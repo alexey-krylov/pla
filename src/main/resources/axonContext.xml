@@ -26,6 +26,6 @@
 
     <bean id="eventBus" class="org.axonframework.eventhandling.SimpleEventBus" />
 
-    <!--<axon:jpa-repository aggregate-type="com.macula.student.domain.model.StudentExam" event-bus="eventBus" id="studentExamRepository"/>-->
+    <axon:jpa-repository aggregate-type="com.pla.aggregaterootsample.domain.Quotation" event-bus="eventBus" id="quotationRepository"/>
 
 </beans>
