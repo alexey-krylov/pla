@@ -28,4 +28,5 @@
 
     <axon:jpa-repository aggregate-type="com.pla.aggregaterootsample.domain.Quotation" event-bus="eventBus" id="quotationRepository"/>
 
+    <import resource="axonSagaContext.xml"/>
 </beans>

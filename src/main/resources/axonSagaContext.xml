@@ -1,0 +1,32 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:axon="http://www.axonframework.org/schema/core" xmlns:cache="http://www.springframework.org/schema/cache"
+       xsi:schemaLocation="http://www.axonframework.org/schema/core http://www.axonframework.org/schema/axon-core.xsd
+       http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/cache http://www.springframework.org/schema/cache/spring-cache.xsd">
+
+    <axon:saga-manager id="sagaManager" saga-repository="sagaRepository" event-bus="eventBus">
+        <axon:async executor="taskExecutor" transaction-manager="transactionManager" />
+        <axon:types>
+            com.pla.sample.sagas.OrderManagementSaga
+        </axon:types>
+    </axon:saga-manager>
+
+    <axon:jpa-saga-repository id="sagaRepository"/>
+
+    <bean id="taskExecutor" class="org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor">
+        <property name="corePoolSize" value="2"/>
+        <property name="maxPoolSize" value="5"/>
+        <property name="waitForTasksToCompleteOnShutdown" value="true"/>
+    </bean>
+
+    <bean id="schedulerFactoryBean" class="org.springframework.scheduling.quartz.SchedulerFactoryBean"/>
+    <!-- Event scheduler for the saga -->
+    <bean id="axonEventScheduler" class="org.axonframework.eventhandling.scheduling.quartz.QuartzEventScheduler">
+        <property name="eventBus" ref="eventBus"></property>
+        <property name="scheduler" ref="schedulerFactoryBean"></property>
+    </bean>
+
+</beans>
