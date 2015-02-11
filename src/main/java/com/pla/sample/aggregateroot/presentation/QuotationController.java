@@ -1,6 +1,6 @@
-package com.pla.aggregaterootsample.presentation;
+package com.pla.sample.aggregateroot.presentation;
 
-import com.pla.aggregaterootsample.application.CreateQuotationCommand;
+import com.pla.sample.aggregateroot.application.CreateQuotationCommand;
 import org.axonframework.commandhandling.gateway.CommandGateway;
 import org.nthdimenzion.application.Application;
 import org.springframework.beans.factory.annotation.Autowired;

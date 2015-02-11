@@ -6,6 +6,7 @@ import com.pla.sample.sagas.SagaController.CreateOrderCommand;
 import lombok.*;
 import org.axonframework.commandhandling.annotation.CommandHandler;
 import org.axonframework.domain.AbstractAggregateRoot;
+import org.axonframework.repository.Repository;
 import org.nthdimenzion.object.utils.IIdGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -23,11 +24,23 @@ public class OrderManagementCommandHandler {
     @Autowired
     private IIdGenerator idGenerator;
 
+    @Autowired
+    private Repository<OrderHeader> orderHeaderRepository;
+
+    @Autowired
+    private Repository<Shipment> shipmentRepository;
+
+    @Autowired
+    private Repository<Invoice> invoiceRepository;
+
+
+
     @CommandHandler
     public void createOrder(CreateOrderCommand createOrderCommand){
         System.out.println("CreateOrderCommand");
-        Order order = new Order(idGenerator.nextId());
-        order.approve();
+        OrderHeader orderHeader = new OrderHeader(idGenerator.nextId());
+        orderHeader.approve();
+        orderHeaderRepository.add(orderHeader);
         System.out.println("Command over");
 
     }
@@ -35,37 +48,20 @@ public class OrderManagementCommandHandler {
     @CommandHandler
     public void prepareShipping(PrepareShippingCommand prepareShippingCommand) {
         System.out.println(prepareShippingCommand);
+        Shipment shipment = new Shipment(prepareShippingCommand.shipmentId);
+        shipment.ship();
+        shipmentRepository.add(shipment);
 
     }
 
     @CommandHandler
     public void createInvoice(CreateInvoiceCommand createInvoiceCommand) {
         System.out.println(createInvoiceCommand);
+        Invoice invoice = new Invoice(createInvoiceCommand.invoiceId);
+        invoice.paid();
+        invoiceRepository.add(invoice);
     }
 
 
-    @AllArgsConstructor
-    private class Shipment extends AbstractAggregateRoot<String>{
 
-        @Id
-        private String id;
-
-        @Override
-        public String getIdentifier() {
-            return id;
-        }
-
-        public void ship(){
-            registerEvent(new ShippingArrivedEvent(id));
-        }
-    }
-
-
-    @AllArgsConstructor
-    @ToString
-    @Getter
-    public static class ShippingArrivedEvent {
-        public final String shipmentId;
-
-    }
 }

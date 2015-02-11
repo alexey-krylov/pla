@@ -23,7 +23,7 @@ import javax.sql.DataSource;
  */
 @SpringBootApplication
 @ComponentScan(basePackages = {"com.pla", "org.nthdimenzion"})
-@EntityScan(basePackages = {"com.pla", "org.nthdimenzion"})
+@EntityScan(basePackages = {"com.pla", "org.nthdimenzion","org.axonframework.saga"})
 @ImportResource(value = "classpath:axonContext.xml")
 public class Application {
 

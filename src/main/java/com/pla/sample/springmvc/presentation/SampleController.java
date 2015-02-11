@@ -1,14 +1,10 @@
-package com.pla.sample.presentation;
+package com.pla.sample.springmvc.presentation;
 
-import com.pla.sample.application.AgentCommand;
-import com.pla.sample.application.SampleCommand;
+import com.pla.sample.springmvc.application.AgentCommand;
+import com.pla.sample.springmvc.application.SampleCommand;
 import org.axonframework.commandhandling.gateway.CommandGateway;
 import org.joda.money.Money;
 import org.joda.time.LocalDate;
-import org.joda.time.format.DateTimeFormat;
-import org.joda.time.format.DateTimeFormatter;
-import org.nthdimenzion.common.AppConstants;
-import org.nthdimenzion.presentation.AppUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;

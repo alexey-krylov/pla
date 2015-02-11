@@ -1,15 +1,10 @@
-package com.pla.sample.presentation;
+package com.pla.sample.springmvc.presentation;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
-import org.joda.money.CurrencyUnit;
 import org.joda.money.Money;
 import org.joda.time.LocalDate;
-import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.format.annotation.NumberFormat;
-
-import java.math.BigDecimal;
 
 @Getter
 @Setter

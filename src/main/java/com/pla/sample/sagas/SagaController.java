@@ -21,6 +21,7 @@ public class SagaController {
     @RequestMapping(value = "/conventionalExample", method = RequestMethod.POST)
     public ResponseEntity conventionalExample(){
         commandGateway.sendAndWait(new CreateOrderCommand());
+        System.out.println("Out of the request");
         return ResponseEntity.ok().build();
     }
 

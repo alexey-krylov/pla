@@ -1,6 +1,6 @@
-package com.pla.aggregaterootsample.domain.eventListeners;
+package com.pla.sample.aggregateroot.domain.eventListeners;
 
-import com.pla.aggregaterootsample.domain.QuotationCreateEvent;
+import com.pla.sample.aggregateroot.domain.QuotationCreateEvent;
 import org.axonframework.eventhandling.annotation.EventHandler;
 import org.springframework.stereotype.Component;
 

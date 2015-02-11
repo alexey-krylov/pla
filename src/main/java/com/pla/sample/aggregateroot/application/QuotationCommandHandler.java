@@ -1,6 +1,6 @@
-package com.pla.aggregaterootsample.application;
+package com.pla.sample.aggregateroot.application;
 
-import com.pla.aggregaterootsample.domain.Quotation;
+import com.pla.sample.aggregateroot.domain.Quotation;
 import org.axonframework.commandhandling.annotation.CommandHandler;
 import org.nthdimenzion.object.utils.IIdGenerator;
 import org.springframework.beans.factory.annotation.Autowired;

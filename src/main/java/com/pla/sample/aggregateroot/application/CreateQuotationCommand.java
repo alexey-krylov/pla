@@ -1,4 +1,4 @@
-package com.pla.aggregaterootsample.application;
+package com.pla.sample.aggregateroot.application;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

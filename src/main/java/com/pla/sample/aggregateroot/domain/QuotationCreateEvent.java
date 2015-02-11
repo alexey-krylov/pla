@@ -1,4 +1,4 @@
-package com.pla.aggregaterootsample.domain;
+package com.pla.sample.aggregateroot.domain;
 
 import lombok.Getter;
 

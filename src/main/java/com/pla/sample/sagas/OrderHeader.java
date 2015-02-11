@@ -1,6 +1,8 @@
 package com.pla.sample.sagas;
 
 import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.ToString;
 import org.axonframework.domain.AbstractAggregateRoot;
 
 import javax.persistence.Entity;
@@ -11,12 +13,12 @@ import javax.persistence.Id;
 */
 @Entity
 @AllArgsConstructor
-public class Order extends AbstractAggregateRoot<String> {
+public class OrderHeader extends AbstractAggregateRoot<String> {
 
     @Id
     private String orderId;
 
-    Order() {
+    OrderHeader() {
     }
 
     @Override
@@ -27,5 +29,13 @@ public class Order extends AbstractAggregateRoot<String> {
     public void approve(){
         registerEvent(new OrderCreatedEvent(orderId));
     }
+
+    @ToString
+    @AllArgsConstructor
+    @Getter
+    public static class OrderCreatedEvent {
+        public final String orderId;
+    }
+
 
 }
