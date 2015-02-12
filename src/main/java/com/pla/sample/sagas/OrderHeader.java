@@ -7,6 +7,7 @@ import org.axonframework.domain.AbstractAggregateRoot;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import java.io.Serializable;
 
 /**
 * Author: Nthdimenzion
@@ -33,7 +34,7 @@ public class OrderHeader extends AbstractAggregateRoot<String> {
     @ToString
     @AllArgsConstructor
     @Getter
-    public static class OrderCreatedEvent {
+    public static class OrderCreatedEvent  implements Serializable {
         public final String orderId;
     }
 

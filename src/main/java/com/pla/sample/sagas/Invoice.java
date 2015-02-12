@@ -7,6 +7,7 @@ import org.axonframework.domain.AbstractAggregateRoot;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import java.io.Serializable;
 
 /**
  * Author: Nthdimenzion
@@ -32,7 +33,7 @@ public class Invoice extends AbstractAggregateRoot<String> {
     @AllArgsConstructor
     @ToString
     @Getter
-    public static class InvoicePaidEvent  {
+    public static class InvoicePaidEvent  implements Serializable {
         public final String invoiceId;
 
     }

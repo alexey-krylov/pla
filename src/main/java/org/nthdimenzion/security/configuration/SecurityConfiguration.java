@@ -10,6 +10,7 @@ import org.nthdimenzion.security.service.AuthenticationFailureHandler;
 import org.nthdimenzion.security.service.AuthenticationSuccessHandler;
 import org.nthdimenzion.security.service.Http401UnauthorizedEntryPoint;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -43,7 +44,9 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
             " where ul.username =? and ul.id = ulsg.USER_LOGIN_ID and ulsg.SECURITY_GROUPS_ID = sg.id and sgsp.SECURITY_GROUP_ID = sg.id" +
             " and sgsp.SECURITY_PERMISSIONS_ID = sp.id";
     private static final String USERS_BY_USERNAME_QUERY = "select ul.username,ul.password,ul.is_enabled from USER_LOGIN ul where ul.username = ?";
+
     @Autowired
+    @Qualifier("primaryDataSource")
     private DataSource dataSource;
     @Autowired
     private UserDetailsService userService;

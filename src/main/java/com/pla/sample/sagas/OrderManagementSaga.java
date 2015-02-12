@@ -19,6 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import org.joda.time.Duration;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 
 /**
@@ -89,12 +90,17 @@ public class OrderManagementSaga extends AbstractAnnotatedSaga {
         public final String invoiceId;
     }
 
+    /**
+     * All events need to implement Serializable interface
+     */
     @AllArgsConstructor
     @ToString
     @Getter
-    public static class OrderPaymentInstallmentEvent {
+    public static class OrderPaymentInstallmentEvent implements Serializable{
 
         private String orderId;
         private Money installmentAmount;
     }
+
+
 }
