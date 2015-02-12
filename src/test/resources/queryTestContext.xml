@@ -16,9 +16,11 @@
     <bean id="validator" class="org.springframework.validation.beanvalidation.LocalValidatorFactoryBean" lazy-init="true"/>
 
     <bean id="commandGateway" class="org.nthdimenzion.stubs.StubCommandGateway" lazy-init="true"/>
+    <bean id="idGenerator" class="org.nthdimenzion.object.utils.StubIdGenerator"/>
 
-    <context:component-scan base-package="com.pla"/>
-
+    <context:component-scan base-package="com.pla">
+        <context:exclude-filter type="regex" expression="com.pla.sample.*"/>
+    </context:component-scan>
     <mvc:annotation-driven validator="validator"/>
 
     <bean id="dataSource" class="com.jolbox.bonecp.BoneCPDataSource" destroy-method="close">
