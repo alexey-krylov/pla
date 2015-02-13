@@ -30,6 +30,8 @@ public class OrderManagementSaga extends AbstractAnnotatedSaga {
 
     private boolean paid = false;
     private boolean delivered = false;
+    private static final int MAX_INSTALLMENTS=12;
+    private int installment=0;
 
     @Autowired
     private transient CommandGateway commandGateway;
@@ -72,9 +74,14 @@ public class OrderManagementSaga extends AbstractAnnotatedSaga {
     }
 
     @SagaEventHandler(associationProperty = "orderId")
-    @EndSaga
     public void handle(OrderPaymentInstallmentEvent event) {
         System.out.println("OrderPaymentInstallment Saga " + event);
+        if(installment<MAX_INSTALLMENTS){
+            eventScheduler.schedule(Duration.standardMinutes(1L),new OrderPaymentInstallmentEvent(event.orderId,Money.of(AppConstants.DEFAULT_CURRENCY, BigDecimal.valueOf(100d))));
+            installment++;
+        }else{
+            end();
+        }
     }
 
 

@@ -42,7 +42,6 @@ public class OrderManagementCommandHandler {
         orderHeader.approve();
         orderHeaderRepository.add(orderHeader);
         System.out.println("Command over");
-
     }
 
     @CommandHandler
