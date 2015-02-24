@@ -20,6 +20,7 @@ spring:
     database: MYSQL
     show-sql: true
 
+
   datasource:
       primary:
         name: primaryDataSource
@@ -41,3 +42,6 @@ flyway:
   check-location: false
   enabled: false
 
+login :
+  username : samir
+  password : samir

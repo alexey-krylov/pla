@@ -27,17 +27,6 @@ import java.io.IOException;
 @Component
 public class AuthenticationSuccessHandler extends SavedRequestAwareAuthenticationSuccessHandler implements LogoutSuccessHandler {
 
-    @Autowired
-    private IAuthentication authenticationService;
-
-    @Autowired
-    private UserDetailsService userService;
-
-
-    @Autowired
-    private UserLoginRepository userLoginRepository;
-
-    @Override
     public void onLogoutSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
         request.getSession().invalidate();
         super.handle(request, response, authentication);
