@@ -20,7 +20,8 @@ spring:
     database: MYSQL
     show-sql: true
 
-
+  profiles:
+        active: ${spring.profiles.active}
   datasource:
       primary:
         name: primaryDataSource
