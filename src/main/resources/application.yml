@@ -20,14 +20,29 @@ spring:
     database: MYSQL
     show-sql: true
 
+  profiles:
+        active: ${spring.profiles.active}
   datasource:
-    url: jdbc:mysql://localhost:3306/pla?useUnicode=true&characterEncoding=utf8&characterSetResults=utf8&rewriteBatchedStatements=true
-    driverClassName: com.mysql.jdbc.Driver
-    username: root
-    password: welcome
+      primary:
+        name: primaryDataSource
+        url: jdbc:mysql://localhost:3306/pla?useUnicode=true&characterEncoding=utf8&characterSetResults=utf8&rewriteBatchedStatements=true
+        driverClassName: com.mysql.jdbc.Driver
+        username: root
+        password: welcome
+
+      jobs:
+        name: jobsDataSource
+        url: jdbc:mysql://localhost:3306/plajobs?useUnicode=true&characterEncoding=utf8&characterSetResults=utf8&rewriteBatchedStatements=true
+        driverClassName: com.mysql.jdbc.Driver
+        username: root
+        password: welcome
+
 
 
 flyway:
   check-location: false
   enabled: false
 
+login :
+  username : samir
+  password : samir

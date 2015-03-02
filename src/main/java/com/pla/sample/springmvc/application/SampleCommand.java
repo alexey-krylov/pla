@@ -1,9 +1,8 @@
-package com.pla.sample.application;
+package com.pla.sample.springmvc.application;
 
 import com.google.common.collect.Lists;
 import lombok.Data;
 import org.hibernate.validator.constraints.Email;
-import org.hibernate.validator.constraints.NotEmpty;
 import org.joda.money.Money;
 import org.joda.time.LocalDate;
 import org.springframework.web.multipart.MultipartFile;

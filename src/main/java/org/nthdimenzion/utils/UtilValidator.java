@@ -118,4 +118,8 @@ public class UtilValidator {
         Matcher m = pattern.matcher(toBeValidated);
         return m.matches();
     }
+
+    public static boolean isRESTConnectionAvailable() {
+        return false;
+    }
 }

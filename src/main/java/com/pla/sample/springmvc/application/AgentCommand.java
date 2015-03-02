@@ -1,4 +1,4 @@
-package com.pla.sample.application;
+package com.pla.sample.springmvc.application;
 
 import lombok.Data;
 import org.hibernate.validator.constraints.NotEmpty;

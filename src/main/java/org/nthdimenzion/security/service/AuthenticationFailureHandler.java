@@ -61,8 +61,6 @@ public class AuthenticationFailureHandler extends SimpleUrlAuthenticationFailure
         abstract String getDescription();
     }
 
-    @Autowired
-    private IAuthentication authenticationService;
 
     @Override
     public void onAuthenticationFailure(HttpServletRequest request,
@@ -72,7 +70,6 @@ public class AuthenticationFailureHandler extends SimpleUrlAuthenticationFailure
 
         if (authenticationException instanceof BadCredentialsException) {
             if (isValidUserName(authenticationException)) {
-                authenticationService.failedLoginAttempt(getUserName(authenticationException));
             }
         }
         super.onAuthenticationFailure(request, response, authenticationException);

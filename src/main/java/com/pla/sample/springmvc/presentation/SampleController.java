@@ -1,14 +1,10 @@
-package com.pla.sample.presentation;
+package com.pla.sample.springmvc.presentation;
 
-import com.pla.sample.application.AgentCommand;
-import com.pla.sample.application.SampleCommand;
+import com.pla.sample.springmvc.application.AgentCommand;
+import com.pla.sample.springmvc.application.SampleCommand;
 import org.axonframework.commandhandling.gateway.CommandGateway;
 import org.joda.money.Money;
 import org.joda.time.LocalDate;
-import org.joda.time.format.DateTimeFormat;
-import org.joda.time.format.DateTimeFormatter;
-import org.nthdimenzion.common.AppConstants;
-import org.nthdimenzion.presentation.AppUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -61,14 +57,12 @@ public class SampleController {
 
     @RequestMapping(produces = "text/html")
     public String sampleFormController(Model model) {
-        System.out.println("Hello world");
         model.addAttribute("sampleCommand", new SampleCommand());
         return "/pla/sample/sample";
     }
 
     @RequestMapping(value = "/saveSample",method = RequestMethod.POST)
     public String saveAgent(@Valid SampleCommand sampleCommand, BindingResult bindingResult){
-        System.out.println("SampleCommand");
         System.out.println(sampleCommand);
 //        System.out.println(sampleCommand.getMultipartFile().getSize());
         return "pla/sample/sample";
@@ -86,6 +80,7 @@ public class SampleController {
     @RequestMapping(value = "/saveSampleJsonWithDateAndMoney", method = RequestMethod.POST)
     @ResponseBody
     public ResponseEntity saveSampleJsonWithDateAndMoney(@RequestBody Map input) {
+        // Assumed that date will come in dd/MM/yyyy format
         System.out.println(ToLocalDate(input.get("date").toString()));
         System.out.println(ToMoney(input.get("money").toString()));
         System.out.println(input);

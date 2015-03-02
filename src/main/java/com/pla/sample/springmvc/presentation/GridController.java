@@ -1,4 +1,4 @@
-package com.pla.sample.presentation;
+package com.pla.sample.springmvc.presentation;
 
 import org.joda.money.Money;
 import org.joda.time.LocalDate;

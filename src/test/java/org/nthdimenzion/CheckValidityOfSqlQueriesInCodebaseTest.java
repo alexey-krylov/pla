@@ -38,7 +38,7 @@ import static org.hamcrest.Matchers.is;
 
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = {"classpath:testContext.xml"})
+@ContextConfiguration(locations = {"classpath:queryTestContext.xml"})
 public class CheckValidityOfSqlQueriesInCodebaseTest {
 
     private static final String QUERY_SUFFIX = "Query";
