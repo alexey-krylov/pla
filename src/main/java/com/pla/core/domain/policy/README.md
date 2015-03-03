@@ -1,0 +1,1 @@
+All domain specific business rule will be governed over a particular model should be under this package.

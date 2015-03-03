@@ -1,0 +1,1 @@
+All core-domain/sub-domain model should be under this package.

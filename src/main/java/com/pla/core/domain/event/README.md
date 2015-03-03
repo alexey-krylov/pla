@@ -1,0 +1,1 @@
+All domain event and handlers should be under this package.
