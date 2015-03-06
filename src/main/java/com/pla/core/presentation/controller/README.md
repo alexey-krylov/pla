@@ -1,0 +1,1 @@
+All controllers for  given view should be under this package.

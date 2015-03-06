@@ -1,0 +1,1 @@
+All DTO for UI element bindings should be under this package.

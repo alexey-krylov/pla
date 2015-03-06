@@ -1,0 +1,1 @@
+All query and dto should be under this package.
