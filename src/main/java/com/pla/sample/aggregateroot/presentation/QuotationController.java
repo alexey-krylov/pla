@@ -35,7 +35,6 @@ public class QuotationController {
         commandGateway.sendAndWait(createQuotationCommand);
     }
 
-
     @Autowired
     public void setCommandGateway(CommandGateway commandGateway) {
         QuotationController.commandGateway = commandGateway;

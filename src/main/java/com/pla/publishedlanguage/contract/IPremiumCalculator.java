@@ -1,4 +1,4 @@
-package com.pla.sharedkernel.contracts;
+package com.pla.publishedlanguage.contract;
 
 /**
  * Author: Nthdimenzion

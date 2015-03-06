@@ -1,9 +1,8 @@
-DROP TABLE IF EXISTS `security_permission`;
-CREATE TABLE `security_permission` (
-  `id` bigint(20) NOT NULL,
-  `description` varchar(255) DEFAULT NULL,
-  `permission_id` varchar(255) DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `UK_qq00m1swwhgg4ef2u4r7u3rh3` (`permission_id`)
-) ;
-INSERT INTO security_permission (ID, DESCRIPTION, PERMISSION_ID ) VALUES (3,'ROLE_ADMIN','ROLE_ADMIN' );
+DROP TABLE IF EXISTS benefit;
+CREATE TABLE `benefit` (
+  `benefit_id` varchar(255) NOT NULL,
+  `active` bit(1) DEFAULT NULL,
+  `benefit_name` varchar(100) DEFAULT NULL,
+  PRIMARY KEY (`benefit_id`),
+  UNIQUE KEY `UNQ_BENEFIT_NAME` (`benefit_name`)
+);
