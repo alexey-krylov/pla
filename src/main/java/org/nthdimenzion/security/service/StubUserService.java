@@ -31,7 +31,7 @@ public class StubUserService implements UserDetailsService {
         if(UtilValidator.isEmpty(userName) || UtilValidator.isEmpty(this.userName) || !userName.equals(this.userName)){
             throw new UsernameNotFoundException("User Name "+ userName +"Not Found");
         }
-        UserLoginDetailDto userLoginDetailDto = UserLoginDetailDto.createUserLoginDetailVo(this.userName, password);
+        UserLoginDetailDto userLoginDetailDto = UserLoginDetailDto.createUserLoginDetailDto(this.userName, password);
         userLoginDetailDto = userLoginDetailDto.populateAuthorities(Lists.newArrayList("ROLE_ADMIN"));
         return userLoginDetailDto;
     }
