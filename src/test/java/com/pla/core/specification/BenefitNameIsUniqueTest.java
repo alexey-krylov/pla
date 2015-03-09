@@ -28,7 +28,7 @@ public class BenefitNameIsUniqueTest {
 
 
     @Test
-    public void should_return_true_when_benefit_name_unique() {
+    public void shouldReturnTrueWhenBenefitNameUnique() {
         when(benefitFinder.getBenefitCountByBenefitName("Death Benefit")).thenReturn(0);
         BenefitNameIsUnique benefitNameIsUnique = new BenefitNameIsUnique(benefitFinder);
         BenefitName benefitName = new BenefitName("Death Benefit");
@@ -37,7 +37,7 @@ public class BenefitNameIsUniqueTest {
     }
 
     @Test
-    public void should_return_false_when_benefit_name_not_unique() {
+    public void shouldReturnFalseWhenBenefitNameNotUnique() {
         when(benefitFinder.getBenefitCountByBenefitName("Death Benefit")).thenReturn(1);
         BenefitNameIsUnique benefitNameIsUnique = new BenefitNameIsUnique(benefitFinder);
         BenefitName benefitName = new BenefitName("Death Benefit");

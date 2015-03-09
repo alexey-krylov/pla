@@ -10,11 +10,14 @@ import com.github.springtestdbunit.DbUnitTestExecutionListener;
 import com.github.springtestdbunit.annotation.ExpectedDatabase;
 import com.github.springtestdbunit.assertion.DatabaseAssertionMode;
 import com.google.common.collect.Lists;
+import com.pla.core.domain.service.AdminRoleAdapter;
 import org.axonframework.commandhandling.gateway.CommandGateway;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.nthdimenzion.security.service.UserLoginDetailDto;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestExecutionListeners;
@@ -34,13 +37,14 @@ import static org.junit.Assert.*;
 @TestExecutionListeners({DependencyInjectionTestExecutionListener.class, DbUnitTestExecutionListener.class})
 public class CreateBenefitETETest {
 
+    private Logger logger = LoggerFactory.getLogger(CreateBenefitETETest.class);
+    
     @Autowired
     private CommandGateway commandGateway;
 
-
     @Test
     @ExpectedDatabase(value = "classpath:testdata/endtoend/expectedbenefitdata.xml", assertionMode = DatabaseAssertionMode.NON_STRICT)
-    public void given_a_benefit_name_it_should_create_benefit() {
+    public void givenABenefitNameItShouldCreateBenefit() {
         UserLoginDetailDto userLoginDetailDto = UserLoginDetailDto.createUserLoginDetailDto("", "");
         List<String> permissions = Lists.newArrayList();
         permissions.add("ROLE_ADMIN");
@@ -53,7 +57,7 @@ public class CreateBenefitETETest {
             commandGateway.sendAndWait(createBenefitCommand);
             isSuccess = Boolean.TRUE;
         } catch (Exception e) {
-            System.out.println("Error in saving");
+            logger.error("Error in creating benefit",e);
         }
         assertTrue(isSuccess);
 

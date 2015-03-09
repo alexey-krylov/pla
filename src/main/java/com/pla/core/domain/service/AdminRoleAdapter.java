@@ -8,15 +8,11 @@ package com.pla.core.domain.service;
 
 import com.pla.core.domain.model.Admin;
 import com.pla.sharedkernel.util.RolesUtil;
-import org.nthdimenzion.ddd.domain.annotations.DomainService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.access.AuthorizationServiceException;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
-
-import java.util.function.Predicate;
 
 /**
  * @author: Samir

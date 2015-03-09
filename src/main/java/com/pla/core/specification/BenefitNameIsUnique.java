@@ -9,7 +9,6 @@ package com.pla.core.specification;
 import com.pla.core.domain.model.BenefitName;
 import com.pla.core.query.BenefitFinder;
 import com.pla.sharedkernel.specification.ISpecification;
-import lombok.NoArgsConstructor;
 import org.nthdimenzion.ddd.domain.annotations.Specification;
 import org.springframework.beans.factory.annotation.Autowired;
 

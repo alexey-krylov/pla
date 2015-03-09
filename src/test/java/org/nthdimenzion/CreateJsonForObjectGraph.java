@@ -19,18 +19,10 @@ import uk.co.jemos.podam.api.PodamFactoryImpl;
 public class CreateJsonForObjectGraph {
 
     public static void main(String[] args) throws JsonProcessingException {
-        System.out.println("Hello Object Graph");
-
-        // Put in the class for which you want to generate the object graph
         UserLoginDetailDto result1 = fillDataIntoObjectGraph(UserLoginDetailDto.class);
-
         ObjectMapper mapper = new ObjectMapper();
-
         configureMapper(mapper);
-
         String result = mapper.writeValueAsString(result1);
-
-        System.out.println("\n\n\n" + result);
     }
 
     private static void configureMapper(ObjectMapper mapper) {

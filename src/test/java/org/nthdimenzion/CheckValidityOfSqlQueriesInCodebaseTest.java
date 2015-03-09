@@ -8,6 +8,8 @@ import org.junit.runner.RunWith;
 import org.nthdimenzion.ddd.domain.annotations.Finder;
 import org.nthdimenzion.utils.UtilValidator;
 import org.reflections.Reflections;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcOperations;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
@@ -41,10 +43,13 @@ import static org.hamcrest.Matchers.is;
 @ContextConfiguration(locations = {"classpath:queryTestContext.xml"})
 public class CheckValidityOfSqlQueriesInCodebaseTest {
 
+
     private static final String QUERY_SUFFIX = "Query";
     private static final int NUMBER_OF_THREADS = 8;
     @Autowired
     private DataSource dataSource;
+
+    private Logger logger = LoggerFactory.getLogger(CheckValidityOfSqlQueriesInCodebaseTest.class);
 
     @Test
     public void checkValidityOfSqlQueries() throws Exception {
@@ -56,29 +61,27 @@ public class CheckValidityOfSqlQueriesInCodebaseTest {
 
         ExecutorService executorService2 = Executors.newFixedThreadPool(NUMBER_OF_THREADS);
 
-        List<List<Query>> partitionedQueries =  Lists.partition(queries, NUMBER_OF_THREADS);
+        List<List<Query>> partitionedQueries = Lists.partition(queries, NUMBER_OF_THREADS);
 
         Collection<Callable<Void>> queryRunnables = Lists.newArrayList();
 
-        for(List<Query> partionedQuery : partitionedQueries){
+        for (List<Query> partionedQuery : partitionedQueries) {
             Callable<Void> queriesRunner = new QueriesRunner(partionedQuery);
             queryRunnables.add(queriesRunner);
         }
 
-        List<Future<Void>> results =  executorService2.invokeAll(queryRunnables);
+        List<Future<Void>> results = executorService2.invokeAll(queryRunnables);
 
         executorService2.shutdown();
 
         executorService2.awaitTermination(10l, TimeUnit.SECONDS);
 
         long timeTaken = System.currentTimeMillis() - startTime;
-
-        System.out.println("TIme take  " + timeTaken);
-
+        logger.info("TIme taken to finish query test" + timeTaken);
         final List<Query> invalidQueries = filterInValidQueries(queries);
-        if(UtilValidator.isNotEmpty(invalidQueries)){
-            System.out.println("\n\n\n Queries have failed parsing");
-            System.out.println(invalidQueries);
+        if (UtilValidator.isNotEmpty(invalidQueries)) {
+            logger.info("\n\n\n Queries have failed parsing");
+            logger.info(invalidQueries.toString());
         }
 
         assertThat(invalidQueries, is((empty())));
@@ -87,8 +90,8 @@ public class CheckValidityOfSqlQueriesInCodebaseTest {
 
     private List<Query> filterInValidQueries(List<Query> queries) {
         List<Query> invalidQueries = Lists.newArrayList();
-        for(Query query : queries){
-            if(!query.isValidSql){
+        for (Query query : queries) {
+            if (!query.isValidSql) {
                 invalidQueries.add(query);
             }
         }
@@ -96,19 +99,19 @@ public class CheckValidityOfSqlQueriesInCodebaseTest {
 
     }
 
-    private Set<Class<?>> getFinders(String packageName){
+    private Set<Class<?>> getFinders(String packageName) {
         Reflections reflections = new Reflections(packageName);
         return reflections.getTypesAnnotatedWith(Finder.class);
     }
 
     private List<Query> collectQueries(Set<Class<?>> finders) throws IllegalAccessException, InstantiationException {
         List<Query> queries = Lists.newArrayList();
-        for(Class finder : finders){
+        for (Class finder : finders) {
             Field[] queryFields = finder.getDeclaredFields();
             Object object = finder.newInstance();
-            for(Field queryField : queryFields){
-                if(queryField.getName().endsWith(QUERY_SUFFIX)){
-                    Query query = new Query(queryField.get(object).toString(),queryField.getName(),finder.getName());
+            for (Field queryField : queryFields) {
+                if (queryField.getName().endsWith(QUERY_SUFFIX)) {
+                    Query query = new Query(queryField.get(object).toString(), queryField.getName(), finder.getName());
                     queries.add(query);
                 }
             }
@@ -116,30 +119,30 @@ public class CheckValidityOfSqlQueriesInCodebaseTest {
         return queries;
     }
 
-    public static boolean isSqlValid(String sqlQuery,DataSource dataSource){
+    public static boolean isSqlValid(String sqlQuery, DataSource dataSource) {
         NamedParameterJdbcOperations namedParameterJdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
-        Map<String,?> params = buildParams(sqlQuery);
+        Map<String, ?> params = buildParams(sqlQuery);
         boolean isValidSql = true;
         try {
             namedParameterJdbcTemplate.queryForRowSet(sqlQuery, params);
-        }catch (Exception ex){
+        } catch (Exception ex) {
             ex.printStackTrace();
             isValidSql = false;
         }
         return isValidSql;
     }
 
-    public static Map<String,?> buildParams(String query){
+    public static Map<String, ?> buildParams(String query) {
         ParsedSql parsedSql = NamedParameterUtils.parseSqlStatement(query);
-        Map<String,?> params = Maps.newHashMap();
-        try{
+        Map<String, ?> params = Maps.newHashMap();
+        try {
             Method method = parsedSql.getClass().getDeclaredMethod("getParameterNames");
             method.setAccessible(true);
             List<String> paramKeys = (List<String>) method.invoke(parsedSql);
-            for(String paramKey: paramKeys){
-                params.put(paramKey,null);
+            for (String paramKey : paramKeys) {
+                params.put(paramKey, null);
             }
-        }catch (Exception ex){
+        } catch (Exception ex) {
             ex.printStackTrace();
         }
 
@@ -148,7 +151,7 @@ public class CheckValidityOfSqlQueriesInCodebaseTest {
     }
 
     @ToString
-    private class Query{
+    private class Query {
         final String sqlQuery;
         final String fieldName;
         final String className;
@@ -161,13 +164,13 @@ public class CheckValidityOfSqlQueriesInCodebaseTest {
             this.isValidSql = true;
         }
 
-        void markAsInvalidSql(){
+        void markAsInvalidSql() {
             this.isValidSql = false;
         }
     }
 
 
-    private class QueriesRunner implements Callable<Void > {
+    private class QueriesRunner implements Callable<Void> {
         private final List<Query> partionedQuery;
 
         public QueriesRunner(List<Query> partitionedQuery) {
@@ -176,9 +179,9 @@ public class CheckValidityOfSqlQueriesInCodebaseTest {
 
         @Override
         public Void call() {
-            for(Query query : partionedQuery){
-                boolean isValidSql = isSqlValid(query.sqlQuery,dataSource);
-                if(!isValidSql){
+            for (Query query : partionedQuery) {
+                boolean isValidSql = isSqlValid(query.sqlQuery, dataSource);
+                if (!isValidSql) {
                     query.markAsInvalidSql();
                 }
             }

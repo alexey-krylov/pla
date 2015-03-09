@@ -35,7 +35,7 @@ public class AdminRoleAdapterTest {
     }
 
     @Test
-    public void should_return_Admin_when_user_has_adminRole() {
+    public void shouldReturnAdminWhenUserHasAdminRole() {
         SimpleGrantedAuthority simpleGrantedAuthority = new SimpleGrantedAuthority("ROLE_ADMIN");
         List<GrantedAuthority> authorities = Lists.newArrayList();
         authorities.add(simpleGrantedAuthority);
@@ -46,7 +46,7 @@ public class AdminRoleAdapterTest {
     }
 
     @Test(expected = AuthorizationServiceException.class)
-    public void should_return_Authorization_Exception_user_has_not_adminRole() {
+    public void shouldReturnAuthorizationExceptionUserHasNotAdminRole() {
         UserLoginDetailDto userLoginDetailDto = UserLoginDetailDto.createUserLoginDetailDto("", "");
         SimpleGrantedAuthority simpleGrantedAuthority = new SimpleGrantedAuthority("ROLE_USER");
         List<GrantedAuthority> authorities = Lists.newArrayList();
