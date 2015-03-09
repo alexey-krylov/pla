@@ -19,5 +19,9 @@ public interface AppConstants {
     CurrencyUnit DEFAULT_CURRENCY = CurrencyUnit.of(Locale.getDefault());
 
     MoneyFormatter MONEY_FORMATTER = new MoneyFormatterBuilder().appendCurrencyCode().appendAmount(MoneyAmountStyle.ASCII_DECIMAL_POINT_GROUP3_COMMA).toFormatter();
+    
+    Boolean Success = Boolean.TRUE;
+    
+    Boolean Failure = Boolean.FALSE;
 
 }

@@ -7,12 +7,14 @@
 package com.pla.core.domain.service;
 
 import com.pla.core.domain.model.Admin;
+import com.pla.sharedkernel.util.RolesUtil;
 import org.nthdimenzion.ddd.domain.annotations.DomainService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.access.AuthorizationServiceException;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.stereotype.Component;
 
 import java.util.function.Predicate;
 
@@ -20,7 +22,7 @@ import java.util.function.Predicate;
  * @author: Samir
  * @since 1.0 05/03/2015
  */
-@DomainService
+@Component
 public class AdminRoleAdapter {
 
     private Logger logger = LoggerFactory.getLogger(AdminRoleAdapter.class);
@@ -29,16 +31,13 @@ public class AdminRoleAdapter {
         if (logger.isDebugEnabled()) {
             logger.debug("User details received" + userDetails);
         }
-        long count = userDetails.getAuthorities().stream().filter(new Predicate<GrantedAuthority>() {
-            @Override
-            public boolean test(GrantedAuthority grantedAuthority) {
-                return "ROLE_ADMIN".equals(grantedAuthority.getAuthority());
-            }
-        }).count();
-        if (count != 1) {
+        boolean hasAdminRole = RolesUtil.hasAdminRole(userDetails.getAuthorities());
+        if (!hasAdminRole) {
             logger.error("user does not have ROLE_ADMIN");
             throw new AuthorizationServiceException("User does not have ROLE_ADMIN authority");
         }
-        return new Admin();
+        Admin admin = new Admin(userDetails.getUsername());
+        return admin;
     }
+
 }

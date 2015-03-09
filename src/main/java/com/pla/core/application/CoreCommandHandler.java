@@ -6,12 +6,10 @@
 
 package com.pla.core.application;
 
-import com.pla.core.domain.model.Admin;
 import com.pla.core.domain.model.Benefit;
-import com.pla.core.domain.service.AdminRoleAdapter;
+import com.pla.core.domain.service.BenefitFactory;
 import org.axonframework.commandhandling.annotation.CommandHandler;
 import org.nthdimenzion.common.service.JpaRepositoryFactory;
-import org.nthdimenzion.object.utils.IIdGenerator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,35 +25,28 @@ public class CoreCommandHandler {
 
     private JpaRepositoryFactory jpaRepositoryFactory;
 
-    private AdminRoleAdapter adminRoleAdapter;
-
-    private IIdGenerator idGenerator;
+    private BenefitFactory benefitFactory;
 
     private Logger logger = LoggerFactory.getLogger(CoreCommandHandler.class);
 
     @Autowired
-    public CoreCommandHandler(JpaRepositoryFactory jpaRepositoryFactory, AdminRoleAdapter adminRoleAdapter, IIdGenerator idGenerator) {
+    public CoreCommandHandler(JpaRepositoryFactory jpaRepositoryFactory, BenefitFactory benefitFactory) {
         this.jpaRepositoryFactory = jpaRepositoryFactory;
-        this.adminRoleAdapter = adminRoleAdapter;
-        this.idGenerator = idGenerator;
-
+        this.benefitFactory = benefitFactory;
     }
 
     @CommandHandler
-    public String createBenefitCommandHandler(CreateBenefitCommand createBenefitCommand) {
+    public void createBenefitHandler(CreateBenefitCommand createBenefitCommand) {
         if (logger.isDebugEnabled()) {
-            logger.debug("**** \nCommand Received****" + createBenefitCommand);
+            logger.debug("*****Command Received*****" + createBenefitCommand);
         }
-        Admin admin = adminRoleAdapter.userToAdmin(createBenefitCommand.getUserDetails());
-        String benefitId = idGenerator.nextId();
-        Benefit benefit = admin.createBenefit(benefitId, createBenefitCommand.getBenefitName());
+        Benefit benefit = benefitFactory.createBenefit(createBenefitCommand);
         CrudRepository<Benefit, String> benefitRepository = jpaRepositoryFactory.getCrudRepository(Benefit.class);
         try {
             benefitRepository.save(benefit);
         } catch (RuntimeException e) {
-            logger.error("******* Saving benefit failed\n", e);
-            return null;
+            logger.error("*****Saving benefit failed*****", e);
+            throw new RuntimeException(e.getMessage());
         }
-        return benefitId;
     }
 }

@@ -6,6 +6,7 @@
 
 package com.pla.core.specification;
 
+import com.pla.core.domain.model.BenefitName;
 import com.pla.core.query.BenefitFinder;
 import com.pla.sharedkernel.specification.ISpecification;
 import lombok.NoArgsConstructor;
@@ -17,7 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
  * @since 1.0 05/03/2015
  */
 @Specification
-public class BenefitNameIsUnique implements ISpecification<String> {
+public class BenefitNameIsUnique implements ISpecification<BenefitName> {
 
     private BenefitFinder benefitFinder;
 
@@ -28,8 +29,8 @@ public class BenefitNameIsUnique implements ISpecification<String> {
     }
 
     @Override
-    public boolean isSatisfiedBy(String benefitName) {
-        int benefitCount = benefitFinder.getBenefitCountByBenefitName(benefitName);
+    public boolean isSatisfiedBy(BenefitName benefitName) {
+        int benefitCount = benefitFinder.getBenefitCountByBenefitName(benefitName.getBenefitName());
         return (benefitCount == 0);
     }
 

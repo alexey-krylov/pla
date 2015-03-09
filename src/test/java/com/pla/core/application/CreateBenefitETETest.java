@@ -48,8 +48,14 @@ public class CreateBenefitETETest {
         CreateBenefitCommand createBenefitCommand = new CreateBenefitCommand();
         createBenefitCommand.setBenefitName("Death Benefit");
         createBenefitCommand.setUserDetails(userLoginDetailDto);
-        String benefitId = commandGateway.sendAndWait(createBenefitCommand);
-        assertNotNull(benefitId);
+        Boolean isSuccess = Boolean.FALSE;
+        try {
+            commandGateway.sendAndWait(createBenefitCommand);
+            isSuccess = Boolean.TRUE;
+        } catch (Exception e) {
+            System.out.println("Error in saving");
+        }
+        assertTrue(isSuccess);
 
     }
 }
