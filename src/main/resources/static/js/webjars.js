@@ -2,7 +2,7 @@
  * Created by pradyumna on 03-02-2015.
  */
 var webjars = {
-    versions: {"bootstrap":"3.3.2","bootstrap-datepicker":"1.3.1","jquery-ui-themes":"1.11.2","jquery-ui":"1.11.2","requirejs":"2.1.15","jquery":"2.1.3","bootstrap-modal":"2.2.5"},
+    versions: {"bootstrap":"3.3.2","bootstrap-datepicker":"1.3.1","bootstrap-multiselect":"0.9.9","jquery-ui-themes":"1.11.2","jquery-ui":"1.11.2","requirejs":"2.1.15","jquery":"2.1.3","bootstrap-modal":"2.2.5"},
     path: function(webJarId, path) {
         alert('webjars '+webJarId);
         console.error('The webjars.path() method of getting a WebJar path has been deprecated.  The RequireJS config in the ' + webJarId + ' WebJar may need to be updated.  Please file an issue: http://github.com/webjars/' + webJarId + '/issues/new');

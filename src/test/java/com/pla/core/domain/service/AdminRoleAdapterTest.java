@@ -46,7 +46,6 @@ public class AdminRoleAdapterTest {
         assertNotNull(admin);
     }
 
-    @Ignore
     @Test(expected = AuthorizationServiceException.class)
     public void shouldReturnAuthorizationExceptionUserHasNotAdminRole() {
         UserLoginDetailDto userLoginDetailDto = UserLoginDetailDto.createUserLoginDetailDto("", "");
