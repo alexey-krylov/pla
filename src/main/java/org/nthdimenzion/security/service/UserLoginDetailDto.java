@@ -1,6 +1,7 @@
 package org.nthdimenzion.security.service;
 
 import lombok.Setter;
+import lombok.ToString;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -19,7 +20,7 @@ public class UserLoginDetailDto implements UserDetails {
 
     private Collection<String> permissions;
 
-    private Collection<? extends GrantedAuthority> authorities;
+    private Collection<SimpleGrantedAuthority> authorities;
 
     private String userName;
 
@@ -34,7 +35,7 @@ public class UserLoginDetailDto implements UserDetails {
         this.password = password;
     }
 
-    public static UserLoginDetailDto createUserLoginDetailVo(String userName, String password) {
+    public static UserLoginDetailDto createUserLoginDetailDto(String userName, String password) {
         UserLoginDetailDto userLoginDetailDto = new UserLoginDetailDto(userName, password);
         return userLoginDetailDto;
     }
@@ -49,7 +50,7 @@ public class UserLoginDetailDto implements UserDetails {
         return this;
     }
 
-    public Collection<? extends GrantedAuthority> getAuthorities() {
+    public Collection<SimpleGrantedAuthority> getAuthorities() {
         return authorities;
     }
 

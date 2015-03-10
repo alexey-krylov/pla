@@ -23,8 +23,4 @@ public class JodaDateFormatter implements Formatter<LocalDate> {
     public String print(LocalDate date, Locale locale) {
         return date.toString(DateTimeFormat.forPattern("dd/MM/yyyy"));
     }
-
-    public static void main(String[] args) {
-        System.out.println(LocalDate.now().toString(DateTimeFormat.forPattern("dd/MM/yyyy")));
-    }
 }

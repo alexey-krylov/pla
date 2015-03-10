@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 1/22/15 8:50 PM.Nth Dimenzion, Inc - All Rights Reserved
+ * Copyright (c) 1/22/15 8:50 PM.NthDimenzion, Inc - All Rights Reserved
  * Unauthorized copying of this file, via any medium is strictly prohibited
  * Proprietary and confidential
  */
@@ -27,9 +27,10 @@ public class JpaRepositoryFactory {
     @PersistenceContext
     private EntityManager entityManager;
 
-    public JpaRepository<ICrudEntity, ?> getCrudRepository(Class<? extends ICrudEntity> crudEntity) {
+    public <T> T getCrudRepository(Class<? extends ICrudEntity> crudEntity) {
         Preconditions.checkNotNull(entityManager);
-        JpaRepository<ICrudEntity, ?> crudRepository = new SimpleJpaRepository(crudEntity, entityManager);
+        Preconditions.checkNotNull(crudEntity);
+        T crudRepository = (T) new SimpleJpaRepository(crudEntity, entityManager);
         return crudRepository;
     }
 

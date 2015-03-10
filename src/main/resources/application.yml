@@ -44,5 +44,5 @@ flyway:
   enabled: false
 
 login :
-  username : samir
-  password : samir
+  username : admin
+  password : admin
