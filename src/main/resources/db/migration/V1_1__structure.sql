@@ -274,17 +274,17 @@ DROP TABLE IF EXISTS coverage;
 DROP TABLE IF EXISTS benefit;
 CREATE TABLE `benefit` (
   `benefit_id` varchar(255) NOT NULL,
-  `active` bit(1) NOT NULL,
-  `benefit_name` varchar(100) DEFAULT NULL,
+  `status` varchar(255)  NOT NULL,
+  `benefit_name` varchar(100)  NOT NULL,
   PRIMARY KEY (`benefit_id`),
   UNIQUE KEY `UNQ_BENEFIT_NAME` (`benefit_name`)
 );
 
 CREATE TABLE `coverage` (
   `coverage_id` varchar(255) NOT NULL,
-  `coverage_name` varchar(50) DEFAULT NULL,
+  `coverage_name` varchar(50)  NOT NULL,
   `description` varchar(150) DEFAULT NULL,
-  `status` varchar(255) DEFAULT NULL,
+  `status` varchar(255)  NOT NULL,
   PRIMARY KEY (`coverage_id`),
   UNIQUE KEY `UNQ_COVERAGE_NAME` (`coverage_name`)
 );

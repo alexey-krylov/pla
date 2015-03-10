@@ -31,7 +31,7 @@ public class BenefitName {
     @Column(length = 100)
     private String benefitName;
 
-    BenefitName(String benefitName) {
+    public BenefitName(String benefitName) {
         Preconditions.checkNotNull(benefitName);
         if (benefitName.trim().length() <= 0 || benefitName.length() > 100) {
             BenefitException.raiseBenefitNameNotProperLengthException();
