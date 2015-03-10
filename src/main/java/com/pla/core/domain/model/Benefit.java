@@ -20,37 +20,24 @@ import javax.persistence.*;
  */
 @Entity
 @Table(name = "benefit", uniqueConstraints = {@UniqueConstraint(name = "UNQ_BENEFIT_NAME", columnNames = "benefitName")})
-@EqualsAndHashCode(of = "benefitName")
+@EqualsAndHashCode(of = {"benefitName", "benefitId"})
 @ToString(of = "benefitName")
-@NoArgsConstructor(access = AccessLevel.PACKAGE)
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class Benefit implements ICrudEntity {
 
     @Id
     private String benefitId;
 
-    @Column(length = 100)
-    private String benefitName;
+    @Embedded
+    private BenefitName benefitName;
 
-    private boolean active;
+    @Enumerated(EnumType.STRING)
+    private BenefitStatus status;
 
-    Benefit(String benefitId, String benefitName, boolean active) {
+    Benefit(String benefitId, BenefitName benefitName, BenefitStatus benefitStatus) {
         this.benefitId = benefitId;
         this.benefitName = benefitName;
-        this.active = active;
-    }
-
-
-    public Benefit updateBenefitWithName(String benefitName) {
-        if (!this.active) {
-            throw new RuntimeException("Cannot update an inactive benefit");
-        }
-        Benefit benefit = new Benefit(this.benefitId, benefitName, true);
-        return benefit;
-    }
-
-    public Benefit deactivate() {
-        Benefit benefit = new Benefit(this.benefitId, this.benefitName, false);
-        return benefit;
+        this.status = benefitStatus;
     }
 
 }

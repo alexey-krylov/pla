@@ -1,7 +1,7 @@
 package com.pla.core.presentation.controller;
 
 import com.pla.core.application.CreateBenefitCommand;
-import org.axonframework.commandhandling.CommandBus;
+import org.axonframework.commandhandling.gateway.CommandGateway;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
 public class BenefitController {
 
     @Autowired
-    private CommandBus commandBus;
+    private CommandGateway commandGateway;
     
     @RequestMapping(value = "/benefits/view", method = RequestMethod.GET)
     public String viewBenefits(@RequestParam(value = "page", required = false) Integer pageNumber, Model model) {

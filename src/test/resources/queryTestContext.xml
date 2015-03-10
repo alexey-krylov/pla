@@ -17,14 +17,6 @@
        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/mvc
        http://www.springframework.org/schema/mvc/spring-mvc.xsd http://www.mockito.org/spring/mockito classpath:spring/mockito.xsd">
 
-    <import resource="axonContext.xml"/>
-    <context:component-scan base-package="com.pla"/>
-    <context:component-scan base-package="org.nthdimenzion">
-        <context:exclude-filter type="regex" expression="org.nthdimenzion.ddd.infrastructure.stubs.*"/>
-        <context:exclude-filter type="regex" expression="org.nthdimenzion.application.Application"/>
-        <context:exclude-filter type="regex" expression="org.nthdimenzion.security.*"/>
-    </context:component-scan>
-
     <bean id="validator" class="org.springframework.validation.beanvalidation.LocalValidatorFactoryBean"
           lazy-init="true"/>
     <mvc:annotation-driven validator="validator"/>
@@ -52,10 +44,13 @@
     <bean class="org.springframework.orm.jpa.support.PersistenceAnnotationBeanPostProcessor"/>
 
     <tx:annotation-driven transaction-manager="transactionManager"/>
-
+    <tx:annotation-driven proxy-target-class="true"/>
+    <bean id="namingStrategy" class="org.nthdimenzion.ddd.domain.infrastructure.hibernate.CustomNamingStrategy"/>
+    
     <bean id="dataSource" class="com.jolbox.bonecp.BoneCPDataSource" destroy-method="close">
         <property name="driverClass" value="org.h2.Driver"/>
-        <property name="jdbcUrl" value="jdbc:h2:mem;MODE=MySQL;DB_CLOSE_ON_EXIT=FALSE;"/>
+        <property name="jdbcUrl" value="jdbc:h2:mem;MODE=MySQL"/>
+<!--        <property name="jdbcUrl" value="jdbc:h2:mem;MODE=MySQL;DB_CLOSE_ON_EXIT=FALSE;"/>-->
         <property name="maxConnectionsPerPartition" value="50"/>
         <property name="minConnectionsPerPartition" value="10"/>
         <property name="acquireIncrement" value="10"/>
@@ -65,7 +60,8 @@
 
     <bean id="jobsDataSource" class="com.jolbox.bonecp.BoneCPDataSource" destroy-method="close">
         <property name="driverClass" value="org.h2.Driver"/>
-        <property name="jdbcUrl" value="jdbc:h2:mem;MODE=MySQL;DB_CLOSE_ON_EXIT=FALSE;"/>
+        <property name="jdbcUrl" value="jdbc:h2:mem;MODE=MySQL"/>
+        <!--<property name="jdbcUrl" value="jdbc:h2:mem;MODE=MySQL;DB_CLOSE_ON_EXIT=FALSE;"/>-->
         <property name="maxConnectionsPerPartition" value="50"/>
         <property name="minConnectionsPerPartition" value="10"/>
         <property name="acquireIncrement" value="10"/>
@@ -81,4 +77,12 @@
         <jdbc:script location="classpath:scripts/plajobs.sql"/>
     </jdbc:initialize-database>
 
+    <import resource="axonContext.xml"/>
+    <context:component-scan base-package="com.pla"/>
+    <context:component-scan base-package="org.nthdimenzion">
+        <context:exclude-filter type="regex" expression="org.nthdimenzion.ddd.infrastructure.stubs.*"/>
+        <context:exclude-filter type="regex" expression="org.nthdimenzion.application.*"/>
+        <context:exclude-filter type="regex" expression="org.nthdimenzion.security.*"/>
+    </context:component-scan>
+    
 </beans>

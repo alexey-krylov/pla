@@ -27,7 +27,7 @@ import java.text.ParseException;
 import java.util.Locale;
 
 import static org.nthdimenzion.common.AppConstants.MONEY_FORMATTER;
-import static org.nthdimenzion.presentation.AppUtils.PrependCurrencyUnit;
+import static org.nthdimenzion.presentation.AppUtils.prependCurrencyUnit;
 import static org.nthdimenzion.presentation.AppUtils.StripCurrencyUnit;
 
 /**
@@ -97,7 +97,7 @@ public class CustomMVCConfiguration extends WebMvcConfigurerAdapter {
 
         @Override
         public Money parse(String text, Locale locale) throws ParseException {
-            return MONEY_FORMATTER.parseMoney(PrependCurrencyUnit(text));
+            return MONEY_FORMATTER.parseMoney(prependCurrencyUnit(text));
         }
 
         @Override

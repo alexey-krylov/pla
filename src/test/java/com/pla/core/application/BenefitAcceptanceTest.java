@@ -11,10 +11,11 @@ import com.github.springtestdbunit.annotation.ExpectedDatabase;
 import com.github.springtestdbunit.assertion.DatabaseAssertionMode;
 import com.google.common.collect.Lists;
 import org.axonframework.commandhandling.gateway.CommandGateway;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.nthdimenzion.security.service.UserLoginDetailDto;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestExecutionListeners;
@@ -32,15 +33,16 @@ import static org.junit.Assert.*;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = "classpath:queryTestContext.xml")
 @TestExecutionListeners({DependencyInjectionTestExecutionListener.class, DbUnitTestExecutionListener.class})
-public class CreateBenefitETETest {
+public class BenefitAcceptanceTest {
 
+    private Logger logger = LoggerFactory.getLogger(BenefitAcceptanceTest.class);
+    
     @Autowired
     private CommandGateway commandGateway;
 
-
     @Test
     @ExpectedDatabase(value = "classpath:testdata/endtoend/expectedbenefitdata.xml", assertionMode = DatabaseAssertionMode.NON_STRICT)
-    public void given_a_benefit_name_it_should_create_benefit() {
+    public void givenABenefitNameItShouldCreateBenefit() {
         UserLoginDetailDto userLoginDetailDto = UserLoginDetailDto.createUserLoginDetailDto("", "");
         List<String> permissions = Lists.newArrayList();
         permissions.add("ROLE_ADMIN");
@@ -48,8 +50,14 @@ public class CreateBenefitETETest {
         CreateBenefitCommand createBenefitCommand = new CreateBenefitCommand();
         createBenefitCommand.setBenefitName("Death Benefit");
         createBenefitCommand.setUserDetails(userLoginDetailDto);
-        String benefitId = commandGateway.sendAndWait(createBenefitCommand);
-        assertNotNull(benefitId);
+        Boolean isSuccess = Boolean.FALSE;
+        try {
+            commandGateway.sendAndWait(createBenefitCommand);
+            isSuccess = Boolean.TRUE;
+        } catch (Exception e) {
+            logger.error("Error in creating benefit",e);
+        }
+        assertTrue(isSuccess);
 
     }
 }

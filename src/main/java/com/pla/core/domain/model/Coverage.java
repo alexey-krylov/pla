@@ -6,6 +6,7 @@
 
 package com.pla.core.domain.model;
 
+import com.pla.core.domain.exception.CoverageException;
 import lombok.AccessLevel;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -13,7 +14,7 @@ import lombok.ToString;
 import org.nthdimenzion.common.crud.ICrudEntity;
 
 import javax.persistence.*;
-import java.util.Collection;
+import java.util.List;
 
 /**
  * @author: Samir
@@ -21,55 +22,60 @@ import java.util.Collection;
  */
 @Entity
 @Table(name = "coverage", uniqueConstraints = {@UniqueConstraint(name = "UNQ_COVERAGE_NAME", columnNames = "coverageName")})
-@EqualsAndHashCode(of = "coverageName")
+@EqualsAndHashCode(of = {"coverageName","coverageId"})
 @ToString(of = "coverageName")
-@NoArgsConstructor(access = AccessLevel.PACKAGE)
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class Coverage implements ICrudEntity {
 
     @Id
     private String coverageId;
 
-    @Column(length = 50)
-    private String coverageName;
+    @Embedded
+    private CoverageName coverageName;
 
     @Column(length = 150)
     private String description;
 
-    private Boolean active;
+    @Enumerated(EnumType.STRING)
+    private CoverageStatus status;
 
-    @ElementCollection(targetClass = String.class)
-    @OrderColumn
-    private Collection<String> benefitIds;
-    
-    private Coverage(String coverageId, String coverageName, Collection<String> benefitIds) {
+    @OneToMany(targetEntity = Benefit.class, fetch = FetchType.EAGER)
+    @JoinTable(name = "coverage_benefit", joinColumns = @JoinColumn(name = "COVERAGE_ID"), inverseJoinColumns = @JoinColumn(name = "BENEFIT_ID"))
+    private List<Benefit> benefits;
+
+    Coverage(String coverageId, CoverageName coverageName, List<Benefit> benefits) {
         this.coverageId = coverageId;
         this.coverageName = coverageName;
-        this.benefitIds = benefitIds;
+        this.benefits = benefits;
     }
 
-    public static Coverage createCoverage(String coverageId, String coverageName, Collection<String> benefitIds) {
-        Coverage coverage = new Coverage(coverageId, coverageName, benefitIds);
-        return coverage;
+    public Coverage updateCoverageName(String name) {
+        if (CoverageStatus.INUSE.equals(this.status)) {
+            CoverageException.raiseCoverageNotUpdatableException();
+        }
+        CoverageName coverageName = new CoverageName(name);
+        this.coverageName = coverageName;
+        return this;
     }
 
-    public Coverage updateWithDescription(String description) {
+    public Coverage updateDescription(String description) {
+        if (CoverageStatus.INUSE.equals(this.status)) {
+            CoverageException.raiseCoverageNotUpdatableException();
+        }
         this.description = description;
         return this;
     }
 
-    public Coverage updateWithCoverageNameAndBenefit(String coverageName,Collection<String> benefitIds) {
-        this.coverageName = coverageName;
-        this.benefitIds = benefitIds;
-        return this;
-    }
-
     public Coverage activate() {
-        this.active = Boolean.TRUE;
+        this.status = CoverageStatus.ACTIVE;
         return this;
     }
 
     public Coverage deactivate() {
-        this.active = Boolean.FALSE;
+        if (CoverageStatus.INUSE.equals(this.status)) {
+            CoverageException.raiseCoverageNotUpdatableException();
+        }
+        this.status = CoverageStatus.INACTIVE;
         return this;
     }
 }
