@@ -10,7 +10,11 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import org.hibernate.validator.constraints.Length;
+import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.security.core.userdetails.UserDetails;
+
+import javax.validation.constraints.NotNull;
 
 /**
  * @author: Samir
@@ -21,8 +25,11 @@ import org.springframework.security.core.userdetails.UserDetails;
 @Setter
 @ToString
 public class CreateBenefitCommand {
-    
+
     private UserDetails userDetails;
-    
+
+    @NotNull(message = "{Benefit name cannot be null}")
+    @NotEmpty(message = "{Benefit name cannot be empty}")
+    @Length(max = 100, min = 1,message = "{Benefit name length should be between 1-100}")
     private String benefitName;
 }

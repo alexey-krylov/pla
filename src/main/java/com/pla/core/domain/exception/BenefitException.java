@@ -15,18 +15,9 @@ import org.nthdimenzion.ddd.domain.DomainException;
 public class BenefitException extends DomainException {
 
 
-    private BenefitException(String message) {
+    public BenefitException(String message) {
         super(message);
     }
 
 
-    public static void raiseBenefitNameNotProperLengthException() {
-        throw new BenefitException("Benefit name cannot be empty or more than 100 characters");
-
-    }
-
-    public static void raiseBenefitNameNotUniqueException() {
-        throw new BenefitException("Benefit already described");
-
-    }
 }
