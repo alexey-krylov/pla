@@ -6,9 +6,6 @@
 
 package com.pla.core.domain.model;
 
-import com.google.common.base.Preconditions;
-import com.pla.core.domain.exception.BenefitException;
-import com.pla.sharedkernel.domain.model.BenefitStatus;
 import lombok.AccessLevel;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -41,35 +38,6 @@ public class Benefit implements ICrudEntity {
         this.benefitId = benefitId;
         this.benefitName = benefitName;
         this.status = benefitStatus;
-    }
-
-    public Benefit updateBenefitName(String name) {
-        Preconditions.checkNotNull(name);
-        Preconditions.checkState(isUpdatable());
-        BenefitName benefitName = new BenefitName(name);
-        this.benefitName = benefitName;
-        return this;
-    }
-
-    public Benefit markAsUsed() {
-        if (BenefitStatus.INACTIVE.equals(this.status)) {
-            throw new BenefitException("Benefit cannot be marked as used as it is in inactive state");
-        }
-        this.status = BenefitStatus.INUSE;
-        return this;
-    }
-
-    public Benefit inActivate() {
-        Preconditions.checkState(isUpdatable());
-        this.status = BenefitStatus.INACTIVE;
-        return this;
-    }
-
-    public boolean isUpdatable() {
-        if (BenefitStatus.INACTIVE.equals(this.status) || BenefitStatus.INUSE.equals(this.status)) {
-            throw new BenefitException("Benefit name cannot be updated as it has been used in coverage/in inactive state");
-        }
-        return true;
     }
 
 }

@@ -8,7 +8,6 @@ package com.pla.core.domain.model;
 
 import com.pla.core.domain.exception.BenefitException;
 import com.pla.core.specification.BenefitNameIsUnique;
-import com.pla.sharedkernel.domain.model.BenefitStatus;
 import org.nthdimenzion.ddd.domain.annotations.ValueObject;
 
 /**
@@ -28,7 +27,7 @@ public class Admin {
     public Benefit createBenefit(BenefitNameIsUnique benefitNameIsUnique, String benefitId, String name) {
         BenefitName benefitName = new BenefitName(name);
         if (!benefitNameIsUnique.isSatisfiedBy(benefitName)) {
-            throw new BenefitException("Benefit name already satisfied");
+            BenefitException.raiseBenefitNameNotUniqueException();
         }
         Benefit benefit = new Benefit(benefitId, benefitName, BenefitStatus.ACTIVE);
         return benefit;

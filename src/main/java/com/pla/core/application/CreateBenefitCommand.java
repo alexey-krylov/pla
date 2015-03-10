@@ -10,10 +10,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
-import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.security.core.userdetails.UserDetails;
-
-import javax.validation.constraints.NotNull;
 
 /**
  * @author: Samir
@@ -24,11 +21,8 @@ import javax.validation.constraints.NotNull;
 @Setter
 @ToString
 public class CreateBenefitCommand {
-
-    @NotNull(message = "{User details cannot be null}")
+    
     private UserDetails userDetails;
-
-    @NotNull(message = "{Benefit name details cannot be null}")
-    @NotEmpty(message = "{Benefit name cannot be empty}")
+    
     private String benefitName;
 }

@@ -4,7 +4,7 @@
  * Proprietary and confidential
  */
 
-package com.pla.sharedkernel.domain.model;
+package com.pla.core.domain.model;
 
 /**
  * @author: Samir
