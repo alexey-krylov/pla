@@ -20,8 +20,8 @@ public interface AppConstants {
 
     MoneyFormatter MONEY_FORMATTER = new MoneyFormatterBuilder().appendCurrencyCode().appendAmount(MoneyAmountStyle.ASCII_DECIMAL_POINT_GROUP3_COMMA).toFormatter();
     
-    Boolean Success = Boolean.TRUE;
+    Boolean SUCCESS = Boolean.TRUE;
     
-    Boolean Failure = Boolean.FALSE;
+    Boolean FAILURE = Boolean.FALSE;
 
 }

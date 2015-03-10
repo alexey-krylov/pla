@@ -28,7 +28,7 @@ import java.util.Set;
 @NamedQuery(name = "findUserLoginByUserName", query = "from UserLogin where username = :username ")
 public class UserLogin implements ICrudEntity {
 
-    public static Long ACTIVATOR_ID = 2L;
+    public static final Long ACTIVATOR_ID = 2L;
 
     @Getter(AccessLevel.NONE)
     private transient Integer MAX_INCORRECT_LOGIN_ATTEMPTS = Integer.valueOf(2);

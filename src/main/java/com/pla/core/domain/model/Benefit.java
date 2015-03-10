@@ -20,9 +20,9 @@ import javax.persistence.*;
  */
 @Entity
 @Table(name = "benefit", uniqueConstraints = {@UniqueConstraint(name = "UNQ_BENEFIT_NAME", columnNames = "benefitName")})
-@EqualsAndHashCode(of = "benefitName")
-@ToString(of = "benefitName", callSuper = true)
-@NoArgsConstructor(access = AccessLevel.PACKAGE)
+@EqualsAndHashCode(of = {"benefitName", "benefitId"})
+@ToString(of = "benefitName")
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class Benefit implements ICrudEntity {
 
     @Id
@@ -31,12 +31,13 @@ public class Benefit implements ICrudEntity {
     @Embedded
     private BenefitName benefitName;
 
-    private boolean active;
+    @Enumerated(EnumType.STRING)
+    private BenefitStatus status;
 
-    Benefit(String benefitId, BenefitName benefitName, boolean active) {
+    Benefit(String benefitId, BenefitName benefitName, BenefitStatus benefitStatus) {
         this.benefitId = benefitId;
         this.benefitName = benefitName;
-        this.active = active;
+        this.status = benefitStatus;
     }
 
 }

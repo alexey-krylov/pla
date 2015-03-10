@@ -10,9 +10,7 @@ import com.github.springtestdbunit.DbUnitTestExecutionListener;
 import com.github.springtestdbunit.annotation.ExpectedDatabase;
 import com.github.springtestdbunit.assertion.DatabaseAssertionMode;
 import com.google.common.collect.Lists;
-import com.pla.core.domain.service.AdminRoleAdapter;
 import org.axonframework.commandhandling.gateway.CommandGateway;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.nthdimenzion.security.service.UserLoginDetailDto;
@@ -35,9 +33,9 @@ import static org.junit.Assert.*;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = "classpath:queryTestContext.xml")
 @TestExecutionListeners({DependencyInjectionTestExecutionListener.class, DbUnitTestExecutionListener.class})
-public class CreateBenefitETETest {
+public class BenefitAcceptanceTest {
 
-    private Logger logger = LoggerFactory.getLogger(CreateBenefitETETest.class);
+    private Logger logger = LoggerFactory.getLogger(BenefitAcceptanceTest.class);
     
     @Autowired
     private CommandGateway commandGateway;

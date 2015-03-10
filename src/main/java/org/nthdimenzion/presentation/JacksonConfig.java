@@ -6,7 +6,6 @@ import com.fasterxml.jackson.databind.*;
 import com.fasterxml.jackson.datatype.joda.JodaModule;
 import org.joda.money.Money;
 import org.joda.time.LocalDate;
-import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.BeanPostProcessor;
@@ -14,11 +13,10 @@ import org.springframework.http.converter.json.MappingJackson2HttpMessageConvert
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
-import java.util.Locale;
 
 import static org.nthdimenzion.common.AppConstants.MONEY_FORMATTER;
-import static org.nthdimenzion.presentation.AppUtils.GetDateTimeFormat;
-import static org.nthdimenzion.presentation.AppUtils.PrependCurrencyUnit;
+import static org.nthdimenzion.presentation.AppUtils.getDateTimeFormat;
+import static org.nthdimenzion.presentation.AppUtils.prependCurrencyUnit;
 import static org.nthdimenzion.presentation.AppUtils.StripCurrencyUnit;
 
 /**
@@ -32,7 +30,7 @@ import static org.nthdimenzion.presentation.AppUtils.StripCurrencyUnit;
 @Component
 public class JacksonConfig implements BeanPostProcessor {
 
-    private static DateTimeFormatter formatter = GetDateTimeFormat();
+    private static DateTimeFormatter formatter = getDateTimeFormat();
 
     public Object postProcessBeforeInitialization(Object bean, String beanName) throws BeansException {
         return bean;
@@ -84,7 +82,7 @@ public class JacksonConfig implements BeanPostProcessor {
 
         @Override
         public Money deserialize(JsonParser jp, DeserializationContext ctxt) throws IOException {
-            return MONEY_FORMATTER.parseMoney(PrependCurrencyUnit(jp.getValueAsString()));
+            return MONEY_FORMATTER.parseMoney(prependCurrencyUnit(jp.getValueAsString()));
         }
     }
 

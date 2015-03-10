@@ -7,10 +7,7 @@
 package org.nthdimenzion.security.service;
 
 
-import org.nthdimenzion.security.repository.UserLoginRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.authentication.SavedRequestAwareAuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
 import org.springframework.stereotype.Component;
@@ -34,7 +31,7 @@ public class AuthenticationSuccessHandler extends SavedRequestAwareAuthenticatio
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication auth) throws IOException, ServletException {
-        final String username = request.getParameter("username");
+//        final String username = request.getParameter("username");
         super.setDefaultTargetUrl("/home");
         super.onAuthenticationSuccess(request, response, auth);
     }

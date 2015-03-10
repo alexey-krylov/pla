@@ -269,6 +269,8 @@ commit;
 
 USE PLA;
 
+DROP TABLE IF EXISTS coverage_benefit;
+DROP TABLE IF EXISTS coverage;
 DROP TABLE IF EXISTS benefit;
 CREATE TABLE `benefit` (
   `benefit_id` varchar(255) NOT NULL,
@@ -278,22 +280,20 @@ CREATE TABLE `benefit` (
   UNIQUE KEY `UNQ_BENEFIT_NAME` (`benefit_name`)
 );
 
-DROP TABLE IF EXISTS coverage_benefit_ids;
-DROP TABLE IF EXISTS coverage;
 CREATE TABLE `coverage` (
   `coverage_id` varchar(255) NOT NULL,
-  `active` bit(1) DEFAULT NULL,
   `coverage_name` varchar(50) DEFAULT NULL,
   `description` varchar(150) DEFAULT NULL,
+  `status` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`coverage_id`),
   UNIQUE KEY `UNQ_COVERAGE_NAME` (`coverage_name`)
 );
 
-CREATE TABLE `coverage_benefit_ids` (
-  `coverage_coverageId` varchar(255) NOT NULL,
-  `benefit_ids` varchar(255) DEFAULT NULL,
-  KEY `FK_COVERAGE_COVERAGEBENEFIT` (`coverage_coverageId`),
-  CONSTRAINT `FK_COVERAGE_COVERAGEBENEFIT` FOREIGN KEY (`coverage_coverageId`) REFERENCES `coverage` (`coverage_id`)
+CREATE TABLE `coverage_benefit` (
+  `coverage_id` varchar(255) NOT NULL,
+  `benefit_id` varchar(255) NOT NULL,
+  UNIQUE KEY `UK_BENEFIT_ID` (`benefit_id`),
+  KEY `FK_COVERAGE_ID` (`coverage_id`),
+  CONSTRAINT `FK_COVERAGE_COVERAGE_ID` FOREIGN KEY (`coverage_id`) REFERENCES `coverage` (`coverage_id`),
+  CONSTRAINT `FK_BENEFIT_BENEFIT_ID` FOREIGN KEY (`benefit_id`) REFERENCES `benefit` (`benefit_id`)
 );
-
-ALTER TABLE `coverage_benefit_ids` ADD CONSTRAINT FK_COVERAGE_BENEFIT FOREIGN KEY (benefit_ids) REFERENCES `benefit`(benefit_id);

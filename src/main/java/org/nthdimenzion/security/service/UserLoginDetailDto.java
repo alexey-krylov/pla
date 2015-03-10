@@ -20,7 +20,7 @@ public class UserLoginDetailDto implements UserDetails {
 
     private Collection<String> permissions;
 
-    private Collection<? extends GrantedAuthority> authorities;
+    private Collection<SimpleGrantedAuthority> authorities;
 
     private String userName;
 
@@ -50,7 +50,7 @@ public class UserLoginDetailDto implements UserDetails {
         return this;
     }
 
-    public Collection<? extends GrantedAuthority> getAuthorities() {
+    public Collection<SimpleGrantedAuthority> getAuthorities() {
         return authorities;
     }
 

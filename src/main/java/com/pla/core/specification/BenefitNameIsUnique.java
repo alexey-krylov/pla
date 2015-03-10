@@ -30,7 +30,7 @@ public class BenefitNameIsUnique implements ISpecification<BenefitName> {
     @Override
     public boolean isSatisfiedBy(BenefitName benefitName) {
         int benefitCount = benefitFinder.getBenefitCountByBenefitName(benefitName.getBenefitName());
-        return (benefitCount == 0);
+        return benefitCount == 0;
     }
 
 }

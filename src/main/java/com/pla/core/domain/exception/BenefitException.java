@@ -26,7 +26,7 @@ public class BenefitException extends DomainException {
     }
 
     public static void raiseBenefitNameNotUniqueException() {
-        throw new BenefitException("Benefit name is not unique");
+        throw new BenefitException("Benefit already described");
 
     }
 }

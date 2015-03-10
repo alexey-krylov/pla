@@ -25,13 +25,13 @@ import javax.persistence.Embeddable;
 @ToString(of = "benefitName")
 @EqualsAndHashCode(of = "benefitName")
 @Immutable
-@NoArgsConstructor(access = AccessLevel.PACKAGE)
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class BenefitName {
 
     @Column(length = 100)
     private String benefitName;
 
-    public BenefitName(String benefitName) {
+    BenefitName(String benefitName) {
         Preconditions.checkNotNull(benefitName);
         if (benefitName.trim().length() <= 0 || benefitName.length() > 100) {
             BenefitException.raiseBenefitNameNotProperLengthException();

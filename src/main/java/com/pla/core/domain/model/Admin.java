@@ -23,12 +23,13 @@ public class Admin {
         this.userName = userName;
 
     }
+
     public Benefit createBenefit(BenefitNameIsUnique benefitNameIsUnique, String benefitId, String name) {
         BenefitName benefitName = new BenefitName(name);
         if (!benefitNameIsUnique.isSatisfiedBy(benefitName)) {
             BenefitException.raiseBenefitNameNotUniqueException();
         }
-        Benefit benefit = new Benefit(benefitId, benefitName, true);
+        Benefit benefit = new Benefit(benefitId, benefitName, BenefitStatus.ACTIVE);
         return benefit;
     }
 
