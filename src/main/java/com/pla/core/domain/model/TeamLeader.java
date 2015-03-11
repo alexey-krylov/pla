@@ -23,7 +23,7 @@ import javax.persistence.Embeddable;
 @ValueObject
 @Immutable
 @Embeddable
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
+@NoArgsConstructor(access = AccessLevel.PUBLIC)
 @EqualsAndHashCode(of = "employeeId")
 public class TeamLeader {
 
@@ -39,7 +39,7 @@ public class TeamLeader {
     @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentLocalDate")
     private LocalDate thruDate;
 
-    TeamLeader(String employeeId, LocalDate fromDate, LocalDate thruDate, String firstName, String lastName) {
+    public TeamLeader(String employeeId, LocalDate fromDate, LocalDate thruDate, String firstName, String lastName) {
         this.employeeId = employeeId;
         this.fromDate = fromDate;
         this.thruDate = thruDate;

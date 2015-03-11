@@ -9,10 +9,7 @@ package com.pla.core.domain.model;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
 import com.pla.core.domain.exception.TeamException;
-import lombok.AccessLevel;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
 import org.nthdimenzion.common.crud.ICrudEntity;
 
 import javax.persistence.*;
@@ -28,6 +25,7 @@ import java.util.List;
 @EqualsAndHashCode(of = {"teamName", "teamCode", "teamId"})
 @ToString(of = {"teamCode", "teamName"})
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
+@Getter(value = AccessLevel.PRIVATE)
 public class Team implements ICrudEntity {
 
     @Id
