@@ -13,4 +13,5 @@ package com.pla.sharedkernel.specification;
 public interface ISpecification<T> {
 
     boolean isSatisfiedBy(T data);
+
 }

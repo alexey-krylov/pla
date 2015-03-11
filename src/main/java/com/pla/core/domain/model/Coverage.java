@@ -26,7 +26,7 @@ import java.util.List;
 @EqualsAndHashCode(of = {"coverageName","coverageId"})
 @ToString(of = "coverageName")
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-class Coverage implements ICrudEntity {
+public class Coverage implements ICrudEntity {
 
     @Id
     private String coverageId;
