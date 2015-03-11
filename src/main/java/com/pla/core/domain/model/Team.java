@@ -6,6 +6,7 @@
 
 package com.pla.core.domain.model;
 
+import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
 import com.pla.core.domain.exception.TeamException;
 import lombok.AccessLevel;
@@ -47,6 +48,7 @@ public class Team implements ICrudEntity {
     private Boolean active = Boolean.FALSE;
 
     Team(String teamId, String teamCode, String teamName, TeamLeader teamLeader) {
+        Preconditions.checkNotNull(teamId);
         this.teamId = teamId;
         this.teamCode = teamCode;
         this.teamName = teamName;
@@ -54,7 +56,7 @@ public class Team implements ICrudEntity {
         this.teamLeaders.add(teamLeader);
     }
 
-    public Team updateTeamLeader(TeamLeader teamLeader) {
+    public Team updateTeamLeader(TeamLeader teamLeader,LocalDate effectiveFrom) {
         if (this.currentTeamLeader != null) {
             TeamException.raiseTeamLeaderCannotBeAssociatedException();
         }
@@ -63,8 +65,4 @@ public class Team implements ICrudEntity {
         return this;
     }
 
-
-    public Team dissociateTeamLeader(String employeeId, LocalDate dissociatedOn) {
-        return this;
-    }
 }

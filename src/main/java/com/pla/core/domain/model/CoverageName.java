@@ -36,9 +36,6 @@ public class CoverageName {
 
     CoverageName(String coverageName) {
         Preconditions.checkNotNull(coverageName);
-        if (coverageName.trim().length() <= 0 || coverageName.length() > 50) {
-            CoverageException.raiseNotProperCoverageNameException();
-        }
         this.coverageName = coverageName;
 
     }

@@ -9,13 +9,16 @@ package com.pla.core.domain.model;
 import com.pla.core.domain.exception.BenefitException;
 import com.pla.core.specification.BenefitNameIsUnique;
 import com.pla.sharedkernel.domain.model.BenefitStatus;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
-import static org.junit.Assert.*;
-import static org.mockito.Mockito.*;
+import static org.springframework.test.util.ReflectionTestUtils.invokeGetterMethod;
+
+import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.when;
 
 /**
  * @author: Samir
@@ -27,49 +30,60 @@ public class BenefitUnitTest {
     @Mock
     private BenefitNameIsUnique benefitNameIsUnique;
 
-    @Test
-    public void statusShouldBeActiveOnCreateOfNewBenefit() {
-        Admin admin = new Admin("");
-        String name = "Accidental death benefit";
+    private Benefit benefit;
+
+    private Admin admin;
+
+    private String name = "Accidental death benefit";
+
+    @Before
+    public void setUp() {
+        admin = new Admin("");
         BenefitName benefitName = new BenefitName("Accidental death benefit");
         when(benefitNameIsUnique.isSatisfiedBy(benefitName)).thenReturn(Boolean.TRUE);
-        Benefit benefit = admin.createBenefit(benefitNameIsUnique, "1", name);
-        assertEquals(BenefitStatus.ACTIVE, benefit.getStatus());
+        benefit = admin.createBenefit(benefitNameIsUnique, "1", name);
+    }
+
+    @Test
+    public void statusShouldBeActiveOnCreateOfNewBenefit() {
+        assertEquals(BenefitStatus.ACTIVE, invokeGetterMethod(benefit, "getStatus"));
     }
 
     @Test
     public void statusOfBenefitShouldBeInUse() {
-        Admin admin = new Admin("");
-        String name = "Accidental death benefit";
-        BenefitName benefitName = new BenefitName("Accidental death benefit");
-        when(benefitNameIsUnique.isSatisfiedBy(benefitName)).thenReturn(Boolean.TRUE);
-        Benefit benefit = admin.createBenefit(benefitNameIsUnique, "1", name);
         benefit = benefit.markAsUsed();
-        assertEquals(BenefitStatus.INUSE, benefit.getStatus());
+        assertEquals(BenefitStatus.INUSE, invokeGetterMethod(benefit, "getStatus"));
     }
 
 
     @Test(expected = BenefitException.class)
     public void markingAnInactivatedBenefitShouldThrowExceptionAndStatusShouldBeInactive() {
-        Admin admin = new Admin("");
-        String name = "Accidental death benefit";
-        BenefitName benefitName = new BenefitName("Accidental death benefit");
-        when(benefitNameIsUnique.isSatisfiedBy(benefitName)).thenReturn(Boolean.TRUE);
-        Benefit benefit = admin.createBenefit(benefitNameIsUnique, "1", name);
         benefit = admin.inactivateBenefit(benefit);
         benefit = benefit.markAsUsed();
-        assertEquals(BenefitStatus.INACTIVE, benefit.getStatus());
+        assertEquals(BenefitStatus.INACTIVE, invokeGetterMethod(benefit, "getStatus"));
     }
 
     @Test(expected = BenefitException.class)
     public void inactivatingABenefitWithInUseStatusThrowExceptionAndStatusShouldBeInUse() {
-        Admin admin = new Admin("");
-        String name = "Accidental death benefit";
-        BenefitName benefitName = new BenefitName("Accidental death benefit");
-        when(benefitNameIsUnique.isSatisfiedBy(benefitName)).thenReturn(Boolean.TRUE);
-        Benefit benefit = admin.createBenefit(benefitNameIsUnique, "1", name);
         benefit = benefit.markAsUsed();
         benefit = admin.inactivateBenefit(benefit);
-        assertEquals(BenefitStatus.INUSE, benefit.getStatus());
+        assertEquals(BenefitStatus.INUSE, invokeGetterMethod(benefit, "getStatus"));
+    }
+
+    @Test(expected = BenefitException.class)
+    public void benefitInUsedStatusShouldThrowExceptionOnUpdatingNameAndNameShouldBeUnchanged() {
+        benefit = benefit.markAsUsed();
+        String updatedName = "CI Benefit";
+        admin.updateBenefit(benefit, updatedName);
+        BenefitName benefitName = (BenefitName) invokeGetterMethod(benefit, "getBenefitName");
+        assertEquals(name, benefitName.getBenefitName());
+    }
+
+    @Test
+    public void benefitInActiveStatusShouldGetUpdatedWithNewName() {
+        String updatedName = "CI Benefit";
+        Benefit updatedBenefit = admin.updateBenefit(benefit, updatedName);
+        BenefitName benefitName = (BenefitName) invokeGetterMethod(updatedBenefit, "getBenefitName");
+        assertEquals(updatedName, benefitName.getBenefitName());
     }
 }

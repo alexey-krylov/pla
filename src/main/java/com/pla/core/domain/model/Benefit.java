@@ -23,6 +23,7 @@ import javax.persistence.*;
 @EqualsAndHashCode(of = {"benefitName", "benefitId"})
 @ToString(of = "benefitName")
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
+@Getter(value = AccessLevel.PRIVATE)
 public class Benefit implements ICrudEntity {
 
     @Id
@@ -32,7 +33,6 @@ public class Benefit implements ICrudEntity {
     private BenefitName benefitName;
 
     @Enumerated(EnumType.STRING)
-    @Getter
     private BenefitStatus status;
 
     Benefit(String benefitId, BenefitName benefitName, BenefitStatus benefitStatus) {

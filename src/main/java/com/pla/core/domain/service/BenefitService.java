@@ -16,6 +16,8 @@ import com.pla.core.specification.BenefitNameIsUnique;
 import org.nthdimenzion.common.service.JpaRepositoryFactory;
 import org.nthdimenzion.ddd.domain.AbstractDomainFactory;
 import org.nthdimenzion.ddd.domain.annotations.DomainFactory;
+import org.nthdimenzion.ddd.domain.annotations.DomainService;
+import org.nthdimenzion.object.utils.IIdGenerator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,8 +27,8 @@ import org.springframework.data.repository.CrudRepository;
  * @author: Samir
  * @since 1.0 09/03/2015
  */
-@DomainFactory
-public class BenefitService extends AbstractDomainFactory {
+@DomainService
+public class BenefitService {
 
 
     private AdminRoleAdapter adminRoleAdapter;
@@ -35,13 +37,14 @@ public class BenefitService extends AbstractDomainFactory {
 
     private JpaRepositoryFactory jpaRepositoryFactory;
 
-    private Logger logger = LoggerFactory.getLogger(AdminRoleAdapter.class);
+    private IIdGenerator idGenerator;
 
     @Autowired
-    public BenefitService(AdminRoleAdapter adminRoleAdapter, BenefitNameIsUnique benefitNameIsUnique, JpaRepositoryFactory jpaRepositoryFactory) {
+    public BenefitService(AdminRoleAdapter adminRoleAdapter, BenefitNameIsUnique benefitNameIsUnique, JpaRepositoryFactory jpaRepositoryFactory, IIdGenerator idGenerator) {
         this.adminRoleAdapter = adminRoleAdapter;
         this.benefitNameIsUnique = benefitNameIsUnique;
         this.jpaRepositoryFactory = jpaRepositoryFactory;
+        this.idGenerator = idGenerator;
     }
 
     public Benefit createBenefit(CreateBenefitCommand createBenefitCommand) {

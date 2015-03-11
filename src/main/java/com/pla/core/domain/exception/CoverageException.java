@@ -18,10 +18,6 @@ public class CoverageException extends DomainException {
         super(message);
     }
 
-    public static void raiseNotProperCoverageNameException() {
-        throw new CoverageException("Coverage name cannot be empty or more than 50 characters");
-
-    }
 
     public static void raiseCoverageNotUpdatableException() {
         throw new CoverageException("Coverage cannot be uupdated as it is used in active plan");
