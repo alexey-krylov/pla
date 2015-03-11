@@ -34,17 +34,29 @@ public class BenefitFinder {
         this.namedParameterJdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
     }
 
-    public static final String FIND_BENEFIT_FOR_A_GIVEN_BENEFIT_NAME = "select * from benefit where benefit_name=:benefitName";
+    public static final String findBenefitForAGivenBenefitName = "select * from benefit where benefit_name=:benefitName";
 
-    public static final String ACTIVE_BENEFIT_COUNT_BY_BENEFIT_NAME = "select count(benefit_id) from benefit where benefit_name=:benefitName";
+    public static final String activeBenefitCountByBenefitName = "select count(benefit_id) from benefit where benefit_name=:benefitName";
+
+    public static final String findBenefitForAGivenBenefitId = "SELECT benefit_id AS benefitId,benefit_name AS benefitName,STATUS AS benefitStatus FROM benefit where benefit_id=:benefitId";
+
+    public static final String findAllBenefit = "SELECT benefit_id AS benefitId,benefit_name AS benefitName,STATUS AS benefitStatus FROM benefit";
 
     public List<Map<String, Object>> findBenefitFor(String benefitName) {
-        return namedParameterJdbcTemplate.query(FIND_BENEFIT_FOR_A_GIVEN_BENEFIT_NAME, Collections.singletonMap("benefitName", benefitName), new ColumnMapRowMapper());
+        return namedParameterJdbcTemplate.query(findBenefitForAGivenBenefitName, Collections.singletonMap("benefitName", benefitName), new ColumnMapRowMapper());
     }
-    
-    public int getBenefitCountByBenefitName(String benefitName){
+
+    public int getBenefitCountByBenefitName(String benefitName) {
         Preconditions.checkNotNull(benefitName);
-        Number noOfBenefit  = namedParameterJdbcTemplate.queryForObject(ACTIVE_BENEFIT_COUNT_BY_BENEFIT_NAME, new MapSqlParameterSource().addValue("benefitName",benefitName), Number.class);
+        Number noOfBenefit = namedParameterJdbcTemplate.queryForObject(activeBenefitCountByBenefitName, new MapSqlParameterSource().addValue("benefitName", benefitName), Number.class);
         return noOfBenefit.intValue();
+    }
+
+    public Map<String, Object> findBenefitById(String benefitId) {
+        return namedParameterJdbcTemplate.queryForMap(findBenefitForAGivenBenefitId, new MapSqlParameterSource().addValue("benefitId", benefitId));
+    }
+
+    public List<Map<String, Object>> getAllBenefit() {
+        return namedParameterJdbcTemplate.query(findAllBenefit, new ColumnMapRowMapper());
     }
 }

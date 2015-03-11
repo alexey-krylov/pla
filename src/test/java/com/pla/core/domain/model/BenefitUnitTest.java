@@ -74,7 +74,7 @@ public class BenefitUnitTest {
     public void benefitInUsedStatusShouldThrowExceptionOnUpdatingNameAndNameShouldBeUnchanged() {
         benefit = benefit.markAsUsed();
         String updatedName = "CI Benefit";
-        admin.updateBenefit(benefit, updatedName);
+        benefit = benefit.updateBenefitName(new BenefitName(updatedName));
         BenefitName benefitName = (BenefitName) invokeGetterMethod(benefit, "getBenefitName");
         assertEquals(name, benefitName.getBenefitName());
     }
@@ -82,7 +82,7 @@ public class BenefitUnitTest {
     @Test
     public void benefitInActiveStatusShouldGetUpdatedWithNewName() {
         String updatedName = "CI Benefit";
-        Benefit updatedBenefit = admin.updateBenefit(benefit, updatedName);
+        Benefit updatedBenefit = benefit.updateBenefitName(new BenefitName(updatedName));;
         BenefitName benefitName = (BenefitName) invokeGetterMethod(updatedBenefit, "getBenefitName");
         assertEquals(updatedName, benefitName.getBenefitName());
     }

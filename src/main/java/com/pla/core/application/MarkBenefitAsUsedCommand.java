@@ -8,10 +8,7 @@
 package com.pla.core.application;
 
 import com.pla.sharedkernel.domain.model.BenefitStatus;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.validation.constraints.NotNull;
@@ -24,6 +21,7 @@ import javax.validation.constraints.NotNull;
 @Getter
 @Setter
 @ToString
+@AllArgsConstructor
 public class MarkBenefitAsUsedCommand {
 
     @NotNull(message = "{benefit id cannot be null}")

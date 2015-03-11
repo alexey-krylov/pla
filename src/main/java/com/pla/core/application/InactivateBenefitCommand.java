@@ -7,10 +7,7 @@
 package com.pla.core.application;
 
 import com.pla.sharedkernel.domain.model.BenefitStatus;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -25,15 +22,12 @@ import javax.validation.constraints.NotNull;
 @Getter
 @Setter
 @ToString
-public class InactivateBenefitStatusCommand {
+@AllArgsConstructor
+public class InactivateBenefitCommand {
 
     @NotNull(message = "{benefit id cannot be null}")
     @NotEmpty(message = "{benefit id cannot be empty}")
     private String benefitId;
-
-
-    @NotNull(message = "{status cannot be null}")
-    private BenefitStatus status;
 
     private UserDetails userDetails;
 }

@@ -6,12 +6,8 @@
 
 package com.pla.core.domain.model;
 
-import lombok.AccessLevel;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.annotations.Immutable;
-import org.hibernate.annotations.Type;
-import org.joda.time.LocalDate;
 import org.nthdimenzion.ddd.domain.annotations.ValueObject;
 
 import javax.persistence.Embeddable;
@@ -23,8 +19,10 @@ import javax.persistence.Embeddable;
 @ValueObject
 @Immutable
 @Embeddable
-@NoArgsConstructor(access = AccessLevel.PUBLIC)
+@NoArgsConstructor(access = AccessLevel.PACKAGE)
 @EqualsAndHashCode(of = "employeeId")
+@Getter(value = AccessLevel.PACKAGE)
+@Setter(value = AccessLevel.PRIVATE)
 public class TeamLeader {
 
     private String employeeId;
@@ -33,16 +31,8 @@ public class TeamLeader {
 
     private String lastName;
 
-    @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentLocalDate")
-    private LocalDate fromDate;
-
-    @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentLocalDate")
-    private LocalDate thruDate;
-
-    public TeamLeader(String employeeId, LocalDate fromDate, LocalDate thruDate, String firstName, String lastName) {
+    TeamLeader(String employeeId, String firstName, String lastName) {
         this.employeeId = employeeId;
-        this.fromDate = fromDate;
-        this.thruDate = thruDate;
         this.firstName = firstName;
         this.lastName = lastName;
     }
