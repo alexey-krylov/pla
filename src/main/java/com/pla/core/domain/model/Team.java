@@ -7,7 +7,6 @@
 package com.pla.core.domain.model;
 
 import com.google.common.base.Preconditions;
-import com.google.common.collect.Lists;
 import com.pla.core.domain.exception.TeamException;
 import lombok.AccessLevel;
 import lombok.EqualsAndHashCode;
@@ -33,35 +32,35 @@ public class Team implements ICrudEntity {
     @Id
     private String teamId;
 
-    private String teamCode;
-
-    private String teamName;
+    @Embedded
+    private TeamCode teamCode;
 
     @Embedded
-    private TeamLeader currentTeamLeader;
+    private TeamName teamName;
 
-    @ElementCollection
+    private String currentTeamLeader;
+
+    @ElementCollection(targetClass = TeamLeaderFulfillment.class, fetch = FetchType.EAGER)
     @OrderColumn
-    @JoinTable(name = "TEAM_TEAM_LEADER", joinColumns = @JoinColumn(name = "TEAM_ID"))
-    private List<TeamLeader> teamLeaders = Lists.newArrayList();
+    @JoinTable(name = "TEAM_TEAM_LEADER_FUlFILLMENT", joinColumns = @JoinColumn(name = "TEAM_ID"))
+    private List<TeamLeaderFulfillment> teamLeaders;
 
     private Boolean active = Boolean.FALSE;
 
-    Team(String teamId, String teamCode, String teamName, TeamLeader teamLeader) {
+    Team(String teamId, TeamCode teamCode, TeamName teamName, String currentTeamLeader, TeamLeaderFulfillment teamLeaderFulfillment) {
         Preconditions.checkNotNull(teamId);
         this.teamId = teamId;
         this.teamCode = teamCode;
         this.teamName = teamName;
-        this.currentTeamLeader = teamLeader;
-        this.teamLeaders.add(teamLeader);
+        this.currentTeamLeader = currentTeamLeader;
+        this.teamLeaders.add(teamLeaderFulfillment);
     }
 
-    public Team updateTeamLeader(TeamLeader teamLeader,LocalDate effectiveFrom) {
+    public Team updateTeamLeader(TeamLeader teamLeader, LocalDate effectiveFrom) {
         if (this.currentTeamLeader != null) {
             TeamException.raiseTeamLeaderCannotBeAssociatedException();
         }
-        this.currentTeamLeader = teamLeader;
-        this.teamLeaders.add(teamLeader);
+        this.currentTeamLeader= teamLeader.getEmployeeId();
         return this;
     }
 

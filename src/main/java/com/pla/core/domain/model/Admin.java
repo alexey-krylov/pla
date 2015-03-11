@@ -7,9 +7,12 @@
 package com.pla.core.domain.model;
 
 import com.pla.core.domain.exception.BenefitException;
+import com.pla.core.specification.BenefitIsUpdatable;
 import com.pla.core.specification.BenefitNameIsUnique;
 import com.pla.sharedkernel.domain.model.BenefitStatus;
 import org.nthdimenzion.ddd.domain.annotations.ValueObject;
+
+import java.util.Set;
 
 /**
  * @author: Samir
@@ -34,14 +37,24 @@ public class Admin {
         return benefit;
     }
 
-    public Benefit updateBenefit(Benefit benefit,String name){
+    public Benefit updateBenefit(Benefit benefit, String name, BenefitNameIsUnique benefitNameIsUnique, BenefitIsUpdatable benefitIsUpdatable) {
         BenefitName benefitName = new BenefitName(name);
+        if (!benefitIsUpdatable.isSatisfiedBy(benefit.getBenefitId(), benefitName)) {
+            throw new BenefitException("Benefit name cannot be updated. New name is required");
+        }
+        if (!benefitIsUpdatable.isGeneralizationOf(benefitNameIsUnique, benefitName)) {
+            throw new BenefitException("Benefit name already satisfied");
+        }
         benefit = benefit.updateBenefitName(benefitName);
         return benefit;
     }
 
-    public Benefit inactivateBenefit(Benefit benefit){
+    public Benefit inactivateBenefit(Benefit benefit) {
         benefit = benefit.inActivate();
         return benefit;
+    }
+
+    public Coverage createCoverage(String coverageId, CoverageName coverageName, Set<Benefit> benefitList) {
+        return new Coverage(coverageId, coverageName, benefitList);
     }
 }

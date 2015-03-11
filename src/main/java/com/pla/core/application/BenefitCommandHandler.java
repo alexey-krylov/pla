@@ -43,7 +43,7 @@ public class BenefitCommandHandler {
         if (logger.isDebugEnabled()) {
             logger.debug("*****Command Received*****" + createBenefitCommand);
         }
-        Benefit benefit = benefitService.createBenefit(createBenefitCommand);
+        Benefit benefit = benefitService.createBenefit(createBenefitCommand.getBenefitName(), createBenefitCommand.getUserDetails());
         JpaRepository<Benefit, String> benefitRepository = jpaRepositoryFactory.getCrudRepository(Benefit.class);
         try {
             benefitRepository.save(benefit);
@@ -58,8 +58,9 @@ public class BenefitCommandHandler {
         if (logger.isDebugEnabled()) {
             logger.debug("*****Command Received*****" + updateBenefitCommand);
         }
-        Benefit benefit = benefitService.updateBenefit(updateBenefitCommand);
         JpaRepository<Benefit, String> benefitRepository = jpaRepositoryFactory.getCrudRepository(Benefit.class);
+        Benefit benefit = benefitRepository.findOne(updateBenefitCommand.getBenefitId());
+        benefit = benefitService.updateBenefit(benefit, updateBenefitCommand.getBenefitName(), updateBenefitCommand.getUserDetails());
         try {
             benefitRepository.save(benefit);
         } catch (RuntimeException e) {
@@ -73,8 +74,9 @@ public class BenefitCommandHandler {
         if (logger.isDebugEnabled()) {
             logger.debug("*****Command Received*****" + markBenefitAsUsedCommand);
         }
-        Benefit benefit = benefitService.markBenefitAsUsed(markBenefitAsUsedCommand);
         CrudRepository<Benefit, String> benefitRepository = jpaRepositoryFactory.getCrudRepository(Benefit.class);
+        Benefit benefit = benefitRepository.findOne(markBenefitAsUsedCommand.getBenefitId());
+        benefit = benefitService.markBenefitAsUsed(benefit);
         try {
             benefitRepository.save(benefit);
         } catch (RuntimeException e) {
@@ -84,13 +86,13 @@ public class BenefitCommandHandler {
     }
 
     @CommandHandler
-    public void inactivateBenefitHandler(InactivateBenefitStatusCommand inactivateBenefitStatusCommand) {
+    public void inactivateBenefitHandler(InactivateBenefitCommand inactivateBenefitCommand) {
         if (logger.isDebugEnabled()) {
-            logger.debug("*****Inactivate Benefit Status Command  Received*****" + inactivateBenefitStatusCommand);
+            logger.debug("*****Inactivate Benefit Status Command  Received*****" + inactivateBenefitCommand);
         }
-        Preconditions.checkState(BenefitStatus.INACTIVE.equals(inactivateBenefitStatusCommand.getStatus()));
-        Benefit benefit = benefitService.inactivateBenefit(inactivateBenefitStatusCommand);
         CrudRepository<Benefit, String> benefitRepository = jpaRepositoryFactory.getCrudRepository(Benefit.class);
+        Benefit benefit = benefitRepository.findOne(inactivateBenefitCommand.getBenefitId());
+        benefit = benefitService.inactivateBenefit(benefit, inactivateBenefitCommand.getUserDetails());
         try {
             benefitRepository.save(benefit);
         } catch (RuntimeException e) {

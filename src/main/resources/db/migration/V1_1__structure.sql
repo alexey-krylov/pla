@@ -297,3 +297,26 @@ CREATE TABLE `coverage_benefit` (
   CONSTRAINT `FK_COVERAGE_COVERAGE_ID` FOREIGN KEY (`coverage_id`) REFERENCES `coverage` (`coverage_id`),
   CONSTRAINT `FK_BENEFIT_BENEFIT_ID` FOREIGN KEY (`benefit_id`) REFERENCES `benefit` (`benefit_id`)
 );
+
+DROP TABLE IF EXISTS team_team_leader_fulfillment;
+DROP TABLE IF EXISTS team;
+CREATE TABLE `team` (
+`team_id` varchar(255) NOT NULL,
+`active` bit(1) DEFAULT NULL,
+`current_team_leader` varchar(255) DEFAULT NULL,
+`team_code` varchar(255) DEFAULT NULL,
+`team_name` varchar(255) DEFAULT NULL,
+PRIMARY KEY (`team_id`),
+UNIQUE KEY `UNQ_TEAM_CODE_NAME` (`team_code`,`team_name`)
+);
+CREATE TABLE `team_team_leader_fulfillment` (
+  `team_id` varchar(255) NOT NULL,
+  `from_date` date DEFAULT NULL,
+  `employee_id` varchar(255) DEFAULT NULL,
+  `first_name` varchar(255) DEFAULT NULL,
+  `last_name` varchar(255) DEFAULT NULL,
+  `thru_date` date DEFAULT NULL,
+  `team_leaders_order` int(11) NOT NULL,
+  PRIMARY KEY (`team_id`,`team_leaders_order`),
+  CONSTRAINT `FK_TEAM_LEADER_FULFILLMENT` FOREIGN KEY (`team_id`) REFERENCES `team` (`team_id`)
+);

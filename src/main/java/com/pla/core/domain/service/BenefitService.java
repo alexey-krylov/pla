@@ -6,22 +6,15 @@
 
 package com.pla.core.domain.service;
 
-import com.pla.core.application.InactivateBenefitStatusCommand;
-import com.pla.core.application.MarkBenefitAsUsedCommand;
-import com.pla.core.application.CreateBenefitCommand;
-import com.pla.core.application.UpdateBenefitCommand;
 import com.pla.core.domain.model.Admin;
 import com.pla.core.domain.model.Benefit;
+import com.pla.core.specification.BenefitIsUpdatable;
 import com.pla.core.specification.BenefitNameIsUnique;
 import org.nthdimenzion.common.service.JpaRepositoryFactory;
-import org.nthdimenzion.ddd.domain.AbstractDomainFactory;
-import org.nthdimenzion.ddd.domain.annotations.DomainFactory;
 import org.nthdimenzion.ddd.domain.annotations.DomainService;
 import org.nthdimenzion.object.utils.IIdGenerator;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.repository.CrudRepository;
+import org.springframework.security.core.userdetails.UserDetails;
 
 /**
  * @author: Samir
@@ -39,48 +32,40 @@ public class BenefitService {
 
     private IIdGenerator idGenerator;
 
+    private BenefitIsUpdatable benefitIsUpdatable;
+
     @Autowired
-    public BenefitService(AdminRoleAdapter adminRoleAdapter, BenefitNameIsUnique benefitNameIsUnique, JpaRepositoryFactory jpaRepositoryFactory, IIdGenerator idGenerator) {
+    public BenefitService(AdminRoleAdapter adminRoleAdapter, BenefitNameIsUnique benefitNameIsUnique, JpaRepositoryFactory jpaRepositoryFactory, IIdGenerator idGenerator, BenefitIsUpdatable benefitIsUpdatable) {
         this.adminRoleAdapter = adminRoleAdapter;
         this.benefitNameIsUnique = benefitNameIsUnique;
         this.jpaRepositoryFactory = jpaRepositoryFactory;
         this.idGenerator = idGenerator;
+        this.benefitIsUpdatable = benefitIsUpdatable;
     }
 
-    public Benefit createBenefit(CreateBenefitCommand createBenefitCommand) {
+    public Benefit createBenefit(String benefitName, UserDetails userDetails) {
         String benefitId = idGenerator.nextId();
-        Admin admin = adminRoleAdapter.userToAdmin(createBenefitCommand.getUserDetails());
-        Benefit benefit = admin.createBenefit(benefitNameIsUnique, benefitId, createBenefitCommand.getBenefitName());
+        Admin admin = adminRoleAdapter.userToAdmin(userDetails);
+        Benefit benefit = admin.createBenefit(benefitNameIsUnique, benefitId, benefitName);
         return benefit;
     }
 
-    public Benefit updateBenefit(UpdateBenefitCommand updateBenefitCommand) {
-        String benefitId = updateBenefitCommand.getBenefitId();
-        Admin admin = adminRoleAdapter.userToAdmin(updateBenefitCommand.getUserDetails());
-        Benefit benefit = getBenefit(benefitId);
-        benefit = admin.updateBenefit(benefit, updateBenefitCommand.getBenefitName());
+    public Benefit updateBenefit(Benefit benefit, String benefitName, UserDetails userDetails) {
+        Admin admin = adminRoleAdapter.userToAdmin(userDetails);
+        benefit = admin.updateBenefit(benefit, benefitName, benefitNameIsUnique, benefitIsUpdatable);
         return benefit;
 
     }
 
-    public Benefit markBenefitAsUsed(MarkBenefitAsUsedCommand markBenefitAsUsedCommand) {
-        String benefitId = markBenefitAsUsedCommand.getBenefitId();
-        Benefit benefit = getBenefit(benefitId);
+    public Benefit markBenefitAsUsed(Benefit benefit) {
         benefit = benefit.markAsUsed();
         return benefit;
     }
 
-    public Benefit inactivateBenefit(InactivateBenefitStatusCommand inactivateBenefitStatusCommand) {
-        String benefitId = inactivateBenefitStatusCommand.getBenefitId();
-        Admin admin = adminRoleAdapter.userToAdmin(inactivateBenefitStatusCommand.getUserDetails());
-        Benefit benefit = getBenefit(benefitId);
+    public Benefit inactivateBenefit(Benefit benefit, UserDetails userDetails) {
+        Admin admin = adminRoleAdapter.userToAdmin(userDetails);
         benefit = admin.inactivateBenefit(benefit);
         return benefit;
     }
 
-    private Benefit getBenefit(String benefitId) {
-        CrudRepository<Benefit, String> benefitRepository = jpaRepositoryFactory.getCrudRepository(Benefit.class);
-        Benefit benefit = benefitRepository.findOne(benefitId);
-        return benefit;
-    }
 }

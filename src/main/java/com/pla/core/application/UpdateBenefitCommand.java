@@ -6,10 +6,7 @@
 
 package com.pla.core.application;
 
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -24,6 +21,7 @@ import javax.validation.constraints.NotNull;
 @Getter
 @Setter
 @ToString
+@AllArgsConstructor
 public class UpdateBenefitCommand {
 
     @NotNull(message = "{benefit id cannot be null}")
@@ -35,4 +33,6 @@ public class UpdateBenefitCommand {
     private String benefitName;
 
     private UserDetails userDetails;
+
+
 }

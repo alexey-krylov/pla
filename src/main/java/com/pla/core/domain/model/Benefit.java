@@ -20,10 +20,10 @@ import javax.persistence.*;
  */
 @Entity
 @Table(name = "benefit", uniqueConstraints = {@UniqueConstraint(name = "UNQ_BENEFIT_NAME", columnNames = "benefitName")})
-@EqualsAndHashCode(of = {"benefitName", "benefitId"})
+@EqualsAndHashCode(of = {"benefitName"})
 @ToString(of = "benefitName")
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-@Getter(value = AccessLevel.PRIVATE)
+@Getter(value = AccessLevel.PACKAGE)
 public class Benefit implements ICrudEntity {
 
     @Id

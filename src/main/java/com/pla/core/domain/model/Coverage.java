@@ -13,9 +13,10 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 import org.nthdimenzion.common.crud.ICrudEntity;
+import org.nthdimenzion.utils.UtilValidator;
 
 import javax.persistence.*;
-import java.util.List;
+import java.util.Set;
 
 /**
  * @author: Samir
@@ -23,10 +24,10 @@ import java.util.List;
  */
 @Entity
 @Table(name = "coverage", uniqueConstraints = {@UniqueConstraint(name = "UNQ_COVERAGE_NAME", columnNames = "coverageName")})
-@EqualsAndHashCode(of = {"coverageName","coverageId"})
+@EqualsAndHashCode(of = {"coverageName"})
 @ToString(of = "coverageName")
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-class Coverage implements ICrudEntity {
+public class Coverage implements ICrudEntity {
 
     @Id
     private String coverageId;
@@ -42,12 +43,12 @@ class Coverage implements ICrudEntity {
 
     @OneToMany(targetEntity = Benefit.class, fetch = FetchType.EAGER)
     @JoinTable(name = "coverage_benefit", joinColumns = @JoinColumn(name = "COVERAGE_ID"), inverseJoinColumns = @JoinColumn(name = "BENEFIT_ID"))
-    private List<Benefit> benefits;
+    private Set<Benefit> benefits;
 
-    Coverage(String coverageId, CoverageName coverageName, List<Benefit> benefits) {
-        Preconditions.checkNotNull(coverageId);
-        Preconditions.checkNotNull(coverageName);
-        Preconditions.checkNotNull(benefits);
+    Coverage(String coverageId, CoverageName coverageName, Set<Benefit> benefits) {
+        Preconditions.checkArgument(coverageId == null);
+        Preconditions.checkArgument(coverageName == null);
+        Preconditions.checkArgument(UtilValidator.isNotEmpty(benefits));
         this.coverageId = coverageId;
         this.coverageName = coverageName;
         this.benefits = benefits;
