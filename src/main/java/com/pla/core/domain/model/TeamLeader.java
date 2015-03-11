@@ -45,7 +45,6 @@ public class TeamLeader {
         this.thruDate = thruDate;
         this.firstName = firstName;
         this.lastName = lastName;
-
     }
 
 }

@@ -6,6 +6,7 @@
 
 package com.pla.core.domain.model;
 
+import com.google.common.base.Preconditions;
 import com.pla.core.domain.exception.CoverageException;
 import lombok.AccessLevel;
 import lombok.EqualsAndHashCode;
@@ -25,7 +26,7 @@ import java.util.List;
 @EqualsAndHashCode(of = {"coverageName","coverageId"})
 @ToString(of = "coverageName")
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-public class Coverage implements ICrudEntity {
+class Coverage implements ICrudEntity {
 
     @Id
     private String coverageId;
@@ -44,6 +45,9 @@ public class Coverage implements ICrudEntity {
     private List<Benefit> benefits;
 
     Coverage(String coverageId, CoverageName coverageName, List<Benefit> benefits) {
+        Preconditions.checkNotNull(coverageId);
+        Preconditions.checkNotNull(coverageName);
+        Preconditions.checkNotNull(benefits);
         this.coverageId = coverageId;
         this.coverageName = coverageName;
         this.benefits = benefits;
