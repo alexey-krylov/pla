@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 
@@ -100,7 +99,7 @@ public class BenefitController {
     }
 
     private UserDetails getLoggedInUSerDetail(HttpServletRequest request) {
-        UserDetails userDetails = (UserDetails) request.getAttribute(AppConstants.loggedInUser);
+        UserDetails userDetails = (UserDetails) request.getSession().getAttribute(AppConstants.loggedInUser);
         return userDetails;
     }
 }
