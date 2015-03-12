@@ -112,7 +112,7 @@ public class BenefitServiceUnitTest {
         String name = "Accidental death benefit";
         BenefitName benefitName = new BenefitName(name);
         when(benefitNameIsUnique.isSatisfiedBy(benefitName)).thenReturn(Boolean.TRUE);
-        Benefit benefit = admin.createBenefit(benefitNameIsUnique, "1", name);
+        Benefit benefit = admin.createBenefit(benefitNameIsUnique, "1", benefitName);
         return benefit;
     }
 }

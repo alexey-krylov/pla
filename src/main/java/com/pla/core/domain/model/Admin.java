@@ -20,23 +20,21 @@ import org.nthdimenzion.ddd.domain.annotations.ValueObject;
 public class Admin {
 
 
-    public Benefit createBenefit(BenefitNameIsUnique benefitNameIsUnique, String benefitId, String name) {
-        BenefitName benefitName = new BenefitName(name);
+    public Benefit createBenefit(BenefitNameIsUnique benefitNameIsUnique, String benefitId,  BenefitName benefitName) {
         if (!benefitNameIsUnique.isSatisfiedBy(benefitName)) {
             throw new BenefitDomainException("Benefit name already satisfied");
         }
         return new Benefit(benefitId, benefitName, BenefitStatus.ACTIVE);
     }
 
-    public Benefit updateBenefit(Benefit benefit, String name, BenefitNameIsUnique benefitNameIsUnique, BenefitIsUpdatable benefitIsUpdatable) {
-        BenefitName benefitName = new BenefitName(name);
-        if (!benefitIsUpdatable.isSatisfiedBy(benefit.getBenefitId(), benefitName)) {
+    public Benefit updateBenefit(Benefit benefit, BenefitName newBenefitName, BenefitNameIsUnique benefitNameIsUnique, BenefitIsUpdatable benefitIsUpdatable) {
+        if (!benefitIsUpdatable.isSatisfiedBy(benefit.getBenefitId(), newBenefitName)) {
             throw new BenefitDomainException("Benefit name cannot be updated. New name is required");
         }
-        if (!benefitIsUpdatable.isGeneralizationOf(benefitNameIsUnique, benefitName)) {
+        if (!benefitIsUpdatable.isGeneralizationOf(benefitNameIsUnique, newBenefitName)) {
             throw new BenefitDomainException("Benefit name already satisfied");
         }
-        Benefit updatedBenefit = benefit.updateBenefitName(benefitName);
+        Benefit updatedBenefit = benefit.updateBenefitName(newBenefitName);
         return updatedBenefit;
     }
 

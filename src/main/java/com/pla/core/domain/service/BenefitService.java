@@ -8,6 +8,7 @@ package com.pla.core.domain.service;
 
 import com.pla.core.domain.model.Admin;
 import com.pla.core.domain.model.Benefit;
+import com.pla.core.domain.model.BenefitName;
 import com.pla.core.specification.BenefitIsUpdatable;
 import com.pla.core.specification.BenefitNameIsUnique;
 import org.nthdimenzion.ddd.domain.annotations.DomainService;
@@ -42,13 +43,13 @@ public class BenefitService {
     public Benefit createBenefit(String benefitName, UserDetails userDetails) {
         String benefitId = idGenerator.nextId();
         Admin admin = adminRoleAdapter.userToAdmin(userDetails);
-        Benefit benefit = admin.createBenefit(benefitNameIsUnique, benefitId, benefitName);
+        Benefit benefit = admin.createBenefit(benefitNameIsUnique, benefitId, new BenefitName(benefitName));
         return benefit;
     }
 
     public Benefit updateBenefit(Benefit benefit, String benefitName, UserDetails userDetails) {
         Admin admin = adminRoleAdapter.userToAdmin(userDetails);
-        Benefit updatedBenefit = admin.updateBenefit(benefit, benefitName, benefitNameIsUnique, benefitIsUpdatable);
+        Benefit updatedBenefit = admin.updateBenefit(benefit, new BenefitName(benefitName), benefitNameIsUnique, benefitIsUpdatable);
         return updatedBenefit;
 
     }

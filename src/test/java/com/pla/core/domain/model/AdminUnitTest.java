@@ -47,7 +47,7 @@ public class AdminUnitTest {
     public void givenABenefitNameItShouldCreateBenefit() {
         String name = "CI Benefit";
         when(benefitNameIsUnique.isSatisfiedBy(new BenefitName(name))).thenReturn(true);
-        Benefit benefit = admin.createBenefit(benefitNameIsUnique, "1", name);
+        Benefit benefit = admin.createBenefit(benefitNameIsUnique, "1", new BenefitName(name));
         BenefitName benefitName = (BenefitName) invokeGetterMethod(benefit, "getBenefitName");
         assertEquals(name, benefitName.getBenefitName());
         assertEquals(BenefitStatus.ACTIVE, invokeGetterMethod(benefit, "getStatus"));
@@ -55,22 +55,21 @@ public class AdminUnitTest {
 
     @Test
     public void itShouldInactivateABenefit() {
-        String name = "CI Benefit";
-        when(benefitNameIsUnique.isSatisfiedBy(new BenefitName(name))).thenReturn(true);
-        Benefit benefit = admin.createBenefit(benefitNameIsUnique, "1", name);
+        BenefitName benefitName = new BenefitName("CI Benefit");
+        when(benefitNameIsUnique.isSatisfiedBy(benefitName)).thenReturn(true);
+        Benefit benefit = admin.createBenefit(benefitNameIsUnique, "1", benefitName);
         benefit = admin.inactivateBenefit(benefit);
         assertEquals(BenefitStatus.INACTIVE, invokeGetterMethod(benefit, "getStatus"));
     }
 
     public void itShouldUpdateABenefit() {
-        String name = "CI Benefit";
-        BenefitName benefitName = new BenefitName(name);
+        BenefitName benefitName = new BenefitName("CI Benefit");
         when(benefitNameIsUnique.isSatisfiedBy(benefitName)).thenReturn(true);
-        when(benefitIsUpdatable.isSatisfiedBy("1000", new BenefitName(name))).thenReturn(true);
+        when(benefitIsUpdatable.isSatisfiedBy("1000", benefitName)).thenReturn(true);
         when(benefitIsUpdatable.isGeneralizationOf(benefitNameIsUnique, benefitName)).thenReturn(true);
-        Benefit benefit = admin.createBenefit(benefitNameIsUnique, "1", name);
+        Benefit benefit = admin.createBenefit(benefitNameIsUnique, "1", benefitName);
         String updatedName = "Accidental Benefit";
-        Benefit updatedBenefit = admin.updateBenefit(benefit, updatedName, benefitNameIsUnique, benefitIsUpdatable);
+        Benefit updatedBenefit = admin.updateBenefit(benefit, new BenefitName(updatedName), benefitNameIsUnique, benefitIsUpdatable);
         BenefitName updatedBenefitName = (BenefitName) invokeGetterMethod(updatedBenefit, "getBenefitName");
         assertEquals(updatedName, updatedBenefitName.getBenefitName());
     }
