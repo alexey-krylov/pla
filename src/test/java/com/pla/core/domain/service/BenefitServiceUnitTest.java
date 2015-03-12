@@ -56,7 +56,7 @@ public class BenefitServiceUnitTest {
     @Before
     public void setUp() {
         userDetails = UserLoginDetailDto.createUserLoginDetailDto("", "");
-        admin = new Admin("");
+        admin = new Admin();
     }
 
 

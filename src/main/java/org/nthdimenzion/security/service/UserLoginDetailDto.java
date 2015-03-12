@@ -27,7 +27,7 @@ public class UserLoginDetailDto implements UserDetails {
 
     private String password;
 
-    public UserLoginDetailDto() {
+    UserLoginDetailDto() {
 
     }
 

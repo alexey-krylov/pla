@@ -27,7 +27,7 @@ spring:
         dev :
           url : http://localhost:6443/pla/stub
         prod :
-          url: Replace
+          url: {Replace with production url}
   datasource:
       primary:
         name: primaryDataSource
@@ -48,7 +48,3 @@ spring:
 flyway:
   check-location: false
   enabled: false
-
-login :
-  username : admin
-  password : admin

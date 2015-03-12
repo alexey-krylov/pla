@@ -19,36 +19,29 @@ import org.nthdimenzion.ddd.domain.annotations.ValueObject;
 @ValueObject
 public class Admin {
 
-    private String userName;
-
-    public Admin(String userName) {
-        this.userName = userName;
-
-    }
 
     public Benefit createBenefit(BenefitNameIsUnique benefitNameIsUnique, String benefitId, String name) {
         BenefitName benefitName = new BenefitName(name);
         if (!benefitNameIsUnique.isSatisfiedBy(benefitName)) {
             throw new BenefitException("Benefit name already satisfied");
         }
-        Benefit benefit = new Benefit(benefitId, benefitName, BenefitStatus.ACTIVE);
-        return benefit;
+        return new Benefit(benefitId, benefitName, BenefitStatus.ACTIVE);
     }
 
-    public Benefit updateBenefit(Benefit benefit, String name, BenefitNameIsUnique benefitNameIsUnique,BenefitIsUpdatable benefitIsUpdatable) {
+    public Benefit updateBenefit(Benefit benefit, String name, BenefitNameIsUnique benefitNameIsUnique, BenefitIsUpdatable benefitIsUpdatable) {
         BenefitName benefitName = new BenefitName(name);
-        if(!benefitIsUpdatable.isSatisfiedBy(benefit.getBenefitId(),benefitName)) {
+        if (!benefitIsUpdatable.isSatisfiedBy(benefit.getBenefitId(), benefitName)) {
             throw new BenefitException("Benefit name cannot be updated. New name is required");
         }
-        if(!benefitIsUpdatable.isGeneralizationOf(benefitNameIsUnique,benefitName)){
+        if (!benefitIsUpdatable.isGeneralizationOf(benefitNameIsUnique, benefitName)) {
             throw new BenefitException("Benefit name already satisfied");
         }
-        benefit = benefit.updateBenefitName(benefitName);
-        return benefit;
+        Benefit updatedBenefit = benefit.updateBenefitName(benefitName);
+        return updatedBenefit;
     }
 
     public Benefit inactivateBenefit(Benefit benefit) {
-        benefit = benefit.inActivate();
-        return benefit;
+        Benefit updatedBenefit = benefit.inActivate();
+        return updatedBenefit;
     }
 }

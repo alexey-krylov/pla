@@ -21,19 +21,18 @@ import org.springframework.stereotype.Component;
 @Component
 public class AdminRoleAdapter {
 
-    private Logger logger = LoggerFactory.getLogger(AdminRoleAdapter.class);
+    private Logger LOGGER = LoggerFactory.getLogger(AdminRoleAdapter.class);
 
     public Admin userToAdmin(UserDetails userDetails) {
-        if (logger.isDebugEnabled()) {
-            logger.debug("User details received" + userDetails);
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("User details received" + userDetails);
         }
         boolean hasAdminRole = RolesUtil.hasAdminRole(userDetails.getAuthorities());
         if (!hasAdminRole) {
-            logger.error("user does not have ROLE_ADMIN");
+            LOGGER.error("user does not have ROLE_ADMIN");
             throw new AuthorizationServiceException("User does not have ROLE_ADMIN authority");
         }
-        Admin admin = new Admin(userDetails.getUsername());
-        return admin;
+        return new Admin();
     }
 
 }

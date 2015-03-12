@@ -52,16 +52,16 @@ public class BenefitController {
     @ResponseBody
     Result createBenefit(@RequestBody @Valid CreateBenefitCommand createBenefitCommand, BindingResult bindingResult, HttpServletRequest request) {
         if (bindingResult.hasErrors()) {
-            return Result.Failure("Error in creating benefit", bindingResult.getAllErrors());
+            return Result.failure("Error in creating benefit", bindingResult.getAllErrors());
         }
         try {
             UserDetails userDetails = getLoggedInUSerDetail(request);
             createBenefitCommand.setUserDetails(userDetails);
             commandGateway.sendAndWait(createBenefitCommand);
         } catch (Exception e) {
-            return Result.Failure("Error in creating benefit");
+            return Result.failure("Error in creating benefit");
         }
-        return Result.Success("Benefit created successfully");
+        return Result.success("Benefit created successfully");
     }
 
     @RequestMapping(value = "/update", method = RequestMethod.POST)
@@ -69,16 +69,16 @@ public class BenefitController {
     @ResponseBody
     Result updateBenefit(@RequestBody @Valid UpdateBenefitCommand updateBenefitCommand, BindingResult bindingResult, HttpServletRequest request) {
         if (bindingResult.hasErrors()) {
-            return Result.Failure("Error in updating benefit", bindingResult.getAllErrors());
+            return Result.failure("Error in updating benefit", bindingResult.getAllErrors());
         }
         try {
             UserDetails userDetails = getLoggedInUSerDetail(request);
             updateBenefitCommand.setUserDetails(userDetails);
             commandGateway.sendAndWait(updateBenefitCommand);
         } catch (Exception e) {
-            return Result.Failure("Error in updating benefit");
+            return Result.failure("Error in updating benefit");
         }
-        return Result.Success("Benefit updated successfully");
+        return Result.success("Benefit updated successfully");
     }
 
     @RequestMapping(value = "/inactivate", method = RequestMethod.POST)
@@ -86,16 +86,16 @@ public class BenefitController {
     @ResponseBody
     Result inactivateBenefit(@RequestBody @Valid InactivateBenefitCommand inactivateBenefitCommand, BindingResult bindingResult, HttpServletRequest request) {
         if (bindingResult.hasErrors()) {
-            return Result.Failure("Error in inactivating benefit", bindingResult.getAllErrors());
+            return Result.failure("Error in inactivating benefit", bindingResult.getAllErrors());
         }
         try {
             UserDetails userDetails = getLoggedInUSerDetail(request);
             inactivateBenefitCommand.setUserDetails(userDetails);
             commandGateway.sendAndWait(inactivateBenefitCommand);
         } catch (Exception e) {
-            return Result.Failure("Error in inactivating benefit");
+            return Result.failure("Error in inactivating benefit");
         }
-        return Result.Success("Benefit inactivated successfully");
+        return Result.success("Benefit inactivated successfully");
     }
 
     private UserDetails getLoggedInUSerDetail(HttpServletRequest request) {

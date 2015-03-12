@@ -8,10 +8,7 @@ package org.nthdimenzion.common.service;
 
 import com.google.common.base.Preconditions;
 import org.nthdimenzion.common.crud.ICrudEntity;
-import org.nthdimenzion.security.domain.UserLogin;
-import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.support.SimpleJpaRepository;
-import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityManager;

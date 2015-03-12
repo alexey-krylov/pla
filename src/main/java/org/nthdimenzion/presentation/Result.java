@@ -26,7 +26,7 @@ public final class Result {
     private static String failureMsg = "Could not complete operation,Contact Administrator";
 
     enum RESULT_TYPE {
-        success("200"), error("500");
+        SUCCESS("200"), ERROR("500");
 
         private String code;
 
@@ -54,8 +54,8 @@ public final class Result {
     }
 
 
-    static Result FailureResultWithErrorDetails(String message, String failureDetails) {
-        Result result = new Result(message, RESULT_TYPE.error);
+    static Result failureResultWithErrorDetails(String message, String failureDetails) {
+        Result result = new Result(message, RESULT_TYPE.ERROR);
         result.failureDetails = failureDetails;
         return result;
     }
@@ -65,32 +65,32 @@ public final class Result {
         this.id = id;
     }
 
-    public static Result Success() {
-        return new Result(successMsg, RESULT_TYPE.success);
+    public static Result success() {
+        return new Result(successMsg, RESULT_TYPE.SUCCESS);
     }
 
-    public static Result Success(String message) {
-        return new Result(message, RESULT_TYPE.success);
+    public static Result success(String message) {
+        return new Result(message, RESULT_TYPE.SUCCESS);
     }
 
-    public static Result Success(String message, String id) {
-        return new Result(message, RESULT_TYPE.success, id);
+    public static Result success(String message, String id) {
+        return new Result(message, RESULT_TYPE.SUCCESS, id);
     }
 
-    public static Result Failure(String message) {
-        return new Result(message, RESULT_TYPE.error);
+    public static Result failure(String message) {
+        return new Result(message, RESULT_TYPE.ERROR);
     }
 
-    public static Result Failure(String message, List<ObjectError> errors) {
+    public static Result failure(String message, List<ObjectError> errors) {
         final List<String> errorCodes = Lists.newArrayList();
         for (ObjectError error : errors) {
             errorCodes.add(error.getDefaultMessage());
         }
-        return FailureResultWithErrorDetails(message, org.thymeleaf.util.StringUtils.join(errorCodes, ","));
+        return failureResultWithErrorDetails(message, org.thymeleaf.util.StringUtils.join(errorCodes, ","));
     }
 
-    public static Result Failure() {
-        return new Result(failureMsg, RESULT_TYPE.error);
+    public static Result failure() {
+        return new Result(failureMsg, RESULT_TYPE.ERROR);
     }
 
 

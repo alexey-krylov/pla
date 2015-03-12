@@ -11,7 +11,7 @@
     <groupId>org.nthdimenzion</groupId>
     <artifactId>PLA</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <packaging>war</packaging>
+    <packaging>jar</packaging>
     <name>PLA</name>
     <description>PLA</description>
 
