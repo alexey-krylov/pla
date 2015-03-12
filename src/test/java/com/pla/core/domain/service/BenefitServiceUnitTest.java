@@ -6,34 +6,25 @@
 
 package com.pla.core.domain.service;
 
-import com.pla.core.application.CreateBenefitCommand;
 import com.pla.core.domain.model.Admin;
 import com.pla.core.domain.model.Benefit;
 import com.pla.core.domain.model.BenefitName;
-import com.pla.core.domain.service.AdminRoleAdapter;
-import com.pla.core.domain.service.BenefitService;
 import com.pla.core.specification.BenefitIsUpdatable;
 import com.pla.core.specification.BenefitNameIsUnique;
-
-import static org.junit.Assert.*;
-
 import com.pla.sharedkernel.domain.model.BenefitStatus;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-
-import static org.mockito.Mockito.*;
-
 import org.mockito.runners.MockitoJUnitRunner;
-import org.nthdimenzion.common.service.JpaRepositoryFactory;
 import org.nthdimenzion.object.utils.IIdGenerator;
 import org.nthdimenzion.security.service.UserLoginDetailDto;
-import org.springframework.data.jpa.repository.support.SimpleJpaRepository;
-import org.springframework.data.repository.CrudRepository;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.mockito.Mockito.when;
 import static org.springframework.test.util.ReflectionTestUtils.invokeGetterMethod;
 
 /**
@@ -51,9 +42,6 @@ public class BenefitServiceUnitTest {
 
     @Mock
     private BenefitIsUpdatable benefitIsUpdatable;
-
-    @Mock
-    private JpaRepositoryFactory jpaRepositoryFactory;
 
     @Mock
     private IIdGenerator idGenerator;

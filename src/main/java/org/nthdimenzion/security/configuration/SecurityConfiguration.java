@@ -43,7 +43,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Override
     public void configure(HttpSecurity http) throws Exception {
-        http.authorizeRequests().antMatchers("/", "/logout").permitAll().anyRequest().authenticated()
+        http.authorizeRequests().antMatchers("/", "/logout","/stub/getuserdetail").permitAll().anyRequest().authenticated()
                 .and()
                 .formLogin().usernameParameter("username").passwordParameter("password")
                 .successHandler(authenticationSuccessHandler).failureHandler(authenticationFailureHandler)

@@ -23,7 +23,7 @@ import java.util.List;
  */
 @Entity
 @Table(name = "coverage", uniqueConstraints = {@UniqueConstraint(name = "UNQ_COVERAGE_NAME", columnNames = "coverageName")})
-@EqualsAndHashCode(of = {"coverageName","coverageId"})
+@EqualsAndHashCode(of = {"coverageName", "coverageId"})
 @ToString(of = "coverageName")
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class Coverage implements ICrudEntity {
@@ -55,7 +55,7 @@ public class Coverage implements ICrudEntity {
 
     public Coverage updateCoverageName(String name) {
         if (CoverageStatus.INUSE.equals(this.status)) {
-            CoverageException.raiseCoverageNotUpdatableException();
+            throw new CoverageException("Coverage is in use;cannot be updated");
         }
         CoverageName coverageName = new CoverageName(name);
         this.coverageName = coverageName;
@@ -64,7 +64,7 @@ public class Coverage implements ICrudEntity {
 
     public Coverage updateDescription(String description) {
         if (CoverageStatus.INUSE.equals(this.status)) {
-            CoverageException.raiseCoverageNotUpdatableException();
+            throw new CoverageException("Coverage is in use;cannot be updated");
         }
         this.description = description;
         return this;
@@ -77,7 +77,7 @@ public class Coverage implements ICrudEntity {
 
     public Coverage deactivate() {
         if (CoverageStatus.INUSE.equals(this.status)) {
-            CoverageException.raiseCoverageNotUpdatableException();
+            throw new CoverageException("Coverage is in use;cannot be deactivated");
         }
         this.status = CoverageStatus.INACTIVE;
         return this;

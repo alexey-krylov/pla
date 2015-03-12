@@ -13,8 +13,8 @@ import org.springframework.stereotype.Service;
  * @author: Samir
  * @since 1.0 13/02/2015
  */
-@Service
-@Profile("dev")
+//@Service
+//@Profile("dev")
 public class StubUserService implements UserDetailsService {
 
     @Value("${login.username}")
