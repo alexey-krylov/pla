@@ -80,14 +80,14 @@ var updateBenefit = function(benefitMap){
         data: JSON.stringify(benefitData),
         contentType: 'application/json; charset=utf-8',
         success: function(msg) {
-            if(msg=='success'){
+            if(msg.status=='200'){
                 hideAlerts();
-                $('#alert').text("Benefit updated successfully").show();
+                $('#alert').text(msg.message).show();
                 $('#cancel-button').text('Done');
                 $('#createUpdate').hide();
-            }else{
+            }else if(msg.status=='500'){
                 hideAlerts();
-                $('#alert-danger').text("Benefit already exists").show();
+                $('#alert-danger').text(msg.message).show();
             }
         }
     });
@@ -158,10 +158,10 @@ var inactivate=function(value,flag){
             data: JSON.stringify({'benefitId':benefitToInactivate}),
             contentType: 'application/json; charset=utf-8',
             success: function(msg) {
-                if(msg=='success'){
+                if(msg.status=='200'){
                     window.location.reload();
                 }else{
-                    alert("Error");
+                    console.log("Error inactivating employee");
                 }
             }
         });
