@@ -8,6 +8,8 @@ import com.pla.core.query.BenefitFinder;
 import org.axonframework.commandhandling.gateway.CommandGateway;
 import org.nthdimenzion.common.AppConstants;
 import org.nthdimenzion.presentation.Result;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
@@ -29,6 +31,9 @@ import javax.validation.Valid;
 @Controller
 @RequestMapping(value = "/core/benefit")
 public class BenefitController {
+
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(BenefitController.class);
 
     private CommandGateway commandGateway;
 
@@ -60,6 +65,7 @@ public class BenefitController {
             createBenefitCommand.setUserDetails(userDetails);
             commandGateway.sendAndWait(createBenefitCommand);
         } catch (BenefitApplicationException e) {
+            LOGGER.error("Error in creating benefit", e);
             return Result.failure("Error in creating benefit");
         }
         return Result.success("Benefit created successfully");
@@ -77,6 +83,7 @@ public class BenefitController {
             updateBenefitCommand.setUserDetails(userDetails);
             commandGateway.sendAndWait(updateBenefitCommand);
         } catch (BenefitApplicationException e) {
+            LOGGER.error("Error in updating benefit", e);
             return Result.failure("Error in updating benefit");
         }
         return Result.success("Benefit updated successfully");
@@ -94,6 +101,7 @@ public class BenefitController {
             inactivateBenefitCommand.setUserDetails(userDetails);
             commandGateway.sendAndWait(inactivateBenefitCommand);
         } catch (BenefitApplicationException e) {
+            LOGGER.error("Error in inactivating benefit", e);
             return Result.failure("Error in inactivating benefit");
         }
         return Result.success("Benefit inactivated successfully");
