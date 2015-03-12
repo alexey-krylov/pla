@@ -8,14 +8,9 @@ package org.nthdimenzion.security.service;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.authentication.DisabledException;
-import org.springframework.security.authentication.LockedException;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler;
-import org.springframework.security.web.authentication.session.SessionAuthenticationException;
 import org.springframework.stereotype.Component;
 
 import javax.servlet.ServletException;
@@ -31,7 +26,7 @@ import java.io.IOException;
 public class AuthenticationFailureHandler extends SimpleUrlAuthenticationFailureHandler {
 
 
-    private static final Logger logger = LoggerFactory.getLogger(AuthenticationFailureHandler.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(AuthenticationFailureHandler.class);
 
     private enum AuthenticationFailureErrorCodes {
         BAD_CREDENTIALS {
@@ -73,10 +68,8 @@ public class AuthenticationFailureHandler extends SimpleUrlAuthenticationFailure
             throws IOException, ServletException {
 
 
-        if (authenticationException instanceof BadCredentialsException) {
-            if (isValidUserName(authenticationException)) {
-                logger.error("Error in authentication", authenticationException);
-            }
+        if (authenticationException instanceof BadCredentialsException && isValidUserName(authenticationException)) {
+            LOGGER.error("Error in authentication", authenticationException);
         }
         super.onAuthenticationFailure(request, response, authenticationException);
     }

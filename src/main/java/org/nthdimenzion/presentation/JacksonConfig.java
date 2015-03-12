@@ -32,10 +32,12 @@ public class JacksonConfig implements BeanPostProcessor {
 
     private static DateTimeFormatter formatter = getDateTimeFormat();
 
+    @Override
     public Object postProcessBeforeInitialization(Object bean, String beanName) throws BeansException {
         return bean;
     }
 
+    @Override
     public Object postProcessAfterInitialization(Object bean, String beanName)
             throws BeansException {
         if (bean instanceof MappingJackson2HttpMessageConverter) {

@@ -29,7 +29,7 @@ public class BenefitCommandHandler {
 
     private BenefitService benefitService;
 
-    private static final Logger logger = LoggerFactory.getLogger(BenefitCommandHandler.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(BenefitCommandHandler.class);
 
     @Autowired
     public BenefitCommandHandler(JpaRepositoryFactory jpaRepositoryFactory, BenefitService benefitService) {
@@ -39,23 +39,23 @@ public class BenefitCommandHandler {
 
     @CommandHandler
     public void createBenefitHandler(CreateBenefitCommand createBenefitCommand) {
-        if (logger.isDebugEnabled()) {
-            logger.debug("*****Command Received*****" + createBenefitCommand);
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("*****Command Received*****" + createBenefitCommand);
         }
         Benefit benefit = benefitService.createBenefit(createBenefitCommand.getBenefitName(), createBenefitCommand.getUserDetails());
         JpaRepository<Benefit, String> benefitRepository = jpaRepositoryFactory.getCrudRepository(Benefit.class);
         try {
             benefitRepository.save(benefit);
         } catch (RuntimeException e) {
-            logger.error("*****Saving benefit failed*****", e);
-            throw new RuntimeException(e.getMessage());
+            LOGGER.error("*****Saving benefit failed*****", e);
+            throw new BenefitApplicationException(e.getMessage());
         }
     }
 
     @CommandHandler
     public void updateBenefitHandler(UpdateBenefitCommand updateBenefitCommand) {
-        if (logger.isDebugEnabled()) {
-            logger.debug("*****Command Received*****" + updateBenefitCommand);
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("*****Command Received*****" + updateBenefitCommand);
         }
         JpaRepository<Benefit, String> benefitRepository = jpaRepositoryFactory.getCrudRepository(Benefit.class);
         Benefit benefit = benefitRepository.findOne(updateBenefitCommand.getBenefitId());
@@ -63,15 +63,15 @@ public class BenefitCommandHandler {
         try {
             benefitRepository.save(benefit);
         } catch (RuntimeException e) {
-            logger.error("*****Updating benefit failed*****", e);
+            LOGGER.error("*****Updating benefit failed*****", e);
             throw new BenefitApplicationException(e.getMessage());
         }
     }
 
     @CommandHandler
     public void markBenefitAsUsedHandler(MarkBenefitAsUsedCommand markBenefitAsUsedCommand) {
-        if (logger.isDebugEnabled()) {
-            logger.debug("*****Command Received*****" + markBenefitAsUsedCommand);
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("*****Command Received*****" + markBenefitAsUsedCommand);
         }
         CrudRepository<Benefit, String> benefitRepository = jpaRepositoryFactory.getCrudRepository(Benefit.class);
         Benefit benefit = benefitRepository.findOne(markBenefitAsUsedCommand.getBenefitId());
@@ -79,15 +79,15 @@ public class BenefitCommandHandler {
         try {
             benefitRepository.save(benefit);
         } catch (RuntimeException e) {
-            logger.error("*****Marking benefit as used failed*****", e);
+            LOGGER.error("*****Marking benefit as used failed*****", e);
             throw new BenefitApplicationException(e.getMessage());
         }
     }
 
     @CommandHandler
     public void inactivateBenefitHandler(InactivateBenefitCommand inactivateBenefitCommand) {
-        if (logger.isDebugEnabled()) {
-            logger.debug("*****Inactivate Benefit Status Command  Received*****" + inactivateBenefitCommand);
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("*****Inactivate Benefit Status Command  Received*****" + inactivateBenefitCommand);
         }
         CrudRepository<Benefit, String> benefitRepository = jpaRepositoryFactory.getCrudRepository(Benefit.class);
         Benefit benefit = benefitRepository.findOne(inactivateBenefitCommand.getBenefitId());
@@ -95,7 +95,7 @@ public class BenefitCommandHandler {
         try {
             benefitRepository.save(benefit);
         } catch (RuntimeException e) {
-            logger.error("*****Inactivating benefit failed*****", e);
+            LOGGER.error("*****Inactivating benefit failed*****", e);
             throw new BenefitApplicationException(e.getMessage());
         }
     }

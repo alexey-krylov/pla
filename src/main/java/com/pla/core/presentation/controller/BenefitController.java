@@ -3,6 +3,7 @@ package com.pla.core.presentation.controller;
 import com.pla.core.application.CreateBenefitCommand;
 import com.pla.core.application.InactivateBenefitCommand;
 import com.pla.core.application.UpdateBenefitCommand;
+import com.pla.core.application.exception.BenefitApplicationException;
 import com.pla.core.query.BenefitFinder;
 import org.axonframework.commandhandling.gateway.CommandGateway;
 import org.nthdimenzion.common.AppConstants;
@@ -58,7 +59,7 @@ public class BenefitController {
             UserDetails userDetails = getLoggedInUSerDetail(request);
             createBenefitCommand.setUserDetails(userDetails);
             commandGateway.sendAndWait(createBenefitCommand);
-        } catch (Exception e) {
+        } catch (BenefitApplicationException e) {
             return Result.failure("Error in creating benefit");
         }
         return Result.success("Benefit created successfully");
@@ -75,7 +76,7 @@ public class BenefitController {
             UserDetails userDetails = getLoggedInUSerDetail(request);
             updateBenefitCommand.setUserDetails(userDetails);
             commandGateway.sendAndWait(updateBenefitCommand);
-        } catch (Exception e) {
+        } catch (BenefitApplicationException e) {
             return Result.failure("Error in updating benefit");
         }
         return Result.success("Benefit updated successfully");
@@ -92,7 +93,7 @@ public class BenefitController {
             UserDetails userDetails = getLoggedInUSerDetail(request);
             inactivateBenefitCommand.setUserDetails(userDetails);
             commandGateway.sendAndWait(inactivateBenefitCommand);
-        } catch (Exception e) {
+        } catch (BenefitApplicationException e) {
             return Result.failure("Error in inactivating benefit");
         }
         return Result.success("Benefit inactivated successfully");
