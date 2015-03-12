@@ -57,8 +57,8 @@ public class Coverage implements ICrudEntity {
         if (CoverageStatus.INUSE.equals(this.status)) {
             throw new CoverageException("Coverage is in use;cannot be updated");
         }
-        CoverageName coverageName = new CoverageName(name);
-        this.coverageName = coverageName;
+        CoverageName updatedCoverageName = new CoverageName(name);
+        this.coverageName = updatedCoverageName;
         return this;
     }
 

@@ -6,7 +6,7 @@
 
 package com.pla.core.domain.model;
 
-import com.pla.core.domain.exception.BenefitException;
+import com.pla.core.domain.exception.BenefitDomainException;
 import com.pla.core.specification.BenefitIsUpdatable;
 import com.pla.core.specification.BenefitNameIsUnique;
 import com.pla.sharedkernel.domain.model.BenefitStatus;
@@ -23,7 +23,7 @@ public class Admin {
     public Benefit createBenefit(BenefitNameIsUnique benefitNameIsUnique, String benefitId, String name) {
         BenefitName benefitName = new BenefitName(name);
         if (!benefitNameIsUnique.isSatisfiedBy(benefitName)) {
-            throw new BenefitException("Benefit name already satisfied");
+            throw new BenefitDomainException("Benefit name already satisfied");
         }
         return new Benefit(benefitId, benefitName, BenefitStatus.ACTIVE);
     }
@@ -31,10 +31,10 @@ public class Admin {
     public Benefit updateBenefit(Benefit benefit, String name, BenefitNameIsUnique benefitNameIsUnique, BenefitIsUpdatable benefitIsUpdatable) {
         BenefitName benefitName = new BenefitName(name);
         if (!benefitIsUpdatable.isSatisfiedBy(benefit.getBenefitId(), benefitName)) {
-            throw new BenefitException("Benefit name cannot be updated. New name is required");
+            throw new BenefitDomainException("Benefit name cannot be updated. New name is required");
         }
         if (!benefitIsUpdatable.isGeneralizationOf(benefitNameIsUnique, benefitName)) {
-            throw new BenefitException("Benefit name already satisfied");
+            throw new BenefitDomainException("Benefit name already satisfied");
         }
         Benefit updatedBenefit = benefit.updateBenefitName(benefitName);
         return updatedBenefit;

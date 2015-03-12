@@ -99,7 +99,7 @@ public class BenefitController {
     }
 
     private UserDetails getLoggedInUSerDetail(HttpServletRequest request) {
-        UserDetails userDetails = (UserDetails) request.getSession().getAttribute(AppConstants.loggedInUser);
+        UserDetails userDetails = (UserDetails) request.getSession().getAttribute(AppConstants.LOGGED_IN_USER);
         return userDetails;
     }
 }

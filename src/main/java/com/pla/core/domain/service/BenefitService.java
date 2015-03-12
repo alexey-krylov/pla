@@ -10,7 +10,6 @@ import com.pla.core.domain.model.Admin;
 import com.pla.core.domain.model.Benefit;
 import com.pla.core.specification.BenefitIsUpdatable;
 import com.pla.core.specification.BenefitNameIsUnique;
-import org.nthdimenzion.common.service.JpaRepositoryFactory;
 import org.nthdimenzion.ddd.domain.annotations.DomainService;
 import org.nthdimenzion.object.utils.IIdGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,7 +32,7 @@ public class BenefitService {
     private BenefitIsUpdatable benefitIsUpdatable;
 
     @Autowired
-    public BenefitService(AdminRoleAdapter adminRoleAdapter, BenefitNameIsUnique benefitNameIsUnique,IIdGenerator idGenerator, BenefitIsUpdatable benefitIsUpdatable) {
+    public BenefitService(AdminRoleAdapter adminRoleAdapter, BenefitNameIsUnique benefitNameIsUnique, IIdGenerator idGenerator, BenefitIsUpdatable benefitIsUpdatable) {
         this.adminRoleAdapter = adminRoleAdapter;
         this.benefitNameIsUnique = benefitNameIsUnique;
         this.idGenerator = idGenerator;
@@ -49,20 +48,20 @@ public class BenefitService {
 
     public Benefit updateBenefit(Benefit benefit, String benefitName, UserDetails userDetails) {
         Admin admin = adminRoleAdapter.userToAdmin(userDetails);
-        benefit = admin.updateBenefit(benefit, benefitName, benefitNameIsUnique, benefitIsUpdatable);
-        return benefit;
+        Benefit updatedBenefit = admin.updateBenefit(benefit, benefitName, benefitNameIsUnique, benefitIsUpdatable);
+        return updatedBenefit;
 
     }
 
     public Benefit markBenefitAsUsed(Benefit benefit) {
-        benefit = benefit.markAsUsed();
-        return benefit;
+        Benefit updatedBenefit = benefit.markAsUsed();
+        return updatedBenefit;
     }
 
     public Benefit inactivateBenefit(Benefit benefit, UserDetails userDetails) {
         Admin admin = adminRoleAdapter.userToAdmin(userDetails);
-        benefit = admin.inactivateBenefit(benefit);
-        return benefit;
+        Benefit updatedBenefit = admin.inactivateBenefit(benefit);
+        return updatedBenefit;
     }
 
 }

@@ -17,7 +17,7 @@ import java.io.IOException;
 import static org.nthdimenzion.common.AppConstants.MONEY_FORMATTER;
 import static org.nthdimenzion.presentation.AppUtils.getDateTimeFormat;
 import static org.nthdimenzion.presentation.AppUtils.prependCurrencyUnit;
-import static org.nthdimenzion.presentation.AppUtils.StripCurrencyUnit;
+import static org.nthdimenzion.presentation.AppUtils.stripCurrencyUnit;
 
 /**
  * https://github.com/FasterXML/jackson-datatype-joda/issues/12
@@ -74,7 +74,7 @@ public class JacksonConfig implements BeanPostProcessor {
 
         @Override
         public void serialize(Money value, JsonGenerator jgen, SerializerProvider provider) throws IOException {
-            jgen.writeString(StripCurrencyUnit(MONEY_FORMATTER.print(value)));
+            jgen.writeString(stripCurrencyUnit(MONEY_FORMATTER.print(value)));
         }
     }
 

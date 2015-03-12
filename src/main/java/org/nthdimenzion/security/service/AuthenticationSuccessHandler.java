@@ -27,14 +27,14 @@ import java.io.IOException;
 public class AuthenticationSuccessHandler extends SavedRequestAwareAuthenticationSuccessHandler implements LogoutSuccessHandler {
 
     public void onLogoutSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
-        request.getSession().removeAttribute(AppConstants.loggedInUser);
+        request.getSession().removeAttribute(AppConstants.LOGGED_IN_USER);
         super.handle(request, response, authentication);
     }
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication auth) throws IOException, ServletException {
         UserDetails userDetails = (UserDetails) auth.getPrincipal();
-        request.getSession().setAttribute(AppConstants.loggedInUser, userDetails);
+        request.getSession().setAttribute(AppConstants.LOGGED_IN_USER, userDetails);
         super.setDefaultTargetUrl("/home");
         super.onAuthenticationSuccess(request, response, auth);
     }

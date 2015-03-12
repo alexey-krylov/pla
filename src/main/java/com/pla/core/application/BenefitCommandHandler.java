@@ -6,10 +6,9 @@
 
 package com.pla.core.application;
 
-import com.google.common.base.Preconditions;
+import com.pla.core.application.exception.BenefitApplicationException;
 import com.pla.core.domain.model.Benefit;
 import com.pla.core.domain.service.BenefitService;
-import com.pla.sharedkernel.domain.model.BenefitStatus;
 import org.axonframework.commandhandling.annotation.CommandHandler;
 import org.nthdimenzion.common.service.JpaRepositoryFactory;
 import org.slf4j.Logger;
@@ -30,7 +29,7 @@ public class BenefitCommandHandler {
 
     private BenefitService benefitService;
 
-    private Logger logger = LoggerFactory.getLogger(BenefitCommandHandler.class);
+    private static final Logger logger = LoggerFactory.getLogger(BenefitCommandHandler.class);
 
     @Autowired
     public BenefitCommandHandler(JpaRepositoryFactory jpaRepositoryFactory, BenefitService benefitService) {
@@ -65,7 +64,7 @@ public class BenefitCommandHandler {
             benefitRepository.save(benefit);
         } catch (RuntimeException e) {
             logger.error("*****Updating benefit failed*****", e);
-            throw new RuntimeException(e.getMessage());
+            throw new BenefitApplicationException(e.getMessage());
         }
     }
 
@@ -81,7 +80,7 @@ public class BenefitCommandHandler {
             benefitRepository.save(benefit);
         } catch (RuntimeException e) {
             logger.error("*****Marking benefit as used failed*****", e);
-            throw new RuntimeException(e.getMessage());
+            throw new BenefitApplicationException(e.getMessage());
         }
     }
 
@@ -97,7 +96,7 @@ public class BenefitCommandHandler {
             benefitRepository.save(benefit);
         } catch (RuntimeException e) {
             logger.error("*****Inactivating benefit failed*****", e);
-            throw new RuntimeException(e.getMessage());
+            throw new BenefitApplicationException(e.getMessage());
         }
     }
 }

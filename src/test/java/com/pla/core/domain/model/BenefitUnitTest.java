@@ -6,7 +6,7 @@
 
 package com.pla.core.domain.model;
 
-import com.pla.core.domain.exception.BenefitException;
+import com.pla.core.domain.exception.BenefitDomainException;
 import com.pla.core.specification.BenefitNameIsUnique;
 import com.pla.sharedkernel.domain.model.BenefitStatus;
 import org.junit.Before;
@@ -56,21 +56,21 @@ public class BenefitUnitTest {
     }
 
 
-    @Test(expected = BenefitException.class)
+    @Test(expected = BenefitDomainException.class)
     public void markingAnInactivatedBenefitShouldThrowExceptionAndStatusShouldBeInactive() {
         benefit = admin.inactivateBenefit(benefit);
         benefit = benefit.markAsUsed();
         assertEquals(BenefitStatus.INACTIVE, invokeGetterMethod(benefit, "getStatus"));
     }
 
-    @Test(expected = BenefitException.class)
+    @Test(expected = BenefitDomainException.class)
     public void inactivatingABenefitWithInUseStatusThrowExceptionAndStatusShouldBeInUse() {
         benefit = benefit.markAsUsed();
         benefit = admin.inactivateBenefit(benefit);
         assertEquals(BenefitStatus.INUSE, invokeGetterMethod(benefit, "getStatus"));
     }
 
-    @Test(expected = BenefitException.class)
+    @Test(expected = BenefitDomainException.class)
     public void benefitInUsedStatusShouldThrowExceptionOnUpdatingNameAndNameShouldBeUnchanged() {
         benefit = benefit.markAsUsed();
         String updatedName = "CI Benefit";

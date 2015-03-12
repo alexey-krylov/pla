@@ -21,7 +21,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class AdminRoleAdapter {
 
-    private Logger LOGGER = LoggerFactory.getLogger(AdminRoleAdapter.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(AdminRoleAdapter.class);
 
     public Admin userToAdmin(UserDetails userDetails) {
         if (LOGGER.isDebugEnabled()) {

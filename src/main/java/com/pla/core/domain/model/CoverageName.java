@@ -7,8 +7,6 @@
 package com.pla.core.domain.model;
 
 import com.google.common.base.Preconditions;
-import com.pla.core.domain.exception.BenefitException;
-import com.pla.core.domain.exception.CoverageException;
 import lombok.AccessLevel;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;

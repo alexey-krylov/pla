@@ -12,10 +12,10 @@ import org.nthdimenzion.ddd.domain.DomainException;
  * @author: Samir
  * @since 1.0 09/03/2015
  */
-public class BenefitException extends DomainException {
+public class BenefitDomainException extends DomainException {
 
 
-    public BenefitException(String message) {
+    public BenefitDomainException(String message) {
         super(message);
     }
 

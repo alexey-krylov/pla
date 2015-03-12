@@ -6,6 +6,8 @@
 
 package org.nthdimenzion.security.service;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.DisabledException;
@@ -27,6 +29,9 @@ import java.io.IOException;
  */
 @Component
 public class AuthenticationFailureHandler extends SimpleUrlAuthenticationFailureHandler {
+
+
+    private static final Logger logger = LoggerFactory.getLogger(AuthenticationFailureHandler.class);
 
     private enum AuthenticationFailureErrorCodes {
         BAD_CREDENTIALS {
@@ -70,32 +75,17 @@ public class AuthenticationFailureHandler extends SimpleUrlAuthenticationFailure
 
         if (authenticationException instanceof BadCredentialsException) {
             if (isValidUserName(authenticationException)) {
+                logger.error("Error in authentication", authenticationException);
             }
         }
         super.onAuthenticationFailure(request, response, authenticationException);
     }
 
-    private String getUserName(AuthenticationException authenticationException) {
-        return authenticationException.getAuthentication().getName();
-    }
 
     private boolean isValidUserName(AuthenticationException authenticationException) {
         return authenticationException.getExtraInformation() != null;
 
     }
 
-    private AuthenticationFailureErrorCodes transformExceptionIntoErrorCode(AuthenticationException
-                                                                                    authenticationException) {
-        if (authenticationException instanceof BadCredentialsException || authenticationException instanceof
-                UsernameNotFoundException) {
-            return AuthenticationFailureErrorCodes.BAD_CREDENTIALS;
-        } else if (authenticationException instanceof DisabledException) {
-            return AuthenticationFailureErrorCodes.ACCOUNT_DISABLED;
-        } else if (authenticationException instanceof LockedException) {
-            return AuthenticationFailureErrorCodes.ACCOUNT_LOCKED;
-        } else if (authenticationException instanceof SessionAuthenticationException) {
-            return AuthenticationFailureErrorCodes.MAX_SESSION_REACHED;
-        }
-        return AuthenticationFailureErrorCodes.UNKNOWN_AUTHENTICATION_EXCEPTION;
-    }
+
 }

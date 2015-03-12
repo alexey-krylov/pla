@@ -17,12 +17,15 @@ import java.util.function.Predicate;
  */
 public class RolesUtil {
 
-    private static final String adminRole = "ROLE_ADMIN";
+
+    private static final String ADMIN_ROLE = "ROLE_ADMIN";
+
+    private RolesUtil() {
+    }
 
     public static boolean hasAdminRole(Collection<? extends GrantedAuthority> authorities) {
-        long count = hasRole(adminRole, authorities);
-        boolean isAdmin = (count == 1);
-        return isAdmin;
+        long count = hasRole(ADMIN_ROLE, authorities);
+        return count == 1;
     }
 
     private static long hasRole(final String role, final Collection<? extends GrantedAuthority> authorities) {
