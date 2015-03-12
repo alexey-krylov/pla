@@ -46,7 +46,7 @@
                 Are you sure to inactivate the benefit?
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-primary" onclick="inactivate('dsdfg','confirm')">Yes</button>
+                <button type="button" class="btn btn-primary" onclick="inactivate('','confirm')">Yes</button>
                 <button type="button" class="btn btn-danger" data-dismiss="modal">No</button>
             </div>
         </div>
@@ -80,11 +80,11 @@
                         </tr>
                         </thead>
                         <tbody>
-                        <tr th:each="benefit : ${benefits}">
-                            <td th:text="${{benefit}}" style="width: 85%"></td>
+                        <tr th:each="benefit : ${benefitList}">
+                            <td th:text="${{benefit.benefitName}}" style="width: 85%"></td>
                             <td style="text-align:center">
                                 <button type="button" class="btn btn-primary btn-xs" th:onclick="'openBenefitUpdateModal(&quot;'+${benefit}+'&quot;)'">Update</button>
-                                <button type="button" class="btn btn-danger btn-xs" data-toggle="modal" data-target="#alert-modal" th:onclick="'inactivate(&quot;'+${benefit}+'&quot;,&quot;save&quot;)'" >Inactivate</button>
+                                <button type="button" class="btn btn-danger btn-xs" data-toggle="modal" data-target="#alert-modal" th:onclick="'inactivate(&quot;'+${benefit.benefitId}+'&quot;,&quot;save&quot;)'" >Inactivate</button>
                             </td>
                         </tr>
                         </tbody>
