@@ -71,7 +71,7 @@ public class PlanTest {
                 .withPaymentTermBasedOnAge(60)
                 .withCoverages(Sets.newHashSet(planCoverage))
                 .withMaturityAmount(5, new BigDecimal(15))
-                .withPolicyTermBasedOnAge(Sets.newHashSet(30, 35, 40, 45, 50, 55, 60))
+                .withPolicyTermBasedOnAge(60)
                 .build();
 
         System.out.println(plan);
