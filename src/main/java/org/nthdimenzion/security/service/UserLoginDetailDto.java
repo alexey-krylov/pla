@@ -1,5 +1,6 @@
 package org.nthdimenzion.security.service;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Setter;
 import lombok.ToString;
 import org.springframework.security.core.GrantedAuthority;
@@ -18,11 +19,11 @@ import java.util.List;
 public class UserLoginDetailDto implements UserDetails {
 
 
-    private Collection<String> permissions;
+    private List<String> permissions;
 
     private Collection<SimpleGrantedAuthority> authorities;
 
-    private String userName;
+    private String username;
 
     private String password;
 
@@ -31,7 +32,7 @@ public class UserLoginDetailDto implements UserDetails {
     }
 
     private UserLoginDetailDto(String userName, String password) {
-        this.userName = userName;
+        this.username = userName;
         this.password = password;
     }
 
@@ -50,11 +51,12 @@ public class UserLoginDetailDto implements UserDetails {
         return this;
     }
 
+    @JsonIgnore
     public Collection<SimpleGrantedAuthority> getAuthorities() {
         return authorities;
     }
 
-    public Collection<String> getPermissions() {
+    public List<String> getPermissions() {
         return permissions;
     }
 
@@ -63,21 +65,25 @@ public class UserLoginDetailDto implements UserDetails {
     }
 
     public String getUsername() {
-        return userName;
+        return username;
     }
 
+    @JsonIgnore
     public boolean isAccountNonExpired() {
         return true;
     }
 
+    @JsonIgnore
     public boolean isAccountNonLocked() {
         return true;
     }
 
+    @JsonIgnore
     public boolean isCredentialsNonExpired() {
         return true;
     }
 
+    @JsonIgnore
     public boolean isEnabled() {
         return true;
     }

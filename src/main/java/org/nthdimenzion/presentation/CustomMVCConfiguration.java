@@ -27,8 +27,8 @@ import java.text.ParseException;
 import java.util.Locale;
 
 import static org.nthdimenzion.common.AppConstants.MONEY_FORMATTER;
-import static org.nthdimenzion.presentation.AppUtils.prependCurrencyUnit;
 import static org.nthdimenzion.presentation.AppUtils.StripCurrencyUnit;
+import static org.nthdimenzion.presentation.AppUtils.prependCurrencyUnit;
 
 /**
  * @author: Samir
@@ -91,7 +91,6 @@ public class CustomMVCConfiguration extends WebMvcConfigurerAdapter {
         registry.addFormatter(new JodaMoneyFormatter());
         super.addFormatters(registry);
     }
-
 
     private class JodaMoneyFormatter implements Formatter<Money> {
 

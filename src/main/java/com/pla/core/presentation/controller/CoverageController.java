@@ -60,7 +60,7 @@ public class CoverageController {
         System.out.println(coverage);
         System.out.println("Update called.........");
         if(coverages.contains(coverage.getCoverageName())){
-            return "error";
+            return "ERROR";
         }
         coverages.add(coverage.getCoverageName());
         return "success";

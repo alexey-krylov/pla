@@ -28,17 +28,14 @@ public class BenefitService {
 
     private BenefitNameIsUnique benefitNameIsUnique;
 
-    private JpaRepositoryFactory jpaRepositoryFactory;
-
     private IIdGenerator idGenerator;
 
     private BenefitIsUpdatable benefitIsUpdatable;
 
     @Autowired
-    public BenefitService(AdminRoleAdapter adminRoleAdapter, BenefitNameIsUnique benefitNameIsUnique, JpaRepositoryFactory jpaRepositoryFactory, IIdGenerator idGenerator, BenefitIsUpdatable benefitIsUpdatable) {
+    public BenefitService(AdminRoleAdapter adminRoleAdapter, BenefitNameIsUnique benefitNameIsUnique,IIdGenerator idGenerator, BenefitIsUpdatable benefitIsUpdatable) {
         this.adminRoleAdapter = adminRoleAdapter;
         this.benefitNameIsUnique = benefitNameIsUnique;
-        this.jpaRepositoryFactory = jpaRepositoryFactory;
         this.idGenerator = idGenerator;
         this.benefitIsUpdatable = benefitIsUpdatable;
     }
