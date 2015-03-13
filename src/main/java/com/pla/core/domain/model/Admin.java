@@ -7,9 +7,13 @@
 package com.pla.core.domain.model;
 
 import com.pla.core.domain.exception.BenefitDomainException;
+import com.pla.core.domain.exception.TeamException;
 import com.pla.core.specification.BenefitIsUpdatable;
 import com.pla.core.specification.BenefitNameIsUnique;
+import com.pla.core.specification.TeamCodeIsUnique;
+import com.pla.core.specification.TeamNameIsUnique;
 import com.pla.sharedkernel.domain.model.BenefitStatus;
+import org.joda.time.LocalDate;
 import org.nthdimenzion.ddd.domain.annotations.ValueObject;
 
 /**
@@ -41,5 +45,25 @@ public class Admin {
     public Benefit inactivateBenefit(Benefit benefit) {
         Benefit updatedBenefit = benefit.inActivate();
         return updatedBenefit;
+    }
+    public Team createTeam(TeamNameIsUnique teamNameIsUnique,TeamCodeIsUnique teamCodeIsUnique, String teamId, String name, String code
+            ,String employeeId,LocalDate fromDate, LocalDate thruDate, String firstname, String lastName) {
+        TeamName teamName = new TeamName(name);
+        TeamCode teamCode =  new TeamCode(code);
+        if (!teamNameIsUnique.isSatisfiedBy(teamName)) {
+            throw  new TeamException("Team Name already exists");
+        }
+        if (!teamCodeIsUnique.isSatisfiedBy(teamCode)) {
+            throw  new TeamException("Team Code already exists");
+        }
+        TeamLeader teamLeader = new TeamLeader(employeeId,firstname, lastName);
+        TeamLeaderFulfillment teamLeaderFulfillment = new TeamLeaderFulfillment(teamLeader, fromDate);
+        Team team = new Team(teamId, teamCode, teamName,employeeId, teamLeaderFulfillment);
+        return team;
+    }
+    public Team updateTeamLead(Team team, String employeeId, String firstname, String lastName, LocalDate fromDate) {
+        TeamLeader teamLeader = new TeamLeader(employeeId, firstname, lastName);
+        Team updatedTeam = team.updateTeamLeader(teamLeader, fromDate);
+        return updatedTeam;
     }
 }
