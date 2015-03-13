@@ -24,6 +24,6 @@ public interface AppConstants {
     
     Boolean FAILURE = Boolean.FALSE;
 
-    String loggedInUser = "loggedInUser";
+    String LOGGED_IN_USER = "LOGGED_IN_USER";
 
 }

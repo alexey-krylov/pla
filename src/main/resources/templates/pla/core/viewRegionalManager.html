@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      lang="en">
+<head th:include="fragments/common :: headTag">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+
+</head>
+<body style="padding-top: 70px;">
+<div th:include="fragments/common :: bodyHeader" th:remove="tag"/>
+<div class="container" style="padding-top: 0px!important;">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <div class="row">
+                        <div class="col-lg-6"><span th:text="#{listOfRegionalManagers}">List of Regional Managers
+                        </span></div>
+                    </div>
+                </div>
+                <div class="panel-body">
+                    <table class="table table-striped table-bordered" id="regionalManager-table" cellspacing="0" width="100%">
+                        <thead>
+                        <tr>
+                            <th th:text="#{regionName}">
+                                Region Name
+                            </th>
+                            <th th:text="#{branchName}">
+                                Branch Name
+                            </th>
+                            <th th:text="#{regionalManager}">
+                                Regional Manager
+                            </th>
+                            <th th:text="#{regionalManagerFrom}">
+                                Regional Manager From
+                            </th>
+                            <th th:text="#{actions}">
+                                Actions
+                            </th>
+                        </tr>
+                        </thead>
+                        <tbody >
+                        <tr id="row1">
+                            <td>South</td>
+                            <td>Livingstone</td>
+                            <td>RegionalManager A</td>
+                            <td>09/03/2014</td>
+                            <td style="text-align:center">
+                                <a class="btn btn-primary btn-xs" th:href="@{/core/regionalManager/assign}">Assign</a></td>
+
+                        </tr>
+                        <tr id="row2">
+                            <td>North</td>
+                            <td>Kasama</td>
+                            <td>RegionalManager B</td>
+                            <td>29/05/2013</td>
+                            <td style="text-align:center">
+                                <a class="btn btn-primary btn-xs" th:href="@{/core/regionalManager/assign}">Assign</a></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="panel-footer">
+                    <ul class="pagination" id="logs-pagination-default"></ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script data-main="/pla/js/viewRegionalManager.js" src="/webjarsjs" th:src="@{/webjarsjs}"></script>
+<footer class="footer" th:include="fragments/common :: footer">
+</footer>
+</body>
+</html>

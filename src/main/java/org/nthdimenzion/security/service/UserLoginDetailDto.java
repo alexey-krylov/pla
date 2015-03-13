@@ -52,38 +52,46 @@ public class UserLoginDetailDto implements UserDetails {
     }
 
     @JsonIgnore
+    @Override
     public Collection<SimpleGrantedAuthority> getAuthorities() {
         return authorities;
     }
+
 
     public List<String> getPermissions() {
         return permissions;
     }
 
+    @Override
     public String getPassword() {
         return password;
     }
 
+    @Override
     public String getUsername() {
         return username;
     }
 
     @JsonIgnore
+    @Override
     public boolean isAccountNonExpired() {
         return true;
     }
 
     @JsonIgnore
+    @Override
     public boolean isAccountNonLocked() {
         return true;
     }
 
     @JsonIgnore
+    @Override
     public boolean isCredentialsNonExpired() {
         return true;
     }
 
     @JsonIgnore
+    @Override
     public boolean isEnabled() {
         return true;
     }
