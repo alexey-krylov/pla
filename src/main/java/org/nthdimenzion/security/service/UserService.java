@@ -6,23 +6,34 @@
 
 package org.nthdimenzion.security.service;
 
-import org.springframework.context.annotation.Profile;
+import com.google.common.base.Preconditions;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
 /**
  * @author: Samir
  * @since 1.0 23/01/2015
  */
 @Service
-@Profile("prod")
 public class UserService implements UserDetailsService {
+
+    @Value("${spring.smeServer.${spring.profiles.active}.url}")
+    private String serverUrl;
 
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        return null;
+        Preconditions.checkNotNull(serverUrl);
+        RestTemplate restTemplate = new RestTemplate();
+        String userDetailUrl = serverUrl + "/getuserdetail";
+        UserLoginDetailDto userLoginDetailDto = restTemplate.getForObject(userDetailUrl, UserLoginDetailDto.class);
+        Preconditions.checkNotNull(userLoginDetailDto);
+        userLoginDetailDto = userLoginDetailDto.populateAuthorities(userLoginDetailDto.getPermissions());
+        return userLoginDetailDto;
     }
+
 }

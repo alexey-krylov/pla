@@ -7,7 +7,7 @@
 package com.pla.core.domain.model;
 
 import com.google.common.base.Preconditions;
-import com.pla.core.domain.exception.BenefitException;
+import com.pla.core.domain.exception.BenefitDomainException;
 import com.pla.sharedkernel.domain.model.BenefitStatus;
 import lombok.*;
 import org.nthdimenzion.common.crud.ICrudEntity;
@@ -53,7 +53,7 @@ public class Benefit implements ICrudEntity {
 
     public Benefit markAsUsed() {
         if (BenefitStatus.INACTIVE.equals(this.status)) {
-            throw new BenefitException("Benefit cannot be marked as used as it is in inactive state");
+            throw new BenefitDomainException("Benefit cannot be marked as used as it is in inactive state");
         }
         this.status = BenefitStatus.INUSE;
         return this;
@@ -67,7 +67,7 @@ public class Benefit implements ICrudEntity {
 
     public boolean isUpdatable() {
         if (BenefitStatus.INACTIVE.equals(this.status) || BenefitStatus.INUSE.equals(this.status)) {
-            throw new BenefitException("Benefit name cannot be updated as it has been used in coverage/in inactive state");
+            throw new BenefitDomainException("Benefit name cannot be updated as it has been used in coverage/in inactive state");
         }
         return true;
     }

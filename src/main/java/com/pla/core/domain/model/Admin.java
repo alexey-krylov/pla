@@ -6,13 +6,11 @@
 
 package com.pla.core.domain.model;
 
-import com.pla.core.domain.exception.BenefitException;
+import com.pla.core.domain.exception.BenefitDomainException;
 import com.pla.core.specification.BenefitIsUpdatable;
 import com.pla.core.specification.BenefitNameIsUnique;
 import com.pla.sharedkernel.domain.model.BenefitStatus;
 import org.nthdimenzion.ddd.domain.annotations.ValueObject;
-
-import java.util.Set;
 
 /**
  * @author: Samir
@@ -21,40 +19,27 @@ import java.util.Set;
 @ValueObject
 public class Admin {
 
-    private String userName;
 
-    public Admin(String userName) {
-        this.userName = userName;
-
-    }
-
-    public Benefit createBenefit(BenefitNameIsUnique benefitNameIsUnique, String benefitId, String name) {
-        BenefitName benefitName = new BenefitName(name);
+    public Benefit createBenefit(BenefitNameIsUnique benefitNameIsUnique, String benefitId,  BenefitName benefitName) {
         if (!benefitNameIsUnique.isSatisfiedBy(benefitName)) {
-            throw new BenefitException("Benefit name already satisfied");
+            throw new BenefitDomainException("Benefit name already satisfied");
         }
-        Benefit benefit = new Benefit(benefitId, benefitName, BenefitStatus.ACTIVE);
-        return benefit;
+        return new Benefit(benefitId, benefitName, BenefitStatus.ACTIVE);
     }
 
-    public Benefit updateBenefit(Benefit benefit, String name, BenefitNameIsUnique benefitNameIsUnique, BenefitIsUpdatable benefitIsUpdatable) {
-        BenefitName benefitName = new BenefitName(name);
-        if (!benefitIsUpdatable.isSatisfiedBy(benefit.getBenefitId(), benefitName)) {
-            throw new BenefitException("Benefit name cannot be updated. New name is required");
+    public Benefit updateBenefit(Benefit benefit, BenefitName newBenefitName, BenefitNameIsUnique benefitNameIsUnique, BenefitIsUpdatable benefitIsUpdatable) {
+        if (!benefitIsUpdatable.isSatisfiedBy(benefit.getBenefitId(), newBenefitName)) {
+            throw new BenefitDomainException("Benefit name cannot be updated. New name is required");
         }
-        if (!benefitIsUpdatable.isGeneralizationOf(benefitNameIsUnique, benefitName)) {
-            throw new BenefitException("Benefit name already satisfied");
+        if (!benefitIsUpdatable.isGeneralizationOf(benefitNameIsUnique, newBenefitName)) {
+            throw new BenefitDomainException("Benefit name already satisfied");
         }
-        benefit = benefit.updateBenefitName(benefitName);
-        return benefit;
+        Benefit updatedBenefit = benefit.updateBenefitName(newBenefitName);
+        return updatedBenefit;
     }
 
     public Benefit inactivateBenefit(Benefit benefit) {
-        benefit = benefit.inActivate();
-        return benefit;
-    }
-
-    public Coverage createCoverage(String coverageId, CoverageName coverageName, Set<Benefit> benefitList) {
-        return new Coverage(coverageId, coverageName, benefitList);
+        Benefit updatedBenefit = benefit.inActivate();
+        return updatedBenefit;
     }
 }

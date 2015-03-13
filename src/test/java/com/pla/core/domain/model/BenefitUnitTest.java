@@ -6,7 +6,7 @@
 
 package com.pla.core.domain.model;
 
-import com.pla.core.domain.exception.BenefitException;
+import com.pla.core.domain.exception.BenefitDomainException;
 import com.pla.core.specification.BenefitNameIsUnique;
 import com.pla.sharedkernel.domain.model.BenefitStatus;
 import org.junit.Before;
@@ -38,10 +38,10 @@ public class BenefitUnitTest {
 
     @Before
     public void setUp() {
-        admin = new Admin("");
+        admin = new Admin();
         BenefitName benefitName = new BenefitName("Accidental death benefit");
         when(benefitNameIsUnique.isSatisfiedBy(benefitName)).thenReturn(Boolean.TRUE);
-        benefit = admin.createBenefit(benefitNameIsUnique, "1", name);
+        benefit = admin.createBenefit(benefitNameIsUnique, "1", benefitName);
     }
 
     @Test
@@ -56,21 +56,21 @@ public class BenefitUnitTest {
     }
 
 
-    @Test(expected = BenefitException.class)
+    @Test(expected = BenefitDomainException.class)
     public void markingAnInactivatedBenefitShouldThrowExceptionAndStatusShouldBeInactive() {
         benefit = admin.inactivateBenefit(benefit);
         benefit = benefit.markAsUsed();
         assertEquals(BenefitStatus.INACTIVE, invokeGetterMethod(benefit, "getStatus"));
     }
 
-    @Test(expected = BenefitException.class)
+    @Test(expected = BenefitDomainException.class)
     public void inactivatingABenefitWithInUseStatusThrowExceptionAndStatusShouldBeInUse() {
         benefit = benefit.markAsUsed();
         benefit = admin.inactivateBenefit(benefit);
         assertEquals(BenefitStatus.INUSE, invokeGetterMethod(benefit, "getStatus"));
     }
 
-    @Test(expected = BenefitException.class)
+    @Test(expected = BenefitDomainException.class)
     public void benefitInUsedStatusShouldThrowExceptionOnUpdatingNameAndNameShouldBeUnchanged() {
         benefit = benefit.markAsUsed();
         String updatedName = "CI Benefit";

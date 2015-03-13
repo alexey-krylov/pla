@@ -1,0 +1,9 @@
+{
+  "permissions": [
+    "ROLE_ADMIN"
+  ],
+  "authorities": [
+  ],
+  "password": "admin",
+  "username": "admin"
+}

@@ -14,12 +14,8 @@ import org.nthdimenzion.ddd.domain.DomainException;
  */
 public class CoverageException extends DomainException {
 
-    private CoverageException(String message) {
+    public CoverageException(String message) {
         super(message);
     }
 
-
-    public static void raiseCoverageNotUpdatableException() {
-        throw new CoverageException("Coverage cannot be uupdated as it is used in active plan");
-    }
 }

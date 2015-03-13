@@ -7,7 +7,6 @@
 package com.pla.core.domain.model;
 
 import com.google.common.base.Preconditions;
-import com.pla.core.domain.exception.BenefitException;
 import lombok.*;
 import org.hibernate.annotations.Immutable;
 import org.nthdimenzion.ddd.domain.annotations.ValueObject;
