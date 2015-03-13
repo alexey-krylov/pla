@@ -6,7 +6,6 @@
 
 package com.pla.core.application;
 
-import com.pla.core.domain.model.TeamLeader;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -28,8 +27,12 @@ import javax.validation.constraints.NotNull;
 @Setter
 @ToString
 public class CreateTeamCommand {
-    
+
     private UserDetails userDetails;
+
+    @NotNull(message = "{Team id cannot be null}")
+    @NotEmpty(message = "{Team id id cannot be empty}")
+    private String teamId;
 
     @NotNull(message = "{Team name cannot be null}")
     @NotEmpty(message = "{Team name cannot be empty}")

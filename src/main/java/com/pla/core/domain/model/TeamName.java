@@ -6,9 +6,11 @@
 
 package com.pla.core.domain.model;
 
+import com.google.common.base.Preconditions;
 import lombok.*;
 import org.hibernate.annotations.Immutable;
 import org.nthdimenzion.ddd.domain.annotations.ValueObject;
+import org.nthdimenzion.utils.UtilValidator;
 
 import javax.persistence.Embeddable;
 
@@ -29,6 +31,7 @@ public class TeamName {
 
     public TeamName(String teamName) {
         this.teamName = teamName;
+        Preconditions.checkState(!UtilValidator.isEmpty(teamName));
     }
 
 }

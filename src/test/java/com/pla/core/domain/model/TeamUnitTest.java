@@ -69,11 +69,18 @@ public class TeamUnitTest {
     }*/
     @Test
     public void testCreateTeamAndTeamLead() {
-        Team team = admin.createTeam(teamNameIsUniqueName, teamCodeIsUnique, "5555", "LLLL", "LLL", "4566",
-                LocalDate.now(), LocalDate.now(),"PPPP","PPP");
-        String updatedName = "844";
-        Team updatedTeam = admin.updateTeamLead(team, updatedName, "qsi", "ssff", LocalDate.now());
-        assertEquals("444", updatedTeam.getCurrentTeamLeader());
+        Team team = admin.createTeam(teamNameIsUniqueName, teamCodeIsUnique, "552255", "gggg", "LggggggLL", "employeedId1",
+                LocalDate.now(), LocalDate.now(),"www","PPP");
+        String updatedName = "777";
+        admin.updateTeamLead(team, "aa", "employeedId2", "ss", LocalDate.now());
+        System.out.println("creat t lid :"+team.getCurrentTeamLeader());
+        Team updatedTeam = admin.updateTeamLead(team, "vvv", "employeedId3", "ss", LocalDate.now());
+        for(int i=0; i< updatedTeam.getTeamLeaders().size();i++)
+        {
+            TeamLeaderFulfillment teamLeaderFulfillment = updatedTeam.getTeamLeaders().get(i);
+            System.out.println("From date : "+teamLeaderFulfillment.getFromDate()+" thru date"+teamLeaderFulfillment.getThruDate()+":: "+teamLeaderFulfillment.getTeamLeader().getEmployeeId());
+        }
+        assertEquals("777", updatedTeam.getCurrentTeamLeader());
        // System.out.println(updatedBenefit.getCurrentTeamLeader());
     }
 }

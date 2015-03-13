@@ -10,8 +10,10 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import org.hibernate.annotations.Type;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotEmpty;
+import org.joda.time.LocalDate;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.validation.constraints.NotNull;
@@ -26,13 +28,20 @@ import javax.validation.constraints.NotNull;
 @ToString
 public class UpdateTeamCommand {
 
-    @NotNull(message = "{benefit id cannot be null}")
-    @NotEmpty(message = "{benefit id cannot be empty}")
-    private String benefitId;
-
-    @NotNull(message = "{status cannot be null}")
-    @Length(max = 100, min = 1,message = "{Benefit name length should be between 1-100}")
-    private String benefitName;
-
     private UserDetails userDetails;
+
+    private String teamId;
+
+    private String employeeId;
+
+    private String firstName;
+
+    private String lastName;
+
+    @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentLocalDate")
+    private LocalDate fromDate;
+
+    @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentLocalDate")
+    private LocalDate thruDate;
+
 }

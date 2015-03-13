@@ -23,7 +23,7 @@ import javax.persistence.Embeddable;
 @EqualsAndHashCode(of = "employeeId")
 @Getter(value = AccessLevel.PACKAGE)
 @Setter(value = AccessLevel.PRIVATE)
-public class TeamLeader {
+class TeamLeader {
 
     private String employeeId;
 

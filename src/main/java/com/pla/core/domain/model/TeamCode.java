@@ -6,9 +6,11 @@
 
 package com.pla.core.domain.model;
 
+import com.google.common.base.Preconditions;
 import lombok.*;
 import org.hibernate.annotations.Immutable;
 import org.nthdimenzion.ddd.domain.annotations.ValueObject;
+import org.nthdimenzion.utils.UtilValidator;
 
 import javax.persistence.Embeddable;
 
@@ -28,6 +30,7 @@ public class TeamCode {
     private String teamCode;
 
     public TeamCode(String teamCode) {
+        Preconditions.checkState(!UtilValidator.isEmpty(teamCode));
         this.teamCode = teamCode;
     }
 }

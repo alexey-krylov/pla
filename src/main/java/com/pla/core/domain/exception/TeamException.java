@@ -19,7 +19,5 @@ public class TeamException extends DomainException {
         super(message);
     }
 
-    public static void raiseTeamLeaderCannotBeAssociatedException() {
-        throw new TeamException("Team leader cannot be associated as there is already team leader available");
-    }
+
 }

@@ -6,6 +6,7 @@
 
 package com.pla.core.specification;
 
+import com.pla.core.domain.model.TeamCode;
 import com.pla.core.domain.model.TeamName;
 import com.pla.core.query.TeamFinder;
 import com.pla.sharedkernel.specification.ISpecification;
@@ -28,8 +29,8 @@ public class TeamNameIsUnique implements ISpecification<TeamName> {
     }
 
     @Override
-    public boolean isSatisfiedBy(TeamName teamNameCode) {
-        int teamCount = teamFinder.getTeamCountByTeamNameCode(teamNameCode.getTeamName(), teamNameCode.getTeamCode());
+    public boolean isSatisfiedBy(TeamName teamName) {
+        int teamCount = teamFinder.getTeamCountByTeamName(teamName.getTeamName());
         return teamCount == 0;
     }
 

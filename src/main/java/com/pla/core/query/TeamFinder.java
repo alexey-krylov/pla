@@ -34,18 +34,24 @@ public class TeamFinder {
         this.namedParameterJdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
     }
 
-  //  public static final String FIND_BENEFIT_FOR_A_GIVEN_BENEFIT_NAME = "select * from team where team_name=:teamName";
+    public static final String ACTIVE_BENEFIT_COUNT_BY_TEAM_NAME = "select count(team_id) from team where team_name=:teamName";
 
-    public static final String ACTIVE_BENEFIT_COUNT_BY_TEAM_NAMECODE = "select count(team_id) from team where team_name=:teamName";
+    public static final String ACTIVE_BENEFIT_COUNT_BY_TEAM_CODE = "select count(team_id) from team where team_code=:teamCode";
 
-   /* public List<Map<String, Object>> findBenefitFor(String benefitName) {
-        return namedParameterJdbcTemplate.query(FIND_BENEFIT_FOR_A_GIVEN_BENEFIT_NAME, Collections.singletonMap("benefitName", benefitName), new ColumnMapRowMapper());
-    }*/
-    
-    public int getTeamCountByTeamNameCode(String teamName, String teamCode){
+    public static final String findAllTeam = "SELECT team_id AS teamId,team_name AS teamName FROM team";
+
+    public int getTeamCountByTeamName(String teamName){
         Preconditions.checkNotNull(teamName);
-        Preconditions.checkNotNull(teamCode);
-        Number noOfBenefit  = namedParameterJdbcTemplate.queryForObject(ACTIVE_BENEFIT_COUNT_BY_TEAM_NAMECODE, new MapSqlParameterSource().addValue("teamName",teamName).addValue("teamCode",teamCode), Number.class);
+        Number noOfBenefit  = namedParameterJdbcTemplate.queryForObject(ACTIVE_BENEFIT_COUNT_BY_TEAM_NAME, new MapSqlParameterSource().addValue("teamName", teamName), Number.class);
         return noOfBenefit.intValue();
+    }
+    public int getTeamCountByTeamCode(String teamCode){
+        Preconditions.checkNotNull(teamCode);
+        Number noOfBenefit  = namedParameterJdbcTemplate.queryForObject(ACTIVE_BENEFIT_COUNT_BY_TEAM_CODE, new MapSqlParameterSource().addValue("teamCode",teamCode), Number.class);
+        return noOfBenefit.intValue();
+    }
+
+    public List<Map<String, Object>> getAllTeam() {
+        return namedParameterJdbcTemplate.query(findAllTeam, new ColumnMapRowMapper());
     }
 }

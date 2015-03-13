@@ -33,7 +33,7 @@ public class TeamCommandHandler {
     private Logger logger = LoggerFactory.getLogger(TeamCommandHandler.class);
 
     @Autowired
-    public TeamCommandHandler(JpaRepositoryFactory jpaRepositoryFactory, TeamService teamService) {
+      public TeamCommandHandler(JpaRepositoryFactory jpaRepositoryFactory, TeamService teamService) {
         this.jpaRepositoryFactory = jpaRepositoryFactory;
         this.teamService = teamService;
     }
@@ -41,9 +41,10 @@ public class TeamCommandHandler {
     @CommandHandler
     public void createTeamHandler(CreateTeamCommand createTeamCommand) {
         if (logger.isDebugEnabled()) {
-            logger.debug("*****Command Received*****" + createTeamCommand);
+            logger.debug("*****Create Team Command Received*****" + createTeamCommand);
         }
-        Team team = teamService.createTeam(createTeamCommand);
+        Team team = teamService.createTeam(createTeamCommand.getTeamName(), createTeamCommand.getTeamCode(),createTeamCommand.getEmployeeId(),
+                createTeamCommand.getFromDate(), createTeamCommand.getThruDate(), createTeamCommand.getFirstName(), createTeamCommand.getLastName(), createTeamCommand.getUserDetails());
         JpaRepository<Team, String> teamRepository = jpaRepositoryFactory.getCrudRepository(Team.class);
         try {
             teamRepository.save(team);

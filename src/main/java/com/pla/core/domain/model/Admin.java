@@ -50,20 +50,18 @@ public class Admin {
             ,String employeeId,LocalDate fromDate, LocalDate thruDate, String firstname, String lastName) {
         TeamName teamName = new TeamName(name);
         TeamCode teamCode =  new TeamCode(code);
-        if (!teamNameIsUnique.isSatisfiedBy(teamName)) {
+        /*if (!teamNameIsUnique.isSatisfiedBy(teamName)) {
             throw  new TeamException("Team Name already exists");
         }
         if (!teamCodeIsUnique.isSatisfiedBy(teamCode)) {
             throw  new TeamException("Team Code already exists");
-        }
+        }*/
         TeamLeader teamLeader = new TeamLeader(employeeId,firstname, lastName);
         TeamLeaderFulfillment teamLeaderFulfillment = new TeamLeaderFulfillment(teamLeader, fromDate);
-        Team team = new Team(teamId, teamCode, teamName,employeeId, teamLeaderFulfillment);
-        return team;
+        return new Team(teamId, teamCode, teamName,employeeId, teamLeaderFulfillment,Boolean.TRUE);
     }
-    public Team updateTeamLead(Team team, String employeeId, String firstname, String lastName, LocalDate fromDate) {
-        TeamLeader teamLeader = new TeamLeader(employeeId, firstname, lastName);
-        Team updatedTeam = team.updateTeamLeader(teamLeader, fromDate);
+    public Team updateTeamLead(Team team, String employeeId, String firstName, String lastName, LocalDate fromDate) {
+        Team updatedTeam = team.assignTeamLeader(employeeId, firstName, lastName, fromDate);
         return updatedTeam;
     }
 }
