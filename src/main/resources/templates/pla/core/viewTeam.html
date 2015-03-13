@@ -7,6 +7,27 @@
 </head>
 <body style="padding-top: 70px;">
 <div th:include="fragments/common :: bodyHeader" th:remove="tag"/>
+
+
+<div class="modal fade" id="alert-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">Alert</h4>
+            </div>
+            <div class="modal-body">
+                Are you sure to inactivate the benefit?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" onclick="inactivate('','confirm')">Yes</button>
+                <button type="button" class="btn btn-danger" data-dismiss="modal">No</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
 <div class="container" style="padding-top: 0px!important;">
     <div class="row">
         <div class="col-lg-12">
@@ -16,7 +37,7 @@
                         <div class="col-lg-6"><span th:text="#{listOfTeams}">List of Teams
                         </span></div>
                         <div class="col-lg-6"><a type="button" class="btn btn-warning btn-sm" style="float: right"
-                                                 th:href="@{/core/team/create}">
+                                                 th:href="@{/core/team/openCreatePage}">
                             Create
                         </a></div>
                     </div>
@@ -64,9 +85,6 @@
                             <!--th:text="${team.teamLeaderFrom}"-->
                             <td style="text-align:center">
                                 <a class="btn btn-primary btn-xs" th:href="@{/core/team/assign}">Assign</a>
-
-                                <!--<button type="button" class="btn btn-primary btn-xs" id="assignTeam1" onclick="assignTeamOne()">Assign</button>-->
-                                <!-- <a class="btn btn-primary btn-xs" th:href="@{/core/team/assign}">Assign</a>-->
                             </td>
                         </tr>
                         <tr>
@@ -77,7 +95,6 @@
                             <td>TeamLeader C</td>
                             <td>29/05/2013</td>
                             <td style="text-align:center">
-                                <!--  <button type="button" class="btn btn-primary" id="assignTeam2"  >Assign</button> -->
                                 <a class="btn btn-primary btn-xs" th:href="@{/core/team/assign}">Assign</a></td>
                         </tr>
                         </tbody>
