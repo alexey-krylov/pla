@@ -106,8 +106,16 @@
                         <tbody>
                         <tr th:each="coverage : ${coverages}">
                             <td th:text="${{coverage}}" ></td>
-                            <td></td>
-                            <td></td>
+                            <td>The policy may be structured to payout may be on the policyholder undergoing a surgical
+                                procedure.
+                            </td>
+                            <td style="text-align:center">
+                                <div class="bs-example">
+                                    <p class="popover-examples">
+                                        <a href="#" class="btn btn-primary btn-xs" data-toggle="popover">Benefits</a>
+                                    </p>
+                                </div>
+                            </td>
                             <td style="text-align:center">
                                 <button type="button" class="btn btn-primary btn-xs" th:onclick="'openCoverageUpdateModal(&quot;'+${coverage}+'&quot;)'">Update</button>
                                 <button type="button" class="btn btn-danger btn-xs" data-toggle="modal" data-target="#alert-modal" th:onclick="'inactivate(&quot;'+${coverage}+'&quot;,&quot;save&quot;)'" >Inactivate</button>

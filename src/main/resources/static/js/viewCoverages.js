@@ -13,6 +13,12 @@ require(['jquery','bootstrap','datatables','bootstrap-multiselect'],function(){
         $('#coverageName').focus()
     });
     $('#coverage-table').dataTable();
+    $('.popover-examples a').popover({
+                    title : 'Benefits',
+                    trigger: 'hover',
+            		placement:'top',
+                    template: '<div class="popover"><div class="arrow"></div><h3 class="popover-title"></h3><ul type="square" style="text-align:left;padding:0 10px;margin-left:5px;" ><li style="text-align:left;font-size:12px;">Accidental Death Benefit</li><li style="text-align:left;font-size:12px;">CI Benefit</li><li style="text-align:left;font-size:12px;">Permanent Total Disability</li><li style="text-align:left;font-size:12px;">Temporary Total Disability</li><li style="text-align:left;font-size:12px;">Death Benefit</li></ul></div>'
+          });
 });
 
 var hasError = false;
