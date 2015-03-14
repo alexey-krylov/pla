@@ -5,6 +5,8 @@ import lombok.Getter;
 import lombok.ToString;
 import org.nthdimenzion.utils.UtilValidator;
 
+import javax.persistence.*;
+import java.util.HashSet;
 import java.util.Set;
 
 import static com.google.common.base.Preconditions.checkArgument;
@@ -15,10 +17,20 @@ import static com.google.common.base.Preconditions.checkArgument;
  */
 @Getter(AccessLevel.PACKAGE)
 @ToString
+@Entity
 class PolicyTerm {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    long id;
     int maxMaturityAge;
-    Set<Integer> validTerms;
+
+    @ElementCollection
+    Set<Integer> validTerms = new HashSet<Integer>();
+
+    protected PolicyTerm() {
+
+    }
 
     PolicyTerm(int maxMaturityAge) {
         checkArgument(maxMaturityAge > 0, "Excepted maxMaturityAge>0 but %s > 0", maxMaturityAge);

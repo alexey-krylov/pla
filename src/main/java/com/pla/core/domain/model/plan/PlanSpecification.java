@@ -4,6 +4,7 @@ package com.pla.core.domain.model.plan;
 import com.pla.sharedkernel.specification.ISpecification;
 import org.nthdimenzion.utils.UtilValidator;
 
+import java.util.Comparator;
 import java.util.Set;
 
 /**
@@ -18,8 +19,9 @@ public class PlanSpecification implements ISpecification<Plan> {
         Set<Integer> policyTerms = plan.getPolicyTerm().getValidTerms();
         Set<Integer> premiumTerms = plan.getPlanPayment().getPremiumPayment().getValidTerms();
         if (UtilValidator.isNotEmpty(premiumTerms) && UtilValidator.isNotEmpty(policyTerms)) {
-            int maxPolicyTerm = policyTerms.stream().sorted().findFirst().get();
-            System.out.println(maxPolicyTerm);
+            int maxPolicyTerm = policyTerms.stream().max(Comparator.comparingInt(term -> term.intValue())).get();
+            int maxPremiumTerm = premiumTerms.stream().max(Comparator.comparingInt(term -> term.intValue())).get();
+            return maxPremiumTerm <= maxPolicyTerm;
         }
         return true;
     }

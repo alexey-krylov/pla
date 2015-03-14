@@ -4,14 +4,15 @@ import com.pla.sharedkernel.identifier.PlanId;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.ToString;
-import org.axonframework.domain.AbstractAggregateRoot;
+import org.axonframework.eventsourcing.annotation.AbstractAnnotatedAggregateRoot;
 import org.nthdimenzion.utils.UtilValidator;
 
-import java.math.BigDecimal;
+import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
 
 import static com.google.common.base.Preconditions.checkArgument;
+import static com.google.common.base.Preconditions.checkState;
 
 /**
  * @author: pradyumna
@@ -19,29 +20,40 @@ import static com.google.common.base.Preconditions.checkArgument;
  */
 @ToString
 @Getter(AccessLevel.PACKAGE)
-public class Plan extends AbstractAggregateRoot<PlanId> {
+@Entity
+public class Plan extends AbstractAnnotatedAggregateRoot<PlanId> {
 
+    @Id
     private PlanId planId;
+
+    @Transient
     private PlanDetail planDetail;
+    @OneToOne
     private SumAssured sumAssured;
     /**
      * Policy term can be a list of age with upper band
      * of maximum maturity age OR it could be list of age
      * of the insured.
      */
+    @OneToOne
     private PolicyTerm policyTerm;
+    @OneToOne
     private PlanPayment planPayment;
-    private Set<PlanCoverage> coverages;
+
+    @OneToMany(mappedBy = "plan")
+    private Set<PlanCoverage> coverages = new HashSet<PlanCoverage>();
 
     protected Plan() {
     }
 
-    private Plan(PlanBuilder builder) {
+    Plan(PlanBuilder builder) {
         checkArgument(builder.planId != null);
         this.planId = builder.planId;
 
         checkArgument(UtilValidator.isNotEmpty(builder.coverages));
-        this.coverages = builder.coverages;
+        for (PlanCoverage planCoverage : builder.coverages) {
+            this.getCoverages().add(new PlanCoverage(this, planCoverage));
+        }
 
         checkArgument(builder.planPayment != null);
         this.planPayment = builder.planPayment;
@@ -57,6 +69,8 @@ public class Plan extends AbstractAggregateRoot<PlanId> {
         checkArgument(builder.sumAssured != null);
         this.sumAssured = builder.sumAssured;
 
+        PlanSpecification specification = new PlanSpecification();
+        checkState(specification.isSatisfiedBy(this), " Premium Payment Term is greater than the Policy Term.");
     }
 
     public static PlanBuilder builder() {
@@ -66,74 +80,5 @@ public class Plan extends AbstractAggregateRoot<PlanId> {
     public PlanId getIdentifier() {
         return planId;
     }
-
-    public static class PlanBuilder {
-
-        private PlanId planId;
-        private PlanDetail planDetail;
-        private SumAssured sumAssured;
-        private PolicyTerm policyTerm;
-        private PlanPayment planPayment;
-        private Set<PlanCoverage> coverages;
-        private Set<MaturityAmount> maturityAmountSet = new HashSet<MaturityAmount>();
-
-        public PlanBuilder withPlanId(PlanId planId) {
-            this.planId = planId;
-            return this;
-        }
-
-
-        public PlanBuilder withPlanDetail(PlanDetail planDetail) {
-            this.planDetail = planDetail;
-            return this;
-        }
-
-
-        public PlanBuilder withSumAssuredByRange(BigDecimal minSumInsured, BigDecimal maxSumInsured, int multiplesOf) {
-            this.sumAssured = new SumAssuredByRange(minSumInsured, maxSumInsured, multiplesOf);
-            return this;
-        }
-
-        public PlanBuilder withSumAssuredBasedOnValue(Set<BigDecimal> sumInsuredValues) {
-            this.sumAssured = new SumAssured(sumInsuredValues);
-            return this;
-        }
-
-
-        public PlanBuilder withPolicyTermBasedOnAge(int maxMaturityAge) {
-            this.policyTerm = new PolicyTerm(maxMaturityAge);
-            return this;
-        }
-
-        public PlanBuilder withPolicyTermBasedOnValue(Set<Integer> validTerms, int maxMaturityAge) {
-            this.policyTerm = new PolicyTerm(validTerms, maxMaturityAge);
-            return this;
-        }
-
-        public PlanBuilder withPaymentTermBasedOnAge(int paymentCutOffAge) {
-            this.planPayment = new PlanPayment(new PremiumPayment(paymentCutOffAge));
-            return this;
-        }
-
-        public PlanBuilder withPaymentTermBasedOnValue(Set<Integer> validTerms, int maxMaturityAge) {
-            this.planPayment = new PlanPayment(new PremiumPayment(validTerms, maxMaturityAge));
-            return this;
-        }
-
-        public PlanBuilder withMaturityAmount(int maturityYear, BigDecimal guaranteedSurvivalBenefitAmount) {
-            this.maturityAmountSet.add(new MaturityAmount(maturityYear, guaranteedSurvivalBenefitAmount));
-            return this;
-        }
-
-        public PlanBuilder withCoverages(Set<PlanCoverage> coverages) {
-            this.coverages = coverages;
-            return this;
-        }
-
-        public Plan build() {
-            return new Plan(this);
-        }
-    }
-
 
 }

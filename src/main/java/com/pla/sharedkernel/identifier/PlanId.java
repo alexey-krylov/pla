@@ -1,19 +1,25 @@
 package com.pla.sharedkernel.identifier;
 
-import lombok.AccessLevel;
-import lombok.Getter;
+import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import javax.persistence.Embeddable;
+import java.io.Serializable;
 
 /**
  * @author: pradyumna
  * @since 1.0 11/03/2015
  */
 @Embeddable
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
-@Getter
-public class PlanId {
+@NoArgsConstructor
+@AllArgsConstructor
+@ToString
+@EqualsAndHashCode
+public class PlanId implements Serializable {
 
     private String planId;
+
+
 }

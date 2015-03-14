@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:axon="http://www.axonframework.org/schema/core"
+       xmlns="http://www.springframework.org/schema/beans"
+       xsi:schemaLocation="http://www.axonframework.org/schema/core http://www.axonframework.org/schema/axon-core.xsd
+       http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <bean id="eventStore" class="org.axonframework.eventstore.jpa.JpaEventStore">
+        <constructor-arg ref="entityManagerProvider"/>
+        <property name="dataSource" ref="primaryDataSource"/>
+    </bean>
+    <bean id="entityManagerProvider" class="org.axonframework.common.jpa.ContainerManagedEntityManagerProvider"/>
+    <axon:event-sourcing-repository id="planRepository" aggregate-type="com.pla.core.domain.model.plan.Plan"
+                                    event-store="eventStore" event-bus="eventBus"/>
+</beans>

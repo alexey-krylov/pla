@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.ToString;
 import org.nthdimenzion.utils.UtilValidator;
 
+import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.Set;
 
@@ -15,8 +16,16 @@ import static com.google.common.base.Preconditions.checkArgument;
  */
 @ToString
 @Getter
+@Entity
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@DiscriminatorColumn(name = "type", discriminatorType = DiscriminatorType.STRING)
+@DiscriminatorValue(value = "SUM_ASSURED_VALUE")
 class SumAssured {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long id;
+    @ElementCollection
     private Set<BigDecimal> sumInsuredValues;
 
     protected SumAssured() {

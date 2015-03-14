@@ -4,6 +4,7 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.ToString;
 
+import javax.persistence.*;
 import java.util.Collection;
 import java.util.LinkedList;
 
@@ -13,13 +14,20 @@ import java.util.LinkedList;
  */
 @ToString
 @Getter(AccessLevel.PACKAGE)
+@Entity
 class PlanPayment {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    long id;
+    @ElementCollection
     private Collection<MaturityAmount> maturityAmounts;
+    @OneToOne
     private PremiumPayment premiumPayment;
+    @Column(nullable = false)
     private PremiumPaymentTermType premiumPaymentTermType;
 
-    PlanPayment() {
+    protected PlanPayment() {
         maturityAmounts = new LinkedList<MaturityAmount>();
         premiumPaymentTermType = PremiumPaymentTermType.REGULAR;
     }

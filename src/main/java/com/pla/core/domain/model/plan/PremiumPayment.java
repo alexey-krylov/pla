@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.ToString;
 import org.nthdimenzion.utils.UtilValidator;
 
+import javax.persistence.*;
 import java.util.Set;
 
 import static com.google.common.base.Preconditions.checkArgument;
@@ -15,13 +16,17 @@ import static com.google.common.base.Preconditions.checkArgument;
  */
 @ToString
 @Getter(AccessLevel.PACKAGE)
-public class PremiumPayment {
+@Entity
+class PremiumPayment {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    long id;
+    @ElementCollection
     private Set<Integer> validTerms;
     private int paymentCutOffAge;
 
     protected PremiumPayment() {
-
     }
 
     PremiumPayment(Set<Integer> validTerms, int paymentCutOffAge) {
