@@ -6,7 +6,6 @@ import org.junit.Test;
 
 import java.math.BigDecimal;
 
-import static com.pla.core.domain.model.plan.PlanCoverage.PlanCoverageBuilder;
 import static org.junit.Assert.assertEquals;
 
 /**
@@ -23,12 +22,15 @@ public class PlanCoverageTest {
     @Test
     public void should_create_coverage_with_out_deductible() {
         PlanCoverageBuilder builder = PlanCoverage.builder();
-        builder.withCoverage(new CoverageId("1"))
+        PlanCoverage planCoverage = builder.withCoverage(new CoverageId("1"))
                 .withCoverageCover(CoverageCover.ACCELERATED)
                 .withTaxApplicable(false)
                 .withCoverageType(CoverageType.BASE)
                 .withMinAndMaxAge(21, 45)
                 .build();
+
+        assertEquals(45, planCoverage.getMaxAge());
+        assertEquals(21, planCoverage.getMinAge());
     }
 
     @Test
@@ -77,6 +79,21 @@ public class PlanCoverageTest {
 
     @Test(expected = IllegalArgumentException.class)
     public void should_not_create_coverage_with_both_deductible_percentage_and_amount() {
+        PlanCoverageBuilder builder = PlanCoverage.builder();
+        PlanCoverage planCoverage = builder.withCoverage(new CoverageId("1"))
+                .withCoverageCover(CoverageCover.ACCELERATED)
+                .withTaxApplicable(false)
+                .withCoverageType(CoverageType.BASE)
+                .withMinAndMaxAge(21, 45)
+                .withDeductibleAsPercentage(new BigDecimal(100))
+                .withDeductibleAmount(new BigDecimal(1800))
+                .withWaitingPeriod(5)
+                .build();
+    }
+
+
+    @Test(expected = IllegalArgumentException.class)
+    public void cannot_add_benefits_belonging_to_different_coverages_to_same_plan_coverage() {
         PlanCoverageBuilder builder = PlanCoverage.builder();
         PlanCoverage planCoverage = builder.withCoverage(new CoverageId("1"))
                 .withCoverageCover(CoverageCover.ACCELERATED)
