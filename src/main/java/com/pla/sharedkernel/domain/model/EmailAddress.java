@@ -10,6 +10,7 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.nthdimenzion.ddd.domain.annotations.ValueObject;
 
+import javax.persistence.Embeddable;
 import java.util.regex.Pattern;
 
 import static com.google.common.base.Preconditions.checkArgument;
@@ -21,6 +22,7 @@ import static org.nthdimenzion.utils.UtilValidator.isNotEmpty;
  */
 @ValueObject
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
+@Embeddable
 public class EmailAddress {
 
     private static final Pattern EMAIL_PATTERN = Pattern.compile("");

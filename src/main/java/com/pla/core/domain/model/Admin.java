@@ -24,7 +24,7 @@ public class Admin {
         if (!benefitNameIsUnique.isSatisfiedBy(benefitName)) {
             throw new BenefitDomainException("Benefit name already satisfied");
         }
-        return new Benefit(benefitId, benefitName, BenefitStatus.ACTIVE);
+        return new Benefit(new BenefitId(benefitId), benefitName, BenefitStatus.ACTIVE);
     }
 
     public Benefit updateBenefit(Benefit benefit, BenefitName newBenefitName, BenefitNameIsUnique benefitNameIsUnique, BenefitIsUpdatable benefitIsUpdatable) {

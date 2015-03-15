@@ -12,6 +12,8 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 import org.nthdimenzion.ddd.domain.annotations.ValueObject;
 
+import javax.persistence.Embeddable;
+
 import static com.google.common.base.Preconditions.checkArgument;
 import static org.nthdimenzion.utils.UtilValidator.isNotEmpty;
 
@@ -23,6 +25,7 @@ import static org.nthdimenzion.utils.UtilValidator.isNotEmpty;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 @ToString
+@Embeddable
 public class GeoDetail {
 
     private int postalCode;

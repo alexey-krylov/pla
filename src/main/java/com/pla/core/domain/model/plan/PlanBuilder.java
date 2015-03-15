@@ -1,6 +1,6 @@
 package com.pla.core.domain.model.plan;
 
-import com.pla.core.domain.model.CoverageId;
+import com.pla.sharedkernel.identifier.CoverageId;
 import com.pla.sharedkernel.identifier.PlanId;
 
 import javax.validation.constraints.NotNull;

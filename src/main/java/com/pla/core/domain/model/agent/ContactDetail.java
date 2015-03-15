@@ -14,6 +14,7 @@ import org.hibernate.annotations.Immutable;
 import org.nthdimenzion.ddd.domain.annotations.ValueObject;
 
 import javax.persistence.Embeddable;
+import javax.persistence.Embedded;
 
 import static com.google.common.base.Preconditions.checkArgument;
 import static org.nthdimenzion.utils.UtilValidator.isNotEmpty;
@@ -35,12 +36,14 @@ class ContactDetail {
 
     private int workPhoneNumber;
 
+    @Embedded
     private EmailAddress emailAddress;
 
     private String addressLine1;
 
     private String addressLine2;
 
+    @Embedded
     private GeoDetail geoDetail;
 
 

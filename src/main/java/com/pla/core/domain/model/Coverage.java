@@ -8,6 +8,7 @@ package com.pla.core.domain.model;
 
 import com.google.common.base.Preconditions;
 import com.pla.core.domain.exception.CoverageException;
+import com.pla.sharedkernel.identifier.CoverageId;
 import lombok.AccessLevel;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -29,8 +30,8 @@ import java.util.Set;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class Coverage implements ICrudEntity {
 
-    @Id
-    private String coverageId;
+    @EmbeddedId
+    private CoverageId coverageId;
 
     @Embedded
     private CoverageName coverageName;
@@ -45,7 +46,7 @@ public class Coverage implements ICrudEntity {
     @JoinTable(name = "coverage_benefit", joinColumns = @JoinColumn(name = "COVERAGE_ID"), inverseJoinColumns = @JoinColumn(name = "BENEFIT_ID"))
     private Set<Benefit> benefits;
 
-    Coverage(String coverageId, CoverageName coverageName, Set<Benefit> benefits) {
+    Coverage(CoverageId coverageId, CoverageName coverageName, Set<Benefit> benefits) {
         Preconditions.checkArgument(coverageId == null);
         Preconditions.checkArgument(coverageName == null);
         Preconditions.checkArgument(UtilValidator.isNotEmpty(benefits));

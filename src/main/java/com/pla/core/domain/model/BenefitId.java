@@ -6,6 +6,11 @@
 
 package com.pla.core.domain.model;
 
+import lombok.AccessLevel;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+
 import javax.persistence.Embeddable;
 import java.io.Serializable;
 
@@ -14,12 +19,12 @@ import java.io.Serializable;
  * @since 1.0 03/03/2015
  */
 @Embeddable
+@NoArgsConstructor(access = AccessLevel.PACKAGE)
+@Getter
+@EqualsAndHashCode(of = "benefitId")
 public class BenefitId implements Serializable {
 
     private String benefitId;
-
-    protected BenefitId() {
-    }
 
     public BenefitId(String benefitId) {
         this.benefitId = benefitId;

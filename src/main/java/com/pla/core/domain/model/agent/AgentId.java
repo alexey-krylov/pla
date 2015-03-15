@@ -14,6 +14,7 @@ import org.hibernate.annotations.Immutable;
 import org.nthdimenzion.ddd.domain.annotations.ValueObject;
 
 import javax.persistence.Embeddable;
+import java.io.Serializable;
 
 /**
  * @author: Samir
@@ -24,7 +25,7 @@ import javax.persistence.Embeddable;
 @Embeddable
 @Getter
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-public class AgentId {
+public class AgentId implements Serializable{
 
     private Integer agentId;
 

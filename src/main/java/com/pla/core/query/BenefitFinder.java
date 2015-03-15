@@ -36,7 +36,7 @@ public class BenefitFinder {
 
     public static final String FIND_BENEFIT_FOR_A_GIVEN_BENEFIT_NAME = "select * from benefit where benefit_name=:benefitName";
 
-    public static final String ACTIVE_BENEFIT_COUNT_BY_BENEFIT_NAME = "select count(benefit_id) from benefit where benefit_name=:benefitName";
+    public static final String ACTIVE_BENEFIT_COUNT_BY_BENEFIT_NAME = "select count(benefit_id) from benefit where benefit_name=:benefitName and status='ACTIVE'";
 
     public static final String FIND_BENEFIT_FOR_A_GIVEN_BENEFIT_ID = "SELECT benefit_id AS benefitId,benefit_name AS benefitName,STATUS AS benefitStatus FROM benefit where benefit_id=:benefitId";
 

@@ -30,6 +30,6 @@
     <axon:jpa-repository aggregate-type="com.pla.sample.sagas.OrderHeader" event-bus="eventBus" id="orderHeaderRepository"/>
     <axon:jpa-repository aggregate-type="com.pla.sample.sagas.Shipment" event-bus="eventBus" id="shipmentRepository"/>
     <axon:jpa-repository aggregate-type="com.pla.sample.sagas.Invoice" event-bus="eventBus" id="invoiceRepository"/>-->
-    <import resource="eventstore-jpa-test-context.xml"/>
+    <!--<import resource="eventstore-jpa-test-context.xml"/>-->
     <import resource="axonSagaContext.xml"/>
 </beans>

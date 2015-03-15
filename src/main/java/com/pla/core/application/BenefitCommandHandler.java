@@ -8,6 +8,7 @@ package com.pla.core.application;
 
 import com.pla.core.application.exception.BenefitApplicationException;
 import com.pla.core.domain.model.Benefit;
+import com.pla.core.domain.model.BenefitId;
 import com.pla.core.domain.service.BenefitService;
 import org.axonframework.commandhandling.annotation.CommandHandler;
 import org.nthdimenzion.common.service.JpaRepositoryFactory;
@@ -57,8 +58,9 @@ public class BenefitCommandHandler {
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("*****Command Received*****" + updateBenefitCommand);
         }
-        JpaRepository<Benefit, String> benefitRepository = jpaRepositoryFactory.getCrudRepository(Benefit.class);
-        Benefit benefit = benefitRepository.findOne(updateBenefitCommand.getBenefitId());
+        JpaRepository<Benefit, BenefitId> benefitRepository = jpaRepositoryFactory.getCrudRepository(Benefit.class);
+        BenefitId benefitId = new BenefitId(updateBenefitCommand.getBenefitId());
+        Benefit benefit = benefitRepository.findOne(benefitId);
         benefit = benefitService.updateBenefit(benefit, updateBenefitCommand.getBenefitName(), updateBenefitCommand.getUserDetails());
         try {
             benefitRepository.save(benefit);
@@ -73,8 +75,9 @@ public class BenefitCommandHandler {
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("*****Command Received*****" + markBenefitAsUsedCommand);
         }
-        CrudRepository<Benefit, String> benefitRepository = jpaRepositoryFactory.getCrudRepository(Benefit.class);
-        Benefit benefit = benefitRepository.findOne(markBenefitAsUsedCommand.getBenefitId());
+        CrudRepository<Benefit, BenefitId> benefitRepository = jpaRepositoryFactory.getCrudRepository(Benefit.class);
+        BenefitId benefitId = new BenefitId(markBenefitAsUsedCommand.getBenefitId());
+        Benefit benefit = benefitRepository.findOne(benefitId);
         benefit = benefitService.markBenefitAsUsed(benefit);
         try {
             benefitRepository.save(benefit);
@@ -89,8 +92,9 @@ public class BenefitCommandHandler {
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("*****Inactivate Benefit Status Command  Received*****" + inactivateBenefitCommand);
         }
-        CrudRepository<Benefit, String> benefitRepository = jpaRepositoryFactory.getCrudRepository(Benefit.class);
-        Benefit benefit = benefitRepository.findOne(inactivateBenefitCommand.getBenefitId());
+        CrudRepository<Benefit, BenefitId> benefitRepository = jpaRepositoryFactory.getCrudRepository(Benefit.class);
+        BenefitId benefitId = new BenefitId(inactivateBenefitCommand.getBenefitId());
+        Benefit benefit = benefitRepository.findOne(benefitId);
         benefit = benefitService.inactivateBenefit(benefit, inactivateBenefitCommand.getUserDetails());
         try {
             benefitRepository.save(benefit);

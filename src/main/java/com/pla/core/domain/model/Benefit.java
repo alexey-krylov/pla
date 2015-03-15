@@ -26,8 +26,8 @@ import javax.persistence.*;
 @Getter(value = AccessLevel.PACKAGE)
 public class Benefit implements ICrudEntity {
 
-    @Id
-    private String benefitId;
+    @EmbeddedId
+    private BenefitId benefitId;
 
     @Embedded
     private BenefitName benefitName;
@@ -35,7 +35,7 @@ public class Benefit implements ICrudEntity {
     @Enumerated(EnumType.STRING)
     private BenefitStatus status;
 
-    Benefit(String benefitId, BenefitName benefitName, BenefitStatus benefitStatus) {
+    Benefit(BenefitId benefitId, BenefitName benefitName, BenefitStatus benefitStatus) {
         Preconditions.checkNotNull(benefitId);
         Preconditions.checkNotNull(benefitName);
         Preconditions.checkState(benefitStatus.equals(BenefitStatus.ACTIVE));

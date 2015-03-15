@@ -11,6 +11,8 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import org.nthdimenzion.ddd.domain.annotations.ValueObject;
 
+import javax.persistence.Embeddable;
+
 import static com.google.common.base.Preconditions.checkArgument;
 import static org.nthdimenzion.utils.UtilValidator.isNotEmpty;
 
@@ -20,6 +22,7 @@ import static org.nthdimenzion.utils.UtilValidator.isNotEmpty;
  */
 @ValueObject
 @Getter(value = AccessLevel.PACKAGE)
+@Embeddable
 class Designation {
 
     private String code;

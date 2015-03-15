@@ -2,7 +2,7 @@ package com.pla.core.domain.model.plan;
 
 import com.google.common.collect.Sets;
 import com.pla.core.domain.model.BenefitId;
-import com.pla.core.domain.model.CoverageId;
+import com.pla.sharedkernel.identifier.CoverageId;
 import com.pla.sharedkernel.domain.model.ClientType;
 import com.pla.sharedkernel.domain.model.PlanType;
 import com.pla.sharedkernel.domain.model.Relationship;

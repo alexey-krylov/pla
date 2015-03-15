@@ -15,6 +15,7 @@ import org.hibernate.annotations.Type;
 import org.nthdimenzion.ddd.domain.annotations.ValueObject;
 
 import javax.persistence.Embeddable;
+import javax.persistence.Embedded;
 import java.time.LocalDate;
 
 import static com.google.common.base.Preconditions.checkArgument;
@@ -43,6 +44,7 @@ class AgentProfile {
 
     private String employeeId;
 
+    @Embedded
     private Designation designation;
 
     @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentLocalDate")
