@@ -3,6 +3,7 @@ package com.pla.core.domain.model;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 
+import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import java.io.Serializable;
 
@@ -15,6 +16,7 @@ import java.io.Serializable;
 @Embeddable
 public class CoverageId implements Serializable {
 
+    @Column(name = "coverage_id")
     String coverageId;
 
     protected CoverageId() {
