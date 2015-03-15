@@ -26,6 +26,7 @@ class SumAssured {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     @ElementCollection
+    @CollectionTable(name = "sum_insured_values", joinColumns = @JoinColumn(name = "sum_assured_id"))
     private Set<BigDecimal> sumInsuredValues;
 
     protected SumAssured() {

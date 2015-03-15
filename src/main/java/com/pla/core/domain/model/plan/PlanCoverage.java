@@ -53,7 +53,10 @@ public class PlanCoverage {
     }
 
     /**
-     * This constructor is added for Hibernate OneToMany
+     * This constructor is added for Hibernate OneToMany.
+     * This is only used internally while creating the Plan.
+     *
+     * This is not for public usage.
      *
      * @param plan
      * @param planCoverage
