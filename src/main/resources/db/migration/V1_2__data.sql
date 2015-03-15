@@ -20,7 +20,7 @@ VALUES("PR-LUS",null,"PROVINCE","Lusaka"),("PR-COP",null,"PROVINCE","Copperbelt"
 ("CI-MUFU","PR-NORW","CITY","Mufumbwe"),("CI-SOL","PR-NORW","CITY","Solwezi"),("CI-KASE","PR-NORW","CITY","Kasempa"),("CI-MWI","PR-NORW","CITY","Mwinilunga"),("CI-ZAM","PR-NORW","CITY","Zambezi"),("CI-KABO","PR-NORW","CITY","Kabompo"),
 ("CI-LUM","PR-NORW","CITY","Lumwana"),("CI-CAI","PR-LUS","CITY","Cairo Road");
 
-INSERT INTO bank_name(BANK_CODE,BANK_NAME) 
+INSERT INTO bank_name(BANK_CODE,BANK_NAME)
 VALUES("ABB","AB BANK ZAMBIA LTD."),
 ("ACC","ACCESS BANK ZAMBIA LIMITED"),
 ("AFR","AFRICAN BANKING CORPORATION ZAMBIA"),
