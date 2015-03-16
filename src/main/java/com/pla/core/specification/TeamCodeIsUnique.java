@@ -13,6 +13,7 @@ import com.pla.sharedkernel.specification.ISpecification;
 import org.nthdimenzion.ddd.domain.annotations.Specification;
 import org.springframework.beans.factory.annotation.Autowired;
 
+
 /**
  * @author: Samir
  * @since 1.0 05/03/2015

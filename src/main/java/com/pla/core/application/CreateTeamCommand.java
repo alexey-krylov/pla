@@ -50,11 +50,7 @@ public class CreateTeamCommand {
 
     private String lastName;
 
-    @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentLocalDate")
     private LocalDate fromDate;
-
-    @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentLocalDate")
-    private LocalDate thruDate;
 
 
 }

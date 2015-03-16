@@ -14,6 +14,8 @@ import org.nthdimenzion.utils.UtilValidator;
 
 import javax.persistence.Embeddable;
 
+
+
 /**
  * @author: Samir
  * @since 1.0 11/03/2015

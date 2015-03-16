@@ -50,12 +50,6 @@ public class Admin {
             ,String employeeId,LocalDate fromDate, LocalDate thruDate, String firstname, String lastName) {
         TeamName teamName = new TeamName(name);
         TeamCode teamCode =  new TeamCode(code);
-        /*if (!teamNameIsUnique.isSatisfiedBy(teamName)) {
-            throw  new TeamException("Team Name already exists");
-        }
-        if (!teamCodeIsUnique.isSatisfiedBy(teamCode)) {
-            throw  new TeamException("Team Code already exists");
-        }*/
         TeamLeader teamLeader = new TeamLeader(employeeId,firstname, lastName);
         TeamLeaderFulfillment teamLeaderFulfillment = new TeamLeaderFulfillment(teamLeader, fromDate);
         return new Team(teamId, teamCode, teamName,employeeId, teamLeaderFulfillment,Boolean.TRUE);

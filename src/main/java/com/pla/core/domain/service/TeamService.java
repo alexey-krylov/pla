@@ -45,6 +45,7 @@ public class TeamService {
 
     public Team createTeam(String teamName, String teamCode,String employeeId, LocalDate fromDate,
                            LocalDate thruDate, String firstName, String lastName, UserDetails userDetails) {
+
         String teamId = idGenerator.nextId();
         Admin admin = adminRoleAdapter.userToAdmin(userDetails);
         Team team = admin.createTeam(teamNameIsUnique, teamCodeIsUnique, teamId, teamName, teamCode, employeeId, fromDate, thruDate, firstName, lastName);

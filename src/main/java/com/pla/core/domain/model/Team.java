@@ -23,6 +23,7 @@ import static com.google.common.base.Preconditions.checkState;
  * @author: Samir
  * @since 1.0 10/03/2015
  */
+
 @Entity
 @Table(name = "team", uniqueConstraints = {@UniqueConstraint(name = "UNQ_TEAM_CODE_NAME", columnNames = {"teamCode", "teamName"})})
 @EqualsAndHashCode(of = {"teamName", "teamCode"})

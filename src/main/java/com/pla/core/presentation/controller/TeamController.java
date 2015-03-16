@@ -2,9 +2,7 @@ package com.pla.core.presentation.controller;
 
 import com.pla.core.application.CreateTeamCommand;
 import com.pla.core.application.UpdateTeamCommand;
-import com.pla.core.query.BenefitFinder;
 import com.pla.core.query.TeamFinder;
-import org.apache.commons.logging.Log;
 import org.axonframework.commandhandling.gateway.CommandGateway;
 import org.nthdimenzion.presentation.Result;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +11,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
+
 
 /**
  * Created by ASUS on 02-Mar-15.
@@ -40,12 +39,6 @@ public class TeamController {
         return modelAndView;
     }
 
-    @RequestMapping(value = "/team/openCreatePage",method = RequestMethod.GET)
-    public String openCreatePageTeam(){
-        return "pla/core/createTeam";
-    }
-
-
     @RequestMapping(value = "/team/create", method = RequestMethod.POST)
     public
     @ResponseBody
@@ -65,6 +58,7 @@ public class TeamController {
     public
     @ResponseBody
     Result updateTeamLead(@RequestBody UpdateTeamCommand updateTeamCommand) {
+
         try {
             commandGateway.sendAndWait(updateTeamCommand);
         } catch (Exception e) {

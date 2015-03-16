@@ -17,6 +17,7 @@ import org.nthdimenzion.ddd.domain.annotations.ValueObject;
 import javax.persistence.Embeddable;
 import javax.persistence.Embedded;
 
+
 /**
  * @author: Samir
  * @since 1.0 11/03/2015

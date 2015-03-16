@@ -56,6 +56,7 @@ public class TeamCommandHandler {
 
     @CommandHandler
     public void updateTeamHandler(UpdateTeamCommand updateTeamCommand) {
+
         if (logger.isDebugEnabled()) {
             logger.debug("*****Command Received*****" + updateTeamCommand);
         }

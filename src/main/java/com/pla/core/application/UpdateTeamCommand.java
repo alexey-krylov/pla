@@ -22,6 +22,7 @@ import javax.validation.constraints.NotNull;
  * @author: Samir
  * @since 1.0 10/03/2015
  */
+
 @NoArgsConstructor
 @Getter
 @Setter
