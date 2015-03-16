@@ -21,7 +21,7 @@ public class DbMigrationRunner {
     @Autowired
     private DataSource dataSource;
 
-    @Bean(name = "flyway")
+    @Bean(name = "flyway",initMethod = "migrate")
     public Flyway migrate() {
         log.debug("Flyway migration started...");
         try {
