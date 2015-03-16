@@ -7,7 +7,6 @@
 package com.pla.core.domain.model;
 
 import com.pla.core.domain.exception.BenefitDomainException;
-import com.pla.core.domain.exception.TeamException;
 import com.pla.core.specification.BenefitIsUpdatable;
 import com.pla.core.specification.BenefitNameIsUnique;
 import com.pla.core.specification.TeamCodeIsUnique;
@@ -47,10 +46,10 @@ public class Admin {
         return updatedBenefit;
     }
     public Team createTeam(TeamNameIsUnique teamNameIsUnique,TeamCodeIsUnique teamCodeIsUnique, String teamId, String name, String code
-            ,String employeeId,LocalDate fromDate, LocalDate thruDate, String firstname, String lastName) {
+            ,String employeeId,LocalDate fromDate, String firstName, String lastName) {
         TeamName teamName = new TeamName(name);
         TeamCode teamCode =  new TeamCode(code);
-        TeamLeader teamLeader = new TeamLeader(employeeId,firstname, lastName);
+        TeamLeader teamLeader = new TeamLeader(employeeId,firstName, lastName);
         TeamLeaderFulfillment teamLeaderFulfillment = new TeamLeaderFulfillment(teamLeader, fromDate);
         return new Team(teamId, teamCode, teamName,employeeId, teamLeaderFulfillment,Boolean.TRUE);
     }

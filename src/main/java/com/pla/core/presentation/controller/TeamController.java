@@ -4,23 +4,29 @@ import com.pla.core.application.CreateTeamCommand;
 import com.pla.core.application.UpdateTeamCommand;
 import com.pla.core.query.TeamFinder;
 import org.axonframework.commandhandling.gateway.CommandGateway;
+import org.nthdimenzion.common.AppConstants;
 import org.nthdimenzion.presentation.Result;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.http.HttpServletRequest;
 
 /**
- * Created by ASUS on 02-Mar-15.
+ * Created by Nischitha on 10-Mar-15.
  */
 @Controller
 @RequestMapping(value = "/core")
 public class TeamController {
 
-    @Autowired
+    private static final Logger LOGGER = LoggerFactory.getLogger(TeamController.class);
+
     private CommandGateway commandGateway;
 
     private TeamFinder teamFinder;
@@ -39,16 +45,30 @@ public class TeamController {
         return modelAndView;
     }
 
+    @RequestMapping(value = "/team/openCreatePage",method = RequestMethod.GET)
+    public String openCreatePageTeam(){
+        return "pla/core/createTeam";
+    }
+
+    @RequestMapping(value = "/team/openAssignPage",method = RequestMethod.GET)
+    public String openAssignPageTeam(){
+        return "pla/core/assignTeam";
+    }
+
+
     @RequestMapping(value = "/team/create", method = RequestMethod.POST)
     public
     @ResponseBody
-    Result createTeam(@RequestBody CreateTeamCommand createTeamCommand, BindingResult bindingResult) {
+    Result createTeam(@RequestBody CreateTeamCommand createTeamCommand, BindingResult bindingResult, HttpServletRequest request) {
         if (bindingResult.hasErrors()) {
             return Result.failure("Error in creating team", bindingResult.getAllErrors());
         }
         try {
+            UserDetails userDetails = getLoggedInUSerDetail(request);
+            createTeamCommand.setUserDetails(userDetails);
             commandGateway.sendAndWait(createTeamCommand);
         } catch (Exception e) {
+            LOGGER.error("Error in creating team", e);
             return Result.failure("Error in creating team");
         }
         return Result.success("Team created successfully");
@@ -62,8 +82,14 @@ public class TeamController {
         try {
             commandGateway.sendAndWait(updateTeamCommand);
         } catch (Exception e) {
+            LOGGER.error("Error in creating team", e);
             return Result.failure("Error in updating team");
         }
-        return Result.success("Team created successfully");
+        return Result.success("Team updated successfully");
+    }
+    private UserDetails getLoggedInUSerDetail(HttpServletRequest request)
+    {
+        UserDetails userDetails = (UserDetails) request.getSession().getAttribute(AppConstants.LOGGED_IN_USER);
+        return userDetails;
     }
 }
