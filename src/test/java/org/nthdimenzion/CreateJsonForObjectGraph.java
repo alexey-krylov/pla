@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.joda.JodaModule;
+import com.pla.core.domain.model.agent.Agent;
 import org.nthdimenzion.security.service.UserLoginDetailDto;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,7 +24,7 @@ public class CreateJsonForObjectGraph {
     private static Logger logger = LoggerFactory.getLogger(CreateJsonForObjectGraph.class);
 
     public static void main(String[] args) throws JsonProcessingException {
-        UserLoginDetailDto result1 = fillDataIntoObjectGraph(UserLoginDetailDto.class);
+        Agent result1 = fillDataIntoObjectGraph(Agent.class);
         ObjectMapper mapper = new ObjectMapper();
         configureMapper(mapper);
         String result = mapper.writeValueAsString(result1);

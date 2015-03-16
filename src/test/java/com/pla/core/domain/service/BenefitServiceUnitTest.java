@@ -10,6 +10,7 @@ import com.pla.core.domain.model.Admin;
 import com.pla.core.domain.model.Benefit;
 import com.pla.core.domain.model.BenefitId;
 import com.pla.core.domain.model.BenefitName;
+import com.pla.core.query.BenefitFinder;
 import com.pla.core.specification.BenefitIsUpdatable;
 import com.pla.core.specification.BenefitNameIsUnique;
 import com.pla.sharedkernel.domain.model.BenefitStatus;
@@ -42,12 +43,11 @@ public class BenefitServiceUnitTest {
     private BenefitNameIsUnique benefitNameIsUnique;
 
     @Mock
-    private BenefitIsUpdatable benefitIsUpdatable;
+    private BenefitFinder benefitFinder;
 
     @Mock
     private IIdGenerator idGenerator;
 
-    @InjectMocks
     private BenefitService benefitService;
 
     private UserDetails userDetails;
@@ -56,6 +56,8 @@ public class BenefitServiceUnitTest {
 
     @Before
     public void setUp() {
+        BenefitIsUpdatable benefitIsUpdatable = new BenefitIsUpdatable(benefitFinder);
+        benefitService = new BenefitService(adminRoleAdapter,benefitNameIsUnique,idGenerator,benefitIsUpdatable);
         userDetails = UserLoginDetailDto.createUserLoginDetailDto("", "");
         admin = new Admin();
     }
@@ -81,10 +83,9 @@ public class BenefitServiceUnitTest {
     public void givenABenefitWithUpdatedNameItShouldUpdateBenefit() {
         Benefit benefit = getBenefit();
         String name = "CI Benefit";
-        BenefitName benefitName = new BenefitName(name);
         when(adminRoleAdapter.userToAdmin(userDetails)).thenReturn(admin);
-        when(benefitIsUpdatable.isSatisfiedBy(new BenefitId("1"), benefitName)).thenReturn(true);
-        when(benefitIsUpdatable.isGeneralizationOf(benefitNameIsUnique, benefitName)).thenReturn(true);
+        when(benefitFinder.getBenefitCountAssociatedWithActiveCoverage("1")).thenReturn(0);
+        when(benefitNameIsUnique.isSatisfiedBy(new BenefitName(name))).thenReturn(true);
         Benefit updatedBenefit = benefitService.updateBenefit(benefit, name, userDetails);
         BenefitName updatedBenefitName = (BenefitName) invokeGetterMethod(updatedBenefit, "getBenefitName");
         assertEquals(BenefitStatus.ACTIVE, invokeGetterMethod(updatedBenefit, "getStatus"));
@@ -102,7 +103,6 @@ public class BenefitServiceUnitTest {
     @Test
     public void givenABenefitItShouldInactivateBenefit() {
         Benefit benefit = getBenefit();
-        String name = "CI Benefit";
         when(adminRoleAdapter.userToAdmin(userDetails)).thenReturn(admin);
         Benefit updatedBenefit = benefitService.inactivateBenefit(benefit, userDetails);
         assertEquals(BenefitStatus.INACTIVE, invokeGetterMethod(updatedBenefit, "getStatus"));

@@ -62,14 +62,15 @@ public class AdminUnitTest {
         assertEquals(BenefitStatus.INACTIVE, invokeGetterMethod(benefit, "getStatus"));
     }
 
+    @Test
     public void itShouldUpdateABenefit() {
         BenefitName benefitName = new BenefitName("CI Benefit");
         when(benefitNameIsUnique.isSatisfiedBy(benefitName)).thenReturn(true);
-        when(benefitIsUpdatable.isSatisfiedBy(new BenefitId("1000"), benefitName)).thenReturn(true);
-        when(benefitIsUpdatable.isGeneralizationOf(benefitNameIsUnique, benefitName)).thenReturn(true);
+        boolean isUpdatable = true;
+        when(benefitIsUpdatable.isSatisfiedBy(new BenefitId("1000"))).thenReturn(isUpdatable);
         Benefit benefit = admin.createBenefit(benefitNameIsUnique, "1", benefitName);
         String updatedName = "Accidental Benefit";
-        Benefit updatedBenefit = admin.updateBenefit(benefit, new BenefitName(updatedName), benefitNameIsUnique, benefitIsUpdatable);
+        Benefit updatedBenefit = admin.updateBenefit(benefit, new BenefitName(updatedName), isUpdatable);
         BenefitName updatedBenefitName = (BenefitName) invokeGetterMethod(updatedBenefit, "getBenefitName");
         assertEquals(updatedName, updatedBenefitName.getBenefitName());
     }

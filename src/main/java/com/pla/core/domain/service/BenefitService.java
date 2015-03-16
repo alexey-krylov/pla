@@ -8,9 +8,11 @@ package com.pla.core.domain.service;
 
 import com.pla.core.domain.model.Admin;
 import com.pla.core.domain.model.Benefit;
+import com.pla.core.domain.model.BenefitId;
 import com.pla.core.domain.model.BenefitName;
 import com.pla.core.specification.BenefitIsUpdatable;
 import com.pla.core.specification.BenefitNameIsUnique;
+import com.pla.sharedkernel.specification.ICompositeSpecification;
 import org.nthdimenzion.ddd.domain.annotations.DomainService;
 import org.nthdimenzion.object.utils.IIdGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,7 +51,8 @@ public class BenefitService {
 
     public Benefit updateBenefit(Benefit benefit, String benefitName, UserDetails userDetails) {
         Admin admin = adminRoleAdapter.userToAdmin(userDetails);
-        Benefit updatedBenefit = admin.updateBenefit(benefit, new BenefitName(benefitName), benefitNameIsUnique, benefitIsUpdatable);
+        boolean isBenefitUpdatable =benefitIsUpdatable.And(benefitNameIsUnique).isSatisfiedBy(benefit.getBenefitId(), new BenefitName(benefitName));
+        Benefit updatedBenefit = admin.updateBenefit(benefit, new BenefitName(benefitName), isBenefitUpdatable);
         return updatedBenefit;
 
     }

@@ -14,6 +14,7 @@ import com.pla.core.specification.TeamNameIsUnique;
 import com.pla.sharedkernel.domain.model.BenefitStatus;
 import org.joda.time.LocalDate;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
@@ -67,7 +68,7 @@ public class TeamUnitTest {
         benefit = admin.inactivateBenefit(benefit);
         assertEquals(BenefitStatus.INACTIVE, invokeGetterMethod(benefit, "getStatus"));
     }*/
-    @Test
+   /* @Test
     public void testCreateTeamAndTeamLead() {
         Team team = admin.createTeam(teamNameIsUniqueName, teamCodeIsUnique, "552255", "gggg", "LggggggLL", "employeedId1",
                 LocalDate.now(), LocalDate.now(),"www","PPP");
@@ -82,5 +83,5 @@ public class TeamUnitTest {
         }
         assertEquals("777", updatedTeam.getCurrentTeamLeader());
        // System.out.println(updatedBenefit.getCurrentTeamLeader());
-    }
+    }*/
 }

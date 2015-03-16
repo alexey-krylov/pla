@@ -13,6 +13,8 @@ import com.pla.core.specification.BenefitNameIsUnique;
 import com.pla.core.specification.TeamCodeIsUnique;
 import com.pla.core.specification.TeamNameIsUnique;
 import com.pla.sharedkernel.domain.model.BenefitStatus;
+import com.pla.sharedkernel.specification.ICompositeSpecification;
+import com.pla.sharedkernel.specification.ISpecification;
 import org.joda.time.LocalDate;
 import org.nthdimenzion.ddd.domain.annotations.ValueObject;
 
@@ -24,19 +26,16 @@ import org.nthdimenzion.ddd.domain.annotations.ValueObject;
 public class Admin {
 
 
-    public Benefit createBenefit(BenefitNameIsUnique benefitNameIsUnique, String benefitId,  BenefitName benefitName) {
+    public Benefit createBenefit(BenefitNameIsUnique benefitNameIsUnique, String benefitId, BenefitName benefitName) {
         if (!benefitNameIsUnique.isSatisfiedBy(benefitName)) {
             throw new BenefitDomainException("Benefit name already satisfied");
         }
         return new Benefit(new BenefitId(benefitId), benefitName, BenefitStatus.ACTIVE);
     }
 
-    public Benefit updateBenefit(Benefit benefit, BenefitName newBenefitName, BenefitNameIsUnique benefitNameIsUnique, BenefitIsUpdatable benefitIsUpdatable) {
-        if (!benefitIsUpdatable.isSatisfiedBy(benefit.getBenefitId(), newBenefitName)) {
-            throw new BenefitDomainException("Benefit name cannot be updated. New name is required");
-        }
-        if (!benefitIsUpdatable.isGeneralizationOf(benefitNameIsUnique, newBenefitName)) {
-            throw new BenefitDomainException("Benefit name already satisfied");
+    public Benefit updateBenefit(Benefit benefit, BenefitName newBenefitName, boolean benefitIsUpdatable) {
+        if (!benefitIsUpdatable) {
+            throw new BenefitDomainException("Benefit is associated with active coverage");
         }
         Benefit updatedBenefit = benefit.updateBenefitName(newBenefitName);
         return updatedBenefit;

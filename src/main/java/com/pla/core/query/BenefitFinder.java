@@ -8,6 +8,7 @@ package com.pla.core.query;
 
 import com.google.common.base.Preconditions;
 import org.nthdimenzion.ddd.domain.annotations.Finder;
+import org.nthdimenzion.utils.UtilValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.ColumnMapRowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
@@ -42,6 +43,8 @@ public class BenefitFinder {
 
     public static final String FIND_ALL_BENEFIT = "SELECT benefit_id AS benefitId,benefit_name AS benefitName,STATUS AS benefitStatus FROM benefit";
 
+    public static final String BENEFIT_COUNT_ASSOCIATED_WITH_ACTIVE_COVERAGE = "SELECT COUNT(CB.benefit_id) FROM `coverage_benefit` CB,`coverage` C WHERE CB.coverage_id=C.coverage_id AND C.status IN('ACTIVE','INUSE') AND CB.benefit_id=:benefitId";
+
     public List<Map<String, Object>> findBenefitFor(String benefitName) {
         return namedParameterJdbcTemplate.query(FIND_BENEFIT_FOR_A_GIVEN_BENEFIT_NAME, Collections.singletonMap("benefitName", benefitName), new ColumnMapRowMapper());
     }
@@ -58,5 +61,11 @@ public class BenefitFinder {
 
     public List<Map<String, Object>> getAllBenefit() {
         return namedParameterJdbcTemplate.query(FIND_ALL_BENEFIT, new ColumnMapRowMapper());
+    }
+
+    public int getBenefitCountAssociatedWithActiveCoverage(String benefitId) {
+        Preconditions.checkArgument(UtilValidator.isNotEmpty(benefitId));
+        Number noOfBenefit = namedParameterJdbcTemplate.queryForObject(BENEFIT_COUNT_ASSOCIATED_WITH_ACTIVE_COVERAGE, new MapSqlParameterSource().addValue("benefitId", benefitId), Number.class);
+        return noOfBenefit.intValue();
     }
 }

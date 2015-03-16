@@ -15,7 +15,7 @@ spring:
 
   jpa:
       hibernate:
-        ddl-auto: validate
+        ddl-auto: update
       database: MYSQL
       show-sql: true
 
@@ -45,5 +45,5 @@ spring:
 
 
 flyway:
-  check-location: true
-  enabled: true
+  check-location: false
+  enabled: false

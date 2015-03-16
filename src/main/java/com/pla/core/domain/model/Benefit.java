@@ -23,7 +23,7 @@ import javax.persistence.*;
 @EqualsAndHashCode(of = {"benefitName"})
 @ToString(of = "benefitName")
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-@Getter(value = AccessLevel.PACKAGE)
+@Getter
 public class Benefit implements ICrudEntity {
 
     @EmbeddedId

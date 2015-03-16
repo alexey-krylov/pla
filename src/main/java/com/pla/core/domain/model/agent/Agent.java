@@ -53,4 +53,6 @@ public class Agent implements ICrudEntity {
 
     @Enumerated(EnumType.STRING)
     private OverrideCommissionApplicable overrideCommissionApplicable;
+
+    private String channelType;
 }

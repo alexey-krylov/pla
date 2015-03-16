@@ -10,19 +10,19 @@ package com.pla.sharedkernel.specification;
  * @author: Samir
  * @since 1.0 14/03/2015
  */
-public class AndSpecification<T> implements ISpecification<T> {
+public class AndSpecification<S, O> implements ICompositeSpecification<S, O> {
 
-    private ISpecification<T> left;
+    private ISpecification<S> left;
 
-    private ISpecification<T> right;
+    private ISpecification<O> right;
 
-    public AndSpecification(ISpecification<T> left, ISpecification<T> right) {
+    public AndSpecification(ISpecification<S> left, ISpecification<O> right) {
         this.left = left;
         this.right = right;
     }
 
     @Override
-    public boolean isSatisfiedBy(T candidate) {
-        return left.isSatisfiedBy(candidate) && right.isSatisfiedBy(candidate);
+    public boolean isSatisfiedBy(S leftCandidate, O rightCandidate) {
+        return left.isSatisfiedBy(leftCandidate) && right.isSatisfiedBy(rightCandidate);
     }
 }
