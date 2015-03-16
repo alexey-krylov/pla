@@ -7,6 +7,7 @@
 package com.pla.core.domain.model;
 
 import com.pla.core.domain.exception.BenefitDomainException;
+import com.pla.core.dto.BenefitDto;
 import com.pla.core.specification.BenefitNameIsUnique;
 import com.pla.sharedkernel.domain.model.BenefitStatus;
 import org.junit.Before;
@@ -15,10 +16,9 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
-import static org.springframework.test.util.ReflectionTestUtils.invokeGetterMethod;
-
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.when;
+import static org.springframework.test.util.ReflectionTestUtils.invokeGetterMethod;
 
 /**
  * @author: Samir
@@ -39,9 +39,11 @@ public class BenefitUnitTest {
     @Before
     public void setUp() {
         admin = new Admin();
-        BenefitName benefitName = new BenefitName("Accidental death benefit");
-        when(benefitNameIsUnique.isSatisfiedBy(benefitName)).thenReturn(Boolean.TRUE);
-        benefit = admin.createBenefit(benefitNameIsUnique, "1", benefitName);
+        boolean isBenefitNameUnique = true;
+        String name = "Accidental death benefit";
+        BenefitDto benefitDto = new BenefitDto("1","Accidental death benefit") ;
+        when(benefitNameIsUnique.isSatisfiedBy(benefitDto)).thenReturn(isBenefitNameUnique);
+        benefit = admin.createBenefit(isBenefitNameUnique, "1", name);
     }
 
     @Test

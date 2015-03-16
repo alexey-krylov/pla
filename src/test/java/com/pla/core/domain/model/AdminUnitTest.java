@@ -6,8 +6,9 @@
 
 package com.pla.core.domain.model;
 
+import com.pla.core.dto.BenefitDto;
 import com.pla.core.query.BenefitFinder;
-import com.pla.core.specification.BenefitIsUpdatable;
+import com.pla.core.specification.BenefitIsAssociatedWithCoverage;
 import com.pla.core.specification.BenefitNameIsUnique;
 import com.pla.sharedkernel.domain.model.BenefitStatus;
 import org.junit.Before;
@@ -34,7 +35,7 @@ public class AdminUnitTest {
     private BenefitFinder benefitFinder;
 
     @Mock
-    private BenefitIsUpdatable benefitIsUpdatable;
+    private BenefitIsAssociatedWithCoverage benefitIsAssociatedWithCoverage;
 
     private Admin admin;
 
@@ -46,8 +47,10 @@ public class AdminUnitTest {
     @Test
     public void givenABenefitNameItShouldCreateBenefit() {
         String name = "CI Benefit";
-        when(benefitNameIsUnique.isSatisfiedBy(new BenefitName(name))).thenReturn(true);
-        Benefit benefit = admin.createBenefit(benefitNameIsUnique, "1", new BenefitName(name));
+        BenefitDto benefitDto = new BenefitDto("1",name);
+        boolean isBenefitNameUnique = true;
+        when(benefitNameIsUnique.isSatisfiedBy(benefitDto)).thenReturn(isBenefitNameUnique);
+        Benefit benefit = admin.createBenefit(isBenefitNameUnique, "1", name);
         BenefitName benefitName = (BenefitName) invokeGetterMethod(benefit, "getBenefitName");
         assertEquals(name, benefitName.getBenefitName());
         assertEquals(BenefitStatus.ACTIVE, invokeGetterMethod(benefit, "getStatus"));
@@ -55,22 +58,26 @@ public class AdminUnitTest {
 
     @Test
     public void itShouldInactivateABenefit() {
-        BenefitName benefitName = new BenefitName("CI Benefit");
-        when(benefitNameIsUnique.isSatisfiedBy(benefitName)).thenReturn(true);
-        Benefit benefit = admin.createBenefit(benefitNameIsUnique, "1", benefitName);
+        String name = "CI Benefit";
+        BenefitDto benefitDto = new BenefitDto("1",name);
+        boolean isBenefitNameUnique = true;
+        when(benefitNameIsUnique.isSatisfiedBy(benefitDto)).thenReturn(isBenefitNameUnique);
+        Benefit benefit = admin.createBenefit(isBenefitNameUnique, "1", name);
         benefit = admin.inactivateBenefit(benefit);
         assertEquals(BenefitStatus.INACTIVE, invokeGetterMethod(benefit, "getStatus"));
     }
 
     @Test
     public void itShouldUpdateABenefit() {
-        BenefitName benefitName = new BenefitName("CI Benefit");
-        when(benefitNameIsUnique.isSatisfiedBy(benefitName)).thenReturn(true);
+        String name = "CI Benefit";
+        BenefitDto benefitDto = new BenefitDto("1",name);
+        boolean isBenefitNameUnique = true;
+        when(benefitNameIsUnique.isSatisfiedBy(benefitDto)).thenReturn(isBenefitNameUnique);
         boolean isUpdatable = true;
-        when(benefitIsUpdatable.isSatisfiedBy(new BenefitId("1000"))).thenReturn(isUpdatable);
-        Benefit benefit = admin.createBenefit(benefitNameIsUnique, "1", benefitName);
+        when(benefitIsAssociatedWithCoverage.isSatisfiedBy(benefitDto)).thenReturn(isUpdatable);
+        Benefit benefit = admin.createBenefit(isBenefitNameUnique, "1", name);
         String updatedName = "Accidental Benefit";
-        Benefit updatedBenefit = admin.updateBenefit(benefit, new BenefitName(updatedName), isUpdatable);
+        Benefit updatedBenefit = admin.updateBenefit(benefit, updatedName, isUpdatable);
         BenefitName updatedBenefitName = (BenefitName) invokeGetterMethod(updatedBenefit, "getBenefitName");
         assertEquals(updatedName, updatedBenefitName.getBenefitName());
     }

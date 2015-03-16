@@ -10,7 +10,8 @@ package com.pla.sharedkernel.specification;
  * @author: Samir
  * @since 1.0 16/03/2015
  */
-public interface ICompositeSpecification<S,O> {
+public interface ICompositeSpecification<T> extends ISpecification<T>{
 
-    boolean isSatisfiedBy(S leftCandidate,O rightCandidate);
+    ICompositeSpecification<T> And(ISpecification<T> other);
+
 }

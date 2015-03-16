@@ -10,12 +10,11 @@ package com.pla.sharedkernel.specification;
  * @author: Samir
  * @since 1.0 14/03/2015
  */
-public abstract class CompositeSpecification<S, O> implements ISpecification<S> {
+public abstract class CompositeSpecification<T> implements ICompositeSpecification<T> {
 
-    public abstract boolean isSatisfiedBy(S candidate);
-
-    public ICompositeSpecification<S, O> And(ISpecification<O> other) {
-        return new AndSpecification<S, O>(this, other);
+    @Override
+    public ICompositeSpecification<T> And(ISpecification<T> other) {
+        return new AndSpecification<>(this, other);
     }
 
 }

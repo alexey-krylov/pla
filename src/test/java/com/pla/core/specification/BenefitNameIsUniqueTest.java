@@ -7,6 +7,7 @@
 package com.pla.core.specification;
 
 import com.pla.core.domain.model.BenefitName;
+import com.pla.core.dto.BenefitDto;
 import com.pla.core.query.BenefitFinder;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -31,8 +32,8 @@ public class BenefitNameIsUniqueTest {
     public void shouldReturnTrueWhenBenefitNameUnique() {
         when(benefitFinder.getBenefitCountByBenefitName("Death Benefit")).thenReturn(0);
         BenefitNameIsUnique benefitNameIsUnique = new BenefitNameIsUnique(benefitFinder);
-        BenefitName benefitName = new BenefitName("Death Benefit");
-        boolean alreadyExists = benefitNameIsUnique.isSatisfiedBy(benefitName);
+        BenefitDto benefitDto = new BenefitDto("1", "Death Benefit");
+        boolean alreadyExists = benefitNameIsUnique.isSatisfiedBy(benefitDto);
         assertTrue(alreadyExists);
     }
 
@@ -40,8 +41,8 @@ public class BenefitNameIsUniqueTest {
     public void shouldReturnFalseWhenBenefitNameNotUnique() {
         when(benefitFinder.getBenefitCountByBenefitName("Death Benefit")).thenReturn(1);
         BenefitNameIsUnique benefitNameIsUnique = new BenefitNameIsUnique(benefitFinder);
-        BenefitName benefitName = new BenefitName("Death Benefit");
-        boolean alreadyExists = benefitNameIsUnique.isSatisfiedBy(benefitName);
+        BenefitDto benefitDto = new BenefitDto("1", "Death Benefit");
+        boolean alreadyExists = benefitNameIsUnique.isSatisfiedBy(benefitDto);
         assertFalse(alreadyExists);
     }
 }

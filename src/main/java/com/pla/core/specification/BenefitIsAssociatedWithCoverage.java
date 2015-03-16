@@ -6,8 +6,7 @@
 
 package com.pla.core.specification;
 
-import com.pla.core.domain.model.BenefitId;
-import com.pla.core.domain.model.BenefitName;
+import com.pla.core.dto.BenefitDto;
 import com.pla.core.query.BenefitFinder;
 import com.pla.sharedkernel.specification.CompositeSpecification;
 import org.nthdimenzion.ddd.domain.annotations.Specification;
@@ -18,19 +17,18 @@ import org.springframework.beans.factory.annotation.Autowired;
  * @since 1.0 11/03/2015
  */
 @Specification
-public class BenefitIsUpdatable extends CompositeSpecification<BenefitId, BenefitName> {
+public class BenefitIsAssociatedWithCoverage extends CompositeSpecification<BenefitDto> {
 
 
     private BenefitFinder benefitFinder;
 
     @Autowired
-    public BenefitIsUpdatable(BenefitFinder benefitFinder) {
+    public BenefitIsAssociatedWithCoverage(BenefitFinder benefitFinder) {
         this.benefitFinder = benefitFinder;
-
     }
 
     @Override
-    public boolean isSatisfiedBy(BenefitId candidate) {
+    public boolean isSatisfiedBy(BenefitDto candidate) {
         int noOfBenefit = benefitFinder.getBenefitCountAssociatedWithActiveCoverage(candidate.getBenefitId());
         return noOfBenefit == 0;
     }

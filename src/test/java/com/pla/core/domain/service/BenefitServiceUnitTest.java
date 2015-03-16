@@ -10,14 +10,14 @@ import com.pla.core.domain.model.Admin;
 import com.pla.core.domain.model.Benefit;
 import com.pla.core.domain.model.BenefitId;
 import com.pla.core.domain.model.BenefitName;
+import com.pla.core.dto.BenefitDto;
 import com.pla.core.query.BenefitFinder;
-import com.pla.core.specification.BenefitIsUpdatable;
+import com.pla.core.specification.BenefitIsAssociatedWithCoverage;
 import com.pla.core.specification.BenefitNameIsUnique;
 import com.pla.sharedkernel.domain.model.BenefitStatus;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.nthdimenzion.object.utils.IIdGenerator;
@@ -56,8 +56,8 @@ public class BenefitServiceUnitTest {
 
     @Before
     public void setUp() {
-        BenefitIsUpdatable benefitIsUpdatable = new BenefitIsUpdatable(benefitFinder);
-        benefitService = new BenefitService(adminRoleAdapter,benefitNameIsUnique,idGenerator,benefitIsUpdatable);
+        BenefitIsAssociatedWithCoverage benefitIsAssociatedWithCoverage = new BenefitIsAssociatedWithCoverage(benefitFinder);
+        benefitService = new BenefitService(adminRoleAdapter, benefitNameIsUnique, idGenerator, benefitIsAssociatedWithCoverage);
         userDetails = UserLoginDetailDto.createUserLoginDetailDto("", "");
         admin = new Admin();
     }
@@ -67,10 +67,10 @@ public class BenefitServiceUnitTest {
     public void givenABenefitNameItShouldCreateBenefitWithActiveState() {
         String benefitId = "BE001";
         String name = "CI Benefit";
-        BenefitName benefitName = new BenefitName(name);
         when(idGenerator.nextId()).thenReturn(benefitId);
         when(adminRoleAdapter.userToAdmin(userDetails)).thenReturn(admin);
-        when(benefitNameIsUnique.isSatisfiedBy(benefitName)).thenReturn(true);
+        BenefitDto benefitDto = new BenefitDto(benefitId, name);
+        when(benefitNameIsUnique.isSatisfiedBy(benefitDto)).thenReturn(true);
         Benefit benefit = benefitService.createBenefit(name, userDetails);
         BenefitName createdBenefitName = (BenefitName) invokeGetterMethod(benefit, "getBenefitName");
         assertNotNull(benefit);
@@ -85,7 +85,8 @@ public class BenefitServiceUnitTest {
         String name = "CI Benefit";
         when(adminRoleAdapter.userToAdmin(userDetails)).thenReturn(admin);
         when(benefitFinder.getBenefitCountAssociatedWithActiveCoverage("1")).thenReturn(0);
-        when(benefitNameIsUnique.isSatisfiedBy(new BenefitName(name))).thenReturn(true);
+        BenefitDto benefitDto = new BenefitDto(benefit.getBenefitId().getBenefitId(), name);
+        when(benefitNameIsUnique.isSatisfiedBy(benefitDto)).thenReturn(true);
         Benefit updatedBenefit = benefitService.updateBenefit(benefit, name, userDetails);
         BenefitName updatedBenefitName = (BenefitName) invokeGetterMethod(updatedBenefit, "getBenefitName");
         assertEquals(BenefitStatus.ACTIVE, invokeGetterMethod(updatedBenefit, "getStatus"));
@@ -110,9 +111,10 @@ public class BenefitServiceUnitTest {
 
     private Benefit getBenefit() {
         String name = "Accidental death benefit";
-        BenefitName benefitName = new BenefitName(name);
-        when(benefitNameIsUnique.isSatisfiedBy(benefitName)).thenReturn(Boolean.TRUE);
-        Benefit benefit = admin.createBenefit(benefitNameIsUnique, "1", benefitName);
+        BenefitDto benefitDto = new BenefitDto("1", name);
+        boolean isBenefitNameUnique = Boolean.TRUE;
+        when(benefitNameIsUnique.isSatisfiedBy(benefitDto)).thenReturn(isBenefitNameUnique);
+        Benefit benefit = admin.createBenefit(isBenefitNameUnique, "1", name);
         return benefit;
     }
 }

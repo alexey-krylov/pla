@@ -7,22 +7,16 @@
 package com.pla.core.domain.model;
 
 import com.pla.core.query.BenefitFinder;
-import com.pla.core.specification.BenefitIsUpdatable;
-import com.pla.core.specification.BenefitNameIsUnique;
+import com.pla.core.specification.BenefitIsAssociatedWithCoverage;
 import com.pla.core.specification.TeamCodeIsUnique;
 import com.pla.core.specification.TeamNameIsUnique;
-import com.pla.sharedkernel.domain.model.BenefitStatus;
-import org.joda.time.LocalDate;
 import org.junit.Before;
 import org.junit.Ignore;
-import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.when;
-import static org.springframework.test.util.ReflectionTestUtils.invokeGetterMethod;
 
 /**
  * @author: Samir
@@ -42,7 +36,7 @@ public class TeamUnitTest {
     private BenefitFinder benefitFinder;
 
     @Mock
-    private BenefitIsUpdatable benefitIsUpdatable;
+    private BenefitIsAssociatedWithCoverage benefitIsAssociatedWithCoverage;
 
     private Admin admin;
 
