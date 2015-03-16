@@ -19,14 +19,20 @@ import org.springframework.security.core.userdetails.UserDetails;
 import javax.validation.constraints.NotNull;
 
 /**
- * @author: Nischitha
- * @since 1.0 10/03/2015
+ * @author: Samir
+ * @since 1.0 05/03/2015
  */
 @NoArgsConstructor
 @Getter
 @Setter
 @ToString
 public class CreateTeamCommand {
+
+    private UserDetails userDetails;
+
+    @NotNull(message = "{Team id cannot be null}")
+    @NotEmpty(message = "{Team id id cannot be empty}")
+    private String teamId;
 
     @NotNull(message = "{Team name cannot be null}")
     @NotEmpty(message = "{Team name cannot be empty}")
@@ -47,7 +53,8 @@ public class CreateTeamCommand {
     @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentLocalDate")
     private LocalDate fromDate;
 
-    private UserDetails userDetails;
+    @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentLocalDate")
+    private LocalDate thruDate;
 
 
 }

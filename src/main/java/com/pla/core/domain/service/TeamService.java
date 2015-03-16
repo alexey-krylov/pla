@@ -43,11 +43,12 @@ public class TeamService {
         this.idGenerator = idGenerator;
     }
 
-    public Team createTeam(String teamName, String teamCode,String employeeId, LocalDate fromDate, String firstName, String lastName, UserDetails userDetails) {
+    public Team createTeam(String teamName, String teamCode,String employeeId, LocalDate fromDate,
+                           LocalDate thruDate, String firstName, String lastName, UserDetails userDetails) {
 
         String teamId = idGenerator.nextId();
         Admin admin = adminRoleAdapter.userToAdmin(userDetails);
-        Team team = admin.createTeam(teamNameIsUnique, teamCodeIsUnique, teamId, teamName, teamCode, employeeId, fromDate, firstName, lastName);
+        Team team = admin.createTeam(teamNameIsUnique, teamCodeIsUnique, teamId, teamName, teamCode, employeeId, fromDate, thruDate, firstName, lastName);
         return team;
     }
 
