@@ -28,6 +28,7 @@ import static org.springframework.test.util.ReflectionTestUtils.invokeGetterMeth
  * @author: Samir
  * @since 1.0 12/03/2015
  */
+@Ignore
 @RunWith(MockitoJUnitRunner.class)
 public class TeamUnitTest {
 
