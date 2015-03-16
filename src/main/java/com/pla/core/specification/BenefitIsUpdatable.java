@@ -6,6 +6,7 @@
 
 package com.pla.core.specification;
 
+import com.pla.core.domain.model.BenefitId;
 import com.pla.core.domain.model.BenefitName;
 import com.pla.core.query.BenefitFinder;
 import com.pla.sharedkernel.specification.ICompositeSpecification;
@@ -20,7 +21,7 @@ import java.util.Map;
  * @since 1.0 11/03/2015
  */
 @Specification
-public class BenefitIsUpdatable implements ICompositeSpecification<String, BenefitName> {
+public class BenefitIsUpdatable implements ICompositeSpecification<BenefitId, BenefitName> {
 
 
     private BenefitFinder benefitFinder;
@@ -32,8 +33,8 @@ public class BenefitIsUpdatable implements ICompositeSpecification<String, Benef
     }
 
     @Override
-    public boolean isSatisfiedBy(String benefitId, BenefitName benefitName) {
-        Map<String, Object> benefitMap = benefitFinder.findBenefitById(benefitId);
+    public boolean isSatisfiedBy(BenefitId benefitId, BenefitName benefitName) {
+        Map<String, Object> benefitMap = benefitFinder.findBenefitById(benefitId.getBenefitId());
         return !(benefitName.getBenefitName().equals((String) benefitMap.get("benefitName")));
     }
 

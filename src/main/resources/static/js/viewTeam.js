@@ -10,30 +10,28 @@ require(['jquery','bootstrap','datatables','bootstrap-datepicker'],function(){
         });
 
 });
-var assignData = {
-
+var teamData = {
      };
-var assignTeamOne = function(){
-    $('#assignTeam1').each(function () {
-                         assignData["regionName"] = $(this).closest("tr").find('td:eq(0)').text();
-                         assignData["branchName"]  = $(this).closest("tr").find('td:eq(1)').text();
-                         assignData["teamName"] = $(this).closest("tr").find('td:eq(2)').text();
-                         assignData["teamCode"]= $(this).closest("tr").find('td:eq(3)').text();
-                         assignData["teamLeader"] = $(this).closest("tr").find('td:eq(4)').text();
-                         assignData["teamLeaderFrom"] = $(this).closest("tr").find('td:eq(5)').text();
-                         console.log(assignData);
+var createTeamOne = function(){
+   $('#createTeam *').filter(':text').each(function(key,value){
+           teamData[$(value)[0].id]=$(value).val();
 
-                         $.ajax({
-                                 url: '/pla/core/team/assign',
-                                 type: 'POST',
-                                 data: JSON.stringify(assignData),
-                                 contentType: 'application/json; charset=utf-8',
-                                 success: function(msg) {
-                                     if(msg=='success'){
-                                       // $('#alert').text("Team Assigned successfully").show();
-                                     }
-                                 }
-                             });
-                        //alert(id);
-                    });
+       });
+        teamData["regionName"]= $('#regionName :selected').text();
+        teamData["branchName"]= $('#branchName :selected').text();
+        teamData["teamLeader"]= $('#teamLeader :selected').text();
+             console.log(teamData);
+             $.ajax({
+                url: '/pla/core/team/create',
+                type: 'POST',
+                data: JSON.stringify(teamData),
+                contentType: 'application/json; charset=utf-8',
+                success: function(msg) {
+                       if(msg=='success'){
+                            $('#alert').text("Team Created successfully").show();
+                        }
+                }
+             });
+
+
     };

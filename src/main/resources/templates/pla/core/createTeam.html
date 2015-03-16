@@ -3,9 +3,10 @@
       lang="en">
 <head th:include="fragments/common :: headTag">
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
- </head>
+</head>
 <body style="padding-top: 70px;">
 <div th:include="fragments/common :: bodyHeader" th:remove="tag"/>
+
 <div class="container" style="padding-top: 0px!important;">
     <div class="row">
         <div class="col-lg-8" style="left:230px;position:absolute;">
@@ -17,12 +18,12 @@
                     </div>
                 </div>
                 <div class="panel-body">
-                    <form class="form-horizontal" id="assignTeam">
+                    <form class="form-horizontal" id="createTeam" >
                         <div class="form-group" style="margin: auto;margin-top:10px;">
                             <label class="col-sm-3 control-label">Region Name</label>
 
                             <div class="col-sm-9">
-                                <select class="form-control">
+                                <select class="form-control" id="regionName">
                                     <option value="Region A">Region A</option>
                                     <option value="Region B">Region B</option>
                                     <option value="Region C">Region C</option>
@@ -34,7 +35,7 @@
                             <label class="col-sm-3 control-label">Branch Name</label>
 
                             <div class="col-sm-9">
-                                <select class="form-control">
+                                <select class="form-control" id="branchName">
                                     <option value="Branch A">Branch A</option>
                                     <option value="Branch B">Branch B</option>
                                     <option value="Branch C">Branch C</option>
@@ -47,7 +48,7 @@
 
                             <div class="col-sm-9">
                                 <input type="text" name="teamName" required="true" maxlength="50" class="form-control"
-                                       id="teamName" onkeypress="resetError(this)"/>
+                                       id="teamName" />
                                 <span hidden="true"
                                       style="color: darkred;font-size: 10px">Please check if it is empty </span>
                             </div>
@@ -57,7 +58,7 @@
 
                             <div class="col-sm-9">
                                 <input type="text" name="teamCode" required="true" maxlength="50" class="form-control"
-                                       id="teamCode" onkeypress="resetError(this)"/>
+                                       id="teamCode" />
                                 <span hidden="true"
                                       style="color: darkred;font-size: 10px">Please check if it is empty </span>
                             </div>
@@ -66,7 +67,7 @@
                             <label class="col-sm-3 control-label">Team Leader</label>
 
                             <div class="col-sm-9">
-                                <select class="form-control">
+                                <select class="form-control" id="teamLeader">
                                     <option value="TeamLeader A">TeamLeader A</option>
                                     <option value="TeamLeader B">TeamLeader B</option>
                                     <option value="TeamLeader C">TeamLeader C</option>
@@ -79,20 +80,17 @@
 
                             <div class="col-sm-9">
                                 <div class='input-group date' id='datetimepicker2'>
-                                    <input type="text" class="form-control" name="teamLeaderFrom"/>
+                                    <input type="text" class="form-control" name="teamLeaderFrom" id="teamLeaderFrom"/>
                             <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span>
                             </span>
                                 </div>
                             </div>
                         </div>
                         <div class="col-lg-12" style="text-align: center;margin-top:10px;">
-                            <button type="submit" class="btn btn-primary align-center">Save</button>
+                            <button type="button" class="btn btn-primary align-center"  onclick="createTeamOne()">Save</button>
                             <a class="btn btn-primary align-center" th:href="@{/core/team/view}">Cancel</a>
                         </div>
                     </form>
-                </div>
-                <div class="panel-footer">
-                    <ul class="pagination" id="logs-pagination-default"></ul>
                 </div>
             </div>
         </div>

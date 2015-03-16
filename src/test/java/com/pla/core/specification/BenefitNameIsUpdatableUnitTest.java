@@ -7,6 +7,7 @@
 package com.pla.core.specification;
 
 import com.google.common.collect.Maps;
+import com.pla.core.domain.model.BenefitId;
 import com.pla.core.domain.model.BenefitName;
 import com.pla.core.query.BenefitFinder;
 import org.junit.Test;
@@ -40,7 +41,7 @@ public class BenefitNameIsUpdatableUnitTest {
         benefitMap.put("benefitName","CI Benefit");
         when(benefitFinder.findBenefitById("1")).thenReturn(benefitMap);
         BenefitIsUpdatable benefitNameIsUpdatable = new BenefitIsUpdatable(benefitFinder);
-        boolean benefitNameUpdatable = benefitNameIsUpdatable.isSatisfiedBy("1",new BenefitName("Health Benefit"));
+        boolean benefitNameUpdatable = benefitNameIsUpdatable.isSatisfiedBy(new BenefitId("1"),new BenefitName("Health Benefit"));
         assertTrue(benefitNameUpdatable);
     }
 
@@ -50,7 +51,7 @@ public class BenefitNameIsUpdatableUnitTest {
         benefitMap.put("benefitName","Health Benefit");
         when(benefitFinder.findBenefitById("1")).thenReturn(benefitMap);
         BenefitIsUpdatable benefitNameIsUpdatable = new BenefitIsUpdatable(benefitFinder);
-        boolean benefitNameUpdatable = benefitNameIsUpdatable.isSatisfiedBy("1",new BenefitName("Health Benefit"));
+        boolean benefitNameUpdatable = benefitNameIsUpdatable.isSatisfiedBy(new BenefitId("1"),new BenefitName("Health Benefit"));
         assertFalse(benefitNameUpdatable);
     }
 }

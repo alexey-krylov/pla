@@ -14,9 +14,7 @@ spring:
       cache: false
 
   jpa:
-    generate-ddl: true
-    hibernate:
-      ddl-auto: update
+    generate-ddl: false
     database: MYSQL
     show-sql: true
 

@@ -21,7 +21,7 @@ import org.springframework.web.client.RestTemplate;
 @Service
 public class UserService implements UserDetailsService {
 
-    @Value("${spring.smeServer.${spring.profiles.active}.url}")
+    @Value("${spring.smeServer.dev.url}")
     private String serverUrl;
 
 
