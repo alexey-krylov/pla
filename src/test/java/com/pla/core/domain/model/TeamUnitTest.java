@@ -6,8 +6,12 @@
 
 package com.pla.core.domain.model;
 
+import com.pla.core.query.BenefitFinder;
+import com.pla.core.specification.BenefitIsUpdatable;
+import com.pla.core.specification.BenefitNameIsUnique;
 import com.pla.core.specification.TeamCodeIsUnique;
 import com.pla.core.specification.TeamNameIsUnique;
+import com.pla.sharedkernel.domain.model.BenefitStatus;
 import org.joda.time.LocalDate;
 import org.junit.Before;
 import org.junit.Test;
@@ -15,9 +19,13 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
+import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.when;
+import static org.springframework.test.util.ReflectionTestUtils.invokeGetterMethod;
+
 /**
- * @author: Nischitha
- * @since 1.0 10/03/2015
+ * @author: Samir
+ * @since 1.0 12/03/2015
  */
 @RunWith(MockitoJUnitRunner.class)
 public class TeamUnitTest {
@@ -27,6 +35,13 @@ public class TeamUnitTest {
 
     @Mock
     private TeamCodeIsUnique teamCodeIsUnique;
+
+    @Mock
+    private BenefitFinder benefitFinder;
+
+    @Mock
+    private BenefitIsUpdatable benefitIsUpdatable;
+
     private Admin admin;
 
     @Before
@@ -54,28 +69,18 @@ public class TeamUnitTest {
     }*/
     @Test
     public void testCreateTeamAndTeamLead() {
-        Team team = admin.createTeam(teamNameIsUniqueName, teamCodeIsUnique, "12345", "TEAMNAME", "TEAMCODE", "employeedId1",
-                LocalDate.now(),"TLF","TLL");
+        Team team = admin.createTeam(teamNameIsUniqueName, teamCodeIsUnique, "552255", "gggg", "LggggggLL", "employeedId1",
+                LocalDate.now(), LocalDate.now(),"www","PPP");
         String updatedName = "777";
         admin.updateTeamLead(team, "aa", "employeedId2", "ss", LocalDate.now());
-        System.out.println("creat t lid :" + team.getCurrentTeamLeader());
-        Team updatedTeam = admin.updateTeamLead(team, "employeedId3", "NTLF", "NTLL", LocalDate.now());
+        System.out.println("creat t lid :"+team.getCurrentTeamLeader());
+        Team updatedTeam = admin.updateTeamLead(team, "vvv", "employeedId3", "ss", LocalDate.now());
         for(int i=0; i< updatedTeam.getTeamLeaders().size();i++)
         {
             TeamLeaderFulfillment teamLeaderFulfillment = updatedTeam.getTeamLeaders().get(i);
             System.out.println("From date : "+teamLeaderFulfillment.getFromDate()+" thru date"+teamLeaderFulfillment.getThruDate()+":: "+teamLeaderFulfillment.getTeamLeader().getEmployeeId());
         }
-        assertEquals("employeedId3", updatedTeam.getCurrentTeamLeader());
+        assertEquals("777", updatedTeam.getCurrentTeamLeader());
        // System.out.println(updatedBenefit.getCurrentTeamLeader());
     }
-   /* @Test
-    public void testExpireCurrentTeamLeadFullFillment() {
-        Team team = admin.createTeam(teamNameIsUniqueName, teamCodeIsUnique, "12345", "TEAMNAME", "TEAMCODE", "employeedId1",
-                LocalDate.now(),"TLF","TLL");
-        Team updatedTeam = team.updateTeamLeaderFullFillment(employeedId1,"TLF","TLL");
-        assertEquals(team.getCurrentTeam, team.expireCurrentTeamLeaderFullFillment();
-        assertEquals("employeedId3", updatedTeam.getCurrentTeamLeader());
-        // System.out.println(updatedBenefit.getCurrentTeamLeader());
-    }*/
-
 }

@@ -119,10 +119,10 @@ CREATE TABLE `team_team_leader_fulfillment` (
   `first_name` varchar(255) DEFAULT NULL,
   `last_name` varchar(255) DEFAULT NULL,
   `thru_date` date DEFAULT NULL,
-  `TEAMLEADERS_ORDER` int(11) NOT NULL,
-  PRIMARY KEY (`team_id`,`TEAMLEADERS_ORDER`),
+  `team_leaders_order` int(11) NOT NULL,
+  PRIMARY KEY (`team_id`,`team_leaders_order`),
   CONSTRAINT `FK_TEAM_LEADER_FULFILLMENT` FOREIGN KEY (`team_id`) REFERENCES `team` (`team_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+);
 
 
 DROP TABLE IF EXISTS agent;

@@ -7,15 +7,17 @@
 package com.pla.core.domain.model;
 
 import lombok.*;
+import net.sf.cglib.core.Local;
 import org.joda.time.LocalDate;
 import org.nthdimenzion.common.crud.ICrudEntity;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Predicate;
+
+import static com.google.common.base.Preconditions.checkNotNull;
+import static com.google.common.base.Preconditions.checkState;
 
 /**
  * @author: Samir
@@ -29,8 +31,6 @@ import java.util.function.Predicate;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 @Getter(value = AccessLevel.PACKAGE)
 public class Team implements ICrudEntity {
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(Team.class);
 
     @Id
     private String teamId;
@@ -46,17 +46,17 @@ public class Team implements ICrudEntity {
     @ElementCollection(targetClass = TeamLeaderFulfillment.class, fetch = FetchType.EAGER)
     @OrderColumn
     @JoinTable(name = "TEAM_TEAM_LEADER_FUlFILLMENT", joinColumns = @JoinColumn(name = "TEAM_ID"))
-    private List<TeamLeaderFulfillment> teamLeaders = new ArrayList<>();
+    private List<TeamLeaderFulfillment> teamLeaders = new ArrayList<TeamLeaderFulfillment>();
 
     private Boolean active = Boolean.FALSE;
 
     Team(String teamId, TeamCode teamCode, TeamName teamName, String currentTeamLeader, TeamLeaderFulfillment teamLeaderFulfillment, Boolean active) {
-       /* checkNotNull(teamId);
+        checkNotNull(teamId);
         checkNotNull(teamCode);
         checkNotNull(teamName);
         checkNotNull(currentTeamLeader);
         checkNotNull(teamLeaderFulfillment);
-        checkState(active);*/
+        checkState(active);
         this.teamId = teamId;
         this.teamCode = teamCode;
         this.teamName = teamName;
@@ -67,37 +67,22 @@ public class Team implements ICrudEntity {
 
     public Team assignTeamLeader(String employeeId, String firstName, String lastName, LocalDate effectiveFrom) {
         if (!currentTeamLeader.equals(employeeId)) {
-            if(expireCurrentTeamLeaderFullFillment())
-                LOGGER.debug("Expired Current Team Leader Fulfillment ");
-            updateTeamLeaderFullFillment(employeeId, firstName, lastName, effectiveFrom);
+            List teamLeaders = this.teamLeaders;
+            teamLeaders.stream().filter(new Predicate<TeamLeaderFulfillment>() {
+                @Override
+                public boolean test(TeamLeaderFulfillment teamLeaderFulfillment) {
+                    if (currentTeamLeader.equals(teamLeaderFulfillment.getTeamLeader().getEmployeeId())) {
+                        teamLeaderFulfillment.expireFulfillment(new LocalDate(LocalDate.now().getYear(), LocalDate.now().getMonthOfYear(), (LocalDate.now().getDayOfMonth() - 1)));
+                    }
+                    return currentTeamLeader.equals(teamLeaderFulfillment.getTeamLeader().getEmployeeId());
+                }
+            });
+            this.currentTeamLeader = employeeId;
+            TeamLeader teamLeader = new TeamLeader(employeeId, firstName, lastName);
+            TeamLeaderFulfillment teamLeaderFulfillment = new TeamLeaderFulfillment(teamLeader, effectiveFrom);
+            this.teamLeaders.add(teamLeaderFulfillment);
         }
         return this;
-    }
-
-    public boolean expireCurrentTeamLeaderFullFillment()
-    {
-        List teamLeaders = this.teamLeaders;
-        long count = teamLeaders.stream().filter(new Predicate<TeamLeaderFulfillment>() {
-            @Override
-            public boolean test(TeamLeaderFulfillment teamLeaderFulfillment) {
-                if (currentTeamLeader.equals(teamLeaderFulfillment.getTeamLeader().getEmployeeId())) {
-                    teamLeaderFulfillment.expireFulfillment(new LocalDate(LocalDate.now().getYear(), LocalDate.now().getMonthOfYear(), (LocalDate.now().getDayOfMonth() - 1)));
-                }
-                return currentTeamLeader.equals(teamLeaderFulfillment.getTeamLeader().getEmployeeId());
-            }
-        }).count();
-        if(count == 1)
-        return true;
-        else
-            return false;
-    }
-    public void updateTeamLeaderFullFillment(String employeeId,String firstName,String lastName, LocalDate effectiveFrom)
-    {
-        this.currentTeamLeader = employeeId;
-        TeamLeader teamLeader = new TeamLeader(employeeId, firstName, lastName);
-        TeamLeaderFulfillment teamLeaderFulfillment = new TeamLeaderFulfillment(teamLeader, effectiveFrom);
-        this.teamLeaders.add(teamLeaderFulfillment);
-
     }
 
 }
