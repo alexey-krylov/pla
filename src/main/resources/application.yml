@@ -14,9 +14,10 @@ spring:
       cache: false
 
   jpa:
-    generate-ddl: false
-    database: MYSQL
-    show-sql: true
+      hibernate:
+        ddl-auto: validate
+      database: MYSQL
+      show-sql: true
 
   profiles:
         active: ${spring.profiles.active}
@@ -44,5 +45,5 @@ spring:
 
 
 flyway:
-  check-location: false
-  enabled: false
+  check-location: true
+  enabled: true
