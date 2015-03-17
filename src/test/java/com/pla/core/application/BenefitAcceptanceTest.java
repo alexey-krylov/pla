@@ -69,7 +69,7 @@ public class BenefitAcceptanceTest {
     }
 
     @Test
-    @DatabaseSetup(value = "classpath:testdata/endtoend/benefit/testdataforupdatebenefit.xml")
+    @DatabaseSetup(value = "classpath:testdata/endtoend/benefit/testdataforupdatebenefit.xml",type = DatabaseOperation.CLEAN_INSERT)
     @ExpectedDatabase(value = "classpath:testdata/endtoend/benefit/expectedupdatedbenefitdata.xml", assertionMode = DatabaseAssertionMode.NON_STRICT)
     @DatabaseTearDown(value = "classpath:testdata/endtoend/benefit/testdataforupdatebenefit.xml",type = DatabaseOperation.DELETE)
     public void givenAnActiveBenefitWithNewNameItShouldUpdateBenefit() {
@@ -85,7 +85,7 @@ public class BenefitAcceptanceTest {
     }
 
     @Test
-    @DatabaseSetup(value = "classpath:testdata/endtoend/benefit/testdataforupdatebenefit.xml")
+    @DatabaseSetup(value = "classpath:testdata/endtoend/benefit/testdataforupdatebenefit.xml",type = DatabaseOperation.CLEAN_INSERT)
     @ExpectedDatabase(value = "classpath:testdata/endtoend/benefit/expecteddataformarkingbenefitasused.xml", assertionMode = DatabaseAssertionMode.NON_STRICT)
     @DatabaseTearDown(value = "classpath:testdata/endtoend/benefit/testdataforupdatebenefit.xml",type = DatabaseOperation.DELETE)
     public void givenAnActiveBenefitItShouldMarkAsUsed() {
@@ -101,7 +101,7 @@ public class BenefitAcceptanceTest {
     }
 
     @Test
-    @DatabaseSetup(value = "classpath:testdata/endtoend/benefit/testdataforupdatebenefit.xml")
+    @DatabaseSetup(value = "classpath:testdata/endtoend/benefit/testdataforupdatebenefit.xml",type = DatabaseOperation.CLEAN_INSERT)
     @ExpectedDatabase(value = "classpath:testdata/endtoend/benefit/expectedinactivebenefitdata.xml", assertionMode = DatabaseAssertionMode.NON_STRICT)
     @DatabaseTearDown(value = "classpath:testdata/endtoend/benefit/testdataforupdatebenefit.xml",type = DatabaseOperation.DELETE)
     public void givenABenefitItShouldInactivate(){

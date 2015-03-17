@@ -574,6 +574,16 @@ CREATE TABLE `sum_assured` (
 
 /*Data for the table `sum_assured` */
 
+DROP TABLE IF EXISTS `sum_insured_values`;
+
+CREATE TABLE `sum_insured_values` (
+  `sum_assured_id` bigint(20) NOT NULL,
+  `sum_insured_values` decimal(19,2) DEFAULT NULL,
+  KEY `FK_28ctxup91kp61te2ela8peqo0` (`sum_assured_id`),
+  CONSTRAINT `FK_28ctxup91kp61te2ela8peqo0` FOREIGN KEY (`sum_assured_id`) REFERENCES `sum_assured` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
 /*Table structure for table `sum_assured_sum_insured_values` */
 
 DROP TABLE IF EXISTS `sum_assured_sum_insured_values`;

@@ -8,6 +8,7 @@ package com.pla.core.domain.model.agent;
 
 import com.google.common.base.Preconditions;
 import lombok.AccessLevel;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Immutable;
@@ -25,6 +26,7 @@ import java.io.Serializable;
 @Embeddable
 @Getter
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
+@EqualsAndHashCode(of = "agentId")
 public class AgentId implements Serializable{
 
     private Integer agentId;

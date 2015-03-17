@@ -14,9 +14,10 @@ spring:
       cache: false
 
   jpa:
-    generate-ddl: false
-    database: MYSQL
-    show-sql: true
+      hibernate:
+        ddl-auto: update
+      database: MYSQL
+      show-sql: true
 
   profiles:
         active: ${spring.profiles.active}

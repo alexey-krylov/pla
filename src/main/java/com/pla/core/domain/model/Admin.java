@@ -7,9 +7,6 @@
 package com.pla.core.domain.model;
 
 import com.pla.core.domain.exception.BenefitDomainException;
-import com.pla.core.domain.exception.TeamException;
-import com.pla.core.specification.BenefitIsUpdatable;
-import com.pla.core.specification.BenefitNameIsUnique;
 import com.pla.core.specification.TeamCodeIsUnique;
 import com.pla.core.specification.TeamNameIsUnique;
 import com.pla.sharedkernel.domain.model.BenefitStatus;
@@ -24,21 +21,18 @@ import org.nthdimenzion.ddd.domain.annotations.ValueObject;
 public class Admin {
 
 
-    public Benefit createBenefit(BenefitNameIsUnique benefitNameIsUnique, String benefitId,  BenefitName benefitName) {
-        if (!benefitNameIsUnique.isSatisfiedBy(benefitName)) {
+    public Benefit createBenefit(boolean isUniqueBenefitName, String benefitId, String benefitName) {
+        if (!isUniqueBenefitName) {
             throw new BenefitDomainException("Benefit name already satisfied");
         }
-        return new Benefit(new BenefitId(benefitId), benefitName, BenefitStatus.ACTIVE);
+        return new Benefit(new BenefitId(benefitId), new BenefitName(benefitName), BenefitStatus.ACTIVE);
     }
 
-    public Benefit updateBenefit(Benefit benefit, BenefitName newBenefitName, BenefitNameIsUnique benefitNameIsUnique, BenefitIsUpdatable benefitIsUpdatable) {
-        if (!benefitIsUpdatable.isSatisfiedBy(benefit.getBenefitId(), newBenefitName)) {
-            throw new BenefitDomainException("Benefit name cannot be updated. New name is required");
+    public Benefit updateBenefit(Benefit benefit, String newBenefitName, boolean benefitIsUpdatable) {
+        if (!benefitIsUpdatable) {
+            throw new BenefitDomainException("Benefit is associated with active coverage");
         }
-        if (!benefitIsUpdatable.isGeneralizationOf(benefitNameIsUnique, newBenefitName)) {
-            throw new BenefitDomainException("Benefit name already satisfied");
-        }
-        Benefit updatedBenefit = benefit.updateBenefitName(newBenefitName);
+        Benefit updatedBenefit = benefit.updateBenefitName(new BenefitName(newBenefitName));
         return updatedBenefit;
     }
 
@@ -46,14 +40,16 @@ public class Admin {
         Benefit updatedBenefit = benefit.inActivate();
         return updatedBenefit;
     }
-    public Team createTeam(TeamNameIsUnique teamNameIsUnique,TeamCodeIsUnique teamCodeIsUnique, String teamId, String name, String code
-            ,String employeeId,LocalDate fromDate, LocalDate thruDate, String firstname, String lastName) {
+
+    public Team createTeam(boolean teamNameIsUnique, boolean teamCodeIsUnique, String teamId, String name, String code
+            , String employeeId, LocalDate fromDate, LocalDate thruDate, String firstname, String lastName) {
         TeamName teamName = new TeamName(name);
-        TeamCode teamCode =  new TeamCode(code);
-        TeamLeader teamLeader = new TeamLeader(employeeId,firstname, lastName);
+        TeamCode teamCode = new TeamCode(code);
+        TeamLeader teamLeader = new TeamLeader(employeeId, firstname, lastName);
         TeamLeaderFulfillment teamLeaderFulfillment = new TeamLeaderFulfillment(teamLeader, fromDate);
-        return new Team(teamId, teamCode, teamName,employeeId, teamLeaderFulfillment,Boolean.TRUE);
+        return new Team(teamId, teamCode, teamName, employeeId, teamLeaderFulfillment, Boolean.TRUE);
     }
+
     public Team updateTeamLead(Team team, String employeeId, String firstName, String lastName, LocalDate fromDate) {
         Team updatedTeam = team.assignTeamLeader(employeeId, firstName, lastName, fromDate);
         return updatedTeam;

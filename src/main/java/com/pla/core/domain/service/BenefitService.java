@@ -8,8 +8,8 @@ package com.pla.core.domain.service;
 
 import com.pla.core.domain.model.Admin;
 import com.pla.core.domain.model.Benefit;
-import com.pla.core.domain.model.BenefitName;
-import com.pla.core.specification.BenefitIsUpdatable;
+import com.pla.core.dto.BenefitDto;
+import com.pla.core.specification.BenefitIsAssociatedWithCoverage;
 import com.pla.core.specification.BenefitNameIsUnique;
 import org.nthdimenzion.ddd.domain.annotations.DomainService;
 import org.nthdimenzion.object.utils.IIdGenerator;
@@ -30,26 +30,30 @@ public class BenefitService {
 
     private IIdGenerator idGenerator;
 
-    private BenefitIsUpdatable benefitIsUpdatable;
+    private BenefitIsAssociatedWithCoverage benefitIsAssociatedWithCoverage;
 
     @Autowired
-    public BenefitService(AdminRoleAdapter adminRoleAdapter, BenefitNameIsUnique benefitNameIsUnique, IIdGenerator idGenerator, BenefitIsUpdatable benefitIsUpdatable) {
+    public BenefitService(AdminRoleAdapter adminRoleAdapter, BenefitNameIsUnique benefitNameIsUnique, IIdGenerator idGenerator, BenefitIsAssociatedWithCoverage benefitIsAssociatedWithCoverage) {
         this.adminRoleAdapter = adminRoleAdapter;
         this.benefitNameIsUnique = benefitNameIsUnique;
         this.idGenerator = idGenerator;
-        this.benefitIsUpdatable = benefitIsUpdatable;
+        this.benefitIsAssociatedWithCoverage = benefitIsAssociatedWithCoverage;
     }
 
-    public Benefit createBenefit(String benefitName, UserDetails userDetails) {
+    public Benefit createBenefit(String name, UserDetails userDetails) {
         String benefitId = idGenerator.nextId();
         Admin admin = adminRoleAdapter.userToAdmin(userDetails);
-        Benefit benefit = admin.createBenefit(benefitNameIsUnique, benefitId, new BenefitName(benefitName));
+        BenefitDto benefitDto = new BenefitDto(benefitId, name);
+        boolean isBenefitNameUnique = benefitNameIsUnique.isSatisfiedBy(benefitDto);
+        Benefit benefit = admin.createBenefit(isBenefitNameUnique, benefitId, name);
         return benefit;
     }
 
-    public Benefit updateBenefit(Benefit benefit, String benefitName, UserDetails userDetails) {
+    public Benefit updateBenefit(Benefit benefit, String newBenefitName, UserDetails userDetails) {
         Admin admin = adminRoleAdapter.userToAdmin(userDetails);
-        Benefit updatedBenefit = admin.updateBenefit(benefit, new BenefitName(benefitName), benefitNameIsUnique, benefitIsUpdatable);
+        BenefitDto benefitDto = new BenefitDto(benefit.getBenefitId().getBenefitId(), newBenefitName);
+        boolean isBenefitUpdatable = benefitIsAssociatedWithCoverage.And(benefitNameIsUnique).isSatisfiedBy(benefitDto);
+        Benefit updatedBenefit = admin.updateBenefit(benefit, newBenefitName, isBenefitUpdatable);
         return updatedBenefit;
 
     }

@@ -10,7 +10,7 @@ package com.pla.sharedkernel.specification;
  * @author: Samir
  * @since 1.0 14/03/2015
  */
-public class AndSpecification<T> implements ISpecification<T> {
+public class AndSpecification<T> extends CompositeSpecification<T> {
 
     private ISpecification<T> left;
 

@@ -6,16 +6,12 @@
 
 package com.pla.core.specification;
 
-import com.google.common.collect.Maps;
-import com.pla.core.domain.model.BenefitId;
-import com.pla.core.domain.model.BenefitName;
+import com.pla.core.dto.BenefitDto;
 import com.pla.core.query.BenefitFinder;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
-
-import java.util.Map;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
@@ -31,27 +27,57 @@ public class BenefitNameIsUpdatableUnitTest {
     @Mock
     private BenefitFinder benefitFinder;
 
-    @Mock
-    private BenefitNameIsUnique benefitNameIsUnique;
-
-
     @Test
-    public void shouldReturnTrueWhenBenefitNameIsDifferent() {
-        Map<String,Object> benefitMap = Maps.newHashMap();
-        benefitMap.put("benefitName","CI Benefit");
-        when(benefitFinder.findBenefitById("1")).thenReturn(benefitMap);
-        BenefitIsUpdatable benefitNameIsUpdatable = new BenefitIsUpdatable(benefitFinder);
-        boolean benefitNameUpdatable = benefitNameIsUpdatable.isSatisfiedBy(new BenefitId("1"),new BenefitName("Health Benefit"));
+    public void shouldReturnTrueWhenBenefitIsNotAssociatedWithCoverage() {
+        when(benefitFinder.getBenefitCountAssociatedWithActiveCoverage("1")).thenReturn(0);
+        BenefitIsAssociatedWithCoverage benefitNameIsUpdatable = new BenefitIsAssociatedWithCoverage(benefitFinder);
+        BenefitDto benefitDto = new BenefitDto("1", "CI Benefit");
+        boolean benefitNameUpdatable = benefitNameIsUpdatable.isSatisfiedBy(benefitDto);
         assertTrue(benefitNameUpdatable);
     }
 
     @Test
-    public void shouldReturnFalseWhenBenefitNameIsSame() {
-        Map<String,Object> benefitMap = Maps.newHashMap();
-        benefitMap.put("benefitName","Health Benefit");
-        when(benefitFinder.findBenefitById("1")).thenReturn(benefitMap);
-        BenefitIsUpdatable benefitNameIsUpdatable = new BenefitIsUpdatable(benefitFinder);
-        boolean benefitNameUpdatable = benefitNameIsUpdatable.isSatisfiedBy(new BenefitId("1"),new BenefitName("Health Benefit"));
+    public void shouldReturnFalseWhenBenefitIsAssociateWithActiveCoverage() {
+        when(benefitFinder.getBenefitCountAssociatedWithActiveCoverage("1")).thenReturn(1);
+        BenefitIsAssociatedWithCoverage benefitNameIsUpdatable = new BenefitIsAssociatedWithCoverage(benefitFinder);
+        BenefitDto benefitDto = new BenefitDto("1", "CI Benefit");
+        boolean benefitNameUpdatable = benefitNameIsUpdatable.isSatisfiedBy(benefitDto);
         assertFalse(benefitNameUpdatable);
+    }
+
+    @Test
+    public void shouldReturnTrueIfBenefitIsUniqueAndNotAssociateWithCoverage() {
+        String benefitName = "CI Benefit";
+        when(benefitFinder.getBenefitCountAssociatedWithActiveCoverage("1")).thenReturn(0);
+        when(benefitFinder.getBenefitCountByBenefitName(benefitName)).thenReturn(0);
+        BenefitIsAssociatedWithCoverage benefitIsAssociatedWithCoverage = new BenefitIsAssociatedWithCoverage(benefitFinder);
+        BenefitNameIsUnique benefitNameIsUnique = new BenefitNameIsUnique(benefitFinder);
+        BenefitDto benefitDto = new BenefitDto("1", benefitName);
+        boolean isUpdatable = benefitIsAssociatedWithCoverage.And(benefitNameIsUnique).isSatisfiedBy(benefitDto);
+        assertTrue(isUpdatable);
+    }
+
+    @Test
+    public void shouldReturnFalseIfBenefitIsUniqueAndAssociateWithCoverage() {
+        String benefitName = "CI Benefit";
+        when(benefitFinder.getBenefitCountAssociatedWithActiveCoverage("1")).thenReturn(1);
+        when(benefitFinder.getBenefitCountByBenefitName(benefitName)).thenReturn(0);
+        BenefitIsAssociatedWithCoverage benefitIsAssociatedWithCoverage = new BenefitIsAssociatedWithCoverage(benefitFinder);
+        BenefitNameIsUnique benefitNameIsUnique = new BenefitNameIsUnique(benefitFinder);
+        BenefitDto benefitDto = new BenefitDto("1", benefitName);
+        boolean isUpdatable = benefitIsAssociatedWithCoverage.And(benefitNameIsUnique).isSatisfiedBy(benefitDto);
+        assertFalse(isUpdatable);
+    }
+
+    @Test
+    public void shouldReturnFalseIfBenefitIsNotUniqueAndNotAssociateWithCoverage() {
+        String benefitName = "CI Benefit";
+        when(benefitFinder.getBenefitCountAssociatedWithActiveCoverage("1")).thenReturn(0);
+        when(benefitFinder.getBenefitCountByBenefitName(benefitName)).thenReturn(1);
+        BenefitIsAssociatedWithCoverage benefitIsAssociatedWithCoverage = new BenefitIsAssociatedWithCoverage(benefitFinder);
+        BenefitNameIsUnique benefitNameIsUnique = new BenefitNameIsUnique(benefitFinder);
+        BenefitDto benefitDto = new BenefitDto("1", benefitName);
+        boolean isUpdatable = benefitIsAssociatedWithCoverage.And(benefitNameIsUnique).isSatisfiedBy(benefitDto);
+        assertFalse(isUpdatable);
     }
 }

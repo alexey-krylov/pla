@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 3/11/15 9:58 AM .NthDimenzion,Inc - All Rights Reserved
+ * Copyright (c) 3/16/15 9:46 AM .NthDimenzion,Inc - All Rights Reserved
  * Unauthorized copying of this file, via any medium is strictly prohibited
  * Proprietary and confidential
  */
@@ -8,11 +8,10 @@ package com.pla.sharedkernel.specification;
 
 /**
  * @author: Samir
- * @since 1.0 11/03/2015
+ * @since 1.0 16/03/2015
  */
-public interface ICompositeSpecification<T1,T2> {
+public interface ICompositeSpecification<T> extends ISpecification<T>{
 
-    boolean isSatisfiedBy(T1 object1, T2 object2);
+    ICompositeSpecification<T> And(ISpecification<T> other);
 
-    boolean isGeneralizationOf(ISpecification<T2> specification,T2 data);
 }
