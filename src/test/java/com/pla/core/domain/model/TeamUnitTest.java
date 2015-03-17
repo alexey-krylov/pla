@@ -54,7 +54,7 @@ public class TeamUnitTest {
     }*/
     @Test
     public void testCreateTeamAndTeamLead() {
-        Team team = admin.createTeam(teamNameIsUniqueName, teamCodeIsUnique, "12345", "TEAMNAME", "TEAMCODE", "employeedId1",
+        Team team = admin.createTeam(true, true, "12345", "TEAMNAME", "TEAMCODE", "employeedId1",
                 LocalDate.now(),"TLF","TLL");
         String updatedName = "777";
         admin.updateTeamLead(team, "aa", "employeedId2", "ss", LocalDate.now());
