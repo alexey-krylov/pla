@@ -13,7 +13,6 @@ import com.pla.core.domain.model.TeamName;
 import com.pla.core.specification.TeamCodeIsUnique;
 import com.pla.core.specification.TeamNameIsUnique;
 import org.joda.time.LocalDate;
-import org.nthdimenzion.common.service.JpaRepositoryFactory;
 import org.nthdimenzion.ddd.domain.annotations.DomainService;
 import org.nthdimenzion.object.utils.IIdGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,20 +32,16 @@ public class TeamService {
 
     private TeamCodeIsUnique teamCodeIsUnique;
 
-    private JpaRepositoryFactory jpaRepositoryFactory;
-
     private IIdGenerator idGenerator;
 
     @Autowired
-    public TeamService(AdminRoleAdapter adminRoleAdapter, TeamNameIsUnique teamNameIsUnique, JpaRepositoryFactory jpaRepositoryFactory, IIdGenerator idGenerator){
+    public TeamService(AdminRoleAdapter adminRoleAdapter, TeamNameIsUnique teamNameIsUnique, IIdGenerator idGenerator){
         this.adminRoleAdapter = adminRoleAdapter;
         this.teamNameIsUnique = teamNameIsUnique;
-        this.jpaRepositoryFactory = jpaRepositoryFactory;
         this.idGenerator = idGenerator;
     }
 
     public Team createTeam(String teamName, String teamCode,String employeeId, LocalDate fromDate, String firstName, String lastName, UserDetails userDetails) {
-
         String teamId = idGenerator.nextId();
         Admin admin = adminRoleAdapter.userToAdmin(userDetails);
         TeamName teamName1 = new TeamName(teamName);
@@ -61,7 +56,6 @@ public class TeamService {
         Admin admin = adminRoleAdapter.userToAdmin(userDetails);
         team = admin.updateTeamLead(team, employeeId, firstName, lastName, fromDate);
         return team;
-
     }
 
 }

@@ -4,7 +4,7 @@
  * Proprietary and confidential
  */
 
-package com.pla.core.domain;
+package com.pla.core.domain.service;
 
 import com.pla.core.application.CreateBenefitCommand;
 import com.pla.core.application.CreateTeamCommand;;
@@ -59,7 +59,7 @@ public class TeamServiceTest {
 
     @Before
     public void setUp() {
-        teamService = new TeamService(adminRoleAdapter, teamNameIsUnique, jpaRepositoryFactory, idGenerator);
+        teamService = new TeamService(adminRoleAdapter, teamNameIsUnique, idGenerator);
         userDetails = UserLoginDetailDto.createUserLoginDetailDto("", "");
        // admin = new Admin("");
     }

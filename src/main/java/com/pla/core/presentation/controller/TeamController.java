@@ -45,13 +45,13 @@ public class TeamController {
         return modelAndView;
     }
 
-    @RequestMapping(value = "/team/openCreatePage",method = RequestMethod.GET)
-    public String openCreatePageTeam(){
+    @RequestMapping(value = "/team/openCreatePage", method = RequestMethod.GET)
+    public String openCreatePageTeam() {
         return "pla/core/createTeam";
     }
 
-    @RequestMapping(value = "/team/openAssignPage",method = RequestMethod.GET)
-    public String openAssignPageTeam(){
+    @RequestMapping(value = "/team/openAssignPage", method = RequestMethod.GET)
+    public String openAssignPageTeam() {
         return "pla/core/assignTeam";
     }
 
@@ -78,7 +78,6 @@ public class TeamController {
     public
     @ResponseBody
     Result updateTeamLead(@RequestBody UpdateTeamCommand updateTeamCommand) {
-
         try {
             commandGateway.sendAndWait(updateTeamCommand);
         } catch (Exception e) {
@@ -87,8 +86,8 @@ public class TeamController {
         }
         return Result.success("Team updated successfully");
     }
-    private UserDetails getLoggedInUSerDetail(HttpServletRequest request)
-    {
+
+    private UserDetails getLoggedInUSerDetail(HttpServletRequest request) {
         UserDetails userDetails = (UserDetails) request.getSession().getAttribute(AppConstants.LOGGED_IN_USER);
         return userDetails;
     }

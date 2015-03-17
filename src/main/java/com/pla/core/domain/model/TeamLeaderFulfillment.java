@@ -7,6 +7,7 @@
 package com.pla.core.domain.model;
 
 import lombok.AccessLevel;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Immutable;
@@ -25,6 +26,7 @@ import javax.persistence.Embedded;
 @ValueObject
 @Getter(value = AccessLevel.PACKAGE)
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
+@EqualsAndHashCode(of = {"teamLeader", "fromDate"})
 @Embeddable
 public class TeamLeaderFulfillment {
 
@@ -41,7 +43,6 @@ public class TeamLeaderFulfillment {
         this.teamLeader = teamLeader;
         this.fromDate = fromDate;
     }
-
 
     public TeamLeaderFulfillment expireFulfillment(LocalDate thruDate) {
         this.thruDate = thruDate;
