@@ -25,22 +25,20 @@ public class Plan extends AbstractAnnotatedAggregateRoot<PlanId> {
 
     @Id
     private PlanId planId;
-
     @Transient
     private PlanDetail planDetail;
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     private SumAssured sumAssured;
     /**
      * Policy term can be a list of age with upper band
      * of maximum maturity age OR it could be list of age
      * of the insured.
      */
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     private PolicyTerm policyTerm;
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     private PlanPayment planPayment;
-
-    @OneToMany(mappedBy = "plan")
+    @OneToMany(mappedBy = "plan", cascade = CascadeType.ALL)
     private Set<PlanCoverage> coverages = new HashSet<PlanCoverage>();
 
     protected Plan() {

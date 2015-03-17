@@ -30,8 +30,10 @@ public class Application {
     @Qualifier("primaryDataSource")
     private DataSource dataSource;
 
+
     public static void main(String[] args) {
         SpringApplication.run(Application.class, args);
     }
+
 
 }

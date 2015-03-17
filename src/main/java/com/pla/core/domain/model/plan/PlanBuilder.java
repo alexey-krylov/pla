@@ -59,8 +59,8 @@ public class PlanBuilder {
         return this;
     }
 
-    public PlanBuilder withPaymentTermBasedOnValue(Set<Integer> validTerms, int maxMaturityAge) {
-        this.planPayment = new PlanPayment(new PremiumPayment(validTerms, maxMaturityAge));
+    public PlanBuilder withPaymentTermBasedOnValue(Set<Integer> validTerms) {
+        this.planPayment = new PlanPayment(new PremiumPayment(validTerms));
         return this;
     }
 

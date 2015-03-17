@@ -26,6 +26,7 @@ class PolicyTerm {
     int maxMaturityAge;
 
     @ElementCollection
+    @CollectionTable(name = "policy_term_valid_terms")
     Set<Integer> validTerms = new HashSet<Integer>();
 
     protected PolicyTerm() {

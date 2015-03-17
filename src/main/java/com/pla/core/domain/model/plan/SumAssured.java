@@ -27,6 +27,7 @@ class SumAssured {
     private long id;
     @ElementCollection
     @CollectionTable(name = "sum_insured_values", joinColumns = @JoinColumn(name = "sum_assured_id"))
+    //TODO change to AssuredValues
     private Set<BigDecimal> sumInsuredValues;
 
     protected SumAssured() {

@@ -22,7 +22,8 @@ class PlanPayment {
     long id;
     @ElementCollection
     private Collection<MaturityAmount> maturityAmounts;
-    @OneToOne
+
+    @OneToOne(cascade = CascadeType.ALL)
     private PremiumPayment premiumPayment;
     @Column(nullable = false)
     private PremiumPaymentTermType premiumPaymentTermType;

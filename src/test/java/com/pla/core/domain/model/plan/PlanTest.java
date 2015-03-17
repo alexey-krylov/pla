@@ -2,10 +2,10 @@ package com.pla.core.domain.model.plan;
 
 import com.google.common.collect.Sets;
 import com.pla.core.domain.model.BenefitId;
-import com.pla.sharedkernel.identifier.CoverageId;
 import com.pla.sharedkernel.domain.model.ClientType;
 import com.pla.sharedkernel.domain.model.PlanType;
 import com.pla.sharedkernel.domain.model.Relationship;
+import com.pla.sharedkernel.identifier.CoverageId;
 import com.pla.sharedkernel.identifier.LineOfBusinessId;
 import com.pla.sharedkernel.identifier.PlanId;
 import org.joda.time.LocalDate;
@@ -89,7 +89,7 @@ public class PlanTest {
         builder.withPlanId(new PlanId())
                 .withPlanDetail(planDetail)
                 .withSumAssuredBasedOnValue(Sets.newHashSet(new BigDecimal(10000000), new BigDecimal(50000000), new BigDecimal(50000000)))
-                .withPaymentTermBasedOnValue(Sets.newHashSet(30, 35, 40, 45, 50, 55, 60), 60)
+                .withPaymentTermBasedOnValue(Sets.newHashSet(30, 35, 40, 45, 50, 55, 60))
                 .withCoverages(Sets.newHashSet(planCoverage))
                 .withMaturityAmount(5, new BigDecimal(15))
                 .withPolicyTermBasedOnValue(Sets.newHashSet(30, 35, 40, 45, 50, 55, 60), 60)
@@ -104,7 +104,7 @@ public class PlanTest {
         Plan plan = builder.withPlanId(new PlanId())
                 .withPlanDetail(planDetail)
                 .withSumAssuredByRange(new BigDecimal(10000000), new BigDecimal(40000000), 1000)
-                .withPaymentTermBasedOnValue(Sets.newHashSet(30, 35, 40, 45, 50, 55, 60), 60)
+                .withPaymentTermBasedOnValue(Sets.newHashSet(30, 35, 40, 45, 50, 55, 60))
                 .withCoverages(Sets.newHashSet(planCoverage))
                 .withMaturityAmount(5, new BigDecimal(15))
                 .withPolicyTermBasedOnValue(Sets.newHashSet(30, 35, 40, 45, 50, 55, 60), 60)
@@ -118,17 +118,17 @@ public class PlanTest {
 
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test(expected = IllegalStateException.class)
     public void should_not_create_plan_when_payment_terms_has_val_gt_than_cut_off_age() {
 
         PlanBuilder builder = Plan.builder();
         builder.withPlanId(new PlanId())
                 .withPlanDetail(planDetail)
                 .withSumAssuredBasedOnValue(Sets.newHashSet(new BigDecimal(10000000), new BigDecimal(50000000), new BigDecimal(50000000)))
-                .withPaymentTermBasedOnValue(Sets.newHashSet(30, 35, 40, 45, 50, 55, 75), 60)
+                .withPaymentTermBasedOnValue(Sets.newHashSet(30, 35, 40, 45, 50, 55, 75))
                 .withCoverages(Sets.newHashSet(planCoverage))
                 .withMaturityAmount(5, new BigDecimal(15))
-                .withPolicyTermBasedOnValue(Sets.newHashSet(30, 35, 40, 45, 50, 55, 60), 60)
+                .withPolicyTermBasedOnValue(Sets.newHashSet(30, 35, 40, 45, 50, 55, 60), 75)
                 .build();
 
     }
@@ -140,7 +140,7 @@ public class PlanTest {
         builder.withPlanId(new PlanId())
                 .withPlanDetail(planDetail)
                 .withSumAssuredBasedOnValue(Sets.newHashSet(new BigDecimal(10000000), new BigDecimal(50000000), new BigDecimal(50000000)))
-                .withPaymentTermBasedOnValue(Sets.newHashSet(30, 35, 40, 45, 50, 55, 60), 60)
+                .withPaymentTermBasedOnValue(Sets.newHashSet(30, 35, 40, 45, 50, 55, 60))
                 .withCoverages(Sets.newHashSet(planCoverage))
                 .withMaturityAmount(5, new BigDecimal(15))
                 .withPolicyTermBasedOnValue(Sets.newHashSet(30, 35, 40, 45, 50, 55, 65), 60)
@@ -154,7 +154,7 @@ public class PlanTest {
         Plan plan = builder.withPlanId(new PlanId())
                 .withPlanDetail(planDetail)
                 .withSumAssuredBasedOnValue(Sets.newHashSet(new BigDecimal(10000000), new BigDecimal(50000000), new BigDecimal(50000000)))
-                .withPaymentTermBasedOnValue(Sets.newHashSet(30, 35, 40, 45, 50, 55, 75), 75)
+                .withPaymentTermBasedOnValue(Sets.newHashSet(30, 35, 40, 45, 50, 55, 75))
                 .withCoverages(Sets.newHashSet(planCoverage))
                 .withMaturityAmount(5, new BigDecimal(15))
                 .withPolicyTermBasedOnValue(Sets.newHashSet(30, 35, 40, 45, 50, 55, 60), 60)
@@ -202,7 +202,7 @@ public class PlanTest {
         builder.withPlanId(new PlanId())
                 .withPlanDetail(planDetail)
                 .withSumAssuredByRange(new BigDecimal(10000000), new BigDecimal(40000000), 1000)
-                .withPaymentTermBasedOnValue(Sets.newHashSet(30, 35, 40, 45, 50, 55, 60), 60)
+                .withPaymentTermBasedOnValue(Sets.newHashSet(30, 35, 40, 45, 50, 55, 60))
                 .withCoverages(Sets.newHashSet(planCoverage_1, planCoverage_2))
                 .withMaturityAmount(5, new BigDecimal(15))
                 .withPolicyTermBasedOnValue(Sets.newHashSet(30, 35, 40, 45, 50, 55, 60), 60)
@@ -224,3 +224,5 @@ public class PlanTest {
     }
 
 }
+
+

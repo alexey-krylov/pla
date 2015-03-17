@@ -23,20 +23,17 @@ class PremiumPayment {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     long id;
     @ElementCollection
+    @CollectionTable(name = "premium_payment_values")
     private Set<Integer> validTerms;
     private int paymentCutOffAge;
 
     protected PremiumPayment() {
     }
 
-    PremiumPayment(Set<Integer> validTerms, int paymentCutOffAge) {
+    //TODO Have to remove PaymentCutOffAge
+    PremiumPayment(Set<Integer> validTerms) {
         checkArgument(UtilValidator.isNotEmpty(validTerms));
-        checkArgument(paymentCutOffAge > 0);
-        long termsGreaterThanCutOffAgeAge = validTerms.stream().filter(term -> term.intValue() > paymentCutOffAge).count();
-        checkArgument(termsGreaterThanCutOffAgeAge == 0, " Invalid Terms. The values cannot be greater than %d.", paymentCutOffAge);
-
         this.validTerms = validTerms;
-        this.paymentCutOffAge = paymentCutOffAge;
     }
 
     PremiumPayment(int paymentCutOffAge) {
