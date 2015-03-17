@@ -70,9 +70,8 @@ public class Team implements ICrudEntity {
         if (!currentTeamLeader.equals(employeeId)) {
             if(expireCurrentTeamLeaderFullFillment())
                 LOGGER.debug("Expired Current Team Leader Fulfillment ");
-            updateTeamLeaderFullFillment(employeeId, firstName, lastName, effectiveFrom);
         }
-        return this;
+        return updateTeamLeaderFullFillment(employeeId, firstName, lastName, effectiveFrom);
     }
 
     public boolean expireCurrentTeamLeaderFullFillment()
@@ -92,12 +91,14 @@ public class Team implements ICrudEntity {
         else
             return false;
     }
-    public void updateTeamLeaderFullFillment(String employeeId,String firstName,String lastName, LocalDate effectiveFrom)
+    public Team updateTeamLeaderFullFillment(String employeeId,String firstName,String lastName, LocalDate effectiveFrom)
     {
         this.currentTeamLeader = employeeId;
         TeamLeader teamLeader = new TeamLeader(employeeId, firstName, lastName);
         TeamLeaderFulfillment teamLeaderFulfillment = new TeamLeaderFulfillment(teamLeader, effectiveFrom);
         this.teamLeaders.add(teamLeaderFulfillment);
+
+        return this;
 
     }
 
