@@ -7,8 +7,7 @@
 package com.pla.core.domain.model;
 
 import com.pla.core.domain.exception.BenefitDomainException;
-import com.pla.core.specification.TeamCodeIsUnique;
-import com.pla.core.specification.TeamNameIsUnique;
+import com.pla.core.domain.exception.TeamDomainException;
 import com.pla.sharedkernel.domain.model.BenefitStatus;
 import org.joda.time.LocalDate;
 import org.nthdimenzion.ddd.domain.annotations.ValueObject;
@@ -40,16 +39,18 @@ public class Admin {
         Benefit updatedBenefit = benefit.inActivate();
         return updatedBenefit;
     }
-
-    public Team createTeam(boolean teamNameIsUnique, boolean teamCodeIsUnique, String teamId, String name, String code
-            , String employeeId, LocalDate fromDate, LocalDate thruDate, String firstname, String lastName) {
-        TeamName teamName = new TeamName(name);
-        TeamCode teamCode = new TeamCode(code);
-        TeamLeader teamLeader = new TeamLeader(employeeId, firstname, lastName);
+    public Team createTeam(boolean isTeamNameUnique,boolean isTeamCodeUnique, String teamId, String teamName, String teamCode
+            ,String employeeId,LocalDate fromDate, String firstName, String lastName) {
+        if (!isTeamNameUnique) {
+            throw new TeamDomainException("Team name already satisfied");
+        }
+        if (!isTeamCodeUnique) {
+            throw new TeamDomainException("Team code already satisfied");
+        }
+        TeamLeader teamLeader = new TeamLeader(employeeId,firstName, lastName);
         TeamLeaderFulfillment teamLeaderFulfillment = new TeamLeaderFulfillment(teamLeader, fromDate);
-        return new Team(teamId, teamCode, teamName, employeeId, teamLeaderFulfillment, Boolean.TRUE);
+        return new Team(teamId, new TeamCode(teamCode), new TeamName(teamName),employeeId, teamLeaderFulfillment,Boolean.TRUE);
     }
-
     public Team updateTeamLead(Team team, String employeeId, String firstName, String lastName, LocalDate fromDate) {
         Team updatedTeam = team.assignTeamLeader(employeeId, firstName, lastName, fromDate);
         return updatedTeam;

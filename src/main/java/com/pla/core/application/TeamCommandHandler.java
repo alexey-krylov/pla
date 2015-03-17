@@ -9,14 +9,11 @@ package com.pla.core.application;
 import com.pla.core.domain.model.Team;
 import com.pla.core.domain.service.TeamService;
 import org.axonframework.commandhandling.annotation.CommandHandler;
-import org.joda.time.LocalDate;
 import org.nthdimenzion.common.service.JpaRepositoryFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.repository.CrudRepository;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 /**
@@ -44,7 +41,7 @@ public class TeamCommandHandler {
             logger.debug("*****Create Team Command Received*****" + createTeamCommand);
         }
         Team team = teamService.createTeam(createTeamCommand.getTeamName(), createTeamCommand.getTeamCode(),createTeamCommand.getEmployeeId(),
-                createTeamCommand.getFromDate(), createTeamCommand.getThruDate(), createTeamCommand.getFirstName(), createTeamCommand.getLastName(), createTeamCommand.getUserDetails());
+                createTeamCommand.getFromDate(), createTeamCommand.getFirstName(), createTeamCommand.getLastName(), createTeamCommand.getUserDetails());
         JpaRepository<Team, String> teamRepository = jpaRepositoryFactory.getCrudRepository(Team.class);
         try {
             teamRepository.save(team);

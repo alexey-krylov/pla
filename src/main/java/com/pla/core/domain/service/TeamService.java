@@ -8,6 +8,8 @@ package com.pla.core.domain.service;
 
 import com.pla.core.domain.model.Admin;
 import com.pla.core.domain.model.Team;
+import com.pla.core.domain.model.TeamCode;
+import com.pla.core.domain.model.TeamName;
 import com.pla.core.specification.TeamCodeIsUnique;
 import com.pla.core.specification.TeamNameIsUnique;
 import org.joda.time.LocalDate;
@@ -43,12 +45,15 @@ public class TeamService {
         this.idGenerator = idGenerator;
     }
 
-    public Team createTeam(String teamName, String teamCode,String employeeId, LocalDate fromDate,
-                           LocalDate thruDate, String firstName, String lastName, UserDetails userDetails) {
+    public Team createTeam(String teamName, String teamCode,String employeeId, LocalDate fromDate, String firstName, String lastName, UserDetails userDetails) {
 
         String teamId = idGenerator.nextId();
         Admin admin = adminRoleAdapter.userToAdmin(userDetails);
-        Team team = admin.createTeam(true, true, teamId, teamName, teamCode, employeeId, fromDate, thruDate, firstName, lastName);
+        TeamName teamName1 = new TeamName(teamName);
+        TeamCode teamCode1 =  new TeamCode(teamCode);
+        boolean isTeamNameUnique = teamNameIsUnique.isSatisfiedBy(teamName1);
+        boolean isTeamCodeUnique = teamCodeIsUnique.isSatisfiedBy(teamCode1);
+        Team team = admin.createTeam(isTeamNameUnique, isTeamCodeUnique, teamId, teamName, teamCode, employeeId, fromDate, firstName, lastName);
         return team;
     }
 

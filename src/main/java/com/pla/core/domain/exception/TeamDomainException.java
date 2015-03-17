@@ -12,10 +12,10 @@ import org.nthdimenzion.ddd.domain.DomainException;
  * @author: Samir
  * @since 1.0 10/03/2015
  */
-public class TeamException extends DomainException {
+public class TeamDomainException extends DomainException {
 
 
-    public TeamException(String message) {
+    public TeamDomainException(String message) {
         super(message);
     }
 
