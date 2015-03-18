@@ -6,7 +6,7 @@
 
 package com.pla.core.specification;
 
-import com.pla.core.domain.model.TeamDto;
+import com.pla.core.dto.TeamDto;
 import com.pla.core.query.TeamFinder;
 import com.pla.sharedkernel.specification.ISpecification;
 import org.nthdimenzion.ddd.domain.annotations.Specification;

@@ -6,8 +6,7 @@
 
 package com.pla.core.specification;
 
-import com.pla.core.domain.model.TeamDto;
-import com.pla.core.dto.BenefitDto;
+import com.pla.core.dto.TeamDto;
 import com.pla.core.query.TeamFinder;
 import org.junit.Test;
 import org.junit.runner.RunWith;

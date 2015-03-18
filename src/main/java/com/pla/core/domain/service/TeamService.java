@@ -8,7 +8,7 @@ package com.pla.core.domain.service;
 
 import com.pla.core.domain.model.Admin;
 import com.pla.core.domain.model.Team;
-import com.pla.core.domain.model.TeamDto;
+import com.pla.core.dto.TeamDto;
 import com.pla.core.specification.TeamIsUnique;
 import org.joda.time.LocalDate;
 import org.nthdimenzion.ddd.domain.annotations.DomainService;

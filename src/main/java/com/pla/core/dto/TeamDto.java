@@ -4,7 +4,7 @@
  * Proprietary and confidential
  */
 
-package com.pla.core.domain.model;
+package com.pla.core.dto;
 
 import com.google.common.base.Preconditions;
 import lombok.*;
