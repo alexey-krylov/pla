@@ -35,9 +35,10 @@ public class TeamService {
     private IIdGenerator idGenerator;
 
     @Autowired
-    public TeamService(AdminRoleAdapter adminRoleAdapter, TeamNameIsUnique teamNameIsUnique, IIdGenerator idGenerator){
+    public TeamService(AdminRoleAdapter adminRoleAdapter, TeamNameIsUnique teamNameIsUnique,TeamCodeIsUnique teamCodeIsUnique, IIdGenerator idGenerator){
         this.adminRoleAdapter = adminRoleAdapter;
         this.teamNameIsUnique = teamNameIsUnique;
+        this.teamCodeIsUnique = teamCodeIsUnique;
         this.idGenerator = idGenerator;
     }
 

@@ -96,14 +96,16 @@ public class Team implements ICrudEntity {
         return teamLeaderFulfillments;
     }
     public TeamLeaderFulfillment getCurrentTeamLeaderFulfillment(String currentTeamLeaderId) {
-        List<TeamLeaderFulfillment> teamLeaderFulfillments = this.teamLeaders.stream().filter(new Predicate<TeamLeaderFulfillment>() {
-            @Override
-            public boolean test(TeamLeaderFulfillment teamLeaderFulfillment) {
-                return currentTeamLeaderId.equals(teamLeaderFulfillment.getTeamLeader().getEmployeeId());
+        TeamLeaderFulfillment local_teamLeaderFulfillment = new TeamLeaderFulfillment(null,null);
+        for(Iterator<TeamLeaderFulfillment> i = this.teamLeaders.iterator(); i.hasNext();)
+        {
+             local_teamLeaderFulfillment = (TeamLeaderFulfillment)i.next();
+            if((local_teamLeaderFulfillment.getTeamLeader()).equals(currentTeamLeaderId))
+            {
+               break;
             }
-        }).collect(Collectors.toList());
-        checkArgument(isNotEmpty(teamLeaderFulfillments));
-        return teamLeaderFulfillments.get(0);
+        }
+        return local_teamLeaderFulfillment;
     }
 
     public TeamLeaderFulfillment createTeamLeaderFulfillment(String employeeId, String firstName, String lastName, LocalDate effectiveFrom) {

@@ -13,6 +13,7 @@ import com.pla.core.domain.service.AdminRoleAdapter;
 import com.pla.core.domain.service.BenefitService;
 import com.pla.core.domain.service.TeamService;
 import com.pla.core.specification.BenefitNameIsUnique;
+import com.pla.core.specification.TeamCodeIsUnique;
 import com.pla.core.specification.TeamNameIsUnique;
 import com.pla.sharedkernel.domain.model.BenefitStatus;
 import org.junit.Before;
@@ -46,6 +47,9 @@ public class TeamServiceTest {
     private TeamNameIsUnique teamNameIsUnique;
 
     @Mock
+    private TeamCodeIsUnique teamCodeIsUnique;
+
+    @Mock
     private JpaRepositoryFactory jpaRepositoryFactory;
 
     @Mock
@@ -59,7 +63,7 @@ public class TeamServiceTest {
 
     @Before
     public void setUp() {
-        teamService = new TeamService(adminRoleAdapter, teamNameIsUnique, idGenerator);
+        teamService = new TeamService(adminRoleAdapter, teamNameIsUnique, teamCodeIsUnique, idGenerator);
         userDetails = UserLoginDetailDto.createUserLoginDetailDto("", "");
        // admin = new Admin("");
     }

@@ -7,6 +7,9 @@
 package com.pla.core.application;
 
 import com.github.springtestdbunit.DbUnitTestExecutionListener;
+import com.github.springtestdbunit.annotation.DatabaseOperation;
+import com.github.springtestdbunit.annotation.DatabaseSetup;
+import com.github.springtestdbunit.annotation.DatabaseTearDown;
 import com.github.springtestdbunit.annotation.ExpectedDatabase;
 import com.github.springtestdbunit.assertion.DatabaseAssertionMode;
 import com.google.common.collect.Lists;
@@ -56,11 +59,11 @@ public class TeamAcceptanceTest {
 
     @Test
     @ExpectedDatabase(value = "classpath:testdata/endtoend/team/expectedteamdata.xml", assertionMode = DatabaseAssertionMode.NON_STRICT)
-    public void givenTeamNameTeamLeadItShouldCreateTeamTL() {
+    public void givenTeamNameAndTeamLeadItShouldCreateTeamWithTeamLead() {
         CreateTeamCommand createTeamCommand = new CreateTeamCommand();
         createTeamCommand.setUserDetails(userDetails);
-        createTeamCommand.setTeamName("CI Team");
-        createTeamCommand.setTeamCode("CI TeamCode");
+        createTeamCommand.setTeamName("CI Team 2");
+        createTeamCommand.setTeamCode("CI TeamCode 2");
         createTeamCommand.setEmployeeId("1234");
         createTeamCommand.setFirstName("CI TL");
         createTeamCommand.setLastName("CI TL LN");
@@ -74,53 +77,26 @@ public class TeamAcceptanceTest {
         }
         assertTrue(isSuccess);
 
-    }/*
-
-    @Test
-    @DatabaseSetup(value = "classpath:testdata/endtoend/benefit/testdataforupdatebenefit.xml")
-    @ExpectedDatabase(value = "classpath:testdata/endtoend/benefit/expectedupdatedbenefitdata.xml", assertionMode = DatabaseAssertionMode.NON_STRICT)
-    @DatabaseTearDown(value = "classpath:testdata/endtoend/benefit/testdataforupdatebenefit.xml",type = DatabaseOperation.DELETE)
-    public void givenAnActiveBenefitWithNewNameItShouldUpdateBenefit() {
-        UpdateBenefitCommand updateBenefitCommand = new UpdateBenefitCommand("1", "CI Benefit", userDetails);
-        Boolean isSuccess = Boolean.FALSE;
-        try {
-            commandGateway.sendAndWait(updateBenefitCommand);
-            isSuccess = Boolean.TRUE;
-        } catch (Exception e) {
-            logger.error("Error in updating benefit", e);
-        }
-        assertTrue(isSuccess);
     }
-
     @Test
-    @DatabaseSetup(value = "classpath:testdata/endtoend/benefit/testdataforupdatebenefit.xml")
-    @ExpectedDatabase(value = "classpath:testdata/endtoend/benefit/expecteddataformarkingbenefitasused.xml", assertionMode = DatabaseAssertionMode.NON_STRICT)
-    @DatabaseTearDown(value = "classpath:testdata/endtoend/benefit/testdataforupdatebenefit.xml",type = DatabaseOperation.DELETE)
-    public void givenAnActiveBenefitItShouldMarkAsUsed() {
-        MarkBenefitAsUsedCommand markBenefitAsUsedCommand = new MarkBenefitAsUsedCommand("2");
+    @DatabaseSetup(value = "classpath:testdata/endtoend/team/testdataforupdateteam.xml",type = DatabaseOperation.CLEAN_INSERT)
+    @ExpectedDatabase(value = "classpath:testdata/endtoend/team/expectedupdateteamdata.xml", assertionMode = DatabaseAssertionMode.NON_STRICT)
+    public void givenTeamLeadItShouldUpdateTeamWithTeamLead() {
+        UpdateTeamCommand updateTeamCommand = new UpdateTeamCommand();
+        updateTeamCommand.setEmployeeId("3456");
+        updateTeamCommand.setFirstName("CI TL2");
+        updateTeamCommand.setLastName("CI TL LN2");
+        updateTeamCommand.setFromDate(LocalDate.now());
+        updateTeamCommand.setTeamId("1");
+        updateTeamCommand.setUserDetails(userDetails);
         Boolean isSuccess = Boolean.FALSE;
         try {
-            commandGateway.sendAndWait(markBenefitAsUsedCommand);
+            commandGateway.sendAndWait(updateTeamCommand);
             isSuccess = Boolean.TRUE;
         } catch (Exception e) {
-            logger.error("Error in marking benefit as used", e);
+            logger.error("Error in updating team", e);
         }
         assertTrue(isSuccess);
+
     }
-
-    @Test
-    @DatabaseSetup(value = "classpath:testdata/endtoend/benefit/testdataforupdatebenefit.xml")
-    @ExpectedDatabase(value = "classpath:testdata/endtoend/benefit/expectedinactivebenefitdata.xml", assertionMode = DatabaseAssertionMode.NON_STRICT)
-    @DatabaseTearDown(value = "classpath:testdata/endtoend/benefit/testdataforupdatebenefit.xml",type = DatabaseOperation.DELETE)
-    public void givenABenefitItShouldInactivate(){
-         InactivateBenefitCommand inactivateBenefitCommand = new InactivateBenefitCommand("1",userDetails);
-        Boolean isSuccess = Boolean.FALSE;
-        try {
-            commandGateway.sendAndWait(inactivateBenefitCommand);
-            isSuccess = Boolean.TRUE;
-        } catch (Exception e) {
-            logger.error("Error in inactivating benefit", e);
-        }
-        assertTrue(isSuccess);
-    }*/
 }
