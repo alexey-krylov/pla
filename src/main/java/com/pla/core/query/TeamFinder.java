@@ -38,7 +38,9 @@ public class TeamFinder {
 
     public static final String ACTIVE_BENEFIT_COUNT_BY_TEAM_CODE = "select count(team_id) from team where team_code=:teamCode";
 
-    public static final String findAllTeam = "SELECT team_id AS teamId,team_name AS teamName FROM team";
+    public static final String findAllTeam = "SELECT team_id AS teamId,team_name AS teamName, r.REGION_CODE AS regionName,b.BRANCH_CODE AS branchName FROM team " +
+            "FULL JOIN region r ON team_region_code = REGION_CODE " +
+            "FULL JOIN branch b ON team_branch_code = BRANCH_CODE";
 
     public int getTeamCountByTeamName(String teamName){
         Preconditions.checkNotNull(teamName);

@@ -40,8 +40,8 @@ public class TeamCommandHandler {
         if (logger.isDebugEnabled()) {
             logger.debug("*****Create Team Command Received*****" + createTeamCommand);
         }
-        Team team = teamService.createTeam(createTeamCommand.getTeamName(), createTeamCommand.getTeamCode(),createTeamCommand.getEmployeeId(),
-                createTeamCommand.getFromDate(), createTeamCommand.getFirstName(), createTeamCommand.getLastName(), createTeamCommand.getUserDetails());
+        Team team = teamService.createTeam(createTeamCommand.getTeamName(), createTeamCommand.getTeamCode(), createTeamCommand.getRegionCode(), createTeamCommand.getBranchCode()
+                ,createTeamCommand.getEmployeeId(),createTeamCommand.getFromDate(), createTeamCommand.getFirstName(), createTeamCommand.getLastName(), createTeamCommand.getUserDetails());
         JpaRepository<Team, String> teamRepository = jpaRepositoryFactory.getCrudRepository(Team.class);
         try {
             teamRepository.save(team);

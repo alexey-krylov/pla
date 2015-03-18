@@ -37,12 +37,12 @@ public class TeamService {
         this.idGenerator = idGenerator;
     }
 
-    public Team createTeam(String teamName, String teamCode,String employeeId, LocalDate fromDate, String firstName, String lastName, UserDetails userDetails) {
+    public Team createTeam(String teamName, String teamCode,String regionCode, String branchCode,String employeeId, LocalDate fromDate, String firstName, String lastName, UserDetails userDetails) {
         String teamId = idGenerator.nextId();
         Admin admin = adminRoleAdapter.userToAdmin(userDetails);
         TeamDto teamDto = new TeamDto(teamName, teamCode);
         boolean isTeamUnique = teamIsUnique.isSatisfiedBy(teamDto);
-        Team team = admin.createTeam(isTeamUnique, teamId, teamName, teamCode, employeeId, fromDate, firstName, lastName);
+        Team team = admin.createTeam(isTeamUnique, teamId, teamName, teamCode, regionCode, branchCode, employeeId, fromDate, firstName, lastName);
         return team;
     }
 

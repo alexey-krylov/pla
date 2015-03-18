@@ -67,7 +67,9 @@ public class TeamAcceptanceTest {
         createTeamCommand.setEmployeeId("1234");
         createTeamCommand.setFirstName("CI TL");
         createTeamCommand.setLastName("CI TL LN");
-        createTeamCommand.setFromDate(LocalDate.now());
+        createTeamCommand.setFromDate(new LocalDate(2015, 03, 18));
+        createTeamCommand.setRegionCode("REGIONCODE");
+        createTeamCommand.setBranchCode("BRANCHCODE");
         Boolean isSuccess = Boolean.FALSE;
         try {
             commandGateway.sendAndWait(createTeamCommand);
@@ -79,14 +81,16 @@ public class TeamAcceptanceTest {
 
     }
     @Test
-    @DatabaseSetup(value = "classpath:testdata/endtoend/team/testdataforupdateteam.xml",type = DatabaseOperation.CLEAN_INSERT)
+    @DatabaseSetup(value = "classpath:testdata/endtoend/team/testdataforupdateteam.xml")
     @ExpectedDatabase(value = "classpath:testdata/endtoend/team/expectedupdateteamdata.xml", assertionMode = DatabaseAssertionMode.NON_STRICT)
+    @DatabaseTearDown(value = {"classpath:testdata/endtoend/team/cleanteamdata.xml"},type = DatabaseOperation.DELETE)
+    @DatabaseTearDown(value = "classpath:testdata/endtoend/team/cleanteam.xml",type = DatabaseOperation.DELETE)
     public void givenTeamLeadItShouldUpdateTeamWithTeamLead() {
         UpdateTeamCommand updateTeamCommand = new UpdateTeamCommand();
         updateTeamCommand.setEmployeeId("3456");
         updateTeamCommand.setFirstName("CI TL2");
         updateTeamCommand.setLastName("CI TL LN2");
-        updateTeamCommand.setFromDate(LocalDate.now());
+        updateTeamCommand.setFromDate(new LocalDate(2015,03,18));
         updateTeamCommand.setTeamId("1");
         updateTeamCommand.setUserDetails(userDetails);
         Boolean isSuccess = Boolean.FALSE;

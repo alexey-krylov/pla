@@ -37,7 +37,7 @@ public class TeamUnitTest {
     public void setUp() {
         boolean isTeamUnique = true;
         admin = new Admin();
-        team = admin.createTeam(isTeamUnique, "12345", "TEAMNAME", "TEAMCODE", "employeedId1",
+        team = admin.createTeam(isTeamUnique, "12345", "TEAMNAME", "TEAMCODE", "REGIONCODE","BRANCHCODE", "employeedId1",
                 LocalDate.now(), "TLF", "TLL");
     }
 

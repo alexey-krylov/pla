@@ -8,12 +8,16 @@ package com.pla.core.domain.model;
 
 import com.google.common.collect.Sets;
 import lombok.*;
+import org.hibernate.annotations.*;
+import org.hibernate.annotations.CascadeType;
 import org.joda.time.LocalDate;
 import org.nthdimenzion.common.crud.ICrudEntity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.Table;
 import java.util.Iterator;
 import java.util.Set;
 
@@ -44,14 +48,19 @@ public class Team implements ICrudEntity {
 
     private String currentTeamLeader;
 
+    private String regionCode;
+
+    private String branchCode;
+
     @ElementCollection(targetClass = TeamLeaderFulfillment.class, fetch = FetchType.EAGER)
     @OrderColumn
     @JoinTable(name = "TEAM_TEAM_LEADER_FUlFILLMENT", joinColumns = @JoinColumn(name = "TEAM_ID"))
+    @Cascade(CascadeType.ALL)
     private Set<TeamLeaderFulfillment> teamLeaders = Sets.newHashSet();
 
     private Boolean active = Boolean.FALSE;
 
-    Team(String teamId, String teamName, String teamCode, String currentTeamLeader, TeamLeaderFulfillment teamLeaderFulfillment, Boolean active) {
+    Team(String teamId, String teamName, String teamCode, String regionCode, String branchCode, String currentTeamLeader, TeamLeaderFulfillment teamLeaderFulfillment, Boolean active) {
         checkArgument(isNotEmpty(teamId));
         checkArgument(teamName != null);
         checkArgument(teamCode != null);
@@ -61,6 +70,8 @@ public class Team implements ICrudEntity {
         this.teamId = teamId;
         this.teamCode = teamCode;
         this.teamName = teamName;
+        this.regionCode = regionCode;
+        this.branchCode = branchCode;
         this.currentTeamLeader = currentTeamLeader;
         this.teamLeaders.add(teamLeaderFulfillment);
         this.active = active;

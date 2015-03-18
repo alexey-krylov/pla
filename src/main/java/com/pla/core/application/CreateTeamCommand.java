@@ -6,6 +6,7 @@
 
 package com.pla.core.application;
 
+import com.pla.core.domain.model.Region;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -48,6 +49,10 @@ public class CreateTeamCommand {
     private LocalDate fromDate;
 
     private UserDetails userDetails;
+
+    private String regionCode;
+
+    private String branchCode;
 
 
 }

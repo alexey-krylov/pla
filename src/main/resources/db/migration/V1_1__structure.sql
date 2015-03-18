@@ -607,6 +607,8 @@ CREATE TABLE `team` (
   `current_team_leader` varchar(255) DEFAULT NULL,
   `team_code` varchar(255) DEFAULT NULL,
   `team_name` varchar(255) DEFAULT NULL,
+  `region_code` varchar(255) DEFAULT NULL,
+  `branch_code` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`team_id`),
   UNIQUE KEY `UNQ_TEAM_CODE_NAME` (`team_code`,`team_name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;

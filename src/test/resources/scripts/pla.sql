@@ -101,14 +101,17 @@ CREATE TABLE `coverage_benefit` (
 
 
 DROP TABLE IF EXISTS team;
+
 CREATE TABLE `team` (
-`team_id` varchar(255) NOT NULL,
-`active` bit(1) DEFAULT NULL,
-`current_team_leader` varchar(255) DEFAULT NULL,
-`team_code` varchar(255) DEFAULT NULL,
-`team_name` varchar(255) DEFAULT NULL,
-PRIMARY KEY (`team_id`),
-UNIQUE KEY `UNQ_TEAM_CODE_NAME` (`team_code`,`team_name`)
+  `team_id` varchar(255) NOT NULL,
+  `active` bit(1) DEFAULT NULL,
+  `current_team_leader` varchar(255) DEFAULT NULL,
+  `team_code` varchar(255) DEFAULT NULL,
+  `team_name` varchar(255) DEFAULT NULL,
+  `region_code` varchar(255) DEFAULT NULL,
+  `branch_code` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`team_id`),
+  UNIQUE KEY `UNQ_TEAM_CODE_NAME` (`team_code`,`team_name`)
 );
 
 DROP TABLE IF EXISTS team_team_leader_fulfillment;
@@ -119,12 +122,11 @@ CREATE TABLE `team_team_leader_fulfillment` (
   `first_name` varchar(255) DEFAULT NULL,
   `last_name` varchar(255) DEFAULT NULL,
   `thru_date` date DEFAULT NULL,
-  `TEAM_LEADERS_ORDER` int(11) NOT NULL AUTO_INCREMENT,
-  PRIMARY KEY (`TEAM_LEADERS_ORDER`),
+  `team_leaders_order` int(11) NOT NULL AUTO_INCREMENT,
+  PRIMARY KEY (`team_id`,`team_leaders_order`),
+  KEY `team_leaders_order` (`team_leaders_order`),
   CONSTRAINT `FK_TEAM_LEADER_FULFILLMENT` FOREIGN KEY (`team_id`) REFERENCES `team` (`team_id`)
 );
-
-
 DROP TABLE IF EXISTS agent;
 CREATE TABLE `agent` (
   `agent_id` int(11) NOT NULL,
