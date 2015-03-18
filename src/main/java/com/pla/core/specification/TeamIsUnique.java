@@ -6,32 +6,30 @@
 
 package com.pla.core.specification;
 
-import com.pla.core.domain.model.TeamCode;
-import com.pla.core.domain.model.TeamName;
+import com.pla.core.domain.model.TeamDto;
 import com.pla.core.query.TeamFinder;
 import com.pla.sharedkernel.specification.ISpecification;
 import org.nthdimenzion.ddd.domain.annotations.Specification;
 import org.springframework.beans.factory.annotation.Autowired;
 
 /**
- * @author: Samir
- * @since 1.0 05/03/2015
+ * @author: Nischitha
+ * @since 1.0 18/03/2015
  */
 @Specification
-public class TeamNameIsUnique implements ISpecification<TeamName> {
+public class TeamIsUnique implements ISpecification<TeamDto> {
 
     private TeamFinder teamFinder;
 
     @Autowired
-    public TeamNameIsUnique(TeamFinder teamFinder) {
+    public TeamIsUnique(TeamFinder teamFinder) {
         this.teamFinder = teamFinder;
 
     }
 
     @Override
-    public boolean isSatisfiedBy(TeamName teamName) {
-        int teamCount = teamFinder.getTeamCountByTeamName(teamName.getTeamName());
-        return teamCount == 0;
+    public boolean isSatisfiedBy(TeamDto teamDto) {
+        return ((teamFinder.getTeamCountByTeamName(teamDto.getTeamName()) == 0) && (teamFinder.getTeamCountByTeamName(teamDto.getTeamCode()) == 0));
     }
 
 }

@@ -6,20 +6,16 @@
 
 package com.pla.core.domain.model;
 
-import com.pla.core.specification.TeamCodeIsUnique;
-import com.pla.core.specification.TeamNameIsUnique;
+import com.pla.core.specification.TeamIsUnique;
 import org.joda.time.LocalDate;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
 
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
-import java.util.function.Predicate;
 
 import static org.junit.Assert.assertEquals;
 
@@ -32,17 +28,16 @@ import static org.junit.Assert.assertEquals;
 public class TeamUnitTest {
 
     @Mock
-    private TeamNameIsUnique teamNameIsUniqueName;
+    private TeamIsUnique teamNameIsUnique;
 
-    @Mock
-    private TeamCodeIsUnique teamCodeIsUnique;
     private Admin admin;
     private Team team;
 
     @Before
     public void setUp() {
+        boolean isTeamUnique = true;
         admin = new Admin();
-        team = admin.createTeam(true, true, "12345", "TEAMNAME", "TEAMCODE", "employeedId1",
+        team = admin.createTeam(isTeamUnique, "12345", "TEAMNAME", "TEAMCODE", "employeedId1",
                 LocalDate.now(), "TLF", "TLL");
     }
 

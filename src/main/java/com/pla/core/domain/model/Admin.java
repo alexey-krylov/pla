@@ -39,17 +39,14 @@ public class Admin {
         Benefit updatedBenefit = benefit.inActivate();
         return updatedBenefit;
     }
-    public Team createTeam(boolean isTeamNameUnique,boolean isTeamCodeUnique, String teamId, String teamName, String teamCode
+    public Team createTeam(boolean isTeamUnique, String teamId, String teamName, String teamCode
             ,String employeeId,LocalDate fromDate, String firstName, String lastName) {
-        if (!isTeamNameUnique) {
-            throw new TeamDomainException("Team name already satisfied");
-        }
-        if (!isTeamCodeUnique) {
-            throw new TeamDomainException("Team code already satisfied");
+        if (!isTeamUnique) {
+            throw new TeamDomainException("Team name & Team Code already satisfied");
         }
         TeamLeader teamLeader = new TeamLeader(employeeId,firstName, lastName);
         TeamLeaderFulfillment teamLeaderFulfillment = new TeamLeaderFulfillment(teamLeader, fromDate);
-        return new Team(teamId, new TeamCode(teamCode), new TeamName(teamName),employeeId, teamLeaderFulfillment,Boolean.TRUE);
+        return new Team(teamId, teamName, teamCode,employeeId, teamLeaderFulfillment,Boolean.TRUE);
     }
     public Team updateTeamLead(Team team, String employeeId, String firstName, String lastName, LocalDate fromDate) {
         Team updatedTeam = team.assignTeamLeader(employeeId, firstName, lastName, fromDate);

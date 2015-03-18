@@ -6,16 +6,9 @@
 
 package com.pla.core.domain.service;
 
-import com.pla.core.application.CreateBenefitCommand;
 import com.pla.core.application.CreateTeamCommand;;
 import com.pla.core.domain.model.*;
-import com.pla.core.domain.service.AdminRoleAdapter;
-import com.pla.core.domain.service.BenefitService;
-import com.pla.core.domain.service.TeamService;
-import com.pla.core.specification.BenefitNameIsUnique;
-import com.pla.core.specification.TeamCodeIsUnique;
-import com.pla.core.specification.TeamNameIsUnique;
-import com.pla.sharedkernel.domain.model.BenefitStatus;
+import com.pla.core.specification.TeamIsUnique;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -26,12 +19,8 @@ import org.nthdimenzion.object.utils.IIdGenerator;
 import org.nthdimenzion.security.service.UserLoginDetailDto;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.when;
-import static org.springframework.test.util.ReflectionTestUtils.invokeGetterMethod;
 
 /**
  * @author: Samir
@@ -44,10 +33,7 @@ public class TeamServiceTest {
     private AdminRoleAdapter adminRoleAdapter;
 
     @Mock
-    private TeamNameIsUnique teamNameIsUnique;
-
-    @Mock
-    private TeamCodeIsUnique teamCodeIsUnique;
+    private TeamIsUnique teamIsUnique;
 
     @Mock
     private JpaRepositoryFactory jpaRepositoryFactory;
@@ -63,7 +49,7 @@ public class TeamServiceTest {
 
     @Before
     public void setUp() {
-        teamService = new TeamService(adminRoleAdapter, teamNameIsUnique, teamCodeIsUnique, idGenerator);
+        teamService = new TeamService(adminRoleAdapter, teamIsUnique, idGenerator);
         userDetails = UserLoginDetailDto.createUserLoginDetailDto("", "");
        // admin = new Admin("");
     }
@@ -86,12 +72,12 @@ public class TeamServiceTest {
         createTeamCommand2.setFirstName("Nischitha");
         createTeamCommand2.setLastName("Ramanna");*/
 
-        TeamName teamName = new TeamName(createTeamCommand.getTeamName());
-       // TeamCode teamCode = new Team(createTeamCommand.getTeamCode());
+        TeamDto teamName = new TeamDto(createTeamCommand.getTeamName(), createTeamCommand.getTeamCode());
+       // TeamCode teamCode = new Team(C);
        // TeamName teamCode = new TeamName(createTeamCommand.getTeamCode());
         when(idGenerator.nextId()).thenReturn(teamId);
         when(adminRoleAdapter.userToAdmin(createTeamCommand.getUserDetails())).thenReturn(admin);
-        when(teamNameIsUnique.isSatisfiedBy(teamName)).thenReturn(true);/*
+        when(teamIsUnique.isSatisfiedBy(teamName)).thenReturn(true);/*
         teamHandler = new TeamHandler(jpaRepositoryFactory, teamService);
         teamHandler.createTeamHandler(createTeamCommand);*/
        // Team team = teamService.createTeam(createTeamCommand);

@@ -6,7 +6,6 @@
 
 package com.pla.core.domain.model;
 
-import com.google.common.base.Preconditions;
 import com.google.common.collect.Sets;
 import lombok.*;
 import org.joda.time.LocalDate;
@@ -15,12 +14,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.persistence.*;
-import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Set;
-import java.util.function.Predicate;
-import java.util.stream.Collectors;
 
 import static com.google.common.base.Preconditions.checkArgument;
 import static org.nthdimenzion.utils.UtilValidator.isNotEmpty;
@@ -43,11 +38,9 @@ public class Team implements ICrudEntity {
     @Id
     private String teamId;
 
-    @Embedded
-    private TeamCode teamCode;
+    private String teamCode;
 
-    @Embedded
-    private TeamName teamName;
+    private String teamName;
 
     private String currentTeamLeader;
 
@@ -58,7 +51,7 @@ public class Team implements ICrudEntity {
 
     private Boolean active = Boolean.FALSE;
 
-    Team(String teamId, TeamCode teamCode, TeamName teamName, String currentTeamLeader, TeamLeaderFulfillment teamLeaderFulfillment, Boolean active) {
+    Team(String teamId, String teamName, String teamCode, String currentTeamLeader, TeamLeaderFulfillment teamLeaderFulfillment, Boolean active) {
         checkArgument(isNotEmpty(teamId));
         checkArgument(teamName != null);
         checkArgument(teamCode != null);

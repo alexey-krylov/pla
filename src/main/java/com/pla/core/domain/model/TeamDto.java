@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 3/11/15 3:59 PM .NthDimenzion,Inc - All Rights Reserved
+ * Copyright (c) 3/11/15 4:00 PM .NthDimenzion,Inc - All Rights Reserved
  * Unauthorized copying of this file, via any medium is strictly prohibited
  * Proprietary and confidential
  */
@@ -15,23 +15,28 @@ import org.nthdimenzion.utils.UtilValidator;
 import javax.persistence.Embeddable;
 
 
+
 /**
- * @author: Samir
- * @since 1.0 11/03/2015
+ * @author: Nischitha
+ * @since 1.0 18/03/2015
  */
 @ValueObject
 @Embeddable
 @Immutable
 @Getter
-@EqualsAndHashCode(of = "teamCode")
+@EqualsAndHashCode(of = "teamName")
 @ToString
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-public class TeamCode {
+public class TeamDto {
 
+    private String teamName;
     private String teamCode;
 
-    public TeamCode(String teamCode) {
-        Preconditions.checkState(!UtilValidator.isEmpty(teamCode));
+    public TeamDto(String teamName, String teamCode) {
+        this.teamName = teamName;
         this.teamCode = teamCode;
+        Preconditions.checkState(!UtilValidator.isEmpty(teamName));
+        Preconditions.checkState(!UtilValidator.isEmpty(teamCode));
     }
+
 }
