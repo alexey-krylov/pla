@@ -6,11 +6,18 @@
 
 package com.pla.core.domain.model;
 
+import com.pla.core.application.agent.CreateAgentCommand;
 import com.pla.core.domain.exception.BenefitDomainException;
+import com.pla.core.domain.model.agent.Agent;
+import com.pla.core.domain.model.agent.AgentId;
+import com.pla.core.specification.TeamCodeIsUnique;
+import com.pla.core.specification.TeamNameIsUnique;
 import com.pla.core.domain.exception.TeamDomainException;
 import com.pla.sharedkernel.domain.model.BenefitStatus;
 import org.joda.time.LocalDate;
 import org.nthdimenzion.ddd.domain.annotations.ValueObject;
+
+import static com.pla.core.domain.exception.AgentException.raiseAgentLicenseNumberUniqueException;
 
 /**
  * @author: Samir
@@ -51,5 +58,13 @@ public class Admin {
     public Team updateTeamLead(Team team, String employeeId, String firstName, String lastName, LocalDate fromDate) {
         Team updatedTeam = team.assignTeamLeader(employeeId, firstName, lastName, fromDate);
         return updatedTeam;
+    }
+
+    public Agent createAgent(boolean isLicenseNumberUnique, CreateAgentCommand createAgentCommand) {
+        if (!isLicenseNumberUnique) {
+            raiseAgentLicenseNumberUniqueException("Agent cannot be created as license number is in use");
+        }
+        Agent agent = Agent.createAgent(new AgentId(createAgentCommand.getAgentId()));
+        return agent;
     }
 }

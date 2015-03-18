@@ -25,6 +25,8 @@ import static org.nthdimenzion.utils.UtilValidator.isNotEmpty;
 @Embeddable
 class Designation {
 
+    private static final String BDE_CODE = "BDE";
+
     private String code;
 
     private String description;
@@ -37,7 +39,7 @@ class Designation {
     }
 
     public OverrideCommissionApplicable getOverrideCommissionApplicable() {
-        if ("BDE".equalsIgnoreCase(this.code)) {
+        if (BDE_CODE.equalsIgnoreCase(this.code)) {
             return OverrideCommissionApplicable.YES;
         }
         return OverrideCommissionApplicable.NO;

@@ -6,13 +6,19 @@
 
 package com.pla.core.domain.model.agent;
 
+import com.pla.sharedkernel.domain.model.EmailAddress;
 import com.pla.sharedkernel.domain.model.OverrideCommissionApplicable;
 import com.pla.sharedkernel.identifier.PlanId;
 import lombok.*;
 import org.nthdimenzion.common.crud.ICrudEntity;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 import java.util.Set;
+
+import static com.google.common.base.Preconditions.checkArgument;
+import static com.pla.core.domain.exception.AgentException.raiseAgentUpdateNotAllowedException;
+import static org.nthdimenzion.utils.UtilValidator.isNotEmpty;
 
 /**
  * @author: Samir
@@ -20,7 +26,7 @@ import java.util.Set;
  */
 
 @Entity
-@EqualsAndHashCode(of = {"licenseNumber","agentProfile"})
+@EqualsAndHashCode(of = {"licenseNumber", "agentProfile"})
 @ToString
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 @Getter(value = AccessLevel.PACKAGE)
@@ -54,5 +60,116 @@ public class Agent implements ICrudEntity {
     @Enumerated(EnumType.STRING)
     private OverrideCommissionApplicable overrideCommissionApplicable;
 
-    private String channelType;
+    @Embedded
+    private ChannelType channelType;
+
+    private Agent(AgentId agentId, AgentStatus agentStatus) {
+        this.agentStatus = agentStatus;
+        this.agentId = agentId;
+    }
+
+    public static Agent createAgent(AgentId agentId) {
+        return new Agent(agentId, AgentStatus.ACTIVE);
+    }
+
+    public Agent createWithAgentProfile(String firstName, String lastName, LocalDate trainingCompleteOn, String designationCode, String designationDescription) {
+        Designation designation = new Designation(designationCode, designationDescription);
+        applyOverrideCommissionEligibility(designationCode, designationDescription);
+        this.agentProfile = new AgentProfile(firstName, lastName, trainingCompleteOn, designation);
+        return this;
+    }
+
+    public Agent withLicenseNumber(String license) {
+        LicenseNumber licenseNumber = new LicenseNumber(license);
+        this.licenseNumber = licenseNumber;
+        return this;
+    }
+
+    public Agent withTeamDetail(String teamId) {
+        TeamDetail teamDetail = new TeamDetail(teamId);
+        this.teamDetail = teamDetail;
+        return this;
+    }
+
+    public Agent withContactDetail(Integer mobileNumber, Integer homePhoneNumber, Integer workPhoneNumber,
+                                   String emailAddress, String addressLine1, String addressLine2, Integer postalCode, String province, String city) {
+        if (AgentStatus.INACTIVE.equals(this.agentStatus)) {
+            raiseAgentUpdateNotAllowedException("Contact detail cannot be updated as it is inactivated");
+        }
+        if (AgentStatus.TERMINATED.equals(this.agentStatus)) {
+            raiseAgentUpdateNotAllowedException("Contact detail cannot be updated as it is terminated");
+        }
+        EmailAddress email = new EmailAddress(emailAddress);
+        GeoDetail geoDetail = new GeoDetail(postalCode, province, city);
+        ContactDetail contactDetail = new ContactDetail(mobileNumber, email, addressLine1, geoDetail).addHomePhoneNumber(homePhoneNumber).addWorkPhoneNumber(workPhoneNumber);
+        checkArgument(contactDetail != null);
+        ContactDetail updatedContactDetail = contactDetail.addAddressLine2(addressLine2);
+        this.contactDetail = updatedContactDetail;
+        return this;
+    }
+
+    public Agent withPhysicalAddress(String addressLine1, String addressLine2, Integer postalCode, String province, String city) {
+        if (AgentStatus.INACTIVE.equals(this.agentStatus)) {
+            raiseAgentUpdateNotAllowedException("Physical address cannot be updated as it is inactivated");
+        }
+        if (AgentStatus.TERMINATED.equals(this.agentStatus)) {
+            raiseAgentUpdateNotAllowedException("Physical address cannot be updated as it is terminated");
+        }
+        GeoDetail geoDetail = new GeoDetail(postalCode, province, city);
+        PhysicalAddress physicalAddress = new PhysicalAddress(addressLine1, geoDetail);
+        PhysicalAddress updatedPhysicalAddress = physicalAddress.addAddressLine2(addressLine2);
+        this.physicalAddress = updatedPhysicalAddress;
+        return this;
+    }
+
+    public Agent withPlans(Set<PlanId> planIds) {
+        if (AgentStatus.INACTIVE.equals(this.agentStatus)) {
+            raiseAgentUpdateNotAllowedException("Authorized to sell cannot be updated as it is inactivated");
+        }
+        if (AgentStatus.TERMINATED.equals(this.agentStatus)) {
+            raiseAgentUpdateNotAllowedException("Authorized to sell cannot be updated as it is terminated");
+        }
+        checkArgument(isNotEmpty(planIds));
+        this.authorizePlansToSell = planIds;
+        return this;
+    }
+
+    public Agent withChannelType(String channelCode, String channelDescription) {
+        if (AgentStatus.INACTIVE.equals(this.agentStatus)) {
+            raiseAgentUpdateNotAllowedException("Channel type cannot be updated as it is inactivated");
+        }
+        if (AgentStatus.TERMINATED.equals(this.agentStatus)) {
+            raiseAgentUpdateNotAllowedException("Channel type cannot be updated as it is terminated");
+        }
+        ChannelType channelType = new ChannelType(channelCode, channelDescription);
+        this.channelType = channelType;
+        return this;
+    }
+
+    public Agent applyOverrideCommissionEligibility(String designationCode, String designationDescription) {
+        Designation designationOb = new Designation(designationCode, designationDescription);
+        this.overrideCommissionApplicable = designationOb.getOverrideCommissionApplicable();
+        return this;
+    }
+
+    public Agent inactivate() {
+        if (AgentStatus.TERMINATED.equals(this.agentStatus)) {
+            raiseAgentUpdateNotAllowedException("Agent cannot be activated as it is terminated");
+        }
+        this.agentStatus = AgentStatus.INACTIVE;
+        return this;
+    }
+
+    public Agent activate() {
+        if (AgentStatus.TERMINATED.equals(this.agentStatus)) {
+            raiseAgentUpdateNotAllowedException("Agent cannot be activated as it is terminated");
+        }
+        this.agentStatus = AgentStatus.ACTIVE;
+        return this;
+    }
+
+    public Agent terminate() {
+        this.agentStatus = AgentStatus.TERMINATED;
+        return this;
+    }
 }

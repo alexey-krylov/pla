@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 3/13/15 9:20 PM .NthDimenzion,Inc - All Rights Reserved
+ * Copyright (c) 3/16/15 4:59 PM .NthDimenzion,Inc - All Rights Reserved
  * Unauthorized copying of this file, via any medium is strictly prohibited
  * Proprietary and confidential
  */
@@ -9,7 +9,7 @@ package com.pla.core.domain.model.agent;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.ToString;
+import org.hibernate.annotations.Immutable;
 import org.nthdimenzion.ddd.domain.annotations.ValueObject;
 
 import javax.persistence.Embeddable;
@@ -19,27 +19,23 @@ import static org.nthdimenzion.utils.UtilValidator.isNotEmpty;
 
 /**
  * @author: Samir
- * @since 1.0 13/03/2015
+ * @since 1.0 16/03/2015
  */
+@Embeddable
 @ValueObject
+@Immutable
 @Getter
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-@ToString
-@Embeddable
-public class GeoDetail {
+class ChannelType {
 
-    private Integer postalCode;
+    private String channelCode;
 
-    private String province;
+    private String channelName;
 
-    private String city;
-
-    GeoDetail(Integer postalCode, String province, String city) {
-        checkArgument(postalCode != null);
-        checkArgument(isNotEmpty(province));
-        checkArgument(isNotEmpty(city));
-        this.postalCode = postalCode;
-        this.province = province;
-        this.city = city;
+    ChannelType(String channelCode, String channelName) {
+        checkArgument(isNotEmpty(channelCode));
+        checkArgument(isNotEmpty(channelName));
+        this.channelCode = channelCode;
+        this.channelName = channelName;
     }
 }

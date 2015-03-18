@@ -30,11 +30,11 @@ import static org.nthdimenzion.utils.UtilValidator.isNotEmpty;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 class ContactDetail {
 
-    private int mobileNumber;
+    private Integer mobileNumber;
 
-    private int homePhoneNumber;
+    private Integer homePhoneNumber;
 
-    private int workPhoneNumber;
+    private Integer workPhoneNumber;
 
     @Embedded
     private EmailAddress emailAddress;
@@ -47,7 +47,7 @@ class ContactDetail {
     private GeoDetail geoDetail;
 
 
-    ContactDetail(int mobileNumber, EmailAddress emailAddress, String addressLine1, GeoDetail geoDetail) {
+    ContactDetail(Integer mobileNumber, EmailAddress emailAddress, String addressLine1, GeoDetail geoDetail) {
         checkArgument(emailAddress != null);
         checkArgument(isNotEmpty(addressLine1));
         checkArgument(geoDetail != null);
@@ -57,7 +57,7 @@ class ContactDetail {
         this.geoDetail = geoDetail;
     }
 
-    public ContactDetail addHomePhoneNumber(int homePhoneNumber) {
+    public ContactDetail addHomePhoneNumber(Integer homePhoneNumber) {
         ContactDetail contactDetail = new ContactDetail(this.mobileNumber, this.emailAddress, this.addressLine1, this.geoDetail);
         contactDetail.homePhoneNumber = homePhoneNumber;
         contactDetail.workPhoneNumber = this.workPhoneNumber;
@@ -65,7 +65,7 @@ class ContactDetail {
         return contactDetail;
     }
 
-    public ContactDetail addWorkPhoneNumber(int workPhoneNumber) {
+    public ContactDetail addWorkPhoneNumber(Integer workPhoneNumber) {
         ContactDetail contactDetail = new ContactDetail(this.mobileNumber, this.emailAddress, this.addressLine1, this.geoDetail);
         contactDetail.homePhoneNumber = this.homePhoneNumber;
         contactDetail.workPhoneNumber = workPhoneNumber;
@@ -81,7 +81,7 @@ class ContactDetail {
         return contactDetail;
     }
 
-    public ContactDetail updateContactDetail(int mobileNumber, EmailAddress emailAddress, String addressLine1, GeoDetail geoDetail) {
+    public ContactDetail updateContactDetail(Integer mobileNumber, EmailAddress emailAddress, String addressLine1, GeoDetail geoDetail) {
         checkArgument(emailAddress != null);
         checkArgument(isNotEmpty(addressLine1));
         checkArgument(geoDetail != null);

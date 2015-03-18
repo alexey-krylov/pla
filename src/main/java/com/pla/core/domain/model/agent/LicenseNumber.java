@@ -26,7 +26,7 @@ import static org.nthdimenzion.utils.UtilValidator.isNotEmpty;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 @Embeddable
-class LicenseNumber {
+public class LicenseNumber {
 
     private String licenseNumber;
 

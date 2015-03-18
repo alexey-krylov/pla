@@ -63,22 +63,25 @@ class AgentProfile {
         this.designation = designation;
     }
 
-    public AgentProfile addTitle(String title) {
-        checkArgument(isNotEmpty(title));
-        this.title = title;
+
+    public AgentProfile withTitle(String title) {
+        if (isNotEmpty(title)) {
+            this.title = title;
+        }
         return this;
     }
 
-    public AgentProfile addNrcNumber(Integer nrcNumber) {
-        checkArgument(nrcNumber != null);
-        checkArgument(nrcNumber.toString().length() < 9);
-        this.nrcNumber = nrcNumber;
+    public AgentProfile withNrcNumber(Integer nrcNumber) {
+        if (nrcNumber != null && isNotEmpty(nrcNumber.toString()) && nrcNumber.toString().length() < 9) {
+            this.nrcNumber = nrcNumber;
+        }
         return this;
     }
 
-    public AgentProfile addEmployeeId(String employeeId) {
-        checkArgument(isNotEmpty(employeeId));
-        this.employeeId = employeeId;
+    public AgentProfile withEmployeeId(String employeeId) {
+        if (isNotEmpty(employeeId)) {
+            this.employeeId = employeeId;
+        }
         return this;
     }
 }

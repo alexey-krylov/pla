@@ -14,6 +14,9 @@ import org.nthdimenzion.ddd.domain.annotations.ValueObject;
 
 import javax.persistence.Embeddable;
 
+import static com.google.common.base.Preconditions.checkArgument;
+import static org.nthdimenzion.utils.UtilValidator.isNotEmpty;
+
 /**
  * @author: Samir
  * @since 1.0 13/03/2015
@@ -27,7 +30,8 @@ class TeamDetail {
 
     private String teamId;
 
-   TeamDetail(String teamId) {
+    TeamDetail(String teamId) {
+        checkArgument(isNotEmpty(teamId));
         this.teamId = teamId;
     }
 }
