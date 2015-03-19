@@ -16,10 +16,7 @@ import org.springframework.format.Formatter;
 import org.springframework.format.FormatterRegistry;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.servlet.LocaleResolver;
-import org.springframework.web.servlet.config.annotation.DefaultServletHandlerConfigurer;
-import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
-import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
+import org.springframework.web.servlet.config.annotation.*;
 import org.springframework.web.servlet.i18n.LocaleChangeInterceptor;
 import org.springframework.web.servlet.i18n.SessionLocaleResolver;
 
@@ -27,8 +24,8 @@ import java.text.ParseException;
 import java.util.Locale;
 
 import static org.nthdimenzion.common.AppConstants.MONEY_FORMATTER;
-import static org.nthdimenzion.presentation.AppUtils.stripCurrencyUnit;
 import static org.nthdimenzion.presentation.AppUtils.prependCurrencyUnit;
+import static org.nthdimenzion.presentation.AppUtils.stripCurrencyUnit;
 
 /**
  * @author: Samir
@@ -39,6 +36,23 @@ public class CustomMVCConfiguration extends WebMvcConfigurerAdapter {
 
     static {
         Locale.setDefault(Locale.UK);
+    }
+
+    private static final String[] SERVLET_RESOURCE_LOCATIONS = {"/"};
+
+    private static final String[] CLASSPATH_RESOURCE_LOCATIONS = {
+            "classpath:/META-INF/resources/", "classpath:/resources/",
+            "classpath:/static/", "classpath:/public/"};
+
+    private static final String[] RESOURCE_LOCATIONS;
+
+    static {
+        RESOURCE_LOCATIONS = new String[CLASSPATH_RESOURCE_LOCATIONS.length
+                + SERVLET_RESOURCE_LOCATIONS.length];
+        System.arraycopy(SERVLET_RESOURCE_LOCATIONS, 0, RESOURCE_LOCATIONS, 0,
+                SERVLET_RESOURCE_LOCATIONS.length);
+        System.arraycopy(CLASSPATH_RESOURCE_LOCATIONS, 0, RESOURCE_LOCATIONS,
+                SERVLET_RESOURCE_LOCATIONS.length, CLASSPATH_RESOURCE_LOCATIONS.length);
     }
 
     @Bean
@@ -79,6 +93,19 @@ public class CustomMVCConfiguration extends WebMvcConfigurerAdapter {
         registry.addViewController("/").setViewName("index");
         registry.addViewController("/login").setViewName("login");
         registry.addViewController("/home").setViewName("home");
+    }
+
+    @Override
+    public void addResourceHandlers(ResourceHandlerRegistry registry) {
+
+        if (!registry.hasMappingForPattern("/webjars/**")) {
+            registry.addResourceHandler("/webjars/**")
+                    .addResourceLocations("classpath:/META-INF/resources/webjars/");
+        }
+        if (!registry.hasMappingForPattern("/**")) {
+            registry.addResourceHandler("/**")
+                    .addResourceLocations(RESOURCE_LOCATIONS);
+        }
     }
 
     @Override
