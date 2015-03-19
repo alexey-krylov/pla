@@ -6,7 +6,6 @@
 
 package com.pla.core.application;
 
-import com.pla.core.domain.model.Region;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
