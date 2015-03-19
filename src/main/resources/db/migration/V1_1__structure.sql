@@ -603,15 +603,20 @@ DROP TABLE IF EXISTS `team`;
 
 CREATE TABLE `team` (
   `team_id` varchar(255) NOT NULL,
-  `active` bit(1) DEFAULT NULL,
+  `active` tinyint(1) DEFAULT NULL,
   `current_team_leader` varchar(255) DEFAULT NULL,
   `team_code` varchar(255) DEFAULT NULL,
   `team_name` varchar(255) DEFAULT NULL,
-  `region_code` varchar(255) DEFAULT NULL,
-  `branch_code` varchar(255) DEFAULT NULL,
-  PRIMARY KEY (`team_id`),
-  UNIQUE KEY `UNQ_TEAM_CODE_NAME` (`team_code`,`team_name`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `region_code` varchar(20) NOT NULL,
+  `branch_code` varchar(20) NOT NULL,
+  PRIMARY KEY (`team_id`,`region_code`,`branch_code`),
+  UNIQUE KEY `UNQ_TEAM_CODE_NAME` (`team_code`,`team_name`),
+  KEY `FK_TEAM_REGION_REGION_CODE` (`region_code`),
+  KEY `FK_TEAM_BRANCH_BRANCH_CODE` (`branch_code`),
+  CONSTRAINT `FK_TEAM_BRANCH_BRANCH_CODE` FOREIGN KEY (`branch_code`) REFERENCES `branch` (`BRANCH_CODE`),
+  CONSTRAINT `FK_TEAM_REGION_REGION_CODE` FOREIGN KEY (`region_code`) REFERENCES `region` (`REGION_CODE`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8
+
 
 /*Data for the table `team` */
 
@@ -630,6 +635,29 @@ CREATE TABLE `team_team_leader_fulfillment` (
   PRIMARY KEY (`team_id`,`team_leaders_order`),
   CONSTRAINT `FK_TEAM_LEADER_FULFILLMENT` FOREIGN KEY (`team_id`) REFERENCES `team` (`team_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+DROP TABLE IF EXISTS `branch`;
+
+CREATE TABLE `branch` (
+  `BRANCH_CODE` varchar(20) NOT NULL,
+  `BRANCH` varchar(255) NOT NULL,
+  `BRANCH_MANAGER` varchar(255) NOT NULL,
+  `BRANCH_BDE` varchar(255) NOT NULL,
+  PRIMARY KEY (`BRANCH_CODE`),
+  CONSTRAINT `FK_BRANCH_CODE_TEAM_BRANCH_CODE` FOREIGN KEY (`BRANCH_CODE`) REFERENCES `team` (`branch_code`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8
+
+DROP TABLE IF EXISTS `region`;
+
+CREATE TABLE `region` (
+  `REGION_CODE` varchar(20) NOT NULL DEFAULT '',
+  `REGION` varchar(12) NOT NULL,
+  PRIMARY KEY (`REGION_CODE`),
+  UNIQUE KEY `REGION` (`REGION`),
+  CONSTRAINT `FK_REGION_TEAM_REGION_CODE` FOREIGN KEY (`REGION_CODE`) REFERENCES `team` (`region_code`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8
+
+
 
 /*Data for the table `team_team_leader_fulfillment` */
 
