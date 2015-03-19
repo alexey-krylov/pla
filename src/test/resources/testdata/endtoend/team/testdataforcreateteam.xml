@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<dataset>
+    <REGION REGION_CODE="REGIONCODE" REGION="REGION"></REGION>
+    <BRANCH BRANCH_CODE="BRANCHCODE" BRANCH="BRANCH"></BRANCH>
+</dataset>
