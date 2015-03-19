@@ -64,12 +64,6 @@ CREATE TABLE hcp_service (
 	REFERENCES geo(GEO_ID)
 );
 
-CREATE TABLE region (
-  REGION_CODE VARCHAR(20),
-  REGION VARCHAR(12) NOT NULL UNIQUE,
-  PRIMARY KEY(REGION_CODE)
-);
-
 DROP TABLE IF EXISTS benefit;
 CREATE TABLE `benefit` (
   `benefit_id` varchar(255) NOT NULL,
@@ -99,28 +93,44 @@ CREATE TABLE `coverage_benefit` (
   CONSTRAINT `FK_BENEFIT_BENEFIT_ID` FOREIGN KEY (`benefit_id`) REFERENCES `benefit` (`benefit_id`)
 );
 
+DROP TABLE IF EXISTS `branch`;
+CREATE TABLE `branch`(
+  `BRANCH_CODE` varchar(20) NOT NULL,
+  `BRANCH` varchar(255) NOT NULL,
+  `BRANCH_MANAGER` varchar(255) NOT NULL,
+  `BRANCH_BDE` varchar(255) NOT NULL,
+  PRIMARY KEY (`BRANCH_CODE`)
+);
 
-DROP TABLE IF EXISTS team;
+DROP TABLE IF EXISTS `region`;
+CREATE TABLE `region`(
+  `REGION_CODE` varchar(20) NOT NULL,
+  `REGION` varchar(12) NOT NULL,
+  `REGIONAL_MANAGER` varchar(255) NOT NULL,
+  PRIMARY KEY (`REGION_CODE`),
+  UNIQUE KEY `REGION` (`REGION`)
+);
 
-CREATE TABLE `team` (
+DROP TABLE IF EXISTS `team`;
+
+CREATE TABLE `team`(
   `team_id` varchar(255) NOT NULL,
-  `active` tinyint(1) DEFAULT NULL,
+  `active` bit(1) DEFAULT NULL,
   `current_team_leader` varchar(255) DEFAULT NULL,
   `team_code` varchar(255) DEFAULT NULL,
   `team_name` varchar(255) DEFAULT NULL,
   `region_code` varchar(20) NOT NULL,
   `branch_code` varchar(20) NOT NULL,
-  PRIMARY KEY (`team_id`,`region_code`,`branch_code`),
+  PRIMARY KEY (`team_id`),
   UNIQUE KEY `UNQ_TEAM_CODE_NAME` (`team_code`,`team_name`),
   KEY `FK_TEAM_REGION_REGION_CODE` (`region_code`),
   KEY `FK_TEAM_BRANCH_BRANCH_CODE` (`branch_code`),
   CONSTRAINT `FK_TEAM_BRANCH_BRANCH_CODE` FOREIGN KEY (`branch_code`) REFERENCES `branch` (`BRANCH_CODE`),
   CONSTRAINT `FK_TEAM_REGION_REGION_CODE` FOREIGN KEY (`region_code`) REFERENCES `region` (`REGION_CODE`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8
-
+);
 
 DROP TABLE IF EXISTS team_team_leader_fulfillment;
-CREATE TABLE `team_team_leader_fulfillment` (
+CREATE TABLE `team_team_leader_fulfillment`(
   `team_id` varchar(255) NOT NULL,
   `from_date` date DEFAULT NULL,
   `employee_id` varchar(255) DEFAULT NULL,
@@ -132,6 +142,7 @@ CREATE TABLE `team_team_leader_fulfillment` (
   KEY `team_leaders_order` (`team_leaders_order`),
   CONSTRAINT `FK_TEAM_LEADER_FULFILLMENT` FOREIGN KEY (`team_id`) REFERENCES `team` (`team_id`)
 );
+
 DROP TABLE IF EXISTS agent;
 CREATE TABLE `agent` (
   `agent_id` int(11) NOT NULL,
@@ -281,29 +292,6 @@ CREATE TABLE `sum_assured_sum_insured_values` (
   KEY `FK_8v9k7sydll2yrf86atgs5081u` (`sum_assured_id`),
   CONSTRAINT `FK_8v9k7sydll2yrf86atgs5081u` FOREIGN KEY (`sum_assured_id`) REFERENCES `sum_assured` (`id`)
 );
-
-
-DROP TABLE IF EXISTS `branch`;
-
-CREATE TABLE `branch` (
-  `BRANCH_CODE` varchar(20) NOT NULL,
-  `BRANCH` varchar(255) NOT NULL,
-  `BRANCH_MANAGER` varchar(255) NOT NULL,
-  `BRANCH_BDE` varchar(255) NOT NULL,
-  PRIMARY KEY (`BRANCH_CODE`),
-  CONSTRAINT `FK_BRANCH_CODE_TEAM_BRANCH_CODE` FOREIGN KEY (`BRANCH_CODE`) REFERENCES `team` (`branch_code`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8
-
-DROP TABLE IF EXISTS `region`;
-
-CREATE TABLE `region` (
-  `REGION_CODE` varchar(20) NOT NULL DEFAULT '',
-  `REGION` varchar(12) NOT NULL,
-  PRIMARY KEY (`REGION_CODE`),
-  UNIQUE KEY `REGION` (`REGION`),
-  CONSTRAINT `FK_REGION_TEAM_REGION_CODE` FOREIGN KEY (`REGION_CODE`) REFERENCES `team` (`region_code`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8
-
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;

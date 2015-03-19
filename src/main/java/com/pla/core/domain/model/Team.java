@@ -90,7 +90,7 @@ public class Team implements ICrudEntity {
     public Set<TeamLeaderFulfillment> updateTeamLeaderFullfillment(Set<TeamLeaderFulfillment> teamLeaderFulfillments, TeamLeaderFulfillment expiredTeamLeaderFulfillment) {
         for(Iterator<TeamLeaderFulfillment> i = teamLeaderFulfillments.iterator(); i.hasNext();)
         {
-            TeamLeaderFulfillment local_teamLeaderFulfillment = (TeamLeaderFulfillment)i.next();
+            TeamLeaderFulfillment local_teamLeaderFulfillment = i.next();
             if((local_teamLeaderFulfillment.getTeamLeader()).equals(expiredTeamLeaderFulfillment.getTeamLeader()))
             {
                 teamLeaderFulfillments.remove(local_teamLeaderFulfillment);
@@ -99,11 +99,13 @@ public class Team implements ICrudEntity {
         }
         return teamLeaderFulfillments;
     }
-    public TeamLeaderFulfillment getCurrentTeamLeaderFulfillment(String currentTeamLeaderId) {
+
+    public TeamLeaderFulfillment
+    getCurrentTeamLeaderFulfillment(String currentTeamLeaderId) {
         TeamLeaderFulfillment local_teamLeaderFulfillment = new TeamLeaderFulfillment(null,null);
         for(Iterator<TeamLeaderFulfillment> i = this.teamLeaders.iterator(); i.hasNext();)
         {
-             local_teamLeaderFulfillment = (TeamLeaderFulfillment)i.next();
+            local_teamLeaderFulfillment = i.next();
             if((local_teamLeaderFulfillment.getTeamLeader()).equals(currentTeamLeaderId))
             {
                break;

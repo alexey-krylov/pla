@@ -626,7 +626,7 @@ CREATE TABLE `team` (
   `team_name` varchar(255) DEFAULT NULL,
   `region_code` varchar(20) NOT NULL,
   `branch_code` varchar(20) NOT NULL,
-  PRIMARY KEY (`team_id`,`region_code`,`branch_code`),
+  PRIMARY KEY (`team_id`),
   UNIQUE KEY `UNQ_TEAM_CODE_NAME` (`team_code`,`team_name`),
   KEY `FK_TEAM_REGION_REGION_CODE` (`region_code`),
   KEY `FK_TEAM_BRANCH_BRANCH_CODE` (`branch_code`),
@@ -646,8 +646,9 @@ CREATE TABLE `team_team_leader_fulfillment`(
   `first_name` varchar(255) DEFAULT NULL,
   `last_name` varchar(255) DEFAULT NULL,
   `thru_date` date DEFAULT NULL,
-  `team_leaders_order` int(11) NOT NULL,
+  `team_leaders_order` int(11) NOT NULL AUTO_INCREMENT,
   PRIMARY KEY (`team_id`,`team_leaders_order`),
+  KEY `team_leaders_order` (`team_leaders_order`),
   CONSTRAINT `FK_TEAM_LEADER_FULFILLMENT` FOREIGN KEY (`team_id`) REFERENCES `team` (`team_id`)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
 

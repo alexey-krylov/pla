@@ -58,6 +58,7 @@ public class TeamAcceptanceTest {
     }
 
     @Test
+    @DatabaseSetup(value = "classpath:testdata/endtoend/team/testdataforcreateteam.xml", type = DatabaseOperation.CLEAN_INSERT)
     @ExpectedDatabase(value = "classpath:testdata/endtoend/team/expectedteamdata.xml", assertionMode = DatabaseAssertionMode.NON_STRICT)
     public void givenTeamNameAndTeamLeadItShouldCreateTeamWithTeamLead() {
         CreateTeamCommand createTeamCommand = new CreateTeamCommand();
@@ -84,7 +85,7 @@ public class TeamAcceptanceTest {
     @DatabaseSetup(value = "classpath:testdata/endtoend/team/testdataforupdateteam.xml")
     @ExpectedDatabase(value = "classpath:testdata/endtoend/team/expectedupdateteamdata.xml", assertionMode = DatabaseAssertionMode.NON_STRICT)
     @DatabaseTearDown(value = {"classpath:testdata/endtoend/team/cleanteamdata.xml"},type = DatabaseOperation.DELETE)
-    @DatabaseTearDown(value = "classpath:testdata/endtoend/team/cleanteam.xml",type = DatabaseOperation.DELETE)
+    @DatabaseTearDown(value = "classpath:testdata/endtoend/team/cleanteam.xml", type = DatabaseOperation.DELETE)
     public void givenTeamLeadItShouldUpdateTeamWithTeamLead() {
         UpdateTeamCommand updateTeamCommand = new UpdateTeamCommand();
         updateTeamCommand.setEmployeeId("3456");
