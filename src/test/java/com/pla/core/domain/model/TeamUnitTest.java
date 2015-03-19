@@ -43,26 +43,26 @@ public class TeamUnitTest {
 
     @Test
     public void testCreateTeamAndTeamLead() {
-        admin.updateTeamLead(team, "aa", "employeedId2", "ss", LocalDate.now());
+        admin.updateTeamLead(team, "aa", "employeedId2", "ss", new LocalDate(2015, 03, 17));
         Team updatedTeam = admin.updateTeamLead(team, "employeedId3", "NTLF", "NTLL", LocalDate.now());
         assertEquals("employeedId3", updatedTeam.getCurrentTeamLeader());
     }
     @Test
     public void testUpdateTeamLeaderFullFillment() {
         TeamLeader teamLeader = new TeamLeader("employeedId1", "Nischitha", "Kurunji");
-        TeamLeaderFulfillment teamLeaderFulfillment = new TeamLeaderFulfillment(teamLeader, LocalDate.now().minusDays(2));
+        TeamLeaderFulfillment teamLeaderFulfillment = new TeamLeaderFulfillment(teamLeader, new LocalDate(2015, 03, 18).minusDays(2));
         Set<TeamLeaderFulfillment> updatedTeamLeaderFulfillments = team.updateTeamLeaderFullfillment(team.getTeamLeaders(), teamLeaderFulfillment);
         Iterator<TeamLeaderFulfillment> iterator = updatedTeamLeaderFulfillments.iterator();
-        assertEquals(LocalDate.now().minusDays(2), ((TeamLeaderFulfillment)iterator.next()).getFromDate());
+        assertEquals(new LocalDate(2015, 03, 18).minusDays(2), ((TeamLeaderFulfillment)iterator.next()).getFromDate());
     }
     @Test
     public void testGetCurrentTeamLeaderFulfillment() {
-        assertEquals("12345", team.getCurrentTeamLeaderFulfillment("12345"));
+        assertEquals("employeedId1", team.getCurrentTeamLeaderFulfillment("12345").getTeamLeader().getEmployeeId());
     }
     @Test
     public void testCreateTeamLeaderFulfillment() {
-        TeamLeaderFulfillment teamLeaderFulfillment = new TeamLeaderFulfillment(new TeamLeader("12345678", "TEAMNAME", "TEAMCODE"),LocalDate.now().minusDays(3));
-        assertEquals(teamLeaderFulfillment, team.createTeamLeaderFulfillment("12345678", "TEAMNAME", "TEAMCODE", LocalDate.now().minusDays(3)));
+        TeamLeaderFulfillment teamLeaderFulfillment = new TeamLeaderFulfillment(new TeamLeader("12345678", "TEAMNAME", "TEAMCODE"),new LocalDate(2015, 03, 18).minusDays(3));
+        assertEquals(teamLeaderFulfillment, team.createTeamLeaderFulfillment("12345678", "TEAMNAME", "TEAMCODE", new LocalDate(2015, 03, 18).minusDays(3)));
     }
     @Test
     public void testAssignTeamLeader() {
