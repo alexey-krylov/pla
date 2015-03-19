@@ -10,8 +10,6 @@ import lombok.ToString;
 import org.joda.time.LocalDate;
 import org.nthdimenzion.utils.UtilValidator;
 
-import javax.persistence.ElementCollection;
-import javax.persistence.Embeddable;
 import java.util.Set;
 import java.util.stream.Stream;
 
@@ -23,7 +21,6 @@ import static com.google.common.base.Preconditions.checkArgument;
  */
 @Getter(AccessLevel.PACKAGE)
 @ToString
-@Embeddable
 public class PlanDetail {
 
     private String planName;
@@ -35,14 +32,13 @@ public class PlanDetail {
     private int maxEntryAge;
     private boolean taxApplicable;
     private int surrenderAfter;
-    @ElementCollection
     private Set<Relationship> applicableRelationships;
-    @ElementCollection
     private Set<EndorsementType> endorsementTypes;
     private LineOfBusinessId lineOfBusinessId;
     private PlanType planType;
     private ClientType clientType;
 
+    @SuppressWarnings("UnusedDeclaration")
     protected PlanDetail() {
     }
 

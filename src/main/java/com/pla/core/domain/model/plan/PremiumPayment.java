@@ -3,9 +3,9 @@ package com.pla.core.domain.model.plan;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.ToString;
+import org.axonframework.eventsourcing.annotation.AbstractAnnotatedEntity;
 import org.nthdimenzion.utils.UtilValidator;
 
-import javax.persistence.*;
 import java.util.Set;
 
 import static com.google.common.base.Preconditions.checkArgument;
@@ -16,21 +16,14 @@ import static com.google.common.base.Preconditions.checkArgument;
  */
 @ToString
 @Getter(AccessLevel.PACKAGE)
-@Entity
-class PremiumPayment {
+class PremiumPayment extends AbstractAnnotatedEntity {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    long id;
-    @ElementCollection
-    @CollectionTable(name = "premium_payment_values")
     private Set<Integer> validTerms;
     private int paymentCutOffAge;
 
     protected PremiumPayment() {
     }
 
-    //TODO Have to remove PaymentCutOffAge
     PremiumPayment(Set<Integer> validTerms) {
         checkArgument(UtilValidator.isNotEmpty(validTerms));
         this.validTerms = validTerms;

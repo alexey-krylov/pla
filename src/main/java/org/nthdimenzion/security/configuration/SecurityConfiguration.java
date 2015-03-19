@@ -6,7 +6,10 @@
 
 package org.nthdimenzion.security.configuration;
 
-import org.nthdimenzion.security.service.*;
+import org.nthdimenzion.security.service.AuthenticationFailureHandler;
+import org.nthdimenzion.security.service.AuthenticationSuccessHandler;
+import org.nthdimenzion.security.service.Http401UnauthorizedEntryPoint;
+import org.nthdimenzion.security.service.RESTAuthenticationProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -43,7 +46,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Override
     public void configure(HttpSecurity http) throws Exception {
-        http.authorizeRequests().antMatchers("/", "/logout","/stub/getuserdetail").permitAll().anyRequest().authenticated()
+        http.authorizeRequests().antMatchers("/", "/webajrs/", "/logout", "/stub/getuserdetail").permitAll().anyRequest().authenticated()
                 .and()
                 .formLogin().usernameParameter("username").passwordParameter("password")
                 .successHandler(authenticationSuccessHandler).failureHandler(authenticationFailureHandler)

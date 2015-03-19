@@ -8,9 +8,6 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.ToString;
 
-import javax.persistence.Column;
-import javax.persistence.Embeddable;
-import javax.persistence.Transient;
 import java.math.BigDecimal;
 
 /**
@@ -19,16 +16,10 @@ import java.math.BigDecimal;
  */
 @ToString
 @Getter(AccessLevel.PACKAGE)
-@EqualsAndHashCode(of = {"coverageId", "benefitId"})
-@Embeddable
+@EqualsAndHashCode(of = {"benefitId"})
 class PlanCoverageBenefit {
 
-    @Transient
     private BenefitId benefitId;
-
-    @Column(name = "benefit_id")
-    private String benefitDBId;
-
     private CoverageBenefitDefinition definedPer;
     private CoverageBenefitType coverageBenefitType;
     private BigDecimal benefitLimit;
@@ -52,10 +43,6 @@ class PlanCoverageBenefit {
         this.coverageBenefitType = coverageBenefitType;
         this.benefitLimit = benefitLimit;
         this.maxLimit = maxLimit;
-        this.benefitDBId = benefitId.toString();
     }
 
-    BenefitId getBenefitId() {
-        return new BenefitId(this.benefitDBId);
-    }
 }

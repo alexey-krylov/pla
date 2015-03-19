@@ -5,7 +5,6 @@ import lombok.Getter;
 import lombok.ToString;
 import org.nthdimenzion.utils.UtilValidator;
 
-import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -17,16 +16,9 @@ import static com.google.common.base.Preconditions.checkArgument;
  */
 @Getter(AccessLevel.PACKAGE)
 @ToString
-@Entity
 class PolicyTerm {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    long id;
     int maxMaturityAge;
-
-    @ElementCollection
-    @CollectionTable(name = "policy_term_valid_terms")
     Set<Integer> validTerms = new HashSet<Integer>();
 
     protected PolicyTerm() {

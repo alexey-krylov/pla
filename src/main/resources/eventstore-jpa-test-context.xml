@@ -10,7 +10,24 @@
         <constructor-arg ref="entityManagerProvider"/>
         <property name="dataSource" ref="primaryDataSource"/>
     </bean>
+    <axon:jpa-event-store id="jpaEventStore"/>
+
+    <bean id="snapshotter" class="org.axonframework.eventsourcing.SpringAggregateSnapshotter">
+        <property name="eventStore" ref="eventStore"/>
+        <property name="executor" ref="taskExecutor"/>
+    </bean>
+    <bean id="taskExecutor" class="org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor">
+        <property name="corePoolSize" value="2"/>
+        <property name="maxPoolSize" value="5"/>
+        <property name="waitForTasksToCompleteOnShutdown" value="true"/>
+    </bean>
+
+    <!--<bean id="cacheManager" class="org.springframework.cache.ehcache.EhCacheManagerFactoryBean"/>-->
+
     <bean id="entityManagerProvider" class="org.axonframework.common.jpa.ContainerManagedEntityManagerProvider"/>
     <axon:event-sourcing-repository id="planRepository" aggregate-type="com.pla.core.domain.model.plan.Plan"
-                                    event-store="eventStore" event-bus="eventBus"/>
+                                    event-store="eventStore" event-bus="eventBus">
+        <axon:snapshotter-trigger event-count-threshold="10" snapshotter-ref="snapshotter"/>
+    </axon:event-sourcing-repository>
+
 </beans>

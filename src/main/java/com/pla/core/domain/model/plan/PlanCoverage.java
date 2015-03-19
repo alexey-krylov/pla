@@ -6,7 +6,6 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.ToString;
 
-import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.HashSet;
 import java.util.Set;
@@ -21,58 +20,25 @@ import static com.google.common.base.Preconditions.checkArgument;
 @EqualsAndHashCode(of = {"coverageId"})
 @ToString(exclude = {"plan"})
 @Getter(AccessLevel.PACKAGE)
-@Entity
 public class PlanCoverage {
 
-    @Id()
     private CoverageId coverageId;
-
-    @Column(nullable = false)
     private CoverageType coverageType;
-    @Column(nullable = false)
     private CoverageCover coverageCover;
     private BigDecimal deductibleAmount;
     private BigDecimal deductiblePercentage;
     private int waitingPeriod;
     private int minAge;
     private int maxAge;
-    @Column(nullable = false)
     private Boolean taxApplicable;
     /**
      * Holds the Benefits that are applicable for Plan.
      */
-    @ElementCollection
-    @CollectionTable(name = "plan_coverage_benefit", joinColumns = @JoinColumn(name = "plan_coverage_id"))
     private Set<PlanCoverageBenefit> planCoverageBenefits = new HashSet<PlanCoverageBenefit>();
 
-    @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "plan_id")
     private Plan plan;
 
     protected PlanCoverage() {
-    }
-
-    /**
-     * This constructor is added for Hibernate OneToMany.
-     * This is only used internally while creating the Plan.
-     *
-     * This is not for public usage.
-     *
-     * @param plan
-     * @param planCoverage
-     */
-    PlanCoverage(Plan plan, PlanCoverage planCoverage) {
-        this.plan = plan;
-        this.coverageId = planCoverage.coverageId;
-        this.coverageCover = planCoverage.coverageCover;
-        this.coverageType = planCoverage.coverageType;
-        this.deductibleAmount = planCoverage.deductibleAmount;
-        this.deductiblePercentage = planCoverage.deductiblePercentage;
-        this.waitingPeriod = planCoverage.waitingPeriod;
-        this.minAge = planCoverage.minAge;
-        this.maxAge = planCoverage.maxAge;
-        this.taxApplicable = planCoverage.taxApplicable;
-        planCoverageBenefits = planCoverage.planCoverageBenefits;
     }
 
     PlanCoverage(PlanCoverageBuilder builder) {

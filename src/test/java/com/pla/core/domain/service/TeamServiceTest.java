@@ -6,8 +6,8 @@
 
 package com.pla.core.domain.service;
 
-import com.pla.core.application.CreateTeamCommand;;
-import com.pla.core.domain.model.*;
+import com.pla.core.application.CreateTeamCommand;
+import com.pla.core.domain.model.Admin;
 import com.pla.core.dto.TeamDto;
 import com.pla.core.specification.TeamIsUnique;
 import org.junit.Before;
@@ -20,7 +20,6 @@ import org.nthdimenzion.object.utils.IIdGenerator;
 import org.nthdimenzion.security.service.UserLoginDetailDto;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.when;
 
 /**
@@ -52,7 +51,6 @@ public class TeamServiceTest {
     public void setUp() {
         teamService = new TeamService(adminRoleAdapter, teamIsUnique, idGenerator);
         userDetails = UserLoginDetailDto.createUserLoginDetailDto("", "");
-       // admin = new Admin("");
     }
 
 
@@ -64,29 +62,9 @@ public class TeamServiceTest {
         createTeamCommand.setTeamName("CI Team");
         createTeamCommand.setTeamCode("CI TeamCode");
         createTeamCommand.setEmployeeId("1234");
-
-        /*CreateTeamCommand createTeamCommand2 = new CreateTeamCommand();
-        createTeamCommand2.setUserDetails(userDetails);
-        createTeamCommand2.setTeamName("CI Team");
-        createTeamCommand2.setTeamCode("CI TeamCode");
-        createTeamCommand2.setEmployeeId("1234");
-        createTeamCommand2.setFirstName("Nischitha");
-        createTeamCommand2.setLastName("Ramanna");*/
-
         TeamDto teamName = new TeamDto(createTeamCommand.getTeamName(), createTeamCommand.getTeamCode());
-       // TeamCode teamCode = new Team(C);
-       // TeamName teamCode = new TeamName(createTeamCommand.getTeamCode());
         when(idGenerator.nextId()).thenReturn(teamId);
         when(adminRoleAdapter.userToAdmin(createTeamCommand.getUserDetails())).thenReturn(admin);
-        when(teamIsUnique.isSatisfiedBy(teamName)).thenReturn(true);/*
-        teamHandler = new TeamHandler(jpaRepositoryFactory, teamService);
-        teamHandler.createTeamHandler(createTeamCommand);*/
-       // Team team = teamService.createTeam(createTeamCommand);
-       // TeamName createdTeamName = (TeamName) invokeGetterMethod(team, "getTeamName");
-       // assertEquals(teamId, invokeGetterMethod(team, "getTeamId"));
-       // TeamLeader teamLeader = new TeamLeader("1234",null,null,"Nischitha","Ramanna");
-       // assertEquals(teamLeader, invokeGetterMethod(team, "getCurrentTeamLeader"));
-      //  assertEquals(BenefitStatus.ACTIVE, invokeGetterMethod(benefit, "getStatus"));
-       // assertEquals(createTeamCommand.getTeamName(), createTeamCommand.getTeamName());
+        when(teamIsUnique.isSatisfiedBy(teamName)).thenReturn(true);
     }
 }

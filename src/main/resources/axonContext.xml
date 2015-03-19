@@ -25,6 +25,7 @@
 
     <bean id="eventBus" class="org.axonframework.eventhandling.SimpleEventBus" />
 
+
     <!--<axon:jpa-repository aggregate-type="com.pla.sample.aggregateroot.domain.Quotation" event-bus="eventBus" id="quotationRepository"/>
 
     <axon:jpa-repository aggregate-type="com.pla.sample.sagas.OrderHeader" event-bus="eventBus" id="orderHeaderRepository"/>

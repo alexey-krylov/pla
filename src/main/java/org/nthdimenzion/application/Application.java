@@ -22,18 +22,17 @@ import javax.sql.DataSource;
  */
 @SpringBootApplication
 @ComponentScan(basePackages = {"com.pla", "org.nthdimenzion"})
-@EntityScan(basePackages = {"com.pla", "org.nthdimenzion", "org.axonframework.saga","org.axonframework.eventstore.jpa"})
-@ImportResource(value = {"classpath:axonContext.xml","classpath:eventstore-jpa-test-context.xml"})
+@EntityScan(basePackages = {"com.pla", "org.nthdimenzion",
+        "org.axonframework.saga", "org.axonframework.eventstore.jpa"})
+@ImportResource(value = {"classpath:axonContext.xml", "classpath:eventstore-jpa-test-context.xml"})
 public class Application {
 
     @Autowired
     @Qualifier("primaryDataSource")
     private DataSource dataSource;
 
-
     public static void main(String[] args) {
         SpringApplication.run(Application.class, args);
     }
-
 
 }
