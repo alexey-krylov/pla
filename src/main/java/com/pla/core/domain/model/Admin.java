@@ -6,16 +6,17 @@
 
 package com.pla.core.domain.model;
 
-import com.pla.core.application.agent.CreateAgentCommand;
+import com.pla.core.application.agent.*;
 import com.pla.core.domain.exception.BenefitDomainException;
+import com.pla.core.domain.exception.TeamDomainException;
 import com.pla.core.domain.model.agent.Agent;
 import com.pla.core.domain.model.agent.AgentId;
-import com.pla.core.specification.TeamCodeIsUnique;
-import com.pla.core.specification.TeamNameIsUnique;
-import com.pla.core.domain.exception.TeamDomainException;
 import com.pla.sharedkernel.domain.model.BenefitStatus;
+import com.pla.sharedkernel.identifier.PlanId;
 import org.joda.time.LocalDate;
 import org.nthdimenzion.ddd.domain.annotations.ValueObject;
+
+import java.util.Set;
 
 import static com.pla.core.domain.exception.AgentException.raiseAgentLicenseNumberUniqueException;
 
@@ -65,6 +66,29 @@ public class Admin {
             raiseAgentLicenseNumberUniqueException("Agent cannot be created as license number is in use");
         }
         Agent agent = Agent.createAgent(new AgentId(createAgentCommand.getAgentId()));
-        return agent;
+        Agent agentDetail = populateAgentDetail(agent, createAgentCommand.getAgentProfile(), createAgentCommand.getLicenseNumber(), createAgentCommand.getTeamDetail(), createAgentCommand.getContactDetail(), createAgentCommand.getPhysicalAddress(), createAgentCommand.getChannelType());
+        Agent agentWithPlans = agentDetail.withPlans(createAgentCommand.getAuthorizePlansToSell());
+        return agentWithPlans;
+    }
+
+    public Agent updateAgent(Agent agent, boolean isLicenseNumberUnique, UpdateAgentCommand updateAgentCommand) {
+        if (!isLicenseNumberUnique) {
+            raiseAgentLicenseNumberUniqueException("Agent cannot be updated as license number is in use");
+        }
+        Agent agentDetail = populateAgentDetail(agent, updateAgentCommand.getAgentProfile(), updateAgentCommand.getLicenseNumber(), updateAgentCommand.getTeamDetail(), updateAgentCommand.getContactDetail(), updateAgentCommand.getPhysicalAddress(), updateAgentCommand.getChannelType());
+        Agent agentWithPlans = agentDetail.withPlans(updateAgentCommand.getAuthorizePlansToSell());
+        return agentWithPlans;
+    }
+
+    private Agent populateAgentDetail(Agent agent, AgentProfileDto agentProfileDto, LicenseNumberDto licenseNumberDto, TeamDetailDto teamDetailDto, ContactDetailDto contactDetailDto, PhysicalAddressDto physicalAddressDto, ChannelTypeDto channelTypeDto) {
+        Agent agentWithProfile = agent.createWithAgentProfile(agentProfileDto.getFirstName(), agentProfileDto.getLastName(), agentProfileDto.getTrainingCompleteOn(), agentProfileDto.getDesignationDto().getCode(), agentProfileDto.getDesignationDto().getDescription());
+        Agent agentWithLicenseNumber = agentWithProfile.withLicenseNumber(licenseNumberDto.getLicenseNumber());
+        Agent agentWithTeamDetail = agentWithLicenseNumber.withTeamDetail(teamDetailDto.getTeamId());
+        GeoDetailDto geoDetailDto = contactDetailDto.getGeoDetail();
+        Agent agentWithContactDetail = agentWithTeamDetail.withContactDetail(contactDetailDto.getMobileNumber(), contactDetailDto.getHomePhoneNumber(), contactDetailDto.getWorkPhoneNumber(), contactDetailDto.getEmailAddress(), contactDetailDto.getAddressLine1(), contactDetailDto.getAddressLine2(), geoDetailDto.getPostalCode(), geoDetailDto.getProvince(), geoDetailDto.getCity());
+        GeoDetailDto physicalGeoDetailDto = physicalAddressDto.getPhysicalGeoDetail();
+        Agent agentWithPhysicalAddress = agentWithContactDetail.withPhysicalAddress(physicalAddressDto.getPhysicalAddressLine1(), physicalAddressDto.getPhysicalAddressLine2(), physicalGeoDetailDto.getPostalCode(), physicalGeoDetailDto.getProvince(), physicalGeoDetailDto.getCity());
+        Agent agentWithChannelType = agentWithPhysicalAddress.withChannelType(channelTypeDto.getChannelCode(), channelTypeDto.getChannelName());
+        return agentWithChannelType;
     }
 }

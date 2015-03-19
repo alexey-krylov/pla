@@ -53,4 +53,21 @@ public class AgentCommandHandler {
         }
 
     }
+
+    @CommandHandler
+    public void updateAgentCommandHandler(UpdateAgentCommand updateAgentCommand) {
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("*****Update Agent Command Received*****" + updateAgentCommand);
+        }
+        try {
+            JpaRepository<Agent, AgentId> agentRepository = jpaRepositoryFactory.getCrudRepository(Agent.class);
+            Agent agent = agentRepository.getOne(new AgentId(updateAgentCommand.getAgentId()));
+            Agent updatedAgent = agentService.updateAgent(agent, updateAgentCommand);
+            agentRepository.save(updatedAgent);
+        } catch (Exception e) {
+            LOGGER.error("*****Update agent failed*****", e);
+            throw new AgentApplicationException(e.getMessage());
+        }
+
+    }
 }

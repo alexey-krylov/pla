@@ -79,9 +79,8 @@ public class Agent implements ICrudEntity {
         return this;
     }
 
-    public Agent withLicenseNumber(String license) {
-        LicenseNumber licenseNumber = new LicenseNumber(license);
-        this.licenseNumber = licenseNumber;
+    public Agent withLicenseNumber(String licenseNumber) {
+        this.licenseNumber = new LicenseNumber(licenseNumber);
         return this;
     }
 

@@ -11,6 +11,7 @@ import lombok.Setter;
 import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.validation.constraints.NotNull;
+import java.time.LocalDate;
 
 /**
  * @author: Samir
@@ -33,6 +34,8 @@ public class AgentProfileDto {
     private Integer nrcNumber;
 
     private String employeeId;
+
+    private LocalDate trainingCompleteOn;
 
     private DesignationDto designationDto=new DesignationDto();
 

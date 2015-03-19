@@ -7,6 +7,7 @@
 package com.pla.core.domain.service;
 
 import com.pla.core.application.agent.CreateAgentCommand;
+import com.pla.core.application.agent.UpdateAgentCommand;
 import com.pla.core.domain.model.Admin;
 import com.pla.core.domain.model.agent.Agent;
 import com.pla.core.domain.model.agent.LicenseNumber;
@@ -20,7 +21,6 @@ import org.springframework.beans.factory.annotation.Autowired;
  */
 @DomainService
 public class AgentService {
-
 
     private AdminRoleAdapter adminRoleAdapter;
 
@@ -36,5 +36,11 @@ public class AgentService {
         boolean isLicenseNumberUnique = agentLicenseNumberIsUnique.isSatisfiedBy(new LicenseNumber(createAgentCommand.getLicenseNumber().getLicenseNumber()));
         Admin admin = adminRoleAdapter.userToAdmin(createAgentCommand.getUserDetails());
         return admin.createAgent(isLicenseNumberUnique, createAgentCommand);
+    }
+
+    public Agent updateAgent(Agent agent, UpdateAgentCommand createAgentCommand) {
+        boolean isLicenseNumberUnique = agentLicenseNumberIsUnique.isSatisfiedBy(new LicenseNumber(createAgentCommand.getLicenseNumber().getLicenseNumber()));
+        Admin admin = adminRoleAdapter.userToAdmin(createAgentCommand.getUserDetails());
+        return admin.updateAgent(agent, isLicenseNumberUnique, createAgentCommand);
     }
 }
