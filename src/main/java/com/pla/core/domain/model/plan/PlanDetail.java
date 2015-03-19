@@ -4,7 +4,6 @@ import com.pla.sharedkernel.domain.model.ClientType;
 import com.pla.sharedkernel.domain.model.PlanType;
 import com.pla.sharedkernel.domain.model.Relationship;
 import com.pla.sharedkernel.identifier.LineOfBusinessId;
-import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.ToString;
 import org.joda.time.LocalDate;
@@ -19,7 +18,7 @@ import static com.google.common.base.Preconditions.checkArgument;
  * @author: pradyumna
  * @since 1.0 11/03/2015
  */
-@Getter(AccessLevel.PACKAGE)
+@Getter
 @ToString
 public class PlanDetail {
 

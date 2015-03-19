@@ -51,7 +51,7 @@ public class Plan extends AbstractAnnotatedAggregateRoot<PlanId> {
         apply(new PlanConfigured(builder.planId));
 
         checkArgument(builder.planDetail != null);
-        apply(new PlanDetailConfigured(builder.planDetail));
+        apply(new PlanDetailConfigured(this.planId, builder.planDetail));
 
         checkArgument(builder.policyTerm != null);
         apply(new PolicyTermConfigured(builder.policyTerm));
@@ -75,7 +75,7 @@ public class Plan extends AbstractAnnotatedAggregateRoot<PlanId> {
 
     public void updatePlanDetail(PlanDetail planDetail) {
         checkArgument(policyTerm != null);
-        apply(new PlanDetailChanged(planDetail));
+        apply(new PlanDetailChanged(this.planId, planDetail));
     }
 
     public void updatePolicyTerm(PolicyTerm policyTerm) {
