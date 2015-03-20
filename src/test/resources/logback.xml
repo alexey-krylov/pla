@@ -13,13 +13,8 @@
             <pattern>%-5level %logger{0} - %msg%n</pattern>
         </encoder>
     </appender>
-
-    <logger name="org.springframework.web.servlet.view" level="error"/>
-    <logger name="org.springframework.security" level="error"/>
-    <logger name="org.springframework.format" level="error"/>
-    <logger name="org.thymeleaf"  level="error"/>
     <logger name="com.pla" level="trace"/>
-    <root level="info">
+    <root level="error">
         <appender-ref ref="console"/>
     </root>
 </configuration>

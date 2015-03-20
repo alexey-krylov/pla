@@ -4,7 +4,6 @@ import com.pla.sharedkernel.domain.model.ClientType;
 import com.pla.sharedkernel.domain.model.PlanType;
 import com.pla.sharedkernel.domain.model.Relationship;
 import com.pla.sharedkernel.identifier.LineOfBusinessId;
-import com.pla.sharedkernel.identifier.PlanId;
 import lombok.Getter;
 import org.joda.time.LocalDate;
 
@@ -34,7 +33,7 @@ public class PlanDetailConfigured implements Serializable {
     PlanType planType;
     ClientType clientType;
 
-    public PlanDetailConfigured(PlanId planId, String planName, String planCode, LocalDate launchDate, LocalDate withdrawalDate,
+    public PlanDetailConfigured(String planId, String planName, String planCode, LocalDate launchDate, LocalDate withdrawalDate,
                                 int freeLookPeriod, int minEntryAge, int maxEntryAge, boolean taxApplicable, int surrenderAfter,
                                 Set<Relationship> applicableRelationships, Set<EndorsementType> endorsementTypes, LineOfBusinessId lineOfBusinessId, PlanType planType, ClientType clientType) {
         this.planId = planId.toString();

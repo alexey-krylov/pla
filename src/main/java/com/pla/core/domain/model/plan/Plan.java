@@ -52,7 +52,7 @@ public class Plan extends AbstractAnnotatedAggregateRoot<PlanId> {
 
         checkArgument(builder.planDetail != null);
         PlanDetail pd = builder.planDetail;
-        apply(new PlanDetailConfigured(this.planId, pd.planName,
+        apply(new PlanDetailConfigured(this.planId.toString(), pd.planName,
                 pd.planCode,
                 pd.launchDate,
                 pd.withdrawalDate,
@@ -89,7 +89,7 @@ public class Plan extends AbstractAnnotatedAggregateRoot<PlanId> {
 
     public void updatePlanDetail(PlanDetail pd) {
         checkArgument(pd != null);
-        apply(new PlanDetailChanged(this.planId, pd.planName,
+        apply(new PlanDetailChanged(this.planId.toString(), pd.planName,
                 pd.planCode,
                 pd.launchDate,
                 pd.withdrawalDate,

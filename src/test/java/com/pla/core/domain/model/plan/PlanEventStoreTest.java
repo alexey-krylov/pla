@@ -8,6 +8,7 @@ import com.pla.sharedkernel.domain.model.Relationship;
 import com.pla.sharedkernel.identifier.CoverageId;
 import com.pla.sharedkernel.identifier.LineOfBusinessId;
 import com.pla.sharedkernel.identifier.PlanId;
+import junit.framework.Assert;
 import org.axonframework.repository.Repository;
 import org.axonframework.unitofwork.DefaultUnitOfWork;
 import org.axonframework.unitofwork.SpringTransactionManager;
@@ -22,6 +23,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.PlatformTransactionManager;
 
+import javax.transaction.Transactional;
 import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.HashSet;
@@ -40,6 +42,7 @@ import java.util.UUID;
 @ContextConfiguration(locations = {
         "classpath:/META-INF/spring/db-context.xml",
         "classpath:/META-INF/spring/eventstore-jpa-test-context.xml"})
+@Transactional
 public class PlanEventStoreTest {
     LocalDate launchDate = LocalDate.now().plusDays(10);
     PlanId planId = new PlanId(UUID.randomUUID().toString());
@@ -111,7 +114,7 @@ public class PlanEventStoreTest {
         System.out.println("********** SAVED*********");
 
 
-        /*uw = DefaultUnitOfWork.startAndGet(new SpringTransactionManager(txManager));
+        uw = DefaultUnitOfWork.startAndGet(new SpringTransactionManager(txManager));
         Plan savedPlan = repository.load(planId);
         System.out.println("********** LOADED *********");
 
@@ -149,7 +152,10 @@ public class PlanEventStoreTest {
         savedPlan.updateSumAssured(new SumAssuredByRange(new BigDecimal(1000000), new BigDecimal(50000000), 10000));
         savedPlan.updatePlanCoverages(Sets.newHashSet(planCoverage));
         uw.commit();
-        System.out.println("**********UPDATED*********");*/
+
+        Assert.assertEquals(plan, savedPlan);
+
+        System.out.println("**********UPDATED*********");
     }
 
 }
