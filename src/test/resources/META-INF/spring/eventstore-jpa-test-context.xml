@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:axon="http://www.axonframework.org/schema/core"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns="http://www.springframework.org/schema/beans"
+       xsi:schemaLocation="http://www.axonframework.org/schema/core http://www.axonframework.org/schema/axon-core.xsd
+       http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+       http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <import resource="classpath:/META-INF/spring/db-context.xml"/>
+    <context:component-scan base-package="com.pla.core.domain.event"/>
+    <axon:annotation-config/>
+
+    <bean id="entityManagerFactory" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
+        <property name="persistenceUnitName" value="testnthdimenzion"/>
+        <property name="packagesToScan">
+            <list>
+                <value>com.pla.core.domain.model.**.*</value>
+            </list>
+        </property>
+        <property name="jpaVendorAdapter">
+            <bean class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter">
+                <property name="databasePlatform" value="org.hibernate.dialect.MySQL5InnoDBDialect"/>
+                <property name="showSql" value="true"/>
+            </bean>
+        </property>
+        <property name="persistenceXmlLocation"
+                  value="classpath:/META-INF/test-persistence.xml"/>
+        <property name="dataSource" ref="dataSource"/>
+    </bean>
+    <bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
+        <property name="entityManagerFactory" ref="entityManagerFactory"/>
+    </bean>
+
+    <bean id="eventStore" class="org.axonframework.eventstore.jpa.JpaEventStore">
+        <constructor-arg ref="entityManagerProvider"/>
+        <property name="dataSource" ref="dataSource"/>
+    </bean>
+    <axon:jpa-event-store id="jpaEventStore"/>
+
+    <bean id="eventBus" class="org.axonframework.eventhandling.SimpleEventBus"/>
+
+    <bean id="snapshotter" class="org.axonframework.eventsourcing.SpringAggregateSnapshotter">
+        <property name="eventStore" ref="eventStore"/>
+        <property name="executor" ref="taskExecutor"/>
+    </bean>
+    <bean id="taskExecutor" class="org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor">
+        <property name="corePoolSize" value="2"/>
+        <property name="maxPoolSize" value="5"/>
+        <property name="waitForTasksToCompleteOnShutdown" value="true"/>
+    </bean>
+
+    <bean id="entityManagerProvider" class="org.axonframework.common.jpa.ContainerManagedEntityManagerProvider"/>
+
+    <axon:event-sourcing-repository id="planRepository" aggregate-type="com.pla.core.domain.model.plan.Plan"
+                                    event-store="eventStore" event-bus="eventBus">
+        <axon:snapshotter-trigger event-count-threshold="10" snapshotter-ref="snapshotter"/>
+    </axon:event-sourcing-repository>
+
+</beans>

@@ -4,7 +4,7 @@ package com.pla.core.domain.model.plan;
  * @author: pradyumna
  * @since 1.0 12/03/2015
  */
-enum EndorsementType {
+public enum EndorsementType {
 
     NAME("Correction of Name"),
     ADDRESS("Change of Address"),

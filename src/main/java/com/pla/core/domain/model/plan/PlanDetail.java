@@ -22,20 +22,20 @@ import static com.google.common.base.Preconditions.checkArgument;
 @ToString
 public class PlanDetail {
 
-    private String planName;
-    private String planCode;
-    private LocalDate launchDate;
-    private LocalDate withdrawalDate;
-    private int freeLookPeriod = 15;
-    private int minEntryAge;
-    private int maxEntryAge;
-    private boolean taxApplicable;
-    private int surrenderAfter;
-    private Set<Relationship> applicableRelationships;
-    private Set<EndorsementType> endorsementTypes;
-    private LineOfBusinessId lineOfBusinessId;
-    private PlanType planType;
-    private ClientType clientType;
+    String planName;
+    String planCode;
+    LocalDate launchDate;
+    LocalDate withdrawalDate;
+    int freeLookPeriod = 15;
+    int minEntryAge;
+    int maxEntryAge;
+    boolean taxApplicable;
+    int surrenderAfter;
+    Set<Relationship> applicableRelationships;
+    Set<EndorsementType> endorsementTypes;
+    LineOfBusinessId lineOfBusinessId;
+    PlanType planType;
+    ClientType clientType;
 
     @SuppressWarnings("UnusedDeclaration")
     protected PlanDetail() {

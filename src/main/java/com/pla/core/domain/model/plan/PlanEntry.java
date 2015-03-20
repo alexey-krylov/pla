@@ -5,6 +5,7 @@ import com.pla.sharedkernel.domain.model.PlanType;
 import com.pla.sharedkernel.domain.model.Relationship;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.Type;
 import org.joda.time.LocalDate;
 import org.nthdimenzion.common.crud.ICrudEntity;
 
@@ -27,7 +28,9 @@ public class PlanEntry implements ICrudEntity {
     private String identifier;
     private String planName;
     private String planCode;
+    @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentLocalDate")
     private LocalDate launchDate;
+    @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentLocalDate")
     private LocalDate withdrawalDate;
     private String lineOfBusinessId;
     private PlanType planType;

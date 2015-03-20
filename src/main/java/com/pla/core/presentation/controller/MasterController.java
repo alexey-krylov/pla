@@ -11,7 +11,7 @@ import com.pla.core.query.MasterFinder;
 import com.pla.sharedkernel.domain.model.GeoType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
-import org.springframework.ui.Model;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -24,7 +24,8 @@ import java.util.Map;
  * @author: Samir
  * @since 1.0 20/03/2015
  */
-@RequestMapping(value = "/pla/master")
+@Controller
+@RequestMapping(value = "/core/master", consumes = MediaType.ALL_VALUE)
 public class MasterController {
 
     private MasterFinder masterFinder;
