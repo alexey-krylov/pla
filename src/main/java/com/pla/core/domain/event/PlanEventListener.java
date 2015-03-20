@@ -28,12 +28,11 @@ public class PlanEventListener {
         if (logger.isDebugEnabled()) {
             logger.debug(" inserting record into Plan Entry.");
         }
-
         PlanEntry planEntry = new PlanEntry();
         planEntry.setClientType(event.getClientType());
         planEntry.setApplicableRelationships(event.getApplicableRelationships());
         planEntry.setEndorsementTypes(event.getEndorsementTypes());
-        planEntry.setIdentifier(event.getPlanId().toString());
+        planEntry.setIdentifier(event.getPlanId());
         planEntry.setLaunchDate(event.getLaunchDate());
         planEntry.setWithdrawalDate(event.getWithdrawalDate());
         planEntry.setPlanCode(event.getPlanCode());
