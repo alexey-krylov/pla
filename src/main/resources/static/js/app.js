@@ -71,8 +71,14 @@ var App = angular.module('AngularApp', ['ngRoute','ui.bootstrap','mgcrea.ngStrap
                   $scope.datePickerSettings.isOpened = true;
          };
 
+        $http.get('http://localhost:6443/pla/core/team/openAssignPage/').success(function(data){
+                          //   console.log(data);
+                   $scope.teamList= data;
+            });
+
          $scope.getBranchList = function(regionName){
                 console.log(regionName);
+
           		//$scope.branchList =_.findWhere($scope.employeeDetails,{regionName:regionName});
         }
          $scope.submitTeam = function(){

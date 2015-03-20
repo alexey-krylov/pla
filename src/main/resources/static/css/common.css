@@ -1,4 +1,14 @@
 body {
-    font-family: Arial, Verdana, Helvetica, sans-serif;
-    font-size: 12px;
+font-family: Arial, Verdana, Helvetica, sans-serif;
+font-size: 12px;
+}
+.panel-primary > .panel-heading {
+        background-color: #088ccd;
+}
+.required .control-label:after {
+content: " *";
+color: red;
+}
+.css-form input.ng-invalid.ng-touched {
+    border:1px solid #FA787E;
 }
