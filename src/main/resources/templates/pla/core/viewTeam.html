@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
-      lang="en">
+      lang="en" ng-app="AngularApp">
 <head th:include="fragments/common :: headTag">
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
 
@@ -8,27 +8,7 @@
 <body style="padding-top: 70px;">
 <div th:include="fragments/common :: bodyHeader" th:remove="tag"/>
 
-
-<div class="modal fade" id="alert-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-sm">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title">Alert</h4>
-            </div>
-            <div class="modal-body">
-                Are you sure to inactivate the benefit?
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-primary" onclick="inactivate('','confirm')">Yes</button>
-                <button type="button" class="btn btn-danger" data-dismiss="modal">No</button>
-            </div>
-        </div>
-    </div>
-</div>
-
-
-<div class="container" style="padding-top: 0px!important;">
+<div class="container" style="padding-top: 0px!important;" ng-Controller="ViewTeamController">
     <div class="row">
         <div class="col-lg-12">
             <div class="panel panel-primary">
@@ -36,8 +16,12 @@
                     <div class="row">
                         <div class="col-lg-6"><span th:text="#{listOfTeams}">List of Teams
                         </span></div>
-                        <div class="col-lg-6"><a type="button" class="btn btn-warning btn-sm" style="float: right"
-                                                 th:href="@{/core/team/openCreatePage}">
+                        <!-- <div class="col-lg-6"><a type="button" class="btn btn-default btn-xs" style="float: right"
+                                                  th:href="@{/core/team/openCreatePage}">
+                             Create
+                         </a></div>-->
+                        <div class="col-lg-6"><a type="button" class="btn btn-default btn-xs" style="float: right"
+                                                 ng-click="openCreateTeam()">
                             Create
                         </a></div>
                     </div>
@@ -69,34 +53,25 @@
                             </th>
                         </tr>
                         </thead>
-                        <tbody>    <!--th:each="team : ${teams}"-->
-                        <tr>
-                            <td>South</td>
-                            <!--th:text="${team.regionName}"-->
-                            <td>Livingstone</td>
-                            <!--th:text="${team.branchName}"-->
-                            <td>Livingstone A</td>
-                            <!--th:text="${team.teamName}"-->
-                            <td>T1234</td>
-                            <!-- th:text="${team.teamCode}"-->
-                            <td>TeamLeader A</td>
-                            <!--th:text="${team.teamLeader}"-->
-                            <td>09/03/2014</td>
-                            <!--th:text="${team.teamLeaderFrom}"-->
+                        <tbody>
+                        <tr  ng-repeat="team in teamList">
+                            <td>{{team.regionName}}</td>
+                            <!--{{team.regionName}}-->
+                            <td>{{team.branchName}}</td>
+                            <!--{{team.branchName}}-->
+                            <td>{{team.teamName}}</td>
+                            <!--{{team.teamName}}-->
+                            <td>{{team.teamCode}}</td>
+                            <!-- {{team.teamCode}}-->
+                            <td>{{team.firstName}}{{team.lastName}}</td>
+                            <!--{{team.teamLeader}}-->
+                            <td>{{team.teamLeaderFrom}}</td>
+                            <!--{{team.teamLeaderFrom}}-->
                             <td style="text-align:center">
-                                <a class="btn btn-primary btn-xs" th:href="@{/core/team/assign}">Assign</a>
+                                <a class="btn btn-default btn-xs" ng-click="openAssignTeam(team.teamId)">Assign</a>
                             </td>
                         </tr>
-                        <tr>
-                            <td>North</td>
-                            <td>Kasama</td>
-                            <td>Kasama A</td>
-                            <td>T7890</td>
-                            <td>TeamLeader C</td>
-                            <td>29/05/2013</td>
-                            <td style="text-align:center">
-                                <a class="btn btn-primary btn-xs" th:href="@{/core/team/assign}">Assign</a></td>
-                        </tr>
+
                         </tbody>
                     </table>
                 </div>

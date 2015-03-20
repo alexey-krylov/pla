@@ -1,13 +1,13 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
-      lang="en">
+      lang="en" ng-app="AngularApp">
 <head th:include="fragments/common :: headTag">
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
 </head>
-<body style="padding-top: 70px;">
+<body style="padding-top: 70px;" >
 <div th:include="fragments/common :: bodyHeader" th:remove="tag"/>
 
-<div class="container" style="padding-top: 0px!important;">
+<div class="container" style="padding-top: 0px!important;" ng-Controller="CreateTeamController">
     <div class="row">
         <div class="col-lg-8" style="left:230px;position:absolute;">
             <div class="panel panel-primary">
@@ -18,85 +18,76 @@
                     </div>
                 </div>
                 <div class="panel-body">
-                    <form class="form-horizontal" id="createTeam" >
-                        <div class="form-group" style="margin: auto;margin-top:10px;">
-                            <label class="col-sm-3 control-label">Region Name</label>
-
-                            <div class="col-sm-9">
-                                <select class="form-control" id="regionName">
+                    <form   novalidate="true" class="css-form">
+                        <div class="row">
+                            <div class="form-group col-md-6 required" style="margin: auto;margin-top:10px;">
+                                <label class="control-label">Region Name</label>
+                                <select class="form-control input-sm"  ng-model="createTeam.regionName" ng-required="true" ng-change="getBranchList(createTeam.regionName)">
+                                    <option value="">Select Region</option>
                                     <option value="Region A">Region A</option>
                                     <option value="Region B">Region B</option>
                                     <option value="Region C">Region C</option>
                                     <option value="Region D">Region D</option>
                                 </select>
                             </div>
-                        </div>
-                        <div class="form-group" style="margin: auto;margin-top:10px;">
-                            <label class="col-sm-3 control-label">Branch Name</label>
-
-                            <div class="col-sm-9">
-                                <select class="form-control" id="branchName">
+                            <div class="form-group col-md-6 required" style="margin: auto;margin-top:10px;">
+                                <label class="control-label">Branch Name</label>
+                                <select class="form-control input-sm" ng-model="createTeam.branchName" ng-required="true" ng-disabled="!createTeam.regionName" >
+                                    <option value="">Select Region First</option>
                                     <option value="Branch A">Branch A</option>
                                     <option value="Branch B">Branch B</option>
                                     <option value="Branch C">Branch C</option>
                                     <option value="Branch D">Branch D</option>
                                 </select>
                             </div>
-                        </div>
-                        <div class="form-group" style="margin: auto;margin-top:10px;">
-                            <label class="col-sm-3 control-label">Team Name</label>
-
-                            <div class="col-sm-9">
-                                <input type="text" name="teamName" required="true" maxlength="50" class="form-control"
-                                       id="teamName" />
+                            <div class="form-group col-md-6 required" style="margin: auto;margin-top:10px;">
+                                <label class="control-label">Team Name</label>
+                                <input type="text" name="teamName" ng-required="true" maxlength="50" class="form-control input-sm"
+                                       id="teamName" ng-model="createTeam.teamName" />
                                 <span hidden="true"
                                       style="color: darkred;font-size: 10px">Please check if it is empty </span>
                             </div>
-                        </div>
-                        <div class="form-group" style="margin: auto;margin-top:10px;">
-                            <label class="col-sm-3 control-label">Team Code</label>
-
-                            <div class="col-sm-9">
-                                <input type="text" name="teamCode" required="true" maxlength="50" class="form-control"
-                                       id="teamCode" />
+                            <div class="form-group col-md-6 required" style="margin: auto;margin-top:10px;">
+                                <label class="control-label">Team Code</label>
+                                <input type="text" name="teamCode" ng-required="true" maxlength="50" class="form-control input-sm"
+                                       id="teamCode" ng-model="createTeam.teamCode" />
                                 <span hidden="true"
                                       style="color: darkred;font-size: 10px">Please check if it is empty </span>
                             </div>
-                        </div>
-                        <div class="form-group" style="margin: auto;margin-top:10px;">
-                            <label class="col-sm-3 control-label">Team Leader</label>
-
-                            <div class="col-sm-9">
-                                <select class="form-control" id="teamLeader">
-                                    <option value="TeamLeader A">TeamLeader A</option>
-                                    <option value="TeamLeader B">TeamLeader B</option>
-                                    <option value="TeamLeader C">TeamLeader C</option>
-                                    <option value="TeamLeader D">TeamLeader D</option>
+                            <div class="form-group col-md-6" style="margin: auto;margin-top:10px;">
+                                <label class="control-label">Team Leader</label>
+                                <select class="form-control input-sm" id="teamLeader" ng-model="createTeam.teamLeader">
+                                    <option value="">Select TeamLeader</option>
+                                    <option value="1">TeamLeader A</option>
+                                    <option value="2">TeamLeader B</option>
+                                    <option value="3">TeamLeader C</option>
+                                    <option value="4">TeamLeader D</option>
                                 </select>
                             </div>
-                        </div>
-                        <div class="form-group" style="margin: auto;margin-top:10px;">
-                            <label class="col-sm-3 control-label">Team Leader From</label>
+                            <div class="form-group col-md-6" style="margin: auto;margin-top:10px;">
+                                <label class="control-label">Team Leader From</label>
+                                <p class="input-group">
+                                    <input type="text" class="form-control input-sm"  datepicker-popup="dd/MM/yyyy" ng-model="createTeam.fromDate"  datepicker-options="datePickerSettings.dateOptions" is-open="datePickerSettings.isOpened"  close-text="Close" />
+                                        <span class="input-group-btn">
+                                            <button type="button" class="btn btn-default btn-sm" ng-click="open($event)"><i class="glyphicon glyphicon-calendar"></i></button>
+                                        </span>
+                                </p>
+                            </div>
 
-                            <div class="col-sm-9">
-                                <div class='input-group date' id='datetimepicker2'>
-                                    <input type="text" class="form-control" name="teamLeaderFrom" id="teamLeaderFrom"/>
-                            <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span>
-                            </span>
-                                </div>
+                        </div>
+                        <div class="row">
+                            <div class="form-group col-lg-12" >
+                                <button type="button" class="btn btn-default" style="float:right;" ng-disabled="(!createTeam.regionName || !createTeam.branchName || !createTeam.teamName || !createTeam.teamCode )"  ng-click="submitTeam()">Save</button>
+                                <a class="btn btn-default"  style="float:left;" th:href="@{/core/team/view}">Cancel</a>
                             </div>
                         </div>
-                        <div class="col-lg-12" style="text-align: center;margin-top:10px;">
-                            <button type="button" class="btn btn-primary align-center"  onclick="createTeamOne()">Save</button>
-                            <a class="btn btn-primary align-center" th:href="@{/core/team/view}">Cancel</a>
-                        </div>
                     </form>
+
                 </div>
             </div>
         </div>
     </div>
 </div>
-<script data-main="/pla/js/viewTeam.js" src="/webjarsjs" th:src="@{/webjarsjs}"></script>
 <footer class="footer" th:include="fragments/common :: footer">
 </footer>
 </body>
