@@ -43,6 +43,10 @@ public class TeamFinder {
             "LEFT JOIN branch b ON b.branch_code = tm.branch_code";
 
 
+    public static final String FIND_TEAM_BY_ID = "SELECT tm.current_team_leader AS currentTeamLeader ,tm.team_id AS teamId,tm.team_name AS teamName,b.branch as branchName,r.regional_manager as regionalManager,r.REGION_CODE AS regionCode,b.BRANCH_CODE AS branchCode FROM team tm " +
+            "LEFT JOIN region r ON r.region_code = tm.region_code " +
+            "LEFT JOIN branch b ON b.branch_code = tm.branch_code  where tm.team_id=:teamId";
+
 
     public int getTeamCountByTeamName(String teamName) {
         Preconditions.checkNotNull(teamName);
@@ -60,5 +64,7 @@ public class TeamFinder {
         return namedParameterJdbcTemplate.query(findAllTeam, new ColumnMapRowMapper());
     }
 
-
+    public Map<String, Object> getTeamById(String teamId) {
+        return namedParameterJdbcTemplate.queryForMap(FIND_TEAM_BY_ID, new MapSqlParameterSource().addValue("teamId", teamId));
+    }
 }

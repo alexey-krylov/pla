@@ -10,6 +10,7 @@ import org.nthdimenzion.presentation.Result;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -18,12 +19,15 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
+
+import static org.nthdimenzion.presentation.AppUtils.getLoggedInUSerDetail;
 
 /**
  * Created by Nischitha on 10-Mar-15.
  */
 @Controller
-@RequestMapping(value = "/core")
+@RequestMapping(value = "/core", consumes = MediaType.ALL_VALUE)
 public class TeamController {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(TeamController.class);
@@ -32,13 +36,13 @@ public class TeamController {
 
     private TeamFinder teamFinder;
 
-    private MasterFinder   masterFinder;
+    private MasterFinder masterFinder;
 
     @Autowired
-    public TeamController(CommandGateway commandGateway, TeamFinder teamFinder,MasterFinder masterFinder) {
+    public TeamController(CommandGateway commandGateway, TeamFinder teamFinder, MasterFinder masterFinder) {
         this.commandGateway = commandGateway;
         this.teamFinder = teamFinder;
-        this.masterFinder=masterFinder;
+        this.masterFinder = masterFinder;
     }
 
     @RequestMapping(value = "/team/view", method = RequestMethod.GET)
@@ -54,12 +58,17 @@ public class TeamController {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("pla/core/createTeam");
         modelAndView.addObject("regions", masterFinder.getAllRegion());
+        modelAndView.addObject("teamLeaders", new ArrayList<>());
         return modelAndView;
     }
 
     @RequestMapping(value = "/team/openAssignPage", method = RequestMethod.GET)
-    public String openAssignPageTeam() {
-        return "pla/core/assignTeam";
+    public ModelAndView openAssignPageTeam(@RequestParam(value = "teamId", required = false) String teamId) {
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("pla/core/assignTeam");
+        modelAndView.addObject("teamDetail", teamFinder.getTeamById(teamId));
+        modelAndView.addObject("teamLeaders", new ArrayList<>());
+        return modelAndView;
     }
 
 
@@ -84,8 +93,10 @@ public class TeamController {
     @RequestMapping(value = "/team/assign", method = RequestMethod.POST)
     public
     @ResponseBody
-    Result updateTeamLead(@RequestBody UpdateTeamCommand updateTeamCommand) {
+    Result updateTeamLead(@RequestBody UpdateTeamCommand updateTeamCommand, BindingResult bindingResult, HttpServletRequest request) {
         try {
+            UserDetails userDetails = getLoggedInUSerDetail(request);
+            updateTeamCommand.setUserDetails(userDetails);
             commandGateway.sendAndWait(updateTeamCommand);
         } catch (Exception e) {
             LOGGER.error("Error in creating team", e);
@@ -94,8 +105,5 @@ public class TeamController {
         return Result.success("Team updated successfully");
     }
 
-    private UserDetails getLoggedInUSerDetail(HttpServletRequest request) {
-        UserDetails userDetails = (UserDetails) request.getSession().getAttribute(AppConstants.LOGGED_IN_USER);
-        return userDetails;
-    }
+
 }
