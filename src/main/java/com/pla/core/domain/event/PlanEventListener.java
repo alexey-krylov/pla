@@ -1,16 +1,16 @@
 package com.pla.core.domain.event;
 
-import com.pla.core.domain.model.plan.PlanDetail;
 import com.pla.core.domain.model.plan.PlanDetailChanged;
 import com.pla.core.domain.model.plan.PlanDetailConfigured;
 import com.pla.core.domain.model.plan.PlanEntry;
 import org.axonframework.eventhandling.annotation.EventHandler;
-import org.nthdimenzion.common.service.JpaRepositoryFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.support.SimpleJpaRepository;
 import org.springframework.stereotype.Component;
+
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 
 /**
  * @author: pradyumna
@@ -19,13 +19,9 @@ import org.springframework.stereotype.Component;
 @Component
 public class PlanEventListener {
 
-    private JpaRepository<PlanEntry, String> planEntryRepository;
-    private Logger logger = LoggerFactory.getLogger(PlanEventListener.class);
 
-    @Autowired
-    public PlanEventListener(JpaRepositoryFactory jpaRepositoryFactory) {
-        planEntryRepository = jpaRepositoryFactory.getCrudRepository(PlanEntry.class);
-    }
+    private SimpleJpaRepository<PlanEntry, String> planEntryRepository;
+    private Logger logger = LoggerFactory.getLogger(PlanEventListener.class);
 
     @EventHandler
     public void onPlanDetailConfigured(PlanDetailConfigured event) {
@@ -33,18 +29,17 @@ public class PlanEventListener {
             logger.debug(" inserting record into Plan Entry.");
         }
 
-        PlanDetail planDetail = event.getPlanDetail();
         PlanEntry planEntry = new PlanEntry();
-        planEntry.setClientType(planDetail.getClientType());
-        planEntry.setApplicableRelationships(planDetail.getApplicableRelationships());
-        planEntry.setEndorsementTypes(planDetail.getEndorsementTypes());
+        planEntry.setClientType(event.getClientType());
+        planEntry.setApplicableRelationships(event.getApplicableRelationships());
+        planEntry.setEndorsementTypes(event.getEndorsementTypes());
         planEntry.setIdentifier(event.getPlanId().toString());
-        planEntry.setLaunchDate(planDetail.getLaunchDate());
-        planEntry.setWithdrawalDate(planDetail.getWithdrawalDate());
-        planEntry.setPlanCode(planDetail.getPlanCode());
-        planEntry.setPlanName(planDetail.getPlanName());
-        planEntry.setLineOfBusinessId(planDetail.getLineOfBusinessId().toString());
-        planEntry.setPlanType(planDetail.getPlanType());
+        planEntry.setLaunchDate(event.getLaunchDate());
+        planEntry.setWithdrawalDate(event.getWithdrawalDate());
+        planEntry.setPlanCode(event.getPlanCode());
+        planEntry.setPlanName(event.getPlanName());
+        planEntry.setLineOfBusinessId(event.getLineOfBusinessId().toString());
+        planEntry.setPlanType(event.getPlanType());
         planEntryRepository.save(planEntry);
     }
 
@@ -54,17 +49,21 @@ public class PlanEventListener {
             logger.debug(" updating record into Plan Entry.");
         }
         PlanEntry planEntry = planEntryRepository.findOne(event.getPlanId().toString());
-        PlanDetail planDetail = event.getPlanDetail();
-        planEntry.setClientType(planDetail.getClientType());
-        planEntry.setApplicableRelationships(planDetail.getApplicableRelationships());
-        planEntry.setEndorsementTypes(planDetail.getEndorsementTypes());
-        planEntry.setLaunchDate(planDetail.getLaunchDate());
-        planEntry.setWithdrawalDate(planDetail.getWithdrawalDate());
-        planEntry.setPlanCode(planDetail.getPlanCode());
-        planEntry.setPlanName(planDetail.getPlanName());
-        planEntry.setLineOfBusinessId(planDetail.getLineOfBusinessId().toString());
-        planEntry.setPlanType(planDetail.getPlanType());
+        planEntry.setClientType(event.getClientType());
+        planEntry.setApplicableRelationships(event.getApplicableRelationships());
+        planEntry.setEndorsementTypes(event.getEndorsementTypes());
+        planEntry.setLaunchDate(event.getLaunchDate());
+        planEntry.setWithdrawalDate(event.getWithdrawalDate());
+        planEntry.setPlanCode(event.getPlanCode());
+        planEntry.setPlanName(event.getPlanName());
+        planEntry.setLineOfBusinessId(event.getLineOfBusinessId().toString());
+        planEntry.setPlanType(event.getPlanType());
         planEntryRepository.save(planEntry);
+    }
+
+    @PersistenceContext
+    public void setEntityManager(EntityManager entityManager) {
+        planEntryRepository = new SimpleJpaRepository<PlanEntry, String>(PlanEntry.class, entityManager);
     }
 
 }

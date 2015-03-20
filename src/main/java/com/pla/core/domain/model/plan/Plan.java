@@ -51,7 +51,21 @@ public class Plan extends AbstractAnnotatedAggregateRoot<PlanId> {
         apply(new PlanConfigured(builder.planId));
 
         checkArgument(builder.planDetail != null);
-        apply(new PlanDetailConfigured(this.planId, builder.planDetail));
+        PlanDetail pd = builder.planDetail;
+        apply(new PlanDetailConfigured(this.planId, pd.planName,
+                pd.planCode,
+                pd.launchDate,
+                pd.withdrawalDate,
+                pd.freeLookPeriod,
+                pd.minEntryAge,
+                pd.maxEntryAge,
+                pd.taxApplicable,
+                pd.surrenderAfter,
+                pd.applicableRelationships,
+                pd.endorsementTypes,
+                pd.lineOfBusinessId,
+                pd.planType,
+                pd.clientType));
 
         checkArgument(builder.policyTerm != null);
         apply(new PolicyTermConfigured(builder.policyTerm));
@@ -73,9 +87,22 @@ public class Plan extends AbstractAnnotatedAggregateRoot<PlanId> {
         return new PlanBuilder();
     }
 
-    public void updatePlanDetail(PlanDetail planDetail) {
-        checkArgument(policyTerm != null);
-        apply(new PlanDetailChanged(this.planId, planDetail));
+    public void updatePlanDetail(PlanDetail pd) {
+        checkArgument(pd != null);
+        apply(new PlanDetailChanged(this.planId, pd.planName,
+                pd.planCode,
+                pd.launchDate,
+                pd.withdrawalDate,
+                pd.freeLookPeriod,
+                pd.minEntryAge,
+                pd.maxEntryAge,
+                pd.taxApplicable,
+                pd.surrenderAfter,
+                pd.applicableRelationships,
+                pd.endorsementTypes,
+                pd.lineOfBusinessId,
+                pd.planType,
+                pd.clientType));
     }
 
     public void updatePolicyTerm(PolicyTerm policyTerm) {
@@ -112,7 +139,21 @@ public class Plan extends AbstractAnnotatedAggregateRoot<PlanId> {
         if (logger.isTraceEnabled()) {
             logger.trace("Plan Detail configured");
         }
-        this.planDetail = event.getPlanDetail();
+        this.planDetail = PlanDetail.builder().withPlanName(event.getPlanName())
+                .withPlanCode(event.getPlanCode())
+                .withLaunchDate(event.launchDate)
+                .withWithdrawalDate(event.withdrawalDate)
+                .withMinEntryAge(event.minEntryAge)
+                .withMaxEntryAge(event.maxEntryAge)
+                .withFreeLookPeriod(event.freeLookPeriod)
+                .withSurrenderAfter(event.surrenderAfter)
+                .withClientType(event.clientType)
+                .withLineOfBusinessId(event.lineOfBusinessId)
+                .withPlanType(event.planType)
+                .withApplicableRelationships(event.applicableRelationships)
+                .withEndorsementTypes(event.endorsementTypes)
+                .withTaxApplicable(event.taxApplicable)
+                .build();
     }
 
     @EventHandler
@@ -152,7 +193,21 @@ public class Plan extends AbstractAnnotatedAggregateRoot<PlanId> {
         if (logger.isTraceEnabled()) {
             logger.trace("Plan Detail changed.");
         }
-        this.planDetail = event.getPlanDetail();
+        this.planDetail = PlanDetail.builder().withPlanName(event.getPlanName())
+                .withPlanCode(event.getPlanCode())
+                .withLaunchDate(event.launchDate)
+                .withWithdrawalDate(event.withdrawalDate)
+                .withMinEntryAge(event.minEntryAge)
+                .withMaxEntryAge(event.maxEntryAge)
+                .withFreeLookPeriod(event.freeLookPeriod)
+                .withSurrenderAfter(event.surrenderAfter)
+                .withClientType(event.clientType)
+                .withLineOfBusinessId(event.lineOfBusinessId)
+                .withPlanType(event.planType)
+                .withApplicableRelationships(event.applicableRelationships)
+                .withEndorsementTypes(event.endorsementTypes)
+                .withTaxApplicable(event.taxApplicable)
+                .build();
     }
 
     @EventHandler
