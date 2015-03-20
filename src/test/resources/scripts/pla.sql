@@ -296,7 +296,7 @@ CREATE TABLE `sum_assured_sum_insured_values` (
 DROP TABLE IF EXISTS `entity_sequence`;
 CREATE TABLE `entity_sequence`(
   `sequence_id` INT(11) NOT NULL,
-  `sequence_name` VARCHAR(20) NOT NULL,
+  `sequence_name` text NOT NULL,
   `sequence_number` DECIMAL(20,0) NOT NULL,
   `sequence_prefix` VARCHAR(255) NOT NULL,
   PRIMARY KEY (`sequence_id`)

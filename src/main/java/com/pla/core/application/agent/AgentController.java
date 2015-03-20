@@ -17,10 +17,7 @@ import org.springframework.http.MediaType;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
@@ -56,6 +53,36 @@ public class AgentController {
         return modelAndView;
     }
 
+
+    @RequestMapping(value = "/opencreatepage", method = RequestMethod.GET)
+    public ModelAndView openAgentCreatePage() {
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("pla/core/createagent?agentid=" + "1");
+        return modelAndView;
+    }
+
+    @RequestMapping(value = "/openeditpage", method = RequestMethod.GET)
+    public ModelAndView openAgentEditPage() {
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("pla/core/editeagent?agentid=" + "1");
+        return modelAndView;
+    }
+
+    @RequestMapping(value = "/getagentdetail", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public CreateAgentCommand getAgentDetail(@RequestParam("agentId") String agentId) {
+        CreateAgentCommand createAgentCommand = new CreateAgentCommand();
+        return createAgentCommand;
+    }
+
+    @RequestMapping(value = "/viewagentdetail", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public ModelAndView viewAgentDetail(@RequestParam("agentId") String agentId) {
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("pla/core/viewagent");
+        modelAndView.addObject("agentDetail", new CreateAgentCommand());
+        return modelAndView;
+    }
 
     @RequestMapping(value = "/create", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.ALL_VALUE)
     public

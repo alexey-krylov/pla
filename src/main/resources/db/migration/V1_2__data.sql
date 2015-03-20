@@ -526,3 +526,5 @@ VALUES ("KON","Konkola Copper Mine","Private Clinic",null,"CI-CHIL","PR-COP",nul
 ("VIK","Vikay Pharmacy Ltd","Private Pharmacist",null,"CI-LUS","PR-LUS",null,null,null),
 ("LUSC","Lusaka Chemist","Private Pharmacist",null,"CI-LUS","PR-LUS",null,null,null),
 ("NOR","Northmead Chemist","Private Pharmacist",null,"CI-LUS","PR-LUS",null,null,null);
+
+insert  into `entity_sequence`(`sequence_id`,`sequence_name`,`sequence_number`,`sequence_prefix`) values (1,'com.pla.core.domain.',0,'1000');
