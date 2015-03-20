@@ -599,6 +599,7 @@ CREATE TABLE `sum_assured_sum_insured_values` (
 DROP TABLE IF EXISTS `branch`;
 CREATE TABLE `branch`(
   `BRANCH_CODE` varchar(20) NOT NULL,
+  `REGION_CODE` varchar(20) NOT NULL,
   `BRANCH` varchar(255) NOT NULL,
   `BRANCH_MANAGER` varchar(255) NOT NULL,
   `BRANCH_BDE` varchar(255) NOT NULL,
@@ -653,6 +654,15 @@ CREATE TABLE `team_team_leader_fulfillment`(
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 /*Data for the table `team_team_leader_fulfillment` */
+
+DROP TABLE IF EXISTS `entity_sequence`;
+CREATE TABLE `entity_sequence`(
+  `sequence_id` INT(11) NOT NULL,
+  `sequence_name` VARCHAR(20) NOT NULL,
+  `sequence_number` DECIMAL(20,0) NOT NULL,
+  `sequence_prefix` VARCHAR(255) NOT NULL,
+  PRIMARY KEY (`sequence_id`)
+) ENGINE=INNODB DEFAULT CHARSET=utf8;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;

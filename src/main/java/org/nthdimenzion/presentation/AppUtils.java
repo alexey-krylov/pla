@@ -7,7 +7,10 @@ import org.joda.money.Money;
 import org.joda.time.LocalDate;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
+import org.nthdimenzion.common.AppConstants;
+import org.springframework.security.core.userdetails.UserDetails;
 
+import javax.servlet.http.HttpServletRequest;
 import java.math.BigDecimal;
 import java.util.Locale;
 
@@ -43,5 +46,10 @@ public class AppUtils {
         return Money.of(DEFAULT_CURRENCY, new BigDecimal(money));
     }
 
+
+    public static UserDetails getLoggedInUSerDetail(HttpServletRequest request) {
+        UserDetails userDetails = (UserDetails) request.getSession().getAttribute(AppConstants.LOGGED_IN_USER);
+        return userDetails;
+    }
 }
 

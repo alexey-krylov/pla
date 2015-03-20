@@ -14,10 +14,8 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
-import java.util.Iterator;
-import java.util.Set;
-
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 
 /**
@@ -37,8 +35,7 @@ public class TeamUnitTest {
     public void setUp() {
         boolean isTeamUnique = true;
         admin = new Admin();
-        team = admin.createTeam(isTeamUnique, "12345", "TEAMNAME", "TEAMCODE", "REGIONCODE","BRANCHCODE", "employeedId1",
-                LocalDate.now(), "TLF", "TLL");
+        team = admin.createTeam(isTeamUnique, "12345", "TEAMNAME", "TEAMCODE", "REGIONCODE", "BRANCHCODE", "employeedId1", LocalDate.now(), "TLF", "TLL");
     }
 
     @Test
@@ -47,25 +44,34 @@ public class TeamUnitTest {
         Team updatedTeam = admin.updateTeamLead(team, "employeedId3", "NTLF", "NTLL", LocalDate.now());
         assertEquals("employeedId3", updatedTeam.getCurrentTeamLeader());
     }
+
     @Test
-    public void testUpdateTeamLeaderFullFillment() {
-        TeamLeader teamLeader = new TeamLeader("employeedId1", "Nischitha", "Kurunji");
-        TeamLeaderFulfillment teamLeaderFulfillment = new TeamLeaderFulfillment(teamLeader, new LocalDate(2015, 03, 18).minusDays(2));
-        Set<TeamLeaderFulfillment> updatedTeamLeaderFulfillments = team.updateTeamLeaderFullfillment(team.getTeamLeaders(), teamLeaderFulfillment);
-        Iterator<TeamLeaderFulfillment> iterator = updatedTeamLeaderFulfillments.iterator();
-        assertEquals(new LocalDate(2015, 03, 18).minusDays(2), ((TeamLeaderFulfillment)iterator.next()).getFromDate());
+    public void itShouldAssignANewTeamLeaderAndExpireTheExistingTeamLeader() {
+        TeamLeaderFulfillment teamLeaderFulfillment = Team.createTeamLeaderFulfillment("EMP001", "Nischitha", "Kurunji", LocalDate.now());
+        Team team = new Team("TEAM001", "Health Insurance Team ", "HIT001", "REG01", "BRA001", "EMP001", teamLeaderFulfillment, Boolean.TRUE);
+        Team updatedTeam = team.assignTeamLeader("EMP002", "Samir", "Padhy", LocalDate.now().plusDays(3));
+        TeamLeaderFulfillment expiredTeamLeaderFulfillment = updatedTeam.getTeamLeaderFulfillmentForATeamLeader("EMP001");
+        assertTrue(expiredTeamLeaderFulfillment != null);
+        assertEquals("EMP002", updatedTeam.getCurrentTeamLeader());
+        assertEquals(LocalDate.now().plusDays(2), expiredTeamLeaderFulfillment.getThruDate());
+
     }
+
     @Test
-    public void testGetCurrentTeamLeaderFulfillment() {
-        assertEquals("employeedId1", team.getCurrentTeamLeaderFulfillment("12345").getTeamLeader().getEmployeeId());
+    public void itShouldReturnTeamLeaderFulfillmentForAGivenTeamLeaderId() {
+        TeamLeaderFulfillment teamLeaderFulfillment = Team.createTeamLeaderFulfillment("EMP001", "Nischitha", "Kurunji", LocalDate.now());
+        Team team = new Team("TEAM001", "Health Insurance Team ", "HIT001", "REG01", "BRA001", "EMP001", teamLeaderFulfillment, Boolean.TRUE);
+        Team updatedTeam = team.assignTeamLeader("EMP002", "Samir", "Padhy", LocalDate.now().plusDays(3));
+        TeamLeaderFulfillment teamLeaderFulfillmentById = updatedTeam.getTeamLeaderFulfillmentForATeamLeader("EMP001");
+        assertEquals("EMP001", teamLeaderFulfillmentById.getTeamLeader().getEmployeeId());
     }
+
     @Test
     public void testCreateTeamLeaderFulfillment() {
-        TeamLeaderFulfillment teamLeaderFulfillment = new TeamLeaderFulfillment(new TeamLeader("12345678", "TEAMNAME", "TEAMCODE"),new LocalDate(2015, 03, 18).minusDays(3));
-        assertEquals(teamLeaderFulfillment, team.createTeamLeaderFulfillment("12345678", "TEAMNAME", "TEAMCODE", new LocalDate(2015, 03, 18).minusDays(3)));
+        TeamLeaderFulfillment teamLeaderFulfillment = new TeamLeaderFulfillment(new TeamLeader("12345678", "TEAMNAME", "TEAMCODE"), new LocalDate(2015, 03, 18).minusDays(1));
+        assertEquals(teamLeaderFulfillment, team.createTeamLeaderFulfillment("12345678", "TEAMNAME", "TEAMCODE", new LocalDate(2015, 03, 18).minusDays(1)));
     }
-    @Test
-    public void testAssignTeamLeader() {
-        assertEquals(team,team.assignTeamLeader("12345", "TEAMNAME", "TEAMCODE", LocalDate.now()));
-    }
+
+
 }
+

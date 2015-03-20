@@ -47,15 +47,17 @@ public class Admin {
         Benefit updatedBenefit = benefit.inActivate();
         return updatedBenefit;
     }
-    public Team createTeam(boolean isTeamUnique, String teamId, String teamName, String teamCode,String regionCode,String branchCode
-            ,String employeeId,LocalDate fromDate, String firstName, String lastName) {
+
+    public Team createTeam(boolean isTeamUnique, String teamId, String teamName, String teamCode, String regionCode, String branchCode
+            , String employeeId, LocalDate fromDate, String firstName, String lastName) {
         if (!isTeamUnique) {
-            throw new TeamDomainException("Team name & Team Code already satisfied");
+            throw new TeamDomainException("Team name and Team Code already satisfied");
         }
-        TeamLeader teamLeader = new TeamLeader(employeeId,firstName, lastName);
+        TeamLeader teamLeader = new TeamLeader(employeeId, firstName, lastName);
         TeamLeaderFulfillment teamLeaderFulfillment = new TeamLeaderFulfillment(teamLeader, fromDate);
-        return new Team(teamId, teamName, teamCode, regionCode, branchCode, employeeId, teamLeaderFulfillment,Boolean.TRUE);
+        return new Team(teamId, teamName, teamCode, regionCode, branchCode, employeeId, teamLeaderFulfillment, Boolean.TRUE);
     }
+
     public Team updateTeamLead(Team team, String employeeId, String firstName, String lastName, LocalDate fromDate) {
         Team updatedTeam = team.assignTeamLeader(employeeId, firstName, lastName, fromDate);
         return updatedTeam;
@@ -77,7 +79,8 @@ public class Admin {
         }
         Agent agentDetail = populateAgentDetail(agent, updateAgentCommand.getAgentProfile(), updateAgentCommand.getLicenseNumber(), updateAgentCommand.getTeamDetail(), updateAgentCommand.getContactDetail(), updateAgentCommand.getPhysicalAddress(), updateAgentCommand.getChannelType());
         Agent agentWithPlans = agentDetail.withPlans(updateAgentCommand.getAuthorizePlansToSell());
-        return agentWithPlans;
+        Agent agentWithUpdatedStatus = agentWithPlans.updateStatus(updateAgentCommand.getAgentStatus());
+        return agentWithUpdatedStatus;
     }
 
     private Agent populateAgentDetail(Agent agent, AgentProfileDto agentProfileDto, LicenseNumberDto licenseNumberDto, TeamDetailDto teamDetailDto, ContactDetailDto contactDetailDto, PhysicalAddressDto physicalAddressDto, ChannelTypeDto channelTypeDto) {

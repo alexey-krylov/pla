@@ -21,7 +21,7 @@ import java.util.Properties;
  */
 public class ArchaiusPropertyPlaceholderConfigurer extends PropertyPlaceholderConfigurer implements InitializingBean {
 
-    private final String[] configFiles = new String[]{"dynamic_prop.yml"};
+    private static final String[] configFiles = new String[]{"dynamic_prop.yml"};
 
     /**
      * Resolve the given placeholder using the properties using Archaius DynamicPropertyFactory.

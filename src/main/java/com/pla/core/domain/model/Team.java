@@ -8,7 +8,7 @@ package com.pla.core.domain.model;
 
 import com.google.common.collect.Sets;
 import lombok.*;
-import org.hibernate.annotations.*;
+import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
 import org.joda.time.LocalDate;
 import org.nthdimenzion.common.crud.ICrudEntity;
@@ -16,9 +16,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.persistence.*;
-import javax.persistence.Entity;
-import javax.persistence.Table;
-import java.util.Iterator;
 import java.util.Set;
 
 import static com.google.common.base.Preconditions.checkArgument;
@@ -78,50 +75,41 @@ public class Team implements ICrudEntity {
     }
 
     public Team assignTeamLeader(String employeeId, String firstName, String lastName, LocalDate effectiveFrom) {
-        TeamLeaderFulfillment currentTeamFulfillment = getCurrentTeamLeaderFulfillment(this.currentTeamLeader);
+        TeamLeaderFulfillment currentTeamFulfillment = getTeamLeaderFulfillmentForATeamLeader(this.currentTeamLeader);
         checkArgument(currentTeamFulfillment != null);
-        TeamLeaderFulfillment expiredTeamLeaderFulfillment = currentTeamFulfillment.expireFulfillment(effectiveFrom.plusDays(-1));
-        this.teamLeaders = updateTeamLeaderFullfillment(this.teamLeaders, expiredTeamLeaderFulfillment);
+        this.teamLeaders = updateTeamLeaderFullfillment(this.teamLeaders, currentTeamFulfillment.getTeamLeader(), effectiveFrom.plusDays(-1));
         this.teamLeaders.add(createTeamLeaderFulfillment(employeeId, firstName, lastName, effectiveFrom));
         this.currentTeamLeader = employeeId;
         return this;
     }
 
-    public Set<TeamLeaderFulfillment> updateTeamLeaderFullfillment(Set<TeamLeaderFulfillment> teamLeaderFulfillments, TeamLeaderFulfillment expiredTeamLeaderFulfillment) {
-        for(Iterator<TeamLeaderFulfillment> i = teamLeaderFulfillments.iterator(); i.hasNext();)
-        {
-            TeamLeaderFulfillment local_teamLeaderFulfillment = i.next();
-            if((local_teamLeaderFulfillment.getTeamLeader()).equals(expiredTeamLeaderFulfillment.getTeamLeader()))
-            {
-                teamLeaderFulfillments.remove(local_teamLeaderFulfillment);
-                teamLeaderFulfillments.add(expiredTeamLeaderFulfillment);
+    public Set<TeamLeaderFulfillment> updateTeamLeaderFullfillment(Set<TeamLeaderFulfillment> teamLeaderFulfillments, TeamLeader teamLeaderToBeExpired, LocalDate expireDate) {
+        for (TeamLeaderFulfillment teamLeaderFulfillment : teamLeaderFulfillments) {
+            if (teamLeaderFulfillment.getTeamLeader().equals(teamLeaderToBeExpired)) {
+                teamLeaderFulfillment.expireFulfillment(expireDate);
             }
         }
         return teamLeaderFulfillments;
     }
 
-    public TeamLeaderFulfillment
-    getCurrentTeamLeaderFulfillment(String currentTeamLeaderId) {
-        TeamLeaderFulfillment local_teamLeaderFulfillment = new TeamLeaderFulfillment(null,null);
-        for(Iterator<TeamLeaderFulfillment> i = this.teamLeaders.iterator(); i.hasNext();)
-        {
-            local_teamLeaderFulfillment = i.next();
-            if((local_teamLeaderFulfillment.getTeamLeader()).equals(currentTeamLeaderId))
-            {
-               break;
+    public TeamLeaderFulfillment getTeamLeaderFulfillmentForATeamLeader(String currentTeamLeaderId) {
+        for (TeamLeaderFulfillment teamLeaderFulfillment : teamLeaders) {
+            if ((teamLeaderFulfillment.getTeamLeader().getEmployeeId()).equals(currentTeamLeaderId)) {
+                return teamLeaderFulfillment;
+
             }
         }
-        return local_teamLeaderFulfillment;
+        return null;
     }
 
-    public TeamLeaderFulfillment createTeamLeaderFulfillment(String employeeId, String firstName, String lastName, LocalDate effectiveFrom) {
+    public static TeamLeaderFulfillment createTeamLeaderFulfillment(String employeeId, String firstName, String lastName, LocalDate effectiveFrom) {
         TeamLeader teamLeader = new TeamLeader(employeeId, firstName, lastName);
         TeamLeaderFulfillment teamLeaderFulfillment = new TeamLeaderFulfillment(teamLeader, effectiveFrom);
         return teamLeaderFulfillment;
     }
 
-    public Team inactivate(){
-        this.active=Boolean.FALSE;
+    public Team inactivate() {
+        this.active = Boolean.FALSE;
         return this;
     }
 

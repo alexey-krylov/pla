@@ -25,7 +25,7 @@ public final class Result {
 
     private static String failureMsg = "Could not complete operation,Contact Administrator";
 
-    enum RESULT_TYPE {
+    public enum RESULT_TYPE {
         SUCCESS("200"), ERROR("500");
 
         private String code;

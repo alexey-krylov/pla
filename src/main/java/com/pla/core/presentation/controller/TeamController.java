@@ -2,6 +2,7 @@ package com.pla.core.presentation.controller;
 
 import com.pla.core.application.CreateTeamCommand;
 import com.pla.core.application.UpdateTeamCommand;
+import com.pla.core.query.MasterFinder;
 import com.pla.core.query.TeamFinder;
 import org.axonframework.commandhandling.gateway.CommandGateway;
 import org.nthdimenzion.common.AppConstants;
@@ -31,10 +32,13 @@ public class TeamController {
 
     private TeamFinder teamFinder;
 
+    private MasterFinder   masterFinder;
+
     @Autowired
-    public TeamController(CommandGateway commandGateway, TeamFinder teamFinder) {
+    public TeamController(CommandGateway commandGateway, TeamFinder teamFinder,MasterFinder masterFinder) {
         this.commandGateway = commandGateway;
         this.teamFinder = teamFinder;
+        this.masterFinder=masterFinder;
     }
 
     @RequestMapping(value = "/team/view", method = RequestMethod.GET)
@@ -46,8 +50,11 @@ public class TeamController {
     }
 
     @RequestMapping(value = "/team/openCreatePage", method = RequestMethod.GET)
-    public String openCreatePageTeam() {
-        return "pla/core/createTeam";
+    public ModelAndView openCreatePageTeam() {
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("pla/core/createTeam");
+        modelAndView.addObject("regions", masterFinder.getAllRegion());
+        return modelAndView;
     }
 
     @RequestMapping(value = "/team/openAssignPage", method = RequestMethod.GET)

@@ -18,7 +18,6 @@ public class PlanSetupController {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(BenefitController.class);
     private BenefitFinder benefitFinder;
-    //private CoverageFinder coverageFinder;
 
     @RequestMapping(value = "/plan/configuration", method = RequestMethod.GET)
     public

@@ -40,6 +40,7 @@ CREATE TABLE bank_name (
 CREATE TABLE bank_branch (
   BANK_CODE VARCHAR(20) NOT NULL,
   BRANCH VARCHAR(100) NOT NULL,
+  `REGION_CODE` varchar(20) NOT NULL,
   SORT_CODE VARCHAR(100),
   PRIMARY KEY(SORT_CODE),
    FOREIGN KEY (BANK_CODE)
@@ -292,6 +293,15 @@ CREATE TABLE `sum_assured_sum_insured_values` (
   KEY `FK_8v9k7sydll2yrf86atgs5081u` (`sum_assured_id`),
   CONSTRAINT `FK_8v9k7sydll2yrf86atgs5081u` FOREIGN KEY (`sum_assured_id`) REFERENCES `sum_assured` (`id`)
 );
+DROP TABLE IF EXISTS `entity_sequence`;
+CREATE TABLE `entity_sequence`(
+  `sequence_id` INT(11) NOT NULL,
+  `sequence_name` VARCHAR(20) NOT NULL,
+  `sequence_number` DECIMAL(20,0) NOT NULL,
+  `sequence_prefix` VARCHAR(255) NOT NULL,
+  PRIMARY KEY (`sequence_id`)
+);
+
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;

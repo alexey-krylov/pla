@@ -7,6 +7,7 @@ import com.pla.core.application.exception.BenefitApplicationException;
 import com.pla.core.query.BenefitFinder;
 import org.axonframework.commandhandling.gateway.CommandGateway;
 import org.nthdimenzion.common.AppConstants;
+import org.nthdimenzion.presentation.AppUtils;
 import org.nthdimenzion.presentation.Result;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,6 +23,8 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+
+import static org.nthdimenzion.presentation.AppUtils.getLoggedInUSerDetail;
 
 
 /**
@@ -107,8 +110,4 @@ public class BenefitController {
         return Result.success("Benefit inactivated successfully");
     }
 
-    private UserDetails getLoggedInUSerDetail(HttpServletRequest request) {
-        UserDetails userDetails = (UserDetails) request.getSession().getAttribute(AppConstants.LOGGED_IN_USER);
-        return userDetails;
-    }
 }

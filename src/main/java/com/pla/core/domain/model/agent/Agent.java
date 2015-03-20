@@ -167,6 +167,18 @@ public class Agent implements ICrudEntity {
         return this;
     }
 
+    public Agent updateStatus(AgentStatus agentStatus) {
+        checkArgument(agentStatus != null);
+        if (AgentStatus.ACTIVE.equals(agentStatus)) {
+            activate();
+        } else if (AgentStatus.TERMINATED.equals(agentStatus)) {
+            terminate();
+        } else {
+            inactivate();
+        }
+        return this;
+    }
+
     public Agent terminate() {
         this.agentStatus = AgentStatus.TERMINATED;
         return this;

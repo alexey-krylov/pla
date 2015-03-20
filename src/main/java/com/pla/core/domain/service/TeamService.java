@@ -33,7 +33,7 @@ public class TeamService {
     @Autowired
     public TeamService(AdminRoleAdapter adminRoleAdapter, TeamIsUnique teamIsUnique, IIdGenerator idGenerator){
         this.adminRoleAdapter = adminRoleAdapter;
-        this.teamIsUnique = teamIsUnique;;
+        this.teamIsUnique = teamIsUnique;
         this.idGenerator = idGenerator;
     }
 

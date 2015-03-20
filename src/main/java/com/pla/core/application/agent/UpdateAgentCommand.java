@@ -7,6 +7,7 @@
 package com.pla.core.application.agent;
 
 import com.google.common.collect.Sets;
+import com.pla.core.domain.model.agent.AgentStatus;
 import com.pla.sharedkernel.domain.model.OverrideCommissionApplicable;
 import com.pla.sharedkernel.identifier.PlanId;
 import lombok.Getter;
@@ -44,4 +45,6 @@ public class UpdateAgentCommand {
     private int agentId;
 
     private UserDetails userDetails;
+
+    private AgentStatus agentStatus;
 }
