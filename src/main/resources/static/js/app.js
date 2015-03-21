@@ -136,4 +136,11 @@ var App = angular.module('AngularApp', ['ngRoute','ui.bootstrap','mgcrea.ngStrap
             };
 
    }]);
+ App.controller('CreateHealthCareProviderController',['$scope','$http',function($scope,$http){
 
+    }]);
+
+App.controller('UpdateHealthCareProviderController',['$scope','$http',function($scope,$http){
+
+
+  }]);

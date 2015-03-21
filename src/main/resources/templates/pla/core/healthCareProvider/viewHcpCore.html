@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      lang="en">
+<head th:include="fragments/common :: headTag">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+
+</head>
+<body style="padding-top: 70px;">
+<div th:include="fragments/common :: bodyHeader" th:remove="tag"/>
+<div class="container" style="padding-top: 0px!important;">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <div class="row">
+                        <div class="col-lg-6"><span th:text="#{listOfHealthCareProviders}">List of Health Care Providers
+                        </span></div>
+                        <div class="col-lg-6"><a type="button" class="btn btn-default btn-xs" style="float: right"
+                                                 th:href="@{/core/healthCareProvider/createCore}">
+                            Create
+                        </a></div>
+                    </div>
+                </div>
+                <div class="panel-body">
+                    <table class="table table-striped table-bordered" id="healthCareProvider-table" cellspacing="0" width="100%">
+                        <thead>
+                        <tr>
+                            <th th:text="#{healthCareProviderName}">
+                                HCP Name
+                            </th>
+                            <th th:text="#{healthCareProviderCode}">
+                                HCP Code
+                            </th>
+                            <th th:text="#{activatedOn}">
+                                Activated On
+                            </th>
+                            <th th:text="#{workPhone}">
+                                Work Phone
+                            </th>
+                            <th th:text="#{actions}">
+                                Actions
+                            </th>
+                        </tr>
+                        </thead>
+                        <tbody>    <!--th:each="healthCareProvider : ${healthCareProviders}"-->
+                        <tr>
+                            <td>CMC</td>
+                            <td>CMC1234</td>
+                            <td>12/08/2014</td>
+                            <td>9908765678</td>
+                            <td style="text-align:center">
+                                <a class="btn btn-default btn-xs" th:href="@{/core/healthCareProvider/updateCore}">Update</a>
+                                <button type="button" class="btn btn-default btn-xs" data-toggle="modal" data-target="#alert-modal"  >Inactivate</button> <!--th:onclick="'inactivate(&quot;'+${healthCareProvider.healthCareProviderId}+'&quot;,&quot;save&quot;)'" -->
+
+                            </td>
+                        </tr>
+
+                        </tbody>
+                    </table>
+                </div>
+                <div class="panel-footer">
+                    <ul class="pagination" id="logs-pagination-default"></ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<footer class="footer" th:include="fragments/common :: footer">
+</footer>
+</body>
+</html>

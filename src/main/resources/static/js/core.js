@@ -14,4 +14,6 @@ require(['jquery','bootstrap','datatables'], function() {
         $('#team-table').dataTable();
         $('#branchManager-table').dataTable();
         $('#regionalManager-table').dataTable();
+        $('#healthCareProvider-table').dataTable();
+
 });
