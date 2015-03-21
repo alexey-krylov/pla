@@ -106,3 +106,34 @@ var App = angular.module('AngularApp', ['ngRoute','ui.bootstrap','mgcrea.ngStrap
 
 
  }]);
+ App.controller('AssignRegionalManagerController',['$scope','$http',function($scope,$http){
+         $scope.datePickerSettings = {
+                  isOpened:false,
+                   dateOptions:{
+                      formatYear:'yyyy' ,
+                      startingDay:1
+              }
+          }
+           $scope.open = function($event) {
+                    $event.preventDefault();
+                    $event.stopPropagation();
+                    $scope.datePickerSettings.isOpened = true;
+           };
+
+  }]);
+  App.controller('AssignBranchManagerController',['$scope','$http',function($scope,$http){
+          $scope.datePickerSettings = {
+                   isOpened:false,
+                    dateOptions:{
+                       formatYear:'yyyy' ,
+                       startingDay:1
+               }
+           }
+            $scope.open = function($event) {
+                     $event.preventDefault();
+                     $event.stopPropagation();
+                     $scope.datePickerSettings.isOpened = true;
+            };
+
+   }]);
+

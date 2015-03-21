@@ -10,6 +10,8 @@ require(["bootstrap-datepicker"], function() {
     });
 });
 
-require(["datatables"], function() {
-    $('#example').dataTable();
+require(['jquery','bootstrap','datatables'], function() {
+        $('#team-table').dataTable();
+        $('#branchManager-table').dataTable();
+        $('#regionalManager-table').dataTable();
 });
