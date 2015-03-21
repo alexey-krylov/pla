@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      lang="en" ng-app="AngularApp">
+<head th:include="fragments/common :: headTag">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+</head>
+<body style="padding-top: 70px;" >
+<div th:include="fragments/common :: bodyHeader" th:remove="tag"/>
+
+<div class="container" style="padding-top: 0px!important;" ng-Controller="ViewCalculatedOverrideCommissionController">
+    <div class="row">
+        <div class="col-lg-12" >
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <div class="row">
+                        <div class="col-lg-3"><span th:text="#{viewCalculatedOverRideCommission}">View Calculated Over-ride Commission
+                        </span></div>
+                    </div>
+                </div>
+                <div class="panel-body" style="padding-top:5px">
+                    <form  id="createCommission">
+
+                        <div class="row">
+                            <div class="form-group col-md-6">
+                                <label class="control-label">Product</label>
+                                <div class="controls readonly">Product A</div>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label class="control-label">Over-ride Commissions Available</label>
+                                <div class="controls readonly">Agent</div>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label class="control-label">From Date</label>
+                                <div class="controls readonly">12/09/2013</div>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label class="control-label">To Date</label>
+                                <div class="controls readonly">22/05/2015</div>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label class="control-label">Over-ride Commission Calculated</label>
+                                <div class="controls readonly">Premium - Policy Fee - Investment Premium</div>
+                            </div>
+                        </div>
+
+                        <table class="table table-striped table-bordered" >
+                            <thead>
+                            <tr>
+                                <th>From Year</th>
+                                <th>To Year</th>
+                                <th>Over-ride Commissions In %age</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+
+                            <tr  >
+                                <td>1</td>
+                                <td></td>
+                                <td>10</td>
+                            </tr>
+                            <tr  >
+                                <td>2</td>
+                                <td>4</td>
+                                <td>5</td>
+                            </tr>
+                            <tr  >
+                                <td>5</td>
+                                <td>8</td>
+                                <td>3</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                       <div class="row">
+                        <div class="col-lg-12" style="text-align: center;margin-top:3px;">
+                            <a class="btn btn-default align-center" th:href="@{/core/overRideCommission/view}">Back</a>
+                        </div>
+                       </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<style>
+    .panel-body {
+    padding-bottom:5px
+    }
+    .form-group{
+    margin-bottom:5px;
+    }
+    td{
+    padding:2px!important;
+    }
+    th{
+    padding:4px!important;
+    }
+    .table{
+    margin-bottom:3px;
+    }
+</style>
+<footer class="footer" th:include="fragments/common :: footer">
+</footer>
+</body>
+</html>

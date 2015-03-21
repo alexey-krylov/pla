@@ -15,5 +15,7 @@ require(['jquery','bootstrap','datatables'], function() {
         $('#branchManager-table').dataTable();
         $('#regionalManager-table').dataTable();
         $('#healthCareProvider-table').dataTable();
+        $('#commission-table').dataTable();
+        $('#overRideCommission-table').dataTable();
 
 });

@@ -136,6 +136,135 @@ var App = angular.module('AngularApp', ['ngRoute','ui.bootstrap','mgcrea.ngStrap
             };
 
    }]);
+   var uid = 1;
+
+      App.controller('CreateCommissionController',['$scope',function($scope){
+              console.log("called CreateCommissionController................");
+              $scope.commissions = [];
+              $scope.showtable  = false;
+              $scope.showToYear  = false;
+                  $scope.addCommissionDetails = function() {
+                      $scope.showtable  = true;
+                      if($scope.addCommission.id == null) {
+                           $scope.addCommission.id = uid++;
+                           $scope.commissions.push($scope.addCommission);
+                      } else {
+
+                           for(i in $scope.commissions) {
+                                  if($scope.commissions[i].id == $scope.addCommission.id) {
+                                      $scope.commissions[i] = $scope.addCommission;
+                                  }
+                           }
+                      }
+                      $scope.addCommission = {};
+                  }
+
+               $scope.getPolicyYearExpressed = function(policyYearExpressed){
+                       // alert(policyYearExpressed);
+                        if(policyYearExpressed == "Range"){
+                          $scope.showToYear  = true;
+                        }else{
+                          $scope.showToYear  = false;
+                        }
+
+               }
+               $scope.saveCommission = function(){
+                       console.log($scope.createCommission);
+                       console.log($scope.commissions);
+               }
+               $scope.fromDatePickerSettings = {
+                      isOpened:false,
+                      dateOptions:{
+                         formatYear:'yyyy' ,
+                         startingDay:1
+                      }
+                 }
+                 $scope.toDatePickerSettings = {
+                                    isOpened:false,
+                                    dateOptions:{
+                                       formatYear:'yyyy' ,
+                                       startingDay:1
+                                    }
+                               }
+                 $scope.open = function($event) {
+                       $event.preventDefault();
+                       $event.stopPropagation();
+                       $scope.fromDatePickerSettings.isOpened = true;
+                 };
+                 $scope.openToDate = function($event) {
+                       $event.preventDefault();
+                       $event.stopPropagation();
+                       $scope.toDatePickerSettings.isOpened = true;
+                 };
+
+       }]);
+       App.controller('CreateOverrideCommissionController',['$scope',function($scope){
+                console.log("called CreateOverrideCommissionController................");
+                $scope.overRideCommissions = [];
+                $scope.showtable  = false;
+                $scope.showToYear  = false;
+                    $scope.addOverRideCommissionDetails = function() {
+                        $scope.showtable  = true;
+                        if($scope.addOverRideCommission.id == null) {
+                             $scope.addOverRideCommission.id = uid++;
+                             $scope.overRideCommissions.push($scope.addOverRideCommission);
+                        } else {
+
+                             for(i in $scope.overRideCommissions) {
+                                    if($scope.overRideCommissions[i].id == $scope.addOverRideCommission.id) {
+                                        $scope.overRideCommissions[i] = $scope.addOverRideCommission;
+                                    }
+                             }
+                        }
+                        $scope.addOverRideCommission = {};
+                    }
+
+                 $scope.getPolicyYearExpressed = function(policyYearExpressed){
+                         // alert(policyYearExpressed);
+                          if(policyYearExpressed == "Range"){
+                            $scope.showToYear  = true;
+                          }else{
+                            $scope.showToYear  = false;
+                          }
+
+                 }
+                 $scope.saveOverRideCommission = function(){
+                         console.log($scope.createOverRideCommission);
+                         console.log($scope.overRideCommissions);
+                 }
+   $scope.fromDatePickerSettings = {
+                      isOpened:false,
+                      dateOptions:{
+                         formatYear:'yyyy' ,
+                         startingDay:1
+                      }
+                 }
+                 $scope.toDatePickerSettings = {
+                     isOpened:false,
+                     dateOptions:{
+                       formatYear:'yyyy' ,
+                       startingDay:1
+                     }
+                 }
+                 $scope.open = function($event) {
+                       $event.preventDefault();
+                       $event.stopPropagation();
+                       $scope.fromDatePickerSettings.isOpened = true;
+                 };
+                 $scope.openToDate = function($event) {
+                       $event.preventDefault();
+                       $event.stopPropagation();
+                       $scope.toDatePickerSettings.isOpened = true;
+                 };
+
+   }]);
+   App.controller('ViewCalculatedCommissionController',['$scope','$http',function($scope,$http){
+
+   }]);
+   App.controller('ViewCalculatedOverrideCommissionController',['$scope','$http',function($scope,$http){
+
+   }]);
+
  App.controller('CreateHealthCareProviderController',['$scope','$http',function($scope,$http){
 
     }]);
