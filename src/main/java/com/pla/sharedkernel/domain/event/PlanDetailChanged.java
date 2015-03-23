@@ -1,9 +1,11 @@
-package com.pla.core.domain.model.plan;
+package com.pla.sharedkernel.domain.event;
 
 import com.pla.sharedkernel.domain.model.ClientType;
+import com.pla.sharedkernel.domain.model.EndorsementType;
 import com.pla.sharedkernel.domain.model.PlanType;
 import com.pla.sharedkernel.domain.model.Relationship;
 import com.pla.sharedkernel.identifier.LineOfBusinessId;
+import com.pla.sharedkernel.identifier.PlanId;
 import org.joda.time.LocalDate;
 
 import java.util.Set;
@@ -14,7 +16,7 @@ import java.util.Set;
  */
 public class PlanDetailChanged extends PlanDetailConfigured {
 
-    public PlanDetailChanged(String planId, String planName, String planCode, LocalDate launchDate,
+    public PlanDetailChanged(PlanId planId, String planName, String planCode, LocalDate launchDate,
                              LocalDate withdrawalDate, int freeLookPeriod, int minEntryAge, int maxEntryAge,
                              boolean taxApplicable, int surrenderAfter, Set<Relationship> applicableRelationships,
                              Set<EndorsementType> endorsementTypes, LineOfBusinessId lineOfBusinessId,

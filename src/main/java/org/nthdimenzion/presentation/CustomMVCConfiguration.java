@@ -118,6 +118,10 @@ public class CustomMVCConfiguration extends WebMvcConfigurerAdapter {
         super.addFormatters(registry);
     }
 
+    @Override
+    public void configureViewResolvers(ViewResolverRegistry registry) {
+    }
+
     private class JodaMoneyFormatter implements Formatter<Money> {
 
         @Override

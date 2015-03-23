@@ -72,7 +72,8 @@ public class Agent implements ICrudEntity {
         return new Agent(agentId, AgentStatus.ACTIVE);
     }
 
-    public Agent createWithAgentProfile(String firstName, String lastName, LocalDate trainingCompleteOn, String designationCode, String designationDescription) {
+    public Agent createWithAgentProfile(String firstName, String lastName, LocalDate trainingCompleteOn,
+                                        String designationCode, String designationDescription) {
         Designation designation = new Designation(designationCode, designationDescription);
         applyOverrideCommissionEligibility(designationCode, designationDescription);
         this.agentProfile = new AgentProfile(firstName, lastName, trainingCompleteOn, designation);

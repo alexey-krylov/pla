@@ -56,6 +56,8 @@ class AgentProfile {
         checkArgument(isNotEmpty(lastName));
         checkArgument(trainingCompleteOn != null);
         checkArgument(designation != null);
+        //Assuming the agent completed training on the 12-01-2015 and is created in the
+        //system on the same very day.
         checkState(trainingCompleteOn.isBefore(LocalDate.now().plusDays(1)));
         this.firstName = firstName;
         this.lastName = lastName;

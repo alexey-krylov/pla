@@ -1,17 +1,19 @@
 package com.pla.core.domain.model.plan;
 
-import com.pla.sharedkernel.domain.model.ClientType;
-import com.pla.sharedkernel.domain.model.PlanType;
-import com.pla.sharedkernel.domain.model.Relationship;
+import com.google.common.collect.Sets;
+import com.pla.sharedkernel.domain.event.PlanCoverageSumAssuredConfigured;
+import com.pla.sharedkernel.domain.model.*;
+import com.pla.sharedkernel.identifier.CoverageId;
 import com.pla.sharedkernel.identifier.LineOfBusinessId;
+import com.pla.sharedkernel.identifier.PlanId;
 import org.joda.time.LocalDate;
 import org.junit.Test;
 
+import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
-import static com.pla.core.domain.model.plan.PlanDetail.PlanDetailBuilder;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 
@@ -61,14 +63,12 @@ public class PlanDetailTest {
 
     }
 
-    @Test
-    public void should_create_plan_detail() {
+    PlanDetail createPlanDetail() {
         PlanDetailBuilder builder = PlanDetail.builder();
         LocalDate launchDate = LocalDate.now().plusDays(10);
         LocalDate withdrawalDate = LocalDate.now().plusDays(30);
         Set<Relationship> relationshipSet = new HashSet<>(Arrays.asList(Relationship.BROTHER, Relationship.DAUGHTER));
         Set<EndorsementType> endorsementTypes = new HashSet<>(Arrays.asList(EndorsementType.ADDRESS, EndorsementType.NAME));
-
         PlanDetail planDetail = builder.withPlanName("Plan 1")
                 .withPlanCode("0001900")
                 .withLaunchDate(launchDate)
@@ -84,7 +84,17 @@ public class PlanDetailTest {
                 .withEndorsementTypes(endorsementTypes)
                 .withTaxApplicable(false)
                 .build();
+        return planDetail;
+    }
 
+    @Test
+    public void should_create_plan_detail() {
+        LocalDate launchDate = LocalDate.now().plusDays(10);
+        LocalDate withdrawalDate = LocalDate.now().plusDays(30);
+        Set<Relationship> relationshipSet = new HashSet<>(Arrays.asList(Relationship.BROTHER, Relationship.DAUGHTER));
+        Set<EndorsementType> endorsementTypes = new HashSet<>(Arrays.asList(EndorsementType.ADDRESS, EndorsementType.NAME));
+
+        PlanDetail planDetail = createPlanDetail();
         assertFalse(planDetail.isTaxApplicable());
         assertEquals("Plan 1", planDetail.getPlanName());
         assertEquals("0001900", planDetail.getPlanCode());
@@ -102,5 +112,23 @@ public class PlanDetailTest {
         System.out.println(planDetail);
     }
 
+    @Test(expected = IllegalArgumentException.class)
+    public void should_not_add_sum_assured_with_different_coverage() {
 
+        PlanDetail planDetail = createPlanDetail();
+        PlanCoverageBuilder builder = PlanCoverage.builder();
+        PlanCoverage planCoverage = builder.withCoverage(new CoverageId("1"))
+                .withCoverageCover(CoverageCover.ACCELERATED)
+                .withTaxApplicable(false)
+                .withCoverageType(CoverageType.BASE)
+                .withMinAndMaxAge(21, 45)
+                .withDeductibleAsPercentage(new BigDecimal(100))
+                .withDeductibleAmount(new BigDecimal(1800))
+                .withWaitingPeriod(5)
+                .build();
+        planDetail.onPlanCoverageConfigured(new PlanCoverageConfigured(Sets.newHashSet(planCoverage)));
+        planDetail.onPlanCoverageSumAssuredConfigured(new PlanCoverageSumAssuredConfigured(new PlanId(), new CoverageId("2"),
+                Sets.newHashSet(new BigDecimal(10000),
+                        new BigDecimal(50000), new BigDecimal(100000))));
+    }
 }

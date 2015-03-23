@@ -20,4 +20,8 @@ public class CoverageId implements Serializable {
 
     private String coverageId;
 
+    public String toString() {
+        return coverageId;
+    }
+
 }

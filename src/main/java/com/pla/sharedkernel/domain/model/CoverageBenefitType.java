@@ -1,4 +1,4 @@
-package com.pla.core.domain.model.plan;
+package com.pla.sharedkernel.domain.model;
 
 /**
  * @author: pradyumna

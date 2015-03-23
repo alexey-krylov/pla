@@ -1,5 +1,6 @@
 package com.pla.core.domain.model.plan;
 
+import com.pla.sharedkernel.domain.model.CoverageType;
 import com.pla.sharedkernel.identifier.CoverageId;
 import org.junit.Before;
 import org.junit.Test;
@@ -105,4 +106,10 @@ public class PlanCoverageTest {
                 .withWaitingPeriod(5)
                 .build();
     }
+
+
+//    savedPlan.configureSumAssuredForPlanCoverage(coverageId, new DerivedSumAssured(coverageId, 5, BigInteger.valueOf(1000000)));
+
+//    savedPlan.configureTermForPlanCoverage(coverageId, new Term(Sets.newHashSet(5, 10, 15)));
+
 }

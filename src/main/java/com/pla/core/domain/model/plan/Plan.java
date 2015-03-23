@@ -1,58 +1,56 @@
 package com.pla.core.domain.model.plan;
 
+import com.google.common.base.Preconditions;
+import com.pla.sharedkernel.domain.event.*;
+import com.pla.sharedkernel.domain.model.*;
+import com.pla.sharedkernel.identifier.CoverageId;
 import com.pla.sharedkernel.identifier.PlanId;
 import lombok.AccessLevel;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.ToString;
 import org.axonframework.eventhandling.annotation.EventHandler;
 import org.axonframework.eventsourcing.annotation.AbstractAnnotatedAggregateRoot;
 import org.axonframework.eventsourcing.annotation.AggregateIdentifier;
+import org.axonframework.eventsourcing.annotation.EventSourcedMember;
 import org.nthdimenzion.utils.UtilValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.HashSet;
+import java.math.BigDecimal;
 import java.util.Set;
 
-import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkState;
 
 /**
  * @author: pradyumna
  * @since 1.0 11/03/2015
  */
-@ToString
+@ToString(exclude = {"logger"})
 @Getter(AccessLevel.PACKAGE)
+@EqualsAndHashCode(exclude = {"logger", "specification"}, callSuper = false)
 public class Plan extends AbstractAnnotatedAggregateRoot<PlanId> {
 
     private Logger logger = LoggerFactory.getLogger(Plan.class);
 
     @AggregateIdentifier
     private PlanId planId;
+    @EventSourcedMember
     private PlanDetail planDetail;
-    private SumAssured sumAssured;
-    /**
-     * Policy term can be a list of age with upper band
-     * of maximum maturity age OR it could be list of age
-     * of the insured.
-     */
-    private PolicyTerm policyTerm;
-    private PlanPayment planPayment;
-    private Set<PlanCoverage> coverages = new HashSet<PlanCoverage>();
+    private PlanSpecification specification = new PlanSpecification();
 
     @SuppressWarnings("UnusedDeclaration")
     protected Plan() {
     }
 
-    Plan(PlanBuilder builder) {
+    Plan(PlanId planId, PlanDetail pd) {
 
-        checkArgument(builder.planId != null);
-        this.planId = builder.planId;
-        apply(new PlanConfigured(builder.planId));
+        Preconditions.checkArgument(planId != null);
+        this.planId = planId;
+        apply(new PlanConfigured(planId));
 
-        checkArgument(builder.planDetail != null);
-        PlanDetail pd = builder.planDetail;
-        apply(new PlanDetailConfigured(this.planId.toString(), pd.planName,
+        Preconditions.checkArgument(pd != null);
+        apply(new PlanDetailConfigured(this.planId, pd.planName,
                 pd.planCode,
                 pd.launchDate,
                 pd.withdrawalDate,
@@ -67,29 +65,11 @@ public class Plan extends AbstractAnnotatedAggregateRoot<PlanId> {
                 pd.planType,
                 pd.clientType));
 
-        checkArgument(builder.policyTerm != null);
-        apply(new PolicyTermConfigured(builder.policyTerm));
-
-        checkArgument(builder.planPayment != null);
-        apply(new PlanPaymentConfigured(builder.planPayment));
-
-        checkArgument(builder.sumAssured != null);
-        apply(new SumAssuredConfigured(builder.sumAssured));
-
-        checkArgument(UtilValidator.isNotEmpty(builder.coverages));
-        apply(new PlanCoverageConfigured(builder.coverages));
-
-        PlanSpecification specification = new PlanSpecification();
-        checkState(specification.isSatisfiedBy(this), " Premium Payment Term is greater than the Policy Term.");
-    }
-
-    public static PlanBuilder builder() {
-        return new PlanBuilder();
     }
 
     public void updatePlanDetail(PlanDetail pd) {
-        checkArgument(pd != null);
-        apply(new PlanDetailChanged(this.planId.toString(), pd.planName,
+        Preconditions.checkArgument(pd != null);
+        apply(new PlanDetailChanged(this.planId, pd.planName,
                 pd.planCode,
                 pd.launchDate,
                 pd.withdrawalDate,
@@ -105,29 +85,79 @@ public class Plan extends AbstractAnnotatedAggregateRoot<PlanId> {
                 pd.clientType));
     }
 
-    public void updatePolicyTerm(PolicyTerm policyTerm) {
-        checkArgument(policyTerm != null);
-        apply(new PolicyTermReconfigured(policyTerm));
+
+    public void configureMaturityAmount(Set<MaturityAmount> maturityAmounts) {
+        apply(new MaturityConfigured(maturityAmounts));
     }
 
-    public void updatePlanPayment(PlanPayment planPayment) {
-        checkArgument(planPayment != null);
-        apply(new PlanPaymentReconfigured(planPayment));
+    public void configureCoverageBenefits(Set<PlanCoverageBenefit> benefits) {
+        apply(new CoverageBenefitConfigured(benefits));
     }
 
-    public void updateSumAssured(SumAssured sumAssured) {
-        checkArgument(sumAssured != null);
-        apply(new SumAssuredReconfigured(sumAssured));
+    public void configurePolicyTerm(PolicyTermType policyTermType, Set<Integer> validValues, int maxMaturityAge) {
+        Preconditions.checkArgument(policyTermType != null);
+        Preconditions.checkArgument(validValues != null);
+        apply(new PolicyTermConfigured(this.planId, policyTermType, validValues, maxMaturityAge));
+        checkState(specification.isSatisfiedBy(this), " Premium Payment Term is greater than the Policy Term.");
     }
 
-    public void updatePlanCoverages(Set<PlanCoverage> coverages) {
-        checkArgument(UtilValidator.isNotEmpty(coverages));
+    /**
+     * /**
+     * If ValidValues is empty or null, the PremiumTermType should
+     * be PremiumTermType.REGULAR.
+     *
+     * @param paymentTermType
+     * @param validValues
+     * @param cutOffAge
+     */
+    public void configurePremiumPayment(PremiumTermType paymentTermType,
+                                        Set<Integer> validValues, int cutOffAge) {
+        if (PremiumTermType.REGULAR == paymentTermType) {
+            Preconditions.checkArgument(validValues == null);
+        }
+        apply(new PremiumTermConfigured(this.planId, paymentTermType, validValues, cutOffAge));
+        checkState(specification.isSatisfiedBy(this), " Premium Payment Term is greater than the Policy Term.");
+    }
+
+    public void configureSumAssured(SumAssuredType sumAssuredType,
+                                    BigDecimal minSumAssuredAmount,
+                                    BigDecimal maxSumAssuredAmount,
+                                    int multiplesOf,
+                                    Set<BigDecimal> assuredValues,
+                                    int percentage) {
+        checkState(planDetail != null, "Plan is not in a valid state.");
+        SumAssuredConfigured event = null;
+        switch (sumAssuredType) {
+            case SPECIFIED_VALUES:
+                Preconditions.checkArgument(UtilValidator.isNotEmpty(assuredValues));
+                event = new SumAssuredConfigured(this.planId, assuredValues);
+                break;
+            case DERIVED:
+                Preconditions.checkArgument(SumAssuredType.DERIVED != sumAssuredType);
+            case RANGE:
+                Preconditions.checkArgument(maxSumAssuredAmount.compareTo(BigDecimal.ZERO) == 1,
+                        "MinSumAssuredAmount greater than zero Expected, but got %d", minSumAssuredAmount);
+                Preconditions.checkArgument(maxSumAssuredAmount.compareTo(BigDecimal.ZERO) == 1,
+                        "MaxSumAssuredAmount greater than zero Expected, but got %d", maxSumAssuredAmount);
+                Preconditions.checkArgument(maxSumAssuredAmount.compareTo(minSumAssuredAmount) == 1,
+                        "MaxSumAssuredAmount>MinSumAssuredAmount Expected, but %d>%d",
+                        maxSumAssuredAmount, minSumAssuredAmount);
+                Preconditions.checkArgument(multiplesOf % 10 == 0, " Not valid Multiples.");
+                event = new SumAssuredConfigured(this.planId,
+                        minSumAssuredAmount, maxSumAssuredAmount, multiplesOf);
+                break;
+        }
+        checkState(event != null, " Sum Assured Type supplied are not valid.");
+        apply(event);
+    }
+
+    public void configureCoverages(Set<PlanCoverage> coverages) {
+        Preconditions.checkArgument(UtilValidator.isNotEmpty(coverages));
         apply(new PlanCoverageReconfigured(coverages));
     }
 
-
     @EventHandler
-    protected void onPlanCreated(PlanConfigured event) {
+    protected void onPlanConfigured(PlanConfigured event) {
         if (logger.isTraceEnabled()) {
             logger.trace("Plan was created with Plan Id " + event.getPlanId());
         }
@@ -141,51 +171,19 @@ public class Plan extends AbstractAnnotatedAggregateRoot<PlanId> {
         }
         this.planDetail = PlanDetail.builder().withPlanName(event.getPlanName())
                 .withPlanCode(event.getPlanCode())
-                .withLaunchDate(event.launchDate)
-                .withWithdrawalDate(event.withdrawalDate)
-                .withMinEntryAge(event.minEntryAge)
-                .withMaxEntryAge(event.maxEntryAge)
-                .withFreeLookPeriod(event.freeLookPeriod)
-                .withSurrenderAfter(event.surrenderAfter)
-                .withClientType(event.clientType)
-                .withLineOfBusinessId(event.lineOfBusinessId)
-                .withPlanType(event.planType)
-                .withApplicableRelationships(event.applicableRelationships)
-                .withEndorsementTypes(event.endorsementTypes)
-                .withTaxApplicable(event.taxApplicable)
+                .withLaunchDate(event.getLaunchDate())
+                .withWithdrawalDate(event.getWithdrawalDate())
+                .withMinEntryAge(event.getMinEntryAge())
+                .withMaxEntryAge(event.getMaxEntryAge())
+                .withFreeLookPeriod(event.getFreeLookPeriod())
+                .withSurrenderAfter(event.getSurrenderAfter())
+                .withClientType(event.getClientType())
+                .withLineOfBusinessId(event.getLineOfBusinessId())
+                .withPlanType(event.getPlanType())
+                .withApplicableRelationships(event.getApplicableRelationships())
+                .withEndorsementTypes(event.getEndorsementTypes())
+                .withTaxApplicable(event.isTaxApplicable())
                 .build();
-    }
-
-    @EventHandler
-    protected void onPolicyTermConfigured(PolicyTermConfigured event) {
-        if (logger.isTraceEnabled()) {
-            logger.trace("Policy Term configured");
-        }
-        this.policyTerm = event.getPolicyTerm();
-    }
-
-    @EventHandler
-    protected void onPlanPaymentConfigured(PlanPaymentConfigured event) {
-        if (logger.isTraceEnabled()) {
-            logger.trace("Plan Payment configured");
-        }
-        this.planPayment = event.getPlanPayment();
-    }
-
-    @EventHandler
-    protected void onSumAssuredConfigured(SumAssuredConfigured event) {
-        if (logger.isTraceEnabled()) {
-            logger.trace("Sum Assured configured");
-        }
-        this.sumAssured = event.getSumAssured();
-    }
-
-    @EventHandler
-    protected void onPlanCoverageConfigured(PlanCoverageConfigured event) {
-        if (logger.isTraceEnabled()) {
-            logger.trace("Plan Coverage configured");
-        }
-        this.coverages = event.getCoverages();
     }
 
     @EventHandler
@@ -195,56 +193,66 @@ public class Plan extends AbstractAnnotatedAggregateRoot<PlanId> {
         }
         this.planDetail = PlanDetail.builder().withPlanName(event.getPlanName())
                 .withPlanCode(event.getPlanCode())
-                .withLaunchDate(event.launchDate)
-                .withWithdrawalDate(event.withdrawalDate)
-                .withMinEntryAge(event.minEntryAge)
-                .withMaxEntryAge(event.maxEntryAge)
-                .withFreeLookPeriod(event.freeLookPeriod)
-                .withSurrenderAfter(event.surrenderAfter)
-                .withClientType(event.clientType)
-                .withLineOfBusinessId(event.lineOfBusinessId)
-                .withPlanType(event.planType)
-                .withApplicableRelationships(event.applicableRelationships)
-                .withEndorsementTypes(event.endorsementTypes)
-                .withTaxApplicable(event.taxApplicable)
+                .withLaunchDate(event.getLaunchDate())
+                .withWithdrawalDate(event.getWithdrawalDate())
+                .withMinEntryAge(event.getMinEntryAge())
+                .withMaxEntryAge(event.getMaxEntryAge())
+                .withFreeLookPeriod(event.getFreeLookPeriod())
+                .withSurrenderAfter(event.getSurrenderAfter())
+                .withClientType(event.getClientType())
+                .withLineOfBusinessId(event.getLineOfBusinessId())
+                .withPlanType(event.getPlanType())
+                .withApplicableRelationships(event.getApplicableRelationships())
+                .withEndorsementTypes(event.getEndorsementTypes())
+                .withTaxApplicable(event.isTaxApplicable())
                 .build();
     }
-
-    @EventHandler
-    protected void onPolicyTermReconfigured(PolicyTermReconfigured event) {
-        if (logger.isTraceEnabled()) {
-            logger.trace("Policy Term re-configured");
-        }
-        this.policyTerm = event.getPolicyTerm();
-    }
-
-    @EventHandler
-    protected void onPlanPaymentReconfigured(PlanPaymentReconfigured event) {
-        if (logger.isTraceEnabled()) {
-            logger.trace("Plan Payment re-configured");
-        }
-        this.planPayment = event.getPlanPayment();
-    }
-
-    @EventHandler
-    protected void onSumAssuredReconfigured(SumAssuredReconfigured event) {
-        if (logger.isTraceEnabled()) {
-            logger.trace("Sum Assured re-configured");
-        }
-        this.sumAssured = event.getSumAssured();
-    }
-
-    @EventHandler
-    protected void onPlanCoverageReconfigured(PlanCoverageReconfigured event) {
-        if (logger.isTraceEnabled()) {
-            logger.trace("Plan Coverage re-configured");
-        }
-        this.coverages = event.getCoverages();
-    }
-
 
     public PlanId getIdentifier() {
         return planId;
     }
 
+    public void configureSumAssuredForPlanCoverage(CoverageId coverageId,
+                                                   SumAssuredType sumAssuredType,
+                                                   BigDecimal minSumAssuredAmount,
+                                                   BigDecimal maxSumAssuredAmount,
+                                                   int multiplesOf,
+                                                   Set<BigDecimal> assuredValues,
+                                                   int percentage) {
+        checkState(this.planDetail != null);
+        PlanCoverageSumAssuredConfigured event = null;
+        switch (sumAssuredType) {
+            case SPECIFIED_VALUES:
+                Preconditions.checkArgument(UtilValidator.isNotEmpty(assuredValues));
+                event = new PlanCoverageSumAssuredConfigured(this.planId, coverageId, assuredValues);
+                break;
+            case DERIVED:
+                Preconditions.checkArgument(percentage > 0);
+                Preconditions.checkArgument(maxSumAssuredAmount.compareTo(BigDecimal.ZERO) == 1);
+                Preconditions.checkArgument(coverageId != null);
+                event = new PlanCoverageSumAssuredConfigured(this.planId, coverageId, percentage, maxSumAssuredAmount);
+                break;
+            case RANGE:
+                Preconditions.checkArgument(maxSumAssuredAmount.compareTo(BigDecimal.ZERO) == 1,
+                        "MinSumAssuredAmount greater than zero Expected, but got %d", minSumAssuredAmount);
+                Preconditions.checkArgument(maxSumAssuredAmount.compareTo(BigDecimal.ZERO) == 1,
+                        "MaxSumAssuredAmount greater than zero Expected, but got %d", maxSumAssuredAmount);
+                Preconditions.checkArgument(maxSumAssuredAmount.compareTo(minSumAssuredAmount) == 1,
+                        "MaxSumAssuredAmount>MinSumAssuredAmount Expected, but %d>%d",
+                        maxSumAssuredAmount, minSumAssuredAmount);
+                Preconditions.checkArgument(multiplesOf % 10 == 0, " Not valid Multiples.");
+                event = new PlanCoverageSumAssuredConfigured(this.planId, coverageId,
+                        minSumAssuredAmount, maxSumAssuredAmount, multiplesOf);
+                break;
+        }
+        checkState(event != null, " Sum Assured Type supplied are not valid.");
+        apply(event);
+    }
+
+    public void configureTermForPlanCoverage(CoverageId coverageId, CoverageTermType coverageTermType, Set<Integer> validTerms, int maxMaturityAge) {
+        checkState(this.planDetail != null);
+        if (CoverageTermType.SPECIFIED_VALUES == coverageTermType)
+            checkState(specification.checkCoverageTerm(this, validTerms), " Coverage Term is greater than the Policy Term.");
+        apply(new PlanCoverageTermConfigured(this.planId, coverageId, coverageTermType, validTerms, maxMaturityAge));
+    }
 }

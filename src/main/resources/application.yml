@@ -12,6 +12,7 @@ spring:
   thymeleaf:
       check-template-location: true
       cache: false
+      mode: XHTML
 
   jpa:
       hibernate:
@@ -45,5 +46,5 @@ spring:
 
 
 flyway:
-  check-location: false
-  enabled: false
+  check-location: true
+  enabled: true

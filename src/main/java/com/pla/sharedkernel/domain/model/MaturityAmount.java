@@ -1,4 +1,4 @@
-package com.pla.core.domain.model.plan;
+package com.pla.sharedkernel.domain.model;
 
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -11,20 +11,18 @@ import java.math.BigDecimal;
  */
 @ToString
 @EqualsAndHashCode
-class MaturityAmount {
+public class MaturityAmount {
 
     int maturityYear;
     BigDecimal guaranteedSurvivalBenefitAmount;
 
-    protected MaturityAmount() {
-    }
     /**
      * The maturity year would be from the policy inception date.
      *
      * @param maturityYear
      * @param guaranteedSurvivalBenefitAmount
      */
-    MaturityAmount(int maturityYear, BigDecimal guaranteedSurvivalBenefitAmount) {
+    public MaturityAmount(int maturityYear, BigDecimal guaranteedSurvivalBenefitAmount) {
         this.maturityYear = maturityYear;
         this.guaranteedSurvivalBenefitAmount = guaranteedSurvivalBenefitAmount;
     }

@@ -1,9 +1,11 @@
-package com.pla.core.domain.model.plan;
+package com.pla.sharedkernel.domain.event;
 
 import com.pla.sharedkernel.domain.model.ClientType;
+import com.pla.sharedkernel.domain.model.EndorsementType;
 import com.pla.sharedkernel.domain.model.PlanType;
 import com.pla.sharedkernel.domain.model.Relationship;
 import com.pla.sharedkernel.identifier.LineOfBusinessId;
+import com.pla.sharedkernel.identifier.PlanId;
 import lombok.Getter;
 import org.joda.time.LocalDate;
 
@@ -17,7 +19,7 @@ import java.util.Set;
 @Getter
 public class PlanDetailConfigured implements Serializable {
 
-    String planId;
+    PlanId planId;
     String planName;
     String planCode;
     LocalDate launchDate;
@@ -33,10 +35,10 @@ public class PlanDetailConfigured implements Serializable {
     PlanType planType;
     ClientType clientType;
 
-    public PlanDetailConfigured(String planId, String planName, String planCode, LocalDate launchDate, LocalDate withdrawalDate,
+    public PlanDetailConfigured(PlanId planId, String planName, String planCode, LocalDate launchDate, LocalDate withdrawalDate,
                                 int freeLookPeriod, int minEntryAge, int maxEntryAge, boolean taxApplicable, int surrenderAfter,
                                 Set<Relationship> applicableRelationships, Set<EndorsementType> endorsementTypes, LineOfBusinessId lineOfBusinessId, PlanType planType, ClientType clientType) {
-        this.planId = planId.toString();
+        this.planId = planId;
         this.planName = planName;
         this.planCode = planCode;
         this.launchDate = launchDate;

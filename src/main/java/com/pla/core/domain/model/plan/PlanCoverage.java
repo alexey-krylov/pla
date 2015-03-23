@@ -1,5 +1,6 @@
 package com.pla.core.domain.model.plan;
 
+import com.pla.sharedkernel.domain.model.CoverageType;
 import com.pla.sharedkernel.identifier.CoverageId;
 import lombok.AccessLevel;
 import lombok.EqualsAndHashCode;
@@ -18,9 +19,9 @@ import static com.google.common.base.Preconditions.checkArgument;
  * @since 1.0 12/03/2015
  */
 @EqualsAndHashCode(of = {"coverageId"})
-@ToString(exclude = {"plan"})
+@ToString()
 @Getter(AccessLevel.PACKAGE)
-public class PlanCoverage {
+class PlanCoverage {
 
     private CoverageId coverageId;
     private CoverageType coverageType;
@@ -31,15 +32,12 @@ public class PlanCoverage {
     private int minAge;
     private int maxAge;
     private Boolean taxApplicable;
+    private SumAssured sumAssured;
+    private Term coverageTerm;
     /**
      * Holds the Benefits that are applicable for Plan.
      */
     private Set<PlanCoverageBenefit> planCoverageBenefits = new HashSet<PlanCoverageBenefit>();
-
-    private Plan plan;
-
-    protected PlanCoverage() {
-    }
 
     PlanCoverage(PlanCoverageBuilder builder) {
         checkArgument(builder.coverageId != null, "Coverage is mandatory.");
@@ -80,9 +78,17 @@ public class PlanCoverage {
         return new PlanCoverageBuilder();
     }
 
-    public void addCoverageBenefit(CoverageId coverageId, PlanCoverageBenefit planCoverageBenefit) {
-        checkArgument(coverageId.equals(this.coverageId));
-        planCoverageBenefits.add(planCoverageBenefit);
+    void configureSumAssured(SumAssured sumAssured) {
+        checkArgument(sumAssured != null);
+        this.sumAssured = sumAssured;
     }
 
+    public void configureCoverageTerm(Term coverageTerm) {
+        checkArgument(coverageTerm != null);
+        this.coverageTerm = coverageTerm;
+    }
+
+    public void replacePlanCoverageBenefits(Set<PlanCoverageBenefit> planCoverageBenefits) {
+        this.planCoverageBenefits = planCoverageBenefits;
+    }
 }
