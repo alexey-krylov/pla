@@ -7,6 +7,7 @@
 package com.pla.sharedkernel.domain.model;
 
 import lombok.AccessLevel;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.nthdimenzion.ddd.domain.annotations.ValueObject;
 
@@ -23,6 +24,7 @@ import static org.nthdimenzion.utils.UtilValidator.isNotEmpty;
 @ValueObject
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 @Embeddable
+@Getter
 public class EmailAddress {
 
     private static final Pattern EMAIL_PATTERN = Pattern.compile("");

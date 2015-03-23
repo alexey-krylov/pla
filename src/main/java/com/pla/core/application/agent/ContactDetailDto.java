@@ -32,11 +32,11 @@ import static org.nthdimenzion.utils.UtilValidator.isNotEmpty;
 public class ContactDetailDto {
 
     @NotNull(message = "{Mobile number cannot be null}")
-    private Integer mobileNumber;
+    private String mobileNumber;
 
-    private Integer homePhoneNumber;
+    private String homePhoneNumber;
 
-    private Integer workPhoneNumber;
+    private String workPhoneNumber;
 
     @Email(message = "{Not a valid email}")
     private String emailAddress;

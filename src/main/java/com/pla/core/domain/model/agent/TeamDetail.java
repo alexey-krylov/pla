@@ -7,6 +7,7 @@
 package com.pla.core.domain.model.agent;
 
 import lombok.AccessLevel;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Immutable;
@@ -26,6 +27,7 @@ import static org.nthdimenzion.utils.UtilValidator.isNotEmpty;
 @Immutable
 @Getter
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
+@EqualsAndHashCode(of = "teamId")
 class TeamDetail {
 
     private String teamId;

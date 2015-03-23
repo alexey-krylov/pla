@@ -70,6 +70,9 @@ public class BenefitController {
         } catch (BenefitApplicationException e) {
             LOGGER.error("Error in creating benefit", e);
             return Result.failure("Error in creating benefit");
+        } catch (Exception e) {
+            LOGGER.error("Error in creating benefit", e);
+            return Result.failure("Error in creating benefit");
         }
         return Result.success("Benefit created successfully");
     }
@@ -88,6 +91,9 @@ public class BenefitController {
         } catch (BenefitApplicationException e) {
             LOGGER.error("Error in updating benefit", e);
             return Result.failure("Error in updating benefit");
+        } catch (Exception e) {
+            LOGGER.error("Error in updating benefit", e);
+            return Result.failure("Error in updating benefit");
         }
         return Result.success("Benefit updated successfully");
     }
@@ -104,6 +110,9 @@ public class BenefitController {
             inactivateBenefitCommand.setUserDetails(userDetails);
             commandGateway.sendAndWait(inactivateBenefitCommand);
         } catch (BenefitApplicationException e) {
+            LOGGER.error("Error in inactivating benefit", e);
+            return Result.failure("Error in inactivating benefit");
+        } catch (Exception e) {
             LOGGER.error("Error in inactivating benefit", e);
             return Result.failure("Error in inactivating benefit");
         }

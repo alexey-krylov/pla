@@ -85,7 +85,10 @@ public class Admin {
 
     private Agent populateAgentDetail(Agent agent, AgentProfileDto agentProfileDto, LicenseNumberDto licenseNumberDto, TeamDetailDto teamDetailDto, ContactDetailDto contactDetailDto, PhysicalAddressDto physicalAddressDto, ChannelTypeDto channelTypeDto) {
         Agent agentWithProfile = agent.createWithAgentProfile(agentProfileDto.getFirstName(), agentProfileDto.getLastName(), agentProfileDto.getTrainingCompleteOn(), agentProfileDto.getDesignationDto().getCode(), agentProfileDto.getDesignationDto().getDescription());
-        Agent agentWithLicenseNumber = agentWithProfile.withLicenseNumber(licenseNumberDto.getLicenseNumber());
+        Agent updatedAgentWithProfile = agentWithProfile.updateAgentProfileWithEmployeeId(agentProfileDto.getEmployeeId());
+        updatedAgentWithProfile = updatedAgentWithProfile.updateAgentProfileWithNrcNumber(agentProfileDto.getNrcNumber());
+        updatedAgentWithProfile = updatedAgentWithProfile.updateAgentProfileWithTitle(agentProfileDto.getTitle());
+        Agent agentWithLicenseNumber = updatedAgentWithProfile.withLicenseNumber(licenseNumberDto.getLicenseNumber());
         Agent agentWithTeamDetail = agentWithLicenseNumber.withTeamDetail(teamDetailDto.getTeamId());
         GeoDetailDto geoDetailDto = contactDetailDto.getGeoDetail();
         Agent agentWithContactDetail = agentWithTeamDetail.withContactDetail(contactDetailDto.getMobileNumber(), contactDetailDto.getHomePhoneNumber(), contactDetailDto.getWorkPhoneNumber(), contactDetailDto.getEmailAddress(), contactDetailDto.getAddressLine1(), contactDetailDto.getAddressLine2(), geoDetailDto.getPostalCode(), geoDetailDto.getProvince(), geoDetailDto.getCity());

@@ -74,7 +74,7 @@ class AgentProfile {
     }
 
     public AgentProfile withNrcNumber(Integer nrcNumber) {
-        if (nrcNumber != null && isNotEmpty(nrcNumber.toString()) && nrcNumber.toString().length() < 9) {
+        if (nrcNumber != null && isNotEmpty(nrcNumber.toString()) && nrcNumber.toString().length() == 9) {
             this.nrcNumber = nrcNumber;
         }
         return this;

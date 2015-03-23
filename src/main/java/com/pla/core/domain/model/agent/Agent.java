@@ -80,6 +80,28 @@ public class Agent implements ICrudEntity {
         return this;
     }
 
+    public Agent updateAgentProfileWithTitle(String title) {
+        AgentProfile agentProfile = this.getAgentProfile();
+        AgentProfile updatedAgentProfile = agentProfile.withTitle(title);
+        this.agentProfile = updatedAgentProfile;
+        return this;
+    }
+
+
+    public Agent updateAgentProfileWithEmployeeId(String employeeId) {
+        AgentProfile agentProfile = this.getAgentProfile();
+        AgentProfile updatedAgentProfile = agentProfile.withEmployeeId(employeeId);
+        this.agentProfile = updatedAgentProfile;
+        return this;
+    }
+
+    public Agent updateAgentProfileWithNrcNumber(Integer nrcNumber) {
+        AgentProfile agentProfile = this.getAgentProfile();
+        AgentProfile updatedAgentProfile = agentProfile.withNrcNumber(nrcNumber);
+        this.agentProfile = updatedAgentProfile;
+        return this;
+    }
+
     public Agent withLicenseNumber(String licenseNumber) {
         this.licenseNumber = new LicenseNumber(licenseNumber);
         return this;
@@ -91,7 +113,7 @@ public class Agent implements ICrudEntity {
         return this;
     }
 
-    public Agent withContactDetail(Integer mobileNumber, Integer homePhoneNumber, Integer workPhoneNumber,
+    public Agent withContactDetail(String mobileNumber, String homePhoneNumber, String workPhoneNumber,
                                    String emailAddress, String addressLine1, String addressLine2, Integer postalCode, String province, String city) {
         if (AgentStatus.INACTIVE.equals(this.agentStatus)) {
             raiseAgentUpdateNotAllowedException("Contact detail cannot be updated as it is inactivated");

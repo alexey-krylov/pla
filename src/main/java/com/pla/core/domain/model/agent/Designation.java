@@ -27,19 +27,19 @@ class Designation {
 
     private static final String BDE_CODE = "BDE";
 
-    private String code;
+    private String designationCode;
 
-    private String description;
+    private String designationName;
 
-    Designation(String code, String description) {
-        checkArgument(isNotEmpty(code));
-        checkArgument(isNotEmpty(description));
-        this.code = code;
-        this.description = description;
+    Designation(String designationCode, String designationName) {
+        checkArgument(isNotEmpty(designationCode));
+        checkArgument(isNotEmpty(designationName));
+        this.designationCode = designationCode;
+        this.designationName = designationName;
     }
 
     public OverrideCommissionApplicable getOverrideCommissionApplicable() {
-        if (BDE_CODE.equalsIgnoreCase(this.code)) {
+        if (BDE_CODE.equalsIgnoreCase(this.designationCode)) {
             return OverrideCommissionApplicable.YES;
         }
         return OverrideCommissionApplicable.NO;

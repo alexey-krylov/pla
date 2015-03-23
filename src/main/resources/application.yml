@@ -42,6 +42,13 @@ spring:
         driverClassName: com.mysql.jdbc.Driver
         username: root
         password: welcome
+  mongoDB:
+      host : localhost
+      port : 27017
+      name: pla
+      username : pla
+      password : pla
+
 
 
 

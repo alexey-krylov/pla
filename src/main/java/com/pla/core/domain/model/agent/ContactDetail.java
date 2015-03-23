@@ -30,11 +30,11 @@ import static org.nthdimenzion.utils.UtilValidator.isNotEmpty;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 class ContactDetail {
 
-    private Integer mobileNumber;
+    private String mobileNumber;
 
-    private Integer homePhoneNumber;
+    private String homePhoneNumber;
 
-    private Integer workPhoneNumber;
+    private String workPhoneNumber;
 
     @Embedded
     private EmailAddress emailAddress;
@@ -47,7 +47,7 @@ class ContactDetail {
     private GeoDetail geoDetail;
 
 
-    ContactDetail(Integer mobileNumber, EmailAddress emailAddress, String addressLine1, GeoDetail geoDetail) {
+    ContactDetail(String mobileNumber, EmailAddress emailAddress, String addressLine1, GeoDetail geoDetail) {
         checkArgument(emailAddress != null);
         checkArgument(isNotEmpty(addressLine1));
         checkArgument(geoDetail != null);
@@ -57,7 +57,7 @@ class ContactDetail {
         this.geoDetail = geoDetail;
     }
 
-    public ContactDetail addHomePhoneNumber(Integer homePhoneNumber) {
+    public ContactDetail addHomePhoneNumber(String homePhoneNumber) {
         ContactDetail contactDetail = new ContactDetail(this.mobileNumber, this.emailAddress, this.addressLine1, this.geoDetail);
         contactDetail.homePhoneNumber = homePhoneNumber;
         contactDetail.workPhoneNumber = this.workPhoneNumber;
@@ -65,7 +65,7 @@ class ContactDetail {
         return contactDetail;
     }
 
-    public ContactDetail addWorkPhoneNumber(Integer workPhoneNumber) {
+    public ContactDetail addWorkPhoneNumber(String workPhoneNumber) {
         ContactDetail contactDetail = new ContactDetail(this.mobileNumber, this.emailAddress, this.addressLine1, this.geoDetail);
         contactDetail.homePhoneNumber = this.homePhoneNumber;
         contactDetail.workPhoneNumber = workPhoneNumber;
@@ -81,11 +81,4 @@ class ContactDetail {
         return contactDetail;
     }
 
-    public ContactDetail updateContactDetail(Integer mobileNumber, EmailAddress emailAddress, String addressLine1, GeoDetail geoDetail) {
-        checkArgument(emailAddress != null);
-        checkArgument(isNotEmpty(addressLine1));
-        checkArgument(geoDetail != null);
-        ContactDetail contactDetail = new ContactDetail(mobileNumber, emailAddress, addressLine1, geoDetail);
-        return contactDetail;
-    }
 }

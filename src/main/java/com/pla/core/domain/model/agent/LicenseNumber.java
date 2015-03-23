@@ -7,6 +7,7 @@
 package com.pla.core.domain.model.agent;
 
 import lombok.AccessLevel;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Immutable;
@@ -26,6 +27,7 @@ import static org.nthdimenzion.utils.UtilValidator.isNotEmpty;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 @Embeddable
+@EqualsAndHashCode(of = "licenseNumber")
 public class LicenseNumber {
 
     private String licenseNumber;
