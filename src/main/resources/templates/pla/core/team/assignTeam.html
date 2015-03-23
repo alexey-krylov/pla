@@ -49,7 +49,7 @@
                             <div class="form-group col-md-6 required" style="margin: auto;margin-top:10px;" >
                                 <label class="control-label">Team Leader From</label>
                                 <p class="input-group">
-                                    <input type="text" class="form-control input-sm" ng-required="true"  datepicker-popup="dd/MM/yyyy" ng-model="assignTeam.fromDate"  datepicker-options="datePickerSettings.dateOptions" is-open="datePickerSettings.isOpened"  close-text="Close" />
+                                    <input type="text" class="form-control input-sm" ng-click="open($event)" ng-required="true"  datepicker-popup="dd/MM/yyyy" ng-model="assignTeam.fromDate"  datepicker-options="datePickerSettings.dateOptions" is-open="datePickerSettings.isOpened"  close-text="Close" />
                                         <span class="input-group-btn">
                                             <button type="button" class="btn btn-default btn-sm" ng-click="open($event)"><i class="glyphicon glyphicon-calendar"></i></button>
                                         </span>
@@ -72,6 +72,13 @@
         </div>
     </div>
 </div>
+<style>
+    .form-control {
+    font-size: 12px;
+    padding:5px;
+    }
+
+</style>
 <footer class="footer" th:include="fragments/common :: footer">
 </footer>
 </body>

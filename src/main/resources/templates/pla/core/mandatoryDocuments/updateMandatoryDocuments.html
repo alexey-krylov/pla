@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      lang="en" ng-app="AngularApp">
+<head th:include="fragments/common :: headTag">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+
+</head>
+<body style="padding-top: 70px;">
+<div th:include="fragments/common :: bodyHeader" th:remove="tag"/>
+<div class="container" style="padding-top: 0px!important;" ng-Controller="UpdateMandatoryDocumentsController">
+    <div class="row">
+        <div class="col-lg-8" style="left:230px;position:absolute;">
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <div class="row">
+                        <div class="col-lg-3"><span th:text="#{updateMandatoryDocuments}">Update Mandatory Documents
+                        </span></div>
+                    </div>
+                </div>
+                <div class="panel-body">
+                    <form  novalidate="true" class="css-form">
+                        <div class="row">
+                            <div class="form-group col-md-6" style="margin: auto;margin-top:10px;">
+                                <label class="control-label">Defined For</label>
+                                <div class="controls readonly">{{updateMandatoryDocument.definedFor}}</div>
+                            </div>
+                            <div class="form-group col-md-6" style="margin: auto;margin-top:10px;">
+                                <label class="control-label">Product</label>
+                                <div class="controls readonly">{{updateMandatoryDocument.product}}</div>
+                            </div>
+                            <div class="form-group col-md-6" style="margin: auto;margin-top:10px;">
+                                <label class="control-label">OptionalCoverage</label>
+                                <div class="controls readonly">{{updateMandatoryDocument.OptionalCoverage}}</div>
+                            </div>
+                            <div class="form-group col-md-6" style="margin: auto;margin-top:10px;">
+                                <label class="control-label">Process</label>
+                                <div class="controls readonly">{{updateMandatoryDocument.process}}</div>
+                            </div>
+                            <div class="form-group col-md-6 required">
+                                <label class="control-label">Mandatory Documents</label>
+                                <div>
+                                    <button type="button" class="btn btn-default bs-select" ng-model="createMandatoryDocument.multiSelect" data-all-none-buttons="true" data-html="1" data-multiple="1"  ng-options="value.name for value in mulSelect" >
+                                        Action <span class="caret"></span>
+                                    </button>
+                                </div>
+                            </div>
+                             </div>
+                             <div class="row">
+                            <div class="form-group col-lg-12" style="margin: auto;margin-top:10px;" >
+                                <button type="submit" class="btn btn-default" style="float:right;" ng-disabled="(!createMandatoryDocument.multiSelect)" ng-click="updateMandatoryDoc()">Save</button>
+                                <a class="btn btn-default" style="float:left;" th:href="@{/core/mandatoryDocument/view}">Cancel</a>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<style>
+    .form-control {
+    font-size: 12px;
+    padding:5px;
+    }
+ </style>
+<footer class="footer" th:include="fragments/common :: footer">
+</footer>
+</body>
+</html>

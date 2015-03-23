@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      lang="en" ng-app="AngularApp">
+<head th:include="fragments/common :: headTag">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+</head>
+<body style="padding-top: 70px;" >
+<div th:include="fragments/common :: bodyHeader" th:remove="tag"/>
+
+<div class="container" style="padding-top: 0px!important;" ng-Controller="CreateMandatoryDocumentsController">
+    <div class="row">
+        <div class="col-lg-12" >
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <div class="row">
+                        <div class="col-lg-3"><span th:text="#{createMandatoryDocument}">Create Mandatory Document
+                        </span></div>
+                    </div>
+                </div>
+                <div class="panel-body" style="padding-top:5px">
+                    <form  novalidate="true" class="css-form">
+
+                        <div class="row">
+                            <div class="form-group col-md-6 required">
+                                <label class="control-label">Defined For</label>
+                                <select class="form-control input-sm" id="definedFor" ng-required="true" ng-model="createMandatoryDocument.definedFor" ng-change="getDefinedValue(createMandatoryDocument.definedFor)">
+                                    <option value="">Select Defined For</option>
+                                    <option value="Product">Product</option>
+                                    <option value="Optional Coverage">Optional Coverage</option>
+                                </select>
+
+                            </div>
+                            <div class="form-group col-md-6 required" ng-show="showProduct">
+                                <label class="control-label">Product Name</label>
+
+                                <select class="form-control input-sm" id="productName" ng-required="true" ng-model="createMandatoryDocument.productName">
+                                    <option value="">Select Product Name</option>
+                                    <option value="Product A">Product A</option>
+                                    <option value="Product B">Product B</option>
+                                    <option value="Product C">Product C</option>
+                                    <option value="Product D">Product D</option>
+                                </select>
+
+                            </div>
+                            <div class="form-group col-md-6 required" ng-show="showOptionalCoverage">
+                                <label class="control-label">Optional Coverage</label>
+
+                                <select class="form-control input-sm" id="optionalCoverage" ng-required="true" ng-model="createMandatoryDocument.optionalCoverage">
+                                    <option value="">Select Optional Coverage</option>
+                                    <option value="OptionalCoverage A">OptionalCoverage A</option>
+                                    <option value="OptionalCoverage B">OptionalCoverage B</option>
+                                    <option value="OptionalCoverage C">OptionalCoverage C</option>
+                                    <option value="OptionalCoverage D">OptionalCoverage D</option>
+                                </select>
+                            </div>
+
+                        </div>
+                        <div class="row">
+                            <div class="form-group col-md-6 required">
+                                <label class="control-label">Process</label>
+
+                                <select class="form-control input-sm"  ng-required="true" ng-model="createMandatoryDocument.process">
+                                    <option value="">Select Process</option>
+                                    <option value="Enrollment">Enrollment</option>
+                                    <option value="Re-Instatement">Re-Instatement</option>
+                                    <option value="Claim">Claim</option>
+                                    <option value="Endorsement">Endorsement</option>
+                                    <option value="Surrender">Surrender</option>
+                                    <option value="Assignment">Assignment</option>
+                                </select>
+                            </div>
+                            <div class="form-group col-md-6 required">
+                                <label class="control-label">Mandatory Documents</label>
+                                <div>
+                                    <button type="button" class="btn btn-default bs-select" ng-model="createMandatoryDocument.multiSelect" data-all-none-buttons="true" data-html="1" data-multiple="1"  ng-options="value.name for value in mulSelect" >
+                                        Action <span class="caret"></span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-12" style="text-align: center;margin-top:3px;">
+                                <button type="button" class="btn btn-default" style="float:right;" ng-disabled="(!createMandatoryDocument.definedFor || !createMandatoryDocument.premiumExpressedAs || !createPremium.multiSelect )"  ng-click="saveMandatoryDoc()">Save</button>
+                                <a class="btn btn-default" style="float:left;" th:href="@{/core/mandatoryDocument/view}">Cancel</a>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<style>
+    .form-control {
+    font-size: 12px;
+    padding:5px;
+    }
+    .btn{
+    font-size:12px;
+    }
+
+</style>
+<footer class="footer" th:include="fragments/common :: footer">
+</footer>
+</body>
+</html>
