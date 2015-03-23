@@ -4,19 +4,12 @@
  * Proprietary and confidential
  */
 
-package com.pla.core.application.agent;
+package com.pla.core.dto;
 
-import com.pla.core.domain.model.agent.GeoDetail;
-import com.pla.sharedkernel.domain.model.EmailAddress;
 import lombok.*;
-import org.hibernate.annotations.Immutable;
 import org.hibernate.validator.constraints.Email;
-import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotEmpty;
-import org.nthdimenzion.ddd.domain.annotations.ValueObject;
 
-import javax.persistence.Embeddable;
-import javax.persistence.Embedded;
 import javax.validation.constraints.NotNull;
 
 import static com.google.common.base.Preconditions.checkArgument;

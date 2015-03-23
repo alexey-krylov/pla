@@ -4,18 +4,13 @@
  * Proprietary and confidential
  */
 
-package com.pla.core.application.agent;
+package com.pla.core.dto;
 
-import com.pla.core.domain.model.agent.GeoDetail;
-import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.hibernate.annotations.Immutable;
 import org.hibernate.validator.constraints.NotEmpty;
-import org.nthdimenzion.ddd.domain.annotations.ValueObject;
 
-import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
 import static com.google.common.base.Preconditions.checkArgument;

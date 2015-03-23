@@ -11,12 +11,10 @@ import com.pla.core.domain.exception.BenefitDomainException;
 import com.pla.core.domain.exception.TeamDomainException;
 import com.pla.core.domain.model.agent.Agent;
 import com.pla.core.domain.model.agent.AgentId;
+import com.pla.core.dto.*;
 import com.pla.sharedkernel.domain.model.BenefitStatus;
-import com.pla.sharedkernel.identifier.PlanId;
 import org.joda.time.LocalDate;
 import org.nthdimenzion.ddd.domain.annotations.ValueObject;
-
-import java.util.Set;
 
 import static com.pla.core.domain.exception.AgentException.raiseAgentLicenseNumberUniqueException;
 

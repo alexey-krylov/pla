@@ -4,7 +4,7 @@
  * Proprietary and confidential
  */
 
-package com.pla.core.application.agent;
+package com.pla.core.dto;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
