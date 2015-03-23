@@ -1,5 +1,5 @@
 var AngularApp = {};
-var App = angular.module('AngularApp', ['ngRoute','ui.bootstrap','mgcrea.ngStrap.select','ngSanitize','angularFileUpload']);
+var App = angular.module('AngularApp', ['ngRoute','mgcrea.ngStrap.select','ngSanitize','angularFileUpload','mgcrea.ngStrap.popover']);
 
  App.controller('ViewTeamController',['$scope','$http',function($scope,$http){
     $scope.teamList={};
@@ -273,3 +273,106 @@ App.controller('UpdateHealthCareProviderController',['$scope','$http',function($
 
 
   }]);
+  App.controller('ViewPremiumController',['$scope','$http',function($scope,$http){
+
+       $scope.items =[
+                                {
+                                  "name": "Team One"
+                                },
+                                {
+                                  "name": "Team Two"
+                                },
+                                {
+                                  "name": "Team Three"
+                                }
+                              ]
+          $scope.popover = {
+            "title": "Influencing Factors",
+            "content": $scope.items
+          };
+
+  }]);
+  App.controller('DownloadErrorFileController',['$scope','$http',function($scope,$http){
+      $scope.datePickerSettings = {
+           isOpened:false,
+           dateOptions:{
+               formatYear:'yyyy' ,
+               startingDay:1
+           }
+      }
+      $scope.open = function($event) {
+           $event.preventDefault();
+           $event.stopPropagation();
+           $scope.datePickerSettings.isOpened = true;
+      };
+      $scope.downloadErrorFilePremium = function(){
+         // console.log($scope.downloadErrorFile.file);
+       //  if ($scope.downloadErrorFile.file == 'Select File') return;
+              window.location = 'http://localhost:6443/pla/downloadTemplates/' + $scope.downloadErrorFile.file;
+
+      };
+
+  }]);
+  App.controller('CreatePremiumController',['$scope','$upload', function($scope,$upload){
+        $scope.datePickerSettings = {
+          isOpened:false,
+           dateOptions:{
+              formatYear:'yyyy' ,
+              startingDay:1
+           }
+        }
+        $scope.open = function($event) {
+            $event.preventDefault();
+            $event.stopPropagation();
+            $scope.datePickerSettings.isOpened = true;
+          };
+        $scope.showProduct=false;
+        $scope.showOptionalCoverage= false;
+        $scope.getDefinedValue = function(definedVal){
+                if(definedVal == "Product"){
+                  $scope.showProduct=true;
+                  $scope.showOptionalCoverage= false;
+                }else if(definedVal == "Optional Coverage"){
+                   $scope.showProduct=false;
+                   $scope.showOptionalCoverage= true;
+                }
+        }
+        $scope.savePremium = function(){
+             console.log($scope.createPremium);
+
+        }
+        $scope.mulSelect =[
+                            {
+                              "id": "1",
+                              "name": "Team One"
+                            },
+                            {
+                              "id": "2",
+                              "name": "Team Two"
+                            },
+                            {
+                              "id": "3",
+                              "name": "Team Three"
+                            }
+                          ]
+
+        $scope.uploadFile= function(files){
+        console.log("************"+files[0].name);
+             if (files) {
+                  $upload.upload({
+                       url: 'http://localhost:6443/pla/upload',
+                       file: files
+                  }).progress(function (evt) {
+                       var progressPercentage = parseInt(100.0 * evt.loaded / evt.total);
+                       console.log('progress: ' + progressPercentage + '% ' +
+                                        evt.config.file.name);
+                  }).success(function (data, status, headers, config) {
+                         console.log('file ' + config.file.name + 'uploaded. Response: ' +
+                                JSON.stringify(data));
+                  });
+             }
+
+        }
+
+    }]);
+

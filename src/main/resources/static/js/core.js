@@ -17,5 +17,6 @@ require(['jquery','bootstrap','datatables'], function() {
         $('#healthCareProvider-table').dataTable();
         $('#commission-table').dataTable();
         $('#overRideCommission-table').dataTable();
+        $('#premium-table').dataTable();
 
 });
