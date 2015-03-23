@@ -14,6 +14,7 @@ import org.axonframework.unitofwork.SpringTransactionManager;
 import org.axonframework.unitofwork.UnitOfWork;
 import org.joda.time.LocalDate;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,6 +40,7 @@ import static org.junit.Assert.assertFalse;
 ,
         "classpath:queryTestContext.xml"
  */
+@Ignore
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = {
         "classpath:/META-INF/spring/db-context.xml",

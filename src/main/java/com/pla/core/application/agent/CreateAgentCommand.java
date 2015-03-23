@@ -12,10 +12,8 @@ import com.pla.sharedkernel.identifier.PlanId;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import javax.validation.constraints.NotNull;
 import java.util.Set;
 
 /**
