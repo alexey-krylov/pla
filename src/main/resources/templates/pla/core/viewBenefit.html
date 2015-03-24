@@ -6,7 +6,11 @@
 </head>
 <body style="padding-top: 70px">
 <div th:include="fragments/common :: bodyHeader" th:remove="tag"/>
+<script>
+    requirejs(['/pla/js/viewBenefits.js'],function($){
 
+    });
+</script>
 <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -95,8 +99,6 @@
         </div>
     </div>
 </div>
-
-<script data-main="/pla/js/viewBenefits.js" src="/webjarsjs" th:src="@{/webjarsjs}"></script>
 <footer class="footer" th:include="fragments/common :: footer">
 </footer>
 </body>

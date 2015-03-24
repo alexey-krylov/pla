@@ -1,7 +1,6 @@
 package com.pla.core.domain.model.plan;
 
 import com.google.common.collect.Sets;
-import com.pla.sharedkernel.domain.event.PlanCoverageSumAssuredConfigured;
 import com.pla.sharedkernel.domain.model.*;
 import com.pla.sharedkernel.identifier.CoverageId;
 import com.pla.sharedkernel.identifier.LineOfBusinessId;
@@ -126,9 +125,16 @@ public class PlanDetailTest {
                 .withDeductibleAmount(new BigDecimal(1800))
                 .withWaitingPeriod(5)
                 .build();
-        planDetail.onPlanCoverageConfigured(new PlanCoverageConfigured(Sets.newHashSet(planCoverage)));
-        planDetail.onPlanCoverageSumAssuredConfigured(new PlanCoverageSumAssuredConfigured(new PlanId(), new CoverageId("2"),
+
+        PlanBuilder planBuilder = Plan.builder();
+        planBuilder.withPlanDetail(planDetail)
+                .withPlanCoverage(planCoverage);
+
+        planBuilder.withSumAssuredForPlanCoverage(new CoverageId("2"),
+                SumAssuredType.SPECIFIED_VALUES,
+                BigDecimal.ZERO, new BigDecimal(100000), 0,
                 Sets.newHashSet(new BigDecimal(10000),
-                        new BigDecimal(50000), new BigDecimal(100000))));
+                        new BigDecimal(50000), new BigDecimal(100000)), 0);
+        planBuilder.build(new PlanId());
     }
 }

@@ -25,7 +25,6 @@ import static com.google.common.base.Preconditions.checkArgument;
 class SumAssured {
 
     private SortedSet<BigDecimal> sumAssuredValue = new TreeSet<BigDecimal>();
-
     //These attributes capture the Sum Assured Configuration for Coverage.
     private CoverageId coverageId;
     //TODO Check if really the percentage has to be a whole number

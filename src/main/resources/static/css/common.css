@@ -28,3 +28,11 @@ body {
 .css-form input.ng-invalid.ng-touched {
     border:1px solid #FA787E;
 }
+
+input.ng-invalid.ng-dirty {
+    background-color: #FA787E;
+}
+
+input.ng-valid.ng-dirty {
+    background-color: #78FA89;
+}
