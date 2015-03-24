@@ -10,7 +10,6 @@ import lombok.AccessLevel;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.Immutable;
 import org.hibernate.annotations.Type;
 import org.joda.time.LocalDate;
 import org.nthdimenzion.ddd.domain.annotations.ValueObject;
@@ -20,8 +19,8 @@ import javax.persistence.Embedded;
 
 
 /**
- * @author: Samir
- * @since 1.0 11/03/2015
+ * @author: Nischitha
+ * @since 1.0 10/03/2015
  */
 @ValueObject
 @Getter(value = AccessLevel.PACKAGE)
@@ -38,7 +37,6 @@ public class TeamLeaderFulfillment {
 
     @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentLocalDate")
     private LocalDate thruDate;
-
     TeamLeaderFulfillment(TeamLeader teamLeader, LocalDate fromDate) {
         this.teamLeader = teamLeader;
         this.fromDate = fromDate;
