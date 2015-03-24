@@ -16,8 +16,7 @@
           rel="stylesheet" />
     <link href="http://cdn.jsdelivr.net/css/sticky-footer-navbar.css"
           th:href="@{/css/sticky-footer-navbar.css}" rel="stylesheet" />
-
-    <!--sub-menus in the navbar css-->
+       <!--sub-menus in the navbar css-->
     <link href="/static/css/common.css"
           th:href="@{/css/common.css}" rel="stylesheet" />
     <link href="/static/css/custom-css.css"
@@ -28,15 +27,12 @@
     <script th:src="@{/webjarsjs}"></script>
     <script  th:src="@{/webjars/requirejs/2.1.15/require.min.js}"></script>
     <style>
-
-        .dropdown-menu {
+      .dropdown-menu {
             padding: 5px 10px;
         }
-
     </style>
 </head>
 <body >
-
 <div th:fragment="bodyHeader" >
     <style>
         .dropdown-menu>li>a:hover{
@@ -44,7 +40,7 @@
         }
     </style>
     <script>
-        requirejs(['jquery','bootstrap','datatables'],function($,bootstrap,datatables){
+        define('basic',['jquery','bootstrap','datatables'],function($,bootstrap,datatables){
 
         });
         requirejs.config({
