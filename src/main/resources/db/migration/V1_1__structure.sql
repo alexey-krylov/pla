@@ -580,6 +580,40 @@ CREATE TABLE `sum_assured_sum_insured_values` (
   CONSTRAINT `FK_8v9k7sydll2yrf86atgs5081u` FOREIGN KEY (`sum_assured_id`) REFERENCES `sum_assured` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+
+DROP TABLE IF EXISTS region;
+CREATE TABLE `region` (
+  `region_code`      VARCHAR(255) NOT NULL,
+  `region_name`      VARCHAR(255) DEFAULT NULL,
+  `regional_manager` VARCHAR(255) DEFAULT NULL,
+  PRIMARY KEY (`region_code`),
+  UNIQUE KEY `UNQ_REGION_CODE_NAME` (`region_code`, `region_name`)
+)
+  ENGINE =InnoDB
+  DEFAULT CHARSET =utf8;
+
+DROP TABLE IF EXISTS branch;
+CREATE TABLE `branch` (
+  `branch_code`    VARCHAR(255) NOT NULL,
+  `branchbde`      VARCHAR(255) DEFAULT NULL,
+  `branch_manager` VARCHAR(255) DEFAULT NULL,
+  `branch_name`    VARCHAR(255) DEFAULT NULL,
+  PRIMARY KEY (`branch_code`)
+)
+  ENGINE =InnoDB
+  DEFAULT CHARSET =utf8;
+
+DROP TABLE IF EXISTS `region_branch`;
+CREATE TABLE `region_branch` (
+  `region_code` VARCHAR(255) NOT NULL,
+  `branch_code` VARCHAR(255) NOT NULL,
+  PRIMARY KEY (`region_code`, `branch_code`),
+  UNIQUE KEY `UK_n48d3jv1a5x3x5wh2wqv6sebr` (`branch_code`),
+  CONSTRAINT `FK_1knyc3q94ravrw1qwm7xnx73u` FOREIGN KEY (`region_code`) REFERENCES `region` (`region_code`),
+  CONSTRAINT `FK_n48d3jv1a5x3x5wh2wqv6sebr` FOREIGN KEY (`branch_code`) REFERENCES `branch` (`branch_code`)
+)
+  ENGINE =InnoDB
+  DEFAULT CHARSET =utf8;
 /*Data for the table `sum_assured_sum_insured_values` */
 
 
@@ -635,18 +669,6 @@ CREATE TABLE `region_manager_fulfillment` (
 )
   ENGINE =InnoDB
   DEFAULT CHARSET =utf8;
-
-DROP TABLE IF EXISTS region;
-CREATE TABLE `region` (
-  `region_code`      VARCHAR(255) NOT NULL,
-  `region_name`      VARCHAR(255) DEFAULT NULL,
-  `regional_manager` VARCHAR(255) DEFAULT NULL,
-  PRIMARY KEY (`region_code`),
-  UNIQUE KEY `UNQ_REGION_CODE_NAME` (`region_code`, `region_name`)
-)
-  ENGINE =InnoDB
-  DEFAULT CHARSET =utf8;
-
 
 
 DROP TABLE IF EXISTS `entity_sequence`;

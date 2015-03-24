@@ -112,6 +112,16 @@ CREATE TABLE `region`(
   UNIQUE KEY `UNQ_REGION_CODE_NAME` (`region_code`,`region_name`)
 );
 
+DROP TABLE IF EXISTS `region_branch`;
+CREATE TABLE `region_branch`(
+  `region_code` varchar(255) NOT NULL,
+  `branch_code` varchar(255) NOT NULL,
+  PRIMARY KEY (`region_code`,`branch_code`),
+  UNIQUE KEY `UK_n48d3jv1a5x3x5wh2wqv6sebr` (`branch_code`),
+  CONSTRAINT `FK_1knyc3q94ravrw1qwm7xnx73u` FOREIGN KEY (`region_code`) REFERENCES `region` (`region_code`),
+  CONSTRAINT `FK_n48d3jv1a5x3x5wh2wqv6sebr` FOREIGN KEY (`branch_code`) REFERENCES `branch` (`branch_code`)
+);
+
 DROP TABLE IF EXISTS `team`;
 
 CREATE TABLE `team`(
