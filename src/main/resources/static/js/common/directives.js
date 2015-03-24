@@ -1,6 +1,7 @@
 define(['angular'],function(angular){
     angular.module('directives',[])
         .directive('fueluxWizard',function(){
+            alert('fueluxWizard init invoked');
             /*use this directive to initialize the fuelUx wizard
             *
             * example: <div fuelux-wizard selected-item="[step]">

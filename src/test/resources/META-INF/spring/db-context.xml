@@ -1,16 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:mongo="http://www.springframework.org/schema/data/mongo"
        xmlns="http://www.springframework.org/schema/beans"
-       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/data/mongo http://www.springframework.org/schema/data/mongo/spring-mongo.xsd">
 
     <!-- Infrastructure configuration -->
-
     <bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
         <property name="locations" value="classpath:mysql.database.properties"/>
     </bean>
-
     <bean class="org.springframework.orm.jpa.support.PersistenceAnnotationBeanPostProcessor"/>
-
     <bean id="dataSource" class="com.jolbox.bonecp.BoneCPDataSource">
         <property name="driverClass" value="${jdbc.driverclass}"/>
         <property name="jdbcUrl" value="${jdbc.url}"/>
@@ -18,4 +16,9 @@
         <property name="password" value="${jdbc.password}"/>
     </bean>
 
+    <mongo:mongo host="localhost" port="27017" id="mongo"/>
+    <mongo:db-factory id="mongoDbFactory" dbname="pla" mongo-ref="mongo"/>
+    <bean id="mongoTemplate" class="org.springframework.data.mongodb.core.MongoTemplate">
+        <constructor-arg name="mongoDbFactory" ref="mongoDbFactory"/>
+    </bean>
 </beans>

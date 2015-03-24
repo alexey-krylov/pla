@@ -25,9 +25,6 @@
     <!--<bean id="cacheManager" class="org.springframework.cache.ehcache.EhCacheManagerFactoryBean"/>-->
 
     <bean id="entityManagerProvider" class="org.axonframework.common.jpa.ContainerManagedEntityManagerProvider"/>
-    <axon:event-sourcing-repository id="planRepository" aggregate-type="com.pla.core.domain.model.plan.Plan"
-                                    event-store="eventStore" event-bus="eventBus">
-        <axon:snapshotter-trigger event-count-threshold="10" snapshotter-ref="snapshotter"/>
-    </axon:event-sourcing-repository>
+
 
 </beans>
