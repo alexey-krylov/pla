@@ -1,12 +1,19 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
-      lang="en" ng-app="AngularApp">
+      lang="en">
 <head th:include="fragments/common :: headTag">
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+
 </head>
 <body style="padding-top: 70px;" >
 <div th:include="fragments/common :: bodyHeader" th:remove="tag"/>
-
+<script>
+    requirejs(['main'],function(){
+    require(['/pla/js/team/createTeam.js'],function(){
+    angular.bootstrap(document, ['createTeam']);
+    });
+    });
+</script>
 <div class="container" style="padding-top: 0px!important;" ng-Controller="CreateTeamController">
     <div class="row">
         <div class="col-lg-8" style="left:230px;position:absolute;">
