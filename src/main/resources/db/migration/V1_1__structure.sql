@@ -585,6 +585,7 @@ CREATE TABLE `sum_assured_sum_insured_values` (
 
 
 DROP TABLE IF EXISTS `region`;
+
 CREATE TABLE `region`(
   `REGION_CODE` varchar(20) NOT NULL,
   `REGION` varchar(12) NOT NULL,
