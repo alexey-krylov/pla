@@ -105,11 +105,11 @@ CREATE TABLE `branch`(
 
 DROP TABLE IF EXISTS `region`;
 CREATE TABLE `region`(
-  `REGION_CODE` varchar(20) NOT NULL,
-  `REGION` varchar(12) NOT NULL,
-  `REGIONAL_MANAGER` varchar(255) NOT NULL,
-  PRIMARY KEY (`REGION_CODE`),
-  UNIQUE KEY `REGION` (`REGION`)
+  `region_code` varchar(255) NOT NULL,
+  `region_name` varchar(255) DEFAULT NULL,
+  `regional_manager` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`region_code`),
+  UNIQUE KEY `UNQ_REGION_CODE_NAME` (`region_code`,`region_name`)
 );
 
 DROP TABLE IF EXISTS `team`;
@@ -143,6 +143,20 @@ CREATE TABLE `team_team_leader_fulfillment`(
   KEY `team_leaders_order` (`team_leaders_order`),
   CONSTRAINT `FK_TEAM_LEADER_FULFILLMENT` FOREIGN KEY (`team_id`) REFERENCES `team` (`team_id`)
 );
+
+DROP TABLE IF EXISTS region_manager_fulfillment;
+CREATE TABLE `region_manager_fulfillment`(
+  `region_Code` varchar(255) NOT NULL,
+  `firstName` varchar(255) NOT NULL,
+  `lastName` varchar(255) NOT NULL,
+  `fromDate` date DEFAULT NULL,
+  `thruDate` date DEFAULT NULL,
+  `employeeId` varchar(255) NOT NULL,
+  `branchCode` varchar(255) NOT NULL,
+  PRIMARY KEY (`region_Code`)
+);
+
+
 
 DROP TABLE IF EXISTS agent;
 CREATE TABLE `agent` (

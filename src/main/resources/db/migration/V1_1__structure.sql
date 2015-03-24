@@ -583,17 +583,6 @@ CREATE TABLE `sum_assured_sum_insured_values` (
 /*Data for the table `sum_assured_sum_insured_values` */
 
 
-
-DROP TABLE IF EXISTS `region`;
-
-CREATE TABLE `region`(
-  `REGION_CODE` varchar(20) NOT NULL,
-  `REGION` varchar(12) NOT NULL,
-  `REGIONAL_MANAGER` varchar(255) NOT NULL,
-  PRIMARY KEY (`REGION_CODE`),
-  UNIQUE KEY `REGION` (`REGION`)
-)ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
 /*Table structure for table `team` */
 
 DROP TABLE IF EXISTS `team`;
@@ -646,6 +635,18 @@ CREATE TABLE `region_manager_fulfillment` (
 )
   ENGINE =InnoDB
   DEFAULT CHARSET =utf8;
+
+DROP TABLE IF EXISTS region;
+CREATE TABLE `region` (
+  `region_code`      VARCHAR(255) NOT NULL,
+  `region_name`      VARCHAR(255) DEFAULT NULL,
+  `regional_manager` VARCHAR(255) DEFAULT NULL,
+  PRIMARY KEY (`region_code`),
+  UNIQUE KEY `UNQ_REGION_CODE_NAME` (`region_code`, `region_name`)
+)
+  ENGINE =InnoDB
+  DEFAULT CHARSET =utf8;
+
 
 
 DROP TABLE IF EXISTS `entity_sequence`;
