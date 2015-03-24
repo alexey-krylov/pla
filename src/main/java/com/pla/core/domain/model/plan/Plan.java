@@ -49,8 +49,6 @@ public class Plan {
         Preconditions.checkArgument(planBuilder != null);
         this.planDetail = planBuilder.getPlanDetail();
         this.sumAssured = planBuilder.getSumAssured();
-        checkArgument(this.sumAssured != null);
-        this.sumAssuredType = sumAssured.getSumAssuredType();
         this.policyTermType = planBuilder.getPolicyTermType();
         this.premiumTermType = planBuilder.getPremiumTermType();
         this.premiumTerm = planBuilder.getPolicyTerm();
