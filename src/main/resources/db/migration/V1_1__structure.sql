@@ -508,14 +508,6 @@ CREATE TABLE `premium_payment_valid_terms` (
 
 /*Table structure for table `region` */
 
-DROP TABLE IF EXISTS `region`;
-
-CREATE TABLE `region` (
-  `REGION_CODE` varchar(20) NOT NULL DEFAULT '',
-  `REGION` varchar(12) NOT NULL,
-  PRIMARY KEY (`REGION_CODE`),
-  UNIQUE KEY `REGION` (`REGION`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 /*Data for the table `region` */
 
@@ -590,15 +582,7 @@ CREATE TABLE `sum_assured_sum_insured_values` (
 
 /*Data for the table `sum_assured_sum_insured_values` */
 
-DROP TABLE IF EXISTS `branch`;
-CREATE TABLE `branch`(
-  `BRANCH_CODE` varchar(20) NOT NULL,
-  `REGION_CODE` varchar(20) NOT NULL,
-  `BRANCH` varchar(255) NOT NULL,
-  `BRANCH_MANAGER` varchar(255) NOT NULL,
-  `BRANCH_BDE` varchar(255) NOT NULL,
-  PRIMARY KEY (`BRANCH_CODE`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
 
 DROP TABLE IF EXISTS `region`;
 CREATE TABLE `region`(
@@ -648,6 +632,20 @@ CREATE TABLE `team_team_leader_fulfillment`(
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 /*Data for the table `team_team_leader_fulfillment` */
+DROP TABLE IF EXISTS region_manager_fulfillment;
+CREATE TABLE `region_manager_fulfillment` (
+  `region_Code` VARCHAR(255) NOT NULL,
+  `firstName`   VARCHAR(255) NOT NULL,
+  `lastName`    VARCHAR(255) NOT NULL,
+  `fromDate`    DATE DEFAULT NULL,
+  `thruDate`    DATE DEFAULT NULL,
+  `employeeId`  VARCHAR(255) NOT NULL,
+  `branchCode`  VARCHAR(255) NOT NULL,
+  PRIMARY KEY (`region_Code`)
+)
+  ENGINE =InnoDB
+  DEFAULT CHARSET =utf8;
+
 
 DROP TABLE IF EXISTS `entity_sequence`;
 CREATE TABLE `entity_sequence`(
@@ -657,6 +655,7 @@ CREATE TABLE `entity_sequence`(
   `sequence_prefix` VARCHAR(255) NOT NULL,
   PRIMARY KEY (`sequence_id`)
 ) ENGINE=INNODB DEFAULT CHARSET=utf8;
+
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
