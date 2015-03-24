@@ -17,8 +17,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 
 /**
- * @author: Nischitha
- * @since 1.0 10/03/2015
+ * @author: Samir
+ * @since 1.0 09/03/2015
  */
 @DomainService
 public class TeamService {

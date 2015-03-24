@@ -38,9 +38,9 @@ public class MasterFinder {
     public static final String FIND_ALL_CHANNEL_TYPE = "SELECT channel_code AS channelCode ,channel_description AS channelDescription FROM channel_type";
 
 
-    public static final String FIND_ALL_REGION = "select region_code AS regionCode, region_name AS regionName from region";
+    public static final String FIND_ALL_REGION = "select * from region";
 
-    public static final String FINA_ALL_BRANCH = "select BRANCH_CODE AS branchCode,BRANCH AS branchName from branch where region_code=:regionCode";
+    public static final String FINA_ALL_BRANCH = "select * from branch where region_code=:regionCode";
 
     public List<Map<String, Object>> getGeoByGeoType(GeoType geoType) {
         return namedParameterJdbcTemplate.query(FIND_GEO_BY_GEO_TYPE, new MapSqlParameterSource().addValue("geoType", geoType.name()), new ColumnMapRowMapper());

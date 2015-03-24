@@ -5,6 +5,7 @@ import com.pla.core.application.UpdateTeamCommand;
 import com.pla.core.query.MasterFinder;
 import com.pla.core.query.TeamFinder;
 import org.axonframework.commandhandling.gateway.CommandGateway;
+import org.nthdimenzion.common.AppConstants;
 import org.nthdimenzion.presentation.Result;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
@@ -44,9 +46,9 @@ public class TeamController {
     }
 
     @RequestMapping(value = "/team/view", method = RequestMethod.GET)
-    public ModelAndView viewTeams() {
+    public ModelAndView viewTeams(@RequestParam(value = "page", required = false) Integer pageNumber, Model model) {
         ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("pla/core/team/viewTeam");
+        modelAndView.setViewName("pla/core/viewTeam");
         modelAndView.addObject("teamList", teamFinder.getAllTeam());
         return modelAndView;
     }
@@ -54,7 +56,7 @@ public class TeamController {
     @RequestMapping(value = "/team/openCreatePage", method = RequestMethod.GET)
     public ModelAndView openCreatePageTeam() {
         ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("pla/core/team/createTeam");
+        modelAndView.setViewName("pla/core/createTeam");
         modelAndView.addObject("regions", masterFinder.getAllRegion());
         modelAndView.addObject("teamLeaders", new ArrayList<>());
         return modelAndView;
@@ -63,7 +65,7 @@ public class TeamController {
     @RequestMapping(value = "/team/openAssignPage", method = RequestMethod.GET)
     public ModelAndView openAssignPageTeam(@RequestParam(value = "teamId", required = false) String teamId) {
         ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("pla/core/team/assignTeam");
+        modelAndView.setViewName("pla/core/assignTeam");
         modelAndView.addObject("teamDetail", teamFinder.getTeamById(teamId));
         modelAndView.addObject("teamLeaders", new ArrayList<>());
         return modelAndView;
