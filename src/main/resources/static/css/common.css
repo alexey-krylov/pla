@@ -4,7 +4,7 @@ body {
 }
 
 .bs-callout-info {
-    border-left-color: #1b809e;
+    border-left-color: #1b809e!important;
 }
 
 .bs-callout {
