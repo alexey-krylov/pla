@@ -1,5 +1,7 @@
 package com.pla.core.domain.model.plan;
 
+import com.pla.sharedkernel.domain.model.CoverageCover;
+import com.pla.sharedkernel.domain.model.CoverageTermType;
 import com.pla.sharedkernel.domain.model.CoverageType;
 import com.pla.sharedkernel.identifier.CoverageId;
 import lombok.AccessLevel;
@@ -34,6 +36,7 @@ class PlanCoverage {
     private Boolean taxApplicable;
     private SumAssured sumAssured;
     private Term coverageTerm;
+    private CoverageTermType coverageTermType;
     /**
      * Holds the Benefits that are applicable for Plan.
      */
@@ -83,8 +86,10 @@ class PlanCoverage {
         this.sumAssured = sumAssured;
     }
 
-    public void configureCoverageTerm(Term coverageTerm) {
+    public void configureCoverageTerm(CoverageTermType coverageTermType, Term coverageTerm) {
         checkArgument(coverageTerm != null);
+        checkArgument(coverageTermType != null);
+        this.coverageTermType = coverageTermType;
         this.coverageTerm = coverageTerm;
     }
 

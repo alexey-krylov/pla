@@ -1,5 +1,6 @@
 package com.pla.core.domain.model.plan;
 
+import com.pla.sharedkernel.domain.model.CoverageCover;
 import com.pla.sharedkernel.domain.model.CoverageType;
 import com.pla.sharedkernel.identifier.CoverageId;
 import org.junit.Before;

@@ -17,6 +17,7 @@
     <logger name="org.springframework.web.servlet.view" level="error"/>
     <logger name="org.springframework.security" level="error"/>
     <logger name="org.springframework.format" level="error"/>
+    <logger name="org.springframework.data.mongodb" level="debug"/>
     <logger name="org.thymeleaf"  level="error"/>
     <logger name="com.pla" level="trace"/>
     <root level="info">

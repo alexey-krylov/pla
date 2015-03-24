@@ -14,6 +14,7 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Set;
 
 import static org.junit.Assert.assertEquals;
@@ -66,59 +67,63 @@ public class PlanTest {
     @Test
     public void should_create_plan_based_on_age() {
 
-        Plan plan = new Plan(new PlanId(), planDetail);
-
-        plan.configureSumAssured(SumAssuredType.SPECIFIED_VALUES, null, new BigDecimal(50000000), 0,
+        PlanBuilder builder = Plan.builder();
+        builder.withPlanDetail(planDetail);
+        builder.withPlanSumAssured(SumAssuredType.SPECIFIED_VALUES, null, new BigDecimal(50000000), 0,
                 Sets.newTreeSet(Sets.newHashSet(new BigDecimal(10000000), new BigDecimal(50000000), new BigDecimal(50000000))), 0);
-        plan.configurePremiumPayment(PremiumTermType.SPECIFIED_AGES, Sets.newHashSet(45, 55), -1);
-        plan.configureCoverages(Sets.newHashSet(planCoverage));
-        plan.configureMaturityAmount(Sets.newHashSet(new MaturityAmount(5, new BigDecimal(15))));
-        plan.configurePolicyTerm(PolicyTermType.MATURITY_AGE_DEPENDENT,
+        builder.withPremiumTerm(PremiumTermType.SPECIFIED_AGES, Sets.newHashSet(45, 55), -1);
+        builder.withPlanCoverages(Sets.newHashSet(planCoverage));
+        builder.withMaturityAmounts(Sets.newHashSet(new MaturityAmount(5, new BigDecimal(15))));
+        builder.withPolicyTerm(PolicyTermType.MATURITY_AGE_DEPENDENT,
                 Sets.newHashSet(60, 65), -1);
+        Plan plan = builder.build(new PlanId());
         System.out.println(plan);
-        Term premiumTermByAge = plan.getPlanDetail().getPremiumTerm();
+        Term premiumTermByAge = builder.getPremiumTerm();
         assertEquals(2, premiumTermByAge.getMaturityAges().size());
     }
 
     @Test
     public void should_create_plan_premium_term_same_as_policy_term() {
-
-        Plan plan = new Plan(new PlanId(), planDetail);
-        plan.configurePolicyTerm(PolicyTermType.MATURITY_AGE_DEPENDENT,
+        PlanBuilder builder = Plan.builder();
+        builder.withPlanDetail(planDetail);
+        builder.withPolicyTerm(PolicyTermType.MATURITY_AGE_DEPENDENT,
                 Sets.newHashSet(60, 65), -1);
-        plan.configurePremiumPayment(PremiumTermType.REGULAR, null, -1);
-        Term premiumTerm = plan.getPlanDetail().getPremiumTerm();
-        Term policyTerm = plan.getPlanDetail().getPolicyTerm();
+        builder.withPremiumTerm(PremiumTermType.REGULAR, null, -1);
+        Plan plan = builder.build(new PlanId());
+        Term premiumTerm = builder.getPremiumTerm();
+        Term policyTerm = builder.getPolicyTerm();
         assertEquals(premiumTerm, policyTerm);
     }
 
     @Test
     public void should_create_plan_based_on_value() {
-        Plan plan = new Plan(new PlanId(), planDetail);
-        plan.configureSumAssured(SumAssuredType.SPECIFIED_VALUES, null, new BigDecimal(50000000), 0,
+        PlanBuilder builder = Plan.builder();
+        builder.withPlanDetail(planDetail);
+        builder.withPlanSumAssured(SumAssuredType.SPECIFIED_VALUES, null, new BigDecimal(50000000), 0,
                 Sets.newTreeSet(Sets.newHashSet(new BigDecimal(10000000), new BigDecimal(50000000), new BigDecimal(50000000))), 0);
-        plan.configurePremiumPayment(PremiumTermType.SPECIFIED_VALUES,
+        builder.withPremiumTerm(PremiumTermType.SPECIFIED_VALUES,
                 Sets.newHashSet(30, 35, 40, 45, 50, 55, 60), 60);
-        plan.configureCoverages(Sets.newHashSet(planCoverage));
-        plan.configureMaturityAmount(Sets.newHashSet(new MaturityAmount(5, new BigDecimal(15))));
-        plan.configurePolicyTerm(PolicyTermType.SPECIFIED_VALUES,
+        builder.withPlanCoverages(Sets.newHashSet(planCoverage));
+        builder.withMaturityAmounts(Sets.newHashSet(new MaturityAmount(5, new BigDecimal(15))));
+        builder.withPolicyTerm(PolicyTermType.SPECIFIED_VALUES,
                 Sets.newHashSet(30, 35, 40, 45, 50, 55, 60), 60);
+        Plan plan = builder.build(new PlanId());
+
     }
 
     @Test
     public void should_create_plan_based_on_sum_assured_range() {
-
-        Plan plan = new Plan(new PlanId(), planDetail);
-
-        plan.configureSumAssured(SumAssuredType.RANGE, new BigDecimal(10000000), new BigDecimal(40000000), 10000, null, 0);
-        plan.configurePremiumPayment(PremiumTermType.SPECIFIED_VALUES,
+        PlanBuilder builder = Plan.builder();
+        builder.withPlanDetail(planDetail);
+        builder.withPlanSumAssured(SumAssuredType.RANGE, new BigDecimal(10000000), new BigDecimal(40000000), 10000, null, 0);
+        builder.withPremiumTerm(PremiumTermType.SPECIFIED_VALUES,
                 Sets.newHashSet(30, 35, 40, 45, 50, 55, 60), 60);
-        plan.configureCoverages(Sets.newHashSet(planCoverage));
-        plan.configureMaturityAmount(Sets.newHashSet(new MaturityAmount(5, new BigDecimal(15))));
-        plan.configurePolicyTerm(PolicyTermType.SPECIFIED_VALUES,
+        builder.withPlanCoverages(Sets.newHashSet(planCoverage));
+        builder.withMaturityAmounts(Sets.newHashSet(new MaturityAmount(5, new BigDecimal(15))));
+        builder.withPolicyTerm(PolicyTermType.SPECIFIED_VALUES,
                 Sets.newHashSet(30, 35, 40, 45, 50, 55, 60), 60);
-
-        SumAssured sumAssured = plan.getPlanDetail().getSumAssured();
+        Plan plan = builder.build(new PlanId());
+        SumAssured sumAssured = builder.getSumAssured();
         assertEquals(new BigDecimal(40000000), sumAssured.getMaxSumInsured());
         assertEquals(new BigDecimal(10000000), sumAssured.getMinSumInsured());
         assertEquals(10000, sumAssured.getMultiplesOf());
@@ -127,27 +132,31 @@ public class PlanTest {
     @Test(expected = IllegalArgumentException.class)
     public void should_not_create_plan_when_payment_terms_has_val_gt_than_cut_off_age() {
 
-        Plan plan = new Plan(new PlanId(), planDetail);
-        plan.configurePremiumPayment(PremiumTermType.SPECIFIED_VALUES,
+        PlanBuilder builder = Plan.builder();
+        builder.withPremiumTerm(PremiumTermType.SPECIFIED_VALUES,
                 Sets.newHashSet(30, 35, 40, 45, 50, 55, 75), 70);
+        builder.build(new PlanId());
+
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void should_not_create_plan_when_policy_terms_has_val_gt_than_max_maturity_age() {
-
-        Plan plan = new Plan(new PlanId(), planDetail);
-        plan.configurePolicyTerm(PolicyTermType.SPECIFIED_VALUES,
+        PlanBuilder builder = Plan.builder();
+        builder.withPolicyTerm(PolicyTermType.SPECIFIED_VALUES,
                 Sets.newHashSet(30, 35, 40, 45, 50, 55, 65), 60);
+        builder.build(new PlanId());
+
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void should_not_create_plan_based_on_value_when_premium_term_gt_than_policy_term() {
-
-        Plan plan = new Plan(new PlanId(), planDetail);
-        plan.configurePolicyTerm(PolicyTermType.SPECIFIED_VALUES,
+        PlanBuilder builder = Plan.builder();
+        builder.withPlanDetail(planDetail);
+        builder.withPolicyTerm(PolicyTermType.SPECIFIED_VALUES,
                 Sets.newHashSet(30, 35, 40, 45, 50, 55, 60), 60);
-        plan.configurePremiumPayment(PremiumTermType.SPECIFIED_VALUES,
+        builder.withPremiumTerm(PremiumTermType.SPECIFIED_VALUES,
                 Sets.newHashSet(30, 35, 40, 45, 50, 55, 75), 70);
+        builder.build(new PlanId());
     }
 
 
@@ -165,11 +174,12 @@ public class PlanTest {
                 .build();
 
         Term term = new Term(Sets.newHashSet(10, 15), 15);
-        Plan plan = new Plan(new PlanId(), planDetail);
-        plan.configureCoverages(Sets.newHashSet(planCoverage_1));
-        plan.configureTermForPlanCoverage(coverageId_1, CoverageTermType.SPECIFIED_VALUES, Sets.newHashSet(10, 15), 15);
-
-        PlanCoverage planCoverage = plan.getPlanDetail().getCoverages().iterator().next();
+        PlanBuilder builder = Plan.builder();
+        builder.withPlanCoverages(Sets.newHashSet(planCoverage_1));
+        builder.withTermForPlanCoverage(coverageId_1, CoverageTermType.SPECIFIED_VALUES, Sets.newHashSet(10, 15), 15);
+        builder.withMaturityAmount(5, new BigDecimal(100000));
+        Plan plan = builder.build(new PlanId());
+        PlanCoverage planCoverage = builder.getCoverages().iterator().next();
         assertEquals(term, planCoverage.getCoverageTerm());
     }
 
@@ -186,14 +196,15 @@ public class PlanTest {
                 .withDeductibleAsPercentage(new BigDecimal(100))
                 .withWaitingPeriod(5)
                 .build();
-
-        Plan plan = new Plan(new PlanId(), planDetail);
-        plan.configurePolicyTerm(PolicyTermType.SPECIFIED_VALUES,
+        PlanBuilder builder = Plan.builder();
+        builder.withPolicyTerm(PolicyTermType.SPECIFIED_VALUES,
                 Sets.newHashSet(30, 35, 40), 45);
 
         Term term = new Term(Sets.newHashSet(45, 55), 55);
-        plan.configureCoverages(Sets.newHashSet(planCoverage_1));
-        plan.configureTermForPlanCoverage(coverageId_1, CoverageTermType.SPECIFIED_VALUES, Sets.newHashSet(45, 55), 55);
+        builder.withPlanCoverages(Sets.newHashSet(planCoverage_1));
+        builder.withTermForPlanCoverage(coverageId_1, CoverageTermType.SPECIFIED_VALUES, Sets.newHashSet(45, 55), 55);
+        Plan plan = builder.build(new PlanId());
+        assertEquals(term, builder.getCoverages().iterator().next().getCoverageTerm());
     }
 
 
@@ -210,12 +221,14 @@ public class PlanTest {
                 .withWaitingPeriod(5)
                 .build();
 
-        Plan plan = new Plan(new PlanId(), planDetail);
-        plan.configureCoverages(Sets.newHashSet(planCoverage_1));
+        PlanBuilder builder = Plan.builder();
+        builder.withPlanCoverages(Sets.newHashSet(planCoverage_1));
 
         SumAssured sumAssured = new SumAssured(new BigDecimal(10000000), new BigDecimal(40000000), 10000);
-        plan.configureSumAssuredForPlanCoverage(coverageId_1, SumAssuredType.RANGE, new BigDecimal(10000000), new BigDecimal(40000000), 10000, null, 0);
-        PlanCoverage planCoverage = plan.getPlanDetail().getCoverages().iterator().next();
+        builder.withSumAssuredForPlanCoverage(coverageId_1, SumAssuredType.RANGE, new BigDecimal(10000000), new BigDecimal(40000000), 10000, null, 0);
+        Plan plan = builder.build(new PlanId());
+
+        PlanCoverage planCoverage = plan.getCoverages().iterator().next();
         assertEquals(sumAssured, planCoverage.getSumAssured());
     }
 
@@ -234,23 +247,23 @@ public class PlanTest {
                 .build();
 
         SumAssured sumAssured = new SumAssured(coverageId_1, 12, BigInteger.valueOf(100000));
-        Plan plan = new Plan(new PlanId(), planDetail);
-        plan.configureCoverages(Sets.newHashSet(planCoverage_1));
-        plan.configureSumAssuredForPlanCoverage(coverageId_1, SumAssuredType.DERIVED, null, new BigDecimal(100000), 0, null, 12);
-
-        PlanCoverage planCoverage = plan.getPlanDetail().getCoverages().iterator().next();
+        PlanBuilder builder = Plan.builder();
+        builder.withPlanCoverages(Sets.newHashSet(planCoverage_1));
+        builder.withSumAssuredForPlanCoverage(coverageId_1, SumAssuredType.DERIVED, null, new BigDecimal(100000), 0, null, 12);
+        Plan plan = builder.build(new PlanId());
+        PlanCoverage planCoverage = plan.getCoverages().iterator().next();
         assertEquals(sumAssured, planCoverage.getSumAssured());
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void should_not_add_derived_sum_assured_to_plan() {
-        Plan plan = new Plan(new PlanId(), planDetail);
-        plan.configureSumAssured(SumAssuredType.DERIVED, null, null, 0, null, 0);
+        PlanBuilder builder = Plan.builder();
+        builder.withPlanSumAssured(SumAssuredType.DERIVED, null, null, 0, null, 0);
     }
 
     @Test
     public void should_add_plan_coverage_term_to_plan() {
-        Plan plan = new Plan(new PlanId(), planDetail);
+        PlanBuilder builder = Plan.builder();
         CoverageId coverageId_1 = new CoverageId("Coverage - 1");
         PlanCoverageBuilder planCoverageBuilder = PlanCoverage.builder();
         PlanCoverage planCoverage_1 = planCoverageBuilder.withCoverage(coverageId_1)
@@ -261,16 +274,17 @@ public class PlanTest {
                 .withDeductibleAsPercentage(new BigDecimal(100))
                 .withWaitingPeriod(5)
                 .build();
-        plan.configurePolicyTerm(PolicyTermType.SPECIFIED_VALUES,
+        builder.withPolicyTerm(PolicyTermType.SPECIFIED_VALUES,
                 Sets.newHashSet(30, 35, 40, 45, 50, 55, 60), 60);
-        plan.configureCoverages(Sets.newHashSet(planCoverage_1));
-        plan.configureTermForPlanCoverage(coverageId_1, CoverageTermType.AGE_DEPENDENT, Sets.newHashSet(100, 150, 200), 0);
+        builder.withPlanCoverages(Sets.newHashSet(planCoverage_1));
+        builder.withTermForPlanCoverage(coverageId_1, CoverageTermType.AGE_DEPENDENT, Sets.newHashSet(100, 150, 200), 0);
+        builder.build(new PlanId());
     }
 
 
     @Test(expected = IllegalStateException.class)
     public void should_not_add_plan_coverage_term_to_plan() {
-        Plan plan = new Plan(new PlanId(), planDetail);
+        PlanBuilder builder = Plan.builder();
         CoverageId coverageId_1 = new CoverageId("Coverage - 1");
         PlanCoverageBuilder planCoverageBuilder = PlanCoverage.builder();
         PlanCoverage planCoverage_1 = planCoverageBuilder.withCoverage(coverageId_1)
@@ -281,16 +295,17 @@ public class PlanTest {
                 .withDeductibleAsPercentage(new BigDecimal(100))
                 .withWaitingPeriod(5)
                 .build();
-        plan.configurePolicyTerm(PolicyTermType.SPECIFIED_VALUES,
+        builder.withPolicyTerm(PolicyTermType.SPECIFIED_VALUES,
                 Sets.newHashSet(30, 35, 40, 45, 50, 55, 60), 60);
-        plan.configureCoverages(Sets.newHashSet(planCoverage_1));
-        plan.configureTermForPlanCoverage(coverageId_1, CoverageTermType.SPECIFIED_VALUES, Sets.newHashSet(100, 150, 200), 200);
+        builder.withPlanCoverages(Sets.newHashSet(planCoverage_1));
+        builder.withTermForPlanCoverage(coverageId_1, CoverageTermType.SPECIFIED_VALUES, Sets.newHashSet(100, 150, 200), 200);
+        builder.build(new PlanId());
     }
 
 
-    @Test(expected = IllegalStateException.class)
+    @Test(expected = IllegalArgumentException.class)
     public void should_not_add_plan_coverage_term_without_max_maturity_age_to_plan() {
-        Plan plan = new Plan(new PlanId(), planDetail);
+        PlanBuilder builder = Plan.builder();
         CoverageId coverageId_1 = new CoverageId("Coverage - 1");
         PlanCoverageBuilder planCoverageBuilder = PlanCoverage.builder();
         PlanCoverage planCoverage_1 = planCoverageBuilder.withCoverage(coverageId_1)
@@ -301,16 +316,17 @@ public class PlanTest {
                 .withDeductibleAsPercentage(new BigDecimal(100))
                 .withWaitingPeriod(5)
                 .build();
-        plan.configurePolicyTerm(PolicyTermType.SPECIFIED_VALUES,
+        builder.withPolicyTerm(PolicyTermType.SPECIFIED_VALUES,
                 Sets.newHashSet(30, 35, 40, 45, 50, 55, 60), 60);
-        plan.configureCoverages(Sets.newHashSet(planCoverage_1));
-        plan.configureTermForPlanCoverage(coverageId_1, CoverageTermType.SPECIFIED_VALUES, Sets.newHashSet(100, 150, 200), 0);
+        builder.withPlanCoverages(Sets.newHashSet(planCoverage_1));
+        builder.withTermForPlanCoverage(coverageId_1, CoverageTermType.SPECIFIED_VALUES, Sets.newHashSet(100, 150, 200), 0);
+        builder.build(new PlanId());
     }
 
 
     @Test
     public void should_add_coverage_term_same_as_plan() {
-        Plan plan = new Plan(new PlanId(), planDetail);
+        PlanBuilder builder = Plan.builder();
         CoverageId coverageId_1 = new CoverageId("Coverage - 1");
         PlanCoverageBuilder planCoverageBuilder = PlanCoverage.builder();
         PlanCoverage planCoverage_1 = planCoverageBuilder.withCoverage(coverageId_1)
@@ -321,11 +337,15 @@ public class PlanTest {
                 .withDeductibleAsPercentage(new BigDecimal(100))
                 .withWaitingPeriod(5)
                 .build();
-        plan.configurePolicyTerm(PolicyTermType.SPECIFIED_VALUES,
+        builder.withPolicyTerm(PolicyTermType.SPECIFIED_VALUES,
                 Sets.newHashSet(30, 35, 40, 45, 50, 55, 60), 60);
-        plan.configureCoverages(Sets.newHashSet(planCoverage_1));
-        plan.configureTermForPlanCoverage(coverageId_1, CoverageTermType.POLICY_TERM, null, 0);
-        assertEquals(plan.getPlanDetail().getPolicyTerm().validTerms, Sets.newHashSet(30, 35, 40, 45, 50, 55, 60));
+        builder.withPlanCoverages(Sets.newHashSet(planCoverage_1));
+        builder.withPlanCoverageBenefit(coverageId_1, new BenefitId("Benefit-Coverage-2"),
+                CoverageBenefitDefinition.DAY, CoverageBenefitType.AMOUNT,
+                new BigDecimal(500), new BigDecimal(5000));
+        builder.withTermForPlanCoverage(coverageId_1, CoverageTermType.POLICY_TERM, null, 0);
+        Plan plan = builder.build(new PlanId());
+        assertEquals(plan.getPolicyTerm().validTerms, Sets.newHashSet(30, 35, 40, 45, 50, 55, 60));
     }
 
 
@@ -335,7 +355,7 @@ public class PlanTest {
      */
     @Test(expected = IllegalStateException.class)
     public void should_not_add_coverage_term_same_as_plan() {
-        Plan plan = new Plan(new PlanId(), planDetail);
+        PlanBuilder builder = Plan.builder();
         CoverageId coverageId_1 = new CoverageId("Coverage - 1");
         PlanCoverageBuilder planCoverageBuilder = PlanCoverage.builder();
         PlanCoverage planCoverage_1 = planCoverageBuilder.withCoverage(coverageId_1)
@@ -346,8 +366,9 @@ public class PlanTest {
                 .withDeductibleAsPercentage(new BigDecimal(100))
                 .withWaitingPeriod(5)
                 .build();
-        plan.configureCoverages(Sets.newHashSet(planCoverage_1));
-        plan.configureTermForPlanCoverage(coverageId_1, CoverageTermType.POLICY_TERM, null, 0);
+        builder.withPlanCoverages(Sets.newHashSet(planCoverage_1));
+        builder.withTermForPlanCoverage(coverageId_1, CoverageTermType.POLICY_TERM, null, 0);
+        Plan plan = builder.build(new PlanId());
     }
 
     @Test
@@ -382,25 +403,28 @@ public class PlanTest {
         PlanCoverageBenefit planCoverageBenefit_2 = new PlanCoverageBenefit(coverageId_2, new BenefitId("Benefit-Coverage-2"),
                 CoverageBenefitDefinition.DAY, CoverageBenefitType.AMOUNT,
                 new BigDecimal(500), new BigDecimal(5000));
-        System.out.println(planCoverageBenefit_1);
 
 
-        Plan plan = new Plan(new PlanId(), planDetail);
-        plan.configureSumAssured(SumAssuredType.RANGE, new BigDecimal(10000000), new BigDecimal(40000000), 10000, null, 0);
-        plan.configurePremiumPayment(PremiumTermType.SPECIFIED_VALUES,
+        PlanBuilder builder = Plan.builder();
+        builder.withPlanSumAssured(SumAssuredType.RANGE, new BigDecimal(10000000), new BigDecimal(40000000), 10000, null, 0);
+        builder.withPremiumTerm(PremiumTermType.SPECIFIED_VALUES,
                 Sets.newHashSet(30, 35, 40, 45, 50, 55, 60), 60);
-        plan.configureCoverages(Sets.newHashSet(planCoverage_1, planCoverage_2));
-        plan.configureMaturityAmount(Sets.newHashSet(new MaturityAmount(5, new BigDecimal(15))));
-        plan.configurePolicyTerm(PolicyTermType.SPECIFIED_VALUES,
+        builder.withPlanCoverages(Sets.newHashSet(planCoverage_1, planCoverage_2));
+        builder.withMaturityAmounts(Sets.newHashSet(new MaturityAmount(5, new BigDecimal(15))));
+        builder.withPolicyTerm(PolicyTermType.SPECIFIED_VALUES,
                 Sets.newHashSet(30, 35, 40, 45, 50, 55, 60), 60);
-        plan.configureCoverageBenefits(Sets.newHashSet(planCoverageBenefit_1,
+        builder.withCoverageBenefits(Sets.newHashSet(planCoverageBenefit_1,
                 planCoverageBenefit_2));
 
-        assertEquals(planCoverageBenefit_1,
-                planCoverage_1.getPlanCoverageBenefits().toArray()[0]);
+        Plan plan = builder.build(new PlanId());
+
+        Iterator<PlanCoverage> planCoverageIter = plan.getCoverages().iterator();
 
         assertEquals(planCoverageBenefit_2,
-                planCoverage_2.getPlanCoverageBenefits().toArray()[0]);
+                planCoverageIter.next().getPlanCoverageBenefits().toArray()[0]);
+
+        assertEquals(planCoverageBenefit_1,
+                planCoverageIter.next().getPlanCoverageBenefits().toArray()[0]);
 
         assertEquals(CoverageBenefitDefinition.DAY, planCoverageBenefit_2.getDefinedPer());
         assertEquals(CoverageBenefitType.AMOUNT, planCoverageBenefit_2.getCoverageBenefitType());

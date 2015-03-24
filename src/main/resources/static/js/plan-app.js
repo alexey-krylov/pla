@@ -1,7 +1,12 @@
 define('app/planSetUpCtrl', [], function (app) {
+    'use strict';
     function planSetUpCtrl($scope) {
 
         $scope.onlyNumbers = /^[1-9]+$/;
+        $scope.today = function () {
+            $scope.dt = new Date();
+        };
+        $scope.today();
         $scope.productName;
         $scope.planSetUpForm = {};
         $scope.relations = [
@@ -18,7 +23,6 @@ define('app/planSetUpCtrl', [], function (app) {
             {val: 'MOTHER_IN_LAW', desc: 'Mother-in-law'},
             {val: 'DEPENDENTS', desc: 'Dependents'}];
 
-        $scope.clientType;
         $scope.endorsementTypes = [
             {val: 'NAME', desc: 'Correction of Name', clientType: 'INDIVIDUAL'},
             {val: 'ADDRESS', desc: 'Change of Address', category: 'INDIVIDUAL'},
@@ -34,28 +38,28 @@ define('app/planSetUpCtrl', [], function (app) {
             {val: 'NEW_COVER', desc: 'Introduction of New Cover', category: 'GROUP'}
         ];
 
-        $scope.surrenderAfter;
-        $scope.minEntryAge;
-        $scope.maxEntryAge;
-        $scope.freeLookPeriod = 15;
+        $scope.$watch('clientType', function (val, old) {
+            if (!angular.isUndefined(val))
+                $scope.plan.planDetail.clientType = val;
+        });
 
-
-        $scope.maturityAges = [];
-        $scope.sumAssuredType;
-        $scope.premiumPaymentTermType;
-
-        $scope.coverages = [{coverageId: '1', coverageName: 'Coverage 1'},
+        $scope.coverageList = [{coverageId: '1', coverageName: 'Coverage 1'},
             {coverageId: '2', coverageName: 'Coverage 2'},
             {coverageId: '3', coverageName: 'Coverage 3'},
             {coverageId: '4', coverageName: 'Coverage 4'},
             {coverageId: '5', coverageName: 'Coverage 5'}];
 
         $scope.isPaymentTermByValue = function () {
-            return $scope.premiumPaymentTermType == 'VALUES';
+            return $scope.plan.premiumTermType == 'SPECIFIED_VALUES';
+        };
+
+        $scope.isPolicyTermByValue = function () {
+            console.log($scope.plan.policyTermType || 'none');
+            return $scope.plan.policyTermType == 'SPECIFIED_VALUES';
         };
 
         $scope.isSumAssuredTypeRange = function () {
-            return $scope.sumAssuredType == 'RANGE';
+            return $scope.plan.sumAssured.sumAssuredType == 'RANGE';
         };
 
         $scope.isSurrenderDisabled = function () {
@@ -65,24 +69,23 @@ define('app/planSetUpCtrl', [], function (app) {
             }
         };
 
-
         $scope.isSurrenderReq = function () {
             if ($scope.clientType == 'INDIVIDUAL')
                 return 'required';
         };
 
         $scope.newCoverage = {};
-        $scope.selectedCoverages = [];
 
         $scope.addCoverage = function () {
+            var newCoverageStr;
             newCoverageStr = angular.toJson($scope.newCoverage, true);
             console.log(newCoverageStr);
-            $scope.selectedCoverages.push($scope.newCoverage);
+            $scope.plan.coverages.push($scope.newCoverage);
             $scope.newCoverage = {};
         };
 
         $scope.removeCoverage = function (idx) {
-            $scope.selectedCoverages.splice(idx, 1);
+            $scope.plan.coverages.splice(idx, 1);
         };
 
         $scope.isCoverageSumAssuredDisabled = function (type) {
@@ -91,8 +94,53 @@ define('app/planSetUpCtrl', [], function (app) {
 
         $scope.isCoverageTermDisabled = function (type) {
             return $scope.newCoverage.coverageTermType != type;
-        }
+        };
 
+        $scope.addMaturityRow = function () {
+            $scope.maturityAmounts.push({});
+        };
+
+        $scope.plan = {
+            planDetails: {},
+            policyTerm: {},
+            premiumTerm: {},
+            sumAssured: {},
+            coverages: [],
+            maturityAmounts: []
+        };
+
+        $scope.submit = function () {
+            console.log($scope.plan);
+        };
+
+        $scope.datePickerSettings = {
+            isOpened: false,
+            dateOptions: {
+                formatYear: 'yyyy',
+                startingDay: 1
+            }
+        };
+        $scope.openLaunchDate = function ($event) {
+            $event.preventDefault();
+            $event.stopPropagation();
+            $scope.launchDateOpen = true;
+
+        };
+
+        $scope.openWithdrawalDate = function ($event) {
+            $event.preventDefault();
+            $event.stopPropagation();
+            $scope.withdrawalDateOpen = true;
+
+        };
+
+        $scope.launchDt;
+
+        $scope.$watch('launchDt', function (newVal) {
+            if (!angular.isUndefined(newVal)) {
+                $scope.plan.planDetail.launchDate = moment(newVal).format('YYYY-MM-DD');
+            }
+        });
 
     }
 
@@ -103,7 +151,7 @@ define('app/planSetUpCtrl', [], function (app) {
 
 define('app/planSetUpModule', ['app/planSetUpCtrl'],
     function (planSetUpCtrl) {
-        var app = angular.module('coreApp', ['ngTagsInput']);
+        var app = angular.module('coreApp', ['ngTagsInput', 'ui.bootstrap', 'ui.bootstrap.tpls', 'checklist-model']);
         app.config(function (tagsInputConfigProvider) {
             tagsInputConfigProvider.setDefaults('tagsInput', {
                 placeholder: 'Add a number',
@@ -112,13 +160,18 @@ define('app/planSetUpModule', ['app/planSetUpCtrl'],
                 maxLength: 3
             });
         });
+        app.config(['datepickerPopupConfig', function (datepickerPopupConfig) {
+            datepickerPopupConfig.datepickerPopup = 'dd/MM/yyyy';
+            datepickerPopupConfig.currentText = 'Today';
+            datepickerPopupConfig.clearText = 'Clear';
+            datepickerPopupConfig.closeText = 'Done';
+            datepickerPopupConfig.closeOnDateSelection = true;
+        }]);
         app.controller('planSetUpCtrl', planSetUpCtrl);
     });
-require(['app/planSetUpModule', 'ngTagsInput'],
+
+require(['app/planSetUpModule', 'ui-bootstrap-tpls'],
     function () {
         angular.bootstrap(document, ['coreApp']);
     }
 );
-
-define("main", function () {
-});

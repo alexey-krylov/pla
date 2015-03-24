@@ -159,6 +159,11 @@
         </dependency>
         <dependency>
             <groupId>org.webjars</groupId>
+            <artifactId>underscorejs</artifactId>
+            <version>1.8.2</version>
+        </dependency>
+        <dependency>
+            <groupId>org.webjars</groupId>
             <artifactId>requirejs</artifactId>
             <version>2.1.15</version>
         </dependency>
@@ -232,6 +237,21 @@
             <groupId>org.webjars</groupId>
             <artifactId>momentjs</artifactId>
             <version>2.9.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.webjars</groupId>
+            <artifactId>ng-tags-input</artifactId>
+            <version>2.1.1</version>
+        </dependency>
+        <dependency>
+            <groupId>org.webjars</groupId>
+            <artifactId>momentjs</artifactId>
+            <version>2.9.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.webjars</groupId>
+            <artifactId>angular-moment</artifactId>
+            <version>0.9.0</version>
         </dependency>
         <!-- Test Dependencies Start -->
 
