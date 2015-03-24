@@ -28,7 +28,7 @@ public class AgentUnitTest {
 
     @Before
     public void setUp() {
-        agent = Agent.createAgent(new AgentId(1));
+        agent = Agent.createAgent(new AgentId("1"));
     }
 
     @Test

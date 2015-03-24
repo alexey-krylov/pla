@@ -9,9 +9,10 @@ package com.pla.core.dto;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.validator.constraints.NotEmpty;
+import org.joda.time.LocalDate;
 
 import javax.validation.constraints.NotNull;
-import java.time.LocalDate;
+import java.util.Map;
 
 /**
  * @author: Samir
@@ -35,8 +36,21 @@ public class AgentProfileDto {
 
     private String employeeId;
 
-    private LocalDate trainingCompleteOn;
+    private LocalDate trainingCompleteOn=LocalDate.now();
 
-    private DesignationDto designationDto=new DesignationDto();
+    private DesignationDto designationDto = new DesignationDto();
+
+
+    public static AgentProfileDto transFormToAgentProfileDto(Map<String, Object> agentDetail) {
+        AgentProfileDto agentProfileDto = new AgentProfileDto();
+        agentProfileDto.setTitle(agentDetail.get("title") != null ? (String) agentDetail.get("title") : null);
+        agentProfileDto.setEmployeeId(agentDetail.get("employeeId") != null ? (String) agentDetail.get("employeeId") : null);
+        agentProfileDto.setFirstName(agentDetail.get("firstName") != null ? (String) agentDetail.get("firstName") : null);
+        agentProfileDto.setLastName(agentDetail.get("lastName") != null ? (String) agentDetail.get("lastName") : null);
+        agentProfileDto.setNrcNumber(agentDetail.get("nrcNumber") != null ? ((Long) agentDetail.get("nrcNumber")).intValue() : null);
+        DesignationDto designationDto = agentDetail.get("designationCode") != null ? new DesignationDto(((String) agentDetail.get("designationCode")), ((String) agentDetail.get("designationName"))) : null;
+        agentProfileDto.setDesignationDto(designationDto);
+        return agentProfileDto;
+    }
 
 }

@@ -6,15 +6,13 @@
 
 package com.pla.core.dto;
 
-import lombok.*;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.hibernate.validator.constraints.NotEmpty;
-import org.nthdimenzion.ddd.domain.annotations.ValueObject;
 
-import javax.persistence.Embeddable;
 import javax.validation.constraints.NotNull;
-
-import static com.google.common.base.Preconditions.checkArgument;
-import static org.nthdimenzion.utils.UtilValidator.isNotEmpty;
+import java.util.Map;
 
 /**
  * @author: Samir
@@ -30,10 +28,35 @@ public class GeoDetailDto {
 
     @NotNull(message = "{Province cannot be null}")
     @NotEmpty(message = "{Province cannot be empty}")
-    private String province;
+    private String provinceName;
 
     @NotNull(message = "{City cannot be null}")
     @NotEmpty(message = "{City cannot be empty}")
-    private String city;
+    private String cityName;
 
+    private String provinceCode;
+
+    private String cityCode;
+
+
+    public static GeoDetailDto transformToGeoDetailDtoPrimaryContactDetail(Map<String, Object> agentDetail) {
+        GeoDetailDto geoDetailDto = new GeoDetailDto();
+        geoDetailDto.setPostalCode(agentDetail.get("postalCode") != null ? ((Integer) agentDetail.get("postalCode")).intValue() : null);
+        geoDetailDto.setCityCode(agentDetail.get("cityCode") != null ? (String) agentDetail.get("cityCode") : null);
+        geoDetailDto.setCityName(agentDetail.get("cityName") != null ? (String) agentDetail.get("cityName") : null);
+        geoDetailDto.setProvinceCode(agentDetail.get("provinceCode") != null ? (String) agentDetail.get("provinceCode") : null);
+        geoDetailDto.setProvinceName(agentDetail.get("provinceName") != null ? (String) agentDetail.get("provinceName") : null);
+        return geoDetailDto;
+
+    }
+
+    public static GeoDetailDto transformToGeoDetailDtoForPhysicalAddress(Map<String, Object> agentDetail) {
+        GeoDetailDto geoDetailDto = new GeoDetailDto();
+        geoDetailDto.setPostalCode(agentDetail.get("physicalAddressPostalCode") != null ? ((Integer) agentDetail.get("physicalAddressPostalCode")).intValue() : null);
+        geoDetailDto.setCityCode(agentDetail.get("physicalAddressCityCode") != null ? (String) agentDetail.get("physicalAddressCityCode") : null);
+        geoDetailDto.setCityName(agentDetail.get("physicalAddressCityName") != null ? (String) agentDetail.get("physicalAddressCityName") : null);
+        geoDetailDto.setProvinceCode(agentDetail.get("physicalAddressProvinceCode") != null ? (String) agentDetail.get("physicalAddressProvinceCode") : null);
+        geoDetailDto.setProvinceName(agentDetail.get("physicalAddressProvinceName") != null ? (String) agentDetail.get("physicalAddressProvinceName") : null);
+        return geoDetailDto;
+    }
 }

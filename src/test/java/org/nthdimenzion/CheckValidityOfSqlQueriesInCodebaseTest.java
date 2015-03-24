@@ -45,6 +45,9 @@ public class CheckValidityOfSqlQueriesInCodebaseTest {
 
 
     private static final String QUERY_SUFFIX = "Query";
+
+    private static final String QUERY_SUFFIX_IN_UPPER_CASE = "QUERY";
+
     private static final int NUMBER_OF_THREADS = 8;
     @Autowired
     private DataSource dataSource;
@@ -110,7 +113,7 @@ public class CheckValidityOfSqlQueriesInCodebaseTest {
             Field[] queryFields = finder.getDeclaredFields();
             Object object = finder.newInstance();
             for (Field queryField : queryFields) {
-                if (queryField.getName().endsWith(QUERY_SUFFIX)) {
+                if (queryField.getName().endsWith(QUERY_SUFFIX) || queryField.getName().endsWith(QUERY_SUFFIX_IN_UPPER_CASE)) {
                     Query query = new Query(queryField.get(object).toString(), queryField.getName(), finder.getName());
                     queries.add(query);
                 }

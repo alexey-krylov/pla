@@ -6,7 +6,8 @@
 
 package com.pla.core.domain.model;
 
-import com.pla.core.application.agent.*;
+import com.pla.core.application.agent.CreateAgentCommand;
+import com.pla.core.application.agent.UpdateAgentCommand;
 import com.pla.core.domain.exception.BenefitDomainException;
 import com.pla.core.domain.exception.TeamDomainException;
 import com.pla.core.domain.model.agent.Agent;
@@ -89,9 +90,9 @@ public class Admin {
         Agent agentWithLicenseNumber = updatedAgentWithProfile.withLicenseNumber(licenseNumberDto.getLicenseNumber());
         Agent agentWithTeamDetail = agentWithLicenseNumber.withTeamDetail(teamDetailDto.getTeamId());
         GeoDetailDto geoDetailDto = contactDetailDto.getGeoDetail();
-        Agent agentWithContactDetail = agentWithTeamDetail.withContactDetail(contactDetailDto.getMobileNumber(), contactDetailDto.getHomePhoneNumber(), contactDetailDto.getWorkPhoneNumber(), contactDetailDto.getEmailAddress(), contactDetailDto.getAddressLine1(), contactDetailDto.getAddressLine2(), geoDetailDto.getPostalCode(), geoDetailDto.getProvince(), geoDetailDto.getCity());
+        Agent agentWithContactDetail = agentWithTeamDetail.withContactDetail(contactDetailDto.getMobileNumber(), contactDetailDto.getHomePhoneNumber(), contactDetailDto.getWorkPhoneNumber(), contactDetailDto.getEmailAddress(), contactDetailDto.getAddressLine1(), contactDetailDto.getAddressLine2(), geoDetailDto.getPostalCode(), geoDetailDto.getProvinceCode(), geoDetailDto.getCityCode());
         GeoDetailDto physicalGeoDetailDto = physicalAddressDto.getPhysicalGeoDetail();
-        Agent agentWithPhysicalAddress = agentWithContactDetail.withPhysicalAddress(physicalAddressDto.getPhysicalAddressLine1(), physicalAddressDto.getPhysicalAddressLine2(), physicalGeoDetailDto.getPostalCode(), physicalGeoDetailDto.getProvince(), physicalGeoDetailDto.getCity());
+        Agent agentWithPhysicalAddress = agentWithContactDetail.withPhysicalAddress(physicalAddressDto.getPhysicalAddressLine1(), physicalAddressDto.getPhysicalAddressLine2(), physicalGeoDetailDto.getPostalCode(), physicalGeoDetailDto.getProvinceCode(), physicalGeoDetailDto.getCityCode());
         Agent agentWithChannelType = agentWithPhysicalAddress.withChannelType(channelTypeDto.getChannelCode(), channelTypeDto.getChannelName());
         return agentWithChannelType;
     }

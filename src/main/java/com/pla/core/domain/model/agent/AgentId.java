@@ -7,10 +7,7 @@
 package com.pla.core.domain.model.agent;
 
 import com.google.common.base.Preconditions;
-import lombok.AccessLevel;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.annotations.Immutable;
 import org.nthdimenzion.ddd.domain.annotations.ValueObject;
 
@@ -25,14 +22,15 @@ import java.io.Serializable;
 @Immutable
 @Embeddable
 @Getter
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
+@NoArgsConstructor(access = AccessLevel.PACKAGE)
 @EqualsAndHashCode(of = "agentId")
-public class AgentId implements Serializable{
+@Setter(value = AccessLevel.PACKAGE)
+public class AgentId implements Serializable {
 
-    private Integer agentId;
+    private String agentId;
 
 
-    public AgentId(Integer agentId) {
+    public AgentId(String agentId) {
         Preconditions.checkArgument(agentId != null);
         this.agentId = agentId;
     }

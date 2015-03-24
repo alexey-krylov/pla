@@ -12,9 +12,7 @@ import lombok.Setter;
 import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.validation.constraints.NotNull;
-
-import static com.google.common.base.Preconditions.checkArgument;
-import static org.nthdimenzion.utils.UtilValidator.isNotEmpty;
+import java.util.Map;
 
 /**
  * @author: Samir
@@ -33,4 +31,12 @@ public class PhysicalAddressDto {
 
     private GeoDetailDto physicalGeoDetail = new GeoDetailDto();
 
+
+    public static PhysicalAddressDto transformToPhysicalAddressDto(Map<String, Object> agentDetail) {
+        PhysicalAddressDto physicalAddressDto = new PhysicalAddressDto();
+        physicalAddressDto.setPhysicalAddressLine1(agentDetail.get("physicalAddressLine1") != null ? (String) agentDetail.get("physicalAddressLine1") : null);
+        physicalAddressDto.setPhysicalAddressLine2(agentDetail.get("physicalAddressLine2") != null ? (String) agentDetail.get("physicalAddressLine2") : null);
+        physicalAddressDto.setPhysicalGeoDetail(GeoDetailDto.transformToGeoDetailDtoForPhysicalAddress(agentDetail));
+        return physicalAddressDto;
+    }
 }

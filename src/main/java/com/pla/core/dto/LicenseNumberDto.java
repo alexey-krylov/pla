@@ -21,6 +21,7 @@ import javax.validation.constraints.NotNull;
 @Getter
 @Setter
 @NoArgsConstructor
+@AllArgsConstructor
 public class LicenseNumberDto {
 
     @NotNull(message = "{License number cannot be null}")

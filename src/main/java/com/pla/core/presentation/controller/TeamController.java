@@ -1,5 +1,6 @@
 package com.pla.core.presentation.controller;
 
+import com.google.common.collect.Lists;
 import com.pla.core.application.CreateTeamCommand;
 import com.pla.core.application.UpdateTeamCommand;
 import com.pla.core.query.MasterFinder;
@@ -18,6 +19,9 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import static org.nthdimenzion.presentation.AppUtils.getLoggedInUSerDetail;
 
@@ -65,10 +69,19 @@ public class TeamController {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("pla/core/team/assignTeam");
         modelAndView.addObject("teamDetail", teamFinder.getTeamById(teamId));
-        modelAndView.addObject("teamLeaders", new ArrayList<>());
         return modelAndView;
     }
 
+
+    @RequestMapping(value = "/team/getteamleaders", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public List<Map<String, Object>> getAllTeamLeaders() {
+        Map<String, Object> teamLeader = new HashMap<>();
+        teamLeader.put("teamLeaderId", "");
+        teamLeader.put("firstName", "");
+        teamLeader.put("lastName", "");
+        return Lists.newArrayList(teamLeader);
+    }
 
     @RequestMapping(value = "/team/create", method = RequestMethod.POST)
     public

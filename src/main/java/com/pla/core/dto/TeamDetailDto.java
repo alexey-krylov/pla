@@ -21,11 +21,18 @@ import javax.validation.constraints.NotNull;
 @Getter
 @Setter
 @NoArgsConstructor
+@AllArgsConstructor
 public class TeamDetailDto {
 
     @NotNull(message = "{Team id cannot be null}")
     @NotEmpty(message = "{Team id cannot be empty}")
     private String teamId;
 
+    private String teamCode;
 
+    private String teamName;
+
+    private String leaderFirstName;
+
+    private String leaderLastName;
 }

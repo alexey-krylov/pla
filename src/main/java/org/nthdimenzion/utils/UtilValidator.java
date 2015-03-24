@@ -119,7 +119,4 @@ public class UtilValidator {
         return m.matches();
     }
 
-    public static boolean isRESTConnectionAvailable() {
-        return false;
-    }
 }

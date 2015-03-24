@@ -21,6 +21,7 @@ import javax.validation.constraints.NotNull;
 @Getter
 @Setter
 @NoArgsConstructor
+@AllArgsConstructor
 public class DesignationDto {
 
     @NotNull(message = "{Designation code cannot be null}")
@@ -30,6 +31,7 @@ public class DesignationDto {
     @NotEmpty(message = "{Designation name cannot be empty}")
     @NotNull(message = "{Designation name cannot be null}")
     private String description;
+
 
 
 }

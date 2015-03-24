@@ -43,7 +43,7 @@ public class UpdateAgentCommand {
 
     private ChannelTypeDto channelType = new ChannelTypeDto();
 
-    private int agentId;
+    private String agentId;
 
     private UserDetails userDetails;
 

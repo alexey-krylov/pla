@@ -23,7 +23,7 @@ public class AgentProfileUnitTest {
 
     @Before
     public void setUp() {
-        Agent agent = Agent.createAgent(new AgentId(1));
+        Agent agent = Agent.createAgent(new AgentId("1"));
         agentProfile = agent.createWithAgentProfile("First", "Agent", LocalDate.now(), "Programmer", "Programmer").getAgentProfile();
     }
 

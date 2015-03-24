@@ -12,8 +12,10 @@ DROP TABLE IF EXISTS channel_type;
 DROP TABLE IF EXISTS bank_name;
 DROP TABLE IF EXISTS bank_branch;
 DROP TABLE IF EXISTS hcp_service;
+DROP VIEW IF EXISTS `agent_team_branch_view`;
+DROP VIEW IF EXISTS `region_region_manger_fulfilment_view`;
+DROP VIEW IF EXISTS `active_team_region_branch_view`;
 DROP TABLE IF EXISTS region;
-
 CREATE TABLE geo (
   GEO_ID VARCHAR(20) NOT NULL,
   PARENT_GEO_ID VARCHAR(20),
@@ -22,20 +24,17 @@ CREATE TABLE geo (
   PRIMARY KEY(GEO_ID)
 );
 
-
 CREATE TABLE channel_type (
   CHANNEL_CODE VARCHAR(20),
   CHANNEL_DESCRIPTION VARCHAR(50) NOT NULL UNIQUE,
   PRIMARY KEY(CHANNEL_CODE)
 );
 
-
 CREATE TABLE bank_name (
   BANK_CODE VARCHAR(20),
   BANK_NAME VARCHAR(50) NOT NULL UNIQUE,
   PRIMARY KEY(BANK_CODE)
 );
-
 
 CREATE TABLE bank_branch (
   BANK_CODE VARCHAR(20) NOT NULL,
@@ -46,7 +45,6 @@ CREATE TABLE bank_branch (
    FOREIGN KEY (BANK_CODE)
 	REFERENCES bank_name(BANK_CODE)
 );
-
 
 CREATE TABLE hcp_service (
   HCP_SERVICE_CODE VARCHAR(20),
@@ -172,47 +170,47 @@ CREATE TABLE `region_manager_fulfillment` (
   CONSTRAINT `FK_REGION_CODE_REGION_MANAGER_FULFILLMENT_REGION_CODE` FOREIGN KEY (`region_Code`) REFERENCES `region` (`region_code`)
 ) ;
 
-
-
 DROP TABLE IF EXISTS agent;
-CREATE TABLE `agent` (
-  `agent_id` int(11) NOT NULL,
-  `code` varchar(255) DEFAULT NULL,
-  `description` varchar(255) DEFAULT NULL,
-  `employee_id` varchar(255) DEFAULT NULL,
-  `first_name` varchar(255) DEFAULT NULL,
-  `last_name` varchar(255) DEFAULT NULL,
-  `nrc_number` int(11) DEFAULT NULL,
-  `title` varchar(255) DEFAULT NULL,
-  `training_complete_on` date DEFAULT NULL,
-  `agent_status` varchar(255) DEFAULT NULL,
-  `address_line1` varchar(255) DEFAULT NULL,
-  `address_line2` varchar(255) DEFAULT NULL,
-  `email` varchar(255) DEFAULT NULL,
-  `city` varchar(255) DEFAULT NULL,
-  `postal_code` int(11) NOT NULL,
-  `province` varchar(255) DEFAULT NULL,
-  `home_phone_number` int(11) NOT NULL,
-  `mobile_number` int(11) NOT NULL,
-  `work_phone_number` int(11) NOT NULL,
-  `license_number` varchar(255) DEFAULT NULL,
-  `override_commission_applicable` varchar(255) DEFAULT NULL,
-  `physical_address_line1` varchar(255) DEFAULT NULL,
-  `physical_address_line2` varchar(255) DEFAULT NULL,
-  `physical_address_city` varchar(255) DEFAULT NULL,
-  `physical_address_postal_code` int(11) DEFAULT NULL,
-  `physical_address_province` varchar(255) DEFAULT NULL,
-  `team_id` varchar(255) DEFAULT NULL,
-  PRIMARY KEY (`agent_id`)
-);
+CREATE TABLE `agent`(
+    `agent_id` varchar(255) NOT NULL,
+    `designation_code` varchar(255) DEFAULT NULL,
+    `designation_name` varchar(255) DEFAULT NULL,
+    `employee_id` varchar(255) DEFAULT NULL,
+    `first_name` varchar(255) DEFAULT NULL,
+    `last_name` varchar(255) DEFAULT NULL,
+    `nrc_number` int(11) DEFAULT NULL,
+    `title` varchar(255) DEFAULT NULL,
+    `training_complete_on` date DEFAULT NULL,
+    `agent_status` varchar(255) DEFAULT NULL,
+    `channel_code` varchar(255) DEFAULT NULL,
+    `channel_name` varchar(255) DEFAULT NULL,
+    `address_line1` varchar(255) DEFAULT NULL,
+    `address_line2` varchar(255) DEFAULT NULL,
+    `email` varchar(255) DEFAULT NULL,
+    `city` varchar(255) DEFAULT NULL,
+    `postal_code` int(11) DEFAULT NULL,
+    `province` varchar(255) DEFAULT NULL,
+    `home_phone_number` varchar(255) DEFAULT NULL,
+    `mobile_number` varchar(255) DEFAULT NULL,
+    `work_phone_number` varchar(255) DEFAULT NULL,
+    `license_number` varchar(255) DEFAULT NULL,
+    `override_commission_applicable` varchar(255) DEFAULT NULL,
+    `physical_address_line1` varchar(255) DEFAULT NULL,
+    `physical_address_line2` varchar(255) DEFAULT NULL,
+    `physical_address_city` varchar(255) DEFAULT NULL,
+    `physical_address_postal_code` int(11) DEFAULT NULL,
+    `physical_address_province` varchar(255) DEFAULT NULL,
+    `team_id` varchar(255) DEFAULT NULL,
+    PRIMARY KEY (`agent_id`)
+  );
 
-DROP TABLE IF EXISTS agent_authorized_plan;
-CREATE TABLE `agent_authorized_plan` (
-  `agent_id` int(11) NOT NULL,
-  `plan_id` varchar(255) DEFAULT NULL,
-  KEY `FK_AGENT_PLAN_ID` (`agent_id`),
-  CONSTRAINT `FK_AUTH_PLAN` FOREIGN KEY (`agent_id`) REFERENCES `agent` (`agent_id`)
-);
+DROP TABLE IF EXISTS `agent_authorized_plan`;
+ CREATE TABLE `agent_authorized_plan` (
+   `agent_id` varchar(255) NOT NULL,
+   `plan_id` varchar(255) DEFAULT NULL,
+   KEY `FK_fb90q6b5wf5iswifmkro1bfr8` (`agent_id`),
+   CONSTRAINT `FK_fb90q6b5wf5iswifmkro1bfr8` FOREIGN KEY (`agent_id`) REFERENCES `agent` (`agent_id`)
+ );
 
 
 DROP TABLE IF EXISTS sum_assured;
@@ -324,14 +322,38 @@ CREATE TABLE `sum_assured_sum_insured_values` (
   CONSTRAINT `FK_8v9k7sydll2yrf86atgs5081u` FOREIGN KEY (`sum_assured_id`) REFERENCES `sum_assured` (`id`)
 );
 DROP TABLE IF EXISTS `entity_sequence`;
-CREATE TABLE `entity_sequence`(
-  `sequence_id` INT(11) NOT NULL,
+CREATE TABLE `entity_sequence` (
+  `sequence_id` int(11) NOT NULL,
   `sequence_name` text NOT NULL,
-  `sequence_number` DECIMAL(20,0) NOT NULL,
-  `sequence_prefix` VARCHAR(255) NOT NULL,
+  `sequence_number` int(11) NOT NULL,
+  `sequence_prefix` varchar(255) NOT NULL,
   PRIMARY KEY (`sequence_id`)
 );
 
+CREATE  VIEW `agent_team_branch_view` AS
+(SELECT  `agent_id` AS agentId,A.title AS title,  `designation_code` AS designationCode,  `designation_name` AS designationName,
+  A.employee_id AS employeeId,A.first_name AS firstName,  A.`last_name` AS lastName,  `nrc_number` AS nrcNumber,  `training_complete_on` AS trainingCompletedOn,
+  agent_status AS agentStatus,channel_code AS channelCode,  channel_name AS channelName,  address_line1 AS addressLine1,  address_line2 AS addressLine2,
+  email,  A.city AS cityCode,(SELECT geo_description  FROM  geo WHERE geo_type = 'CITY' AND geo_id = A.city) AS cityName,
+  postal_code AS postalCode,  A.province AS provinceCode,  (SELECT geo_description FROM geo WHERE geo_type = 'PROVINCE' AND geo_id = A.province) AS provinceName,
+  home_phone_number AS homePhoneNumber,mobile_number AS mobileNumber,work_phone_number AS workPhoneNumber,license_number AS licenseNumber,`override_commission_applicable` AS overrideCommissionApplicable,
+  physical_address_line1 AS physicalAddressLine1, physical_address_line2 AS physicalAddressLine2, physical_address_city AS physicalAddressCityCode,
+  (SELECT geo_description FROM geo WHERE geo_type = 'CITY' AND geo_id = A.physical_address_city) AS physicalAddressCityName,physical_address_postal_code AS physicalAddressPostalCode,
+  physical_address_province AS physicalAddressProvinceCode,(SELECT geo_description FROM geo WHERE geo_type = 'PROVINCE' AND geo_id = A.physical_address_province) AS physicalAddressProvinceName,
+  A.team_id AS teamId,TF.employee_id AS teamLeaderId,TF.first_name AS teamLeaderFirstName,TF.last_name AS teamLeaderLastName,T.team_code AS teamCode,
+  T.team_name AS teamName, R.region_code AS regionCode,R.region_name AS regionName,B.branch_code AS branchCode, B.branch_name AS branchName
+   FROM  agent A  LEFT JOIN team T    ON A.team_id = T.`team_id`  LEFT JOIN `team_team_leader_fulfillment` TF    ON T.`team_id` = TF.`team_id`
+    AND T.`current_team_leader` = TF.`employee_id`  LEFT JOIN region R  ON T.region_code = R.REGION_CODE LEFT JOIN branch B ON T.branch_code = B.branch_code );
+
+
+CREATE VIEW `region_region_manger_fulfilment_view` AS
+(SELECT R.region_code AS regionCode,R.region_name AS regionName,RF.first_name AS regionalManagerFirstName,RF.last_name AS regionalManagerLastName FROM region R LEFT JOIN `region_manager_fulfillment` RF
+ON R.region_code = RF.region_code AND R.regional_manager=RF.employee_id);
+
+CREATE VIEW `active_team_region_branch_view` AS
+(SELECT T.team_id AS teamId,T.team_name AS teamName,TF.first_name AS leaderFirstName,TF.last_name AS leaderLastName,R.region_name AS regionName,
+B.branch_name AS branchName FROM team T LEFT JOIN `team_team_leader_fulfillment` TF ON T.`team_id`=TF.team_id AND T.`current_team_leader`=TF.employee_id
+LEFT JOIN `branch` B ON T.`branch_code`=B.`BRANCH_CODE` LEFT JOIN region R ON T.`region_code`=R.`REGION_CODE` WHERE T.`active`='1');
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;

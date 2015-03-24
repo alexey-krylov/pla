@@ -9,6 +9,7 @@ package com.pla.core.domain.model.agent;
 import com.pla.sharedkernel.domain.model.OverrideCommissionApplicable;
 import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.nthdimenzion.ddd.domain.annotations.ValueObject;
 
 import javax.persistence.Embeddable;
@@ -23,6 +24,7 @@ import static org.nthdimenzion.utils.UtilValidator.isNotEmpty;
 @ValueObject
 @Getter(value = AccessLevel.PACKAGE)
 @Embeddable
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 class Designation {
 
     private static final String BDE_CODE = "BDE";

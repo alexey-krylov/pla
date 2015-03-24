@@ -33,29 +33,35 @@ public class MasterFinder {
         this.namedParameterJdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
     }
 
-    public static final String FIND_GEO_BY_GEO_TYPE = "SELECT geo_id AS geoId,parent_geo_id AS parentGeoId, geo_type AS geoType, geo_description AS geoName FROM geo WHERE geo_type=:geoType";
+    public static final String FIND_GEO_BY_GEO_TYPE_QUERY = "SELECT geo_id AS geoId,parent_geo_id AS parentGeoId, geo_type AS geoType, geo_description AS geoName FROM geo WHERE geo_type=:geoType";
 
-    public static final String FIND_ALL_CHANNEL_TYPE = "SELECT channel_code AS channelCode ,channel_description AS channelDescription FROM channel_type";
+    public static final String FIND_ALL_CHANNEL_TYPE_QUERY = "SELECT channel_code AS channelCode ,channel_description AS channelDescription FROM channel_type";
 
+    public static final String FIND_ALL_REGION_QUERY = "select * from region_region_manger_fulfilment_view";
 
-    public static final String FIND_ALL_REGIONQuery = "select region_code AS regionCode, region_name AS regionName from region";
+    public static final String FINA_ALL_BRANCH_QUERY = "SELECT B.branch_code AS branch_code,B.branch_name AS branchName FROM `region_branch` RB LEFT JOIN  `branch` B ON RB.region_code =B.branch_code\n" +
+            "  WHERE RB.region_code = :regionCode";
 
-    public static final String FINA_ALL_BRANCHQuery = "select BRANCH_CODE AS branchCode,BRANCH AS branchName from branch where region_code=:regionCode";
+    public static final String FIND_ENTITY_SEQUENCE_BY_CLASS_TYPE_QUERY = "SELECT sequence_id as sequenceId, sequence_number AS sequenceNumber,sequence_name AS sequenceName,sequence_prefix AS sequencePrefix FROM `entity_sequence` WHERE sequence_name=:sequenceName";
 
     public List<Map<String, Object>> getGeoByGeoType(GeoType geoType) {
-        return namedParameterJdbcTemplate.query(FIND_GEO_BY_GEO_TYPE, new MapSqlParameterSource().addValue("geoType", geoType.name()), new ColumnMapRowMapper());
+        return namedParameterJdbcTemplate.query(FIND_GEO_BY_GEO_TYPE_QUERY, new MapSqlParameterSource().addValue("geoType", geoType.name()), new ColumnMapRowMapper());
     }
 
     public List<Map<String, Object>> getAllChanelType() {
-        return namedParameterJdbcTemplate.query(FIND_ALL_CHANNEL_TYPE, new ColumnMapRowMapper());
+        return namedParameterJdbcTemplate.query(FIND_ALL_CHANNEL_TYPE_QUERY, new ColumnMapRowMapper());
     }
 
     public List<Map<String, Object>> getAllRegion() {
-        return namedParameterJdbcTemplate.query(FIND_ALL_REGIONQuery, new ColumnMapRowMapper());
+        return namedParameterJdbcTemplate.query(FIND_ALL_REGION_QUERY, new ColumnMapRowMapper());
     }
 
     public List<Map<String, Object>> getBranchByRegion(String regionCode) {
-        return namedParameterJdbcTemplate.query(FINA_ALL_BRANCHQuery, new MapSqlParameterSource().addValue("regionCode", regionCode), new ColumnMapRowMapper());
+        return namedParameterJdbcTemplate.query(FINA_ALL_BRANCH_QUERY, new MapSqlParameterSource().addValue("regionCode", regionCode), new ColumnMapRowMapper());
+    }
+
+    public Map<String, Object> getEntitySequenceFor(Class clazz) {
+        return namedParameterJdbcTemplate.queryForMap(FIND_ENTITY_SEQUENCE_BY_CLASS_TYPE_QUERY, new MapSqlParameterSource().addValue("sequenceName", clazz.getName()));
     }
 
 }

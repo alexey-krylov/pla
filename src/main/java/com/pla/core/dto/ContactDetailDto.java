@@ -12,6 +12,8 @@ import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.validation.constraints.NotNull;
 
+import java.util.Map;
+
 import static com.google.common.base.Preconditions.checkArgument;
 import static org.nthdimenzion.utils.UtilValidator.isNotEmpty;
 
@@ -41,5 +43,17 @@ public class ContactDetailDto {
     private String addressLine2;
 
     private GeoDetailDto geoDetail = new GeoDetailDto();
+
+    public static ContactDetailDto transformToContactDetailDto(Map<String, Object> agentDetail) {
+        ContactDetailDto contactDetailDto = new ContactDetailDto();
+        contactDetailDto.setHomePhoneNumber(agentDetail.get("homePhoneNumber") != null ? (String) agentDetail.get("homePhoneNumber") : null);
+        contactDetailDto.setMobileNumber(agentDetail.get("mobileNumber") != null ? (String) agentDetail.get("mobileNumber") : null);
+        contactDetailDto.setWorkPhoneNumber(agentDetail.get("workPhoneNumber") != null ? (String) agentDetail.get("workPhoneNumber") : null);
+        contactDetailDto.setEmailAddress(agentDetail.get("email") != null ? (String) agentDetail.get("email") : null);
+        contactDetailDto.setAddressLine1(agentDetail.get("addressLine1") != null ? (String) agentDetail.get("addressLine1") : null);
+        contactDetailDto.setAddressLine2(agentDetail.get("addressLine2") != null ? (String) agentDetail.get("addressLine2") : null);
+        contactDetailDto.setGeoDetail(GeoDetailDto.transformToGeoDetailDtoPrimaryContactDetail(agentDetail));
+        return contactDetailDto;
+    }
 
 }

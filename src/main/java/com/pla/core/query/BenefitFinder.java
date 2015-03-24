@@ -35,37 +35,37 @@ public class BenefitFinder {
         this.namedParameterJdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
     }
 
-    public static final String FIND_BENEFIT_FOR_A_GIVEN_BENEFIT_NAME = "select * from benefit where benefit_name=:benefitName";
+    public static final String FIND_BENEFIT_FOR_A_GIVEN_BENEFIT_NAME_Query = "select * from benefit where benefit_name=:benefitName";
 
-    public static final String ACTIVE_BENEFIT_COUNT_BY_BENEFIT_NAME = "select count(benefit_id) from benefit where benefit_name=:benefitName and status='ACTIVE'";
+    public static final String ACTIVE_BENEFIT_COUNT_BY_BENEFIT_NAME_Query = "select count(benefit_id) from benefit where benefit_name=:benefitName and status='ACTIVE'";
 
-    public static final String FIND_BENEFIT_FOR_A_GIVEN_BENEFIT_ID = "SELECT benefit_id AS benefitId,benefit_name AS benefitName,STATUS AS benefitStatus FROM benefit where benefit_id=:benefitId";
+    public static final String FIND_BENEFIT_FOR_A_GIVEN_BENEFIT_ID_Query = "SELECT benefit_id AS benefitId,benefit_name AS benefitName,STATUS AS benefitStatus FROM benefit where benefit_id=:benefitId";
 
-    public static final String FIND_ALL_BENEFIT = "SELECT benefit_id AS benefitId,benefit_name AS benefitName,STATUS AS benefitStatus FROM benefit";
+    public static final String FIND_ALL_BENEFIT_Query = "SELECT benefit_id AS benefitId,benefit_name AS benefitName,STATUS AS benefitStatus FROM benefit";
 
-    public static final String BENEFIT_COUNT_ASSOCIATED_WITH_ACTIVE_COVERAGE = "SELECT COUNT(CB.benefit_id) FROM `coverage_benefit` CB,`coverage` C WHERE CB.coverage_id=C.coverage_id AND C.status IN('ACTIVE','INUSE') AND CB.benefit_id=:benefitId";
+    public static final String BENEFIT_COUNT_ASSOCIATED_WITH_ACTIVE_COVERAGE_Query = "SELECT COUNT(CB.benefit_id) FROM `coverage_benefit` CB,`coverage` C WHERE CB.coverage_id=C.coverage_id AND C.status IN('ACTIVE','INUSE') AND CB.benefit_id=:benefitId";
 
     public List<Map<String, Object>> findBenefitFor(String benefitName) {
-        return namedParameterJdbcTemplate.query(FIND_BENEFIT_FOR_A_GIVEN_BENEFIT_NAME, Collections.singletonMap("benefitName", benefitName), new ColumnMapRowMapper());
+        return namedParameterJdbcTemplate.query(FIND_BENEFIT_FOR_A_GIVEN_BENEFIT_NAME_Query, Collections.singletonMap("benefitName", benefitName), new ColumnMapRowMapper());
     }
 
     public int getBenefitCountByBenefitName(String benefitName) {
         Preconditions.checkNotNull(benefitName);
-        Number noOfBenefit = namedParameterJdbcTemplate.queryForObject(ACTIVE_BENEFIT_COUNT_BY_BENEFIT_NAME, new MapSqlParameterSource().addValue("benefitName", benefitName), Number.class);
+        Number noOfBenefit = namedParameterJdbcTemplate.queryForObject(ACTIVE_BENEFIT_COUNT_BY_BENEFIT_NAME_Query, new MapSqlParameterSource().addValue("benefitName", benefitName), Number.class);
         return noOfBenefit.intValue();
     }
 
     public Map<String, Object> findBenefitById(String benefitId) {
-        return namedParameterJdbcTemplate.queryForMap(FIND_BENEFIT_FOR_A_GIVEN_BENEFIT_ID, new MapSqlParameterSource().addValue("benefitId", benefitId));
+        return namedParameterJdbcTemplate.queryForMap(FIND_BENEFIT_FOR_A_GIVEN_BENEFIT_ID_Query, new MapSqlParameterSource().addValue("benefitId", benefitId));
     }
 
     public List<Map<String, Object>> getAllBenefit() {
-        return namedParameterJdbcTemplate.query(FIND_ALL_BENEFIT, new ColumnMapRowMapper());
+        return namedParameterJdbcTemplate.query(FIND_ALL_BENEFIT_Query, new ColumnMapRowMapper());
     }
 
     public int getBenefitCountAssociatedWithActiveCoverage(String benefitId) {
         Preconditions.checkArgument(UtilValidator.isNotEmpty(benefitId));
-        Number noOfBenefit = namedParameterJdbcTemplate.queryForObject(BENEFIT_COUNT_ASSOCIATED_WITH_ACTIVE_COVERAGE, new MapSqlParameterSource().addValue("benefitId", benefitId), Number.class);
+        Number noOfBenefit = namedParameterJdbcTemplate.queryForObject(BENEFIT_COUNT_ASSOCIATED_WITH_ACTIVE_COVERAGE_Query, new MapSqlParameterSource().addValue("benefitId", benefitId), Number.class);
         return noOfBenefit.intValue();
     }
 }
