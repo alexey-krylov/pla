@@ -10,10 +10,10 @@ import com.pla.sharedkernel.domain.model.EmailAddress;
 import com.pla.sharedkernel.domain.model.OverrideCommissionApplicable;
 import com.pla.sharedkernel.identifier.PlanId;
 import lombok.*;
+import org.joda.time.LocalDate;
 import org.nthdimenzion.common.crud.ICrudEntity;
 
 import javax.persistence.*;
-import java.time.LocalDate;
 import java.util.Set;
 
 import static com.google.common.base.Preconditions.checkArgument;
@@ -28,7 +28,7 @@ import static org.nthdimenzion.utils.UtilValidator.isNotEmpty;
 @Entity
 @EqualsAndHashCode(of = {"licenseNumber", "agentProfile"})
 @ToString
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
+@NoArgsConstructor(access = AccessLevel.PACKAGE)
 @Getter(value = AccessLevel.PACKAGE)
 public class Agent implements ICrudEntity {
 
@@ -42,6 +42,7 @@ public class Agent implements ICrudEntity {
     private AgentProfile agentProfile;
 
     @Embedded
+    @Getter
     private LicenseNumber licenseNumber;
 
     @Embedded

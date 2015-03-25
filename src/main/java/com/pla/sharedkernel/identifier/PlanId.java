@@ -1,6 +1,8 @@
 package com.pla.sharedkernel.identifier;
 
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
@@ -13,6 +15,8 @@ import java.util.UUID;
  */
 @Embeddable
 @EqualsAndHashCode
+@Getter
+@Setter
 public class PlanId implements Serializable {
 
     @Column(name = "plan_id")

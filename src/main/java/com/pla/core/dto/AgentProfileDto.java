@@ -36,7 +36,7 @@ public class AgentProfileDto {
 
     private String employeeId;
 
-    private LocalDate trainingCompleteOn=LocalDate.now();
+    private LocalDate trainingCompleteOn;
 
     private DesignationDto designationDto = new DesignationDto();
 

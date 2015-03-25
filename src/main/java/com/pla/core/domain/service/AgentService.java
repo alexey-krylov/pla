@@ -13,6 +13,7 @@ import com.pla.core.domain.model.agent.Agent;
 import com.pla.core.domain.model.agent.LicenseNumber;
 import com.pla.core.specification.AgentLicenseNumberIsUnique;
 import org.nthdimenzion.ddd.domain.annotations.DomainService;
+import org.nthdimenzion.utils.UtilValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 
 /**
@@ -38,9 +39,12 @@ public class AgentService {
         return admin.createAgent(isLicenseNumberUnique, createAgentCommand);
     }
 
-    public Agent updateAgent(Agent agent, UpdateAgentCommand createAgentCommand) {
-        boolean isLicenseNumberUnique = agentLicenseNumberIsUnique.isSatisfiedBy(new LicenseNumber(createAgentCommand.getLicenseNumber().getLicenseNumber()));
-        Admin admin = adminRoleAdapter.userToAdmin(createAgentCommand.getUserDetails());
-        return admin.updateAgent(agent, isLicenseNumberUnique, createAgentCommand);
+    public Agent updateAgent(Agent agent, UpdateAgentCommand updateAgentCommand) {
+        boolean isLicenseNumberUnique = true;
+        if (UtilValidator.isNotEmpty(updateAgentCommand.getLicenseNumber().getLicenseNumber()) && !(agent.getLicenseNumber().getLicenseNumber().equals(updateAgentCommand.getLicenseNumber().getLicenseNumber()))) {
+            isLicenseNumberUnique = agentLicenseNumberIsUnique.isSatisfiedBy(new LicenseNumber(updateAgentCommand.getLicenseNumber().getLicenseNumber()));
+        }
+        Admin admin = adminRoleAdapter.userToAdmin(updateAgentCommand.getUserDetails());
+        return admin.updateAgent(agent, isLicenseNumberUnique, updateAgentCommand);
     }
 }
