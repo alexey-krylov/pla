@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<dataset>
+
+    <benefit benefit_id="1" benefit_name="ONE" status="ACTIVE" />
+    <benefit benefit_id="2" benefit_name="TWO"  status="ACTIVE" />
+
+    <coverage_benefit   benefit_id="1" />
+    <coverage_benefit  benefit_id="2" />
+    <coverage_benefit   benefit_id="1" />
+
+</dataset>

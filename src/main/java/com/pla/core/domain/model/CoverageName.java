@@ -7,10 +7,7 @@
 package com.pla.core.domain.model;
 
 import com.google.common.base.Preconditions;
-import lombok.AccessLevel;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
 import org.hibernate.annotations.Immutable;
 import org.nthdimenzion.ddd.domain.annotations.ValueObject;
 
@@ -27,12 +24,13 @@ import javax.persistence.Embeddable;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 @ToString(of = "coverageName")
 @EqualsAndHashCode(of = "coverageName")
+@Getter
 public class CoverageName {
 
     @Column(length = 50)
     private String coverageName;
 
-    CoverageName(String coverageName) {
+    public CoverageName(String coverageName) {
         Preconditions.checkNotNull(coverageName);
         this.coverageName = coverageName;
 

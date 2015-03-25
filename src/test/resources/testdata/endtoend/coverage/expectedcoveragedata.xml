@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<dataset>
+
+    <coverage coverage_name="testing Coverage name" description="coverage description" STATUS="ACTIVE" />
+
+    <COVERAGE_BENEFIT  BENEFIT_ID="2" />
+    <COVERAGE_BENEFIT  BENEFIT_ID="1" />
+</dataset>

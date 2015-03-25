@@ -166,20 +166,22 @@ public class AgentUnitTest {
     }
 
     @Test
-    public void itShouldInactivateAgent() {
-        agent = agent.inactivate();
-        assertEquals(AgentStatus.INACTIVE, agent.getAgentStatus());
+    public void givenAgentWithActiveStatusItShouldInactivate() {
+        Agent updatedAgent = agent.updateStatus(AgentStatus.INACTIVE);
+        assertEquals(AgentStatus.INACTIVE, updatedAgent.getAgentStatus());
     }
 
-    @Test
-    public void itShouldTerminateAgent() {
-        agent = agent.terminate();
-        assertEquals(AgentStatus.TERMINATED, agent.getAgentStatus());
+    @Test(expected = AgentException.class)
+    public void givenAgentWithTerminatedStatusItShouldNotActivate() {
+        Agent updatedAgent = agent.updateStatus(AgentStatus.TERMINATED);
+        agent.updateStatus(AgentStatus.ACTIVE);
     }
 
-    @Test
-    public void itShouldActivateAgent() {
-        agent = agent.activate();
-        assertEquals(AgentStatus.ACTIVE, agent.getAgentStatus());
+    @Test(expected = AgentException.class)
+    public void givenAgentWithTerminatedStatusItShouldNotInActivate() {
+        Agent updatedAgent = agent.updateStatus(AgentStatus.TERMINATED);
+        agent.updateStatus(AgentStatus.INACTIVE);
     }
+
+
 }

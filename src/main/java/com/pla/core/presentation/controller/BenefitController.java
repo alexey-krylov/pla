@@ -69,7 +69,7 @@ public class BenefitController {
             commandGateway.sendAndWait(createBenefitCommand);
         } catch (BenefitApplicationException e) {
             LOGGER.error("Error in creating benefit", e);
-            return Result.failure("Error in creating benefit");
+            return Result.failure(e.getMessage());
         } catch (Exception e) {
             LOGGER.error("Error in creating benefit", e);
             return Result.failure(e.getMessage());
@@ -90,10 +90,10 @@ public class BenefitController {
             commandGateway.sendAndWait(updateBenefitCommand);
         } catch (BenefitApplicationException e) {
             LOGGER.error("Error in updating benefit", e);
-            return Result.failure("Error in updating benefit");
+            return Result.failure(e.getMessage());
         } catch (Exception e) {
             LOGGER.error("Error in updating benefit", e);
-            return Result.failure("Error in updating benefit");
+            return Result.failure(e.getMessage());
         }
         return Result.success("Benefit updated successfully");
     }

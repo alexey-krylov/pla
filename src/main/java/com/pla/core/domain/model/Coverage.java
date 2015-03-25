@@ -10,10 +10,7 @@ package com.pla.core.domain.model;
 import com.google.common.base.Preconditions;
 import com.pla.core.domain.exception.CoverageException;
 import com.pla.sharedkernel.identifier.CoverageId;
-import lombok.AccessLevel;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
 import org.nthdimenzion.common.crud.ICrudEntity;
 import org.nthdimenzion.utils.UtilValidator;
 
@@ -29,6 +26,7 @@ import java.util.Set;
 @EqualsAndHashCode(of = {"coverageName"})
 @ToString(of = "coverageName")
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
+@Getter
 public class Coverage implements ICrudEntity {
 
     @EmbeddedId
@@ -43,17 +41,18 @@ public class Coverage implements ICrudEntity {
     @Enumerated(EnumType.STRING)
     private CoverageStatus status;
 
-    @OneToMany(targetEntity = Benefit.class, fetch = FetchType.EAGER)
+    @ManyToMany(targetEntity = Benefit.class, fetch = FetchType.EAGER)
     @JoinTable(name = "coverage_benefit", joinColumns = @JoinColumn(name = "COVERAGE_ID"), inverseJoinColumns = @JoinColumn(name = "BENEFIT_ID"))
     private Set<Benefit> benefits;
 
-    Coverage(CoverageId coverageId, CoverageName coverageName, Set<Benefit> benefits) {
-        Preconditions.checkArgument(coverageId == null);
-        Preconditions.checkArgument(coverageName == null);
-        Preconditions.checkArgument(UtilValidator.isNotEmpty(benefits));
+    Coverage(CoverageId coverageId, CoverageName coverageName, Set<Benefit> benefits,CoverageStatus coverageStatus) {
+        Preconditions.checkNotNull(coverageId == null);
+        Preconditions.checkNotNull(coverageName == null);
+        Preconditions.checkState(UtilValidator.isNotEmpty(benefits));
         this.coverageId = coverageId;
         this.coverageName = coverageName;
         this.benefits = benefits;
+        this.status = coverageStatus;
     }
 
     public Coverage updateCoverageName(String name) {
@@ -73,8 +72,11 @@ public class Coverage implements ICrudEntity {
         return this;
     }
 
-    public Coverage activate() {
-        this.status = CoverageStatus.ACTIVE;
+    public Coverage markAsUsed() {
+        if (CoverageStatus.INACTIVE.equals(this.status)) {
+            throw new CoverageException("Coverage cannot be marked as used as it is in inactive state");
+        }
+        this.status = CoverageStatus.INUSE;
         return this;
     }
 
@@ -85,4 +87,13 @@ public class Coverage implements ICrudEntity {
         this.status = CoverageStatus.INACTIVE;
         return this;
     }
+
+    public Coverage updateBenefit(Set<Benefit> benefits) {
+        if (CoverageStatus.INUSE.equals(this.status) || CoverageStatus.INACTIVE.equals(this.status)) {
+            throw new CoverageException("Coverage is in use;cannot be updated");
+        }
+        this.benefits = benefits;
+        return this;
+    }
+
 }
