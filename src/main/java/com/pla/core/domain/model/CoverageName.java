@@ -32,7 +32,7 @@ public class CoverageName {
     @Column(length = 50)
     private String coverageName;
 
-    CoverageName(String coverageName) {
+    public CoverageName(String coverageName) {
         Preconditions.checkNotNull(coverageName);
         this.coverageName = coverageName;
 

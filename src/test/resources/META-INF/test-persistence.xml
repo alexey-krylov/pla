@@ -5,6 +5,7 @@
         <class>org.axonframework.eventstore.jpa.DomainEventEntry</class>
         <class>org.axonframework.eventstore.jpa.SnapshotEventEntry</class>
         <class>com.pla.core.domain.model.Benefit</class>
+        <class>com.pla.core.domain.model.Coverage</class>
         <class>com.pla.core.domain.model.Team</class>
         <class>com.pla.core.domain.query.PlanEntry</class>
         <class>com.pla.core.domain.query.PlanCoverageEntity</class>

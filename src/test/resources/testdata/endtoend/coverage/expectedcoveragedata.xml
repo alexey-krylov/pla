@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<dataset>
+
+    <coverage coverage_name="testing Coverage name" description="coverage description" STATUS="ACTIVE" />
+
+   <!-- <coverage_benefit  benefit_id="1" />
+    <coverage_benefit  benefit_id="2" />
+    <coverage_benefit  benefit_id="3" />
+    <coverage_benefit  benefit_id="4" />-->
+
+</dataset>

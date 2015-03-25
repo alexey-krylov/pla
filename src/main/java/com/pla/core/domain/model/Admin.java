@@ -7,10 +7,16 @@
 package com.pla.core.domain.model;
 
 import com.pla.core.domain.exception.BenefitDomainException;
+import com.pla.core.domain.exception.CoverageException;
 import com.pla.core.domain.exception.TeamDomainException;
 import com.pla.sharedkernel.domain.model.BenefitStatus;
+import com.pla.sharedkernel.identifier.CoverageId;
 import org.joda.time.LocalDate;
 import org.nthdimenzion.ddd.domain.annotations.ValueObject;
+
+import java.util.Set;
+
+import static com.pla.core.domain.exception.AgentException.raiseAgentLicenseNumberUniqueException;
 
 /**
  * @author: Samir
@@ -39,6 +45,29 @@ public class Admin {
         Benefit updatedBenefit = benefit.inActivate();
         return updatedBenefit;
     }
+
+    public Coverage createCoverage(boolean isUniqueCoverageName, String coverageId, String coverageName,String description,  Set<Benefit> benefits) {
+        if (!isUniqueCoverageName) {
+            throw new CoverageException("Coverage name already satisfied");
+        }
+        Coverage  coverage = new Coverage(new CoverageId(coverageId), new CoverageName(coverageName), benefits, CoverageStatus.ACTIVE);
+        if (description != null)
+            coverage = coverage.updateDescription(description);
+        return coverage;
+    }
+
+    public Coverage updateCoverage(Coverage coverage, String newCoverageName, Set<Benefit> benefits, boolean isCoverageNameUnique) {
+        if (!isCoverageNameUnique) {
+            throw new CoverageException("Coverage name already satisfied");
+        }
+        return coverage.updateCoverageName(newCoverageName).updateBenefit(benefits);
+    }
+
+    public Coverage inactivateCoverage(Coverage coverage) {
+        Coverage deactivatedCoverage = coverage.deactivate();
+        return deactivatedCoverage;
+    }
+
 
     public Team createTeam(boolean isTeamUnique, String teamId, String teamName, String teamCode, String regionCode, String branchCode
             , String employeeId, LocalDate fromDate, String firstName, String lastName) {
