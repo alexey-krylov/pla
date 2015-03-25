@@ -45,8 +45,7 @@ public class TeamFinder {
             "LEFT JOIN team_team_leader_fulfillment tf ON tf.employee_id = tm.current_team_leader";
 
 
-    public static final String FIND_TEAM_BY_ID_QUERY = "SELECT tm.current_team_leader AS currentTeamLeader ,tm.team_id AS teamId,tm.team_name AS teamName,tm.team_code AS teamCode, ttlf.from_date AS fromDate " +
-            ",b.branch_name AS branchName,r.region_name AS regionName,r.regional_manager AS regionalManager,r.REGION_CODE AS regionCode,b.BRANCH_CODE AS branchCode FROM team tm " +
+       public static final String FIND_TEAM_BY_ID_QUERY = "SELECT tm.current_team_leader AS currentTeamLeader ,tm.team_id AS teamId,tm.team_name AS teamName,b.branch_name AS branchName,r.region_name AS regionName,r.regional_manager AS regionalManager,r.REGION_CODE AS regionCode,b.BRANCH_CODE AS branchCode FROM team tm " +
             "LEFT JOIN region r ON r.region_code = tm.region_code " +
             "LEFT JOIN branch b ON b.branch_code = tm.branch_code  " +
             "RIGHT JOIN team_team_leader_fulfillment ttlf ON ttlf.team_id = tm.team_id WHERE tm.team_id=:teamId ";
