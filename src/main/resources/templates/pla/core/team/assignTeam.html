@@ -3,11 +3,17 @@
       lang="en" >
 <head th:include="fragments/common :: headTag">
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+  <script>
 
+
+  </script>
 </head>
 <body style="padding-top: 70px;">
 <div th:include="fragments/common :: bodyHeader" th:remove="tag"/>
 <script>
+
+    require(['moment'], function(moment) {
+    });
     requirejs(['main'],function(){
     require(['/pla/js/team/assignTeam.js'],function(){
     angular.bootstrap(document, ['assignTeam']);
@@ -29,48 +35,42 @@
                         <div class="row">
                             <div class="form-group col-md-6" style="margin: auto;margin-top:10px;">
                                 <label class="control-label">Team Code</label>
-                                <div class="controls readonly">{{teamList.teamCode}}</div>
+                                <div class="controls readonly" ng-model="assignTeam.teamCode" th:text="${teamDetail.teamCode}" ></div>
                             </div>
                             <div class="form-group col-md-6" style="margin: auto;margin-top:10px;">
                                 <label class="control-label">Team Name</label>
-                                <div class="controls readonly">{{teamList.teamName}}</div>
+                                <div class="controls readonly" ng-model="assignTeam.teamName" th:text="${teamDetail.teamName}"></div>
 
                             </div>
                             <div class="form-group col-md-6" style="margin: auto;margin-top:10px;">
                                 <label class="control-label">Region Name</label>
-                                <div class="controls readonly">{{teamList.regionName}}</div>
+                                <div class="controls readonly" ng-model="assignTeam.regionCode" th:text="${teamDetail.regionCode}"></div>
                             </div>
                             <div class="form-group col-md-6" style="margin: auto;margin-top:10px;">
                                 <label class="control-label">Branch Name</label>
-                                <div class="controls readonly">{{teamList.branchName}}</div>
+                                <div class="controls readonly" ng-model="assignTeam.branchName" th:text="${teamDetail.branchName}"></div>
                             </div>
                             <div class="form-group col-md-6 required" style="margin: auto;margin-top:10px;">
                                 <label class="control-label">Team Leader</label>
-                                <select class="form-control input-sm" ng-model="assignTeam.teamLeader" ng-required="true" >
-                                    <option value="1">TeamLeader A</option>
-                                    <option value="2">TeamLeader B</option>
-                                    <option value="3">TeamLeader C</option>
-                                    <option value="4">TeamLeader D</option>
+                                <select class="form-control input-sm" ng-model="assignTeam.teamLeader" th:text="${teamDetail.currentTeamLeader}">
+                                    <option  ng-options="teamLeader.teamLeaderId as teamLeader.firstName + ' ' + teamLeader.lastName for teamLeader in teamLeaders" ></option>
                                 </select>
                             </div>
                             <div class="form-group col-md-6 required" style="margin: auto;margin-top:10px;" >
                                 <label class="control-label">Team Leader From</label>
                                 <p class="input-group">
-                                    <input type="text" class="form-control input-sm" ng-click="open($event)" ng-required="true"  datepicker-popup="dd/MM/yyyy" ng-model="assignTeam.fromDate"  datepicker-options="datePickerSettings.dateOptions" is-open="datePickerSettings.isOpened"  close-text="Close" />
-                                        <span class="input-group-btn">
+                                    <input type="text" class="form-control input-sm" ng-click="open($event)" min-date="selectedDate"  datepicker-popup="dd/MM/yyyy" ng-model="assignTeam.fromDate"  datepicker-options="datePickerSettings.dateOptions" is-open="datePickerSettings.isOpened"  close-text="Close" />
+                                     <span class="input-group-btn">
                                             <button type="button" class="btn btn-default btn-sm" ng-click="open($event)"><i class="glyphicon glyphicon-calendar"></i></button>
-                                        </span>
+                                     </span>
                                 </p>
                             </div>
 
                         </div>
                         <div class="row">
                             <div class="form-group col-lg-12" style="margin: auto;margin-top:10px;" >
-                                <button type="submit" class="btn btn-default" style="float:right;" ng-disabled="(!assignTeam.teamLeader || !assignTeam.fromDate)" ng-click="submitAssignTeam()">Save</button>
-
-                                <!--    <button type="submit" class="btn btn-primary align-center" onclick="assignTeam()">Save</button>-->
+                                <button type="submit" class="btn btn-default" style="float:right;" ng-disabled="(!assignTeam.employeeId || !assignTeam.fromDate)" ng-click="submitAssignTeam()">Save</button>
                                 <a class="btn btn-default" style="float:left;" th:href="@{/core/team/view}">Cancel</a>
-
                             </div>
                         </div>
                     </form>
