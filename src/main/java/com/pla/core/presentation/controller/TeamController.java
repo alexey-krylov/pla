@@ -5,7 +5,6 @@ import com.pla.core.application.CreateTeamCommand;
 import com.pla.core.application.UpdateTeamCommand;
 import com.pla.core.query.MasterFinder;
 import com.pla.core.query.TeamFinder;
-import com.sun.org.apache.regexp.internal.RE;
 import org.axonframework.commandhandling.gateway.CommandGateway;
 import org.nthdimenzion.presentation.Result;
 import org.slf4j.Logger;
@@ -63,6 +62,11 @@ public class TeamController {
         modelAndView.addObject("regions", masterFinder.getAllRegion());
         modelAndView.addObject("teamLeaders", new ArrayList<>());
         return modelAndView;
+    }
+
+    @RequestMapping(value = "/team/redirectToAssignPage", method = RequestMethod.GET)
+    public String redirectToAssignPage(@RequestParam(value = "teamId", required = false) String teamId) {
+        return "pla/core/team/assignTeam";
     }
 
     @RequestMapping(value = "/team/openAssignPage", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
