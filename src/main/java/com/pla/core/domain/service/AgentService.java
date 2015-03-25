@@ -34,7 +34,8 @@ public class AgentService {
     }
 
     public Agent createAgent(CreateAgentCommand createAgentCommand) {
-        boolean isLicenseNumberUnique = agentLicenseNumberIsUnique.isSatisfiedBy(new LicenseNumber(createAgentCommand.getLicenseNumber().getLicenseNumber()));
+        UtilValidator.isNotEmpty("");
+        boolean isLicenseNumberUnique = UtilValidator.isNotEmpty(createAgentCommand.getLicenseNumber().getLicenseNumber()) ? agentLicenseNumberIsUnique.isSatisfiedBy(new LicenseNumber(createAgentCommand.getLicenseNumber().getLicenseNumber())) : true;
         Admin admin = adminRoleAdapter.userToAdmin(createAgentCommand.getUserDetails());
         return admin.createAgent(isLicenseNumberUnique, createAgentCommand);
     }

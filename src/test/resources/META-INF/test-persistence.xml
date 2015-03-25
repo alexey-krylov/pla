@@ -8,10 +8,11 @@
         <class>com.pla.core.domain.model.Team</class>
         <class>com.pla.core.domain.query.PlanEntry</class>
         <class>com.pla.core.domain.query.PlanCoverageEntity</class>
+        <class>com.pla.core.domain.model.agent.Agent</class>
         <properties>
             <property name="hibernate.hbm2ddl.auto" value="update"/>
             <property name="hibernate.ejb.naming_strategy"
-                      value="org.nthdimenzion.ddd.domain.infrastructure.hibernate.CustomNamingStrategy"/>
+                      value="org.springframework.boot.orm.jpa.hibernate.SpringNamingStrategy"/>
             <property name="jadira.usertype.autoRegisterUserTypes" value="true"></property>
             <property name="jadira.usertype.databaseZone" value="jvm"></property>
             <property name="jadira.usertype.javaZone" value="Asia/Kolkata"></property>

@@ -60,8 +60,8 @@
 
     <bean id="jobsDataSource" class="com.jolbox.bonecp.BoneCPDataSource" destroy-method="close">
         <property name="driverClass" value="org.h2.Driver"/>
-        <property name="jdbcUrl" value="jdbc:h2:mem;MODE=MySQL"/>
-        <!--<property name="jdbcUrl" value="jdbc:h2:mem;MODE=MySQL;DB_CLOSE_ON_EXIT=FALSE;"/>-->
+        <!--<property name="jdbcUrl" value="jdbc:h2:mem;MODE=MySQL"/>-->
+        <property name="jdbcUrl" value="jdbc:h2:mem;MODE=MySQL;DB_CLOSE_ON_EXIT=FALSE;"/>
         <property name="maxConnectionsPerPartition" value="50"/>
         <property name="minConnectionsPerPartition" value="10"/>
         <property name="acquireIncrement" value="10"/>

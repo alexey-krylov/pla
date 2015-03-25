@@ -6,10 +6,7 @@
 
 package com.pla.core.domain.model.agent;
 
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
 import org.nthdimenzion.ddd.domain.annotations.ValueObject;
 
 import javax.persistence.Embeddable;
@@ -26,6 +23,7 @@ import static org.nthdimenzion.utils.UtilValidator.isNotEmpty;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 @ToString
 @Embeddable
+@EqualsAndHashCode(of = {"postalCode", "province", "city"})
 public class GeoDetail {
 
     private Integer postalCode;

@@ -74,16 +74,12 @@ class AgentProfile {
     }
 
     public AgentProfile withNrcNumber(Integer nrcNumber) {
-        if (nrcNumber != null && isNotEmpty(nrcNumber.toString()) && nrcNumber.toString().length() == 9) {
-            this.nrcNumber = nrcNumber;
-        }
+        this.nrcNumber = nrcNumber;
         return this;
     }
 
     public AgentProfile withEmployeeId(String employeeId) {
-        if (isNotEmpty(employeeId)) {
-            this.employeeId = employeeId;
-        }
+        this.employeeId = employeeId;
         return this;
     }
 }

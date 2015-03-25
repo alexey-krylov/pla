@@ -167,6 +167,15 @@ CREATE TABLE `region_manager_fulfillment`(
   CONSTRAINT `FK_REGION_CODE_REGION_MANAGER_FULFILLMENT_REGION_CODE` FOREIGN KEY (`region_Code`) REFERENCES `region` (`region_code`)
 ) ;
 
+
+DROP TABLE IF EXISTS agent_authorized_plan;
+CREATE TABLE `agent_authorized_plan` (
+  `agent_id` varchar(255) NOT NULL,
+  `plan_id` varchar(255) DEFAULT NULL,
+  KEY `FK_fb90q6b5wf5iswifmkro1bfr8` (`agent_id`),
+  CONSTRAINT `FK_fb90q6b5wf5iswifmkro1bfr8` FOREIGN KEY (`agent_id`) REFERENCES `agent` (`agent_id`)
+);
+
 DROP TABLE IF EXISTS agent;
 CREATE TABLE `agent`(
     `agent_id` varchar(255) NOT NULL,
@@ -201,13 +210,7 @@ CREATE TABLE `agent`(
     PRIMARY KEY (`agent_id`)
   );
 
-DROP TABLE IF EXISTS `agent_authorized_plan`;
- CREATE TABLE `agent_authorized_plan` (
-   `agent_id` varchar(255) NOT NULL,
-   `plan_id` varchar(255) DEFAULT NULL,
-   KEY `FK_fb90q6b5wf5iswifmkro1bfr8` (`agent_id`),
-   CONSTRAINT `FK_fb90q6b5wf5iswifmkro1bfr8` FOREIGN KEY (`agent_id`) REFERENCES `agent` (`agent_id`)
- );
+
 
 
 DROP TABLE IF EXISTS sum_assured;

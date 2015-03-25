@@ -7,12 +7,12 @@
 package com.pla.sharedkernel.domain.model;
 
 import lombok.AccessLevel;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.nthdimenzion.ddd.domain.annotations.ValueObject;
 
 import javax.persistence.Embeddable;
-import java.util.regex.Pattern;
 
 import static com.google.common.base.Preconditions.checkArgument;
 import static org.nthdimenzion.utils.UtilValidator.isNotEmpty;
@@ -25,9 +25,8 @@ import static org.nthdimenzion.utils.UtilValidator.isNotEmpty;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 @Embeddable
 @Getter
+@EqualsAndHashCode(of = "email")
 public class EmailAddress {
-
-    private static final Pattern EMAIL_PATTERN = Pattern.compile("");
 
     private String email;
 
@@ -36,7 +35,4 @@ public class EmailAddress {
         this.email = email;
     }
 
-    public boolean isValidEmail(String email) {
-    return false;
-    }
 }
