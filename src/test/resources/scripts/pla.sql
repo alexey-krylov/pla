@@ -95,13 +95,10 @@ CREATE TABLE `coverage_benefit` (
 DROP TABLE IF EXISTS `branch`;
 CREATE TABLE `branch`(
   `branch_code` varchar(255) NOT NULL,
-  `branch_name` varchar(255) DEFAULT NULL,
   `branch_bde` varchar(255) DEFAULT NULL,
   `branch_manager` varchar(255) DEFAULT NULL,
-  `region_code` varchar(255) DEFAULT NULL,
-  PRIMARY KEY (`branch_code`),
-  KEY `FK_BRANCH_REGION_CODE` (`region_code`),
-  CONSTRAINT `FK_BRANCH_REGION_CODE` FOREIGN KEY (`region_code`) REFERENCES `region_branch` (`region_code`)
+  `branch_name` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`branch_code`)
 );
 
 DROP TABLE IF EXISTS `region`;
