@@ -596,13 +596,10 @@ DROP TABLE IF EXISTS branch;
 
 CREATE TABLE `branch` (
   `branch_code`    VARCHAR(255) NOT NULL,
-  `branch_name`    VARCHAR(255) DEFAULT NULL,
   `branch_bde`     VARCHAR(255) DEFAULT NULL,
   `branch_manager` VARCHAR(255) DEFAULT NULL,
-  `region_code`    VARCHAR(255) DEFAULT NULL,
-  PRIMARY KEY (`branch_code`),
-  KEY `FK_BRANCH_REGION_CODE` (`region_code`),
-  CONSTRAINT `FK_BRANCH_REGION_CODE` FOREIGN KEY (`region_code`) REFERENCES `region_branch` (`region_code`)
+  `branch_name` VARCHAR(255) DEFAULT NULL,
+  PRIMARY KEY (`branch_code`)
 )
   ENGINE =InnoDB
   DEFAULT CHARSET =utf8;

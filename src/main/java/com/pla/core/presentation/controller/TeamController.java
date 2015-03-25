@@ -64,12 +64,10 @@ public class TeamController {
         return modelAndView;
     }
 
-    @RequestMapping(value = "/team/openAssignPage", method = RequestMethod.GET)
-    public ModelAndView openAssignPageTeam(@RequestParam(value = "teamId", required = false) String teamId) {
-        ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("pla/core/team/assignTeam");
-        modelAndView.addObject("teamDetail", teamFinder.getTeamById(teamId));
-        return modelAndView;
+    @RequestMapping(value = "/team/openAssignPage", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public Map<String, Object> openAssignPageTeam(@RequestParam(value = "teamId", required = false) String teamId) {
+        return teamFinder.getTeamById(teamId);
     }
 
 
