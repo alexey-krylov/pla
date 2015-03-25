@@ -1,4 +1,9 @@
 /*
+ * Copyright (c) 3/10/15 9:21 PM .NthDimenzion,Inc - All Rights Reserved
+ * Unauthorized copying of this file, via any medium is strictly prohibited
+ * Proprietary and confidential
+ */
+
 package com.pla.core.domain.service;
 
 import com.pla.core.domain.model.Admin;
@@ -6,9 +11,9 @@ import com.pla.core.domain.model.Benefit;
 import com.pla.core.domain.model.BenefitId;
 import com.pla.core.domain.model.BenefitName;
 import com.pla.core.dto.BenefitDto;
-import com.pla.core.query.CoverageFinder;
+import com.pla.core.query.BenefitFinder;
 import com.pla.core.specification.BenefitIsAssociatedWithCoverage;
-import com.pla.core.specification.CoverageNameIsUnique;
+import com.pla.core.specification.BenefitNameIsUnique;
 import com.pla.sharedkernel.domain.model.BenefitStatus;
 import org.junit.Before;
 import org.junit.Test;
@@ -24,28 +29,26 @@ import static org.junit.Assert.assertNotNull;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.util.ReflectionTestUtils.invokeGetterMethod;
 
-*/
 /**
- * Created by Admin on 3/25/2015.
- *//*
-
-
+ * @author: Samir
+ * @since 1.0 10/03/2015
+ */
 @RunWith(MockitoJUnitRunner.class)
-public class CoverageServiceUnitTest {
+public class BenefitServiceUnitTest {
 
     @Mock
     private AdminRoleAdapter adminRoleAdapter;
 
     @Mock
-    private CoverageNameIsUnique coverageNameIsUnique;
+    private BenefitNameIsUnique benefitNameIsUnique;
 
     @Mock
-    private CoverageFinder coverageFinder;
+    private BenefitFinder benefitFinder;
 
     @Mock
     private IIdGenerator idGenerator;
 
-    private CoverageService coverageService;
+    private BenefitService benefitService;
 
     private UserDetails userDetails;
 
@@ -53,51 +56,47 @@ public class CoverageServiceUnitTest {
 
     @Before
     public void setUp() {
-        coverageService = new CoverageService(adminRoleAdapter, coverageNameIsUnique, idGenerator);
+        BenefitIsAssociatedWithCoverage benefitIsAssociatedWithCoverage = new BenefitIsAssociatedWithCoverage(benefitFinder);
+        benefitService = new BenefitService(adminRoleAdapter, benefitNameIsUnique, idGenerator, benefitIsAssociatedWithCoverage);
         userDetails = UserLoginDetailDto.createUserLoginDetailDto("", "");
         admin = new Admin();
-
     }
 
 
-   */
-/* @Test
-    public void givenACoverageName_whenTheCoverageNameIsUnique_thenItShouldCreateTheCoverageWithActiveState() {
+    @Test
+    public void givenABenefitNameItShouldCreateBenefitWithActiveState() {
         String benefitId = "BE001";
         String name = "CI Benefit";
         when(idGenerator.nextId()).thenReturn(benefitId);
         when(adminRoleAdapter.userToAdmin(userDetails)).thenReturn(admin);
-        Benefit benefit = coverageService.createCoverage(name, userDetails);
+        BenefitDto benefitDto = new BenefitDto(benefitId, name);
+        when(benefitNameIsUnique.isSatisfiedBy(benefitDto)).thenReturn(true);
+        Benefit benefit = benefitService.createBenefit(name, userDetails);
         BenefitName createdBenefitName = (BenefitName) invokeGetterMethod(benefit, "getBenefitName");
         assertNotNull(benefit);
         assertEquals(new BenefitId(benefitId), invokeGetterMethod(benefit, "getBenefitId"));
         assertEquals(BenefitStatus.ACTIVE, invokeGetterMethod(benefit, "getStatus"));
         assertEquals(name, createdBenefitName.getBenefitName());
-    }*//*
+    }
 
-
-*/
-/*
     @Test
     public void givenABenefitWithUpdatedNameItShouldUpdateBenefit() {
         Benefit benefit = getBenefit();
         String name = "CI Benefit";
         when(adminRoleAdapter.userToAdmin(userDetails)).thenReturn(admin);
-        when(coverageFinder.getBenefitCountAssociatedWithActiveCoverage("1")).thenReturn(0);
+        when(benefitFinder.getBenefitCountAssociatedWithActiveCoverage("1")).thenReturn(0);
         BenefitDto benefitDto = new BenefitDto(benefit.getBenefitId().getBenefitId(), name);
-        when(coverageNameIsUnique.isSatisfiedBy(benefitDto)).thenReturn(true);
-        Benefit updatedBenefit = coverageService.updateBenefit(benefit, name, userDetails);
+        when(benefitNameIsUnique.isSatisfiedBy(benefitDto)).thenReturn(true);
+        Benefit updatedBenefit = benefitService.updateBenefit(benefit, name, userDetails);
         BenefitName updatedBenefitName = (BenefitName) invokeGetterMethod(updatedBenefit, "getBenefitName");
         assertEquals(BenefitStatus.ACTIVE, invokeGetterMethod(updatedBenefit, "getStatus"));
         assertEquals(name, updatedBenefitName.getBenefitName());
     }
-*//*
-
 
     @Test
     public void givenABenefitWhenMarkAsUsedItShouldBeInUsedStatus() {
         Benefit benefit = getBenefit();
-        Benefit updatedBenefit = null;//coverageService.markBenefitAsUsed(benefit);
+        Benefit updatedBenefit = benefitService.markBenefitAsUsed(benefit);
         assertEquals(BenefitStatus.INUSE, invokeGetterMethod(updatedBenefit, "getStatus"));
     }
 
@@ -106,7 +105,7 @@ public class CoverageServiceUnitTest {
     public void givenABenefitItShouldInactivateBenefit() {
         Benefit benefit = getBenefit();
         when(adminRoleAdapter.userToAdmin(userDetails)).thenReturn(admin);
-        Benefit updatedBenefit = null;//overageService.inactivateBenefit(benefit, userDetails);
+        Benefit updatedBenefit = benefitService.inactivateBenefit(benefit, userDetails);
         assertEquals(BenefitStatus.INACTIVE, invokeGetterMethod(updatedBenefit, "getStatus"));
     }
 
@@ -114,9 +113,8 @@ public class CoverageServiceUnitTest {
         String name = "Accidental death benefit";
         BenefitDto benefitDto = new BenefitDto("1", name);
         boolean isBenefitNameUnique = Boolean.TRUE;
-        //when(coverageNameIsUnique.isSatisfiedBy(benefitDto)).thenReturn(isBenefitNameUnique);
-        Benefit benefit = null;//admin.createBenefit(isBenefitNameUnique, "1", name);
+        when(benefitNameIsUnique.isSatisfiedBy(benefitDto)).thenReturn(isBenefitNameUnique);
+        Benefit benefit = admin.createBenefit(isBenefitNameUnique, "1", name);
         return benefit;
     }
 }
-*/
