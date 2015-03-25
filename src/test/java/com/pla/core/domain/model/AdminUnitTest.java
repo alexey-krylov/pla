@@ -6,9 +6,6 @@
 
 package com.pla.core.domain.model;
 
-import com.pla.core.application.agent.CreateAgentCommand;
-import com.pla.core.domain.exception.AgentException;
-import com.pla.core.domain.model.agent.Agent;
 import com.pla.core.dto.BenefitDto;
 import com.pla.core.query.BenefitFinder;
 import com.pla.core.specification.BenefitIsAssociatedWithCoverage;
@@ -85,13 +82,4 @@ public class AdminUnitTest {
         assertEquals(updatedName, updatedBenefitName.getBenefitName());
     }
 
-    @Test(expected = AgentException.class)
-    public void itShouldNotCreateAgentWhenLicenseNumberIsNotUnique() {
-        Agent agent = admin.createAgent(false,new CreateAgentCommand());
-    }
-
-    @Test(expected = AgentException.class)
-    public void itShouldNotUpdateAgentWhenLicenseNumberIsNotUnique() {
-        Agent agent = admin.createAgent(false,new CreateAgentCommand());
-    }
 }

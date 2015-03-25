@@ -11,13 +11,20 @@ import com.pla.core.application.agent.UpdateAgentCommand;
 import com.pla.core.domain.model.Admin;
 import com.pla.core.domain.model.agent.Agent;
 import com.pla.core.domain.model.agent.AgentId;
+import com.pla.core.domain.model.agent.AgentStatus;
 import com.pla.core.domain.model.agent.LicenseNumber;
+import com.pla.core.dto.*;
 import com.pla.core.specification.AgentLicenseNumberIsUnique;
+import com.pla.sharedkernel.identifier.PlanId;
 import org.nthdimenzion.common.service.JpaRepositoryFactory;
 import org.nthdimenzion.ddd.domain.annotations.DomainService;
 import org.nthdimenzion.utils.UtilValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.JpaRepository;
+
+import java.util.Set;
+
+import static com.pla.core.domain.exception.AgentException.raiseAgentLicenseNumberUniqueException;
 
 /**
  * @author: Samir
@@ -39,24 +46,46 @@ public class AgentService {
         this.jpaRepositoryFactory = jpaRepositoryFactory;
     }
 
-    public void createAgent(CreateAgentCommand createAgentCommand) {
+    public void createAgent(String agentId, AgentProfileDto agentProfileDto, LicenseNumberDto licenseNumberDto, TeamDetailDto teamDetailDto, ContactDetailDto contactDetailDto, PhysicalAddressDto physicalAddressDto, ChannelTypeDto channelTypeDto, Set<PlanId> authorizedPlans) {
         UtilValidator.isNotEmpty("");
-        boolean isLicenseNumberUnique = UtilValidator.isNotEmpty(createAgentCommand.getLicenseNumber().getLicenseNumber()) ? agentLicenseNumberIsUnique.isSatisfiedBy(new LicenseNumber(createAgentCommand.getLicenseNumber().getLicenseNumber())) : true;
-        Admin admin = adminRoleAdapter.userToAdmin(createAgentCommand.getUserDetails());
-        Agent agent = admin.createAgent(isLicenseNumberUnique, createAgentCommand);
+        boolean isLicenseNumberUnique = UtilValidator.isNotEmpty(licenseNumberDto.getLicenseNumber()) ? agentLicenseNumberIsUnique.isSatisfiedBy(new LicenseNumber(licenseNumberDto.getLicenseNumber())) : true;
+        if (!isLicenseNumberUnique) {
+            raiseAgentLicenseNumberUniqueException("Agent cannot be updated as license number is in use");
+        }
+        Agent agent = Agent.createAgent(new AgentId(agentId));
+        Agent agentDetail = populateAgentDetail(agent, agentProfileDto, licenseNumberDto, teamDetailDto, contactDetailDto, physicalAddressDto, channelTypeDto);
+        Agent agentWithPlans = agentDetail.withPlans(authorizedPlans);
         JpaRepository<Agent, AgentId> agentRepository = jpaRepositoryFactory.getCrudRepository(Agent.class);
-        agentRepository.save(agent);
+        agentRepository.save(agentWithPlans);
     }
 
-    public void updateAgent(UpdateAgentCommand updateAgentCommand) {
+    public void updateAgent(String agentId, AgentProfileDto agentProfileDto, LicenseNumberDto licenseNumberDto, TeamDetailDto teamDetailDto, ContactDetailDto contactDetailDto, PhysicalAddressDto physicalAddressDto, ChannelTypeDto channelTypeDto, Set<PlanId> authorizedPlans, AgentStatus agentStatus) {
         boolean isLicenseNumberUnique = true;
         JpaRepository<Agent, AgentId> agentRepository = jpaRepositoryFactory.getCrudRepository(Agent.class);
-        Agent agent = agentRepository.getOne(new AgentId(updateAgentCommand.getAgentId()));
-        if (UtilValidator.isNotEmpty(updateAgentCommand.getLicenseNumber().getLicenseNumber()) && !(agent.getLicenseNumber().getLicenseNumber().equals(updateAgentCommand.getLicenseNumber().getLicenseNumber()))) {
-            isLicenseNumberUnique = agentLicenseNumberIsUnique.isSatisfiedBy(new LicenseNumber(updateAgentCommand.getLicenseNumber().getLicenseNumber()));
+        Agent agent = agentRepository.getOne(new AgentId(agentId));
+        isLicenseNumberUnique = (UtilValidator.isNotEmpty(licenseNumberDto.getLicenseNumber()) && !(agent.getLicenseNumber().getLicenseNumber().equals(licenseNumberDto.getLicenseNumber()))) ? agentLicenseNumberIsUnique.isSatisfiedBy(new LicenseNumber(licenseNumberDto.getLicenseNumber())) : true;
+        if (!isLicenseNumberUnique) {
+            raiseAgentLicenseNumberUniqueException("Agent cannot be updated as license number is in use");
         }
-        Admin admin = adminRoleAdapter.userToAdmin(updateAgentCommand.getUserDetails());
-        Agent updatedAgent = admin.updateAgent(agent, isLicenseNumberUnique, updateAgentCommand);
-        agentRepository.save(updatedAgent);
+        Agent updatedAgent = populateAgentDetail(agent, agentProfileDto, licenseNumberDto, teamDetailDto, contactDetailDto, physicalAddressDto, channelTypeDto);
+        Agent agentWithPlans = updatedAgent.withPlans(authorizedPlans);
+        Agent agentWithUpdatedStatus = agentWithPlans.updateStatus(agentStatus);
+        agentRepository.save(agentWithUpdatedStatus);
+    }
+
+
+    private Agent populateAgentDetail(Agent agent, AgentProfileDto agentProfileDto, LicenseNumberDto licenseNumberDto, TeamDetailDto teamDetailDto, ContactDetailDto contactDetailDto, PhysicalAddressDto physicalAddressDto, ChannelTypeDto channelTypeDto) {
+        Agent agentWithProfile = agent.createWithAgentProfile(agentProfileDto.getFirstName(), agentProfileDto.getLastName(), agentProfileDto.getTrainingCompleteOn(), agentProfileDto.getDesignationDto().getCode(), agentProfileDto.getDesignationDto().getDescription());
+        Agent updatedAgentWithProfile = agentWithProfile.updateAgentProfileWithEmployeeId(agentProfileDto.getEmployeeId());
+        updatedAgentWithProfile = updatedAgentWithProfile.updateAgentProfileWithNrcNumber(agentProfileDto.getNrcNumber());
+        updatedAgentWithProfile = updatedAgentWithProfile.updateAgentProfileWithTitle(agentProfileDto.getTitle());
+        Agent agentWithLicenseNumber = updatedAgentWithProfile.withLicenseNumber(licenseNumberDto.getLicenseNumber());
+        Agent agentWithTeamDetail = agentWithLicenseNumber.withTeamDetail(teamDetailDto.getTeamId());
+        GeoDetailDto geoDetailDto = contactDetailDto.getGeoDetail();
+        Agent agentWithContactDetail = agentWithTeamDetail.withContactDetail(contactDetailDto.getMobileNumber(), contactDetailDto.getHomePhoneNumber(), contactDetailDto.getWorkPhoneNumber(), contactDetailDto.getEmailAddress(), contactDetailDto.getAddressLine1(), contactDetailDto.getAddressLine2(), geoDetailDto.getPostalCode(), geoDetailDto.getProvinceCode(), geoDetailDto.getCityCode());
+        GeoDetailDto physicalGeoDetailDto = physicalAddressDto.getPhysicalGeoDetail();
+        Agent agentWithPhysicalAddress = agentWithContactDetail.withPhysicalAddress(physicalAddressDto.getPhysicalAddressLine1(), physicalAddressDto.getPhysicalAddressLine2(), physicalGeoDetailDto.getPostalCode(), physicalGeoDetailDto.getProvinceCode(), physicalGeoDetailDto.getCityCode());
+        Agent agentWithChannelType = agentWithPhysicalAddress.withChannelType(channelTypeDto.getChannelCode(), channelTypeDto.getChannelName());
+        return agentWithChannelType;
     }
 }
