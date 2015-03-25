@@ -164,6 +164,18 @@ CREATE TABLE `region_manager_fulfillment`(
   CONSTRAINT `FK_REGION_CODE_REGION_MANAGER_FULFILLMENT_REGION_CODE` FOREIGN KEY (`region_Code`) REFERENCES `region` (`region_code`)
 ) ;
 
+CREATE TABLE `branch_manager_fulfillment` (
+  `branch_code` varchar(255) NOT NULL,
+  `first_name` varchar(255) NOT NULL,
+  `last_name` varchar(255) NOT NULL,
+  `from_date` date NOT NULL,
+  `thru_date` date DEFAULT NULL,
+  `employee_id` varchar(255) NOT NULL,
+  PRIMARY KEY (`branch_code`),
+  CONSTRAINT `FK_BRANCH_CODE_BRANCH_FULFILLMENT` FOREIGN KEY (`branch_code`) REFERENCES `branch` (`branch_code`)
+);
+
+
 
 DROP TABLE IF EXISTS agent_authorized_plan;
 CREATE TABLE `agent_authorized_plan` (
