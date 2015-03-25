@@ -33,11 +33,11 @@ public class TeamFinder {
         this.namedParameterJdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
     }
 
-    public static final String ACTIVE_BENEFIT_COUNT_BY_TEAM_NAMEQuery = "select count(team_id) from team where team_name=:teamName";
+    public static final String ACTIVE_BENEFIT_COUNT_BY_TEAM_NAME_QUERY = "select count(team_id) from team where team_name=:teamName";
 
-    public static final String ACTIVE_BENEFIT_COUNT_BY_TEAM_CODEQuery = "select count(team_id) from team where team_code=:teamCode";
+    public static final String ACTIVE_BENEFIT_COUNT_BY_TEAM_CODE_QUERY = "select count(team_id) from team where team_code=:teamCode";
 
-    public static final String findAllTeamQuery = "SELECT tm.team_id AS teamId,tm.team_name AS teamName,tm.team_code as teamCode,tf.first_Name AS firstName," +
+    public static final String FIND_ALL_TEAM_QUERY = "SELECT tm.team_id AS teamId,tm.team_name AS teamName,tm.team_code as teamCode,tf.first_Name AS firstName," +
             "tf.last_Name AS lastName,tf.from_date AS fromDate,b.branch_name AS branchName,r.regional_manager AS regionalManager,r.region_name AS regionName,b.BRANCH_CODE AS branchCode " +
             "FROM team tm " +
             "LEFT JOIN region r ON r.region_code = tm.region_code " +
@@ -55,7 +55,7 @@ public class TeamFinder {
 
     public int getTeamCountByTeamName(String teamName) {
         Preconditions.checkNotNull(teamName);
-        Number noOfBenefit = namedParameterJdbcTemplate.queryForObject(ACTIVE_BENEFIT_COUNT_BY_TEAM_NAMEQuery, new MapSqlParameterSource().addValue("teamName", teamName), Number.class);
+        Number noOfBenefit = namedParameterJdbcTemplate.queryForObject(ACTIVE_BENEFIT_COUNT_BY_TEAM_NAME_QUERY, new MapSqlParameterSource().addValue("teamName", teamName), Number.class);
         return noOfBenefit.intValue();
     }
 
@@ -66,7 +66,7 @@ public class TeamFinder {
     }
 
     public List<Map<String, Object>> getAllTeam() {
-        return namedParameterJdbcTemplate.query(findAllTeamQuery, new ColumnMapRowMapper());
+        return namedParameterJdbcTemplate.query(FIND_ALL_TEAM_QUERY, new ColumnMapRowMapper());
     }
 
     public Map<String, Object> getTeamById(String teamId) {
