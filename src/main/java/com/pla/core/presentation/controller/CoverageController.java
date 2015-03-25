@@ -20,7 +20,6 @@ import com.pla.core.application.MarkCoverageAsUsedCommand;
 import com.pla.core.application.UpdateCoverageCommand;
 import com.pla.core.application.exception.BenefitApplicationException;
 import com.pla.core.dto.CoverageDto;
-import com.pla.core.query.BenefitFinder;
 import com.pla.core.query.CoverageFinder;
 import org.axonframework.commandhandling.gateway.CommandGateway;
 import org.nthdimenzion.presentation.Result;
@@ -32,6 +31,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -44,7 +44,7 @@ import static org.nthdimenzion.presentation.AppUtils.getLoggedInUSerDetail;
 public class CoverageController {
 
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(BenefitController.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(CoverageController.class);
 
     private CommandGateway commandGateway;
 
@@ -59,9 +59,11 @@ public class CoverageController {
 
     @RequestMapping(value = "/coverages/view", method = RequestMethod.GET)
     @ResponseBody
-    public List<CoverageDto> viewCoverages(@RequestParam(value = "page", required = false) Integer pageNumber, Model model) {
-        return coverageFinder.getAllBenefit();
-//        return "pla/core/viewCoverage";
+    public ModelAndView viewCoverages() {
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("pla/core/viewCoverage");
+        modelAndView.addObject("listOfCoverage", coverageFinder.getAllCoverage());
+        return modelAndView;
     }
 
     @RequestMapping(value = "/coverages/create", method = RequestMethod.POST)

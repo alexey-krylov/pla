@@ -39,7 +39,7 @@ public class CoverageFinder {
     }
 
 
-    public static final String ACTIVE_COVERAGE_COUNT_BY_COVERAGE_NAME = "select count(coverage_id) from coverage where coverage_name=:coverageName and status='ACTIVE'";
+    public static final String activeCoverageCountByCoverageNameQuery = "select count(coverage_id) from coverage where coverage_name=:coverageName and status='ACTIVE'";
 
     public static final String findAllCoverageQuery = "SELECT c.coverage_id coverageId,c.coverage_name coverageName,c.description description ,c.status AS coverageStatus " +
             "FROM coverage c WHERE c.status='ACTIVE'";
@@ -50,11 +50,11 @@ public class CoverageFinder {
 
     public int getCoverageCountByCoverageName(String coverageName){
         Preconditions.checkNotNull(coverageName);
-        Number noOfBenefit = namedParameterJdbcTemplate.queryForObject(ACTIVE_COVERAGE_COUNT_BY_COVERAGE_NAME, new MapSqlParameterSource().addValue("coverageName", coverageName), Number.class);
+        Number noOfBenefit = namedParameterJdbcTemplate.queryForObject(activeCoverageCountByCoverageNameQuery, new MapSqlParameterSource().addValue("coverageName", coverageName), Number.class);
         return noOfBenefit.intValue();
     }
 
-    public List<CoverageDto> getAllBenefit() {
+    public List<CoverageDto> getAllCoverage() {
         List<CoverageDto> listOfActiveCoverage  = namedParameterJdbcTemplate.query(findAllCoverageQuery, new BeanPropertyRowMapper(CoverageDto.class));
         for (CoverageDto coverageDto : listOfActiveCoverage){
             SqlParameterSource sqlParameterSource = new MapSqlParameterSource("coverageId",coverageDto.getCoverageId());
@@ -62,13 +62,6 @@ public class CoverageFinder {
         }
         return listOfActiveCoverage;
     }
-
-    private Function<Map<String, Object>, String> transformIntoCoverageIds = new Function<Map<String, Object>, String>() {
-        @Override
-        public String apply(@NotNull java.util.Map<String, Object> input) {
-            return (String) input.get("coverageId");
-        }
-    };
 
 }
 

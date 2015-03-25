@@ -46,14 +46,7 @@ public class CoverageCommandHandler {
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("*****Command Received*****" + createCoverageCommand);
         }
-        JpaRepository<Benefit, BenefitId> benefitRepository = jpaRepositoryFactory.getCrudRepository(Benefit.class);
-        Set<Benefit> benefitSet = new HashSet<>();
-        for (BenefitId benefitId : createCoverageCommand.getBenefitIds()) {
-            Benefit benefit = benefitRepository.findOne(benefitId);
-            if(benefit!=null) {
-                benefitSet.add(benefit);
-            }
-        }
+        Set<Benefit> benefitSet= findBenefitById(createCoverageCommand.getBenefitIds());
         JpaRepository<Coverage, String> coverageRepository = jpaRepositoryFactory.getCrudRepository(Coverage.class);
         Coverage coverage = coverageService.createCoverage(createCoverageCommand.getCoverageName(),createCoverageCommand.getDescription(), benefitSet, createCoverageCommand.getUserDetails());
         try {
@@ -72,15 +65,7 @@ public class CoverageCommandHandler {
         JpaRepository<Coverage, CoverageId> coverageRepository = jpaRepositoryFactory.getCrudRepository(Coverage.class);
         CoverageId coverageId = new CoverageId(updateCoverageCommand.getCoverageId());
         Coverage coverage = coverageRepository.findOne(coverageId);
-
-        JpaRepository<Benefit, BenefitId> benefitRepository = jpaRepositoryFactory.getCrudRepository(Benefit.class);
-        Set<Benefit> benefitSet = new HashSet<>();
-        for (BenefitId benefitId : updateCoverageCommand.getBenefitIds()) {
-            Benefit benefit = benefitRepository.findOne(benefitId);
-            if(benefit!=null) {
-                benefitSet.add(benefit);
-            }
-        }
+        Set<Benefit> benefitSet= findBenefitById(updateCoverageCommand.getBenefitIds());
         coverage = coverageService.updateCoverage(coverage, updateCoverageCommand.getCoverageName(),benefitSet, updateCoverageCommand.getUserDetails());
         try {
             coverageRepository.save(coverage);
@@ -122,5 +107,17 @@ public class CoverageCommandHandler {
             LOGGER.error("*****Inactivating coverage failed*****", e);
             throw new CoverageException(e.getMessage());
         }
+    }
+
+    public Set<Benefit> findBenefitById(Set<BenefitId> benefitIds){
+        JpaRepository<Benefit, BenefitId> benefitRepository = jpaRepositoryFactory.getCrudRepository(Benefit.class);
+        Set<Benefit> benefitSet = new HashSet<>();
+        for (BenefitId benefitId : benefitIds) {
+            Benefit benefit = benefitRepository.findOne(benefitId);
+            if(benefit!=null) {
+                benefitSet.add(benefit);
+            }
+        }
+        return benefitSet;
     }
 }
