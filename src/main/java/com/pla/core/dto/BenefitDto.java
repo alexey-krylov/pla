@@ -15,15 +15,15 @@ import lombok.Setter;
  * @since 1.0 16/03/2015
  */
 @Getter
-@EqualsAndHashCode
 @Setter
+@EqualsAndHashCode(of = "benefitId")
 public class BenefitDto {
 
     private String benefitId;
 
     private String benefitName;
 
-    public BenefitDto(){
+    public BenefitDto() {
 
     }
 
