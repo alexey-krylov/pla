@@ -10,10 +10,7 @@ package com.pla.core.domain.model;
 import com.google.common.base.Preconditions;
 import com.pla.core.domain.exception.CoverageException;
 import com.pla.sharedkernel.identifier.CoverageId;
-import lombok.AccessLevel;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
 import org.nthdimenzion.common.crud.ICrudEntity;
 import org.nthdimenzion.utils.UtilValidator;
 
@@ -29,6 +26,7 @@ import java.util.Set;
 @EqualsAndHashCode(of = {"coverageName"})
 @ToString(of = "coverageName")
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
+@Getter
 public class Coverage implements ICrudEntity {
 
     @EmbeddedId
