@@ -21,14 +21,10 @@ App.controller('AssignTeamController',['$scope','$http','$window','$location',fu
                    $scope.teamLeaders=data;
      });
       $scope.url = window.location.search.split('=')[1];
-      // console.log("WINDOW LOCATION-------"+$scope.url.split('=')[1]);
-
-         // var tid = $window.teamId;
-    // var id=parseInt(tid);
-     $http.get('http://localhost:6443/pla/core/team/openAssignPage?teamId='+$scope.url).success(function(data){
-                   console.log(data);
-                  // $scope.assignTeam=data;
-      });
+       $http.get('http://localhost:6443/pla/core/team/openAssignPage?teamId='+$scope.url).success(function(data){
+                  // console.log(data);
+                   $scope.assignTeam=data;
+     });
       $scope.submitAssignTeam = function(){
          if (!moment($scope.assignTeam.fromDate,'DD/MM/YYYY').isValid()) {
          	    $scope.newDateField.fromDate = moment($scope.assignTeam.fromDate).format("DD/MM/YYYY");

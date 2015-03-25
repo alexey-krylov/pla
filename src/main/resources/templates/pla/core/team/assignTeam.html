@@ -3,11 +3,7 @@
       lang="en" >
 <head th:include="fragments/common :: headTag">
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-  <script>
-
-
-  </script>
-</head>
+  </head>
 <body style="padding-top: 70px;">
 <div th:include="fragments/common :: bodyHeader" th:remove="tag"/>
 <script>
@@ -20,7 +16,7 @@
     });
     });
 </script>
-<div class="container" style="padding-top: 0px!important;" ng-Controller="AssignTeamController">
+<div class="container ng-cloak" style="padding-top: 0px!important;" ng-Controller="AssignTeamController">
     <div class="row">
         <div class="col-lg-8" style="left:230px;position:absolute;">
             <div class="panel panel-primary">
@@ -30,36 +26,36 @@
                         </span></div>
                     </div>
                 </div>
-                <div class="panel-body">
+                <div class="panel-body ng-cloak">
                     <form  novalidate="true" class="css-form">
                         <div class="row">
                             <div class="form-group col-md-6" style="margin: auto;margin-top:10px;">
                                 <label class="control-label">Team Code</label>
-                                <div class="controls readonly" ng-model="assignTeam.teamCode" th:text="${teamDetail.teamCode}" ></div>
+                                <div class="controls readonly" ng-model="assignTeam.teamCode"  ></div>
                             </div>
                             <div class="form-group col-md-6" style="margin: auto;margin-top:10px;">
                                 <label class="control-label">Team Name</label>
-                                <div class="controls readonly" ng-model="assignTeam.teamName" th:text="${teamDetail.teamName}"></div>
+                                <div class="controls readonly" ng-model="assignTeam.teamName" >{{assignTeam.teamName}}</div>
 
                             </div>
                             <div class="form-group col-md-6" style="margin: auto;margin-top:10px;">
                                 <label class="control-label">Region Name</label>
-                                <div class="controls readonly" ng-model="assignTeam.regionCode" th:text="${teamDetail.regionCode}"></div>
+                                <div class="controls readonly" ng-model="assignTeam.regionCode" >{{assignTeam.regionName}}</div>
                             </div>
                             <div class="form-group col-md-6" style="margin: auto;margin-top:10px;">
                                 <label class="control-label">Branch Name</label>
-                                <div class="controls readonly" ng-model="assignTeam.branchName" th:text="${teamDetail.branchName}"></div>
+                                <div class="controls readonly" ng-model="assignTeam.branchName">{{assignTeam.branchName}}</div>
                             </div>
                             <div class="form-group col-md-6 required" style="margin: auto;margin-top:10px;">
                                 <label class="control-label">Team Leader</label>
-                                <select class="form-control input-sm" ng-model="assignTeam.teamLeader" th:text="${teamDetail.currentTeamLeader}">
-                                    <option  ng-options="teamLeader.teamLeaderId as teamLeader.firstName + ' ' + teamLeader.lastName for teamLeader in teamLeaders" ></option>
+                                <select class="form-control input-sm"  ng-model="assignTeam.currentTeamLeader" value="{{assignTeam.currentTeamLeader}}">
+                                    <option ng-options="teamLeader.teamLeaderId as teamLeader.firstName + ' ' + teamLeader.lastName for teamLeader in teamLeaders" ></option>
                                 </select>
                             </div>
                             <div class="form-group col-md-6 required" style="margin: auto;margin-top:10px;" >
                                 <label class="control-label">Team Leader From</label>
                                 <p class="input-group">
-                                    <input type="text" class="form-control input-sm" ng-click="open($event)" min-date="selectedDate"  datepicker-popup="dd/MM/yyyy" ng-model="assignTeam.fromDate"  datepicker-options="datePickerSettings.dateOptions" is-open="datePickerSettings.isOpened"  close-text="Close" />
+                                    <input type="text" class="form-control input-sm" ng-click="open($event)" min-date="selectedDate"  value="{{assignTeam.fromDate}}" datepicker-popup="dd/MM/yyyy" ng-model="assignTeam.fromDate"  datepicker-options="datePickerSettings.dateOptions" is-open="datePickerSettings.isOpened"  close-text="Close" />
                                      <span class="input-group-btn">
                                             <button type="button" class="btn btn-default btn-sm" ng-click="open($event)"><i class="glyphicon glyphicon-calendar"></i></button>
                                      </span>
