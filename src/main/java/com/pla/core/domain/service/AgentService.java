@@ -10,11 +10,14 @@ import com.pla.core.application.agent.CreateAgentCommand;
 import com.pla.core.application.agent.UpdateAgentCommand;
 import com.pla.core.domain.model.Admin;
 import com.pla.core.domain.model.agent.Agent;
+import com.pla.core.domain.model.agent.AgentId;
 import com.pla.core.domain.model.agent.LicenseNumber;
 import com.pla.core.specification.AgentLicenseNumberIsUnique;
+import org.nthdimenzion.common.service.JpaRepositoryFactory;
 import org.nthdimenzion.ddd.domain.annotations.DomainService;
 import org.nthdimenzion.utils.UtilValidator;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.repository.JpaRepository;
 
 /**
  * @author: Samir
@@ -27,25 +30,33 @@ public class AgentService {
 
     private AgentLicenseNumberIsUnique agentLicenseNumberIsUnique;
 
+    private JpaRepositoryFactory jpaRepositoryFactory;
+
     @Autowired
-    public AgentService(AdminRoleAdapter adminRoleAdapter, AgentLicenseNumberIsUnique agentLicenseNumberIsUnique) {
+    public AgentService(AdminRoleAdapter adminRoleAdapter, AgentLicenseNumberIsUnique agentLicenseNumberIsUnique, JpaRepositoryFactory jpaRepositoryFactory) {
         this.adminRoleAdapter = adminRoleAdapter;
         this.agentLicenseNumberIsUnique = agentLicenseNumberIsUnique;
+        this.jpaRepositoryFactory = jpaRepositoryFactory;
     }
 
-    public Agent createAgent(CreateAgentCommand createAgentCommand) {
+    public void createAgent(CreateAgentCommand createAgentCommand) {
         UtilValidator.isNotEmpty("");
         boolean isLicenseNumberUnique = UtilValidator.isNotEmpty(createAgentCommand.getLicenseNumber().getLicenseNumber()) ? agentLicenseNumberIsUnique.isSatisfiedBy(new LicenseNumber(createAgentCommand.getLicenseNumber().getLicenseNumber())) : true;
         Admin admin = adminRoleAdapter.userToAdmin(createAgentCommand.getUserDetails());
-        return admin.createAgent(isLicenseNumberUnique, createAgentCommand);
+        Agent agent = admin.createAgent(isLicenseNumberUnique, createAgentCommand);
+        JpaRepository<Agent, AgentId> agentRepository = jpaRepositoryFactory.getCrudRepository(Agent.class);
+        agentRepository.save(agent);
     }
 
-    public Agent updateAgent(Agent agent, UpdateAgentCommand updateAgentCommand) {
+    public void updateAgent(UpdateAgentCommand updateAgentCommand) {
         boolean isLicenseNumberUnique = true;
+        JpaRepository<Agent, AgentId> agentRepository = jpaRepositoryFactory.getCrudRepository(Agent.class);
+        Agent agent = agentRepository.getOne(new AgentId(updateAgentCommand.getAgentId()));
         if (UtilValidator.isNotEmpty(updateAgentCommand.getLicenseNumber().getLicenseNumber()) && !(agent.getLicenseNumber().getLicenseNumber().equals(updateAgentCommand.getLicenseNumber().getLicenseNumber()))) {
             isLicenseNumberUnique = agentLicenseNumberIsUnique.isSatisfiedBy(new LicenseNumber(updateAgentCommand.getLicenseNumber().getLicenseNumber()));
         }
         Admin admin = adminRoleAdapter.userToAdmin(updateAgentCommand.getUserDetails());
-        return admin.updateAgent(agent, isLicenseNumberUnique, updateAgentCommand);
+        Agent updatedAgent = admin.updateAgent(agent, isLicenseNumberUnique, updateAgentCommand);
+        agentRepository.save(updatedAgent);
     }
 }
