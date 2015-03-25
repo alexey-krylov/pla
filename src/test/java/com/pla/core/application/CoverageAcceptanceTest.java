@@ -10,7 +10,6 @@ import com.google.common.collect.Lists;
 import com.pla.core.domain.model.BenefitId;
 import org.axonframework.commandhandling.gateway.CommandGateway;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.nthdimenzion.security.service.UserLoginDetailDto;
@@ -54,8 +53,9 @@ public class CoverageAcceptanceTest {
     }
 
     @Test
-    @DatabaseSetup(value = "classpath:testdata/endtoend/benefit/expectedupdatedbenefitdata.xml",type = DatabaseOperation.CLEAN_INSERT)
+    @DatabaseSetup(value = "classpath:testdata/endtoend/coverage/testbenefitdataforcreatecoverage.xml",type = DatabaseOperation.CLEAN_INSERT)
     @ExpectedDatabase(value = "classpath:testdata/endtoend/coverage/expectedcoveragedata.xml", assertionMode = DatabaseAssertionMode.NON_STRICT)
+//    @DatabaseTearDown(value = "classpath:testdata/endtoend/coverage/testbenefitdataforcreatecoverage.xml",type = DatabaseOperation.TRUNCATE_TABLE)
     public void givenACoverageNameAndSetOfBenefit_whenTheCoverageNameIsUniqueAndUserHasAdminRole_thenCreateACoverage() {
 
         Set<BenefitId> backendIdSet = new HashSet<>();
@@ -72,6 +72,7 @@ public class CoverageAcceptanceTest {
         assertTrue(isSuccess);
 
     }
+
 
     @Test
     @DatabaseSetup(value = "classpath:testdata/endtoend/coverage/testdataforupdatecoverage.xml",type = DatabaseOperation.CLEAN_INSERT)
@@ -111,12 +112,10 @@ public class CoverageAcceptanceTest {
 
     }
 
-
-    @Ignore
     @Test
     @DatabaseSetup(value = "classpath:testdata/endtoend/coverage/testdataformarkcoverageinuse.xml",type = DatabaseOperation.CLEAN_INSERT)
     @ExpectedDatabase(value = "classpath:testdata/endtoend/coverage/expectedtestdataformakecoverageasinuse.xml", assertionMode = DatabaseAssertionMode.NON_STRICT)
-    @DatabaseTearDown(value = "classpath:testdata/endtoend/coverage/testdataformarkcoverageinuse.xml",type = DatabaseOperation.DELETE)
+//    @DatabaseTearDown(value = "classpath:testdata/endtoend/coverage/testdataformarkcoverageinuse.xml",type = DatabaseOperation.DELETE)
     public void givenACoverageId_whenTheCoverageStatusActive_thenMarkCoverageAsInUse() {
 
         MarkCoverageAsUsedCommand markCoverageAsUsedCommand = new MarkCoverageAsUsedCommand("C003");

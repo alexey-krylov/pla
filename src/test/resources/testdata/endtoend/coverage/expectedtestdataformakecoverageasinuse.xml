@@ -2,11 +2,11 @@
 
 <dataset>
 
+    <benefit benefit_id="B001"  status="ACTIVE"/>
+
+
     <coverage coverage_id="C003" coverage_name="testing Coverage name for marking in use"  STATUS="INUSE" />
 
-    <!-- <coverage_benefit  benefit_id="1" />
-     <coverage_benefit  benefit_id="2" />
-     <coverage_benefit  benefit_id="3" />
-     <coverage_benefit  benefit_id="4" />-->
+    <!--  <coverage_benefit coverage_id="C003" benefit_id="B001" />-->
 
 </dataset>

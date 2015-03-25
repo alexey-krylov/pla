@@ -1,4 +1,4 @@
-package com.pla.core.domain.model.plan;
+package com.pla.core.domain.model;
 
 import com.pla.core.domain.exception.CoverageException;
 import com.pla.core.domain.model.*;

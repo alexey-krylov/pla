@@ -4,9 +4,6 @@
 
     <coverage coverage_name="testing Coverage name" description="coverage description" STATUS="ACTIVE" />
 
-   <!-- <coverage_benefit  benefit_id="1" />
-    <coverage_benefit  benefit_id="2" />
-    <coverage_benefit  benefit_id="3" />
-    <coverage_benefit  benefit_id="4" />-->
-
+    <COVERAGE_BENEFIT  BENEFIT_ID="2" />
+    <COVERAGE_BENEFIT  BENEFIT_ID="1" />
 </dataset>

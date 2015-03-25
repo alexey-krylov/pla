@@ -86,7 +86,7 @@ DROP TABLE IF EXISTS coverage_benefit;
 CREATE TABLE `coverage_benefit` (
   `coverage_id` varchar(255) NOT NULL,
   `benefit_id` varchar(255) NOT NULL,
-  UNIQUE KEY `UK_BENEFIT_ID` (`benefit_id`),
+ /* UNIQUE KEY `UK_BENEFIT_ID` (`benefit_id`),*/
   KEY `FK_COVERAGE_ID` (`coverage_id`),
   CONSTRAINT `FK_COVERAGE_COVERAGE_ID` FOREIGN KEY (`coverage_id`) REFERENCES `coverage` (`coverage_id`),
   CONSTRAINT `FK_BENEFIT_BENEFIT_ID` FOREIGN KEY (`benefit_id`) REFERENCES `benefit` (`benefit_id`)

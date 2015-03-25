@@ -41,7 +41,7 @@ public class Coverage implements ICrudEntity {
     @Enumerated(EnumType.STRING)
     private CoverageStatus status;
 
-    @OneToMany(targetEntity = Benefit.class, fetch = FetchType.EAGER)
+    @ManyToMany(targetEntity = Benefit.class, fetch = FetchType.EAGER)
     @JoinTable(name = "coverage_benefit", joinColumns = @JoinColumn(name = "COVERAGE_ID"), inverseJoinColumns = @JoinColumn(name = "BENEFIT_ID"))
     private Set<Benefit> benefits;
 

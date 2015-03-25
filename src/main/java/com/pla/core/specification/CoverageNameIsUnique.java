@@ -25,7 +25,7 @@ public class CoverageNameIsUnique implements ISpecification<CoverageName> {
     }
 
     @Override
-    public boolean isSatisfiedBy(CoverageName candidate) {
+     public boolean isSatisfiedBy(CoverageName candidate) {
         int coverageCount = coverageFinder.getCoverageCountByCoverageName(candidate.toString());
         return coverageCount == 0;
     }
