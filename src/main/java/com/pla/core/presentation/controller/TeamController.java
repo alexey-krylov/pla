@@ -5,6 +5,7 @@ import com.pla.core.application.CreateTeamCommand;
 import com.pla.core.application.UpdateTeamCommand;
 import com.pla.core.query.MasterFinder;
 import com.pla.core.query.TeamFinder;
+import com.sun.org.apache.regexp.internal.RE;
 import org.axonframework.commandhandling.gateway.CommandGateway;
 import org.nthdimenzion.presentation.Result;
 import org.slf4j.Logger;
@@ -71,7 +72,7 @@ public class TeamController {
     }
 
 
-    @RequestMapping(value = "/team/getteamleaders", produces = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(value = "/team/getteamleaders" ,method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public List<Map<String, Object>> getAllTeamLeaders() {
         Map<String, Object> teamLeader = new HashMap<>();

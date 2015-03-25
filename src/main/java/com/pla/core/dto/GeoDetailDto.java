@@ -6,6 +6,7 @@
 
 package com.pla.core.dto;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -38,6 +39,12 @@ public class GeoDetailDto {
 
     private String cityCode;
 
+
+    public GeoDetailDto(Integer postalCode, String cityCode, String provinceCode) {
+        this.postalCode = postalCode;
+        this.cityCode = cityCode;
+        this.provinceCode = provinceCode;
+    }
 
     public static GeoDetailDto transformToGeoDetailDtoPrimaryContactDetail(Map<String, Object> agentDetail) {
         GeoDetailDto geoDetailDto = new GeoDetailDto();

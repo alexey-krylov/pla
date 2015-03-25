@@ -8,6 +8,9 @@
 <body style="padding-top: 70px;" >
 <div th:include="fragments/common :: bodyHeader" th:remove="tag"/>
 <script>
+   require(['moment'], function(moment) {
+   // alert(moment().format('dddd, MMMM Do YYYY, h:mm:ss a'));
+    });
     requirejs(['main'],function(){
     require(['/pla/js/team/createTeam.js'],function(){
     angular.bootstrap(document, ['createTeam']);
@@ -41,28 +44,29 @@
                             </div>
                             <div class="form-group col-md-6 required" style="margin: auto;margin-top:10px;">
                                 <label class="control-label">Team Name</label>
-                                <input type="text" name="teamName" ng-required="true" maxlength="50" class="form-control input-sm"
+                                <input type="text" name="teamName"  maxlength="50" class="form-control input-sm"
                                        id="teamName" ng-model="createTeam.teamName" />
                                 <span hidden="true"
                                       style="color: darkred;font-size: 10px">Please check if it is empty </span>
                             </div>
                             <div class="form-group col-md-6 required" style="margin: auto;margin-top:10px;">
                                 <label class="control-label">Team Code</label>
-                                <input type="text" name="teamCode" ng-required="true" maxlength="50" class="form-control input-sm"
+                                <input type="text" name="teamCode"  maxlength="50" class="form-control input-sm"
                                        id="teamCode" ng-model="createTeam.teamCode" />
                                 <span hidden="true"
                                       style="color: darkred;font-size: 10px">Please check if it is empty </span>
                             </div>
-                            <div class="form-group col-md-6" style="margin: auto;margin-top:10px;">
+                            <div class="form-group col-md-6 required" style="margin: auto;margin-top:10px;">
                                 <label class="control-label">Team Leader</label>
-                                <select class="form-control input-sm" id="teamLeader" ng-model="createTeam.employeeId">
-                                    <option th:each="teamLeader : ${teamLeaders}" th:value="${teamLeader.employeeId}" th:text="|${teamLeader.firstName} ${teamLeader.lastName}|"></option>
-                                    </select>
+                                <select class="form-control input-sm" id="teamLeader" ng-model="createTeam.teamLeader">
+                                    <option ng-options="teamLeader.teamLeaderId as teamLeader.firstName + ' ' + teamLeader.lastName for teamLeader in teamLeaders"></option>
+                                </select>
+
                             </div>
-                            <div class="form-group col-md-6" style="margin: auto;margin-top:10px;">
+                            <div class="form-group col-md-6 required "  style="margin: auto;margin-top:10px;">
                                 <label class="control-label">Team Leader From</label>
                                 <p class="input-group">
-                                    <input type="text" class="form-control input-sm" ng-click="open($event)" min="minEndDate" max="maxEndDate" datepicker-popup="dd/MM/yyyy" data-date-type="number" ng-model="end"  datepicker-options="datePickerSettings.dateOptions" is-open="datePickerSettings.isOpened"  close-text="Close" />
+                                    <input type="text" class="form-control input-sm" ng-click="open($event)"  min-date="selectedDate"   datepicker-popup="dd/MM/yyyy"  ng-model="createTeam.fromDate"  datepicker-options="datePickerSettings.dateOptions" is-open="datePickerSettings.isOpened"  close-text="Close" />
                                         <span class="input-group-btn">
                                             <button type="button" class="btn btn-default btn-sm" ng-click="open($event)"><i class="glyphicon glyphicon-calendar"></i></button>
                                         </span>
@@ -73,7 +77,9 @@
                         <div class="row">
                             <div class="form-group col-lg-12" >
                                 <button type="button" class="btn btn-default" style="float:right;" ng-disabled="(!createTeam.regionCode || !createTeam.branchCode || !createTeam.teamName || !createTeam.teamCode || !createTeam.employeeId || !createTeam.fromDate )"  ng-click="submitTeam()">Save</button>
-                                <a class="btn btn-default"  style="float:left;" th:href="@{/core/team/view}">Cancel</a>
+                                <a class="btn btn-default"  style="float:left;" th:href="@{/core/team/view}" >Cancel</a>
+                               <!-- <button class="btn btn-lg btn-primary"  data-placement="top" data-container="body" data-duration="3" bs-alert="alert">Click to toggle alert </button>-->
+
                             </div>
                         </div>
                     </form>

@@ -6,7 +6,9 @@
 
 package com.pla.core.dto;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.joda.time.LocalDate;
@@ -20,6 +22,8 @@ import java.util.Map;
  */
 @Getter
 @Setter
+@AllArgsConstructor
+@NoArgsConstructor
 public class AgentProfileDto {
 
     private String title;
@@ -47,7 +51,7 @@ public class AgentProfileDto {
         agentProfileDto.setEmployeeId(agentDetail.get("employeeId") != null ? (String) agentDetail.get("employeeId") : null);
         agentProfileDto.setFirstName(agentDetail.get("firstName") != null ? (String) agentDetail.get("firstName") : null);
         agentProfileDto.setLastName(agentDetail.get("lastName") != null ? (String) agentDetail.get("lastName") : null);
-        agentProfileDto.setNrcNumber(agentDetail.get("nrcNumber") != null ? ((Long) agentDetail.get("nrcNumber")).intValue() : null);
+        agentProfileDto.setNrcNumber(agentDetail.get("nrcNumber") != null ? ((Integer) agentDetail.get("nrcNumber")) : null);
         DesignationDto designationDto = agentDetail.get("designationCode") != null ? new DesignationDto(((String) agentDetail.get("designationCode")), ((String) agentDetail.get("designationName"))) : null;
         agentProfileDto.setDesignationDto(designationDto);
         return agentProfileDto;

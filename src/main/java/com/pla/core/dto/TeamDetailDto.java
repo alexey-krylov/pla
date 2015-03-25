@@ -35,4 +35,8 @@ public class TeamDetailDto {
     private String leaderFirstName;
 
     private String leaderLastName;
+
+    public TeamDetailDto(String teamId) {
+        this.teamId = teamId;
+    }
 }

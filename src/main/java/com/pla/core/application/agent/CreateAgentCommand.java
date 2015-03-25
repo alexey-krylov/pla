@@ -72,7 +72,7 @@ public class CreateAgentCommand {
         List<Map<String, Object>> agentPlans = allAgentPlans.stream().filter(new FilterAgentPlanByAgentId((String) agentDetail.get("agentId"))).collect(Collectors.toList());
         Set<PlanId> authorizedPlanToSell = agentPlans.stream().map(new TransformAgentPlanToPlanId()).collect(Collectors.toSet());
         createAgentCommand.setAuthorizePlansToSell(authorizedPlanToSell);
-        createAgentCommand.setAgentStatus(AgentStatus.valueOf((String)agentDetail.get("agentStatus")));
+        createAgentCommand.setAgentStatus(AgentStatus.valueOf((String) agentDetail.get("agentStatus")));
         return createAgentCommand;
     }
 

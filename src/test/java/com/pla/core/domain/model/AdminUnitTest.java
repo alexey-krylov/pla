@@ -6,6 +6,9 @@
 
 package com.pla.core.domain.model;
 
+import com.pla.core.application.agent.CreateAgentCommand;
+import com.pla.core.domain.exception.AgentException;
+import com.pla.core.domain.model.agent.Agent;
 import com.pla.core.dto.BenefitDto;
 import com.pla.core.query.BenefitFinder;
 import com.pla.core.specification.BenefitIsAssociatedWithCoverage;
@@ -47,7 +50,7 @@ public class AdminUnitTest {
     @Test
     public void givenABenefitNameItShouldCreateBenefit() {
         String name = "CI Benefit";
-        BenefitDto benefitDto = new BenefitDto("1",name);
+        BenefitDto benefitDto = new BenefitDto("1", name);
         boolean isBenefitNameUnique = true;
         when(benefitNameIsUnique.isSatisfiedBy(benefitDto)).thenReturn(isBenefitNameUnique);
         Benefit benefit = admin.createBenefit(isBenefitNameUnique, "1", name);
@@ -59,7 +62,7 @@ public class AdminUnitTest {
     @Test
     public void itShouldInactivateABenefit() {
         String name = "CI Benefit";
-        BenefitDto benefitDto = new BenefitDto("1",name);
+        BenefitDto benefitDto = new BenefitDto("1", name);
         boolean isBenefitNameUnique = true;
         when(benefitNameIsUnique.isSatisfiedBy(benefitDto)).thenReturn(isBenefitNameUnique);
         Benefit benefit = admin.createBenefit(isBenefitNameUnique, "1", name);
@@ -70,7 +73,7 @@ public class AdminUnitTest {
     @Test
     public void itShouldUpdateABenefit() {
         String name = "CI Benefit";
-        BenefitDto benefitDto = new BenefitDto("1",name);
+        BenefitDto benefitDto = new BenefitDto("1", name);
         boolean isBenefitNameUnique = true;
         when(benefitNameIsUnique.isSatisfiedBy(benefitDto)).thenReturn(isBenefitNameUnique);
         boolean isUpdatable = true;
@@ -80,5 +83,15 @@ public class AdminUnitTest {
         Benefit updatedBenefit = admin.updateBenefit(benefit, updatedName, isUpdatable);
         BenefitName updatedBenefitName = (BenefitName) invokeGetterMethod(updatedBenefit, "getBenefitName");
         assertEquals(updatedName, updatedBenefitName.getBenefitName());
+    }
+
+    @Test(expected = AgentException.class)
+    public void itShouldNotCreateAgentWhenLicenseNumberIsNotUnique() {
+        Agent agent = admin.createAgent(false,new CreateAgentCommand());
+    }
+
+    @Test(expected = AgentException.class)
+    public void itShouldNotUpdateAgentWhenLicenseNumberIsNotUnique() {
+        Agent agent = admin.createAgent(false,new CreateAgentCommand());
     }
 }

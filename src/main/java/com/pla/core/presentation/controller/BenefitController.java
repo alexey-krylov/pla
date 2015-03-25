@@ -72,7 +72,7 @@ public class BenefitController {
             return Result.failure("Error in creating benefit");
         } catch (Exception e) {
             LOGGER.error("Error in creating benefit", e);
-            return Result.failure("Error in creating benefit");
+            return Result.failure(e.getMessage());
         }
         return Result.success("Benefit created successfully");
     }

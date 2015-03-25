@@ -53,10 +53,4 @@ public class PhysicalAddress {
         return contactDetail;
     }
 
-    public PhysicalAddress updateContactDetail(String addressLine1, GeoDetail geoDetail) {
-        checkArgument(isNotEmpty(addressLine1));
-        checkArgument(geoDetail != null);
-        PhysicalAddress contactDetail = new PhysicalAddress(addressLine1, geoDetail);
-        return contactDetail;
-    }
 }

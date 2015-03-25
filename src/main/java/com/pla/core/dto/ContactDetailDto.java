@@ -6,16 +6,15 @@
 
 package com.pla.core.dto;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.validation.constraints.NotNull;
-
 import java.util.Map;
-
-import static com.google.common.base.Preconditions.checkArgument;
-import static org.nthdimenzion.utils.UtilValidator.isNotEmpty;
 
 /**
  * @author: Samir
@@ -24,6 +23,7 @@ import static org.nthdimenzion.utils.UtilValidator.isNotEmpty;
 @Getter
 @Setter
 @NoArgsConstructor
+@AllArgsConstructor
 public class ContactDetailDto {
 
     @NotNull(message = "{Mobile number cannot be null}")
@@ -55,5 +55,6 @@ public class ContactDetailDto {
         contactDetailDto.setGeoDetail(GeoDetailDto.transformToGeoDetailDtoPrimaryContactDetail(agentDetail));
         return contactDetailDto;
     }
+
 
 }
