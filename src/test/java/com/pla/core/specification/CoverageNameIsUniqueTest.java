@@ -34,14 +34,6 @@ public class CoverageNameIsUniqueTest {
         assertThat(true, is(alreadyExists));
     }
 
-    @Ignore
-    @Test
-    public void givenACoverageName_whenTheCoverageNameIsUnique_thenItShouldReturnAsFalse() {
-        when(coverageFinder.getCoverageCountByCoverageName("another Coverage Name")).thenReturn(1);
-        CoverageNameIsUnique coverageNameIsUnique = new CoverageNameIsUnique(coverageFinder);
-        CoverageName coverageName = new CoverageName("another Coverage Name");
-        boolean alreadyExists = coverageNameIsUnique.isSatisfiedBy(coverageName);
-        assertThat(false, is(alreadyExists));
-    }
-    }
+
+}
 
