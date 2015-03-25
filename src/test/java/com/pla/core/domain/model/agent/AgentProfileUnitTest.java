@@ -6,10 +6,10 @@
 
 package com.pla.core.domain.model.agent;
 
+import org.joda.time.LocalDate;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.time.LocalDate;
 
 import static org.junit.Assert.assertEquals;
 
