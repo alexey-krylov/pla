@@ -15,6 +15,7 @@ import lombok.Setter;
  * @since 1.0 16/03/2015
  */
 @Getter
+@EqualsAndHashCode
 @Setter
 public class BenefitDto {
 
