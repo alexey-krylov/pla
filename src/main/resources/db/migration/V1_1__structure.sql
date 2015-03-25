@@ -593,12 +593,16 @@ CREATE TABLE `region` (
   DEFAULT CHARSET =utf8;
 
 DROP TABLE IF EXISTS branch;
+
 CREATE TABLE `branch` (
   `branch_code`    VARCHAR(255) NOT NULL,
-  `branch_bde` VARCHAR(255) DEFAULT NULL,
-  `branch_manager` VARCHAR(255) DEFAULT NULL,
   `branch_name`    VARCHAR(255) DEFAULT NULL,
-  PRIMARY KEY (`branch_code`)
+  `branch_bde`     VARCHAR(255) DEFAULT NULL,
+  `branch_manager` VARCHAR(255) DEFAULT NULL,
+  `region_code`    VARCHAR(255) DEFAULT NULL,
+  PRIMARY KEY (`branch_code`),
+  KEY `FK_BRANCH_REGION_CODE` (`region_code`),
+  CONSTRAINT `FK_BRANCH_REGION_CODE` FOREIGN KEY (`region_code`) REFERENCES `region_branch` (`region_code`)
 )
   ENGINE =InnoDB
   DEFAULT CHARSET =utf8;
@@ -658,19 +662,13 @@ CREATE TABLE `team_team_leader_fulfillment`(
 /*Data for the table `team_team_leader_fulfillment` */
 DROP TABLE IF EXISTS region_manager_fulfillment;
 CREATE TABLE `region_manager_fulfillment` (
-  `region_Code` VARCHAR(255) NOT NULL,
-  `firstName`   VARCHAR(255) NOT NULL,
-  `lastName`    VARCHAR(255) NOT NULL,
-  `fromDate`    DATE         DEFAULT NULL,
-  `thruDate`    DATE         DEFAULT NULL,
-  `employeeId`  VARCHAR(255) NOT NULL,
-  `branchCode`  VARCHAR(255) NOT NULL,
-  `from_date`   DATE         DEFAULT NULL,
-  `employee_id` VARCHAR(255) DEFAULT NULL,
-  `first_name`  VARCHAR(255) DEFAULT NULL,
-  `last_name`   VARCHAR(255) DEFAULT NULL,
-  `thru_date`   DATE         DEFAULT NULL,
-  PRIMARY KEY (`region_Code`),
+  `region_code` varchar(255) NOT NULL,
+  `first_name`  varchar(255) NOT NULL,
+  `last_name`   varchar(255) NOT NULL,
+  `from_date`   date DEFAULT NULL,
+  `thru_date`   date DEFAULT NULL,
+  `employee_id` varchar(255) NULL,
+  PRIMARY KEY (`region_Code`, `employee_id`),
   CONSTRAINT `FK_REGION_CODE_REGION_MANAGER_FULFILLMENT_REGION_CODE` FOREIGN KEY (`region_Code`) REFERENCES `region` (`region_code`)
 )
   ENGINE =InnoDB

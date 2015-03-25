@@ -94,11 +94,14 @@ CREATE TABLE `coverage_benefit` (
 
 DROP TABLE IF EXISTS `branch`;
 CREATE TABLE `branch`(
-  `BRANCH_CODE` varchar(20) NOT NULL,
-  `BRANCH_NAME` varchar(255) NOT NULL,
-  `BRANCH_MANAGER` varchar(255) NOT NULL,
-  `BRANCH_BDE` varchar(255) NOT NULL,
-  PRIMARY KEY (`BRANCH_CODE`)
+  `branch_code` varchar(255) NOT NULL,
+  `branch_name` varchar(255) DEFAULT NULL,
+  `branch_bde` varchar(255) DEFAULT NULL,
+  `branch_manager` varchar(255) DEFAULT NULL,
+  `region_code` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`branch_code`),
+  KEY `FK_BRANCH_REGION_CODE` (`region_code`),
+  CONSTRAINT `FK_BRANCH_REGION_CODE` FOREIGN KEY (`region_code`) REFERENCES `region_branch` (`region_code`)
 );
 
 DROP TABLE IF EXISTS `region`;
@@ -153,20 +156,14 @@ CREATE TABLE `team_team_leader_fulfillment`(
 );
 
 DROP TABLE IF EXISTS region_manager_fulfillment;
-CREATE TABLE `region_manager_fulfillment` (
-  `region_Code` varchar(255) NOT NULL,
-  `firstName` varchar(255) NOT NULL,
-  `lastName` varchar(255) NOT NULL,
-  `fromDate` date DEFAULT NULL,
-  `thruDate` date DEFAULT NULL,
-  `employeeId` varchar(255) NOT NULL,
-  `branchCode` varchar(255) NOT NULL,
+CREATE TABLE `region_manager_fulfillment`(
+  `region_code` varchar(255) NOT NULL,
+  `first_name` varchar(255) NOT NULL,
+  `last_name` varchar(255) NOT NULL,
   `from_date` date DEFAULT NULL,
-  `employee_id` varchar(255) DEFAULT NULL,
-  `first_name` varchar(255) DEFAULT NULL,
-  `last_name` varchar(255) DEFAULT NULL,
   `thru_date` date DEFAULT NULL,
-  PRIMARY KEY (`region_Code`),
+  `employee_id` varchar(255) NULL,
+  PRIMARY KEY (`region_Code`,`employee_id`),
   CONSTRAINT `FK_REGION_CODE_REGION_MANAGER_FULFILLMENT_REGION_CODE` FOREIGN KEY (`region_Code`) REFERENCES `region` (`region_code`)
 ) ;
 
