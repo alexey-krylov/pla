@@ -52,7 +52,8 @@ public class CoverageFinder {
         List<CoverageDto> listOfActiveCoverage  = namedParameterJdbcTemplate.query(findAllCoverageQuery, new BeanPropertyRowMapper(CoverageDto.class));
         for (CoverageDto coverageDto : listOfActiveCoverage){
             SqlParameterSource sqlParameterSource = new MapSqlParameterSource("coverageId",coverageDto.getCoverageId());
-            coverageDto.benefitDtos  = namedParameterJdbcTemplate.query(findAllBenefitsAssociatedWithTheCoverageQuery, sqlParameterSource,new BeanPropertyRowMapper(BenefitDto.class));
+            List<BenefitDto> listOfBenefits = namedParameterJdbcTemplate.query(findAllBenefitsAssociatedWithTheCoverageQuery, sqlParameterSource, new BeanPropertyRowMapper(BenefitDto.class));
+            coverageDto.setBenefitDtos(listOfBenefits);
         }
         return listOfActiveCoverage;
     }

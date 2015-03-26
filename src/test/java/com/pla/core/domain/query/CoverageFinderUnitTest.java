@@ -45,10 +45,10 @@ public class CoverageFinderUnitTest {
         List<CoverageDto> coverageDtos = new ArrayList<>();
 
         CoverageDto coverageDto = new CoverageDto();
-        coverageDto.coverageId="C001";
-        coverageDto.coverageName="coverage name One";
-        coverageDto.description="description one";
-        coverageDto.coverageStatus="ACTIVE";
+        coverageDto.setCoverageId("C001");
+        coverageDto.setCoverageName("coverage name One");
+        coverageDto.setDescription("description one");
+        coverageDto.setCoverageStatus("ACTIVE");
 
         List<BenefitDto> benefitDtos = new ArrayList<>();
 
@@ -62,13 +62,13 @@ public class CoverageFinderUnitTest {
         benefitDto.setBenefitName("benefit name two");
         benefitDtos.add(benefitDto);
 
-        coverageDto.benefitDtos=benefitDtos;
+        coverageDto.setBenefitDtos(benefitDtos);
         coverageDtos.add(coverageDto);
 
         List<CoverageDto> listOfActiveCoverage = coverageFinder.getAllCoverage();
         assertThat(4, is(listOfActiveCoverage.size()));
-        assertThat(2, is(listOfActiveCoverage.get(0).benefitDtos.size()));
-        assertThat("benefit name one", is(listOfActiveCoverage.get(0).benefitDtos.get(0).getBenefitName()));
+        assertThat(2, is(listOfActiveCoverage.get(0).getBenefitDtos().size()));
+        assertThat("benefit name one", is(listOfActiveCoverage.get(0).getBenefitDtos().get(0).getBenefitName()));
 
     }
 
