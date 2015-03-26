@@ -1,11 +1,9 @@
 package com.pla.core.dto;
 
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.util.List;
-import java.util.Set;
 
 /**
  * Created by Admin on 3/24/2015.
