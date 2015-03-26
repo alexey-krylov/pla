@@ -1,24 +1,18 @@
 package com.pla.core.query;
 
-import com.google.common.base.Function;
 import com.google.common.base.Preconditions;
-import com.google.common.collect.FluentIterable;
-import com.google.common.collect.Lists;
 import com.pla.core.dto.BenefitDto;
 import com.pla.core.dto.CoverageDto;
 import org.nthdimenzion.ddd.domain.annotations.Finder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
-import org.springframework.jdbc.core.ColumnMapRowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.stereotype.Service;
 
 import javax.sql.DataSource;
-import javax.validation.constraints.NotNull;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Created with IntelliJ IDEA.
@@ -50,8 +44,8 @@ public class CoverageFinder {
 
     public int getCoverageCountByCoverageName(String coverageName){
         Preconditions.checkNotNull(coverageName);
-        Number noOfBenefit = namedParameterJdbcTemplate.queryForObject(activeCoverageCountByCoverageNameQuery, new MapSqlParameterSource().addValue("coverageName", coverageName), Number.class);
-        return noOfBenefit.intValue();
+        Number noOfCoverages = namedParameterJdbcTemplate.queryForObject(activeCoverageCountByCoverageNameQuery, new MapSqlParameterSource().addValue("coverageName", coverageName), Number.class);
+        return noOfCoverages.intValue();
     }
 
     public List<CoverageDto> getAllCoverage() {
