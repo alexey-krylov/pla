@@ -8,7 +8,6 @@ package com.pla.core.domain.model;
 
 import com.google.common.base.Preconditions;
 import lombok.*;
-import org.hibernate.annotations.Immutable;
 import org.nthdimenzion.ddd.domain.annotations.ValueObject;
 
 import javax.persistence.Column;
@@ -19,13 +18,12 @@ import javax.persistence.Embeddable;
  * @since 1.0 10/03/2015
  */
 @ValueObject
-@Immutable
 @Embeddable
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 @ToString(of = "coverageName")
 @EqualsAndHashCode(of = "coverageName")
 @Getter
-public class CoverageName {
+public  class CoverageName {
 
     @Column(length = 50)
     private String coverageName;

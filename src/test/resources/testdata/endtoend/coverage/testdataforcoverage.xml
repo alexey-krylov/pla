@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<dataset>
+
+    <coverage coverage_id="C001" coverage_name="testing Coverage one"  STATUS="ACTIVE" />
+    <coverage coverage_id="C002" coverage_name="testing Coverage two"  STATUS="ACTIVE" />
+    <coverage coverage_id="C003" coverage_name="testing Coverage three" STATUS="ACTIVE" />
+    <coverage coverage_id="C004" coverage_name="testing Coverage four"  STATUS="ACTIVE" />
+
+    <benefit benefit_id="B001" benefit_name="benefit name one" status="ACTIVE" />
+    <benefit benefit_id="B002" benefit_name="benefit name two" status="ACTIVE" />
+    <benefit benefit_id="B003" benefit_name="benefit name three" status="ACTIVE" />
+    <benefit benefit_id="B004" benefit_name="benefit name four" status="ACTIVE" />
+
+
+     <coverage_benefit   coverage_id="C001" benefit_id="B001" />
+     <coverage_benefit   coverage_id="C001" benefit_id="B002" />
+     <coverage_benefit   coverage_id="C003" benefit_id="B003" />
+     <coverage_benefit   coverage_id="C004"  benefit_id="B001" />
+
+</dataset>

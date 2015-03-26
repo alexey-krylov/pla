@@ -109,7 +109,7 @@ public class CoverageCommandHandler {
         }
     }
 
-    public Set<Benefit> findBenefitById(Set<BenefitId> benefitIds){
+    private Set<Benefit> findBenefitById(Set<BenefitId> benefitIds){
         JpaRepository<Benefit, BenefitId> benefitRepository = jpaRepositoryFactory.getCrudRepository(Benefit.class);
         Set<Benefit> benefitSet = new HashSet<>();
         for (BenefitId benefitId : benefitIds) {
