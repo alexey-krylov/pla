@@ -40,3 +40,8 @@ input.ng-valid.ng-dirty {
 [ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
   display: none !important;
 }
+.fuelux .wizard>.steps li{
+    font-size: 11px!important;
+    padding-left: 20px!important;
+    padding-right: 5px!important;
+}
