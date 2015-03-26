@@ -79,8 +79,8 @@
                         </div>
                         <div class="row">
                             <div class="form-group col-lg-12" >
-                                <!-- ng-disabled="(!createTeam.regionCode || !createTeam.branchCode || !createTeam.teamName || !createTeam.teamCode || !createTeam.employeeId || !createTeam.fromDate )"-->
-                                <button type="button" class="btn btn-default" style="float:right;"   data-placement="top-right" data-container="notification" data-duration="3" bs-alert="alert"   ng-click="submitTeam()">Save</button>
+
+                                <button type="button" class="btn btn-default" style="float:right;"  ng-disabled="(!createTeam.regionCode || !createTeam.branchCode || !createTeam.teamName || !createTeam.teamCode || !createTeam.employeeId || !createTeam.fromDate )" data-placement="top-right" data-container="notification" data-duration="3" bs-alert="alert"   ng-click="submitTeam()">Save</button>
                                 <a class="btn btn-default"  style="float:left;" th:href="@{/core/team/view}" >Cancel</a>
                                <!-- <button class="btn btn-lg btn-primary"  data-placement="top" data-container="body" data-duration="3" bs-alert="alert">Click to toggle alert </button>-->
 
