@@ -1,11 +1,8 @@
-var App = angular.module('createTeam', ['ngRoute','ui.bootstrap','mgcrea.ngStrap.select','mgcrea.ngStrap']);
+var App = angular.module('createTeam', ['ngRoute','ui.bootstrap','ngSanitize','mgcrea.ngStrap.select','mgcrea.ngStrap','mgcrea.ngStrap.alert']);
 
+App.controller('CreateTeamController',['$scope','$http','$templateCache','$timeout','$alert',function($scope,$http,$templateCache,$timeout,$alert){
 
-App.controller('CreateTeamController',['$scope','$http','$alert',function($scope,$http,$alert){
-
-     // $scope.alert = {title: 'Success Message', content: 'Team Created Successfully', type: 'info'};
-       $scope.selectedDate =moment(new Date).format("YYYY-MM-DD");
-      //console.log($scope.selectedDate);
+        $scope.selectedDate =moment().add(1,'days').format("YYYY-MM-DD");
        	$scope.newDateField={};
         $scope.datePickerSettings = {
                 isOpened:false,
@@ -20,30 +17,24 @@ App.controller('CreateTeamController',['$scope','$http','$alert',function($scope
                   $scope.datePickerSettings.isOpened = true;
          };
          $scope.getAllBranch = function(obj){
-                $http.get('http://localhost:6443/pla/core/master/getbranchbyregion?regioncode='+ obj).success(function(data){
+              $http.get('http://localhost:6443/pla/core/master/getbranchbyregion?regioncode='+ obj).success(function(data){
                //  console.log(data);
                  $scope.branchList=data;
-
-                  });
+               });
          }
 
          $scope.submitTeam = function(){
-            $scope.createTeam.fromDate= $scope.selectedDateAsNumber;
 
-          /* if($scope.createTeam.fromDate) {
              if (!moment($scope.createTeam.fromDate,'DD/MM/YYYY').isValid()) {
-             			$scope.newDateField.fromDate = moment($scope.createTeam.fromDate).format("DD/MM/YYYY");
-             			$scope.createTeam.fromDate=$scope.newDateField.fromDate ;
-
+             		$scope.newDateField.fromDate = moment($scope.createTeam.fromDate).format("DD/MM/YYYY");
+             		$scope.createTeam.fromDate=$scope.newDateField.fromDate ;
              }
-            }  */
-           //  $scope.testTeamData={'teamName':'toofan','teamCode':'132','regionCode':'123','branchCode':'666','employeeId':'100','fromDate':'02/05/2015','firstName':'Sara','lastName':'ali'}
-             // console.log($scope.createTeam);
 
-             $http.post('http://localhost:6443/pla/core/team/create', $scope.createTeam).success(function(data){
-                                     console.log(data);
-               //  $scope.alert = {title: 'Success Message', content: 'Team Created Successfully', type: 'info'};
-                                     $scope.reset();
+           //console.log($scope.createTeam);
+           $http.post('http://localhost:6443/pla/core/team/create', $scope.createTeam).success(function(data){
+              //  console.log(data);
+                  $scope.alert = {title:'Success Message! ', content:'Team Created Successfully', type: 'success'};
+                 $scope.reset();
 
              });
          };
@@ -56,6 +47,4 @@ App.controller('CreateTeamController',['$scope','$http','$alert',function($scope
          	 $scope.createTeam.EmployeeId ='';
          	 $scope.createTeam.teamName ='';
          	 }
-
-
  }]);

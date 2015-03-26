@@ -17,7 +17,9 @@
     });
     });
 </script>
+
 <div class="container" style="padding-top: 0px!important;" ng-Controller="CreateTeamController">
+
     <div class="row">
         <div class="col-lg-8" style="left:230px;position:absolute;">
             <div class="panel panel-primary">
@@ -29,6 +31,7 @@
                 </div>
                 <div class="panel-body">
                     <form   novalidate="true" class="css-form">
+                        <notification ></notification>
                         <div class="row">
                             <div class="form-group col-md-6 required" style="margin: auto;margin-top:10px;">
                                 <label class="control-label">Region Name</label>
@@ -66,7 +69,7 @@
                             <div class="form-group col-md-6 required "  style="margin: auto;margin-top:10px;">
                                 <label class="control-label">Team Leader From</label>
                                 <p class="input-group">
-                                    <input type="text" class="form-control input-sm" ng-click="open($event)"  min-date="selectedDate"   datepicker-popup="dd/MM/yyyy"  ng-model="createTeam.fromDate"  datepicker-options="datePickerSettings.dateOptions" is-open="datePickerSettings.isOpened"  close-text="Close" />
+                                    <input type="text" class="form-control input-sm" ng-click="open($event)"  min-date="selectedDate"   datepicker-popup="dd/MM/yyyy"  ng-model="createTeam.fromDate"  datepicker-options="datePickerSettings.dateOptions" is-open="datePickerSettings.isOpened"  close-text="Close" show-button-bar="false" />
                                         <span class="input-group-btn">
                                             <button type="button" class="btn btn-default btn-sm" ng-click="open($event)"><i class="glyphicon glyphicon-calendar"></i></button>
                                         </span>
@@ -76,7 +79,8 @@
                         </div>
                         <div class="row">
                             <div class="form-group col-lg-12" >
-                                <button type="button" class="btn btn-default" style="float:right;" ng-disabled="(!createTeam.regionCode || !createTeam.branchCode || !createTeam.teamName || !createTeam.teamCode || !createTeam.employeeId || !createTeam.fromDate )"  ng-click="submitTeam()">Save</button>
+                                <!-- ng-disabled="(!createTeam.regionCode || !createTeam.branchCode || !createTeam.teamName || !createTeam.teamCode || !createTeam.employeeId || !createTeam.fromDate )"-->
+                                <button type="button" class="btn btn-default" style="float:right;"   data-placement="top-right" data-container="notification" data-duration="3" bs-alert="alert"   ng-click="submitTeam()">Save</button>
                                 <a class="btn btn-default"  style="float:left;" th:href="@{/core/team/view}" >Cancel</a>
                                <!-- <button class="btn btn-lg btn-primary"  data-placement="top" data-container="body" data-duration="3" bs-alert="alert">Click to toggle alert </button>-->
 
