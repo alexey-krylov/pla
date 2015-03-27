@@ -1,4 +1,9 @@
-require(['jquery','bootstrap','datatables'],function(){
+(function(){
+    preConfigurations();
+})();
+
+
+function preConfigurations(){
     $("#benefitName").keydown(function(event){
         if(event.keyCode == 13){
             event.preventDefault();
@@ -10,7 +15,7 @@ require(['jquery','bootstrap','datatables'],function(){
     });
 
     $('#benefit-table').dataTable();
-});
+}
 var convertThymeleafObjectToJavascriptObject= function(thymeleafObject){
     /*pattern : objectName(key=value,key=value)*/
     var javascriptObject = {};
