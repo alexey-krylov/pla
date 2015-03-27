@@ -49,9 +49,13 @@
                 'fuelux': '/pla/webjars/fuelux/3.3.1/js/fuelux',
                 'directives': '/pla/js/common/directives',
                 'services':'/pla/js/common/services',
-                'checklistmodel': '/pla/js/common/checklist-model'
+                'checklistmodel': '/pla/js/common/checklist-model',
+                'commonModule':'/pla/js/common/commonModule'
             },
-            "shim": {"checklistmodel": ["angular"],"directives":{deps:['angular','fuelux']},"fuelux":{deps:['jquery','bootstrap']},"services":{deps:['angular']}},
+            "shim": {"checklistmodel": ["angular"],
+                "directives":{deps:['angular','fuelux']},
+                "fuelux":{deps:['jquery','bootstrap']},
+                "services":{deps:['angular']}}
             "packages": []
         })
     </script>
