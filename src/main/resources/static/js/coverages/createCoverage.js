@@ -2,7 +2,7 @@ var App = angular.module('createCoverage', ['ngRoute','ui.bootstrap','ngSanitize
 
 App.controller('CreateCoverageController',['$scope','$http',function($scope,$http){
           // console.log("CreateCoverageController called ***********************");
-          $http.get('http://localhost:6443/pla/core/benefit/activebenefits').success(function(data){
+          $http.get('/pla/core/benefit/activebenefits').success(function(data){
                                //  console.log(data);
                           $scope.getAllBenefits=data
 

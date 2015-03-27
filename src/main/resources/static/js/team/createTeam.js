@@ -17,7 +17,7 @@ App.controller('CreateTeamController',['$scope','$http','$templateCache','$timeo
                   $scope.datePickerSettings.isOpened = true;
          };
          $scope.getAllBranch = function(obj){
-              $http.get('http://localhost:6443/pla/core/master/getbranchbyregion?regioncode='+ obj).success(function(data){
+              $http.get('/pla/core/master/getbranchbyregion?regioncode='+ obj).success(function(data){
                //  console.log(data);
                  $scope.branchList=data;
                });
@@ -31,7 +31,7 @@ App.controller('CreateTeamController',['$scope','$http','$templateCache','$timeo
              }
 
            //console.log($scope.createTeam);
-           $http.post('http://localhost:6443/pla/core/team/create', $scope.createTeam).success(function(data){
+           $http.post('/pla/core/team/create', $scope.createTeam).success(function(data){
               //  console.log(data);
                   $scope.alert = {title:'Success Message! ', content:'Team Created Successfully', type: 'success'};
                  $scope.reset();

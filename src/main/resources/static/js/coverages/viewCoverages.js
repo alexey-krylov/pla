@@ -46,11 +46,23 @@ var openCoverageCreateModal = function(){
     modalOptions.show = true;
     $('#coverageModal').modal(modalOptions);
 };
-
+var convertThymeleafObjectToJavascriptObject= function(thymeleafObject){
+    /*pattern : objectName(key=value,key=value)*/
+    var javascriptObject = {};
+    thymeleafObject = thymeleafObject.replace("{","");
+    thymeleafObject = thymeleafObject.replace("}","");
+    $.each(thymeleafObject.split(","),function(key,value){
+        var keyValue = value.split("=");
+        javascriptObject[keyValue[0].trim()]=keyValue[1].trim()
+    });
+    return javascriptObject;
+};
 var openCoverageUpdateModal = function(coverage){
-    console.log("coverage obj*************"+coverage.coverageName);
-    $('#coverageName').val(coverage.coverageName);
-    $('#description').val(coverage.description);
+   var coverageMap = convertThymeleafObjectToJavascriptObject(coverage);
+
+    console.log("coverage obj*************"+coverageMap.coverageName);
+    $('#coverageName').val(coverageMap.coverageName);
+    $('#description').val(coverageMap.description);
     $('#createUpdate').text('Update');
     $('#alert').hide();
     $('#alert-danger').hide();
