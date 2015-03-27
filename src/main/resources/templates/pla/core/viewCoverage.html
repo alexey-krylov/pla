@@ -8,11 +8,16 @@
 <body style="padding-top: 70px;">
 <div th:include="fragments/common :: bodyHeader" th:remove="tag"/>
 <script>
-    requirejs(['/pla/js/viewCoverages.js'],function($){
+    requirejs(['/pla/js/coverages/viewCoverages.js'],function($){
 
     });
+    requirejs(['main'],function(){
+    require(['/pla/js/coverages/createCoverage.js'],function(){
+    angular.bootstrap(document, ['createCoverage']);
+    });
+    });
 </script>
-<div class="modal fade" id="coverageModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+<div class="modal fade" id="coverageModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" ng-Controller="CreateCoverageController">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -23,7 +28,7 @@
                 <div class="modal-body">
                     <div class="alert alert-success" hidden="true" id="alert"></div>
                     <div class="alert alert-danger" hidden="true" id="alert-danger"></div>
-                    <div class="form-group" style="margin: auto;">
+                    <div class="form-group required" style="margin: auto;">
                         <label for="coverageName" class="col-sm-3 control-label">Coverage Name</label>
                         <div class="col-sm-9">
                             <input type="text" name="coverageName" required="true" maxlength="50" class="form-control" id="coverageName"  onkeypress="resetError(this)"/>
@@ -33,22 +38,20 @@
                     <div class="form-group" style="margin: auto;margin-top:10px;">
                         <label for="description" class="col-sm-3 control-label">Description</label>
                         <div class="col-sm-9">
-                            <input type="text" name="description"  required="true" maxlength="150" class="form-control" id="description"   onkeypress="resetError(this)"/>
-                            <span hidden="true" style="color: darkred;font-size: 10px">Please check if it is empty or exceeded more than 150 character</span>
+                            <input type="text" name="description"   maxlength="150" class="form-control" id="description"  />
                         </div>
                     </div>
-                   <div class="form-group" style="margin: auto;margin-top:10px;">
+                   <div class="form-group required" style="margin: auto;margin-top:10px;">
                         <label class="col-sm-3 control-label">Benefit(s)</label>
                         <div class="col-sm-9">
-                            <select id="selectedBenefits" class="form-control" multiple="multiple">
-
-                                <option th:each="benefit :${benefits}"  th:text="${{benefit}}" th:value="${{benefit}}" ></option>
-                            </select>
+                            <button type="button" class="btn btn-default bs-select" id="selectedBenefits" required="true" ng-model="createCoverage.benefitIds" data-all-none-buttons="true" data-html="1" data-multiple="1"  ng-options=" benefit.benefitId as benefit.benefitName for benefit in getAllBenefits" onkeypress="resetError(this)">
+                                Action <span class="caret"></span>
+                            </button>
                         </div>
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-primary" id="createUpdate"></button>
+                    <button type="button" class="btn btn-primary" id="createUpdate" ng-disabled="(!createCoverage.benefitIds)" ></button>
                     <button type="button" class="btn btn-danger" data-dismiss="modal" onclick="reload()" id="cancel-button">Cancel</button>
                 </div>
             </form>
@@ -68,7 +71,7 @@
                 Are you sure to inactivate the coverage?
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-primary" onclick="inactivate('abcd','confirm')">Yes</button>
+                <button type="button" class="btn btn-primary" onclick="inactivate('','confirm')">Yes</button>
                 <button type="button" class="btn btn-danger" data-dismiss="modal">No</button>
             </div>
         </div>
@@ -108,21 +111,19 @@
                         </tr>
                         </thead>
                         <tbody>
-                        <tr th:each="coverage : ${coverages}">
-                            <td th:text="${{coverage}}" ></td>
-                            <td>The policy may be structured to payout may be on the policyholder undergoing a surgical
-                                procedure.
-                            </td>
+                        <tr th:each="coverage : ${listOfCoverage}" th:if="${coverage.coverageStatus=='ACTIVE'}">
+                            <td th:text="${{coverage.coverageName}}" ></td>
+                            <td th:text="${{coverage.description}}"></td>
                             <td style="text-align:center">
                                 <div class="bs-example">
-                                    <p class="popover-examples">
-                                        <a href="#" class="btn btn-primary btn-xs" data-toggle="popover">Benefits</a>
+                                    <p class="popover-examples" th:each="benefit : ${coverage.benefitDtos}">
+                                        <a href="#" class="btn btn-primary btn-xs" data-toggle="popover"  th:text="${{benefit.benefitName}}"  >Benefits</a>
                                     </p>
                                 </div>
                             </td>
                             <td style="text-align:center">
                                 <button type="button" class="btn btn-primary btn-xs" th:onclick="'openCoverageUpdateModal(&quot;'+${coverage}+'&quot;)'">Update</button>
-                                <button type="button" class="btn btn-danger btn-xs" data-toggle="modal" data-target="#alert-modal" th:onclick="'inactivate(&quot;'+${coverage}+'&quot;,&quot;save&quot;)'" >Inactivate</button>
+                                <button type="button" class="btn btn-danger btn-xs" data-toggle="modal" data-target="#alert-modal" th:onclick="'inactivate(&quot;'+${coverage.coverageId}+'&quot;,&quot;save&quot;)'" >Inactivate</button>
                             </td>
                         </tr>
                         </tbody>
