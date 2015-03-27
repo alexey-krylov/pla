@@ -43,7 +43,7 @@ public class PlanPersistenceTest {
     @Autowired
     private ApplicationContext applicationContext;
     @Autowired
-    MongoTemplate mongoSpringTemplate;
+    MongoTemplate springMongoTemplate;
     PlanId planId;
     private PlanDetail planDetail;
     private PlanCoverage planCoverage;
@@ -99,11 +99,11 @@ public class PlanPersistenceTest {
         builder.withPolicyTerm(PolicyTermType.SPECIFIED_VALUES,
                 Sets.newHashSet(30, 35, 40, 45, 50, 55, 60), 60);
         Plan plan = builder.build(planId);
-        mongoSpringTemplate.save(plan);
+        springMongoTemplate.save(plan);
 
         BasicDBObject query = new BasicDBObject();
         query.put("planId", planId);
-        DBCollection table = mongoSpringTemplate.getCollection("PLAN");
+        DBCollection table = springMongoTemplate.getCollection("PLAN");
         DBObject savedPlan = table.findOne();
         Assert.assertNotNull(savedPlan);
     }
