@@ -6,8 +6,6 @@ import com.pla.core.application.UpdateBenefitCommand;
 import com.pla.core.application.exception.BenefitApplicationException;
 import com.pla.core.query.BenefitFinder;
 import org.axonframework.commandhandling.gateway.CommandGateway;
-import org.nthdimenzion.common.AppConstants;
-import org.nthdimenzion.presentation.AppUtils;
 import org.nthdimenzion.presentation.Result;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,6 +21,8 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import java.util.List;
+import java.util.Map;
 
 import static org.nthdimenzion.presentation.AppUtils.getLoggedInUSerDetail;
 
@@ -55,6 +55,13 @@ public class BenefitController {
         modelAndView.addObject("benefitList", benefitFinder.getAllBenefit());
         return modelAndView;
     }
+
+    @RequestMapping(value = "/activebenefits", method = RequestMethod.GET)
+    @ResponseBody
+    public List<Map<String, Object>> getActiveBenefit() {
+        return benefitFinder.getAllActiveBenefit();
+    }
+
 
     @RequestMapping(value = "/create", method = RequestMethod.POST)
     public

@@ -45,6 +45,9 @@ public class BenefitFinder {
 
     public static final String BENEFIT_COUNT_ASSOCIATED_WITH_ACTIVE_COVERAGE_Query = "SELECT COUNT(CB.benefit_id) FROM `coverage_benefit` CB,`coverage` C WHERE CB.coverage_id=C.coverage_id AND C.status IN('ACTIVE','INUSE') AND CB.benefit_id=:benefitId";
 
+    public static final String FIND_ALL_ACTIVE_BENEFITS_Query = "SELECT benefit_id benefitId,STATUS STATUS ,benefit_name benefitName FROM " +
+                                                                  " benefit WHERE STATUS='ACTIVE'";
+
     public List<Map<String, Object>> findBenefitFor(String benefitName) {
         return namedParameterJdbcTemplate.query(FIND_BENEFIT_FOR_A_GIVEN_BENEFIT_NAME_Query, Collections.singletonMap("benefitName", benefitName), new ColumnMapRowMapper());
     }
@@ -67,5 +70,9 @@ public class BenefitFinder {
         Preconditions.checkArgument(UtilValidator.isNotEmpty(benefitId));
         Number noOfBenefit = namedParameterJdbcTemplate.queryForObject(BENEFIT_COUNT_ASSOCIATED_WITH_ACTIVE_COVERAGE_Query, new MapSqlParameterSource().addValue("benefitId", benefitId), Number.class);
         return noOfBenefit.intValue();
+    }
+
+    public List<Map<String, Object>> getAllActiveBenefit() {
+        return namedParameterJdbcTemplate.query(FIND_ALL_ACTIVE_BENEFITS_Query, new ColumnMapRowMapper());
     }
 }

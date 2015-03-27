@@ -1,0 +1,53 @@
+[{
+   "firstName": "Alfred",
+   "lastName": "Daka",
+   "middleName": "",
+   "employeeId": "M706",
+   "nrcNumber": "adfaf",
+   "designation": "ASST.MANAGER",
+   "primaryContactDetail": {
+     "addressLine1": "",
+     "addressLine2": "",
+     "postalCode": "",
+     "provience": "",
+     "city": "",
+     "mobileNumber": null,
+     "workPhoneNumber": "",
+     "homePhoneNumber": "",
+     "email": null
+   },
+   "physicalContactDetail": {
+     "addressLine1": "",
+     "addressLine2": "",
+     "postalCode": "",
+     "provience": "",
+     "city": ""
+   }
+ },
+ {
+   "firstName": "Sahir",
+   "lastName": "Raza",
+   "middleName": "",
+   "employeeId": "G721",
+   "nrcNumber": null,
+   "designation": "ARTISAN",
+   "primaryContactDetail": {
+     "addressLine1": "",
+     "addressLine2": "",
+     "postalCode": "",
+     "provience": "",
+     "city": "",
+     "mobileNumber": "22222",
+     "workPhoneNumber": "",
+     "homePhoneNumber": "",
+     "email": "rashid_saba@nthdimenzion.com"
+   },
+   "physicalContactDetail": {
+     "addressLine1": "",
+     "addressLine2": "",
+     "postalCode": "",
+     "provience": "",
+     "city": ""
+   }
+ }
+]
