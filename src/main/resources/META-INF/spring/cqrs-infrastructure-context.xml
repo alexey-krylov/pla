@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:axon="http://www.axonframework.org/schema/core"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns="http://www.springframework.org/schema/beans"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.axonframework.org/schema/core http://www.axonframework.org/schema/axon-core.xsd
+       http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+
+    <import resource="persistence-infrastructure-context.xml"/>
+    <axon:annotation-config/>
+    <context:component-scan base-package="com.pla"/>
+    <context:annotation-config/>
+
+    <axon:command-bus id="commandBus" transaction-manager="transactionManager"/>
+    <bean id="beanValidationInterceptor"
+          class="org.axonframework.commandhandling.interceptors.BeanValidationInterceptor"/>
+    <bean id="commandGateway" class="org.axonframework.commandhandling.gateway.DefaultCommandGateway">
+        <constructor-arg name="commandBus" ref="commandBus"/>
+        <constructor-arg name="commandDispatchInterceptors">
+            <array value-type="org.axonframework.commandhandling.CommandDispatchInterceptor">
+                <ref bean="beanValidationInterceptor"/>
+            </array>
+        </constructor-arg>
+    </bean>
+
+    <axon:event-bus id="eventBus"/>
+
+    <axon:command-bus id="commandBus" transaction-manager="transactionManager">
+        <axon:dispatchInterceptors>
+            <bean class="org.axonframework.commandhandling.interceptors.BeanValidationInterceptor"/>
+        </axon:dispatchInterceptors>
+    </axon:command-bus>
+
+
+    <bean id="taskExecutor" class="org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor">
+        <property name="corePoolSize" value="2"/>
+        <property name="maxPoolSize" value="5"/>
+        <property name="waitForTasksToCompleteOnShutdown" value="true"/>
+    </bean>
+
+    <bean id="ehcache" class="org.axonframework.cache.EhCacheAdapter">
+
+        <constructor-arg name="ehCache" ref="wrappedEhcache"/>
+    </bean>
+
+    <bean id="wrappedEhcache" factory-bean="cacheManager" factory-method="getCache">
+        <constructor-arg value="testCache"/>
+    </bean>
+
+    <bean id="cacheManager" class="org.springframework.cache.ehcache.EhCacheManagerFactoryBean"/>
+
+    <beans profile="mongodb">
+
+        <bean id="sagaRepository" class="org.axonframework.saga.repository.mongo.MongoSagaRepository">
+            <constructor-arg ref="mongoSagaTemplate"/>
+            <property name="resourceInjector">
+                <bean class="org.axonframework.saga.spring.SpringResourceInjector"/>
+            </property>
+        </bean>
+
+        <axon:saga-manager id="sagaManager" saga-repository="sagaRepository" event-bus="eventBus">
+            <axon:async executor="taskExecutor" transaction-manager="transactionManager"/>
+            <axon:types>
+            </axon:types>
+        </axon:saga-manager>
+    </beans>
+
+</beans>

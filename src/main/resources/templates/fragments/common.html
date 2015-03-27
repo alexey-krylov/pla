@@ -16,6 +16,9 @@
           rel="stylesheet" />
     <link href="http://cdn.jsdelivr.net/css/sticky-footer-navbar.css"
           th:href="@{/css/sticky-footer-navbar.css}" rel="stylesheet" />
+    <link href="http://cdn.jsdelivr.net/webjars/ng-tags-input/2.1.1/ng-tags-input.css"
+          th:href="@{/webjars/ng-tags-input/2.1.1/ng-tags-input.css}" rel="stylesheet"/>
+    <!--sub-menus in the navbar css-->
     <!--sub-menus in the navbar css-->
     <link href="/static/css/common.css"
           th:href="@{/css/common.css}" rel="stylesheet" />
@@ -51,9 +54,11 @@
                 'services':'/pla/js/common/services',
                 'checklistmodel': '/pla/js/common/checklist-model',
                 'commonModule':'/pla/js/common/commonModule'
+                'bt_datatable': '/pla/js/common/bootstrap-datatables'
+
             },
             "shim": {"checklistmodel": ["angular"],
-                "directives":{deps:['angular','fuelux']},
+                "directives": {deps: ['angular', 'fuelux', "datatables"]},
                 "fuelux":{deps:['jquery','bootstrap']},
                 "services":{deps:['angular']}},
             "packages": []

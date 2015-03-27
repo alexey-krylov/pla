@@ -121,7 +121,7 @@ public class AgentUnitTest {
 
     @Test
     public void itShouldUpdateAgentWithPlans() {
-        Set<PlanId> plans = Sets.newHashSet(new PlanId("PLAN001"), new PlanId("PLAN002"));
+        Set<PlanId> plans = Sets.newHashSet(new PlanId(), new PlanId());
         agent = agent.withPlans(plans);
         assertEquals(plans, agent.getAuthorizePlansToSell());
     }
@@ -129,14 +129,14 @@ public class AgentUnitTest {
     @Test(expected = AgentException.class)
     public void itShouldNotUpdatePlanWhenAgentIsInactive() {
         agent = agent.updateStatus(AgentStatus.INACTIVE);
-        Set<PlanId> plans = Sets.newHashSet(new PlanId("PLAN001"), new PlanId("PLAN002"));
+        Set<PlanId> plans = Sets.newHashSet(new PlanId(), new PlanId());
         agent = agent.withPlans(plans);
     }
 
     @Test(expected = AgentException.class)
     public void itShouldNotUpdatePlanWhenAgentIsTerminated() {
         agent = agent.updateStatus(AgentStatus.TERMINATED);
-        Set<PlanId> plans = Sets.newHashSet(new PlanId("PLAN001"), new PlanId("PLAN002"));
+        Set<PlanId> plans = Sets.newHashSet(new PlanId(), new PlanId());
         agent = agent.withPlans(plans);
     }
 

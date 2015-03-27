@@ -29,4 +29,8 @@ public class BenefitId implements Serializable {
     public BenefitId(String benefitId) {
         this.benefitId = benefitId;
     }
+
+    public String toString() {
+        return benefitId;
+    }
 }

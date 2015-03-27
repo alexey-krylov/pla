@@ -1,31 +1,28 @@
-<beans xmlns="http://www.springframework.org/schema/beans"
-       xmlns:p="http://www.springframework.org/schema/p"
+<beans xmlns:p="http://www.springframework.org/schema/p"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns:axon="http://www.axonframework.org/schema/core"
+       xmlns="http://www.springframework.org/schema/beans"
        xsi:schemaLocation="http://www.axonframework.org/schema/core http://www.axonframework.org/schema/axon-core.xsd
        http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
-    <axon:saga-manager id="sagaManager" saga-repository="sagaRepository" event-bus="eventBus">
-        <axon:async executor="taskExecutor" transaction-manager="transactionManager" />
-        <axon:types>
+    <beans profile="jpa">
+        <axon:saga-manager id="jpaSagaManager" saga-repository="sagaRepository" event-bus="eventBus">
+            <axon:async executor="taskExecutor" transaction-manager="transactionManager"/>
+            <axon:types></axon:types>
+        </axon:saga-manager>
+        <axon:jpa-saga-repository id="jpaSagaRepository"/>
+        <bean id="jpaTaskExecutor" class="org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor">
+            <property name="corePoolSize" value="2"/>
+            <property name="maxPoolSize" value="5"/>
+            <property name="waitForTasksToCompleteOnShutdown" value="true"/>
+        </bean>
 
-        </axon:types>
-    </axon:saga-manager>
-
-    <axon:jpa-saga-repository id="sagaRepository"/>
-
-    <bean id="taskExecutor" class="org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor">
-        <property name="corePoolSize" value="2"/>
-        <property name="maxPoolSize" value="5"/>
-        <property name="waitForTasksToCompleteOnShutdown" value="true"/>
-    </bean>
-
-    <bean id="schedulerFactoryBean" class="org.springframework.scheduling.quartz.SchedulerFactoryBean" p:dataSource-ref="jobsDataSource"/>
-
-    <!-- Event scheduler for the saga -->
-    <bean id="axonEventScheduler" class="org.axonframework.eventhandling.scheduling.quartz.QuartzEventScheduler">
-        <property name="eventBus" ref="eventBus"></property>
-        <property name="scheduler" ref="schedulerFactoryBean"></property>
-    </bean>
+        <bean id="schedulerFactoryBean" class="org.springframework.scheduling.quartz.SchedulerFactoryBean"
+              p:dataSource-ref="jobsDataSource"/>
+        <bean id="axonEventScheduler" class="org.axonframework.eventhandling.scheduling.quartz.QuartzEventScheduler">
+            <property name="eventBus" ref="eventBus"></property>
+            <property name="scheduler" ref="schedulerFactoryBean"></property>
+        </bean>
+    </beans>
 
 </beans>

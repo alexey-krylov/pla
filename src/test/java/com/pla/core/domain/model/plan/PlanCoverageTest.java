@@ -43,7 +43,7 @@ public class PlanCoverageTest {
                 .withTaxApplicable(false)
                 .withCoverageType(CoverageType.BASE)
                 .withMinAndMaxAge(21, 45)
-                .withDeductibleAmount(new BigDecimal(10340))
+                .withDeductible(new BigDecimal(10340))
                 .withWaitingPeriod(5)
                 .build();
 
@@ -65,7 +65,6 @@ public class PlanCoverageTest {
                 .withTaxApplicable(false)
                 .withCoverageType(CoverageType.BASE)
                 .withMinAndMaxAge(21, 45)
-                .withDeductibleAsPercentage(new BigDecimal(100))
                 .withWaitingPeriod(5)
                 .build();
 
@@ -75,42 +74,7 @@ public class PlanCoverageTest {
         assertEquals(45, planCoverage.getMaxAge());
         assertEquals(21, planCoverage.getMinAge());
         assertEquals(CoverageCover.ACCELERATED, planCoverage.getCoverageCover());
-        assertEquals(new BigDecimal(100), planCoverage.getDeductiblePercentage());
         assertEquals(5, planCoverage.getWaitingPeriod());
     }
-
-    @Test(expected = IllegalArgumentException.class)
-    public void should_not_create_coverage_with_both_deductible_percentage_and_amount() {
-        PlanCoverageBuilder builder = PlanCoverage.builder();
-        PlanCoverage planCoverage = builder.withCoverage(new CoverageId("1"))
-                .withCoverageCover(CoverageCover.ACCELERATED)
-                .withTaxApplicable(false)
-                .withCoverageType(CoverageType.BASE)
-                .withMinAndMaxAge(21, 45)
-                .withDeductibleAsPercentage(new BigDecimal(100))
-                .withDeductibleAmount(new BigDecimal(1800))
-                .withWaitingPeriod(5)
-                .build();
-    }
-
-
-    @Test(expected = IllegalArgumentException.class)
-    public void cannot_add_benefits_belonging_to_different_coverages_to_same_plan_coverage() {
-        PlanCoverageBuilder builder = PlanCoverage.builder();
-        PlanCoverage planCoverage = builder.withCoverage(new CoverageId("1"))
-                .withCoverageCover(CoverageCover.ACCELERATED)
-                .withTaxApplicable(false)
-                .withCoverageType(CoverageType.BASE)
-                .withMinAndMaxAge(21, 45)
-                .withDeductibleAsPercentage(new BigDecimal(100))
-                .withDeductibleAmount(new BigDecimal(1800))
-                .withWaitingPeriod(5)
-                .build();
-    }
-
-
-//    savedPlan.configureSumAssuredForPlanCoverage(coverageId, new DerivedSumAssured(coverageId, 5, BigInteger.valueOf(1000000)));
-
-//    savedPlan.configureTermForPlanCoverage(coverageId, new Term(Sets.newHashSet(5, 10, 15)));
 
 }

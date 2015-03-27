@@ -3,6 +3,7 @@ package com.pla.core.domain.model.plan;
 import com.pla.sharedkernel.domain.model.CoverageCover;
 import com.pla.sharedkernel.domain.model.CoverageTermType;
 import com.pla.sharedkernel.domain.model.CoverageType;
+import com.pla.sharedkernel.domain.model.MaturityAmount;
 import com.pla.sharedkernel.identifier.CoverageId;
 import lombok.AccessLevel;
 import lombok.EqualsAndHashCode;
@@ -23,13 +24,13 @@ import static com.google.common.base.Preconditions.checkArgument;
 @EqualsAndHashCode(of = {"coverageId"})
 @ToString()
 @Getter(AccessLevel.PACKAGE)
-class PlanCoverage {
+public class PlanCoverage {
 
     private CoverageId coverageId;
-    private CoverageType coverageType;
     private CoverageCover coverageCover;
+    private CoverageType coverageType;
+    private String deductibleType;
     private BigDecimal deductibleAmount;
-    private BigDecimal deductiblePercentage;
     private int waitingPeriod;
     private int minAge;
     private int maxAge;
@@ -37,10 +38,15 @@ class PlanCoverage {
     private SumAssured sumAssured;
     private Term coverageTerm;
     private CoverageTermType coverageTermType;
+    private Set<MaturityAmount> maturityAmounts = new HashSet<>();
     /**
      * Holds the Benefits that are applicable for Plan.
      */
     private Set<PlanCoverageBenefit> planCoverageBenefits = new HashSet<PlanCoverageBenefit>();
+
+    PlanCoverage() {
+
+    }
 
     PlanCoverage(PlanCoverageBuilder builder) {
         checkArgument(builder.coverageId != null, "Coverage is mandatory.");
@@ -57,14 +63,6 @@ class PlanCoverage {
             this.deductibleAmount = builder.deductibleAmount;
         }
 
-        if (builder.deductiblePercentage != null) {
-            checkArgument(BigDecimal.ZERO.compareTo(builder.deductiblePercentage) == -1, "Deductible Percentage has to be greater than 0");
-            this.deductiblePercentage = builder.deductiblePercentage;
-        }
-
-        if (this.deductiblePercentage != null && this.deductibleAmount != null)
-            throw new IllegalArgumentException("Cannot create Plan Coverage with Deductible Percentage and Amount.");
-
         this.waitingPeriod = builder.waitingPeriod;
         checkArgument(builder.minAge > 0, "Min Age for this coverage is missing.");
         this.minAge = builder.minAge;
@@ -75,22 +73,16 @@ class PlanCoverage {
         checkArgument(builder.taxApplicable != null, "Tax Applicable is mandatory.");
         this.taxApplicable = builder.taxApplicable;
         planCoverageBenefits = new HashSet<PlanCoverageBenefit>();
+        this.coverageTerm = builder.coverageTerm;
+        this.deductibleType = builder.deductibleType;
+        this.sumAssured = builder.sumAssured;
+        this.maturityAmounts = builder.maturityAmounts;
+        this.coverageTermType = builder.coverageTermType;
+        this.planCoverageBenefits = builder.planCoverageBenefits;
     }
 
     public static PlanCoverageBuilder builder() {
         return new PlanCoverageBuilder();
-    }
-
-    void configureSumAssured(SumAssured sumAssured) {
-        checkArgument(sumAssured != null);
-        this.sumAssured = sumAssured;
-    }
-
-    public void configureCoverageTerm(CoverageTermType coverageTermType, Term coverageTerm) {
-        checkArgument(coverageTerm != null);
-        checkArgument(coverageTermType != null);
-        this.coverageTermType = coverageTermType;
-        this.coverageTerm = coverageTerm;
     }
 
     public void replacePlanCoverageBenefits(Set<PlanCoverageBenefit> planCoverageBenefits) {

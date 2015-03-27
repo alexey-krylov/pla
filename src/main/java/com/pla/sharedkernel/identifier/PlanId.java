@@ -1,13 +1,9 @@
 package com.pla.sharedkernel.identifier;
 
 import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
+import org.bson.types.ObjectId;
 
-import javax.persistence.Column;
 import javax.persistence.Embeddable;
-import java.io.Serializable;
-import java.util.UUID;
 
 /**
  * @author: pradyumna
@@ -15,19 +11,16 @@ import java.util.UUID;
  */
 @Embeddable
 @EqualsAndHashCode
-@Getter
-@Setter
-public class PlanId implements Serializable {
+public class PlanId {
 
-    @Column(name = "plan_id")
     private String planId;
 
-    public PlanId(String planId) {
-        this.planId = planId;
+    public PlanId(String s) {
+        this.planId = s;
     }
 
     public PlanId() {
-        this.planId = UUID.randomUUID().toString();
+        this.planId = new ObjectId().toString();
     }
 
     public String toString() {

@@ -100,7 +100,7 @@ public class CreateAgentCommand {
 
         @Override
         public PlanId apply(Map<String, Object> agentPlan) {
-            return new PlanId((String) agentPlan.get("agentId"));
+            return new PlanId((String) agentPlan.get("planId"));
         }
     }
 

@@ -25,7 +25,7 @@ import static org.junit.Assert.assertThat;
  * Created by Admin on 3/26/2015.
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration("classpath:queryTestContext.xml")
+@ContextConfiguration(locations = {"classpath:queryTestContext.xml"})
 @TestExecutionListeners({DependencyInjectionTestExecutionListener.class, DbUnitTestExecutionListener.class})
 public class CoverageFinderUnitTest {
 

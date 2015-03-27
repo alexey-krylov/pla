@@ -1,35 +1,42 @@
 package com.pla.core.domain.model.plan;
 
 import com.google.common.collect.Sets;
+import com.mongodb.BasicDBObject;
 import com.pla.sharedkernel.domain.model.*;
 import com.pla.sharedkernel.identifier.CoverageId;
 import com.pla.sharedkernel.identifier.LineOfBusinessId;
 import com.pla.sharedkernel.identifier.PlanId;
 import org.joda.time.LocalDate;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.query.BasicQuery;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 /**
  * @author: pradyumna
  * @since 1.0 23/03/2015
  */
+
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = {"classpath:META-INF/spring/db-context.xml"})
+@ActiveProfiles("mongodb")
+@ContextConfiguration(locations = {"classpath:META-INF/spring/persistence-infrastructure-test-context.xml"})
 public class PlanPersistenceTest {
 
     @Autowired
-    MongoTemplate mongoTemplate;
-
+    MongoTemplate mongoSpringTemplate;
+    PlanId planId;
     private PlanDetail planDetail;
     private PlanCoverage planCoverage;
     private CoverageId coverageId = new CoverageId("1");
@@ -62,9 +69,10 @@ public class PlanPersistenceTest {
                 .withTaxApplicable(false)
                 .withCoverageType(CoverageType.BASE)
                 .withMinAndMaxAge(21, 45)
-                .withDeductibleAsPercentage(new BigDecimal(100))
                 .withWaitingPeriod(5)
                 .build();
+
+        planId = new PlanId();
     }
 
     @Test
@@ -76,14 +84,15 @@ public class PlanPersistenceTest {
         builder.withPremiumTerm(PremiumTermType.SPECIFIED_VALUES,
                 Sets.newHashSet(30, 35, 40, 45, 50, 55, 60), 60);
         builder.withPlanCoverages(Sets.newHashSet(planCoverage));
-        builder.withMaturityAmounts(Sets.newHashSet(new MaturityAmount(5, new BigDecimal(15))));
         builder.withPolicyTerm(PolicyTermType.SPECIFIED_VALUES,
                 Sets.newHashSet(30, 35, 40, 45, 50, 55, 60), 60);
-        builder.withSumAssuredForPlanCoverage(coverageId, SumAssuredType.RANGE, new BigDecimal(10000000), new BigDecimal(40000000), 10000, null, 0);
-        Plan plan = builder.build(new PlanId());
-        System.out.println(plan);
-        mongoTemplate.save(plan);
+        Plan plan = builder.build(planId);
+        mongoSpringTemplate.save(plan);
 
+        BasicDBObject query = new BasicDBObject();
+        query.put("planId", planId);
+        Map savedPlan = mongoSpringTemplate.findOne(new BasicQuery(query), Map.class, "PLAN");
+        Assert.assertNotNull(savedPlan);
     }
 
 }

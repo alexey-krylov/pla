@@ -1,10 +1,17 @@
 package com.pla.core.domain.model.plan;
 
-import com.pla.sharedkernel.domain.model.CoverageCover;
-import com.pla.sharedkernel.domain.model.CoverageType;
+import com.google.common.base.Preconditions;
+import com.pla.core.domain.model.BenefitId;
+import com.pla.sharedkernel.domain.model.*;
 import com.pla.sharedkernel.identifier.CoverageId;
+import org.nthdimenzion.utils.UtilValidator;
 
 import java.math.BigDecimal;
+import java.math.BigInteger;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
 
 import static com.google.common.base.Preconditions.checkArgument;
 
@@ -12,17 +19,23 @@ import static com.google.common.base.Preconditions.checkArgument;
  * @author: pradyumna
  * @since 1.0 14/03/2015
  */
-class PlanCoverageBuilder {
+public class PlanCoverageBuilder {
 
+    Set<MaturityAmount> maturityAmounts = new HashSet<>();
     CoverageId coverageId;
     CoverageType coverageType;
     CoverageCover coverageCover;
     BigDecimal deductibleAmount;
-    BigDecimal deductiblePercentage;
     int waitingPeriod;
     int minAge;
     int maxAge;
     Boolean taxApplicable;
+    String deductibleType;
+    SumAssured sumAssured;
+    Term coverageTerm;
+    CoverageTermType coverageTermType;
+    List<MaturityAmount> maturityAmount;
+    Set<PlanCoverageBenefit> planCoverageBenefits = new HashSet<PlanCoverageBenefit>();
 
     public PlanCoverageBuilder withCoverage(CoverageId coverageId) {
         this.coverageId = coverageId;
@@ -39,16 +52,10 @@ class PlanCoverageBuilder {
         return this;
     }
 
-    public PlanCoverageBuilder withDeductibleAmount(BigDecimal deductibleAmount) {
+    public PlanCoverageBuilder withDeductible(BigDecimal deductibleAmount) {
         this.deductibleAmount = deductibleAmount;
         return this;
     }
-
-    public PlanCoverageBuilder withDeductibleAsPercentage(BigDecimal deductiblePercentage) {
-        this.deductiblePercentage = deductiblePercentage;
-        return this;
-    }
-
 
     public PlanCoverageBuilder withWaitingPeriod(int waitingPeriod) {
         this.waitingPeriod = waitingPeriod;
@@ -66,6 +73,84 @@ class PlanCoverageBuilder {
         this.maxAge = maxAge;
         return this;
     }
+
+    public PlanCoverageBuilder withDeductibleType(String deductibleType) {
+        this.deductibleType = deductibleType;
+        return this;
+    }
+
+    public PlanCoverageBuilder withCoverageTerm(CoverageTermType coverageTermType, Set<Integer> validTerms, int maxMaturityAge) {
+        switch (coverageTermType) {
+            case SPECIFIED_VALUES:
+                checkArgument(maxMaturityAge > 0);
+                checkArgument(UtilValidator.isNotEmpty(validTerms));
+                this.coverageTerm = new Term(validTerms, maxMaturityAge);
+                break;
+            case AGE_DEPENDENT:
+                checkArgument(UtilValidator.isNotEmpty(validTerms));
+                this.coverageTerm = new Term(validTerms);
+                break;
+            case POLICY_TERM:
+                break;
+        }
+        this.coverageTermType = coverageTermType;
+        return this;
+    }
+
+    public PlanCoverageBuilder withMaturityAmount(int maturityYear, BigDecimal guaranteedSurvivalBenefitAmount) {
+        this.maturityAmounts.add(new MaturityAmount(maturityYear, guaranteedSurvivalBenefitAmount));
+        return this;
+    }
+
+
+    public PlanCoverageBuilder withSumAssuredForPlanCoverage(SumAssuredType sumAssuredType,
+                                                             BigDecimal minSumAssuredAmount,
+                                                             BigDecimal maxSumAssuredAmount,
+                                                             int multiplesOf,
+                                                             Set<BigDecimal> assuredValues,
+                                                             int percentage) {
+        switch (sumAssuredType) {
+            case SPECIFIED_VALUES:
+                Preconditions.checkArgument(UtilValidator.isNotEmpty(assuredValues));
+                this.sumAssured = new SumAssured(new TreeSet<>(assuredValues));
+                break;
+            case DERIVED:
+                Preconditions.checkArgument(percentage > 0);
+                Preconditions.checkArgument(maxSumAssuredAmount.compareTo(BigDecimal.ZERO) == 1);
+                Preconditions.checkArgument(coverageId != null);
+                this.sumAssured = new SumAssured(coverageId, percentage, BigInteger.valueOf(maxSumAssuredAmount.longValue()));
+                break;
+            case RANGE:
+                Preconditions.checkArgument(maxSumAssuredAmount.compareTo(BigDecimal.ZERO) == 1,
+                        "MinSumAssuredAmount greater than zero Expected, but got %d", minSumAssuredAmount);
+                Preconditions.checkArgument(maxSumAssuredAmount.compareTo(BigDecimal.ZERO) == 1,
+                        "MaxSumAssuredAmount greater than zero Expected, but got %d", maxSumAssuredAmount);
+                Preconditions.checkArgument(maxSumAssuredAmount.compareTo(minSumAssuredAmount) == 1,
+                        "MaxSumAssuredAmount>MinSumAssuredAmount Expected, but %d>%d",
+                        maxSumAssuredAmount, minSumAssuredAmount);
+                Preconditions.checkArgument(multiplesOf % 10 == 0, " Not valid Multiples.");
+                this.sumAssured = new SumAssured(minSumAssuredAmount, maxSumAssuredAmount, multiplesOf);
+                break;
+        }
+        return this;
+    }
+
+    public PlanCoverageBuilder withMaturityAmount(List<MaturityAmount> maturityAmount) {
+        this.maturityAmount = maturityAmount;
+        return this;
+    }
+
+    //TODO Change benefitId String to BenefitId type
+    public PlanCoverageBuilder withBenefitLimit(String benefitId,
+                                                CoverageBenefitDefinition definedPer,
+                                                CoverageBenefitType coverageBenefitType,
+                                                BigDecimal benefitLimit,
+                                                BigDecimal maxLimit) {
+        this.planCoverageBenefits.add(new PlanCoverageBenefit(new BenefitId(benefitId), definedPer, coverageBenefitType,
+                benefitLimit, maxLimit));
+        return this;
+    }
+
 
     public PlanCoverage build() {
         return new PlanCoverage(this);

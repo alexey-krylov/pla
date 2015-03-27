@@ -201,7 +201,12 @@
         <dependency>
             <groupId>org.webjars</groupId>
             <artifactId>datatables</artifactId>
-            <version>1.10.4</version>
+            <version>1.10.5</version>
+        </dependency>
+        <dependency>
+            <groupId>org.webjars</groupId>
+            <artifactId>datatables-bootstrap</artifactId>
+            <version>2-20120202-2</version>
         </dependency>
         <dependency>
             <groupId>org.webjars</groupId>
@@ -227,16 +232,6 @@
             <groupId>org.webjars</groupId>
             <artifactId>angular-strap</artifactId>
             <version>2.1.4</version>
-        </dependency>
-        <dependency>
-            <groupId>org.webjars</groupId>
-            <artifactId>underscorejs</artifactId>
-            <version>1.8.2</version>
-        </dependency>
-        <dependency>
-            <groupId>org.webjars</groupId>
-            <artifactId>momentjs</artifactId>
-            <version>2.9.0</version>
         </dependency>
         <dependency>
             <groupId>org.webjars</groupId>
@@ -269,7 +264,17 @@
             <version>0.7.1</version>
         </dependency>
         <!-- Test Dependencies Start -->
-
+        <dependency>
+            <groupId>com.foursquare</groupId>
+            <artifactId>fongo</artifactId>
+            <version>1.1.1</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>net.sf.ehcache</groupId>
+            <artifactId>ehcache</artifactId>
+            <version>2.8.3</version>
+        </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
@@ -342,6 +347,12 @@
             <groupId>org.apache.poi</groupId>
             <artifactId>poi</artifactId>
             <version>3.6</version>
+        </dependency>
+        <dependency>
+            <groupId>com.lordofthejars</groupId>
+            <artifactId>nosqlunit-mongodb</artifactId>
+            <version>0.7.6</version>
+            <scope>test</scope>
         </dependency>
 
     </dependencies>

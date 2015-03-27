@@ -43,4 +43,13 @@ angular.module('directives',[])
                 element.wizard(wizardOptions);
             }
         }
+    })
+    .directive('datatable', function () {
+        return {
+            restrict: 'EA',
+            link: function (scope, iElement, attrs) {
+                iElement.dataTable();
+            }
+        }
     });
+   
