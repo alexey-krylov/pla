@@ -18,7 +18,7 @@ import com.pla.core.application.CreateCoverageCommand;
 import com.pla.core.application.InactivateCoverageCommand;
 import com.pla.core.application.MarkCoverageAsUsedCommand;
 import com.pla.core.application.UpdateCoverageCommand;
-import com.pla.core.application.exception.BenefitApplicationException;
+import com.pla.core.domain.exception.CoverageException;
 import com.pla.core.query.CoverageFinder;
 import org.axonframework.commandhandling.gateway.CommandGateway;
 import org.nthdimenzion.presentation.Result;
@@ -76,9 +76,9 @@ public class CoverageController {
             UserDetails userDetails = getLoggedInUSerDetail(request);
             createCoverageCommand.setUserDetails(userDetails);
             commandGateway.sendAndWait(createCoverageCommand);
-        } catch (BenefitApplicationException e) {
+        } catch (CoverageException e) {
             LOGGER.error("Error in creating coverage", e);
-            return Result.failure("Error in creating coverage");
+            return Result.failure(e.getMessage());
         }
         return Result.success("Coverage created successfully");
     }
@@ -94,9 +94,9 @@ public class CoverageController {
             UserDetails userDetails = getLoggedInUSerDetail(request);
             updateCoverageCommand.setUserDetails(userDetails);
             commandGateway.sendAndWait(updateCoverageCommand);
-        } catch (BenefitApplicationException e) {
+        } catch (CoverageException e) {
             LOGGER.error("Error in updating coverage", e);
-            return Result.failure("Error in updating coverage");
+            return Result.failure(e.getMessage());
         }
         return Result.success("coverage updated successfully");
     }
@@ -112,9 +112,9 @@ public class CoverageController {
             UserDetails userDetails = getLoggedInUSerDetail(request);
             inactivateCoverageCommand.setUserDetails(userDetails);
             commandGateway.sendAndWait(inactivateCoverageCommand);
-        } catch (BenefitApplicationException e) {
+        } catch (CoverageException e) {
             LOGGER.error("Error in inactivating coverage", e);
-            return Result.failure("Error in inactivating coverage");
+            return Result.failure(e.getMessage());
         } catch (Exception e) {
             LOGGER.error("Error in inactivating coverage", e);
             return Result.failure("Error in inactivating coverage");
@@ -131,9 +131,9 @@ public class CoverageController {
         }
         try {
             commandGateway.sendAndWait(inactivateCoverageCommand);
-        } catch (BenefitApplicationException e) {
+        } catch (CoverageException e) {
             LOGGER.error("Error in marking the coverage", e);
-            return Result.failure("Error in  marking the coverage");
+            return Result.failure(e.getMessage());
         } catch (Exception e) {
             LOGGER.error("Error in  marking the coverage", e);
             return Result.failure("Error in  marking the coverage");
