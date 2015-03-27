@@ -5,6 +5,7 @@
    "employeeId": "M706",
    "nrcNumber": "adfaf",
    "designation": "ASST.MANAGER",
+   "designationDescription": "ASST.MANAGER",
    "primaryContactDetail": {
      "addressLine1": "",
      "addressLine2": "",
@@ -31,6 +32,7 @@
    "employeeId": "G721",
    "nrcNumber": null,
    "designation": "ARTISAN",
+   "designationDescription": "ARTISAN",
    "primaryContactDetail": {
      "addressLine1": "",
      "addressLine2": "",
