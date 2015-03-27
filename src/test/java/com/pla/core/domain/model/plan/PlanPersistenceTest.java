@@ -1,7 +1,10 @@
 package com.pla.core.domain.model.plan;
 
 import com.google.common.collect.Sets;
+import com.lordofthejars.nosqlunit.mongodb.MongoDbRule;
 import com.mongodb.BasicDBObject;
+import com.mongodb.DBCollection;
+import com.mongodb.DBObject;
 import com.pla.sharedkernel.domain.model.*;
 import com.pla.sharedkernel.identifier.CoverageId;
 import com.pla.sharedkernel.identifier.LineOfBusinessId;
@@ -9,11 +12,12 @@ import com.pla.sharedkernel.identifier.PlanId;
 import org.joda.time.LocalDate;
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
 import org.springframework.data.mongodb.core.MongoTemplate;
-import org.springframework.data.mongodb.core.query.BasicQuery;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -21,8 +25,9 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.HashSet;
-import java.util.Map;
 import java.util.Set;
+
+import static com.lordofthejars.nosqlunit.mongodb.MongoDbRule.MongoDbRuleBuilder.newMongoDbRule;
 
 /**
  * @author: pradyumna
@@ -34,12 +39,18 @@ import java.util.Set;
 @ContextConfiguration(locations = {"classpath:META-INF/spring/persistence-infrastructure-test-context.xml"})
 public class PlanPersistenceTest {
 
+
+    @Autowired
+    private ApplicationContext applicationContext;
     @Autowired
     MongoTemplate mongoSpringTemplate;
     PlanId planId;
     private PlanDetail planDetail;
     private PlanCoverage planCoverage;
     private CoverageId coverageId = new CoverageId("1");
+
+    @Rule
+    public MongoDbRule mongoDbRule = newMongoDbRule().defaultSpringMongoDb("pla");
 
     @Before
     public void setup() {
@@ -76,6 +87,7 @@ public class PlanPersistenceTest {
     }
 
     @Test
+    //@ShouldMatchDataSet(location = "testdata/endtoend/pla/plan.json")
     public void storePlan() {
 
         PlanBuilder builder = Plan.builder();
@@ -91,7 +103,8 @@ public class PlanPersistenceTest {
 
         BasicDBObject query = new BasicDBObject();
         query.put("planId", planId);
-        Map savedPlan = mongoSpringTemplate.findOne(new BasicQuery(query), Map.class, "PLAN");
+        DBCollection table = mongoSpringTemplate.getCollection("PLAN");
+        DBObject savedPlan = table.findOne();
         Assert.assertNotNull(savedPlan);
     }
 

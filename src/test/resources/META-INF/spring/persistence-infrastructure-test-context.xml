@@ -13,7 +13,7 @@
     <bean id="mongoSpringTemplate" class="org.springframework.data.mongodb.core.MongoTemplate">
         <constructor-arg name="mongoDbFactory" ref="mongoDbFactory"/>
     </bean>
-    <bean id="mongoTemplate" class="org.axonframework.eventstore.mongo.DefaultMongoTemplate">
+    <!--<bean id="mongoTemplate" class="org.axonframework.eventstore.mongo.DefaultMongoTemplate">
         <constructor-arg index="0" ref="mongo"/>
         <constructor-arg index="1" value="pla"/>
         <constructor-arg index="2" value="domainevents"/>
@@ -28,12 +28,29 @@
         <constructor-arg index="2" value="snapshotevents"/>
         <constructor-arg index="3" value="pla"/>
         <constructor-arg index="4" value="pla"/>
+    </bean>-->
+
+
+    <bean name="fongo" class="com.foursquare.fongo.Fongo">
+        <constructor-arg value="InMemoryMongo"/>
     </bean>
 
-    <mongo:mongo id="mongo" host="127.0.0.1" port="27017"/>
-    <!--
-        db.createUser({user:"pla", pwd:"pla" roles:[{role:"userAdmin",db:"pla"}]});
-    -->
-    <mongo:db-factory id="mongoDbFactory" dbname="pla" mongo-ref="mongo" username="pla" password="pla"/>
+    <bean id="mongo" factory-bean="fongo" factory-method="getMongo"/>
+
+    <mongo:db-factory id="mongoDbFactory" mongo-ref="mongo" dbname="pla"/>
+
+    <bean id="mongoTemplate" class="org.springframework.data.mongodb.core.MongoTemplate">
+        <constructor-arg ref="mongoDbFactory"/>
+    </bean>
+
+    <bean id="mongoSagaTemplate" class="org.springframework.data.mongodb.core.MongoTemplate">
+        <constructor-arg ref="mongoDbFactory"/>
+    </bean>
+
+    <!--    <mongo:mongo id="mongo" host="127.0.0.1" port="27017"/>
+        &lt;!&ndash;
+            db.createUser({user:"pla", pwd:"pla" roles:[{role:"userAdmin",db:"pla"}]});
+        &ndash;&gt;
+        <mongo:db-factory id="mongoDbFactory" dbname="pla" mongo-ref="mongo" username="pla" password="pla"/>-->
 
 </beans>

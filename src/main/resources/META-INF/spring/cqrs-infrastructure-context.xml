@@ -65,5 +65,4 @@
             </axon:types>
         </axon:saga-manager>
     </beans>
-
 </beans>
