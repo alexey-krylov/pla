@@ -15,8 +15,9 @@
         "shim": {"plansetup": ["angular"]}
     });
 
-    define(['ng-tags-input', 'checklistmodel'], function () {
+    require(['ng-tags-input', 'checklistmodel'], function (a, b) {
     });
+
     requirejs(['main'], function () {
         require(['plansetup', 'jquery'], function (app, $) {
             angular.bootstrap(document, ['planSetup']);

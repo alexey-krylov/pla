@@ -35,7 +35,7 @@
                         <td th:text="${plan.planDetail.lineOfBusinessId}"></td>
                         <td th:text="${{plan.planDetail.launchDate}}"></td>
                         <td th:text="${{plan.planDetail.withdrawalDate}}"></td>
-                        <td><a th:href="'#viewplan/'+${{plan}}+''">View</a></td>
+                        <td><a th:href="'#viewplan/'+${plan.planId.planId}+''">View</a></td>
                     </tr>
                     </tbody>
                 </table>
