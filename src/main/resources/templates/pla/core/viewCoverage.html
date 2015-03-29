@@ -31,7 +31,7 @@
                     <div class="form-group required" style="margin: auto;">
                         <label for="coverageName" class="col-sm-3 control-label">Coverage Name</label>
                         <div class="col-sm-9">
-                            <input type="text" name="coverageName" required="true" maxlength="50" class="form-control" id="coverageName"  onkeypress="resetError(this)"/>
+                            <input type="text" name="coverageName" required="true" maxlength="50" class="form-control" id="coverageName" ng-model="createCoverage.coverageName"  onkeypress="resetError(this)"/>
                             <span hidden="true" style="color: darkred;font-size: 10px">Please check if it is empty or exceeded more than 60 character</span>
                         </div>
                     </div>
@@ -51,7 +51,7 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-primary" id="createUpdate" ng-disabled="(!createCoverage.benefitIds)" ></button>
+                    <button type="button" class="btn btn-primary" id="createUpdate" ng-disabled="(!createCoverage.benefitIds || !createCoverage.coverageName)" ></button>
                     <button type="button" class="btn btn-danger" data-dismiss="modal" onclick="reload()" id="cancel-button">Cancel</button>
                 </div>
             </form>
@@ -114,28 +114,35 @@
                         <tr th:each="coverage : ${listOfCoverage}" th:if="${coverage.coverageStatus=='ACTIVE'}">
                             <td th:text="${{coverage.coverageName}}" ></td>
                             <td th:text="${{coverage.description}}"></td>
-                            <td style="text-align:center">
-                                <div class="bs-example">
-                                    <p class="popover-examples" th:each="benefit : ${coverage.benefitDtos}">
-                                        <a href="#" class="btn btn-primary btn-xs" data-toggle="popover"  th:text="${{benefit.benefitName}}"  >Benefits</a>
-                                    </p>
-                                </div>
+                            <td style="text-align:center" class="pop" >
+                               <button href="#" class="details-box btn btn-primary btn-xs" rel="popover"  data-content="" > Benefits
+                                    <div class="popover-body" style="display:none;">
+                                   <ul  type="square"    th:each="benefit : ${coverage.benefitDtos}">
+                                        <li style="text-align:left;font-size:12px;"   th:text="'&diams;&nbsp;'+${{benefit.benefitName}}+','"></li>
+                                    </ul>
+                                        </div>
+                                </button>
                             </td>
                             <td style="text-align:center">
-                                <button type="button" class="btn btn-primary btn-xs" th:onclick="'openCoverageUpdateModal(&quot;'+${coverage}+'&quot;)'">Update</button>
+                                <button type="button" class="btn btn-primary btn-xs" th:onclick="'openCoverageUpdateModal(&quot;'+${coverage.coverageId}+'&quot;,&quot;'+${coverage.coverageName}+'&quot;,&quot;'+${coverage.description}+'&quot;,&quot;'+${coverage.benefitDtos}+'&quot;)'">Update</button>
                                 <button type="button" class="btn btn-danger btn-xs" data-toggle="modal" data-target="#alert-modal" th:onclick="'inactivate(&quot;'+${coverage.coverageId}+'&quot;,&quot;save&quot;)'" >Inactivate</button>
                             </td>
                         </tr>
                         </tbody>
                     </table>
                 </div>
-                <div class="panel-footer" >
-                    <ul class="pagination" id="logs-pagination-default"></ul>
-                </div>
+
             </div>
         </div>
     </div>
 </div>
+<style>
+    .popover-content {
+    font-size: 11px;
+padding-left:3px;
+    }
+
+</style>
 <footer class="footer" th:include="fragments/common :: footer">
 </footer>
 </body>
