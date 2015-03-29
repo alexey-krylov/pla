@@ -112,6 +112,7 @@ public class CustomMVCConfiguration extends WebMvcConfigurerAdapter {
         registry.addInterceptor(localeChangeInterceptor());
     }
 
+
     @Override
     public void addFormatters(FormatterRegistry registry) {
         registry.addFormatter(new JodaMoneyFormatter());

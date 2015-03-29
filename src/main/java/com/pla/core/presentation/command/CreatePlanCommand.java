@@ -1,18 +1,21 @@
 package com.pla.core.presentation.command;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.datatype.joda.deser.LocalDateDeserializer;
-import com.pla.sharedkernel.domain.model.ClientType;
-import com.pla.sharedkernel.domain.model.EndorsementType;
-import com.pla.sharedkernel.domain.model.PlanType;
-import com.pla.sharedkernel.domain.model.Relationship;
+import com.pla.core.domain.model.BenefitId;
+import com.pla.sharedkernel.domain.model.*;
+import com.pla.sharedkernel.identifier.CoverageId;
 import com.pla.sharedkernel.identifier.LineOfBusinessId;
+import com.pla.sharedkernel.identifier.PlanId;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 import org.joda.time.LocalDate;
 
-import java.util.Set;
+import java.math.BigDecimal;
+import java.math.BigInteger;
+import java.util.*;
 
 /**
  * @author: pradyumna
@@ -23,7 +26,15 @@ import java.util.Set;
 @ToString
 public class CreatePlanCommand {
 
+    @JsonProperty(value = "_id")
+    PlanId planId;
     Detail planDetail;
+    AssuredDetail sumAssured;
+    TermDetail policyTerm;
+    TermDetail premiumTerm;
+    PremiumTermType premiumTermType;
+    PolicyTermType policyTermType;
+    List<PlanCoverageDetail> coverages;
 }
 
 @Getter
@@ -45,4 +56,99 @@ class Detail {
     LineOfBusinessId lineOfBusinessId;
     PlanType planType;
     ClientType clientType;
+}
+
+@Getter
+@Setter
+class AssuredDetail {
+    private List<AssuredValue> sumAssuredValue = new ArrayList<AssuredValue>();
+    private CoverageId coverageId;
+    private int percentage;
+    private BigInteger maxLimit;
+    private BigDecimal minSumInsured;
+    private BigDecimal maxSumInsured;
+    private int multiplesOf;
+    private SumAssuredType sumAssuredType;
+
+    public SortedSet<BigDecimal> getSumAssuredValue() {
+        SortedSet<BigDecimal> set = new TreeSet<BigDecimal>();
+        for (AssuredValue each : sumAssuredValue) {
+            set.add(new BigDecimal(each.getText()));
+        }
+        return set;
+    }
+}
+
+@Getter
+@Setter
+class AssuredValue {
+    private String text;
+}
+
+@Getter
+@Setter
+class TermValue {
+    private String text;
+}
+
+@Getter
+@Setter
+class TermDetail {
+    Set<TermValue> validTerms = new HashSet<TermValue>();
+    Set<TermValue> maturityAges = new HashSet<TermValue>();
+    int maxMaturityAge;
+
+    public SortedSet<Integer> getValidTerms() {
+        SortedSet<Integer> set = new TreeSet<Integer>();
+        for (TermValue each : validTerms) {
+            set.add(Integer.parseInt(each.getText()));
+        }
+        return set;
+    }
+
+    public SortedSet<Integer> getMaturityAges() {
+        SortedSet<Integer> set = new TreeSet<Integer>();
+        for (TermValue each : maturityAges) {
+            set.add(Integer.parseInt(each.getText()));
+        }
+        return set;
+    }
+}
+
+@Getter
+@Setter
+class PlanCoverageDetail {
+    private CoverageId coverageId;
+    private CoverageCover coverageCover;
+    private CoverageType coverageType;
+    private String deductibleType;
+    private BigDecimal deductibleAmount;
+    private int waitingPeriod;
+    private int minAge;
+    private int maxAge;
+    private Boolean taxApplicable;
+    private AssuredDetail sumAssured;
+    private TermDetail coverageTerm;
+    private CoverageTermType coverageTermType;
+    private List<MaturityAmountDetail> maturityAmounts;
+    private List<PlanCoverageBenefitDetail> planCoverageBenefits;
+}
+
+@Getter
+@Setter
+class MaturityAmountDetail {
+    int maturityYear;
+    BigDecimal guaranteedSurvivalBenefitAmount;
+}
+
+
+@Getter
+@Setter
+class PlanCoverageBenefitDetail {
+    private BenefitId benefitId;
+    private CoverageBenefitDefinition definedPer;
+    private CoverageBenefitType coverageBenefitType;
+    private BigDecimal benefitLimit;
+    private BigDecimal maxLimit;
+
 }

@@ -7,6 +7,7 @@ import com.pla.sharedkernel.domain.model.PlanType;
 import com.pla.sharedkernel.domain.model.Relationship;
 import com.pla.sharedkernel.identifier.LineOfBusinessId;
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
 import lombok.ToString;
 import org.joda.time.LocalDate;
 import org.nthdimenzion.utils.UtilValidator;
@@ -22,6 +23,7 @@ import static com.google.common.base.Preconditions.checkArgument;
  * @author: pradyumna
  * @since 1.0 11/03/2015
  */
+@Getter
 @ToString(exclude = {"logger"})
 @EqualsAndHashCode(callSuper = false)
 public class PlanDetail {
@@ -43,6 +45,10 @@ public class PlanDetail {
     LineOfBusinessId lineOfBusinessId;
     PlanType planType;
     ClientType clientType;
+
+    PlanDetail() {
+
+    }
 
     PlanDetail(final PlanDetailBuilder planDetailBuilder) {
         checkArgument(UtilValidator.isNotEmpty(planDetailBuilder.planName), "Plan Name cannot be empty.");

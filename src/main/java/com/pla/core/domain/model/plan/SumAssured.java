@@ -22,7 +22,7 @@ import static com.google.common.base.Preconditions.checkArgument;
 @ToString
 @Getter
 @EqualsAndHashCode
-class SumAssured {
+public class SumAssured {
 
     private SortedSet<BigDecimal> sumAssuredValue = new TreeSet<BigDecimal>();
     //These attributes capture the Sum Assured Configuration for Coverage.
@@ -35,6 +35,10 @@ class SumAssured {
     private BigDecimal maxSumInsured;
     private int multiplesOf;
     private SumAssuredType sumAssuredType;
+
+    SumAssured() {
+
+    }
 
     SumAssured(SortedSet<BigDecimal> sumAssuredValues) {
         checkArgument(UtilValidator.isNotEmpty(sumAssuredValues));

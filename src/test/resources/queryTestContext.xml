@@ -43,10 +43,8 @@
     </bean>
     <bean class="org.springframework.orm.jpa.support.PersistenceAnnotationBeanPostProcessor"/>
 
-    <tx:annotation-driven transaction-manager="transactionManager"/>
-    <tx:annotation-driven proxy-target-class="true"/>
-    <bean id="namingStrategy" class="org.nthdimenzion.ddd.domain.infrastructure.hibernate.CustomNamingStrategy"/>
-    
+    <tx:annotation-driven transaction-manager="transactionManager" proxy-target-class="true"/>
+
     <bean id="dataSource" class="com.jolbox.bonecp.BoneCPDataSource" destroy-method="close">
         <property name="driverClass" value="org.h2.Driver"/>
         <property name="jdbcUrl" value="jdbc:h2:mem;MODE=MySQL"/>
@@ -57,6 +55,7 @@
         <property name="statementsCacheSize" value="20"/>
         <property name="disableJMX" value="true"/>
     </bean>
+    <bean id="namingStrategy" class="org.nthdimenzion.ddd.domain.infrastructure.hibernate.CustomNamingStrategy"/>
 
     <bean id="jobsDataSource" class="com.jolbox.bonecp.BoneCPDataSource" destroy-method="close">
         <property name="driverClass" value="org.h2.Driver"/>
@@ -77,7 +76,7 @@
         <jdbc:script location="classpath:scripts/plajobs.sql"/>
     </jdbc:initialize-database>
 
-    <import resource="axonContext.xml"/>
+    <import resource="META-INF/spring/cqrs-infrastructure-test-context.xml"/>
     <context:component-scan base-package="com.pla"/>
     <context:component-scan base-package="org.nthdimenzion">
         <context:exclude-filter type="regex" expression="org.nthdimenzion.ddd.infrastructure.stubs.*"/>

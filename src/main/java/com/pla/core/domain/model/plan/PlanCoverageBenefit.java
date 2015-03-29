@@ -4,7 +4,6 @@ import com.google.common.base.Preconditions;
 import com.pla.core.domain.model.BenefitId;
 import com.pla.sharedkernel.domain.model.CoverageBenefitDefinition;
 import com.pla.sharedkernel.domain.model.CoverageBenefitType;
-import com.pla.sharedkernel.identifier.CoverageId;
 import lombok.AccessLevel;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -21,24 +20,23 @@ import java.math.BigDecimal;
 @EqualsAndHashCode(of = {"benefitId"})
 class PlanCoverageBenefit {
 
-    private CoverageId coverageId;
     private BenefitId benefitId;
     private CoverageBenefitDefinition definedPer;
     private CoverageBenefitType coverageBenefitType;
     private BigDecimal benefitLimit;
     private BigDecimal maxLimit;
 
-    PlanCoverageBenefit(CoverageId coverageId,
-                        BenefitId benefitId, CoverageBenefitDefinition definedPer,
+    PlanCoverageBenefit() {
+    }
+
+    PlanCoverageBenefit(BenefitId benefitId, CoverageBenefitDefinition definedPer,
                         CoverageBenefitType coverageBenefitType,
                         BigDecimal benefitLimit, BigDecimal maxLimit) {
 
-        Preconditions.checkArgument(coverageId != null, "Expected coverageId!=null, but %s!=null", coverageId);
         Preconditions.checkArgument(benefitId != null, "Expected benefitId!=null, but %s!=null", benefitId);
         Preconditions.checkArgument(definedPer != null, "Expected definedPer!=null, but %s!=null.", definedPer);
         Preconditions.checkArgument(coverageBenefitType != null, "Expected coverageBenefitType!=null, but %s!=null.", coverageBenefitType);
         Preconditions.checkArgument(benefitLimit != null, "Expected limit!=null, but %s!=null.", benefitLimit);
-        this.coverageId = coverageId;
         this.benefitId = benefitId;
         this.definedPer = definedPer;
         this.coverageBenefitType = coverageBenefitType;

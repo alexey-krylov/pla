@@ -1,4 +1,18 @@
 angular.module('directives',[])
+    .directive('nthTleafBinder',['$timeout',function($timeout){
+        return{
+            restrict:'A',
+            require: '?ngModel',
+            link:function(scope,element,attr,ngModel){
+                if(!ngModel) return;
+                var content = attr.nthTleafBinder;
+                ngModel.$render =function(){
+                    element.val(content);
+                    ngModel.$setViewValue(content);
+                };
+            }
+        }
+    }])
     .directive('fueluxWizard',function($timeout){
         /*use this directive to initialize the fuelUx wizard
          *
@@ -30,3 +44,12 @@ angular.module('directives',[])
             }
         }
     })
+    .directive('datatable', function () {
+        return {
+            restrict: 'EA',
+            link: function (scope, iElement, attrs) {
+                iElement.dataTable();
+            }
+        }
+    });
+   

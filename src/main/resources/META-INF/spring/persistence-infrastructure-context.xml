@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:mongo="http://www.springframework.org/schema/data/mongo"
+       xmlns="http://www.springframework.org/schema/beans"
+       xsi:schemaLocation="http://www.springframework.org/schema/data/mongo http://www.springframework.org/schema/data/mongo/spring-mongo.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.1.xsd">
+
+    <beans profile="mongodb">
+        <bean id="userCredentials" class="org.springframework.data.authentication.UserCredentials">
+            <constructor-arg name="username" value="pla"/>
+            <constructor-arg name="password" value="pla"/>
+        </bean>
+        <bean id="mongoSpringTemplate" class="org.springframework.data.mongodb.core.MongoTemplate">
+            <constructor-arg name="mongo" ref="mongo"/>
+            <constructor-arg name="databaseName" value="pla"/>
+            <constructor-arg name="userCredentials" ref="userCredentials"/>
+        </bean>
+        <bean id="mongoTemplate" class="org.axonframework.eventstore.mongo.DefaultMongoTemplate">
+            <constructor-arg index="0" ref="mongo"/>
+            <constructor-arg index="1" value="pla"/>
+            <constructor-arg index="2" value="domainevents"/>
+            <constructor-arg index="3" value="snapshotevents"/>
+            <constructor-arg index="4" value="pla"/>
+            <constructor-arg index="5" value="pla"/>
+        </bean>
+        <bean id="mongoSagaTemplate" class="org.axonframework.saga.repository.mongo.DefaultMongoTemplate">
+            <constructor-arg index="0" ref="mongo"/>
+            <constructor-arg index="1" value="pla"/>
+            <constructor-arg index="2" value="snapshotevents"/>
+            <constructor-arg index="3" value="pla"/>
+            <constructor-arg index="4" value="pla"/>
+        </bean>
+        <mongo:mongo id="mongo" host="127.0.0.1" port="27017"/>
+        <!--
+            db.createUser({user:"pla", pwd:"pla" roles:[{role:"userAdmin",db:"pla"}]});
+        -->
+        <mongo:db-factory id="mongoDbFactory" dbname="pla" mongo-ref="mongo" username="pla" password="pla"/>
+    </beans>
+</beans>

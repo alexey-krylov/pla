@@ -1,14 +1,13 @@
 package com.pla.core.domain.model.plan;
 
-import com.google.common.collect.Sets;
-import com.pla.sharedkernel.domain.model.*;
-import com.pla.sharedkernel.identifier.CoverageId;
+import com.pla.sharedkernel.domain.model.ClientType;
+import com.pla.sharedkernel.domain.model.EndorsementType;
+import com.pla.sharedkernel.domain.model.PlanType;
+import com.pla.sharedkernel.domain.model.Relationship;
 import com.pla.sharedkernel.identifier.LineOfBusinessId;
-import com.pla.sharedkernel.identifier.PlanId;
 import org.joda.time.LocalDate;
 import org.junit.Test;
 
-import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
@@ -111,30 +110,5 @@ public class PlanDetailTest {
         System.out.println(planDetail);
     }
 
-    @Test(expected = IllegalArgumentException.class)
-    public void should_not_add_sum_assured_with_different_coverage() {
 
-        PlanDetail planDetail = createPlanDetail();
-        PlanCoverageBuilder builder = PlanCoverage.builder();
-        PlanCoverage planCoverage = builder.withCoverage(new CoverageId("1"))
-                .withCoverageCover(CoverageCover.ACCELERATED)
-                .withTaxApplicable(false)
-                .withCoverageType(CoverageType.BASE)
-                .withMinAndMaxAge(21, 45)
-                .withDeductibleAsPercentage(new BigDecimal(100))
-                .withDeductibleAmount(new BigDecimal(1800))
-                .withWaitingPeriod(5)
-                .build();
-
-        PlanBuilder planBuilder = Plan.builder();
-        planBuilder.withPlanDetail(planDetail)
-                .withPlanCoverage(planCoverage);
-
-        planBuilder.withSumAssuredForPlanCoverage(new CoverageId("2"),
-                SumAssuredType.SPECIFIED_VALUES,
-                BigDecimal.ZERO, new BigDecimal(100000), 0,
-                Sets.newHashSet(new BigDecimal(10000),
-                        new BigDecimal(50000), new BigDecimal(100000)), 0);
-        planBuilder.build(new PlanId());
-    }
 }

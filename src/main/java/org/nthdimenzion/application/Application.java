@@ -24,7 +24,7 @@ import javax.sql.DataSource;
 @ComponentScan(basePackages = {"com.pla", "org.nthdimenzion"})
 @EntityScan(basePackages = {"com.pla", "org.nthdimenzion",
         "org.axonframework.saga", "org.axonframework.eventstore.jpa"})
-@ImportResource(value = {"classpath:axonContext.xml", "classpath:eventstore-jpa-test-context.xml"})
+@ImportResource(value = {"classpath:META-INF/spring/cqrs-infrastructure-context.xml"})
 public class Application {
 
     @Autowired

@@ -7,8 +7,10 @@
 <body style="padding-top: 70px">
 <div th:include="fragments/common :: bodyHeader" th:remove="tag"/>
 <script>
-    requirejs(['/pla/js/viewBenefits.js'],function($){
+    requirejs(['basic'],function(){
+        requirejs(['/pla/js/viewBenefits.js'],function(){
 
+        });
     });
 </script>
 <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">

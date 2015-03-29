@@ -1,6 +1,5 @@
 package com.pla.core.domain.model.plan;
 
-import lombok.AccessLevel;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.ToString;
@@ -18,7 +17,7 @@ import static com.google.common.base.Preconditions.checkArgument;
  * @author: pradyumna
  * @since 1.0 12/03/2015
  */
-@Getter(AccessLevel.PACKAGE)
+@Getter
 @ToString
 @EqualsAndHashCode
 class Term {
@@ -26,6 +25,10 @@ class Term {
     Set<Integer> validTerms = new HashSet<Integer>();
     Set<Integer> maturityAges = new HashSet<Integer>();
     int maxMaturityAge;
+
+    Term() {
+
+    }
 
     Term(Set<Integer> maturityAges) {
         checkArgument(UtilValidator.isNotEmpty(maturityAges));
