@@ -20,7 +20,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.Collections;
 import java.util.List;
 
@@ -41,11 +44,13 @@ public class StubController {
         return userLoginDetailDto;
     }
 
-    @RequestMapping(value = "/getemployee/{employeeId}/{nrcNumber}", method = RequestMethod.GET)
+    @RequestMapping(value = "/getemployee", method = RequestMethod.GET)
     @ResponseBody
-    public EmployeeDto getEmployeeDetail(@PathVariable String employeeId,@PathVariable String nrcNumber) throws IOException {
+    public EmployeeDto getEmployeeDetail( HttpServletRequest request,HttpServletResponse response) throws IOException {
+        String employeeId = request.getParameter("employeeId");
+        String  nrcNumber = request.getParameter("nrcNumber");
         if (employeeId==null && nrcNumber==null){
-            return null;
+            return new EmployeeDto();
         }
         String jsonPath = "/stubdata/employeeDetail.json";
         List<EmployeeDto> listOfEmployeeDetail = getEmployeeDetail(jsonPath);
@@ -61,9 +66,10 @@ public class StubController {
         return employeeDetail;
     }
 
-    @RequestMapping(value = "/getemployeebydesignation/{designation}", method = RequestMethod.GET)
+    @RequestMapping(value = "/getemployeebydesignation", method = RequestMethod.GET)
     @ResponseBody
-    public List<EmployeeDto> getEmployeeDetailByDesignation(@PathVariable String designation) throws IOException {
+    public List<EmployeeDto> getEmployeeDetailByDesignation(HttpServletRequest request,HttpServletResponse response) throws IOException {
+        String designation = request.getParameter("designation");
         if (designation==null){
             return Collections.EMPTY_LIST;
         }

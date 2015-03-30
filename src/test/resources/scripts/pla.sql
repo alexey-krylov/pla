@@ -350,6 +350,16 @@ CREATE VIEW `active_team_region_branch_view` AS
 B.branch_name AS branchName FROM team T LEFT JOIN `team_team_leader_fulfillment` TF ON T.`team_id`=TF.team_id AND T.`current_team_leader`=TF.employee_id
 LEFT JOIN `branch` B ON T.`branch_code`=B.`BRANCH_CODE` LEFT JOIN region R ON T.`region_code`=R.`REGION_CODE` WHERE T.`active`='1');
 
+
+/*Table structure for document */
+DROP TABLE IF EXISTS `document`;
+CREATE TABLE `document` (
+  `document_name` varchar(255) NOT NULL,
+  `document_description` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`document_name`)
+);
+
+
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
 /*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;

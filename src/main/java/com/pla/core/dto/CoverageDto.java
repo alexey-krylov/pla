@@ -2,6 +2,7 @@ package com.pla.core.dto;
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 import java.util.List;
 
@@ -10,6 +11,7 @@ import java.util.List;
  */
 @Getter
 @Setter
+@ToString
 public class CoverageDto {
     private String coverageId;
     private String coverageName;

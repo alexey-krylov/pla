@@ -11,12 +11,11 @@ import com.pla.core.domain.exception.CoverageException;
 import com.pla.core.domain.exception.TeamDomainException;
 import com.pla.sharedkernel.domain.model.BenefitStatus;
 import com.pla.sharedkernel.identifier.CoverageId;
+import com.pla.sharedkernel.identifier.PlanId;
 import org.joda.time.LocalDate;
 import org.nthdimenzion.ddd.domain.annotations.ValueObject;
 
 import java.util.Set;
-
-import static com.pla.core.domain.exception.AgentException.raiseAgentLicenseNumberUniqueException;
 
 /**
  * @author: Samir
@@ -84,4 +83,13 @@ public class Admin {
         return updatedTeam;
     }
 
+    public PolicyProcessDocument createPolicyProcessDocument(String planId,String coverageId,ProcessType processType, Set<String> documents){
+        PolicyProcessDocument policyProcessDocument = PolicyProcessDocument.createPolicyProcessDocument(new PlanId(planId), new CoverageId(coverageId), processType, documents);
+        return policyProcessDocument;
+    }
+
+    public PolicyProcessDocument updatePolicyProcessDocument(PolicyProcessDocument policyProcessDocument, Set<String> documents){
+        PolicyProcessDocument updatePolicyProcessDocument = policyProcessDocument.updatePolicyProcessDocument(documents);
+        return updatePolicyProcessDocument;
+    }
 }

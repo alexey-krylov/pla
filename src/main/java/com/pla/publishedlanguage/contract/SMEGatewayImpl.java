@@ -22,7 +22,7 @@ public class SMEGatewayImpl implements ISMEGateway {
     public EmployeeDto getEmployeeDetailByIdOrByNRCNumber(String employeeId, String NRCNumber) {
         Preconditions.checkNotNull(serverUrl);
         RestTemplate restTemplate = new RestTemplate();
-        String employeeDetailByIDAndNRCNumberURL = serverUrl + "/getemployeedetail?employeeId="+employeeId+"&nrcNumber="+NRCNumber;
+        String employeeDetailByIDAndNRCNumberURL = serverUrl + "/getemployee?employeeId="+employeeId+"&nrcNumber="+NRCNumber;
         System.out.println(employeeDetailByIDAndNRCNumberURL);
         EmployeeDto  employeeDetail = restTemplate.getForObject(employeeDetailByIDAndNRCNumberURL, EmployeeDto.class);
         Preconditions.checkNotNull(employeeDetail);
@@ -33,7 +33,7 @@ public class SMEGatewayImpl implements ISMEGateway {
     public List<EmployeeDto> getEmployeeDetailByDesignation(String designation) {
         Preconditions.checkNotNull(serverUrl);
         RestTemplate restTemplate = new RestTemplate();
-        String employeeDetailByDesignationURL = serverUrl + "/getemployeedetailbydesignation?designation="+designation;
+        String employeeDetailByDesignationURL = serverUrl + "/getemployeebydesignation?designation="+designation;
         System.out.println(employeeDetailByDesignationURL);
         List<EmployeeDto> listOfEmployeeDetail = restTemplate.getForObject(employeeDetailByDesignationURL, List.class);
         Preconditions.checkNotNull(listOfEmployeeDetail);

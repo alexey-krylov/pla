@@ -401,5 +401,31 @@
         </plugins>
     </build>
 
+    <profiles>
+        <profile>
+            <id>DEV</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <properties>
+                <spring.profiles.active>dev</spring.profiles.active>
+                <devurl>http://localhost:6443/pla/stub</devurl>
+                <mysql.username>root</mysql.username>
+                <mysql.password>welcome</mysql.password>
+            </properties>
+        </profile>
+
+        <profile>
+            <id>PROD</id>
+            <properties>
+                <spring.profiles.active>prod</spring.profiles.active>
+                <produrl>http://127.0.0.1:9090/partymgr/control</produrl>
+                <datasource.primary.username>root</datasource.primary.username>
+                <datasource.primary.password>welcome</datasource.primary.password>
+            </properties>
+        </profile>
+
+    </profiles>
+
 
 </project>
