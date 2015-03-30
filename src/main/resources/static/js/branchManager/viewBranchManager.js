@@ -1,0 +1,1 @@
+ $('#branchManager-table').dataTable();
