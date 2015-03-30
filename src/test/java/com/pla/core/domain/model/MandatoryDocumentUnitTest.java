@@ -21,7 +21,7 @@ public class MandatoryDocumentUnitTest {
         Set<String> documents = Sets.newHashSet();
         documents.add("DOCUMENT_ONE");
         documents.add("DOCUMENT_TWO");
-        MandatoryDocument mandatoryDocument = MandatoryDocument.createMandatoryDocument(new PlanId("P001"), new CoverageId("C001"), ProcessType.ENDORSEMENT, documents);
+        MandatoryDocument mandatoryDocument = MandatoryDocument.createMandatoryDocumentWithCoverageId(new PlanId("P001"), new CoverageId("C001"), ProcessType.ENDORSEMENT, documents);
 
         assertNotNull(mandatoryDocument);
         assertEquals(new PlanId("P001"), invokeGetterMethod(mandatoryDocument, "getPlanId"));
@@ -35,7 +35,7 @@ public class MandatoryDocumentUnitTest {
         Set<String> documents = Sets.newHashSet();
         documents.add("DOCUMENT_ONE");
         documents.add("DOCUMENT_TWO");
-        MandatoryDocument mandatoryDocument = MandatoryDocument.createMandatoryDocument(new PlanId("P001"), new CoverageId("C001"), ProcessType.ENDORSEMENT, documents);
+        MandatoryDocument mandatoryDocument = MandatoryDocument.createMandatoryDocumentWithCoverageId(new PlanId("P001"), new CoverageId("C001"), ProcessType.ENDORSEMENT, documents);
         assertNotNull(mandatoryDocument);
         documents = Sets.newHashSet();
         documents.add("DOCUMENT_THREE");
@@ -50,7 +50,7 @@ public class MandatoryDocumentUnitTest {
         Set<String> documents = Sets.newHashSet();
         documents.add("DOCUMENT_ONE");
         documents.add("DOCUMENT_TWO");
-        MandatoryDocument mandatoryDocument = MandatoryDocument.createMandatoryDocument(new PlanId("P001"), new CoverageId("C001"), ProcessType.ENDORSEMENT, documents);
+        MandatoryDocument mandatoryDocument = MandatoryDocument.createMandatoryDocumentWithCoverageId(new PlanId("P001"), new CoverageId("C001"), ProcessType.ENDORSEMENT, documents);
         assertNotNull(mandatoryDocument);
 
         MandatoryDocument updatedMandatoryDocument = mandatoryDocument.updateMandatoryDocument(null);
