@@ -5,6 +5,25 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
 </head>
 <body style="padding-top: 70px">
+<style>
+    input.ng-invalid.ng-dirty {
+        background-color: #FA787E;
+    }
+
+    input.ng-valid.ng-dirty {
+        background-color: #78FA89;
+    }
+
+    .required .control-label:after {
+        content: " *";
+        color: red;
+    }
+
+    .error {
+        font-size: 10px;
+        color: firebrick;
+    }
+</style>
 <div th:include="fragments/common :: bodyHeader" th:remove="tag"/>
 <script>
 
@@ -15,7 +34,7 @@
         "shim": {"plansetup": ["angular"]}
     });
 
-    require(['ng-tags-input', 'checklistmodel'], function (a, b) {
+    require(['ng-tags-input', 'checklistmodel', 'angular-ui-router'], function (a, b) {
     });
 
     requirejs(['main'], function () {
