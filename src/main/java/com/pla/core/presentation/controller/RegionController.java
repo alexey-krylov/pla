@@ -38,8 +38,8 @@ public class RegionController {
     @RequestMapping(value = "/region/view", method = RequestMethod.GET)
     public ModelAndView viewTeams() {
         ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("pla/core/region//viewRegion");
-        modelAndView.addObject("/regionList", regionFinder.getAllRegion());
+        modelAndView.setViewName("pla/core/region/viewRegion");
+        modelAndView.addObject("regionList", regionFinder.getAllRegion());
         return modelAndView;
     }
 
