@@ -85,7 +85,7 @@ public class Team implements ICrudEntity {
 
     public Set<TeamLeaderFulfillment> updateTeamLeaderFullfillment(Set<TeamLeaderFulfillment> teamLeaderFulfillments, TeamLeader teamLeaderToBeExpired, LocalDate expireDate) {
         for (TeamLeaderFulfillment teamLeaderFulfillment : teamLeaderFulfillments) {
-            if (teamLeaderFulfillment.getTeamLeader().equals(teamLeaderToBeExpired)) {
+            if (teamLeaderFulfillment.getTeamLeader().equals(teamLeaderToBeExpired) && teamLeaderFulfillment.getThruDate() == null) {
                 teamLeaderFulfillment.expireFulfillment(expireDate);
             }
         }

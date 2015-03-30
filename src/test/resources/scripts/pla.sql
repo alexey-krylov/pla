@@ -93,8 +93,8 @@ CREATE TABLE `coverage_benefit` (
 DROP TABLE IF EXISTS `branch`;
 CREATE TABLE `branch`(
   `branch_code` varchar(255) NOT NULL,
-  `branch_bde` varchar(255) DEFAULT NULL,
-  `branch_manager` varchar(255) DEFAULT NULL,
+  `current_branch_bde` varchar(255) DEFAULT NULL,
+  `current_branch_manager` varchar(255) DEFAULT NULL,
   `branch_name` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`branch_code`)
 );
@@ -158,9 +158,33 @@ CREATE TABLE `region_manager_fulfillment`(
   `from_date` date DEFAULT NULL,
   `thru_date` date DEFAULT NULL,
   `employee_id` varchar(255) NULL,
-  PRIMARY KEY (`region_Code`,`employee_id`),
-  CONSTRAINT `FK_REGION_CODE_REGION_MANAGER_FULFILLMENT_REGION_CODE` FOREIGN KEY (`region_Code`) REFERENCES `region` (`region_code`)
+  PRIMARY KEY (`region_Code`,`employee_id`)
 ) ;
+
+DROP TABLE IF EXISTS branch_manager_fulfillment;
+CREATE TABLE `branch_manager_fulfillment`(
+  `branch_code` varchar(255) NOT NULL,
+  `first_name` varchar(255) NOT NULL,
+  `last_name` varchar(255) NOT NULL,
+  `from_date` date NOT NULL,
+  `thru_date` date DEFAULT NULL,
+  `employee_id` varchar(255) NOT NULL,
+  PRIMARY KEY (`branch_code`,`employee_id`),
+  CONSTRAINT `FK_BRANCH_CODE_BRANCH_FULFILLMENT` FOREIGN KEY (`branch_code`) REFERENCES `branch` (`branch_code`)
+);
+
+DROP TABLE IF EXISTS branch_bde_fulfillment;
+CREATE TABLE `branch_bde_fulfillment`(
+  `branch_code` varchar(255) NOT NULL,
+  `first_name` varchar(255) NOT NULL,
+  `last_name` varchar(255) NOT NULL,
+  `from_date` date DEFAULT NULL,
+  `thru_date` date DEFAULT NULL,
+  `employee_id` varchar(255) NOT NULL,
+  PRIMARY KEY (`branch_code`,`employee_id`),
+  CONSTRAINT `FK_BRANCH_CODE_BRANCH_BDE_FULFILLMENT_CODE` FOREIGN KEY (`branch_code`) REFERENCES `branch` (`branch_code`)
+);
+
 
 
 DROP TABLE IF EXISTS agent_authorized_plan;
