@@ -31,4 +31,12 @@ public class BenefitDto {
         this.benefitId = benefitId;
         this.benefitName = benefitName;
     }
+
+    @Override
+    public String toString() {
+        return "BenefitDto{" +
+                "benefitId='" + benefitId + '\'' +
+                ", benefitName='" + benefitName + '\'' +
+                '}';
+    }
 }
