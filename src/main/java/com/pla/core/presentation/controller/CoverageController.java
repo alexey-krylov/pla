@@ -75,9 +75,9 @@ public class CoverageController {
     }
 
     @RequestMapping(value = "/coverages/create", method = RequestMethod.POST)
-    public
-    @ResponseBody
-    Result createCoverage(@RequestBody CreateCoverageCommand createCoverageCommand, BindingResult bindingResult, HttpServletRequest request) {
+     public
+     @ResponseBody
+     Result createCoverage(@RequestBody CreateCoverageCommand createCoverageCommand, BindingResult bindingResult, HttpServletRequest request) {
         if (bindingResult.hasErrors()) {
             return Result.failure("Error in creating benefit", bindingResult.getAllErrors());
         }

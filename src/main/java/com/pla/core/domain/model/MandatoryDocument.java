@@ -7,6 +7,7 @@ import org.nthdimenzion.common.crud.ICrudEntity;
 import org.nthdimenzion.utils.UtilValidator;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.Set;
 
 import static com.google.common.base.Preconditions.checkNotNull;
@@ -17,15 +18,15 @@ import static com.google.common.base.Preconditions.checkState;
  */
 @Entity
 @Table(name = "mandatory_document")
-@EqualsAndHashCode(of = {"id"})
+@EqualsAndHashCode(of = {"documentId"})
 @ToString
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 @Getter
-public class MandatoryDocument implements ICrudEntity {
+public class MandatoryDocument implements ICrudEntity ,Serializable{
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private String id;
+    private Long documentId;
 
     @Embedded
     private PlanId planId;

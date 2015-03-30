@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by Admin on 3/24/2015.
@@ -15,7 +16,7 @@ public class CoverageDto {
     private String coverageName;
     private String description;
     private String coverageStatus;
-    private List<BenefitDto> benefitDtos ;
+    private List<Map<String,Object>> benefitDtos ;
 
     @Override
     public String toString() {

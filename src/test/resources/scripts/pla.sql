@@ -579,16 +579,37 @@ B.branch_name AS branchName FROM team T LEFT JOIN `team_team_leader_fulfillment`
 LEFT JOIN `branch` B ON T.`branch_code`=B.`BRANCH_CODE` LEFT JOIN region R ON T.`region_code`=R.`REGION_CODE` WHERE T.`active`='1');
 
 
+/*Table structure for mandatory_document */
 
-/*Table structure for document *//*
+DROP TABLE IF EXISTS `mandatory_document`;
+CREATE TABLE `mandatory_document` (
+  `document_id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `coverage_id` varchar(255) DEFAULT NULL,
+  `plan_id` varchar(255) DEFAULT NULL,
+  `process` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`document_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+
+
+/*Table structure for mandatory_document_documents */
+
+DROP TABLE IF EXISTS `mandatory_document_documents`;
+CREATE TABLE `mandatory_document_documents` (
+  `mandatory_document_documentId` bigint(20) NOT NULL,
+  `documents` varchar(255) DEFAULT NULL,
+  KEY `FK_aio1xqrp2158a4o2jduiommyy` (`mandatory_document_documentId`),
+  CONSTRAINT `FK_aio1xqrp2158a4o2jduiommyy` FOREIGN KEY (`mandatory_document_documentId`) REFERENCES `mandatory_document` (`document_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+/*Table structure for document */
 
 DROP TABLE IF EXISTS `document`;
 CREATE TABLE `document` (
-  `document_name` varchar(255) NOT NULL,
-  `document_description` varchar(255) DEFAULT NULL,
-  PRIMARY KEY (`document_name`)
+  `document_code` varchar(255) NOT NULL,
+  `document_name` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`document_code`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-*/
 
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
