@@ -42,14 +42,14 @@ public class BranchController {
     @RequestMapping(value = "/branch/view", method = RequestMethod.GET)
     public ModelAndView viewBranches() {
         ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("pla/core/branch/viewBranch");
+        modelAndView.setViewName("pla/core/branch/viewBranchManager");
         modelAndView.addObject("branchList", branchFinder.getAllBranch());
         return modelAndView;
     }
 
     @RequestMapping(value = "/branch/redirectToAssignPage", method = RequestMethod.GET)
     public String redirectToAssignPage(@RequestParam(value = "branchId", required = false) String branchId) {
-        return "pla/core/branch/assignBranch";
+        return "pla/core/branch/assignBranchManager";
     }
 
     @RequestMapping(value = "/branch/openAssignPage", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
