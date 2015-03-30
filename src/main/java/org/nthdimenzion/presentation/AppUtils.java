@@ -1,7 +1,5 @@
 package org.nthdimenzion.presentation;
 
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
 import org.joda.money.CurrencyUnit;
 import org.joda.money.Money;
 import org.joda.time.LocalDate;

@@ -8,7 +8,6 @@ import com.pla.core.domain.service.CoverageService;
 import com.pla.sharedkernel.identifier.CoverageId;
 import org.axonframework.commandhandling.annotation.CommandHandler;
 import org.nthdimenzion.common.service.JpaRepositoryFactory;
-import org.nthdimenzion.utils.UtilValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

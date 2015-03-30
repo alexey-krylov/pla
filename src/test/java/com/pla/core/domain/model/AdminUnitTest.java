@@ -6,16 +6,22 @@
 
 package com.pla.core.domain.model;
 
+import com.pla.core.domain.exception.CoverageException;
 import com.pla.core.dto.BenefitDto;
 import com.pla.core.query.BenefitFinder;
 import com.pla.core.specification.BenefitIsAssociatedWithCoverage;
 import com.pla.core.specification.BenefitNameIsUnique;
 import com.pla.sharedkernel.domain.model.BenefitStatus;
+import com.pla.sharedkernel.identifier.CoverageId;
+import com.pla.sharedkernel.identifier.PlanId;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
+
+import java.util.HashSet;
+import java.util.Set;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.when;
@@ -39,9 +45,15 @@ public class AdminUnitTest {
 
     private Admin admin;
 
+    Set<Benefit> benefitSet = new HashSet<>();
+
     @Before
     public void setUp() {
         admin = new Admin();
+        String name = "CI Benefit";
+        boolean isBenefitNameUnique = true;
+        Benefit benefit = admin.createBenefit(isBenefitNameUnique, "1", name);
+        benefitSet.add(benefit);
     }
 
     @Test
@@ -80,6 +92,94 @@ public class AdminUnitTest {
         Benefit updatedBenefit = admin.updateBenefit(benefit, updatedName, isUpdatable);
         BenefitName updatedBenefitName = (BenefitName) invokeGetterMethod(updatedBenefit, "getBenefitName");
         assertEquals(updatedName, updatedBenefitName.getBenefitName());
+    }
+
+    @Test
+    public void givenTheCoverageWithSetOfBenefit_whenTheCoverageNameIsUnique_thenItShouldCreateTheCoverage() {
+        String name = "CI Benefit";
+        boolean isCoverageNameIsUnique = true;
+        Coverage coverage = admin.createCoverage(isCoverageNameIsUnique, "1", name, "description", benefitSet);
+        CoverageName coverageName = (CoverageName) invokeGetterMethod(coverage, "getCoverageName");
+        assertEquals(name, coverageName.getCoverageName());
+        assertEquals(CoverageStatus.ACTIVE, invokeGetterMethod(coverage, "getStatus"));
+    }
+
+    @Test(expected = CoverageException.class)
+    public void givenTheCoverageWithSetOfBenefit_whenTheCoverageNameIsNotUnique_thenItShouldThrowAnException() {
+        String name = "coverage name";
+        boolean isCoverageNameIsUnique = false;
+        Coverage coverage = admin.createCoverage(isCoverageNameIsUnique, "1", name, "description", benefitSet);
+    }
+
+    @Test
+    public void givenTheCoverageWithNewCoverageName_whenCoverageNameIsUnique_thenTheCoverageShouldUpdateWithNewName() {
+        String name = "coverage name";
+        boolean isCoverageNameIsUnique = true;
+        Coverage coverage = admin.createCoverage(isCoverageNameIsUnique, "1", name, "description", benefitSet);
+
+        String updatedName = "coverage name after update";
+        Coverage updatedCoverage = admin.updateCoverage(coverage,updatedName, benefitSet, true);
+        CoverageName updatedCoverageName = (CoverageName) invokeGetterMethod(updatedCoverage, "getCoverageName");
+        assertEquals(updatedName, updatedCoverageName.getCoverageName());
+    }
+
+    @Test(expected = CoverageException.class)
+    public void givenTheCoverageWithNewCoverageName_whenCoverageNameIsNotUnique_thenTheCoverageShouldUpdateWithNewName() {
+        String name = "coverage name";
+        boolean isCoverageNameIsUnique = true;
+        Coverage coverage = admin.createCoverage(isCoverageNameIsUnique, "1", name, "description", benefitSet);
+
+        String updatedName = "coverage name";
+        Coverage updatedCoverage = admin.updateCoverage(coverage,updatedName, benefitSet, false);
+    }
+
+
+    @Test
+    public void givenACoverage_whenTheCoverageIsInActiveStatus_thenItShouldInActivateTheCoverage() {
+        String name = "coverage name";
+        boolean isCoverageNameIsUnique = true;
+        Coverage coverage = admin.createCoverage(isCoverageNameIsUnique, "1", name, "description", benefitSet);
+        Coverage inactiveCoverage = admin.inactivateCoverage(coverage);
+        assertEquals(CoverageStatus.INACTIVE, invokeGetterMethod(inactiveCoverage, "getStatus"));
+    }
+
+
+    @Test(expected = CoverageException.class)
+    public void givenACoverage_whenTheCoverageIsInInUseStatus_thenItShouldThrowAnException() {
+        String name = "coverage name";
+        boolean isCoverageNameIsUnique = true;
+        Coverage coverage = admin.createCoverage(isCoverageNameIsUnique, "1", name, "description", benefitSet);
+        coverage.markAsUsed();
+        Coverage inactiveCoverage = admin.inactivateCoverage(coverage);
+    }
+
+    @Test
+    public void givenAProductAndAnOptionalCoverage_whenUserHasAdminRole_thenItShouldCreateTheMandatoryDocument(){
+        Set<String> documents = new HashSet<>();
+        documents.add("DOCUMENT_ONE");
+        documents.add("DOCUMENT_TWO");
+        MandatoryDocument mandatoryDocument = admin.createMandatoryDocument("P001", "C001", ProcessType.MATURITY, documents);
+        assertEquals(new PlanId("P001"), invokeGetterMethod(mandatoryDocument, "getPlanId"));
+        assertEquals(new CoverageId("C001"), invokeGetterMethod(mandatoryDocument, "getCoverageId"));
+        assertEquals(ProcessType.MATURITY, invokeGetterMethod(mandatoryDocument, "getProcess"));
+        assertEquals(2, mandatoryDocument.getDocuments().size());
+
+    }
+
+    @Test
+    public void givenSetOfDocuments_whenUserHasAdminRole_thenItShouldUpdateTheMandatoryDocumentWithTheGivenDocuments() {
+        Set<String> documents = new HashSet<>();
+        documents.add("DOCUMENT_ONE");
+        documents.add("DOCUMENT_TWO");
+        MandatoryDocument mandatoryDocument = admin.createMandatoryDocument("P001", "C001", ProcessType.MATURITY, documents);
+        assertEquals(2, mandatoryDocument.getDocuments().size());
+
+        documents = new HashSet<>();
+        documents.add("DOCUMENT_THREE");
+        documents.add("DOCUMENT_FOUR");
+        documents.add("DOCUMENT_FIVE");
+        MandatoryDocument updatedMandatoryDocument = admin.updateMandatoryDocument(mandatoryDocument, documents);
+        assertEquals(3, updatedMandatoryDocument.getDocuments().size());
     }
 
 }

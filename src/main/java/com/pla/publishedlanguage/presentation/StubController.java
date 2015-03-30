@@ -49,9 +49,7 @@ public class StubController {
         }
         String jsonPath = "/stubdata/employeeDetail.json";
         List<EmployeeDto> listOfEmployeeDetail = getEmployeeDetail(jsonPath);
-        EmployeeDto employeeDetail = null;
-        employeeId = employeeId!=null?employeeId:"";
-        nrcNumber = nrcNumber!=null?nrcNumber:"";
+        EmployeeDto employeeDetail  = null;
         for (EmployeeDto employeeDetailFromJson :listOfEmployeeDetail){
             if (employeeId.equals(employeeDetailFromJson.getEmployeeId()) || nrcNumber.equals(employeeDetailFromJson.getNrcNumber())){
                 employeeDetail = employeeDetailFromJson;

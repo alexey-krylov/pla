@@ -12,6 +12,8 @@ import com.pla.core.application.exception.BenefitApplicationException;
 import com.pla.core.domain.model.agent.Agent;
 import com.pla.core.query.AgentFinder;
 import com.pla.core.query.TeamFinder;
+import com.pla.publishedlanguage.contract.ISMEGateway;
+import com.pla.publishedlanguage.domain.model.EmployeeDto;
 import com.pla.sharedkernel.util.SequenceGenerator;
 import org.axonframework.commandhandling.gateway.CommandGateway;
 import org.nthdimenzion.presentation.Result;
@@ -47,6 +49,8 @@ public class AgentController {
 
     private CommandGateway commandGateway;
 
+    private ISMEGateway ismeGateway;
+
     private AgentFinder agentFinder;
 
     private SequenceGenerator sequenceGenerator;
@@ -54,11 +58,12 @@ public class AgentController {
     private TeamFinder teamFinder;
 
     @Autowired
-    public AgentController(CommandGateway commandGateway, AgentFinder agentFinder, SequenceGenerator sequenceGenerator, TeamFinder teamFinder) {
+    public AgentController(CommandGateway commandGateway, AgentFinder agentFinder, SequenceGenerator sequenceGenerator, TeamFinder teamFinder,ISMEGateway ismeGateway) {
         this.commandGateway = commandGateway;
         this.agentFinder = agentFinder;
         this.sequenceGenerator = sequenceGenerator;
         this.teamFinder = teamFinder;
+        this.ismeGateway=ismeGateway;
     }
 
     @RequestMapping(value = "/listagent", method = RequestMethod.GET)
@@ -152,4 +157,9 @@ public class AgentController {
         return Result.success("Agent updated successfully");
     }
 
+    @RequestMapping(value = "/getemployeedeatil/{employeeId}/{nrcNumber}",method = RequestMethod.GET,produces = MediaType.APPLICATION_JSON_VALUE,consumes = MediaType.ALL_VALUE)
+    @ResponseBody
+    public EmployeeDto getEmployeeDetail(@PathVariable String employeeId,@PathVariable String nrcNumber){
+        return ismeGateway.getEmployeeDetailByIdOrByNRCNumber(employeeId,nrcNumber);
+    }
 }

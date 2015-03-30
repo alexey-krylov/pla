@@ -301,7 +301,6 @@ DROP TABLE IF EXISTS `coverage_benefit`;
 CREATE TABLE `coverage_benefit` (
   `coverage_id` varchar(255) NOT NULL,
   `benefit_id` varchar(255) NOT NULL,
-  UNIQUE KEY `UK_BENEFIT_ID` (`benefit_id`),
   KEY `FK_COVERAGE_ID` (`coverage_id`),
   CONSTRAINT `FK_COVERAGE_COVERAGE_ID` FOREIGN KEY (`coverage_id`) REFERENCES `coverage` (`coverage_id`),
   CONSTRAINT `FK_BENEFIT_BENEFIT_ID` FOREIGN KEY (`benefit_id`) REFERENCES `benefit` (`benefit_id`)
@@ -737,6 +736,19 @@ CREATE VIEW `active_team_region_branch_view` AS
 (SELECT T.team_id AS teamId,T.team_name AS teamName,TF.first_name AS leaderFirstName,TF.last_name AS leaderLastName,R.region_name AS regionName,
 B.branch_name AS branchName FROM team T LEFT JOIN `team_team_leader_fulfillment` TF ON T.`team_id`=TF.team_id AND T.`current_team_leader`=TF.employee_id
 LEFT JOIN `branch` B ON T.`branch_code`=B.`BRANCH_CODE` LEFT JOIN region R ON T.`region_code`=R.`REGION_CODE` WHERE T.`active`='1');
+
+
+
+/*Table structure for document *//*
+
+DROP TABLE IF EXISTS `document`;
+CREATE TABLE `document` (
+  `document_name` varchar(255) NOT NULL,
+  `document_description` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`document_name`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+*/
+
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;

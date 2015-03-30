@@ -29,7 +29,7 @@ public class UserService implements UserDetailsService {
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         Preconditions.checkNotNull(serverUrl);
         RestTemplate restTemplate = new RestTemplate();
-        String userDetailUrl = serverUrl + "/getuserdetail";
+        String userDetailUrl = serverUrl + "/getuserdetail?username=admin";
         UserLoginDetailDto userLoginDetailDto = restTemplate.getForObject(userDetailUrl, UserLoginDetailDto.class);
         Preconditions.checkNotNull(userLoginDetailDto);
         userLoginDetailDto = userLoginDetailDto.populateAuthorities(userLoginDetailDto.getPermissions());

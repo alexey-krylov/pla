@@ -11,12 +11,11 @@ import com.pla.core.domain.exception.CoverageException;
 import com.pla.core.domain.exception.TeamDomainException;
 import com.pla.sharedkernel.domain.model.BenefitStatus;
 import com.pla.sharedkernel.identifier.CoverageId;
+import com.pla.sharedkernel.identifier.PlanId;
 import org.joda.time.LocalDate;
 import org.nthdimenzion.ddd.domain.annotations.ValueObject;
 
 import java.util.Set;
-
-import static com.pla.core.domain.exception.AgentException.raiseAgentLicenseNumberUniqueException;
 
 /**
  * @author: Samir
@@ -84,4 +83,17 @@ public class Admin {
         return updatedTeam;
     }
 
+    public MandatoryDocument createMandatoryDocument(String planId, String coverageId, ProcessType processType, Set<String> documents){
+        MandatoryDocument mandatoryDocument;
+        if (coverageId!=null)
+            mandatoryDocument = MandatoryDocument.createMandatoryDocumentWithCoverageId(new PlanId(planId), new CoverageId(coverageId),processType, documents);
+        else
+            mandatoryDocument = MandatoryDocument.createMandatoryDocumentWithPlanId(new PlanId(planId), processType, documents);
+        return mandatoryDocument;
+    }
+
+    public MandatoryDocument updateMandatoryDocument(MandatoryDocument mandatoryDocument, Set<String> documents){
+        MandatoryDocument updateMandatoryDocument = mandatoryDocument.updateMandatoryDocument(documents);
+        return updateMandatoryDocument;
+    }
 }

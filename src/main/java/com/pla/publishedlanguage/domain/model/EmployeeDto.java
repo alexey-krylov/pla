@@ -18,12 +18,14 @@ public class EmployeeDto {
     private String employeeId;
     private String nrcNumber;
     private String designation;
+    private String designationDescription;
     private String departmentName;
     private String email;
-    private Map<String,Object> primaryContactDetail;
-    private Map<String,Object> physicalContactDetail;
+    private Map<String, Object> primaryContactDetail;
+    private Map<String, Object> physicalContactDetail;
 
-    EmployeeDto(){
+    public EmployeeDto() {
 
     }
+
 }

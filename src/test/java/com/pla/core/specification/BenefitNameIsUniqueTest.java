@@ -6,7 +6,6 @@
 
 package com.pla.core.specification;
 
-import com.pla.core.domain.model.BenefitName;
 import com.pla.core.dto.BenefitDto;
 import com.pla.core.query.BenefitFinder;
 import org.junit.Test;
@@ -14,8 +13,9 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
-import static org.junit.Assert.*;
-import static org.mockito.Mockito.*;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.when;
 
 /**
  * @author: Samir

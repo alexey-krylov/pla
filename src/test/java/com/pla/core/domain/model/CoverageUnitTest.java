@@ -1,7 +1,6 @@
 package com.pla.core.domain.model;
 
 import com.pla.core.domain.exception.CoverageException;
-import com.pla.core.domain.model.*;
 import com.pla.sharedkernel.domain.model.BenefitStatus;
 import org.junit.Before;
 import org.junit.Test;

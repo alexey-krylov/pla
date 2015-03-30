@@ -19,6 +19,8 @@ import org.springframework.web.servlet.LocaleResolver;
 import org.springframework.web.servlet.config.annotation.*;
 import org.springframework.web.servlet.i18n.LocaleChangeInterceptor;
 import org.springframework.web.servlet.i18n.SessionLocaleResolver;
+import org.springframework.web.servlet.view.InternalResourceView;
+import org.springframework.web.servlet.view.UrlBasedViewResolver;
 
 import java.text.ParseException;
 import java.util.Locale;
@@ -34,17 +36,15 @@ import static org.nthdimenzion.presentation.AppUtils.stripCurrencyUnit;
 @Configuration
 public class CustomMVCConfiguration extends WebMvcConfigurerAdapter {
 
-    static {
-        Locale.setDefault(Locale.UK);
-    }
-
     private static final String[] SERVLET_RESOURCE_LOCATIONS = {"/"};
-
     private static final String[] CLASSPATH_RESOURCE_LOCATIONS = {
             "classpath:/META-INF/resources/", "classpath:/resources/",
             "classpath:/static/", "classpath:/public/"};
-
     private static final String[] RESOURCE_LOCATIONS;
+
+    static {
+        Locale.setDefault(Locale.UK);
+    }
 
     static {
         RESOURCE_LOCATIONS = new String[CLASSPATH_RESOURCE_LOCATIONS.length
@@ -93,6 +93,7 @@ public class CustomMVCConfiguration extends WebMvcConfigurerAdapter {
         registry.addViewController("/").setViewName("index");
         registry.addViewController("/login").setViewName("login");
         registry.addViewController("/home").setViewName("home");
+        registry.addViewController("/sample/grid").setViewName("pla/sample/grid");
     }
 
     @Override
@@ -101,6 +102,7 @@ public class CustomMVCConfiguration extends WebMvcConfigurerAdapter {
             registry.addResourceHandler("/webjars/**")
                     .addResourceLocations("classpath:/META-INF/resources/webjars/");
         }
+
         if (!registry.hasMappingForPattern("/**")) {
             registry.addResourceHandler("/**")
                     .addResourceLocations(RESOURCE_LOCATIONS);
@@ -121,6 +123,11 @@ public class CustomMVCConfiguration extends WebMvcConfigurerAdapter {
 
     @Override
     public void configureViewResolvers(ViewResolverRegistry registry) {
+        UrlBasedViewResolver resolver = new UrlBasedViewResolver();
+        resolver.setPrefix("/WEB-INF/classes/templates/");
+        resolver.setSuffix(".html");
+        resolver.setViewClass(InternalResourceView.class);
+        registry.viewResolver(resolver);
     }
 
     private class JodaMoneyFormatter implements Formatter<Money> {

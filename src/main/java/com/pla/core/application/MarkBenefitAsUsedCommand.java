@@ -7,7 +7,6 @@
 
 package com.pla.core.application;
 
-import com.pla.sharedkernel.domain.model.BenefitStatus;
 import lombok.*;
 import org.hibernate.validator.constraints.NotEmpty;
 

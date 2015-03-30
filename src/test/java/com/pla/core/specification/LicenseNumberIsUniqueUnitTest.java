@@ -7,7 +7,6 @@
 package com.pla.core.specification;
 
 import com.pla.core.domain.model.agent.LicenseNumber;
-import com.pla.core.dto.BenefitDto;
 import com.pla.core.query.AgentFinder;
 import org.junit.Test;
 import org.junit.runner.RunWith;

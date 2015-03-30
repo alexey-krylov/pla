@@ -1,6 +1,7 @@
+'use strict';
 var app = angular.module('planSetup', ['ngTagsInput', 'ui.bootstrap', 'ui.bootstrap.tpls',
     'ui.bootstrap.accordion',
-    'checklist-model', 'ngRoute', 'directives']);
+    'checklist-model', 'ngRoute', 'directives', 'ui.router']);
 
 app.config(function (tagsInputConfigProvider) {
     tagsInputConfigProvider.setDefaults('tagsInput', {
@@ -64,13 +65,11 @@ app.config(function ($routeProvider, $locationProvider) {
 app.controller('PlanSetupController', ['$scope', '$http', '$routeParams', 'plan',
         function ($scope, $http, $routeParams, plan) {
 
-            $scope.$on('$viewContentLoaded', function () {
+            /*$scope.$on('$viewContentLoaded', function () {
                 console.log('view content loaded ');
                 $('#planSetUpWizard').wizard();
-            });
+             });*/
             $scope.plan = plan;
-
-
             $scope.steps = [{"title": "step-1"}, {"title": "step-2"}];
             $scope.currentStepIndex = 0;
 
@@ -221,7 +220,6 @@ app.controller('PlanSetupController', ['$scope', '$http', '$routeParams', 'plan'
 
             $scope.$watch('newCoverage.coverage', function (newval) {
                 if (newval && !angular.isUndefined(newval.coverageId)) {
-                    console.log(' new Coverage Id ' + newval.coverageId);
                     $scope.newCoverage.coverageId = newval.coverageId;
                 }
             });
@@ -231,7 +229,7 @@ app.controller('PlanSetupController', ['$scope', '$http', '$routeParams', 'plan'
                 $scope.newCoverage = coverage;
             }
 
-            $scope.selectedCoverage;
+            $scope.selectedCoverage = {};
             $scope.benefits = [{benefitName: " Accidental Benefit 1", benefitId: 1},
                 {benefitName: " Accidental Benefit 2", benefitId: 2}];
 
@@ -247,16 +245,16 @@ app.controller('PlanSetupController', ['$scope', '$http', '$routeParams', 'plan'
 
 
             $scope.createPlan = function () {
-                alert($scope.plan._id);
-                console.log(JSON.stringify($scope.plan, null, '\t'));
-
-                $http.post(angular.isUndefined($scope.plan._id) ? '/pla/core/plan/create' : '/pla/core/plan/update', $scope.plan).
+                console.log($scope.planSetupForm.$invalid);
+                $http.post(angular.isUndefined($scope.plan.planId.planId) ? '/pla/core/plan/create' : '/pla/core/plan/update', $scope.plan).
                     success(function (data, status, headers, config) {
                         $scope.plan.planId = data.id;
                     }).
                     error(function (data, status, headers, config) {
                     });
             };
+
+
             $scope.datePickerSettings = {
                 isOpened: false,
                 dateOptions: {
@@ -292,19 +290,27 @@ app.controller('PlanSetupController', ['$scope', '$http', '$routeParams', 'plan'
 
             $scope.getAllBenefits = function () {
                 var benefitList = [];
-                for (i = 0; i < $scope.plan.coverages.length; i++) {
+                var i = 0;
+                for (; i < $scope.plan.coverages.length; i++) {
                     var j = 0;
                     for (j = 0; j < $scope.plan.coverages[i].planCoverageBenefits.length; j++) {
                         benefitList.push($scope.plan.coverages[i].planCoverageBenefits[j]);
                     }
                 }
-                console.log('Total Benefits ' + benefitList.length);
                 return benefitList;
-
             }
 
             $scope.isValid = function (formField) {
                 return formField.$dirty && formField.$invalid
             }
+
+            $scope.$on('finished.fu.wizard', function (name, event, data) {
+                console.log('Completed');
+                $scope.createPlan();
+            });
+
+            $scope.$on('actionclicked.fu.wizard', function (name, event, data) {
+                console.log('Step:: ' + data.step);
+            });
         }]
 );

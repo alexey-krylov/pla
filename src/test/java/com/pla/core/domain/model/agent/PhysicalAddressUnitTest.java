@@ -6,7 +6,6 @@
 
 package com.pla.core.domain.model.agent;
 
-import com.pla.sharedkernel.domain.model.EmailAddress;
 import org.junit.Before;
 import org.junit.Test;
 
