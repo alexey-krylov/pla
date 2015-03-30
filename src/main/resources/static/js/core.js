@@ -11,8 +11,8 @@ require(["bootstrap-datepicker"], function() {
 });
 require(['jquery','bootstrap','datatables'], function() {
     //$('#example').dataTable();
-    $('#team-table').dataTable();
-    $('#branchManager-table').dataTable();
+    //$('#team-table').dataTable();
+   // $('#branchManager-table').dataTable();
     $('#regionalManager-table').dataTable();
     $('#commission-table').dataTable();
     $('#healthCareProvider-table').dataTable();
