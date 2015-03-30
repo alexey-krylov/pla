@@ -19,6 +19,7 @@ import com.pla.core.application.InactivateCoverageCommand;
 import com.pla.core.application.MarkCoverageAsUsedCommand;
 import com.pla.core.application.UpdateCoverageCommand;
 import com.pla.core.domain.exception.CoverageException;
+import com.pla.core.dto.CoverageDto;
 import com.pla.core.query.CoverageFinder;
 import org.axonframework.commandhandling.gateway.CommandGateway;
 import org.nthdimenzion.presentation.Result;
@@ -35,6 +36,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
+
+import java.util.List;
 
 import static org.nthdimenzion.presentation.AppUtils.getLoggedInUSerDetail;
 
@@ -63,6 +66,12 @@ public class CoverageController {
         modelAndView.setViewName("pla/core/viewCoverage");
         modelAndView.addObject("listOfCoverage", coverageFinder.getAllCoverage());
         return modelAndView;
+    }
+
+    @RequestMapping(value = "/coverages/activecoverage", method = RequestMethod.GET)
+    @ResponseBody
+    public List<CoverageDto> activeCoverage() {
+        return coverageFinder.getAllCoverage();
     }
 
     @RequestMapping(value = "/coverages/create", method = RequestMethod.POST)
