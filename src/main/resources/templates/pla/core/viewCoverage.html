@@ -117,8 +117,8 @@
                             <td style="text-align:center" class="pop" >
                                <button href="#" class="details-box btn btn-primary btn-xs" rel="popover"  data-content="" > Benefits
                                     <div class="popover-body" style="display:none;">
-                                   <ul  type="square"    th:each="benefit : ${coverage.benefitDtos}">
-                                        <li style="text-align:left;font-size:12px;"   th:text="'&diams;&nbsp;'+${{benefit.benefitName}}+','"></li>
+                                   <ul  type="square"    th:each="benefit : ${coverage.benefitDtos}" th:if="${coverage.benefitDtos!=null}">
+                                        <li style="text-align:left;font-size:12px;" th:text="'&diams;&nbsp;'+${{benefit.benefitName}}+','"  th:if="${benefit.benefitName!=null}"  ></li>
                                     </ul>
                                         </div>
                                 </button>
