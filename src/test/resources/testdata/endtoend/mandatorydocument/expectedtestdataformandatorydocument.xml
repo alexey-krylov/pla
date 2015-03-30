@@ -2,10 +2,10 @@
 
 <dataset>
 
-    <mandatory_document  coverage_id="C001" plan_id="P001" PROCESS="CLAIM" />
+    <MANDATORY_DOCUMENT COVERAGE_ID="C001" PLAN_ID="P001" PROCESS="CLAIM" />
 
- <!--   <mandatory_document_documents documents="DOCUMENT_ONE" />
-    <mandatory_document_documents documents="DOCUMENT_TWO" />-->
+    <MANDATORY_DOCUMENT_DOCUMENTS  DOCUMENTS="DOCUMENT_ONE" />
+
 
 
 </dataset>
