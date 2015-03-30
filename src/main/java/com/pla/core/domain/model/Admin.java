@@ -96,4 +96,9 @@ public class Admin {
         MandatoryDocument updateMandatoryDocument = mandatoryDocument.updateMandatoryDocument(documents);
         return updateMandatoryDocument;
     }
+
+    public Team inactivateTeam(Team team) {
+        Team deactivatedTeam = team.inactivate();
+        return deactivatedTeam;
+    }
 }

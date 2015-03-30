@@ -31,13 +31,13 @@ public class TeamService {
     private IIdGenerator idGenerator;
 
     @Autowired
-    public TeamService(AdminRoleAdapter adminRoleAdapter, TeamIsUnique teamIsUnique, IIdGenerator idGenerator){
+    public TeamService(AdminRoleAdapter adminRoleAdapter, TeamIsUnique teamIsUnique, IIdGenerator idGenerator) {
         this.adminRoleAdapter = adminRoleAdapter;
         this.teamIsUnique = teamIsUnique;
         this.idGenerator = idGenerator;
     }
 
-    public Team createTeam(String teamName, String teamCode,String regionCode, String branchCode,String employeeId, LocalDate fromDate, String firstName, String lastName, UserDetails userDetails) {
+    public Team createTeam(String teamName, String teamCode, String regionCode, String branchCode, String employeeId, LocalDate fromDate, String firstName, String lastName, UserDetails userDetails) {
         String teamId = idGenerator.nextId();
         Admin admin = adminRoleAdapter.userToAdmin(userDetails);
         TeamDto teamDto = new TeamDto(teamName, teamCode);
@@ -50,6 +50,11 @@ public class TeamService {
         Admin admin = adminRoleAdapter.userToAdmin(userDetails);
         team = admin.updateTeamLead(team, employeeId, firstName, lastName, fromDate);
         return team;
+    }
+
+    public Team inactivateTeam(Team team, UserDetails userDetails) {
+        Admin admin = adminRoleAdapter.userToAdmin(userDetails);
+        return admin.inactivateTeam(team);
     }
 
 }

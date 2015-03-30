@@ -34,8 +34,9 @@ public class BranchController {
     private BranchFinder branchFinder;
 
     @Autowired
-    public BranchController(BranchService branchService) {
+    public BranchController(BranchService branchService, BranchFinder branchFinder) {
         this.branchService = branchService;
+        this.branchFinder = branchFinder;
     }
 
     @RequestMapping(value = "/branch/view", method = RequestMethod.GET)

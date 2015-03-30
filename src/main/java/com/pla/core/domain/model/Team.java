@@ -74,6 +74,12 @@ public class Team implements ICrudEntity {
         this.active = active;
     }
 
+    public static TeamLeaderFulfillment createTeamLeaderFulfillment(String employeeId, String firstName, String lastName, LocalDate effectiveFrom) {
+        TeamLeader teamLeader = new TeamLeader(employeeId, firstName, lastName);
+        TeamLeaderFulfillment teamLeaderFulfillment = new TeamLeaderFulfillment(teamLeader, effectiveFrom);
+        return teamLeaderFulfillment;
+    }
+
     public Team assignTeamLeader(String employeeId, String firstName, String lastName, LocalDate effectiveFrom) {
         TeamLeaderFulfillment currentTeamFulfillment = getTeamLeaderFulfillmentForATeamLeader(this.currentTeamLeader);
         checkArgument(currentTeamFulfillment != null);
@@ -102,15 +108,10 @@ public class Team implements ICrudEntity {
         return null;
     }
 
-    public static TeamLeaderFulfillment createTeamLeaderFulfillment(String employeeId, String firstName, String lastName, LocalDate effectiveFrom) {
-        TeamLeader teamLeader = new TeamLeader(employeeId, firstName, lastName);
-        TeamLeaderFulfillment teamLeaderFulfillment = new TeamLeaderFulfillment(teamLeader, effectiveFrom);
-        return teamLeaderFulfillment;
-    }
-
     public Team inactivate() {
         this.active = Boolean.FALSE;
         return this;
     }
+
 
 }

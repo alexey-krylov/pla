@@ -31,8 +31,9 @@ public class RegionController {
     private RegionFinder regionFinder;
 
     @Autowired
-    public RegionController(RegionService regionService) {
+    public RegionController(RegionService regionService, RegionFinder regionFinder) {
         this.regionService = regionService;
+        this.regionFinder = regionFinder;
     }
 
     @RequestMapping(value = "/region/view", method = RequestMethod.GET)
