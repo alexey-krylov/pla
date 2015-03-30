@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<dataset>
+
+    <mandatory_document  coverage_id="C001" plan_id="P001" PROCESS="CLAIM" />
+
+ <!--   <mandatory_document_documents documents="DOCUMENT_ONE" />
+    <mandatory_document_documents documents="DOCUMENT_TWO" />-->
+
+
+</dataset>

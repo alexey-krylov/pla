@@ -8,18 +8,15 @@ package com.pla.core.domain.service;
 
 import com.google.common.collect.Lists;
 import com.pla.core.domain.model.Admin;
-
-import static org.junit.Assert.*;
-
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.nthdimenzion.security.service.UserLoginDetailDto;
 import org.springframework.security.access.AuthorizationServiceException;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 import java.util.List;
+
+import static org.junit.Assert.assertNotNull;
 
 /**
  * @author: Samir

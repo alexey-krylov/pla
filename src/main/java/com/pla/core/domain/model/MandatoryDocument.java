@@ -16,16 +16,16 @@ import static com.google.common.base.Preconditions.checkState;
  * Created by Admin on 3/27/2015.
  */
 @Entity
-@Table(name = "policy_process_document")
+@Table(name = "mandatory_document")
 @EqualsAndHashCode(of = {"id"})
 @ToString
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 @Getter
-public class PolicyProcessDocument implements ICrudEntity {
+public class MandatoryDocument implements ICrudEntity {
 
     @Id
-    @GeneratedValue
-    private Long id;
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private String id;
 
     @Embedded
     private PlanId planId;
@@ -39,7 +39,7 @@ public class PolicyProcessDocument implements ICrudEntity {
     @ElementCollection
     private Set<String> documents;
 
-    private PolicyProcessDocument(PlanId planId, ProcessType process, Set<String> documents) {
+    private MandatoryDocument(PlanId planId, ProcessType process, Set<String> documents) {
         checkNotNull(planId);
         checkNotNull(process);
         checkState(UtilValidator.isNotEmpty(documents));
@@ -48,14 +48,18 @@ public class PolicyProcessDocument implements ICrudEntity {
         this.documents = documents;
     }
 
-    public static PolicyProcessDocument createPolicyProcessDocument(PlanId planId,CoverageId coverageId, ProcessType process, Set<String> documents){
-        PolicyProcessDocument policyProcessDocument = new PolicyProcessDocument(planId,process,documents);
-        if (coverageId!=null)
-            policyProcessDocument.assignCoverageId(coverageId);
-        return  policyProcessDocument;
+    public static MandatoryDocument createMandatoryDocumentWithCoverageId(PlanId planId, CoverageId coverageId, ProcessType process, Set<String> documents){
+        MandatoryDocument mandatoryDocument = new MandatoryDocument(planId,process,documents);
+        mandatoryDocument.assignCoverageId(coverageId);
+        return mandatoryDocument;
     }
 
-    public PolicyProcessDocument updatePolicyProcessDocument(Set<String> documents) {
+    public static MandatoryDocument createMandatoryDocumentWithPlanId(PlanId planId,ProcessType process, Set<String> documents){
+        MandatoryDocument mandatoryDocument = new MandatoryDocument(planId,process,documents);
+        return mandatoryDocument;
+    }
+
+    public MandatoryDocument updateMandatoryDocument(Set<String> documents) {
         checkNotNull(documents);
         this.documents = documents;
         return this;

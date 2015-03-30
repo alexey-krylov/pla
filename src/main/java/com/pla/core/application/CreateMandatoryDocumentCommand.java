@@ -16,7 +16,7 @@ import java.util.Set;
 @Setter
 @ToString
 @AllArgsConstructor
-public class CreatePolicyProcessDocumentCommand {
+public class CreateMandatoryDocumentCommand {
 
     private UserDetails userDetails;
 

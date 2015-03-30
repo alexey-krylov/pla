@@ -25,9 +25,9 @@ spring:
 
   smeServer :
         dev :
-          url : ${devurl}
+          url : http://localhost:6443/pla/stub
         prod :
-          url: ${produrl}
+          url: {Replace with production url}
   datasource:
       primary:
         name: primaryDataSource

@@ -83,13 +83,17 @@ public class Admin {
         return updatedTeam;
     }
 
-    public PolicyProcessDocument createPolicyProcessDocument(String planId,String coverageId,ProcessType processType, Set<String> documents){
-        PolicyProcessDocument policyProcessDocument = PolicyProcessDocument.createPolicyProcessDocument(new PlanId(planId), new CoverageId(coverageId), processType, documents);
-        return policyProcessDocument;
+    public MandatoryDocument createMandatoryDocument(String planId, String coverageId, ProcessType processType, Set<String> documents){
+        MandatoryDocument mandatoryDocument;
+        if (coverageId!=null)
+            mandatoryDocument = MandatoryDocument.createMandatoryDocumentWithCoverageId(new PlanId(planId), new CoverageId(coverageId),processType, documents);
+        else
+            mandatoryDocument = MandatoryDocument.createMandatoryDocumentWithPlanId(new PlanId(planId), processType, documents);
+        return mandatoryDocument;
     }
 
-    public PolicyProcessDocument updatePolicyProcessDocument(PolicyProcessDocument policyProcessDocument, Set<String> documents){
-        PolicyProcessDocument updatePolicyProcessDocument = policyProcessDocument.updatePolicyProcessDocument(documents);
-        return updatePolicyProcessDocument;
+    public MandatoryDocument updateMandatoryDocument(MandatoryDocument mandatoryDocument, Set<String> documents){
+        MandatoryDocument updateMandatoryDocument = mandatoryDocument.updateMandatoryDocument(documents);
+        return updateMandatoryDocument;
     }
 }

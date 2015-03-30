@@ -11,12 +11,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 import org.hibernate.annotations.Type;
-import org.hibernate.validator.constraints.Length;
-import org.hibernate.validator.constraints.NotEmpty;
 import org.joda.time.LocalDate;
 import org.springframework.security.core.userdetails.UserDetails;
-
-import javax.validation.constraints.NotNull;
 
 /**
  * @author: Samir

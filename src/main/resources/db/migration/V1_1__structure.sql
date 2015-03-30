@@ -709,13 +709,15 @@ LEFT JOIN `branch` B ON T.`branch_code`=B.`BRANCH_CODE` LEFT JOIN region R ON T.
 
 
 
-/*Table structure for document */
+/*Table structure for document *//*
+
 DROP TABLE IF EXISTS `document`;
 CREATE TABLE `document` (
   `document_name` varchar(255) NOT NULL,
   `document_description` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`document_name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+*/
 
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;

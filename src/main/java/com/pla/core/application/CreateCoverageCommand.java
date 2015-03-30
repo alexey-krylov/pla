@@ -6,7 +6,6 @@
 
 package com.pla.core.application;
 
-import com.pla.core.domain.model.Benefit;
 import com.pla.core.domain.model.BenefitId;
 import lombok.*;
 import org.hibernate.validator.constraints.Length;

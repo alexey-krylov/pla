@@ -39,7 +39,7 @@
         <property name="waitForTasksToCompleteOnShutdown" value="true"/>
     </bean>
 
-    <bean id="ehcache" class="org.axonframework.cache.EhCacheAdapter">
+    <!--<bean id="ehcache" class="org.axonframework.cache.EhCacheAdapter">
 
         <constructor-arg name="ehCache" ref="wrappedEhcache"/>
     </bean>
@@ -49,7 +49,7 @@
     </bean>
 
     <bean id="cacheManager" class="org.springframework.cache.ehcache.EhCacheManagerFactoryBean"/>
-
+-->
     <beans profile="mongodb">
 
         <bean id="sagaRepository" class="org.axonframework.saga.repository.mongo.MongoSagaRepository">

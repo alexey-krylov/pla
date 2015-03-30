@@ -401,7 +401,7 @@
         </plugins>
     </build>
 
-    <profiles>
+  <!--  <profiles>
         <profile>
             <id>DEV</id>
             <activation>
@@ -416,7 +416,7 @@
         </profile>
 
         <profile>
-            <id>PROD</id>
+            <id>prod</id>
             <properties>
                 <spring.profiles.active>prod</spring.profiles.active>
                 <produrl>http://127.0.0.1:9090/partymgr/control</produrl>
@@ -426,6 +426,6 @@
         </profile>
 
     </profiles>
-
+-->
 
 </project>

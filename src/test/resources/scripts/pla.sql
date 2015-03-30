@@ -350,6 +350,23 @@ CREATE VIEW `active_team_region_branch_view` AS
 B.branch_name AS branchName FROM team T LEFT JOIN `team_team_leader_fulfillment` TF ON T.`team_id`=TF.team_id AND T.`current_team_leader`=TF.employee_id
 LEFT JOIN `branch` B ON T.`branch_code`=B.`BRANCH_CODE` LEFT JOIN region R ON T.`region_code`=R.`REGION_CODE` WHERE T.`active`='1');
 
+DROP TABLE IF EXISTS `mandatory_document`;
+CREATE TABLE `mandatory_document` (
+  `id` varchar(255) NOT NULL AUTO_INCREMENT,
+  `coverage_id` varchar(255) DEFAULT NULL,
+  `plan_id` varchar(255) DEFAULT NULL,
+  `process` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+);
+
+DROP TABLE IF EXISTS `mandatory_document_documents`;
+CREATE TABLE `mandatory_document_documents` (
+  `mandatory_document_id` varchar(255) NOT NULL,
+  `documents` varchar(255) DEFAULT NULL,
+  KEY `FK_fl10nqnith5gv7fsqsfolbwsp` (`mandatory_document_id`),
+  CONSTRAINT `FK_fl10nqnith5gv7fsqsfolbwsp` FOREIGN KEY (`mandatory_document_id`) REFERENCES `mandatory_document` (`id`)
+) ;
+
 
 /*Table structure for document */
 DROP TABLE IF EXISTS `document`;

@@ -1,6 +1,5 @@
 package com.pla.core.application;
 
-import com.pla.core.domain.model.ProcessType;
 import lombok.*;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -16,7 +15,7 @@ import java.util.Set;
 @Setter
 @ToString
 @AllArgsConstructor
-public class UpdatePolicyProcessDocumentCommand {
+public class UpdateMandatoryDocumentCommand {
 
     private UserDetails userDetails;
 

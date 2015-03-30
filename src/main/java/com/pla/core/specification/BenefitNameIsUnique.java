@@ -6,7 +6,6 @@
 
 package com.pla.core.specification;
 
-import com.pla.core.domain.model.BenefitName;
 import com.pla.core.dto.BenefitDto;
 import com.pla.core.query.BenefitFinder;
 import com.pla.sharedkernel.specification.ISpecification;
