@@ -1,11 +1,11 @@
 package com.pla.core.query;
 
 import com.google.common.base.Preconditions;
-import com.pla.core.dto.BenefitDto;
 import com.pla.core.dto.CoverageDto;
 import org.nthdimenzion.ddd.domain.annotations.Finder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
+import org.springframework.jdbc.core.ColumnMapRowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import javax.sql.DataSource;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created with IntelliJ IDEA.
@@ -52,7 +53,7 @@ public class CoverageFinder {
         List<CoverageDto> listOfActiveCoverage  = namedParameterJdbcTemplate.query(findAllCoverageQuery, new BeanPropertyRowMapper(CoverageDto.class));
         for (CoverageDto coverageDto : listOfActiveCoverage){
             SqlParameterSource sqlParameterSource = new MapSqlParameterSource("coverageId",coverageDto.getCoverageId());
-            List<BenefitDto> listOfBenefits = namedParameterJdbcTemplate.query(findAllBenefitsAssociatedWithTheCoverageQuery, sqlParameterSource, new BeanPropertyRowMapper(BenefitDto.class));
+            List<Map<String,Object>> listOfBenefits = namedParameterJdbcTemplate.query(findAllBenefitsAssociatedWithTheCoverageQuery, sqlParameterSource, new ColumnMapRowMapper());
             coverageDto.setBenefitDtos(listOfBenefits);
         }
         return listOfActiveCoverage;
