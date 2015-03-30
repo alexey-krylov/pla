@@ -169,8 +169,7 @@ CREATE TABLE `branch_manager_fulfillment`(
   `from_date` date NOT NULL,
   `thru_date` date DEFAULT NULL,
   `employee_id` varchar(255) NOT NULL,
-  PRIMARY KEY (`branch_code`,`employee_id`),
-  CONSTRAINT `FK_BRANCH_CODE_BRANCH_FULFILLMENT` FOREIGN KEY (`branch_code`) REFERENCES `branch` (`branch_code`)
+  PRIMARY KEY (`branch_code`,`employee_id`)
 );
 
 DROP TABLE IF EXISTS branch_bde_fulfillment;
@@ -181,8 +180,7 @@ CREATE TABLE `branch_bde_fulfillment`(
   `from_date` date DEFAULT NULL,
   `thru_date` date DEFAULT NULL,
   `employee_id` varchar(255) NOT NULL,
-  PRIMARY KEY (`branch_code`,`employee_id`),
-  CONSTRAINT `FK_BRANCH_CODE_BRANCH_BDE_FULFILLMENT_CODE` FOREIGN KEY (`branch_code`) REFERENCES `branch` (`branch_code`)
+  PRIMARY KEY (`branch_code`,`employee_id`)
 );
 
 

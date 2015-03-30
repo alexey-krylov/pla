@@ -39,10 +39,10 @@ public class BranchController {
     }
 
     @RequestMapping(value = "/branch/view", method = RequestMethod.GET)
-    public ModelAndView viewTeams() {
+    public ModelAndView viewBranches() {
         ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("pla/core/branch//viewBranch");
-        modelAndView.addObject("/branchList", branchFinder.getAllBranch());
+        modelAndView.setViewName("pla/core/branch/viewBranch");
+        modelAndView.addObject("branchList", branchFinder.getAllBranch());
         return modelAndView;
     }
 
@@ -53,7 +53,7 @@ public class BranchController {
 
     @RequestMapping(value = "/branch/openAssignPage", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public Map<String, Object> openAssignPageTeam(@RequestParam(value = "branchId", required = false) String branchId) {
+    public Map<String, Object> openAssignPage(@RequestParam(value = "branchId", required = false) String branchId) {
         return branchFinder.getBranchById(branchId);
     }
 
