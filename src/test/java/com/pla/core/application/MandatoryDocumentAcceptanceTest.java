@@ -3,6 +3,7 @@ package com.pla.core.application;
 import com.github.springtestdbunit.DbUnitTestExecutionListener;
 import com.github.springtestdbunit.annotation.DatabaseOperation;
 import com.github.springtestdbunit.annotation.DatabaseSetup;
+import com.github.springtestdbunit.annotation.DatabaseTearDown;
 import com.github.springtestdbunit.annotation.ExpectedDatabase;
 import com.github.springtestdbunit.assertion.DatabaseAssertionMode;
 import com.google.common.collect.Lists;
@@ -65,6 +66,7 @@ public class MandatoryDocumentAcceptanceTest {
     @Test
     @DatabaseSetup(value = "classpath:testdata/endtoend/mandatorydocument/testdataformandatorydocument.xml", type = DatabaseOperation.CLEAN_INSERT)
     @ExpectedDatabase(value = "classpath:testdata/endtoend/mandatorydocument/expectedtestdataforupdatedmandatorydocument.xml",assertionMode = DatabaseAssertionMode.NON_STRICT)
+    @DatabaseTearDown(value = "classpath:testdata/endtoend/mandatorydocument/testdataformandatorydocument.xml",type = DatabaseOperation.TRUNCATE_TABLE)
     public void givenProductCoverageAndProcessTypeAndListOfDocuments_whenTheProductIsExisted_thenItShouldUpdateAMandatoryDocument(){
         Set<String> documents = Sets.newHashSet();
         documents.add("DOCUMENT_THREE");
