@@ -5,19 +5,22 @@ require(['jquery','bootstrap','datatables'],function(){
             $("#createUpdate").click();
         }
     });
-   /* $('#selectedBenefits').multiselect({
-        includeSelectAllOption: true,
-        enableFiltering: true
-     }); */
     $('#coverageModal').on('shown.bs.modal', function() {
         $('#coverageName').focus()
     });
     $('#coverage-table').dataTable();
-    $('.popover-examples a').popover({
-                    title : 'Benefits',
-                    trigger: 'hover',
-            		placement:'top',
-                    template: '<div class="popover" ><div class="arrow"></div><h3 class="popover-title"></h3><ul type="square" style="text-align:left;padding:0 10px;margin-left:5px;" ><li style="text-align:left;font-size:12px;">Accidental Death Benefit</li><li style="text-align:left;font-size:12px;">CI Benefit</li><li style="text-align:left;font-size:12px;">Permanent Total Disability</li><li style="text-align:left;font-size:12px;">Temporary Total Disability</li><li style="text-align:left;font-size:12px;">Death Benefit</li></ul></div>'
+
+    var box = $('.details-box');
+    box.each(function() {
+        var that = $(this);
+        var text = that.text();
+        var content='';
+        for (var i=0; i<text.length; i++ ){
+             content=content + text[i].replace(",","<br />");
+        }
+        content=content.replace("Benefits","");
+        that.attr('data-content', content);
+        that.popover({title :'Benefits',html : true,trigger: 'hover',placement:'top'}).css({'display':'block'});
     });
 });
 
@@ -43,21 +46,46 @@ var openCoverageCreateModal = function(){
         }
     );
     $('#myModalLabel').text("Create Coverage");
-    modalOptions.show = true;
+         modalOptions.show = true;
     $('#coverageModal').modal(modalOptions);
 };
+ var convertThymeleafObjectToJavascriptObject= function(thymeleafObject){
+     /*pattern : objectName(key=value,key=value)*/
+     var javascriptObject = {};
+    thymeleafObject = thymeleafObject.replace("[","");
+    thymeleafObject = thymeleafObject.replace("]","");
+    var selected = [];
+    $.each(thymeleafObject.split(","),function(key,value){
+           var keyValue = value.split("=");
+           keyValue[0] = keyValue[0].replace("BenefitDto","");
+          keyValue[0] = keyValue[0].replace("{","");
+          keyValue[1] = keyValue[1].replace("}","");
+          if(keyValue[0].trim()=="benefitId"){
+                    selected.push(keyValue[1].replace(/'/g, ''));
+          }
 
-var openCoverageUpdateModal = function(coverage){
-    console.log("coverage obj*************"+coverage.coverageName);
-    $('#coverageName').val(coverage.coverageName);
-    $('#description').val(coverage.description);
+     });
+     return selected;
+ };
+var openCoverageUpdateModal = function(coverageId,coverageName,description,benefitList){
+  $('#coverageName').val(coverageName);
+  $('#description').val(description);
+  var benefit=[];
+  benefitMap= convertThymeleafObjectToJavascriptObject(benefitList);
+  var element = angular.element("#selectedBenefits");
+  var controller = element.controller();
+  var scope = element.scope();
+ scope.$apply(function(){
+             scope.createCoverage.benefitIds = benefitMap;
+});
+
     $('#createUpdate').text('Update');
     $('#alert').hide();
     $('#alert-danger').hide();
     $('#createUpdate').unbind('click');
     $('#createUpdate').click(
         function(){
-            updateCoverage();
+            updateCoverage(coverageId);
         }
     );
     $('#myModalLabel').text("Update Coverage");
@@ -65,7 +93,7 @@ var openCoverageUpdateModal = function(coverage){
     $('#coverageModal').modal(modalOptions);
 };
 
-var updateCoverage = function(){
+var updateCoverage = function(coverageId){
     if(validate()){
         return;
     }
@@ -75,19 +103,22 @@ var updateCoverage = function(){
     $('#createCoverage *').filter(':text').each(function(key,value){
         coverageData[$(value)[0].id]=$(value).val();
     });
-
+    coverageData["coverageId"] = coverageId;
+    var updatedBenefit = [];
+    updatedBenefit= angular.element("#selectedBenefits").scope().createCoverage.benefitIds;
+    coverageData["benefitIds"]=  updatedBenefit;
     $.ajax({
         url: '/pla/core/coverages/update',
         type: 'POST',
         data: JSON.stringify(coverageData),
         contentType: 'application/json; charset=utf-8',
         success: function(msg) {
-            if(msg=='success'){
+            if(msg.status=='200'){
                 hideAlerts();
                 $('#alert').text("Coverage updated successfully").show();
                 $('#cancel-button').text('Done');
                 $('#createUpdate').hide();
-            }else{
+            }else if(msg.status=='500'){
                 hideAlerts();
                 $('#alert-danger').text("Coverage already exists").show();
             }
@@ -107,7 +138,7 @@ var createCoverage = function(){
     });
      var selected = [];
     selected= angular.element("#selectedBenefits").scope().createCoverage.benefitIds;
-  //  console.log("&&&&&&&&&&&&&"+selected);
+   // console.log("&&&&&&&&&&&&&"+selected);
     /* var brands = $('#selectedBenefits option:selected');
 
                     $(brands).each(function(index, brand){
