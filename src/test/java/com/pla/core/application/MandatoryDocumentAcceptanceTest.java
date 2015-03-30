@@ -11,6 +11,7 @@ import com.google.common.collect.Sets;
 import com.pla.core.domain.model.ProcessType;
 import org.axonframework.commandhandling.gateway.CommandGateway;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.nthdimenzion.security.service.UserLoginDetailDto;
@@ -33,6 +34,7 @@ import java.util.Set;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = "classpath:queryTestContext.xml")
 @TestExecutionListeners({DependencyInjectionTestExecutionListener.class, DbUnitTestExecutionListener.class})
+@Ignore
 public class MandatoryDocumentAcceptanceTest {
 
     private Logger logger = LoggerFactory.getLogger(MandatoryDocumentAcceptanceTest.class);
