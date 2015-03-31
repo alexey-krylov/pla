@@ -24,7 +24,7 @@
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close" onclick="reload()"><span aria-hidden="true">&times;</span></button>
                 <h4 class="modal-title" id="myModalLabel">Create Coverage</h4>
             </div>
-            <form class="form-horizontal"  id="createCoverage" novalidate="true">
+            <form class="form-horizontal"  id="createCoverage" name="createCoverageForm" novalidate="true">
                 <div class="modal-body">
                     <div class="alert alert-success" hidden="true" id="alert"></div>
                     <div class="alert alert-danger" hidden="true" id="alert-danger"></div>
@@ -32,26 +32,28 @@
                         <label for="coverageName" class="col-sm-3 control-label">Coverage Name</label>
                         <div class="col-sm-9">
                             <input type="text" name="coverageName" required="true" maxlength="50" class="form-control" id="coverageName" ng-model="createCoverage.coverageName"  onkeypress="resetError(this)"/>
-                            <span hidden="true" style="color: darkred;font-size: 10px">Please check if it is empty or exceeded more than 60 character</span>
+                            <span hidden="true" style="color: darkred;font-size: 10px">Please check if it is empty or exceeded more than 50 character</span>
                         </div>
                     </div>
                     <div class="form-group" style="margin: auto;margin-top:10px;">
                         <label for="description" class="col-sm-3 control-label">Description</label>
                         <div class="col-sm-9">
-                            <input type="text" name="description"   maxlength="150" class="form-control" id="description"  />
+                            <input type="text" name="description"  maxlength="150" class="form-control" id="description" />
+                            <span hidden="true" style="color: darkred;font-size: 10px">Please check if it is exceeded more than 150 characters</span>
                         </div>
                     </div>
                    <div class="form-group required" style="margin: auto;margin-top:10px;">
                         <label class="col-sm-3 control-label">Benefit(s)</label>
-                        <div class="col-sm-9">
-                            <button type="button" class="btn btn-default bs-select" id="selectedBenefits" required="true" ng-model="createCoverage.benefitIds" data-all-none-buttons="true" data-html="1" data-multiple="1"  ng-options=" benefit.benefitId as benefit.benefitName for benefit in getAllBenefits" onkeypress="resetError(this)">
+                        <div class="col-sm-9"  >
+                            <button type="button" class="btn btn-default bs-select" required="true" name="checkBenefits" id="selectedBenefits"  ng-model="createCoverage.benefitIds" data-all-none-buttons="true"  data-html="1" data-multiple="1"  ng-options="benefit.benefitId as benefit.benefitName for benefit in getAllBenefits | orderBy:'benefitName'"  >
                                 Action <span class="caret"></span>
                             </button>
+                           <span type="hidden" style="color: darkred;font-size: 10px" ng-show="createCoverageForm.$submitted &amp;&amp; createCoverageForm.checkBenefits.$error.required" >Please select benefits </span>
                         </div>
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-primary" id="createUpdate" ng-disabled="(!createCoverage.benefitIds || !createCoverage.coverageName)" ></button>
+                    <button type="submit" class="btn btn-primary" id="createUpdate"  ></button>
                     <button type="button" class="btn btn-danger" data-dismiss="modal" onclick="reload()" id="cancel-button">Cancel</button>
                 </div>
             </form>
@@ -140,6 +142,10 @@
     .popover-content {
     font-size: 11px;
 padding-left:3px;
+    }
+    .select{
+    height:310px;
+    overflow:auto;
     }
 
 </style>
