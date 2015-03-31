@@ -107,6 +107,7 @@ var updateCoverage = function(coverageId){
     var updatedBenefit = [];
     updatedBenefit= angular.element("#selectedBenefits").scope().createCoverage.benefitIds;
     coverageData["benefitIds"]=  updatedBenefit;
+    //console.log(coverageData);
     $.ajax({
         url: '/pla/core/coverages/update',
         type: 'POST',
@@ -136,6 +137,7 @@ var createCoverage = function(){
     });
      var selected = [];
     selected= angular.element("#selectedBenefits").scope().createCoverage.benefitIds;
+   // console.log("***************->"+ selected);
     coverageData["benefitIds"]=  selected;
     $.ajax({
         url: '/pla/core/coverages/create',
@@ -159,17 +161,21 @@ var createCoverage = function(){
 var resetError =function(ele){
     $(ele).parent().parent().removeClass("has-error");
     $(ele).siblings().hide();
+
 };
+
+
 
 var validate = function(){
     $('#createCoverage *').filter(':text').each(function(key,value){
         var isRequired = $(value).prop("required");
-        //alert(isRequired);
         if(($(value).val().trim().length<=0 || $(value).val().trim().length>50) && isRequired){
             hasError=true;
+
             $(value).parent().parent().addClass("has-error");
             $(value).siblings().show()
         }
+
     });
     return hasError;
 };
