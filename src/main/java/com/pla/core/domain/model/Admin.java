@@ -55,11 +55,11 @@ public class Admin {
         return coverage;
     }
 
-    public Coverage updateCoverage(Coverage coverage, String newCoverageName, Set<Benefit> benefits, boolean isCoverageNameUnique) {
+    public Coverage updateCoverage(Coverage coverage, String newCoverageName, String description,Set<Benefit> benefits, boolean isCoverageNameUnique) {
         if (!isCoverageNameUnique) {
             throw new CoverageException("Coverage name already satisfied");
         }
-        return coverage.updateCoverageName(newCoverageName).updateBenefit(benefits);
+        return coverage.updateCoverageName(newCoverageName).updateBenefit(benefits).updateDescription(description);
     }
 
     public Coverage inactivateCoverage(Coverage coverage) {

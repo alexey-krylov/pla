@@ -45,11 +45,11 @@ public class CoverageService {
         return coverage;
     }
 
-    public Coverage updateCoverage(Coverage coverage, String newBenefitName,Set<Benefit> benefits, UserDetails userDetails) {
+    public Coverage updateCoverage(Coverage coverage, String newBenefitName,String description,Set<Benefit> benefits, UserDetails userDetails) {
         Admin admin = adminRoleAdapter.userToAdmin(userDetails);
         CoverageName coverageName  = new CoverageName(newBenefitName);
         boolean isCoverageNameUnique = coverageNameIsUnique.isSatisfiedBy(coverageName);
-        Coverage updatedCoverage = admin.updateCoverage(coverage, newBenefitName, benefits,isCoverageNameUnique);
+        Coverage updatedCoverage = admin.updateCoverage(coverage, newBenefitName,description, benefits,isCoverageNameUnique);
         return updatedCoverage;
 
     }

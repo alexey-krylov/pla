@@ -85,7 +85,7 @@ public class CoverageServiceUnitTest {
         String newCoverageName = "new  coverage name";
         Coverage coverage = getCoverage();
         when(coverageNameIsUnique.isSatisfiedBy(new CoverageName(newCoverageName))).thenReturn(true);
-        Coverage updateCoverage = coverageService.updateCoverage(coverage, newCoverageName, benefits, userDetails);
+        Coverage updateCoverage = coverageService.updateCoverage(coverage, newCoverageName,"description", benefits, userDetails);
         CoverageName coverageName = (CoverageName) invokeGetterMethod(updateCoverage, "getCoverageName");
         assertEquals(CoverageStatus.ACTIVE, invokeGetterMethod(updateCoverage, "getStatus"));
         assertEquals(newCoverageName, coverageName.getCoverageName());

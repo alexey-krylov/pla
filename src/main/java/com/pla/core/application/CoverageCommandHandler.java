@@ -65,7 +65,7 @@ public class CoverageCommandHandler {
         CoverageId coverageId = new CoverageId(updateCoverageCommand.getCoverageId());
         Coverage coverage = coverageRepository.findOne(coverageId);
         Set<Benefit> benefitSet= findBenefitById(updateCoverageCommand.getBenefitIds());
-        coverage = coverageService.updateCoverage(coverage, updateCoverageCommand.getCoverageName(),benefitSet, updateCoverageCommand.getUserDetails());
+        coverage = coverageService.updateCoverage(coverage, updateCoverageCommand.getCoverageName(),updateCoverageCommand.getDescription(),benefitSet, updateCoverageCommand.getUserDetails());
         try {
             coverageRepository.save(coverage);
         } catch (RuntimeException e) {
