@@ -739,16 +739,38 @@ LEFT JOIN `branch` B ON T.`branch_code`=B.`BRANCH_CODE` LEFT JOIN region R ON T.
 
 
 
-/*Table structure for document *//*
+/*Table structure for mandatory_document */
+
+DROP TABLE IF EXISTS `mandatory_document`;
+CREATE TABLE `mandatory_document` (
+  `document_id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `coverage_id` varchar(255) DEFAULT NULL,
+  `plan_id` varchar(255) DEFAULT NULL,
+  `process` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`document_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+
+
+/*Table structure for mandatory_documents */
+
+DROP TABLE IF EXISTS `mandatory_documents`;
+CREATE TABLE `mandatory_documents` (
+  `document_id` bigint(20) NOT NULL,
+  `document_code` varchar(255) DEFAULT NULL,
+  KEY `FK_tc6y6qyosoy6f2xjh3i6kv65o` (`document_id`),
+  CONSTRAINT `FK_tc6y6qyosoy6f2xjh3i6kv65o` FOREIGN KEY (`document_id`) REFERENCES `mandatory_document` (`document_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+/*Table structure for document */
+
 
 DROP TABLE IF EXISTS `document`;
 CREATE TABLE `document` (
-  `document_name` varchar(255) NOT NULL,
-  `document_description` varchar(255) DEFAULT NULL,
-  PRIMARY KEY (`document_name`)
+  `document_code` varchar(255) NOT NULL,
+  `document_name` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`document_code`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-*/
-
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;

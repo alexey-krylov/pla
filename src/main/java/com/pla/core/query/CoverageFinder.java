@@ -34,26 +34,26 @@ public class CoverageFinder {
     }
 
 
-    public static final String activeCoverageCountByCoverageNameQuery = "select count(coverage_id) from coverage where coverage_name=:coverageName and status='ACTIVE'";
+    public static final String ACTIVE_COVERAGE_COUNT_BY_COVERAGE_NAME_QUERY = "select count(coverage_id) from coverage where coverage_name=:coverageName and status='ACTIVE'";
 
-    public static final String findAllCoverageQuery = "SELECT c.coverage_id coverageId,c.coverage_name coverageName,c.description description ,c.status AS coverageStatus " +
+    public static final String FIND_ALL_COVERAGE_QUERY = "SELECT c.coverage_id coverageId,c.coverage_name coverageName,c.description description ,c.status AS coverageStatus " +
             "FROM coverage c WHERE c.status='ACTIVE'";
 
-    public static final String findAllBenefitsAssociatedWithTheCoverageQuery = "select b.benefit_id benefitId,b.benefit_name benefitName from  benefit b  " +
+    public static final String FIND_ALL_BENEFITS_ASSOCIATED_WITH_THE_COVERAGE_QUERY = "select b.benefit_id benefitId,b.benefit_name benefitName from  benefit b  " +
             "inner join coverage_benefit cb on b.benefit_id=cb.benefit_id inner join coverage c on cb.coverage_id=c.coverage_id " +
-            "where c.status='ACTIVE' and b.status='ACTIVE' and c.coverage_id=:coverageId";
+            "where c.status='ACTIVE' and b.status='ACTIVE' and c.coverage_id=:coverageId ORDER BY b.benefit_name ASC ";
 
     public int getCoverageCountByCoverageName(String coverageName){
         Preconditions.checkNotNull(coverageName);
-        Number noOfCoverages = namedParameterJdbcTemplate.queryForObject(activeCoverageCountByCoverageNameQuery, new MapSqlParameterSource().addValue("coverageName", coverageName), Number.class);
+        Number noOfCoverages = namedParameterJdbcTemplate.queryForObject(ACTIVE_COVERAGE_COUNT_BY_COVERAGE_NAME_QUERY, new MapSqlParameterSource().addValue("coverageName", coverageName), Number.class);
         return noOfCoverages.intValue();
     }
 
     public List<CoverageDto> getAllCoverage() {
-        List<CoverageDto> listOfActiveCoverage  = namedParameterJdbcTemplate.query(findAllCoverageQuery, new BeanPropertyRowMapper(CoverageDto.class));
+        List<CoverageDto> listOfActiveCoverage  = namedParameterJdbcTemplate.query(FIND_ALL_COVERAGE_QUERY, new BeanPropertyRowMapper(CoverageDto.class));
         for (CoverageDto coverageDto : listOfActiveCoverage){
             SqlParameterSource sqlParameterSource = new MapSqlParameterSource("coverageId",coverageDto.getCoverageId());
-            List<Map<String,Object>> listOfBenefits = namedParameterJdbcTemplate.query(findAllBenefitsAssociatedWithTheCoverageQuery, sqlParameterSource, new ColumnMapRowMapper());
+            List<Map<String,Object>> listOfBenefits = namedParameterJdbcTemplate.query(FIND_ALL_BENEFITS_ASSOCIATED_WITH_THE_COVERAGE_QUERY, sqlParameterSource, new ColumnMapRowMapper());
             coverageDto.setBenefitDtos(listOfBenefits);
         }
         return listOfActiveCoverage;

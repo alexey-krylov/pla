@@ -49,7 +49,7 @@ public class AgentController {
 
     private CommandGateway commandGateway;
 
-    private ISMEGateway ismeGateway;
+    private ISMEGateway smeGateway;
 
     private AgentFinder agentFinder;
 
@@ -58,12 +58,12 @@ public class AgentController {
     private TeamFinder teamFinder;
 
     @Autowired
-    public AgentController(CommandGateway commandGateway, AgentFinder agentFinder, SequenceGenerator sequenceGenerator, TeamFinder teamFinder,ISMEGateway ismeGateway) {
+    public AgentController(CommandGateway commandGateway, AgentFinder agentFinder, SequenceGenerator sequenceGenerator, TeamFinder teamFinder,ISMEGateway smeGateway) {
         this.commandGateway = commandGateway;
         this.agentFinder = agentFinder;
         this.sequenceGenerator = sequenceGenerator;
         this.teamFinder = teamFinder;
-        this.ismeGateway=ismeGateway;
+        this.smeGateway = smeGateway;
     }
 
     @RequestMapping(value = "/listagent", method = RequestMethod.GET)
@@ -157,9 +157,10 @@ public class AgentController {
         return Result.success("Agent updated successfully");
     }
 
-    @RequestMapping(value = "/getemployeedeatil/{employeeId}/{nrcNumber}",method = RequestMethod.GET,produces = MediaType.APPLICATION_JSON_VALUE,consumes = MediaType.ALL_VALUE)
+    @RequestMapping(value = "/getemployeedeatil/{employeeId}/{nrcNumber}",method = RequestMethod.GET)
     @ResponseBody
     public EmployeeDto getEmployeeDetail(@PathVariable String employeeId,@PathVariable String nrcNumber){
-        return ismeGateway.getEmployeeDetailByIdOrByNRCNumber(employeeId,nrcNumber);
+        return smeGateway.getEmployeeDetailByIdOrByNRCNumber(employeeId,nrcNumber);
     }
+
 }

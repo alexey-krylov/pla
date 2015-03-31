@@ -118,7 +118,7 @@ public class AdminUnitTest {
         Coverage coverage = admin.createCoverage(isCoverageNameIsUnique, "1", name, "description", benefitSet);
 
         String updatedName = "coverage name after update";
-        Coverage updatedCoverage = admin.updateCoverage(coverage,updatedName, benefitSet, true);
+        Coverage updatedCoverage = admin.updateCoverage(coverage,updatedName,"coverage description", benefitSet, true);
         CoverageName updatedCoverageName = (CoverageName) invokeGetterMethod(updatedCoverage, "getCoverageName");
         assertEquals(updatedName, updatedCoverageName.getCoverageName());
     }
@@ -130,7 +130,7 @@ public class AdminUnitTest {
         Coverage coverage = admin.createCoverage(isCoverageNameIsUnique, "1", name, "description", benefitSet);
 
         String updatedName = "coverage name";
-        Coverage updatedCoverage = admin.updateCoverage(coverage,updatedName, benefitSet, false);
+        Coverage updatedCoverage = admin.updateCoverage(coverage,updatedName, "coverage description",benefitSet, false);
     }
 
 

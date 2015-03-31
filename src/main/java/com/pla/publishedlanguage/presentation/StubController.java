@@ -15,11 +15,12 @@ import com.pla.publishedlanguage.domain.model.EmployeeDto;
 import org.nthdimenzion.security.service.UserLoginDetailDto;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
@@ -29,7 +30,7 @@ import java.util.List;
  * @since 1.0 11/03/2015
  */
 @Controller
-@RequestMapping(value = "/stub", produces = MediaType.APPLICATION_JSON_VALUE,consumes = MediaType.ALL_VALUE)
+@RequestMapping(value = "/stub", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.ALL_VALUE)
 public class StubController {
 
     @RequestMapping(value = "/getuserdetail", method = RequestMethod.GET)
@@ -41,17 +42,20 @@ public class StubController {
         return userLoginDetailDto;
     }
 
-    @RequestMapping(value = "/getemployee/{employeeId}/{nrcNumber}", method = RequestMethod.GET)
+    @RequestMapping(value = "/getemployee", method = RequestMethod.GET)
     @ResponseBody
-    public EmployeeDto getEmployeeDetail(@PathVariable String employeeId,@PathVariable String nrcNumber) throws IOException {
-        if (employeeId==null && nrcNumber==null){
-            return null;
+    public EmployeeDto getEmployeeDetail(HttpServletRequest request,HttpServletResponse response) throws IOException {
+        response.setContentType("application/json");
+        String employeeId = request.getParameter("employeeId");
+        String nrcNumber = request.getParameter("nrcnumber");
+        if (employeeId == null && nrcNumber == null) {
+            return new EmployeeDto();
         }
         String jsonPath = "/stubdata/employeeDetail.json";
         List<EmployeeDto> listOfEmployeeDetail = getEmployeeDetail(jsonPath);
-        EmployeeDto employeeDetail  = null;
-        for (EmployeeDto employeeDetailFromJson :listOfEmployeeDetail){
-            if (employeeId.equals(employeeDetailFromJson.getEmployeeId()) || nrcNumber.equals(employeeDetailFromJson.getNrcNumber())){
+        EmployeeDto employeeDetail = new EmployeeDto();
+        for (EmployeeDto employeeDetailFromJson : listOfEmployeeDetail) {
+            if (employeeId.equals(employeeDetailFromJson.getEmployeeId()) || nrcNumber.equals(employeeDetailFromJson.getNrcNumber())) {
                 employeeDetail = employeeDetailFromJson;
                 break;
             }
@@ -59,17 +63,19 @@ public class StubController {
         return employeeDetail;
     }
 
-    @RequestMapping(value = "/getemployeebydesignation/{designation}", method = RequestMethod.GET)
+    @RequestMapping(value = "/getemployeebydesignation", method = RequestMethod.GET)
     @ResponseBody
-    public List<EmployeeDto> getEmployeeDetailByDesignation(@PathVariable String designation) throws IOException {
-        if (designation==null){
+    public List<EmployeeDto> getEmployeeDetailByDesignation(HttpServletRequest request,HttpServletResponse response) throws IOException {
+
+        String designation = request.getParameter("designation");
+        if (designation == null) {
             return Collections.EMPTY_LIST;
         }
         List<EmployeeDto> employeeDetailByDesignation = Lists.newArrayList();
         String jsonPath = "/stubdata/employeeByDesignation.json";
         List<EmployeeDto> listOfEmployeeDetail = getEmployeeDetail(jsonPath);
-        for (EmployeeDto employeeDto: listOfEmployeeDetail){
-            if (employeeDto.getDesignation().equals(designation)){
+        for (EmployeeDto employeeDto : listOfEmployeeDetail) {
+            if (employeeDto.getDesignation().equals(designation)) {
                 employeeDetailByDesignation.add(employeeDto);
             }
         }

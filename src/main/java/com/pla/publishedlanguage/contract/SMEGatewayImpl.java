@@ -11,7 +11,7 @@ import java.util.List;
 /**
  * Created by Admin on 3/26/2015.
  */
-@Service
+@Service(value = "smeGateway")
 public class SMEGatewayImpl implements ISMEGateway {
 
 
@@ -20,11 +20,11 @@ public class SMEGatewayImpl implements ISMEGateway {
 
     @Override
     public EmployeeDto getEmployeeDetailByIdOrByNRCNumber(String employeeId, String NRCNumber) {
+        String url = serverUrl;
         Preconditions.checkNotNull(serverUrl);
         RestTemplate restTemplate = new RestTemplate();
-        String employeeDetailByIDAndNRCNumberURL = serverUrl + "/getemployee?employeeId="+employeeId+"&nrcNumber="+NRCNumber;
-        System.out.println(employeeDetailByIDAndNRCNumberURL);
-        EmployeeDto  employeeDetail = restTemplate.getForObject(employeeDetailByIDAndNRCNumberURL, EmployeeDto.class);
+        String employeeDetailByIDAndNRCNumberURL = url + "/getemployee?employeeId="+employeeId+"&nrcnumber="+NRCNumber;
+        EmployeeDto employeeDetail = restTemplate.getForObject(employeeDetailByIDAndNRCNumberURL, EmployeeDto.class);
         Preconditions.checkNotNull(employeeDetail);
         return employeeDetail;
     }
@@ -32,9 +32,9 @@ public class SMEGatewayImpl implements ISMEGateway {
     @Override
     public List<EmployeeDto> getEmployeeDetailByDesignation(String designation) {
         Preconditions.checkNotNull(serverUrl);
+        String url = serverUrl;
         RestTemplate restTemplate = new RestTemplate();
-        String employeeDetailByDesignationURL = serverUrl + "/getemployeebydesignation?designation="+designation;
-        System.out.println(employeeDetailByDesignationURL);
+        String employeeDetailByDesignationURL = url + "/getemployeebydesignation?designation="+designation;
         List<EmployeeDto> listOfEmployeeDetail = restTemplate.getForObject(employeeDetailByDesignationURL, List.class);
         Preconditions.checkNotNull(listOfEmployeeDetail);
         return listOfEmployeeDetail;

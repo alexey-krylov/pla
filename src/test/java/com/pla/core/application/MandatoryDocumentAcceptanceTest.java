@@ -1,4 +1,3 @@
-/*
 package com.pla.core.application;
 
 import com.github.springtestdbunit.DbUnitTestExecutionListener;
@@ -12,7 +11,6 @@ import com.google.common.collect.Sets;
 import com.pla.core.domain.model.ProcessType;
 import org.axonframework.commandhandling.gateway.CommandGateway;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.nthdimenzion.security.service.UserLoginDetailDto;
@@ -28,16 +26,16 @@ import org.springframework.test.context.support.DependencyInjectionTestExecution
 import java.util.List;
 import java.util.Set;
 
-*/
-/**
+/*
+*
  * Created by Admin on 3/30/2015.
- *//*
+
+*/
 
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = "classpath:queryTestContext.xml")
 @TestExecutionListeners({DependencyInjectionTestExecutionListener.class, DbUnitTestExecutionListener.class})
-@Ignore
 public class MandatoryDocumentAcceptanceTest {
 
     private Logger logger = LoggerFactory.getLogger(MandatoryDocumentAcceptanceTest.class);
@@ -47,20 +45,17 @@ public class MandatoryDocumentAcceptanceTest {
     @Autowired
     private CommandGateway commandGateway;
 
-*/
-/*
     @Before
     public void setUp() {
         UserLoginDetailDto userLoginDetailDto = UserLoginDetailDto.createUserLoginDetailDto("", "");
         List<String> permissions = Lists.newArrayList();
         permissions.add("ROLE_ADMIN");
         userDetails = userLoginDetailDto.populateAuthorities(permissions);
-    }*//*
+    }
 
 
 
-   */
-/* @Test
+    @Test
     @ExpectedDatabase(value = "classpath:testdata/endtoend/mandatorydocument/expectedtestdataformandatorydocument.xml", assertionMode = DatabaseAssertionMode.NON_STRICT)
     public void givenProductCoverageAndProcessTypeAndListOfDocuments_whenTheProductIsExisted_thenItShouldCreateAMandatoryDocument(){
         Set<String> documents = Sets.newHashSet();
@@ -80,9 +75,8 @@ public class MandatoryDocumentAcceptanceTest {
         documents.add("DOCUMENT_FOUR");
         UpdateMandatoryDocumentCommand updateMandatoryDocumentCommand = new UpdateMandatoryDocumentCommand(userDetails,1000l,documents);
         commandGateway.sendAndWait(updateMandatoryDocumentCommand);
-    }*//*
+    }
 
 
 
 }
-*/

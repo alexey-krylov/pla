@@ -2,7 +2,6 @@ package com.pla.core.application;
 
 import com.pla.core.domain.exception.MandatoryDocumentException;
 import com.pla.core.domain.model.MandatoryDocument;
-import com.pla.core.domain.model.plan.Plan;
 import com.pla.core.domain.service.MandatoryDocumentService;
 import org.axonframework.commandhandling.annotation.CommandHandler;
 import org.nthdimenzion.common.service.JpaRepositoryFactory;
@@ -35,8 +34,7 @@ public class MandatoryDocumentCommandHandler {
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("*****Command Received*****" + createMandatoryDocumentCommand);
         }
-
-        JpaRepository<MandatoryDocument, String> coverageRepository = jpaRepositoryFactory.getCrudRepository(MandatoryDocument.class);
+        JpaRepository<MandatoryDocument, Long> coverageRepository = jpaRepositoryFactory.getCrudRepository(MandatoryDocument.class);
         MandatoryDocument mandatoryDocument = mandatoryDocumentService.createMandatoryDocument(createMandatoryDocumentCommand.getPlanId(), createMandatoryDocumentCommand.getCoverageId(), createMandatoryDocumentCommand.getProcess(), createMandatoryDocumentCommand.getDocuments(), createMandatoryDocumentCommand.getUserDetails());
         try {
             coverageRepository.save(mandatoryDocument);
@@ -51,7 +49,7 @@ public class MandatoryDocumentCommandHandler {
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("*****Command Received*****" + updateMandatoryDocumentCommand);
         }
-        JpaRepository<MandatoryDocument, String> coverageRepository = jpaRepositoryFactory.getCrudRepository(MandatoryDocument.class);
+        JpaRepository<MandatoryDocument, Long> coverageRepository = jpaRepositoryFactory.getCrudRepository(MandatoryDocument.class);
         MandatoryDocument mandatoryDocument =  coverageRepository.findOne(updateMandatoryDocumentCommand.getId());
         mandatoryDocument = mandatoryDocumentService.updateMandatoryDocument(mandatoryDocument, updateMandatoryDocumentCommand.getDocuments(), updateMandatoryDocumentCommand.getUserDetails());
         try {

@@ -83,7 +83,7 @@ public class CoverageAcceptanceTest {
         Set<BenefitId> backendIdSet = new HashSet<>();
         backendIdSet.add(new BenefitId("1"));
         backendIdSet.add(new BenefitId("4"));
-        UpdateCoverageCommand updateCoverageCommand = new UpdateCoverageCommand("C001","testing Coverage name after update",backendIdSet,userDetails);
+        UpdateCoverageCommand updateCoverageCommand = new UpdateCoverageCommand("C001","testing Coverage name after update","coverage description",backendIdSet,userDetails);
         Boolean isSuccess = Boolean.FALSE;
         try {
             commandGateway.sendAndWait(updateCoverageCommand);

@@ -2,6 +2,7 @@ package com.pla.core.presentation.controller;
 
 import com.google.common.collect.Lists;
 import com.pla.core.application.CreateTeamCommand;
+import com.pla.core.application.InactivateTeamCommand;
 import com.pla.core.application.UpdateTeamCommand;
 import com.pla.core.query.MasterFinder;
 import com.pla.core.query.TeamFinder;
@@ -76,7 +77,7 @@ public class TeamController {
     }
 
 
-    @RequestMapping(value = "/team/getteamleaders" ,method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(value = "/team/getteamleaders", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public List<Map<String, Object>> getAllTeamLeaders() {
         Map<String, Object> teamLeader = new HashMap<>();
@@ -119,5 +120,19 @@ public class TeamController {
         return Result.success("Team updated successfully");
     }
 
-
+    @ResponseBody
+    Result inactivateTeam(@RequestBody InactivateTeamCommand inactivateTeamCommand, BindingResult bindingResult, HttpServletRequest request) {
+        if (bindingResult.hasErrors()) {
+            return Result.failure("Error in inactivating team", bindingResult.getAllErrors());
+        }
+        try {
+            UserDetails userDetails = getLoggedInUSerDetail(request);
+            inactivateTeamCommand.setUserDetails(userDetails);
+            commandGateway.sendAndWait(inactivateTeamCommand);
+        } catch (Exception e) {
+            LOGGER.error("Error in inactivating team", e);
+            return Result.failure("Error in inactivating team");
+        }
+        return Result.success("Team inactivated successfully");
+    }
 }
