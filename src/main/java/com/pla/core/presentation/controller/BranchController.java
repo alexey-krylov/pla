@@ -1,6 +1,6 @@
 package com.pla.core.presentation.controller;
 
-import com.pla.core.UpdateBranchManagerCommand;
+import com.pla.core.application.UpdateBranchManagerCommand;
 import com.pla.core.application.exception.BranchApplicationException;
 import com.pla.core.application.service.BranchService;
 import com.pla.core.query.BranchFinder;

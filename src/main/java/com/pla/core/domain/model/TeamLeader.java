@@ -13,7 +13,7 @@ import org.nthdimenzion.ddd.domain.annotations.ValueObject;
 import javax.persistence.Embeddable;
 
 /**
- * @author: Samir
+ * @author: Nischitha
  * @since 1.0 10/03/2015
  */
 @ValueObject
