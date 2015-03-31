@@ -8,7 +8,18 @@ require(['jquery','bootstrap','datatables'],function(){
     $('#coverageModal').on('shown.bs.modal', function() {
         $('#coverageName').focus()
     });
-    $('#coverage-table').dataTable();
+    $('#coverage-table').dataTable({
+          "bFilter": true,
+             "oSearch":{
+             "sSearch":"",
+            "bRegex": false,
+            "bSmart": true },
+          "aoColumns":[
+            null,
+            null,
+            {"bSearchable": false },//Disable search on this column
+            {"bSearchable": false }
+    ]});
 
     var box = $('.details-box');
     box.each(function() {
