@@ -7,6 +7,10 @@ body {
     border-left-color: #1b809e!important;
 }
 
+.form-group{
+    margin-bottom: 5px!important;
+}
+
 .bs-callout {
     padding: 20px;
     margin: 20px 0;
@@ -29,12 +33,24 @@ body {
     border:1px solid #FA787E;
 }
 
-input.ng-invalid.ng-dirty {
-    background-color: #FA787E;
+input.ng-invalid.ng-touched {
+    border-color: #FA787E;
+}
+button.ng-invalid.ng-touched {
+    border-color: #FA787E;
+}
+select.ng-invalid.ng-touched {
+    border-color: #FA787E;
 }
 
-input.ng-valid.ng-dirty {
-    background-color: #78FA89;
+input.ng-invalid.ng-dirty {
+    border-color: #FA787E;
+}
+button.ng-invalid.ng-dirty {
+    border-color: #FA787E;
+}
+select.ng-invalid.ng-dirty {
+    border-color: #FA787E;
 }
 
 [ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
@@ -127,3 +143,7 @@ input.ng-valid.ng-dirty {
     0%   { transform: rotate(0deg);   transform: rotate(0deg); }
     100% { transform: rotate(360deg); transform: rotate(360deg); }
 }
+
+
+
+

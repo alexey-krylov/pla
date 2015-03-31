@@ -1,7 +1,5 @@
 'use strict';
-var app = angular.module('planSetup', ['ngTagsInput', 'ui.bootstrap', 'ui.bootstrap.tpls',
-    'ui.bootstrap.accordion',
-    'checklist-model', 'ngRoute', 'directives', 'ui.router']);
+var app = angular.module('planSetup', ['common','ngTagsInput','checklist-model', 'ngRoute']);
 
 app.config(function (tagsInputConfigProvider) {
     tagsInputConfigProvider.setDefaults('tagsInput', {
@@ -47,7 +45,7 @@ app.config(function ($routeProvider, $locationProvider) {
                     if (angular.isDefined($route.current.params.planid)) {
                         $http({
                             method: 'GET',
-                            url: '/pla/core/plan/getPlanById/' + $route.current.params.planid,
+                            url: '/pla/core/plan/getPlanById/' + $route.current.params.planid
                         }).success(function (data) {
                             deferred.resolve(data);
                         }).error(function (msg) {
@@ -64,7 +62,6 @@ app.config(function ($routeProvider, $locationProvider) {
 });
 app.controller('PlanSetupController', ['$scope', '$http', '$routeParams', 'plan',
         function ($scope, $http, $routeParams, plan) {
-
             /*$scope.$on('$viewContentLoaded', function () {
                 console.log('view content loaded ');
                 $('#planSetUpWizard').wizard();
@@ -111,11 +108,15 @@ app.controller('PlanSetupController', ['$scope', '$http', '$routeParams', 'plan'
                 if (!angular.isUndefined(val))
                     $scope.plan.planDetail.clientType = val;
             });
-            $scope.coverageList = [{coverageId: '1', coverageName: 'Coverage 1'},
-                {coverageId: '2', coverageName: 'Coverage 2'},
-                {coverageId: '3', coverageName: 'Coverage 3'},
-                {coverageId: '4', coverageName: 'Coverage 4'},
-                {coverageId: '5', coverageName: 'Coverage 5'}];
+            $scope.coverageList = [{"coverageId": '1', coverageName: 'Coverage 1'},
+                {"coverageId": '2', coverageName: 'Coverage 2'},
+                {"coverageId": '3', coverageName: 'Coverage 3'},
+                {"coverageId": '4', coverageName: 'Coverage 4'},
+                {"coverageId": '5', coverageName: 'Coverage 5'}];
+
+            $scope.selectedItem =  function(iii){
+                console.log(iii);
+            }
 
             $scope.isPaymentTermByValue = function () {
                 return $scope.plan.premiumTermType == 'SPECIFIED_VALUES';
@@ -143,7 +144,7 @@ app.controller('PlanSetupController', ['$scope', '$http', '$routeParams', 'plan'
             };
 
             $scope.newCoverage = {
-                coverage: {},
+                coverage: undefined,
                 coverageId: "",
                 coverageCover: "",
                 coverageType: "",
@@ -162,7 +163,7 @@ app.controller('PlanSetupController', ['$scope', '$http', '$routeParams', 'plan'
                 var newCoverageStr;
                 $scope.plan.coverages.push($scope.newCoverage);
                 $scope.newCoverage = {
-                    coverage: {},
+                    coverage: undefined,
                     coverageId: '',
                     coverageCover: '',
                     coverageType: '',
