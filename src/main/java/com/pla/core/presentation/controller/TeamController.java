@@ -1,11 +1,12 @@
 package com.pla.core.presentation.controller;
 
-import com.google.common.collect.Lists;
 import com.pla.core.application.CreateTeamCommand;
 import com.pla.core.application.InactivateTeamCommand;
 import com.pla.core.application.UpdateTeamCommand;
 import com.pla.core.query.MasterFinder;
 import com.pla.core.query.TeamFinder;
+import com.pla.publishedlanguage.contract.ISMEGateway;
+import com.pla.publishedlanguage.domain.model.EmployeeDto;
 import org.axonframework.commandhandling.gateway.CommandGateway;
 import org.nthdimenzion.presentation.Result;
 import org.slf4j.Logger;
@@ -20,7 +21,6 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -41,11 +41,14 @@ public class TeamController {
 
     private MasterFinder masterFinder;
 
+    private ISMEGateway smeGateway;
+
     @Autowired
-    public TeamController(CommandGateway commandGateway, TeamFinder teamFinder, MasterFinder masterFinder) {
+    public TeamController(CommandGateway commandGateway, TeamFinder teamFinder, MasterFinder masterFinder,ISMEGateway smeGateway) {
         this.commandGateway = commandGateway;
         this.teamFinder = teamFinder;
         this.masterFinder = masterFinder;
+        this.smeGateway=smeGateway;
     }
 
     @RequestMapping(value = "/team/view", method = RequestMethod.GET)
@@ -79,12 +82,8 @@ public class TeamController {
 
     @RequestMapping(value = "/team/getteamleaders", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public List<Map<String, Object>> getAllTeamLeaders() {
-        Map<String, Object> teamLeader = new HashMap<>();
-        teamLeader.put("teamLeaderId", "");
-        teamLeader.put("firstName", "");
-        teamLeader.put("lastName", "");
-        return Lists.newArrayList(teamLeader);
+    public List<EmployeeDto> getAllTeamLeaders() {
+        return smeGateway.getEmployeeDetailByDesignation("TEAM_LEADER");
     }
 
     @RequestMapping(value = "/team/create", method = RequestMethod.POST)
