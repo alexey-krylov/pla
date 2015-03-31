@@ -21,6 +21,7 @@ import org.nthdimenzion.utils.UtilValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
@@ -57,13 +58,16 @@ public class AgentController {
 
     private TeamFinder teamFinder;
 
+    private MongoTemplate mongoTemplate;
+
     @Autowired
-    public AgentController(CommandGateway commandGateway, AgentFinder agentFinder, SequenceGenerator sequenceGenerator, TeamFinder teamFinder,ISMEGateway smeGateway) {
+    public AgentController(CommandGateway commandGateway, AgentFinder agentFinder, SequenceGenerator sequenceGenerator, TeamFinder teamFinder, ISMEGateway smeGateway, MongoTemplate mongoTemplate) {
         this.commandGateway = commandGateway;
         this.agentFinder = agentFinder;
         this.sequenceGenerator = sequenceGenerator;
         this.teamFinder = teamFinder;
         this.smeGateway = smeGateway;
+        this.mongoTemplate = mongoTemplate;
     }
 
     @RequestMapping(value = "/listagent", method = RequestMethod.GET)
@@ -157,10 +161,14 @@ public class AgentController {
         return Result.success("Agent updated successfully");
     }
 
-    @RequestMapping(value = "/getemployeedeatil/{employeeId}/{nrcNumber}",method = RequestMethod.GET)
+    @RequestMapping(value = "/getemployeedeatil/{employeeId}/{nrcNumber}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.ALL_VALUE)
     @ResponseBody
-    public EmployeeDto getEmployeeDetail(@PathVariable String employeeId,@PathVariable String nrcNumber){
-        return smeGateway.getEmployeeDetailByIdOrByNRCNumber(employeeId,nrcNumber);
+    public EmployeeDto getEmployeeDetail(@PathVariable String employeeId, @PathVariable String nrcNumber) {
+        return smeGateway.getEmployeeDetailByIdOrByNRCNumber(employeeId, nrcNumber);
     }
 
+    @RequestMapping(value = "/getallplan", method = RequestMethod.GET)
+    public List<Map> getAllPlans() {
+        return mongoTemplate.findAll(Map.class, "PLAN");
+    }
 }

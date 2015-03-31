@@ -15,8 +15,8 @@ import org.joda.time.LocalDate;
 import org.springframework.security.core.userdetails.UserDetails;
 
 /**
- * @author: Samir
- * @since 1.0 10/03/2015
+ * @author: Nischitha
+ * @since 1.0 12/03/2015
  */
 
 @NoArgsConstructor
@@ -24,8 +24,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 @Setter
 @ToString
 public class UpdateTeamCommand {
-
-    private UserDetails userDetails;
 
     private String teamId;
 
@@ -40,5 +38,7 @@ public class UpdateTeamCommand {
 
     @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentLocalDate")
     private LocalDate thruDate;
+
+    private UserDetails userDetails;
 
 }

@@ -123,14 +123,25 @@ public class AdminUnitTest {
         assertEquals(updatedName, updatedCoverageName.getCoverageName());
     }
 
+    /*
+    * Created one coverage with coverage name C_ONE
+    * Created another new coverage with coverage name C_TWO
+    *
+    * When trying t update coverage with coverage name C_TWO to C_ONE
+    *
+    * then it should throw the exception with message "Coverage name is satisfied"
+    *
+    * */
+
     @Test(expected = CoverageException.class)
     public void givenTheCoverageWithNewCoverageName_whenCoverageNameIsNotUnique_thenTheCoverageShouldUpdateWithNewName() {
         String name = "coverage name";
         boolean isCoverageNameIsUnique = true;
         Coverage coverage = admin.createCoverage(isCoverageNameIsUnique, "1", name, "description", benefitSet);
 
+        Coverage newCoverage = admin.createCoverage(isCoverageNameIsUnique, "1", "coverage name two", "description", benefitSet);
         String updatedName = "coverage name";
-        Coverage updatedCoverage = admin.updateCoverage(coverage,updatedName, "coverage description",benefitSet, false);
+        Coverage updatedCoverage = admin.updateCoverage(newCoverage,updatedName, "coverage description",benefitSet, false);
     }
 
 

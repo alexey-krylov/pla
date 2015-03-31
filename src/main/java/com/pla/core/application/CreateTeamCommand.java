@@ -28,6 +28,10 @@ import javax.validation.constraints.NotNull;
 @ToString
 public class CreateTeamCommand {
 
+    private String regionCode;
+
+    private String branchCode;
+
     @NotNull(message = "{Team name cannot be null}")
     @NotEmpty(message = "{Team name cannot be empty}")
     @Length(max = 100, min = 1, message = "{Team name length should be between 1-100}")
@@ -48,10 +52,6 @@ public class CreateTeamCommand {
     private LocalDate fromDate;
 
     private UserDetails userDetails;
-
-    private String regionCode;
-
-    private String branchCode;
 
 
 }
