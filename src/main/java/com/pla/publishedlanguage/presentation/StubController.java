@@ -49,7 +49,7 @@ public class StubController {
         String employeeId = request.getParameter("employeeId");
         String nrcNumber = request.getParameter("nrcnumber");
         if (employeeId == null && nrcNumber == null) {
-            return null;
+            return new EmployeeDto();
         }
         String jsonPath = "/stubdata/employeeDetail.json";
         List<EmployeeDto> listOfEmployeeDetail = getEmployeeDetail(jsonPath);

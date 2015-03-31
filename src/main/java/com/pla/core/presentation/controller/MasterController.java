@@ -57,4 +57,10 @@ public class MasterController {
         return masterFinder.getBranchByRegion(regionCode);
     }
 
+    @RequestMapping(value = "/getdocument", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public List<Map<String, Object>> getAllDocument() {
+        return masterFinder.getAllDocument();
+    }
+
 }

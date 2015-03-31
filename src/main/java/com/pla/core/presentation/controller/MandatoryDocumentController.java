@@ -3,6 +3,8 @@ package com.pla.core.presentation.controller;
 import com.pla.core.application.CreateMandatoryDocumentCommand;
 import com.pla.core.application.UpdateMandatoryDocumentCommand;
 import com.pla.core.domain.exception.MandatoryDocumentException;
+import com.pla.core.dto.MandatoryDocumentDto;
+import com.pla.core.query.MandatoryDocumentFinder;
 import org.axonframework.commandhandling.gateway.CommandGateway;
 import org.nthdimenzion.presentation.Result;
 import org.slf4j.Logger;
@@ -15,8 +17,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 import static org.nthdimenzion.presentation.AppUtils.getLoggedInUSerDetail;
 
@@ -24,19 +28,47 @@ import static org.nthdimenzion.presentation.AppUtils.getLoggedInUSerDetail;
  * Created by Admin on 3/30/2015.
  */
 @Controller
-@RequestMapping(value = "/core")
+@RequestMapping(value = "/core/mandatorydocument")
 public class MandatoryDocumentController {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(MandatoryDocumentController.class);
 
+    private MandatoryDocumentFinder mandatoryDocumentFinder;
+
     private CommandGateway commandGateway;
 
     @Autowired
-    public MandatoryDocumentController(CommandGateway commandGateway) {
+    public MandatoryDocumentController(CommandGateway commandGateway,MandatoryDocumentFinder mandatoryDocumentFinder) {
         this.commandGateway = commandGateway;
+        this.mandatoryDocumentFinder=mandatoryDocumentFinder;
     }
 
-    @RequestMapping(value = "/mandatorydocument/create", method = RequestMethod.POST)
+
+    /*
+    *
+    * API  to get all created mandatory document
+    *
+    * */
+
+    @RequestMapping(value = "/view" ,method = RequestMethod.GET)
+    @ResponseBody
+    public ModelAndView getAllMandatoryDocument(){
+        /*
+        * change is needed for view name
+        * */
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("pla/core/viewMandatoryDocument");
+        modelAndView.addObject("listOfMandatoryDocument", mandatoryDocumentFinder.getAllMandatoryDocument());
+        return modelAndView;
+    }
+
+    @RequestMapping(value = "/getallmadatorydocument" ,method = RequestMethod.GET)
+    @ResponseBody
+    public List<MandatoryDocumentDto> getMandatoryDocument(){
+       return mandatoryDocumentFinder.getAllMandatoryDocument();
+    }
+
+    @RequestMapping(value = "/create", method = RequestMethod.POST)
     public
     @ResponseBody
     Result createMandatoryDocument(@RequestBody CreateMandatoryDocumentCommand createMandatoryDocumentCommand, BindingResult bindingResult, HttpServletRequest request) {
@@ -54,7 +86,7 @@ public class MandatoryDocumentController {
         return Result.success("Mandatory document created successfully");
     }
 
-    @RequestMapping(value = "/mandatorydocument/update", method = RequestMethod.POST)
+    @RequestMapping(value = "/update", method = RequestMethod.POST)
     public
     @ResponseBody
     Result updateMandatoryDocument(@RequestBody UpdateMandatoryDocumentCommand updateMandatoryDocumentCommand, BindingResult bindingResult, HttpServletRequest request) {
