@@ -24,15 +24,24 @@ app.config(function ($routeProvider, $locationProvider) {
             templateUrl: "plan/newplan",
             controller: 'PlanSetupController',
             resolve: {
-                plan: function () {
+                plan: function(){
                     return {
                         planDetail: {},
                         policyTerm: {},
                         premiumTerm: {},
                         sumAssured: {},
-                        coverages: []
+                        coverages:[]
                     }
-                }
+                },
+                activeCoverages:['$q','$http',function($q,$http){
+                    var deferred = $q.defer();
+                    $http.get('/pla/core/coverages/activecoverage').success(function (response, status, headers, config) {
+                        deferred.resolve(response);
+                    }).error(function (response, status, headers, config) {
+                        deferred.reject();
+                    });
+                    return deferred.promise;
+                }]
             }
         })
         .when('/viewplan/:planid', {
@@ -41,7 +50,6 @@ app.config(function ($routeProvider, $locationProvider) {
             resolve: {
                 plan: ['$q', '$route', '$http', function ($q, $route, $http) {
                     var deferred = $q.defer();
-                    console.log($route.current.params.planid);
                     if (angular.isDefined($route.current.params.planid)) {
                         $http({
                             method: 'GET',
@@ -55,18 +63,28 @@ app.config(function ($routeProvider, $locationProvider) {
                         deferred.resolve();
                     }
                     return deferred.promise;
+                }],
+                activeCoverages:['$q','$http',function($q,$http){
+                    var deferred = $q.defer();
+                    $http.get('/pla/core/coverages/activecoverage').success(function (response, status, headers, config) {
+                        deferred.resolve(response);
+                    }).error(function (response, status, headers, config) {
+                        deferred.reject();
+                    });
+                    return deferred.promise;
                 }]
             }
         });
     $routeProvider.otherwise({redirectTo: '/plan'});
 });
-app.controller('PlanSetupController', ['$scope', '$http', '$routeParams', 'plan',
-        function ($scope, $http, $routeParams, plan) {
+app.controller('PlanSetupController', ['$scope', '$http', '$routeParams', 'plan','activeCoverages',
+        function ($scope, $http, $routeParams, plan,activeCoverages) {
             /*$scope.$on('$viewContentLoaded', function () {
-                console.log('view content loaded ');
-                $('#planSetUpWizard').wizard();
+             console.log('view content loaded ');
+             $('#planSetUpWizard').wizard();
              });*/
             $scope.plan = plan;
+            $scope.coverageList = activeCoverages;
             $scope.steps = [{"title": "step-1"}, {"title": "step-2"}];
             $scope.currentStepIndex = 0;
 
@@ -108,15 +126,6 @@ app.controller('PlanSetupController', ['$scope', '$http', '$routeParams', 'plan'
                 if (!angular.isUndefined(val))
                     $scope.plan.planDetail.clientType = val;
             });
-            $scope.coverageList = [{"coverageId": '1', coverageName: 'Coverage 1'},
-                {"coverageId": '2', coverageName: 'Coverage 2'},
-                {"coverageId": '3', coverageName: 'Coverage 3'},
-                {"coverageId": '4', coverageName: 'Coverage 4'},
-                {"coverageId": '5', coverageName: 'Coverage 5'}];
-
-            $scope.selectedItem =  function(iii){
-                console.log(iii);
-            }
 
             $scope.isPaymentTermByValue = function () {
                 return $scope.plan.premiumTermType == 'SPECIFIED_VALUES';
@@ -231,8 +240,16 @@ app.controller('PlanSetupController', ['$scope', '$http', '$routeParams', 'plan'
             }
 
             $scope.selectedCoverage = {};
-            $scope.benefits = [{benefitName: " Accidental Benefit 1", benefitId: 1},
-                {benefitName: " Accidental Benefit 2", benefitId: 2}];
+
+
+            $scope.benefits = [];
+
+            $scope.selectedCoverageItem = function(newVal){
+                var selectedCoverage = _.where($scope.coverageList, {coverageId:newVal.coverageId});
+                if(selectedCoverage){
+                    $scope.benefits = selectedCoverage[0].benefitDtos;
+                }
+            };
 
             $scope.newPlanCoverageBenefit = {};
             $scope.addBenefit = function () {
@@ -246,7 +263,6 @@ app.controller('PlanSetupController', ['$scope', '$http', '$routeParams', 'plan'
 
 
             $scope.createPlan = function () {
-                console.log($scope.planSetupForm.$invalid);
                 $http.post(angular.isUndefined($scope.plan.planId.planId) ? '/pla/core/plan/create' : '/pla/core/plan/update', $scope.plan).
                     success(function (data, status, headers, config) {
                         $scope.plan.planId = data.id;
@@ -291,13 +307,13 @@ app.controller('PlanSetupController', ['$scope', '$http', '$routeParams', 'plan'
 
             $scope.getAllBenefits = function () {
                 var benefitList = [];
-                var i = 0;
-                for (; i < $scope.plan.coverages.length; i++) {
-                    var j = 0;
-                    for (j = 0; j < $scope.plan.coverages[i].planCoverageBenefits.length; j++) {
-                        benefitList.push($scope.plan.coverages[i].planCoverageBenefits[j]);
-                    }
-                }
+                 var i = 0;
+                 for (; i < $scope.plan.coverages.length; i++) {
+                 var j = 0;
+                 for (j = 0; j < $scope.plan.coverages[i].planCoverageBenefits.length; j++) {
+                 benefitList.push($scope.plan.coverages[i].planCoverageBenefits[j]);
+                 }
+                 }
                 return benefitList;
             }
 

@@ -1,5 +1,5 @@
 <form novalidate="true" name="planSetUpForm">
-    <div class="wizard fuelux-wizard" id="planSetUpWizard" style="overflow: visible">
+    <div class="wizard fuelux-wizard" id="planSetUpWizard" style="overflow: visible" skip-validation="['step5']">
         <ul class="steps">
             <li data-step="1" data-name="campaign" class="active">
                 <span class="badge">1</span>Plan Details<span class="chevron"></span></li>
@@ -171,12 +171,12 @@
                             <div class="form-group required">
                                 <label class="control-label" style="display: block;">Is Tax Applicable?</label>
                                 <label class="radio-inline">
-                                    <input type="radio" name="taxable" id="taxable" ng-required="true" nvalue="true"
-                                           ng-model="plan.planDetail.taxApplicable" ng-value="plan.planDetail.taxApplicable"/>Yes
+                                    <input type="radio" name="taxable" id="taxable" ng-required="true" value="true"
+                                           ng-model="plan.planDetail.taxApplicable" />Yes
                                 </label>
                                 <label class="radio-inline">
                                     <input type="radio" name="taxable" ng-required="true" value="false"
-                                           ng-model="plan.planDetail.taxApplicable" ng-value="plan.planDetail.taxApplicable"/>No
+                                           ng-model="plan.planDetail.taxApplicable"/>No
                                 </label>
                                 <div class="error"
                                      ng-show="step1.taxable.$dirty &amp;&amp; step1.taxable.$invalid">
@@ -505,7 +505,7 @@
                                     <div class="controls">
                                         <select ng-model="newCoverage.coverage" name="newCoverage"
                                                 ng-options="item as item.coverageName for item in coverageList"
-                                                class="form-control input-sm  col-sm-3" ng-required="true" ng-change="selectedItem(newCoverage.coverage)">
+                                                class="form-control input-sm  col-sm-3" ng-required="true">
                                         </select>
                                     </div>
                                 </div>
@@ -519,8 +519,15 @@
                                         </label>
                                         <label>
                                             <input type="radio" name="coverType" ng-model="newCoverage.coverageCover"
-                                                   value="ADDITIONAL"/> Additional
+                                                   value="ADDITIONAL" ng-required="true"/> Additional
                                         </label>
+                                    </div>
+                                    <div class="error"
+                                         ng-show="step5.coverType.$dirty &amp;&amp; step5.coverType.$invalid">
+                                        <small class="error"
+                                               ng-show="step5.coverType.$error.required">
+                                            Please indicate cover type.
+                                        </small>
                                     </div>
                                 </div>
                                 <div class="control-group required col-md-4">
@@ -533,10 +540,17 @@
                                         </label>
                                         <label class="radio-inline">
                                             <input type="radio" name="deductibleType"
-                                                   ng-model="newCoverage.deductibleType" value="PERCENTAGE"/>% of
+                                                   ng-model="newCoverage.deductibleType" value="PERCENTAGE" ng-required="true"/>% of
                                             Claimed
                                             Amount
                                         </label>
+                                        <div class="error"
+                                             ng-show="step5.deductibleType.$dirty &amp;&amp; step5.deductibleType.$invalid">
+                                            <small class="error"
+                                                   ng-show="step5.deductibleType.$error.required">
+                                                Please select the Deductible type.
+                                            </small>
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="control-group required col-md-2">
@@ -559,20 +573,33 @@
                                         </label>
                                         <label class="radio-inline">
                                             <input type="radio" name="coverageType" ng-model="newCoverage.coverageType"
-                                                   value="OPTIONAL"/> Optional
+                                                   value="OPTIONAL" ng-required="true"/> Optional
                                         </label>
+                                        <div class="error"
+                                             ng-show="step5.coverageType.$dirty &amp;&amp; step5.coverageType.$invalid">
+                                            <small class="error"
+                                                   ng-show="step5.coverageType.$error.required">
+                                                Please select the Coverage type.
+                                            </small>
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="control-group required col-md-3">
                                     <label class="control-label">Tax Applicable</label>
-
                                     <div class="controls">
                                         <label class="radio-inline">
-                                            <input type="radio" value="true" name="taxApplicable" ng-model="newCoverage.taxApplicable" ng-required="true"/>Yes
+                                            <input type="radio" value="true" name="taxApplicable" ng-model="newCoverage.taxApplicable"/>Yes
                                         </label>
                                         <label class="radio-inline">
-                                            <input type="radio" value="false" name="taxApplicable" ng-model="newCoverage.taxApplicable"/>No
+                                            <input type="radio" value="false" name="taxApplicable" ng-model="newCoverage.taxApplicable" ng-required="true"/>No
                                         </label>
+                                        <div class="error"
+                                             ng-show="step5.taxApplicable.$dirty &amp;&amp; step5.taxApplicable.$invalid">
+                                            <small class="error"
+                                                   ng-show="step5.taxApplicable.$error.required">
+                                                Please indicate whether taxes are applicable for the coverage.
+                                            </small>
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="control-group col-md-2">
@@ -824,8 +851,8 @@
 
                                         <div class="controls">
                                             <select ng-model="selectedCoverage"
-                                                    ng-options="item as item.coverage.coverageName for item in plan.coverages track by item.coverage.coverageId"
-                                                    class="form-control input-sm">
+                                                    ng-options="item as item.coverage.coverageName for item in plan.coverages"
+                                                    class="form-control input-sm" ng-change="selectedCoverageItem(selectedCoverage)">
                                             </select>
                                         </div>
                                     </div>
@@ -834,7 +861,7 @@
 
                                         <div class="controls">
                                             <select ng-model="newPlanCoverageBenefit.benefitId" class="form-control input-sm"
-                                                    ng-options="benefit.benefitId as benefit.benefitName for benefit in benefits">
+                                                    ng-options="benefit.benefitId as benefit.benefitName for benefit in benefits" ng-disabled="!selectedCoverage">
                                             </select>
                                         </div>
                                     </div>
