@@ -16,13 +16,13 @@ App.controller('CreateTeamController',['$scope','$http','$templateCache','$timeo
                   $event.stopPropagation();
                   $scope.datePickerSettings.isOpened = true;
          };
-         $http.get('http://localhost:6443/pla/core/team/getteamleaders').success(function(data){
+         $http.get('/pla/core/team/getteamleaders').success(function(data){
                           //  console.log(data);
                            $scope.teamLeaders=data;
 
          });
          $scope.getAllBranch = function(obj){
-              $http.get('http://localhost:6443/pla/core/master/getbranchbyregion?regioncode='+ obj).success(function(data){
+              $http.get('/pla/core/master/getbranchbyregion?regioncode='+ obj).success(function(data){
                 console.log(data);
                  $scope.branchList=data;
                });
@@ -36,7 +36,7 @@ App.controller('CreateTeamController',['$scope','$http','$templateCache','$timeo
              }
 
            //console.log($scope.createTeam);
-           $http.post('http://localhost:6443/pla/core/team/create', $scope.createTeam).success(function(data){
+           $http.post('/pla/core/team/create', $scope.createTeam).success(function(data){
               //  console.log(data);
                 if(data.status==200){
                      $scope.alert = {title:'Success Message! ', content:data.message, type: 'success'};

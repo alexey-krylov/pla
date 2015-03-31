@@ -20,13 +20,13 @@ App.controller('AssignTeamController',['$scope','$http','$window','$location','$
           $event.stopPropagation();
           $scope.datePickerSettings.isOpened = true;
      };
-     $http.get('http://localhost:6443/pla/core/team/getteamleaders').success(function(data){
+     $http.get('/pla/core/team/getteamleaders').success(function(data){
                  //  console.log(data);
                   $scope.teamLeaders=data;
 
      });
       $scope.url = window.location.search.split('=')[1];
-       $http.get('http://localhost:6443/pla/core/team/openAssignPage?teamId='+$scope.url).success(function(data){
+       $http.get('/pla/core/team/openAssignPage?teamId='+$scope.url).success(function(data){
                   // console.log(data);
                    $scope.assignTeam=data;
                    $scope.currentTeamLeader=$scope.assignTeam.currentTeamLeader;
@@ -52,7 +52,7 @@ App.controller('AssignTeamController',['$scope','$http','$window','$location','$
 
       $scope.submitAssignTeam = function(){
            //       console.log($scope.assignTeam);
-         $http.post('http://localhost:6443/pla/core/team/assign', $scope.assignTeam).success(function(data){
+         $http.post('/pla/core/team/assign', $scope.assignTeam).success(function(data){
              if(data.status==200){
                   $scope.alert = {title:'Success Message! ', content:data.message, type: 'success'};
                   $scope.reset();
