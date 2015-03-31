@@ -43,7 +43,7 @@ DROP TABLE IF EXISTS `agent`;
     `physical_address_province` varchar(255) DEFAULT NULL,
     `team_id` varchar(255) DEFAULT NULL,
     PRIMARY KEY (`agent_id`)
-  ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  );
 
 DROP TABLE IF EXISTS `agent_authorized_plan`;
  CREATE TABLE `agent_authorized_plan` (
@@ -51,7 +51,7 @@ DROP TABLE IF EXISTS `agent_authorized_plan`;
    `plan_id` varchar(255) DEFAULT NULL,
    KEY `FK_fb90q6b5wf5iswifmkro1bfr8` (`agent_id`),
    CONSTRAINT `FK_fb90q6b5wf5iswifmkro1bfr8` FOREIGN KEY (`agent_id`) REFERENCES `agent` (`agent_id`)
- ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+ );
 
 
 /*Table structure for table `association_value_entry` */
@@ -65,14 +65,21 @@ CREATE TABLE `association_value_entry` (
   `saga_id` varchar(255) DEFAULT NULL,
   `saga_type` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+);
 
 /*Data for the table `association_value_entry` */
 
 /*Table structure for table `bank_branch` */
 
-DROP TABLE IF EXISTS `bank_branch`;
+DROP TABLE IF EXISTS `bank_name`;
+CREATE TABLE `bank_name` (
+  `BANK_CODE` varchar(20) NOT NULL DEFAULT '',
+  `BANK_NAME` varchar(50) NOT NULL,
+  PRIMARY KEY (`BANK_CODE`),
+  UNIQUE KEY `BANK_NAME` (`BANK_NAME`)
+);
 
+DROP TABLE IF EXISTS `bank_branch`;
 CREATE TABLE `bank_branch` (
   `BANK_CODE` varchar(20) NOT NULL,
   `BRANCH` varchar(100) NOT NULL,
@@ -80,20 +87,11 @@ CREATE TABLE `bank_branch` (
   PRIMARY KEY (`SORT_CODE`),
   KEY `BANK_CODE` (`BANK_CODE`),
   CONSTRAINT `bank_branch_ibfk_1` FOREIGN KEY (`BANK_CODE`) REFERENCES `bank_name` (`BANK_CODE`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+);
 
 /*Data for the table `bank_branch` */
 
 /*Table structure for table `bank_name` */
-
-DROP TABLE IF EXISTS `bank_name`;
-
-CREATE TABLE `bank_name` (
-  `BANK_CODE` varchar(20) NOT NULL DEFAULT '',
-  `BANK_NAME` varchar(50) NOT NULL,
-  PRIMARY KEY (`BANK_CODE`),
-  UNIQUE KEY `BANK_NAME` (`BANK_NAME`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 /*Data for the table `bank_name` */
 
@@ -119,7 +117,7 @@ CREATE TABLE `channel_type` (
   `CHANNEL_DESCRIPTION` varchar(50) NOT NULL,
   PRIMARY KEY (`CHANNEL_CODE`),
   UNIQUE KEY `CHANNEL_DESCRIPTION` (`CHANNEL_DESCRIPTION`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+);
 
 /*Data for the table `channel_type` */
 
@@ -134,7 +132,7 @@ CREATE TABLE `coverage` (
   `status` varchar(255) NOT NULL,
   PRIMARY KEY (`coverage_id`),
   UNIQUE KEY `UNQ_COVERAGE_NAME` (`coverage_name`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+);
 
 /*Data for the table `coverage` */
 
@@ -148,7 +146,7 @@ CREATE TABLE `coverage_benefit` (
   KEY `FK_COVERAGE_ID` (`coverage_id`),
   CONSTRAINT `FK_COVERAGE_COVERAGE_ID` FOREIGN KEY (`coverage_id`) REFERENCES `coverage` (`coverage_id`),
   CONSTRAINT `FK_BENEFIT_BENEFIT_ID` FOREIGN KEY (`benefit_id`) REFERENCES `benefit` (`benefit_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+);
 
 /*Data for the table `coverage_benefit` */
 
@@ -168,7 +166,7 @@ CREATE TABLE `domain_event_entry` (
   `payload` longblob NOT NULL,
   PRIMARY KEY (`aggregate_identifier`,`sequence_number`,`type`),
   UNIQUE KEY `UK_fwe6lsa8bfo6hyas6ud3m8c7x` (`event_identifier`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+);
 
 /*Data for the table `domain_event_entry` */
 
@@ -182,7 +180,7 @@ CREATE TABLE `geo` (
   `GEO_TYPE` varchar(20) NOT NULL,
   `GEO_DESCRIPTION` varchar(100) NOT NULL,
   PRIMARY KEY (`GEO_ID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+);
 
 /*Data for the table `geo` */
 
@@ -205,224 +203,11 @@ CREATE TABLE `hcp_service` (
   KEY `TOWN_GEO_ID` (`TOWN_GEO_ID`),
   CONSTRAINT `hcp_service_ibfk_1` FOREIGN KEY (`PROVINCE_GEO_ID`) REFERENCES `geo` (`GEO_ID`),
   CONSTRAINT `hcp_service_ibfk_2` FOREIGN KEY (`TOWN_GEO_ID`) REFERENCES `geo` (`GEO_ID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+);
 
 /*Data for the table `hcp_service` */
 
 /*Table structure for table `plan` */
-
-DROP TABLE IF EXISTS `plan`;
-
-CREATE TABLE `plan` (
-  `plan_id` varchar(255) NOT NULL,
-  `last_event_sequence_number` bigint(20) DEFAULT NULL,
-  `version` bigint(20) DEFAULT NULL,
-  `plan_payment_id` bigint(20) DEFAULT NULL,
-  `policy_term_id` bigint(20) DEFAULT NULL,
-  `sum_assured_id` bigint(20) DEFAULT NULL,
-  PRIMARY KEY (`plan_id`),
-  KEY `FK_r70nyaocgvvgcrwuqhvwh8v0u` (`plan_payment_id`),
-  KEY `FK_31dua9hmubeiqdtvvb90u1pxm` (`policy_term_id`),
-  KEY `FK_5i9s67duuj0127co5wmf9o5h` (`sum_assured_id`),
-  CONSTRAINT `FK_5i9s67duuj0127co5wmf9o5h` FOREIGN KEY (`sum_assured_id`) REFERENCES `sum_assured` (`id`),
-  CONSTRAINT `FK_31dua9hmubeiqdtvvb90u1pxm` FOREIGN KEY (`policy_term_id`) REFERENCES `policy_term` (`id`),
-  CONSTRAINT `FK_r70nyaocgvvgcrwuqhvwh8v0u` FOREIGN KEY (`plan_payment_id`) REFERENCES `plan_payment` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
-/*Data for the table `plan` */
-
-/*Table structure for table `plan_coverage` */
-
-DROP TABLE IF EXISTS `plan_coverage`;
-
-CREATE TABLE `plan_coverage` (
-  `coverage_id` varchar(255) NOT NULL,
-  `coverage_cover` int(11) NOT NULL,
-  `coverage_type` int(11) NOT NULL,
-  `deductible_amount` decimal(19,2) DEFAULT NULL,
-  `deductible_percentage` decimal(19,2) DEFAULT NULL,
-  `max_age` int(11) NOT NULL,
-  `min_age` int(11) NOT NULL,
-  `tax_applicable` bit(1) NOT NULL,
-  `waiting_period` int(11) NOT NULL,
-  `plan_id` varchar(255) DEFAULT NULL,
-  PRIMARY KEY (`coverage_id`),
-  KEY `FK_n7h9fv72t4rkcfxy65nmwn88p` (`plan_id`),
-  CONSTRAINT `FK_n7h9fv72t4rkcfxy65nmwn88p` FOREIGN KEY (`plan_id`) REFERENCES `plan` (`plan_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
-/*Data for the table `plan_coverage` */
-
-/*Table structure for table `plan_coverage_benefit` */
-
-DROP TABLE IF EXISTS `plan_coverage_benefit`;
-
-CREATE TABLE `plan_coverage_benefit` (
-  `plan_coverage_id` varchar(255) NOT NULL,
-  `benefit_id` varchar(255) DEFAULT NULL,
-  `benefit_limit` decimal(19,2) DEFAULT NULL,
-  `coverage_benefit_type` int(11) DEFAULT NULL,
-  `defined_per` int(11) DEFAULT NULL,
-  `max_limit` decimal(19,2) DEFAULT NULL,
-  KEY `FK_8jd3iuqc7x0yb17aovswhs92n` (`plan_coverage_id`),
-  CONSTRAINT `FK_8jd3iuqc7x0yb17aovswhs92n` FOREIGN KEY (`plan_coverage_id`) REFERENCES `plan_coverage` (`coverage_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
-/*Data for the table `plan_coverage_benefit` */
-
-/*Table structure for table `plan_payment` */
-
-DROP TABLE IF EXISTS `plan_payment`;
-
-CREATE TABLE `plan_payment` (
-  `id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `premium_payment_term_type` int(11) NOT NULL,
-  `premium_payment_id` bigint(20) DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  KEY `FK_jc8gdw8f50sukxl8ldr98p2cu` (`premium_payment_id`),
-  CONSTRAINT `FK_jc8gdw8f50sukxl8ldr98p2cu` FOREIGN KEY (`premium_payment_id`) REFERENCES `premium_payment` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
-/*Data for the table `plan_payment` */
-
-/*Table structure for table `plan_payment_maturity_amounts` */
-
-DROP TABLE IF EXISTS `plan_payment_maturity_amounts`;
-
-CREATE TABLE `plan_payment_maturity_amounts` (
-  `plan_payment_id` bigint(20) NOT NULL,
-  `guaranteed_survival_benefit_amount` decimal(19,2) NOT NULL,
-  `maturity_year` int(11) NOT NULL,
-  KEY `FK_7qovxgs106k36s3y5pohdq3iw` (`plan_payment_id`),
-  CONSTRAINT `FK_7qovxgs106k36s3y5pohdq3iw` FOREIGN KEY (`plan_payment_id`) REFERENCES `plan_payment` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
-/*Data for the table `plan_payment_maturity_amounts` */
-
-/*Table structure for table `policy_term` */
-
-DROP TABLE IF EXISTS `policy_term`;
-
-CREATE TABLE `policy_term` (
-  `id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `max_maturity_age` int(11) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
-/*Data for the table `policy_term` */
-
-/*Table structure for table `policy_term_valid_terms` */
-
-DROP TABLE IF EXISTS `policy_term_valid_terms`;
-
-CREATE TABLE `policy_term_valid_terms` (
-  `policy_term_id` bigint(20) NOT NULL,
-  `valid_terms` int(11) DEFAULT NULL,
-  KEY `FK_lqp4y9lbtc3yec8t3altqk935` (`policy_term_id`),
-  CONSTRAINT `FK_lqp4y9lbtc3yec8t3altqk935` FOREIGN KEY (`policy_term_id`) REFERENCES `policy_term` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
-/*Data for the table `policy_term_valid_terms` */
-
-/*Table structure for table `premium_payment` */
-
-DROP TABLE IF EXISTS `premium_payment`;
-
-CREATE TABLE `premium_payment` (
-  `id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `payment_cut_off_age` int(11) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
-/*Data for the table `premium_payment` */
-
-/*Table structure for table `premium_payment_valid_terms` */
-
-DROP TABLE IF EXISTS `premium_payment_valid_terms`;
-
-CREATE TABLE `premium_payment_valid_terms` (
-  `premium_payment_id` bigint(20) NOT NULL,
-  `valid_terms` int(11) DEFAULT NULL,
-  KEY `FK_i4nq1052vfgxnmn4umabuox8y` (`premium_payment_id`),
-  CONSTRAINT `FK_i4nq1052vfgxnmn4umabuox8y` FOREIGN KEY (`premium_payment_id`) REFERENCES `premium_payment` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
-/*Data for the table `premium_payment_valid_terms` */
-
-/*Table structure for table `region` */
-
-
-/*Data for the table `region` */
-
-/*Table structure for table `saga_entry` */
-
-DROP TABLE IF EXISTS `saga_entry`;
-
-CREATE TABLE `saga_entry` (
-  `saga_id` varchar(255) NOT NULL,
-  `revision` varchar(255) DEFAULT NULL,
-  `saga_type` varchar(255) DEFAULT NULL,
-  `serialized_saga` longblob,
-  PRIMARY KEY (`saga_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
-/*Data for the table `saga_entry` */
-
-
-
-/*Table structure for table `snapshot_event_entry` */
-
-DROP TABLE IF EXISTS `snapshot_event_entry`;
-
-CREATE TABLE `snapshot_event_entry` (
-  `aggregate_identifier` varchar(255) NOT NULL,
-  `sequence_number` bigint(20) NOT NULL,
-  `type` varchar(255) NOT NULL,
-  `event_identifier` varchar(255) NOT NULL,
-  `payload_revision` varchar(255) DEFAULT NULL,
-  `payload_type` varchar(255) NOT NULL,
-  `time_stamp` varchar(255) NOT NULL,
-  `meta_data` longblob,
-  `payload` longblob NOT NULL,
-  PRIMARY KEY (`aggregate_identifier`,`sequence_number`,`type`),
-  UNIQUE KEY `UK_e1uucjseo68gopmnd0vgdl44h` (`event_identifier`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
-/*Data for the table `snapshot_event_entry` */
-
-/*Table structure for table `sum_assured` */
-
-DROP TABLE IF EXISTS `sum_assured`;
-
-CREATE TABLE `sum_assured` (
-  `type` varchar(31) NOT NULL,
-  `id` bigint(20) NOT NULL AUTO_INCREMENT,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
-/*Data for the table `sum_assured` */
-
-DROP TABLE IF EXISTS `sum_insured_values`;
-
-CREATE TABLE `sum_insured_values` (
-  `sum_assured_id` bigint(20) NOT NULL,
-  `sum_insured_values` decimal(19,2) DEFAULT NULL,
-  KEY `FK_28ctxup91kp61te2ela8peqo0` (`sum_assured_id`),
-  CONSTRAINT `FK_28ctxup91kp61te2ela8peqo0` FOREIGN KEY (`sum_assured_id`) REFERENCES `sum_assured` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
-
-/*Table structure for table `sum_assured_sum_insured_values` */
-
-DROP TABLE IF EXISTS `sum_assured_sum_insured_values`;
-
-CREATE TABLE `sum_assured_sum_insured_values` (
-  `sum_assured_id` bigint(20) NOT NULL,
-  `sum_insured_values` decimal(19,2) DEFAULT NULL,
-  KEY `FK_8v9k7sydll2yrf86atgs5081u` (`sum_assured_id`),
-  CONSTRAINT `FK_8v9k7sydll2yrf86atgs5081u` FOREIGN KEY (`sum_assured_id`) REFERENCES `sum_assured` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
 
 DROP TABLE IF EXISTS region;
 CREATE TABLE `region` (
@@ -478,7 +263,7 @@ CREATE TABLE `team` (
   KEY `FK_TEAM_BRANCH_BRANCH_CODE` (`branch_code`),
   CONSTRAINT `FK_TEAM_BRANCH_BRANCH_CODE` FOREIGN KEY (`branch_code`) REFERENCES `branch` (`BRANCH_CODE`),
   CONSTRAINT `FK_TEAM_REGION_REGION_CODE` FOREIGN KEY (`region_code`) REFERENCES `region` (`REGION_CODE`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+);
 
 /*Data for the table `team` */
 
@@ -599,7 +384,7 @@ CREATE TABLE `mandatory_documents` (
   `document_code` varchar(255) DEFAULT NULL,
   KEY `FK_tc6y6qyosoy6f2xjh3i6kv65o` (`document_id`),
   CONSTRAINT `FK_tc6y6qyosoy6f2xjh3i6kv65o` FOREIGN KEY (`document_id`) REFERENCES `mandatory_document` (`document_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+);
 
 
 /*Table structure for document */
@@ -609,7 +394,7 @@ CREATE TABLE `document` (
   `document_code` varchar(255) NOT NULL,
   `document_name` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`document_code`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+);
 
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
