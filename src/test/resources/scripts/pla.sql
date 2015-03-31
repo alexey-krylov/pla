@@ -71,8 +71,15 @@ CREATE TABLE `association_value_entry` (
 
 /*Table structure for table `bank_branch` */
 
-DROP TABLE IF EXISTS `bank_branch`;
+DROP TABLE IF EXISTS `bank_name`;
+CREATE TABLE `bank_name` (
+  `BANK_CODE` varchar(20) NOT NULL DEFAULT '',
+  `BANK_NAME` varchar(50) NOT NULL,
+  PRIMARY KEY (`BANK_CODE`),
+  UNIQUE KEY `BANK_NAME` (`BANK_NAME`)
+);
 
+DROP TABLE IF EXISTS `bank_branch`;
 CREATE TABLE `bank_branch` (
   `BANK_CODE` varchar(20) NOT NULL,
   `BRANCH` varchar(100) NOT NULL,
@@ -85,15 +92,6 @@ CREATE TABLE `bank_branch` (
 /*Data for the table `bank_branch` */
 
 /*Table structure for table `bank_name` */
-
-DROP TABLE IF EXISTS `bank_name`;
-
-CREATE TABLE `bank_name` (
-  `BANK_CODE` varchar(20) NOT NULL DEFAULT '',
-  `BANK_NAME` varchar(50) NOT NULL,
-  PRIMARY KEY (`BANK_CODE`),
-  UNIQUE KEY `BANK_NAME` (`BANK_NAME`)
-);
 
 /*Data for the table `bank_name` */
 
