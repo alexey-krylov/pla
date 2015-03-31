@@ -22,12 +22,12 @@ angular.module('directives', [])
          */
         return {
             restrict: 'AEC',
-            require: ['^form'],
+            require: ['?^form'],
             scope: {
-                selectedItem: '='
+                selectedItem: '=',
+                skipValidation:'='
             },
             link: function (scope, element, attr, ctrl) {
-
                 scope.$watch('selectedItem',function(newVal,oldVal){
                     element.wizard('selectedItem', {
                         step: newVal
@@ -37,11 +37,15 @@ angular.module('directives', [])
                 $(element).wizard();
                 $(element).on('actionclicked.fu.wizard', function (event, data) {
                     if (data.direction == 'previous')return;
-                    var stepForm = ctrl[0]['step' + data.step];
-                    validateStep(stepForm);
-                    console.log(stepForm);
-                    if (stepForm.$invalid) {
-                        event.preventDefault();
+                    if(ctrl && ctrl[0]){
+                        var currentStep =ctrl[0]['step' + data.step].$name;
+                        if($.inArray(currentStep,scope.skipValidation)==-1){
+                            var stepForm = ctrl[0]['step' + data.step];
+                            validateStep(stepForm);
+                            if (stepForm.$invalid) {
+                                event.preventDefault();
+                            }
+                        }
                     }
                     scope.$emit('actionclicked.fu.wizard', event, data);
                 });
