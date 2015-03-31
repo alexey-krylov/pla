@@ -56,7 +56,7 @@ public class Admin {
     }
 
     public Coverage updateCoverage(Coverage coverage, String newCoverageName, String description,Set<Benefit> benefits, boolean isCoverageNameUnique) {
-        if (!isCoverageNameUnique) {
+        if (!isCoverageNameUnique && !coverage.getCoverageName().equals(new CoverageName(newCoverageName))) {
             throw new CoverageException("Coverage name already satisfied");
         }
         return coverage.updateCoverageName(newCoverageName).updateBenefit(benefits).updateDescription(description);
