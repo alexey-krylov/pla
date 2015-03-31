@@ -49,8 +49,8 @@
                           <div class="form-group col-md-6 required" style="margin: auto;margin-top:10px;">
                                 <label class="control-label">Team Leader</label>
                                 <select class="form-control input-sm"  ng-model="assignTeam.currentTeamLeader" ng-change="getNewTeamLeader(assignTeam.currentTeamLeader)" >
-                                    <option value="">---Select option-----</option>
-                                    <option ng-selected="assignTeam.currentTeamLeader == teamLeader.teamLeaderId" value="{{teamLeader.teamLeaderId}}" ng-repeat="teamLeader in teamLeaders"  >{{teamLeader.firstName}} {{teamLeader.lastName}}</option>
+                                    <option value="">-----Select option-----</option>
+                                    <option ng-selected="assignTeam.currentTeamLeader == teamLeader.employeeId" value="{{teamLeader.employeeId}}" ng-repeat="teamLeader in teamLeaders"  >{{teamLeader.firstName}} {{teamLeader.lastName}}</option>
                                 </select>
                             </div>
                             <div class="form-group col-md-6 required" style="margin: auto;margin-top:10px;" >
@@ -66,7 +66,7 @@
                         </div>
                         <div class="row">
                             <div class="form-group col-lg-12" style="margin: auto;margin-top:10px;" >
-                                <button type="submit" class="btn btn-default" style="float:right;" ng-disabled="(!boolVal)" data-placement="top-right" data-container="notification" data-duration="3" bs-alert="alert" ng-click="submitAssignTeam()">Save</button>
+                                <button type="submit" class="btn btn-default" style="float:right;" ng-disabled="(!boolVal)" data-placement="top-right" data-container="notification" data-duration="5" bs-alert="alert" ng-click="submitAssignTeam()">Save</button>
                                 <a class="btn btn-default" style="float:left;" th:href="@{/core/team/view}">Cancel</a>
                             </div>
                         </div>

@@ -15,10 +15,10 @@ require(['jquery','bootstrap','datatables'],function(){
             "bRegex": false,
             "bSmart": true },
           "aoColumns":[
-            null,
-            null,
-            {"bSearchable": false },//Disable search on this column
-            {"bSearchable": false }
+            { "sWidth": "10%","bSearchable": true },
+          { "sWidth": "70%","bSearchable": true },
+            {"sWidth": "5%","bSearchable": false },//Disable search on this column
+            {"sWidth": "15%","bSearchable": false }
     ]});
 
     var box = $('.details-box');

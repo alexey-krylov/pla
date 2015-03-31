@@ -23,7 +23,7 @@ App.controller('CreateTeamController',['$scope','$http','$templateCache','$timeo
          });
          $scope.getAllBranch = function(obj){
               $http.get('http://localhost:6443/pla/core/master/getbranchbyregion?regioncode='+ obj).success(function(data){
-               //  console.log(data);
+                console.log(data);
                  $scope.branchList=data;
                });
          }
@@ -38,8 +38,12 @@ App.controller('CreateTeamController',['$scope','$http','$templateCache','$timeo
            //console.log($scope.createTeam);
            $http.post('http://localhost:6443/pla/core/team/create', $scope.createTeam).success(function(data){
               //  console.log(data);
-                  $scope.alert = {title:'Success Message! ', content:'Team Created Successfully', type: 'success'};
-                 $scope.reset();
+                if(data.status==200){
+                     $scope.alert = {title:'Success Message! ', content:data.message, type: 'success'};
+                     $scope.reset();
+                }else{
+                 $scope.alert = {title:'Error Message! ', content:data.message, type: 'danger'};
+                }
 
              });
          };
@@ -49,7 +53,7 @@ App.controller('CreateTeamController',['$scope','$http','$templateCache','$timeo
              $scope.createTeam.fromDate ='';
          	 $scope.createTeam.regionCode ='';
          	 $scope.createTeam.teamCode ='';
-         	 $scope.createTeam.EmployeeId ='';
+         	 $scope.createTeam.teamLeader ='';
          	 $scope.createTeam.teamName ='';
          	 }
  }]);

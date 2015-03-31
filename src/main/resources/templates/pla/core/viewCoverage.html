@@ -115,7 +115,7 @@
                         <tbody>
                         <tr th:each="coverage : ${listOfCoverage}" th:if="${coverage.coverageStatus=='ACTIVE'}">
                             <td th:text="${{coverage.coverageName}}" ></td>
-                            <td th:text="${{coverage.description}}"></td>
+                            <td style="white-space:wrap" th:text="${{coverage.description}}"></td>
                             <td style="text-align:center" class="pop" >
                                <button href="#" class="details-box btn btn-primary btn-xs" rel="popover"  data-content="" > Benefits
                                     <div class="popover-body" style="display:none;">
@@ -127,7 +127,7 @@
                             </td>
                             <td style="text-align:center">
                                 <button type="button" class="btn btn-primary btn-xs"  th:onclick="'openCoverageUpdateModal(&quot;'+${coverage.coverageId}+'&quot;,&quot;'+${coverage.coverageName}+'&quot;,&quot;'+${coverage.description}+'&quot;,&quot;'+${coverage.benefitDtos}+'&quot;)'">Update</button>
-                                <button type="button" class="btn btn-danger btn-xs" style="margin-top:5px;" data-toggle="modal" data-target="#alert-modal" th:onclick="'inactivate(&quot;'+${coverage.coverageId}+'&quot;,&quot;save&quot;)'" >Inactivate</button>
+                                <button type="button" class="btn btn-danger btn-xs"  data-toggle="modal" data-target="#alert-modal" th:onclick="'inactivate(&quot;'+${coverage.coverageId}+'&quot;,&quot;save&quot;)'" >Inactivate</button>
                             </td>
                         </tr>
                         </tbody>

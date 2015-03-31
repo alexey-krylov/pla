@@ -25,10 +25,6 @@ App.controller('AssignTeamController',['$scope','$http','$window','$location','$
                   $scope.teamLeaders=data;
 
      });
-     /* $scope.teamLeaders=[{'teamLeaderId':'100','firstName':'sara','lastName':'ali'},
-                       {'teamLeaderId':'101','firstName':'James','lastName':'Mathew'},
-                       {'teamLeaderId':'102','firstName':'Sandy','lastName':'Malhotra'},
-                        {'teamLeaderId':'103','firstName':'Raj','lastName':'Kumar'}];  */
       $scope.url = window.location.search.split('=')[1];
        $http.get('http://localhost:6443/pla/core/team/openAssignPage?teamId='+$scope.url).success(function(data){
                   // console.log(data);
@@ -57,9 +53,13 @@ App.controller('AssignTeamController',['$scope','$http','$window','$location','$
       $scope.submitAssignTeam = function(){
            //       console.log($scope.assignTeam);
          $http.post('http://localhost:6443/pla/core/team/assign', $scope.assignTeam).success(function(data){
-            $scope.alert = {title:'Success Message! ', content:'Team Updated Successfully', type: 'info'};
-           //  console.log(data);
-            $scope.reset();
+             if(data.status==200){
+                  $scope.alert = {title:'Success Message! ', content:data.message, type: 'success'};
+                  $scope.reset();
+             }else{
+                  $scope.alert = {title:'Error Message! ', content:data.message, type: 'danger'};
+             }
+
          });
      }
      $scope.reset = function(){
