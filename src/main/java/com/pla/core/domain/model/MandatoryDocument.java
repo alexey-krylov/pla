@@ -38,6 +38,9 @@ public class MandatoryDocument implements ICrudEntity ,Serializable{
     private ProcessType process;
 
     @ElementCollection
+    @CollectionTable(name="mandatory_documents",
+            joinColumns=@JoinColumn(name="document_id"))
+    @Column(name = "document_code")
     private Set<String> documents;
 
     private MandatoryDocument(PlanId planId, ProcessType process, Set<String> documents) {

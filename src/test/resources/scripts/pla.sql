@@ -591,14 +591,14 @@ CREATE TABLE `mandatory_document` (
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 
 
-/*Table structure for mandatory_document_documents */
+/*Table structure for mandatory_documents */
 
-DROP TABLE IF EXISTS `mandatory_document_documents`;
-CREATE TABLE `mandatory_document_documents` (
-  `mandatory_document_documentId` bigint(20) NOT NULL,
-  `documents` varchar(255) DEFAULT NULL,
-  KEY `FK_aio1xqrp2158a4o2jduiommyy` (`mandatory_document_documentId`),
-  CONSTRAINT `FK_aio1xqrp2158a4o2jduiommyy` FOREIGN KEY (`mandatory_document_documentId`) REFERENCES `mandatory_document` (`document_id`)
+DROP TABLE IF EXISTS `mandatory_documents`;
+CREATE TABLE `mandatory_documents` (
+  `document_id` bigint(20) NOT NULL,
+  `document_code` varchar(255) DEFAULT NULL,
+  KEY `FK_tc6y6qyosoy6f2xjh3i6kv65o` (`document_id`),
+  CONSTRAINT `FK_tc6y6qyosoy6f2xjh3i6kv65o` FOREIGN KEY (`document_id`) REFERENCES `mandatory_document` (`document_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
