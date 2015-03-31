@@ -162,7 +162,6 @@ public class AgentController {
     }
 
     @RequestMapping(value = "/getemployeedeatil/{employeeId}/{nrcNumber}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.ALL_VALUE)
-    @RequestMapping(value = "/getemployeedeatil/{employeeId}/{nrcNumber}",method = RequestMethod.GET)
     @ResponseBody
     public EmployeeDto getEmployeeDetail(@PathVariable String employeeId, @PathVariable String nrcNumber) {
         return smeGateway.getEmployeeDetailByIdOrByNRCNumber(employeeId, nrcNumber);
@@ -171,7 +170,5 @@ public class AgentController {
     @RequestMapping(value = "/getallplan", method = RequestMethod.GET)
     public List<Map> getAllPlans() {
         return mongoTemplate.findAll(Map.class, "PLAN");
-    public EmployeeDto getEmployeeDetail(@PathVariable String employeeId,@PathVariable String nrcNumber){
-        return smeGateway.getEmployeeDetailByIdOrByNRCNumber(employeeId,nrcNumber);
     }
 }
