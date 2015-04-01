@@ -38,7 +38,7 @@ public class TeamFinder {
             ",b.branch_name AS branchName,r.region_name AS regionName,r.region_code AS regionCode,b.branch_code AS branchCode FROM team tm " +
             "LEFT JOIN region r ON r.region_code = tm.region_code " +
             "LEFT JOIN branch b ON b.branch_code = tm.branch_code  " +
-            "RIGHT JOIN team_team_leader_fulfillment ttlf ON ttlf.team_id = tm.team_id WHERE tm.team_id=:teamId ";
+            "RIGHT JOIN team_team_leader_fulfillment ttlf ON ttlf.team_id = tm.team_id AND ttlf.employee_id = tm.current_team_leader WHERE tm.team_id=:teamId ";
     public static final String FIND_ALL_ACTIVE_TEAM_QUERY = "select * from active_team_region_branch_view";
     private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
