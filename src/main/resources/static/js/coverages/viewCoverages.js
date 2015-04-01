@@ -13,6 +13,9 @@ require(['jquery','bootstrap','datatables'],function(){
           "fnDrawCallback": function ( oSettings ) {
            openPopover();
           },
+          "rowCallback": function( row, data ) {
+             openPopover();
+          },
              "oSearch":{
              "sSearch":"",
             "bRegex": false,
