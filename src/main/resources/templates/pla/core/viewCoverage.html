@@ -115,7 +115,7 @@
                         <tbody>
                         <tr th:each="coverage : ${listOfCoverage}" th:if="${coverage.coverageStatus=='ACTIVE'}">
                             <td th:text="${{coverage.coverageName}}" ></td>
-                            <td style="white-space:wrap" th:text="${{coverage.description}}"></td>
+                            <td  th:text="${{coverage.description}}"></td>
                             <td style="text-align:center" class="pop" >
                                <button href="#" class="details-box btn btn-primary btn-xs" rel="popover"  data-content="" > Benefits
                                     <div class="popover-body" style="display:none;">

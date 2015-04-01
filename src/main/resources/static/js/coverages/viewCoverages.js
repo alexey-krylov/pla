@@ -15,25 +15,37 @@ require(['jquery','bootstrap','datatables'],function(){
             "bRegex": false,
             "bSmart": true },
           "aoColumns":[
-            { "sWidth": "10%","bSearchable": true },
-          { "sWidth": "70%","bSearchable": true },
-            {"sWidth": "5%","bSearchable": false },//Disable search on this column
-            {"sWidth": "15%","bSearchable": false }
+            null,
+            null,
+            {"bSearchable": false },//Disable search on this column
+            {"bSearchable": false }
     ]});
-
-    var box = $('.details-box');
-    box.each(function() {
-        var that = $(this);
-        var text = that.text();
-        var content='';
-        for (var i=0; i<text.length; i++ ){
-             content=content + text[i].replace(",","<br />");
-        }
-        content=content.replace("Benefits","");
-        that.attr('data-content', content);
-        that.popover({title :'Benefits',html : true,trigger: 'hover',placement:'top'}).css({'display':'block'});
+    openPopover();
+    $('.next').click(function () {
+             openPopover();
     });
-});
+    $('.paginate_button').click(function () {
+                 openPopover();
+    });
+  });
+var openPopover = function(){
+    var box = $('.details-box');
+       box.each(function() {
+           var that = $(this);
+           var text = that.text();
+
+           var content='';
+           for (var i=0; i<text.length; i++ ){
+                content=content + text[i].replace(",","<br />");
+
+           }
+           content=content.replace("Benefits","");
+          // console.log("Main content-------->"+content);
+           that.attr('data-content', content);
+           that.popover({title :'Benefits',html : true,trigger: 'hover',placement:'top'}).css({'display':'block'});
+       });
+
+}
 
 var hasError = false;
 var reload = function(){
