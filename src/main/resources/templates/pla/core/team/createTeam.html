@@ -18,7 +18,7 @@
     });
 </script>
 
-<div class="container" style="padding-top: 0px!important;" ng-Controller="CreateTeamController">
+<div class="container ng-cloak" style="padding-top: 0px!important;" ng-Controller="CreateTeamController">
 
     <div class="row">
         <div class="col-lg-8" style="left:230px;position:absolute;">
@@ -29,7 +29,7 @@
                         </span></div>
                     </div>
                 </div>
-                <div class="panel-body">
+                <div class="panel-body ng-cloak">
                     <form   novalidate="true" class="css-form">
                         <notification ></notification>
                         <div class="row">
@@ -41,7 +41,7 @@
                             </div>
                             <div class="form-group col-md-6 required" style="margin: auto;margin-top:10px;">
                                 <label class="control-label">Branch Name</label>
-                                <select class="form-control input-sm" ng-model="createTeam.branchCode"  ng-options="branch.branchCode as branch.branchName for branch in branchList | orderBy:'branchName'" ng-disabled="!createTeam.regionCode" >
+                                <select class="form-control input-sm" ng-model="createTeam.branchCode"  ng-options="branch.branch_code as branch.branchName for branch in branchList | orderBy:'branchName'" ng-disabled="!createTeam.regionCode" >
                                    <option value="">-----Select option-----</option>
 
                                 </select>
@@ -80,10 +80,8 @@
                         </div>
                         <div class="row">
                             <div class="form-group col-lg-12" >
-
                                 <button type="button" class="btn btn-default" style="float:right;"  ng-disabled="(!createTeam.regionCode || !createTeam.branchCode || !createTeam.teamName || !createTeam.teamCode || !createTeam.employeeId || !createTeam.fromDate )" data-placement="top-right" data-container="notification" data-duration="5" bs-alert="alert"   ng-click="submitTeam()">Save</button>
                                 <a class="btn btn-default"  style="float:left;" th:href="@{/core/team/view}" >Cancel</a>
-                               <!-- <button class="btn btn-lg btn-primary"  data-placement="top" data-container="body" data-duration="3" bs-alert="alert">Click to toggle alert </button>-->
 
                             </div>
                         </div>
