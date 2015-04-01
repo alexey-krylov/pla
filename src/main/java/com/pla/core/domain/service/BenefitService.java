@@ -65,7 +65,9 @@ public class BenefitService {
 
     public Benefit inactivateBenefit(Benefit benefit, UserDetails userDetails) {
         Admin admin = adminRoleAdapter.userToAdmin(userDetails);
-        Benefit updatedBenefit = admin.inactivateBenefit(benefit);
+        BenefitDto benefitDto = new BenefitDto(benefit.getBenefitId().getBenefitId(), benefit.getBenefitName().getBenefitName());
+        boolean isBenefitUpdatable = benefitIsAssociatedWithCoverage.isSatisfiedBy(benefitDto);
+        Benefit updatedBenefit = admin.inactivateBenefit(benefit,isBenefitUpdatable);
         return updatedBenefit;
     }
 

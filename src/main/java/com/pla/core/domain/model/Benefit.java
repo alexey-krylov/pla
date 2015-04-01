@@ -19,7 +19,7 @@ import javax.persistence.*;
  * @since 1.0 03/03/2015
  */
 @Entity
-@Table(name = "benefit", uniqueConstraints = {@UniqueConstraint(name = "UNQ_BENEFIT_NAME", columnNames = "benefitName")})
+@Table(name = "benefit")
 @EqualsAndHashCode(of = {"benefitName"})
 @ToString(of = "benefitName")
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
