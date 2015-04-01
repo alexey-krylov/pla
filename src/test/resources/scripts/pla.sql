@@ -354,7 +354,7 @@ CREATE  VIEW `agent_team_branch_view` AS
 
 DROP VIEW IF EXISTS `region_region_manger_fulfilment_view`;
 CREATE VIEW `region_region_manger_fulfilment_view` AS
-(SELECT R.region_code AS regionCode,R.region_name AS regionName,RF.first_name AS regionalManagerFirstName,RF.last_name AS regionalManagerLastName FROM region R LEFT JOIN `region_manager_fulfillment` RF
+(SELECT R.region_code AS regionCode,R.region_name AS regionName,R.regional_manager AS regionalManager,RF.first_name AS regionalManagerFirstName,RF.last_name AS regionalManagerLastName,RF.from_date AS fromDate FROM region R LEFT JOIN `region_manager_fulfillment` RF
 ON R.region_code = RF.region_code AND R.regional_manager=RF.employee_id);
 
 DROP VIEW IF EXISTS `active_team_region_branch_view`;

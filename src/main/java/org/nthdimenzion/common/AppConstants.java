@@ -19,11 +19,18 @@ public interface AppConstants {
     CurrencyUnit DEFAULT_CURRENCY = CurrencyUnit.of(Locale.getDefault());
 
     MoneyFormatter MONEY_FORMATTER = new MoneyFormatterBuilder().appendCurrencyCode().appendAmount(MoneyAmountStyle.ASCII_DECIMAL_POINT_GROUP3_COMMA).toFormatter();
-    
+
     Boolean SUCCESS = Boolean.TRUE;
-    
+
     Boolean FAILURE = Boolean.FALSE;
 
     String LOGGED_IN_USER = "LOGGED_IN_USER";
 
+    String TEAM_LEADER_DESIGNATION = "TEAM_LEADER";
+
+    String BRANCH_MANAGER_DESIGNATION = "BRANCH_MANAGER";
+
+    String REGIONAL_MANAGER_DESIGNATION = "REGIONAL_MANAGER";
+
+    String BRANCH_BDE_DESIGNATION = "BRANCH_BDE";
 }
