@@ -40,7 +40,10 @@ public class Admin {
         return updatedBenefit;
     }
 
-    public Benefit inactivateBenefit(Benefit benefit) {
+    public Benefit inactivateBenefit(Benefit benefit,boolean isBenefitUpdatable) {
+        if (!isBenefitUpdatable) {
+            throw new BenefitDomainException("Benefit is associated with active coverage");
+        }
         Benefit updatedBenefit = benefit.inActivate();
         return updatedBenefit;
     }
