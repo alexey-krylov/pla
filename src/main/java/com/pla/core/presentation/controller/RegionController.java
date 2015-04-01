@@ -59,7 +59,7 @@ public class RegionController {
         return modelAndView;
     }
 
-    @RequestMapping(value = "/redirectToAssignPage", method = RequestMethod.GET)
+    @RequestMapping(value = "/redirecttoassignPage", method = RequestMethod.GET)
     public ModelAndView redirectToAssignPage() {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("pla/core/region/assignRegionalManager");
