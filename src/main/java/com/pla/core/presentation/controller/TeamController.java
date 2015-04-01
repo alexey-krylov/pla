@@ -154,7 +154,7 @@ public class TeamController {
         @Override
         public boolean test(EmployeeDto employeeDto) {
             Optional<Map<String, Object>> teamOptional = allTeams.stream().filter(team -> employeeDto.getEmployeeId().equals((String) team.get("currentTeamLeader"))).findAny();
-            return teamOptional.get() == null;
+            return !teamOptional.isPresent();
         }
     }
 }

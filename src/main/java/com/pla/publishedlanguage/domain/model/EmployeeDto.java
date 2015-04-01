@@ -1,5 +1,6 @@
 package com.pla.publishedlanguage.domain.model;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -12,7 +13,8 @@ import java.util.Map;
 
 @Setter
 @Getter
-public class EmployeeDto implements Serializable{
+@AllArgsConstructor
+public class EmployeeDto implements Serializable {
 
     private String firstName;
     private String lastName;
@@ -25,6 +27,19 @@ public class EmployeeDto implements Serializable{
     private String email;
     private Map<String, Object> primaryContactDetail;
     private Map<String, Object> physicalContactDetail;
+
+
+    public EmployeeDto(String firstName, String lastName, String middleName, String employeeId, String nrcNumber, String designation, String designationDescription, String departmentName) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.middleName = middleName;
+        this.employeeId = employeeId;
+        this.nrcNumber = nrcNumber;
+        this.designation = designation;
+        this.designationDescription = designationDescription;
+        this.departmentName = departmentName;
+    }
+
 
     public EmployeeDto() {
     }
