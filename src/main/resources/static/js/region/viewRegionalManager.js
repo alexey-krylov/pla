@@ -1,0 +1,1 @@
+ $('#regionalManager-table').dataTable();
