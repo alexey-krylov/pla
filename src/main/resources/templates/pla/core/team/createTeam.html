@@ -41,7 +41,7 @@
                             </div>
                             <div class="form-group col-md-6 required" style="margin: auto;margin-top:10px;">
                                 <label class="control-label">Branch Name</label>
-                                <select class="form-control input-sm" ng-model="createTeam.branchCode" ng-options="branch.branchCode as branch.branchName for branch in branchList | orderBy:'branchName'" ng-disabled="!createTeam.regionCode" >
+                                <select class="form-control input-sm" ng-model="createTeam.branchCode"  ng-options="branch.branchCode as branch.branchName for branch in branchList | orderBy:'branchName'" ng-disabled="!createTeam.regionCode" >
                                    <option value="">-----Select option-----</option>
 
                                 </select>

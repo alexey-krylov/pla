@@ -26,8 +26,8 @@ App.controller('AssignTeamController',['$scope','$http','$window','$location','$
 
      });
       $scope.url = window.location.search.split('=')[1];
-       $http.get('/pla/core/team/getteamdetail?teamId='+$scope.url).success(function(data){
-                  // console.log(data);
+      $http.get('/pla/core/team/getteamdetail/teamId='+$scope.url).success(function(data){
+                   console.log(data);
                    $scope.assignTeam=data;
                    $scope.currentTeamLeader=$scope.assignTeam.currentTeamLeader;
                    $scope.currentFromDate=moment($scope.assignTeam.fromDate).format("DD/MM/YYYY");
@@ -58,9 +58,9 @@ App.controller('AssignTeamController',['$scope','$http','$window','$location','$
                    		$scope.assignTeam.teamLeaderFrom=$scope.newDateField.fromDate ;
                    }
           var empId = $scope.assignTeam.employeeId;
-                   $scope.employeeData =_.findWhere($scope.teamLeaders,{employeeId:empId});
-                   $scope.assignTeam.firstName=$scope.employeeData.firstName;
-                   $scope.assignTeam.lastName=$scope.employeeData.lastName;
+          $scope.employeeData =_.findWhere($scope.teamLeaders,{employeeId:empId});
+          $scope.assignTeam.firstName=$scope.employeeData.firstName;
+          $scope.assignTeam.lastName=$scope.employeeData.lastName;
         //  console.log($scope.assignTeam);
          $http.post('/pla/core/team/assign', $scope.assignTeam).success(function(data){
              if(data.status==200){
