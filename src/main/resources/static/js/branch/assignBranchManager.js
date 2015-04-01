@@ -17,30 +17,42 @@ App.controller('AssignBranchManagerController',['$scope','$http','$window','$loc
                             $event.stopPropagation();
                             $scope.datePickerSettings.isOpened = true;
                        };
-                        $scope.datePickerSettingsBDE = {
-                                                  isOpened:false,
-                                                   dateOptions:{
-                                                       formatYear:'yyyy' ,
-                                                       startingDay:1
-
-                                                   }
-                                              }
-                       $scope.openBDE = function($event) {
+                   $scope.datePickerSettingsBDE = {
+                            isOpened:false,
+                            dateOptions:{
+                               formatYear:'yyyy' ,
+                               startingDay:1
+                            }
+                   }
+                   $scope.openBDE = function($event) {
                                      $event.preventDefault();
                                      $event.stopPropagation();
                                      $scope.datePickerSettingsBDE.isOpened = true;
-                       };
-                 $http.get('/pla/core/team/getteamleaders').success(function(data){
-                                                 //  console.log(data);
-                                                  $scope.teamLeaders=data;
+                   };
+                   $scope.url = window.location.search.split('=')[1];
+                       $http.get('/pla/core/branch/getbranchdetail/branchId='+$scope.url).success(function(data){
+                         console.log(data);
+                        $scope.assignBranchManager=data;
+                   });
+                 $http.get('/pla/core/branch/getallbranchbde').success(function(data){
+                        $scope.branchBDE=data;
                  });
-                 $scope.url = window.location.search.split('=')[1];
-                $http.get('/pla/core/branch/openAssignPage?branchId='+$scope.url).success(function(data){
-                    // console.log(data);
-                    $scope.assignBranchManager=data;
+                 $http.get('/pla/core/branch/getallbranchmanager').success(function(data){
+                       $scope.branchManagers=data;
+                 });
+                 $scope.submitAssign = function(){
+                     console.log($scope.assignBranchManager);
+                    $http.post('/pla/core/branch/assign', $scope.assignBranchManager).success(function(data){
+                         if(data.status==200){
+                             $scope.alert = {title:'Success Message! ', content:data.message, type: 'success'};
+                             $scope.reset();
+                         }else{
+                              $scope.alert = {title:'Error Message! ', content:data.message, type: 'danger'};
+                         }
+                    });
 
+                 }
 
-                });
 
 
 }]);
