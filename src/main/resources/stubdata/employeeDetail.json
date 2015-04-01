@@ -12,6 +12,8 @@
      "postalCode": "",
      "provience": "",
      "city": "",
+     "cityName":"",
+     "countryName":"",
      "mobileNumber": null,
      "workPhoneNumber": "",
      "homePhoneNumber": "",
@@ -22,7 +24,9 @@
      "addressLine2": "",
      "postalCode": "",
      "provience": "",
-     "city": ""
+     "city": "",
+     "cityName":"",
+     "countryName":""
    }
  },
  {
@@ -39,6 +43,8 @@
      "postalCode": "",
      "provience": "",
      "city": "",
+     "cityName":"",
+     "countryName":"",
      "mobileNumber": "22222",
      "workPhoneNumber": "",
      "homePhoneNumber": "",
@@ -49,7 +55,9 @@
      "addressLine2": "",
      "postalCode": "",
      "provience": "",
-     "city": ""
+     "city": "",
+     "cityName":"",
+     "countryName":""
    }
  }
 ]
