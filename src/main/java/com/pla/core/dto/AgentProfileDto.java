@@ -47,6 +47,18 @@ public class AgentProfileDto {
 
     private DesignationDto designationDto = new DesignationDto();
 
+    private String nrcNumberInString;
+
+    public AgentProfileDto(String title, String firstName, String lastName, Integer nrcNumber, String employeeId, LocalDate trainingCompleteOn, DesignationDto designationDto) {
+        this.title = title;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.nrcNumber = nrcNumber;
+        this.employeeId = employeeId;
+        this.trainingCompleteOn = trainingCompleteOn;
+        this.designationDto = designationDto;
+
+    }
 
     public static AgentProfileDto transFormToAgentProfileDto(Map<String, Object> agentDetail) {
         AgentProfileDto agentProfileDto = new AgentProfileDto();
@@ -59,5 +71,25 @@ public class AgentProfileDto {
         agentProfileDto.setDesignationDto(designationDto);
         return agentProfileDto;
     }
+
+    public void setNrcNumberInString(String nrcNumberInString) {
+        nrcNumberInString = nrcNumberInString.replaceAll("/", "").trim();
+        this.nrcNumber = Integer.valueOf(nrcNumberInString);
+        this.nrcNumberInString = nrcNumberInString;
+    }
+
+    public String getNrcNumberInString() {
+        String nrc = String.valueOf(getNrcNumber());
+        String part1 = nrc.substring(0, 6);
+        String part2 = nrc.substring(6, 8);
+        String part3 = nrc.substring(8, 9);
+        nrc = part1.concat("/").concat(part2).concat("/").concat(part3);
+        return nrc;
+    }
+
+    public Integer getNrcNumber() {
+        return nrcNumber;
+    }
+
 
 }
