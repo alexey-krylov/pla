@@ -8,21 +8,44 @@ require(['jquery','bootstrap','datatables'],function(){
     $('#coverageModal').on('shown.bs.modal', function() {
         $('#coverageName').focus()
     });
-    $('#coverage-table').dataTable();
-
-    var box = $('.details-box');
-    box.each(function() {
-        var that = $(this);
-        var text = that.text();
-        var content='';
-        for (var i=0; i<text.length; i++ ){
-             content=content + text[i].replace(",","<br />");
-        }
-        content=content.replace("Benefits","");
-        that.attr('data-content', content);
-        that.popover({title :'Benefits',html : true,trigger: 'hover',placement:'top'}).css({'display':'block'});
+    $('#coverage-table').dataTable({
+          "bFilter": true,
+             "oSearch":{
+             "sSearch":"",
+            "bRegex": false,
+            "bSmart": true },
+          "aoColumns":[
+            null,
+            null,
+            {"bSearchable": false },//Disable search on this column
+            {"bSearchable": false }
+    ]});
+    openPopover();
+    $('.next').click(function () {
+             openPopover();
     });
-});
+    $('.paginate_button').click(function () {
+                 openPopover();
+    });
+  });
+var openPopover = function(){
+    var box = $('.details-box');
+       box.each(function() {
+           var that = $(this);
+           var text = that.text();
+
+           var content='';
+           for (var i=0; i<text.length; i++ ){
+                content=content + text[i].replace(",","<br />");
+
+           }
+           content=content.replace("Benefits","");
+          // console.log("Main content-------->"+content);
+           that.attr('data-content', content);
+           that.popover({title :'Benefits',html : true,trigger: 'hover',placement:'top'}).css({'display':'block'});
+       });
+
+}
 
 var hasError = false;
 var reload = function(){
