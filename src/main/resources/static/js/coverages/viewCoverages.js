@@ -10,6 +10,9 @@ require(['jquery','bootstrap','datatables'],function(){
     });
     $('#coverage-table').dataTable({
           "bFilter": true,
+          "fnDrawCallback": function ( oSettings ) {
+           openPopover();
+          },
              "oSearch":{
              "sSearch":"",
             "bRegex": false,
@@ -22,11 +25,12 @@ require(['jquery','bootstrap','datatables'],function(){
     ]});
     openPopover();
     $('.next').click(function () {
-             openPopover();
+         openPopover();
     });
     $('.paginate_button').click(function () {
-                 openPopover();
+         openPopover();
     });
+
   });
 var openPopover = function(){
     var box = $('.details-box');
