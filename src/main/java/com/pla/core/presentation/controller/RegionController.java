@@ -54,7 +54,7 @@ public class RegionController {
     @RequestMapping(value = "/view", method = RequestMethod.GET)
     public ModelAndView viewRegions() {
         ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("pla/core/region/viewRegion");
+        modelAndView.setViewName("pla/core/region/viewRegionalManager");
         modelAndView.addObject("regionList", masterFinder.getAllRegion());
         return modelAndView;
     }
@@ -62,7 +62,7 @@ public class RegionController {
     @RequestMapping(value = "/redirectToAssignPage", method = RequestMethod.GET)
     public ModelAndView redirectToAssignPage() {
         ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("pla/core/region/assignRegion");
+        modelAndView.setViewName("pla/core/region/assignRegionalManager");
         return modelAndView;
     }
 
@@ -81,7 +81,7 @@ public class RegionController {
         return regionalManagersNotAssociatedWithRegion;
     }
 
-    @RequestMapping(value = "/region/assign", method = RequestMethod.POST)
+    @RequestMapping(value = "/assign", method = RequestMethod.POST)
     public
     @ResponseBody
     Result updateRegionalManager(@RequestBody UpdateRegionalManagerCommand updateRegionalManagerCommand, BindingResult bindingResult, HttpServletRequest request) {
@@ -108,7 +108,7 @@ public class RegionController {
         @Override
         public boolean test(EmployeeDto employeeDto) {
             Optional<Map<String, Object>> regionOptional = allRegions.stream().filter(region -> employeeDto.getEmployeeId().equals((String) region.get("currentRegionalManager"))).findAny();
-            return regionOptional.get() == null;
+            return !regionOptional.isPresent();
         }
     }
 

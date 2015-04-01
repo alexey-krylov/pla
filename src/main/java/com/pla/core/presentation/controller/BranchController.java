@@ -143,7 +143,7 @@ public class BranchController {
         @Override
         public boolean test(EmployeeDto employeeDto) {
             Optional<Map<String, Object>> branchOptional = allBranchs.stream().filter(branch -> employeeDto.getEmployeeId().equals((String) branch.get("branchManager"))).findAny();
-            return branchOptional.get() == null;
+            return !branchOptional.isPresent();
         }
     }
 }

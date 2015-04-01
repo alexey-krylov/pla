@@ -32,17 +32,18 @@ public class BenefitSeleniumETETest {
         driver = new HtmlUnitDriver();
         baseUrl = "http://5.9.249.195:6443/";
         driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
-    }
-
-
-    @Test
-    public void createBenefit() {
         driver.get(baseUrl + "pla/login");
         driver.findElement(By.xpath("//input[@name='username']")).clear();
         driver.findElement(By.xpath("//input[@name='username']")).sendKeys("admin");
         driver.findElement(By.id("password")).clear();
         driver.findElement(By.id("password")).sendKeys("admin");
-        driver.findElement(By.xpath("//button[@type='submit']")).click();
+        driver.findElement(By.xpath("html/body/div[1]/div/div/div/div[2]/form/button")).click();
+    }
+
+
+    @Test
+    public void createBenefit() {
+;
         //Core -> Benefits
         driver.findElement(By.cssSelector("span.caret")).click();
         driver.findElement(By.xpath("//a[contains(@href, '/pla/core/benefit/listbenefit')]")).click();
@@ -56,13 +57,8 @@ public class BenefitSeleniumETETest {
 
     @Test
     public void updateBenefit() {
-        driver.get(baseUrl + "pla/login");
-        //login
-        driver.findElement(By.xpath("//input[@name='username']")).clear();
-        driver.findElement(By.xpath("//input[@name='username']")).sendKeys("admin");
-        driver.findElement(By.id("password")).clear();
-        driver.findElement(By.id("password")).sendKeys("admin");
-        driver.findElement(By.xpath("//button[@type='submit']")).click();
+
+
         //Core -> Benefits
         driver.findElement(By.cssSelector("span.caret")).click();
         driver.findElement(By.xpath("//a[contains(@href, '/pla/core/benefit/listbenefit')]")).click();

@@ -40,10 +40,10 @@
                                 </select>
                             </div>
                             <div class="form-group col-md-6 required" style="margin: auto;margin-top:10px;">
-                                <label class="control-label">Branch Name</label>  <!-- ng-options="branch.branchCode as branch.branchName for branch in branchList | orderBy:'branchName'"-->
-                                <select class="form-control input-sm" ng-model="createTeam.branchCode"  ng-disabled="!createTeam.regionCode" >
+                                <label class="control-label">Branch Name</label>
+                                <select class="form-control input-sm" ng-model="createTeam.branchCode" ng-options="branch.branchCode as branch.branchName for branch in branchList | orderBy:'branchName'" ng-disabled="!createTeam.regionCode" >
                                    <option value="">-----Select option-----</option>
-                                    <option value="1">1</option>
+
                                 </select>
                             </div>
                             <div class="form-group col-md-6 required" style="margin: auto;margin-top:10px;">
@@ -62,7 +62,7 @@
                             </div>
                             <div class="form-group col-md-6 required" style="margin: auto;margin-top:10px;">
                                 <label class="control-label">Team Leader</label>
-                                <select class="form-control input-sm" id="teamLeader" ng-model="createTeam.teamLeader" ng-options="teamLeader.employeeId as teamLeader.firstName + ' ' + teamLeader.lastName for teamLeader in teamLeaders | orderBy:'firstName' ">
+                                <select class="form-control input-sm" id="teamLeader" ng-model="createTeam.employeeId" ng-options="teamLeader.employeeId as teamLeader.firstName + ' ' + teamLeader.lastName for teamLeader in teamLeaders | orderBy:'firstName' ">
                                     <option value="">-----Select option-----</option>
                                 </select>
 
@@ -81,7 +81,7 @@
                         <div class="row">
                             <div class="form-group col-lg-12" >
 
-                                <button type="button" class="btn btn-default" style="float:right;"  ng-disabled="(!createTeam.regionCode || !createTeam.branchCode || !createTeam.teamName || !createTeam.teamCode || !createTeam.teamLeader || !createTeam.fromDate )" data-placement="top-right" data-container="notification" data-duration="5" bs-alert="alert"   ng-click="submitTeam()">Save</button>
+                                <button type="button" class="btn btn-default" style="float:right;"  ng-disabled="(!createTeam.regionCode || !createTeam.branchCode || !createTeam.teamName || !createTeam.teamCode || !createTeam.employeeId || !createTeam.fromDate )" data-placement="top-right" data-container="notification" data-duration="5" bs-alert="alert"   ng-click="submitTeam()">Save</button>
                                 <a class="btn btn-default"  style="float:left;" th:href="@{/core/team/view}" >Cancel</a>
                                <!-- <button class="btn btn-lg btn-primary"  data-placement="top" data-container="body" data-duration="3" bs-alert="alert">Click to toggle alert </button>-->
 

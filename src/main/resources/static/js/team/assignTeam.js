@@ -4,7 +4,7 @@ App.controller('AssignTeamController',['$scope','$http','$window','$location','$
 
      $scope.currentTeamLeader;
      $scope.currentFromDate;
-     $scope.boolVal=false;
+     //$scope.boolVal=false;
      $scope.selectedDate =moment().add(1,'days').format("YYYY-MM-DD");
      $scope.newDateField={};
      $scope.datePickerSettings = {
@@ -26,15 +26,17 @@ App.controller('AssignTeamController',['$scope','$http','$window','$location','$
 
      });
       $scope.url = window.location.search.split('=')[1];
-       $http.get('/pla/core/team/openAssignPage?teamId='+$scope.url).success(function(data){
+       $http.get('/pla/core/team/getteamdetail?teamId='+$scope.url).success(function(data){
                   // console.log(data);
                    $scope.assignTeam=data;
                    $scope.currentTeamLeader=$scope.assignTeam.currentTeamLeader;
                    $scope.currentFromDate=moment($scope.assignTeam.fromDate).format("DD/MM/YYYY");
                    $scope.assignTeam.fromDate= $scope.currentFromDate;
-     });
 
-     $scope.getNewTeamLeader = function(teamLeaderId){
+     });
+    // $scope.assignTeam={"regionName":"North","branchName":"LivingStone","teamName":"dsadasd","teamCode":"454","currentTeamLeader":"xyz","currentTeamLeaderFrom":"02/01/2014"}
+
+    /* $scope.getNewTeamLeader = function(teamLeaderId){
            if(teamLeaderId != $scope.currentTeamLeader || $scope.assignTeam.fromDate != $scope.currentFromDate ){
                    $scope.boolVal=true;
             }else{
@@ -48,10 +50,18 @@ App.controller('AssignTeamController',['$scope','$http','$window','$location','$
            }else{
                $scope.boolVal=false;
           }
-     }
+     } */
 
       $scope.submitAssignTeam = function(){
-          //console.log($scope.assignTeam);
+          if (!moment($scope.assignTeam.teamLeaderFrom,'DD/MM/YYYY').isValid()) {
+                   		$scope.newDateField.fromDate = moment($scope.assignTeam.teamLeaderFrom).format("DD/MM/YYYY");
+                   		$scope.assignTeam.teamLeaderFrom=$scope.newDateField.fromDate ;
+                   }
+          var empId = $scope.assignTeam.employeeId;
+                   $scope.employeeData =_.findWhere($scope.teamLeaders,{employeeId:empId});
+                   $scope.assignTeam.firstName=$scope.employeeData.firstName;
+                   $scope.assignTeam.lastName=$scope.employeeData.lastName;
+        //  console.log($scope.assignTeam);
          $http.post('/pla/core/team/assign', $scope.assignTeam).success(function(data){
              if(data.status==200){
                   $scope.alert = {title:'Success Message! ', content:data.message, type: 'success'};
