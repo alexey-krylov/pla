@@ -78,9 +78,9 @@ public class TeamController {
         return modelAndView;
     }
 
-    @RequestMapping(value = "/getteamdetail/{teamId}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(value = "/getteamdetail", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public Map<String, Object> getTeamDetail(@PathVariable("teamId") String teamId) {
+    public Map<String, Object> getTeamDetail(@RequestParam(value = "teamId", required = false) String teamId) {
         return teamFinder.getTeamById(teamId);
     }
 
