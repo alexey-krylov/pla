@@ -66,9 +66,9 @@ public class RegionController {
         return modelAndView;
     }
 
-    @RequestMapping(value = "/getregiondetail/{regionId}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(value = "/getregiondetail", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public Map<String, Object> getRegionDetail(@PathVariable("regionId") String regionId) {
+    public Map<String, Object> getRegionDetail(@RequestParam(value = "regionId", required = false) String regionId) {
         return regionFinder.getRegionById(regionId);
     }
 

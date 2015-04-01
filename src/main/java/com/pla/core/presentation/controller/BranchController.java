@@ -57,14 +57,14 @@ public class BranchController {
         return modelAndView;
     }
 
-    @RequestMapping(value = "/redirectToAssignPage", method = RequestMethod.GET)
+    @RequestMapping(value = "/redirecttoassignPage", method = RequestMethod.GET)
     ModelAndView redirectToAssignPage() {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("pla/core/branch/assignBranchManager");
         return modelAndView;
     }
 
-    @RequestMapping(value = "/getbranchdetail/{branchId}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(value = "/getbranchdetail", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public Map<String, Object> openAssignPage(@RequestParam(value = "branchId", required = false) String branchId) {
         return branchFinder.getBranchById(branchId);
