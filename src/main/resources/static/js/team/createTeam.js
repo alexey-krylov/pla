@@ -34,7 +34,9 @@ App.controller('CreateTeamController',['$scope','$http','$templateCache','$timeo
              		$scope.newDateField.fromDate = moment($scope.createTeam.fromDate).format("DD/MM/YYYY");
              		$scope.createTeam.fromDate=$scope.newDateField.fromDate ;
              }
-
+             var empId = $scope.createTeam.teamLeader;
+             $scope.employeeData =_.findWhere($scope.teamLeaders,{employeeId:empId});
+             $scope.createTeam.teamLeader =$scope.employeeData;
            //console.log($scope.createTeam);
            $http.post('/pla/core/team/create', $scope.createTeam).success(function(data){
               //  console.log(data);

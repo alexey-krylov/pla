@@ -51,7 +51,7 @@ App.controller('AssignTeamController',['$scope','$http','$window','$location','$
      }
 
       $scope.submitAssignTeam = function(){
-           //       console.log($scope.assignTeam);
+          //console.log($scope.assignTeam);
          $http.post('/pla/core/team/assign', $scope.assignTeam).success(function(data){
              if(data.status==200){
                   $scope.alert = {title:'Success Message! ', content:data.message, type: 'success'};
