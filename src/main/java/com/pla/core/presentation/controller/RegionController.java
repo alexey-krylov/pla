@@ -81,7 +81,7 @@ public class RegionController {
         return regionalManagersNotAssociatedWithRegion;
     }
 
-    @RequestMapping(value = "/region/assign", method = RequestMethod.POST)
+    @RequestMapping(value = "/assign", method = RequestMethod.POST)
     public
     @ResponseBody
     Result updateRegionalManager(@RequestBody UpdateRegionalManagerCommand updateRegionalManagerCommand, BindingResult bindingResult, HttpServletRequest request) {
@@ -108,7 +108,7 @@ public class RegionController {
         @Override
         public boolean test(EmployeeDto employeeDto) {
             Optional<Map<String, Object>> regionOptional = allRegions.stream().filter(region -> employeeDto.getEmployeeId().equals((String) region.get("currentRegionalManager"))).findAny();
-            return regionOptional.get() == null;
+            return !regionOptional.isPresent();
         }
     }
 
