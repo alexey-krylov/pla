@@ -39,7 +39,7 @@ public class MasterFinder {
 
     public static final String FIND_ALL_REGION_QUERY = "select * from region_region_manger_fulfilment_view";
 
-    public static final String FINA_ALL_BRANCH_QUERY = "SELECT B.branch_code AS branch_code,B.branch_name AS branchName FROM `region_branch` RB LEFT JOIN  `branch` B ON RB.region_code =B.branch_code\n" +
+    public static final String FINA_ALL_BRANCH_QUERY = "SELECT B.branch_code AS branch_code,B.branch_name AS branchName FROM `region_branch` RB LEFT JOIN  `branch` B ON RB.branch_code =B.branch_code\n" +
             "  WHERE RB.region_code = :regionCode";
 
     public static final String FIND_ENTITY_SEQUENCE_BY_CLASS_TYPE_QUERY = "SELECT sequence_id as sequenceId, sequence_number AS sequenceNumber,sequence_name AS sequenceName,sequence_prefix AS sequencePrefix FROM `entity_sequence` WHERE sequence_name=:sequenceName";
