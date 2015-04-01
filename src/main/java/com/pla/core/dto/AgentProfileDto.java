@@ -6,6 +6,8 @@
 
 package com.pla.core.dto;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.datatype.joda.deser.LocalDateDeserializer;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -40,6 +42,7 @@ public class AgentProfileDto {
 
     private String employeeId;
 
+    @JsonDeserialize(using = LocalDateDeserializer.class)
     private LocalDate trainingCompleteOn;
 
     private DesignationDto designationDto = new DesignationDto();
