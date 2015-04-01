@@ -7,6 +7,13 @@
 </head>
 <body style="padding-top: 70px;">
 <div th:include="fragments/common :: bodyHeader" th:remove="tag"/>
+<script>
+    requirejs(['basic'],function(){
+    requirejs(['/pla/js/region/viewRegionalManager.js'],function(){
+    });
+    })
+</script>
+
 <div class="container" style="padding-top: 0px!important;">
     <div class="row">
         <div class="col-lg-12">
@@ -36,12 +43,12 @@
                         </tr>
                         </thead>
                         <tbody >
-                        <tr id="row1">
-                            <td>South</td>
-                            <td>RegionalManager A</td>
-                            <td>09/03/2014</td>
+                        <tr  th:each="region : ${regionList}">
+                            <td th:text="${region.regionName}"></td>
+                            <td th:text="|${region.regionalManagerFirstName} ${region.regionalManagerLastName}|"> </td>
+                            <td ></td><!-- th:text="${region.fromDate}"-->
                             <td style="text-align:center">
-                                <a class="btn btn-default btn-xs" th:href="@{/core/regionalManager/assign}">Assign</a></td>
+                                <a class="btn btn-default btn-xs" th:href="'/pla/core/region/redirecttoassignPage?regionId='+${region.regionCode}+''">Assign</a></td>
 
                         </tr>
 
