@@ -54,7 +54,7 @@ public class RegionController {
     @RequestMapping(value = "/view", method = RequestMethod.GET)
     public ModelAndView viewRegions() {
         ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("pla/core/region/viewRegion");
+        modelAndView.setViewName("pla/core/region/viewRegionalManager");
         modelAndView.addObject("regionList", masterFinder.getAllRegion());
         return modelAndView;
     }
@@ -62,7 +62,7 @@ public class RegionController {
     @RequestMapping(value = "/redirectToAssignPage", method = RequestMethod.GET)
     public ModelAndView redirectToAssignPage() {
         ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("pla/core/region/assignRegion");
+        modelAndView.setViewName("pla/core/region/assignRegionalManager");
         return modelAndView;
     }
 
