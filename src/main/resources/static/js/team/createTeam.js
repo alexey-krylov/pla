@@ -23,7 +23,7 @@ App.controller('CreateTeamController',['$scope','$http','$templateCache','$timeo
          });
          $scope.getAllBranch = function(obj){
               $http.get('/pla/core/master/getbranchbyregion?regioncode='+ obj).success(function(data){
-                console.log(data);
+               // console.log(data);
                  $scope.branchList=data;
                });
          }
@@ -34,17 +34,23 @@ App.controller('CreateTeamController',['$scope','$http','$templateCache','$timeo
              		$scope.newDateField.fromDate = moment($scope.createTeam.fromDate).format("DD/MM/YYYY");
              		$scope.createTeam.fromDate=$scope.newDateField.fromDate ;
              }
-             var empId = $scope.createTeam.teamLeader;
+             var empId = $scope.createTeam.employeeId;
              $scope.employeeData =_.findWhere($scope.teamLeaders,{employeeId:empId});
-             $scope.createTeam.teamLeader =$scope.employeeData;
-           //console.log($scope.createTeam);
+             $scope.createTeam.firstName=$scope.employeeData.firstName;
+             $scope.createTeam.lastName=$scope.employeeData.lastName;
+
+               // console.log($scope.employeeData);
+                 console.log($scope.createTeam);
+          // $scope.createTeamTest={regionCode:"203",branchCode:"222",teamName:"Kasama A",teamCode:"dwdww",employeeId:"teamleaderid",firstName:"teamleaderfirstname",lastName:"teamleaderlastname",teamLeaderFrom:"06/08/2015/"}
            $http.post('/pla/core/team/create', $scope.createTeam).success(function(data){
               //  console.log(data);
                 if(data.status==200){
                      $scope.alert = {title:'Success Message! ', content:data.message, type: 'success'};
                      $scope.reset();
-                }else{
+                }else if(data.status==500){
                  $scope.alert = {title:'Error Message! ', content:data.message, type: 'danger'};
+                }else{
+                    $scope.alert = {title:'Info Message! ', content:data.message, type: 'info'};
                 }
 
              });
@@ -55,7 +61,7 @@ App.controller('CreateTeamController',['$scope','$http','$templateCache','$timeo
              $scope.createTeam.fromDate ='';
          	 $scope.createTeam.regionCode ='';
          	 $scope.createTeam.teamCode ='';
-         	 $scope.createTeam.teamLeader ='';
+         	 $scope.createTeam.employeeId ='';
          	 $scope.createTeam.teamName ='';
          	 }
  }]);
