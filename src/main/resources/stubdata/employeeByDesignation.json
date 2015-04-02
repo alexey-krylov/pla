@@ -6,7 +6,7 @@
     "employeeId": "G053",
     "nrcNumber": "270768/66/1",
     "departmentName": "ELECTRICAL",
-    "designation":"ASST.MANAGER",
+    "designation":"BRANCH_BDE",
     "email": null
   },
   {
@@ -16,7 +16,7 @@
     "employeeId": "G054",
     "nrcNumber": "376865/61/1",
     "departmentName": "ELECTRICAL",
-    "designation":"ASST.MANAGER",
+    "designation":"BRANCH_BDE",
     "email": null
   },
   {
@@ -26,7 +26,7 @@
     "employeeId": "G055",
     "nrcNumber": "160102/46/1",
     "departmentName": "ELECTRICAL",
-    "designation":"ASST.MANAGER",
+    "designation":"BRANCH_BDE",
     "email": null
   },
   {
@@ -36,7 +36,7 @@
     "employeeId": "G721",
     "nrcNumber": null,
     "departmentName": "HUMAN RESOURCES & ADMINISTRATION",
-    "designation":"ASST.MANAGER",
+    "designation":"BRANCH_BDE",
     "email": "rashid_saba@nthdimenzion.com"
   },
   {
@@ -46,7 +46,7 @@
     "employeeId": "G145",
     "nrcNumber": "299505/66/1",
     "departmentName": "PACKING PLANT",
-    "designation":"ASST.MANAGER",
+    "designation":"BRANCH_BDE",
     "email": null
   },
   {
@@ -56,7 +56,7 @@
     "employeeId": "G061",
     "nrcNumber": "103683/37/1",
     "departmentName": "QUALITY",
-    "designation":"ASST.MANAGER",
+    "designation":"BRANCH_BDE",
     "email": null
   }
   ,
@@ -67,7 +67,7 @@
     "employeeId": "M710",
     "nrcNumber": "sdfdsfd",
     "departmentName": "HUMAN RESOURCES & ADMINISTRATION",
-    "designation":"general manager",
+    "designation":"REGIONAL_MANAGER",
     "email": null
   },
   {
@@ -97,7 +97,7 @@
     "employeeId": "G085",
     "nrcNumber": "945578/11/1",
     "departmentName": "ELECTRICAL",
-    "designation":"AUTO MECHANIC",
+    "designation":"BRANCH_MANAGER",
     "email": null
   },
   {
@@ -107,7 +107,7 @@
     "employeeId": "G687",
     "nrcNumber": "103431/611",
     "departmentName": "MECHANICAL",
-    "designation":"AUTO MECHANIC",
+    "designation":"BRANCH_MANAGER",
     "email": null
   },
   {
@@ -117,7 +117,7 @@
     "employeeId": "G035",
     "nrcNumber": "190288/65/1",
     "departmentName": "MOBILE",
-    "designation":"AUTO MECHANIC",
+    "designation":"BRANCH_MANAGER",
     "email": null
   }
 ]
