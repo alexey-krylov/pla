@@ -26,6 +26,10 @@ App.controller('AssignRegionalManagerController',['$scope','$http','$window','$l
               $scope.regionalManagerList=data;
         });
         $scope.submitAssign=function(){
+               if (!moment($scope.assignRegionalManager.fromDate,'DD/MM/YYYY').isValid()) {
+                  $scope.newDateField.fromDate = moment($scope.assignRegionalManager.fromDate).format("DD/MM/YYYY");
+                  $scope.assignRegionalManager.fromDate=$scope.newDateField.fromDate ;
+               }
 
              console.log($scope.assignRegionalManager);
              $http.post('/pla/core/region/assign', $scope.assignBranchManager).success(function(data){
@@ -38,7 +42,10 @@ App.controller('AssignRegionalManagerController',['$scope','$http','$window','$l
              });
         }
         $scope.reset=function(){
-
-
+           $scope.assignRegionalManager.fromDate='';
+           $scope.assignRegionalManager.employeeId='';
+           $scope.assignBranchManager.regionName='';
+           $scope.assignBranchManager.regionalManagerName='';
+           $scope.assignBranchManager.regionalManagerFromDate='';
         }
 }]);
