@@ -30,7 +30,6 @@ App.controller('AssignRegionalManagerController',['$scope','$http','$window','$l
                   $scope.newDateField.fromDate = moment($scope.assignRegionalManager.fromDate).format("DD/MM/YYYY");
                   $scope.assignRegionalManager.fromDate=$scope.newDateField.fromDate ;
                }
-
              console.log($scope.assignRegionalManager);
              $http.post('/pla/core/region/assign', $scope.assignBranchManager).success(function(data){
                    if(data.status==200){

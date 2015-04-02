@@ -30,7 +30,6 @@
                 <div class="panel-body ng-cloak">
                     <form novalidate="true" class="css-form">
                         <notification ></notification>
-
                         <div class="row">
                            <div class="form-group col-md-6" style="margin: auto;margin-top:10px;">
                                <label class="control-label ">Region Name</label>
@@ -40,11 +39,14 @@
                                <label class="control-label">Current Regional Manager</label>
                                <div class="controls readonly" ng-model="assignBranchManager.regionalManagerName">{{assignRegionalManager.regionalManagerFirstName}} {{assignRegionalManager.regionalManagerLastName}}</div>
                             </div>
-                           <div class="form-group col-md-6" style="margin: auto;margin-top:10px;">
-                               <label class="control-label">Current Regional Manager from</label>
-                               <div class="controls readonly" ng-model="assignBranchManager.regionalManagerFromDate">{{assignRegionalManager.regionalManagerFromDate}}</div>
-                           </div>
+
                        </div>
+                        <div class="row">
+                            <div class="form-group col-md-6" style="margin: auto;margin-top:10px;">
+                                <label class="control-label">Current Regional Manager from</label>
+                                <div class="controls readonly" ng-model="assignBranchManager.regionalManagerFromDate">{{assignRegionalManager.regionalManagerFromDate}}</div>
+                            </div>
+                        </div>
                         <div class="row">
                         <div class="form-group col-md-6 required" style="margin: auto;margin-top:10px;">
                             <label class="control-label">Regional Manager</label>
@@ -56,9 +58,9 @@
                             <label class="control-label">Regional Manager From</label>
                             <p class="input-group">
                                 <input type="text" class="form-control input-sm" ng-required="true" ng-click="open($event)"  min-date="selectedDate" datepicker-popup="dd/MM/yyyy" ng-model="assignRegionalManager.fromDate"  datepicker-options="datePickerSettings.dateOptions" is-open="datePickerSettings.isOpened"  close-text="Close" show-button-bar="false" />
-                                        <span class="input-group-btn">
-                                            <button type="button" class="btn btn-default btn-sm" ng-click="open($event)"><i class="glyphicon glyphicon-calendar"></i></button>
-                                        </span>
+                                <span class="input-group-btn">
+                                    <button type="button" class="btn btn-default btn-sm" ng-click="open($event)"><i class="glyphicon glyphicon-calendar"></i></button>
+                                </span>
                             </p>
                         </div>
                         </div>
