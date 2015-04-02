@@ -60,7 +60,7 @@ public class BenefitUnitTest {
 
     @Test(expected = BenefitDomainException.class)
     public void markingAnInactivatedBenefitShouldThrowExceptionAndStatusShouldBeInactive() {
-        benefit = admin.inactivateBenefit(benefit);
+        benefit = admin.inactivateBenefit(benefit,true);
         benefit = benefit.markAsUsed();
         assertEquals(BenefitStatus.INACTIVE, invokeGetterMethod(benefit, "getStatus"));
     }
@@ -68,7 +68,7 @@ public class BenefitUnitTest {
     @Test(expected = BenefitDomainException.class)
     public void inactivatingABenefitWithInUseStatusThrowExceptionAndStatusShouldBeInUse() {
         benefit = benefit.markAsUsed();
-        benefit = admin.inactivateBenefit(benefit);
+        benefit = admin.inactivateBenefit(benefit,true);
         assertEquals(BenefitStatus.INUSE, invokeGetterMethod(benefit, "getStatus"));
     }
 

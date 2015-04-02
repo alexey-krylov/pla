@@ -33,12 +33,15 @@ public class TeamFinder {
             "FROM team tm " +
             "LEFT JOIN region r ON r.region_code = tm.region_code " +
             "LEFT JOIN branch b ON b.branch_code = tm.branch_code " +
-            "LEFT JOIN team_team_leader_fulfillment tf ON tf.employee_id = tm.current_team_leader";
-    public static final String FIND_TEAM_BY_ID_QUERY = "SELECT tm.current_team_leader AS currentTeamLeader ,tm.team_id AS teamId,tm.team_name AS teamName,tm.team_code AS teamCode, ttlf.from_date AS fromDate " +
-            ",b.branch_name AS branchName,r.region_name AS regionName,r.region_code AS regionCode,b.branch_code AS branchCode FROM team tm " +
-            "LEFT JOIN region r ON r.region_code = tm.region_code " +
-            "LEFT JOIN branch b ON b.branch_code = tm.branch_code  " +
-            "RIGHT JOIN team_team_leader_fulfillment ttlf ON ttlf.team_id = tm.team_id AND ttlf.employee_id = tm.current_team_leader WHERE tm.team_id=:teamId ";
+            "LEFT JOIN team_team_leader_fulfillment tf ON tf.employee_id = tm.current_team_leader AND tf.thru_date IS NULL " +
+            "GROUP BY tm.team_id";
+    public static final String FIND_TEAM_BY_ID_QUERY = "SELECT tm.team_id AS teamId,tm.team_name AS teamName,tm.team_code AS teamCode,tm.current_team_leader AS currentTeamLeader,tf.first_Name AS firstName,\n" +
+            " tf.last_Name AS lastName,tf.from_date AS fromDate,tf.thru_date AS endDate ,b.branch_name AS branchName,r.region_name AS regionName,b.branch_code AS branchCode,r.region_code AS regionCode \n" +
+            " FROM team tm \n" +
+            " INNER  JOIN team_team_leader_fulfillment tf ON  tm.current_team_leader=tf.employee_id  AND tf.thru_date IS NULL\n" +
+            " \n" +
+            " INNER JOIN region r ON  tm.region_code=r.region_code \n" +
+            " INNER JOIN branch b ON  tm.branch_code=b.branch_code ";
     public static final String FIND_ALL_ACTIVE_TEAM_QUERY = "select * from active_team_region_branch_view";
     private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 

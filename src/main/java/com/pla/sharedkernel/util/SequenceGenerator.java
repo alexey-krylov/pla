@@ -24,7 +24,7 @@ public class SequenceGenerator {
 
     private MasterFinder masterFinder;
 
-    public static final String updateEntitySequenceQuery = "UPDATE entity_sequence ES set ES.sequence_number=? where ES.sequence_id=?";
+    public static final String UPDATE_ENTITY_SEQUENCE_QUERY = "UPDATE entity_sequence ES set ES.sequence_number=? where ES.sequence_id=?";
 
     private JdbcTemplate jdbcTemplate;
 
@@ -48,7 +48,7 @@ public class SequenceGenerator {
         }
         Integer sequenceNumber = ((Integer) entitySequence.get("sequenceNumber")) + 1;
         String sequence = (String) entitySequence.get("sequencePrefix") + sequenceNumber;
-        jdbcTemplate.update(updateEntitySequenceQuery, new Object[]{sequenceNumber, entitySequence.get("sequenceId")});
+        jdbcTemplate.update(UPDATE_ENTITY_SEQUENCE_QUERY, new Object[]{sequenceNumber, entitySequence.get("sequenceId")});
         return sequence;
     }
 }

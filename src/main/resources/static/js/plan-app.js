@@ -88,7 +88,7 @@ app.controller('PlanSetupController', ['$scope', '$http', '$routeParams', 'plan'
             $scope.steps = [{"title": "step-1"}, {"title": "step-2"}];
             $scope.currentStepIndex = 0;
 
-            $scope.onlyNumbers = /^[1-9]+$/;
+            $scope.onlyNumbers = /^[0-9]+$/;
             $scope.today = function () {
                 $scope.dt = new Date();
             };

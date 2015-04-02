@@ -532,3 +532,32 @@ insert  into `entity_sequence`(`sequence_id`,`sequence_name`,`sequence_number`,`
 insert into `channel_type` (`CHANNEL_CODE`, `CHANNEL_DESCRIPTION`) values('BROKER','Broker');
 insert into `channel_type` (`CHANNEL_CODE`, `CHANNEL_DESCRIPTION`) values('DIRECT','Direct');
 insert into `channel_type` (`CHANNEL_CODE`, `CHANNEL_DESCRIPTION`) values('PERSONAL','Personel Selling');
+
+insert into `region` (`region_code`, `region_name`, `regional_manager`) values('EAST','East',NULL);
+insert into `region` (`region_code`, `region_name`, `regional_manager`) values('NORTH','North',NULL);
+insert into `region` (`region_code`, `region_name`, `regional_manager`) values('SOUTH','South',NULL);
+insert into `region` (`region_code`, `region_name`, `regional_manager`) values('WEST','West',NULL);
+
+insert into `branch` (`branch_code`, `current_branch_bde`, `current_branch_manager`, `branch_name`) values('Chingola',NULL,NULL,'Chingola');
+insert into `branch` (`branch_code`, `current_branch_bde`, `current_branch_manager`, `branch_name`) values('Chipata',NULL,NULL,'Chipata');
+insert into `branch` (`branch_code`, `current_branch_bde`, `current_branch_manager`, `branch_name`) values('Choma',NULL,NULL,'Choma');
+insert into `branch` (`branch_code`, `current_branch_bde`, `current_branch_manager`, `branch_name`) values('Kabwe',NULL,NULL,'Kabwe');
+insert into `branch` (`branch_code`, `current_branch_bde`, `current_branch_manager`, `branch_name`) values('Kasama',NULL,NULL,'Kasama');
+insert into `branch` (`branch_code`, `current_branch_bde`, `current_branch_manager`, `branch_name`) values('Kitwe',NULL,NULL,'Kitwe');
+insert into `branch` (`branch_code`, `current_branch_bde`, `current_branch_manager`, `branch_name`) values('Livingstone',NULL,NULL,'Livingstone');
+insert into `branch` (`branch_code`, `current_branch_bde`, `current_branch_manager`, `branch_name`) values('Lusaka',NULL,NULL,'Lusaka');
+insert into `branch` (`branch_code`, `current_branch_bde`, `current_branch_manager`, `branch_name`) values('Mazabuka',NULL,NULL,'Mazabuka');
+insert into `branch` (`branch_code`, `current_branch_bde`, `current_branch_manager`, `branch_name`) values('Ndola',NULL,NULL,'Ndola');
+insert into `branch` (`branch_code`, `current_branch_bde`, `current_branch_manager`, `branch_name`) values('Solwezi',NULL,NULL,'Solwezi');
+
+insert into `region_branch` (`region_code`, `branch_code`) values('North','Chingola');
+insert into `region_branch` (`region_code`, `branch_code`) values('South','Chipata');
+insert into `region_branch` (`region_code`, `branch_code`) values('South','Choma');
+insert into `region_branch` (`region_code`, `branch_code`) values('South','Kabwe');
+insert into `region_branch` (`region_code`, `branch_code`) values('North','Kasama');
+insert into `region_branch` (`region_code`, `branch_code`) values('North','Kitwe');
+insert into `region_branch` (`region_code`, `branch_code`) values('South','Livingstone');
+insert into `region_branch` (`region_code`, `branch_code`) values('South','Lusaka');
+insert into `region_branch` (`region_code`, `branch_code`) values('South','Mazabuka');
+insert into `region_branch` (`region_code`, `branch_code`) values('North','Ndola');
+insert into `region_branch` (`region_code`, `branch_code`) values('North','Solwezi');

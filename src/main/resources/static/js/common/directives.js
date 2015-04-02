@@ -41,6 +41,7 @@ angular.module('directives', [])
                         var currentStep =ctrl[0]['step' + data.step].$name;
                         if($.inArray(currentStep,scope.skipValidation)==-1){
                             var stepForm = ctrl[0]['step' + data.step];
+                            console.log(stepForm);
                             validateStep(stepForm);
                             if (stepForm.$invalid) {
                                 event.preventDefault();
