@@ -22,7 +22,7 @@ import java.util.Set;
  * @since 1.0 03/03/2015
  */
 @Entity
-@Table(name = "coverage", uniqueConstraints = {@UniqueConstraint(name = "UNQ_COVERAGE_NAME", columnNames = "coverageName")})
+@Table(name = "coverage")
 @EqualsAndHashCode(of = {"coverageName"})
 @ToString(of = "coverageName")
 @NoArgsConstructor(access = AccessLevel.PRIVATE)

@@ -260,8 +260,7 @@ CREATE TABLE `benefit`(
   `benefit_id` varchar(255) NOT NULL,
   `status` varchar(255) NOT NULL,
   `benefit_name` varchar(100) NOT NULL,
-  PRIMARY KEY (`benefit_id`),
-  UNIQUE KEY `UNQ_BENEFIT_NAME` (`benefit_name`)
+  PRIMARY KEY (`benefit_id`)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 /*Data for the table `benefit` */
@@ -288,8 +287,7 @@ CREATE TABLE `coverage` (
   `coverage_name` varchar(50) NOT NULL,
   `description` varchar(150) DEFAULT NULL,
   `status` varchar(255) NOT NULL,
-  PRIMARY KEY (`coverage_id`),
-  UNIQUE KEY `UNQ_COVERAGE_NAME` (`coverage_name`)
+  PRIMARY KEY (`coverage_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 /*Data for the table `coverage` */
@@ -367,141 +365,6 @@ CREATE TABLE `hcp_service` (
 
 /*Table structure for table `plan` */
 
-DROP TABLE IF EXISTS `plan`;
-
-CREATE TABLE `plan` (
-  `plan_id` varchar(255) NOT NULL,
-  `last_event_sequence_number` bigint(20) DEFAULT NULL,
-  `version` bigint(20) DEFAULT NULL,
-  `plan_payment_id` bigint(20) DEFAULT NULL,
-  `policy_term_id` bigint(20) DEFAULT NULL,
-  `sum_assured_id` bigint(20) DEFAULT NULL,
-  PRIMARY KEY (`plan_id`),
-  KEY `FK_r70nyaocgvvgcrwuqhvwh8v0u` (`plan_payment_id`),
-  KEY `FK_31dua9hmubeiqdtvvb90u1pxm` (`policy_term_id`),
-  KEY `FK_5i9s67duuj0127co5wmf9o5h` (`sum_assured_id`),
-  CONSTRAINT `FK_5i9s67duuj0127co5wmf9o5h` FOREIGN KEY (`sum_assured_id`) REFERENCES `sum_assured` (`id`),
-  CONSTRAINT `FK_31dua9hmubeiqdtvvb90u1pxm` FOREIGN KEY (`policy_term_id`) REFERENCES `policy_term` (`id`),
-  CONSTRAINT `FK_r70nyaocgvvgcrwuqhvwh8v0u` FOREIGN KEY (`plan_payment_id`) REFERENCES `plan_payment` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
-/*Data for the table `plan` */
-
-/*Table structure for table `plan_coverage` */
-
-DROP TABLE IF EXISTS `plan_coverage`;
-
-CREATE TABLE `plan_coverage` (
-  `coverage_id` varchar(255) NOT NULL,
-  `coverage_cover` int(11) NOT NULL,
-  `coverage_type` int(11) NOT NULL,
-  `deductible_amount` decimal(19,2) DEFAULT NULL,
-  `deductible_percentage` decimal(19,2) DEFAULT NULL,
-  `max_age` int(11) NOT NULL,
-  `min_age` int(11) NOT NULL,
-  `tax_applicable` bit(1) NOT NULL,
-  `waiting_period` int(11) NOT NULL,
-  `plan_id` varchar(255) DEFAULT NULL,
-  PRIMARY KEY (`coverage_id`),
-  KEY `FK_n7h9fv72t4rkcfxy65nmwn88p` (`plan_id`),
-  CONSTRAINT `FK_n7h9fv72t4rkcfxy65nmwn88p` FOREIGN KEY (`plan_id`) REFERENCES `plan` (`plan_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
-/*Data for the table `plan_coverage` */
-
-/*Table structure for table `plan_coverage_benefit` */
-
-DROP TABLE IF EXISTS `plan_coverage_benefit`;
-
-CREATE TABLE `plan_coverage_benefit` (
-  `plan_coverage_id` varchar(255) NOT NULL,
-  `benefit_id` varchar(255) DEFAULT NULL,
-  `benefit_limit` decimal(19,2) DEFAULT NULL,
-  `coverage_benefit_type` int(11) DEFAULT NULL,
-  `defined_per` int(11) DEFAULT NULL,
-  `max_limit` decimal(19,2) DEFAULT NULL,
-  KEY `FK_8jd3iuqc7x0yb17aovswhs92n` (`plan_coverage_id`),
-  CONSTRAINT `FK_8jd3iuqc7x0yb17aovswhs92n` FOREIGN KEY (`plan_coverage_id`) REFERENCES `plan_coverage` (`coverage_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
-/*Data for the table `plan_coverage_benefit` */
-
-/*Table structure for table `plan_payment` */
-
-DROP TABLE IF EXISTS `plan_payment`;
-
-CREATE TABLE `plan_payment` (
-  `id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `premium_payment_term_type` int(11) NOT NULL,
-  `premium_payment_id` bigint(20) DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  KEY `FK_jc8gdw8f50sukxl8ldr98p2cu` (`premium_payment_id`),
-  CONSTRAINT `FK_jc8gdw8f50sukxl8ldr98p2cu` FOREIGN KEY (`premium_payment_id`) REFERENCES `premium_payment` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
-/*Data for the table `plan_payment` */
-
-/*Table structure for table `plan_payment_maturity_amounts` */
-
-DROP TABLE IF EXISTS `plan_payment_maturity_amounts`;
-
-CREATE TABLE `plan_payment_maturity_amounts` (
-  `plan_payment_id` bigint(20) NOT NULL,
-  `guaranteed_survival_benefit_amount` decimal(19,2) NOT NULL,
-  `maturity_year` int(11) NOT NULL,
-  KEY `FK_7qovxgs106k36s3y5pohdq3iw` (`plan_payment_id`),
-  CONSTRAINT `FK_7qovxgs106k36s3y5pohdq3iw` FOREIGN KEY (`plan_payment_id`) REFERENCES `plan_payment` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
-/*Data for the table `plan_payment_maturity_amounts` */
-
-/*Table structure for table `policy_term` */
-
-DROP TABLE IF EXISTS `policy_term`;
-
-CREATE TABLE `policy_term` (
-  `id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `max_maturity_age` int(11) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
-/*Data for the table `policy_term` */
-
-/*Table structure for table `policy_term_valid_terms` */
-
-DROP TABLE IF EXISTS `policy_term_valid_terms`;
-
-CREATE TABLE `policy_term_valid_terms` (
-  `policy_term_id` bigint(20) NOT NULL,
-  `valid_terms` int(11) DEFAULT NULL,
-  KEY `FK_lqp4y9lbtc3yec8t3altqk935` (`policy_term_id`),
-  CONSTRAINT `FK_lqp4y9lbtc3yec8t3altqk935` FOREIGN KEY (`policy_term_id`) REFERENCES `policy_term` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
-/*Data for the table `policy_term_valid_terms` */
-
-/*Table structure for table `premium_payment` */
-
-DROP TABLE IF EXISTS `premium_payment`;
-
-CREATE TABLE `premium_payment` (
-  `id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `payment_cut_off_age` int(11) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
-/*Data for the table `premium_payment` */
-
-/*Table structure for table `premium_payment_valid_terms` */
-
-DROP TABLE IF EXISTS `premium_payment_valid_terms`;
-
-CREATE TABLE `premium_payment_valid_terms` (
-  `premium_payment_id` bigint(20) NOT NULL,
-  `valid_terms` int(11) DEFAULT NULL,
-  KEY `FK_i4nq1052vfgxnmn4umabuox8y` (`premium_payment_id`),
-  CONSTRAINT `FK_i4nq1052vfgxnmn4umabuox8y` FOREIGN KEY (`premium_payment_id`) REFERENCES `premium_payment` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 /*Data for the table `premium_payment_valid_terms` */
 
@@ -542,41 +405,6 @@ CREATE TABLE `snapshot_event_entry` (
   `payload` longblob NOT NULL,
   PRIMARY KEY (`aggregate_identifier`,`sequence_number`,`type`),
   UNIQUE KEY `UK_e1uucjseo68gopmnd0vgdl44h` (`event_identifier`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
-/*Data for the table `snapshot_event_entry` */
-
-/*Table structure for table `sum_assured` */
-
-DROP TABLE IF EXISTS `sum_assured`;
-
-CREATE TABLE `sum_assured` (
-  `type` varchar(31) NOT NULL,
-  `id` bigint(20) NOT NULL AUTO_INCREMENT,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
-/*Data for the table `sum_assured` */
-
-DROP TABLE IF EXISTS `sum_insured_values`;
-
-CREATE TABLE `sum_insured_values` (
-  `sum_assured_id` bigint(20) NOT NULL,
-  `sum_insured_values` decimal(19,2) DEFAULT NULL,
-  KEY `FK_28ctxup91kp61te2ela8peqo0` (`sum_assured_id`),
-  CONSTRAINT `FK_28ctxup91kp61te2ela8peqo0` FOREIGN KEY (`sum_assured_id`) REFERENCES `sum_assured` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
-
-/*Table structure for table `sum_assured_sum_insured_values` */
-
-DROP TABLE IF EXISTS `sum_assured_sum_insured_values`;
-
-CREATE TABLE `sum_assured_sum_insured_values` (
-  `sum_assured_id` bigint(20) NOT NULL,
-  `sum_insured_values` decimal(19,2) DEFAULT NULL,
-  KEY `FK_8v9k7sydll2yrf86atgs5081u` (`sum_assured_id`),
-  CONSTRAINT `FK_8v9k7sydll2yrf86atgs5081u` FOREIGN KEY (`sum_assured_id`) REFERENCES `sum_assured` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
@@ -625,36 +453,30 @@ DROP TABLE IF EXISTS `team`;
 CREATE TABLE `team` (
   `team_id` varchar(255) NOT NULL,
   `active` bit(1) DEFAULT NULL,
+  `branch_code` varchar(255) DEFAULT NULL,
   `current_team_leader` varchar(255) DEFAULT NULL,
+  `region_code` varchar(255) DEFAULT NULL,
   `team_code` varchar(255) DEFAULT NULL,
   `team_name` varchar(255) DEFAULT NULL,
-  `region_code` varchar(20) NOT NULL,
-  `branch_code` varchar(20) NOT NULL,
   PRIMARY KEY (`team_id`),
-  UNIQUE KEY `UNQ_TEAM_CODE_NAME` (`team_code`,`team_name`),
-  KEY `FK_TEAM_REGION_REGION_CODE` (`region_code`),
-  KEY `FK_TEAM_BRANCH_BRANCH_CODE` (`branch_code`),
-  CONSTRAINT `FK_TEAM_BRANCH_BRANCH_CODE` FOREIGN KEY (`branch_code`) REFERENCES `branch` (`BRANCH_CODE`),
-  CONSTRAINT `FK_TEAM_REGION_REGION_CODE` FOREIGN KEY (`region_code`) REFERENCES `region` (`REGION_CODE`)
+  UNIQUE KEY `UNQ_TEAM_CODE_NAME` (`team_code`,`team_name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
 
 /*Data for the table `team` */
 
 /*Table structure for table `team_team_leader_fulfillment` */
 
-DROP TABLE IF EXISTS `team_team_leader_fulfillment`;
-CREATE TABLE `team_team_leader_fulfillment`(
+CREATE TABLE `team_team_leader_fulfillment` (
   `team_id` varchar(255) NOT NULL,
   `from_date` date DEFAULT NULL,
   `employee_id` varchar(255) DEFAULT NULL,
   `first_name` varchar(255) DEFAULT NULL,
   `last_name` varchar(255) DEFAULT NULL,
   `thru_date` date DEFAULT NULL,
-  `team_leaders_order` int(11) NOT NULL AUTO_INCREMENT,
-  PRIMARY KEY (`team_id`,`team_leaders_order`),
-  KEY `team_leaders_order` (`team_leaders_order`),
-  CONSTRAINT `FK_TEAM_LEADER_FULFILLMENT` FOREIGN KEY (`team_id`) REFERENCES `team` (`team_id`)
-)ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  KEY `FK_71twwvq2jttbb9jfw9xom6y08` (`team_id`),
+  CONSTRAINT `FK_71twwvq2jttbb9jfw9xom6y08` FOREIGN KEY (`team_id`) REFERENCES `team` (`team_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 /*Data for the table `team_team_leader_fulfillment` */
 
@@ -735,15 +557,16 @@ CREATE VIEW `region_region_manger_fulfilment_view` AS
      RF.last_name  AS regionalManagerLastName,
      RF.from_date  AS regionalManagerFromDate
    FROM region R LEFT JOIN `region_manager_fulfillment` RF
-       ON R.region_code = RF.region_code AND R.regional_manager = RF.employee_id);
+ON R.region_code = RF.region_code AND R.regional_manager=RF.employee_id);
 
 DROP VIEW IF EXISTS `active_team_region_branch_view`;
 CREATE VIEW `active_team_region_branch_view` AS
-(SELECT T.team_id AS teamId,T.team_name AS teamName,TF.first_name AS leaderFirstName,TF.last_name AS leaderLastName,R.region_name AS regionName,
-B.branch_name AS branchName FROM team T LEFT JOIN `team_team_leader_fulfillment` TF ON T.`team_id`=TF.team_id AND T.`current_team_leader`=TF.employee_id
-  LEFT JOIN `branch` B ON T.`branch_code` = B.`BRANCH_CODE`
-  LEFT JOIN region R ON T.`region_code` = R.`REGION_CODE`
-WHERE T.`active` = '1');
+(SELECT tm.team_id AS teamId,tm.team_name AS teamName,tm.team_code AS teamCode,tm.current_team_leader AS currentTeamLeader,tf.first_Name AS firstName,
+ tf.last_Name AS lastName,tf.from_date AS fromDate,tf.thru_date AS endDate ,b.branch_name AS branchName,r.region_name AS regionName,b.branch_code AS branchCode,r.region_code AS regionCode
+ FROM team tm
+ INNER  JOIN team_team_leader_fulfillment tf ON  tm.current_team_leader=tf.employee_id  AND tf.thru_date IS NULL
+ INNER JOIN region r ON  tm.region_code=r.region_code
+ INNER JOIN branch b ON  tm.branch_code=b.branch_code  WHERE tm.active='1');
 
 
 

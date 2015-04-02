@@ -75,7 +75,7 @@ public class AdminUnitTest {
         boolean isBenefitNameUnique = true;
         when(benefitNameIsUnique.isSatisfiedBy(benefitDto)).thenReturn(isBenefitNameUnique);
         Benefit benefit = admin.createBenefit(isBenefitNameUnique, "1", name);
-        benefit = admin.inactivateBenefit(benefit);
+        benefit = admin.inactivateBenefit(benefit,true);
         assertEquals(BenefitStatus.INACTIVE, invokeGetterMethod(benefit, "getStatus"));
     }
 
