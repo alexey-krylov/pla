@@ -18,7 +18,7 @@ App.controller('AssignRegionalManagerController',['$scope','$http','$window','$l
         };
         $scope.url = window.location.search.split('=')[1];
         $http.get('/pla/core/region/getregiondetail?regionId='+$scope.url).success(function(data){
-              console.log(data);
+              //console.log(data);
               $scope.assignRegionalManager=data;
         });
 
@@ -27,10 +27,17 @@ App.controller('AssignRegionalManagerController',['$scope','$http','$window','$l
         });
         $scope.submitAssign=function(){
                if (!moment($scope.assignRegionalManager.fromDate,'DD/MM/YYYY').isValid()) {
-                  $scope.newDateField.fromDate = moment($scope.assignRegionalManager.fromDate).format("DD/MM/YYYY");
-                  $scope.assignRegionalManager.fromDate=$scope.newDateField.fromDate ;
+                  $scope.newDateField = moment($scope.assignRegionalManager.fromDate).format("DD/MM/YYYY");
+                  $scope.assignRegionalManager.fromDate=$scope.newDateField ;
                }
-             console.log($scope.assignRegionalManager);
+             $http.get('/pla/core/region/getallregionalmanager').success(function(data){
+                   $scope.regionalManagerList=data;
+                   var id=$scope.assignRegionalManager.employeeId;
+                   $scope.newBranchManager =_.findWhere($scope.regionalManagerList,{employeeId:id});
+                   $scope.assignRegionalManager.firstName=$scope.newBranchManager.firstName;
+                   $scope.assignRegionalManager.lastName=$scope.newBranchManager.lastName;
+             });
+           //  console.log($scope.assignRegionalManager);
              $http.post('/pla/core/region/assign', $scope.assignBranchManager).success(function(data){
                    if(data.status==200){
                       $scope.alert = {title:'Success Message! ', content:data.message, type: 'success'};
