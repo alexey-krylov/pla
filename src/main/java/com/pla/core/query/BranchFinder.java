@@ -24,7 +24,7 @@ public class BranchFinder {
             "JOIN region rg ON rg.region_code = rb.region_code " +
             "LEFT JOIN branch_manager_fulfillment bmf ON bmf.employee_id = br.current_branch_manager " +
             "LEFT JOIN branch_bde_fulfillment bbf ON bbf.employee_id = br.current_branch_bde ";
-    public static final String FIND_BRANCH_BY_ID_QUERY = "SELECT br.branch_name AS branchName,br.branch_code AS branchCode,br.current_branch_manager AS currentBranchManager, br.current_branch_bde AS currentBranchBDE, bmf.first_name AS firstName, bmf.last_name AS branchManagerLastName, bmf.from_date AS branchManagerFromDate, bbf.first_name AS branchBDFirstName, bbf.last_name AS branchBDELastName, bbf.from_date AS branchBDEFromDate  " +
+    public static final String FIND_BRANCH_BY_ID_QUERY = "SELECT br.branch_name AS branchName,br.branch_code AS branchCode,br.current_branch_manager AS currentBranchManager, br.current_branch_bde AS currentBranchBDE, bmf.first_name AS branchManagerFirstName, bmf.last_name AS branchManagerLastName, bmf.from_date AS branchManagerFromDate, bbf.first_name AS branchBDFirstName, bbf.last_name AS branchBDELastName, bbf.from_date AS branchBDEFromDate  " +
             " FROM branch br " +
             " LEFT JOIN branch_manager_fulfillment bmf ON bmf.employee_id = br.current_branch_manager " +
             " LEFT JOIN branch_bde_fulfillment bbf ON bbf.employee_id = br.current_branch_bde " +
