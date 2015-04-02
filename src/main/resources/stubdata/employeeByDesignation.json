@@ -119,6 +119,36 @@
     "departmentName": "MOBILE",
     "designation":"BRANCH_MANAGER",
     "email": null
+  },
+  {
+    "firstName": "Benson",
+    "lastName": "MULEYA",
+    "middleName": "",
+    "employeeId": "G687",
+    "nrcNumber": "103431/611",
+    "departmentName": "MECHANICAL",
+    "designation": "REGIONAL_MANAGER",
+    "email": null
+  },
+  {
+    "firstName": "Dominic C.",
+    "lastName": "LENGWE",
+    "middleName": "",
+    "employeeId": "G035",
+    "nrcNumber": "190288/65/1",
+    "departmentName": "MOBILE",
+    "designation": "BRANCH_MANAGER",
+    "email": null
+  },
+  {
+    "firstName": "GM",
+    "lastName": "Prakash",
+    "middleName": "",
+    "employeeId": "M710",
+    "nrcNumber": "sdfdsfd",
+    "departmentName": "HUMAN RESOURCES & ADMINISTRATION",
+    "designation": "BRANCH_BDE",
+    "email": null
   }
 ]
 

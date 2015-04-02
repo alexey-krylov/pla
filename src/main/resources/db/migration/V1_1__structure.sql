@@ -555,7 +555,8 @@ CREATE VIEW `region_region_manger_fulfilment_view` AS
      R.region_name AS regionName,
      RF.first_name AS regionalManagerFirstName,
      RF.last_name  AS regionalManagerLastName,
-     RF.from_date  AS regionalManagerFromDate
+     RF.from_date   AS regionalManagerFromDate,
+     RF.employee_id AS currentRegionalManager
    FROM region R LEFT JOIN `region_manager_fulfillment` RF
 ON R.region_code = RF.region_code AND R.regional_manager=RF.employee_id);
 

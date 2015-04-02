@@ -47,8 +47,6 @@ public class UpdateBranchManagerCommand {
     @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentLocalDate")
     private LocalDate branchBDEFromDate;
 
-    @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentLocalDate")
-    private LocalDate branchBDEThruDate;
 
 
 }

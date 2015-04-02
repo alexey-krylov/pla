@@ -127,6 +127,7 @@ public class TeamController {
         return Result.success("Team updated successfully");
     }
 
+    @RequestMapping(value = "/inactivate", method = RequestMethod.POST)
     @ResponseBody
     Result inactivateTeam(@RequestBody InactivateTeamCommand inactivateTeamCommand, BindingResult bindingResult, HttpServletRequest request) {
         if (bindingResult.hasErrors()) {
