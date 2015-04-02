@@ -64,7 +64,7 @@ public class CreateAgentCommand {
         createAgentCommand.setLicenseNumber(licenseNumberDto);
         createAgentCommand.setOverrideCommissionApplicable(agentDetail.get("overrideCommissionApplicable") != null ? OverrideCommissionApplicable.valueOf((String) agentDetail.get("overrideCommissionApplicable")) : null);
         createAgentCommand.setContactDetail(ContactDetailDto.transformToContactDetailDto(agentDetail));
-        TeamDetailDto teamDetailDto = agentDetail.get("teamId") != null ? new TeamDetailDto((String) agentDetail.get("teamId"), (String) agentDetail.get("teamCode"), (String) agentDetail.get("teamName"), (String) agentDetail.get("teamLeaderFirstName"), (String) agentDetail.get("teamLeaderLastName")) : null;
+        TeamDetailDto teamDetailDto = agentDetail.get("teamId") != null ? new TeamDetailDto((String) agentDetail.get("teamId"), (String) agentDetail.get("teamCode"), (String) agentDetail.get("teamName"), (String) agentDetail.get("teamLeaderFirstName"), (String) agentDetail.get("teamLeaderLastName"),(String)agentDetail.get("regionName"),(String)agentDetail.get("branchName")) : null;
         createAgentCommand.setTeamDetail(teamDetailDto);
         ChannelTypeDto channelTypeDto = agentDetail.get("channelCode") != null ? new ChannelTypeDto((String) agentDetail.get("channelCode"), (String) agentDetail.get("channelName")) : null;
         createAgentCommand.setChannelType(channelTypeDto);
