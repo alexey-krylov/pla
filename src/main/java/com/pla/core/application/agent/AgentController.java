@@ -83,7 +83,13 @@ public class AgentController {
 
     @RequestMapping(value = "/opencreatepage", method = RequestMethod.GET)
     public View openAgentCreatePage() {
-        return new RedirectView("createagent?agentid=" + sequenceGenerator.getId(Agent.class), true);
+        return new RedirectView("createagent", true);
+    }
+
+    @RequestMapping(value = "/getagentid", method = RequestMethod.GET)
+    @ResponseBody
+    public String getAgentId() {
+        return sequenceGenerator.getId(Agent.class);
     }
 
     @RequestMapping(value = "/createagent", method = RequestMethod.GET)

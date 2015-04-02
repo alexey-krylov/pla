@@ -36,6 +36,10 @@ public class TeamDetailDto {
 
     private String leaderLastName;
 
+    private String regionName;
+
+    private String branchName;
+
     public TeamDetailDto(String teamId) {
         this.teamId = teamId;
     }
