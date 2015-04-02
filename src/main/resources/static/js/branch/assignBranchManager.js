@@ -9,7 +9,7 @@ App.controller('AssignBranchManagerController',['$scope','$http','$window','$loc
                            isOpened:false,
                             dateOptions:{
                                 formatYear:'yyyy' ,
-                                startingDay:1
+                                   startingDay:1
 
                             }
                        }
