@@ -6,10 +6,8 @@
 
 package com.pla.seleniumscripts.benefit;
 
-import jdk.nashorn.internal.ir.annotations.Ignore;
 import org.junit.After;
 import org.junit.Before;
-import org.junit.Test;
 import org.openqa.selenium.*;
 import org.openqa.selenium.htmlunit.HtmlUnitDriver;
 
@@ -21,7 +19,6 @@ import static org.junit.Assert.fail;
  * @author: Samir
  * @since 1.0 31/03/2015
  */
-@Ignore
 public class BenefitSeleniumETETest {
 
     private String baseUrl;
@@ -43,9 +40,9 @@ public class BenefitSeleniumETETest {
     }
 
 
-    @Test
+    /*@Test
+    @Ignore
     public void createBenefit() {
-;
         //Core -> Benefits
         driver.findElement(By.cssSelector("span.caret")).click();
         driver.findElement(By.xpath("//a[contains(@href, '/pla/core/benefit/listbenefit')]")).click();
@@ -55,9 +52,10 @@ public class BenefitSeleniumETETest {
         driver.findElement(By.xpath("//input[@id='benefitName']")).sendKeys("Emergency Ambulance");
         driver.findElement(By.xpath("//button[@id='createUpdate']")).click();
         driver.findElement(By.xpath("//button[@id='cancel-button']")).click();
-    }
+    }*/
 
-    @Test
+   /* @Test
+    @Ignore
     public void updateBenefit() {
 
 
@@ -71,7 +69,7 @@ public class BenefitSeleniumETETest {
         driver.findElement(By.xpath("//button[@id='createUpdate']")).click();
         driver.findElement(By.xpath("//button[@id='cancel-button']")).click();
     }
-
+*/
 
     @After
     public void tearDown() throws Exception {
