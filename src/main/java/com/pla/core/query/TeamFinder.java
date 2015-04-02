@@ -28,13 +28,6 @@ public class TeamFinder {
 
     public static final String ACTIVE_BENEFIT_COUNT_BY_TEAM_NAME_QUERY = "select count(team_id) from team where team_name=:teamName";
     public static final String ACTIVE_BENEFIT_COUNT_BY_TEAM_CODE_QUERY = "select count(team_id) from team where team_code=:teamCode";
-    public static final String FIND_ALL_TEAM_QUERY = "SELECT tm.team_id AS teamId,tm.team_name AS teamName,tm.team_code as teamCode,tm.current_team_leader AS currentTeamLeader,tf.first_Name AS firstName," +
-            "tf.last_Name AS lastName,tf.from_date AS fromDate,tf.thru_date AS endDate ,b.branch_name AS branchName,r.region_name AS regionName,b.branch_code AS branchCode,r.region_code AS regionCode " +
-            "FROM team tm " +
-            "LEFT JOIN region r ON r.region_code = tm.region_code " +
-            "LEFT JOIN branch b ON b.branch_code = tm.branch_code " +
-            "LEFT JOIN team_team_leader_fulfillment tf ON tf.employee_id = tm.current_team_leader AND tf.thru_date IS NULL " +
-            "GROUP BY tm.team_id";
     public static final String FIND_TEAM_BY_ID_QUERY = "SELECT tm.team_id AS teamId,tm.team_name AS teamName,tm.team_code AS teamCode,tm.current_team_leader AS currentTeamLeader,tf.first_Name AS firstName,\n" +
             " tf.last_Name AS lastName,tf.from_date AS fromDate,tf.thru_date AS endDate ,b.branch_name AS branchName,r.region_name AS regionName,b.branch_code AS branchCode,r.region_code AS regionCode \n" +
             " FROM team tm \n" +
@@ -60,10 +53,6 @@ public class TeamFinder {
         Preconditions.checkNotNull(teamCode);
         Number noOfBenefit = namedParameterJdbcTemplate.queryForObject(ACTIVE_BENEFIT_COUNT_BY_TEAM_CODE_QUERY, new MapSqlParameterSource().addValue("teamCode", teamCode), Number.class);
         return noOfBenefit.intValue();
-    }
-
-    public List<Map<String, Object>> getAllTeam() {
-        return namedParameterJdbcTemplate.query(FIND_ALL_TEAM_QUERY, new ColumnMapRowMapper());
     }
 
     public Map<String, Object> getTeamById(String teamId) {

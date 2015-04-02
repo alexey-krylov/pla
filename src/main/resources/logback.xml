@@ -19,9 +19,9 @@
     <logger name="org.springframework.security" level="error"/>
     <logger name="org.springframework.format" level="error"/>
     <logger name="org.springframework.data.mongodb" level="info"/>
-    <logger name="org.thymeleaf" level="warn"/>
-    <logger name="com.pla" level="trace"/>
-    <root level="warn">
+    <logger name="org.thymeleaf" level="info"/>
+    <logger name="com.pla" level="info"/>
+    <root level="info">
         <appender-ref ref="console"/>
     </root>
 </configuration>
