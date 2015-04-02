@@ -36,16 +36,18 @@ App.controller('AssignRegionalManagerController',['$scope','$http','$window','$l
                    $scope.newRegionalManager =_.findWhere($scope.regionalManagerList,{employeeId:id});
                    $scope.assignRegionalManager.firstName=$scope.newRegionalManager.firstName;
                    $scope.assignRegionalManager.lastName=$scope.newRegionalManager.lastName;
+                   $http.post('/pla/core/region/assign', $scope.assignRegionalManager).success(function(data){
+                        if(data.status==200){
+                             $scope.alert = {title:'Success Message! ', content:data.message, type: 'success'};
+                             $scope.reset();
+                        }else{
+                             $scope.alert = {title:'Error Message! ', content:data.message, type: 'danger'};
+                        }
+                   });
              });
-            //console.log($scope.assignRegionalManager);
-             $http.post('/pla/core/region/assign', $scope.assignRegionalManager).success(function(data){
-                   if(data.status==200){
-                      $scope.alert = {title:'Success Message! ', content:data.message, type: 'success'};
-                      $scope.reset();
-                   }else{
-                      $scope.alert = {title:'Error Message! ', content:data.message, type: 'danger'};
-                   }
-             });
+            // console.log("**************");
+           // console.log($scope.assignRegionalManager);
+
         }
         $scope.reset=function(){
            $scope.assignRegionalManager.fromDate='';
