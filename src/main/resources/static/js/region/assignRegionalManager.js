@@ -33,12 +33,12 @@ App.controller('AssignRegionalManagerController',['$scope','$http','$window','$l
              $http.get('/pla/core/region/getallregionalmanager').success(function(data){
                    $scope.regionalManagerList=data;
                    var id=$scope.assignRegionalManager.employeeId;
-                   $scope.newBranchManager =_.findWhere($scope.regionalManagerList,{employeeId:id});
-                   $scope.assignRegionalManager.firstName=$scope.newBranchManager.firstName;
-                   $scope.assignRegionalManager.lastName=$scope.newBranchManager.lastName;
+                   $scope.newRegionalManager =_.findWhere($scope.regionalManagerList,{employeeId:id});
+                   $scope.assignRegionalManager.firstName=$scope.newRegionalManager.firstName;
+                   $scope.assignRegionalManager.lastName=$scope.newRegionalManager.lastName;
              });
-           //  console.log($scope.assignRegionalManager);
-             $http.post('/pla/core/region/assign', $scope.assignBranchManager).success(function(data){
+            //console.log($scope.assignRegionalManager);
+             $http.post('/pla/core/region/assign', $scope.assignRegionalManager).success(function(data){
                    if(data.status==200){
                       $scope.alert = {title:'Success Message! ', content:data.message, type: 'success'};
                       $scope.reset();
