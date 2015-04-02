@@ -735,7 +735,7 @@ CREATE VIEW `region_region_manger_fulfilment_view` AS
      RF.last_name  AS regionalManagerLastName,
      RF.from_date  AS regionalManagerFromDate
    FROM region R LEFT JOIN `region_manager_fulfillment` RF
-ON R.region_code = RF.region_code AND R.regional_manager=RF.employee_id);
+       ON R.region_code = RF.region_code AND R.regional_manager = RF.employee_id);
 
 DROP VIEW IF EXISTS `active_team_region_branch_view`;
 CREATE VIEW `active_team_region_branch_view` AS
@@ -743,7 +743,7 @@ CREATE VIEW `active_team_region_branch_view` AS
 B.branch_name AS branchName FROM team T LEFT JOIN `team_team_leader_fulfillment` TF ON T.`team_id`=TF.team_id AND T.`current_team_leader`=TF.employee_id
   LEFT JOIN `branch` B ON T.`branch_code` = B.`BRANCH_CODE`
   LEFT JOIN region R ON T.`region_code` = R.`REGION_CODE`
-WHERE T.`active` = b'1');
+WHERE T.`active` = '1');
 
 
 
