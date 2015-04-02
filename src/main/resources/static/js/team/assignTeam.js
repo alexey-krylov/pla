@@ -71,7 +71,10 @@ App.controller('AssignTeamController',['$scope','$http','$window','$location','$
          $scope.assignTeam.branchCode ='';
          $scope.assignTeam.regionCode ='';
         $scope.assignTeam.teamLeaderFrom='';
-        $scope.assignTeam.currentTeamLeaderName='';
+        $scope.assignTeam.employeeId='';
+        $scope.assignTeam.firstName='';
+        $scope.assignTeam.lastName='';
+
 
 
      }
