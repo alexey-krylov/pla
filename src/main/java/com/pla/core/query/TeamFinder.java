@@ -34,7 +34,7 @@ public class TeamFinder {
             " INNER  JOIN team_team_leader_fulfillment tf ON  tm.current_team_leader=tf.employee_id  AND tf.thru_date IS NULL\n" +
             " \n" +
             " INNER JOIN region r ON  tm.region_code=r.region_code \n" +
-            " INNER JOIN branch b ON  tm.branch_code=b.branch_code ";
+            " INNER JOIN branch b ON  tm.branch_code=b.branch_code WHERE tm.team_id=:teamId";
     public static final String FIND_ALL_ACTIVE_TEAM_QUERY = "select * from active_team_region_branch_view";
     private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
