@@ -23,7 +23,8 @@ public class BranchFinder {
             "JOIN region_branch rb ON rb.branch_code = br.branch_code " +
             "JOIN region rg ON rg.region_code = rb.region_code " +
             "LEFT JOIN branch_manager_fulfillment bmf ON bmf.employee_id = br.current_branch_manager " +
-            "LEFT JOIN branch_bde_fulfillment bbf ON bbf.employee_id = br.current_branch_bde ";
+            "LEFT JOIN branch_bde_fulfillment bbf ON bbf.employee_id = br.current_branch_bde AND bbf.thru_date IS NULL " +
+            "GROUP BY br.branch_code";
     public static final String FIND_BRANCH_BY_ID_QUERY = "SELECT br.branch_name AS branchName,br.branch_code AS branchCode,br.current_branch_manager AS currentBranchManager, br.current_branch_bde AS currentBranchBDE, bmf.first_name AS currentBranchManagerFirstName, bmf.last_name AS currentBranchManagerLastName, bmf.from_date AS currentBranchManagerFromDate, bbf.first_name AS currentBranchBDFirstName, bbf.last_name AS currentBranchBDELastName, bbf.from_date AS currentBranchBDEFromDate  " +
             " FROM branch br " +
             " LEFT JOIN branch_manager_fulfillment bmf ON bmf.employee_id = br.current_branch_manager " +
