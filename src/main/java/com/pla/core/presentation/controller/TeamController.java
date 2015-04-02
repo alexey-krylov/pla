@@ -58,7 +58,7 @@ public class TeamController {
     public ModelAndView viewTeams() {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("pla/core/team/viewTeam");
-        modelAndView.addObject("teamList", teamFinder.getAllTeam());
+        modelAndView.addObject("teamList", teamFinder.getAllActiveTeam());
         return modelAndView;
     }
 
