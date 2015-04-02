@@ -42,30 +42,29 @@
                         <div class="row">
                             <div class="form-group col-md-6" style="margin: auto;margin-top:10px;">
                                 <label class="control-label">Current Branch Manager</label>
-                                <div class="controls readonly" ng-model="assignBranchManager.currentBranchManager">{{assignBranchManager.firstName}}{{assignBranchManager.branchManagerLastName}}</div>
+                                <div class="controls readonly" ng-model="assignBranchManager.currentBranchManagerFirstName">{{assignBranchManager.currentBranchManagerFirstName}}{{assignBranchManager.currentBranchManagerLastName}}</div>
                             </div>
                             <div class="form-group col-md-6" style="margin: auto;margin-top:10px;">
                                 <label class="control-label">Current Branch Manager From</label>
-                                <div class="controls readonly" ng-model="assignBranchManager.branchManagerFromDate">{{assignBranchManager.branchManagerFromDate}}</div>
+                                <div class="controls readonly" ng-model="assignBranchManager.currentBranchManagerFromDate">{{assignBranchManager.currentBranchManagerFromDate}}</div>
                             </div>
                             </div>
                         <div class="row">
                             <div class="form-group col-md-6" style="margin: auto;margin-top:10px;">
                                 <label class="control-label">Current Branch BDE</label>
-                                <div class="controls readonly" ng-model="assignBranchManager.currentBranchBDE">{{assignBranchManager.branchBDFirstName}}{{assignBranchManager.branchBDLastName}}</div>
+                                <div class="controls readonly" ng-model="assignBranchManager.currentBranchBDEFirstName">{{assignBranchManager.currentBranchBDFirstName}}{{assignBranchManager.currentBranchBDLastName}}</div>
                             </div>
                             <div class="form-group col-md-6" style="margin: auto;margin-top:10px;">
                                 <label class="control-label">Current Branch BDE From</label>
-                                <div class="controls readonly" ng-model="assignBranchManager.branchBDEFromDate">{{assignBranchManager.branchBDEFromDate}}</div>
+                                <div class="controls readonly" ng-model="assignBranchManager.currentBranchBDEFromDate">{{assignBranchManager.currentBranchBDEFromDate}}</div>
                             </div>
 
                         </div>
                         <div class="row">
-                        <div class="form-group col-md-6" style="margin: auto;margin-top:10px;">
+                        <div class="form-group col-md-6" style="margin: auto;margin-top:10px;"><!-- ng-change="getNewBranchManager(assignBranchManager.branchManagerName)" -->
                             <label class="control-label">Branch Manager</label>
-                            <select class="form-control input-sm"  ng-model="assignBranchManager.branchManagerName"  >  <!-- ng-change="getNewBranchManager(assignBranchManager.branchManagerName)" -->
+                            <select class="form-control input-sm"  ng-model="assignBranchManager.employeeId" ng-options="branchManager.employeeId as branchManager.firstName + ' ' + branchManager.lastName for branchManager in branchManagers | orderBy:'firstName' ">
                                 <option value="">---Select option-----</option>
-                                <option ng-selected="assignBranchManager.assignedBranchManager == branchManager.branchManagerId" value="{{branchManager.branchManagerId}}" ng-repeat="branchManager in branchManagers" ></option>
                              </select>
                         </div>
                         <div class="form-group col-md-6 " style="margin: auto;margin-top:10px;">
@@ -81,15 +80,15 @@
                         <div class="row">
                             <div class="form-group col-md-6" style="margin: auto;margin-top:10px;">
                                 <label class="control-label">Branch BDE</label>
-                                <select class="form-control input-sm"  ng-model="assignBranchManager.branchBDEManager"  >  <!-- ng-change="getNewBranchManager(assignBranchManager.branchBDE)" -->
-                                    <option value="">---Select option-----</option>
-                                    <option ng-selected="assignBranchManager.assignedBranchBDE == branchBDE.branchBDEId" value="{{branchBDE.branchBDEId}}" ng-repeat="branchBDE in branchbranchBDEList" ></option>
+                                <select class="form-control input-sm"  ng-model="assignBranchManager.branchBDEEmployeeId" ng-options="branchBDE.employeeId as branchBDE.firstName + ' ' + branchBDE.lastName for branchBDE in branchbranchBDEList | orderBy:'firstName' ">
+                                     <option value="">---Select option-----</option>
+                                    <option value="44">fddds</option>
                                 </select>
                             </div>
                             <div class="form-group col-md-6 " style="margin: auto;margin-top:10px;">
                                 <label class="control-label">BranchBDE From</label>
                                 <p class="input-group">
-                                    <input type="text" class="form-control input-sm" ng-required="true" ng-click="openBDE($event)" min-date="selectedDate"  datepicker-popup="dd/MM/yyyy" ng-model="assignBranchManager.branchBDEManagerFromDate"  datepicker-options="datePickerSettingsBDE.dateOptions" is-open="datePickerSettingsBDE.isOpened"  close-text="Close" show-button-bar="false" />
+                                    <input type="text" class="form-control input-sm" ng-required="true" ng-click="openBDE($event)" min-date="selectedDate"  datepicker-popup="dd/MM/yyyy" ng-model="assignBranchManager.branchBDEFromDate"  datepicker-options="datePickerSettingsBDE.dateOptions" is-open="datePickerSettingsBDE.isOpened"  close-text="Close" show-button-bar="false" />
                                    <span class="input-group-btn">
                                       <button type="button" class="btn btn-default btn-sm" ng-click="openBDE($event)"><i class="glyphicon glyphicon-calendar"></i></button>
                                    </span>
@@ -100,7 +99,7 @@
                         <div class="row">
                         <div class="col-lg-12" style="text-align: center;margin-top:10px;">
 
-                            <button type="button" class="btn btn-default" style="float:right;" ng-disabled="(!assignBranchManager.branchManagerName || !assignBranchManager.branchManagerFromDate)&amp;&amp;(!assignBranchManager.branchBDEManager || !assignBranchManager.branchBDEManagerFromDate)" data-placement="top-right" data-container="notification" data-duration="5" bs-alert="alert"   ng-click="submitAssign()">Save</button>
+                            <button type="button" class="btn btn-default" style="float:right;" ng-disabled="(!assignBranchManager.employeeId || !assignBranchManager.branchManagerFromDate)&amp;&amp;(!assignBranchManager.branchBDEeEmployeeId || !assignBranchManager.branchBDEFromDate)" data-placement="top-right" data-container="notification" data-duration="5" bs-alert="alert"   ng-click="submitAssign()">Save</button>
                             <a class="btn btn-default" th:href="@{/core/branch/view}" style="float:left;">Cancel</a>
 
                         </div>
