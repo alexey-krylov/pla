@@ -31,7 +31,8 @@ App.controller('AssignBranchManagerController',['$scope','$http','$window','$loc
                                      $scope.datePickerSettingsBDE.isOpened = true;
                    };
                    $scope.url = window.location.search.split('=')[1];
-                   $http.get('/pla/core/branch/getbranchdetail?branchId='+$scope.url).success(function(data){
+
+                  $http.get('/pla/core/branch/getbranchdetail?branchId='+$scope.url).success(function(data){
                         // console.log(data);
                         $scope.assignBranchManager=data;
                         /*if($scope.assignBranchManager.branchManagerFromDate){
@@ -43,7 +44,7 @@ App.controller('AssignBranchManagerController',['$scope','$http','$window','$loc
                        }  */
                    });
                  $http.get('/pla/core/branch/getallbranchbde').success(function(data){
-                        $scope.branchBDE=data;
+                        $scope.branchBDEList=data;
                  });
                  $http.get('/pla/core/branch/getallbranchmanager').success(function(data){
                        $scope.branchManagers=data;
