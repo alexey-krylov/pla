@@ -37,11 +37,8 @@ App.controller('CreateTeamController',['$scope','$http','$templateCache','$timeo
              var empId = $scope.createTeam.employeeId;
              $scope.employeeData =_.findWhere($scope.teamLeaders,{employeeId:empId});
              $scope.createTeam.firstName=$scope.employeeData.firstName;
-             $scope.createTeam.lastName=$scope.employeeData.lastName;
+            $scope.createTeam.lastName=$scope.employeeData.lastName;
 
-               // console.log($scope.employeeData);
-                 console.log($scope.createTeam);
-          // $scope.createTeamTest={regionCode:"203",branchCode:"222",teamName:"Kasama A",teamCode:"dwdww",employeeId:"teamleaderid",firstName:"teamleaderfirstname",lastName:"teamleaderlastname",teamLeaderFrom:"06/08/2015/"}
            $http.post('/pla/core/team/create', $scope.createTeam).success(function(data){
               //  console.log(data);
                 if(data.status==200){

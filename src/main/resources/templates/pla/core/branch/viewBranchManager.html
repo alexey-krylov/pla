@@ -9,7 +9,7 @@
 <div th:include="fragments/common :: bodyHeader" th:remove="tag"/>
 <script>
   requirejs(['basic'],function(){
-    requirejs(['/pla/js/branchManager/viewBranchManager.js'],function(){
+    requirejs(['/pla/js/branch/viewBranchManager.js'],function(){
     });
   })
     </script>
@@ -52,15 +52,14 @@
                         </thead>
                         <tbody >
                         <tr  th:each="branch : ${branchList}">
-
                             <td th:text="${branch.regionName}"></td>
                             <td  th:text="${branch.branchName}"></td>
                             <td th:text="|${branch.branchManagerFirstName} ${branch.branchManagerLastName}|"></td>
                             <td th:text="${branch.branchManagerFromDate}"></td>
-                            <td th:text="|${branch.firstName} ${branch.branchBDELastName}|"></td>
+                            <td th:text="|${branch.branchBDEFirstName} ${branch.branchBDELastName}|"></td>
                             <td th:text="${branch.branchBDEFromDate}"></td>
                             <td style="text-align:center">   <!--th:href="@{/core/branch/redirectToAssignPage}"-->
-                            <a class="btn btn-default btn-xs"  th:href="'/pla/core/branch/redirectToAssignPage?branchId='+${branch.branchCode}+''" >Assign</a></td>
+                            <a class="btn btn-default btn-xs"  th:href="'/pla/core/branch/redirecttoassignPage?branchId='+${branch.branchCode}+''" >Assign</a></td>
 
                         </tr>
 
