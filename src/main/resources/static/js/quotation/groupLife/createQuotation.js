@@ -1,4 +1,4 @@
-define(['jquery','bootstrap','ui-bootstrap-tpls','angular','angular-route','angular-strap','angular-strap-tpls','fuelux','../../common/directives','angular-file-upload-shim','angular-file-upload','angular-sanitize'],
+define(['jquery','bootstrap','ui-bootstrap-tpls','angular','angular-route','angular-strap','angular-strap-tpls','fuelux','directives','angular-file-upload-shim','angular-file-upload','angular-sanitize'],
     function($,bootstrap,uibootstrap,angular,route,strap,strapTpls,fuelux){
         angular.module('createQuotation',['ui.bootstrap','ngRoute','mgcrea.ngStrap.select','mgcrea.ngStrap.alert','mgcrea.ngStrap.popover','directives','angularFileUpload','mgcrea.ngStrap.dropdown','ngSanitize'])
             .controller('quotationCtrl',['$scope','$http','$timeout','$upload',
