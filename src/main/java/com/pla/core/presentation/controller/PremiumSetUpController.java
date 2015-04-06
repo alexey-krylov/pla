@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -53,6 +54,15 @@ public class PremiumSetUpController {
         this.premiumService = premiumService;
         this.commandGateway = commandGateway;
         this.planRepository = planRepository;
+    }
+
+    @RequestMapping(value = "/lsitpremium", method = RequestMethod.GET)
+    @ResponseBody
+    public ModelAndView viewPremiums() {
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("/premium/viewPremium");
+        modelAndView.addObject(premiumService.getAllPremium());
+        return modelAndView;
     }
 
     @RequestMapping(value = "/getallpremium", method = RequestMethod.GET)

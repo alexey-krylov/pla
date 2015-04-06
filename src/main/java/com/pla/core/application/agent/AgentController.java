@@ -71,7 +71,7 @@ public class AgentController {
     }
 
     @RequestMapping(value = "/listagent", method = RequestMethod.GET)
-    public ModelAndView viewBenefits() {
+    public ModelAndView viewAgents() {
         List<Map<String, Object>> nonTerminatedAgents = agentFinder.getAllNonTerminatedAgent();
         List<Map<String, Object>> allAgentPlans = agentFinder.getAllAgentPlan();
         ModelAndView modelAndView = new ModelAndView();
