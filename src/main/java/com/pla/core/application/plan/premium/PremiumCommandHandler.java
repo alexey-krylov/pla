@@ -1,5 +1,6 @@
 package com.pla.core.application.plan.premium;
 
+import com.google.common.collect.Lists;
 import com.pla.core.domain.model.plan.premium.Premium;
 import com.pla.core.repository.PremiumRepository;
 import com.pla.sharedkernel.identifier.CoverageId;
@@ -45,8 +46,8 @@ public class PremiumCommandHandler {
         PremiumId premiumId = new PremiumId(idGenerator.nextId());
         PlanId planId = new PlanId(createPremiumCommand.getPlanId());
         CoverageId coverageId = new CoverageId(createPremiumCommand.getCoverageId());
-        Premium newPremium = isNotEmpty(createPremiumCommand.getCoverageId()) ? Premium.createPremiumWithPlanAndCoverage(premiumId, planId, coverageId, createPremiumCommand.getEffectiveFrom(), createPremiumCommand.getPremiumLineItem(), createPremiumCommand.getPremiumFactor(), createPremiumCommand.getPremiumRate())
-                : Premium.createPremiumWithPlan(premiumId, planId, createPremiumCommand.getEffectiveFrom(), createPremiumCommand.getPremiumLineItem(), createPremiumCommand.getPremiumFactor(), createPremiumCommand.getPremiumRate());
+        Premium newPremium = isNotEmpty(createPremiumCommand.getCoverageId()) ? Premium.createPremiumWithPlanAndCoverage(premiumId, planId, coverageId, createPremiumCommand.getEffectiveFrom(), createPremiumCommand.getPremiumLineItem(), createPremiumCommand.getPremiumFactor(), createPremiumCommand.getPremiumRate(), Lists.newArrayList(createPremiumCommand.getPremiumInfluencingFactors()))
+                : Premium.createPremiumWithPlan(premiumId, planId, createPremiumCommand.getEffectiveFrom(), createPremiumCommand.getPremiumLineItem(), createPremiumCommand.getPremiumFactor(), createPremiumCommand.getPremiumRate(), Lists.newArrayList(createPremiumCommand.getPremiumInfluencingFactors()));
         premiumRepository.save(newPremium);
     }
 
