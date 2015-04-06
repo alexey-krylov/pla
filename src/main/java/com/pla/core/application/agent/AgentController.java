@@ -76,7 +76,7 @@ public class AgentController {
         List<Map<String, Object>> allAgentPlans = agentFinder.getAllAgentPlan();
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("pla/core/agent/viewagent");
-        modelAndView.addObject("agentList", CreateAgentCommand.transformToAgentCommand(nonTerminatedAgents, allAgentPlans));
+        modelAndView.addObject("agentList", CreateAgentCommand.transformToAgentCommand(nonTerminatedAgents, allAgentPlans, mongoTemplate.findAll(Map.class, "PLAN")));
         return modelAndView;
     }
 
@@ -117,7 +117,7 @@ public class AgentController {
         Preconditions.checkArgument(UtilValidator.isNotEmpty(agentId));
         Map<String, Object> agentDetail = agentFinder.getAgentById(agentId);
         List<Map<String, Object>> allAgentPlans = agentFinder.getAllAgentPlan();
-        return CreateAgentCommand.transformToAgentCommand(agentDetail, allAgentPlans);
+        return CreateAgentCommand.transformToAgentCommand(agentDetail, allAgentPlans, mongoTemplate.findAll(Map.class, "PLAN"));
     }
 
     @RequestMapping(value = "/viewagentdetail", method = RequestMethod.GET)
@@ -127,7 +127,7 @@ public class AgentController {
         Preconditions.checkArgument(UtilValidator.isNotEmpty(agentId));
         Map<String, Object> agentDetail = agentFinder.getAgentById(agentId);
         List<Map<String, Object>> agentPlans = agentFinder.getAllAgentPlan();
-        modelAndView.addObject("agentDetail", CreateAgentCommand.transformToAgentCommand(agentDetail, agentPlans));
+        modelAndView.addObject("agentDetail", CreateAgentCommand.transformToAgentCommand(agentDetail, agentPlans, mongoTemplate.findAll(Map.class, "PLAN")));
         return modelAndView;
     }
 
