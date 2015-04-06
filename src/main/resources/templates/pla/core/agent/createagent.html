@@ -266,9 +266,9 @@
                             </div>
                             <div class="form-group" style="margin-top: 22px">
                                 <button type="submit" class="btn btn-default btn-sm" style="width: 25%;margin-left: 260px" ng-if="!isEditMode"
-                                        ng-click="submit()" ng-disabled="isFormSubmitted">Submit</button>
+                                        ng-click="submit()" ng-disabled="contactDetailsForm.$submitted">Submit</button>
                                 <button type="submit" class="btn btn-default btn-sm" style="width: 25%;margin-left: 260px" ng-if="isEditMode"
-                                        ng-click="update()" ng-disabled="isFormSubmitted">Update</button>
+                                        ng-click="update()" ng-disabled="contactDetailsForm.$submitted">Update</button>
                                 <button type="button" class="btn btn-default btn-sm" style="width:25%;" ng-click="cancel()">Cancel</button>
                             </div>
                         </div>

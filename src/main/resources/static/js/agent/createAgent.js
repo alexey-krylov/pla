@@ -17,7 +17,7 @@ angular.module('createAgent',['common','ngRoute','mgcrea.ngStrap.select','mgcrea
                 contact:4
             };
             if(_.size(agentDetails)!=0){
-                $scope.agentDetails=agentDetails;
+                $scope.agentDetails=angular.copy(agentDetails);
                 $scope.isEditMode =  true;
                 $scope.trainingCompleteOn = agentDetails.agentProfile.trainingCompleteOn;
                 $scope.stepValues = {
@@ -25,6 +25,10 @@ angular.module('createAgent',['common','ngRoute','mgcrea.ngStrap.select','mgcrea
                     team:2,
                     contact:3
                 };
+                $scope.agentDetails.authorizePlansToSell=[];
+                angular.forEach(agentDetails.authorizePlansToSell,function(value,key){
+                    this.push(value.planId);
+                },$scope.agentDetails.authorizePlansToSell);
                 $scope.stepsToRemove={index:1,howMany:1};
             }
             console.log($scope.agentDetails);
@@ -132,6 +136,7 @@ angular.module('createAgent',['common','ngRoute','mgcrea.ngStrap.select','mgcrea
             $scope.update =  function(){
                 $scope.isFormSubmitted = true;
                 if($scope.agentDetailsForm.$valid && $scope.teamDetailsForm.$valid && $scope.contactDetailsForm.$valid){
+                    $scope.contactDetailsForm.$submitted=true;
                     $http.post('/pla/core/agent/update',transformJson.createCompatibleJson(angular.copy($scope.agentDetails),$scope.physicalCities,$scope.primaryCities,$scope.trainingCompleteOn,true))
                         .success(function(response, status, headers, config){
                         })
@@ -143,6 +148,7 @@ angular.module('createAgent',['common','ngRoute','mgcrea.ngStrap.select','mgcrea
             $scope.submit = function(){
                 $scope.isFormSubmitted = true;
                 if($scope.agentDetailsForm.$valid && $scope.teamDetailsForm.$valid && $scope.contactDetailsForm.$valid){
+                    $scope.contactDetailsForm.$submitted=true;
                     $http.post('/pla/core/agent/create',transformJson.createCompatibleJson(angular.copy($scope.agentDetails),$scope.physicalCities,$scope.primaryCities,$scope.trainingCompleteOn,false))
                         .success(function(response, status, headers, config){
 
