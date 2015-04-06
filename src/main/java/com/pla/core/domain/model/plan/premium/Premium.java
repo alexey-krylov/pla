@@ -14,14 +14,17 @@ import com.pla.sharedkernel.identifier.PlanId;
 import com.pla.sharedkernel.identifier.PremiumId;
 import lombok.*;
 import org.joda.time.LocalDate;
+import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import javax.persistence.Id;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+
+import static com.google.common.base.Preconditions.checkArgument;
+import static org.nthdimenzion.utils.UtilValidator.isNotEmpty;
 
 /**
  * @author: Samir
@@ -52,6 +55,12 @@ public class Premium {
     private PremiumRateFrequency premiumRateFrequency;
 
     private Premium(PremiumId premiumId, PlanId planId, LocalDate effectiveFrom, Set<PremiumItem> premiumItems, PremiumFactor premiumFactor, PremiumRateFrequency premiumRateFrequency) {
+        checkArgument(premiumId != null);
+        checkArgument(planId != null);
+        checkArgument(effectiveFrom != null);
+        checkArgument(isNotEmpty(premiumItems));
+        checkArgument(premiumFactor != null);
+        checkArgument(premiumRateFrequency != null);
         this.premiumId = premiumId;
         this.planId = planId;
         this.effectiveFrom = effectiveFrom;

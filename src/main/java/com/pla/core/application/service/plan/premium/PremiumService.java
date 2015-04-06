@@ -51,7 +51,6 @@ public class PremiumService {
         PremiumTemplateParser premiumTemplateParser = new PremiumTemplateParser();
         List<PremiumInfluencingFactor> premiumInfluencingFactorList = UtilValidator.isNotEmpty(premiumInfluencingFactors) ? Arrays.asList(premiumInfluencingFactors) : new ArrayList<>();
         boolean isValidTemplate = premiumTemplateParser.validatePremiumDataForAGivenPlanAndCoverage(hssfWorkbook, plan, new CoverageId(coverageId), premiumInfluencingFactorList);
-        premiumTemplateParser.parseAndTransformToPremiumData(hssfWorkbook, premiumInfluencingFactorList);
         FileOutputStream stream = new FileOutputStream("E:\\pla\\afterParsing.xls");
         hssfWorkbook.write(stream);
         stream.close();
@@ -67,7 +66,7 @@ public class PremiumService {
     public List<Map> getAllPremium() {
         Query query = new Query();
         query.fields().include("premiumId").include("planId").include("coverageId").include("effectiveFrom").include("validTill").include("premiumFactor").include("premiumRateFrequency");
-        return mongoTemplate.find(query, Map.class);
+        return mongoTemplate.find(query, Map.class,"premium");
     }
 
 

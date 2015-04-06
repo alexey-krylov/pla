@@ -33,9 +33,9 @@ public class PremiumCommandHandler {
     public void createPremiumHandler(CreatePremiumCommand createPremiumCommand) {
         Premium premium = null;
         if (isNotEmpty(createPremiumCommand.getPlanId()) && isNotEmpty(createPremiumCommand.getCoverageId())) {
-            premium = premiumRepository.findByPlanAndCoverageId(new PlanId(createPremiumCommand.getPlanId()), new CoverageId(createPremiumCommand.getCoverageId()));
+            premium = premiumRepository.findByPlanAndCoverageIdAndValidityDate(new PlanId(createPremiumCommand.getPlanId()), new CoverageId(createPremiumCommand.getCoverageId()), null);
         } else if (isNotEmpty(createPremiumCommand.getPlanId()) && isEmpty(createPremiumCommand.getCoverageId())) {
-            premium = premiumRepository.findByPlanId(new PlanId(createPremiumCommand.getPlanId()));
+            premium = premiumRepository.findByPlanIdAndValidityDate(new PlanId(createPremiumCommand.getPlanId()), null);
         }
         if (premium != null) {
             premium = premium.expirePremium(createPremiumCommand.getEffectiveFrom().minusDays(1));
