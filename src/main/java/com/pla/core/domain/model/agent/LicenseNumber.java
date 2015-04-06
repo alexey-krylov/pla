@@ -15,9 +15,6 @@ import org.nthdimenzion.ddd.domain.annotations.ValueObject;
 
 import javax.persistence.Embeddable;
 
-import static com.google.common.base.Preconditions.checkArgument;
-import static org.nthdimenzion.utils.UtilValidator.isNotEmpty;
-
 /**
  * @author: Samir
  * @since 1.0 13/03/2015
@@ -33,7 +30,6 @@ public class LicenseNumber {
     private String licenseNumber;
 
     public LicenseNumber(String licenseNumber) {
-        checkArgument(isNotEmpty(licenseNumber));
         this.licenseNumber = licenseNumber;
     }
 }

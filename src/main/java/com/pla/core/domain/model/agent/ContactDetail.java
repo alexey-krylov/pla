@@ -48,7 +48,6 @@ class ContactDetail {
 
 
     ContactDetail(String mobileNumber, EmailAddress emailAddress, String addressLine1, GeoDetail geoDetail) {
-        checkArgument(emailAddress != null);
         checkArgument(isNotEmpty(addressLine1));
         checkArgument(geoDetail != null);
         this.mobileNumber = mobileNumber;
