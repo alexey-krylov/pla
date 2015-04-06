@@ -1,13 +1,21 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
-      lang="en" ng-app="AngularApp">
+      lang="en">
 <head th:include="fragments/common :: headTag">
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
 
 </head>
 <body style="padding-top: 70px;">
 <div th:include="fragments/common :: bodyHeader" th:remove="tag"/>
-<div class="container" style="padding-top: 0px!important;" ng-Controller="UpdateMandatoryDocumentsController">
+<script>
+    requirejs(['main'],function(){
+    require(['/pla/js/mandatoryDocuments/updateMandatoryDocument.js'],function(){
+    angular.bootstrap(document, ['updateMandatoryDocument']);
+    });
+    });
+</script>
+
+<div class="container ng-cloak" style="padding-top: 0px!important;" ng-Controller="UpdateMandatoryDocumentsController">
     <div class="row">
         <div class="col-lg-8" style="left:230px;position:absolute;">
             <div class="panel panel-primary">
@@ -17,18 +25,18 @@
                         </span></div>
                     </div>
                 </div>
-                <div class="panel-body">
+                <div class="panel-body ng-cloak">
                     <form  novalidate="true" class="css-form">
                         <div class="row">
                             <div class="form-group col-md-6" style="margin: auto;margin-top:10px;">
                                 <label class="control-label">Defined For</label>
                                 <div class="controls readonly">{{updateMandatoryDocument.definedFor}}</div>
                             </div>
-                            <div class="form-group col-md-6" style="margin: auto;margin-top:10px;">
+                            <div class="form-group col-md-6" style="margin: auto;margin-top:10px;" ng-show="showPlan">
                                 <label class="control-label">Product</label>
                                 <div class="controls readonly">{{updateMandatoryDocument.product}}</div>
                             </div>
-                            <div class="form-group col-md-6" style="margin: auto;margin-top:10px;">
+                            <div class="form-group col-md-6" style="margin: auto;margin-top:10px;" ng-show="showOptionalCoverage">
                                 <label class="control-label">OptionalCoverage</label>
                                 <div class="controls readonly">{{updateMandatoryDocument.OptionalCoverage}}</div>
                             </div>
@@ -39,7 +47,7 @@
                             <div class="form-group col-md-6 required">
                                 <label class="control-label">Mandatory Documents</label>
                                 <div>
-                                    <button type="button" class="btn btn-default bs-select" ng-model="createMandatoryDocument.multiSelect" data-all-none-buttons="true" data-html="1" data-multiple="1"  ng-options="value.name for value in mulSelect" >
+                                    <button type="button" class="btn btn-default bs-select" ng-model="updateMandatoryDocument.multiSelectList" data-all-none-buttons="true" data-html="1" data-multiple="1"  ng-options="mandatoryDocument.id as mandatoryDocument.name for mandatoryDocument in mandatoryDocList | orderBy:'name'" >
                                         Action <span class="caret"></span>
                                     </button>
                                 </div>
@@ -47,8 +55,8 @@
                              </div>
                              <div class="row">
                             <div class="form-group col-lg-12" style="margin: auto;margin-top:10px;" >
-                                <button type="submit" class="btn btn-default" style="float:right;" ng-disabled="(!createMandatoryDocument.multiSelect)" ng-click="updateMandatoryDoc()">Save</button>
-                                <a class="btn btn-default" style="float:left;" th:href="@{/core/mandatoryDocument/view}">Cancel</a>
+                                <button type="submit" class="btn btn-default" style="float:right;" ng-disabled="(!updateMandatoryDocument.multiSelectList)" ng-click="updateMandatoryDoc()">Save</button>
+                                <a class="btn btn-default" style="float:left;" th:href="@{/core/mandatorydocument/view}">Cancel</a>
                             </div>
                         </div>
                     </form>
