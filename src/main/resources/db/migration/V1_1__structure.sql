@@ -488,7 +488,6 @@ CREATE TABLE `region_manager_fulfillment` (
   `from_date`  DATE DEFAULT NULL,
   `thru_date`  DATE DEFAULT NULL,
   `employee_id` varchar(255) NULL,
-  PRIMARY KEY (`region_Code`, `employee_id`),
   CONSTRAINT `FK_REGION_CODE_REGION_MANAGER_FULFILLMENT_REGION_CODE` FOREIGN KEY (`region_Code`) REFERENCES `region` (`region_code`)
 )
   ENGINE =InnoDB
@@ -502,7 +501,6 @@ CREATE TABLE `branch_manager_fulfillment` (
   `from_date`   DATE         NOT NULL,
   `thru_date`   DATE DEFAULT NULL,
   `employee_id` VARCHAR(255) NOT NULL,
-  PRIMARY KEY (`branch_code`, `employee_id`),
   CONSTRAINT `FK_BRANCH_CODE_BRANCH_FULFILLMENT` FOREIGN KEY (`branch_code`) REFERENCES `branch` (`branch_code`)
 )
   ENGINE =InnoDB
@@ -516,12 +514,10 @@ CREATE TABLE `branch_bde_fulfillment` (
   `from_date`   date DEFAULT NULL,
   `thru_date`   date DEFAULT NULL,
   `employee_id` varchar(255) NOT NULL,
-  PRIMARY KEY (`branch_code`, `employee_id`),
   CONSTRAINT `FK_BRANCH_CODE_BRANCH_BDE_FULFILLMENT_CODE` FOREIGN KEY (`branch_code`) REFERENCES `branch` (`branch_code`)
 )
   ENGINE =InnoDB
   DEFAULT CHARSET =utf8;
-
 
 DROP TABLE IF EXISTS `entity_sequence`;
 CREATE TABLE `entity_sequence` (
@@ -604,6 +600,30 @@ CREATE TABLE `document` (
   `document_name` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`document_code`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+DROP TABLE IF EXISTS `industry`;
+CREATE TABLE `industry` (
+  `code` varchar(100) NOT NULL,
+  `description` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`code`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+DROP TABLE IF EXISTS `occuptation_category`;
+CREATE TABLE `occuptation_category` (
+  `code` varchar(100) NOT NULL,
+  `description` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`code`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+DROP TABLE IF EXISTS `designation`;
+CREATE TABLE `designation` (
+  `code` varchar(100) NOT NULL,
+  `description` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`code`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;

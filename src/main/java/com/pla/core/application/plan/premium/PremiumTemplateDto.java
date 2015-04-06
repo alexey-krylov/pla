@@ -6,13 +6,11 @@
 
 package com.pla.core.application.plan.premium;
 
-import com.pla.sharedkernel.domain.model.PremiumInfluencingFactor;
+import com.pla.core.domain.model.plan.premium.PremiumInfluencingFactor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.web.multipart.MultipartFile;
-
-import java.util.List;
 
 /**
  * @author: Samir

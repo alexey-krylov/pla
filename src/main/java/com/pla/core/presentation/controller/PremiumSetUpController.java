@@ -12,13 +12,14 @@ import com.pla.core.application.plan.premium.PremiumTemplateDto;
 import com.pla.core.application.service.plan.premium.PremiumService;
 import com.pla.core.domain.model.plan.Plan;
 import com.pla.core.repository.PlanRepository;
-import com.pla.sharedkernel.domain.model.PremiumInfluencingFactor;
+import com.pla.core.domain.model.plan.premium.PremiumInfluencingFactor;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.poifs.filesystem.POIFSFileSystem;
 import org.axonframework.commandhandling.gateway.CommandGateway;
 import org.nthdimenzion.presentation.Result;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -66,7 +67,7 @@ public class PremiumSetUpController {
         return PremiumInfluencingFactor.values();
     }
 
-    /*@RequestMapping(value = "/downloadpremiumtemplate", method = RequestMethod.POST)
+    @RequestMapping(value = "/downloadpremiumtemplate", method = RequestMethod.POST)
     public void downloadPremiumTemplate(@RequestBody PremiumTemplateDto premiumTemplateDto, HttpServletRequest request, HttpServletResponse response) throws IOException {
         response.reset();
         response.setContentType("application/msexcel");
@@ -80,25 +81,6 @@ public class PremiumSetUpController {
         outputStream.flush();
         outputStream.close();
     }
-*/
-    @RequestMapping(value = "/downloadpremiumtemplate", method = RequestMethod.GET)
-    public void downloadPremiumTemplate(PremiumTemplateDto premiumTemplateDto, HttpServletRequest request, HttpServletResponse response) throws IOException {
-        premiumTemplateDto = new PremiumTemplateDto();
-        premiumTemplateDto.setPlanId("551bd46c88604220872bb22b");
-        premiumTemplateDto.setPremiumInfluencingFactors(new PremiumInfluencingFactor[]{PremiumInfluencingFactor.SUM_ASSURED, PremiumInfluencingFactor.POLICY_TERM, PremiumInfluencingFactor.AGE});
-        response.reset();
-        response.setContentType("application/msexcel");
-        Plan plan = planRepository.findByPlanId(premiumTemplateDto.getPlanId());
-        String templateFileName = plan.getPlanDetail().getPlanName() + PREMIUM_TEMPLATE_FILE_NAME_SUFFIX;
-        response.setHeader("content-disposition", "attachment; filename=" + templateFileName + "");
-        OutputStream outputStream = response.getOutputStream();
-        HSSFWorkbook premiumTemplateWorkbook = premiumService.generatePremiumExcelTemplate(premiumTemplateDto.getPremiumInfluencingFactors(),
-                premiumTemplateDto.getPlanId(), premiumTemplateDto.getCoverageId());
-        premiumTemplateWorkbook.write(outputStream);
-        outputStream.flush();
-        outputStream.close();
-    }
-
 
     @RequestMapping(value = "/verifypremiumdata", method = RequestMethod.POST)
     @ResponseBody
@@ -133,7 +115,9 @@ public class PremiumSetUpController {
     @ResponseBody
     public Result uploadPremiumData(CreatePremiumCommand createPremiumCommand, HttpServletRequest servletRequest, HttpServletResponse response) throws IOException {
         MultipartFile file = createPremiumCommand.getFile();
-        if ("application/msexcel".equals(file.getContentType())) {
+        Plan plan = planRepository.findByPlanId(createPremiumCommand.getPlanId());
+        String templateFileName = plan.getPlanDetail().getPlanName() + PREMIUM_TEMPLATE_FILE_NAME_SUFFIX;
+        if (!("application/msexcel".equals(file.getContentType()) || "application/vnd.ms-excel".equals(file.getContentType())) && !templateFileName.equals(file.getOriginalFilename())) {
             return Result.failure("Uploaded file is not valid excel");
         }
         POIFSFileSystem fs = new POIFSFileSystem(file.getInputStream());

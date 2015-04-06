@@ -107,11 +107,11 @@ public class BranchAcceptanceTest {
     @ExpectedDatabase(value = "classpath:testdata/endtoend/branch/expecteddataforupdatebdeonlyrforexistingmanager.xml", assertionMode = DatabaseAssertionMode.NON_STRICT)
     @DatabaseTearDown(value = "classpath:testdata/endtoend/branch/expecteddataforupdatebdeonlyrforexistingmanager.xml", type = DatabaseOperation.DELETE_ALL)
 
-    public void givenBranchBdeEmployeeIdWithoutBranchManagerEmployeeIdItShouldUpdateBdeOnlyExpiringManager() {
+    public void givenBranchBdeEmployeeIdWithoutBranchManagerEmployeeIdItShouldUpdateBdeOnly() {
         Boolean isSuccess = Boolean.FALSE;
         try {
             branchService.updateBranchBDE("BRANCH1200", "000", "BRNCHBDE FN", "BRNCHBDE LN", new LocalDate("2015-03-24"));
-            branchService.updateBranchManager("BRANCH1200", "", "", "", new LocalDate("2015-03-24"));
+            //branchService.updateBranchManager("BRANCH1200", "", "", "", new LocalDate("2015-03-24"));
             isSuccess = Boolean.TRUE;
         } catch (Exception e) {
             logger.error("Error in updating branch bde", e);
@@ -158,10 +158,10 @@ public class BranchAcceptanceTest {
     @DatabaseSetup(value = "classpath:testdata/endtoend/branch/testdataforupdatebranchbde.xml", type = DatabaseOperation.CLEAN_INSERT)
     @ExpectedDatabase(value = "classpath:testdata/endtoend/branch/expecteddataforupdatemanageronlyrforexistingbde.xml", assertionMode = DatabaseAssertionMode.NON_STRICT)
     @DatabaseTearDown(value = "classpath:testdata/endtoend/branch/expecteddataforupdatemanageronlyrforexistingbde.xml", type = DatabaseOperation.DELETE_ALL)
-    public void givenBranchManagerEmployeeIdWithoutBranchBdeEmployeeIdItShouldUpdateManagerOnlyExpiringBde() {
+    public void givenBranchManagerEmployeeIdWithoutBranchBdeEmployeeIdItShouldUpdateManagerOnly() {
         Boolean isSuccess = Boolean.FALSE;
         try {
-            branchService.updateBranchBDE("BRANCHBDE100", "", "", "", new LocalDate("2015-03-29"));
+            //branchService.updateBranchBDE("BRANCHBDE100", "", "", "", new LocalDate("2015-03-29"));
             branchService.updateBranchManager("BRANCHBDE100", "111", "BRNCH FN", "BRNCH LN", new LocalDate("2015-03-29"));
             isSuccess = Boolean.TRUE;
         } catch (Exception e) {

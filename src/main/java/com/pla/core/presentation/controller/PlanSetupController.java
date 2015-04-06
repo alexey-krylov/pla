@@ -49,6 +49,12 @@ public class PlanSetupController {
         return modelAndView;
     }
 
+    @RequestMapping(value = "/getallplan", method = RequestMethod.GET)
+    @ResponseBody
+    public List<Map> findAllPlan() {
+        return mongoTemplate.findAll(Map.class, "PLAN");
+    }
+
     @RequestMapping(value = "/list", method = RequestMethod.GET)
     public ModelAndView gotoPlanList() {
         ModelAndView modelAndView = new ModelAndView();

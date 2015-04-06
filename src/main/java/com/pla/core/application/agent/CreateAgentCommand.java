@@ -8,6 +8,7 @@ package com.pla.core.application.agent;
 
 import com.google.common.collect.Sets;
 import com.pla.core.domain.model.agent.AgentStatus;
+import com.pla.core.domain.model.plan.PlanDetail;
 import com.pla.core.dto.*;
 import com.pla.sharedkernel.domain.model.OverrideCommissionApplicable;
 import com.pla.sharedkernel.identifier.PlanId;
@@ -55,8 +56,10 @@ public class CreateAgentCommand {
 
     private AgentStatus agentStatus;
 
+    private List<PlanDetailDto> agentPlanDetails;
 
-    public static CreateAgentCommand transformToAgentCommand(Map<String, Object> agentDetail, List<Map<String, Object>> allAgentPlans) {
+
+    public static CreateAgentCommand transformToAgentCommand(Map<String, Object> agentDetail, List<Map<String, Object>> allAgentPlans, List<Map> allMasterPlans) {
         CreateAgentCommand createAgentCommand = new CreateAgentCommand();
         createAgentCommand.setAgentId((String) agentDetail.get("agentId"));
         createAgentCommand.setAgentProfile(AgentProfileDto.transFormToAgentProfileDto(agentDetail));
@@ -64,7 +67,7 @@ public class CreateAgentCommand {
         createAgentCommand.setLicenseNumber(licenseNumberDto);
         createAgentCommand.setOverrideCommissionApplicable(agentDetail.get("overrideCommissionApplicable") != null ? OverrideCommissionApplicable.valueOf((String) agentDetail.get("overrideCommissionApplicable")) : null);
         createAgentCommand.setContactDetail(ContactDetailDto.transformToContactDetailDto(agentDetail));
-        TeamDetailDto teamDetailDto = agentDetail.get("teamId") != null ? new TeamDetailDto((String) agentDetail.get("teamId"), (String) agentDetail.get("teamCode"), (String) agentDetail.get("teamName"), (String) agentDetail.get("teamLeaderFirstName"), (String) agentDetail.get("teamLeaderLastName"),(String)agentDetail.get("regionName"),(String)agentDetail.get("branchName")) : null;
+        TeamDetailDto teamDetailDto = agentDetail.get("teamId") != null ? new TeamDetailDto((String) agentDetail.get("teamId"), (String) agentDetail.get("teamCode"), (String) agentDetail.get("teamName"), (String) agentDetail.get("teamLeaderFirstName"), (String) agentDetail.get("teamLeaderLastName"), (String) agentDetail.get("regionName"), (String) agentDetail.get("branchName")) : null;
         createAgentCommand.setTeamDetail(teamDetailDto);
         ChannelTypeDto channelTypeDto = agentDetail.get("channelCode") != null ? new ChannelTypeDto((String) agentDetail.get("channelCode"), (String) agentDetail.get("channelName")) : null;
         createAgentCommand.setChannelType(channelTypeDto);
@@ -73,11 +76,13 @@ public class CreateAgentCommand {
         Set<PlanId> authorizedPlanToSell = agentPlans.stream().map(new TransformAgentPlanToPlanId()).collect(Collectors.toSet());
         createAgentCommand.setAuthorizePlansToSell(authorizedPlanToSell);
         createAgentCommand.setAgentStatus(AgentStatus.valueOf((String) agentDetail.get("agentStatus")));
+        List<PlanDetailDto> planDetailDtos = authorizedPlanToSell.stream().map(new TransformToPlanDetailDto(allMasterPlans)).collect(Collectors.toList());
+        createAgentCommand.setAgentPlanDetails(planDetailDtos);
         return createAgentCommand;
     }
 
-    public static List<CreateAgentCommand> transformToAgentCommand(List<Map<String, Object>> nonTerminatedAgents, List<Map<String, Object>> allAgentPlans) {
-        List<CreateAgentCommand> createAgentCommands = nonTerminatedAgents.stream().map(new TransformAgentDetailToAgentCommand(allAgentPlans)).collect(Collectors.toList());
+    public static List<CreateAgentCommand> transformToAgentCommand(List<Map<String, Object>> nonTerminatedAgents, List<Map<String, Object>> allAgentPlans, List<Map> allMasterPlans) {
+        List<CreateAgentCommand> createAgentCommands = nonTerminatedAgents.stream().map(new TransformAgentDetailToAgentCommand(allAgentPlans, allMasterPlans)).collect(Collectors.toList());
         return createAgentCommands;
     }
 
@@ -108,14 +113,39 @@ public class CreateAgentCommand {
 
         private List<Map<String, Object>> allAgentPlans;
 
-        TransformAgentDetailToAgentCommand(List<Map<String, Object>> allAgentPlans) {
+        private List<Map> allMasterPlans;
+
+        TransformAgentDetailToAgentCommand(List<Map<String, Object>> allAgentPlans, List<Map> allMasterPlans) {
             this.allAgentPlans = allAgentPlans;
+            this.allMasterPlans = allMasterPlans;
         }
 
         @Override
         public CreateAgentCommand apply(Map<String, Object> agentDetail) {
-            return transformToAgentCommand(agentDetail, allAgentPlans);
+            return transformToAgentCommand(agentDetail, allAgentPlans, allMasterPlans);
         }
+
+
     }
 
+    private static class TransformToPlanDetailDto implements Function<PlanId, PlanDetailDto> {
+
+        private List<Map> allMasterPlans;
+
+        public TransformToPlanDetailDto(List<Map> allMasterPlans) {
+            this.allMasterPlans = allMasterPlans;
+        }
+
+        @Override
+        public PlanDetailDto apply(PlanId planId) {
+            List<Map> planDetails = allMasterPlans.stream().filter(new Predicate<Map>() {
+                @Override
+                public boolean test(Map map) {
+                    return planId.equals(map.get("planId"));
+                }
+            }).collect(Collectors.toList());
+            PlanDetail planDetail = (PlanDetail) planDetails.get(0).get("planDetail");
+            return new PlanDetailDto(planId, planDetail.getPlanName());
+        }
+    }
 }
