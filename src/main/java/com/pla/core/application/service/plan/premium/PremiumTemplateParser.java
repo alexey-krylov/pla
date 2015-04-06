@@ -11,12 +11,15 @@ import com.google.common.collect.Maps;
 import com.pla.core.application.exception.PremiumTemplateParseException;
 import com.pla.core.domain.model.plan.Plan;
 import com.pla.core.domain.model.plan.premium.PremiumInfluencingFactor;
+import com.pla.core.query.MasterFinder;
 import com.pla.sharedkernel.identifier.CoverageId;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.nthdimenzion.common.AppConstants;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.util.*;
@@ -34,7 +37,15 @@ import static org.nthdimenzion.utils.UtilValidator.isNotEmpty;
  * @author: Samir
  * @since 1.0 30/03/2015
  */
+@Component
 public class PremiumTemplateParser {
+
+    private MasterFinder masterFinder;
+
+    @Autowired
+    public PremiumTemplateParser(MasterFinder masterFinder) {
+        this.masterFinder = masterFinder;
+    }
 
     public boolean validatePremiumDataForAGivenPlanAndCoverage(HSSFWorkbook hssfWorkbook, Plan plan, CoverageId coverageId, List<PremiumInfluencingFactor> premiumInfluencingFactors) throws IOException, PremiumTemplateParseException {
         boolean isValidPremiumTemplate = true;
@@ -120,6 +131,8 @@ public class PremiumTemplateParser {
         return duplicateRows;
     }
 
+
+    // TODO : Make this method as public and write test
     private boolean isTwoRowIdentical(Row firstRow, Row secondRow, int premiumCellNumber) {
         if (firstRow.getRowNum() == secondRow.getRowNum()) {
             return false;
@@ -140,6 +153,7 @@ public class PremiumTemplateParser {
         return cellList;
     }
 
+    // TODO : Make this method as public and write test
     private boolean areAllCellContainsUniqueValue(List<Cell> firstRowCells, List<Cell> secondRowCells, int premiumCellNumber, int noOfCell) {
         boolean allHasUniqueValue = false;
         int noOfCellHavingSameValue = 0;
@@ -162,6 +176,7 @@ public class PremiumTemplateParser {
         return noOfCell == noOfCellHavingSameValue;
     }
 
+    // TODO : Make this method as public and write test
     private Integer getNoOfNonEmptyRow(HSSFSheet hssfSheet) {
         Iterator<Row> rowsIterator = hssfSheet.iterator();
         rowsIterator.next();
@@ -177,6 +192,7 @@ public class PremiumTemplateParser {
         return isEmpty(nonEmptyRows) ? 0 : nonEmptyRows.size();
     }
 
+    // TODO : Make this method as public and write test
     private boolean isRowEmpty(Row row) {
         List<Cell> cells = Lists.newArrayList(row.cellIterator());
         List<Cell> nonEmptyCells = cells.stream().filter(new Predicate<Cell>() {
@@ -192,6 +208,7 @@ public class PremiumTemplateParser {
         return isEmpty(nonEmptyCells);
     }
 
+    // TODO : Make this method as public and write test
     private boolean isValidHeader(Row headerRow, List<PremiumInfluencingFactor> premiumInfluencingFactors) {
         Iterator<Cell> cellIterator = headerRow.cellIterator();
         Stream<Cell> targetStream = StreamSupport.stream(Spliterators.spliteratorUnknownSize(cellIterator, Spliterator.ORDERED), true);
@@ -202,6 +219,7 @@ public class PremiumTemplateParser {
         return isTemplateContainsSameInfluencingFactor(transformedInfluencingFactors, influencingFactorsPresentInExcel);
     }
 
+    // TODO : Make this method as public and write test
     private boolean isTemplateContainsSameInfluencingFactor(List<String> selectedInfluencingFactors, List<String> influencingFactorsInHeader) {
         boolean containsHeader = true;
         for (String influencingFactorInHeader : influencingFactorsInHeader) {
@@ -213,6 +231,7 @@ public class PremiumTemplateParser {
         return containsHeader;
     }
 
+    // TODO : Make this method as public and write test
     private Map<PremiumInfluencingFactor, Integer> buildInfluencingFactorAndCellIndexMap(Row headerRow, List<PremiumInfluencingFactor> premiumInfluencingFactors) {
         Iterator<Cell> cellIterator = headerRow.cellIterator();
         Stream<Cell> targetStream = StreamSupport.stream(Spliterators.spliteratorUnknownSize(cellIterator, Spliterator.ORDERED), true);
@@ -234,11 +253,13 @@ public class PremiumTemplateParser {
         }
     }
 
+    // TODO : Make this method as public and write test
     private int getCellNumberFor(String cellName, List<Cell> cells) {
         return cells.stream().filter(cell -> cellName.equals(cell.getStringCellValue().trim())).mapToInt(cell -> cells.indexOf(cell)).findAny().getAsInt();
     }
 
 
+    // TODO :  write test
     public List<Map<Map<PremiumInfluencingFactor, String>, Double>> parseAndTransformToPremiumData(HSSFWorkbook hssfWorkbook, List<PremiumInfluencingFactor> premiumInfluencingFactors) {
         HSSFSheet premiumSheet = hssfWorkbook.getSheetAt(0);
         Iterator<Row> rowsIterator = premiumSheet.iterator();
@@ -266,10 +287,11 @@ public class PremiumTemplateParser {
         return premiumInfluencingFactorLineItem;
     }
 
+    // TODO : Make this method as public and write test
     private int getTotalNoOfPremiumCombination(List<PremiumInfluencingFactor> premiumInfluencingFactors, CoverageId coverageId, Plan plan) {
         Integer noOfRow = 1;
         for (PremiumInfluencingFactor premiumInfluencingFactor : premiumInfluencingFactors) {
-            Integer lengthOfAllowedValues = premiumInfluencingFactor.getAllowedValues(plan, coverageId).length == 0 ? 1 : premiumInfluencingFactor.getAllowedValues(plan, coverageId).length;
+            Integer lengthOfAllowedValues = premiumInfluencingFactor.getAllowedValues(plan, coverageId, masterFinder).length == 0 ? 1 : premiumInfluencingFactor.getAllowedValues(plan, coverageId, masterFinder).length;
             noOfRow = noOfRow * lengthOfAllowedValues;
         }
         return noOfRow;

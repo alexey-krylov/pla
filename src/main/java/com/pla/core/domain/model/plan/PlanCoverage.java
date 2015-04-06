@@ -90,6 +90,7 @@ public class PlanCoverage {
     }
 
 
+    // TODO : Write test
     public List<BigDecimal> getAllowedCoverageSumAssuredValues() {
         List<BigDecimal> allowedValues = Lists.newArrayList();
         if (SumAssuredType.SPECIFIED_VALUES.equals(this.coverageSumAssured.getSumAssuredType())) {
@@ -107,6 +108,7 @@ public class PlanCoverage {
         return allowedValues;
     }
 
+    // TODO : Write test
     public Set<Integer> getAllowedCoverageTerm() {
         if (CoverageTermType.SPECIFIED_VALUES.equals(this.coverageTermType)) {
             return this.coverageTerm.getValidTerms();
@@ -116,6 +118,7 @@ public class PlanCoverage {
         return this.coverageTerm.getMaturityAges();
     }
 
+    // TODO : Write test
     public List<Integer> getAllowedAges() {
         List<Integer> allowedAges = new ArrayList<>();
         int maxAge = this.maxAge;

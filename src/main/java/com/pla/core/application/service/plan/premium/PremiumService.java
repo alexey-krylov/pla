@@ -7,6 +7,7 @@
 package com.pla.core.application.service.plan.premium;
 
 import com.pla.core.domain.model.plan.Plan;
+import com.pla.core.query.MasterFinder;
 import com.pla.core.repository.PlanRepository;
 import com.pla.core.domain.model.plan.premium.PremiumInfluencingFactor;
 import com.pla.sharedkernel.identifier.CoverageId;
@@ -35,20 +36,25 @@ public class PremiumService {
 
     private MongoTemplate mongoTemplate;
 
+    private MasterFinder masterFinder;
+
+    private PremiumTemplateParser premiumTemplateParser;
+
     @Autowired
-    public PremiumService(PlanRepository planRepository, MongoTemplate mongoTemplate) {
+    public PremiumService(PlanRepository planRepository, MongoTemplate mongoTemplate, MasterFinder masterFinder, PremiumTemplateParser premiumTemplateParser) {
         this.planRepository = planRepository;
         this.mongoTemplate = mongoTemplate;
+        this.masterFinder = masterFinder;
+        this.premiumTemplateParser = premiumTemplateParser;
     }
 
     public HSSFWorkbook generatePremiumExcelTemplate(PremiumInfluencingFactor[] premiumInfluencingFactors, String planId, String coverageId) throws IOException {
         Plan plan = planRepository.findByPlanId(planId);
-        return new PremiumTemplateExcelGenerator().generatePremiumTemplate(Arrays.asList(premiumInfluencingFactors), plan, new CoverageId(coverageId));
+        return new PremiumTemplateExcelGenerator(masterFinder).generatePremiumTemplate(Arrays.asList(premiumInfluencingFactors), plan, new CoverageId(coverageId));
     }
 
     public boolean validatePremiumTemplateData(HSSFWorkbook hssfWorkbook, PremiumInfluencingFactor[] premiumInfluencingFactors, String planId, String coverageId) throws IOException {
         Plan plan = planRepository.findByPlanId(planId);
-        PremiumTemplateParser premiumTemplateParser = new PremiumTemplateParser();
         List<PremiumInfluencingFactor> premiumInfluencingFactorList = UtilValidator.isNotEmpty(premiumInfluencingFactors) ? Arrays.asList(premiumInfluencingFactors) : new ArrayList<>();
         boolean isValidTemplate = premiumTemplateParser.validatePremiumDataForAGivenPlanAndCoverage(hssfWorkbook, plan, new CoverageId(coverageId), premiumInfluencingFactorList);
         FileOutputStream stream = new FileOutputStream("E:\\pla\\afterParsing.xls");
@@ -58,7 +64,6 @@ public class PremiumService {
     }
 
     public List<Map<Map<PremiumInfluencingFactor, String>, Double>> parsePremiumTemplate(HSSFWorkbook hssfWorkbook, PremiumInfluencingFactor[] premiumInfluencingFactors, String planId, String coverageId) {
-        PremiumTemplateParser premiumTemplateParser = new PremiumTemplateParser();
         List<PremiumInfluencingFactor> premiumInfluencingFactorList = UtilValidator.isNotEmpty(premiumInfluencingFactors) ? Arrays.asList(premiumInfluencingFactors) : new ArrayList<>();
         return premiumTemplateParser.parseAndTransformToPremiumData(hssfWorkbook, premiumInfluencingFactorList);
     }
@@ -66,7 +71,7 @@ public class PremiumService {
     public List<Map> getAllPremium() {
         Query query = new Query();
         query.fields().include("premiumId").include("planId").include("coverageId").include("effectiveFrom").include("validTill").include("premiumFactor").include("premiumRateFrequency");
-        return mongoTemplate.find(query, Map.class,"premium");
+        return mongoTemplate.find(query, Map.class, "premium");
     }
 
 

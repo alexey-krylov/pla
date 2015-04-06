@@ -44,8 +44,14 @@ public class MasterFinder {
 
     public static final String FIND_ENTITY_SEQUENCE_BY_CLASS_TYPE_QUERY = "SELECT sequence_id as sequenceId, sequence_number AS sequenceNumber,sequence_name AS sequenceName,sequence_prefix AS sequencePrefix FROM `entity_sequence` WHERE sequence_name=:sequenceName";
 
-    public static final String FIND_ALL_DOCUMENT_QUERY ="SELECT document_code documentCode,document_name documentName " +
+    public static final String FIND_ALL_DOCUMENT_QUERY = "SELECT document_code documentCode,document_name documentName " +
             " FROM document";
+
+    public static final String FIND_ALL_INDUSTRY_QUERY = "SELECT * FROM industry";
+
+    public static final String FIND_ALL_OCCUPATION_CATEGORY_QUERY = "SELECT * FROM `occuptation_category`";
+
+    public static final String FIND_ALL_DESIGNATION_QUERY = "SELECT * FROM `designation`";
 
     public List<Map<String, Object>> getGeoByGeoType(GeoType geoType) {
         return namedParameterJdbcTemplate.query(FIND_GEO_BY_GEO_TYPE_QUERY, new MapSqlParameterSource().addValue("geoType", geoType.name()), new ColumnMapRowMapper());
@@ -71,4 +77,17 @@ public class MasterFinder {
         return namedParameterJdbcTemplate.query(FIND_ALL_DOCUMENT_QUERY, new ColumnMapRowMapper());
     }
 
+
+    public List<Map<String, Object>> getAllIndustry() {
+        return namedParameterJdbcTemplate.query(FIND_ALL_INDUSTRY_QUERY, new ColumnMapRowMapper());
+    }
+
+    public List<Map<String, Object>> getAllOccupationCategory() {
+        return namedParameterJdbcTemplate.query(FIND_ALL_OCCUPATION_CATEGORY_QUERY, new ColumnMapRowMapper());
+    }
+
+
+    public List<Map<String, Object>> getAllDesignation() {
+        return namedParameterJdbcTemplate.query(FIND_ALL_DESIGNATION_QUERY, new ColumnMapRowMapper());
+    }
 }

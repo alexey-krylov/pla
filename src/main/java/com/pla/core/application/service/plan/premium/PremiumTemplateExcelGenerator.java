@@ -8,6 +8,7 @@ package com.pla.core.application.service.plan.premium;
 
 import com.pla.core.domain.model.plan.Plan;
 import com.pla.core.domain.model.plan.premium.PremiumInfluencingFactor;
+import com.pla.core.query.MasterFinder;
 import com.pla.sharedkernel.identifier.CoverageId;
 import org.apache.poi.hssf.usermodel.*;
 import org.apache.poi.ss.usermodel.Cell;
@@ -28,8 +29,11 @@ public class PremiumTemplateExcelGenerator {
 
     private HSSFSheet premiumSheet;
 
-    public PremiumTemplateExcelGenerator() {
+    private MasterFinder masterFinder;
+
+    public PremiumTemplateExcelGenerator(MasterFinder masterFinder) {
         premiumTemplateWorkbook = new HSSFWorkbook();
+        this.masterFinder = masterFinder;
 
     }
 
@@ -47,7 +51,7 @@ public class PremiumTemplateExcelGenerator {
     private int getTotalNoOfPremiumCombination(List<PremiumInfluencingFactor> premiumInfluencingFactors, CoverageId coverageId, Plan plan) {
         Integer noOfRow = 1;
         for (PremiumInfluencingFactor premiumInfluencingFactor : premiumInfluencingFactors) {
-            Integer lengthOfAllowedValues = premiumInfluencingFactor.getAllowedValues(plan, coverageId).length == 0 ? 1 : premiumInfluencingFactor.getAllowedValues(plan, coverageId).length;
+            Integer lengthOfAllowedValues = premiumInfluencingFactor.getAllowedValues(plan, coverageId,masterFinder).length == 0 ? 1 : premiumInfluencingFactor.getAllowedValues(plan, coverageId,masterFinder).length;
             noOfRow = noOfRow * lengthOfAllowedValues;
         }
         return noOfRow;
@@ -59,7 +63,7 @@ public class PremiumTemplateExcelGenerator {
                 String columnIndex = String.valueOf((char) (65 + cellNumber));
                 PremiumInfluencingFactor premiumInfluencingFactor = premiumInfluencingFactors.get(cellNumber);
                 HSSFSheet hiddenSheetForNamedCell = premiumTemplateWorkbook.createSheet(premiumInfluencingFactor.name());
-                String[] planData = premiumInfluencingFactor.getAllowedValues(plan, coverageId);
+                String[] planData = premiumInfluencingFactor.getAllowedValues(plan, coverageId,masterFinder);
                 createNamedRowWithCell(planData, hiddenSheetForNamedCell, cellNumber);
                 HSSFName namedCell = premiumTemplateWorkbook.createName();
                 namedCell.setNameName(premiumInfluencingFactor.name());
