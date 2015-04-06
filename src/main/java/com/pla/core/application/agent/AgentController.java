@@ -107,7 +107,7 @@ public class AgentController {
     @RequestMapping(value = "/openeditpage", method = RequestMethod.GET)
     public ModelAndView openAgentEditPage() {
         ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("pla/core/agent/editeagent");
+        modelAndView.setViewName("pla/core/agent/createagent");
         return modelAndView;
     }
 
@@ -123,7 +123,7 @@ public class AgentController {
     @RequestMapping(value = "/viewagentdetail", method = RequestMethod.GET)
     public ModelAndView viewAgentDetail(@RequestParam("agentId") String agentId) {
         ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("pla/core/agent/viewagent");
+        modelAndView.setViewName("pla/core/agent/agentDetail");
         Preconditions.checkArgument(UtilValidator.isNotEmpty(agentId));
         Map<String, Object> agentDetail = agentFinder.getAgentById(agentId);
         List<Map<String, Object>> agentPlans = agentFinder.getAllAgentPlan();
@@ -174,6 +174,7 @@ public class AgentController {
     }
 
     @RequestMapping(value = "/getallplan", method = RequestMethod.GET)
+    @ResponseBody
     public List<Map> getAllPlans() {
         return mongoTemplate.findAll(Map.class, "PLAN");
     }
