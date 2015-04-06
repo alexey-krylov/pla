@@ -602,7 +602,7 @@ CREATE TABLE `document` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
-DROP TABLE IF EXISTS `document`;
+DROP TABLE IF EXISTS `industry`;
 CREATE TABLE `industry` (
   `code` varchar(100) NOT NULL,
   `description` varchar(255) DEFAULT NULL,

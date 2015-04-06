@@ -393,6 +393,27 @@ CREATE TABLE `document` (
   PRIMARY KEY (`document_code`)
 );
 
+DROP TABLE IF EXISTS `industry`;
+CREATE TABLE `industry` (
+  `code` varchar(100) NOT NULL,
+  `description` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`code`)
+);
+
+DROP TABLE IF EXISTS `occuptation_category`;
+CREATE TABLE `occuptation_category` (
+  `code` varchar(100) NOT NULL,
+  `description` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`code`)
+);
+
+DROP TABLE IF EXISTS `designation`;
+CREATE TABLE `designation` (
+  `code` varchar(100) NOT NULL,
+  `description` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`code`)
+);
+
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
