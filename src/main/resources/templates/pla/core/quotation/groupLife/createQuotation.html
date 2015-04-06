@@ -13,7 +13,7 @@
 <body class="fuelux container" style="padding-top: 70px;font-size: 12px">
 <div th:include="fragments/common :: bodyHeader" th:remove="tag"/>
 <script>
-    requirejs(['quotation/createQuotation'],function(){
+    requirejs(['quotation/groupLife/createQuotation'],function(){
         angular.bootstrap(document, ['createQuotation']);
     });
 </script>
