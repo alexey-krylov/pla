@@ -24,6 +24,8 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
+import static org.nthdimenzion.utils.UtilValidator.isNotEmpty;
+
 /**
  * @author: Samir
  * @since 1.0 13/03/2015
@@ -76,8 +78,10 @@ public class CreateAgentCommand {
         Set<PlanId> authorizedPlanToSell = agentPlans.stream().map(new TransformAgentPlanToPlanId()).collect(Collectors.toSet());
         createAgentCommand.setAuthorizePlansToSell(authorizedPlanToSell);
         createAgentCommand.setAgentStatus(AgentStatus.valueOf((String) agentDetail.get("agentStatus")));
-        List<PlanDetailDto> planDetailDtos = authorizedPlanToSell.stream().map(new TransformToPlanDetailDto(allMasterPlans)).collect(Collectors.toList());
-        createAgentCommand.setAgentPlanDetails(planDetailDtos);
+        if (isNotEmpty(allMasterPlans)) {
+            List<PlanDetailDto> planDetailDtos = authorizedPlanToSell.stream().map(new TransformToPlanDetailDto(allMasterPlans)).collect(Collectors.toList());
+            createAgentCommand.setAgentPlanDetails(planDetailDtos);
+        }
         return createAgentCommand;
     }
 
