@@ -97,14 +97,18 @@ public class BranchController {
                 LOGGER.debug("*****Command Received*****" + updateBranchManagerCommand);
             }
             try {
-                branchService.updateBranchManager(updateBranchManagerCommand.getBranchCode(), updateBranchManagerCommand.getBranchManagerEmployeeId(), updateBranchManagerCommand.getBranchManagerFirstName(), updateBranchManagerCommand.getBranchBDELastName(), updateBranchManagerCommand.getBranchManagerFromDate());
+                if (updateBranchManagerCommand.isOnlyBranchManager()) {
+                    branchService.updateBranchManager(updateBranchManagerCommand.getBranchCode(), updateBranchManagerCommand.getBranchManagerEmployeeId(), updateBranchManagerCommand.getBranchManagerFirstName(), updateBranchManagerCommand.getBranchBDELastName(), updateBranchManagerCommand.getBranchManagerFromDate());
+                }
 
             } catch (BranchApplicationException e) {
                 LOGGER.error("Error in assigning branch manager", e);
                 return Result.failure("Error in assigning branch manager");
             }
             try {
-                branchService.updateBranchBDE(updateBranchManagerCommand.getBranchCode(), updateBranchManagerCommand.getBranchBDEEmployeeId(), updateBranchManagerCommand.getBranchBDEFirstName(), updateBranchManagerCommand.getBranchBDELastName(), updateBranchManagerCommand.getBranchBDEFromDate());
+                if (updateBranchManagerCommand.isOnlyBde()) {
+                    branchService.updateBranchBDE(updateBranchManagerCommand.getBranchCode(), updateBranchManagerCommand.getBranchBDEEmployeeId(), updateBranchManagerCommand.getBranchBDEFirstName(), updateBranchManagerCommand.getBranchBDELastName(), updateBranchManagerCommand.getBranchBDEFromDate());
+                }
 
             } catch (BranchApplicationException e) {
                 LOGGER.error("Error in assigning branch manager", e);

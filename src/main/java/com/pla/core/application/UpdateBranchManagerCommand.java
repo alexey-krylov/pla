@@ -10,7 +10,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
-import org.hibernate.annotations.Type;
 import org.joda.time.LocalDate;
 
 /**
@@ -32,11 +31,7 @@ public class UpdateBranchManagerCommand {
 
     private String branchManagerLastName;
 
-    @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentLocalDate")
     private LocalDate branchManagerFromDate;
-
-    @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentLocalDate")
-    private LocalDate branchManagerThruDate;
 
     private String branchBDEEmployeeId;
 
@@ -44,9 +39,11 @@ public class UpdateBranchManagerCommand {
 
     private String branchBDELastName;
 
-    @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentLocalDate")
     private LocalDate branchBDEFromDate;
 
+    private boolean onlyBde;
+
+    private boolean onlyBranchManager;
 
 
 }

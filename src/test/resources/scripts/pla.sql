@@ -293,7 +293,6 @@ CREATE TABLE `region_manager_fulfillment` (
   `from_date`  DATE DEFAULT NULL,
   `thru_date`  DATE DEFAULT NULL,
   `employee_id` varchar(255) NULL,
-  PRIMARY KEY (`region_Code`, `employee_id`),
   CONSTRAINT `FK_REGION_CODE_REGION_MANAGER_FULFILLMENT_REGION_CODE` FOREIGN KEY (`region_Code`) REFERENCES `region` (`region_code`)
 )
   ENGINE =InnoDB
@@ -307,7 +306,6 @@ CREATE TABLE `branch_manager_fulfillment` (
   `from_date`   DATE         NOT NULL,
   `thru_date`   DATE DEFAULT NULL,
   `employee_id` VARCHAR(255) NOT NULL,
-  PRIMARY KEY (`branch_code`, `employee_id`),
   CONSTRAINT `FK_BRANCH_CODE_BRANCH_FULFILLMENT` FOREIGN KEY (`branch_code`) REFERENCES `branch` (`branch_code`)
 )
   ENGINE =InnoDB
@@ -321,7 +319,6 @@ CREATE TABLE `branch_bde_fulfillment` (
   `from_date`   date DEFAULT NULL,
   `thru_date`   date DEFAULT NULL,
   `employee_id` varchar(255) NOT NULL,
-  PRIMARY KEY (`branch_code`, `employee_id`),
   CONSTRAINT `FK_BRANCH_CODE_BRANCH_BDE_FULFILLMENT_CODE` FOREIGN KEY (`branch_code`) REFERENCES `branch` (`branch_code`)
 )
   ENGINE =InnoDB
