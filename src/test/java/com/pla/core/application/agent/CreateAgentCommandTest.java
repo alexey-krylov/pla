@@ -9,6 +9,7 @@ package com.pla.core.application.agent;
 import com.github.springtestdbunit.DbUnitTestExecutionListener;
 import com.github.springtestdbunit.annotation.DatabaseOperation;
 import com.github.springtestdbunit.annotation.DatabaseSetup;
+import com.google.common.collect.Lists;
 import com.pla.core.domain.model.agent.AgentStatus;
 import com.pla.core.query.AgentFinder;
 import com.pla.sharedkernel.domain.model.OverrideCommissionApplicable;
@@ -47,7 +48,7 @@ public class CreateAgentCommandTest {
     public void itShouldTransFormToCreateAgentCommand() {
         agentDetail = agentFinder.getAgentById("100011");
         allAgentPlans = agentFinder.getAllAgentPlan();
-        CreateAgentCommand createAgentCommand = CreateAgentCommand.transformToAgentCommand(agentDetail, allAgentPlans);
+        CreateAgentCommand createAgentCommand = CreateAgentCommand.transformToAgentCommand(agentDetail, allAgentPlans, Lists.newArrayList());
         assertEquals("100011", createAgentCommand.getAgentId());
         assertEquals(AgentStatus.ACTIVE, createAgentCommand.getAgentStatus());
         assertEquals(OverrideCommissionApplicable.NO, createAgentCommand.getOverrideCommissionApplicable());
