@@ -1,6 +1,7 @@
 package com.pla.sharedkernel.identifier;
 
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
 import org.bson.types.ObjectId;
 
 import javax.persistence.Embeddable;
@@ -12,6 +13,7 @@ import java.io.Serializable;
  */
 @Embeddable
 @EqualsAndHashCode
+@Getter
 public class PlanId implements Serializable {
 
     private String planId;
