@@ -8,7 +8,7 @@ package com.pla.core.application.service.plan.premium;
 
 import com.pla.core.domain.model.plan.Plan;
 import com.pla.core.repository.PlanRepository;
-import com.pla.sharedkernel.domain.model.PremiumInfluencingFactor;
+import com.pla.core.domain.model.plan.premium.PremiumInfluencingFactor;
 import com.pla.sharedkernel.identifier.CoverageId;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.nthdimenzion.utils.UtilValidator;

@@ -12,7 +12,7 @@ import com.pla.core.application.plan.premium.PremiumTemplateDto;
 import com.pla.core.application.service.plan.premium.PremiumService;
 import com.pla.core.domain.model.plan.Plan;
 import com.pla.core.repository.PlanRepository;
-import com.pla.sharedkernel.domain.model.PremiumInfluencingFactor;
+import com.pla.core.domain.model.plan.premium.PremiumInfluencingFactor;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.poifs.filesystem.POIFSFileSystem;
 import org.axonframework.commandhandling.gateway.CommandGateway;

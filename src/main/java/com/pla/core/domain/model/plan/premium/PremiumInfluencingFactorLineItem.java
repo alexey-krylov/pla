@@ -6,7 +6,6 @@
 
 package com.pla.core.domain.model.plan.premium;
 
-import com.pla.sharedkernel.domain.model.PremiumInfluencingFactor;
 import lombok.*;
 import org.nthdimenzion.ddd.domain.annotations.ValueObject;
 

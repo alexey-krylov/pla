@@ -3,7 +3,7 @@ package com.pla.core.application.plan.premium;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.datatype.joda.deser.LocalDateDeserializer;
 import com.pla.sharedkernel.domain.model.PremiumFactor;
-import com.pla.sharedkernel.domain.model.PremiumInfluencingFactor;
+import com.pla.core.domain.model.plan.premium.PremiumInfluencingFactor;
 import com.pla.sharedkernel.domain.model.PremiumRateFrequency;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

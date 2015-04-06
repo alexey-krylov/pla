@@ -7,7 +7,6 @@
 package com.pla.core.domain.model.plan.premium;
 
 import com.pla.sharedkernel.domain.model.PremiumFactor;
-import com.pla.sharedkernel.domain.model.PremiumInfluencingFactor;
 import com.pla.sharedkernel.domain.model.PremiumRateFrequency;
 import com.pla.sharedkernel.identifier.CoverageId;
 import com.pla.sharedkernel.identifier.PlanId;
