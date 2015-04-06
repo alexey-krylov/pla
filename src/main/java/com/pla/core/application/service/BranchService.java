@@ -30,7 +30,7 @@ public class BranchService {
         JpaRepository<Branch, BranchCode> branchRepository = jpaRepositoryFactory.getCrudRepository(Branch.class);
         BranchCode branchCode = new BranchCode(branchId);
         Branch branch = branchRepository.findOne(branchCode);
-        if (UtilValidator.isEmpty(branchManagerId)) {
+        if ((UtilValidator.isEmpty(branchManagerId)) && (branch != null)) {
             branch = branch.expireBranchManager(branch.getCurrentBranchManager(), fromDate.plusDays(-1));
             branchRepository.save(branch);
             return branch;
@@ -46,7 +46,7 @@ public class BranchService {
         JpaRepository<Branch, BranchCode> branchRepository = jpaRepositoryFactory.getCrudRepository(Branch.class);
         BranchCode branchCode = new BranchCode(branchId);
         Branch branch = branchRepository.findOne(branchCode);
-        if (UtilValidator.isEmpty(branchBDEId)) {
+        if ((UtilValidator.isEmpty(branchBDEId) && (branch != null))) {
             branch = branch.expireBranchBDE(branch.getCurrentBranchBdE(), fromDate.plusDays(-1));
             branchRepository.save(branch);
             return branch;
