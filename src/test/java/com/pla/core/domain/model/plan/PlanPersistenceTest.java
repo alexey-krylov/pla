@@ -20,8 +20,11 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
 
+import java.io.FileNotFoundException;
 import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.HashSet;
@@ -37,6 +40,7 @@ import static com.lordofthejars.nosqlunit.mongodb.MongoDbRule.MongoDbRuleBuilder
 @RunWith(SpringJUnit4ClassRunner.class)
 @ActiveProfiles("mongodb")
 @ContextConfiguration(locations = {"classpath:META-INF/spring/persistence-infrastructure-test-context.xml"})
+@TestExecutionListeners({DependencyInjectionTestExecutionListener.class})
 public class PlanPersistenceTest {
 
 
@@ -87,17 +91,17 @@ public class PlanPersistenceTest {
     }
 
     @Test
-    //@ShouldMatchDataSet(location = "testdata/endtoend/pla/plan.json")
-    public void storePlan() {
+//    @ShouldMatchDataSet(location = "classpath:plan-expected.json")
+    public void storePlan() throws FileNotFoundException {
 
         PlanBuilder builder = Plan.builder();
         builder.withPlanDetail(planDetail);
-        builder.withPlanSumAssured(SumAssuredType.RANGE, new BigDecimal(10000000), new BigDecimal(40000000), 10000, null, 0);
+        builder.withPlanSumAssured(SumAssuredType.RANGE, new BigDecimal(10000000), new BigDecimal(40000000), 100000, null, 0);
         builder.withPremiumTerm(PremiumTermType.SPECIFIED_VALUES,
-                Sets.newHashSet(30, 35, 40, 45, 50, 55, 60), 60);
+                Sets.newHashSet(30, 35, 40, 45, 50, 55, 60, 70, 80), 80);
         builder.withPlanCoverages(Sets.newHashSet(planCoverage));
         builder.withPolicyTerm(PolicyTermType.SPECIFIED_VALUES,
-                Sets.newHashSet(30, 35, 40, 45, 50, 55, 60), 60);
+                Sets.newHashSet(30, 35, 40, 45, 50, 55, 60, 70, 80), 80);
         Plan plan = builder.build(planId);
         springMongoTemplate.save(plan);
 

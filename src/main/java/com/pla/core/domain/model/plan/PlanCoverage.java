@@ -1,9 +1,7 @@
 package com.pla.core.domain.model.plan;
 
-import com.pla.sharedkernel.domain.model.CoverageCover;
-import com.pla.sharedkernel.domain.model.CoverageTermType;
-import com.pla.sharedkernel.domain.model.CoverageType;
-import com.pla.sharedkernel.domain.model.MaturityAmount;
+import com.google.common.collect.Lists;
+import com.pla.sharedkernel.domain.model.*;
 import com.pla.sharedkernel.identifier.CoverageId;
 import lombok.AccessLevel;
 import lombok.EqualsAndHashCode;
@@ -11,7 +9,9 @@ import lombok.Getter;
 import lombok.ToString;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import static com.google.common.base.Preconditions.checkArgument;
@@ -35,7 +35,7 @@ public class PlanCoverage {
     private int minAge;
     private int maxAge;
     private Boolean taxApplicable;
-    private SumAssured sumAssured;
+    private SumAssured coverageSumAssured;
     private Term coverageTerm;
     private CoverageTermType coverageTermType;
     private Set<MaturityAmount> maturityAmounts = new HashSet<>();
@@ -75,7 +75,7 @@ public class PlanCoverage {
         planCoverageBenefits = new HashSet<PlanCoverageBenefit>();
         this.coverageTerm = builder.coverageTerm;
         this.deductibleType = builder.deductibleType;
-        this.sumAssured = builder.sumAssured;
+        this.coverageSumAssured = builder.sumAssured;
         this.maturityAmounts = builder.maturityAmounts;
         this.coverageTermType = builder.coverageTermType;
         this.planCoverageBenefits = builder.planCoverageBenefits;
@@ -88,4 +88,43 @@ public class PlanCoverage {
     public void replacePlanCoverageBenefits(Set<PlanCoverageBenefit> planCoverageBenefits) {
         this.planCoverageBenefits = planCoverageBenefits;
     }
+
+
+    public List<BigDecimal> getAllowedCoverageSumAssuredValues() {
+        List<BigDecimal> allowedValues = Lists.newArrayList();
+        if (SumAssuredType.SPECIFIED_VALUES.equals(this.coverageSumAssured.getSumAssuredType())) {
+            allowedValues.addAll(this.coverageSumAssured.getSumAssuredValue());
+            return allowedValues;
+        } else if (SumAssuredType.RANGE.equals(this.coverageSumAssured.getSumAssuredType())) {
+            BigDecimal minimumSumAssuredValue = this.coverageSumAssured.getMinSumInsured();
+            BigDecimal maximumSumAssuredValue = this.coverageSumAssured.getMaxSumInsured();
+            while (minimumSumAssuredValue.compareTo(maximumSumAssuredValue) == -1) {
+                allowedValues.add(minimumSumAssuredValue);
+                minimumSumAssuredValue = minimumSumAssuredValue.add(new BigDecimal(this.coverageSumAssured.getMultiplesOf()));
+            }
+            allowedValues.add(this.coverageSumAssured.getMaxSumInsured());
+        }
+        return allowedValues;
+    }
+
+    public Set<Integer> getAllowedCoverageTerm() {
+        if (CoverageTermType.SPECIFIED_VALUES.equals(this.coverageTermType)) {
+            return this.coverageTerm.getValidTerms();
+        } else if (CoverageTermType.POLICY_TERM.equals(this.coverageTermType)) {
+            return null;
+        }
+        return this.coverageTerm.getMaturityAges();
+    }
+
+    public List<Integer> getAllowedAges() {
+        List<Integer> allowedAges = new ArrayList<>();
+        int maxAge = this.maxAge;
+        int minAge = this.minAge;
+        while (minAge <= maxAge) {
+            allowedAges.add(minAge);
+            minAge = minAge + 1;
+        }
+        return allowedAges;
+    }
+
 }

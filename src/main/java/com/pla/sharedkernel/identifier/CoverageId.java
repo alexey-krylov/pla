@@ -2,6 +2,7 @@ package com.pla.sharedkernel.identifier;
 
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.Embeddable;
@@ -15,6 +16,7 @@ import java.io.Serializable;
 @EqualsAndHashCode(of = "coverageId")
 @Embeddable
 @NoArgsConstructor
+@Getter
 public class CoverageId implements Serializable {
 
     private String coverageId;

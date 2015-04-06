@@ -1,0 +1,77 @@
+{
+  "_id": {"$oid": "551555ca1778fdbc99004b47"},
+  "_class": "com.pla.core.domain.model.plan.Plan",
+  "planId": {"planId": "551555c91778fdbc99004b46"},
+  "planDetail": {
+    "planName": "Plan 1",
+    "planCode": "0001900",
+    "launchDate": {"$date": 1428258600000},
+    "withdrawalDate": {"$date": 1429986600000},
+    "freeLookPeriod": 15,
+    "minEntryAge": 21,
+    "maxEntryAge": 60,
+    "taxApplicable": false,
+    "surrenderAfter": 5,
+    "applicableRelationships": [
+      "BROTHER",
+      "DAUGHTER"
+    ],
+    "endorsementTypes": [
+      "NAME",
+      "ADDRESS"
+    ],
+    "lineOfBusinessId": "INDIVIDUAL_INSURANCE",
+    "planType": "NON_INVESTMENT",
+    "clientType": "INDIVIDUAL"
+  },
+  "specification": {},
+  "sumAssured": {
+    "sumAssuredValue": [],
+    "percentage": 0,
+    "minSumInsured": "10000000",
+    "maxSumInsured": "40000000",
+    "multiplesOf": 10000,
+    "sumAssuredType": "RANGE"
+  },
+  "policyTermType": "SPECIFIED_VALUES",
+  "premiumTermType": "SPECIFIED_VALUES",
+  "premiumTerm": {
+    "validTerms": [
+      50,
+      35,
+      55,
+      40,
+      60,
+      45,
+      30
+    ],
+    "maturityAges": [],
+    "maxMaturityAge": 60
+  },
+  "policyTerm": {
+    "validTerms": [
+      50,
+      35,
+      55,
+      40,
+      60,
+      45,
+      30
+    ],
+    "maturityAges": [],
+    "maxMaturityAge": 60
+  },
+  "coverages": [
+    {
+      "coverageId": {"coverageId": "1"},
+      "coverageCover": "ACCELERATED",
+      "coverageType": "BASE",
+      "waitingPeriod": 5,
+      "minAge": 21,
+      "maxAge": 45,
+      "taxApplicable": false,
+      "maturityAmounts": [],
+      "planCoverageBenefits": []
+    }
+  ]
+}

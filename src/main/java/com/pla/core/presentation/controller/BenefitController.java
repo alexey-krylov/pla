@@ -118,7 +118,7 @@ public class BenefitController {
             commandGateway.sendAndWait(inactivateBenefitCommand);
         } catch (BenefitApplicationException e) {
             LOGGER.error("Error in inactivating benefit", e);
-            return Result.failure("Error in inactivating benefit");
+            return Result.failure(e.getMessage());
         } catch (Exception e) {
             LOGGER.error("Error in inactivating benefit", e);
             return Result.failure("Error in inactivating benefit");

@@ -76,4 +76,5 @@ public class SumAssured {
         this.maxLimit = maxLimit;
         this.sumAssuredType = SumAssuredType.DERIVED;
     }
+
 }

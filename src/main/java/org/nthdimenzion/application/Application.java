@@ -13,6 +13,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.orm.jpa.EntityScan;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.ImportResource;
+import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
 
 import javax.sql.DataSource;
 
@@ -25,6 +26,7 @@ import javax.sql.DataSource;
 @EntityScan(basePackages = {"com.pla", "org.nthdimenzion",
         "org.axonframework.saga", "org.axonframework.eventstore.jpa"})
 @ImportResource(value = {"classpath:META-INF/spring/cqrs-infrastructure-context.xml"})
+@EnableMongoRepositories(basePackages = {"com.pla"})
 public class Application {
 
     @Autowired
