@@ -44,6 +44,16 @@
     </style>
     <script>
         define('basic',['jquery','bootstrap','datatables'],function($,bootstrap,datatables){
+            $(".dropdown-menu a").click(function(event){
+                event.preventDefault();
+                var windowHref = window.location.href;
+                var clickedHref = $(this).prop('href')
+                if(windowHref===clickedHref){
+                    window.location.reload();
+                }else{
+                    window.location.href = clickedHref;
+                }
+            })
         });
         require(['basic']);
         requirejs.config({
