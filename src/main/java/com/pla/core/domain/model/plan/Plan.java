@@ -206,14 +206,6 @@ public class Plan {
         return validAges.contains(age);
     }
 
-    public int getTotalNoOfPremiumCombination(List<PremiumInfluencingFactor> premiumInfluencingFactors, CoverageId coverageId) {
-        Integer noOfRow = 1;
-        for (PremiumInfluencingFactor premiumInfluencingFactor : premiumInfluencingFactors) {
-            Integer lengthOfAllowedValues = premiumInfluencingFactor.getAllowedValues(this, coverageId).length == 0 ? 1 : premiumInfluencingFactor.getAllowedValues(this, coverageId).length;
-            noOfRow = noOfRow * lengthOfAllowedValues;
-        }
-        return noOfRow;
-    }
 
     private PlanCoverage getPlanCoverageFor(CoverageId coverageId) {
         List<PlanCoverage> planCoverages = this.coverages.stream().filter(new Predicate<PlanCoverage>() {

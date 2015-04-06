@@ -42,7 +42,7 @@ public enum PremiumInfluencingFactor {
 
         @Override
         public boolean isValidValue(Plan plan, CoverageId coverageId, String value) {
-            return isEmpty(value) ? false : coverageId == null ? plan.isValidSumAssured(BigDecimal.valueOf(Double.valueOf(value.trim()).longValue())) : plan.isValidCoverageSumAssured(BigDecimal.valueOf(Double.valueOf(value.trim()).longValue()), coverageId);
+            return isEmpty(value) ? false : coverageId.getCoverageId() == null ? plan.isValidSumAssured(BigDecimal.valueOf(Double.valueOf(value.trim()).longValue())) : plan.isValidCoverageSumAssured(BigDecimal.valueOf(Double.valueOf(value.trim()).longValue()), coverageId);
         }
 
         @Override
@@ -69,7 +69,7 @@ public enum PremiumInfluencingFactor {
 
         @Override
         public boolean isValidValue(Plan plan, CoverageId coverageId, String value) {
-            return isEmpty(value) ? false : coverageId == null ? plan.isValidAge(Integer.valueOf(value.trim())) : plan.isValidCoverageAge(Integer.valueOf(value.trim()), coverageId);
+            return isEmpty(value) ? false : coverageId.getCoverageId() == null ? plan.isValidAge(Integer.valueOf(value.trim())) : plan.isValidCoverageAge(Integer.valueOf(value.trim()), coverageId);
         }
 
         @Override
@@ -95,7 +95,7 @@ public enum PremiumInfluencingFactor {
 
         @Override
         public boolean isValidValue(Plan plan, CoverageId coverageId, String value) {
-            return isEmpty(value) ? false : coverageId == null ? plan.isValidPolicyTerm(Integer.valueOf(value.trim())) : plan.isValidCoverageTerm(Integer.valueOf(value.trim()), coverageId);
+            return isEmpty(value) ? false : coverageId.getCoverageId() == null ? plan.isValidPolicyTerm(Integer.valueOf(value.trim())) : plan.isValidCoverageTerm(Integer.valueOf(value.trim()), coverageId);
         }
 
         @Override
