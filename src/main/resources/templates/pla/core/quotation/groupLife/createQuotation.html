@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" lang="en">
+<head th:include="fragments/common :: headTag">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <!--/*-->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css">
+    <link href="https://www.fuelcdn.com/fuelux/3.6.3/css/fuelux.min.css" rel="stylesheet">
+    <link href="../../../../../static/css/common.css" rel="stylesheet">
+    <script data-main="../../../../../static/js/requireConfig" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.1.16/require.min.js"></script>
+    <!--*/-->
+</head>
+<body class="fuelux container" style="padding-top: 70px;font-size: 12px">
+<div th:include="fragments/common :: bodyHeader" th:remove="tag"/>
+<script>
+    requirejs(['quotation/createQuotation'],function(){
+        angular.bootstrap(document, ['createQuotation']);
+    });
+</script>
+<script type="text/ng-template" id="createQuotationTpl.html">
+    <div class="wizard"  id="quotationWizard"  style="overflow: visible">
+        <ul class="steps" style="margin-left: 0">
+            <li data-step="1" class="active"><span class="badge badge-info">1</span>Basic Details<span class="chevron"></span></li>
+            <li data-step="2"><span class="badge">2</span>Proposer Details<span class="chevron"></span></li>
+            <li data-step="3"><span class="badge">3</span>Plan Details<span class="chevron"></span></li>
+            <li data-step="4"><span class="badge">4</span>Premium Details<span class="chevron"></span></li>
+        </ul>
+        <div class="actions">
+            <span style="font-weight: bolder;margin-right: 15px;color: #999">Quotation ID :<span style="font-size: 13px;color: #3a87ad;">5100000010315 - 01</span></span>
+            <button type="button" class="btn btn-default btn-prev" disabled="disabled"><span class="glyphicon glyphicon-arrow-left"></span>Prev</button>
+            <button type="button" class="btn btn-default btn-next">Next<span class="glyphicon glyphicon-arrow-right"></span></button>
+        </div>
+        <div class="step-content">
+            <div class="step-pane active" data-step="1">
+                <div class="bs-callout  bs-callout-info" style="margin-bottom: 7px">
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <div class="form-group">
+                                <label>Agent ID</label>
+                                <input type="text" class="form-control input-sm" name="agentId">
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="form-group">
+                                <label>Proposer Name</label>
+                                <input type="text" class="form-control input-sm" name="agentId">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <div class="form-group">
+                                <label >Agent Name</label>
+                                <input type="text" class="form-control input-sm" ng-readonly="true">
+                            </div>
+                            <div class="form-group">
+                                <label >Branch Name</label>
+                                <input type="text" class="form-control input-sm" ng-readonly="true">
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="form-group">
+                                <label >Team Name</label>
+                                <input type="text" class="form-control input-sm" ng-readonly="true">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-6">
+                        <button type="button" class="btn btn-default btn-sm">Cancel</button>
+                    </div>
+                    <div class="col-sm-6">
+                        <button type="button" class="btn btn-default btn-sm" style="float: right">Save</button>
+                    </div>
+                </div>
+            </div>
+            <div class="step-pane" data-step="2">
+                <accordion close-others="true">
+                    <accordion-group  is-open="accordionStatus.proposer">
+                        <accordion-heading>
+                            Proposer Details <i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': accordionStatus.proposer, 'glyphicon-chevron-right': !accordionStatus.proposer}"></i>
+                        </accordion-heading>
+                        <div class="col-lg-6">
+                            <div class="form-group">
+                                <label >Proposer Name</label>
+                                <input type="text" class="form-control input-sm" ng-maxlength="100" ng-required="true">
+                            </div>
+                            <div class="form-group">
+                                <label >Address Line 1</label>
+                                <input type="text" class="form-control input-sm" ng-required="true" ng-maxlength="100">
+                            </div>
+                            <div class="form-group">
+                                <label >Postal Code</label>
+                                <select class="form-control input-sm" ng-required="true">
+                                    <option>12345</option>
+                                    <option>67890</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label >Town</label>
+                                <select class="form-control input-sm" ng-required="true">
+                                    <option>Zambia</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label >Work Phone</label>
+                                <input type="number" class="form-control input-sm" ng-required="true" ng-maxlength="13">
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="form-group">
+                                <label>Proposer Code</label>
+                                <input type="text" class="form-control input-sm" ng-readonly="true">
+                            </div>
+                            <div class="form-group">
+                                <label >Address LIne 2</label>
+                                <input type="text" class="form-control input-sm" ng-maxlength="100">
+                            </div>
+                            <div class="form-group">
+                                <label >Province</label>
+                                <select class="form-control input-sm" ng-required="true">
+                                    <option>Lusaka</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label >Email</label>
+                                <input type="email" class="form-control input-sm" ng-required="true" ng-keydown="openNewTab($event)">
+                            </div>
+                        </div>
+                    </accordion-group>
+                    <accordion-group  is-open="accordionStatus.contact">
+                        <accordion-heading>
+                            Contact Details <i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': accordionStatus.contact, 'glyphicon-chevron-right': !accordionStatus.contact}"></i>
+                        </accordion-heading>
+                        <div class="col-lg-6">
+                            <div class="form-group">
+                                <label >Contact Person Details</label>
+                                <input type="text" class="form-control input-sm" ng-maxlength="100" ng-required="true">
+                            </div>
+                            <div class="form-group">
+                                <label >Mobile Number</label>
+                                <input type="number" class="form-control input-sm" ng-maxlength="13" ng-required="true">
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="form-group">
+                                <label >Email</label>
+                                <input type="email" class="form-control input-sm"  ng-required="true">
+                            </div>
+                            <div class="form-group">
+                                <label >Work Phone</label>
+                                <input type="number" class="form-control input-sm" ng-maxlength="13" ng-required="true">
+                            </div>
+                        </div>
+                    </accordion-group>
+                </accordion>
+                <div class="row">
+                    <div class="col-sm-6">
+                        <button type="button" class="btn btn-default btn-sm">Cancel</button>
+                    </div>
+                    <div class="col-sm-6">
+                        <button type="button" class="btn btn-default btn-sm" style="float: right">Save</button>
+                    </div>
+                </div>
+            </div>
+            <div class="step-pane" data-step="3">
+                <div class="row ">
+                    <div class="col-lg-3 col-lg-offset-3">
+                        <div class="checkbox">
+                            <label class="checkbox-custom" data-initialize="checkbox">
+                                <input class="sr-only" type="checkbox" value="">
+                                <span class="checkbox-label" style="position: relative;top:5px;font-weight: bold;color:#000000">Same Plan for all Relationships</span>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="col-lg-3">
+                        <div class="checkbox" style="display: inline-block;">
+                            <label class="checkbox-custom" data-initialize="checkbox">
+                                <input class="sr-only" type="checkbox" value="">
+                                <span class="checkbox-label" style="position: relative;top:5px;font-weight: bold;color:#000000">Same Plan for all Categories</span>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="col-lg-3">
+                        <button type="button" class="btn btn-default pull-right" data-animation="am-flip-x" bs-dropdown="dropdown">Downloads
+                        </button>
+                    </div>
+                </div>
+                <div class="row" style="margin-top: 5px">
+                    <div class="col-lg-6 col-lg-offset-3">
+                        <div class="form-group">
+                            <input type="text" class="form-control input-sm" ng-model="fileName" style="width: 62%;display: inline-block" ng-readonly="true">
+                            <button type="file" class="btn btn-default btn-sm" ng-file-select ng-model="fileSaved">Browse</button>
+                            <button type="file" class="btn btn-default btn-sm" ng-click="upload()">Upload</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-6">
+                        <button type="button" class="btn btn-default btn-sm">Cancel</button>
+                    </div>
+                    <div class="col-sm-6">
+                        <button type="button" class="btn btn-default btn-sm" style="float: right">Save</button>
+                    </div>
+                </div>
+            </div>
+            <div class="step-pane" data-step="4">
+                <div class="col-lg-9">
+                    <div class="bs-callout  bs-callout-info">
+                        <div class="row">
+                            <div class="col-lg-6">
+                                <div class="form-group">
+                                    <label >Add-On Benefits</label>
+                                    <input class="form-control input-sm"  ng-required="true"/>
+                                </div>
+                                <div class="form-group">
+                                    <label >Profit and Solvency Loading</label>
+                                    <input class="form-control input-sm"  ng-required="true"/>
+                                </div>
+                                <div class="form-group">
+                                    <label >Discounts</label>
+                                    <input class="form-control input-sm"  ng-required="true"/>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-6">
+                                <div class="form-group">
+                                    <label >VAT</label>
+                                    <input class="form-control input-sm"  ng-required="true"/>
+                                </div>
+                            </div>
+                            <div class="col-lg-6">
+                                <div class="form-group">
+                                    <label >Policy Term Value (Days)</label>
+                                    <input class="form-control input-sm"  ng-required="true"/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    <div class="form-group">
+                        <label >Annual Payment</label>
+                        <input class="form-control input-sm"  ng-required="true"/>
+                    </div>
+                    <div class="form-group">
+                        <label >Semi-Annual Payment</label>
+                        <input class="form-control input-sm"  ng-required="true"/>
+                    </div>
+                    <div class="form-group">
+                        <label >Quarterly Payment</label>
+                        <input class="form-control input-sm"  ng-required="true"/>
+                    </div>
+                    <div class="form-group">
+                        <label >Monthly Payment</label>
+                        <input class="form-control input-sm"  ng-required="true"/>
+                    </div>
+                </div>
+
+                <div class="row" style="margin-top: 5px">
+                    <div class="col-lg-3 col-lg-offset-9" style="padding-right: 27px;padding-left: 6px">
+                        <div class="form-group">
+                            <label >Total Premium payable</label>
+                            <input class="form-control input-sm"  ng-required="true"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-6">
+                        <button type="button" class="btn btn-default btn-sm">Cancel</button>
+                    </div>
+                    <div class="col-sm-6">
+                        <button type="button" class="btn btn-default btn-sm" style="float: right">Submit</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <style>
+        .bs-callout-info {
+            border-left-color: #1b809e!important;
+        }
+
+        .bs-callout {
+            padding: 20px;
+            border: 1px solid #E4E2E2;
+            border-left-width: 5px;
+            border-radius: 3px;
+        }
+        .fuelux .checkbox-custom:before {
+            font-family: "Glyphicons Halflings" !important;
+            font-style: normal !important;
+            font-weight: normal !important;
+            font-variant: normal !important;
+            text-transform: none !important;
+            line-height: 1;
+            speak: none;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            border: 1px solid #adadad;
+            border-radius: 4px;
+            color: #fff;
+            content: " ";
+            font-size: 12px;
+            height: 18px;
+            left: 0;
+            padding: 1px 0 0 1px;
+            position: absolute;
+            top: 3px;
+            width: 18px;
+        }
+
+        .form-group{
+            margin-bottom: 5px!important;
+        }
+        .form-group > label{
+            margin-bottom: 0px!important;
+        }
+        #createAgentForm input.ng-invalid.ng-touched {
+            border-color: #FA787E;
+        }
+        #createAgentForm button.ng-invalid.ng-touched {
+            border-color: #FA787E;
+        }
+        #createAgentForm select.ng-invalid.ng-touched {
+            border-color: #FA787E;
+        }
+        #createAgentForm.ng-submitted input.ng-invalid{
+            border-color: #FA787E;
+        }
+        #createAgentForm.ng-submitted button.ng-invalid{
+            border-color: #FA787E;
+        }
+        #createAgentForm.ng-submitted select.ng-invalid{
+            border-color: #FA787E;
+        }
+        .red-text-color{
+            color: #ce4844 !important;
+        }
+        .background-red{
+            background-color: #ce4844!important;
+        }
+    </style>
+</script>
+<div ng-view></div>
+<footer class="footer" th:include="fragments/common :: footer">
+</footer>
+</body>
+</html>

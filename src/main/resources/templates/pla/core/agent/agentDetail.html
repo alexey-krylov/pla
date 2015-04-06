@@ -64,7 +64,7 @@
                         <div class="form-group">
                             <label class="control-label">Authorized to Sell</label>
                             <select name="channelType" class="form-control input-sm">
-                                <option th:each="authorizePlansToS :${agentDetail.authorizePlansToSell}" th:text="${authorizePlansToS}"></option>
+                                <option th:each="authorizePlansToS :${agentDetail.agentPlanDetails}" th:text="${authorizePlansToS.planName}"></option>
                             </select>
                         </div>
                         <div class="form-group">
