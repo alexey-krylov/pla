@@ -44,11 +44,26 @@ App.controller('AssignTeamController',['$scope','$http','$window','$location','$
            }
      }
 
+       $scope.$watch( 'assignTeam.employeeId',function(newValue, oldValue){
+         if(newValue){
+            $http.get('/pla/core/team/getteamleaders').success(function(data){
+               $scope.teamLeaders=data;
+               var empId = $scope.assignTeam.employeeId;
+               if(empId){
+                 $scope.newTeamLeader =_.findWhere($scope.teamLeaders,{employeeId:empId});
+                 $scope.newTeamLeader =_.findWhere($scope.teamLeaders,{employeeId:empId});
+                 $scope.assignTeam.firstName=$scope.newTeamLeader.firstName;
+                 $scope.assignTeam.lastName=$scope.newTeamLeader.lastName;
+               }
+            });
+          }
+       });
       $scope.submitAssignTeam = function(){
           if (!moment($scope.assignTeam.teamLeaderFrom,'DD/MM/YYYY').isValid()) {
                    		$scope.newDateField.fromDate = moment($scope.assignTeam.teamLeaderFrom).format("DD/MM/YYYY");
                    		$scope.assignTeam.fromDate=$scope.newDateField.fromDate ;
           }
+
         $http.post('/pla/core/team/assign', $scope.assignTeam).success(function(data){
              if(data.status==200){
                   $scope.alert = {title:'Success Message! ', content:data.message, type: 'success'};
@@ -74,8 +89,5 @@ App.controller('AssignTeamController',['$scope','$http','$window','$location','$
         $scope.assignTeam.employeeId='';
         $scope.assignTeam.firstName='';
         $scope.assignTeam.lastName='';
-
-
-
-     }
+    }
 }]);
