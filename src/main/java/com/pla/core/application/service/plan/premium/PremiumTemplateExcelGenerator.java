@@ -7,7 +7,7 @@
 package com.pla.core.application.service.plan.premium;
 
 import com.pla.core.domain.model.plan.Plan;
-import com.pla.sharedkernel.domain.model.PremiumInfluencingFactor;
+import com.pla.core.domain.model.plan.premium.PremiumInfluencingFactor;
 import com.pla.sharedkernel.identifier.CoverageId;
 import org.apache.poi.hssf.usermodel.*;
 import org.apache.poi.ss.usermodel.Cell;
@@ -34,7 +34,7 @@ public class PremiumTemplateExcelGenerator {
     }
 
     public HSSFWorkbook generatePremiumTemplate(List<PremiumInfluencingFactor> premiumInfluencingFactors, Plan plan, CoverageId coverageId) throws IOException {
-        int noOfExcelRow = plan.getTotalNoOfPremiumCombination(premiumInfluencingFactors, coverageId);
+        int noOfExcelRow = getTotalNoOfPremiumCombination(premiumInfluencingFactors, coverageId, plan);
         premiumSheet = premiumTemplateWorkbook.createSheet(plan.getPlanDetail().getPlanName());
         HSSFRow headerRow = createHeaderRowWithCellData(0, convertToStringArray(premiumInfluencingFactors));
         HSSFCell premiumCell = headerRow.createCell(premiumInfluencingFactors.size());
@@ -42,6 +42,15 @@ public class PremiumTemplateExcelGenerator {
         premiumCell.setCellValue(AppConstants.PREMIUM_CELL_HEADER_NAME);
         createRowWithDvConstraintCellData(noOfExcelRow, premiumInfluencingFactors, plan, coverageId);
         return premiumTemplateWorkbook;
+    }
+
+    private int getTotalNoOfPremiumCombination(List<PremiumInfluencingFactor> premiumInfluencingFactors, CoverageId coverageId, Plan plan) {
+        Integer noOfRow = 1;
+        for (PremiumInfluencingFactor premiumInfluencingFactor : premiumInfluencingFactors) {
+            Integer lengthOfAllowedValues = premiumInfluencingFactor.getAllowedValues(plan, coverageId).length == 0 ? 1 : premiumInfluencingFactor.getAllowedValues(plan, coverageId).length;
+            noOfRow = noOfRow * lengthOfAllowedValues;
+        }
+        return noOfRow;
     }
 
     private void createRowWithDvConstraintCellData(int lastRowNumber, List<PremiumInfluencingFactor> premiumInfluencingFactors, Plan plan, CoverageId coverageId) {

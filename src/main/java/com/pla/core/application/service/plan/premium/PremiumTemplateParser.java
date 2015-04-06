@@ -10,7 +10,7 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.pla.core.application.exception.PremiumTemplateParseException;
 import com.pla.core.domain.model.plan.Plan;
-import com.pla.sharedkernel.domain.model.PremiumInfluencingFactor;
+import com.pla.core.domain.model.plan.premium.PremiumInfluencingFactor;
 import com.pla.sharedkernel.identifier.CoverageId;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
@@ -44,7 +44,7 @@ public class PremiumTemplateParser {
         if (!isValidHeader(headerRow, premiumInfluencingFactors)) {
             raiseHeaderInvalidException();
         }
-        int noOfExpectedPremiumRow = plan.getTotalNoOfPremiumCombination(premiumInfluencingFactors, coverageId);
+        int noOfExpectedPremiumRow = getTotalNoOfPremiumCombination(premiumInfluencingFactors, coverageId, plan);
         int noOfRowNonEmptyRow = getNoOfNonEmptyRow(premiumSheet);
         if (noOfRowNonEmptyRow != noOfExpectedPremiumRow) {
             raiseNumberRowMismatchException(noOfExpectedPremiumRow, noOfRowNonEmptyRow);
@@ -115,7 +115,7 @@ public class PremiumTemplateParser {
         }).collect(Collectors.toList());
         String duplicateRows = "";
         for (Row duplicationRow : duplicationRows) {
-            duplicateRows = duplicateRows + duplicationRow.getRowNum() + ",";
+            duplicateRows = duplicateRows + (duplicationRow.getRowNum() + 1) + ",";
         }
         return duplicateRows;
     }
@@ -141,7 +141,8 @@ public class PremiumTemplateParser {
     }
 
     private boolean areAllCellContainsUniqueValue(List<Cell> firstRowCells, List<Cell> secondRowCells, int premiumCellNumber, int noOfCell) {
-        boolean allHasUniqueValue = true;
+        boolean allHasUniqueValue = false;
+        int noOfCellHavingSameValue = 0;
         for (int count = 0; count < noOfCell; count++) {
             if (count != premiumCellNumber) {
                 Cell firstRowCell = firstRowCells.get(count);
@@ -154,8 +155,11 @@ public class PremiumTemplateParser {
                     }
                 }
             }
+            if (allHasUniqueValue) {
+                noOfCellHavingSameValue = noOfCellHavingSameValue + 1;
+            }
         }
-        return allHasUniqueValue;
+        return noOfCell == noOfCellHavingSameValue;
     }
 
     private Integer getNoOfNonEmptyRow(HSSFSheet hssfSheet) {
@@ -195,7 +199,18 @@ public class PremiumTemplateParser {
         List<String> influencingFactorsPresentInExcel = cells.stream().map(cell -> cell.getStringCellValue()).collect(Collectors.toList());
         influencingFactorsPresentInExcel.remove(AppConstants.PREMIUM_CELL_HEADER_NAME);
         List<String> transformedInfluencingFactors = premiumInfluencingFactors.stream().map(premiumInfluencingFactor -> premiumInfluencingFactor.getDescription()).collect(Collectors.toList());
-        return transformedInfluencingFactors.equals(influencingFactorsPresentInExcel);
+        return isTemplateContainsSameInfluencingFactor(transformedInfluencingFactors, influencingFactorsPresentInExcel);
+    }
+
+    private boolean isTemplateContainsSameInfluencingFactor(List<String> selectedInfluencingFactors, List<String> influencingFactorsInHeader) {
+        boolean containsHeader = true;
+        for (String influencingFactorInHeader : influencingFactorsInHeader) {
+            if (!selectedInfluencingFactors.contains(influencingFactorInHeader)) {
+                containsHeader = false;
+                break;
+            }
+        }
+        return containsHeader;
     }
 
     private Map<PremiumInfluencingFactor, Integer> buildInfluencingFactorAndCellIndexMap(Row headerRow, List<PremiumInfluencingFactor> premiumInfluencingFactors) {
@@ -238,6 +253,9 @@ public class PremiumTemplateParser {
             for (PremiumInfluencingFactor premiumInfluencingFactor : premiumInfluencingFactors) {
                 int cellNumber = influencingFactorCellIndexMap.get(premiumInfluencingFactor);
                 Cell cell = dataRow.getCell(cellNumber);
+                if (cell == null) {
+                    raiseNotValidTemplateException();
+                }
                 String cellValue = Cell.CELL_TYPE_NUMERIC == cell.getCellType() ? ((Double) cell.getNumericCellValue()).toString() : cell.getStringCellValue();
                 influencingFactorValueMap.put(premiumInfluencingFactor, cellValue);
             }
@@ -248,4 +266,12 @@ public class PremiumTemplateParser {
         return premiumInfluencingFactorLineItem;
     }
 
+    private int getTotalNoOfPremiumCombination(List<PremiumInfluencingFactor> premiumInfluencingFactors, CoverageId coverageId, Plan plan) {
+        Integer noOfRow = 1;
+        for (PremiumInfluencingFactor premiumInfluencingFactor : premiumInfluencingFactors) {
+            Integer lengthOfAllowedValues = premiumInfluencingFactor.getAllowedValues(plan, coverageId).length == 0 ? 1 : premiumInfluencingFactor.getAllowedValues(plan, coverageId).length;
+            noOfRow = noOfRow * lengthOfAllowedValues;
+        }
+        return noOfRow;
+    }
 }

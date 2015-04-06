@@ -29,4 +29,7 @@ public class PremiumTemplateParseException extends RuntimeException {
         throw new PremiumTemplateParseException("Not a valid premium template as it contains empty row");
     }
 
+    public static void raiseNotValidTemplateException() {
+        throw new PremiumTemplateParseException("Not a valid premium template");
+    }
 }

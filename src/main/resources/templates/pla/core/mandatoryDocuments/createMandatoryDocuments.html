@@ -1,13 +1,20 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
-      lang="en" ng-app="AngularApp">
+      lang="en">
 <head th:include="fragments/common :: headTag">
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
 </head>
 <body style="padding-top: 70px;" >
 <div th:include="fragments/common :: bodyHeader" th:remove="tag"/>
+<script>
+   requirejs(['main'],function(){
+         require(['/pla/js/mandatoryDocuments/createMandatoryDocument.js'],function(){
+            angular.bootstrap(document, ['createMandatoryDocument']);
+         });
+   });
+</script>
 
-<div class="container" style="padding-top: 0px!important;" ng-Controller="CreateMandatoryDocumentsController">
+<div class="container ng-cloak" style="padding-top: 0px!important;" ng-Controller="CreateMandatoryDocumentController">
     <div class="row">
         <div class="col-lg-12" >
             <div class="panel panel-primary">
@@ -17,23 +24,22 @@
                         </span></div>
                     </div>
                 </div>
-                <div class="panel-body" style="padding-top:5px">
+                <div class="panel-body ng-cloak" style="padding-top:5px">
                     <form  novalidate="true" class="css-form">
-
+                        <notification ></notification>
                         <div class="row">
                             <div class="form-group col-md-6 required">
                                 <label class="control-label">Defined For</label>
                                 <select class="form-control input-sm" id="definedFor" ng-required="true" ng-model="createMandatoryDocument.definedFor" ng-change="getDefinedValue(createMandatoryDocument.definedFor)">
                                     <option value="">Select Defined For</option>
-                                    <option value="Product">Product</option>
+                                    <option value="Plan">Plan</option>
                                     <option value="Optional Coverage">Optional Coverage</option>
                                 </select>
 
                             </div>
-                            <div class="form-group col-md-6 required" ng-show="showProduct">
+                            <div class="form-group col-md-6 required" ng-show="showPlan">
                                 <label class="control-label">Product Name</label>
-
-                                <select class="form-control input-sm" id="productName" ng-required="true" ng-model="createMandatoryDocument.productName">
+                                <select class="form-control input-sm"  ng-model="createMandatoryDocument.planId" ng-options="plan.id as plan.name for plan in planList | orderBy:'name'">
                                     <option value="">Select Product Name</option>
                                     <option value="Product A">Product A</option>
                                     <option value="Product B">Product B</option>
@@ -45,7 +51,7 @@
                             <div class="form-group col-md-6 required" ng-show="showOptionalCoverage">
                                 <label class="control-label">Optional Coverage</label>
 
-                                <select class="form-control input-sm" id="optionalCoverage" ng-required="true" ng-model="createMandatoryDocument.optionalCoverage">
+                                <select class="form-control input-sm" id="optionalCoverage" ng-required="true" ng-model="createMandatoryDocument.optionalCoverageId" ng-options="optionalCoverage.id as optionalCoverage.name for optionalCoverage in optionalCoverageList | orderBy:'name'">
                                     <option value="">Select Optional Coverage</option>
                                     <option value="OptionalCoverage A">OptionalCoverage A</option>
                                     <option value="OptionalCoverage B">OptionalCoverage B</option>
@@ -58,8 +64,7 @@
                         <div class="row">
                             <div class="form-group col-md-6 required">
                                 <label class="control-label">Process</label>
-
-                                <select class="form-control input-sm"  ng-required="true" ng-model="createMandatoryDocument.process">
+                                <select class="form-control input-sm"  ng-required="true" ng-model="createMandatoryDocument.process" ng-options="process.id as process.name for process in processList | orderBy:'name'">
                                     <option value="">Select Process</option>
                                     <option value="Enrollment">Enrollment</option>
                                     <option value="Re-Instatement">Re-Instatement</option>
@@ -72,7 +77,7 @@
                             <div class="form-group col-md-6 required">
                                 <label class="control-label">Mandatory Documents</label>
                                 <div>
-                                    <button type="button" class="btn btn-default bs-select" ng-model="createMandatoryDocument.multiSelect" data-all-none-buttons="true" data-html="1" data-multiple="1"  ng-options="value.name for value in mulSelect" >
+                                    <button type="button" class="btn btn-default bs-select" ng-model="createMandatoryDocument.mandatoryDocuments" data-all-none-buttons="true" data-html="1" data-multiple="1"  ng-options="mandatoryDocument.id as mandatoryDocument.name for mandatoryDocument in mandatoryDocList | orderBy:'name'"   >
                                         Action <span class="caret"></span>
                                     </button>
                                 </div>
@@ -80,8 +85,8 @@
                         </div>
                         <div class="row">
                             <div class="col-lg-12" style="text-align: center;margin-top:3px;">
-                                <button type="button" class="btn btn-default" style="float:right;" ng-disabled="(!createMandatoryDocument.definedFor || !createMandatoryDocument.premiumExpressedAs || !createPremium.multiSelect )"  ng-click="saveMandatoryDoc()">Save</button>
-                                <a class="btn btn-default" style="float:left;" th:href="@{/core/mandatoryDocument/view}">Cancel</a>
+                                <button type="button" class="btn btn-default" style="float:right;" ng-disabled="(!createMandatoryDocument.definedFor || !createMandatoryDocument.mandatoryDocuments || !createMandatoryDocument.process )&amp;&amp;(!createMandatoryDocument.planId)&amp;&amp; (!createMandatoryDocument.optionalCoverageId)" data-placement="top-right" data-container="notification" data-duration="5" bs-alert="alert"  ng-click="saveMandatoryDoc()">Save</button>
+                                <a class="btn btn-default" style="float:left;" th:href="@{/core/mandatorydocument/view}">Cancel</a>
                             </div>
                         </div>
                     </form>

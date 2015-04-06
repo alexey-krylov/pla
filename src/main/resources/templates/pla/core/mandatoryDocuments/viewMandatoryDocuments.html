@@ -1,14 +1,20 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
-      lang="en" ng-app="AngularApp">
+      lang="en">
 <head th:include="fragments/common :: headTag">
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
 
 </head>
 <body style="padding-top: 70px;">
 <div th:include="fragments/common :: bodyHeader" th:remove="tag"/>
+<script>
+    requirejs(['basic'],function(){
+    requirejs(['/pla/js/mandatoryDocuments/viewMandatoryDocument.js'],function(){
+    });
+    })
+</script>
 
-<div class="container" style="padding-top: 0px!important;" ng-Controller="ViewMandatoryDocumentController">
+<div class="container" style="padding-top: 0px!important;" >
     <div class="row">
         <div class="col-lg-12">
             <div class="panel panel-primary">
@@ -17,7 +23,7 @@
                         <div class="col-lg-6"><span th:text="#{listOfMandatoryDocuments}">List of Mandatory Documents
                         </span></div>
                         <div class="col-lg-6"><a type="button" class="btn btn-default btn-xs" style="float: right;margin-left:5px;"
-                                                 th:href="@{/core/mandatoryDocument/create}">
+                                                 th:href="@{/core/mandatorydocument/opencreatepage}">
                             Create
                         </a></div>
                         </div>
@@ -27,7 +33,7 @@
                         <thead>
                         <tr>
                             <th th:text="#{productName}">
-                                Product Name
+                                Plan Name
                             </th>
                             <th th:text="#{optionalCoverage}">
                                 Optional Coverage
@@ -45,13 +51,14 @@
                         </thead>
                         <tbody>
                         <tr>
+                            <p th:text="${listOfMandatoryDocument}"></p>
                             <td>Product A</td>
                             <td>Optional coverage A</td>
                             <td>
                                 <button type="button" class="btn btn-default btn-xs bs-popover" data-placement="top"  data-content="{{popover.content}}" data-trigger="hover" data-template="http://localhost:6443/pla/downloadTemplates/popover.tpl.html" title="{{popover.title}}" data-animation="am-flip-x" data-auto-close="1">Mandatory Documents</button>
                             </td>
-                            <td>Enrollment</td>
-                            <td><a class="btn btn-default btn-xs" th:href="@{/core/mandatoryDocument/update}">Update</a></td>
+                            <td>Enrollment</td>    <!--th:href="'/pla/core/team/redirecttoupdatePage?documentId='+${mandatoryDocument.documentId}+''" -->
+                            <td><a class="btn btn-default btn-xs" th:href="@{/core/mandatorydocument/update}">Update</a></td>
                         </tr>
 
                         </tbody>

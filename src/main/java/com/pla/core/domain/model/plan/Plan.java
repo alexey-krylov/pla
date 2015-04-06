@@ -4,7 +4,10 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
-import com.pla.sharedkernel.domain.model.*;
+import com.pla.sharedkernel.domain.model.CoverageTermType;
+import com.pla.sharedkernel.domain.model.PolicyTermType;
+import com.pla.sharedkernel.domain.model.PremiumTermType;
+import com.pla.sharedkernel.domain.model.SumAssuredType;
 import com.pla.sharedkernel.identifier.CoverageId;
 import com.pla.sharedkernel.identifier.PlanId;
 import lombok.EqualsAndHashCode;
@@ -206,14 +209,6 @@ public class Plan {
         return validAges.contains(age);
     }
 
-    public int getTotalNoOfPremiumCombination(List<PremiumInfluencingFactor> premiumInfluencingFactors, CoverageId coverageId) {
-        Integer noOfRow = 1;
-        for (PremiumInfluencingFactor premiumInfluencingFactor : premiumInfluencingFactors) {
-            Integer lengthOfAllowedValues = premiumInfluencingFactor.getAllowedValues(this, coverageId).length == 0 ? 1 : premiumInfluencingFactor.getAllowedValues(this, coverageId).length;
-            noOfRow = noOfRow * lengthOfAllowedValues;
-        }
-        return noOfRow;
-    }
 
     private PlanCoverage getPlanCoverageFor(CoverageId coverageId) {
         List<PlanCoverage> planCoverages = this.coverages.stream().filter(new Predicate<PlanCoverage>() {
