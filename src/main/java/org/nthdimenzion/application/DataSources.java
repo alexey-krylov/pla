@@ -52,12 +52,12 @@ public class DataSources {
     }
 
 
-    @Bean
+   /* @Bean
     public MongoTemplate mongoTemplate() throws UnknownHostException {
         Mongo mongo = new MongoClient(mongoDBUrl, port);
         MongoDbFactory mongoDbFactory = new SimpleMongoDbFactory(mongo, mongoDbName, new UserCredentials(mongoDbUserName, mongoDbPassword), mongoDbName);
         MongoTemplate mongoTemplate = new MongoTemplate(mongoDbFactory);
         return mongoTemplate;
-    }
+    }*/
 }
 

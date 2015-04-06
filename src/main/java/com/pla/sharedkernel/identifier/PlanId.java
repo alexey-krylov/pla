@@ -4,6 +4,7 @@ import lombok.EqualsAndHashCode;
 import org.bson.types.ObjectId;
 
 import javax.persistence.Embeddable;
+import java.io.Serializable;
 
 /**
  * @author: pradyumna
@@ -11,7 +12,7 @@ import javax.persistence.Embeddable;
  */
 @Embeddable
 @EqualsAndHashCode
-public class PlanId {
+public class PlanId implements Serializable {
 
     private String planId;
 

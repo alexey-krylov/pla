@@ -219,7 +219,7 @@ public class PlanTest {
         Plan plan = builder.build();
 
         PlanCoverage planCoverage = plan.getCoverages().iterator().next();
-        assertEquals(sumAssured, planCoverage.getSumAssured());
+        assertEquals(sumAssured, planCoverage.getCoverageSumAssured());
     }
 
 
@@ -241,7 +241,7 @@ public class PlanTest {
         builder.withPlanCoverages(Sets.newHashSet(planCoverage_1));
         Plan plan = builder.build();
         PlanCoverage planCoverage = plan.getCoverages().iterator().next();
-        assertEquals(sumAssured, planCoverage.getSumAssured());
+        assertEquals(sumAssured, planCoverage.getCoverageSumAssured());
     }
 
     @Test(expected = IllegalArgumentException.class)
