@@ -33,6 +33,7 @@
     <script th:src="@{/webjars/requirejs/2.1.15/require.min.js}"></script>
     <script>
         define('basic',['datatables','bootstrap'],function(datatables){
+            console.log("called basic module");
             $(".dropdown-menu a").click(function(event){
                 event.preventDefault();
                 var windowHref = window.location.href;
@@ -46,6 +47,7 @@
         });
         require(['basic']);
         requirejs.config({
+            waitSeconds:14,
             urlArgs:"version=" +  (new Date()).getTime(),
             paths:{
                 'main':'/pla/js/main',
