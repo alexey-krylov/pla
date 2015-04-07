@@ -20,12 +20,10 @@ require(['jquery','bootstrap','datatables'],function(){
           "aoColumns":[
             null,
             null,
-            {"bSearchable": false },//Disable search on this column
+            {"bSearchable": false },
             {"bSearchable": false }
     ]});
-     /* $('#coverage-table').on('order.dt',function(){
-         openPopover();
-      }) */
+
     openPopover();
     $('.next').click(function () {
          openPopover();

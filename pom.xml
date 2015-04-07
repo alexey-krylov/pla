@@ -263,6 +263,11 @@
             <artifactId>angular-loading-bar</artifactId>
             <version>0.7.1</version>
         </dependency>
+        <dependency>
+            <groupId>org.webjars</groupId>
+            <artifactId>angular-file-upload</artifactId>
+            <version>3.2.4</version>
+        </dependency>
         <!-- Test Dependencies Start -->
         <dependency>
             <groupId>com.foursquare</groupId>
