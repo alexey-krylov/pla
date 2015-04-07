@@ -24,24 +24,25 @@ var webjars = {
         "momentjs": "2.9.0",
         "angular-loading-bar": "0.7.1"
     },
-    path: function(webJarId, path) {
+    path: function (webJarId, path) {
         console.error('The webjars.path() method of getting a WebJar path has been deprecated.  The RequireJS config in the ' + webJarId + ' WebJar may need to be updated.  Please file an issue: http://github.com/webjars/' + webJarId + '/issues/new');
         return ['/pla/webjars/' + webJarId + '/' + webjars.versions[webJarId] + '/' + path];
     }
 };
 
 var require = {
-    callback: function() {
+    callback: function () {
         // Deprecated WebJars RequireJS plugin loader
-        define('webjars', function() {
+        define('webjars', function () {
             return {
-                load: function(name, req, onload, config) {
+                load: function (name, req, onload, config) {
                     if (name.indexOf('.js') >= 0) {
                         console.warn('Detected a legacy file name (' + name + ') as the thing to load.  Loading via file name is no longer supported so the .js will be dropped in an effort to resolve the module name instead.');
                         name = name.replace('.js', '');
                     }
                     console.error('The webjars plugin loader (e.g. webjars!' + name + ') has been deprecated.  The RequireJS config in the ' + name + ' WebJar may need to be updated.  Please file an issue: http://github.com/webjars/webjars/issues/new');
-                    req([name], function() {;
+                    req([name], function () {
+                        ;
                         onload();
                     });
                 }
@@ -51,12 +52,12 @@ var require = {
         // All of the WebJar configs
         requirejs.config({
             "paths": {
-                "ui-bootstrap": ["/pla/webjars/angular-ui-bootstrap/0.12.1-1/ui-bootstrap", "ui-bootstrap"],
-                "ui-bootstrap-tpls": ["/pla/webjars/angular-ui-bootstrap/0.12.1-1/ui-bootstrap-tpls", "ui-bootstrap-tpls"]
+                "ui-bootstrap": ["/pla/webjars/angular-ui-bootstrap/0.12.1-1/ui-bootstrap.min", "ui-bootstrap"],
+                "ui-bootstrap-tpls": ["/pla/webjars/angular-ui-bootstrap/0.12.1-1/ui-bootstrap-tpls.min", "ui-bootstrap-tpls"]
             }, "shim": {"ui-bootstrap": ["angular"], "ui-bootstrap-tpls": ["angular"]}, "packages": []
         })
         requirejs.config({
-            "paths": {"angular-moment": ["/pla/webjars/angular-moment/0.9.0/angular-moment", "angular-moment"]},
+            "paths": {"angular-moment": ["/pla/webjars/angular-moment/0.9.0/angular-moment.min", "angular-moment"]},
             "shim": {"angular-moment": ["angular", "momentjs"]},
             "packages": []
         })
@@ -69,26 +70,26 @@ var require = {
         requirejs.config({"paths": {"tinymce": ["/pla/webjars/tinymce/4.1.9/tinymce.min", "tinymce.min"]}, "packages": []})
         requirejs.config({
             "paths": {
-                "bootstrap": ["/pla/webjars/bootstrap/3.3.2/js/bootstrap", "js/bootstrap"],
-                "bootstrap-css": ["/pla/webjars/bootstrap/3.3.2/css/bootstrap", "css/bootstrap"]
+                "bootstrap": ["/pla/webjars/bootstrap/3.3.2/js/bootstrap.min", "js/bootstrap"],
+                "bootstrap-css": ["/pla/webjars/bootstrap/3.3.2/css/bootstrap.min", "css/bootstrap"]
             }, "shim": {"bootstrap": ["jquery"]}, "packages": []
         })
         requirejs.config({
-            "paths": {"angular-ui-router": ["/pla/webjars/angular-ui-router/0.2.13/angular-ui-router", "angular-ui-router"]},
+            "paths": {"angular-ui-router": ["/pla/webjars/angular-ui-router/0.2.13/angular-ui-router.min", "angular-ui-router"]},
             "shim": {"angular-ui-router": ["angular"]},
             "packages": []
         })
         requirejs.config({
             "paths": {
-                "angular-strap": ["/pla/webjars/angular-strap/2.1.4/angular-strap", "angular-strap"],
-                "angular-strap-tpl": ["/pla/webjars/angular-strap/2.1.4/angular-strap.tpl", "angular-strap.tpl"]
+                "angular-strap": ["/pla/webjars/angular-strap/2.1.4/angular-strap.min", "angular-strap"],
+                "angular-strap-tpl": ["/pla/webjars/angular-strap/2.1.4/angular-strap.tpl.min", "angular-strap.tpl"]
             }, "shim": {"angular-strap-tpl": ["angular-strap"], "angular-strap": ["angular"]}, "packages": []
         })
-        requirejs.config({"paths": {"jquery": ["/pla/webjars/jquery/2.1.3/jquery", "jquery"]}, "shim": {"jquery": {"exports": "$"}}, "packages": []})
+        requirejs.config({"paths": {"jquery": ["/pla/webjars/jquery/2.1.3/jquery.min", "jquery"]}, "shim": {"jquery": {"exports": "$"}}, "packages": []})
 
         requirejs.config({"paths": {"ng-tags-input": ["/pla/webjars/ng-tags-input/2.1.1/ng-tags-input", "ng-tags-input"]}, "shim": {"ng-tags-input": ["angular"]}, "packages": []})
         requirejs.config({
-            "paths": {"datatables": ["/pla/webjars/datatables/1.10.5/js/jquery.dataTables", "js/jquery.dataTables.min"]},
+            "paths": {"datatables": ["/pla/webjars/datatables/1.10.5/js/jquery.dataTables.min", "js/jquery.dataTables"]},
             "shim": {"datatables": ["jquery"]},
             "packages": []
         })
@@ -141,8 +142,8 @@ var require = {
         requirejs.config({"paths": {}, "packages": []})
         requirejs.config({
             "paths": {
-                "underscore": ["/pla/webjars/underscorejs/1.8.2/underscore", "underscore"],
-                "underscorejs": ["/pla/webjars/underscorejs/1.8.2/underscore", "underscore"]
+                "underscore": ["/pla/webjars/underscorejs/1.8.2/underscore-min", "underscore"],
+                "underscorejs": ["/pla/webjars/underscorejs/1.8.2/underscore-min", "underscore"]
             }, "shim": {"underscore": {"exports": "_"}, "underscorejs": {"exports": "_"}}, "packages": []
         })
         requirejs.config({
@@ -152,18 +153,18 @@ var require = {
         })
         requirejs.config({
             "paths": {
-                "angular": ["/pla/webjars/angularjs/1.3.14/angular", "angular"],
-                "angular-animate": ["/pla/webjars/angularjs/1.3.14/angular-animate", "angular-animate"],
-                "angular-aria": ["/pla/webjars/angularjs/1.3.14/angular-aria", "angular-aria"],
-                "angular-cookies": ["/pla/webjars/angularjs/1.3.14/angular-cookies", "angular-cookies"],
-                "angular-loader": ["/pla/webjars/angularjs/1.3.14/angular-loader", "angular-loader"],
-                "angular-messages": ["/pla/webjars/angularjs/1.3.14/angular-messages", "angular-messages"],
-                "angular-mocks": ["/pla/webjars/angularjs/1.3.14/angular-mocks", "angular-mocks"],
-                "angular-resource": ["/pla/webjars/angularjs/1.3.14/angular-resource", "angular-resource"],
-                "angular-route": ["/pla/webjars/angularjs/1.3.14/angular-route", "angular-route"],
-                "angular-sanitize": ["/pla/webjars/angularjs/1.3.14/angular-sanitize", "angular-sanitize"],
-                "angular-scenario": ["/pla/webjars/angularjs/1.3.14/angular-scenario", "angular-scenario"],
-                "angular-touch": ["/pla/webjars/angularjs/1.3.14/angular-touch", "angular-touch"],
+                "angular": ["/pla/webjars/angularjs/1.3.14/angular.min", "angular"],
+                "angular-animate": ["/pla/webjars/angularjs/1.3.14/angular-animate.min", "angular-animate"],
+                "angular-aria": ["/pla/webjars/angularjs/1.3.14/angular-aria.min", "angular-aria"],
+                "angular-cookies": ["/pla/webjars/angularjs/1.3.14/angular-cookies.min", "angular-cookies"],
+                "angular-loader": ["/pla/webjars/angularjs/1.3.14/angular-loader.min", "angular-loader"],
+                "angular-messages": ["/pla/webjars/angularjs/1.3.14/angular-messages.min", "angular-messages"],
+                "angular-mocks": ["/pla/webjars/angularjs/1.3.14/angular-mocks.min", "angular-mocks"],
+                "angular-resource": ["/pla/webjars/angularjs/1.3.14/angular-resource.min", "angular-resource"],
+                "angular-route": ["/pla/webjars/angularjs/1.3.14/angular-route.min", "angular-route"],
+                "angular-sanitize": ["/pla/webjars/angularjs/1.3.14/angular-sanitize.min", "angular-sanitize"],
+                "angular-scenario": ["/pla/webjars/angularjs/1.3.14/angular-scenario.min", "angular-scenario"],
+                "angular-touch": ["/pla/webjars/angularjs/1.3.14/angular-touch.min", "angular-touch"],
                 "angular-locale_en-in": ["/pla/webjars/angularjs/1.3.14/i18n/angular-locale_en-in", "i18n/angular-locale_en-in"],
                 "angular-locale_sk-sk": ["/pla/webjars/angularjs/1.3.14/i18n/angular-locale_sk-sk", "i18n/angular-locale_sk-sk"],
                 "angular-locale_en-dsrt-us": ["/pla/webjars/angularjs/1.3.14/i18n/angular-locale_en-dsrt-us", "i18n/angular-locale_en-dsrt-us"],
@@ -492,19 +493,19 @@ var require = {
             "packages": []
         })
         requirejs.config({
-            "paths": {"bootstrap-datepicker": ["/pla/webjars/bootstrap-datepicker/1.3.1/js/bootstrap-datepicker", "js/bootstrap-datepicker"]},
+            "paths": {"bootstrap-datepicker": ["/pla/webjars/bootstrap-datepicker/1.3.1/js/bootstrap-datepicker.min", "js/bootstrap-datepicker"]},
             "shim": {"bootstrap-datepicker": ["bootstrap"]},
             "packages": []
         })
         requirejs.config({
-            "paths": {"angular-ui-tinymce": ["/pla/webjars/angular-ui-tinymce/0.0.5/angular-ui-tinymce", "angular-ui-tinymce"]},
+            "paths": {"angular-ui-tinymce": ["/pla/webjars/angular-ui-tinymce/0.0.5/angular-ui-tinymce.min", "angular-ui-tinymce"]},
             "shim": {"angular-ui-tinymce": ["angular-ui", "tinymce"]},
             "packages": []
         })
         requirejs.config({
             "paths": {
-                "momentjs": ["/pla/webjars/momentjs/2.9.0/moment", "moment"],
-                "moment": ["/pla/webjars/momentjs/2.9.0/moment", "moment"],
+                "momentjs": ["/pla/webjars/momentjs/2.9.0/min/moment.min", "moment"],
+                "moment": ["/pla/webjars/momentjs/2.9.0/min/moment.min", "moment"],
                 "moment-with-locales": ["/pla/webjars/momentjs/2.9.0/min/moment-with-locales", "min/moment-with-locales"]
             }, "packages": []
         })
