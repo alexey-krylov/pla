@@ -21,7 +21,7 @@
 <body style="padding-top: 70px">
 <div th:include="fragments/common :: bodyHeader" th:remove="tag"/>
 <script>
-    requirejs(['jquery','bootstrap','datatables','/pla/js/agent/viewAgents.js'],function($){
+    requirejs(['/pla/js/agent/viewAgents.js'],function(){
         $('#agent-table').dataTable();
         $( "input[type=radio]" ).on( "click", function(){
             viewAgentModule.getTheItemSelected(this)
