@@ -21,12 +21,17 @@
 <body style="padding-top: 70px">
 <div th:include="fragments/common :: bodyHeader" th:remove="tag"/>
 <script>
-    requirejs(['/pla/js/agent/viewAgents.js'],function(){
-        $('#agent-table').dataTable();
-        $( "input[type=radio]" ).on( "click", function(){
-            viewAgentModule.getTheItemSelected(this)
-        });
-    });
+    var interval = setInterval(function(){
+        if(require.defined("basic")){
+            requirejs(['/pla/js/agent/viewAgents.js'],function(){
+                $('#agent-table').dataTable();
+                $( "input[type=radio]" ).on( "click", function(){
+                    viewAgentModule.getTheItemSelected(this)
+                });
+            });
+            clearInterval(interval);
+        }
+    }, 300);
 </script>
 <div class="modal fade" id="alert-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
     <div class="modal-dialog modal-sm">

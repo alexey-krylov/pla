@@ -31,19 +31,6 @@
     <script th:src="@{/webjars/bootstrap/3.3.2/js/bootstrap.js}"></script>-->
     <script th:src="@{/webjarsjs}"></script>
     <script th:src="@{/webjars/requirejs/2.1.15/require.min.js}"></script>
-    <style>
-        .dropdown-menu {
-            padding: 5px 10px;
-        }
-    </style>
-</head>
-<body >
-<div th:fragment="bodyHeader" >
-    <style>
-        .dropdown-menu>li>a:hover{
-            background-color: #C7C7C7!important;
-        }
-    </style>
     <script>
         define('basic',['datatables','bootstrap'],function(datatables){
             $(".dropdown-menu a").click(function(event){
@@ -77,6 +64,19 @@
             "packages": []
         })
     </script>
+    <style>
+        .dropdown-menu {
+            padding: 5px 10px;
+        }
+    </style>
+</head>
+<body >
+<div th:fragment="bodyHeader" >
+    <style>
+        .dropdown-menu>li>a:hover{
+            background-color: #C7C7C7!important;
+        }
+    </style>
     <!-- Fixed navbar -->
     <nav class="navbar navbar-default navbar-fixed-top">
         <div class="container">
@@ -108,6 +108,7 @@
                             </li>
                             <li><a th:href="@{/core/team/view}">Team</a></li>
                             <li><a th:href="@{/core/plan}">Plan</a></li>
+                            <li><a th:href="@{./proposal/individualLife/createProposal/index.html}">Proposal</a></li>
                             <li><a th:href="@{/core/branch/view}">Branch Manager</a></li>
                             <li><a th:href="@{/core/region/view}">Regional Manager</a></li>
                            <!-- <li class="dropdown-submenu"><a href="#">HealthCareProvider</a>
