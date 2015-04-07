@@ -27,20 +27,12 @@
     <link href="http://cdn.jsdelivr.net/webjars/org.webjars/fuelux/3.3.1/css/fuelux.css" th:href="@{/webjars/fuelux/3.3.1/css/fuelux.css}" rel="stylesheet"/>
     <script th:src="@{/js/webjars.js}"></script>
     <script th:src="@{/webjars/requirejs/2.1.15/require.min.js}"></script>
-</head>
-<body>
-<div th:fragment="bodyHeader" >
-    <style>
-        .dropdown-menu>li>a:hover{
-            background-color: #C7C7C7!important;
-        }
-    </style>
     <script>
         define('basic', ['datatables', 'bootstrap'], function (datatables) {
             $(".dropdown-menu a").click(function(event){
                 event.preventDefault();
                 var windowHref = window.location.href;
-                var clickedHref = $(this).prop('href')
+                var clickedHref = $(this).prop('href');
                 if(windowHref===clickedHref){
                     window.location.reload();
                 }else{
@@ -50,9 +42,10 @@
         });
         require(['basic']);
         requirejs.config({
+            waitSeconds:0,
             paths:{
                 'main':'/pla/js/main',
-                'fuelux': '/pla/webjars/fuelux/3.3.1/js/fuelux',
+                'fuelux': '/pla/webjars/fuelux/3.3.1/js/fuelux.min',
                 'directives': '/pla/js/common/directives',
                 'services':'/pla/js/common/services',
                 'checklistmodel': '/pla/js/common/checklist-model',
@@ -67,6 +60,15 @@
             "packages": []
         })
     </script>
+</head>
+<body>
+<div th:fragment="bodyHeader" >
+    <style>
+        .dropdown-menu>li>a:hover{
+            background-color: #C7C7C7!important;
+        }
+    </style>
+
     <!-- Fixed navbar -->
 
     <div id='cssmenu'>
