@@ -27,8 +27,8 @@
     <link href="http://cdn.jsdelivr.net/bootstrap-datepicker/1.3.1/css/datepicker3.css"
           th:href="@{/webjars/bootstrap-datepicker/1.3.1/css/datepicker3.css}" rel="stylesheet" />
     <link href="http://cdn.jsdelivr.net/webjars/org.webjars/fuelux/3.3.1/css/fuelux.css" th:href="@{/webjars/fuelux/3.3.1/css/fuelux.css}" rel="stylesheet"/>
-    <script th:src="@{/webjars/jquery/2.1.3/jquery.js}"></script>
-    <script th:src="@{/webjars/bootstrap/3.3.2/js/bootstrap.js}"></script>
+   <!-- <script th:src="@{/webjars/jquery/2.1.3/jquery.js}"></script>
+    <script th:src="@{/webjars/bootstrap/3.3.2/js/bootstrap.js}"></script>-->
     <script th:src="@{/webjarsjs}"></script>
     <script th:src="@{/webjars/requirejs/2.1.15/require.min.js}"></script>
     <style>
@@ -45,11 +45,11 @@
         }
     </style>
     <script>
-        define('basic',['datatables'],function(datatables){
+        define('basic',['datatables','bootstrap'],function(datatables){
             $(".dropdown-menu a").click(function(event){
                 event.preventDefault();
                 var windowHref = window.location.href;
-                var clickedHref = $(this).prop('href')
+                var clickedHref = $(this).prop('href');
                 if(windowHref===clickedHref){
                     window.location.reload();
                 }else{
@@ -59,6 +59,7 @@
         });
         require(['basic']);
         requirejs.config({
+            urlArgs:"version=" +  (new Date()).getTime(),
             paths:{
                 'main':'/pla/js/main',
                 'fuelux': '/pla/webjars/fuelux/3.3.1/js/fuelux',
