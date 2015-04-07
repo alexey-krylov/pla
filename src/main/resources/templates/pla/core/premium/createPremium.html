@@ -38,7 +38,7 @@
                                     <label><input type="radio" name="definedFor" value="optionalCoverage" ng-model="createPremium.definedFor" ng-change="getDefinedOption()"/>Optional Coverage</label>
                                 </div>
                             </div>
-                            <div class="form-group col-md-6 required" ng-show="showProduct">
+                            <div class="form-group col-md-6 required" >
                                 <label class="control-label">Plan Name</label>
 
                                 <select class="form-control input-sm"  ng-required="true" ng-model="createPremium.planId">
@@ -100,7 +100,7 @@
                                    <a href="http://localhost:6443/pla/downloadTemplates/UI Contracts.xls" target="_blank" download="UI Contracts.xls">
                                         <img border="0" src="/pla/images/CSV.png" />
                                     </a>-->
-                                    <button  type="button" class="btn btn-default" ng-disabled="(!createPremium.definedFor || !createPremium.premiumExpressedAs || !createPremium.rateExpressedAs || !createPremium.fromDate || !createPremium.multiSelect)"  ng-click="getDownloadedTemplate()">
+                                    <button  type="button" class="btn btn-default" ng-disabled="(!createPremium.definedFor || !createPremium.planId || !createPremium.fromDate || !createPremium.multiSelect)"  ng-click="getDownloadedTemplate()">
                                         Download Template
                                     </button>
                                 </div>
@@ -119,8 +119,8 @@
                                 <label class="control-label">Upload</label>
                                 <div >
                                     <label class="input-sm" style="border:1px solid #ccc;width:330px;" >{{files[0].name}} </label>
-                                    <div class="btn btn-default" style="display:inline;float:right;" ng-click="uploadFile(files)"  ng-disabled="(!createPremium.definedFor || !createPremium.premiumExpressedAs || !createPremium.rateExpressedAs || !createPremium.fromDate || !createPremium.multiSelect || !files || !verified)" >Upload</div>
-                                    <button type="button" class="btn btn-default" style="display:inline;float:right;margin-right:5px;" ng-disabled="(!createPremium.definedFor || !createPremium.premiumExpressedAs || !createPremium.rateExpressedAs || !createPremium.fromDate || !createPremium.multiSelect || !files )" data-placement="top-right" data-container="notification" data-duration="5" bs-alert="alert" ng-click="verifyPremiumData()">Verify</button>
+                                    <div class="btn btn-default" style="display:inline;float:right;" ng-click="uploadFile(files)"  ng-disabled="(!createPremium.definedFor || !createPremium.planId || !createPremium.premiumExpressedAs || !createPremium.rateExpressedAs || !createPremium.fromDate || !createPremium.multiSelect || !files || !verified)" >Upload</div>
+                                    <button type="button" class="btn btn-default" style="display:inline;float:right;margin-right:5px;" ng-disabled="(!createPremium.definedFor || !createPremium.planId || !createPremium.premiumExpressedAs || !createPremium.rateExpressedAs || !createPremium.fromDate || !createPremium.multiSelect || !files )" data-placement="top-right" data-container="notification" data-duration="5" bs-alert="alert" ng-click="verifyPremiumData()">Verify</button>
                                     <div class="btn btn-default" style="display:inline;float:right;margin-right:5px;" ng-file-select=""  ng-model="files"  >Browse</div>
 
                                 </div>
@@ -128,7 +128,7 @@
                         </div>
                         <div class="row">
                             <div class="col-lg-12" style="text-align: center;margin-top:3px;">
-                                <button type="button" class="btn btn-default" style="float:right;" ng-disabled="(!createPremium.definedFor || !createPremium.premiumExpressedAs || !createPremium.rateExpressedAs || !createPremium.fromDate || !createPremium.multiSelect || !files || !uploaded )" data-placement="top-right" data-container="notification" data-duration="5" bs-alert="alert" ng-click="savePremium()">Save</button>
+                                <button type="button" class="btn btn-default" style="float:right;" ng-disabled="(!createPremium.definedFor || !createPremium.planId || !createPremium.premiumExpressedAs || !createPremium.rateExpressedAs || !createPremium.fromDate || !createPremium.multiSelect || !files || !uploaded )" data-placement="top-right" data-container="notification" data-duration="5" bs-alert="alert" ng-click="savePremium()">Save</button>
                                 <a class="btn btn-default" style="float:left;" th:href="@{/core/premium/listpremium}">Cancel</a>
                             </div>
                         </div>

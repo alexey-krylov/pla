@@ -4,7 +4,6 @@ App.controller('CreatePremiumController',['$scope','$http','$rootScope','$upload
 
          $scope.uploaded=false;
          $scope.verified=false;
-         $scope.showProduct=false;
          $scope.showOptionalCoverage= false;
          $scope.selectedDate =moment().add(1,'days').format("YYYY-MM-DD");
          $scope.newDateField={};
@@ -24,19 +23,22 @@ App.controller('CreatePremiumController',['$scope','$http','$rootScope','$upload
          $scope.getDefinedOption = function(){
               // console.log($scope.createPremium.definedFor);
                if($scope.createPremium.definedFor == "plan"){
-                     $scope.showProduct=true;
                      $scope.showOptionalCoverage= false;
                }else{
-                     $scope.showProduct=true;
                      $scope.showOptionalCoverage= true;
                }
 
          }
          $http.get('/pla/core/premium/getpremiuminfluencingfactors').success(function(data){
-                  //  console.log(data);
-                // $scope.mulSelect=data;
+                  console.log(data);
+                //$scope.mulSelect=data;
 
          });
+         $http.get('/pla/core/plan/getallplan').success(function(data){
+                       //   console.log(data);
+                          $scope.plan=data;
+
+                  });
          $scope.getDownloadedTemplate = function(){
              if (!moment($scope.createPremium.fromDate,'DD/MM/YYYY').isValid()) {
              		$scope.newDateField.fromDate = moment($scope.createPremium.fromDate).format("DD/MM/YYYY");
@@ -75,17 +77,21 @@ App.controller('CreatePremiumController',['$scope','$http','$rootScope','$upload
           console.log($scope.createPremium);
         }
         $scope.mulSelect =[
-                                   {
+                                {
                                      "id": "1",
-                                     "name": "Team One"
+                                     "name": "SUM_ASSURED"
                                    },
                                    {
                                      "id": "2",
-                                     "name": "Team Two"
+                                     "name": "AGE"
                                    },
                                    {
                                      "id": "3",
-                                     "name": "Team Three"
+                                     "name": "POLICY_TERM"
+                                   },
+                                   {
+                                     "id": "4",
+                                     "name": "PREMIUM_PAYMENT_TERM"
                                    }
                                  ]
               /* $scope.$watch('files', function () {
