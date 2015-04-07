@@ -14,9 +14,6 @@ import org.nthdimenzion.ddd.domain.annotations.ValueObject;
 
 import javax.persistence.Embeddable;
 
-import static com.google.common.base.Preconditions.checkArgument;
-import static org.nthdimenzion.utils.UtilValidator.isNotEmpty;
-
 /**
  * @author: Samir
  * @since 1.0 13/03/2015
@@ -31,7 +28,6 @@ public class EmailAddress {
     private String email;
 
     public EmailAddress(String email) {
-        checkArgument(isNotEmpty(email));
         this.email = email;
     }
 

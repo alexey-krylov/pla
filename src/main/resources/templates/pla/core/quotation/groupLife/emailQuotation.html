@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      lang="en">
+<head th:include="fragments/common :: headTag">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <!--/*-->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css">
+    <link rel="stylesheet" href="http://cdn.jsdelivr.net/webjars/org.webjars/bootstrap-tagsinput/0.3.9/bootstrap-tagsinput.css">
+    <script data-main="../../../../static/js/requireConfig" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.1.16/require.min.js"></script>
+    <script src="//tinymce.cachefly.net/4.1/tinymce.min.js"></script>
+    <!--*/-->
+</head>
+<body style="padding-top: 70px">
+<div th:include="fragments/common :: bodyHeader" th:remove="tag"/>
+<script>
+        requirejs(['quotation/emailQuotation'],function(){
+        });
+</script>
+<div class="container" style="padding-top: 0px!important;">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                            <span th:text="#{emailQuotation}">Email Quotation</span>
+                </div>
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-md-3">
+                            <button type="button" class="btn btn-success btn-xs">Send Quotation Email</button>
+                        </div>
+                        <div class="col-md-3 col-md-offset-6">
+                            <button type="button" class="btn btn-default pull-right btn-xs">Cancel</button>
+                        </div>
+                    </div>
+                    <div class="row" style="margin-top: 10px">
+                        <div class="col-md-12">
+                            <table class="table table-bordered" style="margin-bottom: 0px">
+                                <tbody>
+                                <tr>
+                                    <td>To:</td>
+                                    <td><select multiple id="to" style="display: none"/></td>
+                                </tr>
+                                <tr>
+                                    <td>Cc:</td>
+                                    <td><select multiple id="cc" style="display: none"/></td>
+                                </tr>
+                                <tr>
+                                    <td>Bcc:</td>
+                                    <td><select multiple id="bcc" style="display: none"/></td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="row" style="margin-top: 3px">
+                        <div class="col-md-12">
+                            <table class="table table-bordered" style="margin-bottom: 0px">
+                                <tbody>
+                                <tr>
+                                    <td>Subject:</td>
+                                    <td><strong>PLA Insurance - Group Life -  Quotation ID - 5100000000315</strong></td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="row" style="margin-top: 3px">
+                      <div class="col-md-12">
+                         <textarea id="tinymce">
+                             <p><strong>Dear User,</strong><br/>&nbsp;&nbsp;&nbsp;Please find the attachment with the quotation details<br/><br/>Regards,<br/>PLA</p>
+                         </textarea>
+                      </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <a href="#"><span class="glyphicon glyphicon-file" style="font-size: 18px"> Group-Life-PLA-Quotation.pdf</span></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<style>
+    .bootstrap-tagsinput{
+        width: 100%;
+        border: none;
+        box-shadow: none;
+        margin-bottom: 0px;
+        padding: 0px;
+    }
+    .table>tbody>tr>td{
+        padding: 3px;!important;
+    }
+    .table tr td:nth-child(1) {
+        width: 7%;
+        background-color: rgba(189, 186, 179, 0.32);
+        color: #a19ba1;
+        font-weight: bold;
+    }
+    .table tr td:nth-child(2){
+        width: 95%;
+    }
+</style>
+<footer class="footer" th:include="fragments/common :: footer">
+</footer>
+</body>
+</html>

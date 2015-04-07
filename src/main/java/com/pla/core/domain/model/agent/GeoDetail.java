@@ -33,7 +33,6 @@ public class GeoDetail {
     private String city;
 
     GeoDetail(Integer postalCode, String province, String city) {
-        checkArgument(postalCode != null);
         checkArgument(isNotEmpty(province));
         checkArgument(isNotEmpty(city));
         this.postalCode = postalCode;

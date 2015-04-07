@@ -53,7 +53,9 @@ public class Premium {
 
     private PremiumRateFrequency premiumRateFrequency;
 
-    private Premium(PremiumId premiumId, PlanId planId, LocalDate effectiveFrom, Set<PremiumItem> premiumItems, PremiumFactor premiumFactor, PremiumRateFrequency premiumRateFrequency) {
+    private List<PremiumInfluencingFactor> premiumInfluencingFactors;
+
+    private Premium(PremiumId premiumId, PlanId planId, LocalDate effectiveFrom, Set<PremiumItem> premiumItems, PremiumFactor premiumFactor, PremiumRateFrequency premiumRateFrequency, List<PremiumInfluencingFactor> premiumInfluencingFactors) {
         checkArgument(premiumId != null);
         checkArgument(planId != null);
         checkArgument(effectiveFrom != null);
@@ -66,16 +68,17 @@ public class Premium {
         this.premiumItems = premiumItems;
         this.premiumFactor = premiumFactor;
         this.premiumRateFrequency = premiumRateFrequency;
+        this.premiumInfluencingFactors = premiumInfluencingFactors;
     }
 
-    public static Premium createPremiumWithPlan(PremiumId premiumId, PlanId planId, LocalDate effectiveFrom, List<Map<Map<PremiumInfluencingFactor, String>, Double>> premiumExcelLineItems, PremiumFactor premiumFactor, PremiumRateFrequency premiumRateFrequency) {
+    public static Premium createPremiumWithPlan(PremiumId premiumId, PlanId planId, LocalDate effectiveFrom, List<Map<Map<PremiumInfluencingFactor, String>, Double>> premiumExcelLineItems, PremiumFactor premiumFactor, PremiumRateFrequency premiumRateFrequency, List<PremiumInfluencingFactor> premiumInfluencingFactors) {
         Set<PremiumItem> premiumItems = createPremiumItems(premiumExcelLineItems);
-        return new Premium(premiumId, planId, effectiveFrom, premiumItems, premiumFactor, premiumRateFrequency);
+        return new Premium(premiumId, planId, effectiveFrom, premiumItems, premiumFactor, premiumRateFrequency, premiumInfluencingFactors);
     }
 
-    public static Premium createPremiumWithPlanAndCoverage(PremiumId premiumId, PlanId planId, CoverageId coverageId, LocalDate effectiveFrom, List<Map<Map<PremiumInfluencingFactor, String>, Double>> premiumExcelLineItems, PremiumFactor premiumFactor, PremiumRateFrequency premiumRateFrequency) {
+    public static Premium createPremiumWithPlanAndCoverage(PremiumId premiumId, PlanId planId, CoverageId coverageId, LocalDate effectiveFrom, List<Map<Map<PremiumInfluencingFactor, String>, Double>> premiumExcelLineItems, PremiumFactor premiumFactor, PremiumRateFrequency premiumRateFrequency, List<PremiumInfluencingFactor> premiumInfluencingFactors) {
         Set<PremiumItem> premiumItems = createPremiumItems(premiumExcelLineItems);
-        Premium premium = new Premium(premiumId, planId, effectiveFrom, premiumItems, premiumFactor, premiumRateFrequency);
+        Premium premium = new Premium(premiumId, planId, effectiveFrom, premiumItems, premiumFactor, premiumRateFrequency, premiumInfluencingFactors);
         premium.coverageId = coverageId;
         return premium;
     }

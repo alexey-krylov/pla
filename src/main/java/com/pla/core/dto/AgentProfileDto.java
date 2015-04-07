@@ -67,7 +67,7 @@ public class AgentProfileDto {
         agentProfileDto.setFirstName(agentDetail.get("firstName") != null ? (String) agentDetail.get("firstName") : null);
         agentProfileDto.setLastName(agentDetail.get("lastName") != null ? (String) agentDetail.get("lastName") : null);
         agentProfileDto.setNrcNumber(agentDetail.get("nrcNumber") != null ? ((Integer) agentDetail.get("nrcNumber")) : null);
-        agentProfileDto.setTrainingCompleteOn(agentDetail.get("trainingCompleteOn") != null ? new LocalDate(agentDetail.get("trainingCompleteOn")) : null);
+        agentProfileDto.setTrainingCompleteOn(agentDetail.get("trainingCompletedOn") != null ? new LocalDate(agentDetail.get("trainingCompletedOn")) : null);
         DesignationDto designationDto = agentDetail.get("designationCode") != null ? new DesignationDto(((String) agentDetail.get("designationCode")), ((String) agentDetail.get("designationName"))) : null;
         agentProfileDto.setDesignationDto(designationDto);
         return agentProfileDto;

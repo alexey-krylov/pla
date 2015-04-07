@@ -25,13 +25,20 @@ angular.module('directives', [])
             require: ['?^form'],
             scope: {
                 selectedItem: '=',
-                skipValidation:'='
+                skipValidation:'=',
+                removeSteps:'='
             },
             link: function (scope, element, attr, ctrl) {
                 scope.$watch('selectedItem',function(newVal,oldVal){
                     element.wizard('selectedItem', {
                         step: newVal
                     });
+                });
+
+                scope.$watch('removeSteps',function(newVal,oldVal){
+                    if(newVal){
+                        element.wizard('removeSteps',newVal.index,newVal.howMany)
+                    }
                 });
 
                 $(element).wizard();
@@ -41,7 +48,6 @@ angular.module('directives', [])
                         var currentStep =ctrl[0]['step' + data.step].$name;
                         if($.inArray(currentStep,scope.skipValidation)==-1){
                             var stepForm = ctrl[0]['step' + data.step];
-                            console.log(stepForm);
                             validateStep(stepForm);
                             if (stepForm.$invalid) {
                                 event.preventDefault();
@@ -79,5 +85,15 @@ angular.module('directives', [])
                 iElement.dataTable();
             }
         }
-    });
+    })
+    .directive('nthAlert',['$rootScope','$alert',function($rootScope,$alert){
+        return{
+            restrict: 'E',
+            link:function(){
+                $rootScope.$on('httpInterceptorAlert',function(event,args){
+                    $alert({title:args.message,placement:'top-right',type:'success',show:true,duration:6});
+                })
+            }
+        }
+    }]);
    
