@@ -3,7 +3,6 @@
       lang="en">
 <head th:include="fragments/common :: headTag">
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-
 </head>
 <body style="padding-top: 70px;">
 <div th:include="fragments/common :: bodyHeader" th:remove="tag"/>
@@ -13,8 +12,8 @@
     });
     requirejs(['main'],function(){
     require(['/pla/js/coverages/createCoverage.js'],function(){
-    angular.bootstrap(document, ['createCoverage']);
-    });
+         angular.bootstrap(document, ['createCoverage']);
+          });
     });
 </script>
 <div class="modal fade" id="coverageModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" ng-Controller="CreateCoverageController">
