@@ -45,7 +45,7 @@
                         <tbody >
                         <tr  th:each="region : ${regionList}">
                             <td th:text="${region.regionName}"></td>
-                            <td th:text="|${region.regionalManagerFirstName} ${region.regionalManagerLastName}|"> </td>
+                            <td th:text="${region.regionalManagerFirstName != null and region.regionalManagerLastName != null}? |${region.regionalManagerFirstName} ${region.regionalManagerLastName} |"> </td>
                             <td th:text="${region.regionalManagerFromDate}"></td>
                             <td style="text-align:center">
                                 <a class="btn btn-default btn-xs" th:href="'/pla/core/region/redirecttoassignPage?regionId='+${region.regionCode}+''">Assign</a></td>
