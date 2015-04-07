@@ -8,6 +8,7 @@ require(['jquery','bootstrap','datatables'],function(){
     $('#coverageModal').on('shown.bs.modal', function() {
         $('#coverageName').focus()
     });
+
     $('#coverage-table').dataTable({
           "bFilter": true,
           "fnDrawCallback": function ( oSettings ) {
@@ -17,11 +18,12 @@ require(['jquery','bootstrap','datatables'],function(){
              "sSearch":"",
             "bRegex": false,
             "bSmart": true },
+          "bAutoWidth": false,
           "aoColumns":[
-            null,
-            null,
-            {"bSearchable": false },
-            {"bSearchable": false }
+             {"sWidth": "25%","bSearchable": true  },
+             {"sWidth": "55%","bSearchable": true  },
+            {"sWidth": "5%","bSearchable": false },
+            {"sWidth": "15%","bSearchable": false }
     ]});
 
     openPopover();
