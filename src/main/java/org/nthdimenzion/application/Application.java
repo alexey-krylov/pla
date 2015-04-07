@@ -23,7 +23,7 @@ import javax.sql.DataSource;
  */
 @SpringBootApplication
 @ComponentScan(basePackages = {"com.pla", "org.nthdimenzion"})
-@EntityScan(basePackages = {"com.pla", "org.nthdimenzion",
+@EntityScan(basePackages = {"com.pla",
         "org.axonframework.saga", "org.axonframework.eventstore.jpa"})
 @ImportResource(value = {"classpath:META-INF/spring/cqrs-infrastructure-context.xml"})
 @EnableMongoRepositories(basePackages = {"com.pla"})

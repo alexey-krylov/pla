@@ -49,9 +49,6 @@ spring:
       username : pla
       password : pla
 
-
-
-
 flyway:
   check-location: true
   enabled: true
