@@ -1,14 +1,14 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/xhtml"
       lang="en" ng-app="AngularApp">
 <head th:include="fragments/common :: headTag">
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
 
 </head>
-<body style="padding-top: 70px;">
+<body>
 <div th:include="fragments/common :: bodyHeader" th:remove="tag"/>
 
-<div class="container" style="padding-top: 0px!important;" ng-Controller="CreateHealthCareProviderController">
+<div class="container" ng-Controller="CreateHealthCareProviderController">
     <div class="row">
         <div class="col-lg-12">
             <div class="panel panel-primary">

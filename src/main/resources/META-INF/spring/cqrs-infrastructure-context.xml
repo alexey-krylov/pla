@@ -2,8 +2,10 @@
 <beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns:axon="http://www.axonframework.org/schema/core"
        xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:extension="http://www.nthdimenzion.com/schema/axon-extension"
        xmlns="http://www.springframework.org/schema/beans"
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.nthdimenzion.com/schema/axon-extension http://www.nthdimenzion.com/schema/axon-extension.xsd
        http://www.axonframework.org/schema/core http://www.axonframework.org/schema/axon-core.xsd
        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
 
@@ -49,19 +51,19 @@
     </bean>
 
     <bean id="cacheManager" class="org.springframework.cache.ehcache.EhCacheManagerFactoryBean"/>
-    <beans profile="mongodb">
+    <bean id="sagaRepository" class="org.axonframework.saga.repository.mongo.MongoSagaRepository">
+        <constructor-arg ref="mongoSagaTemplate"/>
+        <property name="resourceInjector">
+            <bean class="org.axonframework.saga.spring.SpringResourceInjector"/>
+        </property>
+    </bean>
 
-        <bean id="sagaRepository" class="org.axonframework.saga.repository.mongo.MongoSagaRepository">
-            <constructor-arg ref="mongoSagaTemplate"/>
-            <property name="resourceInjector">
-                <bean class="org.axonframework.saga.spring.SpringResourceInjector"/>
-            </property>
-        </bean>
+    <axon:saga-manager id="sagaManager" saga-repository="sagaRepository" event-bus="eventBus">
+        <axon:async executor="taskExecutor" transaction-manager="transactionManager"/>
+        <axon:types>
+        </axon:types>
+    </axon:saga-manager>
 
-        <axon:saga-manager id="sagaManager" saga-repository="sagaRepository" event-bus="eventBus">
-            <axon:async executor="taskExecutor" transaction-manager="transactionManager"/>
-            <axon:types>
-            </axon:types>
-        </axon:saga-manager>
-    </beans>
+    <extension:mongo-repository id="planRepository" aggregate-type="com.pla.core.domain.model.plan.Plan" mongo-template="mongoSpringTemplate"/>
+
 </beans>

@@ -11,24 +11,6 @@
         <constructor-arg name="password" value="pla"/>
     </bean>
 
-    <!--<bean id="mongoTemplate" class="org.axonframework.eventstore.mongo.DefaultMongoTemplate">
-        <constructor-arg index="0" ref="mongo"/>
-        <constructor-arg index="1" value="pla"/>
-        <constructor-arg index="2" value="domainevents"/>
-        <constructor-arg index="3" value="snapshotevents"/>
-        <constructor-arg index="4" value="pla"/>
-        <constructor-arg index="5" value="pla"/>
-    </bean>
-
-    <bean id="mongoSagaTemplate" class="org.axonframework.saga.repository.mongo.DefaultMongoTemplate">
-        <constructor-arg index="0" ref="mongo"/>
-        <constructor-arg index="1" value="pla"/>
-        <constructor-arg index="2" value="snapshotevents"/>
-        <constructor-arg index="3" value="pla"/>
-        <constructor-arg index="4" value="pla"/>
-    </bean>-->
-
-
     <bean name="fongo" class="com.foursquare.fongo.Fongo">
         <constructor-arg value="InMemoryMongo"/>
     </bean>
@@ -49,10 +31,5 @@
         <constructor-arg name="mongoDbFactory" ref="mongoDbFactory"/>
     </bean>
 
-    <!--    <mongo:mongo id="mongo" host="127.0.0.1" port="27017"/>
-        &lt;!&ndash;
-            db.createUser({user:"pla", pwd:"pla" roles:[{role:"userAdmin",db:"pla"}]});
-        &ndash;&gt;
-        <mongo:db-factory id="mongoDbFactory" dbname="pla" mongo-ref="mongo" username="pla" password="pla"/>-->
 
 </beans>

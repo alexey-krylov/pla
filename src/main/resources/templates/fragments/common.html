@@ -12,8 +12,6 @@
           th:href="@{/webjars/bootstrap/3.3.2/css/bootstrap.min.css}" rel="stylesheet" />
     <link href="http://cdn.datatables.net/1.10.4/css/jquery.dataTables.css"
           rel="stylesheet" />
-    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css"
-          rel="stylesheet" />
     <link href="http://cdn.jsdelivr.net/css/sticky-footer-navbar.css"
           th:href="@{/css/sticky-footer-navbar.css}" rel="stylesheet" />
     <link href="http://cdn.jsdelivr.net/webjars/ng-tags-input/2.1.1/ng-tags-input.css"
@@ -22,21 +20,29 @@
     <!--sub-menus in the navbar css-->
     <link href="/static/css/common.css"
           th:href="@{/css/common.css}" rel="stylesheet" />
-    <link href="/static/css/custom-css.css"
-          th:href="@{/css/bootstrap-submenu.css}" rel="stylesheet" />
+    <link href="/static/css/common.css"
+          th:href="@{/css/cssmenu.css}" rel="stylesheet"/>
     <link href="http://cdn.jsdelivr.net/bootstrap-datepicker/1.3.1/css/datepicker3.css"
           th:href="@{/webjars/bootstrap-datepicker/1.3.1/css/datepicker3.css}" rel="stylesheet" />
     <link href="http://cdn.jsdelivr.net/webjars/org.webjars/fuelux/3.3.1/css/fuelux.css" th:href="@{/webjars/fuelux/3.3.1/css/fuelux.css}" rel="stylesheet"/>
-   <!-- <script th:src="@{/webjars/jquery/2.1.3/jquery.js}"></script>
-    <script th:src="@{/webjars/bootstrap/3.3.2/js/bootstrap.js}"></script>-->
-    <script th:src="@{/webjarsjs}"></script>
+    <script th:src="@{/webjars/jquery/2.1.3/jquery.js}"></script>
+    <script th:src="@{/webjars/bootstrap/3.3.2/js/bootstrap.js}"></script>
+    <script th:src="@{/js/webjars.js}"></script>
     <script th:src="@{/webjars/requirejs/2.1.15/require.min.js}"></script>
+</head>
+<body>
+<div th:fragment="bodyHeader" >
+    <style>
+        .dropdown-menu>li>a:hover{
+            background-color: #C7C7C7!important;
+        }
+    </style>
     <script>
-        define('basic',['datatables','bootstrap'],function(datatables){
+        define('basic',['datatables'],function(datatables){
             $(".dropdown-menu a").click(function(event){
                 event.preventDefault();
                 var windowHref = window.location.href;
-                var clickedHref = $(this).prop('href');
+                var clickedHref = $(this).prop('href')
                 if(windowHref===clickedHref){
                     window.location.reload();
                 }else{
@@ -46,7 +52,6 @@
         });
         require(['basic']);
         requirejs.config({
-            urlArgs:"version=" +  (new Date()).getTime(),
             paths:{
                 'main':'/pla/js/main',
                 'fuelux': '/pla/webjars/fuelux/3.3.1/js/fuelux',
@@ -64,88 +69,47 @@
             "packages": []
         })
     </script>
-    <style>
-        .dropdown-menu {
-            padding: 5px 10px;
-        }
-    </style>
-</head>
-<body >
-<div th:fragment="bodyHeader" >
-    <style>
-        .dropdown-menu>li>a:hover{
-            background-color: #C7C7C7!important;
-        }
-    </style>
     <!-- Fixed navbar -->
-    <nav class="navbar navbar-default navbar-fixed-top">
-        <div class="container">
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-                    <span class="sr-only">Toggle navigation</span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                <a class="navbar-brand" href="#">PLA</a>
-            </div>
-            <div id="navbar" class="collapse navbar-collapse">
-                <ul class="nav navbar-nav navbar-left">
-                    <li class="active dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Core <span class="caret"></span></a>
-                        <ul class="dropdown-menu" role="menu">
-                            <li >
-                                <a th:href="@{/core/agent/listagent}">Agents</a>
-                            </li>
-                            <li ><a th:href="@{/core/benefit/listbenefit}">Benefits</a>
-                                <!-- <ul class="dropdown-menu">
-                                     <li><a href="#" onclick="openBenefitCreateModal()">Create Benefits</a></li>
-                                     <li><a th:href="@{/core/benefits/view}">View Benefits</a></li>
-                                 </ul>-->
-                            </li>
-                            <li >
-                                <a th:href="@{/core/coverages/view}">Coverages</a>
-                            </li>
-                            <li><a th:href="@{/core/team/view}">Team</a></li>
-                            <li><a th:href="@{/core/plan}">Plan</a></li>
-                            <li><a th:href="@{./proposal/individualLife/createProposal/index.html}">Proposal</a></li>
-                            <li><a th:href="@{/core/branch/view}">Branch Manager</a></li>
-                            <li><a th:href="@{/core/region/view}">Regional Manager</a></li>
-                           <!-- <li class="dropdown-submenu"><a href="#">HealthCareProvider</a>
-                                <ul class="dropdown-menu">
-                                    <li><a th:href="@{/core/healthCareProvider/viewCore}" > View HCP Core</a></li>
-                                </ul>
-                            </li> -->
-                            <li><a th:href="@{/core/commission/view}">Commissions</a></li>
-                            <li><a th:href="@{/core/overRideCommission/view}">Over-ride Commissions</a></li>
-                            <li><a th:href="@{/core/premium/listpremium}">Premium</a></li>
-                            <li><a th:href="@{/core/mandatorydocument/view}">Mandatory Documents </a></li>
-                            <li class="dropdown-submenu"><a href="#">General Information</a>
-                                <ul class="dropdown-menu">
-                                    <li><a th:href="@{/core/organizationLevelInformation/view}" >Organization Level Information</a></li>
-                                    <li><a th:href="@{/core/groupHealthLevelInformation/view}" >Group Health Level Information</a></li>
 
-                                </ul>
-                            </li>
-                            <!--   <li><a href="#/cars">Cars</a></li>  -->
-                        </ul>
-
+    <div id='cssmenu'>
+        <ul>
+            <li><a th:href="@{/home}"><span class="glyphicon glyphicon-home" aria-hidden="true">&nbsp;</span><span>Home</span></a></li>
+            <li class="active has-sub">
+                <a href="#"><span class="glyphicon glyphicon-wrench"></span>&nbsp;Core</a>
+                <ul>
+                    <li>
+                        <a th:href="@{/core/agent/listagent}">Agents</a>
                     </li>
-                    <!--  <li><a href="#">Test</a></li> -->
-                    <!--<li><a th:href="@{/sample}">Sample Form</a></li>
-                    <li><a th:href="@{/grid/persons}">Sample Table</a></li>-->
-                </ul>
-                <ul class="nav navbar-nav navbar-right">
-                    <li><a href="#" th:href="@{/logout}">Log off</a></li>
-                </ul>
-            </div><!--/.nav-collapse -->
-        </div>
-    </nav>
-</div>
+                    <li><a th:href="@{/core/benefit/listbenefit}">Benefits</a>
+                    </li>
+                    <li>
+                        <a th:href="@{/core/coverages/view}">Coverages</a>
+                    </li>
+                    <li><a th:href="@{/core/team/view}">Team</a></li>
+                    <li><a th:href="@{/core/plan}">Plan</a></li>
+                    <li><a th:href="@{/core/branch/view}">Branch Manager</a></li>
+                    <li><a th:href="@{/core/region/view}">Regional Manager</a></li>
+                    <li><a th:href="@{/core/commission/view}">Commissions</a></li>
+                    <li><a th:href="@{/core/overRideCommission/view}">Over-ride Commissions</a></li>
+                    <li><a th:href="@{/core/premium/view}">Premium</a></li>
+                    <li><a th:href="@{/core/mandatorydocument/view}">Mandatory Documents </a></li>
+                    <li class='last has-sub'><a href="#">General Information</a>
+                        <ul>
+                            <li><a th:href="@{/core/organizationLevelInformation/view}">Organization Level Information</a></li>
+                            <li><a th:href="@{/core/groupHealthLevelInformation/view}">Group Health Level Information</a></li>
 
+                        </ul>
+                    </li>
+                </ul>
+            </li>
+            <li class='last' style="float:right">
+                <a href="#" class="menu-button" th:href="@{/logout}"><span class="glyphicon glyphicon-log-out" aria-hidden="true"></span>&nbsp;Log off</a></li>
+        </ul>
+    </div>
+</div>
 <footer class="footer"  th:fragment="footer">
     <div class="container">
-        <p class="text-muted">Place sticky footer content here.</p>
+        <p class="text-muted"></p>
     </div>
 </footer>
 

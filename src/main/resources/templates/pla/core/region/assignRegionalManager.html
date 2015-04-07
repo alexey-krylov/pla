@@ -1,11 +1,11 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/xhtml"
       lang="en" >
 <head th:include="fragments/common :: headTag">
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
 
 </head>
-<body style="padding-top: 70px;">
+<body>
 <div th:include="fragments/common :: bodyHeader" th:remove="tag"/>
 <script>
     require(['moment'], function(moment) {
@@ -17,7 +17,7 @@
     });
 </script>
 
-<div class="container ng-cloak" style="padding-top: 0px!important;" ng-Controller="AssignRegionalManagerController">
+<div class="container ng-cloak" ng-Controller="AssignRegionalManagerController">
     <div class="row">
         <div class="col-lg-8" style="left:230px;position:absolute;">
             <div class="panel panel-primary">
