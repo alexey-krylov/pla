@@ -27,19 +27,21 @@ App.controller('CreateTeamController',['$scope','$http','$templateCache','$timeo
                  $scope.branchList=data;
                });
          }
-
+         $scope.$watch('createTeam.employeeId',function(newValue, oldValue){
+                 if(newValue){
+                  var empId = $scope.createTeam.employeeId;
+                  $scope.employeeData =_.findWhere($scope.teamLeaders,{employeeId:empId});
+                  $scope.createTeam.firstName=$scope.employeeData.firstName;
+                  $scope.createTeam.lastName=$scope.employeeData.lastName;
+                }
+           });
          $scope.submitTeam = function(){
 
              if (!moment($scope.createTeam.fromDate,'DD/MM/YYYY').isValid()) {
              		$scope.newDateField.fromDate = moment($scope.createTeam.fromDate).format("DD/MM/YYYY");
              		$scope.createTeam.fromDate=$scope.newDateField.fromDate ;
              }
-             var empId = $scope.createTeam.employeeId;
-             $scope.employeeData =_.findWhere($scope.teamLeaders,{employeeId:empId});
-             $scope.createTeam.firstName=$scope.employeeData.firstName;
-            $scope.createTeam.lastName=$scope.employeeData.lastName;
-
-           $http.post('/pla/core/team/create', $scope.createTeam).success(function(data){
+            $http.post('/pla/core/team/create', $scope.createTeam).success(function(data){
               //  console.log(data);
                 if(data.status==200){
                      $scope.alert = {title:'Success Message! ', content:data.message, type: 'success'};
@@ -47,7 +49,7 @@ App.controller('CreateTeamController',['$scope','$http','$templateCache','$timeo
                 }else if(data.status==500){
                  $scope.alert = {title:'Error Message! ', content:data.message, type: 'danger'};
                 }else{
-                    $scope.alert = {title:'Info Message! ', content:data.message, type: 'info'};
+                    $scope.alert = {title:'Info Message! ', content:data.message, type: 'danger'};
                 }
 
              });
