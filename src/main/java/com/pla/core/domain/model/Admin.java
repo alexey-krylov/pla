@@ -9,12 +9,22 @@ package com.pla.core.domain.model;
 import com.pla.core.domain.exception.BenefitDomainException;
 import com.pla.core.domain.exception.CoverageException;
 import com.pla.core.domain.exception.TeamDomainException;
+import com.pla.core.domain.model.generalinformation.*;
+import com.pla.core.dto.GeneralInformationDto;
 import com.pla.sharedkernel.domain.model.BenefitStatus;
+import com.pla.sharedkernel.domain.model.DiscountFactorItem;
+import com.pla.sharedkernel.domain.model.ModalFactorItem;
+import com.pla.sharedkernel.domain.model.Tax;
 import com.pla.sharedkernel.identifier.CoverageId;
+import com.pla.sharedkernel.identifier.LineOfBusinessId;
 import com.pla.sharedkernel.identifier.PlanId;
+import org.bson.types.ObjectId;
 import org.joda.time.LocalDate;
 import org.nthdimenzion.ddd.domain.annotations.ValueObject;
 
+import java.math.BigDecimal;
+import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -103,5 +113,45 @@ public class Admin {
     public Team inactivateTeam(Team team) {
         Team deactivatedTeam = team.inactivate();
         return deactivatedTeam;
+    }
+
+    public ProductLineGeneralInformation createProductLineGeneralInformation(LineOfBusinessId lineOfBusinessId,GeneralInformationDto generalInformationDto){
+        ProductLineGeneralInformation productLineGeneralInformation = ProductLineGeneralInformation.createProductLineGeneralInformation(lineOfBusinessId);
+        productLineGeneralInformation =  assignProductLineProcess(generalInformationDto, productLineGeneralInformation);
+        return productLineGeneralInformation;
+    }
+
+    public OrganizationGeneralInformation createOrganizationGeneralInformation(List<Map<ModalFactorItem, BigDecimal>> modalFactorItems, List<Map<DiscountFactorItem, BigDecimal>> discountFactorItems,Map<Tax, BigDecimal> serviceTax){
+        String organizationInformationId = new ObjectId().toString();
+        OrganizationGeneralInformation organizationGeneralInformation = OrganizationGeneralInformation.createOrganizationGeneralInformation(organizationInformationId);
+        organizationGeneralInformation.withDiscountFactorOrganizationInformation(discountFactorItems);
+        organizationGeneralInformation.withModalFactorOrganizationInformation(modalFactorItems);
+        organizationGeneralInformation.withServiceTaxOrganizationInformation(serviceTax);
+        return organizationGeneralInformation;
+    }
+
+    public OrganizationGeneralInformation updateOrganizationInformation(OrganizationGeneralInformation organizationGeneralInformation,GeneralInformationDto generalInformationDto){
+        organizationGeneralInformation.withDiscountFactorOrganizationInformation(generalInformationDto.getDiscountFactorItems());
+        organizationGeneralInformation.withModalFactorOrganizationInformation(generalInformationDto.getModelFactorItems());
+        organizationGeneralInformation.withServiceTaxOrganizationInformation(generalInformationDto.getServiceTax());
+        return organizationGeneralInformation;
+    }
+
+    public ProductLineGeneralInformation updateProductLineInformation(ProductLineGeneralInformation productLineGeneralInformation,GeneralInformationDto generalInformationDto){
+        productLineGeneralInformation = assignProductLineProcess(generalInformationDto, productLineGeneralInformation);
+        return productLineGeneralInformation;
+    }
+
+    private ProductLineGeneralInformation assignProductLineProcess(GeneralInformationDto generalInformationDto, ProductLineGeneralInformation productLineGeneralInformation) {
+        productLineGeneralInformation.withQuotationProcessInformation(generalInformationDto.getQuotationProcessItems());
+        productLineGeneralInformation.withEnrollmentProcessGeneralInformation(generalInformationDto.getEnrollmentProcessItems());
+        productLineGeneralInformation.withReinstatementProcessInformation(generalInformationDto.getReinstatementProcessItems());
+        productLineGeneralInformation.withEndorsementProcessInformation(generalInformationDto.getEndorsementProcessItems());
+        productLineGeneralInformation.withClaimProcessInformation(generalInformationDto.getClaimProcessItems());
+        productLineGeneralInformation.withPolicyFeeProcessInformation(generalInformationDto.getPolicyFeeProcessItems());
+        productLineGeneralInformation.withPolicyProcessMinimumLimit(generalInformationDto.getPolicyProcessMinimumLimitItems());
+        productLineGeneralInformation.withSurrenderProcessInformation(generalInformationDto.getSurrenderProcessItems());
+        productLineGeneralInformation.withMaturityProcessInformation(generalInformationDto.getMaturityProcessItems());
+        return productLineGeneralInformation;
     }
 }

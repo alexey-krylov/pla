@@ -6,13 +6,21 @@
 
 package com.pla.core.domain.model;
 
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import com.pla.core.domain.exception.CoverageException;
+import com.pla.core.domain.exception.GeneralInformationException;
+import com.pla.core.domain.model.generalinformation.OrganizationGeneralInformation;
+import com.pla.core.domain.model.generalinformation.ProductLineGeneralInformation;
 import com.pla.core.dto.BenefitDto;
+import com.pla.core.dto.GeneralInformationDto;
+import com.pla.core.dto.PolicyProcessMinimumLimitItemDto;
 import com.pla.core.query.BenefitFinder;
 import com.pla.core.specification.BenefitIsAssociatedWithCoverage;
 import com.pla.core.specification.BenefitNameIsUnique;
-import com.pla.sharedkernel.domain.model.BenefitStatus;
+import com.pla.sharedkernel.domain.model.*;
 import com.pla.sharedkernel.identifier.CoverageId;
+import com.pla.sharedkernel.identifier.LineOfBusinessId;
 import com.pla.sharedkernel.identifier.PlanId;
 import org.junit.Before;
 import org.junit.Test;
@@ -20,10 +28,13 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
+import java.math.BigDecimal;
 import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.util.ReflectionTestUtils.invokeGetterMethod;
 
@@ -47,6 +58,9 @@ public class AdminUnitTest {
 
     Set<Benefit> benefitSet = new HashSet<>();
 
+    GeneralInformationDto generalInformationDto = new GeneralInformationDto();
+    List<Map<ProductLineProcessType,Integer>> listOfProcessItems;
+
     @Before
     public void setUp() {
         admin = new Admin();
@@ -54,6 +68,66 @@ public class AdminUnitTest {
         boolean isBenefitNameUnique = true;
         Benefit benefit = admin.createBenefit(isBenefitNameUnique, "1", name);
         benefitSet.add(benefit);
+
+        listOfProcessItems = Lists.newArrayList();
+        Map<ProductLineProcessType,Integer> productLineProcessItemMap = Maps.newLinkedHashMap();
+        productLineProcessItemMap.put(ProductLineProcessType.PURGE_TIME_PERIOD, 10);
+        listOfProcessItems.add(productLineProcessItemMap);
+
+        productLineProcessItemMap = Maps.newLinkedHashMap();
+        productLineProcessItemMap.put(ProductLineProcessType.NO_OF_REMAINDER, 11);
+        listOfProcessItems.add(productLineProcessItemMap);
+
+        productLineProcessItemMap = Maps.newLinkedHashMap();
+        productLineProcessItemMap.put(ProductLineProcessType.FIRST_REMAINDER,12);
+        listOfProcessItems.add(productLineProcessItemMap);
+
+        productLineProcessItemMap = Maps.newLinkedHashMap();
+        productLineProcessItemMap.put(ProductLineProcessType.GAP, 13);
+        listOfProcessItems.add(productLineProcessItemMap);
+
+        productLineProcessItemMap = Maps.newLinkedHashMap();
+        productLineProcessItemMap.put(ProductLineProcessType.CLOSURE, 14);
+        listOfProcessItems.add(productLineProcessItemMap);
+        generalInformationDto.setQuotationProcessItems(listOfProcessItems);
+        generalInformationDto.setEnrollmentProcessItems(listOfProcessItems);
+        generalInformationDto.setEndorsementProcessItems(listOfProcessItems);
+        generalInformationDto.setReinstatementProcessItems(listOfProcessItems);
+        generalInformationDto.setClaimProcessItems(listOfProcessItems);
+        generalInformationDto.setSurrenderProcessItems(listOfProcessItems);
+        generalInformationDto.setMaturityProcessItems(listOfProcessItems);
+
+        List<Map<PolicyFeeProcessType,Integer>> policyFeeProcessInformation =Lists.newArrayList();
+        Map<PolicyFeeProcessType,Integer> policyFeeProcessTypeMap = Maps.newLinkedHashMap();
+        policyFeeProcessTypeMap.put(PolicyFeeProcessType.ANNUAL,20);
+        policyFeeProcessInformation.add(policyFeeProcessTypeMap);
+
+        policyFeeProcessTypeMap = Maps.newLinkedHashMap();
+        policyFeeProcessTypeMap.put(PolicyFeeProcessType.SEMI_ANNUAL,17);
+        policyFeeProcessInformation.add(policyFeeProcessTypeMap);
+
+        policyFeeProcessTypeMap = Maps.newLinkedHashMap();
+        policyFeeProcessTypeMap.put(PolicyFeeProcessType.QUARTERLY,18);
+        policyFeeProcessInformation.add(policyFeeProcessTypeMap);
+
+        policyFeeProcessTypeMap = Maps.newLinkedHashMap();
+        policyFeeProcessTypeMap.put(PolicyFeeProcessType.MONTHLY,19);
+        policyFeeProcessInformation.add(policyFeeProcessTypeMap);
+        generalInformationDto.setPolicyFeeProcessItems(policyFeeProcessInformation);
+
+        List<PolicyProcessMinimumLimitItemDto> policyProcessMinimumLimit = Lists.newArrayList();
+        PolicyProcessMinimumLimitItemDto policyProcessMinimumLimitItemDto = new PolicyProcessMinimumLimitItemDto();
+        policyProcessMinimumLimitItemDto.setPolicyProcessMinimumLimitType(PolicyProcessMinimumLimitType.ANNUAL);
+        policyProcessMinimumLimitItemDto.setNoOfPersonPerPolicy(10);
+        policyProcessMinimumLimitItemDto.setMinimumPremium(2);
+        policyProcessMinimumLimit.add(policyProcessMinimumLimitItemDto);
+
+        policyProcessMinimumLimitItemDto = new PolicyProcessMinimumLimitItemDto();
+        policyProcessMinimumLimitItemDto.setPolicyProcessMinimumLimitType(PolicyProcessMinimumLimitType.SEMI_ANNUAL);
+        policyProcessMinimumLimitItemDto.setNoOfPersonPerPolicy(20);
+        policyProcessMinimumLimitItemDto.setMinimumPremium(8);
+        policyProcessMinimumLimit.add(policyProcessMinimumLimitItemDto);
+        generalInformationDto.setPolicyProcessMinimumLimitItems(policyProcessMinimumLimit);
     }
 
     @Test
@@ -193,4 +267,106 @@ public class AdminUnitTest {
         assertEquals(3, updatedMandatoryDocument.getDocuments().size());
     }
 
+    /*
+    * Given
+    *    the general information for the
+    *       1.Group life level
+    *       2.Group health level and
+    *       3.Individual information
+    * When
+    *    all the information are given i.e, all the information provided
+    * Then
+    *    the product line information should get created with all the process information
+    *
+    * */
+    @Test
+    public void givenLineOfBusinessIdAndGeneralInformation_thenItShouldCreateTheProductLineInformationWithTheGivenProcess(){
+        ProductLineGeneralInformation createdProductLineGeneralInformation = admin.createProductLineGeneralInformation(LineOfBusinessId.GROUP_HEALTH, generalInformationDto);
+        assertNotNull(createdProductLineGeneralInformation);
+        assertNotNull(createdProductLineGeneralInformation.getQuotationProcessInformation());
+        assertNotNull(createdProductLineGeneralInformation.getEnrollmentProcessInformation());
+        assertNotNull(createdProductLineGeneralInformation.getEndorsementProcessInformation());
+        assertNotNull(createdProductLineGeneralInformation.getReinstatementProcessInformation());
+        assertNotNull(createdProductLineGeneralInformation.getClaimProcessInformation());
+        assertNotNull(createdProductLineGeneralInformation.getSurrenderProcessInformation());
+        assertNotNull(createdProductLineGeneralInformation.getMaturityProcessInformation());
+    }
+
+    /*
+    * Given
+    *    the line of business id,general information
+    * When
+    *    the general information has Early Death Criteria product line process type is associated with the process other than Claim process
+    * Then
+    *    the Generic exception should be thrown with message "Early Death Criteria is applicable only for claim request"
+    * */
+    @Test(expected = GeneralInformationException.class)
+    public void givenLineOfBusinessIdAndGeneralInformation_whenEarlyDeathCriteriaIsAssociatedWithOtherThanClaimProcess_thenItThrowAnGenericInformationException(){
+        Map<ProductLineProcessType,Integer> productLineProcessItemMap = Maps.newLinkedHashMap();
+        productLineProcessItemMap.put(ProductLineProcessType.EARLY_DEATH_CRITERIA, 10);
+        listOfProcessItems.add(productLineProcessItemMap);
+        ProductLineGeneralInformation createdProductLineGeneralInformation = admin.createProductLineGeneralInformation(LineOfBusinessId.GROUP_HEALTH, generalInformationDto);
+        assertNull(createdProductLineGeneralInformation);
+    }
+
+    /*
+   * Given
+   *    the line of business id,general information
+   * When
+   *    the line of business id is Individual information for minimum limit request
+   * Then
+   *    the exception should be thrown as product line general information
+   * */
+    @Test(expected = IllegalArgumentException.class)
+    public void givenLineOfBusinessIdAndGeneralInformation_whenLineOfBusinessIdIsIndividualInsurance_thenItThrowAnException(){
+        ProductLineGeneralInformation createdProductLineGeneralInformation = admin.createProductLineGeneralInformation(LineOfBusinessId.INDIVIDUAL_INSURANCE, generalInformationDto);
+        assertNull(createdProductLineGeneralInformation);
+    }
+
+
+    /*
+    * Given
+    *    the service tax, modal factor and discount factor information
+    *  When
+    *   all the mandatory information are provided
+    * Then
+    *    it should create the Organization general information with discount and modal factor values limited to 4 decimal places
+    *    and service tax value limited 3 digits and to 2 decimal places
+    * */
+    @Test
+    public void givenServiceTaxDiscountAndModalFactorInformation_thenItShouldCreateTheOrganizationInformation(){
+        Map<Tax,BigDecimal> serviceTaxMap = Maps.newLinkedHashMap();
+        serviceTaxMap.put(Tax.SERVICE_TAX, new BigDecimal(123.9567));
+
+        List<Map<DiscountFactorItem,BigDecimal>> listOfDiscountFactorItem  = Lists.newArrayList();
+        Map<DiscountFactorItem,BigDecimal> discountFactorMap = Maps.newLinkedHashMap();
+        discountFactorMap.put(DiscountFactorItem.QUARTERLY, new BigDecimal(114.123449));
+        listOfDiscountFactorItem.add(discountFactorMap);
+        discountFactorMap = Maps.newLinkedHashMap();
+        discountFactorMap.put(DiscountFactorItem.ANNUAL, new BigDecimal(111.123441));
+        listOfDiscountFactorItem.add(discountFactorMap);
+        discountFactorMap = Maps.newLinkedHashMap();
+        discountFactorMap.put(DiscountFactorItem.SEMI_ANNUAL, new BigDecimal(112.123445));
+        listOfDiscountFactorItem.add(discountFactorMap);
+
+        List<Map<ModalFactorItem,BigDecimal>> listOfModalFactorItem  = Lists.newArrayList();
+        Map<ModalFactorItem,BigDecimal> modalFactorMap = Maps.newLinkedHashMap();
+        modalFactorMap.put(ModalFactorItem.SEMI_ANNUAL, new BigDecimal(100.188446));
+        listOfModalFactorItem.add(modalFactorMap);
+
+        modalFactorMap = Maps.newLinkedHashMap();
+        modalFactorMap.put(ModalFactorItem.QUARTERLY, new BigDecimal(101.123448));
+        listOfModalFactorItem.add(modalFactorMap);
+
+        modalFactorMap = Maps.newLinkedHashMap();
+        modalFactorMap.put(ModalFactorItem.MONTHLY, new BigDecimal(102.123449));
+        listOfModalFactorItem.add(modalFactorMap);
+
+        OrganizationGeneralInformation organizationGeneralInformation = admin.createOrganizationGeneralInformation(listOfModalFactorItem, listOfDiscountFactorItem, serviceTaxMap);
+        assertNotNull(organizationGeneralInformation);
+        assertNotNull(organizationGeneralInformation.getServiceTax());
+        assertNotNull(organizationGeneralInformation.getDiscountFactorItems());
+        assertNotNull(organizationGeneralInformation.getModelFactorItems());
+
+    }
 }
