@@ -21,6 +21,7 @@ import org.springframework.web.servlet.i18n.LocaleChangeInterceptor;
 import org.springframework.web.servlet.i18n.SessionLocaleResolver;
 import org.springframework.web.servlet.view.InternalResourceView;
 import org.springframework.web.servlet.view.UrlBasedViewResolver;
+import org.thymeleaf.templateresolver.ServletContextTemplateResolver;
 
 import java.text.ParseException;
 import java.util.Locale;
@@ -94,6 +95,7 @@ public class CustomMVCConfiguration extends WebMvcConfigurerAdapter {
         registry.addViewController("/login").setViewName("login");
         registry.addViewController("/home").setViewName("home");
         registry.addViewController("/sample/grid").setViewName("pla/sample/grid");
+
     }
 
     @Override
@@ -107,6 +109,17 @@ public class CustomMVCConfiguration extends WebMvcConfigurerAdapter {
             registry.addResourceHandler("/**")
                     .addResourceLocations(RESOURCE_LOCATIONS);
         }
+    }
+
+    @Bean
+    public ServletContextTemplateResolver templateResolver() {
+        ServletContextTemplateResolver resolver = new ServletContextTemplateResolver();
+        resolver.setPrefix("/WEB-INF/");
+        resolver.setSuffix(".html");
+        resolver.setTemplateMode("HTML5");
+        resolver.setOrder(2);
+        resolver.setCacheable(false);
+        return resolver;
     }
 
     @Override

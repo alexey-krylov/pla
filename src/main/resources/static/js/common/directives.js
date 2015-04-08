@@ -30,14 +30,14 @@ angular.module('directives', [])
             },
             link: function (scope, element, attr, ctrl) {
                 scope.$watch('selectedItem',function(newVal,oldVal){
-                    element.wizard('selectedItem', {
+                    $(element).wizard('selectedItem', {
                         step: newVal
                     });
                 });
 
                 scope.$watch('removeSteps',function(newVal,oldVal){
                     if(newVal){
-                        element.wizard('removeSteps',newVal.index,newVal.howMany)
+                        $(element).wizard('removeSteps', newVal.index, newVal.howMany)
                     }
                 });
 
@@ -96,4 +96,3 @@ angular.module('directives', [])
             }
         }
     }]);
-   

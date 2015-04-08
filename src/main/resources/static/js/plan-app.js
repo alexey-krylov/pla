@@ -304,7 +304,6 @@ app.controller('PlanSetupController', ['$scope', '$http', '$routeParams', 'plan'
                 }
             });
 
-
             $scope.getAllBenefits = function () {
                 var benefitList = [];
                  var i = 0;
@@ -331,3 +330,8 @@ app.controller('PlanSetupController', ['$scope', '$http', '$routeParams', 'plan'
             });
         }]
 );
+app.filter('getTrustedUrl', ['$sce', function ($sce) {
+    return function (url) {
+        return $sce.getTrustedResourceUrl(url);
+    }
+}]);

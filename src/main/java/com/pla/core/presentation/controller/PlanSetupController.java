@@ -30,7 +30,7 @@ import java.util.Map;
 @RequestMapping(value = "/core/plan")
 public class PlanSetupController {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(BenefitController.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(PlanSetupController.class);
     private CommandGateway commandGateway;
     private MongoTemplate mongoTemplate;
 
@@ -141,5 +141,4 @@ public class PlanSetupController {
         }
         return plan;
     }
-
 }
