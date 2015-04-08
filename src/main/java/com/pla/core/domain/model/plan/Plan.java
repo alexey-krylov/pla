@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
+import com.mongodb.BasicDBObjectBuilder;
+import com.mongodb.DBObject;
 import com.pla.sharedkernel.domain.model.CoverageTermType;
 import com.pla.sharedkernel.domain.model.PolicyTermType;
 import com.pla.sharedkernel.domain.model.PremiumTermType;
@@ -13,8 +15,10 @@ import com.pla.sharedkernel.identifier.PlanId;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.ToString;
+import org.axonframework.domain.AbstractAggregateRoot;
 import org.axonframework.domain.DomainEventMessage;
 import org.axonframework.eventsourcing.EventSourcedEntity;
+import org.axonframework.eventsourcing.annotation.AggregateIdentifier;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -35,11 +39,12 @@ import java.util.stream.Collectors;
 @Getter
 @ToString(exclude = {"logger"})
 @EqualsAndHashCode(exclude = {"logger", "specification"}, callSuper = false)
-public class Plan {
+public class Plan extends AbstractAggregateRoot<PlanId> {
 
     private static final Logger logger = LoggerFactory.getLogger(Plan.class);
 
     @Id
+    @AggregateIdentifier
     private PlanId planId;
     private PlanDetail planDetail;
     @Transient
@@ -54,16 +59,6 @@ public class Plan {
 
 
     Plan() {
-
-    }
-
-    //@Override
-    protected Iterable<? extends EventSourcedEntity> getChildEntities() {
-        return null;
-    }
-
-    //@Override
-    protected void handle(DomainEventMessage event) {
 
     }
 
@@ -95,6 +90,15 @@ public class Plan {
         return new PlanBuilder();
     }
 
+    //@Override
+    protected Iterable<? extends EventSourcedEntity> getChildEntities() {
+        return null;
+    }
+
+    //@Override
+    protected void handle(DomainEventMessage event) {
+
+    }
 
     // TODO : Write test
     public Set<Integer> getAllowedPolicyTerm() {
@@ -178,6 +182,7 @@ public class Plan {
         List<BigDecimal> coverageSumAssuredValues = getAllowedCoverageSumAssuredValues(coverageId);
         return coverageSumAssuredValues.contains(sumAssured);
     }
+
     // TODO : Write test
     public int getMaximumMaturityAge() {
         int maximumMaturityAge = 0;
@@ -215,6 +220,7 @@ public class Plan {
         List<Integer> validAges = getAllowedAges();
         return validAges.contains(age);
     }
+
     // TODO : Write test
     public boolean isValidCoverageAge(Integer age, CoverageId coverageId) {
         List<Integer> validAges = getAllowedCoverageAges(coverageId);
@@ -232,8 +238,16 @@ public class Plan {
         return planCoverages.get(0);
     }
 
-    //@Override
-    public Object getIdentifier() {
-        return null;
+    @Override
+    public PlanId getIdentifier() {
+        return planId;
+    }
+
+    public DBObject getAsDBObject() {
+        return new BasicDBObjectBuilder().append("planId", planId).append("planDetail", planDetail)
+                .append("policyTermType", policyTermType)
+                .append("sumAssured", sumAssured)
+                .append("premiumTerm", premiumTerm)
+                .append("coverages", coverages).get();
     }
 }
