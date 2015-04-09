@@ -414,37 +414,6 @@ CREATE TABLE `designation` (
   PRIMARY KEY (`code`)
 );
 
-DROP TABLE IF EXISTS `commission`;
-CREATE TABLE `commission` (
-  `commission_id` varchar(255) NOT NULL,
-  `available_for` int(11) DEFAULT NULL,
-  `commission_term_type` varchar(255) DEFAULT NULL,
-  `commission_type` varchar(255) DEFAULT NULL,
-  `from_date` date DEFAULT NULL,
-  `plan_id` varchar(255) DEFAULT NULL,
-  `thru_date` date DEFAULT NULL,
-  PRIMARY KEY (`commission_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
-DROP TABLE IF EXISTS `commission_commission_term`;
-CREATE TABLE `commission_commission_term` (
-  `commission_id` varchar(255) NOT NULL,
-  `commission_percentage` decimal(19,2) DEFAULT NULL,
-  `end_year` int(11) DEFAULT NULL,
-  `start_year` int(11) DEFAULT NULL,
-  KEY `FK_as28e68p5ow4r4rrxui4kx64l` (`commission_id`),
-  CONSTRAINT `FK_as28e68p5ow4r4rrxui4kx64l` FOREIGN KEY (`commission_id`) REFERENCES `commission` (`commission_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
-DROP VIEW IF EXISTS `commission_view`;
-CREATE VIEW `commission_view` AS
-  (SELECT cm.commission_id AS commissionId,cm.from_date AS fromDate,cm.thru_date AS toDate,cm.plan_id AS planId,cm.available_for AS availableFor,cm.commission_term_type AS commissionTermType,cm.commission_type AS commissionType FROM commission cm);
-
-DROP VIEW IF EXISTS `commission_commission_term_view`;
-CREATE VIEW `commission_commission_term_view` AS
-  (SELECT cctf.commission_id AS commissionId,cctf.commission_percentage  AS commissionPercentage, cctf.start_year  AS startYear,
-     cctf.end_year AS endYear FROM COMMISSION_COMMISSION_TERM  cctf );
-
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
