@@ -55,7 +55,7 @@
                            <td th:text="${branch.regionName}"></td>
                             <td  th:text="${branch.branchName}"></td>
                             <td th:text="${branch.branchManagerFirstName != null and branch.branchManagerLastName != null} ? | ${branch.branchManagerFirstName} ${branch.branchManagerLastName} |"></td>
-                            <td th:text="${branch.branchManagerFromDate}"></td>
+                            <td th:text="${branch.branchManagerFromDate !=null}? ${#dates.format(branch.branchManagerFromDate,'dd/MM/yyyy')}"></td>
                             <td th:text="${branch.branchBDEFirstName != null and branch.branchBDELastName != null} ? | ${branch.branchBDEFirstName} ${branch.branchBDELastName}  |"></td>
                             <td th:text="${branch.branchBDEFromDate !=null}? ${#dates.format(branch.branchBDEFromDate,'dd/MM/yyyy')}"></td>
                             <td style="text-align:center">   <!--th:href="@{/core/branch/redirectToAssignPage}"-->

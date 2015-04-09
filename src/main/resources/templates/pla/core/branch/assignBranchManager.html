@@ -46,7 +46,7 @@
                             </div>
                             <div class="form-group col-md-6" style="margin: auto;margin-top:10px;">
                                 <label class="control-label">Current Branch Manager From</label>
-                                <div class="controls readonly" ng-model="assignBranchManager.currentBranchManagerFromDate">{{assignBranchManager.currentBranchManagerFromDate}}</div>
+                                <div class="controls readonly" ng-model="assignBranchManager.currentBranchManagerFromDate">{{assignBranchManager.currentBranchManagerFromDate | date:'dd/MM/yyyy'}}</div>
                             </div>
                             </div>
                         <div class="row">
@@ -56,7 +56,7 @@
                             </div>
                             <div class="form-group col-md-6" style="margin: auto;margin-top:10px;">
                                 <label class="control-label">Current Branch BDE From</label>
-                                <div class="controls readonly" ng-model="assignBranchManager.currentBranchBDEFromDate">{{assignBranchManager.currentBranchBDEFromDate}}</div>
+                                <div class="controls readonly" ng-model="assignBranchManager.currentBranchBDEFromDate">{{assignBranchManager.currentBranchBDEFromDate | date:'dd/MM/yyyy'}}</div>
                             </div>
 
                         </div>
