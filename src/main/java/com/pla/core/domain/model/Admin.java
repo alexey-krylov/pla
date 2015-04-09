@@ -9,12 +9,13 @@ package com.pla.core.domain.model;
 import com.pla.core.domain.exception.BenefitDomainException;
 import com.pla.core.domain.exception.CoverageException;
 import com.pla.core.domain.exception.TeamDomainException;
-import com.pla.core.domain.model.generalinformation.*;
+import com.pla.core.domain.model.generalinformation.OrganizationGeneralInformation;
+import com.pla.core.domain.model.generalinformation.ProductLineGeneralInformation;
+import com.pla.core.domain.model.plan.commission.Commission;
+import com.pla.core.domain.model.plan.commission.CommissionTerm;
 import com.pla.core.dto.GeneralInformationDto;
-import com.pla.sharedkernel.domain.model.BenefitStatus;
-import com.pla.sharedkernel.domain.model.DiscountFactorItem;
-import com.pla.sharedkernel.domain.model.ModalFactorItem;
-import com.pla.sharedkernel.domain.model.Tax;
+import com.pla.sharedkernel.domain.model.*;
+import com.pla.sharedkernel.identifier.CommissionId;
 import com.pla.sharedkernel.identifier.CoverageId;
 import com.pla.sharedkernel.identifier.LineOfBusinessId;
 import com.pla.sharedkernel.identifier.PlanId;
@@ -153,5 +154,15 @@ public class Admin {
         productLineGeneralInformation.withSurrenderProcessInformation(generalInformationDto.getSurrenderProcessItems());
         productLineGeneralInformation.withMaturityProcessInformation(generalInformationDto.getMaturityProcessItems());
         return productLineGeneralInformation;
+    }
+
+    public Commission createCommission(CommissionId commissionId, PlanId planId, CommissionDesignation availableFor, CommissionType commissionType, CommissionTermType commissionTermType, LocalDate fromDate) {
+
+        return Commission.createCommission(commissionId, planId, availableFor, commissionType, commissionTermType, fromDate);
+    }
+
+    public Commission updateCommissionTerm(Commission commission, Set<CommissionTerm> commissionSet) {
+
+        return commission.updateWithCommissionTerms(commissionSet);
     }
 }
