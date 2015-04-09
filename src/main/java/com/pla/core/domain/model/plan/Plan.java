@@ -70,7 +70,7 @@ public class Plan extends AbstractAggregateRoot<PlanId> {
         this.sumAssured = planBuilder.getSumAssured();
         this.policyTermType = planBuilder.getPolicyTermType();
         this.premiumTermType = planBuilder.getPremiumTermType();
-        this.premiumTerm = planBuilder.getPolicyTerm();
+        this.premiumTerm = planBuilder.getPremiumTerm();
         this.policyTerm = planBuilder.getPolicyTerm();
         this.coverages = planBuilder.getCoverages();
         Preconditions.checkState(specification.isSatisfiedBy(this));
@@ -100,7 +100,7 @@ public class Plan extends AbstractAggregateRoot<PlanId> {
 
     }
 
-    // TODO : Write test
+
     public Set<Integer> getAllowedPolicyTerm() {
         if (PolicyTermType.SPECIFIED_VALUES.equals(this.policyTermType)) {
             return this.policyTerm.getValidTerms();
@@ -108,7 +108,7 @@ public class Plan extends AbstractAggregateRoot<PlanId> {
         return this.policyTerm.getMaturityAges();
     }
 
-    // TODO : Write test
+
     public Set<Integer> getAllowedCoverageTerm(CoverageId coverageId) {
         PlanCoverage planCoverage = getPlanCoverageFor(coverageId);
         if (CoverageTermType.POLICY_TERM.equals(planCoverage.getCoverageTermType())) {
@@ -117,19 +117,19 @@ public class Plan extends AbstractAggregateRoot<PlanId> {
         return planCoverage.getAllowedCoverageTerm();
     }
 
-    // TODO : Write test
+
     public boolean isValidPolicyTerm(Integer policyTerm) {
         Set<Integer> policyTerms = getAllowedPolicyTerm();
         return policyTerms.contains(policyTerm);
     }
 
-    // TODO : Write test
+
     public boolean isValidCoverageTerm(Integer coverageTerm, CoverageId coverageId) {
         Set<Integer> coverageTerms = getAllowedCoverageTerm(coverageId);
         return coverageTerms.contains(coverageTerm);
     }
 
-    // TODO : Write test
+
     public Set<Integer> getAllowedPremiumTerms() {
         if (PremiumTermType.SPECIFIED_VALUES.equals(this.premiumTermType)) {
             return this.premiumTerm.getValidTerms();
@@ -141,19 +141,19 @@ public class Plan extends AbstractAggregateRoot<PlanId> {
         return Sets.newHashSet(1);
     }
 
-    // TODO : Write test
+
     public boolean isValidPremiumTerm(Integer premiumTerm) {
         Set<Integer> premiumTerms = getAllowedPremiumTerms();
         return premiumTerms.contains(premiumTerm);
     }
 
-    // TODO : Write test
+
     public List<BigDecimal> getAllowedCoverageSumAssuredValues(CoverageId coverageId) {
         PlanCoverage planCoverage = getPlanCoverageFor(coverageId);
         return planCoverage.getAllowedCoverageSumAssuredValues();
     }
 
-    // TODO : Write test
+
     public List<BigDecimal> getAllowedSumAssuredValues() {
         List<BigDecimal> allowedValues = Lists.newArrayList();
         if (SumAssuredType.SPECIFIED_VALUES.equals(this.sumAssured.getSumAssuredType())) {
@@ -171,19 +171,19 @@ public class Plan extends AbstractAggregateRoot<PlanId> {
         return allowedValues;
     }
 
-    // TODO : Write test
+
     public boolean isValidSumAssured(BigDecimal sumAssured) {
         List<BigDecimal> sumAssuredValues = getAllowedSumAssuredValues();
         return sumAssuredValues.contains(sumAssured);
     }
 
-    // TODO : Write test
+
     public boolean isValidCoverageSumAssured(BigDecimal sumAssured, CoverageId coverageId) {
         List<BigDecimal> coverageSumAssuredValues = getAllowedCoverageSumAssuredValues(coverageId);
         return coverageSumAssuredValues.contains(sumAssured);
     }
 
-    // TODO : Write test
+
     public int getMaximumMaturityAge() {
         int maximumMaturityAge = 0;
         if (PolicyTermType.SPECIFIED_VALUES.equals(this.policyTermType)) {
@@ -197,7 +197,7 @@ public class Plan extends AbstractAggregateRoot<PlanId> {
         return maximumMaturityAge;
     }
 
-    // TODO : Write test
+
     public List<Integer> getAllowedAges() {
         List<Integer> allowedAges = new ArrayList<>();
         int maxAge = getMaximumMaturityAge();
@@ -209,26 +209,26 @@ public class Plan extends AbstractAggregateRoot<PlanId> {
         return allowedAges;
     }
 
-    // TODO : Write test
+
     public List<Integer> getAllowedCoverageAges(CoverageId coverageId) {
         PlanCoverage planCoverage = getPlanCoverageFor(coverageId);
         return planCoverage.getAllowedAges();
     }
 
-    // TODO : Write test
+
     public boolean isValidAge(Integer age) {
         List<Integer> validAges = getAllowedAges();
         return validAges.contains(age);
     }
 
-    // TODO : Write test
+
     public boolean isValidCoverageAge(Integer age, CoverageId coverageId) {
         List<Integer> validAges = getAllowedCoverageAges(coverageId);
         return validAges.contains(age);
     }
 
-    // TODO : Write test
-    private PlanCoverage getPlanCoverageFor(CoverageId coverageId) {
+
+      PlanCoverage getPlanCoverageFor(CoverageId coverageId) {
         List<PlanCoverage> planCoverages = this.coverages.stream().filter(new Predicate<PlanCoverage>() {
             @Override
             public boolean test(PlanCoverage planCoverage) {
