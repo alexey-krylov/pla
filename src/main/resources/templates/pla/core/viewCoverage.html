@@ -45,7 +45,7 @@
                    <div class="form-group required" style="margin: auto;margin-top:10px;">
                         <label class="col-sm-3 control-label">Benefit(s)</label>
                         <div class="col-sm-9"  >
-                            <button type="button" class="btn btn-default bs-select" required="true" name="checkBenefits" id="selectedBenefits"  ng-model="createCoverage.benefitIds" data-all-none-buttons="true"  data-html="1" data-multiple="1"  ng-options="benefit.benefitId as benefit.benefitName for benefit in getAllBenefits | orderBy:'benefitName'"  >
+                            <button type="button" class="btn btn-default bs-select" required="true" name="checkBenefits" id="selectedBenefits"  ng-model="createCoverage.benefitIds" max-length="0" data-all-none-buttons="true"  data-html="1" data-multiple="1"  ng-options="benefit.benefitId as benefit.benefitName for benefit in getAllBenefits | orderBy:'benefitName'"  >
                                 Action <span class="caret"></span>
                             </button>
                            <span type="hidden" style="color: darkred;font-size: 10px" ng-show="createCoverageForm.$submitted &amp;&amp; createCoverageForm.checkBenefits.$error.required" >Please select benefits </span>

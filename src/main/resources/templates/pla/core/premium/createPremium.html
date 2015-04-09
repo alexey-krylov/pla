@@ -4,7 +4,7 @@
 <head th:include="fragments/common :: headTag">
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
 </head>
-<body style="padding-top: 70px;" >
+<body>
 <div th:include="fragments/common :: bodyHeader" th:remove="tag"/>
 <script>
     require(['moment'], function(moment) {
@@ -17,7 +17,7 @@
     });
 </script>
 
-<div class="container ng-cloak" style="padding-top: 0px!important;" ng-Controller="CreatePremiumController">
+<div class="container ng-cloak"  ng-Controller="CreatePremiumController">
     <div class="row">
         <div class="col-lg-12" >
             <div class="panel panel-primary">
@@ -39,25 +39,19 @@
                                 </div>
                             </div>
                             <div class="form-group col-md-6 required" >
-                                <label class="control-label">Plan Name</label>
-
-                                <select class="form-control input-sm"  ng-required="true" ng-model="createPremium.planId">
+                                <label class="control-label">Plan Name</label> <!-- -->
+                                 <select class="form-control input-sm"  ng-required="true" ng-model="createPremium.planId" ng-options="plan.planId as plan.planName for plan in newPlanList | orderBy:'planName'">
                                     <option value="">Select Plan Name</option>
-                                    <option value="Product A">Product A</option>
-                                    <option value="Product B">Product B</option>
-                                    <option value="Product C">Product C</option>
-                                    <option value="Product D">Product D</option>
+
                                 </select>
 
                             </div>
+
                             <div class="form-group col-md-6 required" ng-show="showOptionalCoverage">
-                                <label class="control-label">Optional Coverage</label>
-                                <select class="form-control input-sm" id="optionalCoverage" ng-required="true" ng-model="createPremium.coverageId" ng-disabled="!createPremium.planId">
+                                <label class="control-label">Optional Coverage</label>         <!-- -->
+                                <select class="form-control input-sm" id="optionalCoverage" ng-required="true" ng-model="createPremium.coverageCode"   ng-disabled="!createPremium.planId" ng-options="optionalCoverage.coverageId as optionalCoverage.coverageCover for optionalCoverage in optionalCoverageList | orderBy:'coverageCover'">
                                     <option value="">Select Optional Coverage</option>
-                                    <option value="OptionalCoverage A">OptionalCoverage A</option>
-                                    <option value="OptionalCoverage B">OptionalCoverage B</option>
-                                    <option value="OptionalCoverage C">OptionalCoverage C</option>
-                                    <option value="OptionalCoverage D">OptionalCoverage D</option>
+
                                 </select>
                             </div>
                             <div class="form-group col-md-6 required">
@@ -94,23 +88,18 @@
                             <div class="form-group col-md-6">
                                 <label class="control-label">Download Template</label>
                                 <div>
-                                  <!--  <a href="http://localhost:6443/pla/downloadTemplates/UI Contracts.xls" target="_blank" download="UI Contracts.xls">
-                                        <img border="0" src="/pla/images/xls-icon.png" />
-                                    </a>
-                                   <a href="http://localhost:6443/pla/downloadTemplates/UI Contracts.xls" target="_blank" download="UI Contracts.xls">
-                                        <img border="0" src="/pla/images/CSV.png" />
-                                    </a>-->
-                                    <button  type="button" class="btn btn-default" ng-disabled="(!createPremium.definedFor || !createPremium.planId || !createPremium.fromDate || !createPremium.multiSelect)"  ng-click="getDownloadedTemplate()">
+                                   <a  type="button"  class="btn btn-default" target="_blank" download=""  ng-disabled="(!createPremium.definedFor || !createPremium.planId || !createPremium.fromDate || !createPremium.premiumInfluencingFactors)"  ng-click="getDownloadedTemplate()">
                                         Download Template
-                                    </button>
+                                    </a>
                                 </div>
                             </div>
                             <div class="form-group col-md-6 required">
                                 <label class="control-label">Influencing Factors</label>
                                 <div>
-                                    <button type="button" class="btn btn-default bs-select" ng-model="createPremium.multiSelect" data-all-none-buttons="true" data-html="1" data-multiple="1"  ng-options="value.name for value in mulSelect" >
+                                    <button type="button" class="btn btn-default bs-select" ng-model="createPremium.premiumInfluencingFactors" data-all-none-buttons="true" data-html="1" data-multiple="1"  ng-options="value for (key, value) in mulSelect" >
                                         Action <span class="caret"></span>
                                     </button>
+
                                 </div>
                             </div>
                         </div>
@@ -118,17 +107,17 @@
                             <div class="form-group col-md-6 required">
                                 <label class="control-label">Upload</label>
                                 <div >
-                                    <label class="input-sm" style="border:1px solid #ccc;width:330px;" >{{files[0].name}} </label>
-                                    <div class="btn btn-default" style="display:inline;float:right;" ng-click="uploadFile(files)"  ng-disabled="(!createPremium.definedFor || !createPremium.planId || !createPremium.premiumExpressedAs || !createPremium.rateExpressedAs || !createPremium.fromDate || !createPremium.multiSelect || !files || !verified)" >Upload</div>
-                                    <button type="button" class="btn btn-default" style="display:inline;float:right;margin-right:5px;" ng-disabled="(!createPremium.definedFor || !createPremium.planId || !createPremium.premiumExpressedAs || !createPremium.rateExpressedAs || !createPremium.fromDate || !createPremium.multiSelect || !files )" data-placement="top-right" data-container="notification" data-duration="5" bs-alert="alert" ng-click="verifyPremiumData()">Verify</button>
-                                    <div class="btn btn-default" style="display:inline;float:right;margin-right:5px;" ng-file-select=""  ng-model="files"  >Browse</div>
+                                    <label class="input-sm" style="border:1px solid #ccc;width:330px;" >{{createPremium.file[0].name}} </label>
+                                    <div class="btn btn-default" style="display:inline;float:right;" ng-click="uploadFile(createPremium.file)"  ng-disabled="(!createPremium.definedFor || !createPremium.planId || !createPremium.premiumExpressedAs || !createPremium.rateExpressedAs || !createPremium.fromDate || !createPremium.premiumInfluencingFactors || !createPremium.file || !verified)" >Upload</div>
+                                    <button type="button" class="btn btn-default" style="display:inline;float:right;margin-right:5px;" ng-disabled="(!createPremium.definedFor || !createPremium.planId || !createPremium.premiumExpressedAs || !createPremium.rateExpressedAs || !createPremium.fromDate || !createPremium.premiumInfluencingFactors || !createPremium.file )" data-placement="top-right" data-container="notification" data-duration="5" bs-alert="alert" ng-click="verifyPremiumData(createPremium.file)">Verify</button>
+                                    <div class="btn btn-default" style="display:inline;float:right;margin-right:5px;" ng-file-select=""  ng-model="createPremium.file"  >Browse</div>
 
                                 </div>
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-lg-12" style="text-align: center;margin-top:3px;">
-                                <button type="button" class="btn btn-default" style="float:right;" ng-disabled="(!createPremium.definedFor || !createPremium.planId || !createPremium.premiumExpressedAs || !createPremium.rateExpressedAs || !createPremium.fromDate || !createPremium.multiSelect || !files || !uploaded )" data-placement="top-right" data-container="notification" data-duration="5" bs-alert="alert" ng-click="savePremium()">Save</button>
+                               <!-- <button type="button" class="btn btn-default" style="float:right;" ng-disabled="(!createPremium.definedFor || !createPremium.planId || !createPremium.premiumExpressedAs || !createPremium.rateExpressedAs || !createPremium.fromDate || !createPremium.premiumInfluencingFactors || !createPremium.file)" data-placement="top-right" data-container="notification" data-duration="5" bs-alert="alert" ng-click="savePremium()">Save</button>-->
                                 <a class="btn btn-default" style="float:left;" th:href="@{/core/premium/listpremium}">Cancel</a>
                             </div>
                         </div>

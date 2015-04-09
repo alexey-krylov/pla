@@ -48,8 +48,6 @@ App.controller('CreateTeamController',['$scope','$http','$templateCache','$timeo
                      $scope.reset();
                 }else if(data.status==500){
                  $scope.alert = {title:'Error Message! ', content:data.message, type: 'danger'};
-                }else{
-                    $scope.alert = {title:'Info Message! ', content:data.message, type: 'danger'};
                 }
 
              });
