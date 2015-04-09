@@ -6,11 +6,13 @@
 
 package com.pla.core.application;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 import org.joda.time.LocalDate;
+import org.nthdimenzion.presentation.LocalJodaDateDeserializer;
 
 /**
  * @author: Nischitha
@@ -31,6 +33,7 @@ public class UpdateBranchManagerCommand {
 
     private String branchManagerLastName;
 
+    @JsonDeserialize(using = LocalJodaDateDeserializer.class)
     private LocalDate branchManagerFromDate;
 
     private String branchBDEEmployeeId;
@@ -39,6 +42,7 @@ public class UpdateBranchManagerCommand {
 
     private String branchBDELastName;
 
+    @JsonDeserialize(using = LocalJodaDateDeserializer.class)
     private LocalDate branchBDEFromDate;
 
     private boolean onlyBde;
