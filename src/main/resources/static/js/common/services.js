@@ -2,7 +2,7 @@ define(['moment'],function(moment){
     angular.module('commonServices',[])
         .factory('formatJSDateToYYYYMMDD',function(){
             return function(date){
-               return moment(date).format('YYYY-MM-DD');
+               return moment(date).format('YYYY/MM/DD');
             }
         })
         .factory()
