@@ -2,7 +2,6 @@ package com.pla.core.presentation.command;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.datatype.joda.deser.LocalDateDeserializer;
 import com.pla.core.domain.model.BenefitId;
 import com.pla.sharedkernel.domain.model.*;
 import com.pla.sharedkernel.identifier.CoverageId;
@@ -12,6 +11,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 import org.joda.time.LocalDate;
+import org.nthdimenzion.presentation.LocalJodaDateDeserializer;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -42,9 +42,9 @@ public class CreatePlanCommand {
 class Detail {
     String planName;
     String planCode;
-    @JsonDeserialize(using = LocalDateDeserializer.class)
+    @JsonDeserialize(using = LocalJodaDateDeserializer.class)
     LocalDate launchDate;
-    @JsonDeserialize(using = LocalDateDeserializer.class)
+    @JsonDeserialize(using = LocalJodaDateDeserializer.class)
     LocalDate withdrawalDate;
     int freeLookPeriod = 15;
     int minEntryAge;

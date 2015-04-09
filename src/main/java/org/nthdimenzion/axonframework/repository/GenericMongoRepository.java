@@ -1,11 +1,17 @@
 package org.nthdimenzion.axonframework.repository;
 
+import com.mongodb.BasicDBObjectBuilder;
+import com.mongodb.DBObject;
 import org.axonframework.domain.AggregateRoot;
+import org.axonframework.eventsourcing.annotation.AggregateIdentifier;
 import org.axonframework.repository.AbstractRepository;
 import org.axonframework.repository.AggregateNotFoundException;
 import org.axonframework.repository.ConflictingAggregateVersionException;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.mapping.Document;
+
+import javax.persistence.Transient;
+import java.lang.reflect.Field;
 
 import static java.lang.String.format;
 
@@ -34,12 +40,30 @@ public class GenericMongoRepository<T extends AggregateRoot> extends AbstractRep
 
     @Override
     protected void doSave(T t) {
-        mongoTemplate.save(t);
+        Class klass = super.getAggregateType();
+        try {
+            Field[] fields = klass.getDeclaredFields();
+            BasicDBObjectBuilder builder = new BasicDBObjectBuilder();
+            for (Field field : fields) {
+                if (!field.isAnnotationPresent(Transient.class) && !"logger".equalsIgnoreCase(field.getName())) {
+                    field.setAccessible(true);
+                    builder.append(field.getName(), field.get(t));
+
+                }
+                if (field.isAnnotationPresent(AggregateIdentifier.class)) {
+                    builder.append("_id", field.get(t).toString());
+                }
+            }
+            DBObject dbObject = builder.get();
+            mongoTemplate.save(dbObject, collectionName);
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
     protected T doLoad(Object aggregateIdentifier, Long expectedVersion) {
-        T aggregate = mongoTemplate.findById(aggregateIdentifier, getAggregateType(), this.collectionName);
+        T aggregate = mongoTemplate.findById(aggregateIdentifier.toString(), getAggregateType(), this.collectionName);
         if (aggregate == null) {
             throw new AggregateNotFoundException(aggregateIdentifier, format(
                     "Aggregate [%s] with identifier [%s] not found",

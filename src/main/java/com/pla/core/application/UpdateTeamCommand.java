@@ -6,12 +6,13 @@
 
 package com.pla.core.application;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
-import org.hibernate.annotations.Type;
 import org.joda.time.LocalDate;
+import org.nthdimenzion.presentation.LocalJodaDateDeserializer;
 import org.springframework.security.core.userdetails.UserDetails;
 
 /**
@@ -33,10 +34,10 @@ public class UpdateTeamCommand {
 
     private String lastName;
 
-    @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentLocalDate")
+    @JsonDeserialize(using = LocalJodaDateDeserializer.class)
     private LocalDate fromDate;
 
-    @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentLocalDate")
+    @JsonDeserialize(using = LocalJodaDateDeserializer.class)
     private LocalDate thruDate;
 
     private UserDetails userDetails;

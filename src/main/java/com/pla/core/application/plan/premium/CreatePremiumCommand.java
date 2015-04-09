@@ -1,14 +1,14 @@
 package com.pla.core.application.plan.premium;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.datatype.joda.deser.LocalDateDeserializer;
-import com.pla.sharedkernel.domain.model.PremiumFactor;
 import com.pla.core.domain.model.plan.premium.PremiumInfluencingFactor;
+import com.pla.sharedkernel.domain.model.PremiumFactor;
 import com.pla.sharedkernel.domain.model.PremiumRateFrequency;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.joda.time.LocalDate;
+import org.nthdimenzion.presentation.LocalJodaDateDeserializer;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
@@ -34,7 +34,7 @@ public class CreatePremiumCommand {
 
     private PremiumFactor premiumFactor;
 
-    @JsonDeserialize(using = LocalDateDeserializer.class)
+    @JsonDeserialize(using = LocalJodaDateDeserializer.class)
     private LocalDate effectiveFrom;
 
     private PremiumRateFrequency premiumRate;
