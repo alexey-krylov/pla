@@ -125,7 +125,7 @@ angular.module('createAgent',['common','ngRoute','mgcrea.ngStrap.select','mgcrea
             };
             $scope.prePopulateTeamLeader = function(){
                 var teamDetails = _.findWhere($scope.teamDetails, {teamId:$scope.agentDetails.teamDetail.teamId});
-                $scope.teamLeaderName = teamDetails.leaderFirstName+' '+teamDetails.leaderLastName;
+                $scope.teamLeaderName = teamDetails.firstName+' '+teamDetails.lastName;
                 $scope.branchName =teamDetails.branchName;
                 $scope.regionName = teamDetails.regionName;
 
