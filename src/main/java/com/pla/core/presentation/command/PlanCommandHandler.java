@@ -26,7 +26,6 @@ public class PlanCommandHandler {
     }
 
     private Plan buildPlan(CreatePlanCommand command) {
-        System.out.println(command);
         PlanDetailBuilder pdBuilder = PlanDetail.builder();
         Detail dtl = command.getPlanDetail();
         pdBuilder.withPlanName(dtl.getPlanName())
@@ -44,7 +43,6 @@ public class PlanCommandHandler {
                 .withPlanType(dtl.getPlanType())
                 .withSurrenderAfter(dtl.getSurrenderAfter());
         PlanDetail pd = pdBuilder.build();
-        System.out.println(pd);
 
         Set<PlanCoverage> coverageSet = new HashSet<PlanCoverage>();
         for (PlanCoverageDetail each : command.getCoverages()) {
@@ -66,7 +64,6 @@ public class PlanCommandHandler {
             for (PlanCoverageBenefitDetail rec : each.getPlanCoverageBenefits())
                 pcBuilder.withBenefitLimit(rec.getBenefitId().toString(), rec.getDefinedPer(), rec.getCoverageBenefitType(), rec.getBenefitLimit(), rec.getMaxLimit());
             PlanCoverage planCoverage = pcBuilder.build();
-            System.out.println(planCoverage);
             coverageSet.add(planCoverage);
         }
 

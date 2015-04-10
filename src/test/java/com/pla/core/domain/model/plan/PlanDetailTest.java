@@ -107,7 +107,6 @@ public class PlanDetailTest {
         assertEquals(PlanType.NON_INVESTMENT, planDetail.getPlanType());
         assertEquals(relationshipSet, planDetail.getApplicableRelationships());
         assertEquals(endorsementTypes, planDetail.getEndorsementTypes());
-        System.out.println(planDetail);
     }
 
 

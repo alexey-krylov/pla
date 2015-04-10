@@ -122,7 +122,6 @@ public class PlanSetupController {
     public
     @ResponseBody
     Map getPlanByPlanId(@PathVariable("planId") PlanId planId) {
-        System.out.println("getPlanByPlanId**********");
         BasicDBObject query = new BasicDBObject();
         query.put("planId", planId);
         Map plan = mongoTemplate.findOne(new BasicQuery(query), Map.class, "PLAN");
