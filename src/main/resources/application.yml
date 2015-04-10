@@ -27,7 +27,7 @@ spring:
         dev :
           url : http://localhost:6443/pla/stub
         prod :
-          url: http://5.9.249.195:9090/partymgr/control
+          url: http://127.0.0.1:9090/partymgr/control
   datasource:
       primary:
         name: primaryDataSource
