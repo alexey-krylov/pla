@@ -7,15 +7,10 @@
 <body>
 <div th:include="fragments/common :: bodyHeader" th:remove="tag"/>
 <script>
-   var interval = setInterval(function(){
-       if(require.defined("basic")){
-             requirejs(['/pla/js/coverages/viewCoverages.js'],function($){
-              });
-         clearInterval(interval);
-        }
-    }, 300);
 
 
+    requirejs(['/pla/js/coverages/viewCoverages.js'],function($){
+    });
 
         requirejs(['main'],function(){
             require(['/pla/js/coverages/createCoverage.js'],function(){
@@ -144,7 +139,7 @@
                                 </button>
                             </td>
                             <td style="text-align:center">
-                                <button type="button" class="btn btn-primary btn-xs"  th:onclick="'openCoverageUpdateModal(&quot;'+${coverage.coverageCode}+'&quot;,&quot;'+${coverage.coverageId}+'&quot;,&quot;'+${coverage.coverageName}+'&quot;,&quot;'+${coverage.description}+'&quot;,&quot;'+${coverage.benefitDtos}+'&quot;)'">Update</button>
+                                <button type="button" class="btn btn-primary btn-xs"  th:onclick="'openCoverageUpdateModal(&quot;'+${coverage.coverageId}+'&quot;,&quot;'+${coverage.coverageName}+'&quot;,&quot;'+${coverage.coverageCode}+'&quot;,&quot;'+${coverage.description}+'&quot;,&quot;'+${coverage.benefitDtos}+'&quot;)'">Update</button>
                                 <button type="button" class="btn btn-danger btn-xs"  data-toggle="modal" data-target="#alert-modal" th:onclick="'inactivate(&quot;'+${coverage.coverageId}+'&quot;,&quot;save&quot;)'" >Inactivate</button>
                             </td>
                         </tr>

@@ -20,8 +20,9 @@ require(['jquery','bootstrap','datatables'],function(){
             "bSmart": true },
           "bAutoWidth": false,
           "aoColumns":[
-             {"sWidth": "25%","bSearchable": true  },
-             {"sWidth": "55%","bSearchable": true  },
+             {"sWidth": "20%","bSearchable": true  },
+             {"sWidth": "45%","bSearchable": true  },
+             {"sWidth": "15%","bSearchable": true  },
             {"sWidth": "5%","bSearchable": false },
             {"sWidth": "15%","bSearchable": false }
     ]});
@@ -91,14 +92,14 @@ var openCoverageCreateModal = function(){
            var keyValue = value.split("=");
            keyValue[0] = keyValue[0].replace("BenefitDto","");
           keyValue[0] = keyValue[0].replace("{","");
-          keyValue[1] = keyValue[1].replace("}","");
+         // keyValue[1] = keyValue[1].replace("}","");
           if(keyValue[0].trim()=="benefitId"){
                     selected.push(keyValue[1].replace(/'/g, ''));
           }
       });
      return selected;
  };
-var openCoverageUpdateModal = function(coverageId,coverageName,description,benefitList,coverageCode){
+var openCoverageUpdateModal = function(coverageId,coverageName,coverageCode,description,benefitList){
   $('#coverageName').val(coverageName);
   $('#coverageCode').val(coverageCode);
   $('#description').val(description);
@@ -148,12 +149,12 @@ var updateCoverage = function(coverageId){
         success: function(msg) {
             if(msg.status=='200'){
                 hideAlerts();
-                $('#alert').text("Coverage updated successfully").show();
+                $('#alert').text(msg.message).show();
                 $('#cancel-button').text('Done');
                 $('#createUpdate').hide();
             }else if(msg.status=='500'){
                 hideAlerts();
-                $('#alert-danger').text("Coverage already exists").show();
+                $('#alert-danger').text(msg.message).show();
             }
         }
     });
