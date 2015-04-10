@@ -72,7 +72,6 @@ public class PlanTest {
         builder.withPolicyTerm(PolicyTermType.MATURITY_AGE_DEPENDENT,
                 Sets.newHashSet(60, 65), -1);
         Plan plan = builder.build();
-        System.out.println(plan);
         Term premiumTermByAge = builder.getPremiumTerm();
         assertEquals(2, premiumTermByAge.getMaturityAges().size());
     }

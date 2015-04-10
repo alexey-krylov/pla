@@ -26,8 +26,8 @@ import java.util.Map;
 @Service
 public class TeamFinder {
 
-    public static final String ACTIVE_BENEFIT_COUNT_BY_TEAM_NAME_QUERY = "select count(team_id) from team where team_name=:teamName";
-    public static final String ACTIVE_BENEFIT_COUNT_BY_TEAM_CODE_QUERY = "select count(team_id) from team where team_code=:teamCode";
+    public static final String ACTIVE_TEAM_COUNT_BY_TEAM_NAME_QUERY = "select count(team_id) from team where team_name=:teamName and active = '1'";
+    public static final String ACTIVE_TEAM_COUNT_BY_TEAM_CODE_QUERY = "select count(team_id) from team where team_code=:teamCode and active = '1'";
     public static final String FIND_TEAM_BY_ID_QUERY = "SELECT tm.team_id AS teamId,tm.team_name AS teamName,tm.team_code AS teamCode,tm.current_team_leader AS currentTeamLeader,tf.first_Name AS firstName,\n" +
             " tf.last_Name AS lastName,tf.from_date AS fromDate,tf.thru_date AS endDate ,b.branch_name AS branchName,r.region_name AS regionName,b.branch_code AS branchCode,r.region_code AS regionCode \n" +
             " FROM team tm \n" +
@@ -45,13 +45,13 @@ public class TeamFinder {
 
     public int getTeamCountByTeamName(String teamName) {
         Preconditions.checkNotNull(teamName);
-        Number noOfBenefit = namedParameterJdbcTemplate.queryForObject(ACTIVE_BENEFIT_COUNT_BY_TEAM_NAME_QUERY, new MapSqlParameterSource().addValue("teamName", teamName), Number.class);
+        Number noOfBenefit = namedParameterJdbcTemplate.queryForObject(ACTIVE_TEAM_COUNT_BY_TEAM_NAME_QUERY, new MapSqlParameterSource().addValue("teamName", teamName), Number.class);
         return noOfBenefit.intValue();
     }
 
     public int getTeamCountByTeamCode(String teamCode) {
         Preconditions.checkNotNull(teamCode);
-        Number noOfBenefit = namedParameterJdbcTemplate.queryForObject(ACTIVE_BENEFIT_COUNT_BY_TEAM_CODE_QUERY, new MapSqlParameterSource().addValue("teamCode", teamCode), Number.class);
+        Number noOfBenefit = namedParameterJdbcTemplate.queryForObject(ACTIVE_TEAM_COUNT_BY_TEAM_CODE_QUERY, new MapSqlParameterSource().addValue("teamCode", teamCode), Number.class);
         return noOfBenefit.intValue();
     }
 

@@ -27,7 +27,7 @@ import static org.nthdimenzion.utils.UtilValidator.isNotEmpty;
  */
 
 @Entity
-@Table(name = "team", uniqueConstraints = {@UniqueConstraint(name = "UNQ_TEAM_CODE_NAME", columnNames = {"teamCode", "teamName"})})
+@Table(name = "team", uniqueConstraints = {@UniqueConstraint(name = "UNQ_ACTIVE_TEAM_CODE_NAME", columnNames = {"teamCode", "teamName", "active"})})
 @EqualsAndHashCode(of = {"teamName", "teamCode"})
 @ToString(of = {"teamCode", "teamName"})
 @NoArgsConstructor(access = AccessLevel.PRIVATE)

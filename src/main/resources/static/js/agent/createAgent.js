@@ -125,7 +125,7 @@ angular.module('createAgent',['common','ngRoute','mgcrea.ngStrap.select','mgcrea
             };
             $scope.prePopulateTeamLeader = function(){
                 var teamDetails = _.findWhere($scope.teamDetails, {teamId:$scope.agentDetails.teamDetail.teamId});
-                $scope.teamLeaderName = teamDetails.leaderFirstName+' '+teamDetails.leaderLastName;
+                $scope.teamLeaderName = teamDetails.firstName+' '+teamDetails.lastName;
                 $scope.branchName =teamDetails.branchName;
                 $scope.regionName = teamDetails.regionName;
 
@@ -160,7 +160,7 @@ angular.module('createAgent',['common','ngRoute','mgcrea.ngStrap.select','mgcrea
             };
 
         }])
-    .factory('transformJson',['formatJSDateToYYYYMMDD',function(formatJSDateToYYYYMMDD){
+    .factory('transformJson',['formatJSDateToDDMMYYYY',function(formatJSDateToDDMMYYYY){
         var transformService = {};
         transformService.createCompatibleJson = function (agentDetails,physicalCities,primaryCities,trainingCompleteOn,isUpdate) {
             var authorizePlansToSell = angular.copy(agentDetails.authorizePlansToSell);
@@ -170,7 +170,8 @@ angular.module('createAgent',['common','ngRoute','mgcrea.ngStrap.select','mgcrea
             },agentDetails.authorizePlansToSell);
             agentDetails.physicalAddress.physicalGeoDetail.cityName = _.findWhere(physicalCities,{geoId:agentDetails.physicalAddress.physicalGeoDetail.cityCode}).geoName;
             agentDetails.contactDetail.geoDetail.cityName =_.findWhere(primaryCities,{geoId:agentDetails.contactDetail.geoDetail.cityCode}).geoName;
-            agentDetails.agentProfile.trainingCompleteOn = formatJSDateToYYYYMMDD(trainingCompleteOn);
+            console.log(trainingCompleteOn);
+            agentDetails.agentProfile.trainingCompleteOn = formatJSDateToDDMMYYYY(trainingCompleteOn);
             if(!isUpdate){
                 delete agentDetails.agentStatus;
             }

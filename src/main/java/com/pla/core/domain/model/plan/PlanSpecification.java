@@ -38,7 +38,6 @@ public class PlanSpecification implements ISpecification<Plan> {
         if (policyTerm != null && UtilValidator.isNotEmpty(coverageTerms)) {
             Set<Integer> policyTerms = policyTerm.getValidTerms();
             for (Term term : coverageTerms) {
-                System.out.println(" TERM " + term);
                 if (UtilValidator.isNotEmpty(term.getValidTerms()) && UtilValidator.isNotEmpty(policyTerms)) {
                     int maxPolicyTerm = policyTerms.stream().max(Comparator.comparingInt(pTerm -> pTerm.intValue())).get();
                     int maxCoverageTerm = term.getValidTerms().stream().max(Comparator.comparingInt(each -> each.intValue())).get();

@@ -47,7 +47,7 @@ public class CoverageCommandHandler {
         }
         Set<Benefit> benefitSet= findBenefitById(createCoverageCommand.getBenefitIds());
         JpaRepository<Coverage, String> coverageRepository = jpaRepositoryFactory.getCrudRepository(Coverage.class);
-        Coverage coverage = coverageService.createCoverage(createCoverageCommand.getCoverageName(),createCoverageCommand.getDescription(), benefitSet, createCoverageCommand.getUserDetails());
+        Coverage coverage = coverageService.createCoverage(createCoverageCommand.getCoverageName(),createCoverageCommand.getCoverageCode(),createCoverageCommand.getDescription(), benefitSet, createCoverageCommand.getUserDetails());
         try {
             coverageRepository.save(coverage);
         } catch (RuntimeException e) {
@@ -56,7 +56,7 @@ public class CoverageCommandHandler {
         }
     }
 
-    @CommandHandler
+        @CommandHandler
     public void updateCoverageHandler(UpdateCoverageCommand updateCoverageCommand) {
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("*****Command Received*****" + updateCoverageCommand);
@@ -65,7 +65,7 @@ public class CoverageCommandHandler {
         CoverageId coverageId = new CoverageId(updateCoverageCommand.getCoverageId());
         Coverage coverage = coverageRepository.findOne(coverageId);
         Set<Benefit> benefitSet= findBenefitById(updateCoverageCommand.getBenefitIds());
-        coverage = coverageService.updateCoverage(coverage, updateCoverageCommand.getCoverageName(),updateCoverageCommand.getDescription(),benefitSet, updateCoverageCommand.getUserDetails());
+        coverage = coverageService.updateCoverage(coverage, updateCoverageCommand.getCoverageName(),updateCoverageCommand.getCoverageCode(),updateCoverageCommand.getDescription(),benefitSet, updateCoverageCommand.getUserDetails());
         try {
             coverageRepository.save(coverage);
         } catch (RuntimeException e) {

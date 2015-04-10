@@ -9,12 +9,13 @@ package com.pla.core.domain.model;
 import com.pla.core.domain.exception.BenefitDomainException;
 import com.pla.core.domain.exception.CoverageException;
 import com.pla.core.domain.exception.TeamDomainException;
-import com.pla.core.domain.model.generalinformation.*;
+import com.pla.core.domain.model.generalinformation.OrganizationGeneralInformation;
+import com.pla.core.domain.model.generalinformation.ProductLineGeneralInformation;
+import com.pla.core.domain.model.plan.commission.Commission;
+import com.pla.core.domain.model.plan.commission.CommissionTerm;
 import com.pla.core.dto.GeneralInformationDto;
-import com.pla.sharedkernel.domain.model.BenefitStatus;
-import com.pla.sharedkernel.domain.model.DiscountFactorItem;
-import com.pla.sharedkernel.domain.model.ModalFactorItem;
-import com.pla.sharedkernel.domain.model.Tax;
+import com.pla.sharedkernel.domain.model.*;
+import com.pla.sharedkernel.identifier.CommissionId;
 import com.pla.sharedkernel.identifier.CoverageId;
 import com.pla.sharedkernel.identifier.LineOfBusinessId;
 import com.pla.sharedkernel.identifier.PlanId;
@@ -58,20 +59,26 @@ public class Admin {
         return updatedBenefit;
     }
 
-    public Coverage createCoverage(boolean isUniqueCoverageName, String coverageId, String coverageName,String description,  Set<Benefit> benefits) {
-        if (!isUniqueCoverageName) {
+    public Coverage createCoverage(boolean isUniqueCoverageName,boolean isCoverageCodeIsUnique, String coverageId, String coverageName,String coverageCode,String description,  Set<Benefit> benefits) {
+        if (!isUniqueCoverageName)
             throw new CoverageException("Coverage name already satisfied");
-        }
-        Coverage  coverage = new Coverage(new CoverageId(coverageId), new CoverageName(coverageName), benefits, CoverageStatus.ACTIVE);
+
+        if (!isCoverageCodeIsUnique)
+            throw new CoverageException("Coverage Code already satisfied");
+
+        Coverage coverage = new Coverage(new CoverageId(coverageId), new CoverageName(coverageName),coverageCode, benefits, CoverageStatus.ACTIVE);
         if (description != null)
             coverage = coverage.updateDescription(description);
         return coverage;
     }
 
-    public Coverage updateCoverage(Coverage coverage, String newCoverageName, String description,Set<Benefit> benefits, boolean isCoverageNameUnique) {
-        if (!isCoverageNameUnique && !coverage.getCoverageName().equals(new CoverageName(newCoverageName))) {
+    public Coverage updateCoverage(Coverage coverage, String newCoverageName,String newCoverageCode, String description,Set<Benefit> benefits, boolean isCoverageNameUnique,boolean isCoverageCodeIsUnique) {
+        if (!isCoverageNameUnique && !coverage.getCoverageName().equals(new CoverageName(newCoverageName)))
             throw new CoverageException("Coverage name already satisfied");
-        }
+
+        if (!isCoverageCodeIsUnique && !coverage.getCoverageCode().equals(newCoverageCode))
+            throw new CoverageException("Coverage Code already satisfied");
+
         return coverage.updateCoverageName(newCoverageName).updateBenefit(benefits).updateDescription(description);
     }
 
@@ -153,5 +160,15 @@ public class Admin {
         productLineGeneralInformation.withSurrenderProcessInformation(generalInformationDto.getSurrenderProcessItems());
         productLineGeneralInformation.withMaturityProcessInformation(generalInformationDto.getMaturityProcessItems());
         return productLineGeneralInformation;
+    }
+
+    public Commission createCommission(CommissionId commissionId, PlanId planId, CommissionDesignation availableFor, CommissionType commissionType, CommissionTermType commissionTermType, LocalDate fromDate) {
+
+        return Commission.createCommission(commissionId, planId, availableFor, commissionType, commissionTermType, fromDate);
+    }
+
+    public Commission updateCommissionTerm(Commission commission, Set<CommissionTerm> commissionSet) {
+
+        return commission.updateWithCommissionTerms(commissionSet);
     }
 }

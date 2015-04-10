@@ -61,7 +61,7 @@ public class CoverageAcceptanceTest {
         Set<BenefitId> backendIdSet = new HashSet<>();
         backendIdSet.add(new BenefitId("1"));
         backendIdSet.add(new BenefitId("2"));
-        CreateCoverageCommand createCoverageCommand = new CreateCoverageCommand(userDetails,"testing Coverage name","coverage description",backendIdSet);
+        CreateCoverageCommand createCoverageCommand = new CreateCoverageCommand(userDetails,"testing Coverage name","C_ONE","coverage description",backendIdSet);
         Boolean isSuccess = Boolean.FALSE;
         try {
             commandGateway.sendAndWait(createCoverageCommand);
@@ -83,7 +83,7 @@ public class CoverageAcceptanceTest {
         Set<BenefitId> backendIdSet = new HashSet<>();
         backendIdSet.add(new BenefitId("1"));
         backendIdSet.add(new BenefitId("4"));
-        UpdateCoverageCommand updateCoverageCommand = new UpdateCoverageCommand("C001","testing Coverage name after update","coverage description",backendIdSet,userDetails);
+        UpdateCoverageCommand updateCoverageCommand = new UpdateCoverageCommand("C001","testing Coverage name after update","C_ONE","coverage description",backendIdSet,userDetails);
         Boolean isSuccess = Boolean.FALSE;
         try {
             commandGateway.sendAndWait(updateCoverageCommand);

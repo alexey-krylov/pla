@@ -227,8 +227,7 @@ public class Plan extends AbstractAggregateRoot<PlanId> {
         return validAges.contains(age);
     }
 
-
-      PlanCoverage getPlanCoverageFor(CoverageId coverageId) {
+    PlanCoverage getPlanCoverageFor(CoverageId coverageId) {
         List<PlanCoverage> planCoverages = this.coverages.stream().filter(new Predicate<PlanCoverage>() {
             @Override
             public boolean test(PlanCoverage planCoverage) {

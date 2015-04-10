@@ -37,9 +37,6 @@ public class UpdateTeamCommand {
     @JsonDeserialize(using = LocalJodaDateDeserializer.class)
     private LocalDate fromDate;
 
-    @JsonDeserialize(using = LocalJodaDateDeserializer.class)
-    private LocalDate thruDate;
-
     private UserDetails userDetails;
 
 }
