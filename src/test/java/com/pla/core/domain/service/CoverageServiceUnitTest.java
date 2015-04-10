@@ -3,6 +3,7 @@ package com.pla.core.domain.service;
 import com.pla.core.domain.exception.CoverageException;
 import com.pla.core.domain.model.*;
 import com.pla.core.query.CoverageFinder;
+import com.pla.core.specification.CoverageCodeIsUnique;
 import com.pla.core.specification.CoverageNameIsUnique;
 import com.pla.sharedkernel.identifier.CoverageId;
 import org.junit.Before;
@@ -14,11 +15,16 @@ import org.nthdimenzion.object.utils.IIdGenerator;
 import org.nthdimenzion.security.service.UserLoginDetailDto;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.util.Arrays;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.mockito.Matchers.anyString;
+import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.util.ReflectionTestUtils.invokeGetterMethod;
 
@@ -39,6 +45,10 @@ public class CoverageServiceUnitTest {
     private CoverageNameIsUnique coverageNameIsUnique;
 
     @Mock
+    private CoverageCodeIsUnique coverageCodeIsUnique;
+
+
+    @Mock
     private CoverageFinder coverageFinder;
 
     @Mock
@@ -53,7 +63,7 @@ public class CoverageServiceUnitTest {
     private Set<Benefit> benefits=new HashSet<>();
     @Before
     public void setUp() {
-        coverageService = new CoverageService(adminRoleAdapter, coverageNameIsUnique, idGenerator);
+        coverageService = new CoverageService(adminRoleAdapter, coverageNameIsUnique,coverageCodeIsUnique, idGenerator);
         userDetails = UserLoginDetailDto.createUserLoginDetailDto("", "");
         admin = new Admin();
 
@@ -69,14 +79,58 @@ public class CoverageServiceUnitTest {
         String coverageId = "C001";
         when(idGenerator.nextId()).thenReturn(coverageId);
         String name="testing coverage name";
+        String coverageCode="testing coverage name";
         when(coverageNameIsUnique.isSatisfiedBy(new CoverageName(name))).thenReturn(true);
+        when(coverageCodeIsUnique.isSatisfiedBy(anyString())).thenReturn(true);
         when(adminRoleAdapter.userToAdmin(userDetails)).thenReturn(admin);
-        Coverage coverage = coverageService.createCoverage(name, "coverage description", benefits, userDetails);
+        Coverage coverage = coverageService.createCoverage(name, "coverage description",coverageCode,benefits, userDetails);
         CoverageName coverageName = (CoverageName) invokeGetterMethod(coverage, "getCoverageName");
         assertNotNull(coverage);
         assertEquals(new CoverageId(coverageId), invokeGetterMethod(coverage, "getCoverageId"));
         assertEquals(CoverageStatus.ACTIVE, invokeGetterMethod(coverage, "getStatus"));
         assertEquals(name, coverageName.getCoverageName());
+    }
+
+    @Test(expected = CoverageException.class)
+    public void givenACoverageName_whenTheCoverageNameIsNotUnique_thenItShouldThrowTheException() {
+        String coverageId = "C001";
+        when(idGenerator.nextId()).thenReturn(coverageId);
+        String name="testing coverage name";
+        when(coverageNameIsUnique.isSatisfiedBy(new CoverageName(name))).thenReturn(false);
+        when(coverageCodeIsUnique.isSatisfiedBy(anyString())).thenReturn(true);
+        when(adminRoleAdapter.userToAdmin(userDetails)).thenReturn(admin);
+        Coverage coverage = coverageService.createCoverage(name, "coverage description", "C_ONE",benefits, userDetails);
+        assertNull(coverage);
+
+    }
+
+    @Test
+    public void givenACoverageName_whenTheCoverageCodeIsUnique_thenItShouldCreateTheCoverageWithActiveState() {
+        String coverageId = "C001";
+        when(idGenerator.nextId()).thenReturn(coverageId);
+        String name="testing coverage name";
+        when(coverageNameIsUnique.isSatisfiedBy(new CoverageName(name))).thenReturn(true);
+        when(coverageCodeIsUnique.isSatisfiedBy(anyString())).thenReturn(true);
+        when(adminRoleAdapter.userToAdmin(userDetails)).thenReturn(admin);
+        Coverage coverage = coverageService.createCoverage(name, "coverage description", "C_ONE",benefits, userDetails);
+        CoverageName coverageName = (CoverageName) invokeGetterMethod(coverage, "getCoverageName");
+        assertNotNull(coverage);
+        assertEquals(new CoverageId(coverageId), invokeGetterMethod(coverage, "getCoverageId"));
+        assertEquals(CoverageStatus.ACTIVE, invokeGetterMethod(coverage, "getStatus"));
+        assertEquals(name, coverageName.getCoverageName());
+    }
+
+    @Test(expected = CoverageException.class)
+    public void givenACoverageName_whenTheCoverageCodeIsNotUnique_thenItShouldThrowTheException() {
+        String coverageId = "C001";
+        when(idGenerator.nextId()).thenReturn(coverageId);
+        String name="testing coverage name";
+        when(coverageNameIsUnique.isSatisfiedBy(new CoverageName(name))).thenReturn(true);
+        when(coverageCodeIsUnique.isSatisfiedBy(anyString())).thenReturn(false);
+        when(adminRoleAdapter.userToAdmin(userDetails)).thenReturn(admin);
+        Coverage coverage = coverageService.createCoverage(name, "coverage description", "C_ONE",benefits, userDetails);
+        assertNull(coverage);
+
     }
 
 
@@ -85,7 +139,8 @@ public class CoverageServiceUnitTest {
         String newCoverageName = "new  coverage name";
         Coverage coverage = getCoverage();
         when(coverageNameIsUnique.isSatisfiedBy(new CoverageName(newCoverageName))).thenReturn(true);
-        Coverage updateCoverage = coverageService.updateCoverage(coverage, newCoverageName,"description", benefits, userDetails);
+        when(coverageCodeIsUnique.isSatisfiedBy(anyString())).thenReturn(true);
+        Coverage updateCoverage = coverageService.updateCoverage(coverage, newCoverageName,"C_ONE","description", benefits, userDetails);
         CoverageName coverageName = (CoverageName) invokeGetterMethod(updateCoverage, "getCoverageName");
         assertEquals(CoverageStatus.ACTIVE, invokeGetterMethod(updateCoverage, "getStatus"));
         assertEquals(newCoverageName, coverageName.getCoverageName());
@@ -122,12 +177,12 @@ public class CoverageServiceUnitTest {
         assertEquals(CoverageStatus.INACTIVE, invokeGetterMethod(inactivateCoverage, "getStatus"));
     }
 
-
     private Coverage getCoverage() {
         String name="testing coverage name";
         when(adminRoleAdapter.userToAdmin(userDetails)).thenReturn(admin);
         when(coverageNameIsUnique.isSatisfiedBy(new CoverageName(name))).thenReturn(true);
-        Coverage coverage = coverageService.createCoverage(name, "coverage description", benefits, userDetails);
+        when(coverageCodeIsUnique.isSatisfiedBy(anyString())).thenReturn(true);
+        Coverage coverage = coverageService.createCoverage(name, "coverage description","C_ONE", benefits, userDetails);
         return coverage;
     }
 }

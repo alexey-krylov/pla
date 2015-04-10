@@ -132,10 +132,10 @@ DROP TABLE IF EXISTS `coverage`;
 CREATE TABLE `coverage` (
   `coverage_id` varchar(255) NOT NULL,
   `coverage_name` varchar(50) NOT NULL,
+  `coverage_code` varchar(255) NOT NULL,
   `description` varchar(150) DEFAULT NULL,
   `status` varchar(255) NOT NULL,
-  PRIMARY KEY (`coverage_id`),
-  UNIQUE KEY `UNQ_COVERAGE_NAME` (`coverage_name`)
+  PRIMARY KEY (`coverage_id`)
 );
 
 /*Data for the table `coverage` */
