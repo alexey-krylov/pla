@@ -258,7 +258,7 @@ CREATE TABLE `team` (
   `region_code` varchar(20) NOT NULL,
   `branch_code` varchar(20) NOT NULL,
   PRIMARY KEY (`team_id`),
-  UNIQUE KEY `UNQ_TEAM_CODE_NAME` (`team_code`,`team_name`),
+   UNIQUE KEY `UNQ_ACTIVE_TEAM_CODE_NAME` (`team_code`,`team_name`,`active`),
   KEY `FK_TEAM_REGION_REGION_CODE` (`region_code`),
   KEY `FK_TEAM_BRANCH_BRANCH_CODE` (`branch_code`),
   CONSTRAINT `FK_TEAM_BRANCH_BRANCH_CODE` FOREIGN KEY (`branch_code`) REFERENCES `branch` (`BRANCH_CODE`),
