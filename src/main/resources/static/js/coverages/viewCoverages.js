@@ -64,6 +64,7 @@ var modalOptions = {
 
 var openCoverageCreateModal = function(){
     $('#coverageName').val(null);
+    $('#coverageCode').val(null);
     $('#description').val(null);
     $('#createUpdate').text('Create');
     $('#alert').hide();
@@ -97,8 +98,9 @@ var openCoverageCreateModal = function(){
       });
      return selected;
  };
-var openCoverageUpdateModal = function(coverageId,coverageName,description,benefitList){
+var openCoverageUpdateModal = function(coverageId,coverageName,description,benefitList,coverageCode){
   $('#coverageName').val(coverageName);
+  $('#coverageCode').val(coverageCode);
   $('#description').val(description);
   var benefit=[];
   benefitMap= convertThymeleafObjectToJavascriptObject(benefitList);
@@ -167,7 +169,7 @@ var createCoverage = function(){
     });
      var selected = [];
     selected= angular.element("#selectedBenefits").scope().createCoverage.benefitIds;
-   // console.log("***************->"+ selected);
+   // console.log("***************->"+ coverageData);
     coverageData["benefitIds"]=  selected;
     $.ajax({
         url: '/pla/core/coverages/create',

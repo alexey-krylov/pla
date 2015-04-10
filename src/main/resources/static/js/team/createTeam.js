@@ -1,6 +1,6 @@
 var App = angular.module('createTeam', ['ngRoute','ui.bootstrap','ngSanitize','mgcrea.ngStrap.select','mgcrea.ngStrap','mgcrea.ngStrap.alert']);
 
-App.controller('CreateTeamController',['$scope','$http','$templateCache','$timeout','$alert',function($scope,$http,$templateCache,$timeout,$alert){
+App.controller('CreateTeamController',['$scope','$http','$templateCache','$timeout','$alert','$window',function($scope,$http,$templateCache,$timeout,$alert,$window){
 
         $scope.selectedDate =moment().add(1,'days').format("YYYY-MM-DD");
        	$scope.newDateField={};
@@ -21,6 +21,7 @@ App.controller('CreateTeamController',['$scope','$http','$templateCache','$timeo
                            $scope.teamLeaders=data;
 
          });
+
          $scope.getAllBranch = function(obj){
               $http.get('/pla/core/master/getbranchbyregion?regioncode='+ obj).success(function(data){
                // console.log(data);
@@ -45,7 +46,8 @@ App.controller('CreateTeamController',['$scope','$http','$templateCache','$timeo
               //  console.log(data);
                 if(data.status==200){
                      $scope.alert = {title:'Success Message! ', content:data.message, type: 'success'};
-                     $scope.reset();
+                    // $scope.reset();
+                   $window.location.reload();
                 }else if(data.status==500){
                  $scope.alert = {title:'Error Message! ', content:data.message, type: 'danger'};
                 }

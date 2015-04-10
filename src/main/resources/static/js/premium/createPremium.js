@@ -4,6 +4,7 @@ App.controller('CreatePremiumController',['$scope','$http','$rootScope','$upload
 
          $scope.uploaded=false;
          $scope.verified=false;
+         $scope.boolVal=false;
          $scope.newPlanList = [];
          $scope.optionalCoverageList=[];
          $scope.showOptionalCoverage= false;
@@ -46,105 +47,139 @@ App.controller('CreatePremiumController',['$scope','$http','$rootScope','$upload
                               });
                 }
          });
+         $scope.$watch('createPremium.definedFor',function(newValue, oldValue){
+             if(newValue=='plan'){
+               $scope.boolVal=true;
+             }else if(newValue == 'optionalCoverage'){
+               $scope.boolVal=false;
+             }
+         });
          $scope.$watch('createPremium.planId',function(newValue, oldValue){
-                 if(newValue){
+             if(newValue){
                          var planId=$scope.createPremium.planId;
-                         $scope.optionalCoverageList =_.findWhere($scope.newPlanList,{planId:planId});
-                         $scope.optionalCoverageList =$scope.optionalCoverageList.coverages;
+                        $scope.optionalCoverageData =_.findWhere($scope.newPlanList,{planId:planId});
+                        $scope.optionalCoverageList = _.where($scope.optionalCoverageData.coverages, {coverageType: "OPTIONAL"});
+                        //console.log( $scope.optionalCoverageList);
+                        // $scope.optionalCoverageList =$scope.optionalCoverageList.coverages;
+
 
             }
+
          });
          $scope.$watch('createPremium.coverageCode',function(newValue, oldValue){
-                          if(newValue){
-                          $scope.createPremium.coverageId=$scope.createPremium.coverageCode.coverageId;
-                     }
-                  });
-         $scope.getDownloadedTemplate = function(){
-             if (!moment($scope.createPremium.fromDate,'DD/MM/YYYY').isValid()) {
-             		$scope.newDateField.fromDate = moment($scope.createPremium.fromDate).format("DD/MM/YYYY");
-               		$scope.createPremium.fromDate=$scope.newDateField.fromDate ;
-             }
+            if(newValue){
+                $scope.createPremium.coverageId=$scope.createPremium.coverageCode.coverageId;
+                $scope.boolVal=true;
+            }else{
+               $scope.boolVal=false;
+            }
+         });
 
-          $http({url: '/pla/core/premium/downloadpremiumtemplate',method: 'POST',responseType: 'arraybuffer',data: $scope.createPremium,
+         $scope.getDownloadedTemplate = function(){
+              $http({url: '/pla/core/premium/downloadpremiumtemplate',method: 'POST',responseType: 'arraybuffer',data: $scope.createPremium,
                  headers: {'Content-type': 'application/json','Accept': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
              }
-        }).success(function(data){
-                 var blob = new Blob([data], {
+        }).success(function(data, status, headers){
+             var filename = "";
+             var header = headers('content-disposition');
+             if (header && header.indexOf('attachment') !== -1) {
+                 var filenameRegex = /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/;
+                 var matches = filenameRegex.exec(header);
+                 if (matches != null && matches[1]) filename = matches[1].replace(/['"]/g, '');
+             }
+            //  console.log(filename);
+               $scope.fileName=filename;
+                var blob = new Blob([data], {
                 type: 'application/msexcel'
+
                });
+
                  var objectUrl = URL.createObjectURL(blob);
-                           window.open(objectUrl);
+                     var a = document.createElement("a");
+                     document.body.appendChild(a);
+                     a.style = "display: none";
+                     a.href = objectUrl;
+                     a.download = filename;
+                     a.click();
+                 /*window.open(objectUrl);*/
+
                 }).error(function(){
                     //Some error log
                 });
          }
 
-        /* $scope.verifyPremiumData= function(){
-
-                 if (!moment($scope.createPremium.fromDate,'DD/MM/YYYY').isValid()) {
-                    		$scope.newDateField.fromDate = moment($scope.createPremium.fromDate).format("DD/MM/YYYY");
-                    		$scope.createPremium.fromDate=$scope.newDateField.fromDate ;
-                 }
-            console.log($scope.createPremium);
-
-             $http.post('/pla/core/premium/verifypremiumdata', $scope.createPremium).success(function(data){
-                              //  console.log(data);
-                if(data.status==200){
+    $scope.verifyPremiumData= function(files){
+       var a= $scope.createPremium.premiumInfluencingFactors;
+       var output = [];
+       for (var i=0; i<a.length; i++) {
+           output.push(JSON.stringify(a[i]).replace(/"/g, ''));
+           }
+        // console.log(output.join(','));
+        if (files) {
+            $upload.upload({
+                 url: '/pla/core/premium/verifypremiumdata',
+                 file: files,
+                 fields:{planId:$scope.createPremium.planId,coverageId:$scope.createPremium.coverageId,
+                 premiumInfluencingFactors:output.join(',')},
+                 headers: {'Accept': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'}
+            }).progress(function (evt) {
+                // var progressPercentage = parseInt(100.0 * evt.loaded / evt.total);
+                // console.log('progress: ' + progressPercentage + '% ' +
+                //      evt.config.file.name);
+            }).success(function (data, status, headers, config) {
+               /* if(data.status==200){
                     $scope.verified=true;
-                   $scope.alert = {title:'Success Message! ', content:data.message, type: 'success'};
+                    $scope.alert = {title:'Success Message! ', content:data.message, type: 'success'};
                 }else if(data.status==500){
-                   $scope.alert = {title:'Error Message! ', content:data.message, type: 'danger'};
-                }else{
-                   $scope.alert = {title:'Info Message! ', content:data.message, type: 'danger'};
-                }
-             });
-        }  */
-       $scope.verifyPremiumData= function(files){
-        if (!moment($scope.createPremium.fromDate,'DD/MM/YYYY').isValid()) {
-                           		$scope.newDateField.fromDate = moment($scope.createPremium.fromDate).format("DD/MM/YYYY");
-                           		$scope.createPremium.fromDate=$scope.newDateField.fromDate ;
-                        }
-                    // console.log(files);
-                   // console.log("************"+files[0].name);
-                          if (files) {
-                               $upload.upload({
-                                    url: '/pla/core/premium/verifypremiumdata',
-                                    file: files,
-                                    fields:$scope.createPremium
-
-                               }).progress(function (evt) {
-                                   // var progressPercentage = parseInt(100.0 * evt.loaded / evt.total);
-                                   // console.log('progress: ' + progressPercentage + '% ' +
-                                               //      evt.config.file.name);
-                               }).success(function (data, status, headers, config) {
-                                     if(data.status==200){
-                                        $scope.verified=true;
-                                         $scope.alert = {title:'Success Message! ', content:data.message, type: 'success'};
-                                     }else if(data.status==500){
-                                        $scope.alert = {title:'Error Message! ', content:data.message, type: 'danger'};
-                                     }
-                               });
-                          }
-
+                    $scope.alert = {title:'Error Message! ', content:data.message, type: 'danger'};
+                }else{    */
+                     var filename = "";
+                     var header = headers('content-disposition');
+                     if (header && header.indexOf('attachment') !== -1) {
+                          var filenameRegex = /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/;
+                          var matches = filenameRegex.exec(header);
+                         if (matches != null && matches[1]) filename = matches[1].replace(/['"]/g, '');
                      }
-          $scope.uploadFile= function(files){
-              // console.log("************"+files[0].name);
-                    if (files) {
-                   // console.log($scope.createPremium.file);
-                         $upload.upload({
-                              url: '/pla/core/premium/uploadpremiumdata',
-                              file: files,
-                              fields:$scope.createPremium
+                     var blob = new Blob([data], {
+                         type: 'application/msexcel'
+                     });
+                     var objectUrl = URL.createObjectURL(blob);
+                     var a = document.createElement("a");
+                     document.body.appendChild(a);
+                     a.style = "display: none";
+                     console.log(objectUrl);
+                     a.href = objectUrl;
+                     a.download = filename;
+                     a.click();
+               //  }
+            });
+         }
+ }
 
-                         }).progress(function (evt) {
-                             // var progressPercentage = parseInt(100.0 * evt.loaded / evt.total);
-                             // console.log('progress: ' + progressPercentage + '% ' +
-                                         //      evt.config.file.name);
-                         }).success(function (data, status, headers, config) {
-                                console.log('file ' + config.file.name + 'uploaded. Response: ' +
-                                       JSON.stringify(data));
-                         });
-                    }
-
-               }
+ $scope.uploadFile= function(files){
+      if (!moment($scope.createPremium.effectiveFrom,'DD/MM/YYYY').isValid()) {
+      	$scope.newDateField.fromDate = moment($scope.createPremium.effectiveFrom).format("DD/MM/YYYY");
+      	$scope.createPremium.effectiveFrom=$scope.newDateField.fromDate ;
+      }
+      var  a=$scope.createPremium.premiumInfluencingFactors;
+      var output = [];
+      for (var i=0; i<a.length; i++) {
+          output.push(JSON.stringify(a[i]).replace(/"/g, ''));
+      }
+     if (files) {
+        $upload.upload({
+            url: '/pla/core/premium/uploadpremiumdata',
+            file: files,
+            fields:{planId:$scope.createPremium.planId,coverageId:$scope.createPremium.coverageId,
+                    premiumInfluencingFactors:output.join(','),premiumFactor:$scope.createPremium.premiumFactor,premiumRate:$scope.createPremium.premiumRate,effectiveFrom:$scope.createPremium.effectiveFrom}
+        }).progress(function (evt) {
+             // var progressPercentage = parseInt(100.0 * evt.loaded / evt.total);
+             // console.log('progress: ' + progressPercentage + '% ' +
+             //      evt.config.file.name);
+        }).success(function (data, status, headers, config) {
+           console.log('file ' + config.file.name + 'uploaded. Response: ' +
+           JSON.stringify(data));
+        });
+     }
+ }
 }]);
