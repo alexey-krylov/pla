@@ -459,7 +459,7 @@ CREATE TABLE `team` (
   `team_code` varchar(255) DEFAULT NULL,
   `team_name` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`team_id`),
-  UNIQUE KEY `UNQ_TEAM_CODE_NAME` (`team_code`,`team_name`)
+  UNIQUE KEY `UNQ_ACTIVE_TEAM_CODE_NAME` (`team_code`, `team_name`, `active`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
