@@ -33,10 +33,11 @@ public class CoverageFinder {
         this.namedParameterJdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
     }
 
+    public static final String ACTIVE_COVERAGE_COUNT_BY_COVERAGE_NAME_QUERY = "select count(coverage_id) from coverage where coverage_name=:coverageName and status in ('ACTIVE','INUSE')";
 
-    public static final String ACTIVE_COVERAGE_COUNT_BY_COVERAGE_NAME_QUERY = "select count(coverage_id) from coverage where coverage_name=:coverageName and status='ACTIVE'";
+    public static final String ACTIVE_COVERAGE_COUNT_BY_COVERAGE_CODE_QUERY = "select count(coverage_id) from coverage where coverage_code=:coverageCode and  status in ('ACTIVE','INUSE')";
 
-    public static final String FIND_ALL_COVERAGE_QUERY = "SELECT c.coverage_id coverageId,c.coverage_name coverageName,c.description description ,c.status AS coverageStatus " +
+    public static final String FIND_ALL_COVERAGE_QUERY = "SELECT c.coverage_id coverageId,c.coverage_code coverageCode,c.coverage_name coverageName,c.description description ,c.status AS coverageStatus " +
             "FROM coverage c WHERE c.status='ACTIVE'";
 
     public static final String FIND_ALL_BENEFITS_ASSOCIATED_WITH_THE_COVERAGE_QUERY = "select b.benefit_id benefitId,b.benefit_name benefitName from  benefit b  " +
@@ -48,6 +49,13 @@ public class CoverageFinder {
         Number noOfCoverages = namedParameterJdbcTemplate.queryForObject(ACTIVE_COVERAGE_COUNT_BY_COVERAGE_NAME_QUERY, new MapSqlParameterSource().addValue("coverageName", coverageName), Number.class);
         return noOfCoverages.intValue();
     }
+
+    public int getCoverageCountByCoverageCode(String coverageCode){
+        Preconditions.checkNotNull(coverageCode);
+        Number noOfCoverages = namedParameterJdbcTemplate.queryForObject(ACTIVE_COVERAGE_COUNT_BY_COVERAGE_CODE_QUERY, new MapSqlParameterSource().addValue("coverageCode", coverageCode), Number.class);
+        return noOfCoverages.intValue();
+    }
+
 
     public List<CoverageDto> getAllCoverage() {
         List<CoverageDto> listOfActiveCoverage  = namedParameterJdbcTemplate.query(FIND_ALL_COVERAGE_QUERY, new BeanPropertyRowMapper(CoverageDto.class));

@@ -23,14 +23,16 @@ import java.util.Set;
  */
 @Entity
 @Table(name = "coverage")
-@EqualsAndHashCode(of = {"coverageName"})
-@ToString(of = "coverageName")
+@EqualsAndHashCode(of = {"coverageName","coverageCode"})
+@ToString(of = {"coverageName","coverageCode"})
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 @Getter
 public class Coverage implements ICrudEntity {
 
     @EmbeddedId
     private CoverageId coverageId;
+
+    private String coverageCode;
 
     @Embedded
     private CoverageName coverageName;
@@ -45,12 +47,13 @@ public class Coverage implements ICrudEntity {
     @JoinTable(name = "coverage_benefit", joinColumns = @JoinColumn(name = "COVERAGE_ID"), inverseJoinColumns = @JoinColumn(name = "BENEFIT_ID"))
     private Set<Benefit> benefits;
 
-    Coverage(CoverageId coverageId, CoverageName coverageName, Set<Benefit> benefits,CoverageStatus coverageStatus) {
+    Coverage(CoverageId coverageId, CoverageName coverageName,String coverageCode, Set<Benefit> benefits,CoverageStatus coverageStatus) {
         Preconditions.checkNotNull(coverageId == null);
         Preconditions.checkNotNull(coverageName == null);
         Preconditions.checkState(UtilValidator.isNotEmpty(benefits));
         this.coverageId = coverageId;
         this.coverageName = coverageName;
+        this.coverageCode = coverageCode;
         this.benefits = benefits;
         this.status = coverageStatus;
     }

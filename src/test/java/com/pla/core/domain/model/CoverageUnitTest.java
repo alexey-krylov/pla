@@ -27,7 +27,7 @@ public class CoverageUnitTest {
         boolean isBenefitNameUnique = true;
         benefit = admin.createBenefit(isBenefitNameUnique, "B001", name);
         benefitSet.add(benefit);
-        coverage = admin.createCoverage(isBenefitNameUnique, "C001", name, "coverage description",benefitSet);
+        coverage = admin.createCoverage(true,true, "C001", name,"C_ONE", "coverage description",benefitSet);
     }
 
     @Test
@@ -67,7 +67,7 @@ public class CoverageUnitTest {
     @Test
     public void benefitInActiveStatusShouldGetUpdatedWithNewName() {
         String updatedName = "Updating coverage name";
-        Coverage updateCoverageName = coverage.updateCoverageName(updatedName);;
+        Coverage updateCoverageName = coverage.updateCoverageName(updatedName);
         CoverageName coverageName = (CoverageName) invokeGetterMethod(updateCoverageName, "getCoverageName");
         assertEquals(updatedName, coverageName.getCoverageName());
     }
