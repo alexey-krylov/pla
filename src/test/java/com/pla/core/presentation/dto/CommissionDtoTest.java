@@ -13,6 +13,7 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.test.context.ContextConfiguration;
 
 import java.math.BigDecimal;
 import java.util.*;
@@ -24,6 +25,7 @@ import static org.mockito.Mockito.when;
  * Created by User on 4/9/2015.
  */
 @RunWith(MockitoJUnitRunner.class)
+@ContextConfiguration(locations = "classpath:queryTestContext.xml")
 public class CommissionDtoTest {
 
 

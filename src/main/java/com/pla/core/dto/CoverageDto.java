@@ -14,6 +14,7 @@ import java.util.Map;
 public class CoverageDto {
     private String coverageId;
     private String coverageName;
+    private String coverageCode;
     private String description;
     private String coverageStatus;
     private List<Map<String,Object>> benefitDtos ;
@@ -21,11 +22,12 @@ public class CoverageDto {
     @Override
     public String toString() {
         return "CoverageDto{" +
-                "coverageId='" + coverageId + '\'' +
-                ", coverageName='" + coverageName + '\'' +
-                ", description='" + description + '\'' +
+                "benefitDtos=" + benefitDtos +
                 ", coverageStatus='" + coverageStatus + '\'' +
-                ", benefitDtos=" + benefitDtos +
+                ", description='" + description + '\'' +
+                ", coverageCode='" + coverageCode + '\'' +
+                ", coverageName='" + coverageName + '\'' +
+                ", coverageId='" + coverageId + '\'' +
                 '}';
     }
 }

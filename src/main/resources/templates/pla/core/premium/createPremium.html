@@ -57,8 +57,8 @@
                             <div class="form-group col-md-6 required">
                                 <label class="control-label">Premium Expressed As</label>
                                 <div class="radio" style="margin:0px">
-                                    <label style="margin-right:30px"><input type="radio"  name="premiumExpressedAs" value="Certain Specified Values" ng-model="createPremium.premiumExpressedAs"/>Certain Specified Values</label>
-                                    <label><input type="radio" name="premiumExpressedAs" value="Rate (per thousand" ng-model="createPremium.premiumExpressedAs"/>Rate (per thousand)</label>
+                                    <label style="margin-right:30px"><input type="radio"  name="premiumExpressedAs" value="FLAT_AMOUNT" ng-model="createPremium.premiumFactor"/>Certain Specified Values</label>
+                                    <label><input type="radio" name="premiumExpressedAs" value="PER_THOUSAND" ng-model="createPremium.premiumFactor"/>Rate (per thousand)</label>
                                 </div>
                             </div>
                         </div>
@@ -68,14 +68,14 @@
                             <div class="form-group col-md-6 required">
                                 <label class="control-label">Rate Expressed As</label>
                                 <div class="radio" style="margin:0px">
-                                    <label style="margin-right:30px"><input type="radio"  name="rateExpressedAs" value="Per Month" ng-model="createPremium.rateExpressedAs"/>Per Month</label>
-                                    <label><input type="radio" name="rateExpressedAs" value="Per Year" ng-model="createPremium.rateExpressedAs"/>Per Year</label>
+                                    <label style="margin-right:30px"><input type="radio"  name="rateExpressedAs" value="MONTHLY" ng-model="createPremium.premiumRate"/>Per Month</label>
+                                    <label><input type="radio" name="rateExpressedAs" value="YEARLY" ng-model="createPremium.premiumRate"/>Per Year</label>
                                 </div>
                             </div>
                             <div class="form-group col-md-6 required">
                                 <label class="control-label">From Date</label>
                                 <p class="input-group">
-                                    <input type="text" class="form-control input-sm" ng-click="open($event)" min-date="selectedDate" ng-required="true" datepicker-popup="dd/MM/yyyy" ng-model="createPremium.fromDate"  datepicker-options="datePickerSettings.dateOptions" is-open="datePickerSettings.isOpened"  close-text="Close" show-button-bar="false" />
+                                    <input type="text" class="form-control input-sm" ng-click="open($event)" min-date="selectedDate" ng-required="true" datepicker-popup="dd/MM/yyyy" ng-model="createPremium.effectiveFrom"  datepicker-options="datePickerSettings.dateOptions" is-open="datePickerSettings.isOpened"  close-text="Close" show-button-bar="false" />
                                         <span class="input-group-btn">
                                             <button type="button" class="btn btn-default btn-sm" ng-click="open($event)"><i class="glyphicon glyphicon-calendar"></i></button>
                                         </span>
@@ -88,14 +88,17 @@
                             <div class="form-group col-md-6">
                                 <label class="control-label">Download Template</label>
                                 <div>
-                                   <a  type="button"  class="btn btn-default" target="_blank" download=""  ng-disabled="(!createPremium.definedFor || !createPremium.planId || !createPremium.fromDate || !createPremium.premiumInfluencingFactors)"  ng-click="getDownloadedTemplate()">
+                                   <a type="button"  class="btn btn-default" target="_blank" download=""  ng-disabled="(!createPremium.definedFor || !createPremium.planId || !createPremium.effectiveFrom || !createPremium.premiumInfluencingFactors || !boolVal)"  ng-click="getDownloadedTemplate()">
                                         Download Template
                                     </a>
                                 </div>
                             </div>
                             <div class="form-group col-md-6 required">
                                 <label class="control-label">Influencing Factors</label>
-                                <div>
+                                <div>                                          <!--value for (key, value) in mulSelect -->
+                                  <!--  <button type="button" class="btn btn-default bs-select" ng-model="createPremium.code" data-all-none-buttons="true" data-html="1" data-multiple="1"  ng-options="premiumInfluencingFactors.code as premiumInfluencingFactors.description for premiumInfluencingFactors in mulSelect | orderBy:'description'" >
+                                        Action <span class="caret"></span>
+                                    </button> -->
                                     <button type="button" class="btn btn-default bs-select" ng-model="createPremium.premiumInfluencingFactors" data-all-none-buttons="true" data-html="1" data-multiple="1"  ng-options="value for (key, value) in mulSelect" >
                                         Action <span class="caret"></span>
                                     </button>
@@ -108,8 +111,8 @@
                                 <label class="control-label">Upload</label>
                                 <div >
                                     <label class="input-sm" style="border:1px solid #ccc;width:330px;" >{{createPremium.file[0].name}} </label>
-                                    <div class="btn btn-default" style="display:inline;float:right;" ng-click="uploadFile(createPremium.file)"  ng-disabled="(!createPremium.definedFor || !createPremium.planId || !createPremium.premiumExpressedAs || !createPremium.rateExpressedAs || !createPremium.fromDate || !createPremium.premiumInfluencingFactors || !createPremium.file || !verified)" >Upload</div>
-                                    <button type="button" class="btn btn-default" style="display:inline;float:right;margin-right:5px;" ng-disabled="(!createPremium.definedFor || !createPremium.planId || !createPremium.premiumExpressedAs || !createPremium.rateExpressedAs || !createPremium.fromDate || !createPremium.premiumInfluencingFactors || !createPremium.file )" data-placement="top-right" data-container="notification" data-duration="5" bs-alert="alert" ng-click="verifyPremiumData(createPremium.file)">Verify</button>
+                                    <div class="btn btn-default" style="display:inline;float:right;" ng-click="uploadFile(createPremium.file)"  ng-disabled="(!verified)" >Upload</div>
+                                    <a type="button" class="btn btn-default" style="display:inline;float:right;margin-right:5px;"  data-placement="top-right" data-container="notification" data-duration="5" bs-alert="alert" ng-disabled="(!createPremium.definedFor || !createPremium.planId || !createPremium.effectiveFrom || !createPremium.premiumInfluencingFactors || !boolVal || !createPremium.file)" ng-click="verifyPremiumData(createPremium.file)">Verify</a>
                                     <div class="btn btn-default" style="display:inline;float:right;margin-right:5px;" ng-file-select=""  ng-model="createPremium.file"  >Browse</div>
 
                                 </div>

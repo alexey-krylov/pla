@@ -9,6 +9,10 @@
 /*Table structure for table `agent` */
  SET FOREIGN_KEY_CHECKS=0;
  DROP VIEW IF EXISTS `region_region_manger_fulfilment_view`;
+ DROP VIEW IF EXISTS `commission_view`;
+ DROP VIEW IF EXISTS `commission_commission_term_view`;
+ DROP TABLE IF EXISTS `commission`;
+ DROP TABLE IF EXISTS `commission_commission_term`;
  DROP VIEW IF EXISTS `active_team_region_branch_view`;
  DROP VIEW IF EXISTS `agent_team_branch_view`;
 DROP TABLE IF EXISTS `agent`;
@@ -128,10 +132,10 @@ DROP TABLE IF EXISTS `coverage`;
 CREATE TABLE `coverage` (
   `coverage_id` varchar(255) NOT NULL,
   `coverage_name` varchar(50) NOT NULL,
+  `coverage_code` varchar(255) NOT NULL,
   `description` varchar(150) DEFAULT NULL,
   `status` varchar(255) NOT NULL,
-  PRIMARY KEY (`coverage_id`),
-  UNIQUE KEY `UNQ_COVERAGE_NAME` (`coverage_name`)
+  PRIMARY KEY (`coverage_id`)
 );
 
 /*Data for the table `coverage` */
@@ -258,7 +262,7 @@ CREATE TABLE `team` (
   `region_code` varchar(20) NOT NULL,
   `branch_code` varchar(20) NOT NULL,
   PRIMARY KEY (`team_id`),
-   UNIQUE KEY `UNQ_ACTIVE_TEAM_CODE_NAME` (`team_code`,`team_name`,`active`),
+  UNIQUE KEY `UNQ_ACTIVE_TEAM_CODE_NAME` (`team_code`,`team_name`,`active`),
   KEY `FK_TEAM_REGION_REGION_CODE` (`region_code`),
   KEY `FK_TEAM_BRANCH_BRANCH_CODE` (`branch_code`),
   CONSTRAINT `FK_TEAM_BRANCH_BRANCH_CODE` FOREIGN KEY (`branch_code`) REFERENCES `branch` (`BRANCH_CODE`),
@@ -413,6 +417,50 @@ CREATE TABLE `designation` (
   `description` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`code`)
 );
+
+DROP TABLE IF EXISTS `commission`;
+CREATE TABLE `commission` (
+  `commission_id`        VARCHAR(255) NOT NULL,
+  `available_for`        VARCHAR(255) DEFAULT NULL,
+  `commission_term_type` VARCHAR(255) DEFAULT NULL,
+  `commission_type`      VARCHAR(255) DEFAULT NULL,
+  `from_date`            DATE         DEFAULT NULL,
+  `plan_id`              VARCHAR(255) DEFAULT NULL,
+  `thru_date`            DATE         DEFAULT NULL,
+  PRIMARY KEY (`commission_id`)
+);
+
+DROP TABLE IF EXISTS `commission_commission_term`;
+CREATE TABLE `commission_commission_term` (
+  `commission_id`         VARCHAR(255) NOT NULL,
+  `commission_percentage` DECIMAL(19, 2) DEFAULT NULL,
+  `end_year`              INT(11)        DEFAULT NULL,
+  `start_year`            INT(11)        DEFAULT NULL,
+  KEY `FK_as28e68p5ow4r4rrxui4kx64l` (`commission_id`),
+  CONSTRAINT `FK_as28e68p5ow4r4rrxui4kx64l` FOREIGN KEY (`commission_id`) REFERENCES `commission` (`commission_id`)
+);
+
+DROP VIEW IF EXISTS `commission_view`;
+CREATE VIEW `commission_view` AS
+  (SELECT
+     cm.commission_id        AS commissionId,
+     cm.from_date            AS fromDate,
+     cm.thru_date            AS toDate,
+     cm.plan_id              AS planId,
+     cm.available_for        AS availableFor,
+     cm.commission_term_type AS commissionTermType,
+     cm.commission_type      AS commissionType
+   FROM commission cm);
+
+DROP VIEW IF EXISTS `commission_commission_term_view`;
+CREATE VIEW `commission_commission_term_view` AS
+  (SELECT
+     cctf.commission_id         AS commissionId,
+     cctf.commission_percentage AS commissionPercentage,
+     cctf.start_year            AS startYear,
+     cctf.end_year              AS endYear
+   FROM COMMISSION_COMMISSION_TERM cctf);
+
 
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;

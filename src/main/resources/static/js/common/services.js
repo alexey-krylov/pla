@@ -1,8 +1,8 @@
 define(['moment'],function(moment){
     angular.module('commonServices',[])
-        .factory('formatJSDateToYYYYMMDD',function(){
+        .factory('formatJSDateToDDMMYYYY',function(){
             return function(date){
-               return moment(date).format('YYYY/MM/DD');
+               return moment(date).format('DD/MM/YYYY');
             }
         })
         .factory()
