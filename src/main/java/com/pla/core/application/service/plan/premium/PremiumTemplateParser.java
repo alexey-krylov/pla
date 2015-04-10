@@ -74,10 +74,10 @@ public class PremiumTemplateParser {
                     validValueErrorMessage = validValueErrorMessage + "\n" + premiumInfluencingFactor.getDescription() + " is missing";
                     continue;
                 }
-                boolean isValidValue = premiumInfluencingFactor.isValidValue(plan, coverageId, Cell.CELL_TYPE_NUMERIC == cell.getCellType() ? ((Double) cell.getNumericCellValue()).toString() : cell.getStringCellValue());
+                boolean isValidValue = premiumInfluencingFactor.isValidValue(plan, coverageId, Cell.CELL_TYPE_NUMERIC == cell.getCellType() ? ((Long)((Double) cell.getNumericCellValue()).longValue()).toString() : cell.getStringCellValue());
                 if (!isValidValue) {
                     isValidPremiumTemplate = false;
-                    validValueErrorMessage = validValueErrorMessage + "\n" + premiumInfluencingFactor.getErrorMessage(Cell.CELL_TYPE_NUMERIC == cell.getCellType() ? ((Double) cell.getNumericCellValue()).toString() : cell.getStringCellValue());
+                    validValueErrorMessage = validValueErrorMessage + "\n" + premiumInfluencingFactor.getErrorMessage(Cell.CELL_TYPE_NUMERIC == cell.getCellType() ? ((Long)((Double) cell.getNumericCellValue()).longValue()).toString() : cell.getStringCellValue());
                 }
             }
             Cell premiumCell = row.getCell(premiumCellNumber);

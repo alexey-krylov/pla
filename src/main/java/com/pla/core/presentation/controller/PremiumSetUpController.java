@@ -6,6 +6,8 @@
 
 package com.pla.core.presentation.controller;
 
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import com.pla.core.application.exception.PremiumTemplateParseException;
 import com.pla.core.application.plan.premium.CreatePremiumCommand;
 import com.pla.core.application.plan.premium.PremiumTemplateDto;
@@ -56,7 +58,7 @@ public class PremiumSetUpController {
         this.planRepository = planRepository;
     }
 
-    @RequestMapping(value = "/lsitpremium", method = RequestMethod.GET)
+    @RequestMapping(value = "/listpremium", method = RequestMethod.GET)
     @ResponseBody
     public ModelAndView viewPremiums() {
         ModelAndView modelAndView = new ModelAndView();
@@ -73,8 +75,22 @@ public class PremiumSetUpController {
 
     @RequestMapping(value = "/getpremiuminfluencingfactors", method = RequestMethod.GET)
     @ResponseBody
-    public PremiumInfluencingFactor[] getPremiumInfluencingFactor() {
-        return PremiumInfluencingFactor.values();
+    public List<Map<String, String>> getPremiumInfluencingFactor() {
+        List<Map<String, String>> premiumInfluencingFactors = Lists.newArrayList();
+        for (PremiumInfluencingFactor premiumInfluencingFactor : PremiumInfluencingFactor.values()) {
+            Map<String, String> premiumInfluencingFactorMap = Maps.newHashMap();
+            premiumInfluencingFactorMap.put("code", premiumInfluencingFactor.name());
+            premiumInfluencingFactorMap.put("description", premiumInfluencingFactor.getDescription());
+            premiumInfluencingFactors.add(premiumInfluencingFactorMap);
+        }
+        return premiumInfluencingFactors;
+    }
+
+    @RequestMapping(value = "/createpremium", method = RequestMethod.GET)
+    public ModelAndView openCreatePagePremium() {
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("pla/core/premium/createPremium");
+        return modelAndView;
     }
 
     @RequestMapping(value = "/downloadpremiumtemplate", method = RequestMethod.POST)
