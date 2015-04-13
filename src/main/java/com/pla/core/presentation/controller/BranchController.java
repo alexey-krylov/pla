@@ -98,7 +98,7 @@ public class BranchController {
             }
             try {
                 if (updateBranchManagerCommand.isOnlyBranchManager()) {
-                    branchService.updateBranchManager(updateBranchManagerCommand.getBranchCode(), updateBranchManagerCommand.getBranchManagerEmployeeId(), updateBranchManagerCommand.getBranchManagerFirstName(), updateBranchManagerCommand.getBranchBDELastName(), updateBranchManagerCommand.getBranchManagerFromDate());
+                    branchService.updateBranchManager(updateBranchManagerCommand.getBranchCode(), updateBranchManagerCommand.getBranchManagerEmployeeId(), updateBranchManagerCommand.getBranchManagerFirstName(), updateBranchManagerCommand.getBranchManagerLastName(), updateBranchManagerCommand.getBranchManagerFromDate());
                 }
 
             } catch (BranchApplicationException e) {
