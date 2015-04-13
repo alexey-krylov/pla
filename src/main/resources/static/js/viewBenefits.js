@@ -14,7 +14,12 @@ function preConfigurations(){
         $('#benefitName').focus()
     });
 
-    $('#benefit-table').dataTable();
+    $('#benefit-table').dataTable(
+        {
+            "aoColumnDefs": [
+                { "bSearchable": false, "aTargets": [ 1 ] }
+            ] }
+    );
 }
 var convertThymeleafObjectToJavascriptObject= function(thymeleafObject){
     /*pattern : objectName(key=value,key=value)*/
@@ -166,7 +171,7 @@ var inactivate=function(value,flag){
                 if(msg.status=='200'){
                     window.location.reload();
                 }else{
-                    console.log("Error inactivating employee");
+                    $('#inactivate-alert-danger').text(msg.message).show();
                 }
             }
         });
