@@ -5,7 +5,6 @@ define(['moment'],function(moment){
                return moment(date).format('DD/MM/YYYY');
             }
         })
-        .factory()
         .factory('getQueryParameter',['$window',function($window){
             return function(name){
                 name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");

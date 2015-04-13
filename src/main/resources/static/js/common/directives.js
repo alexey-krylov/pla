@@ -1,5 +1,5 @@
-angular.module('directives', [])
-    .directive('nthTleafBinder', ['$timeout', function ($timeout) {
+angular.module('directives', ['mgcrea.ngStrap.alert'])
+    .directive('nthTleafBinder', [function () {
         return {
             restrict: 'A',
             require: '?ngModel',
@@ -13,7 +13,7 @@ angular.module('directives', [])
             }
         }
     }])
-    .directive('fueluxWizard', function ($timeout) {
+    .directive('fueluxWizard', function () {
         /*use this directive to initialize the fuelUx wizard
          *
          * example: <div fuelux-wizard selected-item="[step]">
@@ -82,7 +82,7 @@ angular.module('directives', [])
         return {
             restrict: 'EA',
             link: function (scope, iElement, attrs) {
-                iElement.dataTable();
+                $(iElement).dataTable();
             }
         }
     })
