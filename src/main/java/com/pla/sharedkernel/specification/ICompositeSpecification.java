@@ -14,4 +14,7 @@ public interface ICompositeSpecification<T> extends ISpecification<T>{
 
     ICompositeSpecification<T> And(ISpecification<T> other);
 
+    ICompositeSpecification<T> Or(ISpecification<T> other);
+
+
 }

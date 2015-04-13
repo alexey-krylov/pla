@@ -7,6 +7,13 @@
 </head>
 <body>
 <div th:include="fragments/common :: bodyHeader" th:remove="tag"/>
+<script>
+    requirejs(['basic'],function(){
+    requirejs(['/pla/js/commissions/viewCommissions.js'],function(){
+    });
+    })
+</script>
+
 
 <div class="container">
     <div class="row">
@@ -17,7 +24,7 @@
                         <div class="col-lg-6"><span th:text="#{listOfCommissions}">List of Commissions
                         </span></div>
                         <div class="col-lg-6"><a type="button" class="btn btn-default btn-xs" style="float: right"
-                                                 th:href="@{/core/commission/openCreatePage}">
+                                                 th:href="@{/core/commission/opencreatepage}">
                             Create
                         </a></div>
                     </div>
@@ -27,7 +34,7 @@
                         <thead>
                         <tr>
                             <th th:text="#{product}">
-                                Product
+                                Product Name
                             </th>
                             <th th:text="#{designation}">
                                 Designation
@@ -42,6 +49,7 @@
                         </thead>
                         <tbody>    <!--th:each="commission : ${commissionList}"-->
                         <tr>
+
                             <td>Product A</td>
                             <td>Agent</td>
                             <td>09/03/2014</td>

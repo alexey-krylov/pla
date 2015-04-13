@@ -1,0 +1,1 @@
+$('#commission-table').dataTable();

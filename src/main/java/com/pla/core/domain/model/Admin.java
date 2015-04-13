@@ -38,7 +38,7 @@ public class Admin {
 
     public Benefit createBenefit(boolean isUniqueBenefitName, String benefitId, String benefitName) {
         if (!isUniqueBenefitName) {
-            throw new BenefitDomainException("Benefit name already satisfied");
+            throw new BenefitDomainException("Benefit already described");
         }
         return new Benefit(new BenefitId(benefitId), new BenefitName(benefitName), BenefitStatus.ACTIVE);
     }
@@ -59,21 +59,16 @@ public class Admin {
         return updatedBenefit;
     }
 
-    public Coverage createCoverage(boolean isUniqueCoverageName, String coverageId, String coverageName,String description,  Set<Benefit> benefits) {
-        if (!isUniqueCoverageName) {
-            throw new CoverageException("Coverage name already satisfied");
-        }
-        Coverage  coverage = new Coverage(new CoverageId(coverageId), new CoverageName(coverageName), benefits, CoverageStatus.ACTIVE);
-        if (description != null)
-            coverage = coverage.updateDescription(description);
-        return coverage;
+    public Coverage createCoverage(boolean isCodeOrNameIsUnique,String coverageId, String coverageName,String coverageCode,String description,  Set<Benefit> benefits) {
+        if (!isCodeOrNameIsUnique)
+            throw new CoverageException("Coverage already described");
+        return new Coverage(new CoverageId(coverageId), new CoverageName(coverageName),coverageCode, benefits, CoverageStatus.ACTIVE).updateDescription(description);
     }
 
-    public Coverage updateCoverage(Coverage coverage, String newCoverageName, String description,Set<Benefit> benefits, boolean isCoverageNameUnique) {
-        if (!isCoverageNameUnique && !coverage.getCoverageName().equals(new CoverageName(newCoverageName))) {
-            throw new CoverageException("Coverage name already satisfied");
-        }
-        return coverage.updateCoverageName(newCoverageName).updateBenefit(benefits).updateDescription(description);
+    public Coverage updateCoverage(Coverage coverage, String newCoverageName,String newCoverageCode, String description,Set<Benefit> benefits, boolean isCoverageNameOrCodeIsUnique) {
+        if (!isCoverageNameOrCodeIsUnique)
+            throw new CoverageException("Coverage already described");
+        return coverage.updateCoverageName(newCoverageName).updateCoverageCode(newCoverageCode).updateBenefit(benefits).updateDescription(description);
     }
 
     public Coverage inactivateCoverage(Coverage coverage) {
@@ -165,4 +160,5 @@ public class Admin {
 
         return commission.updateWithCommissionTerms(commissionSet);
     }
+
 }

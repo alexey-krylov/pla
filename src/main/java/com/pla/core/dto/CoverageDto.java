@@ -1,5 +1,6 @@
 package com.pla.core.dto;
 
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -11,21 +12,33 @@ import java.util.Map;
  */
 @Getter
 @Setter
+@EqualsAndHashCode
 public class CoverageDto {
     private String coverageId;
     private String coverageName;
+    private String coverageCode;
     private String description;
     private String coverageStatus;
     private List<Map<String,Object>> benefitDtos ;
 
+    public CoverageDto() {
+    }
+
+    public CoverageDto(String coverageId,String coverageName,String coverageCode){
+        this.coverageId = coverageId;
+        this.coverageName = coverageName;
+        this.coverageCode = coverageCode;
+    }
+
     @Override
     public String toString() {
         return "CoverageDto{" +
-                "coverageId='" + coverageId + '\'' +
-                ", coverageName='" + coverageName + '\'' +
-                ", description='" + description + '\'' +
+                "benefitDtos=" + benefitDtos +
                 ", coverageStatus='" + coverageStatus + '\'' +
-                ", benefitDtos=" + benefitDtos +
+                ", description='" + description + '\'' +
+                ", coverageCode='" + coverageCode + '\'' +
+                ", coverageName='" + coverageName + '\'' +
+                ", coverageId='" + coverageId + '\'' +
                 '}';
     }
 }

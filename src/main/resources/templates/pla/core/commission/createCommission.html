@@ -1,12 +1,21 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/xhtml"
-      lang="en" ng-app="AngularApp">
+      lang="en">
 <head th:include="fragments/common :: headTag">
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
 </head>
 <body>
 <div th:include="fragments/common :: bodyHeader" th:remove="tag"/>
-
+<script>
+    require(['moment'], function(moment) {
+    // alert(moment().format('dddd, MMMM Do YYYY, h:mm:ss a'));
+    });
+    requirejs(['main','angular-file-upload'],function(){
+    require(['/pla/js/commissions/createCommissions.js'],function(){
+    angular.bootstrap(document, ['createCommission']);
+    });
+    });
+</script>
 <div class="container" ng-Controller="CreateCommissionController">
     <div class="row">
         <div class="col-lg-12" >
@@ -56,7 +65,7 @@
                             <div class="form-group col-md-6">
                                 <label class="control-label">From Date</label>
                                 <p class="input-group">
-                                    <input type="text" class="form-control input-sm" ng-click="open($event)" datepicker-popup="dd/MM/yyyy" ng-model="createCommission.fromDate"  datepicker-options="fromDatePickerSettings.dateOptions" is-open="fromDatePickerSettings.isOpened"  close-text="Close" />
+                                    <input type="text" class="form-control input-sm" ng-click="open($event)"  datepicker-popup="dd/MM/yyyy" ng-model="createCommission.fromDate"  datepicker-options="fromDatePickerSettings.dateOptions" is-open="fromDatePickerSettings.isOpened"  close-text="Close" show-button-bar="false" />
                                         <span class="input-group-btn">
                                             <button type="button" class="btn btn-default btn-sm" ng-click="open($event)"><i class="glyphicon glyphicon-calendar"></i></button>
                                         </span>
@@ -65,7 +74,7 @@
                             <div class="form-group col-md-6">
                                 <label class="control-label">To Date</label>
                                 <p class="input-group">
-                                    <input type="text" class="form-control input-sm" ng-click="openToDate($event)" datepicker-popup="dd/MM/yyyy" ng-model="createCommission.toDate"  datepicker-options="toDatePickerSettings.dateOptions" is-open="toDatePickerSettings.isOpened"  close-text="Close" />
+                                    <input type="text" class="form-control input-sm" ng-click="openToDate($event)" datepicker-popup="dd/MM/yyyy" ng-model="createCommission.toDate"  datepicker-options="toDatePickerSettings.dateOptions" is-open="toDatePickerSettings.isOpened"  close-text="Close" show-button-bar="false" />
                                         <span class="input-group-btn">
                                             <button type="button" class="btn btn-default btn-sm" ng-click="openToDate($event)"><i class="glyphicon glyphicon-calendar"></i></button>
                                         </span>

@@ -1,11 +1,10 @@
 define(['moment'],function(moment){
     angular.module('commonServices',[])
-        .factory('formatJSDateToYYYYMMDD',function(){
+        .factory('formatJSDateToDDMMYYYY',function(){
             return function(date){
-               return moment(date).format('YYYY/MM/DD');
+               return moment(date).format('DD/MM/YYYY');
             }
         })
-        .factory()
         .factory('getQueryParameter',['$window',function($window){
             return function(name){
                 name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");

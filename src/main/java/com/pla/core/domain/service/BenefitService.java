@@ -6,6 +6,7 @@
 
 package com.pla.core.domain.service;
 
+import com.pla.core.domain.exception.BenefitDomainException;
 import com.pla.core.domain.model.Admin;
 import com.pla.core.domain.model.Benefit;
 import com.pla.core.dto.BenefitDto;
@@ -51,11 +52,13 @@ public class BenefitService {
 
     public Benefit updateBenefit(Benefit benefit, String newBenefitName, UserDetails userDetails) {
         Admin admin = adminRoleAdapter.userToAdmin(userDetails);
-        BenefitDto benefitDto = new BenefitDto(benefit.getBenefitId().getBenefitId(), newBenefitName);
+        BenefitDto  benefitDto = new BenefitDto(benefit.getBenefitId().getBenefitId(), newBenefitName);
+        boolean isBenefitNameUnique = benefitNameIsUnique.isSatisfiedBy(benefitDto);
+        if (!isBenefitNameUnique)
+            throw new BenefitDomainException("Benefit already described");
         boolean isBenefitUpdatable = benefitIsAssociatedWithCoverage.And(benefitNameIsUnique).isSatisfiedBy(benefitDto);
         Benefit updatedBenefit = admin.updateBenefit(benefit, newBenefitName, isBenefitUpdatable);
         return updatedBenefit;
-
     }
 
     public Benefit markBenefitAsUsed(Benefit benefit) {

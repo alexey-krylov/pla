@@ -74,10 +74,10 @@ public class PremiumTemplateParser {
                     validValueErrorMessage = validValueErrorMessage + "\n" + premiumInfluencingFactor.getDescription() + " is missing";
                     continue;
                 }
-                boolean isValidValue = premiumInfluencingFactor.isValidValue(plan, coverageId, Cell.CELL_TYPE_NUMERIC == cell.getCellType() ? ((Double) cell.getNumericCellValue()).toString() : cell.getStringCellValue());
+                boolean isValidValue = premiumInfluencingFactor.isValidValue(plan, coverageId, Cell.CELL_TYPE_NUMERIC == cell.getCellType() ? ((Long)((Double) cell.getNumericCellValue()).longValue()).toString() : cell.getStringCellValue());
                 if (!isValidValue) {
                     isValidPremiumTemplate = false;
-                    validValueErrorMessage = validValueErrorMessage + "\n" + premiumInfluencingFactor.getErrorMessage(Cell.CELL_TYPE_NUMERIC == cell.getCellType() ? ((Double) cell.getNumericCellValue()).toString() : cell.getStringCellValue());
+                    validValueErrorMessage = validValueErrorMessage + "\n" + premiumInfluencingFactor.getErrorMessage(Cell.CELL_TYPE_NUMERIC == cell.getCellType() ? ((Long)((Double) cell.getNumericCellValue()).longValue()).toString() : cell.getStringCellValue());
                 }
             }
             Cell premiumCell = row.getCell(premiumCellNumber);
@@ -132,8 +132,8 @@ public class PremiumTemplateParser {
     }
 
 
-    // TODO : Make this method as public and write test
-    private boolean isTwoRowIdentical(Row firstRow, Row secondRow, int premiumCellNumber) {
+
+    boolean isTwoRowIdentical(Row firstRow, Row secondRow, int premiumCellNumber) {
         if (firstRow.getRowNum() == secondRow.getRowNum()) {
             return false;
         }
@@ -147,14 +147,14 @@ public class PremiumTemplateParser {
         return isDuplicate;
     }
 
-    private List<Cell> transformCellIteratorToList(Iterator<Cell> cellIterator) {
+    List<Cell> transformCellIteratorToList(Iterator<Cell> cellIterator) {
         Stream<Cell> cellStream = StreamSupport.stream(Spliterators.spliteratorUnknownSize(cellIterator, Spliterator.ORDERED), true);
         List<Cell> cellList = cellStream.collect(Collectors.toList());
         return cellList;
     }
 
-    // TODO : Make this method as public and write test
-    private boolean areAllCellContainsUniqueValue(List<Cell> firstRowCells, List<Cell> secondRowCells, int premiumCellNumber, int noOfCell) {
+
+    boolean areAllCellContainsUniqueValue(List<Cell> firstRowCells, List<Cell> secondRowCells, int premiumCellNumber, int noOfCell) {
         boolean allHasUniqueValue = false;
         int noOfCellHavingSameValue = 0;
         for (int count = 0; count < noOfCell; count++) {
@@ -176,8 +176,8 @@ public class PremiumTemplateParser {
         return noOfCell == noOfCellHavingSameValue;
     }
 
-    // TODO : Make this method as public and write test
-    private Integer getNoOfNonEmptyRow(HSSFSheet hssfSheet) {
+
+    Integer getNoOfNonEmptyRow(HSSFSheet hssfSheet) {
         Iterator<Row> rowsIterator = hssfSheet.iterator();
         rowsIterator.next();
         List<Row> nonEmptyRows = Lists.newArrayList();
@@ -192,8 +192,8 @@ public class PremiumTemplateParser {
         return isEmpty(nonEmptyRows) ? 0 : nonEmptyRows.size();
     }
 
-    // TODO : Make this method as public and write test
-    private boolean isRowEmpty(Row row) {
+
+    boolean isRowEmpty(Row row) {
         List<Cell> cells = Lists.newArrayList(row.cellIterator());
         List<Cell> nonEmptyCells = cells.stream().filter(new Predicate<Cell>() {
             @Override
@@ -208,8 +208,8 @@ public class PremiumTemplateParser {
         return isEmpty(nonEmptyCells);
     }
 
-    // TODO : Make this method as public and write test
-    private boolean isValidHeader(Row headerRow, List<PremiumInfluencingFactor> premiumInfluencingFactors) {
+
+    boolean isValidHeader(Row headerRow, List<PremiumInfluencingFactor> premiumInfluencingFactors) {
         Iterator<Cell> cellIterator = headerRow.cellIterator();
         Stream<Cell> targetStream = StreamSupport.stream(Spliterators.spliteratorUnknownSize(cellIterator, Spliterator.ORDERED), true);
         List<Cell> cells = targetStream.collect(Collectors.toList());
@@ -219,7 +219,7 @@ public class PremiumTemplateParser {
         return isTemplateContainsSameInfluencingFactor(transformedInfluencingFactors, influencingFactorsPresentInExcel);
     }
 
-    // TODO : Make this method as public and write test
+
     private boolean isTemplateContainsSameInfluencingFactor(List<String> selectedInfluencingFactors, List<String> influencingFactorsInHeader) {
         boolean containsHeader = true;
         for (String influencingFactorInHeader : influencingFactorsInHeader) {
@@ -231,15 +231,14 @@ public class PremiumTemplateParser {
         return containsHeader;
     }
 
-    // TODO : Make this method as public and write test
-    private Map<PremiumInfluencingFactor, Integer> buildInfluencingFactorAndCellIndexMap(Row headerRow, List<PremiumInfluencingFactor> premiumInfluencingFactors) {
+
+    Map<PremiumInfluencingFactor, Integer> buildInfluencingFactorAndCellIndexMap(Row headerRow, List<PremiumInfluencingFactor> premiumInfluencingFactors) {
         Iterator<Cell> cellIterator = headerRow.cellIterator();
         Stream<Cell> targetStream = StreamSupport.stream(Spliterators.spliteratorUnknownSize(cellIterator, Spliterator.ORDERED), true);
         List<Cell> cells = targetStream.collect(Collectors.toList());
         Map<PremiumInfluencingFactor, Integer> indexMap = premiumInfluencingFactors.parallelStream().collect(Collectors.toMap(Function.identity(), new TransformToIndexMap(cells)));
         return indexMap;
     }
-
     private class TransformToIndexMap implements Function<PremiumInfluencingFactor, Integer> {
         List<Cell> cells;
 
@@ -253,8 +252,8 @@ public class PremiumTemplateParser {
         }
     }
 
-    // TODO : Make this method as public and write test
-    private int getCellNumberFor(String cellName, List<Cell> cells) {
+
+    int getCellNumberFor(String cellName, List<Cell> cells) {
         return cells.stream().filter(cell -> cellName.equals(cell.getStringCellValue().trim())).mapToInt(cell -> cells.indexOf(cell)).findAny().getAsInt();
     }
 
@@ -287,8 +286,8 @@ public class PremiumTemplateParser {
         return premiumInfluencingFactorLineItem;
     }
 
-    // TODO : Make this method as public and write test
-    private int getTotalNoOfPremiumCombination(List<PremiumInfluencingFactor> premiumInfluencingFactors, CoverageId coverageId, Plan plan) {
+
+    int getTotalNoOfPremiumCombination(List<PremiumInfluencingFactor> premiumInfluencingFactors, CoverageId coverageId, Plan plan) {
         Integer noOfRow = 1;
         for (PremiumInfluencingFactor premiumInfluencingFactor : premiumInfluencingFactors) {
             Integer lengthOfAllowedValues = premiumInfluencingFactor.getAllowedValues(plan, coverageId, masterFinder).length == 0 ? 1 : premiumInfluencingFactor.getAllowedValues(plan, coverageId, masterFinder).length;

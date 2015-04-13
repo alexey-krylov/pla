@@ -171,8 +171,8 @@ public class AdminUnitTest {
     @Test
     public void givenTheCoverageWithSetOfBenefit_whenTheCoverageNameIsUnique_thenItShouldCreateTheCoverage() {
         String name = "CI Benefit";
-        boolean isCoverageNameIsUnique = true;
-        Coverage coverage = admin.createCoverage(isCoverageNameIsUnique, "1", name, "description", benefitSet);
+        boolean isCoverageNameOrNameIsUnique = true;
+        Coverage coverage = admin.createCoverage(isCoverageNameOrNameIsUnique, "1", name,"C_ONE", "description", benefitSet);
         CoverageName coverageName = (CoverageName) invokeGetterMethod(coverage, "getCoverageName");
         assertEquals(name, coverageName.getCoverageName());
         assertEquals(CoverageStatus.ACTIVE, invokeGetterMethod(coverage, "getStatus"));
@@ -182,17 +182,38 @@ public class AdminUnitTest {
     public void givenTheCoverageWithSetOfBenefit_whenTheCoverageNameIsNotUnique_thenItShouldThrowAnException() {
         String name = "coverage name";
         boolean isCoverageNameIsUnique = false;
-        Coverage coverage = admin.createCoverage(isCoverageNameIsUnique, "1", name, "description", benefitSet);
+        boolean isCoverageNameOrNameIsUnique = true;
+        Coverage coverage = admin.createCoverage(isCoverageNameIsUnique, "1", name,"C_ONE", "description", benefitSet);
+    }
+
+    @Test(expected = CoverageException.class)
+    public void givenTheCoverageWithSetOfBenefit_whenTheCoverageCodeIsNotUnique_thenItShouldThrowAnException() {
+        String name = "coverage name";
+        boolean isCoverageNameOrNameIsUnique = false;
+        Coverage coverage = admin.createCoverage(isCoverageNameOrNameIsUnique, "1", name,"C_ONE", "description", benefitSet);
     }
 
     @Test
     public void givenTheCoverageWithNewCoverageName_whenCoverageNameIsUnique_thenTheCoverageShouldUpdateWithNewName() {
         String name = "coverage name";
-        boolean isCoverageNameIsUnique = true;
-        Coverage coverage = admin.createCoverage(isCoverageNameIsUnique, "1", name, "description", benefitSet);
+        boolean isCoverageNameOrNameIsUnique = true;
+        Coverage coverage = admin.createCoverage(isCoverageNameOrNameIsUnique, "1", name, "C_ONE","description", benefitSet);
 
         String updatedName = "coverage name after update";
-        Coverage updatedCoverage = admin.updateCoverage(coverage,updatedName,"coverage description", benefitSet, true);
+        Coverage updatedCoverage = admin.updateCoverage(coverage,updatedName,"C_TWO","coverage description", benefitSet, true);
+        CoverageName updatedCoverageName = (CoverageName) invokeGetterMethod(updatedCoverage, "getCoverageName");
+        assertEquals(updatedName, updatedCoverageName.getCoverageName());
+    }
+
+    @Test
+    public void givenTheCoverageWithNewCoverageCode_whenCoverageCodeIsUnique_thenTheCoverageShouldUpdateWithNewCoverageCode() {
+        String name = "coverage name";
+        boolean isCoverageNameOrNameIsUnique = true;
+        Coverage coverage = admin.createCoverage(isCoverageNameOrNameIsUnique, "1", name, "C_ONE","description", benefitSet);
+
+        String updatedName = "coverage name after update";
+        String newCoverageCode = "coverage name after update";
+        Coverage updatedCoverage = admin.updateCoverage(coverage,updatedName,newCoverageCode,"coverage description", benefitSet, true);
         CoverageName updatedCoverageName = (CoverageName) invokeGetterMethod(updatedCoverage, "getCoverageName");
         assertEquals(updatedName, updatedCoverageName.getCoverageName());
     }
@@ -208,22 +229,33 @@ public class AdminUnitTest {
     * */
 
     @Test(expected = CoverageException.class)
-    public void givenTheCoverageWithNewCoverageName_whenCoverageNameIsNotUnique_thenTheCoverageShouldUpdateWithNewName() {
+    public void givenTheCoverageWithCoverageName_whenCoverageNameIsNotUnique_thenTheCoverageShouldNotUpdateWithNewName() {
         String name = "coverage name";
-        boolean isCoverageNameIsUnique = true;
-        Coverage coverage = admin.createCoverage(isCoverageNameIsUnique, "1", name, "description", benefitSet);
+        boolean isCoverageNameOrNameIsUnique = true;
+        Coverage coverage = admin.createCoverage(isCoverageNameOrNameIsUnique, "1", name,"C_ONE", "description", benefitSet);
 
-        Coverage newCoverage = admin.createCoverage(isCoverageNameIsUnique, "1", "coverage name two", "description", benefitSet);
+        Coverage newCoverage = admin.createCoverage(isCoverageNameOrNameIsUnique, "1", "coverage name two","C_ONE", "description", benefitSet);
         String updatedName = "coverage name";
-        Coverage updatedCoverage = admin.updateCoverage(newCoverage,updatedName, "coverage description",benefitSet, false);
+        Coverage updatedCoverage = admin.updateCoverage(newCoverage,updatedName,"C_TWO", "coverage description",benefitSet, false);
+    }
+
+    @Test(expected = CoverageException.class)
+    public void givenTheCoverageWithCoverageCode_whenCoverageCodeIsNotUnique_thenTheCoverageShouldNotUpdateWithNewCoverageCode() {
+        String name = "coverage name";
+        boolean isCoverageNameOrNameIsUnique = true;
+        Coverage coverage = admin.createCoverage(isCoverageNameOrNameIsUnique, "1", name,"C_ONE", "description", benefitSet);
+
+        Coverage newCoverage = admin.createCoverage(isCoverageNameOrNameIsUnique, "1", "coverage name two","C_TWO", "description", benefitSet);
+        String updatedName = "new coverage name";
+        Coverage updatedCoverage = admin.updateCoverage(newCoverage,updatedName,"C_ONE", "coverage description",benefitSet,false);
     }
 
 
     @Test
     public void givenACoverage_whenTheCoverageIsInActiveStatus_thenItShouldInActivateTheCoverage() {
         String name = "coverage name";
-        boolean isCoverageNameIsUnique = true;
-        Coverage coverage = admin.createCoverage(isCoverageNameIsUnique, "1", name, "description", benefitSet);
+        boolean isCoverageNameOrNameIsUnique = true;
+        Coverage coverage = admin.createCoverage(isCoverageNameOrNameIsUnique, "1", name,"C_ONE", "description", benefitSet);
         Coverage inactiveCoverage = admin.inactivateCoverage(coverage);
         assertEquals(CoverageStatus.INACTIVE, invokeGetterMethod(inactiveCoverage, "getStatus"));
     }
@@ -232,8 +264,8 @@ public class AdminUnitTest {
     @Test(expected = CoverageException.class)
     public void givenACoverage_whenTheCoverageIsInInUseStatus_thenItShouldThrowAnException() {
         String name = "coverage name";
-        boolean isCoverageNameIsUnique = true;
-        Coverage coverage = admin.createCoverage(isCoverageNameIsUnique, "1", name, "description", benefitSet);
+        boolean isCoverageNameOrNameIsUnique = true;
+        Coverage coverage = admin.createCoverage(isCoverageNameOrNameIsUnique, "1", name,"C_ONE", "description", benefitSet);
         coverage.markAsUsed();
         Coverage inactiveCoverage = admin.inactivateCoverage(coverage);
     }

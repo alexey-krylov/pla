@@ -33,6 +33,7 @@ public class CreateCoverageCommand {
     @Length(max = 100, min = 1,message = "{Coverage name length should be between 1-100}")
     private String coverageName;
 
+    private String coverageCode;
     private String description;
 
     private Set<BenefitId> benefitIds;

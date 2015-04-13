@@ -49,7 +49,7 @@ public class BenefitNameIsUpdatableUnitTest {
     public void shouldReturnTrueIfBenefitIsUniqueAndNotAssociateWithCoverage() {
         String benefitName = "CI Benefit";
         when(benefitFinder.getBenefitCountAssociatedWithActiveCoverage("1")).thenReturn(0);
-        when(benefitFinder.getBenefitCountByBenefitName(benefitName)).thenReturn(0);
+        when(benefitFinder.getBenefitCountByBenefitName(benefitName,"B001")).thenReturn(0);
         BenefitIsAssociatedWithCoverage benefitIsAssociatedWithCoverage = new BenefitIsAssociatedWithCoverage(benefitFinder);
         BenefitNameIsUnique benefitNameIsUnique = new BenefitNameIsUnique(benefitFinder);
         BenefitDto benefitDto = new BenefitDto("1", benefitName);
@@ -61,7 +61,7 @@ public class BenefitNameIsUpdatableUnitTest {
     public void shouldReturnFalseIfBenefitIsUniqueAndAssociateWithCoverage() {
         String benefitName = "CI Benefit";
         when(benefitFinder.getBenefitCountAssociatedWithActiveCoverage("1")).thenReturn(1);
-        when(benefitFinder.getBenefitCountByBenefitName(benefitName)).thenReturn(0);
+        when(benefitFinder.getBenefitCountByBenefitName(benefitName,"B001")).thenReturn(0);
         BenefitIsAssociatedWithCoverage benefitIsAssociatedWithCoverage = new BenefitIsAssociatedWithCoverage(benefitFinder);
         BenefitNameIsUnique benefitNameIsUnique = new BenefitNameIsUnique(benefitFinder);
         BenefitDto benefitDto = new BenefitDto("1", benefitName);
@@ -72,8 +72,8 @@ public class BenefitNameIsUpdatableUnitTest {
     @Test
     public void shouldReturnFalseIfBenefitIsNotUniqueAndNotAssociateWithCoverage() {
         String benefitName = "CI Benefit";
-        when(benefitFinder.getBenefitCountAssociatedWithActiveCoverage("1")).thenReturn(0);
-        when(benefitFinder.getBenefitCountByBenefitName(benefitName)).thenReturn(1);
+        when(benefitFinder.getBenefitCountAssociatedWithActiveCoverage("1")).thenReturn(1);
+        when(benefitFinder.getBenefitCountByBenefitName(benefitName,"B001")).thenReturn(1);
         BenefitIsAssociatedWithCoverage benefitIsAssociatedWithCoverage = new BenefitIsAssociatedWithCoverage(benefitFinder);
         BenefitNameIsUnique benefitNameIsUnique = new BenefitNameIsUnique(benefitFinder);
         BenefitDto benefitDto = new BenefitDto("1", benefitName);
