@@ -73,7 +73,7 @@ angular.module('createAgent',['common','ngRoute','mgcrea.ngStrap.select','mgcrea
             };
 
             $scope.isSearchDisabled =  function(){
-                var searchPattern = new RegExp("[0-9]{6}\/[0-9]{2}\/[0-9]{1}");
+                var searchPattern = new RegExp("^[0-9]{6}\/[0-9]{2}\/[0-9]{1}$");
                 if($scope.search && $scope.search.nrc && !searchPattern.test($scope.search.nrc)){
                    return true;
                 }
@@ -118,14 +118,18 @@ angular.module('createAgent',['common','ngRoute','mgcrea.ngStrap.select','mgcrea
                             $scope.agentDetails = transformJson.fromHrmsToPla(data);
                             $scope.trainingCompleteOn = $scope.agentDetails.trainingCompleteOn;
                         }
+                        if(nextAgentSequence){
+                            $scope.agentDetails.agentId = nextAgentSequence;
+                        }
                     })
                     .error(function(data,status){
                         $scope.searchResult.isEmpty=true;
                         $scope.agentDetails.agentProfile.nrcNumberInString=$scope.search.nrc;
+                        if(nextAgentSequence){
+                            $scope.agentDetails.agentId = nextAgentSequence;
+                        }
                     });
-                if(nextAgentSequence){
-                    $scope.agentDetails.agentId = nextAgentSequence;
-                }
+
             };
             $scope.prePopulateTeamLeader = function(){
                 var teamDetails = _.findWhere($scope.teamDetails, {teamId:$scope.agentDetails.teamDetail.teamId});
