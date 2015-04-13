@@ -109,10 +109,10 @@ App.controller('CreatePremiumController',['$scope','$http','$rootScope','$upload
          }
 
     $scope.verifyPremiumData= function(files){
-       var a= $scope.createPremium.premiumInfluencingFactors;
+       var aVal= $scope.createPremium.premiumInfluencingFactors;
        var output = [];
-       for (var i=0; i<a.length; i++) {
-           output.push(JSON.stringify(a[i]).replace(/"/g, ''));
+       for (var i=0; i<aVal.length; i++) {
+           output.push(JSON.stringify(aVal[i]).replace(/"/g, ''));
            }
         // console.log(output.join(','));
         if (files) {
@@ -120,14 +120,13 @@ App.controller('CreatePremiumController',['$scope','$http','$rootScope','$upload
                  url: '/pla/core/premium/verifypremiumdata',
                  file: files,
                  fields:{planId:$scope.createPremium.planId,coverageId:$scope.createPremium.coverageId,
-                 premiumInfluencingFactors:output.join(',')},
-                 headers: {'Accept': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'}
+                 premiumInfluencingFactors:output.join(',')}
             }).progress(function (evt) {
                 // var progressPercentage = parseInt(100.0 * evt.loaded / evt.total);
                 // console.log('progress: ' + progressPercentage + '% ' +
                 //      evt.config.file.name);
-            }).success(function (data, status, headers, config) {
-               if(data.status==200){
+            }).success(function (data) {
+              if(data.status==200){
                     $scope.verified=true;
                     $scope.alert = {title:'Success Message! ', content:data.message, type: 'success'};
                 }else if(data.status==500){
