@@ -52,8 +52,8 @@ var require = {
         // All of the WebJar configs
         requirejs.config({
             "paths": {
-                "ui-bootstrap": ["/pla/webjars/angular-ui-bootstrap/0.12.1-1/ui-bootstrap.min", "ui-bootstrap"],
-                "ui-bootstrap-tpls": ["/pla/webjars/angular-ui-bootstrap/0.12.1-1/ui-bootstrap-tpls.min", "ui-bootstrap-tpls"]
+                "ui-bootstrap": ["/pla/js/common/ui-bootstrap-tpls", "ui-bootstrap"],
+                "ui-bootstrap-tpls": ["/pla/js/common/ui-bootstrap-tpls", "ui-bootstrap-tpls"]
             }, "shim": {"ui-bootstrap": ["angular"], "ui-bootstrap-tpls": ["angular"]}, "packages": []
         })
         requirejs.config({
