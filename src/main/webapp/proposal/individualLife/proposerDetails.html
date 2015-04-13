@@ -1,0 +1,215 @@
+<ng-form name="step2">
+    <accordion close-others="true">
+
+        <accordion-group is-open="accordionStatus.proposerDetails.proposedAssured">
+            <accordion-heading>
+                Proposed Assured <i class="pull-right glyphicon"
+                                    ng-class="{'glyphicon-chevron-down': accordionStatus.proposerDetails.proposedAssured, 'glyphicon-chevron-right': !accordionStatus.proposerDetails.proposedAssured}"></i>
+            </accordion-heading>
+            <div class="col-md-6">
+                <div class="form-group required">
+                    <label class="control-label">Title</label>
+                    <select class="form-control input-sm">
+                        <option>Mr.</option>
+                        <option>Mrs.</option>
+                        <option>Miss</option>
+                        <option>Dr.</option>
+                        <option>Prof.</option>
+                        <option>Hon.</option>
+                        <option>Ms.</option>
+                        <option>Rev.</option>
+                        <option>Pst.</option>
+                    </select>
+                </div>
+                <div class="form-group required">
+                    <label class="control-label">Surname</label>
+                    <input type="text" class="form-control input-sm" name="surname"/>
+                </div>
+                <div class="form-group required">
+                    <label class="control-label">NRC</label>
+                    <input type="text" class="form-control input-sm" name="nrc"/>
+                </div>
+                <div class="form-group required">
+                    <label class="control-label">Age Next Birthday</label>
+                    <input type="text" class="form-control input-sm" name="ageNextBirthday"/>
+                </div>
+                <div class="form-group required">
+                    <label class="control-label">Mobile Number</label>
+                    <input type="text" class="form-control input-sm" name="mobileNumber"/>
+                </div>
+                <div class="form-group required">
+                    <label class="control-label">Marital Status</label>
+                    <select class="form-control input-sm">
+                        <option>Select one</option>
+                    </select>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group required">
+                    <label class="control-label">First Name</label>
+                    <input type="text" class="form-control input-sm" name="firstName"/>
+                </div>
+                <div class="form-group">
+                    <label class="control-label">Other Name</label>
+                    <input type="text" class="form-control input-sm" name="otherName"/>
+                </div>
+                <div class="form-group required">
+                    <label class="control-label">Date Of Birth</label>
+                    <input type="text" class="form-control input-sm" name="dob"/>
+                </div>
+                <div class="form-group required">
+                    <label class="control-label">Sex</label>
+                    <select class="form-control input-sm">
+                        <option value="MALE">Male</option>
+                        <option value="FEMALE">Female</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="control-label">Email ID</label>
+                    <input type="text" class="form-control input-sm" name="email"/>
+                </div>
+            </div>
+        </accordion-group>
+
+
+
+        <accordion-group is-open="accordionStatus.proposerDetails.spouseDetails">
+            <accordion-heading>
+                Spouse Details <i class="pull-right glyphicon"
+                                  ng-class="{'glyphicon-chevron-down': accordionStatus.proposerDetails.spouseDetails, 'glyphicon-chevron-right': !accordionStatus.proposerDetails.spouseDetails}"></i>
+            </accordion-heading>
+            <div class="col-md-6">
+                <div class="form-group required">
+                    <label class="control-label">Spouse's Surname</label>
+                    <input type="text" class="form-control input-sm" name="spouseSurname"/>
+                </div>
+                <div class="form-group required">
+                    <label class="control-label">Spouse's Mobile Number</label>
+                    <input type="text" class="form-control input-sm" name="spouseMobileNumber"/>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group required">
+                    <label class="control-label">Spouse's First Name</label>
+                    <input type="text" class="form-control input-sm" name="spouseFirstName"/>
+                </div>
+                <div class="form-group">
+                    <label class="control-label">Spouse's Email ID</label>
+                    <input type="text" class="form-control input-sm" name="spouseEmailId"/>
+                </div>
+            </div>
+        </accordion-group>
+
+
+
+        <accordion-group is-open="accordionStatus.proposerDetails.employment">
+            <accordion-heading>
+                Employment Details <i class="pull-right glyphicon"
+                                      ng-class="{'glyphicon-chevron-down': accordionStatus.proposerDetails.employment, 'glyphicon-chevron-right': !accordionStatus.proposerDetails.employment}"></i>
+            </accordion-heading>
+            <div class="col-md-6">
+                <div class="form-group required">
+                    <label class="control-label">Occupation</label>
+                    <input type="text" class="form-control input-sm" name="occupation"/>
+                </div>
+                <div class="form-group required">
+                    <label class="control-label">Employment Date</label>
+                    <input type="text" class="form-control input-sm" name="employmentDate"/>
+                </div>
+                <div class="form-group required">
+                    <label class="control-label">Address Line 1</label>
+                    <input type="text" class="form-control input-sm" name="addressLine1"/>
+                </div>
+                <div class="form-group">
+                    <label class="control-label">Postal Code</label>
+                    <input type="text" class="form-control input-sm" name="postCode"/>
+                </div>
+                <div class="form-group required">
+                    <label class="control-label">Town</label>
+                    <select class="form-control input-sm">
+                        <option>Select One</option>
+                    </select>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group required">
+                    <label class="control-label">Employer</label>
+                    <input type="text" class="form-control input-sm" name="employer"/>
+                </div>
+                <div class="form-group required">
+                    <label class="control-label">Employment Type</label>
+                    <input type="text" class="form-control input-sm" name="employmentType"/>
+                </div>
+                <div class="form-group">
+                    <label class="control-label">Address Line 2</label>
+                    <input type="text" class="form-control input-sm" name="addressLine2"/>
+                </div>
+                <div class="form-group required">
+                    <label class="control-label">Province</label>
+                    <select class="form-control input-sm">
+                        <option>Select One</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="control-label">Work phone</label>
+                    <input type="text" class="form-control input-sm" name="workPhone"/>
+                </div>
+            </div>
+        </accordion-group>
+
+
+        <accordion-group is-open="accordionStatus.proposerDetails.resident">
+            <accordion-heading>
+                Residential Details <i class="pull-right glyphicon"
+                                       ng-class="{'glyphicon-chevron-down': accordionStatus.proposerDetails.resident, 'glyphicon-chevron-right': !accordionStatus.proposerDetails.resident}"></i>
+            </accordion-heading>
+            <div class="col-md-6">
+                <div class="form-group required">
+                    <label class="control-label">Address Line 1</label>
+                    <input type="text" class="form-control input-sm" name="residentAddress1"/>
+                </div>
+                <div class="form-group">
+                    <label class="control-label">Postal Code</label>
+                    <input type="text" class="form-control input-sm" name="residentPostalCode"/>
+                </div>
+                <div class="form-group required">
+                    <label class="control-label">Town</label>
+                    <select type="text" class="form-control input-sm" name="residentTown">
+                        <option>Select One</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="control-label">email Address</label>
+                    <input type="text" class="form-control input-sm" name="residentEmail"/>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label class="control-label">Address Line 2</label>
+                    <input type="text" class="form-control input-sm" name="residentAddress2"/>
+                </div>
+                <div class="form-group required">
+                    <label class="control-label">Province</label>
+                    <select type="text" class="form-control input-sm" name="residentProvince">
+                        <option>
+                            select One
+                        </option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="control-label">Home Phone</label>
+                    <input type="text" class="form-control input-sm" name="residentPhone"/>
+                </div>
+            </div>
+        </accordion-group>
+    </accordion>
+
+    <div class="row">
+        <div class="col-sm-6">
+            <button type="button" class="btn btn-default btn-sm">Cancel</button>
+        </div>
+        <div class="col-sm-6">
+            <button type="button" class="btn btn-default btn-sm" style="float: right">Save</button>
+        </div>
+    </div>
+</ng-form>
