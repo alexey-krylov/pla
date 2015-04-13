@@ -7,6 +7,9 @@ App.controller('CreateMandatoryDocumentController',['$scope','$http','$rootScope
           $http.get('/pla/core/master/getdocument').success(function(data){
                           $scope.mandatoryDocList=data;
           });
+          $http.get('/pla/core/mandatorydocument/getallmandatorydocument').success(function(data){
+                                    $scope.mandatoryDocList=data;
+                    });
          $http.get('/pla/core/plan/getallplan').success(function(data){
               for(var i=0;i<data.length;i++) {
                   $scope.planList=data[i];
@@ -26,14 +29,14 @@ App.controller('CreateMandatoryDocumentController',['$scope','$http','$rootScope
 
          }
 
-         $scope.$watch('mandatorydocument.planId',function(newValue, oldValue){
+         $scope.$watch('createMandatoryDocument.planId',function(newValue, oldValue){
            if(newValue){
-              var planId=$scope.mandatorydocument.planId;
+              var planId=$scope.createMandatoryDocument.planId;
               $scope.optionalCoverageData =_.findWhere($scope.newPlanList,{planId:planId});
               $scope.optionalCoverageList = _.where($scope.optionalCoverageData.coverages, {coverageType: "OPTIONAL"});
            }
          });
-         $scope.$watch('mandatorydocument.coverageCode',function(newValue, oldValue){
+         $scope.$watch('createMandatoryDocument.coverageCode',function(newValue, oldValue){
            if(newValue){
                 $scope.createMandatoryDocument.coverageId=$scope.createMandatoryDocument.coverageCode.coverageId;
            }
@@ -44,8 +47,8 @@ App.controller('CreateMandatoryDocumentController',['$scope','$http','$rootScope
          });
 
          $scope.saveMandatoryDoc = function(){
-            console.log($scope.createMandatoryDocument);
-            $http.get('/pla/core/mandatorydocument/create').success(function(data){
+           // console.log($scope.createMandatoryDocument);
+            $http.post('/pla/core/mandatorydocument/create', $scope.createMandatoryDocument).success(function(data){
                   if(data.status==200){
                      $scope.alert = {title:'Success Message! ', content:data.message, type: 'success'};
                      $scope.reset();
@@ -57,10 +60,12 @@ App.controller('CreateMandatoryDocumentController',['$scope','$http','$rootScope
          }
          $scope.reset = function(){
             $scope.createMandatoryDocument.definedFor='';
-             $scope.showPlan=false;
+             //$scope.showPlan=false;
             //$scope.showOptionalCoverage=false;
             $scope.createMandatoryDocument.process='';
-            $scope.createMandatoryDocument.mandatoryDocuments='';
+            $scope.createMandatoryDocument.documents='';
+            $scope.createMandatoryDocument.planId='';
+            $scope.createMandatoryDocument.coverageCode='';
          }
 
 
