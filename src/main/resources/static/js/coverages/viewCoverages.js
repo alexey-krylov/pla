@@ -21,8 +21,8 @@ require(['jquery','bootstrap','datatables'],function(){
           "bAutoWidth": false,
           "aoColumns":[
              {"sWidth": "20%","bSearchable": true  },
-             {"sWidth": "45%","bSearchable": true  },
              {"sWidth": "15%","bSearchable": true  },
+             {"sWidth": "45%","bSearchable": true  },
             {"sWidth": "5%","bSearchable": false },
             {"sWidth": "15%","bSearchable": false }
     ]});
@@ -196,6 +196,14 @@ var resetError =function(ele){
     $(ele).siblings().hide();
 
 };
+var isAlphaNumeric= function (evt){
+
+    var charCode = (evt.which) ? evt.which : evt.keyCode;
+
+    if (charCode > 31 && charCode !=8 && charCode !=0 && (charCode < 48 || charCode > 57 )&&(charCode < 65 || charCode > 90) &&(charCode < 97 || charCode > 122) )
+        return false;
+    return true;
+}
 
 
 

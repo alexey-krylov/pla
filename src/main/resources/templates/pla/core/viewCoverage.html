@@ -40,7 +40,7 @@
                     <div class="form-group required" style="margin: auto;">
                         <label for="coverageCode" class="col-sm-3 control-label">Coverage Code</label>
                         <div class="col-sm-9">
-                            <input type="text" name="coverageCode" required="true" class="form-control" id="coverageCode" ng-model="createCoverage.coverageCode"  onkeypress="resetError(this)"/>
+                            <input type="text" name="coverageCode" maxlength="50" required="true" class="form-control" id="coverageCode" ng-model="createCoverage.coverageCode" onkeypress="return isAlphaNumeric(event)" />
                             <span hidden="true" style="color: darkred;font-size: 10px">Please check if it is empty </span>
                         </div>
                     </div>

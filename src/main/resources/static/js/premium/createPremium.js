@@ -76,7 +76,7 @@ App.controller('CreatePremiumController',['$scope','$http','$rootScope','$upload
          });
 
          $scope.getDownloadedTemplate = function(){
-              $http({url: '/pla/core/premium/downloadpremiumtemplate',method: 'POST',responseType: 'arraybuffer',data: $scope.createPremium,
+             $http({url: '/pla/core/premium/downloadpremiumtemplate',method: 'POST',responseType: 'arraybuffer',data: $scope.createPremium,
                  headers: {'Content-type': 'application/json','Accept': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
              }
         }).success(function(data, status, headers){
@@ -127,12 +127,12 @@ App.controller('CreatePremiumController',['$scope','$http','$rootScope','$upload
                 // console.log('progress: ' + progressPercentage + '% ' +
                 //      evt.config.file.name);
             }).success(function (data, status, headers, config) {
-               /* if(data.status==200){
+               if(data.status==200){
                     $scope.verified=true;
                     $scope.alert = {title:'Success Message! ', content:data.message, type: 'success'};
                 }else if(data.status==500){
                     $scope.alert = {title:'Error Message! ', content:data.message, type: 'danger'};
-                }else{    */
+                }else{
                      var filename = "";
                      var header = headers('content-disposition');
                      if (header && header.indexOf('attachment') !== -1) {
@@ -147,11 +147,11 @@ App.controller('CreatePremiumController',['$scope','$http','$rootScope','$upload
                      var a = document.createElement("a");
                      document.body.appendChild(a);
                      a.style = "display: none";
-                     console.log(objectUrl);
+                    // console.log(objectUrl);
                      a.href = objectUrl;
                      a.download = filename;
                      a.click();
-               //  }
+                 }
             });
          }
  }
