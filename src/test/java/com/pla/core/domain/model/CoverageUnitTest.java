@@ -27,7 +27,7 @@ public class CoverageUnitTest {
         boolean isBenefitNameUnique = true;
         benefit = admin.createBenefit(isBenefitNameUnique, "B001", name);
         benefitSet.add(benefit);
-        coverage = admin.createCoverage(true,true, "C001", name,"C_ONE", "coverage description",benefitSet);
+        coverage = admin.createCoverage(true, "C001", name,"C_ONE", "coverage description",benefitSet);
     }
 
     @Test

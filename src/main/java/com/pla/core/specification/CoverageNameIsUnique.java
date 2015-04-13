@@ -1,6 +1,6 @@
 package com.pla.core.specification;
 
-import com.pla.core.domain.model.CoverageName;
+import com.pla.core.dto.CoverageDto;
 import com.pla.core.query.CoverageFinder;
 import com.pla.sharedkernel.specification.ISpecification;
 import org.nthdimenzion.ddd.domain.annotations.Specification;
@@ -14,7 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
  * To change this template use File | Settings | File Templates.
  */
 @Specification
-public class CoverageNameIsUnique implements ISpecification<CoverageName> {
+public class CoverageNameIsUnique implements ISpecification<CoverageDto> {
 
     private CoverageFinder coverageFinder;
 
@@ -25,8 +25,8 @@ public class CoverageNameIsUnique implements ISpecification<CoverageName> {
     }
 
     @Override
-     public boolean isSatisfiedBy(CoverageName candidate) {
-        int coverageCount = coverageFinder.getCoverageCountByCoverageName(candidate.getCoverageName());
+     public boolean isSatisfiedBy(CoverageDto candidate) {
+        int coverageCount = coverageFinder.getCoverageCountByCoverageName(candidate.getCoverageName(),candidate.getCoverageId());
         return coverageCount == 0;
     }
 }

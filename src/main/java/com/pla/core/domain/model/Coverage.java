@@ -7,7 +7,6 @@
 
 package com.pla.core.domain.model;
 
-import com.google.common.base.Preconditions;
 import com.pla.core.domain.exception.CoverageException;
 import com.pla.sharedkernel.identifier.CoverageId;
 import lombok.*;
@@ -17,10 +16,14 @@ import org.nthdimenzion.utils.UtilValidator;
 import javax.persistence.*;
 import java.util.Set;
 
+import static com.google.common.base.Preconditions.checkNotNull;
+import static com.google.common.base.Preconditions.checkState;
+
 /**
  * @author: Samir
  * @since 1.0 03/03/2015
  */
+
 @Entity
 @Table(name = "coverage")
 @EqualsAndHashCode(of = {"coverageName","coverageCode"})
@@ -48,9 +51,10 @@ public class Coverage implements ICrudEntity {
     private Set<Benefit> benefits;
 
     Coverage(CoverageId coverageId, CoverageName coverageName,String coverageCode, Set<Benefit> benefits,CoverageStatus coverageStatus) {
-        Preconditions.checkNotNull(coverageId == null);
-        Preconditions.checkNotNull(coverageName == null);
-        Preconditions.checkState(UtilValidator.isNotEmpty(benefits));
+        checkNotNull(coverageId == null);
+        checkNotNull(coverageName == null);
+        checkNotNull(coverageCode == null);
+        checkState(UtilValidator.isNotEmpty(benefits));
         this.coverageId = coverageId;
         this.coverageName = coverageName;
         this.coverageCode = coverageCode;
@@ -64,6 +68,14 @@ public class Coverage implements ICrudEntity {
         }
         CoverageName updatedCoverageName = new CoverageName(name);
         this.coverageName = updatedCoverageName;
+        return this;
+    }
+
+    public Coverage updateCoverageCode(String coverageCode) {
+        if (CoverageStatus.INUSE.equals(this.status)) {
+            throw new CoverageException("Coverage is in use;cannot be updated");
+        }
+        this.coverageCode = coverageCode;
         return this;
     }
 

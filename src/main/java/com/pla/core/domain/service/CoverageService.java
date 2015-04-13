@@ -3,7 +3,7 @@ package com.pla.core.domain.service;
 import com.pla.core.domain.model.Admin;
 import com.pla.core.domain.model.Benefit;
 import com.pla.core.domain.model.Coverage;
-import com.pla.core.domain.model.CoverageName;
+import com.pla.core.dto.CoverageDto;
 import com.pla.core.specification.CoverageCodeIsUnique;
 import com.pla.core.specification.CoverageNameIsUnique;
 import org.nthdimenzion.ddd.domain.annotations.DomainService;
@@ -43,21 +43,18 @@ public class CoverageService {
     public Coverage createCoverage(String name,String coverageCode,String description,Set<Benefit> benefitSet, UserDetails userDetails) {
         String coverageId = idGenerator.nextId();
         Admin admin = adminRoleAdapter.userToAdmin(userDetails);
-        CoverageName coverageName  = new CoverageName(name);
-        boolean isCoverageNameUnique = coverageNameIsUnique.isSatisfiedBy(coverageName);
-        boolean isCoverageCodeIsUnique =  coverageCodeIsUnique.isSatisfiedBy(coverageCode);
-        Coverage coverage = admin.createCoverage(isCoverageNameUnique,isCoverageCodeIsUnique, coverageId, name,coverageCode,description,benefitSet);
+        CoverageDto coverageDto  = new CoverageDto(coverageId,name,coverageCode);
+        boolean isCodeOrNameIsUnique = coverageCodeIsUnique.Or(coverageNameIsUnique).isSatisfiedBy(coverageDto);
+        Coverage coverage = admin.createCoverage(isCodeOrNameIsUnique,coverageId, name,coverageCode,description,benefitSet);
         return coverage;
     }
 
-    public Coverage updateCoverage(Coverage coverage, String newBenefitName,String newCoverageCode,String description,Set<Benefit> benefits, UserDetails userDetails) {
+    public Coverage updateCoverage(Coverage coverage, String newCoverageName,String newCoverageCode,String description,Set<Benefit> benefits, UserDetails userDetails) {
         Admin admin = adminRoleAdapter.userToAdmin(userDetails);
-        CoverageName coverageName  = new CoverageName(newBenefitName);
-        boolean isCoverageNameUnique = coverageNameIsUnique.isSatisfiedBy(coverageName);
-        boolean isCoverageCodeIsUnique = coverageCodeIsUnique.isSatisfiedBy(newCoverageCode);
-        Coverage updatedCoverage = admin.updateCoverage(coverage, newBenefitName,newCoverageCode,description, benefits,isCoverageNameUnique,isCoverageCodeIsUnique);
+        CoverageDto coverageDto  = new CoverageDto(coverage.getCoverageId().getCoverageId(), newCoverageName,newCoverageCode);
+        boolean isCodeOrNameIsUnique = coverageCodeIsUnique.Or(coverageNameIsUnique).isSatisfiedBy(coverageDto);
+        Coverage updatedCoverage = admin.updateCoverage(coverage, newCoverageName,newCoverageCode,description, benefits,isCodeOrNameIsUnique);
         return updatedCoverage;
-
     }
 
     public Coverage markCoverageAsUsed(Coverage coverage) {

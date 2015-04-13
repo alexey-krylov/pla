@@ -29,7 +29,7 @@ public class BenefitNameIsUnique implements ISpecification<BenefitDto> {
 
     @Override
     public boolean isSatisfiedBy(BenefitDto benefitDto) {
-        int benefitCount = benefitFinder.getBenefitCountByBenefitName(benefitDto.getBenefitName());
+        int benefitCount = benefitFinder.getBenefitCountByBenefitName(benefitDto.getBenefitName(),benefitDto.getBenefitId());
         return benefitCount == 0;
     }
 

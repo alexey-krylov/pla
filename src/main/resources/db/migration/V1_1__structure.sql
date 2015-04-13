@@ -656,11 +656,11 @@ CREATE TABLE `industry` (
   PRIMARY KEY (`code`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-DROP TABLE IF EXISTS `occuptation_category`;
-CREATE TABLE `occuptation_category` (
-  `code` varchar(100) NOT NULL,
-  `description` varchar(255) DEFAULT NULL,
-  PRIMARY KEY (`code`)
+DROP TABLE IF EXISTS `occupation_class`;
+CREATE TABLE `occupation_class` (
+ `code` varchar(100) NOT NULL,
+  `description` varchar(255) NOT NULL,
+  PRIMARY KEY (`code`,`description`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 DROP TABLE IF EXISTS `designation`;

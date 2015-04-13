@@ -17,4 +17,10 @@ public abstract class CompositeSpecification<T> implements ICompositeSpecificati
         return new AndSpecification<>(this, other);
     }
 
+
+    @Override
+    public ICompositeSpecification<T> Or(ISpecification<T> other) {
+        return new OrSpecification<>(this, other);
+    }
+
 }

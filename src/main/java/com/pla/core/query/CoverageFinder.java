@@ -33,9 +33,11 @@ public class CoverageFinder {
         this.namedParameterJdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
     }
 
-    public static final String ACTIVE_COVERAGE_COUNT_BY_COVERAGE_NAME_QUERY = "select count(coverage_id) from coverage where coverage_name=:coverageName and status in ('ACTIVE','INUSE')";
+    public static final String ACTIVE_COVERAGE_COUNT_BY_COVERAGE_NAME_QUERY = "select count(coverage_id) from coverage where coverage_name=:coverageName and status in ('ACTIVE','INUSE')" +
+            " and coverage_id !=:coverageId";
 
-    public static final String ACTIVE_COVERAGE_COUNT_BY_COVERAGE_CODE_QUERY = "select count(coverage_id) from coverage where coverage_code=:coverageCode and  status in ('ACTIVE','INUSE')";
+    public static final String ACTIVE_COVERAGE_COUNT_BY_COVERAGE_CODE_QUERY = "select count(coverage_id) from coverage where coverage_code=:coverageCode and  status in ('ACTIVE','INUSE')" +
+            " and coverage_id !=:coverageId";
 
     public static final String FIND_ALL_COVERAGE_QUERY = "SELECT c.coverage_id coverageId,c.coverage_code coverageCode,c.coverage_name coverageName,c.description description ,c.status AS coverageStatus " +
             "FROM coverage c WHERE c.status='ACTIVE'";
@@ -44,15 +46,15 @@ public class CoverageFinder {
             "inner join coverage_benefit cb on b.benefit_id=cb.benefit_id inner join coverage c on cb.coverage_id=c.coverage_id " +
             "where c.status='ACTIVE' and b.status='ACTIVE' and c.coverage_id=:coverageId ORDER BY b.benefit_name ASC ";
 
-    public int getCoverageCountByCoverageName(String coverageName){
+    public int getCoverageCountByCoverageName(String coverageName,String coverageId){
         Preconditions.checkNotNull(coverageName);
-        Number noOfCoverages = namedParameterJdbcTemplate.queryForObject(ACTIVE_COVERAGE_COUNT_BY_COVERAGE_NAME_QUERY, new MapSqlParameterSource().addValue("coverageName", coverageName), Number.class);
+        Number noOfCoverages = namedParameterJdbcTemplate.queryForObject(ACTIVE_COVERAGE_COUNT_BY_COVERAGE_NAME_QUERY, new MapSqlParameterSource("coverageId",coverageId).addValue("coverageName", coverageName), Number.class);
         return noOfCoverages.intValue();
     }
 
-    public int getCoverageCountByCoverageCode(String coverageCode){
+    public int getCoverageCountByCoverageCode(String coverageCode,String coverageId){
         Preconditions.checkNotNull(coverageCode);
-        Number noOfCoverages = namedParameterJdbcTemplate.queryForObject(ACTIVE_COVERAGE_COUNT_BY_COVERAGE_CODE_QUERY, new MapSqlParameterSource().addValue("coverageCode", coverageCode), Number.class);
+        Number noOfCoverages = namedParameterJdbcTemplate.queryForObject(ACTIVE_COVERAGE_COUNT_BY_COVERAGE_CODE_QUERY, new MapSqlParameterSource("coverageId",coverageId).addValue("coverageCode", coverageCode), Number.class);
         return noOfCoverages.intValue();
     }
 

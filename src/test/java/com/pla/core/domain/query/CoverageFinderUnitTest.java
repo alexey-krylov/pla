@@ -77,7 +77,7 @@ public class CoverageFinderUnitTest {
     @Test
     @DatabaseSetup(value = "classpath:testdata/endtoend/coverage/testdataforcoverage.xml")
     public void givenTheCoverageName_whenTheCoverageNameIsUnique_thenItShouldReturnZeroCount() {
-        int coverageCountByCoverageName = coverageFinder.getCoverageCountByCoverageName("new coverage name");
+        int coverageCountByCoverageName = coverageFinder.getCoverageCountByCoverageName("new coverage name","C_ONE");
         assertThat(0, is(coverageCountByCoverageName));
 
     }
@@ -85,7 +85,7 @@ public class CoverageFinderUnitTest {
     @Test
     @DatabaseSetup(value = "classpath:testdata/endtoend/coverage/testdataforcoverage.xml")
     public void givenTheCoverageName_whenTheCoverageNameIsNotUnique_thenItShouldReturnCountAsGreaterThanZero() {
-        int coverageCountByCoverageName = coverageFinder.getCoverageCountByCoverageName("testing Coverage one");
+        int coverageCountByCoverageName = coverageFinder.getCoverageCountByCoverageName("testing Coverage one","C_TWO");
         assertThat(1, is(coverageCountByCoverageName));
 
     }
