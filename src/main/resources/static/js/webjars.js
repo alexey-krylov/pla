@@ -70,8 +70,8 @@ var require = {
         requirejs.config({"paths": {"tinymce": ["/pla/webjars/tinymce/4.1.9/tinymce.min", "tinymce.min"]}, "packages": []})
         requirejs.config({
             "paths": {
-                "bootstrap": ["/pla/webjars/bootstrap/3.3.2/js/bootstrap.min", "js/bootstrap"],
-                "bootstrap-css": ["/pla/webjars/bootstrap/3.3.2/css/bootstrap.min", "css/bootstrap"]
+                "bootstrap": ["/pla/webjars/bootstrap/3.3.4/js/bootstrap.min", "js/bootstrap"],
+                "bootstrap-css": ["/pla/webjars/bootstrap/3.3.4/css/bootstrap.min", "css/bootstrap"]
             }, "shim": {"bootstrap": ["jquery"]}, "packages": []
         })
         requirejs.config({

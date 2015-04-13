@@ -73,6 +73,10 @@ angular.module('createAgent',['common','ngRoute','mgcrea.ngStrap.select','mgcrea
             };
 
             $scope.isSearchDisabled =  function(){
+                var searchPattern = new RegExp("[0-9]{6}\/[0-9]{2}\/[0-9]{1}");
+                if($scope.search && $scope.search.nrc && !searchPattern.test($scope.search.nrc)){
+                   return true;
+                }
                 if($scope.search && ((!$scope.search.nrc && $scope.search.empId) || ($scope.search.nrc && !$scope.search.empId))){
                     return false;
                 }
