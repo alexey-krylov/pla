@@ -8,8 +8,8 @@
     <META HTTP-EQUIV="Expires" CONTENT="-1"/>
     <title></title>
 
-    <link href="http://cdn.jsdelivr.net/bootstrap/3.3.2/css/bootstrap.min.css"
-          th:href="@{/webjars/bootstrap/3.3.2/css/bootstrap.min.css}" rel="stylesheet" />
+    <link href="http://cdn.jsdelivr.net/bootstrap/3.3.4/css/bootstrap.min.css"
+          th:href="@{/webjars/bootstrap/3.3.4/css/bootstrap.min.css}" rel="stylesheet" />
     <link href="http://cdn.datatables.net/1.10.4/css/jquery.dataTables.css"
           rel="stylesheet" />
     <link href="http://cdn.jsdelivr.net/css/sticky-footer-navbar.css"
@@ -29,7 +29,7 @@
     <script th:src="@{/webjars/requirejs/2.1.15/require.min.js}"></script>
     <script>
         define('basic', ['datatables', 'bootstrap'], function (datatables) {
-            $(".dropdown-menu a").click(function(event){
+            $("#cssmenu ul li>a").click(function(event){
                 event.preventDefault();
                 var windowHref = window.location.href;
                 var clickedHref = $(this).prop('href');
@@ -75,7 +75,7 @@
         <ul>
             <li><a th:href="@{/home}"><span class="glyphicon glyphicon-home" aria-hidden="true">&nbsp;</span><span>Home</span></a></li>
             <li class="active has-sub">
-                <a href="#"><span class="glyphicon glyphicon-wrench"></span>&nbsp;Core</a>
+                <a href="javascript:void(0)"><span class="glyphicon glyphicon-wrench"></span>&nbsp;Core</a>
                 <ul>
                     <li>
                         <a th:href="@{/core/agent/listagent}">Agents</a>
@@ -87,6 +87,7 @@
                     </li>
                     <li><a th:href="@{/core/team/view}">Team</a></li>
                     <li><a th:href="@{/core/plan}">Plan</a></li>
+                    <li><a th:href="@{/core/proposal}">Proposal</a></li>
                     <li><a th:href="@{/core/branch/view}">Branch Manager</a></li>
                     <li><a th:href="@{/core/region/view}">Regional Manager</a></li>
                     <li><a th:href="@{/core/commission/view}">Commissions</a></li>
