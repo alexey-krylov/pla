@@ -3,6 +3,7 @@ package com.pla.core.presentation.controller;
 import com.pla.core.application.CreateMandatoryDocumentCommand;
 import com.pla.core.application.UpdateMandatoryDocumentCommand;
 import com.pla.core.domain.exception.MandatoryDocumentException;
+import com.pla.core.domain.model.ProcessType;
 import com.pla.core.dto.MandatoryDocumentDto;
 import com.pla.core.query.MandatoryDocumentFinder;
 import org.axonframework.commandhandling.gateway.CommandGateway;
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Arrays;
 import java.util.List;
 
 import static org.nthdimenzion.presentation.AppUtils.getLoggedInUSerDetail;
@@ -57,15 +59,23 @@ public class MandatoryDocumentController {
         * change is needed for view name
         * */
         ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("pla/core/viewMandatoryDocument");
+        modelAndView.setViewName("pla/core/mandatorydocument/viewMandatoryDocument");
         modelAndView.addObject("listOfMandatoryDocument", mandatoryDocumentFinder.getAllMandatoryDocument());
         return modelAndView;
     }
 
-    @RequestMapping(value = "/getallmadatorydocument" ,method = RequestMethod.GET)
+
+    @RequestMapping(value ="/opencreatepage", method = RequestMethod.GET)
+    public ModelAndView openCreatePageMandatoryDocument() {
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("pla/core/mandatoryDocuments/createMandatoryDocuments");
+        return modelAndView;
+    }
+
+    @RequestMapping(value = "/getallmandatorydocument" ,method = RequestMethod.GET)
     @ResponseBody
     public List<MandatoryDocumentDto> getMandatoryDocument(){
-       return mandatoryDocumentFinder.getAllMandatoryDocument();
+        return mandatoryDocumentFinder.getAllMandatoryDocument();
     }
 
     @RequestMapping(value = "/create", method = RequestMethod.POST)
@@ -102,6 +112,12 @@ public class MandatoryDocumentController {
             return Result.failure(e.getMessage());
         }
         return Result.success("Mandatory document updated successfully");
+    }
+
+    @RequestMapping(value = "/getallprocess",method = RequestMethod.GET)
+    @ResponseBody
+    public List getDefinedProcess(){
+        return Arrays.asList(ProcessType.values());
     }
 }
 
