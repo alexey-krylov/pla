@@ -20,11 +20,18 @@ public class RolesUtil {
 
     private static final String ADMIN_ROLE = "ROLE_ADMIN";
 
+    private static final String GROUP_LIFE_QUOTATION_PROCESSOR_ROLE = "ROLE_GROUP_LIFE_QUOTATION_PROCESSOR";
+
     private RolesUtil() {
     }
 
     public static boolean hasAdminRole(Collection<? extends GrantedAuthority> authorities) {
         long count = hasRole(ADMIN_ROLE, authorities);
+        return count == 1;
+    }
+
+    public static boolean hasQuotationProcessorRole(Collection<? extends GrantedAuthority> authorities) {
+        long count = hasRole(GROUP_LIFE_QUOTATION_PROCESSOR_ROLE, authorities);
         return count == 1;
     }
 

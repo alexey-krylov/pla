@@ -7,9 +7,8 @@
 package com.pla.core.application.service.plan.premium;
 
 import com.pla.core.domain.model.plan.Plan;
-import com.pla.core.query.MasterFinder;
 import com.pla.core.repository.PlanRepository;
-import com.pla.core.domain.model.plan.premium.PremiumInfluencingFactor;
+import com.pla.publishedlanguage.domain.model.PremiumInfluencingFactor;
 import com.pla.sharedkernel.identifier.CoverageId;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.nthdimenzion.utils.UtilValidator;
@@ -36,21 +35,21 @@ public class PremiumService {
 
     private MongoTemplate mongoTemplate;
 
-    private MasterFinder masterFinder;
+    private PremiumTemplateExcelGenerator premiumTemplateExcelGenerator;
 
     private PremiumTemplateParser premiumTemplateParser;
 
     @Autowired
-    public PremiumService(PlanRepository planRepository, MongoTemplate mongoTemplate, MasterFinder masterFinder, PremiumTemplateParser premiumTemplateParser) {
+    public PremiumService(PlanRepository planRepository, MongoTemplate mongoTemplate, PremiumTemplateParser premiumTemplateParser, PremiumTemplateExcelGenerator premiumTemplateExcelGenerator) {
         this.planRepository = planRepository;
         this.mongoTemplate = mongoTemplate;
-        this.masterFinder = masterFinder;
         this.premiumTemplateParser = premiumTemplateParser;
+        this.premiumTemplateExcelGenerator = premiumTemplateExcelGenerator;
     }
 
     public HSSFWorkbook generatePremiumExcelTemplate(PremiumInfluencingFactor[] premiumInfluencingFactors, String planId, String coverageId) throws IOException {
         Plan plan = planRepository.findByPlanId(planId);
-        return new PremiumTemplateExcelGenerator(masterFinder).generatePremiumTemplate(Arrays.asList(premiumInfluencingFactors), plan, new CoverageId(coverageId));
+        return premiumTemplateExcelGenerator.generatePremiumTemplate(Arrays.asList(premiumInfluencingFactors), plan, new CoverageId(coverageId));
     }
 
     public boolean validatePremiumTemplateData(HSSFWorkbook hssfWorkbook, PremiumInfluencingFactor[] premiumInfluencingFactors, String planId, String coverageId) throws IOException {

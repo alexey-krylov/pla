@@ -17,7 +17,6 @@ import com.pla.publishedlanguage.domain.model.EmployeeDto;
 import com.pla.sharedkernel.util.SequenceGenerator;
 import org.axonframework.commandhandling.gateway.CommandGateway;
 import org.nthdimenzion.presentation.Result;
-import org.nthdimenzion.utils.UtilValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,6 +36,7 @@ import java.util.List;
 import java.util.Map;
 
 import static org.nthdimenzion.presentation.AppUtils.getLoggedInUSerDetail;
+import static org.nthdimenzion.utils.UtilValidator.isNotEmpty;
 
 /**
  * @author: Samir
@@ -89,7 +89,7 @@ public class AgentController {
     @RequestMapping(value = "/getagentid", method = RequestMethod.GET)
     @ResponseBody
     public String getAgentId() {
-        return sequenceGenerator.getId(Agent.class);
+        return sequenceGenerator.getSequence(Agent.class);
     }
 
     @RequestMapping(value = "/createagent", method = RequestMethod.GET)
@@ -114,7 +114,7 @@ public class AgentController {
     @RequestMapping(value = "/agentdetail", method = RequestMethod.GET)
     @ResponseBody
     public CreateAgentCommand getAgentDetail(@RequestParam("agentId") String agentId) {
-        Preconditions.checkArgument(UtilValidator.isNotEmpty(agentId));
+        Preconditions.checkArgument(isNotEmpty(agentId));
         Map<String, Object> agentDetail = agentFinder.getAgentById(agentId);
         List<Map<String, Object>> allAgentPlans = agentFinder.getAllAgentPlan();
         return CreateAgentCommand.transformToAgentCommand(agentDetail, allAgentPlans, mongoTemplate.findAll(Map.class, "PLAN"));
@@ -124,7 +124,7 @@ public class AgentController {
     public ModelAndView viewAgentDetail(@RequestParam("agentId") String agentId) {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("pla/core/agent/agentDetail");
-        Preconditions.checkArgument(UtilValidator.isNotEmpty(agentId));
+        Preconditions.checkArgument(isNotEmpty(agentId));
         Map<String, Object> agentDetail = agentFinder.getAgentById(agentId);
         List<Map<String, Object>> agentPlans = agentFinder.getAllAgentPlan();
         modelAndView.addObject("agentDetail", CreateAgentCommand.transformToAgentCommand(agentDetail, agentPlans, mongoTemplate.findAll(Map.class, "PLAN")));
@@ -167,9 +167,12 @@ public class AgentController {
         return Result.success("Agent updated successfully");
     }
 
-    @RequestMapping(value = "/getemployeedeatil/{employeeId}/{nrcNumber}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.ALL_VALUE)
+    @RequestMapping(value = "/getemployeedeatil", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.ALL_VALUE)
     @ResponseBody
-    public EmployeeDto getEmployeeDetail(@PathVariable String employeeId, @PathVariable String nrcNumber) {
+    public EmployeeDto getEmployeeDetail(@RequestParam("employeeId") String employeeId, @RequestParam("nrcNumber") String nrcNumber) {
+        if (isNotEmpty(nrcNumber)) {
+            nrcNumber = nrcNumber.replaceAll("/", "").trim();
+        }
         return smeGateway.getEmployeeDetailByIdOrByNRCNumber(employeeId, nrcNumber);
     }
 
