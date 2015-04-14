@@ -1,8 +1,9 @@
 package com.pla.sharedkernel.identifier;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
-import org.bson.types.ObjectId;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.Embeddable;
 import java.io.Serializable;
@@ -11,19 +12,17 @@ import java.io.Serializable;
  * @author: pradyumna
  * @since 1.0 11/03/2015
  */
+@EqualsAndHashCode(of = "planId")
 @Embeddable
-@EqualsAndHashCode
+@NoArgsConstructor
 @Getter
+@JsonSerialize(using = com.fasterxml.jackson.databind.ser.std.ToStringSerializer.class)
 public class PlanId implements Serializable {
 
     private String planId;
 
     public PlanId(String s) {
         this.planId = s;
-    }
-
-    public PlanId() {
-        this.planId = new ObjectId().toString();
     }
 
     public String toString() {

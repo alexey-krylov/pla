@@ -14,14 +14,14 @@
         </encoder>
     </appender>
 
-    <logger name="org.springframework.web.servlet.view" level="error"/>
-    <logger name="springframework.http.converter" level="debug"/>
-    <logger name="org.springframework.security" level="error"/>
-    <logger name="org.springframework.format" level="error"/>
-    <logger name="org.springframework.data.mongodb" level="info"/>
-    <logger name="org.thymeleaf" level="warn"/>
-    <logger name="com.pla" level="trace"/>
-    <root level="warn">
+    <!--    <logger name="org.springframework.web.servlet.view" level="trace"/>
+        <logger name="org.springframework.http" level="trace"/>
+        <logger name="org.springframework.security" level="error"/>
+        <logger name="org.springframework.format" level="error"/>
+        <logger name="org.springframework.data.mongodb" level="info"/>
+        <logger name="org.thymeleaf" level="warn"/>
+        <logger name="com.pla" level="trace"/>-->
+    <root level="trace">
         <appender-ref ref="console"/>
     </root>
 </configuration>

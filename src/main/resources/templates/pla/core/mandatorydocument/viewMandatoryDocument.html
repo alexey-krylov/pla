@@ -8,10 +8,9 @@
 <body>
 <div th:include="fragments/common :: bodyHeader" th:remove="tag"/>
 <script>
-    requirejs(['basic'],function(){
-    requirejs(['/pla/js/mandatoryDocuments/viewMandatoryDocument.js'],function(){
+    requirejs(['/pla/js/mandatoryDocuments/viewMandatoryDocument.js'],function($){
     });
-    })
+
 </script>
 
 <div class="container">
@@ -50,15 +49,20 @@
                         </tr>
                         </thead>
                         <tbody>
-                        <tr>
-                            <p th:text="${listOfMandatoryDocument}"></p>
-                            <td>Product A</td>
-                            <td>Optional coverage A</td>
-                            <td>
-                                <button type="button" class="btn btn-default btn-xs bs-popover" data-placement="top"  data-content="{{popover.content}}" data-trigger="hover" data-template="http://localhost:6443/pla/downloadTemplates/popover.tpl.html" title="{{popover.title}}" data-animation="am-flip-x" data-auto-close="1">Mandatory Documents</button>
+                        <tr th:each="mandatoryDocument : ${listOfMandatoryDocument}">
+                            <td th:text="${mandatoryDocument.planId}"></td>
+                            <td th:text="${mandatoryDocument.coverageId}"></td>
+                            <td style="text-align:center" class="pop" >
+                                <button href="#" class="details-box btn btn-primary btn-xs" rel="popover"  data-content="" > Mandatory-Documents
+                                    <div class="popover-body" style="display:none;">
+                                        <ul  type="square"   th:each="documents : ${mandatoryDocument.documents}"  >   <!-- -->
+                                            <li style="text-align:left;font-size:12px;" th:text="'&diams;&nbsp;'+${{documents.documentCode}}+','"   ></li> <!-- -->
+                                        </ul>
+                                    </div>
+                                </button>
                             </td>
-                            <td>Enrollment</td>    <!--th:href="'/pla/core/team/redirecttoupdatePage?documentId='+${mandatoryDocument.documentId}+''" -->
-                            <td><a class="btn btn-default btn-xs" th:href="@{/core/mandatorydocument/update}">Update</a></td>
+                            <td th:text="${mandatoryDocument.process}"></td>    <!--th:href="'/pla/core/team/redirecttoupdatePage?documentId='+${mandatoryDocument.documentId}+''" -->
+                            <td><a class="btn btn-default btn-xs" th:href="'/pla/core/team/redirecttoupdatepage?documentId='+${mandatoryDocument.documentId}+''">Update</a></td>
                         </tr>
 
                         </tbody>

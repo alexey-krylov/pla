@@ -23,11 +23,12 @@
 <script>
     var interval = setInterval(function(){
         if(require.defined("basic")){
-            console.log("called agents");
             requirejs(['/pla/js/agent/viewAgents.js'],function(){
-                $('#agent-table').dataTable();
-                $( "input[type=radio]" ).on( "click", function(){
-                    viewAgentModule.getTheItemSelected(this)
+                $(document).ready(function(){
+                    $('#agent-table').dataTable();
+                    $( "input[type=radio]" ).on( "click", function(){
+                        viewAgentModule.getTheItemSelected(this)
+                    });
                 });
             });
             clearInterval(interval);

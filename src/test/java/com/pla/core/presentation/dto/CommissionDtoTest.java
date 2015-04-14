@@ -7,13 +7,10 @@ import com.pla.sharedkernel.domain.model.CommissionTermType;
 import com.pla.sharedkernel.domain.model.CommissionType;
 import com.pla.sharedkernel.identifier.PlanId;
 import org.joda.time.LocalDate;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
-import org.springframework.data.mongodb.core.MongoTemplate;
-import org.springframework.test.context.ContextConfiguration;
 
 import java.math.BigDecimal;
 import java.util.*;
@@ -25,19 +22,11 @@ import static org.mockito.Mockito.when;
  * Created by User on 4/9/2015.
  */
 @RunWith(MockitoJUnitRunner.class)
-@ContextConfiguration(locations = "classpath:queryTestContext.xml")
 public class CommissionDtoTest {
 
-
+    @Mock
     private PlanFinder planFinder;
 
-    @Mock
-    private MongoTemplate mongoTemplate;
-
-    @Before
-    public void setUp() {
-        this.planFinder = new PlanFinder(this.mongoTemplate);
-    }
 
     @Test
     public void shouldReturnCommissionDtosWhenGivenListOfAllCommissionsAndCommissionTerms() {
@@ -64,6 +53,7 @@ public class CommissionDtoTest {
         Map<String, Object> planName = new LinkedHashMap<>();
         planName.put("planName", "Plan1");
         planDetails.put("planDetail", planName);
+
         when(planFinder.findPlanByPlanId(new PlanId("1234"))).thenReturn(planDetails);
 
         CommissionDto commissionDto = new CommissionDto();

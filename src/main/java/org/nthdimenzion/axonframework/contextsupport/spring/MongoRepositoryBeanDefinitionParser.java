@@ -1,5 +1,4 @@
 package org.nthdimenzion.axonframework.contextsupport.spring;
-
 import org.axonframework.eventhandling.EventBus;
 import org.nthdimenzion.axonframework.repository.GenericMongoRepository;
 import org.springframework.beans.factory.support.BeanDefinitionBuilder;

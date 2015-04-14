@@ -1,5 +1,6 @@
 package com.pla.sharedkernel.identifier;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -17,6 +18,7 @@ import java.io.Serializable;
 @Embeddable
 @NoArgsConstructor
 @Getter
+@JsonSerialize(using = com.fasterxml.jackson.databind.ser.std.ToStringSerializer.class)
 public class CoverageId implements Serializable {
 
     private String coverageId;

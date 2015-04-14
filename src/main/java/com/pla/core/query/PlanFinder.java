@@ -6,15 +6,22 @@
 
 package com.pla.core.query;
 
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import com.mongodb.BasicDBObject;
+import com.pla.core.domain.model.plan.Plan;
 import com.pla.sharedkernel.identifier.PlanId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.BasicQuery;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+
 /**
  * @author: Nischitha
  * @since 1.0 05/03/2015
@@ -30,17 +37,66 @@ public class PlanFinder {
         this.mongoTemplate = mongoTemplate;
     }
 
-    public List<Map> findAllPlan() {
-        List<Map> allPlan = mongoTemplate.findAll(Map.class, "PLAN");
+    public List<Plan> findAllPlan() {
+        List<Plan> allPlan = mongoTemplate.findAll(Plan.class, "PLAN");
         return allPlan;
     }
 
     public Map findPlanByPlanId(PlanId planId) {
         BasicDBObject query = new BasicDBObject();
         query.put("planId", planId);
-        Map plan = mongoTemplate.findOne(new BasicQuery(query), Map.class, "PLAN");
+        Plan _plan = mongoTemplate.findOne(new BasicQuery(query), Plan.class, "PLAN");
+        ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
+        objectMapper.setVisibilityChecker(objectMapper.getSerializationConfig().getDefaultVisibilityChecker()
+                .withFieldVisibility(JsonAutoDetect.Visibility.ANY)
+                .withGetterVisibility(JsonAutoDetect.Visibility.NONE)
+                .withSetterVisibility(JsonAutoDetect.Visibility.NONE)
+                .withCreatorVisibility(JsonAutoDetect.Visibility.ANY));
+        Map plan = objectMapper.convertValue(_plan, Map.class);
+
+        covertSumAssuredToTags((Map) plan.get("sumAssured"));
+
+        Map policyTerm = (Map) plan.get("policyTerm");
+        convertTermToTags(policyTerm);
+        Map premiumTerm = (Map) plan.get("premiumTerm");
+        convertTermToTags(premiumTerm);
+        List<Map> coverageMaps = (List<Map>) plan.get("coverages");
+
+        for (Map coverageMap : coverageMaps) {
+            covertSumAssuredToTags((Map) coverageMap.get("coverageSumAssured"));
+            Map coverageTerm = (Map) coverageMap.get("coverageTerm");
+            convertTermToTags(coverageTerm);
+        }
         return plan;
     }
 
+
+    private void covertSumAssuredToTags(Map sumAssured) {
+        List values = new LinkedList();
+        for (Double val : (List<Double>) sumAssured.get("sumAssuredValue")) {
+            Map obj = new HashMap();
+            obj.put("text", val);
+            values.add(obj);
+        }
+        sumAssured.put("sumAssuredValue", values);
+    }
+
+    private void convertTermToTags(Map term) {
+        List values = new LinkedList<>();
+        for (Integer val : (List<Integer>) term.get("validTerms")) {
+            Map obj = new HashMap();
+            obj.put("text", val);
+            values.add(obj);
+        }
+        term.put("validTerms", values);
+        values = new LinkedList<>();
+        for (Integer val : (List<Integer>) term.get("maturityAges")) {
+            Map obj = new HashMap();
+            obj.put("text", val);
+            values.add(obj);
+        }
+        term.put("maturityAges", values);
+    }
 
 }

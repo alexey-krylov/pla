@@ -1,6 +1,7 @@
 
 angular.module('createAgent',['common','ngRoute','mgcrea.ngStrap.select','mgcrea.ngStrap.alert','commonServices'])
     .controller('agentCtrl',['$scope','$http','channelType','authorisedToSell','teamDetails','provinces','$timeout','$alert','$route','$window','transformJson','getQueryParameter','agentDetails','globalConstants','nextAgentSequence','$rootScope',
+
         function($scope,$http,channelType,authorisedToSell,teamDetails,provinces,$timeout,$alert,$route,$window,transformJson,getQueryParameter,agentDetails,globalConstants,nextAgentSequence,$rootScope){
             $scope.numberPattern =globalConstants.numberPattern;
             $scope.selectedWizard = 1;
@@ -73,7 +74,7 @@ angular.module('createAgent',['common','ngRoute','mgcrea.ngStrap.select','mgcrea
             };
 
             $scope.isSearchDisabled =  function(){
-                var searchPattern = new RegExp("[0-9]{6}\/[0-9]{2}\/[0-9]{1}");
+                var searchPattern = new RegExp("^[0-9]{6}\/[0-9]{2}\/[0-9]{1}$");
                 if($scope.search && $scope.search.nrc && !searchPattern.test($scope.search.nrc)){
                    return true;
                 }
@@ -108,7 +109,7 @@ angular.module('createAgent',['common','ngRoute','mgcrea.ngStrap.select','mgcrea
             };
             $scope.searchAgent =  function(){
                 $scope.searchResult.isSearched=true;
-                $http.get("/pla/core/agent/getemployeedeatil/"+(_.isEmpty($scope.search.empId)?null:$scope.search.empId)+"/"+(_.isEmpty($scope.search.nrc)?null:$scope.search.nrc))
+                $http.get("/pla/core/agent/getemployeedeatil/",{params:$scope.search})
                     .success(function(data,status){
                         if(data && (_.size(data) ==0 || data.firstName==null)){
                             $scope.searchResult.isEmpty=true;
@@ -118,14 +119,18 @@ angular.module('createAgent',['common','ngRoute','mgcrea.ngStrap.select','mgcrea
                             $scope.agentDetails = transformJson.fromHrmsToPla(data);
                             $scope.trainingCompleteOn = $scope.agentDetails.trainingCompleteOn;
                         }
+                        if(nextAgentSequence){
+                            $scope.agentDetails.agentId = nextAgentSequence;
+                        }
                     })
                     .error(function(data,status){
                         $scope.searchResult.isEmpty=true;
                         $scope.agentDetails.agentProfile.nrcNumberInString=$scope.search.nrc;
+                        if(nextAgentSequence){
+                            $scope.agentDetails.agentId = nextAgentSequence;
+                        }
                     });
-                if(nextAgentSequence){
-                    $scope.agentDetails.agentId = nextAgentSequence;
-                }
+
             };
             $scope.prePopulateTeamLeader = function(){
                 var teamDetails = _.findWhere($scope.teamDetails, {teamId:$scope.agentDetails.teamDetail.teamId});
