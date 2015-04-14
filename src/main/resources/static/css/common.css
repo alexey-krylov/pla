@@ -18,6 +18,12 @@ body {
     border-left-width: 5px;
     border-radius: 3px;
 }
+
+.error{
+    color: darkred;
+    font-weight: 800;
+}
+
 .required .control-label:after {
     content: " *";
     color: red;
