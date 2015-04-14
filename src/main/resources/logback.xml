@@ -13,15 +13,11 @@
             <pattern>%-5level %logger{0} - %msg%n</pattern>
         </encoder>
     </appender>
-
-    <!--    <logger name="org.springframework.web.servlet.view" level="trace"/>
-        <logger name="org.springframework.http" level="trace"/>
-        <logger name="org.springframework.security" level="error"/>
-        <logger name="org.springframework.format" level="error"/>
-        <logger name="org.springframework.data.mongodb" level="info"/>
-        <logger name="org.thymeleaf" level="warn"/>
-        <logger name="com.pla" level="trace"/>-->
-    <root level="trace">
+    <logger name="com.pla" level="trace"/>
+    <logger name="org.springframework.beans.factory.xml" level="info"/>
+    <logger name="org.springframework.core.convert" level="trace"/>
+    <logger name="org.axonframework" level="debug"/>
+    <root level="warn">
         <appender-ref ref="console"/>
     </root>
 </configuration>

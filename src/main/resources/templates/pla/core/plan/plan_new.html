@@ -510,7 +510,15 @@
             </div>
             <div class="step-pane" data-step="5" style="min-height: 250px">
                 <h4>Coverage<span class="badge">{{plan.coverages.length}}</span></h4>
-                <button class="btn btn-primary" ng-click="showCoverageForm()">Add Coverage</button>
+
+                <div class="alert alert-danger" role="alert" ng-if="step5.$error">
+                    <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+                    <span class="sr-only">Error:</span>
+                    {{stepErrorMsg}}
+                </div>
+                <div style="float:right">
+                    <button class="btn btn-primary" ng-click="showCoverageForm()">Add Coverage</button>
+                </div>
                 <table class="table table-bordered table-condensed  table-striped">
                     <thead>
                     <tr>
@@ -520,7 +528,7 @@
                         <td> Deductible Type</td>
                         <td> Coverage Type</td>
                         <td> Sum Assured Type</td>
-                        <!--<td> Action</td>-->
+                        <td> Action</td>
                     </tr>
                     </thead>
                     <tr ng-repeat="coverage in plan.coverages">
@@ -528,14 +536,17 @@
                         <td>{{coverage.coverageCover}}</td>
                         <td>{{coverage.coverageType}}</td>
                         <td>{{coverage.deductibleType}}</td>
-                        <td> {{coverage.coverageType}}</td>
-                        <td> {{coverage.coverageSumAssured.sumAssuredType}}</td>
-                        <!-- <td>
+                        <td>{{coverage.coverageType}}</td>
+                        <td>{{coverage.coverageSumAssured.sumAssuredType}}</td>
+                        <td>
                              <button type="button" class="btn btn-default btn-xs"
                                      ng-click="editPlanCoverage(coverage)">
                                  <span class="glyphicon glyphicon-edit" aria-hidden="true"></span>
                              </button>
-                         </td>-->
+                            <button type="button" class="btn btn-danger btn-xs"
+                                    ng-click="removePlanCoverage($index)">X
+                            </button>
+                        </td>
                     </tr>
                 </table>
             </div>

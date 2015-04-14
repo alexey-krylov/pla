@@ -17,7 +17,6 @@ import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
 
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -56,9 +55,6 @@ public class PremiumService {
         Plan plan = planRepository.findByPlanId(planId);
         List<PremiumInfluencingFactor> premiumInfluencingFactorList = UtilValidator.isNotEmpty(premiumInfluencingFactors) ? Arrays.asList(premiumInfluencingFactors) : new ArrayList<>();
         boolean isValidTemplate = premiumTemplateParser.validatePremiumDataForAGivenPlanAndCoverage(hssfWorkbook, plan, new CoverageId(coverageId), premiumInfluencingFactorList);
-        FileOutputStream stream = new FileOutputStream("E:\\pla\\afterParsing.xls");
-        hssfWorkbook.write(stream);
-        stream.close();
         return isValidTemplate;
     }
 

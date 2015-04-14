@@ -3,6 +3,7 @@ package org.nthdimenzion.axonframework.repository;
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.datatype.joda.JodaModule;
 import com.mongodb.BasicDBObject;
 import org.axonframework.domain.AggregateRoot;
 import org.axonframework.eventsourcing.annotation.AggregateIdentifier;
@@ -13,6 +14,7 @@ import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.query.BasicQuery;
 
+import javax.persistence.Transient;
 import java.lang.reflect.Field;
 
 import static java.lang.String.format;
@@ -41,7 +43,6 @@ public class GenericMongoRepository<T extends AggregateRoot> extends AbstractRep
         assert annotation != null;
         this.collectionName = annotation.collection();
         Class klass = super.getAggregateType();
-
         try {
             Field[] fields = klass.getDeclaredFields();
             for (Field field : fields) {
@@ -54,7 +55,6 @@ public class GenericMongoRepository<T extends AggregateRoot> extends AbstractRep
         } catch (Throwable e) {
             e.printStackTrace();
         }
-
         objectMapper = new ObjectMapper();
         objectMapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
         objectMapper.setVisibilityChecker(objectMapper.getSerializationConfig().getDefaultVisibilityChecker()
@@ -62,15 +62,33 @@ public class GenericMongoRepository<T extends AggregateRoot> extends AbstractRep
                 .withGetterVisibility(JsonAutoDetect.Visibility.NONE)
                 .withSetterVisibility(JsonAutoDetect.Visibility.NONE)
                 .withCreatorVisibility(JsonAutoDetect.Visibility.ANY));
+        objectMapper.registerModule(new JodaModule());
     }
 
     @Override
     protected void doSave(T t) {
+       /*objectMapper.registerModule(new JodaModule());
+        objectMapper.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
         BasicDBObject dbo = objectMapper.convertValue(t, BasicDBObject.class);
         dbo.put("_id", getIdValue(t));
         dbo.put("_class", getAggregateType().getName());
         dbo.removeField("eventContainer");
+        dbo.removeField(idFieldName.getName());*/
+        BasicDBObject dbo = new BasicDBObject();
+        Field[] fields = getAggregateType().getDeclaredFields();
+        for (Field field : fields) {
+            try {
+                field.setAccessible(true);
+                if (!field.isAnnotationPresent(Transient.class) && !java.lang.reflect.Modifier.isStatic(field.getModifiers())) {
+                    dbo.put(field.getName(), field.get(t));
+                }
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+            }
+        }
         dbo.removeField(idFieldName.getName());
+        dbo.put("_id", getIdValue(t));
+        dbo.put("_class", getAggregateType().getName());
         mongoTemplate.save(dbo, collectionName);
     }
 

@@ -26,100 +26,13 @@ app.config(function ($routeProvider, $locationProvider) {
             resolve: {
                 plan: function () {
                     return {
-                        "planDetail": {
-                            "planName": "JEEVAN ANAND",
-                            "planCode": "JEEVEN-001",
-                            "launchDate": "2015-05-14",
-                            "withdrawalDate": "2015-12-29",
-                            "freeLookPeriod": 15,
-                            "minEntryAge": 19,
-                            "maxEntryAge": 65,
-                            "taxApplicable": true,
-                            "surrenderAfter": 5,
-                            "applicableRelationships": [
-                                "SELF",
-                                "SISTER",
-                                "BROTHER"
-                            ],
-                            "endorsementTypes": [
-                                "NAME",
-                                "DATE_OF_BIRTH",
-                                "ADDRESS"
-                            ],
-                            "lineOfBusinessId": "INDIVIDUAL_INSURANCE",
-                            "planType": "INVESTMENT",
-                            "clientType": "INDIVIDUAL"
-                        },
+                        "planDetail": {},
                         "policyTermType": "SPECIFIED_VALUES",
                         "premiumTermType": "SPECIFIED_VALUES",
-                        "policyTerm": {
-                            "validTerms": [
-                                {
-                                    "text": 10
-                                },
-                                {
-                                    "text": 20
-                                },
-                                {
-                                    "text": 30
-                                },
-                                {
-                                    "text": "45"
-                                },
-                                {
-                                    "text": "50"
-                                }
-                            ],
-                            "maturityAges": [],
-                            "maxMaturityAge": 65
-                        },
-                        "premiumTerm": {
-                            "validTerms": [
-                                {
-                                    "text": 10
-                                },
-                                {
-                                    "text": 20
-                                },
-                                {
-                                    "text": 30
-                                },
-                                {
-                                    "text": "35"
-                                }
-                            ],
-                            "maturityAges": [],
-                            "maxMaturityAge": 65
-                        },
-                        "sumAssured": {
-                            "sumAssuredValue": [
-                                {
-                                    "text": "1000000"
-                                },
-                                {
-                                    "text": "2000000"
-                                },
-                                {
-                                    "text": "300000"
-                                }
-                            ],
-                            "percentage": 0,
-                            "multiplesOf": 0,
-                            "sumAssuredType": "SPECIFIED_VALUES"
-                        },
-                        coverages: [{
-                            "maturityAmounts": [{"maturityYear": 5, "guaranteedSurvivalBenefitAmount": "5"}],
-                            "coverageId": "306B8DF2-8298-4801-93C8-23D26E7018B7",
-                            "coverageCover": "ACCELERATED",
-                            "deductibleType": "AMOUNT",
-                            "coverageSumAssured": {"sumAssuredType": "RANGE", "minSumInsured": "1", "maxSumInsured": "2", "multiplesOf": "1000"},
-                            "taxApplicable": "true",
-                            "coverageTermType": "SPECIFIED_VALUES",
-                            "coverageTerm": {"validTerms": [{"text": "45"}], "maxMaturityAge": 65},
-                            "coverageType": "OPTIONAL",
-                            "minAge": 19,
-                            "maxAge": 65
-                        }]
+                        "policyTerm": {},
+                        "premiumTerm": {},
+                        "sumAssured": {},
+                        coverages: []
                     }
                 },
                 activeCoverages: ['$q', '$http', function ($q, $http) {
@@ -246,7 +159,7 @@ app.controller('PlanSetupController', ['$scope', '$http', '$location', '$routePa
                     templateUrl: '/pla/plan/coverage-form.html',
                     backdrop: true,
                     windowClass: 'modal',
-                    controller: function ($scope, $modalInstance, $log, newCoverage, plan, coverageList, isEditing) {
+                    controller: function ($scope, $modalInstance, $log, newCoverage, plan, coverageList, isEditing, stepForm) {
                         $scope.plan = plan;
                         $scope.coverageList = coverageList;
                         $scope.newCoverage = newCoverage;
@@ -274,6 +187,7 @@ app.controller('PlanSetupController', ['$scope', '$http', '$location', '$routePa
                             $scope.coverageTerm = [];
                             $scope.coverageMaturityAge = [];
                             $scope.cancel();
+                            $scope.stepForm.$error = false;
                         };
 
                         $scope.removeCoverage = function (idx) {
@@ -296,13 +210,20 @@ app.controller('PlanSetupController', ['$scope', '$http', '$location', '$routePa
                             return $scope.plan;
                         },
                         isEditing: function () {
-                            return isEditing
+                            return isEditing;
+                        },
+                        stepForm: function () {
+                            return $scope.step5;
                         }
                     }
                 });
             };
 
-
+            /**
+             * This is used to nullify the planSumAssured on toggling the
+             * Plan Sum Assured Type.
+             *
+             */
             $scope.$watch('planSumAssuredType', function (newval) {
                 if (!angular.isUndefined(newval)) {
                     $scope.planSumAssured = [];
@@ -310,14 +231,26 @@ app.controller('PlanSetupController', ['$scope', '$http', '$location', '$routePa
                 }
             });
 
+            /**
+             * Used for displaying the coverages in List of Coverages.
+             * Plan only stores the coverageId. The coverageId is then searched
+             * against the Coverage List that is injected in to the Controller.
+             *
+             * @param coverageId
+             */
             $scope.resolveCoverage = function (coverageId) {
-                console.log('resolveCoverage :: coverageId ' + coverageId);
-                console.log('resolveCoverage :: $scope.coverageList ' + JSON.stringify($scope.coverageList));
                 var coverage = _.findWhere($scope.coverageList, {'coverageId': coverageId});
-                console.log('resolveCoverage :: resolved coverage ' + JSON.stringify(coverage));
                 return coverage;
-            }
+            };
 
+            /**
+             * This returns the Benefit Name for displaying in the Existing Benefits table.
+             * The BenefitId is only stored in the PlanCoverage Association. This benefitId
+             * is then searched against the List of coverages that is injected.
+             *
+             * @param benefitId
+             * @returns {*}
+             */
             $scope.getCoverageNameFromBenefit = function (benefitId) {
                 console.log('getCoverageNameFromBenefit :: benefitId ' + benefitId);
                 var i = 0;
@@ -348,8 +281,15 @@ app.controller('PlanSetupController', ['$scope', '$http', '$location', '$routePa
                     }
                 }
                 return '';
-            }
+            };
 
+            /**
+             * This returns the list of all the coverages that are attached
+             * to the Plan. This is used for populating the Coverages drop
+             * down in benefit section.
+             *
+             * @returns {*}
+             */
             $scope.configuredCoverages = function () {
                 var planCoverages = _.pluck($scope.plan.coverages, 'coverageId');
                 var configuredCoverages = _.filter($scope.coverageList, function (coverage) {
@@ -358,10 +298,29 @@ app.controller('PlanSetupController', ['$scope', '$http', '$location', '$routePa
                 return configuredCoverages;
             };
 
+            /**
+             * Open the Coverage Modal Form for editing the selected Plan Coverage details.
+             *
+             * @param coverage
+             */
             $scope.editPlanCoverage = function (coverage) {
                 $scope.showCoverageForm(coverage, true);
             };
 
+            /**
+             * Remove the coverage from the plan.
+             *
+             * @param coverage
+             */
+            $scope.removePlanCoverage = function (index) {
+                $scope.plan.coverages.splice(index, 1);
+            };
+
+            /**
+             * To display the list of benefits attached to the Plan.
+             *
+             * @returns {Array}
+             */
             $scope.getAllBenefits = function () {
                 var benefits = [];
                 var i = 0;
@@ -370,7 +329,6 @@ app.controller('PlanSetupController', ['$scope', '$http', '$location', '$routePa
                     var j = 0;
                     if (angular.isDefined(coverage.planCoverageBenefits)) {
                         for (; j < coverage.planCoverageBenefits.length; j++) {
-                            console.log(" getAllBenefits :: adding " + JSON.stringify(coverage.planCoverageBenefits[j]));
                             benefits.push(coverage.planCoverageBenefits[j]);
                         }
                     }
@@ -378,6 +336,12 @@ app.controller('PlanSetupController', ['$scope', '$http', '$location', '$routePa
                 return benefits;
             };
 
+
+            /**
+             * To populate the benefit drop down based on the selected coverage.
+             *
+             * @param selectedCoverage
+             */
             $scope.populateBenefits = function (selectedCoverage) {
                 var coverage = _.where($scope.coverageList, {coverageId: selectedCoverage.coverageId});
                 if (coverage && coverage.length > 0) {
@@ -455,9 +419,18 @@ app.controller('PlanSetupController', ['$scope', '$http', '$location', '$routePa
             $scope.$on('finished.fu.wizard', function (name, event, data) {
                 $scope.createPlan();
             });
-
+            $scope.step5 = {};
             $scope.$on('actionclicked.fu.wizard', function (name, event, data) {
                 console.log('Step:: ' + data.step);
+                if (data.step == 5) {
+                    console.log('Step:: 5 coverages length==' + $scope.plan.coverages.length);
+                    if ($scope.plan.coverages.length == 0) {
+                        $scope.step5.$error = true;
+                        $scope.stepErrorMsg = "Configure coverages.";
+                        $scope.$apply();
+                        event.preventDefault();
+                    }
+                }
             });
         }]
 );
