@@ -21,7 +21,7 @@ spring:
       show-sql: true
 
   profiles:
-        active: ${spring.profiles.active}
+        active: dev
 
   smeServer :
         dev :

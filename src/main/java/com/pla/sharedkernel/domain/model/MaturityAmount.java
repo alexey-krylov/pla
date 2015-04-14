@@ -1,6 +1,5 @@
 package com.pla.sharedkernel.domain.model;
 
-import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
 import java.math.BigDecimal;
@@ -10,7 +9,7 @@ import java.math.BigDecimal;
  * @since 1.0 12/03/2015
  */
 @ToString
-@EqualsAndHashCode
+//@EqualsAndHashCode
 public class MaturityAmount {
 
     int maturityYear;

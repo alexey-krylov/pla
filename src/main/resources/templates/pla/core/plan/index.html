@@ -16,7 +16,7 @@
 
     requirejs.config({
         paths: {
-            'plansetup': '/pla/js/plan-app'
+            'plansetup': '/pla/js/plan-app.js?t=0'
         },
         "shim": {"plansetup": ["angular"]}
     });
@@ -31,7 +31,8 @@
     });
 </script>
 <div class="container fuelux">
-    <ng-view>
+
+<ng-view>
 
     </ng-view>
 </div>

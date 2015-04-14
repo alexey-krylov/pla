@@ -6,6 +6,8 @@
 
 package com.pla.core.domain.model;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import lombok.AccessLevel;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -22,6 +24,7 @@ import java.io.Serializable;
 @NoArgsConstructor(access = AccessLevel.PACKAGE)
 @Getter
 @EqualsAndHashCode(of = "benefitId")
+@JsonSerialize(using = ToStringSerializer.class)
 public class BenefitId implements Serializable {
 
     private String benefitId;

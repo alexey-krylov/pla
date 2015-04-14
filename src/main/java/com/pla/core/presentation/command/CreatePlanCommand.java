@@ -1,6 +1,5 @@
 package com.pla.core.presentation.command;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.pla.core.domain.model.BenefitId;
 import com.pla.sharedkernel.domain.model.*;
@@ -26,7 +25,6 @@ import java.util.*;
 @ToString
 public class CreatePlanCommand {
 
-    @JsonProperty(value = "_id")
     PlanId planId;
     Detail planDetail;
     AssuredDetail sumAssured;
@@ -34,7 +32,7 @@ public class CreatePlanCommand {
     TermDetail premiumTerm;
     PremiumTermType premiumTermType;
     PolicyTermType policyTermType;
-    List<PlanCoverageDetail> coverages;
+    List<PlanCoverageDetail> coverages = new ArrayList<>();
 }
 
 @Getter
@@ -127,11 +125,11 @@ class PlanCoverageDetail {
     private int minAge;
     private int maxAge;
     private Boolean taxApplicable;
-    private AssuredDetail sumAssured;
+    private AssuredDetail coverageSumAssured;
     private TermDetail coverageTerm;
     private CoverageTermType coverageTermType;
-    private List<MaturityAmountDetail> maturityAmounts;
-    private List<PlanCoverageBenefitDetail> planCoverageBenefits;
+    private List<MaturityAmountDetail> maturityAmounts = new ArrayList<>();
+    private List<PlanCoverageBenefitDetail> planCoverageBenefits = new ArrayList<>();
 }
 
 @Getter

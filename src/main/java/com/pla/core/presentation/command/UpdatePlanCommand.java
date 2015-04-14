@@ -1,5 +1,6 @@
 package com.pla.core.presentation.command;
 
+import com.pla.sharedkernel.identifier.PlanId;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -11,6 +12,7 @@ import lombok.Setter;
 @Setter
 public class UpdatePlanCommand extends CreatePlanCommand {
 
+    private PlanId newPlanId;
     public UpdatePlanCommand() {
         super();
     }

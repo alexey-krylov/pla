@@ -23,8 +23,8 @@
         <constructor-arg ref="mongoDbFactory"/>
     </bean>
 
-    <bean id="mongoSagaTemplate" class="org.springframework.data.mongodb.core.MongoTemplate">
-        <constructor-arg ref="mongoDbFactory"/>
+    <bean id="mongoSagaTemplate" class="org.axonframework.saga.repository.mongo.DefaultMongoTemplate">
+        <constructor-arg ref="mongo" name="mongo"/>
     </bean>
 
     <bean id="springMongoTemplate" class="org.springframework.data.mongodb.core.MongoTemplate">

@@ -79,16 +79,41 @@ public class PlanCoverageBuilder {
         return this;
     }
 
-    public PlanCoverageBuilder withCoverageTerm(CoverageTermType coverageTermType, Set<Integer> validTerms, int maxMaturityAge) {
+    /**
+     * @param coverageTermType
+     * @param validTerms
+     * @param maxMaturityAge
+     * @return
+     * @deprecated Please use #withCoverageTerm(CoverageTermType,Term)
+     */
+    PlanCoverageBuilder withCoverageTerm(CoverageTermType coverageTermType, Set<Integer> validTerms, int maxMaturityAge) {
         switch (coverageTermType) {
             case SPECIFIED_VALUES:
                 checkArgument(maxMaturityAge > 0);
-                checkArgument(UtilValidator.isNotEmpty(validTerms));
+                checkArgument(validTerms != null);
                 this.coverageTerm = new Term(validTerms, maxMaturityAge);
                 break;
             case AGE_DEPENDENT:
-                checkArgument(UtilValidator.isNotEmpty(validTerms));
+                checkArgument(validTerms != null);
                 this.coverageTerm = new Term(validTerms);
+                break;
+            case POLICY_TERM:
+                break;
+        }
+        this.coverageTermType = coverageTermType;
+        return this;
+    }
+
+    //TODO Refactor this to send the Term instead of validTerms and maxMaturityAge
+    public PlanCoverageBuilder withCoverageTerm(CoverageTermType coverageTermType, Term coverageTerm) {
+        switch (coverageTermType) {
+            case SPECIFIED_VALUES:
+                checkArgument(coverageTerm != null);
+                this.coverageTerm = new Term(coverageTerm);
+                break;
+            case AGE_DEPENDENT:
+                checkArgument(coverageTerm != null);
+                this.coverageTerm = new Term(coverageTerm);
                 break;
             case POLICY_TERM:
                 break;

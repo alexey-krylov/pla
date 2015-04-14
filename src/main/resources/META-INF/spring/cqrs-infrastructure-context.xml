@@ -51,6 +51,7 @@
     </bean>
 
     <bean id="cacheManager" class="org.springframework.cache.ehcache.EhCacheManagerFactoryBean"/>
+
     <bean id="sagaRepository" class="org.axonframework.saga.repository.mongo.MongoSagaRepository">
         <constructor-arg ref="mongoSagaTemplate"/>
         <property name="resourceInjector">
@@ -61,9 +62,10 @@
     <axon:saga-manager id="sagaManager" saga-repository="sagaRepository" event-bus="eventBus">
         <axon:async executor="taskExecutor" transaction-manager="transactionManager"/>
         <axon:types>
+            com.pla.core.domain.model.plan.PlanManagementSaga
         </axon:types>
     </axon:saga-manager>
 
-    <extension:mongo-repository id="planRepository" aggregate-type="com.pla.core.domain.model.plan.Plan" mongo-template="mongoSpringTemplate"/>
-
+    <extension:mongo-repository id="planMongoRepository" aggregate-type="com.pla.core.domain.model.plan.Plan"
+                                mongo-template="mongoTemplate"/>
 </beans>

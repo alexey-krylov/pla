@@ -68,10 +68,10 @@ public class PlanDetail {
 
         this.launchDate = planDetailBuilder.launchDate;
 
-        checkArgument(planDetailBuilder.withdrawalDate != null, "Cannot create a Plan without Withdrawal Date");
-        checkArgument(planDetailBuilder.withdrawalDate.isAfter(launchDate), "Withdrawal cannot be less than launchDate");
-        this.withdrawalDate = planDetailBuilder.withdrawalDate;
-
+        if (planDetailBuilder.withdrawalDate != null) {
+            checkArgument(planDetailBuilder.withdrawalDate.isAfter(launchDate), "Withdrawal cannot be less than launchDate");
+            this.withdrawalDate = planDetailBuilder.withdrawalDate;
+        }
 
         checkArgument(planDetailBuilder.clientType != null, "Cannot create Plan without Client Type");
         this.clientType = planDetailBuilder.clientType;

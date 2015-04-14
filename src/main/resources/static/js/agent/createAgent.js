@@ -1,6 +1,7 @@
 
 angular.module('createAgent',['common','ngRoute','mgcrea.ngStrap.select','mgcrea.ngStrap.alert','commonServices'])
     .controller('agentCtrl',['$scope','$http','channelType','authorisedToSell','teamDetails','provinces','$timeout','$alert','$route','$window','transformJson','getQueryParameter','agentDetails','globalConstants','nextAgentSequence','$rootScope',
+
         function($scope,$http,channelType,authorisedToSell,teamDetails,provinces,$timeout,$alert,$route,$window,transformJson,getQueryParameter,agentDetails,globalConstants,nextAgentSequence,$rootScope){
             $scope.numberPattern =globalConstants.numberPattern;
             $scope.selectedWizard = 1;
