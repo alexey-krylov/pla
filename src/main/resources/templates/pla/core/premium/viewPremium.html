@@ -55,29 +55,21 @@
                         </tr>
                         </thead>
                         <tbody>
-                        <tr >  <!-- th:each="premium : ${listOfPremium}"-->
-                            <td>Product A</td>
-                            <!--th:text="${premium.planName}"-->
-                            <td>Optional coverage A</td>
-                            <!--th:text="${premium.optionalCoverage}"-->
-                          <!--  <td>
-                              <button type="button" class="btn btn-default btn-xs bs-popover" data-placement="top"  data-content="{{popover.content}}" data-trigger="hover" data-template="http://localhost:6443/pla/core/premium/popover.tpl.html" title="{{popover.title}}" data-animation="am-flip-x" data-auto-close="1">Influencing Factors</button>
-                            </td> -->
+                        <tr th:each="premium : ${listOfPremium}">
+                            <td th:text="${premium.planId}"></td>
+                            <td th:text="${premium.coverageId}"></td>
                             <td style="text-align:center" class="pop" >
                                 <button href="#" class="details-box btn btn-primary btn-xs" rel="popover"  data-content="" > Influencing-Factors
                                     <div class="popover-body" style="display:none;">
-                                        <ul  type="square"     >   <!--th:each="influencingFactor : ${premium.listOfInfluencingFactor}" -->
-                                            <li style="text-align:left;font-size:12px;"    ></li> <!--th:text="'&diams;&nbsp;'+${{influencingFactor.influencingFactorName}}+','" -->
+                                        <ul  type="square"  th:each="influencingFactor : ${premium.premiumInfluencingFactors}"   >
+                                            <li style="text-align:left;font-size:12px;"   th:text="'&diams;&nbsp;'+${{influencingFactor.description}}+','" ></li>
                                         </ul>
                                     </div>
                                 </button>
                             </td>
-                            <!--th:text="${premium.premiumExpressedAs}"-->
-                            <td>Rate(per thousand)</td>
-                            <!-- th:text="${premium.rateExpressedAs}"-->
-                            <td>Per Year</td>
-                            <!--th:text="${premium.fromDate}"-->
-                            <td>09/03/2014</td>
+                            <td th:text="${premium.premiumFactor}">Rate(per thousand)</td>
+                            <td th:text="${premium.premiumRateFrequency}">Per Year</td>
+                            <td th:text="${premium.effectiveFrom}">09/03/2014</td>
                         </tr>
 
                         </tbody>
