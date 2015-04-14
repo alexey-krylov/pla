@@ -61,8 +61,8 @@
                                     </div>
                                 </button>
                             </td>
-                            <td th:text="${mandatoryDocument.process}"></td>    <!--th:href="'/pla/core/team/redirecttoupdatePage?documentId='+${mandatoryDocument.documentId}+''" -->
-                            <td><a class="btn btn-default btn-xs" th:href="'/pla/core/team/redirecttoupdatepage?documentId='+${mandatoryDocument.documentId}+''">Update</a></td>
+                            <td th:text="${mandatoryDocument.process}"></td>
+                            <td><a class="btn btn-default btn-xs" th:href="'/pla/core/mandatorydocument/redirecttoupdatepage?documentId='+${mandatoryDocument.documentId}+''">Update</a></td>
                         </tr>
 
                         </tbody>
@@ -75,7 +75,13 @@
         </div>
     </div>
 </div>
+<style>
+    .popover-content {
+        font-size: 11px;
+        padding-left:3px;
+    }
 
+</style>
 <footer class="footer" th:include="fragments/common :: footer">
 </footer>
 </body>

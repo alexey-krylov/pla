@@ -24,7 +24,7 @@
                         </span></div>
                     </div>
                 </div>
-                <div class="panel-body ng-cloak" style="padding-top:5px">
+                <div class="panel-body ng-cloak">
                     <form  novalidate="true" class="css-form">
                         <notification ></notification>
                         <div class="row">
@@ -36,7 +36,7 @@
                                 </div>
                             </div>
                             <div class="form-group col-md-6 required" >
-                                <label class="control-label">Product Name</label>
+                                <label class="control-label">Plan Name</label>
                                 <select class="form-control input-sm"  ng-model="createMandatoryDocument.planId" ng-options="plan.planId as plan.planName for plan in newPlanList | orderBy:'name'">
                                     <option value="">----Select one----</option>
 
@@ -54,19 +54,13 @@
                             <div class="form-group col-md-6 required">
                                 <label class="control-label">Process</label>
                                 <select class="form-control input-sm"  ng-required="true" ng-model="createMandatoryDocument.process" ng-options="value for (key, value) in processList | orderBy:'name'">
-                                    <option value="">Select Process</option>
-                                    <option value="Enrollment">Enrollment</option>
-                                    <option value="Re-Instatement">Re-Instatement</option>
-                                    <option value="Claim">Claim</option>
-                                    <option value="Endorsement">Endorsement</option>
-                                    <option value="Surrender">Surrender</option>
-                                    <option value="Assignment">Assignment</option>
+                                    <option value="">---Select one---</option>
                                 </select>
                             </div>
                             <div class="form-group col-md-6 required">
                                 <label class="control-label">Mandatory Documents</label>
                                 <div>
-                                    <button type="button" class="btn btn-default bs-select" ng-model="createMandatoryDocument.documents" data-all-none-buttons="true" data-html="1" data-multiple="1"  ng-options="mandatoryDocument.documentCode as mandatoryDocument.documentName for mandatoryDocument in mandatoryDocList | orderBy:'documentName'"   >
+                                    <button type="button" class="btn btn-default bs-select" ng-model="createMandatoryDocument.documents" data-all-none-buttons="true" data-html="1" data-multiple="1"  ng-options="mandatoryDocument.documentCode as mandatoryDocument.documentName for mandatoryDocument in documentList | orderBy:'documentName'"   >
                                         Action <span class="caret"></span>
                                     </button>
                                 </div>
@@ -75,7 +69,7 @@
 
                         <div class="row">
                             <div class="col-lg-12" style="text-align: center;margin-top:3px;">
-                                <button type="button" class="btn btn-default" style="float:right;" ng-disabled="(!createMandatoryDocument.definedFor || !createMandatoryDocument.mandatoryDocuments || !createMandatoryDocument.process )&amp;&amp;(!createMandatoryDocument.planId)&amp;&amp; (!createMandatoryDocument.optionalCoverageId)" data-placement="top-right" data-container="notification" data-duration="5" bs-alert="alert"  ng-click="saveMandatoryDoc()">Save</button>
+                                <button type="button" class="btn btn-default" style="float:right;" ng-disabled="(!createMandatoryDocument.definedFor || !createMandatoryDocument.documents || !createMandatoryDocument.process || !createMandatoryDocument.planId || !boolVal)" data-placement="top-right" data-container="notification" data-duration="5" bs-alert="alert"  ng-click="saveMandatoryDoc()">Save</button>
                                 <a class="btn btn-default" style="float:left;" th:href="@{/core/mandatorydocument/view}">Cancel</a>
                             </div>
                         </div>
@@ -85,15 +79,7 @@
         </div>
     </div>
 </div>
-<style>
-    .form-control {
-    font-size: 12px;
-    padding:5px;
-    }
-    .btn{
-    font-size:12px;
-    }
-</style>
+
 <footer class="footer" th:include="fragments/common :: footer">
 </footer>
 </body>
