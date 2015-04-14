@@ -109,7 +109,7 @@ angular.module('createAgent',['common','ngRoute','mgcrea.ngStrap.select','mgcrea
             };
             $scope.searchAgent =  function(){
                 $scope.searchResult.isSearched=true;
-                $http.get("/pla/core/agent/getemployeedeatil/"+(_.isEmpty($scope.search.empId)?null:$scope.search.empId)+"/"+(_.isEmpty($scope.search.nrc)?null:$scope.search.nrc))
+                $http.get("/pla/core/agent/getemployeedeatil/",{params:$scope.search})
                     .success(function(data,status){
                         if(data && (_.size(data) ==0 || data.firstName==null)){
                             $scope.searchResult.isEmpty=true;
