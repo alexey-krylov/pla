@@ -26,100 +26,13 @@ app.config(function ($routeProvider, $locationProvider) {
             resolve: {
                 plan: function () {
                     return {
-                        "planDetail": {
-                            "planName": "JEEVAN ANAND",
-                            "planCode": "JEEVEN-001",
-                            "launchDate": "2015-05-14",
-                            "withdrawalDate": "2015-12-29",
-                            "freeLookPeriod": 15,
-                            "minEntryAge": 19,
-                            "maxEntryAge": 65,
-                            "taxApplicable": true,
-                            "surrenderAfter": 5,
-                            "applicableRelationships": [
-                                "SELF",
-                                "SISTER",
-                                "BROTHER"
-                            ],
-                            "endorsementTypes": [
-                                "NAME",
-                                "DATE_OF_BIRTH",
-                                "ADDRESS"
-                            ],
-                            "lineOfBusinessId": "INDIVIDUAL_INSURANCE",
-                            "planType": "INVESTMENT",
-                            "clientType": "INDIVIDUAL"
-                        },
+                        "planDetail": {},
                         "policyTermType": "SPECIFIED_VALUES",
                         "premiumTermType": "SPECIFIED_VALUES",
-                        "policyTerm": {
-                            "validTerms": [
-                                {
-                                    "text": 10
-                                },
-                                {
-                                    "text": 20
-                                },
-                                {
-                                    "text": 30
-                                },
-                                {
-                                    "text": "45"
-                                },
-                                {
-                                    "text": "50"
-                                }
-                            ],
-                            "maturityAges": [],
-                            "maxMaturityAge": 65
-                        },
-                        "premiumTerm": {
-                            "validTerms": [
-                                {
-                                    "text": 10
-                                },
-                                {
-                                    "text": 20
-                                },
-                                {
-                                    "text": 30
-                                },
-                                {
-                                    "text": "35"
-                                }
-                            ],
-                            "maturityAges": [],
-                            "maxMaturityAge": 65
-                        },
-                        "sumAssured": {
-                            "sumAssuredValue": [
-                                {
-                                    "text": "1000000"
-                                },
-                                {
-                                    "text": "2000000"
-                                },
-                                {
-                                    "text": "300000"
-                                }
-                            ],
-                            "percentage": 0,
-                            "multiplesOf": 0,
-                            "sumAssuredType": "SPECIFIED_VALUES"
-                        },
-                        coverages: [{
-                            "maturityAmounts": [{"maturityYear": 5, "guaranteedSurvivalBenefitAmount": "5"}],
-                            "coverageId": "306B8DF2-8298-4801-93C8-23D26E7018B7",
-                            "coverageCover": "ACCELERATED",
-                            "deductibleType": "AMOUNT",
-                            "coverageSumAssured": {"sumAssuredType": "RANGE", "minSumInsured": "1", "maxSumInsured": "2", "multiplesOf": "1000"},
-                            "taxApplicable": "true",
-                            "coverageTermType": "SPECIFIED_VALUES",
-                            "coverageTerm": {"validTerms": [{"text": "45"}], "maxMaturityAge": 65},
-                            "coverageType": "OPTIONAL",
-                            "minAge": 19,
-                            "maxAge": 65
-                        }]
+                        "policyTerm": {},
+                        "premiumTerm": {},
+                        "sumAssured": {},
+                        "coverages": []
                     }
                 },
                 activeCoverages: ['$q', '$http', function ($q, $http) {
