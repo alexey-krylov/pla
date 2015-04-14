@@ -14,7 +14,13 @@
 <script>
     requirejs(['main'],function(){
         require(['/pla/js/agent/createAgent.js'],function(){
-            angular.bootstrap(document, ['createAgent']);
+            angular.element(document).ready(function() {
+                /*TODO*/
+                /*Remove the console during production*/
+                console.log(angular.element(document));
+                console.log("Agent module bootstrapped succefully...");
+                angular.bootstrap(document, ['createAgent']);
+            });
         });
     });
 </script>
