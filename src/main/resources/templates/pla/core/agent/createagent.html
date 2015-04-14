@@ -14,7 +14,13 @@
 <script>
     requirejs(['main'],function(){
         require(['/pla/js/agent/createAgent.js'],function(){
-            angular.bootstrap(document, ['createAgent']);
+            angular.element(document).ready(function() {
+                /*TODO*/
+                /*Remove the console during production*/
+                console.log(angular.element(document));
+                console.log("Agent module bootstrapped succefully...");
+                angular.bootstrap(document, ['createAgent']);
+            });
         });
     });
 </script>
@@ -108,7 +114,7 @@
                                     Action <span class="caret"></span>
                                 </button>
                             </div>
-                            <div class="form-group" ng-if="agentDetails.designation=='BRANCH_BDE'">
+                            <div class="form-group" ng-if="agentDetails.designationDto.code=='BRANCH_BDE'">
                                 <label style="text-align: left">Can Collect override Commissions?</label>
                                 <label style="padding-right: 5px"><input type="radio"  name="overrideCommission" ng-model="agentDetails.overrideCommissionApplicable" value="yes"/>Yes</label>
                                 <label><input type="radio"  name="overrideCommission" ng-model="agentDetails.overrideCommissionApplicable" value="no"/>No</label>

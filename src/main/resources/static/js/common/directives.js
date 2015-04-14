@@ -45,8 +45,8 @@ angular.module('directives', ['mgcrea.ngStrap.alert'])
                 $(element).on('actionclicked.fu.wizard', function (event, data) {
                     if (data.direction == 'previous')return;
                     if(ctrl && ctrl[0]){
-                        var currentStep =ctrl[0]['step' + data.step].$name;
-                        if($.inArray(currentStep,scope.skipValidation)==-1){
+                        var currentStep = ctrl[0]['step' + data.step] && ctrl[0]['step' + data.step].$name;
+                        if (angular.isDefined(currentStep) && $.inArray(currentStep, scope.skipValidation) == -1) {
                             var stepForm = ctrl[0]['step' + data.step];
                             validateStep(stepForm);
                             if (stepForm.$invalid) {

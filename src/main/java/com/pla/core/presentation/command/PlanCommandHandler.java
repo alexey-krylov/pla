@@ -1,9 +1,10 @@
 package com.pla.core.presentation.command;
 
 import com.pla.core.domain.model.plan.*;
+import com.pla.sharedkernel.domain.model.CoverageTermType;
 import org.axonframework.commandhandling.annotation.CommandHandler;
+import org.axonframework.repository.Repository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.stereotype.Component;
 
 import java.util.HashSet;
@@ -16,16 +17,21 @@ import java.util.Set;
 @Component
 public class PlanCommandHandler {
 
+    private Repository<Plan> planMongoRepository;
+
     @Autowired
-    private MongoTemplate mongoTemplate;
+    public PlanCommandHandler(Repository<Plan> planMongoRepository) {
+        this.planMongoRepository = planMongoRepository;
+    }
 
     @CommandHandler
     public void handle(CreatePlanCommand command) {
-        Plan plan = buildPlan(command);
-        mongoTemplate.save(plan);
+        PlanBuilder planBuilder = planBuilder(command);
+        Plan plan = planBuilder.build(command.getPlanId());
+        planMongoRepository.add(plan);
     }
 
-    private Plan buildPlan(CreatePlanCommand command) {
+    private PlanBuilder planBuilder(CreatePlanCommand command) {
         PlanDetailBuilder pdBuilder = PlanDetail.builder();
         Detail dtl = command.getPlanDetail();
         pdBuilder.withPlanName(dtl.getPlanName())
@@ -49,7 +55,13 @@ public class PlanCommandHandler {
             PlanCoverageBuilder pcBuilder = PlanCoverage.builder();
             pcBuilder.withCoverageCover(each.getCoverageCover());
             pcBuilder.withCoverage(each.getCoverageId());
-            pcBuilder.withCoverageTerm(each.getCoverageTermType(), each.getCoverageTerm().getValidTerms(), each.getCoverageTerm().getMaxMaturityAge());
+            Term coverageTerm = null;
+            if (CoverageTermType.AGE_DEPENDENT == each.getCoverageTermType()) {
+                coverageTerm = new Term(each.getCoverageTerm().getMaturityAges());
+            } else if (CoverageTermType.SPECIFIED_VALUES == each.getCoverageTermType()) {
+                coverageTerm = new Term(each.getCoverageTerm().getValidTerms(), each.getCoverageTerm().getMaxMaturityAge());
+            }
+            pcBuilder.withCoverageTerm(each.getCoverageTermType(), coverageTerm);
             pcBuilder.withTaxApplicable(each.getTaxApplicable());
             pcBuilder.withCoverageType(each.getCoverageType());
             pcBuilder.withDeductibleType(each.getDeductibleType());
@@ -58,11 +70,14 @@ public class PlanCommandHandler {
                 pcBuilder.withMaturityAmount(maturityRec.getMaturityYear(), maturityRec.getGuaranteedSurvivalBenefitAmount());
             pcBuilder.withMinAndMaxAge(each.getMinAge(), each.getMaxAge());
             pcBuilder.withWaitingPeriod(each.getWaitingPeriod());
-            pcBuilder.withSumAssuredForPlanCoverage(each.getSumAssured().getSumAssuredType(), each.getSumAssured().getMinSumInsured(),
-                    each.getSumAssured().getMaxSumInsured(), each.getSumAssured().getMultiplesOf(), each.getSumAssured().getSumAssuredValue(),
-                    each.getSumAssured().getPercentage());
+
+            pcBuilder.withSumAssuredForPlanCoverage(each.getCoverageSumAssured().getSumAssuredType(), each.getCoverageSumAssured().getMinSumInsured(),
+                    each.getCoverageSumAssured().getMaxSumInsured(), each.getCoverageSumAssured().getMultiplesOf(), each.getCoverageSumAssured().getSumAssuredValue(),
+                    each.getCoverageSumAssured().getPercentage());
+
             for (PlanCoverageBenefitDetail rec : each.getPlanCoverageBenefits())
                 pcBuilder.withBenefitLimit(rec.getBenefitId().toString(), rec.getDefinedPer(), rec.getCoverageBenefitType(), rec.getBenefitLimit(), rec.getMaxLimit());
+
             PlanCoverage planCoverage = pcBuilder.build();
             coverageSet.add(planCoverage);
         }
@@ -78,13 +93,15 @@ public class PlanCommandHandler {
         planBuilder.withPolicyTerm(command.getPolicyTermType(), command.getPolicyTerm().getValidTerms(), command.getPolicyTerm().getMaxMaturityAge());
         planBuilder.withPremiumTerm(command.getPremiumTermType(), command.getPremiumTerm().getValidTerms(), command.getPremiumTerm().getMaxMaturityAge());
         planBuilder.withPlanCoverages(coverageSet);
-        Plan plan = planBuilder.build(command.getPlanId());
-        return plan;
+        return planBuilder;
     }
 
     @CommandHandler
     public void handle(UpdatePlanCommand command) {
-        Plan plan = buildPlan(command);
-        mongoTemplate.save(plan);
+        Plan oldPlan = planMongoRepository.load(command.getPlanId());
+        oldPlan.delete();
+        PlanBuilder planBuilder = planBuilder(command);
+        Plan _new = planBuilder.build();
+        planMongoRepository.add(_new);
     }
 }

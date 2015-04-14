@@ -20,7 +20,7 @@ import static com.google.common.base.Preconditions.checkArgument;
 @Getter
 @ToString
 @EqualsAndHashCode
-class Term {
+public class Term {
 
     Set<Integer> validTerms = new HashSet<Integer>();
     Set<Integer> maturityAges = new HashSet<Integer>();
@@ -30,12 +30,12 @@ class Term {
 
     }
 
-    Term(Set<Integer> maturityAges) {
+    public Term(Set<Integer> maturityAges) {
         checkArgument(UtilValidator.isNotEmpty(maturityAges));
         this.maturityAges = maturityAges;
     }
 
-    Term(Term term) {
+    public Term(Term term) {
         this.validTerms = term.getValidTerms();
         this.maxMaturityAge = term.getMaxMaturityAge();
         this.maturityAges = term.getMaturityAges();
@@ -49,7 +49,7 @@ class Term {
      * @param validTerms
      * @param maxMaturityAge
      */
-    Term(Set<Integer> validTerms, int maxMaturityAge) {
+    public Term(Set<Integer> validTerms, int maxMaturityAge) {
         checkArgument(UtilValidator.isNotEmpty(validTerms));
         checkArgument(maxMaturityAge > 0);
         long termsGreaterThanMaxMaturityAge = validTerms.stream().filter(term -> term.intValue() > maxMaturityAge).count();

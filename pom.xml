@@ -334,6 +334,13 @@
             <version>0.9.9-RC1</version>
             <scope>test</scope>
         </dependency>
+        <!--  <dependency>
+              <groupId>org.nthdimenzion</groupId>
+              <artifactId>axon-extension</artifactId>
+              <version>1.0</version>
+              <scope>system</scope>
+              <systemPath>${basedir}/lib/axon-extension-1.0.jar</systemPath>
+          </dependency>-->
         <dependency>
             <groupId>uk.co.jemos.podam</groupId>
             <artifactId>podam</artifactId>

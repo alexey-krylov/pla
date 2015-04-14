@@ -23,11 +23,12 @@
 <script>
     var interval = setInterval(function(){
         if(require.defined("basic")){
-            console.log("called agents");
             requirejs(['/pla/js/agent/viewAgents.js'],function(){
-                $('#agent-table').dataTable();
-                $( "input[type=radio]" ).on( "click", function(){
-                    viewAgentModule.getTheItemSelected(this)
+                $(document).ready(function(){
+                    $('#agent-table').dataTable();
+                    $( "input[type=radio]" ).on( "click", function(){
+                        viewAgentModule.getTheItemSelected(this)
+                    });
                 });
             });
             clearInterval(interval);
@@ -92,7 +93,7 @@
                                 <td th:text="${agent.agentId}">001</td>
                                 <td th:text="${agent.teamDetail.teamName}">A Team</td>
                                 <td th:text="${agent.agentProfile.nrcNumberInString}">Lusaka</td>
-                                <td th:text="${agent.teamDetail.leaderFirstName}">South</td>
+                                <td th:text="${agent.teamDetail.leaderFirstName+' '+agent.teamDetail.leaderLastName}">South</td>
                             </tr>
                             <!--/*-->
                             <tr>

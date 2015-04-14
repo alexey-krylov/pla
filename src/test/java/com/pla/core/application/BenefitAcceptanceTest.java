@@ -36,7 +36,7 @@ import static org.junit.Assert.assertTrue;
  * @since 1.0 05/03/2015
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = "classpath:queryTestContext.xml")
+@ContextConfiguration(locations = "classpath*:queryTestContext.xml")
 @TestExecutionListeners({DependencyInjectionTestExecutionListener.class, DbUnitTestExecutionListener.class})
 public class BenefitAcceptanceTest {
 

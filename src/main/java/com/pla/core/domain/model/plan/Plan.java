@@ -1,11 +1,13 @@
 package com.pla.core.domain.model.plan;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
-import com.mongodb.BasicDBObjectBuilder;
-import com.mongodb.DBObject;
+import com.pla.core.domain.event.PlanCreatedEvent;
+import com.pla.core.domain.event.PlanDeletedEvent;
 import com.pla.sharedkernel.domain.model.CoverageTermType;
 import com.pla.sharedkernel.domain.model.PolicyTermType;
 import com.pla.sharedkernel.domain.model.PremiumTermType;
@@ -21,10 +23,10 @@ import org.axonframework.eventsourcing.EventSourcedEntity;
 import org.axonframework.eventsourcing.annotation.AggregateIdentifier;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.Transient;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import javax.persistence.Id;
-import javax.persistence.Transient;
 import java.math.BigDecimal;
 import java.util.*;
 import java.util.function.Predicate;
@@ -38,13 +40,14 @@ import java.util.stream.Collectors;
 @Document(collection = "PLAN")
 @Getter
 @ToString(exclude = {"logger"})
-@EqualsAndHashCode(exclude = {"logger", "specification"}, callSuper = false)
+@EqualsAndHashCode(exclude = {"logger", "specification"}, callSuper = false, doNotUseGetters = true)
 public class Plan extends AbstractAggregateRoot<PlanId> {
 
     private static final Logger logger = LoggerFactory.getLogger(Plan.class);
 
     @Id
     @AggregateIdentifier
+    @JsonSerialize(using = ToStringSerializer.class)
     private PlanId planId;
     private PlanDetail planDetail;
     @Transient
@@ -56,7 +59,6 @@ public class Plan extends AbstractAggregateRoot<PlanId> {
     private Term premiumTerm;
     private Term policyTerm;
     private Set<PlanCoverage> coverages = new HashSet<PlanCoverage>();
-
 
     Plan() {
 
@@ -84,6 +86,7 @@ public class Plan extends AbstractAggregateRoot<PlanId> {
 
         });
         Preconditions.checkState(specification.checkCoverageTerm(this, allTerms));
+        super.registerEvent(new PlanCreatedEvent(planId));
     }
 
     public static PlanBuilder builder() {
@@ -242,11 +245,8 @@ public class Plan extends AbstractAggregateRoot<PlanId> {
         return planId;
     }
 
-    public DBObject getAsDBObject() {
-        return new BasicDBObjectBuilder().append("planId", planId).append("planDetail", planDetail)
-                .append("policyTermType", policyTermType)
-                .append("sumAssured", sumAssured)
-                .append("premiumTerm", premiumTerm)
-                .append("coverages", coverages).get();
+    public void delete() {
+        super.markDeleted();
+        super.registerEvent(new PlanDeletedEvent(this.planId));
     }
 }
