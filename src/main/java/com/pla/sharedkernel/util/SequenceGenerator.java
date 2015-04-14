@@ -41,7 +41,7 @@ public class SequenceGenerator {
 
 
     @Transactional
-    public String getId(Class clazz) {
+    public String getSequence(Class clazz) {
         Map<String, Object> entitySequence = masterFinder.getEntitySequenceFor(clazz);
         if (entitySequence == null) {
             throw new RuntimeException("Entity sequence not found for class:" + clazz);
@@ -49,6 +49,6 @@ public class SequenceGenerator {
         Integer sequenceNumber = ((Integer) entitySequence.get("sequenceNumber")) + 1;
         String sequence = (String) entitySequence.get("sequencePrefix") + sequenceNumber;
         jdbcTemplate.update(UPDATE_ENTITY_SEQUENCE_QUERY, new Object[]{sequenceNumber, entitySequence.get("sequenceId")});
-        return sequence;
+        return sequence.trim();
     }
 }

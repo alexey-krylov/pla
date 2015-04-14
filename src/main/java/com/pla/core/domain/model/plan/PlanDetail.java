@@ -1,6 +1,5 @@
 package com.pla.core.domain.model.plan;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.pla.sharedkernel.domain.model.ClientType;
 import com.pla.sharedkernel.domain.model.EndorsementType;
 import com.pla.sharedkernel.domain.model.PlanType;
@@ -31,9 +30,7 @@ public class PlanDetail {
     private static final Logger logger = LoggerFactory.getLogger(PlanDetail.class);
     String planName;
     String planCode;
-    @JsonIgnore
     LocalDate launchDate;
-    @JsonIgnore
     LocalDate withdrawalDate;
     int freeLookPeriod = 15;
     int minEntryAge;

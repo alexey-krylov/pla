@@ -6,6 +6,9 @@
 
 package com.pla.core.domain.model.plan.premium;
 
+import com.pla.core.domain.model.generalinformation.DiscountFactorOrganizationInformation;
+import com.pla.core.domain.model.generalinformation.ModelFactorOrganizationInformation;
+import com.pla.publishedlanguage.domain.model.PremiumInfluencingFactor;
 import com.pla.sharedkernel.domain.model.PremiumFactor;
 import com.pla.sharedkernel.domain.model.PremiumRateFrequency;
 import com.pla.sharedkernel.identifier.CoverageId;
@@ -16,6 +19,7 @@ import org.joda.time.LocalDate;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -43,6 +47,7 @@ public class Premium {
 
     private CoverageId coverageId;
 
+    @Getter
     private Set<PremiumItem> premiumItems;
 
     private LocalDate effectiveFrom;
@@ -99,5 +104,52 @@ public class Premium {
         public PremiumItem apply(Map<Map<PremiumInfluencingFactor, String>, Double> premiumExcelLineItem) {
             return PremiumItem.createCoveragePremiumItem(premiumExcelLineItem);
         }
+    }
+
+    public BigDecimal getAnnualPremium(PremiumItem premiumItem, Set<DiscountFactorOrganizationInformation> discountFactorItems) {
+        BigDecimal premiumAmount = getAllowedPremiumAmount(premiumItem);
+        if (PremiumRateFrequency.YEARLY.equals(premiumRateFrequency)) {
+            return premiumAmount;
+        }
+        premiumAmount = premiumAmount.multiply(DiscountFactorOrganizationInformation.getAnnualDiscountFactor(discountFactorItems)).setScale(2, BigDecimal.ROUND_HALF_UP);
+        return premiumAmount;
+    }
+
+    public BigDecimal getMonthlyPremium(PremiumItem premiumItem, Set<ModelFactorOrganizationInformation> modelFactorItems) {
+        BigDecimal premiumAmount = getAllowedPremiumAmount(premiumItem);
+        if (PremiumRateFrequency.MONTHLY.equals(premiumRateFrequency)) {
+            return premiumAmount;
+        }
+        premiumAmount = premiumAmount.multiply(ModelFactorOrganizationInformation.getMonthlyModalFactor(modelFactorItems)).setScale(2, BigDecimal.ROUND_HALF_UP);
+        return premiumAmount;
+    }
+
+    public BigDecimal getQuarterlyPremium(PremiumItem premiumItem, Set<ModelFactorOrganizationInformation> modelFactorItems, Set<DiscountFactorOrganizationInformation> discountFactorItems) {
+        BigDecimal premiumAmount = getAllowedPremiumAmount(premiumItem);
+        if (PremiumRateFrequency.MONTHLY.equals(premiumRateFrequency)) {
+            premiumAmount = premiumAmount.multiply(DiscountFactorOrganizationInformation.getQuarterlyDiscountFactor(discountFactorItems)).setScale(2, BigDecimal.ROUND_HALF_UP);
+            return premiumAmount;
+        }
+        premiumAmount = premiumAmount.multiply(ModelFactorOrganizationInformation.getQuarterlyModalFactor(modelFactorItems)).setScale(2, BigDecimal.ROUND_HALF_UP);
+        return premiumAmount;
+    }
+
+    public BigDecimal getSemiAnnuallyPremium(PremiumItem premiumItem, Set<ModelFactorOrganizationInformation> modelFactorItems, Set<DiscountFactorOrganizationInformation> discountFactorItems) {
+        BigDecimal premiumAmount = getAllowedPremiumAmount(premiumItem);
+        if (PremiumRateFrequency.MONTHLY.equals(premiumRateFrequency)) {
+            premiumAmount = premiumAmount.multiply(DiscountFactorOrganizationInformation.getSemiAnnualDiscountFactor(discountFactorItems)).setScale(2, BigDecimal.ROUND_HALF_UP);
+            return premiumAmount;
+        }
+        premiumAmount = premiumAmount.multiply(ModelFactorOrganizationInformation.getSemiAnnualModalFactor(modelFactorItems)).setScale(2, BigDecimal.ROUND_HALF_UP);
+        return premiumAmount;
+    }
+
+    private BigDecimal getAllowedPremiumAmount(PremiumItem premiumItem) {
+        BigDecimal premiumAmount = premiumItem.getPremium();
+        if (PremiumFactor.PER_THOUSAND.equals(premiumFactor)) {
+            premiumAmount = premiumItem.getSumAssuredValue().multiply(premiumItem.getPremium());
+            premiumAmount = premiumAmount.divide(new BigDecimal(1000)).setScale(2, BigDecimal.ROUND_HALF_UP);
+        }
+        return premiumAmount;
     }
 }

@@ -1,0 +1,22 @@
+db.premium.find(
+{
+  'planId.planId':"551bd46c88604220872bb22b",
+  $and:
+  [
+    {
+      $and:
+        [
+          {'premiumItems.premiumInfluencingFactorLineItems.premiumInfluencingFactor': "AGE"},
+          {'premiumItems.premiumInfluencingFactorLineItems.value': "19"}
+        ]
+    },
+    {
+    $and:
+      [
+        {'premiumItems.premiumInfluencingFactorLineItems.premiumInfluencingFactor': "SUM_ASSURED"},
+        {'premiumItems.premiumInfluencingFactorLineItems.value': "10000000"}
+      ]
+    }
+  ]
+}
+)

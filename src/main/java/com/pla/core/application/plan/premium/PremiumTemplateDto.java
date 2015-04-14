@@ -6,7 +6,7 @@
 
 package com.pla.core.application.plan.premium;
 
-import com.pla.core.domain.model.plan.premium.PremiumInfluencingFactor;
+import com.pla.publishedlanguage.domain.model.PremiumInfluencingFactor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;

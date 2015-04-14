@@ -24,7 +24,6 @@ import static org.nthdimenzion.utils.UtilValidator.isNotEmpty;
 @Document(collection = "organization_information")
 @Getter
 @Setter(value = AccessLevel.PACKAGE)
-@ToString(exclude = {"logger"})
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 @EqualsAndHashCode
 public class OrganizationGeneralInformation {

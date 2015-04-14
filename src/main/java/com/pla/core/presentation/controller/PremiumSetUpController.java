@@ -14,7 +14,7 @@ import com.pla.core.application.plan.premium.PremiumTemplateDto;
 import com.pla.core.application.service.plan.premium.PremiumService;
 import com.pla.core.domain.model.plan.Plan;
 import com.pla.core.repository.PlanRepository;
-import com.pla.core.domain.model.plan.premium.PremiumInfluencingFactor;
+import com.pla.publishedlanguage.domain.model.PremiumInfluencingFactor;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.poifs.filesystem.POIFSFileSystem;
 import org.axonframework.commandhandling.gateway.CommandGateway;
@@ -62,7 +62,7 @@ public class PremiumSetUpController {
     @ResponseBody
     public ModelAndView viewPremiums() {
         ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("/premium/viewPremium");
+        modelAndView.setViewName("pla/core/premium/viewPremium");
         modelAndView.addObject(premiumService.getAllPremium());
         return modelAndView;
     }
@@ -110,7 +110,7 @@ public class PremiumSetUpController {
 
     @RequestMapping(value = "/verifypremiumdata", method = RequestMethod.POST)
     @ResponseBody
-    public Result validatePremiumData(PremiumTemplateDto premiumTemplateDto, HttpServletRequest servletRequest, HttpServletResponse response) throws IOException {
+    public Result validatePremiumData(PremiumTemplateDto premiumTemplateDto, HttpServletResponse response) throws IOException {
         Plan plan = planRepository.findByPlanId(premiumTemplateDto.getPlanId());
         String templateFileName = plan.getPlanDetail().getPlanName() + PREMIUM_TEMPLATE_FILE_NAME_SUFFIX;
         MultipartFile file = premiumTemplateDto.getFile();
@@ -126,7 +126,7 @@ public class PremiumSetUpController {
             }
             response.reset();
             response.setContentType("application/msexcel");
-            response.setHeader("content-disposition", "attachment; filename=" + "premiumTemplate.xls" + "");
+            response.setHeader("content-disposition", "attachment; filename=" + templateFileName + "");
             OutputStream outputStream = response.getOutputStream();
             premiumTemplateWorkbook.write(outputStream);
             outputStream.flush();

@@ -49,7 +49,7 @@ public class MasterFinder {
 
     public static final String FIND_ALL_INDUSTRY_QUERY = "SELECT * FROM industry";
 
-    public static final String FIND_ALL_OCCUPATION_CATEGORY_QUERY = "SELECT * FROM `occuptation_category`";
+    public static final String FIND_ALL_OCCUPATION_CLASS_QUERY = "SELECT * FROM `occupation_class`";
 
     public static final String FIND_ALL_DESIGNATION_QUERY = "SELECT * FROM `designation`";
 
@@ -82,8 +82,8 @@ public class MasterFinder {
         return namedParameterJdbcTemplate.query(FIND_ALL_INDUSTRY_QUERY, new ColumnMapRowMapper());
     }
 
-    public List<Map<String, Object>> getAllOccupationCategory() {
-        return namedParameterJdbcTemplate.query(FIND_ALL_OCCUPATION_CATEGORY_QUERY, new ColumnMapRowMapper());
+    public List<Map<String, Object>> getAllOccupationClass() {
+        return namedParameterJdbcTemplate.query(FIND_ALL_OCCUPATION_CLASS_QUERY, new ColumnMapRowMapper());
     }
 
 

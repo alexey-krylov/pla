@@ -33,6 +33,7 @@ public interface AppConstants {
     String REGIONAL_MANAGER_DESIGNATION = "REGIONAL_MANAGER";
 
     String BRANCH_BDE_DESIGNATION = "BRANCH_BDE";
+
     String PREMIUM_CELL_HEADER_NAME = "Premium";
 
     String ERROR_CELL_HEADER_NAME = "Error Message";
