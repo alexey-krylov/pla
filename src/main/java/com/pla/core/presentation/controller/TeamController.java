@@ -3,6 +3,7 @@ package com.pla.core.presentation.controller;
 import com.pla.core.application.CreateTeamCommand;
 import com.pla.core.application.InactivateTeamCommand;
 import com.pla.core.application.UpdateTeamCommand;
+import com.pla.core.domain.exception.TeamDomainException;
 import com.pla.core.query.MasterFinder;
 import com.pla.core.query.TeamFinder;
 import com.pla.publishedlanguage.contract.ISMEGateway;
@@ -105,6 +106,9 @@ public class TeamController {
             UserDetails userDetails = getLoggedInUSerDetail(request);
             createTeamCommand.setUserDetails(userDetails);
             commandGateway.sendAndWait(createTeamCommand);
+        } catch (TeamDomainException e) {
+            LOGGER.error("Error in creating team", e);
+            return Result.failure(e.getMessage());
         } catch (Exception e) {
             LOGGER.error("Error in creating team", e);
             return Result.failure("Error in creating team");
