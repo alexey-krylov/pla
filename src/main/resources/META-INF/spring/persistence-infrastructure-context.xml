@@ -13,6 +13,12 @@
             <mongo:converter>
                 <bean class="com.pla.core.repository.ObjectIdToPlanIdConverter"/>
             </mongo:converter>
+            <mongo:converter>
+                <bean class="com.pla.core.repository.LocalDateToStringConverter"/>
+            </mongo:converter>
+            <mongo:converter>
+                <bean class="com.pla.core.repository.StringToLocalDateConverter"/>
+            </mongo:converter>
         </mongo:custom-converters>
     </mongo:mapping-converter>
 

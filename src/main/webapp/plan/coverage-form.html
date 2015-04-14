@@ -1,0 +1,361 @@
+<div>
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close" ng-click="cancel()"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">New Coverage</h4>
+    </div>
+    <div class="modal-body">
+        <form name="coverageForm" ng-submit="submitForm(coverageForm.$valid)" novalidate>
+            <div class="row">
+                <div class="control-group required col-md-2">
+                    <label class="control-label">Coverage</label>
+
+                    <div class="controls">
+                        <select ng-model="newCoverage.coverageId" name="newCoverage"
+                                ng-options="item.coverageId as item.coverageName for item in coverageList"
+                                class="form-control input-sm  col-sm-3" ng-required="true">
+                        </select>
+                    </div>
+                </div>
+                <div class="required col-md-3">
+                    <label class="control-label">Cover Type</label>
+
+                    <div class="radio">
+                        <label>
+                            <input type="radio" name="coverType" ng-model="newCoverage.coverageCover"
+                                   value="ACCELERATED"/> Accelerated
+                        </label>
+                        <label>
+                            <input type="radio" name="coverType" ng-model="newCoverage.coverageCover"
+                                   value="ADDITIONAL" ng-required="true"/> Additional
+                        </label>
+                    </div>
+                    <div class="error"
+                         ng-show="step5.coverType.$dirty &amp;&amp; step5.coverType.$invalid">
+                        <small class="error"
+                               ng-show="step5.coverType.$error.required">
+                            Please indicate cover type.
+                        </small>
+                    </div>
+                </div>
+                <div class="control-group required col-md-4">
+                    <label class="control-label">Deductible Type</label>
+
+                    <div class="controls">
+                        <label class="radio-inline">
+                            <input type="radio" name="deductibleType"
+                                   ng-model="newCoverage.deductibleType" value="AMOUNT"/>Amount
+                        </label>
+                        <label class="radio-inline">
+                            <input type="radio" name="deductibleType"
+                                   ng-model="newCoverage.deductibleType" value="PERCENTAGE" ng-required="true"/>% of
+                            Claimed
+                            Amount
+                        </label>
+
+                        <div class="error"
+                             ng-show="step5.deductibleType.$dirty &amp;&amp; step5.deductibleType.$invalid">
+                            <small class="error"
+                                   ng-show="step5.deductibleType.$error.required">
+                                Please select the Deductible type.
+                            </small>
+                        </div>
+                    </div>
+                </div>
+                <div class="control-group required col-md-2">
+                    <label class="control-label">Minimum Entry Age</label>
+
+                    <div class="controls">
+                        <input type="number" ng-model="newCoverage.minAge" class="form-control input-sm"
+                               ng-required="true" name="minEntryAge" min="{{plan.planDetail.minEntryAge}}"
+                               max="{{plan.planDetail.maxEntryAge}}"/>
+
+                        <div ng-show="coverageForm.minEntryAge.$dirty &amp;&amp; coverageForm.minEntryAge.$invalid">
+                            <small class="error" ng-show="coverageForm.minEntryAge.$error.min">
+                                Minimum age cannot be less than Plan Entry Minimum Age.
+                            </small>
+                            <small class="error" ng-show="coverageForm.minEntryAge.$error.max">
+                                Minimum age cannot be greater than Plan Entry Maximum Entry Age.
+                            </small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="control-group required col-md-2">
+                    <label class="control-label">Coverage Type</label>
+
+                    <div class="controls">
+                        <label class="radio-inline">
+                            <input type="radio" name="coverageType" ng-model="newCoverage.coverageType"
+                                   value="BASE"/> Base
+                        </label>
+                        <label class="radio-inline">
+                            <input type="radio" name="coverageType" ng-model="newCoverage.coverageType"
+                                   value="OPTIONAL" ng-required="true"/> Optional
+                        </label>
+
+                        <div class="error"
+                             ng-show="step5.coverageType.$dirty &amp;&amp; step5.coverageType.$invalid">
+                            <small class="error"
+                                   ng-show="step5.coverageType.$error.required">
+                                Please select the Coverage type.
+                            </small>
+                        </div>
+                    </div>
+                </div>
+                <div class="control-group required col-md-3">
+                    <label class="control-label">Tax Applicable</label>
+
+                    <div class="controls">
+                        <label class="radio-inline">
+                            <input type="radio" value="true" name="taxApplicable" ng-model="newCoverage.taxApplicable"/>Yes
+                        </label>
+                        <label class="radio-inline">
+                            <input type="radio" value="false" name="taxApplicable" ng-model="newCoverage.taxApplicable" ng-required="true"/>No
+                        </label>
+
+                        <div class="error"
+                             ng-show="step5.taxApplicable.$dirty &amp;&amp; step5.taxApplicable.$invalid">
+                            <small class="error"
+                                   ng-show="step5.taxApplicable.$error.required">
+                                Please indicate whether taxes are applicable for the coverage.
+                            </small>
+                        </div>
+                    </div>
+                </div>
+                <div class="control-group col-md-2">
+                    <label class="control-label">Deductible</label>
+
+                    <div class="controls">
+                        <input type="number"
+                               ng-model="newCoverage.deductiblePercentage"
+                               class="form-control input-sm"/>
+                    </div>
+                </div>
+                <div class="control-group col-md-2">
+                    <label class="control-label">Waiting Period</label>
+
+                    <div class="controls">
+                        <input type="text" ng-pattern="onlyNumbers" ng-model="newCoverage.waitingPeriod"
+                               class="form-control input-sm"/>
+
+                        <p class="help">(in years)</p>
+                    </div>
+                </div>
+                <div class="control-group required col-md-2">
+                    <label class="control-label">Maximum Entry Age</label>
+
+                    <div class="controls">
+                        <input type="number" ng-model="newCoverage.maxAge" class="form-control input-sm" name="maxEntryAge"
+                               ng-required="true" min="{{newCoverage.minAge}}" max="{{plan.planDetail.maxEntryAge}}"/>
+
+                        <div ng-show="coverageForm.maxEntryAge.$dirty &amp;&amp; coverageForm.maxEntryAge.$invalid">
+                            <small class="error" ng-show="coverageForm.maxEntryAge.$error.max">
+                                Maximum age cannot be greater than Plan Entry Minimum age.
+                            </small>
+                            <small class="error" ng-show="coverageForm.maxEntryAge.$error.min">
+                                Maximum age cannot be less than Minimum age.
+                            </small>
+                            <small class="error" ng-show="coverageForm.maxEntryAge.$error.number">Please
+                                enter Numbers only.
+                            </small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <hr/>
+            <div class="row">
+                <div class="control-group required col-md-3">
+                    <label class="control-label">Sum Assured Type</label>
+                    <select ng-model="newCoverage.coverageSumAssured.sumAssuredType"
+                            class="form-control input-sm col-sm-3" name="sumAssured" ng-required="true">
+                        <option value="SPECIFIED_VALUES">Specified Values</option>
+                        <option value="RANGE">Specified Range</option>
+                        <option value="DERIVED">% of the Product Sum Assured</option>
+                    </select>
+                </div>
+                <div class="animate-switch-container col-md-9" ng-switch="" on="newCoverage.coverageSumAssured.sumAssuredType">
+                    <div class="control-group required col-md-9" ng-switch-when="SPECIFIED_VALUES">
+                        <label class="control-label">Sum Assured Value</label>
+
+                        <div class="controls">
+                            <tags-input class="col-md-12"
+                                        ng-model="newCoverage.coverageSumAssured.sumAssuredValue"
+                                        placeholder="Add a number"
+                                        min-tags="1"
+                                        allow-leftover-text="false"
+                                        allowed-tags-pattern="^[0-9]+$"></tags-input>
+                        </div>
+                    </div>
+                    <div class="control-group required col-md-3" ng-switch-when="RANGE">
+                        <label class="control-label">Minimum Sum Assured</label>
+
+                        <div class="controls">
+                            <input type="text" ng-model="newCoverage.coverageSumAssured.minSumInsured"
+                                   name="minSumAssured"
+                                   class="form-control input-sm"
+                                   ng-pattern="onlyNumbers"
+                                   ng-required="true"/>
+                        </div>
+                    </div>
+                    <div class="control-group required col-md-3" ng-switch-when="RANGE">
+                        <label class="control-label">Maximum Sum Assured</label>
+
+                        <div class="controls">
+                            <input type="text" ng-model="newCoverage.coverageSumAssured.maxSumInsured"
+                                   class="form-control input-sm"
+                                   ng-pattern="onlyNumbers"
+                                   ng-required="true"/>
+                        </div>
+                    </div>
+                    <div class="control-group col-md-3" ng-switch-when="RANGE">
+                        <label class="control-label">Multiples Of</label>
+
+                        <div class="controls">
+                            <select ng-model="newCoverage.coverageSumAssured.multiplesOf"
+                                    ng-required="true"
+                                    class="form-control input-sm">
+                                <option value="1000">1000</option>
+                                <option value="10000">10000</option>
+                                <option value="100000">100000</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="control-group required col-md-3" ng-switch-when="DERIVED">
+                        <label class="control-label">% of Plan Sum Assured</label>
+
+                        <div class="controls">
+                            <input type="text" ng-model="newCoverage.coverageSumAssured.percentage"
+                                   class="form-control input-sm"
+                                   ng-pattern="onlyNumbers"
+                                   ng-required="true"/>
+                        </div>
+                    </div>
+                    <div class="control-group required col-md-3" ng-switch-when="DERIVED">
+                        <label class="control-label">Max Limit</label>
+
+                        <div class="controls">
+                            <input type="text" ng-model="newCoverage.coverageSumAssured.maxLimit"
+                                   class="form-control input-sm"
+                                   ng-pattern="onlyNumbers"
+                                   ng-required="true"/>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <hr/>
+            <div class="row">
+                <div class="control-group required col-md-3">
+                    <label class="control-label">Coverage Term Type</label>
+
+                    <div class="controls">
+                        <select ng-model="newCoverage.coverageTermType"
+                                class="form-control input-sm" ng-required="true" name="coverageTermType">
+                            <option value="SPECIFIED_VALUES">Specified Values</option>
+                            <option value="AGE_DEPENDENT">Maturity Age Dependent</option>
+                            <option value="POLICY_TERM">Policy Term</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-9 animate-switch-container" ng-switch="" on="newCoverage.coverageTermType">
+                    <div class="control-group required col-md-9 animate-switch" ng-switch-when="AGE_DEPENDENT">
+                        <label class="control-label">Maturity Age</label>
+
+                        <div class="controls">
+                            <tags-input class="col-md-12"
+                                        ng-model="newCoverage.coverageTerm.maturityAges"
+                                        min-tags="1" placeholder="Add a number"
+                                        allow-leftover-text="false"
+                                        allowed-tags-pattern="^[0-9]+$"></tags-input>
+                        </div>
+                    </div>
+                    <div class="animate-switch" ng-switch-when="SPECIFIED_VALUES">
+                        <div class="control-group required col-md-9">
+                            <label class="control-label">Coverage Term Values</label>
+
+                            <div class="controls">
+                                <tags-input class="col-md-12"
+                                            ng-model="newCoverage.coverageTerm.validTerms"
+                                            min-tags="1" placeholder="Add a number"
+                                            allow-leftover-text="false"
+                                            allowed-tags-pattern="^[0-9]+$"></tags-input>
+                            </div>
+                        </div>
+                        <div class="control-group required col-md-3">
+                            <label class="control-label">Maximum Maturity Age</label>
+
+                            <div class="controls">
+                                <input type="number" ng-model="newCoverage.coverageTerm.maxMaturityAge"
+                                       class="form-control" name="maxMaturityAge" max="{{newCoverage.maxAge}}"
+                                       ng-required="true"/>
+
+                                <div ng-show="coverageForm.maxMaturityAge.$dirty &amp;&amp; coverageForm.maxMaturityAge.$invalid">
+                                    <small class="error" ng-show="coverageForm.maxMaturityAge.$error.max">
+                                        Maximum Age cannot be greater than Maximum Entry Age.
+                                    </small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <hr/>
+            <div>
+                <button class="btn btn-default btn-sm" ng-click="addMaturityRow(newCoverage)">
+                    <span class="glyphicon glyphicon-plus">More Rows</span>
+                </button>
+                <table class="table table-bordered table-condensed  table-striped">
+                    <thead>
+                    <tr>
+                        <td><label>Partial Maturity Year</label></td>
+                        <td><label>Guaranteed Survival Benefit</label>
+
+                            <p class="help">Guaranteed periodic survival benefit Amount
+                                (Percentage Of Sum Insured)</p>
+                        </td>
+                        <td></td>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr ng-repeat="newMaturityAmount in newCoverage.maturityAmounts">
+                        <td>
+                            <input type="number" ng-model="newMaturityAmount.maturityYear"
+                                   class="form-control input-sm" max="{{maxEntryAge}}"
+                                   ng-pattern="onlyNumbers" ng-required="true"/>
+                        </td>
+                        <td>
+                            <input type="text" ng-model="newMaturityAmount.guaranteedSurvivalBenefitAmount"
+                                   class="form-control input-sm"
+                                   ng-pattern="onlyNumbers" ng-required="true"/>
+
+                        </td>
+                        <td>
+                            <button type="button" class="btn btn-default btn-xs btn-danger"
+                                    ng-click="removeMaturityRow(newCoverage,$index)">Remove
+                            </button>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            <p class="pager" style="line-height:10px;">
+                <button type="button btn-primary" ng-if="!editFlag" class="btn btn-primary" tooltip="Please fill all mandatory fields."
+                        ng-click="addCoverage(newCoverage)" ng-disabled="coverageForm.$invalid">Add
+                </button>
+                <button type="button btn-primary" ng-if="editFlag" class="btn btn-primary" tooltip="Please fill all mandatory fields."
+                        ng-click="cancel()" ng-disabled="coverageForm.$invalid">Save
+                </button>
+            </p>
+        </form>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-default" ng-click="cancel()" data-dismiss="modal">Close</button>
+    </div>
+</div>
+<style>
+    .modal-dialog {
+        width: 62%
+    }
+</style>
+<!-- /.modal-content -->

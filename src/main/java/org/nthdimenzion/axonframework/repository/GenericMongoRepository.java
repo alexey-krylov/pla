@@ -62,7 +62,6 @@ public class GenericMongoRepository<T extends AggregateRoot> extends AbstractRep
                 .withGetterVisibility(JsonAutoDetect.Visibility.NONE)
                 .withSetterVisibility(JsonAutoDetect.Visibility.NONE)
                 .withCreatorVisibility(JsonAutoDetect.Visibility.ANY));
-
     }
 
     @Override
