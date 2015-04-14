@@ -6,6 +6,7 @@ import com.pla.sharedkernel.domain.model.CommissionDesignation;
 import com.pla.sharedkernel.domain.model.CommissionTermType;
 import com.pla.sharedkernel.domain.model.CommissionType;
 import com.pla.sharedkernel.identifier.PlanId;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import org.joda.time.LocalDate;
@@ -23,6 +24,7 @@ import java.util.stream.Collectors;
  */
 @Getter
 @Setter
+@EqualsAndHashCode(of = {"commissionId", "planId", "planName", "availableFor", "commissionType", "fromDate"})
 public class CommissionDto {
 
     String commissionId;
@@ -30,7 +32,6 @@ public class CommissionDto {
     String planName;
     CommissionDesignation availableFor;
     CommissionType commissionType;
-    CommissionTermType termType;
     LocalDate fromDate;
     Set<CommissionTermDto> commissionTermSet;
 
@@ -49,7 +50,6 @@ public class CommissionDto {
         commissionDto.setPlanName((String) (planDetail.get("planName")));
         commissionDto.setAvailableFor(CommissionDesignation.valueOf((String) commission.get("availableFor")));
         commissionDto.setCommissionType(CommissionType.valueOf((String) commission.get("commissionType")));
-        commissionDto.setTermType(CommissionTermType.valueOf((String) commission.get("commissionTermType")));
         commissionDto.setFromDate(new LocalDate(commission.get("fromDate")));
         List<Map<String, Object>> commissionTermsByCommissionId = allCommissionTerms.stream().filter(new FilterCommissionTermByCommissionId((String) commission.get("commissionId"))).collect(Collectors.toList());
         commissionDto.setCommissionTermSet(commissionTermsByCommissionId.stream().map(new CommissionTermTransformer()).collect(Collectors.toSet()));
@@ -58,6 +58,7 @@ public class CommissionDto {
 
     public static CommissionTermDto transformInToCommissionTermDto(Map<String, Object> commissionTermDtos) {
         CommissionTermDto commissionTermDto = new CommissionTermDto();
+        commissionTermDto.setCommissionTermType(CommissionTermType.valueOf(commissionTermDtos.get("commissionTermType").toString()));
         commissionTermDto.setCommissionPercentage((BigDecimal) (commissionTermDtos.get("commissionPercentage")));
         commissionTermDto.setStartYear((Integer) commissionTermDtos.get("startYear"));
         commissionTermDto.setEndYear((Integer) commissionTermDtos.get("endYear"));
@@ -97,12 +98,7 @@ public class CommissionDto {
 
         @Override
         public boolean test(Map<String, Object> commissionTerms) {
-            return commissionId.equals((String) commissionTerms.get("commissionId"));
+            return commissionId.equals(commissionTerms.get("commissionId"));
         }
-    }
-
-    @Override
-    public String toString() {
-        return planId+" "+commissionId+" "+planName+" "+" "+termType+" "+fromDate;
     }
 }

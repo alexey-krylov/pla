@@ -1,9 +1,7 @@
 package com.pla.core.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import com.pla.sharedkernel.domain.model.CommissionTermType;
+import lombok.*;
 
 import java.math.BigDecimal;
 
@@ -14,7 +12,10 @@ import java.math.BigDecimal;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@EqualsAndHashCode(of = {"startYear", "endYear", "commissionPercentage", "commissionTermType"})
 public class CommissionTermDto {
+
+    CommissionTermType commissionTermType;
 
     private Integer startYear;
 

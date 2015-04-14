@@ -23,7 +23,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import static org.mockito.Mockito.when;
 
 /**
- * @author: Samir
+ * @author: Nischitha
  * @since 1.0 10/03/2015
  */
 @RunWith(MockitoJUnitRunner.class)

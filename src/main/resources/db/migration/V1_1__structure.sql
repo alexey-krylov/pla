@@ -531,13 +531,13 @@ CREATE TABLE `entity_sequence` (
 
 DROP TABLE IF EXISTS `commission`;
 CREATE TABLE `commission` (
-  `commission_id`        VARCHAR(255) NOT NULL,
-  `available_for`        VARCHAR(255) DEFAULT NULL,
-  `commission_term_type` VARCHAR(255) DEFAULT NULL,
-  `commission_type`      VARCHAR(255) DEFAULT NULL,
-  `from_date`            DATE         DEFAULT NULL,
-  `plan_id`              VARCHAR(255) DEFAULT NULL,
-  `thru_date`            DATE         DEFAULT NULL,
+  `commission_id`   VARCHAR(255) NOT NULL,
+  `available_for`   VARCHAR(255) DEFAULT NULL,
+  `commission_type` VARCHAR(255) DEFAULT NULL,
+  `from_date`       DATE         DEFAULT NULL,
+  `plan_id`         VARCHAR(255) DEFAULT NULL,
+  `premium_fee`     VARCHAR(255) DEFAULT NULL,
+  `thru_date`       DATE         DEFAULT NULL,
   PRIMARY KEY (`commission_id`)
 )
   ENGINE =InnoDB
@@ -547,6 +547,7 @@ DROP TABLE IF EXISTS `commission_commission_term`;
 CREATE TABLE `commission_commission_term` (
   `commission_id`         VARCHAR(255) NOT NULL,
   `commission_percentage` DECIMAL(19, 2) DEFAULT NULL,
+  `commission_term_type` VARCHAR(255) DEFAULT NULL,
   `end_year`              INT(11)        DEFAULT NULL,
   `start_year`            INT(11)        DEFAULT NULL,
   KEY `FK_as28e68p5ow4r4rrxui4kx64l` (`commission_id`),
@@ -554,6 +555,7 @@ CREATE TABLE `commission_commission_term` (
 )
   ENGINE =InnoDB
   DEFAULT CHARSET =utf8;
+
 
 DROP VIEW IF EXISTS `agent_team_branch_view`;
 CREATE  VIEW `agent_team_branch_view` AS
@@ -601,7 +603,6 @@ CREATE VIEW `commission_view` AS
      cm.thru_date            AS toDate,
      cm.plan_id              AS planId,
      cm.available_for        AS availableFor,
-     cm.commission_term_type AS commissionTermType,
      cm.commission_type      AS commissionType
    FROM commission cm);
 
@@ -611,7 +612,8 @@ CREATE VIEW `commission_commission_term_view` AS
      cctf.commission_id         AS commissionId,
      cctf.commission_percentage AS commissionPercentage,
      cctf.start_year            AS startYear,
-     cctf.end_year              AS endYear
+     cctf.end_year             AS endYear,
+     cctf.commission_term_type AS commissionTermType
    FROM COMMISSION_COMMISSION_TERM cctf);
 
 
