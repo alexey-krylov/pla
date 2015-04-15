@@ -72,12 +72,17 @@ public class CommissionController {
         }
     }
 
-    @RequestMapping(value = "/opencreatepage", method = RequestMethod.GET)
-    public ModelAndView openCreatePageCommission() {
+    @RequestMapping(value = "/opencreatepage/{commissiontype}", method = RequestMethod.GET)
+    public ModelAndView openCreatePageCommission(@PathVariable("commissiontype") String commissionType) {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("pla/core/commission/createCommission");
         modelAndView.addObject("plans", planFinder.findAllPlan());
         modelAndView.addObject("designation", CommissionDesignation.values());
+        if (commissionType.equals("Override")) {
+            modelAndView.addObject("commissiontype", "Override");
+        } else {
+            modelAndView.addObject("commissiontype", "Normal");
+        }
         return modelAndView;
     }
 
