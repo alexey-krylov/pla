@@ -1,8 +1,9 @@
-package com.pla.quotation.presentation.command.grouplife;
+package com.pla.quotation.application.command.grouplife;
 
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.validator.constraints.NotEmpty;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.validation.constraints.NotNull;
 
@@ -11,7 +12,7 @@ import javax.validation.constraints.NotNull;
  */
 @Getter
 @Setter
-public class CreateGLCommand {
+public class CreateGLQuotationCommand {
 
     @NotNull(message = "{Agent ID cannot be null}")
     @NotEmpty(message = "{Agent ID cannot be empty}")
@@ -27,4 +28,5 @@ public class CreateGLCommand {
 
     private String branchName;
 
+    private UserDetails userDetails;
 }

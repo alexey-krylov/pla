@@ -1,7 +1,7 @@
 package com.pla.quotation.presentation.controller;
 
 import com.pla.quotation.application.service.grouplife.GLQuotationService;
-import com.pla.quotation.presentation.command.grouplife.*;
+import com.pla.quotation.application.command.grouplife.*;
 import com.pla.quotation.query.AgentDetailDto;
 import com.pla.quotation.query.PremiumDetailDto;
 import com.pla.quotation.query.ProposerDto;
@@ -17,12 +17,14 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.Map;
 
 import static com.google.common.base.Preconditions.checkArgument;
+import static org.nthdimenzion.presentation.AppUtils.getLoggedInUSerDetail;
 
 /**
  * Created by Samir on 4/14/2015.
@@ -51,6 +53,13 @@ public class GroupLifeQuotationController {
         return modelAndView;
     }
 
+    @RequestMapping(value = "/getquotationnumber/{quotationId}", method = RequestMethod.GET)
+    @ResponseBody
+    public String getQuotationNumber(@PathVariable("quotationId") String quotationId) {
+        Map quotationMap = GLQuotationFinder.getQuotationById(quotationId);
+        return (String) quotationMap.get("quotationNumber");
+    }
+
     @RequestMapping(value = "/getagentdetail/{agentId}", method = RequestMethod.GET)
     @ResponseBody
     public Result getAgentDetail(@PathVariable("agentId") String agentId) {
@@ -61,12 +70,12 @@ public class GroupLifeQuotationController {
             return Result.failure("Agent not found");
         }
         checkArgument(agentDetail != null);
-        CreateGLCommand createGLCommand = new CreateGLCommand();
-        createGLCommand.setAgentId(agentId);
-        createGLCommand.setBranchName((String) agentDetail.get("branchName"));
-        createGLCommand.setTeamName((String) agentDetail.get("teamName"));
-        createGLCommand.setAgentName((String) agentDetail.get("firstName") + " " + (String) agentDetail.get("lastName"));
-        return Result.success("Agent found", createGLCommand);
+        CreateGLQuotationCommand createGLQuotationCommand = new CreateGLQuotationCommand();
+        createGLQuotationCommand.setAgentId(agentId);
+        createGLQuotationCommand.setBranchName((String) agentDetail.get("branchName"));
+        createGLQuotationCommand.setTeamName((String) agentDetail.get("teamName"));
+        createGLQuotationCommand.setAgentName((String) agentDetail.get("firstName") + " " + (String) agentDetail.get("lastName"));
+        return Result.success("Agent found", createGLQuotationCommand);
     }
 
     @RequestMapping(value = "/getagentdetailfromquotation/{quotationId}", method = RequestMethod.GET)
@@ -85,12 +94,13 @@ public class GroupLifeQuotationController {
 
     @RequestMapping(value = "/createquotation", method = RequestMethod.POST)
     @ResponseBody
-    public Result createQuotation(@RequestBody CreateGLCommand createGLCommand, BindingResult bindingResult) {
+    public Result createQuotation(@RequestBody CreateGLQuotationCommand createGLQuotationCommand, BindingResult bindingResult, HttpServletRequest request) {
         if (bindingResult.hasErrors()) {
             return Result.failure("Create quotation data is not valid", bindingResult.getAllErrors());
         }
         try {
-            String quotationId = commandGateway.sendAndWait(createGLCommand);
+            createGLQuotationCommand.setUserDetails(getLoggedInUSerDetail(request));
+            String quotationId = commandGateway.sendAndWait(createGLQuotationCommand);
             return Result.success("Quotation created successfully", quotationId);
         } catch (Exception e) {
             return Result.failure(e.getMessage());
@@ -99,13 +109,14 @@ public class GroupLifeQuotationController {
 
     @RequestMapping(value = "/updatewithagentdetail", method = RequestMethod.POST)
     @ResponseBody
-    public Result updateQuotationWithAgentDetail(@RequestBody UpdateGLQuotationWithAgentCommand updateGLQuotationWithAgentCommand, BindingResult bindingResult) {
+    public Result updateQuotationWithAgentDetail(@RequestBody UpdateGLQuotationWithAgentCommand updateGLQuotationWithAgentCommand, BindingResult bindingResult, HttpServletRequest request) {
         if (bindingResult.hasErrors()) {
             return Result.failure("Update quotation agent data is not valid", bindingResult.getAllErrors());
         }
         try {
-            commandGateway.sendAndWait(updateGLQuotationWithAgentCommand);
-            return Result.success("Agent detail updated successfully");
+            updateGLQuotationWithAgentCommand.setUserDetails(getLoggedInUSerDetail(request));
+            String quotationId = commandGateway.sendAndWait(updateGLQuotationWithAgentCommand);
+            return Result.success("Agent detail updated successfully", quotationId);
         } catch (Exception e) {
             return Result.failure(e.getMessage());
         }
@@ -113,13 +124,14 @@ public class GroupLifeQuotationController {
 
     @RequestMapping(value = "/updatewithproposerdetail", method = RequestMethod.POST)
     @ResponseBody
-    public Result updateQuotationWithProposerDetail(@RequestBody UpdateGLQuotationWithProposerCommand updateGLQuotationWithProposerCommand, BindingResult bindingResult) {
+    public Result updateQuotationWithProposerDetail(@RequestBody UpdateGLQuotationWithProposerCommand updateGLQuotationWithProposerCommand, BindingResult bindingResult, HttpServletRequest request) {
         if (bindingResult.hasErrors()) {
             return Result.failure("Update quotation proposer data is not valid", bindingResult.getAllErrors());
         }
         try {
-            commandGateway.sendAndWait(updateGLQuotationWithProposerCommand);
-            return Result.success("Proposer detail updated successfully");
+            updateGLQuotationWithProposerCommand.setUserDetails(getLoggedInUSerDetail(request));
+            String quotationId = commandGateway.sendAndWait(updateGLQuotationWithProposerCommand);
+            return Result.success("Proposer detail updated successfully", quotationId);
         } catch (Exception e) {
             return Result.failure();
         }

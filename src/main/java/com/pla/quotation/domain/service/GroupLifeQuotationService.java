@@ -8,6 +8,7 @@ import com.pla.quotation.domain.model.grouplife.Proposer;
 import com.pla.quotation.domain.model.grouplife.ProposerBuilder;
 import com.pla.quotation.query.ProposerDto;
 import com.pla.sharedkernel.identifier.QuotationId;
+import org.bson.types.ObjectId;
 import org.nthdimenzion.ddd.domain.annotations.DomainService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -31,10 +32,11 @@ public class GroupLifeQuotationService {
         this.premiumCalculator = premiumCalculator;
     }
 
-    public GroupLifeQuotation createQuotation(AgentId agentId, String proposerName, UserDetails userDetails) {
+    public GroupLifeQuotation createQuotation(String agentId, String proposerName, UserDetails userDetails) {
         GLQuotationProcessor glQuotationProcessor = quotationRoleAdapter.userToQuotationProcessor(userDetails);
-        QuotationId quotationId = new QuotationId(quotationNumberGenerator.getQuotationNumber("5", "1", GroupLifeQuotation.class));
-        return glQuotationProcessor.createGroupLifeQuotation(glQuotationProcessor.getUserName(), quotationId, agentId, proposerName);
+        QuotationId quotationId = new QuotationId(new ObjectId().toString());
+        String quotationNumber = quotationNumberGenerator.getQuotationNumber("5", "1", GroupLifeQuotation.class);
+        return glQuotationProcessor.createGroupLifeQuotation(quotationNumber, glQuotationProcessor.getUserName(), quotationId, new AgentId(agentId), proposerName);
     }
 
     public GroupLifeQuotation updateWithProposer(GroupLifeQuotation groupLifeQuotation, ProposerDto proposerDto, UserDetails userDetails) {
@@ -46,18 +48,19 @@ public class GroupLifeQuotationService {
         return glQuotationProcessor.updateWithProposer(groupLifeQuotation, proposerBuilder.build());
     }
 
-    public GroupLifeQuotation updateWithAgent(GroupLifeQuotation groupLifeQuotation, AgentId agentId, UserDetails userDetails) {
+    public GroupLifeQuotation updateWithAgent(GroupLifeQuotation groupLifeQuotation, String agentId, UserDetails userDetails) {
         GLQuotationProcessor glQuotationProcessor = quotationRoleAdapter.userToQuotationProcessor(userDetails);
         groupLifeQuotation = checkQuotationNeedForVersioningAndGetQuotation(glQuotationProcessor, groupLifeQuotation);
-        return glQuotationProcessor.updateWithAgentId(groupLifeQuotation, agentId);
+        return glQuotationProcessor.updateWithAgentId(groupLifeQuotation, new AgentId(agentId));
     }
 
     private GroupLifeQuotation checkQuotationNeedForVersioningAndGetQuotation(GLQuotationProcessor glQuotationProcessor, GroupLifeQuotation groupLifeQuotation) {
         if (!groupLifeQuotation.requireVersioning()) {
             return groupLifeQuotation;
         }
-        QuotationId quotationId = new QuotationId(quotationNumberGenerator.getQuotationNumber("5", "1", GroupLifeQuotation.class));
-        return groupLifeQuotation.cloneQuotation(glQuotationProcessor.getUserName(), quotationId);
+        String quotationNumber = quotationNumberGenerator.getQuotationNumber("5", "1", GroupLifeQuotation.class);
+        QuotationId quotationId = new QuotationId(new ObjectId().toString());
+        return groupLifeQuotation.cloneQuotation(quotationNumber, glQuotationProcessor.getUserName(), quotationId);
     }
 
 

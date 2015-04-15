@@ -7,9 +7,13 @@ import com.pla.quotation.domain.event.QuotationGeneratedEvent;
 import com.pla.quotation.domain.model.IQuotation;
 import com.pla.quotation.domain.model.QuotationStatus;
 import com.pla.sharedkernel.identifier.QuotationId;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.axonframework.domain.AbstractAggregateRoot;
 import org.axonframework.eventsourcing.annotation.AggregateIdentifier;
 import org.joda.time.LocalDate;
+import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.Set;
@@ -22,9 +26,11 @@ import static org.nthdimenzion.utils.UtilValidator.isNotEmpty;
  * Created by Samir on 4/7/2015.
  */
 @Document(collection = "group_life_quotation")
+@NoArgsConstructor(access = AccessLevel.PACKAGE)
 public class GroupLifeQuotation extends AbstractAggregateRoot<QuotationId> implements IQuotation {
 
     @AggregateIdentifier
+    @Id
     private QuotationId quotationId;
 
     private String quotationCreator;
@@ -41,12 +47,16 @@ public class GroupLifeQuotation extends AbstractAggregateRoot<QuotationId> imple
 
     private int versionNumber;
 
+    @Getter
+    private String quotationNumber;
+
     private LocalDate generatedOn;
 
     private QuotationId parentQuotationId;
 
-    private GroupLifeQuotation(String quotationCreator, QuotationId quotationId, AgentId agentId, Proposer proposer, QuotationStatus quotationStatus, int versionNumber) {
+    private GroupLifeQuotation(String quotationCreator, String quotationNumber, QuotationId quotationId, AgentId agentId, Proposer proposer, QuotationStatus quotationStatus, int versionNumber) {
         checkArgument(isNotEmpty(quotationCreator));
+        checkArgument(isNotEmpty(quotationNumber));
         checkArgument(quotationId != null);
         checkArgument(agentId != null);
         checkArgument(proposer != null);
@@ -57,9 +67,11 @@ public class GroupLifeQuotation extends AbstractAggregateRoot<QuotationId> imple
         this.proposer = proposer;
         this.quotationStatus = quotationStatus;
         this.versionNumber = versionNumber;
+        this.quotationNumber = quotationNumber;
     }
 
-    private GroupLifeQuotation(String quotationCreator, QuotationId quotationId, int versionNumber, QuotationStatus quotationStatus) {
+    private GroupLifeQuotation(String quotationNumber, String quotationCreator, QuotationId quotationId, int versionNumber, QuotationStatus quotationStatus) {
+        checkArgument(isNotEmpty(quotationNumber));
         checkArgument(isNotEmpty(quotationCreator));
         checkArgument(quotationId != null);
         checkArgument(QuotationStatus.DRAFT.equals(quotationStatus));
@@ -69,8 +81,8 @@ public class GroupLifeQuotation extends AbstractAggregateRoot<QuotationId> imple
         this.quotationStatus = quotationStatus;
     }
 
-    public static GroupLifeQuotation createWithAgentAndProposerDetail(String quotationCreator, QuotationId quotationId, AgentId agentId, Proposer proposer) {
-        return new GroupLifeQuotation(quotationCreator, quotationId, agentId, proposer, QuotationStatus.DRAFT, 0);
+    public static GroupLifeQuotation createWithAgentAndProposerDetail(String quotationNumber, String quotationCreator, QuotationId quotationId, AgentId agentId, Proposer proposer) {
+        return new GroupLifeQuotation(quotationCreator, quotationNumber, quotationId, agentId, proposer, QuotationStatus.DRAFT, 0);
     }
 
     public GroupLifeQuotation updateWithPolicy(Set<Policy> policies) {
@@ -131,8 +143,8 @@ public class GroupLifeQuotation extends AbstractAggregateRoot<QuotationId> imple
         return QuotationStatus.GENERATED.equals(this.quotationStatus);
     }
 
-    public GroupLifeQuotation cloneQuotation(String quotationCreator, QuotationId quotationId) {
-        GroupLifeQuotation newQuotation = new GroupLifeQuotation(quotationCreator, quotationId, this.versionNumber + 1, QuotationStatus.DRAFT);
+    public GroupLifeQuotation cloneQuotation(String quotationNumber, String quotationCreator, QuotationId quotationId) {
+        GroupLifeQuotation newQuotation = new GroupLifeQuotation(quotationCreator, quotationNumber, quotationId, this.versionNumber + 1, QuotationStatus.DRAFT);
         newQuotation.parentQuotationId = this.quotationId;
         newQuotation.proposer = this.proposer;
         newQuotation.agentId = this.agentId;

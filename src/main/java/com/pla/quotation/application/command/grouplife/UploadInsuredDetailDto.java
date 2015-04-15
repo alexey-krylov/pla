@@ -1,6 +1,5 @@
-package com.pla.quotation.presentation.command.grouplife;
+package com.pla.quotation.application.command.grouplife;
 
-import com.pla.sharedkernel.identifier.QuotationId;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.web.multipart.MultipartFile;
@@ -18,5 +17,5 @@ public class UploadInsuredDetailDto {
 
     private MultipartFile file;
 
-    private QuotationId quotationId;
+    private String quotationId;
 }

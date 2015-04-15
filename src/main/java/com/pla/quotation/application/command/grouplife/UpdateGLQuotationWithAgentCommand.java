@@ -1,9 +1,9 @@
-package com.pla.quotation.presentation.command.grouplife;
+package com.pla.quotation.application.command.grouplife;
 
-import com.pla.sharedkernel.identifier.QuotationId;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.validator.constraints.NotEmpty;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.validation.constraints.NotNull;
 
@@ -22,6 +22,7 @@ public class UpdateGLQuotationWithAgentCommand {
     @NotEmpty(message = "{Proposer name cannot be empty}")
     private String proposerName;
 
-    private QuotationId quotationId;
+    private String quotationId;
 
+    private UserDetails userDetails;
 }

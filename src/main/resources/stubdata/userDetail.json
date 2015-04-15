@@ -1,6 +1,7 @@
 {
   "permissions": [
-    "ROLE_ADMIN"
+    "ROLE_ADMIN",
+    "ROLE_GROUP_LIFE_QUOTATION_PROCESSOR"
   ],
   "authorities": [
   ],

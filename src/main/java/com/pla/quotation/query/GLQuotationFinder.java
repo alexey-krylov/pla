@@ -12,6 +12,7 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Service;
 
 import javax.sql.DataSource;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -40,9 +41,14 @@ public class GLQuotationFinder {
 
     public Map getQuotationById(String quotationId) {
         BasicDBObject query = new BasicDBObject();
-        query.put("quotationId.quotationId", quotationId);
+        query.put("_id._id", quotationId);
         Map quotation = mongoTemplate.findOne(new BasicQuery(query), Map.class, "group_life_quotation");
         return quotation;
     }
+
+    public List<Map> getAllQuotation() {
+        return mongoTemplate.findAll(Map.class, "group_life_quotation");
+    }
+
 
 }

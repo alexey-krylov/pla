@@ -1,6 +1,7 @@
 package com.pla.quotation.query;
 
 import com.pla.sharedkernel.identifier.QuotationId;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 import org.joda.time.LocalDate;
@@ -10,6 +11,7 @@ import org.joda.time.LocalDate;
  */
 @Getter
 @Setter
+@AllArgsConstructor
 public class GlQuotationDto {
 
     private QuotationId quotationId;
@@ -23,4 +25,8 @@ public class GlQuotationDto {
     private String agentName;
 
     private QuotationId parentQuotationId;
+
+    private String quotationStatus;
+
+    private String quotationNumber;
 }

@@ -14,6 +14,12 @@
             <mongo:converter>
                 <bean class="com.pla.core.repository.ObjectIdToPlanIdConverter"/>
             </mongo:converter>
+            <mongo:converter>
+                <bean class="com.pla.quotation.repository.QuotationIdToObjectIdConverter"/>
+            </mongo:converter>
+            <mongo:converter>
+                <bean class="com.pla.quotation.repository.ObjectIdToQuotationIdConverter"/>
+            </mongo:converter>
         </mongo:custom-converters>
     </mongo:mapping-converter>
 

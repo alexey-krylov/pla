@@ -21,9 +21,9 @@ public class GLQuotationProcessor {
     }
 
 
-    public GroupLifeQuotation createGroupLifeQuotation(String quotationCreator, QuotationId quotationId, AgentId agentId, String proposerName) {
+    public GroupLifeQuotation createGroupLifeQuotation(String quotationNumber, String quotationCreator, QuotationId quotationId, AgentId agentId, String proposerName) {
         ProposerBuilder proposerBuilder = Proposer.getProposerBuilder(proposerName);
-        return GroupLifeQuotation.createWithAgentAndProposerDetail(quotationCreator, quotationId, agentId, proposerBuilder.build());
+        return GroupLifeQuotation.createWithAgentAndProposerDetail(quotationNumber, quotationCreator, quotationId, agentId, proposerBuilder.build());
     }
 
     public GroupLifeQuotation updateWithAgentId(GroupLifeQuotation groupLifeQuotation, AgentId agentId) {
