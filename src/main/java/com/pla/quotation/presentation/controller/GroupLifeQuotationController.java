@@ -5,6 +5,7 @@ import com.pla.quotation.presentation.command.grouplife.*;
 import com.pla.quotation.query.AgentDetailDto;
 import com.pla.quotation.query.PremiumDetailDto;
 import com.pla.quotation.query.ProposerDto;
+import com.pla.quotation.query.GLQuotationFinder;
 import com.pla.sharedkernel.identifier.QuotationId;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.axonframework.commandhandling.gateway.CommandGateway;
@@ -19,6 +20,9 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.Map;
+
+import static com.google.common.base.Preconditions.checkArgument;
 
 /**
  * Created by Samir on 4/14/2015.
@@ -29,12 +33,15 @@ public class GroupLifeQuotationController {
 
     private CommandGateway commandGateway;
 
-    private GLQuotationService GLQuotationService;
+    private GLQuotationService glQuotationService;
+
+    private GLQuotationFinder GLQuotationFinder;
 
     @Autowired
-    public GroupLifeQuotationController(CommandGateway commandGateway, GLQuotationService GLQuotationService) {
+    public GroupLifeQuotationController(CommandGateway commandGateway, GLQuotationService glQuotationService, GLQuotationFinder GLQuotationFinder) {
         this.commandGateway = commandGateway;
-        this.GLQuotationService = GLQuotationService;
+        this.glQuotationService = glQuotationService;
+        this.GLQuotationFinder = GLQuotationFinder;
     }
 
     @RequestMapping(value = "/creategrouplifequotation", method = RequestMethod.GET)
@@ -46,21 +53,33 @@ public class GroupLifeQuotationController {
 
     @RequestMapping(value = "/getagentdetail/{agentId}", method = RequestMethod.GET)
     @ResponseBody
-    public CreateGLCommand getAgentDetail(@PathVariable("agentId") String agentId) {
-        return new CreateGLCommand();
+    public Result getAgentDetail(@PathVariable("agentId") String agentId) {
+        Map<String, Object> agentDetail = null;
+        try {
+            agentDetail = GLQuotationFinder.getAgentById(agentId);
+        } catch (Exception e) {
+            return Result.failure("Agent not found");
+        }
+        checkArgument(agentDetail != null);
+        CreateGLCommand createGLCommand = new CreateGLCommand();
+        createGLCommand.setAgentId(agentId);
+        createGLCommand.setBranchName((String) agentDetail.get("branchName"));
+        createGLCommand.setTeamName((String) agentDetail.get("teamName"));
+        createGLCommand.setAgentName((String) agentDetail.get("firstName") + " " + (String) agentDetail.get("lastName"));
+        return Result.success("Agent found", createGLCommand);
     }
 
     @RequestMapping(value = "/getagentdetailfromquotation/{quotationId}", method = RequestMethod.GET)
     @ResponseBody
     public AgentDetailDto getAgentDetailFromQuotation(@PathVariable("quotationId") String quotationId) {
-        return GLQuotationService.getAgentDetail(new QuotationId(quotationId));
+        return glQuotationService.getAgentDetail(new QuotationId(quotationId));
     }
 
     @RequestMapping(value = "/listgrouplifequotation", method = RequestMethod.GET)
     public ModelAndView listQuotation() {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("pla/quotation/groupLife/listQuotation");
-        modelAndView.addObject(GLQuotationService.getAllQuotation());
+        modelAndView.addObject(glQuotationService.getAllQuotation());
         return modelAndView;
     }
 
@@ -112,7 +131,7 @@ public class GroupLifeQuotationController {
         response.setContentType("application/msexcel");
         response.setHeader("content-disposition", "attachment; filename=" + "plandetail.xls" + "");
         OutputStream outputStream = response.getOutputStream();
-        HSSFWorkbook planDetailExcel = GLQuotationService.getPlanDetailExcel();
+        HSSFWorkbook planDetailExcel = glQuotationService.getPlanDetailExcel();
         planDetailExcel.write(outputStream);
         outputStream.flush();
         outputStream.close();
@@ -124,7 +143,7 @@ public class GroupLifeQuotationController {
         response.setContentType("application/msexcel");
         response.setHeader("content-disposition", "attachment; filename=" + "insuredTemplate.xls" + "");
         OutputStream outputStream = response.getOutputStream();
-        HSSFWorkbook planDetailExcel = GLQuotationService.getInsuredTemplateExcel();
+        HSSFWorkbook planDetailExcel = glQuotationService.getInsuredTemplateExcel();
         planDetailExcel.write(outputStream);
         outputStream.flush();
         outputStream.close();
@@ -143,13 +162,13 @@ public class GroupLifeQuotationController {
     @RequestMapping(value = "/getpremiumdetail/{quotationid}", method = RequestMethod.GET)
     @ResponseBody
     public PremiumDetailDto getPremiumDetail(@PathVariable("quotationid") String quotationId) {
-        return GLQuotationService.getPremiumDetail(new QuotationId(quotationId));
+        return glQuotationService.getPremiumDetail(new QuotationId(quotationId));
     }
 
     @RequestMapping(value = "/recalculatePremium", method = RequestMethod.POST)
     @ResponseBody
     public PremiumDetailDto reCalculatePremium(@RequestBody PremiumDetailDto premiumDetailDto) {
-        return GLQuotationService.getReCalculatePremium(premiumDetailDto);
+        return glQuotationService.getReCalculatePremium(premiumDetailDto);
     }
 
     @RequestMapping(value = "/updatewithpremiumdetail", method = RequestMethod.POST)
@@ -177,6 +196,6 @@ public class GroupLifeQuotationController {
     @RequestMapping(value = "/getproposerdetail/{quotationId}")
     @ResponseBody
     public ProposerDto getProposerDetail(@PathVariable("quotationId") String quotationId) {
-        return GLQuotationService.getProposerDetail(new QuotationId(quotationId));
+        return glQuotationService.getProposerDetail(new QuotationId(quotationId));
     }
 }

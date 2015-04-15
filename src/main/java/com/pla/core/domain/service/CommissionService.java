@@ -77,7 +77,7 @@ public class CommissionService {
                 LOGGER.error("Error in creating commission", e);
             }
         }
-        Plan plan = planRepository.findByPlanId(planId);
+        Plan plan = planRepository.findOne(new PlanId(planId));
         CommissionId commissionId = new CommissionId(iIdGenerator.nextId());
         Commission commission = admin.createCommission(commissionId, planid, availableFor, commissionType, premiumFee, fromDate);
         Set<CommissionTerm> commissionTerms = commissionTermsDto.stream().map(new CommissionTermTransformer()).collect(Collectors.toSet());
@@ -86,7 +86,7 @@ public class CommissionService {
 
     public Commission updateCommissionTerm(String planId, Commission commission, Set<CommissionTermDto> commissionTermsDto, UserDetails userDetails) {
         Admin admin = adminRoleAdapter.userToAdmin(userDetails);
-        Plan plan = planRepository.findByPlanId(planId);
+        Plan plan = planRepository.findOne(new PlanId(planId));
         Set<CommissionTerm> commissionTerms = commissionTermsDto.stream().map(new CommissionTermTransformer()).collect(Collectors.toSet());
         return admin.updateCommissionTerm(commission, commissionTerms, plan);
 

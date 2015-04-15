@@ -44,6 +44,7 @@ class ProposerContactDetail {
         return this;
     }
 
+    @Getter
     private class ContactPersonDetail {
 
         private String contactPersonName;

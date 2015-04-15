@@ -44,6 +44,8 @@ public final class Result {
 
     private String id;
 
+    private Object data;
+
     private String failureDetails;
 
 
@@ -71,6 +73,12 @@ public final class Result {
 
     public static Result success(String message) {
         return new Result(message, RESULT_TYPE.SUCCESS);
+    }
+
+    public static Result success(String message, Object data) {
+        Result result = new Result(message, RESULT_TYPE.SUCCESS);
+        result.data = data;
+        return result;
     }
 
     public static Result success(String message, String id) {

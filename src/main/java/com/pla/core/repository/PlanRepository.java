@@ -9,7 +9,6 @@ package com.pla.core.repository;
 import com.pla.core.domain.model.plan.Plan;
 import com.pla.sharedkernel.identifier.PlanId;
 import org.springframework.data.mongodb.repository.MongoRepository;
-import org.springframework.data.mongodb.repository.Query;
 
 /**
  * @author: Samir
@@ -17,6 +16,4 @@ import org.springframework.data.mongodb.repository.Query;
  */
 public interface PlanRepository extends MongoRepository<Plan, PlanId> {
 
-    @Query(value = "{'planId.planId' : ?0 }")
-    public Plan findByPlanId(String planId);
 }

@@ -15,6 +15,7 @@ import com.pla.core.application.service.plan.premium.PremiumService;
 import com.pla.core.domain.model.plan.Plan;
 import com.pla.core.repository.PlanRepository;
 import com.pla.publishedlanguage.domain.model.PremiumInfluencingFactor;
+import com.pla.sharedkernel.identifier.PlanId;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.poifs.filesystem.POIFSFileSystem;
 import org.axonframework.commandhandling.gateway.CommandGateway;
@@ -97,7 +98,7 @@ public class PremiumSetUpController {
     public void downloadPremiumTemplate(@RequestBody PremiumTemplateDto premiumTemplateDto, HttpServletRequest request, HttpServletResponse response) throws IOException {
         response.reset();
         response.setContentType("application/msexcel");
-        Plan plan = planRepository.findByPlanId(premiumTemplateDto.getPlanId());
+        Plan plan = planRepository.findOne(new PlanId(premiumTemplateDto.getPlanId()));
         String templateFileName = plan.getPlanDetail().getPlanName() + PREMIUM_TEMPLATE_FILE_NAME_SUFFIX;
         response.setHeader("content-disposition", "attachment; filename=" + templateFileName + "");
         OutputStream outputStream = response.getOutputStream();
@@ -111,7 +112,7 @@ public class PremiumSetUpController {
     @RequestMapping(value = "/verifypremiumdata", method = RequestMethod.POST)
     @ResponseBody
     public Result validatePremiumData(PremiumTemplateDto premiumTemplateDto, HttpServletResponse response) throws IOException {
-        Plan plan = planRepository.findByPlanId(premiumTemplateDto.getPlanId());
+        Plan plan = planRepository.findOne(new PlanId(premiumTemplateDto.getPlanId()));
         String templateFileName = plan.getPlanDetail().getPlanName() + PREMIUM_TEMPLATE_FILE_NAME_SUFFIX;
         MultipartFile file = premiumTemplateDto.getFile();
         if (!("application/msexcel".equals(file.getContentType()) || "application/vnd.ms-excel".equals(file.getContentType())) && !templateFileName.equals(file.getOriginalFilename())) {
@@ -141,7 +142,7 @@ public class PremiumSetUpController {
     @ResponseBody
     public Result uploadPremiumData(CreatePremiumCommand createPremiumCommand, HttpServletRequest servletRequest, HttpServletResponse response) throws IOException {
         MultipartFile file = createPremiumCommand.getFile();
-        Plan plan = planRepository.findByPlanId(createPremiumCommand.getPlanId());
+        Plan plan = planRepository.findOne(new PlanId(createPremiumCommand.getPlanId()));
         String templateFileName = plan.getPlanDetail().getPlanName() + PREMIUM_TEMPLATE_FILE_NAME_SUFFIX;
         if (!("application/msexcel".equals(file.getContentType()) || "application/vnd.ms-excel".equals(file.getContentType())) && !templateFileName.equals(file.getOriginalFilename())) {
             return Result.failure("Uploaded file is not valid excel");
