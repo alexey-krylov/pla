@@ -1,7 +1,7 @@
 package com.pla.core.presentation.command;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.pla.core.domain.model.BenefitId;
+import com.pla.sharedkernel.identifier.BenefitId;
 import com.pla.sharedkernel.domain.model.*;
 import com.pla.sharedkernel.identifier.CoverageId;
 import com.pla.sharedkernel.identifier.LineOfBusinessId;

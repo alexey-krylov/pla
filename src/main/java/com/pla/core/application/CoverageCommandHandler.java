@@ -2,7 +2,7 @@ package com.pla.core.application;
 
 import com.pla.core.domain.exception.CoverageException;
 import com.pla.core.domain.model.Benefit;
-import com.pla.core.domain.model.BenefitId;
+import com.pla.sharedkernel.identifier.BenefitId;
 import com.pla.core.domain.model.Coverage;
 import com.pla.core.domain.service.CoverageService;
 import com.pla.sharedkernel.identifier.CoverageId;

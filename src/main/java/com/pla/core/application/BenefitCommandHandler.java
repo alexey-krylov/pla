@@ -8,7 +8,7 @@ package com.pla.core.application;
 
 import com.pla.core.application.exception.BenefitApplicationException;
 import com.pla.core.domain.model.Benefit;
-import com.pla.core.domain.model.BenefitId;
+import com.pla.sharedkernel.identifier.BenefitId;
 import com.pla.core.domain.service.BenefitService;
 import org.axonframework.commandhandling.annotation.CommandHandler;
 import org.nthdimenzion.common.service.JpaRepositoryFactory;

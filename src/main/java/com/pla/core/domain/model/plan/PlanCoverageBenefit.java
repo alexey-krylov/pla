@@ -1,7 +1,7 @@
 package com.pla.core.domain.model.plan;
 
 import com.google.common.base.Preconditions;
-import com.pla.core.domain.model.BenefitId;
+import com.pla.sharedkernel.identifier.BenefitId;
 import com.pla.sharedkernel.domain.model.CoverageBenefitDefinition;
 import com.pla.sharedkernel.domain.model.CoverageBenefitType;
 import lombok.AccessLevel;
