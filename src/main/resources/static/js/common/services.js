@@ -13,4 +13,16 @@ define(['moment'],function(moment){
                 return results === null ? null : decodeURIComponent(results[1].replace(/\+/g, " "));
             }
         }])
+        .factory('getProvinceAndCityDetail',function(){
+            return function(provinces,provinceCode){
+                var province =  _.findWhere(provinces, {provinceId:provinceCode});
+                if(province){
+                    return {
+                        provinceName:province.provinceName,
+                        provinceCode:province.provinceId,
+                        cities:province.cities
+                    }
+                }
+            }
+        })
 });
