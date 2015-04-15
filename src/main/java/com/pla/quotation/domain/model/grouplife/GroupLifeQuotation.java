@@ -103,31 +103,27 @@ public class GroupLifeQuotation extends AbstractAggregateRoot<QuotationId> imple
     }
 
     @Override
-    public GroupLifeQuotation closeQuotation() {
+    public void closeQuotation() {
         this.quotationStatus = QuotationStatus.CLOSED;
         registerEvent(new QuotationClosedEvent(quotationId));
-        return this;
     }
 
     @Override
-    public GroupLifeQuotation inactiveQuotation() {
+    public void inactiveQuotation() {
         this.quotationStatus = QuotationStatus.INACTIVE;
-        return this;
     }
 
     @Override
-    public GroupLifeQuotation declineQuotation() {
+    public void declineQuotation() {
         this.quotationStatus = QuotationStatus.DECLINED;
-        return this;
     }
 
     @Override
-    public GroupLifeQuotation generateQuotation(LocalDate generatedOn) {
+    public void generateQuotation(LocalDate generatedOn) {
         this.quotationStatus = QuotationStatus.GENERATED;
         this.generatedOn = generatedOn;
         registerEvent(new QuotationGeneratedEvent(quotationId));
         registerEvent(new ProposerAddedEvent());
-        return this;
     }
 
     @Override

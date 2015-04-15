@@ -7,13 +7,13 @@ import org.joda.time.LocalDate;
  */
 public interface IQuotation {
 
-    IQuotation closeQuotation();
+    void closeQuotation();
 
-    IQuotation inactiveQuotation();
+    void inactiveQuotation();
 
-    IQuotation declineQuotation();
+    void declineQuotation();
 
-    IQuotation generateQuotation(LocalDate generatedOn);
+    void generateQuotation(LocalDate generatedOn);
 
     boolean requireVersioning();
 

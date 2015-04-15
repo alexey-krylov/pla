@@ -13,7 +13,7 @@ import com.pla.core.domain.model.agent.LicenseNumber;
 import com.pla.core.dto.*;
 import com.pla.core.specification.AgentLicenseNumberIsUnique;
 import com.pla.sharedkernel.identifier.PlanId;
-import com.pla.sharedkernel.specification.NrcNumberIsUnique;
+import com.pla.core.specification.NrcNumberIsUnique;
 import org.nthdimenzion.common.service.JpaRepositoryFactory;
 import org.nthdimenzion.ddd.domain.annotations.DomainService;
 import org.nthdimenzion.utils.UtilValidator;
