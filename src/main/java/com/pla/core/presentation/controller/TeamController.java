@@ -107,7 +107,7 @@ public class TeamController {
             commandGateway.sendAndWait(createTeamCommand);
         } catch (Exception e) {
             LOGGER.error("Error in creating team", e);
-            return Result.failure("Error in creating team");
+            return Result.failure(e.getMessage());
         }
         return Result.success("Team created successfully");
     }
