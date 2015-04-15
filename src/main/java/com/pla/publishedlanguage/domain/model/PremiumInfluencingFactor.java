@@ -6,9 +6,7 @@
 
 package com.pla.publishedlanguage.domain.model;
 
-import com.google.common.collect.Lists;
 import com.pla.core.domain.model.plan.Plan;
-import com.pla.core.query.MasterFinder;
 import com.pla.sharedkernel.domain.model.Gender;
 import com.pla.sharedkernel.domain.model.SmokingStatus;
 import com.pla.sharedkernel.identifier.CoverageId;
@@ -17,7 +15,6 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 
 import static org.nthdimenzion.utils.UtilValidator.isEmpty;
 import static org.nthdimenzion.utils.UtilValidator.isNotEmpty;
@@ -30,7 +27,7 @@ public enum PremiumInfluencingFactor {
 
     SUM_ASSURED("Sum Assured") {
         @Override
-        public String[] getAllowedValues(Plan plan, CoverageId coverageId, MasterFinder masterFinder) {
+        public String[] getAllowedValues(Plan plan, CoverageId coverageId) {
             List<BigDecimal> sumAssureValues = null;
             if (coverageId.getCoverageId() != null) {
                 sumAssureValues = plan.getAllowedCoverageSumAssuredValues(coverageId);
@@ -56,7 +53,7 @@ public enum PremiumInfluencingFactor {
         }
     }, AGE("Age") {
         @Override
-        public String[] getAllowedValues(Plan plan, CoverageId coverageId, MasterFinder masterFinder) {
+        public String[] getAllowedValues(Plan plan, CoverageId coverageId) {
             List<Integer> ages = null;
             if (coverageId.getCoverageId() != null) {
                 ages = plan.getAllowedCoverageAges(coverageId);
@@ -83,7 +80,7 @@ public enum PremiumInfluencingFactor {
         }
     }, POLICY_TERM("Policy Term") {
         @Override
-        public String[] getAllowedValues(Plan plan, CoverageId coverageId, MasterFinder masterFinder) {
+        public String[] getAllowedValues(Plan plan, CoverageId coverageId) {
             List<Integer> policyTerms = new ArrayList<>();
             if (coverageId.getCoverageId() != null) {
                 policyTerms.addAll(plan.getAllowedCoverageTerm(coverageId));
@@ -109,7 +106,7 @@ public enum PremiumInfluencingFactor {
         }
     }, PREMIUM_PAYMENT_TERM("Premium Payment Term") {
         @Override
-        public String[] getAllowedValues(Plan plan, CoverageId coverageId, MasterFinder masterFinder) {
+        public String[] getAllowedValues(Plan plan, CoverageId coverageId) {
             List<Integer> premiumTerms = new ArrayList<>();
             premiumTerms.addAll(plan.getAllowedPremiumTerms());
             Collections.sort(premiumTerms);
@@ -131,7 +128,7 @@ public enum PremiumInfluencingFactor {
         }
     }, GENDER("Gender") {
         @Override
-        public String[] getAllowedValues(Plan plan, CoverageId coverageId, MasterFinder masterFinder) {
+        public String[] getAllowedValues(Plan plan, CoverageId coverageId) {
             return new String[]{Gender.MALE.name(), Gender.FEMALE.name()};
         }
 
@@ -146,7 +143,7 @@ public enum PremiumInfluencingFactor {
         }
     }, SMOKING_STATUS("Smoking Status") {
         @Override
-        public String[] getAllowedValues(Plan plan, CoverageId coverageId, MasterFinder masterFinder) {
+        public String[] getAllowedValues(Plan plan, CoverageId coverageId) {
             return new String[]{SmokingStatus.YES.name(), SmokingStatus.NO.name()};
         }
 
@@ -162,15 +159,8 @@ public enum PremiumInfluencingFactor {
     },
     INDUSTRY("Industry") {
         @Override
-        public String[] getAllowedValues(Plan plan, CoverageId coverageId, MasterFinder masterFinder) {
-            List<Map<String, Object>> allIndustries = masterFinder.getAllIndustry();
-            allIndustries = isNotEmpty(allIndustries) ? allIndustries : Lists.newArrayList();
-            String[] industries = new String[allIndustries.size()];
-            for (int count = 0; count < allIndustries.size(); count++) {
-                Map<String, Object> industryMap = allIndustries.get(count);
-                industries[count] = (String) industryMap.get("description");
-            }
-            return industries;
+        public String[] getAllowedValues(Plan plan, CoverageId coverageId) {
+            return new String[]{};
         }
 
         @Override
@@ -184,15 +174,8 @@ public enum PremiumInfluencingFactor {
         }
     }, DESIGNATION("Designation") {
         @Override
-        public String[] getAllowedValues(Plan plan, CoverageId coverageId, MasterFinder masterFinder) {
-            List<Map<String, Object>> allDesignations = masterFinder.getAllDesignation();
-            allDesignations = isNotEmpty(allDesignations) ? allDesignations : Lists.newArrayList();
-            String[] designations = new String[allDesignations.size()];
-            for (int count = 0; count < allDesignations.size(); count++) {
-                Map<String, Object> industryMap = allDesignations.get(count);
-                designations[count] = (String) industryMap.get("description");
-            }
-            return designations;
+        public String[] getAllowedValues(Plan plan, CoverageId coverageId) {
+            return new String[]{};
         }
 
         @Override
@@ -206,15 +189,8 @@ public enum PremiumInfluencingFactor {
         }
     }, OCCUPATION_CATEGORY("Occupation Category") {
         @Override
-        public String[] getAllowedValues(Plan plan, CoverageId coverageId, MasterFinder masterFinder) {
-            List<Map<String, Object>> occupationCategories = masterFinder.getAllOccupationClass();
-            occupationCategories = isNotEmpty(occupationCategories) ? occupationCategories : Lists.newArrayList();
-            String[] categories = new String[occupationCategories.size()];
-            for (int count = 0; count < occupationCategories.size(); count++) {
-                Map<String, Object> occupationCategoryMap = occupationCategories.get(count);
-                categories[count] = (String) occupationCategoryMap.get("code");
-            }
-            return categories;
+        public String[] getAllowedValues(Plan plan, CoverageId coverageId) {
+            return new String[]{};
         }
 
         @Override
@@ -228,7 +204,7 @@ public enum PremiumInfluencingFactor {
         }
     }, BMI("BMI") {
         @Override
-        public String[] getAllowedValues(Plan plan, CoverageId coverageId, MasterFinder masterFinder) {
+        public String[] getAllowedValues(Plan plan, CoverageId coverageId) {
             return new String[]{""};
         }
 
@@ -253,7 +229,7 @@ public enum PremiumInfluencingFactor {
         return description;
     }
 
-    public abstract String[] getAllowedValues(Plan plan, CoverageId coverageId, MasterFinder masterFinder);
+    public abstract String[] getAllowedValues(Plan plan, CoverageId coverageId);
 
     public abstract boolean isValidValue(Plan plan, CoverageId coverageId, String value);
 

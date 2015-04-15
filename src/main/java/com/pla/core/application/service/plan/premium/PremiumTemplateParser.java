@@ -74,10 +74,10 @@ public class PremiumTemplateParser {
                     validValueErrorMessage = validValueErrorMessage + "\n" + premiumInfluencingFactor.getDescription() + " is missing";
                     continue;
                 }
-                boolean isValidValue = premiumInfluencingFactor.isValidValue(plan, coverageId, Cell.CELL_TYPE_NUMERIC == cell.getCellType() ? ((Long)((Double) cell.getNumericCellValue()).longValue()).toString() : cell.getStringCellValue());
+                boolean isValidValue = premiumInfluencingFactor.isValidValue(plan, coverageId, Cell.CELL_TYPE_NUMERIC == cell.getCellType() ? ((Long) ((Double) cell.getNumericCellValue()).longValue()).toString() : cell.getStringCellValue());
                 if (!isValidValue) {
                     isValidPremiumTemplate = false;
-                    validValueErrorMessage = validValueErrorMessage + "\n" + premiumInfluencingFactor.getErrorMessage(Cell.CELL_TYPE_NUMERIC == cell.getCellType() ? ((Long)((Double) cell.getNumericCellValue()).longValue()).toString() : cell.getStringCellValue());
+                    validValueErrorMessage = validValueErrorMessage + "\n" + premiumInfluencingFactor.getErrorMessage(Cell.CELL_TYPE_NUMERIC == cell.getCellType() ? ((Long) ((Double) cell.getNumericCellValue()).longValue()).toString() : cell.getStringCellValue());
                 }
             }
             Cell premiumCell = row.getCell(premiumCellNumber);
@@ -130,7 +130,6 @@ public class PremiumTemplateParser {
         }
         return duplicateRows;
     }
-
 
 
     boolean isTwoRowIdentical(Row firstRow, Row secondRow, int premiumCellNumber) {
@@ -239,6 +238,7 @@ public class PremiumTemplateParser {
         Map<PremiumInfluencingFactor, Integer> indexMap = premiumInfluencingFactors.parallelStream().collect(Collectors.toMap(Function.identity(), new TransformToIndexMap(cells)));
         return indexMap;
     }
+
     private class TransformToIndexMap implements Function<PremiumInfluencingFactor, Integer> {
         List<Cell> cells;
 
@@ -290,9 +290,43 @@ public class PremiumTemplateParser {
     int getTotalNoOfPremiumCombination(List<PremiumInfluencingFactor> premiumInfluencingFactors, CoverageId coverageId, Plan plan) {
         Integer noOfRow = 1;
         for (PremiumInfluencingFactor premiumInfluencingFactor : premiumInfluencingFactors) {
-            Integer lengthOfAllowedValues = premiumInfluencingFactor.getAllowedValues(plan, coverageId, masterFinder).length == 0 ? 1 : premiumInfluencingFactor.getAllowedValues(plan, coverageId, masterFinder).length;
+            String[] data = getAllowedValues(premiumInfluencingFactor, plan, coverageId);
+            Integer lengthOfAllowedValues = data.length == 0 ? 1 : data.length;
             noOfRow = noOfRow * lengthOfAllowedValues;
         }
         return noOfRow;
+    }
+
+    private String[] getAllowedValues(PremiumInfluencingFactor premiumInfluencingFactor, Plan plan, CoverageId coverageId) {
+        if (PremiumInfluencingFactor.INDUSTRY.equals(premiumInfluencingFactor)) {
+            List<Map<String, Object>> allIndustries = masterFinder.getAllIndustry();
+            allIndustries = isNotEmpty(allIndustries) ? allIndustries : Lists.newArrayList();
+            String[] industries = new String[allIndustries.size()];
+            for (int count = 0; count < allIndustries.size(); count++) {
+                Map<String, Object> industryMap = allIndustries.get(count);
+                industries[count] = (String) industryMap.get("description");
+            }
+            return industries;
+        } else if (PremiumInfluencingFactor.DESIGNATION.equals(premiumInfluencingFactor)) {
+            List<Map<String, Object>> allDesignations = masterFinder.getAllDesignation();
+            allDesignations = isNotEmpty(allDesignations) ? allDesignations : Lists.newArrayList();
+            String[] designations = new String[allDesignations.size()];
+            for (int count = 0; count < allDesignations.size(); count++) {
+                Map<String, Object> industryMap = allDesignations.get(count);
+                designations[count] = (String) industryMap.get("description");
+            }
+            return designations;
+
+        } else if (PremiumInfluencingFactor.OCCUPATION_CATEGORY.equals(premiumInfluencingFactor)) {
+            List<Map<String, Object>> occupationCategories = masterFinder.getAllOccupationClass();
+            occupationCategories = isNotEmpty(occupationCategories) ? occupationCategories : Lists.newArrayList();
+            String[] categories = new String[occupationCategories.size()];
+            for (int count = 0; count < occupationCategories.size(); count++) {
+                Map<String, Object> occupationCategoryMap = occupationCategories.get(count);
+                categories[count] = (String) occupationCategoryMap.get("code");
+            }
+            return categories;
+        }
+        return premiumInfluencingFactor.getAllowedValues(plan, coverageId);
     }
 }

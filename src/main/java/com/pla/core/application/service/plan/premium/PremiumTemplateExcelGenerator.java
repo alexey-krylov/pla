@@ -6,6 +6,7 @@
 
 package com.pla.core.application.service.plan.premium;
 
+import com.google.common.collect.Lists;
 import com.pla.core.domain.model.plan.Plan;
 import com.pla.core.query.MasterFinder;
 import com.pla.publishedlanguage.domain.model.PremiumInfluencingFactor;
@@ -20,6 +21,9 @@ import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
+
+import static org.nthdimenzion.utils.UtilValidator.isNotEmpty;
 
 /**
  * @author: Samir
@@ -55,7 +59,8 @@ public class PremiumTemplateExcelGenerator {
     private int getTotalNoOfPremiumCombination(List<PremiumInfluencingFactor> premiumInfluencingFactors, CoverageId coverageId, Plan plan) {
         Integer noOfRow = 1;
         for (PremiumInfluencingFactor premiumInfluencingFactor : premiumInfluencingFactors) {
-            Integer lengthOfAllowedValues = premiumInfluencingFactor.getAllowedValues(plan, coverageId, masterFinder).length == 0 ? 1 : premiumInfluencingFactor.getAllowedValues(plan, coverageId, masterFinder).length;
+            String[] data = getAllowedValues(premiumInfluencingFactor, plan, coverageId);
+            Integer lengthOfAllowedValues = data.length == 0 ? 1 : data.length;
             noOfRow = noOfRow * lengthOfAllowedValues;
         }
         return noOfRow;
@@ -67,7 +72,7 @@ public class PremiumTemplateExcelGenerator {
                 String columnIndex = String.valueOf((char) (65 + cellNumber));
                 PremiumInfluencingFactor premiumInfluencingFactor = premiumInfluencingFactors.get(cellNumber);
                 HSSFSheet hiddenSheetForNamedCell = premiumTemplateWorkbook.createSheet(premiumInfluencingFactor.name());
-                String[] planData = premiumInfluencingFactor.getAllowedValues(plan, coverageId, masterFinder);
+                String[] planData = getAllowedValues(premiumInfluencingFactor, plan, coverageId);
                 createNamedRowWithCell(planData, hiddenSheetForNamedCell, cellNumber);
                 HSSFName namedCell = premiumTemplateWorkbook.createName();
                 namedCell.setNameName(premiumInfluencingFactor.name());
@@ -80,8 +85,43 @@ public class PremiumTemplateExcelGenerator {
                 dataValidation.createErrorBox("Error", "Provide proper " + premiumInfluencingFactor.getDescription() + " value");
                 premiumTemplateWorkbook.setSheetHidden(premiumTemplateWorkbook.getSheetIndex(hiddenSheetForNamedCell), true);
                 premiumSheet.addValidationData(dataValidation);
+
             }
         }
+
+    }
+
+    private String[] getAllowedValues(PremiumInfluencingFactor premiumInfluencingFactor, Plan plan, CoverageId coverageId) {
+        if (PremiumInfluencingFactor.INDUSTRY.equals(premiumInfluencingFactor)) {
+            List<Map<String, Object>> allIndustries = masterFinder.getAllIndustry();
+            allIndustries = isNotEmpty(allIndustries) ? allIndustries : Lists.newArrayList();
+            String[] industries = new String[allIndustries.size()];
+            for (int count = 0; count < allIndustries.size(); count++) {
+                Map<String, Object> industryMap = allIndustries.get(count);
+                industries[count] = (String) industryMap.get("description");
+            }
+            return industries;
+        } else if (PremiumInfluencingFactor.DESIGNATION.equals(premiumInfluencingFactor)) {
+            List<Map<String, Object>> allDesignations = masterFinder.getAllDesignation();
+            allDesignations = isNotEmpty(allDesignations) ? allDesignations : Lists.newArrayList();
+            String[] designations = new String[allDesignations.size()];
+            for (int count = 0; count < allDesignations.size(); count++) {
+                Map<String, Object> industryMap = allDesignations.get(count);
+                designations[count] = (String) industryMap.get("description");
+            }
+            return designations;
+
+        } else if (PremiumInfluencingFactor.OCCUPATION_CATEGORY.equals(premiumInfluencingFactor)) {
+            List<Map<String, Object>> occupationCategories = masterFinder.getAllOccupationClass();
+            occupationCategories = isNotEmpty(occupationCategories) ? occupationCategories : Lists.newArrayList();
+            String[] categories = new String[occupationCategories.size()];
+            for (int count = 0; count < occupationCategories.size(); count++) {
+                Map<String, Object> occupationCategoryMap = occupationCategories.get(count);
+                categories[count] = (String) occupationCategoryMap.get("code");
+            }
+            return categories;
+        }
+        return premiumInfluencingFactor.getAllowedValues(plan, coverageId);
     }
 
     private void createNamedRowWithCell(String[] planData, HSSFSheet hiddenSheet, int cellNumber) {
