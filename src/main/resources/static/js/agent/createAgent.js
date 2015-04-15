@@ -1,8 +1,8 @@
 
 angular.module('createAgent',['common','ngRoute','mgcrea.ngStrap.select','mgcrea.ngStrap.alert','commonServices'])
-    .controller('agentCtrl',['$scope','$http','channelType','authorisedToSell','teamDetails','provinces','$timeout','$alert','$route','$window','transformJson','getQueryParameter','agentDetails','globalConstants','nextAgentSequence','$rootScope',
+    .controller('agentCtrl',['$scope','$http','channelType','authorisedToSell','teamDetails','provinces','$timeout','$alert','$route','$window','transformJson','getQueryParameter','agentDetails','globalConstants','nextAgentSequence','getProvinceAndCityDetail',
 
-        function($scope,$http,channelType,authorisedToSell,teamDetails,provinces,$timeout,$alert,$route,$window,transformJson,getQueryParameter,agentDetails,globalConstants,nextAgentSequence,$rootScope){
+        function($scope,$http,channelType,authorisedToSell,teamDetails,provinces,$timeout,$alert,$route,$window,transformJson,getQueryParameter,agentDetails,globalConstants,nextAgentSequence,getProvinceAndCityDetail){
             $scope.numberPattern =globalConstants.numberPattern;
             $scope.selectedWizard = 1;
             $scope.searchResult = {
@@ -55,14 +55,7 @@ angular.module('createAgent',['common','ngRoute','mgcrea.ngStrap.select','mgcrea
                 }
             });
             $scope.getProvinceDetails=function(provinceCode){
-                var province =  _.findWhere(provinces, {provinceId:provinceCode});
-                if(province){
-                    return {
-                        provinceName:province.provinceName,
-                        provinceCode:province.provinceId,
-                        cities:province.cities
-                    }
-                }
+                return getProvinceAndCityDetail(provinces,provinceCode);
             };
 
             if(!$scope.isEditMode){
@@ -75,10 +68,10 @@ angular.module('createAgent',['common','ngRoute','mgcrea.ngStrap.select','mgcrea
 
             $scope.isSearchDisabled =  function(){
                 var searchPattern = new RegExp("^[0-9]{6}\/[0-9]{2}\/[0-9]{1}$");
-                if($scope.search && $scope.search.nrc && !searchPattern.test($scope.search.nrc)){
+                if($scope.search && $scope.search.nrcNumber && !searchPattern.test($scope.search.nrcNumber)){
                    return true;
                 }
-                if($scope.search && ((!$scope.search.nrc && $scope.search.empId) || ($scope.search.nrc && !$scope.search.empId))){
+                if($scope.search && ((!$scope.search.nrcNumber && $scope.search.employeeId) || ($scope.search.nrcNumber && !$scope.search.employeeId))){
                     return false;
                 }
                 return true;
@@ -113,7 +106,7 @@ angular.module('createAgent',['common','ngRoute','mgcrea.ngStrap.select','mgcrea
                     .success(function(data,status){
                         if(data && (_.size(data) ==0 || data.firstName==null)){
                             $scope.searchResult.isEmpty=true;
-                            $scope.agentDetails.agentProfile.nrcNumberInString=$scope.search.nrc;
+                            $scope.agentDetails.agentProfile.nrcNumberInString=$scope.search.nrcNumber;
                         }else{
                             $scope.jumpToNthStep(2);
                             $scope.agentDetails = transformJson.fromHrmsToPla(data);
@@ -125,7 +118,7 @@ angular.module('createAgent',['common','ngRoute','mgcrea.ngStrap.select','mgcrea
                     })
                     .error(function(data,status){
                         $scope.searchResult.isEmpty=true;
-                        $scope.agentDetails.agentProfile.nrcNumberInString=$scope.search.nrc;
+                        $scope.agentDetails.agentProfile.nrcNumberInString=$scope.search.nrcNumber;
                         if(nextAgentSequence){
                             $scope.agentDetails.agentId = nextAgentSequence;
                         }
