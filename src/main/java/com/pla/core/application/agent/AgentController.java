@@ -8,7 +8,6 @@ package com.pla.core.application.agent;
 
 import com.google.common.base.Preconditions;
 import com.pla.core.application.exception.AgentApplicationException;
-import com.pla.core.application.exception.BenefitApplicationException;
 import com.pla.core.domain.model.agent.Agent;
 import com.pla.core.query.AgentFinder;
 import com.pla.core.query.TeamFinder;
@@ -21,7 +20,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -142,9 +143,13 @@ public class AgentController {
             UserDetails userDetails = getLoggedInUSerDetail(request);
             createAgentCommand.setUserDetails(userDetails);
             commandGateway.sendAndWait(createAgentCommand);
-        } catch (BenefitApplicationException e) {
+        } catch (AgentApplicationException e) {
             LOGGER.error("Error in creating agent", e);
-            return Result.failure("Error in creating agent");
+            return Result.failure(e.getMessage());
+        }
+        catch (Exception e){
+            LOGGER.error("Error in creating agent", e);
+            return Result.failure(e.getMessage());
         }
         return Result.success("Agent created successfully");
     }
@@ -169,11 +174,17 @@ public class AgentController {
 
     @RequestMapping(value = "/getemployeedeatil", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.ALL_VALUE)
     @ResponseBody
-    public EmployeeDto getEmployeeDetail(@RequestParam("employeeId") String employeeId, @RequestParam("nrcNumber") String nrcNumber) {
-        if (isNotEmpty(nrcNumber)) {
-            nrcNumber = nrcNumber.replaceAll("/", "").trim();
+    public ResponseEntity getEmployeeDetail(@RequestParam(value = "employeeId",required = false) String employeeId, @RequestParam(value = "nrcNumber",required = false) String nrcNumber) {
+        EmployeeDto employeeDto;
+        try {
+            if (isNotEmpty(nrcNumber)) {
+                nrcNumber = nrcNumber.replaceAll("/", "").trim();
+            }
+            employeeDto = smeGateway.getEmployeeDetailByIdOrByNRCNumber(employeeId, nrcNumber);
+        }catch (Exception e){
+            return new ResponseEntity(e.getLocalizedMessage(), HttpStatus.PRECONDITION_FAILED);
         }
-        return smeGateway.getEmployeeDetailByIdOrByNRCNumber(employeeId, nrcNumber);
+        return new ResponseEntity(employeeDto, HttpStatus.OK);
     }
 
     @RequestMapping(value = "/getallplan", method = RequestMethod.GET)

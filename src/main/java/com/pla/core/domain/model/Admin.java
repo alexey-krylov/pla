@@ -60,14 +60,14 @@ public class Admin {
         return updatedBenefit;
     }
 
-    public Coverage createCoverage(boolean isCodeOrNameIsUnique,String coverageId, String coverageName,String coverageCode,String description,  Set<Benefit> benefits) {
-        if (!isCodeOrNameIsUnique)
+    public Coverage createCoverage(boolean isCodeAndNameIsUnique,String coverageId, String coverageName,String coverageCode,String description,  Set<Benefit> benefits) {
+        if (!isCodeAndNameIsUnique)
             throw new CoverageException("Coverage already described");
         return new Coverage(new CoverageId(coverageId), new CoverageName(coverageName),coverageCode, benefits, CoverageStatus.ACTIVE).updateDescription(description);
     }
 
-    public Coverage updateCoverage(Coverage coverage, String newCoverageName,String newCoverageCode, String description,Set<Benefit> benefits, boolean isCoverageNameOrCodeIsUnique) {
-        if (!isCoverageNameOrCodeIsUnique)
+    public Coverage updateCoverage(Coverage coverage, String newCoverageName,String newCoverageCode, String description,Set<Benefit> benefits, boolean isCodeAndNameIsUnique) {
+        if (!isCodeAndNameIsUnique)
             throw new CoverageException("Coverage already described");
         return coverage.updateCoverageName(newCoverageName).updateCoverageCode(newCoverageCode).updateBenefit(benefits).updateDescription(description);
     }

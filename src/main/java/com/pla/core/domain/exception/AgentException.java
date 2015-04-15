@@ -22,7 +22,11 @@ public class AgentException extends DomainException {
         throw new AgentException(message);
     }
 
-    public static AgentException raiseAgentLicenseNumberUniqueException(String message) {
-        throw new AgentException(message);
+    public static AgentException raiseAgentLicenseNumberUniqueException() {
+        throw new AgentException("Agent cannot be updated as license number is in use");
+    }
+
+    public static AgentException raiseAgentNrcNumberUniqueException() {
+        throw new AgentException("Agent cannot be updated as nrc number is in use");
     }
 }

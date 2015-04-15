@@ -16,6 +16,6 @@ public class OrSpecification<T> extends CompositeSpecification<T> {
 
     @Override
     public boolean isSatisfiedBy(T candidate) {
-        return left.isSatisfiedBy(candidate) && right.isSatisfiedBy(candidate);
+        return left.isSatisfiedBy(candidate) || right.isSatisfiedBy(candidate);
     }
 }
