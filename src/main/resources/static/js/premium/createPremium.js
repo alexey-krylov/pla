@@ -113,10 +113,10 @@ App.controller('CreatePremiumController',['$scope','$http','$rootScope','$upload
                  url: '/pla/core/premium/verifypremiumdata',
                  file: files,
                  fields:{planId:$scope.createPremium.planId,coverageId:$scope.createPremium.coverageId,
-                 premiumInfluencingFactors:output.join(',')}
+                 premiumInfluencingFactors:output.join(',')},
             }).progress(function (evt) {
 
-            }).success(function (data) {
+            }).success(function (data, status, headers) {
               if(data.status==200){
                     $scope.verified=true;
                     $scope.alert = {title:'Success Message! ', content:data.message, type: 'success'};

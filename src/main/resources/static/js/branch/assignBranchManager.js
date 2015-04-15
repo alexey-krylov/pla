@@ -2,7 +2,8 @@ var App = angular.module('assignBranchManager', ['ngRoute','ui.bootstrap','ngSan
 
 App.controller('AssignBranchManagerController',['$scope','$http','$window','$location',function($scope,$http,$window,$location){
 
-
+                    $scope.bmBool=false;
+                   // $scope.bdeBool=false;
                    $scope.selectedDate =moment().add(1,'days').format("YYYY-MM-DD");
                        $scope.newDateField={};
                        $scope.datePickerSettings = {
@@ -37,7 +38,7 @@ App.controller('AssignBranchManagerController',['$scope','$http','$window','$loc
                         $scope.assignBranchManager=data;
 
                    });
-                   $scope.$watch( 'assignBranchManager.employeeId',function(newValue, oldValue){
+                $scope.$watch( 'assignBranchManager.employeeId',function(newValue, oldValue){
                        if(newValue){
                          $http.get('/pla/core/branch/getallbranchmanager').success(function(data){
                             $scope.branchManagers=data;
@@ -48,12 +49,13 @@ App.controller('AssignBranchManagerController',['$scope','$http','$window','$loc
                                 $scope.assignBranchManager.branchManagerLastName=$scope.newBranchManager.lastName;
                                 $scope.assignBranchManager.branchManagerEmployeeId=$scope.newBranchManager.employeeId;
                                 $scope.assignBranchManager.onlyBranchManager=true;
+
                             }
                          });
-                      }
+                       }
 
                    });
-                   $scope.$watch( 'assignBranchManager.branchBDEEmployeeId',function(newValue, oldValue){
+                $scope.$watch( 'assignBranchManager.branchBDEEmployeeId',function(newValue, oldValue){
                          if(newValue){
                          $http.get('/pla/core/branch/getallbranchbde').success(function(data){
                               $scope.branchBDEList=data;
@@ -64,17 +66,57 @@ App.controller('AssignBranchManagerController',['$scope','$http','$window','$loc
                                   $scope.assignBranchManager.branchBDELastName= $scope.newBranchBDE.lastName;
                                   $scope.assignBranchManager.branchBDEEmployeeId=$scope.newBranchBDE.employeeId;
                                   $scope.assignBranchManager.onlyBde=true;
+
                               }
                          });
                         }
                 });
-                 $http.get('/pla/core/branch/getallbranchbde').success(function(data){
+
+            /* $scope.$watchGroup(['assignBranchManager.employeeId', 'assignBranchManager.branchManagerFromDate'], function(newValues, oldValues, scope) {
+
+                 if(newValues[0] && newValues[1] ) {
+                     $scope.bmBool = true;
+                 }else{
+                     $scope.bmBool = false;
+                 }
+
+             });
+             $scope.$watchGroup(['assignBranchManager.branchBDEEmployeeId', 'assignBranchManager.branchBDEFromDate'], function(newValues, oldValues, scope) {
+
+                 if(newValues[0] && newValues[1]) {
+                     $scope.bmBool = true;
+                 }else{
+                     $scope.bmBool = false;
+                 }
+
+             });*/
+          $scope.$watchGroup(['assignBranchManager.employeeId', 'assignBranchManager.branchManagerFromDate','assignBranchManager.branchBDEEmployeeId', 'assignBranchManager.branchBDEFromDate'], function(newValues, oldValues, scope) {
+               // console.log(newValues[0]+newValues[1]+ newValues[2] + newValues[3] );
+              if(newValues[0] &&  newValues[1] && newValues[2] &&  newValues[3] ){
+                  $scope.bmBool = true;
+              }else if(newValues[0] &&  newValues[1] &&  newValues[3]){
+                         $scope.bmBool = false;
+              }else if(newValues[0] &&  newValues[1] &&  newValues[2]){
+                  $scope.bmBool = false;
+              }else if(newValues[2] &&  newValues[3] &&  newValues[0]){
+                  $scope.bmBool = false;
+              }else if(newValues[2] &&  newValues[3] &&  newValues[1]){
+                  $scope.bmBool = false;
+              }else if(newValues[2] &&  newValues[3] ){
+                     $scope.bmBool = true;
+              }else if(newValues[0] &&  newValues[1] ){
+                  $scope.bmBool = true;
+              }else{
+                  $scope.bmBool = false;
+              }
+            });
+             $http.get('/pla/core/branch/getallbranchbde').success(function(data){
                         $scope.branchBDEList=data;
-                 });
-                $http.get('/pla/core/branch/getallbranchmanager').success(function(data){
-                       $scope.branchManagers=data;
-                 });
-                 $scope.submitAssign = function(){
+             });
+             $http.get('/pla/core/branch/getallbranchmanager').success(function(data){
+                     $scope.branchManagers=data;
+             });
+             $scope.submitAssign = function(){
                     if($scope.assignBranchManager.branchBDEEmployeeId){
                       $scope.assignBranchManager.onlyBde=true;
 
@@ -105,7 +147,6 @@ App.controller('AssignBranchManagerController',['$scope','$http','$window','$loc
                                 $scope.assignBranchManager.branchManagerFromDate=$scope.newDateField.fromDate ;
                          }
                      }
-
                     $http.post('/pla/core/branch/assign', $scope.assignBranchManager).success(function(data){
                                                   if(data.status==200){
                                                     $scope.alert = {title:'Success Message! ', content:data.message, type: 'success'};
