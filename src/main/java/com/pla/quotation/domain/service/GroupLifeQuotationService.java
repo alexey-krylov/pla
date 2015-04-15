@@ -2,8 +2,7 @@ package com.pla.quotation.domain.service;
 
 import com.pla.core.domain.model.agent.AgentId;
 import com.pla.publishedlanguage.contract.IPremiumCalculator;
-import com.pla.quotation.domain.model.QuotationNumberGenerator;
-import com.pla.quotation.domain.model.QuotationProcessor;
+import com.pla.quotation.domain.model.grouplife.GLQuotationProcessor;
 import com.pla.quotation.domain.model.grouplife.GroupLifeQuotation;
 import com.pla.quotation.domain.model.grouplife.Proposer;
 import com.pla.quotation.domain.model.grouplife.ProposerBuilder;
@@ -33,32 +32,32 @@ public class GroupLifeQuotationService {
     }
 
     public GroupLifeQuotation createQuotation(AgentId agentId, String proposerName, UserDetails userDetails) {
-        QuotationProcessor quotationProcessor = quotationRoleAdapter.userToQuotationProcessor(userDetails);
+        GLQuotationProcessor glQuotationProcessor = quotationRoleAdapter.userToQuotationProcessor(userDetails);
         QuotationId quotationId = new QuotationId(quotationNumberGenerator.getQuotationNumber("5", "1", GroupLifeQuotation.class));
-        return quotationProcessor.createGroupLifeQuotation(quotationProcessor.getUserName(), quotationId, agentId, proposerName);
+        return glQuotationProcessor.createGroupLifeQuotation(glQuotationProcessor.getUserName(), quotationId, agentId, proposerName);
     }
 
     public GroupLifeQuotation updateWithProposer(GroupLifeQuotation groupLifeQuotation, ProposerDto proposerDto, UserDetails userDetails) {
-        QuotationProcessor quotationProcessor = quotationRoleAdapter.userToQuotationProcessor(userDetails);
-        groupLifeQuotation = checkQuotationNeedForVersioningAndGetQuotation(quotationProcessor, groupLifeQuotation);
+        GLQuotationProcessor glQuotationProcessor = quotationRoleAdapter.userToQuotationProcessor(userDetails);
+        groupLifeQuotation = checkQuotationNeedForVersioningAndGetQuotation(glQuotationProcessor, groupLifeQuotation);
         ProposerBuilder proposerBuilder = Proposer.getProposerBuilder(proposerDto.getProposerName(), proposerDto.getProposerCode());
         proposerBuilder.withContactDetail(proposerDto.getAddressLine1(), proposerDto.getAddressLine2(), proposerDto.getPostalCode(), proposerDto.getProvince(), proposerDto.getTown(), proposerDto.getEmailAddress())
                 .withContactPersonDetail(proposerDto.getContactPersonName(), proposerDto.getContactPersonEmail(), proposerDto.getContactPersonMobileNumber(), proposerDto.getContactPersonWorkPhoneNumber());
-        return quotationProcessor.updateWithProposer(groupLifeQuotation, proposerBuilder.build());
+        return glQuotationProcessor.updateWithProposer(groupLifeQuotation, proposerBuilder.build());
     }
 
     public GroupLifeQuotation updateWithAgent(GroupLifeQuotation groupLifeQuotation, AgentId agentId, UserDetails userDetails) {
-        QuotationProcessor quotationProcessor = quotationRoleAdapter.userToQuotationProcessor(userDetails);
-        groupLifeQuotation = checkQuotationNeedForVersioningAndGetQuotation(quotationProcessor, groupLifeQuotation);
-        return quotationProcessor.updateWithAgentId(groupLifeQuotation, agentId);
+        GLQuotationProcessor glQuotationProcessor = quotationRoleAdapter.userToQuotationProcessor(userDetails);
+        groupLifeQuotation = checkQuotationNeedForVersioningAndGetQuotation(glQuotationProcessor, groupLifeQuotation);
+        return glQuotationProcessor.updateWithAgentId(groupLifeQuotation, agentId);
     }
 
-    private GroupLifeQuotation checkQuotationNeedForVersioningAndGetQuotation(QuotationProcessor quotationProcessor, GroupLifeQuotation groupLifeQuotation) {
+    private GroupLifeQuotation checkQuotationNeedForVersioningAndGetQuotation(GLQuotationProcessor glQuotationProcessor, GroupLifeQuotation groupLifeQuotation) {
         if (!groupLifeQuotation.requireVersioning()) {
             return groupLifeQuotation;
         }
         QuotationId quotationId = new QuotationId(quotationNumberGenerator.getQuotationNumber("5", "1", GroupLifeQuotation.class));
-        return groupLifeQuotation.cloneQuotation(quotationProcessor.getUserName(), quotationId);
+        return groupLifeQuotation.cloneQuotation(glQuotationProcessor.getUserName(), quotationId);
     }
 
 

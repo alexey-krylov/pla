@@ -1,6 +1,6 @@
 package com.pla.quotation.domain.service;
 
-import com.pla.quotation.domain.model.QuotationProcessor;
+import com.pla.quotation.domain.model.grouplife.GLQuotationProcessor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.access.AuthorizationServiceException;
@@ -17,7 +17,7 @@ public class QuotationRoleAdapter {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(QuotationRoleAdapter.class);
 
-    public QuotationProcessor userToQuotationProcessor(UserDetails userDetails) {
+    public GLQuotationProcessor userToQuotationProcessor(UserDetails userDetails) {
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("User details received" + userDetails);
         }
@@ -26,7 +26,7 @@ public class QuotationRoleAdapter {
             LOGGER.error("user does not have ROLE_QUOTATION_PROCESSOR");
             throw new AuthorizationServiceException("User does not have Quotation processor(ROLE_QUOTATION_PROCESSOR) authority");
         }
-        return new QuotationProcessor(userDetails.getUsername());
+        return new GLQuotationProcessor(userDetails.getUsername());
     }
 
 
