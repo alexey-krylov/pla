@@ -1,6 +1,5 @@
 package com.pla.core.presentation.controller;
 
-import com.pla.core.domain.model.plan.Plan;
 import com.pla.core.presentation.command.CreatePlanCommand;
 import com.pla.core.presentation.command.UpdatePlanCommand;
 import com.pla.core.query.PlanFinder;
@@ -65,7 +64,7 @@ public class PlanSetupController {
      */
     @RequestMapping(value = "/getallplan", method = RequestMethod.GET)
     @ResponseBody
-    public List<Plan> findAllPlan() {
+    public List<Map> findAllPlan() {
         return planFinder.findAllPlan();
     }
 
@@ -79,7 +78,7 @@ public class PlanSetupController {
     public ModelAndView gotoPlanList() {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("pla/core/plan/plan_list");
-        modelAndView.addObject("planList", planFinder.findAllPlan());
+        modelAndView.addObject("planList", planFinder.findAllPlanForThymeleaf());
         return modelAndView;
     }
 

@@ -531,13 +531,13 @@ CREATE TABLE `entity_sequence` (
 
 DROP TABLE IF EXISTS `commission`;
 CREATE TABLE `commission` (
-  `commission_id`        VARCHAR(255) NOT NULL,
-  `available_for`        VARCHAR(255) DEFAULT NULL,
-  `commission_term_type` VARCHAR(255) DEFAULT NULL,
-  `commission_type`      VARCHAR(255) DEFAULT NULL,
-  `from_date`            DATE         DEFAULT NULL,
-  `plan_id`              VARCHAR(255) DEFAULT NULL,
-  `thru_date`            DATE         DEFAULT NULL,
+  `commission_id`   VARCHAR(255) NOT NULL,
+  `available_for`   VARCHAR(255) DEFAULT NULL,
+  `commission_type` VARCHAR(255) DEFAULT NULL,
+  `from_date`       DATE         DEFAULT NULL,
+  `plan_id`         VARCHAR(255) DEFAULT NULL,
+  `premium_fee`     VARCHAR(255) DEFAULT NULL,
+  `thru_date`       DATE         DEFAULT NULL,
   PRIMARY KEY (`commission_id`)
 )
   ENGINE =InnoDB
@@ -547,6 +547,7 @@ DROP TABLE IF EXISTS `commission_commission_term`;
 CREATE TABLE `commission_commission_term` (
   `commission_id`         VARCHAR(255) NOT NULL,
   `commission_percentage` DECIMAL(19, 2) DEFAULT NULL,
+  `commission_term_type` VARCHAR(255) DEFAULT NULL,
   `end_year`              INT(11)        DEFAULT NULL,
   `start_year`            INT(11)        DEFAULT NULL,
   KEY `FK_as28e68p5ow4r4rrxui4kx64l` (`commission_id`),
@@ -554,6 +555,7 @@ CREATE TABLE `commission_commission_term` (
 )
   ENGINE =InnoDB
   DEFAULT CHARSET =utf8;
+
 
 DROP VIEW IF EXISTS `agent_team_branch_view`;
 CREATE  VIEW `agent_team_branch_view` AS
@@ -568,7 +570,7 @@ CREATE  VIEW `agent_team_branch_view` AS
   physical_address_province AS physicalAddressProvinceCode,(SELECT geo_description FROM geo WHERE geo_type = 'PROVINCE' AND geo_id = A.physical_address_province) AS physicalAddressProvinceName,
   A.team_id AS teamId,TF.employee_id AS teamLeaderId,TF.first_name AS teamLeaderFirstName,TF.last_name AS teamLeaderLastName,T.team_code AS teamCode,
   T.team_name AS teamName, R.region_code AS regionCode,R.region_name AS regionName,B.branch_code AS branchCode, B.branch_name AS branchName
-   FROM  agent A  LEFT JOIN team T    ON A.team_id = T.`team_id`  LEFT JOIN `team_team_leader_fulfillment` TF    ON T.`team_id` = TF.`team_id`
+   FROM  agent A  LEFT JOIN team T    ON A.team_id = T.`team_id`  LEFT JOIN `team_team_leader_fulfillment` TF    ON T.`team_id` = TF.`team_id` AND TF.from_date<=NOW() AND (TF.thru_date>=NOW() OR TF.thru_date IS NULL)
     AND T.`current_team_leader` = TF.`employee_id`  LEFT JOIN region R  ON T.region_code = R.REGION_CODE LEFT JOIN branch B ON T.branch_code = B.branch_code );
 
 DROP VIEW IF EXISTS `region_region_manger_fulfilment_view`;
@@ -601,7 +603,6 @@ CREATE VIEW `commission_view` AS
      cm.thru_date            AS toDate,
      cm.plan_id              AS planId,
      cm.available_for        AS availableFor,
-     cm.commission_term_type AS commissionTermType,
      cm.commission_type      AS commissionType
    FROM commission cm);
 
@@ -611,7 +612,8 @@ CREATE VIEW `commission_commission_term_view` AS
      cctf.commission_id         AS commissionId,
      cctf.commission_percentage AS commissionPercentage,
      cctf.start_year            AS startYear,
-     cctf.end_year              AS endYear
+     cctf.end_year             AS endYear,
+     cctf.commission_term_type AS commissionTermType
    FROM COMMISSION_COMMISSION_TERM cctf);
 
 

@@ -64,7 +64,7 @@ public class AgentAcceptanceTest {
         createAgentCommand.setAgentStatus(AgentStatus.ACTIVE);
         DesignationDto designationDto = new DesignationDto("Employee", "Employee");
         LocalDate trainingCompletionDate = new LocalDate(2015, 3, 24);
-        createAgentCommand.setAgentProfile(new AgentProfileDto("Mr", "Test", "Agent", 11111, "EMP002", trainingCompletionDate, designationDto));
+        createAgentCommand.setAgentProfile(new AgentProfileDto("Mr", "Test", "Agent", 1111, "EMP002", trainingCompletionDate, designationDto));
         createAgentCommand.setLicenseNumber(new LicenseNumberDto("LIC0001"));
         GeoDetailDto geoDetailDto = new GeoDetailDto(560068, "Bangalore", "India");
         createAgentCommand.setContactDetail(new ContactDetailDto("9916971271", "9916971271", "9916971271", "abc@def.com", "Kormangala", "Kormangala", geoDetailDto));
@@ -86,7 +86,7 @@ public class AgentAcceptanceTest {
         updateAgentCommand.setAgentStatus(AgentStatus.ACTIVE);
         DesignationDto designationDto = new DesignationDto("Employee", "Employee");
         LocalDate trainingCompletionDate = new LocalDate(2015, 3, 24);
-        updateAgentCommand.setAgentProfile(new AgentProfileDto("Mr", "Test", "Agent", 11111, "EMP002", trainingCompletionDate, designationDto));
+        updateAgentCommand.setAgentProfile(new AgentProfileDto("Mr", "Test", "Agent", 1111, "EMP002", trainingCompletionDate, designationDto));
         updateAgentCommand.setLicenseNumber(new LicenseNumberDto("LIC0001"));
         GeoDetailDto geoDetailDto = new GeoDetailDto(560068, "Bangalore", "India");
         updateAgentCommand.setContactDetail(new ContactDetailDto("9916971271", "9916971271", "9916971271", "abc@def.com", "Kormangala", "Kormangala", geoDetailDto));

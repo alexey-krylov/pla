@@ -68,7 +68,7 @@ public class MandatoryDocumentController {
     @RequestMapping(value ="/opencreatepage", method = RequestMethod.GET)
     public ModelAndView openCreatePageMandatoryDocument() {
         ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("pla/core/mandatoryDocuments/createMandatoryDocuments");
+        modelAndView.setViewName("pla/core/mandatorydocument/createMandatoryDocument");
         return modelAndView;
     }
 

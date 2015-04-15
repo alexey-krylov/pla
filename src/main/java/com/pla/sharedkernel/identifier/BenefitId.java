@@ -4,7 +4,7 @@
  * Proprietary and confidential
  */
 
-package com.pla.core.domain.model;
+package com.pla.sharedkernel.identifier;
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;

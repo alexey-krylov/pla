@@ -8,7 +8,7 @@ package com.pla.core.domain.service;
 
 import com.pla.core.domain.model.Admin;
 import com.pla.core.domain.model.Benefit;
-import com.pla.core.domain.model.BenefitId;
+import com.pla.sharedkernel.identifier.BenefitId;
 import com.pla.core.domain.model.BenefitName;
 import com.pla.core.dto.BenefitDto;
 import com.pla.core.query.BenefitFinder;

@@ -8,10 +8,16 @@
 <body>
 <div th:include="fragments/common :: bodyHeader" th:remove="tag"/>
 <script>
-    requirejs(['basic'],function(){
-    requirejs(['/pla/js/commissions/viewCommissions.js'],function(){
-    });
-    })
+    var interval = setInterval(function(){
+        if(require.defined("basic")){
+            requirejs(['/pla/js/commissions/viewCommissions.js'],function(){
+                $(document).ready(function(){
+                    $('#commission-table').dataTable();
+                });
+            });
+            clearInterval(interval);
+        }
+    }, 300);
 </script>
 
 
@@ -23,10 +29,10 @@
                     <div class="row">
                         <div class="col-lg-6"><span th:text="#{listOfCommissions}">List of Commissions
                         </span></div>
-                        <div class="col-lg-6"><a type="button" class="btn btn-default btn-xs" style="float: right"
-                                                 th:href="@{/core/commission/opencreatepage}">
+                        <div class="col-lg-6"><button type="button" class="btn btn-default btn-xs" style="float: right"
+                                                      onclick="viewCommission.openCreatePage()">
                             Create
-                        </a></div>
+                        </button>></div>
                     </div>
                 </div>
                 <div class="panel-body">

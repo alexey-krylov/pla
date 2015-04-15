@@ -1,7 +1,6 @@
 package com.pla.core.domain.model.plan;
 
 import com.google.common.base.Preconditions;
-import com.pla.core.domain.model.BenefitId;
 import com.pla.sharedkernel.domain.model.*;
 import com.pla.sharedkernel.identifier.CoverageId;
 import org.nthdimenzion.utils.UtilValidator;
@@ -171,7 +170,7 @@ public class PlanCoverageBuilder {
                                                 CoverageBenefitType coverageBenefitType,
                                                 BigDecimal benefitLimit,
                                                 BigDecimal maxLimit) {
-        this.planCoverageBenefits.add(new PlanCoverageBenefit(new BenefitId(benefitId), definedPer, coverageBenefitType,
+        this.planCoverageBenefits.add(new PlanCoverageBenefit(benefitId, definedPer, coverageBenefitType,
                 benefitLimit, maxLimit));
         return this;
     }

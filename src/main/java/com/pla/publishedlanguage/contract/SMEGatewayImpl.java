@@ -28,6 +28,7 @@ public class SMEGatewayImpl implements ISMEGateway {
         RestTemplate restTemplate = new RestTemplate();
         String employeeDetailByIDAndNRCNumberURL = url + "/getemployee?employeeId=" + employeeId + "&nrcnumber=" + NRCNumber;
         EmployeeDto employeeDetail = restTemplate.getForObject(employeeDetailByIDAndNRCNumberURL, EmployeeDto.class);
+        employeeDetail.setNrcNumber(getNrcNumberInString(employeeDetail.getNrcNumber()));
         Preconditions.checkNotNull(employeeDetail);
         return employeeDetail;
     }
@@ -49,5 +50,14 @@ public class SMEGatewayImpl implements ISMEGateway {
             }
         }).collect(Collectors.toList());
         return employeeDtos;
+    }
+
+    public String getNrcNumberInString(String nrcNumber) {
+        String nrc = nrcNumber;
+        String part1 = nrc.substring(0, 6);
+        String part2 = nrc.substring(6, 8);
+        String part3 = nrc.substring(8, 9);
+        nrc = part1.concat("/").concat(part2).concat("/").concat(part3);
+        return nrc;
     }
 }

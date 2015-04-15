@@ -17,10 +17,7 @@ import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.BasicQuery;
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @author: Nischitha
@@ -31,30 +28,50 @@ public class PlanFinder {
 
 
     private MongoTemplate mongoTemplate;
+    private ObjectMapper objectMapper;
 
     @Autowired
     public PlanFinder(MongoTemplate mongoTemplate) {
-        this.mongoTemplate = mongoTemplate;
-    }
-
-    public List<Plan> findAllPlan() {
-        List<Plan> allPlan = mongoTemplate.findAll(Plan.class, "PLAN");
-        return allPlan;
-    }
-
-    public Map findPlanByPlanId(PlanId planId) {
-        BasicDBObject query = new BasicDBObject();
-        query.put("planId", planId);
-        Plan _plan = mongoTemplate.findOne(new BasicQuery(query), Plan.class, "PLAN");
-        ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper = new ObjectMapper();
         objectMapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
+        objectMapper.configure(SerializationFeature.WRITE_DATE_KEYS_AS_TIMESTAMPS, false);
         objectMapper.setVisibilityChecker(objectMapper.getSerializationConfig().getDefaultVisibilityChecker()
                 .withFieldVisibility(JsonAutoDetect.Visibility.ANY)
                 .withGetterVisibility(JsonAutoDetect.Visibility.NONE)
                 .withSetterVisibility(JsonAutoDetect.Visibility.NONE)
                 .withCreatorVisibility(JsonAutoDetect.Visibility.ANY));
-        Map plan = objectMapper.convertValue(_plan, Map.class);
+        this.mongoTemplate = mongoTemplate;
+    }
 
+    public List<Plan> findAllPlanForThymeleaf() {
+        List<Plan> allPlans = mongoTemplate.findAll(Plan.class, "PLAN");
+        return allPlans;
+    }
+
+
+    public List<Map> findAllPlan() {
+        List<Plan> allPlans = mongoTemplate.findAll(Plan.class, "PLAN");
+        List<Map> planList = new ArrayList<Map>();
+        for (Plan p : allPlans) {
+            Map plan = objectMapper.convertValue(p, Map.class);
+            planList.add(plan);
+        }
+        return planList;
+    }
+
+    public Map findPlanByPlanId(PlanId planId) {
+        objectMapper = new ObjectMapper();
+        objectMapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
+        objectMapper.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
+        objectMapper.setVisibilityChecker(objectMapper.getSerializationConfig().getDefaultVisibilityChecker()
+                .withFieldVisibility(JsonAutoDetect.Visibility.ANY)
+                .withGetterVisibility(JsonAutoDetect.Visibility.NONE)
+                .withSetterVisibility(JsonAutoDetect.Visibility.NONE)
+                .withCreatorVisibility(JsonAutoDetect.Visibility.ANY));
+        BasicDBObject query = new BasicDBObject();
+        query.put("planId", planId);
+        Plan _plan = mongoTemplate.findOne(new BasicQuery(query), Plan.class, "PLAN");
+        Map plan = objectMapper.convertValue(_plan, Map.class);
         covertSumAssuredToTags((Map) plan.get("sumAssured"));
 
         Map policyTerm = (Map) plan.get("policyTerm");

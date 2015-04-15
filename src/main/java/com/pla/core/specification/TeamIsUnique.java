@@ -29,7 +29,7 @@ public class TeamIsUnique implements ISpecification<TeamDto> {
 
     @Override
     public boolean isSatisfiedBy(TeamDto teamDto) {
-        return ((teamFinder.getTeamCountByTeamName(teamDto.getTeamName()) == 0) && (teamFinder.getTeamCountByTeamName(teamDto.getTeamCode()) == 0));
+        return ((teamFinder.getTeamCountByTeamName(teamDto.getTeamName()) == 0) && (teamFinder.getTeamCountByTeamCode(teamDto.getTeamCode()) == 0));
     }
 
 }

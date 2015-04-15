@@ -1,7 +1,7 @@
 package com.pla.core.domain.model.plan;
 
 import com.google.common.base.Preconditions;
-import com.pla.core.domain.model.BenefitId;
+import com.pla.sharedkernel.identifier.BenefitId;
 import com.pla.sharedkernel.domain.model.CoverageBenefitDefinition;
 import com.pla.sharedkernel.domain.model.CoverageBenefitType;
 import lombok.AccessLevel;
@@ -29,7 +29,7 @@ class PlanCoverageBenefit {
     PlanCoverageBenefit() {
     }
 
-    PlanCoverageBenefit(BenefitId benefitId, CoverageBenefitDefinition definedPer,
+    PlanCoverageBenefit(String benefitId, CoverageBenefitDefinition definedPer,
                         CoverageBenefitType coverageBenefitType,
                         BigDecimal benefitLimit, BigDecimal maxLimit) {
 
@@ -37,7 +37,7 @@ class PlanCoverageBenefit {
         Preconditions.checkArgument(definedPer != null, "Expected definedPer!=null, but %s!=null.", definedPer);
         Preconditions.checkArgument(coverageBenefitType != null, "Expected coverageBenefitType!=null, but %s!=null.", coverageBenefitType);
         Preconditions.checkArgument(benefitLimit != null, "Expected limit!=null, but %s!=null.", benefitLimit);
-        this.benefitId = benefitId;
+        this.benefitId = new BenefitId(benefitId);
         this.definedPer = definedPer;
         this.coverageBenefitType = coverageBenefitType;
         this.benefitLimit = benefitLimit;

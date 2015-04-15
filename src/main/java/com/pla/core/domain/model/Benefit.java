@@ -9,6 +9,7 @@ package com.pla.core.domain.model;
 import com.google.common.base.Preconditions;
 import com.pla.core.domain.exception.BenefitDomainException;
 import com.pla.sharedkernel.domain.model.BenefitStatus;
+import com.pla.sharedkernel.identifier.BenefitId;
 import lombok.*;
 import org.nthdimenzion.common.crud.ICrudEntity;
 

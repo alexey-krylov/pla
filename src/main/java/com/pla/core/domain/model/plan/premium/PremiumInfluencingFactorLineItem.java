@@ -6,6 +6,7 @@
 
 package com.pla.core.domain.model.plan.premium;
 
+import com.pla.publishedlanguage.domain.model.PremiumInfluencingFactor;
 import lombok.*;
 import org.nthdimenzion.ddd.domain.annotations.ValueObject;
 
@@ -20,10 +21,10 @@ import java.util.stream.Collectors;
  */
 @ValueObject
 @NoArgsConstructor(access = AccessLevel.PACKAGE)
-@Getter(value = AccessLevel.PACKAGE)
+@Getter
 @Setter(value = AccessLevel.PACKAGE)
 @EqualsAndHashCode
-class PremiumInfluencingFactorLineItem {
+public class PremiumInfluencingFactorLineItem {
 
     private PremiumInfluencingFactor premiumInfluencingFactor;
 

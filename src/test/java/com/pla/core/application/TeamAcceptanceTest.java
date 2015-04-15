@@ -33,7 +33,7 @@ import java.util.List;
 import static org.junit.Assert.assertTrue;
 
 /**
- * @author: Samir
+ * @author: Nischitha
  * @since 1.0 05/03/2015
  */
 @RunWith(SpringJUnit4ClassRunner.class)

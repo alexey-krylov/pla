@@ -1,6 +1,5 @@
 package com.pla.core.domain.model.plan;
 
-import com.pla.core.application.service.plan.premium.PremiumService;
 import com.pla.core.domain.event.PlanCreatedEvent;
 import com.pla.core.domain.event.PlanDeletedEvent;
 import org.axonframework.saga.annotation.AbstractAnnotatedSaga;
@@ -19,7 +18,6 @@ public class PlanManagementSaga extends AbstractAnnotatedSaga {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(PlanManagementSaga.class);
     private boolean planPremiumAvailable = false;
-    private PremiumService premiumService;
 
     @StartSaga
     @SagaEventHandler(associationProperty = "planId")

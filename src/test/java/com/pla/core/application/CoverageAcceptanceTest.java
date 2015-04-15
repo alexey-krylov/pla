@@ -7,7 +7,7 @@ import com.github.springtestdbunit.annotation.DatabaseTearDown;
 import com.github.springtestdbunit.annotation.ExpectedDatabase;
 import com.github.springtestdbunit.assertion.DatabaseAssertionMode;
 import com.google.common.collect.Lists;
-import com.pla.core.domain.model.BenefitId;
+import com.pla.sharedkernel.identifier.BenefitId;
 import org.axonframework.commandhandling.gateway.CommandGateway;
 import org.junit.Before;
 import org.junit.Test;

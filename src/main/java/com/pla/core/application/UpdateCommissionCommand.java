@@ -7,6 +7,7 @@
 package com.pla.core.application;
 
 import com.pla.core.dto.CommissionTermDto;
+import com.pla.sharedkernel.domain.model.PremiumFee;
 import com.pla.sharedkernel.identifier.CommissionId;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -25,9 +26,10 @@ import java.util.Set;
 @Setter
 @ToString
 public class UpdateCommissionCommand {
-
+    String planId;
     CommissionId commissionId;
     Set<CommissionTermDto> commissionTermSet;
+    PremiumFee premiumFee;
     UserDetails userDetails;
 
 }

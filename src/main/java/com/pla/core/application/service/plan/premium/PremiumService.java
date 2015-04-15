@@ -7,10 +7,10 @@
 package com.pla.core.application.service.plan.premium;
 
 import com.pla.core.domain.model.plan.Plan;
-import com.pla.core.query.MasterFinder;
 import com.pla.core.repository.PlanRepository;
-import com.pla.core.domain.model.plan.premium.PremiumInfluencingFactor;
+import com.pla.publishedlanguage.domain.model.PremiumInfluencingFactor;
 import com.pla.sharedkernel.identifier.CoverageId;
+import com.pla.sharedkernel.identifier.PlanId;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.nthdimenzion.utils.UtilValidator;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +18,6 @@ import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
 
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -36,30 +35,27 @@ public class PremiumService {
 
     private MongoTemplate mongoTemplate;
 
-    private MasterFinder masterFinder;
+    private PremiumTemplateExcelGenerator premiumTemplateExcelGenerator;
 
     private PremiumTemplateParser premiumTemplateParser;
 
     @Autowired
-    public PremiumService(PlanRepository planRepository, MongoTemplate mongoTemplate, MasterFinder masterFinder, PremiumTemplateParser premiumTemplateParser) {
+    public PremiumService(PlanRepository planRepository, MongoTemplate mongoTemplate, PremiumTemplateParser premiumTemplateParser, PremiumTemplateExcelGenerator premiumTemplateExcelGenerator) {
         this.planRepository = planRepository;
         this.mongoTemplate = mongoTemplate;
-        this.masterFinder = masterFinder;
         this.premiumTemplateParser = premiumTemplateParser;
+        this.premiumTemplateExcelGenerator = premiumTemplateExcelGenerator;
     }
 
     public HSSFWorkbook generatePremiumExcelTemplate(PremiumInfluencingFactor[] premiumInfluencingFactors, String planId, String coverageId) throws IOException {
-        Plan plan = planRepository.findByPlanId(planId);
-        return new PremiumTemplateExcelGenerator(masterFinder).generatePremiumTemplate(Arrays.asList(premiumInfluencingFactors), plan, new CoverageId(coverageId));
+        Plan plan = planRepository.findOne(new PlanId(planId));
+        return premiumTemplateExcelGenerator.generatePremiumTemplate(Arrays.asList(premiumInfluencingFactors), plan, new CoverageId(coverageId));
     }
 
     public boolean validatePremiumTemplateData(HSSFWorkbook hssfWorkbook, PremiumInfluencingFactor[] premiumInfluencingFactors, String planId, String coverageId) throws IOException {
-        Plan plan = planRepository.findByPlanId(planId);
+        Plan plan = planRepository.findOne(new PlanId(planId));
         List<PremiumInfluencingFactor> premiumInfluencingFactorList = UtilValidator.isNotEmpty(premiumInfluencingFactors) ? Arrays.asList(premiumInfluencingFactors) : new ArrayList<>();
         boolean isValidTemplate = premiumTemplateParser.validatePremiumDataForAGivenPlanAndCoverage(hssfWorkbook, plan, new CoverageId(coverageId), premiumInfluencingFactorList);
-        FileOutputStream stream = new FileOutputStream("E:\\pla\\afterParsing.xls");
-        hssfWorkbook.write(stream);
-        stream.close();
         return isValidTemplate;
     }
 

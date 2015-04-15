@@ -41,8 +41,7 @@ public class CommissionCommandHandler {
         if (logger.isDebugEnabled()) {
             logger.debug("*****Create Commission Command Received*****" + createCommissionCommand);
         }
-        Commission commission = commissionService.createCommission(createCommissionCommand.getPlanId(), createCommissionCommand.getAvailableFor(), createCommissionCommand.getCommissionType(),
-                createCommissionCommand.getTermType(), createCommissionCommand.getFromDate(), createCommissionCommand.getCommissionTermSet(), createCommissionCommand.getUserDetails());
+        Commission commission = commissionService.createCommission(createCommissionCommand.getPlanId(), createCommissionCommand.getAvailableFor(), createCommissionCommand.getCommissionType(), createCommissionCommand.getPremiumFee(), createCommissionCommand.getFromDate(), createCommissionCommand.getCommissionTermSet(), createCommissionCommand.getUserDetails());
         JpaRepository<Commission, CommissionId> commissionRepository = jpaRepositoryFactory.getCrudRepository(Commission.class);
         try {
             commissionRepository.save(commission);
@@ -57,10 +56,11 @@ public class CommissionCommandHandler {
         if (logger.isDebugEnabled()) {
             logger.debug("*****Create Commission Command Received*****" + updateCommissionCommand);
         }
-        Commission commission = commissionService.updateCommissionTerm(updateCommissionCommand.getCommissionId(),updateCommissionCommand.getCommissionTermSet(),updateCommissionCommand.getUserDetails());
         JpaRepository<Commission, CommissionId> commissionRepository = jpaRepositoryFactory.getCrudRepository(Commission.class);
+        Commission commission = commissionRepository.findOne(updateCommissionCommand.getCommissionId());
+        Commission updatedCommission = commissionService.updateCommissionTerm(updateCommissionCommand.getPlanId(), commission, updateCommissionCommand.getCommissionTermSet(), updateCommissionCommand.getUserDetails());
         try {
-            commissionRepository.save(commission);
+            commissionRepository.save(updatedCommission);
         } catch (RuntimeException e) {
             logger.error("*****Saving Commission failed*****", e);
             throw new RuntimeException(e.getMessage());

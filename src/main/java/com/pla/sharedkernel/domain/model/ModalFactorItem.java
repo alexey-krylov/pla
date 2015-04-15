@@ -8,7 +8,7 @@ import lombok.Getter;
 @Getter
 public enum ModalFactorItem {
 
-    SEMI_ANNUAL("Semi-annual Modal Factor"),QUARTERLY("Quarterly Modal Factor"),
+    SEMI_ANNUAL("Semi-annual Modal Factor"), QUARTERLY("Quarterly Modal Factor"),
     MONTHLY("Monthly Modal Factor");
 
     private String description;

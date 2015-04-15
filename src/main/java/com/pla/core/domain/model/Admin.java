@@ -11,14 +11,12 @@ import com.pla.core.domain.exception.CoverageException;
 import com.pla.core.domain.exception.TeamDomainException;
 import com.pla.core.domain.model.generalinformation.OrganizationGeneralInformation;
 import com.pla.core.domain.model.generalinformation.ProductLineGeneralInformation;
+import com.pla.core.domain.model.plan.Plan;
 import com.pla.core.domain.model.plan.commission.Commission;
 import com.pla.core.domain.model.plan.commission.CommissionTerm;
 import com.pla.core.dto.GeneralInformationDto;
 import com.pla.sharedkernel.domain.model.*;
-import com.pla.sharedkernel.identifier.CommissionId;
-import com.pla.sharedkernel.identifier.CoverageId;
-import com.pla.sharedkernel.identifier.LineOfBusinessId;
-import com.pla.sharedkernel.identifier.PlanId;
+import com.pla.sharedkernel.identifier.*;
 import org.bson.types.ObjectId;
 import org.joda.time.LocalDate;
 import org.nthdimenzion.ddd.domain.annotations.ValueObject;
@@ -59,14 +57,14 @@ public class Admin {
         return updatedBenefit;
     }
 
-    public Coverage createCoverage(boolean isCodeOrNameIsUnique,String coverageId, String coverageName,String coverageCode,String description,  Set<Benefit> benefits) {
-        if (!isCodeOrNameIsUnique)
+    public Coverage createCoverage(boolean isCodeAndNameIsUnique,String coverageId, String coverageName,String coverageCode,String description,  Set<Benefit> benefits) {
+        if (!isCodeAndNameIsUnique)
             throw new CoverageException("Coverage already described");
         return new Coverage(new CoverageId(coverageId), new CoverageName(coverageName),coverageCode, benefits, CoverageStatus.ACTIVE).updateDescription(description);
     }
 
-    public Coverage updateCoverage(Coverage coverage, String newCoverageName,String newCoverageCode, String description,Set<Benefit> benefits, boolean isCoverageNameOrCodeIsUnique) {
-        if (!isCoverageNameOrCodeIsUnique)
+    public Coverage updateCoverage(Coverage coverage, String newCoverageName,String newCoverageCode, String description,Set<Benefit> benefits, boolean isCodeAndNameIsUnique) {
+        if (!isCodeAndNameIsUnique)
             throw new CoverageException("Coverage already described");
         return coverage.updateCoverageName(newCoverageName).updateCoverageCode(newCoverageCode).updateBenefit(benefits).updateDescription(description);
     }
@@ -80,7 +78,7 @@ public class Admin {
     public Team createTeam(boolean isTeamUnique, String teamId, String teamName, String teamCode, String regionCode, String branchCode
             , String employeeId, LocalDate fromDate, String firstName, String lastName) {
         if (!isTeamUnique) {
-            throw new TeamDomainException("Team name and Team Code already satisfied");
+            throw new TeamDomainException("Team name or Team Code already satisfied");
         }
         TeamLeader teamLeader = new TeamLeader(employeeId, firstName, lastName);
         TeamLeaderFulfillment teamLeaderFulfillment = new TeamLeaderFulfillment(teamLeader, fromDate);
@@ -151,14 +149,14 @@ public class Admin {
         return productLineGeneralInformation;
     }
 
-    public Commission createCommission(CommissionId commissionId, PlanId planId, CommissionDesignation availableFor, CommissionType commissionType, CommissionTermType commissionTermType, LocalDate fromDate) {
+    public Commission createCommission(CommissionId commissionId, PlanId planId, CommissionDesignation availableFor, CommissionType commissionType, PremiumFee premiumFee, LocalDate fromDate) {
 
-        return Commission.createCommission(commissionId, planId, availableFor, commissionType, commissionTermType, fromDate);
+        return Commission.createCommission(commissionId, planId, availableFor, commissionType, premiumFee, fromDate);
     }
 
-    public Commission updateCommissionTerm(Commission commission, Set<CommissionTerm> commissionSet) {
+    public Commission updateCommissionTerm(Commission commission, Set<CommissionTerm> commissionSet, Plan plan) {
 
-        return commission.updateWithCommissionTerms(commissionSet);
+        return commission.updateWithCommissionTerms(commissionSet, plan);
     }
 
 }

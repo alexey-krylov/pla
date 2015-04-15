@@ -528,6 +528,7 @@ VALUES ("KON","Konkola Copper Mine","Private Clinic",null,"CI-CHIL","PR-COP",nul
 ("NOR","Northmead Chemist","Private Pharmacist",null,"CI-LUS","PR-LUS",null,null,null);
 
 insert  into `entity_sequence`(`sequence_id`,`sequence_name`,`sequence_number`,`sequence_prefix`) values (1,'com.pla.core.domain.model.agent.Agent',0,'1000');
+insert  into `entity_sequence`(`sequence_id`,`sequence_name`,`sequence_number`,`sequence_prefix`) values (2,'com.pla.quotation.domain.model.grouplife.GroupLifeQuotation',1000000,' ');
 
 insert into `channel_type` (`CHANNEL_CODE`, `CHANNEL_DESCRIPTION`) values('BROKER','Broker');
 insert into `channel_type` (`CHANNEL_CODE`, `CHANNEL_DESCRIPTION`) values('DIRECT','Direct');
@@ -613,3 +614,14 @@ values ('A','Accountants'),('A','Actuaries'),('A','Advocates'),('A','Architects'
 ('E','Blasters'),('E','Bulldozers Drivers'),('E','Divers (Qualified professionals)'),('E','Firemen (fire fighting)'),
 ('E','Raliway Shunters'),('E','Spray painters'),('E','Trawlers (all crew members- Not Naval)'),
 ('E','Underground workers (heavy occupations- Mines)'),('IC','Brewery Employees');
+
+
+INSERT INTO `document` (`document_code`, `document_name`) VALUES('ACTIVE_AT_WORK_DECLARATION_FORM','Active At Work Declaration Form'),
+('ADDRESS_PROOF','Address Proof'),
+('CONSENT_LETTER','Consent Letter'),
+('FULLY_FILLED_CLAIM_FORM','Fully filled  Claim Form'),
+('FULLY_FILLED_MATURITY_CLAIM_FORM','Fully filled Maturity Claim Form'),
+('FULLY_FILLED_SURRENDER_CLAIM_FORM','Fully filled Surrender Claim Form'),
+('ID_PROOF','ID Proof'),
+('SIGNED_DOCUEMENT','Signed Agreement'),
+('SIGNED_PROPOSAL_FORM','Signed Proposal Form');

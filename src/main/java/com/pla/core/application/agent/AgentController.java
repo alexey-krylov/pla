@@ -8,7 +8,6 @@ package com.pla.core.application.agent;
 
 import com.google.common.base.Preconditions;
 import com.pla.core.application.exception.AgentApplicationException;
-import com.pla.core.application.exception.BenefitApplicationException;
 import com.pla.core.domain.model.agent.Agent;
 import com.pla.core.query.AgentFinder;
 import com.pla.core.query.TeamFinder;
@@ -17,12 +16,13 @@ import com.pla.publishedlanguage.domain.model.EmployeeDto;
 import com.pla.sharedkernel.util.SequenceGenerator;
 import org.axonframework.commandhandling.gateway.CommandGateway;
 import org.nthdimenzion.presentation.Result;
-import org.nthdimenzion.utils.UtilValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -37,6 +37,7 @@ import java.util.List;
 import java.util.Map;
 
 import static org.nthdimenzion.presentation.AppUtils.getLoggedInUSerDetail;
+import static org.nthdimenzion.utils.UtilValidator.isNotEmpty;
 
 /**
  * @author: Samir
@@ -89,7 +90,7 @@ public class AgentController {
     @RequestMapping(value = "/getagentid", method = RequestMethod.GET)
     @ResponseBody
     public String getAgentId() {
-        return sequenceGenerator.getId(Agent.class);
+        return sequenceGenerator.getSequence(Agent.class);
     }
 
     @RequestMapping(value = "/createagent", method = RequestMethod.GET)
@@ -114,7 +115,7 @@ public class AgentController {
     @RequestMapping(value = "/agentdetail", method = RequestMethod.GET)
     @ResponseBody
     public CreateAgentCommand getAgentDetail(@RequestParam("agentId") String agentId) {
-        Preconditions.checkArgument(UtilValidator.isNotEmpty(agentId));
+        Preconditions.checkArgument(isNotEmpty(agentId));
         Map<String, Object> agentDetail = agentFinder.getAgentById(agentId);
         List<Map<String, Object>> allAgentPlans = agentFinder.getAllAgentPlan();
         return CreateAgentCommand.transformToAgentCommand(agentDetail, allAgentPlans, mongoTemplate.findAll(Map.class, "PLAN"));
@@ -124,7 +125,7 @@ public class AgentController {
     public ModelAndView viewAgentDetail(@RequestParam("agentId") String agentId) {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("pla/core/agent/agentDetail");
-        Preconditions.checkArgument(UtilValidator.isNotEmpty(agentId));
+        Preconditions.checkArgument(isNotEmpty(agentId));
         Map<String, Object> agentDetail = agentFinder.getAgentById(agentId);
         List<Map<String, Object>> agentPlans = agentFinder.getAllAgentPlan();
         modelAndView.addObject("agentDetail", CreateAgentCommand.transformToAgentCommand(agentDetail, agentPlans, mongoTemplate.findAll(Map.class, "PLAN")));
@@ -142,9 +143,13 @@ public class AgentController {
             UserDetails userDetails = getLoggedInUSerDetail(request);
             createAgentCommand.setUserDetails(userDetails);
             commandGateway.sendAndWait(createAgentCommand);
-        } catch (BenefitApplicationException e) {
+        } catch (AgentApplicationException e) {
             LOGGER.error("Error in creating agent", e);
-            return Result.failure("Error in creating agent");
+            return Result.failure(e.getMessage());
+        }
+        catch (Exception e){
+            LOGGER.error("Error in creating agent", e);
+            return Result.failure(e.getMessage());
         }
         return Result.success("Agent created successfully");
     }
@@ -167,10 +172,19 @@ public class AgentController {
         return Result.success("Agent updated successfully");
     }
 
-    @RequestMapping(value = "/getemployeedeatil/{employeeId}/{nrcNumber}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.ALL_VALUE)
+    @RequestMapping(value = "/getemployeedeatil", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.ALL_VALUE)
     @ResponseBody
-    public EmployeeDto getEmployeeDetail(@PathVariable String employeeId, @PathVariable String nrcNumber) {
-        return smeGateway.getEmployeeDetailByIdOrByNRCNumber(employeeId, nrcNumber);
+    public ResponseEntity getEmployeeDetail(@RequestParam(value = "employeeId",required = false) String employeeId, @RequestParam(value = "nrcNumber",required = false) String nrcNumber) {
+        EmployeeDto employeeDto;
+        try {
+            if (isNotEmpty(nrcNumber)) {
+                nrcNumber = nrcNumber.replaceAll("/", "").trim();
+            }
+            employeeDto = smeGateway.getEmployeeDetailByIdOrByNRCNumber(employeeId, nrcNumber);
+        }catch (Exception e){
+            return new ResponseEntity(e.getLocalizedMessage(), HttpStatus.PRECONDITION_FAILED);
+        }
+        return new ResponseEntity(employeeDto, HttpStatus.OK);
     }
 
     @RequestMapping(value = "/getallplan", method = RequestMethod.GET)

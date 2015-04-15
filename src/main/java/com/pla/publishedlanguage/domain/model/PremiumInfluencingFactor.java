@@ -4,7 +4,7 @@
  * Proprietary and confidential
  */
 
-package com.pla.core.domain.model.plan.premium;
+package com.pla.publishedlanguage.domain.model;
 
 import com.google.common.collect.Lists;
 import com.pla.core.domain.model.plan.Plan;
@@ -207,12 +207,12 @@ public enum PremiumInfluencingFactor {
     }, OCCUPATION_CATEGORY("Occupation Category") {
         @Override
         public String[] getAllowedValues(Plan plan, CoverageId coverageId, MasterFinder masterFinder) {
-            List<Map<String, Object>> occupationCategories = masterFinder.getAllOccupationCategory();
+            List<Map<String, Object>> occupationCategories = masterFinder.getAllOccupationClass();
             occupationCategories = isNotEmpty(occupationCategories) ? occupationCategories : Lists.newArrayList();
             String[] categories = new String[occupationCategories.size()];
             for (int count = 0; count < occupationCategories.size(); count++) {
                 Map<String, Object> occupationCategoryMap = occupationCategories.get(count);
-                categories[count] = (String) occupationCategoryMap.get("description");
+                categories[count] = (String) occupationCategoryMap.get("code");
             }
             return categories;
         }
@@ -230,21 +230,6 @@ public enum PremiumInfluencingFactor {
         @Override
         public String[] getAllowedValues(Plan plan, CoverageId coverageId, MasterFinder masterFinder) {
             return new String[]{""};
-        }
-
-        @Override
-        public boolean isValidValue(Plan plan, CoverageId coverageId, String value) {
-            return isNotEmpty(value);
-        }
-
-        @Override
-        public String getErrorMessage(String value) {
-            return " ";
-        }
-    }, INCOME_MULTIPLIER("Income Multiplier") {
-        @Override
-        public String[] getAllowedValues(Plan plan, CoverageId coverageId, MasterFinder masterFinder) {
-            return new String[0];
         }
 
         @Override

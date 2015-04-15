@@ -44,16 +44,16 @@ public class CoverageService {
         String coverageId = idGenerator.nextId();
         Admin admin = adminRoleAdapter.userToAdmin(userDetails);
         CoverageDto coverageDto  = new CoverageDto(coverageId,name,coverageCode);
-        boolean isCodeOrNameIsUnique = coverageCodeIsUnique.Or(coverageNameIsUnique).isSatisfiedBy(coverageDto);
-        Coverage coverage = admin.createCoverage(isCodeOrNameIsUnique,coverageId, name,coverageCode,description,benefitSet);
+        boolean isCodeAndNameIsUnique = coverageCodeIsUnique.And(coverageNameIsUnique).isSatisfiedBy(coverageDto);
+        Coverage coverage = admin.createCoverage(isCodeAndNameIsUnique,coverageId, name,coverageCode,description,benefitSet);
         return coverage;
     }
 
     public Coverage updateCoverage(Coverage coverage, String newCoverageName,String newCoverageCode,String description,Set<Benefit> benefits, UserDetails userDetails) {
         Admin admin = adminRoleAdapter.userToAdmin(userDetails);
         CoverageDto coverageDto  = new CoverageDto(coverage.getCoverageId().getCoverageId(), newCoverageName,newCoverageCode);
-        boolean isCodeOrNameIsUnique = coverageCodeIsUnique.Or(coverageNameIsUnique).isSatisfiedBy(coverageDto);
-        Coverage updatedCoverage = admin.updateCoverage(coverage, newCoverageName,newCoverageCode,description, benefits,isCodeOrNameIsUnique);
+        boolean isCodeAndNameIsUnique = coverageCodeIsUnique.And(coverageNameIsUnique).isSatisfiedBy(coverageDto);
+        Coverage updatedCoverage = admin.updateCoverage(coverage, newCoverageName,newCoverageCode,description, benefits,isCodeAndNameIsUnique);
         return updatedCoverage;
     }
 

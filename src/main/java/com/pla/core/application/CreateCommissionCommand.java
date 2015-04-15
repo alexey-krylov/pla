@@ -7,10 +7,10 @@
 package com.pla.core.application;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.pla.sharedkernel.domain.model.CommissionDesignation;
 import com.pla.core.dto.CommissionTermDto;
-import com.pla.sharedkernel.domain.model.CommissionTermType;
+import com.pla.sharedkernel.domain.model.CommissionDesignation;
 import com.pla.sharedkernel.domain.model.CommissionType;
+import com.pla.sharedkernel.domain.model.PremiumFee;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -33,8 +33,8 @@ public class CreateCommissionCommand {
 
     String planId;
     CommissionDesignation availableFor;
+    PremiumFee premiumFee;
     CommissionType commissionType;
-    CommissionTermType termType;
 
     @JsonDeserialize(using = LocalJodaDateDeserializer.class)
     LocalDate fromDate;
