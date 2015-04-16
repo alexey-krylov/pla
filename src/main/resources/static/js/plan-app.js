@@ -439,3 +439,6 @@ app.filter('getTrustedUrl', ['$sce', function ($sce) {
         return $sce.getTrustedResourceUrl(url);
     }
 }]);
+
+
+
