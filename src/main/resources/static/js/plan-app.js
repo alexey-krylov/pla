@@ -156,7 +156,7 @@ app.controller('PlanSetupController', ['$scope', '$http', '$location', '$routePa
 
             $scope.showCoverageForm = function (coverage, isEditing) {
                 $modal.open({
-                    templateUrl: '/pla/plan/coverage-form.html',
+                    templateUrl: '/pla/core/plan/coverage-form.html',
                     backdrop: true,
                     windowClass: 'modal',
                     controller: function ($scope, $modalInstance, $log, newCoverage, plan, coverageList, isEditing, stepForm) {
@@ -439,3 +439,6 @@ app.filter('getTrustedUrl', ['$sce', function ($sce) {
         return $sce.getTrustedResourceUrl(url);
     }
 }]);
+
+
+
