@@ -57,6 +57,12 @@ public class PlanSetupController {
         return modelAndView;
     }
 
+    @RequestMapping(value = "/coverage-form.html", method = RequestMethod.GET)
+     public ModelAndView coverageFormPage() {
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("pla/core/plan/coverage-form");
+        return modelAndView;
+    }
     /**
      * For handling ajax call to get list of all active Plan.
      *
