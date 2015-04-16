@@ -31,14 +31,18 @@
                                 <label class="control-label">Product</label>
                                 <select class="form-control input-sm" id="productName" ng-model="createCommission.planId" ng-required="true">
                                     <option value="">--Select One--</option>
-                                    <option th:each="plan:${plans}" th:text="${plan.planDetail.planName}" th:value="${plan.planId.planId}"></option>
+                                    <option th:each="plan:${plans}" th:text="${plan.planDetail.planName}" th:value="${plan.planId}" ></option>
                                 </select>
                             </div>
                             <div class="form-group col-md-6 required">
                                 <label class="control-label">Commissions Available For</label>
-                                <select class="form-control input-sm" id="commissionsAvailableFor" ng-model="createCommission.availableFor" ng-required="true">
+                                <select class="form-control input-sm" id="commissionsAvailableFor" ng-model="createCommission.availableFor" ng-required="true" th:if="${commissiontype=='Override'}">
                                     <option value="">--Select One--</option>
-                                    <option th:each="desig:${designation}" th:value="${desig}" th:text="${desig}"></option>
+                                    <option th:each="desig:${designation}" th:value="${desig}" th:text="${desig.description}" th:if="${!desig.toString().equals('AGENT')}"></option>
+                                </select>
+                                <select class="form-control input-sm" id="commissionsAvailableFor" ng-model="createCommission.availableFor" ng-required="true" th:if="${commissiontype=='Normal'}">
+                                    <option value="">--Select One--</option>
+                                    <option th:each="desig:${designation}" th:value="${desig}" th:text="${desig.description}"></option>
                                 </select>
                             </div>
                             <div class="form-group col-md-6 required">
@@ -62,7 +66,7 @@
                                     <input type="radio" name="commissionCalculated"  ng-value="'INVESTMENT_FEE'" ng-model="createCommission.premiumFee" ng-required="true"/>Premium - Policy Fee - Investment Premium
                                 </label>
                                 <div ng-show="productForm.commissionCalculated.$invalid &amp;&amp; productForm.commissionCalculated.$dirty">
-                                    <small class="error" ng-show="productForm.toYear.$error.required">
+                                    <small class="error" ng-show="productForm.endYear.$error.required">
                                         Please select One.
                                     </small>
                                 </div>
@@ -74,7 +78,7 @@
                         <div class="row">
                             <div class="form-group col-md-2 required">
                                 <label class="control-label ">Policy year Expressed As</label>
-                                <select class="form-control input-sm" name="policyYearExpressed" ng-model="addCommission.policyYearExpressed" ng-required="true">
+                                <select class="form-control input-sm" name="commissionTermType" ng-model="addCommission.commissionTermType" ng-required="true">
                                     <option value="">Please Select</option>
                                     <option value="SINGLE">Single</option>
                                     <option value="RANGE">Range</option>
@@ -83,13 +87,13 @@
                             </div>
                             <div class="form-group col-md-2 required">
                                 <label class="control-label ">From Year</label>
-                                <input type="number" name="fromYear"  class="form-control input-sm" ng-disabled="!addCommission.policyYearExpressed" id="policyYear1"
-                                       ng-model="addCommission.fromYear"  ng-required="true" ng-change="yearErrorStatus=null" min="1"/>
-                                <div ng-show="addCommissionForm.fromYear.$invalid &amp;&amp; addCommissionForm.fromYear.$dirty">
-                                    <small class="error" ng-show="addCommissionForm.fromYear.$error.number">
+                                <input type="number" name="startYear"  class="form-control input-sm" ng-disabled="!addCommission.commissionTermType" id="policyYear1"
+                                       ng-model="addCommission.startYear"  ng-required="true" ng-change="yearErrorStatus=null" min="1"/>
+                                <div ng-show="addCommissionForm.startYear.$invalid &amp;&amp; addCommissionForm.startYear.$dirty">
+                                    <small class="error" ng-show="addCommissionForm.startYear.$error.number">
                                         Please enter a valid number.
                                     </small>
-                                    <small class="error" ng-show="addCommissionForm.fromYear.$error.min">
+                                    <small class="error" ng-show="addCommissionForm.startYear.$error.min">
                                         Please enter a valid number.
                                     </small>
                                 </div>
@@ -97,15 +101,15 @@
                                     From year already exists in the range.
                                 </small>
                             </div>
-                            <div class="form-group col-md-2 required" ng-if="addCommission.policyYearExpressed=='RANGE'">
+                            <div class="form-group col-md-2 required" ng-if="addCommission.commissionTermType=='RANGE'">
                                 <label class="control-label">To Year</label>
-                                <input type="number" name="toYear" class="form-control input-sm" id="policyYear2" ng-disabled="!addCommission.policyYearExpressed"
-                                       ng-model="addCommission.toYear"  ng-required="true" min="{{addCommission.fromYear+1}}" ng-change="yearErrorStatus=null"/>
-                                <div ng-show="addCommissionForm.toYear.$invalid &amp;&amp; addCommissionForm.toYear.$dirty">
-                                    <small class="error" ng-show="addCommissionForm.toYear.$error.min">
+                                <input type="number" name="endYear" class="form-control input-sm" id="policyYear2" ng-disabled="!addCommission.commissionTermType"
+                                       ng-model="addCommission.endYear"  ng-required="true" min="{{addCommission.startYear+1}}" ng-change="yearErrorStatus=null"/>
+                                <div ng-show="addCommissionForm.endYear.$invalid &amp;&amp; addCommissionForm.endYear.$dirty">
+                                    <small class="error" ng-show="addCommissionForm.endYear.$error.min">
                                         To year should be greater than from year.
                                     </small>
-                                    <small class="error" ng-show="addCommissionForm.toYear.$error.number">
+                                    <small class="error" ng-show="addCommissionForm.endYear.$error.number">
                                         Please enter a valid number.
                                     </small>
                                 </div>
@@ -115,8 +119,8 @@
                             </div>
                             <div class="form-group col-md-2 required" >
                                 <label class="control-label">Commissions In %age</label>
-                                <input type="number" name="commission"  class="form-control input-sm" id="commissions" ng-disabled="!addCommission.policyYearExpressed"
-                                       ng-model="addCommission.policyCommissions"  ng-required="true" min="1"/>
+                                <input type="number" name="commission"  class="form-control input-sm" id="commissions" ng-disabled="!addCommission.commissionTermType"
+                                       ng-model="addCommission.commissionPercentage"  ng-required="true" min="1"/>
                                 <div ng-show="addCommissionForm.commission.$invalid &amp;&amp; addCommissionForm.commission.$dirty">
                                     <small class="error" ng-show="addCommissionForm.commission.$error.number">
                                         Please enter a valid number.
@@ -137,20 +141,27 @@
                             <th>From Year</th>
                             <th>To Year</th>
                             <th>Commissions In %age</th>
+                            <th>Action</th>
                         </tr>
                         </thead>
                         <tbody>
 
                         <tr ng-repeat="commission in createCommission.commissionTermSet" >
-                            <td>{{ commission.fromYear}}</td>
-                            <td>{{ commission.toYear}}</td>
-                            <td>{{ commission.policyCommissions }}</td>
+                            <td><span>{{ commission.startYear}}</span>
+                            </td>
+                            <td><span>{{ commission.endYear}}</span>
+                            </td>
+                            <td><span>{{ commission.commissionPercentage }}</span>
+                            </td>
+                            <td>
+                                <button class="btn btn-default btn-sm" ng-click="deleteCurrentRow($index)">Delete</button>
+                            </td>
                         </tr>
                         </tbody>
                     </table>
                     <div class="row">
                         <div class="col-lg-12" style="text-align: center;margin-top:3px;">
-                            <button type="button" class="btn btn-default" style="float:right;" ng-disabled="productForm.$invalid || !createCommission.commissionTermSet[0]" ng-click="saveCommission()">Save</button>
+                            <button type="button" class="btn btn-default" style="float:right;" ng-disabled="productForm.$invalid || !createCommission.commissionTermSet[0] ||isSaved" ng-click="saveCommission()">Save</button>
                             <a class="btn btn-default" style="float:left;" th:href="@{/core/commission/view}">Cancel</a>
                         </div>
                     </div>

@@ -1,7 +1,13 @@
 angular.module('createCommission', ['common','commonServices'])
 
-    .controller('CreateCommissionController',['$scope','formatJSDateToDDMMYYYY','getQueryParameter',function($scope,formatJSDateToDDMMYYYY,getQueryParameter){
-        var mode = getQueryParameter("mode");
+    .controller('CreateCommissionController',['$scope','formatJSDateToDDMMYYYY','$http','$window',function($scope,formatJSDateToDDMMYYYY,$http,$window){
+        var mode= null;
+        if($window.location.href.indexOf("Normal")!=-1){
+            mode = "NORMAL";
+        }else{
+            mode = "OVERRIDE";
+        }
+        $scope.isSaved =  false;
         $scope.createCommission = {
             commissionTermSet:[],
             commissionType:mode
@@ -14,32 +20,45 @@ angular.module('createCommission', ['common','commonServices'])
         var yearsSelected = [];
 
         $scope.addCommissionDetails = function(addCommissionForm) {
-            if($scope.addCommission.policyYearExpressed=='RANGE'){
-                if(_.contains(yearsSelected,$scope.addCommission.toYear)){
+            if($scope.addCommission.commissionTermType=='RANGE'){
+                if(_.contains(yearsSelected,$scope.addCommission.endYear)){
                     $scope.yearErrorStatus = 'TO_YEAR';
                     return;
                 }
-                if(_.contains(yearsSelected,$scope.addCommission.fromYear)){
+                if(_.contains(yearsSelected,$scope.addCommission.startYear)){
                     $scope.yearErrorStatus = 'FROM_YEAR';
                     return;
                 }
-                for(var fromYear=$scope.addCommission.fromYear;fromYear<=$scope.addCommission.toYear;fromYear++){
+                for(var fromYear=$scope.addCommission.startYear;fromYear<=$scope.addCommission.endYear;fromYear++){
                     yearsSelected.push(fromYear);
                 }
                 $scope.createCommission.commissionTermSet.push($scope.addCommission);
             }else{
-                if(_.contains(yearsSelected,$scope.addCommission.fromYear)){
+                if($scope.addCommission && $scope.addCommission.endYear){
+                    delete $scope.addCommission.endYear;
+                }
+                if(_.contains(yearsSelected,$scope.addCommission.startYear)){
                     $scope.yearErrorStatus = 'FROM_YEAR';
                     return;
                 }
-                yearsSelected.push($scope.addCommission.fromYear);
+                yearsSelected.push($scope.addCommission.startYear);
                 $scope.createCommission.commissionTermSet.push($scope.addCommission);
             }
-            console.log($scope.createCommission)
             $scope.showtable  = true;
             $scope.yearErrorStatus = null;
             $scope.addCommission = {};
             resetForm(addCommissionForm);
+        };
+
+        var removeYearsSelected=function(selectedRow){
+                if(selectedRow.commissionTermType=='RANGE'){
+                    for(var fromYear=selectedRow.startYear;fromYear<=selectedRow.endYear;fromYear++){
+                        yearsSelected.splice(yearsSelected.indexOf(fromYear));
+                    }
+                }else{
+                    yearsSelected.splice(yearsSelected.indexOf(selectedRow.startYear));
+                }
+                $scope.createCommission.commissionTermSet.splice($scope.createCommission.commissionTermSet.indexOf(selectedRow));
         };
 
         var resetForm = function(form){
@@ -51,9 +70,18 @@ angular.module('createCommission', ['common','commonServices'])
             })
         };
 
+        $scope.deleteCurrentRow =  function(index){
+            removeYearsSelected($scope.createCommission.commissionTermSet[index]);
+        };
+
         $scope.saveCommission = function(){
             $scope.createCommission.fromDate = formatJSDateToDDMMYYYY($scope.fromDate);
-            console.log($scope.createCommission);
+            $http.post("/pla/core/commission/create", $scope.createCommission)
+                .success(function(data,status){
+                    if(data.status="200"){
+                        $scope.isSaved=true;
+                    }
+                })
         };
         $scope.fromDatePickerSettings = {
             isOpened:false,
@@ -70,4 +98,9 @@ angular.module('createCommission', ['common','commonServices'])
         };
 
 
-    }]);
+    }])
+    .filter('camelCase', function() {
+        return function(input) {
+            return input.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
+        }
+    });
