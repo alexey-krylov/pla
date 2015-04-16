@@ -64,6 +64,7 @@
                                 <label class="control-label">Team Leader</label>
                                 <select class="form-control input-sm" id="teamLeader" ng-model="createTeam.employeeId" ng-options="teamLeader.employeeId as teamLeader.firstName + ' ' + teamLeader.lastName for teamLeader in teamLeaders | orderBy:'firstName' ">
                                     <option value="">-----Select option-----</option>
+
                                 </select>
 
                             </div>
@@ -73,7 +74,7 @@
                                     <input type="text" class="form-control input-sm" ng-click="open($event)"  min-date="selectedDate"   datepicker-popup="dd/MM/yyyy"  ng-model="createTeam.fromDate"  datepicker-options="datePickerSettings.dateOptions" is-open="datePickerSettings.isOpened"  close-text="Close" show-button-bar="false" />
                                         <span class="input-group-btn">
                                             <button type="button" class="btn btn-default btn-sm" ng-click="open($event)"><i class="glyphicon glyphicon-calendar"></i></button>
-                                        </span>
+                                     </span>
                                 </p>
                             </div>
 

@@ -41,7 +41,7 @@ App.controller('CreatePremiumController',['$scope','$http','$rootScope','$upload
                          $scope.planList=data[i];
                          $scope.newPlanList.push({
                               planName: $scope.planList.planDetail.planName,
-                              planId: $scope.planList.planId.planId,
+                              planId: $scope.planList.planId,
                               coverages: $scope.planList.coverages
                               });
                 }
