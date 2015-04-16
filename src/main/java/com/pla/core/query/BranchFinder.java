@@ -18,8 +18,8 @@ import java.util.Map;
 @Service
 public class BranchFinder {
 
-    public static final String FIND_ALL_BRANCH_QUERY = "SELECT br.branch_code AS branchCode,rg.region_code AS regionCode, rg.region_name AS regionName, br.branch_name AS branchName,bmf.employee_id AS branchManager,bmf.first_name AS branchManagerFirstName, bmf.last_name AS branchManagerLastName, bmf.from_date AS branchManagerFromDate, " +
-            "bbf.employee_id AS branchBDE,bbf.first_name AS branchBDEFirstName, bbf.last_name AS branchBDELastName, bbf.from_date AS branchBDEFromDate " +
+    public static final String FIND_ALL_BRANCH_QUERY = "SELECT br.branch_code AS branchCode,rg.region_code AS regionCode, rg.region_name AS regionName, br.branch_name AS branchName,bmf.employee_id AS branchManager,bmf.first_name AS branchManagerFirstName, bmf.last_name AS branchManagerLastName, bmf.from_date AS branchManagerFromDate,bmf.thru_date AS branchManagerToDate, " +
+            "bbf.employee_id AS branchBDE,bbf.first_name AS branchBDEFirstName, bbf.last_name AS branchBDELastName, bbf.from_date AS branchBDEFromDate, bbf.thru_date AS branchBDEToDate " +
             "FROM branch br " +
             "JOIN region_branch rb ON rb.branch_code = br.branch_code " +
             "JOIN region rg ON rg.region_code = rb.region_code " +
