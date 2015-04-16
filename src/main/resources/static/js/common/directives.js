@@ -101,7 +101,7 @@ angular.module('directives', ['mgcrea.ngStrap.alert'])
             restrict: 'E',
             link:function(){
                 $rootScope.$on('httpInterceptorAlert',function(event,args){
-                    $alert({title:args.message,placement:'top-right',type:'success',show:true,duration:6});
+                    $alert({title:args.message,placement:'top-right',type:args.type,show:true,duration:6});
                 })
             }
         }
