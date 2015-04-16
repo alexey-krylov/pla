@@ -37,6 +37,9 @@
                             <th th:text="#{regionalManagerFrom}">
                                 Regional Manager From
                             </th>
+                            <th th:text="#{regionalManagerTo}">
+                                Regional Manager To
+                            </th>
                             <th th:text="#{actions}">
                                 Actions
                             </th>
@@ -47,8 +50,10 @@
                             <td th:text="${region.regionName}"></td>
                             <td th:text="${region.regionalManagerFirstName != null and region.regionalManagerLastName != null}? |${region.regionalManagerFirstName} ${region.regionalManagerLastName} |"> </td>
                             <td th:text="${region.regionalManagerFromDate != null}? ${#dates.format(region.regionalManagerFromDate,'dd/MM/yyyy')}"></td>
+                            <td th:text="${region.regionalManagerThruDate != null}? ${#dates.format(region.regionalManagerThruDate,'dd/MM/yyyy')}"></td>
+
                             <td style="text-align:center">
-                                <a class="btn btn-default btn-xs" th:href="'/pla/core/region/redirecttoassignPage?regionId='+${region.regionCode}+''">Assign</a></td>
+                                <a class="btn btn-default btn-xs" th:disabled="${region.regionalManagerThruDate != null}" th:href="'/pla/core/region/redirecttoassignPage?regionId='+${region.regionCode}+''">Assign</a></td>
 
                         </tr>
 

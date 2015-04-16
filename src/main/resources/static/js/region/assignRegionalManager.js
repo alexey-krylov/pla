@@ -52,8 +52,8 @@ App.controller('AssignRegionalManagerController',['$scope','$http','$window','$l
         $scope.reset=function(){
            $scope.assignRegionalManager.fromDate='';
            $scope.assignRegionalManager.employeeId='';
-           $scope.assignBranchManager.regionName='';
-           $scope.assignBranchManager.regionalManagerName='';
-           $scope.assignBranchManager.regionalManagerFromDate='';
+           $scope.assignRegionalManager.regionName='';
+           $scope.assignRegionalManager.regionalManagerName='';
+           $scope.assignRegionalManager.regionalManagerFromDate='';
         }
 }]);

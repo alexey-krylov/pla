@@ -15,7 +15,7 @@ App.controller('CreateMandatoryDocumentController',['$scope','$http','$rootScope
                   $scope.planList=data[i];
                   $scope.newPlanList.push({
                         planName: $scope.planList.planDetail.planName,
-                        planId: $scope.planList.planId.planId,
+                        planId: $scope.planList.planId,
                         coverages: $scope.planList.coverages
                  });
               }
@@ -32,6 +32,7 @@ App.controller('CreateMandatoryDocumentController',['$scope','$http','$rootScope
          }
 
          $scope.$watch('createMandatoryDocument.planId',function(newValue, oldValue){
+
            if(newValue){
               var planId=$scope.createMandatoryDocument.planId;
               $scope.optionalCoverageData =_.findWhere($scope.newPlanList,{planId:planId});
@@ -50,6 +51,14 @@ App.controller('CreateMandatoryDocumentController',['$scope','$http','$rootScope
 
          $http.get('/pla/core/mandatorydocument/getallprocess').success(function(data){
                          $scope.processList=data;
+            /* $scope.processList= {
+                 "CLAIM": "Claim",
+                 "ENDORSEMENT": "Endorsement",
+                 "MATURITY": "Maturity",
+                 "PROPOSAL": "Proposal",
+                 "REINSTATEMENT": "Reinstatement",
+                 "SURRENDER": "Surrender"
+             }*/
          });
 
          $scope.saveMandatoryDoc = function(){
