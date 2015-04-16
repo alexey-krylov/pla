@@ -13,7 +13,7 @@ angular.module('directives', ['mgcrea.ngStrap.alert'])
             }
         }
     }])
-    .directive('fueluxWizard', function () {
+    .directive('fueluxWizard', ['$timeout',function ($timeout) {
         /*use this directive to initialize the fuelUx wizard
          *
          * example: <div fuelux-wizard selected-item="[step]">
@@ -24,24 +24,29 @@ angular.module('directives', ['mgcrea.ngStrap.alert'])
             restrict: 'AEC',
             require: ['?^form'],
             scope: {
-                selectedItem: '=',
-                skipValidation:'=',
-                removeSteps:'='
+                selectedItem: '=?',
+                skipValidation:'=?',
+                removeSteps:'=?'
             },
             link: function (scope, element, attr, ctrl) {
+
                 scope.$watch('selectedItem',function(newVal,oldVal){
                     $(element).wizard('selectedItem', {
-                        step: newVal
+                        step: scope.selectedItem
                     });
                 });
-
                 scope.$watch('removeSteps',function(newVal,oldVal){
                     if(newVal){
                         $(element).wizard('removeSteps', newVal.index, newVal.howMany)
                     }
                 });
-
-                $(element).wizard();
+                if(scope.selectedItem){
+                    $(element).wizard('selectedItem', {
+                        step: scope.selectedItem
+                    });
+                }else{
+                    $(element).wizard();
+                }
                 $(element).on('actionclicked.fu.wizard', function (event, data) {
                     if (data.direction == 'previous')return;
                     if(ctrl && ctrl[0]){
@@ -55,6 +60,11 @@ angular.module('directives', ['mgcrea.ngStrap.alert'])
                         }
                     }
                     scope.$emit('actionclicked.fu.wizard', event, data);
+                });
+                $(element).on('changed.fu.wizard',function(event,data){
+                    $timeout(function(){
+                        scope.selectedItem=data.step;
+                    });
                 });
                 $(element).on('stepclicked.fu.wizard', function (event, data) {
                     scope.$emit('stepclicked.fu.wizard', event, data);
@@ -77,7 +87,7 @@ angular.module('directives', ['mgcrea.ngStrap.alert'])
 
             }
         }
-    })
+    }])
     .directive('datatable', function () {
         return {
             restrict: 'EA',
