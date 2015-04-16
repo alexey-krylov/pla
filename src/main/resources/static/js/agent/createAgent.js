@@ -32,7 +32,6 @@ angular.module('createAgent',['common','ngRoute','mgcrea.ngStrap.select','mgcrea
                 },$scope.agentDetails.authorizePlansToSell);
                 $scope.stepsToRemove={index:1,howMany:1};
             }
-            console.log($scope.agentDetails);
             $scope.$watch('agentDetails.teamDetail.teamId',function(newVal,oldVal){
                 if(newVal){
                     $scope.prePopulateTeamLeader();

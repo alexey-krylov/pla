@@ -15,10 +15,6 @@
     requirejs(['main'],function(){
         require(['/pla/js/agent/createAgent.js'],function(){
             angular.element(document).ready(function() {
-                /*TODO*/
-                /*Remove the console during production*/
-                console.log(angular.element(document));
-                console.log("Agent module bootstrapped succefully...");
                 angular.bootstrap(document, ['createAgent']);
             });
         });
@@ -78,7 +74,7 @@
                         <div class="col-lg-6">
                             <div class="form-group required">
                                 <label class="control-label">NRC</label>
-                                <input type="text" class="form-control input-sm" name="nrc" ng-disabled="!search.empId || isEditMode"
+                                <input type="text" class="form-control input-sm" name="nrc" ng-disabled="!search.employeeId || isEditMode"
                                        placeholder="Enter NRC" ng-model="agentDetails.agentProfile.nrcNumberInString" ng-required="true" ng-pattern="/^[0-9]{6}\/[0-9]{2}\/[0-9]{1}$/"/>
                             </div>
                             <div class="form-group">
@@ -314,13 +310,6 @@
         }
         .background-red{
             background-color: #ce4844!important;
-        }
-        .top-right{
-            right: 0;
-            top: 50px;
-            position: fixed;
-            z-index: 1050;
-            margin: 20px;
         }
 
     </style>
