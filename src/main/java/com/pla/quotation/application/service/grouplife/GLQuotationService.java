@@ -1,6 +1,7 @@
 package com.pla.quotation.application.service.grouplife;
 
 import com.pla.core.domain.model.agent.AgentId;
+import com.pla.quotation.application.command.grouplife.SearchGlQuotationDto;
 import com.pla.quotation.domain.model.grouplife.Proposer;
 import com.pla.quotation.query.*;
 import com.pla.sharedkernel.identifier.QuotationId;
@@ -67,6 +68,13 @@ public class GLQuotationService {
 
     public List<GlQuotationDto> getAllQuotation() {
         List<Map> allQuotations = glQuotationFinder.getAllQuotation();
+        List<GlQuotationDto> glQuotationDtoList = allQuotations.stream().map(new TransformToGLQuotationDto()).collect(Collectors.toList());
+        return glQuotationDtoList;
+    }
+
+
+    public List<GlQuotationDto> searchQuotation(SearchGlQuotationDto searchGlQuotationDto) {
+        List<Map> allQuotations = glQuotationFinder.searchQuotation(searchGlQuotationDto.getQuotationNumber(), searchGlQuotationDto.getAgentCode(), searchGlQuotationDto.getProposerName());
         List<GlQuotationDto> glQuotationDtoList = allQuotations.stream().map(new TransformToGLQuotationDto()).collect(Collectors.toList());
         return glQuotationDtoList;
     }

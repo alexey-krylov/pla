@@ -2,10 +2,7 @@ package com.pla.quotation.presentation.controller;
 
 import com.pla.quotation.application.service.grouplife.GLQuotationService;
 import com.pla.quotation.application.command.grouplife.*;
-import com.pla.quotation.query.AgentDetailDto;
-import com.pla.quotation.query.PremiumDetailDto;
-import com.pla.quotation.query.ProposerDto;
-import com.pla.quotation.query.GLQuotationFinder;
+import com.pla.quotation.query.*;
 import com.pla.sharedkernel.identifier.QuotationId;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.axonframework.commandhandling.gateway.CommandGateway;
@@ -21,6 +18,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.List;
 import java.util.Map;
 
 import static com.google.common.base.Preconditions.checkArgument;
@@ -97,6 +95,12 @@ public class GroupLifeQuotationController {
         modelAndView.setViewName("pla/quotation/groupLife/viewQuotation");
         modelAndView.addObject(glQuotationService.getAllQuotation());
         return modelAndView;
+    }
+
+    @RequestMapping(value = "/searchquotation", method = RequestMethod.POST)
+    @ResponseBody
+    public List<GlQuotationDto> searchQuotation(@RequestBody SearchGlQuotationDto searchGlQuotationDto) {
+        return glQuotationService.searchQuotation(searchGlQuotationDto);
     }
 
     @RequestMapping(value = "/createquotation", method = RequestMethod.POST)
