@@ -1,5 +1,6 @@
 package com.pla.quotation.application.service.grouplife;
 
+import com.pla.core.domain.model.agent.AgentId;
 import com.pla.quotation.query.*;
 import com.pla.sharedkernel.identifier.QuotationId;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
@@ -46,8 +47,8 @@ public class GLQuotationService {
 
     public AgentDetailDto getAgentDetail(QuotationId quotationId) {
         Map quotation = glQuotationFinder.getQuotationById(quotationId.getQuotationId());
-        Map agentMap = (Map) quotation.get("agentId");
-        String agentId = (String) agentMap.get("agentId");
+        AgentId agentMap = (AgentId) quotation.get("agentId");
+        String agentId = agentMap.getAgentId();
         Map<String, Object> agentDetail = glQuotationFinder.getAgentById(agentId);
         AgentDetailDto agentDetailDto = new AgentDetailDto();
         agentDetailDto.setAgentId(agentId);

@@ -87,7 +87,7 @@ public class GroupLifeQuotationController {
     @RequestMapping(value = "/listgrouplifequotation", method = RequestMethod.GET)
     public ModelAndView listQuotation() {
         ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("pla/quotation/groupLife/listQuotation");
+        modelAndView.setViewName("pla/quotation/groupLife/viewQuotation");
         modelAndView.addObject(glQuotationService.getAllQuotation());
         return modelAndView;
     }

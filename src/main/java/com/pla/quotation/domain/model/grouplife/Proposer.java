@@ -13,7 +13,7 @@ import static com.google.common.base.Preconditions.checkArgument;
  */
 @ValueObject
 @NoArgsConstructor(access = AccessLevel.PACKAGE)
-@Getter(value = AccessLevel.PACKAGE)
+@Getter
 @Setter(value = AccessLevel.PACKAGE)
 public class Proposer {
 
