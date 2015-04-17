@@ -1,5 +1,6 @@
 package com.pla.core.query;
 
+import com.google.common.collect.Lists;
 import com.pla.core.dto.MandatoryDocumentDto;
 import org.nthdimenzion.ddd.domain.annotations.Finder;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -59,9 +60,13 @@ public class MandatoryDocumentFinder {
         SqlParameterSource sqlParameterSource = new MapSqlParameterSource("documentId",documentId);
         List<MandatoryDocumentDto> mandatoryDocumentDtos =  namedParameterJdbcTemplate.query(GET_MANDATORY_DOCUMENT_BY_ID_QUERY, sqlParameterSource, new BeanPropertyRowMapper(MandatoryDocumentDto.class));
         List<Map<String,Object>>  listOfDocument = namedParameterJdbcTemplate.query(GET_ALL_DOCUMENTS_ASSOCIATED_WITH_MANDATORY_DOCUMENT_QUERY, sqlParameterSource, new ColumnMapRowMapper());
-       for (MandatoryDocumentDto mandatoryDocumentDto : mandatoryDocumentDtos){
-           mandatoryDocumentDto.setDocuments(listOfDocument);
-       }
+        for (MandatoryDocumentDto mandatoryDocumentDto : mandatoryDocumentDtos){
+            List<String> document = Lists.newArrayList();
+            for (Map<String,Object> documents :listOfDocument) {
+                document.add((String) documents.get("documentCode"));
+                mandatoryDocumentDto.setDocument(document);
+            }
+        }
         return mandatoryDocumentDtos;
     }
 }

@@ -84,7 +84,6 @@ public class PremiumService {
                 plans.put("planName",planName);
             if (isNotEmpty(coverages))
                 plans.put("coverageNames",coverages);
-
             listOfPremiumPlan.add(plans);
         }
         return listOfPremiumPlan;

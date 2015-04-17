@@ -19,4 +19,5 @@ public class MandatoryDocumentDto {
     private String planName;
     private String process;
     List<Map<String,Object>> documents;
+    List<String> document;
 }
