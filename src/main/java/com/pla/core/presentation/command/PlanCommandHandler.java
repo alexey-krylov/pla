@@ -101,7 +101,7 @@ public class PlanCommandHandler {
         Plan oldPlan = planMongoRepository.load(command.getPlanId());
         oldPlan.delete();
         PlanBuilder planBuilder = planBuilder(command);
-        Plan _new = planBuilder.build();
+        Plan _new = planBuilder.build(command.getNewPlanId());
         planMongoRepository.add(_new);
     }
 }

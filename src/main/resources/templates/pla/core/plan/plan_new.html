@@ -3,8 +3,14 @@
         .row {
             padding: 10px;
         }
+
     </style>
     <div class="wizard fuelux-wizard" id="planSetUpWizard" skip-validation="['step5']">
+        <div class="alert alert-danger" role="alert" ng-if="validationFailed">
+            <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+            <span class="sr-only">Error:</span>
+            {{serverErrMsg}}
+        </div>
         <ul class="steps">
             <li data-step="1" data-name="campaign" class="active">
                 <span class="badge">1</span>Plan Details<span class="chevron"></span></li>
@@ -25,6 +31,7 @@
                     class="glyphicon glyphicon-arrow-right"></span></button>
         </div>
         <div class="step-content">
+
             <div class="step-pane" data-step="1" style="min-height: 250px">
                 <!--<div ng-include="'/pla/plan/plan-step-1.html' | getTrustedUrl"/>-->
                 <ng-form id="step1" name="step1">
@@ -270,7 +277,7 @@
                                         <label class="control-label">Sum Assured</label>
 
                                         <div class="controls">
-                                            <tags-input class="bootstrap col-sm-12 ti-input-lg"
+                                            <tags-input class="ti-input-lg"
                                                         ng-model="plan.sumAssured.sumAssuredValue"
                                                         min-tags="1" name="sumAssuredValues"
                                                         placeholder="Add a number"
@@ -362,61 +369,67 @@
                             </div>
                         </div>
                     </div>
+                    <br/>
+
                     <div class="row animate-switch-container"
                          ng-switch="" on="plan.policyTermType">
-                        <div class="panel panel-default animate-switch" ng-switch-when="MATURITY_AGE_DEPENDENT">
-                            <div class="panel-heading">Policy Term Based on Age</div>
-                            <div class="panel-body">
-                                <div class="control-group col-sm-12">
-                                    <label class="control-label" for="groupTerm">Various Maturity Ages</label>
+                        <div class="col-md-12">
+                            <div class="panel panel-default animate-switch" ng-switch-when="MATURITY_AGE_DEPENDENT">
+                                <div class="panel-heading">
+                                    <h3 class="panel-title">Policy Term Based on Age</h3></div>
+                                <div class="panel-body">
+                                    <div class="control-group col-sm-12">
+                                        <label class="control-label" for="groupTerm">Various Maturity Ages</label>
 
-                                    <div class="controls">
-                                        <tags-input class="col-sm-12 ti-input-lg"
-                                                    ng-model="plan.premiumTerm.maturityAges"
-                                                    placeholder="Add a number" allow-leftover-text="false"
-                                                    allowed-tags-pattern="^[0-9]+$"></tags-input>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="panel panel-default animate-switch" ng-switch-when="SPECIFIED_VALUES">
-                            <div class="panel-heading">Policy Term Based on Term Values</div>
-                            <div class="panel-body">
-                                <div class="control-group required col-sm-3">
-                                    <label class="control-label">Maximum Maturity Age</label>
-
-                                    <div class="controls">
-                                        <input type="text" ng-pattern="onlyNumbers" name="maxMaturityAge"
-                                               ng-required="true" class="form-control input-sm col-sm-3" style="margin-top: 8px"
-                                               ng-model="plan.policyTerm.maxMaturityAge"/>
-
-                                        <div class="error" ng-show="step3.maxMaturityAge.$dirty &amp;&amp; step3.maxMaturityAge.$invalid">
-                                            <small class="error" ng-show="step3.maxMaturityAge.$error.required">
-                                                Policy Term Maximum Maturity Age is required.
-                                            </small>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="control-group required col-sm-9">
-                                    <label class="control-label">Policy Term Values</label>
-
-                                    <div class="controls">
-                                        <tags-input class="col-sm-9 ti-input-lg"
-                                                    name="policyValidTerms"
-                                                    ng-model="plan.policyTerm.validTerms"
-                                                    ng-disabled="isPolicyTermByValue()"
-                                                    min-tags="1" placeholder="Add a number" allow-leftover-text="false"
-                                                    allowed-tags-pattern="^[0-9]+$"></tags-input>
-                                        <div class="error" ng-show="step3.policyValidTerms.$dirty &amp;&amp; step3.policyValidTerms.$invalid">
-                                            <small class="error" ng-show="step3.policyValidTerms.$error.minTags">
-                                                Policy Terms are required.
-                                            </small>
+                                        <div class="controls">
+                                            <tags-input class="ti-input-lg"
+                                                        ng-model="plan.premiumTerm.maturityAges"
+                                                        placeholder="Add a number" allow-leftover-text="false"
+                                                        allowed-tags-pattern="^[0-9]+$"></tags-input>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                            <div class="panel panel-default animate-switch" ng-switch-when="SPECIFIED_VALUES">
+                                <div class="panel-heading">
+                                    <h3 class="panel-title">Policy Term Based on Term Values</h3>
+                                </div>
+                                <div class="panel-body">
+                                    <div class="control-group required col-sm-3">
+                                        <label class="control-label">Maximum Maturity Age</label>
 
+                                        <div class="controls">
+                                            <input type="text" ng-pattern="onlyNumbers" name="maxMaturityAge"
+                                                   ng-required="true" class="form-control input-sm col-sm-3" style="margin-top: 8px"
+                                                   ng-model="plan.policyTerm.maxMaturityAge"/>
+
+                                            <div class="error" ng-show="step3.maxMaturityAge.$dirty &amp;&amp; step3.maxMaturityAge.$invalid">
+                                                <small class="error" ng-show="step3.maxMaturityAge.$error.required">
+                                                    Policy Term Maximum Maturity Age is required.
+                                                </small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="control-group required col-sm-9">
+                                        <label class="control-label">Policy Term Values</label>
+
+                                        <div class="controls">
+                                            <tags-input class="ti-input-lg"
+                                                        name="policyValidTerms"
+                                                        ng-model="plan.policyTerm.validTerms"
+                                                        ng-disabled="isPolicyTermByValue()"
+                                                        min-tags="1" placeholder="Add a number" allow-leftover-text="false"
+                                                        allowed-tags-pattern="^[0-9]+$"></tags-input>
+                                            <div class="error" ng-show="step3.policyValidTerms.$dirty &amp;&amp; step3.policyValidTerms.$invalid">
+                                                <small class="error" ng-show="step3.policyValidTerms.$error.minTags">
+                                                    Policy Terms are required.
+                                                </small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </ng-form>
             </div>
@@ -463,9 +476,8 @@
                                     </div>
                                     <div class="control-group required col-md-9">
                                         <label class="control-label">Payment Terms</label>
-
                                         <div class="controls">
-                                            <tags-input class="ti-input-lg col-sm-9" name="validTerms"
+                                            <tags-input class="ti-input-lg" name="validTerms"
                                                         ng-model="plan.premiumTerm.validTerms"
                                                         min-tags="1" placeholder="Add a number"
                                                         allow-leftover-text="false"
@@ -489,7 +501,7 @@
                                         <label class="control-label" for="groupTerm">Premium Ages</label>
 
                                         <div class="controls">
-                                            <tags-input class=" col-sm-12" name="maturityAges"
+                                            <tags-input name="maturityAges"
                                                         ng-model="plan.premiumTerm.maturityAges"
                                                         min-tags="1" placeholder="Add a number"
                                                         allow-leftover-text="false"
@@ -516,19 +528,19 @@
                     <span class="sr-only">Error:</span>
                     {{stepErrorMsg}}
                 </div>
-                <div style="float:right">
-                    <button class="btn btn-primary" ng-click="showCoverageForm()">Add Coverage</button>
+                <div style="float:right;padding:0px 0px 2px 0px">
+                    <button class="btn btn-default" ng-click="showCoverageForm()">Add Coverage</button>
                 </div>
-                <table class="table table-bordered table-condensed  table-striped">
+                <table class="table table-bordered table-hover table-stripped" style="background-color: #fff">
                     <thead>
                     <tr>
-                        <td> Coverage Name</td>
-                        <td> Coverage Cover</td>
-                        <td> Cover Type</td>
-                        <td> Deductible Type</td>
-                        <td> Coverage Type</td>
-                        <td> Sum Assured Type</td>
-                        <td> Action</td>
+                        <th> Coverage Name</th>
+                        <th> Coverage Cover</th>
+                        <th> Cover Type</th>
+                        <th> Deductible Type</th>
+                        <th> Coverage Type</th>
+                        <th> Sum Assured Type</th>
+                        <th> Action</th>
                     </tr>
                     </thead>
                     <tr ng-repeat="coverage in plan.coverages">
@@ -538,13 +550,13 @@
                         <td>{{coverage.deductibleType}}</td>
                         <td>{{coverage.coverageType}}</td>
                         <td>{{coverage.coverageSumAssured.sumAssuredType}}</td>
-                        <td>
-                             <button type="button" class="btn btn-default btn-xs"
-                                     ng-click="editPlanCoverage(coverage)">
-                                 <span class="glyphicon glyphicon-edit" aria-hidden="true"></span>
-                             </button>
+                        <td style="text-align:center">
+                            <button type="button" class="btn btn-default btn-xs"
+                                    ng-click="editPlanCoverage(coverage)">
+                                <span class="glyphicon glyphicon-edit" aria-hidden="true" tooltip="Edit Coverage"></span>
+                            </button>
                             <button type="button" class="btn btn-danger btn-xs"
-                                    ng-click="removePlanCoverage($index)">X
+                                    ng-click="removePlanCoverage($index)" tooltip="Remove Coverage">X
                             </button>
                         </td>
                     </tr>
@@ -555,16 +567,16 @@
                 <ng-form id="step6" name="step6">
                     <accordion>
                         <accordion-group heading="Existing Benefits" is-open="true">
-                            <table class="table table-bordered table-condensed  table-striped">
+                            <table class="table table-bordered table-hover table-stripped" style="background-color: #fff">
                                 <thead>
                                 <tr>
-                                    <td> Coverage</td>
-                                    <td> Benefit</td>
-                                    <td> Limit Defined</td>
-                                    <td> Limit Type</td>
-                                    <td> Benefit Limit</td>
-                                    <td> Maximum Limit</td>
-                                    <!--<td></td>-->
+                                    <th> Coverage</th>
+                                    <th> Benefit</th>
+                                    <th> Limit Defined</th>
+                                    <th> Limit Type</th>
+                                    <th> Benefit Limit</th>
+                                    <th> Maximum Limit</th>
+                                    <th>Action</th>
                                 </tr>
                                 </thead>
                                 <tr ng-repeat="benefit in getAllBenefits()">
@@ -572,14 +584,13 @@
                                     <td>{{geBenefitNameFromBenefit(benefit.benefitId)}}</td>
                                     <td>{{benefit.definedPer}}</td>
                                     <td>{{benefit.coverageBenefitType}}</td>
-                                    <td> {{benefit.benefitLimit}}</td>
-                                    <td> {{benefit.maxLimit}}</td>
-                                    <!-- <td>
-                                         <button type="button" class="btn btn-default btn-xs"
-                                                 ng-click="editPlanCoverage(coverage)">
-                                             <span class="glyphicon glyphicon-edit" aria-hidden="true"></span>
-                                         </button>
-                                     </td>-->
+                                    <td>{{benefit.benefitLimit}}</td>
+                                    <td>{{benefit.maxLimit}}</td>
+                                    <td>
+                                        <button type="button" class="btn btn-danger btn-xs"
+                                                ng-click="removeBenefit(benefit.benefitId)" title="Remove Benefit">X
+                                        </button>
+                                    </td>
                                 </tr>
                             </table>
                         </accordion-group>
@@ -588,6 +599,7 @@
                                 <div class="row">
                                     <div class="control-group required col-md-6">
                                         <label class="control-label">Coverage</label>
+
                                         <div class="controls">
                                             <select ng-model="selectedCoverage"
                                                     ng-options="item as item.coverageName for item in configuredCoverages()"
@@ -659,3 +671,41 @@
         </div>
     </div>
 </form>
+
+<script type="text/ng-template" id="coverageConfirmation.html">
+    <div class="modal-header bg-primary" style="display: block">
+        <h3 class="modal-title">Confirmation</h3>
+    </div>
+    <div class="modal-body">
+        <h4 class="text-danger">Are you sure?</h4>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-danger" ng-click="ok()">OK</button>
+        <button class="btn btn-warning" ng-click="cancel()">Cancel</button>
+    </div>
+</script>
+
+<script type="text/ng-template" id="coverageAlert.html">
+    <div class="modal-header bg-primary" style="display: block">
+        <h3 class="modal-title">Information</h3>
+    </div>
+    <div class="modal-body">
+        <h4 class="text-info">Please remove all the Benefits related to the Coverage from this Plan.</h4>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-default" ng-click="cancel()">OK</button>
+    </div>
+</script>
+
+<script type="text/ng-template" id="benefitConfirmation.html">
+    <div class="modal-header bg-primary" style="display: block">
+        <h3 class="modal-title">Confirmation</h3>
+    </div>
+    <div class="modal-body">
+        <h4 class="text-danger">Are you sure?</h4>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-danger" ng-click="ok()">OK</button>
+        <button class="btn btn-warning" ng-click="cancel()">Cancel</button>
+    </div>
+</script>

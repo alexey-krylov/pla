@@ -111,7 +111,7 @@ public class Premium {
         if (PremiumRateFrequency.YEARLY.equals(premiumRateFrequency)) {
             return premiumAmount;
         }
-        premiumAmount = premiumAmount.multiply(DiscountFactorOrganizationInformation.getAnnualDiscountFactor(discountFactorItems)).setScale(2, BigDecimal.ROUND_HALF_UP);
+        premiumAmount = premiumAmount.multiply(DiscountFactorOrganizationInformation.getAnnualDiscountFactor(discountFactorItems)).setScale(4, BigDecimal.ROUND_HALF_UP);
         return premiumAmount;
     }
 
@@ -120,27 +120,27 @@ public class Premium {
         if (PremiumRateFrequency.MONTHLY.equals(premiumRateFrequency)) {
             return premiumAmount;
         }
-        premiumAmount = premiumAmount.multiply(ModelFactorOrganizationInformation.getMonthlyModalFactor(modelFactorItems)).setScale(2, BigDecimal.ROUND_HALF_UP);
+        premiumAmount = premiumAmount.multiply(ModelFactorOrganizationInformation.getMonthlyModalFactor(modelFactorItems)).setScale(4, BigDecimal.ROUND_HALF_UP);
         return premiumAmount;
     }
 
     public BigDecimal getQuarterlyPremium(PremiumItem premiumItem, Set<ModelFactorOrganizationInformation> modelFactorItems, Set<DiscountFactorOrganizationInformation> discountFactorItems) {
         BigDecimal premiumAmount = getAllowedPremiumAmount(premiumItem);
         if (PremiumRateFrequency.MONTHLY.equals(premiumRateFrequency)) {
-            premiumAmount = premiumAmount.multiply(DiscountFactorOrganizationInformation.getQuarterlyDiscountFactor(discountFactorItems)).setScale(2, BigDecimal.ROUND_HALF_UP);
+            premiumAmount = premiumAmount.multiply(DiscountFactorOrganizationInformation.getQuarterlyDiscountFactor(discountFactorItems)).setScale(4, BigDecimal.ROUND_HALF_UP);
             return premiumAmount;
         }
-        premiumAmount = premiumAmount.multiply(ModelFactorOrganizationInformation.getQuarterlyModalFactor(modelFactorItems)).setScale(2, BigDecimal.ROUND_HALF_UP);
+        premiumAmount = premiumAmount.multiply(ModelFactorOrganizationInformation.getQuarterlyModalFactor(modelFactorItems)).setScale(4, BigDecimal.ROUND_HALF_UP);
         return premiumAmount;
     }
 
     public BigDecimal getSemiAnnuallyPremium(PremiumItem premiumItem, Set<ModelFactorOrganizationInformation> modelFactorItems, Set<DiscountFactorOrganizationInformation> discountFactorItems) {
         BigDecimal premiumAmount = getAllowedPremiumAmount(premiumItem);
         if (PremiumRateFrequency.MONTHLY.equals(premiumRateFrequency)) {
-            premiumAmount = premiumAmount.multiply(DiscountFactorOrganizationInformation.getSemiAnnualDiscountFactor(discountFactorItems)).setScale(2, BigDecimal.ROUND_HALF_UP);
+            premiumAmount = premiumAmount.multiply(DiscountFactorOrganizationInformation.getSemiAnnualDiscountFactor(discountFactorItems)).setScale(4, BigDecimal.ROUND_HALF_UP);
             return premiumAmount;
         }
-        premiumAmount = premiumAmount.multiply(ModelFactorOrganizationInformation.getSemiAnnualModalFactor(modelFactorItems)).setScale(2, BigDecimal.ROUND_HALF_UP);
+        premiumAmount = premiumAmount.multiply(ModelFactorOrganizationInformation.getSemiAnnualModalFactor(modelFactorItems)).setScale(4, BigDecimal.ROUND_HALF_UP);
         return premiumAmount;
     }
 
@@ -148,7 +148,7 @@ public class Premium {
         BigDecimal premiumAmount = premiumItem.getPremium();
         if (PremiumFactor.PER_THOUSAND.equals(premiumFactor)) {
             premiumAmount = premiumItem.getSumAssuredValue().multiply(premiumItem.getPremium());
-            premiumAmount = premiumAmount.divide(new BigDecimal(1000)).setScale(2, BigDecimal.ROUND_HALF_UP);
+            premiumAmount = premiumAmount.divide(new BigDecimal(1000)).setScale(4, BigDecimal.ROUND_HALF_UP);
         }
         return premiumAmount;
     }

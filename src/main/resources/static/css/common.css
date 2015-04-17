@@ -186,3 +186,9 @@ select.ng-invalid.ng-dirty {
     font-size: 12px;
     padding: 8px 10px 5px;
 }
+
+.table > thead > tr > th {
+    font-weight: bold !important;
+}
+
+

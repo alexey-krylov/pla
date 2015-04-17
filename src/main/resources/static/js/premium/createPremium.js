@@ -70,7 +70,14 @@ App.controller('CreatePremiumController',['$scope','$http','$rootScope','$upload
                $scope.boolVal=false;
             }
          });
-
+     $scope.$watch('createPremium.effectiveFrom',function(newValue, oldValue){
+         if(newValue) {
+             if (!moment($scope.createPremium.effectiveFrom, 'DD/MM/YYYY').isValid()) {
+                 $scope.newDateField.fromDate = moment($scope.createPremium.effectiveFrom).format("DD/MM/YYYY");
+                 $scope.createPremium.effectiveFrom = $scope.newDateField.fromDate;
+             }
+         }
+     });
          $scope.getDownloadedTemplate = function(){
              $http({url: '/pla/core/premium/downloadpremiumtemplate',method: 'POST',responseType: 'arraybuffer',data: $scope.createPremium,
                  headers: {'Content-type': 'application/json','Accept': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
@@ -113,10 +120,11 @@ App.controller('CreatePremiumController',['$scope','$http','$rootScope','$upload
                  url: '/pla/core/premium/verifypremiumdata',
                  file: files,
                  fields:{planId:$scope.createPremium.planId,coverageId:$scope.createPremium.coverageId,
-                 premiumInfluencingFactors:output.join(',')},
+                 premiumInfluencingFactors:output.join(',')}
             }).progress(function (evt) {
 
             }).success(function (data, status, headers) {
+           // console.log(data);
               if(data.status==200){
                     $scope.verified=true;
                     $scope.alert = {title:'Success Message! ', content:data.message, type: 'success'};
@@ -146,10 +154,7 @@ App.controller('CreatePremiumController',['$scope','$http','$rootScope','$upload
  }
 
  $scope.uploadFile= function(files){
-      if (!moment($scope.createPremium.effectiveFrom,'DD/MM/YYYY').isValid()) {
-      	$scope.newDateField.fromDate = moment($scope.createPremium.effectiveFrom).format("DD/MM/YYYY");
-      	$scope.createPremium.effectiveFrom=$scope.newDateField.fromDate ;
-      }
+
       var  a=$scope.createPremium.premiumInfluencingFactors;
       var output = [];
       for (var i=0; i<a.length; i++) {
@@ -166,8 +171,12 @@ App.controller('CreatePremiumController',['$scope','$http','$rootScope','$upload
              // console.log('progress: ' + progressPercentage + '% ' +
              //      evt.config.file.name);
         }).success(function (data, status, headers, config) {
-           console.log('file ' + config.file.name + 'uploaded. Response: ' +
-           JSON.stringify(data));
+            if(data.status==200){
+
+                $scope.alert = {title:'Success Message! ', content:data.message, type: 'success'};
+            }else if(data.status==500) {
+                $scope.alert = {title: 'Error Message! ', content: data.message, type: 'danger'};
+            }
         });
      }
  }

@@ -142,7 +142,7 @@ public class PlanPersistenceTest {
             } catch (Exception e) {
             }
 //            Repository<Plan> repository = (Repository<Plan>)applicationContext.getBean("planMongoRepository");
-            UnitOfWork uom = new DefaultUnitOfWork(new NoTransactionManager());
+/*            UnitOfWork uom = new DefaultUnitOfWork(new NoTransactionManager());
             uom.start();
             planMongoRepository = new GenericMongoRepository<>(mongoTemplate, Plan.class);
             PlanCommandHandler planCommandHandler = new PlanCommandHandler(planMongoRepository);
@@ -153,7 +153,7 @@ public class PlanPersistenceTest {
             uom.start();
             planMongoRepository = new GenericMongoRepository<>(mongoTemplate, Plan.class);
             planCommandHandler.handle(updateCmd);
-            uom.commit();
+            uom.commit();*/
 
           /*  PlanBuilder builder = Plan.builder();
             builder.withPlanDetail(planDetail);

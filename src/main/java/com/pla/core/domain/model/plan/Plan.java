@@ -1,6 +1,5 @@
 package com.pla.core.domain.model.plan;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.google.common.base.Preconditions;
@@ -51,7 +50,6 @@ public class Plan extends AbstractAggregateRoot<PlanId> {
     private PlanId planId;
     private PlanDetail planDetail;
     @Transient
-    @JsonIgnore
     private PlanSpecification specification = new PlanSpecification();
     private SumAssured sumAssured;
     private PolicyTermType policyTermType;
@@ -75,7 +73,7 @@ public class Plan extends AbstractAggregateRoot<PlanId> {
         this.premiumTerm = planBuilder.getPremiumTerm();
         this.policyTerm = planBuilder.getPolicyTerm();
         this.coverages = planBuilder.getCoverages();
-        Preconditions.checkState(specification.isSatisfiedBy(this));
+        Preconditions.checkState(specification.isSatisfiedBy(this), "Conflicting terms found.Please check Policy and Premium Terms ");
 
         Collection<Term> allTerms = new LinkedList<>();
         if (this.premiumTermType == PremiumTermType.SPECIFIED_VALUES)

@@ -41,7 +41,7 @@ public class GLQuotationFinder {
 
     public Map getQuotationById(String quotationId) {
         BasicDBObject query = new BasicDBObject();
-        query.put("_id._id", quotationId);
+        query.put("_id", quotationId);
         Map quotation = mongoTemplate.findOne(new BasicQuery(query), Map.class, "group_life_quotation");
         return quotation;
     }

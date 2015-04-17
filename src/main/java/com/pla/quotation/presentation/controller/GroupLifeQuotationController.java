@@ -55,9 +55,9 @@ public class GroupLifeQuotationController {
 
     @RequestMapping(value = "/getquotationnumber/{quotationId}", method = RequestMethod.GET)
     @ResponseBody
-    public String getQuotationNumber(@PathVariable("quotationId") String quotationId) {
+    public Result getQuotationNumber(@PathVariable("quotationId") String quotationId) {
         Map quotationMap = GLQuotationFinder.getQuotationById(quotationId);
-        return (String) quotationMap.get("quotationNumber");
+        return Result.success("Quotation number ", (String) quotationMap.get("quotationNumber"));
     }
 
     @RequestMapping(value = "/getagentdetail/{agentId}", method = RequestMethod.GET)

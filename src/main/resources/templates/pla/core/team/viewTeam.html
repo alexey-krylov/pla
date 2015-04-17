@@ -89,7 +89,7 @@
                             <td style="text-align:center">
                                <!-- <button type="button" class="btn btn-default btn-xs" th:onclick="'openAssignTeam(\'' +${team.teamId}+'\')'" >Assign</button>-->
                                 <a class="btn btn-default btn-xs" th:disabled="${team.endDate != null}" th:href="'/pla/core/team/redirecttoassignPage?teamId='+${team.teamId}+''" >Update</a>
-                                <button type="button" class="btn btn-danger btn-xs" data-toggle="modal" data-target="#alert-modal" th:onclick="'inactivate(&quot;'+${team.teamId}+'&quot;,&quot;save&quot;)'" >Inactivate</button>
+                                <button type="button" class="btn btn-danger btn-xs"  th:disabled="${team.endDate != null}" data-toggle="modal" data-target="#alert-modal" th:onclick="'inactivate(&quot;'+${team.teamId}+'&quot;,&quot;save&quot;)'" >Inactivate</button>
 
                             </td>
                         </tr>

@@ -53,7 +53,7 @@ public class Term {
         checkArgument(UtilValidator.isNotEmpty(validTerms));
         checkArgument(maxMaturityAge > 0);
         long termsGreaterThanMaxMaturityAge = validTerms.stream().filter(term -> term.intValue() > maxMaturityAge).count();
-        checkArgument(termsGreaterThanMaxMaturityAge == 0, " Invalid Terms. The values cannot be greater than Max Maturity Age.");
+        checkArgument(termsGreaterThanMaxMaturityAge == 0, "The Term values cannot be greater than Max Maturity Age.");
         this.validTerms = validTerms;
         this.maxMaturityAge = maxMaturityAge;
     }
