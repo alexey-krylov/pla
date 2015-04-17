@@ -131,7 +131,7 @@ public class PlanFinder {
         return planName;
     }
 
-    public  Map<String,String> getCoverageName(PlanId planId){
+    public Map<String,String> getCoverageName(PlanId planId){
         Map plan = findPlanByPlanId(planId);
         if (isEmpty(plan)){
             return Maps.newLinkedHashMap();
@@ -142,7 +142,8 @@ public class PlanFinder {
             String  coverageId = (String) coverageMap.get("coverageId");
             if (isNotEmpty(coverageId)){
                 if (CoverageType.OPTIONAL.name().equals(coverageMap.get("coverageType"))){
-                    coverageMaps.put(coverageId, mandatoryDocumentFinder.getCoverageNameById(coverageId));
+                    coverageMaps.put("coverageId",coverageId);
+                    coverageMaps.put("coverageName", mandatoryDocumentFinder.getCoverageNameById(coverageId));
                 }
             }
         }
