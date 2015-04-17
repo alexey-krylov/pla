@@ -94,6 +94,9 @@ public class PlanFinder {
     }
 
     private void convertTermToTags(Map term) {
+        if (term == null) {
+            return;
+        }
         List values = new LinkedList<>();
         for (Integer val : (List<Integer>) term.get("validTerms")) {
             Map obj = new HashMap();
