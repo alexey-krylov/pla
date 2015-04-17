@@ -268,6 +268,14 @@ public class Commission implements ICrudEntity {
                     || currentCommissionTerm.getStartYear() > otherCommissionTerm.getEndYear() && currentCommissionTerm.getEndYear() > otherCommissionTerm.getEndYear());
         }
     }
+
+    public void validateNewCommissionPeriodForAPlanAndDesignation(LocalDate fromDate) {
+        try {
+            checkArgument(fromDate.isAfter(this.fromDate));
+        } catch (IllegalArgumentException e) {
+            throw new CommissionDomainException("From Date should be greater than " + fromDate);
+        }
+    }
 }
 
 

@@ -70,9 +70,11 @@ public class CommissionService {
 
         if (isNotEmpty(resultSet)) {
             JpaRepository<Commission, CommissionId> commissionRepository = jpaRepositoryFactory.getCrudRepository(Commission.class);
+            Commission existingCommission = entityManager.createNamedQuery("findAllCommissionByPlanIdAndDesignationId", Commission.class).setParameter("planId", planid).
+                    setParameter("availableFor", availableFor).getResultList().get(0);
+            existingCommission.validateNewCommissionPeriodForAPlanAndDesignation(fromDate);
             try {
-                commissionRepository.save(entityManager.createNamedQuery("findAllCommissionByPlanIdAndDesignationId", Commission.class).setParameter("planId", planid).
-                        setParameter("availableFor", availableFor).getResultList().get(0).expireCommission(fromDate.minusDays(1)));
+                commissionRepository.save(existingCommission.expireCommission(fromDate.minusDays(1)));
             } catch (RuntimeException e) {
                 LOGGER.error("Error in creating commission", e);
             }
