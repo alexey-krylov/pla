@@ -26,8 +26,11 @@ public class MandatoryDocumentFinder {
     public static final String GET_ALL_MANDATORY_DOCUMENT_QUERY = "SELECT document_id documentId,coverage_id coverageId,plan_id planId,PROCESS PROCESS " +
             " FROM mandatory_document";
 
-    public static final String GET_ALL_DOCUMENTS_ASSOCIATED_WITH_MANDATORY_DOCUMENT_QUERY ="SELECT document_code documentCode" +
-            " FROM mandatory_documents WHERE document_id=:documentId";
+    public static final String GET_ALL_DOCUMENTS_ASSOCIATED_WITH_MANDATORY_DOCUMENT_QUERY ="SELECT d.document_name documentName " +
+            " FROM mandatory_documents md INNER JOIN document d ON md.document_code=d.document_code " +
+            " WHERE document_id=:documentId ";
+
+    public static final String GET_COVERAGE_NAME_FOR_GIVEN_COVERAGE_ID_QUERY =" SELECT coverage_name coverageName FROM coverage WHERE coverage_id =:coverageId ";
 
     @Autowired
     public void setDataSource(DataSource dataSource) {
@@ -44,4 +47,8 @@ public class MandatoryDocumentFinder {
         return listOfMandatoryDocument;
     }
 
+    public String getCoverageNameById(String coverageId){
+        SqlParameterSource sqlParameterSource = new MapSqlParameterSource("coverageId",coverageId);
+        return namedParameterJdbcTemplate.queryForObject(GET_COVERAGE_NAME_FOR_GIVEN_COVERAGE_ID_QUERY,sqlParameterSource,String.class);
+    }
 }
