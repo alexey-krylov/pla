@@ -56,22 +56,20 @@
                         </thead>
                         <tbody>
                         <tr th:each="premium : ${listOfPremium}">
-                            <!--<p th:text="${listOfPremium}"></p>-->
-                            <td th:text="${premium.planId}"></td>
-                            <td></td>
-                          <!--  <td th:text="${premium.coverageId}"></td>-->
+                            <td th:text="${premium.planName}"></td>
+                            <td th:text="${premium.coverageName}"></td>
                             <td style="text-align:center" class="pop" >
                                 <button href="#" class="details-box btn btn-primary btn-xs" rel="popover"  data-content="" > Influencing-Factors
-                                   <!-- <div class="popover-body" style="display:none;">
+                                    <div class="popover-body" style="display:none;">
                                         <ul  type="square"  th:each="influencingFactor : ${premium.premiumInfluencingFactors}"   >
-                                            <li style="text-align:left;font-size:12px;"   th:text="'&diams;&nbsp;'+${{influencingFactor.description}}+','" ></li>
+                                         <!--   <li style="text-align:left;font-size:12px;"   th:text="'&diams;&nbsp;'+${{influencingFactor.description}}+','" ></li>-->
                                         </ul>
-                                    </div>-->
+                                    </div>
                                 </button>
                             </td>
                             <td th:text="${premium.premiumFactor}">Rate(per thousand)</td>
                             <td th:text="${premium.premiumRateFrequency}">Per Year</td>
-                            <td th:text="${premium.effectiveFrom}">09/03/2014</td>
+                            <td th:text="${#dates.format(premium.effectiveFrom,'dd/MM/yyyy')}">09/03/2014</td>
                         </tr>
 
                         </tbody>

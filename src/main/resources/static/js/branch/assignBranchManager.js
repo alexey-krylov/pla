@@ -150,7 +150,8 @@ App.controller('AssignBranchManagerController',['$scope','$http','$window','$loc
                     $http.post('/pla/core/branch/assign', $scope.assignBranchManager).success(function(data){
                                                   if(data.status==200){
                                                     $scope.alert = {title:'Success Message! ', content:data.message, type: 'success'};
-                                                    $scope.reset();
+                                                  //  $scope.reset();
+                                                      $window.location.href = "/pla/core/branch/view";
                                                  }else if(data.status==500){
                                                     $scope.alert = {title:'Error Message! ', content:data.message, type: 'danger'};
                                                  }

@@ -39,8 +39,7 @@ App.controller('AssignRegionalManagerController',['$scope','$http','$window','$l
                    $http.post('/pla/core/region/assign', $scope.assignRegionalManager).success(function(data){
                         if(data.status==200){
                              $scope.alert = {title:'Success Message! ', content:data.message, type: 'success'};
-                             $scope.reset();
-                        }else{
+                            $window.location.href = "/pla/core/region/view";                        }else{
                              $scope.alert = {title:'Error Message! ', content:data.message, type: 'danger'};
                         }
                    });

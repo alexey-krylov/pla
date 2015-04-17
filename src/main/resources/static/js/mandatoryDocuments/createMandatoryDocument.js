@@ -35,14 +35,17 @@ App.controller('CreateMandatoryDocumentController',['$scope','$http','$rootScope
 
            if(newValue){
               var planId=$scope.createMandatoryDocument.planId;
-              $scope.optionalCoverageData =_.findWhere($scope.newPlanList,{planId:planId});
-              $scope.optionalCoverageList = _.where($scope.optionalCoverageData.coverages, {coverageType: "OPTIONAL"});
+             // $scope.optionalCoverageData =_.findWhere($scope.newPlanList,{planId:planId});
+             // $scope.optionalCoverageList = _.where($scope.optionalCoverageData.coverages, {coverageType: "OPTIONAL"});
+               $http.get('/pla/core/premium/getCoverageByplanId/'+planId).success(function(data){
+                   $scope.optionalCoverageList=data;
+               });
 
            }
          });
-         $scope.$watch('createMandatoryDocument.coverageCode',function(newValue, oldValue){
+         $scope.$watch('createMandatoryDocument.coverageId',function(newValue, oldValue){
            if(newValue){
-                $scope.createMandatoryDocument.coverageId=$scope.createMandatoryDocument.coverageCode.coverageId;
+               // $scope.createMandatoryDocument.coverageId=$scope.createMandatoryDocument.coverageCode.coverageId;
                $scope.boolVal=true;
            }else{
                $scope.boolVal=false;
@@ -51,14 +54,7 @@ App.controller('CreateMandatoryDocumentController',['$scope','$http','$rootScope
 
          $http.get('/pla/core/mandatorydocument/getallprocess').success(function(data){
                          $scope.processList=data;
-            /* $scope.processList= {
-                 "CLAIM": "Claim",
-                 "ENDORSEMENT": "Endorsement",
-                 "MATURITY": "Maturity",
-                 "PROPOSAL": "Proposal",
-                 "REINSTATEMENT": "Reinstatement",
-                 "SURRENDER": "Surrender"
-             }*/
+
          });
 
          $scope.saveMandatoryDoc = function(){

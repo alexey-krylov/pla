@@ -67,7 +67,8 @@ App.controller('AssignTeamController',['$scope','$http','$window','$location','$
         $http.post('/pla/core/team/assign', $scope.assignTeam).success(function(data){
              if(data.status==200){
                   $scope.alert = {title:'Success Message! ', content:data.message, type: 'success'};
-                  $scope.reset();
+                $window.location.href = "/pla/core/team/view";
+                // $scope.reset();
              }else if(data.status==500){
                   $scope.alert = {title:'Error Message! ', content:data.message, type: 'danger'};
              }
