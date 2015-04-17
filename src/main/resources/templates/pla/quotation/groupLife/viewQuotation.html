@@ -17,6 +17,21 @@
 </head>
 <body>
 <div th:include="fragments/common :: bodyHeader" th:remove="tag"/>
+<script>
+    var interval = setInterval(function(){
+        if(require.defined("basic")){
+            requirejs(['/pla/js/quotation/groupLife/viewQuotation.js'],function(){
+                $(document).ready(function(){
+                    $('#quotation-table').dataTable();
+                    $( "input[type=radio]" ).on( "click", function(){
+                        viewQuotationModule.getTheItemSelected(this);
+                    });
+                });
+            });
+            clearInterval(interval);
+        }
+    }, 300);
+</script>
 <div class="container">
     <div class="row">
         <div class="col-lg-12">
@@ -29,8 +44,7 @@
                         <div class="col-lg-3 col-lg-offset-3">
                             <a type="button" class="btn btn-default btn-sm btn-disabled" disabled="disabled">Print</a>
                             <a type="button" class="btn btn-default btn-sm btn-disabled" disabled="disabled">Email</a>
-                            <a type="button" class="btn btn-default btn-sm btn-disabled" disabled="disabled">Modify</a>
-                            <a type="button" class="btn btn-default btn-sm">Create</a>
+                            <a type="button" class="btn btn-default btn-sm btn-disabled" disabled="disabled" onclick="viewQuotationModule.modifyQuotation()">Modify</a>
                         </div>
                     </div>
                 </div>
@@ -40,25 +54,19 @@
                         <tr>
                             <th></th>
                             <th th:text="#{quotationNumber}" style="width: 10%">Quotation Number</th>
-                            <th th:text="#{quotationDate}" style="width: 1%">Quotation Date</th>
-                            <th th:text="#{proposerName}">Proposer Name</th>
-                            <th th:text="#{planName}">Plan Name</th>
+                            <th th:text="#{quotationCreatedOn}" style="width: 1%">Quotation Date</th>
                             <th th:text="#{agentName}">Agent Name</th>
-                            <th th:text="#{agentCode}" style="width: 1%">Agent Code</th>
                             <th th:text="#{versionNumber}" style="width: 1%;">Version Number</th>
                         </tr>
                         </thead>
                         <tbody>
                         <form id="viewAgentsForm">
-                            <!--/*/ <th:block th:each="quotation : ${quotations}"> /*/-->
+                            <!--/*/ <th:block th:each="quotation : ${glQuotationDtoList}"> /*/-->
                             <tr>
-                                <td><input type="radio" name="quotationNumber" th:value="${quotation.quotationNumber}" value="5100000010315"/></td>
+                                <td><input type="radio" name="quotationNumber" th:value="${quotation.quotationId}" value="5100000010315"/></td>
                                 <td th:text="${quotation.quotationNumber}">5100000010315</td>
-                                <td th:text="${quotation.quotationDate}">05/03/2015</td>
-                                <td th:text="${quotation.proposerName}">NthDimenzion Solutions Private Limited</td>
-                                <td th:text="${quotation.planName}">Detailed Accident plan</td>
+                                <td th:text="${quotation.quotationGeneratedOn}">05/03/2015</td>
                                 <td th:text="${quotation.agentName}">Agent Name</td>
-                                <td th:text="${quotation.agentCode}">A001</td>
                                 <td th:text="${quotation.versionNumber}">001</td>
                             </tr>
                             <!--/*-->

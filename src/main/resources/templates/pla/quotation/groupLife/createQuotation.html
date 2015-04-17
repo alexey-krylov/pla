@@ -6,290 +6,316 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css">
     <link href="https://www.fuelcdn.com/fuelux/3.6.3/css/fuelux.min.css" rel="stylesheet">
-    <link href="../../../../../static/css/common.css" rel="stylesheet">
-    <script data-main="../../../../../static/js/requireConfig" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.1.16/require.min.js"></script>
+    <link href="../../../../static/css/common.css" rel="stylesheet">
+    <script data-main="../../../../static/js/requireConfig" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.1.16/require.min.js"></script>
     <!--*/-->
 </head>
-<body class="fuelux container" style="padding-top: 70px;font-size: 12px">
+<body class="fuelux ng-cloak">
 <div th:include="fragments/common :: bodyHeader" th:remove="tag"/>
 <script>
-    requirejs(['quotation/groupLife/createQuotation'],function(){
-        angular.bootstrap(document, ['createQuotation']);
+    requirejs(['main','angular-file-upload'],function(){
+        require(['/pla/js/quotation/groupLife/createQuotation.js'],function(){
+            angular.element(document).ready(function() {
+                angular.bootstrap(document, ['createQuotation']);
+            });
+        });
     });
 </script>
 <script type="text/ng-template" id="createQuotationTpl.html">
-    <div class="wizard"  id="quotationWizard"  style="overflow: visible">
-        <ul class="steps" style="margin-left: 0">
-            <li data-step="1" class="active"><span class="badge badge-info">1</span>Basic Details<span class="chevron"></span></li>
-            <li data-step="2"><span class="badge">2</span>Proposer Details<span class="chevron"></span></li>
-            <li data-step="3"><span class="badge">3</span>Plan Details<span class="chevron"></span></li>
-            <li data-step="4"><span class="badge">4</span>Premium Details<span class="chevron"></span></li>
-        </ul>
-        <div class="actions">
-            <span style="font-weight: bolder;margin-right: 15px;color: #999">Quotation ID :<span style="font-size: 13px;color: #3a87ad;">5100000010315 - 01</span></span>
-            <button type="button" class="btn btn-default btn-prev" disabled="disabled"><span class="glyphicon glyphicon-arrow-left"></span>Prev</button>
-            <button type="button" class="btn btn-default btn-next">Next<span class="glyphicon glyphicon-arrow-right"></span></button>
-        </div>
-        <div class="step-content">
-            <div class="step-pane active" data-step="1">
-                <div class="bs-callout  bs-callout-info" style="margin-bottom: 7px">
-                    <div class="row">
-                        <div class="col-lg-6">
-                            <div class="form-group">
-                                <label>Agent ID</label>
-                                <input type="text" class="form-control input-sm" name="agentId">
-                            </div>
-                        </div>
-                        <div class="col-lg-6">
-                            <div class="form-group">
-                                <label>Proposer Name</label>
-                                <input type="text" class="form-control input-sm" name="agentId">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-lg-6">
-                            <div class="form-group">
-                                <label >Agent Name</label>
-                                <input type="text" class="form-control input-sm" ng-readonly="true">
-                            </div>
-                            <div class="form-group">
-                                <label >Branch Name</label>
-                                <input type="text" class="form-control input-sm" ng-readonly="true">
-                            </div>
-                        </div>
-                        <div class="col-lg-6">
-                            <div class="form-group">
-                                <label >Team Name</label>
-                                <input type="text" class="form-control input-sm" ng-readonly="true">
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-sm-6">
-                        <button type="button" class="btn btn-default btn-sm">Cancel</button>
-                    </div>
-                    <div class="col-sm-6">
-                        <button type="button" class="btn btn-default btn-sm" style="float: right">Save</button>
-                    </div>
-                </div>
+    <nth-alert></nth-alert>
+    <form name="quotationForm" novalidate="true">
+        <div class="wizard fueluxWizard" style="overflow: visible" selected-item="selectedItem">
+            <ul class="steps" style="margin-left: 0">
+                <li data-step="1"><span class="badge badge-info">1</span>Basic Details<span class="chevron"></span></li>
+                <li data-step="2"><span class="badge">2</span>Proposer Details<span class="chevron"></span></li>
+                <li data-step="3"><span class="badge">3</span>Plan Details<span class="chevron"></span></li>
+                <li data-step="4"><span class="badge">4</span>Premium Details<span class="chevron"></span></li>
+            </ul>
+            <div class="actions">
+                <span style="font-weight: bolder;margin-right: 15px;color: #999">Quotation ID :<span style="font-size: 13px;color: #3a87ad;">{{quotationNumber}}<span ng-show="versionNumber!=0">/{{versionNumber}}</span></span></span>
+                <button type="button" class="btn btn-default btn-prev" disabled="disabled"><span class="glyphicon glyphicon-arrow-left"></span>Prev</button>
+                <button type="button" class="btn btn-default btn-next" ng-disabled="!setpsSaved[selectedItem]">Next<span class="glyphicon glyphicon-arrow-right"></span></button>
             </div>
-            <div class="step-pane" data-step="2">
-                <accordion close-others="true">
-                    <accordion-group  is-open="accordionStatus.proposer">
-                        <accordion-heading>
-                            Proposer Details <i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': accordionStatus.proposer, 'glyphicon-chevron-right': !accordionStatus.proposer}"></i>
-                        </accordion-heading>
-                        <div class="col-lg-6">
-                            <div class="form-group">
-                                <label >Proposer Name</label>
-                                <input type="text" class="form-control input-sm" ng-maxlength="100" ng-required="true">
+            <div class="step-content">
+                <div class="step-pane active" data-step="1">
+                    <ng-form name="step1">
+                        <div class="bs-callout  bs-callout-info" style="margin-bottom: 7px">
+                            <div class="alert alert-info" ng-show="agentNotFound">
+                                <strong>Agent Not Found.Please try again</strong>
                             </div>
-                            <div class="form-group">
-                                <label >Address Line 1</label>
-                                <input type="text" class="form-control input-sm" ng-required="true" ng-maxlength="100">
+                            <div class="row">
+                                <div class="col-lg-6">
+                                    <div class="form-group required">
+                                        <label class="control-label">Agent ID</label>
+                                        <div class="input-group">
+                                            <input type="text" class="form-control input-sm" name="agentId" ng-model="quotationDetails.basic.agentId" ng-required="true" ng-change="clearAgentDetails()" ng-disabled="isEditMode"/>
+                                            <div class="input-group-btn">
+                                                <button type="button" class="btn btn-default btn-sm" ng-click="searchAgent()" ng-disabled="!quotationDetails.basic.agentId || isEditMode">
+                                                    <span class="glyphicon glyphicon-search"></span>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="form-group required">
+                                        <label class="control-label">Proposer Name</label>
+                                        <input type="text" class="form-control input-sm" name="proposerName" ng-model="quotationDetails.proposer.proposerName" ng-required="true" ng-disabled="isEditMode"/>
+                                    </div>
+                                </div>
                             </div>
-                            <div class="form-group">
-                                <label >Postal Code</label>
-                                <select class="form-control input-sm" ng-required="true">
-                                    <option>12345</option>
-                                    <option>67890</option>
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <label >Town</label>
-                                <select class="form-control input-sm" ng-required="true">
-                                    <option>Zambia</option>
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <label >Work Phone</label>
-                                <input type="number" class="form-control input-sm" ng-required="true" ng-maxlength="13">
-                            </div>
-                        </div>
-                        <div class="col-lg-6">
-                            <div class="form-group">
-                                <label>Proposer Code</label>
-                                <input type="text" class="form-control input-sm" ng-readonly="true">
-                            </div>
-                            <div class="form-group">
-                                <label >Address LIne 2</label>
-                                <input type="text" class="form-control input-sm" ng-maxlength="100">
-                            </div>
-                            <div class="form-group">
-                                <label >Province</label>
-                                <select class="form-control input-sm" ng-required="true">
-                                    <option>Lusaka</option>
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <label >Email</label>
-                                <input type="email" class="form-control input-sm" ng-required="true" ng-keydown="openNewTab($event)">
+                            <div class="row">
+                                <div class="col-lg-6">
+                                    <div class="form-group required">
+                                        <label class="control-label">Agent Name</label>
+                                        <input type="text" class="form-control input-sm" ng-readonly="true" ng-required="true" name="agentName" ng-model="quotationDetails.basic.agentName"/>
+                                    </div>
+                                    <div class="form-group required">
+                                        <label class="control-label">Branch Name</label>
+                                        <input type="text" class="form-control input-sm" ng-readonly="true" ng-required="true" name="branchName" ng-model="quotationDetails.basic.branchName"/>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="form-group required">
+                                        <label class="control-label">Team Name</label>
+                                        <input type="text" class="form-control input-sm" ng-readonly="true" ng-required="true" name="teamName" ng-model="quotationDetails.basic.teamName"/>
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                    </accordion-group>
-                    <accordion-group  is-open="accordionStatus.contact">
-                        <accordion-heading>
-                            Contact Details <i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': accordionStatus.contact, 'glyphicon-chevron-right': !accordionStatus.contact}"></i>
-                        </accordion-heading>
-                        <div class="col-lg-6">
-                            <div class="form-group">
-                                <label >Contact Person Details</label>
-                                <input type="text" class="form-control input-sm" ng-maxlength="100" ng-required="true">
-                            </div>
-                            <div class="form-group">
-                                <label >Mobile Number</label>
-                                <input type="number" class="form-control input-sm" ng-maxlength="13" ng-required="true">
-                            </div>
+                    </ng-form>
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <button type="button" class="btn btn-default btn-sm">Cancel</button>
                         </div>
-                        <div class="col-lg-6">
-                            <div class="form-group">
-                                <label >Email</label>
-                                <input type="email" class="form-control input-sm"  ng-required="true">
-                            </div>
-                            <div class="form-group">
-                                <label >Work Phone</label>
-                                <input type="number" class="form-control input-sm" ng-maxlength="13" ng-required="true">
-                            </div>
+                        <div class="col-sm-6">
+                            <button type="button" class="btn btn-default btn-sm" style="float: right" ng-click="saveBasicDetails()" ng-disabled="isSaveDisabled(step1)">Save</button>
                         </div>
-                    </accordion-group>
-                </accordion>
-                <div class="row">
-                    <div class="col-sm-6">
-                        <button type="button" class="btn btn-default btn-sm">Cancel</button>
-                    </div>
-                    <div class="col-sm-6">
-                        <button type="button" class="btn btn-default btn-sm" style="float: right">Save</button>
                     </div>
                 </div>
-            </div>
-            <div class="step-pane" data-step="3">
-                <div class="row ">
-                    <div class="col-lg-3 col-lg-offset-3">
-                        <div class="checkbox">
-                            <label class="checkbox-custom" data-initialize="checkbox">
-                                <input class="sr-only" type="checkbox" value="">
-                                <span class="checkbox-label" style="position: relative;top:5px;font-weight: bold;color:#000000">Same Plan for all Relationships</span>
-                            </label>
+                <div class="step-pane" data-step="2">
+                    <ng-form name="step2">
+                        <accordion close-others="true">
+                            <accordion-group  is-open="accordionStatus.proposer">
+                                <accordion-heading>
+                                    Proposer Details <i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': accordionStatus.proposer, 'glyphicon-chevron-right': !accordionStatus.proposer}"></i>
+                                </accordion-heading>
+                                <div class="col-lg-6">
+                                    <div class="form-group required">
+                                        <label class="control-label">Proposer Name</label>
+                                        <input type="text" class="form-control input-sm" name="proposerName" ng-disabled="true" ng-required="true" ng-model="quotationDetails.proposer.proposerName"/>
+                                    </div>
+                                    <div class="form-group required">
+                                        <label class="control-label">Address Line 1</label>
+                                        <input type="text" class="form-control input-sm" ng-required="true" name="addressLine1" ng-maxlength="100" ng-model="quotationDetails.proposer.addressLine1"/>
+                                    </div>
+                                    <div class="form-group">
+                                        <label >Postal Code</label>
+                                        <input type="text" class="form-control input-sm" name="postalCode" ng-model="quotationDetails.proposer.postalCode"/>
+                                    </div>
+                                    <div class="form-group required">
+                                        <label class="control-label">Town</label>
+                                        <select class="form-control input-sm" ng-required="true" name="town" ng-model="quotationDetails.proposer.town" ng-options="city.geoId as city.geoName for city in cities">
+                                        </select>
+                                    </div>
+                                    <!-- <div class="form-group required">
+                                         <label class="control-label">Work Phone</label>
+                                         <input type="text" class="form-control input-sm" ng-required="true" maxlength="13" ng-pattern="numberPattern" ng-model="quotationDetails.proposer.contactPersonWorkPhoneNumber"/>
+                                     </div>-->
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="form-group required">
+                                        <label class="control-label">Proposer Code</label>
+                                        <input type="text" class="form-control input-sm" ng-required="true" name="proposerCode" ng-model="quotationDetails.proposer.proposerCode"/>
+                                    </div>
+                                    <div class="form-group">
+                                        <label >Address Line 2</label>
+                                        <input type="text" class="form-control input-sm" maxlength="100" ng-model="quotationDetails.proposer.addressLine2"/>
+                                    </div>
+                                    <div class="form-group required">
+                                        <label class="control-label">Province</label>
+                                        <select class="form-control input-sm" ng-required="true" name="province" ng-model="quotationDetails.proposer.province" ng-options="province.provinceId  as province.provinceName for province in provinces">
+                                        </select>
+                                    </div>
+                                    <!--<div class="form-group">
+                                        <label >Email</label>
+                                        <input type="email" class="form-control input-sm" ng-required="true" ng-keydown="openNewTab($event)"/>
+                                    </div>-->
+                                </div>
+                            </accordion-group>
+                            <accordion-group  is-open="accordionStatus.contact">
+                                <accordion-heading>
+                                    Contact Details <i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': accordionStatus.contact, 'glyphicon-chevron-right': !accordionStatus.contact}"></i>
+                                </accordion-heading>
+                                <div class="col-lg-6">
+                                    <div class="form-group required">
+                                        <label class="control-label">Contact Person Details</label>
+                                        <input type="text" class="form-control input-sm" name="contactPersonDetails" maxlength="100" ng-required="true" ng-model="quotationDetails.proposer.contactPersonName"/>
+                                    </div>
+                                    <div class="form-group required">
+                                        <label class="control-label">Mobile Number</label>
+                                        <input type="text" class="form-control input-sm" maxlength="10" minlength="10" name="mobileNumber" ng-required="true" ng-pattern="numberPattern" ng-model="quotationDetails.proposer.contactPersonMobileNumber"/>
+                                        <div ng-show="step2.mobileNumber.$invalid &amp;&amp; step2.mobileNumber.$dirty">
+                                            <small class="error" ng-show="!step2.mobileNumber.$error.pattern &amp;&amp; step2.mobileNumber.$error.minlength">
+                                                Please enter a valid mobile number.
+                                            </small>
+                                            <small class="error" ng-show="step2.mobileNumber.$error.pattern">
+                                                Only numbers are allowed.
+                                            </small>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="form-group required">
+                                        <label class="control-label">Email</label>
+                                        <input type="email" class="form-control input-sm"  ng-required="true" name="email" ng-model="quotationDetails.proposer.contactPersonEmail"/>
+                                        <div ng-show="step2.email.$invalid &amp;&amp; step2.email.$dirty">
+                                            <small class="error" ng-show="step2.email.$error.email">
+                                                Please enter a valid emailId.
+                                            </small>
+                                        </div>
+                                    </div>
+                                    <div class="form-group required">
+                                        <label class="control-label">Work Phone</label>
+                                        <input type="text" class="form-control input-sm" maxlength="13" minlength="13" name="workPhone" ng-required="true" ng-pattern="numberPattern" ng-model="quotationDetails.proposer.contactPersonWorkPhoneNumber"/>
+                                        <div ng-show="step2.workPhone.$invalid &amp;&amp; step2.workPhone.$dirty">
+                                            <small class="error" ng-show="!step2.workPhone.$error.pattern &amp;&amp; step2.workPhone.$error.minlength">
+                                                Please enter a valid mobile number.
+                                            </small>
+                                            <small class="error" ng-show="step2.workPhone.$error.pattern">
+                                                Only numbers are allowed.
+                                            </small>
+                                        </div>
+                                    </div>
+                                </div>
+                            </accordion-group>
+                        </accordion>
+                    </ng-form>
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <button type="button" class="btn btn-default btn-sm">Cancel</button>
+                        </div>
+                        <div class="col-sm-6">
+                            <button type="button" class="btn btn-default btn-sm" style="float: right" ng-click="saveProposerDetails()" ng-disabled="isSaveDisabled(step2)">Save</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="step-pane" data-step="3">
+                    <div class="row ">
+                        <div class="col-lg-3 col-lg-offset-3">
+                            <div class="checkbox">
+                                <label class="checkbox-custom" data-initialize="checkbox">
+                                    <input class="sr-only" type="checkbox" ng-true-value="true" ng-false-value="false" name="planChoice" ng-model="quotationDetails.plan.samePlanForAllRelation"/>
+                                    <span class="checkbox-label" style="position: relative;top:5px;font-weight: bold;color:#000000;margin-left:5px">Same Plan for all Relationships</span>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="col-lg-3">
+                            <div class="checkbox" style="display: inline-block;">
+                                <label class="checkbox-custom" data-initialize="checkbox">
+                                    <input class="sr-only" type="checkbox" ng-true-value="true" ng-false-value="false" name="planChoice" ng-model="quotationDetails.plan.samePlanForAllCategory"/>
+                                    <span class="checkbox-label" style="position: relative;top:5px;font-weight: bold;color:#000000;margin-left: 5px">Same Plan for all Categories</span>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="col-lg-3">
+                            <button type="button" class="btn btn-default pull-right" data-animation="am-flip-x" bs-dropdown="dropdown">Downloads
+                            </button>
+                        </div>
+                    </div>
+                    <div class="row" style="margin-top: 5px">
+                        <div class="col-lg-6 col-lg-offset-3">
+                            <div class="form-group">
+                                <input type="text" class="form-control input-sm" ng-model="fileName" style="width: 62%;display: inline-block" ng-readonly="true"/>
+                                <button type="file" class="btn btn-default btn-sm" ng-file-select="" ng-model="fileSaved">Browse</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <button type="button" class="btn btn-default btn-sm">Cancel</button>
+                        </div>
+                        <div class="col-sm-6">
+                            <button type="button" class="btn btn-default btn-sm" style="float: right" ng-disabled="!fileSaved" ng-click="savePlanDetails()">Upload &amp; Save</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="step-pane" data-step="4">
+                    <div class="col-lg-9">
+                        <div class="bs-callout  bs-callout-info">
+                            <div class="row">
+                                <div class="col-lg-6">
+                                    <div class="form-group required">
+                                        <label class="control-label">Add-On Benefits</label>
+                                        <input class="form-control input-sm"  ng-required="true" name="addOnBenefits" ng-model="quotationDetails.premium.addOnBenefit"/>
+                                    </div>
+                                    <div class="form-group required">
+                                        <label class="control-label">Profit and Solvency Loading</label>
+                                        <input class="form-control input-sm"  ng-required="true" name="profitAndSolvencyLoading" ng-model="quotationDetails.premium.profitAndSolvencyLoading"/>
+                                    </div>
+                                    <div class="form-group required">
+                                        <label class="control-label">Discounts</label>
+                                        <input class="form-control input-sm"  ng-required="true" name="discounts" ng-model="quotationDetails.premium.discounts"/>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label >VAT</label>
+                                        <input class="form-control input-sm"  ng-required="true"/>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label >Policy Term Value (Days)</label>
+                                        <input class="form-control input-sm"  ng-required="true"/>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <div class="col-lg-3">
-                        <div class="checkbox" style="display: inline-block;">
-                            <label class="checkbox-custom" data-initialize="checkbox">
-                                <input class="sr-only" type="checkbox" value="">
-                                <span class="checkbox-label" style="position: relative;top:5px;font-weight: bold;color:#000000">Same Plan for all Categories</span>
-                            </label>
-                        </div>
-                    </div>
-                    <div class="col-lg-3">
-                        <button type="button" class="btn btn-default pull-right" data-animation="am-flip-x" bs-dropdown="dropdown">Downloads
-                        </button>
-                    </div>
-                </div>
-                <div class="row" style="margin-top: 5px">
-                    <div class="col-lg-6 col-lg-offset-3">
                         <div class="form-group">
-                            <input type="text" class="form-control input-sm" ng-model="fileName" style="width: 62%;display: inline-block" ng-readonly="true">
-                            <button type="file" class="btn btn-default btn-sm" ng-file-select ng-model="fileSaved">Browse</button>
-                            <button type="file" class="btn btn-default btn-sm" ng-click="upload()">Upload</button>
+                            <label >Annual Payment</label>
+                            <input class="form-control input-sm"  ng-required="true"/>
                         </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-sm-6">
-                        <button type="button" class="btn btn-default btn-sm">Cancel</button>
-                    </div>
-                    <div class="col-sm-6">
-                        <button type="button" class="btn btn-default btn-sm" style="float: right">Save</button>
-                    </div>
-                </div>
-            </div>
-            <div class="step-pane" data-step="4">
-                <div class="col-lg-9">
-                    <div class="bs-callout  bs-callout-info">
-                        <div class="row">
-                            <div class="col-lg-6">
-                                <div class="form-group">
-                                    <label >Add-On Benefits</label>
-                                    <input class="form-control input-sm"  ng-required="true"/>
-                                </div>
-                                <div class="form-group">
-                                    <label >Profit and Solvency Loading</label>
-                                    <input class="form-control input-sm"  ng-required="true"/>
-                                </div>
-                                <div class="form-group">
-                                    <label >Discounts</label>
-                                    <input class="form-control input-sm"  ng-required="true"/>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-lg-6">
-                                <div class="form-group">
-                                    <label >VAT</label>
-                                    <input class="form-control input-sm"  ng-required="true"/>
-                                </div>
-                            </div>
-                            <div class="col-lg-6">
-                                <div class="form-group">
-                                    <label >Policy Term Value (Days)</label>
-                                    <input class="form-control input-sm"  ng-required="true"/>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-3">
-                    <div class="form-group">
-                        <label >Annual Payment</label>
-                        <input class="form-control input-sm"  ng-required="true"/>
-                    </div>
-                    <div class="form-group">
-                        <label >Semi-Annual Payment</label>
-                        <input class="form-control input-sm"  ng-required="true"/>
-                    </div>
-                    <div class="form-group">
-                        <label >Quarterly Payment</label>
-                        <input class="form-control input-sm"  ng-required="true"/>
-                    </div>
-                    <div class="form-group">
-                        <label >Monthly Payment</label>
-                        <input class="form-control input-sm"  ng-required="true"/>
-                    </div>
-                </div>
-
-                <div class="row" style="margin-top: 5px">
-                    <div class="col-lg-3 col-lg-offset-9" style="padding-right: 27px;padding-left: 6px">
                         <div class="form-group">
-                            <label >Total Premium payable</label>
+                            <label >Semi-Annual Payment</label>
+                            <input class="form-control input-sm"  ng-required="true"/>
+                        </div>
+                        <div class="form-group">
+                            <label >Quarterly Payment</label>
+                            <input class="form-control input-sm"  ng-required="true"/>
+                        </div>
+                        <div class="form-group">
+                            <label >Monthly Payment</label>
                             <input class="form-control input-sm"  ng-required="true"/>
                         </div>
                     </div>
-                </div>
-                <div class="row">
-                    <div class="col-sm-6">
-                        <button type="button" class="btn btn-default btn-sm">Cancel</button>
+
+                    <div class="row" style="margin-top: 5px">
+                        <div class="col-lg-3 col-lg-offset-9" style="padding-right: 27px;padding-left: 6px">
+                            <div class="form-group">
+                                <label >Total Premium payable</label>
+                                <input class="form-control input-sm"  ng-required="true"/>
+                            </div>
+                        </div>
                     </div>
-                    <div class="col-sm-6">
-                        <button type="button" class="btn btn-default btn-sm" style="float: right">Submit</button>
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <button type="button" class="btn btn-default btn-sm">Cancel</button>
+                        </div>
+                        <div class="col-sm-6">
+                            <button type="button" class="btn btn-default btn-sm" style="float: right">Submit</button>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-
-    </div>
+    </form>
     <style>
-        .bs-callout-info {
-            border-left-color: #1b809e!important;
-        }
 
-        .bs-callout {
-            padding: 20px;
-            border: 1px solid #E4E2E2;
-            border-left-width: 5px;
-            border-radius: 3px;
-        }
         .fuelux .checkbox-custom:before {
             font-family: "Glyphicons Halflings" !important;
             font-style: normal !important;
@@ -313,39 +339,11 @@
             width: 18px;
         }
 
-        .form-group{
-            margin-bottom: 5px!important;
-        }
-        .form-group > label{
-            margin-bottom: 0px!important;
-        }
-        #createAgentForm input.ng-invalid.ng-touched {
-            border-color: #FA787E;
-        }
-        #createAgentForm button.ng-invalid.ng-touched {
-            border-color: #FA787E;
-        }
-        #createAgentForm select.ng-invalid.ng-touched {
-            border-color: #FA787E;
-        }
-        #createAgentForm.ng-submitted input.ng-invalid{
-            border-color: #FA787E;
-        }
-        #createAgentForm.ng-submitted button.ng-invalid{
-            border-color: #FA787E;
-        }
-        #createAgentForm.ng-submitted select.ng-invalid{
-            border-color: #FA787E;
-        }
-        .red-text-color{
-            color: #ce4844 !important;
-        }
-        .background-red{
-            background-color: #ce4844!important;
-        }
     </style>
 </script>
-<div ng-view></div>
+<div class="ng-view container">
+
+</div>
 <footer class="footer" th:include="fragments/common :: footer">
 </footer>
 </body>

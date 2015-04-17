@@ -1,11 +1,3 @@
-/*
- define(["angular"],
- function(){
- angular.module("myApp",[])
- .controller('viewAgentCtrl',function($scope){
-
- })
- });*/
 var viewQuotationModule = (function(){
     var services = {};
     services.selectedItem = "";
@@ -19,13 +11,24 @@ var viewQuotationModule = (function(){
         window.location.reload();
     };
 
+    services.createQuotation = function(){
+        window.location.href = "creategrouplifequotation"
+    };
+
+    services.modifyQuotation = function(){
+        var quotationId = this.selectedItem
+        $.ajax({
+            url: '/pla/quotation/grouplife/getversionnumber/'+quotationId,
+            type: 'GET',
+            contentType: 'application/json; charset=utf-8',
+            success: function(msg) {
+                if(msg.status=='200'){
+                    window.location.href = "/pla/quotation/grouplife/creategrouplifequotation?quotationId="+quotationId+"&version="+msg.data+"&mode=edit";
+                }else if(msg.status=='500'){
+                }
+            }
+        });
+    };
 
     return services ;
 })();
-
-$(document).ready(function(){
-    $('#quotation-table').dataTable();
-    $( "input[type=radio]" ).on( "click", function(){
-        viewQuotationModule.getTheItemSelected(this)
-    });
-});

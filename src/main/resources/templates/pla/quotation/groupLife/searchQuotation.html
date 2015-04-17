@@ -12,34 +12,59 @@
 </head>
 <body>
 <div th:include="fragments/common :: bodyHeader" th:remove="tag"/>
+<script>
+    var interval = setInterval(function(){
+        if(require.defined("basic")){
+            requirejs(['/pla/js/quotation/groupLife/viewQuotation.js'],function(){
+                $("input[type='text']").keyup(function() {
+                    var isDisabled =  true;
+                    $('#quotationForm *').filter(':text').each(function(key,value){
+                        if($(value).val().trim().length !=0){
+                            isDisabled = false;
+                        }
+                    });
+                    $("#search").prop("disabled",isDisabled);
+                });
+            });
+            clearInterval(interval);
+        }
+    }, 300);
+</script>
 <div class="container">
     <div class="row">
         <div class="col-lg-12">
             <div class="panel panel-primary">
                 <div class="panel-heading">
-                    <span th:text="#{searchQuotation}">Search Quotation</span>
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <span th:text="#{searchQuotation}">Search Quotation</span>
+                        </div>
+                        <div class="col-lg-1 col-lg-offset-5">
+                            <button type="button" class="btn btn-default btn-sm" onclick="viewQuotationModule.createQuotation()">Create</button>
+                        </div>
+                    </div>
                 </div>
                 <div class="panel-body">
-                    <form method="post" action="#" novalidate="true" name="quotationForm" id="quotationForm">
+                    <form method="post" action="searchquotation" novalidate="true" name="quotationForm" id="quotationForm">
                         <div class="row">
                             <div class="col-lg-6">
                                 <div class="form-group">
                                     <label th:text="#{quotationName}">Quotation ID</label>
-                                    <input type="text" class="form-control input-sm" name="quotationName">
+                                    <input type="text" class="form-control input-sm" name="quotationName"/>
                                 </div>
                                 <div class="form-group">
                                     <label th:text="#{proposerName}">Proposer Name</label>
-                                    <input type="text" class="form-control input-sm" name="proposerName">
+                                    <input type="text" class="form-control input-sm" name="proposerName"/>
                                 </div>
                             </div>
                             <div class="col-lg-6">
                                 <div class="form-group">
                                     <label th:text="#{agentName}">Agent Name</label>
-                                    <input type="text" class="form-control input-sm" name="agentName">
+                                    <input type="text" class="form-control input-sm" name="agentName"/>
                                 </div>
                                 <div class="form-group">
                                     <label th:text="#{agentCode}" class="abc">Agent Code</label>
-                                    <input type="text" class="form-control input-sm" name="agentCode" required="true">
+                                    <input type="text" class="form-control input-sm" name="agentCode" required="true"/>
                                 </div>
                             </div>
                         </div>
@@ -54,19 +79,7 @@
         </div>
     </div>
 </div>
-<script type="text/javascript">
-    $(function(){
-        $("input[type='text']").keyup(function() {
-            var isDisabled =  true;
-            $('#quotationForm *').filter(':text').each(function(key,value){
-                if($(value).val().trim().length !=0){
-                    isDisabled = false;
-                }
-            });
-            $("#search").prop("disabled",isDisabled);
-        });
-    });
-</script>
+
 <footer class="footer" th:include="fragments/common :: footer">
 </footer>
 </body>
