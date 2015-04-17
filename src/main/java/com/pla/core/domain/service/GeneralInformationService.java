@@ -186,10 +186,14 @@ public class GeneralInformationService {
 
     public List<Map> getProductLineInformation(){
         List<Map> productLineInformation = findAllProductLineInformation();
-        if (isEmpty(productLineInformation)){
-            return populateProductLineGeneralInformationData();
-        }
         List<Map> productLineInformationList = Lists.newArrayList();
+        if (isEmpty(productLineInformation)){
+            productLineInformationList.add(getGroupHealthProductLineInformation());
+            productLineInformationList.add(getGroupInsuranceProductLineInformation());
+            productLineInformationList.add(getIndividualInsuranceProductLineInformation());
+            return productLineInformationList;
+        }
+        productLineInformationList =  getProductLine(productLineInformationList,productLineInformation);
         for (Map productLineInformationMap: productLineInformation){
             Map<String,Object> productLineInformationByBusinessId = Maps.newLinkedHashMap();
             List listOfProcess = Lists.newArrayList();
@@ -210,14 +214,29 @@ public class GeneralInformationService {
         return productLineInformationList;
     }
 
+    public List<Map> getProductLine(List<Map> productLineInformationList,  List<Map> productLineInformation ){
+        for (Map productLineMap : productLineInformation){
+            if (!LineOfBusinessId.GROUP_HEALTH.name().equals(productLineMap.get("productLine"))){
+                productLineInformationList.add(getGroupHealthProductLineInformation());
+            }
+            if (!LineOfBusinessId.GROUP_INSURANCE.name().equals(productLineMap.get("productLine"))){
+                productLineInformationList.add(getGroupInsuranceProductLineInformation());
+            }
+            if (!LineOfBusinessId.INDIVIDUAL_INSURANCE.name().equals(productLineMap.get("productLine"))){
+                productLineInformationList.add(getIndividualInsuranceProductLineInformation());
+            }
+        }
+        return productLineInformationList;
+    }
+
     private List<Map> findAllProductLineInformation() {
         List<Map> productLineInformationList = new ArrayList<Map>();
         List<ProductLineGeneralInformation> productLineInformation =  springMongoTemplate.findAll(ProductLineGeneralInformation.class, "product_line_information");
-            for (ProductLineGeneralInformation productLineGeneralInformation : productLineInformation) {
-                Map plan = objectMapper.convertValue(productLineGeneralInformation, Map.class);
-                productLineInformationList.add(plan);
-            }
-            return productLineInformationList;
+        for (ProductLineGeneralInformation productLineGeneralInformation : productLineInformation) {
+            Map plan = objectMapper.convertValue(productLineGeneralInformation, Map.class);
+            productLineInformationList.add(plan);
+        }
+        return productLineInformationList;
     }
 
     private List<Map> findAllOrganizationInformation() {
@@ -230,43 +249,57 @@ public class GeneralInformationService {
         return organizationInformationList;
     }
 
-    private List populateProductLineGeneralInformationData(){
-        List list = Lists.newArrayList();
-        GeneralInformationDto generalInformationDto = getProductLineGeneralInformation();
-        generalInformationDto.setLineOfBusinessId(LineOfBusinessId.GROUP_HEALTH);
-        list.add(generalInformationDto);
-
-        generalInformationDto = getProductLineGeneralInformation();
-        generalInformationDto.setLineOfBusinessId(LineOfBusinessId.GROUP_INSURANCE);
-        list.add(generalInformationDto);
-
-        generalInformationDto = getProductLineGeneralInformation();
-        generalInformationDto.setLineOfBusinessId(LineOfBusinessId.INDIVIDUAL_INSURANCE);
-        list.add(generalInformationDto);
-        return list;
+    public Map getGroupHealthProductLineInformation(){
+        Map productLineMap  = Maps.newLinkedHashMap();
+        productLineMap.put("productLine",LineOfBusinessId.GROUP_HEALTH);
+        productLineMap.put("productLineInformationId",null);
+        List<Map> groupHealthMap = getProductLineGeneralInformation();
+        productLineMap.put("processType", groupHealthMap);
+        return productLineMap;
+    }
+    public Map getGroupInsuranceProductLineInformation(){
+        Map insuranceMap  = Maps.newLinkedHashMap();
+        insuranceMap.put("productLine",LineOfBusinessId.GROUP_INSURANCE);
+        insuranceMap.put("productLineInformationId",null);
+        List<Map> groupInsuranceMap = getProductLineGeneralInformation();
+        insuranceMap.put("processType", groupInsuranceMap);
+        return insuranceMap;
     }
 
+    public Map getIndividualInsuranceProductLineInformation(){
+        Map individualInsurance  = Maps.newLinkedHashMap();
+        individualInsurance.put("productLine",LineOfBusinessId.INDIVIDUAL_INSURANCE);
+        individualInsurance.put("productLineInformationId",null);
+        List<Map> individualInsuranceMap = getProductLineGeneralInformation();
+        individualInsurance.put("processType", individualInsuranceMap);
+        return individualInsurance;
+    }
 
     private List populateOrganizationGeneralInformationData(){
         List list = Lists.newArrayList();
+        Map organizationInformationMap = Maps.newLinkedHashMap();
         GeneralInformationDto generalInformationDto = getOrganizationGeneralInformation();
+        organizationInformationMap.put("productLine",generalInformationDto.getProductLine());
+        organizationInformationMap.put("organizationInformationId",generalInformationDto.getOrganizationInformationId());
         list.add(generalInformationDto);
         return list;
     }
 
 
-    private GeneralInformationDto getProductLineGeneralInformation(){
-        GeneralInformationDto generalInformationDto = new GeneralInformationDto();
-        generalInformationDto.setQuotationProcessItems(populateQuotationProcessItems());
-        generalInformationDto.setEnrollmentProcessItems(populateEnrollmentProcessItems());
-        generalInformationDto.setReinstatementProcessItems(populateReinstatementProcessItems());
-        generalInformationDto.setEndorsementProcessItems(populateEndorsementProcessItems());
-        generalInformationDto.setClaimProcessItems(populateClaimProcessItems());
-        generalInformationDto.setPolicyFeeProcessItems(populatePolicyFeeProcessData());
-        generalInformationDto.setPolicyProcessMinimumLimitItems(populateMinimumLimitProcessData());
-        generalInformationDto.setSurrenderProcessItems(populateSurrenderProcessItems());
-        generalInformationDto.setMaturityProcessItems(populateMaturityProcessItems());
-        return generalInformationDto;
+    private List<Map> getProductLineGeneralInformation(){
+        List<Map> productLineList = Lists.newArrayList();
+        Map productLineInformationMap = Maps.newLinkedHashMap();
+        productLineInformationMap.put("quotationProcessItems", populateProcessItems());
+        productLineInformationMap.put("enrollmentProcessItems", populateProcessItems());
+        productLineInformationMap.put("reinstatementProcessItems", populateProcessItems());
+        productLineInformationMap.put("endorsementProcessItems", populateProcessItems());
+        productLineInformationMap.put("claimProcessItems", populateClaimProcessItems());
+        productLineInformationMap.put("policyFeeProcessItems",populatePolicyFeeProcessData());
+        productLineInformationMap.put("policyProcessMinimumLimitItems", populateMinimumLimitProcessData());
+        productLineInformationMap.put("surrenderProcessItems", populateProcessItems());
+        productLineInformationMap.put("maturityProcessItems", populateProcessItems());
+        productLineList.add(productLineInformationMap);
+        return productLineList;
     }
 
     private GeneralInformationDto getOrganizationGeneralInformation(){
@@ -277,129 +310,58 @@ public class GeneralInformationService {
         return generalInformationDto;
     }
 
-    private List<Map<ProductLineProcessType,Integer>> populateQuotationProcessItems(){
-        List<Map<ProductLineProcessType,Integer>> productLineProcessList = Lists.newArrayList();
-        Map<ProductLineProcessType,Integer> quotationProcessItems = Maps.newLinkedHashMap();
-        quotationProcessItems.put(ProductLineProcessType.NO_OF_REMAINDER, 0);
+    private List<Map<String,Object>> populateProcessItems(){
+        List<Map<String,Object>> productLineProcessList = Lists.newArrayList();
+        Map<String,Object> quotationProcessItems = Maps.newLinkedHashMap();
+        quotationProcessItems.put("productLineProcessItem",ProductLineProcessType.PURGE_TIME_PERIOD);
+        quotationProcessItems.put("value",0);
         productLineProcessList.add(quotationProcessItems);
         quotationProcessItems = Maps.newLinkedHashMap();
-        quotationProcessItems.put(ProductLineProcessType.GAP, 0);
+        quotationProcessItems.put("productLineProcessItem",ProductLineProcessType.FIRST_REMAINDER);
+        quotationProcessItems.put("value", 0);
         productLineProcessList.add(quotationProcessItems);
         quotationProcessItems = Maps.newLinkedHashMap();
-        quotationProcessItems.put(ProductLineProcessType.CLOSURE, 0);
+        quotationProcessItems.put("productLineProcessItem",ProductLineProcessType.NO_OF_REMAINDER);
+        quotationProcessItems.put("value", 0);
         productLineProcessList.add(quotationProcessItems);
         quotationProcessItems = Maps.newLinkedHashMap();
-        quotationProcessItems.put(ProductLineProcessType.PURGE_TIME_PERIOD, 0);
-        productLineProcessList.add(quotationProcessItems);
-        return productLineProcessList;
-    }
-
-    private List<Map<ProductLineProcessType,Integer>> populateEnrollmentProcessItems(){
-        List<Map<ProductLineProcessType,Integer>> productLineProcessList = Lists.newArrayList();
-        Map<ProductLineProcessType,Integer> enrollmentProcessItems = Maps.newLinkedHashMap();
-        enrollmentProcessItems.put(ProductLineProcessType.NO_OF_REMAINDER, 0);
-        productLineProcessList.add(enrollmentProcessItems);
-        enrollmentProcessItems = Maps.newLinkedHashMap();
-        enrollmentProcessItems.put(ProductLineProcessType.GAP, 0);
-        productLineProcessList.add(enrollmentProcessItems);
-        enrollmentProcessItems = Maps.newLinkedHashMap();
-        enrollmentProcessItems.put(ProductLineProcessType.CLOSURE, 0);
-        productLineProcessList.add(enrollmentProcessItems);
-        enrollmentProcessItems = Maps.newLinkedHashMap();
-        enrollmentProcessItems.put(ProductLineProcessType.PURGE_TIME_PERIOD, 0);
-        productLineProcessList.add(enrollmentProcessItems);
-        return productLineProcessList;
-    }
-
-    private List<Map<ProductLineProcessType,Integer>> populateEndorsementProcessItems(){
-        List<Map<ProductLineProcessType,Integer>> productLineProcessList = Lists.newArrayList();
-        Map<ProductLineProcessType,Integer> endorsementProcessItems = Maps.newLinkedHashMap();
-        endorsementProcessItems.put(ProductLineProcessType.NO_OF_REMAINDER, 0);
-        productLineProcessList.add(endorsementProcessItems);
-        endorsementProcessItems = Maps.newLinkedHashMap();
-        endorsementProcessItems.put(ProductLineProcessType.GAP, 0);
-        productLineProcessList.add(endorsementProcessItems);
-        endorsementProcessItems = Maps.newLinkedHashMap();
-        endorsementProcessItems.put(ProductLineProcessType.CLOSURE, 0);
-        productLineProcessList.add(endorsementProcessItems);
-        endorsementProcessItems = Maps.newLinkedHashMap();
-        endorsementProcessItems.put(ProductLineProcessType.PURGE_TIME_PERIOD, 0);
-        productLineProcessList.add(endorsementProcessItems);
-        return productLineProcessList;
-    }
-
-    private List<Map<ProductLineProcessType,Integer>> populateClaimProcessItems(){
-        List<Map<ProductLineProcessType,Integer>> productLineProcessList = Lists.newArrayList();
-        Map<ProductLineProcessType,Integer> claimProcessItems = Maps.newLinkedHashMap();
-        claimProcessItems.put(ProductLineProcessType.NO_OF_REMAINDER, 0);
-        productLineProcessList.add(claimProcessItems);
-        claimProcessItems = Maps.newLinkedHashMap();
-        claimProcessItems.put(ProductLineProcessType.GAP, 0);
-        productLineProcessList.add(claimProcessItems);
-        claimProcessItems = Maps.newLinkedHashMap();
-        claimProcessItems.put(ProductLineProcessType.CLOSURE, 0);
-        productLineProcessList.add(claimProcessItems);
-        claimProcessItems = Maps.newLinkedHashMap();
-        claimProcessItems.put(ProductLineProcessType.PURGE_TIME_PERIOD, 0);
-        productLineProcessList.add(claimProcessItems);
-        claimProcessItems = Maps.newLinkedHashMap();
-        claimProcessItems.put(ProductLineProcessType.EARLY_DEATH_CRITERIA, 0);
-        productLineProcessList.add(claimProcessItems);
-        return productLineProcessList;
-    }
-
-    private List<Map<ProductLineProcessType,Integer>> populateReinstatementProcessItems(){
-        List<Map<ProductLineProcessType,Integer>> productLineProcessList = Lists.newArrayList();
-        Map<ProductLineProcessType,Integer> quotationProcessItems = Maps.newLinkedHashMap();
-        quotationProcessItems.put(ProductLineProcessType.NO_OF_REMAINDER, 0);
+        quotationProcessItems.put("productLineProcessItem",ProductLineProcessType.GAP);
+        quotationProcessItems.put("value", 0);
         productLineProcessList.add(quotationProcessItems);
         quotationProcessItems = Maps.newLinkedHashMap();
-        quotationProcessItems.put(ProductLineProcessType.GAP, 0);
+        quotationProcessItems.put("productLineProcessItem",ProductLineProcessType.CLOSURE);
+        quotationProcessItems.put("value", 0);
+        productLineProcessList.add(quotationProcessItems);
+        return productLineProcessList;
+    }
+    private List<Map<String,Object>> populateClaimProcessItems(){
+        List<Map<String,Object>> productLineProcessList = Lists.newArrayList();
+        Map<String,Object> quotationProcessItems = Maps.newLinkedHashMap();
+        quotationProcessItems.put("productLineProcessItem",ProductLineProcessType.PURGE_TIME_PERIOD);
+        quotationProcessItems.put("value",0);
         productLineProcessList.add(quotationProcessItems);
         quotationProcessItems = Maps.newLinkedHashMap();
-        quotationProcessItems.put(ProductLineProcessType.CLOSURE, 0);
+        quotationProcessItems.put("productLineProcessItem",ProductLineProcessType.FIRST_REMAINDER);
+        quotationProcessItems.put("value", 0);
         productLineProcessList.add(quotationProcessItems);
         quotationProcessItems = Maps.newLinkedHashMap();
-        quotationProcessItems.put(ProductLineProcessType.PURGE_TIME_PERIOD, 0);
+        quotationProcessItems.put("productLineProcessItem",ProductLineProcessType.NO_OF_REMAINDER);
+        quotationProcessItems.put("value", 0);
+        productLineProcessList.add(quotationProcessItems);
+        quotationProcessItems = Maps.newLinkedHashMap();
+        quotationProcessItems.put("productLineProcessItem", ProductLineProcessType.GAP);
+        quotationProcessItems.put("value", 0);
+        productLineProcessList.add(quotationProcessItems);
+        quotationProcessItems = Maps.newLinkedHashMap();
+        quotationProcessItems.put("productLineProcessItem",ProductLineProcessType.CLOSURE);
+        quotationProcessItems.put("value", 0);
+        productLineProcessList.add(quotationProcessItems);
+        quotationProcessItems = Maps.newLinkedHashMap();
+        quotationProcessItems.put("productLineProcessItem",ProductLineProcessType.EARLY_DEATH_CRITERIA);
+        quotationProcessItems.put("value", 0);
         productLineProcessList.add(quotationProcessItems);
         return productLineProcessList;
     }
-
-    private List<Map<ProductLineProcessType,Integer>> populateSurrenderProcessItems(){
-        List<Map<ProductLineProcessType,Integer>> productLineProcessList = Lists.newArrayList();
-        Map<ProductLineProcessType,Integer> surrenderProcessItems = Maps.newLinkedHashMap();
-        surrenderProcessItems.put(ProductLineProcessType.NO_OF_REMAINDER, 0);
-        productLineProcessList.add(surrenderProcessItems);
-        surrenderProcessItems = Maps.newLinkedHashMap();
-        surrenderProcessItems.put(ProductLineProcessType.GAP, 0);
-        productLineProcessList.add(surrenderProcessItems);
-        surrenderProcessItems = Maps.newLinkedHashMap();
-        surrenderProcessItems.put(ProductLineProcessType.CLOSURE, 0);
-        productLineProcessList.add(surrenderProcessItems);
-        surrenderProcessItems = Maps.newLinkedHashMap();
-        surrenderProcessItems.put(ProductLineProcessType.PURGE_TIME_PERIOD, 0);
-        productLineProcessList.add(surrenderProcessItems);
-        return productLineProcessList;
-    }
-
-    private List<Map<ProductLineProcessType,Integer>> populateMaturityProcessItems(){
-        List<Map<ProductLineProcessType,Integer>> productLineProcessList = Lists.newArrayList();
-        Map<ProductLineProcessType,Integer> maturityProcessItems = Maps.newLinkedHashMap();
-        maturityProcessItems.put(ProductLineProcessType.NO_OF_REMAINDER, 0);
-        productLineProcessList.add(maturityProcessItems);
-        maturityProcessItems = Maps.newLinkedHashMap();
-        maturityProcessItems.put(ProductLineProcessType.GAP, 0);
-        productLineProcessList.add(maturityProcessItems);
-        maturityProcessItems = Maps.newLinkedHashMap();
-        maturityProcessItems.put(ProductLineProcessType.CLOSURE, 0);
-        productLineProcessList.add(maturityProcessItems);
-        maturityProcessItems = Maps.newLinkedHashMap();
-        maturityProcessItems.put(ProductLineProcessType.PURGE_TIME_PERIOD, 0);
-        productLineProcessList.add(maturityProcessItems);
-        return productLineProcessList;
-    }
-
-
 
     private List<Map<DiscountFactorItem, BigDecimal>> populateDiscountFactorDiscount(){
         List<Map<DiscountFactorItem,BigDecimal>>  discountFactorList = Lists.newArrayList();
@@ -429,19 +391,23 @@ public class GeneralInformationService {
         return modalFactorList;
     }
 
-    private List<Map<PolicyFeeProcessType, Integer>> populatePolicyFeeProcessData(){
-        List<Map<PolicyFeeProcessType,Integer>>  processFeeList = Lists.newArrayList();
-        Map<PolicyFeeProcessType,Integer> policyFeeProcessItems = Maps.newLinkedHashMap();
-        policyFeeProcessItems.put(PolicyFeeProcessType.ANNUAL, 0);
+    private List<Map<String,Object>> populatePolicyFeeProcessData(){
+        List<Map<String,Object>>  processFeeList = Lists.newArrayList();
+        Map<String,Object> policyFeeProcessItems = Maps.newLinkedHashMap();
+        policyFeeProcessItems.put("policyFeeProcessType",PolicyFeeProcessType.ANNUAL);
+        policyFeeProcessItems.put("policyFee",0);
         processFeeList.add(policyFeeProcessItems);
         policyFeeProcessItems = Maps.newLinkedHashMap();
-        policyFeeProcessItems.put(PolicyFeeProcessType.SEMI_ANNUAL, 0);
+        policyFeeProcessItems.put("policyFeeProcessType",PolicyFeeProcessType.SEMI_ANNUAL);
+        policyFeeProcessItems.put("policyFee",0);
         processFeeList.add(policyFeeProcessItems);
         policyFeeProcessItems = Maps.newLinkedHashMap();
-        policyFeeProcessItems.put(PolicyFeeProcessType.QUARTERLY, 0);
+        policyFeeProcessItems.put("policyFeeProcessType",PolicyFeeProcessType.QUARTERLY);
+        policyFeeProcessItems.put("policyFee",0);
         processFeeList.add(policyFeeProcessItems);
         policyFeeProcessItems = Maps.newLinkedHashMap();
-        policyFeeProcessItems.put(PolicyFeeProcessType.MONTHLY, 0);
+        policyFeeProcessItems.put("policyFeeProcessType",PolicyFeeProcessType.MONTHLY);
+        policyFeeProcessItems.put("policyFee",0);
         processFeeList.add(policyFeeProcessItems);
         return processFeeList;
     }
@@ -451,12 +417,12 @@ public class GeneralInformationService {
         PolicyProcessMinimumLimitItemDto policyProcessMinimumLimitItemDto = new PolicyProcessMinimumLimitItemDto();
         policyProcessMinimumLimitItemDto.setPolicyProcessMinimumLimitType(PolicyProcessMinimumLimitType.SEMI_ANNUAL);
         policyProcessMinimumLimitItemDto.setMinimumPremium(0);
-        policyProcessMinimumLimitItemDto.setNoOfPersonPerPolicy(1);
+        policyProcessMinimumLimitItemDto.setNoOfPersonPerPolicy(0);
         policyProcessMinimumLimitItems.add(policyProcessMinimumLimitItemDto);
         policyProcessMinimumLimitItemDto = new PolicyProcessMinimumLimitItemDto();
         policyProcessMinimumLimitItemDto.setPolicyProcessMinimumLimitType(PolicyProcessMinimumLimitType.ANNUAL);
         policyProcessMinimumLimitItemDto.setMinimumPremium(0);
-        policyProcessMinimumLimitItemDto.setNoOfPersonPerPolicy(1);
+        policyProcessMinimumLimitItemDto.setNoOfPersonPerPolicy(0);
         policyProcessMinimumLimitItems.add(policyProcessMinimumLimitItemDto);
         return policyProcessMinimumLimitItems;
     }
