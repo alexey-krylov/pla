@@ -1,5 +1,6 @@
 package com.pla.core.domain.model.plan;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.pla.sharedkernel.domain.model.ClientType;
 import com.pla.sharedkernel.domain.model.EndorsementType;
 import com.pla.sharedkernel.domain.model.PlanType;
@@ -28,6 +29,10 @@ import static com.google.common.base.Preconditions.checkArgument;
 public class PlanDetail {
 
     private static final Logger logger = LoggerFactory.getLogger(PlanDetail.class);
+    @JsonIgnore
+    private final String MODULE_NAME = PlanDetail.class.getSimpleName();
+    @JsonIgnore
+    private final String errorMessage = "Error in creating Plan: %s";
     String planName;
     String planCode;
     LocalDate launchDate;
@@ -48,29 +53,29 @@ public class PlanDetail {
     }
 
     PlanDetail(final PlanDetailBuilder planDetailBuilder) {
-        checkArgument(UtilValidator.isNotEmpty(planDetailBuilder.planName), "Plan Name cannot be empty.");
+        checkArgument(UtilValidator.isNotEmpty(planDetailBuilder.planName), String.format(errorMessage, "Plan Name cannot be empty."));
         this.planName = planDetailBuilder.planName;
 
         checkArgument(planDetailBuilder.planCode != null);
         this.planCode = planDetailBuilder.planCode;
 
-        checkArgument(planDetailBuilder.minEntryAge > 0, "Min Entry Age cannot be less than 0");
+        checkArgument(planDetailBuilder.minEntryAge > 0, String.format(errorMessage, "Min Entry Age cannot be less than 0"));
         this.minEntryAge = planDetailBuilder.minEntryAge;
 
-        checkArgument(planDetailBuilder.maxEntryAge > planDetailBuilder.minEntryAge, "Max Entry Age cannot be less than Min Entry Age");
+        checkArgument(planDetailBuilder.maxEntryAge > planDetailBuilder.minEntryAge, String.format(errorMessage, "Max Entry Age cannot be less than Min Entry Age"));
         this.maxEntryAge = planDetailBuilder.maxEntryAge;
 
-        checkArgument(planDetailBuilder.launchDate != null, "Cannot create a Plan without Launch Date");
-        checkArgument(planDetailBuilder.launchDate.isAfter(LocalDate.now()), "Cannot create a Plan with Launch Date less than Today's date");
+        checkArgument(planDetailBuilder.launchDate != null, String.format(errorMessage, "Cannot create a Plan without Launch Date"));
+        checkArgument(planDetailBuilder.launchDate.isAfter(LocalDate.now().minusDays(1)), String.format(errorMessage, "Cannot create a Plan with Launch Date with Past Date."));
 
         this.launchDate = planDetailBuilder.launchDate;
 
         if (planDetailBuilder.withdrawalDate != null) {
-            checkArgument(planDetailBuilder.withdrawalDate.isAfter(launchDate), "Withdrawal cannot be less than launchDate");
+            checkArgument(planDetailBuilder.withdrawalDate.isAfter(launchDate), String.format(errorMessage, "Withdrawal cannot be less than launchDate"));
             this.withdrawalDate = planDetailBuilder.withdrawalDate;
         }
 
-        checkArgument(planDetailBuilder.clientType != null, "Cannot create Plan without Client Type");
+        checkArgument(planDetailBuilder.clientType != null, String.format(errorMessage, "Cannot create Plan without Client Type"));
         this.clientType = planDetailBuilder.clientType;
 
         checkArgument(UtilValidator.isNotEmpty(planDetailBuilder.endorsementTypes));
@@ -84,13 +89,13 @@ public class PlanDetail {
                                     || endorsementType.equals(EndorsementType.PROMOTION)
                                     || endorsementType.equals(EndorsementType.NEW_COVER)
             );
-            checkArgument(groupEndorsementType.count() == 0, "Group Endorsements are not allowed for Plan with Client Type as %s", this.clientType);
+            checkArgument(groupEndorsementType.count() == 0, String.format(errorMessage, "Group Endorsements are not allowed for Plan with Client Type as Individual"));
         }
 
-        checkArgument(planDetailBuilder.lineOfBusinessId != null, "Cannot create Plan without Line of Business");
+        checkArgument(planDetailBuilder.lineOfBusinessId != null, String.format(errorMessage, "Cannot create Plan without Line of Business"));
         this.lineOfBusinessId = planDetailBuilder.lineOfBusinessId;
 
-        checkArgument(planDetailBuilder.planType != null, "Cannot create Plan without Plan Type");
+        checkArgument(planDetailBuilder.planType != null, String.format(errorMessage, "Cannot create Plan without Plan Type"));
         this.planType = planDetailBuilder.planType;
 
         this.freeLookPeriod = planDetailBuilder.freeLookPeriod;

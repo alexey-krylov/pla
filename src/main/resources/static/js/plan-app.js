@@ -26,13 +26,40 @@ app.config(function ($routeProvider, $locationProvider) {
             resolve: {
                 plan: function () {
                     return {
-                        "planDetail": {},
+                        "planDetail": {
+                            "lineOfBusinessId": "INDIVIDUAL_INSURANCE",
+                            "planName": "re",
+                            "planType": "INVESTMENT",
+                            "clientType": "INDIVIDUAL",
+                            "launchDate": "17/04/2015",
+                            "withdrawalDate": "30/04/2015",
+                            "surrenderAfter": "5",
+                            "applicableRelationships": ["SISTER", "BROTHER", "WIFE"],
+                            "endorsementTypes": ["ADDRESS", "BENEFICIARY"],
+                            "planCode": "tyty",
+                            "freeLookPeriod": 5,
+                            "minEntryAge": 19,
+                            "maxEntryAge": 65,
+                            "taxApplicable": "true"
+                        },
                         "policyTermType": "SPECIFIED_VALUES",
                         "premiumTermType": "SPECIFIED_VALUES",
-                        "policyTerm": {},
-                        "premiumTerm": {},
-                        "sumAssured": {},
-                        coverages: []
+                        "policyTerm": {"validTerms": [{"text": "10000"}], "maxMaturityAge": "19"},
+                        "premiumTerm": {"validTerms": [{"text": "10"}, {"text": "20"}], "maxMaturityAge": "5"},
+                        "sumAssured": {
+                            "sumAssuredType": "SPECIFIED_VALUES"
+                            , "sumAssuredValue": [{"text": "10000"}], "minSumInsured": null, "maxSumInsured": null, "multiplesOf": null
+                        },
+                        "coverages": [{
+                            "maturityAmounts": [{"maturityYear": 5, "guaranteedSurvivalBenefitAmount": "5"}], "coverageId": "306B8DF2-8298-4801-93C8-23D26E7018B7"
+                            , "coverageCover": "ACCELERATED", "taxApplicable": "true", "coverageType": "OPTIONAL", "deductibleType": "AMOUNT"
+                            , "minAge": 19, "maxAge": 65, "waitingPeriod": "5", "deductiblePercentage": 5, "coverageSumAssured": {
+                                "sumAssuredType": "SPECIFIED_VALUES", "sumAssuredValue": [{"text": "1000"}]
+                            }, "coverageTermType": "SPECIFIED_VALUES", "coverageTerm": {"validTerms": [{"text": "100"}], "maxMaturityAge": 15}, "planCoverageBenefits": [{
+                                "benefitId": "DA833BF2-3423-414E-AD98-E73F4CCD862A"
+                                , "definedPer": "INCIDENCE", "coverageBenefitType": "AMOUNT", "benefitLimit": "5", "maxLimit": "5"
+                            }]
+                        }]
                     }
                 },
                 activeCoverages: ['$q', '$http', function ($q, $http) {
@@ -252,15 +279,12 @@ app.controller('PlanSetupController', ['$scope', '$http', '$location', '$routePa
              * @returns {*}
              */
             $scope.getCoverageNameFromBenefit = function (benefitId) {
-                console.log('getCoverageNameFromBenefit :: benefitId ' + benefitId);
                 var i = 0;
                 for (; i < $scope.plan.coverages.length; i++) {
                     var eachCoverage = $scope.plan.coverages[i];
-                    console.log('getCoverageNameFromBenefit :: found coverage ' + JSON.stringify(eachCoverage));
                     var benefit = _.findWhere(eachCoverage.planCoverageBenefits, {'benefitId': benefitId});
                     if (benefit) {
                         var coverage = $scope.resolveCoverage(eachCoverage.coverageId);
-                        console.log(' getCoverageNameFromBenefit :: coverage name from Benefit' + coverage.coverageName);
                         return coverage.coverageName;
                     }
                 }
@@ -269,14 +293,11 @@ app.controller('PlanSetupController', ['$scope', '$http', '$location', '$routePa
 
 
             $scope.geBenefitNameFromBenefit = function (benefitId) {
-                console.log('geBenefitNameFromBenefit :: benefitId ' + benefitId);
                 var i = 0;
                 for (; i < $scope.coverageList.length; i++) {
                     var eachCoverage = $scope.coverageList[i];
-                    console.log('geBenefitNameFromBenefit :: found coverage ' + JSON.stringify(eachCoverage));
                     var benefit = _.findWhere(eachCoverage.benefitDtos, {'benefitId': benefitId});
                     if (benefit) {
-                        console.log(' geBenefitNameFromBenefit :: benefit name from Benefit' + benefit.benefitName);
                         return benefit.benefitName;
                     }
                 }
@@ -313,7 +334,43 @@ app.controller('PlanSetupController', ['$scope', '$http', '$location', '$routePa
              * @param coverage
              */
             $scope.removePlanCoverage = function (index) {
-                $scope.plan.coverages.splice(index, 1);
+
+                if ($scope.plan.coverages[index].planCoverageBenefits.length > 0) {
+                    $modal.open({
+                        backdrop: true,
+                        windowClass: 'modal',
+                        size: 'sm',
+                        templateUrl: 'coverageAlert.html',
+                        controller: function ($scope, $modalInstance) {
+                            $scope.cancel = function () {
+                                $modalInstance.dismiss('cancel');
+                            };
+                        }
+                    });
+                } else
+                    $modal.open({
+                        backdrop: true,
+                        windowClass: 'modal',
+                        size: 'sm',
+                        templateUrl: 'coverageConfirmation.html',
+                        controller: function ($scope, $modalInstance, $log, plan) {
+                            $scope.plan = plan;
+
+                            $scope.cancel = function () {
+                                $modalInstance.dismiss('cancel');
+                            };
+                            $scope.ok = function () {
+                                $log.info('removing the coverage.');
+                                $scope.plan.coverages.splice(index, 1);
+                                $scope.cancel();
+                            };
+                        },
+                        resolve: {
+                            plan: function () {
+                                return $scope.plan;
+                            }
+                        }
+                    });
             };
 
             /**
@@ -349,12 +406,49 @@ app.controller('PlanSetupController', ['$scope', '$http', '$location', '$routePa
                 }
             };
 
+            /**
+             * Remove the Benefits configured from the plan.
+             *
+             * @param coverage
+             */
+            $scope.removeBenefit = function (benefitId) {
+                $modal.open({
+                    backdrop: true,
+                    windowClass: 'modal',
+                    size: 'sm',
+                    templateUrl: 'benefitConfirmation.html',
+                    controller: function ($scope, $modalInstance, $log, plan) {
+                        $scope.plan = plan;
+                        $scope.cancel = function () {
+                            $modalInstance.dismiss('cancel');
+                        };
+                        $scope.ok = function () {
+                            $log.info(' removing the benefit');
+                            angular.forEach($scope.plan.coverages, function (value, key) {
+                                var i = 0;
+                                for (; i < value.planCoverageBenefits.length; i++) {
+                                    if (value.planCoverageBenefits[i].benefitId == benefitId) {
+                                        value.planCoverageBenefits.splice(i, 1);
+                                        break;
+                                    }
+                                }
+                            });
+                            $scope.cancel();
+                        };
+                    },
+                    resolve: {
+                        plan: function () {
+                            return $scope.plan;
+                        }
+                    }
+                });
+            };
+
 
             $scope.newPlanCoverageBenefit = {};
 
             $scope.addBenefit = function (selectedCoverage) {
                 var planCoverage = _.find($scope.plan.coverages, function (planCoverage) {
-                    console.log(JSON.stringify(planCoverage));
                     return planCoverage.coverageId == selectedCoverage.coverageId;
                 });
                 if (angular.isUndefined(planCoverage.planCoverageBenefits)) {
@@ -364,19 +458,21 @@ app.controller('PlanSetupController', ['$scope', '$http', '$location', '$routePa
                 $scope.newPlanCoverageBenefit = angular.copy({});
             };
 
-            $scope.removeBenefit = function (index) {
-                $scope.selectedCoverage.planCoverageBenefits.splice(index, 1);
-            };
-
-
             $scope.createPlan = function () {
+                $scope.validationFailed = false;
                 $http.post(angular.isUndefined($scope.plan.planId) ? '/pla/core/plan/create' : '/pla/core/plan/update', $scope.plan).
                     success(function (data, status, headers, config) {
+                        $scope.$apply();
                         $scope.plan.planId = data.id;
-                        $location.path('/plan#/viewplan/' + data.id);
+                        $location.path('/plan');
+                        $scope.successMsg = data.message;
                     }).
                     error(function (data, status, headers, config) {
+                        $scope.validationFailed = true;
+                        $scope.serverErrMsg = data.message;
                     });
+
+
             };
 
 
@@ -421,9 +517,7 @@ app.controller('PlanSetupController', ['$scope', '$http', '$location', '$routePa
             });
             $scope.step5 = {};
             $scope.$on('actionclicked.fu.wizard', function (name, event, data) {
-                console.log('Step:: ' + data.step);
                 if (data.step == 5) {
-                    console.log('Step:: 5 coverages length==' + $scope.plan.coverages.length);
                     if ($scope.plan.coverages.length == 0) {
                         $scope.step5.$error = true;
                         $scope.stepErrorMsg = "Configure coverages.";
