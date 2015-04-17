@@ -122,7 +122,7 @@ public class Commission implements ICrudEntity {
 
     public Commission addCommissionTerm(Set<CommissionTerm> commissionTerms, Plan plan) {
         if (!isWithinPlanMaturityAge(commissionTerms, plan))
-            throw new CommissionDomainException("Not Within Plan Maturity Age!!");
+            throw new CommissionDomainException("Not Within Plan Policy Terms!!");
         if (!validateOverLappingYears(commissionTerms))
             throw new CommissionDomainException("Overlapping Years!!");
         this.commissionTerms = commissionTerms;
