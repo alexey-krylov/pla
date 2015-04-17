@@ -11,9 +11,9 @@ import org.nthdimenzion.ddd.domain.annotations.ValueObject;
  */
 @ValueObject
 @NoArgsConstructor(access = AccessLevel.PACKAGE)
-@Getter(value = AccessLevel.PACKAGE)
+@Getter
 @Setter(value = AccessLevel.PACKAGE)
-class ProposerContactDetail {
+public class ProposerContactDetail {
 
     private ContactPersonDetail contactPersonDetail;
 
@@ -45,7 +45,7 @@ class ProposerContactDetail {
     }
 
     @Getter
-    private class ContactPersonDetail {
+    public class ContactPersonDetail {
 
         private String contactPersonName;
 

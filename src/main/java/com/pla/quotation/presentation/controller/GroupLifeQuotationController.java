@@ -2,10 +2,7 @@ package com.pla.quotation.presentation.controller;
 
 import com.pla.quotation.application.service.grouplife.GLQuotationService;
 import com.pla.quotation.application.command.grouplife.*;
-import com.pla.quotation.query.AgentDetailDto;
-import com.pla.quotation.query.PremiumDetailDto;
-import com.pla.quotation.query.ProposerDto;
-import com.pla.quotation.query.GLQuotationFinder;
+import com.pla.quotation.query.*;
 import com.pla.sharedkernel.identifier.QuotationId;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.axonframework.commandhandling.gateway.CommandGateway;
@@ -21,6 +18,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.List;
 import java.util.Map;
 
 import static com.google.common.base.Preconditions.checkArgument;
@@ -37,13 +35,13 @@ public class GroupLifeQuotationController {
 
     private GLQuotationService glQuotationService;
 
-    private GLQuotationFinder GLQuotationFinder;
+    private GLQuotationFinder glQuotationFinder;
 
     @Autowired
-    public GroupLifeQuotationController(CommandGateway commandGateway, GLQuotationService glQuotationService, GLQuotationFinder GLQuotationFinder) {
+    public GroupLifeQuotationController(CommandGateway commandGateway, GLQuotationService glQuotationService, GLQuotationFinder glQuotationFinder) {
         this.commandGateway = commandGateway;
         this.glQuotationService = glQuotationService;
-        this.GLQuotationFinder = GLQuotationFinder;
+        this.glQuotationFinder = glQuotationFinder;
     }
 
     @RequestMapping(value = "/creategrouplifequotation", method = RequestMethod.GET)
@@ -56,8 +54,15 @@ public class GroupLifeQuotationController {
     @RequestMapping(value = "/getquotationnumber/{quotationId}", method = RequestMethod.GET)
     @ResponseBody
     public Result getQuotationNumber(@PathVariable("quotationId") String quotationId) {
-        Map quotationMap = GLQuotationFinder.getQuotationById(quotationId);
+        Map quotationMap = glQuotationFinder.getQuotationById(quotationId);
         return Result.success("Quotation number ", (String) quotationMap.get("quotationNumber"));
+    }
+
+    @RequestMapping(value = "/getversionnumber/{quotationId}", method = RequestMethod.GET)
+    @ResponseBody
+    public Result getVersionNumber(@PathVariable("quotationId") String quotationId) {
+        Map quotationMap = glQuotationFinder.getQuotationById(quotationId);
+        return Result.success("Quotation Version number ", quotationMap.get("versionNumber"));
     }
 
     @RequestMapping(value = "/getagentdetail/{agentId}", method = RequestMethod.GET)
@@ -65,7 +70,7 @@ public class GroupLifeQuotationController {
     public Result getAgentDetail(@PathVariable("agentId") String agentId) {
         Map<String, Object> agentDetail = null;
         try {
-            agentDetail = GLQuotationFinder.getAgentById(agentId);
+            agentDetail = glQuotationFinder.getAgentById(agentId);
         } catch (Exception e) {
             return Result.failure("Agent not found");
         }
@@ -87,9 +92,15 @@ public class GroupLifeQuotationController {
     @RequestMapping(value = "/listgrouplifequotation", method = RequestMethod.GET)
     public ModelAndView listQuotation() {
         ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("pla/quotation/groupLife/listQuotation");
+        modelAndView.setViewName("pla/quotation/groupLife/viewQuotation");
         modelAndView.addObject(glQuotationService.getAllQuotation());
         return modelAndView;
+    }
+
+    @RequestMapping(value = "/searchquotation", method = RequestMethod.POST)
+    @ResponseBody
+    public List<GlQuotationDto> searchQuotation(@RequestBody SearchGlQuotationDto searchGlQuotationDto) {
+        return glQuotationService.searchQuotation(searchGlQuotationDto);
     }
 
     @RequestMapping(value = "/createquotation", method = RequestMethod.POST)

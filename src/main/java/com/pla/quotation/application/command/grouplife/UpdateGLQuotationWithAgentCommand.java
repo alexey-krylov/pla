@@ -1,6 +1,7 @@
 package com.pla.quotation.application.command.grouplife;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -12,6 +13,7 @@ import javax.validation.constraints.NotNull;
  */
 @Getter
 @Setter
+@NoArgsConstructor
 public class UpdateGLQuotationWithAgentCommand {
 
     @NotNull(message = "{Agent ID cannot be null}")

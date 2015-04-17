@@ -186,7 +186,7 @@ angular.module('createAgent',['common','ngRoute','mgcrea.ngStrap.select','mgcrea
         transformService.toPlanIdPlanNameObject = function(authorisedToSell){
             var plans = [];
             angular.forEach(authorisedToSell,function(plan,key){
-                this.push({planId:plan.planId.planId,planName:plan.planDetail.planName});
+                this.push({planId:plan.planId,planName:plan.planDetail.planName});
             },plans);
             return plans;
         };
@@ -282,7 +282,7 @@ angular.module('createAgent',['common','ngRoute','mgcrea.ngStrap.select','mgcrea
                 }],
                 authorisedToSell:['$q', '$http','transformJson', function ($q, $http,transformJson) {
                     var deferred = $q.defer();
-                    $http.get('/pla/core/agent/getallplan').success(function (response, status, headers, config) {
+                    $http.get('/pla/core/plan/getallplan').success(function (response, status, headers, config) {
                         deferred.resolve(transformJson.toPlanIdPlanNameObject(response))
                     }).error(function (response, status, headers, config) {
                         deferred.reject();

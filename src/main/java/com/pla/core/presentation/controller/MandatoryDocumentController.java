@@ -1,11 +1,13 @@
 package com.pla.core.presentation.controller;
 
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import com.pla.core.application.CreateMandatoryDocumentCommand;
 import com.pla.core.application.UpdateMandatoryDocumentCommand;
 import com.pla.core.domain.exception.MandatoryDocumentException;
 import com.pla.core.domain.model.ProcessType;
+import com.pla.core.domain.service.MandatoryDocumentService;
 import com.pla.core.dto.MandatoryDocumentDto;
-import com.pla.core.query.MandatoryDocumentFinder;
 import org.axonframework.commandhandling.gateway.CommandGateway;
 import org.nthdimenzion.presentation.Result;
 import org.slf4j.Logger;
@@ -21,8 +23,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 import static org.nthdimenzion.presentation.AppUtils.getLoggedInUSerDetail;
 
@@ -35,32 +37,23 @@ public class MandatoryDocumentController {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(MandatoryDocumentController.class);
 
-    private MandatoryDocumentFinder mandatoryDocumentFinder;
+    private MandatoryDocumentService mandatoryDocumentService;
 
     private CommandGateway commandGateway;
 
     @Autowired
-    public MandatoryDocumentController(CommandGateway commandGateway,MandatoryDocumentFinder mandatoryDocumentFinder) {
+    public MandatoryDocumentController(CommandGateway commandGateway,MandatoryDocumentService mandatoryDocumentService) {
         this.commandGateway = commandGateway;
-        this.mandatoryDocumentFinder=mandatoryDocumentFinder;
+        this.mandatoryDocumentService = mandatoryDocumentService;
     }
 
-
-    /*
-    *
-    * API  to get all created mandatory document
-    *
-    * */
 
     @RequestMapping(value = "/view" ,method = RequestMethod.GET)
     @ResponseBody
     public ModelAndView getAllMandatoryDocument(){
-        /*
-        * change is needed for view name
-        * */
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("pla/core/mandatorydocument/viewMandatoryDocument");
-        modelAndView.addObject("listOfMandatoryDocument", mandatoryDocumentFinder.getAllMandatoryDocument());
+        modelAndView.addObject("listOfMandatoryDocument", mandatoryDocumentService.getMandatoryDocuments());
         return modelAndView;
     }
 
@@ -75,7 +68,7 @@ public class MandatoryDocumentController {
     @RequestMapping(value = "/getallmandatorydocument" ,method = RequestMethod.GET)
     @ResponseBody
     public List<MandatoryDocumentDto> getMandatoryDocument(){
-        return mandatoryDocumentFinder.getAllMandatoryDocument();
+        return mandatoryDocumentService.getMandatoryDocuments();
     }
 
     @RequestMapping(value = "/create", method = RequestMethod.POST)
@@ -116,8 +109,16 @@ public class MandatoryDocumentController {
 
     @RequestMapping(value = "/getallprocess",method = RequestMethod.GET)
     @ResponseBody
-    public List getDefinedProcess(){
-        return Arrays.asList(ProcessType.values());
+    public List<Map<String,String>> getDefinedProcess(){
+        List<Map<String,String>> processTypeList = Lists.newArrayList();
+        for (ProcessType processType : ProcessType.values()){
+            Map<String,String> processTypeMap = Maps.newLinkedHashMap();
+            processTypeMap.put("processType",processType.name());
+            processTypeMap.put("description", processType.description);
+            processTypeList.add(processTypeMap);
+        }
+        return processTypeList;
     }
+
 }
 

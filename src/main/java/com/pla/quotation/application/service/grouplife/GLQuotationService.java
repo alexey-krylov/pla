@@ -1,5 +1,8 @@
 package com.pla.quotation.application.service.grouplife;
 
+import com.pla.core.domain.model.agent.AgentId;
+import com.pla.quotation.application.command.grouplife.SearchGlQuotationDto;
+import com.pla.quotation.domain.model.grouplife.Proposer;
 import com.pla.quotation.query.*;
 import com.pla.sharedkernel.identifier.QuotationId;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
@@ -46,8 +49,8 @@ public class GLQuotationService {
 
     public AgentDetailDto getAgentDetail(QuotationId quotationId) {
         Map quotation = glQuotationFinder.getQuotationById(quotationId.getQuotationId());
-        Map agentMap = (Map) quotation.get("agentId");
-        String agentId = (String) agentMap.get("agentId");
+        AgentId agentMap = (AgentId) quotation.get("agentId");
+        String agentId = agentMap.getAgentId();
         Map<String, Object> agentDetail = glQuotationFinder.getAgentById(agentId);
         AgentDetailDto agentDetailDto = new AgentDetailDto();
         agentDetailDto.setAgentId(agentId);
@@ -59,12 +62,19 @@ public class GLQuotationService {
 
     public ProposerDto getProposerDetail(QuotationId quotationId) {
         Map quotation = glQuotationFinder.getQuotationById(quotationId.getQuotationId());
-        Map proposerMap = (Map) quotation.get("proposer");
-        return new ProposerDto(proposerMap);
+        Proposer proposer = (Proposer) quotation.get("proposer");
+        return new ProposerDto(proposer);
     }
 
     public List<GlQuotationDto> getAllQuotation() {
         List<Map> allQuotations = glQuotationFinder.getAllQuotation();
+        List<GlQuotationDto> glQuotationDtoList = allQuotations.stream().map(new TransformToGLQuotationDto()).collect(Collectors.toList());
+        return glQuotationDtoList;
+    }
+
+
+    public List<GlQuotationDto> searchQuotation(SearchGlQuotationDto searchGlQuotationDto) {
+        List<Map> allQuotations = glQuotationFinder.searchQuotation(searchGlQuotationDto.getQuotationNumber(), searchGlQuotationDto.getAgentCode(), searchGlQuotationDto.getProposerName());
         List<GlQuotationDto> glQuotationDtoList = allQuotations.stream().map(new TransformToGLQuotationDto()).collect(Collectors.toList());
         return glQuotationDtoList;
     }

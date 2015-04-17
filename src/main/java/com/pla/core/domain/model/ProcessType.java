@@ -1,18 +1,23 @@
 package com.pla.core.domain.model;
 
+import lombok.Getter;
+
 /**
  * Created by Admin on 3/27/2015.
  */
+
 public enum ProcessType {
 
-    PROPOSAL("Proposal"),
+    ASSIGNMENT("Assignment"),
     CLAIM("Claim"),
-    REINSTATEMENT("Reinstatement"),
     ENDORSEMENT("Endorsement"),
-    SURRENDER("Surrender"),
-    MATURITY("Maturity");
+    ENROLLMENT("Enrollment"),
+    MATURITY("Maturity Claim"),
+    PROPOSAL("Proposal"),
+    REINSTATEMENT("Reinstatement"),
+    SURRENDER("Surrender Claim");
 
-    private String description;
+    public String description;
 
     ProcessType(String description) {
         this.description = description;
