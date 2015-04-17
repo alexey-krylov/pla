@@ -63,11 +63,11 @@ public class MandatoryDocumentService {
         List<MandatoryDocumentDto> mandatoryDocumentDtoList = Lists.newArrayList();
         for (MandatoryDocumentDto mandatoryDocumentDto : mandatoryDocumentDtos) {
            String planName = planFinder.getPlanName(new PlanId(mandatoryDocumentDto.getPlanId()));
-            Map<String, String> coverages = planFinder.getCoverageName(new PlanId(mandatoryDocumentDto.getPlanId()));
+            List<Map<String, String>> coverages = planFinder.getCoverageName(new PlanId(mandatoryDocumentDto.getPlanId()));
             if (isNotEmpty(planName))
                 mandatoryDocumentDto.setPlanName(planName);
             if (isNotEmpty(coverages))
-                mandatoryDocumentDto.setCoverageName(coverages.get("coverageName"));
+                mandatoryDocumentDto.setCoverageName(coverages.get(0).get("coverageName"));
             mandatoryDocumentDtoList.add(mandatoryDocumentDto);
         }
         return mandatoryDocumentDtoList;

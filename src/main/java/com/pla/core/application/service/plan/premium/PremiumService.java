@@ -14,7 +14,6 @@ import com.pla.publishedlanguage.domain.model.PremiumInfluencingFactor;
 import com.pla.sharedkernel.identifier.CoverageId;
 import com.pla.sharedkernel.identifier.PlanId;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-import org.nthdimenzion.utils.UtilValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Query;
@@ -79,7 +78,7 @@ public class PremiumService {
         for (Map plans : premiumPlan) {
             String planId  = plans.get("planId").toString();
             String planName = planFinder.getPlanName(new PlanId(planId));
-            Map<String, String> coverages =  planFinder.getCoverageName(new PlanId(planId));
+            List<Map<String, String>> coverages =  planFinder.getCoverageName(new PlanId(planId));
             if (isNotEmpty(planName))
                 plans.put("planName",planName);
             if (isNotEmpty(coverages))

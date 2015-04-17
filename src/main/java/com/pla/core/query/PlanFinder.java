@@ -131,22 +131,24 @@ public class PlanFinder {
         return planName;
     }
 
-    public Map<String,String> getCoverageName(PlanId planId){
+    public List<Map<String,String>> getCoverageName(PlanId planId){
         Map plan = findPlanByPlanId(planId);
         if (isEmpty(plan)){
-            return Maps.newLinkedHashMap();
+            return Lists.newArrayList();
         }
-        Map<String,String> coverageMaps  = Maps.newLinkedHashMap();
+        List<Map<String,String>> coverageList = Lists.newArrayList();
         List<Map> listCoverages  = (List) plan.get("coverages");
         for (Map coverageMap : listCoverages){
-            String  coverageId = (String) coverageMap.get("coverageId");
+            Map<String,String> coverageMaps  = Maps.newLinkedHashMap();
+            String coverageId = (String) coverageMap.get("coverageId");
             if (isNotEmpty(coverageId)){
                 if (CoverageType.OPTIONAL.name().equals(coverageMap.get("coverageType"))){
                     coverageMaps.put("coverageId",coverageId);
                     coverageMaps.put("coverageName", mandatoryDocumentFinder.getCoverageNameById(coverageId));
+                    coverageList.add(coverageMaps);
                 }
             }
         }
-        return coverageMaps;
+        return coverageList;
     }
 }

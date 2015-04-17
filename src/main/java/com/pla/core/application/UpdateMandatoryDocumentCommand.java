@@ -17,7 +17,7 @@ public class UpdateMandatoryDocumentCommand {
 
     private UserDetails userDetails;
 
-    private Long id;
+    private Long documentId;
 
     private Set<String> documents;
 }

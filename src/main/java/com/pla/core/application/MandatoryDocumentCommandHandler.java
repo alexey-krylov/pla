@@ -50,7 +50,7 @@ public class MandatoryDocumentCommandHandler {
             LOGGER.debug("*****Command Received*****" + updateMandatoryDocumentCommand);
         }
         JpaRepository<MandatoryDocument, Long> coverageRepository = jpaRepositoryFactory.getCrudRepository(MandatoryDocument.class);
-        MandatoryDocument mandatoryDocument =  coverageRepository.findOne(updateMandatoryDocumentCommand.getId());
+        MandatoryDocument mandatoryDocument =  coverageRepository.findOne(updateMandatoryDocumentCommand.getDocumentId());
         mandatoryDocument = mandatoryDocumentService.updateMandatoryDocument(mandatoryDocument, updateMandatoryDocumentCommand.getDocuments(), updateMandatoryDocumentCommand.getUserDetails());
         try {
             coverageRepository.save(mandatoryDocument);
