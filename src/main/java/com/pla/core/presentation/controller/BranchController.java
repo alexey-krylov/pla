@@ -76,7 +76,7 @@ public class BranchController {
         List<Map<String, Object>> allBranch = branchFinder.getAllBranch();
         List<EmployeeDto> allBranchManagers = smeGateway.getEmployeeDetailByDesignation(AppConstants.BRANCH_MANAGER_DESIGNATION);
         List<EmployeeDto> branchAllManagersNotAssociatedWithBranch = allBranchManagers.stream().filter(new FilterBranchManagerFromBranchPredicate(allBranch)).collect(Collectors.toList());
-        branchAllManagersNotAssociatedWithBranch.add(new EmployeeDto("Unassigned", "", "Unassigned", "Unassigned", "Unassigned", "Unassigned", "Unassigned", "Unassigned"));
+        branchAllManagersNotAssociatedWithBranch.add(new EmployeeDto("Unassigned", "", "", "Unassigned", "Unassigned", "Unassigned", "Unassigned", "Unassigned"));
         return branchAllManagersNotAssociatedWithBranch;
     }
 
