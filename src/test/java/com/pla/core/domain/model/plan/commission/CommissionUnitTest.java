@@ -109,7 +109,7 @@ public class CommissionUnitTest {
         commissionTerms.add(new CommissionTerm(new Integer(46), new Integer(56), new BigDecimal(6.00), CommissionTermType.RANGE));
         commissionTerms.add(new CommissionTerm(new Integer(34), new Integer(67), new BigDecimal(6.00), CommissionTermType.RANGE));
 
-        assertFalse(commission.isLesserThanMaxPlanMaturityAge(commissionTerms, 55));
+        assertFalse(commission.isLesserThanMaxPlanPolicyTerm(commissionTerms, 55));
 
     }
 
@@ -121,7 +121,7 @@ public class CommissionUnitTest {
         commissionTerms.add(new CommissionTerm(new Integer(46), new Integer(54), new BigDecimal(6.00), CommissionTermType.RANGE));
         commissionTerms.add(new CommissionTerm(new Integer(34), new Integer(50), new BigDecimal(6.00), CommissionTermType.RANGE));
 
-        assertTrue(commission.isLesserThanMaxPlanMaturityAge(commissionTerms, 55));
+        assertTrue(commission.isLesserThanMaxPlanPolicyTerm(commissionTerms, 55));
 
     }
 
@@ -131,7 +131,7 @@ public class CommissionUnitTest {
         Set<CommissionTerm> commissionTerms = Sets.newHashSet();
         commissionTerms.add(new CommissionTerm(new Integer(12), new Integer(58), new BigDecimal(6.00), CommissionTermType.RANGE));
 
-        assertFalse(commission.isLesserThanMaxPlanMaturityAge(commissionTerms, 55));
+        assertFalse(commission.isLesserThanMaxPlanPolicyTerm(commissionTerms, 55));
 
     }
 
@@ -141,7 +141,7 @@ public class CommissionUnitTest {
         Set<CommissionTerm> commissionTerms = Sets.newHashSet();
         commissionTerms.add(new CommissionTerm(new Integer(12), new Integer(45), new BigDecimal(6.00), CommissionTermType.RANGE));
 
-        assertTrue(commission.isLesserThanMaxPlanMaturityAge(commissionTerms, 55));
+        assertTrue(commission.isLesserThanMaxPlanPolicyTerm(commissionTerms, 55));
 
     }
 
@@ -153,7 +153,7 @@ public class CommissionUnitTest {
         commissionTerms.add(new CommissionTerm(new Integer(46), new Integer(56), new BigDecimal(6.00), CommissionTermType.RANGE));
         commissionTerms.add(new CommissionTerm(new Integer(34), new Integer(67), new BigDecimal(6.00), CommissionTermType.RANGE));
 
-        assertFalse(commission.isGreaterThanMinPlanMaturityAge(commissionTerms, 15));
+        assertFalse(commission.isGreaterThanMinPlanPolicyTerm(commissionTerms, 15));
 
     }
 
@@ -163,7 +163,7 @@ public class CommissionUnitTest {
         Set<CommissionTerm> commissionTerms = Sets.newHashSet();
         commissionTerms.add(new CommissionTerm(new Integer(12), new Integer(45), new BigDecimal(6.00), CommissionTermType.RANGE));
 
-        assertFalse(commission.isGreaterThanMinPlanMaturityAge(commissionTerms, 15));
+        assertFalse(commission.isGreaterThanMinPlanPolicyTerm(commissionTerms, 15));
 
     }
 
@@ -175,8 +175,9 @@ public class CommissionUnitTest {
         commissionTerms.add(new CommissionTerm(new Integer(56), new Integer(78), new BigDecimal(6.00), CommissionTermType.RANGE));
         commissionTerms.add(new CommissionTerm(new Integer(2), new Integer(4), new BigDecimal(6.00), CommissionTermType.RANGE));
 
-        assertTrue(commission.isGreaterThanMinPlanMaturityAge(commissionTerms, 1));
+        assertTrue(commission.isGreaterThanMinPlanPolicyTerm(commissionTerms, 1));
 
     }
+
 
 }

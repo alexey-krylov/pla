@@ -107,7 +107,8 @@ public class Commission implements ICrudEntity {
     }
 
     public Commission updateWithCommissionTerms(Set<CommissionTerm> commissionTerms, Plan plan) {
-        if (!isWithinPlanMaturityAge(commissionTerms, plan))
+        checkNotNull(plan);
+        if (!isWithinPlanPolicyTerms(commissionTerms, plan))
             throw new CommissionDomainException("Not Within Plan Maturity Age!!");
         if (!validateOverLappingYears(commissionTerms))
             throw new CommissionDomainException("Overlapping Years!!");
@@ -121,7 +122,8 @@ public class Commission implements ICrudEntity {
     }
 
     public Commission addCommissionTerm(Set<CommissionTerm> commissionTerms, Plan plan) {
-        if (!isWithinPlanMaturityAge(commissionTerms, plan))
+        checkNotNull(plan);
+        if (!isWithinPlanPolicyTerms(commissionTerms, plan))
             throw new CommissionDomainException("Not Within Plan Policy Terms!!");
         if (!validateOverLappingYears(commissionTerms))
             throw new CommissionDomainException("Overlapping Years!!");
@@ -132,32 +134,40 @@ public class Commission implements ICrudEntity {
 
     }
 
-    boolean isWithinPlanMaturityAge(Set<CommissionTerm> commissionTerms, Plan plan) {
+    boolean isWithinPlanPolicyTerms(Set<CommissionTerm> commissionTerms, Plan plan) {
+        List<Integer> policyTerms = sortPlanPolicyTerms(plan);
+        Integer minimumPolicyTerm = getMinimumPlanMaturityAge(policyTerms);
+        Integer maximumPolicyTerm = getMaximumPlanMaturityAge(policyTerms);
+        if (minimumPolicyTerm == maximumPolicyTerm)
+            minimumPolicyTerm = 0;
 
-        return (isLesserThanMaxPlanMaturityAge(commissionTerms, this.getMaximumPlanMaturityAge(plan)) && ((isGreaterThanMinPlanMaturityAge(commissionTerms, this.getMinimumPlanMaturityAge(plan)))));
+        return (isLesserThanMaxPlanPolicyTerm(commissionTerms, maximumPolicyTerm)) && ((isGreaterThanMinPlanPolicyTerm(commissionTerms, minimumPolicyTerm)));
     }
 
-    Integer getMaximumPlanMaturityAge(Plan plan) {
-        List<Integer> maturityAges = new ArrayList<Integer>();
-        maturityAges.addAll(plan.getAllowedPolicyTerm());
-        Collections.sort(maturityAges);
-        return maturityAges.get(maturityAges.size() - 1);
+    List<Integer> sortPlanPolicyTerms(Plan plan) {
+        List<Integer> policyTerms = new ArrayList<Integer>();
+        Set<Integer> allowedPolicyTerms = plan.getAllowedPolicyTerm();
+        checkNotNull(allowedPolicyTerms);
+        policyTerms.addAll(allowedPolicyTerms);
+        Collections.sort(policyTerms);
+        return policyTerms;
     }
 
-    Integer getMinimumPlanMaturityAge(Plan plan) {
-        List<Integer> maturityAges = new ArrayList<Integer>();
-        maturityAges.addAll(plan.getAllowedPolicyTerm());
-        Collections.sort(maturityAges);
-        return maturityAges.get(0);
+    Integer getMinimumPlanMaturityAge(List<Integer> policyTerms) {
+        return policyTerms.get(0);
+    }
+
+    Integer getMaximumPlanMaturityAge(List<Integer> policyTerms) {
+        return policyTerms.get(policyTerms.size() - 1);
     }
 
 
-    boolean isGreaterThanMinPlanMaturityAge(Set<CommissionTerm> commissionTerms, Integer maxMaturity) {
+    boolean isGreaterThanMinPlanPolicyTerm(Set<CommissionTerm> commissionTerms, Integer maxMaturity) {
         List<CommissionTerm> commissionTermsGreaterThanMaximumMaturityAge = commissionTerms.stream().filter(new CommissionTermsGreaterThanMinimumMaturityAge(commissionTerms, maxMaturity)).collect(Collectors.toList());
         return UtilValidator.isEmpty(commissionTermsGreaterThanMaximumMaturityAge);
     }
 
-    boolean isLesserThanMaxPlanMaturityAge(Set<CommissionTerm> commissionTerms, Integer maxMaturity) {
+    boolean isLesserThanMaxPlanPolicyTerm(Set<CommissionTerm> commissionTerms, Integer maxMaturity) {
         List<CommissionTerm> commissionTermsGreaterThanMaximumMaturityAge = commissionTerms.stream().filter(new CommissionTermsLesserThanMaximumMaturityAge(commissionTerms, maxMaturity)).collect(Collectors.toList());
         return UtilValidator.isEmpty(commissionTermsGreaterThanMaximumMaturityAge);
     }
