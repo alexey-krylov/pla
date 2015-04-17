@@ -7,6 +7,7 @@
 package com.pla.core.application.service.plan.premium;
 
 import com.pla.core.domain.model.plan.Plan;
+import com.pla.core.query.PlanFinder;
 import com.pla.core.repository.PlanRepository;
 import com.pla.publishedlanguage.domain.model.PremiumInfluencingFactor;
 import com.pla.sharedkernel.identifier.CoverageId;
@@ -39,12 +40,15 @@ public class PremiumService {
 
     private PremiumTemplateParser premiumTemplateParser;
 
+    private PlanFinder planFinder;
+
     @Autowired
-    public PremiumService(PlanRepository planRepository, MongoTemplate mongoTemplate, PremiumTemplateParser premiumTemplateParser, PremiumTemplateExcelGenerator premiumTemplateExcelGenerator) {
+    public PremiumService(PlanRepository planRepository, MongoTemplate mongoTemplate, PremiumTemplateParser premiumTemplateParser, PremiumTemplateExcelGenerator premiumTemplateExcelGenerator,PlanFinder planFinder) {
         this.planRepository = planRepository;
         this.mongoTemplate = mongoTemplate;
         this.premiumTemplateParser = premiumTemplateParser;
         this.premiumTemplateExcelGenerator = premiumTemplateExcelGenerator;
+        this.planFinder = planFinder;
     }
 
     public HSSFWorkbook generatePremiumExcelTemplate(PremiumInfluencingFactor[] premiumInfluencingFactors, String planId, String coverageId) throws IOException {
@@ -66,8 +70,14 @@ public class PremiumService {
 
     public List<Map> getAllPremium() {
         Query query = new Query();
-        query.fields().include("premiumId").include("planId").include("coverageId").include("effectiveFrom").include("validTill").include("premiumFactor").include("premiumRateFrequency");
-        return mongoTemplate.find(query, Map.class, "premium");
+        query.fields().include("premiumId").include("planId").include("coverageId").include("effectiveFrom").include("validTill").include("premiumFactor").include("premiumRateFrequency").include("premiumInfluencingFactors");
+        List<Map> premiumPlan =  mongoTemplate.find(query, Map.class, "premium");
+        for (Map plans : premiumPlan) {
+            String planId  = plans.get("planId").toString();
+            Map planAndCoverageName = planFinder.getPlanNameAndCoverageName(new PlanId(planId));
+            premiumPlan.add(planAndCoverageName);
+        }
+        return premiumPlan;
     }
 
 

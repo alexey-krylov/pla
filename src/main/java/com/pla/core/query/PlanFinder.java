@@ -9,9 +9,11 @@ package com.pla.core.query;
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
+import com.google.common.collect.Maps;
 import com.fasterxml.jackson.datatype.joda.JodaModule;
 import com.mongodb.BasicDBObject;
 import com.pla.core.domain.model.plan.Plan;
+import com.pla.sharedkernel.domain.model.CoverageType;
 import com.pla.sharedkernel.identifier.PlanId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
@@ -19,6 +21,8 @@ import org.springframework.data.mongodb.core.query.BasicQuery;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
+
+import static org.nthdimenzion.utils.UtilValidator.isEmpty;
 
 /**
  * @author: Nischitha
@@ -30,9 +34,10 @@ public class PlanFinder {
 
     private MongoTemplate mongoTemplate;
     private ObjectMapper objectMapper;
+    private MandatoryDocumentFinder mandatoryDocumentFinder;
 
     @Autowired
-    public PlanFinder(MongoTemplate mongoTemplate) {
+    public PlanFinder(MongoTemplate mongoTemplate,MandatoryDocumentFinder mandatoryDocumentFinder) {
         objectMapper = new ObjectMapper();
         objectMapper.registerModule(new JodaModule());
         objectMapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
@@ -43,6 +48,7 @@ public class PlanFinder {
                 .withSetterVisibility(JsonAutoDetect.Visibility.NONE)
                 .withCreatorVisibility(JsonAutoDetect.Visibility.ANY));
         this.mongoTemplate = mongoTemplate;
+        this.mandatoryDocumentFinder = mandatoryDocumentFinder;
     }
 
     public List<Plan> findAllPlanForThymeleaf() {
@@ -110,4 +116,24 @@ public class PlanFinder {
         term.put("maturityAges", values);
     }
 
+    public Map<String,String> getPlanNameAndCoverageName(PlanId planId){
+        Map<String,String> plans = Maps.newLinkedHashMap();
+        Map plan = findPlanByPlanId(planId);
+        if (isEmpty(plan)){
+            return Maps.newLinkedHashMap();
+        }
+        Map planDetail =(Map)plan.get("planDetail");
+        String planName  = (String) planDetail.get("planName");
+        plan.put("planName",planName);
+        List<Map> listCoverages  = (List) plan.get("coverages");
+        for (Map coverageMap : listCoverages){
+            String  coverageId = (String) coverageMap.get("coverageId");
+            if (coverageId!=null){
+                if (CoverageType.OPTIONAL.name().equals(coverageMap.get("coverageType"))){
+                    plans.put("coverageName",mandatoryDocumentFinder.getCoverageNameById(coverageId));
+                }
+            }
+        }
+        return plans;
+    }
 }
