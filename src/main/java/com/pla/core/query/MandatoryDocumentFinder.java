@@ -30,6 +30,9 @@ public class MandatoryDocumentFinder {
             " FROM mandatory_documents md INNER JOIN document d ON md.document_code=d.document_code " +
             " WHERE document_id=:documentId ";
 
+    public static final String GET_MANDATORY_DOCUMENT_BY_ID_QUERY =" SELECT document_id documentId,coverage_id coverageId,plan_id planId,PROCESS PROCESS " +
+            "  FROM mandatory_document WHERE document_id =:documentId";
+
     public static final String GET_COVERAGE_NAME_FOR_GIVEN_COVERAGE_ID_QUERY =" SELECT coverage_name coverageName FROM coverage WHERE coverage_id =:coverageId ";
 
     @Autowired
@@ -41,7 +44,7 @@ public class MandatoryDocumentFinder {
         List<MandatoryDocumentDto> listOfMandatoryDocument =  namedParameterJdbcTemplate.query(GET_ALL_MANDATORY_DOCUMENT_QUERY, new BeanPropertyRowMapper(MandatoryDocumentDto.class));
         for (MandatoryDocumentDto mandatoryDocumentDto : listOfMandatoryDocument){
             SqlParameterSource sqlParameterSource = new MapSqlParameterSource("documentId",mandatoryDocumentDto.getDocumentId());
-             List<Map<String,Object>>  listOfDocument = namedParameterJdbcTemplate.query(GET_ALL_DOCUMENTS_ASSOCIATED_WITH_MANDATORY_DOCUMENT_QUERY, sqlParameterSource, new ColumnMapRowMapper());
+            List<Map<String,Object>>  listOfDocument = namedParameterJdbcTemplate.query(GET_ALL_DOCUMENTS_ASSOCIATED_WITH_MANDATORY_DOCUMENT_QUERY, sqlParameterSource, new ColumnMapRowMapper());
             mandatoryDocumentDto.setDocuments(listOfDocument);
         }
         return listOfMandatoryDocument;
@@ -50,5 +53,15 @@ public class MandatoryDocumentFinder {
     public String getCoverageNameById(String coverageId){
         SqlParameterSource sqlParameterSource = new MapSqlParameterSource("coverageId",coverageId);
         return namedParameterJdbcTemplate.queryForObject(GET_COVERAGE_NAME_FOR_GIVEN_COVERAGE_ID_QUERY,sqlParameterSource,String.class);
+    }
+
+    public List<MandatoryDocumentDto> getMandatoryDocumentById(Long documentId){
+        SqlParameterSource sqlParameterSource = new MapSqlParameterSource("documentId",documentId);
+        List<MandatoryDocumentDto> mandatoryDocumentDtos =  namedParameterJdbcTemplate.query(GET_MANDATORY_DOCUMENT_BY_ID_QUERY, sqlParameterSource, new BeanPropertyRowMapper(MandatoryDocumentDto.class));
+        List<Map<String,Object>>  listOfDocument = namedParameterJdbcTemplate.query(GET_ALL_DOCUMENTS_ASSOCIATED_WITH_MANDATORY_DOCUMENT_QUERY, sqlParameterSource, new ColumnMapRowMapper());
+       for (MandatoryDocumentDto mandatoryDocumentDto : mandatoryDocumentDtos){
+           mandatoryDocumentDto.setDocuments(listOfDocument);
+       }
+        return mandatoryDocumentDtos;
     }
 }
