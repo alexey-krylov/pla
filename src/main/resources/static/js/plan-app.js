@@ -26,40 +26,13 @@ app.config(function ($routeProvider, $locationProvider) {
             resolve: {
                 plan: function () {
                     return {
-                        "planDetail": {
-                            "lineOfBusinessId": "INDIVIDUAL_INSURANCE",
-                            "planName": "re",
-                            "planType": "INVESTMENT",
-                            "clientType": "INDIVIDUAL",
-                            "launchDate": "17/04/2015",
-                            "withdrawalDate": "30/04/2015",
-                            "surrenderAfter": "5",
-                            "applicableRelationships": ["SISTER", "BROTHER", "WIFE"],
-                            "endorsementTypes": ["ADDRESS", "BENEFICIARY"],
-                            "planCode": "tyty",
-                            "freeLookPeriod": 5,
-                            "minEntryAge": 19,
-                            "maxEntryAge": 65,
-                            "taxApplicable": "true"
-                        },
+                        "planDetail": {},
                         "policyTermType": "SPECIFIED_VALUES",
                         "premiumTermType": "SPECIFIED_VALUES",
-                        "policyTerm": {"validTerms": [{"text": "10000"}], "maxMaturityAge": "19"},
-                        "premiumTerm": {"validTerms": [{"text": "10"}, {"text": "20"}], "maxMaturityAge": "5"},
-                        "sumAssured": {
-                            "sumAssuredType": "SPECIFIED_VALUES"
-                            , "sumAssuredValue": [{"text": "10000"}], "minSumInsured": null, "maxSumInsured": null, "multiplesOf": null
-                        },
-                        "coverages": [{
-                            "maturityAmounts": [{"maturityYear": 5, "guaranteedSurvivalBenefitAmount": "5"}], "coverageId": "306B8DF2-8298-4801-93C8-23D26E7018B7"
-                            , "coverageCover": "ACCELERATED", "taxApplicable": "true", "coverageType": "OPTIONAL", "deductibleType": "AMOUNT"
-                            , "minAge": 19, "maxAge": 65, "waitingPeriod": "5", "deductiblePercentage": 5, "coverageSumAssured": {
-                                "sumAssuredType": "SPECIFIED_VALUES", "sumAssuredValue": [{"text": "1000"}]
-                            }, "coverageTermType": "SPECIFIED_VALUES", "coverageTerm": {"validTerms": [{"text": "100"}], "maxMaturityAge": 15}, "planCoverageBenefits": [{
-                                "benefitId": "DA833BF2-3423-414E-AD98-E73F4CCD862A"
-                                , "definedPer": "INCIDENCE", "coverageBenefitType": "AMOUNT", "benefitLimit": "5", "maxLimit": "5"
-                            }]
-                        }]
+                        "policyTerm": {},
+                        "premiumTerm": {},
+                        "sumAssured": {},
+                        "coverages": []
                     }
                 },
                 activeCoverages: ['$q', '$http', function ($q, $http) {
