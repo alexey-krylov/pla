@@ -72,7 +72,7 @@ public class PlanSetupController {
 
     @RequestMapping(value = "/getcoveragebyplanid/{planId}")
     @ResponseBody
-    public List<String> getCoverageAssociatedWithPlan(@PathVariable("planId") PlanId planId){
+    public Map<String, String> getCoverageAssociatedWithPlan(@PathVariable("planId") PlanId planId){
         return planFinder.getCoverageName(planId);
     }
     /**

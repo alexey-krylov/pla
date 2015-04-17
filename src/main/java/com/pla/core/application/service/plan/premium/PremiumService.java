@@ -79,7 +79,7 @@ public class PremiumService {
         for (Map plans : premiumPlan) {
             String planId  = plans.get("planId").toString();
             String planName = planFinder.getPlanName(new PlanId(planId));
-            List<String> coverages =  planFinder.getCoverageName(new PlanId(planId));
+            Map<String, String> coverages =  planFinder.getCoverageName(new PlanId(planId));
             if (isNotEmpty(planName))
                 plans.put("planName",planName);
             if (isNotEmpty(coverages))

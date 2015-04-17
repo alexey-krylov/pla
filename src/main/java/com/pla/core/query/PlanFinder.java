@@ -11,6 +11,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.joda.JodaModule;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import com.mongodb.BasicDBObject;
 import com.pla.core.domain.model.plan.Plan;
 import com.pla.sharedkernel.domain.model.CoverageType;
@@ -130,21 +131,21 @@ public class PlanFinder {
         return planName;
     }
 
-    public List<String> getCoverageName(PlanId planId){
+    public  Map<String,String> getCoverageName(PlanId planId){
         Map plan = findPlanByPlanId(planId);
         if (isEmpty(plan)){
-            return Lists.newArrayList();
+            return Maps.newLinkedHashMap();
         }
-        List<String> coverages = Lists.newArrayList();
+        Map<String,String> coverageMaps  = Maps.newLinkedHashMap();
         List<Map> listCoverages  = (List) plan.get("coverages");
         for (Map coverageMap : listCoverages){
             String  coverageId = (String) coverageMap.get("coverageId");
             if (isNotEmpty(coverageId)){
                 if (CoverageType.OPTIONAL.name().equals(coverageMap.get("coverageType"))){
-                    coverages.add(mandatoryDocumentFinder.getCoverageNameById(coverageId));
+                    coverageMaps.put(coverageId, mandatoryDocumentFinder.getCoverageNameById(coverageId));
                 }
             }
         }
-        return coverages;
+        return coverageMaps;
     }
 }
