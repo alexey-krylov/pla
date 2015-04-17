@@ -50,13 +50,13 @@
                         </thead>
                         <tbody>
                         <tr th:each="mandatoryDocument : ${listOfMandatoryDocument}">
-                            <td th:text="${mandatoryDocument.planId}"></td>
-                            <td th:text="${mandatoryDocument.coverageId}"></td>
+                            <td th:text="${mandatoryDocument.planName}"></td>
+                            <td th:text="${mandatoryDocument.coverageName}"></td>
                             <td style="text-align:center" class="pop" >
                                 <button href="#" class="details-box btn btn-primary btn-xs" rel="popover"  data-content="" > Mandatory-Documents
                                     <div class="popover-body" style="display:none;">
-                                        <ul  type="square"   th:each="documents : ${mandatoryDocument.documents}"  >   <!-- -->
-                                            <li style="text-align:left;font-size:12px;" th:text="'&diams;&nbsp;'+${{documents.documentCode}}+','"   ></li> <!-- -->
+                                        <ul  type="square"   th:each="documents : ${mandatoryDocument.documents}"  >
+                                            <li style="text-align:left;font-size:12px;" th:text="'&diams;&nbsp;'+${{documents.documentName}}+','"   ></li>
                                         </ul>
                                     </div>
                                 </button>

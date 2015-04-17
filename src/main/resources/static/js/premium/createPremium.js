@@ -5,6 +5,7 @@ App.controller('CreatePremiumController',['$scope','$http','$rootScope','$upload
          $scope.verified=false;
          $scope.boolVal=false;
          $scope.newPlanList = [];
+        $scope.coverageList=[];
          $scope.optionalCoverageList=[];
          $scope.showOptionalCoverage= false;
          $scope.selectedDate =moment().add(1,'days').format("YYYY-MM-DD");
@@ -55,16 +56,15 @@ App.controller('CreatePremiumController',['$scope','$http','$rootScope','$upload
          });
          $scope.$watch('createPremium.planId',function(newValue, oldValue){
              if(newValue){
-                         var planId=$scope.createPremium.planId;
-                        $scope.optionalCoverageData =_.findWhere($scope.newPlanList,{planId:planId});
-                        $scope.optionalCoverageList = _.where($scope.optionalCoverageData.coverages, {coverageType: "OPTIONAL"});
-
+                var planId=$scope.createPremium.planId;
+                $http.get('/pla/core/premium/getCoverageByplanId/'+planId).success(function(data){
+                   $scope.optionalCoverageList=data;
+                 });
             }
-
          });
-         $scope.$watch('createPremium.coverageCode',function(newValue, oldValue){
+         $scope.$watch('createPremium.coverageId',function(newValue, oldValue){
             if(newValue){
-                $scope.createPremium.coverageId=$scope.createPremium.coverageCode.coverageId;
+
                 $scope.boolVal=true;
             }else{
                $scope.boolVal=false;
@@ -167,9 +167,7 @@ App.controller('CreatePremiumController',['$scope','$http','$rootScope','$upload
             fields:{planId:$scope.createPremium.planId,coverageId:$scope.createPremium.coverageId,
                     premiumInfluencingFactors:output.join(','),premiumFactor:$scope.createPremium.premiumFactor,premiumRate:$scope.createPremium.premiumRate,effectiveFrom:$scope.createPremium.effectiveFrom}
         }).progress(function (evt) {
-             // var progressPercentage = parseInt(100.0 * evt.loaded / evt.total);
-             // console.log('progress: ' + progressPercentage + '% ' +
-             //      evt.config.file.name);
+
         }).success(function (data, status, headers, config) {
             if(data.status==200){
 

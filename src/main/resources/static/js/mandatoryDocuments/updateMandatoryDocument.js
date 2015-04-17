@@ -9,9 +9,10 @@ App.controller('UpdateMandatoryDocumentsController',['$scope','$http','$rootScop
             $scope.mandatoryDocList=data;
           });
 
-        $http.get('/pla/core/mandatorydocument/getmandatorydocumentdetail?documentId='+$scope.url).success(function(data){
+        $http.get('/pla/core/mandatorydocument/getmandatorydocumentdetail/'+$scope.url).success(function(data){
 
                   $scope.updateMandatoryDocument=data;
+
                   if($scope.updateMandatoryDocument.coverageId){
 
                        $scope.showOptionalCoverage=true;
@@ -24,7 +25,7 @@ App.controller('UpdateMandatoryDocumentsController',['$scope','$http','$rootScop
             $http.post('/pla/core/mandatorydocument/update',$scope.updateMandatoryDocument).success(function(data){
                   if(data.status==200){
                      $scope.alert = {title:'Success Message! ', content:data.message, type: 'success'};
-                    // $scope.reset();
+                     $scope.reset();
                   }else{
                       $scope.alert = {title:'Error Message! ', content:data.message, type: 'danger'};
                   }

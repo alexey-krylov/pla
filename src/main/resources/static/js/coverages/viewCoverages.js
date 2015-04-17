@@ -101,8 +101,8 @@ var openCoverageCreateModal = function(){
  };
 var openCoverageUpdateModal = function(coverageId,coverageName,coverageCode,description,benefitList){
   $('#coverageName').val(coverageName);
-  $('#coverageCode').val(coverageCode);
-  $('#description').val(description);
+  $('#coverageCode').val(coverageCode).attr("disabled",true);
+   $('#description').val(description);
   var benefit=[];
   benefitMap= convertThymeleafObjectToJavascriptObject(benefitList);
   var element = angular.element("#selectedBenefits");

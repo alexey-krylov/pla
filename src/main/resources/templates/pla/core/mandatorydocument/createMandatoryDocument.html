@@ -46,7 +46,7 @@
                             <div class="form-group col-md-6 required"  ng-show="showOptionalCoverage">
                                 <label class="control-label">Optional Coverage</label>
 
-                                <select class="form-control input-sm"  ng-required="true" ng-disabled="!createMandatoryDocument.planId" ng-model="createMandatoryDocument.coverageCode" ng-options="optionalCoverage.coverageId as optionalCoverage.coverageCover for optionalCoverage in optionalCoverageList| orderBy:'coverageCover'">
+                                <select class="form-control input-sm"  ng-required="true" ng-disabled="!createMandatoryDocument.planId" ng-model="createMandatoryDocument.coverageId" ng-options="optionalCoverage.coverageId as optionalCoverage.coverageName for optionalCoverage in optionalCoverageList| orderBy:'coverageName'">
                                     <option value="">----Select one----</option>
 
                                 </select>
@@ -54,7 +54,7 @@
                             <div class="form-group col-md-6 required">
                                 <label class="control-label">Process</label>
 
-                                <select class="form-control input-sm"  ng-required="true" ng-model="createMandatoryDocument.process" ng-options="value for (key, value) in processList | orderBy:'value'">
+                                <select class="form-control input-sm"  ng-required="true" ng-model="createMandatoryDocument.process" ng-options="processData.processType as processData.description for processData in processList | orderBy:'description'">
                                     <option value="">---Select one---</option>
                                 </select>
                             </div>
