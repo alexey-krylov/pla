@@ -9,8 +9,8 @@ package com.pla.core.query;
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
-import com.google.common.collect.Maps;
 import com.fasterxml.jackson.datatype.joda.JodaModule;
+import com.google.common.collect.Lists;
 import com.mongodb.BasicDBObject;
 import com.pla.core.domain.model.plan.Plan;
 import com.pla.sharedkernel.domain.model.CoverageType;
@@ -23,6 +23,7 @@ import org.springframework.stereotype.Service;
 import java.util.*;
 
 import static org.nthdimenzion.utils.UtilValidator.isEmpty;
+import static org.nthdimenzion.utils.UtilValidator.isNotEmpty;
 
 /**
  * @author: Nischitha
@@ -119,24 +120,31 @@ public class PlanFinder {
         term.put("maturityAges", values);
     }
 
-    public Map<String,String> getPlanNameAndCoverageName(PlanId planId){
-        Map<String,String> plans = Maps.newLinkedHashMap();
+    public String getPlanName(PlanId planId){
         Map plan = findPlanByPlanId(planId);
         if (isEmpty(plan)){
-            return Maps.newLinkedHashMap();
+            return "";
         }
         Map planDetail =(Map)plan.get("planDetail");
         String planName  = (String) planDetail.get("planName");
-        plans.put("planName",planName);
+        return planName;
+    }
+
+    public List<String> getCoverageName(PlanId planId){
+        Map plan = findPlanByPlanId(planId);
+        if (isEmpty(plan)){
+            return Lists.newArrayList();
+        }
+        List<String> coverages = Lists.newArrayList();
         List<Map> listCoverages  = (List) plan.get("coverages");
         for (Map coverageMap : listCoverages){
             String  coverageId = (String) coverageMap.get("coverageId");
-            if (coverageId!=null){
+            if (isNotEmpty(coverageId)){
                 if (CoverageType.OPTIONAL.name().equals(coverageMap.get("coverageType"))){
-                    plans.put("coverageName",mandatoryDocumentFinder.getCoverageNameById(coverageId));
+                    coverages.add(mandatoryDocumentFinder.getCoverageNameById(coverageId));
                 }
             }
         }
-        return plans;
+        return coverages;
     }
 }

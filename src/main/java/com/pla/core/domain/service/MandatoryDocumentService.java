@@ -13,7 +13,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 import static org.nthdimenzion.utils.UtilValidator.isNotEmpty;
@@ -62,11 +61,12 @@ public class MandatoryDocumentService {
     public List<MandatoryDocumentDto> transformMandatoryDocument(List<MandatoryDocumentDto> mandatoryDocumentDtos){
         List<MandatoryDocumentDto> mandatoryDocumentDtoList = Lists.newArrayList();
         for (MandatoryDocumentDto mandatoryDocumentDto : mandatoryDocumentDtos) {
-            Map plan = planFinder.getPlanNameAndCoverageName(new PlanId(mandatoryDocumentDto.getPlanId()));
-            if (isNotEmpty(plan)) {
-                mandatoryDocumentDto.setPlanName((String) plan.get("planName"));
-                mandatoryDocumentDto.setCoverageName((String) plan.get("coverageName"));
-            }
+           String planName = planFinder.getPlanName(new PlanId(mandatoryDocumentDto.getPlanId()));
+            List<String> coverages = planFinder.getCoverageName(new PlanId(mandatoryDocumentDto.getPlanId()));
+            if (isNotEmpty(planName))
+                mandatoryDocumentDto.setPlanName(planName);
+            if (isNotEmpty(coverages))
+                mandatoryDocumentDto.setCoverageName(coverages.get(0));
             mandatoryDocumentDtoList.add(mandatoryDocumentDto);
         }
         return mandatoryDocumentDtoList;

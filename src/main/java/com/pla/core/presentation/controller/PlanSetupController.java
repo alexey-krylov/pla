@@ -70,6 +70,11 @@ public class PlanSetupController {
         return planFinder.findAllPlan();
     }
 
+    @RequestMapping(value = "/getcoveragebyplanid/{planId}")
+    @ResponseBody
+    public List<String> getCoverageAssociatedWithPlan(@PathVariable("planId") PlanId planId){
+        return planFinder.getCoverageName(planId);
+    }
     /**
      * For routing the /core/plan/list url. The model is populated
      * with All the active plans and rendered via Thyme View Resolver.
