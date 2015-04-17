@@ -37,13 +37,13 @@ public class GroupLifeQuotationController {
 
     private GLQuotationService glQuotationService;
 
-    private GLQuotationFinder GLQuotationFinder;
+    private GLQuotationFinder glQuotationFinder;
 
     @Autowired
-    public GroupLifeQuotationController(CommandGateway commandGateway, GLQuotationService glQuotationService, GLQuotationFinder GLQuotationFinder) {
+    public GroupLifeQuotationController(CommandGateway commandGateway, GLQuotationService glQuotationService, GLQuotationFinder glQuotationFinder) {
         this.commandGateway = commandGateway;
         this.glQuotationService = glQuotationService;
-        this.GLQuotationFinder = GLQuotationFinder;
+        this.glQuotationFinder = glQuotationFinder;
     }
 
     @RequestMapping(value = "/creategrouplifequotation", method = RequestMethod.GET)
@@ -56,8 +56,15 @@ public class GroupLifeQuotationController {
     @RequestMapping(value = "/getquotationnumber/{quotationId}", method = RequestMethod.GET)
     @ResponseBody
     public Result getQuotationNumber(@PathVariable("quotationId") String quotationId) {
-        Map quotationMap = GLQuotationFinder.getQuotationById(quotationId);
+        Map quotationMap = glQuotationFinder.getQuotationById(quotationId);
         return Result.success("Quotation number ", (String) quotationMap.get("quotationNumber"));
+    }
+
+    @RequestMapping(value = "/getversionnumber/{quotationId}", method = RequestMethod.GET)
+    @ResponseBody
+    public Result getVersionNumber(@PathVariable("quotationId") String quotationId) {
+        Map quotationMap = glQuotationFinder.getQuotationById(quotationId);
+        return Result.success("Quotation Version number ", quotationMap.get("versionNumber"));
     }
 
     @RequestMapping(value = "/getagentdetail/{agentId}", method = RequestMethod.GET)
@@ -65,7 +72,7 @@ public class GroupLifeQuotationController {
     public Result getAgentDetail(@PathVariable("agentId") String agentId) {
         Map<String, Object> agentDetail = null;
         try {
-            agentDetail = GLQuotationFinder.getAgentById(agentId);
+            agentDetail = glQuotationFinder.getAgentById(agentId);
         } catch (Exception e) {
             return Result.failure("Agent not found");
         }

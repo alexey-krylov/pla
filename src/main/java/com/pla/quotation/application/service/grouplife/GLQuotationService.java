@@ -1,6 +1,7 @@
 package com.pla.quotation.application.service.grouplife;
 
 import com.pla.core.domain.model.agent.AgentId;
+import com.pla.quotation.domain.model.grouplife.Proposer;
 import com.pla.quotation.query.*;
 import com.pla.sharedkernel.identifier.QuotationId;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
@@ -60,8 +61,8 @@ public class GLQuotationService {
 
     public ProposerDto getProposerDetail(QuotationId quotationId) {
         Map quotation = glQuotationFinder.getQuotationById(quotationId.getQuotationId());
-        Map proposerMap = (Map) quotation.get("proposer");
-        return new ProposerDto(proposerMap);
+        Proposer proposer = (Proposer) quotation.get("proposer");
+        return new ProposerDto(proposer);
     }
 
     public List<GlQuotationDto> getAllQuotation() {

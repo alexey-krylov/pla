@@ -1,11 +1,10 @@
 package com.pla.quotation.query;
 
+import com.pla.quotation.domain.model.grouplife.Proposer;
+import com.pla.quotation.domain.model.grouplife.ProposerContactDetail;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * Created by Samir on 4/9/2015.
@@ -39,20 +38,20 @@ public class ProposerDto {
 
     private String contactPersonWorkPhoneNumber;
 
-    public ProposerDto(Map proposerMap) {
-        Map contactDetailMap = proposerMap.get("contactDetail") != null ? (Map) proposerMap.get("contactDetail") : new HashMap<>();
-        Map contactPersonDetailMap = contactDetailMap.get("contactPersonDetail") != null ? (Map) contactDetailMap.get("contactPersonDetail") : new HashMap<>();
-        this.proposerName = proposerMap.get("proposerName") != null ? (String) proposerMap.get("proposerName") : "";
-        this.postalCode = proposerMap.get("proposerCode") != null ? (String) proposerMap.get("proposerCode") : "";
-        this.addressLine1 = contactDetailMap.get("addressLine1") != null ? (String) contactDetailMap.get("addressLine1") : "";
-        this.addressLine2 = contactDetailMap.get("addressLine2") != null ? (String) contactDetailMap.get("addressLine2") : "";
-        this.postalCode = contactDetailMap.get("postalCode") != null ? (String) contactDetailMap.get("postalCode") : "";
-        this.province = contactDetailMap.get("province") != null ? (String) contactDetailMap.get("province") : "";
-        this.town = contactDetailMap.get("town") != null ? (String) contactDetailMap.get("town") : "";
-        this.emailAddress = contactDetailMap.get("emailAddress") != null ? (String) contactDetailMap.get("emailAddress") : "";
-        this.contactPersonName = contactPersonDetailMap.get("contactPersonName") != null ? (String) contactDetailMap.get("contactPersonName") : "";
-        this.contactPersonEmail = contactPersonDetailMap.get("contactPersonEmail") != null ? (String) contactDetailMap.get("contactPersonEmail") : "";
-        this.contactPersonMobileNumber = contactPersonDetailMap.get("mobileNumber") != null ? (String) contactDetailMap.get("mobileNumber") : "";
-        this.contactPersonWorkPhoneNumber = contactPersonDetailMap.get("workPhoneNumber") != null ? (String) contactDetailMap.get("workPhoneNumber") : "";
+    public ProposerDto(Proposer proposer) {
+        ProposerContactDetail proposerContactDetail = proposer.getContactDetail();
+        ProposerContactDetail.ContactPersonDetail contactPersonDetail = proposerContactDetail != null ? proposerContactDetail.getContactPersonDetail() : null;
+        this.proposerName = proposer.getProposerName();
+        this.proposerCode = proposer.getProposerCode();
+        this.addressLine1 = proposerContactDetail != null ? proposerContactDetail.getAddressLine1() : "";
+        this.addressLine2 = proposerContactDetail != null ? proposerContactDetail.getAddressLine2() : "";
+        this.postalCode = proposerContactDetail != null ? proposerContactDetail.getPostalCode() : "";
+        this.province = proposerContactDetail != null ? proposerContactDetail.getProvince() : "";
+        this.town = proposerContactDetail != null ? proposerContactDetail.getTown() : "";
+        this.emailAddress = proposerContactDetail != null ? proposerContactDetail.getEmailAddress() : "";
+        this.contactPersonName = contactPersonDetail != null ? contactPersonDetail.getContactPersonName() : "";
+        this.contactPersonEmail = contactPersonDetail != null ? contactPersonDetail.getContactPersonEmail() : "";
+        this.contactPersonMobileNumber = contactPersonDetail != null ? contactPersonDetail.getMobileNumber() : "";
+        this.contactPersonWorkPhoneNumber = contactPersonDetail != null ? contactPersonDetail.getWorkPhoneNumber() : "";
     }
 }

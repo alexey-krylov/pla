@@ -2,6 +2,7 @@ package com.pla.quotation.application.command.grouplife;
 
 import com.pla.quotation.query.ProposerDto;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -10,6 +11,7 @@ import org.springframework.security.core.userdetails.UserDetails;
  */
 @Getter
 @Setter
+@NoArgsConstructor
 public class UpdateGLQuotationWithProposerCommand {
 
     private ProposerDto proposerDto;
