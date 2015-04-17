@@ -111,7 +111,7 @@
                                 <label class="control-label">Upload</label>
                                 <div >
                                     <label class="input-sm" style="border:1px solid #ccc;width:330px;" >{{createPremium.file[0].name}} </label>
-                                    <div class="btn btn-default" style="display:inline;float:right;" ng-click="uploadFile(createPremium.file)"  ng-disabled="(!createPremium.premiumRate || !createPremium.premiumFactor || createPremium.effectiveFrom || !verified)" >Upload</div>
+                                    <div class="btn btn-default" style="display:inline;float:right;" data-placement="top-right" data-container="notification" data-duration="5" bs-alert="alert" ng-click="uploadFile(createPremium.file)"  ng-disabled="(!createPremium.effectiveFrom || !createPremium.premiumRate || !createPremium.premiumFactor || !verified)" >Upload</div>
                                     <a type="button" class="btn btn-default" style="display:inline;float:right;margin-right:5px;"  data-placement="top-right" data-container="notification" data-duration="5" bs-alert="alert" ng-disabled="(!createPremium.definedFor || !createPremium.planId || !createPremium.effectiveFrom || !createPremium.premiumInfluencingFactors || !boolVal || !createPremium.file)" ng-click="verifyPremiumData(createPremium.file)">Verify</a>
                                     <div class="btn btn-default" style="display:inline;float:right;margin-right:5px;" ng-file-select=""  ng-model="createPremium.file"  >Browse</div>
 
