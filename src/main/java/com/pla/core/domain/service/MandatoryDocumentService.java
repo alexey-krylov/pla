@@ -48,8 +48,19 @@ public class MandatoryDocumentService {
     }
 
     public List<MandatoryDocumentDto> getMandatoryDocuments(){
-        List<MandatoryDocumentDto> mandatoryDocumentDtoList = Lists.newArrayList();
         List<MandatoryDocumentDto> mandatoryDocumentDtos = mandatoryDocumentFinder.getAllMandatoryDocument();
+        List<MandatoryDocumentDto> mandatoryDocumentDtoList =  transformMandatoryDocument(mandatoryDocumentDtos);
+        return mandatoryDocumentDtoList;
+    }
+
+    public List<MandatoryDocumentDto> getMandatoryDocumentById(Long documentId){
+        List<MandatoryDocumentDto> mandatoryDocumentDtos = mandatoryDocumentFinder.getMandatoryDocumentById(documentId);
+        List<MandatoryDocumentDto> mandatoryDocumentDtoList =  transformMandatoryDocument(mandatoryDocumentDtos);
+        return mandatoryDocumentDtoList;
+    }
+
+    public List<MandatoryDocumentDto> transformMandatoryDocument(List<MandatoryDocumentDto> mandatoryDocumentDtos){
+        List<MandatoryDocumentDto> mandatoryDocumentDtoList = Lists.newArrayList();
         for (MandatoryDocumentDto mandatoryDocumentDto : mandatoryDocumentDtos) {
             Map plan = planFinder.getPlanNameAndCoverageName(new PlanId(mandatoryDocumentDto.getPlanId()));
             if (isNotEmpty(plan)) {
@@ -60,5 +71,4 @@ public class MandatoryDocumentService {
         }
         return mandatoryDocumentDtoList;
     }
-
 }

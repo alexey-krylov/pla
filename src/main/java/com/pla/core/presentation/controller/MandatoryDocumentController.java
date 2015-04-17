@@ -16,10 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
@@ -57,12 +54,25 @@ public class MandatoryDocumentController {
         return modelAndView;
     }
 
+    @RequestMapping(value ="/redirecttoupdatepage", method = RequestMethod.GET)
+    public ModelAndView redirectToUpdatePage() {
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("pla/core/mandatorydocument/updateMandatoryDocument");
+        return modelAndView;
+    }
+
 
     @RequestMapping(value ="/opencreatepage", method = RequestMethod.GET)
     public ModelAndView openCreatePageMandatoryDocument() {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("pla/core/mandatorydocument/createMandatoryDocument");
         return modelAndView;
+    }
+
+    @RequestMapping(value ="/getmandatorydocumentdetail/{documentId}", method = RequestMethod.GET)
+    @ResponseBody
+    public List<MandatoryDocumentDto> getMandatoryDocumentDetail(@PathVariable("documentId") Long documentId) {
+        return mandatoryDocumentService.getMandatoryDocumentById(documentId);
     }
 
     @RequestMapping(value = "/getallmandatorydocument" ,method = RequestMethod.GET)

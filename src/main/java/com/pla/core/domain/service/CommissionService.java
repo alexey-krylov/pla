@@ -25,6 +25,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.function.Function;
@@ -65,13 +66,12 @@ public class CommissionService {
         Admin admin = adminRoleAdapter.userToAdmin(userDetails);
         PlanId planid = new PlanId(planId);
         TypedQuery typedQuery = entityManager.createNamedQuery("findAllCommissionByPlanIdAndDesignationId", Commission.class).setParameter("planId", planid).
-                setParameter("availableFor", availableFor);
-        List resultSet = typedQuery.getResultList();
+                setParameter("availableFor", availableFor).setParameter("commissionType", commissionType);
+        List<Commission> resultSet = typedQuery.getResultList();
 
         if (isNotEmpty(resultSet)) {
             JpaRepository<Commission, CommissionId> commissionRepository = jpaRepositoryFactory.getCrudRepository(Commission.class);
-            Commission existingCommission = entityManager.createNamedQuery("findAllCommissionByPlanIdAndDesignationId", Commission.class).setParameter("planId", planid).
-                    setParameter("availableFor", availableFor).getResultList().get(0);
+            Commission existingCommission = resultSet.get(0);
             existingCommission.validateNewCommissionPeriodForAPlanAndDesignation(fromDate);
             try {
                 commissionRepository.save(existingCommission.expireCommission(fromDate.minusDays(1)));
@@ -80,17 +80,21 @@ public class CommissionService {
             }
         }
         Plan plan = planRepository.findOne(new PlanId(planId));
+        List<Integer> policyTerms = new ArrayList<>();
+        policyTerms.addAll(plan.getAllowedPolicyTerm());
         CommissionId commissionId = new CommissionId(iIdGenerator.nextId());
         Commission commission = admin.createCommission(commissionId, planid, availableFor, commissionType, premiumFee, fromDate);
         Set<CommissionTerm> commissionTerms = commissionTermsDto.stream().map(new CommissionTermTransformer()).collect(Collectors.toSet());
-        return commission.addCommissionTerm(commissionTerms, plan);
+        return commission.addCommissionTerm(commissionTerms, policyTerms);
     }
 
     public Commission updateCommissionTerm(String planId, Commission commission, Set<CommissionTermDto> commissionTermsDto, UserDetails userDetails) {
         Admin admin = adminRoleAdapter.userToAdmin(userDetails);
         Plan plan = planRepository.findOne(new PlanId(planId));
+        List<Integer> policyTerms = new ArrayList<>();
+        policyTerms.addAll(plan.getAllowedPolicyTerm());
         Set<CommissionTerm> commissionTerms = commissionTermsDto.stream().map(new CommissionTermTransformer()).collect(Collectors.toSet());
-        return admin.updateCommissionTerm(commission, commissionTerms, plan);
+        return admin.updateCommissionTerm(commission, commissionTerms, policyTerms);
 
     }
 

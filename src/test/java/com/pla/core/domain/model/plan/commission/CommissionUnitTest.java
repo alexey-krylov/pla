@@ -2,7 +2,6 @@ package com.pla.core.domain.model.plan.commission;
 
 import com.google.common.collect.Sets;
 import com.pla.core.domain.model.plan.Plan;
-import com.pla.core.repository.PlanRepository;
 import com.pla.sharedkernel.domain.model.CommissionTermType;
 import org.hamcrest.CoreMatchers;
 import org.junit.Test;
@@ -11,11 +10,12 @@ import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.Assert.*;
-import static org.mockito.Mockito.when;
 
 /**
  * Created by User on 4/7/2015.
@@ -25,8 +25,6 @@ public class CommissionUnitTest {
     @Mock
     Plan plan;
 
-    @Mock
-    PlanRepository planRepository;
 
     @Test
     public void givenCommissionTermsWithOverlappingYearShouldReturnFalse(){
@@ -69,11 +67,12 @@ public class CommissionUnitTest {
         policyTerms.add(new Integer(34));
         policyTerms.add(new Integer(45));
         policyTerms.add(new Integer(89));
-        when(plan.getAllowedPolicyTerm()).thenReturn(policyTerms);
+        List<Integer> policyTermsList = new ArrayList<>();
+        policyTermsList.addAll(policyTerms);
         commissionTerms.add(new CommissionTerm(new Integer(34), new Integer(45), new BigDecimal(6.00), CommissionTermType.RANGE));
         commissionTerms.add(new CommissionTerm(new Integer(46), new Integer(54), new BigDecimal(6.00), CommissionTermType.RANGE));
         commissionTerms.add(new CommissionTerm(new Integer(55), new Integer(89), new BigDecimal(6.00), CommissionTermType.RANGE));
-        assertEquals(3, commission.addCommissionTerm(commissionTerms, plan).getCommissionTerms().size());
+        assertEquals(3, commission.addCommissionTerm(commissionTerms, policyTermsList).getCommissionTerms().size());
 
     }
 
@@ -89,14 +88,15 @@ public class CommissionUnitTest {
         policyTerms.add(new Integer(45));
         policyTerms.add(new Integer(54));
         policyTerms.add(new Integer(100));
-        when(plan.getAllowedPolicyTerm()).thenReturn(policyTerms);
-        commission.addCommissionTerm(commissionTerms, plan).getCommissionTerms();
+        List<Integer> policyTermsList = new ArrayList<>();
+        policyTermsList.addAll(policyTerms);
+        commission.addCommissionTerm(commissionTerms, policyTermsList).getCommissionTerms();
         Set<CommissionTerm> updatedCommissionTerms = Sets.newHashSet();
         updatedCommissionTerms.add(new CommissionTerm(new Integer(34), new Integer(38), new BigDecimal(10.00), CommissionTermType.RANGE));
         updatedCommissionTerms.add(new CommissionTerm(new Integer(46), new Integer(48), new BigDecimal(15.00), CommissionTermType.RANGE));
         updatedCommissionTerms.add(new CommissionTerm(new Integer(55), new Integer(99), new BigDecimal(6.00), CommissionTermType.RANGE));
 
-        assertThat(commission.updateWithCommissionTerms(updatedCommissionTerms, plan).getCommissionTerms(), CoreMatchers.hasItems(new CommissionTerm(new Integer(34), new Integer(38), new BigDecimal(10.00), CommissionTermType.RANGE), new CommissionTerm(new Integer(46), new Integer(48), new BigDecimal(15.00),
+        assertThat(commission.updateWithCommissionTerms(updatedCommissionTerms, policyTermsList).getCommissionTerms(), CoreMatchers.hasItems(new CommissionTerm(new Integer(34), new Integer(38), new BigDecimal(10.00), CommissionTermType.RANGE), new CommissionTerm(new Integer(46), new Integer(48), new BigDecimal(15.00),
                 CommissionTermType.RANGE), new CommissionTerm(new Integer(55), new Integer(99), new BigDecimal(6.00), CommissionTermType.RANGE)));
 
     }
@@ -109,7 +109,11 @@ public class CommissionUnitTest {
         commissionTerms.add(new CommissionTerm(new Integer(46), new Integer(56), new BigDecimal(6.00), CommissionTermType.RANGE));
         commissionTerms.add(new CommissionTerm(new Integer(34), new Integer(67), new BigDecimal(6.00), CommissionTermType.RANGE));
 
-        assertFalse(commission.isLesserThanMaxPlanPolicyTerm(commissionTerms, 55));
+        List<Integer> policyTerms = new ArrayList<>();
+        policyTerms.add(new Integer(45));
+        policyTerms.add(new Integer(55));
+
+        assertFalse(commission.isWithinPlanPolicyTerms(commissionTerms, policyTerms));
 
     }
 
@@ -121,7 +125,11 @@ public class CommissionUnitTest {
         commissionTerms.add(new CommissionTerm(new Integer(46), new Integer(54), new BigDecimal(6.00), CommissionTermType.RANGE));
         commissionTerms.add(new CommissionTerm(new Integer(34), new Integer(50), new BigDecimal(6.00), CommissionTermType.RANGE));
 
-        assertTrue(commission.isLesserThanMaxPlanPolicyTerm(commissionTerms, 55));
+        List<Integer> policyTerms = new ArrayList<>();
+        policyTerms.add(new Integer(45));
+        policyTerms.add(new Integer(55));
+
+        assertTrue(commission.isWithinPlanPolicyTerms(commissionTerms, policyTerms));
 
     }
 
@@ -130,8 +138,9 @@ public class CommissionUnitTest {
         Commission commission = new Commission();
         Set<CommissionTerm> commissionTerms = Sets.newHashSet();
         commissionTerms.add(new CommissionTerm(new Integer(12), new Integer(58), new BigDecimal(6.00), CommissionTermType.RANGE));
-
-        assertFalse(commission.isLesserThanMaxPlanPolicyTerm(commissionTerms, 55));
+        List<Integer> policyTerms = new ArrayList<>();
+        policyTerms.add(new Integer(55));
+        assertFalse(commission.isWithinPlanPolicyTerms(commissionTerms, policyTerms));
 
     }
 
@@ -141,7 +150,9 @@ public class CommissionUnitTest {
         Set<CommissionTerm> commissionTerms = Sets.newHashSet();
         commissionTerms.add(new CommissionTerm(new Integer(12), new Integer(45), new BigDecimal(6.00), CommissionTermType.RANGE));
 
-        assertTrue(commission.isLesserThanMaxPlanPolicyTerm(commissionTerms, 55));
+        List<Integer> policyTerms = new ArrayList<>();
+        policyTerms.add(new Integer(55));
+        assertTrue(commission.isWithinPlanPolicyTerms(commissionTerms, policyTerms));
 
     }
 
@@ -152,8 +163,9 @@ public class CommissionUnitTest {
         commissionTerms.add(new CommissionTerm(new Integer(12), new Integer(45), new BigDecimal(6.00), CommissionTermType.RANGE));
         commissionTerms.add(new CommissionTerm(new Integer(46), new Integer(56), new BigDecimal(6.00), CommissionTermType.RANGE));
         commissionTerms.add(new CommissionTerm(new Integer(34), new Integer(67), new BigDecimal(6.00), CommissionTermType.RANGE));
-
-        assertFalse(commission.isGreaterThanMinPlanPolicyTerm(commissionTerms, 15));
+        List<Integer> policyTerms = new ArrayList<>();
+        policyTerms.add(new Integer(15));
+        assertFalse(commission.isWithinPlanPolicyTerms(commissionTerms, policyTerms));
 
     }
 
@@ -162,8 +174,9 @@ public class CommissionUnitTest {
         Commission commission = new Commission();
         Set<CommissionTerm> commissionTerms = Sets.newHashSet();
         commissionTerms.add(new CommissionTerm(new Integer(12), new Integer(45), new BigDecimal(6.00), CommissionTermType.RANGE));
-
-        assertFalse(commission.isGreaterThanMinPlanPolicyTerm(commissionTerms, 15));
+        List<Integer> policyTerms = new ArrayList<>();
+        policyTerms.add(new Integer(15));
+        assertFalse(commission.isWithinPlanPolicyTerms(commissionTerms, policyTerms));
 
     }
 
@@ -174,8 +187,10 @@ public class CommissionUnitTest {
         commissionTerms.add(new CommissionTerm(new Integer(12), new Integer(45), new BigDecimal(6.00), CommissionTermType.RANGE));
         commissionTerms.add(new CommissionTerm(new Integer(56), new Integer(78), new BigDecimal(6.00), CommissionTermType.RANGE));
         commissionTerms.add(new CommissionTerm(new Integer(2), new Integer(4), new BigDecimal(6.00), CommissionTermType.RANGE));
-
-        assertTrue(commission.isGreaterThanMinPlanPolicyTerm(commissionTerms, 1));
+        List<Integer> policyTerms = new ArrayList<>();
+        policyTerms.add(new Integer(1));
+        policyTerms.add(new Integer(79));
+        assertTrue(commission.isWithinPlanPolicyTerms(commissionTerms, policyTerms));
 
     }
 

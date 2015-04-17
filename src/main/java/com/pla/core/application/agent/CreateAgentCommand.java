@@ -8,6 +8,7 @@ package com.pla.core.application.agent;
 
 import com.google.common.collect.Sets;
 import com.pla.core.domain.model.agent.AgentStatus;
+import com.pla.core.domain.model.plan.PlanDetail;
 import com.pla.core.dto.*;
 import com.pla.sharedkernel.domain.model.OverrideCommissionApplicable;
 import com.pla.sharedkernel.identifier.PlanId;
@@ -144,10 +145,11 @@ public class CreateAgentCommand {
             List<Map> planDetails = allMasterPlans.stream().filter(new Predicate<Map>() {
                 @Override
                 public boolean test(Map map) {
-                    return planId.getPlanId().equals(((Map) map.get("planId")).get("planId"));
+                    return planId.getPlanId().equals(map.get("_id").toString());
                 }
             }).collect(Collectors.toList());
-            String  planName =isNotEmpty(planDetails)? (String)((Map) planDetails.get(0).get("planDetail")).get("planName"):"";
+            PlanDetail planDetail = isNotEmpty(planDetails) ? planDetails.get(0).get("planDetail") != null ? (PlanDetail) planDetails.get(0).get("planDetail") : null : null;
+            String planName = planDetail != null ? planDetail.getPlanName() : "";
             return new PlanDetailDto(planId, planName);
         }
     }

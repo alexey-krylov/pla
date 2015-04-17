@@ -11,7 +11,6 @@ import com.pla.core.domain.exception.CoverageException;
 import com.pla.core.domain.exception.TeamDomainException;
 import com.pla.core.domain.model.generalinformation.OrganizationGeneralInformation;
 import com.pla.core.domain.model.generalinformation.ProductLineGeneralInformation;
-import com.pla.core.domain.model.plan.Plan;
 import com.pla.core.domain.model.plan.commission.Commission;
 import com.pla.core.domain.model.plan.commission.CommissionTerm;
 import com.pla.core.dto.GeneralInformationDto;
@@ -154,9 +153,9 @@ public class Admin {
         return Commission.createCommission(commissionId, planId, availableFor, commissionType, premiumFee, fromDate);
     }
 
-    public Commission updateCommissionTerm(Commission commission, Set<CommissionTerm> commissionSet, Plan plan) {
+    public Commission updateCommissionTerm(Commission commission, Set<CommissionTerm> commissionSet, List<Integer> policyTerms) {
 
-        return commission.updateWithCommissionTerms(commissionSet, plan);
+        return commission.updateWithCommissionTerms(commissionSet, policyTerms);
     }
 
 }
