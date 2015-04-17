@@ -72,8 +72,8 @@ public class CommissionController {
         }
     }
 
-    @RequestMapping(value = "/opencreatepage/{commissiontype}", method = RequestMethod.GET)
-    public ModelAndView openCreatePageCommission(@PathVariable("commissiontype") String commissionType) {
+    @RequestMapping(value = "/opencreatepage/{mode}", method = RequestMethod.GET)
+    public ModelAndView openCreatePageCommission(@PathVariable("mode") String commissionType) {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("pla/core/commission/createCommission");
         modelAndView.addObject("plans", planFinder.findAllPlan());
