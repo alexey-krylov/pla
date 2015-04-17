@@ -3,8 +3,15 @@ require(['jquery','bootstrap','datatables'],function(){
           "bFilter": true,
           "fnDrawCallback": function ( oSettings ) {
                openPopover();
-          }
-         });
+          },
+            "aoColumns":[
+                {"bSearchable": true  },
+                {"bSearchable": true  },
+                {"bSearchable": false  },
+                {"bSearchable": true },
+                {"bSearchable": true },
+                {"bSearchable": true }
+          ]});
 
       openPopover();
 

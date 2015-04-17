@@ -1,4 +1,8 @@
-$('#team-table').dataTable();
+$('#team-table').dataTable({
+    "aoColumnDefs":[
+        {"bSearchable": false, "aTargets": [ 7 ]  }
+
+]});
 
 var hideAlerts = function(){
     $('#alert-danger').hide();
