@@ -48,7 +48,7 @@
                             </div>
 
                             <div class="form-group col-md-6 required" ng-show="showOptionalCoverage">
-                                <label class="control-label">Optional Coverage</label>         <!-- -->
+                                <label class="control-label">Optional Coverage</label>
                                 <select class="form-control input-sm" id="optionalCoverage" ng-required="true" ng-model="createPremium.coverageId"   ng-disabled="!createPremium.planId" ng-options="optionalCoverage.coverageId as optionalCoverage.coverageName for optionalCoverage in optionalCoverageList | orderBy:'coverageName'">
                                     <option value="">---Select one---</option>
 

@@ -27,7 +27,7 @@
                 </div>
                 <div class="panel-body ng-cloak">
                     <form  novalidate="true" class="css-form">
-                        <div class="row">{{updateMandatoryDocument}}
+                        <div class="row">
                             <div class="form-group col-md-6" >
                                 <label class="control-label">Plan Name</label>
                                 <div class="controls readonly">{{updateMandatoryDocument.planName}}</div>
@@ -43,7 +43,7 @@
                             <div class="form-group col-md-6 required">
                                 <label class="control-label">Mandatory Documents</label>
                                <div>
-                                    <button type="button" class="btn btn-default bs-select" ng-model="updateMandatoryDocument.documents" data-all-none-buttons="true" data-html="1" data-multiple="1"  ng-options="mandatoryDocument.documentCode as mandatoryDocument.documentName for mandatoryDocument in mandatoryDocList | orderBy:'documentName'" >
+                                    <button type="button" class="btn btn-default bs-select" ng-model="updateMandatoryDocument.document" data-all-none-buttons="true" data-html="1" data-multiple="1"  ng-options="mandatoryDocument.documentCode as mandatoryDocument.documentName for mandatoryDocument in mandatoryDocList | orderBy:'documentName'" >
                                         Action <span class="caret"></span>
                                     </button>
                                 </div>
@@ -51,7 +51,7 @@
                              </div>
                              <div class="row">
                             <div class="form-group col-lg-12" style="margin: auto;margin-top:10px;" >
-                                <button type="submit" class="btn btn-default" style="float:right;" ng-disabled="(!updateMandatoryDocument.documents)" ng-click="updateMandatoryDoc()">Save</button>
+                                <button type="submit" class="btn btn-default" style="float:right;" ng-disabled="(!updateMandatoryDocument.document)" data-placement="top-right" data-container="notification" data-duration="5" bs-alert="alert" ng-click="updateMandatoryDoc()">Save</button>
                                 <a class="btn btn-default" style="float:left;" th:href="@{/core/mandatorydocument/view}">Cancel</a>
                             </div>
                         </div>

@@ -57,12 +57,13 @@
                         <tbody>
                         <tr th:each="premium : ${listOfPremium}">
                             <td th:text="${premium.planName}"></td>
-                            <td th:text="${premium.coverageName}"></td>
+                           <td th:text="${premium.coverageNames}"></td>
+
                             <td style="text-align:center" class="pop" >
                                 <button href="#" class="details-box btn btn-primary btn-xs" rel="popover"  data-content="" > Influencing-Factors
                                     <div class="popover-body" style="display:none;">
                                         <ul  type="square"  th:each="influencingFactor : ${premium.premiumInfluencingFactors}"   >
-                                         <!--   <li style="text-align:left;font-size:12px;"   th:text="'&diams;&nbsp;'+${{influencingFactor.description}}+','" ></li>-->
+                                            <li style="text-align:left;font-size:12px;"   th:text="'&diams;&nbsp;'+${{influencingFactor}}+','" ></li>
                                         </ul>
                                     </div>
                                 </button>

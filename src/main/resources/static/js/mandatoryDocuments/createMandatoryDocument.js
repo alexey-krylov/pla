@@ -37,10 +37,9 @@ App.controller('CreateMandatoryDocumentController',['$scope','$http','$rootScope
               var planId=$scope.createMandatoryDocument.planId;
              // $scope.optionalCoverageData =_.findWhere($scope.newPlanList,{planId:planId});
              // $scope.optionalCoverageList = _.where($scope.optionalCoverageData.coverages, {coverageType: "OPTIONAL"});
-               $http.get('/pla/core/premium/getCoverageByplanId/'+planId).success(function(data){
+               $http.get('/pla/core/plan/getcoveragebyplanid/'+planId).success(function(data){
                    $scope.optionalCoverageList=data;
                });
-
            }
          });
          $scope.$watch('createMandatoryDocument.coverageId',function(newValue, oldValue){

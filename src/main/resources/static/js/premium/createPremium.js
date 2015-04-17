@@ -57,8 +57,9 @@ App.controller('CreatePremiumController',['$scope','$http','$rootScope','$upload
          $scope.$watch('createPremium.planId',function(newValue, oldValue){
              if(newValue){
                 var planId=$scope.createPremium.planId;
-                $http.get('/pla/core/premium/getCoverageByplanId/'+planId).success(function(data){
+                $http.get('/pla/core/plan/getcoveragebyplanid/'+planId).success(function(data){
                    $scope.optionalCoverageList=data;
+                    console.log($scope.optionalCoverageList);
                  });
             }
          });
