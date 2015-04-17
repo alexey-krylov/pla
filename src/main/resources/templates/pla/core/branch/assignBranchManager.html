@@ -64,7 +64,7 @@
                         <div class="form-group col-md-6" style="margin: auto;margin-top:10px;">
                             <label class="control-label">Branch Manager</label>
                             <select class="form-control input-sm"  ng-model="assignBranchManager.employeeId" ng-options="branchManager.employeeId as branchManager.firstName + ' ' + branchManager.lastName for branchManager in branchManagers | orderBy:'firstName' ">
-                                <option value="">---Select option-----</option>
+                                <option value="">----Select BranchManager----</option>
                              </select>
                         </div>
                         <div class="form-group col-md-6 " style="margin: auto;margin-top:10px;">
@@ -81,7 +81,7 @@
                             <div class="form-group col-md-6" style="margin: auto;margin-top:10px;">
                                 <label class="control-label">Branch BDE</label>
                                 <select class="form-control input-sm"  ng-model="assignBranchManager.branchBDEEmployeeId" ng-options="branchBDE.employeeId as branchBDE.firstName + ' ' + branchBDE.lastName for branchBDE in branchBDEList | orderBy:'firstName' ">
-                                     <option value="">---Select option-----</option>
+                                     <option value="">----Select BranchBDE----</option>
                                 </select>
                             </div>
                             <div class="form-group col-md-6 " style="margin: auto;margin-top:10px;">

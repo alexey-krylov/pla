@@ -38,7 +38,7 @@
                             <div class="form-group col-md-6 required" >
                                 <label class="control-label">Plan Name</label>
                                 <select class="form-control input-sm"  ng-model="createMandatoryDocument.planId" ng-options="plan.planId as plan.planName for plan in newPlanList | orderBy:'name'">
-                                    <option value="">----Select one----</option>
+                                    <option value="">----Select Plan----</option>
 
                                 </select>
 
@@ -47,7 +47,7 @@
                                 <label class="control-label">Optional Coverage</label>
 
                                 <select class="form-control input-sm"  ng-required="true" ng-disabled="!createMandatoryDocument.planId" ng-model="createMandatoryDocument.coverageId" ng-options="optionalCoverage.coverageId as optionalCoverage.coverageName for optionalCoverage in optionalCoverageList| orderBy:'coverageName'">
-                                    <option value="">----Select one----</option>
+                                    <option value="">----Select OptionalCoverage----</option>
 
                                 </select>
                             </div>
@@ -55,13 +55,13 @@
                                 <label class="control-label">Process</label>
 
                                 <select class="form-control input-sm"  ng-required="true" ng-model="createMandatoryDocument.process" ng-options="processData.processType as processData.description for processData in processList | orderBy:'description'">
-                                    <option value="">---Select one---</option>
+                                    <option value="">----Select Process----</option>
                                 </select>
                             </div>
                             <div class="form-group col-md-6 required">
                                 <label class="control-label">Mandatory Documents</label>
                                 <div>
-                                    <button type="button" class="btn btn-default bs-select" ng-model="createMandatoryDocument.documents" data-all-none-buttons="true" data-html="1" data-multiple="1"  ng-options="mandatoryDocument.documentCode as mandatoryDocument.documentName for mandatoryDocument in documentList | orderBy:'documentName'"   >
+                                    <button type="button" class="btn btn-default bs-select" ng-model="createMandatoryDocument.documents" data-all-none-buttons="true" data-html="1" data-multiple="1" placeholder="----Select MandatoryDocuments----" ng-options="mandatoryDocument.documentCode as mandatoryDocument.documentName for mandatoryDocument in documentList | orderBy:'documentName'"   >
                                         Action <span class="caret"></span>
                                     </button>
                                 </div>
