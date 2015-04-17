@@ -6,6 +6,7 @@
 
 package com.pla.core.application.service.plan.premium;
 
+import com.google.common.collect.Lists;
 import com.pla.core.domain.model.plan.Plan;
 import com.pla.core.query.PlanFinder;
 import com.pla.core.repository.PlanRepository;
@@ -24,6 +25,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+
+import static org.nthdimenzion.utils.UtilValidator.isNotEmpty;
 
 /**
  * @author: Samir
@@ -58,13 +61,13 @@ public class PremiumService {
 
     public boolean validatePremiumTemplateData(HSSFWorkbook hssfWorkbook, PremiumInfluencingFactor[] premiumInfluencingFactors, String planId, String coverageId) throws IOException {
         Plan plan = planRepository.findOne(new PlanId(planId));
-        List<PremiumInfluencingFactor> premiumInfluencingFactorList = UtilValidator.isNotEmpty(premiumInfluencingFactors) ? Arrays.asList(premiumInfluencingFactors) : new ArrayList<>();
+        List<PremiumInfluencingFactor> premiumInfluencingFactorList = isNotEmpty(premiumInfluencingFactors) ? Arrays.asList(premiumInfluencingFactors) : new ArrayList<>();
         boolean isValidTemplate = premiumTemplateParser.validatePremiumDataForAGivenPlanAndCoverage(hssfWorkbook, plan, new CoverageId(coverageId), premiumInfluencingFactorList);
         return isValidTemplate;
     }
 
     public List<Map<Map<PremiumInfluencingFactor, String>, Double>> parsePremiumTemplate(HSSFWorkbook hssfWorkbook, PremiumInfluencingFactor[] premiumInfluencingFactors, String planId, String coverageId) {
-        List<PremiumInfluencingFactor> premiumInfluencingFactorList = UtilValidator.isNotEmpty(premiumInfluencingFactors) ? Arrays.asList(premiumInfluencingFactors) : new ArrayList<>();
+        List<PremiumInfluencingFactor> premiumInfluencingFactorList = isNotEmpty(premiumInfluencingFactors) ? Arrays.asList(premiumInfluencingFactors) : new ArrayList<>();
         return premiumTemplateParser.parseAndTransformToPremiumData(hssfWorkbook, premiumInfluencingFactorList);
     }
 
@@ -72,12 +75,17 @@ public class PremiumService {
         Query query = new Query();
         query.fields().include("premiumId").include("planId").include("coverageId").include("effectiveFrom").include("validTill").include("premiumFactor").include("premiumRateFrequency").include("premiumInfluencingFactors");
         List<Map> premiumPlan =  mongoTemplate.find(query, Map.class, "premium");
+        List<Map> listOfPremiumPlan = Lists.newArrayList();
         for (Map plans : premiumPlan) {
             String planId  = plans.get("planId").toString();
             Map planAndCoverageName = planFinder.getPlanNameAndCoverageName(new PlanId(planId));
-            premiumPlan.add(planAndCoverageName);
+            if (isNotEmpty(planAndCoverageName)){
+                plans.put("planName",planAndCoverageName.get("planName"));
+                plans.put("coverageName",planAndCoverageName.get("coverageName"));
+            }
+            listOfPremiumPlan.add(plans);
         }
-        return premiumPlan;
+        return listOfPremiumPlan;
     }
 
 
