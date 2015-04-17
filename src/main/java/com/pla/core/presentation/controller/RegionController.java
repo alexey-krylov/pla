@@ -75,7 +75,7 @@ public class RegionController {
     @RequestMapping(value = "/getallregionalmanager", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public List<EmployeeDto> getAllRegionalManager() {
-        List<Map<String, Object>> allRegion = masterFinder.getAllRegion();
+        List<Map<String, Object>> allRegion = regionFinder.getAllActiveRegionalManagers();
         List<EmployeeDto> allRegionalManagers = smeGateway.getEmployeeDetailByDesignation(AppConstants.REGIONAL_MANAGER_DESIGNATION);
         List<EmployeeDto> regionalManagersNotAssociatedWithRegion = allRegionalManagers.stream().filter(new FilterRegionalManagerFromRegionPredicate(allRegion)).collect(Collectors.toList());
         return regionalManagersNotAssociatedWithRegion;
