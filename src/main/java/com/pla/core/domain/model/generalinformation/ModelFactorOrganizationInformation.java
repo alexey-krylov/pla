@@ -28,7 +28,7 @@ public class ModelFactorOrganizationInformation {
 
     private BigDecimal value;
 
-    ModelFactorOrganizationInformation(ModalFactorItem modalFactorItem, BigDecimal value) {
+    public  ModelFactorOrganizationInformation(ModalFactorItem modalFactorItem, BigDecimal value) {
         this.modalFactorItem = modalFactorItem;
         this.value = value.setScale(4, BigDecimal.ROUND_HALF_UP);
     }
