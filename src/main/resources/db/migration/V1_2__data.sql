@@ -623,5 +623,5 @@ INSERT INTO `document` (`document_code`, `document_name`) VALUES('ACTIVE_AT_WORK
 ('FULLY_FILLED_MATURITY_CLAIM_FORM','Fully filled Maturity Claim Form'),
 ('FULLY_FILLED_SURRENDER_CLAIM_FORM','Fully filled Surrender Claim Form'),
 ('ID_PROOF','ID Proof'),
-('SIGNED_DOCUEMENT','Signed Agreement'),
+('SIGNED_DOCUMENT','Signed Agreement'),
 ('SIGNED_PROPOSAL_FORM','Signed Proposal Form');

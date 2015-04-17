@@ -14,7 +14,9 @@ import java.util.Map;
 public class MandatoryDocumentDto {
     private Long documentId;
     private String coverageId;
+    private String coverageName;
     private String planId;
+    private String planName;
     private String process;
     List<Map<String,Object>> documents;
 }
