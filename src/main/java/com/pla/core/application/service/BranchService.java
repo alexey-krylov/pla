@@ -4,7 +4,6 @@ import com.pla.core.domain.model.Branch;
 import com.pla.core.domain.model.BranchCode;
 import org.joda.time.LocalDate;
 import org.nthdimenzion.common.service.JpaRepositoryFactory;
-import org.nthdimenzion.utils.UtilValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
@@ -30,7 +29,7 @@ public class BranchService {
         JpaRepository<Branch, BranchCode> branchRepository = jpaRepositoryFactory.getCrudRepository(Branch.class);
         BranchCode branchCode = new BranchCode(branchId);
         Branch branch = branchRepository.findOne(branchCode);
-        if ((UtilValidator.isEmpty(branchManagerId)) && (branch != null)) {
+        if ((branchManagerId.equals("Unassigned")) && (branch != null)) {
             branch = branch.expireBranchManager(branch.getCurrentBranchManager(), fromDate.plusDays(-1));
             branchRepository.save(branch);
             return branch;
@@ -46,7 +45,7 @@ public class BranchService {
         JpaRepository<Branch, BranchCode> branchRepository = jpaRepositoryFactory.getCrudRepository(Branch.class);
         BranchCode branchCode = new BranchCode(branchId);
         Branch branch = branchRepository.findOne(branchCode);
-        if ((UtilValidator.isEmpty(branchBDEId) && (branch != null))) {
+        if ((branchBDEId.equals("Unassigned") && (branch != null))) {
             branch = branch.expireBranchBDE(branch.getCurrentBranchBdE(), fromDate.plusDays(-1));
             branchRepository.save(branch);
             return branch;

@@ -75,8 +75,9 @@ public class BranchController {
     public List<EmployeeDto> getAllBranchManager() {
         List<Map<String, Object>> allBranch = branchFinder.getAllBranch();
         List<EmployeeDto> allBranchManagers = smeGateway.getEmployeeDetailByDesignation(AppConstants.BRANCH_MANAGER_DESIGNATION);
-        List<EmployeeDto> branchalManagersNotAssociatedWithBranch = allBranchManagers.stream().filter(new FilterBranchManagerFromBranchPredicate(allBranch)).collect(Collectors.toList());
-        return branchalManagersNotAssociatedWithBranch;
+        List<EmployeeDto> branchAllManagersNotAssociatedWithBranch = allBranchManagers.stream().filter(new FilterBranchManagerFromBranchPredicate(allBranch)).collect(Collectors.toList());
+        branchAllManagersNotAssociatedWithBranch.add(new EmployeeDto("Unassigned", "", "Unassigned", "Unassigned", "Unassigned", "Unassigned", "Unassigned", "Unassigned"));
+        return branchAllManagersNotAssociatedWithBranch;
     }
 
     @RequestMapping(value = "/getallbranchbde", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -84,8 +85,9 @@ public class BranchController {
     public List<EmployeeDto> getAllBranchBDE() {
         List<Map<String, Object>> allBranch = branchFinder.getAllBranch();
         List<EmployeeDto> allBranchManagers = smeGateway.getEmployeeDetailByDesignation(AppConstants.BRANCH_BDE_DESIGNATION);
-        List<EmployeeDto> branchalManagersNotAssociatedWithBranch = allBranchManagers.stream().filter(new FilterBranchBDEFromBranchPredicate(allBranch)).collect(Collectors.toList());
-        return branchalManagersNotAssociatedWithBranch;
+        List<EmployeeDto> branchAllBDEsNotAssociatedWithBranch = allBranchManagers.stream().filter(new FilterBranchBDEFromBranchPredicate(allBranch)).collect(Collectors.toList());
+        branchAllBDEsNotAssociatedWithBranch.add(new EmployeeDto("Unassigned", "Unassigned", "Unassigned", "Unassigned", "Unassigned", "Unassigned", "Unassigned", "Unassigned"));
+        return branchAllBDEsNotAssociatedWithBranch;
     }
 
     @RequestMapping(value = "/assign", method = RequestMethod.POST)
