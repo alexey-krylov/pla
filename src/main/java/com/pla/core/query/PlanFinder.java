@@ -124,7 +124,7 @@ public class PlanFinder {
         }
         Map planDetail =(Map)plan.get("planDetail");
         String planName  = (String) planDetail.get("planName");
-        plan.put("planName",planName);
+        plans.put("planName",planName);
         List<Map> listCoverages  = (List) plan.get("coverages");
         for (Map coverageMap : listCoverages){
             String  coverageId = (String) coverageMap.get("coverageId");
