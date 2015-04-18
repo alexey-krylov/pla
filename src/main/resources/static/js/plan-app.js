@@ -19,6 +19,18 @@ app.config(function ($routeProvider, $locationProvider) {
     $routeProvider
         .when('/plan', {
             templateUrl: 'plan/list'
+            /* controller: 'PlanListController',
+             resolve: {
+             planList: ['$q', '$http', function ($q, $http) {
+             var deferred = $q.defer();
+             $http.get('/pla/core/plan/getallplan').success(function (response, status, headers, config) {
+             deferred.resolve(response);
+             }).error(function (response, status, headers, config) {
+             deferred.reject();
+             });
+             return deferred.promise;
+             }]
+             }*/
         })
         .when('/newplan', {
             templateUrl: "plan/newplan",
@@ -79,8 +91,12 @@ app.config(function ($routeProvider, $locationProvider) {
         });
     $routeProvider.otherwise({redirectTo: '/plan'});
 });
-app.controller('PlanSetupController', ['$scope', '$http', '$location', '$routeParams', '$bsmodal', 'plan', 'activeCoverages',
-        function ($scope, $http, $location, $routeParams, $modal, plan, activeCoverages) {
+app.controller('PlanListController', ['$scope', 'planList', function ($scope, planList) {
+    $scope.planList = planList;
+}
+]);
+app.controller('PlanSetupController', ['$scope', '$http', '$location', '$routeParams', '$templateCache', '$bsmodal', 'plan', 'activeCoverages',
+        function ($scope, $http, $location, $routeParams, $templateCache, $modal, plan, activeCoverages) {
 
             $scope.plan = plan;
             $scope.coverageList = activeCoverages;
@@ -439,6 +455,7 @@ app.controller('PlanSetupController', ['$scope', '$http', '$location', '$routePa
                         $scope.plan.planId = data.id;
                         $location.path('/plan');
                         $scope.successMsg = data.message;
+                        $templateCache.remove('plan/list')
                     }).
                     error(function (data, status, headers, config) {
                         $scope.validationFailed = true;
