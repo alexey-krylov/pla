@@ -32,27 +32,36 @@ import static org.nthdimenzion.utils.UtilValidator.isNotEmpty;
 @Service
 public class PremiumTemplateExcelGenerator {
 
-    private HSSFWorkbook premiumTemplateWorkbook;
-
-    private HSSFSheet premiumSheet;
 
     private MasterFinder masterFinder;
 
     @Autowired
     public PremiumTemplateExcelGenerator(MasterFinder masterFinder) {
-        premiumTemplateWorkbook = new HSSFWorkbook();
         this.masterFinder = masterFinder;
 
     }
 
+    public HSSFWorkbook generatePremiumParseErrorExcel(Map<Integer, String> errorRowMessageMap, String planName) {
+        HSSFWorkbook errorExcelWorkBook = new HSSFWorkbook();
+        HSSFSheet premiumErrorSheet = errorExcelWorkBook.createSheet(planName);
+        createRowWithCellData(0, new String[]{"Row Number", "Error Message"}, premiumErrorSheet);
+        int rowNumber = 1;
+        for (Map.Entry<Integer, String> entry : errorRowMessageMap.entrySet()) {
+            createRowWithCellData(rowNumber, new String[]{entry.getKey().toString(), entry.getValue()}, premiumErrorSheet);
+            rowNumber = rowNumber + 1;
+        }
+        return errorExcelWorkBook;
+    }
+
     public HSSFWorkbook generatePremiumTemplate(List<PremiumInfluencingFactor> premiumInfluencingFactors, Plan plan, CoverageId coverageId) throws IOException {
+        HSSFWorkbook premiumTemplateWorkbook = new HSSFWorkbook();
         int noOfExcelRow = getTotalNoOfPremiumCombination(premiumInfluencingFactors, coverageId, plan);
-        premiumSheet = premiumTemplateWorkbook.createSheet(plan.getPlanDetail().getPlanName());
-        HSSFRow headerRow = createHeaderRowWithCellData(0, convertToStringArray(premiumInfluencingFactors));
+        HSSFSheet premiumSheet = premiumTemplateWorkbook.createSheet(plan.getPlanDetail().getPlanName());
+        HSSFRow headerRow = createRowWithCellData(0, convertToStringArray(premiumInfluencingFactors), premiumSheet);
         HSSFCell premiumCell = headerRow.createCell(premiumInfluencingFactors.size());
         premiumCell.setCellType(Cell.CELL_TYPE_NUMERIC);
         premiumCell.setCellValue(AppConstants.PREMIUM_CELL_HEADER_NAME);
-        createRowWithDvConstraintCellData(noOfExcelRow, premiumInfluencingFactors, plan, coverageId);
+        createRowWithDvConstraintCellData(noOfExcelRow, premiumInfluencingFactors, plan, coverageId, premiumTemplateWorkbook, premiumSheet);
         return premiumTemplateWorkbook;
     }
 
@@ -66,7 +75,7 @@ public class PremiumTemplateExcelGenerator {
         return noOfRow;
     }
 
-    private void createRowWithDvConstraintCellData(int lastRowNumber, List<PremiumInfluencingFactor> premiumInfluencingFactors, Plan plan, CoverageId coverageId) {
+    private void createRowWithDvConstraintCellData(int lastRowNumber, List<PremiumInfluencingFactor> premiumInfluencingFactors, Plan plan, CoverageId coverageId, HSSFWorkbook premiumTemplateWorkbook, HSSFSheet premiumSheet) {
         for (int cellNumber = 0; cellNumber < premiumInfluencingFactors.size(); cellNumber++) {
             if (!PremiumInfluencingFactor.BMI.equals(premiumInfluencingFactors.get(cellNumber))) {
                 String columnIndex = String.valueOf((char) (65 + cellNumber));
@@ -141,8 +150,8 @@ public class PremiumTemplateExcelGenerator {
         return data;
     }
 
-    private HSSFRow createHeaderRowWithCellData(int rowNumber, String[] data) {
-        HSSFRow row = premiumSheet.createRow(rowNumber);
+    private HSSFRow createRowWithCellData(int rowNumber, String[] data, HSSFSheet hssfSheet) {
+        HSSFRow row = hssfSheet.createRow(rowNumber);
         for (int cellNumber = 0; cellNumber < data.length; cellNumber++) {
             HSSFCell cell = row.createCell(cellNumber);
             cell.setCellValue(data[cellNumber]);

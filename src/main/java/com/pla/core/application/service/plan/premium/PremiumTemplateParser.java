@@ -47,8 +47,7 @@ public class PremiumTemplateParser {
         this.masterFinder = masterFinder;
     }
 
-    public boolean validatePremiumDataForAGivenPlanAndCoverage(HSSFWorkbook hssfWorkbook, Plan plan, CoverageId coverageId, List<PremiumInfluencingFactor> premiumInfluencingFactors) throws IOException, PremiumTemplateParseException {
-        boolean isValidPremiumTemplate = true;
+    public Map<Integer, String> validatePremiumDataForAGivenPlanAndCoverage(HSSFWorkbook hssfWorkbook, Plan plan, CoverageId coverageId, List<PremiumInfluencingFactor> premiumInfluencingFactors) throws IOException, PremiumTemplateParseException {
         HSSFSheet premiumSheet = hssfWorkbook.getSheetAt(0);
         Iterator<Row> rowsIterator = premiumSheet.iterator();
         Row headerRow = rowsIterator.next();
@@ -64,43 +63,38 @@ public class PremiumTemplateParser {
         List<Row> allRows = Lists.newArrayList(rowsIterator);
         List<Row> allRowsToBeCompared = Lists.newArrayList(allRows);
         int premiumCellNumber = getCellNumberFor(AppConstants.PREMIUM_CELL_HEADER_NAME, transformCellIteratorToList(headerRow.cellIterator()));
+        Map<Integer, String> errorRowAndMessageMap = Maps.newHashMap();
         for (Row row : allRows) {
             String validValueErrorMessage = "";
             for (PremiumInfluencingFactor premiumInfluencingFactor : premiumInfluencingFactors) {
                 int cellIndex = influencingFactorCellIndexMap.get(premiumInfluencingFactor);
                 Cell cell = row.getCell(cellIndex);
                 if (cell == null) {
-                    isValidPremiumTemplate = false;
                     validValueErrorMessage = validValueErrorMessage + "\n" + premiumInfluencingFactor.getDescription() + " is missing";
                     continue;
                 }
                 boolean isValidValue = premiumInfluencingFactor.isValidValue(plan, coverageId, Cell.CELL_TYPE_NUMERIC == cell.getCellType() ? ((Long) ((Double) cell.getNumericCellValue()).longValue()).toString() : cell.getStringCellValue());
                 if (!isValidValue) {
-                    isValidPremiumTemplate = false;
                     validValueErrorMessage = validValueErrorMessage + "\n" + premiumInfluencingFactor.getErrorMessage(Cell.CELL_TYPE_NUMERIC == cell.getCellType() ? ((Long) ((Double) cell.getNumericCellValue()).longValue()).toString() : cell.getStringCellValue());
                 }
             }
             Cell premiumCell = row.getCell(premiumCellNumber);
             if (premiumCell == null || Cell.CELL_TYPE_NUMERIC != premiumCell.getCellType()) {
-                isValidPremiumTemplate = false;
                 validValueErrorMessage = validValueErrorMessage + "\n" + " Premium value is missing";
             }
             String duplicateRowNumbers = checkAndGetDuplicateWithRow(row, allRowsToBeCompared, premiumCellNumber);
-            int errorCellNumber = premiumInfluencingFactors.size() + 1;
             String duplicateRowErrorMessage = "";
             if (isNotEmpty(duplicateRowNumbers.trim())) {
-                isValidPremiumTemplate = false;
                 duplicateRowErrorMessage = "This row is duplicate with row(s): " + duplicateRowNumbers;
             }
             if (isNotEmpty(validValueErrorMessage.trim()) || isNotEmpty(duplicateRowErrorMessage.trim())) {
-                isValidPremiumTemplate = false;
-                createErrorCellAndWriteErrorMessage(errorCellNumber, validValueErrorMessage, duplicateRowErrorMessage, headerRow, row);
+                errorRowAndMessageMap.put(row.getRowNum() + 1, validValueErrorMessage + "\n" + duplicateRowErrorMessage);
             }
         }
-        return isValidPremiumTemplate;
+        return errorRowAndMessageMap;
     }
 
-    private void createErrorCellAndWriteErrorMessage(int errorCellNumber, String validValueErrorMessage, String duplicateRowErrorMessage, Row headerRow, Row dataRow) {
+    /*private void createErrorCellAndWriteErrorMessage(int errorCellNumber, String validValueErrorMessage, String duplicateRowErrorMessage, Row headerRow, Row dataRow) {
         List<Cell> headerCellList = Lists.newArrayList(headerRow.cellIterator());
         Optional<Cell> errorCellOptional = headerCellList.stream().filter(new Predicate<Cell>() {
             @Override
@@ -114,16 +108,21 @@ public class PremiumTemplateParser {
         Cell errorCell = dataRow.createCell(errorCellNumber);
         String errorMessage = validValueErrorMessage + "\n" + duplicateRowErrorMessage;
         errorCell.setCellValue(errorMessage);
-    }
+    }*/
 
 
     private String checkAndGetDuplicateWithRow(Row row, List<Row> allRows, int premiumCellNumber) {
-        List<Row> duplicationRows = allRows.parallelStream().filter(new Predicate<Row>() {
+        List<Row> duplicationRows = Lists.newArrayList()/*allRows.parallelStream().filter(new Predicate<Row>() {
             @Override
             public boolean test(Row otherRow) {
                 return isTwoRowIdentical(row, otherRow, premiumCellNumber);
             }
-        }).collect(Collectors.toList());
+        }).collect(Collectors.toList())*/;
+        for (Row otherRow : allRows) {
+            if (isTwoRowIdentical(row, otherRow, premiumCellNumber)) {
+                duplicationRows.add(otherRow);
+            }
+        }
         String duplicateRows = "";
         for (Row duplicationRow : duplicationRows) {
             duplicateRows = duplicateRows + (duplicationRow.getRowNum() + 1) + ",";

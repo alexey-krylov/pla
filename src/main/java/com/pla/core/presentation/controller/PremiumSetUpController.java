@@ -22,7 +22,10 @@ import org.axonframework.commandhandling.gateway.CommandGateway;
 import org.nthdimenzion.presentation.Result;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -61,7 +64,7 @@ public class PremiumSetUpController {
     public ModelAndView viewPremiums() {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("pla/core/premium/viewPremium");
-        modelAndView.addObject("listOfPremium",premiumService.getAllPremium());
+        modelAndView.addObject("listOfPremium", premiumService.getAllPremium());
         return modelAndView;
     }
 
@@ -108,7 +111,7 @@ public class PremiumSetUpController {
 
     @RequestMapping(value = "/verifypremiumdata", method = RequestMethod.POST)
     @ResponseBody
-    public Result validatePremiumData(PremiumTemplateDto premiumTemplateDto, HttpServletResponse response) throws IOException {
+    public Result validatePremiumData(@RequestBody PremiumTemplateDto premiumTemplateDto, HttpServletResponse response) throws IOException {
         Plan plan = planRepository.findOne(new PlanId(premiumTemplateDto.getPlanId()));
         String templateFileName = plan.getPlanDetail().getPlanName() + PREMIUM_TEMPLATE_FILE_NAME_SUFFIX;
         MultipartFile file = premiumTemplateDto.getFile();
@@ -118,15 +121,15 @@ public class PremiumSetUpController {
         POIFSFileSystem fs = new POIFSFileSystem(file.getInputStream());
         HSSFWorkbook premiumTemplateWorkbook = new HSSFWorkbook(fs);
         try {
-            boolean isValidTemplate = premiumService.validatePremiumTemplateData(premiumTemplateWorkbook, premiumTemplateDto.getPremiumInfluencingFactors(), premiumTemplateDto.getPlanId(), premiumTemplateDto.getCoverageId());
-            if (isValidTemplate) {
+            HSSFWorkbook errorWorkbook = premiumService.validatePremiumTemplateData(premiumTemplateWorkbook, premiumTemplateDto.getPremiumInfluencingFactors(), premiumTemplateDto.getPlanId(), premiumTemplateDto.getCoverageId());
+            if (errorWorkbook == null) {
                 return Result.success("Premium Template is valid");
             }
             response.reset();
             response.setContentType("application/msexcel");
-            response.setHeader("content-disposition", "attachment; filename=" + templateFileName + "");
+            response.setHeader("content-disposition", "attachment; filename=" + "error.xls" + "");
             OutputStream outputStream = response.getOutputStream();
-            premiumTemplateWorkbook.write(outputStream);
+            errorWorkbook.write(outputStream);
             outputStream.flush();
             outputStream.close();
         } catch (PremiumTemplateParseException exception) {
@@ -147,8 +150,8 @@ public class PremiumSetUpController {
         POIFSFileSystem fs = new POIFSFileSystem(file.getInputStream());
         HSSFWorkbook premiumTemplateWorkbook = new HSSFWorkbook(fs);
         try {
-            boolean isValidTemplate = premiumService.validatePremiumTemplateData(premiumTemplateWorkbook, createPremiumCommand.getPremiumInfluencingFactors(), createPremiumCommand.getPlanId(), createPremiumCommand.getCoverageId());
-            if (!isValidTemplate) {
+            HSSFWorkbook errorWorkbook = premiumService.validatePremiumTemplateData(premiumTemplateWorkbook, createPremiumCommand.getPremiumInfluencingFactors(), createPremiumCommand.getPlanId(), createPremiumCommand.getCoverageId());
+            if (errorWorkbook != null) {
                 return Result.failure("Premium Template is not valid");
             } else {
                 List<Map<Map<PremiumInfluencingFactor, String>, Double>> premiumLineItem = premiumService.parsePremiumTemplate(premiumTemplateWorkbook, createPremiumCommand.getPremiumInfluencingFactors(), createPremiumCommand.getPlanId(), createPremiumCommand.getCoverageId());

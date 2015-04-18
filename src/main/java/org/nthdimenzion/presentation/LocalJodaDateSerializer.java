@@ -12,9 +12,9 @@ import java.io.IOException;
 /**
  * Created by Samir on 4/13/2015.
  */
-public class LocalJodaDateSerializer extends JsonSerializer<LocalDate>{
+public class LocalJodaDateSerializer extends JsonSerializer<LocalDate> {
     @Override
     public void serialize(LocalDate value, JsonGenerator jgen, SerializerProvider provider) throws IOException, JsonProcessingException {
-        value.toString(DateTimeFormat.forPattern("dd/MM/yyyy"));
+        jgen.writeString(DateTimeFormat.forPattern("dd/MM/yyyy").print(value));
     }
 }

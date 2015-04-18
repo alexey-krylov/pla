@@ -1,9 +1,10 @@
 package com.pla.quotation.presentation.controller;
 
-import com.pla.quotation.application.service.grouplife.GLQuotationService;
 import com.pla.quotation.application.command.grouplife.*;
+import com.pla.quotation.application.service.grouplife.GLQuotationService;
 import com.pla.quotation.query.*;
 import com.pla.sharedkernel.identifier.QuotationId;
+import com.wordnik.swagger.annotations.ApiOperation;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.axonframework.commandhandling.gateway.CommandGateway;
 import org.nthdimenzion.presentation.Result;
@@ -13,6 +14,8 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.web.servlet.view.RedirectView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -52,6 +55,7 @@ public class GroupLifeQuotationController {
     }
 
     @RequestMapping(value = "/getquotationnumber/{quotationId}", method = RequestMethod.GET)
+    @ApiOperation(httpMethod = "GET", value = "Get Quotation number for a given quotation Id")
     @ResponseBody
     public Result getQuotationNumber(@PathVariable("quotationId") String quotationId) {
         Map quotationMap = glQuotationFinder.getQuotationById(quotationId);
@@ -90,20 +94,23 @@ public class GroupLifeQuotationController {
     }
 
     @RequestMapping(value = "/listgrouplifequotation", method = RequestMethod.GET)
-    public ModelAndView listQuotation() {
+    public ModelAndView listQuotation(@ModelAttribute("searchResult") List<GlQuotationDto> searchResult, @ModelAttribute("searchCriteria") SearchGlQuotationDto searchCriteria) {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("pla/quotation/groupLife/viewQuotation");
         modelAndView.addObject(glQuotationService.getAllQuotation());
         return modelAndView;
     }
 
-    @RequestMapping(value = "/searchquotation", method = RequestMethod.POST)
-    @ResponseBody
-    public List<GlQuotationDto> searchQuotation(@RequestBody SearchGlQuotationDto searchGlQuotationDto) {
-        return glQuotationService.searchQuotation(searchGlQuotationDto);
+    @RequestMapping(value = "/searchquotation", method = RequestMethod.GET)
+    public RedirectView searchQuotation(@RequestBody SearchGlQuotationDto searchGlQuotationDto, RedirectAttributes redirectAttributes) {
+        redirectAttributes.addFlashAttribute("searchResult", glQuotationService.searchQuotation(searchGlQuotationDto));
+        redirectAttributes.addFlashAttribute("searchCriteria", searchGlQuotationDto);
+        RedirectView redirectView = new RedirectView("listgrouplifequotation");
+        return redirectView;
     }
 
     @RequestMapping(value = "/createquotation", method = RequestMethod.POST)
+    @ApiOperation(httpMethod = "POST", value = "Create Group Life Quotation")
     @ResponseBody
     public Result createQuotation(@RequestBody CreateGLQuotationCommand createGLQuotationCommand, BindingResult bindingResult, HttpServletRequest request) {
         if (bindingResult.hasErrors()) {

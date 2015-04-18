@@ -7,6 +7,7 @@
 package com.pla.core.dto;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -14,6 +15,7 @@ import lombok.Setter;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.joda.time.LocalDate;
 import org.nthdimenzion.presentation.LocalJodaDateDeserializer;
+import org.nthdimenzion.presentation.LocalJodaDateSerializer;
 
 import javax.validation.constraints.NotNull;
 import java.util.Map;
@@ -43,6 +45,7 @@ public class AgentProfileDto {
     private String employeeId;
 
     @JsonDeserialize(using = LocalJodaDateDeserializer.class)
+    @JsonSerialize(using = LocalJodaDateSerializer.class)
     private LocalDate trainingCompleteOn;
 
     private DesignationDto designationDto = new DesignationDto();
