@@ -49,7 +49,7 @@
     <bean id="dataSource" class="com.jolbox.bonecp.BoneCPDataSource" destroy-method="close">
         <property name="driverClass" value="org.h2.Driver"/>
         <property name="jdbcUrl" value="jdbc:h2:mem;MODE=MySQL"/>
-<!--        <property name="jdbcUrl" value="jdbc:h2:mem;MODE=MySQL;DB_CLOSE_ON_EXIT=FALSE;"/>-->
+        <!--        <property name="jdbcUrl" value="jdbc:h2:mem;MODE=MySQL;DB_CLOSE_ON_EXIT=FALSE;"/>-->
         <property name="maxConnectionsPerPartition" value="50"/>
         <property name="minConnectionsPerPartition" value="10"/>
         <property name="acquireIncrement" value="10"/>
@@ -84,6 +84,7 @@
         <context:exclude-filter type="regex" expression="org.nthdimenzion.ddd.infrastructure.stubs.*"/>
         <context:exclude-filter type="regex" expression="org.nthdimenzion.application.*"/>
         <context:exclude-filter type="regex" expression="org.nthdimenzion.security.*"/>
+        <context:exclude-filter type="regex" expression="org.nthdimenzion.presentation.SwaggerConfiguration"/>
     </context:component-scan>
 
 
