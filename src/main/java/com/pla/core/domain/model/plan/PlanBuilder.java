@@ -91,14 +91,6 @@ public class PlanBuilder {
         SumAssured sumAssured = null;
         switch (sumAssuredType) {
             case RANGE:
-                Preconditions.checkArgument(maxSumAssuredAmount.compareTo(BigDecimal.ZERO) == 1,
-                        "MinSumAssuredAmount greater than zero Expected, but got %d", minSumAssuredAmount);
-                Preconditions.checkArgument(maxSumAssuredAmount.compareTo(BigDecimal.ZERO) == 1,
-                        "MaxSumAssuredAmount greater than zero Expected, but got %d", maxSumAssuredAmount);
-                Preconditions.checkArgument(maxSumAssuredAmount.compareTo(minSumAssuredAmount) == 1,
-                        "MaxSumAssuredAmount>MinSumAssuredAmount Expected, but %d>%d",
-                        maxSumAssuredAmount, minSumAssuredAmount);
-                Preconditions.checkArgument(multiplesOf % 10 == 0, " Not valid Multiples.");
                 sumAssured = new SumAssured(minSumAssuredAmount,
                         maxSumAssuredAmount, multiplesOf);
                 break;

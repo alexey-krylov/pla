@@ -35,7 +35,7 @@ import static org.nthdimenzion.presentation.AppUtils.getLoggedInUSerDetail;
 @RequestMapping(value = "/core/productlineinformation",produces = MediaType.APPLICATION_JSON_VALUE,consumes = MediaType.ALL_VALUE)
 public class ProductLineInformationController {
 
-    private static final Logger logger = LoggerFactory.getLogger(ProductLineInformationController.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(ProductLineInformationController.class);
     private GeneralInformationService generalInformationService;
 
     private MongoTemplate mongoTemplate;
@@ -68,7 +68,7 @@ public class ProductLineInformationController {
             UserDetails userDetails = getLoggedInUSerDetail(request);
             generalInformationService.createProductLineInformation(generalInformationDto.getLineOfBusinessId(), userDetails, generalInformationDto);
         }catch (GeneralInformationException e){
-            logger.debug(e.getMessage());
+            LOGGER.debug(e.getMessage());
             return Result.failure(e.getMessage());
         }catch (Exception e){
             return Result.failure(e.getMessage());
@@ -86,7 +86,7 @@ public class ProductLineInformationController {
             UserDetails userDetails = getLoggedInUSerDetail(request);
             generalInformationService.updateProductLineInformation(generalInformationDto, userDetails);
         } catch (GeneralInformationException e){
-            logger.debug(e.getMessage());
+            LOGGER.debug(e.getMessage());
             return Result.failure(e.getMessage());
         }catch (Exception e){
             return Result.failure(e.getMessage());

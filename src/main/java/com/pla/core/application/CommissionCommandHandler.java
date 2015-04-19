@@ -28,7 +28,7 @@ public class CommissionCommandHandler {
 
     private CommissionService commissionService;
 
-    private Logger LOGGER = LoggerFactory.getLogger(CommissionCommandHandler.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(CommissionCommandHandler.class);
 
     @Autowired
     public CommissionCommandHandler(JpaRepositoryFactory jpaRepositoryFactory, CommissionService commissionService) {

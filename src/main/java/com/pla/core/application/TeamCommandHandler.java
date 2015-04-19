@@ -27,7 +27,7 @@ public class TeamCommandHandler {
 
     private TeamService teamService;
 
-    private Logger LOGGER = LoggerFactory.getLogger(TeamCommandHandler.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(TeamCommandHandler.class);
 
     @Autowired
     public TeamCommandHandler(JpaRepositoryFactory jpaRepositoryFactory, TeamService teamService) {

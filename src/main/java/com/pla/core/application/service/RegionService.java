@@ -20,7 +20,7 @@ public class RegionService {
     @Autowired
     private JpaRepositoryFactory jpaRepositoryFactory;
 
-    private Logger LOGGER = LoggerFactory.getLogger(RegionService.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(RegionService.class);
 
     @Autowired
     public RegionService(JpaRepositoryFactory jpaRepositoryFactory) {
