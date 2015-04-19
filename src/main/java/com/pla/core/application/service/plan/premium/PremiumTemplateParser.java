@@ -94,38 +94,13 @@ public class PremiumTemplateParser {
         return errorRowAndMessageMap;
     }
 
-    /*private void createErrorCellAndWriteErrorMessage(int errorCellNumber, String validValueErrorMessage, String duplicateRowErrorMessage, Row headerRow, Row dataRow) {
-        List<Cell> headerCellList = Lists.newArrayList(headerRow.cellIterator());
-        Optional<Cell> errorCellOptional = headerCellList.stream().filter(new Predicate<Cell>() {
-            @Override
-            public boolean test(Cell cell) {
-                return AppConstants.ERROR_CELL_HEADER_NAME.equals(cell.getStringCellValue());
-            }
-        }).findAny();
-        if (!errorCellOptional.isPresent()) {
-            headerRow.createCell(errorCellNumber).setCellValue(AppConstants.ERROR_CELL_HEADER_NAME);
-        }
-        Cell errorCell = dataRow.createCell(errorCellNumber);
-        String errorMessage = validValueErrorMessage + "\n" + duplicateRowErrorMessage;
-        errorCell.setCellValue(errorMessage);
-    }*/
-
 
     private String checkAndGetDuplicateWithRow(Row row, List<Row> allRows, int premiumCellNumber) {
-        List<Row> duplicationRows = Lists.newArrayList()/*allRows.parallelStream().filter(new Predicate<Row>() {
-            @Override
-            public boolean test(Row otherRow) {
-                return isTwoRowIdentical(row, otherRow, premiumCellNumber);
-            }
-        }).collect(Collectors.toList())*/;
+        String duplicateRows = "";
         for (Row otherRow : allRows) {
             if (isTwoRowIdentical(row, otherRow, premiumCellNumber)) {
-                duplicationRows.add(otherRow);
+                duplicateRows = duplicateRows + (otherRow.getRowNum() + 1) + ",";
             }
-        }
-        String duplicateRows = "";
-        for (Row duplicationRow : duplicationRows) {
-            duplicateRows = duplicateRows + (duplicationRow.getRowNum() + 1) + ",";
         }
         return duplicateRows;
     }

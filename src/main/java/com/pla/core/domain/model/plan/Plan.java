@@ -17,8 +17,6 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.ToString;
 import org.axonframework.domain.AbstractAggregateRoot;
-import org.axonframework.domain.DomainEventMessage;
-import org.axonframework.eventsourcing.EventSourcedEntity;
 import org.axonframework.eventsourcing.annotation.AggregateIdentifier;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -80,8 +78,9 @@ public class Plan extends AbstractAggregateRoot<PlanId> {
             allTerms.add(this.premiumTerm);
         this.coverages.forEach(planCoverage -> {
             Term term = planCoverage.getCoverageTerm();
-            if (term != null) allTerms.add(term);
-
+            if (term != null) {
+                allTerms.add(term);
+            }
         });
         Preconditions.checkState(specification.checkCoverageTerm(this, allTerms));
         super.registerEvent(new PlanCreatedEvent(planId));
@@ -89,16 +88,6 @@ public class Plan extends AbstractAggregateRoot<PlanId> {
 
     public static PlanBuilder builder() {
         return new PlanBuilder();
-    }
-
-    //@Override
-    protected Iterable<? extends EventSourcedEntity> getChildEntities() {
-        return null;
-    }
-
-    //@Override
-    protected void handle(DomainEventMessage event) {
-
     }
 
 

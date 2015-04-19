@@ -98,24 +98,16 @@ public class BranchController {
             if (LOGGER.isDebugEnabled()) {
                 LOGGER.debug("*****Command Received*****" + updateBranchManagerCommand);
             }
-            try {
-                if (updateBranchManagerCommand.isOnlyBranchManager()) {
-                    branchService.updateBranchManager(updateBranchManagerCommand.getBranchCode(), updateBranchManagerCommand.getBranchManagerEmployeeId(), updateBranchManagerCommand.getBranchManagerFirstName(), updateBranchManagerCommand.getBranchManagerLastName(), updateBranchManagerCommand.getBranchManagerFromDate());
-                }
-
-            } catch (BranchApplicationException e) {
-                LOGGER.error("Error in assigning branch manager", e);
-                return Result.failure("Error in assigning branch manager");
+            if (updateBranchManagerCommand.isOnlyBranchManager()) {
+                branchService.updateBranchManager(updateBranchManagerCommand.getBranchCode(), updateBranchManagerCommand.getBranchManagerEmployeeId(), updateBranchManagerCommand.getBranchManagerFirstName(), updateBranchManagerCommand.getBranchManagerLastName(), updateBranchManagerCommand.getBranchManagerFromDate());
             }
-            try {
-                if (updateBranchManagerCommand.isOnlyBde()) {
-                    branchService.updateBranchBDE(updateBranchManagerCommand.getBranchCode(), updateBranchManagerCommand.getBranchBDEEmployeeId(), updateBranchManagerCommand.getBranchBDEFirstName(), updateBranchManagerCommand.getBranchBDELastName(), updateBranchManagerCommand.getBranchBDEFromDate());
-                }
-
-            } catch (BranchApplicationException e) {
-                LOGGER.error("Error in assigning branch manager", e);
-                return Result.failure("Error in assigning branch bde");
+            if (updateBranchManagerCommand.isOnlyBde()) {
+                branchService.updateBranchBDE(updateBranchManagerCommand.getBranchCode(), updateBranchManagerCommand.getBranchBDEEmployeeId(), updateBranchManagerCommand.getBranchBDEFirstName(), updateBranchManagerCommand.getBranchBDELastName(), updateBranchManagerCommand.getBranchBDEFromDate());
             }
+
+        } catch (BranchApplicationException e) {
+            LOGGER.error("Error in assigning branch manager", e);
+            return Result.failure(e.getMessage());
         } catch (Exception e) {
             LOGGER.error("Error in assigning branch manager", e);
             return Result.failure(e.getMessage());

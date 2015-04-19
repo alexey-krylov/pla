@@ -10,8 +10,6 @@ import org.springframework.core.convert.converter.Converter;
 public class ObjectIdToQuotationIdConverter implements Converter<ObjectId, QuotationId> {
     @Override
     public QuotationId convert(ObjectId id) {
-        {
-            return id == null ? null : new QuotationId(id.toString());
-        }
+        return id == null ? null : new QuotationId(id.toString());
     }
 }

@@ -22,7 +22,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -69,7 +68,7 @@ public class StubController {
 
         String designation = request.getParameter("designation");
         if (designation == null) {
-            return Collections.EMPTY_LIST;
+            return Lists.newArrayList();
         }
         List<EmployeeDto> employeeDetailByDesignation = Lists.newArrayList();
         String jsonPath = "/stubdata/employeeByDesignation.json";

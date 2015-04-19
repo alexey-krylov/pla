@@ -32,7 +32,7 @@ public class PlanDetail {
     @JsonIgnore
     private final String MODULE_NAME = PlanDetail.class.getSimpleName();
     @JsonIgnore
-    private final String errorMessage = "Error in creating Plan: %s";
+    private static final String errorMessage = "Error in creating Plan: %s";
     String planName;
     String planCode;
     LocalDate launchDate;

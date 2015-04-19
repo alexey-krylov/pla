@@ -1,6 +1,7 @@
 package com.pla.core.domain.model.plan;
 
 import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
 import com.pla.sharedkernel.domain.model.*;
 import com.pla.sharedkernel.identifier.CoverageId;
 import lombok.AccessLevel;
@@ -113,7 +114,7 @@ public class PlanCoverage {
         if (CoverageTermType.SPECIFIED_VALUES.equals(this.coverageTermType)) {
             return this.coverageTerm.getValidTerms();
         } else if (CoverageTermType.POLICY_TERM.equals(this.coverageTermType)) {
-            return null;
+            return Sets.newHashSet();
         }
         return this.coverageTerm.getMaturityAges();
     }

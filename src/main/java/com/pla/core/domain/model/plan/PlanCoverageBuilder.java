@@ -85,6 +85,7 @@ public class PlanCoverageBuilder {
      * @return
      * @deprecated Please use #withCoverageTerm(CoverageTermType,Term)
      */
+    @Deprecated
     PlanCoverageBuilder withCoverageTerm(CoverageTermType coverageTermType, Set<Integer> validTerms, int maxMaturityAge) {
         switch (coverageTermType) {
             case SPECIFIED_VALUES:
