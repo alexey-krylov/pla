@@ -28,11 +28,11 @@ public class OrganizationGeneralInformationUnitTest {
         OrganizationGeneralInformation organizationGeneralInformation = OrganizationGeneralInformation.createOrganizationGeneralInformation("OI001");
         organizationGeneralInformation.withServiceTaxOrganizationInformation(serviceTaxMap);
 
-        BigDecimal expectedServiceTaxValue = new BigDecimal(123.96).setScale(2, BigDecimal.ROUND_HALF_UP);
+        BigDecimal expectedServiceTaxValue = new BigDecimal(123.9567).setScale(4, BigDecimal.ROUND_CEILING);
 
         assertNotNull(organizationGeneralInformation.getServiceTax());
         assertThat(Tax.SERVICE_TAX,is(organizationGeneralInformation.getServiceTax().getTax()));
-        assertThat(expectedServiceTaxValue,is(organizationGeneralInformation.getServiceTax().getValue()));
+        assertThat(expectedServiceTaxValue,is(organizationGeneralInformation.getServiceTax().getValue().setScale(4,BigDecimal.ROUND_CEILING)));
     }
 
     @Test

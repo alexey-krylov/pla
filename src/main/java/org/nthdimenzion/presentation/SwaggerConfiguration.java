@@ -18,7 +18,7 @@ public class SwaggerConfiguration {
     @Autowired
     private SpringSwaggerConfig springSwaggerConfig;
 
-    @Bean//"/quotation/grouplife/.*","/core/.*"
+    @Bean
     public SwaggerSpringMvcPlugin customImplementation() {
         return new SwaggerSpringMvcPlugin(this.springSwaggerConfig).apiInfo(apiInfo()).includePatterns("/*/.*");
     }

@@ -26,7 +26,7 @@ class ServiceTax {
     * */
     ServiceTax(Tax tax, BigDecimal value) {
         this.tax = tax;
-        this.value = value.setScale(2, BigDecimal.ROUND_HALF_UP);
+        this.value = value;
     }
 
 }

@@ -42,7 +42,7 @@ public class PremiumUnitTest {
     Set<ModelFactorOrganizationInformation> modelFactorItems;
 
     @Before
-    public void setUp(){
+    public void setUp() {
         planId = new PlanId("P001");
         premiumId = new PremiumId("PR001");
         coverageId = new CoverageId("C001");
@@ -51,12 +51,12 @@ public class PremiumUnitTest {
         premiumExcelLineItems = Lists.newArrayList();
         Map<Map<PremiumInfluencingFactor, String>, Double> premiumExcelItemMap = Maps.newLinkedHashMap();
         Map<PremiumInfluencingFactor, String> premiumInfluencingFactorMap = Maps.newLinkedHashMap();
-        premiumInfluencingFactorMap.put(PremiumInfluencingFactor.AGE,"Age");
-        premiumInfluencingFactorMap.put(PremiumInfluencingFactor.POLICY_TERM,"Policy Term");
-        premiumInfluencingFactorMap.put(PremiumInfluencingFactor.DESIGNATION,"Designation");
-        premiumInfluencingFactorMap.put(PremiumInfluencingFactor.SMOKING_STATUS,"Smoking Status");
-        premiumInfluencingFactorMap.put(PremiumInfluencingFactor.SUM_ASSURED,"Sum Assured");
-        premiumExcelItemMap.put(premiumInfluencingFactorMap,100.00);
+        premiumInfluencingFactorMap.put(PremiumInfluencingFactor.AGE, "Age");
+        premiumInfluencingFactorMap.put(PremiumInfluencingFactor.POLICY_TERM, "Policy Term");
+        premiumInfluencingFactorMap.put(PremiumInfluencingFactor.DESIGNATION, "Designation");
+        premiumInfluencingFactorMap.put(PremiumInfluencingFactor.SMOKING_STATUS, "Smoking Status");
+        premiumInfluencingFactorMap.put(PremiumInfluencingFactor.SUM_ASSURED, "Sum Assured");
+        premiumExcelItemMap.put(premiumInfluencingFactorMap, 100.00);
         premiumExcelLineItems.add(premiumExcelItemMap);
         premiumItem = PremiumItem.createCoveragePremiumItem(premiumExcelItemMap);
         premiumItems.add(premiumItem);
@@ -68,30 +68,30 @@ public class PremiumUnitTest {
         premiumInfluencingFactors.add(PremiumInfluencingFactor.SMOKING_STATUS);
         premiumInfluencingFactors.add(PremiumInfluencingFactor.SUM_ASSURED);
 
-        premium = Premium.createPremiumWithPlan(premiumId,planId,new LocalDate("2015-04-20"), premiumExcelLineItems, PremiumFactor.FLAT_AMOUNT, PremiumRateFrequency.MONTHLY,
+        premium = Premium.createPremiumWithPlan(premiumId, planId, new LocalDate("2015-04-20"), premiumExcelLineItems, PremiumFactor.FLAT_AMOUNT, PremiumRateFrequency.MONTHLY,
                 premiumInfluencingFactors);
 
         discountFactorItems = Sets.newLinkedHashSet();
-        DiscountFactorOrganizationInformation discountFactorOrganizationInformation  = new DiscountFactorOrganizationInformation(DiscountFactorItem.ANNUAL,new BigDecimal(1234.867744));
+        DiscountFactorOrganizationInformation discountFactorOrganizationInformation = new DiscountFactorOrganizationInformation(DiscountFactorItem.ANNUAL, new BigDecimal(1234.867744));
         discountFactorItems.add(discountFactorOrganizationInformation);
-        discountFactorOrganizationInformation  = new DiscountFactorOrganizationInformation(DiscountFactorItem.SEMI_ANNUAL,new BigDecimal(55555.864989));
+        discountFactorOrganizationInformation = new DiscountFactorOrganizationInformation(DiscountFactorItem.SEMI_ANNUAL, new BigDecimal(55555.864989));
         discountFactorItems.add(discountFactorOrganizationInformation);
-        discountFactorOrganizationInformation  = new DiscountFactorOrganizationInformation(DiscountFactorItem.QUARTERLY,new BigDecimal(44444.884648493));
+        discountFactorOrganizationInformation = new DiscountFactorOrganizationInformation(DiscountFactorItem.QUARTERLY, new BigDecimal(44444.884648493));
         discountFactorItems.add(discountFactorOrganizationInformation);
 
         modelFactorItems = Sets.newLinkedHashSet();
-        ModelFactorOrganizationInformation modelFactorOrganizationInformation = new ModelFactorOrganizationInformation(ModalFactorItem.SEMI_ANNUAL,new BigDecimal(1000.99194));
+        ModelFactorOrganizationInformation modelFactorOrganizationInformation = new ModelFactorOrganizationInformation(ModalFactorItem.SEMI_ANNUAL, new BigDecimal(1000.99194));
         modelFactorItems.add(modelFactorOrganizationInformation);
-        modelFactorOrganizationInformation = new ModelFactorOrganizationInformation(ModalFactorItem.QUARTERLY,new BigDecimal(1001.99994));
+        modelFactorOrganizationInformation = new ModelFactorOrganizationInformation(ModalFactorItem.QUARTERLY, new BigDecimal(1001.99994));
         modelFactorItems.add(modelFactorOrganizationInformation);
-        modelFactorOrganizationInformation = new ModelFactorOrganizationInformation(ModalFactorItem.MONTHLY,new BigDecimal(1002.99899));
+        modelFactorOrganizationInformation = new ModelFactorOrganizationInformation(ModalFactorItem.MONTHLY, new BigDecimal(1002.99899));
         modelFactorItems.add(modelFactorOrganizationInformation);
     }
 
 
     @Test
-    public void givenTheNeededInformationToCreateThePremium_whenAllTheInformationAreCorrect_thenItShouldCreateThePremiumWithPlan(){
-        Premium  premium = Premium.createPremiumWithPlan(premiumId,planId,new LocalDate("2015-04-20"), premiumExcelLineItems, PremiumFactor.FLAT_AMOUNT, PremiumRateFrequency.MONTHLY,
+    public void givenTheNeededInformationToCreateThePremium_whenAllTheInformationAreCorrect_thenItShouldCreateThePremiumWithPlan() {
+        Premium premium = Premium.createPremiumWithPlan(premiumId, planId, new LocalDate("2015-04-20"), premiumExcelLineItems, PremiumFactor.FLAT_AMOUNT, PremiumRateFrequency.MONTHLY,
                 premiumInfluencingFactors);
         assertNotNull(premium);
         assertEquals(new LocalDate("2015-04-20"), invokeGetterMethod(premium, "effectiveFrom"));
@@ -99,8 +99,8 @@ public class PremiumUnitTest {
     }
 
     @Test
-    public void givenTheInformationToCreateAPremiumPlan_whenAllTheInformationAreCorrect_thenItShouldCreateThePremiumWithPlanAndCoverage(){
-        Premium premiumWithPlanAndCoverage =   Premium.createPremiumWithPlanAndCoverage(premiumId, planId, coverageId, new LocalDate("2015-04-20"), premiumExcelLineItems, PremiumFactor.PER_THOUSAND, PremiumRateFrequency.MONTHLY, premiumInfluencingFactors);
+    public void givenTheInformationToCreateAPremiumPlan_whenAllTheInformationAreCorrect_thenItShouldCreateThePremiumWithPlanAndCoverage() {
+        Premium premiumWithPlanAndCoverage = Premium.createPremiumWithPlanAndCoverage(premiumId, planId, coverageId, new LocalDate("2015-04-20"), premiumExcelLineItems, PremiumFactor.PER_THOUSAND, PremiumRateFrequency.MONTHLY, premiumInfluencingFactors);
         assertNotNull(premiumWithPlanAndCoverage);
         assertEquals(new LocalDate("2015-04-20"), invokeGetterMethod(premiumWithPlanAndCoverage, "effectiveFrom"));
         assertEquals(new PlanId("P001"), invokeGetterMethod(premiumWithPlanAndCoverage, "planId"));
@@ -108,50 +108,55 @@ public class PremiumUnitTest {
     }
 
     @Test
-    public void givenAPremiumPlan_whenPremiumPlanAssignedWithValidTillDate_thenItShouldReturnThePremiumPlanWithAssignedValidTillDate(){
-        premium =  premium.expirePremium(new LocalDate("2015-06-15"));
+    public void givenAPremiumPlan_whenPremiumPlanAssignedWithValidTillDate_thenItShouldReturnThePremiumPlanWithAssignedValidTillDate() {
+        premium = premium.expirePremium(new LocalDate("2015-06-15"));
         assertEquals(new LocalDate("2015-06-15"), invokeGetterMethod(premium, "validTill"));
     }
 
     @Test
-    public void givenPremiumItemAndDiscountFactor_thenItShouldReturnTheAnnualDiscountFactor(){
-        BigDecimal expectedAnnualDiscountFactor = new BigDecimal(123486.7700).setScale(4, BigDecimal.ROUND_HALF_UP);
-        BigDecimal annualDiscountFactor = premium.getAnnualPremium(premiumItem, discountFactorItems);
-        assertThat(expectedAnnualDiscountFactor,is(annualDiscountFactor));
+    public void givenPremiumItemAndDiscountFactor_thenItShouldReturnTheAnnualDiscountFactor() {
+        BigDecimal expectedAnnualDiscountFactor = new BigDecimal(123486.7744).setScale(4, BigDecimal.ROUND_CEILING);
+        BigDecimal annualDiscountFactor = premium.getAnnualPremium(premiumItem, discountFactorItems, 365);
+        annualDiscountFactor = annualDiscountFactor.setScale(4, BigDecimal.ROUND_CEILING);
+        assertThat(expectedAnnualDiscountFactor, is(annualDiscountFactor));
 
     }
 
     @Test
-    public void givenPremiumItemAndDiscountFactor_thenItShouldReturnTheSemiAnnualDiscountFactor(){
-        BigDecimal expectedSemiAnnualDiscountFactor = new BigDecimal(5555586.5000).setScale(4, BigDecimal.ROUND_HALF_UP);
-        BigDecimal semiAnnualDiscountFactor = premium.getSemiAnnuallyPremium(premiumItem, modelFactorItems,discountFactorItems);
-        assertThat(expectedSemiAnnualDiscountFactor,is(semiAnnualDiscountFactor));
+    public void givenPremiumItemAndDiscountFactor_thenItShouldReturnTheSemiAnnualDiscountFactor() {
+        BigDecimal expectedSemiAnnualDiscountFactor = new BigDecimal(5555586.4990).setScale(4, BigDecimal.ROUND_CEILING);
+        BigDecimal semiAnnualDiscountFactor = premium.getSemiAnnuallyPremium(premiumItem, modelFactorItems, discountFactorItems, 365);
+        semiAnnualDiscountFactor = semiAnnualDiscountFactor.setScale(4, BigDecimal.ROUND_CEILING);
+        assertThat(expectedSemiAnnualDiscountFactor, is(semiAnnualDiscountFactor));
 
     }
+
     /*
     * set scale for premium amount for which Premium Rate frequency is Monthly
     * */
     @Test
-    public void givenPremiumItemAndModalFactorItem_whenModalFactorItemIsMonthly_thenItShouldReturnThePremiumAmount(){
+    public void givenPremiumItemAndModalFactorItem_whenModalFactorItemIsMonthly_thenItShouldReturnThePremiumAmount() {
         BigDecimal expectedMonthlyPremiumFactor = new BigDecimal(100.00).setScale(1, BigDecimal.ROUND_HALF_UP);
-        BigDecimal monthlyPremium = premium.getMonthlyPremium(premiumItem, modelFactorItems);
-        assertThat(expectedMonthlyPremiumFactor,is(monthlyPremium));
+        BigDecimal monthlyPremium = premium.getMonthlyPremium(premiumItem, modelFactorItems, 365);
+        assertThat(expectedMonthlyPremiumFactor, is(monthlyPremium));
     }
 
     @Test
-    public void givenPremiumItemAndModalFactorItem_whenModalFactorItemIsNotMonthly_thenItShouldReturnTheMonthlyPremiumAmount(){
-        BigDecimal expectedMonthlyPremiumFactor = new BigDecimal(100299.90).setScale(4, BigDecimal.ROUND_HALF_UP);
+    public void givenPremiumItemAndModalFactorItem_whenModalFactorItemIsNotMonthly_thenItShouldReturnTheMonthlyPremiumAmount() {
+        BigDecimal expectedMonthlyPremiumFactor = new BigDecimal(100299.8991).setScale(4, BigDecimal.ROUND_CEILING);
         premium.setPremiumRateFrequency(PremiumRateFrequency.YEARLY);
-        BigDecimal monthlyPremium = premium.getMonthlyPremium(premiumItem, modelFactorItems);
-        assertThat(expectedMonthlyPremiumFactor,is(monthlyPremium));
+        BigDecimal monthlyPremium = premium.getMonthlyPremium(premiumItem, modelFactorItems, 365);
+        monthlyPremium = monthlyPremium.setScale(4, BigDecimal.ROUND_CEILING);
+        assertThat(expectedMonthlyPremiumFactor, is(monthlyPremium));
     }
 
     @Test
-    public void givenPremiumItemAndModalFactorItem_whenModalFactorItemIsNotMonthly_thenItShouldReturnTheQuarterlyPremiumAmount(){
-        BigDecimal expectedQuarterlyPremiumFactor = new BigDecimal(100199.9900).setScale(4, BigDecimal.ROUND_HALF_UP);
+    public void givenPremiumItemAndModalFactorItem_whenModalFactorItemIsNotMonthly_thenItShouldReturnTheQuarterlyPremiumAmount() {
+        BigDecimal expectedQuarterlyPremiumFactor = new BigDecimal(100199.9941).setScale(4, BigDecimal.ROUND_CEILING);
         premium.setPremiumRateFrequency(PremiumRateFrequency.YEARLY);
-        BigDecimal quarterlyPremium = premium.getQuarterlyPremium(premiumItem, modelFactorItems, discountFactorItems);
-        assertThat(expectedQuarterlyPremiumFactor,is(quarterlyPremium));
+        BigDecimal quarterlyPremium = premium.getQuarterlyPremium(premiumItem, modelFactorItems, discountFactorItems, 365);
+        quarterlyPremium = quarterlyPremium.setScale(4,BigDecimal.ROUND_CEILING);
+        assertThat(expectedQuarterlyPremiumFactor, is(quarterlyPremium));
     }
 
 }

@@ -101,7 +101,7 @@ public class GroupLifeQuotationController {
         return modelAndView;
     }
 
-    @RequestMapping(value = "/searchquotation", method = RequestMethod.GET)
+    @RequestMapping(value = "/searchquotation", method = RequestMethod.POST)
     public RedirectView searchQuotation(@RequestBody SearchGlQuotationDto searchGlQuotationDto, RedirectAttributes redirectAttributes) {
         redirectAttributes.addFlashAttribute("searchResult", glQuotationService.searchQuotation(searchGlQuotationDto));
         redirectAttributes.addFlashAttribute("searchCriteria", searchGlQuotationDto);

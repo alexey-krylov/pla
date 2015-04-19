@@ -26,7 +26,9 @@ public class PremiumCalculationDto {
 
     private PremiumFrequency premiumFrequency;
 
-    public PremiumCalculationDto(PlanId planId, CoverageId coverageId, Set<PremiumCalculationInfluencingFactorItem> premiumCalculationInfluencingFactorItems, LocalDate calculateAsOf, PremiumFrequency premiumFrequency) {
+    private int noOfDays;
+
+    public PremiumCalculationDto(PlanId planId, CoverageId coverageId, Set<PremiumCalculationInfluencingFactorItem> premiumCalculationInfluencingFactorItems, LocalDate calculateAsOf, PremiumFrequency premiumFrequency, int noOfDays) {
         checkArgument(planId != null);
         checkArgument(calculateAsOf != null);
         checkArgument(isNotEmpty(premiumCalculationInfluencingFactorItems));
@@ -35,6 +37,7 @@ public class PremiumCalculationDto {
         this.planId = planId;
         this.coverageId = coverageId;
         this.premiumCalculationInfluencingFactorItems = premiumCalculationInfluencingFactorItems;
+        this.noOfDays = noOfDays;
     }
 
     @Getter

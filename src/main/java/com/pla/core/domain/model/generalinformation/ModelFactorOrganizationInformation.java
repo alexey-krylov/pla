@@ -21,16 +21,16 @@ import static org.nthdimenzion.utils.UtilValidator.isNotEmpty;
 
 @Getter
 @Setter(AccessLevel.PACKAGE)
-@EqualsAndHashCode(callSuper = false)
+@EqualsAndHashCode
 public class ModelFactorOrganizationInformation {
 
     private ModalFactorItem modalFactorItem;
 
     private BigDecimal value;
 
-    public  ModelFactorOrganizationInformation(ModalFactorItem modalFactorItem, BigDecimal value) {
+    public ModelFactorOrganizationInformation(ModalFactorItem modalFactorItem, BigDecimal value) {
         this.modalFactorItem = modalFactorItem;
-        this.value = value.setScale(4, BigDecimal.ROUND_HALF_UP);
+        this.value = value;
     }
 
     public static BigDecimal getMonthlyModalFactor(Set<ModelFactorOrganizationInformation> modelFactorOrganizationInformations) {

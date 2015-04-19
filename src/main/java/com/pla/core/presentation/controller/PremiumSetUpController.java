@@ -110,8 +110,7 @@ public class PremiumSetUpController {
     }
 
     @RequestMapping(value = "/verifypremiumdata", method = RequestMethod.POST)
-    @ResponseBody
-    public Result validatePremiumData(@RequestBody PremiumTemplateDto premiumTemplateDto, HttpServletResponse response) throws IOException {
+    public Result validatePremiumData(PremiumTemplateDto premiumTemplateDto, HttpServletResponse response) throws IOException {
         Plan plan = planRepository.findOne(new PlanId(premiumTemplateDto.getPlanId()));
         String templateFileName = plan.getPlanDetail().getPlanName() + PREMIUM_TEMPLATE_FILE_NAME_SUFFIX;
         MultipartFile file = premiumTemplateDto.getFile();

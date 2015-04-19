@@ -32,21 +32,21 @@ public class ModalFactorInformationUnitTest {
 
     @Test
     public void givenModalFactorItem_whenModalFactorItemIsMonthly_thenItShouldReturnTheMonthlyModalFactor(){
-        BigDecimal expectedMonthlyModalFactor = new BigDecimal(1002.99899).setScale(4,BigDecimal.ROUND_HALF_UP);
+        BigDecimal expectedMonthlyModalFactor = new BigDecimal(1002.99899);
         BigDecimal monthlyModalFactor = ModelFactorOrganizationInformation.getMonthlyModalFactor(modelFactorItems);
         assertThat(expectedMonthlyModalFactor,is(monthlyModalFactor));
     }
 
     @Test
     public void givenModalFactorItem_whenModalFactorItemIsSemiAnnual_thenItShouldReturnTheSemiAnnualModalFactor(){
-        BigDecimal expectedSemiAnnualModalFactor = new BigDecimal(1000.99194).setScale(4,BigDecimal.ROUND_HALF_UP);
+        BigDecimal expectedSemiAnnualModalFactor = new BigDecimal(1000.99194);
         BigDecimal semiAnnualModalFactor = ModelFactorOrganizationInformation.getSemiAnnualModalFactor(modelFactorItems);
         assertThat(expectedSemiAnnualModalFactor,is(semiAnnualModalFactor));
     }
 
     @Test
     public void givenModalFactorItem_whenModalFactorItemIsQuarterly_thenItShouldReturnTheQuarterlyModalFactor(){
-        BigDecimal expectedQuarterlyModalFactor = new BigDecimal(1001.99994).setScale(4,BigDecimal.ROUND_HALF_UP);
+        BigDecimal expectedQuarterlyModalFactor = new BigDecimal(1001.99994);
         BigDecimal quarterlyModalFactor = ModelFactorOrganizationInformation.getQuarterlyModalFactor(modelFactorItems);
         assertThat(expectedQuarterlyModalFactor,is(quarterlyModalFactor));
     }

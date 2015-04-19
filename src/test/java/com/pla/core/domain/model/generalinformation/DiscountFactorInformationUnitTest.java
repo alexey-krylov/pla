@@ -31,21 +31,21 @@ public class DiscountFactorInformationUnitTest {
 
     @Test
     public void givenDiscountFactorItems_whenDiscountFactorItemIsAnnual_thenItShouldReturnTheAnnualDiscountFactor(){
-        BigDecimal expectedAnnualDiscountFactor = new BigDecimal(1234.867744).setScale(4,BigDecimal.ROUND_HALF_UP);
+        BigDecimal expectedAnnualDiscountFactor = new BigDecimal(1234.867744);
         BigDecimal annualDiscountFactor = DiscountFactorOrganizationInformation.getAnnualDiscountFactor(discountFactorItems);
         assertThat(expectedAnnualDiscountFactor,is(annualDiscountFactor));
     }
 
     @Test
     public void givenDiscountFactorItems_whenDiscountFactorItemIsSemiAnnual_thenItShouldReturnTheSemiAnnualDiscountFactor(){
-        BigDecimal expectedSemiAnnualDiscountFactor = new BigDecimal(55555.864989).setScale(4,BigDecimal.ROUND_HALF_UP);
+        BigDecimal expectedSemiAnnualDiscountFactor = new BigDecimal(55555.864989);
         BigDecimal semiAnnualDiscountFactor = DiscountFactorOrganizationInformation.getSemiAnnualDiscountFactor(discountFactorItems);
         assertThat(expectedSemiAnnualDiscountFactor,is(semiAnnualDiscountFactor));
     }
 
     @Test
     public void givenDiscountFactorItems_whenDiscountFactorItemIsQuarterly_thenItShouldReturnTheQuarterlyDiscountFactor(){
-        BigDecimal expectedQuarterlyDiscountFactor = new BigDecimal(44444.884648493).setScale(4,BigDecimal.ROUND_HALF_UP);
+        BigDecimal expectedQuarterlyDiscountFactor = new BigDecimal(44444.884648493);
         BigDecimal quarterlyDiscountFactor = DiscountFactorOrganizationInformation.getQuarterlyDiscountFactor(discountFactorItems);
         assertThat(expectedQuarterlyDiscountFactor,is(quarterlyDiscountFactor));
     }

@@ -20,7 +20,7 @@ import static org.nthdimenzion.utils.UtilValidator.isNotEmpty;
  */
 @Setter(AccessLevel.PACKAGE)
 @Getter(AccessLevel.PACKAGE)
-@EqualsAndHashCode(callSuper = false)
+@EqualsAndHashCode
 public class DiscountFactorOrganizationInformation {
 
     private DiscountFactorItem discountFactorItem;
@@ -29,7 +29,7 @@ public class DiscountFactorOrganizationInformation {
 
     public DiscountFactorOrganizationInformation(DiscountFactorItem discountFactorItem, BigDecimal value) {
         this.discountFactorItem = discountFactorItem;
-        this.value = value.setScale(4, BigDecimal.ROUND_HALF_UP);
+        this.value = value;
     }
 
     public static BigDecimal getAnnualDiscountFactor(Set<DiscountFactorOrganizationInformation> discountFactorOrganizationInformations) {
