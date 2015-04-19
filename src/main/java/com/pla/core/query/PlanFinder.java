@@ -39,7 +39,7 @@ public class PlanFinder {
     private MandatoryDocumentFinder mandatoryDocumentFinder;
 
     @Autowired
-    public PlanFinder(MongoTemplate mongoTemplate,MandatoryDocumentFinder mandatoryDocumentFinder) {
+    public PlanFinder(MongoTemplate mongoTemplate, MandatoryDocumentFinder mandatoryDocumentFinder) {
         objectMapper = new ObjectMapper();
         objectMapper.registerModule(new JodaModule());
         objectMapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
@@ -121,32 +121,30 @@ public class PlanFinder {
         term.put("maturityAges", values);
     }
 
-    public String getPlanName(PlanId planId){
+    public String getPlanName(PlanId planId) {
         Map plan = findPlanByPlanId(planId);
-        if (isEmpty(plan)){
+        if (isEmpty(plan)) {
             return "";
         }
-        Map planDetail =(Map)plan.get("planDetail");
-        String planName  = (String) planDetail.get("planName");
+        Map planDetail = (Map) plan.get("planDetail");
+        String planName = (String) planDetail.get("planName");
         return planName;
     }
 
-    public List<Map<String,String>> getCoverageName(PlanId planId){
+    public List<Map<String, String>> getCoverageName(PlanId planId) {
         Map plan = findPlanByPlanId(planId);
-        if (isEmpty(plan)){
+        if (isEmpty(plan)) {
             return Lists.newArrayList();
         }
-        List<Map<String,String>> coverageList = Lists.newArrayList();
-        List<Map> listCoverages  = (List) plan.get("coverages");
-        for (Map coverageMap : listCoverages){
-            Map<String,String> coverageMaps  = Maps.newLinkedHashMap();
+        List<Map<String, String>> coverageList = Lists.newArrayList();
+        List<Map> listCoverages = (List) plan.get("coverages");
+        for (Map coverageMap : listCoverages) {
+            Map<String, String> coverageMaps = Maps.newLinkedHashMap();
             String coverageId = (String) coverageMap.get("coverageId");
-            if (isNotEmpty(coverageId)){
-                if (CoverageType.OPTIONAL.name().equals(coverageMap.get("coverageType"))){
-                    coverageMaps.put("coverageId",coverageId);
-                    coverageMaps.put("coverageName", mandatoryDocumentFinder.getCoverageNameById(coverageId));
-                    coverageList.add(coverageMaps);
-                }
+            if (isNotEmpty(coverageId) && CoverageType.OPTIONAL.name().equals(coverageMap.get("coverageType"))) {
+                coverageMaps.put("coverageId", coverageId);
+                coverageMaps.put("coverageName", mandatoryDocumentFinder.getCoverageNameById(coverageId));
+                coverageList.add(coverageMaps);
             }
         }
         return coverageList;

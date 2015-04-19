@@ -27,7 +27,7 @@ public class TeamCommandHandler {
 
     private TeamService teamService;
 
-    private Logger logger = LoggerFactory.getLogger(TeamCommandHandler.class);
+    private Logger LOGGER = LoggerFactory.getLogger(TeamCommandHandler.class);
 
     @Autowired
     public TeamCommandHandler(JpaRepositoryFactory jpaRepositoryFactory, TeamService teamService) {
@@ -37,8 +37,8 @@ public class TeamCommandHandler {
 
     @CommandHandler
     public void createTeamHandler(CreateTeamCommand createTeamCommand) {
-        if (logger.isDebugEnabled()) {
-            logger.debug("*****Create Team Command Received*****" + createTeamCommand);
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("*****Create Team Command Received*****" + createTeamCommand);
         }
         Team team = teamService.createTeam(createTeamCommand.getTeamName(), createTeamCommand.getTeamCode(), createTeamCommand.getRegionCode(), createTeamCommand.getBranchCode()
                 , createTeamCommand.getEmployeeId(), createTeamCommand.getFromDate(), createTeamCommand.getFirstName(), createTeamCommand.getLastName(), createTeamCommand.getUserDetails());
@@ -46,7 +46,7 @@ public class TeamCommandHandler {
         try {
             teamRepository.save(team);
         } catch (RuntimeException e) {
-            logger.error("*****Saving Team failed*****", e);
+            LOGGER.error("*****Saving Team failed*****", e);
             throw new RuntimeException(e.getMessage());
         }
     }
@@ -54,8 +54,8 @@ public class TeamCommandHandler {
     @CommandHandler
     public void updateTeamHandler(UpdateTeamCommand updateTeamCommand) {
 
-        if (logger.isDebugEnabled()) {
-            logger.debug("*****Command Received*****" + updateTeamCommand);
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("*****Command Received*****" + updateTeamCommand);
         }
         JpaRepository<Team, String> teamRepository = jpaRepositoryFactory.getCrudRepository(Team.class);
         Team team = teamRepository.findOne(updateTeamCommand.getTeamId());
@@ -64,15 +64,15 @@ public class TeamCommandHandler {
         try {
             teamRepository.save(team);
         } catch (RuntimeException e) {
-            logger.error("*****Updating Team failed*****", e);
+            LOGGER.error("*****Updating Team failed*****", e);
             throw new RuntimeException(e.getMessage());
         }
     }
 
     @CommandHandler
     public void inactivateTeamHandler(InactivateTeamCommand inactivateTeamCommand) {
-        if (logger.isDebugEnabled()) {
-            logger.debug("*****Inactivate team Status Command  Received*****" + inactivateTeamCommand);
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("*****Inactivate team Status Command  Received*****" + inactivateTeamCommand);
         }
         JpaRepository<Team, String> teamRepository = jpaRepositoryFactory.getCrudRepository(Team.class);
         Team team = teamRepository.findOne(inactivateTeamCommand.getTeamId());
@@ -80,7 +80,7 @@ public class TeamCommandHandler {
         try {
             teamRepository.save(team);
         } catch (RuntimeException e) {
-            logger.error("*****Updating Team failed*****", e);
+            LOGGER.error("*****Updating Team failed*****", e);
             throw new RuntimeException(e.getMessage());
         }
     }

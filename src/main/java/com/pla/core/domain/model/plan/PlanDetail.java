@@ -11,8 +11,6 @@ import lombok.Getter;
 import lombok.ToString;
 import org.joda.time.LocalDate;
 import org.nthdimenzion.utils.UtilValidator;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.Set;
 import java.util.stream.Stream;
@@ -28,7 +26,6 @@ import static com.google.common.base.Preconditions.checkArgument;
 @EqualsAndHashCode(callSuper = false)
 public class PlanDetail {
 
-    private static final Logger logger = LoggerFactory.getLogger(PlanDetail.class);
     @JsonIgnore
     private final String MODULE_NAME = PlanDetail.class.getSimpleName();
     @JsonIgnore

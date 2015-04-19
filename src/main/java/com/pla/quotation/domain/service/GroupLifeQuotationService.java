@@ -1,7 +1,6 @@
 package com.pla.quotation.domain.service;
 
 import com.pla.core.domain.model.agent.AgentId;
-import com.pla.publishedlanguage.contract.IPremiumCalculator;
 import com.pla.quotation.domain.model.grouplife.GLQuotationProcessor;
 import com.pla.quotation.domain.model.grouplife.GroupLifeQuotation;
 import com.pla.quotation.domain.model.grouplife.Proposer;
@@ -23,13 +22,10 @@ public class GroupLifeQuotationService {
 
     private QuotationNumberGenerator quotationNumberGenerator;
 
-    private IPremiumCalculator premiumCalculator;
-
     @Autowired
-    public GroupLifeQuotationService(QuotationRoleAdapter quotationRoleAdapter, QuotationNumberGenerator quotationNumberGenerator, IPremiumCalculator premiumCalculator) {
+    public GroupLifeQuotationService(QuotationRoleAdapter quotationRoleAdapter, QuotationNumberGenerator quotationNumberGenerator) {
         this.quotationRoleAdapter = quotationRoleAdapter;
         this.quotationNumberGenerator = quotationNumberGenerator;
-        this.premiumCalculator = premiumCalculator;
     }
 
     public GroupLifeQuotation createQuotation(String agentId, String proposerName, UserDetails userDetails) {

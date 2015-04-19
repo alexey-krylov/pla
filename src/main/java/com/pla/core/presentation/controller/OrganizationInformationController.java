@@ -35,7 +35,7 @@ import static org.nthdimenzion.presentation.AppUtils.getLoggedInUSerDetail;
 @RequestMapping(value = "/core/organizationinformation",produces = MediaType.APPLICATION_JSON_VALUE,consumes = MediaType.ALL_VALUE)
 public class OrganizationInformationController {
 
-    private static final Logger logger = LoggerFactory.getLogger(ProductLineInformationController.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(ProductLineInformationController.class);
     private GeneralInformationService generalInformationService;
 
     private MongoTemplate springMongoTemplate;
@@ -67,7 +67,7 @@ public class OrganizationInformationController {
             UserDetails userDetails = getLoggedInUSerDetail(request);
             generalInformationService.createOrganizationInformation(generalInformationDto.getModelFactorItems(), generalInformationDto.getDiscountFactorItems(), generalInformationDto.getServiceTax(), userDetails);
         }catch (GeneralInformationException e){
-            logger.debug(e.getMessage());
+            LOGGER.debug(e.getMessage());
             return Result.failure(e.getMessage());
         }catch (Exception e){
             return Result.failure(e.getMessage());
@@ -85,7 +85,7 @@ public class OrganizationInformationController {
             UserDetails userDetails = getLoggedInUSerDetail(request);
             generalInformationService.updateOrganizationInformation(generalInformationDto, userDetails);
         } catch (GeneralInformationException e){
-            logger.debug(e.getMessage());
+            LOGGER.debug(e.getMessage());
             return Result.failure(e.getMessage());
         }catch (Exception e){
             return Result.failure(e.getMessage());

@@ -25,7 +25,7 @@ import static com.google.common.base.Preconditions.checkArgument;
 @Getter
 @Embeddable
 public class CommissionTerm {
-    private static final Logger logger = LoggerFactory.getLogger(CommissionTerm.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(CommissionTerm.class);
 
     @Enumerated(EnumType.STRING)
     private CommissionTermType commissionTermType;

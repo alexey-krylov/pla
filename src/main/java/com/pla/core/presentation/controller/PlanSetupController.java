@@ -6,8 +6,6 @@ import com.pla.core.query.PlanFinder;
 import com.pla.sharedkernel.identifier.PlanId;
 import org.axonframework.commandhandling.gateway.CommandGateway;
 import org.bson.types.ObjectId;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
@@ -24,7 +22,7 @@ import java.util.Map;
 /**
  * Controller for handling all the User Interface calls related to
  * creation/edition of Plan.
- * <p>
+ * <p/>
  * It also have interface to handled ajax calls to return list of plans.
  *
  * @author: pradyumna
@@ -34,7 +32,6 @@ import java.util.Map;
 @RequestMapping(value = "/core/plan")
 public class PlanSetupController {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(PlanSetupController.class);
     private final CommandGateway commandGateway;
 
     private final PlanFinder planFinder;
@@ -72,9 +69,10 @@ public class PlanSetupController {
 
     @RequestMapping(value = "/getcoveragebyplanid/{planId}")
     @ResponseBody
-    public List<Map<String, String>> getCoverageAssociatedWithPlan(@PathVariable("planId") PlanId planId){
+    public List<Map<String, String>> getCoverageAssociatedWithPlan(@PathVariable("planId") PlanId planId) {
         return planFinder.getCoverageName(planId);
     }
+
     /**
      * For routing the /core/plan/list url. The model is populated
      * with All the active plans and rendered via Thyme View Resolver.

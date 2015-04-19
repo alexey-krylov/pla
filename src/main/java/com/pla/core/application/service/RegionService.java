@@ -20,7 +20,7 @@ public class RegionService {
     @Autowired
     private JpaRepositoryFactory jpaRepositoryFactory;
 
-    private Logger logger = LoggerFactory.getLogger(RegionService.class);
+    private Logger LOGGER = LoggerFactory.getLogger(RegionService.class);
 
     @Autowired
     public RegionService(JpaRepositoryFactory jpaRepositoryFactory) {
@@ -35,7 +35,7 @@ public class RegionService {
         try {
             regionRepository.save(updatedRegion);
         } catch (RuntimeException e) {
-            logger.error("*****Saving Regional Manager failed*****", e);
+            LOGGER.error("*****Saving Regional Manager failed*****", e);
             throw new RuntimeException(e.getMessage());
         }
     }

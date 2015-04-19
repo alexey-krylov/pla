@@ -146,11 +146,8 @@ public class Branch implements ICrudEntity {
 
     BranchBdeFulfillment getBranchBDEFulfillmentForABranchBDE(String currentBranchBdeId) {
         for (BranchBdeFulfillment branchBdeFulfillment : branchBDEFulfillments) {
-            if (branchBdeFulfillment != null) {
-                if ((branchBdeFulfillment.getBranchBde().getEmployeeId()).equals(currentBranchBdeId)) {
-                    return branchBdeFulfillment;
-
-                }
+            if (branchBdeFulfillment != null && (branchBdeFulfillment.getBranchBde().getEmployeeId()).equals(currentBranchBdeId)) {
+                return branchBdeFulfillment;
             }
         }
         return null;

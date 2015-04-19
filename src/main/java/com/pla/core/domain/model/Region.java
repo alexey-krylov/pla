@@ -82,11 +82,9 @@ public class Region implements ICrudEntity {
 
     public RegionalManagerFulfillment getRegionalManagerFulfillmentForARegionalManager(String currentRegionalManagerId) {
         for (RegionalManagerFulfillment regionalManagerFulfillment : regionalManagerFulfillments) {
-            if (regionalManagerFulfillment != null) {
-                if ((regionalManagerFulfillment.getRegionalManager().getEmployeeId()).equals(currentRegionalManagerId)) {
-                    return regionalManagerFulfillment;
+            if (regionalManagerFulfillment != null && (regionalManagerFulfillment.getRegionalManager().getEmployeeId()).equals(currentRegionalManagerId)) {
+                return regionalManagerFulfillment;
 
-                }
             }
         }
         return null;

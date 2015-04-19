@@ -28,7 +28,7 @@ public class CommissionCommandHandler {
 
     private CommissionService commissionService;
 
-    private Logger logger = LoggerFactory.getLogger(CommissionCommandHandler.class);
+    private Logger LOGGER = LoggerFactory.getLogger(CommissionCommandHandler.class);
 
     @Autowired
     public CommissionCommandHandler(JpaRepositoryFactory jpaRepositoryFactory, CommissionService commissionService) {
@@ -38,23 +38,23 @@ public class CommissionCommandHandler {
 
     @CommandHandler
     public void createCommissionHandler(CreateCommissionCommand createCommissionCommand) {
-        if (logger.isDebugEnabled()) {
-            logger.debug("*****Create Commission Command Received*****" + createCommissionCommand);
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("*****Create Commission Command Received*****" + createCommissionCommand);
         }
         Commission commission = commissionService.createCommission(createCommissionCommand.getPlanId(), createCommissionCommand.getAvailableFor(), createCommissionCommand.getCommissionType(), createCommissionCommand.getPremiumFee(), createCommissionCommand.getFromDate(), createCommissionCommand.getCommissionTermSet(), createCommissionCommand.getUserDetails());
         JpaRepository<Commission, CommissionId> commissionRepository = jpaRepositoryFactory.getCrudRepository(Commission.class);
         try {
             commissionRepository.save(commission);
         } catch (RuntimeException e) {
-            logger.error("*****Saving Commission failed*****", e);
+            LOGGER.error("*****Saving Commission failed*****", e);
             throw new RuntimeException(e.getMessage());
         }
     }
 
     @CommandHandler
     public void updateCommissionHandler(UpdateCommissionCommand updateCommissionCommand) {
-        if (logger.isDebugEnabled()) {
-            logger.debug("*****Create Commission Command Received*****" + updateCommissionCommand);
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("*****Create Commission Command Received*****" + updateCommissionCommand);
         }
         JpaRepository<Commission, CommissionId> commissionRepository = jpaRepositoryFactory.getCrudRepository(Commission.class);
         Commission commission = commissionRepository.findOne(updateCommissionCommand.getCommissionId());
@@ -62,7 +62,7 @@ public class CommissionCommandHandler {
         try {
             commissionRepository.save(updatedCommission);
         } catch (RuntimeException e) {
-            logger.error("*****Saving Commission failed*****", e);
+            LOGGER.error("*****Saving Commission failed*****", e);
             throw new RuntimeException(e.getMessage());
         }
     }

@@ -17,7 +17,6 @@ import org.springframework.stereotype.Component;
 public class PlanManagementSaga extends AbstractAnnotatedSaga {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(PlanManagementSaga.class);
-    private boolean planPremiumAvailable = false;
 
     @StartSaga
     @SagaEventHandler(associationProperty = "planId")

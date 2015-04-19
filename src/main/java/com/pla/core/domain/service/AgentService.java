@@ -12,8 +12,8 @@ import com.pla.core.domain.model.agent.AgentStatus;
 import com.pla.core.domain.model.agent.LicenseNumber;
 import com.pla.core.dto.*;
 import com.pla.core.specification.AgentLicenseNumberIsUnique;
-import com.pla.sharedkernel.identifier.PlanId;
 import com.pla.core.specification.NrcNumberIsUnique;
+import com.pla.sharedkernel.identifier.PlanId;
 import org.nthdimenzion.common.service.JpaRepositoryFactory;
 import org.nthdimenzion.ddd.domain.annotations.DomainService;
 import org.nthdimenzion.utils.UtilValidator;
@@ -32,17 +32,15 @@ import static com.pla.core.domain.exception.AgentException.raiseAgentNrcNumberUn
 @DomainService
 public class AgentService {
 
-    private AdminRoleAdapter adminRoleAdapter;
-
     private AgentLicenseNumberIsUnique agentLicenseNumberIsUnique;
+
     private NrcNumberIsUnique nrcNumberIsUnique;
 
     private JpaRepositoryFactory jpaRepositoryFactory;
 
     @Autowired
-    public AgentService(AdminRoleAdapter adminRoleAdapter, AgentLicenseNumberIsUnique agentLicenseNumberIsUnique, NrcNumberIsUnique nrcNumberIsUnique,
+    public AgentService(AgentLicenseNumberIsUnique agentLicenseNumberIsUnique, NrcNumberIsUnique nrcNumberIsUnique,
                         JpaRepositoryFactory jpaRepositoryFactory) {
-        this.adminRoleAdapter = adminRoleAdapter;
         this.agentLicenseNumberIsUnique = agentLicenseNumberIsUnique;
         this.jpaRepositoryFactory = jpaRepositoryFactory;
         this.nrcNumberIsUnique = nrcNumberIsUnique;
@@ -51,11 +49,11 @@ public class AgentService {
     public void createAgent(String agentId, AgentProfileDto agentProfileDto, LicenseNumberDto licenseNumberDto, TeamDetailDto teamDetailDto, ContactDetailDto contactDetailDto, PhysicalAddressDto physicalAddressDto, ChannelTypeDto channelTypeDto, Set<PlanId> authorizedPlans) {
         UtilValidator.isNotEmpty("");
         boolean isLicenseNumberUnique = UtilValidator.isNotEmpty(licenseNumberDto.getLicenseNumber()) ? agentLicenseNumberIsUnique.isSatisfiedBy(new LicenseNumber(licenseNumberDto.getLicenseNumber())) : true;
-        boolean isNrcNumberIsUnique =   agentProfileDto.getNrcNumber()!=0?nrcNumberIsUnique.isSatisfiedBy(agentProfileDto.getNrcNumber()):true;
+        boolean isNrcNumberIsUnique = agentProfileDto.getNrcNumber() != 0 ? nrcNumberIsUnique.isSatisfiedBy(agentProfileDto.getNrcNumber()) : true;
         if (!isLicenseNumberUnique) {
             raiseAgentLicenseNumberUniqueException();
         }
-        if (!isNrcNumberIsUnique){
+        if (!isNrcNumberIsUnique) {
             raiseAgentNrcNumberUniqueException();
         }
         Agent agent = Agent.createAgent(new AgentId(agentId));
@@ -73,8 +71,8 @@ public class AgentService {
         if (!isLicenseNumberUnique) {
             raiseAgentLicenseNumberUniqueException();
         }
-        boolean isNrcNumberIsUnique =   agentProfileDto.getNrcNumber()!=0?nrcNumberIsUnique.isSatisfiedBy(agentProfileDto.getNrcNumber()):true;
-        if (!isNrcNumberIsUnique){
+        boolean isNrcNumberIsUnique = agentProfileDto.getNrcNumber() != 0 ? nrcNumberIsUnique.isSatisfiedBy(agentProfileDto.getNrcNumber()) : true;
+        if (!isNrcNumberIsUnique) {
             raiseAgentNrcNumberUniqueException();
         }
         Agent updatedAgent = populateAgentDetail(agent, agentProfileDto, licenseNumberDto, teamDetailDto, contactDetailDto, physicalAddressDto, channelTypeDto);

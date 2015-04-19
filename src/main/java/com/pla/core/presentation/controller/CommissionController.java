@@ -12,7 +12,6 @@ import org.nthdimenzion.presentation.Result;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
@@ -42,13 +41,11 @@ public class CommissionController {
 
     private PlanFinder planFinder;
 
-    private MongoTemplate mongoTemplate;
 
     @Autowired
-    public CommissionController(CommandGateway commandGateway, CommissionFinder commissionFinder, MongoTemplate springMongoTemplate, PlanFinder planFinder) {
+    public CommissionController(CommandGateway commandGateway, CommissionFinder commissionFinder, PlanFinder planFinder) {
         this.commandGateway = commandGateway;
         this.commissionFinder = commissionFinder;
-        this.mongoTemplate = springMongoTemplate;
         this.planFinder = planFinder;
     }
 
