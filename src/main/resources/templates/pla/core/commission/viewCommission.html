@@ -13,6 +13,9 @@
             requirejs(['/pla/js/commissions/viewCommissions.js'],function(){
                 $(document).ready(function(){
                     $('#commission-table').dataTable();
+                    $( "input[type=radio]" ).on( "click", function(){
+                        viewCommission.getTheItemSelected(this)
+                    });
                 });
             });
             clearInterval(interval);
@@ -27,18 +30,20 @@
             <div class="panel panel-primary">
                 <div class="panel-heading">
                     <div class="row">
-                        <div class="col-lg-6"><span th:text="#{listOfCommissions}">List of Commissions
+                        <div class="col-lg-10"><span th:text="#{listOfCommissions}">List of Commissions
                         </span></div>
-                        <div class="col-lg-6"><button type="button" class="btn btn-default btn-xs" style="float: right"
-                                                      onclick="viewCommission.openCreatePage()">
-                            Create
-                        </button>></div>
+                        <div class="col-lg-2">
+                            <button type="button" class="btn btn-default btn-xs" onclick="viewCommission.openCreatePage()">Create</button>
+                            <button type="button" class="btn btn-default btn-xs" id="commission-view" disabled="disabled" onclick="viewCommission.viewCommission()">View</button>
+                            <button type="button" class="btn btn-default btn-xs" id="commission-update" disabled="disabled" onclick="viewCommission.updateCommission()">Update</button>
+                        </div>
                     </div>
                 </div>
                 <div class="panel-body">
                     <table class="table table-striped table-bordered" id="commission-table" cellspacing="0" width="100%">
                         <thead>
                         <tr>
+                            <th></th>
                             <th th:text="#{product}">
                                 Product Name
                             </th>
@@ -48,21 +53,14 @@
                             <th th:text="#{fromDate}">
                                 From Date
                             </th>
-                            <th th:text="#{actions}">
-                                Actions
-                            </th>
                         </tr>
                         </thead>
-                        <tbody>    <!--th:each="commission : ${commissionList}"-->
-                        <tr>
-
-                            <td>Product A</td>
-                            <td>Agent</td>
-                            <td>09/03/2014</td>
-
-                            <td style="text-align:center">
-                                <a class="btn btn-default btn-xs" th:href="@{/core/commission/viewCalculatedCommission}">view</a>
-                            </td>
+                        <tbody>
+                        <tr th:each="commission:${commissionList}">
+                            <th><input type="radio" th:value="${commission.commissionId}"/></th>
+                            <td th:text="${commission.planName}"></td>
+                            <td th:text="${commission.availableFor.description}"></td>
+                            <td th:text="${#dates.format(commission.fromDate, 'dd/MM/yyyy')}"></td>
                         </tr>
 
                         </tbody>
