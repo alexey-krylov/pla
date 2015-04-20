@@ -29,21 +29,21 @@ public class TeamIsUniqueTest {
 
 
     @Test
-    public void shouldReturnTrueWhenBenefitNameUnique() {
+    public void shouldReturnTrueWhenTeamNameUnique() {
         when(teamFinder.getTeamCountByTeamCode("Team1")).thenReturn(0);
         when(teamFinder.getTeamCountByTeamName("Team")).thenReturn(0);
         TeamIsUnique teamIsUnique = new TeamIsUnique(teamFinder);
-        TeamDto teamDto = new TeamDto("Teamname", "TeamCode");
+        TeamDto teamDto = new TeamDto("Teamname", "TeamCode", "sdsd");
         boolean alreadyExists = teamIsUnique.isSatisfiedBy(teamDto);
         assertTrue(alreadyExists);
     }
 
    @Test
-    public void shouldReturnFalseWhenBenefitNameNotUnique() {
+   public void shouldReturnFalseWhenTeamNameNotUnique() {
        when(teamFinder.getTeamCountByTeamCode("Team1")).thenReturn(1);
        when(teamFinder.getTeamCountByTeamName("Team")).thenReturn(1);
        TeamIsUnique teamIsUnique = new TeamIsUnique(teamFinder);
-       TeamDto teamDto = new TeamDto("Team", "Team1");
+       TeamDto teamDto = new TeamDto("Team", "Team1", "232321");
        boolean alreadyExists = teamIsUnique.isSatisfiedBy(teamDto);
        assertFalse(alreadyExists);
     }

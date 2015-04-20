@@ -29,10 +29,12 @@ import javax.persistence.Embeddable;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class TeamDto {
 
+    private String teamId;
     private String teamName;
     private String teamCode;
 
-    public TeamDto(String teamName, String teamCode) {
+    public TeamDto(String teamName, String teamCode, String teamId) {
+        this.teamId = teamId;
         this.teamName = teamName;
         this.teamCode = teamCode;
         Preconditions.checkState(!UtilValidator.isEmpty(teamName));

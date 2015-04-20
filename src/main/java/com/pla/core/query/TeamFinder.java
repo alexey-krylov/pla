@@ -65,7 +65,7 @@ public class TeamFinder {
 
     public int getActiveTeamCountByAgentAssociatedWithTeam(TeamDto teamDto) {
         Preconditions.checkNotNull(teamDto);
-        Number noOfActiveTeamCountByAgentAssociatedWithTeam = namedParameterJdbcTemplate.queryForObject(ACTIVE_TEAM_COUNT_BY_TEAM_ASSOCIATED_WITH_AGENT_CODE_QUERY, new MapSqlParameterSource().addValue("teamCode", teamDto.getTeamCode()), Number.class);
+        Number noOfActiveTeamCountByAgentAssociatedWithTeam = namedParameterJdbcTemplate.queryForObject(ACTIVE_TEAM_COUNT_BY_TEAM_ASSOCIATED_WITH_AGENT_CODE_QUERY, new MapSqlParameterSource().addValue("teamCode", teamDto.getTeamId()), Number.class);
         return noOfActiveTeamCountByAgentAssociatedWithTeam.intValue();
     }
 

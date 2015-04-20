@@ -104,7 +104,7 @@ public class Admin {
     }
 
     public Team inactivateTeam(Team team, boolean isTeamAssociatedWithAgent) {
-        if (!isTeamAssociatedWithAgent) {
+        if (isTeamAssociatedWithAgent) {
             throw new TeamDomainException("Team is associated with Agent!!");
         }
         Team deactivatedTeam = team.inactivate();

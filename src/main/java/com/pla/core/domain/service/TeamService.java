@@ -44,7 +44,7 @@ public class TeamService {
     public Team createTeam(String teamName, String teamCode, String regionCode, String branchCode, String employeeId, LocalDate fromDate, String firstName, String lastName, UserDetails userDetails) {
         String teamId = idGenerator.nextId();
         Admin admin = adminRoleAdapter.userToAdmin(userDetails);
-        TeamDto teamDto = new TeamDto(teamName, teamCode);
+        TeamDto teamDto = new TeamDto(teamName, teamCode, teamId);
         boolean isTeamUnique = teamIsUnique.isSatisfiedBy(teamDto);
         Team team = admin.createTeam(isTeamUnique, teamId, teamName, teamCode, regionCode, branchCode, employeeId, fromDate, firstName, lastName);
         return team;
@@ -58,7 +58,7 @@ public class TeamService {
 
     public Team inactivateTeam(Team team, UserDetails userDetails) {
         Admin admin = adminRoleAdapter.userToAdmin(userDetails);
-        TeamDto teamDto = new TeamDto(team.getTeamName(), team.getTeamCode());
+        TeamDto teamDto = new TeamDto(team.getTeamName(), team.getTeamCode(), team.getTeamId());
         boolean isTeamAssociatedWithAgent = teamAssociatedWithAgent.isSatisfiedBy(teamDto);
         return admin.inactivateTeam(team, isTeamAssociatedWithAgent);
     }

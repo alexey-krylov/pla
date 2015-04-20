@@ -66,7 +66,7 @@ public class TeamServiceTest {
         createTeamCommand.setTeamName("CI Team");
         createTeamCommand.setTeamCode("CI TeamCode");
         createTeamCommand.setEmployeeId("1234");
-        TeamDto teamName = new TeamDto(createTeamCommand.getTeamName(), createTeamCommand.getTeamCode());
+        TeamDto teamName = new TeamDto(createTeamCommand.getTeamName(), createTeamCommand.getTeamCode(), teamId);
         when(idGenerator.nextId()).thenReturn(teamId);
         when(adminRoleAdapter.userToAdmin(createTeamCommand.getUserDetails())).thenReturn(admin);
         when(teamIsUnique.isSatisfiedBy(teamName)).thenReturn(true);
