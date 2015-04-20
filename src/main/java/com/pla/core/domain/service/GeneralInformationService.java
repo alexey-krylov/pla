@@ -107,9 +107,43 @@ public class GeneralInformationService {
 
     public List<ProductLineProcessDto> getProductLineProcessItems(){
         List<ProductLineProcessDto> productLineProcessList = Lists.newArrayList();
-        productLineProcessList = ProductLineProcessType.getProductLineProcessType(productLineProcessList);
-        productLineProcessList = PolicyFeeProcessType.getPolicyFeeProcessType(productLineProcessList);
-        productLineProcessList = PolicyProcessMinimumLimitType.getPolicyProcessMinimumLimitType(productLineProcessList);
+        productLineProcessList = getPolicyFeeProcessType(productLineProcessList);
+        productLineProcessList = getProductLineProcessType(productLineProcessList);
+        productLineProcessList = getPolicyProcessMinimumLimitType(productLineProcessList);
         return productLineProcessList;
     }
+
+    private  List<ProductLineProcessDto> getPolicyFeeProcessType(List<ProductLineProcessDto> productLineProcessList ){
+        for(PolicyFeeProcessType policyFeeProcessType : PolicyFeeProcessType.values()){
+            ProductLineProcessDto productLineProcessDto = new ProductLineProcessDto();
+            productLineProcessDto.setType(policyFeeProcessType.name());
+            productLineProcessDto.setDescription(policyFeeProcessType.getDescription());
+            productLineProcessDto.setFullDescription(policyFeeProcessType.getFullDescription());
+            productLineProcessList.add(productLineProcessDto);
+        }
+        return productLineProcessList;
+    }
+
+    private  List<ProductLineProcessDto> getProductLineProcessType(List<ProductLineProcessDto> productLineProcessList){
+        for(ProductLineProcessType productLineProcessType : ProductLineProcessType.values()){
+            ProductLineProcessDto productLineProcessDto = new ProductLineProcessDto();
+            productLineProcessDto.setType(productLineProcessType.name());
+            productLineProcessDto.setDescription(productLineProcessType.getDescription());
+            productLineProcessDto.setFullDescription(productLineProcessType.getFullDescription());
+            productLineProcessList.add(productLineProcessDto);
+        }
+        return productLineProcessList;
+    }
+
+    private List<ProductLineProcessDto> getPolicyProcessMinimumLimitType(List<ProductLineProcessDto> productLineProcessList ){
+        for(PolicyProcessMinimumLimitType minimumLimitType :PolicyProcessMinimumLimitType.values()){
+            ProductLineProcessDto productLineProcessDto = new ProductLineProcessDto();
+            productLineProcessDto.setType(minimumLimitType.name());
+            productLineProcessDto.setDescription(minimumLimitType.getDescription());
+            productLineProcessDto.setFullDescription(minimumLimitType.getFullDescription());
+            productLineProcessList.add(productLineProcessDto);
+        }
+        return productLineProcessList;
+    }
+
 }

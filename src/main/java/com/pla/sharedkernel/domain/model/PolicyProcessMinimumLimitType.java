@@ -1,9 +1,6 @@
 package com.pla.sharedkernel.domain.model;
 
-import com.pla.core.dto.ProductLineProcessDto;
 import lombok.Getter;
-
-import java.util.List;
 
 /**
  * Created by Admin on 4/1/2015.
@@ -20,14 +17,4 @@ public enum PolicyProcessMinimumLimitType {
         this.description = description;
     }
 
-    public static List<ProductLineProcessDto> getPolicyProcessMinimumLimitType(List<ProductLineProcessDto> productLineProcessList ){
-        for(PolicyProcessMinimumLimitType minimumLimitType : values()){
-            ProductLineProcessDto productLineProcessDto = new ProductLineProcessDto();
-            productLineProcessDto.setType(minimumLimitType.name());
-            productLineProcessDto.setDescription(minimumLimitType.getDescription());
-            productLineProcessDto.setFullDescription(minimumLimitType.getFullDescription());
-            productLineProcessList.add(productLineProcessDto);
-        }
-        return productLineProcessList;
-    }
 }
