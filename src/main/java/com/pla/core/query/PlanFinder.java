@@ -19,8 +19,13 @@ import com.pla.sharedkernel.identifier.PlanId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.BasicQuery;
+import org.springframework.jdbc.core.ColumnMapRowMapper;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.stereotype.Service;
 
+import javax.sql.DataSource;
 import java.util.*;
 
 import static org.nthdimenzion.utils.UtilValidator.isEmpty;
@@ -36,10 +41,17 @@ public class PlanFinder {
 
     private MongoTemplate mongoTemplate;
     private ObjectMapper objectMapper;
-    private MandatoryDocumentFinder mandatoryDocumentFinder;
+    private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
+
+    public static final String GET_COVERAGE_NAME_FOR_GIVEN_COVERAGE_ID_QUERY ="SELECT coverage_name coverageName FROM coverage WHERE coverage_id =:coverageId";
 
     @Autowired
-    public PlanFinder(MongoTemplate mongoTemplate, MandatoryDocumentFinder mandatoryDocumentFinder) {
+    public void setDataSource(DataSource dataSource) {
+        this.namedParameterJdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
+    }
+
+    @Autowired
+    public PlanFinder(MongoTemplate mongoTemplate) {
         objectMapper = new ObjectMapper();
         objectMapper.registerModule(new JodaModule());
         objectMapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
@@ -50,7 +62,6 @@ public class PlanFinder {
                 .withSetterVisibility(JsonAutoDetect.Visibility.NONE)
                 .withCreatorVisibility(JsonAutoDetect.Visibility.ANY));
         this.mongoTemplate = mongoTemplate;
-        this.mandatoryDocumentFinder = mandatoryDocumentFinder;
     }
 
     public List<Plan> findAllPlanForThymeleaf() {
@@ -143,10 +154,16 @@ public class PlanFinder {
             String coverageId = (String) coverageMap.get("coverageId");
             if (isNotEmpty(coverageId) && CoverageType.OPTIONAL.name().equals(coverageMap.get("coverageType"))) {
                 coverageMaps.put("coverageId", coverageId);
-                coverageMaps.put("coverageName", mandatoryDocumentFinder.getCoverageNameById(coverageId));
+                coverageMaps.put("coverageName", getCoverageNameById(coverageId));
                 coverageList.add(coverageMaps);
             }
         }
         return coverageList;
+    }
+
+    private String getCoverageNameById(String coverageId){
+        SqlParameterSource sqlParameterSource = new MapSqlParameterSource("coverageId",coverageId);
+        List<Map<String,Object>>  coverageNameList = namedParameterJdbcTemplate.query(GET_COVERAGE_NAME_FOR_GIVEN_COVERAGE_ID_QUERY, sqlParameterSource, new ColumnMapRowMapper());
+        return isNotEmpty(coverageNameList)? (String) coverageNameList.get(0).get("coverageName"):"";
     }
 }
