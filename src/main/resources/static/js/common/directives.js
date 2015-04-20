@@ -96,6 +96,19 @@ angular.module('directives', ['mgcrea.ngStrap.alert'])
             }
         }
     })
+    .directive('disableAllFields',function(){
+        return{
+            restrict: 'A',
+            scope:{
+                disableAllFields:"=?"
+            },
+            link: function (scope, controls) {
+                if(scope.disableAllFields){
+                    $(controls).find(":input").not(":button").prop("disabled",true);
+                }
+            }
+        }
+    })
     .directive('nthAlert',['$rootScope','$alert',function($rootScope,$alert){
         return{
             restrict: 'E',
