@@ -70,16 +70,9 @@ public class CommissionController {
     }
 
     @RequestMapping(value = "/opencreatepage/{commissiontype}", method = RequestMethod.GET)
-    public ModelAndView openCreatePageCommission(@PathVariable("commissiontype") String commissionType) {
+    public ModelAndView openCreatePageCommission() {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("pla/core/commission/createCommission");
-        modelAndView.addObject("plans", planFinder.findAllPlan());
-        modelAndView.addObject("designation", CommissionDesignation.values());
-        if (commissionType.equals("Override")) {
-            modelAndView.addObject("commissiontype", "Override");
-        } else {
-            modelAndView.addObject("commissiontype", "Normal");
-        }
         return modelAndView;
     }
 
@@ -124,5 +117,19 @@ public class CommissionController {
             return Result.failure(e.getMessage());
         }
         return Result.success("Commission updated successfully");
+    }
+
+    @RequestMapping(value = "/commissionPage/{commissiontype}", method = RequestMethod.GET)
+    public ModelAndView commissionPage(@PathVariable("commissiontype") String commissionType) {
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("pla/core/commission/commission");
+        modelAndView.addObject("plans", planFinder.findAllPlan());
+        modelAndView.addObject("designation", CommissionDesignation.values());
+        if (commissionType.equals("Override")) {
+            modelAndView.addObject("commissiontype", "Override");
+        } else {
+            modelAndView.addObject("commissiontype", "Normal");
+        }
+        return modelAndView;
     }
 }
