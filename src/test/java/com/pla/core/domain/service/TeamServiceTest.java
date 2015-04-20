@@ -9,6 +9,7 @@ package com.pla.core.domain.service;
 import com.pla.core.application.CreateTeamCommand;
 import com.pla.core.domain.model.Admin;
 import com.pla.core.dto.TeamDto;
+import com.pla.core.specification.TeamAssociatedWithAgent;
 import com.pla.core.specification.TeamIsUnique;
 import org.junit.Before;
 import org.junit.Test;
@@ -36,6 +37,9 @@ public class TeamServiceTest {
     private TeamIsUnique teamIsUnique;
 
     @Mock
+    TeamAssociatedWithAgent teamAssociatedWithAgent;
+
+    @Mock
     private JpaRepositoryFactory jpaRepositoryFactory;
 
     @Mock
@@ -49,7 +53,7 @@ public class TeamServiceTest {
 
     @Before
     public void setUp() {
-        teamService = new TeamService(adminRoleAdapter, teamIsUnique, idGenerator);
+        teamService = new TeamService(adminRoleAdapter, teamIsUnique, idGenerator, teamAssociatedWithAgent);
         userDetails = UserLoginDetailDto.createUserLoginDetailDto("", "");
     }
 

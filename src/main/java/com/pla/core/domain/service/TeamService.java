@@ -9,6 +9,7 @@ package com.pla.core.domain.service;
 import com.pla.core.domain.model.Admin;
 import com.pla.core.domain.model.Team;
 import com.pla.core.dto.TeamDto;
+import com.pla.core.specification.TeamAssociatedWithAgent;
 import com.pla.core.specification.TeamIsUnique;
 import org.joda.time.LocalDate;
 import org.nthdimenzion.ddd.domain.annotations.DomainService;
@@ -28,13 +29,16 @@ public class TeamService {
 
     private TeamIsUnique teamIsUnique;
 
+    private TeamAssociatedWithAgent teamAssociatedWithAgent;
+
     private IIdGenerator idGenerator;
 
     @Autowired
-    public TeamService(AdminRoleAdapter adminRoleAdapter, TeamIsUnique teamIsUnique, IIdGenerator idGenerator) {
+    public TeamService(AdminRoleAdapter adminRoleAdapter, TeamIsUnique teamIsUnique, IIdGenerator idGenerator, TeamAssociatedWithAgent teamAssociatedWithAgent) {
         this.adminRoleAdapter = adminRoleAdapter;
         this.teamIsUnique = teamIsUnique;
         this.idGenerator = idGenerator;
+        this.teamAssociatedWithAgent = teamAssociatedWithAgent;
     }
 
     public Team createTeam(String teamName, String teamCode, String regionCode, String branchCode, String employeeId, LocalDate fromDate, String firstName, String lastName, UserDetails userDetails) {
@@ -54,7 +58,9 @@ public class TeamService {
 
     public Team inactivateTeam(Team team, UserDetails userDetails) {
         Admin admin = adminRoleAdapter.userToAdmin(userDetails);
-        return admin.inactivateTeam(team);
+        TeamDto teamDto = new TeamDto(team.getTeamName(), team.getTeamCode());
+        boolean isTeamAssociatedWithAgent = teamAssociatedWithAgent.isSatisfiedBy(teamDto);
+        return admin.inactivateTeam(team, isTeamAssociatedWithAgent);
     }
 
 }

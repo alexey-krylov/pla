@@ -139,7 +139,7 @@ public class TeamController {
             commandGateway.sendAndWait(inactivateTeamCommand);
         } catch (Exception e) {
             LOGGER.error("Error in inactivating team", e);
-            return Result.failure("Error in inactivating team");
+            return Result.failure(e.getMessage());
         }
         return Result.success("Team inactivated successfully");
     }

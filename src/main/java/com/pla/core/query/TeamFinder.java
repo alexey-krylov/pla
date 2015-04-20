@@ -7,6 +7,7 @@
 package com.pla.core.query;
 
 import com.google.common.base.Preconditions;
+import com.pla.core.dto.TeamDto;
 import org.nthdimenzion.ddd.domain.annotations.Finder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.ColumnMapRowMapper;
@@ -28,6 +29,7 @@ public class TeamFinder {
 
     public static final String ACTIVE_TEAM_COUNT_BY_TEAM_NAME_QUERY = "select count(team_id) from team where team_name=:teamName and active = '1'";
     public static final String ACTIVE_TEAM_COUNT_BY_TEAM_CODE_QUERY = "select count(team_id) from team where team_code=:teamCode and active = '1'";
+    public static final String ACTIVE_TEAM_COUNT_BY_TEAM_ASSOCIATED_WITH_AGENT_CODE_QUERY = "select count(agent_id) from agent where team_id=:teamCode ";
     public static final String FIND_TEAM_BY_ID_QUERY = "SELECT tm.team_id AS teamId,tm.team_name AS teamName,tm.team_code AS teamCode,tm.current_team_leader AS currentTeamLeader,tf.first_Name AS firstName,\n" +
             " tf.last_Name AS lastName,tf.from_date AS fromDate,tf.thru_date AS endDate ,b.branch_name AS branchName,r.region_name AS regionName,b.branch_code AS branchCode,r.region_code AS regionCode \n" +
             " FROM team tm \n" +
@@ -59,6 +61,12 @@ public class TeamFinder {
         Preconditions.checkNotNull(teamCode);
         Number noOfBenefit = namedParameterJdbcTemplate.queryForObject(ACTIVE_TEAM_COUNT_BY_TEAM_CODE_QUERY, new MapSqlParameterSource().addValue("teamCode", teamCode), Number.class);
         return noOfBenefit.intValue();
+    }
+
+    public int getActiveTeamCountByAgentAssociatedWithTeam(TeamDto teamDto) {
+        Preconditions.checkNotNull(teamDto);
+        Number noOfActiveTeamCountByAgentAssociatedWithTeam = namedParameterJdbcTemplate.queryForObject(ACTIVE_TEAM_COUNT_BY_TEAM_ASSOCIATED_WITH_AGENT_CODE_QUERY, new MapSqlParameterSource().addValue("teamCode", teamDto.getTeamCode()), Number.class);
+        return noOfActiveTeamCountByAgentAssociatedWithTeam.intValue();
     }
 
     public Map<String, Object> getTeamById(String teamId) {

@@ -103,7 +103,10 @@ public class Admin {
         return updateMandatoryDocument;
     }
 
-    public Team inactivateTeam(Team team) {
+    public Team inactivateTeam(Team team, boolean isTeamAssociatedWithAgent) {
+        if (!isTeamAssociatedWithAgent) {
+            throw new TeamDomainException("Team is associated with Agent!!");
+        }
         Team deactivatedTeam = team.inactivate();
         return deactivatedTeam;
     }

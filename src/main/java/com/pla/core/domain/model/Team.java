@@ -32,7 +32,7 @@ import static org.nthdimenzion.utils.UtilValidator.isNotEmpty;
 @EqualsAndHashCode(of = {"teamName", "teamCode"})
 @ToString(of = {"teamCode", "teamName"})
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-@Getter(value = AccessLevel.PACKAGE)
+@Getter
 public class Team implements ICrudEntity {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(Team.class);
