@@ -51,12 +51,13 @@ public class CommissionController {
 
     @RequestMapping(value = "/list/{commissionType}", method = RequestMethod.GET)
     public ModelAndView viewCommissions(@PathVariable("commissionType") String commissionType) {
-        if (commissionType.equals("Override")) {
+        if (commissionType.equals("OVERRIDE")) {
             List<Map<String, Object>> commissions = commissionFinder.getAllCommissionByCommissionType(CommissionType.OVERRIDE);
             List<Map<String, Object>> commissionTerms = commissionFinder.getAllCommissionTerm();
             ModelAndView modelAndView = new ModelAndView();
             modelAndView.setViewName("pla/core/commission/viewCommission");
             modelAndView.addObject("commissionList", CommissionDto.transformToCommissionDto(commissions, commissionTerms, planFinder));
+            modelAndView.addObject("commissionType",commissionType);
             return modelAndView;
         } else {
 
@@ -65,6 +66,7 @@ public class CommissionController {
             ModelAndView modelAndView = new ModelAndView();
             modelAndView.setViewName("pla/core/commission/viewCommission");
             modelAndView.addObject("commissionList", CommissionDto.transformToCommissionDto(commissions, commissionTerms, planFinder));
+            modelAndView.addObject("commissionType",commissionType);
             return modelAndView;
         }
     }

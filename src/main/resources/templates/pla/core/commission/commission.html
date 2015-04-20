@@ -19,7 +19,7 @@
                             </select>
                         </div>
                         <div class="form-group col-md-6 required">
-                            <label class="control-label">Commissions Available For</label>
+                            <label class="control-label">{{override}} Commissions Available For</label>
                             <select class="form-control input-sm" id="commissionsAvailableFor" ng-model="commissionDetails.availableFor" ng-required="true" th:if="${commissiontype=='Override'}" ng-disabled="viewType!='create'">
                                 <option value="">--Select One--</option>
                                 <option th:each="desig:${designation}" th:value="${desig}" th:text="${desig.description}" th:if="${!desig.toString().equals('AGENT')}"></option>
@@ -33,7 +33,7 @@
                             <label class="control-label">From Date</label>
                             <p class="input-group">
                                 <input type="text" class="form-control input-sm" ng-click="open($event)"  datepicker-popup="dd/MM/yyyy"
-                                       ng-model="fromDate"  datepicker-options="fromDatePickerSettings.dateOptions"
+                                       ng-model="fromDate"  datepicker-options="fromDatePickerSettings.dateOptions" min-date="fromDatePickerSettings.tomorrow"
                                        is-open="fromDatePickerSettings.isOpened"  close-text="Close" show-button-bar="false" ng-required="true" ng-disabled="viewType!='create'"/>
                                         <span class="input-group-btn">
                                             <button type="button" class="btn btn-default btn-sm" ng-click="open($event)" ng-disabled="viewType!='create'"><i class="glyphicon glyphicon-calendar"></i></button>
@@ -101,8 +101,8 @@
                                 To year already exists in the range.
                             </small>
                         </div>
-                        <div class="form-group col-md-2 required" >
-                            <label class="control-label">Commissions In %age</label>
+                        <div class="form-group col-md-3 required" >
+                            <label class="control-label">{{override}} Commissions In %age</label>
                             <input type="number" name="commission"  class="form-control input-sm" id="commissions" ng-disabled="!addCommission.commissionTermType"
                                    ng-model="addCommission.commissionPercentage"  ng-required="true" min="1"/>
                             <div ng-show="addCommissionForm.commission.$invalid &amp;&amp; addCommissionForm.commission.$dirty">
