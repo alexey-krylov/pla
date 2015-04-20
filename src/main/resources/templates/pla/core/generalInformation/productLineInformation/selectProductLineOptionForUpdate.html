@@ -1,0 +1,805 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/xhtml"
+      lang="en">
+<head th:include="fragments/common :: headTag">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+
+</head>
+<body>
+<div th:include="fragments/common :: bodyHeader" th:remove="tag"/>
+
+<script>
+    var interval = setInterval(function(){
+        if(require.defined("basic")){
+            $(document).ready(function(){
+                $('#accordion .accordion-toggle').click(function (e){
+                    var chevState = $(e.target).siblings("i.indicator").toggleClass('glyphicon-chevron-down glyphicon-chevron-up');
+                    $("i.indicator").not(chevState).removeClass("glyphicon-chevron-down").addClass("glyphicon-chevron-up");
+                });
+                $('#accordion1 .accordion-toggle').click(function (e){
+                    var chevState = $(e.target).siblings("i.indicator").toggleClass('glyphicon-chevron-down glyphicon-chevron-up');
+                    $("i.indicator").not(chevState).removeClass("glyphicon-chevron-down").addClass("glyphicon-chevron-up");
+                });
+                $('#accordion2 .accordion-toggle').click(function (e){
+                    var chevState = $(e.target).siblings("i.indicator").toggleClass('glyphicon-chevron-down glyphicon-chevron-up');
+                    $("i.indicator").not(chevState).removeClass("glyphicon-chevron-down").addClass("glyphicon-chevron-up");
+                });
+
+            });
+
+            clearInterval(interval);
+        }
+    }, 300);
+
+    requirejs(['main'],function(){
+        require(['/pla/js/generalInformation/updateProductLine.js'],function(){
+            angular.bootstrap(document, ['updateProductLine']);
+        });
+    });
+
+
+</script>
+<div class="container ng-cloak" ng-Controller="SelectUpdateController" ng-show="selectUpdate">
+    <div class="row">
+        <div class="col-lg-12" >
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <div class="row">
+                        <div class="col-lg-3"><span th:text="#{selectProductLineInformation}">Select Product Line Information
+                        </span></div>
+                    </div>
+                </div>
+                <div class="panel-body ng-cloak">
+                    <form  novalidate="true" class="css-form">
+                        <div class="row">
+                            <div class="form-group col-md-6 required" >
+                                <label class="control-label">Select Product Line information</label>
+
+                                <select class="form-control input-sm" ng-model="selectedOption.productLine"   >
+                                    <option value="">----Select one----</option>
+                                    <option value="groupHealth" >Group Health Level Information</option>
+                                    <option value="groupLife">Group Life Level Information</option>
+                                    <option value="individualLife">Individual Life Level Information</option>
+                                </select>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container ng-cloak" ng-Controller="UpdateGroupHealthLevelInformationController" ng-show="groupHealth">
+       <div class="row">
+        <div class="col-lg-12">
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <div class="row">
+                        <div class="col-lg-6"><span th:text="#{updateGroupHealthLevelInformation}">Update Group Health Level Information
+                        </span></div>
+                    </div>
+                </div>
+                <div class="panel-body ng-cloak">
+                    <div class="panel-group" id="accordion">
+                        <div class="panel panel-default" id="panel1" ng-class="forms.form1.$valid ? '' : 'errorClass'">
+                            <div class="panel-heading">
+                                <h4 class="panel-title">
+                                    <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapseOne">
+                                        Quotation
+                                    </a><i class="indicator glyphicon glyphicon-chevron-down  pull-right"></i>
+
+                                </h4>
+                            </div>
+                            <div id="collapseOne" class="panel-collapse collapse in">
+                                <div class="panel-body">
+                                    <form  novalidate="true" role="form" name="forms.form1">
+                                        <div class="row">
+                                            <div class="form-group col-md-4" ng-repeat="quotationProcessItems in items[0].processType[0].quotationProcessItems">
+                                                <label class="control-label"  data-toggle="tooltip" tooltip="Tooltip on left" tooltip-placement="top">{{quotationProcessItems.productLineProcessItem}}</label>
+                                                <p class="input-group" >
+                                                    <input type="text" class="form-control input-sm" ng-model="quotationProcessItems.value" value="{{quotationProcessItems.value}}" ng-required="true"/>
+                                                </p>
+
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel panel-default" id="panel2" ng-class="forms.form2.$valid ? '' : 'errorClass'">
+                            <div class="panel-heading">
+                                <h4 class="panel-title">
+                                    <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo">
+                                        New Business/Enrollment
+                                    </a><i class="indicator glyphicon glyphicon-chevron-down  pull-right"></i>
+                                </h4>
+                            </div>
+                            <div id="collapseTwo" class="panel-collapse collapse">
+                                <div class="panel-body">
+                                    <form  novalidate="true" role="form" name="forms.form2">
+                                    <div class="row">
+                                        <div class="form-group col-md-4" ng-repeat="enrollmentProcessItems in items[0].processType[1].enrollmentProcessItems">
+                                            <label class="control-label"  data-toggle="tooltip" data-placement="top" title="Number of days after which Closed (Incomplete) New Business should be purged">{{enrollmentProcessItems.productLineProcessItem}}</label>
+                                            <p class="input-group">
+                                                <input type="text" class="form-control input-sm" ng-model="enrollmentProcessItems.value" value="{{enrollmentProcessItems.value}}" ng-required="true"/>
+                                            </p>
+                                        </div>
+
+                                    </div>
+                                </form>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel panel-default" id="panel3" ng-class="forms.form3.$valid ? '' : 'errorClass'">
+                            <div class="panel-heading">
+                                <h4 class="panel-title">
+                                    <a  class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapseThree">
+                                        Reinstatement Request
+                                    </a><i class="indicator glyphicon glyphicon-chevron-down  pull-right"></i>
+                                </h4>
+                            </div>
+                            <div id="collapseThree" class="panel-collapse collapse">
+                                <div class="panel-body">
+                                    <form  novalidate="true" role="form" name="forms.form3">
+                                    <div class="row">
+                                        <div class="form-group col-md-4" ng-repeat="reinstatementProcessItems in items[0].processType[2].reinstatementProcessItems">
+                                            <label class="control-label"  data-toggle="tooltip" data-placement="top" title="Number of days after which Closed (complete)Reinstatement request should be purged">{{reinstatementProcessItems.productLineProcessItem}}</label>
+                                            <p class="input-group">
+                                                <input type="text" class="form-control input-sm"  ng-model="reinstatementProcessItems.value" value="{{reinstatementProcessItems.value}}" ng-required="true"/>
+                                            </p>
+                                        </div>
+                                    </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel panel-default" id="panel4" ng-class="forms.form4.$valid ? '' : 'errorClass'">
+                            <div class="panel-heading">
+                                <h4 class="panel-title">
+                                    <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapseFour">
+                                        Endorsement Request
+                                    </a><i class="indicator glyphicon glyphicon-chevron-down  pull-right"></i>
+                                </h4>
+                            </div>
+                            <div id="collapseFour" class="panel-collapse collapse">
+                                <div class="panel-body">
+                                    <form  novalidate="true" role="form" name="forms.form4">
+                                    <div class="row">
+                                        <div class="form-group col-md-4"  ng-repeat="endorsementProcessItems in items[0].processType[3].endorsementProcessItems">
+                                            <label class="control-label"  data-toggle="tooltip" data-placement="top" title="Number of days after which Closed ( Incomplete) endorsement request should be purged">{{endorsementProcessItems.productLineProcessItem}}</label>
+                                            <p class="input-group">
+                                                <input type="text" class="form-control input-sm"  ng-model="endorsementProcessItems.value" value="{{endorsementProcessItems.value}}" ng-required="true"/>
+                                            </p>
+                                        </div>
+
+                                    </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel panel-default" id="panel5" ng-class="forms.form5.$valid ? '' : 'errorClass'">
+                            <div class="panel-heading">
+                                <h4 class="panel-title">
+                                    <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapseFive">
+                                        Claim Request
+                                    </a><i class="indicator glyphicon glyphicon-chevron-down  pull-right"></i>
+                                </h4>
+                            </div>
+                            <div id="collapseFive" class="panel-collapse collapse">
+                                <div class="panel-body">
+                                    <form  novalidate="true" role="form" name="forms.form5">
+                                    <div class="row">
+                                        <div class="form-group col-md-4" ng-repeat="claimProcessItems in items[0].processType[4].claimProcessItems">
+                                            <label class="control-label"  data-toggle="tooltip" data-placement="top" title="Number of days after which Closed (Incomplete) Claim request should be purged">{{claimProcessItems.productLineProcessItem}}</label>
+                                            <p class="input-group">
+                                                <input type="text" class="form-control input-sm" ng-model="claimProcessItems.value" value="{{claimProcessItems.value}}" ng-required="true"/>
+                                            </p>
+                                        </div>
+                                    </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel panel-default" id="panel6" ng-class="forms.form6.$valid ? '' : 'errorClass'">
+                            <div class="panel-heading">
+                                <h4 class="panel-title">
+                                    <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapseSix">
+                                        Policy Fee
+                                    </a><i class="indicator glyphicon glyphicon-chevron-down  pull-right"></i>
+                                </h4>
+                            </div>
+                            <div id="collapseSix" class="panel-collapse collapse">
+                                <div class="panel-body">
+                                    <form  novalidate="true" role="form" name="forms.form6">
+                                    <div class="row">
+                                        <div class="form-group col-md-4" ng-repeat="policyFeeProcessItems in items[0].processType[5].policyFeeProcessItems">
+                                            <label class="control-label"  data-toggle="tooltip" data-placement="top" title="Annual">{{policyFeeProcessItems.policyFeeProcessType}}</label>
+                                            <p class="input-group">
+                                                <input type="text" class="form-control input-sm"  ng-model="policyFeeProcessItems.policyFee" value="{{policyFeeProcessItems.policyFee}}" ng-required="true"/>
+                                            </p>
+                                        </div>
+
+                                    </div>
+                                </form>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel panel-default" id="panel7" ng-class="forms.form7.$valid ? '' : 'errorClass'">
+                            <div class="panel-heading">
+                                <h4 class="panel-title">
+                                    <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapseSeven">
+                                        Minimum Limit for Group Policy
+                                    </a><i class="indicator glyphicon glyphicon-chevron-down  pull-right"></i>
+                                </h4>
+                            </div>
+                            <div id="collapseSeven" class="panel-collapse collapse">
+                                <div class="panel-body">
+                                    <form  novalidate="true" role="form" name="forms.form7">
+                                    <div class="row">
+                                        <div class="form-group col-md-4" ng-repeat="policyProcessMinimumLimitItems in items[0].processType[6].policyProcessMinimumLimitItems">
+                                            <label class="control-label"  data-toggle="tooltip" data-placement="top" title="Annual">{{policyProcessMinimumLimitItems.policyProcessMinimumLimitType}}</label>
+                                            <p class="input-group">
+                                                <input type="text" class="form-control input-sm" ng-model="policyProcessMinimumLimitItems.noOfPersonPerPolicy" value="{{policyProcessMinimumLimitItems.noOfPersonPerPolicy}}" ng-required="true" />
+                                            </p>
+                                        </div>
+                                    </div>
+                                   </form>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel panel-default" id="panel8" ng-class="forms.form8.$valid ? '' : 'errorClass'">
+                            <div class="panel-heading">
+                                <h4 class="panel-title">
+                                    <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapseEight">
+                                        Surrender Request
+                                    </a><i class="indicator glyphicon glyphicon-chevron-down  pull-right"></i>
+                                </h4>
+                            </div>
+                            <div id="collapseEight" class="panel-collapse collapse">
+                                <div class="panel-body">
+                                    <form  novalidate="true" role="form" name="forms.form8">
+                                    <div class="row">
+                                        <div class="form-group col-md-4" ng-repeat="surrenderProcessItems in items[0].processType[7].surrenderProcessItems">
+                                            <label class="control-label"  data-toggle="tooltip" data-placement="top" title="Annual">{{surrenderProcessItems.productLineProcessItem}}</label>
+                                            <p class="input-group">
+                                                <input type="text" class="form-control input-sm" ng-model="surrenderProcessItems.value" value="{{surrenderProcessItems.value}}" ng-required="true"/>
+                                            </p>
+                                        </div>
+                                    </div>
+                                 </form>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel panel-default" id="panel9" ng-class="forms.form9.$valid ? '' : 'errorClass'">
+                            <div class="panel-heading">
+                                <h4 class="panel-title">
+                                    <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapseNine">
+                                        maturity Process
+                                    </a><i class="indicator glyphicon glyphicon-chevron-down  pull-right"></i>
+                                </h4>
+                            </div>
+                            <div id="collapseNine" class="panel-collapse collapse">
+                                <div class="panel-body">
+                                    <form  novalidate="true" role="form" name="forms.form9">
+
+                                    <div class="row">
+                                        <div class="form-group col-md-4" ng-repeat="maturityProcessItems in items[0].processType[8].maturityProcessItems">
+                                            <label class="control-label"  data-toggle="tooltip" data-placement="top" title="Annual">{{maturityProcessItems.productLineProcessItem}}</label>
+                                            <p class="input-group">
+                                                <input type="text" class="form-control input-sm" ng-model="maturityProcessItems.value" value="{{maturityProcessItems.value}}" ng-required="true" />
+                                            </p>
+                                        </div>
+                                    </div>
+                                  </form>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-12" style="text-align: center;margin-top:10px;">
+
+                                <button type="button" class="btn btn-default" style="float:right;" ng-disabled="(!forms.form1.$valid || !forms.form2.$valid || !forms.form3.$valid || !forms.form4.$valid || !forms.form5.$valid || !forms.form6.$valid || !forms.form7.$valid || !forms.form8.$valid || !forms.form9.$valid)" data-placement="top-right" data-container="notification" data-duration="5" bs-alert="alert"   ng-click="submitGroupHealth()">Save</button>
+                                <a class="btn btn-default" th:href="@{/core/productlineinformation/openupdate}" style="float:left;">Cancel</a>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<div class="container ng-cloak" ng-Controller="UpdateGroupLifeLevelInformationController" ng-show="groupLife">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <div class="row">
+                        <div class="col-lg-6"><span th:text="#{updateGroupLifeLevelInformation}">Update Group Life Level Information
+                        </span></div>
+                    </div>
+                </div>
+                <div class="panel-body ng-cloak">
+                    <div class="panel-group" id="accordion1">
+                        <div class="panel panel-default" id="panel11" ng-class="forms.form1.$valid ? '' : 'errorClass'">
+                            <div class="panel-heading">
+                                <h4 class="panel-title">
+                                    <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion1" href="#collapseOneOne">
+                                        Quotation
+                                    </a><i class="indicator glyphicon glyphicon-chevron-down  pull-right"></i>
+
+                                </h4>
+                            </div>
+                            <div id="collapseOneOne" class="panel-collapse collapse in">
+                                <div class="panel-body">
+                                    <form  novalidate="true" role="form" name="forms.form1">
+                                        <div class="row">
+                                            <div class="form-group col-md-4" ng-repeat="quotationProcessItems in items[0].processType[0].quotationProcessItems">
+                                                <label class="control-label" data-toggle="tooltip" data-placement="top" title="Number of days after which Quotation should be purged">{{quotationProcessItems.productLineProcessItem}}</label>
+                                                <p class="input-group" >
+                                                    <input type="text" class="form-control input-sm" ng-model="quotationProcessItems.value" value="{{quotationProcessItems.value}}" ng-required="true"/>
+                                                </p>
+
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel panel-default" id="panel21"  ng-class="forms.form2.$valid ? '' : 'errorClass'" >
+                            <div class="panel-heading">
+                                <h4 class="panel-title">
+                                    <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion1" href="#collapseTwoOne">
+                                        New Business/Enrollment
+                                    </a><i class="indicator glyphicon glyphicon-chevron-down  pull-right"></i>
+                                </h4>
+                            </div>
+                            <div id="collapseTwoOne" class="panel-collapse collapse">
+                                <div class="panel-body">
+                                    <form  novalidate="true" role="form" name="forms.form2">
+                                    <div class="row">
+                                        <div class="form-group col-md-4" ng-repeat="enrollmentProcessItems in items[0].processType[1].enrollmentProcessItems">
+                                            <label class="control-label"  data-toggle="tooltip" data-placement="top" title="Number of days after which Closed (Incomplete) New Business should be purged">{{enrollmentProcessItems.productLineProcessItem}}</label>
+                                            <p class="input-group">
+                                                <input type="text" class="form-control input-sm" ng-model="enrollmentProcessItems.value" value="{{enrollmentProcessItems.value}}" ng-required="true"/>
+                                            </p>
+                                        </div>
+                                    </div>
+                                </form>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel panel-default" id="panel31" ng-class="forms.form3.$valid ? '' : 'errorClass'">
+                            <div class="panel-heading">
+                                <h4 class="panel-title">
+                                    <a  class="accordion-toggle" data-toggle="collapse" data-parent="#accordion1" href="#collapseThreeOne">
+                                        Reinstatement Request
+                                    </a><i class="indicator glyphicon glyphicon-chevron-down  pull-right"></i>
+                                </h4>
+                            </div>
+                            <div id="collapseThreeOne" class="panel-collapse collapse">
+                                <div class="panel-body">
+                                    <form  novalidate="true" role="form" name="forms.form3">
+                                       <div class="row">
+                                        <div class="form-group col-md-4" ng-repeat="reinstatementProcessItems in items[0].processType[2].reinstatementProcessItems">
+                                            <label class="control-label"  data-toggle="tooltip" data-placement="top" title="Number of days after which Closed (complete)Reinstatement request should be purged">{{reinstatementProcessItems.productLineProcessItem}}</label>
+                                            <p class="input-group">
+                                                <input type="text" class="form-control input-sm"  ng-model="reinstatementProcessItems.value" value="{{reinstatementProcessItems.value}}"  ng-required="true"/>
+                                            </p>
+                                        </div>
+                                    </div>
+                                </form>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel panel-default" id="panel41" ng-class="forms.form4.$valid ? '' : 'errorClass'">
+                            <div class="panel-heading">
+                                <h4 class="panel-title">
+                                    <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion1" href="#collapseFourOne">
+                                        Endorsement Request
+                                    </a><i class="indicator glyphicon glyphicon-chevron-down  pull-right"></i>
+                                </h4>
+                            </div>
+                            <div id="collapseFourOne" class="panel-collapse collapse">
+                                <div class="panel-body">
+                                    <form  novalidate="true" role="form" name="forms.form4">
+                                    <div class="row">
+                                        <div class="form-group col-md-4"  ng-repeat="endorsementProcessItems in items[0].processType[3].endorsementProcessItems">
+                                            <label class="control-label"  data-toggle="tooltip" data-placement="top" title="Number of days after which Closed ( Incomplete) endorsement request should be purged">{{endorsementProcessItems.productLineProcessItem}}</label>
+                                            <p class="input-group">
+                                                <input type="text" class="form-control input-sm"  ng-model="endorsementProcessItems.value" value="{{endorsementProcessItems.value}}" ng-required="true"/>
+                                            </p>
+                                        </div>
+
+                                    </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel panel-default" id="panel51" ng-class="forms.form5.$valid ? '' : 'errorClass'">
+                            <div class="panel-heading">
+                                <h4 class="panel-title">
+                                    <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion1" href="#collapseFiveOne">
+                                        Claim Request
+                                    </a><i class="indicator glyphicon glyphicon-chevron-down  pull-right"></i>
+                                </h4>
+                            </div>
+                            <div id="collapseFiveOne" class="panel-collapse collapse">
+                                <div class="panel-body">
+                                    <form  novalidate="true" role="form" name="forms.form5">
+                                    <div class="row">
+                                        <div class="form-group col-md-4" ng-repeat="claimProcessItems in items[0].processType[4].claimProcessItems">
+                                            <label class="control-label"  data-toggle="tooltip" data-placement="top" title="Number of days after which Closed (Incomplete) Claim request should be purged">{{claimProcessItems.productLineProcessItem}}</label>
+                                            <p class="input-group">
+                                                <input type="text" class="form-control input-sm" ng-model="claimProcessItems.value" value="{{claimProcessItems.value}}"  ng-required="true"/>
+                                            </p>
+                                        </div>
+                                    </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel panel-default" id="panel61" ng-class="forms.form6.$valid ? '' : 'errorClass'">
+                            <div class="panel-heading">
+                                <h4 class="panel-title">
+                                    <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion1" href="#collapseSixOne">
+                                        Policy Fee
+                                    </a><i class="indicator glyphicon glyphicon-chevron-down  pull-right"></i>
+                                </h4>
+                            </div>
+                            <div id="collapseSixOne" class="panel-collapse collapse">
+                                <div class="panel-body">
+                                    <form  novalidate="true" role="form" name="forms.form6">
+                                    <div class="row">
+                                        <div class="form-group col-md-4" ng-repeat="policyFeeProcessItems in items[0].processType[5].policyFeeProcessItems">
+                                            <label class="control-label"  data-toggle="tooltip" data-placement="top" title="Annual">{{policyFeeProcessItems.policyFeeProcessType}}</label>
+                                            <p class="input-group">
+                                                <input type="text" class="form-control input-sm"  ng-model="policyFeeProcessItems.policyFee" value="{{policyFeeProcessItems.policyFee}}" ng-required="true"/>
+                                            </p>
+                                        </div>
+                                    </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel panel-default" id="panel71" ng-class="forms.form7.$valid ? '' : 'errorClass'">
+                            <div class="panel-heading">
+                                <h4 class="panel-title">
+                                    <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion1" href="#collapseSevenOne">
+                                        Minimum Limit for Group Policy
+                                    </a><i class="indicator glyphicon glyphicon-chevron-down  pull-right"></i>
+                                </h4>
+                            </div>
+                            <div id="collapseSevenOne" class="panel-collapse collapse">
+                                <div class="panel-body">
+                                    <form  novalidate="true" role="form" name="forms.form7">
+                                    <div class="row">
+                                        <div class="form-group col-md-4" ng-repeat="policyProcessMinimumLimitItems in items[0].processType[6].policyProcessMinimumLimitItems">
+                                            <label class="control-label"  data-toggle="tooltip" data-placement="top" title="Annual">{{policyProcessMinimumLimitItems.policyProcessMinimumLimitType}}</label>
+                                            <p class="input-group">
+                                                <input type="text" class="form-control input-sm" ng-model="policyProcessMinimumLimitItems.noOfPersonPerPolicy" value="{{policyProcessMinimumLimitItems.noOfPersonPerPolicy}}"  ng-required="true"/>
+                                            </p>
+                                        </div>
+                                    </div>
+                                        </form>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel panel-default" id="panel81" ng-class="forms.form8.$valid ? '' : 'errorClass'">
+                            <div class="panel-heading">
+                                <h4 class="panel-title">
+                                    <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion1" href="#collapseEightOne">
+                                        Surrender Request
+                                    </a><i class="indicator glyphicon glyphicon-chevron-down  pull-right"></i>
+                                </h4>
+                            </div>
+                            <div id="collapseEightOne" class="panel-collapse collapse">
+                                <div class="panel-body">
+                                    <form  novalidate="true" role="form" name="forms.form8">
+                                    <div class="row">
+                                        <div class="form-group col-md-4" ng-repeat="surrenderProcessItems in items[0].processType[7].surrenderProcessItems">
+                                            <label class="control-label"  data-toggle="tooltip" data-placement="top" title="Annual">{{surrenderProcessItems.productLineProcessItem}}</label>
+                                            <p class="input-group">
+                                                <input type="text" class="form-control input-sm" ng-model="surrenderProcessItems.value" value="{{surrenderProcessItems.value}}" ng-required="true"/>
+                                            </p>
+                                        </div>
+                                    </div>
+                                        </form>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel panel-default" id="panel91" ng-class="forms.form9.$valid ? '' : 'errorClass'">
+                            <div class="panel-heading">
+                                <h4 class="panel-title">
+                                    <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion1" href="#collapseNineOne">
+                                        maturity Process
+                                    </a><i class="indicator glyphicon glyphicon-chevron-down  pull-right"></i>
+                                </h4>
+                            </div>
+                            <div id="collapseNineOne" class="panel-collapse collapse">
+                                <div class="panel-body">
+                                    <form  novalidate="true" role="form" name="forms.form9">
+                                    <div class="row">
+                                        <div class="form-group col-md-4" ng-repeat="maturityProcessItems in items[0].processType[8].maturityProcessItems">
+                                            <label class="control-label"  data-toggle="tooltip" data-placement="top" title="Annual">{{maturityProcessItems.productLineProcessItem}}</label>
+                                            <p class="input-group">
+                                                <input type="text" class="form-control input-sm" ng-model="maturityProcessItems.value" value="{{maturityProcessItems.value}}" ng-required="true"/>
+                                            </p>
+                                        </div>
+                                    </div>
+                                  </form>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-12" style="text-align: center;margin-top:10px;">
+
+                                <button type="button" class="btn btn-default" style="float:right;" ng-disabled="(!forms.form1.$valid || !forms.form2.$valid || !forms.form3.$valid || !forms.form4.$valid || !forms.form5.$valid || !forms.form6.$valid || !forms.form7.$valid || !forms.form8.$valid || !forms.form9.$valid)" data-placement="top-right" data-container="notification" data-duration="5" bs-alert="alert"   ng-click="submitGroupHealth()">Save</button>
+                                <a class="btn btn-default" th:href="@{/core/productlineinformation/openupdate}" style="float:left;">Cancel</a>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<div class="container ng-cloak" ng-Controller="UpdateIndividualLifeLevelInformationController" ng-show="individualLife">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <div class="row">
+                        <div class="col-lg-6"><span th:text="#{updateIndividualLifeLevelInformation}">Update Individual Life Level Information
+                        </span></div>
+                    </div>
+                </div>
+                <div class="panel-body ng-cloak">
+                    <div class="panel-group" id="accordion2">
+                        <div class="panel panel-default" id="panel12" ng-class="forms.form1.$valid ? '' : 'errorClass'">
+                            <div class="panel-heading">
+                                <h4 class="panel-title">
+                                    <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion1" href="#collapseOneTwo">
+                                        Quotation
+                                    </a><i class="indicator glyphicon glyphicon-chevron-down  pull-right"></i>
+
+                                </h4>
+                            </div>
+                            <div id="collapseOneTwo" class="panel-collapse collapse in">
+                                <div class="panel-body">
+                                    <form  novalidate="true" role="form" name="forms.form1">
+                                        <div class="row">
+                                            <div class="form-group col-md-4" ng-repeat="quotationProcessItems in items[0].processType[0].quotationProcessItems">
+                                                <label class="control-label" data-toggle="tooltip" data-placement="top" title="Number of days after which Quotation should be purged">{{quotationProcessItems.productLineProcessItem}}</label>
+                                                <p class="input-group" >
+                                                    <input type="text" class="form-control input-sm" ng-model="quotationProcessItems.value" value="{{quotationProcessItems.value}}" ng-required="true"/>
+                                                </p>
+
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel panel-default" id="panel22"  ng-class="forms.form2.$valid ? '' : 'errorClass'" >
+                            <div class="panel-heading">
+                                <h4 class="panel-title">
+                                    <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseTwoTwo">
+                                        New Business/Enrollment
+                                    </a><i class="indicator glyphicon glyphicon-chevron-down  pull-right"></i>
+                                </h4>
+                            </div>
+                            <div id="collapseTwoTwo" class="panel-collapse collapse">
+                                <div class="panel-body">
+                                    <form  novalidate="true" role="form" name="forms.form2">
+                                        <div class="row">
+                                            <div class="form-group col-md-4" ng-repeat="enrollmentProcessItems in items[0].processType[1].enrollmentProcessItems">
+                                                <label class="control-label"  data-toggle="tooltip" data-placement="top" title="Number of days after which Closed (Incomplete) New Business should be purged">{{enrollmentProcessItems.productLineProcessItem}}</label>
+                                                <p class="input-group">
+                                                    <input type="text" class="form-control input-sm" ng-model="enrollmentProcessItems.value" value="{{enrollmentProcessItems.value}}" ng-required="true"/>
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel panel-default" id="panel32" ng-class="forms.form3.$valid ? '' : 'errorClass'">
+                            <div class="panel-heading">
+                                <h4 class="panel-title">
+                                    <a  class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseThreeTwo">
+                                        Reinstatement Request
+                                    </a><i class="indicator glyphicon glyphicon-chevron-down  pull-right"></i>
+                                </h4>
+                            </div>
+                            <div id="collapseThreeTwo" class="panel-collapse collapse">
+                                <div class="panel-body">
+                                    <form  novalidate="true" role="form" name="forms.form3">
+                                        <div class="row">
+                                            <div class="form-group col-md-4" ng-repeat="reinstatementProcessItems in items[0].processType[2].reinstatementProcessItems">
+                                                <label class="control-label"  data-toggle="tooltip" data-placement="top" title="Number of days after which Closed (complete)Reinstatement request should be purged">{{reinstatementProcessItems.productLineProcessItem}}</label>
+                                                <p class="input-group">
+                                                    <input type="text" class="form-control input-sm"  ng-model="reinstatementProcessItems.value" value="{{reinstatementProcessItems.value}}"  ng-required="true"/>
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel panel-default" id="panel42" ng-class="forms.form4.$valid ? '' : 'errorClass'">
+                            <div class="panel-heading">
+                                <h4 class="panel-title">
+                                    <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseFourTwo">
+                                        Endorsement Request
+                                    </a><i class="indicator glyphicon glyphicon-chevron-down  pull-right"></i>
+                                </h4>
+                            </div>
+                            <div id="collapseFourTwo" class="panel-collapse collapse">
+                                <div class="panel-body">
+                                    <form  novalidate="true" role="form" name="forms.form4">
+                                        <div class="row">
+                                            <div class="form-group col-md-4"  ng-repeat="endorsementProcessItems in items[0].processType[3].endorsementProcessItems">
+                                                <label class="control-label"  data-toggle="tooltip" data-placement="top" title="Number of days after which Closed ( Incomplete) endorsement request should be purged">{{endorsementProcessItems.productLineProcessItem}}</label>
+                                                <p class="input-group">
+                                                    <input type="text" class="form-control input-sm"  ng-model="endorsementProcessItems.value" value="{{endorsementProcessItems.value}}" ng-required="true"/>
+                                                </p>
+                                            </div>
+
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel panel-default" id="panel52" ng-class="forms.form5.$valid ? '' : 'errorClass'">
+                            <div class="panel-heading">
+                                <h4 class="panel-title">
+                                    <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseFiveTwo">
+                                        Claim Request
+                                    </a><i class="indicator glyphicon glyphicon-chevron-down  pull-right"></i>
+                                </h4>
+                            </div>
+                            <div id="collapseFiveTwo" class="panel-collapse collapse">
+                                <div class="panel-body">
+                                    <form  novalidate="true" role="form" name="forms.form5">
+                                        <div class="row">
+                                            <div class="form-group col-md-4" ng-repeat="claimProcessItems in items[0].processType[4].claimProcessItems">
+                                                <label class="control-label"  data-toggle="tooltip" data-placement="top" title="Number of days after which Closed (Incomplete) Claim request should be purged">{{claimProcessItems.productLineProcessItem}}</label>
+                                                <p class="input-group">
+                                                    <input type="text" class="form-control input-sm" ng-model="claimProcessItems.value" value="{{claimProcessItems.value}}"  ng-required="true"/>
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel panel-default" id="panel62" ng-class="forms.form6.$valid ? '' : 'errorClass'">
+                            <div class="panel-heading">
+                                <h4 class="panel-title">
+                                    <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseSixTwo">
+                                        Policy Fee
+                                    </a><i class="indicator glyphicon glyphicon-chevron-down  pull-right"></i>
+                                </h4>
+                            </div>
+                            <div id="collapseSixTwo" class="panel-collapse collapse">
+                                <div class="panel-body">
+                                    <form  novalidate="true" role="form" name="forms.form6">
+                                        <div class="row">
+                                            <div class="form-group col-md-4" ng-repeat="policyFeeProcessItems in items[0].processType[5].policyFeeProcessItems">
+                                                <label class="control-label"  data-toggle="tooltip" data-placement="top" title="Annual">{{policyFeeProcessItems.policyFeeProcessType}}</label>
+                                                <p class="input-group">
+                                                    <input type="text" class="form-control input-sm"  ng-model="policyFeeProcessItems.policyFee" value="{{policyFeeProcessItems.policyFee}}" ng-required="true"/>
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel panel-default" id="panel72" ng-class="forms.form7.$valid ? '' : 'errorClass'">
+                            <div class="panel-heading">
+                                <h4 class="panel-title">
+                                    <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseSevenTwo">
+                                        Minimum Limit for Group Policy
+                                    </a><i class="indicator glyphicon glyphicon-chevron-down  pull-right"></i>
+                                </h4>
+                            </div>
+                            <div id="collapseSevenTwo" class="panel-collapse collapse">
+                                <div class="panel-body">
+                                    <form  novalidate="true" role="form" name="forms.form7">
+                                        <div class="row">
+                                            <div class="form-group col-md-4" ng-repeat="policyProcessMinimumLimitItems in items[0].processType[6].policyProcessMinimumLimitItems">
+                                                <label class="control-label"  data-toggle="tooltip" data-placement="top" title="Annual">{{policyProcessMinimumLimitItems.policyProcessMinimumLimitType}}</label>
+                                                <p class="input-group">
+                                                    <input type="text" class="form-control input-sm" ng-model="policyProcessMinimumLimitItems.noOfPersonPerPolicy" value="{{policyProcessMinimumLimitItems.noOfPersonPerPolicy}}"  ng-required="true"/>
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel panel-default" id="panel82" ng-class="forms.form8.$valid ? '' : 'errorClass'">
+                            <div class="panel-heading">
+                                <h4 class="panel-title">
+                                    <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseEightTwo">
+                                        Surrender Request
+                                    </a><i class="indicator glyphicon glyphicon-chevron-down  pull-right"></i>
+                                </h4>
+                            </div>
+                            <div id="collapseEightTwo" class="panel-collapse collapse">
+                                <div class="panel-body">
+                                    <form  novalidate="true" role="form" name="forms.form8">
+                                        <div class="row">
+                                            <div class="form-group col-md-4" ng-repeat="surrenderProcessItems in items[0].processType[7].surrenderProcessItems">
+                                                <label class="control-label"  data-toggle="tooltip" data-placement="top" title="Annual">{{surrenderProcessItems.productLineProcessItem}}</label>
+                                                <p class="input-group">
+                                                    <input type="text" class="form-control input-sm" ng-model="surrenderProcessItems.value" value="{{surrenderProcessItems.value}}" ng-required="true"/>
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel panel-default" id="panel92" ng-class="forms.form9.$valid ? '' : 'errorClass'">
+                            <div class="panel-heading">
+                                <h4 class="panel-title">
+                                    <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseNineTwo">
+                                        maturity Process
+                                    </a><i class="indicator glyphicon glyphicon-chevron-down  pull-right"></i>
+                                </h4>
+                            </div>
+                            <div id="collapseNineTwo" class="panel-collapse collapse">
+                                <div class="panel-body">
+                                    <form  novalidate="true" role="form" name="forms.form9">
+                                        <div class="row">
+                                            <div class="form-group col-md-4" ng-repeat="maturityProcessItems in items[0].processType[8].maturityProcessItems">
+                                                <label class="control-label"  data-toggle="tooltip" data-placement="top" title="Annual">{{maturityProcessItems.productLineProcessItem}}</label>
+                                                <p class="input-group">
+                                                    <input type="text" class="form-control input-sm" ng-model="maturityProcessItems.value" value="{{maturityProcessItems.value}}" ng-required="true"/>
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-12" style="text-align: center;margin-top:10px;">
+
+                                <button type="button" class="btn btn-default" style="float:right;" ng-disabled="(!forms.form1.$valid || !forms.form2.$valid || !forms.form3.$valid || !forms.form4.$valid || !forms.form5.$valid || !forms.form6.$valid || !forms.form7.$valid || !forms.form8.$valid || !forms.form9.$valid)" data-placement="top-right" data-container="notification" data-duration="5" bs-alert="alert"   ng-click="submitGroupHealth()">Save</button>
+                                <a class="btn btn-default" th:href="@{/core/productlineinformation/openupdate}" style="float:left;">Cancel</a>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<footer class="footer" th:include="fragments/common :: footer">
+</footer>
+<style>
+    .errorClass{
+        border:1px solid red;
+    }
+</style>
+
+</body>
+</html>
