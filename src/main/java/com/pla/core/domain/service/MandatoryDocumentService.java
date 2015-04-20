@@ -16,6 +16,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import static org.nthdimenzion.utils.UtilValidator.isEmpty;
 import static org.nthdimenzion.utils.UtilValidator.isNotEmpty;
 
 /**
@@ -49,20 +50,24 @@ public class MandatoryDocumentService {
 
     public List<MandatoryDocumentDto> getMandatoryDocuments(){
         List<MandatoryDocumentDto> mandatoryDocumentDtos = mandatoryDocumentFinder.getAllMandatoryDocument();
-        List<MandatoryDocumentDto> mandatoryDocumentDtoList =  transformMandatoryDocument(mandatoryDocumentDtos);
-        return mandatoryDocumentDtoList;
+        if (isEmpty(mandatoryDocumentDtos)) {
+            return Lists.newArrayList();
+        }
+        return transformMandatoryDocument(mandatoryDocumentDtos);
     }
 
     public List<MandatoryDocumentDto> getMandatoryDocumentById(Long documentId){
         List<MandatoryDocumentDto> mandatoryDocumentDtos = mandatoryDocumentFinder.getMandatoryDocumentById(documentId);
-        List<MandatoryDocumentDto> mandatoryDocumentDtoList =  transformMandatoryDocument(mandatoryDocumentDtos);
-        return mandatoryDocumentDtoList;
+        if (isEmpty(mandatoryDocumentDtos)) {
+            return Lists.newArrayList();
+        }
+        return transformMandatoryDocument(mandatoryDocumentDtos);
     }
 
     public List<MandatoryDocumentDto> transformMandatoryDocument(List<MandatoryDocumentDto> mandatoryDocumentDtos){
         List<MandatoryDocumentDto> mandatoryDocumentDtoList = Lists.newArrayList();
         for (MandatoryDocumentDto mandatoryDocumentDto : mandatoryDocumentDtos) {
-           String planName = planFinder.getPlanName(new PlanId(mandatoryDocumentDto.getPlanId()));
+            String planName = planFinder.getPlanName(new PlanId(mandatoryDocumentDto.getPlanId()));
             List<Map<String, String>> coverages = planFinder.getCoverageName(new PlanId(mandatoryDocumentDto.getPlanId()));
             if (isNotEmpty(planName))
                 mandatoryDocumentDto.setPlanName(planName);
