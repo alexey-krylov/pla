@@ -71,8 +71,9 @@ public class MandatoryDocumentService {
             List<Map<String, String>> coverages = planFinder.getCoverageName(new PlanId(mandatoryDocumentDto.getPlanId()));
             if (isNotEmpty(planName))
                 mandatoryDocumentDto.setPlanName(planName);
-            if (isNotEmpty(coverages))
+            if (isNotEmpty(mandatoryDocumentDto.getCoverageId()) && isNotEmpty(coverages)){
                 mandatoryDocumentDto.setCoverageName(coverages.get(0).get("coverageName"));
+            }
             mandatoryDocumentDtoList.add(mandatoryDocumentDto);
         }
         return mandatoryDocumentDtoList;
