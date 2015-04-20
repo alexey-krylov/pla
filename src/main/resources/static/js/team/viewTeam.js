@@ -23,7 +23,7 @@ var inactivate=function(value,flag){
                 if(msg.status=='200'){
                     window.location.reload();
                 }else{
-                    alert("Error inactivating coverage");
+                    alert("Error inactivating Team");
                 }
             }
         });

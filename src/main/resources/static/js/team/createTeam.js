@@ -21,8 +21,18 @@ App.controller('CreateTeamController',['$scope','$http','$templateCache','$timeo
                            $scope.teamLeaders=data;
 
          });
+    $scope.$watch('createTeam.fromDate',function(newValue, oldValue){
+        if(newValue){
+            if (!moment($scope.createTeam.fromDate,'DD/MM/YYYY').isValid()) {
+                $scope.newDateField.fromDate = moment($scope.createTeam.fromDate).format("DD/MM/YYYY");
+                $scope.createTeam.fromDate=$scope.newDateField.fromDate ;
+            }
+        }
+    });
 
-         $scope.getAllBranch = function(obj){
+
+
+    $scope.getAllBranch = function(obj){
               $http.get('/pla/core/master/getbranchbyregion?regioncode='+ obj).success(function(data){
                // console.log(data);
                  $scope.branchList=data;
@@ -38,10 +48,7 @@ App.controller('CreateTeamController',['$scope','$http','$templateCache','$timeo
            });
          $scope.submitTeam = function(){
 
-             if (!moment($scope.createTeam.fromDate,'DD/MM/YYYY').isValid()) {
-             		$scope.newDateField.fromDate = moment($scope.createTeam.fromDate).format("DD/MM/YYYY");
-             		$scope.createTeam.fromDate=$scope.newDateField.fromDate ;
-             }
+
             $http.post('/pla/core/team/create', $scope.createTeam).success(function(data){
               //  console.log(data);
                 if(data.status==200){
