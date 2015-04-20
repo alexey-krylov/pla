@@ -5,6 +5,7 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
 </head>
 <body>
+
 <style>
     .error {
         font-size: 10px;
@@ -12,8 +13,12 @@
     }
 </style>
 <div th:include="fragments/common :: bodyHeader" th:remove="tag"/>
+<div class="splash" ng-cloak="">
+    <div class="color-line"></div>
+    <div class="splash-title">
+        <p>Please wait.. The Plan is loading.</p></div>
+</div>
 <script>
-
     requirejs.config({
         paths: {
             'plansetup': '/pla/js/plan-app.js?t=0'
@@ -23,7 +28,6 @@
 
     require(['ng-tags-input', 'checklistmodel', 'angular-ui-router'], function (a, b) {
     });
-
     requirejs(['main'], function () {
         require(['plansetup', 'jquery'], function (app, $) {
             angular.bootstrap(document, ['planSetup']);
@@ -31,10 +35,7 @@
     });
 </script>
 <div class="container fuelux">
-
-<ng-view>
-
-    </ng-view>
+    <ng-view></ng-view>
 </div>
 <footer class="footer" th:include="fragments/common :: footer">
 </footer>

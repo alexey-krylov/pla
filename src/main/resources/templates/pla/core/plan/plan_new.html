@@ -3,9 +3,9 @@
         .row {
             padding: 10px;
         }
-
     </style>
     <div class="wizard fuelux-wizard" id="planSetUpWizard" skip-validation="['step5']">
+
         <div class="alert alert-danger" role="alert" ng-if="validationFailed">
             <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
             <span class="sr-only">Error:</span>
@@ -112,6 +112,7 @@
                                     <input type="text" class="form-control input-sm"
                                            datepicker-popup=""
                                            ng-required="true"
+                                           min-date=""
                                            is-open="launchDateOpen"
                                            ng-model="launchDt" name="launchDate" id='launchDate'/>
                                     <span class="input-group-btn">
@@ -133,7 +134,7 @@
                                 <div class='input-group date'>
                                     <input type="text" class="form-control input-sm"
                                            is-open="withdrawalDateOpen"
-                                           min-date="launchDt"
+                                           min-date="today"
                                            datepicker-popup="" name="withdrawalDate"
                                            ng-model="withdrawalDt" id='withdrawalDate'/>
                                     <span class="input-group-btn">
@@ -163,7 +164,6 @@
                                 <input type="number" class="form-control input-sm" ng-required="true"
                                        ng-model="plan.planDetail.maxEntryAge"
                                        id='maxEntryAge' min="{{plan.planDetail.minEntryAge}}" name="maxEntryAge"/>
-
                                 <div ng-show="step1.maxEntryAge.$dirty &amp;&amp; step1.maxEntryAge.$invalid">
                                     <small class="error" ng-show="step1.maxEntryAge.$error.min">
                                         Max age should be greater than or equal to Min age.
@@ -321,7 +321,7 @@
 
                                             <div class="error" ng-show="step2.maxSumInsured.$dirty &amp;&amp; step2.maxSumInsured.$invalid">
                                                 <small class="error" ng-show="step2.maxSumInsured.$error.required">
-                                                    Minimum Sum Assured is required.
+                                                    Maximum Sum Assured is required.
                                                 </small>
                                             </div>
                                         </div>
@@ -330,9 +330,13 @@
                                         <label class="control-label" for="groupTerm">Multiples of</label>
 
                                         <div class="controls">
-                                            <input type="text" class="form-control input-sm col-sm-3"
-                                                   ng-model="plan.sumAssured.multiplesOf" name="multiplesOf" ng-required="true"/>
-
+                                            <select ng-model="plan.sumAssured.multiplesOf"
+                                                    ng-required="true" name="multiplesOf"
+                                                    class="form-control input-sm col-sm-3">
+                                                <option value="1000">1000</option>
+                                                <option value="10000">10000</option>
+                                                <option value="100000">100000</option>
+                                            </select>
                                             <div class="error" ng-show="step2.multiplesOf.$dirty &amp;&amp; step2.multiplesOf.$invalid">
                                                 <small class="error" ng-show="step2.multiplesOf.$error.required">
                                                     Multiples is required.
@@ -399,13 +403,17 @@
                                         <label class="control-label">Maximum Maturity Age</label>
 
                                         <div class="controls">
-                                            <input type="text" ng-pattern="onlyNumbers" name="maxMaturityAge"
+                                            <input type="number" ng-pattern="onlyNumbers" name="maxMaturityAge"
                                                    ng-required="true" class="form-control input-sm col-sm-3" style="margin-top: 8px"
-                                                   ng-model="plan.policyTerm.maxMaturityAge"/>
-
+                                                   ng-model="plan.policyTerm.maxMaturityAge"
+                                                   min="{{plan.planDetail.minEntryAge}}"
+                                                   max="{{plan.planDetail.maxEntryAge}}"/>
                                             <div class="error" ng-show="step3.maxMaturityAge.$dirty &amp;&amp; step3.maxMaturityAge.$invalid">
                                                 <small class="error" ng-show="step3.maxMaturityAge.$error.required">
                                                     Policy Term Maximum Maturity Age is required.
+                                                </small>
+                                                <small class="error" ng-show="step3.maxMaturityAge.$error.max">
+                                                    Minimum age cannot be greater than Plan Entry Maximum Entry Age.
                                                 </small>
                                             </div>
                                         </div>
@@ -464,12 +472,17 @@
                                         <label class="control-label" for="groupTerm">Premium Payment Cutoff Age</label>
 
                                         <div class="controls">
-                                            <input type="text" ng-pattern="onlyNumbers" class="form-control col-sm-3" ng-required="true"
-                                                   ng-model="plan.premiumTerm.maxMaturityAge" name="cutoffage"/>
+                                            <input type="number" ng-pattern="onlyNumbers" class="form-control col-sm-3" ng-required="true"
+                                                   ng-model="plan.premiumTerm.maxMaturityAge" name="cutoffage"
+                                                   min="{{plan.planDetail.minEntryAge}}"
+                                                   max="{{plan.planDetail.maxEntryAge}}"/>
 
                                             <div class="error" ng-show="step4.cutoffage.$dirty &amp;&amp; step4.cutoffage.$invalid">
                                                 <small class="error" ng-show="step4.cutoffage.$error.required">
                                                     Premium Payment Cutoff Age is required.
+                                                </small>
+                                                <small class="error" ng-show="step4.cutoffage.$error.max">
+                                                    Minimum age cannot be greater than Plan Entry Maximum Entry Age.
                                                 </small>
                                             </div>
                                         </div>

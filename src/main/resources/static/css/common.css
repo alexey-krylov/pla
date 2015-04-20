@@ -59,6 +59,13 @@ select.ng-invalid.ng-dirty {
     border-color: #FA787E;
 }
 
+[ng-cloak].splash {
+    display: block !important;
+}
+
+.splash {
+    display: none;
+}
 [ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
   display: none !important;
 }

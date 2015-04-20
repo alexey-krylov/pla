@@ -1,5 +1,5 @@
 'use strict';
-var app = angular.module('planSetup', ['common', 'ngTagsInput', 'checklist-model', 'ngRoute', 'ui.bootstrap']);
+var app = angular.module('planSetup', ['common', 'ngTagsInput', 'checklist-model', 'ngRoute']);
 
 app.config(function (tagsInputConfigProvider) {
     tagsInputConfigProvider.setDefaults('tagsInput', {
@@ -19,18 +19,6 @@ app.config(function ($routeProvider, $locationProvider) {
     $routeProvider
         .when('/plan', {
             templateUrl: 'plan/list'
-            /* controller: 'PlanListController',
-             resolve: {
-             planList: ['$q', '$http', function ($q, $http) {
-             var deferred = $q.defer();
-             $http.get('/pla/core/plan/getallplan').success(function (response, status, headers, config) {
-             deferred.resolve(response);
-             }).error(function (response, status, headers, config) {
-             deferred.reject();
-             });
-             return deferred.promise;
-             }]
-             }*/
         })
         .when('/newplan', {
             templateUrl: "plan/newplan",
@@ -38,7 +26,9 @@ app.config(function ($routeProvider, $locationProvider) {
             resolve: {
                 plan: function () {
                     return {
-                        "planDetail": {},
+                        "planDetail": {
+                            launchDate: moment().format('DD/MM/YYYY')
+                        },
                         "policyTermType": "SPECIFIED_VALUES",
                         "premiumTermType": "SPECIFIED_VALUES",
                         "policyTerm": {},
@@ -95,8 +85,8 @@ app.controller('PlanListController', ['$scope', 'planList', function ($scope, pl
     $scope.planList = planList;
 }
 ]);
-app.controller('PlanSetupController', ['$scope', '$http', '$location', '$routeParams', '$templateCache', '$bsmodal', 'plan', 'activeCoverages',
-        function ($scope, $http, $location, $routeParams, $templateCache, $modal, plan, activeCoverages) {
+app.controller('PlanSetupController', ['$scope', '$http', '$location', '$routeParams', '$templateCache', '$bsmodal', '$log', 'plan', 'activeCoverages',
+        function ($scope, $http, $location, $routeParams, $templateCache, $modal, $log, plan, activeCoverages) {
 
             $scope.plan = plan;
             $scope.coverageList = activeCoverages;
@@ -145,6 +135,7 @@ app.controller('PlanSetupController', ['$scope', '$http', '$location', '$routePa
                 $scope.plan.sumAssured.multiplesOf = null;
 
             }
+
 
             $scope.clientType = $scope.plan.planDetail.clientType;
 
@@ -205,6 +196,33 @@ app.controller('PlanSetupController', ['$scope', '$http', '$location', '$routePa
                             $scope.cancel();
                             $scope.stepForm.$error = false;
                         };
+
+                        /**
+                         *
+                         * Reset the coverage sum assured as the Sum Assured Changes.
+                         */
+                        $scope.resetPlanCoverageSumAssured = function () {
+                            $scope.newCoverage.coverageSumAssured.sumAssuredValue = [];
+                            $scope.newCoverage.coverageSumAssured.percentage = null;
+                            $scope.newCoverage.coverageSumAssured.maxLimit = null;
+                            $scope.newCoverage.coverageSumAssured.minSumInsured = null;
+                            $scope.newCoverage.coverageSumAssured.maxSumInsured = null;
+                            $scope.newCoverage.coverageSumAssured.multiplesOf = null;
+
+                        }
+
+                        /**
+                         *
+                         * Reset the coverage coverageTerm as the Sum Assured Changes.
+                         */
+                        $scope.resetPlanCoverageTerm = function () {
+                            $scope.newCoverage.coverageTerm.maturityAges = [];
+                            $scope.newCoverage.coverageTerm.validTerms = [];
+                            $scope.newCoverage.coverageTerm.maxMaturityAge = [];
+                            $scope.newCoverage.coverageTerm.maturityAges = [];
+                            $scope.newCoverage.coverageTerm.maturityAges = [];
+
+                        }
 
                         $scope.removeCoverage = function (idx) {
                             $scope.plan.coverages.splice(idx, 1);
@@ -391,7 +409,16 @@ app.controller('PlanSetupController', ['$scope', '$http', '$location', '$routePa
             $scope.populateBenefits = function (selectedCoverage) {
                 var coverage = _.where($scope.coverageList, {coverageId: selectedCoverage.coverageId});
                 if (coverage && coverage.length > 0) {
-                    $scope.benefits = coverage[0].benefitDtos;
+                    var benefits = coverage[0].benefitDtos;
+                    /* var planCoverage= _.where($scope.plan.coverages,{coverageId:selectedCoverage.coverageId});
+                     if (angular.isDefined(planCoverage.planCoverageBenefits)) {
+                     var i=0;
+                     for(;i<planCoverage.planCoverageBenefits.length;i++){
+                     $log.info('Filtering benefits');
+                     benefits= _.reject(benefits,{benefitId:planCoverage.planCoverageBenefits[i].benefitId});
+                     }
+                     }*/
+                    $scope.benefits = benefits;
                 }
             };
 
@@ -461,8 +488,6 @@ app.controller('PlanSetupController', ['$scope', '$http', '$location', '$routePa
                         $scope.validationFailed = true;
                         $scope.serverErrMsg = data.message;
                     });
-
-
             };
 
 
