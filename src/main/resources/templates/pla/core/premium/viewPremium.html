@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/xhtml"
       lang="en" >
 <head th:include="fragments/common :: headTag">
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
@@ -57,7 +57,7 @@
                         <tbody>
                         <tr th:each="premium : ${listOfPremium}">
                             <td th:text="${premium.planName}"></td>
-                           <td th:text="${premium.coverageNames}"></td>
+                            <td></td>
 
                             <td style="text-align:center" class="pop" >
                                 <button href="#" class="details-box btn btn-primary btn-xs" rel="popover"  data-content="" > Influencing-Factors

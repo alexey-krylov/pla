@@ -22,15 +22,15 @@ import org.axonframework.commandhandling.gateway.CommandGateway;
 import org.nthdimenzion.presentation.Result;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.ObjectError;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.List;
@@ -44,13 +44,10 @@ import java.util.Map;
 @RequestMapping(value = "/core/premium")
 public class PremiumSetUpController {
 
-    private PremiumService premiumService;
-
-    private CommandGateway commandGateway;
-
-    private PlanRepository planRepository;
-
     private static final String PREMIUM_TEMPLATE_FILE_NAME_SUFFIX = "_PremiumTemplate.xls";
+    private PremiumService premiumService;
+    private CommandGateway commandGateway;
+    private PlanRepository planRepository;
 
     @Autowired
     public PremiumSetUpController(PremiumService premiumService, CommandGateway commandGateway, PlanRepository planRepository) {
@@ -90,6 +87,7 @@ public class PremiumSetUpController {
     @RequestMapping(value = "/createpremium", method = RequestMethod.GET)
     public ModelAndView openCreatePagePremium() {
         ModelAndView modelAndView = new ModelAndView();
+        modelAndView.addObject("createPremiumCommand", new CreatePremiumCommand());
         modelAndView.setViewName("pla/core/premium/createPremium");
         return modelAndView;
     }
@@ -138,16 +136,17 @@ public class PremiumSetUpController {
     }
 
     @RequestMapping(value = "/uploadpremiumdata", method = RequestMethod.POST)
-    @ResponseBody
-    public ModelAndView uploadPremiumData(CreatePremiumCommand createPremiumCommand, HttpServletRequest servletRequest, HttpServletResponse response) throws IOException {
+    public String uploadPremiumData(@Valid @ModelAttribute("createPremiumCommand") CreatePremiumCommand createPremiumCommand, BindingResult bindingResult,
+                                    HttpServletRequest servletRequest, HttpServletResponse response) throws IOException {
         MultipartFile file = createPremiumCommand.getFile();
         Plan plan = planRepository.findOne(new PlanId(createPremiumCommand.getPlanId()));
         String templateFileName = plan.getPlanDetail().getPlanName() + PREMIUM_TEMPLATE_FILE_NAME_SUFFIX;
         if (!("application/msexcel".equals(file.getContentType()) || "application/vnd.ms-excel".equals(file.getContentType())) && !templateFileName.equals(file.getOriginalFilename())) {
+            bindingResult.addError(new ObjectError("message", "Uploaded file is not valid excel"));
             ModelAndView modelAndView = new ModelAndView();
             modelAndView.setViewName("pla/core/premium/createPremium");
-            modelAndView.addObject("message", "Uploaded file is not valid excel");
-            return modelAndView;
+//            modelAndView.addObject("message", "Uploaded file is not valid excel");
+            return "pla/core/premium/createPremium";
         }
         POIFSFileSystem fs = new POIFSFileSystem(file.getInputStream());
         HSSFWorkbook premiumTemplateWorkbook = new HSSFWorkbook(fs);
@@ -169,13 +168,13 @@ public class PremiumSetUpController {
 
         } catch (Exception e) {
             ModelAndView modelAndView = new ModelAndView();
-            modelAndView.setViewName("pla/core/premium/createPremium");
+//            modelAndView.setViewName("pla/core/premium/createPremium");
             modelAndView.addObject("message", e.getMessage());
-            return modelAndView;
+            return "pla/core/premium/createPremium";
         }
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("pla/core/premium/viewPremium");
         modelAndView.addObject("listOfPremium", premiumService.getAllPremium());
-        return modelAndView;
+        return "redirect:/core/premium/viewPremium";
     }
 }

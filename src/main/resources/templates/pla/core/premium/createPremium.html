@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/xhtml"
       lang="en">
 <head th:include="fragments/common :: headTag">
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
@@ -7,135 +7,173 @@
 <body>
 <div th:include="fragments/common :: bodyHeader" th:remove="tag"/>
 <script>
-    require(['moment'], function(moment) {
-    // alert(moment().format('dddd, MMMM Do YYYY, h:mm:ss a'));
+    require(['moment'], function (moment) {
+        // alert(moment().format('dddd, MMMM Do YYYY, h:mm:ss a'));
     });
-    requirejs(['main','angular-file-upload'],function(){
-         require(['/pla/js/premium/createPremium.js'],function(){
-             angular.bootstrap(document, ['createPremium']);
-         });
+    requirejs(['main', 'angular-file-upload'], function () {
+        require(['/pla/js/premium/createPremium.js?t=2'], function () {
+            angular.bootstrap(document, ['createPremium']);
+        });
     });
+
+</script>
+<script th:inline="javascript">
+    /*<![CDATA[*/
+    var createPremium = {};
+    var premiumRate = /*[[${createPremiumCommand.premiumRate}]]*/null;
+    var coverageId = /*[[${createPremiumCommand.coverageId}]]*/null;
+    if (coverageId) {
+        createPremium.definedFor = 'optionalCoverage';
+    } else {
+        createPremium.definedFor = 'plan';
+    }
+    var planId = /*[[${createPremiumCommand.planId}]]*/null;
+    createPremium.planId = planId;
+    var effectiveFrom = /*[[${{createPremiumCommand.effectiveFrom}}]]*/null;
+    createPremium.effectiveFrom = effectiveFrom;
+    createPremium.premiumRate = premiumRate.$name;
+    var premiumFactor = /*[[${createPremiumCommand.premiumFactor}]]*/null;
+    createPremium.premiumFactor = premiumFactor.$name;
+    /*]]>*/
 </script>
 
-<div class="container ng-cloak"  ng-Controller="CreatePremiumController">
-    <div class="row">
-        <div class="col-lg-12" >
-            <div class="panel panel-primary">
-                <div class="panel-heading">
-                    <div class="row">
-                        <div class="col-lg-3"><span th:text="#{createPremium}">Create Premium
+<div class="container ng-cloak">
+
+    <div class="alert alert-danger" role="alert">
+        <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+        <span class="sr-only">Error:</span>
+
+        <p th:errors="${createPremiumCommand}"></p>
+    </div>
+    <form class="css-form" method="post" enctype="multipart/form-data" action="uploadpremiumdata" name="premiumForm" ng-submit="submitFormToServer()"
+          ng-controller="CreatePremiumController">
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <div class="row">
+                    <div class="col-lg-3"><span th:text="#{createPremium}">Create Premium
                         </span></div>
+                </div>
+            </div>
+            <div class="panel-body" style="padding-top:5px">
+                <!--<notification ></notification>-->
+                <div class="row">
+                    <div class="form-group col-md-6 required">
+                        <label class="control-label">Defined For</label>
+
+                        <div class="radio">
+                            <label style="margin-right:30px">
+                                <input type="radio" name="definedFor" value="plan" ng-model="createPremium.definedFor" ng-change="getDefinedOption()"/>Plan
+                            </label>
+                            <label>
+                                <input type="radio" name="definedFor" value="optionalCoverage" ng-model="createPremium.definedFor" ng-change="getDefinedOption()"/>Optional
+                                Coverage
+                            </label>
+                        </div>
+                    </div>
+                    <div class="form-group col-md-6 required">
+                        <label class="control-label">Plan Name</label> <!-- -->
+                        <input type="hidden" name="planId" class="form-control input-lg" value="{{createPremium.planId}}"/>
+                        <select class="form-control input-sm" ng-required="true" ng-model="createPremium.planId"
+                                ng-options="plan.planId as plan.planName for plan in newPlanList | orderBy:'planName'">
+                            <option value="">----Select Plan----</option>
+                        </select>
+                    </div>
+                    <div class="form-group col-md-6 required" ng-show="showOptionalCoverage">
+                        <label class="control-label">Optional Coverage</label>
+                        <!-- <select class="form-control input-sm" id="optionalCoverage" ng-required="true" ng-model="createPremium.coverageId" ng-disabled="!createPremium.planId"
+                                 ng-options="optionalCoverage.coverageId as optionalCoverage.coverageName for optionalCoverage in optionalCoverageList | orderBy:'coverageName'">
+                             <option value="">&#45;&#45;&#45;&#45;Select Optional Coverage &#45;&#45;&#45;&#45;</option>
+                         </select>-->
+                    </div>
+                    <div class="form-group col-md-6 required">
+                        <label class="control-label">Premium Expressed As</label>
+
+                        <div class="radio" style="margin:0px">
+                            <label style="margin-right:30px"><input type="radio" name="premiumFactor" value="FLAT_AMOUNT" ng-model="createPremium.premiumFactor"/>Certain
+                                Specified Values</label>
+                            <label><input type="radio" name="premiumFactor" value="PER_THOUSAND" ng-model="createPremium.premiumFactor"/>Rate (per thousand)</label>
+                        </div>
                     </div>
                 </div>
-                <div class="panel-body ng-cloak" style="padding-top:5px">
-                    <form  novalidate="true" class="css-form">
-                        <notification ></notification>
-                        <div class="row">
-                            <div class="form-group col-md-6 required">
-                                <label class="control-label">Defined For</label>
-                                  <div class="radio" style="margin:0px">
-                                    <label style="margin-right:30px"><input type="radio"  name="definedFor" value="plan" ng-model="createPremium.definedFor" ng-change="getDefinedOption()"/>Plan</label>
-                                    <label><input type="radio" name="definedFor" value="optionalCoverage" ng-model="createPremium.definedFor" ng-change="getDefinedOption()"/>Optional Coverage</label>
-                                </div>
-                            </div>
-                            <div class="form-group col-md-6 required" >
-                                <label class="control-label">Plan Name</label> <!-- -->
-                                 <select class="form-control input-sm"  ng-required="true" ng-model="createPremium.planId" ng-options="plan.planId as plan.planName for plan in newPlanList | orderBy:'planName'">
-                                    <option value="">----Select Plan----</option>
+                <div class="row">
+                    <div class="form-group col-md-6 required">
+                        <label class="control-label">Rate Expressed As</label>
 
-                                </select>
-
-                            </div>
-
-                            <div class="form-group col-md-6 required" ng-show="showOptionalCoverage">
-                                <label class="control-label">Optional Coverage</label>
-                                <select class="form-control input-sm" id="optionalCoverage" ng-required="true" ng-model="createPremium.coverageId"   ng-disabled="!createPremium.planId" ng-options="optionalCoverage.coverageId as optionalCoverage.coverageName for optionalCoverage in optionalCoverageList | orderBy:'coverageName'">
-                                    <option value="">----Select OptionalCoverages ----</option>
-
-                                </select>
-                            </div>
-                            <div class="form-group col-md-6 required">
-                                <label class="control-label">Premium Expressed As</label>
-                                <div class="radio" style="margin:0px">
-                                    <label style="margin-right:30px"><input type="radio"  name="premiumExpressedAs" value="FLAT_AMOUNT" ng-model="createPremium.premiumFactor"/>Certain Specified Values</label>
-                                    <label><input type="radio" name="premiumExpressedAs" value="PER_THOUSAND" ng-model="createPremium.premiumFactor"/>Rate (per thousand)</label>
-                                </div>
-                            </div>
+                        <div class="radio" style="margin:0px">
+                            <label style="margin-right:30px"><input type="radio" name="premiumRate" value="MONTHLY" ng-model="createPremium.premiumRate"/>Per Month</label>
+                            <label><input type="radio" name="premiumRate" value="YEARLY" ng-model="createPremium.premiumRate"/>Per Year</label>
                         </div>
-                        <div class="row">
+                    </div>
+                    <div class="form-group col-md-6 required">
+                        <label class="control-label">From Date</label>
 
-
-                            <div class="form-group col-md-6 required">
-                                <label class="control-label">Rate Expressed As</label>
-                                <div class="radio" style="margin:0px">
-                                    <label style="margin-right:30px"><input type="radio"  name="rateExpressedAs" value="MONTHLY" ng-model="createPremium.premiumRate"/>Per Month</label>
-                                    <label><input type="radio" name="rateExpressedAs" value="YEARLY" ng-model="createPremium.premiumRate"/>Per Year</label>
-                                </div>
-                            </div>
-                            <div class="form-group col-md-6 required">
-                                <label class="control-label">From Date</label>
-                                <p class="input-group">
-                                    <input type="text" class="form-control input-sm" ng-click="open($event)" min-date="selectedDate" ng-required="true" datepicker-popup="dd/MM/yyyy" ng-model="createPremium.effectiveFrom"  datepicker-options="datePickerSettings.dateOptions" is-open="datePickerSettings.isOpened"  close-text="Close" show-button-bar="false" />
+                        <p class="input-group">
+                            <input type="text" class="form-control input-sm" ng-click="open($event)" min-date="selectedDate" ng-required="true" datepicker-popup="dd/MM/yyyy"
+                                   ng-model="createPremium.effectiveFrom" datepicker-options="datePickerSettings.dateOptions" is-open="datePickerSettings.isOpened"
+                                   name="effectiveFrom"
+                                   close-text="Close" show-button-bar="false"/>
                                         <span class="input-group-btn">
                                             <button type="button" class="btn btn-default btn-sm" ng-click="open($event)"><i class="glyphicon glyphicon-calendar"></i></button>
                                         </span>
-                                </p>
-                            </div>
-
-
-                        </div>
-                        <div class="row">
-                            <div class="form-group col-md-6">
-                                <label class="control-label">Download Template</label>
-                                <div>
-                                   <a type="button"  class="btn btn-default" target="_blank" download=""  ng-disabled="(!createPremium.definedFor || !createPremium.planId || !createPremium.premiumInfluencingFactors || !boolVal)"  ng-click="getDownloadedTemplate()">
-                                        Download Template
-                                    </a>
-                                </div>
-                            </div>
-                            <div class="form-group col-md-6 required">
-                                <label class="control-label">Influencing Factors</label>
-                                <div>                                          <!--value for (key, value) in mulSelect -->
-                                 <button type="button" class="btn btn-default bs-select" ng-model="createPremium.premiumInfluencingFactors" data-all-none-buttons="true" data-html="1" data-multiple="1" placeholder="----Select InfluencingFactors----"  ng-options="premiumInfluencingFactors.code as premiumInfluencingFactors.description for premiumInfluencingFactors in mulSelect | orderBy:'description'" >
-                                        Action <span class="caret"></span>
-                                    </button>
-                                   <!-- <button type="button" class="btn btn-default bs-select" ng-model="createPremium.premiumInfluencingFactors" data-all-none-buttons="true" data-html="1" data-multiple="1"  ng-options="value for (key, value) in mulSelect" >
-                                        Action <span class="caret"></span>
-                                    </button>-->
-
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="form-group col-md-6 required">
-                                <label class="control-label">Upload</label>
-                                <div >
-                                    <label class="input-sm" style="border:1px solid #ccc;width:330px;" >{{createPremium.file[0].name}} </label>
-                                    <div class="btn btn-default" style="display:inline;float:right;" data-placement="top-right" data-container="notification" data-duration="5" bs-alert="alert" ng-click="uploadFile(createPremium.file)"  ng-disabled="(!createPremium.effectiveFrom || !createPremium.premiumRate || !createPremium.premiumFactor || !verified)" >Upload</div>
-                                    <a type="button" class="btn btn-default" style="display:inline;float:right;margin-right:5px;"  data-placement="top-right" data-container="notification" data-duration="5" bs-alert="alert" ng-disabled="(!createPremium.definedFor || !createPremium.planId || !createPremium.effectiveFrom || !createPremium.premiumInfluencingFactors || !boolVal || !createPremium.file)" ng-click="verifyPremiumData(createPremium.file)">Verify</a>
-                                    <div class="btn btn-default" style="display:inline;float:right;margin-right:5px;" ng-file-select=""  ng-model="createPremium.file"  >Browse</div>
-
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-lg-12" style="text-align: center;margin-top:3px;">
-                                <a class="btn btn-default" style="float:left;" th:href="@{/core/premium/listpremium}">Cancel</a>
-                            </div>
-                        </div>
-                    </form>
+                        </p>
+                    </div>
                 </div>
+                <div class="row">
+                    <div class="form-group col-md-6">
+                        <label class="control-label">Download Template</label>
+
+                        <div>
+                            <a type="button" class="btn btn-default" target="_blank" download=""
+                               ng-disabled="(!createPremium.definedFor || !createPremium.planId || !createPremium.premiumInfluencingFactors || !boolVal)"
+                               ng-click="getDownloadedTemplate()">
+                                Download Template
+                            </a>
+                        </div>
+                    </div>
+                    <div class="form-group col-md-6 required">
+                        <label class="control-label">Influencing Factors</label>
+
+                        <div th:each="premiumInfluencingFactors: ${T(com.pla.publishedlanguage.domain.model.PremiumInfluencingFactor).values()}">
+                            <input name="premiumInfluencingFactors" type="checkbox"
+                                   th:field="*{createPremiumCommand.premiumInfluencingFactors}"
+                                   th:id="${{premiumInfluencingFactors}}" th:value="${{premiumInfluencingFactors}}"/>
+                            <label th:text="${{premiumInfluencingFactors.description}}"></label>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group col-md-6 required">
+                        <label class="control-label">Upload</label>
+
+                        <div>
+                            <!--<label class="input-sm" style="border:1px solid #ccc;width:330px;" >{{createPremium.file[0].name}} </label>-->
+                            <input type="file" name="file" class="input-sm"/>
+                            <!--<a type="button" class="btn btn-default" style="display:inline;float:right;margin-right:5px;"  data-placement="top-right" data-container="notification" data-duration="5" bs-alert="alert" ng-disabled="(!createPremium.definedFor || !createPremium.planId || !createPremium.effectiveFrom || !createPremium.premiumInfluencingFactors || !boolVal || !createPremium.file)" ng-click="verifyPremiumData(createPremium.file)">Verify</a>-->
+                            <!--<div class="btn btn-default" ng-model="createPremium.file"  >Browse</div>
+                             ng-disabled="(!createPremium.effectiveFrom || !createPremium.premiumRate || !createPremium.premiumFactor)"
+                            -->
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-12" style="text-align: center;margin-top:3px;">
+                        <a class="btn btn-default" th:href="@{/core/premium/listpremium}">Cancel</a>
+                        <input type="submit" class="btn btn-primary" value="Upload"/>
+                    </div>
+                </div>
+
             </div>
         </div>
-    </div>
+    </form>
 </div>
 <style>
     .form-control {
-    font-size: 12px;
-    padding:5px;
+        font-size: 12px;
+        padding: 5px;
     }
-    .btn{
-    font-size:12px;
+
+    .btn {
+        font-size: 12px;
     }
 
 </style>
