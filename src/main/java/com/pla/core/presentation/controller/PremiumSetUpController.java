@@ -139,30 +139,43 @@ public class PremiumSetUpController {
 
     @RequestMapping(value = "/uploadpremiumdata", method = RequestMethod.POST)
     @ResponseBody
-    public Result uploadPremiumData(CreatePremiumCommand createPremiumCommand, HttpServletRequest servletRequest, HttpServletResponse response) throws IOException {
+    public ModelAndView uploadPremiumData(CreatePremiumCommand createPremiumCommand, HttpServletRequest servletRequest, HttpServletResponse response) throws IOException {
         MultipartFile file = createPremiumCommand.getFile();
         Plan plan = planRepository.findOne(new PlanId(createPremiumCommand.getPlanId()));
         String templateFileName = plan.getPlanDetail().getPlanName() + PREMIUM_TEMPLATE_FILE_NAME_SUFFIX;
         if (!("application/msexcel".equals(file.getContentType()) || "application/vnd.ms-excel".equals(file.getContentType())) && !templateFileName.equals(file.getOriginalFilename())) {
-            return Result.failure("Uploaded file is not valid excel");
+            ModelAndView modelAndView = new ModelAndView();
+            modelAndView.setViewName("pla/core/premium/createPremium");
+            modelAndView.addObject("message", "Uploaded file is not valid excel");
+            return modelAndView;
         }
         POIFSFileSystem fs = new POIFSFileSystem(file.getInputStream());
         HSSFWorkbook premiumTemplateWorkbook = new HSSFWorkbook(fs);
         try {
             HSSFWorkbook errorWorkbook = premiumService.validatePremiumTemplateData(premiumTemplateWorkbook, createPremiumCommand.getPremiumInfluencingFactors(), createPremiumCommand.getPlanId(), createPremiumCommand.getCoverageId());
             if (errorWorkbook != null) {
-                return Result.failure("Premium Template is not valid");
+                response.reset();
+                response.setContentType("application/msexcel");
+                response.setHeader("content-disposition", "attachment; filename=" + "error.xls" + "");
+                OutputStream outputStream = response.getOutputStream();
+                errorWorkbook.write(outputStream);
+                outputStream.flush();
+                outputStream.close();
             } else {
                 List<Map<Map<PremiumInfluencingFactor, String>, Double>> premiumLineItem = premiumService.parsePremiumTemplate(premiumTemplateWorkbook, createPremiumCommand.getPremiumInfluencingFactors(), createPremiumCommand.getPlanId(), createPremiumCommand.getCoverageId());
                 createPremiumCommand.setPremiumLineItem(premiumLineItem);
                 commandGateway.send(createPremiumCommand);
             }
 
-        } catch (PremiumTemplateParseException exception) {
-            return Result.failure(exception.getMessage());
         } catch (Exception e) {
-            return Result.failure(e.getMessage());
+            ModelAndView modelAndView = new ModelAndView();
+            modelAndView.setViewName("pla/core/premium/createPremium");
+            modelAndView.addObject("message", e.getMessage());
+            return modelAndView;
         }
-        return Result.success("Premiums uploaded successfully");
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("pla/core/premium/viewPremium");
+        modelAndView.addObject("listOfPremium", premiumService.getAllPremium());
+        return modelAndView;
     }
 }
