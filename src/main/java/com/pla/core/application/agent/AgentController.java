@@ -167,7 +167,7 @@ public class AgentController {
             commandGateway.sendAndWait(updateAgentCommand);
         } catch (AgentApplicationException e) {
             LOGGER.error("Error in updating agent", e);
-            return Result.failure("Error in updating benefit");
+            return Result.failure(e.getMessage());
         }
         return Result.success("Agent updated successfully");
     }

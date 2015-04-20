@@ -49,7 +49,8 @@ public class AgentService {
     public void createAgent(String agentId, AgentProfileDto agentProfileDto, LicenseNumberDto licenseNumberDto, TeamDetailDto teamDetailDto, ContactDetailDto contactDetailDto, PhysicalAddressDto physicalAddressDto, ChannelTypeDto channelTypeDto, Set<PlanId> authorizedPlans) {
         UtilValidator.isNotEmpty("");
         boolean isLicenseNumberUnique = UtilValidator.isNotEmpty(licenseNumberDto.getLicenseNumber()) ? agentLicenseNumberIsUnique.isSatisfiedBy(new LicenseNumber(licenseNumberDto.getLicenseNumber())) : true;
-        boolean isNrcNumberIsUnique = agentProfileDto.getNrcNumber() != 0 ? nrcNumberIsUnique.isSatisfiedBy(agentProfileDto.getNrcNumber()) : true;
+        AgentDto agentDto = new AgentDto(agentProfileDto.getNrcNumber(),agentId);
+        boolean isNrcNumberIsUnique = agentProfileDto.getNrcNumber() != 0 ? nrcNumberIsUnique.isSatisfiedBy(agentDto) : true;
         if (!isLicenseNumberUnique) {
             raiseAgentLicenseNumberUniqueException();
         }
@@ -71,7 +72,8 @@ public class AgentService {
         if (!isLicenseNumberUnique) {
             raiseAgentLicenseNumberUniqueException();
         }
-        boolean isNrcNumberIsUnique = agentProfileDto.getNrcNumber() != 0 ? nrcNumberIsUnique.isSatisfiedBy(agentProfileDto.getNrcNumber()) : true;
+        AgentDto agentDto = new AgentDto(agentProfileDto.getNrcNumber(),agentId);
+        boolean isNrcNumberIsUnique = agentProfileDto.getNrcNumber() != 0 ? nrcNumberIsUnique.isSatisfiedBy(agentDto) : true;
         if (!isNrcNumberIsUnique) {
             raiseAgentNrcNumberUniqueException();
         }
