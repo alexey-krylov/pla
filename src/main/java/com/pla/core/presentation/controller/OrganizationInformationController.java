@@ -1,12 +1,8 @@
 package com.pla.core.presentation.controller;
 
-import com.google.common.collect.Lists;
 import com.pla.core.domain.exception.GeneralInformationException;
 import com.pla.core.domain.service.GeneralInformationService;
 import com.pla.core.dto.GeneralInformationDto;
-import com.pla.sharedkernel.domain.model.DiscountFactorItem;
-import com.pla.sharedkernel.domain.model.ModalFactorItem;
-import com.pla.sharedkernel.domain.model.Tax;
 import org.nthdimenzion.presentation.Result;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -46,14 +42,10 @@ public class OrganizationInformationController {
         this.springMongoTemplate = springMongoTemplate;
     }
 
-    @RequestMapping(value = "/getdefinedorganizationitem", method = RequestMethod.GET)
+    @RequestMapping(value = "/getorganizationprocessitem", method = RequestMethod.GET)
     @ResponseBody
-    public List getOrganizationInformationItem(){
-        List definedOrganizationInformationItem = Lists.newArrayList();
-        definedOrganizationInformationItem.add(ModalFactorItem.values());
-        definedOrganizationInformationItem.add(DiscountFactorItem.values());
-        definedOrganizationInformationItem.add(Tax.values());
-        return definedOrganizationInformationItem;
+    public  Map<String,List<Map<String,String>>> getOrganizationInformationItem(){
+       return generalInformationService.getOrganizationProcessItems();
     }
 
     @RequestMapping(value = "/create", method = RequestMethod.POST)

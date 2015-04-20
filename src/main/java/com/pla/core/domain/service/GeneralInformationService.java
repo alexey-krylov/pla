@@ -1,12 +1,13 @@
 package com.pla.core.domain.service;
 
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import com.pla.core.domain.model.Admin;
 import com.pla.core.domain.model.generalinformation.OrganizationGeneralInformation;
 import com.pla.core.domain.model.generalinformation.ProductLineGeneralInformation;
 import com.pla.core.dto.GeneralInformationDto;
-import com.pla.sharedkernel.domain.model.DiscountFactorItem;
-import com.pla.sharedkernel.domain.model.ModalFactorItem;
-import com.pla.sharedkernel.domain.model.Tax;
+import com.pla.core.dto.ProductLineProcessDto;
+import com.pla.sharedkernel.domain.model.*;
 import com.pla.sharedkernel.identifier.LineOfBusinessId;
 import org.nthdimenzion.common.AppConstants;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -94,4 +95,21 @@ public class GeneralInformationService {
         return update;
     }
 
+    public Map<String ,List<Map<String,String>>> getOrganizationProcessItems(){
+        Map<String,List<Map<String,String>>> organizationProcessItemMap = Maps.newLinkedHashMap();
+        organizationProcessItemMap.put("modalFactorItem",ModalFactorItem.getModalFactorItems());
+        organizationProcessItemMap.put("discountFactorItem", DiscountFactorItem.getDiscountFactorItems());
+        List<Map<String, String>> definedOrganizationInformationItem = Lists.newArrayList();
+        definedOrganizationInformationItem.add(Tax.getServiceTaxItem());
+        organizationProcessItemMap.put("serviceTaxItem", definedOrganizationInformationItem);
+        return organizationProcessItemMap;
+    }
+
+    public List<ProductLineProcessDto> getProductLineProcessItems(){
+        List<ProductLineProcessDto> productLineProcessList = Lists.newArrayList();
+        productLineProcessList = ProductLineProcessType.getProductLineProcessType(productLineProcessList);
+        productLineProcessList = PolicyFeeProcessType.getPolicyFeeProcessType(productLineProcessList);
+        productLineProcessList = PolicyProcessMinimumLimitType.getPolicyProcessMinimumLimitType(productLineProcessList);
+        return productLineProcessList;
+    }
 }

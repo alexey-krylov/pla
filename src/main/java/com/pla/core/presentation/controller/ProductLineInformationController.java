@@ -1,12 +1,11 @@
 package com.pla.core.presentation.controller;
 
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import com.pla.core.domain.exception.GeneralInformationException;
 import com.pla.core.domain.service.GeneralInformationService;
 import com.pla.core.dto.GeneralInformationDto;
-import com.pla.sharedkernel.domain.model.PolicyFeeProcessType;
-import com.pla.sharedkernel.domain.model.PolicyProcessMinimumLimitType;
-import com.pla.sharedkernel.domain.model.ProductLineProcessType;
+import com.pla.core.dto.ProductLineProcessDto;
 import org.nthdimenzion.presentation.Result;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,6 +26,7 @@ import java.util.Map;
 
 import static com.google.common.base.Preconditions.checkArgument;
 import static org.nthdimenzion.presentation.AppUtils.getLoggedInUSerDetail;
+import static org.nthdimenzion.utils.UtilValidator.isEmpty;
 
 /**
  * Created by Admin on 4/1/2015.
@@ -46,14 +46,10 @@ public class ProductLineInformationController {
         this.mongoTemplate = springMongoTemplate;
     }
 
-    @RequestMapping(value = "/getproductlineinformationitem", method = RequestMethod.GET)
+    @RequestMapping(value = "/getproductlineprocessitem", method = RequestMethod.GET)
     @ResponseBody
-    public List getProductLineInformationItem(){
-        List definedProductLineInformationItem = Lists.newArrayList();
-        definedProductLineInformationItem.add(PolicyProcessMinimumLimitType.values());
-        definedProductLineInformationItem.add(ProductLineProcessType.values());
-        definedProductLineInformationItem.add(PolicyFeeProcessType.values());
-        return definedProductLineInformationItem;
+    public  List<ProductLineProcessDto> getProductLineInformationItem(){
+        return generalInformationService.getProductLineProcessItems();
     }
 
 
@@ -96,8 +92,29 @@ public class ProductLineInformationController {
 
     @RequestMapping(value = "/getproducrlineinformation", method = RequestMethod.GET)
     @ResponseBody
-    public List<Map> getProductLineInformation() {
-        return mongoTemplate.findAll(Map.class, "product_line_information");
+    public List<Map<String,Object>> getProductLineInformation() {
+        List<Map> productLineInformation =  mongoTemplate.findAll(Map.class, "product_line_information");
+        if (isEmpty(productLineInformation)){
+            return Lists.newArrayList();
+        }
+        List<Map<String,Object>> productLineInformationList = Lists.newArrayList();
+        for (Map productLineInformationMap: productLineInformation){
+            Map<String,Object> productLineInformationByBusinessId = Maps.newLinkedHashMap();
+            productLineInformationByBusinessId.put("productLine",productLineInformationMap.get("productLine"));
+            List listOfProcess = Lists.newArrayList();
+            listOfProcess.add(productLineInformationMap.get("quotationProcessInformation"));
+            listOfProcess.add(productLineInformationMap.get("enrollmentProcessInformation"));
+            listOfProcess.add(productLineInformationMap.get("reinstatementProcessInformation"));
+            listOfProcess.add(productLineInformationMap.get("endorsementProcessInformation"));
+            listOfProcess.add(productLineInformationMap.get("claimProcessInformation"));
+            listOfProcess.add(productLineInformationMap.get("policyFeeProcessInformation"));
+            listOfProcess.add(productLineInformationMap.get("policyProcessMinimumLimit"));
+            listOfProcess.add(productLineInformationMap.get("surrenderProcessInformation"));
+            listOfProcess.add(productLineInformationMap.get("maturityProcessInformation"));
+            productLineInformationByBusinessId.put("processType",listOfProcess);
+            productLineInformationList.add(productLineInformationByBusinessId);
+        }
+        return productLineInformationList;
     }
 
 }
