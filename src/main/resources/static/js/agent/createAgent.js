@@ -27,9 +27,6 @@ angular.module('createAgent',['common','ngRoute','mgcrea.ngStrap.select','mgcrea
                     contact:3
                 };
                 $scope.agentDetails.authorizePlansToSell=[];
-                angular.forEach(agentDetails.authorizePlansToSell,function(value,key){
-                    this.push(value.planId);
-                },$scope.agentDetails.authorizePlansToSell);
                 $scope.stepsToRemove={index:1,howMany:1};
             }
             $scope.$watch('agentDetails.teamDetail.teamId',function(newVal,oldVal){
