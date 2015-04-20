@@ -1,12 +1,11 @@
 package com.pla.core.domain.service;
 
 import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
 import com.pla.core.domain.model.Admin;
 import com.pla.core.domain.model.generalinformation.OrganizationGeneralInformation;
 import com.pla.core.domain.model.generalinformation.ProductLineGeneralInformation;
 import com.pla.core.dto.GeneralInformationDto;
-import com.pla.core.dto.ProductLineProcessDto;
+import com.pla.core.dto.GeneralInformationProcessDto;
 import com.pla.sharedkernel.domain.model.*;
 import com.pla.sharedkernel.identifier.LineOfBusinessId;
 import org.nthdimenzion.common.AppConstants;
@@ -95,55 +94,68 @@ public class GeneralInformationService {
         return update;
     }
 
-    public Map<String ,List<Map<String,String>>> getOrganizationProcessItems(){
-        Map<String,List<Map<String,String>>> organizationProcessItemMap = Maps.newLinkedHashMap();
-        organizationProcessItemMap.put("modalFactorItem",ModalFactorItem.getModalFactorItems());
-        organizationProcessItemMap.put("discountFactorItem", DiscountFactorItem.getDiscountFactorItems());
-        List<Map<String, String>> definedOrganizationInformationItem = Lists.newArrayList();
-        definedOrganizationInformationItem.add(Tax.getServiceTaxItem());
-        organizationProcessItemMap.put("serviceTaxItem", definedOrganizationInformationItem);
-        return organizationProcessItemMap;
+    public List<GeneralInformationProcessDto> getOrganizationProcessItems(){
+        List<GeneralInformationProcessDto> organizationProcessList = Lists.newArrayList();
+        organizationProcessList = getModalFactorItems(organizationProcessList);
+        organizationProcessList = getDiscountFactorItems(organizationProcessList);
+        organizationProcessList = getServiceTaxItem(organizationProcessList);
+        return organizationProcessList;
     }
 
-    public List<ProductLineProcessDto> getProductLineProcessItems(){
-        List<ProductLineProcessDto> productLineProcessList = Lists.newArrayList();
+    public List<GeneralInformationProcessDto> getProductLineProcessItems(){
+        List<GeneralInformationProcessDto> productLineProcessList = Lists.newArrayList();
         productLineProcessList = getPolicyFeeProcessType(productLineProcessList);
         productLineProcessList = getProductLineProcessType(productLineProcessList);
         productLineProcessList = getPolicyProcessMinimumLimitType(productLineProcessList);
         return productLineProcessList;
     }
 
-    private  List<ProductLineProcessDto> getPolicyFeeProcessType(List<ProductLineProcessDto> productLineProcessList ){
+    private List<GeneralInformationProcessDto> getModalFactorItems(List<GeneralInformationProcessDto> organizationProcessList){
+        for (ModalFactorItem modalFactorItem : ModalFactorItem.values()){
+            organizationProcessList.add(transformProductLineProcessItem(modalFactorItem.name(),modalFactorItem.getDescription(),modalFactorItem.getFullDescription()));
+        }
+        return organizationProcessList;
+    }
+
+    private List<GeneralInformationProcessDto> getServiceTaxItem(List<GeneralInformationProcessDto> organizationProcessList){
+        organizationProcessList.add(transformProductLineProcessItem(Tax.SERVICE_TAX.name(), Tax.SERVICE_TAX.getDescription(), Tax.SERVICE_TAX.getFullDescription()));
+        return organizationProcessList;
+    }
+
+    private List<GeneralInformationProcessDto> getDiscountFactorItems(List<GeneralInformationProcessDto> organizationProcessList){
+        for (DiscountFactorItem discountFactorItem : DiscountFactorItem.values()){
+            organizationProcessList.add(transformProductLineProcessItem(discountFactorItem.name(),discountFactorItem.getDescription(),discountFactorItem.getFullDescription()));
+        }
+        return organizationProcessList;
+    }
+
+    private  List<GeneralInformationProcessDto> getPolicyFeeProcessType(List<GeneralInformationProcessDto> productLineProcessList ){
         for(PolicyFeeProcessType policyFeeProcessType : PolicyFeeProcessType.values()){
-            ProductLineProcessDto productLineProcessDto = new ProductLineProcessDto();
-            productLineProcessDto.setType(policyFeeProcessType.name());
-            productLineProcessDto.setDescription(policyFeeProcessType.getDescription());
-            productLineProcessDto.setFullDescription(policyFeeProcessType.getFullDescription());
-            productLineProcessList.add(productLineProcessDto);
+            productLineProcessList.add(transformProductLineProcessItem(policyFeeProcessType.name(),policyFeeProcessType.getDescription(),policyFeeProcessType.getFullDescription()));
         }
         return productLineProcessList;
     }
 
-    private  List<ProductLineProcessDto> getProductLineProcessType(List<ProductLineProcessDto> productLineProcessList){
+    private  List<GeneralInformationProcessDto> getProductLineProcessType(List<GeneralInformationProcessDto> productLineProcessList){
         for(ProductLineProcessType productLineProcessType : ProductLineProcessType.values()){
-            ProductLineProcessDto productLineProcessDto = new ProductLineProcessDto();
-            productLineProcessDto.setType(productLineProcessType.name());
-            productLineProcessDto.setDescription(productLineProcessType.getDescription());
-            productLineProcessDto.setFullDescription(productLineProcessType.getFullDescription());
-            productLineProcessList.add(productLineProcessDto);
+            productLineProcessList.add(transformProductLineProcessItem(productLineProcessType.name(),productLineProcessType.getDescription(),productLineProcessType.getFullDescription()));
         }
         return productLineProcessList;
     }
 
-    private List<ProductLineProcessDto> getPolicyProcessMinimumLimitType(List<ProductLineProcessDto> productLineProcessList ){
+    private List<GeneralInformationProcessDto> getPolicyProcessMinimumLimitType(List<GeneralInformationProcessDto> productLineProcessList ){
         for(PolicyProcessMinimumLimitType minimumLimitType :PolicyProcessMinimumLimitType.values()){
-            ProductLineProcessDto productLineProcessDto = new ProductLineProcessDto();
-            productLineProcessDto.setType(minimumLimitType.name());
-            productLineProcessDto.setDescription(minimumLimitType.getDescription());
-            productLineProcessDto.setFullDescription(minimumLimitType.getFullDescription());
-            productLineProcessList.add(productLineProcessDto);
+            productLineProcessList.add(transformProductLineProcessItem(minimumLimitType.name(),minimumLimitType.getDescription(),minimumLimitType.getFullDescription()));
         }
         return productLineProcessList;
+    }
+
+    private GeneralInformationProcessDto transformProductLineProcessItem(String type,String description,String fullDescription){
+        GeneralInformationProcessDto generalInformationProcessDto = new GeneralInformationProcessDto();
+        generalInformationProcessDto.setType(type);
+        generalInformationProcessDto.setDescription(description);
+        generalInformationProcessDto.setFullDescription(fullDescription);
+        return generalInformationProcessDto;
     }
 
 }

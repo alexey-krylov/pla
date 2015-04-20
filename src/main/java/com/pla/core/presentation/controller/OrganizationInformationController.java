@@ -3,6 +3,7 @@ package com.pla.core.presentation.controller;
 import com.pla.core.domain.exception.GeneralInformationException;
 import com.pla.core.domain.service.GeneralInformationService;
 import com.pla.core.dto.GeneralInformationDto;
+import com.pla.core.dto.GeneralInformationProcessDto;
 import org.nthdimenzion.presentation.Result;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -44,7 +45,7 @@ public class OrganizationInformationController {
 
     @RequestMapping(value = "/getorganizationprocessitem", method = RequestMethod.GET)
     @ResponseBody
-    public  Map<String,List<Map<String,String>>> getOrganizationInformationItem(){
+    public List<GeneralInformationProcessDto> getOrganizationInformationItem(){
        return generalInformationService.getOrganizationProcessItems();
     }
 

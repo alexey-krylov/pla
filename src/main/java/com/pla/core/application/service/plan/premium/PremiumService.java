@@ -84,10 +84,10 @@ public class PremiumService {
             if (isNotEmpty(planName))
                 plans.put("planName", planName);
             String coverageId = (String) plans.get("coverageId");
+            plans.put("coverageNames", "");
             if (isNotEmpty(coverageId)) {
                 List<Map<String, String>> coverages = planFinder.getCoverageName(new PlanId(planId));
-                if (isNotEmpty(coverages))
-                    plans.put("coverageNames", coverages);
+                plans.put("coverageNames", coverages);
             }
             listOfPremiumPlan.add(plans);
         }
