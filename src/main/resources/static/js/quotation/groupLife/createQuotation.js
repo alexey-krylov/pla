@@ -1,7 +1,13 @@
 angular.module('createQuotation',['common','ngRoute','mgcrea.ngStrap.select','mgcrea.ngStrap.alert','mgcrea.ngStrap.popover','directives','angularFileUpload','mgcrea.ngStrap.dropdown','ngSanitize','commonServices'])
-    .controller('quotationCtrl',['$scope','$http','$timeout','$upload','provinces','getProvinceAndCityDetail','globalConstants','agentDetails','stepsSaved','proposerDetails','quotationNumber','getQueryParameter',
-        function($scope,$http,$timeout,$upload,provinces,getProvinceAndCityDetail,globalConstants,agentDetails,stepsSaved,proposerDetails,quotationNumber,getQueryParameter){
-            $scope.isEditMode = !!getQueryParameter("mode");
+    .controller('quotationCtrl',['$scope','$http','$timeout','$upload','provinces','getProvinceAndCityDetail','globalConstants','agentDetails','stepsSaved','proposerDetails','quotationNumber','getQueryParameter','$window',
+        function($scope,$http,$timeout,$upload,provinces,getProvinceAndCityDetail,globalConstants,agentDetails,stepsSaved,proposerDetails,quotationNumber,getQueryParameter,$window){
+            var mode = getQueryParameter("mode");
+            if(mode=='view'){
+                $scope.isViewMode = true;
+                $scope.isEditMode = true;
+            }else{
+                $scope.isEditMode = true;
+            }
 
             /*regex for number pattern for more details see commonModule.js*/
             $scope.numberPattern =globalConstants.numberPattern;
@@ -150,6 +156,10 @@ angular.module('createQuotation',['common','ngRoute','mgcrea.ngStrap.select','mg
                         })
                 });
             };
+
+            $scope.back = function(){
+                $window.location.href= 'listgrouplifequotation';
+            }
         }])
     .config(['$dropdownProvider',function($dropdownProvider){
         angular.extend($dropdownProvider.defaults, {

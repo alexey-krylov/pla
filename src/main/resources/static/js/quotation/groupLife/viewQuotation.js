@@ -16,7 +16,7 @@ var viewQuotationModule = (function(){
     };
 
     services.modifyQuotation = function(){
-        var quotationId = this.selectedItem
+        var quotationId = this.selectedItem;
         $.ajax({
             url: '/pla/quotation/grouplife/getversionnumber/'+quotationId,
             type: 'GET',
@@ -24,6 +24,21 @@ var viewQuotationModule = (function(){
             success: function(msg) {
                 if(msg.status=='200'){
                     window.location.href = "/pla/quotation/grouplife/creategrouplifequotation?quotationId="+quotationId+"&version="+msg.data+"&mode=edit";
+                }else if(msg.status=='500'){
+                }
+            }
+        });
+    };
+
+    services.viewQuotation = function(){
+        var quotationId = this.selectedItem;
+        $.ajax({
+            url: '/pla/quotation/grouplife/getversionnumber/'+quotationId,
+            type: 'GET',
+            contentType: 'application/json; charset=utf-8',
+            success: function(msg) {
+                if(msg.status=='200'){
+                    window.location.href = "/pla/quotation/grouplife/creategrouplifequotation?quotationId="+quotationId+"&version="+msg.data+"&mode=view";
                 }else if(msg.status=='500'){
                 }
             }
