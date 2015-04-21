@@ -22,7 +22,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -91,7 +94,7 @@ public class PremiumSetUpController {
     }
 
     @RequestMapping(value = "/downloadpremiumtemplate", method = RequestMethod.POST)
-    public void downloadPremiumTemplate(@RequestBody PremiumTemplateDto premiumTemplateDto, HttpServletRequest request, HttpServletResponse response) throws IOException {
+    public void downloadPremiumTemplate(@Valid @ModelAttribute PremiumTemplateDto premiumTemplateDto, HttpServletRequest request, HttpServletResponse response) throws IOException {
         response.reset();
         response.setContentType("application/msexcel");
         Plan plan = planRepository.findOne(new PlanId(premiumTemplateDto.getPlanId()));
@@ -138,7 +141,7 @@ public class PremiumSetUpController {
                 List<Map<Map<PremiumInfluencingFactor, String>, Double>> premiumLineItem = premiumService.parsePremiumTemplate(premiumTemplateWorkbook, createPremiumCommand.getPremiumInfluencingFactors(), createPremiumCommand.getPlanId(), createPremiumCommand.getCoverageId());
                 createPremiumCommand.setPremiumLineItem(premiumLineItem);
                 commandGateway.send(createPremiumCommand);
-                modelAndView.setViewName("pla/core/premium/listpremium");
+                modelAndView.setViewName("redirect:listpremium");
             }
         } catch (Exception e) {
             modelAndView.addObject("message", e.getMessage());

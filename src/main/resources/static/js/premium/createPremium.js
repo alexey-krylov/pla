@@ -35,10 +35,7 @@ App.controller('CreatePremiumController', ['$scope', '$http', function ($scope, 
         }
 
     }
-    /*   $http.get('/pla/core/premium/getpremiuminfluencingfactors').success(function (data) {
-        $scope.mulSelect = data;
 
-     });*/
     $http.get('/pla/core/plan/getallplan').success(function (data) {
         for (var i = 0; i < data.length; i++) {
             $scope.planList = data[i];
@@ -50,13 +47,6 @@ App.controller('CreatePremiumController', ['$scope', '$http', function ($scope, 
         }
     });
 
-    $scope.$watch('createPremium.definedFor', function (newValue, oldValue) {
-        if (newValue == 'plan') {
-            $scope.boolVal = true;
-        } else if (newValue == 'optionalCoverage') {
-            $scope.boolVal = false;
-        }
-    });
     $scope.$watch('createPremium.planId', function (newValue, oldValue) {
         if (newValue) {
             var planId = $scope.createPremium.planId;
@@ -67,14 +57,7 @@ App.controller('CreatePremiumController', ['$scope', '$http', function ($scope, 
             });
         }
     });
-    $scope.$watch('createPremium.coverageId', function (newValue, oldValue) {
-        if (newValue) {
 
-            $scope.boolVal = true;
-        } else {
-            $scope.boolVal = false;
-        }
-    });
     $scope.$watch('createPremium.effectiveFrom', function (newValue, oldValue) {
         if (newValue) {
             if (!moment($scope.createPremium.effectiveFrom, 'DD/MM/YYYY').isValid()) {
@@ -84,36 +67,5 @@ App.controller('CreatePremiumController', ['$scope', '$http', function ($scope, 
         }
     });
 
-    $scope.getDownloadedTemplate = function () {
-        $http({
-            url: '/pla/core/premium/downloadpremiumtemplate', method: 'POST', responseType: 'arraybuffer', data: $scope.createPremium,
-            headers: {
-                'Content-type': 'application/json', 'Accept': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
-            }
-        }).success(function (data, status, headers) {
-            var filename = "";
-            var header = headers('content-disposition');
-            if (header && header.indexOf('attachment') !== -1) {
-                var filenameRegex = /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/;
-                var matches = filenameRegex.exec(header);
-                if (matches != null && matches[1]) filename = matches[1].replace(/['"]/g, '');
-            }
-            $scope.fileName = filename;
-            var blob = new Blob([data], {
-                type: 'application/msexcel'
-
-            });
-            var objectUrl = URL.createObjectURL(blob);
-            var a = document.createElement("a");
-            document.body.appendChild(a);
-            a.style = "display: none";
-            a.href = objectUrl;
-            a.download = filename;
-            a.click();
-
-        }).error(function () {
-            //Some error log
-        });
-    }
 
 }]);
