@@ -11,6 +11,7 @@ import com.pla.core.domain.model.plan.Plan;
 import com.pla.core.query.PlanFinder;
 import com.pla.core.repository.PlanRepository;
 import com.pla.publishedlanguage.domain.model.PremiumInfluencingFactor;
+import com.pla.sharedkernel.domain.model.PremiumFactor;
 import com.pla.sharedkernel.identifier.CoverageId;
 import com.pla.sharedkernel.identifier.PlanId;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
@@ -79,6 +80,7 @@ public class PremiumService {
         for (Map plans : premiumPlan) {
             String planId = plans.get("planId").toString();
             String planName = planFinder.getPlanName(new PlanId(planId));
+            plans.put("premiumFactor", PremiumFactor.valueOf((String) plans.get("premiumFactor")).getDescription());
             if (isNotEmpty(planName))
                 plans.put("planName", planName);
             String coverageId = (String) plans.get("coverageId");

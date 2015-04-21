@@ -5,5 +5,15 @@ package com.pla.sharedkernel.domain.model;
  */
 public enum PremiumFactor {
 
-    FLAT_AMOUNT, PER_THOUSAND
+    FLAT_AMOUNT("Flat Amount"), PER_THOUSAND("Per Thousand");
+
+    private String description;
+
+    PremiumFactor(String description) {
+        this.description = description;
+    }
+
+    public String getDescription() {
+        return description;
+    }
 }

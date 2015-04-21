@@ -45,7 +45,7 @@ import java.util.Map;
 @RequestMapping(value = "/core/premium")
 public class PremiumSetUpController {
 
-    private static final String PREMIUM_TEMPLATE_FILE_NAME_SUFFIX = "_PremiumTemplate.xls";
+    private static final String PREMIUM_TEMPLATE_FILE_NAME_SUFFIX = "-PremiumTemplate.xls";
     private PremiumService premiumService;
     private CommandGateway commandGateway;
     private PlanRepository planRepository;
@@ -99,6 +99,7 @@ public class PremiumSetUpController {
         response.setContentType("application/msexcel");
         Plan plan = planRepository.findOne(new PlanId(premiumTemplateDto.getPlanId()));
         String templateFileName = plan.getPlanDetail().getPlanName() + PREMIUM_TEMPLATE_FILE_NAME_SUFFIX;
+        templateFileName = templateFileName.replaceAll("[\\s]*", "").trim();
         response.setHeader("content-disposition", "attachment; filename=" + templateFileName + "");
         OutputStream outputStream = response.getOutputStream();
         HSSFWorkbook premiumTemplateWorkbook = premiumService.generatePremiumExcelTemplate(premiumTemplateDto.getPremiumInfluencingFactors(),
@@ -110,17 +111,16 @@ public class PremiumSetUpController {
 
     @RequestMapping(value = "/uploadpremiumdata", method = RequestMethod.POST)
     public ModelAndView uploadPremiumData(@Valid @ModelAttribute("createPremiumCommand") CreatePremiumCommand createPremiumCommand, BindingResult bindingResult,
-                                    HttpServletResponse response) throws IOException {
+                                          HttpServletResponse response) throws IOException {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("pla/core/premium/createPremium");
-
         if (bindingResult.hasErrors()) {
             return modelAndView;
         }
-
         MultipartFile file = createPremiumCommand.getFile();
         Plan plan = planRepository.findOne(new PlanId(createPremiumCommand.getPlanId()));
         String templateFileName = plan.getPlanDetail().getPlanName() + PREMIUM_TEMPLATE_FILE_NAME_SUFFIX;
+        templateFileName = templateFileName.replaceAll("[\\s]*", "").trim();
         if (!("application/msexcel".equals(file.getContentType()) || "application/vnd.ms-excel".equals(file.getContentType())) && !templateFileName.equals(file.getOriginalFilename())) {
             bindingResult.addError(new ObjectError("message", "Uploaded file is not valid excel"));
             return modelAndView;
