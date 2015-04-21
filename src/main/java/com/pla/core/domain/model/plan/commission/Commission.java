@@ -164,7 +164,7 @@ public class Commission implements ICrudEntity {
         try {
             checkArgument(fromDate.isAfter(this.fromDate));
         } catch (IllegalArgumentException e) {
-            throw new CommissionDomainException("From Date should be greater than " + fromDate);
+            throw new CommissionDomainException("From Date should be greater than " + this.fromDate);
         }
     }
 }
