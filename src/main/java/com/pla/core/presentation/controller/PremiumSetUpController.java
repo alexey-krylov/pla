@@ -8,7 +8,6 @@ package com.pla.core.presentation.controller;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import com.pla.core.application.exception.PremiumTemplateParseException;
 import com.pla.core.application.plan.premium.CreatePremiumCommand;
 import com.pla.core.application.plan.premium.PremiumTemplateDto;
 import com.pla.core.application.service.plan.premium.PremiumService;
@@ -19,7 +18,6 @@ import com.pla.sharedkernel.identifier.PlanId;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.poifs.filesystem.POIFSFileSystem;
 import org.axonframework.commandhandling.gateway.CommandGateway;
-import org.nthdimenzion.presentation.Result;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -107,37 +105,9 @@ public class PremiumSetUpController {
         outputStream.close();
     }
 
-    @RequestMapping(value = "/verifypremiumdata", method = RequestMethod.POST)
-    public Result validatePremiumData(PremiumTemplateDto premiumTemplateDto, HttpServletResponse response) throws IOException {
-        Plan plan = planRepository.findOne(new PlanId(premiumTemplateDto.getPlanId()));
-        String templateFileName = plan.getPlanDetail().getPlanName() + PREMIUM_TEMPLATE_FILE_NAME_SUFFIX;
-        MultipartFile file = premiumTemplateDto.getFile();
-        if (!("application/msexcel".equals(file.getContentType()) || "application/vnd.ms-excel".equals(file.getContentType())) && !templateFileName.equals(file.getOriginalFilename())) {
-            return Result.failure("Uploaded file is not valid premium template");
-        }
-        POIFSFileSystem fs = new POIFSFileSystem(file.getInputStream());
-        HSSFWorkbook premiumTemplateWorkbook = new HSSFWorkbook(fs);
-        try {
-            HSSFWorkbook errorWorkbook = premiumService.validatePremiumTemplateData(premiumTemplateWorkbook, premiumTemplateDto.getPremiumInfluencingFactors(), premiumTemplateDto.getPlanId(), premiumTemplateDto.getCoverageId());
-            if (errorWorkbook == null) {
-                return Result.success("Premium Template is valid");
-            }
-            response.reset();
-            response.setContentType("application/msexcel");
-            response.setHeader("content-disposition", "attachment; filename=" + "error.xls" + "");
-            OutputStream outputStream = response.getOutputStream();
-            errorWorkbook.write(outputStream);
-            outputStream.flush();
-            outputStream.close();
-        } catch (PremiumTemplateParseException exception) {
-            return Result.failure(exception.getMessage());
-        }
-        return Result.success("Verified the file");
-    }
-
     @RequestMapping(value = "/uploadpremiumdata", method = RequestMethod.POST)
     public String uploadPremiumData(@Valid @ModelAttribute("createPremiumCommand") CreatePremiumCommand createPremiumCommand, BindingResult bindingResult,
-                                    HttpServletRequest servletRequest, HttpServletResponse response) throws IOException {
+                                    HttpServletResponse response) throws IOException {
         MultipartFile file = createPremiumCommand.getFile();
         Plan plan = planRepository.findOne(new PlanId(createPremiumCommand.getPlanId()));
         String templateFileName = plan.getPlanDetail().getPlanName() + PREMIUM_TEMPLATE_FILE_NAME_SUFFIX;
@@ -145,19 +115,18 @@ public class PremiumSetUpController {
             bindingResult.addError(new ObjectError("message", "Uploaded file is not valid excel"));
             ModelAndView modelAndView = new ModelAndView();
             modelAndView.setViewName("pla/core/premium/createPremium");
-//            modelAndView.addObject("message", "Uploaded file is not valid excel");
             return "pla/core/premium/createPremium";
         }
         POIFSFileSystem fs = new POIFSFileSystem(file.getInputStream());
         HSSFWorkbook premiumTemplateWorkbook = new HSSFWorkbook(fs);
         try {
-            HSSFWorkbook errorWorkbook = premiumService.validatePremiumTemplateData(premiumTemplateWorkbook, createPremiumCommand.getPremiumInfluencingFactors(), createPremiumCommand.getPlanId(), createPremiumCommand.getCoverageId());
-            if (errorWorkbook != null) {
+            boolean isValidTemplate = premiumService.validatePremiumTemplateData(premiumTemplateWorkbook, createPremiumCommand.getPremiumInfluencingFactors(), createPremiumCommand.getPlanId(), createPremiumCommand.getCoverageId());
+            if (!isValidTemplate) {
                 response.reset();
                 response.setContentType("application/msexcel");
-                response.setHeader("content-disposition", "attachment; filename=" + "error.xls" + "");
+                response.setHeader("content-disposition", "attachment; filename=" + templateFileName + "");
                 OutputStream outputStream = response.getOutputStream();
-                errorWorkbook.write(outputStream);
+                premiumTemplateWorkbook.write(outputStream);
                 outputStream.flush();
                 outputStream.close();
             } else {
@@ -168,7 +137,6 @@ public class PremiumSetUpController {
 
         } catch (Exception e) {
             ModelAndView modelAndView = new ModelAndView();
-//            modelAndView.setViewName("pla/core/premium/createPremium");
             modelAndView.addObject("message", e.getMessage());
             return "pla/core/premium/createPremium";
         }
