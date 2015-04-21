@@ -26,7 +26,6 @@ angular.module('createAgent',['common','ngRoute','mgcrea.ngStrap.select','mgcrea
                     team:2,
                     contact:3
                 };
-                $scope.agentDetails.authorizePlansToSell=[];
                 $scope.stepsToRemove={index:1,howMany:1};
             }
             $scope.$watch('agentDetails.teamDetail.teamId',function(newVal,oldVal){
@@ -134,25 +133,26 @@ angular.module('createAgent',['common','ngRoute','mgcrea.ngStrap.select','mgcrea
             $scope.update =  function(){
                 $scope.isFormSubmitted = true;
                 if($scope.agentDetailsForm.$valid && $scope.teamDetailsForm.$valid && $scope.contactDetailsForm.$valid){
-                    $scope.contactDetailsForm.$submitted=true;
                     $http.post('/pla/core/agent/update',transformJson.createCompatibleJson(angular.copy($scope.agentDetails),$scope.physicalCities,$scope.primaryCities,$scope.trainingCompleteOn,true))
                         .success(function(response, status, headers, config){
+                            if(response.status=="200"){
+                                $scope.contactDetailsForm.$submitted=true;
+                            }
                         })
                         .error(function(response, status, headers, config){
-                            alert("error!!!");
                         });
                 }
             };
             $scope.submit = function(){
                 $scope.isFormSubmitted = true;
                 if($scope.agentDetailsForm.$valid && $scope.teamDetailsForm.$valid && $scope.contactDetailsForm.$valid){
-                    $scope.contactDetailsForm.$submitted=true;
                     $http.post('/pla/core/agent/create',transformJson.createCompatibleJson(angular.copy($scope.agentDetails),$scope.physicalCities,$scope.primaryCities,$scope.trainingCompleteOn,false))
                         .success(function(response, status, headers, config){
-
+                            if(response.status=="200"){
+                                $scope.contactDetailsForm.$submitted=true;
+                            }
                         })
                         .error(function(response, status, headers, config){
-                            alert("error!!!");
                         });
                 }
             };
@@ -161,16 +161,10 @@ angular.module('createAgent',['common','ngRoute','mgcrea.ngStrap.select','mgcrea
     .factory('transformJson',['formatJSDateToDDMMYYYY',function(formatJSDateToDDMMYYYY){
         var transformService = {};
         transformService.createCompatibleJson = function (agentDetails,physicalCities,primaryCities,trainingCompleteOn,isUpdate) {
-            var authorizePlansToSell = angular.copy(agentDetails.authorizePlansToSell);
-            agentDetails.authorizePlansToSell = [];
-            angular.forEach(authorizePlansToSell,function(value,key){
-                this.push({"planId":value});
-            },agentDetails.authorizePlansToSell);
             agentDetails.physicalAddress.physicalGeoDetail.cityName = _.findWhere(physicalCities,{geoId:agentDetails.physicalAddress.physicalGeoDetail.cityCode}).geoName;
             agentDetails.contactDetail.geoDetail.cityName =_.findWhere(primaryCities,{geoId:agentDetails.contactDetail.geoDetail.cityCode}).geoName;
-            console.log(trainingCompleteOn);
-            agentDetails.agentProfile.trainingCompleteOn = formatJSDateToDDMMYYYY(trainingCompleteOn);
             if(!isUpdate){
+                agentDetails.agentProfile.trainingCompleteOn = formatJSDateToDDMMYYYY(trainingCompleteOn);
                 delete agentDetails.agentStatus;
             }
             delete agentDetails.teamDetail.regionName;
