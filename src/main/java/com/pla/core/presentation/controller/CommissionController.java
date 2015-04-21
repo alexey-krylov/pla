@@ -21,6 +21,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -67,6 +68,9 @@ public class CommissionController {
             modelAndView.setViewName("pla/core/commission/viewCommission");
             modelAndView.addObject("commissionList", CommissionDto.transformToCommissionDto(commissions, commissionTerms, planFinder));
             modelAndView.addObject("commissionType",commissionType);
+            List<CommissionDto> commissionDtos = CommissionDto.transformToCommissionDto(commissions, commissionTerms, planFinder);
+            Collections.sort(commissionDtos);
+            modelAndView.addObject("commissionList", commissionDtos);
             return modelAndView;
         }
     }
@@ -103,7 +107,7 @@ public class CommissionController {
             LOGGER.error("Error in creating commission", e);
             return Result.failure(e.getMessage());
         }
-        return Result.success("Commission created successfully");
+        return Result.success((createCommissionCommand.getCommissionType().toString().equals("OVERRIDE") ? "Override Commission" : "Commission") + " created successfully");
     }
 
     @RequestMapping(value = "/update", method = RequestMethod.POST)
