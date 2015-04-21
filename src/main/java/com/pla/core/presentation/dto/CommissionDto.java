@@ -30,7 +30,7 @@ import java.util.stream.Collectors;
 @Getter
 @Setter
 @EqualsAndHashCode(of = {"commissionId", "planId", "planName", "availableFor", "commissionType", "fromDate", "premiumFee"})
-public class CommissionDto {
+public class CommissionDto implements Comparable<CommissionDto> {
 
     String commissionId;
     String planId;
@@ -76,6 +76,7 @@ public class CommissionDto {
         return commissionTermDto;
     }
 
+
     private static class TransformAllCommissionToCommissionDto implements Function<Map<String, Object>, CommissionDto> {
         private List<Map<String, Object>> allCommissionTerms;
         private PlanFinder planFinder;
@@ -111,5 +112,11 @@ public class CommissionDto {
         public boolean test(Map<String, Object> commissionTerms) {
             return commissionId.equals(commissionTerms.get("commissionId"));
         }
+    }
+
+    public int compareTo(CommissionDto commissionDto) {
+
+        return (this.planName.compareTo(commissionDto.planName));
+
     }
 }
