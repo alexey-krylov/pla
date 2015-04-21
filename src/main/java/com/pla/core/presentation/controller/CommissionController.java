@@ -57,8 +57,10 @@ public class CommissionController {
             List<Map<String, Object>> commissionTerms = commissionFinder.getAllCommissionTerm();
             ModelAndView modelAndView = new ModelAndView();
             modelAndView.setViewName("pla/core/commission/viewCommission");
-            modelAndView.addObject("commissionList", CommissionDto.transformToCommissionDto(commissions, commissionTerms, planFinder));
             modelAndView.addObject("commissionType",commissionType);
+            List<CommissionDto> commissionDtos = CommissionDto.transformToCommissionDto(commissions, commissionTerms, planFinder);
+            Collections.sort(commissionDtos);
+            modelAndView.addObject("commissionList", commissionDtos);
             return modelAndView;
         } else {
 
@@ -66,7 +68,6 @@ public class CommissionController {
             List<Map<String, Object>> commissionTerms = commissionFinder.getAllCommissionTerm();
             ModelAndView modelAndView = new ModelAndView();
             modelAndView.setViewName("pla/core/commission/viewCommission");
-            modelAndView.addObject("commissionList", CommissionDto.transformToCommissionDto(commissions, commissionTerms, planFinder));
             modelAndView.addObject("commissionType",commissionType);
             List<CommissionDto> commissionDtos = CommissionDto.transformToCommissionDto(commissions, commissionTerms, planFinder);
             Collections.sort(commissionDtos);
