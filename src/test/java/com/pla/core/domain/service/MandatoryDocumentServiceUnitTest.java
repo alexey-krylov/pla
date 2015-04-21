@@ -3,6 +3,7 @@ package com.pla.core.domain.service;
 import com.pla.core.domain.model.Admin;
 import com.pla.core.domain.model.MandatoryDocument;
 import com.pla.core.domain.model.ProcessType;
+import com.pla.core.query.CoverageFinder;
 import com.pla.core.query.MandatoryDocumentFinder;
 import com.pla.core.query.PlanFinder;
 import com.pla.sharedkernel.identifier.CoverageId;
@@ -38,6 +39,8 @@ public class MandatoryDocumentServiceUnitTest {
     @Mock
     private PlanFinder planFinder;
 
+    @Mock
+    private CoverageFinder coverageFinder;
     MandatoryDocumentService mandatoryDocumentService;
 
     private UserDetails userDetails;
@@ -46,7 +49,7 @@ public class MandatoryDocumentServiceUnitTest {
 
     @Before
     public void setUp() {
-        mandatoryDocumentService = new MandatoryDocumentService(adminRoleAdapter,mandatoryDocumentFinder,planFinder);
+        mandatoryDocumentService = new MandatoryDocumentService(adminRoleAdapter,mandatoryDocumentFinder,planFinder,coverageFinder);
         userDetails = UserLoginDetailDto.createUserLoginDetailDto("", "");
         admin = new Admin();
     }

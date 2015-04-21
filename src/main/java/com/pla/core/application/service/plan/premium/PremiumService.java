@@ -84,7 +84,7 @@ public class PremiumService {
             String coverageId = (String) plans.get("coverageId");
             plans.put("coverageNames", "");
             if (isNotEmpty(coverageId)) {
-                List<Map<String, String>> coverages = planFinder.getCoverageName(new PlanId(planId));
+                List<Map> coverages = planFinder.getAllOptionalCoverage(new PlanId(planId));
                 plans.put("coverageNames", coverages);
             }
             listOfPremiumPlan.add(plans);

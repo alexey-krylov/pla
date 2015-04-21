@@ -11,25 +11,24 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.joda.JodaModule;
 import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
 import com.mongodb.BasicDBObject;
 import com.pla.core.domain.model.plan.Plan;
+import com.pla.core.dto.CoverageDto;
 import com.pla.sharedkernel.domain.model.CoverageType;
 import com.pla.sharedkernel.identifier.PlanId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.BasicQuery;
-import org.springframework.jdbc.core.ColumnMapRowMapper;
-import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
-import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.stereotype.Service;
 
 import javax.sql.DataSource;
 import java.util.*;
+import java.util.function.Function;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 import static org.nthdimenzion.utils.UtilValidator.isEmpty;
-import static org.nthdimenzion.utils.UtilValidator.isNotEmpty;
 
 /**
  * @author: Nischitha
@@ -41,14 +40,10 @@ public class PlanFinder {
 
     private MongoTemplate mongoTemplate;
     private ObjectMapper objectMapper;
-    private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
-
-    public static final String GET_COVERAGE_NAME_FOR_GIVEN_COVERAGE_ID_QUERY ="SELECT coverage_name coverageName FROM coverage WHERE coverage_id =:coverageId";
 
     @Autowired
-    public void setDataSource(DataSource dataSource) {
-        this.namedParameterJdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
-    }
+    private CoverageFinder coverageFinder;
+
 
     @Autowired
     public PlanFinder(MongoTemplate mongoTemplate) {
@@ -142,28 +137,42 @@ public class PlanFinder {
         return planName;
     }
 
-    public List<Map<String, String>> getCoverageName(PlanId planId) {
+    public List<Map> getAllOptionalCoverage(PlanId planId) {
         Map plan = findPlanByPlanId(planId);
         if (isEmpty(plan)) {
             return Lists.newArrayList();
         }
-        List<Map<String, String>> coverageList = Lists.newArrayList();
-        List<Map> listCoverages = (List) plan.get("coverages");
-        for (Map coverageMap : listCoverages) {
-            Map<String, String> coverageMaps = Maps.newLinkedHashMap();
-            String coverageId = (String) coverageMap.get("coverageId");
-            if (isNotEmpty(coverageId) && CoverageType.OPTIONAL.name().equals(coverageMap.get("coverageType"))) {
-                coverageMaps.put("coverageId", coverageId);
-                coverageMaps.put("coverageName", getCoverageNameById(coverageId));
-                coverageList.add(coverageMaps);
+        List<Map> planCoverageList = (List) plan.get("coverages");
+        List<CoverageDto> coverageNameList = coverageFinder.getAllCoverage();
+        planCoverageList = planCoverageList.stream().filter(new Predicate<Map>() {
+            @Override
+            public boolean test(Map map) {
+                return CoverageType.OPTIONAL.name().equals(map.get("coverageType"));
             }
-        }
-        return coverageList;
+        }).map(new TransformPlanCoverageWithCoverageName(coverageNameList)).collect(Collectors.toList());
+        return planCoverageList;
     }
 
-    private String getCoverageNameById(String coverageId){
-        SqlParameterSource sqlParameterSource = new MapSqlParameterSource("coverageId",coverageId);
-        List<Map<String,Object>>  coverageNameList = namedParameterJdbcTemplate.query(GET_COVERAGE_NAME_FOR_GIVEN_COVERAGE_ID_QUERY, sqlParameterSource, new ColumnMapRowMapper());
-        return isNotEmpty(coverageNameList)? (String) coverageNameList.get(0).get("coverageName"):"";
+    private class TransformPlanCoverageWithCoverageName implements Function<Map, Map<String, Object>> {
+
+        private List<CoverageDto> allCoverages;
+
+        TransformPlanCoverageWithCoverageName(List<CoverageDto> allCoverages) {
+            this.allCoverages = allCoverages;
+        }
+
+        @Override
+        public Map<String, Object> apply(Map planCoverageMap) {
+            CoverageDto coverageMap = allCoverages.stream().filter(new Predicate<CoverageDto>() {
+                @Override
+                public boolean test(CoverageDto coverageMap) {
+                    return planCoverageMap.get("coverageId").equals(coverageMap.getCoverageId());
+                }
+            }).findAny().get();
+            planCoverageMap.put("coverageName", coverageMap.getCoverageName());
+            return planCoverageMap;
+        }
     }
+
+
 }
