@@ -77,40 +77,28 @@ public class PremiumTemplateExcelGenerator {
 
     private void createRowWithDvConstraintCellData(int lastRowNumber, List<PremiumInfluencingFactor> premiumInfluencingFactors, Plan plan, CoverageId coverageId, HSSFWorkbook premiumTemplateWorkbook, HSSFSheet premiumSheet) {
         for (int cellNumber = 0; cellNumber < premiumInfluencingFactors.size(); cellNumber++) {
-            if (!PremiumInfluencingFactor.BMI.equals(premiumInfluencingFactors.get(cellNumber))) {
-                String columnIndex = String.valueOf((char) (65 + cellNumber));
-                PremiumInfluencingFactor premiumInfluencingFactor = premiumInfluencingFactors.get(cellNumber);
-                HSSFSheet hiddenSheetForNamedCell = premiumTemplateWorkbook.createSheet(premiumInfluencingFactor.name());
-                String[] planData = getAllowedValues(premiumInfluencingFactor, plan, coverageId);
-                createNamedRowWithCell(planData, hiddenSheetForNamedCell, cellNumber);
-                HSSFName namedCell = premiumTemplateWorkbook.createName();
-                namedCell.setNameName(premiumInfluencingFactor.name());
-                String formula = premiumInfluencingFactor.name() + "!$" + columnIndex + "$1:$" + columnIndex + "$";
-                namedCell.setRefersToFormula(formula + (planData.length == 0 ? 1 : planData.length));
-                DVConstraint constraint = DVConstraint.createFormulaListConstraint(premiumInfluencingFactor.name());
-                CellRangeAddressList addressList = new CellRangeAddressList(1, lastRowNumber, cellNumber, cellNumber);
-                HSSFDataValidation dataValidation = new HSSFDataValidation(addressList, constraint);
-                dataValidation.setErrorStyle(DataValidation.ErrorStyle.INFO);
-                dataValidation.createErrorBox("Error", "Provide proper " + premiumInfluencingFactor.getDescription() + " value");
-                premiumTemplateWorkbook.setSheetHidden(premiumTemplateWorkbook.getSheetIndex(hiddenSheetForNamedCell), true);
-                premiumSheet.addValidationData(dataValidation);
-
-            }
+            String columnIndex = String.valueOf((char) (65 + cellNumber));
+            PremiumInfluencingFactor premiumInfluencingFactor = premiumInfluencingFactors.get(cellNumber);
+            HSSFSheet hiddenSheetForNamedCell = premiumTemplateWorkbook.createSheet(premiumInfluencingFactor.name());
+            String[] planData = getAllowedValues(premiumInfluencingFactor, plan, coverageId);
+            createNamedRowWithCell(planData, hiddenSheetForNamedCell, cellNumber);
+            HSSFName namedCell = premiumTemplateWorkbook.createName();
+            namedCell.setNameName(premiumInfluencingFactor.name());
+            String formula = premiumInfluencingFactor.name() + "!$" + columnIndex + "$1:$" + columnIndex + "$";
+            namedCell.setRefersToFormula(formula + (planData.length == 0 ? 1 : planData.length));
+            DVConstraint constraint = DVConstraint.createFormulaListConstraint(premiumInfluencingFactor.name());
+            CellRangeAddressList addressList = new CellRangeAddressList(1, lastRowNumber, cellNumber, cellNumber);
+            HSSFDataValidation dataValidation = new HSSFDataValidation(addressList, constraint);
+            dataValidation.setErrorStyle(DataValidation.ErrorStyle.INFO);
+            dataValidation.createErrorBox("Error", "Provide proper " + premiumInfluencingFactor.getDescription() + " value");
+            premiumTemplateWorkbook.setSheetHidden(premiumTemplateWorkbook.getSheetIndex(hiddenSheetForNamedCell), true);
+            premiumSheet.addValidationData(dataValidation);
         }
 
     }
 
     private String[] getAllowedValues(PremiumInfluencingFactor premiumInfluencingFactor, Plan plan, CoverageId coverageId) {
-        if (PremiumInfluencingFactor.INDUSTRY.equals(premiumInfluencingFactor)) {
-            List<Map<String, Object>> allIndustries = masterFinder.getAllIndustry();
-            allIndustries = isNotEmpty(allIndustries) ? allIndustries : Lists.newArrayList();
-            String[] industries = new String[allIndustries.size()];
-            for (int count = 0; count < allIndustries.size(); count++) {
-                Map<String, Object> industryMap = allIndustries.get(count);
-                industries[count] = (String) industryMap.get("description");
-            }
-            return industries;
-        } else if (PremiumInfluencingFactor.DESIGNATION.equals(premiumInfluencingFactor)) {
+        if (PremiumInfluencingFactor.DESIGNATION.equals(premiumInfluencingFactor)) {
             List<Map<String, Object>> allDesignations = masterFinder.getAllDesignation();
             allDesignations = isNotEmpty(allDesignations) ? allDesignations : Lists.newArrayList();
             String[] designations = new String[allDesignations.size()];

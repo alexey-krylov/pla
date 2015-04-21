@@ -79,6 +79,12 @@ public class PremiumService {
         List<Map> listOfPremiumPlan = Lists.newArrayList();
         for (Map plans : premiumPlan) {
             String planId = plans.get("planId").toString();
+            List premiumInfluencingFactors = (List) plans.get("premiumInfluencingFactors");
+            List premiumInfluencingFactorWithDescription = Lists.newArrayList();
+            for(Object premiumInfluencingFactor:premiumInfluencingFactors){
+                premiumInfluencingFactorWithDescription.add(PremiumInfluencingFactor.valueOf((String)premiumInfluencingFactor).getDescription());
+            }
+            plans.put("premiumInfluencingFactors",premiumInfluencingFactorWithDescription);
             String planName = planFinder.getPlanName(new PlanId(planId));
             plans.put("premiumFactor", PremiumFactor.valueOf((String) plans.get("premiumFactor")).getDescription());
             if (isNotEmpty(planName))

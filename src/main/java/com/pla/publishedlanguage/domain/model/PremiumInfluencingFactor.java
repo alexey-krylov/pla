@@ -156,22 +156,6 @@ public enum PremiumInfluencingFactor {
         public String getErrorMessage(String value) {
             return value + " :is not valid Smoking Status.";
         }
-    },
-    INDUSTRY("Industry") {
-        @Override
-        public String[] getAllowedValues(Plan plan, CoverageId coverageId) {
-            return new String[]{};
-        }
-
-        @Override
-        public boolean isValidValue(Plan plan, CoverageId coverageId, String value) {
-            return isNotEmpty(value);
-        }
-
-        @Override
-        public String getErrorMessage(String value) {
-            return value + " :is not valid Industry.";
-        }
     }, DESIGNATION("Designation") {
         @Override
         public String[] getAllowedValues(Plan plan, CoverageId coverageId) {
@@ -201,21 +185,6 @@ public enum PremiumInfluencingFactor {
         @Override
         public String getErrorMessage(String value) {
             return value + " :is not valid Occupation category";
-        }
-    }, BMI("BMI") {
-        @Override
-        public String[] getAllowedValues(Plan plan, CoverageId coverageId) {
-            return new String[]{""};
-        }
-
-        @Override
-        public boolean isValidValue(Plan plan, CoverageId coverageId, String value) {
-            return isNotEmpty(value);
-        }
-
-        @Override
-        public String getErrorMessage(String value) {
-            return " ";
         }
     };
 

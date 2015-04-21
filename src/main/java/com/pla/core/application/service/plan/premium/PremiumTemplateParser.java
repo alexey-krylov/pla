@@ -294,16 +294,7 @@ public class PremiumTemplateParser {
     }
 
     private String[] getAllowedValues(PremiumInfluencingFactor premiumInfluencingFactor, Plan plan, CoverageId coverageId) {
-        if (PremiumInfluencingFactor.INDUSTRY.equals(premiumInfluencingFactor)) {
-            List<Map<String, Object>> allIndustries = masterFinder.getAllIndustry();
-            allIndustries = isNotEmpty(allIndustries) ? allIndustries : Lists.newArrayList();
-            String[] industries = new String[allIndustries.size()];
-            for (int count = 0; count < allIndustries.size(); count++) {
-                Map<String, Object> industryMap = allIndustries.get(count);
-                industries[count] = (String) industryMap.get("description");
-            }
-            return industries;
-        } else if (PremiumInfluencingFactor.DESIGNATION.equals(premiumInfluencingFactor)) {
+        if (PremiumInfluencingFactor.DESIGNATION.equals(premiumInfluencingFactor)) {
             List<Map<String, Object>> allDesignations = masterFinder.getAllDesignation();
             allDesignations = isNotEmpty(allDesignations) ? allDesignations : Lists.newArrayList();
             String[] designations = new String[allDesignations.size()];

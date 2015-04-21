@@ -19,10 +19,8 @@ import com.pla.sharedkernel.identifier.PlanId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.BasicQuery;
-import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Service;
 
-import javax.sql.DataSource;
 import java.util.*;
 import java.util.function.Function;
 import java.util.function.Predicate;
@@ -37,13 +35,12 @@ import static org.nthdimenzion.utils.UtilValidator.isEmpty;
 @Service
 public class PlanFinder {
 
-
     private MongoTemplate mongoTemplate;
+
     private ObjectMapper objectMapper;
 
     @Autowired
     private CoverageFinder coverageFinder;
-
 
     @Autowired
     public PlanFinder(MongoTemplate mongoTemplate) {
@@ -63,7 +60,6 @@ public class PlanFinder {
         List<Plan> allPlans = mongoTemplate.findAll(Plan.class, "PLAN");
         return allPlans;
     }
-
 
     public List<Map> findAllPlan() {
         List<Plan> allPlans = mongoTemplate.findAll(Plan.class, "PLAN");
