@@ -5,7 +5,7 @@ angular.module('createQuotation',['common','ngRoute','mgcrea.ngStrap.select','mg
             if(mode=='view'){
                 $scope.isViewMode = true;
                 $scope.isEditMode = true;
-            }else{
+            }else if(mode=='edit'){
                 $scope.isEditMode = true;
             }
 
