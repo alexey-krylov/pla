@@ -61,6 +61,7 @@ angular.module('createCommission', ['common','commonServices','ngRoute'])
                         yearsSelected.push(fromYear);
                     }
                     $scope.commissionDetails.commissionTermSet.push($scope.addCommission);
+
                 }else{
                     if($scope.addCommission && $scope.addCommission.endYear){
                         delete $scope.addCommission.endYear;
@@ -72,10 +73,15 @@ angular.module('createCommission', ['common','commonServices','ngRoute'])
                     yearsSelected.push($scope.addCommission.startYear);
                     $scope.commissionDetails.commissionTermSet.push($scope.addCommission);
                 }
+                sort();
                 $scope.showtable  = true;
                 $scope.yearErrorStatus = null;
                 $scope.addCommission = {};
                 resetForm(addCommissionForm);
+            };
+
+            var sort =  function(){
+                $scope.commissionDetails.commissionTermSet = _.sortBy($scope.commissionDetails.commissionTermSet,'startYear');
             };
 
             var removeYearsSelected=function(selectedRow){
@@ -106,7 +112,7 @@ angular.module('createCommission', ['common','commonServices','ngRoute'])
                 $scope.commissionDetails.fromDate = formatJSDateToDDMMYYYY($scope.fromDate);
                 $http.post("/pla/core/commission/create", $scope.commissionDetails)
                     .success(function(data,status){
-                        if(data.status="200"){
+                        if(data.status=="200"){
                             $scope.isSaved=true;
                         }
                     })
@@ -119,7 +125,7 @@ angular.module('createCommission', ['common','commonServices','ngRoute'])
                 delete commissionDetailsToUpdate.commissionType;
                 $http.post("/pla/core/commission/update", $scope.commissionDetails)
                     .success(function(data,status){
-                        if(data.status="200"){
+                        if(data.status=="200"){
                             $scope.isSaved=true;
                         }
                     })
@@ -167,6 +173,7 @@ angular.module('createCommission', ['common','commonServices','ngRoute'])
                         var commissionId = getQueryParameter('commissionId');
                         var deferred = $q.defer();
                         $http.get('/pla/core/commission/getcommissiondetail/'+commissionId).success(function (response, status, headers, config) {
+                            response.commissionTermSet = _.sortBy(response.commissionTermSet,'startYear')
                             deferred.resolve(response)
                         }).error(function (response, status, headers, config) {
                             deferred.reject();
