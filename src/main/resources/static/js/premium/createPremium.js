@@ -1,6 +1,6 @@
-var App = angular.module('createPremium', ['ngRoute', 'ui.bootstrap', 'ngSanitize', 'mgcrea.ngStrap.select', 'mgcrea.ngStrap', 'mgcrea.ngStrap.alert', 'angularFileUpload']);
+var App = angular.module('createPremium', ['ngRoute', 'ui.bootstrap', 'ngSanitize']);
 
-App.controller('CreatePremiumController', ['$scope', '$http', '$rootScope', '$upload', '$window', function ($scope, $http, $rootScope, $upload, $window) {
+App.controller('CreatePremiumController', ['$scope', '$http', function ($scope, $http) {
 
     console.log(JSON.stringify(createPremium));
     $scope.uploaded = false;
@@ -35,11 +35,10 @@ App.controller('CreatePremiumController', ['$scope', '$http', '$rootScope', '$up
         }
 
     }
-
-    $http.get('/pla/core/premium/getpremiuminfluencingfactors').success(function (data) {
+    /*   $http.get('/pla/core/premium/getpremiuminfluencingfactors').success(function (data) {
         $scope.mulSelect = data;
 
-    });
+     });*/
     $http.get('/pla/core/plan/getallplan').success(function (data) {
         for (var i = 0; i < data.length; i++) {
             $scope.planList = data[i];
@@ -50,6 +49,7 @@ App.controller('CreatePremiumController', ['$scope', '$http', '$rootScope', '$up
             });
         }
     });
+
     $scope.$watch('createPremium.definedFor', function (newValue, oldValue) {
         if (newValue == 'plan') {
             $scope.boolVal = true;
@@ -83,6 +83,7 @@ App.controller('CreatePremiumController', ['$scope', '$http', '$rootScope', '$up
             }
         }
     });
+
     $scope.getDownloadedTemplate = function () {
         $http({
             url: '/pla/core/premium/downloadpremiumtemplate', method: 'POST', responseType: 'arraybuffer', data: $scope.createPremium,
@@ -102,7 +103,6 @@ App.controller('CreatePremiumController', ['$scope', '$http', '$rootScope', '$up
                 type: 'application/msexcel'
 
             });
-
             var objectUrl = URL.createObjectURL(blob);
             var a = document.createElement("a");
             document.body.appendChild(a);
@@ -116,85 +116,4 @@ App.controller('CreatePremiumController', ['$scope', '$http', '$rootScope', '$up
         });
     }
 
-    $scope.submitFormToServer = function () {
-
-    }
-
-    $scope.verifyPremiumData = function (files) {
-        var aVal = $scope.createPremium.premiumInfluencingFactors;
-        var output = [];
-        for (var i = 0; i < aVal.length; i++) {
-            output.push(JSON.stringify(aVal[i]).replace(/"/g, ''));
-        }
-        if (files) {
-            $upload.upload({
-                url: '/pla/core/premium/verifypremiumdata',
-                file: files,
-                fields: {
-                    planId: $scope.createPremium.planId, coverageId: $scope.createPremium.coverageId,
-                    premiumInfluencingFactors: output.join(',')
-                }
-            }).progress(function (evt) {
-
-            }).success(function (data, status, headers) {
-                // console.log(data);
-                if (data.status == 200) {
-                    $scope.verified = true;
-                    $scope.alert = {title: 'Success Message! ', content: data.message, type: 'success'};
-                } else if (data.status == 500) {
-                    $scope.alert = {title: 'Error Message! ', content: data.message, type: 'danger'};
-                } else {
-                    var filename = "";
-                    var header = headers('content-disposition');
-                    if (header && header.indexOf('attachment') !== -1) {
-                        var filenameRegex = /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/;
-                        var matches = filenameRegex.exec(header);
-                        if (matches != null && matches[1]) filename = matches[1].replace(/['"]/g, '');
-                    }
-                    var blob = new Blob([data], {
-                        type: 'application/msexcel'
-                    });
-                    var objectUrl = URL.createObjectURL(blob);
-                    var a = document.createElement("a");
-                    document.body.appendChild(a);
-                    a.style = "display: none";
-                    a.href = objectUrl;
-                    a.download = filename;
-                    a.click();
-                }
-            });
-        }
-    }
-
-    $scope.uploadFile = function (files) {
-
-        var a = $scope.createPremium.premiumInfluencingFactors;
-        var output = [];
-        for (var i = 0; i < a.length; i++) {
-            output.push(JSON.stringify(a[i]).replace(/"/g, ''));
-        }
-        if (files) {
-            $upload.upload({
-                url: '/pla/core/premium/uploadpremiumdata',
-                file: files,
-                fields: {
-                    planId: $scope.createPremium.planId,
-                    coverageId: $scope.createPremium.coverageId,
-                    premiumInfluencingFactors: output.join(','),
-                    premiumFactor: $scope.createPremium.premiumFactor,
-                    premiumRate: $scope.createPremium.premiumRate,
-                    effectiveFrom: $scope.createPremium.effectiveFrom
-                }
-            }).progress(function (evt) {
-
-            }).success(function (data, status, headers, config) {
-                if (data.status == 200) {
-
-                    $scope.alert = {title: 'Success Message! ', content: data.message, type: 'success'};
-                } else if (data.status == 500) {
-                    $scope.alert = {title: 'Error Message! ', content: data.message, type: 'danger'};
-                }
-            });
-        }
-    }
 }]);

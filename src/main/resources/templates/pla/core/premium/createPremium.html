@@ -11,7 +11,7 @@
         // alert(moment().format('dddd, MMMM Do YYYY, h:mm:ss a'));
     });
     requirejs(['main', 'angular-file-upload'], function () {
-        require(['/pla/js/premium/createPremium.js?t=2'], function () {
+        require(['/pla/js/premium/createPremium.js?t=5'], function () {
             angular.bootstrap(document, ['createPremium']);
         });
     });
@@ -39,10 +39,9 @@
 
 <div class="container ng-cloak">
 
-    <div class="alert alert-danger" role="alert">
+    <div class="alert alert-danger" role="alert" th:if="${#fields.hasErrors('createPremiumCommand')}">
         <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
         <span class="sr-only">Error:</span>
-
         <p th:errors="${createPremiumCommand}"></p>
     </div>
     <form class="css-form" method="post" enctype="multipart/form-data" action="uploadpremiumdata" name="premiumForm" ng-submit="submitFormToServer()"
@@ -78,12 +77,14 @@
                             <option value="">----Select Plan----</option>
                         </select>
                     </div>
-                    <div class="form-group col-md-6 required" ng-show="showOptionalCoverage">
+                    <div ng-switch="" on="createPremium.definedFor" class="animate-switch-container">
+                        <div class="form-group col-md-6 required animate-switch" ng-switch-when="optionalCoverage">
                         <label class="control-label">Optional Coverage</label>
-                        <!-- <select class="form-control input-sm" id="optionalCoverage" ng-required="true" ng-model="createPremium.coverageId" ng-disabled="!createPremium.planId"
+                            <select class="form-control input-sm" id="optionalCoverage" ng-required="true" ng-model="createPremium.coverageId" ng-disabled="!createPremium.planId"
                                  ng-options="optionalCoverage.coverageId as optionalCoverage.coverageName for optionalCoverage in optionalCoverageList | orderBy:'coverageName'">
-                             <option value="">&#45;&#45;&#45;&#45;Select Optional Coverage &#45;&#45;&#45;&#45;</option>
-                         </select>-->
+                                <option value="">----Select Optional Coverage ----</option>
+                            </select>
+                    </div>
                     </div>
                     <div class="form-group col-md-6 required">
                         <label class="control-label">Premium Expressed As</label>
@@ -124,17 +125,15 @@
 
                         <div>
                             <a type="button" class="btn btn-default" target="_blank" download=""
-                               ng-disabled="(!createPremium.definedFor || !createPremium.planId || !createPremium.premiumInfluencingFactors || !boolVal)"
-                               ng-click="getDownloadedTemplate()">
-                                Download Template
+                               ng-disabled="(!createPremium.definedFor || !createPremium.planId)"
+                               ng-click="getDownloadedTemplate()">Download Template
                             </a>
                         </div>
                     </div>
                     <div class="form-group col-md-6 required">
                         <label class="control-label">Influencing Factors</label>
-
                         <div th:each="premiumInfluencingFactors: ${T(com.pla.publishedlanguage.domain.model.PremiumInfluencingFactor).values()}">
-                            <input name="premiumInfluencingFactors" type="checkbox"
+                            <input name="premiumInfluencingFactors" type="checkbox" checklist-model="createPremium.premiumInfluencingFactors"
                                    th:field="*{createPremiumCommand.premiumInfluencingFactors}"
                                    th:id="${{premiumInfluencingFactors}}" th:value="${{premiumInfluencingFactors}}"/>
                             <label th:text="${{premiumInfluencingFactors.description}}"></label>

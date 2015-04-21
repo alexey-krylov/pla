@@ -12,6 +12,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.validation.constraints.NotNull;
+
 /**
  * @author: Samir
  * @since 1.0 26/03/2015
@@ -25,6 +27,7 @@ public class PremiumTemplateDto {
 
     private String coverageId;
 
+    @NotNull
     private PremiumInfluencingFactor[] premiumInfluencingFactors;
 
     private MultipartFile file;
