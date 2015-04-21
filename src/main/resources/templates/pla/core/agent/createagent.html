@@ -110,7 +110,7 @@
                                     Action <span class="caret"></span>
                                 </button>
                             </div>
-                            <div class="form-group" ng-if="agentDetails.designationDto.code=='BRANCH_BDE'">
+                            <div class="form-group" ng-if="agentDetails.agentProfile.designationDto.code=='BRANCH_BDE'">
                                 <label style="text-align: left">Can Collect override Commissions?</label>
                                 <label style="padding-right: 5px"><input type="radio"  name="overrideCommission" ng-model="agentDetails.overrideCommissionApplicable" value="yes"/>Yes</label>
                                 <label><input type="radio"  name="overrideCommission" ng-model="agentDetails.overrideCommissionApplicable" value="no"/>No</label>
@@ -131,7 +131,7 @@
                             <div class="form-group required">
                                 <label  class="control-label">Designation</label>
                                 <input type="text" class="form-control input-sm" name="designation" ng-required="true"
-                                       ng-model="agentDetails.agentProfile.designationDto.description"/>
+                                       ng-model="agentDetails.agentProfile.designationDto.description" ng-disabled="search"/>
                             </div>
                             <div class="form-group required">
                                 <label  class="control-label">Agent Status</label>
