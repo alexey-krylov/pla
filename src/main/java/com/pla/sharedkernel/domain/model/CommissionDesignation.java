@@ -8,7 +8,7 @@ import lombok.Getter;
 @Getter
 public enum CommissionDesignation {
 
-    AGENT("Agent"), BROKER("Broker"),TEAM_LEADER("Team Leader"), SALES_SUPERVISOR_BDE("Sales Supervisor BDE,"),BRANCH_MANAGER("Branch Manager"),
+    AGENT("Agent"), BROKER("Broker"), TEAM_LEADER("Team Leader"), SALES_SUPERVISOR_BDE("Sales Supervisor BDE"), BRANCH_MANAGER("Branch Manager"),
     REGIONAL_MANAGER("Regional Manager"),NATIONAL_SALES_MANAGER("National Sales Manager"),GENERAL_MANAGER("General Manager"),
     MANAGING_DIRECTOR("Managing Director"),STAFF("Staff");
 
