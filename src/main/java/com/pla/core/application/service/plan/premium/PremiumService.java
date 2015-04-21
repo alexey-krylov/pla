@@ -14,6 +14,7 @@ import com.pla.publishedlanguage.domain.model.PremiumInfluencingFactor;
 import com.pla.sharedkernel.identifier.CoverageId;
 import com.pla.sharedkernel.identifier.PlanId;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.nthdimenzion.utils.UtilValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Query;
@@ -58,14 +59,11 @@ public class PremiumService {
         return premiumTemplateExcelGenerator.generatePremiumTemplate(Arrays.asList(premiumInfluencingFactors), plan, new CoverageId(coverageId));
     }
 
-    public HSSFWorkbook validatePremiumTemplateData(HSSFWorkbook hssfWorkbook, PremiumInfluencingFactor[] premiumInfluencingFactors, String planId, String coverageId) throws IOException {
+    public boolean validatePremiumTemplateData(HSSFWorkbook hssfWorkbook, PremiumInfluencingFactor[] premiumInfluencingFactors, String planId, String coverageId) throws IOException {
         Plan plan = planRepository.findOne(new PlanId(planId));
-        List<PremiumInfluencingFactor> premiumInfluencingFactorList = isNotEmpty(premiumInfluencingFactors) ? Arrays.asList(premiumInfluencingFactors) : new ArrayList<>();
-        Map<Integer, String> validErrorMessageMap = premiumTemplateParser.validatePremiumDataForAGivenPlanAndCoverage(hssfWorkbook, plan, new CoverageId(coverageId), premiumInfluencingFactorList);
-        if (isNotEmpty(validErrorMessageMap)) {
-            return premiumTemplateExcelGenerator.generatePremiumParseErrorExcel(validErrorMessageMap, plan.getPlanDetail().getPlanName());
-        }
-        return null;
+        List<PremiumInfluencingFactor> premiumInfluencingFactorList = UtilValidator.isNotEmpty(premiumInfluencingFactors) ? Arrays.asList(premiumInfluencingFactors) : new ArrayList<>();
+        boolean isValidTemplate = premiumTemplateParser.validatePremiumDataForAGivenPlanAndCoverage(hssfWorkbook, plan, new CoverageId(coverageId), premiumInfluencingFactorList);
+        return isValidTemplate;
     }
 
     public List<Map<Map<PremiumInfluencingFactor, String>, Double>> parsePremiumTemplate(HSSFWorkbook hssfWorkbook, PremiumInfluencingFactor[] premiumInfluencingFactors, String planId, String coverageId) {

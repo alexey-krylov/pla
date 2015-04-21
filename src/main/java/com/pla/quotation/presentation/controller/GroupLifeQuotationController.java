@@ -2,7 +2,10 @@ package com.pla.quotation.presentation.controller;
 
 import com.pla.quotation.application.command.grouplife.*;
 import com.pla.quotation.application.service.grouplife.GLQuotationService;
-import com.pla.quotation.query.*;
+import com.pla.quotation.query.AgentDetailDto;
+import com.pla.quotation.query.GLQuotationFinder;
+import com.pla.quotation.query.PremiumDetailDto;
+import com.pla.quotation.query.ProposerDto;
 import com.pla.sharedkernel.identifier.QuotationId;
 import com.wordnik.swagger.annotations.ApiOperation;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
@@ -14,14 +17,11 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import org.springframework.web.servlet.view.RedirectView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.util.List;
 import java.util.Map;
 
 import static com.google.common.base.Preconditions.checkArgument;
@@ -94,19 +94,20 @@ public class GroupLifeQuotationController {
     }
 
     @RequestMapping(value = "/listgrouplifequotation", method = RequestMethod.GET)
-    public ModelAndView listQuotation(@ModelAttribute("searchResult") List<GlQuotationDto> searchResult, @ModelAttribute("searchCriteria") SearchGlQuotationDto searchCriteria) {
+    public ModelAndView listQuotation() {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("pla/quotation/groupLife/viewQuotation");
-        modelAndView.addObject(glQuotationService.getAllQuotation());
+        modelAndView.addObject("searchCriteria", new SearchGlQuotationDto());
         return modelAndView;
     }
 
     @RequestMapping(value = "/searchquotation", method = RequestMethod.POST)
-    public RedirectView searchQuotation(@RequestBody SearchGlQuotationDto searchGlQuotationDto, RedirectAttributes redirectAttributes) {
-        redirectAttributes.addFlashAttribute("searchResult", glQuotationService.searchQuotation(searchGlQuotationDto));
-        redirectAttributes.addFlashAttribute("searchCriteria", searchGlQuotationDto);
-        RedirectView redirectView = new RedirectView("listgrouplifequotation");
-        return redirectView;
+    public ModelAndView searchQuotation(SearchGlQuotationDto searchGlQuotationDto) {
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("pla/quotation/groupLife/viewQuotation");
+        modelAndView.addObject("searchResult", glQuotationService.getAllQuotation());
+        modelAndView.addObject("searchCriteria", searchGlQuotationDto);
+        return modelAndView;
     }
 
     @RequestMapping(value = "/createquotation", method = RequestMethod.POST)

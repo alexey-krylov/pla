@@ -10,7 +10,6 @@ import lombok.*;
 import org.hibernate.annotations.Type;
 import org.joda.time.LocalDate;
 import org.nthdimenzion.common.crud.ICrudEntity;
-import org.nthdimenzion.utils.UtilValidator;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -138,9 +137,11 @@ public class Commission implements ICrudEntity {
         Collections.sort(policyTerms);
         Integer minimumPolicyTerm = policyTerms.get(0);
         Integer maximumPolicyTerm = policyTerms.get(policyTerms.size() - 1);
-        if (minimumPolicyTerm == maximumPolicyTerm)
+        if (minimumPolicyTerm == maximumPolicyTerm) {
             minimumPolicyTerm = 0;
-        return UtilValidator.isNotEmpty(commissionTerms.stream().filter(new CommissionTermsWithinPolicyTerms(minimumPolicyTerm, maximumPolicyTerm)).collect(Collectors.toList()));
+        }
+        List<CommissionTerm> commissionTermList = commissionTerms.stream().filter(new CommissionTermsWithinPolicyTerms(minimumPolicyTerm, maximumPolicyTerm)).collect(Collectors.toList());
+        return commissionTerms.size() == commissionTermList.size();
     }
 
 
@@ -155,7 +156,7 @@ public class Commission implements ICrudEntity {
 
         @Override
         public boolean test(CommissionTerm commissionTerm) {
-            return ((commissionTerm.getStartYear() >= minMaturity) && (commissionTerm.getEndYear() <= maxMaturity));
+            return commissionTerm.getEndYear() <= maxMaturity;
         }
     }
 

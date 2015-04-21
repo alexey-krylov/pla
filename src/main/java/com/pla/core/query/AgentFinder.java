@@ -8,6 +8,7 @@ package com.pla.core.query;
 
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
+import com.pla.core.dto.AgentDto;
 import org.nthdimenzion.ddd.domain.annotations.Finder;
 import org.nthdimenzion.utils.UtilValidator;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,7 +40,7 @@ public class AgentFinder {
 
     public static final String FIND_AGENT_BY_ID_QUERY = "select * from agent_team_branch_view where agentId =:agentId";
 
-    public static final String FIND_AGENT_COUNT_BY_NRC_NUMBER_QUERY = "SELECT COUNT(agent_id) FROM agent WHERE nrc_number = :nrcNumber";
+    public static final String FIND_AGENT_COUNT_BY_NRC_NUMBER_QUERY = "SELECT COUNT(agent_id) FROM agent WHERE nrc_number = :nrcNumber and agent_id != :agentId";
 
     public static final String FIND_ALL_AGENT_BY_STATUS_QUERY = "select * from agent_team_branch_view where agentStatus IN (:agentStatuses)";
 
@@ -64,8 +65,8 @@ public class AgentFinder {
         return namedParameterJdbcTemplate.query(FIND_ALL_AGENT_BY_STATUS_QUERY, new MapSqlParameterSource().addValue("agentStatuses", Lists.newArrayList("ACTIVE", "INACTIVE")), new ColumnMapRowMapper());
     }
 
-    public int getAgentCountByNrcNumber(Integer nrcNumber) {
-        Number noOfAgentCount = namedParameterJdbcTemplate.queryForObject(FIND_AGENT_COUNT_BY_NRC_NUMBER_QUERY,  new MapSqlParameterSource().addValue("nrcNumber", nrcNumber), Number.class);
+    public int getAgentCountByNrcNumber(AgentDto agentDto) {
+        Number noOfAgentCount = namedParameterJdbcTemplate.queryForObject(FIND_AGENT_COUNT_BY_NRC_NUMBER_QUERY,  new MapSqlParameterSource().addValue("nrcNumber", agentDto.getNrcNumber()).addValue("agentId",agentDto.getAgentId()), Number.class);
         return noOfAgentCount.intValue();
     }
 

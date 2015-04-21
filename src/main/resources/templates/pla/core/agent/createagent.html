@@ -45,7 +45,7 @@
             <div class="step-pane" data-step="1">
                 <div class="bs-callout-info bs-callout">
                     <div class="row" ng-if="searchResult.isEmpty">
-                        <div class="col-lg-6">
+                        <div class="col-md-6">
                             <div class="alert alert-info">
                                 <strong>Search not found!</strong> Would you like to create a new Agent?
                                 <button type="button" class="btn btn-primary btn-xs pull-right" style="width:15%" ng-click="jumpToNthStep(2)"><Strong>Yes</Strong></button>
@@ -53,16 +53,16 @@
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-lg-5">
+                        <div class="col-md-5">
                             <input type="text" class="form-control input-sm"  placeholder="Nrc Number" ng-model="search.nrcNumber" />
                         </div>
-                        <div class="col-lg-1" style="text-align: center;margin-top: 5px">
+                        <div class="col-md-1" style="text-align: center;margin-top: 5px">
                             <Strong>OR</Strong>
                         </div>
-                        <div class="col-lg-5">
+                        <div class="col-md-5">
                             <input type="text" class="form-control input-sm"  placeholder="Employee Id" ng-model="search.employeeId"/>
                         </div>
-                        <div class="col-lg-1">
+                        <div class="col-md-1">
                             <button type="button" class="btn btn-default btn-sm" ng-click="searchAgent()" ng-disabled="isSearchDisabled()">Search</button>
                         </div>
                     </div>
@@ -71,7 +71,7 @@
             <div class="step-pane" data-step="2">
                 <ng-form name="agentDetailsForm">
                     <div class="row">
-                        <div class="col-lg-6">
+                        <div class="col-md-6">
                             <div class="form-group required">
                                 <label class="control-label">NRC</label>
                                 <input type="text" class="form-control input-sm" name="nrc" ng-disabled="!search.employeeId || isEditMode"
@@ -118,7 +118,7 @@
                         </div>
                         <!--Agent Details left end-->
                         <!--Agent Details right start-->
-                        <div class="col-lg-6">
+                        <div class="col-md-6">
                             <div class="form-group">
                                 <label  >Employee ID</label>
                                 <input type="text" class="form-control input-sm" ng-disabled="true" name="employeeId"  placeholder="Enter employee ID" ng-model="agentDetails.agentProfile.employeeId"/>
@@ -167,7 +167,7 @@
                 <div class="row">
                     <ng-form name="teamDetailsForm">
                         <!--Team Details left start-->
-                        <div class="col-lg-6">
+                        <div class="col-md-6">
                             <div class="form-group">
                                 <label>Team Code</label>
                                 <select  class="form-control input-sm" ng-model="agentDetails.teamDetail" ng-options="teamDetail as teamDetail.teamName for teamDetail in teamDetails track by teamDetail.teamId" ng-required="true">
@@ -180,7 +180,7 @@
                         </div>
                         <!--Team Details left end-->
                         <!--Team Details right start-->
-                        <div class="col-lg-6">
+                        <div class="col-md-6">
                             <div class="form-group">
                                 <label  >Team Leader Full Name</label>
                                 <input type="text" class="form-control input-sm" name="teamLeaderName"  placeholder="Enter team leader Name" ng-model="teamLeaderName" ng-required="teamCode.isRequired" ng-disabled="true"/>
@@ -198,7 +198,7 @@
                 <ng-form name="contactDetailsForm">
                     <!--Contact Details  start-->
                     <div class="row">
-                        <div class="col-lg-6">
+                        <div class="col-md-6">
                             <div class="form-group required">
                                 <label  class="control-label">Mobile Number</label>
                                 <input type="text" class="form-control input-sm" name="mobileNumber"  placeholder="Enter mobile number" ng-model="agentDetails.contactDetail.mobileNumber" ng-required="true" maxlength="10" minlength="10" ng-pattern="numberPattern"/>
@@ -221,7 +221,7 @@
                                         ng-options="city.geoId  as city.geoName for city in primaryCities" ng-required="true"></select>
                             </div>
                         </div>
-                        <div class="col-lg-6">
+                        <div class="col-md-6">
                             <div class="form-group">
                                 <label  >Home Phone</label>
                                 <input type="text" class="form-control input-sm" name="homePhone"  placeholder="Enter home phone" ng-model="agentDetails.contactDetail.homePhoneNumber" maxlength="15" ng-pattern="numberPattern"/>
@@ -242,7 +242,7 @@
                     </div>
                     <div class="row">
                         <h4 style="margin-left: 10px">Physical Address</h4>
-                        <div class="col-lg-6">
+                        <div class="col-md-6">
                             <div class="form-group required">
                                 <label  class="control-label">Address Line 1</label>
                                 <input type="text" class="form-control input-sm" name="physicalAddressLine1" placeholder="Enter address" ng-model="agentDetails.physicalAddress.physicalAddressLine1" ng-required="true" ng-maxlength="100"/>
@@ -257,7 +257,7 @@
                                         ng-options="city.geoId as city.geoName for city in physicalCities" ng-required="true"></select>
                             </div>
                         </div>
-                        <div class="col-lg-6">
+                        <div class="col-md-6">
                             <div class="form-group">
                                 <label  >Address Line 2</label>
                                 <input type="text" class="form-control input-sm" name="physicalAddressLine2" placeholder="Enter address" ng-model="agentDetails.physicalAddress.physicalAddressLine2" ng-maxlength="100"/>

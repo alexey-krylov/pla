@@ -74,7 +74,7 @@
     <div id='cssmenu'>
         <ul>
             <li><a th:href="@{/home}"><span class="glyphicon glyphicon-home" aria-hidden="true">&nbsp;</span><span>Home</span></a></li>
-            <li class="active has-sub">
+            <li class="has-sub">
                 <a href="javascript:void(0)"><span class="glyphicon glyphicon-wrench"></span>&nbsp;Core</a>
                 <ul>
                     <li>
@@ -91,7 +91,7 @@
                     <li><a th:href="@{/core/branch/view}">Branch Manager</a></li>
                     <li><a th:href="@{/core/region/view}">Regional Manager</a></li>
                     <li><a th:href="@{/core/commission/list/NORMAL}">Commission</a></li>
-                    <li><a th:href="@{/core/commission/list/Override}">Over-ride Commission</a></li>
+                    <li><a th:href="@{/core/commission/list/OVERRIDE}">Over-ride Commission</a></li>
                     <li><a th:href="@{/core/premium/listpremium}">Premium</a></li>
                     <li><a th:href="@{/core/mandatorydocument/view}">Mandatory Documents </a></li>
                     <li class='last has-sub'><a href="#">General Information</a>
@@ -113,7 +113,7 @@
                     </li>
                 </ul>
             </li>
-            <li class="active has-sub">
+            <li class="has-sub">
                 <a href="javascript:void(0)"><span class="glyphicon glyphicon-list-alt"></span>&nbsp;Quotation</a>
                 <ul>
                     <li><a th:href="@{/quotation/grouplife/listgrouplifequotation}">GroupLife </a></li>

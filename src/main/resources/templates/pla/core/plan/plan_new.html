@@ -406,14 +406,13 @@
                                             <input type="number" ng-pattern="onlyNumbers" name="maxMaturityAge"
                                                    ng-required="true" class="form-control input-sm col-sm-3" style="margin-top: 8px"
                                                    ng-model="plan.policyTerm.maxMaturityAge"
-                                                   min="{{plan.planDetail.minEntryAge}}"
-                                                   max="{{plan.planDetail.maxEntryAge}}"/>
+                                                   min="{{plan.planDetail.minEntryAge}}"/>
                                             <div class="error" ng-show="step3.maxMaturityAge.$dirty &amp;&amp; step3.maxMaturityAge.$invalid">
                                                 <small class="error" ng-show="step3.maxMaturityAge.$error.required">
                                                     Policy Term Maximum Maturity Age is required.
                                                 </small>
-                                                <small class="error" ng-show="step3.maxMaturityAge.$error.max">
-                                                    Minimum age cannot be greater than Plan Entry Maximum Entry Age.
+                                                <small class="error" ng-show="step3.maxMaturityAge.$error.min">
+                                                    Minimum age cannot be less than Plan Entry Minimum Entry Age.
                                                 </small>
                                             </div>
                                         </div>
@@ -474,15 +473,14 @@
                                         <div class="controls">
                                             <input type="number" ng-pattern="onlyNumbers" class="form-control col-sm-3" ng-required="true"
                                                    ng-model="plan.premiumTerm.maxMaturityAge" name="cutoffage"
-                                                   min="{{plan.planDetail.minEntryAge}}"
-                                                   max="{{plan.planDetail.maxEntryAge}}"/>
+                                                   min="{{plan.planDetail.minEntryAge}}"/>
 
                                             <div class="error" ng-show="step4.cutoffage.$dirty &amp;&amp; step4.cutoffage.$invalid">
                                                 <small class="error" ng-show="step4.cutoffage.$error.required">
-                                                    Premium Payment Cutoff Age is required.
+                                                    Premium Payment Cut Off Age is required.
                                                 </small>
-                                                <small class="error" ng-show="step4.cutoffage.$error.max">
-                                                    Minimum age cannot be greater than Plan Entry Maximum Entry Age.
+                                                <small class="error" ng-show="step4.cutoffage.$error.min">
+                                                    Minimum age cannot be less than Plan Entry Minimum Entry Age.
                                                 </small>
                                             </div>
                                         </div>

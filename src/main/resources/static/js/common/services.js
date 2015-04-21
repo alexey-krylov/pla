@@ -5,6 +5,11 @@ define(['moment'],function(moment){
                return moment(date).format('DD/MM/YYYY');
             }
         })
+        .factory('addDays',function(){
+            return function(date,days){
+                return moment(date).add(days,'days');
+            }
+        })
         .factory('getQueryParameter',['$window',function($window){
             return function(name){
                 name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");

@@ -11,6 +11,7 @@ import org.joda.time.LocalDate;
 import org.nthdimenzion.presentation.LocalJodaDateDeserializer;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.validation.constraints.NotNull;
 import java.util.List;
 import java.util.Map;
 
@@ -23,21 +24,28 @@ import java.util.Map;
 public class CreatePremiumCommand {
 
     private List<Map<Map<PremiumInfluencingFactor, String>, Double>> premiumLineItem;
-
+    @NotNull
     private String planId;
 
     private String coverageId;
 
-    private PremiumInfluencingFactor[] premiumInfluencingFactors;
+    private String premiumInfluencingFactorsStr;
 
+    @NotNull
+    private PremiumInfluencingFactor[] premiumInfluencingFactors = new PremiumInfluencingFactor[0];
+
+    @NotNull
     private MultipartFile file;
+    @NotNull
+    private PremiumFactor premiumFactor = PremiumFactor.FLAT_AMOUNT;
 
-    private PremiumFactor premiumFactor;
-
+    @NotNull
     @JsonDeserialize(using = LocalJodaDateDeserializer.class)
     private LocalDate effectiveFrom;
+    @NotNull
+    private PremiumRateFrequency premiumRate = PremiumRateFrequency.MONTHLY;
 
-    private PremiumRateFrequency premiumRate;
-
-
+    public PremiumInfluencingFactor[] getPremiumInfluencingFactors() {
+        return premiumInfluencingFactors;
+    }
 }

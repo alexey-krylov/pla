@@ -30,12 +30,14 @@
             <div class="panel panel-primary">
                 <div class="panel-heading">
                     <div class="row">
-                        <div class="col-lg-10"><span th:text="#{listOfCommissions}">List of Commissions
-                        </span></div>
+                        <div class="col-lg-10">
+                            <span th:text="#{listOfCommissions}" th:if="${commissionType=='NORMAL'}">List of Commissions</span>
+                            <span th:text="#{listOfOverrideCommissions}" th:if="${commissionType=='OVERRIDE'}">List of Over-ride Commissions</span>
+                        </div>
                         <div class="col-lg-2">
                             <button type="button" class="btn btn-default btn-xs" onclick="viewCommission.openCreatePage()">Create</button>
                             <button type="button" class="btn btn-default btn-xs" id="commission-view" disabled="disabled" onclick="viewCommission.viewCommission()">View</button>
-                            <button type="button" class="btn btn-default btn-xs" id="commission-update" disabled="disabled" onclick="viewCommission.updateCommission()">Update</button>
+                            <!--<button type="button" class="btn btn-default btn-xs" id="commission-update" disabled="disabled" onclick="viewCommission.updateCommission()">Update</button>-->
                         </div>
                     </div>
                 </div>
@@ -57,7 +59,7 @@
                         </thead>
                         <tbody>
                         <tr th:each="commission:${commissionList}">
-                            <th><input type="radio" th:value="${commission.commissionId}"/></th>
+                            <th><input type="radio" th:value="${commission.commissionId}" name="commissionId"/></th>
                             <td th:text="${commission.planName}"></td>
                             <td th:text="${commission.availableFor.description}"></td>
                             <td th:text="${#dates.format(commission.fromDate, 'dd/MM/yyyy')}"></td>

@@ -1,7 +1,7 @@
 angular.module('createCommission', ['common','commonServices','ngRoute'])
 
-    .controller('commissionController',['$scope','formatJSDateToDDMMYYYY','$http','$window','commissionDetails','getQueryParameter',
-        function($scope,formatJSDateToDDMMYYYY,$http,$window,commissionDetails,getQueryParameter){
+    .controller('commissionController',['$scope','formatJSDateToDDMMYYYY','$http','$window','commissionDetails','getQueryParameter','addDays','globalConstants',
+        function($scope,formatJSDateToDDMMYYYY,$http,$window,commissionDetails,getQueryParameter,addDays,globalConstants){
             var mode= null;
             $scope.showtable  = false;
             $scope.showToYear  = false;
@@ -12,6 +12,8 @@ angular.module('createCommission', ['common','commonServices','ngRoute'])
             }else{
                 mode = "OVERRIDE";
             }
+
+            $scope.numberPatternWithDecimal= globalConstants.numberPatternWithDecimal;
 
             var viewType = getQueryParameter('type');
 
@@ -123,6 +125,7 @@ angular.module('createCommission', ['common','commonServices','ngRoute'])
                     })
             };
             $scope.fromDatePickerSettings = {
+                tomorrow : addDays(new Date(),1),
                 isOpened:false,
                 dateOptions:{
                     formatYear:'yyyy' ,

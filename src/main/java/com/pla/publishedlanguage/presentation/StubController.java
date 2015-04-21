@@ -46,15 +46,17 @@ public class StubController {
     public EmployeeDto getEmployeeDetail(HttpServletRequest request,HttpServletResponse response) throws IOException {
         response.setContentType("application/json");
         String employeeId = request.getParameter("employeeId");
-        String nrcNumber = request.getParameter("nrcnumber");
+        String nrcNumber = request.getParameter("nrcNumber");
         if (employeeId == null && nrcNumber == null) {
-            return new EmployeeDto();
+            return null;
         }
+        String nrcNumberWithSlash = nrcNumber!=null?getNrcNumberInString(nrcNumber):"";
+        employeeId = employeeId!=null?employeeId:"";
         String jsonPath = "/stubdata/employeeDetail.json";
         List<EmployeeDto> listOfEmployeeDetail = getEmployeeDetail(jsonPath);
         EmployeeDto employeeDetail = null;
         for (EmployeeDto employeeDetailFromJson : listOfEmployeeDetail) {
-            if (employeeId.equals(employeeDetailFromJson.getEmployeeId()) || nrcNumber.equals(employeeDetailFromJson.getNrcNumber())) {
+            if (employeeId.equals(employeeDetailFromJson.getEmployeeId()) || nrcNumberWithSlash.equals(employeeDetailFromJson.getNrcNumber())) {
                 employeeDetail = employeeDetailFromJson;
                 break;
             }
@@ -89,4 +91,15 @@ public class StubController {
                 List.class, EmployeeDto.class);
         return objectMapper.readValue(StubController.class.getResourceAsStream(jsonPath), employeeCollectionType);
     }
+
+
+    public String getNrcNumberInString(String nrcNumber) {
+        String nrc = nrcNumber;
+        String part1 = nrc.substring(0, 6);
+        String part2 = nrc.substring(6, 8);
+        String part3 = nrc.substring(8, 9);
+        nrc = part1.concat("/").concat(part2).concat("/").concat(part3);
+        return nrc;
+    }
+
 }
