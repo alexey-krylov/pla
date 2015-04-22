@@ -279,7 +279,7 @@ public class GeneralInformationService {
         List list = Lists.newArrayList();
         Map organizationInformationMap = Maps.newLinkedHashMap();
         GeneralInformationDto generalInformationDto = getOrganizationGeneralInformation();
-        organizationInformationMap.put("productLine",generalInformationDto.getLineOfBusinessId());
+        organizationInformationMap.put("productLine",generalInformationDto.getProductLine());
         organizationInformationMap.put("organizationInformationId",generalInformationDto.getOrganizationInformationId());
         list.add(generalInformationDto);
         return list;
