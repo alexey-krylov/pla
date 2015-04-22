@@ -59,7 +59,7 @@ public class ProductLineInformationController {
         try {
             checkArgument(generalInformationDto!=null);
             UserDetails userDetails = getLoggedInUSerDetail(request);
-            generalInformationService.createProductLineInformation(generalInformationDto.getLineOfBusinessId(), userDetails, generalInformationDto);
+            generalInformationService.createProductLineInformation(generalInformationDto.getProductLine(), userDetails, generalInformationDto);
         }catch (GeneralInformationException e){
             LOGGER.debug(e.getMessage());
             return Result.failure(e.getMessage());

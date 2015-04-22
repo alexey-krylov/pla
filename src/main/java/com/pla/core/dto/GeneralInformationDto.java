@@ -19,7 +19,7 @@ import java.util.Map;
 public class GeneralInformationDto {
 
     private String productLineInformationId;
-    private LineOfBusinessId lineOfBusinessId;
+    private LineOfBusinessId productLine;
     private List<Map<ProductLineProcessType,Integer>> quotationProcessItems;
     private List<Map<ProductLineProcessType,Integer>> enrollmentProcessItems;
     private List<Map<ProductLineProcessType,Integer>> reinstatementProcessItems;
