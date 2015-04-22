@@ -73,7 +73,7 @@ public class OrganizationInformationController {
         try {
             checkArgument(generalInformationDto!=null);
             UserDetails userDetails = getLoggedInUSerDetail(request);
-            generalInformationService.createOrganizationInformation(generalInformationDto.getModelFactorItems(), generalInformationDto.getDiscountFactorItems(), generalInformationDto.getServiceTax(), userDetails);
+            generalInformationService.createOrganizationInformation(generalInformationDto, userDetails);
         }catch (GeneralInformationException e){
             LOGGER.debug(e.getMessage());
             return Result.failure(e.getMessage());
@@ -106,7 +106,5 @@ public class OrganizationInformationController {
     public List<Map> getOrganizationInformation() {
         return generalInformationService.getAllOrganizationInformation();
     }
-
-
 
 }

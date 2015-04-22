@@ -13,7 +13,6 @@ import com.pla.core.domain.model.generalinformation.OrganizationGeneralInformati
 import com.pla.core.domain.model.generalinformation.ProductLineGeneralInformation;
 import com.pla.core.domain.model.plan.commission.Commission;
 import com.pla.core.domain.model.plan.commission.CommissionTerm;
-import com.pla.core.dto.GeneralInformationDto;
 import com.pla.sharedkernel.domain.model.*;
 import com.pla.sharedkernel.identifier.*;
 import org.bson.types.ObjectId;
@@ -111,9 +110,12 @@ public class Admin {
         return deactivatedTeam;
     }
 
-    public ProductLineGeneralInformation createProductLineGeneralInformation(LineOfBusinessId lineOfBusinessId,GeneralInformationDto generalInformationDto){
+    public ProductLineGeneralInformation createProductLineGeneralInformation(LineOfBusinessId lineOfBusinessId, List<Map<ProductLineProcessType,Integer>> quotationProcessItem,List<Map<ProductLineProcessType,Integer>> enrollmentProcessItem ,
+                                                                             List<Map<ProductLineProcessType,Integer>> reinstatementProcessItem ,List<Map<ProductLineProcessType,Integer>> endorsementProcessItem,
+                                                                             List<Map<ProductLineProcessType,Integer>> claimProcessItem, List<Map<PolicyFeeProcessType,Integer>> policyFeeProcess,List<Map<PolicyProcessMinimumLimitType,Integer>>   minimumLimitProcess,
+                                                                             List<Map<ProductLineProcessType,Integer>> surrenderProcessItem ,List<Map<ProductLineProcessType,Integer>> maturityProcessItem){
         ProductLineGeneralInformation productLineGeneralInformation = ProductLineGeneralInformation.createProductLineGeneralInformation(lineOfBusinessId);
-        productLineGeneralInformation =  assignProductLineProcess(generalInformationDto, productLineGeneralInformation);
+        productLineGeneralInformation =  assignProductLineProcess(quotationProcessItem,enrollmentProcessItem,reinstatementProcessItem,endorsementProcessItem,claimProcessItem,policyFeeProcess,minimumLimitProcess,surrenderProcessItem,maturityProcessItem, productLineGeneralInformation);
         return productLineGeneralInformation;
     }
 
@@ -126,28 +128,34 @@ public class Admin {
         return organizationGeneralInformation;
     }
 
-    public OrganizationGeneralInformation updateOrganizationInformation(OrganizationGeneralInformation organizationGeneralInformation,GeneralInformationDto generalInformationDto){
-        organizationGeneralInformation.withDiscountFactorOrganizationInformation(generalInformationDto.getDiscountFactorItems());
-        organizationGeneralInformation.withModalFactorOrganizationInformation(generalInformationDto.getModelFactorItems());
-        organizationGeneralInformation.withServiceTaxOrganizationInformation(generalInformationDto.getServiceTax());
+    public OrganizationGeneralInformation updateOrganizationInformation(OrganizationGeneralInformation organizationGeneralInformation, List<Map<ModalFactorItem, BigDecimal>>  modalFactorItem ,List<Map<DiscountFactorItem, BigDecimal>>  discountFactorItem,Map<Tax,BigDecimal> serviceTax){
+        organizationGeneralInformation.withDiscountFactorOrganizationInformation(discountFactorItem);
+        organizationGeneralInformation.withModalFactorOrganizationInformation(modalFactorItem);
+        organizationGeneralInformation.withServiceTaxOrganizationInformation(serviceTax);
         return organizationGeneralInformation;
     }
 
-    public ProductLineGeneralInformation updateProductLineInformation(ProductLineGeneralInformation productLineGeneralInformation,GeneralInformationDto generalInformationDto){
-        productLineGeneralInformation = assignProductLineProcess(generalInformationDto, productLineGeneralInformation);
+    public ProductLineGeneralInformation updateProductLineInformation(ProductLineGeneralInformation productLineGeneralInformation,List<Map<ProductLineProcessType,Integer>> quotationProcessItem,List<Map<ProductLineProcessType,Integer>> enrollmentProcessItem ,
+                                                                      List<Map<ProductLineProcessType,Integer>> reinstatementProcessItem ,List<Map<ProductLineProcessType,Integer>> endorsementProcessItem,
+                                                                      List<Map<ProductLineProcessType,Integer>> claimProcessItem, List<Map<PolicyFeeProcessType,Integer>> policyFeeProcess,List<Map<PolicyProcessMinimumLimitType,Integer>>   minimumLimitProcess,
+                                                                      List<Map<ProductLineProcessType,Integer>> surrenderProcessItem ,List<Map<ProductLineProcessType,Integer>> maturityProcessItem){
+        productLineGeneralInformation = assignProductLineProcess(quotationProcessItem,enrollmentProcessItem,reinstatementProcessItem,endorsementProcessItem,claimProcessItem,policyFeeProcess,minimumLimitProcess,surrenderProcessItem,maturityProcessItem, productLineGeneralInformation);
         return productLineGeneralInformation;
     }
 
-    private ProductLineGeneralInformation assignProductLineProcess(GeneralInformationDto generalInformationDto, ProductLineGeneralInformation productLineGeneralInformation) {
-        productLineGeneralInformation.withQuotationProcessInformation(generalInformationDto.getQuotationProcessItems());
-        productLineGeneralInformation.withEnrollmentProcessGeneralInformation(generalInformationDto.getEnrollmentProcessItems());
-        productLineGeneralInformation.withReinstatementProcessInformation(generalInformationDto.getReinstatementProcessItems());
-        productLineGeneralInformation.withEndorsementProcessInformation(generalInformationDto.getEndorsementProcessItems());
-        productLineGeneralInformation.withClaimProcessInformation(generalInformationDto.getClaimProcessItems());
-        productLineGeneralInformation.withPolicyFeeProcessInformation(generalInformationDto.getPolicyFeeProcessItems());
-        productLineGeneralInformation.withPolicyProcessMinimumLimit(generalInformationDto.getPolicyProcessMinimumLimitItems());
-        productLineGeneralInformation.withSurrenderProcessInformation(generalInformationDto.getSurrenderProcessItems());
-        productLineGeneralInformation.withMaturityProcessInformation(generalInformationDto.getMaturityProcessItems());
+    private ProductLineGeneralInformation assignProductLineProcess( List<Map<ProductLineProcessType,Integer>> quotationProcessItem,List<Map<ProductLineProcessType,Integer>> enrollmentProcessItem ,
+                                                                    List<Map<ProductLineProcessType,Integer>> reinstatementProcessItem ,List<Map<ProductLineProcessType,Integer>> endorsementProcessItem,
+                                                                    List<Map<ProductLineProcessType,Integer>> claimProcessItem, List<Map<PolicyFeeProcessType,Integer>> policyFeeProcess,List<Map<PolicyProcessMinimumLimitType,Integer>>   minimumLimitProcess,
+                                                                    List<Map<ProductLineProcessType,Integer>> surrenderProcessItem ,List<Map<ProductLineProcessType,Integer>> maturityProcessItem, ProductLineGeneralInformation productLineGeneralInformation) {
+        productLineGeneralInformation.withQuotationProcessInformation(quotationProcessItem);
+        productLineGeneralInformation.withEnrollmentProcessGeneralInformation(enrollmentProcessItem);
+        productLineGeneralInformation.withReinstatementProcessInformation(reinstatementProcessItem);
+        productLineGeneralInformation.withEndorsementProcessInformation(endorsementProcessItem);
+        productLineGeneralInformation.withClaimProcessInformation(claimProcessItem);
+        productLineGeneralInformation.withPolicyFeeProcessInformation(policyFeeProcess);
+        productLineGeneralInformation.withPolicyProcessMinimumLimit(minimumLimitProcess);
+        productLineGeneralInformation.withSurrenderProcessInformation(surrenderProcessItem);
+        productLineGeneralInformation.withMaturityProcessInformation(maturityProcessItem);
         return productLineGeneralInformation;
     }
 
@@ -160,5 +168,6 @@ public class Admin {
 
         return commission.updateWithCommissionTerms(commissionSet, policyTerms);
     }
+
 
 }

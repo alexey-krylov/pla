@@ -15,6 +15,10 @@
     angular.bootstrap(document, ['assignRegionalManager']);
     });
     });
+    requirejs(['basic'],function(){
+        requirejs(['/pla/js/region/viewRegionalManager.js'],function(){
+        });
+    })
 </script>
 
 <div class="container ng-cloak" ng-Controller="AssignRegionalManagerController">
@@ -57,7 +61,7 @@
                         <div class="form-group col-md-6 required" style="margin: auto;margin-top:10px;">
                             <label class="control-label">Regional Manager From</label>
                             <p class="input-group">
-                                <input type="text" class="form-control input-sm" ng-required="true" ng-click="open($event)"  min-date="selectedDate" datepicker-popup="dd/MM/yyyy" ng-model="assignRegionalManager.fromDate"  datepicker-options="datePickerSettings.dateOptions" is-open="datePickerSettings.isOpened"  close-text="Close" show-button-bar="false" />
+                                <input type="text" class="form-control input-sm" ng-required="true" ng-click="open($event)"  min-date="selectedDate" datepicker-popup="dd/MM/yyyy" ng-model="assignRegionalManager.fromDate"  datepicker-options="datePickerSettings.dateOptions" is-open="datePickerSettings.isOpened"  close-text="Close" show-button-bar="false" onkeypress="return isNumeric(event)"/>
                                 <span class="input-group-btn">
                                     <button type="button" class="btn btn-default btn-sm" ng-click="open($event)"><i class="glyphicon glyphicon-calendar"></i></button>
                                 </span>

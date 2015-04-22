@@ -563,7 +563,7 @@ CREATE TABLE `commission_commission_term` (
 
 DROP VIEW IF EXISTS `agent_team_branch_view`;
 CREATE  VIEW `agent_team_branch_view` AS
-  (SELECT
+  (SELECT DISTINCT
      `agent_id`                                                             AS agentId,
      A.title                                                                AS title,
      `designation_code`                                                     AS designationCode,
@@ -614,13 +614,15 @@ CREATE  VIEW `agent_team_branch_view` AS
      R.region_name                                                          AS regionName,
      B.branch_code                                                          AS branchCode,
      B.branch_name                                                          AS branchName
-   FROM  agent A  LEFT JOIN team T    ON A.team_id = T.`team_id`  LEFT JOIN `team_team_leader_fulfillment` TF    ON T.`team_id` = TF.`team_id` AND TF.from_date<=NOW() AND (TF.thru_date>=NOW() OR TF.thru_date IS NULL)
+   FROM  agent A  LEFT JOIN team T    ON A.team_id = T.`team_id`  LEFT JOIN `team_team_leader_fulfillment` TF    ON T.`team_id` = TF.`team_id`
                                                                                                                     AND
-                                                                                                                    T.`current_team_leader`
-                                                                                                                    =
-                                                                                                                    TF.`employee_id`
+                                                                                                                    CASE WHEN TF.thru_date IS NULL THEN T.current_team_leader=TF.employee_id
+                                                                                                                    WHEN TF.thru_date >=NOW() THEN T.`team_id` = TF.`team_id`
+                                                                                                                    END
+
      LEFT JOIN region R ON T.region_code = R.REGION_CODE
-     LEFT JOIN branch B ON T.branch_code = B.branch_code);
+     LEFT JOIN branch B ON T.branch_code = B.branch_code GROUP BY A.agent_id
+     ORDER BY TF.from_date DESC);
 
 DROP VIEW IF EXISTS `region_region_manger_fulfilment_view`;
 CREATE VIEW `region_region_manger_fulfilment_view` AS

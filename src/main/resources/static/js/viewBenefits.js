@@ -97,6 +97,7 @@ var updateBenefit = function(benefitMap){
                 $('#createUpdate').hide();
             }else if(msg.status=='500'){
                 hideAlerts();
+                $('#createUpdate').hide();
                 $('#alert-danger').text(msg.message).show();
             }
         }

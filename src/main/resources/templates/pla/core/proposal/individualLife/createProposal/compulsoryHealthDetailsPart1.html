@@ -1,0 +1,150 @@
+<ng-form name="step5">
+    <div class="row bs-callout  bs-callout-info" style="margin: 5px;padding:10px">
+        <div class="col-md-10">
+            <strong>Have you ever received counseling or treatment, or had a blood test in connection with HIV infection, excluding blood test taken for the purpose of donating blood for blood transfusion ?</strong>
+        </div>
+        <div class="col-md-2">
+            <select class="form-control input-sm">
+                <option value="">--Select One--</option>
+                <option value="YES">Yes</option>
+                <option value="NO">No</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="row bs-callout  bs-callout-info" style="margin: 5px;padding:10px">
+        <div class="col-md-10">
+            <strong>Do you have, or have you ever had any of the following:- Disease or disorder of the Kidneys, Bladder, or Reproductive Organs e.g. Protein in Urine, Kidney Stones, prostatitis, Cystitis, Urethritis, Sexual transmitted Disease, HIV infection?</strong>
+        </div>
+        <div class="col-md-2">
+            <select class="form-control input-sm">
+                <option value="">--Select One--</option>
+                <option value="YES">Yes</option>
+                <option value="NO">No</option>
+            </select>
+        </div>
+    </div>
+
+    <h5>Do you have, or have you ever had, any trouble with, or disorder or abnormality of :</h5>
+
+    <accordion close-others="true">
+        <div class="row" style="margin-bottom: 5px">
+            <div class="col-md-10">
+                <accordion-group is-open="accordionStatus.healthDetailsPart1.tab1">
+                    <accordion-heading>
+                        <strong style="font-size: 11px">Your heart circulation or blood vessels (e.g. rheumatic fever, heart murmur, chest pains, palpitations, blood pressure, stroke varicose veins etc.)?</strong>
+                        <i class="pull-right glyphicon"
+                           ng-class="{'glyphicon-chevron-down': accordionStatus.healthDetailsPart1.tab1, 'glyphicon-chevron-right': !accordionStatus.healthDetailsPart1.tab1}"></i>
+                    </accordion-heading>
+                    <div class="col-md-12">
+                        <textarea class="form-control" placeholder="Please give full details  e.g. name and address of attending doctor, treatment and results etc"></textarea>
+                    </div>
+                </accordion-group>
+            </div>
+            <div class="col-md-2">
+                <select class="form-control input-sm">
+                    <option value="">--Select One--</option>
+                    <option value="YES">Yes</option>
+                    <option value="NO">No</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="row" style="margin-bottom: 5px">
+            <div class="col-md-10">
+                <accordion-group is-open="accordionStatus.healthDetailsPart1.tab2">
+                    <accordion-heading>
+                        <strong style="font-size: 11px">Your glands and/or blood (e.g. haemophilia, abundant nose bleeding, diabetes, thyroid, spleen, leukaemia etc.)?</strong>
+                        <i class="pull-right glyphicon"
+                           ng-class="{'glyphicon-chevron-down': accordionStatus.healthDetailsPart1.tab2, 'glyphicon-chevron-right': !accordionStatus.healthDetailsPart1.tab2}"></i>
+                    </accordion-heading>
+                    <div class="col-md-12">
+                        <textarea class="form-control" placeholder="Please give full details  e.g. name and address of attending doctor, treatment and results etc"></textarea>
+                    </div>
+                </accordion-group>
+            </div>
+            <div class="col-md-2">
+                <select class="form-control input-sm">
+                    <option value="">--Select One--</option>
+                    <option value="YES">Yes</option>
+                    <option value="NO">No</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="row" style="margin-bottom: 5px">
+            <div class="col-md-10">
+                <accordion-group is-open="accordionStatus.healthDetailsPart1.tab3">
+                    <accordion-heading>
+                        <strong style="font-size: 11px">Your lungs (e.g. persistent cough, asthma, bronchitis, tuberculosis pneumonia, shortness of breath etc.)?</strong>
+                        <i class="pull-right glyphicon"
+                           ng-class="{'glyphicon-chevron-down': accordionStatus.healthDetailsPart1.tab3, 'glyphicon-chevron-right': !accordionStatus.healthDetailsPart1.tab3}"></i>
+                    </accordion-heading>
+                    <div class="col-md-12">
+                        <textarea class="form-control" placeholder="Please give full details  e.g. name and address of attending doctor, treatment and results etc"></textarea>
+                    </div>
+                </accordion-group>
+            </div>
+            <div class="col-md-2">
+                <select class="form-control input-sm">
+                    <option value="">--Select One--</option>
+                    <option value="YES">Yes</option>
+                    <option value="NO">No</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="row" style="margin-bottom: 5px">
+            <div class="col-md-10">
+                <accordion-group is-open="accordionStatus.healthDetailsPart1.tab4">
+                    <accordion-heading>
+                        <strong style="font-size: 11px">Your digestive system and liver (e.g. ulcers, recurrent indigestion, bleeding from the bowel, persistent diarrhoea, hepatitis, gall stones etc.)?</strong>
+                        <i class="pull-right glyphicon"
+                           ng-class="{'glyphicon-chevron-down': accordionStatus.healthDetailsPart1.tab4, 'glyphicon-chevron-right': !accordionStatus.healthDetailsPart1.tab4}"></i>
+                    </accordion-heading>
+                    <div class="col-md-12">
+                        <textarea class="form-control" placeholder="Please give full details  e.g. name and address of attending doctor, treatment and results etc"></textarea>
+                    </div>
+                </accordion-group>
+            </div>
+            <div class="col-md-2">
+                <select class="form-control input-sm">
+                    <option value="">--Select One--</option>
+                    <option value="YES">Yes</option>
+                    <option value="NO">No</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="row" style="margin-bottom: 5px">
+            <div class="col-md-10">
+                <accordion-group is-open="accordionStatus.healthDetailsPart1.tab5">
+                    <accordion-heading>
+                        <strong style="font-size: 11px">Your skin (e.g. persistent or recurring rash, cancer, ulcers extensive lesions etc.)?</strong>
+                        <i class="pull-right glyphicon"
+                           ng-class="{'glyphicon-chevron-down': accordionStatus.healthDetailsPart1.tab5, 'glyphicon-chevron-right': !accordionStatus.healthDetailsPart1.tab5}"></i>
+                    </accordion-heading>
+                    <div class="col-md-12">
+                        <textarea class="form-control" placeholder="Please give full details  e.g. name and address of attending doctor, treatment and results etc"></textarea>
+                    </div>
+                </accordion-group>
+            </div>
+            <div class="col-md-2">
+                <select class="form-control input-sm">
+                    <option value="">--Select One--</option>
+                    <option value="YES">Yes</option>
+                    <option value="NO">No</option>
+                </select>
+            </div>
+        </div>
+    </accordion>
+
+    <div class="row">
+        <div class="col-sm-6">
+            <button type="button" class="btn btn-default btn-sm">Cancel</button>
+        </div>
+        <div class="col-sm-6">
+            <button type="button" class="btn btn-default btn-sm" style="float: right">Save</button>
+        </div>
+    </div>
+</ng-form>

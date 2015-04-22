@@ -10,6 +10,7 @@ import com.pla.core.domain.exception.BenefitDomainException;
 import com.pla.core.dto.BenefitDto;
 import com.pla.core.specification.BenefitNameIsUnique;
 import com.pla.sharedkernel.domain.model.BenefitStatus;
+import com.pla.sharedkernel.identifier.BenefitId;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -17,6 +18,7 @@ import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.util.ReflectionTestUtils.invokeGetterMethod;
 
@@ -84,8 +86,21 @@ public class BenefitUnitTest {
     @Test
     public void benefitInActiveStatusShouldGetUpdatedWithNewName() {
         String updatedName = "CI Benefit";
-        Benefit updatedBenefit = benefit.updateBenefitName(new BenefitName(updatedName));;
+        Benefit updatedBenefit = benefit.updateBenefitName(new BenefitName(updatedName));
         BenefitName benefitName = (BenefitName) invokeGetterMethod(updatedBenefit, "getBenefitName");
         assertEquals(updatedName, benefitName.getBenefitName());
+    }
+    @Test
+    public void givenBenefitIdAndName_whenIdAndNameAreNotNull_thenItShouldCreateTheBenefit(){
+        Benefit benefit = new Benefit(new BenefitId("B001"),new BenefitName("Health benefit"),BenefitStatus.ACTIVE);
+        assertNotNull(benefit);
+        assertEquals(new BenefitName("Health benefit"), invokeGetterMethod(benefit, "getBenefitName"));
+    }
+
+    @Test(expected = NullPointerException.class)
+    public void givenBenefitIdAndName_whenIdAndNameAAreNull_thenItShouldThrowTheException(){
+        Benefit benefit = new Benefit(null,new BenefitName("Health benefit"),BenefitStatus.ACTIVE);
+        assertNotNull(benefit);
+        assertEquals(new BenefitName("Health benefit"), invokeGetterMethod(benefit, "getBenefitName"));
     }
 }

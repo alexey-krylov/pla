@@ -9,7 +9,7 @@ import lombok.Getter;
 public enum ProductLineProcessType {
 
     PURGE_TIME_PERIOD("Purge Time Period"),
-    FIRST_REMAINDER(""),
+    FIRST_REMAINDER("First Remainder"),
     NO_OF_REMAINDER("No. of Remainder"),
     GAP("Gap"),
     CLOSURE("Closure"),
@@ -20,5 +20,4 @@ public enum ProductLineProcessType {
     ProductLineProcessType(String description) {
         this.description = description;
     }
-
 }

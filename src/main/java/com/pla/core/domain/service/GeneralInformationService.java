@@ -9,9 +9,7 @@ import com.google.common.collect.Maps;
 import com.pla.core.domain.model.Admin;
 import com.pla.core.domain.model.generalinformation.OrganizationGeneralInformation;
 import com.pla.core.domain.model.generalinformation.ProductLineGeneralInformation;
-import com.pla.core.dto.GeneralInformationDto;
-import com.pla.core.dto.GeneralInformationProcessDto;
-import com.pla.core.dto.PolicyProcessMinimumLimitItemDto;
+import com.pla.core.dto.*;
 import com.pla.sharedkernel.domain.model.*;
 import com.pla.sharedkernel.identifier.LineOfBusinessId;
 import org.nthdimenzion.common.AppConstants;
@@ -58,13 +56,57 @@ public class GeneralInformationService {
 
     public boolean createProductLineInformation(LineOfBusinessId lineOfBusinessId, UserDetails userDetails, GeneralInformationDto generalInformationDto) {
         Admin admin = adminRoleAdapter.userToAdmin(userDetails);
-        ProductLineGeneralInformation productLineGeneralInformation = admin.createProductLineGeneralInformation(lineOfBusinessId, generalInformationDto);
+        List<Map<ProductLineProcessType,Integer>> quotationProcessItem =   transformProductLine(generalInformationDto.getQuotationProcessItems());
+        List<Map<ProductLineProcessType,Integer>> enrollmentProcessItem =   transformProductLine(generalInformationDto.getEnrollmentProcessItems());
+        List<Map<ProductLineProcessType,Integer>> endorsementProcessItem =   transformProductLine(generalInformationDto.getEndorsementProcessItems());
+        List<Map<ProductLineProcessType,Integer>> claimProcessItem =   transformProductLine(generalInformationDto.getClaimProcessItems());
+        List<Map<ProductLineProcessType,Integer>> reinstatementProcessItem =   transformProductLine(generalInformationDto.getReinstatementProcessItems());
+        List<Map<ProductLineProcessType,Integer>> maturityProcessItem =   transformProductLine(generalInformationDto.getMaturityProcessItems());
+        List<Map<ProductLineProcessType,Integer>> surrenderProcessItem =   transformProductLine(generalInformationDto.getSurrenderProcessItems());
+        List<Map<PolicyFeeProcessType,Integer>> policyFeeProcess  = transformProductLineFeeProcess(generalInformationDto.getPolicyFeeProcessItems());
+        List<Map<PolicyProcessMinimumLimitType,Integer>>  minimumLimitProcess =  transformProductLineMinimumLimitProcess(generalInformationDto.getPolicyProcessMinimumLimitItems());
+        ProductLineGeneralInformation productLineGeneralInformation = admin.createProductLineGeneralInformation(lineOfBusinessId, quotationProcessItem,enrollmentProcessItem,reinstatementProcessItem,endorsementProcessItem,claimProcessItem,policyFeeProcess,minimumLimitProcess,surrenderProcessItem,maturityProcessItem);
         springMongoTemplate.save(productLineGeneralInformation);
         return AppConstants.SUCCESS;
     }
 
-    public boolean createOrganizationInformation(List<Map<ModalFactorItem, BigDecimal>> modelFactorItems, List<Map<DiscountFactorItem, BigDecimal>> discountFactorItems, Map<Tax, BigDecimal> serviceTax, UserDetails userDetails) {
+    public List<Map<ProductLineProcessType,Integer>> transformProductLine(List<ProductLineProcessItemDto> productLineProcessItemDtos){
+        List<Map<ProductLineProcessType,Integer>> productLineProcessList = Lists.newArrayList();
+        for (ProductLineProcessItemDto productLineProcessItemDto :  productLineProcessItemDtos){
+            Map<ProductLineProcessType,Integer> processTypeIntegerMap = Maps.newLinkedHashMap();
+            processTypeIntegerMap.put(productLineProcessItemDto.getProductLineProcessItem(),productLineProcessItemDto.getValue());
+            productLineProcessList.add(processTypeIntegerMap);
+        }
+        return productLineProcessList;
+    }
+
+    public List<Map<PolicyFeeProcessType,Integer>> transformProductLineFeeProcess(List<PolicyFeeProcessItemDto> policyFeeProcessItemDtos){
+        List<Map<PolicyFeeProcessType,Integer>> productLineProcessList = Lists.newArrayList();
+        for (PolicyFeeProcessItemDto policyFeeProcessItemDto : policyFeeProcessItemDtos){
+            Map<PolicyFeeProcessType,Integer> processTypeIntegerMap = Maps.newLinkedHashMap();
+            processTypeIntegerMap.put(policyFeeProcessItemDto.getPolicyFeeProcessType(), policyFeeProcessItemDto.getPolicyFee());
+            productLineProcessList.add(processTypeIntegerMap);
+        }
+        return productLineProcessList;
+    }
+
+    public List<Map<PolicyProcessMinimumLimitType,Integer>> transformProductLineMinimumLimitProcess(List<PolicyProcessMinimumLimitItemDto> policyProcessMinimumLimitItemDtos){
+        List<Map<PolicyProcessMinimumLimitType,Integer>> productLineProcessList = Lists.newArrayList();
+        for (PolicyProcessMinimumLimitItemDto policyProcessMinimumLimitItemDto : policyProcessMinimumLimitItemDtos){
+            Map<PolicyProcessMinimumLimitType,Integer> policyProcessMinimumLimit = Maps.newLinkedHashMap();
+            policyProcessMinimumLimit.put(policyProcessMinimumLimitItemDto.getPolicyProcessMinimumLimitType(),policyProcessMinimumLimitItemDto.getValue());
+            productLineProcessList.add(policyProcessMinimumLimit);
+        }
+        return productLineProcessList;
+    }
+
+
+    public boolean createOrganizationInformation(GeneralInformationDto generalInformationDto, UserDetails userDetails) {
         Admin admin = adminRoleAdapter.userToAdmin(userDetails);
+        List<Map<ModalFactorItem, BigDecimal>> modelFactorItems =  transformModalFactorItem(generalInformationDto.getModelFactorItems());
+        List<Map<DiscountFactorItem, BigDecimal>> discountFactorItems =  transformDiscountFactorItem(generalInformationDto.getDiscountFactorItems());
+        Map<Tax,BigDecimal> serviceTax = Maps.newLinkedHashMap();
+        serviceTax.put(generalInformationDto.getServiceTax().getTax(),generalInformationDto.getServiceTax().getValue());
         OrganizationGeneralInformation organizationGeneralInformation = admin.createOrganizationGeneralInformation(modelFactorItems, discountFactorItems, serviceTax);
         springMongoTemplate.save(organizationGeneralInformation);
         return AppConstants.SUCCESS;
@@ -77,7 +119,11 @@ public class GeneralInformationService {
         findGeneralInformation.addCriteria(Criteria.where("organizationInformationId").is(generalInformationDto.getOrganizationInformationId()));
         OrganizationGeneralInformation organizationGeneralInformation = springMongoTemplate.findOne(findGeneralInformation, OrganizationGeneralInformation.class);
         checkArgument(organizationGeneralInformation != null);
-        organizationGeneralInformation = admin.updateOrganizationInformation(organizationGeneralInformation, generalInformationDto);
+        List<Map<ModalFactorItem, BigDecimal>>  modalFactorItem =  transformModalFactorItem(generalInformationDto.getModelFactorItems());
+        List<Map<DiscountFactorItem, BigDecimal>>  discountFactorItem =  transformDiscountFactorItem(generalInformationDto.getDiscountFactorItems());
+        Map<Tax,BigDecimal> serviceTax = Maps.newLinkedHashMap();
+        serviceTax.put(generalInformationDto.getServiceTax().getTax(),generalInformationDto.getServiceTax().getValue());
+        organizationGeneralInformation = admin.updateOrganizationInformation(organizationGeneralInformation,modalFactorItem,discountFactorItem ,serviceTax);
         update.set("modelFactorItems", organizationGeneralInformation.getModelFactorItems());
         update.set("discountFactorItems", organizationGeneralInformation.getDiscountFactorItems());
         update.set("serviceTax", organizationGeneralInformation.getServiceTax());
@@ -92,7 +138,16 @@ public class GeneralInformationService {
         findGeneralInformation.addCriteria(Criteria.where("productLineInformationId").is(generalInformationDto.getProductLineInformationId()));
         ProductLineGeneralInformation productLineGeneralInformation = springMongoTemplate.findOne(findGeneralInformation, ProductLineGeneralInformation.class);
         checkArgument(productLineGeneralInformation != null);
-        productLineGeneralInformation = admin.updateProductLineInformation(productLineGeneralInformation, generalInformationDto);
+        List<Map<ProductLineProcessType,Integer>> quotationProcessItem = transformProductLine(generalInformationDto.getQuotationProcessItems());
+        List<Map<ProductLineProcessType,Integer>> enrollmentProcessItem = transformProductLine(generalInformationDto.getEnrollmentProcessItems());
+        List<Map<ProductLineProcessType,Integer>> endorsementProcessItem = transformProductLine(generalInformationDto.getEndorsementProcessItems());
+        List<Map<ProductLineProcessType,Integer>> claimProcessItem = transformProductLine(generalInformationDto.getClaimProcessItems());
+        List<Map<ProductLineProcessType,Integer>> reinstatementProcessItem =transformProductLine(generalInformationDto.getReinstatementProcessItems());
+        List<Map<ProductLineProcessType,Integer>> maturityProcessItem = transformProductLine(generalInformationDto.getMaturityProcessItems());
+        List<Map<ProductLineProcessType,Integer>> surrenderProcessItem = transformProductLine(generalInformationDto.getSurrenderProcessItems());
+        List<Map<PolicyFeeProcessType,Integer>> policyFeeProcess  = transformProductLineFeeProcess(generalInformationDto.getPolicyFeeProcessItems());
+        List<Map<PolicyProcessMinimumLimitType,Integer>>  minimumLimitProcess =  transformProductLineMinimumLimitProcess(generalInformationDto.getPolicyProcessMinimumLimitItems());
+        productLineGeneralInformation = admin.updateProductLineInformation(productLineGeneralInformation,  quotationProcessItem,enrollmentProcessItem,reinstatementProcessItem,endorsementProcessItem,claimProcessItem,policyFeeProcess,minimumLimitProcess,surrenderProcessItem,maturityProcessItem);
         update = updateProductLineInformation(update, productLineGeneralInformation);
         springMongoTemplate.updateFirst(findGeneralInformation, update, ProductLineGeneralInformation.class);
         return AppConstants.SUCCESS;
@@ -110,6 +165,27 @@ public class GeneralInformationService {
         update.set("maturityProcessInformation", updatedProductLineInformation.getMaturityProcessInformation());
         return update;
     }
+
+     List<Map<ModalFactorItem, BigDecimal>> transformModalFactorItem(List<ModalFactorInformationDto> modalFactorInformationDtos){
+        List<Map<ModalFactorItem, BigDecimal>> modalFactorItems = Lists.newArrayList();
+        for (ModalFactorInformationDto modalFactorInformationDto : modalFactorInformationDtos){
+            Map<ModalFactorItem, BigDecimal> modalFactorItemMap = Maps.newLinkedHashMap();
+            modalFactorItemMap.put(modalFactorInformationDto.getModalFactorItem(),modalFactorInformationDto.getValue());
+            modalFactorItems.add(modalFactorItemMap);
+        }
+        return modalFactorItems;
+    }
+
+     List<Map<DiscountFactorItem, BigDecimal>> transformDiscountFactorItem(List<DiscountFactorInformationDto> modalFactorInformationDtos){
+        List<Map<DiscountFactorItem, BigDecimal>> discountFactorItems = Lists.newArrayList();
+        for (DiscountFactorInformationDto discountFactorInformationDto : modalFactorInformationDtos){
+            Map<DiscountFactorItem, BigDecimal> discountFactorItemMap = Maps.newLinkedHashMap();
+            discountFactorItemMap.put(discountFactorInformationDto.getDiscountFactorItem(),discountFactorInformationDto.getValue());
+            discountFactorItems.add(discountFactorItemMap);
+        }
+        return discountFactorItems;
+    }
+
 
     public List<GeneralInformationProcessDto> getOrganizationProcessItems(){
         List<GeneralInformationProcessDto> organizationProcessList = Lists.newArrayList();
@@ -193,40 +269,48 @@ public class GeneralInformationService {
             productLineInformationList.add(getIndividualInsuranceProductLineInformation());
             return productLineInformationList;
         }
-        productLineInformationList =  getProductLine(productLineInformationList,productLineInformation);
         for (Map productLineInformationMap: productLineInformation){
             Map<String,Object> productLineInformationByBusinessId = Maps.newLinkedHashMap();
-            List listOfProcess = Lists.newArrayList();
             productLineInformationByBusinessId.put("productLine",productLineInformationMap.get("productLine"));
             productLineInformationByBusinessId.put("productLineInformationId", productLineInformationMap.get("productLineInformationId"));
-            listOfProcess.add(productLineInformationMap.get("quotationProcessInformation"));
-            listOfProcess.add(productLineInformationMap.get("enrollmentProcessInformation"));
-            listOfProcess.add(productLineInformationMap.get("reinstatementProcessInformation"));
-            listOfProcess.add(productLineInformationMap.get("endorsementProcessInformation"));
-            listOfProcess.add(productLineInformationMap.get("claimProcessInformation"));
-            listOfProcess.add(productLineInformationMap.get("policyFeeProcessInformation"));
-            listOfProcess.add(productLineInformationMap.get("policyProcessMinimumLimit"));
-            listOfProcess.add(productLineInformationMap.get("surrenderProcessInformation"));
-            listOfProcess.add(productLineInformationMap.get("maturityProcessInformation"));
-            productLineInformationByBusinessId.put("processType",listOfProcess);
+            Map quotationMap = (Map) productLineInformationMap.get("quotationProcessInformation");
+            productLineInformationByBusinessId.put("quotationProcessItems", quotationMap.get("quotationProcessItems"));
+            Map enrollmentMap = (Map) productLineInformationMap.get("enrollmentProcessInformation");
+            productLineInformationByBusinessId.put("enrollmentProcessItems",enrollmentMap.get("enrollmentProcessItems") );
+            Map reinstatementMap = (Map) productLineInformationMap.get("reinstatementProcessInformation");
+            productLineInformationByBusinessId.put("reinstatementProcessItems",reinstatementMap.get("reinstatementProcessItems") );
+            Map  endorsementMap = (Map) productLineInformationMap.get("endorsementProcessInformation");
+            productLineInformationByBusinessId.put("endorsementProcessItems",endorsementMap.get("endorsementProcessItems") );
+            Map claimMap = (Map) productLineInformationMap.get("claimProcessInformation");
+            productLineInformationByBusinessId.put("claimProcessItems",claimMap.get("claimProcessItems"));
+            Map policyFeeMap = (Map) productLineInformationMap.get("policyFeeProcessInformation");
+            productLineInformationByBusinessId.put("policyFeeProcessItems", policyFeeMap.get("policyFeeProcessItems"));
+            Map minimumLimitMap = (Map) productLineInformationMap.get("policyProcessMinimumLimit");
+            productLineInformationByBusinessId.put("policyProcessMinimumLimitItems",minimumLimitMap.get("policyProcessMinimumLimitItems"));
+            Map surrenderMap  = (Map) productLineInformationMap.get("surrenderProcessInformation");
+            productLineInformationByBusinessId.put("surrenderProcessItems",surrenderMap.get("surrenderProcessItems"));
+            Map  maturityMap = (Map) productLineInformationMap.get("maturityProcessInformation");
+            productLineInformationByBusinessId.put("maturityProcessItems",maturityMap.get("maturityProcessItems"));
             productLineInformationList.add(productLineInformationByBusinessId);
         }
-        return productLineInformationList;
+        return transformProductLineInformation(productLineInformationList);
     }
 
-    public List<Map> getProductLine(List<Map> productLineInformationList,  List<Map> productLineInformation ){
-        for (Map productLineMap : productLineInformation){
-            if (!LineOfBusinessId.GROUP_HEALTH.name().equals(productLineMap.get("productLine"))){
-                productLineInformationList.add(getGroupHealthProductLineInformation());
-            }
-            if (!LineOfBusinessId.GROUP_INSURANCE.name().equals(productLineMap.get("productLine"))){
-                productLineInformationList.add(getGroupInsuranceProductLineInformation());
-            }
-            if (!LineOfBusinessId.INDIVIDUAL_INSURANCE.name().equals(productLineMap.get("productLine"))){
-                productLineInformationList.add(getIndividualInsuranceProductLineInformation());
-            }
+    private List<Map> transformProductLineInformation(List<Map> productLineInformation){
+        List<String> strings = Lists.newArrayList();
+        for (Map map : productLineInformation){
+            strings.add((String) map.get("productLine"));
         }
-        return productLineInformationList;
+        if (!strings.contains(LineOfBusinessId.GROUP_HEALTH.name())){
+            productLineInformation.add(getGroupHealthProductLineInformation());
+        }
+        if (!strings.contains(LineOfBusinessId.GROUP_INSURANCE.name())){
+            productLineInformation.add(getGroupInsuranceProductLineInformation());
+        }
+        if (!strings.contains(LineOfBusinessId.INDIVIDUAL_INSURANCE.name())){
+            productLineInformation.add(getIndividualInsuranceProductLineInformation());
+        }
+        return productLineInformation;
     }
 
     private List<Map> findAllProductLineInformation() {
@@ -253,16 +337,15 @@ public class GeneralInformationService {
         Map productLineMap  = Maps.newLinkedHashMap();
         productLineMap.put("productLine",LineOfBusinessId.GROUP_HEALTH);
         productLineMap.put("productLineInformationId",null);
-        List<Map> groupHealthMap = getProductLineGeneralInformation();
-        productLineMap.put("processType", groupHealthMap);
+        productLineMap = getProductLineGeneralInformation(productLineMap);
         return productLineMap;
     }
+
     public Map getGroupInsuranceProductLineInformation(){
         Map insuranceMap  = Maps.newLinkedHashMap();
         insuranceMap.put("productLine",LineOfBusinessId.GROUP_INSURANCE);
         insuranceMap.put("productLineInformationId",null);
-        List<Map> groupInsuranceMap = getProductLineGeneralInformation();
-        insuranceMap.put("processType", groupInsuranceMap);
+        insuranceMap = getProductLineGeneralInformation(insuranceMap);
         return insuranceMap;
     }
 
@@ -270,167 +353,30 @@ public class GeneralInformationService {
         Map individualInsurance  = Maps.newLinkedHashMap();
         individualInsurance.put("productLine",LineOfBusinessId.INDIVIDUAL_INSURANCE);
         individualInsurance.put("productLineInformationId",null);
-        List<Map> individualInsuranceMap = getProductLineGeneralInformation();
-        individualInsurance.put("processType", individualInsuranceMap);
+        individualInsurance = getProductLineGeneralInformation(individualInsurance);
         return individualInsurance;
     }
 
     private List populateOrganizationGeneralInformationData(){
         List list = Lists.newArrayList();
-        Map organizationInformationMap = Maps.newLinkedHashMap();
-        GeneralInformationDto generalInformationDto = getOrganizationGeneralInformation();
-        organizationInformationMap.put("productLine",generalInformationDto.getProductLine());
-        organizationInformationMap.put("organizationInformationId",generalInformationDto.getOrganizationInformationId());
-        list.add(generalInformationDto);
+        Map organizationInformation = Maps.newLinkedHashMap();
+        organizationInformation.put("modelFactorItems",GeneralInformationProcessItem.MODAL_FACTOR.getOrganizationLevelProcessInformationItem());
+        organizationInformation.put("discountFactorItems",GeneralInformationProcessItem.DISCOUNT_FACTOR.getOrganizationLevelProcessInformationItem());
+        organizationInformation.put("serviceTax",GeneralInformationProcessItem.SERVICE_TAX.getOrganizationLevelProcessInformationItem().get(0));
+        list.add(organizationInformation);
         return list;
     }
 
-
-    private List<Map> getProductLineGeneralInformation(){
-        List<Map> productLineList = Lists.newArrayList();
-        Map productLineInformationMap = Maps.newLinkedHashMap();
-        productLineInformationMap.put("quotationProcessItems", populateProcessItems());
-        productLineInformationMap.put("enrollmentProcessItems", populateProcessItems());
-        productLineInformationMap.put("reinstatementProcessItems", populateProcessItems());
-        productLineInformationMap.put("endorsementProcessItems", populateProcessItems());
-        productLineInformationMap.put("claimProcessItems", populateClaimProcessItems());
-        productLineInformationMap.put("policyFeeProcessItems",populatePolicyFeeProcessData());
-        productLineInformationMap.put("policyProcessMinimumLimitItems", populateMinimumLimitProcessData());
-        productLineInformationMap.put("surrenderProcessItems", populateProcessItems());
-        productLineInformationMap.put("maturityProcessItems", populateProcessItems());
-        productLineList.add(productLineInformationMap);
-        return productLineList;
+    private Map getProductLineGeneralInformation(Map productLineInformationMap){
+        productLineInformationMap.put("quotationProcessItems", GeneralInformationProcessItem.QUOTATION.getOrganizationLevelProcessInformationItem());
+        productLineInformationMap.put("enrollmentProcessItems",  GeneralInformationProcessItem.ENROLLMENT.getOrganizationLevelProcessInformationItem());
+        productLineInformationMap.put("reinstatementProcessItems",  GeneralInformationProcessItem.REINSTATEMENT.getOrganizationLevelProcessInformationItem());
+        productLineInformationMap.put("endorsementProcessItems", GeneralInformationProcessItem.ENDORSEMENT.getOrganizationLevelProcessInformationItem());
+        productLineInformationMap.put("claimProcessItems", GeneralInformationProcessItem.CLAIM.getOrganizationLevelProcessInformationItem());
+        productLineInformationMap.put("policyFeeProcessItems",GeneralInformationProcessItem.POLICY_FEE.getOrganizationLevelProcessInformationItem());
+        productLineInformationMap.put("policyProcessMinimumLimitItems", GeneralInformationProcessItem.MINIMUM_LIMIT.getOrganizationLevelProcessInformationItem());
+        productLineInformationMap.put("surrenderProcessItems", GeneralInformationProcessItem.SURRENDER.getOrganizationLevelProcessInformationItem());
+        productLineInformationMap.put("maturityProcessItems", GeneralInformationProcessItem.MATURITY.getOrganizationLevelProcessInformationItem());
+        return productLineInformationMap;
     }
-
-    private GeneralInformationDto getOrganizationGeneralInformation(){
-        GeneralInformationDto generalInformationDto = new GeneralInformationDto();
-        generalInformationDto.setModelFactorItems(populateModalFactorDiscount());
-        generalInformationDto.setDiscountFactorItems(populateDiscountFactorDiscount());
-        generalInformationDto.setServiceTax(populateServiceTax());
-        return generalInformationDto;
-    }
-
-    private List<Map<String,Object>> populateProcessItems(){
-        List<Map<String,Object>> productLineProcessList = Lists.newArrayList();
-        Map<String,Object> quotationProcessItems = Maps.newLinkedHashMap();
-        quotationProcessItems.put("productLineProcessItem",ProductLineProcessType.PURGE_TIME_PERIOD);
-        quotationProcessItems.put("value",0);
-        productLineProcessList.add(quotationProcessItems);
-        quotationProcessItems = Maps.newLinkedHashMap();
-        quotationProcessItems.put("productLineProcessItem",ProductLineProcessType.FIRST_REMAINDER);
-        quotationProcessItems.put("value", 0);
-        productLineProcessList.add(quotationProcessItems);
-        quotationProcessItems = Maps.newLinkedHashMap();
-        quotationProcessItems.put("productLineProcessItem",ProductLineProcessType.NO_OF_REMAINDER);
-        quotationProcessItems.put("value", 0);
-        productLineProcessList.add(quotationProcessItems);
-        quotationProcessItems = Maps.newLinkedHashMap();
-        quotationProcessItems.put("productLineProcessItem",ProductLineProcessType.GAP);
-        quotationProcessItems.put("value", 0);
-        productLineProcessList.add(quotationProcessItems);
-        quotationProcessItems = Maps.newLinkedHashMap();
-        quotationProcessItems.put("productLineProcessItem",ProductLineProcessType.CLOSURE);
-        quotationProcessItems.put("value", 0);
-        productLineProcessList.add(quotationProcessItems);
-        return productLineProcessList;
-    }
-    private List<Map<String,Object>> populateClaimProcessItems(){
-        List<Map<String,Object>> productLineProcessList = Lists.newArrayList();
-        Map<String,Object> quotationProcessItems = Maps.newLinkedHashMap();
-        quotationProcessItems.put("productLineProcessItem",ProductLineProcessType.PURGE_TIME_PERIOD);
-        quotationProcessItems.put("value",0);
-        productLineProcessList.add(quotationProcessItems);
-        quotationProcessItems = Maps.newLinkedHashMap();
-        quotationProcessItems.put("productLineProcessItem",ProductLineProcessType.FIRST_REMAINDER);
-        quotationProcessItems.put("value", 0);
-        productLineProcessList.add(quotationProcessItems);
-        quotationProcessItems = Maps.newLinkedHashMap();
-        quotationProcessItems.put("productLineProcessItem",ProductLineProcessType.NO_OF_REMAINDER);
-        quotationProcessItems.put("value", 0);
-        productLineProcessList.add(quotationProcessItems);
-        quotationProcessItems = Maps.newLinkedHashMap();
-        quotationProcessItems.put("productLineProcessItem", ProductLineProcessType.GAP);
-        quotationProcessItems.put("value", 0);
-        productLineProcessList.add(quotationProcessItems);
-        quotationProcessItems = Maps.newLinkedHashMap();
-        quotationProcessItems.put("productLineProcessItem",ProductLineProcessType.CLOSURE);
-        quotationProcessItems.put("value", 0);
-        productLineProcessList.add(quotationProcessItems);
-        quotationProcessItems = Maps.newLinkedHashMap();
-        quotationProcessItems.put("productLineProcessItem",ProductLineProcessType.EARLY_DEATH_CRITERIA);
-        quotationProcessItems.put("value", 0);
-        productLineProcessList.add(quotationProcessItems);
-        return productLineProcessList;
-    }
-
-    private List<Map<DiscountFactorItem, BigDecimal>> populateDiscountFactorDiscount(){
-        List<Map<DiscountFactorItem,BigDecimal>>  discountFactorList = Lists.newArrayList();
-        Map<DiscountFactorItem,BigDecimal> discountFactorItems = Maps.newLinkedHashMap();
-        discountFactorItems.put(DiscountFactorItem.ANNUAL, null);
-        discountFactorList.add(discountFactorItems);
-        discountFactorItems = Maps.newLinkedHashMap();
-        discountFactorItems.put(DiscountFactorItem.SEMI_ANNUAL, null);
-        discountFactorList.add(discountFactorItems);
-        discountFactorItems = Maps.newLinkedHashMap();
-        discountFactorItems.put(DiscountFactorItem.QUARTERLY, null);
-        discountFactorList.add(discountFactorItems);
-        return discountFactorList;
-    }
-
-    private List<Map<ModalFactorItem, BigDecimal>> populateModalFactorDiscount(){
-        List<Map<ModalFactorItem,BigDecimal>>  modalFactorList = Lists.newArrayList();
-        Map<ModalFactorItem,BigDecimal> modelFactorItems = Maps.newLinkedHashMap();
-        modelFactorItems.put(ModalFactorItem.SEMI_ANNUAL, null);
-        modalFactorList.add(modelFactorItems);
-        modelFactorItems = Maps.newLinkedHashMap();
-        modelFactorItems.put(ModalFactorItem.QUARTERLY, null);
-        modalFactorList.add(modelFactorItems);
-        modelFactorItems = Maps.newLinkedHashMap();
-        modelFactorItems.put(ModalFactorItem.MONTHLY, null);
-        modalFactorList.add(modelFactorItems);
-        return modalFactorList;
-    }
-
-    private List<Map<String,Object>> populatePolicyFeeProcessData(){
-        List<Map<String,Object>>  processFeeList = Lists.newArrayList();
-        Map<String,Object> policyFeeProcessItems = Maps.newLinkedHashMap();
-        policyFeeProcessItems.put("policyFeeProcessType",PolicyFeeProcessType.ANNUAL);
-        policyFeeProcessItems.put("policyFee",0);
-        processFeeList.add(policyFeeProcessItems);
-        policyFeeProcessItems = Maps.newLinkedHashMap();
-        policyFeeProcessItems.put("policyFeeProcessType",PolicyFeeProcessType.SEMI_ANNUAL);
-        policyFeeProcessItems.put("policyFee",0);
-        processFeeList.add(policyFeeProcessItems);
-        policyFeeProcessItems = Maps.newLinkedHashMap();
-        policyFeeProcessItems.put("policyFeeProcessType",PolicyFeeProcessType.QUARTERLY);
-        policyFeeProcessItems.put("policyFee",0);
-        processFeeList.add(policyFeeProcessItems);
-        policyFeeProcessItems = Maps.newLinkedHashMap();
-        policyFeeProcessItems.put("policyFeeProcessType",PolicyFeeProcessType.MONTHLY);
-        policyFeeProcessItems.put("policyFee",0);
-        processFeeList.add(policyFeeProcessItems);
-        return processFeeList;
-    }
-
-    private List<PolicyProcessMinimumLimitItemDto> populateMinimumLimitProcessData(){
-        List<PolicyProcessMinimumLimitItemDto>  policyProcessMinimumLimitItems = Lists.newArrayList();
-        PolicyProcessMinimumLimitItemDto policyProcessMinimumLimitItemDto = new PolicyProcessMinimumLimitItemDto();
-        policyProcessMinimumLimitItemDto.setPolicyProcessMinimumLimitType(PolicyProcessMinimumLimitType.SEMI_ANNUAL);
-        policyProcessMinimumLimitItemDto.setMinimumPremium(0);
-        policyProcessMinimumLimitItemDto.setNoOfPersonPerPolicy(0);
-        policyProcessMinimumLimitItems.add(policyProcessMinimumLimitItemDto);
-        policyProcessMinimumLimitItemDto = new PolicyProcessMinimumLimitItemDto();
-        policyProcessMinimumLimitItemDto.setPolicyProcessMinimumLimitType(PolicyProcessMinimumLimitType.ANNUAL);
-        policyProcessMinimumLimitItemDto.setMinimumPremium(0);
-        policyProcessMinimumLimitItemDto.setNoOfPersonPerPolicy(0);
-        policyProcessMinimumLimitItems.add(policyProcessMinimumLimitItemDto);
-        return policyProcessMinimumLimitItems;
-    }
-
-    public Map<Tax,BigDecimal> populateServiceTax(){
-        Map<Tax,BigDecimal> serviceTax = Maps.newLinkedHashMap();
-        serviceTax.put(Tax.SERVICE_TAX, null);
-        return serviceTax;
-    }
-
 }

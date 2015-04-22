@@ -1,7 +1,6 @@
 var App = angular.module('updateProductLine', ['common','ngRoute','ui.bootstrap','ngSanitize','mgcrea.ngStrap.select','mgcrea.ngStrap','mgcrea.ngStrap.alert']);
 
 App.controller('SelectUpdateController',['$rootScope','$scope','$http','$templateCache','$timeout','$alert','$window','$location',function($rootScope,$scope,$http,$templateCache,$timeout,$alert,$window,$location) {
-   // console.log("******************************SELECT UPDATE CONTROLLER CALLED*********************************************")
     $scope.selectUpdate=true;
     $scope.$watch('selectedOption.productLine', function (newValue, oldValue) {
 
@@ -27,261 +26,88 @@ App.controller('SelectUpdateController',['$rootScope','$scope','$http','$templat
 }]);
 App.controller('UpdateGroupHealthLevelInformationController',['$rootScope','$scope','$http','$templateCache','$timeout','$alert','$window','$location',function($rootScope,$scope,$http,$templateCache,$timeout,$alert,$window,$location) {
     $scope.forms = {};
+    $scope.items={};
     $scope.groupHealth=false;
     $rootScope.$watch('PanelName',function(n,o){
         if(n=='groupHealth'){
             $scope.groupHealth=true;
         }
     });
-   /* $scope.$watch('forms.form1.$valid', function(n,o) {
-        if(n){
-            console.log("watching " + $scope.forms.form1.$valid);
 
-        }
-    });*/
-    $scope.items = [
-        {
-            "productLine": "GROUP_HEALTH",
-            "processType": [
-                {
-                    "quotationProcessItems": [
-                        {
-                            "productLineProcessItem": "GAP",
-                            "value": 4
-                        },
-                        {
-                            "productLineProcessItem": "NO_OF_REMAINDER",
-                            "value": 3
-                        },
-                        {
-                            "productLineProcessItem": "CLOSURE",
-                            "value": 6
-                        },
-                        {
-                            "productLineProcessItem": "PURGE_TIME_PERIOD",
-                            "value": 1
-                        },
-                        {
-                            "productLineProcessItem": "FIRST_REMAINDER",
-                            "value": 2
-                        }
-                    ]
-                },
-                {
-                    "enrollmentProcessItems": [
-                        {
-                            "productLineProcessItem": "GAP",
-                            "value": 4
-                        },
-                        {
-                            "productLineProcessItem": "NO_OF_REMAINDER",
-                            "value": 3
-                        },
-                        {
-                            "productLineProcessItem": "CLOSURE",
-                            "value": 6
-                        },
-                        {
-                            "productLineProcessItem": "PURGE_TIME_PERIOD",
-                            "value": 1
-                        },
-                        {
-                            "productLineProcessItem": "FIRST_REMAINDER",
-                            "value": 2
-                        }
-                    ]
-                },
-                {
-                    "reinstatementProcessItems": [
-                        {
-                            "productLineProcessItem": "GAP",
-                            "value": 4
-                        },
-                        {
-                            "productLineProcessItem": "NO_OF_REMAINDER",
-                            "value": 3
-                        },
-                        {
-                            "productLineProcessItem": "CLOSURE",
-                            "value": 6
-                        },
-                        {
-                            "productLineProcessItem": "PURGE_TIME_PERIOD",
-                            "value": 1
-                        },
-                        {
-                            "productLineProcessItem": "FIRST_REMAINDER",
-                            "value": 2
-                        }
-                    ]
-                },
-                {
-                    "endorsementProcessItems": [
-                        {
-                            "productLineProcessItem": "GAP",
-                            "value": 4
-                        },
-                        {
-                            "productLineProcessItem": "NO_OF_REMAINDER",
-                            "value": 3
-                        },
-                        {
-                            "productLineProcessItem": "CLOSURE",
-                            "value": 6
-                        },
-                        {
-                            "productLineProcessItem": "PURGE_TIME_PERIOD",
-                            "value": 1
-                        },
-                        {
-                            "productLineProcessItem": "FIRST_REMAINDER",
-                            "value": 2
-                        }
-                    ]
-                },
-                {
-                    "claimProcessItems": [
-                        {
-                            "productLineProcessItem": "GAP",
-                            "value": 4
-                        },
-                        {
-                            "productLineProcessItem": "NO_OF_REMAINDER",
-                            "value": 3
-                        },
-                        {
-                            "productLineProcessItem": "CLOSURE",
-                            "value": 6
-                        },
-                        {
-                            "productLineProcessItem": "PURGE_TIME_PERIOD",
-                            "value": 1
-                        },
-                        {
-                            "productLineProcessItem": "FIRST_REMAINDER",
-                            "value": 2
-                        },
-                        {
-                            "productLineProcessItem": "EARLY_DEATH_CRITERIA",
-                            "value": 15
-                        }
-                    ]
-                },
-                {
-                    "policyFeeProcessItems": [
-                        {
-                            "policyFeeProcessType": "ANNUAL",
-                            "policyFee": 1
-                        },
-                        {
-                            "policyFeeProcessType": "MONTHLY",
-                            "policyFee": 4
-                        },
-                        {
-                            "policyFeeProcessType": "QUARTERLY",
-                            "policyFee": 3
-                        },
-                        {
-                            "policyFeeProcessType": "SEMI_ANNUAL",
-                            "policyFee": 2
-                        }
-                    ]
-                },
-                {
-                    "policyProcessMinimumLimitItems": [
-                        {
-                            "policyProcessMinimumLimitType": "ANNUAL",
-                            "noOfPersonPerPolicy": 18,
-                            "minimumPremium": 20
-                        },
-                        {
-                            "policyProcessMinimumLimitType": "SEMI_ANNUAL",
-                            "noOfPersonPerPolicy": 3,
-                            "minimumPremium": 15
-                        }
-                    ]
-                },
-                {
-                    "surrenderProcessItems": [
-                        {
-                            "productLineProcessItem": "GAP",
-                            "value": 4
-                        },
-                        {
-                            "productLineProcessItem": "NO_OF_REMAINDER",
-                            "value": 3
-                        },
-                        {
-                            "productLineProcessItem": "CLOSURE",
-                            "value": 6
-                        },
-                        {
-                            "productLineProcessItem": "PURGE_TIME_PERIOD",
-                            "value": 1
-                        },
-                        {
-                            "productLineProcessItem": "FIRST_REMAINDER",
-                            "value": 2
-                        }
-                    ]
-                },
-                {
-                    "maturityProcessItems": [
-                        {
-                            "productLineProcessItem": "GAP",
-                            "value": 4
-                        },
-                        {
-                            "productLineProcessItem": "NO_OF_REMAINDER",
-                            "value": 3
-                        },
-                        {
-                            "productLineProcessItem": "CLOSURE",
-                            "value": 6
-                        },
-                        {
-                            "productLineProcessItem": "PURGE_TIME_PERIOD",
-                            "value": 1
-                        },
-                        {
-                            "productLineProcessItem": "FIRST_REMAINDER",
-                            "value": 2
-                        }
-                    ]
-                }
-            ]
-        }
-    ];
-
-
-    /* $scope.$watch('forms.form1.$valid', function() {
-         console.log("watching " + $scope.forms.form1.$valid);
-     });*/
-   $http.get('/pla/core/productlineinformation/getproducrlineinformation').success(function(data){
+    $scope.updatePanelLabel=false;
+    $scope.createPanelLabel=false;
+   $http.get('/pla/core/productlineinformation/getproductlineinformation').success(function(data){
       //  console.log(data);
+       $scope.groupHealthData=data;
+       var productLineName="GROUP_HEALTH";
+      $scope.items =_.findWhere($scope.groupHealthData,{productLine:productLineName});
+      // console.log($scope.items.productLineInformationId);should chk for id in update page
+
+      // console.log($scope.items);
+       if($scope.items.productLineInformationId !=null){
+           $scope.updatePanelLabel=true;
+       }else{
+           $scope.createPanelLabel=true;
+
+       }
 
     });
+
+    $scope.reloadPage = function(){
+        $window.location.href="/pla/core/productlineinformation/openupdate";
+
+    }
+
     $http.get('/pla/core/productlineinformation/getproductlineprocessitem').success(function(data){
-       // console.log(data);
+        $scope.processItems=data;
 
     });
-
-   /* $scope.submitGroupHealth=function(){
-        $http.post('/pla/core/productlineinformation/update', $scope.items).success(function(data){
-            if(data.status==200){
-                $scope.alert = {title:'Success Message! ', content:data.message, type: 'success'};
-                //  $scope.reset();
-            }else if(data.status==500){
-                $scope.alert = {title:'Error Message! ', content:data.message, type: 'danger'};
+    $scope.fieldData={};
+    $scope.getFieldName = function(fieldtype){
+  //  console.log(fieldtype);
+         if(fieldtype){
+             $scope.fieldData=_.findWhere($scope.processItems,{type:fieldtype});
+             if($scope.fieldData)
+                 return $scope.fieldData.description;
             }
-        });
+    }
 
-    }*/
+    $scope.submitGroupHealth=function(){
+        ///console.log($scope.items);
+       // console.log("*****************************AFTER CHANGING THE OBJECT *************************");
+
+       if($scope.items.productLineInformationId !=null) {
+            $http.post('/pla/core/productlineinformation/update',$scope.items).success(function (data) {
+                if (data.status == 200) {
+                    $scope.alert = {title: 'Success Message! ', content: data.message, type: 'success'};
+                    //  $scope.reset();
+                    $window.location.href="/pla/core/productlineinformation/openupdate";
+
+                } else if (data.status == 500) {
+                    $scope.alert = {title: 'Error Message! ', content: data.message, type: 'danger'};
+                }
+            });
+        }else{
+
+            $http.post('/pla/core/productlineinformation/create', $scope.items).success(function (data) {
+                if (data.status == 200) {
+                    $scope.alert = {title: 'Success Message! ', content: data.message, type: 'success'};
+                    //  $scope.reset();
+                    $window.location.href="/pla/core/productlineinformation/openupdate";
+
+                } else if (data.status == 500) {
+                    $scope.alert = {title: 'Error Message! ', content: data.message, type: 'danger'};
+                }
+            });
+        }
+
+    }
 
 }]);
 App.controller('UpdateGroupLifeLevelInformationController',['$rootScope','$scope','$http','$templateCache','$timeout','$alert','$window','$location',function($rootScope,$scope,$http,$templateCache,$timeout,$alert,$window,$location) {
     $scope.forms = {};
-
+    $scope.updatePanelLabel=false;
+    $scope.createPanelLabel=false;
     $scope.groupLife=false;
     $rootScope.$watch('PanelName',function(n,o){
         if(n=='groupLife'){
@@ -289,247 +115,76 @@ App.controller('UpdateGroupLifeLevelInformationController',['$rootScope','$scope
         }
     });
 
-    $scope.items = [
-        {
-            "productLine": "GROUP_HEALTH",
-            "processType": [
-                {
-                    "quotationProcessItems": [
-                        {
-                            "productLineProcessItem": "GAP",
-                            "value": 4
-                        },
-                        {
-                            "productLineProcessItem": "NO_OF_REMAINDER",
-                            "value": 3
-                        },
-                        {
-                            "productLineProcessItem": "CLOSURE",
-                            "value": 6
-                        },
-                        {
-                            "productLineProcessItem": "PURGE_TIME_PERIOD",
-                            "value": 1
-                        },
-                        {
-                            "productLineProcessItem": "FIRST_REMAINDER",
-                            "value": 2
-                        }
-                    ]
-                },
-                {
-                    "enrollmentProcessItems": [
-                        {
-                            "productLineProcessItem": "GAP",
-                            "value": 4
-                        },
-                        {
-                            "productLineProcessItem": "NO_OF_REMAINDER",
-                            "value": 3
-                        },
-                        {
-                            "productLineProcessItem": "CLOSURE",
-                            "value": 6
-                        },
-                        {
-                            "productLineProcessItem": "PURGE_TIME_PERIOD",
-                            "value": 1
-                        },
-                        {
-                            "productLineProcessItem": "FIRST_REMAINDER",
-                            "value": 2
-                        }
-                    ]
-                },
-                {
-                    "reinstatementProcessItems": [
-                        {
-                            "productLineProcessItem": "GAP",
-                            "value": 4
-                        },
-                        {
-                            "productLineProcessItem": "NO_OF_REMAINDER",
-                            "value": 3
-                        },
-                        {
-                            "productLineProcessItem": "CLOSURE",
-                            "value": 6
-                        },
-                        {
-                            "productLineProcessItem": "PURGE_TIME_PERIOD",
-                            "value": 1
-                        },
-                        {
-                            "productLineProcessItem": "FIRST_REMAINDER",
-                            "value": 2
-                        }
-                    ]
-                },
-                {
-                    "endorsementProcessItems": [
-                        {
-                            "productLineProcessItem": "GAP",
-                            "value": 4
-                        },
-                        {
-                            "productLineProcessItem": "NO_OF_REMAINDER",
-                            "value": 3
-                        },
-                        {
-                            "productLineProcessItem": "CLOSURE",
-                            "value": 6
-                        },
-                        {
-                            "productLineProcessItem": "PURGE_TIME_PERIOD",
-                            "value": 1
-                        },
-                        {
-                            "productLineProcessItem": "FIRST_REMAINDER",
-                            "value": 2
-                        }
-                    ]
-                },
-                {
-                    "claimProcessItems": [
-                        {
-                            "productLineProcessItem": "GAP",
-                            "value": 4
-                        },
-                        {
-                            "productLineProcessItem": "NO_OF_REMAINDER",
-                            "value": 3
-                        },
-                        {
-                            "productLineProcessItem": "CLOSURE",
-                            "value": 6
-                        },
-                        {
-                            "productLineProcessItem": "PURGE_TIME_PERIOD",
-                            "value": 1
-                        },
-                        {
-                            "productLineProcessItem": "FIRST_REMAINDER",
-                            "value": 2
-                        },
-                        {
-                            "productLineProcessItem": "EARLY_DEATH_CRITERIA",
-                            "value": 15
-                        }
-                    ]
-                },
-                {
-                    "policyFeeProcessItems": [
-                        {
-                            "policyFeeProcessType": "ANNUAL",
-                            "policyFee": 1
-                        },
-                        {
-                            "policyFeeProcessType": "MONTHLY",
-                            "policyFee": 4
-                        },
-                        {
-                            "policyFeeProcessType": "QUARTERLY",
-                            "policyFee": 3
-                        },
-                        {
-                            "policyFeeProcessType": "SEMI_ANNUAL",
-                            "policyFee": 2
-                        }
-                    ]
-                },
-                {
-                    "policyProcessMinimumLimitItems": [
-                        {
-                            "policyProcessMinimumLimitType": "ANNUAL",
-                            "noOfPersonPerPolicy": 18,
-                            "minimumPremium": 20
-                        },
-                        {
-                            "policyProcessMinimumLimitType": "SEMI_ANNUAL",
-                            "noOfPersonPerPolicy": 3,
-                            "minimumPremium": 15
-                        }
-                    ]
-                },
-                {
-                    "surrenderProcessItems": [
-                        {
-                            "productLineProcessItem": "GAP",
-                            "value": 4
-                        },
-                        {
-                            "productLineProcessItem": "NO_OF_REMAINDER",
-                            "value": 3
-                        },
-                        {
-                            "productLineProcessItem": "CLOSURE",
-                            "value": 6
-                        },
-                        {
-                            "productLineProcessItem": "PURGE_TIME_PERIOD",
-                            "value": 1
-                        },
-                        {
-                            "productLineProcessItem": "FIRST_REMAINDER",
-                            "value": 2
-                        }
-                    ]
-                },
-                {
-                    "maturityProcessItems": [
-                        {
-                            "productLineProcessItem": "GAP",
-                            "value": 4
-                        },
-                        {
-                            "productLineProcessItem": "NO_OF_REMAINDER",
-                            "value": 3
-                        },
-                        {
-                            "productLineProcessItem": "CLOSURE",
-                            "value": 6
-                        },
-                        {
-                            "productLineProcessItem": "PURGE_TIME_PERIOD",
-                            "value": 1
-                        },
-                        {
-                            "productLineProcessItem": "FIRST_REMAINDER",
-                            "value": 2
-                        }
-                    ]
-                }
-            ]
+    $http.get('/pla/core/productlineinformation/getproductlineinformation').success(function(data){
+        //  console.log(data);
+        $scope.groupLifeData=data;
+        var productLineName="GROUP_INSURANCE";
+        $scope.items =_.findWhere($scope.groupLifeData,{productLine:productLineName});
+        // console.log($scope.items.productLineInformationId);should chk for id in update page
+
+        // console.log($scope.items);
+
+        if($scope.items.productLineInformationId !=null){
+            $scope.updatePanelLabel=true;
+        }else{
+            $scope.createPanelLabel=true;
+
         }
-    ];
 
-    /* $scope.$watch('forms.form1.$valid', function() {
-     console.log("watching " + $scope.forms.form1.$valid);
-     });*/
-  /*  $http.get('/pla/core/productlineinformation/getproductlineprocessitem').success(function(data){
-       // console.log(data);
-       // $scope.groupHealth=data;
+    });
+    $http.get('/pla/core/productlineinformation/getproductlineprocessitem').success(function(data){
+        $scope.processItems=data;
+
     });
 
-    $http.get('/pla/core/productlineinformation/getproducrlineinformation').success(function(data){
-       // console.log(data);
-       // $scope.groupHealth=data;
-    });
-    $scope.submitGroupHealth=function() {
-              console.log($scope.items)
-        $http.post('/pla/core/productlineinformation/update', $scope.items).success(function (data) {
-            if (data.status == 200) {
-                $scope.alert = {title: 'Success Message! ', content: data.message, type: 'success'};
-                //  $scope.reset();
-            } else if (data.status == 500) {
-                $scope.alert = {title: 'Error Message! ', content: data.message, type: 'danger'};
-            }
-        });
-    }*/
+    $scope.fieldData={};
+    $scope.getFieldName = function(fieldtype){
+        //  console.log(fieldtype);
+        if(fieldtype){
+            $scope.fieldData=_.findWhere($scope.processItems,{type:fieldtype});
+            if($scope.fieldData)
+                return $scope.fieldData.description;
+        }
+    }
+
+    $scope.reloadPage = function(){
+        $window.location.href="/pla/core/productlineinformation/openupdate";
+
+    }
+
+    $scope.submitGroupLife=function(){
+        if($scope.items.productLineInformationId !=null) {
+            $http.post('/pla/core/productlineinformation/update', $scope.items).success(function (data) {
+                if (data.status == 200) {
+                    $scope.alert = {title: 'Success Message! ', content: data.message, type: 'success'};
+                    //  $scope.reset();
+                    $window.location.href="/pla/core/productlineinformation/openupdate";
+
+                } else if (data.status == 500) {
+                    $scope.alert = {title: 'Error Message! ', content: data.message, type: 'danger'};
+                }
+            });
+        }else{
+
+            $http.post('/pla/core/productlineinformation/create', $scope.items).success(function (data) {
+                if (data.status == 200) {
+                    $scope.alert = {title: 'Success Message! ', content: data.message, type: 'success'};
+                    //  $scope.reset();
+                    $window.location.href="/pla/core/productlineinformation/openupdate";
+
+                } else if (data.status == 500) {
+                    $scope.alert = {title: 'Error Message! ', content: data.message, type: 'danger'};
+                }
+            });
+        }
+
+    }
 
 }]);
 App.controller('UpdateIndividualLifeLevelInformationController',['$rootScope','$scope','$http','$templateCache','$timeout','$alert','$window','$location',function($rootScope,$scope,$http,$templateCache,$timeout,$alert,$window,$location) {
 
+    $scope.updatePanelLabel=false;
+    $scope.createPanelLabel=false;
     $scope.individualLife=false;
     $rootScope.$watch('PanelName',function(n,o){
         if(n=='individualLife'){
@@ -537,21 +192,70 @@ App.controller('UpdateIndividualLifeLevelInformationController',['$rootScope','$
         }
     });
 
+    $http.get('/pla/core/productlineinformation/getproductlineinformation').success(function(data){
+        //  console.log(data);
+        $scope.individualLifeData=data;
+        var productLineName="INDIVIDUAL_INSURANCE";
+        $scope.items =_.findWhere($scope.individualLifeData,{productLine:productLineName});
+        // console.log($scope.items.productLineInformationId);should chk for id in update page
 
-    $http.get('/pla/core/productlineinformation/getproductlineinformationitem').success(function(data){
-        console.log(data);
-        $scope.groupHealth=data;
+        // console.log($scope.items);
+        if($scope.items.productLineInformationId !=null){
+            $scope.updatePanelLabel=true;
+        }else{
+            $scope.createPanelLabel=true;
+
+        }
+
+    });
+    $http.get('/pla/core/productlineinformation/getproductlineprocessitem').success(function(data){
+        $scope.processItems=data;
+
     });
 
-    $scope.submitGroupHealth=function() {
-        $http.post('/pla/core/productlineinformation/update', $scope.groupHealth).success(function (data) {
-            if (data.status == 200) {
-                $scope.alert = {title: 'Success Message! ', content: data.message, type: 'success'};
-                //  $scope.reset();
-            } else if (data.status == 500) {
-                $scope.alert = {title: 'Error Message! ', content: data.message, type: 'danger'};
-            }
-        });
+    $scope.fieldData={};
+    $scope.getFieldName = function(fieldtype){
+        //  console.log(fieldtype);
+        if(fieldtype){
+            $scope.fieldData=_.findWhere($scope.processItems,{type:fieldtype});
+            if($scope.fieldData)
+                return $scope.fieldData.description;
+        }
     }
+
+    $scope.reloadPage = function(){
+        $window.location.href="/pla/core/productlineinformation/openupdate";
+
+    }
+
+    $scope.submitIndividualLife=function() {
+        if($scope.items.productLineInformationId !=null) {
+            $http.post('/pla/core/productlineinformation/update', $scope.items).success(function (data) {
+                if (data.status == 200) {
+                    $scope.alert = {title: 'Success Message! ', content: data.message, type: 'success'};
+                    //  $scope.reset();
+                    $window.location.href="/pla/core/productlineinformation/openupdate";
+
+                } else if (data.status == 500) {
+                    $scope.alert = {title: 'Error Message! ', content: data.message, type: 'danger'};
+                }
+            });
+        }else{
+
+            $http.post('/pla/core/productlineinformation/create', $scope.items).success(function (data) {
+                if (data.status == 200) {
+                    $scope.alert = {title: 'Success Message! ', content: data.message, type: 'success'};
+                    //  $scope.reset();
+                    $window.location.href="/pla/core/productlineinformation/openupdate";
+
+                } else if (data.status == 500) {
+                    $scope.alert = {title: 'Error Message! ', content: data.message, type: 'danger'};
+                }
+            });
+        }
+
+    }
+
+
 
 }]);

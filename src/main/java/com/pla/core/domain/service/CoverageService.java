@@ -1,10 +1,12 @@
 package com.pla.core.domain.service;
 
+import com.pla.core.domain.exception.CoverageException;
 import com.pla.core.domain.model.Admin;
 import com.pla.core.domain.model.Benefit;
 import com.pla.core.domain.model.Coverage;
 import com.pla.core.dto.CoverageDto;
 import com.pla.core.specification.CoverageCodeIsUnique;
+import com.pla.core.specification.CoverageIsAssociatedWithPlan;
 import com.pla.core.specification.CoverageNameIsUnique;
 import org.nthdimenzion.ddd.domain.annotations.DomainService;
 import org.nthdimenzion.object.utils.IIdGenerator;
@@ -29,15 +31,18 @@ public class CoverageService {
 
     private CoverageCodeIsUnique  coverageCodeIsUnique;
 
+    private CoverageIsAssociatedWithPlan coverageIsAssociatedWithPlan;
+
     private IIdGenerator idGenerator;
 
 
     @Autowired
-    public CoverageService(AdminRoleAdapter adminRoleAdapter, CoverageNameIsUnique coverageNameIsUnique,CoverageCodeIsUnique coverageCodeIsUnique, IIdGenerator idGenerator) {
+    public CoverageService(AdminRoleAdapter adminRoleAdapter, CoverageNameIsUnique coverageNameIsUnique,CoverageCodeIsUnique coverageCodeIsUnique, IIdGenerator idGenerator,CoverageIsAssociatedWithPlan coverageIsAssociatedWithPlan) {
         this.adminRoleAdapter = adminRoleAdapter;
         this.coverageNameIsUnique = coverageNameIsUnique;
         this.coverageCodeIsUnique = coverageCodeIsUnique;
         this.idGenerator = idGenerator;
+       this.coverageIsAssociatedWithPlan = coverageIsAssociatedWithPlan;
     }
 
     public Coverage createCoverage(String name,String coverageCode,String description,Set<Benefit> benefitSet, UserDetails userDetails) {
@@ -52,6 +57,10 @@ public class CoverageService {
     public Coverage updateCoverage(Coverage coverage, String newCoverageName,String newCoverageCode,String description,Set<Benefit> benefits, UserDetails userDetails) {
         Admin admin = adminRoleAdapter.userToAdmin(userDetails);
         CoverageDto coverageDto  = new CoverageDto(coverage.getCoverageId().getCoverageId(), newCoverageName,newCoverageCode);
+        boolean isCoverageAssociatedWithPlan = coverageIsAssociatedWithPlan.isSatisfiedBy(coverageDto);
+        if (isCoverageAssociatedWithPlan){
+            throw new CoverageException("Coverage is associated with Plan");
+        }
         boolean isCodeAndNameIsUnique = coverageCodeIsUnique.And(coverageNameIsUnique).isSatisfiedBy(coverageDto);
         Coverage updatedCoverage = admin.updateCoverage(coverage, newCoverageName,newCoverageCode,description, benefits,isCodeAndNameIsUnique);
         return updatedCoverage;
@@ -63,6 +72,12 @@ public class CoverageService {
 
     public Coverage inactivateCoverage(Coverage coverage, UserDetails userDetails) {
         Admin admin = adminRoleAdapter.userToAdmin(userDetails);
+        CoverageDto coverageDto = new CoverageDto();
+        coverageDto.setCoverageId(coverage.getCoverageId().getCoverageId());
+        boolean isCoverageAssociatedWithPlan = coverageIsAssociatedWithPlan.isSatisfiedBy(coverageDto);
+        if (isCoverageAssociatedWithPlan){
+            throw new CoverageException("Coverage is associated with Plan");
+        }
         return admin.inactivateCoverage(coverage);
     }
 

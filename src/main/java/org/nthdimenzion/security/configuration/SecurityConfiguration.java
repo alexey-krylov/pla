@@ -46,11 +46,11 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Override
     public void configure(HttpSecurity http) throws Exception {
-        http.authorizeRequests().antMatchers("/", "/logout", "/stub/**").permitAll().anyRequest().authenticated()
+        http.authorizeRequests().antMatchers("/","/logout", "/stub/**").permitAll().anyRequest().authenticated()
                 .and()
                 .formLogin().usernameParameter("username").passwordParameter("password")
                 .successHandler(authenticationSuccessHandler).failureHandler(authenticationFailureHandler)
-                .failureUrl("/login?error=1").loginPage("/login").permitAll()
+                .failureUrl("/login").loginPage("/login").permitAll()
                 .and()
                 .logout().logoutSuccessUrl("/login")
                 .logoutSuccessHandler(authenticationSuccessHandler).invalidateHttpSession(true)

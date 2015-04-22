@@ -4,7 +4,6 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import com.pla.sharedkernel.domain.model.*;
 import com.pla.sharedkernel.identifier.CoverageId;
-import lombok.AccessLevel;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.ToString;
@@ -24,10 +23,12 @@ import static com.google.common.base.Preconditions.checkArgument;
  */
 @EqualsAndHashCode(of = {"coverageId"})
 @ToString()
-@Getter(AccessLevel.PACKAGE)
+@Getter
 public class PlanCoverage {
 
     private CoverageId coverageId;
+    private String coverageCode;
+    private String coverageName;
     private CoverageCover coverageCover;
     private CoverageType coverageType;
     private String deductibleType;
@@ -52,7 +53,8 @@ public class PlanCoverage {
     PlanCoverage(PlanCoverageBuilder builder) {
         checkArgument(builder.coverageId != null, "Coverage is mandatory.");
         this.coverageId = builder.coverageId;
-
+        this.coverageCode = builder.coverageCode;
+        this.coverageName = builder.coverageName;
         checkArgument(builder.coverageCover != null, "coverageCover !=null Expected, but %s !=null ", builder.coverageCover);
         this.coverageCover = builder.coverageCover;
 
@@ -89,7 +91,6 @@ public class PlanCoverage {
     public void replacePlanCoverageBenefits(Set<PlanCoverageBenefit> planCoverageBenefits) {
         this.planCoverageBenefits = planCoverageBenefits;
     }
-
 
 
     public List<BigDecimal> getAllowedCoverageSumAssuredValues() {

@@ -2,8 +2,9 @@ var App = angular.module('assignBranchManager', ['ngRoute','ui.bootstrap','ngSan
 
 App.controller('AssignBranchManagerController',['$scope','$http','$window','$location',function($scope,$http,$window,$location){
 
-                    $scope.bmBool=false;
-                   // $scope.bdeBool=false;
+                   $scope.bmBool=false;
+                   $scope.disableCurrentBranchBDE=true;
+                   $scope.disableCurrentBranchManager=true;
                    $scope.selectedDate =moment().add(1,'days').format("YYYY-MM-DD");
                        $scope.newDateField={};
                        $scope.datePickerSettings = {
@@ -36,6 +37,21 @@ App.controller('AssignBranchManagerController',['$scope','$http','$window','$loc
                 $http.get('/pla/core/branch/getbranchdetail?branchId='+$scope.url).success(function(data){
                         // console.log(data);
                         $scope.assignBranchManager=data;
+                    if($scope.assignBranchManager.currentBranchManagerFromDate){
+                        $scope.disableCurrentBranchManager=false;
+
+
+                    }else{
+                        $scope.disableCurrentBranchManager=true;
+                    }
+                    if($scope.assignBranchManager.currentBranchBDEFromDate){
+                        $scope.disableCurrentBranchBDE=false;
+
+
+                    }else{
+                        $scope.disableCurrentBranchBDE=true;
+
+                    }
 
                    });
                 $scope.$watch( 'assignBranchManager.employeeId',function(newValue, oldValue){

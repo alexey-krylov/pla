@@ -26,11 +26,12 @@ import static org.nthdimenzion.utils.UtilValidator.isNotEmpty;
  * Created by Samir on 4/7/2015.
  */
 @Document(collection = "group_life_quotation")
+@Getter(value = AccessLevel.PACKAGE)
 @NoArgsConstructor(access = AccessLevel.PACKAGE)
 public class GroupLifeQuotation extends AbstractAggregateRoot<QuotationId> implements IQuotation {
 
-    @AggregateIdentifier
     @Id
+    @AggregateIdentifier
     private QuotationId quotationId;
 
     private String quotationCreator;
@@ -40,8 +41,6 @@ public class GroupLifeQuotation extends AbstractAggregateRoot<QuotationId> imple
     private Proposer proposer;
 
     private Set<Insured> insureds;
-
-    private Set<Policy> policies;
 
     private QuotationStatus quotationStatus;
 
@@ -53,6 +52,8 @@ public class GroupLifeQuotation extends AbstractAggregateRoot<QuotationId> imple
     private LocalDate generatedOn;
 
     private QuotationId parentQuotationId;
+
+    private PremiumDetail premiumDetail;
 
     private GroupLifeQuotation(String quotationCreator, String quotationNumber, QuotationId quotationId, AgentId agentId, Proposer proposer, QuotationStatus quotationStatus, int versionNumber) {
         checkArgument(isNotEmpty(quotationCreator));
@@ -85,9 +86,9 @@ public class GroupLifeQuotation extends AbstractAggregateRoot<QuotationId> imple
         return new GroupLifeQuotation(quotationCreator, quotationNumber, quotationId, agentId, proposer, QuotationStatus.DRAFT, 0);
     }
 
-    public GroupLifeQuotation updateWithPolicy(Set<Policy> policies) {
+    public GroupLifeQuotation updateWithPremiumDetail(PremiumDetail premiumDetail) {
         checkInvariant();
-        this.policies = policies;
+        this.premiumDetail = premiumDetail;
         return this;
     }
 
@@ -134,8 +135,13 @@ public class GroupLifeQuotation extends AbstractAggregateRoot<QuotationId> imple
     public void generateQuotation(LocalDate generatedOn) {
         this.quotationStatus = QuotationStatus.GENERATED;
         this.generatedOn = generatedOn;
-        registerEvent(new QuotationGeneratedEvent(quotationId));
-        registerEvent(new ProposerAddedEvent());
+        if (proposer != null && proposer.getContactDetail() != null) {
+            ProposerContactDetail proposerContactDetail = proposer.getContactDetail();
+            registerEvent(new ProposerAddedEvent(proposer.getProposerName(), proposer.getProposerCode(),
+                    proposerContactDetail.getAddressLine1(), proposerContactDetail.getAddressLine2(), proposerContactDetail.getPostalCode(),
+                    proposerContactDetail.getProvince(), proposerContactDetail.getTown(), proposerContactDetail.getEmailAddress()));
+            registerEvent(new QuotationGeneratedEvent(quotationId));
+        }
     }
 
     @Override
@@ -149,10 +155,9 @@ public class GroupLifeQuotation extends AbstractAggregateRoot<QuotationId> imple
         newQuotation.proposer = this.proposer;
         newQuotation.agentId = this.agentId;
         newQuotation.insureds = this.insureds;
-        newQuotation.policies = this.policies;
+        newQuotation.premiumDetail = this.premiumDetail;
         return newQuotation;
     }
-
 
     private void checkInvariant() {
         if (QuotationStatus.CLOSED.equals(this.quotationStatus) || QuotationStatus.DECLINED.equals(this.quotationStatus)) {

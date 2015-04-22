@@ -6,6 +6,8 @@ import org.nthdimenzion.ddd.domain.annotations.Finder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.BasicQuery;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Service;
@@ -52,15 +54,18 @@ public class GLQuotationFinder {
     }
 
     public List<Map> searchQuotation(String quotationNumber, String agentCode, String proposerName) {
-        BasicDBObject query = new BasicDBObject();
+        Criteria criteria = null;
         if (isNotEmpty(quotationNumber)) {
-            query.put("quotationNumber", quotationNumber);
-        } else if (isNotEmpty(agentCode)) {
-            query.put("agentId.agentId", agentCode);
-        } else if (isNotEmpty(proposerName)) {
-            query.put("proposer.proposerName", proposerName);
+            criteria = Criteria.where("quotationNumber").is(quotationNumber);
         }
-        return mongoTemplate.findAll(Map.class, "group_life_quotation");
+        if (isNotEmpty(agentCode)) {
+            criteria = criteria != null ? criteria.and("agentId.agentId").is(agentCode) : Criteria.where("agentId.agentId").is(agentCode);
+        }
+        if (isNotEmpty(proposerName)) {
+            criteria = criteria != null ? criteria.and("proposer.proposerName").is(proposerName) : Criteria.where("proposer.proposerName").is(proposerName);
+        }
+        Query query = new Query(criteria);
+        return mongoTemplate.find(query, Map.class, "group_life_quotation");
     }
 
 }

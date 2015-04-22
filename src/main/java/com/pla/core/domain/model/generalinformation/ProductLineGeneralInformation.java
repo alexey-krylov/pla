@@ -1,7 +1,7 @@
 package com.pla.core.domain.model.generalinformation;
 
-import com.pla.core.dto.PolicyProcessMinimumLimitItemDto;
 import com.pla.sharedkernel.domain.model.PolicyFeeProcessType;
+import com.pla.sharedkernel.domain.model.PolicyProcessMinimumLimitType;
 import com.pla.sharedkernel.domain.model.ProductLineProcessType;
 import com.pla.sharedkernel.identifier.LineOfBusinessId;
 import lombok.*;
@@ -11,8 +11,6 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import javax.persistence.Id;
 import java.util.List;
 import java.util.Map;
-
-import static com.google.common.base.Preconditions.checkArgument;
 
 
 /**
@@ -84,8 +82,7 @@ public class ProductLineGeneralInformation {
         return this;
     }
 
-    public ProductLineGeneralInformation withPolicyProcessMinimumLimit(List<PolicyProcessMinimumLimitItemDto> policyProcessMinimumLimit) {
-        checkArgument(LineOfBusinessId.GROUP_HEALTH.equals(this.getProductLine()) || LineOfBusinessId.GROUP_INSURANCE.equals(this.getProductLine()));
+    public ProductLineGeneralInformation withPolicyProcessMinimumLimit(List<Map<PolicyProcessMinimumLimitType,Integer>> policyProcessMinimumLimit) {
         this.policyProcessMinimumLimit = PolicyProcessMinimumLimit.create(policyProcessMinimumLimit);
         return this;
     }

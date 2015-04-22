@@ -105,7 +105,7 @@ public class GroupLifeQuotationController {
     public ModelAndView searchQuotation(SearchGlQuotationDto searchGlQuotationDto) {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("pla/quotation/groupLife/viewQuotation");
-        modelAndView.addObject("searchResult", glQuotationService.getAllQuotation());
+        modelAndView.addObject("searchResult", glQuotationService.searchQuotation(searchGlQuotationDto));
         modelAndView.addObject("searchCriteria", searchGlQuotationDto);
         return modelAndView;
     }

@@ -24,10 +24,12 @@ spring:
         active: ${spring.profiles.active}
 
   smeServer :
+        logoutUrl: https://5.9.249.195:7443/myportal/control/logout
         dev :
           url : http://localhost:6443/pla/stub
         prod :
-          url: http://localhost:9090/partymgr/control
+          url: http://5.9.249.195:9090/partymgr/control
+
   datasource:
       primary:
         name: primaryDataSource
@@ -42,13 +44,6 @@ spring:
         driverClassName: com.mysql.jdbc.Driver
         username: root
         password: welcome
-  mongoDB:
-      host : localhost
-      port : 27017
-      name: pla
-      username : pla
-      password : pla
-
 flyway:
   check-location: true
   enabled: true

@@ -20,7 +20,7 @@ public class RolesUtil {
 
     private static final String ADMIN_ROLE = "ROLE_ADMIN";
 
-    private static final String GROUP_LIFE_QUOTATION_PROCESSOR_ROLE = "ROLE_GROUP_LIFE_QUOTATION_PROCESSOR";
+    public static final String GROUP_LIFE_QUOTATION_PROCESSOR_ROLE = "ROLE_GROUP_LIFE_QUOTATION_PROCESSOR";
 
     private RolesUtil() {
     }

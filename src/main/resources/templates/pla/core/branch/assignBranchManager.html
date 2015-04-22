@@ -15,6 +15,10 @@
     angular.bootstrap(document, ['assignBranchManager']);
     });
     });
+    requirejs(['basic'],function(){
+        requirejs(['/pla/js/branch/viewBranchManager.js'],function(){
+        });
+    })
 </script>
 <div class="container ng-cloak" ng-Controller="AssignBranchManagerController">
     <div class="row">
@@ -63,14 +67,14 @@
                         <div class="row">
                         <div class="form-group col-md-6" style="margin: auto;margin-top:10px;">
                             <label class="control-label">Branch Manager</label>
-                            <select class="form-control input-sm"  ng-model="assignBranchManager.employeeId" ng-options="branchManager.employeeId as branchManager.firstName + ' ' + branchManager.lastName for branchManager in branchManagers | orderBy:'firstName' ">
+                            <select class="form-control input-sm"  ng-model="assignBranchManager.employeeId" ng-options="branchManager.employeeId as branchManager.firstName + ' ' + branchManager.lastName for branchManager in branchManagers | orderBy:'firstName' " ng-disabled="(!disableCurrentBranchManager)">
                                 <option value="">----Select BranchManager----</option>
                              </select>
                         </div>
                         <div class="form-group col-md-6 " style="margin: auto;margin-top:10px;">
                             <label class="control-label">Branch Manager From</label>
                             <p class="input-group">
-                                <input type="text" class="form-control input-sm" ng-required="true" ng-click="open($event)" min-date="selectedDate"  datepicker-popup="dd/MM/yyyy" ng-model="assignBranchManager.branchManagerFromDate"  datepicker-options="datePickerSettings.dateOptions" is-open="datePickerSettings.isOpened"  close-text="Close" show-button-bar="false"/>
+                                <input type="text" class="form-control input-sm" ng-required="true" ng-click="open($event)" min-date="selectedDate"  datepicker-popup="dd/MM/yyyy" ng-model="assignBranchManager.branchManagerFromDate"  datepicker-options="datePickerSettings.dateOptions" is-open="datePickerSettings.isOpened"  close-text="Close" show-button-bar="false" ng-disabled="(!disableCurrentBranchManager)" onkeypress="return isNumeric(event)"/>
                                    <span class="input-group-btn">
                                       <button type="button" class="btn btn-default btn-sm" ng-click="open($event)"><i class="glyphicon glyphicon-calendar"></i></button>
                                    </span>
@@ -78,16 +82,16 @@
                         </div>
                             </div>
                         <div class="row">
-                            <div class="form-group col-md-6" style="margin: auto;margin-top:10px;">
+                            <div class="form-group col-md-6" style="margin: auto;margin-top:10px;" >
                                 <label class="control-label">Branch BDE</label>
-                                <select class="form-control input-sm"  ng-model="assignBranchManager.branchBDEEmployeeId" ng-options="branchBDE.employeeId as branchBDE.firstName + ' ' + branchBDE.lastName for branchBDE in branchBDEList | orderBy:'firstName' ">
+                                <select class="form-control input-sm"  ng-model="assignBranchManager.branchBDEEmployeeId" ng-options="branchBDE.employeeId as branchBDE.firstName + ' ' + branchBDE.lastName for branchBDE in branchBDEList | orderBy:'firstName' " ng-disabled="(!disableCurrentBranchBDE)">
                                      <option value="">----Select BranchBDE----</option>
                                 </select>
                             </div>
-                            <div class="form-group col-md-6 " style="margin: auto;margin-top:10px;">
+                            <div class="form-group col-md-6 " style="margin: auto;margin-top:10px;" >
                                 <label class="control-label">BranchBDE From</label>
                                 <p class="input-group">
-                                    <input type="text" class="form-control input-sm" ng-required="true" ng-click="openBDE($event)" min-date="selectedDate"  datepicker-popup="dd/MM/yyyy" ng-model="assignBranchManager.branchBDEFromDate"  datepicker-options="datePickerSettingsBDE.dateOptions" is-open="datePickerSettingsBDE.isOpened"  close-text="Close" show-button-bar="false" />
+                                    <input type="text" class="form-control input-sm" ng-required="true" ng-click="openBDE($event)" min-date="selectedDate"  datepicker-popup="dd/MM/yyyy" ng-model="assignBranchManager.branchBDEFromDate"  datepicker-options="datePickerSettingsBDE.dateOptions" is-open="datePickerSettingsBDE.isOpened"  close-text="Close" show-button-bar="false" ng-disabled="(!disableCurrentBranchBDE)" onkeypress="return isNumeric(event)"/>
                                    <span class="input-group-btn">
                                       <button type="button" class="btn btn-default btn-sm" ng-click="openBDE($event)"><i class="glyphicon glyphicon-calendar"></i></button>
                                    </span>

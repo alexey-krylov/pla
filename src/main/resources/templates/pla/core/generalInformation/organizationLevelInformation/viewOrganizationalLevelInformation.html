@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/xhtml"
+      lang="en">
+<head th:include="fragments/common :: headTag">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+
+</head>
+<body>
+<div th:include="fragments/common :: bodyHeader" th:remove="tag"/>
+<script>
+
+    requirejs(['basic'],function(){
+        requirejs(['/pla/js/generalInformation/viewOrganizationalLevelInformation.js'],function(){
+        });
+    })
+    requirejs(['main'],function(){
+        require(['/pla/js/generalInformation/updateOrganizationalLevelInformation.js'],function(){
+            angular.bootstrap(document, ['updateOrganizationalLevelInfo']);
+        });
+    });
+
+</script>
+
+<div class="container ng-cloak" ng-Controller="ViewOrganizationalLevelController">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <div class="row">
+                        <div class="col-lg-6"><span th:text="#{viewOrganizationalLevelInformation}">View Organizational Level Information
+                        </span></div>
+
+                    </div>
+                </div>
+                <div class="panel-body ng-cloak">
+                    <table class="table table-striped table-bordered"  cellspacing="0" width="100%">
+                        <thead>
+                        <tr>
+                            <th th:text="#{semiAnnualModalFactor}">
+                                Semi Annual Modal Factor
+                            </th>
+                            <th th:text="#{monthlyModalFactor}">
+                                Monthly Modal Factor
+                            </th>
+
+                            <th th:text="#{annualDiscountFactor}">
+                                Annual Discount Factor
+                            </th>
+                            <th th:text="#{quarterlyDiscountFactor}">
+                                Quarterly Discount Factor
+                            </th>
+                            <th th:text="#{tax}">
+                                Tax
+                            </th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr >
+                            <td>{{organizationInformation.modelFactorItems[0].value}}</td>
+                            <td>{{organizationInformation.modelFactorItems[1].value}}</td>
+                            <td>{{organizationInformation.discountFactorItems[0].value}}</td>
+                            <td>{{organizationInformation.discountFactorItems[1].value}}</td>
+                            <td>{{organizationInformation.serviceTax.value}} </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="panel-footer">
+                    <ul class="pagination" id="logs-pagination-default"></ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<footer class="footer" th:include="fragments/common :: footer">
+</footer>
+</body>
+</html>

@@ -45,4 +45,14 @@ public class ProposerBuilder {
     public Proposer build() {
         return new Proposer(this);
     }
+
+    public static void main(String[] args) {
+        try {
+            return;
+        }catch (Exception e){
+
+        }finally {
+            System.out.println("XX");
+        }
+    }
 }

@@ -1,0 +1,285 @@
+<ng-form name="step4">
+    <accordion close-others="true">
+        <div class="row" style="margin-bottom: 5px">
+            <div class="col-md-10">
+                <accordion-group is-open="accordionStatus.generalDetails.tab1" is-part="part.isPart">
+                    <accordion-heading>
+                        <strong style="font-size: 11px">Is your life already assured by PLAL ?</strong>
+                        <i class="pull-right glyphicon"
+                           ng-class="{'glyphicon-chevron-down': accordionStatus.generalDetails.tab1, 'glyphicon-chevron-right': !accordionStatus.generalDetails.tab1}"></i>
+                    </accordion-heading>
+                    <div class="col-md-1" ng-show="assuredByPlal == 'YES'">
+                        <button class="btn btn-default btn-sm" ng-click="openModalWindow('assuredByPlalTpl.html')"><strong>Add</strong></button>
+                    </div>
+                    <div class="col-md-11">
+                        <table class="table table-bordered" style="margin-top: 10px;margin-bottom: 0px" ng-show="assuredByPlal == 'YES'">
+                            <thead>
+                            <tr>
+                                <th>Policy Number</th>
+                                <th>Sum Assured</th>
+                            </tr>
+                            </thead>
+                        </table>
+                    </div>
+                </accordion-group>
+            </div>
+            <div class="col-md-2">
+                <select class="form-control input-sm" ng-model="assuredByPlal" ng-change="openAccordion(assuredByPlal,'tab1')" name="assuredByPlal">
+                    <option value="">--Select One--</option>
+                    <option value="YES">Yes</option>
+                    <option value="NO">No</option>
+                </select>
+            </div>
+        </div>
+        <div class="row" style="margin-bottom: 5px">
+            <div class="col-md-10">
+                <accordion-group is-open="accordionStatus.generalDetails.tab2">
+                    <accordion-heading>
+                        <strong style="font-size: 11px">Have any policies been issued on your life in the last 12 months by  any other insurer?</strong>
+
+                        <i class="pull-right glyphicon"
+                           ng-class="{'glyphicon-chevron-down': accordionStatus.generalDetails.tab2, 'glyphicon-chevron-right': !accordionStatus.generalDetails.tab2}"></i>
+                    </accordion-heading>
+                    <div class="col-md-1" ng-show="assuredByOthers == 'YES'">
+                        <button class="btn btn-default btn-sm" ng-click="openModalWindow('assuredByOthersTpl.html')"><strong>Add</strong></button>
+                    </div>
+                    <div class="col-md-11">
+                        <table class="table table-bordered" style="margin-top: 10px;margin-bottom: 0px" ng-show="assuredByOthers == 'YES'">
+                            <thead>
+                            <tr>
+                                <th>Name of Assurer/Insurer</th>
+                                <th>Policy Number</th>
+                                <th>Amount of Insurance</th>
+                                <th>Policy Inception Date</th>
+                            </tr>
+                            </thead>
+                        </table>
+                    </div>
+                </accordion-group>
+            </div>
+            <div class="col-md-2">
+                <select class="form-control input-sm" ng-model="assuredByOthers" ng-change="openAccordion(assuredByOthers,'tab2')">
+                    <option value="">--Select One--</option>
+                    <option value="YES">Yes</option>
+                    <option value="NO">No</option>
+                </select>
+            </div>
+        </div>
+        <div class="row" style="margin-bottom: 5px">
+            <div class="col-md-10">
+                <accordion-group is-open="accordionStatus.generalDetails.tab3">
+                    <accordion-heading>
+                        <strong style="font-size: 11px">Are any proposals for Life Assurance on your life pending with Professional Life Assurance Limited or any other insurer ?</strong>
+                        <i class="pull-right glyphicon"
+                           ng-class="{'glyphicon-chevron-down': accordionStatus.generalDetails.tab3, 'glyphicon-chevron-right': !accordionStatus.generalDetails.tab3}"></i>
+                    </accordion-heading>
+                    <div class="col-md-1" ng-show="pendingInsuranceByOthers == 'YES'">
+                        <button class="btn btn-default btn-sm" ng-click="openModalWindow('pendingInsuranceByOthersTpl.html')"><strong>Add</strong></button>
+                    </div>
+                    <div class="col-md-11">
+                        <table class="table table-bordered" style="margin-top: 10px;margin-bottom: 0px" ng-show="pendingInsuranceByOthers == 'YES'">
+                            <thead>
+                            <tr>
+                                <th>Name of Assurer/Insurer</th>
+                                <th>Policy Number</th>
+                                <th>Amount of Insurance</th>
+                                <th>Date of Proposal</th>
+                            </tr>
+                            </thead>
+                        </table>
+                    </div>
+                </accordion-group>
+            </div>
+            <div class="col-md-2">
+                <select class="form-control input-sm" ng-model="pendingInsuranceByOthers" ng-change="openAccordion(pendingInsuranceByOthers,'tab3')">
+                    <option value="">--Select One--</option>
+                    <option value="YES">Yes</option>
+                    <option value="NO">No</option>
+                </select>
+            </div>
+        </div>
+        <div class="row" style="margin-bottom: 5px">
+            <div class="col-md-10">
+                <accordion-group is-open="accordionStatus.generalDetails.tab4">
+                    <accordion-heading>
+                        <strong style="font-size: 11px">Has an application for assurance on your life ever been declined, deferred, not proceeded with, loaded or accepted other than as submitted ?</strong>
+                        <i class="pull-right glyphicon"
+                           ng-class="{'glyphicon-chevron-down': accordionStatus.generalDetails.tab4, 'glyphicon-chevron-right': !accordionStatus.generalDetails.tab4}"></i>
+                    </accordion-heading>
+                    <div class="col-md-1" ng-show="assuranceDeclined == 'YES'">
+                        <button class="btn btn-default btn-sm" ng-click="openModalWindow('assuranceDeclinedTpl.html')"><strong>Add</strong></button>
+                    </div>
+                    <div class="col-md-11">
+                        <table class="table table-bordered" style="margin-top: 10px;margin-bottom: 0px" ng-show="assuranceDeclined == 'YES'">
+                            <thead>
+                            <tr>
+                                <th>Name of Assurer/Insurer</th>
+                                <th>Proposal Number</th>
+                            </tr>
+                            </thead>
+                        </table>
+                    </div>
+                </accordion-group>
+            </div>
+            <div class="col-md-2">
+                <select class="form-control input-sm" ng-model="assuranceDeclined" ng-change="openAccordion(assuranceDeclined,'tab4')">
+                    <option value="">--Select One--</option>
+                    <option value="YES">Yes</option>
+                    <option value="NO">No</option>
+                </select>
+            </div>
+        </div>
+    </accordion>
+
+    <div class="row bs-callout  bs-callout-info" style="margin: 5px;padding:10px">
+        <div class="col-md-10">
+            <strong>Have you ever been or have you any intention of being engaged or employed at a mine of any sort?</strong>
+        </div>
+        <div class="col-md-2">
+            <select class="form-control input-sm" ng-model="employedAtMine">
+                <option value="">--Select One--</option>
+                <option value="YES">Yes</option>
+                <option value="NO">No</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="row bs-callout  bs-callout-info" style="margin: 5px;padding:10px">
+
+        <div class="col-md-10">
+            <strong>Have you ever been or have you any intention of being engaged or employed In aviation other than as a fare paying passenger on a regular airline?</strong>
+        </div>
+        <div class="col-md-2">
+            <select class="form-control input-sm" ng-model="employedAtAviation">
+                <option value="">--Select One--</option>
+                <option value="YES">Yes</option>
+                <option value="NO">No</option>
+            </select>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-6">
+            <button type="button" class="btn btn-default btn-sm">Cancel</button>
+        </div>
+        <div class="col-sm-6">
+            <button type="button" class="btn btn-default btn-sm" style="float: right">Save</button>
+        </div>
+    </div>
+</ng-form>
+
+
+<script type="text/ng-template" id="assuredByPlalTpl.html">
+    <div class="modal-header">
+        <h3 class="modal-title">Policy Details</h3>
+    </div>
+    <div class="modal-body">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="form-group required">
+                    <label class="control-label">Policy Number</label>
+                    <input type="text" class="form-control input-sm" name="policyNumber"/>
+                </div>
+                <div class="form-group required">
+                    <label class="control-label">Sum Assured</label>
+                    <input type="text" class="form-control input-sm" name="sumAssured"/>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-default">Add</button>
+        <button class="btn btn-default" ng-click="cancel()">Cancel</button>
+    </div>
+</script>
+
+<script type="text/ng-template" id="assuranceDeclinedTpl.html">
+    <div class="modal-header">
+        <h3 class="modal-title">Assurer/Insurer Details</h3>
+    </div>
+    <div class="modal-body">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="form-group required">
+                    <label class="control-label">Name of Assurer/Insurer</label>
+                    <input type="text" class="form-control input-sm" name="name"/>
+                </div>
+                <div class="form-group required">
+                    <label class="control-label">Proposal Number</label>
+                    <input type="text" class="form-control input-sm" name="proposalNumber"/>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-default">Add</button>
+        <button class="btn btn-default" ng-click="cancel()">Cancel</button>
+    </div>
+</script>
+
+<script type="text/ng-template" id="assuredByOthersTpl.html">
+    <div class="modal-header">
+        <h3 class="modal-title">Assurer/Insurer Details</h3>
+    </div>
+    <div class="modal-body">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group required">
+                    <label class="control-label">Name of Assurer/Insurer</label>
+                    <input type="text" class="form-control input-sm" name="name"/>
+                </div>
+                <div class="form-group required">
+                    <label class="control-label">Policy Number</label>
+                    <input type="text" class="form-control input-sm" name="proposalNumber"/>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group required">
+                    <label class="control-label">Amount of Insurance</label>
+                    <input type="text" class="form-control input-sm" name="name"/>
+                </div>
+                <div class="form-group required">
+                    <label class="control-label">Policy Inception Date</label>
+                    <input type="text" class="form-control input-sm" name="proposalNumber"/>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-default">Add</button>
+        <button class="btn btn-default" ng-click="cancel()">Cancel</button>
+    </div>
+</script>
+
+<script type="text/ng-template" id="pendingInsuranceByOthersTpl.html">
+    <div class="modal-header">
+        <h3 class="modal-title">Assurer/Insurer Details</h3>
+    </div>
+    <div class="modal-body">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group required">
+                    <label class="control-label">Name of Assurer/Insurer</label>
+                    <input type="text" class="form-control input-sm" name="name"/>
+                </div>
+                <div class="form-group required">
+                    <label class="control-label">Policy Number</label>
+                    <input type="text" class="form-control input-sm" name="proposalNumber"/>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group required">
+                    <label class="control-label">Amount of Insurance</label>
+                    <input type="text" class="form-control input-sm" name="name"/>
+                </div>
+                <div class="form-group required">
+                    <label class="control-label">Date of Proposal</label>
+                    <input type="text" class="form-control input-sm" name="proposalNumber"/>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-default">Add</button>
+        <button class="btn btn-default" ng-click="cancel()">Cancel</button>
+    </div>
+</script>
