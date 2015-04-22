@@ -30,6 +30,7 @@ angular.module('createAgent',['common','ngRoute','mgcrea.ngStrap.select','mgcrea
             * */
             if(_.size(agentDetails)!=0){
                 $scope.agentDetails=angular.copy(agentDetails);
+                $scope.agentDetails.overrideCommissionApplicable = 'NO'
                 /*This is used to disabled and hide some of the fields in the UI*/
                 $scope.isEditMode =  true;
                 $scope.trainingCompleteOn = agentDetails.agentProfile.trainingCompleteOn;
