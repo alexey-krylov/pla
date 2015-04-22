@@ -223,7 +223,7 @@ public class GeneralInformationService {
                 productLineInformationList.add(getGroupInsuranceProductLineInformation());
             }
             if (!LineOfBusinessId.INDIVIDUAL_INSURANCE.name().equals(productLineMap.get("productLine"))){
-                productLineInformationList.add(getGroupInsuranceProductLineInformation());
+                productLineInformationList.add(getIndividualInsuranceProductLineInformation());
             }
         }
         return productLineInformationList;
