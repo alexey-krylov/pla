@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
@@ -43,6 +44,20 @@ public class OrganizationInformationController {
         this.springMongoTemplate = springMongoTemplate;
     }
 
+    @RequestMapping(value = "/openview", method = RequestMethod.GET)
+    public ModelAndView openView()
+    {
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("pla/core/generalInformation/organizationLevelInformation/viewOrganizationalLevelInformation");
+        modelAndView.addObject("listOfOrganizationInformation",generalInformationService.getOrganizationProcessItems());
+        return modelAndView;
+    }
+
+    @RequestMapping(value = "/openupdate", method = RequestMethod.GET)
+    public String openUpdate() {
+        return "pla/core/generalInformation/organizationLevelInformation/updateOrganizationalLevelInformation";
+    }
+    
     @RequestMapping(value = "/getorganizationprocessitem", method = RequestMethod.GET)
     @ResponseBody
     public List<GeneralInformationProcessDto> getOrganizationInformationItem(){
@@ -89,7 +104,7 @@ public class OrganizationInformationController {
     @RequestMapping(value = "/getorganizationformation", method = RequestMethod.GET)
     @ResponseBody
     public List<Map> getOrganizationInformation() {
-        return springMongoTemplate.findAll(Map.class, "organization_information");
+        return generalInformationService.getAllOrganizationInformation();
     }
 
 

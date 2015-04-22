@@ -1,7 +1,5 @@
 package com.pla.core.presentation.controller;
 
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
 import com.pla.core.domain.exception.GeneralInformationException;
 import com.pla.core.domain.service.GeneralInformationService;
 import com.pla.core.dto.GeneralInformationDto;
@@ -26,7 +24,6 @@ import java.util.Map;
 
 import static com.google.common.base.Preconditions.checkArgument;
 import static org.nthdimenzion.presentation.AppUtils.getLoggedInUSerDetail;
-import static org.nthdimenzion.utils.UtilValidator.isEmpty;
 
 /**
  * Created by Admin on 4/1/2015.
@@ -90,31 +87,10 @@ public class ProductLineInformationController {
         return Result.success("Product Line Information Updated successfully");
     }
 
-    @RequestMapping(value = "/getproducrlineinformation", method = RequestMethod.GET)
+    @RequestMapping(value = "/getproductlineinformation", method = RequestMethod.GET,produces = MediaType.APPLICATION_JSON_VALUE,consumes = MediaType.ALL_VALUE)
     @ResponseBody
-    public List<Map<String,Object>> getProductLineInformation() {
-        List<Map> productLineInformation =  mongoTemplate.findAll(Map.class, "product_line_information");
-        if (isEmpty(productLineInformation)){
-            return Lists.newArrayList();
-        }
-        List<Map<String,Object>> productLineInformationList = Lists.newArrayList();
-        for (Map productLineInformationMap: productLineInformation){
-            Map<String,Object> productLineInformationByBusinessId = Maps.newLinkedHashMap();
-            productLineInformationByBusinessId.put("productLine",productLineInformationMap.get("productLine"));
-            List listOfProcess = Lists.newArrayList();
-            listOfProcess.add(productLineInformationMap.get("quotationProcessInformation"));
-            listOfProcess.add(productLineInformationMap.get("enrollmentProcessInformation"));
-            listOfProcess.add(productLineInformationMap.get("reinstatementProcessInformation"));
-            listOfProcess.add(productLineInformationMap.get("endorsementProcessInformation"));
-            listOfProcess.add(productLineInformationMap.get("claimProcessInformation"));
-            listOfProcess.add(productLineInformationMap.get("policyFeeProcessInformation"));
-            listOfProcess.add(productLineInformationMap.get("policyProcessMinimumLimit"));
-            listOfProcess.add(productLineInformationMap.get("surrenderProcessInformation"));
-            listOfProcess.add(productLineInformationMap.get("maturityProcessInformation"));
-            productLineInformationByBusinessId.put("processType",listOfProcess);
-            productLineInformationList.add(productLineInformationByBusinessId);
-        }
-        return productLineInformationList;
+    public List<Map> getProductLineInformation() {
+        return generalInformationService.getProductLineInformation();
     }
 
 }

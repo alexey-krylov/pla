@@ -13,7 +13,6 @@ import java.util.List;
 import java.util.Map;
 
 import static com.google.common.base.Preconditions.checkArgument;
-import static org.nthdimenzion.utils.UtilValidator.isNotEmpty;
 
 
 /**
@@ -61,37 +60,31 @@ public class ProductLineGeneralInformation {
     }
 
     public ProductLineGeneralInformation withQuotationProcessInformation(List<Map<ProductLineProcessType, Integer>> quotationProcessInformation) {
-        checkArgument(isNotEmpty(quotationProcessInformation));
         this.quotationProcessInformation =  QuotationProcessInformation.create(quotationProcessInformation);
         return this;
     }
 
     public ProductLineGeneralInformation withEnrollmentProcessGeneralInformation(List<Map<ProductLineProcessType,Integer>> enrollmentProcessGeneralInformation){
-        checkArgument(isNotEmpty(enrollmentProcessGeneralInformation));
         this.enrollmentProcessInformation = EnrollmentProcessInformation.create(enrollmentProcessGeneralInformation);
         return this;
     }
 
     public ProductLineGeneralInformation withReinstatementProcessInformation(List<Map<ProductLineProcessType,Integer>> reinstatementProcessInformation){
-        checkArgument(isNotEmpty(reinstatementProcessInformation));
         this.reinstatementProcessInformation = ReinstatementProcessInformation.create(reinstatementProcessInformation);
         return this;
     }
 
     public ProductLineGeneralInformation withEndorsementProcessInformation(List<Map<ProductLineProcessType,Integer>> endorsementProcessInformation){
-        checkArgument(isNotEmpty(endorsementProcessInformation));
         this.endorsementProcessInformation = EndorsementProcessInformation.create(endorsementProcessInformation);
         return this;
     }
 
     public ProductLineGeneralInformation withClaimProcessInformation(List<Map<ProductLineProcessType,Integer>> claimProcessInformation){
-        checkArgument(isNotEmpty(claimProcessInformation));
         this.claimProcessInformation = ClaimProcessInformation.create(claimProcessInformation);
         return this;
     }
 
     public ProductLineGeneralInformation withPolicyProcessMinimumLimit(List<PolicyProcessMinimumLimitItemDto> policyProcessMinimumLimit) {
-        checkArgument(isNotEmpty(policyProcessMinimumLimit));
         checkArgument(LineOfBusinessId.GROUP_HEALTH.equals(this.getProductLine()) || LineOfBusinessId.GROUP_INSURANCE.equals(this.getProductLine()));
         this.policyProcessMinimumLimit = PolicyProcessMinimumLimit.create(policyProcessMinimumLimit);
         return this;
@@ -99,19 +92,16 @@ public class ProductLineGeneralInformation {
 
 
     public ProductLineGeneralInformation withPolicyFeeProcessInformation(List<Map<PolicyFeeProcessType,Integer>> policyFeeProcessInformation){
-        checkArgument(isNotEmpty(policyFeeProcessInformation));
         this.policyFeeProcessInformation = PolicyFeeProcessInformation.create(policyFeeProcessInformation);
         return this;
     }
 
     public ProductLineGeneralInformation withSurrenderProcessInformation(List<Map<ProductLineProcessType,Integer>> surrenderProcessInformation){
-        checkArgument(isNotEmpty(surrenderProcessInformation));
         this.surrenderProcessInformation  = SurrenderProcessInformation.create(surrenderProcessInformation);
         return this;
     }
 
     public ProductLineGeneralInformation withMaturityProcessInformation(List<Map<ProductLineProcessType,Integer>> maturityProcessInformation){
-        checkArgument(isNotEmpty(maturityProcessInformation));
         this.maturityProcessInformation = MaturityProcessInformation.create(maturityProcessInformation);
         return this;
     }
