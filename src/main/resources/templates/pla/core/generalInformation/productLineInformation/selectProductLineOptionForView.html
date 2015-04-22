@@ -93,8 +93,8 @@
                             <div id="collapseOne" class="panel-collapse collapse in">
                                 <div class="panel-body">
                                         <div class="row">
-                                            <div class="form-group col-md-4" ng-repeat="quotationProcessItems in items[0].processType[0].quotationProcessItems">
-                                                <label class="control-label" data-toggle="tooltip" data-placement="top" title="Number of days after which Quotation should be purged">{{quotationProcessItems.productLineProcessItem}}</label>
+                                            <div class="form-group col-md-4" ng-repeat="quotationProcessItems in items.quotationProcessItems">
+                                                <label class="control-label" data-toggle="tooltip" data-placement="top" title="Number of days after which Quotation should be purged" ng-bind="getFieldName(quotationProcessItems.productLineProcessItem)"></label>
                                                 <p class="input-group" >
                                                     <input type="text" class="form-control input-sm"  value="{{quotationProcessItems.value}}" readonly="true"/>
                                                 </p>
@@ -116,8 +116,8 @@
                                 <div class="panel-body">
 
                                     <div class="row">
-                                        <div class="form-group col-md-4" ng-repeat="enrollmentProcessItems in items[0].processType[1].enrollmentProcessItems">
-                                            <label class="control-label"  data-toggle="tooltip" data-placement="top" title="Number of days after which Closed (Incomplete) New Business should be purged">{{enrollmentProcessItems.productLineProcessItem}}</label>
+                                        <div class="form-group col-md-4" ng-repeat="enrollmentProcessItems in items.enrollmentProcessItems">
+                                            <label class="control-label"  data-toggle="tooltip" data-placement="top" title="Number of days after which Closed (Incomplete) New Business should be purged" ng-bind="getFieldName(enrollmentProcessItems.productLineProcessItem)"></label>
                                             <p class="input-group">
                                                 <input type="text" class="form-control input-sm"  value="{{enrollmentProcessItems.value}}" readonly="true"/>
                                             </p>
@@ -139,8 +139,8 @@
                             <div id="collapseThree" class="panel-collapse collapse">
                                 <div class="panel-body">
                                     <div class="row">
-                                        <div class="form-group col-md-4" ng-repeat="reinstatementProcessItems in items[0].processType[2].reinstatementProcessItems">
-                                            <label class="control-label"  data-toggle="tooltip" data-placement="top" title="Number of days after which Closed (complete)Reinstatement request should be purged">{{reinstatementProcessItems.productLineProcessItem}}</label>
+                                        <div class="form-group col-md-4" ng-repeat="reinstatementProcessItems in items.reinstatementProcessItems">
+                                            <label class="control-label"  data-toggle="tooltip" data-placement="top" title="Number of days after which Closed (complete)Reinstatement request should be purged" ng-bind="getFieldName(reinstatementProcessItems.productLineProcessItem)"></label>
                                             <p class="input-group">
                                                 <input type="text" class="form-control input-sm"  value="{{reinstatementProcessItems.value}}" readonly="true"/>
                                             </p>
@@ -163,8 +163,8 @@
                             <div id="collapseFour" class="panel-collapse collapse">
                                 <div class="panel-body">
                                     <div class="row">
-                                        <div class="form-group col-md-4"  ng-repeat="endorsementProcessItems in items[0].processType[3].endorsementProcessItems">
-                                            <label class="control-label"  data-toggle="tooltip" data-placement="top" title="Number of days after which Closed ( Incomplete) endorsement request should be purged">{{endorsementProcessItems.productLineProcessItem}}</label>
+                                        <div class="form-group col-md-4"  ng-repeat="endorsementProcessItems in items.endorsementProcessItems">
+                                            <label class="control-label"  data-toggle="tooltip" data-placement="top" title="Number of days after which Closed ( Incomplete) endorsement request should be purged" ng-bind="getFieldName(endorsementProcessItems.productLineProcessItem)"></label>
                                             <p class="input-group">
                                                 <input type="text" class="form-control input-sm"  value="{{endorsementProcessItems.value}}" readonly="true" />
                                             </p>
@@ -186,8 +186,8 @@
                             <div id="collapseFive" class="panel-collapse collapse">
                                 <div class="panel-body">
                                     <div class="row">
-                                        <div class="form-group col-md-4" ng-repeat="claimProcessItems in items[0].processType[4].claimProcessItems">
-                                            <label class="control-label"  data-toggle="tooltip" data-placement="top" title="Number of days after which Closed (Incomplete) Claim request should be purged">{{claimProcessItems.productLineProcessItem}}</label>
+                                        <div class="form-group col-md-4" ng-repeat="claimProcessItems in items.claimProcessItems">
+                                            <label class="control-label"  data-toggle="tooltip" data-placement="top" title="Number of days after which Closed (Incomplete) Claim request should be purged" ng-bind="getFieldName(claimProcessItems.productLineProcessItem)"></label>
                                             <p class="input-group">
                                                 <input type="text" class="form-control input-sm" value="{{claimProcessItems.value}}" readonly="true" />
                                             </p>
@@ -208,8 +208,8 @@
                             <div id="collapseSix" class="panel-collapse collapse">
                                 <div class="panel-body">
                                     <div class="row">
-                                        <div class="form-group col-md-4" ng-repeat="policyFeeProcessItems in items[0].processType[5].policyFeeProcessItems">
-                                            <label class="control-label"  data-toggle="tooltip" data-placement="top" title="Annual">{{policyFeeProcessItems.policyFeeProcessType}}</label>
+                                        <div class="form-group col-md-4" ng-repeat="policyFeeProcessItems in items.policyFeeProcessItems">
+                                            <label class="control-label"  data-toggle="tooltip" data-placement="top" title="Annual" ng-bind="getFieldName(policyFeeProcessItems.policyFeeProcessType)"></label>
                                             <p class="input-group">
                                                 <input type="text" class="form-control input-sm"  value="{{policyFeeProcessItems.policyFee}}" readonly="true"/>
                                             </p>
@@ -231,8 +231,8 @@
                             <div id="collapseSeven" class="panel-collapse collapse">
                                 <div class="panel-body">
                                     <div class="row">
-                                        <div class="form-group col-md-4" ng-repeat="policyProcessMinimumLimitItems in items[0].processType[6].policyProcessMinimumLimitItems">
-                                            <label class="control-label"  data-toggle="tooltip" data-placement="top" title="Annual">{{policyProcessMinimumLimitItems.policyProcessMinimumLimitType}}</label>
+                                        <div class="form-group col-md-4" ng-repeat="policyProcessMinimumLimitItems in items.policyProcessMinimumLimitItems">
+                                            <label class="control-label"  data-toggle="tooltip" data-placement="top" title="Annual"  ng-bind="getFieldName(policyProcessMinimumLimitItems.policyProcessMinimumLimitType)"></label>
                                             <p class="input-group">
                                                 <input type="text" class="form-control input-sm"  value="{{policyProcessMinimumLimitItems.noOfPersonPerPolicy}}" readonly="true" />
                                             </p>
@@ -252,8 +252,8 @@
                             <div id="collapseEight" class="panel-collapse collapse">
                                 <div class="panel-body">
                                     <div class="row">
-                                        <div class="form-group col-md-4" ng-repeat="surrenderProcessItems in items[0].processType[7].surrenderProcessItems">
-                                            <label class="control-label"  data-toggle="tooltip" data-placement="top" title="Annual">{{surrenderProcessItems.productLineProcessItem}}</label>
+                                        <div class="form-group col-md-4" ng-repeat="surrenderProcessItems in items.surrenderProcessItems">
+                                            <label class="control-label"  data-toggle="tooltip" data-placement="top" title="Annual" ng-bind="getFieldName(surrenderProcessItems.productLineProcessItem)"></label>
                                             <p class="input-group">
                                                 <input type="text" class="form-control input-sm"  value="{{surrenderProcessItems.value}}" readonly="true"/>
                                             </p>
@@ -266,15 +266,15 @@
                             <div class="panel-heading">
                                 <h4 class="panel-title">
                                     <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapseNine">
-                                        maturity Process
+                                        Maturity Process
                                     </a><i class="indicator glyphicon glyphicon-chevron-down  pull-right"></i>
                                 </h4>
                             </div>
                             <div id="collapseNine" class="panel-collapse collapse">
                                 <div class="panel-body">
                                     <div class="row">
-                                        <div class="form-group col-md-4" ng-repeat="maturityProcessItems in items[0].processType[8].maturityProcessItems">
-                                            <label class="control-label"  data-toggle="tooltip" data-placement="top" title="Annual">{{maturityProcessItems.productLineProcessItem}}</label>
+                                        <div class="form-group col-md-4" ng-repeat="maturityProcessItems in items.maturityProcessItems">
+                                            <label class="control-label"  data-toggle="tooltip" data-placement="top" title="Annual" ng-bind="getFieldName(maturityProcessItems.productLineProcessItem)"></label>
                                             <p class="input-group">
                                                 <input type="text" class="form-control input-sm"  value="{{maturityProcessItems.value}}" readonly="true"/>
                                             </p>
@@ -317,10 +317,10 @@
                             <div id="collapseOneOne" class="panel-collapse collapse in">
                                 <div class="panel-body">
                                         <div class="row">
-                                            <div class="form-group col-md-4" ng-repeat="quotationProcessItems in items[0].processType[0].quotationProcessItems">
-                                                <label class="control-label" data-toggle="tooltip" data-placement="top" title="Number of days after which Quotation should be purged">{{quotationProcessItems.productLineProcessItem}}</label>
+                                            <div class="form-group col-md-4" ng-repeat="quotationProcessItems in items.quotationProcessItems">
+                                                <label class="control-label" data-toggle="tooltip" data-placement="top" title="Number of days after which Quotation should be purged" ng-bind="getFieldName(quotationProcessItems.productLineProcessItem)"></label>
                                                 <p class="input-group" >
-                                                    <input type="text" class="form-control input-sm" ng-model="quotationProcessItems.value" value="{{quotationProcessItems.value}}"/>
+                                                    <input type="text" class="form-control input-sm" value="{{quotationProcessItems.value}}" readonly="true"/>
                                                 </p>
 
                                             </div>
@@ -340,10 +340,10 @@
                                 <div class="panel-body">
 
                                     <div class="row">
-                                        <div class="form-group col-md-4" ng-repeat="enrollmentProcessItems in items[0].processType[1].enrollmentProcessItems">
-                                            <label class="control-label"  data-toggle="tooltip" data-placement="top" title="Number of days after which Closed (Incomplete) New Business should be purged">{{enrollmentProcessItems.productLineProcessItem}}</label>
+                                        <div class="form-group col-md-4" ng-repeat="enrollmentProcessItems in items.enrollmentProcessItems">
+                                            <label class="control-label"  data-toggle="tooltip" data-placement="top" title="Number of days after which Closed (Incomplete) New Business should be purged" ng-bind="getFieldName(enrollmentProcessItems.productLineProcessItem)"></label>
                                             <p class="input-group">
-                                                <input type="text" class="form-control input-sm" ng-model="enrollmentProcessItems.value" value="{{enrollmentProcessItems.value}}"/>
+                                                <input type="text" class="form-control input-sm"  value="{{enrollmentProcessItems.value}}" readonly="true"/>
                                             </p>
                                         </div>
 
@@ -363,10 +363,10 @@
                             <div id="collapseThreeOne" class="panel-collapse collapse">
                                 <div class="panel-body">
                                     <div class="row">
-                                        <div class="form-group col-md-4" ng-repeat="reinstatementProcessItems in items[0].processType[2].reinstatementProcessItems">
-                                            <label class="control-label"  data-toggle="tooltip" data-placement="top" title="Number of days after which Closed (complete)Reinstatement request should be purged">{{reinstatementProcessItems.productLineProcessItem}}</label>
+                                        <div class="form-group col-md-4" ng-repeat="reinstatementProcessItems in items.reinstatementProcessItems">
+                                            <label class="control-label"  data-toggle="tooltip" data-placement="top" title="Number of days after which Closed (complete)Reinstatement request should be purged" ng-bind="getFieldName(reinstatementProcessItems.productLineProcessItem)"></label>
                                             <p class="input-group">
-                                                <input type="text" class="form-control input-sm"  ng-model="reinstatementProcessItems.value" value="{{reinstatementProcessItems.value}}" />
+                                                <input type="text" class="form-control input-sm" value="{{reinstatementProcessItems.value}}" readonly="true"/>
                                             </p>
                                         </div>
 
@@ -387,10 +387,10 @@
                             <div id="collapseFourOne" class="panel-collapse collapse">
                                 <div class="panel-body">
                                     <div class="row">
-                                        <div class="form-group col-md-4"  ng-repeat="endorsementProcessItems in items[0].processType[3].endorsementProcessItems">
-                                            <label class="control-label"  data-toggle="tooltip" data-placement="top" title="Number of days after which Closed ( Incomplete) endorsement request should be purged">{{endorsementProcessItems.productLineProcessItem}}</label>
+                                        <div class="form-group col-md-4"  ng-repeat="endorsementProcessItems in items.endorsementProcessItems">
+                                            <label class="control-label"  data-toggle="tooltip" data-placement="top" title="Number of days after which Closed ( Incomplete) endorsement request should be purged" ng-bind="getFieldName(endorsementProcessItems.productLineProcessItem)"></label>
                                             <p class="input-group">
-                                                <input type="text" class="form-control input-sm"  ng-model="endorsementProcessItems.value" value="{{endorsementProcessItems.value}}" />
+                                                <input type="text" class="form-control input-sm"  value="{{endorsementProcessItems.value}}" readonly="true"/>
                                             </p>
                                         </div>
 
@@ -410,10 +410,10 @@
                             <div id="collapseFiveOne" class="panel-collapse collapse">
                                 <div class="panel-body">
                                     <div class="row">
-                                        <div class="form-group col-md-4" ng-repeat="claimProcessItems in items[0].processType[4].claimProcessItems">
-                                            <label class="control-label"  data-toggle="tooltip" data-placement="top" title="Number of days after which Closed (Incomplete) Claim request should be purged">{{claimProcessItems.productLineProcessItem}}</label>
+                                        <div class="form-group col-md-4" ng-repeat="claimProcessItems in items.claimProcessItems">
+                                            <label class="control-label"  data-toggle="tooltip" data-placement="top" title="Number of days after which Closed (Incomplete) Claim request should be purged" ng-bind="getFieldName(claimProcessItems.productLineProcessItem)"></label>
                                             <p class="input-group">
-                                                <input type="text" class="form-control input-sm" ng-model="claimProcessItems.value" value="{{claimProcessItems.value}}" />
+                                                <input type="text" class="form-control input-sm"  value="{{claimProcessItems.value}}" readonly="true"/>
                                             </p>
                                         </div>
                                     </div>
@@ -432,10 +432,10 @@
                             <div id="collapseSixOne" class="panel-collapse collapse">
                                 <div class="panel-body">
                                     <div class="row">
-                                        <div class="form-group col-md-4" ng-repeat="policyFeeProcessItems in items[0].processType[5].policyFeeProcessItems">
-                                            <label class="control-label"  data-toggle="tooltip" data-placement="top" title="Annual">{{policyFeeProcessItems.policyFeeProcessType}}</label>
+                                        <div class="form-group col-md-4" ng-repeat="policyFeeProcessItems in items.policyFeeProcessItems">
+                                            <label class="control-label"  data-toggle="tooltip" data-placement="top" title="Annual" ng-bind="getFieldName(policyFeeProcessItems.policyFeeProcessType)"></label>
                                             <p class="input-group">
-                                                <input type="text" class="form-control input-sm"  ng-model="policyFeeProcessItems.policyFee" value="{{policyFeeProcessItems.policyFee}}"/>
+                                                <input type="text" class="form-control input-sm"   value="{{policyFeeProcessItems.policyFee}}" readonly="true"/>
                                             </p>
                                         </div>
 
@@ -455,10 +455,10 @@
                             <div id="collapseSevenOne" class="panel-collapse collapse">
                                 <div class="panel-body">
                                     <div class="row">
-                                        <div class="form-group col-md-4" ng-repeat="policyProcessMinimumLimitItems in items[0].processType[6].policyProcessMinimumLimitItems">
-                                            <label class="control-label"  data-toggle="tooltip" data-placement="top" title="Annual">{{policyProcessMinimumLimitItems.policyProcessMinimumLimitType}}</label>
+                                        <div class="form-group col-md-4" ng-repeat="policyProcessMinimumLimitItems in items.policyProcessMinimumLimitItems">
+                                            <label class="control-label"  data-toggle="tooltip" data-placement="top" title="Annual" ng-bind="getFieldName(policyProcessMinimumLimitItems.policyProcessMinimumLimitType)"></label>
                                             <p class="input-group">
-                                                <input type="text" class="form-control input-sm" ng-model="policyProcessMinimumLimitItems.noOfPersonPerPolicy" value="{{policyProcessMinimumLimitItems.noOfPersonPerPolicy}}" />
+                                                <input type="text" class="form-control input-sm"  value="{{policyProcessMinimumLimitItems.noOfPersonPerPolicy}}" readonly="true"/>
                                             </p>
                                         </div>
                                     </div>
@@ -476,10 +476,10 @@
                             <div id="collapseEightOne" class="panel-collapse collapse">
                                 <div class="panel-body">
                                     <div class="row">
-                                        <div class="form-group col-md-4" ng-repeat="surrenderProcessItems in items[0].processType[7].surrenderProcessItems">
-                                            <label class="control-label"  data-toggle="tooltip" data-placement="top" title="Annual">{{surrenderProcessItems.productLineProcessItem}}</label>
+                                        <div class="form-group col-md-4" ng-repeat="surrenderProcessItems in items.surrenderProcessItems">
+                                            <label class="control-label"  data-toggle="tooltip" data-placement="top" title="Annual" ng-bind="getFieldName(surrenderProcessItems.productLineProcessItem)"></label>
                                             <p class="input-group">
-                                                <input type="text" class="form-control input-sm" ng-model="surrenderProcessItems.value" value="{{surrenderProcessItems.value}}" />
+                                                <input type="text" class="form-control input-sm"  value="{{surrenderProcessItems.value}}" readonly="true"/>
                                             </p>
                                         </div>
                                     </div>
@@ -490,17 +490,17 @@
                             <div class="panel-heading">
                                 <h4 class="panel-title">
                                     <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion1" href="#collapseNineOne">
-                                        maturity Process
+                                        Maturity Process
                                     </a><i class="indicator glyphicon glyphicon-chevron-down  pull-right"></i>
                                 </h4>
                             </div>
-                            <div id="collapseNineOne" class="panel-collapse collapse">1
+                            <div id="collapseNineOne" class="panel-collapse collapse">
                                 <div class="panel-body">
                                     <div class="row">
-                                        <div class="form-group col-md-4" ng-repeat="maturityProcessItems in items[0].processType[8].maturityProcessItems">
-                                            <label class="control-label"  data-toggle="tooltip" data-placement="top" title="Annual">{{maturityProcessItems.productLineProcessItem}}</label>
+                                        <div class="form-group col-md-4" ng-repeat="maturityProcessItems in items.maturityProcessItems">
+                                            <label class="control-label"  data-toggle="tooltip" data-placement="top" title="Annual" ng-bind="getFieldName(maturityProcessItems.productLineProcessItem)"></label>
                                             <p class="input-group">
-                                                <input type="text" class="form-control input-sm" ng-model="maturityProcessItems.value" value="{{maturityProcessItems.value}}" />
+                                                <input type="text" class="form-control input-sm"  value="{{maturityProcessItems.value}}" readonly="true" />
                                             </p>
                                         </div>
                                     </div>
@@ -539,10 +539,10 @@
                             <div id="collapseOneTwo" class="panel-collapse collapse in">
                                 <div class="panel-body">
                                     <div class="row">
-                                        <div class="form-group col-md-4" ng-repeat="quotationProcessItems in items[0].processType[0].quotationProcessItems">
-                                            <label class="control-label" data-toggle="tooltip" data-placement="top" title="Number of days after which Quotation should be purged">{{quotationProcessItems.productLineProcessItem}}</label>
+                                        <div class="form-group col-md-4" ng-repeat="quotationProcessItems in items.quotationProcessItems">
+                                            <label class="control-label" data-toggle="tooltip" data-placement="top" title="Number of days after which Quotation should be purged" ng-bind="getFieldName(quotationProcessItems.productLineProcessItem)"></label>
                                             <p class="input-group" >
-                                                <input type="text" class="form-control input-sm" ng-model="quotationProcessItems.value" value="{{quotationProcessItems.value}}"/>
+                                                <input type="text" class="form-control input-sm"  value="{{quotationProcessItems.value}}" readonly="true"/>
                                             </p>
 
                                         </div>
@@ -562,10 +562,10 @@
                                 <div class="panel-body">
 
                                     <div class="row">
-                                        <div class="form-group col-md-4" ng-repeat="enrollmentProcessItems in items[0].processType[1].enrollmentProcessItems">
-                                            <label class="control-label"  data-toggle="tooltip" data-placement="top" title="Number of days after which Closed (Incomplete) New Business should be purged">{{enrollmentProcessItems.productLineProcessItem}}</label>
+                                        <div class="form-group col-md-4" ng-repeat="enrollmentProcessItems in items.enrollmentProcessItems">
+                                            <label class="control-label"  data-toggle="tooltip" data-placement="top" title="Number of days after which Closed (Incomplete) New Business should be purged" ng-bind="getFieldName(enrollmentProcessItems.productLineProcessItem)"></label>
                                             <p class="input-group">
-                                                <input type="text" class="form-control input-sm" ng-model="enrollmentProcessItems.value" value="{{enrollmentProcessItems.value}}"/>
+                                                <input type="text" class="form-control input-sm"  value="{{enrollmentProcessItems.value}}" readonly="true"/>
                                             </p>
                                         </div>
 
@@ -585,10 +585,10 @@
                             <div id="collapseThreeTwo" class="panel-collapse collapse">
                                 <div class="panel-body">
                                     <div class="row">
-                                        <div class="form-group col-md-4" ng-repeat="reinstatementProcessItems in items[0].processType[2].reinstatementProcessItems">
-                                            <label class="control-label"  data-toggle="tooltip" data-placement="top" title="Number of days after which Closed (complete)Reinstatement request should be purged">{{reinstatementProcessItems.productLineProcessItem}}</label>
+                                        <div class="form-group col-md-4" ng-repeat="reinstatementProcessItems in items.reinstatementProcessItems">
+                                            <label class="control-label"  data-toggle="tooltip" data-placement="top" title="Number of days after which Closed (complete)Reinstatement request should be purged" ng-bind="getFieldName(reinstatementProcessItems.productLineProcessItem)"></label>
                                             <p class="input-group">
-                                                <input type="text" class="form-control input-sm"  ng-model="reinstatementProcessItems.value" value="{{reinstatementProcessItems.value}}" />
+                                                <input type="text" class="form-control input-sm"  value="{{reinstatementProcessItems.value}}" readonly="true" />
                                             </p>
                                         </div>
 
@@ -609,10 +609,10 @@
                             <div id="collapseFourTwo" class="panel-collapse collapse">
                                 <div class="panel-body">
                                     <div class="row">
-                                        <div class="form-group col-md-4"  ng-repeat="endorsementProcessItems in items[0].processType[3].endorsementProcessItems">
-                                            <label class="control-label"  data-toggle="tooltip" data-placement="top" title="Number of days after which Closed ( Incomplete) endorsement request should be purged">{{endorsementProcessItems.productLineProcessItem}}</label>
+                                        <div class="form-group col-md-4"  ng-repeat="endorsementProcessItems in items.endorsementProcessItems">
+                                            <label class="control-label"  data-toggle="tooltip" data-placement="top" title="Number of days after which Closed ( Incomplete) endorsement request should be purged" ng-bind="getFieldName(endorsementProcessItems.productLineProcessItem)"></label>
                                             <p class="input-group">
-                                                <input type="text" class="form-control input-sm"  ng-model="endorsementProcessItems.value" value="{{endorsementProcessItems.value}}" />
+                                                <input type="text" class="form-control input-sm"   value="{{endorsementProcessItems.value}}" readonly="true"/>
                                             </p>
                                         </div>
 
@@ -632,10 +632,10 @@
                             <div id="collapseFiveTwo" class="panel-collapse collapse">
                                 <div class="panel-body">
                                     <div class="row">
-                                        <div class="form-group col-md-4" ng-repeat="claimProcessItems in items[0].processType[4].claimProcessItems">
-                                            <label class="control-label"  data-toggle="tooltip" data-placement="top" title="Number of days after which Closed (Incomplete) Claim request should be purged">{{claimProcessItems.productLineProcessItem}}</label>
+                                        <div class="form-group col-md-4" ng-repeat="claimProcessItems in items.claimProcessItems">
+                                            <label class="control-label"  data-toggle="tooltip" data-placement="top" title="Number of days after which Closed (Incomplete) Claim request should be purged" ng-bind="getFieldName(claimProcessItems.productLineProcessItem)"></label>
                                             <p class="input-group">
-                                                <input type="text" class="form-control input-sm" ng-model="claimProcessItems.value" value="{{claimProcessItems.value}}" />
+                                                <input type="text" class="form-control input-sm"  value="{{claimProcessItems.value}}" readonly="true"/>
                                             </p>
                                         </div>
                                     </div>
@@ -654,10 +654,10 @@
                             <div id="collapseSixTwo" class="panel-collapse collapse">
                                 <div class="panel-body">
                                     <div class="row">
-                                        <div class="form-group col-md-4" ng-repeat="policyFeeProcessItems in items[0].processType[5].policyFeeProcessItems">
-                                            <label class="control-label"  data-toggle="tooltip" data-placement="top" title="Annual">{{policyFeeProcessItems.policyFeeProcessType}}</label>
+                                        <div class="form-group col-md-4" ng-repeat="policyFeeProcessItems in items.policyFeeProcessItems">
+                                            <label class="control-label"  data-toggle="tooltip" data-placement="top" title="Annual" ng-bind="getFieldName(policyFeeProcessItems.policyFeeProcessType)"></label>
                                             <p class="input-group">
-                                                <input type="text" class="form-control input-sm"  ng-model="policyFeeProcessItems.policyFee" value="{{policyFeeProcessItems.policyFee}}"/>
+                                                <input type="text" class="form-control input-sm"   value="{{policyFeeProcessItems.policyFee}}" readonly="true"/>
                                             </p>
                                         </div>
 
@@ -677,10 +677,10 @@
                             <div id="collapseSevenTwo" class="panel-collapse collapse">
                                 <div class="panel-body">
                                     <div class="row">
-                                        <div class="form-group col-md-4" ng-repeat="policyProcessMinimumLimitItems in items[0].processType[6].policyProcessMinimumLimitItems">
-                                            <label class="control-label"  data-toggle="tooltip" data-placement="top" title="Annual">{{policyProcessMinimumLimitItems.policyProcessMinimumLimitType}}</label>
+                                        <div class="form-group col-md-4" ng-repeat="policyProcessMinimumLimitItems in items.policyProcessMinimumLimitItems">
+                                            <label class="control-label"  data-toggle="tooltip" data-placement="top" title="Annual" ng-bind="getFieldName(policyProcessMinimumLimitItems.policyProcessMinimumLimitType)"></label>
                                             <p class="input-group">
-                                                <input type="text" class="form-control input-sm" ng-model="policyProcessMinimumLimitItems.noOfPersonPerPolicy" value="{{policyProcessMinimumLimitItems.noOfPersonPerPolicy}}" />
+                                                <input type="text" class="form-control input-sm" value="{{policyProcessMinimumLimitItems.noOfPersonPerPolicy}}" readonly="true"/>
                                             </p>
                                         </div>
                                     </div>
@@ -698,10 +698,10 @@
                             <div id="collapseEightTwo" class="panel-collapse collapse">
                                 <div class="panel-body">
                                     <div class="row">
-                                        <div class="form-group col-md-4" ng-repeat="surrenderProcessItems in items[0].processType[7].surrenderProcessItems">
-                                            <label class="control-label"  data-toggle="tooltip" data-placement="top" title="Annual">{{surrenderProcessItems.productLineProcessItem}}</label>
+                                        <div class="form-group col-md-4" ng-repeat="surrenderProcessItems in items.surrenderProcessItems">
+                                            <label class="control-label"  data-toggle="tooltip" data-placement="top" title="Annual" ng-bind="getFieldName(surrenderProcessItems.productLineProcessItem)"></label>
                                             <p class="input-group">
-                                                <input type="text" class="form-control input-sm" ng-model="surrenderProcessItems.value" value="{{surrenderProcessItems.value}}" />
+                                                <input type="text" class="form-control input-sm" value="{{surrenderProcessItems.value}}" readonly="true" />
                                             </p>
                                         </div>
                                     </div>
@@ -712,17 +712,17 @@
                             <div class="panel-heading">
                                 <h4 class="panel-title">
                                     <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseNineTwo">
-                                        maturity Process
+                                        Maturity Process
                                     </a><i class="indicator glyphicon glyphicon-chevron-down  pull-right"></i>
                                 </h4>
                             </div>
-                            <div id="collapseNineTwo" class="panel-collapse collapse">1
+                            <div id="collapseNineTwo" class="panel-collapse collapse">
                                 <div class="panel-body">
                                     <div class="row">
-                                        <div class="form-group col-md-4" ng-repeat="maturityProcessItems in items[0].processType[8].maturityProcessItems">
-                                            <label class="control-label"  data-toggle="tooltip" data-placement="top" title="Annual">{{maturityProcessItems.productLineProcessItem}}</label>
+                                        <div class="form-group col-md-4" ng-repeat="maturityProcessItems in items.maturityProcessItems">
+                                            <label class="control-label"  data-toggle="tooltip" data-placement="top" title="Annual" ng-bind="getFieldName(maturityProcessItems.productLineProcessItem)"></label>
                                             <p class="input-group">
-                                                <input type="text" class="form-control input-sm" ng-model="maturityProcessItems.value" value="{{maturityProcessItems.value}}" />
+                                                <input type="text" class="form-control input-sm"  value="{{maturityProcessItems.value}}" readonly="true" />
                                             </p>
                                         </div>
                                     </div>
