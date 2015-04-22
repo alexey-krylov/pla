@@ -196,19 +196,17 @@ public class GeneralInformationService {
         productLineInformationList =  getProductLine(productLineInformationList,productLineInformation);
         for (Map productLineInformationMap: productLineInformation){
             Map<String,Object> productLineInformationByBusinessId = Maps.newLinkedHashMap();
-            List listOfProcess = Lists.newArrayList();
             productLineInformationByBusinessId.put("productLine",productLineInformationMap.get("productLine"));
             productLineInformationByBusinessId.put("productLineInformationId", productLineInformationMap.get("productLineInformationId"));
-            listOfProcess.add(productLineInformationMap.get("quotationProcessInformation"));
-            listOfProcess.add(productLineInformationMap.get("enrollmentProcessInformation"));
-            listOfProcess.add(productLineInformationMap.get("reinstatementProcessInformation"));
-            listOfProcess.add(productLineInformationMap.get("endorsementProcessInformation"));
-            listOfProcess.add(productLineInformationMap.get("claimProcessInformation"));
-            listOfProcess.add(productLineInformationMap.get("policyFeeProcessInformation"));
-            listOfProcess.add(productLineInformationMap.get("policyProcessMinimumLimit"));
-            listOfProcess.add(productLineInformationMap.get("surrenderProcessInformation"));
-            listOfProcess.add(productLineInformationMap.get("maturityProcessInformation"));
-            productLineInformationByBusinessId.put("processType",listOfProcess);
+            productLineInformationByBusinessId.put("quotationProcessItems", productLineInformationMap.get("quotationProcessInformation"));
+            productLineInformationByBusinessId.put("enrollmentProcessItems", productLineInformationMap.get("enrollmentProcessInformation"));
+            productLineInformationByBusinessId.put("reinstatementProcessItems", productLineInformationMap.get("reinstatementProcessInformation"));
+            productLineInformationByBusinessId.put("endorsementProcessItems", productLineInformationMap.get("endorsementProcessInformation"));
+            productLineInformationByBusinessId.put("claimProcessItems", productLineInformationMap.get("claimProcessInformation"));
+            productLineInformationByBusinessId.put("policyFeeProcessItems", productLineInformationMap.get("policyFeeProcessInformation"));
+            productLineInformationByBusinessId.put("policyProcessMinimumLimitItems", productLineInformationMap.get("policyProcessMinimumLimit"));
+            productLineInformationByBusinessId.put("surrenderProcessItems", productLineInformationMap.get("surrenderProcessInformation"));
+            productLineInformationByBusinessId.put("maturityProcessItems",productLineInformationMap.get("maturityProcessInformation"));
             productLineInformationList.add(productLineInformationByBusinessId);
         }
         return productLineInformationList;
@@ -216,7 +214,7 @@ public class GeneralInformationService {
 
     public List<Map> getProductLine(List<Map> productLineInformationList,  List<Map> productLineInformation ){
         for (Map productLineMap : productLineInformation){
-            if (!LineOfBusinessId.GROUP_HEALTH.name().equals(productLineMap.get("productLine"))){
+            if (!LineOfBusinessId.GROUP_HEALTH.name().equals(productLineMap.get("productLine")) && !productLineInformationList.contains(LineOfBusinessId.GROUP_HEALTH)){
                 productLineInformationList.add(getGroupHealthProductLineInformation());
             }
             if (!LineOfBusinessId.GROUP_INSURANCE.name().equals(productLineMap.get("productLine"))){
@@ -253,16 +251,14 @@ public class GeneralInformationService {
         Map productLineMap  = Maps.newLinkedHashMap();
         productLineMap.put("productLine",LineOfBusinessId.GROUP_HEALTH);
         productLineMap.put("productLineInformationId",null);
-        List<Map> groupHealthMap = getProductLineGeneralInformation();
-        productLineMap.put("processType", groupHealthMap);
+        productLineMap = getProductLineGeneralInformation(productLineMap);
         return productLineMap;
     }
     public Map getGroupInsuranceProductLineInformation(){
         Map insuranceMap  = Maps.newLinkedHashMap();
         insuranceMap.put("productLine",LineOfBusinessId.GROUP_INSURANCE);
         insuranceMap.put("productLineInformationId",null);
-        List<Map> groupInsuranceMap = getProductLineGeneralInformation();
-        insuranceMap.put("processType", groupInsuranceMap);
+        insuranceMap = getProductLineGeneralInformation(insuranceMap);
         return insuranceMap;
     }
 
@@ -270,8 +266,7 @@ public class GeneralInformationService {
         Map individualInsurance  = Maps.newLinkedHashMap();
         individualInsurance.put("productLine",LineOfBusinessId.INDIVIDUAL_INSURANCE);
         individualInsurance.put("productLineInformationId",null);
-        List<Map> individualInsuranceMap = getProductLineGeneralInformation();
-        individualInsurance.put("processType", individualInsuranceMap);
+        individualInsurance = getProductLineGeneralInformation(individualInsurance);
         return individualInsurance;
     }
 
@@ -286,9 +281,7 @@ public class GeneralInformationService {
     }
 
 
-    private List<Map> getProductLineGeneralInformation(){
-        List<Map> productLineList = Lists.newArrayList();
-        Map productLineInformationMap = Maps.newLinkedHashMap();
+    private Map getProductLineGeneralInformation(Map productLineInformationMap){
         productLineInformationMap.put("quotationProcessItems", populateProcessItems());
         productLineInformationMap.put("enrollmentProcessItems", populateProcessItems());
         productLineInformationMap.put("reinstatementProcessItems", populateProcessItems());
@@ -298,8 +291,7 @@ public class GeneralInformationService {
         productLineInformationMap.put("policyProcessMinimumLimitItems", populateMinimumLimitProcessData());
         productLineInformationMap.put("surrenderProcessItems", populateProcessItems());
         productLineInformationMap.put("maturityProcessItems", populateProcessItems());
-        productLineList.add(productLineInformationMap);
-        return productLineList;
+        return productLineInformationMap;
     }
 
     private GeneralInformationDto getOrganizationGeneralInformation(){
