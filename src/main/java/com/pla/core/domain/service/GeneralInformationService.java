@@ -265,7 +265,24 @@ public class GeneralInformationService {
             productLineInformationByBusinessId.put("maturityProcessItems",maturityMap.get("maturityProcessItems"));
             productLineInformationList.add(productLineInformationByBusinessId);
         }
-        return productLineInformationList;
+        return transformProductLineInformation(productLineInformationList);
+    }
+
+    private List<Map> transformProductLineInformation(List<Map> productLineInformation){
+        List<String> strings = Lists.newArrayList();
+        for (Map map : productLineInformation){
+            strings.add((String) map.get("productLine"));
+        }
+        if (!strings.contains(LineOfBusinessId.GROUP_HEALTH.name())){
+            productLineInformation.add(getGroupHealthProductLineInformation());
+        }
+        if (!strings.contains(LineOfBusinessId.GROUP_INSURANCE.name())){
+            productLineInformation.add(getGroupInsuranceProductLineInformation());
+        }
+        if (!strings.contains(LineOfBusinessId.INDIVIDUAL_INSURANCE.name())){
+            productLineInformation.add(getIndividualInsuranceProductLineInformation());
+        }
+        return productLineInformation;
     }
 
     private List<Map> findAllProductLineInformation() {

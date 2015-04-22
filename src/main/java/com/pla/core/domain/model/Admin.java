@@ -156,7 +156,6 @@ public class Admin {
         productLineGeneralInformation.withClaimProcessInformation(claimProcessItem);
         productLineGeneralInformation.withPolicyFeeProcessInformation(policyFeeProcess);
         productLineGeneralInformation.withPolicyProcessMinimumLimit(minimumLimitProcess);
-        productLineGeneralInformation.withPolicyProcessMinimumLimit(minimumLimitProcess);
         productLineGeneralInformation.withSurrenderProcessInformation(surrenderProcessItem);
         productLineGeneralInformation.withMaturityProcessInformation(maturityProcessItem);
         return productLineGeneralInformation;

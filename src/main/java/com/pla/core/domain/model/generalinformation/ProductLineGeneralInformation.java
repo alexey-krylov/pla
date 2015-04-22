@@ -12,8 +12,6 @@ import javax.persistence.Id;
 import java.util.List;
 import java.util.Map;
 
-import static com.google.common.base.Preconditions.checkArgument;
-
 
 /**
  * Created by Admin on 4/1/2015.
@@ -85,7 +83,6 @@ public class ProductLineGeneralInformation {
     }
 
     public ProductLineGeneralInformation withPolicyProcessMinimumLimit(List<PolicyProcessMinimumLimitItemDto> policyProcessMinimumLimit) {
-        checkArgument(LineOfBusinessId.GROUP_HEALTH.equals(this.getProductLine()) || LineOfBusinessId.GROUP_INSURANCE.equals(this.getProductLine()));
         this.policyProcessMinimumLimit = PolicyProcessMinimumLimit.create(policyProcessMinimumLimit);
         return this;
     }

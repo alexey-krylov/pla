@@ -356,6 +356,11 @@ public class AdminUnitTest {
    *    the exception should be thrown as product line general information
    * */
 
+    /*
+    *
+    * Add the line of business id check for minimum limit process
+    * */
+/*
     @Test(expected = IllegalArgumentException.class)
     public void givenLineOfBusinessIdAndGeneralInformation_whenLineOfBusinessIdIsIndividualInsurance_thenItThrowAnException(){
         List<Map<PolicyFeeProcessType,Integer>> policyFeeProcessItems = Lists.newArrayList();
@@ -363,6 +368,7 @@ public class AdminUnitTest {
         ProductLineGeneralInformation createdProductLineGeneralInformation = admin.createProductLineGeneralInformation(LineOfBusinessId.INDIVIDUAL_INSURANCE, listOfProcessItems,listOfProcessItems,listOfProcessItems,listOfProcessItems,listOfProcessItems,policyFeeProcessItems,policyProcessMinimumLimitItems,listOfProcessItems,listOfProcessItems);
         assertNull(createdProductLineGeneralInformation);
     }
+*/
 
 
 

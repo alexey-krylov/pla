@@ -174,7 +174,11 @@ public class ProductLineInformationUnitTest {
         assertThat(productLineProcessItems.size(), is(2));
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    /*
+    *
+    * Add the check for line of business id
+    * */
+    /*@Test(expected = IllegalArgumentException.class)
     public void givenPolicyProcessMinimumLimitInformation_whenLineOfBusinessIdIsOtherThenGroupHealthOrGroupInsurance_thenItShouldThrowAnException(){
 
         List<PolicyProcessMinimumLimitItemDto> policyProcessMinimumLimit =Lists.newArrayList();
@@ -194,7 +198,7 @@ public class ProductLineInformationUnitTest {
         productLineGeneralInformation = productLineGeneralInformation.withPolicyProcessMinimumLimit(policyProcessMinimumLimit);
 
 
-    }
+    }*/
 
 
     @Test
