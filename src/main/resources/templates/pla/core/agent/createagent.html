@@ -44,7 +44,7 @@
         <div class="step-content">
             <div class="step-pane" data-step="1">
                 <div class="bs-callout-info bs-callout">
-                    <div class="row" ng-if="searchResult.isEmpty">
+                    <div class="row" ng-if="!hideAlert">
                         <div class="col-md-6">
                             <div class="alert alert-info">
                                 <strong>Search not found!</strong> Would you like to create a new Agent?
@@ -74,7 +74,7 @@
                         <div class="col-md-6">
                             <div class="form-group required">
                                 <label class="control-label">NRC</label>
-                                <input type="text" class="form-control input-sm" name="nrc" ng-disabled="!search.employeeId || isEditMode"
+                                <input type="text" class="form-control input-sm" name="nrc" ng-disabled="isSearchEmptyOrIsEdit()"
                                        placeholder="Enter NRC" ng-model="agentDetails.agentProfile.nrcNumberInString" ng-required="true" ng-pattern="/^[0-9]{6}\/[0-9]{2}\/[0-9]{1}$/"/>
                             </div>
                             <div class="form-group">
@@ -89,7 +89,7 @@
                             <div class="form-group required">
                                 <label  class="control-label">First Name</label>
                                 <input type="text" class="form-control input-sm" name="firstName" ng-required="true" ng-maxlength="20"
-                                       placeholder="Enter first Name" ng-model="agentDetails.agentProfile.firstName" ng-disabled="isEditMode"/>
+                                       placeholder="Enter first Name" ng-model="agentDetails.agentProfile.firstName" ng-disabled="isSearchEmptyOrIsEdit()"/>
                             </div>
                             <div class="form-group required">
                                 <label  class="control-label">Agent ID</label>
@@ -125,13 +125,13 @@
                             </div>
                             <div class="form-group required">
                                 <label  class="control-label">Surname</label>
-                                <input type="text" class="form-control input-sm" name="surname" ng-required="true" ng-maxlength="20" ng-disabled="isEditMode"
+                                <input type="text" class="form-control input-sm" name="surname" ng-required="true" ng-maxlength="20" ng-disabled="isSearchEmptyOrIsEdit()"
                                        placeholder="Enter surname" ng-model="agentDetails.agentProfile.lastName"/>
                             </div>
                             <div class="form-group required">
                                 <label  class="control-label">Designation</label>
                                 <input type="text" class="form-control input-sm" name="designation" ng-required="true"
-                                       ng-model="agentDetails.agentProfile.designationDto.description" ng-disabled="search"/>
+                                       ng-model="agentDetails.agentProfile.designationDto.description" ng-disabled="!searchResult.isEmpty"/>
                             </div>
                             <div class="form-group required">
                                 <label  class="control-label">Agent Status</label>
@@ -194,7 +194,7 @@
                     </ng-form>
                 </div>
             </div>
-            <div class="step-pane" data-step="4">
+            <div class="step-pane" data-step="4" disable-all-fields="isSearchEmptyOrIsEdit()">
                 <ng-form name="contactDetailsForm">
                     <!--Contact Details  start-->
                     <div class="row">

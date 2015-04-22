@@ -4,6 +4,7 @@ angular.module('createAgent',['common','ngRoute','mgcrea.ngStrap.select','mgcrea
 
         function($scope,$http,channelType,authorisedToSell,teamDetails,provinces,$timeout,$alert,$route,$window,transformJson,getQueryParameter,agentDetails,globalConstants,nextAgentSequence,getProvinceAndCityDetail){
             $scope.numberPattern =globalConstants.numberPattern;
+            /*Wizard initial step*/
             $scope.selectedWizard = 1;
             $scope.searchResult = {
                 isEmpty:false,
@@ -11,21 +12,36 @@ angular.module('createAgent',['common','ngRoute','mgcrea.ngStrap.select','mgcrea
             };
             $scope.agentDetails={};
             $scope.isFormSubmitted =  false;
+            /*Initially hide the alert window
+            * which will be shown only when the search result is empty
+            * */
+            $scope.hideAlert=true;
             $scope.isEditMode =  false;
+            /*The values that will be shown in the ui for each step
+            * Search step will hold value 1 and 2,3,4 for agent team and contact
+            * */
             $scope.stepValues = {
                 agent:2,
                 team:3,
                 contact:4
             };
+            /*agentDetails will be empty if its a create page else it is an update
+            * and agentDetails will be pre-populated
+            * */
             if(_.size(agentDetails)!=0){
                 $scope.agentDetails=angular.copy(agentDetails);
+                /*This is used to disabled and hide some of the fields in the UI*/
                 $scope.isEditMode =  true;
                 $scope.trainingCompleteOn = agentDetails.agentProfile.trainingCompleteOn;
+                /*during edit mode search field will be hidden and hence the step value changes*/
                 $scope.stepValues = {
                     agent:1,
                     team:2,
                     contact:3
                 };
+                /*remove search step in the wizard in edit mode
+                * @link directive.js
+                * */
                 $scope.stepsToRemove={index:1,howMany:1};
             }
             $scope.$watch('agentDetails.teamDetail.teamId',function(newVal,oldVal){
@@ -91,20 +107,23 @@ angular.module('createAgent',['common','ngRoute','mgcrea.ngStrap.select','mgcrea
                 $scope.datePickerSettings.isOpened = true;
             };
 
+            /*wizard will be set to active state on the step we provide */
             $scope.jumpToNthStep = function(step){
                 $scope.selectedWizard=step;
-                $scope.searchResult.isEmpty=false;
+                $scope.hideAlert=true;
             };
             $scope.searchAgent =  function(){
                 $scope.searchResult.isSearched=true;
                 $http.get("/pla/core/agent/getemployeedeatil",{params:$scope.search})
                     .success(function(data,status){
                         if(data && (_.size(data) ==0 || data.firstName==null)){
+                            $scope.hideAlert=false;
                             $scope.searchResult.isEmpty=true;
                             $scope.agentDetails.agentProfile.nrcNumberInString=$scope.search.nrcNumber;
                         }else{
                             $scope.jumpToNthStep(2);
                             $scope.agentDetails = transformJson.fromHrmsToPla(data);
+                            $scope.searchResult.isEmpty=false;
                             $scope.trainingCompleteOn = $scope.agentDetails.trainingCompleteOn;
                         }
                         if(nextAgentSequence){
@@ -112,6 +131,7 @@ angular.module('createAgent',['common','ngRoute','mgcrea.ngStrap.select','mgcrea
                         }
                     })
                     .error(function(data,status){
+                        $scope.hideAlert=false;
                         $scope.searchResult.isEmpty=true;
                         $scope.agentDetails.agentProfile.nrcNumberInString=$scope.search.nrcNumber;
                         if(nextAgentSequence){
@@ -119,6 +139,9 @@ angular.module('createAgent',['common','ngRoute','mgcrea.ngStrap.select','mgcrea
                         }
                     });
 
+            };
+            $scope.isSearchEmptyOrIsEdit = function(){
+              return !$scope.searchResult.isEmpty || $scope.isEditMode;
             };
             $scope.prePopulateTeamLeader = function(){
                 var teamDetails = _.findWhere($scope.teamDetails, {teamId:$scope.agentDetails.teamDetail.teamId});

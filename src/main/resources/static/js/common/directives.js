@@ -103,9 +103,9 @@ angular.module('directives', ['mgcrea.ngStrap.alert'])
                 disableAllFields:"=?"
             },
             link: function (scope, controls) {
-                if(scope.disableAllFields){
-                    $(controls).find(":input").not(":button").prop("disabled",true);
-                }
+                scope.$watch('disableAllFields',function(newVal,oldVal){
+                    $(controls).find(":input").not(":button").prop("disabled",newVal);
+                });
             }
         }
     })
