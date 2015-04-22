@@ -199,66 +199,67 @@ public class GeneralInformationService {
             productLineInformationByBusinessId.put("productLineInformationId", productLineInformationMap.get("productLineInformationId"));
 
             Map quotationMap = (Map) productLineInformationMap.get("quotationProcessInformation");
-            List<Map> list = (List) quotationMap.get("quotationProcessItems");
-            productLineInformationByBusinessId.put("quotationProcessItems",  getProductLineProcess(list));
+            List<Map> quotationList = (List) quotationMap.get("quotationProcessItems");
+            productLineInformationByBusinessId.put("quotationProcessItems",  getProductLineProcess(quotationList));
 
             Map enrollmentMap = (Map)productLineInformationMap.get("enrollmentProcessInformation");
-            List<Map> list1 = (List) enrollmentMap.get("enrollmentProcessItems");
-            productLineInformationByBusinessId.put("enrollmentProcessItems",getProductLineProcess(list1));
+            List<Map> enrollmentList = (List) enrollmentMap.get("enrollmentProcessItems");
+            productLineInformationByBusinessId.put("enrollmentProcessItems",getProductLineProcess(enrollmentList));
 
             Map reinstatementMap = (Map)productLineInformationMap.get("reinstatementProcessInformation");
-            List<Map> list2 = (List) reinstatementMap.get("reinstatementProcessItems");
-            productLineInformationByBusinessId.put("reinstatementProcessItems",getProductLineProcess(list2));
+            List<Map> reinstatementList = (List) reinstatementMap.get("reinstatementProcessItems");
+            productLineInformationByBusinessId.put("reinstatementProcessItems",getProductLineProcess(reinstatementList));
 
             Map endorsementMap = (Map)productLineInformationMap.get("endorsementProcessInformation");
-            List<Map> list3 = (List) endorsementMap.get("endorsementProcessItems");
-            productLineInformationByBusinessId.put("endorsementProcessItems",getProductLineProcess(list3));
+            List<Map> endorsementList = (List) endorsementMap.get("endorsementProcessItems");
+            productLineInformationByBusinessId.put("endorsementProcessItems",getProductLineProcess(endorsementList));
 
             Map claimMap = (Map)productLineInformationMap.get("claimProcessInformation");
-            List<Map> list4 = (List) claimMap.get("claimProcessItems");
-            productLineInformationByBusinessId.put("claimProcessItems", getProductLineProcess(list4));
+            List<Map> claimList = (List) claimMap.get("claimProcessItems");
+            productLineInformationByBusinessId.put("claimProcessItems", getProductLineProcess(claimList));
 
             Map policyFeeMap = (Map)productLineInformationMap.get("policyFeeProcessInformation");
-            List<Map> list7 = (List) policyFeeMap.get("policyFeeProcessItems");
-            productLineInformationByBusinessId.put("policyFeeProcessItems",getProductFeeProcess(list7));
+            List<Map> policyFeeList = (List) policyFeeMap.get("policyFeeProcessItems");
+            productLineInformationByBusinessId.put("policyFeeProcessItems",getProductFeeProcess(policyFeeList));
 
             Map minimumLimitMap = (Map)productLineInformationMap.get("policyProcessMinimumLimit");
             productLineInformationByBusinessId.put("policyProcessMinimumLimitItems",minimumLimitMap.get("policyProcessMinimumLimitItems"));
 
             Map surrenderMap = (Map)productLineInformationMap.get("surrenderProcessInformation");
-            List<Map> list5 = (List) surrenderMap.get("surrenderProcessItems");
-            productLineInformationByBusinessId.put("surrenderProcessItems",getProductLineProcess(list5));
+            List<Map> surrenderProcessList = (List) surrenderMap.get("surrenderProcessItems");
+            productLineInformationByBusinessId.put("surrenderProcessItems",getProductLineProcess(surrenderProcessList));
 
             Map maturityMap = (Map)productLineInformationMap.get("maturityProcessInformation");
-            List<Map> list6 = (List) maturityMap.get("maturityProcessItems");
-            productLineInformationByBusinessId.put("maturityProcessItems",getProductLineProcess(list6));
+            List<Map> maturityProcessItems = (List) maturityMap.get("maturityProcessItems");
+            productLineInformationByBusinessId.put("maturityProcessItems",getProductLineProcess(maturityProcessItems));
 
             productLineInformationList.add(productLineInformationByBusinessId);
         }
-        productLineInformationList =  getProductLine(productLineInformationList);
+        productLineInformationList =  getProductLineList(productLineInformationList);
         return productLineInformationList;
     }
-    public List getProductLineProcess(List<Map> list){
-        List<Map> list1 = Lists.newArrayList();
-        for (Map map : list){
-            Map<Object,Object> objectObjectMap = Maps.newLinkedHashMap();
-            objectObjectMap.put(map.get("productLineProcessItem"),map.get("value"));
-            list1.add(objectObjectMap);
+
+    public List getProductLineProcess(List<Map> productLineProcessList){
+        List<Map> processList = Lists.newArrayList();
+        for (Map map : productLineProcessList){
+            Map<Object,Object> productLineMap = Maps.newLinkedHashMap();
+            productLineMap.put(map.get("productLineProcessItem"), map.get("value"));
+            processList.add(productLineMap);
         }
-        return list1;
+        return processList;
     }
 
-    public List getProductFeeProcess(List<Map> list){
-        List<Map> list1 = Lists.newArrayList();
-        for (Map map : list){
-            Map<Object,Object> objectObjectMap = Maps.newLinkedHashMap();
-            objectObjectMap.put(map.get("policyFeeProcessType"),map.get("policyFee"));
-            list1.add(objectObjectMap);
+    public List getProductFeeProcess(List<Map> feeProcessList){
+        List<Map> productLineFeeProcessList = Lists.newArrayList();
+        for (Map map : feeProcessList){
+            Map<Object,Object> feeProcessMap = Maps.newLinkedHashMap();
+            feeProcessMap.put(map.get("policyFeeProcessType"), map.get("policyFee"));
+            productLineFeeProcessList.add(feeProcessMap);
         }
-        return list1;
+        return productLineFeeProcessList;
     }
 
-    public List<Map> getProductLine(List<Map> productLineInformationList ){
+    public List<Map> getProductLineList(List<Map> productLineInformationList){
         if (!productLineInformationList.contains(LineOfBusinessId.GROUP_HEALTH.name()))
             productLineInformationList.add(getGroupHealthProductLineInformation());
         if (!productLineInformationList.contains(LineOfBusinessId.GROUP_INSURANCE.name()))
