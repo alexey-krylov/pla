@@ -193,37 +193,78 @@ public class GeneralInformationService {
             productLineInformationList.add(getIndividualInsuranceProductLineInformation());
             return productLineInformationList;
         }
-        productLineInformationList =  getProductLine(productLineInformationList,productLineInformation);
         for (Map productLineInformationMap: productLineInformation){
             Map<String,Object> productLineInformationByBusinessId = Maps.newLinkedHashMap();
             productLineInformationByBusinessId.put("productLine",productLineInformationMap.get("productLine"));
             productLineInformationByBusinessId.put("productLineInformationId", productLineInformationMap.get("productLineInformationId"));
-            productLineInformationByBusinessId.put("quotationProcessItems", productLineInformationMap.get("quotationProcessInformation"));
-            productLineInformationByBusinessId.put("enrollmentProcessItems", productLineInformationMap.get("enrollmentProcessInformation"));
-            productLineInformationByBusinessId.put("reinstatementProcessItems", productLineInformationMap.get("reinstatementProcessInformation"));
-            productLineInformationByBusinessId.put("endorsementProcessItems", productLineInformationMap.get("endorsementProcessInformation"));
-            productLineInformationByBusinessId.put("claimProcessItems", productLineInformationMap.get("claimProcessInformation"));
-            productLineInformationByBusinessId.put("policyFeeProcessItems", productLineInformationMap.get("policyFeeProcessInformation"));
-            productLineInformationByBusinessId.put("policyProcessMinimumLimitItems", productLineInformationMap.get("policyProcessMinimumLimit"));
-            productLineInformationByBusinessId.put("surrenderProcessItems", productLineInformationMap.get("surrenderProcessInformation"));
-            productLineInformationByBusinessId.put("maturityProcessItems",productLineInformationMap.get("maturityProcessInformation"));
+
+            Map quotationMap = (Map) productLineInformationMap.get("quotationProcessInformation");
+            List<Map> list = (List) quotationMap.get("quotationProcessItems");
+            productLineInformationByBusinessId.put("quotationProcessItems",  getProductLineProcess(list));
+
+            Map enrollmentMap = (Map)productLineInformationMap.get("enrollmentProcessInformation");
+            List<Map> list1 = (List) enrollmentMap.get("enrollmentProcessItems");
+            productLineInformationByBusinessId.put("enrollmentProcessItems",getProductLineProcess(list1));
+
+            Map reinstatementMap = (Map)productLineInformationMap.get("reinstatementProcessInformation");
+            List<Map> list2 = (List) reinstatementMap.get("reinstatementProcessItems");
+            productLineInformationByBusinessId.put("reinstatementProcessItems",getProductLineProcess(list2));
+
+            Map endorsementMap = (Map)productLineInformationMap.get("endorsementProcessInformation");
+            List<Map> list3 = (List) endorsementMap.get("endorsementProcessItems");
+            productLineInformationByBusinessId.put("endorsementProcessItems",getProductLineProcess(list3));
+
+            Map claimMap = (Map)productLineInformationMap.get("claimProcessInformation");
+            List<Map> list4 = (List) claimMap.get("claimProcessItems");
+            productLineInformationByBusinessId.put("claimProcessItems", getProductLineProcess(list4));
+
+            Map policyFeeMap = (Map)productLineInformationMap.get("policyFeeProcessInformation");
+            List<Map> list7 = (List) policyFeeMap.get("policyFeeProcessItems");
+            productLineInformationByBusinessId.put("policyFeeProcessItems",getProductFeeProcess(list7));
+
+            Map minimumLimitMap = (Map)productLineInformationMap.get("policyProcessMinimumLimit");
+            productLineInformationByBusinessId.put("policyProcessMinimumLimitItems",minimumLimitMap.get("policyProcessMinimumLimitItems"));
+
+            Map surrenderMap = (Map)productLineInformationMap.get("surrenderProcessInformation");
+            List<Map> list5 = (List) surrenderMap.get("surrenderProcessItems");
+            productLineInformationByBusinessId.put("surrenderProcessItems",getProductLineProcess(list5));
+
+            Map maturityMap = (Map)productLineInformationMap.get("maturityProcessInformation");
+            List<Map> list6 = (List) maturityMap.get("maturityProcessItems");
+            productLineInformationByBusinessId.put("maturityProcessItems",getProductLineProcess(list6));
+
             productLineInformationList.add(productLineInformationByBusinessId);
         }
+        productLineInformationList =  getProductLine(productLineInformationList);
         return productLineInformationList;
     }
-
-    public List<Map> getProductLine(List<Map> productLineInformationList,  List<Map> productLineInformation ){
-        for (Map productLineMap : productLineInformation){
-            if (!LineOfBusinessId.GROUP_HEALTH.name().equals(productLineMap.get("productLine")) && !productLineInformationList.contains(LineOfBusinessId.GROUP_HEALTH)){
-                productLineInformationList.add(getGroupHealthProductLineInformation());
-            }
-            if (!LineOfBusinessId.GROUP_INSURANCE.name().equals(productLineMap.get("productLine"))){
-                productLineInformationList.add(getGroupInsuranceProductLineInformation());
-            }
-            if (!LineOfBusinessId.INDIVIDUAL_INSURANCE.name().equals(productLineMap.get("productLine"))){
-                productLineInformationList.add(getIndividualInsuranceProductLineInformation());
-            }
+    public List getProductLineProcess(List<Map> list){
+        List<Map> list1 = Lists.newArrayList();
+        for (Map map : list){
+            Map<Object,Object> objectObjectMap = Maps.newLinkedHashMap();
+            objectObjectMap.put(map.get("productLineProcessItem"),map.get("value"));
+            list1.add(objectObjectMap);
         }
+        return list1;
+    }
+
+    public List getProductFeeProcess(List<Map> list){
+        List<Map> list1 = Lists.newArrayList();
+        for (Map map : list){
+            Map<Object,Object> objectObjectMap = Maps.newLinkedHashMap();
+            objectObjectMap.put(map.get("policyFeeProcessType"),map.get("policyFee"));
+            list1.add(objectObjectMap);
+        }
+        return list1;
+    }
+
+    public List<Map> getProductLine(List<Map> productLineInformationList ){
+        if (!productLineInformationList.contains(LineOfBusinessId.GROUP_HEALTH.name()))
+            productLineInformationList.add(getGroupHealthProductLineInformation());
+        if (!productLineInformationList.contains(LineOfBusinessId.GROUP_INSURANCE.name()))
+            productLineInformationList.add(getGroupInsuranceProductLineInformation());
+        if (!productLineInformationList.contains(LineOfBusinessId.INDIVIDUAL_INSURANCE.name()))
+            productLineInformationList.add(getIndividualInsuranceProductLineInformation());
         return productLineInformationList;
     }
 
@@ -254,6 +295,7 @@ public class GeneralInformationService {
         productLineMap = getProductLineGeneralInformation(productLineMap);
         return productLineMap;
     }
+
     public Map getGroupInsuranceProductLineInformation(){
         Map insuranceMap  = Maps.newLinkedHashMap();
         insuranceMap.put("productLine",LineOfBusinessId.GROUP_INSURANCE);
@@ -302,55 +344,49 @@ public class GeneralInformationService {
         return generalInformationDto;
     }
 
-    private List<Map<String,Object>> populateProcessItems(){
-        List<Map<String,Object>> productLineProcessList = Lists.newArrayList();
-        Map<String,Object> quotationProcessItems = Maps.newLinkedHashMap();
-        quotationProcessItems.put("productLineProcessItem",ProductLineProcessType.PURGE_TIME_PERIOD);
-        quotationProcessItems.put("value",0);
+    private List<Map<ProductLineProcessType,Object>> populateProcessItems(){
+        List<Map<ProductLineProcessType,Object>> productLineProcessList = Lists.newArrayList();
+        Map<ProductLineProcessType,Object> quotationProcessItems = Maps.newLinkedHashMap();
+        quotationProcessItems.put(ProductLineProcessType.PURGE_TIME_PERIOD,0);
         productLineProcessList.add(quotationProcessItems);
+
         quotationProcessItems = Maps.newLinkedHashMap();
-        quotationProcessItems.put("productLineProcessItem",ProductLineProcessType.FIRST_REMAINDER);
-        quotationProcessItems.put("value", 0);
+        quotationProcessItems.put(ProductLineProcessType.FIRST_REMAINDER, 0);
         productLineProcessList.add(quotationProcessItems);
+
         quotationProcessItems = Maps.newLinkedHashMap();
-        quotationProcessItems.put("productLineProcessItem",ProductLineProcessType.NO_OF_REMAINDER);
-        quotationProcessItems.put("value", 0);
+        quotationProcessItems.put(ProductLineProcessType.NO_OF_REMAINDER, 0);
         productLineProcessList.add(quotationProcessItems);
+
         quotationProcessItems = Maps.newLinkedHashMap();
-        quotationProcessItems.put("productLineProcessItem",ProductLineProcessType.GAP);
-        quotationProcessItems.put("value", 0);
+        quotationProcessItems.put(ProductLineProcessType.GAP, 0);
         productLineProcessList.add(quotationProcessItems);
+
         quotationProcessItems = Maps.newLinkedHashMap();
-        quotationProcessItems.put("productLineProcessItem",ProductLineProcessType.CLOSURE);
-        quotationProcessItems.put("value", 0);
+        quotationProcessItems.put(ProductLineProcessType.CLOSURE,0);
         productLineProcessList.add(quotationProcessItems);
         return productLineProcessList;
     }
-    private List<Map<String,Object>> populateClaimProcessItems(){
-        List<Map<String,Object>> productLineProcessList = Lists.newArrayList();
-        Map<String,Object> quotationProcessItems = Maps.newLinkedHashMap();
-        quotationProcessItems.put("productLineProcessItem",ProductLineProcessType.PURGE_TIME_PERIOD);
-        quotationProcessItems.put("value",0);
+
+    private List<Map<ProductLineProcessType,Object>> populateClaimProcessItems(){
+        List<Map<ProductLineProcessType,Object>> productLineProcessList = Lists.newArrayList();
+        Map<ProductLineProcessType,Object> quotationProcessItems = Maps.newLinkedHashMap();
+        quotationProcessItems.put(ProductLineProcessType.PURGE_TIME_PERIOD, 0);
         productLineProcessList.add(quotationProcessItems);
         quotationProcessItems = Maps.newLinkedHashMap();
-        quotationProcessItems.put("productLineProcessItem",ProductLineProcessType.FIRST_REMAINDER);
-        quotationProcessItems.put("value", 0);
+        quotationProcessItems.put(ProductLineProcessType.FIRST_REMAINDER, 0);
         productLineProcessList.add(quotationProcessItems);
         quotationProcessItems = Maps.newLinkedHashMap();
-        quotationProcessItems.put("productLineProcessItem",ProductLineProcessType.NO_OF_REMAINDER);
-        quotationProcessItems.put("value", 0);
+        quotationProcessItems.put(ProductLineProcessType.NO_OF_REMAINDER, 0);
         productLineProcessList.add(quotationProcessItems);
         quotationProcessItems = Maps.newLinkedHashMap();
-        quotationProcessItems.put("productLineProcessItem", ProductLineProcessType.GAP);
-        quotationProcessItems.put("value", 0);
+        quotationProcessItems.put(ProductLineProcessType.GAP, 0);
         productLineProcessList.add(quotationProcessItems);
         quotationProcessItems = Maps.newLinkedHashMap();
-        quotationProcessItems.put("productLineProcessItem",ProductLineProcessType.CLOSURE);
-        quotationProcessItems.put("value", 0);
+        quotationProcessItems.put(ProductLineProcessType.CLOSURE, 0);
         productLineProcessList.add(quotationProcessItems);
         quotationProcessItems = Maps.newLinkedHashMap();
-        quotationProcessItems.put("productLineProcessItem",ProductLineProcessType.EARLY_DEATH_CRITERIA);
-        quotationProcessItems.put("value", 0);
+        quotationProcessItems.put(ProductLineProcessType.EARLY_DEATH_CRITERIA,0);
         productLineProcessList.add(quotationProcessItems);
         return productLineProcessList;
     }
@@ -383,23 +419,19 @@ public class GeneralInformationService {
         return modalFactorList;
     }
 
-    private List<Map<String,Object>> populatePolicyFeeProcessData(){
-        List<Map<String,Object>>  processFeeList = Lists.newArrayList();
-        Map<String,Object> policyFeeProcessItems = Maps.newLinkedHashMap();
-        policyFeeProcessItems.put("policyFeeProcessType",PolicyFeeProcessType.ANNUAL);
-        policyFeeProcessItems.put("policyFee",0);
+    private List<Map<PolicyFeeProcessType,Object>> populatePolicyFeeProcessData(){
+        List<Map<PolicyFeeProcessType,Object>>  processFeeList = Lists.newArrayList();
+        Map<PolicyFeeProcessType,Object> policyFeeProcessItems = Maps.newLinkedHashMap();
+        policyFeeProcessItems.put(PolicyFeeProcessType.ANNUAL,0);
         processFeeList.add(policyFeeProcessItems);
         policyFeeProcessItems = Maps.newLinkedHashMap();
-        policyFeeProcessItems.put("policyFeeProcessType",PolicyFeeProcessType.SEMI_ANNUAL);
-        policyFeeProcessItems.put("policyFee",0);
+        policyFeeProcessItems.put(PolicyFeeProcessType.SEMI_ANNUAL,0);
         processFeeList.add(policyFeeProcessItems);
         policyFeeProcessItems = Maps.newLinkedHashMap();
-        policyFeeProcessItems.put("policyFeeProcessType",PolicyFeeProcessType.QUARTERLY);
-        policyFeeProcessItems.put("policyFee",0);
+        policyFeeProcessItems.put(PolicyFeeProcessType.QUARTERLY,0);
         processFeeList.add(policyFeeProcessItems);
         policyFeeProcessItems = Maps.newLinkedHashMap();
-        policyFeeProcessItems.put("policyFeeProcessType",PolicyFeeProcessType.MONTHLY);
-        policyFeeProcessItems.put("policyFee",0);
+        policyFeeProcessItems.put(PolicyFeeProcessType.MONTHLY,0);
         processFeeList.add(policyFeeProcessItems);
         return processFeeList;
     }
