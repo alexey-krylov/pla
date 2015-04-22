@@ -107,6 +107,4 @@ public class OrganizationInformationController {
         return generalInformationService.getAllOrganizationInformation();
     }
 
-
-
 }

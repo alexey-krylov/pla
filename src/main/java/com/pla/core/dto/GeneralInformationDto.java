@@ -20,20 +20,21 @@ public class GeneralInformationDto {
 
     private String productLineInformationId;
     private LineOfBusinessId productLine;
-    private List<Map<ProductLineProcessType,Integer>> quotationProcessItems;
-    private List<Map<ProductLineProcessType,Integer>> enrollmentProcessItems;
-    private List<Map<ProductLineProcessType,Integer>> reinstatementProcessItems;
-    private List<Map<ProductLineProcessType,Integer>> endorsementProcessItems;
-    private List<Map<ProductLineProcessType,Integer>> claimProcessItems;
-    private List<Map<PolicyFeeProcessType,Integer>> policyFeeProcessItems;
+    private List<ProductLineProcessItemDto> quotationProcessItems;
+    private List<ProductLineProcessItemDto> enrollmentProcessItems;
+    private List<ProductLineProcessItemDto> reinstatementProcessItems;
+    private List<ProductLineProcessItemDto> endorsementProcessItems;
+    private List<ProductLineProcessItemDto> claimProcessItems;
+    private List<PolicyFeeProcessItemDto> policyFeeProcessItems;
     private List<PolicyProcessMinimumLimitItemDto> policyProcessMinimumLimitItems;
-    private List<Map<ProductLineProcessType,Integer>> surrenderProcessItems;
-    private List<Map<ProductLineProcessType,Integer>> maturityProcessItems;
+    private List<ProductLineProcessItemDto> surrenderProcessItems;
+    private List<ProductLineProcessItemDto> maturityProcessItems;
 
     private String organizationInformationId;
     private List<Map<DiscountFactorItem,BigDecimal>> discountFactorItems;
     private List<Map<ModalFactorItem,BigDecimal>> modelFactorItems;
     private Map<Tax, BigDecimal> serviceTax;
 
-
+    public GeneralInformationDto() {
+    }
 }

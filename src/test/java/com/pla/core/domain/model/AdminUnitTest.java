@@ -4,6 +4,7 @@
  * Proprietary and confidential
  */
 
+
 package com.pla.core.domain.model;
 
 import com.google.common.collect.Lists;
@@ -38,10 +39,12 @@ import static org.junit.Assert.*;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.util.ReflectionTestUtils.invokeGetterMethod;
 
+
 /**
  * @author: Samir
  * @since 1.0 12/03/2015
  */
+
 @RunWith(MockitoJUnitRunner.class)
 public class AdminUnitTest {
 
@@ -89,13 +92,6 @@ public class AdminUnitTest {
         productLineProcessItemMap = Maps.newLinkedHashMap();
         productLineProcessItemMap.put(ProductLineProcessType.CLOSURE, 14);
         listOfProcessItems.add(productLineProcessItemMap);
-        generalInformationDto.setQuotationProcessItems(listOfProcessItems);
-        generalInformationDto.setEnrollmentProcessItems(listOfProcessItems);
-        generalInformationDto.setEndorsementProcessItems(listOfProcessItems);
-        generalInformationDto.setReinstatementProcessItems(listOfProcessItems);
-        generalInformationDto.setClaimProcessItems(listOfProcessItems);
-        generalInformationDto.setSurrenderProcessItems(listOfProcessItems);
-        generalInformationDto.setMaturityProcessItems(listOfProcessItems);
 
         List<Map<PolicyFeeProcessType,Integer>> policyFeeProcessInformation =Lists.newArrayList();
         Map<PolicyFeeProcessType,Integer> policyFeeProcessTypeMap = Maps.newLinkedHashMap();
@@ -113,7 +109,6 @@ public class AdminUnitTest {
         policyFeeProcessTypeMap = Maps.newLinkedHashMap();
         policyFeeProcessTypeMap.put(PolicyFeeProcessType.MONTHLY,19);
         policyFeeProcessInformation.add(policyFeeProcessTypeMap);
-        generalInformationDto.setPolicyFeeProcessItems(policyFeeProcessInformation);
 
         List<PolicyProcessMinimumLimitItemDto> policyProcessMinimumLimit = Lists.newArrayList();
         PolicyProcessMinimumLimitItemDto policyProcessMinimumLimitItemDto = new PolicyProcessMinimumLimitItemDto();
@@ -218,7 +213,9 @@ public class AdminUnitTest {
         assertEquals(updatedName, updatedCoverageName.getCoverageName());
     }
 
-    /*
+
+
+/*
     * Created one coverage with coverage name C_ONE
     * Created another new coverage with coverage name C_TWO
     *
@@ -227,6 +224,7 @@ public class AdminUnitTest {
     * then it should throw the exception with message "Coverage name is satisfied"
     *
     * */
+
 
     @Test(expected = CoverageException.class)
     public void givenTheCoverageWithCoverageName_whenCoverageNameIsNotUnique_thenTheCoverageShouldNotUpdateWithNewName() {
@@ -299,7 +297,8 @@ public class AdminUnitTest {
         assertEquals(3, updatedMandatoryDocument.getDocuments().size());
     }
 
-    /*
+
+/*
     * Given
     *    the general information for the
     *       1.Group life level
@@ -311,9 +310,12 @@ public class AdminUnitTest {
     *    the product line information should get created with all the process information
     *
     * */
+
     @Test
     public void givenLineOfBusinessIdAndGeneralInformation_thenItShouldCreateTheProductLineInformationWithTheGivenProcess(){
-        ProductLineGeneralInformation createdProductLineGeneralInformation = admin.createProductLineGeneralInformation(LineOfBusinessId.GROUP_HEALTH, generalInformationDto);
+        List<PolicyProcessMinimumLimitItemDto> policyProcessMinimumLimitItems = Lists.newArrayList();
+        List<Map<PolicyFeeProcessType,Integer>> policyFeeProcessItems = Lists.newArrayList();
+        ProductLineGeneralInformation createdProductLineGeneralInformation = admin.createProductLineGeneralInformation(LineOfBusinessId.GROUP_HEALTH, listOfProcessItems,listOfProcessItems,listOfProcessItems,listOfProcessItems,listOfProcessItems,policyFeeProcessItems,policyProcessMinimumLimitItems,listOfProcessItems,listOfProcessItems);
         assertNotNull(createdProductLineGeneralInformation);
         assertNotNull(createdProductLineGeneralInformation.getQuotationProcessInformation());
         assertNotNull(createdProductLineGeneralInformation.getEnrollmentProcessInformation());
@@ -324,7 +326,8 @@ public class AdminUnitTest {
         assertNotNull(createdProductLineGeneralInformation.getMaturityProcessInformation());
     }
 
-    /*
+
+/*
     * Given
     *    the line of business id,general information
     * When
@@ -332,16 +335,19 @@ public class AdminUnitTest {
     * Then
     *    the Generic exception should be thrown with message "Early Death Criteria is applicable only for claim request"
     * */
+
     @Test(expected = GeneralInformationException.class)
     public void givenLineOfBusinessIdAndGeneralInformation_whenEarlyDeathCriteriaIsAssociatedWithOtherThanClaimProcess_thenItThrowAnGenericInformationException(){
         Map<ProductLineProcessType,Integer> productLineProcessItemMap = Maps.newLinkedHashMap();
+        List<PolicyProcessMinimumLimitItemDto> policyProcessMinimumLimitItems = Lists.newArrayList();
         productLineProcessItemMap.put(ProductLineProcessType.EARLY_DEATH_CRITERIA, 10);
         listOfProcessItems.add(productLineProcessItemMap);
-        ProductLineGeneralInformation createdProductLineGeneralInformation = admin.createProductLineGeneralInformation(LineOfBusinessId.GROUP_HEALTH, generalInformationDto);
+        ProductLineGeneralInformation createdProductLineGeneralInformation = admin.createProductLineGeneralInformation(LineOfBusinessId.GROUP_HEALTH, listOfProcessItems,listOfProcessItems,listOfProcessItems,listOfProcessItems,listOfProcessItems,null,policyProcessMinimumLimitItems,listOfProcessItems,listOfProcessItems);
         assertNull(createdProductLineGeneralInformation);
     }
 
-    /*
+
+/*
    * Given
    *    the line of business id,general information
    * When
@@ -349,14 +355,18 @@ public class AdminUnitTest {
    * Then
    *    the exception should be thrown as product line general information
    * */
+
     @Test(expected = IllegalArgumentException.class)
     public void givenLineOfBusinessIdAndGeneralInformation_whenLineOfBusinessIdIsIndividualInsurance_thenItThrowAnException(){
-        ProductLineGeneralInformation createdProductLineGeneralInformation = admin.createProductLineGeneralInformation(LineOfBusinessId.INDIVIDUAL_INSURANCE, generalInformationDto);
+        List<Map<PolicyFeeProcessType,Integer>> policyFeeProcessItems = Lists.newArrayList();
+        List<PolicyProcessMinimumLimitItemDto> policyProcessMinimumLimitItems = Lists.newArrayList();
+        ProductLineGeneralInformation createdProductLineGeneralInformation = admin.createProductLineGeneralInformation(LineOfBusinessId.INDIVIDUAL_INSURANCE, listOfProcessItems,listOfProcessItems,listOfProcessItems,listOfProcessItems,listOfProcessItems,policyFeeProcessItems,policyProcessMinimumLimitItems,listOfProcessItems,listOfProcessItems);
         assertNull(createdProductLineGeneralInformation);
     }
 
 
-    /*
+
+/*
     * Given
     *    the service tax, modal factor and discount factor information
     *  When
@@ -365,6 +375,7 @@ public class AdminUnitTest {
     *    it should create the Organization general information with discount and modal factor values limited to 4 decimal places
     *    and service tax value limited 3 digits and to 2 decimal places
     * */
+
     @Test
     public void givenServiceTaxDiscountAndModalFactorInformation_thenItShouldCreateTheOrganizationInformation(){
         Map<Tax,BigDecimal> serviceTaxMap = Maps.newLinkedHashMap();
@@ -402,3 +413,4 @@ public class AdminUnitTest {
 
     }
 }
+
