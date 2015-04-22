@@ -21,7 +21,8 @@ App.controller('UpdateOrganizationalLevelController',['$scope','$http','$templat
 
        //$scope.organizationInformation=data[0];
         $scope.organizationLevelInformation=data[0];
-        if( $scope.organizationLevelInformation){
+     //  console.log($scope.organizationLevelInformation);
+        if($scope.organizationLevelInformation.organizationInformationId!=null){
             $scope.updateOrganizationinfo=true;
         }else{
             $scope.updateOrganizationinfo=false;
@@ -32,8 +33,7 @@ App.controller('UpdateOrganizationalLevelController',['$scope','$http','$templat
     $scope.submitOrganizationLevelInfo = function(){
         //console.log(createObject());
    //console.log( $scope.organizationLevelInformation);
-
-          $http.post('/pla/core/organizationinformation/update',  $scope.organizationLevelInformation).success(function (data) {
+           $http.post('/pla/core/organizationinformation/update',  $scope.organizationLevelInformation).success(function (data) {
                 console.log(data.status);
                 if (data.status == 200) {
                     $scope.alert = {title: 'Success Message! ', content: data.message, type: 'success'};
@@ -64,10 +64,10 @@ App.controller('CreateOrganizationalLevelController',['$scope','$http','$templat
     $scope.createOrganizationinfo=false;
     $http.get('/pla/core/organizationinformation/getorganizationformation').success(function(data){
         $scope.organizationInformation=data[0];
-        if( $scope.organizationInformation){
-            $scope.createOrganizationinfo=false;
-        }else{
+        if($scope.organizationInformation.organizationInformationId==null){
             $scope.createOrganizationinfo=true;
+        }else{
+            $scope.createOrganizationinfo=false;
         }
     });
     var createObject = function(){
@@ -75,7 +75,7 @@ App.controller('CreateOrganizationalLevelController',['$scope','$http','$templat
         angular.forEach($scope.createOrganizationLevelInformation,function(value,key){
 
             if(key=='modelFactorItems'){
-                transformedObject[key]=[{"SEMI_ANNUAL":$scope.createOrganizationLevelInformation.modelFactorItems.SEMI_ANNUAL},{"QUARTERLY" :$scope.createOrganizationLevelInformation.modelFactorItems.QUARTERLY},{"MONTHLY":$scope.createOrganizationLevelInformation.modelFactorItems.QUARTERLY}];
+                transformedObject[key]=[{"SEMI_ANNUAL":$scope.createOrganizationLevelInformation.modelFactorItems.SEMI_ANNUAL},{"QUARTERLY" :$scope.createOrganizationLevelInformation.modelFactorItems.QUARTERLY},{"MONTHLY":$scope.createOrganizationLevelInformation.modelFactorItems.MONTHLY}];
             }else if(key=='discountFactorItems'){
                 transformedObject[key]=[{"SEMI_ANNUAL":$scope.createOrganizationLevelInformation.discountFactorItems.SEMI_ANNUAL},{"ANNUAL":$scope.createOrganizationLevelInformation.discountFactorItems.ANNUAL},{"QUARTERLY":$scope.createOrganizationLevelInformation.discountFactorItems.QUARTERLY}];
 
