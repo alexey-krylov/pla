@@ -29,7 +29,8 @@ public class BranchFinder {
             "LEFT JOIN branch_bde_fulfillment bbf ON " +
             /*"bbf.employee_id = br.current_branch_bde AND" +*/
             " bbf.branch_code = br.branch_code AND ((bbf.thru_date IS NULL) OR (bbf.thru_date >= CURDATE()))  ";
-    public static final String FIND_BRANCH_BY_ID_QUERY = "SELECT br.branch_name AS branchName,br.branch_code AS branchCode,br.current_branch_manager AS currentBranchManager, br.current_branch_bde AS currentBranchBDE, rg.region_code AS regionCode, rg.region_name AS regionName, bmf.first_name AS currentBranchManagerFirstName, bmf.last_name AS currentBranchManagerLastName, bmf.from_date AS currentBranchManagerFromDate, bbf.first_name AS currentBranchBDFirstName, bbf.last_name AS currentBranchBDELastName, bbf.from_date AS currentBranchBDEFromDate  " +
+    public static final String FIND_BRANCH_BY_ID_QUERY = "SELECT br.branch_name AS branchName,br.branch_code AS branchCode,br.current_branch_manager AS currentBranchManager, br.current_branch_bde AS currentBranchBDE, rg.region_code AS regionCode, rg.region_name AS regionName, bmf.first_name AS currentBranchManagerFirstName, bmf.last_name AS currentBranchManagerLastName, bmf.from_date AS currentBranchManagerFromDate, bbf.first_name AS currentBranchBDFirstName, bbf.last_name AS currentBranchBDELastName, bbf.from_date AS currentBranchBDEFromDate," +
+            " bmf.thru_date AS currentBranchManagerToDate,bbf.thru_date AS currentBranchBDEToDate  " +
             " FROM branch br  " +
             " JOIN region_branch rb ON rb.branch_code = br.branch_code " +
             " JOIN region rg ON rg.region_code = rb.region_code " +
@@ -46,6 +47,7 @@ public class BranchFinder {
     public List<Map<String, Object>> getAllBranch() {
         return namedParameterJdbcTemplate.query(FIND_ALL_BRANCH_QUERY, new ColumnMapRowMapper());
     }
+
 
     public Map<String, Object> getBranchById(String branchId) {
         return namedParameterJdbcTemplate.queryForMap(FIND_BRANCH_BY_ID_QUERY, new MapSqlParameterSource().addValue("branchId", branchId));
