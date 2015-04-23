@@ -1,7 +1,7 @@
 package com.pla.core.domain.model.generalinformation;
 
-import com.pla.core.dto.PolicyProcessMinimumLimitItemDto;
 import com.pla.sharedkernel.domain.model.PolicyFeeProcessType;
+import com.pla.sharedkernel.domain.model.PolicyProcessMinimumLimitType;
 import com.pla.sharedkernel.domain.model.ProductLineProcessType;
 import com.pla.sharedkernel.identifier.LineOfBusinessId;
 import lombok.*;
@@ -82,7 +82,7 @@ public class ProductLineGeneralInformation {
         return this;
     }
 
-    public ProductLineGeneralInformation withPolicyProcessMinimumLimit(List<PolicyProcessMinimumLimitItemDto> policyProcessMinimumLimit) {
+    public ProductLineGeneralInformation withPolicyProcessMinimumLimit(List<Map<PolicyProcessMinimumLimitType,Integer>> policyProcessMinimumLimit) {
         this.policyProcessMinimumLimit = PolicyProcessMinimumLimit.create(policyProcessMinimumLimit);
         return this;
     }

@@ -15,12 +15,10 @@ import lombok.Setter;
 public class PolicyProcessMinimumLimitItem {
 
     private PolicyProcessMinimumLimitType policyProcessMinimumLimitType;
-    private int noOfPersonPerPolicy;
-    private int minimumPremium;
+    private int value;
 
-    public PolicyProcessMinimumLimitItem(PolicyProcessMinimumLimitType policyProcessMinimumLimitType,int noOfPersonPerPolicy,int minimumPremium) {
+    public PolicyProcessMinimumLimitItem(PolicyProcessMinimumLimitType policyProcessMinimumLimitType,int value) {
         this.policyProcessMinimumLimitType = policyProcessMinimumLimitType;
-        this.noOfPersonPerPolicy = noOfPersonPerPolicy;
-        this.minimumPremium = minimumPremium;
+        this.value = value;
     }
 }

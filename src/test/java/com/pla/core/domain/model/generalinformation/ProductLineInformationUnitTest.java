@@ -3,7 +3,6 @@ package com.pla.core.domain.model.generalinformation;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.pla.core.domain.exception.GeneralInformationException;
-import com.pla.core.dto.PolicyProcessMinimumLimitItemDto;
 import com.pla.sharedkernel.domain.model.PolicyFeeProcessType;
 import com.pla.sharedkernel.domain.model.PolicyProcessMinimumLimitType;
 import com.pla.sharedkernel.domain.model.ProductLineProcessType;
@@ -16,7 +15,8 @@ import java.util.Map;
 import java.util.Set;
 
 import static org.hamcrest.core.Is.is;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertThat;
 
 /**
  * Created by Admin on 4/6/2015.
@@ -62,7 +62,7 @@ public class ProductLineInformationUnitTest {
     }
 
     @Test
-      public void givenEndorsementProcessInformation_thenItShouldAddTheProcessTypesToProductLineInformation(){
+    public void givenEndorsementProcessInformation_thenItShouldAddTheProcessTypesToProductLineInformation(){
         ProductLineGeneralInformation productLineGeneralInformation = ProductLineGeneralInformation.createProductLineGeneralInformation(LineOfBusinessId.GROUP_HEALTH);
         productLineGeneralInformation = productLineGeneralInformation.withEndorsementProcessInformation(listOfProcessItems);
 
@@ -153,18 +153,13 @@ public class ProductLineInformationUnitTest {
     @Test
     public void givenPolicyProcessMinimumLimitInformation_thenItShouldAddTheProcessTypesToProductLineInformation(){
 
-        List<PolicyProcessMinimumLimitItemDto> policyProcessMinimumLimit =Lists.newArrayList();
-        PolicyProcessMinimumLimitItemDto policyProcessMinimumLimitItemDto = new PolicyProcessMinimumLimitItemDto();
-        policyProcessMinimumLimitItemDto.setPolicyProcessMinimumLimitType(PolicyProcessMinimumLimitType.ANNUAL);
-        policyProcessMinimumLimitItemDto.setNoOfPersonPerPolicy(10);
-        policyProcessMinimumLimitItemDto.setMinimumPremium(2);
-        policyProcessMinimumLimit.add(policyProcessMinimumLimitItemDto);
-
-        policyProcessMinimumLimitItemDto = new PolicyProcessMinimumLimitItemDto();
-        policyProcessMinimumLimitItemDto.setPolicyProcessMinimumLimitType(PolicyProcessMinimumLimitType.SEMI_ANNUAL);
-        policyProcessMinimumLimitItemDto.setNoOfPersonPerPolicy(20);
-        policyProcessMinimumLimitItemDto.setMinimumPremium(8);
-        policyProcessMinimumLimit.add(policyProcessMinimumLimitItemDto);
+        List<Map<PolicyProcessMinimumLimitType,Integer>> policyProcessMinimumLimit =Lists.newArrayList();
+        Map<PolicyProcessMinimumLimitType,Integer> policyProcessMinimumLimitMap = Maps.newLinkedHashMap();
+        policyProcessMinimumLimitMap.put(PolicyProcessMinimumLimitType.MINIMUM_NUMBER_OF_PERSON_PER_POLICY,10);
+        policyProcessMinimumLimit.add(policyProcessMinimumLimitMap);
+        policyProcessMinimumLimitMap = Maps.newLinkedHashMap();
+        policyProcessMinimumLimitMap.put(PolicyProcessMinimumLimitType.MINIMUM_PREMIUM, 10);
+        policyProcessMinimumLimit.add(policyProcessMinimumLimitMap);
 
         ProductLineGeneralInformation productLineGeneralInformation = ProductLineGeneralInformation.createProductLineGeneralInformation(LineOfBusinessId.GROUP_HEALTH);
         productLineGeneralInformation = productLineGeneralInformation.withPolicyProcessMinimumLimit(policyProcessMinimumLimit);
@@ -181,18 +176,14 @@ public class ProductLineInformationUnitTest {
     @Test
     public void givenPolicyProcessMinimumLimitInformation_whenLineOfBusinessIdIsOtherThenGroupHealthOrGroupInsurance_thenItShouldThrowAnException(){
 
-        List<PolicyProcessMinimumLimitItemDto> policyProcessMinimumLimit =Lists.newArrayList();
-        PolicyProcessMinimumLimitItemDto policyProcessMinimumLimitItemDto = new PolicyProcessMinimumLimitItemDto();
-        policyProcessMinimumLimitItemDto.setPolicyProcessMinimumLimitType(PolicyProcessMinimumLimitType.ANNUAL);
-        policyProcessMinimumLimitItemDto.setNoOfPersonPerPolicy(10);
-        policyProcessMinimumLimitItemDto.setMinimumPremium(2);
-        policyProcessMinimumLimit.add(policyProcessMinimumLimitItemDto);
+        List<Map<PolicyProcessMinimumLimitType,Integer>> policyProcessMinimumLimit =Lists.newArrayList();
+        Map<PolicyProcessMinimumLimitType,Integer> policyProcessMinimumLimitMap = Maps.newLinkedHashMap();
+        policyProcessMinimumLimitMap.put(PolicyProcessMinimumLimitType.MINIMUM_NUMBER_OF_PERSON_PER_POLICY, 10);
+        policyProcessMinimumLimit.add(policyProcessMinimumLimitMap);
+        policyProcessMinimumLimitMap = Maps.newLinkedHashMap();
+        policyProcessMinimumLimitMap.put(PolicyProcessMinimumLimitType.MINIMUM_PREMIUM, 10);
+        policyProcessMinimumLimit.add(policyProcessMinimumLimitMap);
 
-        policyProcessMinimumLimitItemDto = new PolicyProcessMinimumLimitItemDto();
-        policyProcessMinimumLimitItemDto.setPolicyProcessMinimumLimitType(PolicyProcessMinimumLimitType.SEMI_ANNUAL);
-        policyProcessMinimumLimitItemDto.setNoOfPersonPerPolicy(20);
-        policyProcessMinimumLimitItemDto.setMinimumPremium(8);
-        policyProcessMinimumLimit.add(policyProcessMinimumLimitItemDto);
 
         ProductLineGeneralInformation productLineGeneralInformation = ProductLineGeneralInformation.createProductLineGeneralInformation(LineOfBusinessId.INDIVIDUAL_INSURANCE);
         productLineGeneralInformation = productLineGeneralInformation.withPolicyProcessMinimumLimit(policyProcessMinimumLimit);
@@ -220,6 +211,86 @@ public class ProductLineInformationUnitTest {
         Set<ProductLineProcessItem> productLineProcessItems = productLineGeneralInformation.getMaturityProcessInformation().getMaturityProcessItems();
         assertThat(productLineProcessItems.size(), is(5));
 
+    }
+
+    @Test
+    public void givenReinstatementProcessInformation_thenItShouldReturnTheReinstatementProcessInformation(){
+        List<Map<ProductLineProcessType,Integer>> reinstatementProcessItems  = Lists.newArrayList();
+        Map<ProductLineProcessType,Integer> processItem = Maps.newLinkedHashMap();
+        processItem.put(ProductLineProcessType.PURGE_TIME_PERIOD,12);
+        ReinstatementProcessInformation reinstatementProcessInformation = ReinstatementProcessInformation.create(reinstatementProcessItems);
+        assertNotNull(reinstatementProcessInformation);
+    }
+
+    @Test
+    public void givenQuotationProcessInformation_thenItShouldReturnTheQuotationProcessInformation(){
+        List<Map<ProductLineProcessType,Integer>> quotationProcessItems  = Lists.newArrayList();
+        Map<ProductLineProcessType,Integer> processItem = Maps.newLinkedHashMap();
+        processItem.put(ProductLineProcessType.PURGE_TIME_PERIOD,12);
+        QuotationProcessInformation quotationProcessInformation = QuotationProcessInformation.create(quotationProcessItems);
+        assertNotNull(quotationProcessInformation);
+    }
+
+    @Test
+    public void givenEnrollmentProcessInformation_thenItShouldReturnTheEnrollmentProcessInformation(){
+        List<Map<ProductLineProcessType,Integer>> enrollmentProcessItems  = Lists.newArrayList();
+        Map<ProductLineProcessType,Integer> processItem = Maps.newLinkedHashMap();
+        processItem.put(ProductLineProcessType.PURGE_TIME_PERIOD,12);
+        EnrollmentProcessInformation enrollmentProcessInformation = EnrollmentProcessInformation.create(enrollmentProcessItems);
+        assertNotNull(enrollmentProcessInformation);
+    }
+
+    @Test
+    public void givenEndorsementProcessInformation_thenItShouldReturnTheEndorsementProcessInformation(){
+        List<Map<ProductLineProcessType,Integer>> endorsementProcessItems  = Lists.newArrayList();
+        Map<ProductLineProcessType,Integer> processItem = Maps.newLinkedHashMap();
+        processItem.put(ProductLineProcessType.PURGE_TIME_PERIOD,12);
+        EndorsementProcessInformation endorsementProcessInformation = EndorsementProcessInformation.create(endorsementProcessItems);
+        assertNotNull(endorsementProcessInformation);
+    }
+
+    @Test
+    public void givenClaimProcessInformation_thenItShouldReturnTheClaimProcessInformation(){
+        List<Map<ProductLineProcessType,Integer>> claimProcessItems  = Lists.newArrayList();
+        Map<ProductLineProcessType,Integer> processItem = Maps.newLinkedHashMap();
+        processItem.put(ProductLineProcessType.PURGE_TIME_PERIOD,12);
+        ClaimProcessInformation claimProcessInformation = ClaimProcessInformation.create(claimProcessItems);
+        assertNotNull(claimProcessInformation);
+    }
+
+    @Test
+    public void givenSurrenderProcessInformation_thenItShouldReturnTheSurrenderProcessInformation(){
+        List<Map<ProductLineProcessType,Integer>> surrenderProcessItems  = Lists.newArrayList();
+        Map<ProductLineProcessType,Integer> processItem = Maps.newLinkedHashMap();
+        processItem.put(ProductLineProcessType.PURGE_TIME_PERIOD,12);
+        SurrenderProcessInformation surrenderProcessInformation = SurrenderProcessInformation.create(surrenderProcessItems);
+        assertNotNull(surrenderProcessInformation);
+    }
+
+    @Test
+    public void givenMaturityProcessInformation_thenItShouldReturnTheMaturityProcessInformation(){
+        List<Map<ProductLineProcessType,Integer>> maturityProcessItems  = Lists.newArrayList();
+        Map<ProductLineProcessType,Integer> processItem = Maps.newLinkedHashMap();
+        processItem.put(ProductLineProcessType.PURGE_TIME_PERIOD,12);
+        MaturityProcessInformation maturityProcessInformation = MaturityProcessInformation.create(maturityProcessItems);
+        assertNotNull(maturityProcessInformation);
+    }
+
+    @Test
+    public void givenPolicyFeeProcessInformation_thenItShouldReturnThePolicyFeeProcessInformation(){
+        List<Map<PolicyFeeProcessType,Integer>> policyFeeProcessItems  = Lists.newArrayList();
+        Map<PolicyFeeProcessType,Integer> processItem = Maps.newLinkedHashMap();
+        processItem.put(PolicyFeeProcessType.MONTHLY,12);
+        PolicyFeeProcessInformation policyFeeProcessInformation = PolicyFeeProcessInformation.create(policyFeeProcessItems);
+        assertNotNull(policyFeeProcessInformation);
+    }
+    @Test
+    public void givenMinimumLimitProcessInformation_thenItShouldReturnTheMinimumLimitProcessInformation(){
+        List<Map<PolicyProcessMinimumLimitType,Integer>> policyMinimumLimitProcessItems  = Lists.newArrayList();
+        Map<PolicyProcessMinimumLimitType,Integer> processItem = Maps.newLinkedHashMap();
+        processItem.put(PolicyProcessMinimumLimitType.MINIMUM_PREMIUM,12);
+        PolicyProcessMinimumLimit policyProcessMinimumLimit = PolicyProcessMinimumLimit.create(policyMinimumLimitProcessItems);
+        assertNotNull(policyProcessMinimumLimit);
     }
 
 }

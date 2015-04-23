@@ -20,5 +20,4 @@ public enum ProductLineProcessType {
     ProductLineProcessType(String description) {
         this.description = description;
     }
-
 }
