@@ -31,65 +31,47 @@
                     </div>
                 </div>
                 <div class="panel-body ng-cloak">
-                    <form  name="myForm" novalidate="true" class="css-form">
+                    <form  novalidate="true" role="form" name="forms.form1">
                         <div class="row">
-                            <notification ></notification>
+                            <notification1></notification1>
                             <div class="" style="margin: auto;margin-top:10px;">
                                 <label class="control-label" style="padding-left:10px;">Modal Factors - to be applied in case Premiums are mentioned on a per year basis.</label>
                             </div>
+                            <div class="form-group col-md-4 required" ng-repeat="modelFactorItems in organizationInformation.modelFactorItems">
+                                <label class="control-label" ng-bind="getFieldName(modelFactorItems.modalFactorItem)"></label>
+                                <p class="input-group" >
+                                    <input type="number" class="form-control input-sm" min="1" onkeypress="return isNumeric(event)" ng-model="modelFactorItems.value" value="{{modelFactorItems.value}}" ng-required="true"/>
+                                </p>
 
-                            <div class="form-group col-md-6 required" style="margin: auto;margin-top:10px;">
-                                <label class="control-label">Semi-Annual Modal Factor</label>
-                                <input type="text" name="semiAnnual"  class="form-control input-sm"   onkeypress="return isNumeric(event)"  ng-model="organizationLevelInformation.modelFactorItems[2].value" value="{{organizationLevelInformation.modelFactorItems[2].value}}" ng-required="true"/>
-                                <span hidden="true"  style="color: darkred;font-size: 10px">Please check if it is empty </span>
                             </div>
-                            <div class="form-group col-md-6 required" style="margin: auto;margin-top:10px;">
-                                <label class="control-label">Quarterly Modal Factor</label>
-                                <input type="text" name="quarterlyModal"  class="form-control input-sm"  onkeypress="return isNumeric(event)" ng-model="organizationLevelInformation.modelFactorItems[1].value" value="{{organizationLevelInformation.modelFactorItems[1].value}}" ng-required="true" />
-                                <span hidden="true"
-                                      style="color: darkred;font-size: 10px">Please check if it is empty </span>
-                            </div>
-                            <div class="form-group col-md-6 required" style="margin: auto;margin-top:10px;">
-                                <label class="control-label">Monthly Modal Factor</label>
-                                <input type="text" name="monthlyModal" class="form-control input-sm" onkeypress="return isNumeric(event)" ng-model="organizationLevelInformation.modelFactorItems[0].value" value="{{organizationLevelInformation.modelFactorItems[0].value}}" ng-required="true"/>
-                                <span hidden="true"  style="color: darkred;font-size: 10px">Please check if it is empty </span>
-                            </div>
+
                         </div>
 
                         <div class="row" >
                             <div class="" style="margin: auto;margin-top:10px;">
                                 <label class="control-label"  style="padding-left:10px;">Discount Factors - to be applied in case Premiums are mentioned on a per month basis.</label>
                             </div>
-                            <div class="form-group col-md-6 required" style="margin: auto;margin-top:10px;">
-                                <label class="control-label">Annual Discount Factor</label>
-                                <input type="text" name="annualDiscount"  class="form-control input-sm"  onkeypress="return isNumeric(event)" ng-model="organizationLevelInformation.discountFactorItems[0].value" value="{{organizationLevelInformation.discountFactorItems[0].value}}"  ng-required="true"/>
-                                <span hidden="true"  style="color: darkred;font-size: 10px">Please check if it is empty </span>
+                            <div class="form-group col-md-4 required" ng-repeat="discountFactorItems in organizationInformation.discountFactorItems">
+                                <label class="control-label" ng-bind="getFieldName(discountFactorItems.discountFactorItem)" ></label>
+                                <p class="input-group" >
+                                    <input type="number" class="form-control input-sm" min="1" onkeypress="return isNumeric(event)" ng-model="discountFactorItems.value" value="{{discountFactorItems.value}}" ng-required="true"/>
+                                </p>
+
                             </div>
-                            <div class="form-group col-md-6 required" style="margin: auto;margin-top:10px;">
-                                <label class="control-label">Semi-Annual Discount Factor</label>
-                                <input type="text" name="semiAnnualDiscount"  class="form-control input-sm"  onkeypress="return isNumeric(event)" ng-model="organizationLevelInformation.discountFactorItems[1].value" value="{{organizationLevelInformation.discountFactorItems[1].value}}" ng-required="true"/>
-                                <span hidden="true"
-                                      style="color: darkred;font-size: 10px">Please check if it is empty </span>
-                            </div>
-                            <div class="form-group col-md-6 required" style="margin: auto;margin-top:10px;">
-                                <label class="control-label">Quarterly Discount Factor</label>
-                                <input type="text" name="quarterlyDiscount"   class="form-control input-sm"  onkeypress="return isNumeric(event)" ng-model="organizationLevelInformation.discountFactorItems[2].value" value="{{organizationLevelInformation.discountFactorItems[2].value}}" ng-required="true"/>
-                                <span hidden="true"  style="color: darkred;font-size: 10px">Please check if it is empty </span>
+                            <div class="form-group col-md-4 required" >
+                                <label class="control-label" ng-bind="getFieldName(organizationInformation.serviceTax.tax)"></label>
+                                <p class="input-group" >
+                                    <input type="number" class="form-control input-sm" min="1" onkeypress="return isNumeric(event)" ng-model="organizationInformation.serviceTax.value" value="{{organizationInformation.serviceTax.value}}" ng-required="true"/>
+                                </p>
+
                             </div>
 
-                            <div class="form-group col-md-6 required" style="margin: auto;margin-top:10px;">
-                                <label class="control-label">Tax ( Expressed as %)</label>
-                                <input type="text" name="taxExp" class="form-control input-sm"  ng-pattern="/^([0-9]{3})+(\.[0-9]{1,2})?$/" onkeypress="return isNumeric(event)" ng-model="organizationLevelInformation.serviceTax.value" value="{{organizationLevelInformation.serviceTax.value}}" ng-required="true"/>
-                                    <span hidden="true"
-                                          style="color: darkred;font-size: 10px">Please check if it is empty </span>
-                                <span style="color: darkred;font-size: 10px" ng-show="!myForm.taxExp.$valid">Please enter correct format xxx.xx</span>
-                            </div>
                         </div>
 
                         <div class="row">
                             <div class="form-group col-lg-12" >
-                                <button type="button" class="btn btn-default" style="float:right;" ng-disabled="(!organizationLevelInformation.modelFactorItems[0].value || !organizationLevelInformation.modelFactorItems[1].value || !organizationLevelInformation.modelFactorItems[2].value || !organizationLevelInformation.serviceTax.value || !organizationLevelInformation.discountFactorItems[0].value || !organizationLevelInformation.discountFactorItems[1].value || !organizationLevelInformation.discountFactorItems[2].value)"   data-placement="top-right" data-container="notification" data-duration="5" bs-alert="alert"   ng-click="submitOrganizationLevelInfo()">Save</button>
-                                <a class="btn btn-default"  style="float:left;" th:href="@{/core/organizationinformation/openview}" >Cancel</a>
+                                <button type="button" class="btn btn-default" style="float:right;" ng-disabled="(!forms.form1.$valid)"   data-placement="top-right" data-container="notification1" data-duration="10" bs-alert="alert"   ng-click="submitOrganizationLevelInfo()">Save</button>
+                                <a class="btn btn-default"  style="float:left;" ng-click="reloadPage()" >Cancel</a>
                             </div>
                         </div>
                     </form>
@@ -113,64 +95,46 @@
                     </div>
                 </div>
                 <div class="panel-body ng-cloak">
-                    <form  name="myForm" novalidate="true" class="css-form">
+                    <notification ></notification>
+                    <form  novalidate="true" role="form" name="forms.form1">
                         <div class="row">
-                            <notification ></notification>
                             <div class="" style="margin: auto;margin-top:10px;">
                                 <label class="control-label" style="padding-left:10px;">Modal Factors - to be applied in case Premiums are mentioned on a per year basis.</label>
                             </div>
+                            <div class="form-group col-md-4 required" ng-repeat="modelFactorItems in organizationInformation.modelFactorItems">
+                                <label class="control-label" ng-bind="getFieldName(modelFactorItems.modalFactorItem)"></label>
+                                <p class="input-group" >
+                                    <input type="number" class="form-control input-sm" min="1" onkeypress="return isNumeric(event)" ng-model="modelFactorItems.value" value="{{modelFactorItems.value}}" ng-required="true"/>
+                                </p>
 
-                            <div class="form-group col-md-6 required" style="margin: auto;margin-top:10px;">
-                                <label class="control-label">Semi-Annual Modal Factor</label>
-                                <input type="number" name="semiAnnual"  class="form-control input-sm"   onkeypress="return isNumeric(event)"  ng-model="createOrganizationLevelInformation.modelFactorItems.SEMI_ANNUAL" ng-required="true"/>
-                                <span hidden="true"  style="color: darkred;font-size: 10px">Please check if it is empty </span>
                             </div>
-                            <div class="form-group col-md-6 required" style="margin: auto;margin-top:10px;">
-                                <label class="control-label">Quarterly Modal Factor</label>
-                                <input type="number" name="quarterlyModal"  class="form-control input-sm"  onkeypress="return isNumeric(event)" ng-model="createOrganizationLevelInformation.modelFactorItems.QUARTERLY"  ng-required="true" />
-                                <span hidden="true"
-                                      style="color: darkred;font-size: 10px">Please check if it is empty </span>
-                            </div>
-                            <div class="form-group col-md-6 required" style="margin: auto;margin-top:10px;">
-                                <label class="control-label">Monthly Modal Factor</label>
-                                <input type="number" name="monthlyModal" class="form-control input-sm" onkeypress="return isNumeric(event)" ng-model="createOrganizationLevelInformation.modelFactorItems.MONTHLY"  ng-required="true"/>
-                                <span hidden="true"  style="color: darkred;font-size: 10px">Please check if it is empty </span>
-                            </div>
+
                         </div>
 
                         <div class="row" >
                             <div class="" style="margin: auto;margin-top:10px;">
                                 <label class="control-label"  style="padding-left:10px;">Discount Factors - to be applied in case Premiums are mentioned on a per month basis.</label>
                             </div>
-                            <div class="form-group col-md-6 required" style="margin: auto;margin-top:10px;">
-                                <label class="control-label">Annual Discount Factor</label>
-                                <input type="number" name="annualDiscount"  class="form-control input-sm"  onkeypress="return isNumeric(event)" ng-model="createOrganizationLevelInformation.discountFactorItems.ANNUAL"   ng-required="true"/>
-                                <span hidden="true"  style="color: darkred;font-size: 10px">Please check if it is empty </span>
+                            <div class="form-group col-md-4 required" ng-repeat="discountFactorItems in organizationInformation.discountFactorItems">
+                                <label class="control-label" ng-bind="getFieldName(discountFactorItems.discountFactorItem)" ></label>
+                                <p class="input-group" >
+                                    <input type="number" class="form-control input-sm" min="1" onkeypress="return isNumeric(event)" ng-model="discountFactorItems.value" value="{{discountFactorItems.value}}" ng-required="true"/>
+                                </p>
+
                             </div>
-                            <div class="form-group col-md-6 required" style="margin: auto;margin-top:10px;">
-                                <label class="control-label">Semi-Annual Discount Factor</label>
-                                <input type="number" name="semiAnnualDiscount"  class="form-control input-sm"  onkeypress="return isNumeric(event)" ng-model="createOrganizationLevelInformation.discountFactorItems.SEMI_ANNUAL"  ng-required="true"/>
-                                <span hidden="true"
-                                      style="color: darkred;font-size: 10px">Please check if it is empty </span>
-                            </div>
-                            <div class="form-group col-md-6 required" style="margin: auto;margin-top:10px;">
-                                <label class="control-label">Quarterly Discount Factor</label>
-                                <input type="number" name="quarterlyDiscount"   class="form-control input-sm"  onkeypress="return isNumeric(event)" ng-model="createOrganizationLevelInformation.discountFactorItems.QUARTERLY"  ng-required="true"/>
-                                <span hidden="true"  style="color: darkred;font-size: 10px">Please check if it is empty </span>
+                            <div class="form-group col-md-4 required" >
+                                <label class="control-label" ng-bind="getFieldName(organizationInformation.serviceTax.tax)"></label>
+                                <p class="input-group" >
+                                    <input type="number" class="form-control input-sm" min="1" onkeypress="return isNumeric(event)" ng-model="organizationInformation.serviceTax.value" value="{{organizationInformation.serviceTax.value}}" ng-required="true"/>
+                                </p>
+
                             </div>
 
-                            <div class="form-group col-md-6 required" style="margin: auto;margin-top:10px;">
-                                <label class="control-label">Tax ( Expressed as %)</label>
-                                <input type="number" name="taxExp" class="form-control input-sm"  ng-pattern="/^([0-9]{3})+(\.[0-9]{1,2})?$/" onkeypress="return isNumeric(event)" ng-model="createOrganizationLevelInformation.serviceTax.SERVICE_TAX" ng-required="true"/>
-                                    <span hidden="true"
-                                          style="color: darkred;font-size: 10px">Please check if it is empty </span>
-                                <span style="color: darkred;font-size: 10px" ng-show="!myForm.taxExp.$valid">Please enter correct format xxx.xx</span>
-                            </div>
                         </div>
                         <div class="row">
                             <div class="form-group col-lg-12" >
-                                <button type="button" class="btn btn-default" style="float:right;" ng-disabled="(!createOrganizationLevelInformation.modelFactorItems.SEMI_ANNUAL || !createOrganizationLevelInformation.modelFactorItems.QUARTERLY || !createOrganizationLevelInformation.modelFactorItems.MONTHLY || !createOrganizationLevelInformation.discountFactorItems.ANNUAL || !createOrganizationLevelInformation.discountFactorItems.SEMI_ANNUAL || !createOrganizationLevelInformation.discountFactorItems.QUARTERLY || !createOrganizationLevelInformation.serviceTax.SERVICE_TAX)"   data-placement="top-right" data-container="notification" data-duration="5" bs-alert="alert"   ng-click="createOrganizationLevelInfo()">Save</button>
-                                <a class="btn btn-default"  style="float:left;" th:href="@{/core/organizationinformation/openview}" >Cancel</a>
+                                <button type="button" class="btn btn-default" style="float:right;" ng-disabled="(!forms.form1.$valid)"   data-placement="top-right" data-container="notification" data-duration="5" bs-alert="alert"   ng-click="createOrganizationLevelInfo()">Save</button>
+                                <a class="btn btn-default"  style="float:left;" ng-click="reloadPage()" >Cancel</a>
                             </div>
                         </div>
                     </form>
