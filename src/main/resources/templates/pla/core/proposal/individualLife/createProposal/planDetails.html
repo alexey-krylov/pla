@@ -1,0 +1,77 @@
+<ng-form name="step3">
+    <accordion>
+        <accordion-group is-open="accordionStatus.planDetails.plan">
+            <accordion-heading>
+                Plan Details <i class="pull-right glyphicon"
+                                ng-class="{'glyphicon-chevron-down': accordionStatus.planDetails.plan, 'glyphicon-chevron-right': !accordionStatus.planDetails.plan}"></i>
+            </accordion-heading>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label class="control-label">Plan</label>
+                    <input type="text" class="form-control input-sm" name="plan"/>
+                </div>
+                <div class="form-group">
+                    <label class="control-label">Policy Term</label>
+                    <input type="text" class="form-control input-sm" name="policyTerm"/>
+                </div>
+                <div class="form-group">
+                    <label class="control-label">Riders Applied For</label>
+                    <input type="text" class="form-control input-sm" name="ridersAppliedFor"/>
+                </div>
+                <table class="table table-bordered">
+                    <thead>
+                    <tr>
+                        <th>
+                            Optional Cover Name
+                        </th>
+                        <th>
+                            Sum Assured
+                        </th>
+                        <th>
+                            Term
+                        </th>
+                    </tr>
+                    </thead>
+                </table>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label class="control-label">Sum Assured</label>
+                    <input type="text" class="form-control input-sm" name="sumAssured"/>
+                </div>
+                <div class="form-group">
+                    <label class="control-label">Premium Payment Term</label>
+                    <input type="text" class="form-control input-sm" name="plan"/>
+                </div>
+            </div>
+        </accordion-group>
+
+
+        <accordion-group is-open="accordionStatus.planDetails.beneficiary">
+            <accordion-heading>
+                Beneficiary Details <i class="pull-right glyphicon"
+                                       ng-class="{'glyphicon-chevron-down': accordionStatus.planDetails.beneficiary, 'glyphicon-chevron-right': !accordionStatus.planDetails.beneficiary}"></i>
+            </accordion-heading>
+            <div class="row" style="margin: 0px">
+                <div class="col-md-12">
+                    <button type="button" class="btn btn-default btn-xs pull-right" ng-click="openBeneficiaryModal()" style="margin-bottom: 5px"><strong>Add Beneficiary</strong></button>
+                    <table class="table table-bordered">
+                        <thead>
+                        <tr>
+                            <th>
+                                Beneficiary Name
+                            </th>
+                            <th>
+                                Relationship To Proposed Assured
+                            </th>
+                            <th>
+                                Share %
+                            </th>
+                        </tr>
+                        </thead>
+                    </table>
+                </div>
+            </div>
+        </accordion-group>
+    </accordion>
+</ng-form>

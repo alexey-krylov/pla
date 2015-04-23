@@ -1,0 +1,356 @@
+<ng-form name="step7">
+    <accordion close-others="true">
+        <accordion-group is-open="accordionStatus.familyHabitAndBuild.tab1">
+            <accordion-heading>
+                Family History
+                <i class="pull-right glyphicon"
+                   ng-class="{'glyphicon-chevron-down': accordionStatus.familyHabitAndBuild.tab1, 'glyphicon-chevron-right': !accordionStatus.familyHabitAndBuild.tab1}"></i>
+            </accordion-heading>
+            <div class="row">
+                <div class="col-md-12">
+                    <table class="table table-bordered">
+                        <thead>
+                        <tr>
+                            <th>
+                                Family Member
+                            </th>
+                            <th>
+                                Status
+                            </th>
+                            <th>
+                                State of health, give particulars
+                            </th>
+                            <th>
+                                Age of death
+                            </th>
+                            <th>
+                                Cause of Death
+                            </th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td>Father</td>
+                            <td>
+                                <label class="radio-inline">
+                                    <input type="radio" name="fatherStatus"  value="ALIVE" /> Alive
+                                </label>
+                                <label class="radio-inline">
+                                    <input type="radio" name="fatherStatus"  value="DEAD"/> Dead
+                                </label>
+                            </td>
+                            <td>
+                                <input type="text" class="form-control input-sm"/>
+                            </td>
+                            <td>
+                                <input type="text" class="form-control input-sm"/>
+                            </td>
+                            <td>
+                                <input type="text" class="form-control input-sm"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Mother</td>
+                            <td>
+                                <label class="radio-inline">
+                                    <input type="radio" name="motherStatus"  value="ALIVE" /> Alive
+                                </label>
+                                <label class="radio-inline">
+                                    <input type="radio" name="motherStatus"  value="DEAD"/> Dead
+                                </label>
+                            </td>
+                            <td>
+                                <input type="text" class="form-control input-sm"/>
+                            </td>
+                            <td>
+                                <input type="text" class="form-control input-sm"/>
+                            </td>
+                            <td>
+                                <input type="text" class="form-control input-sm"/>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <table class="table table-bordered">
+                        <thead>
+                        <tr>
+                            <th>
+                                Family Member
+                            </th>
+                            <th>
+                                Number Of Siblings Alive
+                            </th>
+                            <th>
+                                Number Of Siblings Dead
+                            </th>
+                            <th>
+                                State of health,give particulars
+                            </th>
+                            <th>
+                                Age at death
+                            </th>
+                            <th>
+                                Cause Of Death
+                            </th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td>Brothers</td>
+                            <td><input type="text" class="form-control input-sm"/></td>
+                            <td><input type="text" class="form-control input-sm"/></td>
+                            <td><input type="text" class="form-control input-sm"/></td>
+                            <td><input type="text" class="form-control input-sm"/></td>
+                            <td><input type="text" class="form-control input-sm"/></td>
+                        </tr>
+                        <tr>
+                            <td>Sisters</td>
+                            <td><input type="text" class="form-control input-sm"/></td>
+                            <td><input type="text" class="form-control input-sm"/></td>
+                            <td><input type="text" class="form-control input-sm"/></td>
+                            <td><input type="text" class="form-control input-sm"/></td>
+                            <td><input type="text" class="form-control input-sm"/></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-10">
+                    If not already stated, is any close blood relative suffering from (or has any one had) diabetes, heart disease, high blood pressure, mental illness etc.
+                </div>
+                <div class="col-md-2">
+                    <select class="form-control input-sm">
+                        <option value="">--Select One--</option>
+                        <option value="YES">Yes</option>
+                        <option value="NO">No</option>
+                    </select>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-10">
+                    <textarea class="form-control" placeholder="Please give full details"></textarea>
+                </div>
+            </div>
+        </accordion-group>
+
+        <accordion-group is-open="accordionStatus.familyHabitAndBuild.tab2">
+            <accordion-heading>
+                Habits
+                <i class="pull-right glyphicon"
+                   ng-class="{'glyphicon-chevron-down': accordionStatus.familyHabitAndBuild.tab2, 'glyphicon-chevron-right': !accordionStatus.familyHabitAndBuild.tab2}"></i>
+            </accordion-heading>
+            <div class="row">
+                <div class="col-md-6">
+                    What kind and quantity of alcohol liquor do you consume per week?
+                </div>
+                <div class="col-md-6">
+                    <table class="table table-bordered">
+                        <thead>
+                        <tr>
+                            <th>Wine</th>
+                            <th>Beer</th>
+                            <th>Spirits</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td>
+                                <input type="text" class="form-control input-sm"/>
+                            </td>
+                            <td>
+                                <input type="text" class="form-control input-sm"/>
+                            </td>
+                            <td>
+                                <input type="text" class="form-control input-sm"/>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-10">
+                    How much, and what do you smoke per day?
+                </div>
+                <div class="col-md-2">
+                    <input type="text" class="form-control input-sm"/>
+                </div>
+            </div>
+            <div class="row" style="margin: 0">
+                <accordion close-others="true">
+                    <div class="row" style="margin-top: 5px">
+                        <div class="col-md-10">
+                            <accordion-group is-open="accordionStatus.familyHabitAndBuild.tab2_1">
+                                <accordion-heading>
+                                    <strong style="font-size: 11px">Have you ever received personal medical advise to reduce or discontinue your liquor tobacco consumption?</strong>
+                                    <i class="pull-right glyphicon"
+                                       ng-class="{'glyphicon-chevron-down': accordionStatus.familyHabitAndBuild.tab2_1, 'glyphicon-chevron-right': !accordionStatus.familyHabitAndBuild.tab2_1}"></i>
+                                </accordion-heading>
+                                <div class="col-md-12">
+                                    <textarea class="form-control" placeholder="Please give full details  e.g. name and address of attending doctor, diagnosis etc"></textarea>
+                                </div>
+                            </accordion-group>
+                        </div>
+                        <div class="col-md-2">
+                            <select class="form-control input-sm">
+                                <option value="">--Select One--</option>
+                                <option value="YES">Yes</option>
+                                <option value="NO">No</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="row" style="margin-top: 5px">
+                        <div class="col-md-10">
+                            <accordion-group is-open="accordionStatus.familyHabitAndBuild.tab2_2">
+                                <accordion-heading>
+                                    <strong style="font-size: 11px">Have you ever, in the past, used quantities of liquor or tobacco greater than the amounts indicated above?</strong>
+                                    <i class="pull-right glyphicon"
+                                       ng-class="{'glyphicon-chevron-down': accordionStatus.familyHabitAndBuild.tab2_2, 'glyphicon-chevron-right': !accordionStatus.familyHabitAndBuild.tab2_2}"></i>
+                                </accordion-heading>
+                                <div class="col-md-12">
+                                    <textarea class="form-control" placeholder="Please give full details  "></textarea>
+                                </div>
+                            </accordion-group>
+                        </div>
+                        <div class="col-md-2">
+                            <select class="form-control input-sm">
+                                <option value="">--Select One--</option>
+                                <option value="YES">Yes</option>
+                                <option value="NO">No</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="row" style="margin-top: 5px">
+                        <div class="col-md-10">
+                            <accordion-group is-open="accordionStatus.familyHabitAndBuild.tab2_3">
+                                <accordion-heading>
+                                    <strong style="font-size: 11px">Have you ever taken drugs, medicine or tranquilisers prescribed by a medical practitioner for more than two weeks.</strong>
+                                    <i class="pull-right glyphicon"
+                                       ng-class="{'glyphicon-chevron-down': accordionStatus.familyHabitAndBuild.tab2_3, 'glyphicon-chevron-right': !accordionStatus.familyHabitAndBuild.tab2_3}"></i>
+                                </accordion-heading>
+                                <div class="col-md-12">
+                                    <textarea class="form-control" placeholder="Please give full details  "></textarea>
+                                </div>
+                            </accordion-group>
+                        </div>
+                        <div class="col-md-2">
+                            <select class="form-control input-sm">
+                                <option value="">--Select One--</option>
+                                <option value="YES">Yes</option>
+                                <option value="NO">No</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="row" style="margin-top: 5px">
+                        <div class="col-md-10">
+                            <accordion-group is-open="accordionStatus.familyHabitAndBuild.tab2_4">
+                                <accordion-heading>
+                                    <strong style="font-size: 11px">Have you ever taken drugs for non medicinal purpose?</strong>
+                                    <i class="pull-right glyphicon"
+                                       ng-class="{'glyphicon-chevron-down': accordionStatus.familyHabitAndBuild.tab2_4, 'glyphicon-chevron-right': !accordionStatus.familyHabitAndBuild.tab2_4}"></i>
+                                </accordion-heading>
+                                <div class="col-md-12">
+                                    <textarea class="form-control" placeholder="Please give full details  "></textarea>
+                                </div>
+                            </accordion-group>
+                        </div>
+                        <div class="col-md-2">
+                            <select class="form-control input-sm">
+                                <option value="">--Select One--</option>
+                                <option value="YES">Yes</option>
+                                <option value="NO">No</option>
+                            </select>
+                        </div>
+                    </div>
+                </accordion>
+            </div>
+        </accordion-group>
+
+        <accordion-group is-open="accordionStatus.familyHabitAndBuild.tab3">
+            <accordion-heading>
+                Build
+                <i class="pull-right glyphicon"
+                   ng-class="{'glyphicon-chevron-down': accordionStatus.familyHabitAndBuild.tab3, 'glyphicon-chevron-right': !accordionStatus.familyHabitAndBuild.tab3}"></i>
+            </accordion-heading>
+            <div class="row">
+                <div class="col-md-6">
+                    <table class="table table-bordered">
+                        <thead>
+                        <tr>
+                            <th>Height</th>
+                            <th>Height Type</th>
+                            <th>Weight</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td><input type="text" class="form-control input-sm"/></td>
+                            <td><input type="text" class="form-control input-sm"/></td>
+                            <td><input type="text" class="form-control input-sm"/></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <accordion close-others="true">
+                <div class="row" style="margin-top: 5px">
+                    <div class="col-md-10">
+                        <accordion-group is-open="accordionStatus.familyHabitAndBuild.tab3_1">
+                            <accordion-heading>
+                                <strong style="font-size: 11px">Has your weight altered by more than 5Kgs during the past year?</strong>
+                                <i class="pull-right glyphicon"
+                                   ng-class="{'glyphicon-chevron-down': accordionStatus.familyHabitAndBuild.tab3_1, 'glyphicon-chevron-right': !accordionStatus.familyHabitAndBuild.tab3_1}"></i>
+                            </accordion-heading>
+                            <div class="col-md-12">
+                                <textarea class="form-control" placeholder="state whether increase or decrease, by how much, reason and for long present weight has remained constant."></textarea>
+                            </div>
+                        </accordion-group>
+                    </div>
+                    <div class="col-md-2">
+                        <select class="form-control input-sm">
+                            <option value="">--Select One--</option>
+                            <option value="YES">Yes</option>
+                            <option value="NO">No</option>
+                        </select>
+                    </div>
+                </div>
+            </accordion>
+        </accordion-group>
+    </accordion>
+    <strong>For Female Applicants</strong>
+    <div class="row bs-callout  bs-callout-info" style="margin: 5px;padding:10px">
+        <div class="col-md-2">
+            Are you now pregnant?
+        </div>
+        <div class="col-md-2">
+            <select class="form-control input-sm">
+                <option value="">--Select One--</option>
+                <option value="YES">Yes</option>
+                <option value="NO">No</option>
+            </select>
+        </div>
+        <div class="col-md-2 col-md-offset-6">
+            <div class="form-group">
+                <label class="control-label">If <strong>Yes</strong> how many months?</label>
+                <input type="text" class="form-control input-sm"/>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-6">
+            <button type="button" class="btn btn-default btn-sm">Cancel</button>
+        </div>
+        <div class="col-sm-6">
+            <button type="button" class="btn btn-default btn-sm" style="float: right">Save</button>
+        </div>
+    </div>
+</ng-form>
