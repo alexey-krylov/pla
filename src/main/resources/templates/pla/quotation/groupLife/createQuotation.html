@@ -272,13 +272,13 @@
                                 <div class="col-lg-6">
                                     <div class="form-group">
                                         <label >Policy Term Value (Days)</label>
-                                        <input class="form-control input-sm"  ng-required="true"/>
+                                        <input class="form-control input-sm"  ng-required="true" ng-model="quotationDetails.premium.policyTermValue"/>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div class="col-lg-3">
+                    <div class="col-lg-3" ng-hide="isPolicyTermNot365">
                         <div class="form-group">
                             <label >Annual Payment</label>
                             <input class="form-control input-sm"  ng-required="true"/>
@@ -294,6 +294,13 @@
                         <div class="form-group">
                             <label >Monthly Payment</label>
                             <input class="form-control input-sm"  ng-required="true"/>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-3" ng-hide="!isPolicyTermNot365" style="margin-top: 205px">
+                        <div class="form-group">
+                            <label >Number Of Installments</label>
+                            <select class="form-control" ng-model="quotationDetails.premium.numberOfInstallments" ng-options="numberOfInstallments for numberOfInstallments in numberOfInstallmentsDropDown"></select>
                         </div>
                     </div>
 
