@@ -49,6 +49,16 @@ public class ProductLineInformationController {
         return generalInformationService.getProductLineProcessItems();
     }
 
+    @RequestMapping(value = "/openview", method = RequestMethod.GET)
+    public String openView()
+    {
+        return "pla/core/generalInformation/productLineInformation/selectProductLineOptionForView";
+    }
+
+    @RequestMapping(value = "/openupdate", method = RequestMethod.GET)
+    public String openUpdate() {
+        return "pla/core/generalInformation/productLineInformation/selectProductLineOptionForUpdate";
+    }
 
     @RequestMapping(value = "/create", method = RequestMethod.POST)
     @ResponseBody
