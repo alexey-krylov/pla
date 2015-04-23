@@ -90,7 +90,7 @@ public class GLQuotationService {
             Proposer proposerMap = map.get("proposer") != null ? (Proposer) map.get("proposer") : null;
             String proposerName = proposerMap != null ? proposerMap.getProposerName() : "";
             String parentQuotationId = parentQuotationIdMap != null ? parentQuotationIdMap.get("parentQuotationId") != null ? (String) parentQuotationIdMap.get("parentQuotationId") : "" : "";
-            GlQuotationDto glQuotationDto = new GlQuotationDto(new QuotationId(quotationId), (Integer) map.get("versionNumber"), null, null, null, new QuotationId(parentQuotationId), quotationStatus, quotationNumber, proposerName);
+            GlQuotationDto glQuotationDto = new GlQuotationDto(new QuotationId(quotationId), (Integer) map.get("versionNumber"), null, null, null, new QuotationId(parentQuotationId), quotationStatus, quotationNumber, proposerName,null);
             return glQuotationDto;
         }
     }
