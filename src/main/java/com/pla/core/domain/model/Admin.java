@@ -13,7 +13,6 @@ import com.pla.core.domain.model.generalinformation.OrganizationGeneralInformati
 import com.pla.core.domain.model.generalinformation.ProductLineGeneralInformation;
 import com.pla.core.domain.model.plan.commission.Commission;
 import com.pla.core.domain.model.plan.commission.CommissionTerm;
-import com.pla.core.dto.GeneralInformationDto;
 import com.pla.core.dto.PolicyProcessMinimumLimitItemDto;
 import com.pla.sharedkernel.domain.model.*;
 import com.pla.sharedkernel.identifier.*;
@@ -130,10 +129,10 @@ public class Admin {
         return organizationGeneralInformation;
     }
 
-    public OrganizationGeneralInformation updateOrganizationInformation(OrganizationGeneralInformation organizationGeneralInformation,GeneralInformationDto generalInformationDto){
-        organizationGeneralInformation.withDiscountFactorOrganizationInformation(generalInformationDto.getDiscountFactorItems());
-        organizationGeneralInformation.withModalFactorOrganizationInformation(generalInformationDto.getModelFactorItems());
-        organizationGeneralInformation.withServiceTaxOrganizationInformation(generalInformationDto.getServiceTax());
+    public OrganizationGeneralInformation updateOrganizationInformation(OrganizationGeneralInformation organizationGeneralInformation, List<Map<ModalFactorItem, BigDecimal>>  modalFactorItem ,List<Map<DiscountFactorItem, BigDecimal>>  discountFactorItem,Map<Tax,BigDecimal> serviceTax){
+        organizationGeneralInformation.withDiscountFactorOrganizationInformation(discountFactorItem);
+        organizationGeneralInformation.withModalFactorOrganizationInformation(modalFactorItem);
+        organizationGeneralInformation.withServiceTaxOrganizationInformation(serviceTax);
         return organizationGeneralInformation;
     }
 

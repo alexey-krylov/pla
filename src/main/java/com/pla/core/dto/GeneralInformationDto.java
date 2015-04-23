@@ -1,14 +1,11 @@
 package com.pla.core.dto;
 
-import com.pla.sharedkernel.domain.model.*;
 import com.pla.sharedkernel.identifier.LineOfBusinessId;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
-import java.math.BigDecimal;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Created by Admin on 4/1/2015.
@@ -31,9 +28,9 @@ public class GeneralInformationDto {
     private List<ProductLineProcessItemDto> maturityProcessItems;
 
     private String organizationInformationId;
-    private List<Map<DiscountFactorItem,BigDecimal>> discountFactorItems;
-    private List<Map<ModalFactorItem,BigDecimal>> modelFactorItems;
-    private Map<Tax, BigDecimal> serviceTax;
+    private List<DiscountFactorInformationDto> discountFactorItems;
+    private List<ModalFactorInformationDto> modelFactorItems;
+    private ServiceTaxDto serviceTax;
 
     public GeneralInformationDto() {
     }

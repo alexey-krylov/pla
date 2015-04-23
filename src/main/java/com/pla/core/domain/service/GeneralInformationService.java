@@ -98,12 +98,15 @@ public class GeneralInformationService {
             productLineProcessList.add(policyProcessMinimumLimitItemDto);
         }
         return productLineProcessList;
-
     }
 
 
-    public boolean createOrganizationInformation(List<Map<ModalFactorItem, BigDecimal>> modelFactorItems, List<Map<DiscountFactorItem, BigDecimal>> discountFactorItems, Map<Tax, BigDecimal> serviceTax, UserDetails userDetails) {
+    public boolean createOrganizationInformation(GeneralInformationDto generalInformationDto, UserDetails userDetails) {
         Admin admin = adminRoleAdapter.userToAdmin(userDetails);
+        List<Map<ModalFactorItem, BigDecimal>> modelFactorItems =  transformModalFactorItem(generalInformationDto.getModelFactorItems());
+        List<Map<DiscountFactorItem, BigDecimal>> discountFactorItems =  transformDiscountFactorItem(generalInformationDto.getDiscountFactorItems());
+        Map<Tax,BigDecimal> serviceTax = Maps.newLinkedHashMap();
+        serviceTax.put(generalInformationDto.getServiceTax().getTax(),generalInformationDto.getServiceTax().getValue());
         OrganizationGeneralInformation organizationGeneralInformation = admin.createOrganizationGeneralInformation(modelFactorItems, discountFactorItems, serviceTax);
         springMongoTemplate.save(organizationGeneralInformation);
         return AppConstants.SUCCESS;
@@ -116,7 +119,11 @@ public class GeneralInformationService {
         findGeneralInformation.addCriteria(Criteria.where("organizationInformationId").is(generalInformationDto.getOrganizationInformationId()));
         OrganizationGeneralInformation organizationGeneralInformation = springMongoTemplate.findOne(findGeneralInformation, OrganizationGeneralInformation.class);
         checkArgument(organizationGeneralInformation != null);
-        organizationGeneralInformation = admin.updateOrganizationInformation(organizationGeneralInformation, generalInformationDto);
+        List<Map<ModalFactorItem, BigDecimal>>  modalFactorItem =  transformModalFactorItem(generalInformationDto.getModelFactorItems());
+        List<Map<DiscountFactorItem, BigDecimal>>  discountFactorItem =  transformDiscountFactorItem(generalInformationDto.getDiscountFactorItems());
+        Map<Tax,BigDecimal> serviceTax = Maps.newLinkedHashMap();
+        serviceTax.put(generalInformationDto.getServiceTax().getTax(),generalInformationDto.getServiceTax().getValue());
+        organizationGeneralInformation = admin.updateOrganizationInformation(organizationGeneralInformation,modalFactorItem,discountFactorItem ,serviceTax);
         update.set("modelFactorItems", organizationGeneralInformation.getModelFactorItems());
         update.set("discountFactorItems", organizationGeneralInformation.getDiscountFactorItems());
         update.set("serviceTax", organizationGeneralInformation.getServiceTax());
@@ -137,7 +144,7 @@ public class GeneralInformationService {
         List<Map<ProductLineProcessType,Integer>> claimProcessItem = transformProductLine(generalInformationDto.getClaimProcessItems());
         List<Map<ProductLineProcessType,Integer>> reinstatementProcessItem =transformProductLine(generalInformationDto.getReinstatementProcessItems());
         List<Map<ProductLineProcessType,Integer>> maturityProcessItem = transformProductLine(generalInformationDto.getMaturityProcessItems());
-        List<Map<ProductLineProcessType,Integer>> surrenderProcessItem =   transformProductLine(generalInformationDto.getSurrenderProcessItems());
+        List<Map<ProductLineProcessType,Integer>> surrenderProcessItem = transformProductLine(generalInformationDto.getSurrenderProcessItems());
         List<Map<PolicyFeeProcessType,Integer>> policyFeeProcess  = transformProductLineFeeProcess(generalInformationDto.getPolicyFeeProcessItems());
         List<PolicyProcessMinimumLimitItemDto>  minimumLimitProcess =  transformProductLineMinimumLimitProcess(generalInformationDto.getPolicyProcessMinimumLimitItems());
         productLineGeneralInformation = admin.updateProductLineInformation(productLineGeneralInformation,  quotationProcessItem,enrollmentProcessItem,reinstatementProcessItem,endorsementProcessItem,claimProcessItem,policyFeeProcess,minimumLimitProcess,surrenderProcessItem,maturityProcessItem);
@@ -158,6 +165,27 @@ public class GeneralInformationService {
         update.set("maturityProcessInformation", updatedProductLineInformation.getMaturityProcessInformation());
         return update;
     }
+
+    private List<Map<ModalFactorItem, BigDecimal>> transformModalFactorItem(List<ModalFactorInformationDto> modalFactorInformationDtos){
+        List<Map<ModalFactorItem, BigDecimal>> modalFactorItems = Lists.newArrayList();
+        for (ModalFactorInformationDto modalFactorInformationDto : modalFactorInformationDtos){
+            Map<ModalFactorItem, BigDecimal> modalFactorItemMap = Maps.newLinkedHashMap();
+            modalFactorItemMap.put(modalFactorInformationDto.getModalFactorItem(),modalFactorInformationDto.getValue());
+            modalFactorItems.add(modalFactorItemMap);
+        }
+        return modalFactorItems;
+    }
+
+    private List<Map<DiscountFactorItem, BigDecimal>> transformDiscountFactorItem(List<DiscountFactorInformationDto> modalFactorInformationDtos){
+        List<Map<DiscountFactorItem, BigDecimal>> discountFactorItems = Lists.newArrayList();
+        for (DiscountFactorInformationDto discountFactorInformationDto : modalFactorInformationDtos){
+            Map<DiscountFactorItem, BigDecimal> discountFactorItemMap = Maps.newLinkedHashMap();
+            discountFactorItemMap.put(discountFactorInformationDto.getDiscountFactorItem(),discountFactorInformationDto.getValue());
+            discountFactorItems.add(discountFactorItemMap);
+        }
+        return discountFactorItems;
+    }
+
 
     public List<GeneralInformationProcessDto> getOrganizationProcessItems(){
         List<GeneralInformationProcessDto> organizationProcessList = Lists.newArrayList();
@@ -331,10 +359,7 @@ public class GeneralInformationService {
 
     private List populateOrganizationGeneralInformationData(){
         List list = Lists.newArrayList();
-        Map organizationInformationMap = Maps.newLinkedHashMap();
         GeneralInformationDto generalInformationDto = getOrganizationGeneralInformation();
-        organizationInformationMap.put("productLine",generalInformationDto.getProductLine());
-        organizationInformationMap.put("organizationInformationId",generalInformationDto.getOrganizationInformationId());
         list.add(generalInformationDto);
         return list;
     }
@@ -357,7 +382,10 @@ public class GeneralInformationService {
         GeneralInformationDto generalInformationDto = new GeneralInformationDto();
         generalInformationDto.setModelFactorItems(populateModalFactorDiscount());
         generalInformationDto.setDiscountFactorItems(populateDiscountFactorDiscount());
-        generalInformationDto.setServiceTax(populateServiceTax());
+        ServiceTaxDto serviceTaxDto = new ServiceTaxDto();
+        serviceTaxDto.setValue(BigDecimal.ZERO);
+        serviceTaxDto.setTax(Tax.SERVICE_TAX);
+        generalInformationDto.setServiceTax(serviceTaxDto);
         return generalInformationDto;
     }
 
@@ -414,31 +442,35 @@ public class GeneralInformationService {
         return productLineProcessList;
     }
 
-    private List<Map<DiscountFactorItem, BigDecimal>> populateDiscountFactorDiscount(){
-        List<Map<DiscountFactorItem,BigDecimal>>  discountFactorList = Lists.newArrayList();
-        Map<DiscountFactorItem,BigDecimal> discountFactorItems = Maps.newLinkedHashMap();
-        discountFactorItems.put(DiscountFactorItem.ANNUAL, null);
-        discountFactorList.add(discountFactorItems);
-        discountFactorItems = Maps.newLinkedHashMap();
-        discountFactorItems.put(DiscountFactorItem.SEMI_ANNUAL, null);
-        discountFactorList.add(discountFactorItems);
-        discountFactorItems = Maps.newLinkedHashMap();
-        discountFactorItems.put(DiscountFactorItem.QUARTERLY, null);
-        discountFactorList.add(discountFactorItems);
+    private List<DiscountFactorInformationDto> populateDiscountFactorDiscount(){
+        List<DiscountFactorInformationDto>  discountFactorList = Lists.newArrayList();
+        DiscountFactorInformationDto discountFactorInformationDto = new DiscountFactorInformationDto();
+        discountFactorInformationDto.setDiscountFactorItem(DiscountFactorItem.ANNUAL);
+        discountFactorInformationDto.setValue(BigDecimal.ZERO);
+        discountFactorList.add(discountFactorInformationDto);
+        discountFactorInformationDto = new DiscountFactorInformationDto();
+        discountFactorInformationDto.setDiscountFactorItem(DiscountFactorItem.SEMI_ANNUAL);
+        discountFactorInformationDto.setValue(BigDecimal.ZERO);
+        discountFactorInformationDto = new DiscountFactorInformationDto();
+        discountFactorInformationDto.setDiscountFactorItem(DiscountFactorItem.QUARTERLY);
+        discountFactorInformationDto.setValue(BigDecimal.ZERO);
+        discountFactorList.add(discountFactorInformationDto);
         return discountFactorList;
     }
 
-    private List<Map<ModalFactorItem, BigDecimal>> populateModalFactorDiscount(){
-        List<Map<ModalFactorItem,BigDecimal>>  modalFactorList = Lists.newArrayList();
-        Map<ModalFactorItem,BigDecimal> modelFactorItems = Maps.newLinkedHashMap();
-        modelFactorItems.put(ModalFactorItem.SEMI_ANNUAL, null);
-        modalFactorList.add(modelFactorItems);
-        modelFactorItems = Maps.newLinkedHashMap();
-        modelFactorItems.put(ModalFactorItem.QUARTERLY, null);
-        modalFactorList.add(modelFactorItems);
-        modelFactorItems = Maps.newLinkedHashMap();
-        modelFactorItems.put(ModalFactorItem.MONTHLY, null);
-        modalFactorList.add(modelFactorItems);
+    private List<ModalFactorInformationDto> populateModalFactorDiscount(){
+        List<ModalFactorInformationDto>  modalFactorList = Lists.newArrayList();
+        ModalFactorInformationDto modalFactorInformationDto = new ModalFactorInformationDto();
+        modalFactorInformationDto.setModalFactorItem(ModalFactorItem.SEMI_ANNUAL);
+        modalFactorInformationDto.setValue(BigDecimal.ZERO);
+        modalFactorList.add(modalFactorInformationDto);
+        modalFactorInformationDto = new ModalFactorInformationDto();
+        modalFactorInformationDto.setModalFactorItem(ModalFactorItem.QUARTERLY);
+        modalFactorInformationDto.setValue(BigDecimal.ZERO);
+        modalFactorInformationDto = new ModalFactorInformationDto();
+        modalFactorInformationDto.setModalFactorItem(ModalFactorItem.MONTHLY);
+        modalFactorInformationDto.setValue(BigDecimal.ZERO);
+        modalFactorList.add(modalFactorInformationDto);
         return modalFactorList;
     }
 

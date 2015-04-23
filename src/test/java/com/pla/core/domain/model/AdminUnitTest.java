@@ -360,15 +360,13 @@ public class AdminUnitTest {
     *
     * Add the line of business id check for minimum limit process
     * */
-/*
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void givenLineOfBusinessIdAndGeneralInformation_whenLineOfBusinessIdIsIndividualInsurance_thenItThrowAnException(){
         List<Map<PolicyFeeProcessType,Integer>> policyFeeProcessItems = Lists.newArrayList();
         List<PolicyProcessMinimumLimitItemDto> policyProcessMinimumLimitItems = Lists.newArrayList();
         ProductLineGeneralInformation createdProductLineGeneralInformation = admin.createProductLineGeneralInformation(LineOfBusinessId.INDIVIDUAL_INSURANCE, listOfProcessItems,listOfProcessItems,listOfProcessItems,listOfProcessItems,listOfProcessItems,policyFeeProcessItems,policyProcessMinimumLimitItems,listOfProcessItems,listOfProcessItems);
-        assertNull(createdProductLineGeneralInformation);
+        assertNotNull(createdProductLineGeneralInformation);
     }
-*/
 
 
 
@@ -417,6 +415,19 @@ public class AdminUnitTest {
         assertNotNull(organizationGeneralInformation.getDiscountFactorItems());
         assertNotNull(organizationGeneralInformation.getModelFactorItems());
 
+    }
+
+    @Test
+    public void givenProductLineInformation_whenAllTheInformationAreFullFilled_thenItShouldUpdateTheProductLineInformation(){
+        List<PolicyProcessMinimumLimitItemDto> policyProcessMinimumLimitItems = Lists.newArrayList();
+        List<Map<PolicyFeeProcessType,Integer>> policyFeeProcessItems = Lists.newArrayList();
+        Map<PolicyFeeProcessType,Integer> feeProcessMap = Maps.newLinkedHashMap();
+        feeProcessMap.put(PolicyFeeProcessType.MONTHLY,12);
+        policyFeeProcessItems.add(feeProcessMap);
+        ProductLineGeneralInformation createdProductLineGeneralInformation = admin.createProductLineGeneralInformation(LineOfBusinessId.GROUP_HEALTH, listOfProcessItems, listOfProcessItems, listOfProcessItems, listOfProcessItems, listOfProcessItems, policyFeeProcessItems, policyProcessMinimumLimitItems, listOfProcessItems, listOfProcessItems);
+        ProductLineGeneralInformation updatedProductLineInformation = admin.updateProductLineInformation(createdProductLineGeneralInformation, listOfProcessItems, listOfProcessItems, listOfProcessItems, listOfProcessItems, listOfProcessItems, policyFeeProcessItems, policyProcessMinimumLimitItems, listOfProcessItems, listOfProcessItems);
+        assertNotNull(updatedProductLineInformation);
+        assertNotNull(updatedProductLineInformation.getPolicyFeeProcessInformation());
     }
 }
 

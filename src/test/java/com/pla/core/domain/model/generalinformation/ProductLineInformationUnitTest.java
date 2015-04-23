@@ -178,7 +178,7 @@ public class ProductLineInformationUnitTest {
     *
     * Add the check for line of business id
     * */
-    /*@Test(expected = IllegalArgumentException.class)
+    @Test
     public void givenPolicyProcessMinimumLimitInformation_whenLineOfBusinessIdIsOtherThenGroupHealthOrGroupInsurance_thenItShouldThrowAnException(){
 
         List<PolicyProcessMinimumLimitItemDto> policyProcessMinimumLimit =Lists.newArrayList();
@@ -197,8 +197,7 @@ public class ProductLineInformationUnitTest {
         ProductLineGeneralInformation productLineGeneralInformation = ProductLineGeneralInformation.createProductLineGeneralInformation(LineOfBusinessId.INDIVIDUAL_INSURANCE);
         productLineGeneralInformation = productLineGeneralInformation.withPolicyProcessMinimumLimit(policyProcessMinimumLimit);
 
-
-    }*/
+    }
 
 
     @Test
