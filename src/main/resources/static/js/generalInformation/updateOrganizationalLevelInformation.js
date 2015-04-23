@@ -45,7 +45,7 @@ App.controller('UpdateOrganizationalLevelController',['$scope','$http','$templat
                     $scope.alert = {title: 'Success Message! ', content: data.message, type: 'success'};
                     // $scope.reset();
                    // $window.location.reload();
-                   // $window.location.href="/pla/core/organizationinformation/openview";
+                    $window.location.href="/pla/core/organizationinformation/openview";
 
                 } else if (data.status == 500) {
                     $scope.alert = {title: 'Error Message! ', content: data.message, type: 'danger'};
