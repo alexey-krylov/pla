@@ -19,6 +19,8 @@ import com.pla.sharedkernel.identifier.PlanId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.BasicQuery;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -59,6 +61,11 @@ public class PlanFinder {
     public List<Plan> findAllPlanForThymeleaf() {
         List<Plan> allPlans = mongoTemplate.findAll(Plan.class, "PLAN");
         return allPlans;
+    }
+
+    public List<Plan> findPlanBy(List<PlanId> planIds) {
+        Criteria planCriteria = Criteria.where("planId").in(planIds);
+        return mongoTemplate.find(new Query(planCriteria), Plan.class);
     }
 
     public List<Map> findAllPlan() {

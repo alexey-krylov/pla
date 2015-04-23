@@ -22,6 +22,8 @@ public class PlanCoverageBuilder {
 
     Set<MaturityAmount> maturityAmounts = new HashSet<>();
     CoverageId coverageId;
+    String coverageCode;
+    String coverageName;
     CoverageType coverageType;
     CoverageCover coverageCover;
     BigDecimal deductibleAmount;
@@ -48,6 +50,16 @@ public class PlanCoverageBuilder {
 
     public PlanCoverageBuilder withCoverageCover(CoverageCover coverageCover) {
         this.coverageCover = coverageCover;
+        return this;
+    }
+
+    public PlanCoverageBuilder withCoverageCode(String coverageCode) {
+        this.coverageCode = coverageCode;
+        return this;
+    }
+
+    public PlanCoverageBuilder withCoverageName(String coverageName) {
+        this.coverageName = coverageName;
         return this;
     }
 

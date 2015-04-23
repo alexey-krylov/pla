@@ -29,4 +29,6 @@ public class GlQuotationDto {
     private String quotationStatus;
 
     private String quotationNumber;
+
+    private String proposeName;
 }

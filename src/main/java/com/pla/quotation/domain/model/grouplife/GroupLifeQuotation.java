@@ -29,8 +29,8 @@ import static org.nthdimenzion.utils.UtilValidator.isNotEmpty;
 @NoArgsConstructor(access = AccessLevel.PACKAGE)
 public class GroupLifeQuotation extends AbstractAggregateRoot<QuotationId> implements IQuotation {
 
-    @AggregateIdentifier
     @Id
+    @AggregateIdentifier
     private QuotationId quotationId;
 
     private String quotationCreator;
