@@ -9,7 +9,7 @@
 <div th:include="fragments/common :: bodyHeader" th:remove="tag"/>
 
 <script>
-    var interval = setInterval(function(){
+  var interval = setInterval(function(){
         if(require.defined("basic")){
             $(document).ready(function(){
                 $('#accordion .accordion-toggle').click(function (e){
@@ -255,7 +255,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="panel panel-default" id="panel8" ng-class="forms.form8.$valid ? '' : 'errorClass'">
+                       <!-- <div class="panel panel-default" id="panel8" ng-class="forms.form8.$valid ? '' : 'errorClass'">
                             <div class="panel-heading">
                                 <h4 class="panel-title">
                                     <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapseEight">
@@ -301,11 +301,11 @@
                                   </form>
                                 </div>
                             </div>
-                        </div>
+                        </div>-->
                         <div class="row">
                             <div class="col-lg-12" style="text-align: center;margin-top:10px;">
 
-                                <button type="button" class="btn btn-default" style="float:right;" ng-disabled="(!forms.form1.$valid || !forms.form2.$valid || !forms.form3.$valid || !forms.form4.$valid || !forms.form5.$valid || !forms.form6.$valid || !forms.form7.$valid || !forms.form8.$valid || !forms.form9.$valid)" data-placement="top-right" data-container="notification" data-duration="10" bs-alert="alert"   ng-click="submitGroupHealth()">Save</button>
+                                <button type="button" class="btn btn-default" style="float:right;" ng-disabled="(!forms.form1.$valid || !forms.form2.$valid || !forms.form3.$valid || !forms.form4.$valid || !forms.form5.$valid || !forms.form6.$valid || !forms.form7.$valid)" data-placement="top-right" data-container="notification" data-duration="10" bs-alert="alert"   ng-click="submitGroupHealth()">Save</button>
                                 <a class="btn btn-default" ng-click="reloadPage()" style="float:left;">Cancel</a>
 
                             </div>
@@ -502,7 +502,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="panel panel-default" id="panel81" ng-class="forms.form8.$valid ? '' : 'errorClass'">
+                       <!-- <div class="panel panel-default" id="panel81" ng-class="forms.form8.$valid ? '' : 'errorClass'">
                             <div class="panel-heading">
                                 <h4 class="panel-title">
                                     <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion1" href="#collapseEightOne">
@@ -547,11 +547,11 @@
                                   </form>
                                 </div>
                             </div>
-                        </div>
+                        </div>-->
                         <div class="row">
                             <div class="col-lg-12" style="text-align: center;margin-top:10px;">
 
-                                <button type="button" class="btn btn-default" style="float:right;" ng-disabled="(!forms.form1.$valid || !forms.form2.$valid || !forms.form3.$valid || !forms.form4.$valid || !forms.form5.$valid || !forms.form6.$valid || !forms.form7.$valid || !forms.form8.$valid || !forms.form9.$valid)" data-placement="top-right" data-container="notification1" data-duration="10" bs-alert="alert"   ng-click="submitGroupLife()">Save</button>
+                                <button type="button" class="btn btn-default" style="float:right;" ng-disabled="(!forms.form1.$valid || !forms.form2.$valid || !forms.form3.$valid || !forms.form4.$valid || !forms.form5.$valid || !forms.form6.$valid || !forms.form7.$valid)" data-placement="top-right" data-container="notification1" data-duration="10" bs-alert="alert"   ng-click="submitGroupLife()">Save</button>
                                 <a class="btn btn-default" ng-click="reloadPage()" style="float:left;">Cancel</a>
 
                             </div>
