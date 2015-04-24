@@ -17,7 +17,7 @@ angular.module('createQuotation',['common','ngRoute','mgcrea.ngStrap.select','mg
             $scope.fileSaved=null;
 
             /*This scope value is binded to fueluxWizard directive and hence it changes as and when next button is clicked*/
-            $scope.selectedItem = 4;
+            $scope.selectedItem = 1;
 
             /*Holds the indicator for steps in which save button is clicked*/
             $scope.setpsSaved =stepsSaved;
@@ -46,6 +46,7 @@ angular.module('createQuotation',['common','ngRoute','mgcrea.ngStrap.select','mg
             };
             $scope.quotationDetails.basic = agentDetails;
             $scope.quotationDetails.proposer = proposerDetails;
+            /*used for bs-dropdown*/
             $scope.dropdown = [
                 {
                     "text": "<a><img src=\"/pla/images/xls-icon.png\">Ready Reckoner</a>",
@@ -124,16 +125,23 @@ angular.module('createQuotation',['common','ngRoute','mgcrea.ngStrap.select','mg
 
             $scope.$watch('quotationDetails.premium.policyTermValue',function(newVal,oldVal){
                 /*TODO check for the minimum amd maximum value for the policy term value*/
-                if(newVal && newVal!=365 && newVal>=30){
+                if(newVal && newVal!=365 && newVal>=30 && newVal<=999){
+                    /*used to toggle controls between dropdown and text*/
                     $scope.isPolicyTermNot365 = true;
+                    /*used to show the error message when inappropriate value is entered*/
+                    $scope.inappropriatePolicyTerm = false;
                     var numberOfInstallments = newVal/30;
                     if(isInteger(numberOfInstallments)){
                         generateListOfInstallments(numberOfInstallments-1)
                     }else{
-                        generateListOfInstallments(Math.round(numberOfInstallments));
+                        generateListOfInstallments(Math.floor(numberOfInstallments));
                     }
                 }else{
-                    $scope.isPolicyTermNot365 = false;
+                    if(newVal<30 || newVal>999){
+                       $scope.inappropriatePolicyTerm = true;
+                    }else{
+                        $scope.isPolicyTermNot365 = false;
+                    }
                 }
             });
 
