@@ -15,8 +15,8 @@ import java.util.Map;
 import java.util.Set;
 
 import static org.hamcrest.core.Is.is;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertThat;
+import static org.junit.Assert.*;
+import static org.springframework.test.util.ReflectionTestUtils.invokeGetterMethod;
 
 /**
  * Created by Admin on 4/6/2015.
@@ -218,6 +218,17 @@ public class ProductLineInformationUnitTest {
         List<Map<ProductLineProcessType,Integer>> reinstatementProcessItems  = Lists.newArrayList();
         Map<ProductLineProcessType,Integer> processItem = Maps.newLinkedHashMap();
         processItem.put(ProductLineProcessType.PURGE_TIME_PERIOD,12);
+        reinstatementProcessItems.add(processItem);
+        ReinstatementProcessInformation reinstatementProcessInformation = ReinstatementProcessInformation.create(reinstatementProcessItems);
+        assertNotNull(reinstatementProcessInformation);
+    }
+
+    @Test(expected = GeneralInformationException.class)
+    public void givenReinstatementProcessInformation_whenTheProcessTypeIsEarlyDeathCriteria_thenItShouldThrowAnException(){
+        List<Map<ProductLineProcessType,Integer>> reinstatementProcessItems  = Lists.newArrayList();
+        Map<ProductLineProcessType,Integer> processItem = Maps.newLinkedHashMap();
+        processItem.put(ProductLineProcessType.EARLY_DEATH_CRITERIA,12);
+        reinstatementProcessItems.add(processItem);
         ReinstatementProcessInformation reinstatementProcessInformation = ReinstatementProcessInformation.create(reinstatementProcessItems);
         assertNotNull(reinstatementProcessInformation);
     }
@@ -227,6 +238,17 @@ public class ProductLineInformationUnitTest {
         List<Map<ProductLineProcessType,Integer>> quotationProcessItems  = Lists.newArrayList();
         Map<ProductLineProcessType,Integer> processItem = Maps.newLinkedHashMap();
         processItem.put(ProductLineProcessType.PURGE_TIME_PERIOD,12);
+        quotationProcessItems.add(processItem);
+        QuotationProcessInformation quotationProcessInformation = QuotationProcessInformation.create(quotationProcessItems);
+        assertNotNull(quotationProcessInformation);
+    }
+
+    @Test(expected = GeneralInformationException.class)
+    public void givenQuotationProcessInformation_whenTheProcessTypeIsEarlyDeathCriteria_thenItShouldThrowAnException(){
+        List<Map<ProductLineProcessType,Integer>> quotationProcessItems  = Lists.newArrayList();
+        Map<ProductLineProcessType,Integer> processItem = Maps.newLinkedHashMap();
+        processItem.put(ProductLineProcessType.EARLY_DEATH_CRITERIA,12);
+        quotationProcessItems.add(processItem);
         QuotationProcessInformation quotationProcessInformation = QuotationProcessInformation.create(quotationProcessItems);
         assertNotNull(quotationProcessInformation);
     }
@@ -236,15 +258,38 @@ public class ProductLineInformationUnitTest {
         List<Map<ProductLineProcessType,Integer>> enrollmentProcessItems  = Lists.newArrayList();
         Map<ProductLineProcessType,Integer> processItem = Maps.newLinkedHashMap();
         processItem.put(ProductLineProcessType.PURGE_TIME_PERIOD,12);
+        enrollmentProcessItems.add(processItem);
         EnrollmentProcessInformation enrollmentProcessInformation = EnrollmentProcessInformation.create(enrollmentProcessItems);
         assertNotNull(enrollmentProcessInformation);
     }
+
+    @Test(expected = GeneralInformationException.class)
+    public void givenEnrollmentProcessInformation_whenTheProcessTypeIsEarlyDeathCriteria_thenItShouldThrowAnException(){
+        List<Map<ProductLineProcessType,Integer>> enrollmentProcessItems  = Lists.newArrayList();
+        Map<ProductLineProcessType,Integer> processItem = Maps.newLinkedHashMap();
+        processItem.put(ProductLineProcessType.EARLY_DEATH_CRITERIA,12);
+        enrollmentProcessItems.add(processItem);
+        EnrollmentProcessInformation enrollmentProcessInformation = EnrollmentProcessInformation.create(enrollmentProcessItems);
+        assertNotNull(enrollmentProcessInformation);
+    }
+
 
     @Test
     public void givenEndorsementProcessInformation_thenItShouldReturnTheEndorsementProcessInformation(){
         List<Map<ProductLineProcessType,Integer>> endorsementProcessItems  = Lists.newArrayList();
         Map<ProductLineProcessType,Integer> processItem = Maps.newLinkedHashMap();
         processItem.put(ProductLineProcessType.PURGE_TIME_PERIOD,12);
+        endorsementProcessItems.add(processItem);
+        EndorsementProcessInformation endorsementProcessInformation = EndorsementProcessInformation.create(endorsementProcessItems);
+        assertNotNull(endorsementProcessInformation);
+    }
+
+    @Test(expected = GeneralInformationException.class)
+    public void givenEndorsementProcessInformation_whenTheProcessTypeIsEarlyDeathCriteria_thenItShouldThrowAnException(){
+        List<Map<ProductLineProcessType,Integer>> endorsementProcessItems  = Lists.newArrayList();
+        Map<ProductLineProcessType,Integer> processItem = Maps.newLinkedHashMap();
+        processItem.put(ProductLineProcessType.EARLY_DEATH_CRITERIA,12);
+        endorsementProcessItems.add(processItem);
         EndorsementProcessInformation endorsementProcessInformation = EndorsementProcessInformation.create(endorsementProcessItems);
         assertNotNull(endorsementProcessInformation);
     }
@@ -254,6 +299,7 @@ public class ProductLineInformationUnitTest {
         List<Map<ProductLineProcessType,Integer>> claimProcessItems  = Lists.newArrayList();
         Map<ProductLineProcessType,Integer> processItem = Maps.newLinkedHashMap();
         processItem.put(ProductLineProcessType.PURGE_TIME_PERIOD,12);
+        claimProcessItems.add(processItem);
         ClaimProcessInformation claimProcessInformation = ClaimProcessInformation.create(claimProcessItems);
         assertNotNull(claimProcessInformation);
     }
@@ -263,34 +309,80 @@ public class ProductLineInformationUnitTest {
         List<Map<ProductLineProcessType,Integer>> surrenderProcessItems  = Lists.newArrayList();
         Map<ProductLineProcessType,Integer> processItem = Maps.newLinkedHashMap();
         processItem.put(ProductLineProcessType.PURGE_TIME_PERIOD,12);
+        surrenderProcessItems.add(processItem);
+        SurrenderProcessInformation surrenderProcessInformation = SurrenderProcessInformation.create(surrenderProcessItems);
+        assertNotNull(surrenderProcessInformation);
+    }
+
+    @Test(expected = GeneralInformationException.class)
+    public void givenSurrenderProcessInformation_whenTheProcessTypeIsEarlyDeathCriteria_thenItShouldThrowAnException(){
+        List<Map<ProductLineProcessType,Integer>> surrenderProcessItems  = Lists.newArrayList();
+        Map<ProductLineProcessType,Integer> processItem = Maps.newLinkedHashMap();
+        processItem.put(ProductLineProcessType.EARLY_DEATH_CRITERIA,12);
+        surrenderProcessItems.add(processItem);
         SurrenderProcessInformation surrenderProcessInformation = SurrenderProcessInformation.create(surrenderProcessItems);
         assertNotNull(surrenderProcessInformation);
     }
 
     @Test
-    public void givenMaturityProcessInformation_thenItShouldReturnTheMaturityProcessInformation(){
+    public void givenMaturityProcessInformation_thenItShouldReturnTheMaturityProcessInformation1(){
         List<Map<ProductLineProcessType,Integer>> maturityProcessItems  = Lists.newArrayList();
         Map<ProductLineProcessType,Integer> processItem = Maps.newLinkedHashMap();
         processItem.put(ProductLineProcessType.PURGE_TIME_PERIOD,12);
+        maturityProcessItems.add(processItem);
         MaturityProcessInformation maturityProcessInformation = MaturityProcessInformation.create(maturityProcessItems);
         assertNotNull(maturityProcessInformation);
     }
+
+    @Test(expected = GeneralInformationException.class)
+    public void givenMaturityProcessInformation_whenTheProcessTypeIsEarlyDeathCriteria_thenItShouldThrowAnException(){
+        List<Map<ProductLineProcessType,Integer>> maturityProcessItems  = Lists.newArrayList();
+        Map<ProductLineProcessType,Integer> processItem = Maps.newLinkedHashMap();
+        processItem.put(ProductLineProcessType.EARLY_DEATH_CRITERIA,12);
+        maturityProcessItems.add(processItem);
+        MaturityProcessInformation maturityProcessInformation = MaturityProcessInformation.create(maturityProcessItems);
+        assertNotNull(maturityProcessInformation);
+    }
+
 
     @Test
     public void givenPolicyFeeProcessInformation_thenItShouldReturnThePolicyFeeProcessInformation(){
         List<Map<PolicyFeeProcessType,Integer>> policyFeeProcessItems  = Lists.newArrayList();
         Map<PolicyFeeProcessType,Integer> processItem = Maps.newLinkedHashMap();
         processItem.put(PolicyFeeProcessType.MONTHLY,12);
+        policyFeeProcessItems.add(processItem);
         PolicyFeeProcessInformation policyFeeProcessInformation = PolicyFeeProcessInformation.create(policyFeeProcessItems);
         assertNotNull(policyFeeProcessInformation);
     }
+
     @Test
     public void givenMinimumLimitProcessInformation_thenItShouldReturnTheMinimumLimitProcessInformation(){
         List<Map<PolicyProcessMinimumLimitType,Integer>> policyMinimumLimitProcessItems  = Lists.newArrayList();
         Map<PolicyProcessMinimumLimitType,Integer> processItem = Maps.newLinkedHashMap();
         processItem.put(PolicyProcessMinimumLimitType.MINIMUM_PREMIUM,12);
+        policyMinimumLimitProcessItems.add(processItem);
         PolicyProcessMinimumLimit policyProcessMinimumLimit = PolicyProcessMinimumLimit.create(policyMinimumLimitProcessItems);
         assertNotNull(policyProcessMinimumLimit);
     }
 
+    @Test
+    public void givenProductLineProcessType_thenItShouldReturnProductLineProcess(){
+        ProductLineProcessItem productLineProcessItem = new ProductLineProcessItem(ProductLineProcessType.PURGE_TIME_PERIOD,12);
+        assertNotNull(productLineProcessItem);
+        assertEquals(ProductLineProcessType.PURGE_TIME_PERIOD, invokeGetterMethod(productLineProcessItem, "productLineProcessItem"));
+    }
+
+    @Test
+    public void givenProductLineMinimumLimitType_thenItShouldReturnProductLineMinimumLimitProcess(){
+        PolicyProcessMinimumLimitItem policyProcessMinimumLimitItem = new PolicyProcessMinimumLimitItem(PolicyProcessMinimumLimitType.MINIMUM_NUMBER_OF_PERSON_PER_POLICY,12);
+        assertNotNull(policyProcessMinimumLimitItem);
+        assertEquals(PolicyProcessMinimumLimitType.MINIMUM_NUMBER_OF_PERSON_PER_POLICY, invokeGetterMethod(policyProcessMinimumLimitItem, "policyProcessMinimumLimitType"));
+    }
+
+    @Test
+    public void givenProductLinePolicyFeeProcess_thenItShouldReturnProductLinePolicyFeeProcess(){
+        PolicyFeeProcessItem policyFeeProcessItem = new PolicyFeeProcessItem(PolicyFeeProcessType.MONTHLY,12);
+        assertNotNull(policyFeeProcessItem);
+        assertEquals(PolicyFeeProcessType.MONTHLY, invokeGetterMethod(policyFeeProcessItem, "policyFeeProcessType"));
+    }
 }
