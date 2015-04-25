@@ -1,5 +1,6 @@
 package org.nthdimenzion.application;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,6 +14,8 @@ import org.webjars.RequireJS;
 import org.webjars.WebJarAssetLocator;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 
 /**
  * Created by pradyumna on 02-02-2015.
@@ -21,6 +24,12 @@ import javax.servlet.http.HttpServletRequest;
 public class CommonController extends ResourceHttpRequestHandler {
 
     private WebJarAssetLocator assetLocator = new WebJarAssetLocator();
+
+    @Value("${spring.smeServer.logoutUrl}")
+    private String logoutUrl;
+
+    @Value("${spring.profiles.active}")
+    private String activeProfile;
 
     @ResponseBody
     @RequestMapping(value = "/webjarsjs", produces = "application/javascript")
@@ -39,5 +48,13 @@ public class CommonController extends ResourceHttpRequestHandler {
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
+    }
+
+    @RequestMapping(value = "/login")
+    public String login(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        if (!"dev".equals(activeProfile)) {
+            response.sendRedirect(logoutUrl);
+        }
+        return "login";
     }
 }

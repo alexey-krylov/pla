@@ -41,8 +41,6 @@ public class GroupLifeQuotation extends AbstractAggregateRoot<QuotationId> imple
 
     private Set<Insured> insureds;
 
-    private Set<Policy> policies;
-
     private QuotationStatus quotationStatus;
 
     private int versionNumber;
@@ -53,6 +51,8 @@ public class GroupLifeQuotation extends AbstractAggregateRoot<QuotationId> imple
     private LocalDate generatedOn;
 
     private QuotationId parentQuotationId;
+
+    private PremiumDetail premiumDetail;
 
     private GroupLifeQuotation(String quotationCreator, String quotationNumber, QuotationId quotationId, AgentId agentId, Proposer proposer, QuotationStatus quotationStatus, int versionNumber) {
         checkArgument(isNotEmpty(quotationCreator));
@@ -85,9 +85,9 @@ public class GroupLifeQuotation extends AbstractAggregateRoot<QuotationId> imple
         return new GroupLifeQuotation(quotationCreator, quotationNumber, quotationId, agentId, proposer, QuotationStatus.DRAFT, 0);
     }
 
-    public GroupLifeQuotation updateWithPolicy(Set<Policy> policies) {
+    public GroupLifeQuotation updateWithPremiumDetail(PremiumDetail premiumDetail) {
         checkInvariant();
-        this.policies = policies;
+        this.premiumDetail = premiumDetail;
         return this;
     }
 
@@ -149,10 +149,9 @@ public class GroupLifeQuotation extends AbstractAggregateRoot<QuotationId> imple
         newQuotation.proposer = this.proposer;
         newQuotation.agentId = this.agentId;
         newQuotation.insureds = this.insureds;
-        newQuotation.policies = this.policies;
+        newQuotation.premiumDetail = this.premiumDetail;
         return newQuotation;
     }
-
 
     private void checkInvariant() {
         if (QuotationStatus.CLOSED.equals(this.quotationStatus) || QuotationStatus.DECLINED.equals(this.quotationStatus)) {

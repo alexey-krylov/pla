@@ -13,6 +13,7 @@ import com.pla.sharedkernel.identifier.PlanId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -36,6 +37,26 @@ public class PlanAdapterImpl implements IPlanAdapter {
         List<Plan> plans = planFinder.findPlanBy(planIds);
         List<PlanCoverageDetailDto> planCoverageDetailDtoList = plans.stream().map(new PlanCoverageDetailTransformer()).collect(Collectors.toList());
         return planCoverageDetailDtoList;
+    }
+
+    @Override
+    public boolean isValidPlanForRelationship(String planCode, Relationship relationship) {
+        return false;
+    }
+
+    @Override
+    public boolean isValidPlanSumAssured(String planCode, BigDecimal sumAssured) {
+        return false;
+    }
+
+    @Override
+    public boolean isValidCoverageSumAssured(String planCode, String coverageCode, BigDecimal sumAssured) {
+        return false;
+    }
+
+    @Override
+    public boolean hasPlanContainsIncomeMultiplierSumAssured(String planCode) {
+        return false;
     }
 
     private class PlanCoverageDetailTransformer implements Function<Plan, PlanCoverageDetailDto> {
