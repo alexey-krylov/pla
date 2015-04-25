@@ -11,6 +11,5 @@ import lombok.Setter;
 @Setter
 public class PolicyProcessMinimumLimitItemDto {
     private PolicyProcessMinimumLimitType policyProcessMinimumLimitType;
-    private int noOfPersonPerPolicy;
-    private int minimumPremium;
+    private int value;
 }

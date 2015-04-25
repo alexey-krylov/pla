@@ -7,8 +7,8 @@ import lombok.Getter;
  */
 @Getter
 public enum PolicyProcessMinimumLimitType {
-    ANNUAL("Minimum Number of Persons per Policy"),
-    SEMI_ANNUAL("Minimum Premium");
+    MINIMUM_NUMBER_OF_PERSON_PER_POLICY("Minimum Number of Persons per Policy"),
+    MINIMUM_PREMIUM("Minimum Premium");
 
     private String description;
     private String fullDescription;

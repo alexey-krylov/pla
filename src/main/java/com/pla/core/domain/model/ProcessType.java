@@ -1,7 +1,5 @@
 package com.pla.core.domain.model;
 
-import lombok.Getter;
-
 /**
  * Created by Admin on 3/27/2015.
  */

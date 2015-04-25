@@ -8,6 +8,8 @@ angular.module('createQuotation',['common','ngRoute','mgcrea.ngStrap.select','mg
             }else if(mode=='edit'){
                 $scope.isEditMode = true;
             }
+            /*This scope holds the list of installments from which user can select one */
+            $scope.numberOfInstallmentsDropDown = [];
 
             /*regex for number pattern for more details see commonModule.js*/
             $scope.numberPattern =globalConstants.numberPattern;
@@ -44,6 +46,7 @@ angular.module('createQuotation',['common','ngRoute','mgcrea.ngStrap.select','mg
             };
             $scope.quotationDetails.basic = agentDetails;
             $scope.quotationDetails.proposer = proposerDetails;
+            /*used for bs-dropdown*/
             $scope.dropdown = [
                 {
                     "text": "<a><img src=\"/pla/images/xls-icon.png\">Ready Reckoner</a>",
@@ -108,6 +111,40 @@ angular.module('createQuotation',['common','ngRoute','mgcrea.ngStrap.select','mg
                     });
             };
 
+            function isInteger(x) {
+                return Math.round(x) === x;
+            }
+
+
+            function generateListOfInstallments(numberOfInstallments){
+                $scope.numberOfInstallmentsDropDown=[];
+                for(var installment=1;installment<=numberOfInstallments;installment++){
+                    $scope.numberOfInstallmentsDropDown.push(installment);
+                }
+            }
+
+            $scope.$watch('quotationDetails.premium.policyTermValue',function(newVal,oldVal){
+                /*TODO check for the minimum amd maximum value for the policy term value*/
+                if(newVal && newVal!=365 && newVal>=30 && newVal<=999){
+                    /*used to toggle controls between dropdown and text*/
+                    $scope.isPolicyTermNot365 = true;
+                    /*used to show the error message when inappropriate value is entered*/
+                    $scope.inappropriatePolicyTerm = false;
+                    var numberOfInstallments = newVal/30;
+                    if(isInteger(numberOfInstallments)){
+                        generateListOfInstallments(numberOfInstallments-1)
+                    }else{
+                        generateListOfInstallments(Math.floor(numberOfInstallments));
+                    }
+                }else{
+                    if(newVal<30 || newVal>999){
+                       $scope.inappropriatePolicyTerm = true;
+                    }else{
+                        $scope.isPolicyTermNot365 = false;
+                    }
+                }
+            });
+
             var setQuotationNumberAndVersionNumber = function(quotationId){
                 $http.get("/pla/quotation/grouplife/getquotationnumber/"+quotationId)
                     .success(function(data,status){
@@ -122,9 +159,11 @@ angular.module('createQuotation',['common','ngRoute','mgcrea.ngStrap.select','mg
             $scope.saveBasicDetails = function(){
                 $http.post("/pla/quotation/grouplife/createquotation",angular.extend($scope.quotationDetails.basic,{proposerName:$scope.quotationDetails.proposer.proposerName}))
                     .success(function(agentDetails){
-                        $scope.quotationId = agentDetails.id;
-                        setQuotationNumberAndVersionNumber(agentDetails.id);
-                        saveStep();
+                        if(agentDetails.status=="200"){
+                            $scope.quotationId = agentDetails.id;
+                            setQuotationNumberAndVersionNumber(agentDetails.id);
+                            saveStep();
+                        }
                     });
             };
 
@@ -137,7 +176,9 @@ angular.module('createQuotation',['common','ngRoute','mgcrea.ngStrap.select','mg
                     {proposerDto : $scope.quotationDetails.proposer},
                     {"quotationId":$scope.quotationId}))
                     .success(function(data){
-                        saveStep();
+                        if(data.status=="200"){
+                            saveStep();
+                        }
                     });
             };
 
@@ -149,11 +190,13 @@ angular.module('createQuotation',['common','ngRoute','mgcrea.ngStrap.select','mg
                     fields:$scope.quotationDetails.plan,
                     file: $scope.fileSaved
                 }).success(function (data, status, headers, config) {
-                    saveStep();
-                    $http.get("/pla/quotation/getpremiumdetail/"+ $scope.quotationId)
-                        .success(function(){
+                    if(data.status="200"){
+                        saveStep();
+                        $http.get("/pla/quotation/getpremiumdetail/"+ $scope.quotationId)
+                            .success(function(){
 
-                        })
+                            })
+                    }
                 });
             };
 

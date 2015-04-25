@@ -1,11 +1,12 @@
 package com.pla.core.domain.model.generalinformation;
 
-import com.pla.core.dto.PolicyProcessMinimumLimitItemDto;
+import com.pla.sharedkernel.domain.model.PolicyProcessMinimumLimitType;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -24,16 +25,17 @@ public class PolicyProcessMinimumLimit {
       this.policyProcessMinimumLimitItems = policyProcessMinimumLimitItems;
    }
 
-   public static PolicyProcessMinimumLimit create(List<PolicyProcessMinimumLimitItemDto> policyProcessMinimumLimitItems) {
+   public static PolicyProcessMinimumLimit create(List<Map<PolicyProcessMinimumLimitType,Integer>> policyProcessMinimumLimitItems) {
       Set<PolicyProcessMinimumLimitItem> policyFeeProcessItem = policyProcessMinimumLimitItems.stream().map(new PolicyProcessMinimumLimitInformationTransformer()).collect(Collectors.toSet());
       return new PolicyProcessMinimumLimit(policyFeeProcessItem);
    }
 
 
-   private static class PolicyProcessMinimumLimitInformationTransformer implements Function<PolicyProcessMinimumLimitItemDto,PolicyProcessMinimumLimitItem> {
+   private static class PolicyProcessMinimumLimitInformationTransformer implements Function<Map<PolicyProcessMinimumLimitType,Integer>,PolicyProcessMinimumLimitItem> {
       @Override
-      public PolicyProcessMinimumLimitItem apply(PolicyProcessMinimumLimitItemDto policyProcessMinimumLimitItemDto) {
-         PolicyProcessMinimumLimitItem policyProcessMinimumLimitItem = new PolicyProcessMinimumLimitItem(policyProcessMinimumLimitItemDto.getPolicyProcessMinimumLimitType(),policyProcessMinimumLimitItemDto.getNoOfPersonPerPolicy(),policyProcessMinimumLimitItemDto.getMinimumPremium());
+      public PolicyProcessMinimumLimitItem apply(Map<PolicyProcessMinimumLimitType,Integer> policyProcessMinimumLimitItemDto) {
+         Map.Entry<PolicyProcessMinimumLimitType,Integer> entry = policyProcessMinimumLimitItemDto.entrySet().iterator().next();
+         PolicyProcessMinimumLimitItem policyProcessMinimumLimitItem = new PolicyProcessMinimumLimitItem(entry.getKey(),entry.getValue());
          return policyProcessMinimumLimitItem;
       }
    }

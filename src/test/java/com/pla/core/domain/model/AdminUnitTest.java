@@ -15,7 +15,6 @@ import com.pla.core.domain.model.generalinformation.OrganizationGeneralInformati
 import com.pla.core.domain.model.generalinformation.ProductLineGeneralInformation;
 import com.pla.core.dto.BenefitDto;
 import com.pla.core.dto.GeneralInformationDto;
-import com.pla.core.dto.PolicyProcessMinimumLimitItemDto;
 import com.pla.core.query.BenefitFinder;
 import com.pla.core.specification.BenefitIsAssociatedWithCoverage;
 import com.pla.core.specification.BenefitNameIsUnique;
@@ -110,19 +109,14 @@ public class AdminUnitTest {
         policyFeeProcessTypeMap.put(PolicyFeeProcessType.MONTHLY,19);
         policyFeeProcessInformation.add(policyFeeProcessTypeMap);
 
-        List<PolicyProcessMinimumLimitItemDto> policyProcessMinimumLimit = Lists.newArrayList();
-        PolicyProcessMinimumLimitItemDto policyProcessMinimumLimitItemDto = new PolicyProcessMinimumLimitItemDto();
-        policyProcessMinimumLimitItemDto.setPolicyProcessMinimumLimitType(PolicyProcessMinimumLimitType.ANNUAL);
-        policyProcessMinimumLimitItemDto.setNoOfPersonPerPolicy(10);
-        policyProcessMinimumLimitItemDto.setMinimumPremium(2);
-        policyProcessMinimumLimit.add(policyProcessMinimumLimitItemDto);
+        List<Map<PolicyProcessMinimumLimitType,Integer>> policyProcessMinimumLimit = Lists.newArrayList();
+        Map<PolicyProcessMinimumLimitType,Integer> policyProcessMinimumLimitMap = Maps.newLinkedHashMap();
+        policyProcessMinimumLimitMap.put(PolicyProcessMinimumLimitType.MINIMUM_NUMBER_OF_PERSON_PER_POLICY, 1);
+        policyProcessMinimumLimit.add(policyProcessMinimumLimitMap);
 
-        policyProcessMinimumLimitItemDto = new PolicyProcessMinimumLimitItemDto();
-        policyProcessMinimumLimitItemDto.setPolicyProcessMinimumLimitType(PolicyProcessMinimumLimitType.SEMI_ANNUAL);
-        policyProcessMinimumLimitItemDto.setNoOfPersonPerPolicy(20);
-        policyProcessMinimumLimitItemDto.setMinimumPremium(8);
-        policyProcessMinimumLimit.add(policyProcessMinimumLimitItemDto);
-        generalInformationDto.setPolicyProcessMinimumLimitItems(policyProcessMinimumLimit);
+        policyProcessMinimumLimitMap = Maps.newLinkedHashMap();
+        policyProcessMinimumLimitMap.put(PolicyProcessMinimumLimitType.MINIMUM_PREMIUM, 1);
+        policyProcessMinimumLimit.add(policyProcessMinimumLimitMap);
     }
 
     @Test
@@ -313,7 +307,7 @@ public class AdminUnitTest {
 
     @Test
     public void givenLineOfBusinessIdAndGeneralInformation_thenItShouldCreateTheProductLineInformationWithTheGivenProcess(){
-        List<PolicyProcessMinimumLimitItemDto> policyProcessMinimumLimitItems = Lists.newArrayList();
+        List<Map<PolicyProcessMinimumLimitType,Integer>> policyProcessMinimumLimitItems = Lists.newArrayList();
         List<Map<PolicyFeeProcessType,Integer>> policyFeeProcessItems = Lists.newArrayList();
         ProductLineGeneralInformation createdProductLineGeneralInformation = admin.createProductLineGeneralInformation(LineOfBusinessId.GROUP_HEALTH, listOfProcessItems,listOfProcessItems,listOfProcessItems,listOfProcessItems,listOfProcessItems,policyFeeProcessItems,policyProcessMinimumLimitItems,listOfProcessItems,listOfProcessItems);
         assertNotNull(createdProductLineGeneralInformation);
@@ -339,7 +333,7 @@ public class AdminUnitTest {
     @Test(expected = GeneralInformationException.class)
     public void givenLineOfBusinessIdAndGeneralInformation_whenEarlyDeathCriteriaIsAssociatedWithOtherThanClaimProcess_thenItThrowAnGenericInformationException(){
         Map<ProductLineProcessType,Integer> productLineProcessItemMap = Maps.newLinkedHashMap();
-        List<PolicyProcessMinimumLimitItemDto> policyProcessMinimumLimitItems = Lists.newArrayList();
+        List<Map<PolicyProcessMinimumLimitType,Integer>> policyProcessMinimumLimitItems = Lists.newArrayList();
         productLineProcessItemMap.put(ProductLineProcessType.EARLY_DEATH_CRITERIA, 10);
         listOfProcessItems.add(productLineProcessItemMap);
         ProductLineGeneralInformation createdProductLineGeneralInformation = admin.createProductLineGeneralInformation(LineOfBusinessId.GROUP_HEALTH, listOfProcessItems,listOfProcessItems,listOfProcessItems,listOfProcessItems,listOfProcessItems,null,policyProcessMinimumLimitItems,listOfProcessItems,listOfProcessItems);
@@ -363,7 +357,7 @@ public class AdminUnitTest {
     @Test
     public void givenLineOfBusinessIdAndGeneralInformation_whenLineOfBusinessIdIsIndividualInsurance_thenItThrowAnException(){
         List<Map<PolicyFeeProcessType,Integer>> policyFeeProcessItems = Lists.newArrayList();
-        List<PolicyProcessMinimumLimitItemDto> policyProcessMinimumLimitItems = Lists.newArrayList();
+        List<Map<PolicyProcessMinimumLimitType,Integer>> policyProcessMinimumLimitItems = Lists.newArrayList();
         ProductLineGeneralInformation createdProductLineGeneralInformation = admin.createProductLineGeneralInformation(LineOfBusinessId.INDIVIDUAL_INSURANCE, listOfProcessItems,listOfProcessItems,listOfProcessItems,listOfProcessItems,listOfProcessItems,policyFeeProcessItems,policyProcessMinimumLimitItems,listOfProcessItems,listOfProcessItems);
         assertNotNull(createdProductLineGeneralInformation);
     }
@@ -419,7 +413,7 @@ public class AdminUnitTest {
 
     @Test
     public void givenProductLineInformation_whenAllTheInformationAreFullFilled_thenItShouldUpdateTheProductLineInformation(){
-        List<PolicyProcessMinimumLimitItemDto> policyProcessMinimumLimitItems = Lists.newArrayList();
+        List<Map<PolicyProcessMinimumLimitType,Integer>> policyProcessMinimumLimitItems = Lists.newArrayList();
         List<Map<PolicyFeeProcessType,Integer>> policyFeeProcessItems = Lists.newArrayList();
         Map<PolicyFeeProcessType,Integer> feeProcessMap = Maps.newLinkedHashMap();
         feeProcessMap.put(PolicyFeeProcessType.MONTHLY,12);
