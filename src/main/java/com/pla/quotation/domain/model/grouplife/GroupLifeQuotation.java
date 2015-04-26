@@ -26,6 +26,7 @@ import static org.nthdimenzion.utils.UtilValidator.isNotEmpty;
  * Created by Samir on 4/7/2015.
  */
 @Document(collection = "group_life_quotation")
+@Getter(value = AccessLevel.PACKAGE)
 @NoArgsConstructor(access = AccessLevel.PACKAGE)
 public class GroupLifeQuotation extends AbstractAggregateRoot<QuotationId> implements IQuotation {
 
@@ -134,8 +135,13 @@ public class GroupLifeQuotation extends AbstractAggregateRoot<QuotationId> imple
     public void generateQuotation(LocalDate generatedOn) {
         this.quotationStatus = QuotationStatus.GENERATED;
         this.generatedOn = generatedOn;
-        registerEvent(new QuotationGeneratedEvent(quotationId));
-        registerEvent(new ProposerAddedEvent());
+        if (proposer != null && proposer.getContactDetail() != null) {
+            ProposerContactDetail proposerContactDetail = proposer.getContactDetail();
+            registerEvent(new ProposerAddedEvent(proposer.getProposerName(), proposer.getProposerCode(),
+                    proposerContactDetail.getAddressLine1(), proposerContactDetail.getAddressLine2(), proposerContactDetail.getPostalCode(),
+                    proposerContactDetail.getProvince(), proposerContactDetail.getTown(), proposerContactDetail.getEmailAddress()));
+            registerEvent(new QuotationGeneratedEvent(quotationId));
+        }
     }
 
     @Override
