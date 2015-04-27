@@ -20,6 +20,7 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 import static com.google.common.base.Preconditions.checkArgument;
+import static com.pla.core.domain.exception.PremiumException.raiseInfluencingFactorMismatchException;
 import static com.pla.core.domain.exception.PremiumException.raisePremiumNotFoundException;
 import static org.nthdimenzion.utils.UtilValidator.isEmpty;
 import static org.nthdimenzion.utils.UtilValidator.isNotEmpty;
@@ -43,6 +44,10 @@ public class PremiumCalculator implements IPremiumCalculator {
     @Override
     public List<ComputedPremiumDto> calculatePremium(PremiumCalculationDto premiumCalculationDto) {
         Premium premium = premiumFinder.findPremium(premiumCalculationDto);
+        boolean hasAllInfluencingFactor = premium.hasAllInfluencingFactor(premiumCalculationDto.getInfluencingFactors());
+        if (!hasAllInfluencingFactor) {
+            raiseInfluencingFactorMismatchException();
+        }
         Set<PremiumItem> premiumItems = premium.getPremiumItems();
         PremiumItem premiumItem = findPremiumItem(premiumItems, premiumCalculationDto.getPremiumCalculationInfluencingFactorItems());
         List<OrganizationGeneralInformation> organizationGeneralInformations = organizationGeneralInformationRepository.findAll();
@@ -84,13 +89,14 @@ public class PremiumCalculator implements IPremiumCalculator {
         @Override
         public boolean test(PremiumItem premiumItem) {
             boolean matchFound = true;
+            int noOfMatch = 0;
             for (PremiumInfluencingFactorLineItem premiumInfluencingFactorLineItem : premiumItem.getPremiumInfluencingFactorLineItems()) {
                 if (isMatchesInfluencingFactorAndValue(premiumInfluencingFactorLineItem, premiumCalculationInfluencingFactorItems)) {
+                    noOfMatch = noOfMatch + 1;
                     continue;
                 }
-                matchFound = false;
             }
-            return matchFound;
+            return premiumCalculationInfluencingFactorItems.size() == noOfMatch;
         }
     }
 

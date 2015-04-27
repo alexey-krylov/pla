@@ -58,6 +58,7 @@ public class Premium {
 
     private PremiumRateFrequency premiumRateFrequency;
 
+    @Getter
     private List<PremiumInfluencingFactor> premiumInfluencingFactors;
 
     private Premium(PremiumId premiumId, PlanId planId, LocalDate effectiveFrom, Set<PremiumItem> premiumItems, PremiumFactor premiumFactor, PremiumRateFrequency premiumRateFrequency, List<PremiumInfluencingFactor> premiumInfluencingFactors) {
@@ -152,12 +153,16 @@ public class Premium {
         }
         if (noOfDays != 365) {
             if (PremiumRateFrequency.MONTHLY.equals(premiumRateFrequency)) {
-                premiumAmount = premiumAmount.divide(new BigDecimal(30));
+                premiumAmount = premiumAmount.divide(new BigDecimal(30), 4, BigDecimal.ROUND_CEILING);
             } else if (PremiumRateFrequency.YEARLY.equals(premiumRateFrequency)) {
-                premiumAmount = premiumAmount.divide(new BigDecimal(365));
+                premiumAmount = premiumAmount.divide(new BigDecimal(365), 4, BigDecimal.ROUND_CEILING);
             }
             premiumAmount = premiumAmount.multiply(new BigDecimal(noOfDays));
         }
         return premiumAmount;
+    }
+
+    public boolean hasAllInfluencingFactor(List<PremiumInfluencingFactor> premiumInfluencingFactors) {
+        return premiumInfluencingFactors.containsAll(this.premiumInfluencingFactors);
     }
 }

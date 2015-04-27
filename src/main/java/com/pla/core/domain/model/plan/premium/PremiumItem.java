@@ -8,6 +8,7 @@ package com.pla.core.domain.model.plan.premium;
 
 import com.pla.publishedlanguage.domain.model.PremiumInfluencingFactor;
 import lombok.AccessLevel;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import org.nthdimenzion.ddd.domain.annotations.ValueObject;
@@ -29,6 +30,7 @@ import static org.nthdimenzion.utils.UtilValidator.isNotEmpty;
 @ValueObject
 @Getter(value = AccessLevel.PACKAGE)
 @Setter(value = AccessLevel.PACKAGE)
+@EqualsAndHashCode
 public class PremiumItem {
 
     private BigDecimal premium;
@@ -53,7 +55,7 @@ public class PremiumItem {
         List<PremiumInfluencingFactorLineItem> premiumInfluencingFactorLineItemList = premiumInfluencingFactorLineItems.stream().filter(new Predicate<PremiumInfluencingFactorLineItem>() {
             @Override
             public boolean test(PremiumInfluencingFactorLineItem premiumInfluencingFactorLineItem) {
-                return false;
+                return PremiumInfluencingFactor.SUM_ASSURED.equals(premiumInfluencingFactorLineItem.getPremiumInfluencingFactor());
             }
         }).collect(Collectors.toList());
         checkArgument(isNotEmpty(premiumInfluencingFactorLineItemList), "Sum Assured influencing factor value not found");

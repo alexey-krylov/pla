@@ -55,7 +55,7 @@ public class OrganizationGeneralInformation {
 
     public OrganizationGeneralInformation withModalFactorOrganizationInformation(List<Map<ModalFactorItem, BigDecimal>> listOfModalFactorItem) {
         checkArgument(isNotEmpty(listOfModalFactorItem));
-        modelFactorItems = listOfModalFactorItem.stream().map(new ModalFactorInformationTransformer()).collect(Collectors.toSet());
+        this.modelFactorItems = listOfModalFactorItem.stream().map(new ModalFactorInformationTransformer()).collect(Collectors.toSet());
         return this;
     }
 

@@ -1,13 +1,18 @@
 package com.pla.publishedlanguage.domain.model;
 
+import com.google.common.collect.Sets;
 import com.pla.sharedkernel.identifier.CoverageId;
 import com.pla.sharedkernel.identifier.PlanId;
 import lombok.Getter;
 import org.joda.time.LocalDate;
 
+import java.util.List;
 import java.util.Set;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 import static com.google.common.base.Preconditions.checkArgument;
+import static org.nthdimenzion.utils.UtilValidator.isEmpty;
 import static org.nthdimenzion.utils.UtilValidator.isNotEmpty;
 
 /**
@@ -28,16 +33,23 @@ public class PremiumCalculationDto {
 
     private int noOfDays;
 
-    public PremiumCalculationDto(PlanId planId, CoverageId coverageId, Set<PremiumCalculationInfluencingFactorItem> premiumCalculationInfluencingFactorItems, LocalDate calculateAsOf, PremiumFrequency premiumFrequency, int noOfDays) {
+    public PremiumCalculationDto(PlanId planId, CoverageId coverageId, LocalDate calculateAsOf, PremiumFrequency premiumFrequency, int noOfDays) {
         checkArgument(planId != null);
         checkArgument(calculateAsOf != null);
-        checkArgument(isNotEmpty(premiumCalculationInfluencingFactorItems));
         this.calculateAsOf = calculateAsOf;
         this.premiumFrequency = premiumFrequency;
         this.planId = planId;
         this.coverageId = coverageId;
-        this.premiumCalculationInfluencingFactorItems = premiumCalculationInfluencingFactorItems;
         this.noOfDays = noOfDays;
+    }
+
+    public PremiumCalculationDto addInfluencingFactorItemValue(PremiumInfluencingFactor premiumInfluencingFactor, String value) {
+        if (isEmpty(this.premiumCalculationInfluencingFactorItems)) {
+            this.premiumCalculationInfluencingFactorItems = Sets.newHashSet();
+        }
+        PremiumCalculationInfluencingFactorItem premiumCalculationInfluencingFactorItem = new PremiumCalculationInfluencingFactorItem(premiumInfluencingFactor, value);
+        this.premiumCalculationInfluencingFactorItems.add(premiumCalculationInfluencingFactorItem);
+        return this;
     }
 
     @Getter
@@ -53,5 +65,15 @@ public class PremiumCalculationDto {
             this.premiumInfluencingFactor = premiumInfluencingFactor;
             this.value = value;
         }
+    }
+
+    public List<PremiumInfluencingFactor> getInfluencingFactors() {
+        List<PremiumInfluencingFactor> premiumInfluencingFactorList = this.premiumCalculationInfluencingFactorItems.stream().map(new Function<PremiumCalculationInfluencingFactorItem, PremiumInfluencingFactor>() {
+            @Override
+            public PremiumInfluencingFactor apply(PremiumCalculationInfluencingFactorItem premiumCalculationInfluencingFactorItem) {
+                return premiumCalculationInfluencingFactorItem.getPremiumInfluencingFactor();
+            }
+        }).collect(Collectors.toList());
+        return premiumInfluencingFactorList;
     }
 }
