@@ -47,6 +47,7 @@ public class PlanCoverageDetailDto {
         return this;
     }
 
+    @Getter
     public class SumAssuredDto {
 
         private BigDecimal minimumSumAssured;
@@ -68,6 +69,7 @@ public class PlanCoverageDetailDto {
         }
     }
 
+    @Getter
     public class CoverageDto {
 
         private SumAssuredDto sumAssuredDto;

@@ -3,7 +3,8 @@ package com.pla.core.domain.model;
 import org.joda.time.LocalDate;
 import org.junit.Test;
 
-import static org.junit.Assert.assertEquals;
+import static org.hamcrest.core.Is.is;
+import static org.junit.Assert.*;
 
 /**
  * Created by User on 3/24/2015.
@@ -34,5 +35,42 @@ public class RegionUnitTest {
         region.assignRegionalManager("3245", "SOUTH REGIONAL", "MANAGER", new LocalDate().now().plusDays(6));
         assertEquals(3, region.getRegionalManagerFulfillments().size());
         assertEquals("3245", region.getRegionalManager());
+    }
+
+    @Test
+    public void givenRegionCodeAndManagerName_thenItShouldCreateTheRegion1(){
+        Region region = new Region("R001","RName","RManager");
+        assertNotNull(region);
+        assertThat("R001", is(region.getRegionCode()));
+        assertThat("RName", is(region.getRegionName()));
+        assertThat("RManager", is(region.getRegionalManager()));
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void givenRegionCodeAndManagerName_whenRegionIdIsNull_thenItShouldThrowAnException(){
+        Region region = new Region(null,"RName","RManager");
+        assertNotNull(region);
+        assertThat("R001", is(region.getRegionCode()));
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void givenRegionCodeAndManagerName_whenManagerNameIsNull_thenItShouldThrowAnException(){
+        Region region = new Region("R001","RName",null);
+        assertNotNull(region);
+        assertThat("R001", is(region.getRegionCode()));
+    }
+
+    @Test
+    public void givenNewRegionalManagerFromDate_whenNewRegionalManagerFromDateIsAfterCurrentRegionalManagerFromDate_thenItShouldReturnTrue(){
+        Region region = new Region("R001","RName","RManager");
+        boolean isNewRegionalManagerFulfillmentValid = region.isNewRegionalManagerFulfillmentValid(new LocalDate("2015-07-01"), new LocalDate("2015-05-05"));
+        assertTrue(isNewRegionalManagerFulfillmentValid);
+    }
+
+    @Test
+    public void givenNewRegionalManagerFromDate_whenNewRegionalManagerFromDateIsBeforeCurrentRegionalManagerFromDate_thenItShouldReturnFalse(){
+        Region region = new Region("R001","RName","RManager");
+        boolean isNewRegionalManagerFulfillmentValid = region.isNewRegionalManagerFulfillmentValid(new LocalDate("2015-04-01"), new LocalDate("2015-05-05"));
+        assertFalse(isNewRegionalManagerFulfillmentValid);
     }
 }

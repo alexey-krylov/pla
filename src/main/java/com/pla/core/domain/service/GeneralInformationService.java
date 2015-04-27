@@ -90,9 +90,9 @@ public class GeneralInformationService {
         return productLineProcessList;
     }
 
-    public List<Map<PolicyProcessMinimumLimitType,Integer>> transformProductLineMinimumLimitProcess(List<PolicyProcessMinimumLimitItemDto> policyFeeProcessItemDtos){
+    public List<Map<PolicyProcessMinimumLimitType,Integer>> transformProductLineMinimumLimitProcess(List<PolicyProcessMinimumLimitItemDto> policyProcessMinimumLimitItemDtos){
         List<Map<PolicyProcessMinimumLimitType,Integer>> productLineProcessList = Lists.newArrayList();
-        for (PolicyProcessMinimumLimitItemDto policyProcessMinimumLimitItemDto : policyFeeProcessItemDtos){
+        for (PolicyProcessMinimumLimitItemDto policyProcessMinimumLimitItemDto : policyProcessMinimumLimitItemDtos){
             Map<PolicyProcessMinimumLimitType,Integer> policyProcessMinimumLimit = Maps.newLinkedHashMap();
             policyProcessMinimumLimit.put(policyProcessMinimumLimitItemDto.getPolicyProcessMinimumLimitType(),policyProcessMinimumLimitItemDto.getValue());
             productLineProcessList.add(policyProcessMinimumLimit);
@@ -166,7 +166,7 @@ public class GeneralInformationService {
         return update;
     }
 
-    private List<Map<ModalFactorItem, BigDecimal>> transformModalFactorItem(List<ModalFactorInformationDto> modalFactorInformationDtos){
+     List<Map<ModalFactorItem, BigDecimal>> transformModalFactorItem(List<ModalFactorInformationDto> modalFactorInformationDtos){
         List<Map<ModalFactorItem, BigDecimal>> modalFactorItems = Lists.newArrayList();
         for (ModalFactorInformationDto modalFactorInformationDto : modalFactorInformationDtos){
             Map<ModalFactorItem, BigDecimal> modalFactorItemMap = Maps.newLinkedHashMap();
@@ -176,7 +176,7 @@ public class GeneralInformationService {
         return modalFactorItems;
     }
 
-    private List<Map<DiscountFactorItem, BigDecimal>> transformDiscountFactorItem(List<DiscountFactorInformationDto> modalFactorInformationDtos){
+     List<Map<DiscountFactorItem, BigDecimal>> transformDiscountFactorItem(List<DiscountFactorInformationDto> modalFactorInformationDtos){
         List<Map<DiscountFactorItem, BigDecimal>> discountFactorItems = Lists.newArrayList();
         for (DiscountFactorInformationDto discountFactorInformationDto : modalFactorInformationDtos){
             Map<DiscountFactorItem, BigDecimal> discountFactorItemMap = Maps.newLinkedHashMap();
