@@ -616,12 +616,27 @@ values ('A','Accountants'),('A','Actuaries'),('A','Advocates'),('A','Architects'
 ('E','Underground workers (heavy occupations- Mines)'),('IC','Brewery Employees');
 
 
-INSERT INTO `document` (`document_code`, `document_name`) VALUES('ACTIVE_AT_WORK_DECLARATION_FORM','Active At Work Declaration Form'),
-('ADDRESS_PROOF','Address Proof'),
-('CONSENT_LETTER','Consent Letter'),
-('FULLY_FILLED_CLAIM_FORM','Fully filled  Claim Form'),
-('FULLY_FILLED_MATURITY_CLAIM_FORM','Fully filled Maturity Claim Form'),
-('FULLY_FILLED_SURRENDER_CLAIM_FORM','Fully filled Surrender Claim Form'),
-('ID_PROOF','ID Proof'),
-('SIGNED_DOCUMENT','Signed Agreement'),
-('SIGNED_PROPOSAL_FORM','Signed Proposal Form');
+/*Data for the table `document` */
+
+INSERT INTO `document` (`document_code`, `document_name`)
+ VALUES('ACTIVE_AT_WORK_DECLARATION_FORM','Active At Work Declaration Form'),
+ ('ADDRESS_PROOF','Address Proof'),
+ ('ANY_CLINICAL_ABSTRACTS_RECORDS_IF_AVAILABLE','Any clinical abstracts/records if available'),
+ ('BROUGHT_IN_DEAD_BID_CERTIFICATE','Brought in dead (BID) certificate'),
+ ('BURIAL_CERTIFICATE','Burial Certificate'),
+ ('CERTIFICATE_OF_REGISTRATION_OF_DEATH','Certificate of Registration of Death'),
+ ('CERTIFIED_COPY_OF_NATIONAL_REGISTRATION_CARD_ID','Certified copy of National Registration Card/ID'),
+ ('CONSENT_LETTER','Consent Letter'),
+ ('CORONERS_REPORT','Coroner\'s Report'),
+ ('DEATH_CERTIFICATE','Death Certificate'),
+ ('FULLY_FILLED_CLAIM_FORM','Fully filled  Claim Form'),
+ ('FULLY_FILLED_MATURITY_CLAIM_FORM','Fully filled Maturity Claim Form'),
+ ('FULLY_FILLED_SURRENDER_CLAIM_FORM','Fully filled Surrender Claim Form'),
+ ('ID_PROOF','ID Proof'),
+ ('LETTER_FROM_THE_VILLAGE_CHIEF','Letter from the Village Chief'),
+ ('MEDICAL_CERTIFICATE_OF_CAUSE_OF_DEATH','Medical Certificate of cause of death'),
+ ('MEDICAL_REPORT_SIGNED_BY_DOCTOR_FROM_REGISTERED_HOSPITALS_OR_CLINICS_UNDER_THE_MINISTRY_OF_HEALTH_ONLY','Medical Report signed by Doctor from registered hospitals or clinics under the Ministry of Health only'),
+ ('ORIGINAL_POLICY_DOCUMENT_AND_SCHEDULE','Original Policy Document & Schedule'),
+ ('POLICE_REPORT','Police Report (for accident cases)'),
+ ('SIGNED_AGREEMENT','Signed Agreement'),
+ ('SIGNED_PROPOSAL_FORM','Signed Proposal Form');
