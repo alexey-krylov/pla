@@ -1,6 +1,6 @@
  $('#branchManager-table').dataTable({
   "aoColumnDefs":[
-   {"bSearchable": false, "aTargets": [8]  }
+   {"bSearchable": false, "aTargets": [8],"bSortable":false  }
   ]});
  var isNumeric = function (event){
   var charCode = (event.which) ? event.which : event.keyCode;

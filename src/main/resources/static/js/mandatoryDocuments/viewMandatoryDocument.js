@@ -7,9 +7,9 @@ require(['jquery','bootstrap','datatables'],function(){
          "aoColumns":[
              {"bSearchable": true  },
              {"bSearchable": true  },
-             {"bSearchable": false  },
+             {"bSearchable": false ,"bSortable":false },
              {"bSearchable": true },
-             {"bSearchable": false }
+             {"bSearchable": false ,"bSortable":false}
          ]});
 
       openPopover();

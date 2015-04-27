@@ -1,6 +1,6 @@
 $('#team-table').dataTable({
     "aoColumnDefs":[
-        {"bSearchable": false, "aTargets": [ 7 ]  }
+        {"bSearchable": false, "aTargets": [ 7 ] ,"bSortable":false }
 
 ]});
 

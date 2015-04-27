@@ -1,6 +1,6 @@
  $('#regionalManager-table').dataTable({
   "aoColumnDefs":[
-   {"bSearchable": false, "aTargets": [4 ]  }
+   {"bSearchable": false, "aTargets": [4 ],"bSortable":false  }
 
   ]});
  var isNumeric = function (event){
