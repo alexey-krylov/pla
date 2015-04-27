@@ -88,7 +88,6 @@ public class PremiumCalculator implements IPremiumCalculator {
 
         @Override
         public boolean test(PremiumItem premiumItem) {
-            boolean matchFound = true;
             int noOfMatch = 0;
             for (PremiumInfluencingFactorLineItem premiumInfluencingFactorLineItem : premiumItem.getPremiumInfluencingFactorLineItems()) {
                 if (isMatchesInfluencingFactorAndValue(premiumInfluencingFactorLineItem, premiumCalculationInfluencingFactorItems)) {

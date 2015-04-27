@@ -263,8 +263,10 @@ public class PremiumCalculatorUnitTest {
     public void givenPremiumItShouldCalculatePremiumWithNoPremiumFoundItShouldThrowException() throws IOException {
         PremiumCalculationDto premiumCalculationDto = new PremiumCalculationDto(planId, null, premiumSetupDate.plusDays(1), PremiumFrequency.MONTHLY, 365);
         premiumCalculationDto = premiumCalculationDto.addInfluencingFactorItemValue(PremiumInfluencingFactor.SUM_ASSURED, "550001");
-        premiumCalculationDto = premiumCalculationDto.addInfluencingFactorItemValue(PremiumInfluencingFactor.AGE, "22");
-        premiumCalculationDto = premiumCalculationDto.addInfluencingFactorItemValue(PremiumInfluencingFactor.POLICY_TERM, "365");
+        premiumCalculationDto = premiumCalculationDto.addInfluencingFactorItemValue(PremiumInfluencingFactor.AGE, "23232");
+        premiumCalculationDto = premiumCalculationDto.addInfluencingFactorItemValue(PremiumInfluencingFactor.POLICY_TERM, "36335");
+        premiumCalculationDto = premiumCalculationDto.addInfluencingFactorItemValue(PremiumInfluencingFactor.PREMIUM_PAYMENT_TERM, "36335");
+        premiumCalculationDto = premiumCalculationDto.addInfluencingFactorItemValue(PremiumInfluencingFactor.GENDER, "36335");
         Premium premium = createPremium(PremiumFactor.FLAT_AMOUNT, PremiumRateFrequency.YEARLY, "premiumsetupdatawithflatpremium.xls");
         when(premiumFinder.findPremium(premiumCalculationDto)).thenReturn(premium);
         when(organizationGeneralInformationRepository.findAll()).thenReturn(Lists.newArrayList(organizationGeneralInformation));
@@ -293,7 +295,6 @@ public class PremiumCalculatorUnitTest {
         premiumCalculationDto = premiumCalculationDto.addInfluencingFactorItemValue(PremiumInfluencingFactor.AGE, "22");
         premiumCalculationDto = premiumCalculationDto.addInfluencingFactorItemValue(PremiumInfluencingFactor.POLICY_TERM, "365");
         premiumCalculationDto = premiumCalculationDto.addInfluencingFactorItemValue(PremiumInfluencingFactor.GENDER, "365");
-        premiumCalculationDto = premiumCalculationDto.addInfluencingFactorItemValue(PremiumInfluencingFactor.PREMIUM_PAYMENT_TERM, "365");
         Premium premium = createPremium(PremiumFactor.FLAT_AMOUNT, PremiumRateFrequency.YEARLY, "premiumsetupdatawithflatpremium.xls");
         when(premiumFinder.findPremium(premiumCalculationDto)).thenReturn(premium);
         when(organizationGeneralInformationRepository.findAll()).thenReturn(Lists.newArrayList(organizationGeneralInformation));
