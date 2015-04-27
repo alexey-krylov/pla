@@ -23,8 +23,8 @@ require(['jquery','bootstrap','datatables'],function(){
              {"sWidth": "20%","bSearchable": true  },
              {"sWidth": "15%","bSearchable": true  },
              {"sWidth": "45%","bSearchable": true  },
-            {"sWidth": "5%","bSearchable": false },
-            {"sWidth": "15%","bSearchable": false }
+            {"sWidth": "5%","bSearchable": false,"bSortable":false},
+            {"sWidth": "15%","bSearchable": false,"bSortable":false }
     ]});
 
     openPopover();
