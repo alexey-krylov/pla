@@ -37,14 +37,14 @@ App.controller('AssignBranchManagerController',['$scope','$http','$window','$loc
                 $http.get('/pla/core/branch/getbranchdetail?branchId='+$scope.url).success(function(data){
                         // console.log(data);
                         $scope.assignBranchManager=data;
-                    if($scope.assignBranchManager.currentBranchManagerFromDate){
+                    if($scope.assignBranchManager.currentBranchManagerToDate){
                         $scope.disableCurrentBranchManager=false;
 
 
                     }else{
                         $scope.disableCurrentBranchManager=true;
                     }
-                    if($scope.assignBranchManager.currentBranchBDEFromDate){
+                    if($scope.assignBranchManager.currentBranchBDEToDate){
                         $scope.disableCurrentBranchBDE=false;
 
 
