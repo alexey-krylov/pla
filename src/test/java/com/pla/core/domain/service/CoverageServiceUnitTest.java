@@ -5,6 +5,7 @@ import com.pla.core.domain.model.*;
 import com.pla.core.dto.CoverageDto;
 import com.pla.core.query.CoverageFinder;
 import com.pla.core.specification.CoverageCodeIsUnique;
+import com.pla.core.specification.CoverageIsAssociatedWithPlan;
 import com.pla.core.specification.CoverageNameIsUnique;
 import com.pla.sharedkernel.identifier.CoverageId;
 import org.junit.Before;
@@ -44,6 +45,8 @@ public class CoverageServiceUnitTest {
     @Mock
     private CoverageCodeIsUnique coverageCodeIsUnique;
 
+    @Mock
+    private CoverageIsAssociatedWithPlan coverageIsAssociatedWithPlan;
 
     @Mock
     private CoverageFinder coverageFinder;
@@ -61,7 +64,7 @@ public class CoverageServiceUnitTest {
     @Before
     public void setUp() {
         CoverageCodeIsUnique coverageCodeIsUnique = new CoverageCodeIsUnique(coverageFinder);
-        coverageService = new CoverageService(adminRoleAdapter, coverageNameIsUnique,coverageCodeIsUnique, idGenerator);
+        coverageService = new CoverageService(adminRoleAdapter, coverageNameIsUnique,coverageCodeIsUnique, idGenerator,coverageIsAssociatedWithPlan);
         userDetails = UserLoginDetailDto.createUserLoginDetailDto("", "");
         admin = new Admin();
 
