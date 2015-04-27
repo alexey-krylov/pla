@@ -9,10 +9,7 @@
 <div th:include="fragments/common :: bodyHeader" th:remove="tag"/>
 <script>
 
-    requirejs(['basic'],function(){
-        requirejs(['/pla/js/generalInformation/viewOrganizationalLevelInformation.js'],function(){
-        });
-    })
+
     requirejs(['main'],function(){
         require(['/pla/js/generalInformation/updateOrganizationalLevelInformation.js'],function(){
             angular.bootstrap(document, ['updateOrganizationalLevelInfo']);
@@ -33,37 +30,35 @@
                     </div>
                 </div>
                 <div class="panel-body ng-cloak">
-                    <table class="table table-striped table-bordered"  cellspacing="0" width="100%">
-                        <thead>
-                        <tr>
-                            <th th:text="#{semiAnnualModalFactor}">
-                                Semi Annual Modal Factor
-                            </th>
-                            <th th:text="#{monthlyModalFactor}">
-                                Monthly Modal Factor
-                            </th>
+                    <div class="row">
+                        <div class="" style="margin: auto;margin-top:10px;">
+                            <label class="control-label" style="padding-left:10px;">Modal Factors - to be applied in case Premiums are mentioned on a per year basis.</label>
+                        </div>
+                        <div class="form-group col-md-4 " ng-repeat="modelFactorItems in organizationInformation.modelFactorItems">
+                            <label class="control-label" ng-bind="getFieldName(modelFactorItems.modalFactorItem)"></label>
+                            <p class="input-group" >
+                                <input type="text" class="form-control input-sm" ng-model="modelFactorItems.value" value="{{modelFactorItems.value}}" readonly="true"/>
+                            </p>
+                        </div>
+                    </div>
+                    <div class="row" >
+                        <div class="" style="margin: auto;margin-top:10px;">
+                            <label class="control-label"  style="padding-left:10px;">Discount Factors - to be applied in case Premiums are mentioned on a per month basis.</label>
+                        </div>
+                        <div class="form-group col-md-4" ng-repeat="discountFactorItems in organizationInformation.discountFactorItems">
+                            <label class="control-label" ng-bind="getFieldName(discountFactorItems.discountFactorItem)" ></label>
+                            <p class="input-group" >
+                                <input type="text" class="form-control input-sm" ng-model="discountFactorItems.value" value="{{discountFactorItems.value}}" readonly="true"/>
+                            </p>
+                        </div>
+                        <div class="form-group col-md-4" >
+                            <label class="control-label" ng-bind="getFieldName(organizationInformation.serviceTax.tax)"></label>
+                            <p class="input-group" >
+                                <input type="text" class="form-control input-sm" min="1"  ng-model="organizationInformation.serviceTax.value" value="{{organizationInformation.serviceTax.value}}" readonly="true"/>
+                            </p>
+                        </div>
+                    </div>
 
-                            <th th:text="#{annualDiscountFactor}">
-                                Annual Discount Factor
-                            </th>
-                            <th th:text="#{quarterlyDiscountFactor}">
-                                Quarterly Discount Factor
-                            </th>
-                            <th th:text="#{tax}">
-                                Tax
-                            </th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <tr >
-                            <td>{{organizationInformation.modelFactorItems[0].value}}</td>
-                            <td>{{organizationInformation.modelFactorItems[1].value}}</td>
-                            <td>{{organizationInformation.discountFactorItems[0].value}}</td>
-                            <td>{{organizationInformation.discountFactorItems[1].value}}</td>
-                            <td>{{organizationInformation.serviceTax.value}} </td>
-                        </tr>
-                        </tbody>
-                    </table>
                 </div>
                 <div class="panel-footer">
                     <ul class="pagination" id="logs-pagination-default"></ul>

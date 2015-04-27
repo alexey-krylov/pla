@@ -64,6 +64,21 @@ App.controller('ViewOrganizationalLevelController',['$scope','$http','$templateC
        $scope.organizationInformation=data[0];
 
     });
+    $http.get('/pla/core/organizationinformation/getorganizationprocessitem').success(function(data){
+        $scope.processItems=data;
+
+    });
+
+    $scope.fieldData={};
+    $scope.getFieldName = function(fieldtype){
+        //  console.log(fieldtype);
+        if(fieldtype){
+            $scope.fieldData=_.findWhere($scope.processItems,{type:fieldtype});
+            if($scope.fieldData)
+                return $scope.fieldData.description;
+        }
+    }
+
 
 }]);
 App.controller('CreateOrganizationalLevelController',['$scope','$http','$templateCache','$timeout','$alert','$window',function($scope,$http,$templateCache,$timeout,$alert,$window){
