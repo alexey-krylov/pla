@@ -1,16 +1,22 @@
 package com.pla.core.domain.model.generalinformation;
 
-import com.pla.sharedkernel.domain.model.PolicyFeeProcessType;
-import com.pla.sharedkernel.domain.model.PolicyProcessMinimumLimitType;
-import com.pla.sharedkernel.domain.model.ProductLineProcessType;
+import com.google.common.collect.Sets;
+import com.pla.core.domain.exception.GeneralInformationException;
+import com.pla.publishedlanguage.domain.model.PremiumFrequency;
+import com.pla.sharedkernel.domain.model.*;
 import com.pla.sharedkernel.identifier.LineOfBusinessId;
 import lombok.*;
 import org.bson.types.ObjectId;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import javax.persistence.Id;
+import java.math.BigDecimal;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 
 /**
@@ -46,6 +52,12 @@ public class ProductLineGeneralInformation {
     private SurrenderProcessInformation surrenderProcessInformation;
 
     private MaturityProcessInformation maturityProcessInformation;
+
+    private Set<PremiumFollowUpFrequency> premiumFollowUpFrequency;
+
+    private ModalFactorProcessInformation  modalFactorProcessInformation;
+
+    private DiscountFactorProcessInformation discountFactorProcessInformation;
 
 
     private ProductLineGeneralInformation(String productLineInformationId, LineOfBusinessId productLineId) {
@@ -102,4 +114,40 @@ public class ProductLineGeneralInformation {
         this.maturityProcessInformation = MaturityProcessInformation.create(maturityProcessInformation);
         return this;
     }
+
+    public ProductLineGeneralInformation withModalFactorProcessInformation(List<Map<ModalFactorItem, BigDecimal>> listOfModalFactorItem) {
+        this.modalFactorProcessInformation = ModalFactorProcessInformation.create(listOfModalFactorItem);
+        return this;
+    }
+
+    public ProductLineGeneralInformation withDiscountFactorProcessInformation(List<Map<DiscountFactorItem, BigDecimal>> listOfDiscountFactorItem) {
+        this.discountFactorProcessInformation = DiscountFactorProcessInformation.create(listOfDiscountFactorItem);
+        return this;
+    }
+
+    public ProductLineGeneralInformation withPremiumFollowUpMonthly(Map<PremiumFrequency, List<Map<ProductLineProcessType,Integer>>> premiumFollowUpFrequencyItems) {
+        premiumFollowUpFrequency = Sets.newLinkedHashSet();
+        for (Map.Entry<PremiumFrequency, List<Map<ProductLineProcessType, Integer>>> premiumFrequencyFollowUpMap : premiumFollowUpFrequencyItems.entrySet()) {
+            premiumFollowUpFrequency.add(new PremiumFollowUpFrequency(premiumFrequencyFollowUpMap.getKey(), create(premiumFrequencyFollowUpMap.getValue())));
+        }
+        return this;
+    }
+
+    public static Set<ProductLineProcessItem> create(List<Map<ProductLineProcessType,Integer>> quotationProcessItems) {
+        Set<ProductLineProcessItem> productLineProcessItems = quotationProcessItems.stream().map(new QuotationProcessInformationTransformer()).collect(Collectors.toSet());
+        return productLineProcessItems;
+    }
+
+    private static class QuotationProcessInformationTransformer implements Function<Map<ProductLineProcessType,Integer>,ProductLineProcessItem> {
+        @Override
+        public ProductLineProcessItem apply(Map<ProductLineProcessType,Integer> productLineProcessItemMap) {
+            Map.Entry<ProductLineProcessType,Integer> entry = productLineProcessItemMap.entrySet().iterator().next();
+            if (!Arrays.asList(ProductLineProcessType.FIRST_REMAINDER, ProductLineProcessType.SECOND_REMAINDER, ProductLineProcessType.LAPSE).contains(entry.getKey())){
+                throw new GeneralInformationException("Premium Follow up frequency should not include "+entry.getKey());
+            }
+            ProductLineProcessItem productLineProcessItem = new ProductLineProcessItem(entry.getKey(), entry.getValue());
+            return productLineProcessItem;
+        }
+    }
+
 }

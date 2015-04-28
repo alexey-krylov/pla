@@ -232,6 +232,8 @@ var hideAlerts = function(){
  * */
 var coverageToInactivate = '';
 var inactivate=function(value,flag){
+    hideAlerts();
+    $('#approveButton').show();
     if(flag=='save'){
         coverageToInactivate =  value;
     }else{
@@ -244,7 +246,9 @@ var inactivate=function(value,flag){
                 if(msg.status=='200'){
                     window.location.reload();
                 }else{
-                    alert("Error inactivating coverage");
+                    hideAlerts();
+                    $('#approveButton').hide();
+                    $('#inactivate-alert-danger').text(msg.message).show();
                 }
             }
         });

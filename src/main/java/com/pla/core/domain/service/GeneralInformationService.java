@@ -10,6 +10,7 @@ import com.pla.core.domain.model.Admin;
 import com.pla.core.domain.model.generalinformation.OrganizationGeneralInformation;
 import com.pla.core.domain.model.generalinformation.ProductLineGeneralInformation;
 import com.pla.core.dto.*;
+import com.pla.publishedlanguage.domain.model.PremiumFrequency;
 import com.pla.sharedkernel.domain.model.*;
 import com.pla.sharedkernel.identifier.LineOfBusinessId;
 import org.nthdimenzion.common.AppConstants;
@@ -63,9 +64,13 @@ public class GeneralInformationService {
         List<Map<ProductLineProcessType,Integer>> reinstatementProcessItem =   transformProductLine(generalInformationDto.getReinstatementProcessItems());
         List<Map<ProductLineProcessType,Integer>> maturityProcessItem =   transformProductLine(generalInformationDto.getMaturityProcessItems());
         List<Map<ProductLineProcessType,Integer>> surrenderProcessItem =   transformProductLine(generalInformationDto.getSurrenderProcessItems());
+        Map<PremiumFrequency, List<Map<ProductLineProcessType,Integer>>> premiumFollowUpFrequencyItems =  transformPremiumFrequencyFollowUp(generalInformationDto.getPremiumFollowUpFrequency());
         List<Map<PolicyFeeProcessType,Integer>> policyFeeProcess  = transformProductLineFeeProcess(generalInformationDto.getPolicyFeeProcessItems());
         List<Map<PolicyProcessMinimumLimitType,Integer>>  minimumLimitProcess =  transformProductLineMinimumLimitProcess(generalInformationDto.getPolicyProcessMinimumLimitItems());
-        ProductLineGeneralInformation productLineGeneralInformation = admin.createProductLineGeneralInformation(lineOfBusinessId, quotationProcessItem,enrollmentProcessItem,reinstatementProcessItem,endorsementProcessItem,claimProcessItem,policyFeeProcess,minimumLimitProcess,surrenderProcessItem,maturityProcessItem);
+        List<Map<ModalFactorItem, BigDecimal>> modalFactorItems =  transformModalFactorItem(generalInformationDto.getModelFactorItems());
+        List<Map<DiscountFactorItem, BigDecimal>> discountFactorItems =  transformDiscountFactorItem(generalInformationDto.getDiscountFactorItems());
+        ProductLineGeneralInformation productLineGeneralInformation = admin.createProductLineGeneralInformation(lineOfBusinessId, quotationProcessItem,enrollmentProcessItem,reinstatementProcessItem,endorsementProcessItem,claimProcessItem,policyFeeProcess,minimumLimitProcess,surrenderProcessItem,maturityProcessItem,
+                premiumFollowUpFrequencyItems,modalFactorItems,discountFactorItems);
         springMongoTemplate.save(productLineGeneralInformation);
         return AppConstants.SUCCESS;
     }
@@ -98,6 +103,15 @@ public class GeneralInformationService {
             productLineProcessList.add(policyProcessMinimumLimit);
         }
         return productLineProcessList;
+    }
+
+    public Map<PremiumFrequency, List<Map<ProductLineProcessType,Integer>>> transformPremiumFrequencyFollowUp(List<PremiumFrequencyFollowUpDto> premiumFrequencyFollowUpDtos){
+        Map<PremiumFrequency, List<Map<ProductLineProcessType,Integer>>> premiumFrequencyFollowUp = Maps.newLinkedHashMap();
+        for (PremiumFrequencyFollowUpDto premiumFrequencyFollowUpDto : premiumFrequencyFollowUpDtos){
+            List<Map<ProductLineProcessType,Integer>> productLineProcessItem =  transformProductLine(premiumFrequencyFollowUpDto.getPremiumFollowUpFrequencyItems());
+            premiumFrequencyFollowUp.put(premiumFrequencyFollowUpDto.getPremiumFrequency(),productLineProcessItem);
+        }
+        return premiumFrequencyFollowUp;
     }
 
 
@@ -147,7 +161,10 @@ public class GeneralInformationService {
         List<Map<ProductLineProcessType,Integer>> surrenderProcessItem = transformProductLine(generalInformationDto.getSurrenderProcessItems());
         List<Map<PolicyFeeProcessType,Integer>> policyFeeProcess  = transformProductLineFeeProcess(generalInformationDto.getPolicyFeeProcessItems());
         List<Map<PolicyProcessMinimumLimitType,Integer>>  minimumLimitProcess =  transformProductLineMinimumLimitProcess(generalInformationDto.getPolicyProcessMinimumLimitItems());
-        productLineGeneralInformation = admin.updateProductLineInformation(productLineGeneralInformation,  quotationProcessItem,enrollmentProcessItem,reinstatementProcessItem,endorsementProcessItem,claimProcessItem,policyFeeProcess,minimumLimitProcess,surrenderProcessItem,maturityProcessItem);
+        Map<PremiumFrequency, List<Map<ProductLineProcessType,Integer>>>  premiumFrequencyFollowUp =  transformPremiumFrequencyFollowUp(generalInformationDto.getPremiumFollowUpFrequency());
+        List<Map<ModalFactorItem, BigDecimal>> modalFactorItems  = transformModalFactorItem(generalInformationDto.getModelFactorItems());
+        List<Map<DiscountFactorItem, BigDecimal>> discountFactorItems = transformDiscountFactorItem(generalInformationDto.getDiscountFactorItems());
+        productLineGeneralInformation = admin.updateProductLineInformation(productLineGeneralInformation,  quotationProcessItem,enrollmentProcessItem,reinstatementProcessItem,endorsementProcessItem,claimProcessItem,policyFeeProcess,minimumLimitProcess,surrenderProcessItem,maturityProcessItem,premiumFrequencyFollowUp,modalFactorItems,discountFactorItems);
         update = updateProductLineInformation(update, productLineGeneralInformation);
         springMongoTemplate.updateFirst(findGeneralInformation, update, ProductLineGeneralInformation.class);
         return AppConstants.SUCCESS;
@@ -163,10 +180,13 @@ public class GeneralInformationService {
         update.set("policyProcessMinimumLimit", updatedProductLineInformation.getPolicyProcessMinimumLimit());
         update.set("surrenderProcessInformation", updatedProductLineInformation.getSurrenderProcessInformation());
         update.set("maturityProcessInformation", updatedProductLineInformation.getMaturityProcessInformation());
+        update.set("premiumFollowUpFrequency", updatedProductLineInformation.getPremiumFollowUpFrequency());
+        update.set("modalFactorProcessInformation", updatedProductLineInformation.getModalFactorProcessInformation());
+        update.set("discountFactorProcessInformation", updatedProductLineInformation.getDiscountFactorProcessInformation());
         return update;
     }
 
-     List<Map<ModalFactorItem, BigDecimal>> transformModalFactorItem(List<ModalFactorInformationDto> modalFactorInformationDtos){
+    List<Map<ModalFactorItem, BigDecimal>> transformModalFactorItem(List<ModalFactorInformationDto> modalFactorInformationDtos){
         List<Map<ModalFactorItem, BigDecimal>> modalFactorItems = Lists.newArrayList();
         for (ModalFactorInformationDto modalFactorInformationDto : modalFactorInformationDtos){
             Map<ModalFactorItem, BigDecimal> modalFactorItemMap = Maps.newLinkedHashMap();
@@ -176,7 +196,7 @@ public class GeneralInformationService {
         return modalFactorItems;
     }
 
-     List<Map<DiscountFactorItem, BigDecimal>> transformDiscountFactorItem(List<DiscountFactorInformationDto> modalFactorInformationDtos){
+    List<Map<DiscountFactorItem, BigDecimal>> transformDiscountFactorItem(List<DiscountFactorInformationDto> modalFactorInformationDtos){
         List<Map<DiscountFactorItem, BigDecimal>> discountFactorItems = Lists.newArrayList();
         for (DiscountFactorInformationDto discountFactorInformationDto : modalFactorInformationDtos){
             Map<DiscountFactorItem, BigDecimal> discountFactorItemMap = Maps.newLinkedHashMap();
@@ -291,6 +311,12 @@ public class GeneralInformationService {
             productLineInformationByBusinessId.put("surrenderProcessItems",surrenderMap.get("surrenderProcessItems"));
             Map  maturityMap = (Map) productLineInformationMap.get("maturityProcessInformation");
             productLineInformationByBusinessId.put("maturityProcessItems",maturityMap.get("maturityProcessItems"));
+            productLineInformationByBusinessId.put("premiumFollowUpFrequency", productLineInformationMap.get("premiumFollowUpFrequency"));
+            Map  discountFactorMap = (Map) productLineInformationMap.get("discountFactorProcessInformation");
+            productLineInformationByBusinessId.put("discountFactorItems",discountFactorMap.get("discountFactorItems"));
+            Map  modalFactorMap = (Map) productLineInformationMap.get("modalFactorProcessInformation");
+            productLineInformationByBusinessId.put("modelFactorItems",modalFactorMap.get("modelFactorItems"));
+
             productLineInformationList.add(productLineInformationByBusinessId);
         }
         return transformProductLineInformation(productLineInformationList);
@@ -368,15 +394,19 @@ public class GeneralInformationService {
     }
 
     private Map getProductLineGeneralInformation(Map productLineInformationMap){
-        productLineInformationMap.put("quotationProcessItems", GeneralInformationProcessItem.QUOTATION.getOrganizationLevelProcessInformationItem());
-        productLineInformationMap.put("enrollmentProcessItems",  GeneralInformationProcessItem.ENROLLMENT.getOrganizationLevelProcessInformationItem());
-        productLineInformationMap.put("reinstatementProcessItems",  GeneralInformationProcessItem.REINSTATEMENT.getOrganizationLevelProcessInformationItem());
-        productLineInformationMap.put("endorsementProcessItems", GeneralInformationProcessItem.ENDORSEMENT.getOrganizationLevelProcessInformationItem());
+        productLineInformationMap.put("quotationProcessItems", GeneralInformationProcessItem.DEFAULT.getOrganizationLevelProcessInformationItem());
+        productLineInformationMap.put("enrollmentProcessItems",  GeneralInformationProcessItem.DEFAULT.getOrganizationLevelProcessInformationItem());
+        productLineInformationMap.put("reinstatementProcessItems",  GeneralInformationProcessItem.DEFAULT.getOrganizationLevelProcessInformationItem());
+        productLineInformationMap.put("endorsementProcessItems", GeneralInformationProcessItem.DEFAULT.getOrganizationLevelProcessInformationItem());
         productLineInformationMap.put("claimProcessItems", GeneralInformationProcessItem.CLAIM.getOrganizationLevelProcessInformationItem());
         productLineInformationMap.put("policyFeeProcessItems",GeneralInformationProcessItem.POLICY_FEE.getOrganizationLevelProcessInformationItem());
         productLineInformationMap.put("policyProcessMinimumLimitItems", GeneralInformationProcessItem.MINIMUM_LIMIT.getOrganizationLevelProcessInformationItem());
-        productLineInformationMap.put("surrenderProcessItems", GeneralInformationProcessItem.SURRENDER.getOrganizationLevelProcessInformationItem());
-        productLineInformationMap.put("maturityProcessItems", GeneralInformationProcessItem.MATURITY.getOrganizationLevelProcessInformationItem());
+        productLineInformationMap.put("surrenderProcessItems", GeneralInformationProcessItem.DEFAULT.getOrganizationLevelProcessInformationItem());
+        productLineInformationMap.put("maturityProcessItems", GeneralInformationProcessItem.DEFAULT.getOrganizationLevelProcessInformationItem());
+        productLineInformationMap.put("premiumFollowUpFrequency", GeneralInformationProcessItem.PREMIUM_FOLLOW_UP.getOrganizationLevelProcessInformationItem());
+        productLineInformationMap.put("modelFactorItems",GeneralInformationProcessItem.MODAL_FACTOR.getOrganizationLevelProcessInformationItem());
+        productLineInformationMap.put("discountFactorItems",GeneralInformationProcessItem.DISCOUNT_FACTOR.getOrganizationLevelProcessInformationItem());
         return productLineInformationMap;
     }
+
 }

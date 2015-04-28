@@ -2,7 +2,9 @@ package com.pla.sharedkernel.domain.model;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import com.pla.publishedlanguage.domain.model.PremiumFrequency;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -11,57 +13,12 @@ import java.util.Map;
  */
 public enum GeneralInformationProcessItem {
 
-    QUOTATION{
+    DEFAULT{
         @Override
         public List<Map<String, Object>> getOrganizationLevelProcessInformationItem() {
             List<Map<String,Object>> productLineProcessList = Lists.newArrayList();
             for (ProductLineProcessType productLineProcessType : ProductLineProcessType.values()){
-                if (!ProductLineProcessType.EARLY_DEATH_CRITERIA.equals(productLineProcessType)){
-                    Map<String,Object> quotationProcessItems = Maps.newLinkedHashMap();
-                    quotationProcessItems.put("productLineProcessItem",productLineProcessType);
-                    quotationProcessItems.put("value",0);
-                    productLineProcessList.add(quotationProcessItems);
-                }
-            }
-            return productLineProcessList;
-        }
-    },
-    ENROLLMENT{
-        @Override
-        public List<Map<String, Object>> getOrganizationLevelProcessInformationItem() {
-            List<Map<String,Object>> productLineProcessList = Lists.newArrayList();
-            for (ProductLineProcessType productLineProcessType : ProductLineProcessType.values()){
-                if (!ProductLineProcessType.EARLY_DEATH_CRITERIA.equals(productLineProcessType)){
-                    Map<String,Object> quotationProcessItems = Maps.newLinkedHashMap();
-                    quotationProcessItems.put("productLineProcessItem",productLineProcessType);
-                    quotationProcessItems.put("value",0);
-                    productLineProcessList.add(quotationProcessItems);
-                }
-            }
-            return productLineProcessList;
-        }
-    },
-    ENDORSEMENT{
-        @Override
-        public List<Map<String, Object>> getOrganizationLevelProcessInformationItem() {
-            List<Map<String,Object>> productLineProcessList = Lists.newArrayList();
-            for (ProductLineProcessType productLineProcessType : ProductLineProcessType.values()){
-                if (!ProductLineProcessType.EARLY_DEATH_CRITERIA.equals(productLineProcessType)){
-                    Map<String,Object> quotationProcessItems = Maps.newLinkedHashMap();
-                    quotationProcessItems.put("productLineProcessItem",productLineProcessType);
-                    quotationProcessItems.put("value",0);
-                    productLineProcessList.add(quotationProcessItems);
-                }
-            }
-            return productLineProcessList;
-        }
-    },
-    REINSTATEMENT{
-        @Override
-        public List<Map<String, Object>> getOrganizationLevelProcessInformationItem() {
-            List<Map<String,Object>> productLineProcessList = Lists.newArrayList();
-            for (ProductLineProcessType productLineProcessType : ProductLineProcessType.values()){
-                if (!ProductLineProcessType.EARLY_DEATH_CRITERIA.equals(productLineProcessType)){
+                if (!Arrays.asList(ProductLineProcessType.EARLY_DEATH_CRITERIA, ProductLineProcessType.LAPSE).contains(productLineProcessType)){
                     Map<String,Object> quotationProcessItems = Maps.newLinkedHashMap();
                     quotationProcessItems.put("productLineProcessItem",productLineProcessType);
                     quotationProcessItems.put("value",0);
@@ -76,10 +33,12 @@ public enum GeneralInformationProcessItem {
         public List<Map<String, Object>> getOrganizationLevelProcessInformationItem() {
             List<Map<String,Object>> productLineProcessList = Lists.newArrayList();
             for (ProductLineProcessType productLineProcessType : ProductLineProcessType.values()){
-                Map<String,Object> quotationProcessItems = Maps.newLinkedHashMap();
-                quotationProcessItems.put("productLineProcessItem",productLineProcessType);
-                quotationProcessItems.put("value",0);
-                productLineProcessList.add(quotationProcessItems);
+                if (!Arrays.asList(ProductLineProcessType.LAPSE).contains(productLineProcessType)) {
+                    Map<String, Object> quotationProcessItems = Maps.newLinkedHashMap();
+                    quotationProcessItems.put("productLineProcessItem", productLineProcessType);
+                    quotationProcessItems.put("value", 0);
+                    productLineProcessList.add(quotationProcessItems);
+                }
             }
             return productLineProcessList;
         }
@@ -110,34 +69,26 @@ public enum GeneralInformationProcessItem {
             return productLineProcessList;
         }
     },
-    SURRENDER{
+    PREMIUM_FOLLOW_UP{
         @Override
         public List<Map<String, Object>> getOrganizationLevelProcessInformationItem() {
             List<Map<String,Object>> productLineProcessList = Lists.newArrayList();
             for (ProductLineProcessType productLineProcessType : ProductLineProcessType.values()){
-                if (!ProductLineProcessType.EARLY_DEATH_CRITERIA.equals(productLineProcessType)){
+                if (Arrays.asList(ProductLineProcessType.FIRST_REMAINDER, ProductLineProcessType.SECOND_REMAINDER, ProductLineProcessType.LAPSE).contains(productLineProcessType)){
                     Map<String,Object> quotationProcessItems = Maps.newLinkedHashMap();
                     quotationProcessItems.put("productLineProcessItem",productLineProcessType);
                     quotationProcessItems.put("value",0);
                     productLineProcessList.add(quotationProcessItems);
                 }
             }
-            return productLineProcessList;
-        }
-    },
-    MATURITY{
-        @Override
-        public List<Map<String, Object>> getOrganizationLevelProcessInformationItem() {
-            List<Map<String,Object>> productLineProcessList = Lists.newArrayList();
-            for (ProductLineProcessType productLineProcessType : ProductLineProcessType.values()){
-                if (!ProductLineProcessType.EARLY_DEATH_CRITERIA.equals(productLineProcessType)){
-                    Map<String,Object> quotationProcessItems = Maps.newLinkedHashMap();
-                    quotationProcessItems.put("productLineProcessItem",productLineProcessType);
-                    quotationProcessItems.put("value",0);
-                    productLineProcessList.add(quotationProcessItems);
-                }
+            List<Map<String,Object>> premiumFrequencyFollowUpList = Lists.newArrayList();
+            for (PremiumFrequency premiumFrequency : PremiumFrequency.values()){
+                Map<String,Object> premiumFrequencyMap = Maps.newLinkedHashMap();
+                premiumFrequencyMap.put("premiumFrequency", premiumFrequency);
+                premiumFrequencyMap.put("premiumFollowUpFrequencyItems",productLineProcessList);
+                premiumFrequencyFollowUpList.add(premiumFrequencyMap);
             }
-            return productLineProcessList;
+            return premiumFrequencyFollowUpList;
         }
     },
     MODAL_FACTOR{

@@ -2,7 +2,7 @@ define(['angular','angular-loading-bar','directives','angular-animate','ui-boots
     angular.module('common',['directives','angular-loading-bar','ngAnimate','ui.bootstrap'])
         .constant('globalConstants',{
             numberPattern : /^\d+$/,
-            numberPatternWithDecimal : /(^\d+$|^\d+\.\d{1,4}$)/,
+            numberPatternWithDecimal : /(^\d{1,2}$|^\d{1,2}\.\d{1,2}$)/,
             title:["Mr.","Mrs.","Miss","Dr.","Prof.","Hon.","Ms.","Rev.","Pst."],
             gender:[{code:'MALE',description:"Male"},{code:'FEMALE',description:'Female'}]
         })
