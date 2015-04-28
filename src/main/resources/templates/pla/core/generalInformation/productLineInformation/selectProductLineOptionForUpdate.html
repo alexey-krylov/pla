@@ -138,17 +138,111 @@
                                 </div>
                             </div>
                         </div>
+
                         <div class="panel panel-default" id="panel3" ng-class="forms.form3.$valid ? '' : 'errorClass'">
                             <div class="panel-heading">
                                 <h4 class="panel-title">
                                     <a  class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapseThree">
-                                        Reinstatement Request
+                                        Premium Follow Up- Annual Frequency
                                     </a><i class="indicator glyphicon glyphicon-chevron-down  pull-right"></i>
                                 </h4>
                             </div>
                             <div id="collapseThree" class="panel-collapse collapse">
                                 <div class="panel-body">
                                     <form  novalidate="true" role="form" name="forms.form3">
+                                       <div class="row">
+                                            <div class="form-group col-md-4 required" ng-repeat="premiumFollowUpFrequencyItems in items.premiumFollowUpFrequency[0].premiumFollowUpFrequencyItems">
+                                                <label class="control-label"  data-toggle="tooltip" data-placement="top" title="Number of days after which Closed (complete)Reinstatement request should be purged" ng-bind="getFieldName(premiumFollowUpFrequencyItems.productLineProcessItem)"></label>
+                                                <p class="input-group">
+                                                    <input type="number" class="form-control input-sm" min="1" ng-pattern="/^([0-9]{2})?$/"  ng-model="premiumFollowUpFrequencyItems.value" value="{{premiumFollowUpFrequencyItems.value}}" ng-required="true"/>
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel panel-default" id="panel4" ng-class="forms.form4.$valid ? '' : 'errorClass'">
+                            <div class="panel-heading">
+                                <h4 class="panel-title">
+                                    <a  class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapseFour">
+                                        Premium Follow Up- Semi-Annual Frequency
+                                    </a><i class="indicator glyphicon glyphicon-chevron-down  pull-right"></i>
+                                </h4>
+                            </div>
+                            <div id="collapseFour" class="panel-collapse collapse">
+                                <div class="panel-body">
+                                    <form  novalidate="true" role="form" name="forms.form4">
+                                         <div class="row">
+                                             <div class="form-group col-md-4 required" ng-repeat="premiumFollowUpFrequencyItems in items.premiumFollowUpFrequency[1].premiumFollowUpFrequencyItems">
+                                                 <label class="control-label"  data-toggle="tooltip" data-placement="top" title="Number of days after which Closed (complete)Reinstatement request should be purged" ng-bind="getFieldName(premiumFollowUpFrequencyItems.productLineProcessItem)"></label>
+                                                 <p class="input-group">
+                                                     <input type="number" class="form-control input-sm" min="1" ng-pattern="/^([0-9]{2})?$/"  ng-model="premiumFollowUpFrequencyItems.value" value="{{premiumFollowUpFrequencyItems.value}}" ng-required="true"/>
+                                                 </p>
+                                             </div>
+                                         </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel panel-default" id="panel5" ng-class="forms.form5.$valid ? '' : 'errorClass'">
+                            <div class="panel-heading">
+                                <h4 class="panel-title">
+                                    <a  class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapseFive">
+                                        Premium Follow Up- Quarterly Frequency
+                                    </a><i class="indicator glyphicon glyphicon-chevron-down  pull-right"></i>
+                                </h4>
+                            </div>
+                            <div id="collapseFive" class="panel-collapse collapse">
+                                <div class="panel-body">
+                                    <form  novalidate="true" role="form" name="forms.form5">
+                                         <div class="row">
+                                             <div class="form-group col-md-4 required" ng-repeat="premiumFollowUpFrequencyItems in items.premiumFollowUpFrequency[2].premiumFollowUpFrequencyItems">
+                                                 <label class="control-label"  data-toggle="tooltip" data-placement="top" title="Number of days after which Closed (complete)Reinstatement request should be purged" ng-bind="getFieldName(premiumFollowUpFrequencyItems.productLineProcessItem)"></label>
+                                                 <p class="input-group">
+                                                     <input type="number" class="form-control input-sm" min="1" ng-pattern="/^([0-9]{2})?$/"  ng-model="premiumFollowUpFrequencyItems.value" value="{{premiumFollowUpFrequencyItems.value}}" ng-required="true"/>
+                                                 </p>
+                                             </div>
+                                         </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="panel panel-default" id="panel6" ng-class="forms.form6.$valid ? '' : 'errorClass'">
+                            <div class="panel-heading">
+                                <h4 class="panel-title">
+                                    <a  class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapseSix">
+                                        Premium Follow Up- Monthly Frequency
+                                    </a><i class="indicator glyphicon glyphicon-chevron-down  pull-right"></i>
+                                </h4>
+                            </div>
+                            <div id="collapseSix" class="panel-collapse collapse">
+                                <div class="panel-body">
+                                    <form  novalidate="true" role="form" name="forms.form6">
+                                        <div class="row">
+                                             <div class="form-group col-md-4 required" ng-repeat="premiumFollowUpFrequencyItems in items.premiumFollowUpFrequency[3].premiumFollowUpFrequencyItems">
+                                                 <label class="control-label"  data-toggle="tooltip" data-placement="top" title="Number of days after which Closed (complete)Reinstatement request should be purged" ng-bind="getFieldName(premiumFollowUpFrequencyItems.productLineProcessItem)"></label>
+                                                 <p class="input-group">
+                                                     <input type="number" class="form-control input-sm" min="1" ng-pattern="/^([0-9]{2})?$/"  ng-model="premiumFollowUpFrequencyItems.value" value="{{premiumFollowUpFrequencyItems.value}}" ng-required="true"/>
+                                                 </p>
+                                             </div>
+                                         </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel panel-default" id="panel7" ng-class="forms.form7.$valid ? '' : 'errorClass'">
+                            <div class="panel-heading">
+                                <h4 class="panel-title">
+                                    <a  class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapseSeven">
+                                        Reinstatement Request
+                                    </a><i class="indicator glyphicon glyphicon-chevron-down  pull-right"></i>
+                                </h4>
+                            </div>
+                            <div id="collapseSeven" class="panel-collapse collapse">
+                                <div class="panel-body">
+                                    <form  novalidate="true" role="form" name="forms.form7">
                                     <div class="row">
                                         <div class="form-group col-md-4 required" ng-repeat="reinstatementProcessItems in items.reinstatementProcessItems">
                                             <label class="control-label"  data-toggle="tooltip" data-placement="top" title="Number of days after which Closed (complete)Reinstatement request should be purged" ng-bind="getFieldName(reinstatementProcessItems.productLineProcessItem)"></label>
@@ -161,17 +255,17 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="panel panel-default" id="panel4" ng-class="forms.form4.$valid ? '' : 'errorClass'">
+                        <div class="panel panel-default" id="panel8" ng-class="forms.form8.$valid ? '' : 'errorClass'">
                             <div class="panel-heading">
                                 <h4 class="panel-title">
-                                    <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapseFour">
+                                    <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapseEight">
                                         Endorsement Request
                                     </a><i class="indicator glyphicon glyphicon-chevron-down  pull-right"></i>
                                 </h4>
                             </div>
-                            <div id="collapseFour" class="panel-collapse collapse">
+                            <div id="collapseEight" class="panel-collapse collapse">
                                 <div class="panel-body">
-                                    <form  novalidate="true" role="form" name="forms.form4">
+                                    <form  novalidate="true" role="form" name="forms.form8">
                                     <div class="row">
                                         <div class="form-group col-md-4 required"  ng-repeat="endorsementProcessItems in items.endorsementProcessItems">
                                             <label class="control-label"  data-toggle="tooltip" data-placement="top" title="Number of days after which Closed ( Incomplete) endorsement request should be purged" ng-bind="getFieldName(endorsementProcessItems.productLineProcessItem)"></label>
@@ -185,17 +279,17 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="panel panel-default" id="panel5" ng-class="forms.form5.$valid ? '' : 'errorClass'">
+                        <div class="panel panel-default" id="panel9" ng-class="forms.form9.$valid ? '' : 'errorClass'">
                             <div class="panel-heading">
                                 <h4 class="panel-title">
-                                    <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapseFive">
+                                    <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapseNine">
                                         Claim Request
                                     </a><i class="indicator glyphicon glyphicon-chevron-down  pull-right"></i>
                                 </h4>
                             </div>
-                            <div id="collapseFive" class="panel-collapse collapse">
+                            <div id="collapseNine" class="panel-collapse collapse">
                                 <div class="panel-body">
-                                    <form  novalidate="true" role="form" name="forms.form5">
+                                    <form  novalidate="true" role="form" name="forms.form9">
                                     <div class="row">
                                         <div class="form-group col-md-4 required" ng-repeat="claimProcessItems in items.claimProcessItems">
                                             <label class="control-label"  data-toggle="tooltip" data-placement="top" title="Number of days after which Closed (Incomplete) Claim request should be purged" ng-bind="getFieldName(claimProcessItems.productLineProcessItem)"></label>
@@ -208,46 +302,22 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="panel panel-default" id="panel6" ng-class="forms.form6.$valid ? '' : 'errorClass'">
+                        <div class="panel panel-default" id="panel10" ng-class="forms.form10.$valid ? '' : 'errorClass'">
                             <div class="panel-heading">
                                 <h4 class="panel-title">
-                                    <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapseSix">
-                                        Policy Fee
-                                    </a><i class="indicator glyphicon glyphicon-chevron-down  pull-right"></i>
-                                </h4>
-                            </div>
-                            <div id="collapseSix" class="panel-collapse collapse">
-                                <div class="panel-body">
-                                    <form  novalidate="true" role="form" name="forms.form6">
-                                    <div class="row">
-                                        <div class="form-group col-md-4 required" ng-repeat="policyFeeProcessItems in items.policyFeeProcessItems">
-                                            <label class="control-label"  data-toggle="tooltip" data-placement="top" title="Annual" ng-bind="getFieldName(policyFeeProcessItems.policyFeeProcessType)"></label>
-                                            <p class="input-group">
-                                                <input type="number" class="form-control input-sm" min="1" ng-pattern="/^([0-9]{2})?$/"  ng-model="policyFeeProcessItems.policyFee" value="{{policyFeeProcessItems.policyFee}}" ng-required="true"/>
-                                            </p>
-                                        </div>
-
-                                    </div>
-                                </form>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="panel panel-default" id="panel7" ng-class="forms.form7.$valid ? '' : 'errorClass'">
-                            <div class="panel-heading">
-                                <h4 class="panel-title">
-                                    <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapseSeven">
+                                    <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapseTen">
                                         Minimum Limit for Group Policy
                                     </a><i class="indicator glyphicon glyphicon-chevron-down  pull-right"></i>
                                 </h4>
                             </div>
-                            <div id="collapseSeven" class="panel-collapse collapse">
+                            <div id="collapseTen" class="panel-collapse collapse">
                                 <div class="panel-body">
-                                    <form  novalidate="true" role="form" name="forms.form7">
+                                    <form  novalidate="true" role="form" name="forms.form10">
                                     <div class="row">
                                         <div class="form-group col-md-4 required" ng-repeat="policyProcessMinimumLimitItems in items.policyProcessMinimumLimitItems">
                                             <label class="control-label"  data-toggle="tooltip" data-placement="top" title="Annual" ng-bind="getFieldName(policyProcessMinimumLimitItems.policyProcessMinimumLimitType)"></label>
                                             <p class="input-group">
-                                                <input type="number" class="form-control input-sm" min="1" ng-pattern="/^([0-9]{2})?$/"  ng-model="policyProcessMinimumLimitItems.noOfPersonPerPolicy" value="{{policyProcessMinimumLimitItems.noOfPersonPerPolicy}}" ng-required="true" />
+                                                <input type="number" class="form-control input-sm" min="1" ng-pattern="/^([0-9]{2})?$/"  ng-model="policyProcessMinimumLimitItems.value" value="{{policyProcessMinimumLimitItems.value}}" ng-required="true" />
                                             </p>
                                         </div>
                                     </div>
@@ -255,22 +325,22 @@
                                 </div>
                             </div>
                         </div>
-                       <!-- <div class="panel panel-default" id="panel8" ng-class="forms.form8.$valid ? '' : 'errorClass'">
+                        <div class="panel panel-default" id="panel11" ng-class="forms.form11.$valid ? '' : 'errorClass'">
                             <div class="panel-heading">
                                 <h4 class="panel-title">
-                                    <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapseEight">
-                                        Surrender Request
+                                    <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapseEleven">
+                                        Modal Factors
                                     </a><i class="indicator glyphicon glyphicon-chevron-down  pull-right"></i>
                                 </h4>
                             </div>
-                            <div id="collapseEight" class="panel-collapse collapse">
+                            <div id="collapseEleven" class="panel-collapse collapse">
                                 <div class="panel-body">
-                                    <form  novalidate="true" role="form" name="forms.form8">
+                                    <form  novalidate="true" role="form" name="forms.form11">
                                     <div class="row">
-                                        <div class="form-group col-md-4 required" ng-repeat="surrenderProcessItems in items.surrenderProcessItems">
-                                            <label class="control-label"  data-toggle="tooltip" data-placement="top" title="Annual" ng-bind="getFieldName(surrenderProcessItems.productLineProcessItem)"></label>
+                                        <div class="form-group col-md-4 required" ng-repeat="modelFactorItems in items.modelFactorItems">
+                                            <label class="control-label"  data-toggle="tooltip" data-placement="top" title="Annual" ng-bind="getFieldName(modelFactorItems.modalFactorItem)"></label>
                                             <p class="input-group">
-                                                <input type="number" class="form-control input-sm" min="1" ng-model="surrenderProcessItems.value" value="{{surrenderProcessItems.value}}" ng-required="true"/>
+                                                <input type="number" class="form-control input-sm" min="1" ng-pattern="/^(^[1-9]{1})+(\.[0-9]{1,4})?$/" ng-model="modelFactorItems.value" value="{{modelFactorItems.value}}" ng-required="true"/>
                                             </p>
                                         </div>
                                     </div>
@@ -278,34 +348,34 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="panel panel-default" id="panel9" ng-class="forms.form9.$valid ? '' : 'errorClass'">
+                        <div class="panel panel-default" id="panel12" ng-class="forms.form12.$valid ? '' : 'errorClass'">
                             <div class="panel-heading">
                                 <h4 class="panel-title">
-                                    <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapseNine">
-                                        Maturity Process
+                                    <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapseTwelve">
+                                        Discount Factors
                                     </a><i class="indicator glyphicon glyphicon-chevron-down  pull-right"></i>
                                 </h4>
                             </div>
-                            <div id="collapseNine" class="panel-collapse collapse">
+                            <div id="collapseTwelve" class="panel-collapse collapse">
                                 <div class="panel-body">
-                                    <form  novalidate="true" role="form" name="forms.form9">
+                                    <form  novalidate="true" role="form" name="forms.form12">
 
                                     <div class="row">
-                                        <div class="form-group col-md-4 required" ng-repeat="maturityProcessItems in items.maturityProcessItems">
-                                            <label class="control-label"  data-toggle="tooltip" data-placement="top" title="Annual" ng-bind="getFieldName(maturityProcessItems.productLineProcessItem)"></label>
+                                        <div class="form-group col-md-4 required" ng-repeat="discountFactorItems in items.discountFactorItems">
+                                            <label class="control-label"  data-toggle="tooltip" data-placement="top" title="Annual" ng-bind="getFieldName(discountFactorItems.discountFactorItem)"></label>
                                             <p class="input-group">
-                                                <input type="number" class="form-control input-sm" min="1" ng-model="maturityProcessItems.value" value="{{maturityProcessItems.value}}" ng-required="true" />
+                                                <input type="number" class="form-control input-sm" min="1" ng-pattern="/^(^[0-9]{1,2})+(\.[0-9]{1,4})?$/" ng-model="discountFactorItems.value" value="{{discountFactorItems.value}}" ng-required="true" />
                                             </p>
                                         </div>
                                     </div>
                                   </form>
                                 </div>
                             </div>
-                        </div>-->
+                        </div>
                         <div class="row">
                             <div class="col-lg-12" style="text-align: center;margin-top:10px;">
 
-                                <button type="button" class="btn btn-default" style="float:right;" ng-disabled="(!forms.form1.$valid || !forms.form2.$valid || !forms.form3.$valid || !forms.form4.$valid || !forms.form5.$valid || !forms.form6.$valid || !forms.form7.$valid)" data-placement="top-right" data-container="notification" data-duration="10" bs-alert="alert"   ng-click="submitGroupHealth()">Save</button>
+                                <button type="button" class="btn btn-default" style="float:right;" ng-disabled="(!forms.form1.$valid || !forms.form2.$valid || !forms.form3.$valid || !forms.form4.$valid || !forms.form5.$valid || !forms.form6.$valid || !forms.form7.$valid || !forms.form8.$valid || !forms.form9.$valid || !forms.form10.$valid || !forms.form11.$valid || !forms.form12.$valid)" data-placement="top-right" data-container="notification" data-duration="10" bs-alert="alert"   ng-click="submitGroupHealth()">Save</button>
                                 <a class="btn btn-default" ng-click="reloadPage()" style="float:left;">Cancel</a>
 
                             </div>
@@ -338,16 +408,16 @@
                 <div class="panel-body ng-cloak">
                     <notification1></notification1>
                     <div class="panel-group" id="accordion1">
-                        <div class="panel panel-default" id="panel11" ng-class="forms.form1.$valid ? '' : 'errorClass'">
+                        <div class="panel panel-default" id="panel100" ng-class="forms.form1.$valid ? '' : 'errorClass'">
                             <div class="panel-heading">
                                 <h4 class="panel-title">
-                                    <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion1" href="#collapseOneOne">
+                                    <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion1" href="#collapseOneZeroZero">
                                         Quotation
                                     </a><i class="indicator glyphicon glyphicon-chevron-down  pull-right"></i>
 
                                 </h4>
                             </div>
-                            <div id="collapseOneOne" class="panel-collapse collapse in">
+                            <div id="collapseOneZeroZero" class="panel-collapse collapse in">
                                 <div class="panel-body">
                                     <form  novalidate="true" role="form" name="forms.form1">
                                         <div class="row">
@@ -363,15 +433,15 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="panel panel-default" id="panel21"  ng-class="forms.form2.$valid ? '' : 'errorClass'" >
+                        <div class="panel panel-default" id="panel101"  ng-class="forms.form2.$valid ? '' : 'errorClass'" >
                             <div class="panel-heading">
                                 <h4 class="panel-title">
-                                    <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion1" href="#collapseTwoOne">
+                                    <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion1" href="#collapseOneZeroOne">
                                         New Business/Enrollment
                                     </a><i class="indicator glyphicon glyphicon-chevron-down  pull-right"></i>
                                 </h4>
                             </div>
-                            <div id="collapseTwoOne" class="panel-collapse collapse">
+                            <div id="collapseOneZeroOne" class="panel-collapse collapse">
                                 <div class="panel-body">
                                     <form  novalidate="true" role="form" name="forms.form2">
                                     <div class="row">
@@ -386,17 +456,111 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="panel panel-default" id="panel31" ng-class="forms.form3.$valid ? '' : 'errorClass'">
+
+                        <div class="panel panel-default" id="panel102" ng-class="forms.form3.$valid ? '' : 'errorClass'">
                             <div class="panel-heading">
                                 <h4 class="panel-title">
-                                    <a  class="accordion-toggle" data-toggle="collapse" data-parent="#accordion1" href="#collapseThreeOne">
+                                    <a  class="accordion-toggle" data-toggle="collapse" data-parent="#accordion1" href="#collapseOneZeroTwo">
+                                        Premium Follow Up- Annual Frequency
+                                    </a><i class="indicator glyphicon glyphicon-chevron-down  pull-right"></i>
+                                </h4>
+                            </div>
+                            <div id="collapseOneZeroTwo" class="panel-collapse collapse">
+                                <div class="panel-body">
+                                    <form  novalidate="true" role="form" name="forms.form3">
+                                     <div class="row">
+                                             <div class="form-group col-md-4 required" ng-repeat="premiumFollowUpFrequencyItems in items.premiumFollowUpFrequency[0].premiumFollowUpFrequencyItems">
+                                                 <label class="control-label"  data-toggle="tooltip" data-placement="top" title="Number of days after which Closed (complete)Reinstatement request should be purged" ng-bind="getFieldName(premiumFollowUpFrequencyItems.productLineProcessItem)"></label>
+                                                 <p class="input-group">
+                                                     <input type="number" class="form-control input-sm" min="1" ng-pattern="/^([0-9]{2})?$/"  ng-model="premiumFollowUpFrequencyItems.value" value="{{premiumFollowUpFrequencyItems.value}}" ng-required="true"/>
+                                                 </p>
+                                             </div>
+                                         </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel panel-default" id="panel103" ng-class="forms.form4.$valid ? '' : 'errorClass'">
+                            <div class="panel-heading">
+                                <h4 class="panel-title">
+                                    <a  class="accordion-toggle" data-toggle="collapse" data-parent="#accordion1" href="#collapseOneZeroThree">
+                                        Premium Follow Up- Semi-Annual Frequency
+                                    </a><i class="indicator glyphicon glyphicon-chevron-down  pull-right"></i>
+                                </h4>
+                            </div>
+                            <div id="collapseOneZeroThree" class="panel-collapse collapse">
+                                <div class="panel-body">
+                                    <form  novalidate="true" role="form" name="forms.form4">
+                                        <div class="row">
+                                             <div class="form-group col-md-4 required" ng-repeat="premiumFollowUpFrequencyItems in items.premiumFollowUpFrequency[1].premiumFollowUpFrequencyItems">
+                                                 <label class="control-label"  data-toggle="tooltip" data-placement="top" title="Number of days after which Closed (complete)Reinstatement request should be purged" ng-bind="getFieldName(premiumFollowUpFrequencyItems.productLineProcessItem)"></label>
+                                                 <p class="input-group">
+                                                     <input type="number" class="form-control input-sm" min="1" ng-pattern="/^([0-9]{2})?$/"  ng-model="premiumFollowUpFrequencyItems.value" value="{{premiumFollowUpFrequencyItems.value}}" ng-required="true"/>
+                                                 </p>
+                                             </div>
+                                         </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel panel-default" id="panel104" ng-class="forms.form5.$valid ? '' : 'errorClass'">
+                            <div class="panel-heading">
+                                <h4 class="panel-title">
+                                    <a  class="accordion-toggle" data-toggle="collapse" data-parent="#accordion1" href="#collapseOneZeroFour">
+                                        Premium Follow Up- Quarterly Frequency
+                                    </a><i class="indicator glyphicon glyphicon-chevron-down  pull-right"></i>
+                                </h4>
+                            </div>
+                            <div id="collapseOneZeroFour" class="panel-collapse collapse">
+                                <div class="panel-body">
+                                    <form  novalidate="true" role="form" name="forms.form5">
+                                         <div class="row">
+                                             <div class="form-group col-md-4 required" ng-repeat="premiumFollowUpFrequencyItems in items.premiumFollowUpFrequency[2].premiumFollowUpFrequencyItems">
+                                                 <label class="control-label"  data-toggle="tooltip" data-placement="top" title="Number of days after which Closed (complete)Reinstatement request should be purged" ng-bind="getFieldName(premiumFollowUpFrequencyItems.productLineProcessItem)"></label>
+                                                 <p class="input-group">
+                                                     <input type="number" class="form-control input-sm" min="1" ng-pattern="/^([0-9]{2})?$/"  ng-model="premiumFollowUpFrequencyItems.value" value="{{premiumFollowUpFrequencyItems.value}}" ng-required="true"/>
+                                                 </p>
+                                             </div>
+                                         </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="panel panel-default" id="panel105" ng-class="forms.form6.$valid ? '' : 'errorClass'">
+                            <div class="panel-heading">
+                                <h4 class="panel-title">
+                                    <a  class="accordion-toggle" data-toggle="collapse" data-parent="#accordion1" href="#collapseOneZeroFive">
+                                        Premium Follow Up- Monthly Frequency
+                                    </a><i class="indicator glyphicon glyphicon-chevron-down  pull-right"></i>
+                                </h4>
+                            </div>
+                            <div id="collapseOneZeroFive" class="panel-collapse collapse">
+                                <div class="panel-body">
+                                    <form  novalidate="true" role="form" name="forms.form6">
+                                        <div class="row">
+                                             <div class="form-group col-md-4 required" ng-repeat="premiumFollowUpFrequencyItems in items.premiumFollowUpFrequency[3].premiumFollowUpFrequencyItems">
+                                                 <label class="control-label"  data-toggle="tooltip" data-placement="top" title="Number of days after which Closed (complete)Reinstatement request should be purged" ng-bind="getFieldName(premiumFollowUpFrequencyItems.productLineProcessItem)"></label>
+                                                 <p class="input-group">
+                                                     <input type="number" class="form-control input-sm" min="1" ng-pattern="/^([0-9]{2})?$/"  ng-model="premiumFollowUpFrequencyItems.value" value="{{premiumFollowUpFrequencyItems.value}}" ng-required="true"/>
+                                                 </p>
+                                             </div>
+                                         </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel panel-default" id="panel106" ng-class="forms.form7.$valid ? '' : 'errorClass'">
+                            <div class="panel-heading">
+                                <h4 class="panel-title">
+                                    <a  class="accordion-toggle" data-toggle="collapse" data-parent="#accordion1" href="#collapseOneZeroSix">
                                         Reinstatement Request
                                     </a><i class="indicator glyphicon glyphicon-chevron-down  pull-right"></i>
                                 </h4>
                             </div>
-                            <div id="collapseThreeOne" class="panel-collapse collapse">
+                            <div id="collapseOneZeroSix" class="panel-collapse collapse">
                                 <div class="panel-body">
-                                    <form  novalidate="true" role="form" name="forms.form3">
+                                    <form  novalidate="true" role="form" name="forms.form7">
                                        <div class="row">
                                         <div class="form-group col-md-4 required" ng-repeat="reinstatementProcessItems in items.reinstatementProcessItems">
                                             <label class="control-label"  data-toggle="tooltip" data-placement="top" title="Number of days after which Closed (complete)Reinstatement request should be purged" ng-bind="getFieldName(reinstatementProcessItems.productLineProcessItem)"></label>
@@ -409,17 +573,17 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="panel panel-default" id="panel41" ng-class="forms.form4.$valid ? '' : 'errorClass'">
+                        <div class="panel panel-default" id="panel107" ng-class="forms.form8.$valid ? '' : 'errorClass'">
                             <div class="panel-heading">
                                 <h4 class="panel-title">
-                                    <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion1" href="#collapseFourOne">
+                                    <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion1" href="#collapseOneZeroSeven">
                                         Endorsement Request
                                     </a><i class="indicator glyphicon glyphicon-chevron-down  pull-right"></i>
                                 </h4>
                             </div>
-                            <div id="collapseFourOne" class="panel-collapse collapse">
+                            <div id="collapseOneZeroSeven" class="panel-collapse collapse">
                                 <div class="panel-body">
-                                    <form  novalidate="true" role="form" name="forms.form4">
+                                    <form  novalidate="true" role="form" name="forms.form8">
                                     <div class="row">
                                         <div class="form-group col-md-4 required"  ng-repeat="endorsementProcessItems in items.endorsementProcessItems">
                                             <label class="control-label"  data-toggle="tooltip" data-placement="top" title="Number of days after which Closed ( Incomplete) endorsement request should be purged" ng-bind="getFieldName(endorsementProcessItems.productLineProcessItem)"></label>
@@ -433,17 +597,17 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="panel panel-default" id="panel51" ng-class="forms.form5.$valid ? '' : 'errorClass'">
+                        <div class="panel panel-default" id="panel108" ng-class="forms.form9.$valid ? '' : 'errorClass'">
                             <div class="panel-heading">
                                 <h4 class="panel-title">
-                                    <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion1" href="#collapseFiveOne">
+                                    <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion1" href="#collapseOneZeroEight">
                                         Claim Request
                                     </a><i class="indicator glyphicon glyphicon-chevron-down  pull-right"></i>
                                 </h4>
                             </div>
-                            <div id="collapseFiveOne" class="panel-collapse collapse">
+                            <div id="collapseOneZeroEight" class="panel-collapse collapse">
                                 <div class="panel-body">
-                                    <form  novalidate="true" role="form" name="forms.form5">
+                                    <form  novalidate="true" role="form" name="forms.form9">
                                     <div class="row">
                                         <div class="form-group col-md-4 required" ng-repeat="claimProcessItems in items.claimProcessItems">
                                             <label class="control-label"  data-toggle="tooltip" data-placement="top" title="Number of days after which Closed (Incomplete) Claim request should be purged" ng-bind="getFieldName(claimProcessItems.productLineProcessItem)"></label>
@@ -456,45 +620,23 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="panel panel-default" id="panel61" ng-class="forms.form6.$valid ? '' : 'errorClass'">
+
+                        <div class="panel panel-default" id="panel109" ng-class="forms.form10.$valid ? '' : 'errorClass'">
                             <div class="panel-heading">
                                 <h4 class="panel-title">
-                                    <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion1" href="#collapseSixOne">
-                                        Policy Fee
-                                    </a><i class="indicator glyphicon glyphicon-chevron-down  pull-right"></i>
-                                </h4>
-                            </div>
-                            <div id="collapseSixOne" class="panel-collapse collapse">
-                                <div class="panel-body">
-                                    <form  novalidate="true" role="form" name="forms.form6">
-                                    <div class="row">
-                                        <div class="form-group col-md-4 required" ng-repeat="policyFeeProcessItems in items.policyFeeProcessItems">
-                                            <label class="control-label"  data-toggle="tooltip" data-placement="top" title="Annual" ng-bind="getFieldName(policyFeeProcessItems.policyFeeProcessType)"></label>
-                                            <p class="input-group">
-                                                <input type="number" class="form-control input-sm" min="1" ng-pattern="/^([0-9]{2})?$/"  ng-model="policyFeeProcessItems.policyFee" value="{{policyFeeProcessItems.policyFee}}" ng-required="true"/>
-                                            </p>
-                                        </div>
-                                    </div>
-                                    </form>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="panel panel-default" id="panel71" ng-class="forms.form7.$valid ? '' : 'errorClass'">
-                            <div class="panel-heading">
-                                <h4 class="panel-title">
-                                    <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion1" href="#collapseSevenOne">
+                                    <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion1" href="#collapseOneZeroNine">
                                         Minimum Limit for Group Policy
                                     </a><i class="indicator glyphicon glyphicon-chevron-down  pull-right"></i>
                                 </h4>
                             </div>
-                            <div id="collapseSevenOne" class="panel-collapse collapse">
+                            <div id="collapseOneZeroNine" class="panel-collapse collapse">
                                 <div class="panel-body">
-                                    <form  novalidate="true" role="form" name="forms.form7">
+                                    <form  novalidate="true" role="form" name="forms.form10">
                                     <div class="row">
                                         <div class="form-group col-md-4 required" ng-repeat="policyProcessMinimumLimitItems in items.policyProcessMinimumLimitItems">
                                             <label class="control-label"  data-toggle="tooltip" data-placement="top" title="Annual" ng-bind="getFieldName(policyProcessMinimumLimitItems.policyProcessMinimumLimitType)"></label>
                                             <p class="input-group">
-                                                <input type="number" class="form-control input-sm" min="1" ng-pattern="/^([0-9]{2})?$/"  ng-model="policyProcessMinimumLimitItems.noOfPersonPerPolicy" value="{{policyProcessMinimumLimitItems.noOfPersonPerPolicy}}"  ng-required="true"/>
+                                                <input type="number" class="form-control input-sm" min="1" ng-pattern="/^([0-9]{2})?$/"  ng-model="policyProcessMinimumLimitItems.value" value="{{policyProcessMinimumLimitItems.value}}"  ng-required="true"/>
                                             </p>
                                         </div>
                                     </div>
@@ -502,22 +644,22 @@
                                 </div>
                             </div>
                         </div>
-                       <!-- <div class="panel panel-default" id="panel81" ng-class="forms.form8.$valid ? '' : 'errorClass'">
+                       <div class="panel panel-default" id="panel110" ng-class="forms.form11.$valid ? '' : 'errorClass'">
                             <div class="panel-heading">
                                 <h4 class="panel-title">
-                                    <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion1" href="#collapseEightOne">
-                                        Surrender Request
+                                    <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion1" href="#collapseOneOneZero">
+                                        Modal Factors
                                     </a><i class="indicator glyphicon glyphicon-chevron-down  pull-right"></i>
                                 </h4>
                             </div>
-                            <div id="collapseEightOne" class="panel-collapse collapse">
+                            <div id="collapseOneOneZero" class="panel-collapse collapse">
                                 <div class="panel-body">
-                                    <form  novalidate="true" role="form" name="forms.form8">
+                                    <form  novalidate="true" role="form" name="forms.form11">
                                     <div class="row">
-                                        <div class="form-group col-md-4 required" ng-repeat="surrenderProcessItems in items.surrenderProcessItems">
-                                            <label class="control-label"  data-toggle="tooltip" data-placement="top" title="Annual" ng-bind="getFieldName(surrenderProcessItems.productLineProcessItem)"></label>
+                                        <div class="form-group col-md-4 required" ng-repeat="modelFactorItems in items.modelFactorItems">
+                                            <label class="control-label"  data-toggle="tooltip" data-placement="top" title="Annual" ng-bind="getFieldName(modelFactorItems.modalFactorItem)"></label>
                                             <p class="input-group">
-                                                <input type="number" class="form-control input-sm" min="1" ng-model="surrenderProcessItems.value" value="{{surrenderProcessItems.value}}" ng-required="true"/>
+                                                <input type="number" class="form-control input-sm" min="1" ng-pattern="/^(^[1-9]{1})+(\.[0-9]{1,4})?$/" ng-model="modelFactorItems.value" value="{{modelFactorItems.value}}" ng-required="true"/>
                                             </p>
                                         </div>
                                     </div>
@@ -525,33 +667,33 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="panel panel-default" id="panel91" ng-class="forms.form9.$valid ? '' : 'errorClass'">
+                        <div class="panel panel-default" id="panel111" ng-class="forms.form12.$valid ? '' : 'errorClass'">
                             <div class="panel-heading">
                                 <h4 class="panel-title">
-                                    <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion1" href="#collapseNineOne">
-                                        Maturity Process
+                                    <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion1" href="#collapseOneOneOne">
+                                       Discount Factors
                                     </a><i class="indicator glyphicon glyphicon-chevron-down  pull-right"></i>
                                 </h4>
                             </div>
-                            <div id="collapseNineOne" class="panel-collapse collapse">
+                            <div id="collapseOneOneOne" class="panel-collapse collapse">
                                 <div class="panel-body">
-                                    <form  novalidate="true" role="form" name="forms.form9">
+                                    <form  novalidate="true" role="form" name="forms.form12">
                                     <div class="row">
-                                        <div class="form-group col-md-4 required" ng-repeat="maturityProcessItems in items.maturityProcessItems">
-                                            <label class="control-label"  data-toggle="tooltip" data-placement="top" title="Annual" ng-bind="getFieldName(maturityProcessItems.productLineProcessItem)"></label>
+                                        <div class="form-group col-md-4 required" ng-repeat="discountFactorItems in items.discountFactorItems">
+                                            <label class="control-label"  data-toggle="tooltip" data-placement="top" title="Annual" ng-bind="getFieldName(discountFactorItems.discountFactorItem)"></label>
                                             <p class="input-group">
-                                                <input type="number" class="form-control input-sm" min="1" ng-model="maturityProcessItems.value" value="{{maturityProcessItems.value}}" ng-required="true"/>
+                                                <input type="number" class="form-control input-sm" min="1" ng-pattern="/^(^[0-9]{1,2})+(\.[0-9]{1,4})?$/" ng-model="discountFactorItems.value" value="{{discountFactorItems.value}}" ng-required="true"/>
                                             </p>
                                         </div>
                                     </div>
                                   </form>
                                 </div>
                             </div>
-                        </div>-->
+                        </div>
                         <div class="row">
                             <div class="col-lg-12" style="text-align: center;margin-top:10px;">
 
-                                <button type="button" class="btn btn-default" style="float:right;" ng-disabled="(!forms.form1.$valid || !forms.form2.$valid || !forms.form3.$valid || !forms.form4.$valid || !forms.form5.$valid || !forms.form6.$valid || !forms.form7.$valid)" data-placement="top-right" data-container="notification1" data-duration="10" bs-alert="alert"   ng-click="submitGroupLife()">Save</button>
+                                <button type="button" class="btn btn-default" style="float:right;" ng-disabled="(!forms.form1.$valid || !forms.form2.$valid || !forms.form3.$valid || !forms.form4.$valid || !forms.form5.$valid || !forms.form6.$valid || !forms.form7.$valid || !forms.form8.$valid || !forms.form9.$valid || !forms.form10.$valid || !forms.form11.$valid || !forms.form12.$valid)" data-placement="top-right" data-container="notification1" data-duration="10" bs-alert="alert"   ng-click="submitGroupLife()">Save</button>
                                 <a class="btn btn-default" ng-click="reloadPage()" style="float:left;">Cancel</a>
 
                             </div>
@@ -584,16 +726,16 @@
                 <div class="panel-body ng-cloak">
                     <notification2></notification2>
                     <div class="panel-group" id="accordion2">
-                        <div class="panel panel-default" id="panel12" ng-class="forms.form1.$valid ? '' : 'errorClass'">
+                        <div class="panel panel-default" id="panel21" ng-class="forms.form1.$valid ? '' : 'errorClass'">
                             <div class="panel-heading">
                                 <h4 class="panel-title">
-                                    <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion1" href="#collapseOneTwo">
+                                    <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion1" href="#collapseTwoOne">
                                         Quotation
                                     </a><i class="indicator glyphicon glyphicon-chevron-down  pull-right"></i>
 
                                 </h4>
                             </div>
-                            <div id="collapseOneTwo" class="panel-collapse collapse in">
+                            <div id="collapseTwoOne" class="panel-collapse collapse in">
                                 <div class="panel-body">
                                     <form  novalidate="true" role="form" name="forms.form1">
                                         <div class="row">
@@ -632,17 +774,111 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="panel panel-default" id="panel32" ng-class="forms.form3.$valid ? '' : 'errorClass'">
+
+                        <div class="panel panel-default" id="panel23" ng-class="forms.form3.$valid ? '' : 'errorClass'">
                             <div class="panel-heading">
                                 <h4 class="panel-title">
-                                    <a  class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseThreeTwo">
+                                    <a  class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseTwoThree">
+                                        Premium Follow Up- Annual Frequency
+                                    </a><i class="indicator glyphicon glyphicon-chevron-down  pull-right"></i>
+                                </h4>
+                            </div>
+                            <div id="collapseTwoThree" class="panel-collapse collapse">
+                                <div class="panel-body">
+                                    <form  novalidate="true" role="form" name="forms.form3">
+                                        <div class="row">
+                                             <div class="form-group col-md-4 required" ng-repeat="premiumFollowUpFrequencyItems in items.premiumFollowUpFrequency[0].premiumFollowUpFrequencyItems">
+                                                 <label class="control-label"  data-toggle="tooltip" data-placement="top" title="Number of days after which Closed (complete)Reinstatement request should be purged" ng-bind="getFieldName(premiumFollowUpFrequencyItems.productLineProcessItem)"></label>
+                                                 <p class="input-group">
+                                                     <input type="number" class="form-control input-sm" min="1" ng-pattern="/^([0-9]{2})?$/"  ng-model="premiumFollowUpFrequencyItems.value" value="{{premiumFollowUpFrequencyItems.value}}" ng-required="true"/>
+                                                 </p>
+                                             </div>
+                                         </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel panel-default" id="panel24" ng-class="forms.form4.$valid ? '' : 'errorClass'">
+                            <div class="panel-heading">
+                                <h4 class="panel-title">
+                                    <a  class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseTwoFour">
+                                        Premium Follow Up- Semi-Annual Frequency
+                                    </a><i class="indicator glyphicon glyphicon-chevron-down  pull-right"></i>
+                                </h4>
+                            </div>
+                            <div id="collapseTwoFour" class="panel-collapse collapse">
+                                <div class="panel-body">
+                                    <form  novalidate="true" role="form" name="forms.form4">
+                                         <div class="row">
+                                             <div class="form-group col-md-4 required" ng-repeat="premiumFollowUpFrequencyItems in items.premiumFollowUpFrequency[1].premiumFollowUpFrequencyItems">
+                                                 <label class="control-label"  data-toggle="tooltip" data-placement="top" title="Number of days after which Closed (complete)Reinstatement request should be purged" ng-bind="getFieldName(premiumFollowUpFrequencyItems.productLineProcessItem)"></label>
+                                                 <p class="input-group">
+                                                     <input type="number" class="form-control input-sm" min="1" ng-pattern="/^([0-9]{2})?$/"  ng-model="premiumFollowUpFrequencyItems.value" value="{{premiumFollowUpFrequencyItems.value}}" ng-required="true"/>
+                                                 </p>
+                                             </div>
+                                         </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel panel-default" id="panel25" ng-class="forms.form5.$valid ? '' : 'errorClass'">
+                            <div class="panel-heading">
+                                <h4 class="panel-title">
+                                    <a  class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseTwoFive">
+                                        Premium Follow Up- Quarterly Frequency
+                                    </a><i class="indicator glyphicon glyphicon-chevron-down  pull-right"></i>
+                                </h4>
+                            </div>
+                            <div id="collapseTwoFive" class="panel-collapse collapse">
+                                <div class="panel-body">
+                                    <form  novalidate="true" role="form" name="forms.form5">
+                                       <div class="row">
+                                             <div class="form-group col-md-4 required" ng-repeat="premiumFollowUpFrequencyItems in items.premiumFollowUpFrequency[2].premiumFollowUpFrequencyItems">
+                                                 <label class="control-label"  data-toggle="tooltip" data-placement="top" title="Number of days after which Closed (complete)Reinstatement request should be purged" ng-bind="getFieldName(premiumFollowUpFrequencyItems.productLineProcessItem)"></label>
+                                                 <p class="input-group">
+                                                     <input type="number" class="form-control input-sm" min="1" ng-pattern="/^([0-9]{2})?$/"  ng-model="premiumFollowUpFrequencyItems.value" value="{{premiumFollowUpFrequencyItems.value}}" ng-required="true"/>
+                                                 </p>
+                                             </div>
+                                         </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="panel panel-default" id="panel26" ng-class="forms.form6.$valid ? '' : 'errorClass'">
+                            <div class="panel-heading">
+                                <h4 class="panel-title">
+                                    <a  class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseTwoSix">
+                                        Premium Follow Up- Monthly Frequency
+                                    </a><i class="indicator glyphicon glyphicon-chevron-down  pull-right"></i>
+                                </h4>
+                            </div>
+                            <div id="collapseTwoSix" class="panel-collapse collapse">
+                                <div class="panel-body">
+                                    <form  novalidate="true" role="form" name="forms.form6">
+                                        <div class="row">
+                                             <div class="form-group col-md-4 required" ng-repeat="premiumFollowUpFrequencyItems in items.premiumFollowUpFrequency[2].premiumFollowUpFrequencyItems">
+                                                 <label class="control-label"  data-toggle="tooltip" data-placement="top" title="Number of days after which Closed (complete)Reinstatement request should be purged" ng-bind="getFieldName(premiumFollowUpFrequencyItems.productLineProcessItem)"></label>
+                                                 <p class="input-group">
+                                                     <input type="number" class="form-control input-sm" min="1" ng-pattern="/^([0-9]{2})?$/"  ng-model="premiumFollowUpFrequencyItems.value" value="{{premiumFollowUpFrequencyItems.value}}" ng-required="true"/>
+                                                 </p>
+                                             </div>
+                                         </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel panel-default" id="panel27" ng-class="forms.form7.$valid ? '' : 'errorClass'">
+                            <div class="panel-heading">
+                                <h4 class="panel-title">
+                                    <a  class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseTwoSeven">
                                         Reinstatement Request
                                     </a><i class="indicator glyphicon glyphicon-chevron-down  pull-right"></i>
                                 </h4>
                             </div>
-                            <div id="collapseThreeTwo" class="panel-collapse collapse">
+                            <div id="collapseTwoSeven" class="panel-collapse collapse">
                                 <div class="panel-body">
-                                    <form  novalidate="true" role="form" name="forms.form3">
+                                    <form  novalidate="true" role="form" name="forms.form7">
                                         <div class="row">
                                             <div class="form-group col-md-4 required" ng-repeat="reinstatementProcessItems in items.reinstatementProcessItems">
                                                 <label class="control-label"  data-toggle="tooltip" data-placement="top" title="Number of days after which Closed (complete)Reinstatement request should be purged" ng-bind="getFieldName(reinstatementProcessItems.productLineProcessItem)"></label>
@@ -655,17 +891,17 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="panel panel-default" id="panel42" ng-class="forms.form4.$valid ? '' : 'errorClass'">
+                        <div class="panel panel-default" id="panel28" ng-class="forms.form8.$valid ? '' : 'errorClass'">
                             <div class="panel-heading">
                                 <h4 class="panel-title">
-                                    <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseFourTwo">
+                                    <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseTwoEight">
                                         Endorsement Request
                                     </a><i class="indicator glyphicon glyphicon-chevron-down  pull-right"></i>
                                 </h4>
                             </div>
-                            <div id="collapseFourTwo" class="panel-collapse collapse">
+                            <div id="collapseTwoEight" class="panel-collapse collapse">
                                 <div class="panel-body">
-                                    <form  novalidate="true" role="form" name="forms.form4">
+                                    <form  novalidate="true" role="form" name="forms.form8">
                                         <div class="row">
                                             <div class="form-group col-md-4 required"  ng-repeat="endorsementProcessItems in items.endorsementProcessItems">
                                                 <label class="control-label"  data-toggle="tooltip" data-placement="top" title="Number of days after which Closed ( Incomplete) endorsement request should be purged" ng-bind="getFieldName(endorsementProcessItems.productLineProcessItem)"></label>
@@ -679,17 +915,17 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="panel panel-default" id="panel52" ng-class="forms.form5.$valid ? '' : 'errorClass'">
+                        <div class="panel panel-default" id="panel29" ng-class="forms.form9.$valid ? '' : 'errorClass'">
                             <div class="panel-heading">
                                 <h4 class="panel-title">
-                                    <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseFiveTwo">
+                                    <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseTwoNine">
                                         Claim Request
                                     </a><i class="indicator glyphicon glyphicon-chevron-down  pull-right"></i>
                                 </h4>
                             </div>
-                            <div id="collapseFiveTwo" class="panel-collapse collapse">
+                            <div id="collapseTwoNine" class="panel-collapse collapse">
                                 <div class="panel-body">
-                                    <form  novalidate="true" role="form" name="forms.form5">
+                                    <form  novalidate="true" role="form" name="forms.form9">
                                         <div class="row">
                                             <div class="form-group col-md-4 required" ng-repeat="claimProcessItems in items.claimProcessItems">
                                                 <label class="control-label"  data-toggle="tooltip" data-placement="top" title="Number of days after which Closed (Incomplete) Claim request should be purged" ng-bind="getFieldName(claimProcessItems.productLineProcessItem)"></label>
@@ -702,63 +938,18 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="panel panel-default" id="panel62" ng-class="forms.form6.$valid ? '' : 'errorClass'">
+
+                        <div class="panel panel-default" id="panel30" ng-class="forms.form10.$valid ? '' : 'errorClass'">
                             <div class="panel-heading">
                                 <h4 class="panel-title">
-                                    <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseSixTwo">
-                                        Policy Fee
-                                    </a><i class="indicator glyphicon glyphicon-chevron-down  pull-right"></i>
-                                </h4>
-                            </div>
-                            <div id="collapseSixTwo" class="panel-collapse collapse">
-                                <div class="panel-body">
-                                    <form  novalidate="true" role="form" name="forms.form6">
-                                        <div class="row">
-                                            <div class="form-group col-md-4 required" ng-repeat="policyFeeProcessItems in items.policyFeeProcessItems">
-                                                <label class="control-label"  data-toggle="tooltip" data-placement="top" title="Annual" ng-bind="getFieldName(policyFeeProcessItems.policyFeeProcessType)"></label>
-                                                <p class="input-group">
-                                                    <input type="number" class="form-control input-sm" min="1" ng-pattern="/^([0-9]{2})?$/"  ng-model="policyFeeProcessItems.policyFee" value="{{policyFeeProcessItems.policyFee}}" ng-required="true"/>
-                                                </p>
-                                            </div>
-                                        </div>
-                                    </form>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="panel panel-default" id="panel72" ng-class="forms.form7.$valid ? '' : 'errorClass'">
-                            <div class="panel-heading">
-                                <h4 class="panel-title">
-                                    <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseSevenTwo">
-                                        Minimum Limit for Group Policy
-                                    </a><i class="indicator glyphicon glyphicon-chevron-down  pull-right"></i>
-                                </h4>
-                            </div>
-                            <div id="collapseSevenTwo" class="panel-collapse collapse">
-                                <div class="panel-body">
-                                    <form  novalidate="true" role="form" name="forms.form7">
-                                        <div class="row">
-                                            <div class="form-group col-md-4 required" ng-repeat="policyProcessMinimumLimitItems in items.policyProcessMinimumLimitItems">
-                                                <label class="control-label"  data-toggle="tooltip" data-placement="top" title="Annual" ng-bind="getFieldName(policyProcessMinimumLimitItems.policyProcessMinimumLimitType)"></label>
-                                                <p class="input-group">
-                                                    <input type="number" class="form-control input-sm" min="1" ng-pattern="/^([0-9]{2})?$/" ng-model="policyProcessMinimumLimitItems.noOfPersonPerPolicy" value="{{policyProcessMinimumLimitItems.noOfPersonPerPolicy}}"  ng-required="true"/>
-                                                </p>
-                                            </div>
-                                        </div>
-                                    </form>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="panel panel-default" id="panel82" ng-class="forms.form8.$valid ? '' : 'errorClass'">
-                            <div class="panel-heading">
-                                <h4 class="panel-title">
-                                    <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseEightTwo">
+                                    <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseThreeZero">
                                         Surrender Request
                                     </a><i class="indicator glyphicon glyphicon-chevron-down  pull-right"></i>
                                 </h4>
                             </div>
-                            <div id="collapseEightTwo" class="panel-collapse collapse">
+                            <div id="collapseThreeZero" class="panel-collapse collapse">
                                 <div class="panel-body">
-                                    <form  novalidate="true" role="form" name="forms.form8">
+                                    <form  novalidate="true" role="form" name="forms.form10">
                                         <div class="row">
                                             <div class="form-group col-md-4 required" ng-repeat="surrenderProcessItems in items.surrenderProcessItems">
                                                 <label class="control-label"  data-toggle="tooltip" data-placement="top" title="Annual" ng-bind="getFieldName(surrenderProcessItems.productLineProcessItem)"></label>
@@ -771,17 +962,17 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="panel panel-default" id="panel92" ng-class="forms.form9.$valid ? '' : 'errorClass'">
+                        <div class="panel panel-default" id="panel31" ng-class="forms.form11.$valid ? '' : 'errorClass'">
                             <div class="panel-heading">
                                 <h4 class="panel-title">
-                                    <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseNineTwo">
+                                    <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseThreeOne">
                                         Maturity Process
                                     </a><i class="indicator glyphicon glyphicon-chevron-down  pull-right"></i>
                                 </h4>
                             </div>
-                            <div id="collapseNineTwo" class="panel-collapse collapse">
+                            <div id="collapseThreeOne" class="panel-collapse collapse">
                                 <div class="panel-body">
-                                    <form  novalidate="true" role="form" name="forms.form9">
+                                    <form  novalidate="true" role="form" name="forms.form11">
                                         <div class="row">
                                             <div class="form-group col-md-4 required" ng-repeat="maturityProcessItems in items.maturityProcessItems">
                                                 <label class="control-label"  data-toggle="tooltip" data-placement="top" title="Annual" ng-bind="getFieldName(maturityProcessItems.productLineProcessItem)"></label>
@@ -794,10 +985,33 @@
                                 </div>
                             </div>
                         </div>
+                        <div class="panel panel-default" id="panel32" ng-class="forms.form12.$valid ? '' : 'errorClass'">
+                            <div class="panel-heading">
+                                <h4 class="panel-title">
+                                    <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseThreeTwo">
+                                        Policy Fee
+                                    </a><i class="indicator glyphicon glyphicon-chevron-down  pull-right"></i>
+                                </h4>
+                            </div>
+                            <div id="collapseThreeTwo" class="panel-collapse collapse">
+                                <div class="panel-body">
+                                    <form  novalidate="true" role="form" name="forms.form12">
+                                        <div class="row">
+                                            <div class="form-group col-md-4 required" ng-repeat="policyFeeProcessItems in items.policyFeeProcessItems">
+                                                <label class="control-label"  data-toggle="tooltip" data-placement="top" title="Annual" ng-bind="getFieldName(policyFeeProcessItems.policyFeeProcessType)"></label>
+                                                <p class="input-group">
+                                                    <input type="number" class="form-control input-sm" min="1" ng-pattern="/^([0-9]{2})?$/"  ng-model="policyFeeProcessItems.policyFee" value="{{policyFeeProcessItems.policyFee}}" ng-required="true"/>
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
                         <div class="row">
                             <div class="col-lg-12" style="text-align: center;margin-top:10px;">
 
-                                <button type="button" class="btn btn-default" style="float:right;" ng-disabled="(!forms.form1.$valid || !forms.form2.$valid || !forms.form3.$valid || !forms.form4.$valid || !forms.form5.$valid || !forms.form6.$valid || !forms.form7.$valid || !forms.form8.$valid || !forms.form9.$valid)" data-placement="top-right" data-container="notification2" data-duration="5" bs-alert="alert"   ng-click="submitIndividualLife()">Save</button>
+                                <button type="button" class="btn btn-default" style="float:right;" ng-disabled="(!forms.form1.$valid || !forms.form2.$valid || !forms.form3.$valid || !forms.form4.$valid || !forms.form5.$valid || !forms.form6.$valid || !forms.form7.$valid || !forms.form8.$valid || !forms.form9.$valid || !forms.form10.$valid || !forms.form11.$valid || !forms.form12.$valid)" data-placement="top-right" data-container="notification2" data-duration="5" bs-alert="alert"   ng-click="submitIndividualLife()">Save</button>
                                 <a class="btn btn-default" ng-click="reloadPage()" style="float:left;">Cancel</a>
 
                             </div>

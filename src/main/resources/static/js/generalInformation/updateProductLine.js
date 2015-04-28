@@ -81,19 +81,19 @@ App.controller('UpdateGroupHealthLevelInformationController',['$rootScope','$sco
                 if (data.status == 200) {
                     $scope.alert = {title: 'Success Message! ', content: data.message, type: 'success'};
                     //  $scope.reset();
-                    $window.location.href="/pla/core/productlineinformation/openupdate";
+                   // $window.location.href="/pla/core/productlineinformation/openupdate";
 
                 } else if (data.status == 500) {
                     $scope.alert = {title: 'Error Message! ', content: data.message, type: 'danger'};
                 }
             });
         }else{
-
+            console.log($scope.items);
             $http.post('/pla/core/productlineinformation/create', $scope.items).success(function (data) {
                 if (data.status == 200) {
                     $scope.alert = {title: 'Success Message! ', content: data.message, type: 'success'};
                     //  $scope.reset();
-                    $window.location.href="/pla/core/productlineinformation/openupdate";
+                   // $window.location.href="/pla/core/productlineinformation/openupdate";
 
                 } else if (data.status == 500) {
                     $scope.alert = {title: 'Error Message! ', content: data.message, type: 'danger'};
