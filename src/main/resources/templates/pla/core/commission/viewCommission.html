@@ -10,18 +10,15 @@
 <script>
     var interval = setInterval(function(){
         if(require.defined("basic")){
-            requirejs(['/pla/js/commissions/viewCommissions.js'],function(){
+            requirejs(['/pla/js/commissions/viewCommissions.js','momentjs','/pla/js/common/datetime-moment.js'],function(){
                 $(document).ready(function(){
+                    $.fn.dataTable.moment( 'DD/MM/YYYY' );
                     $('#commission-table').dataTable({
                         "fnDrawCallback":function(){
                             $( "input[type=radio]" ).on( "click", function(){
                                 viewCommission.getTheItemSelected(this)
                             });
-                        },
-                        "aoColumnDefs":[
-
-                            { "sType": "date-uk", "aTargets": [ 3 ] }]
-
+                        }
                     });
                 });
             });
