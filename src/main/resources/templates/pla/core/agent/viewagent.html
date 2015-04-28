@@ -25,9 +25,12 @@
         if(require.defined("basic")){
             requirejs(['/pla/js/agent/viewAgents.js'],function(){
                 $(document).ready(function(){
-                    $('#agent-table').dataTable();
-                    $( "input[type=radio]" ).on( "click", function(){
-                        viewAgentModule.getTheItemSelected(this)
+                    $('#agent-table').dataTable({
+                        "fnDrawCallback":function(){
+                            $( "input[type=radio]" ).on( "click", function(){
+                                viewAgentModule.getTheItemSelected(this)
+                            });
+                        }
                     });
                 });
             });
