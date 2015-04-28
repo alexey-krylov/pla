@@ -51,7 +51,7 @@ public class MasterFinder {
 
     public static final String FIND_ALL_INDUSTRY_QUERY = "SELECT * FROM industry";
 
-    public static final String FIND_ALL_OCCUPATION_CLASS_QUERY = "SELECT * FROM `occupation_class`";
+    public static final String FIND_ALL_OCCUPATION_CLASS_QUERY = "SELECT DISTINCT(CODE) FROM occupation_class";
 
     public static final String FIND_ALL_DESIGNATION_QUERY = "SELECT * FROM `designation`";
 

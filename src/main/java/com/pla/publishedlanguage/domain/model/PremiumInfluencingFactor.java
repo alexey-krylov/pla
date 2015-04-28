@@ -171,7 +171,7 @@ public enum PremiumInfluencingFactor {
         public String getErrorMessage(String value) {
             return value + " :is not valid Designation";
         }
-    }, OCCUPATION_CATEGORY("Occupation Category") {
+    }, OCCUPATION_CATEGORY("Occupation Class") {
         @Override
         public String[] getAllowedValues(Plan plan, CoverageId coverageId) {
             return new String[]{};
