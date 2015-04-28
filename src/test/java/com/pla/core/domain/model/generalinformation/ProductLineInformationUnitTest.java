@@ -33,7 +33,7 @@ public class ProductLineInformationUnitTest {
         listOfProcessItems.add(productLineProcessItemMap);
 
         productLineProcessItemMap = Maps.newLinkedHashMap();
-        productLineProcessItemMap.put(ProductLineProcessType.NO_OF_REMAINDER, 11);
+        productLineProcessItemMap.put(ProductLineProcessType.SECOND_REMAINDER, 11);
         listOfProcessItems.add(productLineProcessItemMap);
 
         productLineProcessItemMap = Maps.newLinkedHashMap();
@@ -41,7 +41,7 @@ public class ProductLineInformationUnitTest {
         listOfProcessItems.add(productLineProcessItemMap);
 
         productLineProcessItemMap = Maps.newLinkedHashMap();
-        productLineProcessItemMap.put(ProductLineProcessType.GAP, 13);
+        productLineProcessItemMap.put(ProductLineProcessType.LAPSE, 13);
         listOfProcessItems.add(productLineProcessItemMap);
 
         productLineProcessItemMap = Maps.newLinkedHashMap();

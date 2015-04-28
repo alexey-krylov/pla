@@ -26,7 +26,7 @@ public class GeneralInformationDto {
     private List<PolicyProcessMinimumLimitItemDto> policyProcessMinimumLimitItems;
     private List<ProductLineProcessItemDto> surrenderProcessItems;
     private List<ProductLineProcessItemDto> maturityProcessItems;
-
+    private List<PremiumFrequencyFollowUpDto> premiumFollowUpFrequency;
     private String organizationInformationId;
     private List<DiscountFactorInformationDto> discountFactorItems;
     private List<ModalFactorInformationDto> modelFactorItems;

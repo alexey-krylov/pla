@@ -9,7 +9,10 @@ import lombok.Setter;
 @Getter
 @Setter
 public class GeneralInformationProcessDto {
+
     private String type;
+
     private String description;
+
     private String fullDescription;
 }

@@ -52,7 +52,7 @@ public class GeneralInformationServiceUnitTest {
         processItemDtos.add(productLineProcessItemDto);
 
         productLineProcessItemDto = new ProductLineProcessItemDto();
-        productLineProcessItemDto.setProductLineProcessItem(ProductLineProcessType.NO_OF_REMAINDER);
+        productLineProcessItemDto.setProductLineProcessItem(ProductLineProcessType.SECOND_REMAINDER);
         productLineProcessItemDto.setValue(10);
         processItemDtos.add(productLineProcessItemDto);
 
@@ -75,7 +75,7 @@ public class GeneralInformationServiceUnitTest {
         expectedProductLineProcessItem.add(processMap);
 
         processMap = Maps.newLinkedHashMap();
-        processMap.put(ProductLineProcessType.NO_OF_REMAINDER,10);
+        processMap.put(ProductLineProcessType.SECOND_REMAINDER,10);
         expectedProductLineProcessItem.add(processMap);
 
         processMap = Maps.newLinkedHashMap();

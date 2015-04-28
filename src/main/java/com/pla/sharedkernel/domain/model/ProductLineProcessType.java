@@ -9,9 +9,9 @@ import lombok.Getter;
 public enum ProductLineProcessType {
 
     PURGE_TIME_PERIOD("Purge Time Period"),
-    FIRST_REMAINDER("First Remainder"),
-    NO_OF_REMAINDER("No. of Remainder"),
-    GAP("Gap"),
+    FIRST_REMAINDER("First Reminder"),
+    SECOND_REMAINDER("Second Reminder"),
+    LAPSE("Lapse"),
     CLOSURE("Closure"),
     EARLY_DEATH_CRITERIA("Early Death Criteria");
 
