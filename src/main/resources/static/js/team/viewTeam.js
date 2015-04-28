@@ -17,6 +17,7 @@ var hideAlerts = function(){
 var teamToInactivate = '';
 var inactivate=function(value,flag){
     hideAlerts();
+    $('#approveButton').show();
      if(flag=='save'){
 
         teamToInactivate =  value;
@@ -33,6 +34,7 @@ var inactivate=function(value,flag){
                     window.location.reload();
                 }else{
                     hideAlerts();
+                    $('#approveButton').hide();
                     $('#inactivate-alert-danger').text(msg.message).show();
                 }
             }
