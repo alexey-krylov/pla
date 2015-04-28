@@ -53,8 +53,6 @@ public class PremiumUnitTest {
         Map<PremiumInfluencingFactor, String> premiumInfluencingFactorMap = Maps.newLinkedHashMap();
         premiumInfluencingFactorMap.put(PremiumInfluencingFactor.AGE, "Age");
         premiumInfluencingFactorMap.put(PremiumInfluencingFactor.POLICY_TERM, "Policy Term");
-        premiumInfluencingFactorMap.put(PremiumInfluencingFactor.DESIGNATION, "Designation");
-        premiumInfluencingFactorMap.put(PremiumInfluencingFactor.SMOKING_STATUS, "Smoking Status");
         premiumInfluencingFactorMap.put(PremiumInfluencingFactor.SUM_ASSURED, "Sum Assured");
         premiumExcelItemMap.put(premiumInfluencingFactorMap, 100.00);
         premiumExcelLineItems.add(premiumExcelItemMap);
@@ -63,9 +61,7 @@ public class PremiumUnitTest {
 
         premiumInfluencingFactors = Lists.newArrayList();
         premiumInfluencingFactors.add(PremiumInfluencingFactor.AGE);
-        premiumInfluencingFactors.add(PremiumInfluencingFactor.DESIGNATION);
         premiumInfluencingFactors.add(PremiumInfluencingFactor.POLICY_TERM);
-        premiumInfluencingFactors.add(PremiumInfluencingFactor.SMOKING_STATUS);
         premiumInfluencingFactors.add(PremiumInfluencingFactor.SUM_ASSURED);
 
         premium = Premium.createPremiumWithPlan(premiumId, planId, new LocalDate("2015-04-20"), premiumExcelLineItems, PremiumFactor.FLAT_AMOUNT, PremiumRateFrequency.MONTHLY,

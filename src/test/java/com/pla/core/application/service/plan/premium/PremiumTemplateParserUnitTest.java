@@ -37,17 +37,18 @@ public class PremiumTemplateParserUnitTest {
     @Mock
     MasterFinder masterFinder;
 
-    PremiumTemplateParser premiumTemplateParser ;
+    PremiumTemplateParser premiumTemplateParser;
     HSSFWorkbook premiumTemplateWorkbook;
     HSSFSheet premiumSheet;
     List<Row> allRows;
     List<Row> allRowsToBeCompared;
     @Mock
     Plan plan;
+
     @Before
     public void setUp() throws IOException {
-        premiumTemplateParser =  new PremiumTemplateParser(masterFinder);
-        InputStream inputStream =  ClassLoader.getSystemResourceAsStream("testdata/endtoend/plan/_PremiumTemplate.xls");
+        premiumTemplateParser = new PremiumTemplateParser(masterFinder);
+        InputStream inputStream = ClassLoader.getSystemResourceAsStream("testdata/endtoend/plan/_PremiumTemplate.xls");
         POIFSFileSystem fs = new POIFSFileSystem(inputStream);
         premiumTemplateWorkbook = new HSSFWorkbook(fs);
         premiumSheet = premiumTemplateWorkbook.getSheetAt(0);
@@ -57,104 +58,103 @@ public class PremiumTemplateParserUnitTest {
     }
 
     @Test
-    public void givenSecondRowAndThirdRow_whenBothRowsAreNotIdentical_thenItShouldReturnTrue(){
-        Row firstRow  = allRows.get(2);
-        Row secondRow  = allRowsToBeCompared.get(3);
+    public void givenSecondRowAndThirdRow_whenBothRowsAreNotIdentical_thenItShouldReturnTrue() {
+        Row firstRow = allRows.get(2);
+        Row secondRow = allRowsToBeCompared.get(3);
         Boolean isRowIdentical = premiumTemplateParser.isTwoRowIdentical(firstRow, secondRow, 3);
         assertTrue(isRowIdentical);
     }
 
     @Test
-    public void givenFirstRowAndSecondRow_whenBothRowsAreNotIdentical_thenItShouldReturnFalse(){
-        Row firstRow  = allRows.get(1);
-        Row secondRow  = allRowsToBeCompared.get(2);
+    public void givenFirstRowAndSecondRow_whenBothRowsAreNotIdentical_thenItShouldReturnFalse() {
+        Row firstRow = allRows.get(1);
+        Row secondRow = allRowsToBeCompared.get(2);
         Boolean isRowIdentical = premiumTemplateParser.isTwoRowIdentical(firstRow, secondRow, 3);
         assertFalse(isRowIdentical);
     }
 
 
     @Test
-    public void givenFirstRowAndSecondRow_whenAllCellAreIdentical_thenItShouldReturnTrue(){
-        Row firstRow  = allRows.get(2);
-        Row secondRow  = allRowsToBeCompared.get(3);
+    public void givenFirstRowAndSecondRow_whenAllCellAreIdentical_thenItShouldReturnTrue() {
+        Row firstRow = allRows.get(2);
+        Row secondRow = allRowsToBeCompared.get(3);
         List<Cell> firstRowCellList = premiumTemplateParser.transformCellIteratorToList(firstRow.cellIterator());
         List<Cell> secondRowCellList = premiumTemplateParser.transformCellIteratorToList(secondRow.cellIterator());
-        Boolean doesAllRowContainTheUniqueValue = premiumTemplateParser.areAllCellContainsUniqueValue(firstRowCellList,secondRowCellList,3,4);
+        Boolean doesAllRowContainTheUniqueValue = premiumTemplateParser.areAllCellContainsUniqueValue(firstRowCellList, secondRowCellList, 3, 4);
         assertTrue(doesAllRowContainTheUniqueValue);
     }
 
     @Test
-    public void givenFirstRowAndSecondRow_whenAllCellAreNotIdentical_thenItShouldReturnFalse(){
-        Row firstRow  = allRows.get(1);
-        Row secondRow  = allRowsToBeCompared.get(2);
+    public void givenFirstRowAndSecondRow_whenAllCellAreNotIdentical_thenItShouldReturnFalse() {
+        Row firstRow = allRows.get(1);
+        Row secondRow = allRowsToBeCompared.get(2);
         List<Cell> firstRowCellList = premiumTemplateParser.transformCellIteratorToList(firstRow.cellIterator());
         List<Cell> secondRowCellList = premiumTemplateParser.transformCellIteratorToList(secondRow.cellIterator());
-        Boolean doesAllRowContainTheUniqueValue = premiumTemplateParser.areAllCellContainsUniqueValue(firstRowCellList,secondRowCellList,3,4);
+        Boolean doesAllRowContainTheUniqueValue = premiumTemplateParser.areAllCellContainsUniqueValue(firstRowCellList, secondRowCellList, 3, 4);
         assertFalse(doesAllRowContainTheUniqueValue);
     }
 
     @Test(expected = PremiumTemplateParseException.class)
-    public void givenAPremiumSheet_whenTheTemplateHasEmptyRows_thenItShouldThrowAnException(){
-        int noOfNonEmptyRow =  premiumTemplateParser.getNoOfNonEmptyRow(premiumSheet);
+    public void givenAPremiumSheet_whenTheTemplateHasEmptyRows_thenItShouldThrowAnException() {
+        int noOfNonEmptyRow = premiumTemplateParser.getNoOfNonEmptyRow(premiumSheet);
     }
 
     @Test
-    public void givenTheRow_whenTheRowIsEmpty_thenItShouldReturnTrue(){
-        Row row  = allRows.get(5);
+    public void givenTheRow_whenTheRowIsEmpty_thenItShouldReturnTrue() {
+        Row row = allRows.get(5);
         boolean isRowEmpty = premiumTemplateParser.isRowEmpty(row);
         assertTrue(isRowEmpty);
     }
 
     @Test
-    public void givenTheRow_whenTheRowIsNotEmpty_thenItShouldReturnFalse(){
-        Row row  = allRows.get(2);
+    public void givenTheRow_whenTheRowIsNotEmpty_thenItShouldReturnFalse() {
+        Row row = allRows.get(2);
         boolean isRowEmpty = premiumTemplateParser.isRowEmpty(row);
         assertFalse(isRowEmpty);
     }
 
     @Test
-    public void givenHeaderAndTheListOfInfluencingFactor_whenHeaderIsSameAsThePremiumInfluencingFactor_thenItShouldReturnTrue(){
-        boolean isValidHeader = premiumTemplateParser.isValidHeader(allRows.get(7),Lists.newArrayList(PremiumInfluencingFactor.SUM_ASSURED,PremiumInfluencingFactor.AGE,PremiumInfluencingFactor.SMOKING_STATUS,PremiumInfluencingFactor.PREMIUM_PAYMENT_TERM));
-        assertTrue(isValidHeader);
-    }
-
-    @Test
-    public void givenHeaderAndTheListOfInfluencingFactor_whenHeaderIsNotSameAsThePremiumInfluencingFactor_thenItShouldReturnFalse(){
-        boolean isValidHeader = premiumTemplateParser.isValidHeader(allRows.get(0),Lists.newArrayList(PremiumInfluencingFactor.SUM_ASSURED,PremiumInfluencingFactor.AGE,PremiumInfluencingFactor.SMOKING_STATUS,PremiumInfluencingFactor.PREMIUM_PAYMENT_TERM));
+    public void givenHeaderAndTheListOfInfluencingFactor_whenHeaderIsSameAsThePremiumInfluencingFactor_thenItShouldReturnTrue() {
+        boolean isValidHeader = premiumTemplateParser.isValidHeader(allRows.get(7), Lists.newArrayList(PremiumInfluencingFactor.SUM_ASSURED, PremiumInfluencingFactor.AGE, PremiumInfluencingFactor.PREMIUM_PAYMENT_TERM));
         assertFalse(isValidHeader);
     }
 
     @Test
-    public void givenTheInfluencingFactorNameAndListHeaderRow_whenTheInfluencingFactorNameIsPresent_thenItShouldReturnTheCellIndex(){
-        Row row =  allRows.get(7);
+    public void givenHeaderAndTheListOfInfluencingFactor_whenHeaderIsNotSameAsThePremiumInfluencingFactor_thenItShouldReturnFalse() {
+        boolean isValidHeader = premiumTemplateParser.isValidHeader(allRows.get(0), Lists.newArrayList(PremiumInfluencingFactor.SUM_ASSURED, PremiumInfluencingFactor.AGE, PremiumInfluencingFactor.PREMIUM_PAYMENT_TERM));
+        assertFalse(isValidHeader);
+    }
+
+    @Test
+    public void givenTheInfluencingFactorNameAndListHeaderRow_whenTheInfluencingFactorNameIsPresent_thenItShouldReturnTheCellIndex() {
+        Row row = allRows.get(7);
         List<Cell> headerRowCellList = premiumTemplateParser.transformCellIteratorToList(row.cellIterator());
         int cellNumberForAge = premiumTemplateParser.getCellNumberFor("Age", headerRowCellList);
-        assertThat(cellNumberForAge,is(1));
+        assertThat(cellNumberForAge, is(1));
     }
 
     @Test
-    public void givenPremiumInfluencingFactorCoverageIdAndPlan_when_thenItShouldReturnTotalNumberOfPremiumCombination(){
-        int totalNumberOfPremiumCombination = premiumTemplateParser.getTotalNoOfPremiumCombination(Lists.newArrayList(PremiumInfluencingFactor.SUM_ASSURED, PremiumInfluencingFactor.AGE, PremiumInfluencingFactor.SMOKING_STATUS, PremiumInfluencingFactor.PREMIUM_PAYMENT_TERM), new CoverageId("1"), plan);
-        assertThat(totalNumberOfPremiumCombination,is(2));
+    public void givenPremiumInfluencingFactorCoverageIdAndPlan_when_thenItShouldReturnTotalNumberOfPremiumCombination() {
+        int totalNumberOfPremiumCombination = premiumTemplateParser.getTotalNoOfPremiumCombination(Lists.newArrayList(PremiumInfluencingFactor.SUM_ASSURED, PremiumInfluencingFactor.AGE, PremiumInfluencingFactor.PREMIUM_PAYMENT_TERM), new CoverageId("1"), plan);
+        assertThat(totalNumberOfPremiumCombination, is(1));
     }
 
 
     @Test
-    public void givenHeaderRowAndListInfluencingFactor_thenItShouldReturnInfluencingFactorWithCelIndex(){
+    public void givenHeaderRowAndListInfluencingFactor_thenItShouldReturnInfluencingFactorWithCelIndex() {
         Map<PremiumInfluencingFactor, Integer> expectedInfluencingFactorWithCellIndexMap = Maps.newLinkedHashMap();
-        expectedInfluencingFactorWithCellIndexMap.put(PremiumInfluencingFactor.SUM_ASSURED,0);
-        expectedInfluencingFactorWithCellIndexMap.put(PremiumInfluencingFactor.AGE,1);
-        expectedInfluencingFactorWithCellIndexMap.put(PremiumInfluencingFactor.SMOKING_STATUS,2);
+        expectedInfluencingFactorWithCellIndexMap.put(PremiumInfluencingFactor.SUM_ASSURED, 0);
+        expectedInfluencingFactorWithCellIndexMap.put(PremiumInfluencingFactor.AGE, 1);
 
-        Row row =  allRows.get(7);
-        Map<PremiumInfluencingFactor, Integer> influencingFactorCellIndexMap = premiumTemplateParser.buildInfluencingFactorAndCellIndexMap(row, Lists.newArrayList(PremiumInfluencingFactor.SUM_ASSURED, PremiumInfluencingFactor.AGE, PremiumInfluencingFactor.SMOKING_STATUS));
-        assertThat(expectedInfluencingFactorWithCellIndexMap,is(influencingFactorCellIndexMap));
+        Row row = allRows.get(7);
+        Map<PremiumInfluencingFactor, Integer> influencingFactorCellIndexMap = premiumTemplateParser.buildInfluencingFactorAndCellIndexMap(row, Lists.newArrayList(PremiumInfluencingFactor.SUM_ASSURED, PremiumInfluencingFactor.AGE));
+        assertThat(expectedInfluencingFactorWithCellIndexMap, is(influencingFactorCellIndexMap));
     }
 
     @Test(expected = NoSuchElementException.class)
-    public void givenHeaderRowAndListInfluencingFactor_whenTheHeaderRowIsInvalid_thenItShouldThrowAnException(){
-        Row row =  allRows.get(0);
-        Map<PremiumInfluencingFactor, Integer> influencingFactorCellIndexMap = premiumTemplateParser.buildInfluencingFactorAndCellIndexMap(row, Lists.newArrayList(PremiumInfluencingFactor.SUM_ASSURED, PremiumInfluencingFactor.AGE, PremiumInfluencingFactor.SMOKING_STATUS,PremiumInfluencingFactor.PREMIUM_PAYMENT_TERM));
+    public void givenHeaderRowAndListInfluencingFactor_whenTheHeaderRowIsInvalid_thenItShouldThrowAnException() {
+        Row row = allRows.get(0);
+        Map<PremiumInfluencingFactor, Integer> influencingFactorCellIndexMap = premiumTemplateParser.buildInfluencingFactorAndCellIndexMap(row, Lists.newArrayList(PremiumInfluencingFactor.SUM_ASSURED, PremiumInfluencingFactor.AGE, PremiumInfluencingFactor.PREMIUM_PAYMENT_TERM));
         assertNull(influencingFactorCellIndexMap);
     }
 
