@@ -8,7 +8,6 @@ package com.pla.publishedlanguage.domain.model;
 
 import com.pla.core.domain.model.plan.Plan;
 import com.pla.sharedkernel.domain.model.Gender;
-import com.pla.sharedkernel.domain.model.SmokingStatus;
 import com.pla.sharedkernel.identifier.CoverageId;
 
 import java.math.BigDecimal;
@@ -140,36 +139,6 @@ public enum PremiumInfluencingFactor {
         @Override
         public String getErrorMessage(String value) {
             return value + " :is not valid Gender.";
-        }
-    }, SMOKING_STATUS("Smoking Status") {
-        @Override
-        public String[] getAllowedValues(Plan plan, CoverageId coverageId) {
-            return new String[]{SmokingStatus.YES.name(), SmokingStatus.NO.name()};
-        }
-
-        @Override
-        public boolean isValidValue(Plan plan, CoverageId coverageId, String value) {
-            return isEmpty(value) ? false : (value.trim().equals(SmokingStatus.YES.name()) || value.trim().equals(SmokingStatus.NO.name()));
-        }
-
-        @Override
-        public String getErrorMessage(String value) {
-            return value + " :is not valid Smoking Status.";
-        }
-    }, DESIGNATION("Designation") {
-        @Override
-        public String[] getAllowedValues(Plan plan, CoverageId coverageId) {
-            return new String[]{};
-        }
-
-        @Override
-        public boolean isValidValue(Plan plan, CoverageId coverageId, String value) {
-            return isNotEmpty(value);
-        }
-
-        @Override
-        public String getErrorMessage(String value) {
-            return value + " :is not valid Designation";
         }
     }, OCCUPATION_CATEGORY("Occupation Class") {
         @Override
