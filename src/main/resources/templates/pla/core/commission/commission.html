@@ -103,7 +103,7 @@
                         </div>
                         <div class="form-group col-md-3 required" >
                             <label class="control-label">{{override}} Commissions In %age</label>
-                            <input type="string" name="commission"  class="form-control input-sm" id="commissions" ng-disabled="!addCommission.commissionTermType"
+                            <input type="text" name="commission"  class="form-control input-sm" id="commissions" ng-disabled="!addCommission.commissionTermType"
                                    ng-model="addCommission.commissionPercentage"  ng-required="true"  ng-pattern="numberPatternWithDecimal" placeholder="upto four decimal value"/>
                             <div ng-show="addCommissionForm.commission.$invalid &amp;&amp; addCommissionForm.commission.$dirty">
                                 <small class="error" ng-show="addCommissionForm.commission.$error.pattern">
