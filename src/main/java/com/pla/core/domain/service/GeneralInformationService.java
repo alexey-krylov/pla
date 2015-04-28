@@ -311,7 +311,7 @@ public class GeneralInformationService {
             productLineInformationByBusinessId.put("surrenderProcessItems",surrenderMap.get("surrenderProcessItems"));
             Map  maturityMap = (Map) productLineInformationMap.get("maturityProcessInformation");
             productLineInformationByBusinessId.put("maturityProcessItems",maturityMap.get("maturityProcessItems"));
-            productLineInformationByBusinessId.put("surrenderProcessItems", productLineInformationMap.get("premiumFollowUpFrequency"));
+            productLineInformationByBusinessId.put("premiumFollowUpFrequency", productLineInformationMap.get("premiumFollowUpFrequency"));
             Map  discountFactorMap = (Map) productLineInformationMap.get("discountFactorProcessInformation");
             productLineInformationByBusinessId.put("discountFactorItems",discountFactorMap.get("discountFactorItems"));
             Map  modalFactorMap = (Map) productLineInformationMap.get("modalFactorProcessInformation");
