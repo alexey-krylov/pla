@@ -28,7 +28,10 @@ App.controller('AssignTeamController',['$scope','$http','$window','$location','$
                    $scope.assignTeam=data;
                    $scope.currentFromDate=moment($scope.assignTeam.fromDate).format("DD/MM/YYYY");
                    $scope.assignTeam.fromDate= $scope.currentFromDate;
-                   var empId = $scope.assignTeam.currentTeamLeader;
+                   $scope.assignTeam.currentFName =$scope.assignTeam.firstName;
+                  $scope.assignTeam.currentLName =$scope.assignTeam.lastName;
+
+          var empId = $scope.assignTeam.currentTeamLeader;
                    $http.get('/pla/core/team/getteamleaders').success(function(data){
                                $scope.teamLeaders=data;
                                $scope.currentTeamLeader =_.findWhere($scope.teamLeaders,{employeeId:empId});
