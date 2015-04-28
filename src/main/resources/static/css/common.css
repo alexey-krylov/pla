@@ -19,6 +19,10 @@ body {
     border-radius: 3px;
 }
 
+.accordion-error{
+    border-color: red;
+}
+
 .error{
     color: darkred;
     font-weight: 800;
