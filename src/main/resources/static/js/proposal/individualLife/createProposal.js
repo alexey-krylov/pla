@@ -1,8 +1,10 @@
 angular.module('createProposal',['common','ngRoute'])
-    .controller('createProposalCtrl',['$scope','resources','$bsmodal',function($scope,resources,$bsmodal){
+    .controller('createProposalCtrl',['$scope','resources','$bsmodal','globalConstants',function($scope,resources,$bsmodal,globalConstants){
+        $scope.titles = globalConstants.title;
         $scope.part={
             isPart:true
         };
+        $scope.isProposed = null;
         $scope.resources = resources;
         $scope.agentDetails = [];
         $scope.accordionStatus = {
@@ -22,6 +24,7 @@ angular.module('createProposal',['common','ngRoute'])
             });
 
             agentModalInstance.result.then(function (agent) {
+                $scope.isAgentEmpty = false;
                 $scope.agentDetails.push(agent);
             });
 
@@ -50,6 +53,36 @@ angular.module('createProposal',['common','ngRoute'])
                 controller: 'addBeneficiaryCtrl',
                 backdrop:'static'
             });
+        };
+
+        $scope.hasAccordionError =  function(form){
+            return $scope.createProposal.step1.$submitted  && form.$invalid;
+        };
+
+        function isFormValidated(){
+            if(_.isEmpty($scope.agentDetails)){
+                $scope.isAgentEmpty = true;
+                return false;
+            }
+
+            if($scope.step1.isProposed.$invalid){
+                return false;
+            }
+        }
+
+        function setSubFormSubmitted(){
+            $scope.createProposal.step1.$setSubmitted();
+            $scope.createProposal.step1.proposedAssuredDetails.$setPristine();
+            $scope.createProposal.step1.spouseDetails.$setPristine();
+            $scope.createProposal.step1.employmentDetails.$setPristine();
+            $scope.createProposal.step1.residentDetails.$setPristine();
+        }
+
+        $scope.savePrposedAssuredDetails = function(){
+            setSubFormSubmitted();
+            if(isFormValidated()){
+
+            }
         }
     }])
     .controller('modalCtrl',['$scope','$modalInstance',function($scope, $modalInstance){
@@ -80,7 +113,7 @@ angular.module('createProposal',['common','ngRoute'])
     }])
     .config(["$routeProvider","$provide",function($routeProvider,$provide){
         $routeProvider.when('/', {
-            templateUrl: '/pla/proposal/individualLife/createProposal.html',
+            templateUrl: '/pla/proposal/individualLife/getPage/createProposal',
             controller: 'createProposalCtrl',
             resolve: {
 
@@ -100,16 +133,16 @@ angular.module('createProposal',['common','ngRoute'])
 
     }])
     .constant('resources', {
-        agentModal:"/pla/proposal/individualLife/agentDetailModal.html",
-        proposedAssuredUrl:"/pla/proposal/individualLife/proposedAssuredDetails.html",
-        proposerDetails:"/pla/proposal/individualLife/proposerDetails.html",
-        planDetails:"/pla/proposal/individualLife/planDetails.html",
-        beneficiaryModal:"/pla/proposal/individualLife/beneficiaryDetailModal.html",
-        generalDetails:"/pla/proposal/individualLife/generalDetails.html",
-        compulsoryHealthDetailsPart1:"/pla/proposal/individualLife/compulsoryHealthDetailsPart1.html",
-        compulsoryHealthDetailsPart2:"/pla/proposal/individualLife/compulsoryHealthDetailsPart2.html",
-        familyHabitAndBuild:"/pla/proposal/individualLife/familyHabitAndBuild.html",
-        additionalDetail:"/pla/proposal/individualLife/additionalDetail.html"
+        agentModal:"/pla/proposal/individualLife/getPage/agentDetailModal",
+        proposedAssuredUrl:"/pla/proposal/individualLife/getPage/proposedAssuredDetails",
+        proposerDetails:"/pla/proposal/individualLife/getPage/proposerDetails",
+        planDetails:"/pla/proposal/individualLife/getPage/planDetails",
+        beneficiaryModal:"/pla/proposal/individualLife/getPage/beneficiaryDetailModal",
+        generalDetails:"/pla/proposal/individualLife/getPage/generalDetails",
+        compulsoryHealthDetailsPart1:"/pla/proposal/individualLife/getPage/compulsoryHealthDetailsPart1",
+        compulsoryHealthDetailsPart2:"/pla/proposal/individualLife/getPage/compulsoryHealthDetailsPart2",
+        familyHabitAndBuild:"/pla/proposal/individualLife/getPage/familyHabitAndBuild",
+        additionalDetail:"/pla/proposal/individualLife/getPage/additionalDetail"
     })
     .filter('getTrustedUrl',['$sce',function($sce){
         return function(url){
