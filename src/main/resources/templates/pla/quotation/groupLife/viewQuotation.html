@@ -32,9 +32,12 @@
                         $("#search").prop("disabled",isDisabled);
                     });
 
-                    $('#quotation-table').dataTable();
-                    $( "input[type=radio]" ).on( "click", function(){
-                        viewQuotationModule.getTheItemSelected(this);
+                    $('#quotation-table').dataTable({
+                        "fnDrawCallback":function(){
+                            $( "input[type=radio]" ).on( "click", function(){
+                                viewQuotationModule.getTheItemSelected(this);
+                            });
+                        }
                     });
                 });
             });

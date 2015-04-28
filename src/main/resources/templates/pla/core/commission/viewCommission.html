@@ -12,9 +12,12 @@
         if(require.defined("basic")){
             requirejs(['/pla/js/commissions/viewCommissions.js'],function(){
                 $(document).ready(function(){
-                    $('#commission-table').dataTable();
-                    $( "input[type=radio]" ).on( "click", function(){
-                        viewCommission.getTheItemSelected(this)
+                    $('#commission-table').dataTable({
+                        "fnDrawCallback":function(){
+                            $( "input[type=radio]" ).on( "click", function(){
+                                viewCommission.getTheItemSelected(this)
+                            });
+                        }
                     });
                 });
             });
