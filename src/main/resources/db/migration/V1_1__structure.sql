@@ -755,6 +755,7 @@ DROP TABLE IF EXISTS `document`;
 CREATE TABLE `document` (
   `document_code` varchar(255) NOT NULL,
   `document_name` varchar(255) DEFAULT NULL,
+  `is_provided` varchar(10) DEFAULT NULL,
   PRIMARY KEY (`document_code`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
