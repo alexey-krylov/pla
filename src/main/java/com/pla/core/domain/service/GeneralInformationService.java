@@ -403,10 +403,22 @@ public class GeneralInformationService {
         productLineInformationMap.put("policyProcessMinimumLimitItems", GeneralInformationProcessItem.MINIMUM_LIMIT.getOrganizationLevelProcessInformationItem());
         productLineInformationMap.put("surrenderProcessItems", GeneralInformationProcessItem.DEFAULT.getOrganizationLevelProcessInformationItem());
         productLineInformationMap.put("maturityProcessItems", GeneralInformationProcessItem.DEFAULT.getOrganizationLevelProcessInformationItem());
-        productLineInformationMap.put("premiumFollowUpFrequency", GeneralInformationProcessItem.PREMIUM_FOLLOW_UP.getOrganizationLevelProcessInformationItem());
+        productLineInformationMap.put("premiumFollowUpFrequency", transformPremiumFollowUp());
         productLineInformationMap.put("modelFactorItems",GeneralInformationProcessItem.MODAL_FACTOR.getOrganizationLevelProcessInformationItem());
         productLineInformationMap.put("discountFactorItems",GeneralInformationProcessItem.DISCOUNT_FACTOR.getOrganizationLevelProcessInformationItem());
         return productLineInformationMap;
+    }
+
+    public List<Map<String,Object>> transformPremiumFollowUp(){
+        List<Map<String,Object>> productLineProcessList = GeneralInformationProcessItem.PREMIUM_FOLLOW_UP.getOrganizationLevelProcessInformationItem();
+        List<Map<String,Object>> premiumFrequencyFollowUpList = Lists.newArrayList();
+        for (PremiumFrequency premiumFrequency : PremiumFrequency.values()){
+            Map<String,Object> premiumFrequencyMap = Maps.newLinkedHashMap();
+            premiumFrequencyMap.put("premiumFrequency", premiumFrequency);
+            premiumFrequencyMap.put("premiumFollowUpFrequencyItems",productLineProcessList);
+            premiumFrequencyFollowUpList.add(premiumFrequencyMap);
+        }
+        return premiumFrequencyFollowUpList;
     }
 
 }
