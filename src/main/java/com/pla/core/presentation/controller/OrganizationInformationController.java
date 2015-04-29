@@ -49,7 +49,7 @@ public class OrganizationInformationController {
     {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("pla/core/generalInformation/organizationLevelInformation/viewOrganizationalLevelInformation");
-        modelAndView.addObject("listOfOrganizationInformation",generalInformationService.getOrganizationProcessItems());
+        modelAndView.addObject("listOfOrganizationInformation",generalInformationService.getAllOrganizationInformation());
         return modelAndView;
     }
 
@@ -60,7 +60,7 @@ public class OrganizationInformationController {
     
     @RequestMapping(value = "/getorganizationprocessitem", method = RequestMethod.GET)
     @ResponseBody
-    public List<GeneralInformationProcessDto> getOrganizationInformationItem(){
+    public Map<String,List<GeneralInformationProcessDto>> getOrganizationInformationItem(){
        return generalInformationService.getOrganizationProcessItems();
     }
 

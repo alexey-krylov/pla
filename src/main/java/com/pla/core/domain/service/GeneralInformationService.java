@@ -207,12 +207,12 @@ public class GeneralInformationService {
     }
 
 
-    public List<GeneralInformationProcessDto> getOrganizationProcessItems(){
-        List<GeneralInformationProcessDto> organizationProcessList = Lists.newArrayList();
-        organizationProcessList = getModalFactorItems(organizationProcessList);
-        organizationProcessList = getDiscountFactorItems(organizationProcessList);
-        organizationProcessList = getServiceTaxItem(organizationProcessList);
-        return organizationProcessList;
+    public Map<String,List<GeneralInformationProcessDto>> getOrganizationProcessItems(){
+        Map<String,List<GeneralInformationProcessDto>> organizationInformationProcess = Maps.newLinkedHashMap();
+        organizationInformationProcess.put("modalFactorProcess",getModalFactorItems());
+        organizationInformationProcess.put("discountFactorProcess",getDiscountFactorItems());
+        organizationInformationProcess.put("serviceTax",getServiceTaxItem());
+        return organizationInformationProcess;
     }
 
     public List<GeneralInformationProcessDto> getProductLineProcessItems(){
@@ -223,19 +223,22 @@ public class GeneralInformationService {
         return productLineProcessList;
     }
 
-    private List<GeneralInformationProcessDto> getModalFactorItems(List<GeneralInformationProcessDto> organizationProcessList){
+    private List<GeneralInformationProcessDto> getModalFactorItems(){
+        List<GeneralInformationProcessDto> organizationProcessList = Lists.newArrayList();
         for (ModalFactorItem modalFactorItem : ModalFactorItem.values()){
             organizationProcessList.add(transformProductLineProcessItem(modalFactorItem.name(),modalFactorItem.getDescription(),modalFactorItem.getFullDescription()));
         }
         return organizationProcessList;
     }
 
-    private List<GeneralInformationProcessDto> getServiceTaxItem(List<GeneralInformationProcessDto> organizationProcessList){
+    private List<GeneralInformationProcessDto> getServiceTaxItem(){
+        List<GeneralInformationProcessDto> organizationProcessList = Lists.newArrayList();
         organizationProcessList.add(transformProductLineProcessItem(Tax.SERVICE_TAX.name(), Tax.SERVICE_TAX.getDescription(), Tax.SERVICE_TAX.getFullDescription()));
         return organizationProcessList;
     }
 
-    private List<GeneralInformationProcessDto> getDiscountFactorItems(List<GeneralInformationProcessDto> organizationProcessList){
+    private List<GeneralInformationProcessDto> getDiscountFactorItems(){
+        List<GeneralInformationProcessDto> organizationProcessList = Lists.newArrayList();
         for (DiscountFactorItem discountFactorItem : DiscountFactorItem.values()){
             organizationProcessList.add(transformProductLineProcessItem(discountFactorItem.name(),discountFactorItem.getDescription(),discountFactorItem.getFullDescription()));
         }
