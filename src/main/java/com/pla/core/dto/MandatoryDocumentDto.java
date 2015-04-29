@@ -1,5 +1,6 @@
 package com.pla.core.dto;
 
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -11,6 +12,7 @@ import java.util.Map;
  */
 @Getter
 @Setter
+@EqualsAndHashCode
 public class MandatoryDocumentDto {
     private Long documentId;
     private String coverageId;
@@ -20,4 +22,5 @@ public class MandatoryDocumentDto {
     private String process;
     List<Map<String,Object>> documents;
     List<String> document;
+
 }

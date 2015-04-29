@@ -9,6 +9,7 @@ import com.pla.core.dto.MandatoryDocumentDto;
 import com.pla.core.query.CoverageFinder;
 import com.pla.core.query.MandatoryDocumentFinder;
 import com.pla.core.query.PlanFinder;
+import com.pla.core.specification.MandatoryDocumentIsAssociatedWithPlan;
 import com.pla.sharedkernel.identifier.PlanId;
 import org.nthdimenzion.ddd.domain.annotations.DomainService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,18 +33,24 @@ public class MandatoryDocumentService {
     private MandatoryDocumentFinder mandatoryDocumentFinder;
     private PlanFinder planFinder;
     private CoverageFinder coverageFinder;
+    private MandatoryDocumentIsAssociatedWithPlan mandatoryDocumentIsAssociatedWithPlan;
 
     @Autowired
-    public MandatoryDocumentService(AdminRoleAdapter adminRoleAdapter,MandatoryDocumentFinder mandatoryDocumentFinder,PlanFinder planFinder,CoverageFinder coverageFinder) {
+    public MandatoryDocumentService(AdminRoleAdapter adminRoleAdapter,MandatoryDocumentFinder mandatoryDocumentFinder,PlanFinder planFinder,CoverageFinder coverageFinder,MandatoryDocumentIsAssociatedWithPlan mandatoryDocumentIsAssociatedWithPlan) {
         this.adminRoleAdapter = adminRoleAdapter;
         this.mandatoryDocumentFinder = mandatoryDocumentFinder;
         this.planFinder = planFinder;
         this.coverageFinder = coverageFinder;
+        this.mandatoryDocumentIsAssociatedWithPlan = mandatoryDocumentIsAssociatedWithPlan;
     }
 
     public MandatoryDocument createMandatoryDocument(String planId, String coverageId, ProcessType process, Set<String> documents, UserDetails userDetails){
         Admin admin = adminRoleAdapter.userToAdmin(userDetails);
-        MandatoryDocument mandatoryDocument = admin.createMandatoryDocument(planId, coverageId, process, documents);
+        MandatoryDocumentDto mandatoryDocumentDto = new MandatoryDocumentDto();
+        mandatoryDocumentDto.setPlanId(planId);
+        mandatoryDocumentDto.setProcess(process.name());
+        boolean isMandatoryDocumentIsAssociatedWithPlan =  mandatoryDocumentIsAssociatedWithPlan.isSatisfiedBy(mandatoryDocumentDto);
+        MandatoryDocument mandatoryDocument = admin.createMandatoryDocument(planId, coverageId, process, documents,isMandatoryDocumentIsAssociatedWithPlan);
         return mandatoryDocument;
     }
 

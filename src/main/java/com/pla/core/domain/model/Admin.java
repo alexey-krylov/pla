@@ -8,6 +8,7 @@ package com.pla.core.domain.model;
 
 import com.pla.core.domain.exception.BenefitDomainException;
 import com.pla.core.domain.exception.CoverageException;
+import com.pla.core.domain.exception.MandatoryDocumentException;
 import com.pla.core.domain.exception.TeamDomainException;
 import com.pla.core.domain.model.generalinformation.OrganizationGeneralInformation;
 import com.pla.core.domain.model.generalinformation.ProductLineGeneralInformation;
@@ -89,7 +90,10 @@ public class Admin {
         return updatedTeam;
     }
 
-    public MandatoryDocument createMandatoryDocument(String planId, String coverageId, ProcessType processType, Set<String> documents){
+    public MandatoryDocument createMandatoryDocument(String planId, String coverageId, ProcessType processType, Set<String> documents,boolean isMandatoryDocumentIsAssociatedWithPlan){
+        if (!isMandatoryDocumentIsAssociatedWithPlan){
+            throw new MandatoryDocumentException("Mandatory documents already described");
+        }
         MandatoryDocument mandatoryDocument;
         if (coverageId!=null)
             mandatoryDocument = MandatoryDocument.createMandatoryDocumentWithCoverageId(new PlanId(planId), new CoverageId(coverageId),processType, documents);

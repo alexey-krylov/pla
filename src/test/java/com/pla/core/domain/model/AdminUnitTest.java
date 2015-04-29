@@ -272,7 +272,7 @@ public class AdminUnitTest {
         Set<String> documents = new HashSet<>();
         documents.add("DOCUMENT_ONE");
         documents.add("DOCUMENT_TWO");
-        MandatoryDocument mandatoryDocument = admin.createMandatoryDocument("P001", "C001", ProcessType.MATURITY, documents);
+        MandatoryDocument mandatoryDocument = admin.createMandatoryDocument("P001", "C001", ProcessType.MATURITY, documents,true);
         assertEquals(new PlanId("P001"), invokeGetterMethod(mandatoryDocument, "getPlanId"));
         assertEquals(new CoverageId("C001"), invokeGetterMethod(mandatoryDocument, "getCoverageId"));
         assertEquals(ProcessType.MATURITY, invokeGetterMethod(mandatoryDocument, "getProcess"));
@@ -285,7 +285,7 @@ public class AdminUnitTest {
         Set<String> documents = new HashSet<>();
         documents.add("DOCUMENT_ONE");
         documents.add("DOCUMENT_TWO");
-        MandatoryDocument mandatoryDocument = admin.createMandatoryDocument("P001", "C001", ProcessType.MATURITY, documents);
+        MandatoryDocument mandatoryDocument = admin.createMandatoryDocument("P001", "C001", ProcessType.MATURITY, documents,true);
         assertEquals(2, mandatoryDocument.getDocuments().size());
 
         documents = new HashSet<>();

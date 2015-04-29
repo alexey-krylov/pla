@@ -1,11 +1,13 @@
 package com.pla.core.domain.service;
 
+import com.pla.core.domain.exception.MandatoryDocumentException;
 import com.pla.core.domain.model.Admin;
 import com.pla.core.domain.model.MandatoryDocument;
 import com.pla.core.domain.model.ProcessType;
 import com.pla.core.query.CoverageFinder;
 import com.pla.core.query.MandatoryDocumentFinder;
 import com.pla.core.query.PlanFinder;
+import com.pla.core.specification.MandatoryDocumentIsAssociatedWithPlan;
 import com.pla.sharedkernel.identifier.CoverageId;
 import com.pla.sharedkernel.identifier.PlanId;
 import org.junit.Before;
@@ -21,6 +23,8 @@ import java.util.Set;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.mockito.Matchers.anyObject;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.util.ReflectionTestUtils.invokeGetterMethod;
 
@@ -41,6 +45,10 @@ public class MandatoryDocumentServiceUnitTest {
 
     @Mock
     private CoverageFinder coverageFinder;
+
+    @Mock
+    MandatoryDocumentIsAssociatedWithPlan mandatoryDocumentIsAssociatedWithPlan;
+
     MandatoryDocumentService mandatoryDocumentService;
 
     private UserDetails userDetails;
@@ -49,7 +57,7 @@ public class MandatoryDocumentServiceUnitTest {
 
     @Before
     public void setUp() {
-        mandatoryDocumentService = new MandatoryDocumentService(adminRoleAdapter,mandatoryDocumentFinder,planFinder,coverageFinder);
+        mandatoryDocumentService = new MandatoryDocumentService(adminRoleAdapter,mandatoryDocumentFinder,planFinder,coverageFinder,mandatoryDocumentIsAssociatedWithPlan);
         userDetails = UserLoginDetailDto.createUserLoginDetailDto("", "");
         admin = new Admin();
     }
@@ -63,6 +71,19 @@ public class MandatoryDocumentServiceUnitTest {
         assertEquals(ProcessType.CLAIM, invokeGetterMethod(mandatoryDocument, "getProcess"));
         assertEquals(2, mandatoryDocument.getDocuments().size());
     }
+
+    @Test(expected = MandatoryDocumentException.class)
+    public void givenProductAndOptionalCoverageWithClaimProcess_whenUserHasAdminRoleDocumentIsAssociatedWithPlan_thenItShouldThrowAnException() {
+        Set<String> documents = new HashSet<>();
+        documents.add("DOCUMENT_ONE");
+        documents.add("DOCUMENT_TWO");
+        when(adminRoleAdapter.userToAdmin(userDetails)).thenReturn(admin);
+        when(mandatoryDocumentIsAssociatedWithPlan.isSatisfiedBy(anyObject())).thenReturn(false);
+        MandatoryDocument mandatoryDocument =  mandatoryDocumentService.createMandatoryDocument("P001", "C001", ProcessType.CLAIM, documents, userDetails);
+        assertNull(mandatoryDocument);
+
+    }
+
 
     @Test
     public void givenIdAndSetOfDocuments_whenUserHasAdminRole_thenItShouldUpdateTheMandatoryDocumentForTheGivenProduct() {
@@ -82,6 +103,7 @@ public class MandatoryDocumentServiceUnitTest {
         documents.add("DOCUMENT_ONE");
         documents.add("DOCUMENT_TWO");
         when(adminRoleAdapter.userToAdmin(userDetails)).thenReturn(admin);
+        when(mandatoryDocumentIsAssociatedWithPlan.isSatisfiedBy(anyObject())).thenReturn(true);
         return mandatoryDocumentService.createMandatoryDocument("P001","C001",ProcessType.CLAIM,documents,userDetails);
     }
 
