@@ -52,8 +52,8 @@
                             <td th:text="${region.regionalManagerFromDate != null}? ${#dates.format(region.regionalManagerFromDate,'dd/MM/yyyy')}"></td>
                             <td th:text="${region.regionalManagerThruDate != null}? ${#dates.format(region.regionalManagerThruDate,'dd/MM/yyyy')}"></td>
 
-                            <td style="text-align:center">
-                                <a class="btn btn-default btn-xs" th:disabled="${region.regionalManagerThruDate != null}" th:href="'/pla/core/region/redirecttoassignPage?regionId='+${region.regionCode}+''">Assign</a></td>
+                            <td style="text-align:center"><!--th:disabled="${region.regionalManagerThruDate != null}"-->
+                                <a class="btn btn-default btn-xs"  th:href="'/pla/core/region/redirecttoassignPage?regionId='+${region.regionCode}+''">Assign</a></td>
 
                         </tr>
 
