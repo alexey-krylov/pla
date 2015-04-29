@@ -6,5 +6,5 @@ package com.pla.sharedkernel.domain.model;
  */
 public enum SumAssuredType {
 
-    SPECIFIED_VALUES, RANGE, DERIVED
+    SPECIFIED_VALUES, RANGE, DERIVED, INCOME_MULTIPLIER
 }

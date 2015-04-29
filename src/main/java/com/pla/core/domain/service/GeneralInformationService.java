@@ -330,10 +330,10 @@ public class GeneralInformationService {
         if (!strings.contains(LineOfBusinessId.GROUP_HEALTH.name())){
             productLineInformation.add(getGroupHealthProductLineInformation());
         }
-        if (!strings.contains(LineOfBusinessId.GROUP_INSURANCE.name())){
+        if (!strings.contains(LineOfBusinessId.GROUP_LIFE.name())) {
             productLineInformation.add(getGroupInsuranceProductLineInformation());
         }
-        if (!strings.contains(LineOfBusinessId.INDIVIDUAL_INSURANCE.name())){
+        if (!strings.contains(LineOfBusinessId.INDIVIDUAL_LIFE.name())) {
             productLineInformation.add(getIndividualInsuranceProductLineInformation());
         }
         return productLineInformation;
@@ -369,7 +369,7 @@ public class GeneralInformationService {
 
     public Map getGroupInsuranceProductLineInformation(){
         Map insuranceMap  = Maps.newLinkedHashMap();
-        insuranceMap.put("productLine",LineOfBusinessId.GROUP_INSURANCE);
+        insuranceMap.put("productLine", LineOfBusinessId.GROUP_LIFE);
         insuranceMap.put("productLineInformationId",null);
         insuranceMap = getProductLineGeneralInformation(insuranceMap);
         return insuranceMap;
@@ -377,7 +377,7 @@ public class GeneralInformationService {
 
     public Map getIndividualInsuranceProductLineInformation(){
         Map individualInsurance  = Maps.newLinkedHashMap();
-        individualInsurance.put("productLine",LineOfBusinessId.INDIVIDUAL_INSURANCE);
+        individualInsurance.put("productLine", LineOfBusinessId.INDIVIDUAL_LIFE);
         individualInsurance.put("productLineInformationId",null);
         individualInsurance = getProductLineGeneralInformation(individualInsurance);
         return individualInsurance;

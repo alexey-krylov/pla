@@ -47,23 +47,19 @@ import static org.springframework.test.util.ReflectionTestUtils.invokeGetterMeth
 @RunWith(MockitoJUnitRunner.class)
 public class AdminUnitTest {
 
-    @Mock
-    private BenefitNameIsUnique benefitNameIsUnique;
-
-    @Mock
-    private BenefitFinder benefitFinder;
-
-    @Mock
-    private BenefitIsAssociatedWithCoverage benefitIsAssociatedWithCoverage;
-
-    private Admin admin;
-
     Set<Benefit> benefitSet = new HashSet<>();
-
-    List<Map<ProductLineProcessType,Integer>> listOfProcessItems;
-    Map<PremiumFrequency, List<Map<ProductLineProcessType,Integer>>> premiumFollowUpFrequencyItems;
+    List<Map<ProductLineProcessType, Integer>> listOfProcessItems;
+    Map<PremiumFrequency, List<Map<ProductLineProcessType, Integer>>> premiumFollowUpFrequencyItems;
     List<Map<ModalFactorItem, BigDecimal>> listOfModalFactorItem;
     List<Map<DiscountFactorItem, BigDecimal>> listOfDiscountFactorItem;
+    @Mock
+    private BenefitNameIsUnique benefitNameIsUnique;
+    @Mock
+    private BenefitFinder benefitFinder;
+    @Mock
+    private BenefitIsAssociatedWithCoverage benefitIsAssociatedWithCoverage;
+    private Admin admin;
+
     @Before
     public void setUp() {
         admin = new Admin();
@@ -341,7 +337,7 @@ public class AdminUnitTest {
         List<Map<PolicyProcessMinimumLimitType,Integer>> policyProcessMinimumLimitItems = Lists.newArrayList();
         productLineProcessItemMap.put(ProductLineProcessType.EARLY_DEATH_CRITERIA, 10);
         listOfProcessItems.add(productLineProcessItemMap);
-        ProductLineGeneralInformation createdProductLineGeneralInformation = admin.createProductLineGeneralInformation(LineOfBusinessId.GROUP_HEALTH, listOfProcessItems,listOfProcessItems,listOfProcessItems,listOfProcessItems,listOfProcessItems,null,policyProcessMinimumLimitItems,listOfProcessItems,listOfProcessItems,premiumFollowUpFrequencyItems,listOfModalFactorItem,listOfDiscountFactorItem);
+        ProductLineGeneralInformation createdProductLineGeneralInformation = admin.createProductLineGeneralInformation(LineOfBusinessId.GROUP_HEALTH, listOfProcessItems, listOfProcessItems, listOfProcessItems, listOfProcessItems, listOfProcessItems, null, policyProcessMinimumLimitItems, listOfProcessItems, listOfProcessItems, premiumFollowUpFrequencyItems, listOfModalFactorItem, listOfDiscountFactorItem);
         assertNull(createdProductLineGeneralInformation);
     }
 
@@ -363,7 +359,7 @@ public class AdminUnitTest {
     public void givenLineOfBusinessIdAndGeneralInformation_whenLineOfBusinessIdIsIndividualInsurance_thenItThrowAnException(){
         List<Map<PolicyFeeProcessType,Integer>> policyFeeProcessItems = Lists.newArrayList();
         List<Map<PolicyProcessMinimumLimitType,Integer>> policyProcessMinimumLimitItems = Lists.newArrayList();
-        ProductLineGeneralInformation createdProductLineGeneralInformation = admin.createProductLineGeneralInformation(LineOfBusinessId.INDIVIDUAL_INSURANCE, listOfProcessItems,listOfProcessItems,listOfProcessItems,listOfProcessItems,listOfProcessItems,policyFeeProcessItems,policyProcessMinimumLimitItems,listOfProcessItems,listOfProcessItems,premiumFollowUpFrequencyItems,listOfModalFactorItem,listOfDiscountFactorItem);
+        ProductLineGeneralInformation createdProductLineGeneralInformation = admin.createProductLineGeneralInformation(LineOfBusinessId.INDIVIDUAL_LIFE, listOfProcessItems, listOfProcessItems, listOfProcessItems, listOfProcessItems, listOfProcessItems, policyFeeProcessItems, policyProcessMinimumLimitItems, listOfProcessItems, listOfProcessItems, premiumFollowUpFrequencyItems, listOfModalFactorItem, listOfDiscountFactorItem);
         assertNotNull(createdProductLineGeneralInformation);
     }
 

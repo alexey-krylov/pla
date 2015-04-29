@@ -187,7 +187,7 @@ public class ProductLineInformationUnitTest {
         policyProcessMinimumLimit.add(policyProcessMinimumLimitMap);
 
 
-        ProductLineGeneralInformation productLineGeneralInformation = ProductLineGeneralInformation.createProductLineGeneralInformation(LineOfBusinessId.INDIVIDUAL_INSURANCE);
+        ProductLineGeneralInformation productLineGeneralInformation = ProductLineGeneralInformation.createProductLineGeneralInformation(LineOfBusinessId.INDIVIDUAL_LIFE);
         productLineGeneralInformation = productLineGeneralInformation.withPolicyProcessMinimumLimit(policyProcessMinimumLimit);
 
     }

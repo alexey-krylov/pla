@@ -33,10 +33,10 @@ public class PlanDetailTest {
                 .withMaxEntryAge(60)
                 .withFreeLookPeriod(15)
                 .withSurrenderAfter(5)
-                .withLineOfBusinessId(LineOfBusinessId.INDIVIDUAL_INSURANCE)
+                .withLineOfBusinessId(LineOfBusinessId.INDIVIDUAL_LIFE)
                 .withPlanType(PlanType.NON_INVESTMENT)
                 .withApplicableRelationships(new HashSet<>(Arrays.asList(Relationship.BROTHER, Relationship.DAUGHTER)))
-                .withEndorsementTypes(new HashSet<>(Arrays.asList(EndorsementType.ADDRESS, EndorsementType.AGENT)))
+                .withEndorsementTypes(new HashSet<>(Arrays.asList(EndorsementType.IND_CHANGE_ADDRESS, EndorsementType.IND_CHANGE_AGENT)))
                 .build();
 
     }
@@ -53,10 +53,10 @@ public class PlanDetailTest {
                 .withFreeLookPeriod(15)
                 .withSurrenderAfter(5)
                 .withClientType(ClientType.INDIVIDUAL)
-                .withLineOfBusinessId(LineOfBusinessId.INDIVIDUAL_INSURANCE)
+                .withLineOfBusinessId(LineOfBusinessId.INDIVIDUAL_LIFE)
                 .withPlanType(PlanType.NON_INVESTMENT)
                 .withApplicableRelationships(new HashSet<>(Arrays.asList(Relationship.BROTHER, Relationship.DAUGHTER)))
-                .withEndorsementTypes(new HashSet<>(Arrays.asList(EndorsementType.ADDRESS, EndorsementType.MEMBER_ADDITION)))
+                .withEndorsementTypes(new HashSet<>(Arrays.asList(EndorsementType.IND_CHANGE_ADDRESS, EndorsementType.GRP_MEMBER_ADDITION)))
                 .build();
 
     }
@@ -66,7 +66,7 @@ public class PlanDetailTest {
         LocalDate launchDate = LocalDate.now().plusDays(10);
         LocalDate withdrawalDate = LocalDate.now().plusDays(30);
         Set<Relationship> relationshipSet = new HashSet<>(Arrays.asList(Relationship.BROTHER, Relationship.DAUGHTER));
-        Set<EndorsementType> endorsementTypes = new HashSet<>(Arrays.asList(EndorsementType.ADDRESS, EndorsementType.NAME));
+        Set<EndorsementType> endorsementTypes = new HashSet<>(Arrays.asList(EndorsementType.IND_CHANGE_ADDRESS, EndorsementType.IND_CHANGE_NAME));
         PlanDetail planDetail = builder.withPlanName("Plan 1")
                 .withPlanCode("0001900")
                 .withLaunchDate(launchDate)
@@ -76,7 +76,7 @@ public class PlanDetailTest {
                 .withFreeLookPeriod(15)
                 .withSurrenderAfter(5)
                 .withClientType(ClientType.INDIVIDUAL)
-                .withLineOfBusinessId(LineOfBusinessId.INDIVIDUAL_INSURANCE)
+                .withLineOfBusinessId(LineOfBusinessId.INDIVIDUAL_LIFE)
                 .withPlanType(PlanType.NON_INVESTMENT)
                 .withApplicableRelationships(relationshipSet)
                 .withEndorsementTypes(endorsementTypes)
@@ -90,7 +90,7 @@ public class PlanDetailTest {
         LocalDate launchDate = LocalDate.now().plusDays(10);
         LocalDate withdrawalDate = LocalDate.now().plusDays(30);
         Set<Relationship> relationshipSet = new HashSet<>(Arrays.asList(Relationship.BROTHER, Relationship.DAUGHTER));
-        Set<EndorsementType> endorsementTypes = new HashSet<>(Arrays.asList(EndorsementType.ADDRESS, EndorsementType.NAME));
+        Set<EndorsementType> endorsementTypes = new HashSet<>(Arrays.asList(EndorsementType.IND_CHANGE_ADDRESS, EndorsementType.IND_CHANGE_NAME));
 
         PlanDetail planDetail = createPlanDetail();
         assertFalse(planDetail.isTaxApplicable());
@@ -103,7 +103,7 @@ public class PlanDetailTest {
         assertEquals(15, planDetail.getFreeLookPeriod());
         assertEquals(5, planDetail.getSurrenderAfter());
         assertEquals(ClientType.INDIVIDUAL, planDetail.getClientType());
-        assertEquals(LineOfBusinessId.INDIVIDUAL_INSURANCE, planDetail.getLineOfBusinessId());
+        assertEquals(LineOfBusinessId.INDIVIDUAL_LIFE, planDetail.getLineOfBusinessId());
         assertEquals(PlanType.NON_INVESTMENT, planDetail.getPlanType());
         assertEquals(relationshipSet, planDetail.getApplicableRelationships());
         assertEquals(endorsementTypes, planDetail.getEndorsementTypes());

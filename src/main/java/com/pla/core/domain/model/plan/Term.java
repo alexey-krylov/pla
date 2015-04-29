@@ -25,6 +25,7 @@ public class Term {
     Set<Integer> validTerms = new HashSet<Integer>();
     Set<Integer> maturityAges = new HashSet<Integer>();
     int maxMaturityAge;
+    int groupTerm;
 
     Term() {
 
@@ -39,21 +40,25 @@ public class Term {
         this.validTerms = term.getValidTerms();
         this.maxMaturityAge = term.getMaxMaturityAge();
         this.maturityAges = term.getMaturityAges();
+        this.groupTerm = term.getGroupTerm();
+    }
+
+    public Term(int groupTerm) {
+        this.groupTerm = groupTerm;
     }
 
     /**
-     * Term with valid terms needs to have a Maximum Age.
-     * The maximum age for a Premium Term is known as Premium Payment Cut Off Age
-     * and in case of Policy Term it is Maximum Maturity Age.
-     *
      * @param validTerms
      * @param maxMaturityAge
      */
     public Term(Set<Integer> validTerms, int maxMaturityAge) {
+       /*
+        Commented : PLA Internal 0010797
+        -----------------------------------
         checkArgument(UtilValidator.isNotEmpty(validTerms));
         checkArgument(maxMaturityAge > 0);
         long termsGreaterThanMaxMaturityAge = validTerms.stream().filter(term -> term.intValue() > maxMaturityAge).count();
-        checkArgument(termsGreaterThanMaxMaturityAge == 0, "The Term values cannot be greater than Max Maturity Age.");
+        checkArgument(termsGreaterThanMaxMaturityAge == 0, "The Term values cannot be greater than Max Maturity Age.");*/
         this.validTerms = validTerms;
         this.maxMaturityAge = maxMaturityAge;
     }

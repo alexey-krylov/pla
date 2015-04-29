@@ -22,10 +22,8 @@ import java.util.Map;
 @Component
 public class SequenceGenerator {
 
-    private MasterFinder masterFinder;
-
     public static final String UPDATE_ENTITY_SEQUENCE_QUERY = "UPDATE entity_sequence ES set ES.sequence_number=? where ES.sequence_id=?";
-
+    private MasterFinder masterFinder;
     private JdbcTemplate jdbcTemplate;
 
 

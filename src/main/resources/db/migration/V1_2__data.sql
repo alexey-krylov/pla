@@ -529,6 +529,7 @@ VALUES ("KON","Konkola Copper Mine","Private Clinic",null,"CI-CHIL","PR-COP",nul
 
 insert  into `entity_sequence`(`sequence_id`,`sequence_name`,`sequence_number`,`sequence_prefix`) values (1,'com.pla.core.domain.model.agent.Agent',0,'1000');
 insert  into `entity_sequence`(`sequence_id`,`sequence_name`,`sequence_number`,`sequence_prefix`) values (2,'com.pla.quotation.domain.model.grouplife.GroupLifeQuotation',1000000,' ');
+INSERT INTO `entity_sequence`(`sequence_id`,`sequence_name`,`sequence_number`,`sequence_prefix`) values ('3','com.pla.core.domain.model.plan.Plan',1000,' ');
 
 insert into `channel_type` (`CHANNEL_CODE`, `CHANNEL_DESCRIPTION`) values('BROKER','Broker');
 insert into `channel_type` (`CHANNEL_CODE`, `CHANNEL_DESCRIPTION`) values('DIRECT','Direct');
