@@ -41,7 +41,7 @@ public class TeamFinder {
     public static final String FIND_ALL_ACTIVE_TEAM_LEADER_QUERY = "SELECT tm.team_id AS teamId,tm.team_name AS teamName,tm.team_code AS teamCode,tf.employee_id AS currentTeamLeader,tf.first_Name AS firstName, " +
             " tf.last_Name AS lastName,tf.from_date AS fromDate,tf.thru_date AS endDate " +
             " FROM team tm " +
-            " LEFT OUTER JOIN team_team_leader_fulfillment tf  ON tf.team_id = tm.team_id  AND ((tf.thru_date >= CURDATE()) OR (tf.thru_date IS NULL)) " +
+            " LEFT OUTER JOIN team_team_leader_fulfillment tf  ON tf.team_id = tm.team_id  AND ((tf.thru_date >= DATE(CURDATE()+1)) OR (tf.thru_date IS NULL)) " +
             " WHERE tm.active='1'";
     public static final String FIND_ALL_ACTIVE_TEAM_FULFILLMENT_GREATER_THAN_CURRENT_DATE_QUERY = "select * from active_team_team_fulfillment_greater_than_current_date";
     private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
