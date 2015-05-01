@@ -1,5 +1,7 @@
 package com.pla.core.presentation.dto;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.pla.core.dto.CommissionTermDto;
 import com.pla.core.query.PlanFinder;
 import com.pla.sharedkernel.domain.model.CommissionDesignation;
@@ -10,6 +12,8 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import org.joda.time.LocalDate;
+import org.nthdimenzion.presentation.LocalJodaDateDeserializer;
+import org.nthdimenzion.presentation.LocalJodaDateSerializer;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -32,7 +36,11 @@ public class CommissionDto {
     String planName;
     CommissionDesignation availableFor;
     CommissionType commissionType;
+
+    @JsonDeserialize(using = LocalJodaDateDeserializer.class)
+    @JsonSerialize(using = LocalJodaDateSerializer.class)
     LocalDate fromDate;
+
     Set<CommissionTermDto> commissionTermSet;
 
 
