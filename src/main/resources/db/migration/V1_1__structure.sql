@@ -11,147 +11,147 @@ DROP TABLE IF EXISTS QRTZ_TRIGGERS;
 DROP TABLE IF EXISTS QRTZ_JOB_DETAILS;
 DROP TABLE IF EXISTS QRTZ_CALENDARS;
 CREATE TABLE QRTZ_JOB_DETAILS
-  (
-    SCHED_NAME VARCHAR(120) NOT NULL,
-    JOB_NAME  VARCHAR(200) NOT NULL,
-    JOB_GROUP VARCHAR(200) NOT NULL,
-    DESCRIPTION VARCHAR(250) NULL,
-    JOB_CLASS_NAME   VARCHAR(250) NOT NULL,
-    IS_DURABLE VARCHAR(1) NOT NULL,
-    IS_NONCONCURRENT VARCHAR(1) NOT NULL,
-    IS_UPDATE_DATA VARCHAR(1) NOT NULL,
-    REQUESTS_RECOVERY VARCHAR(1) NOT NULL,
-    JOB_DATA BLOB NULL,
-    PRIMARY KEY (SCHED_NAME,JOB_NAME,JOB_GROUP)
+(
+  SCHED_NAME        VARCHAR(120) NOT NULL,
+  JOB_NAME          VARCHAR(200) NOT NULL,
+  JOB_GROUP         VARCHAR(200) NOT NULL,
+  DESCRIPTION       VARCHAR(250) NULL,
+  JOB_CLASS_NAME    VARCHAR(250) NOT NULL,
+  IS_DURABLE        VARCHAR(1)   NOT NULL,
+  IS_NONCONCURRENT  VARCHAR(1)   NOT NULL,
+  IS_UPDATE_DATA    VARCHAR(1)   NOT NULL,
+  REQUESTS_RECOVERY VARCHAR(1)   NOT NULL,
+  JOB_DATA          BLOB         NULL,
+  PRIMARY KEY (SCHED_NAME, JOB_NAME, JOB_GROUP)
 );
 
 CREATE TABLE QRTZ_TRIGGERS
-  (
-    SCHED_NAME VARCHAR(120) NOT NULL,
-    TRIGGER_NAME VARCHAR(200) NOT NULL,
-    TRIGGER_GROUP VARCHAR(200) NOT NULL,
-    JOB_NAME  VARCHAR(200) NOT NULL,
-    JOB_GROUP VARCHAR(200) NOT NULL,
-    DESCRIPTION VARCHAR(250) NULL,
-    NEXT_FIRE_TIME BIGINT(13) NULL,
-    PREV_FIRE_TIME BIGINT(13) NULL,
-    PRIORITY INTEGER NULL,
-    TRIGGER_STATE VARCHAR(16) NOT NULL,
-    TRIGGER_TYPE VARCHAR(8) NOT NULL,
-    START_TIME BIGINT(13) NOT NULL,
-    END_TIME BIGINT(13) NULL,
-    CALENDAR_NAME VARCHAR(200) NULL,
-    MISFIRE_INSTR SMALLINT(2) NULL,
-    JOB_DATA BLOB NULL,
-    PRIMARY KEY (SCHED_NAME,TRIGGER_NAME,TRIGGER_GROUP),
-    FOREIGN KEY (SCHED_NAME,JOB_NAME,JOB_GROUP)
-        REFERENCES QRTZ_JOB_DETAILS(SCHED_NAME,JOB_NAME,JOB_GROUP)
+(
+  SCHED_NAME     VARCHAR(120) NOT NULL,
+  TRIGGER_NAME   VARCHAR(200) NOT NULL,
+  TRIGGER_GROUP  VARCHAR(200) NOT NULL,
+  JOB_NAME       VARCHAR(200) NOT NULL,
+  JOB_GROUP      VARCHAR(200) NOT NULL,
+  DESCRIPTION    VARCHAR(250) NULL,
+  NEXT_FIRE_TIME BIGINT(13)   NULL,
+  PREV_FIRE_TIME BIGINT(13)   NULL,
+  PRIORITY       INTEGER      NULL,
+  TRIGGER_STATE  VARCHAR(16)  NOT NULL,
+  TRIGGER_TYPE   VARCHAR(8)   NOT NULL,
+  START_TIME     BIGINT(13)   NOT NULL,
+  END_TIME       BIGINT(13)   NULL,
+  CALENDAR_NAME  VARCHAR(200) NULL,
+  MISFIRE_INSTR  SMALLINT(2)  NULL,
+  JOB_DATA       BLOB         NULL,
+  PRIMARY KEY (SCHED_NAME, TRIGGER_NAME, TRIGGER_GROUP),
+  FOREIGN KEY (SCHED_NAME, JOB_NAME, JOB_GROUP)
+  REFERENCES QRTZ_JOB_DETAILS (SCHED_NAME, JOB_NAME, JOB_GROUP)
 );
 
 CREATE TABLE QRTZ_SIMPLE_TRIGGERS
-  (
-    SCHED_NAME VARCHAR(120) NOT NULL,
-    TRIGGER_NAME VARCHAR(200) NOT NULL,
-    TRIGGER_GROUP VARCHAR(200) NOT NULL,
-    REPEAT_COUNT BIGINT(7) NOT NULL,
-    REPEAT_INTERVAL BIGINT(12) NOT NULL,
-    TIMES_TRIGGERED BIGINT(10) NOT NULL,
-    PRIMARY KEY (SCHED_NAME,TRIGGER_NAME,TRIGGER_GROUP),
-    FOREIGN KEY (SCHED_NAME,TRIGGER_NAME,TRIGGER_GROUP)
-        REFERENCES QRTZ_TRIGGERS(SCHED_NAME,TRIGGER_NAME,TRIGGER_GROUP)
+(
+  SCHED_NAME      VARCHAR(120) NOT NULL,
+  TRIGGER_NAME    VARCHAR(200) NOT NULL,
+  TRIGGER_GROUP   VARCHAR(200) NOT NULL,
+  REPEAT_COUNT    BIGINT(7)    NOT NULL,
+  REPEAT_INTERVAL BIGINT(12)   NOT NULL,
+  TIMES_TRIGGERED BIGINT(10)   NOT NULL,
+  PRIMARY KEY (SCHED_NAME, TRIGGER_NAME, TRIGGER_GROUP),
+  FOREIGN KEY (SCHED_NAME, TRIGGER_NAME, TRIGGER_GROUP)
+  REFERENCES QRTZ_TRIGGERS (SCHED_NAME, TRIGGER_NAME, TRIGGER_GROUP)
 );
 
 CREATE TABLE QRTZ_CRON_TRIGGERS
-  (
-    SCHED_NAME VARCHAR(120) NOT NULL,
-    TRIGGER_NAME VARCHAR(200) NOT NULL,
-    TRIGGER_GROUP VARCHAR(200) NOT NULL,
-    CRON_EXPRESSION VARCHAR(200) NOT NULL,
-    TIME_ZONE_ID VARCHAR(80),
-    PRIMARY KEY (SCHED_NAME,TRIGGER_NAME,TRIGGER_GROUP),
-    FOREIGN KEY (SCHED_NAME,TRIGGER_NAME,TRIGGER_GROUP)
-        REFERENCES QRTZ_TRIGGERS(SCHED_NAME,TRIGGER_NAME,TRIGGER_GROUP)
+(
+  SCHED_NAME      VARCHAR(120) NOT NULL,
+  TRIGGER_NAME    VARCHAR(200) NOT NULL,
+  TRIGGER_GROUP   VARCHAR(200) NOT NULL,
+  CRON_EXPRESSION VARCHAR(200) NOT NULL,
+  TIME_ZONE_ID    VARCHAR(80),
+  PRIMARY KEY (SCHED_NAME, TRIGGER_NAME, TRIGGER_GROUP),
+  FOREIGN KEY (SCHED_NAME, TRIGGER_NAME, TRIGGER_GROUP)
+  REFERENCES QRTZ_TRIGGERS (SCHED_NAME, TRIGGER_NAME, TRIGGER_GROUP)
 );
 
 CREATE TABLE QRTZ_SIMPROP_TRIGGERS
-  (
-    SCHED_NAME VARCHAR(120) NOT NULL,
-    TRIGGER_NAME VARCHAR(200) NOT NULL,
-    TRIGGER_GROUP VARCHAR(200) NOT NULL,
-    STR_PROP_1 VARCHAR(512) NULL,
-    STR_PROP_2 VARCHAR(512) NULL,
-    STR_PROP_3 VARCHAR(512) NULL,
-    INT_PROP_1 INT NULL,
-    INT_PROP_2 INT NULL,
-    LONG_PROP_1 BIGINT NULL,
-    LONG_PROP_2 BIGINT NULL,
-    DEC_PROP_1 NUMERIC(13,4) NULL,
-    DEC_PROP_2 NUMERIC(13,4) NULL,
-    BOOL_PROP_1 VARCHAR(1) NULL,
-    BOOL_PROP_2 VARCHAR(1) NULL,
-    PRIMARY KEY (SCHED_NAME,TRIGGER_NAME,TRIGGER_GROUP),
-    FOREIGN KEY (SCHED_NAME,TRIGGER_NAME,TRIGGER_GROUP)
-    REFERENCES QRTZ_TRIGGERS(SCHED_NAME,TRIGGER_NAME,TRIGGER_GROUP)
+(
+  SCHED_NAME    VARCHAR(120)   NOT NULL,
+  TRIGGER_NAME  VARCHAR(200)   NOT NULL,
+  TRIGGER_GROUP VARCHAR(200)   NOT NULL,
+  STR_PROP_1    VARCHAR(512)   NULL,
+  STR_PROP_2    VARCHAR(512)   NULL,
+  STR_PROP_3    VARCHAR(512)   NULL,
+  INT_PROP_1    INT            NULL,
+  INT_PROP_2    INT            NULL,
+  LONG_PROP_1   BIGINT         NULL,
+  LONG_PROP_2   BIGINT         NULL,
+  DEC_PROP_1    NUMERIC(13, 4) NULL,
+  DEC_PROP_2    NUMERIC(13, 4) NULL,
+  BOOL_PROP_1   VARCHAR(1)     NULL,
+  BOOL_PROP_2   VARCHAR(1)     NULL,
+  PRIMARY KEY (SCHED_NAME, TRIGGER_NAME, TRIGGER_GROUP),
+  FOREIGN KEY (SCHED_NAME, TRIGGER_NAME, TRIGGER_GROUP)
+  REFERENCES QRTZ_TRIGGERS (SCHED_NAME, TRIGGER_NAME, TRIGGER_GROUP)
 );
 
 CREATE TABLE QRTZ_BLOB_TRIGGERS
-  (
-    SCHED_NAME VARCHAR(120) NOT NULL,
-    TRIGGER_NAME VARCHAR(200) NOT NULL,
-    TRIGGER_GROUP VARCHAR(200) NOT NULL,
-    BLOB_DATA BLOB NULL,
-    PRIMARY KEY (SCHED_NAME,TRIGGER_NAME,TRIGGER_GROUP),
-    FOREIGN KEY (SCHED_NAME,TRIGGER_NAME,TRIGGER_GROUP)
-        REFERENCES QRTZ_TRIGGERS(SCHED_NAME,TRIGGER_NAME,TRIGGER_GROUP)
+(
+  SCHED_NAME    VARCHAR(120) NOT NULL,
+  TRIGGER_NAME  VARCHAR(200) NOT NULL,
+  TRIGGER_GROUP VARCHAR(200) NOT NULL,
+  BLOB_DATA     BLOB         NULL,
+  PRIMARY KEY (SCHED_NAME, TRIGGER_NAME, TRIGGER_GROUP),
+  FOREIGN KEY (SCHED_NAME, TRIGGER_NAME, TRIGGER_GROUP)
+  REFERENCES QRTZ_TRIGGERS (SCHED_NAME, TRIGGER_NAME, TRIGGER_GROUP)
 );
 
 CREATE TABLE QRTZ_CALENDARS
-  (
-    SCHED_NAME VARCHAR(120) NOT NULL,
-    CALENDAR_NAME  VARCHAR(200) NOT NULL,
-    CALENDAR BLOB NOT NULL,
-    PRIMARY KEY (SCHED_NAME,CALENDAR_NAME)
+(
+  SCHED_NAME    VARCHAR(120) NOT NULL,
+  CALENDAR_NAME VARCHAR(200) NOT NULL,
+  CALENDAR      BLOB         NOT NULL,
+  PRIMARY KEY (SCHED_NAME, CALENDAR_NAME)
 );
 
 CREATE TABLE QRTZ_PAUSED_TRIGGER_GRPS
-  (
-    SCHED_NAME VARCHAR(120) NOT NULL,
-    TRIGGER_GROUP  VARCHAR(200) NOT NULL,
-    PRIMARY KEY (SCHED_NAME,TRIGGER_GROUP)
+(
+  SCHED_NAME    VARCHAR(120) NOT NULL,
+  TRIGGER_GROUP VARCHAR(200) NOT NULL,
+  PRIMARY KEY (SCHED_NAME, TRIGGER_GROUP)
 );
 
 CREATE TABLE QRTZ_FIRED_TRIGGERS
-  (
-    SCHED_NAME VARCHAR(120) NOT NULL,
-    ENTRY_ID VARCHAR(95) NOT NULL,
-    TRIGGER_NAME VARCHAR(200) NOT NULL,
-    TRIGGER_GROUP VARCHAR(200) NOT NULL,
-    INSTANCE_NAME VARCHAR(200) NOT NULL,
-    FIRED_TIME BIGINT(13) NOT NULL,
-    SCHED_TIME BIGINT(13) NOT NULL,
-    PRIORITY INTEGER NOT NULL,
-    STATE VARCHAR(16) NOT NULL,
-    JOB_NAME VARCHAR(200) NULL,
-    JOB_GROUP VARCHAR(200) NULL,
-    IS_NONCONCURRENT VARCHAR(1) NULL,
-    REQUESTS_RECOVERY VARCHAR(1) NULL,
-    PRIMARY KEY (SCHED_NAME,ENTRY_ID)
+(
+  SCHED_NAME        VARCHAR(120) NOT NULL,
+  ENTRY_ID          VARCHAR(95)  NOT NULL,
+  TRIGGER_NAME      VARCHAR(200) NOT NULL,
+  TRIGGER_GROUP     VARCHAR(200) NOT NULL,
+  INSTANCE_NAME     VARCHAR(200) NOT NULL,
+  FIRED_TIME        BIGINT(13)   NOT NULL,
+  SCHED_TIME        BIGINT(13)   NOT NULL,
+  PRIORITY          INTEGER      NOT NULL,
+  STATE             VARCHAR(16)  NOT NULL,
+  JOB_NAME          VARCHAR(200) NULL,
+  JOB_GROUP         VARCHAR(200) NULL,
+  IS_NONCONCURRENT  VARCHAR(1)   NULL,
+  REQUESTS_RECOVERY VARCHAR(1)   NULL,
+  PRIMARY KEY (SCHED_NAME, ENTRY_ID)
 );
 
 CREATE TABLE QRTZ_SCHEDULER_STATE
-  (
-    SCHED_NAME VARCHAR(120) NOT NULL,
-    INSTANCE_NAME VARCHAR(200) NOT NULL,
-    LAST_CHECKIN_TIME BIGINT(13) NOT NULL,
-    CHECKIN_INTERVAL BIGINT(13) NOT NULL,
-    PRIMARY KEY (SCHED_NAME,INSTANCE_NAME)
+(
+  SCHED_NAME        VARCHAR(120) NOT NULL,
+  INSTANCE_NAME     VARCHAR(200) NOT NULL,
+  LAST_CHECKIN_TIME BIGINT(13)   NOT NULL,
+  CHECKIN_INTERVAL  BIGINT(13)   NOT NULL,
+  PRIMARY KEY (SCHED_NAME, INSTANCE_NAME)
 );
 
 CREATE TABLE QRTZ_LOCKS
-  (
-    SCHED_NAME VARCHAR(120) NOT NULL,
-    LOCK_NAME  VARCHAR(40) NOT NULL,
-    PRIMARY KEY (SCHED_NAME,LOCK_NAME)
+(
+  SCHED_NAME VARCHAR(120) NOT NULL,
+  LOCK_NAME  VARCHAR(40)  NOT NULL,
+  PRIMARY KEY (SCHED_NAME, LOCK_NAME)
 );
 COMMIT;
 
@@ -168,46 +168,50 @@ USE PLA;
 
 /*Table structure for table `agent` */
 DROP TABLE IF EXISTS `agent`;
-  CREATE TABLE `agent`(
-    `agent_id` varchar(255) NOT NULL,
-    `designation_code` varchar(255) DEFAULT NULL,
-    `designation_name` varchar(255) DEFAULT NULL,
-    `employee_id` varchar(255) DEFAULT NULL,
-    `first_name` varchar(255) DEFAULT NULL,
-    `last_name` varchar(255) DEFAULT NULL,
-    `nrc_number` int(11) DEFAULT NULL,
-    `title` varchar(255) DEFAULT NULL,
-    `training_complete_on` date DEFAULT NULL,
-    `agent_status` varchar(255) DEFAULT NULL,
-    `channel_code` varchar(255) DEFAULT NULL,
-    `channel_name` varchar(255) DEFAULT NULL,
-    `address_line1` varchar(255) DEFAULT NULL,
-    `address_line2` varchar(255) DEFAULT NULL,
-    `email` varchar(255) DEFAULT NULL,
-    `city` varchar(255) DEFAULT NULL,
-    `postal_code` int(11) DEFAULT NULL,
-    `province` varchar(255) DEFAULT NULL,
-    `home_phone_number` varchar(255) DEFAULT NULL,
-    `mobile_number` varchar(255) DEFAULT NULL,
-    `work_phone_number` varchar(255) DEFAULT NULL,
-    `license_number` varchar(255) DEFAULT NULL,
-    `override_commission_applicable` varchar(255) DEFAULT NULL,
-    `physical_address_line1` varchar(255) DEFAULT NULL,
-    `physical_address_line2` varchar(255) DEFAULT NULL,
-    `physical_address_city` varchar(255) DEFAULT NULL,
-    `physical_address_postal_code` int(11) DEFAULT NULL,
-    `physical_address_province` varchar(255) DEFAULT NULL,
-    `team_id` varchar(255) DEFAULT NULL,
-    PRIMARY KEY (`agent_id`)
-  ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+CREATE TABLE `agent` (
+  `agent_id`                       VARCHAR(255) NOT NULL,
+  `designation_code`               VARCHAR(255) DEFAULT NULL,
+  `designation_name`               VARCHAR(255) DEFAULT NULL,
+  `employee_id`                    VARCHAR(255) DEFAULT NULL,
+  `first_name`                     VARCHAR(255) DEFAULT NULL,
+  `last_name`                      VARCHAR(255) DEFAULT NULL,
+  `nrc_number`                     INT(11)      DEFAULT NULL,
+  `title`                          VARCHAR(255) DEFAULT NULL,
+  `training_complete_on`           DATE         DEFAULT NULL,
+  `agent_status`                   VARCHAR(255) DEFAULT NULL,
+  `channel_code`                   VARCHAR(255) DEFAULT NULL,
+  `channel_name`                   VARCHAR(255) DEFAULT NULL,
+  `address_line1`                  VARCHAR(255) DEFAULT NULL,
+  `address_line2`                  VARCHAR(255) DEFAULT NULL,
+  `email`                          VARCHAR(255) DEFAULT NULL,
+  `city`                           VARCHAR(255) DEFAULT NULL,
+  `postal_code`                    INT(11)      DEFAULT NULL,
+  `province`                       VARCHAR(255) DEFAULT NULL,
+  `home_phone_number`              VARCHAR(255) DEFAULT NULL,
+  `mobile_number`                  VARCHAR(255) DEFAULT NULL,
+  `work_phone_number`              VARCHAR(255) DEFAULT NULL,
+  `license_number`                 VARCHAR(255) DEFAULT NULL,
+  `override_commission_applicable` VARCHAR(255) DEFAULT NULL,
+  `physical_address_line1`         VARCHAR(255) DEFAULT NULL,
+  `physical_address_line2`         VARCHAR(255) DEFAULT NULL,
+  `physical_address_city`          VARCHAR(255) DEFAULT NULL,
+  `physical_address_postal_code`   INT(11)      DEFAULT NULL,
+  `physical_address_province`      VARCHAR(255) DEFAULT NULL,
+  `team_id`                        VARCHAR(255) DEFAULT NULL,
+  PRIMARY KEY (`agent_id`)
+)
+  ENGINE =InnoDB
+  DEFAULT CHARSET =utf8;
 
 DROP TABLE IF EXISTS `agent_authorized_plan`;
- CREATE TABLE `agent_authorized_plan` (
-   `agent_id` varchar(255) NOT NULL,
-   `plan_id` varchar(255) DEFAULT NULL,
-   KEY `FK_fb90q6b5wf5iswifmkro1bfr8` (`agent_id`),
-   CONSTRAINT `FK_fb90q6b5wf5iswifmkro1bfr8` FOREIGN KEY (`agent_id`) REFERENCES `agent` (`agent_id`)
- ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+CREATE TABLE `agent_authorized_plan` (
+  `agent_id` VARCHAR(255) NOT NULL,
+  `plan_id`  VARCHAR(255) DEFAULT NULL,
+  KEY `FK_fb90q6b5wf5iswifmkro1bfr8` (`agent_id`),
+  CONSTRAINT `FK_fb90q6b5wf5iswifmkro1bfr8` FOREIGN KEY (`agent_id`) REFERENCES `agent` (`agent_id`)
+)
+  ENGINE =InnoDB
+  DEFAULT CHARSET =utf8;
 
 
 /*Table structure for table `association_value_entry` */
@@ -559,19 +563,64 @@ CREATE TABLE `commission_commission_term` (
 
 DROP VIEW IF EXISTS `agent_team_branch_view`;
 CREATE  VIEW `agent_team_branch_view` AS
-(SELECT  `agent_id` AS agentId,A.title AS title,  `designation_code` AS designationCode,  `designation_name` AS designationName,
-  A.employee_id AS employeeId,A.first_name AS firstName,  A.`last_name` AS lastName,  `nrc_number` AS nrcNumber,  `training_complete_on` AS trainingCompletedOn,
-  agent_status AS agentStatus,channel_code AS channelCode,  channel_name AS channelName,  address_line1 AS addressLine1,  address_line2 AS addressLine2,
-  email,  A.city AS cityCode,(SELECT geo_description  FROM  geo WHERE geo_type = 'CITY' AND geo_id = A.city) AS cityName,
-  postal_code AS postalCode,  A.province AS provinceCode,  (SELECT geo_description FROM geo WHERE geo_type = 'PROVINCE' AND geo_id = A.province) AS provinceName,
-  home_phone_number AS homePhoneNumber,mobile_number AS mobileNumber,work_phone_number AS workPhoneNumber,license_number AS licenseNumber,`override_commission_applicable` AS overrideCommissionApplicable,
-  physical_address_line1 AS physicalAddressLine1, physical_address_line2 AS physicalAddressLine2, physical_address_city AS physicalAddressCityCode,
-  (SELECT geo_description FROM geo WHERE geo_type = 'CITY' AND geo_id = A.physical_address_city) AS physicalAddressCityName,physical_address_postal_code AS physicalAddressPostalCode,
-  physical_address_province AS physicalAddressProvinceCode,(SELECT geo_description FROM geo WHERE geo_type = 'PROVINCE' AND geo_id = A.physical_address_province) AS physicalAddressProvinceName,
-  A.team_id AS teamId,TF.employee_id AS teamLeaderId,TF.first_name AS teamLeaderFirstName,TF.last_name AS teamLeaderLastName,T.team_code AS teamCode,
-  T.team_name AS teamName, R.region_code AS regionCode,R.region_name AS regionName,B.branch_code AS branchCode, B.branch_name AS branchName
+  (SELECT
+     `agent_id`                                                             AS agentId,
+     A.title                                                                AS title,
+     `designation_code`                                                     AS designationCode,
+     `designation_name`                                                     AS designationName,
+     A.employee_id                                                          AS employeeId,
+     A.first_name                                                           AS firstName,
+     A.`last_name`                                                          AS lastName,
+     `nrc_number`                                                           AS nrcNumber,
+     `training_complete_on`                                                 AS trainingCompletedOn,
+     agent_status                                                           AS agentStatus,
+     channel_code                                                           AS channelCode,
+     channel_name                                                           AS channelName,
+     address_line1                                                          AS addressLine1,
+     address_line2                                                          AS addressLine2,
+     email,
+     A.city                                                                 AS cityCode,
+     (SELECT geo_description
+      FROM geo
+      WHERE geo_type = 'CITY' AND geo_id = A.city)                          AS cityName,
+     postal_code                                                            AS postalCode,
+     A.province                                                             AS provinceCode,
+     (SELECT geo_description
+      FROM geo
+      WHERE geo_type = 'PROVINCE' AND geo_id = A.province)                  AS provinceName,
+     home_phone_number                                                      AS homePhoneNumber,
+     mobile_number                                                          AS mobileNumber,
+     work_phone_number                                                      AS workPhoneNumber,
+     license_number                                                         AS licenseNumber,
+     `override_commission_applicable`                                       AS overrideCommissionApplicable,
+     physical_address_line1                                                 AS physicalAddressLine1,
+     physical_address_line2                                                 AS physicalAddressLine2,
+     physical_address_city                                                  AS physicalAddressCityCode,
+     (SELECT geo_description
+      FROM geo
+      WHERE geo_type = 'CITY' AND geo_id = A.physical_address_city)         AS physicalAddressCityName,
+     physical_address_postal_code                                           AS physicalAddressPostalCode,
+     physical_address_province                                              AS physicalAddressProvinceCode,
+     (SELECT geo_description
+      FROM geo
+      WHERE geo_type = 'PROVINCE' AND geo_id = A.physical_address_province) AS physicalAddressProvinceName,
+     A.team_id                                                              AS teamId,
+     TF.employee_id                                                         AS teamLeaderId,
+     TF.first_name                                                          AS teamLeaderFirstName,
+     TF.last_name                                                           AS teamLeaderLastName,
+     T.team_code                                                            AS teamCode,
+     T.team_name                                                            AS teamName,
+     R.region_code                                                          AS regionCode,
+     R.region_name                                                          AS regionName,
+     B.branch_code                                                          AS branchCode,
+     B.branch_name                                                          AS branchName
    FROM  agent A  LEFT JOIN team T    ON A.team_id = T.`team_id`  LEFT JOIN `team_team_leader_fulfillment` TF    ON T.`team_id` = TF.`team_id` AND TF.from_date<=NOW() AND (TF.thru_date>=NOW() OR TF.thru_date IS NULL)
-    AND T.`current_team_leader` = TF.`employee_id`  LEFT JOIN region R  ON T.region_code = R.REGION_CODE LEFT JOIN branch B ON T.branch_code = B.branch_code );
+                                                                                                                    AND
+                                                                                                                    T.`current_team_leader`
+                                                                                                                    =
+                                                                                                                    TF.`employee_id`
+     LEFT JOIN region R ON T.region_code = R.REGION_CODE
+     LEFT JOIN branch B ON T.branch_code = B.branch_code);
 
 DROP VIEW IF EXISTS `region_region_manger_fulfilment_view`;
 CREATE VIEW `region_region_manger_fulfilment_view` AS
@@ -602,14 +651,26 @@ CREATE VIEW `region_region_manger_fulfilment_greater_than_current_date_view` AS
 
 DROP VIEW IF EXISTS `active_team_region_branch_view`;
 CREATE VIEW `active_team_region_branch_view` AS
-(SELECT tm.team_id AS teamId,tm.team_name AS teamName,tm.team_code AS teamCode,tm.current_team_leader AS currentTeamLeader,tf.first_Name AS firstName,
- tf.last_Name AS lastName,tf.from_date AS fromDate,tf.thru_date AS endDate ,b.branch_name AS branchName,r.region_name AS regionName,b.branch_code AS branchCode,r.region_code AS regionCode
- FROM team tm
-   INNER JOIN team_team_leader_fulfillment tf
-     ON tm.current_team_leader = tf.employee_id AND
-        tf.team_id = tm.team_id AND tf.thru_date IS NULL
- INNER JOIN region r ON  tm.region_code=r.region_code
- INNER JOIN branch b ON  tm.branch_code=b.branch_code  WHERE tm.active='1');
+  (SELECT
+     tm.team_id             AS teamId,
+     tm.team_name           AS teamName,
+     tm.team_code           AS teamCode,
+     tm.current_team_leader AS currentTeamLeader,
+     tf.first_Name          AS firstName,
+     tf.last_Name           AS lastName,
+     tf.from_date           AS fromDate,
+     tf.thru_date           AS endDate,
+     b.branch_name          AS branchName,
+     r.region_name          AS regionName,
+     b.branch_code          AS branchCode,
+     r.region_code          AS regionCode
+   FROM team tm
+     INNER JOIN team_team_leader_fulfillment tf
+       ON tm.current_team_leader = tf.employee_id AND
+          tf.team_id = tm.team_id AND tf.thru_date IS NULL
+     INNER JOIN region r ON tm.region_code = r.region_code
+     INNER JOIN branch b ON tm.branch_code = b.branch_code
+   WHERE tm.active = '1');
 
 DROP VIEW IF EXISTS `active_team_team_fulfillment_greater_than_current_date`;
 CREATE VIEW `active_team_team_fulfillment_greater_than_current_date` AS
@@ -643,7 +704,8 @@ CREATE VIEW `commission_view` AS
      cm.thru_date            AS toDate,
      cm.plan_id              AS planId,
      cm.available_for        AS availableFor,
-     cm.commission_type      AS commissionType
+     cm.commission_type AS commissionType,
+     cm.premium_fee     AS premiumFee
    FROM commission cm);
 
 DROP VIEW IF EXISTS `commission_commission_term_view`;
@@ -700,7 +762,7 @@ CREATE TABLE `industry` (
 
 DROP TABLE IF EXISTS `occupation_class`;
 CREATE TABLE `occupation_class` (
- `code` varchar(100) NOT NULL,
+  `code` VARCHAR(100) NOT NULL,
   `description` varchar(255) NOT NULL,
   PRIMARY KEY (`code`,`description`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;

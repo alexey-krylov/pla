@@ -7,6 +7,7 @@ import com.pla.core.query.PlanFinder;
 import com.pla.sharedkernel.domain.model.CommissionDesignation;
 import com.pla.sharedkernel.domain.model.CommissionTermType;
 import com.pla.sharedkernel.domain.model.CommissionType;
+import com.pla.sharedkernel.domain.model.PremiumFee;
 import com.pla.sharedkernel.identifier.PlanId;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -28,7 +29,7 @@ import java.util.stream.Collectors;
  */
 @Getter
 @Setter
-@EqualsAndHashCode(of = {"commissionId", "planId", "planName", "availableFor", "commissionType", "fromDate"})
+@EqualsAndHashCode(of = {"commissionId", "planId", "planName", "availableFor", "commissionType", "fromDate", "premiumFee"})
 public class CommissionDto {
 
     String commissionId;
@@ -36,6 +37,7 @@ public class CommissionDto {
     String planName;
     CommissionDesignation availableFor;
     CommissionType commissionType;
+    PremiumFee premiumFee;
 
     @JsonDeserialize(using = LocalJodaDateDeserializer.class)
     @JsonSerialize(using = LocalJodaDateSerializer.class)
@@ -58,6 +60,7 @@ public class CommissionDto {
         commissionDto.setPlanName((String) (planDetail.get("planName")));
         commissionDto.setAvailableFor(CommissionDesignation.valueOf((String) commission.get("availableFor")));
         commissionDto.setCommissionType(CommissionType.valueOf((String) commission.get("commissionType")));
+        commissionDto.setPremiumFee(PremiumFee.valueOf((String) commission.get("premiumFee")));
         commissionDto.setFromDate(new LocalDate(commission.get("fromDate")));
         List<Map<String, Object>> commissionTermsByCommissionId = allCommissionTerms.stream().filter(new FilterCommissionTermByCommissionId((String) commission.get("commissionId"))).collect(Collectors.toList());
         commissionDto.setCommissionTermSet(commissionTermsByCommissionId.stream().map(new CommissionTermTransformer()).collect(Collectors.toSet()));

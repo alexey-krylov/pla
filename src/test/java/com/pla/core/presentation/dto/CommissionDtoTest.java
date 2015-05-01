@@ -6,6 +6,7 @@ import com.pla.core.query.PlanFinder;
 import com.pla.sharedkernel.domain.model.CommissionDesignation;
 import com.pla.sharedkernel.domain.model.CommissionTermType;
 import com.pla.sharedkernel.domain.model.CommissionType;
+import com.pla.sharedkernel.domain.model.PremiumFee;
 import com.pla.sharedkernel.identifier.PlanId;
 import org.hamcrest.CoreMatchers;
 import org.joda.time.LocalDate;
@@ -40,6 +41,7 @@ public class CommissionDtoTest {
         commissionMap.put("toDate", "2014-03-07");
         commissionMap.put("availableFor", "REGIONAL_MANAGER");
         commissionMap.put("commissionType", "OVERRIDE");
+        commissionMap.put("premiumFee", "POLICY_FEE");
         commissions.add(commissionMap);
 
         List<Map<String, Object>> allCommissionTerms = new ArrayList();
@@ -64,6 +66,7 @@ public class CommissionDtoTest {
         expectedCommissionDto.setPlanName("Plan1");
         expectedCommissionDto.setCommissionId("123123sSAFS");
         expectedCommissionDto.setCommissionType(CommissionType.OVERRIDE);
+        expectedCommissionDto.setPremiumFee(PremiumFee.POLICY_FEE);
         expectedCommissionDto.setAvailableFor(CommissionDesignation.REGIONAL_MANAGER);
         Set<CommissionTermDto> commissionTermDtos = Sets.newHashSet();
         CommissionTermDto commissionTermDto = new CommissionTermDto();
@@ -90,6 +93,7 @@ public class CommissionDtoTest {
         commissionMap.put("toDate", "2014-03-07");
         commissionMap.put("availableFor", "REGIONAL_MANAGER");
         commissionMap.put("commissionType", "OVERRIDE");
+        commissionMap.put("premiumFee", "POLICY_FEE");
 
         List<Map<String, Object>> allCommissionTerms = new ArrayList();
         Map<String, Object> commissionTermMap = new LinkedHashMap<>();
@@ -113,6 +117,7 @@ public class CommissionDtoTest {
         expectedCommissionDto.setPlanName("Plan1");
         expectedCommissionDto.setCommissionId("123123-SAFS");
         expectedCommissionDto.setCommissionType(CommissionType.OVERRIDE);
+        expectedCommissionDto.setPremiumFee(PremiumFee.POLICY_FEE);
 
         CommissionTermDto expectedCommissionTermDto = new CommissionTermDto();
         expectedCommissionTermDto.setStartYear(1);

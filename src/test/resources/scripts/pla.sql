@@ -478,7 +478,8 @@ CREATE VIEW `commission_view` AS
      cm.thru_date            AS toDate,
      cm.plan_id              AS planId,
      cm.available_for        AS availableFor,
-     cm.commission_type      AS commissionType
+     cm.commission_type      AS commissionType,
+     cm.premium_fee          AS premiumFee
    FROM commission cm);
 
 DROP VIEW IF EXISTS `commission_commission_term_view`;
