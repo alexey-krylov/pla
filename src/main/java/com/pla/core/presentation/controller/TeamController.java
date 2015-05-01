@@ -88,7 +88,7 @@ public class TeamController {
     @RequestMapping(value = "/getteamleaders", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public List<EmployeeDto> getAllTeamLeaders() {
-        List<Map<String, Object>> allTeams = teamFinder.getAllActiveTeam();
+        List<Map<String, Object>> allTeams = teamFinder.getAllActiveTeamLeaders();
         List<EmployeeDto> allTeamLeaders = smeGateway.getEmployeeDetailByDesignation(AppConstants.TEAM_LEADER_DESIGNATION);
         List<EmployeeDto> teamLeadersNotAssociatedWithTeam = allTeamLeaders.stream().filter(new FilterTeamLeaderFromTeamPredicate(allTeams)).collect(Collectors.toList());
         return teamLeadersNotAssociatedWithTeam;
