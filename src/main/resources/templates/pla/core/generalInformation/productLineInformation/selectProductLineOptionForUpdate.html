@@ -340,7 +340,7 @@
                                         <div class="form-group col-md-4 required" ng-repeat="modelFactorItems in items.modelFactorItems">
                                             <label class="control-label"  data-toggle="tooltip" data-placement="top" title="Annual" ng-bind="getFieldName(modelFactorItems.modalFactorItem)"></label>
                                             <p class="input-group">
-                                                <input type="number" class="form-control input-sm" min="1" ng-pattern="/^(^[1-9]{1})+(\.[0-9]{1,4})?$/" ng-model="modelFactorItems.value" value="{{modelFactorItems.value}}" ng-required="true"/>
+                                                <input type="number" class="form-control input-sm" min="0.0001" ng-pattern="/^(^[0-9]{1})+(\.[0-9]{1,4})?$/" ng-model="modelFactorItems.value" value="{{modelFactorItems.value}}" ng-required="true"/>
                                             </p>
                                         </div>
                                     </div>
@@ -364,7 +364,7 @@
                                         <div class="form-group col-md-4 required" ng-repeat="discountFactorItems in items.discountFactorItems">
                                             <label class="control-label"  data-toggle="tooltip" data-placement="top" title="Annual" ng-bind="getFieldName(discountFactorItems.discountFactorItem)"></label>
                                             <p class="input-group">
-                                                <input type="number" class="form-control input-sm" min="1" ng-pattern="/^(^[0-9]{1,2})+(\.[0-9]{1,4})?$/" ng-model="discountFactorItems.value" value="{{discountFactorItems.value}}" ng-required="true" />
+                                                <input type="number" class="form-control input-sm" min="0.0001" ng-pattern="/^(^[0-9]{1,2})+(\.[0-9]{1,4})?$/" ng-model="discountFactorItems.value" value="{{discountFactorItems.value}}" ng-required="true" />
                                             </p>
                                         </div>
                                     </div>
@@ -659,7 +659,7 @@
                                         <div class="form-group col-md-4 required" ng-repeat="modelFactorItems in items.modelFactorItems">
                                             <label class="control-label"  data-toggle="tooltip" data-placement="top" title="Annual" ng-bind="getFieldName(modelFactorItems.modalFactorItem)"></label>
                                             <p class="input-group">
-                                                <input type="number" class="form-control input-sm" min="1" ng-pattern="/^(^[1-9]{1})+(\.[0-9]{1,4})?$/" ng-model="modelFactorItems.value" value="{{modelFactorItems.value}}" ng-required="true"/>
+                                                <input type="number" class="form-control input-sm" min="0.0001" ng-pattern="/^(^[0-9]{1})+(\.[0-9]{1,4})?$/" ng-model="modelFactorItems.value" value="{{modelFactorItems.value}}" ng-required="true"/>
                                             </p>
                                         </div>
                                     </div>
@@ -682,7 +682,7 @@
                                         <div class="form-group col-md-4 required" ng-repeat="discountFactorItems in items.discountFactorItems">
                                             <label class="control-label"  data-toggle="tooltip" data-placement="top" title="Annual" ng-bind="getFieldName(discountFactorItems.discountFactorItem)"></label>
                                             <p class="input-group">
-                                                <input type="number" class="form-control input-sm" min="1" ng-pattern="/^(^[0-9]{1,2})+(\.[0-9]{1,4})?$/" ng-model="discountFactorItems.value" value="{{discountFactorItems.value}}" ng-required="true"/>
+                                                <input type="number" class="form-control input-sm" min="0.0001" ng-pattern="/^(^[0-9]{1,2})+(\.[0-9]{1,4})?$/" ng-model="discountFactorItems.value" value="{{discountFactorItems.value}}" ng-required="true"/>
                                             </p>
                                         </div>
                                     </div>
