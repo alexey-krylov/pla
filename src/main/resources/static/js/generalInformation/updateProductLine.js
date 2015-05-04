@@ -44,11 +44,13 @@ App.controller('UpdateGroupHealthLevelInformationController',['$rootScope','$sco
       // console.log($scope.items.productLineInformationId);should chk for id in update page
 
       // console.log($scope.items);
-       if($scope.items.productLineInformationId !=null){
-           $scope.updatePanelLabel=true;
-       }else{
-           $scope.createPanelLabel=true;
+       if($scope.items) {
+           if ($scope.items.productLineInformationId != null) {
+               $scope.updatePanelLabel = true;
+           } else {
+               $scope.createPanelLabel = true;
 
+           }
        }
 
     });
@@ -88,7 +90,7 @@ App.controller('UpdateGroupHealthLevelInformationController',['$rootScope','$sco
                 }
             });
         }else{
-            console.log($scope.items);
+           // console.log($scope.items);
             $http.post('/pla/core/productlineinformation/create', $scope.items).success(function (data) {
                 if (data.status == 200) {
                     $scope.alert = {title: 'Success Message! ', content: data.message, type: 'success'};
@@ -118,17 +120,16 @@ App.controller('UpdateGroupLifeLevelInformationController',['$rootScope','$scope
     $http.get('/pla/core/productlineinformation/getproductlineinformation').success(function(data){
         //  console.log(data);
         $scope.groupLifeData=data;
-        var productLineName="GROUP_INSURANCE";
+        var productLineName="GROUP_LIFE";
         $scope.items =_.findWhere($scope.groupLifeData,{productLine:productLineName});
         // console.log($scope.items.productLineInformationId);should chk for id in update page
+        if( $scope.items) {
+            if ($scope.items.productLineInformationId != null) {
+                $scope.updatePanelLabel = true;
+            } else {
+                $scope.createPanelLabel = true;
 
-        // console.log($scope.items);
-
-        if($scope.items.productLineInformationId !=null){
-            $scope.updatePanelLabel=true;
-        }else{
-            $scope.createPanelLabel=true;
-
+            }
         }
 
     });
@@ -195,16 +196,18 @@ App.controller('UpdateIndividualLifeLevelInformationController',['$rootScope','$
     $http.get('/pla/core/productlineinformation/getproductlineinformation').success(function(data){
         //  console.log(data);
         $scope.individualLifeData=data;
-        var productLineName="INDIVIDUAL_INSURANCE";
+        var productLineName="INDIVIDUAL_LIFE";
         $scope.items =_.findWhere($scope.individualLifeData,{productLine:productLineName});
         // console.log($scope.items.productLineInformationId);should chk for id in update page
 
         // console.log($scope.items);
-        if($scope.items.productLineInformationId !=null){
-            $scope.updatePanelLabel=true;
-        }else{
-            $scope.createPanelLabel=true;
+        if( $scope.items) {
+            if ($scope.items.productLineInformationId != null) {
+                $scope.updatePanelLabel = true;
+            } else {
+                $scope.createPanelLabel = true;
 
+            }
         }
 
     });
