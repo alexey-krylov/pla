@@ -224,6 +224,7 @@ var validate = function(){
 var hideAlerts = function(){
     $('#alert-danger').hide();
     $('#alert').hide();
+    $('#inactivate-alert-danger').hide();
 };
 
 /*Value : actual coverage to inactivate*/
@@ -244,9 +245,10 @@ var inactivate=function(value,flag){
             contentType: 'application/json; charset=utf-8',
             success: function(msg) {
                 if(msg.status=='200'){
+
                     window.location.reload();
                 }else{
-                    hideAlerts();
+
                     $('#approveButton').hide();
                     $('#inactivate-alert-danger').text(msg.message).show();
                 }
