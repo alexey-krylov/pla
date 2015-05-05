@@ -152,6 +152,7 @@ var validate = function(){
 var hideAlerts = function(){
     $('#alert-danger').hide();
     $('#alert').hide();
+    $('#inactivate-alert-danger').hide();
 };
 
 /*Value : actual benefit id to inactivate*/
@@ -160,6 +161,8 @@ var hideAlerts = function(){
  * */
 var benefitToInactivate = '';
 var inactivate=function(value,flag){
+    hideAlerts();
+    $('#approveButton').show();
     if(flag=='save'){
         benefitToInactivate =  value;
     }else{
@@ -172,6 +175,7 @@ var inactivate=function(value,flag){
                 if(msg.status=='200'){
                     window.location.reload();
                 }else{
+                    $('#approveButton').hide();
                     $('#inactivate-alert-danger').text(msg.message).show();
                 }
             }

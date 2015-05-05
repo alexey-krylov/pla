@@ -12,6 +12,7 @@ $('#team-table').dataTable({
 var hideAlerts = function(){
     $('.alert-danger').hide();
     $('#alert').hide();
+    $('#inactivate-alert-danger').hide();
    };
 
 var teamToInactivate = '';
@@ -30,10 +31,8 @@ var inactivate=function(value,flag){
             contentType: 'application/json; charset=utf-8',
             success: function(msg) {
                 if(msg.status=='200'){
-                    hideAlerts();
-                    window.location.reload();
+                   window.location.reload();
                 }else{
-                    hideAlerts();
                     $('#approveButton').hide();
                     $('#inactivate-alert-danger').text(msg.message).show();
                 }
