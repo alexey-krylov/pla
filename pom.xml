@@ -432,6 +432,11 @@
             <version>1.4.01</version>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>net.sf.jasperreports</groupId>
+            <artifactId>jasperreports</artifactId>
+            <version>5.2.0</version>
+        </dependency>
     </dependencies>
 
     <build>
@@ -441,7 +446,6 @@
         <resources>
             <resource>
                 <directory>src/main/resources</directory>
-                <filtering>true</filtering>
             </resource>
             <resource>
                 <directory>src/test/resources</directory>
