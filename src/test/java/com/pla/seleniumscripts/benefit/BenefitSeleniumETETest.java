@@ -67,13 +67,12 @@ public class BenefitSeleniumETETest {
     public void createBenefit() throws Exception {
         System.out.println("***************Create button****************");
         driver.findElement(By.xpath("(//button[@type='button'])[7]")).click();
-        System.out.println(driver.getCurrentUrl());
-        Thread.sleep(1000);
+        Thread.sleep(5000);
         System.out.println("***************Create Benefit****************");
         driver.findElement(By.xpath("//form[@id='createBenefit']/div/div[3]/div/input")).clear();
         driver.findElement(By.xpath("//form[@id='createBenefit']/div/div[3]/div/input")).sendKeys(randomString);
         driver.findElement(By.xpath("//form[@id='createBenefit']/div[2]/button")).click();
-
+        driver.manage().timeouts().implicitlyWait(40, TimeUnit.SECONDS);
         try {
             System.out.println("Verify Success Message");
             Thread.sleep(1000);
@@ -91,7 +90,7 @@ public class BenefitSeleniumETETest {
             driver.findElement(By.xpath("//form[@id='createBenefit']/div/div[3]/div/input")).clear();
             driver.findElement(By.xpath("//form[@id='createBenefit']/div/div[3]/div/input")).sendKeys(randomString+"_007");
             driver.findElement(By.xpath("//form[@id='createBenefit']/div[2]/button")).click();
-
+            driver.manage().timeouts().implicitlyWait(40, TimeUnit.SECONDS);
             try {
                 System.out.println("Verify Success Message");
                 Thread.sleep(1000);
@@ -104,12 +103,12 @@ public class BenefitSeleniumETETest {
         System.out.println("***************Create Benefit Duplicate****************");
         driver.findElement(By.xpath("(//button[@type='button'])[7]")).click();
         System.out.println(driver.getCurrentUrl());
-        Thread.sleep(1000);
+        Thread.sleep(5000);
         System.out.println("***************Create Benefit****************");
         driver.findElement(By.xpath("//form[@id='createBenefit']/div/div[3]/div/input")).clear();
         driver.findElement(By.xpath("//form[@id='createBenefit']/div/div[3]/div/input")).sendKeys(randomString + "_007");
         driver.findElement(By.xpath("//form[@id='createBenefit']/div[2]/button")).click();
-
+        driver.manage().timeouts().implicitlyWait(40, TimeUnit.SECONDS);
         try {
             System.out.println("Verify Success Message");
             Thread.sleep(500);
