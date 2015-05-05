@@ -34,13 +34,13 @@ public class BenefitSeleniumETETest {
     @Before
     public void setUp() throws Exception {
 
-/*        // Setup firefox binary to start in Xvfb
+        // Setup firefox binary to start in Xvfb
         String Xport = System.getProperty("lmportal.xvfb.id", ":1");
         final File firefoxPath = new File(System.getProperty("lmportal.deploy.firefox.path", "/usr/bin/firefox"));
         FirefoxBinary firefoxBinary = new FirefoxBinary(firefoxPath);
         firefoxBinary.setEnvironmentProperty("DISPLAY", Xport);
-        driver = new FirefoxDriver(firefoxBinary, null);*/
-        driver =new FirefoxDriver();
+        driver = new FirefoxDriver(firefoxBinary, null);
+        //driver =new FirefoxDriver();
 		baseUrl = "http://5.9.249.195:9090";
         System.out.println("******************************Navigating to URL******************");
         driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
