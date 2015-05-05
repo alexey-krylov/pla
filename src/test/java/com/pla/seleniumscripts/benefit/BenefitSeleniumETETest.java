@@ -109,11 +109,12 @@ public class BenefitSeleniumETETest {
         System.out.println("***************Create button****************");
         driver.findElement(By.xpath("(//button[@type='button'])[7]")).click();
         System.out.println(driver.getCurrentUrl());
-        Thread.sleep(1000);
+        Thread.sleep(2000);
         System.out.println("***************Create Benefit****************");
         driver.findElement(By.xpath("//form[@id='createBenefit']/div/div[3]/div/input")).clear();
         driver.findElement(By.xpath("//form[@id='createBenefit']/div/div[3]/div/input")).sendKeys(randomString+"_007");
-        driver.manage().timeouts().implicitlyWait(20, TimeUnit.SECONDS);
+        System.out.println("***************Create Benefit****************");
+        driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
         driver.findElement(By.xpath("//form[@id='createBenefit']/div[2]/button")).click();
 
         try {
