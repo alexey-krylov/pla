@@ -67,15 +67,16 @@ public class BenefitSeleniumETETest {
     public void createBenefit() throws Exception {
         System.out.println("***************Create button****************");
         driver.findElement(By.xpath("(//button[@type='button'])[7]")).click();
-        Thread.sleep(5000);
+        Thread.sleep(500);
         System.out.println("***************Create Benefit****************");
         driver.findElement(By.xpath("//form[@id='createBenefit']/div/div[3]/div/input")).clear();
+        System.out.println("Input Clear");
         driver.findElement(By.xpath("//form[@id='createBenefit']/div/div[3]/div/input")).sendKeys(randomString);
+        System.out.println("Sendkey Random variables");
         driver.findElement(By.xpath("//form[@id='createBenefit']/div[2]/button")).click();
-        driver.manage().timeouts().implicitlyWait(40, TimeUnit.SECONDS);
         try {
             System.out.println("Verify Success Message");
-            Thread.sleep(1000);
+            Thread.sleep(500);
             assertEquals("Benefit created successfully", driver.findElement(By.xpath("//form[@id='createBenefit']/div/div")).getText());
         } catch (Error e) {
             verificationErrors.append(e.toString());
@@ -85,15 +86,17 @@ public class BenefitSeleniumETETest {
             System.out.println("***************Create Second Benefit****************");
             driver.findElement(By.xpath("(//button[@type='button'])[7]")).click();
             System.out.println(driver.getCurrentUrl());
-            Thread.sleep(1000);
+            Thread.sleep(500);
             System.out.println("***************Create Benefit****************");
             driver.findElement(By.xpath("//form[@id='createBenefit']/div/div[3]/div/input")).clear();
+            System.out.println("Input Clear 2");
             driver.findElement(By.xpath("//form[@id='createBenefit']/div/div[3]/div/input")).sendKeys(randomString+"_007");
+            System.out.println("Sendkeys random 2");
             driver.findElement(By.xpath("//form[@id='createBenefit']/div[2]/button")).click();
             driver.manage().timeouts().implicitlyWait(40, TimeUnit.SECONDS);
             try {
                 System.out.println("Verify Success Message");
-                Thread.sleep(1000);
+                Thread.sleep(500);
                 assertEquals("Benefit created successfully", driver.findElement(By.xpath("//form[@id='createBenefit']/div/div")).getText());
             } catch (Error e) {
                 verificationErrors.append(e.toString());
@@ -102,11 +105,12 @@ public class BenefitSeleniumETETest {
             driver.findElement(By.xpath("//form[@id='createBenefit']/div[2]/button[2]")).click();
         System.out.println("***************Create Benefit Duplicate****************");
         driver.findElement(By.xpath("(//button[@type='button'])[7]")).click();
-        System.out.println(driver.getCurrentUrl());
-        Thread.sleep(5000);
+        Thread.sleep(500);
         System.out.println("***************Create Benefit****************");
         driver.findElement(By.xpath("//form[@id='createBenefit']/div/div[3]/div/input")).clear();
+        System.out.println("***************Create Benefit1****************");
         driver.findElement(By.xpath("//form[@id='createBenefit']/div/div[3]/div/input")).sendKeys(randomString + "_007");
+        System.out.println("***************Create Benefit2****************");
         driver.findElement(By.xpath("//form[@id='createBenefit']/div[2]/button")).click();
         driver.manage().timeouts().implicitlyWait(40, TimeUnit.SECONDS);
         try {
@@ -120,7 +124,7 @@ public class BenefitSeleniumETETest {
         driver.findElement(By.xpath("//form[@id='createBenefit']/div[2]/button[2]")).click();
            System.out.println("****Update Functionality*****");
         System.out.println("SEARCH BENEFIT......");
-        Thread.sleep(5000);
+        Thread.sleep(500);
         driver.findElement(By.xpath("//div[@id='benefit-table_filter']/label/input")).sendKeys(randomString);
         //Click Update button of benefit
         driver.findElement(By.xpath("//table[@id='benefit-table']/tbody/tr/td[2]/button")).click();
@@ -130,7 +134,7 @@ public class BenefitSeleniumETETest {
         driver.findElement(By.xpath("//form[@id='createBenefit']/div/div[3]/div/input")).sendKeys(randomString + "_123");
         driver.findElement(By.xpath("//form[@id='createBenefit']/div[2]/button")).click();
         try {
-            Thread.sleep(1000);
+            Thread.sleep(500);
             assertEquals("Benefit updated successfully", driver.findElement(By.xpath("//form[@id='createBenefit']/div/div")).getText());
         } catch (Error e) {
             verificationErrors.append(e.toString());
@@ -140,7 +144,7 @@ public class BenefitSeleniumETETest {
         System.out.println("****Update Functionality Duplicate*****");
         System.out.println(driver.getCurrentUrl());
         System.out.println("SEARCH BENEFIT......");
-        Thread.sleep(1000);
+        Thread.sleep(500);
         driver.findElement(By.xpath("//div[@id='benefit-table_filter']/label/input")).sendKeys(randomString+"_007");
         //Click Update button of benefit
         driver.findElement(By.xpath("//table[@id='benefit-table']/tbody/tr/td[2]/button")).click();
@@ -150,7 +154,7 @@ public class BenefitSeleniumETETest {
         driver.findElement(By.xpath("//form[@id='createBenefit']/div/div[3]/div/input")).sendKeys(randomString + "_123");
         driver.findElement(By.xpath("//form[@id='createBenefit']/div[2]/button")).click();
         try {
-            Thread.sleep(1000);
+            Thread.sleep(500);
             assertEquals("Benefit already described", driver.findElement(By.xpath("//form[@id='createBenefit']/div/div[2]")).getText());
         } catch (Error e) {
             verificationErrors.append(e.toString());
