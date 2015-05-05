@@ -5,19 +5,19 @@ import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
+import com.pla.core.domain.event.PlanCoverageAssociationEvent;
 import com.pla.core.domain.event.PlanCreatedEvent;
 import com.pla.core.domain.event.PlanDeletedEvent;
-import com.pla.sharedkernel.domain.model.CoverageTermType;
-import com.pla.sharedkernel.domain.model.PolicyTermType;
-import com.pla.sharedkernel.domain.model.PremiumTermType;
-import com.pla.sharedkernel.domain.model.SumAssuredType;
+import com.pla.sharedkernel.domain.model.*;
+import com.pla.sharedkernel.identifier.BenefitId;
 import com.pla.sharedkernel.identifier.CoverageId;
 import com.pla.sharedkernel.identifier.PlanId;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.ToString;
-import org.axonframework.domain.AbstractAggregateRoot;
+import org.axonframework.eventsourcing.annotation.AbstractAnnotatedAggregateRoot;
 import org.axonframework.eventsourcing.annotation.AggregateIdentifier;
+import org.joda.time.LocalDate;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.Transient;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -36,9 +36,10 @@ import java.util.stream.Collectors;
 @Getter
 @ToString(exclude = {"logger"})
 @EqualsAndHashCode(exclude = {"logger", "specification"}, callSuper = false, doNotUseGetters = true)
-public class Plan extends AbstractAggregateRoot<PlanId> {
+public class Plan extends AbstractAnnotatedAggregateRoot<PlanId> {
 
 
+    public static final String DOCUMENT_NAME = "PLAN";
     @Id
     @AggregateIdentifier
     @JsonSerialize(using = ToStringSerializer.class)
@@ -46,30 +47,42 @@ public class Plan extends AbstractAggregateRoot<PlanId> {
     private PlanDetail planDetail;
     @Transient
     private PlanSpecification specification = new PlanSpecification();
+    private PlanStatus status;
     private SumAssured sumAssured;
     private PolicyTermType policyTermType;
     private PremiumTermType premiumTermType;
     private Term premiumTerm;
     private Term policyTerm;
     private Set<PlanCoverage> coverages = new HashSet<PlanCoverage>();
+    private PlanDetail planDetails;
 
     Plan() {
 
     }
 
     Plan(PlanId planId, PlanBuilder planBuilder) {
-
         this.planId = planId;
+        this.status = PlanStatus.DRAFT;
+        copyPropertiesFromPlanBuilder(planBuilder);
+        super.registerEvent(new PlanCreatedEvent(planId));
+        super.registerEvent(new PlanCoverageAssociationEvent(this.planId, Collections.unmodifiableMap(derievedCoverages())));
+    }
+
+    public static PlanBuilder builder() {
+        return new PlanBuilder();
+    }
+
+    private void copyPropertiesFromPlanBuilder(PlanBuilder planBuilder) {
         Preconditions.checkArgument(planBuilder != null);
         this.planDetail = planBuilder.getPlanDetail();
         this.sumAssured = planBuilder.getSumAssured();
         this.policyTermType = planBuilder.getPolicyTermType();
         this.premiumTermType = planBuilder.getPremiumTermType();
+        this.premiumTermType = planBuilder.getPremiumTermType();
         this.premiumTerm = planBuilder.getPremiumTerm();
         this.policyTerm = planBuilder.getPolicyTerm();
         this.coverages = planBuilder.getCoverages();
         Preconditions.checkState(specification.isSatisfiedBy(this), "Conflicting terms found.Please check Policy and Premium Terms ");
-
         Collection<Term> allTerms = new LinkedList<>();
         if (this.premiumTermType == PremiumTermType.SPECIFIED_VALUES)
             allTerms.add(this.premiumTerm);
@@ -80,19 +93,49 @@ public class Plan extends AbstractAggregateRoot<PlanId> {
             }
         });
         Preconditions.checkState(specification.checkCoverageTerm(this, allTerms));
-        super.registerEvent(new PlanCreatedEvent(planId));
     }
 
-    public static PlanBuilder builder() {
-        return new PlanBuilder();
+    public void updatePlan(PlanBuilder planBuilder) {
+        Preconditions.checkState(this.status == PlanStatus.DRAFT, "Plan in draft status can only be updated.");
+        copyPropertiesFromPlanBuilder(planBuilder);
     }
 
+
+    private Map derievedCoverages() {
+        Map<CoverageType, Map<CoverageId, List<BenefitId>>> payload = new HashMap<>();
+        Map<CoverageId, List<BenefitId>> optionalCoverageBenefits = new HashMap();
+        Map<CoverageId, List<BenefitId>> baseCoverageBenefits = new HashMap();
+
+        for (PlanCoverage coverage : this.getCoverages()) {
+            CoverageId coverageId = coverage.getCoverageId();
+
+            List<BenefitId> benefitIds = new ArrayList<>();
+            for (PlanCoverageBenefit pcb : coverage.getPlanCoverageBenefits()) {
+                benefitIds.add(pcb.getBenefitId());
+            }
+            if (coverage.getCoverageType() == CoverageType.BASE) {
+                baseCoverageBenefits.put(coverageId, benefitIds);
+            } else
+                optionalCoverageBenefits.put(coverageId, benefitIds);
+        }
+        payload.put(CoverageType.BASE, baseCoverageBenefits);
+        payload.put(CoverageType.BASE, optionalCoverageBenefits);
+
+        return payload;
+    }
 
     public Set<Integer> getAllowedPolicyTerm() {
-        if (PolicyTermType.SPECIFIED_VALUES.equals(this.policyTermType)) {
-            return this.policyTerm.getValidTerms();
+        if (planDetail.getClientType().equals(ClientType.GROUP)) {
+            Set<Integer> value = new HashSet<Integer>();
+            value.add(policyTerm.getGroupTerm() / 365);
+            return value;
+        } else {
+
+            if (PolicyTermType.SPECIFIED_VALUES.equals(this.policyTermType)) {
+                return this.policyTerm.getValidTerms();
+            }
+            return this.policyTerm.getMaturityAges();
         }
-        return this.policyTerm.getMaturityAges();
     }
 
 
@@ -233,4 +276,10 @@ public class Plan extends AbstractAggregateRoot<PlanId> {
         super.markDeleted();
         super.registerEvent(new PlanDeletedEvent(this.planId));
     }
+
+    public void withdrawPlan() {
+        this.status = PlanStatus.WITHDRAWN;
+        this.planDetail.setWithdrawalDate(LocalDate.now());
+    }
+
 }

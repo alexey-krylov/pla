@@ -16,6 +16,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 
@@ -148,6 +149,16 @@ public class ProductLineGeneralInformation {
             ProductLineProcessItem productLineProcessItem = new ProductLineProcessItem(entry.getKey(), entry.getValue());
             return productLineProcessItem;
         }
+    }
+
+    public Set<ProductLineProcessItem> getPremiumFollowUpFrequencyFor(PremiumFrequency premiumFrequency) {
+        PremiumFollowUpFrequency premiumFollowUpFrequencyItems =  premiumFollowUpFrequency.stream().filter(new Predicate<PremiumFollowUpFrequency>() {
+            @Override
+            public boolean test(PremiumFollowUpFrequency premiumFollowUpFrequency) {
+                return premiumFollowUpFrequency.getPremiumFrequency().equals(premiumFrequency);
+            }
+        }).findAny().get();
+        return premiumFollowUpFrequencyItems.getPremiumFollowUpFrequencyItems();
     }
 
 }

@@ -37,7 +37,7 @@ App.controller('AssignBranchManagerController',['$scope','$http','$window','$loc
                 $http.get('/pla/core/branch/getbranchdetail?branchId='+$scope.url).success(function(data){
                         // console.log(data);
                         $scope.assignBranchManager=data;
-                    if($scope.assignBranchManager.currentBranchManagerToDate){
+                   /* if($scope.assignBranchManager.currentBranchManagerToDate){
                         $scope.disableCurrentBranchManager=false;
 
 
@@ -51,7 +51,7 @@ App.controller('AssignBranchManagerController',['$scope','$http','$window','$loc
                     }else{
                         $scope.disableCurrentBranchBDE=true;
 
-                    }
+                    }*/
 
                    });
                 $scope.$watch( 'assignBranchManager.employeeId',function(newValue, oldValue){
@@ -88,24 +88,6 @@ App.controller('AssignBranchManagerController',['$scope','$http','$window','$loc
                         }
                 });
 
-            /* $scope.$watchGroup(['assignBranchManager.employeeId', 'assignBranchManager.branchManagerFromDate'], function(newValues, oldValues, scope) {
-
-                 if(newValues[0] && newValues[1] ) {
-                     $scope.bmBool = true;
-                 }else{
-                     $scope.bmBool = false;
-                 }
-
-             });
-             $scope.$watchGroup(['assignBranchManager.branchBDEEmployeeId', 'assignBranchManager.branchBDEFromDate'], function(newValues, oldValues, scope) {
-
-                 if(newValues[0] && newValues[1]) {
-                     $scope.bmBool = true;
-                 }else{
-                     $scope.bmBool = false;
-                 }
-
-             });*/
           $scope.$watchGroup(['assignBranchManager.employeeId', 'assignBranchManager.branchManagerFromDate','assignBranchManager.branchBDEEmployeeId', 'assignBranchManager.branchBDEFromDate'], function(newValues, oldValues, scope) {
                // console.log(newValues[0]+newValues[1]+ newValues[2] + newValues[3] );
               if(newValues[0] &&  newValues[1] && newValues[2] &&  newValues[3] ){

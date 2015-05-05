@@ -224,6 +224,7 @@ var validate = function(){
 var hideAlerts = function(){
     $('#alert-danger').hide();
     $('#alert').hide();
+    $('#inactivate-alert-danger').hide();
 };
 
 /*Value : actual coverage to inactivate*/
@@ -232,6 +233,8 @@ var hideAlerts = function(){
  * */
 var coverageToInactivate = '';
 var inactivate=function(value,flag){
+    hideAlerts();
+    $('#approveButton').show();
     if(flag=='save'){
         coverageToInactivate =  value;
     }else{
@@ -242,9 +245,12 @@ var inactivate=function(value,flag){
             contentType: 'application/json; charset=utf-8',
             success: function(msg) {
                 if(msg.status=='200'){
+
                     window.location.reload();
                 }else{
-                    alert("Error inactivating coverage");
+
+                    $('#approveButton').hide();
+                    $('#inactivate-alert-danger').text(msg.message).show();
                 }
             }
         });

@@ -14,7 +14,6 @@
     <context:component-scan base-package="com.pla"/>
     <context:annotation-config/>
 
-    <axon:command-bus id="commandBus" transaction-manager="transactionManager"/>
     <bean id="beanValidationInterceptor"
           class="org.axonframework.commandhandling.interceptors.BeanValidationInterceptor"/>
     <bean id="commandGateway" class="org.axonframework.commandhandling.gateway.DefaultCommandGateway">
@@ -71,4 +70,5 @@
     <extension:mongo-repository id="glQuotationMongoRepository"
                                 aggregate-type="com.pla.quotation.domain.model.grouplife.GroupLifeQuotation"
                                 mongo-template="mongoTemplate"/>
+
 </beans>

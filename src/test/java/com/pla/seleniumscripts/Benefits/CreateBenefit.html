@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head profile="http://selenium-ide.openqa.org/profiles/test-case">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link rel="selenium.base" href="http://5.9.249.195:9090/" />
+<title>CreateBenefit</title>
+</head>
+<body>
+<table cellpadding="1" cellspacing="1" border="1">
+<thead>
+<tr><td rowspan="1" colspan="3">CreateBenefit</td></tr>
+</thead><tbody>
+<tr>
+	<td>open</td>
+	<td>/myportal/control/main/</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>//input[@name='USERNAME']</td>
+	<td>admin</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>//input[@name='PASSWORD']</td>
+	<td>ofbiz</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>//input[@type='image']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>pause</td>
+	<td>2000</td>
+	<td></td>
+</tr>
+<!--Click Insurance-->
+<tr>
+	<td>clickAndWait</td>
+	<td>//li[5]/a/b</td>
+	<td></td>
+</tr>
+<!--Click Core-->
+<tr>
+	<td>open</td>
+	<td>http://5.9.249.195:6443/pla/core/benefit/listbenefit</td>
+	<td></td>
+</tr>
+<tr>
+	<td>pause</td>
+	<td>2000</td>
+	<td></td>
+</tr>
+<!--Click Create Button-->
+<tr>
+	<td>click</td>
+	<td>xpath=(//button[@type='button'])[7]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>pause</td>
+	<td>2000</td>
+	<td></td>
+</tr>
+<!--Generate a random benefit name-->
+<tr>
+	<td>storeEval</td>
+	<td>javascript{Math.floor(Math.random()*111111)}</td>
+	<td>RandomNumber</td>
+</tr>
+<tr>
+	<td>echo</td>
+	<td>${RandomNumber}</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>//form[@id='createBenefit']/div/div[3]/div/input</td>
+	<td>SeleniumBenefit${RandomNumber}</td>
+</tr>
+<tr>
+	<td>store</td>
+	<td>SeleniumBenefit${RandomNumber}</td>
+	<td>BenefitName</td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>//form[@id='createBenefit']/div[2]/button</td>
+	<td></td>
+</tr>
+<tr>
+	<td>pause</td>
+	<td>2000</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertText</td>
+	<td>//form[@id='createBenefit']/div/div</td>
+	<td>Benefit created successfully</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>//form[@id='createBenefit']/div[2]/button[2]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>pause</td>
+	<td>2000</td>
+	<td></td>
+</tr>
+<!--Create second benefit-->
+<!--Click Create Button-->
+<tr>
+	<td>click</td>
+	<td>xpath=(//button[@type='button'])[7]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>pause</td>
+	<td>2000</td>
+	<td></td>
+</tr>
+<!--Generate a random benefit name-->
+<tr>
+	<td>storeEval</td>
+	<td>javascript{Math.floor(Math.random()*11111)}</td>
+	<td>RandomNumber</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>//form[@id='createBenefit']/div/div[3]/div/input</td>
+	<td>SeleniumBenefit${RandomNumber}</td>
+</tr>
+<tr>
+	<td>store</td>
+	<td>SeleniumBenefit${RandomNumber}</td>
+	<td>BenefitName1</td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>//form[@id='createBenefit']/div[2]/button</td>
+	<td></td>
+</tr>
+<tr>
+	<td>pause</td>
+	<td>3000</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertText</td>
+	<td>//form[@id='createBenefit']/div/div</td>
+	<td>Benefit created successfully</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>//form[@id='createBenefit']/div[2]/button[2]</td>
+	<td></td>
+</tr>
+</tbody></table>
+</body>
+</html>

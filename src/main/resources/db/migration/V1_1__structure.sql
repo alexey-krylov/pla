@@ -617,7 +617,7 @@ CREATE  VIEW `agent_team_branch_view` AS
    FROM  agent A  LEFT JOIN team T    ON A.team_id = T.`team_id`  LEFT JOIN `team_team_leader_fulfillment` TF    ON T.`team_id` = TF.`team_id`
                                                                                                                     AND
                                                                                                                     CASE WHEN TF.thru_date IS NULL THEN T.current_team_leader=TF.employee_id
-                                                                                                                    WHEN TF.thru_date >=NOW() THEN T.`team_id` = TF.`team_id`
+                                                                                                                    WHEN DATE_ADD(TF.thru_date, INTERVAL 1 DAY) > NOW() THEN T.`team_id` = TF.`team_id`
                                                                                                                     END
 
      LEFT JOIN region R ON T.region_code = R.REGION_CODE
@@ -668,11 +668,15 @@ CREATE VIEW `active_team_region_branch_view` AS
      r.region_code          AS regionCode
    FROM team tm
      INNER JOIN team_team_leader_fulfillment tf
-       ON tm.current_team_leader = tf.employee_id AND
-          tf.team_id = tm.team_id AND tf.thru_date IS NULL
+       ON tm.`team_id` = TF.`team_id`
+          AND
+          CASE WHEN TF.thru_date IS NULL THEN tm.current_team_leader=TF.employee_id
+          WHEN DATE_ADD(TF.thru_date, INTERVAL 1 DAY) > NOW() THEN tm.`team_id` = TF.`team_id`
+          END
      INNER JOIN region r ON tm.region_code = r.region_code
      INNER JOIN branch b ON tm.branch_code = b.branch_code
-   WHERE tm.active = '1');
+   WHERE tm.active = '1' GROUP BY tm.team_id
+   ORDER BY TF.from_date DESC);
 
 DROP VIEW IF EXISTS `active_team_team_fulfillment_greater_than_current_date`;
 CREATE VIEW `active_team_team_fulfillment_greater_than_current_date` AS
@@ -751,6 +755,7 @@ DROP TABLE IF EXISTS `document`;
 CREATE TABLE `document` (
   `document_code` varchar(255) NOT NULL,
   `document_name` varchar(255) DEFAULT NULL,
+  `is_provided` varchar(10) DEFAULT NULL,
   PRIMARY KEY (`document_code`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -776,6 +781,18 @@ CREATE TABLE `designation` (
   PRIMARY KEY (`code`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+CREATE TABLE `plan_coverage_benefits_assoc` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `plan_id` varchar(60) NOT NULL,
+  `coverage_id` varchar(255) NOT NULL,
+  `benefit_id` varchar(255) NOT NULL,
+  `optional` tinyint(1) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `FK_PLAN_BENEFIT_ID` (`benefit_id`),
+  KEY `FK_PLAN_COVERAGE_ID` (`coverage_id`),
+  CONSTRAINT `FK_PLAN_BENEFIT_ID` FOREIGN KEY (`benefit_id`) REFERENCES `benefit` (`benefit_id`),
+  CONSTRAINT `FK_PLAN_COVERAGE_ID` FOREIGN KEY (`coverage_id`) REFERENCES `coverage` (`coverage_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;

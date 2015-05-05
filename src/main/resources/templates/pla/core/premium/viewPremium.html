@@ -62,8 +62,7 @@
                         <tbody>
                         <tr th:each="premium : ${listOfPremium}">
                             <td th:text="${premium.planName}"></td>
-                            <td></td>
-
+                            <td th:text="${premium.coverageNames}"></td>
                             <td style="text-align:center" class="pop" >
                                 <button href="#" class="details-box btn btn-primary btn-xs" rel="popover"  data-content="" > Influencing-Factors
                                     <div class="popover-body" style="display:none;">

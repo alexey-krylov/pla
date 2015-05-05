@@ -31,7 +31,7 @@ app.config(function ($routeProvider, $locationProvider) {
                         },
                         "policyTermType": "SPECIFIED_VALUES",
                         "premiumTermType": "SPECIFIED_VALUES",
-                        "policyTerm": {},
+                        "policyTerm": {groupTerm: 365},
                         "premiumTerm": {},
                         "sumAssured": {},
                         "coverages": []
@@ -94,39 +94,43 @@ app.controller('PlanSetupController', ['$scope', '$http', '$location', '$routePa
             $scope.currentStepIndex = 0;
 
             $scope.onlyNumbers = /^[0-9]+$/;
-            $scope.today = function () {
-                $scope.dt = new Date();
-            };
-            $scope.today();
+
+            $scope.minDate = new Date();
+
             $scope.productName;
             $scope.planSetUpForm = {};
             $scope.relations = [
+                {val: 'BROTHER', desc: 'Brother'},
+                {val: 'DAUGHTER', desc: 'Daughter'},
+                {val: 'DEPENDENTS', desc: 'Dependents'},
+                {val: 'FATHER', desc: 'Father'},
+                {val: 'FATHER_IN_LAW', desc: 'Father-in-law'},
+                {val: 'MOTHER', desc: 'Mother'},
+                {val: 'MOTHER_IN_LAW', desc: 'Mother-in-law'},
                 {val: 'SELF', desc: 'Self'},
                 {val: 'SISTER', desc: 'Sister'},
-                {val: 'BROTHER', desc: 'Brother'},
-                {val: 'WIFE', desc: 'Wife'},
-                {val: 'FATHER', desc: 'Father'},
-                {val: 'MOTHER', desc: 'Mother'},
                 {val: 'SON', desc: 'Son'},
-                {val: 'DAUGHTER', desc: 'Daughter'},
+                {val: 'SPOUSE', desc: 'Spouse'},
                 {val: 'STEP_DAUGHTER', desc: 'Step Daughter'},
-                {val: 'FATHER_IN_LAW', desc: 'Father-in-law'},
-                {val: 'MOTHER_IN_LAW', desc: 'Mother-in-law'},
-                {val: 'DEPENDENTS', desc: 'Dependents'}];
+                {val: 'STEP_SON', desc: 'Step Son'}];
             $scope.endorsementTypes = [
-                {val: 'NAME', desc: 'Correction of Name', clientType: 'INDIVIDUAL'},
-                {val: 'ADDRESS', desc: 'Change of Address', category: 'INDIVIDUAL'},
-                {val: 'BENEFICIARY', desc: 'Change/Add Beneficiary', category: 'INDIVIDUAL'},
-                {val: 'PAYMENT', desc: 'Change method of Payment', category: 'INDIVIDUAL'},
-                {val: 'AGENT', desc: 'Change Agent', category: 'INDIVIDUAL'},
-                {val: 'CHANGE_PAYER', desc: 'Change Sum Assured', category: 'INDIVIDUAL'},
-                {val: 'SUM_ASSURED', desc: 'Change Sum Assured', category: 'INDIVIDUAL'},
-                {val: 'DATE_OF_BIRTH', desc: 'Change Life Assured Date of Birth', category: 'INDIVIDUAL'},
-                {val: 'MEMBER_ADDITION', desc: 'Member Addition', category: 'GROUP'},
-                {val: 'MEMBER_DELETION', desc: 'Member Deletion', category: 'GROUP'},
-                {val: 'PROMOTION', desc: 'Promotion', category: 'GROUP'},
-                {val: 'NEW_COVER', desc: 'Introduction of New Cover', category: 'GROUP'}
+                {val: 'IND_CHANGE_NAME', desc: 'Correction of Name', clientType: 'INDIVIDUAL'},
+                {val: 'IND_CHANGE_ADDRESS', desc: 'Change of Address', category: 'INDIVIDUAL'},
+                {val: 'IND_CHANGE_BENEFICIARY', desc: 'Change/Add Beneficiary', category: 'INDIVIDUAL'},
+                {val: 'IND_CHANGE_PAYMENT_METHOD', desc: 'Change method of Payment', category: 'INDIVIDUAL'},
+                {val: 'IND_CHANGE_AGENT', desc: 'Change Agent', category: 'INDIVIDUAL'},
+                {val: 'IND_CHANGE_PAYER', desc: 'Change Payer', category: 'INDIVIDUAL'},
+                {val: 'IND_CHANGE_SUM_ASSURED', desc: 'Change Sum Assured', category: 'INDIVIDUAL'},
+                {val: 'IND_CHANGE_DOB', desc: 'Change Life Assured Date of Birth', category: 'INDIVIDUAL'},
+                {val: 'GRP_MEMBER_ADDITION', desc: 'Member Addition', category: 'GROUP'},
+                {val: 'GRP_MEMBER_DELETION', desc: 'Member Deletion', category: 'GROUP'},
+                {val: 'GRP_NEW_COVER', desc: 'Introduction of New Cover', category: 'GROUP'},
+                {val: 'GRP_PROMOTION', desc: 'Promotion', category: 'GROUP'}
             ];
+
+
+            $scope.sumAssuredTypesOriginal = [{val: 'RANGE', desc: 'Specified Range'}, {val: 'SPECIFIED_VALUES', desc: 'Specified Values'}];
+            $scope.sumAssuredTypes = [];
 
             $scope.resetPlanSumAssured = function () {
                 $scope.plan.sumAssured.sumAssuredValue = [];
@@ -140,8 +144,15 @@ app.controller('PlanSetupController', ['$scope', '$http', '$location', '$routePa
             $scope.clientType = $scope.plan.planDetail.clientType;
 
             $scope.$watch('clientType', function (val, old) {
-                if (!angular.isUndefined(val))
+                if (!angular.isUndefined(val)) {
                     $scope.plan.planDetail.clientType = val;
+                    if ($scope.clientType == 'GROUP') {
+                        $scope.sumAssuredTypes = angular.copy($scope.sumAssuredTypesOriginal);
+                        $scope.sumAssuredTypes.push({val: 'INCOME_MULTIPLIER', desc: 'Income Multiplier'});
+                    } else {
+                        $scope.sumAssuredTypes = angular.copy($scope.sumAssuredTypesOriginal);
+                    }
+                }
             });
 
             $scope.isSurrenderDisabled = function () {
@@ -156,7 +167,7 @@ app.controller('PlanSetupController', ['$scope', '$http', '$location', '$routePa
                     return 'required';
             };
 
-            $scope.newCoverage = {maturityAmounts: [{name: "from parent"}]};
+            $scope.newCoverage = {maturityAmounts: [], coverageTerm: {}};
             $scope.emptyCoverage = {maturityAmounts: []};
 
             //var myOtherModal = $modal({scope: $scope, template: '/pla/plan/coverage-form.html', show: false});
@@ -216,11 +227,13 @@ app.controller('PlanSetupController', ['$scope', '$http', '$location', '$routePa
                          * Reset the coverage coverageTerm as the Sum Assured Changes.
                          */
                         $scope.resetPlanCoverageTerm = function () {
-                            $scope.newCoverage.coverageTerm.maturityAges = [];
-                            $scope.newCoverage.coverageTerm.validTerms = [];
-                            $scope.newCoverage.coverageTerm.maxMaturityAge = [];
-                            $scope.newCoverage.coverageTerm.maturityAges = [];
-                            $scope.newCoverage.coverageTerm.maturityAges = [];
+                            if (newCoverage.coverageTerm) {
+                                $scope.newCoverage.coverageTerm.maturityAges = [];
+                                $scope.newCoverage.coverageTerm.validTerms = [];
+                                $scope.newCoverage.coverageTerm.maxMaturityAge = [];
+                                $scope.newCoverage.coverageTerm.maturityAges = [];
+                                $scope.newCoverage.coverageTerm.maturityAges = [];
+                            }
 
                         }
 
@@ -471,18 +484,27 @@ app.controller('PlanSetupController', ['$scope', '$http', '$location', '$routePa
                     planCoverage.planCoverageBenefits = [];
                 }
                 planCoverage.planCoverageBenefits.push($scope.newPlanCoverageBenefit);
-                $scope.newPlanCoverageBenefit = angular.copy({});
+                $scope.newPlanCoverageBenefit = angular.copy({benefitLimit: null, maxLimit: null});
+                $scope.benefitForm.$setPristine();
+                $scope.benefitForm.$setUntouched();
+                $scope.coverageForm.$setValidity();
+                $scope.step6.$error = false;
             };
 
             $scope.createPlan = function () {
                 $scope.validationFailed = false;
+
+                if ($scope.plan.planDetail.withdrawalDate == "Invalid date") {
+                    $scope.plan.planDetail.withdrawalDate = null;
+                }
+
                 $http.post(angular.isUndefined($scope.plan.planId) ? '/pla/core/plan/create' : '/pla/core/plan/update', $scope.plan).
                     success(function (data, status, headers, config) {
                         $scope.$apply();
                         $scope.plan.planId = data.id;
                         $location.path('/plan');
                         $scope.successMsg = data.message;
-                        $templateCache.remove('plan/list')
+                        $templateCache.remove('plan/list');
                     }).
                     error(function (data, status, headers, config) {
                         $scope.validationFailed = true;
@@ -518,7 +540,7 @@ app.controller('PlanSetupController', ['$scope', '$http', '$location', '$routePa
                 }
             });
             $scope.$watch('withdrawalDt', function (newVal) {
-                if (!angular.isUndefined(newVal)) {
+                if (!angular.isUndefined(newVal) && newVal != "Invalid Date") {
                     $scope.plan.planDetail.withdrawalDate = moment(newVal).format('DD/MM/YYYY');
                 }
             });
@@ -527,10 +549,8 @@ app.controller('PlanSetupController', ['$scope', '$http', '$location', '$routePa
                 return formField.$dirty && formField.$invalid
             }
 
-            $scope.$on('finished.fu.wizard', function (name, event, data) {
-                $scope.createPlan();
-            });
             $scope.step5 = {};
+            $scope.step6 = {};
             $scope.$on('actionclicked.fu.wizard', function (name, event, data) {
                 if (data.step == 5) {
                     if ($scope.plan.coverages.length == 0) {
@@ -539,6 +559,17 @@ app.controller('PlanSetupController', ['$scope', '$http', '$location', '$routePa
                         $scope.$apply();
                         event.preventDefault();
                     }
+                }
+            });
+
+            $scope.$on('finished.fu.wizard', function (name, event, data) {
+                if ($scope.getAllBenefits().length == 0) {
+                    $scope.step6.$error = true;
+                    $scope.step6_errorMsg = "Configure Benefits.";
+                    $scope.$apply();
+                    event.preventDefault();
+                } else {
+                    $scope.createPlan();
                 }
             });
         }]

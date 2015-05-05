@@ -6,5 +6,5 @@ package com.pla.sharedkernel.identifier;
  */
 public enum LineOfBusinessId {
 
-    GROUP_HEALTH, GROUP_INSURANCE, INDIVIDUAL_INSURANCE
+    GROUP_HEALTH, GROUP_LIFE, INDIVIDUAL_LIFE
 }

@@ -11,8 +11,8 @@ public class PlanCreatedEvent {
 
     private final PlanId planId;
 
-
     public PlanCreatedEvent(PlanId planId) {
         this.planId = planId;
     }
+
 }

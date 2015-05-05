@@ -2,7 +2,9 @@ package com.pla.core.domain.model.generalinformation;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import com.google.common.collect.Sets;
 import com.pla.core.domain.exception.GeneralInformationException;
+import com.pla.publishedlanguage.domain.model.PremiumFrequency;
 import com.pla.sharedkernel.domain.model.PolicyFeeProcessType;
 import com.pla.sharedkernel.domain.model.PolicyProcessMinimumLimitType;
 import com.pla.sharedkernel.domain.model.ProductLineProcessType;
@@ -185,7 +187,7 @@ public class ProductLineInformationUnitTest {
         policyProcessMinimumLimit.add(policyProcessMinimumLimitMap);
 
 
-        ProductLineGeneralInformation productLineGeneralInformation = ProductLineGeneralInformation.createProductLineGeneralInformation(LineOfBusinessId.INDIVIDUAL_INSURANCE);
+        ProductLineGeneralInformation productLineGeneralInformation = ProductLineGeneralInformation.createProductLineGeneralInformation(LineOfBusinessId.INDIVIDUAL_LIFE);
         productLineGeneralInformation = productLineGeneralInformation.withPolicyProcessMinimumLimit(policyProcessMinimumLimit);
 
     }
@@ -384,5 +386,65 @@ public class ProductLineInformationUnitTest {
         PolicyFeeProcessItem policyFeeProcessItem = new PolicyFeeProcessItem(PolicyFeeProcessType.MONTHLY,12);
         assertNotNull(policyFeeProcessItem);
         assertEquals(PolicyFeeProcessType.MONTHLY, invokeGetterMethod(policyFeeProcessItem, "policyFeeProcessType"));
+    }
+
+    @Test
+    public void givenPremiumFollowUpFrequency_whenPremiumFrequencyIsAnnual_thenItShouldReturnProductLineProcessItemOfAnnualPremiumFrequency(){
+        Set<PremiumFollowUpFrequency> premiumFollowUpFrequencyList = Sets.newLinkedHashSet();
+        Set<ProductLineProcessItem> premiumFollowUpFrequencyItems = Sets.newLinkedHashSet();
+        ProductLineProcessItem productLineProcessItem = new ProductLineProcessItem(ProductLineProcessType.LAPSE,0);
+        premiumFollowUpFrequencyItems.add(productLineProcessItem);
+        PremiumFollowUpFrequency premiumFollowUpFrequency = new PremiumFollowUpFrequency(PremiumFrequency.ANNUALLY,premiumFollowUpFrequencyItems);
+        premiumFollowUpFrequencyList.add(premiumFollowUpFrequency);
+
+        ProductLineGeneralInformation productLineGeneralInformation = new ProductLineGeneralInformation();
+        productLineGeneralInformation.setPremiumFollowUpFrequency(premiumFollowUpFrequencyList);
+        Set<ProductLineProcessItem>  productLineProcessItems =  productLineGeneralInformation.getPremiumFollowUpFrequencyFor(PremiumFrequency.ANNUALLY);
+        assertThat(premiumFollowUpFrequencyItems,is(productLineProcessItems));
+    }
+
+    @Test
+    public void givenPremiumFollowUpFrequency_whenPremiumFrequencyIsSemiAnnual_thenItShouldReturnProductLineProcessItemOfSemiAnnualPremiumFrequency(){
+        Set<PremiumFollowUpFrequency> premiumFollowUpFrequencyList = Sets.newLinkedHashSet();
+        Set<ProductLineProcessItem> premiumFollowUpFrequencyItems = Sets.newLinkedHashSet();
+        ProductLineProcessItem productLineProcessItem = new ProductLineProcessItem(ProductLineProcessType.FIRST_REMAINDER,0);
+        premiumFollowUpFrequencyItems.add(productLineProcessItem);
+        PremiumFollowUpFrequency premiumFollowUpFrequency = new PremiumFollowUpFrequency(PremiumFrequency.SEMI_ANNUALLY,premiumFollowUpFrequencyItems);
+        premiumFollowUpFrequencyList.add(premiumFollowUpFrequency);
+
+        ProductLineGeneralInformation productLineGeneralInformation = new ProductLineGeneralInformation();
+        productLineGeneralInformation.setPremiumFollowUpFrequency(premiumFollowUpFrequencyList);
+        Set<ProductLineProcessItem>  productLineProcessItems =  productLineGeneralInformation.getPremiumFollowUpFrequencyFor(PremiumFrequency.SEMI_ANNUALLY);
+        assertThat(premiumFollowUpFrequencyItems,is(productLineProcessItems));
+    }
+
+    @Test
+    public void givenPremiumFollowUpFrequency_whenPremiumFrequencyIsQuarterly_thenItShouldReturnProductLineProcessItemOfQuarterlyPremiumFrequency(){
+        Set<PremiumFollowUpFrequency> premiumFollowUpFrequencyList = Sets.newLinkedHashSet();
+        Set<ProductLineProcessItem> premiumFollowUpFrequencyItems = Sets.newLinkedHashSet();
+        ProductLineProcessItem productLineProcessItem = new ProductLineProcessItem(ProductLineProcessType.SECOND_REMAINDER,0);
+        premiumFollowUpFrequencyItems.add(productLineProcessItem);
+        PremiumFollowUpFrequency premiumFollowUpFrequency = new PremiumFollowUpFrequency(PremiumFrequency.QUARTERLY,premiumFollowUpFrequencyItems);
+        premiumFollowUpFrequencyList.add(premiumFollowUpFrequency);
+
+        ProductLineGeneralInformation productLineGeneralInformation = new ProductLineGeneralInformation();
+        productLineGeneralInformation.setPremiumFollowUpFrequency(premiumFollowUpFrequencyList);
+        Set<ProductLineProcessItem>  productLineProcessItems =  productLineGeneralInformation.getPremiumFollowUpFrequencyFor(PremiumFrequency.QUARTERLY);
+        assertThat(premiumFollowUpFrequencyItems,is(productLineProcessItems));
+    }
+
+    @Test
+    public void givenPremiumFollowUpFrequency_whenPremiumFrequencyIsMonthly_thenItShouldReturnProductLineProcessItemOfMonthlyPremiumFrequency(){
+        Set<PremiumFollowUpFrequency> premiumFollowUpFrequencyList = Sets.newLinkedHashSet();
+        Set<ProductLineProcessItem> premiumFollowUpFrequencyItems = Sets.newLinkedHashSet();
+        ProductLineProcessItem productLineProcessItem = new ProductLineProcessItem(ProductLineProcessType.LAPSE,0);
+        premiumFollowUpFrequencyItems.add(productLineProcessItem);
+        PremiumFollowUpFrequency premiumFollowUpFrequency = new PremiumFollowUpFrequency(PremiumFrequency.MONTHLY,premiumFollowUpFrequencyItems);
+        premiumFollowUpFrequencyList.add(premiumFollowUpFrequency);
+
+        ProductLineGeneralInformation productLineGeneralInformation = new ProductLineGeneralInformation();
+        productLineGeneralInformation.setPremiumFollowUpFrequency(premiumFollowUpFrequencyList);
+        Set<ProductLineProcessItem>  productLineProcessItems =  productLineGeneralInformation.getPremiumFollowUpFrequencyFor(PremiumFrequency.MONTHLY);
+        assertThat(premiumFollowUpFrequencyItems,is(productLineProcessItems));
     }
 }

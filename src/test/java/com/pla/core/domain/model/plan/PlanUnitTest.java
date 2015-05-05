@@ -26,11 +26,11 @@ public class PlanUnitTest {
 
     Plan plan;
     PlanId planId;
+    PlanBuilder builder;
+    PlanCoverageBuilder planCoverageBuilder;
     private PlanDetail planDetail;
     private PlanCoverage planCoverage;
     private CoverageId coverageId = new CoverageId("1");
-    PlanBuilder builder;
-    PlanCoverageBuilder planCoverageBuilder;
 
     @Before
     public void setup() {
@@ -38,7 +38,7 @@ public class PlanUnitTest {
         LocalDate launchDate = LocalDate.now().plusDays(10);
         LocalDate withdrawalDate = LocalDate.now().plusDays(30);
         Set<Relationship> relationshipSet = new HashSet<>(Arrays.asList(Relationship.BROTHER, Relationship.DAUGHTER));
-        Set<EndorsementType> endorsementTypes = new HashSet<>(Arrays.asList(EndorsementType.ADDRESS, EndorsementType.NAME));
+        Set<EndorsementType> endorsementTypes = new HashSet<>(Arrays.asList(EndorsementType.IND_CHANGE_ADDRESS, EndorsementType.IND_CHANGE_NAME));
         planDetail = planDetailBuilder.withPlanName("Plan 1")
                 .withPlanCode("0001900")
                 .withLaunchDate(launchDate)
@@ -48,7 +48,7 @@ public class PlanUnitTest {
                 .withFreeLookPeriod(15)
                 .withSurrenderAfter(5)
                 .withClientType(ClientType.INDIVIDUAL)
-                .withLineOfBusinessId(LineOfBusinessId.INDIVIDUAL_INSURANCE)
+                .withLineOfBusinessId(LineOfBusinessId.INDIVIDUAL_LIFE)
                 .withPlanType(PlanType.NON_INVESTMENT)
                 .withApplicableRelationships(relationshipSet)
                 .withEndorsementTypes(endorsementTypes)

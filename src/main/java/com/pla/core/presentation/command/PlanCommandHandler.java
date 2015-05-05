@@ -1,7 +1,10 @@
 package com.pla.core.presentation.command;
 
+import com.pla.core.domain.exception.DuplicatePlanException;
 import com.pla.core.domain.model.plan.*;
+import com.pla.core.specification.PlanCodeSpecification;
 import com.pla.sharedkernel.domain.model.CoverageTermType;
+import com.pla.sharedkernel.util.SequenceGenerator;
 import org.axonframework.commandhandling.annotation.CommandHandler;
 import org.axonframework.repository.Repository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,14 +21,27 @@ import java.util.Set;
 public class PlanCommandHandler {
 
     private Repository<Plan> planMongoRepository;
+    private PlanCodeSpecification planCodeSpecification;
+    private SequenceGenerator sequenceGenerator;
+
+    private String DUPLICATE_PLAN_CODE = "Plan with same name %s already exists.";
 
     @Autowired
-    public PlanCommandHandler(Repository<Plan> planMongoRepository) {
+    public PlanCommandHandler(Repository<Plan> planMongoRepository, PlanCodeSpecification planCodeSpecification, SequenceGenerator sequenceGenerator) {
         this.planMongoRepository = planMongoRepository;
+        this.planCodeSpecification = planCodeSpecification;
+        this.sequenceGenerator = sequenceGenerator;
     }
 
     @CommandHandler
-    public void handle(CreatePlanCommand command) {
+    public void handle(CreatePlanCommand command) throws DuplicatePlanException {
+        boolean isSatisfied = planCodeSpecification.satisfiedOnCreate(command.getPlanId(), command.getPlanDetail().getPlanName(),
+                command.getPlanDetail().getPlanCode());
+        if (!isSatisfied) {
+            throw new DuplicatePlanException(String.format(DUPLICATE_PLAN_CODE, command.getPlanDetail().getPlanName()));
+        }
+        String planCode = sequenceGenerator.getSequence(Plan.class);
+        command.getPlanDetail().setPlanCode(planCode);
         PlanBuilder planBuilder = planBuilder(command);
         Plan plan = planBuilder.build(command.getPlanId());
         planMongoRepository.add(plan);
@@ -97,11 +113,14 @@ public class PlanCommandHandler {
     }
 
     @CommandHandler
-    public void handle(UpdatePlanCommand command) {
-        Plan oldPlan = planMongoRepository.load(command.getPlanId());
-        oldPlan.delete();
+    public void handle(UpdatePlanCommand command) throws DuplicatePlanException {
+        boolean isSatisfied = planCodeSpecification.satisfiedOnUpdate(command.getPlanId(), command.getPlanDetail().getPlanName(),
+                command.getPlanDetail().getPlanCode());
+        if (!isSatisfied) {
+            throw new DuplicatePlanException(String.format(DUPLICATE_PLAN_CODE, command.getPlanDetail().getPlanName()));
+        }
         PlanBuilder planBuilder = planBuilder(command);
-        Plan _new = planBuilder.build(command.getNewPlanId());
-        planMongoRepository.add(_new);
+        Plan plan = planMongoRepository.load(command.getPlanId());
+        plan.updatePlan(planBuilder);
     }
 }

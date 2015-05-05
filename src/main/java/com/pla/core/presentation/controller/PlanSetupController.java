@@ -1,10 +1,13 @@
 package com.pla.core.presentation.controller;
 
+import com.pla.core.domain.exception.DuplicatePlanException;
 import com.pla.core.presentation.command.CreatePlanCommand;
+import com.pla.core.presentation.command.PlanCommandGateway;
 import com.pla.core.presentation.command.UpdatePlanCommand;
 import com.pla.core.query.PlanFinder;
 import com.pla.sharedkernel.identifier.PlanId;
-import org.axonframework.commandhandling.gateway.CommandGateway;
+import org.axonframework.commandhandling.CommandBus;
+import org.axonframework.commandhandling.gateway.GatewayProxyFactory;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -22,7 +25,7 @@ import java.util.Map;
 /**
  * Controller for handling all the User Interface calls related to
  * creation/edition of Plan.
- * <p/>
+ * <p>
  * It also have interface to handled ajax calls to return list of plans.
  *
  * @author: pradyumna
@@ -32,15 +35,15 @@ import java.util.Map;
 @RequestMapping(value = "/core/plan")
 public class PlanSetupController {
 
-    private final CommandGateway commandGateway;
-
+    private final PlanCommandGateway planCommandGateway;
     private final PlanFinder planFinder;
 
 
     @Autowired
-    public PlanSetupController(CommandGateway commandGateway, PlanFinder planFinder) {
-        this.commandGateway = commandGateway;
+    public PlanSetupController(CommandBus commandBus, PlanFinder planFinder) throws Exception {
         this.planFinder = planFinder;
+        GatewayProxyFactory factory = new GatewayProxyFactory(commandBus);
+        planCommandGateway = factory.createGateway(PlanCommandGateway.class);
     }
 
     /**
@@ -101,9 +104,13 @@ public class PlanSetupController {
         response.setCharacterEncoding("UTF-8");
         response.setContentType("text/json");
         try {
-            commandGateway.sendAndWait(command);
+            planCommandGateway.createPlan(command);
             viewMap.put("message", "Plan created successfully");
             viewMap.put("id", planId.toString());
+        } catch (DuplicatePlanException dupExp) {
+            response.reset();
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            viewMap.put("message", dupExp.getMessage());
         } catch (Exception t) {
             response.reset();
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
@@ -129,8 +136,12 @@ public class PlanSetupController {
         response.setCharacterEncoding("UTF-8");
         response.setContentType("text/json");
         try {
-            commandGateway.sendAndWait(command);
+            planCommandGateway.updatePlan(command);
             viewMap.put("message", "Plan updated successfully");
+        } catch (DuplicatePlanException dupExp) {
+            response.reset();
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            viewMap.put("message", dupExp.getMessage());
         } catch (Exception t) {
             response.reset();
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);

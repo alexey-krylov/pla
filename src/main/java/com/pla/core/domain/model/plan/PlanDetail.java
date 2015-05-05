@@ -27,8 +27,6 @@ import static com.google.common.base.Preconditions.checkArgument;
 public class PlanDetail {
 
     @JsonIgnore
-    private final String MODULE_NAME = PlanDetail.class.getSimpleName();
-    @JsonIgnore
     private static final String errorMessage = "Error in creating Plan: %s";
     String planName;
     String planCode;
@@ -44,7 +42,6 @@ public class PlanDetail {
     LineOfBusinessId lineOfBusinessId;
     PlanType planType;
     ClientType clientType;
-
     PlanDetail() {
 
     }
@@ -81,10 +78,10 @@ public class PlanDetail {
         if (this.clientType.equals(ClientType.INDIVIDUAL)) {
             this.surrenderAfter = planDetailBuilder.surrenderAfterYears;
             Stream<EndorsementType> groupEndorsementType = this.endorsementTypes.stream().filter(endorsementType ->
-                            endorsementType.equals(EndorsementType.MEMBER_ADDITION)
-                                    || endorsementType.equals(EndorsementType.MEMBER_DELETION)
-                                    || endorsementType.equals(EndorsementType.PROMOTION)
-                                    || endorsementType.equals(EndorsementType.NEW_COVER)
+                            endorsementType.equals(EndorsementType.GRP_MEMBER_ADDITION)
+                                    || endorsementType.equals(EndorsementType.GRP_MEMBER_DELETION)
+                                    || endorsementType.equals(EndorsementType.GRP_PROMOTION)
+                                    || endorsementType.equals(EndorsementType.GRP_NEW_COVER)
             );
             checkArgument(groupEndorsementType.count() == 0, String.format(errorMessage, "Group Endorsements are not allowed for Plan with Client Type as Individual"));
         }
@@ -119,6 +116,13 @@ public class PlanDetail {
 
     public LocalDate getWithdrawalDate() {
         return withdrawalDate;
+    }
+
+    void setWithdrawalDate(LocalDate withdrawalDate) {
+        if (withdrawalDate != null) {
+            checkArgument(withdrawalDate.isAfter(launchDate), String.format(errorMessage, "Withdrawal cannot be less than launchDate"));
+            this.withdrawalDate = withdrawalDate;
+        }
     }
 
     public int getFreeLookPeriod() {

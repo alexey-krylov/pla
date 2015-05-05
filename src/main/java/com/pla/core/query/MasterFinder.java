@@ -46,12 +46,12 @@ public class MasterFinder {
 
     public static final String FIND_ENTITY_SEQUENCE_BY_CLASS_TYPE_QUERY = "SELECT sequence_id as sequenceId, sequence_number AS sequenceNumber,sequence_name AS sequenceName,sequence_prefix AS sequencePrefix FROM `entity_sequence` WHERE sequence_name=:sequenceName";
 
-    public static final String FIND_ALL_DOCUMENT_QUERY = "SELECT document_code documentCode,document_name documentName " +
-            " FROM document";
+    public static final String FIND_ALL_DOCUMENT = "SELECT document_code documentCode,document_name documentName " +
+            " FROM document where is_provided = 'NO'";
 
     public static final String FIND_ALL_INDUSTRY_QUERY = "SELECT * FROM industry";
 
-    public static final String FIND_ALL_OCCUPATION_CLASS_QUERY = "SELECT * FROM `occupation_class`";
+    public static final String FIND_ALL_OCCUPATION_CLASS_QUERY = "SELECT DISTINCT(CODE) FROM occupation_class";
 
     public static final String FIND_ALL_DESIGNATION_QUERY = "SELECT * FROM `designation`";
 
@@ -80,7 +80,7 @@ public class MasterFinder {
     }
 
     public List<Map<String, Object>> getAllDocument() {
-        return namedParameterJdbcTemplate.query(FIND_ALL_DOCUMENT_QUERY, new ColumnMapRowMapper());
+        return namedParameterJdbcTemplate.query(FIND_ALL_DOCUMENT, new ColumnMapRowMapper());
     }
 
 

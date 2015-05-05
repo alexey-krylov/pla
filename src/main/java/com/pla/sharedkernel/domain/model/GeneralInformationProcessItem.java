@@ -2,7 +2,6 @@ package com.pla.sharedkernel.domain.model;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import com.pla.publishedlanguage.domain.model.PremiumFrequency;
 
 import java.util.Arrays;
 import java.util.List;
@@ -81,14 +80,7 @@ public enum GeneralInformationProcessItem {
                     productLineProcessList.add(quotationProcessItems);
                 }
             }
-            List<Map<String,Object>> premiumFrequencyFollowUpList = Lists.newArrayList();
-            for (PremiumFrequency premiumFrequency : PremiumFrequency.values()){
-                Map<String,Object> premiumFrequencyMap = Maps.newLinkedHashMap();
-                premiumFrequencyMap.put("premiumFrequency", premiumFrequency);
-                premiumFrequencyMap.put("premiumFollowUpFrequencyItems",productLineProcessList);
-                premiumFrequencyFollowUpList.add(premiumFrequencyMap);
-            }
-            return premiumFrequencyFollowUpList;
+            return productLineProcessList;
         }
     },
     MODAL_FACTOR{

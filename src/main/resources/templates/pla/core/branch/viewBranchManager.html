@@ -66,11 +66,9 @@
                             <td th:text="${branch.branchBDEFirstName != null and branch.branchBDELastName != null} ? | ${branch.branchBDEFirstName} ${branch.branchBDELastName}  |"></td>
                             <td th:text="${branch.branchBDEFromDate !=null}? ${#dates.format(branch.branchBDEFromDate,'dd/MM/yyyy')}"></td>
                             <td th:text="${branch.branchBDEToDate !=null}? ${#dates.format(branch.branchBDEToDate,'dd/MM/yyyy')}"></td>
-                            <td style="text-align:center">   <!--th:href="@{/core/branch/redirectToAssignPage}"-->
-                            <a class="btn btn-default btn-xs" th:disabled="${branch.branchBDEToDate != null and branch.branchManagerToDate !=null}" th:href="'/pla/core/branch/redirecttoassignPage?branchId='+${branch.branchCode}+''" >Assign</a></td>
-
+                            <td style="text-align:center">   <!--th:disabled="${branch.branchBDEToDate != null and branch.branchManagerToDate !=null}"-->
+                            <a class="btn btn-default btn-xs"  th:href="'/pla/core/branch/redirecttoassignPage?branchId='+${branch.branchCode}+''" >Assign</a></td>
                         </tr>
-
                         </tbody>
                     </table>
                 </div>
