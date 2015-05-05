@@ -34,13 +34,13 @@ public class BenefitSeleniumETETest {
     @Before
     public void setUp() throws Exception {
 
-        // Setup firefox binary to start in Xvfb
+/*        // Setup firefox binary to start in Xvfb
         String Xport = System.getProperty("lmportal.xvfb.id", ":1");
         final File firefoxPath = new File(System.getProperty("lmportal.deploy.firefox.path", "/usr/bin/firefox"));
         FirefoxBinary firefoxBinary = new FirefoxBinary(firefoxPath);
         firefoxBinary.setEnvironmentProperty("DISPLAY", Xport);
-        driver = new FirefoxDriver(firefoxBinary, null);
-        //driver =new FirefoxDriver();
+        driver = new FirefoxDriver(firefoxBinary, null);*/
+        driver =new FirefoxDriver();
 		baseUrl = "http://5.9.249.195:9090";
         System.out.println("******************************Navigating to URL******************");
         driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
@@ -109,7 +109,7 @@ public class BenefitSeleniumETETest {
         System.out.println("***************Create button****************");
         driver.findElement(By.xpath("(//button[@type='button'])[7]")).click();
         System.out.println(driver.getCurrentUrl());
-        Thread.sleep(2000);
+        Thread.sleep(500);
         System.out.println("***************Create Benefit****************");
         driver.findElement(By.xpath("//form[@id='createBenefit']/div/div[3]/div/input")).clear();
         driver.findElement(By.xpath("//form[@id='createBenefit']/div/div[3]/div/input")).sendKeys(randomString+"_007");
@@ -119,7 +119,7 @@ public class BenefitSeleniumETETest {
 
         try {
             System.out.println("Verify Success Message");
-            Thread.sleep(1000);
+            Thread.sleep(500);
             assertEquals("Benefit already described", driver.findElement(By.xpath("//form[@id='createBenefit']/div/div[2]")).getText());
         } catch (Error e) {
             verificationErrors.append(e.toString());
@@ -153,7 +153,7 @@ public class BenefitSeleniumETETest {
         System.out.println("****Update Functionality Duplicate*****");
         System.out.println(driver.getCurrentUrl());
         System.out.println("SEARCH BENEFIT......");
-        Thread.sleep(5000);
+        Thread.sleep(1000);
         driver.findElement(By.xpath("//div[@id='benefit-table_filter']/label/input")).sendKeys(randomString+"_007");
         //Click Update button of benefit
         driver.findElement(By.xpath("//table[@id='benefit-table']/tbody/tr/td[2]/button")).click();
