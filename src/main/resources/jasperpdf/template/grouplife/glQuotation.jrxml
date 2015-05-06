@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with Jaspersoft Studio version 6.0.4.final using JasperReports Library version 6.0.4  -->
-<!-- 2015-05-06T11:53:51 -->
+<!-- 2015-05-06T18:15:19 -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Quotation" pageWidth="842" pageHeight="1500" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="957e75dd-e876-4376-9d34-ee0e5f53cdeb">
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
 	<queryString>
@@ -36,11 +36,11 @@
 	<field name="coveragePeriod" class="java.lang.String">
 		<fieldDescription><![CDATA[coveragePeriod]]></fieldDescription>
 	</field>
-	<field name="livesCovered" class="java.lang.String">
-		<fieldDescription><![CDATA[livesCovered]]></fieldDescription>
+	<field name="totalLivesCovered" class="java.lang.String">
+		<fieldDescription><![CDATA[totalLivesCovered]]></fieldDescription>
 	</field>
-	<field name="sumAssured" class="java.lang.String">
-		<fieldDescription><![CDATA[sumAssured]]></fieldDescription>
+	<field name="totalSumAssured" class="java.lang.String">
+		<fieldDescription><![CDATA[totalSumAssured]]></fieldDescription>
 	</field>
 	<field name="planName" class="java.lang.String">
 		<fieldDescription><![CDATA[planName]]></fieldDescription>
@@ -312,7 +312,7 @@
 					<textField>
 						<reportElement x="210" y="77" width="100" height="20" uuid="bebde990-cbb1-4832-a73b-15c51cac0635"/>
 						<textElement verticalAlignment="Middle"/>
-						<textFieldExpression><![CDATA[$F{livesCovered}]]></textFieldExpression>
+						<textFieldExpression><![CDATA[$F{totalLivesCovered}]]></textFieldExpression>
 					</textField>
 					<staticText>
 						<reportElement x="69" y="101" width="140" height="16" uuid="32ad4a4e-c806-488d-9c19-920ff9932f44"/>
@@ -324,7 +324,7 @@
 					<textField>
 						<reportElement x="210" y="101" width="100" height="15" uuid="55e7cd55-8851-4e98-aab1-9b85679d0931"/>
 						<textElement verticalAlignment="Middle"/>
-						<textFieldExpression><![CDATA[$F{sumAssured}]]></textFieldExpression>
+						<textFieldExpression><![CDATA[$F{totalSumAssured}]]></textFieldExpression>
 					</textField>
 				</frame>
 				<subreport>
