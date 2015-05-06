@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with Jaspersoft Studio version 6.0.4.final using JasperReports Library version 6.0.4  -->
-<!-- 2015-05-05T18:16:46 -->
+<!-- 2015-05-06T11:53:51 -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Quotation" pageWidth="842" pageHeight="1500" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="957e75dd-e876-4376-9d34-ee0e5f53cdeb">
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
 	<queryString>
@@ -288,7 +288,7 @@
 						<text><![CDATA[Quotation Number :]]></text>
 					</staticText>
 					<textField>
-						<reportElement x="209" y="38" width="100" height="17" uuid="5f3ccd72-3e34-419f-b9c2-c67064e6cf69"/>
+						<reportElement x="212" y="37" width="100" height="17" uuid="5f3ccd72-3e34-419f-b9c2-c67064e6cf69"/>
 						<textFieldExpression><![CDATA[$F{quotationNumber}]]></textFieldExpression>
 					</textField>
 					<staticText>
@@ -299,7 +299,7 @@
 						<text><![CDATA[Proposed Cover Period :]]></text>
 					</staticText>
 					<textField>
-						<reportElement x="205" y="54" width="100" height="19" uuid="417b6a96-2e89-469a-a5bf-f638ca3d60d1"/>
+						<reportElement x="211" y="54" width="100" height="19" uuid="417b6a96-2e89-469a-a5bf-f638ca3d60d1"/>
 						<textFieldExpression><![CDATA[$F{coveragePeriod}]]></textFieldExpression>
 					</textField>
 					<staticText>
@@ -348,7 +348,7 @@
 						<text><![CDATA[Premium Details:]]></text>
 					</staticText>
 					<staticText>
-						<reportElement x="440" y="50" width="141" height="22" uuid="139c374a-b01d-49ea-95da-8d30ef42ca19"/>
+						<reportElement x="382" y="53" width="141" height="22" uuid="139c374a-b01d-49ea-95da-8d30ef42ca19"/>
 						<textElement textAlignment="Right" verticalAlignment="Middle">
 							<font size="12" isBold="true"/>
 							<paragraph lineSpacing="Single" lineSpacingSize="1.0"/>
@@ -363,11 +363,11 @@
 						<text><![CDATA[Net Premium :]]></text>
 					</staticText>
 					<staticText>
-						<reportElement x="84" y="81" width="127" height="21" uuid="6ba3e743-3fec-459c-8944-85490abf6845"/>
+						<reportElement x="52" y="74" width="127" height="21" uuid="6ba3e743-3fec-459c-8944-85490abf6845"/>
 						<textElement textAlignment="Right" verticalAlignment="Middle">
 							<font size="12" isBold="true"/>
 						</textElement>
-						<text><![CDATA[Waiver of Excess Loadings:]]></text>
+						<text><![CDATA[Waiver of Excess Loadings]]></text>
 					</staticText>
 					<staticText>
 						<reportElement x="381" y="80" width="189" height="18" uuid="a125feeb-520c-4597-b633-6370894afb21"/>
@@ -396,12 +396,12 @@
 						<textFieldExpression><![CDATA[$F{netPremium}]]></textFieldExpression>
 					</textField>
 					<textField>
-						<reportElement x="216" y="103" width="147" height="15" uuid="c0f7417e-2640-4e6b-a364-eff91e4b09df"/>
+						<reportElement x="223" y="99" width="147" height="17" uuid="c0f7417e-2640-4e6b-a364-eff91e4b09df"/>
 						<textElement textAlignment="Left" verticalAlignment="Middle"/>
 						<textFieldExpression><![CDATA[$F{additionalDiscountLoading}]]></textFieldExpression>
 					</textField>
 					<textField>
-						<reportElement x="215" y="117" width="92" height="19" uuid="f265b2c7-cccd-459f-84dc-01efcb498bfd"/>
+						<reportElement x="223" y="119" width="92" height="19" uuid="f265b2c7-cccd-459f-84dc-01efcb498bfd"/>
 						<textElement textAlignment="Left" verticalAlignment="Middle"/>
 						<textFieldExpression><![CDATA[$F{totalPremium}]]></textFieldExpression>
 					</textField>
@@ -411,30 +411,45 @@
 						<textFieldExpression><![CDATA[$F{profitAndSolvencyLoading}]]></textFieldExpression>
 					</textField>
 					<textField>
-						<reportElement x="69" y="81" width="11" height="19" uuid="defbc721-8ce0-469f-9634-2644747e2664"/>
-						<textElement verticalAlignment="Middle">
+						<reportElement x="180" y="76" width="29" height="19" uuid="defbc721-8ce0-469f-9634-2644747e2664"/>
+						<textElement textAlignment="Right" verticalAlignment="Middle">
 							<font size="12" isBold="true"/>
 						</textElement>
 						<textFieldExpression><![CDATA[$F{addOnBenefitsPercentage}]]></textFieldExpression>
 					</textField>
 					<textField>
-						<reportElement x="421" y="53" width="19" height="19" uuid="06824680-da92-4ccf-aca6-19ef1799a845"/>
-						<textElement>
+						<reportElement x="523" y="54" width="32" height="19" uuid="06824680-da92-4ccf-aca6-19ef1799a845"/>
+						<textElement textAlignment="Right">
 							<font size="12" isBold="true"/>
 						</textElement>
 						<textFieldExpression><![CDATA[$F{waiverOfExcessLoadingsPercentage}]]></textFieldExpression>
 					</textField>
 					<textField>
-						<reportElement x="222" y="78" width="100" height="20" uuid="3e9a580a-3d7f-4c28-aed5-74cdc6da912f"/>
-						<textElement verticalAlignment="Middle">
+						<reportElement x="571" y="51" width="100" height="20" uuid="3e9a580a-3d7f-4c28-aed5-74cdc6da912f"/>
+						<textElement verticalAlignment="Bottom">
 							<font isBold="false"/>
 						</textElement>
 						<textFieldExpression><![CDATA[$F{addOnBenefits}]]></textFieldExpression>
 					</textField>
 					<textField>
-						<reportElement x="582" y="49" width="52" height="22" uuid="63983f1c-55d3-40b5-81fa-68203e120ef7"/>
+						<reportElement x="222" y="75" width="88" height="22" uuid="63983f1c-55d3-40b5-81fa-68203e120ef7"/>
+						<textElement verticalAlignment="Middle"/>
 						<textFieldExpression><![CDATA[$F{waiverOfExcessLoadings}]]></textFieldExpression>
 					</textField>
+					<staticText>
+						<reportElement x="209" y="80" width="13" height="20" uuid="ae44fc20-8343-4f91-8d95-0bbede196524"/>
+						<textElement>
+							<font isBold="true"/>
+						</textElement>
+						<text><![CDATA[:]]></text>
+					</staticText>
+					<staticText>
+						<reportElement x="556" y="57" width="13" height="15" uuid="4c699ca3-a33f-452f-9bd0-41b25cd263ce"/>
+						<textElement>
+							<font isBold="true"/>
+						</textElement>
+						<text><![CDATA[:]]></text>
+					</staticText>
 				</frame>
 				<subreport>
 					<reportElement positionType="Float" x="18" y="581" width="755" height="33" uuid="e2ddcdb0-a869-4c1d-a93a-16b20833ca13"/>
@@ -450,11 +465,20 @@
 						</textElement>
 						<text><![CDATA[Special conditions if any:]]></text>
 					</staticText>
-					<textField>
-						<reportElement x="177" y="4" width="130" height="21" uuid="a31c84ce-b33a-493c-9126-81533ae3631c"/>
-						<textElement verticalAlignment="Middle"/>
-						<textFieldExpression><![CDATA[$F{specialConditions}]]></textFieldExpression>
-					</textField>
+					<frame>
+						<reportElement x="178" y="4" width="490" height="27" uuid="a55f16a7-1741-46b0-ba39-9146034d82f4"/>
+						<box>
+							<topPen lineWidth="0.6" lineStyle="Solid" lineColor="#000000"/>
+							<leftPen lineWidth="0.6" lineStyle="Solid" lineColor="#000000"/>
+							<bottomPen lineWidth="0.6" lineStyle="Solid" lineColor="#000000"/>
+							<rightPen lineWidth="0.6" lineStyle="Solid" lineColor="#000000"/>
+						</box>
+						<textField>
+							<reportElement x="0" y="3" width="130" height="21" uuid="a31c84ce-b33a-493c-9126-81533ae3631c"/>
+							<textElement verticalAlignment="Middle"/>
+							<textFieldExpression><![CDATA[$F{specialConditions}]]></textFieldExpression>
+						</textField>
+					</frame>
 				</frame>
 			</frame>
 			<frame>

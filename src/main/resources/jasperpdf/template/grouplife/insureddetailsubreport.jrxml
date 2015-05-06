@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with Jaspersoft Studio version 6.0.4.final using JasperReports Library version 6.0.4  -->
-<!-- 2015-05-05T17:40:25 -->
+<!-- 2015-05-06T11:50:14 -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="annexure" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="c3a36bfc-3994-4a93-904a-25902ebe0d96">
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
 	<queryString>
@@ -194,8 +194,8 @@
 					<rightPen lineWidth="0.6" lineColor="#000000"/>
 				</box>
 				<staticText>
-					<reportElement mode="Opaque" x="11" y="2" width="70" height="36" forecolor="#FFFFFF" backcolor="#524A49" uuid="b5a89dc3-444a-478c-8a87-b64aea64114f"/>
-					<textElement textAlignment="Center" verticalAlignment="Middle">
+					<reportElement mode="Opaque" x="22" y="1" width="55" height="37" forecolor="#FFFFFF" backcolor="#524A49" uuid="b5a89dc3-444a-478c-8a87-b64aea64114f"/>
+					<textElement textAlignment="Center" verticalAlignment="Top">
 						<font fontName="Arial Black" size="20" isBold="true"/>
 					</textElement>
 					<text><![CDATA[Annual Income]]></text>
@@ -210,8 +210,8 @@
 					<rightPen lineWidth="0.6" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<staticText>
-					<reportElement mode="Opaque" x="14" y="2" width="70" height="35" forecolor="#FFFFFF" backcolor="#524A49" uuid="f8bb186a-4e80-46de-b71a-cf5f7ff4e44e"/>
-					<textElement textAlignment="Center" verticalAlignment="Middle">
+					<reportElement mode="Opaque" x="10" y="1" width="60" height="37" forecolor="#FFFFFF" backcolor="#524A49" uuid="f8bb186a-4e80-46de-b71a-cf5f7ff4e44e"/>
+					<textElement textAlignment="Center" verticalAlignment="Top">
 						<font fontName="Arial Black" size="20" isBold="true"/>
 					</textElement>
 					<text><![CDATA[Basic Premium]]></text>

@@ -33,7 +33,6 @@ public class TestPDFGenerator {
         coverDetail.setRelationship("relationshipt1");
         for (int i = 0; i < 5; i++) {
             coverDetails.add(coverDetail);
-            System.out.println("Cover details adding :: i = " + i);
         }
         Annexure annexure = new Annexure();
         annexure.setAge("45");
@@ -47,7 +46,6 @@ public class TestPDFGenerator {
         annexure.setStatus("Singel");
         for (int i = 0; i < 5; i++) {
             annexures.add(annexure);
-            System.out.println("Insured details adding :: i = " + i);
         }
         dataBeanList.add(produce("Nischitha", "Kurunji", "Miss", "1221kejw", "963210317", "Living Stone A", "847 A Block,Sahakar Nagar,1st main,Hebbal Road,Bangalore", "AWER#$44", "12/04/2015", "23/7/2020", "24", "4500", "Plan Name"
                 , "Net Premium", "Add on Benefits", "weigher of excess", "profit and solvency", "additional doscount ladoing", "65", "4500", coverDetails, annexures));
