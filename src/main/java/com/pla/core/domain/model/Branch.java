@@ -53,12 +53,9 @@ public class Branch implements ICrudEntity {
         this.currentBranchBdE = currentBranchBdE;
     }
 
-    public void validateBranchManagerFromDate(String employeeId, String firstName, String lastName, LocalDate effectiveFrom) {
+    public void validateBranchManagerFromDate(String firstName, String lastName, LocalDate effectiveFrom) {
 
         BranchManagerFulfillment currentBranchManagerFulfillment = getBranchManagerFulfillmentForABranchManager(this.currentBranchManager);
-        if (currentBranchManager.equals(employeeId)) {
-            return;
-        }
         try {
             checkArgument(isNewFulfillmentValid(effectiveFrom, currentBranchManagerFulfillment.getFromDate()));
         } catch (IllegalArgumentException e) {
@@ -68,7 +65,10 @@ public class Branch implements ICrudEntity {
 
     public Branch assignBranchManager(String employeeId, String firstName, String lastName, LocalDate effectiveFrom) {
         if (currentBranchManager != null) {
-            validateBranchManagerFromDate(employeeId, firstName, lastName, effectiveFrom);
+            if (currentBranchManager.equals(employeeId)) {
+                return this;
+            }
+            validateBranchManagerFromDate(firstName, lastName, effectiveFrom);
             expireBranchManager(this.currentBranchManager, effectiveFrom.plusDays(-1));
 
         }
@@ -78,13 +78,9 @@ public class Branch implements ICrudEntity {
         return this;
     }
 
-    public void validateBranchBDEFromDate(String employeeId, String firstName, String lastName, LocalDate effectiveFrom) {
-
+    public void validateBranchBDEFromDate(String firstName, String lastName, LocalDate effectiveFrom) {
 
         BranchBdeFulfillment currentBranchBdeFulfillment = getBranchBDEFulfillmentForABranchBDE(this.currentBranchBdE);
-        if (currentBranchBdE.equals(employeeId)) {
-            return;
-        }
         try {
             checkArgument(isNewFulfillmentValid(effectiveFrom, currentBranchBdeFulfillment.getFromDate()));
         } catch (IllegalArgumentException e) {
@@ -94,7 +90,10 @@ public class Branch implements ICrudEntity {
 
     public Branch assignBranchBDE(String employeeId, String firstName, String lastName, LocalDate effectiveFrom) {
         if (currentBranchBdE != null) {
-            validateBranchBDEFromDate(employeeId, firstName, lastName, effectiveFrom);
+            if (currentBranchBdE.equals(employeeId)) {
+                return this;
+            }
+            validateBranchBDEFromDate(firstName, lastName, effectiveFrom);
             expireBranchBDE(this.currentBranchBdE, effectiveFrom.plusDays(-1));
 
         }
