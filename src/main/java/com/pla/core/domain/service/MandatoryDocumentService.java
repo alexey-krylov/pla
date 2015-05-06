@@ -49,6 +49,7 @@ public class MandatoryDocumentService {
         MandatoryDocumentDto mandatoryDocumentDto = new MandatoryDocumentDto();
         mandatoryDocumentDto.setPlanId(planId);
         mandatoryDocumentDto.setProcess(process.name());
+        mandatoryDocumentDto.setCoverageId(coverageId);
         boolean isMandatoryDocumentIsAssociatedWithPlan =  mandatoryDocumentIsAssociatedWithPlan.isSatisfiedBy(mandatoryDocumentDto);
         MandatoryDocument mandatoryDocument = admin.createMandatoryDocument(planId, coverageId, process, documents,isMandatoryDocumentIsAssociatedWithPlan);
         return mandatoryDocument;

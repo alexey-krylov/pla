@@ -21,7 +21,7 @@ public class MandatoryDocumentIsAssociatedWithPlan implements ISpecification<Man
 
     @Override
     public boolean isSatisfiedBy(MandatoryDocumentDto candidate) {
-        int count = mandatoryDocumentFinder.getMandatoryDocumentCountBy(candidate.getPlanId(), candidate.getProcess());
+        int count = mandatoryDocumentFinder.getMandatoryDocumentCountBy(candidate.getPlanId(), candidate.getProcess(),candidate.getCoverageId());
         return count == 0;
     }
 }
