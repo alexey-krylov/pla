@@ -30,7 +30,7 @@ public class BranchService {
         BranchCode branchCode = new BranchCode(branchId);
         Branch branch = branchRepository.findOne(branchCode);
         if ((branchManagerId.equals("Unassigned")) && (branch != null)) {
-            branch.validateBranchManagerFromDate(branchManagerId, firstName, lastName, fromDate);
+            branch.validateBranchManagerFromDate(firstName, lastName, fromDate);
             branch = branch.expireBranchManager(branch.getCurrentBranchManager(), fromDate.plusDays(-1));
             branchRepository.save(branch);
             return branch;
@@ -47,7 +47,7 @@ public class BranchService {
         BranchCode branchCode = new BranchCode(branchId);
         Branch branch = branchRepository.findOne(branchCode);
         if ((branchBDEId.equals("Unassigned") && (branch != null))) {
-            branch.validateBranchBDEFromDate(branchBDEId, firstName, lastName, fromDate);
+            branch.validateBranchBDEFromDate(firstName, lastName, fromDate);
             branch = branch.expireBranchBDE(branch.getCurrentBranchBdE(), fromDate.plusDays(-1));
             branchRepository.save(branch);
             return branch;
