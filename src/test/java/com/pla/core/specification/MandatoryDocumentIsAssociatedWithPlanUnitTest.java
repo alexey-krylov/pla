@@ -24,7 +24,7 @@ public class MandatoryDocumentIsAssociatedWithPlanUnitTest {
 
     @Test
     public void givenPlanAndProcessType_whenMandatoryDocumentIsNotExistedWithSamePlanAndProcess_thenItShouldReturnTrue(){
-        when(mandatoryDocumentFinder.getMandatoryDocumentCountBy(anyString(),anyString())).thenReturn(0);
+        when(mandatoryDocumentFinder.getMandatoryDocumentCountBy(anyString(),anyString(),anyString())).thenReturn(0);
         MandatoryDocumentIsAssociatedWithPlan mandatoryDocumentIsAssociatedWithPlan = new MandatoryDocumentIsAssociatedWithPlan(mandatoryDocumentFinder);
         MandatoryDocumentDto mandatoryDocumentDto = new MandatoryDocumentDto();
         boolean isMandatoryDocumentIsAssociatedWithPlan = mandatoryDocumentIsAssociatedWithPlan.isSatisfiedBy(mandatoryDocumentDto);
@@ -34,7 +34,7 @@ public class MandatoryDocumentIsAssociatedWithPlanUnitTest {
 
     @Test
     public void givenPlanAndProcessType_whenMandatoryDocumentIsExistedWithSamePlanAndProcess_thenItShouldReturnFalse(){
-        when(mandatoryDocumentFinder.getMandatoryDocumentCountBy(anyString(),anyString())).thenReturn(1);
+        when(mandatoryDocumentFinder.getMandatoryDocumentCountBy(anyString(),anyString(),anyString())).thenReturn(1);
         MandatoryDocumentIsAssociatedWithPlan mandatoryDocumentIsAssociatedWithPlan = new MandatoryDocumentIsAssociatedWithPlan(mandatoryDocumentFinder);
         MandatoryDocumentDto mandatoryDocumentDto = new MandatoryDocumentDto();
         boolean isMandatoryDocumentIsAssociatedWithPlan = mandatoryDocumentIsAssociatedWithPlan.isSatisfiedBy(mandatoryDocumentDto);

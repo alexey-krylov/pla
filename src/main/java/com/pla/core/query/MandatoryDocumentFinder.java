@@ -35,7 +35,9 @@ public class MandatoryDocumentFinder {
     public static final String GET_MANDATORY_DOCUMENT_BY_ID_QUERY =" SELECT document_id documentId,coverage_id coverageId,plan_id planId,PROCESS PROCESS " +
             "  FROM mandatory_document WHERE document_id =:documentId";
 
-    public static final String GET_MANDATORY_DOCUMENT_COUNT_ASSOCIATED_WITH_PLAN_AND_PROCESS_QUERY = "SELECT COUNT(document_id) FROM mandatory_document WHERE plan_id=:planId AND process=:processType";
+    public static final String GET_COVERAGE_ID_ASSOCIATED_WITH_PLAN_AND_PROCESS_QUERY = "SELECT coverage_id coverageId FROM mandatory_document WHERE  " +
+            " plan_id=:planId " +
+            " AND PROCESS=:processType";
 
     @Autowired
     public void setDataSource(DataSource dataSource) {
@@ -66,10 +68,20 @@ public class MandatoryDocumentFinder {
         return mandatoryDocumentDtos;
     }
 
-    public int getMandatoryDocumentCountBy(String planId,String process){
+    public int getMandatoryDocumentCountBy(String planId,String process,String coverageId){
         Preconditions.checkNotNull(planId);
-        Number noOfMandatoryDocument = namedParameterJdbcTemplate.queryForObject(GET_MANDATORY_DOCUMENT_COUNT_ASSOCIATED_WITH_PLAN_AND_PROCESS_QUERY, new MapSqlParameterSource("planId",planId).addValue("processType", process), Number.class);
-        return noOfMandatoryDocument.intValue();
+        SqlParameterSource sqlParameterSource =  new MapSqlParameterSource("planId",planId).addValue("processType", process);
+        List<Map<String,Object>> optionalCoverageAssociatedWithPlan = namedParameterJdbcTemplate.query(GET_COVERAGE_ID_ASSOCIATED_WITH_PLAN_AND_PROCESS_QUERY, sqlParameterSource, new ColumnMapRowMapper());
+        for (Map<String,Object> optionalCoverageMap : optionalCoverageAssociatedWithPlan){
+            String optionalCoverageId = (String) optionalCoverageMap.get("coverageId");
+            if (coverageId==null && optionalCoverageId == null){
+                return 1;
+            }
+            if (coverageId!= null?coverageId.equals(optionalCoverageId):"".equals(optionalCoverageId)) {
+                return 1;
+            }
+        }
+        return 0;
     }
 
 }
