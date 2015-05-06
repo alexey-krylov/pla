@@ -14,7 +14,7 @@ import java.util.List;
 public class PDFGeneratorUtils {
 
     public static <T> byte[] createPDFReportByList(List<T> reportData, String jasperFileName) throws IOException, JRException {
-        JasperReport jasperReport = JasperCompileManager.compileReport(PDFGeneratorUtils.class.getClassLoader().getResourceAsStream("jasperpdf/template/grouplife/glQuotation.jrxml"));
+        JasperReport jasperReport = JasperCompileManager.compileReport(PDFGeneratorUtils.class.getClassLoader().getResourceAsStream(jasperFileName));
         JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, new HashMap(), new JRBeanCollectionDataSource(reportData, true));
         return JasperExportManager.exportReportToPdf(jasperPrint);
     }

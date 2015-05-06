@@ -14,7 +14,7 @@ import java.util.List;
 public class TestPDFGenerator {
 
     public static void main(String[] args) throws IOException, JRException {
-        byte[] data= PDFGeneratorUtils.createPDFReportByList(getDataBeanList(), "jasperpdf/jasper/grouplife/glQuotation.jasper");
+        byte[] data = PDFGeneratorUtils.createPDFReportByList(getDataBeanList(), "jasperpdf/template/grouplife/glQuotation.jrxml");
         File file = new File("glquotation.pdf");
         FileOutputStream fileOutputStream = new FileOutputStream(file);
         fileOutputStream.write(data);
