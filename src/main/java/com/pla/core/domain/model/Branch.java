@@ -84,6 +84,8 @@ public class Branch implements ICrudEntity {
         BranchBdeFulfillment currentBranchBdeFulfillment = getBranchBDEFulfillmentForABranchBDE(this.currentBranchBdE);
         if (currentBranchBdE.equals(employeeId)) {
             return;
+
+
         }
         try {
             checkArgument(isNewFulfillmentValid(effectiveFrom, currentBranchBdeFulfillment.getFromDate()));
