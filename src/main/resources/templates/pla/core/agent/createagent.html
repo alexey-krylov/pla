@@ -131,7 +131,7 @@
                             <div class="form-group required">
                                 <label  class="control-label">Designation</label>
                                 <input type="text" class="form-control input-sm" name="designation" ng-required="true"
-                                       ng-model="agentDetails.agentProfile.designationDto.description" ng-disabled="!searchResult.isEmpty"/>
+                                       ng-model="agentDetails.agentProfile.designationDto.description" ng-disabled="true"/><!--ng-disabled="!searchResult.isEmpty"-->
                             </div>
                             <div class="form-group required">
                                 <label  class="control-label">Agent Status</label>
@@ -309,7 +309,7 @@
             color: #ce4844 !important;
         }
         .background-red{
-            background-color: #ce4844!important;
+            background-color: #ce4844 !important;
         }
         .select{
              width: 400px;
