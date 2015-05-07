@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.0.4.final using JasperReports Library version 6.0.4  -->
+<!-- 2015-05-07T12:13:21 -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="readReckonerReport" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="87043a36-0248-4085-b01a-737facb39170">
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
+	<queryString>
+		<![CDATA[]]>
+	</queryString>
+	<field name="product" class="java.lang.String">
+		<fieldDescription><![CDATA[product]]></fieldDescription>
+	</field>
+	<field name="sumAssured" class="java.lang.String">
+		<fieldDescription><![CDATA[sumAssured]]></fieldDescription>
+	</field>
+	<field name="coverages" class="java.lang.String">
+		<fieldDescription><![CDATA[coverages]]></fieldDescription>
+	</field>
+	<field name="relationships" class="java.lang.String">
+		<fieldDescription><![CDATA[relationships]]></fieldDescription>
+	</field>
+	<field name="coverageDetails" class="java.util.List">
+		<fieldDescription><![CDATA[coverageDetails]]></fieldDescription>
+	</field>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="30" splitType="Stretch">
+			<frame>
+				<reportElement x="20" y="0" width="656" height="30" uuid="599c873a-a79b-4604-b3c3-1c168e610657"/>
+				<box>
+					<topPen lineWidth="0.6"/>
+					<leftPen lineWidth="0.6"/>
+					<bottomPen lineWidth="0.6"/>
+					<rightPen lineWidth="0.6"/>
+				</box>
+				<staticText>
+					<reportElement x="194" y="0" width="306" height="30" uuid="4c34c34e-bbc9-4f87-b0a3-dc3536299dd9"/>
+					<textElement textAlignment="Center">
+						<font size="18" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Ready Reckoner]]></text>
+				</staticText>
+			</frame>
+		</band>
+	</title>
+	<detail>
+		<band height="192" splitType="Stretch">
+			<frame>
+				<reportElement x="20" y="0" width="656" height="168" uuid="b84b5629-40a9-46d6-ab98-a26798f26786"/>
+				<box>
+					<topPen lineWidth="0.6"/>
+					<leftPen lineWidth="0.6"/>
+					<bottomPen lineWidth="0.6"/>
+					<rightPen lineWidth="0.6"/>
+				</box>
+				<textField>
+					<reportElement x="20" y="10" width="100" height="30" uuid="54a1c01f-bd24-48a9-bb76-76749a08daa1"/>
+					<textElement verticalAlignment="Middle">
+						<font size="14" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{product}]]></textFieldExpression>
+				</textField>
+				<frame>
+					<reportElement x="141" y="30" width="499" height="30" uuid="b274a34e-e245-46b2-87fe-c879edd2e35f"/>
+					<staticText>
+						<reportElement x="10" y="0" width="100" height="30" uuid="741802dc-ab5f-42fa-86bc-5c59809cb19a"/>
+						<textElement verticalAlignment="Middle">
+							<font size="14" isBold="true"/>
+						</textElement>
+						<text><![CDATA[Sum Assured]]></text>
+					</staticText>
+					<textField>
+						<reportElement x="129" y="1" width="359" height="29" uuid="3c25bea6-8379-4cf2-902a-e0a258229dd7"/>
+						<box>
+							<topPen lineWidth="0.0"/>
+							<leftPen lineWidth="0.0"/>
+							<bottomPen lineWidth="0.0"/>
+							<rightPen lineWidth="0.0"/>
+						</box>
+						<textElement verticalAlignment="Middle">
+							<font size="12"/>
+						</textElement>
+						<textFieldExpression><![CDATA[$F{sumAssured}]]></textFieldExpression>
+					</textField>
+				</frame>
+				<frame>
+					<reportElement x="142" y="61" width="499" height="35" uuid="80cdb851-64a0-4c0d-8227-0d8cef1b9f54"/>
+					<staticText>
+						<reportElement x="10" y="0" width="100" height="30" uuid="15415914-7442-4895-a7d9-bc761175c148"/>
+						<textElement verticalAlignment="Middle">
+							<font size="14" isBold="true"/>
+						</textElement>
+						<text><![CDATA[Coverages]]></text>
+					</staticText>
+					<textField>
+						<reportElement x="130" y="5" width="358" height="30" uuid="c7e3521d-7f03-424d-ac1d-2aecbae6fa77"/>
+						<textElement verticalAlignment="Middle">
+							<font size="12"/>
+						</textElement>
+						<textFieldExpression><![CDATA[$F{coverages}]]></textFieldExpression>
+					</textField>
+				</frame>
+				<frame>
+					<reportElement x="142" y="97" width="499" height="32" uuid="248310fc-28c4-4571-bc1d-d9a49e229199"/>
+					<staticText>
+						<reportElement x="10" y="0" width="100" height="30" uuid="0ff616e6-15e5-422e-b093-fb05ec631221"/>
+						<textElement verticalAlignment="Middle">
+							<font size="14" isBold="true"/>
+						</textElement>
+						<text><![CDATA[Relationships]]></text>
+					</staticText>
+					<textField>
+						<reportElement x="130" y="2" width="350" height="30" uuid="12f026f4-6bb1-4a8f-b92e-c5f831bbfb0c"/>
+						<textElement verticalAlignment="Middle">
+							<font size="12"/>
+						</textElement>
+						<textFieldExpression><![CDATA[$F{relationships}]]></textFieldExpression>
+					</textField>
+				</frame>
+				<subreport>
+					<reportElement x="121" y="141" width="499" height="27" uuid="3303c714-b05a-413d-9b30-c6c49e4e3fbe"/>
+					<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{coverageDetails})]]></dataSourceExpression>
+					<subreportExpression><![CDATA["C:/Users/User/JaspersoftWorkspace/MyReports/ReadyReckoner/Coverage.jasper"]]></subreportExpression>
+				</subreport>
+				<staticText>
+					<reportElement x="25" y="131" width="85" height="21" uuid="86e3d002-42c0-4c16-8fc2-ae31c594e10a"/>
+					<textElement verticalAlignment="Middle">
+						<font size="14" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Coverages: ]]></text>
+				</staticText>
+			</frame>
+		</band>
+	</detail>
+</jasperReport>
