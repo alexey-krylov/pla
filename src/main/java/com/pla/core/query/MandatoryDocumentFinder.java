@@ -30,7 +30,7 @@ public class MandatoryDocumentFinder {
 
     public static final String GET_ALL_DOCUMENTS_ASSOCIATED_WITH_MANDATORY_DOCUMENT_QUERY ="SELECT d.document_name documentName,d.document_code documentCode " +
             " FROM mandatory_documents md INNER JOIN document d ON md.document_code=d.document_code " +
-            " WHERE document_id=:documentId ";
+            " WHERE document_id=:documentId ORDER BY d.document_name";
 
     public static final String GET_MANDATORY_DOCUMENT_BY_ID_QUERY =" SELECT document_id documentId,coverage_id coverageId,plan_id planId,PROCESS PROCESS " +
             "  FROM mandatory_document WHERE document_id =:documentId";

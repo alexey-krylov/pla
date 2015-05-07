@@ -4,6 +4,7 @@ angular.module('createAgent',['common','ngRoute','mgcrea.ngStrap.select','mgcrea
 
         function($scope,$http,channelType,authorisedToSell,teamDetails,provinces,$timeout,$alert,$route,$window,transformJson,getQueryParameter,agentDetails,globalConstants,nextAgentSequence,getProvinceAndCityDetail){
             $scope.numberPattern =globalConstants.numberPattern;
+
             /*Wizard initial step*/
             $scope.selectedWizard = 1;
             $scope.searchResult = {
@@ -40,6 +41,18 @@ angular.module('createAgent',['common','ngRoute','mgcrea.ngStrap.select','mgcrea
                     team:2,
                     contact:3
                 };
+                /*  CHECK WHETHER EMPLOYEE EXISTS IN HRMS */
+                $scope.editContactDetails=function() {
+                    if ($scope.agentDetails) {
+                        if ($scope.agentDetails.agentProfile.employeeId) {
+                              return true;
+                        } else {
+                            return false;
+                        }
+                    }
+                }
+
+               // console.log($scope.agentDetails);
                 /*remove search step in the wizard in edit mode
                 * @link directive.js
                 * */
@@ -49,6 +62,18 @@ angular.module('createAgent',['common','ngRoute','mgcrea.ngStrap.select','mgcrea
                 if(newVal){
                     $scope.prePopulateTeamLeader();
                 }
+            });
+            $scope.$watch('agentDetails.channelType',function(n,o){
+                if(n){
+                    if(n.channelName=='Brokers'){
+                        $scope.teamDetailsForm.$valid=true;
+                        $scope.teamDetailsForm.$submitted=true;
+                        //$scope.displayTeamCode=false;
+                        $scope.agentDetails.teamDetail={};
+
+                    }
+                }
+
             });
             $scope.primaryCities = [];
             $scope.physicalCities = [];
@@ -124,6 +149,7 @@ angular.module('createAgent',['common','ngRoute','mgcrea.ngStrap.select','mgcrea
                         }else{
                             $scope.jumpToNthStep(2);
                             $scope.agentDetails = transformJson.fromHrmsToPla(data);
+                            //console.log($scope.agentDetails);
                             $scope.searchResult.isEmpty=false;
                             $scope.trainingCompleteOn = $scope.agentDetails.trainingCompleteOn;
                         }
@@ -169,7 +195,11 @@ angular.module('createAgent',['common','ngRoute','mgcrea.ngStrap.select','mgcrea
             };
             $scope.submit = function(){
                 $scope.isFormSubmitted = true;
-                if($scope.agentDetailsForm.$valid && $scope.teamDetailsForm.$valid && $scope.contactDetailsForm.$valid){
+               // console.log($scope.teamDetailsForm.$valid);
+                //console.log($scope.agentDetails);
+
+              //  console.log($scope.teamDetailsForm.$submitted);
+              if($scope.agentDetailsForm.$valid && $scope.teamDetailsForm.$valid && $scope.contactDetailsForm.$valid){
                     $http.post('/pla/core/agent/create',transformJson.createCompatibleJson(angular.copy($scope.agentDetails),$scope.physicalCities,$scope.primaryCities,$scope.trainingCompleteOn,false))
                         .success(function(response, status, headers, config){
                             if(response.status=="200"){
@@ -191,13 +221,17 @@ angular.module('createAgent',['common','ngRoute','mgcrea.ngStrap.select','mgcrea
                 agentDetails.agentProfile.trainingCompleteOn = formatJSDateToDDMMYYYY(trainingCompleteOn);
                 delete agentDetails.agentStatus;
             }
-            delete agentDetails.teamDetail.regionName;
-            delete agentDetails.teamDetail.branchName;
-            if(!agentDetails.licenseNumber ||_.size(agentDetails.licenseNumber.licenseNumber)==0){
-                delete agentDetails.licenseNumber;
+            if(agentDetails.teamDetail.regionName) {
+                delete agentDetails.teamDetail.regionName;
+                delete agentDetails.teamDetail.branchName;
             }
-            return agentDetails;
-        };
+                 if (!agentDetails.licenseNumber || _.size(agentDetails.licenseNumber.licenseNumber) == 0) {
+                    delete agentDetails.licenseNumber;
+                   }
+                   return agentDetails;
+
+
+              };
         transformService.toPlanIdPlanNameObject = function(authorisedToSell){
             var plans = [];
             angular.forEach(authorisedToSell,function(plan,key){
