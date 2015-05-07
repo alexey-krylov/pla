@@ -857,7 +857,7 @@
                                 <div class="panel-body">
                                     <form  novalidate="true" role="form" name="forms.form6">
                                         <div class="row">
-                                             <div class="form-group col-md-4 required" ng-repeat="premiumFollowUpFrequencyItems in items.premiumFollowUpFrequency[2].premiumFollowUpFrequencyItems">
+                                             <div class="form-group col-md-4 required" ng-repeat="premiumFollowUpFrequencyItems in items.premiumFollowUpFrequency[3].premiumFollowUpFrequencyItems">
                                                  <label class="control-label"  data-toggle="tooltip" data-placement="top" title="Number of days after which Closed (complete)Reinstatement request should be purged" ng-bind="getFieldName(premiumFollowUpFrequencyItems.productLineProcessItem)"></label>
                                                  <p class="input-group">
                                                      <input type="number" class="form-control input-sm" min="1" ng-pattern="/^([0-9]{2})?$/"  ng-model="premiumFollowUpFrequencyItems.value" value="{{premiumFollowUpFrequencyItems.value}}" ng-required="true"/>
