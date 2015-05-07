@@ -21,6 +21,8 @@ public class RolesUtil {
     private static final String ADMIN_ROLE = "ROLE_ADMIN";
 
     public static final String GROUP_LIFE_QUOTATION_PROCESSOR_ROLE = "ROLE_GROUP_LIFE_QUOTATION_PROCESSOR";
+    
+    public static final String GROUP_HEALTH_QUOTATION_PROCESSOR_ROLE = "ROLE_GROUP_HEALTH_QUOTATION_PROCESSOR";
 
     private RolesUtil() {
     }
@@ -32,6 +34,11 @@ public class RolesUtil {
 
     public static boolean hasQuotationProcessorRole(Collection<? extends GrantedAuthority> authorities) {
         long count = hasRole(GROUP_LIFE_QUOTATION_PROCESSOR_ROLE, authorities);
+        return count == 1;
+    }
+    
+    public static boolean hasGroupHealthQuotationProcessorRole(Collection<? extends GrantedAuthority> authorities) {
+        long count = hasRole(GROUP_HEALTH_QUOTATION_PROCESSOR_ROLE, authorities);
         return count == 1;
     }
 
