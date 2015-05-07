@@ -447,6 +447,18 @@
             <resource>
                 <directory>src/main/resources</directory>
                 <filtering>true</filtering>
+                <excludes>
+                    <exclude>**/*.jasper</exclude>
+                    <exclude>**/*.jrxml</exclude>
+                </excludes>
+            </resource>
+            <resource>
+                <directory>src/main/resources</directory>
+                <filtering>false</filtering>
+                <includes>
+                    <include>**/*.jasper</include>
+                    <include>**/*.jrxml</include>
+                </includes>
             </resource>
             <resource>
                 <directory>src/test/resources</directory>
