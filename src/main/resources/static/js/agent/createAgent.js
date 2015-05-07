@@ -65,7 +65,7 @@ angular.module('createAgent',['common','ngRoute','mgcrea.ngStrap.select','mgcrea
             });
             $scope.$watch('agentDetails.channelType',function(n,o){
                 if(n){
-                    if(n.channelName=='Brokers'){
+                    if(n.channelName=='Broker'){
                         $scope.teamDetailsForm.$valid=true;
                         $scope.teamDetailsForm.$submitted=true;
                         //$scope.displayTeamCode=false;
@@ -115,7 +115,7 @@ angular.module('createAgent',['common','ngRoute','mgcrea.ngStrap.select','mgcrea
             };
             $scope.channelTypes = [{channelName:"Personal Selling",channelCode:"PERSONAL_SELLING"},
                 {channelName:"Direct",channelCode:"DIRECT"},
-                {channelName:"Brokers",channelCode:"BROKERS"}];
+                {channelName:"Broker",channelCode:"BROKER"}];
             $scope.authorisedToSell = authorisedToSell;
             $scope.teamDetails= teamDetails;
             $scope.provinces=provinces;

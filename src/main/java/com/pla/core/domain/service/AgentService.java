@@ -90,9 +90,11 @@ public class AgentService {
         updatedAgentWithProfile = updatedAgentWithProfile.updateAgentProfileWithNrcNumber(agentProfileDto.getNrcNumber());
         updatedAgentWithProfile = updatedAgentWithProfile.updateAgentProfileWithTitle(agentProfileDto.getTitle());
         Agent agentWithLicenseNumber = updatedAgentWithProfile.withLicenseNumber(licenseNumberDto.getLicenseNumber());
-        Agent agentWithTeamDetail = agentWithLicenseNumber.withTeamDetail(teamDetailDto.getTeamId());
+        if(!"BROKER".equals(channelTypeDto.getChannelCode())) {
+            agentWithLicenseNumber = agentWithLicenseNumber.withTeamDetail(teamDetailDto.getTeamId());
+        }
         GeoDetailDto geoDetailDto = contactDetailDto.getGeoDetail();
-        Agent agentWithContactDetail = agentWithTeamDetail.withContactDetail(contactDetailDto.getMobileNumber(), contactDetailDto.getHomePhoneNumber(), contactDetailDto.getWorkPhoneNumber(), contactDetailDto.getEmailAddress(), contactDetailDto.getAddressLine1(), contactDetailDto.getAddressLine2(), geoDetailDto.getPostalCode(), geoDetailDto.getProvinceCode(), geoDetailDto.getCityCode());
+        Agent agentWithContactDetail = agentWithLicenseNumber.withContactDetail(contactDetailDto.getMobileNumber(), contactDetailDto.getHomePhoneNumber(), contactDetailDto.getWorkPhoneNumber(), contactDetailDto.getEmailAddress(), contactDetailDto.getAddressLine1(), contactDetailDto.getAddressLine2(), geoDetailDto.getPostalCode(), geoDetailDto.getProvinceCode(), geoDetailDto.getCityCode());
         GeoDetailDto physicalGeoDetailDto = physicalAddressDto.getPhysicalGeoDetail();
         Agent agentWithPhysicalAddress = agentWithContactDetail.withPhysicalAddress(physicalAddressDto.getPhysicalAddressLine1(), physicalAddressDto.getPhysicalAddressLine2(), physicalGeoDetailDto.getPostalCode(), physicalGeoDetailDto.getProvinceCode(), physicalGeoDetailDto.getCityCode());
         Agent agentWithChannelType = agentWithPhysicalAddress.withChannelType(channelTypeDto.getChannelCode(), channelTypeDto.getChannelName());

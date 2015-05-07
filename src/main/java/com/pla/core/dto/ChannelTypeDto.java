@@ -32,4 +32,6 @@ public class ChannelTypeDto {
     @NotEmpty(message = "{Channel Name cannot be empty}")
     private String channelName;
 
+
+
 }

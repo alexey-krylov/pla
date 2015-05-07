@@ -115,12 +115,12 @@
                             <div class="form-group">
                                 <label>Team Code</label>
                                 <select name="channelType" class="form-control input-sm" disabled="true">
-                                    <option th:text="${agentDetail.teamDetail.teamName}"></option>
+                                    <option th:text="${agentDetail.teamDetail !=null} ? ${agentDetail.teamDetail.teamName}"></option>
                                 </select>
                             </div>
                             <div class="form-group">
                                 <label  >Branch Name</label>
-                                <input type="text" class="form-control input-sm" name="branchName" placeholder="Enter branch name" disabled="true" th:field="${agentDetail.teamDetail.branchName}"/>
+                                <label class="form-control input-sm" name="branchName" placeholder="Enter branch name" disabled="true" th:text="${agentDetail.teamDetail !=null} ? ${agentDetail.teamDetail.branchName}"/>
                             </div>
                         </div>
                         <!--Team Details left end-->
@@ -128,11 +128,11 @@
                         <div class="col-lg-6">
                             <div class="form-group">
                                 <label  >Team Leader Full Name</label>
-                                <input type="text" class="form-control input-sm" name="teamLeaderName"  disabled="true" th:value="${agentDetail.teamDetail.leaderFirstName+'&nbsp;'+agentDetail.teamDetail.leaderLastName}"/>
+                                <label class="form-control input-sm" name="teamLeaderName"  disabled="true" th:text="${agentDetail.teamDetail !=null} ? ${agentDetail.teamDetail.leaderFirstName+'&nbsp;'+agentDetail.teamDetail.leaderLastName}"/>
                             </div>
                             <div class="form-group">
                                 <label  >Region Name</label>
-                                <input type="text" class="form-control input-sm" name="regionName" disabled="true" th:field="${agentDetail.teamDetail.regionName}"/>
+                                <label class="form-control input-sm" name="regionName" disabled="true" th:text="${agentDetail.teamDetail !=null} ? ${agentDetail.teamDetail.regionName}"/>
                             </div>
                         </div>
                         <!--Team Details right end-->
