@@ -29,12 +29,6 @@ public class BranchService {
         JpaRepository<Branch, BranchCode> branchRepository = jpaRepositoryFactory.getCrudRepository(Branch.class);
         BranchCode branchCode = new BranchCode(branchId);
         Branch branch = branchRepository.findOne(branchCode);
-        if ((branchManagerId.equals("Unassigned")) && (branch != null)) {
-            branch.validateBranchManagerFromDate(firstName, lastName, fromDate);
-            branch = branch.expireBranchManager(branch.getCurrentBranchManager(), fromDate.plusDays(-1));
-            branchRepository.save(branch);
-            return branch;
-        }
         branch = branch.assignBranchManager(branchManagerId, firstName, lastName, fromDate);
         branchRepository.save(branch);
         return branch;
@@ -46,12 +40,6 @@ public class BranchService {
         JpaRepository<Branch, BranchCode> branchRepository = jpaRepositoryFactory.getCrudRepository(Branch.class);
         BranchCode branchCode = new BranchCode(branchId);
         Branch branch = branchRepository.findOne(branchCode);
-        if ((branchBDEId.equals("Unassigned") && (branch != null))) {
-            branch.validateBranchBDEFromDate(firstName, lastName, fromDate);
-            branch = branch.expireBranchBDE(branch.getCurrentBranchBdE(), fromDate.plusDays(-1));
-            branchRepository.save(branch);
-            return branch;
-        }
         branch = branch.assignBranchBDE(branchBDEId, firstName, lastName, fromDate);
         branchRepository.save(branch);
         return branch;

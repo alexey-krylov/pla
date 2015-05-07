@@ -53,21 +53,17 @@ public class Branch implements ICrudEntity {
         this.currentBranchBdE = currentBranchBdE;
     }
 
-    public void validateBranchManagerFromDate(String firstName, String lastName, LocalDate effectiveFrom) {
-        BranchManagerFulfillment currentBranchManagerFulfillment = getBranchManagerFulfillmentForABranchManager(this.currentBranchManager);
-        try {
-            checkArgument(isNewFulfillmentValid(effectiveFrom, currentBranchManagerFulfillment.getFromDate()));
-        } catch (IllegalArgumentException e) {
-            throw new BranchDomainException(firstName + " " + lastName + " from date should be greater than " + currentBranchManagerFulfillment.getFromDate().getDayOfMonth() + "/" + currentBranchManagerFulfillment.getFromDate().getMonthOfYear() + "/" + currentBranchManagerFulfillment.getFromDate().getYear());
-        }
-    }
-
     public Branch assignBranchManager(String employeeId, String firstName, String lastName, LocalDate effectiveFrom) {
         if (currentBranchManager != null) {
+            BranchManagerFulfillment currentBranchManagerFulfillment = getBranchManagerFulfillmentForABranchManager(this.currentBranchManager);
             if (currentBranchManager.equals(employeeId)) {
                 return this;
             }
-            validateBranchManagerFromDate(firstName, lastName, effectiveFrom);
+            try {
+                checkArgument(isNewFulfillmentValid(effectiveFrom, currentBranchManagerFulfillment.getFromDate()));
+            } catch (IllegalArgumentException e) {
+                throw new BranchDomainException(firstName + " " + lastName + " from date should be greater than " + currentBranchManagerFulfillment.getFromDate().getDayOfMonth() + "/" + currentBranchManagerFulfillment.getFromDate().getMonthOfYear() + "/" + currentBranchManagerFulfillment.getFromDate().getYear());
+            }
             expireBranchManager(this.currentBranchManager, effectiveFrom.plusDays(-1));
 
         }
@@ -77,21 +73,17 @@ public class Branch implements ICrudEntity {
         return this;
     }
 
-    public void validateBranchBDEFromDate(String firstName, String lastName, LocalDate effectiveFrom) {
-        BranchBdeFulfillment currentBranchBdeFulfillment = getBranchBDEFulfillmentForABranchBDE(this.currentBranchBdE);
-        try {
-            checkArgument(isNewFulfillmentValid(effectiveFrom, currentBranchBdeFulfillment.getFromDate()));
-        } catch (IllegalArgumentException e) {
-            throw new BranchDomainException(firstName + " " + lastName + " from date should be greater than " + currentBranchBdeFulfillment.getFromDate().getDayOfMonth() + "/" + currentBranchBdeFulfillment.getFromDate().getMonthOfYear() + "/" + currentBranchBdeFulfillment.getFromDate().getYear());
-        }
-    }
-
     public Branch assignBranchBDE(String employeeId, String firstName, String lastName, LocalDate effectiveFrom) {
         if (currentBranchBdE != null) {
+            BranchBdeFulfillment currentBranchBdeFulfillment = getBranchBDEFulfillmentForABranchBDE(this.currentBranchBdE);
             if (currentBranchBdE.equals(employeeId)) {
                 return this;
             }
-            validateBranchBDEFromDate(firstName, lastName, effectiveFrom);
+            try {
+                checkArgument(isNewFulfillmentValid(effectiveFrom, currentBranchBdeFulfillment.getFromDate()));
+            } catch (IllegalArgumentException e) {
+                throw new BranchDomainException(firstName + " " + lastName + " from date should be greater than " + currentBranchBdeFulfillment.getFromDate().getDayOfMonth() + "/" + currentBranchBdeFulfillment.getFromDate().getMonthOfYear() + "/" + currentBranchBdeFulfillment.getFromDate().getYear());
+            }
             expireBranchBDE(this.currentBranchBdE, effectiveFrom.plusDays(-1));
 
         }
