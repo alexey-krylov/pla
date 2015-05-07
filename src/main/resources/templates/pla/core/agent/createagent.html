@@ -154,7 +154,7 @@
                             </div>
                             <div class="form-group ">
                                 <label  >Licence Number</label>
-                                <input type="text" class="form-control input-sm" name="licenceNumber" placeholder="Enter licence number" ng-disabled="isEditMode"
+                                <input type="text" class="form-control input-sm" name="licenceNumber" maxlength="8"  ng-pattern="/^[A-z0-9]+$/" placeholder="Enter licence number" ng-disabled="isEditMode"
                                        ng-model="agentDetails.licenseNumber.licenseNumber"/>
                             </div>
                         </div>
@@ -170,7 +170,7 @@
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label>Team Code</label>
-                                <select  class="form-control input-sm" ng-model="agentDetails.teamDetail" ng-options="teamDetail as teamDetail.teamName for teamDetail in teamDetails track by teamDetail.teamId" ng-required="true">
+                                <select  class="form-control input-sm" ng-model="agentDetails.teamDetail" ng-options="teamDetail as teamDetail.teamName for teamDetail in teamDetails track by teamDetail.teamId" ng-required="true" >
                                 </select>
                             </div>
                             <div class="form-group">
@@ -194,14 +194,14 @@
                     </ng-form>
                 </div>
             </div>
-            <div class="step-pane" data-step="4" disable-all-fields="isSearchEmptyOrIsEdit()">
+            <div class="step-pane" data-step="4" disable-all-fields="editContactDetails()">
                 <ng-form name="contactDetailsForm">
                     <!--Contact Details  start-->
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group required">
                                 <label  class="control-label">Mobile Number</label>
-                                <input type="text" class="form-control input-sm" name="mobileNumber"  placeholder="Enter mobile number" ng-model="agentDetails.contactDetail.mobileNumber" ng-required="true" maxlength="10" minlength="10" ng-pattern="numberPattern"/>
+                                <input type="text" class="form-control input-sm" name="mobileNumber"  placeholder="Enter mobile number" ng-model="agentDetails.contactDetail.mobileNumber" ng-required="true" maxlength="10" minlength="10" ng-pattern="numberPattern" />
                             </div>
                             <div class="form-group">
                                 <label  >Work phone</label>
@@ -213,7 +213,7 @@
                             </div>
                             <div class="form-group">
                                 <label  >Postal Code</label>
-                                <input type="text" class="form-control input-sm" name="postalCode"  placeholder="Enter postal code" ng-model="agentDetails.contactDetail.geoDetail.postalCode"  ng-maxlength="5" ng-pattern="numberPattern"/>
+                                <input type="text" class="form-control input-sm" name="postalCode"  placeholder="Enter postal code" ng-model="agentDetails.contactDetail.geoDetail.postalCode" maxlength="5" ng-pattern="numberPattern"/>
                             </div>
                             <div class="form-group required">
                                 <label  class="control-label">Town</label>
@@ -249,7 +249,7 @@
                             </div>
                             <div class="form-group">
                                 <label  >Postal Code</label>
-                                <input type="text" class="form-control input-sm" name="physicalPostalCode" placeholder="Enter postal code" ng-model="agentDetails.physicalAddress.physicalGeoDetail.postalCode"  ng-maxlength="5" ng-pattern="numberPattern"/>
+                                <input type="text" class="form-control input-sm" name="physicalPostalCode" placeholder="Enter postal code" ng-model="agentDetails.physicalAddress.physicalGeoDetail.postalCode"  maxlength="5" ng-pattern="numberPattern"/>
                             </div>
                             <div class="form-group required">
                                 <label  class="control-label">Town</label>
