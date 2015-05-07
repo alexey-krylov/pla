@@ -105,7 +105,7 @@ public class GeneralInformationService {
         return productLineProcessList;
     }
 
-    public Map<PremiumFrequency, List<Map<ProductLineProcessType,Integer>>> transformPremiumFrequencyFollowUp(List<PremiumFrequencyFollowUpDto> premiumFrequencyFollowUpDtos){
+        public Map<PremiumFrequency, List<Map<ProductLineProcessType,Integer>>> transformPremiumFrequencyFollowUp(List<PremiumFrequencyFollowUpDto> premiumFrequencyFollowUpDtos){
         Map<PremiumFrequency, List<Map<ProductLineProcessType,Integer>>> premiumFrequencyFollowUp = Maps.newLinkedHashMap();
         for (PremiumFrequencyFollowUpDto premiumFrequencyFollowUpDto : premiumFrequencyFollowUpDtos){
             List<Map<ProductLineProcessType,Integer>> productLineProcessItem =  transformProductLine(premiumFrequencyFollowUpDto.getPremiumFollowUpFrequencyItems());
@@ -366,7 +366,7 @@ public class GeneralInformationService {
         Map productLineMap  = Maps.newLinkedHashMap();
         productLineMap.put("productLine",LineOfBusinessId.GROUP_HEALTH);
         productLineMap.put("productLineInformationId",null);
-        productLineMap = getProductLineGeneralInformation(productLineMap);
+        productLineMap = getProductLineGeneralInformation(productLineMap,LineOfBusinessId.GROUP_HEALTH);
         return productLineMap;
     }
 
@@ -374,7 +374,7 @@ public class GeneralInformationService {
         Map insuranceMap  = Maps.newLinkedHashMap();
         insuranceMap.put("productLine", LineOfBusinessId.GROUP_LIFE);
         insuranceMap.put("productLineInformationId",null);
-        insuranceMap = getProductLineGeneralInformation(insuranceMap);
+        insuranceMap = getProductLineGeneralInformation(insuranceMap,LineOfBusinessId.GROUP_LIFE);
         return insuranceMap;
     }
 
@@ -382,38 +382,38 @@ public class GeneralInformationService {
         Map individualInsurance  = Maps.newLinkedHashMap();
         individualInsurance.put("productLine", LineOfBusinessId.INDIVIDUAL_LIFE);
         individualInsurance.put("productLineInformationId",null);
-        individualInsurance = getProductLineGeneralInformation(individualInsurance);
+        individualInsurance = getProductLineGeneralInformation(individualInsurance,LineOfBusinessId.INDIVIDUAL_LIFE);
         return individualInsurance;
     }
 
     private List populateOrganizationGeneralInformationData(){
         List list = Lists.newArrayList();
         Map organizationInformation = Maps.newLinkedHashMap();
-        organizationInformation.put("modelFactorItems",GeneralInformationProcessItem.MODAL_FACTOR.getOrganizationLevelProcessInformationItem());
-        organizationInformation.put("discountFactorItems",GeneralInformationProcessItem.DISCOUNT_FACTOR.getOrganizationLevelProcessInformationItem());
-        organizationInformation.put("serviceTax",GeneralInformationProcessItem.SERVICE_TAX.getOrganizationLevelProcessInformationItem().get(0));
+        organizationInformation.put("modelFactorItems",GeneralInformationProcessItem.MODAL_FACTOR.getOrganizationLevelProcessInformationItem(LineOfBusinessId.GROUP_HEALTH));
+        organizationInformation.put("discountFactorItems",GeneralInformationProcessItem.DISCOUNT_FACTOR.getOrganizationLevelProcessInformationItem(LineOfBusinessId.GROUP_HEALTH));
+        organizationInformation.put("serviceTax",GeneralInformationProcessItem.SERVICE_TAX.getOrganizationLevelProcessInformationItem(LineOfBusinessId.GROUP_HEALTH).get(0));
         list.add(organizationInformation);
         return list;
     }
 
-    private Map getProductLineGeneralInformation(Map productLineInformationMap){
-        productLineInformationMap.put("quotationProcessItems", GeneralInformationProcessItem.DEFAULT.getOrganizationLevelProcessInformationItem());
-        productLineInformationMap.put("enrollmentProcessItems",  GeneralInformationProcessItem.DEFAULT.getOrganizationLevelProcessInformationItem());
-        productLineInformationMap.put("reinstatementProcessItems",  GeneralInformationProcessItem.DEFAULT.getOrganizationLevelProcessInformationItem());
-        productLineInformationMap.put("endorsementProcessItems", GeneralInformationProcessItem.DEFAULT.getOrganizationLevelProcessInformationItem());
-        productLineInformationMap.put("claimProcessItems", GeneralInformationProcessItem.CLAIM.getOrganizationLevelProcessInformationItem());
-        productLineInformationMap.put("policyFeeProcessItems",GeneralInformationProcessItem.POLICY_FEE.getOrganizationLevelProcessInformationItem());
-        productLineInformationMap.put("policyProcessMinimumLimitItems", GeneralInformationProcessItem.MINIMUM_LIMIT.getOrganizationLevelProcessInformationItem());
-        productLineInformationMap.put("surrenderProcessItems", GeneralInformationProcessItem.DEFAULT.getOrganizationLevelProcessInformationItem());
-        productLineInformationMap.put("maturityProcessItems", GeneralInformationProcessItem.DEFAULT.getOrganizationLevelProcessInformationItem());
-        productLineInformationMap.put("premiumFollowUpFrequency", transformPremiumFollowUp());
-        productLineInformationMap.put("modelFactorItems",GeneralInformationProcessItem.MODAL_FACTOR.getOrganizationLevelProcessInformationItem());
-        productLineInformationMap.put("discountFactorItems",GeneralInformationProcessItem.DISCOUNT_FACTOR.getOrganizationLevelProcessInformationItem());
+    private Map getProductLineGeneralInformation(Map productLineInformationMap,LineOfBusinessId lineOfBusinessId){
+        productLineInformationMap.put("quotationProcessItems", GeneralInformationProcessItem.DEFAULT.getOrganizationLevelProcessInformationItem(lineOfBusinessId));
+        productLineInformationMap.put("enrollmentProcessItems",  GeneralInformationProcessItem.DEFAULT.getOrganizationLevelProcessInformationItem(lineOfBusinessId));
+        productLineInformationMap.put("reinstatementProcessItems",  GeneralInformationProcessItem.REINSTATEMENT.getOrganizationLevelProcessInformationItem(lineOfBusinessId));
+        productLineInformationMap.put("endorsementProcessItems", GeneralInformationProcessItem.DEFAULT.getOrganizationLevelProcessInformationItem(lineOfBusinessId));
+        productLineInformationMap.put("claimProcessItems", GeneralInformationProcessItem.CLAIM.getOrganizationLevelProcessInformationItem(lineOfBusinessId));
+        productLineInformationMap.put("policyFeeProcessItems",GeneralInformationProcessItem.POLICY_FEE.getOrganizationLevelProcessInformationItem(lineOfBusinessId));
+        productLineInformationMap.put("policyProcessMinimumLimitItems", GeneralInformationProcessItem.MINIMUM_LIMIT.getOrganizationLevelProcessInformationItem(lineOfBusinessId));
+        productLineInformationMap.put("surrenderProcessItems", GeneralInformationProcessItem.SURRENDER.getOrganizationLevelProcessInformationItem(lineOfBusinessId));
+        productLineInformationMap.put("maturityProcessItems", GeneralInformationProcessItem.DEFAULT.getOrganizationLevelProcessInformationItem(lineOfBusinessId));
+        productLineInformationMap.put("premiumFollowUpFrequency", transformPremiumFollowUp(lineOfBusinessId));
+        productLineInformationMap.put("modelFactorItems",GeneralInformationProcessItem.MODAL_FACTOR.getOrganizationLevelProcessInformationItem(lineOfBusinessId));
+        productLineInformationMap.put("discountFactorItems",GeneralInformationProcessItem.DISCOUNT_FACTOR.getOrganizationLevelProcessInformationItem(lineOfBusinessId));
         return productLineInformationMap;
     }
 
-    public List<Map<String,Object>> transformPremiumFollowUp(){
-        List<Map<String,Object>> productLineProcessList = GeneralInformationProcessItem.PREMIUM_FOLLOW_UP.getOrganizationLevelProcessInformationItem();
+    public List<Map<String,Object>> transformPremiumFollowUp(LineOfBusinessId lineOfBusinessId){
+        List<Map<String,Object>> productLineProcessList = GeneralInformationProcessItem.PREMIUM_FOLLOW_UP.getOrganizationLevelProcessInformationItem(lineOfBusinessId);
         List<Map<String,Object>> premiumFrequencyFollowUpList = Lists.newArrayList();
         for (PremiumFrequency premiumFrequency : PremiumFrequency.values()){
             Map<String,Object> premiumFrequencyMap = Maps.newLinkedHashMap();

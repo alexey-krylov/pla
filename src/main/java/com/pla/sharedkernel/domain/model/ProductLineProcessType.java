@@ -8,12 +8,15 @@ import lombok.Getter;
 @Getter
 public enum ProductLineProcessType {
 
-    PURGE_TIME_PERIOD("Purge Time Period"),
-    FIRST_REMAINDER("First Reminder"),
-    SECOND_REMAINDER("Second Reminder"),
-    LAPSE("Lapse"),
-    CLOSURE("Closure"),
-    EARLY_DEATH_CRITERIA("Early Death Criteria");
+    PURGE_TIME_PERIOD("Purge Time Period (Days)"),
+    FIRST_REMAINDER("First Reminder (Days)"),
+    SECOND_REMAINDER("Second Reminder (Days)"),
+    LAPSE("Lapse (Days)"),
+    CLOSURE("Closure (Days)"),
+    EARLY_DEATH_CRITERIA("Early Death Criteria"),
+    TYPE("Type"),
+    INTEREST("Interest"),
+    CHARGES("Charges");
 
     private String description;
     private String fullDescription;
