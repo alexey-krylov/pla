@@ -213,7 +213,7 @@
                             </div>
                             <div class="form-group">
                                 <label  >Postal Code</label>
-                                <input type="text" class="form-control input-sm" name="postalCode"  placeholder="Enter postal code" ng-model="agentDetails.contactDetail.geoDetail.postalCode" maxlength="5" ng-pattern="numberPattern"/>
+                                <input type="text" class="form-control input-sm" name="postalCode"  placeholder="Enter postal code" ng-model="agentDetails.contactDetail.geoDetail.postalCode" maxlength="5" minlength="5" ng-pattern="numberPattern"/>
                             </div>
                             <div class="form-group required">
                                 <label  class="control-label">Town</label>
@@ -249,7 +249,7 @@
                             </div>
                             <div class="form-group">
                                 <label  >Postal Code</label>
-                                <input type="text" class="form-control input-sm" name="physicalPostalCode" placeholder="Enter postal code" ng-model="agentDetails.physicalAddress.physicalGeoDetail.postalCode"  maxlength="5" ng-pattern="numberPattern"/>
+                                <input type="text" class="form-control input-sm" name="physicalPostalCode" placeholder="Enter postal code" ng-model="agentDetails.physicalAddress.physicalGeoDetail.postalCode"  maxlength="5"  minlength="5" ng-pattern="numberPattern"/>
                             </div>
                             <div class="form-group required">
                                 <label  class="control-label">Town</label>
