@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with Jaspersoft Studio version 6.0.4.final using JasperReports Library version 6.0.4  -->
-<!-- 2015-05-07T18:23:55 -->
+<!-- 2015-05-07T18:28:16 -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="planReadyReckoner" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="d00c8d26-b471-4e08-b063-b05b93be6bca">
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
 	<queryString>
@@ -45,9 +45,9 @@
 		</band>
 	</pageHeader>
 	<detail>
-		<band height="139" splitType="Stretch">
+		<band height="117" splitType="Stretch">
 			<frame>
-				<reportElement x="0" y="0" width="800" height="139" uuid="aa076bd4-35d3-4728-8fae-b9cb9aac6929"/>
+				<reportElement x="0" y="0" width="800" height="117" uuid="aa076bd4-35d3-4728-8fae-b9cb9aac6929"/>
 				<box>
 					<topPen lineWidth="0.6"/>
 					<leftPen lineWidth="0.6"/>
@@ -55,14 +55,14 @@
 					<rightPen lineWidth="0.6"/>
 				</box>
 				<textField isStretchWithOverflow="true">
-					<reportElement x="70" y="11" width="370" height="30" uuid="d4d5119c-1dd2-4073-b86b-59ff12233ed2"/>
+					<reportElement x="70" y="11" width="370" height="19" uuid="d4d5119c-1dd2-4073-b86b-59ff12233ed2"/>
 					<textElement verticalAlignment="Middle">
 						<font size="14" isBold="true"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$F{product}]]></textFieldExpression>
 				</textField>
 				<frame>
-					<reportElement x="201" y="53" width="499" height="20" uuid="ff4b910a-a46b-4ca6-900b-8cf5c4c4c0f6"/>
+					<reportElement x="201" y="31" width="499" height="20" uuid="ff4b910a-a46b-4ca6-900b-8cf5c4c4c0f6"/>
 					<staticText>
 						<reportElement x="10" y="0" width="100" height="20" uuid="27e56bcd-c8bb-45c9-b8e1-4abccfed566e"/>
 						<textElement textAlignment="Right" verticalAlignment="Middle">
@@ -85,7 +85,7 @@
 					</textField>
 				</frame>
 				<frame>
-					<reportElement x="201" y="74" width="499" height="20" uuid="fb811a8d-ac2d-4d1d-948d-30dd9ab15246"/>
+					<reportElement x="201" y="52" width="499" height="20" uuid="fb811a8d-ac2d-4d1d-948d-30dd9ab15246"/>
 					<staticText>
 						<reportElement x="10" y="0" width="100" height="20" uuid="86ce4314-44ee-48a8-9b4e-2e52f3ea90df"/>
 						<textElement textAlignment="Right" verticalAlignment="Middle">
@@ -102,7 +102,7 @@
 					</textField>
 				</frame>
 				<frame>
-					<reportElement x="201" y="95" width="499" height="20" uuid="a9dc0105-bf25-4b29-81f7-f9408eaab4ff"/>
+					<reportElement x="201" y="73" width="499" height="20" uuid="a9dc0105-bf25-4b29-81f7-f9408eaab4ff"/>
 					<staticText>
 						<reportElement x="10" y="0" width="100" height="20" uuid="660ed1a6-609e-4d9e-bca4-17dd1498809c"/>
 						<textElement textAlignment="Right" verticalAlignment="Middle">
@@ -119,12 +119,12 @@
 					</textField>
 				</frame>
 				<subreport>
-					<reportElement x="341" y="114" width="360" height="23" uuid="7c6e8f21-838d-47bc-891d-8cab28f90efa"/>
+					<reportElement x="331" y="94" width="360" height="23" uuid="7c6e8f21-838d-47bc-891d-8cab28f90efa"/>
 					<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{coverageDetails})]]></dataSourceExpression>
 					<subreportExpression><![CDATA["jasperpdf/jasper/grouplife/coverage.jasper"]]></subreportExpression>
 				</subreport>
 				<staticText>
-					<reportElement x="227" y="116" width="85" height="21" uuid="cb18c4ee-10be-45fe-bba0-603cc0a9e054"/>
+					<reportElement x="227" y="94" width="85" height="21" uuid="cb18c4ee-10be-45fe-bba0-603cc0a9e054"/>
 					<textElement textAlignment="Right" verticalAlignment="Middle">
 						<font size="14" isBold="true"/>
 					</textElement>
