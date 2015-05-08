@@ -4,7 +4,9 @@ import com.google.common.collect.Lists;
 import com.pla.core.domain.model.plan.Plan;
 import com.pla.core.domain.model.plan.PlanCoverage;
 import com.pla.core.domain.model.plan.SumAssured;
+import com.pla.core.query.CoverageFinder;
 import com.pla.core.query.PlanFinder;
+import com.pla.core.repository.PlanRepository;
 import com.pla.publishedlanguage.contract.IPlanAdapter;
 import com.pla.publishedlanguage.dto.PlanCoverageDetailDto;
 import com.pla.sharedkernel.domain.model.Relationship;
@@ -15,8 +17,12 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+
+import static org.nthdimenzion.utils.UtilValidator.isEmpty;
+import static org.nthdimenzion.utils.UtilValidator.isNotEmpty;
 
 /**
  * Created by Samir on 4/22/2015.
@@ -27,9 +33,15 @@ public class PlanAdapterImpl implements IPlanAdapter {
 
     private PlanFinder planFinder;
 
+    private PlanRepository planRepository;
+
+    private CoverageFinder coverageFinder;
+
     @Autowired
-    public PlanAdapterImpl(PlanFinder planFinder) {
+    public PlanAdapterImpl(PlanFinder planFinder, PlanRepository planRepository, CoverageFinder coverageFinder) {
         this.planFinder = planFinder;
+        this.planRepository = planRepository;
+        this.coverageFinder = coverageFinder;
     }
 
     @Override
@@ -41,22 +53,43 @@ public class PlanAdapterImpl implements IPlanAdapter {
 
     @Override
     public boolean isValidPlanForRelationship(String planCode, Relationship relationship) {
+        List<Plan> plans = planRepository.findPlanByCodeAndName(planCode);
+        if (isEmpty(plans)) {
+            return false;
+        }
+        Plan plan = plans.get(0);
+        return plan.isPlanApplicableForRelationship(relationship);
+    }
+
+    @Override
+    public boolean isValidPlanCoverage(String planCode, String coverageCode) {
         return false;
     }
 
     @Override
     public boolean isValidPlanSumAssured(String planCode, BigDecimal sumAssured) {
-        return false;
-    }
-
-    @Override
-    public boolean isValidCoverageSumAssured(String planCode, String coverageCode, BigDecimal sumAssured) {
-        return false;
+        List<Plan> plans = planRepository.findPlanByCodeAndName(planCode);
+        if (isEmpty(plans)) {
+            return false;
+        }
+        Plan plan = plans.get(0);
+        return plan.isValidSumAssured(sumAssured);
     }
 
     @Override
     public boolean hasPlanContainsIncomeMultiplierSumAssured(String planCode) {
-        return false;
+        List<Plan> plans = planRepository.findPlanByCodeAndName(planCode);
+        if (isEmpty(plans)) {
+            return false;
+        }
+        Plan plan = plans.get(0);
+        return plan.hasPlanContainsSumAssuredTypeAsIncomeMultiplier();
+    }
+
+    @Override
+    public boolean isValidPlanCode(String planCode) {
+        List<Plan> plans = planRepository.findPlanByCodeAndName(planCode);
+        return isNotEmpty(plans);
     }
 
     private class PlanCoverageDetailTransformer implements Function<Plan, PlanCoverageDetailDto> {
@@ -75,7 +108,7 @@ public class PlanAdapterImpl implements IPlanAdapter {
 
             List<String> relations = plan.getPlanDetail().getApplicableRelationships().stream().map(new RelationshipTransformer()).collect(Collectors.toList());
             planCoverageDetailDto = planCoverageDetailDto.addRelationTypes(relations);
-            List<PlanCoverageDetailDto.CoverageDto> coverageDtoList = plan.getCoverages().stream().map(new CoverageTransformer(planCoverageDetailDto)).collect(Collectors.toList());
+            List<PlanCoverageDetailDto.CoverageDto> coverageDtoList = plan.getOptionalCoverages().stream().map(new CoverageTransformer(planCoverageDetailDto)).collect(Collectors.toList());
             planCoverageDetailDto = planCoverageDetailDto.addCoverage(coverageDtoList);
             return planCoverageDetailDto;
         }
@@ -91,7 +124,14 @@ public class PlanAdapterImpl implements IPlanAdapter {
 
         @Override
         public PlanCoverageDetailDto.CoverageDto apply(PlanCoverage coverage) {
-            PlanCoverageDetailDto.CoverageDto coverageDto = planCoverageDetailDto.new CoverageDto(coverage.getCoverageCode(), coverage.getCoverageName(), coverage.getCoverageId());
+            Map<String, Object> coverageMap = coverageFinder.getCoverageDetail(coverage.getCoverageId().getCoverageId());
+            String coverageCode = "";
+            String coverageName = "";
+            if (coverageMap != null) {
+                coverageCode = (String) coverageMap.get("coverageCode");
+                coverageName = (String) coverageMap.get("coverageName");
+            }
+            PlanCoverageDetailDto.CoverageDto coverageDto = planCoverageDetailDto.new CoverageDto(coverageCode, coverageName, coverage.getCoverageId());
             PlanCoverageDetailDto.SumAssuredDto sumAssuredDto = null;
             SumAssured sumAssured = coverage.getCoverageSumAssured();
             if (SumAssuredType.RANGE.equals(sumAssured.getSumAssuredType())) {

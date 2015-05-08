@@ -1,5 +1,8 @@
 package com.pla.sharedkernel.domain.model;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * @author: pradyumna
  * @since 1.0 12/03/2015
@@ -13,5 +16,13 @@ public enum Relationship {
 
     Relationship(String description) {
         this.description = description;
+    }
+
+    public static List<String> getAllRelation() {
+        List<String> allRelations = new ArrayList<>();
+        for (Relationship relationship : Relationship.values()) {
+            allRelations.add(relationship.description);
+        }
+        return allRelations;
     }
 }

@@ -16,9 +16,11 @@ public interface IPlanAdapter {
 
     boolean isValidPlanForRelationship(String planCode, Relationship relationship);
 
+    boolean isValidPlanCoverage(String planCode, String coverageCode);
+
     boolean isValidPlanSumAssured(String planCode, BigDecimal sumAssured);
 
-    boolean isValidCoverageSumAssured(String planCode, String coverageCode, BigDecimal sumAssured);
-
     boolean hasPlanContainsIncomeMultiplierSumAssured(String planCode);
+
+    boolean isValidPlanCode(String planCode);
 }

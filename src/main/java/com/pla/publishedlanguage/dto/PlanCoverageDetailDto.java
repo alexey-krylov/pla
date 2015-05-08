@@ -6,6 +6,10 @@ import lombok.Getter;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+
+import static org.nthdimenzion.utils.UtilValidator.isNotEmpty;
 
 /**
  * Created by Samir on 4/22/2015.
@@ -67,6 +71,19 @@ public class PlanCoverageDetailDto {
         public SumAssuredDto(List<BigDecimal> sumAssureds) {
             this.sumAssureds = sumAssureds;
         }
+
+
+        public String getSumAssuredInString() {
+            String sumAssuredInString = "";
+            if (isNotEmpty(sumAssureds)) {
+                for (BigDecimal sumAssured : sumAssureds) {
+                    sumAssuredInString = sumAssuredInString + sumAssured.toString() + ",";
+                }
+            } else if (minimumSumAssured != null && maximumSumAssured != null) {
+                sumAssuredInString = minimumSumAssured.toString() + " to " + maximumSumAssured.toString() + " multiples of" + multiplesOf.toString();
+            }
+            return sumAssuredInString;
+        }
     }
 
     @Getter
@@ -91,5 +108,39 @@ public class PlanCoverageDetailDto {
             return this;
         }
 
+        public List<String> getCoverageName(List<CoverageDto> coverageDtoList) {
+            List<String> coverageNames = coverageDtoList.stream().map(new Function<CoverageDto, String>() {
+                @Override
+                public String apply(CoverageDto coverageDto) {
+                    return coverageDto.coverageName;
+                }
+            }).collect(Collectors.toList());
+            return coverageNames;
+
+        }
+    }
+
+    public static int getNoOfOptionalCoverage(List<PlanCoverageDetailDto> planCoverageDetailDtoList) {
+        int noOfCoverage = 0;
+        for (PlanCoverageDetailDto planCoverageDetailDto : planCoverageDetailDtoList) {
+            noOfCoverage = noOfCoverage + planCoverageDetailDto.getCoverageDtoList().size();
+        }
+        return noOfCoverage;
+    }
+
+    public String getRelations() {
+        String relations = "";
+        for (String relationship : relationTypes) {
+            relations = relations + relationship + ",";
+        }
+        return relations;
+    }
+
+    public String coveragesInString() {
+        String coveragesInString = "";
+        for (CoverageDto coverageDto : coverageDtoList) {
+            coveragesInString = coveragesInString + coverageDto.getCoverageName() + " (" + coverageDto.getCoverageCode() + " )" + ",";
+        }
+        return coveragesInString;
     }
 }

@@ -49,7 +49,13 @@ class InsuredDependent {
 
     private Relationship relationship;
 
-    private Set<Policy> dependentPolicies;
+    private String occupationClass;
+
+    private String occupationCategory;
+
+    private PlanPremiumDetail planPremiumDetail;
+
+    private Set<CoveragePremiumDetail> coveragePremiumDetails;
 
     InsuredDependent(InsuredDependentBuilder insuredDependentBuilder) {
         checkArgument(insuredDependentBuilder != null);
@@ -65,7 +71,6 @@ class InsuredDependent {
         this.dateOfBirth = insuredDependentBuilder.getDateOfBirth();
         this.gender = insuredDependentBuilder.getGender();
         this.category = insuredDependentBuilder.getCategory();
-        this.dependentPolicies = insuredDependentBuilder.getPolicies();
     }
 
     public static InsuredDependentBuilder getInsuredDependentBuilder(PlanId planId) {

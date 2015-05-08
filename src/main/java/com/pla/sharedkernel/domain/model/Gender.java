@@ -6,11 +6,23 @@
 
 package com.pla.sharedkernel.domain.model;
 
+import com.google.common.collect.Lists;
+
+import java.util.List;
+
 /**
  * @author: Samir
  * @since 1.0 26/03/2015
  */
 public enum Gender {
 
-    MALE ,FEMALE
+    MALE, FEMALE;
+
+    public static List<String> getAllGender() {
+        List<String> genders = Lists.newArrayList();
+        for (Gender gender : Gender.values()) {
+            genders.add(gender.name());
+        }
+        return genders;
+    }
 }

@@ -40,6 +40,13 @@ public class AppUtils {
         return getDateTimeFormat().parseLocalDate(date);
     }
 
+    public static String toString(LocalDate date) {
+        if (date == null) {
+            return "";
+        }
+        return date.toString(AppConstants.DD_MM_YYY_FORMAT);
+    }
+
     public static Money toMoney(String money) {
         return Money.of(DEFAULT_CURRENCY, new BigDecimal(money));
     }
@@ -49,5 +56,6 @@ public class AppUtils {
         UserDetails userDetails = (UserDetails) request.getSession().getAttribute(AppConstants.LOGGED_IN_USER);
         return userDetails;
     }
+
 }
 

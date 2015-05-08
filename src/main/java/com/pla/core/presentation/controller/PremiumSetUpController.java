@@ -46,8 +46,11 @@ import java.util.Map;
 public class PremiumSetUpController {
 
     private static final String PREMIUM_TEMPLATE_FILE_NAME_SUFFIX = "-PremiumTemplate.xls";
+
     private PremiumService premiumService;
+
     private CommandGateway commandGateway;
+
     private PlanRepository planRepository;
 
     @Autowired

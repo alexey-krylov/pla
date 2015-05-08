@@ -1,15 +1,24 @@
 package com.pla.quotation.application.service.grouplife;
 
+import com.google.common.collect.Lists;
 import com.pla.core.domain.model.agent.AgentId;
+import com.pla.publishedlanguage.contract.IPlanAdapter;
 import com.pla.quotation.application.command.grouplife.SearchGlQuotationDto;
+import com.pla.quotation.application.service.GLInsuredExcelGenerator;
+import com.pla.quotation.application.service.GLInsuredExcelParser;
 import com.pla.quotation.domain.model.grouplife.Proposer;
+import com.pla.quotation.presentation.dto.PlanDetailDto;
 import com.pla.quotation.query.*;
+import com.pla.sharedkernel.identifier.PlanId;
 import com.pla.sharedkernel.identifier.QuotationId;
+import com.pla.sharedkernel.util.PDFGeneratorUtils;
+import net.sf.jasperreports.engine.JRException;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
@@ -21,21 +30,51 @@ import java.util.stream.Collectors;
 @Service
 public class GLQuotationService {
 
-
     private GLQuotationFinder glQuotationFinder;
 
+    private IPlanAdapter planAdapter;
+
+    private GLInsuredExcelGenerator glInsuredExcelGenerator;
+
+    private GLInsuredExcelParser glInsuredExcelParser;
+
     @Autowired
-    public GLQuotationService(GLQuotationFinder glQuotationFinder) {
+    public GLQuotationService(GLQuotationFinder glQuotationFinder, IPlanAdapter planAdapter, GLInsuredExcelGenerator glInsuredExcelGenerator, GLInsuredExcelParser glInsuredExcelParser) {
         this.glQuotationFinder = glQuotationFinder;
+        this.planAdapter = planAdapter;
+        this.glInsuredExcelGenerator = glInsuredExcelGenerator;
+        this.glInsuredExcelParser = glInsuredExcelParser;
     }
 
-    public HSSFWorkbook getPlanDetailExcel() {
-        HSSFWorkbook hssfWorkbook = new HSSFWorkbook();
-        return hssfWorkbook;
+    public byte[] getPlanReadyReckoner(String quotationId) throws IOException, JRException {
+        AgentDetailDto agentDetailDto = getAgentDetail(new QuotationId(quotationId));
+        List<PlanId> planIds = getAgentAuthorizedPlans(agentDetailDto.getAgentId());
+        List<PlanDetailDto> planDetailDtoList = PlanDetailDto.transformToPlanDetail(planAdapter.getPlanAndCoverageDetail(planIds));
+        byte[] pdfData = PDFGeneratorUtils.createPDFReportByList(planDetailDtoList, "jasperpdf/template/grouplife/planReadyReckoner.jrxml");
+        return pdfData;
     }
 
-    public HSSFWorkbook getInsuredTemplateExcel() {
-        HSSFWorkbook hssfWorkbook = new HSSFWorkbook();
+    public boolean isValidInsuredTemplate(HSSFWorkbook insuredTemplateWorkbook, boolean samePlanForAllCategory, boolean samePlanForAllRelationship) {
+        return glInsuredExcelParser.isValidInsuredExcel(insuredTemplateWorkbook, samePlanForAllCategory, samePlanForAllRelationship);
+    }
+
+    private List<PlanId> getAgentAuthorizedPlans(String agentId) {
+        List<Map<String, Object>> authorizedPlans = glQuotationFinder.getAgentAuthorizedPlan(agentId);
+        List<PlanId> planIds = authorizedPlans.stream().map(new Function<Map<String, Object>, PlanId>() {
+            @Override
+            public PlanId apply(Map<String, Object> authorizePlanMap) {
+                String planId = (String) authorizePlanMap.get("planId");
+                return new PlanId(planId);
+            }
+        }).collect(Collectors.toList());
+        return planIds;
+    }
+
+    public HSSFWorkbook getInsuredTemplateExcel(String quotationId) throws IOException {
+        AgentDetailDto agentDetailDto = getAgentDetail(new QuotationId(quotationId));
+        List<PlanId> planIds = getAgentAuthorizedPlans(agentDetailDto.getAgentId());
+        List<InsuredDto> insuredDtos = Lists.newArrayList();
+        HSSFWorkbook hssfWorkbook = glInsuredExcelGenerator.generateInsuredExcel(insuredDtos, planIds);
         return hssfWorkbook;
     }
 
@@ -66,13 +105,6 @@ public class GLQuotationService {
         return new ProposerDto(proposer);
     }
 
-    public List<GlQuotationDto> getAllQuotation() {
-        List<Map> allQuotations = glQuotationFinder.getAllQuotation();
-        List<GlQuotationDto> glQuotationDtoList = allQuotations.stream().map(new TransformToGLQuotationDto()).collect(Collectors.toList());
-        return glQuotationDtoList;
-    }
-
-
     public List<GlQuotationDto> searchQuotation(SearchGlQuotationDto searchGlQuotationDto) {
         List<Map> allQuotations = glQuotationFinder.searchQuotation(searchGlQuotationDto.getQuotationNumber(), searchGlQuotationDto.getAgentCode(), searchGlQuotationDto.getProposerName());
         List<GlQuotationDto> glQuotationDtoList = allQuotations.stream().map(new TransformToGLQuotationDto()).collect(Collectors.toList());
@@ -90,7 +122,7 @@ public class GLQuotationService {
             Proposer proposerMap = map.get("proposer") != null ? (Proposer) map.get("proposer") : null;
             String proposerName = proposerMap != null ? proposerMap.getProposerName() : "";
             String parentQuotationId = parentQuotationIdMap != null ? parentQuotationIdMap.get("parentQuotationId") != null ? (String) parentQuotationIdMap.get("parentQuotationId") : "" : "";
-            GlQuotationDto glQuotationDto = new GlQuotationDto(new QuotationId(quotationId), (Integer) map.get("versionNumber"), null, null, null, new QuotationId(parentQuotationId), quotationStatus, quotationNumber, proposerName,null);
+            GlQuotationDto glQuotationDto = new GlQuotationDto(new QuotationId(quotationId), (Integer) map.get("versionNumber"), null, null, null, new QuotationId(parentQuotationId), quotationStatus, quotationNumber, proposerName, null);
             return glQuotationDto;
         }
     }
