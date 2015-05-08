@@ -1,0 +1,1 @@
+This Test suite contains the  creation of a Benefit, Creation of a coverage with the same benefit , Creation of  a Group Life plan with the same Coverage and Inactivation of the Coverage associated with the Plan.
