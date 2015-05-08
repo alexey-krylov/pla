@@ -43,8 +43,12 @@ angular.module('createAgent',['common','ngRoute','mgcrea.ngStrap.select','mgcrea
                 };
                 /*  CHECK WHETHER EMPLOYEE EXISTS IN HRMS */
                 $scope.editContactDetails=function() {
-                    $scope.EmployeeDetails = $scope.searchAgent();
-                    //console.log($scope.EmployeeDetails);
+                   // $scope.EmployeeDetails = $scope.searchAgent();
+                    $http.get("/pla/core/agent/getemployeedeatil",{params:$scope.search})
+                        .success(function(data,status){
+                            $scope.EmployeeDetails = data;
+                        });
+                    console.log($scope.EmployeeDetails);
                     if ($scope.EmployeeDetails) {
                         if ($scope.EmployeeDetails.employeeId) {
                               return true;

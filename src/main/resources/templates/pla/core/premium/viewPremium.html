@@ -17,8 +17,7 @@
 <div class="container">
     <div class="alert alert-success" role="alert" th:if="!${#strings.isEmpty(message)}">
         <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
-
-        <p th:errors="${message}"></p>
+        <p th:text="${message}"></p>
     </div>
     <div class="row">
         <div class="col-lg-12">
@@ -61,7 +60,8 @@
                         </thead>
                         <tbody>
                         <tr th:each="premium : ${listOfPremium}">
-                            <td th:text="${premium.planName}"></td>
+                           <!-- <p th:text="${listOfPremium}"></p>-->
+                           <td th:text="${premium.planName}"></td>
                             <td th:text="${premium.coverageNames}"></td>
                             <td style="text-align:center" class="pop" >
                                 <button href="#" class="details-box btn btn-primary btn-xs" rel="popover"  data-content="" > Influencing-Factors
@@ -75,6 +75,7 @@
                             <td th:text="${premium.premiumFactor}">Rate(per thousand)</td>
                             <td th:text="${premium.premiumRateFrequency}">Per Year</td>
                             <td th:text="${#dates.format(premium.effectiveFrom,'dd/MM/yyyy')}">09/03/2014</td>
+
                         </tr>
 
                         </tbody>
