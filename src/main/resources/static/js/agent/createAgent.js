@@ -43,8 +43,10 @@ angular.module('createAgent',['common','ngRoute','mgcrea.ngStrap.select','mgcrea
                 };
                 /*  CHECK WHETHER EMPLOYEE EXISTS IN HRMS */
                 $scope.editContactDetails=function() {
-                    if ($scope.agentDetails) {
-                        if ($scope.agentDetails.agentProfile.employeeId) {
+                    $scope.EmployeeDetails = $scope.searchAgent();
+                    //console.log($scope.EmployeeDetails);
+                    if ($scope.EmployeeDetails) {
+                        if ($scope.EmployeeDetails.employeeId) {
                               return true;
                         } else {
                             return false;
