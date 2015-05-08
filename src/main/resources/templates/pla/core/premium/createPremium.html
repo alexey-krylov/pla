@@ -27,6 +27,7 @@
                         log = numFiles > 1 ? numFiles + ' files selected' : label;
                 if (input.length) {
                     input.val(log);
+
                 } else {
                     if (log) alert(log);
                 }
@@ -45,6 +46,7 @@
     var coverageId = /*[[${createPremiumCommand.coverageId}]]*/null;
     if (coverageId) {
         createPremium.definedFor = 'optionalCoverage';
+        createPremium.coverageId = coverageId;
     } else {
         createPremium.definedFor = 'plan';
     }
@@ -64,9 +66,13 @@
         <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
         <span class="sr-only">Error:</span>
         <p th:errors="${createPremiumCommand}"></p>
-    </div>
+   </div>
+    <div class="alert alert-danger" role="alert" th:text="${message !=null} ?${message}"></div>
+
     <form class="css-form" method="post" enctype="multipart/form-data" action="uploadpremiumdata" name="premiumForm" id="premiumForm" ng-submit="submitFormToServer()"
           ng-controller="CreatePremiumController">
+
+
         <div class="panel panel-primary">
             <div class="panel-heading">
                 <div class="row">
@@ -101,7 +107,8 @@
                     <div ng-switch="" on="createPremium.definedFor" class="animate-switch-container">
                         <div class="form-group col-md-6 required animate-switch" ng-switch-when="optionalCoverage">
                             <label class="control-label">Optional Coverage</label>
-                            <select class="form-control input-sm" id="optionalCoverage" ng-required="true" ng-model="createPremium.coverageId" ng-disabled="!createPremium.planId"
+                            <input type="hidden" name="coverageId" class="form-control input-lg" value="{{createPremium.coverageId}}"/>
+                           <select class="form-control input-sm" id="optionalCoverage" ng-required="true" ng-model="createPremium.coverageId" ng-disabled="!createPremium.planId"
                                     ng-options="optionalCoverage.coverageId as optionalCoverage.coverageName for optionalCoverage in optionalCoverageList | orderBy:'coverageName'">
                                 <option value="">----Select Optional Coverage ----</option>
                             </select>
@@ -193,7 +200,7 @@
 
     function uploadTemplate() {
         $('#premiumForm').attr('action', 'uploadpremiumdata');
-        return true;
+           return true;
     }
 </script>
 <style>

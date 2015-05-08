@@ -31,11 +31,15 @@ App.controller('CreatePremiumController', ['$scope', '$http', function ($scope, 
         if ($scope.createPremium.definedFor == "plan") {
             $scope.showOptionalCoverage = false;
         } else {
+           // $scope.createPremium.definedFor = "optionalCoverage"
             $scope.showOptionalCoverage = true;
         }
 
     }
+   /* $scope.submitFormToServer=function(){
+       console.log(createPremium);
 
+    };*/
     $http.get('/pla/core/plan/getallplan').success(function (data) {
         for (var i = 0; i < data.length; i++) {
             $scope.planList = data[i];
@@ -53,7 +57,7 @@ App.controller('CreatePremiumController', ['$scope', '$http', function ($scope, 
             $scope.premiumForm.planId = planId;
             $http.get('/pla/core/plan/getcoveragebyplanid/' + planId).success(function (data) {
                 $scope.optionalCoverageList = data;
-                console.log($scope.optionalCoverageList);
+                //console.log($scope.optionalCoverageList);
             });
         }
     });

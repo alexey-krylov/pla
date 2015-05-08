@@ -44,6 +44,7 @@ angular.module('createQuotation',['common','ngRoute','mgcrea.ngStrap.select','mg
                     discounts:0
                 }
             };
+
             $scope.quotationDetails.basic = agentDetails;
             $scope.quotationDetails.proposer = proposerDetails;
             /*used for bs-dropdown*/
@@ -193,12 +194,18 @@ angular.module('createQuotation',['common','ngRoute','mgcrea.ngStrap.select','mg
                     if(data.status="200"){
                         saveStep();
                         $http.get("/pla/quotation/getpremiumdetail/"+ $scope.quotationId)
-                            .success(function(){
+                            .success(function(data){
+                                console.log(data);
 
                             })
                     }
                 });
             };
+
+            $scope.savePremiumDetails = function(){
+
+
+            }
 
             $scope.back = function(){
                 $window.location.href= 'listgrouplifequotation';
