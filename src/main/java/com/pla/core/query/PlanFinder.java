@@ -11,6 +11,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.joda.JodaModule;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import com.mongodb.BasicDBObject;
 import com.pla.core.domain.model.plan.Plan;
 import com.pla.core.domain.model.plan.PlanCoverage;
@@ -18,6 +19,7 @@ import com.pla.core.dto.CoverageDto;
 import com.pla.sharedkernel.domain.model.CoverageType;
 import com.pla.sharedkernel.identifier.CoverageId;
 import com.pla.sharedkernel.identifier.PlanId;
+import org.nthdimenzion.utils.UtilValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.BasicQuery;
@@ -168,29 +170,34 @@ public class PlanFinder {
 
         @Override
         public Map<String, Object> apply(Map planCoverageMap) {
+            Map map = Maps.newLinkedHashMap();
             CoverageDto coverageMap = allCoverages.stream().filter(new Predicate<CoverageDto>() {
                 @Override
                 public boolean test(CoverageDto coverageMap) {
                     return planCoverageMap.get("coverageId").equals(coverageMap.getCoverageId());
                 }
             }).findAny().get();
-            planCoverageMap.put("coverageName", coverageMap.getCoverageName());
-            return planCoverageMap;
+            map.put("coverageName", coverageMap.getCoverageName());
+            return map;
         }
     }
 
-    public List<CoverageId> getAllCoverageAssociatedWithPlan(){
+    public List<CoverageId> getAllCoverageAssociatedWithPlan() {
         Criteria premiumCriteria = Criteria.where("coverages.coverageType").is(CoverageType.OPTIONAL);
         Query query = new Query(premiumCriteria);
         query.fields().include("coverages.coverageId.coverageId");
         List<Plan> coveragesAssociatedWithPlan = mongoTemplate.find(query, Plan.class);
         List<CoverageId> coverageList = Lists.newArrayList();
-        for (Plan plan : coveragesAssociatedWithPlan){
-            PlanCoverage planCoverage =  plan.getCoverages().iterator().next();
+        for (Plan plan : coveragesAssociatedWithPlan) {
+            PlanCoverage planCoverage = plan.getCoverages().iterator().next();
             if (Optional.ofNullable(planCoverage).isPresent())
                 coverageList.add(planCoverage.getCoverageId());
         }
         return coverageList;
     }
 
+    public String getCoverageAssociatedWithPremiumPlan(String coverageId) {
+        Map<String, Object> coverageDetail = coverageFinder.getCoverageDetail(coverageId);
+        return UtilValidator.isNotEmpty(coverageDetail)?(String)coverageDetail.get("coverageName"):"";
+    }
 }

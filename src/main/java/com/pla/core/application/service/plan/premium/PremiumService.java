@@ -89,10 +89,10 @@ public class PremiumService {
             plans.put("premiumFactor", PremiumFactor.valueOf((String) plans.get("premiumFactor")).getDescription());
             if (isNotEmpty(planName))
                 plans.put("planName", planName);
-            String coverageId = (String) plans.get("coverageId");
+            Map coverageId = (Map) plans.get("coverageId");
             plans.put("coverageNames", "");
             if (isNotEmpty(coverageId)) {
-                List<Map> coverages = planFinder.getAllOptionalCoverage(new PlanId(planId));
+                String coverages = planFinder.getCoverageAssociatedWithPremiumPlan((String) coverageId.get("coverageId"));
                 plans.put("coverageNames", coverages);
             }
             listOfPremiumPlan.add(plans);
