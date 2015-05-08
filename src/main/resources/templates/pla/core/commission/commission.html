@@ -22,7 +22,9 @@
                             <label class="control-label">{{override}} Commissions Available For</label>
                             <select class="form-control input-sm" id="commissionsAvailableFor" ng-model="commissionDetails.availableFor" ng-required="true" th:if="${commissiontype=='Override'}" ng-disabled="viewType!='create'">
                                 <option value="">--Select One--</option>
-                                <option th:each="desig:${designation}" th:value="${desig}" th:text="${desig.description}" th:if="${!desig.toString().equals('AGENT')}"></option>
+                                <option th:each="desig:${designation}" th:value="${desig}"
+                                        th:text="${desig.description}"
+                                        th:if="${!(desig.toString().equals('AGENT')) and !(desig.toString().equals('BROKER'))}"></option>
                             </select>
                             <select class="form-control input-sm" id="commissionsAvailableFor" ng-model="commissionDetails.availableFor" ng-required="true" th:if="${commissiontype=='Normal'}" ng-disabled="viewType!='create'">
                                 <option value="">--Select One--</option>
