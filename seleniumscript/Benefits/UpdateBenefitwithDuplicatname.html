@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head profile="http://selenium-ide.openqa.org/profiles/test-case">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link rel="selenium.base" href="http://5.9.249.195:6443/" />
+<title>UpdateBenefitwithDuplicatname</title>
+</head>
+<body>
+<table cellpadding="1" cellspacing="1" border="1">
+<thead>
+<tr><td rowspan="1" colspan="3">UpdateBenefitwithDuplicatname</td></tr>
+</thead><tbody>
+<!--Click Core-->
+<tr>
+	<td>click</td>
+	<td>//div[@id='cssmenu']/ul/li[2]/a</td>
+	<td></td>
+</tr>
+<!--Click Benefits-->
+<tr>
+	<td>clickAndWait</td>
+	<td>//div[@id='cssmenu']/ul/li[2]/ul/li[2]/a</td>
+	<td></td>
+</tr>
+<tr>
+	<td>pause</td>
+	<td>2000</td>
+	<td></td>
+</tr>
+<!--Type-in Search input field-->
+<tr>
+	<td>sendKeys</td>
+	<td>//div[@id='benefit-table_filter']/label/input</td>
+	<td>${BenefitName1}</td>
+</tr>
+<tr>
+	<td>verifyText</td>
+	<td>//table[@id='benefit-table']/tbody/tr/td</td>
+	<td>${BenefitName1}</td>
+</tr>
+<!--Click Update button-->
+<tr>
+	<td>click</td>
+	<td>xpath=(//button[@type='button'])[8]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>pause</td>
+	<td>2000</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>//form[@id='createBenefit']/div/div[3]/div/input</td>
+	<td>${BenefitName}_123</td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>//form[@id='createBenefit']/div[2]/button</td>
+	<td></td>
+</tr>
+<tr>
+	<td>pause</td>
+	<td>2000</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertText</td>
+	<td>//form[@id='createBenefit']/div/div[2]</td>
+	<td>Benefit already described</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>//form[@id='createBenefit']/div[2]/button[2]</td>
+	<td></td>
+</tr>
+</tbody></table>
+</body>
+</html>
