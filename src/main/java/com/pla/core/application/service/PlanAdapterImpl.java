@@ -52,6 +52,13 @@ public class PlanAdapterImpl implements IPlanAdapter {
     }
 
     @Override
+    public List<PlanCoverageDetailDto> getAllPlanAndCoverageDetail() {
+        List<Plan> plans = planFinder.findAllPlanForThymeleaf();
+        List<PlanCoverageDetailDto> planCoverageDetailDtoList = plans.stream().map(new PlanCoverageDetailTransformer()).collect(Collectors.toList());
+        return planCoverageDetailDtoList;
+    }
+
+    @Override
     public boolean isValidPlanForRelationship(String planCode, Relationship relationship) {
         List<Plan> plans = planRepository.findPlanByCodeAndName(planCode);
         if (isEmpty(plans)) {
