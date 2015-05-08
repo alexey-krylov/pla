@@ -170,15 +170,14 @@ public class PlanFinder {
 
         @Override
         public Map<String, Object> apply(Map planCoverageMap) {
-            Map map = Maps.newLinkedHashMap();
             CoverageDto coverageMap = allCoverages.stream().filter(new Predicate<CoverageDto>() {
                 @Override
                 public boolean test(CoverageDto coverageMap) {
                     return planCoverageMap.get("coverageId").equals(coverageMap.getCoverageId());
                 }
             }).findAny().get();
-            map.put("coverageName", coverageMap.getCoverageName());
-            return map;
+            planCoverageMap.put("coverageName", coverageMap.getCoverageName());
+            return planCoverageMap;
         }
     }
 
