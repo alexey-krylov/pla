@@ -67,8 +67,10 @@
         <span class="sr-only">Error:</span>
         <p th:errors="${createPremiumCommand}"></p>
    </div>
-    <div class="alert alert-danger" role="alert" th:text="${message !=null} ?${message}"></div>
-
+    <div class="alert alert-danger" role="alert" th:if="!${#strings.isEmpty(message)}">
+        <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+        <p th:text="${message}"></p>
+    </div>
     <form class="css-form" method="post" enctype="multipart/form-data" action="uploadpremiumdata" name="premiumForm" id="premiumForm" ng-submit="submitFormToServer()"
           ng-controller="CreatePremiumController">
 
