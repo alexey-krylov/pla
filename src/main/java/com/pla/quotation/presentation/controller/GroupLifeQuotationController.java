@@ -8,7 +8,9 @@ import com.pla.quotation.query.PremiumDetailDto;
 import com.pla.quotation.query.ProposerDto;
 import com.pla.sharedkernel.identifier.QuotationId;
 import com.wordnik.swagger.annotations.ApiOperation;
+import net.sf.jasperreports.engine.JRException;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.poifs.filesystem.POIFSFileSystem;
 import org.axonframework.commandhandling.gateway.CommandGateway;
 import org.nthdimenzion.presentation.Result;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -156,25 +158,24 @@ public class GroupLifeQuotationController {
         }
     }
 
-    @RequestMapping(value = "/downloadplandetail", method = RequestMethod.GET)
-    public void downloadPlanDetail(HttpServletResponse response) throws IOException {
+    @RequestMapping(value = "/downloadplandetail/{quotationId}", method = RequestMethod.GET)
+    public void downloadPlanDetail(@PathVariable("quotationId") String quotationId, HttpServletResponse response) throws IOException, JRException {
         response.reset();
-        response.setContentType("application/msexcel");
-        response.setHeader("content-disposition", "attachment; filename=" + "plandetail.xls" + "");
+        response.setContentType("application/pdf");
+        response.setHeader("content-disposition", "attachment; filename=" + "planReadyReckoner.pdf" + "");
         OutputStream outputStream = response.getOutputStream();
-        HSSFWorkbook planDetailExcel = glQuotationService.getPlanDetailExcel();
-        planDetailExcel.write(outputStream);
+        outputStream.write(glQuotationService.getPlanReadyReckoner(quotationId));
         outputStream.flush();
         outputStream.close();
     }
 
-    @RequestMapping(value = "/downloadinsuredtemplate", method = RequestMethod.GET)
-    public void downloadInsuredTemplate(HttpServletResponse response) throws IOException {
+    @RequestMapping(value = "/downloadinsuredtemplate/{quotationId}", method = RequestMethod.GET)
+    public void downloadInsuredTemplate(@PathVariable("quotationId") String quotationId, HttpServletResponse response) throws IOException {
         response.reset();
         response.setContentType("application/msexcel");
         response.setHeader("content-disposition", "attachment; filename=" + "insuredTemplate.xls" + "");
         OutputStream outputStream = response.getOutputStream();
-        HSSFWorkbook planDetailExcel = glQuotationService.getInsuredTemplateExcel();
+        HSSFWorkbook planDetailExcel = glQuotationService.getInsuredTemplateExcel(quotationId);
         planDetailExcel.write(outputStream);
         outputStream.flush();
         outputStream.close();
@@ -182,10 +183,16 @@ public class GroupLifeQuotationController {
 
     @RequestMapping(value = "/uploadinsureddetail", method = RequestMethod.POST)
     @ResponseBody
-    public Result uploadInsuredDetail(UploadInsuredDetailDto uploadInsuredDetailDto) {
+    public Result uploadInsuredDetail(UploadInsuredDetailDto uploadInsuredDetailDto) throws IOException {
         MultipartFile file = uploadInsuredDetailDto.getFile();
         if (!("application/msexcel".equals(file.getContentType()) || "application/vnd.ms-excel".equals(file.getContentType()))) {
             return Result.failure("Uploaded file is not valid excel");
+        }
+        POIFSFileSystem fs = new POIFSFileSystem(file.getInputStream());
+        HSSFWorkbook insuredTemplateWorkbook = new HSSFWorkbook(fs);
+        boolean isValidInsuredTemplate = glQuotationService.isValidInsuredTemplate(insuredTemplateWorkbook, uploadInsuredDetailDto.isSamePlanForAllCategory(), uploadInsuredDetailDto.isSamePlanForAllRelation());
+        if (!isValidInsuredTemplate) {
+            return Result.failure("Uploaded Insured template is not valid.Please download to check the errors");
         }
         return Result.success("Insured detail uploaded successfully");
     }

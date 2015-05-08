@@ -53,6 +53,8 @@ public class MasterFinder {
 
     public static final String FIND_ALL_OCCUPATION_CLASS_QUERY = "SELECT DISTINCT(CODE) FROM occupation_class";
 
+    public static final String FIND_ALL_OCCUPATION_CLASSIFICATION_QUERY = "SELECT DISTINCT(description) FROM occupation_class";
+
     public static final String FIND_ALL_DESIGNATION_QUERY = "SELECT * FROM `designation`";
 
     public List<Map<String, Object>> getGeoByGeoType(GeoType geoType) {
@@ -90,6 +92,10 @@ public class MasterFinder {
 
     public List<Map<String, Object>> getAllOccupationClass() {
         return namedParameterJdbcTemplate.query(FIND_ALL_OCCUPATION_CLASS_QUERY, new ColumnMapRowMapper());
+    }
+
+    public List<Map<String, Object>> getAllOccupationClassification() {
+        return namedParameterJdbcTemplate.query(FIND_ALL_OCCUPATION_CLASSIFICATION_QUERY, new ColumnMapRowMapper());
     }
 
 

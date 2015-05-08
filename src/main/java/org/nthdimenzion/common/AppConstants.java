@@ -37,4 +37,9 @@ public interface AppConstants {
     String PREMIUM_CELL_HEADER_NAME = "Premium";
 
     String ERROR_CELL_HEADER_NAME = "Error Message";
+
+    String DD_MM_YYY_FORMAT = "dd/MM/yyyy";
+
+    String OPTIONAL_COVERAGE_HEADER = "OptionalCoverage";
+
 }

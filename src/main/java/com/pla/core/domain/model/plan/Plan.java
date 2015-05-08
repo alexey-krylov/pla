@@ -54,7 +54,6 @@ public class Plan extends AbstractAnnotatedAggregateRoot<PlanId> {
     private Term premiumTerm;
     private Term policyTerm;
     private Set<PlanCoverage> coverages = new HashSet<PlanCoverage>();
-    private PlanDetail planDetails;
 
     Plan() {
 
@@ -277,9 +276,28 @@ public class Plan extends AbstractAnnotatedAggregateRoot<PlanId> {
         super.registerEvent(new PlanDeletedEvent(this.planId));
     }
 
+
+    public List<PlanCoverage> getOptionalCoverages() {
+        List<PlanCoverage> optionalCoverages = coverages.stream().filter(new Predicate<PlanCoverage>() {
+            @Override
+            public boolean test(PlanCoverage planCoverage) {
+                return CoverageType.OPTIONAL.equals(planCoverage.getCoverageType());
+            }
+        }).collect(Collectors.toList());
+        return optionalCoverages;
+    }
+
     public void withdrawPlan() {
         this.status = PlanStatus.WITHDRAWN;
         this.planDetail.setWithdrawalDate(LocalDate.now());
+    }
+
+    public boolean isPlanApplicableForRelationship(Relationship relationship) {
+        return this.getPlanDetail().getApplicableRelationships().contains(relationship);
+    }
+
+    public boolean hasPlanContainsSumAssuredTypeAsIncomeMultiplier() {
+        return SumAssuredType.INCOME_MULTIPLIER.equals(this.sumAssured.getSumAssuredType());
     }
 
 }

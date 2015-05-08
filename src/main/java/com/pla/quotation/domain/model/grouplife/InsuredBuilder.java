@@ -40,7 +40,9 @@ public class InsuredBuilder {
 
     private Set<InsuredDependent> insuredDependents;
 
-    private Set<Policy> policies;
+    private PlanPremiumDetail planPremiumDetail;
+
+    private Set<CoveragePremiumDetail> coveragePremiumDetails;
 
     InsuredBuilder(PlanId insuredPlan) {
         checkArgument(insuredPlan != null);
@@ -91,11 +93,6 @@ public class InsuredBuilder {
 
     public InsuredBuilder withDependents(Set<InsuredDependent> insuredDependents) {
         this.insuredDependents = insuredDependents;
-        return this;
-    }
-
-    public InsuredBuilder withPremiums(Set<Policy> policies) {
-        this.policies = policies;
         return this;
     }
 

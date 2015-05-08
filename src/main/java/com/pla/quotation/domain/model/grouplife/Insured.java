@@ -10,10 +10,10 @@ import lombok.Setter;
 import org.joda.time.LocalDate;
 import org.nthdimenzion.ddd.domain.annotations.ValueObject;
 
+import java.math.BigDecimal;
 import java.util.Set;
 
 import static com.google.common.base.Preconditions.checkArgument;
-import static org.nthdimenzion.utils.UtilValidator.isNotEmpty;
 
 /**
  * Created by Samir on 4/7/2015.
@@ -23,8 +23,6 @@ import static org.nthdimenzion.utils.UtilValidator.isNotEmpty;
 @Getter(value = AccessLevel.PACKAGE)
 @Setter(value = AccessLevel.PACKAGE)
 public class Insured {
-
-    private PlanId insuredPlan;
 
     private Set<CoverageId> insuredCoverages;
 
@@ -46,15 +44,22 @@ public class Insured {
 
     private String category;
 
+    private BigDecimal annualIncome;
+
+    private String occupationClass;
+
+    private String occupationCategory;
+
+    private Integer noOfAssured;
+
     private Set<InsuredDependent> insuredDependents;
 
-    private Set<Policy> selfPolices;
+    private PlanPremiumDetail planPremiumDetail;
 
+    private Set<CoveragePremiumDetail> coveragePremiumDetails;
 
     Insured(InsuredBuilder insuredBuilder) {
         checkArgument(insuredBuilder != null);
-        checkArgument(isNotEmpty(insuredBuilder.getPolicies()));
-        this.insuredPlan = insuredBuilder.getInsuredPlan();
         this.insuredCoverages = insuredBuilder.getInsuredCoverages();
         this.companyName = insuredBuilder.getCompanyName();
         this.manNumber = insuredBuilder.getManNumber();
@@ -66,7 +71,6 @@ public class Insured {
         this.gender = insuredBuilder.getGender();
         this.category = insuredBuilder.getCategory();
         this.insuredDependents = insuredBuilder.getInsuredDependents();
-        this.selfPolices = insuredBuilder.getPolicies();
 
     }
 
