@@ -4,7 +4,7 @@ angular.module('createAgent',['common','ngRoute','mgcrea.ngStrap.select','mgcrea
 
         function($scope,$http,channelType,authorisedToSell,teamDetails,provinces,$timeout,$alert,$route,$window,transformJson,getQueryParameter,agentDetails,globalConstants,nextAgentSequence,getProvinceAndCityDetail){
             $scope.numberPattern =globalConstants.numberPattern;
-
+            $scope.displayChannelType=true;
             /*Wizard initial step*/
             $scope.selectedWizard = 1;
             $scope.searchResult = {
@@ -41,16 +41,11 @@ angular.module('createAgent',['common','ngRoute','mgcrea.ngStrap.select','mgcrea
                     team:2,
                     contact:3
                 };
-                /*  CHECK WHETHER EMPLOYEE EXISTS IN HRMS */
+               /*  CHECK WHETHER EMPLOYEE EXISTS IN HRMS */
                 $scope.editContactDetails=function() {
-                   // $scope.EmployeeDetails = $scope.searchAgent();
-                    $http.get("/pla/core/agent/getemployeedeatil",{params:$scope.search})
-                        .success(function(data,status){
-                            $scope.EmployeeDetails = data;
-                        });
-                    console.log($scope.EmployeeDetails);
-                    if ($scope.EmployeeDetails) {
-                        if ($scope.EmployeeDetails.employeeId) {
+                  // console.log(agentDetails);
+                    if (agentDetails) {
+                        if (agentDetails.agentProfile.employeeId) {
                               return true;
                         } else {
                             return false;
@@ -74,7 +69,7 @@ angular.module('createAgent',['common','ngRoute','mgcrea.ngStrap.select','mgcrea
                     if(n.channelName=='Broker'){
                         $scope.teamDetailsForm.$valid=true;
                         $scope.teamDetailsForm.$submitted=true;
-                        //$scope.displayTeamCode=false;
+                        $scope.displayChannelType=false;
                         $scope.agentDetails.teamDetail={};
 
                     }
