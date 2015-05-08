@@ -66,7 +66,7 @@ App.controller('ViewGroupLifeLevelInformationController',['$rootScope','$scope',
     });
     $http.get('/pla/core/productlineinformation/getproductlineinformation').success(function(data){
         $scope.groupLifeData=data;
-        var productLineName="GROUP_INSURANCE";
+        var productLineName="GROUP_LIFE";
         $scope.items =_.findWhere($scope.groupLifeData,{productLine:productLineName});
     });
     $http.get('/pla/core/productlineinformation/getproductlineprocessitem').success(function(data){
@@ -97,7 +97,7 @@ App.controller('ViewIndividualLifeLevelInformationController',['$rootScope','$sc
 
     $http.get('/pla/core/productlineinformation/getproductlineinformation').success(function(data){
         $scope.individualLifeData=data;
-        var productLineName="INDIVIDUAL_INSURANCE";
+        var productLineName="INDIVIDUAL_LIFE";
         $scope.items =_.findWhere($scope.individualLifeData,{productLine:productLineName});
     });
     $http.get('/pla/core/productlineinformation/getproductlineprocessitem').success(function(data){
