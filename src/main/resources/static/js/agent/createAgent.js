@@ -4,7 +4,6 @@ angular.module('createAgent',['common','ngRoute','mgcrea.ngStrap.select','mgcrea
 
         function($scope,$http,channelType,authorisedToSell,teamDetails,provinces,$timeout,$alert,$route,$window,transformJson,getQueryParameter,agentDetails,globalConstants,nextAgentSequence,getProvinceAndCityDetail){
             $scope.numberPattern =globalConstants.numberPattern;
-            $scope.displayChannelType=true;
             /*Wizard initial step*/
             $scope.selectedWizard = 1;
             $scope.searchResult = {
@@ -41,7 +40,20 @@ angular.module('createAgent',['common','ngRoute','mgcrea.ngStrap.select','mgcrea
                     team:2,
                     contact:3
                 };
-               /*  CHECK WHETHER EMPLOYEE EXISTS IN HRMS */
+                /*  Disable Channel Type IF it is broker in update*/
+                $scope.disableChannelType = function(){
+                    if (agentDetails) {
+                        if (agentDetails.channelType.channelName=='Broker') {
+                            return true;
+                        } else {
+                            return false;
+                        }
+
+                    }
+
+                }
+
+              /*  CHECK WHETHER EMPLOYEE EXISTS IN HRMS */
                 $scope.editContactDetails=function() {
                   // console.log(agentDetails);
                     if (agentDetails) {
@@ -69,7 +81,7 @@ angular.module('createAgent',['common','ngRoute','mgcrea.ngStrap.select','mgcrea
                     if(n.channelName=='Broker'){
                         $scope.teamDetailsForm.$valid=true;
                         $scope.teamDetailsForm.$submitted=true;
-                        $scope.displayChannelType=false;
+
                         $scope.agentDetails.teamDetail={};
 
                     }
