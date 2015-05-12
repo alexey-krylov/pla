@@ -56,20 +56,14 @@ angular.module('createAgent',['common','ngRoute','mgcrea.ngStrap.select','mgcrea
               /*  CHECK WHETHER EMPLOYEE EXISTS IN HRMS */
                 $scope.editContactDetails=function() {
 
-                    if (agentDetails) {
-                        if (agentDetails.agentProfile.employeeId) {
+                    if (agentDetails || $scope.agentDetails) {
+                        if (agentDetails.agentProfile.employeeId || $scope.agentDetails.employeeId) {
                               return true;
                         } else {
                             return false;
                         }
                     }
-                    if($scope.agentDetails){
-                        if (agentDetails.employeeId) {
-                            return true;
-                        } else {
-                            return false;
-                        }
-                    }
+
                 }
 
                // console.log($scope.agentDetails);
@@ -202,6 +196,7 @@ angular.module('createAgent',['common','ngRoute','mgcrea.ngStrap.select','mgcrea
             };
             $scope.update =  function(){
                 $scope.isFormSubmitted = true;
+                console.log($scope.agentDetails);
                 if($scope.agentDetailsForm.$valid && $scope.teamDetailsForm.$valid && $scope.contactDetailsForm.$valid){
                     $http.post('/pla/core/agent/update',transformJson.createCompatibleJson(angular.copy($scope.agentDetails),$scope.physicalCities,$scope.primaryCities,$scope.trainingCompleteOn,true))
                         .success(function(response, status, headers, config){
