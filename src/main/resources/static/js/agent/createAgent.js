@@ -43,6 +43,7 @@ angular.module('createAgent',['common','ngRoute','mgcrea.ngStrap.select','mgcrea
                 /*  Disable Channel Type IF it is broker in update*/
                 $scope.disableChannelType = function(){
                     if (agentDetails) {
+
                         if (agentDetails.channelType.channelName=='Broker') {
                             return true;
                         } else {
@@ -50,12 +51,13 @@ angular.module('createAgent',['common','ngRoute','mgcrea.ngStrap.select','mgcrea
                         }
 
                     }
-
                 }
 
               /*  CHECK WHETHER EMPLOYEE EXISTS IN HRMS */
                 $scope.editContactDetails=function() {
-
+                    console.log(agentDetails);
+                    console.log("*******************************");
+                    console.log($scope.agentDetails);
                     if (agentDetails || $scope.agentDetails) {
                         if (agentDetails.agentProfile.employeeId || $scope.agentDetails.employeeId) {
                               return true;
