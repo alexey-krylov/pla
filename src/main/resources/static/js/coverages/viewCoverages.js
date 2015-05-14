@@ -10,6 +10,8 @@ require(['jquery','bootstrap','datatables'],function(){
     });
 
     $('#coverage-table').dataTable({
+        "bProcessing": true,
+        "bDeferRender": true,
           "bFilter": true,
           "fnDrawCallback": function ( oSettings ) {
            openPopover();
