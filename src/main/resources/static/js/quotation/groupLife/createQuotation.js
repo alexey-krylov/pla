@@ -2,12 +2,15 @@ angular.module('createQuotation',['common','ngRoute','mgcrea.ngStrap.select','mg
     .controller('quotationCtrl',['$scope','$http','$timeout','$upload','provinces','getProvinceAndCityDetail','globalConstants','agentDetails','stepsSaved','proposerDetails','quotationNumber','getQueryParameter','$window',
         function($scope,$http,$timeout,$upload,provinces,getProvinceAndCityDetail,globalConstants,agentDetails,stepsSaved,proposerDetails,quotationNumber,getQueryParameter,$window){
             var mode = getQueryParameter("mode");
+            $scope.qId=null;
             if(mode=='view'){
                 $scope.isViewMode = true;
                 $scope.isEditMode = true;
             }else if(mode=='edit'){
                 $scope.isEditMode = true;
             }
+
+            $scope.showDownload=true;
             /*This scope holds the list of installments from which user can select one */
             $scope.numberOfInstallmentsDropDown = [];
 
@@ -47,17 +50,62 @@ angular.module('createQuotation',['common','ngRoute','mgcrea.ngStrap.select','mg
 
             $scope.quotationDetails.basic = agentDetails;
             $scope.quotationDetails.proposer = proposerDetails;
-            /*used for bs-dropdown*/
-            $scope.dropdown = [
-                {
-                    "text": "<a><img src=\"/pla/images/xls-icon.png\">Ready Reckoner</a>",
-                    "href": "/pla/quotation/grouplife/downloadplandetail"
-                },
-                {
-                    "text": "<a><img src=\"/pla/images/xls-icon.png\">Template</a>",
-                    "href": "/pla/quotation/grouplife/downloadinsuredtemplate"
+          // console.log(getQueryParameter('quotationId'));
+           // console.log($scope.quotationId);
+
+
+            $scope.$watchCollection('[quotationId,showDownload]',function(n){
+                if(n[0]){
+                    $scope.qId=n[0];
+                    console.log(n[0]);
+                    console.log(n[1]);
+                    if(n[1]) {
+                        $scope.dropdown = [
+                            {
+                                "text": "<a><img src=\"/pla/images/xls-icon.png\">Ready Reckoner</a>",
+                                "href": "/pla/quotation/grouplife/downloadplandetail/" + $scope.qId
+                            },
+                            {
+                                "text": "<a><img src=\"/pla/images/xls-icon.png\">Template</a>",
+                                "href": "/pla/quotation/grouplife/downloadinsuredtemplate/" + $scope.qId
+                            }
+                        ];
+                    }else{
+                        $scope.dropdown = [
+                            {
+                                "text": "<a><img src=\"/pla/images/xls-icon.png\">Ready Reckoner</a>",
+                                "href": "/pla/quotation/grouplife/downloadplandetail/" + $scope.qId
+                            },
+                            {
+                                "text": "<a><img src=\"/pla/images/xls-icon.png\">Template</a>",
+                                "href": "/pla/quotation/grouplife/downloadinsuredtemplate/" + $scope.qId
+                            },
+                            {
+                                "text": "<a><img src=\"/pla/images/xls-icon.png\">Error File</a>",
+                                "href": "/pla/quotation/grouplife/downloadinsuredtemplate/" + $scope.qId
+                            }
+                        ];
+                    }
                 }
-            ];
+            });
+
+
+                /*used for bs-dropdown*/
+              /*  $scope.dropdown = [
+                    {
+                        "text": "<a><img src=\"/pla/images/xls-icon.png\">Ready Reckoner</a>",
+                        "href": "/pla/quotation/grouplife/downloadplandetail/" + $scope.qId
+                    },
+                    {
+                        "text": "<a><img src=\"/pla/images/xls-icon.png\">Template</a>",
+                        "href": "/pla/quotation/grouplife/downloadinsuredtemplate/" + $scope.qId
+                    },
+                    {
+                        "text": "<a><img src=\"/pla/images/xls-icon.png\">Error File</a>",
+                        "href": "/pla/quotation/grouplife/downloadinsuredtemplate/" + $scope.qId
+                    }
+                ];*/
+
 
             $scope.$watch('quotationDetails.proposer.province',function(newVal,oldVal){
                 if(newVal){
@@ -163,6 +211,7 @@ angular.module('createQuotation',['common','ngRoute','mgcrea.ngStrap.select','mg
                         if(agentDetails.status=="200"){
                             $scope.quotationId = agentDetails.id;
                             setQuotationNumberAndVersionNumber(agentDetails.id);
+
                             saveStep();
                         }
                     });
@@ -193,12 +242,17 @@ angular.module('createQuotation',['common','ngRoute','mgcrea.ngStrap.select','mg
                 }).success(function (data, status, headers, config) {
                     if(data.status="200"){
                         saveStep();
+                        $scope.showDownload=true;
                         $http.get("/pla/quotation/getpremiumdetail/"+ $scope.quotationId)
                             .success(function(data){
                                 console.log(data);
 
                             })
+                    }else{
+                        $scope.showDownload=false;
+                       // console.log($scope.showDownload);
                     }
+
                 });
             };
 
