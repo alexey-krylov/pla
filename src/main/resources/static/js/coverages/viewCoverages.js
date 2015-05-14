@@ -46,7 +46,7 @@ var openPopover = function(){
 
            var content='';
            for (var i=0; i<text.length; i++ ){
-                content=content + text[i].replace(",","<br />");
+                content=content + text[i].replace("@","<br />");
 
            }
            content=content.replace("Benefits","");
