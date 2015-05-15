@@ -1,4 +1,4 @@
-var App = angular.module('createTeam', ['ngRoute','ui.bootstrap','ngSanitize','mgcrea.ngStrap.select','mgcrea.ngStrap','mgcrea.ngStrap.alert']);
+var App = angular.module('createTeam', ['common','commonServices','ngRoute','ui.bootstrap','ngSanitize','mgcrea.ngStrap.select','mgcrea.ngStrap','mgcrea.ngStrap.alert']);
 
 App.controller('CreateTeamController',['$scope','$http','$templateCache','$timeout','$alert','$window',function($scope,$http,$templateCache,$timeout,$alert,$window){
 
@@ -52,11 +52,11 @@ App.controller('CreateTeamController',['$scope','$http','$templateCache','$timeo
             $http.post('/pla/core/team/create', $scope.createTeam).success(function(data){
               //  console.log(data);
                 if(data.status==200){
-                     $scope.alert = {title:'Success Message! ', content:data.message, type: 'success'};
+                    // $scope.alert = {title:'Success Message! ', content:data.message, type: 'success'};
                     // $scope.reset();
                    $window.location.reload();
                 }else if(data.status==500){
-                 $scope.alert = {title:'Error Message! ', content:data.message, type: 'danger'};
+               //  $scope.alert = {title:'Error Message! ', content:data.message, type: 'danger'};
                 }
 
              });

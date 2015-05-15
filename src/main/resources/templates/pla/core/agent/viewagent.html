@@ -83,7 +83,7 @@
                             <th th:text="#{agentName}">Agent Name</th>
                             <th th:text="#{agentCode}">Agent Code</th>
                             <th th:text="#{teamName}">Team Name</th>
-                            <th>NRC Number</th>
+                            <th>NRC</th>
                             <th>Team Leader Name</th>
                         </tr>
                         </thead>
@@ -92,8 +92,7 @@
                             <!--/*/ <th:block th:each="agent : ${agentList}"> /*/-->
                             <tr>
                                 <td><input type="radio" name="agentCode" th:value="${agent.agentId}" value="001"/></td>
-
-                               <td th:text="${agent.agentProfile.firstName+' '+agent.agentProfile.lastName}">Robert downey</td>
+                                <td th:text="${agent.agentProfile.firstName+' '+agent.agentProfile.lastName}">Robert downey</td>
                                 <td th:text="${agent.agentId}">001</td>
                                 <td th:text="${agent.teamDetail !=null} ? ${agent.teamDetail.teamName}">A Team</td>
                                 <td th:text="${agent.agentProfile.nrcNumberInString}">Lusaka</td>
