@@ -52,19 +52,27 @@ angular.module('createAgent',['common','ngRoute','mgcrea.ngStrap.select','mgcrea
 
                     }
                 }
+                $scope.$watchCollection('[search.employeeId,search.nrcNumber]',function(n){
+                    if(n[0]){
+                        console.log(n[0]);
+                    }else{
+                        console.log(n[1]);
+                    }
+                });
 
               /*  CHECK WHETHER EMPLOYEE EXISTS IN HRMS */
                 $scope.editContactDetails=function() {
                     console.log(agentDetails);
-                    console.log("*******************************");
+                    console.log("*******************************"+$scope.search);
                     console.log($scope.agentDetails);
                     if (agentDetails || $scope.agentDetails) {
-                        if (agentDetails.agentProfile.employeeId || $scope.agentDetails.employeeId) {
+                        if (agentDetails.agentProfile.employeeId || $scope.agentDetails.employeeId){
                               return true;
                         } else {
                             return false;
                         }
-                    }
+                    };
+
 
                 }
 
