@@ -24,8 +24,8 @@ public class Term {
 
     Set<Integer> validTerms = new HashSet<Integer>();
     Set<Integer> maturityAges = new HashSet<Integer>();
-    Integer maxMaturityAge;
-    Integer groupTerm;
+    Integer maxMaturityAge=0;
+    Integer groupTerm=0;
 
     Term() {
 
