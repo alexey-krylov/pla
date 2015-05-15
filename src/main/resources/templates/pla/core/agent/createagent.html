@@ -19,6 +19,8 @@
             });
         });
     });
+
+
 </script>
 <script type="text/ng-template" id="createAgentTpl.html">
     <nth-alert></nth-alert>
@@ -45,9 +47,9 @@
             <div class="step-pane" data-step="1">
                 <div class="bs-callout-info bs-callout">
                     <div class="row" ng-if="!hideAlert">
-                        <div class="col-md-6">
+                        <div class="col-md-7">
                             <div class="alert alert-info">
-                                <strong>Entered details not found in HR Records!</strong> Please proceed in case Agent is not employee.
+                                <strong>Entered details not found in HR Records!</strong> Please proceed in case Agent is not an employee.
                                 <button type="button" class="btn btn-primary btn-xs pull-right" style="width:15%" ng-click="jumpToNthStep(2)"><Strong>Proceed</Strong></button>
                             </div>
                         </div>
