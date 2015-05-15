@@ -72,7 +72,7 @@
 
                         </div>
                         <div class="form-group col-md-2 required">
-                            <label class="control-label ">From Year</label>
+                            <label class="control-label ">Policy Year1</label>
                             <input type="number" name="startYear"  class="form-control input-sm" ng-disabled="!addCommission.commissionTermType" id="policyYear1"
                                    ng-model="addCommission.startYear"  ng-required="true" ng-change="yearErrorStatus=null" min="1"/>
                             <div ng-show="addCommissionForm.startYear.$invalid &amp;&amp; addCommissionForm.startYear.$dirty">
@@ -84,23 +84,23 @@
                                 </small>
                             </div>
                             <small class="error" ng-show="yearErrorStatus=='FROM_YEAR'">
-                                From year already exists in the range.
+                                Commission already defined for the specified Policy Year.
                             </small>
                         </div>
                         <div class="form-group col-md-2 required" ng-if="addCommission.commissionTermType=='RANGE'">
-                            <label class="control-label">To Year</label>
+                            <label class="control-label">Policy Year2</label>
                             <input type="number" name="endYear" class="form-control input-sm" id="policyYear2" ng-disabled="!addCommission.commissionTermType"
                                    ng-model="addCommission.endYear"  ng-required="true" min="{{addCommission.startYear+1}}" ng-change="yearErrorStatus=null"/>
                             <div ng-show="addCommissionForm.endYear.$invalid &amp;&amp; addCommissionForm.endYear.$dirty">
                                 <small class="error" ng-show="addCommissionForm.endYear.$error.min">
-                                    To year should be greater than from year.
+                                    Policy Year {{addCommissionForm.endYear.$viewValue}} should be greater than Policy Year {{addCommission.startYear}}.
                                 </small>
                                 <small class="error" ng-show="addCommissionForm.endYear.$error.number">
                                     Please enter a valid number.
                                 </small>
                             </div>
                             <small class="error" ng-show="yearErrorStatus=='TO_YEAR'">
-                                To year already exists in the range.
+                                Commission already defined for the specified Policy Year.
                             </small>
                         </div>
                         <div class="form-group col-md-3 required" >

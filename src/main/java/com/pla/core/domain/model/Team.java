@@ -86,7 +86,7 @@ public class Team implements ICrudEntity {
         try {
             checkArgument(isNewTeamLeaderFulfillmentValid(effectiveFrom, currentTeamLeaderFulfillment.getFromDate()));
         } catch (IllegalArgumentException e) {
-            throw new TeamDomainException(firstName + " " + lastName + " from date should be greater than " + currentTeamLeaderFulfillment.getFromDate().getDayOfMonth() + "/" + currentTeamLeaderFulfillment.getFromDate().getMonthOfYear() + "/" + currentTeamLeaderFulfillment.getFromDate().getYear());
+            throw new TeamDomainException("Another Team Leader has already been associated with this team for this period.");
         }
         checkArgument(currentTeamLeaderFulfillment != null);
         this.teamLeaders = updateTeamLeaderFullfillment(this.teamLeaders, currentTeamLeaderFulfillment.getTeamLeader(), effectiveFrom.plusDays(-1));

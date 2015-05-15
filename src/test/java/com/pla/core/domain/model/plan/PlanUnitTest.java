@@ -72,7 +72,7 @@ public class PlanUnitTest {
         builder.withPlanSumAssured(SumAssuredType.SPECIFIED_VALUES, new BigDecimal(10000), new BigDecimal(40000), 10000, Sets.newHashSet(new BigDecimal(500),new BigDecimal(1000)), 0);
         builder.withPlanCoverages(Sets.newHashSet(planCoverage));
         builder.withPolicyTerm(PolicyTermType.SPECIFIED_VALUES,
-                Sets.newHashSet(30, 35, 40, 45, 50, 55, 60, 70, 80), 80);
+                Sets.newHashSet(30, 35, 40, 45, 50, 55, 60, 70, 80), 80,null);
         plan = builder.build(planId);
     }
 
@@ -89,7 +89,7 @@ public class PlanUnitTest {
         Set<Integer> expectedMaturityAges = Sets.newHashSet(30, 35, 40, 45, 50, 55, 60, 70, 80);
 
         builder.withPolicyTerm(PolicyTermType.MATURITY_AGE_DEPENDENT,
-                Sets.newHashSet(30, 35, 40, 45, 50, 55, 60, 70, 80), 80);
+                Sets.newHashSet(30, 35, 40, 45, 50, 55, 60, 70, 80), 80,null);
         plan = builder.build();
         Set<Integer> maturityAges = plan.getAllowedPolicyTerm();
         assertThat(expectedMaturityAges, is(maturityAges));
@@ -109,7 +109,7 @@ public class PlanUnitTest {
     public void givenPlanWithCoverageTermTypeAndPolicyTermType_whenCoverageTermTypeIsPolicyTermAndPolicyTermTypeIsMaturityAgeDependent_thenItShouldReturnSetOfMaturityAges(){
         planCoverageBuilder.withCoverageTerm(CoverageTermType.POLICY_TERM, Sets.newHashSet(30, 35, 40, 45, 50, 55, 60, 70, 80), 80);
         builder.withPolicyTerm(PolicyTermType.MATURITY_AGE_DEPENDENT,
-                Sets.newHashSet(30, 35, 40, 45, 50, 55, 60, 70, 80), 80);
+                Sets.newHashSet(30, 35, 40, 45, 50, 55, 60, 70, 80), 80,null);
         plan = builder.build();
         Set<Integer> expectedMaturityAges = Sets.newHashSet(30, 35, 40, 45, 50, 55, 60, 70, 80);
         Set<Integer> maturityAges = plan.getAllowedCoverageTerm(coverageId);
@@ -132,7 +132,7 @@ public class PlanUnitTest {
     @Test
     public void givenPolicyTerm_whenPolicyTermTypeIsAgeDependentAndSetOfMaturityAgeContainsTheGivenValue_thenItShouldReturnTrue(){
         builder.withPolicyTerm(PolicyTermType.MATURITY_AGE_DEPENDENT,
-                Sets.newHashSet(30, 35, 40, 45, 50, 55, 60, 70), 80);
+                Sets.newHashSet(30, 35, 40, 45, 50, 55, 60, 70), 80,null);
         plan = builder.build();
         Boolean isValidTerm  = plan.isValidPolicyTerm(70);
         assertTrue(isValidTerm);
@@ -141,7 +141,7 @@ public class PlanUnitTest {
     @Test
     public void givenPolicyTerm_whenPolicyTermTypeIsAgeDependentAndSetOfMaturityAgeDoesNotContainTheGivenValue_thenItShouldReturnFalse(){
         builder.withPolicyTerm(PolicyTermType.MATURITY_AGE_DEPENDENT,
-                Sets.newHashSet(30, 35, 40, 45, 50, 55, 60, 70, 80), 80);
+                Sets.newHashSet(30, 35, 40, 45, 50, 55, 60, 70, 80), 80,null);
         plan = builder.build();
         Boolean isValidTerm  = plan.isValidPolicyTerm(85);
         assertFalse(isValidTerm);
@@ -163,7 +163,7 @@ public class PlanUnitTest {
     @Test
     public void givenCoverageTermAndCoverageId_whenPolicyTermTypeIsMaturityAgeDependentAndMaturityAgesSetContainTheCoverageTerm_thenItShouldReturnTrue(){
         builder.withPolicyTerm(PolicyTermType.MATURITY_AGE_DEPENDENT,
-                Sets.newHashSet(30, 35, 40, 45, 50, 55, 60, 70, 80), 80);
+                Sets.newHashSet(30, 35, 40, 45, 50, 55, 60, 70, 80), 80,null);
         plan = builder.build();
         Boolean isValidCoverageTerm = plan.isValidCoverageTerm(40, coverageId);
         assertTrue(isValidCoverageTerm);
@@ -172,7 +172,7 @@ public class PlanUnitTest {
     @Test
     public void givenCoverageTermAndCoverageId_whenPolicyTermTypeIsMaturityAgeDependentAndMaturityAgesSetDoesNotContainTheCoverageTerm_thenItShouldReturnFalse(){
         builder.withPolicyTerm(PolicyTermType.MATURITY_AGE_DEPENDENT,
-                Sets.newHashSet(30, 35, 40, 45, 50, 55, 60, 70, 80), 80);
+                Sets.newHashSet(30, 35, 40, 45, 50, 55, 60, 70, 80), 80,null);
         plan = builder.build();
         Boolean isValidCoverageTerm = plan.isValidCoverageTerm(15, coverageId);
         assertFalse(isValidCoverageTerm);
@@ -217,7 +217,7 @@ public class PlanUnitTest {
         Set<Integer> expectedPolicyValidTerm  =  Sets.newHashSet(30, 35, 40, 45);
 
         builder.withPolicyTerm(PolicyTermType.MATURITY_AGE_DEPENDENT,
-                Sets.newHashSet(30, 35, 40, 45), 80);
+                Sets.newHashSet(30, 35, 40, 45), 80,null);
 
         builder.withPremiumTerm(PremiumTermType.REGULAR,
                 Sets.newHashSet(30, 35, 40, 45, 50, 55, 60, 70, 80),80);
@@ -284,7 +284,7 @@ public class PlanUnitTest {
     @Test
     public void givenPremiumTerm_whenPremiumTermTypeIsRegularAndPolicyTermTypeIsAgeDependentAndSetMaturityAgeContainsTheGivenPremiumTerm_thenItShouldReturnTrue(){
         builder.withPolicyTerm(PolicyTermType.MATURITY_AGE_DEPENDENT,
-                Sets.newHashSet(30, 35, 40, 45), 80);
+                Sets.newHashSet(30, 35, 40, 45), 80,null);
         builder.withPremiumTerm(PremiumTermType.REGULAR,
                 Sets.newHashSet(20,25,30, 35, 40, 45, 50, 55, 60, 70, 80),80);
         plan = builder.build();
@@ -295,7 +295,7 @@ public class PlanUnitTest {
     @Test
     public void givenPremiumTerm_whenPremiumTermTypeIsRegularAndPolicyTermTypeIsAgeDependentAndSetMaturityAgeDoesNotContainsTheGivenPremiumTerm_thenItShouldReturnFalse(){
         builder.withPolicyTerm(PolicyTermType.MATURITY_AGE_DEPENDENT,
-                Sets.newHashSet(30, 35, 40, 45), 80);
+                Sets.newHashSet(30, 35, 40, 45), 80,null);
         builder.withPremiumTerm(PremiumTermType.REGULAR,
                 Sets.newHashSet(20,25,30, 35, 40, 45, 50, 55, 60, 70, 80),80);
         plan = builder.build();
@@ -401,13 +401,13 @@ public class PlanUnitTest {
         int maximumMaturityAge = plan.getMaximumMaturityAge();
         assertThat(maximumMaturityAge,is(80));
         builder.withPolicyTerm(PolicyTermType.SPECIFIED_VALUES,
-                Sets.newHashSet(30, 35, 40, 45, 50, 55, 60, 70, 80), 80);
+                Sets.newHashSet(30, 35, 40, 45, 50, 55, 60, 70, 80), 80,null);
     }
 
     @Test
     public void givenAPlan_whenPolicyTermTypeIsAgeDependent_thenItShouldReturnTheGreaterValueAmongTheSetOfMaturityAges(){
         builder.withPolicyTerm(PolicyTermType.MATURITY_AGE_DEPENDENT,
-                Sets.newHashSet(30, 35, 40, 45, 50, 55), 80);
+                Sets.newHashSet(30, 35, 40, 45, 50, 55), 80,null);
         plan = builder.build();
         int maximumMaturityAge = plan.getMaximumMaturityAge();
         assertThat(maximumMaturityAge,is(55));

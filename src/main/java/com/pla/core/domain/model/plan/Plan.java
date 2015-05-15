@@ -126,7 +126,7 @@ public class Plan extends AbstractAnnotatedAggregateRoot<PlanId> {
     public Set<Integer> getAllowedPolicyTerm() {
         if (planDetail.getClientType().equals(ClientType.GROUP)) {
             Set<Integer> value = new HashSet<Integer>();
-            value.add(policyTerm.getGroupTerm() / 365);
+            value.add((policyTerm.getGroupTerm() != null ? policyTerm.getGroupTerm() : 0) / 365);
             return value;
         } else {
 
@@ -216,7 +216,7 @@ public class Plan extends AbstractAnnotatedAggregateRoot<PlanId> {
     public int getMaximumMaturityAge() {
         int maximumMaturityAge = 0;
         if (PolicyTermType.SPECIFIED_VALUES.equals(this.policyTermType)) {
-            maximumMaturityAge = this.policyTerm.getMaxMaturityAge();
+            maximumMaturityAge = this.policyTerm.getMaxMaturityAge() != null ? this.policyTerm.getMaxMaturityAge() : 0;
         } else if (PolicyTermType.MATURITY_AGE_DEPENDENT.equals(this.policyTermType)) {
             List<Integer> maturityAges = new ArrayList<Integer>();
             maturityAges.addAll(this.policyTerm.getMaturityAges());

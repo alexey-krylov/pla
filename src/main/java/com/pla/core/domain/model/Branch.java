@@ -62,7 +62,7 @@ public class Branch implements ICrudEntity {
             try {
                 checkArgument(isNewFulfillmentValid(effectiveFrom, currentBranchManagerFulfillment.getFromDate()));
             } catch (IllegalArgumentException e) {
-                throw new BranchDomainException(firstName + " " + lastName + " from date should be greater than " + currentBranchManagerFulfillment.getFromDate().getDayOfMonth() + "/" + currentBranchManagerFulfillment.getFromDate().getMonthOfYear() + "/" + currentBranchManagerFulfillment.getFromDate().getYear());
+                throw new BranchDomainException("Another Branch Manager has already been associated with this branch for this period");
             }
             expireBranchManager(this.currentBranchManager, effectiveFrom.plusDays(-1));
 

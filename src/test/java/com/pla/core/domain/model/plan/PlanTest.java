@@ -70,7 +70,7 @@ public class PlanTest {
         builder.withPremiumTerm(PremiumTermType.SPECIFIED_AGES, Sets.newHashSet(45, 55), -1);
         builder.withPlanCoverages(Sets.newHashSet(planCoverage));
         builder.withPolicyTerm(PolicyTermType.MATURITY_AGE_DEPENDENT,
-                Sets.newHashSet(60, 65), -1);
+                Sets.newHashSet(60, 65), -1,null);
         Plan plan = builder.build();
         Term premiumTermByAge = builder.getPremiumTerm();
         assertEquals(2, premiumTermByAge.getMaturityAges().size());
@@ -81,7 +81,7 @@ public class PlanTest {
         PlanBuilder builder = Plan.builder();
         builder.withPlanDetail(planDetail);
         builder.withPolicyTerm(PolicyTermType.MATURITY_AGE_DEPENDENT,
-                Sets.newHashSet(60, 65), -1);
+                Sets.newHashSet(60, 65), -1,null);
         builder.withPremiumTerm(PremiumTermType.REGULAR, null, -1);
         Plan plan = builder.build();
         Term premiumTerm = builder.getPremiumTerm();
@@ -99,7 +99,7 @@ public class PlanTest {
                 Sets.newHashSet(30, 35, 40, 45, 50, 55, 60), 60);
         builder.withPlanCoverages(Sets.newHashSet(planCoverage));
         builder.withPolicyTerm(PolicyTermType.SPECIFIED_VALUES,
-                Sets.newHashSet(30, 35, 40, 45, 50, 55, 60), 60);
+                Sets.newHashSet(30, 35, 40, 45, 50, 55, 60), 60,null);
         Plan plan = builder.build();
 
     }
@@ -113,7 +113,7 @@ public class PlanTest {
                 Sets.newHashSet(30, 35, 40, 45, 50, 55, 60), 60);
         builder.withPlanCoverages(Sets.newHashSet(planCoverage));
         builder.withPolicyTerm(PolicyTermType.SPECIFIED_VALUES,
-                Sets.newHashSet(30, 35, 40, 45, 50, 55, 60), 60);
+                Sets.newHashSet(30, 35, 40, 45, 50, 55, 60), 60,null);
         Plan plan = builder.build();
         SumAssured sumAssured = builder.getSumAssured();
         assertEquals(new BigDecimal(40000000), sumAssured.getMaxSumInsured());
@@ -150,7 +150,7 @@ public class PlanTest {
         PlanBuilder builder = Plan.builder();
         builder.withPlanDetail(planDetail);
         builder.withPolicyTerm(PolicyTermType.SPECIFIED_VALUES,
-                Sets.newHashSet(30, 35, 40, 45, 50, 55, 60), 60);
+                Sets.newHashSet(30, 35, 40, 45, 50, 55, 60), 60,null);
         builder.withPremiumTerm(PremiumTermType.SPECIFIED_VALUES,
                 Sets.newHashSet(30, 35, 40, 45, 50, 55, 75), 70);
         builder.build();
@@ -193,7 +193,7 @@ public class PlanTest {
                 .build();
         PlanBuilder builder = Plan.builder();
         builder.withPolicyTerm(PolicyTermType.SPECIFIED_VALUES,
-                Sets.newHashSet(30, 35, 40), 45);
+                Sets.newHashSet(30, 35, 40), 45,null);
 
         Term term = new Term(Sets.newHashSet(45, 55), 55);
         builder.withPlanCoverages(Sets.newHashSet(planCoverage_1));
@@ -267,7 +267,7 @@ public class PlanTest {
                 .withWaitingPeriod(5)
                 .build();
         builder.withPolicyTerm(PolicyTermType.SPECIFIED_VALUES,
-                Sets.newHashSet(30, 35, 40, 45, 50, 55, 60), 60);
+                Sets.newHashSet(30, 35, 40, 45, 50, 55, 60), 60,null);
         builder.withPlanCoverages(Sets.newHashSet(planCoverage_1));
         builder.build();
     }
@@ -288,7 +288,7 @@ public class PlanTest {
                         Sets.newHashSet(80), 80)
                 .build();
         builder.withPolicyTerm(PolicyTermType.SPECIFIED_VALUES,
-                Sets.newHashSet(30, 35, 40, 45, 50, 55, 60), 60);
+                Sets.newHashSet(30, 35, 40, 45, 50, 55, 60), 60,null);
         builder.withPlanCoverages(Sets.newHashSet(planCoverage_1));
         builder.build();
     }
@@ -308,7 +308,7 @@ public class PlanTest {
                 .withWaitingPeriod(5)
                 .build();
         builder.withPolicyTerm(PolicyTermType.SPECIFIED_VALUES,
-                Sets.newHashSet(30, 35, 40, 45, 50, 55, 60), 60);
+                Sets.newHashSet(30, 35, 40, 45, 50, 55, 60), 60,null);
         builder.withPlanCoverages(Sets.newHashSet(planCoverage_1));
         builder.build();
     }

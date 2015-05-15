@@ -47,8 +47,8 @@
                     <div class="row" ng-if="!hideAlert">
                         <div class="col-md-6">
                             <div class="alert alert-info">
-                                <strong>Search not found!</strong> Would you like to create a new Agent?
-                                <button type="button" class="btn btn-primary btn-xs pull-right" style="width:15%" ng-click="jumpToNthStep(2)"><Strong>Yes</Strong></button>
+                                <strong>Entered details not found in HR Records!</strong> Please proceed in case Agent is not employee.
+                                <button type="button" class="btn btn-primary btn-xs pull-right" style="width:15%" ng-click="jumpToNthStep(2)"><Strong>Proceed</Strong></button>
                             </div>
                         </div>
                     </div>
@@ -263,7 +263,7 @@
                                 <input type="text" class="form-control input-sm" name="physicalAddressLine2" placeholder="Enter address" ng-model="agentDetails.physicalAddress.physicalAddressLine2" ng-maxlength="100"/>
                             </div>
                             <div class="form-group required">
-                                <label  class="control-label">province</label>
+                                <label  class="control-label">Province</label>
                                 <select class="form-control input-sm" name="physicalAddressProvince" ng-model="agentDetails.physicalAddress.physicalGeoDetail.provinceCode" ng-options="province.provinceId  as province.provinceName for province in provinces" ng-required="true"></select>
                             </div>
                             <div class="form-group" style="margin-top: 22px">

@@ -24,8 +24,8 @@ public class Term {
 
     Set<Integer> validTerms = new HashSet<Integer>();
     Set<Integer> maturityAges = new HashSet<Integer>();
-    int maxMaturityAge;
-    int groupTerm;
+    Integer maxMaturityAge;
+    Integer groupTerm;
 
     Term() {
 
@@ -51,7 +51,7 @@ public class Term {
      * @param validTerms
      * @param maxMaturityAge
      */
-    public Term(Set<Integer> validTerms, int maxMaturityAge) {
+    public Term(Set<Integer> validTerms, Integer maxMaturityAge) {
        /*
         Commented : PLA Internal 0010797
         -----------------------------------

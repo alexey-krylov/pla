@@ -230,7 +230,6 @@ app.controller('PlanSetupController', ['$scope', '$http', '$location', '$routePa
                             if (newCoverage.coverageTerm) {
                                 $scope.newCoverage.coverageTerm.maturityAges = [];
                                 $scope.newCoverage.coverageTerm.validTerms = [];
-                                $scope.newCoverage.coverageTerm.maxMaturityAge = [];
                                 $scope.newCoverage.coverageTerm.maturityAges = [];
                                 $scope.newCoverage.coverageTerm.maturityAges = [];
                             }

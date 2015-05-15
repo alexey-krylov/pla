@@ -39,11 +39,15 @@ public class PlanBuilder {
         return this;
     }
 
-    public PlanBuilder withPolicyTerm(PolicyTermType policyTermType, Set<Integer> validValues, int maxMaturityAge) {
+    public PlanBuilder withPolicyTerm(PolicyTermType policyTermType, Set<Integer> validValues, Integer maxMaturityAge, Integer groupTerm) {
         this.policyTermType = policyTermType;
         switch (policyTermType) {
             case SPECIFIED_VALUES:
-                this.policyTerm = new Term(validValues, maxMaturityAge);
+                if (groupTerm != null) {
+                    this.policyTerm = new Term(groupTerm);
+                } else {
+                    this.policyTerm = new Term(validValues, maxMaturityAge);
+                }
                 break;
             case MATURITY_AGE_DEPENDENT:
                 this.policyTerm = new Term(validValues);

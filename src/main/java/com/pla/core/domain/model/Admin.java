@@ -78,7 +78,7 @@ public class Admin {
     public Team createTeam(boolean isTeamUnique, String teamId, String teamName, String teamCode, String regionCode, String branchCode
             , String employeeId, LocalDate fromDate, String firstName, String lastName) {
         if (!isTeamUnique) {
-            throw new TeamDomainException("Team name or Team Code already satisfied");
+            throw new TeamDomainException("There is an existing record for this Team , please update the same for any change in Team Leader ");
         }
         TeamLeader teamLeader = new TeamLeader(employeeId, firstName, lastName);
         TeamLeaderFulfillment teamLeaderFulfillment = new TeamLeaderFulfillment(teamLeader, fromDate);

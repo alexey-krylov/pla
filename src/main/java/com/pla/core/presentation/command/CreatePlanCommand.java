@@ -13,7 +13,6 @@ import org.joda.time.LocalDate;
 import org.nthdimenzion.presentation.LocalJodaDateDeserializer;
 
 import java.math.BigDecimal;
-import java.math.BigInteger;
 import java.util.*;
 
 /**
@@ -62,7 +61,7 @@ class AssuredDetail {
     private List<AssuredValue> sumAssuredValue = new ArrayList<AssuredValue>();
     private CoverageId coverageId;
     private int percentage;
-    private BigInteger maxLimit;
+    private BigDecimal maxLimit;
     private BigDecimal minSumInsured;
     private BigDecimal maxSumInsured;
     private int multiplesOf;
@@ -86,20 +85,22 @@ class AssuredValue {
 @Getter
 @Setter
 class TermValue {
-    private String text;
+    private Integer text;
 }
 
 @Getter
 @Setter
 class TermDetail {
+
+    private Integer groupTerm;
     Set<TermValue> validTerms = new HashSet<TermValue>();
     Set<TermValue> maturityAges = new HashSet<TermValue>();
-    int maxMaturityAge;
+    Integer maxMaturityAge;
 
     public SortedSet<Integer> getValidTerms() {
         SortedSet<Integer> set = new TreeSet<Integer>();
         for (TermValue each : validTerms) {
-            set.add(Integer.parseInt(each.getText()));
+            set.add(each.getText());
         }
         return set;
     }
@@ -107,7 +108,7 @@ class TermDetail {
     public SortedSet<Integer> getMaturityAges() {
         SortedSet<Integer> set = new TreeSet<Integer>();
         for (TermValue each : maturityAges) {
-            set.add(Integer.parseInt(each.getText()));
+            set.add(each.getText());
         }
         return set;
     }

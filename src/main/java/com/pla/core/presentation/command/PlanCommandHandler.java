@@ -3,7 +3,9 @@ package com.pla.core.presentation.command;
 import com.pla.core.domain.exception.DuplicatePlanException;
 import com.pla.core.domain.model.plan.*;
 import com.pla.core.specification.PlanCodeSpecification;
+import com.pla.sharedkernel.domain.model.ClientType;
 import com.pla.sharedkernel.domain.model.CoverageTermType;
+import com.pla.sharedkernel.domain.model.SumAssuredType;
 import com.pla.sharedkernel.util.SequenceGenerator;
 import org.axonframework.commandhandling.annotation.CommandHandler;
 import org.axonframework.repository.Repository;
@@ -88,7 +90,7 @@ public class PlanCommandHandler {
             pcBuilder.withWaitingPeriod(each.getWaitingPeriod());
 
             pcBuilder.withSumAssuredForPlanCoverage(each.getCoverageSumAssured().getSumAssuredType(), each.getCoverageSumAssured().getMinSumInsured(),
-                    each.getCoverageSumAssured().getMaxSumInsured(), each.getCoverageSumAssured().getMultiplesOf(), each.getCoverageSumAssured().getSumAssuredValue(),
+                    SumAssuredType.DERIVED.equals(each.getCoverageSumAssured().getSumAssuredType()) ? each.getCoverageSumAssured().getMaxLimit() : each.getCoverageSumAssured().getMaxSumInsured(), each.getCoverageSumAssured().getMultiplesOf(), each.getCoverageSumAssured().getSumAssuredValue(),
                     each.getCoverageSumAssured().getPercentage());
 
             for (PlanCoverageBenefitDetail rec : each.getPlanCoverageBenefits())
@@ -100,13 +102,16 @@ public class PlanCommandHandler {
 
         PlanBuilder planBuilder = Plan.builder();
         planBuilder.withPlanDetail(pd);
+        if (ClientType.GROUP.equals(pd.getClientType())) {
+
+        }
         planBuilder.withPlanSumAssured(command.getSumAssured().getSumAssuredType(),
                 command.getSumAssured().getMinSumInsured(),
                 command.getSumAssured().getMaxSumInsured(),
                 command.getSumAssured().getMultiplesOf(),
                 command.getSumAssured().getSumAssuredValue(),
                 command.getSumAssured().getPercentage());
-        planBuilder.withPolicyTerm(command.getPolicyTermType(), command.getPolicyTerm().getValidTerms(), command.getPolicyTerm().getMaxMaturityAge());
+        planBuilder.withPolicyTerm(command.getPolicyTermType(), command.getPolicyTerm().getValidTerms(), command.getPolicyTerm().getMaxMaturityAge(), command.getPolicyTerm().getGroupTerm());
         planBuilder.withPremiumTerm(command.getPremiumTermType(), command.getPremiumTerm().getValidTerms(), command.getPremiumTerm().getMaxMaturityAge());
         planBuilder.withPlanCoverages(coverageSet);
         return planBuilder;
