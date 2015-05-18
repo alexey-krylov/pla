@@ -102,7 +102,6 @@ public class Plan extends AbstractAnnotatedAggregateRoot<PlanId> {
             }
         });
         Preconditions.checkState(specification.checkCoverageTerm(this, allTerms));
-
         if (planBuilder.getSumAssured() != null && planBuilder.getSumAssured().getSumAssuredType() == SumAssuredType.INCOME_MULTIPLIER) {
             Preconditions.checkState(planBuilder.getPlanDetail().getClientType() == ClientType.GROUP);
         }

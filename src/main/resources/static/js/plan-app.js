@@ -516,7 +516,7 @@ app.controller('PlanSetupController', ['$scope', '$http', '$location', '$routePa
 
             $scope.newPlanCoverageBenefit = {};
 
-            $scope.addBenefit = function (selectedCoverage) {
+            $scope.addBenefit = function (selectedCoverage, benefitForm) {
                 var planCoverage = _.find($scope.plan.coverages, function (planCoverage) {
                     return planCoverage.coverageId == selectedCoverage.coverageId;
                 });
@@ -525,9 +525,9 @@ app.controller('PlanSetupController', ['$scope', '$http', '$location', '$routePa
                 }
                 planCoverage.planCoverageBenefits.push($scope.newPlanCoverageBenefit);
                 $scope.newPlanCoverageBenefit = angular.copy({benefitLimit: null, maxLimit: null});
-                $scope.benefitForm.$setPristine();
-                $scope.benefitForm.$setUntouched();
-                $scope.coverageForm.$setValidity();
+                benefitForm.$setPristine();
+                benefitForm.$setUntouched();
+                benefitForm.$setValidity();
                 $scope.step6.$error = false;
             };
 

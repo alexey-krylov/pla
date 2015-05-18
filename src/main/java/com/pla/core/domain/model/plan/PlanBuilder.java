@@ -44,10 +44,10 @@ public class PlanBuilder {
         this.policyTermType = policyTermType;
         switch (policyTermType) {
             case SPECIFIED_VALUES:
-                if (groupTerm != null) {
-                    this.policyTerm = new Term(groupTerm);
-                } else {
+                if (validValues.size() > 0) {
                     this.policyTerm = new Term(validValues, maxMaturityAge);
+                } else {
+                    this.policyTerm = new Term(groupTerm);
                 }
                 break;
             case MATURITY_AGE_DEPENDENT:

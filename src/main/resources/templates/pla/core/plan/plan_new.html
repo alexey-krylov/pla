@@ -115,15 +115,9 @@
                                 <div class='input-group date'>
                                     <input type="text" class="form-control input-sm"
                                            datepicker-popup=""
-                                           ng-required="true"
+                                           ng-required="{{plan.planId!=undefined}}"
                                            is-open="launchDateOpen"
-                                           ng-model="launchDt" name="launchDate" id='launchDate' ng-if="plan.planId!=undefined"/>
-                                    <input type="text" class="form-control input-sm"
-                                           datepicker-popup=""
-                                           ng-required="true"
-                                           is-open="launchDateOpen"
-                                           min-date="minDate"
-                                           ng-model="launchDt" name="launchDate_edit" id='launchDate_edit' ng-if="plan.planId==undefined"/>
+                                           ng-model="launchDt" name="launchDate" id='launchDate'/>
                                     <span class="input-group-btn">
                                     <button type="button" class="btn btn-default btn-sm" ng-click="openLaunchDate($event)">
                                         <i class="glyphicon glyphicon-calendar"></i></button>
@@ -523,13 +517,13 @@
                                     <h3 class="panel-title">Premium Payment Term Values</h3>
                                 </div>
                                 <div class="panel-body">
-                                    <div class="control-group col-md-3">
+                                    <!--<div class="control-group col-md-3">
                                         <label class="control-label" for="groupTerm">Premium Payment Cutoff Age</label>
                                         <div class="controls">
                                             <input type="number" ng-pattern="onlyNumbers" class="form-control col-sm-3"
                                                    ng-model="plan.premiumTerm.maxMaturityAge" name="cutoffage"/>
                                         </div>
-                                    </div>
+                                    </div>-->
                                     <div class="control-group required col-md-9">
                                         <label class="control-label">Payment Terms</label>
                                         <div class="controls">
@@ -713,7 +707,7 @@
                                     </div>
                                 </div>
                                 <p class="pager" style="line-height:10px;">
-                                    <button class="btn btn-primary" ng-click="addBenefit(selectedCoverage)" ng-disabled="benefitForm.$invalid">
+                                    <button class="btn btn-primary" ng-click="addBenefit(selectedCoverage,benefitForm)" ng-disabled="benefitForm.$invalid">
                                         <span class="glyphicon glyphicon-add" aria-hidden="true">Add</span>
                                     </button>
                                 </p>
