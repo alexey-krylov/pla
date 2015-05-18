@@ -359,7 +359,7 @@
                         <div class="control-group col-sm-3" ng-show="clientType=='GROUP'">
                             <label class="control-label" for="groupTerm">Group Term</label>
                             <div class="controls">
-                                <input type="text" class="form-control input-sm col-sm-3" id="groupTerm" ng-model="plan.policyTerm.groupTerm"
+                                <input type="text" readonly="true" class="form-control input-sm col-sm-3" id="groupTerm" ng-model="plan.policyTerm.groupTerm"
                                        ng-show="clientType=='GROUP'"/>
                             </div>
                         </div>
@@ -444,7 +444,7 @@
                             <label class="control-label" for="groupTerm">Premium Payment Term Type</label>
 
                             <div class="controls">
-                                <select ng-model="plan.premiumTermType" class="form-control input-sm  col-sm-3">
+                                    <select ng-model="plan.premiumTermType" class="form-control input-sm  col-sm-3" disabled="{{premiumPaymentTermReadonly}}">
                                     <option value="REGULAR">Regular</option>
                                     <option value="SINGLE">Single</option>
                                     <option value="SPECIFIED_VALUES">Specified Values</option>

@@ -37,6 +37,8 @@ import java.io.OutputStream;
 import java.util.List;
 import java.util.Map;
 
+import static org.nthdimenzion.utils.UtilValidator.isEmpty;
+
 /**
  * @author: Samir
  * @since 1.0 30/03/2015
@@ -98,6 +100,9 @@ public class PremiumSetUpController {
 
     @RequestMapping(value = "/downloadpremiumtemplate", method = RequestMethod.POST)
     public void downloadPremiumTemplate(@Valid @ModelAttribute PremiumTemplateDto premiumTemplateDto, HttpServletRequest request, HttpServletResponse response) throws IOException {
+        if (isEmpty(premiumTemplateDto.getPremiumInfluencingFactors()) || isEmpty(premiumTemplateDto.getPlanId())) {
+            return;
+        }
         response.reset();
         response.setContentType("application/msexcel");
         Plan plan = planRepository.findOne(new PlanId(premiumTemplateDto.getPlanId()));

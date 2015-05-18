@@ -158,6 +158,7 @@ app.controller('PlanSetupController', ['$scope', '$http', '$location', '$routePa
             $scope.isSurrenderDisabled = function () {
                 if ($scope.clientType == 'GROUP') {
                     $scope.surrenderAfter = '';
+                    $scope.plan.premiumTermType='REGULAR';
                     return true;
                 }
             };

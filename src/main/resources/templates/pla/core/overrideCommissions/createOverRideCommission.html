@@ -94,11 +94,11 @@
 
                                 </div>
                                 <div class="form-group col-md-2">
-                                    <label class="control-label">From Year</label>
+                                    <label class="control-label">Policy Year1</label>
                                     <input type="text" name="policyYear1"  class="form-control input-sm" ng-disabled="(!addOverRideCommission.policyYearExpressed)" id="policyYear1" ng-model="addOverRideCommission.fromYear"/>
                                 </div>
                                 <div class="form-group col-md-2" ng-show="showToYear">
-                                    <label class="control-label">To Year</label>
+                                    <label class="control-label">Policy Year2</label>
                                     <input type="text" name="policyYear2" class="form-control input-sm" id="policyYear2" ng-disabled="(!addOverRideCommission.policyYearExpressed)" ng-model="addOverRideCommission.toYear"/>
                                 </div>
                                 <div class="form-group col-md-3" >
@@ -115,9 +115,9 @@
                         <table class="table table-striped table-bordered" ng-show="showtable">
                             <thead>
                             <tr>
-                                <th>From Year</th>
-                                <th>To Year</th>
-                                <th>Commissions In %age</th>
+                                <th>Policy Year1</th>
+                                <th>Policy Year2</th>
+                                <th>Over-ride Commissions In %age</th>
                             </tr>
                             </thead>
                             <tbody>

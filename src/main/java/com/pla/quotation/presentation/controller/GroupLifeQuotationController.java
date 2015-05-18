@@ -78,7 +78,7 @@ public class GroupLifeQuotationController {
         try {
             agentDetail = glQuotationFinder.getAgentById(agentId);
         } catch (Exception e) {
-            return Result.failure("Agent not found");
+            return Result.failure("Agent detail not found");
         }
         checkArgument(agentDetail != null);
         CreateGLQuotationCommand createGLQuotationCommand = new CreateGLQuotationCommand();
