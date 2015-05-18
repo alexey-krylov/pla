@@ -1,12 +1,16 @@
 package com.pla.quotation.application.service;
 
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import com.pla.publishedlanguage.contract.IPlanAdapter;
+import com.pla.publishedlanguage.dto.PlanCoverageDetailDto;
 import com.pla.quotation.query.InsuredDto;
 import com.pla.sharedkernel.domain.model.Gender;
 import com.pla.sharedkernel.domain.model.Relationship;
+import com.pla.sharedkernel.identifier.PlanId;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
+import org.nthdimenzion.common.AppConstants;
 import org.nthdimenzion.presentation.AppUtils;
 
 import java.math.BigDecimal;
@@ -67,7 +71,7 @@ public enum GLInsuredExcelHeader {
         @Override
         public String validateAndIfNotBuildErrorMessage(IPlanAdapter planAdapter, Row row, String value, List<String> excelHeaders) {
             String errorMessage = "";
-            if (!isValidNrcNumber(value)) {
+            if (!isValidNrcNumber(value) && isNotEmpty(value)) {
                 errorMessage = errorMessage + "NRC Number is not in valid format [0-9]{6}/[0-9]{2}/[0-9].";
             }
             return errorMessage;
@@ -422,6 +426,17 @@ public enum GLInsuredExcelHeader {
             return Double.valueOf(cell.getNumericCellValue()).toString().trim();
         }
         return cell.getStringCellValue().trim();
+    }
+
+    public static List<String> getAllowedHeaders(IPlanAdapter planAdapter, List<PlanId> planIds) {
+        List<PlanCoverageDetailDto> planCoverageDetailDtoList = planAdapter.getPlanAndCoverageDetail(planIds);
+        int noOfOptionalCoverage = PlanCoverageDetailDto.getNoOfOptionalCoverage(planCoverageDetailDtoList);
+        List<String> headers = GLInsuredExcelHeader.getAllHeader();
+        for (int count = 1; count <= noOfOptionalCoverage; count++) {
+            headers.add((AppConstants.OPTIONAL_COVERAGE_HEADER + count));
+            headers.add((AppConstants.OPTIONAL_COVERAGE_HEADER + count) + " " + AppConstants.PREMIUM_CELL_HEADER_NAME);
+        }
+        return ImmutableList.copyOf(headers);
     }
 
     public abstract String getAllowedValue(InsuredDto insuredDto);

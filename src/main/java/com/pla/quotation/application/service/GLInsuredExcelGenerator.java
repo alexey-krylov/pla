@@ -1,11 +1,9 @@
 package com.pla.quotation.application.service;
 
-import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.pla.core.query.MasterFinder;
 import com.pla.publishedlanguage.contract.IPlanAdapter;
-import com.pla.publishedlanguage.dto.PlanCoverageDetailDto;
 import com.pla.quotation.query.InsuredDto;
 import com.pla.sharedkernel.domain.model.Gender;
 import com.pla.sharedkernel.domain.model.OccupationCategory;
@@ -42,9 +40,7 @@ public class GLInsuredExcelGenerator {
     }
 
     public HSSFWorkbook generateInsuredExcel(List<InsuredDto> insureds, List<PlanId> planIds) throws IOException {
-        List<PlanCoverageDetailDto> planCoverageDetailDtoList = planAdapter.getPlanAndCoverageDetail(planIds);
-        int noOfOptionalCoverage = PlanCoverageDetailDto.getNoOfOptionalCoverage(planCoverageDetailDtoList);
-        final List<String> headers = getHeaders(noOfOptionalCoverage);
+        final List<String> headers = GLInsuredExcelHeader.getAllowedHeaders(planAdapter, planIds);
         List excelData = insureds.stream().map(new Function<InsuredDto, List<Map<Integer, String>>>() {
             @Override
             public List<Map<Integer, String>> apply(InsuredDto insuredDto) {
@@ -95,26 +91,6 @@ public class GLInsuredExcelGenerator {
             excelDataMap.put(indexOfOptionalCoverage + 1, coveragePremiumDetail.getPremium() != null ? coveragePremiumDetail.getPremium().toString() : "");
         });
         return excelDataMap;
-    }
-
-    private List<String> getHeaders(int noOfOptionalCoverage) {
-        List<String> headers = GLInsuredExcelHeader.getAllHeader();
-        for (int count = 1; count <= noOfOptionalCoverage; count++) {
-            headers.add((AppConstants.OPTIONAL_COVERAGE_HEADER + count));
-            headers.add((AppConstants.OPTIONAL_COVERAGE_HEADER + count) +" "+AppConstants.PREMIUM_CELL_HEADER_NAME);
-        }
-        return ImmutableList.copyOf(headers);
-    }
-
-    private List<String> getAllOccupationCategory() {
-        List<Map<String, Object>> occupationClassList = masterFinder.getAllOccupationClass();
-        List<String> occupationClasses = occupationClassList.stream().map(new Function<Map<String, Object>, String>() {
-            @Override
-            public String apply(Map<String, Object> stringObjectMap) {
-                return (String) stringObjectMap.get("code");
-            }
-        }).collect(Collectors.toList());
-        return occupationClasses;
     }
 
     private List<String> getAllOccupationClassification() {

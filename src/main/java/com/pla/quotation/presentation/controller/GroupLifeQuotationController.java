@@ -11,6 +11,7 @@ import com.wordnik.swagger.annotations.ApiOperation;
 import net.sf.jasperreports.engine.JRException;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.poifs.filesystem.POIFSFileSystem;
+import org.apache.poi.util.IOUtils;
 import org.axonframework.commandhandling.gateway.CommandGateway;
 import org.nthdimenzion.presentation.Result;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,8 +23,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.io.OutputStream;
+import java.io.*;
 import java.util.Map;
 
 import static com.google.common.base.Preconditions.checkArgument;
@@ -181,6 +181,20 @@ public class GroupLifeQuotationController {
         outputStream.close();
     }
 
+    @RequestMapping(value = "/downloaderrorinsuredtemplate/{quotationId}", method = RequestMethod.GET)
+    public void downloadErrorInsuredTemplate(@PathVariable("quotationId") String quotationId, HttpServletResponse response) throws IOException {
+        response.reset();
+        response.setContentType("application/msexcel");
+        response.setHeader("content-disposition", "attachment; filename=" + "insuredTemplate.xls" + "");
+        OutputStream outputStream = response.getOutputStream();
+        File errorTemplateFile = new File(quotationId);
+        InputStream inputStream = new FileInputStream(errorTemplateFile);
+        outputStream.write(IOUtils.toByteArray(inputStream));
+        outputStream.flush();
+        outputStream.close();
+        errorTemplateFile.delete();
+    }
+
     @RequestMapping(value = "/uploadinsureddetail", method = RequestMethod.POST)
     @ResponseBody
     public Result uploadInsuredDetail(UploadInsuredDetailDto uploadInsuredDetailDto) throws IOException {
@@ -190,9 +204,18 @@ public class GroupLifeQuotationController {
         }
         POIFSFileSystem fs = new POIFSFileSystem(file.getInputStream());
         HSSFWorkbook insuredTemplateWorkbook = new HSSFWorkbook(fs);
-        boolean isValidInsuredTemplate = glQuotationService.isValidInsuredTemplate(insuredTemplateWorkbook, uploadInsuredDetailDto.isSamePlanForAllCategory(), uploadInsuredDetailDto.isSamePlanForAllRelation());
-        if (!isValidInsuredTemplate) {
-            return Result.failure("Uploaded Insured template is not valid.Please download to check the errors");
+        try {
+            boolean isValidInsuredTemplate = glQuotationService.isValidInsuredTemplate(uploadInsuredDetailDto.getQuotationId(), insuredTemplateWorkbook, uploadInsuredDetailDto.isSamePlanForAllCategory(), uploadInsuredDetailDto.isSamePlanForAllRelation());
+            if (!isValidInsuredTemplate) {
+                File insuredTemplateWithError = new File(uploadInsuredDetailDto.getQuotationId());
+                FileOutputStream fileOutputStream = new FileOutputStream(insuredTemplateWithError);
+                insuredTemplateWorkbook.write(fileOutputStream);
+                fileOutputStream.flush();
+                fileOutputStream.close();
+                return Result.failure("Uploaded Insured template is not valid.Please download to check the errors");
+            }
+        } catch (Exception e) {
+            return Result.failure(e.getMessage());
         }
         return Result.success("Insured detail uploaded successfully");
     }

@@ -54,8 +54,10 @@ public class GLQuotationService {
         return pdfData;
     }
 
-    public boolean isValidInsuredTemplate(HSSFWorkbook insuredTemplateWorkbook, boolean samePlanForAllCategory, boolean samePlanForAllRelationship) {
-        return glInsuredExcelParser.isValidInsuredExcel(insuredTemplateWorkbook, samePlanForAllCategory, samePlanForAllRelationship);
+    public boolean isValidInsuredTemplate(String quotationId, HSSFWorkbook insuredTemplateWorkbook, boolean samePlanForAllCategory, boolean samePlanForAllRelationship) {
+        AgentDetailDto agentDetailDto = getAgentDetail(new QuotationId(quotationId));
+        List<PlanId> agentPlans = getAgentAuthorizedPlans(agentDetailDto.getAgentId());
+        return glInsuredExcelParser.isValidInsuredExcel(insuredTemplateWorkbook, samePlanForAllCategory, samePlanForAllRelationship, agentPlans);
     }
 
     private List<PlanId> getAgentAuthorizedPlans(String agentId) {
