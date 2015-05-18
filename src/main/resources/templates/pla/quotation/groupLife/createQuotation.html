@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" lang="en">
+<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/xhtml" lang="en">
 <head th:include="fragments/common :: headTag">
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <!--/*-->
@@ -22,7 +22,7 @@
 
     }
     requirejs(['main','angular-file-upload'],function(){
-        require(['/pla/js/quotation/groupLife/createQuotation.js'],function(){
+        require(['/pla/js/quotation/groupLife/createQuotation.js?t=0'], function () {
             angular.element(document).ready(function() {
                 angular.bootstrap(document, ['createQuotation']);
             });
@@ -216,6 +216,8 @@
                         <div class="col-lg-3 col-lg-offset-3">
                             <div class="checkbox">
                                 <label class="checkbox-custom" data-initialize="checkbox">
+                                    <input type="hidden" ng-value="quotationId" name="quotationId" ng-model="quotationId"/>
+
                                     <input class="sr-only" type="checkbox" ng-true-value="true" ng-false-value="false" name="planChoice" ng-model="quotationDetails.plan.samePlanForAllRelation"/>
                                     <span class="checkbox-label" style="position: relative;top:5px;font-weight: bold;color:#000000;margin-left:5px">Same Plan for all Relationships</span>
                                 </label>

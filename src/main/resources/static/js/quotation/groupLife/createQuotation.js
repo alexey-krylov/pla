@@ -82,7 +82,7 @@ angular.module('createQuotation',['common','ngRoute','mgcrea.ngStrap.select','mg
                             },
                             {
                                 "text": "<a><img src=\"/pla/images/xls-icon.png\">Error File</a>",
-                                "href": "/pla/quotation/grouplife/downloadinsuredtemplate/" + $scope.qId
+                                "href": "/pla/quotation/grouplife/downloaderrorinsuredtemplate/" + $scope.qId
                             }
                         ];
                     }
@@ -235,12 +235,12 @@ angular.module('createQuotation',['common','ngRoute','mgcrea.ngStrap.select','mg
 
             $scope.savePlanDetails = function () {
                 $upload.upload({
-                    url: '/pla/quotation/grouplife/uploadinsureddetail',
+                    url: '/pla/quotation/grouplife/uploadinsureddetail?quotationId=' + $scope.quotationId,
                     headers: {'Authorization': 'xxx'},
                     fields:$scope.quotationDetails.plan,
                     file: $scope.fileSaved
                 }).success(function (data, status, headers, config) {
-                    if(data.status="200"){
+                    if (data.status == "200") {
                         saveStep();
                         $scope.showDownload=true;
                         $http.get("/pla/quotation/getpremiumdetail/"+ $scope.quotationId)
