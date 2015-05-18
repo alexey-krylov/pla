@@ -36,6 +36,7 @@ public class CreatePlanCommand {
 
 @Getter
 @Setter
+@ToString
 class Detail {
     String planName;
     String planCode;
@@ -95,7 +96,7 @@ class TermDetail {
 
     Set<TermValue> validTerms = new HashSet<TermValue>();
     Set<TermValue> maturityAges = new HashSet<TermValue>();
-    Integer maxMaturityAge;
+    int maxMaturityAge;
     private Integer groupTerm;
 
     public SortedSet<Integer> getValidTerms() {

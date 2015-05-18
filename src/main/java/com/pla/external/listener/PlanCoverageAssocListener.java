@@ -64,10 +64,9 @@ public class PlanCoverageAssocListener {
                         .addValue("coverageId", coverageId.toString())
                         .addValue("benefitId", benefitId.toString())
                         .addValue("planName", planName)
-                        .addValue("benefitId", planCode);
-
+                        .addValue("planCode", planCode);
                 namedParameterJdbcTemplate.execute("insert into plan_coverage_benefits_assoc (`plan_id`,`plan_name`,`plan_code`,`coverage_id`," +
-                                "`benefit_id`,`optional`) values (:planId,:coverageId,:benefitId,0)", parameterSource,
+                                "`benefit_id`,`optional`) values (:planId,:planName,:planCode,:coverageId,:benefitId,0)", parameterSource,
                         new PreparedStatementCallback<Object>() {
                             @Override
                             public Object doInPreparedStatement(PreparedStatement ps) throws SQLException, DataAccessException {
@@ -88,9 +87,9 @@ public class PlanCoverageAssocListener {
                         .addValue("coverageId", coverageId.toString())
                         .addValue("benefitId", benefitId.toString())
                         .addValue("planName", planName)
-                        .addValue("benefitId", planCode);
+                        .addValue("planCode", planCode);
                 namedParameterJdbcTemplate.execute("insert into plan_coverage_benefits_assoc (`plan_id`,`plan_name`,`plan_code`,`coverage_id`," +
-                                "`benefit_id`,`optional`) values (:planId,:coverageId,:benefitId,1)", parameterSource,
+                                "`benefit_id`,`optional`) values (:planId,:planName,:planCode,:coverageId,:benefitId,1)", parameterSource,
                         new PreparedStatementCallback<Object>() {
                             @Override
                             public Object doInPreparedStatement(PreparedStatement ps) throws SQLException, DataAccessException {

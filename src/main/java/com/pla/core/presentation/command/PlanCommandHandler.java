@@ -109,6 +109,7 @@ public class PlanCommandHandler {
                 command.getSumAssured().getSumAssuredValue(),
                 command.getSumAssured().getIncomeMultiplier());
         planBuilder.withPolicyTerm(command.getPolicyTermType(), command.getPolicyTerm().getValidTerms(), command.getPolicyTerm().getMaxMaturityAge(), command.getPolicyTerm().getGroupTerm());
+        System.out.println(command.getPremiumTerm());
         planBuilder.withPremiumTerm(command.getPremiumTermType(), command.getPremiumTerm().getValidTerms(), command.getPremiumTerm().getMaxMaturityAge());
         planBuilder.withPlanCoverages(coverageSet);
         return planBuilder;

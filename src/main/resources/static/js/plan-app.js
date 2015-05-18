@@ -27,7 +27,8 @@ app.config(function ($routeProvider, $locationProvider) {
                 plan: function () {
                     return {
                         "planDetail": {
-                            launchDate: moment().format('DD/MM/YYYY')
+                            launchDate: moment().format('DD/MM/YYYY'),
+                            freeLookPeriod: 15
                         },
                         "policyTermType": "SPECIFIED_VALUES",
                         "premiumTermType": "SPECIFIED_VALUES",
@@ -181,10 +182,13 @@ app.controller('PlanSetupController', ['$scope', '$http', '$location', '$routePa
                 if (!angular.isUndefined(val)) {
                     $scope.plan.planDetail.clientType = val;
                     if ($scope.clientType == 'GROUP') {
+                        $scope.plan.premiumTermType = 'REGULAR';
                         $scope.sumAssuredTypes = angular.copy($scope.sumAssuredTypesOriginal);
                         $scope.sumAssuredTypes.push({val: 'INCOME_MULTIPLIER', desc: 'Income Multiplier'});
+                        $scope.premiumPaymentTermReadonly = true;
                     } else {
                         $scope.sumAssuredTypes = angular.copy($scope.sumAssuredTypesOriginal);
+                        $scope.premiumPaymentTermReadonly = false;
                     }
                 }
             });
@@ -192,7 +196,6 @@ app.controller('PlanSetupController', ['$scope', '$http', '$location', '$routePa
             $scope.isSurrenderDisabled = function () {
                 if ($scope.clientType == 'GROUP') {
                     $scope.surrenderAfter = '';
-                    $scope.plan.premiumTermType='REGULAR';
                     return true;
                 }
             };
