@@ -164,7 +164,7 @@
                             <input name="premiumInfluencingFactors" type="checkbox"
                                    th:field="*{createPremiumCommand.premiumInfluencingFactors}"
                                    th:id="${{premiumInfluencingFactors}}" th:value="${{premiumInfluencingFactors}}"/>
-                            <label th:text="${{premiumInfluencingFactors.description}}"></label>
+                            <label th:text="${{premiumInfluencingFactors.description}}" ></label>
                         </div>
                     </div>
                 </div>
@@ -177,7 +177,7 @@
                                 <span class="input-group-btn">
                                     <span class="btn btn-default btn-file">
                                         Browse...
-                                        <input type="file" name="file"/>
+                                        <input type="file" name="file" />
                                     </span>
                                 </span>
                                 <input type="text" class="form-control"/>
@@ -188,7 +188,7 @@
                 <div class="row">
                     <div class="col-lg-12" style="text-align: center;margin-top:3px;">
                         <a class="btn btn-default" th:href="@{/core/premium/listpremium}">Cancel</a>
-                        <input type="submit" class="btn btn-primary" value="Upload" onclick="javascript:uploadTemplate();"/>
+                        <input type="submit" class="btn btn-primary" value="Upload" ng-disabled="(!createPremium.planId || !createPremium.effectiveFrom )" onclick="javascript:uploadTemplate();"/>
                     </div>
                 </div>
 

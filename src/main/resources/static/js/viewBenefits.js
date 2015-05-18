@@ -14,10 +14,11 @@ function preConfigurations(){
         $('#benefitName').focus()
     });
 
+
     $('#benefit-table').dataTable(
         {
             "aoColumnDefs": [
-                { "bSearchable": false, "aTargets": [ 1 ] }
+                { "bSearchable": false, "bSortable":false, "aTargets": [ 1 ] }
             ] }
     );
 }
@@ -93,6 +94,7 @@ var updateBenefit = function(benefitMap){
             if(msg.status=='200'){
                 hideAlerts();
                 $('#alert').text(msg.message).show();
+                document.getElementById("benefitName").disabled = true;
                 $('#cancel-button').text('Done');
                 $('#createUpdate').hide();
             }else if(msg.status=='500'){
@@ -123,6 +125,7 @@ var createBenefit = function(){
             if(msg.status=='200'){
                 hideAlerts();
                 $('#alert').text(msg.message).show();
+                document.getElementById("benefitName").disabled = true;
                 $('#cancel-button').text('Done');
                 $('#createUpdate').hide();
             }else if(msg.status=='500'){
@@ -173,7 +176,13 @@ var inactivate=function(value,flag){
             contentType: 'application/json; charset=utf-8',
             success: function(msg) {
                 if(msg.status=='200'){
-                    window.location.reload();
+                    $('#alert-modal').show();
+                    $('#confirmationMsg').hide();
+                    $('#approveButton').hide();
+                    $('#changeToOk').text('Ok');
+                    $("#successMessage").text(msg.message).show();
+                    window.setTimeout('location.reload()', 3000);
+                  //window.location.reload();
                 }else{
                     $('#approveButton').hide();
                     $('#inactivate-alert-danger').text(msg.message).show();

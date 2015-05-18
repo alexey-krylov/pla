@@ -1,4 +1,4 @@
-var App = angular.module('createPremium', ['ngRoute', 'ui.bootstrap', 'ngSanitize']);
+var App = angular.module('createPremium', ['ngRoute', 'ui.bootstrap', 'ngSanitize','angularFileUpload']);
 
 App.controller('CreatePremiumController', ['$scope', '$http', function ($scope, $http) {
 
