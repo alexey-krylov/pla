@@ -42,26 +42,6 @@ public class PlanDetailTest {
 
     }
 
-    @Test(expected = IllegalArgumentException.class)
-    public void should_not_create_plan_detail_when_group_endorsements_for_individual_insurance() {
-        PlanDetailBuilder builder = PlanDetail.builder();
-        builder.withPlanName("Plan 1")
-                .withPlanCode("0001900")
-                .withLaunchDate(LocalDate.now().plusDays(10))
-                .withWithdrawalDate(LocalDate.now().plusDays(30))
-                .withMinEntryAge(21)
-                .withMaxEntryAge(60)
-                .withFreeLookPeriod(15)
-                .withSurrenderAfter(5)
-                .withClientType(ClientType.INDIVIDUAL)
-                .withLineOfBusinessId(LineOfBusinessId.INDIVIDUAL_LIFE)
-                .withPlanType(PlanType.NON_INVESTMENT)
-                .withApplicableRelationships(new HashSet<>(Arrays.asList(Relationship.BROTHER, Relationship.DAUGHTER)))
-                .withEndorsementTypes(Sets.newHashSet(new EndorsementType("Change Insured Name")))
-                .build();
-
-    }
-
     PlanDetail createPlanDetail() {
         PlanDetailBuilder builder = PlanDetail.builder();
         LocalDate launchDate = LocalDate.now().plusDays(10);
