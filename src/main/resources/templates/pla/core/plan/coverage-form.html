@@ -5,7 +5,7 @@
     </div>
     <div class="modal-body">
         <form name="coverageForm" ng-submit="submitForm(coverageForm.$valid)" novalidate="true">
-                <div class="row">
+            <div class="row">
                 <div class="control-group required col-md-2">
                     <label class="control-label">Coverage</label>
 
@@ -37,7 +37,7 @@
                         </small>
                     </div>
                 </div>
-                <div class="control-group required col-md-4">
+                <div class="control-group col-md-4">
                     <label class="control-label">Deductible Type</label>
 
                     <div class="controls">
@@ -47,18 +47,8 @@
                         </label>
                         <label class="radio-inline">
                             <input type="radio" name="deductibleType"
-                                   ng-model="newCoverage.deductibleType" value="PERCENTAGE" ng-required="true"/>% of
-                            Claimed
-                            Amount
+                                   ng-model="newCoverage.deductibleType" value="PERCENTAGE"/>% of Claimed Amount
                         </label>
-
-                        <div class="error"
-                             ng-show="step5.deductibleType.$dirty &amp;&amp; step5.deductibleType.$invalid">
-                            <small class="error"
-                                   ng-show="step5.deductibleType.$error.required">
-                                Please select the Deductible type.
-                            </small>
-                        </div>
                     </div>
                 </div>
                 <div class="control-group required col-md-2">
@@ -215,6 +205,9 @@
                             <select ng-model="newCoverage.coverageSumAssured.multiplesOf"
                                     ng-required="true"
                                     class="form-control input-sm">
+                                <option value="1">1</option>
+                                <option value="10">10</option>
+                                <option value="100">100</option>
                                 <option value="1000">1000</option>
                                 <option value="10000">10000</option>
                                 <option value="100000">100000</option>
@@ -273,6 +266,7 @@
                     <div class="animate-switch" ng-switch-when="SPECIFIED_VALUES">
                         <div class="control-group required col-md-9">
                             <label class="control-label">Coverage Term Values</label>
+
                             <div class="controls">
                                 <tags-input class="col-md-12"
                                             ng-model="newCoverage.coverageTerm.validTerms"
@@ -286,12 +280,12 @@
 
                             <div class="controls">
                                 <input type="number" ng-model="newCoverage.coverageTerm.maxMaturityAge"
-                                       class="form-control" name="maxMaturityAge" max="{{newCoverage.maxAge}}"
+                                       class="form-control" name="maxMaturityAge" min="{{newCoverage.maxAge}}" max="{{plan.planDetail.maxEntryAge}}"
                                        ng-required="true"/>
 
                                 <div ng-show="coverageForm.maxMaturityAge.$dirty &amp;&amp; coverageForm.maxMaturityAge.$invalid">
                                     <small class="error" ng-show="coverageForm.maxMaturityAge.$error.max">
-                                        Maximum Age cannot be greater than Maximum Entry Age.
+                                        Coverage Maximum Maturity Age should be greater than Max Entry Age of Coverage and less than or equal to the Maximum Maturity Age of Plan
                                     </small>
                                 </div>
                             </div>

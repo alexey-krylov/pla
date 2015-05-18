@@ -8,6 +8,7 @@ import com.google.common.collect.Sets;
 import com.pla.core.domain.event.PlanCoverageAssociationEvent;
 import com.pla.core.domain.event.PlanCreatedEvent;
 import com.pla.core.domain.event.PlanDeletedEvent;
+import com.pla.core.domain.exception.PlanValidationException;
 import com.pla.sharedkernel.domain.model.*;
 import com.pla.sharedkernel.identifier.BenefitId;
 import com.pla.sharedkernel.identifier.CoverageId;
@@ -59,12 +60,21 @@ public class Plan extends AbstractAnnotatedAggregateRoot<PlanId> {
 
     }
 
-    Plan(PlanId planId, PlanBuilder planBuilder) {
-        this.planId = planId;
-        this.status = PlanStatus.DRAFT;
-        copyPropertiesFromPlanBuilder(planBuilder);
-        super.registerEvent(new PlanCreatedEvent(planId));
-        super.registerEvent(new PlanCoverageAssociationEvent(this.planId, Collections.unmodifiableMap(derievedCoverages())));
+    Plan(PlanId planId, PlanBuilder planBuilder) throws PlanValidationException {
+        try {
+            this.planId = planId;
+            this.status = PlanStatus.DRAFT;
+            copyPropertiesFromPlanBuilder(planBuilder);
+            if (planBuilder.getPlanDetail() != null) {
+                super.registerEvent(new PlanCreatedEvent(planId));
+                super.registerEvent(new PlanCoverageAssociationEvent(this.planId, this.planDetail.getPlanName(), this.planDetail.getPlanCode(),
+                        this.planDetail.lineOfBusinessId, this.planDetail.getClientType(), this.planDetail.planType, this.planDetail.launchDate, this.planDetail.withdrawalDate,
+                        Collections.unmodifiableMap(derievedCoverages())));
+            }
+        } catch (Throwable t) {
+            t.printStackTrace();
+            throw new PlanValidationException(t.getMessage());
+        }
     }
 
     public static PlanBuilder builder() {
@@ -81,7 +91,7 @@ public class Plan extends AbstractAnnotatedAggregateRoot<PlanId> {
         this.premiumTerm = planBuilder.getPremiumTerm();
         this.policyTerm = planBuilder.getPolicyTerm();
         this.coverages = planBuilder.getCoverages();
-        Preconditions.checkState(specification.isSatisfiedBy(this), "Conflicting terms found.Please check Policy and Premium Terms ");
+        Preconditions.checkState(specification.isSatisfiedBy(this), "Conflicting terms values found.Please check Policy and Premium Terms ");
         Collection<Term> allTerms = new LinkedList<>();
         if (this.premiumTermType == PremiumTermType.SPECIFIED_VALUES)
             allTerms.add(this.premiumTerm);
@@ -92,11 +102,20 @@ public class Plan extends AbstractAnnotatedAggregateRoot<PlanId> {
             }
         });
         Preconditions.checkState(specification.checkCoverageTerm(this, allTerms));
+
+        if (planBuilder.getSumAssured() != null && planBuilder.getSumAssured().getSumAssuredType() == SumAssuredType.INCOME_MULTIPLIER) {
+            Preconditions.checkState(planBuilder.getPlanDetail().getClientType() == ClientType.GROUP);
+        }
     }
 
-    public void updatePlan(PlanBuilder planBuilder) {
-        Preconditions.checkState(this.status == PlanStatus.DRAFT, "Plan in draft status can only be updated.");
-        copyPropertiesFromPlanBuilder(planBuilder);
+    public void updatePlan(PlanBuilder planBuilder) throws PlanValidationException {
+        try {
+            Preconditions.checkState(this.status == PlanStatus.DRAFT, "Plan in draft status can only be updated.");
+            copyPropertiesFromPlanBuilder(planBuilder);
+        } catch (Throwable t) {
+            t.printStackTrace();
+            throw new PlanValidationException(t.getMessage());
+        }
     }
 
 

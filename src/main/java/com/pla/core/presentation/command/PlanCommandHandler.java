@@ -1,9 +1,9 @@
 package com.pla.core.presentation.command;
 
 import com.pla.core.domain.exception.DuplicatePlanException;
+import com.pla.core.domain.exception.PlanValidationException;
 import com.pla.core.domain.model.plan.*;
 import com.pla.core.specification.PlanCodeSpecification;
-import com.pla.sharedkernel.domain.model.ClientType;
 import com.pla.sharedkernel.domain.model.CoverageTermType;
 import com.pla.sharedkernel.domain.model.SumAssuredType;
 import com.pla.sharedkernel.util.SequenceGenerator;
@@ -36,7 +36,7 @@ public class PlanCommandHandler {
     }
 
     @CommandHandler
-    public void handle(CreatePlanCommand command) throws DuplicatePlanException {
+    public void handle(CreatePlanCommand command) throws DuplicatePlanException, PlanValidationException {
         boolean isSatisfied = planCodeSpecification.satisfiedOnCreate(command.getPlanId(), command.getPlanDetail().getPlanName(),
                 command.getPlanDetail().getPlanCode());
         if (!isSatisfied) {
@@ -66,7 +66,7 @@ public class PlanCommandHandler {
                 .withPlanCode(dtl.getPlanCode())
                 .withPlanType(dtl.getPlanType())
                 .withSurrenderAfter(dtl.getSurrenderAfter());
-        PlanDetail pd = pdBuilder.build();
+        PlanDetail pd = pdBuilder.build(false);
 
         Set<PlanCoverage> coverageSet = new HashSet<PlanCoverage>();
         for (PlanCoverageDetail each : command.getCoverages()) {
@@ -102,15 +102,12 @@ public class PlanCommandHandler {
 
         PlanBuilder planBuilder = Plan.builder();
         planBuilder.withPlanDetail(pd);
-        if (ClientType.GROUP.equals(pd.getClientType())) {
-
-        }
         planBuilder.withPlanSumAssured(command.getSumAssured().getSumAssuredType(),
                 command.getSumAssured().getMinSumInsured(),
                 command.getSumAssured().getMaxSumInsured(),
                 command.getSumAssured().getMultiplesOf(),
                 command.getSumAssured().getSumAssuredValue(),
-                command.getSumAssured().getPercentage());
+                command.getSumAssured().getIncomeMultiplier());
         planBuilder.withPolicyTerm(command.getPolicyTermType(), command.getPolicyTerm().getValidTerms(), command.getPolicyTerm().getMaxMaturityAge(), command.getPolicyTerm().getGroupTerm());
         planBuilder.withPremiumTerm(command.getPremiumTermType(), command.getPremiumTerm().getValidTerms(), command.getPremiumTerm().getMaxMaturityAge());
         planBuilder.withPlanCoverages(coverageSet);
@@ -118,7 +115,7 @@ public class PlanCommandHandler {
     }
 
     @CommandHandler
-    public void handle(UpdatePlanCommand command) throws DuplicatePlanException {
+    public void handle(UpdatePlanCommand command) throws DuplicatePlanException, PlanValidationException {
         boolean isSatisfied = planCodeSpecification.satisfiedOnUpdate(command.getPlanId(), command.getPlanDetail().getPlanName(),
                 command.getPlanDetail().getPlanCode());
         if (!isSatisfied) {

@@ -1,5 +1,6 @@
 package com.pla.core.domain.model.plan;
 
+import com.google.common.collect.Sets;
 import com.pla.sharedkernel.domain.model.ClientType;
 import com.pla.sharedkernel.domain.model.EndorsementType;
 import com.pla.sharedkernel.domain.model.PlanType;
@@ -36,7 +37,7 @@ public class PlanDetailTest {
                 .withLineOfBusinessId(LineOfBusinessId.INDIVIDUAL_LIFE)
                 .withPlanType(PlanType.NON_INVESTMENT)
                 .withApplicableRelationships(new HashSet<>(Arrays.asList(Relationship.BROTHER, Relationship.DAUGHTER)))
-                .withEndorsementTypes(new HashSet<>(Arrays.asList(EndorsementType.IND_CHANGE_ADDRESS, EndorsementType.IND_CHANGE_AGENT)))
+                .withEndorsementTypes(Sets.newHashSet(new EndorsementType("Change Insured Name")))
                 .build();
 
     }
@@ -56,7 +57,7 @@ public class PlanDetailTest {
                 .withLineOfBusinessId(LineOfBusinessId.INDIVIDUAL_LIFE)
                 .withPlanType(PlanType.NON_INVESTMENT)
                 .withApplicableRelationships(new HashSet<>(Arrays.asList(Relationship.BROTHER, Relationship.DAUGHTER)))
-                .withEndorsementTypes(new HashSet<>(Arrays.asList(EndorsementType.IND_CHANGE_ADDRESS, EndorsementType.GRP_MEMBER_ADDITION)))
+                .withEndorsementTypes(Sets.newHashSet(new EndorsementType("Change Insured Name")))
                 .build();
 
     }
@@ -66,7 +67,6 @@ public class PlanDetailTest {
         LocalDate launchDate = LocalDate.now().plusDays(10);
         LocalDate withdrawalDate = LocalDate.now().plusDays(30);
         Set<Relationship> relationshipSet = new HashSet<>(Arrays.asList(Relationship.BROTHER, Relationship.DAUGHTER));
-        Set<EndorsementType> endorsementTypes = new HashSet<>(Arrays.asList(EndorsementType.IND_CHANGE_ADDRESS, EndorsementType.IND_CHANGE_NAME));
         PlanDetail planDetail = builder.withPlanName("Plan 1")
                 .withPlanCode("0001900")
                 .withLaunchDate(launchDate)
@@ -79,8 +79,8 @@ public class PlanDetailTest {
                 .withLineOfBusinessId(LineOfBusinessId.INDIVIDUAL_LIFE)
                 .withPlanType(PlanType.NON_INVESTMENT)
                 .withApplicableRelationships(relationshipSet)
-                .withEndorsementTypes(endorsementTypes)
                 .withTaxApplicable(false)
+                .withEndorsementTypes(Sets.newHashSet(new EndorsementType("Change Insured Name")))
                 .build();
         return planDetail;
     }
@@ -90,8 +90,6 @@ public class PlanDetailTest {
         LocalDate launchDate = LocalDate.now().plusDays(10);
         LocalDate withdrawalDate = LocalDate.now().plusDays(30);
         Set<Relationship> relationshipSet = new HashSet<>(Arrays.asList(Relationship.BROTHER, Relationship.DAUGHTER));
-        Set<EndorsementType> endorsementTypes = new HashSet<>(Arrays.asList(EndorsementType.IND_CHANGE_ADDRESS, EndorsementType.IND_CHANGE_NAME));
-
         PlanDetail planDetail = createPlanDetail();
         assertFalse(planDetail.isTaxApplicable());
         assertEquals("Plan 1", planDetail.getPlanName());
@@ -106,7 +104,6 @@ public class PlanDetailTest {
         assertEquals(LineOfBusinessId.INDIVIDUAL_LIFE, planDetail.getLineOfBusinessId());
         assertEquals(PlanType.NON_INVESTMENT, planDetail.getPlanType());
         assertEquals(relationshipSet, planDetail.getApplicableRelationships());
-        assertEquals(endorsementTypes, planDetail.getEndorsementTypes());
     }
 
 

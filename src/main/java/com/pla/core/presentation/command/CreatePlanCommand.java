@@ -66,6 +66,7 @@ class AssuredDetail {
     private BigDecimal maxSumInsured;
     private int multiplesOf;
     private SumAssuredType sumAssuredType;
+    private BigDecimal incomeMultiplier;
 
     public SortedSet<BigDecimal> getSumAssuredValue() {
         SortedSet<BigDecimal> set = new TreeSet<BigDecimal>();
@@ -92,10 +93,10 @@ class TermValue {
 @Setter
 class TermDetail {
 
-    private Integer groupTerm;
     Set<TermValue> validTerms = new HashSet<TermValue>();
     Set<TermValue> maturityAges = new HashSet<TermValue>();
     Integer maxMaturityAge;
+    private Integer groupTerm;
 
     public SortedSet<Integer> getValidTerms() {
         SortedSet<Integer> set = new TreeSet<Integer>();

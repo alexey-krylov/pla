@@ -794,6 +794,20 @@ CREATE TABLE `plan_coverage_benefits_assoc` (
   CONSTRAINT `FK_PLAN_COVERAGE_ID` FOREIGN KEY (`coverage_id`) REFERENCES `coverage` (`coverage_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8;
 
+ALTER TABLE `plan_coverage_benefits_assoc`
+  ADD COLUMN `plan_name` VARCHAR(100) NULL AFTER `plan_id`,
+  ADD COLUMN `plan_code` VARCHAR(10) NULL AFTER `plan_name`;
+
+CREATE TABLE `endorsement_type` (
+  `endorsement_type_id` BIGINT(20) NOT NULL AUTO_INCREMENT,
+  `description` VARCHAR(120) NOT NULL,
+  `category` VARCHAR(30) NOT NULL,
+  PRIMARY KEY (`endorsement_type_id`)
+) ENGINE=INNODB DEFAULT CHARSET=utf8;
+
+ALTER TABLE `endorsement_type`
+  ADD  UNIQUE INDEX `UNIQUE` (`description`, `category`);
+
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
 /*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;

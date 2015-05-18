@@ -101,6 +101,10 @@ public class PlanDetailBuilder {
     }
 
     public PlanDetail build() {
-        return new PlanDetail(this);
+        return new PlanDetail(this, true);
+    }
+
+    public PlanDetail build(boolean isNewPlan) {
+        return new PlanDetail(this, isNewPlan);
     }
 }

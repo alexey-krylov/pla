@@ -61,6 +61,19 @@ public class PlanSetupController {
 
 
     /**
+     * Get all available endorsements.
+     *
+     * @return
+     */
+    @RequestMapping(value = "/getAllEndorsements", method = RequestMethod.GET)
+    @ResponseBody
+    public List<Map<String, Object>> getEndorsements() {
+        List<Map<String, Object>> endorsementTypeList = planFinder.findAllEndorsements();
+        return endorsementTypeList;
+    }
+
+
+    /**
      * For handling ajax call to get list of all active Plan.
      *
      * @return
@@ -113,7 +126,7 @@ public class PlanSetupController {
             response.reset();
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             viewMap.put("message", dupExp.getMessage());
-        } catch (Exception t) {
+        } catch (Throwable t) {
             response.reset();
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             viewMap.put("message", t.getMessage());
@@ -144,7 +157,7 @@ public class PlanSetupController {
             response.reset();
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             viewMap.put("message", dupExp.getMessage());
-        } catch (Exception t) {
+        } catch (Throwable t) {
             response.reset();
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             viewMap.put("message", t.getMessage());

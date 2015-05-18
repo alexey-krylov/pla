@@ -37,6 +37,16 @@ app.config(function ($routeProvider, $locationProvider) {
                         "coverages": []
                     }
                 },
+                endorsementTypes: ['$q', '$http', function ($q, $http) {
+                    var deferred = $q.defer();
+                    $http.get('/pla/core/plan/getAllEndorsements').success(function (response, status, headers, config) {
+                        deferred.resolve(response);
+                    }).error(function (response, status, headers, config) {
+                        deferred.reject();
+                    });
+                    return deferred.promise;
+                    ;
+                }],
                 activeCoverages: ['$q', '$http', function ($q, $http) {
                     var deferred = $q.defer();
                     $http.get('/pla/core/coverages/activecoverage').success(function (response, status, headers, config) {
@@ -68,6 +78,16 @@ app.config(function ($routeProvider, $locationProvider) {
                     }
                     return deferred.promise;
                 }],
+                endorsementTypes: ['$q', '$http', function ($q, $http) {
+                    var deferred = $q.defer();
+                    $http.get('/pla/core/plan/getAllEndorsements').success(function (response, status, headers, config) {
+                        deferred.resolve(response);
+                    }).error(function (response, status, headers, config) {
+                        deferred.reject();
+                    });
+                    return deferred.promise;
+                    ;
+                }],
                 activeCoverages: ['$q', '$http', function ($q, $http) {
                     var deferred = $q.defer();
                     $http.get('/pla/core/coverages/activecoverage').success(function (response, status, headers, config) {
@@ -85,8 +105,8 @@ app.controller('PlanListController', ['$scope', 'planList', function ($scope, pl
     $scope.planList = planList;
 }
 ]);
-app.controller('PlanSetupController', ['$scope', '$http', '$location', '$routeParams', '$templateCache', '$bsmodal', '$log', 'plan', 'activeCoverages',
-        function ($scope, $http, $location, $routeParams, $templateCache, $modal, $log, plan, activeCoverages) {
+app.controller('PlanSetupController', ['$scope', '$http', '$location', '$routeParams', '$templateCache', '$bsmodal', '$log', 'plan', 'activeCoverages', 'endorsementTypes',
+        function ($scope, $http, $location, $routeParams, $templateCache, $modal, $log, plan, activeCoverages, endorsementTypes) {
 
             $scope.plan = plan;
             $scope.coverageList = activeCoverages;
@@ -113,20 +133,34 @@ app.controller('PlanSetupController', ['$scope', '$http', '$location', '$routePa
                 {val: 'SPOUSE', desc: 'Spouse'},
                 {val: 'STEP_DAUGHTER', desc: 'Step Daughter'},
                 {val: 'STEP_SON', desc: 'Step Son'}];
-            $scope.endorsementTypes = [
-                {val: 'IND_CHANGE_NAME', desc: 'Correction of Name', clientType: 'INDIVIDUAL'},
-                {val: 'IND_CHANGE_ADDRESS', desc: 'Change of Address', category: 'INDIVIDUAL'},
-                {val: 'IND_CHANGE_BENEFICIARY', desc: 'Change/Add Beneficiary', category: 'INDIVIDUAL'},
-                {val: 'IND_CHANGE_PAYMENT_METHOD', desc: 'Change method of Payment', category: 'INDIVIDUAL'},
-                {val: 'IND_CHANGE_AGENT', desc: 'Change Agent', category: 'INDIVIDUAL'},
-                {val: 'IND_CHANGE_PAYER', desc: 'Change Payer', category: 'INDIVIDUAL'},
-                {val: 'IND_CHANGE_SUM_ASSURED', desc: 'Change Sum Assured', category: 'INDIVIDUAL'},
-                {val: 'IND_CHANGE_DOB', desc: 'Change Life Assured Date of Birth', category: 'INDIVIDUAL'},
-                {val: 'GRP_MEMBER_ADDITION', desc: 'Member Addition', category: 'GROUP'},
-                {val: 'GRP_MEMBER_DELETION', desc: 'Member Deletion', category: 'GROUP'},
-                {val: 'GRP_NEW_COVER', desc: 'Introduction of New Cover', category: 'GROUP'},
-                {val: 'GRP_PROMOTION', desc: 'Promotion', category: 'GROUP'}
-            ];
+
+
+            $scope.initEndorsements = function () {
+                var list = _.filter(endorsementTypes, function (each) {
+                    return each['category'] == 'INDIVIDUAL';
+                });
+                $scope.individualEndorsementTypes = _.pluck(list, "description");
+
+                list = _.filter(endorsementTypes, function (each) {
+                    return each['category'] == 'GROUP';
+                });
+                $scope.groupEndorsementTypes = _.pluck(list, "description");
+            }
+
+            $scope.initEndorsements();
+
+            /* $scope.getEndorsementTypes = function () {
+             var endorsementTypesList=  _.filter(endorsementTypes, function(each){
+             return each['category']==$scope.clientType;
+             });
+             var returnList = [];
+             var i=0;
+             for(;i<endorsementTypesList.length;i++){
+             returnList.push({'description':endorsementTypesList[i]['description']});
+             }
+             return returnList;
+             };*/
+
 
 
             $scope.sumAssuredTypesOriginal = [{val: 'RANGE', desc: 'Specified Range'}, {val: 'SPECIFIED_VALUES', desc: 'Specified Values'}];
@@ -183,6 +217,7 @@ app.controller('PlanSetupController', ['$scope', '$http', '$location', '$routePa
                         $scope.coverageList = coverageList;
                         $scope.newCoverage = newCoverage;
                         $scope.editFlag = isEditing;
+                        $scope.stepForm = stepForm;
 
                         $scope.cancel = function () {
                             $modalInstance.dismiss('cancel');
@@ -205,8 +240,8 @@ app.controller('PlanSetupController', ['$scope', '$http', '$location', '$routePa
                             $scope.coverageSumAssured = [];
                             $scope.coverageTerm = [];
                             $scope.coverageMaturityAge = [];
+                            $scope.stepForm.hasError = false;
                             $scope.cancel();
-                            $scope.stepForm.$error = false;
                         };
 
                         /**
@@ -238,7 +273,8 @@ app.controller('PlanSetupController', ['$scope', '$http', '$location', '$routePa
                         }
 
                         $scope.removeCoverage = function (idx) {
-                            $scope.plan.coverages.splice(idx, 1);
+                            if ($scope.plan.coverages)
+                                $scope.plan.coverages.splice(idx, 1);
                         };
 
                     },
@@ -247,11 +283,13 @@ app.controller('PlanSetupController', ['$scope', '$http', '$location', '$routePa
                             return angular.isUndefined(coverage) ? {maturityAmounts: []} : coverage;
                         },
                         coverageList: function () {
-                            var listOfCoverageIds = _.pluck($scope.plan.coverages, "coverageId");
-                            var unUsedCoverageList = _.reject($scope.coverageList, function (coverage) {
+                            return $scope.coverageList;
+                            /* var listOfCoverageIds = _.pluck($scope.plan.coverages, "coverageId");
+                             return listOfCoverageIds;*/
+                            /*var unUsedCoverageList = _.reject($scope.coverageList, function (coverage) {
                                 return _.contains(listOfCoverageIds, coverage.coverageId);
                             });
-                            return unUsedCoverageList;
+                             return unUsedCoverageList;*/
                         },
                         plan: function () {
                             return $scope.plan;
@@ -354,8 +392,7 @@ app.controller('PlanSetupController', ['$scope', '$http', '$location', '$routePa
              * @param coverage
              */
             $scope.removePlanCoverage = function (index) {
-
-                if ($scope.plan.coverages[index].planCoverageBenefits.length > 0) {
+                if ($scope.plan.coverages && $scope.plan.coverages[index].planCoverageBenefits && $scope.plan.coverages[index].planCoverageBenefits.length > 0) {
                     $modal.open({
                         backdrop: true,
                         windowClass: 'modal',
@@ -380,8 +417,8 @@ app.controller('PlanSetupController', ['$scope', '$http', '$location', '$routePa
                                 $modalInstance.dismiss('cancel');
                             };
                             $scope.ok = function () {
-                                $log.info('removing the coverage.');
-                                $scope.plan.coverages.splice(index, 1);
+                                if ($scope.plan.coverages)
+                                    $scope.plan.coverages.splice(index, 1);
                                 $scope.cancel();
                             };
                         },
@@ -554,7 +591,7 @@ app.controller('PlanSetupController', ['$scope', '$http', '$location', '$routePa
             $scope.$on('actionclicked.fu.wizard', function (name, event, data) {
                 if (data.step == 5) {
                     if ($scope.plan.coverages.length == 0) {
-                        $scope.step5.$error = true;
+                        $scope.step5.hasError = true;
                         $scope.stepErrorMsg = "Configure coverages.";
                         $scope.$apply();
                         event.preventDefault();
@@ -572,6 +609,14 @@ app.controller('PlanSetupController', ['$scope', '$http', '$location', '$routePa
                     $scope.createPlan();
                 }
             });
+
+
+            $scope.camelize = function (str) {
+                return str.replace(/(?:^\w|[A-Z]|\b\w)/g, function (letter, index) {
+                    return index == 0 ? letter.toLowerCase() : letter.toUpperCase();
+                }).replace(/\s+/g, '');
+            }
+
         }]
 );
 app.filter('getTrustedUrl', ['$sce', function ($sce) {

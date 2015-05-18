@@ -1,6 +1,7 @@
 package com.pla.core.domain.model.plan;
 
 import com.google.common.base.Preconditions;
+import com.pla.core.domain.exception.PlanValidationException;
 import com.pla.sharedkernel.domain.model.PolicyTermType;
 import com.pla.sharedkernel.domain.model.PremiumTermType;
 import com.pla.sharedkernel.domain.model.SumAssuredType;
@@ -91,7 +92,7 @@ public class PlanBuilder {
                                           BigDecimal maxSumAssuredAmount,
                                           int multiplesOf,
                                           Set<BigDecimal> assuredValues,
-                                          int percentage) {
+                                          BigDecimal incomeMultiplier) {
         SumAssured sumAssured = null;
         switch (sumAssuredType) {
             case RANGE:
@@ -102,6 +103,9 @@ public class PlanBuilder {
                 Preconditions.checkArgument(UtilValidator.isNotEmpty(assuredValues));
                 sumAssured = new SumAssured(new TreeSet(assuredValues));
                 break;
+            case INCOME_MULTIPLIER:
+                sumAssured = SumAssured.createSumAssuredWithIncomeMultiplier(incomeMultiplier);
+
         }
         checkArgument(sumAssured != null);
         this.sumAssured = sumAssured;
@@ -109,12 +113,12 @@ public class PlanBuilder {
     }
 
 
-    public Plan build(PlanId planId) {
+    public Plan build(PlanId planId) throws PlanValidationException {
         return new Plan(planId, this);
     }
 
 
-    public Plan build() {
+    public Plan build() throws PlanValidationException {
         return new Plan(new PlanId(), this);
     }
 }

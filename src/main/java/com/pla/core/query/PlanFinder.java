@@ -11,7 +11,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.joda.JodaModule;
 import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
 import com.mongodb.BasicDBObject;
 import com.pla.core.domain.model.plan.Plan;
 import com.pla.core.domain.model.plan.PlanCoverage;
@@ -25,8 +24,11 @@ import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.BasicQuery;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.jdbc.core.namedparam.EmptySqlParameterSource;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Service;
 
+import javax.sql.DataSource;
 import java.util.*;
 import java.util.function.Function;
 import java.util.function.Predicate;
@@ -48,6 +50,8 @@ public class PlanFinder {
     @Autowired
     private CoverageFinder coverageFinder;
 
+    private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
+
     @Autowired
     public PlanFinder(MongoTemplate mongoTemplate) {
         objectMapper = new ObjectMapper();
@@ -60,6 +64,11 @@ public class PlanFinder {
                 .withSetterVisibility(JsonAutoDetect.Visibility.NONE)
                 .withCreatorVisibility(JsonAutoDetect.Visibility.ANY));
         this.mongoTemplate = mongoTemplate;
+    }
+
+    @Autowired
+    public void setDataSource(DataSource dataSource) {
+        this.namedParameterJdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
     }
 
     public List<Plan> findAllPlanForThymeleaf() {
@@ -160,6 +169,30 @@ public class PlanFinder {
         return planCoverageList;
     }
 
+    public List<CoverageId> getAllCoverageAssociatedWithPlan() {
+        Criteria premiumCriteria = Criteria.where("coverages.coverageType").is(CoverageType.OPTIONAL);
+        Query query = new Query(premiumCriteria);
+        query.fields().include("coverages.coverageId.coverageId");
+        List<Plan> coveragesAssociatedWithPlan = mongoTemplate.find(query, Plan.class);
+        List<CoverageId> coverageList = Lists.newArrayList();
+        for (Plan plan : coveragesAssociatedWithPlan) {
+            PlanCoverage planCoverage = plan.getCoverages().iterator().next();
+            if (Optional.ofNullable(planCoverage).isPresent())
+                coverageList.add(planCoverage.getCoverageId());
+        }
+        return coverageList;
+    }
+
+    public String getCoverageAssociatedWithPremiumPlan(String coverageId) {
+        Map<String, Object> coverageDetail = coverageFinder.getCoverageDetail(coverageId);
+        return UtilValidator.isNotEmpty(coverageDetail) ? (String) coverageDetail.get("coverageName") : "";
+    }
+
+    public List<Map<String, Object>> findAllEndorsements() {
+        List<Map<String, Object>> endorsementTypeList = namedParameterJdbcTemplate.queryForList("SELECT description,category FROM ENDORSEMENT_TYPE ORDER BY DESCRIPTION", EmptySqlParameterSource.INSTANCE);
+        return endorsementTypeList;
+    }
+
     private class TransformPlanCoverageWithCoverageName implements Function<Map, Map<String, Object>> {
 
         private List<CoverageDto> allCoverages;
@@ -181,22 +214,4 @@ public class PlanFinder {
         }
     }
 
-    public List<CoverageId> getAllCoverageAssociatedWithPlan() {
-        Criteria premiumCriteria = Criteria.where("coverages.coverageType").is(CoverageType.OPTIONAL);
-        Query query = new Query(premiumCriteria);
-        query.fields().include("coverages.coverageId.coverageId");
-        List<Plan> coveragesAssociatedWithPlan = mongoTemplate.find(query, Plan.class);
-        List<CoverageId> coverageList = Lists.newArrayList();
-        for (Plan plan : coveragesAssociatedWithPlan) {
-            PlanCoverage planCoverage = plan.getCoverages().iterator().next();
-            if (Optional.ofNullable(planCoverage).isPresent())
-                coverageList.add(planCoverage.getCoverageId());
-        }
-        return coverageList;
-    }
-
-    public String getCoverageAssociatedWithPremiumPlan(String coverageId) {
-        Map<String, Object> coverageDetail = coverageFinder.getCoverageDetail(coverageId);
-        return UtilValidator.isNotEmpty(coverageDetail)?(String)coverageDetail.get("coverageName"):"";
-    }
 }

@@ -13,7 +13,6 @@ import org.joda.time.LocalDate;
 import org.nthdimenzion.utils.UtilValidator;
 
 import java.util.Set;
-import java.util.stream.Stream;
 
 import static com.google.common.base.Preconditions.checkArgument;
 
@@ -42,11 +41,12 @@ public class PlanDetail {
     LineOfBusinessId lineOfBusinessId;
     PlanType planType;
     ClientType clientType;
+
     PlanDetail() {
 
     }
 
-    PlanDetail(final PlanDetailBuilder planDetailBuilder) {
+    PlanDetail(final PlanDetailBuilder planDetailBuilder, boolean isNewPlan) {
         checkArgument(UtilValidator.isNotEmpty(planDetailBuilder.planName), String.format(errorMessage, "Plan Name cannot be empty."));
         this.planName = planDetailBuilder.planName;
 
@@ -60,6 +60,7 @@ public class PlanDetail {
         this.maxEntryAge = planDetailBuilder.maxEntryAge;
 
         checkArgument(planDetailBuilder.launchDate != null, String.format(errorMessage, "Cannot create a Plan without Launch Date"));
+        if (isNewPlan)
         checkArgument(planDetailBuilder.launchDate.isAfter(LocalDate.now().minusDays(1)), String.format(errorMessage, "Cannot create a Plan with Launch Date with Past Date."));
 
         this.launchDate = planDetailBuilder.launchDate;
@@ -69,22 +70,13 @@ public class PlanDetail {
             this.withdrawalDate = planDetailBuilder.withdrawalDate;
         }
 
+        this.surrenderAfter = planDetailBuilder.surrenderAfterYears;
+
         checkArgument(planDetailBuilder.clientType != null, String.format(errorMessage, "Cannot create Plan without Client Type"));
         this.clientType = planDetailBuilder.clientType;
 
         checkArgument(UtilValidator.isNotEmpty(planDetailBuilder.endorsementTypes));
         this.endorsementTypes = planDetailBuilder.endorsementTypes;
-
-        if (this.clientType.equals(ClientType.INDIVIDUAL)) {
-            this.surrenderAfter = planDetailBuilder.surrenderAfterYears;
-            Stream<EndorsementType> groupEndorsementType = this.endorsementTypes.stream().filter(endorsementType ->
-                            endorsementType.equals(EndorsementType.GRP_MEMBER_ADDITION)
-                                    || endorsementType.equals(EndorsementType.GRP_MEMBER_DELETION)
-                                    || endorsementType.equals(EndorsementType.GRP_PROMOTION)
-                                    || endorsementType.equals(EndorsementType.GRP_NEW_COVER)
-            );
-            checkArgument(groupEndorsementType.count() == 0, String.format(errorMessage, "Group Endorsements are not allowed for Plan with Client Type as Individual"));
-        }
 
         checkArgument(planDetailBuilder.lineOfBusinessId != null, String.format(errorMessage, "Cannot create Plan without Line of Business"));
         this.lineOfBusinessId = planDetailBuilder.lineOfBusinessId;
@@ -102,22 +94,6 @@ public class PlanDetail {
         return new PlanDetailBuilder();
     }
 
-    public String getPlanName() {
-        return planName;
-    }
-
-    public String getPlanCode() {
-        return planCode;
-    }
-
-    public LocalDate getLaunchDate() {
-        return launchDate;
-    }
-
-    public LocalDate getWithdrawalDate() {
-        return withdrawalDate;
-    }
-
     void setWithdrawalDate(LocalDate withdrawalDate) {
         if (withdrawalDate != null) {
             checkArgument(withdrawalDate.isAfter(launchDate), String.format(errorMessage, "Withdrawal cannot be less than launchDate"));
@@ -125,44 +101,5 @@ public class PlanDetail {
         }
     }
 
-    public int getFreeLookPeriod() {
-        return freeLookPeriod;
-    }
-
-    public int getMinEntryAge() {
-        return minEntryAge;
-    }
-
-    public int getMaxEntryAge() {
-        return maxEntryAge;
-    }
-
-    public boolean isTaxApplicable() {
-        return taxApplicable;
-    }
-
-    public int getSurrenderAfter() {
-        return surrenderAfter;
-    }
-
-    public Set<Relationship> getApplicableRelationships() {
-        return applicableRelationships;
-    }
-
-    public Set<EndorsementType> getEndorsementTypes() {
-        return endorsementTypes;
-    }
-
-    public LineOfBusinessId getLineOfBusinessId() {
-        return lineOfBusinessId;
-    }
-
-    public PlanType getPlanType() {
-        return planType;
-    }
-
-    public ClientType getClientType() {
-        return clientType;
-    }
 
 }

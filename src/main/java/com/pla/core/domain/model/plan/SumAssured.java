@@ -35,17 +35,22 @@ public class SumAssured {
     private BigDecimal maxSumInsured;
     private int multiplesOf;
     private SumAssuredType sumAssuredType;
+    private BigDecimal incomeMultiplier;
 
     SumAssured() {
 
     }
 
+    /**
+     * @param sumAssuredValues
+     * @version 1.1
+     * @deprecated instead use the createSumAssuredWithSpecifiedValues.
+     */
     SumAssured(SortedSet<BigDecimal> sumAssuredValues) {
         checkArgument(UtilValidator.isNotEmpty(sumAssuredValues));
         this.sumAssuredValue = sumAssuredValues;
         this.sumAssuredType = SumAssuredType.SPECIFIED_VALUES;
     }
-
 
     SumAssured(BigDecimal minSumInsured, BigDecimal maxSumInsured, int multiplesOf) {
 
@@ -84,6 +89,28 @@ public class SumAssured {
         this.percentage = percentage;
         this.maxLimit = maxLimit;
         this.sumAssuredType = SumAssuredType.DERIVED;
+    }
+
+    public static SumAssured createSumAssuredWithIncomeMultiplier(BigDecimal incomeMultiplier) {
+        Preconditions.checkArgument(incomeMultiplier != null);
+        SumAssured sumAssured = new SumAssured();
+        sumAssured.sumAssuredType = SumAssuredType.INCOME_MULTIPLIER;
+        sumAssured.incomeMultiplier = incomeMultiplier;
+        return sumAssured;
+    }
+
+    /**
+     * Creates the Sum Assured Value object with specified values.
+     *
+     * @param sumAssuredValues
+     * @return
+     */
+    public static SumAssured createSumAssuredWithSpecifiedValues(SortedSet<BigDecimal> sumAssuredValues) {
+        SumAssured sumAssured = new SumAssured();
+        checkArgument(UtilValidator.isNotEmpty(sumAssuredValues));
+        sumAssured.sumAssuredValue = sumAssuredValues;
+        sumAssured.sumAssuredType = SumAssuredType.SPECIFIED_VALUES;
+        return sumAssured;
     }
 
 }
