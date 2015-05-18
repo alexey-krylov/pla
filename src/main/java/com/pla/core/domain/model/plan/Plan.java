@@ -71,7 +71,7 @@ public class Plan extends AbstractAnnotatedAggregateRoot<PlanId> {
                         this.planDetail.lineOfBusinessId, this.planDetail.getClientType(), this.planDetail.planType, this.planDetail.launchDate, this.planDetail.withdrawalDate,
                         Collections.unmodifiableMap(derievedCoverages())));
             }
-        } catch (Throwable t) {
+        } catch (Exception t) {
             t.printStackTrace();
             throw new PlanValidationException(t.getMessage());
         }
@@ -112,7 +112,7 @@ public class Plan extends AbstractAnnotatedAggregateRoot<PlanId> {
         try {
             Preconditions.checkState(this.status == PlanStatus.DRAFT, "Plan in draft status can only be updated.");
             copyPropertiesFromPlanBuilder(planBuilder);
-        } catch (Throwable t) {
+        } catch (Exception t) {
             t.printStackTrace();
             throw new PlanValidationException(t.getMessage());
         }
