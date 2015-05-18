@@ -74,7 +74,12 @@
                 <ng-form name="agentDetailsForm">
                     <div class="row">
                         <div class="col-md-6">
-                            <div class="form-group required">
+                            <div class="form-group" ng-if="agentDetails.channelType.channelName=='Broker'">
+                                <label class="control-label">NRC</label>
+                                <input type="text" class="form-control input-sm" name="nrc" ng-disabled="isSearchEmptyOrIsEdit()"
+                                       placeholder="Enter NRC" ng-model="agentDetails.agentProfile.nrcNumberInString" ng-pattern="/^[0-9]{6}\/[0-9]{2}\/[0-9]{1}$/"/>
+                            </div>
+                            <div class="form-group required" ng-if="agentDetails.channelType.channelName!='Broker'">
                                 <label class="control-label">NRC</label>
                                 <input type="text" class="form-control input-sm" name="nrc" ng-disabled="isSearchEmptyOrIsEdit()"
                                        placeholder="Enter NRC" ng-model="agentDetails.agentProfile.nrcNumberInString" ng-required="true" ng-pattern="/^[0-9]{6}\/[0-9]{2}\/[0-9]{1}$/"/>
@@ -125,9 +130,14 @@
                                 <label  >Employee ID</label>
                                 <input type="text" class="form-control input-sm" ng-disabled="true" name="employeeId"  placeholder="Enter employee ID" ng-model="agentDetails.agentProfile.employeeId"/>
                             </div>
-                            <div class="form-group required">
+                            <div class="form-group" ng-if="agentDetails.channelType.channelName=='Broker'">
                                 <label  class="control-label">Surname</label>
-                                <input type="text" class="form-control input-sm" name="surname" ng-required="true" ng-maxlength="20" ng-disabled="isSearchEmptyOrIsEdit()"
+                                <input type="text" class="form-control input-sm" name="surname" ng-maxlength="20" ng-disabled="isSearchEmptyOrIsEdit()"
+                                       placeholder="Enter surname" ng-model="agentDetails.agentProfile.lastName"/>
+                            </div>
+                            <div class="form-group required" ng-if="agentDetails.channelType.channelName!='Broker'">
+                                <label  class="control-label">Surname</label>
+                                <input type="text" class="form-control input-sm" name="surname" ng-required="true"  ng-maxlength="20" ng-disabled="isSearchEmptyOrIsEdit()"
                                        placeholder="Enter surname" ng-model="agentDetails.agentProfile.lastName"/>
                             </div>
                             <div class="form-group required">

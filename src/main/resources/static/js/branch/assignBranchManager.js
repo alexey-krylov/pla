@@ -1,4 +1,4 @@
-var App = angular.module('assignBranchManager', ['ngRoute','ui.bootstrap','ngSanitize','mgcrea.ngStrap.select','mgcrea.ngStrap','mgcrea.ngStrap.alert']);
+var App = angular.module('assignBranchManager', ['common','commonServices','ngRoute','ui.bootstrap','ngSanitize','mgcrea.ngStrap.select','mgcrea.ngStrap','mgcrea.ngStrap.alert']);
 
 App.controller('AssignBranchManagerController',['$scope','$http','$window','$location',function($scope,$http,$window,$location){
 
@@ -147,11 +147,11 @@ App.controller('AssignBranchManagerController',['$scope','$http','$window','$loc
                      }
                     $http.post('/pla/core/branch/assign', $scope.assignBranchManager).success(function(data){
                                                   if(data.status==200){
-                                                    $scope.alert = {title:'Success Message! ', content:data.message, type: 'success'};
+                                                  //  $scope.alert = {title:'Success Message! ', content:data.message, type: 'success'};
                                                   //  $scope.reset();
                                                       $window.location.href = "/pla/core/branch/view";
                                                  }else if(data.status==500){
-                                                    $scope.alert = {title:'Error Message! ', content:data.message, type: 'danger'};
+                                                 //   $scope.alert = {title:'Error Message! ', content:data.message, type: 'danger'};
                                                  }
                                          });
                 }

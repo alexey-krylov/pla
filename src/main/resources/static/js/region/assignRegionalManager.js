@@ -1,4 +1,4 @@
-var App = angular.module('assignRegionalManager', ['ngRoute','ui.bootstrap','ngSanitize','mgcrea.ngStrap.select','mgcrea.ngStrap','mgcrea.ngStrap.alert']);
+var App = angular.module('assignRegionalManager', ['common','commonServices','ngRoute','ui.bootstrap','ngSanitize','mgcrea.ngStrap.select','mgcrea.ngStrap','mgcrea.ngStrap.alert']);
 
 App.controller('AssignRegionalManagerController',['$scope','$http','$window','$location',function($scope,$http,$window,$location){
 
@@ -38,9 +38,9 @@ App.controller('AssignRegionalManagerController',['$scope','$http','$window','$l
                    $scope.assignRegionalManager.lastName=$scope.newRegionalManager.lastName;
                    $http.post('/pla/core/region/assign', $scope.assignRegionalManager).success(function(data){
                         if(data.status==200){
-                             $scope.alert = {title:'Success Message! ', content:data.message, type: 'success'};
+                             //$scope.alert = {title:'Success Message! ', content:data.message, type: 'success'};
                             $window.location.href = "/pla/core/region/view";                        }else{
-                             $scope.alert = {title:'Error Message! ', content:data.message, type: 'danger'};
+                            // $scope.alert = {title:'Error Message! ', content:data.message, type: 'danger'};
                         }
                    });
              });

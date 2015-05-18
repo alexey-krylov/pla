@@ -1,4 +1,4 @@
-var App = angular.module('assignTeam', ['ngRoute','ui.bootstrap','ngSanitize','mgcrea.ngStrap.select','mgcrea.ngStrap','mgcrea.ngStrap.alert']);
+var App = angular.module('assignTeam', ['common','commonServices','ngRoute','ui.bootstrap','ngSanitize','mgcrea.ngStrap.select','mgcrea.ngStrap','mgcrea.ngStrap.alert']);
 
 App.controller('AssignTeamController',['$scope','$http','$window','$location','$alert',function($scope,$http,$window,$location,$alert){
 
@@ -69,11 +69,11 @@ App.controller('AssignTeamController',['$scope','$http','$window','$location','$
 
         $http.post('/pla/core/team/assign', $scope.assignTeam).success(function(data){
              if(data.status==200){
-                  $scope.alert = {title:'Success Message! ', content:data.message, type: 'success'};
+                 // $scope.alert = {title:'Success Message! ', content:data.message, type: 'success'};
                 $window.location.href = "/pla/core/team/view";
                 // $scope.reset();
              }else if(data.status==500){
-                  $scope.alert = {title:'Error Message! ', content:data.message, type: 'danger'};
+                //  $scope.alert = {title:'Error Message! ', content:data.message, type: 'danger'};
              }
 
          });
