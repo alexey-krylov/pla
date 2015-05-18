@@ -126,7 +126,7 @@ public class PlanSetupController {
             response.reset();
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             viewMap.put("message", dupExp.getMessage());
-        } catch (Throwable t) {
+        } catch (Exception t) {
             response.reset();
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             viewMap.put("message", t.getMessage());
@@ -157,7 +157,7 @@ public class PlanSetupController {
             response.reset();
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             viewMap.put("message", dupExp.getMessage());
-        } catch (Throwable t) {
+        } catch (Exception t) {
             response.reset();
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             viewMap.put("message", t.getMessage());
