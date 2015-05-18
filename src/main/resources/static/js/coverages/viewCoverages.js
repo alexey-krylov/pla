@@ -152,6 +152,10 @@ var updateCoverage = function(coverageId){
             if(msg.status=='200'){
                 hideAlerts();
                 $('#alert').text(msg.message).show();
+                document.getElementById("coverageName").disabled = true;
+                document.getElementById("coverageCode").disabled = true;
+                document.getElementById("description").disabled = true;
+                $('#selectedBenefits').prop('disabled', 'disabled');
                 $('#cancel-button').text('Done');
                 $('#createUpdate').hide();
             }else if(msg.status=='500'){
@@ -183,6 +187,10 @@ var createCoverage = function(){
             if(msg.status=='200'){
                 hideAlerts();
                 $('#alert').text(msg.message).show();
+                document.getElementById("coverageName").disabled = true;
+                document.getElementById("coverageCode").disabled = true;
+                document.getElementById("description").disabled = true;
+                $('#selectedBenefits').prop('disabled', 'disabled');
                 $('#cancel-button').text('Done');
                 $('#createUpdate').hide();
             }else if(msg.status=='500'){
@@ -211,6 +219,7 @@ var isAlphaNumeric= function (evt){
 
 var validate = function(){
     $('#createCoverage *').filter(':text').each(function(key,value){
+
         var isRequired = $(value).prop("required");
         if(($(value).val().trim().length<=0 || $(value).val().trim().length>50) && isRequired){
             hasError=true;
@@ -248,7 +257,13 @@ var inactivate=function(value,flag){
             success: function(msg) {
                 if(msg.status=='200'){
 
-                    window.location.reload();
+                    $('#alert-modal').show();
+                    $('#confirmationMsg').hide();
+                    $('#approveButton').hide();
+                    $('#changeToOk').text('Ok');
+                    $("#successMessage").text(msg.message).show();
+                    window.setTimeout('location.reload()', 3000);
+
                 }else{
 
                     $('#approveButton').hide();

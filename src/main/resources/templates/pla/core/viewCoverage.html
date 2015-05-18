@@ -63,7 +63,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="submit" class="btn btn-primary" id="createUpdate"  ></button>
-                    <button type="button" class="btn btn-danger" data-dismiss="modal" onclick="reload()" id="cancel-button">Cancel</button>
+                    <button type="button" class="btn btn-danger" data-dismiss="modal"  onclick="reload()" id="cancel-button">Cancel</button>
                 </div>
             </form>
         </div>
@@ -79,12 +79,13 @@
                 <h4 class="modal-title">Alert</h4>
             </div>
             <div class="modal-body">
+                <div class="alert alert-success" hidden="true" id="successMessage"></div>
                 <div class="alert alert-danger" hidden="true" id="inactivate-alert-danger"></div>
-                Are you sure to inactivate the coverage?
+                <div id="confirmationMsg">Are you sure to inactivate the coverage?</div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-primary" id="approveButton" onclick="inactivate('','confirm')">Yes</button>
-                <button type="button" class="btn btn-danger" data-dismiss="modal">No</button>
+                <button type="button" class="btn btn-danger" id="changeToOk" data-dismiss="modal">No</button>
             </div>
         </div>
     </div>
