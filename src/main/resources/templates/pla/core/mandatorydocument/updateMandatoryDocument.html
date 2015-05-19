@@ -27,7 +27,7 @@
                 </div>
                 <div class="panel-body ng-cloak">
                     <form  novalidate="true" class="css-form">
-                        <notification ></notification>
+                        <nth-alert></nth-alert>
                         <div class="row">
                             <div class="form-group col-md-6" >
                                 <label class="control-label">Plan Name</label>
@@ -52,7 +52,7 @@
                              </div>
                              <div class="row">
                             <div class="form-group col-lg-12" style="margin: auto;margin-top:10px;" >
-                                <button type="submit" class="btn btn-default" style="float:right;" ng-disabled="(!updateMandatoryDocument.document || !boolVal)" data-placement="top-right" data-container="notification" data-duration="5" bs-alert="alert" ng-click="updateMandatoryDoc()">Save</button>
+                                <button type="submit" class="btn btn-default" style="float:right;" ng-disabled="(!updateMandatoryDocument.document || !boolVal)"  ng-click="updateMandatoryDoc()">Save</button>
                                 <a class="btn btn-default" style="float:left;" th:href="@{/core/mandatorydocument/view}">Cancel</a>
                             </div>
                         </div>

@@ -1,4 +1,4 @@
-var App = angular.module('createMandatoryDocument', ['ngRoute','ui.bootstrap','ngSanitize','mgcrea.ngStrap.select','mgcrea.ngStrap','mgcrea.ngStrap.alert']);
+var App = angular.module('createMandatoryDocument', ['common','commonServices','ngRoute','ui.bootstrap','ngSanitize','mgcrea.ngStrap.select','mgcrea.ngStrap','mgcrea.ngStrap.alert']);
 
 App.controller('CreateMandatoryDocumentController',['$scope','$http','$rootScope','$alert','$window',function($scope,$http,$rootScope,$alert,$window){
 
@@ -60,12 +60,12 @@ App.controller('CreateMandatoryDocumentController',['$scope','$http','$rootScope
            // console.log($scope.createMandatoryDocument);
             $http.post('/pla/core/mandatorydocument/create', $scope.createMandatoryDocument).success(function(data){
                   if(data.status==200){
-                     $scope.alert = {title:'Success Message! ', content:data.message, type: 'success'};
+                    // $scope.alert = {title:'Success Message! ', content:data.message, type: 'success'};
 
                      $window.location.href="/pla/core/mandatorydocument/view";
 
                   }else{
-                      $scope.alert = {title:'Error Message! ', content:data.message, type: 'danger'};
+                     // $scope.alert = {title:'Error Message! ', content:data.message, type: 'danger'};
                   }
             });
 
