@@ -46,9 +46,9 @@ angular.module('createAgent',['common','ngRoute','mgcrea.ngStrap.select','mgcrea
                             $scope.empDetails = data;
                            console.log($scope.empDetails);
                             if ($scope.empDetails.employeeId) {
-                                return true;
-                            } else {
                                 return false;
+                            } else {
+                                return true;
                             }
                         });
                 } else if (_.size(agentDetails) != 0) {
