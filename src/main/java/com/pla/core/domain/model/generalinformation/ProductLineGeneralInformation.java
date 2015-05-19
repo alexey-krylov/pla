@@ -4,7 +4,7 @@ import com.google.common.collect.Sets;
 import com.pla.core.domain.exception.GeneralInformationException;
 import com.pla.publishedlanguage.domain.model.PremiumFrequency;
 import com.pla.sharedkernel.domain.model.*;
-import com.pla.sharedkernel.identifier.LineOfBusinessId;
+import com.pla.sharedkernel.identifier.LineOfBusinessEnum;
 import lombok.*;
 import org.bson.types.ObjectId;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -34,7 +34,7 @@ public class ProductLineGeneralInformation {
     @Id
     private String productLineInformationId;
 
-    private LineOfBusinessId productLine;
+    private LineOfBusinessEnum productLine;
 
     private QuotationProcessInformation quotationProcessInformation;
 
@@ -61,13 +61,18 @@ public class ProductLineGeneralInformation {
     private DiscountFactorProcessInformation discountFactorProcessInformation;
 
 
-    private ProductLineGeneralInformation(String productLineInformationId, LineOfBusinessId productLineId) {
+    private ProductLineGeneralInformation(String productLineInformationId, LineOfBusinessEnum productLineId) {
         this.productLineInformationId = productLineInformationId;
         this.productLine = productLineId;
     }
 
-    public static ProductLineGeneralInformation createProductLineGeneralInformation(LineOfBusinessId productLineId) {
+    public static ProductLineGeneralInformation createProductLineGeneralInformation(LineOfBusinessEnum productLineId) {
         return new ProductLineGeneralInformation(new ObjectId().toString(), productLineId);
+    }
+
+    public static Set<ProductLineProcessItem> create(List<Map<ProductLineProcessType, Integer>> quotationProcessItems) {
+        Set<ProductLineProcessItem> productLineProcessItems = quotationProcessItems.stream().map(new QuotationProcessInformationTransformer()).collect(Collectors.toSet());
+        return productLineProcessItems;
     }
 
     public ProductLineGeneralInformation withQuotationProcessInformation(List<Map<ProductLineProcessType, Integer>> quotationProcessInformation) {
@@ -99,7 +104,6 @@ public class ProductLineGeneralInformation {
         this.policyProcessMinimumLimit = PolicyProcessMinimumLimit.create(policyProcessMinimumLimit);
         return this;
     }
-
 
     public ProductLineGeneralInformation withPolicyFeeProcessInformation(List<Map<PolicyFeeProcessType,Integer>> policyFeeProcessInformation){
         this.policyFeeProcessInformation = PolicyFeeProcessInformation.create(policyFeeProcessInformation);
@@ -134,9 +138,14 @@ public class ProductLineGeneralInformation {
         return this;
     }
 
-    public static Set<ProductLineProcessItem> create(List<Map<ProductLineProcessType,Integer>> quotationProcessItems) {
-        Set<ProductLineProcessItem> productLineProcessItems = quotationProcessItems.stream().map(new QuotationProcessInformationTransformer()).collect(Collectors.toSet());
-        return productLineProcessItems;
+    public Set<ProductLineProcessItem> getPremiumFollowUpFrequencyFor(PremiumFrequency premiumFrequency) {
+        PremiumFollowUpFrequency premiumFollowUpFrequencyItems = premiumFollowUpFrequency.stream().filter(new Predicate<PremiumFollowUpFrequency>() {
+            @Override
+            public boolean test(PremiumFollowUpFrequency premiumFollowUpFrequency) {
+                return premiumFollowUpFrequency.getPremiumFrequency().equals(premiumFrequency);
+            }
+        }).findAny().get();
+        return premiumFollowUpFrequencyItems.getPremiumFollowUpFrequencyItems();
     }
 
     private static class QuotationProcessInformationTransformer implements Function<Map<ProductLineProcessType,Integer>,ProductLineProcessItem> {
@@ -149,16 +158,6 @@ public class ProductLineGeneralInformation {
             ProductLineProcessItem productLineProcessItem = new ProductLineProcessItem(entry.getKey(), entry.getValue());
             return productLineProcessItem;
         }
-    }
-
-    public Set<ProductLineProcessItem> getPremiumFollowUpFrequencyFor(PremiumFrequency premiumFrequency) {
-        PremiumFollowUpFrequency premiumFollowUpFrequencyItems =  premiumFollowUpFrequency.stream().filter(new Predicate<PremiumFollowUpFrequency>() {
-            @Override
-            public boolean test(PremiumFollowUpFrequency premiumFollowUpFrequency) {
-                return premiumFollowUpFrequency.getPremiumFrequency().equals(premiumFrequency);
-            }
-        }).findAny().get();
-        return premiumFollowUpFrequencyItems.getPremiumFollowUpFrequencyItems();
     }
 
 }

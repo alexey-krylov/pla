@@ -8,7 +8,7 @@ import com.pla.publishedlanguage.domain.model.PremiumFrequency;
 import com.pla.sharedkernel.domain.model.PolicyFeeProcessType;
 import com.pla.sharedkernel.domain.model.PolicyProcessMinimumLimitType;
 import com.pla.sharedkernel.domain.model.ProductLineProcessType;
-import com.pla.sharedkernel.identifier.LineOfBusinessId;
+import com.pla.sharedkernel.identifier.LineOfBusinessEnum;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -54,7 +54,7 @@ public class ProductLineInformationUnitTest {
 
     @Test
     public void givenEnrollmentProcessInformation_thenItShouldAddTheProcessItemToProductLineInformation(){
-        ProductLineGeneralInformation productLineGeneralInformation = ProductLineGeneralInformation.createProductLineGeneralInformation(LineOfBusinessId.GROUP_HEALTH);
+        ProductLineGeneralInformation productLineGeneralInformation = ProductLineGeneralInformation.createProductLineGeneralInformation(LineOfBusinessEnum.GROUP_HEALTH);
         productLineGeneralInformation = productLineGeneralInformation.withEnrollmentProcessGeneralInformation(listOfProcessItems);
 
         Set<ProductLineProcessItem> enrollmentProcessItems =  productLineGeneralInformation.getEnrollmentProcessInformation().getEnrollmentProcessItems();
@@ -65,7 +65,7 @@ public class ProductLineInformationUnitTest {
 
     @Test
     public void givenEndorsementProcessInformation_thenItShouldAddTheProcessTypesToProductLineInformation(){
-        ProductLineGeneralInformation productLineGeneralInformation = ProductLineGeneralInformation.createProductLineGeneralInformation(LineOfBusinessId.GROUP_HEALTH);
+        ProductLineGeneralInformation productLineGeneralInformation = ProductLineGeneralInformation.createProductLineGeneralInformation(LineOfBusinessEnum.GROUP_HEALTH);
         productLineGeneralInformation = productLineGeneralInformation.withEndorsementProcessInformation(listOfProcessItems);
 
         Set<ProductLineProcessItem> productLineProcessItems = productLineGeneralInformation.getEndorsementProcessInformation().getEndorsementProcessItems();
@@ -75,7 +75,7 @@ public class ProductLineInformationUnitTest {
 
     @Test
     public void givenReinstatementProcessInformation_thenItShouldAddTheProcessTypesToProductLineInformation(){
-        ProductLineGeneralInformation productLineGeneralInformation = ProductLineGeneralInformation.createProductLineGeneralInformation(LineOfBusinessId.GROUP_HEALTH);
+        ProductLineGeneralInformation productLineGeneralInformation = ProductLineGeneralInformation.createProductLineGeneralInformation(LineOfBusinessEnum.GROUP_HEALTH);
         productLineGeneralInformation = productLineGeneralInformation.withReinstatementProcessInformation(listOfProcessItems);
 
         assertNotNull(productLineGeneralInformation.getReinstatementProcessInformation());
@@ -87,7 +87,7 @@ public class ProductLineInformationUnitTest {
     @Test
     public void givenQuotationProcessInformation_thenItShouldAddTheProcessTypesToProductLineInformation(){
 
-        ProductLineGeneralInformation productLineGeneralInformation = ProductLineGeneralInformation.createProductLineGeneralInformation(LineOfBusinessId.GROUP_HEALTH);
+        ProductLineGeneralInformation productLineGeneralInformation = ProductLineGeneralInformation.createProductLineGeneralInformation(LineOfBusinessEnum.GROUP_HEALTH);
         productLineGeneralInformation = productLineGeneralInformation.withQuotationProcessInformation(listOfProcessItems);
 
         assertNotNull(productLineGeneralInformation.getQuotationProcessInformation());
@@ -103,7 +103,7 @@ public class ProductLineInformationUnitTest {
         productLineProcessItemMap.put(ProductLineProcessType.EARLY_DEATH_CRITERIA, 20);
         listOfProcessItems.add(productLineProcessItemMap);
 
-        ProductLineGeneralInformation productLineGeneralInformation = ProductLineGeneralInformation.createProductLineGeneralInformation(LineOfBusinessId.GROUP_HEALTH);
+        ProductLineGeneralInformation productLineGeneralInformation = ProductLineGeneralInformation.createProductLineGeneralInformation(LineOfBusinessEnum.GROUP_HEALTH);
         productLineGeneralInformation = productLineGeneralInformation.withQuotationProcessInformation(listOfProcessItems);
 
         assertNotNull(productLineGeneralInformation.getQuotationProcessInformation());
@@ -114,7 +114,7 @@ public class ProductLineInformationUnitTest {
 
     @Test
     public void givenClaimProcessInformation_thenItShouldAddTheProcessTypesToProductLineInformation(){
-        ProductLineGeneralInformation productLineGeneralInformation = ProductLineGeneralInformation.createProductLineGeneralInformation(LineOfBusinessId.GROUP_HEALTH);
+        ProductLineGeneralInformation productLineGeneralInformation = ProductLineGeneralInformation.createProductLineGeneralInformation(LineOfBusinessEnum.GROUP_HEALTH);
         productLineGeneralInformation = productLineGeneralInformation.withClaimProcessInformation(listOfProcessItems);
 
         assertNotNull(productLineGeneralInformation.getClaimProcessInformation());
@@ -143,7 +143,7 @@ public class ProductLineInformationUnitTest {
         policyFeeProcessTypeMap.put(PolicyFeeProcessType.MONTHLY,19);
         policyFeeProcessInformation.add(policyFeeProcessTypeMap);
 
-        ProductLineGeneralInformation productLineGeneralInformation = ProductLineGeneralInformation.createProductLineGeneralInformation(LineOfBusinessId.GROUP_HEALTH);
+        ProductLineGeneralInformation productLineGeneralInformation = ProductLineGeneralInformation.createProductLineGeneralInformation(LineOfBusinessEnum.GROUP_HEALTH);
         productLineGeneralInformation = productLineGeneralInformation.withPolicyFeeProcessInformation(policyFeeProcessInformation);
 
         Set<PolicyFeeProcessItem> productLineProcessItems = productLineGeneralInformation.getPolicyFeeProcessInformation().getPolicyFeeProcessItems();
@@ -163,7 +163,7 @@ public class ProductLineInformationUnitTest {
         policyProcessMinimumLimitMap.put(PolicyProcessMinimumLimitType.MINIMUM_PREMIUM, 10);
         policyProcessMinimumLimit.add(policyProcessMinimumLimitMap);
 
-        ProductLineGeneralInformation productLineGeneralInformation = ProductLineGeneralInformation.createProductLineGeneralInformation(LineOfBusinessId.GROUP_HEALTH);
+        ProductLineGeneralInformation productLineGeneralInformation = ProductLineGeneralInformation.createProductLineGeneralInformation(LineOfBusinessEnum.GROUP_HEALTH);
         productLineGeneralInformation = productLineGeneralInformation.withPolicyProcessMinimumLimit(policyProcessMinimumLimit);
 
         Set<PolicyProcessMinimumLimitItem> productLineProcessItems = productLineGeneralInformation.getPolicyProcessMinimumLimit().getPolicyProcessMinimumLimitItems();
@@ -187,7 +187,7 @@ public class ProductLineInformationUnitTest {
         policyProcessMinimumLimit.add(policyProcessMinimumLimitMap);
 
 
-        ProductLineGeneralInformation productLineGeneralInformation = ProductLineGeneralInformation.createProductLineGeneralInformation(LineOfBusinessId.INDIVIDUAL_LIFE);
+        ProductLineGeneralInformation productLineGeneralInformation = ProductLineGeneralInformation.createProductLineGeneralInformation(LineOfBusinessEnum.INDIVIDUAL_LIFE);
         productLineGeneralInformation = productLineGeneralInformation.withPolicyProcessMinimumLimit(policyProcessMinimumLimit);
 
     }
@@ -195,7 +195,7 @@ public class ProductLineInformationUnitTest {
 
     @Test
     public void givenSurrenderProcessInformation_thenItShouldAddTheProcessTypesToProductLineInformation(){
-        ProductLineGeneralInformation productLineGeneralInformation = ProductLineGeneralInformation.createProductLineGeneralInformation(LineOfBusinessId.GROUP_HEALTH);
+        ProductLineGeneralInformation productLineGeneralInformation = ProductLineGeneralInformation.createProductLineGeneralInformation(LineOfBusinessEnum.GROUP_HEALTH);
         productLineGeneralInformation = productLineGeneralInformation.withSurrenderProcessInformation(listOfProcessItems);
 
         assertNotNull(productLineGeneralInformation.getSurrenderProcessInformation());
@@ -206,7 +206,7 @@ public class ProductLineInformationUnitTest {
 
     @Test
     public void givenMaturityProcessInformation_thenItShouldAddTheProcessTypesToProductLineInformation(){
-        ProductLineGeneralInformation productLineGeneralInformation = ProductLineGeneralInformation.createProductLineGeneralInformation(LineOfBusinessId.GROUP_HEALTH);
+        ProductLineGeneralInformation productLineGeneralInformation = ProductLineGeneralInformation.createProductLineGeneralInformation(LineOfBusinessEnum.GROUP_HEALTH);
         productLineGeneralInformation = productLineGeneralInformation.withMaturityProcessInformation(listOfProcessItems);
 
         assertNotNull(productLineGeneralInformation.getMaturityProcessInformation());

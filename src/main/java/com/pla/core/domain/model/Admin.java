@@ -115,7 +115,7 @@ public class Admin {
         return deactivatedTeam;
     }
 
-    public ProductLineGeneralInformation createProductLineGeneralInformation(LineOfBusinessId lineOfBusinessId, List<Map<ProductLineProcessType,Integer>> quotationProcessItem,List<Map<ProductLineProcessType,Integer>> enrollmentProcessItem ,
+    public ProductLineGeneralInformation createProductLineGeneralInformation(LineOfBusinessEnum lineOfBusinessId, List<Map<ProductLineProcessType, Integer>> quotationProcessItem, List<Map<ProductLineProcessType, Integer>> enrollmentProcessItem,
                                                                              List<Map<ProductLineProcessType,Integer>> reinstatementProcessItem ,List<Map<ProductLineProcessType,Integer>> endorsementProcessItem,
                                                                              List<Map<ProductLineProcessType,Integer>> claimProcessItem, List<Map<PolicyFeeProcessType,Integer>> policyFeeProcess,List<Map<PolicyProcessMinimumLimitType,Integer>>   minimumLimitProcess,
                                                                              List<Map<ProductLineProcessType,Integer>> surrenderProcessItem ,List<Map<ProductLineProcessType,Integer>> maturityProcessItem,

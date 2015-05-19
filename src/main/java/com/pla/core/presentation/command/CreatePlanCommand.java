@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.pla.sharedkernel.domain.model.*;
 import com.pla.sharedkernel.identifier.BenefitId;
 import com.pla.sharedkernel.identifier.CoverageId;
-import com.pla.sharedkernel.identifier.LineOfBusinessId;
+import com.pla.sharedkernel.identifier.LineOfBusinessEnum;
 import com.pla.sharedkernel.identifier.PlanId;
 import lombok.Getter;
 import lombok.Setter;
@@ -51,7 +51,7 @@ class Detail {
     int surrenderAfter;
     Set<Relationship> applicableRelationships;
     Set<EndorsementType> endorsementTypes;
-    LineOfBusinessId lineOfBusinessId;
+    LineOfBusinessEnum lineOfBusinessId;
     PlanType planType;
     ClientType clientType;
 }

@@ -6,5 +6,15 @@ package com.pla.sharedkernel.domain.model;
  */
 public enum ClientType {
 
-    GROUP, INDIVIDUAL
+    GROUP("Group"), INDIVIDUAL("Individual");
+
+    private String description;
+
+    ClientType(String description) {
+        this.description = description;
+    }
+
+    public String toString() {
+        return description;
+    }
 }

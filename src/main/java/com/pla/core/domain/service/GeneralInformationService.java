@@ -12,7 +12,7 @@ import com.pla.core.domain.model.generalinformation.ProductLineGeneralInformatio
 import com.pla.core.dto.*;
 import com.pla.publishedlanguage.domain.model.PremiumFrequency;
 import com.pla.sharedkernel.domain.model.*;
-import com.pla.sharedkernel.identifier.LineOfBusinessId;
+import com.pla.sharedkernel.identifier.LineOfBusinessEnum;
 import org.nthdimenzion.common.AppConstants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
@@ -55,7 +55,7 @@ public class GeneralInformationService {
         this.springMongoTemplate = springMongoTemplate;
     }
 
-    public boolean createProductLineInformation(LineOfBusinessId lineOfBusinessId, UserDetails userDetails, GeneralInformationDto generalInformationDto) {
+    public boolean createProductLineInformation(LineOfBusinessEnum lineOfBusinessId, UserDetails userDetails, GeneralInformationDto generalInformationDto) {
         Admin admin = adminRoleAdapter.userToAdmin(userDetails);
         List<Map<ProductLineProcessType,Integer>> quotationProcessItem =   transformProductLine(generalInformationDto.getQuotationProcessItems());
         List<Map<ProductLineProcessType,Integer>> enrollmentProcessItem =   transformProductLine(generalInformationDto.getEnrollmentProcessItems());
@@ -330,13 +330,13 @@ public class GeneralInformationService {
         for (Map map : productLineInformation){
             strings.add((String) map.get("productLine"));
         }
-        if (!strings.contains(LineOfBusinessId.GROUP_HEALTH.name())){
+        if (!strings.contains(LineOfBusinessEnum.GROUP_HEALTH.name())) {
             productLineInformation.add(getGroupHealthProductLineInformation());
         }
-        if (!strings.contains(LineOfBusinessId.GROUP_LIFE.name())) {
+        if (!strings.contains(LineOfBusinessEnum.GROUP_LIFE.name())) {
             productLineInformation.add(getGroupInsuranceProductLineInformation());
         }
-        if (!strings.contains(LineOfBusinessId.INDIVIDUAL_LIFE.name())) {
+        if (!strings.contains(LineOfBusinessEnum.INDIVIDUAL_LIFE.name())) {
             productLineInformation.add(getIndividualInsuranceProductLineInformation());
         }
         return productLineInformation;
@@ -364,39 +364,39 @@ public class GeneralInformationService {
 
     public Map getGroupHealthProductLineInformation(){
         Map productLineMap  = Maps.newLinkedHashMap();
-        productLineMap.put("productLine",LineOfBusinessId.GROUP_HEALTH);
+        productLineMap.put("productLine", LineOfBusinessEnum.GROUP_HEALTH);
         productLineMap.put("productLineInformationId",null);
-        productLineMap = getProductLineGeneralInformation(productLineMap,LineOfBusinessId.GROUP_HEALTH);
+        productLineMap = getProductLineGeneralInformation(productLineMap, LineOfBusinessEnum.GROUP_HEALTH);
         return productLineMap;
     }
 
     public Map getGroupInsuranceProductLineInformation(){
         Map insuranceMap  = Maps.newLinkedHashMap();
-        insuranceMap.put("productLine", LineOfBusinessId.GROUP_LIFE);
+        insuranceMap.put("productLine", LineOfBusinessEnum.GROUP_LIFE);
         insuranceMap.put("productLineInformationId",null);
-        insuranceMap = getProductLineGeneralInformation(insuranceMap,LineOfBusinessId.GROUP_LIFE);
+        insuranceMap = getProductLineGeneralInformation(insuranceMap, LineOfBusinessEnum.GROUP_LIFE);
         return insuranceMap;
     }
 
     public Map getIndividualInsuranceProductLineInformation(){
         Map individualInsurance  = Maps.newLinkedHashMap();
-        individualInsurance.put("productLine", LineOfBusinessId.INDIVIDUAL_LIFE);
+        individualInsurance.put("productLine", LineOfBusinessEnum.INDIVIDUAL_LIFE);
         individualInsurance.put("productLineInformationId",null);
-        individualInsurance = getProductLineGeneralInformation(individualInsurance,LineOfBusinessId.INDIVIDUAL_LIFE);
+        individualInsurance = getProductLineGeneralInformation(individualInsurance, LineOfBusinessEnum.INDIVIDUAL_LIFE);
         return individualInsurance;
     }
 
     private List populateOrganizationGeneralInformationData(){
         List list = Lists.newArrayList();
         Map organizationInformation = Maps.newLinkedHashMap();
-        organizationInformation.put("modelFactorItems",GeneralInformationProcessItem.MODAL_FACTOR.getOrganizationLevelProcessInformationItem(LineOfBusinessId.GROUP_HEALTH));
-        organizationInformation.put("discountFactorItems",GeneralInformationProcessItem.DISCOUNT_FACTOR.getOrganizationLevelProcessInformationItem(LineOfBusinessId.GROUP_HEALTH));
-        organizationInformation.put("serviceTax",GeneralInformationProcessItem.SERVICE_TAX.getOrganizationLevelProcessInformationItem(LineOfBusinessId.GROUP_HEALTH).get(0));
+        organizationInformation.put("modelFactorItems", GeneralInformationProcessItem.MODAL_FACTOR.getOrganizationLevelProcessInformationItem(LineOfBusinessEnum.GROUP_HEALTH));
+        organizationInformation.put("discountFactorItems", GeneralInformationProcessItem.DISCOUNT_FACTOR.getOrganizationLevelProcessInformationItem(LineOfBusinessEnum.GROUP_HEALTH));
+        organizationInformation.put("serviceTax", GeneralInformationProcessItem.SERVICE_TAX.getOrganizationLevelProcessInformationItem(LineOfBusinessEnum.GROUP_HEALTH).get(0));
         list.add(organizationInformation);
         return list;
     }
 
-    private Map getProductLineGeneralInformation(Map productLineInformationMap,LineOfBusinessId lineOfBusinessId){
+    private Map getProductLineGeneralInformation(Map productLineInformationMap, LineOfBusinessEnum lineOfBusinessId) {
         productLineInformationMap.put("quotationProcessItems", GeneralInformationProcessItem.DEFAULT.getOrganizationLevelProcessInformationItem(lineOfBusinessId));
         productLineInformationMap.put("enrollmentProcessItems",  GeneralInformationProcessItem.DEFAULT.getOrganizationLevelProcessInformationItem(lineOfBusinessId));
         productLineInformationMap.put("reinstatementProcessItems",  GeneralInformationProcessItem.REINSTATEMENT.getOrganizationLevelProcessInformationItem(lineOfBusinessId));
@@ -412,7 +412,7 @@ public class GeneralInformationService {
         return productLineInformationMap;
     }
 
-    public List<Map<String,Object>> transformPremiumFollowUp(LineOfBusinessId lineOfBusinessId){
+    public List<Map<String, Object>> transformPremiumFollowUp(LineOfBusinessEnum lineOfBusinessId) {
         List<Map<String,Object>> productLineProcessList = GeneralInformationProcessItem.PREMIUM_FOLLOW_UP.getOrganizationLevelProcessInformationItem(lineOfBusinessId);
         List<Map<String,Object>> premiumFrequencyFollowUpList = Lists.newArrayList();
         for (PremiumFrequency premiumFrequency : PremiumFrequency.values()){

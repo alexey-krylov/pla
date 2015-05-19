@@ -5,7 +5,7 @@ import com.pla.sharedkernel.domain.model.ClientType;
 import com.pla.sharedkernel.domain.model.EndorsementType;
 import com.pla.sharedkernel.domain.model.PlanType;
 import com.pla.sharedkernel.domain.model.Relationship;
-import com.pla.sharedkernel.identifier.LineOfBusinessId;
+import com.pla.sharedkernel.identifier.LineOfBusinessEnum;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.ToString;
@@ -38,7 +38,7 @@ public class PlanDetail {
     int surrenderAfter;
     Set<Relationship> applicableRelationships;
     Set<EndorsementType> endorsementTypes;
-    LineOfBusinessId lineOfBusinessId;
+    LineOfBusinessEnum lineOfBusinessId;
     PlanType planType;
     ClientType clientType;
 

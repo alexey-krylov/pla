@@ -24,7 +24,7 @@
                         <th th:text="#{planCode}">Plan Code</th>
                         <th th:text="#{clientType}">Client Type</th>
                         <th th:text="#{planType}">Plan Type</th>
-                        <th th:text="#{lineOfBusinessId}">Plan Type</th>
+                        <th th:text="#{lineOfBusinessId}">Line of Business</th>
                         <th th:text="#{launchDate}">Launch Date</th>
                         <th th:text="#{withdrawalDate}">Withdrawal Date</th>
                         <th>Action</th>
@@ -37,7 +37,7 @@
                         <td th:text="${plan.planDetail.clientType}"></td>
                         <td th:text="${plan.planDetail.planType}"></td>
                         <td th:text="${plan.planDetail.lineOfBusinessId}"></td>
-                        <td th:text="${{plan.planDetail.launchDate}}"></td>
+                        <td th:text="${#dates.format(plan.planDetail.launchDate,'dd/MM/yyyy')}"></td>
                         <td th:text="${{plan.planDetail.withdrawalDate}}"></td>
                         <td><a th:href="'#viewplan/'+${plan.planId.planId}+''">View</a></td>
                     </tr>

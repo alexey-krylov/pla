@@ -222,3 +222,29 @@ select.ng-invalid.ng-dirty {
     cursor: inherit;
     display: block;
 }
+
+tags-input .host {
+    margin-top: 5px !important;
+}
+
+tags-input .tags {
+    padding: 1px;
+}
+
+tags-input .tags .tag-item {
+    border-radius: 3px;
+    font: 11px/25px "Helvetica Neue", Helvetica, Arial, sans-serif;
+    height: 24px;
+    margin: 2px;
+    padding: 0 2px;
+}
+
+tags-input .tags .tag-item .remove-button {
+    font: bold 10px Arial, sans-serif;
+}
+
+tags-input .tags .input {
+    font: 12px "Helvetica Neue", Helvetica, Arial, sans-serif;
+    height: 24px;
+    margin: 2px;
+}

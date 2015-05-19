@@ -178,14 +178,32 @@ app.controller('PlanSetupController', ['$scope', '$http', '$location', '$routePa
 
             $scope.clientType = $scope.plan.planDetail.clientType;
 
+
+            $scope.$watch('plan.planDetail.lineOfBusinessId', function (newval, oldval) {
+                console.log(' Line of Business Id ' + newval);
+                if (newval != undefined) {
+                    if (newval != 'INDIVIDUAL_LIFE') {
+                        $scope.clientType = 'GROUP';
+                    } else {
+                        $scope.clientType = 'INDIVIDUAL';
+                    }
+                }
+            });
+
             $scope.$watch('clientType', function (val, old) {
                 if (!angular.isUndefined(val)) {
                     $scope.plan.planDetail.clientType = val;
+
+                    if (val != old) {
+                        $scope.plan.sumAssured = {sumAssuredType: ""};
+                    }
+
                     if ($scope.clientType == 'GROUP') {
                         $scope.plan.premiumTermType = 'REGULAR';
                         $scope.sumAssuredTypes = angular.copy($scope.sumAssuredTypesOriginal);
                         $scope.sumAssuredTypes.push({val: 'INCOME_MULTIPLIER', desc: 'Income Multiplier'});
                         $scope.premiumPaymentTermReadonly = true;
+
                     } else {
                         $scope.sumAssuredTypes = angular.copy($scope.sumAssuredTypesOriginal);
                         $scope.premiumPaymentTermReadonly = false;
@@ -267,9 +285,7 @@ app.controller('PlanSetupController', ['$scope', '$http', '$location', '$routePa
                          */
                         $scope.resetPlanCoverageTerm = function () {
                             if (newCoverage.coverageTerm) {
-                                $scope.newCoverage.coverageTerm.maturityAges = [];
                                 $scope.newCoverage.coverageTerm.validTerms = [];
-                                $scope.newCoverage.coverageTerm.maturityAges = [];
                                 $scope.newCoverage.coverageTerm.maturityAges = [];
                             }
 
@@ -523,6 +539,13 @@ app.controller('PlanSetupController', ['$scope', '$http', '$location', '$routePa
                 if (angular.isUndefined(planCoverage.planCoverageBenefits)) {
                     planCoverage.planCoverageBenefits = [];
                 }
+
+                var planCoverageBenefit = _.find($scope.plan.planCoverageBenefits, function (each) {
+                    return each.benefitId == $scope.newPlanCoverageBenefit.benefitId;
+                });
+
+                console.log(JSON.stringify(planCoverageBenefit));
+
                 planCoverage.planCoverageBenefits.push($scope.newPlanCoverageBenefit);
                 $scope.newPlanCoverageBenefit = angular.copy({benefitLimit: null, maxLimit: null});
                 benefitForm.$setPristine();
@@ -540,7 +563,6 @@ app.controller('PlanSetupController', ['$scope', '$http', '$location', '$routePa
 
                 $http.post(angular.isUndefined($scope.plan.planId) ? '/pla/core/plan/create' : '/pla/core/plan/update', $scope.plan).
                     success(function (data, status, headers, config) {
-                        $scope.$apply();
                         $scope.plan.planId = data.id;
                         $location.path('/plan');
                         $scope.successMsg = data.message;
@@ -575,8 +597,10 @@ app.controller('PlanSetupController', ['$scope', '$http', '$location', '$routePa
             $scope.launchDt = $scope.plan.planDetail.launchDate;
             $scope.withdrawalDt = $scope.plan.planDetail.withdrawalDate;
             $scope.$watch('launchDt', function (newVal) {
-                if (!angular.isUndefined(newVal)) {
+                if (!angular.isUndefined(newVal) && angular.isDefined($scope.plan.planId)) {
                     $scope.plan.planDetail.launchDate = moment(newVal).format('DD/MM/YYYY');
+                } else {
+                    $scope.plan.planDetail.launchDate = newVal;
                 }
             });
             $scope.$watch('withdrawalDt', function (newVal) {

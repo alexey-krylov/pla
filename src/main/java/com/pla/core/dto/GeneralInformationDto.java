@@ -1,6 +1,6 @@
 package com.pla.core.dto;
 
-import com.pla.sharedkernel.identifier.LineOfBusinessId;
+import com.pla.sharedkernel.identifier.LineOfBusinessEnum;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -16,7 +16,7 @@ import java.util.List;
 public class GeneralInformationDto {
 
     private String productLineInformationId;
-    private LineOfBusinessId productLine;
+    private LineOfBusinessEnum productLine;
     private List<ProductLineProcessItemDto> quotationProcessItems;
     private List<ProductLineProcessItemDto> enrollmentProcessItems;
     private List<ProductLineProcessItemDto> reinstatementProcessItems;

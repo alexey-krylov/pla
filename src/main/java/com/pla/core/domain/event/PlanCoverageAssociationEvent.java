@@ -5,7 +5,7 @@ import com.pla.sharedkernel.domain.model.CoverageType;
 import com.pla.sharedkernel.domain.model.PlanType;
 import com.pla.sharedkernel.identifier.BenefitId;
 import com.pla.sharedkernel.identifier.CoverageId;
-import com.pla.sharedkernel.identifier.LineOfBusinessId;
+import com.pla.sharedkernel.identifier.LineOfBusinessEnum;
 import com.pla.sharedkernel.identifier.PlanId;
 import lombok.Getter;
 import org.joda.time.LocalDate;
@@ -21,7 +21,7 @@ public class PlanCoverageAssociationEvent {
     private final PlanId planId;
     private final String planName;
     private final String planCode;
-    private final LineOfBusinessId lineOfBusinessId;
+    private final LineOfBusinessEnum lineOfBusinessId;
     private final ClientType clientType;
     private final PlanType planType;
     private final LocalDate launchDate;
@@ -29,7 +29,7 @@ public class PlanCoverageAssociationEvent {
 
     private final Map<CoverageType, Map<CoverageId, List<BenefitId>>> coverageAndBenefits;
 
-    public PlanCoverageAssociationEvent(PlanId planId, String planName, String planCode, LineOfBusinessId lineOfBusinessId,
+    public PlanCoverageAssociationEvent(PlanId planId, String planName, String planCode, LineOfBusinessEnum lineOfBusinessId,
                                         ClientType clientType, PlanType planType, LocalDate launchDate, LocalDate withdrawalDate,
                                         Map<CoverageType, Map<CoverageId, List<BenefitId>>> coverageAndBenefits) {
         this.planId = planId;

@@ -5,7 +5,7 @@
 #
 
 server:
-  port: 6443
+  port: 7979
   context-path: /pla
 
 spring:
@@ -26,7 +26,7 @@ spring:
   smeServer :
         logoutUrl: https://5.9.249.195:7443/myportal/control/logout
         dev :
-          url : http://localhost:6443/pla/stub
+          url : http://localhost:7979/pla/stub
         prod :
           url: http://5.9.249.195:9090/partymgr/control
 

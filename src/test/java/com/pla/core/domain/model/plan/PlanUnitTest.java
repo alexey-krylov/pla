@@ -5,7 +5,7 @@ import com.google.common.collect.Sets;
 import com.pla.core.domain.exception.PlanValidationException;
 import com.pla.sharedkernel.domain.model.*;
 import com.pla.sharedkernel.identifier.CoverageId;
-import com.pla.sharedkernel.identifier.LineOfBusinessId;
+import com.pla.sharedkernel.identifier.LineOfBusinessEnum;
 import com.pla.sharedkernel.identifier.PlanId;
 import org.joda.time.LocalDate;
 import org.junit.Before;
@@ -48,7 +48,7 @@ public class PlanUnitTest {
                 .withFreeLookPeriod(15)
                 .withSurrenderAfter(5)
                 .withClientType(ClientType.INDIVIDUAL)
-                .withLineOfBusinessId(LineOfBusinessId.INDIVIDUAL_LIFE)
+                .withLineOfBusinessId(LineOfBusinessEnum.INDIVIDUAL_LIFE)
                 .withPlanType(PlanType.NON_INVESTMENT)
                 .withApplicableRelationships(relationshipSet)
                 .withTaxApplicable(false)

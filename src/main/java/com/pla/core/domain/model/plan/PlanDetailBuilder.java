@@ -4,7 +4,7 @@ import com.pla.sharedkernel.domain.model.ClientType;
 import com.pla.sharedkernel.domain.model.EndorsementType;
 import com.pla.sharedkernel.domain.model.PlanType;
 import com.pla.sharedkernel.domain.model.Relationship;
-import com.pla.sharedkernel.identifier.LineOfBusinessId;
+import com.pla.sharedkernel.identifier.LineOfBusinessEnum;
 import org.joda.time.LocalDate;
 
 import java.util.Set;
@@ -26,7 +26,7 @@ public class PlanDetailBuilder {
     int surrenderAfterYears;
     Set<Relationship> applicableRelationships;
     Set<EndorsementType> endorsementTypes;
-    LineOfBusinessId lineOfBusinessId;
+    LineOfBusinessEnum lineOfBusinessId;
     PlanType planType;
     ClientType clientType;
 
@@ -85,7 +85,7 @@ public class PlanDetailBuilder {
         return this;
     }
 
-    public PlanDetailBuilder withLineOfBusinessId(LineOfBusinessId lineOfBusinessId) {
+    public PlanDetailBuilder withLineOfBusinessId(LineOfBusinessEnum lineOfBusinessId) {
         this.lineOfBusinessId = lineOfBusinessId;
         return this;
     }

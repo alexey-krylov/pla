@@ -5,7 +5,7 @@ import com.pla.sharedkernel.domain.model.ClientType;
 import com.pla.sharedkernel.domain.model.EndorsementType;
 import com.pla.sharedkernel.domain.model.PlanType;
 import com.pla.sharedkernel.domain.model.Relationship;
-import com.pla.sharedkernel.identifier.LineOfBusinessId;
+import com.pla.sharedkernel.identifier.LineOfBusinessEnum;
 import org.joda.time.LocalDate;
 import org.junit.Test;
 
@@ -34,7 +34,7 @@ public class PlanDetailTest {
                 .withMaxEntryAge(60)
                 .withFreeLookPeriod(15)
                 .withSurrenderAfter(5)
-                .withLineOfBusinessId(LineOfBusinessId.INDIVIDUAL_LIFE)
+                .withLineOfBusinessId(LineOfBusinessEnum.INDIVIDUAL_LIFE)
                 .withPlanType(PlanType.NON_INVESTMENT)
                 .withApplicableRelationships(new HashSet<>(Arrays.asList(Relationship.BROTHER, Relationship.DAUGHTER)))
                 .withEndorsementTypes(Sets.newHashSet(new EndorsementType("Change Insured Name")))
@@ -56,7 +56,7 @@ public class PlanDetailTest {
                 .withFreeLookPeriod(15)
                 .withSurrenderAfter(5)
                 .withClientType(ClientType.INDIVIDUAL)
-                .withLineOfBusinessId(LineOfBusinessId.INDIVIDUAL_LIFE)
+                .withLineOfBusinessId(LineOfBusinessEnum.INDIVIDUAL_LIFE)
                 .withPlanType(PlanType.NON_INVESTMENT)
                 .withApplicableRelationships(relationshipSet)
                 .withTaxApplicable(false)
@@ -81,7 +81,7 @@ public class PlanDetailTest {
         assertEquals(15, planDetail.getFreeLookPeriod());
         assertEquals(5, planDetail.getSurrenderAfter());
         assertEquals(ClientType.INDIVIDUAL, planDetail.getClientType());
-        assertEquals(LineOfBusinessId.INDIVIDUAL_LIFE, planDetail.getLineOfBusinessId());
+        assertEquals(LineOfBusinessEnum.INDIVIDUAL_LIFE, planDetail.getLineOfBusinessId());
         assertEquals(PlanType.NON_INVESTMENT, planDetail.getPlanType());
         assertEquals(relationshipSet, planDetail.getApplicableRelationships());
     }

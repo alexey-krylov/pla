@@ -10,30 +10,30 @@
                     <label class="control-label">Coverage</label>
 
                     <div class="controls">
-                        <select ng-model="newCoverage.coverageId" name="newCoverage"
+                        <select ng-model="newCoverage.coverageId" name="newCoverage" ng-disabled="{{editFlag}}"
                                 ng-options="item.coverageId as item.coverageName for item in coverageList"
                                 class="form-control input-sm  col-sm-3" ng-required="true">
                         </select>
                     </div>
                 </div>
                 <div class="required col-md-3">
-                    <label class="control-label">Cover Type</label>
+                    <label class="control-label">Accelerated /Additional Cover</label>
 
                     <div class="radio">
                         <label>
-                            <input type="radio" name="coverType" ng-model="newCoverage.coverageCover"
+                            <input type="radio" name="coverageCover" ng-model="newCoverage.coverageCover"
                                    value="ACCELERATED"/> Accelerated
                         </label>
                         <label>
-                            <input type="radio" name="coverType" ng-model="newCoverage.coverageCover"
+                            <input type="radio" name="coverageCover" ng-model="newCoverage.coverageCover"
                                    value="ADDITIONAL" ng-required="true"/> Additional
                         </label>
                     </div>
                     <div class="error"
-                         ng-show="step5.coverType.$dirty &amp;&amp; step5.coverType.$invalid">
+                         ng-show="coverageForm.coverageCover.$dirty &amp;&amp; step5.coverageCover.$invalid">
                         <small class="error"
-                               ng-show="step5.coverType.$error.required">
-                            Please indicate cover type.
+                               ng-show="coverageForm.coverageCover.$error.required">
+                            Please indicate whether the coverage is an Accelerated Cover or Additional Cover.
                         </small>
                     </div>
                 </div>
@@ -72,23 +72,23 @@
             </div>
             <div class="row">
                 <div class="control-group required col-md-2">
-                    <label class="control-label">Coverage Type</label>
+                    <label class="control-label">Base/Optional</label>
 
                     <div class="controls">
                         <label class="radio-inline">
-                            <input type="radio" name="coverageType" ng-model="newCoverage.coverageType"
+                            <input type="radio" name="coverType" ng-model="newCoverage.coverageType"
                                    value="BASE"/> Base
                         </label>
                         <label class="radio-inline">
-                            <input type="radio" name="coverageType" ng-model="newCoverage.coverageType"
+                            <input type="radio" name="coverType" ng-model="newCoverage.coverageType"
                                    value="OPTIONAL" ng-required="true"/> Optional
                         </label>
 
                         <div class="error"
-                             ng-show="step5.coverageType.$dirty &amp;&amp; step5.coverageType.$invalid">
+                             ng-show="coverageForm.coverType.$dirty &amp;&amp; coverageForm.coverType.$invalid">
                             <small class="error"
-                                   ng-show="step5.coverageType.$error.required">
-                                Please select the Coverage type.
+                                   ng-show="coverageForm.coverType.$error.required">
+                                Please indicate whether the coverage is Base or Optional.
                             </small>
                         </div>
                     </div>
@@ -98,16 +98,16 @@
 
                     <div class="controls">
                         <label class="radio-inline">
-                            <input type="radio" value="true" name="taxApplicable" ng-model="newCoverage.taxApplicable"/>Yes
+                            <input type="radio" ng-value="true" name="taxApplicable" ng-model="newCoverage.taxApplicable" ng-required="true"/>Yes
                         </label>
                         <label class="radio-inline">
-                            <input type="radio" value="false" name="taxApplicable" ng-model="newCoverage.taxApplicable" ng-required="true"/>No
+                            <input type="radio" ng-value="false" name="taxApplicable" ng-model="newCoverage.taxApplicable" ng-required="true"/>No
                         </label>
 
                         <div class="error"
-                             ng-show="step5.taxApplicable.$dirty &amp;&amp; step5.taxApplicable.$invalid">
+                             ng-show="coverageForm.taxApplicable.$dirty &amp;&amp; coverageForm.taxApplicable.$invalid">
                             <small class="error"
-                                   ng-show="step5.taxApplicable.$error.required">
+                                   ng-show="coverageForm.taxApplicable.$error.required">
                                 Please indicate whether taxes are applicable for the coverage.
                             </small>
                         </div>
@@ -115,11 +115,18 @@
                 </div>
                 <div class="control-group col-md-2">
                     <label class="control-label">Deductible</label>
-
                     <div class="controls">
-                        <input type="number"
+                        <input type="text" name="deductiblePercentage" ng-pattern="onlyNumbers"
                                ng-model="newCoverage.deductiblePercentage"
-                               class="form-control input-sm"/>
+                               class="form-control input-sm" ng-required="newCoverage.deductibleType!=undefined"/>
+
+                        <div class="error"
+                             ng-show="coverageForm.deductiblePercentage.$invalid">
+                            <small class="error"
+                                   ng-show="coverageForm.deductiblePercentage.$error.required">
+                                Please enter Deductible
+                            </small>
+                        </div>
                     </div>
                 </div>
                 <div class="control-group col-md-2">
