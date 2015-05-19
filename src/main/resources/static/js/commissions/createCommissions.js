@@ -3,6 +3,7 @@ angular.module('createCommission', ['common','commonServices','ngRoute'])
     .controller('commissionController',['$scope','formatJSDateToDDMMYYYY','$http','$window','commissionDetails','getQueryParameter','addDays','globalConstants',
         function($scope,formatJSDateToDDMMYYYY,$http,$window,commissionDetails,getQueryParameter,addDays,globalConstants){
             var mode= null;
+            $scope.isSaving = false;
             $scope.showtable  = false;
             $scope.showToYear  = false;
             $scope.viewType = "create";
@@ -113,6 +114,7 @@ angular.module('createCommission', ['common','commonServices','ngRoute'])
                 $http.post("/pla/core/commission/create", $scope.commissionDetails)
                     .success(function(data,status){
                         if(data.status=="200"){
+                            $scope.isSaving = true;
                             $scope.isSaved=true;
                         }
                     })
@@ -126,6 +128,7 @@ angular.module('createCommission', ['common','commonServices','ngRoute'])
                 $http.post("/pla/core/commission/update", $scope.commissionDetails)
                     .success(function(data,status){
                         if(data.status=="200"){
+                            $scope.isSaving = true;
                             $scope.isSaved=true;
                         }
                     })
