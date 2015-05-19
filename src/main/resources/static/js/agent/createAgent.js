@@ -44,7 +44,7 @@ angular.module('createAgent',['common','ngRoute','mgcrea.ngStrap.select','mgcrea
                         .success(function (data, status) {
 
                             $scope.empDetails = data;
-                            if (empDetails.employeeId) {
+                            if ($scope.empDetails.employeeId) {
                                 return true;
                             } else {
                                 return false;
@@ -76,7 +76,6 @@ angular.module('createAgent',['common','ngRoute','mgcrea.ngStrap.select','mgcrea
                 /*  Disable Channel Type IF it is broker in update*/
                 $scope.disableChannelType = function(){
                     if (agentDetails) {
-
                         if (agentDetails.channelType.channelName=='Broker') {
                             return true;
                         } else {
