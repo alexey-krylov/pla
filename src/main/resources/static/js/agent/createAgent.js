@@ -4,8 +4,10 @@ angular.module('createAgent',['common','ngRoute','mgcrea.ngStrap.select','mgcrea
 
         function($scope,$http,channelType,authorisedToSell,teamDetails,provinces,$timeout,$alert,$route,$window,transformJson,getQueryParameter,agentDetails,globalConstants,nextAgentSequence,getProvinceAndCityDetail){
             $scope.numberPattern =globalConstants.numberPattern;
+
             /*Wizard initial step*/
             $scope.selectedWizard = 1;
+            $scope.search = {};
             $scope.searchResult = {
                 isEmpty:false,
                 isSearched:false
@@ -25,6 +27,37 @@ angular.module('createAgent',['common','ngRoute','mgcrea.ngStrap.select','mgcrea
                 team:3,
                 contact:4
             };
+            $scope.searchedValue=false;
+            $scope.$watch('searchedValue',function(newVal,oldVal){
+
+                if(newVal){
+                    $scope.editContactDetails();
+                    $scope.searchedValue=false;
+                }
+            });
+
+            /*  CHECK WHETHER EMPLOYEE EXISTS IN HRMS */
+            $scope.editContactDetails=function() {
+                //   console.log($scope.search);
+                if ($scope.searchedValue) {
+                   $http.get("/pla/core/agent/getemployeedeatil", {params: $scope.search})
+                        .success(function (data, status) {
+
+                            $scope.empDetails = data;
+                            if (empDetails.employeeId) {
+                                return true;
+                            } else {
+                                return false;
+                            }
+                        });
+                } else if (_.size(agentDetails) != 0) {
+                  if (agentDetails.agentProfile.employeeId) {
+                        return true;
+                    } else {
+                        return false;
+                    }
+                }
+            }
             /*agentDetails will be empty if its a create page else it is an update
             * and agentDetails will be pre-populated
             * */
@@ -54,17 +87,6 @@ angular.module('createAgent',['common','ngRoute','mgcrea.ngStrap.select','mgcrea
                 }
 
 
-              /*  CHECK WHETHER EMPLOYEE EXISTS IN HRMS */
-                $scope.editContactDetails=function() {
-                   // console.log(agentDetails);
-                    if (agentDetails ) {
-                        if (agentDetails.agentProfile.employeeId){
-                              return true;
-                        } else {
-                            return false;
-                        }
-                    };
-                }
 
                // console.log($scope.agentDetails);
                 /*remove search step in the wizard in edit mode
@@ -153,6 +175,7 @@ angular.module('createAgent',['common','ngRoute','mgcrea.ngStrap.select','mgcrea
                 $scope.hideAlert=true;
             };
             $scope.searchAgent =  function(){
+                $scope.searchedValue=true;
                 $scope.searchResult.isSearched=true;
                 $http.get("/pla/core/agent/getemployeedeatil",{params:$scope.search})
                     .success(function(data,status){
