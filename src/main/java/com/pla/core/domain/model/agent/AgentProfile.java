@@ -53,7 +53,6 @@ class AgentProfile {
 
     AgentProfile(String firstName, String lastName, LocalDate trainingCompleteOn, Designation designation) {
         checkArgument(isNotEmpty(firstName));
-        checkArgument(isNotEmpty(lastName));
         checkArgument(trainingCompleteOn != null);
         checkArgument(designation != null);
         //Assuming the agent completed training on the 12-01-2015 and is created in the

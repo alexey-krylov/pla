@@ -20,6 +20,8 @@ import org.nthdimenzion.presentation.LocalJodaDateSerializer;
 import javax.validation.constraints.NotNull;
 import java.util.Map;
 
+import static org.nthdimenzion.utils.UtilValidator.isEmpty;
+
 /**
  * @author: Samir
  * @since 1.0 13/03/2015
@@ -77,12 +79,19 @@ public class AgentProfileDto {
     }
 
     public void setNrcNumberInString(String nrcNumberInString) {
+        if(isEmpty(nrcNumberInString)){
+            this.nrcNumber=null;
+            this.nrcNumberInString="";
+        }
         nrcNumberInString = nrcNumberInString.replaceAll("/", "").trim();
         this.nrcNumber = Integer.valueOf(nrcNumberInString);
         this.nrcNumberInString = nrcNumberInString;
     }
 
     public String getNrcNumberInString() {
+        if(getNrcNumber()==null){
+            return "";
+        }
         String nrc = String.valueOf(getNrcNumber());
         String part1 = nrc.substring(0, 6);
         String part2 = nrc.substring(6, 8);

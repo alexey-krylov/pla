@@ -50,7 +50,7 @@ public class AgentService {
         UtilValidator.isNotEmpty("");
         boolean isLicenseNumberUnique = UtilValidator.isNotEmpty(licenseNumberDto.getLicenseNumber()) ? agentLicenseNumberIsUnique.isSatisfiedBy(new LicenseNumber(licenseNumberDto.getLicenseNumber())) : true;
         AgentDto agentDto = new AgentDto(agentProfileDto.getNrcNumber(),agentId);
-        boolean isNrcNumberIsUnique = agentProfileDto.getNrcNumber() != 0 ? nrcNumberIsUnique.isSatisfiedBy(agentDto) : true;
+        boolean isNrcNumberIsUnique =  agentProfileDto.getNrcNumber()!=null ? nrcNumberIsUnique.isSatisfiedBy(agentDto) : true;
         if (!isLicenseNumberUnique) {
             raiseAgentLicenseNumberUniqueException();
         }
@@ -73,7 +73,7 @@ public class AgentService {
             raiseAgentLicenseNumberUniqueException();
         }
         AgentDto agentDto = new AgentDto(agentProfileDto.getNrcNumber(),agentId);
-        boolean isNrcNumberIsUnique = agentProfileDto.getNrcNumber() != 0 ? nrcNumberIsUnique.isSatisfiedBy(agentDto) : true;
+        boolean isNrcNumberIsUnique = agentProfileDto.getNrcNumber()!=null? nrcNumberIsUnique.isSatisfiedBy(agentDto) : true;
         if (!isNrcNumberIsUnique) {
             raiseAgentNrcNumberUniqueException();
         }

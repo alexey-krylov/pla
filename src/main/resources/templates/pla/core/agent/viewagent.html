@@ -92,10 +92,10 @@
                             <!--/*/ <th:block th:each="agent : ${agentList}"> /*/-->
                             <tr>
                                 <td><input type="radio" name="agentCode" th:value="${agent.agentId}" value="001"/></td>
-                                <td th:text="${agent.agentProfile.firstName+' '+agent.agentProfile.lastName}">Robert downey</td>
+                                <td th:text="${agent.agentProfile.lastName !=null} ? ${agent.agentProfile.firstName+' '+agent.agentProfile.lastName}:${agent.agentProfile.firstName}">Robert downey</td>
                                 <td th:text="${agent.agentId}">001</td>
                                 <td th:text="${agent.teamDetail !=null} ? ${agent.teamDetail.teamName}">A Team</td>
-                                <td th:text="${agent.agentProfile.nrcNumberInString}">Lusaka</td>
+                                <td th:text="${agent.agentProfile.nrcNumberInString !=null}? ${agent.agentProfile.nrcNumberInString}">Lusaka</td><!-- -->
                                 <td th:text="${agent.teamDetail !=null} ? ${agent.teamDetail.leaderFirstName+' '+agent.teamDetail.leaderLastName}">South</td>
                             </tr>
                             <!--/*-->
