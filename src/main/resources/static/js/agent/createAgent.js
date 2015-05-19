@@ -35,7 +35,7 @@ angular.module('createAgent',['common','ngRoute','mgcrea.ngStrap.select','mgcrea
                     $scope.searchedValue=false;
                 }
             });
-
+            $scope.empDetails={};
             /*  CHECK WHETHER EMPLOYEE EXISTS IN HRMS */
             $scope.editContactDetails=function() {
                 //   console.log($scope.search);
@@ -44,6 +44,7 @@ angular.module('createAgent',['common','ngRoute','mgcrea.ngStrap.select','mgcrea
                         .success(function (data, status) {
 
                             $scope.empDetails = data;
+                           console.log($scope.empDetails);
                             if ($scope.empDetails.employeeId) {
                                 return true;
                             } else {
