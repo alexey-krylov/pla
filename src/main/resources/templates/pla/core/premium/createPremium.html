@@ -161,7 +161,7 @@
                         <label class="control-label">Influencing Factors</label>
 
                         <div  th:each="premiumInfluencingFactors: ${T(com.pla.publishedlanguage.domain.model.PremiumInfluencingFactor).values()}">
-                            <input name="premiumInfluencingFactors" type="checkbox" ng-required="true"
+                            <input name="premiumInfluencingFactors" type="checkbox"
                                    th:field="*{createPremiumCommand.premiumInfluencingFactors}"
                                    th:id="${{premiumInfluencingFactors}}" th:value="${{premiumInfluencingFactors}}" />
                             <label th:text="${{premiumInfluencingFactors.description}}" ></label>
