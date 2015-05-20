@@ -6,22 +6,13 @@
 
 package com.pla.seleniumscripts.benefit;
 
-import org.junit.*;
+import org.junit.FixMethodOrder;
 import org.junit.runners.MethodSorters;
-import org.openqa.selenium.*;
-import org.openqa.selenium.firefox.FirefoxBinary;
-import org.openqa.selenium.firefox.FirefoxDriver;
-
-import java.io.File;
-import java.util.Random;
-import java.util.concurrent.TimeUnit;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
 
 
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class BenefitSeleniumETETest {
+/*
 
     private String baseUrl;
     private WebDriver driver;
@@ -30,6 +21,7 @@ public class BenefitSeleniumETETest {
     public String benefitName;
     Random random = new Random();
     String randomString = "Benefit"+random.nextInt(1000);
+
     @Before
     public void setUp() throws Exception {
 
@@ -57,9 +49,11 @@ public class BenefitSeleniumETETest {
         System.out.println(driver.getCurrentUrl());
 
     }
+*/
 
 
-    @Ignore
+
+   /* @Ignore
     @Test()
     public void createBenefit() throws Exception {
         driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
@@ -158,9 +152,9 @@ public class BenefitSeleniumETETest {
         //Click on Done button
         driver.findElement(By.xpath("//form[@id='createBenefit']/div[2]/button[2]")).click();
     }
+*/
 
-
-    @After
+   /* @After
     public void tearDown() throws Exception {
        driver.quit();
         String verificationErrorString = verificationErrors.toString();
@@ -200,5 +194,5 @@ public class BenefitSeleniumETETest {
         } finally {
             acceptNextAlert = true;
         }
-    }
+    }*/
 }
