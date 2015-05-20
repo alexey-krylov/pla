@@ -82,6 +82,7 @@ public class AgentProfileDto {
         if(isEmpty(nrcNumberInString)){
             this.nrcNumber=null;
             this.nrcNumberInString="";
+            return;
         }
         nrcNumberInString = nrcNumberInString.replaceAll("/", "").trim();
         this.nrcNumber = Integer.valueOf(nrcNumberInString);

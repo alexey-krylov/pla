@@ -62,8 +62,8 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="submit" class="btn btn-primary" id="createUpdate"  ></button>
-                    <button type="button" class="btn btn-danger" data-dismiss="modal"  onclick="reload()" id="cancel-button">Cancel</button>
+                    <button type="submit" class="btn btn-default" id="createUpdate"  ></button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal"  onclick="reload()" id="cancel-button">Cancel</button>
                 </div>
             </form>
         </div>
@@ -100,7 +100,7 @@
                     <div class="row">
                         <div class="col-lg-6"><span th:text="#{listOfCoverages}">List of Coverages
                         </span></div>
-                        <div class="col-lg-6"><button type="button" class="btn btn-warning btn-sm" style="float: right" onclick="openCoverageCreateModal()">
+                        <div class="col-lg-6"><button type="button" class="btn btn-default btn-sm" style="float: right" onclick="openCoverageCreateModal()">
                             Create
                         </button></div>
                     </div>
@@ -141,7 +141,7 @@
                                 </button>
                             </td>
                             <td style="text-align:center">
-                                <button type="button" class="btn btn-primary btn-xs"  th:onclick="'openCoverageUpdateModal(&quot;'+${coverage.coverageId}+'&quot;,&quot;'+${coverage.coverageName}+'&quot;,&quot;'+${coverage.coverageCode}+'&quot;,&quot;'+${coverage.description}+'&quot;,&quot;'+${coverage.benefitDtos}+'&quot;)'">Update</button>
+                                <button type="button" class="btn btn-default btn-xs"  th:onclick="'openCoverageUpdateModal(&quot;'+${coverage.coverageId}+'&quot;,&quot;'+${coverage.coverageName}+'&quot;,&quot;'+${coverage.coverageCode}+'&quot;,&quot;'+${coverage.description}+'&quot;,&quot;'+${coverage.benefitDtos}+'&quot;)'">Update</button>
                                 <button type="button" class="btn btn-danger btn-xs"  data-toggle="modal" data-target="#alert-modal" th:onclick="'inactivate(&quot;'+${coverage.coverageId}+'&quot;,&quot;save&quot;)'" >Inactivate</button>
                             </td>
                         </tr>

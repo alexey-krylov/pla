@@ -1,9 +1,10 @@
-var App = angular.module('createPremium', ['ngRoute', 'ui.bootstrap', 'ngSanitize','angularFileUpload']);
+var App = angular.module('createPremium', ['ngRoute', 'ui.bootstrap', 'ngSanitize','angularFileUpload','mgcrea.ngStrap.select','checklist-model']);
 
 App.controller('CreatePremiumController', ['$scope', '$http', function ($scope, $http) {
 
     console.log(JSON.stringify(createPremium));
     $scope.uploaded = false;
+    $scope.showOptionalCoverageValue=true;
     $scope.verified = false;
     $scope.boolVal = false;
     $scope.newPlanList = [];
@@ -12,6 +13,11 @@ App.controller('CreatePremiumController', ['$scope', '$http', function ($scope, 
     $scope.showOptionalCoverage = false;
     $scope.selectedDate = moment().add(1, 'days').format("YYYY-MM-DD");
     $scope.newDateField = {};
+    $scope.selectedUsers = [];
+$scope.showSelectedCheckboxValue = function(){
+    alert(selectedUsers);
+}
+
     $scope.datePickerSettings = {
         isOpened: false,
         dateOptions: {
@@ -33,9 +39,30 @@ App.controller('CreatePremiumController', ['$scope', '$http', function ($scope, 
         } else {
            // $scope.createPremium.definedFor = "optionalCoverage"
             $scope.showOptionalCoverage = true;
+
         }
 
     }
+    $scope.$watch('createPremium.definedFor',function(newValue, oldValue){
+        if(newValue=='optionalCoverage'){
+            $scope.createPremium.planId="";
+            $scope.showOptionalCoverageValue = false;
+        }
+
+    });
+    $scope.$watch('createPremium.coverageId',function(newValue, oldValue){
+
+        if(newValue){
+
+            $scope.showOptionalCoverageValue=true;
+        }
+    });
+    $scope.$watch('createPremium.premiumInfluencingFactors',function(newValue, oldValue){
+
+        if(newValue){
+          //  alert(newValue);
+        }
+    });
    /* $scope.submitFormToServer=function(){
        console.log(createPremium);
 
@@ -50,7 +77,11 @@ App.controller('CreatePremiumController', ['$scope', '$http', function ($scope, 
             });
         }
     });
+    $http.get('/pla/core/premium/getpremiuminfluencingfactors').success(function(data){
 
+        $scope.mulSelect=data;
+
+    });
     $scope.$watch('createPremium.planId', function (newValue, oldValue) {
         if (newValue) {
             var planId = $scope.createPremium.planId;
