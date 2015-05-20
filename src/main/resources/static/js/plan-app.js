@@ -138,12 +138,12 @@ app.controller('PlanSetupController', ['$scope', '$http', '$location', '$routePa
 
             $scope.initEndorsements = function () {
                 var list = _.filter(endorsementTypes, function (each) {
-                    return each['category'] == 'INDIVIDUAL';
+                    return each['category'] == 'GROUP';
                 });
                 $scope.individualEndorsementTypes = _.pluck(list, "description");
 
                 list = _.filter(endorsementTypes, function (each) {
-                    return each['category'] == 'GROUP';
+                    return each['category'] == 'INDIVIDUAL';
                 });
                 $scope.groupEndorsementTypes = _.pluck(list, "description");
             }
@@ -255,8 +255,8 @@ app.controller('PlanSetupController', ['$scope', '$http', '$location', '$routePa
                         $scope.addCoverage = function (newCoverage) {
                             $scope.plan.coverages.push(newCoverage);
                             $scope.newCoverage = angular.copy($scope.emptyCoverage);
-                            $scope.coverageForm.$setPristine();
-                            $scope.coverageForm.$setUntouched();
+                            //$scope.coverageForm.$setPristine();
+                            //$scope.coverageForm.$setUntouched();
                             $scope.coverageForm.$setValidity();
                             $scope.coverageSumAssured = [];
                             $scope.coverageTerm = [];
