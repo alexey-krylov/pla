@@ -101,6 +101,8 @@ var updateBenefit = function(benefitMap){
                 hideAlerts();
                 $('#createUpdate').hide();
                 $('#alert-danger').text(msg.message).show();
+                document.getElementById("benefitName").disabled = true;
+
             }
         }
     });

@@ -161,6 +161,10 @@ var updateCoverage = function(coverageId){
             }else if(msg.status=='500'){
                 hideAlerts();
                 $('#alert-danger').text(msg.message).show();
+                document.getElementById("coverageName").disabled = true;
+                document.getElementById("coverageCode").disabled = true;
+                document.getElementById("description").disabled = true;
+                $('#selectedBenefits').prop('disabled', 'disabled');
             }
         }
     });
