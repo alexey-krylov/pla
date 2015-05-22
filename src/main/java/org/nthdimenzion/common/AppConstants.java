@@ -36,6 +36,10 @@ public interface AppConstants {
 
     String PREMIUM_CELL_HEADER_NAME = "Premium";
 
+    String UNDER_WRITER_ROUTING_HEADER_NAME = "Routing Level";
+
+    String UNDER_WRITER_DOCUMENT = "documents";
+
     String ERROR_CELL_HEADER_NAME = "Error Message";
 
     String DD_MM_YYY_FORMAT = "dd/MM/yyyy";

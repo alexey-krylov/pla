@@ -11,6 +11,7 @@ import com.pla.publishedlanguage.contract.IPlanAdapter;
 import com.pla.publishedlanguage.dto.PlanCoverageDetailDto;
 import com.pla.sharedkernel.domain.model.Relationship;
 import com.pla.sharedkernel.domain.model.SumAssuredType;
+import com.pla.sharedkernel.identifier.CoverageId;
 import com.pla.sharedkernel.identifier.PlanId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -81,6 +82,36 @@ public class PlanAdapterImpl implements IPlanAdapter {
         }
         Plan plan = plans.get(0);
         return plan.isValidSumAssured(sumAssured);
+    }
+
+    @Override
+    public boolean isValidCoverageSumAssured(String planCode,String coverageId, BigDecimal sumAssured) {
+        List<Plan> plans = planRepository.findPlanByCodeAndName(planCode);
+        if (isEmpty(plans)) {
+            return false;
+        }
+        Plan plan = plans.get(0);
+        return plan.isValidCoverageSumAssured(sumAssured,new CoverageId(coverageId));
+    }
+
+    @Override
+    public boolean isValidPlanAge(String planCode, int age) {
+        List<Plan> plans = planRepository.findPlanByCodeAndName(planCode);
+        if (isEmpty(plans)) {
+            return false;
+        }
+        Plan plan = plans.get(0);
+       return plan.isValidAge(age);
+    }
+
+    @Override
+    public boolean isValidCoverageAge(String planCode, String coverageId, int age) {
+        List<Plan> plans = planRepository.findPlanByCodeAndName(planCode);
+        if (isEmpty(plans)) {
+            return false;
+        }
+        Plan plan = plans.get(0);
+        return   plan.isValidCoverageAge(age,new CoverageId(coverageId));
     }
 
     @Override
@@ -158,4 +189,5 @@ public class PlanAdapterImpl implements IPlanAdapter {
             return relationship.description;
         }
     }
+
 }

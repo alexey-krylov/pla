@@ -11,7 +11,7 @@ public enum ProcessType {
     ENDORSEMENT("Endorsement"),
     ENROLLMENT("Enrollment"),
     MATURITY("Maturity Claim"),
-    PROPOSAL("Proposal"),
+  /*  PROPOSAL("Proposal"),*/
     REINSTATEMENT("Reinstatement"),
     SURRENDER("Surrender Claim");
 
