@@ -54,6 +54,8 @@ class Detail {
     LineOfBusinessEnum lineOfBusinessId;
     PlanType planType;
     ClientType clientType;
+    boolean funeralCover;
+
 }
 
 @Getter
@@ -133,6 +135,7 @@ class PlanCoverageDetail {
     private CoverageTermType coverageTermType;
     private List<MaturityAmountDetail> maturityAmounts = new ArrayList<>();
     private List<PlanCoverageBenefitDetail> planCoverageBenefits = new ArrayList<>();
+
 }
 
 @Getter

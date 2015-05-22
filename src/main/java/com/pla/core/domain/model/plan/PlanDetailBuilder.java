@@ -29,6 +29,7 @@ public class PlanDetailBuilder {
     LineOfBusinessEnum lineOfBusinessId;
     PlanType planType;
     ClientType clientType;
+    boolean funeralCover;
 
     public PlanDetailBuilder withPlanName(String planName) {
         this.planName = planName;
@@ -100,6 +101,10 @@ public class PlanDetailBuilder {
         return this;
     }
 
+    public PlanDetailBuilder withFuneralCover(boolean funeralCover) {
+        this.funeralCover = funeralCover;
+        return this;
+    }
     public PlanDetail build() {
         return new PlanDetail(this, true);
     }

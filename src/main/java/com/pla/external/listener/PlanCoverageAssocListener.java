@@ -4,7 +4,6 @@ import com.pla.core.domain.event.PlanCoverageAssociationEvent;
 import com.pla.sharedkernel.domain.model.CoverageType;
 import com.pla.sharedkernel.identifier.BenefitId;
 import com.pla.sharedkernel.identifier.CoverageId;
-import com.pla.sharedkernel.identifier.PlanId;
 import org.axonframework.eventhandling.annotation.EventHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
@@ -15,6 +14,7 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Component;
 
 import javax.sql.DataSource;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.List;
@@ -38,9 +38,8 @@ public class PlanCoverageAssocListener {
     }
 
     @EventHandler
-    public void handle(PlanCoverageAssociationEvent event) {
+    public void handle(final PlanCoverageAssociationEvent event) {
         Map<CoverageType, Map<CoverageId, List<BenefitId>>> payload = event.getCoverageAndBenefits();
-        PlanId planId = event.getPlanId();
         namedParameterJdbcTemplate.execute("delete from plan_coverage_benefits_assoc",
                 new EmptySqlParameterSource(), new PreparedStatementCallback<Object>() {
                     @Override
@@ -49,24 +48,30 @@ public class PlanCoverageAssocListener {
                     }
                 });
         Map<CoverageId, List<BenefitId>> optionalCoverageBenefits = payload.get(CoverageType.OPTIONAL);
-        populateOptionalCoverages(planId, event.getPlanName(), event.getPlanCode(), optionalCoverageBenefits);
+        populateOptionalCoverages(event, optionalCoverageBenefits);
 
         Map<CoverageId, List<BenefitId>> baseCoverageBenefits = payload.get(CoverageType.BASE);
-        if (baseCoverageBenefits != null) populateBaseCoverages(planId, event.getPlanName(), event.getPlanCode(), baseCoverageBenefits);
+        if (baseCoverageBenefits != null) populateBaseCoverages(event, baseCoverageBenefits);
     }
 
-    private void populateOptionalCoverages(PlanId planId, String planName, String planCode, Map<CoverageId, List<BenefitId>> optionalCoverageBenefits) {
+    private void populateOptionalCoverages(PlanCoverageAssociationEvent event, Map<CoverageId, List<BenefitId>> optionalCoverageBenefits) {
         if (optionalCoverageBenefits == null) return;
         for (CoverageId coverageId : optionalCoverageBenefits.keySet()) {
             for (BenefitId benefitId : optionalCoverageBenefits.get(coverageId)) {
                 MapSqlParameterSource parameterSource = new MapSqlParameterSource()
-                        .addValue("planId", planId)
+                        .addValue("planId", event.getPlanId().toString())
                         .addValue("coverageId", coverageId.toString())
                         .addValue("benefitId", benefitId.toString())
-                        .addValue("planName", planName)
-                        .addValue("planCode", planCode);
-                namedParameterJdbcTemplate.execute("insert into plan_coverage_benefits_assoc (`plan_id`,`plan_name`,`plan_code`,`coverage_id`," +
-                                "`benefit_id`,`optional`) values (:planId,:planName,:planCode,:coverageId,:benefitId,0)", parameterSource,
+                        .addValue("planName", event.getPlanName())
+                        .addValue("planCode", event.getPlanCode())
+                        .addValue("launchDate", new Date(event.getLaunchDate().toDate().getTime()))
+                        .addValue("lineOfBusiness", event.getLineOfBusinessId().toString())
+                        .addValue("withdrawalDate", event.getWithdrawalDate() != null ? new Date(event.getWithdrawalDate().toDate().getTime()) : null)
+                        .addValue("funeralCover", event.isFuneralCover())
+                        .addValue("clientType", event.getClientType().toString());
+                namedParameterJdbcTemplate.execute("insert into plan_coverage_benefits_assoc (`plan_id`,`plan_name`,`plan_code`,`launch_date`,`withdrawal_date`,`line_of_business`,`client_type`," +
+                                "`coverage_id`,`benefit_id`,`funeral_cover`,`optional`) values (:planId,:planName,:planCode,:launchDate,:withdrawalDate,:lineOfBusiness,:clientType," +
+                                ":coverageId,:benefitId,0,:funeralCover)", parameterSource,
                         new PreparedStatementCallback<Object>() {
                             @Override
                             public Object doInPreparedStatement(PreparedStatement ps) throws SQLException, DataAccessException {
@@ -77,19 +82,24 @@ public class PlanCoverageAssocListener {
         }
     }
 
-    private void populateBaseCoverages(PlanId planId, String planName, String planCode, Map<CoverageId, List<BenefitId>> baseCoverageBenefits) {
+    private void populateBaseCoverages(PlanCoverageAssociationEvent event, Map<CoverageId, List<BenefitId>> baseCoverageBenefits) {
         if (baseCoverageBenefits == null) return;
 
         for (CoverageId coverageId : baseCoverageBenefits.keySet()) {
             for (BenefitId benefitId : baseCoverageBenefits.get(coverageId)) {
                 MapSqlParameterSource parameterSource = new MapSqlParameterSource()
-                        .addValue("planId", planId.toString())
+                        .addValue("planId", event.getPlanId().toString())
                         .addValue("coverageId", coverageId.toString())
                         .addValue("benefitId", benefitId.toString())
-                        .addValue("planName", planName)
-                        .addValue("planCode", planCode);
-                namedParameterJdbcTemplate.execute("insert into plan_coverage_benefits_assoc (`plan_id`,`plan_name`,`plan_code`,`coverage_id`," +
-                                "`benefit_id`,`optional`) values (:planId,:planName,:planCode,:coverageId,:benefitId,1)", parameterSource,
+                        .addValue("planName", event.getPlanName())
+                        .addValue("planCode", event.getPlanCode())
+                        .addValue("launchDate", new Date(event.getLaunchDate().toDate().getTime()))
+                        .addValue("lineOfBusiness", event.getLineOfBusinessId().toString())
+                        .addValue("withdrawalDate", event.getWithdrawalDate() != null ? new Date(event.getWithdrawalDate().toDate().getTime()) : null)
+                        .addValue("funeralCover", event.isFuneralCover())
+                        .addValue("clientType", event.getClientType().toString());
+                namedParameterJdbcTemplate.execute("insert into plan_coverage_benefits_assoc (`plan_id`,`plan_name`,`plan_code`,`launch_date`,`withdrawal_date`,`line_of_business`,`client_type`,`coverage_id`," +
+                                "`benefit_id`,`optional`,`funeral_cover`) values (:planId,:planName,:planCode,:launchDate,:withdrawalDate,:lineOfBusiness,:clientType,:coverageId,:benefitId,1,:funeralCover)", parameterSource,
                         new PreparedStatementCallback<Object>() {
                             @Override
                             public Object doInPreparedStatement(PreparedStatement ps) throws SQLException, DataAccessException {

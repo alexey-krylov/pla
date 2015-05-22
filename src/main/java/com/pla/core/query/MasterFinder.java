@@ -26,36 +26,27 @@ import java.util.Map;
 @Service
 public class MasterFinder {
 
+    public static final String FIND_GEO_BY_GEO_TYPE_QUERY = "SELECT geo_id AS geoId,parent_geo_id AS parentGeoId, geo_type AS geoType, geo_description AS geoName FROM geo WHERE geo_type=:geoType";
+    public static final String FIND_ALL_CHANNEL_TYPE_QUERY = "SELECT channel_code AS channelCode ,channel_description AS channelDescription FROM channel_type";
+    public static final String FIND_ALL_REGION_QUERY = "select * from region_region_manger_fulfilment_view";
+    public static final String FIND_ALL_REGION_REGION_FULFILLMENT_GREATER_THAN_CURRENT_DATE_QUERY = "select * from region_region_manger_fulfilment_greater_than_current_date_view";
+    public static final String FINA_ALL_BRANCH_QUERY = "SELECT B.branch_code AS branch_code,B.branch_name AS branchName FROM `region_branch` RB LEFT JOIN  `branch` B ON RB.branch_code =B.branch_code\n" +
+            "  WHERE RB.region_code = :regionCode";
+    public static final String FIND_ENTITY_SEQUENCE_BY_CLASS_TYPE_QUERY = "SELECT sequence_id as sequenceId, sequence_number AS sequenceNumber,sequence_name AS sequenceName,sequence_prefix AS sequencePrefix FROM `entity_sequence` WHERE sequence_name=:sequenceName";
+    public static final String FIND_ALL_DOCUMENT = "SELECT document_code documentCode,document_name documentName " +
+            " FROM document where is_provided = 'NO'";
+    public static final String FIND_ALL_INDUSTRY_QUERY = "SELECT * FROM industry";
+    public static final String FIND_ALL_OCCUPATION_CLASS_QUERY = "SELECT DISTINCT(CODE) FROM occupation_class";
+    public static final String FIND_ALL_OCCUPATION_CLASSIFICATION_QUERY = "SELECT DISTINCT(description) FROM occupation_class";
+    public static final String FIND_ALL_DESIGNATION_QUERY = "SELECT * FROM `designation`";
+    private static final String FIND_ALL_PLAN_INDIVIDUAL_LIFE = "select * from plan_coverage_benefit_assoc where" +
+            " line_of_business='Individual Life' group by plan_code";
     private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
     @Autowired
     public void setDataSource(DataSource dataSource) {
         this.namedParameterJdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
     }
-
-    public static final String FIND_GEO_BY_GEO_TYPE_QUERY = "SELECT geo_id AS geoId,parent_geo_id AS parentGeoId, geo_type AS geoType, geo_description AS geoName FROM geo WHERE geo_type=:geoType";
-
-    public static final String FIND_ALL_CHANNEL_TYPE_QUERY = "SELECT channel_code AS channelCode ,channel_description AS channelDescription FROM channel_type";
-
-    public static final String FIND_ALL_REGION_QUERY = "select * from region_region_manger_fulfilment_view";
-
-    public static final String FIND_ALL_REGION_REGION_FULFILLMENT_GREATER_THAN_CURRENT_DATE_QUERY = "select * from region_region_manger_fulfilment_greater_than_current_date_view";
-
-    public static final String FINA_ALL_BRANCH_QUERY = "SELECT B.branch_code AS branch_code,B.branch_name AS branchName FROM `region_branch` RB LEFT JOIN  `branch` B ON RB.branch_code =B.branch_code\n" +
-            "  WHERE RB.region_code = :regionCode";
-
-    public static final String FIND_ENTITY_SEQUENCE_BY_CLASS_TYPE_QUERY = "SELECT sequence_id as sequenceId, sequence_number AS sequenceNumber,sequence_name AS sequenceName,sequence_prefix AS sequencePrefix FROM `entity_sequence` WHERE sequence_name=:sequenceName";
-
-    public static final String FIND_ALL_DOCUMENT = "SELECT document_code documentCode,document_name documentName " +
-            " FROM document where is_provided = 'NO'";
-
-    public static final String FIND_ALL_INDUSTRY_QUERY = "SELECT * FROM industry";
-
-    public static final String FIND_ALL_OCCUPATION_CLASS_QUERY = "SELECT DISTINCT(CODE) FROM occupation_class";
-
-    public static final String FIND_ALL_OCCUPATION_CLASSIFICATION_QUERY = "SELECT DISTINCT(description) FROM occupation_class";
-
-    public static final String FIND_ALL_DESIGNATION_QUERY = "SELECT * FROM `designation`";
 
     public List<Map<String, Object>> getGeoByGeoType(GeoType geoType) {
         return namedParameterJdbcTemplate.query(FIND_GEO_BY_GEO_TYPE_QUERY, new MapSqlParameterSource().addValue("geoType", geoType.name()), new ColumnMapRowMapper());
@@ -101,5 +92,13 @@ public class MasterFinder {
 
     public List<Map<String, Object>> getAllDesignation() {
         return namedParameterJdbcTemplate.query(FIND_ALL_DESIGNATION_QUERY, new ColumnMapRowMapper());
+    }
+
+    public List<Map<String, Object>> getAllPlanForIndividualLife() {
+        return namedParameterJdbcTemplate.query(FIND_ALL_PLAN_INDIVIDUAL_LIFE, new ColumnMapRowMapper());
+    }
+
+    public List<Map<String, Object>> getOptionalCoverages(String planId) {
+        return namedParameterJdbcTemplate.query(FIND_ALL_PLAN_INDIVIDUAL_LIFE, new ColumnMapRowMapper());
     }
 }

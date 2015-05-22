@@ -80,7 +80,6 @@
                                     <option value="INDIVIDUAL">Individual</option>
                                     <option value="GROUP">Group</option>
                                 </select>
-
                                 <div class="error" ng-show="step1.clientType.$dirty &amp;&amp; step1.clientType.$invalid">
                                     <small class="error" ng-show="step1.clientType.$error.required">
                                         Please indicate the Client type.
@@ -131,7 +130,6 @@
                         <div class="col-md-3">
                             <div class="form-group  required">
                                 <label class="control-label">Launch Date</label>
-
                                 <div class='input-group date'>
                                     <input type="text" class="form-control input-sm"
                                            datepicker-popup=""
@@ -211,7 +209,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-6">
+                        <div class="col-md-3">
                             <div class="form-group required">
                                 <label class="control-label" style="display: block;">Is Tax Applicable?</label>
                                 <label class="radio-inline">
@@ -227,6 +225,28 @@
                                     <small class="error"
                                            ng-show="step1.taxable.$error.required">
                                         Please indicate whether taxes are applicable for the product.
+                                    </small>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-3">
+                            <div class="form-group required">
+                                <label class="control-label" style="display: block;">Is it a Funeral Cover?</label>
+                                <label class="radio-inline">
+                                    <input type="radio" name="funeralCover" ng-required="true" ng-value="true"
+                                           ng-model="plan.planDetail.funeralCover"/>Yes
+                                </label>
+                                <label class="radio-inline">
+                                    <input type="radio" name="funeralCover" ng-required="true" ng-value="false"
+                                           ng-model="plan.planDetail.funeralCover"/>No
+                                </label>
+
+                                <div class="error"
+                                     ng-show="step1.funeralCover.$dirty &amp;&amp; step1.funeralCover.$invalid">
+                                    <small class="error"
+                                           ng-show="step1.funeralCover.$error.required">
+                                        Please indicate whether it is a Funeral Plan.
                                     </small>
                                 </div>
                             </div>

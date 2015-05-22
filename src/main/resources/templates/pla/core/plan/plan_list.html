@@ -23,7 +23,7 @@
                         <th th:text="#{planName}">Plan Name</th>
                         <th th:text="#{planCode}">Plan Code</th>
                         <th th:text="#{clientType}">Client Type</th>
-                        <th th:text="#{planType}">Plan Type</th>
+                        <!--<th th:text="#{planType}">Plan Type</th>-->
                         <th th:text="#{lineOfBusinessId}">Line of Business</th>
                         <th th:text="#{launchDate}">Launch Date</th>
                         <th th:text="#{withdrawalDate}">Withdrawal Date</th>
@@ -32,14 +32,14 @@
                     </thead>
                     <tbody>
                     <tr th:each="plan : ${planList}">
-                        <td th:text="${plan.planDetail.planName}"></td>
-                        <td th:text="${plan.planDetail.planCode}"></td>
-                        <td th:text="${plan.planDetail.clientType}"></td>
-                        <td th:text="${plan.planDetail.planType}"></td>
-                        <td th:text="${plan.planDetail.lineOfBusinessId}"></td>
-                        <td th:text="${#dates.format(plan.planDetail.launchDate,'dd/MM/yyyy')}"></td>
-                        <td th:text="${{plan.planDetail.withdrawalDate}}"></td>
-                        <td><a th:href="'#viewplan/'+${plan.planId.planId}+''">View</a></td>
+                        <td th:text="${plan.plan_name}"></td>
+                        <td th:text="${plan.plan_code}"></td>
+                        <td th:text="${plan.client_type}"></td>
+                        <!--<td th:text="${plan.plan_type}"></td>-->
+                        <td th:text="${plan.line_of_business}"></td>
+                        <td th:text="${#dates.format(plan.launch_date,'dd/MM/yyyy')}"></td>
+                        <td th:text="${{plan.withdrawal_date}}"></td>
+                        <td><a th:href="'#viewplan/'+${plan.plan_id}+''">View</a></td>
                     </tr>
                     </tbody>
                 </table>

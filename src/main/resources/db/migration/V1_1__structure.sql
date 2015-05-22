@@ -769,10 +769,13 @@ CREATE TABLE `industry` (
 
 DROP TABLE IF EXISTS `occupation_class`;
 CREATE TABLE `occupation_class` (
+ `occupation_id` BIGINT(20) NOT NULL AUTO_INCREMENT,
   `code` VARCHAR(100) NOT NULL,
-  `description` varchar(255) NOT NULL,
-  PRIMARY KEY (`code`,`description`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `description` VARCHAR(255) NOT NULL,
+  PRIMARY KEY (`occupation_id`),
+  UNIQUE KEY (`code`,`description`)
+) ENGINE=INNODB DEFAULT CHARSET=utf8;
+
 
 DROP TABLE IF EXISTS `designation`;
 CREATE TABLE `designation` (
@@ -796,7 +799,12 @@ CREATE TABLE `plan_coverage_benefits_assoc` (
 
 ALTER TABLE `plan_coverage_benefits_assoc`
   ADD COLUMN `plan_name` VARCHAR(100) NULL AFTER `plan_id`,
-  ADD COLUMN `plan_code` VARCHAR(10) NULL AFTER `plan_name`;
+  ADD COLUMN `plan_code` VARCHAR(10) NULL AFTER `plan_name`,
+  ADD COLUMN `launch_date` date NOT NULL AFTER `plan_code`,
+  ADD COLUMN `withdrawal_date` data AFTER `launch_date`,
+  ADD COLUMN `client_type` varchar(60) NOT NULL AFTER `withdrawal_date`,
+  ADD COLUMN `line_of_business` varchar(60) NOT NULL AFTER `client_type`,
+  ADD COLUMN `funeral_cover` tinyint(1) DEFAULT NULL
 
 CREATE TABLE `endorsement_type` (
   `endorsement_type_id` BIGINT(20) NOT NULL AUTO_INCREMENT,
@@ -807,6 +815,9 @@ CREATE TABLE `endorsement_type` (
 
 ALTER TABLE `endorsement_type`
   ADD  UNIQUE INDEX `UNIQUE` (`description`, `category`);
+
+alter table occupation_class
+  add column ;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;

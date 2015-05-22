@@ -65,7 +65,8 @@ public class PlanCommandHandler {
                 .withMinEntryAge(dtl.getMinEntryAge())
                 .withPlanCode(dtl.getPlanCode())
                 .withPlanType(dtl.getPlanType())
-                .withSurrenderAfter(dtl.getSurrenderAfter());
+                .withSurrenderAfter(dtl.getSurrenderAfter())
+                .withFuneralCover(dtl.funeralCover);
         PlanDetail pd = pdBuilder.build(false);
 
         Set<PlanCoverage> coverageSet = new HashSet<PlanCoverage>();

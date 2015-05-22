@@ -71,9 +71,9 @@ public class PlanFinder {
         this.namedParameterJdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
     }
 
-    public List<Plan> findAllPlanForThymeleaf() {
-        List<Plan> allPlans = mongoTemplate.findAll(Plan.class, "PLAN");
-        return allPlans;
+    public List<Map<String, Object>> findAllPlanForThymeleaf() {
+        List<Map<String, Object>> planList = namedParameterJdbcTemplate.queryForList("SELECT * FROM plan_coverage_benefits_assoc group by plan_code ORDER BY plan_name,launch_date", EmptySqlParameterSource.INSTANCE);
+        return planList;
     }
 
     public List<Plan> findPlanBy(List<PlanId> planIds) {

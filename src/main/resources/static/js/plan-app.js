@@ -162,8 +162,6 @@ app.controller('PlanSetupController', ['$scope', '$http', '$location', '$routePa
              return returnList;
              };*/
 
-
-
             $scope.sumAssuredTypesOriginal = [{val: 'RANGE', desc: 'Specified Range'}, {val: 'SPECIFIED_VALUES', desc: 'Specified Values'}];
             $scope.sumAssuredTypes = [];
 

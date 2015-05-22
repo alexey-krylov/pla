@@ -1,7 +1,6 @@
 package com.pla.core.presentation.controller;
 
 import com.pla.core.domain.exception.DuplicatePlanException;
-import com.pla.core.domain.model.plan.Plan;
 import com.pla.core.presentation.command.CreatePlanCommand;
 import com.pla.core.presentation.command.PlanCommandGateway;
 import com.pla.core.presentation.command.UpdatePlanCommand;
@@ -100,7 +99,7 @@ public class PlanSetupController {
     public ModelAndView gotoPlanList() {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("pla/core/plan/plan_list");
-        List<Plan> planList = planFinder.findAllPlanForThymeleaf();
+        List<Map<String, Object>> planList = planFinder.findAllPlanForThymeleaf();
         modelAndView.addObject("planList", planList);
         return modelAndView;
     }

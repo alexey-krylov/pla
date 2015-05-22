@@ -52,11 +52,12 @@ public class PlanAdapterImpl implements IPlanAdapter {
         return planCoverageDetailDtoList;
     }
 
+    //TODO: Check with Samir why is this required.
     @Override
     public List<PlanCoverageDetailDto> getAllPlanAndCoverageDetail() {
-        List<Plan> plans = planFinder.findAllPlanForThymeleaf();
-        List<PlanCoverageDetailDto> planCoverageDetailDtoList = plans.stream().map(new PlanCoverageDetailTransformer()).collect(Collectors.toList());
-        return planCoverageDetailDtoList;
+      /*  List<Plan> plans = planFinder.findAllPlanForThymeleaf();
+        List<PlanCoverageDetailDto> planCoverageDetailDtoList = plans.stream().map(new PlanCoverageDetailTransformer()).collect(Collectors.toList());*/
+        return null;
     }
 
     @Override

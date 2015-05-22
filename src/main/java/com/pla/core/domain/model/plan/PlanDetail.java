@@ -35,6 +35,7 @@ public class PlanDetail {
     int minEntryAge;
     int maxEntryAge;
     boolean taxApplicable;
+    boolean funeralCover;
     int surrenderAfter;
     Set<Relationship> applicableRelationships;
     Set<EndorsementType> endorsementTypes;
@@ -87,6 +88,7 @@ public class PlanDetail {
         this.freeLookPeriod = planDetailBuilder.freeLookPeriod;
         this.taxApplicable = planDetailBuilder.taxApplicable;
         this.applicableRelationships = planDetailBuilder.applicableRelationships;
+        this.funeralCover = planDetailBuilder.funeralCover;
 
     }
 

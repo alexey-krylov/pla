@@ -26,11 +26,12 @@ public class PlanCoverageAssociationEvent {
     private final PlanType planType;
     private final LocalDate launchDate;
     private final LocalDate withdrawalDate;
+    private final boolean funeralCover;
 
     private final Map<CoverageType, Map<CoverageId, List<BenefitId>>> coverageAndBenefits;
 
     public PlanCoverageAssociationEvent(PlanId planId, String planName, String planCode, LineOfBusinessEnum lineOfBusinessId,
-                                        ClientType clientType, PlanType planType, LocalDate launchDate, LocalDate withdrawalDate,
+                                        ClientType clientType, PlanType planType, LocalDate launchDate, LocalDate withdrawalDate, boolean funeralCover,
                                         Map<CoverageType, Map<CoverageId, List<BenefitId>>> coverageAndBenefits) {
         this.planId = planId;
         this.planName = planName;
@@ -41,5 +42,6 @@ public class PlanCoverageAssociationEvent {
         this.launchDate = launchDate;
         this.withdrawalDate = withdrawalDate;
         this.coverageAndBenefits = coverageAndBenefits;
+        this.funeralCover = funeralCover;
     }
 }

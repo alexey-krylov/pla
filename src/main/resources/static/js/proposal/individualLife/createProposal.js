@@ -113,7 +113,7 @@ angular.module('createProposal',['common','ngRoute'])
     }])
     .config(["$routeProvider","$provide",function($routeProvider,$provide){
         $routeProvider.when('/', {
-            templateUrl: '/pla/proposal/individualLife/getPage/createProposal',
+            templateUrl: '/individualLife/proposal/createProposalForm',
             controller: 'createProposalCtrl',
             resolve: {
 

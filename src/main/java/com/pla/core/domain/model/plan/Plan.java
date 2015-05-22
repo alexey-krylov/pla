@@ -69,6 +69,7 @@ public class Plan extends AbstractAnnotatedAggregateRoot<PlanId> {
                 super.registerEvent(new PlanCreatedEvent(planId));
                 super.registerEvent(new PlanCoverageAssociationEvent(this.planId, this.planDetail.getPlanName(), this.planDetail.getPlanCode(),
                         this.planDetail.lineOfBusinessId, this.planDetail.getClientType(), this.planDetail.planType, this.planDetail.launchDate, this.planDetail.withdrawalDate,
+                        this.planDetail.funeralCover,
                         Collections.unmodifiableMap(derievedCoverages())));
             }
         } catch (Exception t) {
@@ -111,6 +112,10 @@ public class Plan extends AbstractAnnotatedAggregateRoot<PlanId> {
         try {
             Preconditions.checkState(this.status == PlanStatus.DRAFT, "Plan in draft status can only be updated.");
             copyPropertiesFromPlanBuilder(planBuilder);
+            super.registerEvent(new PlanCoverageAssociationEvent(this.planId, this.planDetail.getPlanName(), this.planDetail.getPlanCode(),
+                    this.planDetail.lineOfBusinessId, this.planDetail.getClientType(), this.planDetail.planType, this.planDetail.launchDate, this.planDetail.withdrawalDate,
+                    this.planDetail.funeralCover,
+                    Collections.unmodifiableMap(derievedCoverages())));
         } catch (Exception t) {
             t.printStackTrace();
             throw new PlanValidationException(t.getMessage());
