@@ -2,7 +2,6 @@ package com.pla.individuallife.domain.model.proposal;
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
-import com.pla.individuallife.domain.policy.ProposalSpecification;
 import com.pla.sharedkernel.domain.model.ProposalNumber;
 import com.pla.sharedkernel.identifier.PlanId;
 import lombok.EqualsAndHashCode;

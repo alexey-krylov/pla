@@ -1,4 +1,4 @@
-package com.pla.individuallife.domain.policy;
+package com.pla.individuallife.domain.model.proposal;
 
 import com.google.common.base.Preconditions;
 import com.pla.core.domain.model.plan.PlanDetail;
