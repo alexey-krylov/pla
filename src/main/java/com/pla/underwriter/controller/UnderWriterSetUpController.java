@@ -66,6 +66,15 @@ public class UnderWriterSetUpController {
         return underWritingService.getAllOptionalCoverageFor(Lists.newArrayList(planId));
     }
 
+    @RequestMapping(value = "/viewroutinglevel",method = RequestMethod.GET)
+    public String viewRoutingLevelSetup(){
+        return "pla/core/underwriter/routingLevelSetup/viewRoutingLevelSetup";
+    }
+    @RequestMapping(value = "/opencreateroutinglevel",method = RequestMethod.GET)
+    public String openCreatePage( ){
+        return "pla/core/underwriter/routingLevelSetup/createRoutingLevelSetup";
+    }
+
     @RequestMapping(value = "/checkforoverlapping",method = RequestMethod.POST)
     @ResponseBody
     public ResponseEntity isRowValid(@RequestBody CreateUnderWriterDocumentCommand createUnderWriterDocumentCommand,  BindingResult bindingResult,HttpServletRequest request){
@@ -140,7 +149,6 @@ public class UnderWriterSetUpController {
         POIFSFileSystem fs = new POIFSFileSystem(fis);
         HSSFWorkbook premiumTemplateWorkbook = new HSSFWorkbook(fs);
         try {
-
             String templateFileName = createUnderWriterRoutingLevelCommand.getPlanName()+ UNDER_WRITER_TEMPLATE_FILE_NAME_SUFFIX;
             templateFileName = templateFileName.replaceAll("[\\s]*", "").trim();
             boolean isValidTemplate = underWritingService.isValidUnderWriterRoutingLevelTemplate(premiumTemplateWorkbook,createUnderWriterRoutingLevelCommand.getPlanCode(),createUnderWriterRoutingLevelCommand.getCoverageId(), createUnderWriterRoutingLevelCommand.getUnderWriterInfluencingFactors());
