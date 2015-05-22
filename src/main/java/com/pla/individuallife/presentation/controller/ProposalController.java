@@ -53,7 +53,7 @@ public class ProposalController {
         return planList;
     }
 
-    @RequestMapping(method = RequestMethod.GET, value = "/getAllOccupation")
+    @RequestMapping(method = RequestMethod.GET, value = "/getRiders")
     public List<Map<String, Object>> getOptionalCoverages(@PathVariable("planId") String planId) {
         List<Map<String, Object>> planList = masterFinder.getOptionalCoverages(planId);
         return planList;

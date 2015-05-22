@@ -86,13 +86,13 @@ public class PlanAdapterImpl implements IPlanAdapter {
     }
 
     @Override
-    public boolean isValidCoverageSumAssured(String planCode,String coverageId, BigDecimal sumAssured) {
+    public boolean isValidCoverageSumAssured(String planCode, String coverageId, BigDecimal sumAssured) {
         List<Plan> plans = planRepository.findPlanByCodeAndName(planCode);
         if (isEmpty(plans)) {
             return false;
         }
         Plan plan = plans.get(0);
-        return plan.isValidCoverageSumAssured(sumAssured,new CoverageId(coverageId));
+        return plan.isValidCoverageSumAssured(sumAssured, new CoverageId(coverageId));
     }
 
     @Override
@@ -102,7 +102,7 @@ public class PlanAdapterImpl implements IPlanAdapter {
             return false;
         }
         Plan plan = plans.get(0);
-       return plan.isValidAge(age);
+        return plan.isValidAge(age);
     }
 
     @Override
@@ -112,7 +112,7 @@ public class PlanAdapterImpl implements IPlanAdapter {
             return false;
         }
         Plan plan = plans.get(0);
-        return   plan.isValidCoverageAge(age,new CoverageId(coverageId));
+        return plan.isValidCoverageAge(age, new CoverageId(coverageId));
     }
 
     @Override
