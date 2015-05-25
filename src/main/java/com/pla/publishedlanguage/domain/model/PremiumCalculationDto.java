@@ -33,14 +33,18 @@ public class PremiumCalculationDto {
 
     private int noOfDays;
 
-    public PremiumCalculationDto(PlanId planId, CoverageId coverageId, LocalDate calculateAsOf, PremiumFrequency premiumFrequency, int noOfDays) {
+    public PremiumCalculationDto(PlanId planId, LocalDate calculateAsOf, PremiumFrequency premiumFrequency, int noOfDays) {
         checkArgument(planId != null);
         checkArgument(calculateAsOf != null);
         this.calculateAsOf = calculateAsOf;
         this.premiumFrequency = premiumFrequency;
         this.planId = planId;
-        this.coverageId = coverageId;
         this.noOfDays = noOfDays;
+    }
+
+    public PremiumCalculationDto addCoverage(CoverageId coverageId) {
+        this.coverageId = coverageId;
+        return this;
     }
 
     public PremiumCalculationDto addInfluencingFactorItemValue(PremiumInfluencingFactor premiumInfluencingFactor, String value) {

@@ -2,10 +2,7 @@ package com.pla.quotation.presentation.controller;
 
 import com.pla.quotation.application.command.grouplife.*;
 import com.pla.quotation.application.service.grouplife.GLQuotationService;
-import com.pla.quotation.query.AgentDetailDto;
-import com.pla.quotation.query.GLQuotationFinder;
-import com.pla.quotation.query.PremiumDetailDto;
-import com.pla.quotation.query.ProposerDto;
+import com.pla.quotation.query.*;
 import com.pla.sharedkernel.identifier.QuotationId;
 import com.wordnik.swagger.annotations.ApiOperation;
 import net.sf.jasperreports.engine.JRException;
@@ -24,6 +21,7 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
+import java.util.List;
 import java.util.Map;
 
 import static com.google.common.base.Preconditions.checkArgument;
@@ -197,9 +195,9 @@ public class GroupLifeQuotationController {
 
     @RequestMapping(value = "/uploadinsureddetail", method = RequestMethod.POST)
     @ResponseBody
-    public Result uploadInsuredDetail(UploadInsuredDetailDto uploadInsuredDetailDto) throws IOException {
+    public Result uploadInsuredDetail(UploadInsuredDetailDto uploadInsuredDetailDto, HttpServletRequest request) throws IOException {
         MultipartFile file = uploadInsuredDetailDto.getFile();
-        if (!("application/msexcel".equals(file.getContentType()) || "application/vnd.ms-excel".equals(file.getContentType()))) {
+        if (!("application/ms-excel".equals(file.getContentType()) || "application/msexcel".equals(file.getContentType()) || "application/vnd.ms-excel".equals(file.getContentType()))) {
             return Result.failure("Uploaded file is not valid excel");
         }
         POIFSFileSystem fs = new POIFSFileSystem(file.getInputStream());
@@ -214,7 +212,10 @@ public class GroupLifeQuotationController {
                 fileOutputStream.close();
                 return Result.failure("Uploaded Insured template is not valid.Please download to check the errors");
             }
+            List<InsuredDto> insuredDtos = glQuotationService.transformToInsuredDto(insuredTemplateWorkbook, uploadInsuredDetailDto.getQuotationId(), uploadInsuredDetailDto.isSamePlanForAllCategory(), uploadInsuredDetailDto.isSamePlanForAllRelation());
+            commandGateway.sendAndWait(new UpdateGLQuotationWithInsuredCommand(uploadInsuredDetailDto.getQuotationId(), insuredDtos, getLoggedInUSerDetail(request)));
         } catch (Exception e) {
+            e.printStackTrace();
             return Result.failure(e.getMessage());
         }
         return Result.success("Insured detail uploaded successfully");
@@ -228,19 +229,13 @@ public class GroupLifeQuotationController {
 
     @RequestMapping(value = "/recalculatePremium", method = RequestMethod.POST)
     @ResponseBody
-    public PremiumDetailDto reCalculatePremium(@RequestBody PremiumDetailDto premiumDetailDto) {
-        return glQuotationService.getReCalculatePremium(premiumDetailDto);
-    }
-
-    @RequestMapping(value = "/updatewithpremiumdetail", method = RequestMethod.POST)
-    @ResponseBody
-    public Result updatePremiumDetail(@RequestBody UpdateGLQuotationWithPremiumDetailCommand updateGLQuotationWithPremiumDetailCommand) {
+    public PremiumDetailDto reCalculatePremium(@RequestBody UpdateGLQuotationWithPremiumDetailCommand updateGLQuotationWithPremiumDetailCommand, HttpServletRequest request) {
         try {
             commandGateway.sendAndWait(updateGLQuotationWithPremiumDetailCommand);
-            return Result.success("Premium detail updated successfully");
+            return glQuotationService.getPremiumDetail(new QuotationId(updateGLQuotationWithPremiumDetailCommand.getQuotationId()));
         } catch (Exception e) {
-            return Result.failure(e.getMessage());
         }
+        return new PremiumDetailDto();
     }
 
     @RequestMapping(value = "/generate", method = RequestMethod.POST)

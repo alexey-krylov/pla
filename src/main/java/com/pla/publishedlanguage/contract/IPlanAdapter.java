@@ -31,4 +31,6 @@ public interface IPlanAdapter {
     boolean hasPlanContainsIncomeMultiplierSumAssured(String planCode);
 
     boolean isValidPlanCode(String planCode);
+
+    PlanId getPlanId(String planCode);
 }

@@ -74,14 +74,15 @@ public class PremiumTemplateParser {
                     validValueErrorMessage = validValueErrorMessage + "\n" + premiumInfluencingFactor.getDescription() + " is missing";
                     continue;
                 }
-                boolean isValidValue = premiumInfluencingFactor.isValidValue(plan, coverageId, Cell.CELL_TYPE_NUMERIC == cell.getCellType() ? ((Double) cell.getNumericCellValue()).toString() : cell.getStringCellValue());
+                boolean isValidValue = premiumInfluencingFactor.isValidValue(plan, coverageId, getCellValue(cell));
                 if (!isValidValue) {
                     isValidPremiumTemplate = false;
-                    validValueErrorMessage = validValueErrorMessage + "\n" + premiumInfluencingFactor.getErrorMessage(Cell.CELL_TYPE_NUMERIC == cell.getCellType() ? ((Double) cell.getNumericCellValue()).toString() : cell.getStringCellValue());
+                    validValueErrorMessage = validValueErrorMessage + "\n" + premiumInfluencingFactor.getErrorMessage(getCellValue(cell));
                 }
             }
             Cell premiumCell = row.getCell(premiumCellNumber);
-            if (premiumCell == null || Cell.CELL_TYPE_NUMERIC != premiumCell.getCellType()) {
+            String premiumValue = getCellValue(premiumCell);
+            if (isEmpty(premiumValue)) {
                 isValidPremiumTemplate = false;
                 validValueErrorMessage = validValueErrorMessage + "\n" + " Premium value is missing";
             }
@@ -193,10 +194,7 @@ public class PremiumTemplateParser {
         List<Cell> nonEmptyCells = cells.stream().filter(new Predicate<Cell>() {
             @Override
             public boolean test(Cell cell) {
-                String cellValue = "";
-                if (cell != null) {
-                    cellValue = Cell.CELL_TYPE_NUMERIC == cell.getCellType() ? ((Double) cell.getNumericCellValue()).toString() : cell.getStringCellValue();
-                }
+                String cellValue = getCellValue(cell);
                 return isNotEmpty(cellValue);
             }
         }).collect(Collectors.toList());
@@ -272,11 +270,11 @@ public class PremiumTemplateParser {
                 if (cell == null) {
                     raiseNotValidTemplateException();
                 }
-                String cellValue = Cell.CELL_TYPE_NUMERIC == cell.getCellType() ? ((Double) cell.getNumericCellValue()).toString() : cell.getStringCellValue();
+                String cellValue = getCellValue(cell);
                 influencingFactorValueMap.put(premiumInfluencingFactor, cellValue);
             }
             Cell premiumCell = dataRow.getCell(premiumCellNumber);
-            premiumLineItemMap.put(influencingFactorValueMap, premiumCell.getNumericCellValue());
+            premiumLineItemMap.put(influencingFactorValueMap, Double.valueOf(getCellValue(premiumCell)));
             premiumInfluencingFactorLineItem.add(premiumLineItemMap);
         }
         return premiumInfluencingFactorLineItem;
@@ -294,7 +292,7 @@ public class PremiumTemplateParser {
     }
 
     private String[] getAllowedValues(PremiumInfluencingFactor premiumInfluencingFactor, Plan plan, CoverageId coverageId) {
-       if (PremiumInfluencingFactor.OCCUPATION_CATEGORY.equals(premiumInfluencingFactor)) {
+        if (PremiumInfluencingFactor.OCCUPATION_CLASS.equals(premiumInfluencingFactor)) {
             List<Map<String, Object>> occupationCategories = masterFinder.getAllOccupationClass();
             occupationCategories = isNotEmpty(occupationCategories) ? occupationCategories : Lists.newArrayList();
             String[] categories = new String[occupationCategories.size()];
@@ -305,5 +303,19 @@ public class PremiumTemplateParser {
             return categories;
         }
         return premiumInfluencingFactor.getAllowedValues(plan, coverageId);
+    }
+
+    private String getCellValue(Cell cell) {
+        String cellValue = "";
+        if (cell == null) {
+            return cellValue;
+        }
+        if (Cell.CELL_TYPE_FORMULA == cell.getCellType()) {
+            int formulaCellType = cell.getCachedFormulaResultType();
+            cellValue = Cell.CELL_TYPE_NUMERIC == formulaCellType ? ((Double) cell.getNumericCellValue()).toString() : cell.getRichStringCellValue().getString();
+        } else {
+            cellValue = Cell.CELL_TYPE_NUMERIC == cell.getCellType() ? ((Double) cell.getNumericCellValue()).toString() : cell.getStringCellValue();
+        }
+        return cellValue;
     }
 }

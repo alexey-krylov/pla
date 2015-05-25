@@ -1,9 +1,7 @@
 package com.pla.quotation.domain.model.grouplife;
 
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import com.pla.sharedkernel.identifier.CoverageId;
+import lombok.*;
 import org.nthdimenzion.ddd.domain.annotations.ValueObject;
 
 import java.math.BigDecimal;
@@ -13,13 +11,14 @@ import java.math.BigDecimal;
  */
 @ValueObject
 @NoArgsConstructor(access = AccessLevel.PACKAGE)
-@Getter(value = AccessLevel.PACKAGE)
+@Getter
 @Setter(value = AccessLevel.PACKAGE)
-class CoveragePremiumDetail {
+@EqualsAndHashCode(of = "coverageCode")
+public class CoveragePremiumDetail {
 
     private String coverageCode;
 
-    private String coverageId;
+    private CoverageId coverageId;
 
     private BigDecimal premium;
 
@@ -27,10 +26,15 @@ class CoveragePremiumDetail {
 
     private BigDecimal sumAssured;
 
-    CoveragePremiumDetail(String coverageName, String coverageCode, String coverageId, BigDecimal premium) {
+    CoveragePremiumDetail(String coverageName, String coverageCode, CoverageId coverageId, BigDecimal premium) {
         this.coverageCode = coverageCode;
         this.coverageId = coverageId;
         this.premium = premium;
         this.coverageName = coverageName;
+    }
+
+    public CoveragePremiumDetail updateWithPremium(BigDecimal premiumAmount) {
+        this.premium = premiumAmount;
+        return this;
     }
 }

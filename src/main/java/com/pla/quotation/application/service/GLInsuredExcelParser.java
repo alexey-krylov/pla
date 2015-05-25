@@ -8,6 +8,8 @@ import com.pla.publishedlanguage.contract.IPlanAdapter;
 import com.pla.quotation.query.InsuredDto;
 import com.pla.sharedkernel.domain.model.Relationship;
 import com.pla.sharedkernel.identifier.PlanId;
+import org.apache.poi.hssf.usermodel.HSSFCellStyle;
+import org.apache.poi.hssf.usermodel.HSSFFont;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Cell;
@@ -21,6 +23,7 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import static com.pla.quotation.application.service.exception.GLInsuredTemplateExcelParseException.*;
+import static com.pla.sharedkernel.util.ExcelGeneratorUtil.getCellValue;
 import static org.nthdimenzion.utils.UtilValidator.isEmpty;
 import static org.nthdimenzion.utils.UtilValidator.isNotEmpty;
 
@@ -38,35 +41,51 @@ public class GLInsuredExcelParser {
     }
 
 
-    public List<InsuredDto> transformToInsuredDto(HSSFWorkbook hssfWorkbook, boolean samePlanForAllCategory, boolean samePlanForAllRelation) {
+    public List<InsuredDto> transformToInsuredDto(HSSFWorkbook hssfWorkbook, List<PlanId> agentPlans) {
         HSSFSheet hssfSheet = hssfWorkbook.getSheetAt(0);
         Iterator<Row> rowIterator = hssfSheet.rowIterator();
         Row headerRow = rowIterator.next();
-        final List<String> headers = getHeaders(headerRow);
-        Map<Row, List<Row>> insuredTemplateDataRowMap = groupByRelationship(rowIterator, headers);
+        final List<String> headers = GLInsuredExcelHeader.getAllowedHeaderForParser(planAdapter, agentPlans);
+        final List<String> excelHeaders = getHeaders(headerRow);
+        Map<Row, List<Row>> insuredTemplateDataRowMap = groupByRelationship(Lists.newArrayList(rowIterator), GLInsuredExcelHeader.getAllowedHeaders(planAdapter, agentPlans));
         List<InsuredDto> insuredDtoList = insuredTemplateDataRowMap.entrySet().stream().map(new Function<Map.Entry<Row, List<Row>>, InsuredDto>() {
             @Override
             public InsuredDto apply(Map.Entry<Row, List<Row>> rowListEntry) {
-                return null;
+                Row insuredRow = rowListEntry.getKey();
+                List<Row> dependentRows = rowListEntry.getValue();
+                InsuredDto insuredDto = InsuredDto.createInsuredDto(insuredRow, excelHeaders, headers, findNonEmptyOptionalCoverageCell(excelHeaders, insuredRow));
+                insuredDto.getPlanPremiumDetail().setPlanId(planAdapter.getPlanId(insuredDto.getPlanPremiumDetail().getPlanCode()).getPlanId());
+                Set<InsuredDto.InsuredDependentDto> insuredDependentDtoSet = dependentRows.stream().map(new Function<Row, InsuredDto.InsuredDependentDto>() {
+                    @Override
+                    public InsuredDto.InsuredDependentDto apply(Row row) {
+                        InsuredDto.InsuredDependentDto insuredDependentDto = InsuredDto.InsuredDependentDto.createInsuredDependentDto(row, excelHeaders, headers, findNonEmptyOptionalCoverageCell(excelHeaders, row));
+                        insuredDependentDto.getPlanPremiumDetail().setPlanId(planAdapter.getPlanId(insuredDependentDto.getPlanPremiumDetail().getPlanCode()).getPlanId());
+                        return insuredDependentDto;
+                    }
+                }).collect(Collectors.toSet());
+                insuredDto.setInsuredDependents(insuredDependentDtoSet);
+                return insuredDto;
             }
         }).collect(Collectors.toList());
         return insuredDtoList;
     }
 
     public boolean isValidInsuredExcel(HSSFWorkbook hssfWorkbook, boolean samePlanForAllCategory, boolean samePlanForAllRelation, List<PlanId> agentPlans) {
+        boolean isValidTemplate = true;
         HSSFSheet hssfSheet = hssfWorkbook.getSheetAt(0);
         Iterator<Row> rowIterator = hssfSheet.rowIterator();
         Row headerRow = rowIterator.next();
+        List<Row> dataRows = Lists.newArrayList(rowIterator);
         final List<String> headers = getHeaders(headerRow);
         boolean isValidHeader = isValidHeader(headers, agentPlans);
         if (!isValidHeader) {
             raiseNotValidHeaderException();
         }
-        boolean isFirstRowContainsSelfRelationship = isFirstRowContainsSelfRelationship(rowIterator, headers);
+        boolean isFirstRowContainsSelfRelationship = isFirstRowContainsSelfRelationship(dataRows, headers);
         if (!isFirstRowContainsSelfRelationship) {
             raiseNotValidFirstHeaderException();
         }
-        Map<Row, List<Row>> insuredDependentMap = groupByRelationship(rowIterator, headers);
+        Map<Row, List<Row>> insuredDependentMap = groupByRelationship(dataRows, headers);
         boolean isSamePlanForAllCategory = isSamePlanForAllCategory(insuredDependentMap, headers);
         boolean isSamePlanForAllRelationship = isSamePlanForAllRelation(insuredDependentMap, headers);
         if (samePlanForAllCategory && !isSamePlanForAllCategory) {
@@ -77,22 +96,29 @@ public class GLInsuredExcelParser {
             raiseNotSamePlanForAllCategoryAndRelationshipException();
         }
         Cell errorMessageHeaderCell = null;
-        while (rowIterator.hasNext()) {
-            Row currentRow = rowIterator.next();
-            String errorMessage = validateRow(currentRow, headers);
+        Iterator<Row> dataRowIterator = dataRows.iterator();
+        while (dataRowIterator.hasNext()) {
+            Row currentRow = dataRowIterator.next();
+            String errorMessage = validateRow(currentRow, GLInsuredExcelHeader.getAllowedHeaderForParser(planAdapter, agentPlans));
             String coverageErrorMessage = validateOptionalCoverageCell(headers, currentRow);
             if (isEmpty(errorMessage) && isEmpty(coverageErrorMessage)) {
                 continue;
             }
+            isValidTemplate = false;
             if (errorMessageHeaderCell == null) {
+                HSSFCellStyle cellStyle = hssfSheet.getWorkbook().createCellStyle();
+                HSSFFont hssfFont = hssfSheet.getWorkbook().createFont();
+                hssfFont.setBoldweight(HSSFFont.BOLDWEIGHT_BOLD);
+                cellStyle.setFont(hssfFont);
                 errorMessageHeaderCell = headerRow.createCell(headers.size());
                 errorMessageHeaderCell.setCellValue(AppConstants.ERROR_CELL_HEADER_NAME);
+                errorMessageHeaderCell.setCellStyle(cellStyle);
             }
             errorMessage = errorMessage + "\n" + coverageErrorMessage;
-            Cell errorMessageCell = headerRow.getCell(headers.size());
+            Cell errorMessageCell = currentRow.createCell(headers.size());
             errorMessageCell.setCellValue(errorMessage);
         }
-        return false;
+        return isValidTemplate;
     }
 
     private boolean isValidHeader(List<String> headers, List<PlanId> planIds) {
@@ -115,7 +141,7 @@ public class GLInsuredExcelParser {
         Cell planCell = row.getCell(headers.indexOf(GLInsuredExcelHeader.PLAN.getDescription()));
         String planCode = getCellValue(planCell);
         Set<String> errorMessages = Sets.newHashSet();
-        List<Cell> optionalCoverageCells = findOptionalCoverageCell(headers, row);
+        List<Cell> optionalCoverageCells = findNonEmptyOptionalCoverageCell(headers, row);
         optionalCoverageCells.forEach(optionalCoverageCell -> {
             String optionalCoverageCode = getCellValue(optionalCoverageCell);
             if (isNotEmpty(optionalCoverageCode) && !isValidCoverage(planCode, optionalCoverageCode)) {
@@ -134,12 +160,15 @@ public class GLInsuredExcelParser {
         return buildErrorMessage(errorMessages);
     }
 
-    private List<Cell> findOptionalCoverageCell(List<String> headers, Row row) {
+    private List<Cell> findNonEmptyOptionalCoverageCell(List<String> headers, Row row) {
         List<Cell> optionalCoverageCells = Lists.newArrayList();
         headers.forEach(header -> {
             if (header.contains(AppConstants.OPTIONAL_COVERAGE_HEADER) && !header.contains(AppConstants.PREMIUM_CELL_HEADER_NAME)) {
                 int cellNumber = headers.indexOf(header);
-                optionalCoverageCells.add(row.getCell(cellNumber));
+                Cell cell = row.getCell(cellNumber);
+                if (isNotEmpty(getCellValue(cell))) {
+                    optionalCoverageCells.add(cell);
+                }
             }
         });
         return optionalCoverageCells;
@@ -174,14 +203,15 @@ public class GLInsuredExcelParser {
         return planAdapter.isValidPlanCoverage(planCode, coverageCode);
     }
 
-    private boolean isFirstRowContainsSelfRelationship(Iterator<Row> dataRows, List<String> headers) {
-        Row row = dataRows.next();
+    private boolean isFirstRowContainsSelfRelationship(List<Row> dataRows, List<String> headers) {
+        Row row = dataRows.iterator().next();
         Cell relationshipCell = row.getCell(headers.indexOf(GLInsuredExcelHeader.RELATIONSHIP.getDescription()));
         String relationship = getCellValue(relationshipCell);
         return Relationship.SELF.description.equals(relationship);
     }
 
-    private Map<Row, List<Row>> groupByRelationship(Iterator<Row> rowIterator, List<String> headers) {
+    private Map<Row, List<Row>> groupByRelationship(List<Row> dataRows, List<String> headers) {
+        Iterator<Row> rowIterator = dataRows.iterator();
         Map<Row, List<Row>> categoryRowMap = Maps.newLinkedHashMap();
         Row selfRelationshipRow = null;
         while (rowIterator.hasNext()) {
@@ -199,6 +229,7 @@ public class GLInsuredExcelParser {
         }
         return categoryRowMap;
     }
+
 
     private boolean isSamePlanForAllCategory(Map<Row, List<Row>> relationshipGroupRowMap, List<String> headers) {
         boolean isSamePlanForAllCategory = false;
@@ -255,15 +286,6 @@ public class GLInsuredExcelParser {
         return row.getCell(cellNumber);
     }
 
-    private String getCellValue(Cell cell) {
-        if (Cell.CELL_TYPE_BLANK == cell.getCellType()) {
-            return "";
-        } else if (Cell.CELL_TYPE_NUMERIC == cell.getCellType()) {
-            return Double.valueOf(cell.getNumericCellValue()).toString().trim();
-        }
-        return cell.getStringCellValue().trim();
-    }
-
     public List<String> getHeaders(Row headerRow) {
         List<String> headers = Lists.newArrayList();
         Iterator<Cell> cellIterator = headerRow.cellIterator();
@@ -273,5 +295,4 @@ public class GLInsuredExcelParser {
         }
         return ImmutableList.copyOf(headers);
     }
-
 }

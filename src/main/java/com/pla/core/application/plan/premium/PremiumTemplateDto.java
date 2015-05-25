@@ -10,6 +10,7 @@ import com.pla.publishedlanguage.domain.model.PremiumInfluencingFactor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.constraints.NotNull;
@@ -28,6 +29,7 @@ public class PremiumTemplateDto {
     private String coverageId;
 
     @NotNull
+    @NotEmpty
     private PremiumInfluencingFactor[] premiumInfluencingFactors;
 
     private MultipartFile file;

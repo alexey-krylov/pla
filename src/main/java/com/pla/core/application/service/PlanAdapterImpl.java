@@ -20,6 +20,7 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 import static org.nthdimenzion.utils.UtilValidator.isEmpty;
@@ -72,7 +73,18 @@ public class PlanAdapterImpl implements IPlanAdapter {
 
     @Override
     public boolean isValidPlanCoverage(String planCode, String coverageCode) {
-        return false;
+        List<Plan> plans = planRepository.findPlanByCodeAndName(planCode);
+        if (isEmpty(plans)) {
+            return false;
+        }
+        Plan plan = plans.get(0);
+        boolean isCoverageExist = plan.getCoverages().stream().filter(new Predicate<PlanCoverage>() {
+            @Override
+            public boolean test(PlanCoverage planCoverage) {
+                return coverageCode.equals(planCoverage.getCoverageCode());
+            }
+        }).findAny().isPresent();
+        return isCoverageExist;
     }
 
     @Override
@@ -129,6 +141,12 @@ public class PlanAdapterImpl implements IPlanAdapter {
     public boolean isValidPlanCode(String planCode) {
         List<Plan> plans = planRepository.findPlanByCodeAndName(planCode);
         return isNotEmpty(plans);
+    }
+
+    @Override
+    public PlanId getPlanId(String planCode) {
+        List<Plan> plans = planRepository.findPlanByCodeAndName(planCode);
+        return isNotEmpty(plans) ? plans.get(0).getIdentifier() : null;
     }
 
     private class PlanCoverageDetailTransformer implements Function<Plan, PlanCoverageDetailDto> {

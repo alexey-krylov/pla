@@ -241,13 +241,13 @@ angular.module('createQuotation',['common','ngRoute','mgcrea.ngStrap.select','mg
                     file: $scope.fileSaved
                 }).success(function (data, status, headers, config) {
                     if (data.status == "200") {
-                        saveStep();
-                        $scope.showDownload=true;
                         $http.get("/pla/quotation/getpremiumdetail/"+ $scope.quotationId)
                             .success(function(data){
                                 console.log(data);
 
                             })
+                        saveStep();
+                        $scope.showDownload=true;
                     }else{
                         $scope.showDownload=false;
                        // console.log($scope.showDownload);

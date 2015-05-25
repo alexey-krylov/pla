@@ -1,8 +1,10 @@
 package com.pla.publishedlanguage.contract;
 
+import com.pla.publishedlanguage.domain.model.BasicPremiumDto;
 import com.pla.publishedlanguage.domain.model.ComputedPremiumDto;
 import com.pla.publishedlanguage.domain.model.PremiumCalculationDto;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -11,5 +13,9 @@ import java.util.List;
 
 public interface IPremiumCalculator {
 
-    List<ComputedPremiumDto> calculatePremium(PremiumCalculationDto premiumCalculationDto);
+    List<ComputedPremiumDto> calculateBasicPremium(PremiumCalculationDto premiumCalculationDto);
+
+    List<ComputedPremiumDto> calculateModalPremium(BasicPremiumDto basicPremiumDto);
+
+    BigDecimal computeProratePremium(PremiumCalculationDto premiumCalculationDto);
 }

@@ -1,6 +1,7 @@
 package com.pla.core.domain.service.plan.premium;
 
 import com.google.common.collect.Lists;
+import com.pla.core.domain.model.generalinformation.ModelFactorOrganizationInformation;
 import com.pla.core.domain.model.generalinformation.OrganizationGeneralInformation;
 import com.pla.core.domain.model.plan.premium.Premium;
 import com.pla.core.domain.model.plan.premium.PremiumInfluencingFactorLineItem;
@@ -8,12 +9,14 @@ import com.pla.core.domain.model.plan.premium.PremiumItem;
 import com.pla.core.query.PremiumFinder;
 import com.pla.core.repository.OrganizationGeneralInformationRepository;
 import com.pla.publishedlanguage.contract.IPremiumCalculator;
+import com.pla.publishedlanguage.domain.model.BasicPremiumDto;
 import com.pla.publishedlanguage.domain.model.ComputedPremiumDto;
 import com.pla.publishedlanguage.domain.model.PremiumCalculationDto;
 import com.pla.publishedlanguage.domain.model.PremiumFrequency;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Set;
 import java.util.function.Predicate;
@@ -42,7 +45,7 @@ public class PremiumCalculator implements IPremiumCalculator {
     }
 
     @Override
-    public List<ComputedPremiumDto> calculatePremium(PremiumCalculationDto premiumCalculationDto) {
+    public List<ComputedPremiumDto> calculateBasicPremium(PremiumCalculationDto premiumCalculationDto) {
         Premium premium = premiumFinder.findPremium(premiumCalculationDto);
         boolean hasAllInfluencingFactor = premium.hasAllInfluencingFactor(premiumCalculationDto.getInfluencingFactors());
         if (!hasAllInfluencingFactor) {
@@ -55,6 +58,37 @@ public class PremiumCalculator implements IPremiumCalculator {
         return computePremium(premium, premiumItem, organizationGeneralInformations.get(0), premiumCalculationDto.getNoOfDays());
     }
 
+    @Override
+    public List<ComputedPremiumDto> calculateModalPremium(BasicPremiumDto basicPremiumDto) {
+        List<OrganizationGeneralInformation> organizationGeneralInformations = organizationGeneralInformationRepository.findAll();
+        checkArgument(isNotEmpty(organizationGeneralInformations));
+        OrganizationGeneralInformation organizationGeneralInformation = organizationGeneralInformations.get(0);
+        Set<ModelFactorOrganizationInformation> modelFactorItems = organizationGeneralInformation.getModelFactorItems();
+        ComputedPremiumDto annualPremium = new ComputedPremiumDto(PremiumFrequency.ANNUALLY, basicPremiumDto.getBasicPremium());
+        ComputedPremiumDto semiAnnualPremium = new ComputedPremiumDto(PremiumFrequency.SEMI_ANNUALLY, basicPremiumDto.getBasicPremium().multiply(ModelFactorOrganizationInformation.getSemiAnnualModalFactor(modelFactorItems)));
+        ComputedPremiumDto quarterlyPremium = new ComputedPremiumDto(PremiumFrequency.QUARTERLY, basicPremiumDto.getBasicPremium().multiply(ModelFactorOrganizationInformation.getQuarterlyModalFactor(modelFactorItems)));
+        ComputedPremiumDto monthlyPremium = new ComputedPremiumDto(PremiumFrequency.MONTHLY, basicPremiumDto.getBasicPremium().multiply(ModelFactorOrganizationInformation.getMonthlyModalFactor(modelFactorItems)));
+        List<ComputedPremiumDto> computedPremiumDtoList = Lists.newArrayList();
+        computedPremiumDtoList.add(annualPremium);
+        computedPremiumDtoList.add(semiAnnualPremium);
+        computedPremiumDtoList.add(quarterlyPremium);
+        computedPremiumDtoList.add(monthlyPremium);
+        return computedPremiumDtoList;
+    }
+
+    @Override
+    public BigDecimal computeProratePremium(PremiumCalculationDto premiumCalculationDto) {
+        Premium premium = premiumFinder.findPremium(premiumCalculationDto);
+        boolean hasAllInfluencingFactor = premium.hasAllInfluencingFactor(premiumCalculationDto.getInfluencingFactors());
+        if (!hasAllInfluencingFactor) {
+            raiseInfluencingFactorMismatchException();
+        }
+        Set<PremiumItem> premiumItems = premium.getPremiumItems();
+        PremiumItem premiumItem = findPremiumItem(premiumItems, premiumCalculationDto.getPremiumCalculationInfluencingFactorItems());
+        return computeProratePremium(premium, premiumItem, premiumCalculationDto.getNoOfDays());
+    }
+
+
     public List<ComputedPremiumDto> computePremium(Premium premium, PremiumItem premiumItem, OrganizationGeneralInformation organizationGeneralInformation, int noOfDays) {
         ComputedPremiumDto annualPremium = new ComputedPremiumDto(PremiumFrequency.ANNUALLY, premium.getAnnualPremium(premiumItem, organizationGeneralInformation.getDiscountFactorItems(), noOfDays));
         ComputedPremiumDto semiAnnualPremium = new ComputedPremiumDto(PremiumFrequency.SEMI_ANNUALLY, premium.getSemiAnnuallyPremium(premiumItem, organizationGeneralInformation.getModelFactorItems(), organizationGeneralInformation.getDiscountFactorItems(), noOfDays));
@@ -66,6 +100,11 @@ public class PremiumCalculator implements IPremiumCalculator {
         computedPremiumDtoList.add(quarterlyPremium);
         computedPremiumDtoList.add(monthlyPremium);
         return computedPremiumDtoList;
+    }
+
+
+    public BigDecimal computeProratePremium(Premium premium, PremiumItem premiumItem, int noOfDays) {
+        return premium.getProratePremium(premiumItem, noOfDays);
     }
 
 

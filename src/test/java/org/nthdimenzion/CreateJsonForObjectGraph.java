@@ -5,7 +5,7 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.joda.JodaModule;
-import com.pla.core.application.agent.CreateAgentCommand;
+import com.pla.quotation.application.command.grouplife.UpdateGLQuotationWithAgentCommand;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
@@ -23,11 +23,12 @@ public class CreateJsonForObjectGraph {
     private static Logger logger = LoggerFactory.getLogger(CreateJsonForObjectGraph.class);
 
     public static void main(String[] args) throws JsonProcessingException {
-        CreateAgentCommand result1 = fillDataIntoObjectGraph(CreateAgentCommand.class);
+        UpdateGLQuotationWithAgentCommand result1 = fillDataIntoObjectGraph(UpdateGLQuotationWithAgentCommand.class);
         ObjectMapper mapper = new ObjectMapper();
         configureMapper(mapper);
         String result = mapper.writeValueAsString(result1);
         logger.info(result);
+        System.out.println(result);
     }
 
     private static void configureMapper(ObjectMapper mapper) {

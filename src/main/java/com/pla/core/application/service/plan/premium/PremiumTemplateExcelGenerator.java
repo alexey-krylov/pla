@@ -98,7 +98,7 @@ public class PremiumTemplateExcelGenerator {
     }
 
     private String[] getAllowedValues(PremiumInfluencingFactor premiumInfluencingFactor, Plan plan, CoverageId coverageId) {
-         if (PremiumInfluencingFactor.OCCUPATION_CATEGORY.equals(premiumInfluencingFactor)) {
+         if (PremiumInfluencingFactor.OCCUPATION_CLASS.equals(premiumInfluencingFactor)) {
             List<Map<String, Object>> occupationCategories = masterFinder.getAllOccupationClass();
             occupationCategories = isNotEmpty(occupationCategories) ? occupationCategories : Lists.newArrayList();
             String[] categories = new String[occupationCategories.size()];

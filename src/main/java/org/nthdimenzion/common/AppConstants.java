@@ -5,6 +5,7 @@ import org.joda.money.format.MoneyAmountStyle;
 import org.joda.money.format.MoneyFormatter;
 import org.joda.money.format.MoneyFormatterBuilder;
 
+import java.math.RoundingMode;
 import java.util.Locale;
 
 /**
@@ -45,5 +46,11 @@ public interface AppConstants {
     String DD_MM_YYY_FORMAT = "dd/MM/yyyy";
 
     String OPTIONAL_COVERAGE_HEADER = "OptionalCoverage";
+
+    String OPTIONAL_COVERAGE_SA_HEADER = "Sum Assured";
+
+    RoundingMode roundingMode = RoundingMode.CEILING;
+
+    int scale = 2;
 
 }

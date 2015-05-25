@@ -40,6 +40,8 @@ public class GLQuotationFinder {
 
     public static final String FIND_AGENT_PLANS_QUERY = "SELECT agent_id as agentId,plan_id as planId FROM `agent_authorized_plan` WHERE agent_id=:agentId";
 
+    public static final String FIND_OCCUPATION_CLASS_QUERY = "SELECT code,description FROM occupation_class WHERE description=:occupation";
+
     public Map<String, Object> getAgentById(String agentId) {
         Preconditions.checkArgument(isNotEmpty(agentId));
         return namedParameterJdbcTemplate.queryForMap(FIND_ACTIVE_AGENT_BY_ID_QUERY, new MapSqlParameterSource().addValue("agentId", agentId));
@@ -73,5 +75,14 @@ public class GLQuotationFinder {
 
     public List<Map<String, Object>> getAgentAuthorizedPlan(String agentId) {
         return namedParameterJdbcTemplate.query(FIND_AGENT_PLANS_QUERY, new MapSqlParameterSource().addValue("agentId", agentId), new ColumnMapRowMapper());
+    }
+
+    public String getOccupationClass(String occupation) {
+        List<Map<String, Object>> occupationClassList = namedParameterJdbcTemplate.query(FIND_OCCUPATION_CLASS_QUERY, new MapSqlParameterSource().addValue("occupation", occupation), new ColumnMapRowMapper());
+        if (isNotEmpty(occupationClassList)) {
+            Map<String, Object> occupationClassMap = occupationClassList.get(0);
+            return (String) occupationClassMap.get("code");
+        }
+        return "";
     }
 }

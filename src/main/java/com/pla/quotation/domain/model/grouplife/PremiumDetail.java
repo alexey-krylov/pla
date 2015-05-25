@@ -1,17 +1,20 @@
 package com.pla.quotation.domain.model.grouplife;
 
+import com.pla.publishedlanguage.domain.model.PremiumFrequency;
 import lombok.*;
 import org.nthdimenzion.ddd.domain.annotations.ValueObject;
 
 import java.math.BigDecimal;
+import java.util.Optional;
 import java.util.Set;
+import java.util.function.Predicate;
 
 /**
  * Created by Samir on 4/23/2015.
  */
 @ValueObject
 @NoArgsConstructor(access = AccessLevel.PACKAGE)
-@Getter(value = AccessLevel.PACKAGE)
+@Getter
 @Setter(value = AccessLevel.PACKAGE)
 public class PremiumDetail {
 
@@ -21,24 +24,40 @@ public class PremiumDetail {
 
     private BigDecimal discount;
 
-    private BigDecimal vat;
-
     private Integer policyTermValue;
 
-    private Set<PremiumInstallment> premiumInstallments;
+    private PremiumInstallment premiumInstallment;
 
     private Set<Policy> policies;
 
-    PremiumDetail(BigDecimal addOnBenefit, BigDecimal profitAndSolvency, BigDecimal discount, BigDecimal vat, Integer policyTermValue) {
+    private BigDecimal netTotalPremium;
+
+    public PremiumDetail(BigDecimal addOnBenefit, BigDecimal profitAndSolvency, BigDecimal discount, Integer policyTermValue) {
         this.addOnBenefit = addOnBenefit;
         this.profitAndSolvency = profitAndSolvency;
         this.discount = discount;
-        this.vat = vat;
         this.policyTermValue = policyTermValue;
     }
 
-    public PremiumDetail addPremiumInstallments(Set<PremiumInstallment> premiumInstallments) {
-        this.premiumInstallments = premiumInstallments;
+
+    public PremiumDetail updateWithNetPremium(BigDecimal netTotalPremium) {
+        this.netTotalPremium = netTotalPremium;
+        return this;
+    }
+
+    public Policy getAnnualPolicy() {
+        Optional<Policy> policyOptional = this.policies.stream().filter(new Predicate<Policy>() {
+            @Override
+            public boolean test(Policy policy) {
+                return false;
+            }
+        }).findAny();
+        return policyOptional.isPresent() ? policyOptional.get() : null;
+    }
+
+    public PremiumDetail addPremiumInstallment(int noOfInstallment, BigDecimal installmentAmount) {
+        PremiumInstallment premiumInstallment = new PremiumInstallment(noOfInstallment, installmentAmount);
+        this.premiumInstallment = premiumInstallment;
         return this;
     }
 
@@ -47,18 +66,49 @@ public class PremiumDetail {
         return this;
     }
 
-    @Getter(value = AccessLevel.PACKAGE)
-    @Setter(value = AccessLevel.PACKAGE)
-    @EqualsAndHashCode(of = "installmentNo")
+    public BigDecimal getAnnualPremiumAmount() {
+        Policy policy = getPolicy(PremiumFrequency.ANNUALLY);
+        return policy != null ? policy.getPremium() : null;
+    }
+
+    public BigDecimal getSemiAnnualPremiumAmount() {
+        Policy policy = getPolicy(PremiumFrequency.SEMI_ANNUALLY);
+        return policy != null ? policy.getPremium() : null;
+    }
+
+
+    public BigDecimal getQuarterlyPremiumAmount() {
+        Policy policy = getPolicy(PremiumFrequency.QUARTERLY);
+        return policy != null ? policy.getPremium() : null;
+    }
+
+    public BigDecimal getMonthlyPremiumAmount() {
+        Policy policy = getPolicy(PremiumFrequency.MONTHLY);
+        return policy != null ? policy.getPremium() : null;
+    }
+
+
+    private Policy getPolicy(PremiumFrequency premiumFrequency) {
+        Optional<Policy> policyOptional = this.policies.stream().filter(new Predicate<Policy>() {
+            @Override
+            public boolean test(Policy policy) {
+                return premiumFrequency.equals(policy.getPremiumFrequency());
+            }
+        }).findAny();
+        return policyOptional.isPresent() ? policyOptional.get() : null;
+    }
+
+    @Getter
     public class PremiumInstallment {
 
-        private Integer installmentNo;
+        private int noOfInstallment;
 
         private BigDecimal installmentAmount;
 
-        public PremiumInstallment(Integer installmentNo, BigDecimal installmentAmount) {
-            this.installmentNo = installmentNo;
+        PremiumInstallment(int noOfInstallment, BigDecimal installmentAmount) {
+            this.noOfInstallment = noOfInstallment;
             this.installmentAmount = installmentAmount;
         }
+
     }
 }

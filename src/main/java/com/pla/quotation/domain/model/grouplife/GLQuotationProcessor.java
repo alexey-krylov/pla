@@ -37,4 +37,8 @@ public class GLQuotationProcessor {
     public GroupLifeQuotation updateWithInsured(GroupLifeQuotation groupLifeQuotation, Set<Insured> insureds) {
         return groupLifeQuotation.updateWithInsured(insureds);
     }
+
+    public GroupLifeQuotation updateWithPremiumDetail(GroupLifeQuotation groupLifeQuotation, PremiumDetail premiumDetail) {
+        return groupLifeQuotation.updateWithPremiumDetail(premiumDetail);
+    }
 }

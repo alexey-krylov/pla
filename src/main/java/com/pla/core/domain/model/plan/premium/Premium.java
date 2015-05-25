@@ -107,9 +107,13 @@ public class Premium {
         }
     }
 
+    public BigDecimal getProratePremium(PremiumItem premiumItem, int noOfDays) {
+        return getAllowedPremiumAmount(premiumItem, noOfDays);
+    }
+
     public BigDecimal getAnnualPremium(PremiumItem premiumItem, Set<DiscountFactorOrganizationInformation> discountFactorItems, int noOfDays) {
         BigDecimal premiumAmount = getAllowedPremiumAmount(premiumItem, noOfDays);
-        if (PremiumRateFrequency.YEARLY.equals(premiumRateFrequency)) {
+        if (PremiumRateFrequency.YEARLY.equals(this.premiumRateFrequency)) {
             return premiumAmount;
         }
         premiumAmount = premiumAmount.multiply(DiscountFactorOrganizationInformation.getAnnualDiscountFactor(discountFactorItems));
@@ -144,6 +148,7 @@ public class Premium {
         premiumAmount = premiumAmount.multiply(ModelFactorOrganizationInformation.getSemiAnnualModalFactor(modelFactorItems));
         return premiumAmount;
     }
+
 
     private BigDecimal getAllowedPremiumAmount(PremiumItem premiumItem, int noOfDays) {
         BigDecimal premiumAmount = premiumItem.getPremium();

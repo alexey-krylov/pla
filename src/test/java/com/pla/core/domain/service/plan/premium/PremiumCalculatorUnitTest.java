@@ -95,7 +95,7 @@ public class PremiumCalculatorUnitTest {
      */
     @Test
     public void givenPremiumWithFlatAmountItShouldCalculatePremiumWithPremiumInfluencingFactorSumAssuredAgePolicyTermByApplyingModalFactor() throws IOException {
-        PremiumCalculationDto premiumCalculationDto = new PremiumCalculationDto(planId, null, premiumSetupDate.plusDays(1), PremiumFrequency.MONTHLY, 365);
+        PremiumCalculationDto premiumCalculationDto = new PremiumCalculationDto(planId, premiumSetupDate.plusDays(1), PremiumFrequency.MONTHLY, 365);
         premiumCalculationDto = premiumCalculationDto.addInfluencingFactorItemValue(PremiumInfluencingFactor.SUM_ASSURED, "55000");
         premiumCalculationDto = premiumCalculationDto.addInfluencingFactorItemValue(PremiumInfluencingFactor.AGE, "22");
         premiumCalculationDto = premiumCalculationDto.addInfluencingFactorItemValue(PremiumInfluencingFactor.POLICY_TERM, "365");
@@ -104,7 +104,7 @@ public class PremiumCalculatorUnitTest {
         Premium premium = createPremium(PremiumFactor.FLAT_AMOUNT, PremiumRateFrequency.YEARLY, "premiumsetupdatawithflatpremium.xls");
         when(premiumFinder.findPremium(premiumCalculationDto)).thenReturn(premium);
         when(organizationGeneralInformationRepository.findAll()).thenReturn(Lists.newArrayList(organizationGeneralInformation));
-        List<ComputedPremiumDto> computedPremiumDtoList = premiumCalculator.calculatePremium(premiumCalculationDto);
+        List<ComputedPremiumDto> computedPremiumDtoList = premiumCalculator.calculateBasicPremium(premiumCalculationDto);
         assertEquals(new BigDecimal("5000.5"), ComputedPremiumDto.getAnnualPremium(computedPremiumDtoList));
         assertEquals(new BigDecimal("1562.15620"), ComputedPremiumDto.getSemiAnnualPremium(computedPremiumDtoList));
         assertEquals(new BigDecimal("3394.83945"), ComputedPremiumDto.getMonthlyPremium(computedPremiumDtoList));
@@ -119,7 +119,7 @@ public class PremiumCalculatorUnitTest {
      */
     @Test
     public void givenPremiumWithFlatAmountItShouldCalculatePremiumOnProrateBasisWithPremiumInfluencingFactorSumAssuredAgePolicyTermByApplyingModalFactor() throws IOException {
-        PremiumCalculationDto premiumCalculationDto = new PremiumCalculationDto(planId, null, premiumSetupDate.plusDays(1), PremiumFrequency.MONTHLY, 270);
+        PremiumCalculationDto premiumCalculationDto = new PremiumCalculationDto(planId, premiumSetupDate.plusDays(1), PremiumFrequency.MONTHLY, 270);
         premiumCalculationDto = premiumCalculationDto.addInfluencingFactorItemValue(PremiumInfluencingFactor.SUM_ASSURED, "55000");
         premiumCalculationDto = premiumCalculationDto.addInfluencingFactorItemValue(PremiumInfluencingFactor.AGE, "22");
         premiumCalculationDto = premiumCalculationDto.addInfluencingFactorItemValue(PremiumInfluencingFactor.POLICY_TERM, "365");
@@ -128,7 +128,7 @@ public class PremiumCalculatorUnitTest {
         Premium premium = createPremium(PremiumFactor.FLAT_AMOUNT, PremiumRateFrequency.YEARLY, "premiumsetupdatawithflatpremium.xls");
         when(premiumFinder.findPremium(premiumCalculationDto)).thenReturn(premium);
         when(organizationGeneralInformationRepository.findAll()).thenReturn(Lists.newArrayList(organizationGeneralInformation));
-        List<ComputedPremiumDto> computedPremiumDtoList = premiumCalculator.calculatePremium(premiumCalculationDto);
+        List<ComputedPremiumDto> computedPremiumDtoList = premiumCalculator.calculateBasicPremium(premiumCalculationDto);
         assertEquals(new BigDecimal("3699.0000"), ComputedPremiumDto.getAnnualPremium(computedPremiumDtoList));
     }
 
@@ -151,7 +151,7 @@ public class PremiumCalculatorUnitTest {
         semiAnnuallyModalFactor.put(ModalFactorItem.SEMI_ANNUAL, new BigDecimal("0.5012"));
         List<Map<ModalFactorItem, BigDecimal>> modalFactorList = Lists.newArrayList(monthlyModalFactor, quarterlyModalFactor, semiAnnuallyModalFactor);
         organizationGeneralInformation = organizationGeneralInformation.withModalFactorOrganizationInformation(modalFactorList);
-        PremiumCalculationDto premiumCalculationDto = new PremiumCalculationDto(planId, null, premiumSetupDate.plusDays(1), PremiumFrequency.MONTHLY, 365);
+        PremiumCalculationDto premiumCalculationDto = new PremiumCalculationDto(planId, premiumSetupDate.plusDays(1), PremiumFrequency.MONTHLY, 365);
         premiumCalculationDto = premiumCalculationDto.addInfluencingFactorItemValue(PremiumInfluencingFactor.SUM_ASSURED, "55000");
         premiumCalculationDto = premiumCalculationDto.addInfluencingFactorItemValue(PremiumInfluencingFactor.AGE, "22");
         premiumCalculationDto = premiumCalculationDto.addInfluencingFactorItemValue(PremiumInfluencingFactor.POLICY_TERM, "365");
@@ -160,7 +160,7 @@ public class PremiumCalculatorUnitTest {
         Premium premium = createPremium(PremiumFactor.PER_THOUSAND, PremiumRateFrequency.YEARLY, "premiumsetupdatawithpremiumrate.xls");
         when(premiumFinder.findPremium(premiumCalculationDto)).thenReturn(premium);
         when(organizationGeneralInformationRepository.findAll()).thenReturn(Lists.newArrayList(organizationGeneralInformation));
-        List<ComputedPremiumDto> computedPremiumDtoList = premiumCalculator.calculatePremium(premiumCalculationDto);
+        List<ComputedPremiumDto> computedPremiumDtoList = premiumCalculator.calculateBasicPremium(premiumCalculationDto);
         assertEquals(new BigDecimal("1237.50"), ComputedPremiumDto.getAnnualPremium(computedPremiumDtoList));
         assertEquals(new BigDecimal("620.235000"), ComputedPremiumDto.getSemiAnnualPremium(computedPremiumDtoList));
         assertEquals(new BigDecimal("315.810000"), ComputedPremiumDto.getQuarterlyPremium(computedPremiumDtoList));
@@ -177,7 +177,7 @@ public class PremiumCalculatorUnitTest {
      */
     @Test
     public void givenPremiumWithFlatAmountItShouldCalculatePremiumWithPremiumInfluencingFactorSumAssuredAgePolicyTermByApplyingDiscountFactor() throws IOException {
-        PremiumCalculationDto premiumCalculationDto = new PremiumCalculationDto(planId, null, premiumSetupDate.plusDays(1), PremiumFrequency.MONTHLY, 365);
+        PremiumCalculationDto premiumCalculationDto = new PremiumCalculationDto(planId, premiumSetupDate.plusDays(1), PremiumFrequency.MONTHLY, 365);
         premiumCalculationDto = premiumCalculationDto.addInfluencingFactorItemValue(PremiumInfluencingFactor.SUM_ASSURED, "55000");
         premiumCalculationDto = premiumCalculationDto.addInfluencingFactorItemValue(PremiumInfluencingFactor.AGE, "22");
         premiumCalculationDto = premiumCalculationDto.addInfluencingFactorItemValue(PremiumInfluencingFactor.POLICY_TERM, "365");
@@ -186,7 +186,7 @@ public class PremiumCalculatorUnitTest {
         Premium premium = createPremium(PremiumFactor.FLAT_AMOUNT, PremiumRateFrequency.MONTHLY, "premiumsetupdatawithflatpremium.xls");
         when(premiumFinder.findPremium(premiumCalculationDto)).thenReturn(premium);
         when(organizationGeneralInformationRepository.findAll()).thenReturn(Lists.newArrayList(organizationGeneralInformation));
-        List<ComputedPremiumDto> computedPremiumDtoList = premiumCalculator.calculatePremium(premiumCalculationDto);
+        List<ComputedPremiumDto> computedPremiumDtoList = premiumCalculator.calculateBasicPremium(premiumCalculationDto);
         assertEquals(new BigDecimal("2160.71605"), ComputedPremiumDto.getAnnualPremium(computedPremiumDtoList));
         assertEquals(new BigDecimal("1616.16160"), ComputedPremiumDto.getSemiAnnualPremium(computedPremiumDtoList));
         assertEquals(new BigDecimal("5000.5"), ComputedPremiumDto.getMonthlyPremium(computedPremiumDtoList));
@@ -205,7 +205,7 @@ public class PremiumCalculatorUnitTest {
      */
     @Test
     public void givenPremiumWithFlatAmountItShouldCalculatePremiumOnProrateBasisWithPremiumInfluencingFactorSumAssuredAgePolicyTermByApplyingDiscountFactor() throws IOException {
-        PremiumCalculationDto premiumCalculationDto = new PremiumCalculationDto(planId, null, premiumSetupDate.plusDays(1), PremiumFrequency.MONTHLY, 275);
+        PremiumCalculationDto premiumCalculationDto = new PremiumCalculationDto(planId, premiumSetupDate.plusDays(1), PremiumFrequency.MONTHLY, 275);
         premiumCalculationDto = premiumCalculationDto.addInfluencingFactorItemValue(PremiumInfluencingFactor.SUM_ASSURED, "55000");
         premiumCalculationDto = premiumCalculationDto.addInfluencingFactorItemValue(PremiumInfluencingFactor.AGE, "22");
         premiumCalculationDto = premiumCalculationDto.addInfluencingFactorItemValue(PremiumInfluencingFactor.POLICY_TERM, "365");
@@ -214,7 +214,7 @@ public class PremiumCalculatorUnitTest {
         Premium premium = createPremium(PremiumFactor.FLAT_AMOUNT, PremiumRateFrequency.MONTHLY, "premiumsetupdatawithflatpremium.xls");
         when(premiumFinder.findPremium(premiumCalculationDto)).thenReturn(premium);
         when(organizationGeneralInformationRepository.findAll()).thenReturn(Lists.newArrayList(organizationGeneralInformation));
-        List<ComputedPremiumDto> computedPremiumDtoList = premiumCalculator.calculatePremium(premiumCalculationDto);
+        List<ComputedPremiumDto> computedPremiumDtoList = premiumCalculator.calculateBasicPremium(premiumCalculationDto);
         assertEquals(new BigDecimal("45837.9350"), ComputedPremiumDto.getMonthlyPremium(computedPremiumDtoList));
     }
 
@@ -237,7 +237,7 @@ public class PremiumCalculatorUnitTest {
         semiAnnualDiscountFactor.put(DiscountFactorItem.SEMI_ANNUAL, new BigDecimal("0.9427"));
         List<Map<DiscountFactorItem, BigDecimal>> discountFactorList = Lists.newArrayList(annualDiscountFactor, semiAnnualDiscountFactor, quarterlyDiscountFactor);
         organizationGeneralInformation = organizationGeneralInformation.withDiscountFactorOrganizationInformation(discountFactorList);
-        PremiumCalculationDto premiumCalculationDto = new PremiumCalculationDto(planId, null, premiumSetupDate.plusDays(1), PremiumFrequency.MONTHLY, 365);
+        PremiumCalculationDto premiumCalculationDto = new PremiumCalculationDto(planId, premiumSetupDate.plusDays(1), PremiumFrequency.MONTHLY, 365);
         premiumCalculationDto = premiumCalculationDto.addInfluencingFactorItemValue(PremiumInfluencingFactor.SUM_ASSURED, "55000");
         premiumCalculationDto = premiumCalculationDto.addInfluencingFactorItemValue(PremiumInfluencingFactor.AGE, "22");
         premiumCalculationDto = premiumCalculationDto.addInfluencingFactorItemValue(PremiumInfluencingFactor.POLICY_TERM, "365");
@@ -246,7 +246,7 @@ public class PremiumCalculatorUnitTest {
         Premium premium = createPremium(PremiumFactor.PER_THOUSAND, PremiumRateFrequency.MONTHLY, "premiumsetupdatawithpremiumrate.xls");
         when(premiumFinder.findPremium(premiumCalculationDto)).thenReturn(premium);
         when(organizationGeneralInformationRepository.findAll()).thenReturn(Lists.newArrayList(organizationGeneralInformation));
-        List<ComputedPremiumDto> computedPremiumDtoList = premiumCalculator.calculatePremium(premiumCalculationDto);
+        List<ComputedPremiumDto> computedPremiumDtoList = premiumCalculator.calculateBasicPremium(premiumCalculationDto);
         assertEquals(new BigDecimal("1139.118750"), ComputedPremiumDto.getAnnualPremium(computedPremiumDtoList));
         assertEquals(new BigDecimal("1185.030000"), ComputedPremiumDto.getQuarterlyPremium(computedPremiumDtoList));
         assertEquals(new BigDecimal("1166.591250"), ComputedPremiumDto.getSemiAnnualPremium(computedPremiumDtoList));
@@ -261,7 +261,7 @@ public class PremiumCalculatorUnitTest {
      */
     @Test(expected = PremiumException.class)
     public void givenPremiumItShouldCalculatePremiumWithNoPremiumFoundItShouldThrowException() throws IOException {
-        PremiumCalculationDto premiumCalculationDto = new PremiumCalculationDto(planId, null, premiumSetupDate.plusDays(1), PremiumFrequency.MONTHLY, 365);
+        PremiumCalculationDto premiumCalculationDto = new PremiumCalculationDto(planId, premiumSetupDate.plusDays(1), PremiumFrequency.MONTHLY, 365);
         premiumCalculationDto = premiumCalculationDto.addInfluencingFactorItemValue(PremiumInfluencingFactor.SUM_ASSURED, "550001");
         premiumCalculationDto = premiumCalculationDto.addInfluencingFactorItemValue(PremiumInfluencingFactor.AGE, "23232");
         premiumCalculationDto = premiumCalculationDto.addInfluencingFactorItemValue(PremiumInfluencingFactor.POLICY_TERM, "36335");
@@ -270,7 +270,7 @@ public class PremiumCalculatorUnitTest {
         Premium premium = createPremium(PremiumFactor.FLAT_AMOUNT, PremiumRateFrequency.YEARLY, "premiumsetupdatawithflatpremium.xls");
         when(premiumFinder.findPremium(premiumCalculationDto)).thenReturn(premium);
         when(organizationGeneralInformationRepository.findAll()).thenReturn(Lists.newArrayList(organizationGeneralInformation));
-        premiumCalculator.calculatePremium(premiumCalculationDto);
+        premiumCalculator.calculateBasicPremium(premiumCalculationDto);
     }
 
     /**
@@ -290,7 +290,7 @@ public class PremiumCalculatorUnitTest {
      */
     @Test(expected = PremiumException.class)
     public void givenPremiumWithInfluencingFactorsWhenInfluencingFactorForPremiumCalculationMismatchItShouldThrowInfluencingFactorMismatchException() throws IOException {
-        PremiumCalculationDto premiumCalculationDto = new PremiumCalculationDto(planId, null, premiumSetupDate.plusDays(1), PremiumFrequency.MONTHLY, 365);
+        PremiumCalculationDto premiumCalculationDto = new PremiumCalculationDto(planId, premiumSetupDate.plusDays(1), PremiumFrequency.MONTHLY, 365);
         premiumCalculationDto = premiumCalculationDto.addInfluencingFactorItemValue(PremiumInfluencingFactor.SUM_ASSURED, "550001");
         premiumCalculationDto = premiumCalculationDto.addInfluencingFactorItemValue(PremiumInfluencingFactor.AGE, "22");
         premiumCalculationDto = premiumCalculationDto.addInfluencingFactorItemValue(PremiumInfluencingFactor.POLICY_TERM, "365");
@@ -298,7 +298,7 @@ public class PremiumCalculatorUnitTest {
         Premium premium = createPremium(PremiumFactor.FLAT_AMOUNT, PremiumRateFrequency.YEARLY, "premiumsetupdatawithflatpremium.xls");
         when(premiumFinder.findPremium(premiumCalculationDto)).thenReturn(premium);
         when(organizationGeneralInformationRepository.findAll()).thenReturn(Lists.newArrayList(organizationGeneralInformation));
-        premiumCalculator.calculatePremium(premiumCalculationDto);
+        premiumCalculator.calculateBasicPremium(premiumCalculationDto);
     }
 
     private Premium createPremium(PremiumFactor premiumFactor, PremiumRateFrequency premiumRateFrequency, String premiumSetUpFileName) throws IOException {

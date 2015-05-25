@@ -2,7 +2,6 @@ package com.pla.quotation.domain.model.grouplife;
 
 import com.pla.sharedkernel.domain.model.Gender;
 import com.pla.sharedkernel.domain.model.Relationship;
-import com.pla.sharedkernel.identifier.CoverageId;
 import com.pla.sharedkernel.identifier.PlanId;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -11,23 +10,19 @@ import lombok.Setter;
 import org.joda.time.LocalDate;
 import org.nthdimenzion.ddd.domain.annotations.ValueObject;
 
+import java.math.BigDecimal;
 import java.util.Set;
 
 import static com.google.common.base.Preconditions.checkArgument;
-import static org.nthdimenzion.utils.UtilValidator.isNotEmpty;
 
 /**
  * Created by Samir on 4/7/2015.
  */
 @ValueObject
 @NoArgsConstructor(access = AccessLevel.PACKAGE)
-@Getter(value = AccessLevel.PACKAGE)
+@Getter
 @Setter(value = AccessLevel.PACKAGE)
-class InsuredDependent {
-
-    private PlanId insuredDependentPlan;
-
-    private Set<CoverageId> insuredDependentCoverages;
+public class InsuredDependent {
 
     private String companyName;
 
@@ -59,9 +54,6 @@ class InsuredDependent {
 
     InsuredDependent(InsuredDependentBuilder insuredDependentBuilder) {
         checkArgument(insuredDependentBuilder != null);
-        checkArgument(isNotEmpty(insuredDependentBuilder.getPolicies()));
-        this.insuredDependentPlan = insuredDependentBuilder.getInsuredPlan();
-        this.insuredDependentCoverages = insuredDependentBuilder.getInsuredCoverages();
         this.companyName = insuredDependentBuilder.getCompanyName();
         this.manNumber = insuredDependentBuilder.getManNumber();
         this.salutation = insuredDependentBuilder.getSalutation();
@@ -71,9 +63,17 @@ class InsuredDependent {
         this.dateOfBirth = insuredDependentBuilder.getDateOfBirth();
         this.gender = insuredDependentBuilder.getGender();
         this.category = insuredDependentBuilder.getCategory();
+        this.relationship = insuredDependentBuilder.getRelationship();
+        this.planPremiumDetail = insuredDependentBuilder.getPlanPremiumDetail();
+        this.coveragePremiumDetails = insuredDependentBuilder.getCoveragePremiumDetails();
     }
 
-    public static InsuredDependentBuilder getInsuredDependentBuilder(PlanId planId) {
-        return new InsuredDependentBuilder(planId);
+    public static InsuredDependentBuilder getInsuredDependentBuilder(PlanId planId, String planCode, BigDecimal premiumAmount, BigDecimal sumAssured) {
+        return new InsuredDependentBuilder(planId,planCode,premiumAmount,sumAssured);
+    }
+
+    public InsuredDependent updatePlanPremiumAmount(BigDecimal insuredPlanProratePremium) {
+        this.planPremiumDetail = this.planPremiumDetail.updatePremiumAmount(insuredPlanProratePremium);
+        return this;
     }
 }

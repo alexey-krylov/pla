@@ -140,7 +140,7 @@ public enum PremiumInfluencingFactor {
         public String getErrorMessage(String value) {
             return value + " :is not valid Gender.";
         }
-    }, OCCUPATION_CATEGORY("Occupation Class") {
+    }, OCCUPATION_CLASS("Occupation Class") {
         @Override
         public String[] getAllowedValues(Plan plan, CoverageId coverageId) {
             return new String[]{};

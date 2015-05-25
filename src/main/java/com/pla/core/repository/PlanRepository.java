@@ -19,9 +19,9 @@ import java.util.List;
  */
 public interface PlanRepository extends MongoRepository<Plan, PlanId> {
 
-    @Query("{ 'planDetail.planCode' : ?0 }")
+    @Query("{'planDetail.planCode' : ?0 }")
     List<Plan> findByThePlansPlanDetailPlanCode(String planCode);
 
-    @Query("{ 'planDetail.planCode' : ?0 }")
+    @Query("{'planDetail.planCode' : ?0 }")
     List<Plan> findPlanByCodeAndName(String planCode);
 }

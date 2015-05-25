@@ -2,9 +2,13 @@ package com.pla.sharedkernel.util;
 
 import com.google.common.collect.Maps;
 import org.apache.poi.hssf.usermodel.*;
+import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.DataValidation;
+import org.apache.poi.ss.usermodel.DateUtil;
 import org.apache.poi.ss.util.CellRangeAddressList;
+import org.nthdimenzion.common.AppConstants;
 
+import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.Map;
 
@@ -74,20 +78,22 @@ public class ExcelGeneratorUtil {
             if (isNotEmpty(constraintCellData.get(cellNumber))) {
                 String columnIndex = String.valueOf((char) (65 + cellNumber));
                 String hiddenSheetName = "hidden" + columnIndex;
-                HSSFSheet hiddenSheetForNamedCell = workbook.getSheet(hiddenSheetName) == null ? workbook.createSheet(hiddenSheetName) : workbook.getSheet(hiddenSheetName);
-                List<String> dataList = constraintCellData.get(cellNumber);
-                createNamedRowWithCell(dataList, hiddenSheetForNamedCell, cellNumber);
-                HSSFName namedCell = workbook.createName();
-                namedCell.setNameName(hiddenSheetName);
-                String formula = hiddenSheetName + "!$" + columnIndex + "$1:$" + columnIndex + "$";
-                namedCell.setRefersToFormula(formula + (dataList.size() == 0 ? 1 : dataList.size()));
-                DVConstraint constraint = DVConstraint.createFormulaListConstraint(hiddenSheetName);
-                CellRangeAddressList addressList = new CellRangeAddressList(rowNumber, lastRowNumber, cellNumber, cellNumber);
-                HSSFDataValidation dataValidation = new HSSFDataValidation(addressList, constraint);
-                dataValidation.setErrorStyle(DataValidation.ErrorStyle.INFO);
-                dataValidation.createErrorBox("Error", "Provide proper value");
-                workbook.setSheetHidden(workbook.getSheetIndex(hiddenSheetForNamedCell), true);
-                hssfSheet.addValidationData(dataValidation);
+                if(workbook.getSheet(hiddenSheetName) == null) {
+                    HSSFSheet hiddenSheetForNamedCell = workbook.getSheet(hiddenSheetName) == null ? workbook.createSheet(hiddenSheetName) : workbook.getSheet(hiddenSheetName);
+                    List<String> dataList = constraintCellData.get(cellNumber);
+                    createNamedRowWithCell(dataList, hiddenSheetForNamedCell, cellNumber);
+                    HSSFName namedCell = workbook.createName();
+                    namedCell.setNameName(hiddenSheetName);
+                    String formula = hiddenSheetName + "!$" + columnIndex + "$1:$" + columnIndex + "$";
+                    namedCell.setRefersToFormula(formula + (dataList.size() == 0 ? 1 : dataList.size()));
+                    DVConstraint constraint = DVConstraint.createFormulaListConstraint(hiddenSheetName);
+                    CellRangeAddressList addressList = new CellRangeAddressList(rowNumber, lastRowNumber, cellNumber, cellNumber);
+                    HSSFDataValidation dataValidation = new HSSFDataValidation(addressList, constraint);
+                    dataValidation.setErrorStyle(DataValidation.ErrorStyle.INFO);
+                    dataValidation.createErrorBox("Error", "Provide proper value");
+                    workbook.setSheetHidden(workbook.getSheetIndex(hiddenSheetForNamedCell), true);
+                    hssfSheet.addValidationData(dataValidation);
+                }
             }
             if (isNotEmpty(cellData.get(cellNumber))) {
                 createStringCellAndValue(hssfRow, cellNumber, cellData.get(cellNumber));
@@ -115,10 +121,31 @@ public class ExcelGeneratorUtil {
         return hssfCell;
     }
 
-    private static HSSFCell createStringHeaderCellAndValue(HSSFCellStyle cellStyle, HSSFRow row, int cellNumber, String value) {
+    public static HSSFCell createStringHeaderCellAndValue(HSSFCellStyle cellStyle, HSSFRow row, int cellNumber, String value) {
         HSSFCell hssfCell = row.createCell(cellNumber);
         hssfCell.setCellValue(value);
         hssfCell.setCellStyle(cellStyle);
         return hssfCell;
+    }
+
+    public static String getCellValue(Cell cell) {
+        if (cell == null) {
+            return "";
+        }
+        if (Cell.CELL_TYPE_BLANK == cell.getCellType()) {
+            return "";
+        } else if (Cell.CELL_TYPE_NUMERIC == cell.getCellType()) {
+            if (DateUtil.isCellDateFormatted(cell)) {
+                if (cell.getDateCellValue() == null) {
+                    return "";
+                }
+                SimpleDateFormat simpleDateFormat = new SimpleDateFormat();
+                simpleDateFormat.applyPattern(AppConstants.DD_MM_YYY_FORMAT);
+                return simpleDateFormat.format(cell.getDateCellValue());
+            }
+            return String.valueOf(cell.getNumericCellValue());
+        }
+
+        return cell.getStringCellValue().trim();
     }
 }

@@ -10,12 +10,15 @@ import com.pla.sharedkernel.domain.model.Relationship;
 import com.pla.sharedkernel.identifier.PlanId;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
+import org.joda.time.LocalDate;
+import org.joda.time.format.DateTimeFormat;
 import org.nthdimenzion.common.AppConstants;
 import org.nthdimenzion.presentation.AppUtils;
 
 import java.math.BigDecimal;
 import java.util.List;
 
+import static com.pla.sharedkernel.util.ExcelGeneratorUtil.getCellValue;
 import static org.nthdimenzion.utils.UtilValidator.*;
 
 /**
@@ -30,22 +33,54 @@ public enum GLInsuredExcelHeader {
         }
 
         @Override
+        public InsuredDto populateInsuredDetail(InsuredDto insuredDto, Row row, List<String> headers) {
+            int cellNumber = headers.indexOf(this.getDescription());
+            Cell cell = row.getCell(cellNumber);
+            String cellValue = getCellValue(cell);
+            insuredDto.setCompanyName(cellValue);
+            return insuredDto;
+        }
+
+        @Override
+        public InsuredDto.InsuredDependentDto populateInsuredDependentDetail(InsuredDto.InsuredDependentDto insuredDependentDto, Row row, List<String> headers) {
+            int cellNumber = headers.indexOf(this.getDescription());
+            Cell cell = row.getCell(cellNumber);
+            String cellValue = getCellValue(cell);
+            insuredDependentDto.setCompanyName(cellValue);
+            return insuredDependentDto;
+        }
+
+        @Override
         public String getAllowedValue(InsuredDto.InsuredDependentDto insuredDependentDto) {
             return insuredDependentDto.getCompanyName();
         }
 
         @Override
         public String validateAndIfNotBuildErrorMessage(IPlanAdapter planAdapter, Row row, String value, List<String> excelHeaders) {
-            String errorMessage = "";
-            if (isEmpty(value)) {
-                errorMessage = errorMessage + "Proposer name cannot be empty.";
-            }
-            return errorMessage;
+            return "";
         }
     }, MAN_NUMBER("MAN Number") {
         @Override
         public String getAllowedValue(InsuredDto insuredDto) {
             return insuredDto.getManNumber();
+        }
+
+        @Override
+        public InsuredDto populateInsuredDetail(InsuredDto insuredDto, Row row, List<String> headers) {
+            int cellNumber = headers.indexOf(this.getDescription());
+            Cell cell = row.getCell(cellNumber);
+            String cellValue = getCellValue(cell);
+            insuredDto.setManNumber(cellValue);
+            return insuredDto;
+        }
+
+        @Override
+        public InsuredDto.InsuredDependentDto populateInsuredDependentDetail(InsuredDto.InsuredDependentDto insuredDependentDto, Row row, List<String> headers) {
+            int cellNumber = headers.indexOf(this.getDescription());
+            Cell cell = row.getCell(cellNumber);
+            String cellValue = getCellValue(cell);
+            insuredDependentDto.setManNumber(cellValue);
+            return insuredDependentDto;
         }
 
         @Override
@@ -61,6 +96,24 @@ public enum GLInsuredExcelHeader {
         @Override
         public String getAllowedValue(InsuredDto insuredDto) {
             return insuredDto.getNrcNumber();
+        }
+
+        @Override
+        public InsuredDto populateInsuredDetail(InsuredDto insuredDto, Row row, List<String> headers) {
+            int cellNumber = headers.indexOf(this.getDescription());
+            Cell cell = row.getCell(cellNumber);
+            String cellValue = getCellValue(cell);
+            insuredDto.setNrcNumber(cellValue);
+            return insuredDto;
+        }
+
+        @Override
+        public InsuredDto.InsuredDependentDto populateInsuredDependentDetail(InsuredDto.InsuredDependentDto insuredDependentDto, Row row, List<String> headers) {
+            int cellNumber = headers.indexOf(this.getDescription());
+            Cell cell = row.getCell(cellNumber);
+            String cellValue = getCellValue(cell);
+            insuredDependentDto.setNrcNumber(cellValue);
+            return insuredDependentDto;
         }
 
         @Override
@@ -83,6 +136,20 @@ public enum GLInsuredExcelHeader {
         }
 
         @Override
+        public InsuredDto populateInsuredDetail(InsuredDto insuredDto, Row row, List<String> headers) {
+            int cellNumber = headers.indexOf(this.getDescription());
+            Cell cell = row.getCell(cellNumber);
+            String cellValue = getCellValue(cell);
+            insuredDto.setAnnualIncome(isNotEmpty(cellValue) ? BigDecimal.valueOf(Double.valueOf(cellValue)) : null);
+            return insuredDto;
+        }
+
+        @Override
+        public InsuredDto.InsuredDependentDto populateInsuredDependentDetail(InsuredDto.InsuredDependentDto insuredDependentDto, Row row, List<String> headers) {
+            return insuredDependentDto;
+        }
+
+        @Override
         public String getAllowedValue(InsuredDto.InsuredDependentDto insuredDependentDto) {
             return "";
         }
@@ -90,12 +157,15 @@ public enum GLInsuredExcelHeader {
         @Override
         public String validateAndIfNotBuildErrorMessage(IPlanAdapter planAdapter, Row row, String value, List<String> excelHeaders) {
             String errorMessage = "";
-            Cell incomeMultiplierCell = row.getCell(excelHeaders.indexOf(INCOME_MULTIPLIER.getDescription()));
-            Cell annualIncomeCell = row.getCell(excelHeaders.indexOf(ANNUAL_INCOME.getDescription()));
+            Cell incomeMultiplierCell = row.getCell(excelHeaders.indexOf(INCOME_MULTIPLIER.name()));
+            Cell annualIncomeCell = row.getCell(excelHeaders.indexOf(ANNUAL_INCOME.name()));
             String incomeMultiplier = getCellValue(incomeMultiplierCell);
             String annualIncome = getCellValue(annualIncomeCell);
             if (isEmpty(annualIncome) && isNotEmpty(incomeMultiplier)) {
                 errorMessage = errorMessage + "Annual income cannot be blank.";
+                return errorMessage;
+            }
+            if (isEmpty(value)) {
                 return errorMessage;
             }
             try {
@@ -114,6 +184,24 @@ public enum GLInsuredExcelHeader {
         }
 
         @Override
+        public InsuredDto populateInsuredDetail(InsuredDto insuredDto, Row row, List<String> headers) {
+            int cellNumber = headers.indexOf(this.getDescription());
+            Cell cell = row.getCell(cellNumber);
+            String cellValue = getCellValue(cell);
+            insuredDto.setSalutation(cellValue);
+            return insuredDto;
+        }
+
+        @Override
+        public InsuredDto.InsuredDependentDto populateInsuredDependentDetail(InsuredDto.InsuredDependentDto insuredDependentDto, Row row, List<String> headers) {
+            int cellNumber = headers.indexOf(this.getDescription());
+            Cell cell = row.getCell(cellNumber);
+            String cellValue = getCellValue(cell);
+            insuredDependentDto.setSalutation(cellValue);
+            return insuredDependentDto;
+        }
+
+        @Override
         public String getAllowedValue(InsuredDto.InsuredDependentDto insuredDependentDto) {
             return insuredDependentDto.getSalutation();
         }
@@ -126,6 +214,24 @@ public enum GLInsuredExcelHeader {
         @Override
         public String getAllowedValue(InsuredDto insuredDto) {
             return insuredDto.getFirstName();
+        }
+
+        @Override
+        public InsuredDto populateInsuredDetail(InsuredDto insuredDto, Row row, List<String> headers) {
+            int cellNumber = headers.indexOf(this.getDescription());
+            Cell cell = row.getCell(cellNumber);
+            String cellValue = getCellValue(cell);
+            insuredDto.setFirstName(cellValue);
+            return insuredDto;
+        }
+
+        @Override
+        public InsuredDto.InsuredDependentDto populateInsuredDependentDetail(InsuredDto.InsuredDependentDto insuredDependentDto, Row row, List<String> headers) {
+            int cellNumber = headers.indexOf(this.getDescription());
+            Cell cell = row.getCell(cellNumber);
+            String cellValue = getCellValue(cell);
+            insuredDependentDto.setFirstName(cellValue);
+            return insuredDependentDto;
         }
 
         @Override
@@ -144,6 +250,24 @@ public enum GLInsuredExcelHeader {
         }
 
         @Override
+        public InsuredDto populateInsuredDetail(InsuredDto insuredDto, Row row, List<String> headers) {
+            int cellNumber = headers.indexOf(this.getDescription());
+            Cell cell = row.getCell(cellNumber);
+            String cellValue = getCellValue(cell);
+            insuredDto.setLastName(cellValue);
+            return insuredDto;
+        }
+
+        @Override
+        public InsuredDto.InsuredDependentDto populateInsuredDependentDetail(InsuredDto.InsuredDependentDto insuredDependentDto, Row row, List<String> headers) {
+            int cellNumber = headers.indexOf(this.getDescription());
+            Cell cell = row.getCell(cellNumber);
+            String cellValue = getCellValue(cell);
+            insuredDependentDto.setLastName(cellValue);
+            return insuredDependentDto;
+        }
+
+        @Override
         public String getAllowedValue(InsuredDto.InsuredDependentDto insuredDependentDto) {
             return insuredDependentDto.getLastName();
         }
@@ -156,6 +280,24 @@ public enum GLInsuredExcelHeader {
         @Override
         public String getAllowedValue(InsuredDto insuredDto) {
             return AppUtils.toString(insuredDto.getDateOfBirth());
+        }
+
+        @Override
+        public InsuredDto populateInsuredDetail(InsuredDto insuredDto, Row row, List<String> headers) {
+            int cellNumber = headers.indexOf(this.getDescription());
+            Cell cell = row.getCell(cellNumber);
+            String cellValue = getCellValue(cell);
+            insuredDto.setDateOfBirth(isNotEmpty(cellValue) ? LocalDate.parse(cellValue, DateTimeFormat.forPattern(AppConstants.DD_MM_YYY_FORMAT)) : null);
+            return insuredDto;
+        }
+
+        @Override
+        public InsuredDto.InsuredDependentDto populateInsuredDependentDetail(InsuredDto.InsuredDependentDto insuredDependentDto, Row row, List<String> headers) {
+            int cellNumber = headers.indexOf(this.getDescription());
+            Cell cell = row.getCell(cellNumber);
+            String cellValue = getCellValue(cell);
+            insuredDependentDto.setDateOfBirth(isNotEmpty(cellValue) ? LocalDate.parse(cellValue, DateTimeFormat.forPattern(AppConstants.DD_MM_YYY_FORMAT)) : null);
+            return insuredDependentDto;
         }
 
         @Override
@@ -182,6 +324,24 @@ public enum GLInsuredExcelHeader {
         }
 
         @Override
+        public InsuredDto populateInsuredDetail(InsuredDto insuredDto, Row row, List<String> headers) {
+            int cellNumber = headers.indexOf(this.getDescription());
+            Cell cell = row.getCell(cellNumber);
+            String cellValue = getCellValue(cell);
+            insuredDto.setGender(Gender.valueOf(cellValue));
+            return insuredDto;
+        }
+
+        @Override
+        public InsuredDto.InsuredDependentDto populateInsuredDependentDetail(InsuredDto.InsuredDependentDto insuredDependentDto, Row row, List<String> headers) {
+            int cellNumber = headers.indexOf(this.getDescription());
+            Cell cell = row.getCell(cellNumber);
+            String cellValue = getCellValue(cell);
+            insuredDependentDto.setGender(Gender.valueOf(cellValue));
+            return insuredDependentDto;
+        }
+
+        @Override
         public String getAllowedValue(InsuredDto.InsuredDependentDto insuredDependentDto) {
             return insuredDependentDto.getGender().name();
         }
@@ -204,6 +364,24 @@ public enum GLInsuredExcelHeader {
         }
 
         @Override
+        public InsuredDto populateInsuredDetail(InsuredDto insuredDto, Row row, List<String> headers) {
+            int cellNumber = headers.indexOf(this.getDescription());
+            Cell cell = row.getCell(cellNumber);
+            String cellValue = getCellValue(cell);
+            insuredDto.setOccupationClass(cellValue);
+            return insuredDto;
+        }
+
+        @Override
+        public InsuredDto.InsuredDependentDto populateInsuredDependentDetail(InsuredDto.InsuredDependentDto insuredDependentDto, Row row, List<String> headers) {
+            int cellNumber = headers.indexOf(this.getDescription());
+            Cell cell = row.getCell(cellNumber);
+            String cellValue = getCellValue(cell);
+            insuredDependentDto.setOccupationClass(cellValue);
+            return insuredDependentDto;
+        }
+
+        @Override
         public String getAllowedValue(InsuredDto.InsuredDependentDto insuredDependentDto) {
             return insuredDependentDto.getOccupationClass();
         }
@@ -211,7 +389,7 @@ public enum GLInsuredExcelHeader {
         @Override
         public String validateAndIfNotBuildErrorMessage(IPlanAdapter planAdapter, Row row, String value, List<String> excelHeaders) {
             String errorMessage = "";
-            Cell relationshipCell = row.getCell(excelHeaders.indexOf(RELATIONSHIP.getDescription()));
+            Cell relationshipCell = row.getCell(excelHeaders.indexOf(RELATIONSHIP.name()));
             String relationship = getCellValue(relationshipCell);
             if (isEmpty(relationship)) {
                 errorMessage = errorMessage + "Relationship cannot be empty.";
@@ -225,6 +403,24 @@ public enum GLInsuredExcelHeader {
         @Override
         public String getAllowedValue(InsuredDto insuredDto) {
             return insuredDto.getOccupationCategory();
+        }
+
+        @Override
+        public InsuredDto populateInsuredDetail(InsuredDto insuredDto, Row row, List<String> headers) {
+            int cellNumber = headers.indexOf(this.getDescription());
+            Cell cell = row.getCell(cellNumber);
+            String cellValue = getCellValue(cell);
+            insuredDto.setOccupationCategory(cellValue);
+            return insuredDto;
+        }
+
+        @Override
+        public InsuredDto.InsuredDependentDto populateInsuredDependentDetail(InsuredDto.InsuredDependentDto insuredDependentDto, Row row, List<String> headers) {
+            int cellNumber = headers.indexOf(this.getDescription());
+            Cell cell = row.getCell(cellNumber);
+            String cellValue = getCellValue(cell);
+            insuredDependentDto.setOccupationCategory(cellValue);
+            return insuredDependentDto;
         }
 
         @Override
@@ -247,13 +443,27 @@ public enum GLInsuredExcelHeader {
         }
 
         @Override
+        public InsuredDto populateInsuredDetail(InsuredDto insuredDto, Row row, List<String> headers) {
+            return insuredDto;
+        }
+
+        @Override
+        public InsuredDto.InsuredDependentDto populateInsuredDependentDetail(InsuredDto.InsuredDependentDto insuredDependentDto, Row row, List<String> headers) {
+            int cellNumber = headers.indexOf(this.getDescription());
+            Cell cell = row.getCell(cellNumber);
+            String cellValue = getCellValue(cell);
+            insuredDependentDto.setRelationship(Relationship.getRelationship(cellValue));
+            return insuredDependentDto;
+        }
+
+        @Override
         public String getAllowedValue(InsuredDto.InsuredDependentDto insuredDependentDto) {
             return insuredDependentDto.getRelationship().description;
         }
 
         @Override
         public String validateAndIfNotBuildErrorMessage(IPlanAdapter planAdapter, Row row, String value, List<String> excelHeaders) {
-            Cell relationshipCell = row.getCell(excelHeaders.indexOf(RELATIONSHIP.getDescription()));
+            Cell relationshipCell = row.getCell(excelHeaders.indexOf(RELATIONSHIP.name()));
             String relationship = getCellValue(relationshipCell);
             String errorMessage = "";
             if (isEmpty(relationship)) {
@@ -266,6 +476,20 @@ public enum GLInsuredExcelHeader {
         @Override
         public String getAllowedValue(InsuredDto insuredDto) {
             return insuredDto.getNoOfAssured() != null ? insuredDto.getNoOfAssured().toString() : "";
+        }
+
+        @Override
+        public InsuredDto populateInsuredDetail(InsuredDto insuredDto, Row row, List<String> headers) {
+            int cellNumber = headers.indexOf(this.getDescription());
+            Cell cell = row.getCell(cellNumber);
+            String cellValue = getCellValue(cell);
+            insuredDto.setNoOfAssured(isNotEmpty(cellValue) ? Double.valueOf(cellValue).intValue() : null);
+            return insuredDto;
+        }
+
+        @Override
+        public InsuredDto.InsuredDependentDto populateInsuredDependentDetail(InsuredDto.InsuredDependentDto insuredDependentDto, Row row, List<String> headers) {
+            return insuredDependentDto;
         }
 
         @Override
@@ -284,6 +508,40 @@ public enum GLInsuredExcelHeader {
         }
 
         @Override
+        public InsuredDto populateInsuredDetail(InsuredDto insuredDto, Row row, List<String> headers) {
+            int cellNumber = headers.indexOf(this.getDescription());
+            Cell cell = row.getCell(cellNumber);
+            String cellValue = getCellValue(cell);
+            String planCode = null;
+            try {
+                planCode = String.valueOf(Double.valueOf(cellValue).intValue());
+            } catch (Exception e) {
+                planCode = cellValue;
+            }
+            InsuredDto.PlanPremiumDetailDto planPremiumDetailDto = insuredDto.getPlanPremiumDetail() == null ? new InsuredDto.PlanPremiumDetailDto() : insuredDto.getPlanPremiumDetail();
+            planPremiumDetailDto.setPlanCode(planCode);
+            insuredDto.setPlanPremiumDetail(planPremiumDetailDto);
+            return insuredDto;
+        }
+
+        @Override
+        public InsuredDto.InsuredDependentDto populateInsuredDependentDetail(InsuredDto.InsuredDependentDto insuredDependentDto, Row row, List<String> headers) {
+            int cellNumber = headers.indexOf(this.getDescription());
+            Cell cell = row.getCell(cellNumber);
+            String cellValue = getCellValue(cell);
+            String planCode = null;
+            try {
+                planCode = String.valueOf(Double.valueOf(cellValue).intValue());
+            } catch (Exception e) {
+                planCode = cellValue;
+            }
+            InsuredDto.PlanPremiumDetailDto planPremiumDetailDto = insuredDependentDto.getPlanPremiumDetail() != null ? insuredDependentDto.getPlanPremiumDetail() : new InsuredDto.PlanPremiumDetailDto();
+            planPremiumDetailDto.setPlanCode(planCode);
+            insuredDependentDto.setPlanPremiumDetail(planPremiumDetailDto);
+            return insuredDependentDto;
+        }
+
+        @Override
         public String getAllowedValue(InsuredDto.InsuredDependentDto insuredDependentDto) {
             return insuredDependentDto.getPlanPremiumDetail().getPlanCode();
         }
@@ -292,12 +550,24 @@ public enum GLInsuredExcelHeader {
         public String validateAndIfNotBuildErrorMessage(IPlanAdapter planAdapter, Row row, String value, List<String> excelHeaders) {
             String errorMessage = "";
             if (isEmpty(value)) {
-                errorMessage = errorMessage + "Plan cannot be empty.";
+                errorMessage = errorMessage + "Plan code cannot be empty.";
                 return errorMessage;
             }
-            boolean isValidPlan = planAdapter.isValidPlanCode(value);
+            String planCode = null;
+            try {
+                planCode = String.valueOf(Double.valueOf(value).intValue());
+            } catch (Exception e) {
+                planCode = value;
+            }
+            boolean isValidPlan = planAdapter.isValidPlanCode(planCode);
             if (!isValidPlan) {
                 errorMessage = errorMessage + "Plan code does not exist.";
+            }
+            Cell relationshipCell = row.getCell(excelHeaders.indexOf(RELATIONSHIP.name()));
+            String relationship = getCellValue(relationshipCell);
+            boolean isValidPlanForRelationship = planAdapter.isValidPlanForRelationship(planCode, Relationship.getRelationship(relationship));
+            if (!isValidPlanForRelationship) {
+                errorMessage = errorMessage + "Plan code is not valid for the relationship " + relationship + ".";
             }
             return errorMessage;
         }
@@ -308,6 +578,27 @@ public enum GLInsuredExcelHeader {
         }
 
         @Override
+        public InsuredDto populateInsuredDetail(InsuredDto insuredDto, Row row, List<String> headers) {
+            int cellNumber = headers.indexOf(this.getDescription());
+            Cell cell = row.getCell(cellNumber);
+            String cellValue = getCellValue(cell);
+            InsuredDto.PlanPremiumDetailDto planPremiumDetailDto = insuredDto.getPlanPremiumDetail() != null ? insuredDto.getPlanPremiumDetail() : new InsuredDto.PlanPremiumDetailDto();
+            planPremiumDetailDto.setIncomeMultiplier(isNotEmpty(cellValue) ? BigDecimal.valueOf(Double.valueOf(cellValue)) : null);
+            insuredDto.setPlanPremiumDetail(planPremiumDetailDto);
+            return insuredDto;
+        }
+
+        @Override
+        public InsuredDto.InsuredDependentDto populateInsuredDependentDetail(InsuredDto.InsuredDependentDto insuredDependentDto, Row row, List<String> headers) {
+            int cellNumber = headers.indexOf(this.getDescription());
+            Cell cell = row.getCell(cellNumber);
+            String cellValue = getCellValue(cell);
+            InsuredDto.PlanPremiumDetailDto planPremiumDetailDto = insuredDependentDto.getPlanPremiumDetail() != null ? insuredDependentDto.getPlanPremiumDetail() : new InsuredDto.PlanPremiumDetailDto();
+            planPremiumDetailDto.setIncomeMultiplier(isNotEmpty(cellValue) ? BigDecimal.valueOf(Double.valueOf(cellValue)) : null);
+            return insuredDependentDto;
+        }
+
+        @Override
         public String getAllowedValue(InsuredDto.InsuredDependentDto insuredDependentDto) {
             return insuredDependentDto.getPlanPremiumDetail().getIncomeMultiplier() != null ? insuredDependentDto.getPlanPremiumDetail().getIncomeMultiplier().toString() : "";
         }
@@ -315,13 +606,17 @@ public enum GLInsuredExcelHeader {
         @Override
         public String validateAndIfNotBuildErrorMessage(IPlanAdapter planAdapter, Row row, String value, List<String> excelHeaders) {
             String errorMessage = "";
-            Cell planCell = row.getCell(excelHeaders.indexOf(PLAN.getDescription()));
-            Cell relationshipCell = row.getCell(excelHeaders.indexOf(RELATIONSHIP.getDescription()));
+            Cell planCell = row.getCell(excelHeaders.indexOf(PLAN.name()));
+            Cell relationshipCell = row.getCell(excelHeaders.indexOf(RELATIONSHIP.name()));
             String relationship = getCellValue(relationshipCell);
             String planCode = getCellValue(planCell);
             if (isEmpty(planCode)) {
-                errorMessage = errorMessage + "Plan cannot be empty.";
+                errorMessage = errorMessage + "Plan code cannot be empty.";
                 return errorMessage;
+            }
+            try {
+                planCode = String.valueOf(Double.valueOf(planCode).intValue());
+            } catch (Exception e) {
             }
             boolean isValidPlan = planAdapter.isValidPlanCode(planCode);
             if (!isValidPlan) {
@@ -342,6 +637,28 @@ public enum GLInsuredExcelHeader {
         }
 
         @Override
+        public InsuredDto populateInsuredDetail(InsuredDto insuredDto, Row row, List<String> headers) {
+            int cellNumber = headers.indexOf(this.getDescription());
+            Cell cell = row.getCell(cellNumber);
+            String cellValue = getCellValue(cell);
+            InsuredDto.PlanPremiumDetailDto planPremiumDetailDto = insuredDto.getPlanPremiumDetail() != null ? insuredDto.getPlanPremiumDetail() : new InsuredDto.PlanPremiumDetailDto();
+            planPremiumDetailDto.setSumAssured(isNotEmpty(cellValue) ? BigDecimal.valueOf(Double.valueOf(cellValue)) : null);
+            insuredDto.setPlanPremiumDetail(planPremiumDetailDto);
+            return insuredDto;
+        }
+
+        @Override
+        public InsuredDto.InsuredDependentDto populateInsuredDependentDetail(InsuredDto.InsuredDependentDto insuredDependentDto, Row row, List<String> headers) {
+            int cellNumber = headers.indexOf(this.getDescription());
+            Cell cell = row.getCell(cellNumber);
+            String cellValue = getCellValue(cell);
+            InsuredDto.PlanPremiumDetailDto planPremiumDetailDto = insuredDependentDto.getPlanPremiumDetail() != null ? insuredDependentDto.getPlanPremiumDetail() : new InsuredDto.PlanPremiumDetailDto();
+            planPremiumDetailDto.setSumAssured(isNotEmpty(cellValue) ? BigDecimal.valueOf(Double.valueOf(cellValue)) : null);
+            insuredDependentDto.setPlanPremiumDetail(planPremiumDetailDto);
+            return insuredDependentDto;
+        }
+
+        @Override
         public String getAllowedValue(InsuredDto.InsuredDependentDto insuredDependentDto) {
             return insuredDependentDto.getPlanPremiumDetail().getSumAssured() != null ? insuredDependentDto.getPlanPremiumDetail().getSumAssured().toString() : "";
         }
@@ -349,13 +666,17 @@ public enum GLInsuredExcelHeader {
         @Override
         public String validateAndIfNotBuildErrorMessage(IPlanAdapter planAdapter, Row row, String value, List<String> excelHeaders) {
             String errorMessage = "";
-            Cell planCell = row.getCell(excelHeaders.indexOf(PLAN.getDescription()));
-            Cell relationshipCell = row.getCell(excelHeaders.indexOf(RELATIONSHIP.getDescription()));
+            Cell planCell = row.getCell(excelHeaders.indexOf(PLAN.name()));
+            Cell relationshipCell = row.getCell(excelHeaders.indexOf(RELATIONSHIP.name()));
             String relationship = getCellValue(relationshipCell);
             String planCode = getCellValue(planCell);
             if (isEmpty(planCode)) {
                 errorMessage = errorMessage + "Plan code cannot be empty.";
                 return errorMessage;
+            }
+            try {
+                planCode = String.valueOf(Double.valueOf(planCode).intValue());
+            } catch (Exception e) {
             }
             boolean isValidPlan = planAdapter.isValidPlanCode(planCode);
             if (!isValidPlan) {
@@ -371,7 +692,7 @@ public enum GLInsuredExcelHeader {
                 errorMessage = errorMessage + "Sum assured cannot be empty.";
                 return errorMessage;
             }
-            boolean isValidSumAssured = isNotEmpty(value) ? planAdapter.isValidPlanSumAssured(planCode, BigDecimal.valueOf(Double.valueOf(value))) : true;
+            boolean isValidSumAssured = isNotEmpty(value) ? planAdapter.isValidPlanSumAssured(planCode, BigDecimal.valueOf(Double.valueOf(value).intValue())) : true;
             if (!isValidSumAssured) {
                 errorMessage = errorMessage + "Sum assured is not valid for selected plan.";
             }
@@ -385,6 +706,28 @@ public enum GLInsuredExcelHeader {
         }
 
         @Override
+        public InsuredDto populateInsuredDetail(InsuredDto insuredDto, Row row, List<String> headers) {
+            int cellNumber = headers.indexOf(this.getDescription());
+            Cell cell = row.getCell(cellNumber);
+            String cellValue = getCellValue(cell);
+            InsuredDto.PlanPremiumDetailDto planPremiumDetailDto = insuredDto.getPlanPremiumDetail() != null ? insuredDto.getPlanPremiumDetail() : new InsuredDto.PlanPremiumDetailDto();
+            planPremiumDetailDto.setPremiumAmount(isNotEmpty(cellValue) ? BigDecimal.valueOf(Double.valueOf(cellValue)) : null);
+            insuredDto.setPlanPremiumDetail(planPremiumDetailDto);
+            return insuredDto;
+        }
+
+        @Override
+        public InsuredDto.InsuredDependentDto populateInsuredDependentDetail(InsuredDto.InsuredDependentDto insuredDependentDto, Row row, List<String> headers) {
+            int cellNumber = headers.indexOf(this.getDescription());
+            Cell cell = row.getCell(cellNumber);
+            String cellValue = getCellValue(cell);
+            InsuredDto.PlanPremiumDetailDto planPremiumDetailDto = insuredDependentDto.getPlanPremiumDetail() != null ? insuredDependentDto.getPlanPremiumDetail() : new InsuredDto.PlanPremiumDetailDto();
+            planPremiumDetailDto.setPremiumAmount(isNotEmpty(cellValue) ? BigDecimal.valueOf(Double.valueOf(cellValue)) : null);
+            insuredDependentDto.setPlanPremiumDetail(planPremiumDetailDto);
+            return insuredDependentDto;
+        }
+
+        @Override
         public String getAllowedValue(InsuredDto.InsuredDependentDto insuredDependentDto) {
             return insuredDependentDto.getPlanPremiumDetail().getPremiumAmount() != null ? insuredDependentDto.getPlanPremiumDetail().getPremiumAmount().toString() : "";
         }
@@ -392,7 +735,7 @@ public enum GLInsuredExcelHeader {
         @Override
         public String validateAndIfNotBuildErrorMessage(IPlanAdapter planAdapter, Row row, String value, List<String> excelHeaders) {
             String errorMessage = "";
-            Cell noOfSumAssuredCell = row.getCell(excelHeaders.indexOf(NO_OF_ASSURED.description));
+            Cell noOfSumAssuredCell = row.getCell(excelHeaders.indexOf(NO_OF_ASSURED.name()));
             String noOfSumAssured = getCellValue(noOfSumAssuredCell);
             if (isNotEmpty(noOfSumAssured) && isEmpty(value)) {
                 errorMessage = errorMessage + "Plan premium cannot be empty.";
@@ -414,19 +757,19 @@ public enum GLInsuredExcelHeader {
     public static List<String> getAllHeader() {
         List<String> headers = Lists.newArrayList();
         for (GLInsuredExcelHeader glInsuredExcelHeader : GLInsuredExcelHeader.values()) {
-            headers.add(glInsuredExcelHeader.description);
+            headers.add(glInsuredExcelHeader.getDescription());
         }
         return headers;
     }
 
-    String getCellValue(Cell cell) {
-        if (Cell.CELL_TYPE_BLANK == cell.getCellType()) {
-            return "";
-        } else if (Cell.CELL_TYPE_NUMERIC == cell.getCellType()) {
-            return Double.valueOf(cell.getNumericCellValue()).toString().trim();
+    public static List<String> getAllHeaderForParser() {
+        List<String> headers = Lists.newArrayList();
+        for (GLInsuredExcelHeader glInsuredExcelHeader : GLInsuredExcelHeader.values()) {
+            headers.add(glInsuredExcelHeader.name());
         }
-        return cell.getStringCellValue().trim();
+        return headers;
     }
+
 
     public static List<String> getAllowedHeaders(IPlanAdapter planAdapter, List<PlanId> planIds) {
         List<PlanCoverageDetailDto> planCoverageDetailDtoList = planAdapter.getPlanAndCoverageDetail(planIds);
@@ -435,13 +778,31 @@ public enum GLInsuredExcelHeader {
         for (int count = 1; count <= noOfOptionalCoverage; count++) {
             headers.add((AppConstants.OPTIONAL_COVERAGE_HEADER + count));
             headers.add((AppConstants.OPTIONAL_COVERAGE_HEADER + count) + " " + AppConstants.PREMIUM_CELL_HEADER_NAME);
+            headers.add((AppConstants.OPTIONAL_COVERAGE_HEADER + count) + " " + AppConstants.OPTIONAL_COVERAGE_SA_HEADER);
+        }
+        return ImmutableList.copyOf(headers);
+    }
+
+    public static List<String> getAllowedHeaderForParser(IPlanAdapter planAdapter, List<PlanId> planIds) {
+        List<PlanCoverageDetailDto> planCoverageDetailDtoList = planAdapter.getPlanAndCoverageDetail(planIds);
+        int noOfOptionalCoverage = PlanCoverageDetailDto.getNoOfOptionalCoverage(planCoverageDetailDtoList);
+        List<String> headers = GLInsuredExcelHeader.getAllHeaderForParser();
+        for (int count = 1; count <= noOfOptionalCoverage; count++) {
+            headers.add((AppConstants.OPTIONAL_COVERAGE_HEADER + count));
+            headers.add((AppConstants.OPTIONAL_COVERAGE_HEADER + count) + " " + AppConstants.PREMIUM_CELL_HEADER_NAME);
+            headers.add((AppConstants.OPTIONAL_COVERAGE_HEADER + count) + " " + AppConstants.OPTIONAL_COVERAGE_SA_HEADER);
         }
         return ImmutableList.copyOf(headers);
     }
 
     public abstract String getAllowedValue(InsuredDto insuredDto);
 
+    public abstract InsuredDto populateInsuredDetail(InsuredDto insuredDto, Row row, List<String> headers);
+
+    public abstract InsuredDto.InsuredDependentDto populateInsuredDependentDetail(InsuredDto.InsuredDependentDto insuredDependentDto, Row row, List<String> headers);
+
     public abstract String getAllowedValue(InsuredDto.InsuredDependentDto insuredDependentDto);
 
     public abstract String validateAndIfNotBuildErrorMessage(IPlanAdapter planAdapter, Row row, String value, List<String> excelHeaders);
+
 }

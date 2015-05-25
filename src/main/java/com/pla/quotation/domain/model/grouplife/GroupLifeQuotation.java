@@ -16,6 +16,7 @@ import org.joda.time.LocalDate;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.math.BigDecimal;
 import java.util.Set;
 
 import static com.google.common.base.Preconditions.checkArgument;
@@ -26,7 +27,7 @@ import static org.nthdimenzion.utils.UtilValidator.isNotEmpty;
  * Created by Samir on 4/7/2015.
  */
 @Document(collection = "group_life_quotation")
-@Getter(value = AccessLevel.PACKAGE)
+@Getter
 @NoArgsConstructor(access = AccessLevel.PACKAGE)
 public class GroupLifeQuotation extends AbstractAggregateRoot<QuotationId> implements IQuotation {
 
@@ -46,7 +47,6 @@ public class GroupLifeQuotation extends AbstractAggregateRoot<QuotationId> imple
 
     private int versionNumber;
 
-    @Getter
     private String quotationNumber;
 
     private LocalDate generatedOn;
@@ -163,5 +163,28 @@ public class GroupLifeQuotation extends AbstractAggregateRoot<QuotationId> imple
         if (QuotationStatus.CLOSED.equals(this.quotationStatus) || QuotationStatus.DECLINED.equals(this.quotationStatus)) {
             raiseQuotationNotModifiableException();
         }
+    }
+
+    public BigDecimal getNetAnnualPremiumPaymentAmount(PremiumDetail premiumDetail, BigDecimal totalInsuredPremiumAmount) {
+        if (premiumDetail.getPolicyTermValue() != 365) {
+            totalInsuredPremiumAmount = premiumDetail.getPremiumInstallment().getInstallmentAmount();
+        } else {
+            Policy annualPolicy = premiumDetail.getAnnualPolicy();
+            totalInsuredPremiumAmount = annualPolicy != null ? annualPolicy.getPremium() : totalInsuredPremiumAmount;
+        }
+        BigDecimal addOnBenefitAmount = premiumDetail.getAddOnBenefit() != null ? totalInsuredPremiumAmount.multiply((premiumDetail.getAddOnBenefit().divide(new BigDecimal(100))).setScale(2, BigDecimal.ROUND_CEILING)) : BigDecimal.ZERO;
+        BigDecimal profitAndSolvencyAmount = premiumDetail.getProfitAndSolvency() != null ? totalInsuredPremiumAmount.multiply((premiumDetail.getProfitAndSolvency().divide(new BigDecimal(100))).setScale(2, BigDecimal.ROUND_CEILING)) : BigDecimal.ZERO;
+        BigDecimal discountAmount = premiumDetail.getDiscount() != null ? totalInsuredPremiumAmount.multiply((premiumDetail.getDiscount().divide(new BigDecimal(100))).setScale(2, BigDecimal.ROUND_CEILING)) : BigDecimal.ZERO;
+        BigDecimal netPremiumAmount = (totalInsuredPremiumAmount.add(addOnBenefitAmount).add(profitAndSolvencyAmount)).subtract(discountAmount);
+        return netPremiumAmount;
+    }
+
+
+    public BigDecimal getTotalBasicPremiumForInsured() {
+        BigDecimal totalBasicAnnualPremium = BigDecimal.ZERO;
+        for (Insured insured : this.insureds) {
+            totalBasicAnnualPremium = totalBasicAnnualPremium.add(insured.getBasicAnnualPremium());
+        }
+        return totalBasicAnnualPremium;
     }
 }

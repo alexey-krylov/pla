@@ -1,7 +1,6 @@
 package com.pla.quotation.domain.model.grouplife;
 
 import com.pla.sharedkernel.domain.model.Gender;
-import com.pla.sharedkernel.identifier.CoverageId;
 import com.pla.sharedkernel.identifier.PlanId;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -14,17 +13,16 @@ import java.math.BigDecimal;
 import java.util.Set;
 
 import static com.google.common.base.Preconditions.checkArgument;
+import static org.nthdimenzion.utils.UtilValidator.isNotEmpty;
 
 /**
  * Created by Samir on 4/7/2015.
  */
 @ValueObject
 @NoArgsConstructor(access = AccessLevel.PACKAGE)
-@Getter(value = AccessLevel.PACKAGE)
+@Getter
 @Setter(value = AccessLevel.PACKAGE)
 public class Insured {
-
-    private Set<CoverageId> insuredCoverages;
 
     private String companyName;
 
@@ -60,7 +58,7 @@ public class Insured {
 
     Insured(InsuredBuilder insuredBuilder) {
         checkArgument(insuredBuilder != null);
-        this.insuredCoverages = insuredBuilder.getInsuredCoverages();
+        this.planPremiumDetail = insuredBuilder.getPlanPremiumDetail();
         this.companyName = insuredBuilder.getCompanyName();
         this.manNumber = insuredBuilder.getManNumber();
         this.salutation = insuredBuilder.getSalutation();
@@ -71,10 +69,45 @@ public class Insured {
         this.gender = insuredBuilder.getGender();
         this.category = insuredBuilder.getCategory();
         this.insuredDependents = insuredBuilder.getInsuredDependents();
+        this.annualIncome = insuredBuilder.getAnnualIncome();
+        this.occupationClass = insuredBuilder.getOccupation();
+        this.coveragePremiumDetails = insuredBuilder.getCoveragePremiumDetails();
 
     }
 
-    public static InsuredBuilder getInsuredBuilder(PlanId planId) {
-        return new InsuredBuilder(planId);
+    public static InsuredBuilder getInsuredBuilder(PlanId planId, String planCode, BigDecimal premiumAmount, BigDecimal sumAssured) {
+        return new InsuredBuilder(planId, planCode, premiumAmount, sumAssured);
+    }
+
+    public Insured updatePlanPremiumAmount(BigDecimal premiumAmount) {
+        this.planPremiumDetail = this.planPremiumDetail.updatePremiumAmount(premiumAmount);
+        return this;
+    }
+
+    public BigDecimal getBasicAnnualPremium() {
+        BigDecimal basicAnnualPremium = planPremiumDetail.getPremiumAmount();
+        if (isNotEmpty(coveragePremiumDetails)) {
+            for (CoveragePremiumDetail coveragePremiumDetail : coveragePremiumDetails) {
+                basicAnnualPremium = basicAnnualPremium.add(coveragePremiumDetail.getPremium());
+            }
+        }
+        basicAnnualPremium = basicAnnualPremium.add(getBasicAnnualPremiumForDependent());
+        return basicAnnualPremium;
+    }
+
+    private BigDecimal getBasicAnnualPremiumForDependent() {
+        BigDecimal basicAnnualPremiumOfDependent = BigDecimal.ZERO;
+        if (isNotEmpty(this.insuredDependents)) {
+            for (InsuredDependent insuredDependent : this.insuredDependents) {
+                PlanPremiumDetail planPremiumDetail = insuredDependent.getPlanPremiumDetail();
+                basicAnnualPremiumOfDependent = basicAnnualPremiumOfDependent.add(planPremiumDetail != null ? planPremiumDetail.getPremiumAmount() : BigDecimal.ZERO);
+                if (isNotEmpty(insuredDependent.getCoveragePremiumDetails())) {
+                    for (CoveragePremiumDetail coveragePremiumDetail : insuredDependent.getCoveragePremiumDetails()) {
+                        basicAnnualPremiumOfDependent = basicAnnualPremiumOfDependent.add(coveragePremiumDetail.getPremium());
+                    }
+                }
+            }
+        }
+        return basicAnnualPremiumOfDependent;
     }
 }

@@ -18,6 +18,15 @@ public enum Relationship {
         this.description = description;
     }
 
+    public static Relationship getRelationship(String description) {
+        for (Relationship relationship : Relationship.values()) {
+            if (description.equals(relationship.description)) {
+                return relationship;
+            }
+        }
+        return null;
+    }
+
     public static List<String> getAllRelation() {
         List<String> allRelations = new ArrayList<>();
         for (Relationship relationship : Relationship.values()) {

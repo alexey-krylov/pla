@@ -1,24 +1,25 @@
 package com.pla.quotation.domain.model.grouplife;
 
 import com.pla.sharedkernel.domain.model.Gender;
+import com.pla.sharedkernel.domain.model.Relationship;
 import com.pla.sharedkernel.identifier.CoverageId;
 import com.pla.sharedkernel.identifier.PlanId;
 import lombok.Getter;
 import org.joda.time.LocalDate;
 
+import java.math.BigDecimal;
+import java.util.HashSet;
 import java.util.Set;
 
 import static com.google.common.base.Preconditions.checkArgument;
+import static org.nthdimenzion.utils.UtilValidator.isEmpty;
+import static org.nthdimenzion.utils.UtilValidator.isNotEmpty;
 
 /**
  * Created by Samir on 4/8/2015.
  */
 @Getter
 public class InsuredDependentBuilder {
-
-    private PlanId insuredPlan;
-
-    private Set<CoverageId> insuredCoverages;
 
     private String companyName;
 
@@ -38,18 +39,18 @@ public class InsuredDependentBuilder {
 
     private String category;
 
-    private Set<InsuredDependent> insuredDependents;
+    private Relationship relationship;
 
-    private Set<Policy> policies;
+    private PlanPremiumDetail planPremiumDetail;
 
-    InsuredDependentBuilder(PlanId insuredPlan) {
-        checkArgument(insuredPlan != null);
-        this.insuredPlan = insuredPlan;
-    }
+    private Set<CoveragePremiumDetail> coveragePremiumDetails;
 
-    public InsuredDependentBuilder withCoverageIds(Set<CoverageId> insuredCoverages) {
-        this.insuredCoverages = insuredCoverages;
-        return this;
+    InsuredDependentBuilder(PlanId planId, String planCode, BigDecimal premiumAmount, BigDecimal sumAssured) {
+        checkArgument(planId != null);
+        checkArgument(isNotEmpty(planCode));
+        checkArgument(premiumAmount != null);
+        PlanPremiumDetail planPremiumDetail = new PlanPremiumDetail(planId, planCode, premiumAmount, sumAssured);
+        this.planPremiumDetail = planPremiumDetail;
     }
 
     public InsuredDependentBuilder withInsuredName(String salutation, String firstName, String lastName) {
@@ -89,13 +90,17 @@ public class InsuredDependentBuilder {
         return this;
     }
 
-    public InsuredDependentBuilder withDependents(Set<InsuredDependent> insuredDependents) {
-        this.insuredDependents = insuredDependents;
+    public InsuredDependentBuilder withRelationship(Relationship relationship) {
+        this.relationship = relationship;
         return this;
     }
 
-    public InsuredDependentBuilder withPremiums(Set<Policy> policies) {
-        this.policies = policies;
+    public InsuredDependentBuilder withCoveragePremiumDetail(String coverageName, String coverageCode, String coverageId, BigDecimal premium) {
+        CoveragePremiumDetail coveragePremiumDetail = new CoveragePremiumDetail(coverageName, coverageCode, new CoverageId(coverageId), premium);
+        if (isEmpty(this.coveragePremiumDetails)) {
+            this.coveragePremiumDetails = new HashSet<>();
+        }
+        this.coveragePremiumDetails.add(coveragePremiumDetail);
         return this;
     }
 
