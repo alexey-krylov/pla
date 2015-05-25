@@ -1,12 +1,12 @@
 package com.pla.individuallife.application.command.quotation;
 
+import com.pla.core.domain.model.agent.AgentId;
+import com.pla.sharedkernel.identifier.PlanId;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.security.core.userdetails.UserDetails;
-import com.pla.core.domain.model.agent.AgentId;
-import com.pla.sharedkernel.identifier.PlanId;
 
 import javax.validation.constraints.NotNull;
 
@@ -20,6 +20,8 @@ public class CreateILQuotationCommand {
 
     @NotNull(message = "{Agent ID cannot be null}")
     private AgentId agentId;
+
+    private String assuredId;
 
     @NotNull(message = "{Assured Title cannot be null}")
     @NotEmpty(message = "{Assured Title cannot be empty}")

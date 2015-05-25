@@ -2,11 +2,12 @@ package com.pla.individuallife.application.command.quotation;
 
 import com.pla.individuallife.domain.model.quotation.IndividualLifeQuotation;
 import com.pla.individuallife.domain.service.IndividualLifeQuotationService;
-
 import com.pla.sharedkernel.identifier.QuotationId;
 import org.axonframework.commandhandling.annotation.CommandHandler;
 import org.axonframework.repository.Repository;
+import org.nthdimenzion.common.service.JpaRepositoryFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Component;
 
 /**
@@ -15,34 +16,42 @@ import org.springframework.stereotype.Component;
 @Component
 public class ILQuotationCommandHandler {
 
+    private JpaRepositoryFactory jpaRepositoryFactory;
+
     private Repository<IndividualLifeQuotation> ilQuotationMongoRepository;
+
 
     private IndividualLifeQuotationService individualLifeQuotationService;
 
     @Autowired
-    public ILQuotationCommandHandler(Repository<IndividualLifeQuotation> ilQuotationMongoRepository, IndividualLifeQuotationService individualLifeQuotationService) {
-        this.ilQuotationMongoRepository = ilQuotationMongoRepository;
+    public ILQuotationCommandHandler(JpaRepositoryFactory jpaRepositoryFactory, IndividualLifeQuotationService individualLifeQuotationService) {
+        this.jpaRepositoryFactory = jpaRepositoryFactory;
         this.individualLifeQuotationService = individualLifeQuotationService;
     }
 
     @CommandHandler
     public String createQuotation(CreateILQuotationCommand createILQuotationCommand) {
-        IndividualLifeQuotation individualLifeQuotation = individualLifeQuotationService.createQuotation(createILQuotationCommand.getAgentId(), createILQuotationCommand.getAssuredTitle(), createILQuotationCommand.getAssuredFName(), createILQuotationCommand.getAssuredSurame(), createILQuotationCommand.getAssuredNRC(), createILQuotationCommand.getPlanId(), createILQuotationCommand.getUserDetails());
-        ilQuotationMongoRepository.add(individualLifeQuotation);
+        IndividualLifeQuotation individualLifeQuotation = individualLifeQuotationService.createQuotation( createILQuotationCommand.getAgentId(), createILQuotationCommand.getAssuredId(), createILQuotationCommand.getAssuredTitle(), createILQuotationCommand.getAssuredFName(), createILQuotationCommand.getAssuredSurame(), createILQuotationCommand.getAssuredNRC(), createILQuotationCommand.getPlanId(), createILQuotationCommand.getUserDetails());
+        JpaRepository<IndividualLifeQuotation, QuotationId> individualLifeQuotationJpaRepository = jpaRepositoryFactory.getCrudRepository(IndividualLifeQuotation.class);
+        individualLifeQuotationJpaRepository.save(individualLifeQuotation);
         return individualLifeQuotation.getIdentifier().getQuotationId();
     }
 
     @CommandHandler
     public String updateWithProposer(UpdateILQuotationWithProposerCommand updateILQuotationWithProposerCommand) {
-        IndividualLifeQuotation individualLifeQuotation = ilQuotationMongoRepository.load(new QuotationId(updateILQuotationWithProposerCommand.getQuotationId()));
+        JpaRepository<IndividualLifeQuotation, QuotationId> individualLifeQuotationJpaRepository = jpaRepositoryFactory.getCrudRepository(IndividualLifeQuotation.class);
+        IndividualLifeQuotation individualLifeQuotation = individualLifeQuotationJpaRepository.findOne((new QuotationId(updateILQuotationWithProposerCommand.getQuotationId())));
         individualLifeQuotation = individualLifeQuotationService.updateWithProposer(individualLifeQuotation, updateILQuotationWithProposerCommand.getProposerDto(), updateILQuotationWithProposerCommand.getAgentId(), updateILQuotationWithProposerCommand.getUserDetails());
+        individualLifeQuotationJpaRepository.save(individualLifeQuotation);
         return individualLifeQuotation.getIdentifier().getQuotationId();
     }
 
     @CommandHandler
     public String updateWithAssured(UpdateILQuotationWithAssuredCommand updateILQuotationWithProposerCommand) {
-        IndividualLifeQuotation individualLifeQuotation = ilQuotationMongoRepository.load(new QuotationId(updateILQuotationWithProposerCommand.getQuotationId()));
+        JpaRepository<IndividualLifeQuotation, QuotationId> individualLifeQuotationJpaRepository = jpaRepositoryFactory.getCrudRepository(IndividualLifeQuotation.class);
+        IndividualLifeQuotation individualLifeQuotation = individualLifeQuotationJpaRepository.findOne((new QuotationId(updateILQuotationWithProposerCommand.getQuotationId())));
         individualLifeQuotation = individualLifeQuotationService.updateWithAssured(individualLifeQuotation, updateILQuotationWithProposerCommand.getProposedAssuredDto(), updateILQuotationWithProposerCommand.getIsAssuredTheProposer(), updateILQuotationWithProposerCommand.getUserDetails());
+        individualLifeQuotationJpaRepository.save(individualLifeQuotation);
         return individualLifeQuotation.getIdentifier().getQuotationId();
     }
 

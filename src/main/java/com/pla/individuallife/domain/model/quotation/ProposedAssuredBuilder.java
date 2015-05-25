@@ -5,7 +5,6 @@ import lombok.Getter;
 import org.joda.time.LocalDate;
 
 import static com.google.common.base.Preconditions.checkArgument;
-import static com.google.common.base.Preconditions.checkNotNull;
 import static org.nthdimenzion.utils.UtilValidator.isNotEmpty;
 
 /**
@@ -13,6 +12,8 @@ import static org.nthdimenzion.utils.UtilValidator.isNotEmpty;
  */
 @Getter
 public class ProposedAssuredBuilder {
+
+    private String assuredId;
 
     private String assuredTitle;
 
@@ -34,7 +35,7 @@ public class ProposedAssuredBuilder {
 
     private String occupation;
 
-    ProposedAssuredBuilder(String title, String firstName, String surname, String nrc) {
+    ProposedAssuredBuilder(String assuredId, String title, String firstName, String surname, String nrc) {
         checkArgument(isNotEmpty(title));
         checkArgument(isNotEmpty(firstName));
         checkArgument(isNotEmpty(surname));
@@ -43,9 +44,10 @@ public class ProposedAssuredBuilder {
         this.assuredFName = firstName;
         this.assuredSurname = surname;
         this.assuredNRC = nrc;
+        this.assuredId = assuredId;
     }
 
-    public ProposedAssuredBuilder(String title, String firstName, String surname, String nrc, LocalDate dateOfBirth, Number ageNextBirthDay, Gender gender, String mobileNumber, String emailId, String occupation) {
+    public ProposedAssuredBuilder(String assuredId, String title, String firstName, String surname, String nrc, LocalDate dateOfBirth, Number ageNextBirthDay, Gender gender, String mobileNumber, String emailId, String occupation) {
         checkArgument(isNotEmpty(title));
         checkArgument(isNotEmpty(firstName));
         checkArgument(isNotEmpty(surname));
@@ -56,6 +58,7 @@ public class ProposedAssuredBuilder {
         checkArgument(emailId != null);
         checkArgument(isNotEmpty(occupation));
         checkArgument(ageNextBirthDay != null);
+        this.assuredId = assuredId;
         this.assuredTitle = title;
         this.assuredFName = firstName;
         this.assuredSurname = surname;

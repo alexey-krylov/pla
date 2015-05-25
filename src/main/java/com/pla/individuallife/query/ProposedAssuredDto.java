@@ -1,7 +1,6 @@
 package com.pla.individuallife.query;
 
 import com.pla.individuallife.domain.model.quotation.ProposedAssured;
-import com.pla.individuallife.domain.model.quotation.Proposer;
 import com.pla.sharedkernel.domain.model.Gender;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -15,6 +14,8 @@ import org.joda.time.LocalDate;
 @Setter
 @NoArgsConstructor
 public class ProposedAssuredDto {
+
+    private String assuredId;
 
     private String assuredTitle;
 
@@ -38,6 +39,7 @@ public class ProposedAssuredDto {
 
 
     public ProposedAssuredDto(ProposedAssured proposedAssured) {
+        this.assuredId = proposedAssured.getAssuredId();
         this.assuredTitle = proposedAssured.getAssuredTitle();
         this.assuredFName = proposedAssured.getAssuredFName();
         this.assuredSurname = proposedAssured.getAssuredSurname();

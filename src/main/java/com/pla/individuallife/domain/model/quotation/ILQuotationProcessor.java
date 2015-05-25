@@ -20,16 +20,16 @@ public class ILQuotationProcessor {
     }
 
 
-    public IndividualLifeQuotation createIndividualLifeQuotation(String quotationNumber, String quotationCreator, QuotationId quotationId, AgentId agentId, String assuredTitle, String assuredFName, String assuredSurname, String assuredNRC, PlanId planid ) {
-        ProposedAssuredBuilder proposedAssuredBuilder = ProposedAssured.getAssuredBuilder(assuredTitle, assuredFName, assuredSurname, assuredNRC);
+    public IndividualLifeQuotation createIndividualLifeQuotation(String quotationNumber, String quotationCreator, QuotationId quotationId, AgentId agentId, String assuredId, String assuredTitle, String assuredFName, String assuredSurname, String assuredNRC, PlanId planid ) {
+        ProposedAssuredBuilder proposedAssuredBuilder = ProposedAssured.getAssuredBuilder(assuredId, assuredTitle, assuredFName, assuredSurname, assuredNRC);
         return IndividualLifeQuotation.createWithBasicDetail(quotationNumber, quotationCreator, quotationId, agentId, proposedAssuredBuilder.build(), planid);
     }
 
-    public IndividualLifeQuotation updateWithProposerAndAgentId(IndividualLifeQuotation individualLifeQuotation, Proposer proposer, AgentId agentId) {
-        return individualLifeQuotation.updateWithProposer(proposer, agentId);
+    public IndividualLifeQuotation updateWithProposerAndAgentId(IndividualLifeQuotation individualLifeQuotation, Proposer proposer, AgentId agentId, String proposerId) {
+        return individualLifeQuotation.updateWithProposer(proposer, agentId, proposerId);
     }
 
-    public IndividualLifeQuotation updateWithAssured(IndividualLifeQuotation individualLifeQuotation, ProposedAssured proposedAssured, Boolean isAssuredTheProposer) {
-        return individualLifeQuotation.updateWithAssured(proposedAssured, isAssuredTheProposer);
+    public IndividualLifeQuotation updateWithAssured(IndividualLifeQuotation individualLifeQuotation, ProposedAssured proposedAssured, Boolean isAssuredTheProposer, String proposerId) {
+        return individualLifeQuotation.updateWithAssured(proposedAssured, isAssuredTheProposer, proposerId);
     }
 }

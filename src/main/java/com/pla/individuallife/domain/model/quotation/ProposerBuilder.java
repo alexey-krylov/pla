@@ -1,6 +1,5 @@
 package com.pla.individuallife.domain.model.quotation;
 
-import com.pla.core.domain.model.agent.AgentId;
 import com.pla.sharedkernel.domain.model.Gender;
 import lombok.Getter;
 import org.joda.time.LocalDate;
@@ -13,6 +12,8 @@ import static org.nthdimenzion.utils.UtilValidator.isNotEmpty;
  */
 @Getter
 public class ProposerBuilder {
+
+    private String proposerId;
 
     private String proposerTitle;
 
@@ -32,7 +33,7 @@ public class ProposerBuilder {
 
     private String emailId;
 
-    ProposerBuilder( String proposerTitle, String proposerFName, String proposerSurname, String proposerNRC, LocalDate dateOfBirth, Number ageNextBirthDay, Gender gender, String mobileNumber, String emailId) {
+    ProposerBuilder( String  proposerId, String proposerTitle, String proposerFName, String proposerSurname, String proposerNRC, LocalDate dateOfBirth, Number ageNextBirthDay, Gender gender, String mobileNumber, String emailId) {
         checkArgument(isNotEmpty(proposerTitle));
         checkArgument(isNotEmpty(proposerFName));
         checkArgument(isNotEmpty(proposerSurname));

@@ -73,9 +73,5 @@
     <extension:mongo-repository id="ghQuotationMongoRepository"
                                 aggregate-type="com.pla.grouphealth.domain.model.quotation.GroupHealthQuotation"
                                 mongo-template="mongoTemplate"/>
-    <extension:mongo-repository id="ilQuotationMongoRepository"
-                                aggregate-type="com.pla.individuallife.domain.model.quotation.IndividualLifeQuotation"
-                                mongo-template="mongoTemplate"/>
-
 
 </beans>

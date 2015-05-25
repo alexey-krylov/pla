@@ -21,12 +21,6 @@
                 <bean class="com.pla.quotation.repository.ObjectIdToQuotationIdConverter"/>
             </mongo:converter>
             <mongo:converter>
-                <bean class="com.pla.individuallife.repository.QuotationIdToObjectIdConverter"/>
-            </mongo:converter>
-            <mongo:converter>
-                <bean class="com.pla.individuallife.repository.ObjectIdToQuotationIdConverter"/>
-            </mongo:converter>
-            <mongo:converter>
                 <bean class="com.pla.grouphealth.repository.QuotationIdToObjectIdConverter"/>
             </mongo:converter>
             <mongo:converter>

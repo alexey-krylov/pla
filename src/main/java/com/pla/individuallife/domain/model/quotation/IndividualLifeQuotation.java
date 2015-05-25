@@ -1,8 +1,8 @@
 package com.pla.individuallife.domain.model.quotation;
 
 import com.pla.core.domain.model.agent.AgentId;
-import com.pla.quotation.domain.model.IQuotation;
 import com.pla.individuallife.domain.model.ILQuotationStatus;
+import com.pla.quotation.domain.model.IQuotation;
 import com.pla.sharedkernel.identifier.PlanId;
 import com.pla.sharedkernel.identifier.QuotationId;
 import lombok.AccessLevel;
@@ -10,24 +10,30 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.axonframework.domain.AbstractAggregateRoot;
 import org.axonframework.eventsourcing.annotation.AggregateIdentifier;
+import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.DynamicUpdate;
 import org.joda.time.LocalDate;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
+import org.nthdimenzion.common.crud.ICrudEntity;
+
+import javax.persistence.*;
 
 import static com.google.common.base.Preconditions.checkArgument;
-import static org.nthdimenzion.utils.UtilValidator.isNotEmpty;
 import static com.pla.individuallife.domain.exception.QuotationException.raiseQuotationNotModifiableException;
+import static org.nthdimenzion.utils.UtilValidator.isNotEmpty;
 
 /**
  * Created by Karunakar on 5/13/2015.
  */
-@Document(collection = "individual_life_quotation")
-@Getter(value = AccessLevel.PACKAGE)
+@Entity
+@Table (name = "individual_life_quotation")
+@Getter(value = AccessLevel.PUBLIC)
 @NoArgsConstructor(access = AccessLevel.PACKAGE)
-public class IndividualLifeQuotation extends AbstractAggregateRoot<QuotationId> implements IQuotation {
+@DynamicInsert
+@DynamicUpdate
+public class IndividualLifeQuotation extends AbstractAggregateRoot<QuotationId> implements IQuotation, ICrudEntity {
 
 
-    @Id
+    @EmbeddedId
     @AggregateIdentifier
     private QuotationId quotationId;
 
@@ -35,10 +41,15 @@ public class IndividualLifeQuotation extends AbstractAggregateRoot<QuotationId> 
 
     private AgentId agentId;
 
+    @OneToOne(targetEntity = Proposer.class, fetch = FetchType.EAGER, cascade = {CascadeType.ALL})
+    @JoinColumn(name = "proposer_id")
     private Proposer proposer;
 
+    @OneToOne(targetEntity = ProposedAssured.class, fetch = FetchType.EAGER, cascade = {CascadeType.ALL})
+    @JoinColumn(name = "assured_id")
     private ProposedAssured proposedAssured;
 
+    @Enumerated(EnumType.STRING)
     private ILQuotationStatus ilQuotationStatus;
 
     private int versionNumber;
@@ -47,10 +58,12 @@ public class IndividualLifeQuotation extends AbstractAggregateRoot<QuotationId> 
 
     private LocalDate generatedOn;
 
+    @Transient
     private QuotationId parentQuotationId;
 
     private PlanId  planid;
 
+    @Column( nullable = false, columnDefinition = "BOOLEAN DEFAULT false" )
     private Boolean isAssuredTheProposer;
 
 
@@ -58,6 +71,7 @@ public class IndividualLifeQuotation extends AbstractAggregateRoot<QuotationId> 
         checkArgument(isNotEmpty(quotationCreator));
         checkArgument(isNotEmpty(quotationNumber));
         checkArgument(quotationId != null);
+        checkArgument(isNotEmpty(quotationId.getQuotationId()));
         checkArgument(agentId != null);
         checkArgument(proposedAssured != null);
         checkArgument(proposedAssured.getAssuredFName() != null);
@@ -97,19 +111,31 @@ public class IndividualLifeQuotation extends AbstractAggregateRoot<QuotationId> 
         return this;
     }
 
-    public IndividualLifeQuotation updateWithProposer(Proposer proposer, AgentId agentId ) {
+    public IndividualLifeQuotation updateWithProposer(Proposer proposer, AgentId agentId , String proposerId) {
         checkInvariant();
+        if( this.proposer != null)
+            proposerId = this.proposer.getProposerId();
+        proposer.setProposerId(proposerId);
         this.proposer = proposer;
         this.agentId = agentId;
+        if(isAssuredTheProposer) {
+            raiseQuotationNotModifiableException();
+
+        }
         return this;
     }
 
-    public IndividualLifeQuotation updateWithAssured(ProposedAssured proposedAssured, Boolean isAssuredTheProposer) {
+    public IndividualLifeQuotation updateWithAssured(ProposedAssured proposedAssured, Boolean isAssuredTheProposer, String proposerId) {
         checkInvariant();
+        proposedAssured.setAssuredId(this.proposedAssured.getAssuredId());
         this.proposedAssured = proposedAssured;
         this.isAssuredTheProposer = isAssuredTheProposer;
-        if(isAssuredTheProposer)
+        if(isAssuredTheProposer) {
+            if (proposerId == null) proposerId = this.proposer.getProposerId();
             this.proposer = convertAssuredToProposer(proposedAssured);
+                this.proposer.setProposerId(proposerId);
+
+        }
         return this;
     }
 
@@ -160,10 +186,8 @@ public class IndividualLifeQuotation extends AbstractAggregateRoot<QuotationId> 
     }
 
     private Proposer convertAssuredToProposer(ProposedAssured proposedAssured) {
-        //proposerTitle, proposerFName, proposerSurname, proposerNRC, dateOfBirth, ageNextBirthDay, gender, mobileNumber, emailId);
-        ProposerBuilder proposerBuilder= Proposer.getProposerBuilder(proposedAssured.getAssuredTitle(), proposedAssured.getAssuredFName(), proposedAssured.getAssuredSurname(), proposedAssured.getAssuredNRC(), proposedAssured.getDateOfBirth(), proposedAssured.getAgeNextBirthDay(), proposedAssured.getGender(), proposedAssured.getMobileNumber(), proposedAssured.getEmailId());
+        ProposerBuilder proposerBuilder= Proposer.getProposerBuilder(null, proposedAssured.getAssuredTitle(), proposedAssured.getAssuredFName(), proposedAssured.getAssuredSurname(), proposedAssured.getAssuredNRC(), proposedAssured.getDateOfBirth(), proposedAssured.getAgeNextBirthDay(), proposedAssured.getGender(), proposedAssured.getMobileNumber(), proposedAssured.getEmailId());
         return new Proposer(proposerBuilder);
-
-
     }
+
 }
