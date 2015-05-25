@@ -801,10 +801,10 @@ ALTER TABLE `plan_coverage_benefits_assoc`
   ADD COLUMN `plan_name` VARCHAR(100) NULL AFTER `plan_id`,
   ADD COLUMN `plan_code` VARCHAR(10) NULL AFTER `plan_name`,
   ADD COLUMN `launch_date` date NOT NULL AFTER `plan_code`,
-  ADD COLUMN `withdrawal_date` data AFTER `launch_date`,
+  ADD COLUMN `withdrawal_date` date AFTER `launch_date`,
   ADD COLUMN `client_type` varchar(60) NOT NULL AFTER `withdrawal_date`,
   ADD COLUMN `line_of_business` varchar(60) NOT NULL AFTER `client_type`,
-  ADD COLUMN `funeral_cover` tinyint(1) DEFAULT NULL
+  ADD COLUMN `funeral_cover` tinyint(1) DEFAULT NULL;
 
 CREATE TABLE `endorsement_type` (
   `endorsement_type_id` BIGINT(20) NOT NULL AUTO_INCREMENT,
