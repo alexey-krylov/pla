@@ -816,6 +816,61 @@ CREATE TABLE `endorsement_type` (
 ALTER TABLE `endorsement_type`
   ADD  UNIQUE INDEX `UNIQUE` (`description`, `category`);
 
+  DROP TABLE IF EXISTS `individual_life_quotation`;
+  CREATE TABLE `individual_life_quotation` (
+    `quotation_id` varchar(255) NOT NULL,
+    `last_event_sequence_number` bigint(20) DEFAULT NULL,
+    `version` bigint(20) DEFAULT NULL,
+    `agent_id` varchar(255) DEFAULT NULL,
+    `generated_on` tinyblob,
+    `il_quotation_status` varchar(20) DEFAULT NULL,
+    `is_assured_the_proposer` tinyint(1) NOT NULL DEFAULT '0',
+    `plan_id` varchar(255) DEFAULT NULL,
+    `quotation_creator` varchar(255) DEFAULT NULL,
+    `quotation_number` varchar(255) DEFAULT NULL,
+    `version_number` int(11) NOT NULL,
+    `assured_id` varchar(255) DEFAULT NULL,
+    `proposer_id` varchar(255) DEFAULT NULL,
+    PRIMARY KEY (`quotation_id`),
+    KEY `FK_Quotation_Assured` (`assured_id`),
+    KEY `FK_Quotation_Proposer` (`proposer_id`),
+    CONSTRAINT `FK_ILQuotation_Assured` FOREIGN KEY (`assured_id`) REFERENCES `assured` (`assured_id`),
+    CONSTRAINT `FK_ILQuotation_Proposer` FOREIGN KEY (`proposer_id`) REFERENCES `proposer` (`proposer_id`)
+  ) ENGINE=InnoDB DEFAULT CHARSET=utf8
+
+  DROP TABLE IF EXISTS `assured`;
+
+  CREATE TABLE `assured` (
+    `assured_id` varchar(255) NOT NULL,
+    `age_next_birth_day` tinyblob,
+    `assuredfname` varchar(255) DEFAULT NULL,
+    `assurednrc` varchar(255) DEFAULT NULL,
+    `assured_surname` varchar(255) DEFAULT NULL,
+    `assured_title` varchar(255) DEFAULT NULL,
+    `date_of_birth` date DEFAULT NULL,
+    `email_id` varchar(255) DEFAULT NULL,
+    `gender` varchar(11) DEFAULT NULL,
+    `mobile_number` varchar(255) DEFAULT NULL,
+    `occupation` varchar(255) DEFAULT NULL,
+    PRIMARY KEY (`assured_id`)
+  ) ENGINE=InnoDB DEFAULT CHARSET=utf8
+
+  DROP TABLE IF EXISTS `proposer`;
+
+  CREATE TABLE `proposer` (
+    `proposer_id` varchar(255) NOT NULL,
+    `age_next_birth_day` tinyblob,
+    `date_of_birth` date DEFAULT NULL,
+    `email_id` varchar(255) DEFAULT NULL,
+    `gender` varchar(11) DEFAULT NULL,
+    `mobile_number` varchar(255) DEFAULT NULL,
+    `proposerfname` varchar(255) DEFAULT NULL,
+    `proposernrc` varchar(255) DEFAULT NULL,
+    `proposer_surname` varchar(255) DEFAULT NULL,
+    `proposer_title` varchar(255) DEFAULT NULL,
+    PRIMARY KEY (`proposer_id`)
+  ) ENGINE=InnoDB DEFAULT CHARSET=utf8
+
 
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
