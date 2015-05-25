@@ -70,7 +70,7 @@ public class Plan extends AbstractAnnotatedAggregateRoot<PlanId> {
                 super.registerEvent(new PlanCoverageAssociationEvent(this.planId, this.planDetail.getPlanName(), this.planDetail.getPlanCode(),
                         this.planDetail.lineOfBusinessId, this.planDetail.getClientType(), this.planDetail.planType, this.planDetail.launchDate, this.planDetail.withdrawalDate,
                         this.planDetail.funeralCover,
-                        Collections.unmodifiableMap(derievedCoverages())));
+                        Collections.unmodifiableMap(derivedCoverages())));
             }
         } catch (Exception t) {
             t.printStackTrace();
@@ -115,7 +115,7 @@ public class Plan extends AbstractAnnotatedAggregateRoot<PlanId> {
             super.registerEvent(new PlanCoverageAssociationEvent(this.planId, this.planDetail.getPlanName(), this.planDetail.getPlanCode(),
                     this.planDetail.lineOfBusinessId, this.planDetail.getClientType(), this.planDetail.planType, this.planDetail.launchDate, this.planDetail.withdrawalDate,
                     this.planDetail.funeralCover,
-                    Collections.unmodifiableMap(derievedCoverages())));
+                    Collections.unmodifiableMap(derivedCoverages())));
         } catch (Exception t) {
             t.printStackTrace();
             throw new PlanValidationException(t.getMessage());
@@ -123,7 +123,7 @@ public class Plan extends AbstractAnnotatedAggregateRoot<PlanId> {
     }
 
 
-    private Map derievedCoverages() {
+    private Map derivedCoverages() {
         Map<CoverageType, Map<CoverageId, List<BenefitId>>> payload = new HashMap<>();
         Map<CoverageId, List<BenefitId>> optionalCoverageBenefits = new HashMap();
         Map<CoverageId, List<BenefitId>> baseCoverageBenefits = new HashMap();
@@ -141,7 +141,7 @@ public class Plan extends AbstractAnnotatedAggregateRoot<PlanId> {
                 optionalCoverageBenefits.put(coverageId, benefitIds);
         }
         payload.put(CoverageType.BASE, baseCoverageBenefits);
-        payload.put(CoverageType.BASE, optionalCoverageBenefits);
+        payload.put(CoverageType.OPTIONAL, optionalCoverageBenefits);
 
         return payload;
     }

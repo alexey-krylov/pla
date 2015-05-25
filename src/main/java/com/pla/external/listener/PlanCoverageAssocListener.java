@@ -40,7 +40,7 @@ public class PlanCoverageAssocListener {
     @EventHandler
     public void handle(final PlanCoverageAssociationEvent event) {
         Map<CoverageType, Map<CoverageId, List<BenefitId>>> payload = event.getCoverageAndBenefits();
-        namedParameterJdbcTemplate.execute("delete from plan_coverage_benefits_assoc",
+        namedParameterJdbcTemplate.execute("delete from plan_coverage_benefits_assoc where plan_id="+"'"+ event.getPlanId().toString()+"'",
                 new EmptySqlParameterSource(), new PreparedStatementCallback<Object>() {
                     @Override
                     public Object doInPreparedStatement(PreparedStatement ps) throws SQLException, DataAccessException {
