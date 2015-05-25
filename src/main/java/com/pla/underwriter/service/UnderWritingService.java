@@ -6,6 +6,7 @@ import com.pla.publishedlanguage.contract.IPlanAdapter;
 import com.pla.publishedlanguage.dto.PlanCoverageDetailDto;
 import com.pla.sharedkernel.identifier.PlanId;
 import com.pla.underwriter.domain.model.UnderWriterInfluencingFactor;
+import com.pla.underwriter.domain.model.UnderWriterProcessType;
 import com.pla.underwriter.dto.UnderWriterDto;
 import com.pla.underwriter.dto.UnderWriterLineItemDto;
 import org.apache.commons.lang.math.NumberUtils;
@@ -15,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -144,5 +146,35 @@ public class UnderWritingService {
     public void checkValidPlanAndCoverageCode(String planCode){
         if (!iPlanAdapter.isValidPlanCode(planCode))
             raiseNotValidPlanCodeException();
+    }
+
+    public List<Map<String,String>> getUnderWriterProcess(){
+        List<Map<String,String>> underWriterProcess = Lists.newArrayList();
+        Arrays.asList(UnderWriterProcessType.values()).forEach(process-> {
+                    Map<String, String> processMap = Maps.newLinkedHashMap();
+                    processMap.put("processType",process.name());
+                    processMap.put("description",process.getDescription());
+                    underWriterProcess.add(processMap);
+                }
+        );
+        return underWriterProcess;
+    }
+
+    public List<Map<String,String>> getUnderWritingInfluencingFactor(String processType){
+        List<Map<String,String>> influencingFactorList = Lists.newArrayList();
+        Arrays.asList(UnderWriterInfluencingFactor.values()).forEach(influencingFactor->{
+            Map<String,String> influencingFactorMap = Maps.newLinkedHashMap();
+            if (UnderWriterProcessType.CLAIM.equals(UnderWriterProcessType.valueOf(processType))) {
+                influencingFactorMap.put("influencingFactor", influencingFactor.name());
+                influencingFactorMap.put("description", influencingFactor.getDescription());
+                influencingFactorList.add(influencingFactorMap);
+            }
+            else if (!UnderWriterInfluencingFactor.CLAIM_AMOUNT.equals(influencingFactor)){
+                influencingFactorMap.put("influencingFactor", influencingFactor.name());
+                influencingFactorMap.put("description", influencingFactor.getDescription());
+                influencingFactorList.add(influencingFactorMap);
+            }
+        });
+        return influencingFactorList;
     }
 }

@@ -22,11 +22,11 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.List;
@@ -150,8 +150,8 @@ public class UnderWriterSetUpController {
         if (bindingResult.hasErrors()) {
             return Result.failure();
         }
-        FileInputStream fis = new FileInputStream(createUnderWriterRoutingLevelCommand.getFile().getName());
-        POIFSFileSystem fs = new POIFSFileSystem(fis);
+        MultipartFile file = createUnderWriterRoutingLevelCommand.getFile();
+        POIFSFileSystem fs = new POIFSFileSystem(file.getInputStream());
         HSSFWorkbook premiumTemplateWorkbook = new HSSFWorkbook(fs);
         try {
             String templateFileName = createUnderWriterRoutingLevelCommand.getPlanName()+ UNDER_WRITER_TEMPLATE_FILE_NAME_SUFFIX;
@@ -196,4 +196,15 @@ public class UnderWriterSetUpController {
         return underWriterFinder.findAllUnderWriterRoutingLevel();
     }
 
+    @RequestMapping(value = "/getunderwriterprocess",method = RequestMethod.GET)
+    @ResponseBody
+    public List<Map<String,String>> getUnderWriterProcessType(){
+        return underWritingService.getUnderWriterProcess();
+    }
+
+    @RequestMapping(value = "/getunderwriterinfluencingfactor/{processtype}",method = RequestMethod.GET)
+    @ResponseBody
+    public List<Map<String,String>> getUnderWriterInfluencingFactor(@PathVariable("processtype") String processType){
+        return underWritingService.getUnderWritingInfluencingFactor(processType);
+    }
 }

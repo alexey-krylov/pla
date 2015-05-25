@@ -1,6 +1,7 @@
 package com.pla.underwriter.service;
 
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import com.pla.publishedlanguage.contract.IPlanAdapter;
 import com.pla.underwriter.domain.model.UnderWriterInfluencingFactor;
@@ -160,4 +161,36 @@ public class UnderWriterServiceUnitTest {
         when(iPlanAdapter.isValidPlanCode("P001")).thenReturn(false);
         underWritingService.checkValidPlanAndCoverageCode("P001");
     }
+
+    @Test
+    public void itShouldReturnTheDefinedUnderWritingProcessTypes(){
+        List<Map<String,String>> expectedProcessList = Lists.newArrayList();
+        Map<String,String> processMap   =  Maps.newLinkedHashMap();
+        processMap.put("processType","ENROLLMENT");
+        processMap.put("description","Enrollment");
+        expectedProcessList.add(processMap);
+
+        processMap  =  Maps.newLinkedHashMap();
+        processMap.put("processType","CLAIM");
+        processMap.put("description","Claim");
+        expectedProcessList.add(processMap);
+
+        List<Map<String,String>> underWriterProcess  = underWritingService.getUnderWriterProcess();
+        assertThat(expectedProcessList,is(underWriterProcess));
+    }
+
+    @Test
+    public void givenProcessTypeAsEnrollment_whenProcessTypeIsNotClaim_thenItShouldNotReturnTheClaimAmountInfluencingFactor(){
+        List<Map<String,String>> underWritingInfluencingFactor =  underWritingService.getUnderWritingInfluencingFactor("ENROLLMENT");
+        assertNotNull(underWritingInfluencingFactor);
+        assertThat(underWritingInfluencingFactor.size(),is(5));
+    }
+
+    @Test
+    public void givenProcessTypeAsClaim_thenItShouldReturnTheClaimAmountInfluencingFactor(){
+        List<Map<String,String>> underWritingInfluencingFactor =  underWritingService.getUnderWritingInfluencingFactor("CLAIM");
+        assertNotNull(underWritingInfluencingFactor);
+        assertThat(underWritingInfluencingFactor.size(),is(6));
+    }
+
 }
