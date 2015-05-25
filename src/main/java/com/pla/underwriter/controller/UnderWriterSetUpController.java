@@ -22,6 +22,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -70,9 +71,13 @@ public class UnderWriterSetUpController {
     public String viewRoutingLevelSetup(){
         return "pla/core/underwriter/routingLevelSetup/viewRoutingLevelSetup";
     }
+
     @RequestMapping(value = "/opencreateroutinglevel",method = RequestMethod.GET)
-    public String openCreatePage( ){
-        return "pla/core/underwriter/routingLevelSetup/createRoutingLevelSetup";
+    public ModelAndView openCreatePage( ){
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.addObject("createUnderWriterRoutingLevelCommand",new CreateUnderWriterRoutingLevelCommand());
+        modelAndView.setViewName("pla/core/underwriter/routingLevelSetup/createRoutingLevelSetup");
+        return modelAndView;
     }
 
     @RequestMapping(value = "/checkforoverlapping",method = RequestMethod.POST)
@@ -190,4 +195,5 @@ public class UnderWriterSetUpController {
     public List<Map> getAllUnderWriterRoutingLevel(){
         return underWriterFinder.findAllUnderWriterRoutingLevel();
     }
+
 }
