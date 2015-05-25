@@ -816,10 +816,9 @@ CREATE TABLE `endorsement_type` (
 ALTER TABLE `endorsement_type`
   ADD  UNIQUE INDEX `UNIQUE` (`description`, `category`);
 
-  DROP TABLE IF EXISTS `individual_life_quotation`;
+DROP TABLE IF EXISTS `individual_life_quotation`;
   CREATE TABLE `individual_life_quotation` (
     `quotation_id` varchar(255) NOT NULL,
-    `last_event_sequence_number` bigint(20) DEFAULT NULL,
     `version` bigint(20) DEFAULT NULL,
     `agent_id` varchar(255) DEFAULT NULL,
     `generated_on` tinyblob,
@@ -829,17 +828,10 @@ ALTER TABLE `endorsement_type`
     `quotation_creator` varchar(255) DEFAULT NULL,
     `quotation_number` varchar(255) DEFAULT NULL,
     `version_number` int(11) NOT NULL,
-    `assured_id` varchar(255) DEFAULT NULL,
-    `proposer_id` varchar(255) DEFAULT NULL,
-    PRIMARY KEY (`quotation_id`),
-    KEY `FK_Quotation_Assured` (`assured_id`),
-    KEY `FK_Quotation_Proposer` (`proposer_id`),
-    CONSTRAINT `FK_ILQuotation_Assured` FOREIGN KEY (`assured_id`) REFERENCES `assured` (`assured_id`),
-    CONSTRAINT `FK_ILQuotation_Proposer` FOREIGN KEY (`proposer_id`) REFERENCES `proposer` (`proposer_id`)
+    PRIMARY KEY (`quotation_id`)
   ) ENGINE=InnoDB DEFAULT CHARSET=utf8
 
-  DROP TABLE IF EXISTS `assured`;
-
+DROP TABLE IF EXISTS `assured`;
   CREATE TABLE `assured` (
     `assured_id` varchar(255) NOT NULL,
     `age_next_birth_day` tinyblob,
@@ -855,8 +847,16 @@ ALTER TABLE `endorsement_type`
     PRIMARY KEY (`assured_id`)
   ) ENGINE=InnoDB DEFAULT CHARSET=utf8
 
-  DROP TABLE IF EXISTS `proposer`;
+DROP TABLE IF EXISTS `quotation_assured`;
+  CREATE TABLE `quotation_assured` (
+   `quotation_id` varchar(255) NOT NULL,
+   `assured_id` varchar(255) NOT NULL,
+   KEY `FK_QUOTATION_ID` (`quotation_id`),
+   CONSTRAINT `FK_QUOTATION_QUOTATION_ID` FOREIGN KEY (`quotation_id`) REFERENCES `quotation` (`quotation_id`),
+   CONSTRAINT `FK_ASSURED_ASSURED_ID` FOREIGN KEY (`assured_id`) REFERENCES `assured` (`assured_id`)
+  ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+DROP TABLE IF EXISTS `proposer`;
   CREATE TABLE `proposer` (
     `proposer_id` varchar(255) NOT NULL,
     `age_next_birth_day` tinyblob,
@@ -871,6 +871,14 @@ ALTER TABLE `endorsement_type`
     PRIMARY KEY (`proposer_id`)
   ) ENGINE=InnoDB DEFAULT CHARSET=utf8
 
+DROP TABLE IF EXISTS `quotation_proposer`;
+  CREATE TABLE `quotation_proposer` (
+   `quotation_id` varchar(255) NOT NULL,
+   `proposer_id` varchar(255) NOT NULL,
+   KEY `FK_QUOTATION_ID` (`quotation_id`),
+   CONSTRAINT `FK_QUOTATION_QUOTATION_ID` FOREIGN KEY (`quotation_id`) REFERENCES `quotation` (`quotation_id`),
+   CONSTRAINT `FK_PROPOSER_PROPOSER_ID` FOREIGN KEY (`proposer_id`) REFERENCES `assured` (`proposer_id`)
+  ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;

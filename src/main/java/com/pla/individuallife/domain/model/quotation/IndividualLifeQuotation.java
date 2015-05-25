@@ -41,12 +41,12 @@ public class IndividualLifeQuotation extends AbstractAggregateRoot<QuotationId> 
 
     private AgentId agentId;
 
-    @OneToOne(targetEntity = Proposer.class, fetch = FetchType.EAGER, cascade = {CascadeType.ALL})
-    @JoinColumn(name = "proposer_id")
+    @OneToOne(targetEntity = Proposer.class, fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinTable(name = "quotation_proposer", joinColumns = @JoinColumn(name = "QUOTATION_ID"), inverseJoinColumns = @JoinColumn(name = "PROPOSER_ID"))
     private Proposer proposer;
 
-    @OneToOne(targetEntity = ProposedAssured.class, fetch = FetchType.EAGER, cascade = {CascadeType.ALL})
-    @JoinColumn(name = "assured_id")
+    @OneToOne(targetEntity = ProposedAssured.class, fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinTable(name = "quotation_assured", joinColumns = @JoinColumn(name = "QUOTATION_ID"), inverseJoinColumns = @JoinColumn(name = "ASSURED_ID"))
     private ProposedAssured proposedAssured;
 
     @Enumerated(EnumType.STRING)
