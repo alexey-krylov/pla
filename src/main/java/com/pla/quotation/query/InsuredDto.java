@@ -1,24 +1,17 @@
 package com.pla.quotation.query;
 
-import com.pla.quotation.application.service.GLInsuredExcelHeader;
 import com.pla.sharedkernel.domain.model.Gender;
 import com.pla.sharedkernel.domain.model.Relationship;
 import com.pla.sharedkernel.identifier.CoverageId;
 import com.pla.sharedkernel.identifier.PlanId;
-import com.pla.sharedkernel.util.ExcelGeneratorUtil;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.Row;
 import org.joda.time.LocalDate;
-import org.nthdimenzion.common.AppConstants;
 
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Set;
-import java.util.function.Function;
-import java.util.stream.Collectors;
 
 /**
  * Created by Samir on 4/29/2015.
@@ -76,25 +69,6 @@ public class InsuredDto {
         return this;
     }
 
-    public static InsuredDto createInsuredDto(Row row, List<String> excelHeaders, List<String> headers, List<Cell> optionalCoverageCell) {
-        InsuredDto insuredDto = new InsuredDto();
-        for (String header : headers) {
-            if (!header.contains(AppConstants.OPTIONAL_COVERAGE_HEADER)) {
-                insuredDto = GLInsuredExcelHeader.valueOf(header).populateInsuredDetail(insuredDto, row, excelHeaders);
-            }
-        }
-        List<CoveragePremiumDetailDto> coveragePremiumDetails = optionalCoverageCell.stream().map(new Function<Cell, CoveragePremiumDetailDto>() {
-            @Override
-            public CoveragePremiumDetailDto apply(Cell cell) {
-                CoveragePremiumDetailDto coveragePremiumDetailDto = new CoveragePremiumDetailDto();
-                coveragePremiumDetailDto.setCoverageCode(ExcelGeneratorUtil.getCellValue(cell));
-                return coveragePremiumDetailDto;
-            }
-        }).collect(Collectors.toList());
-        insuredDto = insuredDto.addCoveragePremiumDetails(coveragePremiumDetails);
-        return insuredDto;
-    }
-
     @Getter
     @Setter
     public static class InsuredDependentDto {
@@ -141,24 +115,6 @@ public class InsuredDto {
             return this;
         }
 
-        public static InsuredDependentDto createInsuredDependentDto(Row dependentRow, List<String> excelHeaders, List<String> headers, List<Cell> optionalCoverageCells) {
-            InsuredDependentDto insuredDependentDto = new InsuredDependentDto();
-            for (String header : headers) {
-                if (!header.contains(AppConstants.OPTIONAL_COVERAGE_HEADER)) {
-                    insuredDependentDto = GLInsuredExcelHeader.valueOf(header).populateInsuredDependentDetail(insuredDependentDto, dependentRow, excelHeaders);
-                }
-            }
-            List<CoveragePremiumDetailDto> coveragePremiumDetails = optionalCoverageCells.stream().map(new Function<Cell, CoveragePremiumDetailDto>() {
-                @Override
-                public CoveragePremiumDetailDto apply(Cell cell) {
-                    CoveragePremiumDetailDto coveragePremiumDetailDto = new CoveragePremiumDetailDto();
-                    coveragePremiumDetailDto.setCoverageCode(ExcelGeneratorUtil.getCellValue(cell));
-                    return coveragePremiumDetailDto;
-                }
-            }).collect(Collectors.toList());
-            insuredDependentDto = insuredDependentDto.addCoveragePremiumDetails(coveragePremiumDetails);
-            return insuredDependentDto;
-        }
     }
 
     @Getter
