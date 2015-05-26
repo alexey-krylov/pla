@@ -88,7 +88,7 @@ public class GLQuotationService {
         List<PlanId> planIds = getAgentAuthorizedPlans(agentDetailDto.getAgentId());
         Map quotation = glQuotationFinder.getQuotationById(quotationId);
         List<Insured> insureds = (List<Insured>) quotation.get("insureds");
-        List<InsuredDto> insuredDtoList = isNotEmpty(insureds) ? insureds.stream().map(new Function<Insured, InsuredDto>() {
+        List<InsuredDto> insuredDtoList = isNotEmpty(insureds)? insureds.stream().map(new Function<Insured, InsuredDto>() {
             @Override
             public InsuredDto apply(Insured insured) {
                 InsuredDto insuredDto = new InsuredDto();
@@ -151,15 +151,9 @@ public class GLQuotationService {
                 insuredDto = insuredDto.addInsuredDependent(insuredDependentDtoList);
                 return insuredDto;
             }
-        }).collect(Collectors.toList()) : Lists.newArrayList();
+        }).collect(Collectors.toList()):Lists.newArrayList();
         HSSFWorkbook hssfWorkbook = glInsuredExcelGenerator.generateInsuredExcel(insuredDtoList, planIds);
         return hssfWorkbook;
-    }
-
-    public boolean isInsuredDataUpdated(String quotationId) {
-        Map quotation = glQuotationFinder.getQuotationById(quotationId);
-        List<Insured> insureds = (List<Insured>) quotation.get("insureds");
-        return isNotEmpty(insureds);
     }
 
     public PremiumDetailDto getPremiumDetail(QuotationId quotationId) {

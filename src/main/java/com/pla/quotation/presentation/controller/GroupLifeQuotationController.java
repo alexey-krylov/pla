@@ -62,12 +62,6 @@ public class GroupLifeQuotationController {
         return Result.success("Quotation number ", (String) quotationMap.get("quotationNumber"));
     }
 
-    @RequestMapping(value = "/isinsureddetailavailable/{quotationId}", method = RequestMethod.GET)
-    @ResponseBody
-    public boolean isInsuredDetailAvailable(@PathVariable("quotationId") String quotationId) {
-        return glQuotationService.isInsuredDataUpdated(quotationId);
-    }
-
     @RequestMapping(value = "/getversionnumber/{quotationId}", method = RequestMethod.GET)
     @ResponseBody
     public Result getVersionNumber(@PathVariable("quotationId") String quotationId) {
