@@ -471,7 +471,7 @@ CREATE TABLE `team` (
 /*Data for the table `team` */
 
 /*Table structure for table `team_team_leader_fulfillment` */
-
+DROP TABLE IF EXISTS `team_team_leader_fulfillment`;
 CREATE TABLE `team_team_leader_fulfillment` (
   `team_id` varchar(255) NOT NULL,
   `from_date` date DEFAULT NULL,
@@ -494,9 +494,7 @@ CREATE TABLE `region_manager_fulfillment` (
   `thru_date`  DATE DEFAULT NULL,
   `employee_id` varchar(255) NULL,
   CONSTRAINT `FK_REGION_CODE_REGION_MANAGER_FULFILLMENT_REGION_CODE` FOREIGN KEY (`region_Code`) REFERENCES `region` (`region_code`)
-)
-  ENGINE =InnoDB
-  DEFAULT CHARSET =utf8;
+) ENGINE =InnoDB  DEFAULT CHARSET =utf8;
 
 DROP TABLE IF EXISTS branch_manager_fulfillment;
 CREATE TABLE `branch_manager_fulfillment` (
@@ -784,6 +782,7 @@ CREATE TABLE `designation` (
   PRIMARY KEY (`code`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+DROP TABLE IF EXISTS `plan_coverage_benefits_assoc`;
 CREATE TABLE `plan_coverage_benefits_assoc` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `plan_id` varchar(60) NOT NULL,
@@ -806,6 +805,8 @@ ALTER TABLE `plan_coverage_benefits_assoc`
   ADD COLUMN `line_of_business` varchar(60) NOT NULL AFTER `client_type`,
   ADD COLUMN `funeral_cover` tinyint(1) DEFAULT NULL;
 
+
+DROP TABLE IF EXISTS `endorsement_type`;
 CREATE TABLE `endorsement_type` (
   `endorsement_type_id` BIGINT(20) NOT NULL AUTO_INCREMENT,
   `description` VARCHAR(120) NOT NULL,
@@ -829,7 +830,7 @@ DROP TABLE IF EXISTS `individual_life_quotation`;
     `quotation_number` varchar(255) DEFAULT NULL,
     `version_number` int(11) NOT NULL,
     PRIMARY KEY (`quotation_id`)
-  ) ENGINE=InnoDB DEFAULT CHARSET=utf8
+  ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 DROP TABLE IF EXISTS `assured`;
   CREATE TABLE `assured` (
@@ -845,7 +846,7 @@ DROP TABLE IF EXISTS `assured`;
     `mobile_number` varchar(255) DEFAULT NULL,
     `occupation` varchar(255) DEFAULT NULL,
     PRIMARY KEY (`assured_id`)
-  ) ENGINE=InnoDB DEFAULT CHARSET=utf8
+  ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 DROP TABLE IF EXISTS `quotation_assured`;
   CREATE TABLE `quotation_assured` (
@@ -869,16 +870,8 @@ DROP TABLE IF EXISTS `proposer`;
     `proposer_surname` varchar(255) DEFAULT NULL,
     `proposer_title` varchar(255) DEFAULT NULL,
     PRIMARY KEY (`proposer_id`)
-  ) ENGINE=InnoDB DEFAULT CHARSET=utf8
-
-DROP TABLE IF EXISTS `quotation_proposer`;
-  CREATE TABLE `quotation_proposer` (
-   `quotation_id` varchar(255) NOT NULL,
-   `proposer_id` varchar(255) NOT NULL,
-   KEY `FK_QUOTATION_ID` (`quotation_id`),
-   CONSTRAINT `FK_QUOTATION_QUOTATION_ID` FOREIGN KEY (`quotation_id`) REFERENCES `quotation` (`quotation_id`),
-   CONSTRAINT `FK_PROPOSER_PROPOSER_ID` FOREIGN KEY (`proposer_id`) REFERENCES `assured` (`proposer_id`)
   ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
 
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;

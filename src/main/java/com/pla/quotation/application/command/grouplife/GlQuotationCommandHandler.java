@@ -61,14 +61,29 @@ public class GlQuotationCommandHandler {
     @CommandHandler
     public String updateWithProposer(UpdateGLQuotationWithProposerCommand updateGLQuotationWithProposerCommand) {
         GroupLifeQuotation groupLifeQuotation = glQuotationMongoRepository.load(new QuotationId(updateGLQuotationWithProposerCommand.getQuotationId()));
+        boolean isVersioningRequire = groupLifeQuotation.requireVersioning();
         groupLifeQuotation = groupLifeQuotationService.updateWithProposer(groupLifeQuotation, updateGLQuotationWithProposerCommand.getProposerDto(), updateGLQuotationWithProposerCommand.getUserDetails());
+        if (isVersioningRequire) {
+            glQuotationMongoRepository.add(groupLifeQuotation);
+        }
         return groupLifeQuotation.getIdentifier().getQuotationId();
     }
 
     @CommandHandler
     public String updateWithAgentDetail(UpdateGLQuotationWithAgentCommand updateGLQuotationWithAgentCommand) {
         GroupLifeQuotation groupLifeQuotation = glQuotationMongoRepository.load(new QuotationId(updateGLQuotationWithAgentCommand.getQuotationId()));
+        boolean isVersioningRequire = groupLifeQuotation.requireVersioning();
         groupLifeQuotation = groupLifeQuotationService.updateWithAgent(groupLifeQuotation, updateGLQuotationWithAgentCommand.getAgentId(), updateGLQuotationWithAgentCommand.getUserDetails());
+        if (isVersioningRequire) {
+            glQuotationMongoRepository.add(groupLifeQuotation);
+        }
+        return groupLifeQuotation.getIdentifier().getQuotationId();
+    }
+
+    @CommandHandler
+    public String generateQuotation(GenerateGLQuotationCommand generateGLQuotationCommand) {
+        GroupLifeQuotation groupLifeQuotation = glQuotationMongoRepository.load(new QuotationId(generateGLQuotationCommand.getQuotationId()));
+        groupLifeQuotation.generateQuotation(LocalDate.now());
         return groupLifeQuotation.getIdentifier().getQuotationId();
     }
 
@@ -96,9 +111,13 @@ public class GlQuotationCommandHandler {
             }
         }).collect(Collectors.toSet());
         GroupLifeQuotation groupLifeQuotation = glQuotationMongoRepository.load(new QuotationId(updateGLQuotationWithInsuredCommand.getQuotationId()));
+        boolean isVersioningRequire = groupLifeQuotation.requireVersioning();
         groupLifeQuotation = groupLifeQuotationService.updateInsured(groupLifeQuotation, insureds, updateGLQuotationWithInsuredCommand.getUserDetails());
         PremiumDetailDto premiumDetailDto = new PremiumDetailDto(BigDecimal.valueOf(20), 365);
         groupLifeQuotation = groupLifeQuotationService.updateWithPremiumDetail(groupLifeQuotation, premiumDetailDto, updateGLQuotationWithInsuredCommand.getUserDetails());
+        if (isVersioningRequire) {
+            glQuotationMongoRepository.add(groupLifeQuotation);
+        }
         return groupLifeQuotation.getIdentifier().getQuotationId();
     }
 

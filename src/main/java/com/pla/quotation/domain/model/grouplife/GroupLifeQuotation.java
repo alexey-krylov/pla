@@ -1,9 +1,7 @@
 package com.pla.quotation.domain.model.grouplife;
 
 import com.pla.core.domain.model.agent.AgentId;
-import com.pla.quotation.domain.event.ProposerAddedEvent;
 import com.pla.quotation.domain.event.QuotationClosedEvent;
-import com.pla.quotation.domain.event.QuotationGeneratedEvent;
 import com.pla.quotation.domain.model.IQuotation;
 import com.pla.quotation.domain.model.QuotationStatus;
 import com.pla.sharedkernel.identifier.QuotationId;
@@ -76,6 +74,7 @@ public class GroupLifeQuotation extends AbstractAggregateRoot<QuotationId> imple
         checkArgument(isNotEmpty(quotationCreator));
         checkArgument(quotationId != null);
         checkArgument(QuotationStatus.DRAFT.equals(quotationStatus));
+        this.quotationNumber = quotationNumber;
         this.quotationCreator = quotationCreator;
         this.quotationId = quotationId;
         this.versionNumber = versionNumber;
@@ -135,13 +134,13 @@ public class GroupLifeQuotation extends AbstractAggregateRoot<QuotationId> imple
     public void generateQuotation(LocalDate generatedOn) {
         this.quotationStatus = QuotationStatus.GENERATED;
         this.generatedOn = generatedOn;
-        if (proposer != null && proposer.getContactDetail() != null) {
+        /*if (proposer != null && proposer.getContactDetail() != null) {
             ProposerContactDetail proposerContactDetail = proposer.getContactDetail();
             registerEvent(new ProposerAddedEvent(proposer.getProposerName(), proposer.getProposerCode(),
                     proposerContactDetail.getAddressLine1(), proposerContactDetail.getAddressLine2(), proposerContactDetail.getPostalCode(),
                     proposerContactDetail.getProvince(), proposerContactDetail.getTown(), proposerContactDetail.getEmailAddress()));
             registerEvent(new QuotationGeneratedEvent(quotationId));
-        }
+        }*/
     }
 
     @Override

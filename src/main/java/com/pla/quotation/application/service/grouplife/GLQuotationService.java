@@ -165,6 +165,9 @@ public class GLQuotationService {
     public PremiumDetailDto getPremiumDetail(QuotationId quotationId) {
         Map quotation = glQuotationFinder.getQuotationById(quotationId.getQuotationId());
         PremiumDetail premiumDetail = (PremiumDetail) quotation.get("premiumDetail");
+        if (premiumDetail == null) {
+            return new PremiumDetailDto();
+        }
         PremiumDetailDto premiumDetailDto = new PremiumDetailDto(premiumDetail.getAddOnBenefit(), premiumDetail.getProfitAndSolvency(), premiumDetail.getDiscount(), premiumDetail.getPolicyTermValue());
         PremiumDetail.PremiumInstallment premiumInstallment = premiumDetail.getPremiumInstallment();
         if (premiumInstallment != null) {
@@ -208,10 +211,10 @@ public class GLQuotationService {
             String quotationId = map.get("_id").toString();
             String quotationStatus = map.get("quotationStatus") != null ? (String) map.get("quotationStatus") : "";
             String quotationNumber = map.get("quotationNumber") != null ? (String) map.get("quotationNumber") : "";
-            Map parentQuotationIdMap = map.get("parentQuotationId") != null ? (Map) map.get("parentQuotationId") : null;
+            ObjectId parentQuotationIdMap = map.get("parentQuotationId") != null ? (ObjectId) map.get("parentQuotationId") : null;
             Proposer proposerMap = map.get("proposer") != null ? (Proposer) map.get("proposer") : null;
             String proposerName = proposerMap != null ? proposerMap.getProposerName() : "";
-            String parentQuotationId = parentQuotationIdMap != null ? parentQuotationIdMap.get("parentQuotationId") != null ? (String) parentQuotationIdMap.get("parentQuotationId") : "" : "";
+            String parentQuotationId = parentQuotationIdMap != null ? parentQuotationIdMap.toString() : "";
             GlQuotationDto glQuotationDto = new GlQuotationDto(new QuotationId(quotationId), (Integer) map.get("versionNumber"), null, null, null, new QuotationId(parentQuotationId), quotationStatus, quotationNumber, proposerName, null);
             return glQuotationDto;
         }
