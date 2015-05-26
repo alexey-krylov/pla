@@ -62,6 +62,12 @@ public class GroupLifeQuotationController {
         return Result.success("Quotation number ", (String) quotationMap.get("quotationNumber"));
     }
 
+    @RequestMapping(value = "/isinsureddetailavailable/{quotationId}", method = RequestMethod.GET)
+    @ResponseBody
+    public boolean isInsuredDetailAvailable(@PathVariable("quotationId") String quotationId) {
+        return glQuotationService.isInsuredDataUpdated(quotationId);
+    }
+
     @RequestMapping(value = "/getversionnumber/{quotationId}", method = RequestMethod.GET)
     @ResponseBody
     public Result getVersionNumber(@PathVariable("quotationId") String quotationId) {
@@ -83,7 +89,7 @@ public class GroupLifeQuotationController {
         createGLQuotationCommand.setAgentId(agentId);
         createGLQuotationCommand.setBranchName((String) agentDetail.get("branchName"));
         createGLQuotationCommand.setTeamName((String) agentDetail.get("teamName"));
-        createGLQuotationCommand.setAgentName((String) agentDetail.get("firstName") + " " + (String) agentDetail.get("lastName"));
+        createGLQuotationCommand.setAgentName(agentDetail.get("firstName") + " " + agentDetail.get("lastName"));
         return Result.success("Agent found", createGLQuotationCommand);
     }
 

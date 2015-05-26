@@ -88,7 +88,7 @@ public class GLQuotationService {
         List<PlanId> planIds = getAgentAuthorizedPlans(agentDetailDto.getAgentId());
         Map quotation = glQuotationFinder.getQuotationById(quotationId);
         List<Insured> insureds = (List<Insured>) quotation.get("insureds");
-        List<InsuredDto> insuredDtoList = isNotEmpty(insureds)? insureds.stream().map(new Function<Insured, InsuredDto>() {
+        List<InsuredDto> insuredDtoList = isNotEmpty(insureds) ? insureds.stream().map(new Function<Insured, InsuredDto>() {
             @Override
             public InsuredDto apply(Insured insured) {
                 InsuredDto insuredDto = new InsuredDto();
@@ -151,9 +151,15 @@ public class GLQuotationService {
                 insuredDto = insuredDto.addInsuredDependent(insuredDependentDtoList);
                 return insuredDto;
             }
-        }).collect(Collectors.toList()):Lists.newArrayList();
+        }).collect(Collectors.toList()) : Lists.newArrayList();
         HSSFWorkbook hssfWorkbook = glInsuredExcelGenerator.generateInsuredExcel(insuredDtoList, planIds);
         return hssfWorkbook;
+    }
+
+    public boolean isInsuredDataUpdated(String quotationId) {
+        Map quotation = glQuotationFinder.getQuotationById(quotationId);
+        List<Insured> insureds = (List<Insured>) quotation.get("insureds");
+        return isNotEmpty(insureds);
     }
 
     public PremiumDetailDto getPremiumDetail(QuotationId quotationId) {
@@ -179,7 +185,7 @@ public class GLQuotationService {
         agentDetailDto.setAgentId(agentId);
         agentDetailDto.setBranchName((String) agentDetail.get("branchName"));
         agentDetailDto.setTeamName((String) agentDetail.get("teamName"));
-        agentDetailDto.setAgentName((String) agentDetail.get("firstName") + " " + (String) agentDetail.get("lastName"));
+        agentDetailDto.setAgentName(agentDetail.get("firstName") + " " + agentDetail.get("lastName"));
         return agentDetailDto;
     }
 
@@ -199,7 +205,7 @@ public class GLQuotationService {
 
         @Override
         public GlQuotationDto apply(Map map) {
-            String quotationId = ((ObjectId) map.get("_id")).toString();
+            String quotationId = map.get("_id").toString();
             String quotationStatus = map.get("quotationStatus") != null ? (String) map.get("quotationStatus") : "";
             String quotationNumber = map.get("quotationNumber") != null ? (String) map.get("quotationNumber") : "";
             Map parentQuotationIdMap = map.get("parentQuotationId") != null ? (Map) map.get("parentQuotationId") : null;
