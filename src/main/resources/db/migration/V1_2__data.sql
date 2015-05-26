@@ -537,10 +537,9 @@ insert into `channel_type` (`CHANNEL_CODE`, `CHANNEL_DESCRIPTION`) values('BROKE
 insert into `channel_type` (`CHANNEL_CODE`, `CHANNEL_DESCRIPTION`) values('DIRECT','Direct');
 insert into `channel_type` (`CHANNEL_CODE`, `CHANNEL_DESCRIPTION`) values('PERSONAL','Personel Selling');
 
-insert into `region` (`region_code`, `region_name`, `regional_manager`) values('EAST','East',NULL);
 insert into `region` (`region_code`, `region_name`, `regional_manager`) values('NORTH','North',NULL);
 insert into `region` (`region_code`, `region_name`, `regional_manager`) values('SOUTH','South',NULL);
-insert into `region` (`region_code`, `region_name`, `regional_manager`) values('WEST','West',NULL);
+
 
 insert into `branch` (`branch_code`, `current_branch_bde`, `current_branch_manager`, `branch_name`) values('Chingola',NULL,NULL,'Chingola');
 insert into `branch` (`branch_code`, `current_branch_bde`, `current_branch_manager`, `branch_name`) values('Chipata',NULL,NULL,'Chipata');
