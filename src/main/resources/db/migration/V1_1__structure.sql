@@ -872,6 +872,45 @@ DROP TABLE IF EXISTS `proposer`;
     PRIMARY KEY (`proposer_id`)
   ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+DROP TABLE IF EXISTS `plan_detail`;
+  CREATE TABLE `plan_detail` (
+    `plan_detail_id` varchar(255) NOT NULL,
+    `plan_id` varchar(255) DEFAULT NULL,
+    `policy_term` int(11) DEFAULT NULL,
+    `premium_payment_term` int(11) DEFAULT NULL,
+    `sum_assured` decimal(19,2) DEFAULT NULL,
+    PRIMARY KEY (`plan_detail_id`)
+  ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+DROP TABLE IF EXISTS `rider_detail`;
+  CREATE TABLE `rider_detail` (
+    `rider_detail_id` varchar(255) NOT NULL,
+    `cover_term` int(11) DEFAULT NULL,
+    `coverage_id` varchar(255) DEFAULT NULL,
+    `sum_assured` decimal(19,2) DEFAULT NULL,
+    `waiver_of_premium` int(11) DEFAULT NULL,
+    PRIMARY KEY (`rider_detail_id`)
+  ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+DROP TABLE IF EXISTS `palndetail_rider`;
+  CREATE TABLE `palndetail_rider` (
+    `plan_detail_id` varchar(255) NOT NULL,
+    `rider_detail_id` varchar(255) NOT NULL,
+    PRIMARY KEY (`plan_detail_id`,`rider_detail_id`),
+    UNIQUE KEY `UK_RAIDER_DETAIL` (`rider_detail_id`),
+    CONSTRAINT `FK_PLAN_DETAIL_PLAN_ID` FOREIGN KEY (`plan_detail_id`) REFERENCES `plan_detail` (`plan_detail_id`),
+    CONSTRAINT `FK_RIDER_RIDER_ID` FOREIGN KEY (`rider_detail_id`) REFERENCES `rider_detail` (`rider_detail_id`)
+  ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+DROP TABLE IF EXISTS `quotation_plandetail`;
+  CREATE TABLE `quotation_plandetail` (
+    `plan_detail_id` varchar(255) DEFAULT NULL,
+    `quotation_id` varchar(255) NOT NULL,
+    PRIMARY KEY (`quotation_id`),
+    KEY `FK_QUOTATION_PLANDETAIL_ID` (`plan_detail_id`),
+    CONSTRAINT `FK_QUOTATION_QUOTATION_PLAN_ID` FOREIGN KEY (`quotation_id`) REFERENCES `individual_life_quotation` (`quotation_id`),
+    CONSTRAINT `FK_PLAN_DETAIL_QUOTATION_ID` FOREIGN KEY (`plan_detail_id`) REFERENCES `plan_detail` (`plan_detail_id`)
+  ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
