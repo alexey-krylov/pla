@@ -1,6 +1,9 @@
-angular.module('createQuotation',['common','ngRoute','mgcrea.ngStrap.select','mgcrea.ngStrap.alert','mgcrea.ngStrap.popover','directives','angularFileUpload','mgcrea.ngStrap.dropdown','ngSanitize','commonServices'])
-    .controller('quotationCtrl',['$scope','$http','$timeout','$upload','provinces','getProvinceAndCityDetail','globalConstants','agentDetails','stepsSaved','proposerDetails','quotationNumber','getQueryParameter','$window',
-        function($scope,$http,$timeout,$upload,provinces,getProvinceAndCityDetail,globalConstants,agentDetails,stepsSaved,proposerDetails,quotationNumber,getQueryParameter,$window){
+angular.module('createQuotation',['common','ngRoute','mgcrea.ngStrap.select','mgcrea.ngStrap.alert','mgcrea.ngStrap.popover','directives','angularFileUpload',
+    'mgcrea.ngStrap.dropdown','ngSanitize','commonServices'])
+    .controller('quotationCtrl',['$scope','$http','$timeout','$upload','provinces','getProvinceAndCityDetail','globalConstants','agentDetails','stepsSaved','proposerDetails',
+        'quotationNumber','getQueryParameter','$window','checkIfInsuredUploaded','premiumData',
+        function($scope,$http,$timeout,$upload,provinces,getProvinceAndCityDetail,globalConstants,agentDetails,stepsSaved,proposerDetails,quotationNumber,getQueryParameter,
+                 $window,checkIfInsuredUploaded,premiumData){
             var mode = getQueryParameter("mode");
             $scope.qId=null;
             if(mode=='view'){
@@ -9,6 +12,9 @@ angular.module('createQuotation',['common','ngRoute','mgcrea.ngStrap.select','mg
             }else if(mode=='edit'){
                 $scope.isEditMode = true;
             }
+
+
+            $scope.premiumData=premiumData;
 
             $scope.showDownload=true;
             /*This scope holds the list of installments from which user can select one */
@@ -23,8 +29,8 @@ angular.module('createQuotation',['common','ngRoute','mgcrea.ngStrap.select','mg
             $scope.selectedItem = 1;
 
             /*Holds the indicator for steps in which save button is clicked*/
-            $scope.setpsSaved =stepsSaved;
-
+            $scope.stepsSaved =stepsSaved;
+            $scope.stepsSaved["3"]=checkIfInsuredUploaded;
             /*Inter id used for programmatic purpose*/
             $scope.quotationId = getQueryParameter('quotationId') || null;
 
@@ -142,7 +148,7 @@ angular.module('createQuotation',['common','ngRoute','mgcrea.ngStrap.select','mg
             };
 
             $scope.isSaveDisabled = function(formName){
-                return formName.$invalid || ($scope.setpsSaved[$scope.selectedItem] && !$scope.isEditMode)
+                return formName.$invalid || ($scope.stepsSaved[$scope.selectedItem] && !$scope.isEditMode)
             };
 
             $scope.searchAgent = function(){
@@ -218,7 +224,7 @@ angular.module('createQuotation',['common','ngRoute','mgcrea.ngStrap.select','mg
             };
 
             var saveStep = function(){
-                $scope.setpsSaved[$scope.selectedItem]=true;
+                $scope.stepsSaved[$scope.selectedItem]=true;
             };
 
             $scope.saveProposerDetails =  function(){
@@ -241,10 +247,10 @@ angular.module('createQuotation',['common','ngRoute','mgcrea.ngStrap.select','mg
                     file: $scope.fileSaved
                 }).success(function (data, status, headers, config) {
                     if (data.status == "200") {
-                        $http.get("/pla/quotation/getpremiumdetail/"+ $scope.quotationId)
+                        $http.get("/pla/quotation/grouplife/getpremiumdetail/"+ $scope.quotationId)
                             .success(function(data){
                                 console.log(data);
-
+                                $scope.premiumData=data;
                             })
                         saveStep();
                         $scope.showDownload=true;
@@ -316,6 +322,19 @@ angular.module('createQuotation',['common','ngRoute','mgcrea.ngStrap.select','mg
                         return {};
                     }
                 }],
+                checkIfInsuredUploaded:['$q','$http',function($q,$http){
+                    if(queryParam && !_.isEmpty(queryParam) ){
+                        var deferred = $q.defer();
+                        $http.get('/pla/quotation/grouplife/isinsureddetailavailable/'+queryParam).success(function (response, status, headers, config) {
+                            deferred.resolve(response)
+                        }).error(function (response, status, headers, config) {
+                            deferred.reject();
+                        });
+                        return deferred.promise;
+                    }else{
+                        return false;
+                    }
+                }],
                 quotationNumber:['$q','$http',function($q,$http){
                     if(queryParam && !_.isEmpty(queryParam) ){
                         var deferred = $q.defer();
@@ -329,6 +348,19 @@ angular.module('createQuotation',['common','ngRoute','mgcrea.ngStrap.select','mg
                         return deferred.promise;
                     }else{
                         return null;
+                    }
+                }],
+                premiumData:['$q','$http',function($q,$http){
+                    if(queryParam && !_.isEmpty(queryParam) ){
+                        var deferred = $q.defer();
+                        $http.get('/pla/quotation/grouplife/getpremiumdetail/'+queryParam).success(function (response, status, headers, config) {
+                            deferred.resolve(response)
+                        }).error(function (response, status, headers, config) {
+                            deferred.reject();
+                        });
+                        return deferred.promise;
+                    }else{
+                        return false;
                     }
                 }],
                 stepsSaved:function(){
