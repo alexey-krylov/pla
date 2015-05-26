@@ -55,4 +55,14 @@ public class ILQuotationCommandHandler {
         return individualLifeQuotation.getIdentifier().getQuotationId();
     }
 
+    @CommandHandler
+    public String updateWithPlan(UpdateILQuotationWithPlanCommand updateILQuotationWithPlanCommand) {
+        JpaRepository<IndividualLifeQuotation, QuotationId> individualLifeQuotationJpaRepository = jpaRepositoryFactory.getCrudRepository(IndividualLifeQuotation.class);
+        IndividualLifeQuotation individualLifeQuotation = individualLifeQuotationJpaRepository.findOne((new QuotationId(updateILQuotationWithPlanCommand.getQuotationId())));
+        individualLifeQuotation = individualLifeQuotationService.updateWithPlan(individualLifeQuotation, updateILQuotationWithPlanCommand.getPlanDetailDto(), updateILQuotationWithPlanCommand.getUserDetails());
+        individualLifeQuotationJpaRepository.save(individualLifeQuotation);
+        return individualLifeQuotation.getIdentifier().getQuotationId();
+    }
+
+
 }

@@ -66,6 +66,10 @@ public class IndividualLifeQuotation extends AbstractAggregateRoot<QuotationId> 
     @Column( nullable = false, columnDefinition = "BOOLEAN DEFAULT false" )
     private Boolean isAssuredTheProposer;
 
+    @OneToOne(targetEntity = PlanDetail.class, fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinTable(name = "quotation_plandetail", joinColumns = @JoinColumn(name = "QUOTATION_ID"), inverseJoinColumns = @JoinColumn(name = "PLAN_DETAIL_ID"))
+    private PlanDetail planDetail;
+
 
     private IndividualLifeQuotation(String quotationCreator, String quotationNumber, QuotationId quotationId, AgentId agentId, ProposedAssured proposedAssured, PlanId planId,  ILQuotationStatus ilQuotationStatus, int versionNumber) {
         checkArgument(isNotEmpty(quotationCreator));
@@ -136,6 +140,12 @@ public class IndividualLifeQuotation extends AbstractAggregateRoot<QuotationId> 
                 this.proposer.setProposerId(proposerId);
 
         }
+        return this;
+    }
+
+    public IndividualLifeQuotation updateWithPlan(PlanDetail planDetail) {
+        checkInvariant();
+        this.planDetail = planDetail;
         return this;
     }
 

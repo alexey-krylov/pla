@@ -1,7 +1,7 @@
 package com.pla.individuallife.application.command.quotation;
 
 import com.pla.core.domain.model.agent.AgentId;
-import com.pla.individuallife.query.ProposerDto;
+import com.pla.individuallife.presentation.dto.ProposerDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;

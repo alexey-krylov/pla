@@ -32,4 +32,9 @@ public class ILQuotationProcessor {
     public IndividualLifeQuotation updateWithAssured(IndividualLifeQuotation individualLifeQuotation, ProposedAssured proposedAssured, Boolean isAssuredTheProposer, String proposerId) {
         return individualLifeQuotation.updateWithAssured(proposedAssured, isAssuredTheProposer, proposerId);
     }
+
+
+    public IndividualLifeQuotation updateWithPlan(IndividualLifeQuotation individualLifeQuotation, PlanDetail planDetail) {
+        return individualLifeQuotation.updateWithPlan(planDetail);
+    }
 }

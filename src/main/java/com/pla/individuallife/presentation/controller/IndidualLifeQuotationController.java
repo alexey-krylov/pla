@@ -1,11 +1,14 @@
 package com.pla.individuallife.presentation.controller;
 
-import com.pla.individuallife.application.command.quotation.*;
+import com.pla.individuallife.application.command.quotation.CreateILQuotationCommand;
+import com.pla.individuallife.application.command.quotation.UpdateILQuotationWithAssuredCommand;
+import com.pla.individuallife.application.command.quotation.UpdateILQuotationWithPlanCommand;
+import com.pla.individuallife.application.command.quotation.UpdateILQuotationWithProposerCommand;
 import com.pla.individuallife.application.service.quotation.ILQuotationService;
+import com.pla.individuallife.presentation.dto.ProposedAssuredDto;
+import com.pla.individuallife.presentation.dto.ProposerDto;
 import com.pla.individuallife.query.ILQuotationFinder;
 import com.pla.individuallife.query.PremiumDetailDto;
-import com.pla.individuallife.query.ProposedAssuredDto;
-import com.pla.individuallife.query.ProposerDto;
 import com.pla.sharedkernel.identifier.QuotationId;
 import com.wordnik.swagger.annotations.ApiOperation;
 import org.axonframework.commandhandling.gateway.CommandGateway;
@@ -17,10 +20,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.util.Map;
 
-import static com.google.common.base.Preconditions.checkArgument;
 import static org.nthdimenzion.presentation.AppUtils.getLoggedInUSerDetail;
 
 /**
@@ -106,6 +107,21 @@ public class IndidualLifeQuotationController {
             updateILQuotationWithAssuredCommand.setUserDetails(getLoggedInUSerDetail(request));
             String quotationId = commandGateway.sendAndWait(updateILQuotationWithAssuredCommand);
             return Result.success("Assured detail updated successfully", quotationId);
+        } catch (Exception e) {
+            return Result.failure();
+        }
+    }
+
+    @RequestMapping(value = "/updatewithplandetail", method = RequestMethod.POST)
+    @ResponseBody
+    public Result updateQuotationWithPlanDetail(@RequestBody UpdateILQuotationWithPlanCommand updateILQuotationWithPlanCommand, BindingResult bindingResult, HttpServletRequest request) {
+        if (bindingResult.hasErrors()) {
+            return Result.failure("Update quotation Plan details data is not valid", bindingResult.getAllErrors());
+        }
+        try {
+            updateILQuotationWithPlanCommand.setUserDetails(getLoggedInUSerDetail(request));
+            String quotationId = commandGateway.sendAndWait(updateILQuotationWithPlanCommand);
+            return Result.success("Plan details updated successfully", quotationId);
         } catch (Exception e) {
             return Result.failure();
         }

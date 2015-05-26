@@ -1,4 +1,4 @@
-package com.pla.individuallife.query;
+package com.pla.individuallife.presentation.dto;
 
 import com.pla.individuallife.domain.model.quotation.ProposedAssured;
 import com.pla.sharedkernel.domain.model.Gender;

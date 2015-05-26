@@ -2,8 +2,9 @@ package com.pla.individuallife.domain.service;
 
 import com.pla.core.domain.model.agent.AgentId;
 import com.pla.individuallife.domain.model.quotation.*;
-import com.pla.individuallife.query.ProposedAssuredDto;
-import com.pla.individuallife.query.ProposerDto;
+import com.pla.individuallife.presentation.dto.PlanDetailDto;
+import com.pla.individuallife.presentation.dto.ProposedAssuredDto;
+import com.pla.individuallife.presentation.dto.ProposerDto;
 import com.pla.sharedkernel.identifier.PlanId;
 import com.pla.sharedkernel.identifier.QuotationId;
 import org.nthdimenzion.ddd.domain.annotations.DomainService;
@@ -56,6 +57,17 @@ public class IndividualLifeQuotationService {
         ProposedAssuredBuilder proposedAssuredBuilder = ProposedAssured.getAssuredBuilder(proposedAssuredDto.getAssuredId(), proposedAssuredDto.getAssuredTitle(), proposedAssuredDto.getAssuredFName(), proposedAssuredDto.getAssuredSurname(), proposedAssuredDto.getAssuredNRC(), proposedAssuredDto.getDateOfBirth(), proposedAssuredDto.getAgeNextBirthDay(), proposedAssuredDto.getGender(), proposedAssuredDto.getMobileNumber(), proposedAssuredDto.getEmailId(), proposedAssuredDto.getOccupation());
         if (isAssuredTheProposer && individualLifeQuotation.getProposer() == null ) { proposerId = idGenerator.nextId(); }
         return IlQuotationProcessor.updateWithAssured(individualLifeQuotation, proposedAssuredBuilder.build(), isAssuredTheProposer, proposerId);
+    }
+
+    public IndividualLifeQuotation updateWithPlan(IndividualLifeQuotation individualLifeQuotation, PlanDetailDto planDetailDto, UserDetails userDetails) {
+        ILQuotationProcessor IlQuotationProcessor = ilQuotationRoleAdapter.userToQuotationProcessor(userDetails);
+        if(planDetailDto.getPlanDetailId() == null)  planDetailDto.setPlanDetailId( idGenerator.nextId());
+        if(planDetailDto.getRiderDetails() != null) {
+            planDetailDto.getRiderDetails().stream().filter(riderdetail -> riderdetail.getRiderDetailId() == null).forEach(riderdetail -> riderdetail.setRiderDetailId(idGenerator.nextId()));
+        }
+        individualLifeQuotation = checkQuotationNeedForVersioningAndGetQuotation(IlQuotationProcessor, individualLifeQuotation);
+        PlanDetailBuilder planDetailBuilder = PlanDetail.getPlanDetailBuilder(planDetailDto.getPlanDetailId(), planDetailDto.getPlanId(), planDetailDto.getPolicyTerm(), planDetailDto.getPremiumPaymentTerm(), planDetailDto.getSumAssured(), planDetailDto.getRiderDetails());
+        return IlQuotationProcessor.updateWithPlan(individualLifeQuotation, planDetailBuilder.build());
     }
 
     private IndividualLifeQuotation checkQuotationNeedForVersioningAndGetQuotation(ILQuotationProcessor ILQuotationProcessor, IndividualLifeQuotation individualLifeQuotation) {

@@ -2,9 +2,11 @@ package com.pla.individuallife.application.service.quotation;
 
 import com.pla.individuallife.domain.model.quotation.ProposedAssured;
 import com.pla.individuallife.domain.model.quotation.Proposer;
-import com.pla.individuallife.query.*;
+import com.pla.individuallife.presentation.dto.ProposedAssuredDto;
+import com.pla.individuallife.presentation.dto.ProposerDto;
 import com.pla.individuallife.query.ILQuotationDto;
 import com.pla.individuallife.query.ILQuotationFinder;
+import com.pla.individuallife.query.PremiumDetailDto;
 import com.pla.sharedkernel.identifier.QuotationId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
