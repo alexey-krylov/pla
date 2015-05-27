@@ -1,11 +1,13 @@
 package com.pla.grouplife.quotation.application.service;
 
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import com.pla.core.domain.model.agent.AgentId;
 import com.pla.grouplife.quotation.application.command.SearchGlQuotationDto;
 import com.pla.grouplife.quotation.domain.model.*;
 import com.pla.grouplife.quotation.presentation.dto.GLQuotationDetailDto;
+import com.pla.grouplife.quotation.presentation.dto.GLQuotationMailDto;
 import com.pla.grouplife.quotation.presentation.dto.PlanDetailDto;
 import com.pla.grouplife.quotation.query.*;
 import com.pla.grouplife.quotation.repository.GlQuotationRepository;
@@ -16,11 +18,13 @@ import com.pla.sharedkernel.identifier.QuotationId;
 import com.pla.sharedkernel.util.PDFGeneratorUtils;
 import net.sf.jasperreports.engine.JRException;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.velocity.app.VelocityEngine;
 import org.bson.types.ObjectId;
 import org.joda.time.LocalDate;
 import org.nthdimenzion.presentation.AppUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.ui.velocity.VelocityEngineUtils;
 
 import java.io.IOException;
 import java.math.BigDecimal;
@@ -47,13 +51,16 @@ public class GLQuotationService {
 
     private GlQuotationRepository glQuotationRepository;
 
+    private VelocityEngine velocityEngine;
+
     @Autowired
-    public GLQuotationService(GLQuotationFinder glQuotationFinder, IPlanAdapter planAdapter, GLInsuredExcelGenerator glInsuredExcelGenerator, GLInsuredExcelParser glInsuredExcelParser, GlQuotationRepository glQuotationRepository) {
+    public GLQuotationService(GLQuotationFinder glQuotationFinder, IPlanAdapter planAdapter, GLInsuredExcelGenerator glInsuredExcelGenerator, GLInsuredExcelParser glInsuredExcelParser, GlQuotationRepository glQuotationRepository, VelocityEngine velocityEngine) {
         this.glQuotationFinder = glQuotationFinder;
         this.planAdapter = planAdapter;
         this.glInsuredExcelGenerator = glInsuredExcelGenerator;
         this.glInsuredExcelParser = glInsuredExcelParser;
         this.glQuotationRepository = glQuotationRepository;
+        this.velocityEngine = velocityEngine;
     }
 
     public byte[] getPlanReadyReckoner(String quotationId) throws IOException, JRException {
@@ -68,6 +75,14 @@ public class GLQuotationService {
         GLQuotationDetailDto glQuotationDetailDto = getGlQuotationDetailForPDF(quotationId);
         byte[] pdfData = PDFGeneratorUtils.createPDFReportByList(Arrays.asList(glQuotationDetailDto), "jasperpdf/template/grouplife/glQuotation.jrxml");
         return pdfData;
+    }
+
+    public GLQuotationMailDto getPreScriptedEmail(String quotationId) {
+        GroupLifeQuotation groupLifeQuotation = glQuotationRepository.findOne(new QuotationId(quotationId));
+        String subject = "PLA Insurance - Group Life - Quotation ID : " + groupLifeQuotation.getQuotationNumber();
+        String mailAddress = groupLifeQuotation.getProposer().getContactDetail().getContactPersonDetail().getContactPersonEmail();
+        String emailBody = VelocityEngineUtils.mergeTemplateIntoString(velocityEngine, "emailtemplate/grouplife/quotation/grouplifeQuotationTemplate.vm", Maps.newHashMap());
+        return new GLQuotationMailDto(subject, emailBody, new String[]{mailAddress});
     }
 
     private GLQuotationDetailDto getGlQuotationDetailForPDF(String quotationId) {

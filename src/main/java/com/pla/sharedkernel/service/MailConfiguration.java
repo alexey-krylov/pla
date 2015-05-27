@@ -24,7 +24,7 @@ public class MailConfiguration {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        javaMailSender.setUsername(properties.getProperty("mail.user"));
+        javaMailSender.setUsername(properties.getProperty("mail.username"));
         javaMailSender.setPassword(properties.getProperty("mail.password"));
         javaMailSender.setJavaMailProperties(properties);
         return javaMailSender;

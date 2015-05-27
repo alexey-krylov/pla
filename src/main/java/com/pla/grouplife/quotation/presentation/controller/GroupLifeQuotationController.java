@@ -2,8 +2,11 @@ package com.pla.grouplife.quotation.presentation.controller;
 
 import com.pla.grouplife.quotation.application.command.*;
 import com.pla.grouplife.quotation.application.service.GLQuotationService;
+import com.pla.grouplife.quotation.presentation.dto.GLQuotationMailDto;
 import com.pla.grouplife.quotation.query.*;
 import com.pla.sharedkernel.identifier.QuotationId;
+import com.pla.sharedkernel.service.EmailAttachment;
+import com.pla.sharedkernel.service.MailService;
 import com.wordnik.swagger.annotations.ApiOperation;
 import net.sf.jasperreports.engine.JRException;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
@@ -21,6 +24,7 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -40,11 +44,14 @@ public class GroupLifeQuotationController {
 
     private GLQuotationFinder glQuotationFinder;
 
+    private MailService mailService;
+
     @Autowired
-    public GroupLifeQuotationController(CommandGateway commandGateway, GLQuotationService glQuotationService, GLQuotationFinder glQuotationFinder) {
+    public GroupLifeQuotationController(CommandGateway commandGateway, GLQuotationService glQuotationService, GLQuotationFinder glQuotationFinder, MailService mailService) {
         this.commandGateway = commandGateway;
         this.glQuotationService = glQuotationService;
         this.glQuotationFinder = glQuotationFinder;
+        this.mailService = mailService;
     }
 
     @RequestMapping(value = "/creategrouplifequotation", method = RequestMethod.GET)
@@ -172,6 +179,40 @@ public class GroupLifeQuotationController {
         outputStream.flush();
         outputStream.close();
     }
+
+    @RequestMapping(value = "/openemailquotation/{quotationId}", method = RequestMethod.GET)
+    public ModelAndView openEmailPage(@PathVariable("quotationId") String quotationId) {
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("pla/quotation/groupLife/emailQuotation");
+        modelAndView.addObject("mailContent", glQuotationService.getPreScriptedEmail(quotationId));
+        return modelAndView;
+    }
+
+    @RequestMapping(value = "/emailQuotation", method = RequestMethod.POST)
+    @ResponseBody
+    public Result emailQuotation(@RequestBody GLQuotationMailDto mailDto, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            return Result.failure("Email cannot be sent due to wrong data");
+        }
+        try {
+            byte[] quotationData = glQuotationService.getQuotationPDF(mailDto.getQuotationId());
+            String fileName = "Quotation No: " + mailDto.getQuotationNumber() + ".pdf";
+            File file = new File(fileName);
+            FileOutputStream fileOutputStream = new FileOutputStream(file);
+            fileOutputStream.write(quotationData);
+            fileOutputStream.flush();
+            fileOutputStream.close();
+            EmailAttachment emailAttachment = new EmailAttachment(fileName, "application/pdf", file);
+            mailService.sendMailWithAttachment(mailDto.getSubject(), mailDto.getMailContent(), Arrays.asList(emailAttachment), mailDto.getRecipientMailAddress());
+            file.delete();
+            return Result.success("Email sent successfully");
+
+        } catch (Exception e) {
+            Result.failure("Email cannot be sent for network issue");
+        }
+        return Result.success("Email sent successfully");
+    }
+
 
     @RequestMapping(value = "/printquotation/{quotationId}", method = RequestMethod.GET)
     public void printQuotation(@PathVariable("quotationId") String quotationId, HttpServletResponse response) throws IOException, JRException {

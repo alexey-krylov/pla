@@ -9,6 +9,7 @@ import lombok.Setter;
 import org.joda.time.LocalDate;
 import org.nthdimenzion.presentation.LocalJodaDateDeserializer;
 import org.nthdimenzion.presentation.LocalJodaDateSerializer;
+import org.springframework.format.annotation.DateTimeFormat;
 
 /**
  * Created by Samir on 4/14/2015.
@@ -24,6 +25,7 @@ public class GlQuotationDto {
 
     @JsonSerialize(using = LocalJodaDateSerializer.class)
     @JsonDeserialize(using = LocalJodaDateDeserializer.class)
+    @DateTimeFormat(pattern="dd/MM/yyyy")
     private LocalDate quotationGeneratedOn;
 
     private String agentCode;
