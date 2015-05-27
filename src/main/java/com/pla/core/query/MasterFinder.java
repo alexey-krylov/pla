@@ -39,9 +39,9 @@ public class MasterFinder {
     public static final String FIND_ALL_OCCUPATION_CLASS_QUERY = "SELECT DISTINCT(CODE) FROM occupation_class";
     public static final String FIND_ALL_OCCUPATION_CLASSIFICATION_QUERY = "SELECT DISTINCT(description),code,occupation_id FROM occupation_class";
     public static final String FIND_ALL_DESIGNATION_QUERY = "SELECT * FROM `designation`";
-    private static final String FIND_ALL_PLAN_INDIVIDUAL_LIFE = "select * from plan_coverage_benefit_assoc where" +
+    public static final String FIND_ALL_PLAN_INDIVIDUAL_LIFE_QUERY = "select * from plan_coverage_benefit_assoc where" +
             " line_of_business='Individual Life' group by plan_code";
-    private static final String FIND_ALL_EMPLOYMENT_TYPE_QUERY = "select * from employment_type";
+    public static final String FIND_ALL_EMPLOYMENT_TYPE_QUERY = "select * from employment_type";
     private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
     @Autowired
@@ -96,11 +96,11 @@ public class MasterFinder {
     }
 
     public List<Map<String, Object>> getAllPlanForIndividualLife() {
-        return namedParameterJdbcTemplate.query(FIND_ALL_PLAN_INDIVIDUAL_LIFE, new ColumnMapRowMapper());
+        return namedParameterJdbcTemplate.query(FIND_ALL_PLAN_INDIVIDUAL_LIFE_QUERY, new ColumnMapRowMapper());
     }
 
     public List<Map<String, Object>> getOptionalCoverages(String planId) {
-        return namedParameterJdbcTemplate.query(FIND_ALL_PLAN_INDIVIDUAL_LIFE, new ColumnMapRowMapper());
+        return namedParameterJdbcTemplate.query(FIND_ALL_PLAN_INDIVIDUAL_LIFE_QUERY, new ColumnMapRowMapper());
     }
 
     public List<Map<String, Object>> getAllEmploymentTypes() {

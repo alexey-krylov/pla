@@ -921,6 +921,28 @@ CREATE TABLE `employment_type` (
   UNIQUE KEY (`code`,`description`)
 ) ENGINE=INNODB DEFAULT CHARSET=utf8;
 
+DROP TABLE IF EXISTS `plan_coverage_benefits_assoc`;
+CREATE TABLE `plan_coverage_benefits_assoc` (
+`id` bigint(20) NOT NULL AUTO_INCREMENT,
+`plan_id` varchar(60) NOT NULL,
+`coverage_id` varchar(255) NOT NULL,
+`benefit_id` varchar(255) NOT NULL,
+`optional` tinyint(1) DEFAULT NULL,
+PRIMARY KEY (`id`),
+KEY `FK_PLAN_BENEFIT_ID` (`benefit_id`),
+KEY `FK_PLAN_COVERAGE_ID` (`coverage_id`),
+CONSTRAINT `FK_PLAN_BENEFIT_ID` FOREIGN KEY (`benefit_id`) REFERENCES `benefit` (`benefit_id`),
+CONSTRAINT `FK_PLAN_COVERAGE_ID` FOREIGN KEY (`coverage_id`) REFERENCES `coverage` (`coverage_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8;
+
+ALTER TABLE `plan_coverage_benefits_assoc`
+ADD COLUMN `plan_name` VARCHAR(100) NULL AFTER `plan_id`,
+ADD COLUMN `plan_code` VARCHAR(10) NULL AFTER `plan_name`,
+ADD COLUMN `launch_date` date NOT NULL AFTER `plan_code`,
+ADD COLUMN `withdrawal_date` date AFTER `launch_date`,
+ADD COLUMN `client_type` varchar(60) NOT NULL AFTER `withdrawal_date`,
+ADD COLUMN `line_of_business` varchar(60) NOT NULL AFTER `client_type`,
+ADD COLUMN `funeral_cover` tinyint(1) DEFAULT NULL;
 
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;

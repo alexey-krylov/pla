@@ -17,7 +17,7 @@ public class QuotationRoleAdapter {
 
         boolean hasQuotationProcessorRole = hasQuotationProcessorRole(userDetails.getAuthorities());
         if (!hasQuotationProcessorRole) {
-            throw new AuthorizationServiceException("User does not have Quotation processor(ROLE_QUOTATION_PROCESSOR) authority");
+            throw new AuthorizationServiceException("User does not have Quotation processor(ROLE_GROUP_LIFE_QUOTATION_PROCESSOR) authority");
         }
         return new GLQuotationProcessor(userDetails.getUsername());
     }

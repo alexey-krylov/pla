@@ -17,7 +17,7 @@
     <logger name="org.springframework.beans.factory.xml" level="info"/>
     <logger name="org.springframework.core.convert" level="trace"/>
     <logger name="org.axonframework" level="debug"/>
-    <root level="trace">
+    <root level="info">
         <appender-ref ref="console"/>
     </root>
 </configuration>

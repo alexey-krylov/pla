@@ -434,10 +434,13 @@ CREATE TABLE `industry` (
 
 DROP TABLE IF EXISTS `occupation_class`;
 CREATE TABLE `occupation_class` (
- `code` varchar(100) NOT NULL,
-  `description` varchar(255) NOT NULL,
-  PRIMARY KEY (`code`,`description`)
+ `occupation_id` BIGINT(20) NOT NULL AUTO_INCREMENT,
+  `code` VARCHAR(100) NOT NULL,
+  `description` VARCHAR(255) NOT NULL,
+  PRIMARY KEY (`occupation_id`),
+  UNIQUE KEY (`code`,`description`)
 );
+
 
 DROP TABLE IF EXISTS `designation`;
 CREATE TABLE `designation` (
@@ -491,6 +494,34 @@ CREATE VIEW `commission_commission_term_view` AS
      cctf.end_year              AS endYear,
      cctf.commission_term_type  AS commissionTermType
    FROM COMMISSION_COMMISSION_TERM cctf);
+
+DROP TABLE IF EXISTS `employment_type`;
+CREATE TABLE `employment_type` (
+ `employment_id` BIGINT(20) NOT NULL AUTO_INCREMENT,
+  `code` VARCHAR(100) NOT NULL,
+  `description` VARCHAR(255) NOT NULL,
+  PRIMARY KEY (`employment_id`),
+  UNIQUE KEY (`code`,`description`)
+);
+
+DROP TABLE IF EXISTS `plan_coverage_benefit_assoc`;
+CREATE TABLE `plan_coverage_benefit_assoc` (
+`id` bigint(20) NOT NULL AUTO_INCREMENT,
+`plan_id` varchar(60) NOT NULL,
+`coverage_id` varchar(255) NOT NULL,
+`benefit_id` varchar(255) NOT NULL,
+`optional` tinyint(1) DEFAULT NULL,
+`plan_name` VARCHAR(100) NULL,
+`plan_code` VARCHAR(10) NULL,
+`launch_date` date NOT NULL,
+`withdrawal_date` date,
+`client_type` varchar(60) NOT NULL,
+`line_of_business` varchar(60) NOT NULL,
+`funeral_cover` tinyint(1) DEFAULT NULL,
+PRIMARY KEY (`id`),
+CONSTRAINT `FK_PLAN_BENEFIT_ID` FOREIGN KEY (`benefit_id`) REFERENCES `benefit` (`benefit_id`),
+CONSTRAINT `FK_PLAN_COVERAGE_ID` FOREIGN KEY (`coverage_id`) REFERENCES `coverage` (`coverage_id`)
+);
 
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
