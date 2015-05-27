@@ -27,13 +27,13 @@ import static org.nthdimenzion.utils.UtilValidator.isNotEmpty;
  * Created by Admin on 5/11/2015.
  */
 @Service
-public class UnderWritingService {
+public class UnderWriterService {
 
     private UnderWriterTemplateParser underWriterTemplateParser;
     private IPlanAdapter iPlanAdapter;
 
     @Autowired
-    public UnderWritingService(UnderWriterTemplateParser underWriterTemplateParser,IPlanAdapter iPlanAdapter) {
+    public UnderWriterService(UnderWriterTemplateParser underWriterTemplateParser, IPlanAdapter iPlanAdapter) {
         this.underWriterTemplateParser = underWriterTemplateParser;
         this.iPlanAdapter  = iPlanAdapter;
     }
@@ -174,6 +174,19 @@ public class UnderWritingService {
                 influencingFactorMap.put("description", influencingFactor.getDescription());
                 influencingFactorList.add(influencingFactorMap);
             }
+        });
+        return influencingFactorList;
+    }
+
+    public List<Map<String,Object>> getInfluencingFactorRange(List<UnderWriterInfluencingFactor> underWriterInfluencingFactors){
+        List<Map<String,Object>> influencingFactorList = Lists.newArrayList();
+        underWriterInfluencingFactors.forEach(influencingFactorRangeList->{
+           influencingFactorRangeList.getInfluencingFactorRange(Lists.newArrayList()).forEach(influencingFactor->{
+                Map<String ,Object> influencingFactorMap = Maps.newLinkedHashMap();
+                influencingFactorMap.put("name",influencingFactor);
+                influencingFactorMap.put("value",0);
+                influencingFactorList.add(influencingFactorMap);
+            });
         });
         return influencingFactorList;
     }

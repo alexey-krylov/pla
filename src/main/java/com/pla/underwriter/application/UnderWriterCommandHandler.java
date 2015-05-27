@@ -7,7 +7,7 @@ import com.pla.underwriter.domain.model.UnderWriterDocument;
 import com.pla.underwriter.domain.model.UnderWriterRoutingLevel;
 import com.pla.underwriter.repository.UnderWriterDocumentRepository;
 import com.pla.underwriter.repository.UnderWriterRoutingLevelRepository;
-import com.pla.underwriter.service.UnderWritingService;
+import com.pla.underwriter.service.UnderWriterService;
 import org.axonframework.commandhandling.annotation.CommandHandler;
 import org.nthdimenzion.object.utils.IIdGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +25,7 @@ import static org.nthdimenzion.utils.UtilValidator.isNotEmpty;
 @Component
 public class UnderWriterCommandHandler {
 
-    private UnderWritingService underWritingService;
+    private UnderWriterService underWriterService;
 
     private UnderWriterDocumentRepository underWriterDocumentRepository;
 
@@ -34,8 +34,8 @@ public class UnderWriterCommandHandler {
     private IIdGenerator idGenerator;
 
     @Autowired
-     public UnderWriterCommandHandler(UnderWritingService underWritingService,UnderWriterDocumentRepository underWriterDocumentRepository,UnderWriterRoutingLevelRepository underWriterRoutingLevelRepository, IIdGenerator idGenerator) {
-        this.underWritingService = underWritingService;
+     public UnderWriterCommandHandler(UnderWriterService underWriterService,UnderWriterDocumentRepository underWriterDocumentRepository,UnderWriterRoutingLevelRepository underWriterRoutingLevelRepository, IIdGenerator idGenerator) {
+        this.underWriterService = underWriterService;
         this.underWriterDocumentRepository = underWriterDocumentRepository;
         this.underWriterRoutingLevelRepository = underWriterRoutingLevelRepository;
         this.idGenerator = idGenerator;
@@ -56,7 +56,7 @@ public class UnderWriterCommandHandler {
         UnderWriterDocumentId underWriterDocumentId = new UnderWriterDocumentId(idGenerator.nextId());
         String planCode = createUnderWriterDocumentCommand.getPlanCode();
         CoverageId coverageId = new CoverageId(createUnderWriterDocumentCommand.getCoverageId());
-        List<Map<Object,Map<String,Object>>> transformedUnderWriterDocument = underWritingService.transformUnderWriterDocument(createUnderWriterDocumentCommand.getUnderWriterDocumentItems());
+        List<Map<Object,Map<String,Object>>> transformedUnderWriterDocument = underWriterService.transformUnderWriterDocument(createUnderWriterDocumentCommand.getUnderWriterDocumentItems());
         UnderWriterDocument document = isNotEmpty(createUnderWriterDocumentCommand.getCoverageId()) ? UnderWriterDocument.createUnderWriterDocumentWithOptionalCoverage(underWriterDocumentId,planCode,coverageId, createUnderWriterDocumentCommand.getProcessType(), transformedUnderWriterDocument, createUnderWriterDocumentCommand.getUnderWriterInfluencingFactors(), createUnderWriterDocumentCommand.getEffectiveFrom())
                 : UnderWriterDocument.createUnderWriterDocumentWithPlan(underWriterDocumentId,planCode, createUnderWriterDocumentCommand.getProcessType(), transformedUnderWriterDocument, createUnderWriterDocumentCommand.getUnderWriterInfluencingFactors(), createUnderWriterDocumentCommand.getEffectiveFrom());
         underWriterDocumentRepository.save(document);

@@ -5,14 +5,14 @@ import com.pla.publishedlanguage.dto.PlanCoverageDetailDto;
 import com.pla.sharedkernel.identifier.PlanId;
 import com.pla.underwriter.application.CreateUnderWriterDocumentCommand;
 import com.pla.underwriter.application.CreateUnderWriterRoutingLevelCommand;
+import com.pla.underwriter.domain.model.UnderWriterInfluencingFactor;
 import com.pla.underwriter.dto.UnderWritingRouterDto;
 import com.pla.underwriter.exception.UnderWriterTemplateParseException;
 import com.pla.underwriter.finder.UnderWriterFinder;
-import com.pla.underwriter.service.UnderWritingService;
+import com.pla.underwriter.service.UnderWriterService;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.poifs.filesystem.POIFSFileSystem;
 import org.axonframework.commandhandling.gateway.CommandGateway;
-import org.nthdimenzion.presentation.Result;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +21,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
@@ -41,7 +42,7 @@ import static org.nthdimenzion.presentation.AppUtils.getLoggedInUSerDetail;
 @RequestMapping(value = "/underwriter")
 public class UnderWriterSetUpController {
 
-    private UnderWritingService underWritingService;
+    private UnderWriterService underWriterService;
     private CommandGateway commandGateway;
     private UnderWriterFinder underWriterFinder;
     private static final Logger LOGGER = LoggerFactory.getLogger(UnderWriterSetUpController.class);
@@ -49,8 +50,8 @@ public class UnderWriterSetUpController {
     private static final String UNDER_WRITER_TEMPLATE_FILE_NAME_SUFFIX = "-UnderWritingTemplate.xls";
 
     @Autowired
-    public UnderWriterSetUpController(UnderWritingService underWritingService, CommandGateway commandGateway, UnderWriterFinder underWriterFinder){
-        this.underWritingService = underWritingService;
+    public UnderWriterSetUpController(UnderWriterService underWriterService, CommandGateway commandGateway, UnderWriterFinder underWriterFinder){
+        this.underWriterService = underWriterService;
         this.commandGateway = commandGateway;
         this.underWriterFinder = underWriterFinder;
     }
@@ -58,25 +59,26 @@ public class UnderWriterSetUpController {
     @RequestMapping(value = "/getplancoveragedetail",method = RequestMethod.GET)
     @ResponseBody
     public List<PlanCoverageDetailDto> getAllPlanCoverageDetail(){
-        return underWritingService.getPlanCoverageDetail();
+        return underWriterService.getPlanCoverageDetail();
     }
 
-    @RequestMapping(value = "/getoptionalcoverage/{planId}")
+    @RequestMapping(value = "/getoptionalcoverage/{planId}",method = RequestMethod.GET)
     @ResponseBody
     public List<PlanCoverageDetailDto> getOptionalCoverageFor(@PathVariable("planId") PlanId planId){
-        return underWritingService.getAllOptionalCoverageFor(Lists.newArrayList(planId));
+        return underWriterService.getAllOptionalCoverageFor(Lists.newArrayList(planId));
     }
 
-    @RequestMapping(value = "/viewroutinglevel",method = RequestMethod.GET)
-    public String viewRoutingLevelSetup(){
-        return "pla/core/underwriter/routingLevelSetup/viewRoutingLevelSetup";
+    @RequestMapping(value = "/viewdocumentsetup",method = RequestMethod.GET)
+    public String viewDocumentSetup(){
+        return "pla/core/underwriter/documentSetup/viewDocumentSetup";
     }
 
-    @RequestMapping(value = "/opencreateroutinglevel",method = RequestMethod.GET)
-    public ModelAndView openCreatePage( ){
+
+    @RequestMapping(value = "/opencreatedocumentsetup",method = RequestMethod.GET)
+    public ModelAndView openCreatePageForDocument( ) {
         ModelAndView modelAndView = new ModelAndView();
-        modelAndView.addObject("createUnderWriterRoutingLevelCommand",new CreateUnderWriterRoutingLevelCommand());
-        modelAndView.setViewName("pla/core/underwriter/routingLevelSetup/createRoutingLevelSetup");
+        modelAndView.addObject("CreateUnderWriterDocumentCommand", new CreateUnderWriterDocumentCommand());
+        modelAndView.setViewName("pla/core/underwriter/documentSetup/createDocumentSetup");
         return modelAndView;
     }
 
@@ -88,7 +90,7 @@ public class UnderWriterSetUpController {
         }
         try{
             List<String> errorMessageBuilder = Lists.newArrayList();
-            boolean isValid = underWritingService.validateTheUnderWriterDocument(createUnderWriterDocumentCommand.getPlanCode(),createUnderWriterDocumentCommand.getCoverageId(),createUnderWriterDocumentCommand.getUnderWriterDocumentItems(),errorMessageBuilder);
+            boolean isValid = underWriterService.validateTheUnderWriterDocument(createUnderWriterDocumentCommand.getPlanCode(),createUnderWriterDocumentCommand.getCoverageId(),createUnderWriterDocumentCommand.getUnderWriterDocumentItems(),errorMessageBuilder);
             if (!isValid){
                 return new ResponseEntity(errorMessageBuilder, HttpStatus.PRECONDITION_FAILED);
             }
@@ -109,8 +111,8 @@ public class UnderWriterSetUpController {
         }
         try {
             List<String> errorMessageBuilder = Lists.newArrayList();
-            underWritingService.checkValidPlanAndCoverageCode(createUnderWriterDocumentCommand.getPlanCode());
-            boolean isValid = underWritingService.validateTheUnderWriterDocumentData(createUnderWriterDocumentCommand.getPlanCode(),createUnderWriterDocumentCommand.getCoverageId(),createUnderWriterDocumentCommand.getUnderWriterDocumentItems(),errorMessageBuilder);
+            underWriterService.checkValidPlanAndCoverageCode(createUnderWriterDocumentCommand.getPlanCode());
+            boolean isValid = underWriterService.validateTheUnderWriterDocumentData(createUnderWriterDocumentCommand.getPlanCode(),createUnderWriterDocumentCommand.getCoverageId(),createUnderWriterDocumentCommand.getUnderWriterDocumentItems(),errorMessageBuilder);
             if (!isValid){
                 return new ResponseEntity(errorMessageBuilder, HttpStatus.PRECONDITION_FAILED);
             }
@@ -135,7 +137,7 @@ public class UnderWriterSetUpController {
         templateFileName = templateFileName.replaceAll("[\\s]*", "").trim();
         response.setHeader("content-disposition", "attachment; filename=" + templateFileName + "");
         OutputStream outputStream = response.getOutputStream();
-        HSSFWorkbook premiumTemplateWorkbook = underWritingService.generateUnderWriterExcelTemplate(underWritingRouterDto.getUnderWriterInfluencingFactors(),
+        HSSFWorkbook premiumTemplateWorkbook = underWriterService.generateUnderWriterExcelTemplate(underWritingRouterDto.getUnderWriterInfluencingFactors(),
                 underWritingRouterDto.getPlanName());
         premiumTemplateWorkbook.write(outputStream);
         outputStream.flush();
@@ -145,10 +147,12 @@ public class UnderWriterSetUpController {
 
     @RequestMapping(value = "/uploadunderwriterroutingleveltemplate", method = RequestMethod.POST)
     @ResponseBody
-    public Result uploadUnderwriterRoutingLevel(@RequestBody CreateUnderWriterRoutingLevelCommand createUnderWriterRoutingLevelCommand, BindingResult bindingResult, HttpServletRequest request,
-                                                HttpServletResponse response) throws IOException {
+    public ModelAndView uploadUnderwriterRoutingLevel(@RequestBody CreateUnderWriterRoutingLevelCommand createUnderWriterRoutingLevelCommand, BindingResult bindingResult, HttpServletRequest request,
+                                                      HttpServletResponse response) throws IOException {
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("pla/core/underwriter/routingLevelSetup/createRoutingLevelSetup");
         if (bindingResult.hasErrors()) {
-            return Result.failure();
+            return modelAndView;
         }
         MultipartFile file = createUnderWriterRoutingLevelCommand.getFile();
         POIFSFileSystem fs = new POIFSFileSystem(file.getInputStream());
@@ -156,7 +160,11 @@ public class UnderWriterSetUpController {
         try {
             String templateFileName = createUnderWriterRoutingLevelCommand.getPlanName()+ UNDER_WRITER_TEMPLATE_FILE_NAME_SUFFIX;
             templateFileName = templateFileName.replaceAll("[\\s]*", "").trim();
-            boolean isValidTemplate = underWritingService.isValidUnderWriterRoutingLevelTemplate(premiumTemplateWorkbook,createUnderWriterRoutingLevelCommand.getPlanCode(),createUnderWriterRoutingLevelCommand.getCoverageId(), createUnderWriterRoutingLevelCommand.getUnderWriterInfluencingFactors());
+            if (!("application/msexcel".equals(createUnderWriterRoutingLevelCommand.getFile().getContentType()) || "application/vnd.ms-excel".equals(file.getContentType())) && !templateFileName.equals(file.getOriginalFilename())) {
+                bindingResult.addError(new ObjectError("message", "Uploaded file is not valid excel"));
+                return modelAndView;
+            }
+            boolean isValidTemplate = underWriterService.isValidUnderWriterRoutingLevelTemplate(premiumTemplateWorkbook,createUnderWriterRoutingLevelCommand.getPlanCode(),createUnderWriterRoutingLevelCommand.getCoverageId(), createUnderWriterRoutingLevelCommand.getUnderWriterInfluencingFactors());
             if (!isValidTemplate) {
                 response.reset();
                 response.setContentType("application/msexcel");
@@ -169,20 +177,22 @@ public class UnderWriterSetUpController {
             else {
                 UserDetails userDetails = getLoggedInUSerDetail(request);
                 createUnderWriterRoutingLevelCommand.setUserDetails(userDetails);
-                List<Map<Object,Map<String,Object>>>  underWriterRoutingLevelDataFromExcel = underWritingService.parseUnderWriterExcelTemplate(premiumTemplateWorkbook, createUnderWriterRoutingLevelCommand.getUnderWriterInfluencingFactors());
+                List<Map<Object,Map<String,Object>>>  underWriterRoutingLevelDataFromExcel = underWriterService.parseUnderWriterExcelTemplate(premiumTemplateWorkbook, createUnderWriterRoutingLevelCommand.getUnderWriterInfluencingFactors());
                 createUnderWriterRoutingLevelCommand.setUnderWriterDocumentItem(underWriterRoutingLevelDataFromExcel);
                 commandGateway.sendAndWait(createUnderWriterRoutingLevelCommand);
+                modelAndView.setViewName("redirect:viewroutinglevel");
             }
         }
         catch (UnderWriterTemplateParseException e){
-            return Result.failure(e.getMessage());
+            modelAndView.addObject("message", e.getMessage());
         }
         catch (Exception e) {
             e.printStackTrace();
-            return Result.failure("Error in Creating Under Writer Routing Level");
+            modelAndView.addObject("message", e.getMessage());
         }
-        return Result.success("Under Writer Routing Level Created Successfully");
+        return modelAndView;
     }
+
 
     @RequestMapping(value = "/getalldocument",method = RequestMethod.GET)
     @ResponseBody
@@ -199,12 +209,19 @@ public class UnderWriterSetUpController {
     @RequestMapping(value = "/getunderwriterprocess",method = RequestMethod.GET)
     @ResponseBody
     public List<Map<String,String>> getUnderWriterProcessType(){
-        return underWritingService.getUnderWriterProcess();
+        return underWriterService.getUnderWriterProcess();
     }
 
     @RequestMapping(value = "/getunderwriterinfluencingfactor/{processtype}",method = RequestMethod.GET)
     @ResponseBody
     public List<Map<String,String>> getUnderWriterInfluencingFactor(@PathVariable("processtype") String processType){
-        return underWritingService.getUnderWritingInfluencingFactor(processType);
+        return underWriterService.getUnderWritingInfluencingFactor(processType);
     }
+
+    @RequestMapping(value = "/getinfluencingfactorrange/{influencingFactors}",method = RequestMethod.GET)
+    @ResponseBody
+    public List<Map<String,Object>> getUnderWriterInfluencingFactorRange(@PathVariable("influencingFactors") List<UnderWriterInfluencingFactor> underWriterInfluencingFactors){
+        return underWriterService.getInfluencingFactorRange(underWriterInfluencingFactors);
+    }
+
 }

@@ -32,7 +32,8 @@ public class UnderWriterServiceUnitTest {
 
     @Mock
     private IPlanAdapter iPlanAdapter;
-    UnderWritingService underWritingService;
+
+    UnderWriterService underWriterService;
     List<UnderWriterDto> underWriterDocumentItems;
 
     @Before
@@ -51,7 +52,7 @@ public class UnderWriterServiceUnitTest {
         underWriterDto.setDocuments(documents);
         underWriterDocumentItems.add(underWriterDto);
 
-        underWritingService = new UnderWritingService(underWriterTemplateParser,iPlanAdapter);
+        underWriterService = new UnderWriterService(underWriterTemplateParser,iPlanAdapter);
     }
 
     /*
@@ -62,7 +63,7 @@ public class UnderWriterServiceUnitTest {
     * */
     @Test
     public void givenUnderWriterDocumentSetUp_thenItShouldTransformTheUnderWriterDocumentSetUpToRequiredFormat(){
-        List<Map<Object,Map<String,Object>>>  underWriterDocumentMap =  underWritingService.transformUnderWriterDocument(underWriterDocumentItems);
+        List<Map<Object,Map<String,Object>>>  underWriterDocumentMap =  underWriterService.transformUnderWriterDocument(underWriterDocumentItems);
         assertNotNull(underWriterDocumentMap);
     }
 
@@ -87,7 +88,7 @@ public class UnderWriterServiceUnitTest {
         Set<String> documents = Sets.newHashSet("Document One", "Document Two", "Document Three", "Document Four");
         underWriterDto.setDocuments(documents);
         underWriterDocumentItems.add(underWriterDto);
-        boolean isValid = underWritingService.doesAnyRowOverLappingEachOther(underWriterDto, underWriterDocumentItems, true, Lists.newArrayList());
+        boolean isValid = underWriterService.doesAnyRowOverLappingEachOther(underWriterDto, underWriterDocumentItems, true, Lists.newArrayList());
         assertFalse(isValid);
     }
 
@@ -112,7 +113,7 @@ public class UnderWriterServiceUnitTest {
         Set<String> documents = Sets.newHashSet("Document One", "Document Two", "Document Three", "Document Four");
         underWriterDto.setDocuments(documents);
         underWriterDocumentItems.add(underWriterDto);
-        boolean isValid = underWritingService.doesAnyRowOverLappingEachOther(underWriterDto, underWriterDocumentItems, true, Lists.newArrayList());
+        boolean isValid = underWriterService.doesAnyRowOverLappingEachOther(underWriterDto, underWriterDocumentItems, true, Lists.newArrayList());
         assertTrue(isValid);
     }
 
@@ -124,7 +125,7 @@ public class UnderWriterServiceUnitTest {
     @Test
     public void givenInfluencingFactorValue_whenTheValueIsValid_thenItShouldReturnTheInfluencingFactor(){
         Double expectedValue = 1234.0;
-        Double influencingFactorValue =  underWritingService.getInfluencingFactorValue("1234");
+        Double influencingFactorValue =  underWriterService.getInfluencingFactorValue("1234");
         assertThat(expectedValue, is(influencingFactorValue));
     }
 
@@ -136,7 +137,7 @@ public class UnderWriterServiceUnitTest {
     @Test
     public void givenInfluencingFactorValue_whenTheValueIsNotValid_thenItShouldReturnTheInfluencingFactorAsZero(){
         Double expectedValue = 0.0;
-        Double influencingFactorValue =  underWritingService.getInfluencingFactorValue("12ABC");
+        Double influencingFactorValue =  underWriterService.getInfluencingFactorValue("12ABC");
         assertThat(expectedValue, is(influencingFactorValue));
     }
 
@@ -148,7 +149,7 @@ public class UnderWriterServiceUnitTest {
     @Test
     public void givenAPlanCode_whenThePlanCodeIsValid_thenItShouldAllowToCreateTheUnderWriter(){
         when(iPlanAdapter.isValidPlanCode("P001")).thenReturn(true);
-        underWritingService.checkValidPlanAndCoverageCode("P001");
+        underWriterService.checkValidPlanAndCoverageCode("P001");
     }
 
     /*
@@ -159,7 +160,7 @@ public class UnderWriterServiceUnitTest {
     @Test(expected = UnderWriterTemplateParseException.class)
     public void givenAPlanCode_whenThePlanCodeIsNotValid_thenItShouldThrowUnderWriterException(){
         when(iPlanAdapter.isValidPlanCode("P001")).thenReturn(false);
-        underWritingService.checkValidPlanAndCoverageCode("P001");
+        underWriterService.checkValidPlanAndCoverageCode("P001");
     }
 
     @Test
@@ -175,22 +176,27 @@ public class UnderWriterServiceUnitTest {
         processMap.put("description","Claim");
         expectedProcessList.add(processMap);
 
-        List<Map<String,String>> underWriterProcess  = underWritingService.getUnderWriterProcess();
+        List<Map<String,String>> underWriterProcess  = underWriterService.getUnderWriterProcess();
         assertThat(expectedProcessList,is(underWriterProcess));
     }
 
     @Test
     public void givenProcessTypeAsEnrollment_whenProcessTypeIsNotClaim_thenItShouldNotReturnTheClaimAmountInfluencingFactor(){
-        List<Map<String,String>> underWritingInfluencingFactor =  underWritingService.getUnderWritingInfluencingFactor("ENROLLMENT");
+        List<Map<String,String>> underWritingInfluencingFactor =  underWriterService.getUnderWritingInfluencingFactor("ENROLLMENT");
         assertNotNull(underWritingInfluencingFactor);
         assertThat(underWritingInfluencingFactor.size(),is(5));
     }
 
     @Test
     public void givenProcessTypeAsClaim_thenItShouldReturnTheClaimAmountInfluencingFactor(){
-        List<Map<String,String>> underWritingInfluencingFactor =  underWritingService.getUnderWritingInfluencingFactor("CLAIM");
+        List<Map<String,String>> underWritingInfluencingFactor =  underWriterService.getUnderWritingInfluencingFactor("CLAIM");
         assertNotNull(underWritingInfluencingFactor);
         assertThat(underWritingInfluencingFactor.size(),is(6));
+    }
+    @Test
+    public void given_when_then(){
+        List<UnderWriterInfluencingFactor> underWriterInfluencingFactors = Lists.newArrayList(UnderWriterInfluencingFactor.AGE,UnderWriterInfluencingFactor.SUM_ASSURED,UnderWriterInfluencingFactor.BMI,UnderWriterInfluencingFactor.HEIGHT);
+        underWriterService.getInfluencingFactorRange(underWriterInfluencingFactors);
     }
 
 }
