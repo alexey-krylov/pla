@@ -279,6 +279,11 @@
             <artifactId>angular-file-upload</artifactId>
             <version>3.2.4</version>
         </dependency>
+        <dependency>
+            <groupId>org.apache.velocity</groupId>
+            <artifactId>velocity</artifactId>
+            <version>1.6.2</version>
+        </dependency>
         <!-- Test Dependencies Start -->
         <dependency>
             <groupId>com.foursquare</groupId>
