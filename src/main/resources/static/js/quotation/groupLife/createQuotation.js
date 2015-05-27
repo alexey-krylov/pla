@@ -285,7 +285,7 @@ angular.module('createQuotation', ['common', 'ngRoute', 'mgcrea.ngStrap.select',
     .config(["$routeProvider", function ($routeProvider) {
         var stepsSaved = {};
         var queryParam = null;
-        $routeProvider.when('/newQuotation', {
+        $routeProvider.when('/', {
             templateUrl: 'createQuotationTpl.html',
             controller: 'quotationCtrl',
             resolve: {
