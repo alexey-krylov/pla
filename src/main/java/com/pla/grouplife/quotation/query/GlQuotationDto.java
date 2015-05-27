@@ -1,10 +1,14 @@
 package com.pla.grouplife.quotation.query;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.pla.sharedkernel.identifier.QuotationId;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 import org.joda.time.LocalDate;
+import org.nthdimenzion.presentation.LocalJodaDateDeserializer;
+import org.nthdimenzion.presentation.LocalJodaDateSerializer;
 
 /**
  * Created by Samir on 4/14/2015.
@@ -18,6 +22,8 @@ public class GlQuotationDto {
 
     private Integer versionNumber;
 
+    @JsonSerialize(using = LocalJodaDateSerializer.class)
+    @JsonDeserialize(using = LocalJodaDateDeserializer.class)
     private LocalDate quotationGeneratedOn;
 
     private String agentCode;

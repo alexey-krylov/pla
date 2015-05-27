@@ -2,6 +2,7 @@ package org.nthdimenzion.presentation;
 
 import org.joda.money.CurrencyUnit;
 import org.joda.money.Money;
+import org.joda.time.Days;
 import org.joda.time.LocalDate;
 import org.joda.time.Years;
 import org.joda.time.format.DateTimeFormat;
@@ -32,8 +33,7 @@ public class AppUtils {
     }
 
     public static DateTimeFormatter getDateTimeFormat() {
-        String patternEnglish = DateTimeFormat.patternForStyle("S-", Locale.getDefault());
-        patternEnglish = patternEnglish.replace("yy", "yyyy");
+        String patternEnglish = AppConstants.DD_MM_YYY_FORMAT;
         return DateTimeFormat.forPattern(patternEnglish);
     }
 
@@ -63,8 +63,16 @@ public class AppUtils {
         return age.getYears();
     }
 
+    public static Integer getIntervalInDays(LocalDate date) {
+        if (date == null) {
+            return null;
+        }
+        Days interval = Days.daysBetween(date, LocalDate.now());
+        return interval.getDays();
+    }
+
     public static void main(String[] args) {
-        System.out.println(getAge(new LocalDate (1985, 5, 25)));
+        System.out.println(getAge(new LocalDate(1985, 5, 25)));
     }
 }
 

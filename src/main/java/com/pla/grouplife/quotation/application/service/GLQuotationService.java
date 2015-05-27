@@ -3,33 +3,32 @@ package com.pla.grouplife.quotation.application.service;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import com.pla.core.domain.model.agent.AgentId;
-import com.pla.grouplife.quotation.domain.model.*;
-import com.pla.publishedlanguage.contract.IPlanAdapter;
-import com.pla.publishedlanguage.dto.PlanCoverageDetailDto;
 import com.pla.grouplife.quotation.application.command.SearchGlQuotationDto;
+import com.pla.grouplife.quotation.domain.model.*;
 import com.pla.grouplife.quotation.presentation.dto.GLQuotationDetailDto;
 import com.pla.grouplife.quotation.presentation.dto.PlanDetailDto;
 import com.pla.grouplife.quotation.query.*;
 import com.pla.grouplife.quotation.repository.GlQuotationRepository;
+import com.pla.publishedlanguage.contract.IPlanAdapter;
+import com.pla.publishedlanguage.dto.PlanCoverageDetailDto;
 import com.pla.sharedkernel.identifier.PlanId;
 import com.pla.sharedkernel.identifier.QuotationId;
 import com.pla.sharedkernel.util.PDFGeneratorUtils;
 import net.sf.jasperreports.engine.JRException;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.bson.types.ObjectId;
+import org.joda.time.LocalDate;
 import org.nthdimenzion.presentation.AppUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.math.BigDecimal;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+import static org.nthdimenzion.presentation.AppUtils.getIntervalInDays;
 import static org.nthdimenzion.utils.UtilValidator.isNotEmpty;
 
 /**
@@ -298,13 +297,15 @@ public class GLQuotationService {
         @Override
         public GlQuotationDto apply(Map map) {
             String quotationId = map.get("_id").toString();
+            AgentDetailDto agentDetailDto = getAgentDetail(new QuotationId(quotationId));
+            LocalDate generatedOn = map.get("generatedOn") != null ? new LocalDate((Date) map.get("generatedOn")) : null;
             String quotationStatus = map.get("quotationStatus") != null ? (String) map.get("quotationStatus") : "";
             String quotationNumber = map.get("quotationNumber") != null ? (String) map.get("quotationNumber") : "";
             ObjectId parentQuotationIdMap = map.get("parentQuotationId") != null ? (ObjectId) map.get("parentQuotationId") : null;
             Proposer proposerMap = map.get("proposer") != null ? (Proposer) map.get("proposer") : null;
             String proposerName = proposerMap != null ? proposerMap.getProposerName() : "";
             String parentQuotationId = parentQuotationIdMap != null ? parentQuotationIdMap.toString() : "";
-            GlQuotationDto glQuotationDto = new GlQuotationDto(new QuotationId(quotationId), (Integer) map.get("versionNumber"), null, null, null, new QuotationId(parentQuotationId), quotationStatus, quotationNumber, proposerName, null);
+            GlQuotationDto glQuotationDto = new GlQuotationDto(new QuotationId(quotationId), (Integer) map.get("versionNumber"), generatedOn, agentDetailDto.getAgentId(), agentDetailDto.getAgentName(), new QuotationId(parentQuotationId), quotationStatus, quotationNumber, proposerName, getIntervalInDays(generatedOn));
             return glQuotationDto;
         }
     }
