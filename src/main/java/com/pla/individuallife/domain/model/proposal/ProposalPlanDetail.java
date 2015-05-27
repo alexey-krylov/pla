@@ -3,10 +3,12 @@ package com.pla.individuallife.domain.model.proposal;
 import com.pla.core.domain.model.plan.SumAssured;
 import com.pla.core.domain.model.plan.Term;
 import com.pla.sharedkernel.identifier.PlanId;
+import lombok.Getter;
 
 /**
  * Created by pradyumna on 22-05-2015.
  */
+@Getter
 public class ProposalPlanDetail {
 
     private PlanId planId;

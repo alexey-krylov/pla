@@ -3,11 +3,13 @@ package com.pla.individuallife.domain.model.proposal;
 import com.pla.sharedkernel.domain.model.Gender;
 import com.pla.sharedkernel.domain.model.MaritalStatus;
 import com.pla.sharedkernel.domain.model.TitleEnum;
+import lombok.Getter;
 import org.joda.time.LocalDate;
 
 /**
  * Created by pradyumna on 22-05-2015.
  */
+@Getter
 public class Proposer {
 
     private TitleEnum title;

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" lang="en">
+<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/xhtml" lang="en">
 <head th:include="fragments/common :: headTag">
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <title></title>
@@ -7,8 +7,12 @@
 <body>
 <div th:include="fragments/common :: bodyHeader" th:remove="tag"/>
 <script>
-    requirejs(['main'],function(){
-        require(['/pla/js/proposal/individualLife/createProposal.js'],function(){
+    /*  require(['moment'], function (moment) {
+     require(['/pla/js/proposal/individualLife/proposal.js'], function () {
+     })
+     });*/
+    requirejs(['main', '/pla/js/proposal/individualLife/proposal.js'], function () {
+        require(['/pla/js/proposal/individualLife/createProposal.js?t=01'], function () {
             angular.bootstrap(document, ['createProposal']);
         });
     });

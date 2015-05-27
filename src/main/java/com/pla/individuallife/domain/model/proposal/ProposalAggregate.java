@@ -2,58 +2,66 @@ package com.pla.individuallife.domain.model.proposal;
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
+import com.google.common.base.Preconditions;
 import com.pla.sharedkernel.domain.model.ProposalNumber;
-import com.pla.sharedkernel.identifier.PlanId;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.ToString;
 import org.axonframework.eventsourcing.annotation.AbstractAnnotatedAggregateRoot;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 /**
  * Created by pradyumna on 22-05-2015.
  */
 @Document(collection = "individual_life_proposal")
-@Getter
-@ToString(exclude = {"logger"})
-@EqualsAndHashCode(exclude = {"logger", "specification"}, callSuper = false, doNotUseGetters = true)
 public class ProposalAggregate extends AbstractAnnotatedAggregateRoot<ProposalNumber> {
 
-    ProposalSpecification specification;
+    private final BigDecimal PERCENTAGE = new BigDecimal(100.00);
+    private ProposalSpecification specification;
     private ProposedAssured proposedAssured;
     private Proposer proposer;
-    private ProposalPlanDetail planDetail;
     private Set<RiderDetail> riders;
     @JsonSerialize(using = ToStringSerializer.class)
     private ProposalNumber proposalNumber;
+    private ProposalPlanDetail proposalPlanDetail;
+    private List<Beneficiary> beneficiaries;
+    private BigDecimal totalBeneficiaryShare = BigDecimal.ZERO;
 
-    public void assignProposedAssured(ProposedAssured proposedAssured) {
+    public ProposalAggregate() {
+        riders = new HashSet<RiderDetail>();
+        beneficiaries = new ArrayList<Beneficiary>();
+    }
+
+    public ProposalAggregate(ProposalNumber proposalNumber, ProposalPlanDetail proposalPlanDetail, ProposedAssured proposedAssured, Proposer proposer, Set<RiderDetail> riders) {
+        this.proposalNumber = proposalNumber;
+        assignProposedAssured(proposedAssured);
+        assignProposer(proposer);
+        assignPlan(proposalPlanDetail);
+        this.riders = riders;
+    }
+
+    private void assignProposedAssured(ProposedAssured proposedAssured) {
         specification.checkProposedAssured(proposedAssured);
         this.proposedAssured = proposedAssured;
-        if (proposedAssured.isProposer()) {
-            ProposerBuilder proposerBuilder = new ProposerBuilder();
-            proposerBuilder.withDateOfBirth(proposedAssured.getDateOfBirth());
-            proposerBuilder.withEmailAddress(proposedAssured.getEmailAddress());
-            proposerBuilder.withEmploymentDetail(proposedAssured.getEmploymentDetail());
-            proposerBuilder.withFirstName(proposedAssured.getFirstName());
-            proposerBuilder.withSurname(proposedAssured.getSurname());
-            proposerBuilder.withGender(proposedAssured.getGender());
-            proposerBuilder.withMaritalStatus(proposedAssured.getMaritalStatus());
-            proposerBuilder.withMobileNumber(proposedAssured.getMobileNumber());
-            proposerBuilder.withEmploymentDetail(proposedAssured.getEmploymentDetail());
-            proposerBuilder.withResidentialAddress(proposedAssured.getResidentialAddress());
-            proposerBuilder.withTitle(proposedAssured.getTitle());
-            proposerBuilder.withSpouseFirstName(proposedAssured.getSpouseFirstName());
-            proposerBuilder.withSpouseLastName(proposedAssured.getSpouseLastName());
-            proposerBuilder.withSpouseEmailAddress(proposedAssured.getSpouseEmailAddress());
-            this.proposer = proposerBuilder.createProposer();
-        }
     }
 
-    public void assignPlan(PlanId planId) {
-
+    private void assignProposer(Proposer proposer) {
+        specification.checkProposer(proposer);
+        this.proposer = proposer;
     }
 
+    private void assignPlan(ProposalPlanDetail proposalPlanDetail) {
+        this.proposalPlanDetail = proposalPlanDetail;
+    }
+
+    public void addBeneficiary(Beneficiary beneficiary) {
+        BigDecimal newTotal = totalBeneficiaryShare.add(beneficiary.getShare());
+        Preconditions.checkArgument(newTotal.compareTo(PERCENTAGE) == -1, "Total share exceeds 100%. Cannot add any more beneficiary.");
+        boolean sameBeneficiaryExists = beneficiaries.parallelStream().anyMatch(each -> (each.equals(beneficiary)));
+        Preconditions.checkArgument(!sameBeneficiaryExists, "Beneficiary already exists.");
+        totalBeneficiaryShare = newTotal;
+    }
 }

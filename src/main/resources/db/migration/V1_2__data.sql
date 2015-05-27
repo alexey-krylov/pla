@@ -685,3 +685,7 @@ INSERT INTO `endorsement_type`(`description`,`category`) VALUES ('Introduction o
 INSERT INTO `endorsement_type`(`description`,`category`) VALUES ('Premium Adjustment','GROUP');
 INSERT INTO `endorsement_type`(`description`,`category`) VALUES ('Change Agent','GROUP');
 INSERT INTO `endorsement_type`(`description`,`category`) VALUES ('Change Inception Date','GROUP');
+
+
+INSERT INTO `employment_type`(`code`,`description`) values('1','Permanent');
+INSERT INTO `employment_type`(`code`,`description`) values('2','Temporary');

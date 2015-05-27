@@ -150,18 +150,6 @@ app.controller('PlanSetupController', ['$scope', '$http', '$location', '$routePa
 
             $scope.initEndorsements();
 
-            /* $scope.getEndorsementTypes = function () {
-             var endorsementTypesList=  _.filter(endorsementTypes, function(each){
-             return each['category']==$scope.clientType;
-             });
-             var returnList = [];
-             var i=0;
-             for(;i<endorsementTypesList.length;i++){
-             returnList.push({'description':endorsementTypesList[i]['description']});
-             }
-             return returnList;
-             };*/
-
             $scope.sumAssuredTypesOriginal = [{val: 'RANGE', desc: 'Specified Range'}, {val: 'SPECIFIED_VALUES', desc: 'Specified Values'}];
             $scope.sumAssuredTypes = [];
 
@@ -170,12 +158,9 @@ app.controller('PlanSetupController', ['$scope', '$http', '$location', '$routePa
                 $scope.plan.sumAssured.minSumInsured = null;
                 $scope.plan.sumAssured.maxSumInsured = null;
                 $scope.plan.sumAssured.multiplesOf = null;
-
-            }
-
+            };
 
             $scope.clientType = $scope.plan.planDetail.clientType;
-
 
             $scope.$watch('plan.planDetail.lineOfBusinessId', function (newval, oldval) {
                 console.log(' Line of Business Id ' + newval);
@@ -304,8 +289,8 @@ app.controller('PlanSetupController', ['$scope', '$http', '$location', '$routePa
                             /* var listOfCoverageIds = _.pluck($scope.plan.coverages, "coverageId");
                              return listOfCoverageIds;*/
                             /*var unUsedCoverageList = _.reject($scope.coverageList, function (coverage) {
-                                return _.contains(listOfCoverageIds, coverage.coverageId);
-                            });
+                             return _.contains(listOfCoverageIds, coverage.coverageId);
+                             });
                              return unUsedCoverageList;*/
                         },
                         plan: function () {

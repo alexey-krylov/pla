@@ -98,6 +98,8 @@ public class ProposedAssuredBuilder {
     }
 
     public ProposedAssured createProposedAssured() {
+
+
         return new ProposedAssured(title, firstName, surname, nrc, dateOfBirth, gender, mobileNumber, emailAddress, maritalStatus, spouseFirstName, spouseLastName, spouseEmailAddress, employmentDetail, residentialAddress, isProposer);
     }
 }

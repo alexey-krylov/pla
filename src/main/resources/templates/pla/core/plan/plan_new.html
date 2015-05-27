@@ -366,7 +366,7 @@
                                         <label class="control-label" for="groupTerm">Minimum Sum Assured</label>
 
                                         <div class="controls">
-                                            <input type="text" name="minSumInsured" ng-pattern="onlyNumbers" class="form-control input-sm  col-sm-3"
+                                            <input type="number" name="minSumInsured" ng-pattern="onlyNumbers" class="form-control input-sm  col-sm-3"
                                                    ng-model="plan.sumAssured.minSumInsured" ng-required="true"/>
 
                                             <div class="error" ng-show="step2.minSumInsured.$dirty &amp;&amp; step2.minSumInsured.$invalid">
@@ -380,9 +380,8 @@
                                         <label class="control-label" for="groupTerm">Maximum Sum Assured</label>
 
                                         <div class="controls">
-                                            <input type="text" name="maxSumInsured" ng-pattern="onlyNumbers" class="form-control input-sm col-sm-3"
-                                                   ng-model="plan.sumAssured.maxSumInsured" ng-required="true"/>
-
+                                            <input type="number" name="maxSumInsured" ng-pattern="onlyNumbers" class="form-control input-sm col-sm-3"
+                                                   ng-model="plan.sumAssured.maxSumInsured" ng-required="true" min="{{plan.sumAssured.minSumInsured}}"/>
                                             <div class="error" ng-show="step2.maxSumInsured.$dirty &amp;&amp; step2.maxSumInsured.$invalid">
                                                 <small class="error" ng-show="step2.maxSumInsured.$error.required">
                                                     Maximum Sum Assured is required.

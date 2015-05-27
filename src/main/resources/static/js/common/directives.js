@@ -13,7 +13,7 @@ angular.module('directives', ['mgcrea.ngStrap.alert'])
             }
         }
     }])
-    .directive('fueluxWizard', ['$timeout',function ($timeout) {
+    .directive('fueluxWizard', ['$timeout', function ($timeout) {
         /*use this directive to initialize the fuelUx wizard
          *
          * example: <div fuelux-wizard selected-item="[step]">
@@ -25,31 +25,31 @@ angular.module('directives', ['mgcrea.ngStrap.alert'])
             require: ['?^form'],
             scope: {
                 selectedItem: '=?',
-                skipValidation:'=?',
-                removeSteps:'=?'
+                skipValidation: '=?',
+                removeSteps: '=?'
             },
             link: function (scope, element, attr, ctrl) {
 
-                scope.$watch('selectedItem',function(newVal,oldVal){
+                scope.$watch('selectedItem', function (newVal, oldVal) {
                     $(element).wizard('selectedItem', {
                         step: scope.selectedItem
                     });
                 });
-                scope.$watch('removeSteps',function(newVal,oldVal){
-                    if(newVal){
+                scope.$watch('removeSteps', function (newVal, oldVal) {
+                    if (newVal) {
                         $(element).wizard('removeSteps', newVal.index, newVal.howMany)
                     }
                 });
-                if(scope.selectedItem){
+                if (scope.selectedItem) {
                     $(element).wizard('selectedItem', {
                         step: scope.selectedItem
                     });
-                }else{
+                } else {
                     $(element).wizard();
                 }
                 $(element).on('actionclicked.fu.wizard', function (event, data) {
                     if (data.direction == 'previous')return;
-                    if(ctrl && ctrl[0]){
+                    if (ctrl && ctrl[0]) {
                         var currentStep = ctrl[0]['step' + data.step] && ctrl[0]['step' + data.step].$name;
                         if (angular.isDefined(currentStep) && $.inArray(currentStep, scope.skipValidation) == -1) {
                             var stepForm = ctrl[0]['step' + data.step];
@@ -61,9 +61,9 @@ angular.module('directives', ['mgcrea.ngStrap.alert'])
                     }
                     scope.$emit('actionclicked.fu.wizard', event, data);
                 });
-                $(element).on('changed.fu.wizard',function(event,data){
-                    $timeout(function(){
-                        scope.selectedItem=data.step;
+                $(element).on('changed.fu.wizard', function (event, data) {
+                    $timeout(function () {
+                        scope.selectedItem = data.step;
                     });
                 });
                 $(element).on('stepclicked.fu.wizard', function (event, data) {
@@ -96,25 +96,25 @@ angular.module('directives', ['mgcrea.ngStrap.alert'])
             }
         }
     })
-    .directive('disableAllFields',function(){
-        return{
+    .directive('disableAllFields', function () {
+        return {
             restrict: 'A',
-            scope:{
-                disableAllFields:"=?"
+            scope: {
+                disableAllFields: "=?"
             },
             link: function (scope, controls) {
-                scope.$watch('disableAllFields',function(newVal,oldVal){
-                    $(controls).find(":input").not(":button").prop("disabled",newVal);
+                scope.$watch('disableAllFields', function (newVal, oldVal) {
+                    $(controls).find(":input").not(":button").prop("disabled", newVal);
                 });
             }
         }
     })
-    .directive('nthAlert',['$rootScope','$alert',function($rootScope,$alert){
-        return{
+    .directive('nthAlert', ['$rootScope', '$alert', function ($rootScope, $alert) {
+        return {
             restrict: 'E',
-            link:function(){
-                $rootScope.$on('httpInterceptorAlert',function(event,args){
-                    $alert({title:args.message,placement:'top-right',type:args.type,show:true,duration:6});
+            link: function () {
+                $rootScope.$on('httpInterceptorAlert', function (event, args) {
+                    $alert({title: args.message, placement: 'top-right', type: args.type, show: true, duration: 6});
                 })
             }
         }

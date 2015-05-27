@@ -47,7 +47,7 @@ public class IndidualLifeQuotationController {
     @RequestMapping(value = "/createindividuallifequotation", method = RequestMethod.GET)
     public ModelAndView createQuotationPage() {
         ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("pla/quotation/individualLife/createQuotation");
+        modelAndView.setViewName("pla/quotation/individualLife/index");
         return modelAndView;
     }
 

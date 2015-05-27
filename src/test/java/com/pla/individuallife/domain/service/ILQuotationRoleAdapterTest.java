@@ -31,7 +31,7 @@ public class ILQuotationRoleAdapterTest {
         List<SimpleGrantedAuthority> authorities = Lists.newArrayList();
         authorities.add(simpleGrantedAuthority);
         userLoginDetailDto.setAuthorities(authorities);
-        ILQuotationRoleAdapter ilquotationRoleAdapter = new ILQuotationRoleAdapter();
+        RoleAdapter ilquotationRoleAdapter = new RoleAdapter();
         ILQuotationProcessor ilQuotationProcessor = ilquotationRoleAdapter.userToQuotationProcessor(userLoginDetailDto);
         assertNotNull(ilQuotationProcessor);
     }
@@ -43,7 +43,7 @@ public class ILQuotationRoleAdapterTest {
         List<SimpleGrantedAuthority> authorities = Lists.newArrayList();
         authorities.add(simpleGrantedAuthority);
         userLoginDetailDto.setAuthorities(authorities);
-        ILQuotationRoleAdapter ilquotationRoleAdapter = new ILQuotationRoleAdapter();
+        RoleAdapter ilquotationRoleAdapter = new RoleAdapter();
         ilquotationRoleAdapter.userToQuotationProcessor(userLoginDetailDto);
     }
 }

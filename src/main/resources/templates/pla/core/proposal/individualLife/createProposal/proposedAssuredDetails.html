@@ -1,6 +1,7 @@
 <ng-form name="step1">
+    <div ng-init="setForm(step1);"></div>
     <accordion close-others="true">
-        <accordion-group  is-open="accordionStatus.proposedAssuredDetails.agents" ng-class="{'accordion-error':isAgentEmpty}">
+        <accordion-group is-open="accordionStatus.proposedAssuredDetails.agents" ng-class="{'accordion-error':isAgentEmpty}">
             <accordion-heading>
                 Agent
                 <i class="pull-right glyphicon"
@@ -26,97 +27,141 @@
                 </table>
             </div>
         </accordion-group>
-        <accordion-group is-open="accordionStatus.proposedAssuredDetails.proposedAssured" ng-form="proposedAssuredDetails" ng-class="{'accordion-error':hasAccordionError(proposedAssuredDetails)}">
+        <accordion-group is-open="accordionStatus.proposedAssuredDetails.proposedAssured" ng-form="proposedAssuredDetails"
+                         ng-class="{'accordion-error':hasAccordionError(proposedAssuredDetails)}">
             <accordion-heading>
                 Proposed Assured <i class="pull-right glyphicon"
                                     ng-class="{'glyphicon-chevron-down': accordionStatus.proposedAssuredDetails.proposedAssured, 'glyphicon-chevron-right': !accordionStatus.proposedAssuredDetails.proposedAssured}"></i>
             </accordion-heading>
-                <div class="col-md-6">
-                    <div class="form-group required">
-                        <label class="control-label">Title</label>
-                        <select class="form-control input-sm" name="title" ng-required="true" ng-model="assuredTitle" ng-options="title as title for title in titles">
+            <div class="col-md-6">
+                <div class="form-group required">
+                    <label class="control-label">Title</label>
+                    <select class="form-control input-sm" name="title" ng-required="true" ng-model="proposedAssured.title" ng-options="title as title for title in titles">
+                    </select>
 
-                        </select>
-                    </div>
-                    <div class="form-group required">
-                        <label class="control-label">Surname</label>
-                        <input type="text" class="form-control input-sm" name="surname" ng-required="true" ng-model="asfd"/>
-                    </div>
-                    <div class="form-group required">
-                        <label class="control-label">NRC</label>
-                        <input type="text" class="form-control input-sm" name="nrc"/>
-                    </div>
-                    <div class="form-group required">
-                        <label class="control-label">Age Next Birthday</label>
-                        <input type="text" class="form-control input-sm" name="ageNextBirthday"/>
-                    </div>
-                    <div class="form-group required">
-                        <label class="control-label">Mobile Number</label>
-                        <input type="text" class="form-control input-sm" name="mobileNumber"/>
-                    </div>
-                    <div class="form-group required">
-                        <label class="control-label">Marital Status</label>
-                        <select class="form-control input-sm">
-                            <option>Select one</option>
-                        </select>
+                    <div class="error" ng-messages="proposedAssuredDetails.title.$error">
+                        <small ng-message="required">Please enter title.</small>
                     </div>
                 </div>
-                <div class="col-md-6">
-                    <div class="form-group required">
-                        <label class="control-label">First Name</label>
-                        <input type="text" class="form-control input-sm" name="firstName"/>
-                    </div>
-                    <div class="form-group">
-                        <label class="control-label">Other Name</label>
-                        <input type="text" class="form-control input-sm" name="otherName"/>
-                    </div>
-                    <div class="form-group required">
-                        <label class="control-label">Date Of Birth</label>
-                        <input type="text" class="form-control input-sm" name="dob"/>
-                    </div>
-                    <div class="form-group required">
-                        <label class="control-label">Sex</label>
-                        <select class="form-control input-sm">
-                            <option value="MALE">Male</option>
-                            <option value="FEMALE">Female</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label class="control-label">Email ID</label>
-                        <input type="text" class="form-control input-sm" name="email"/>
+                <div class="form-group required">
+                    <label class="control-label">Surname</label>
+                    <input type="text" class="form-control input-sm" name="surname" ng-required="true" ng-model="proposedAssured.surname"/>
+
+                    <div class="error" ng-messages="proposedAssuredDetails.surname.$error">
+                        <small class="error" ng-message="required">Please enter Surname.</small>
                     </div>
                 </div>
+                <div class="form-group required">
+                    <label class="control-label">NRC</label>
+                    <input type="text" class="form-control input-sm" name="nrc" ng-model="proposedAssured.nrc" ng-required="true"/>
+
+                    <div class="error" ng-messages="proposedAssuredDetails.nrc.$error">
+                        <small class="error" ng-message="required">Please enter NRC.</small>
+                    </div>
+                </div>
+                <div class="form-group required">
+                    <label class="control-label">Age Next Birthday</label>
+                    <input type="text" class="form-control input-sm" name="ageNextBirthday"/>
+                </div>
+                <div class="form-group required">
+                    <label class="control-label">Mobile Number</label>
+                    <input type="text" class="form-control input-sm" name="mobileNumber" ng-model="proposedAssured.mobileNumber" ng-required="true" ng-maxLength="10"/>
+
+                    <div class="error" ng-messages="proposedAssuredDetails.mobileNumber.$error">
+                        <small class="error" ng-message="required">Please enter Mobile Number</small>
+                    </div>
+                </div>
+                <div class="form-group required">
+                    <label class="control-label">Marital Status</label>
+                    <select class="form-control input-sm" ng-model="proposedAssured.maritalStatus" name="maritalStatus" ng-required="true">
+                        <option value="MARRIED">Married</option>
+                        <option value="UNMARRIED">UnMarried</option>
+                    </select>
+
+                    <div class="error" ng-messages="proposedAssuredDetails.maritalStatus.$error">
+                        <small class="error" ng-message="required">Please enter Marital Status</small>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group required">
+                    <label class="control-label">First Name</label>
+                    <input type="text" class="form-control input-sm" name="firstName" ng-model="proposedAssured.firstName" ng-required="true"/>
+
+                    <div class="error" ng-messages="proposedAssuredDetails.firstName.$error">
+                        <small class="error" ng-message="required">
+                            Please enter FirstName
+                        </small>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label">Other Name</label>
+                    <input type="text" class="form-control input-sm" name="otherName" ng-model="proposedAssured.otherName"/>
+                </div>
+                <div class="form-group required">
+                    <label class="control-label">Date Of Birth</label>
+                    <input type="text" class="form-control input-sm" name="dateOfBirth" ng-model="proposedAssured.dateOfBirth" ng-required="true"/>
+
+                    <div class="error" ng-messages="proposedAssuredDetails.dateOfBirth.$error">
+                        <small class="error" ng-message="required">Please enter Date of Birth</small>
+                    </div>
+                </div>
+                <div class="form-group required">
+                    <label class="control-label">Sex</label>
+                    <select class="form-control input-sm" name="gender" ng-model="proposedAssured.gender" ng-required="true">
+                        <option value="MALE">Male</option>
+                        <option value="FEMALE">Female</option>
+                    </select>
+
+                    <div class="error" ng-messages="proposedAssuredDetails.gender.$error">
+                        <small class="error" ng-message="required">Please enter Sex</small>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label">Email Address</label>
+                    <input type="text" class="form-control input-sm" name="email" ng-model="proposedAssured.emailAddress"/>
+                </div>
+            </div>
         </accordion-group>
-
-
 
         <accordion-group is-open="accordionStatus.proposedAssuredDetails.spouseDetails" ng-form="spouseDetails">
             <accordion-heading>
                 Spouse Details <i class="pull-right glyphicon"
                                   ng-class="{'glyphicon-chevron-down': accordionStatus.proposedAssuredDetails.spouseDetails, 'glyphicon-chevron-right': !accordionStatus.proposedAssuredDetails.spouseDetails}"></i>
             </accordion-heading>
-                <div class="col-md-6">
-                    <div class="form-group required">
-                        <label class="control-label">Spouse's Surname</label>
-                        <input type="text" class="form-control input-sm" name="spouseSurname"/>
-                    </div>
-                    <div class="form-group required">
-                        <label class="control-label">Spouse's Mobile Number</label>
-                        <input type="text" class="form-control input-sm" name="spouseMobileNumber"/>
-                    </div>
-                </div>
-                <div class="col-md-6">
-                    <div class="form-group required">
-                        <label class="control-label">Spouse's First Name</label>
-                        <input type="text" class="form-control input-sm" name="spouseFirstName"/>
-                    </div>
-                    <div class="form-group">
-                        <label class="control-label">Spouse's Email ID</label>
-                        <input type="text" class="form-control input-sm" name="spouseEmailId"/>
-                    </div>
-                </div>
-        </accordion-group>
+            <div class="col-md-6">
+                <div class="form-group required">
+                    <label class="control-label">Spouse's First Name</label>
+                    <input type="text" class="form-control input-sm" name="spouseFirstName" ng-model="proposedAssuredSpouse.firstName" ng-required="true"/>
 
+                    <div class="error" ng-messages="spouseDetails.spouseFirstName.$error">
+                        <small class="error" ng-message="required">Please enter Spouse's First Name</small>
+                    </div>
+                </div>
+                <div class="form-group required">
+                    <label class="control-label">Spouse's Mobile Number</label>
+                    <input type="text" class="form-control input-sm" name="spouseMobileNumber" ng-model="proposedAssuredSpouse.mobileNumber" ng-required="true"/>
+
+                    <div class="error" ng-messages="spouseDetails.spouseMobileNumber.$error">
+                        <small class="error" ng-message="required">Please enter Spouse's Mobile Number</small>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group required">
+                    <label class="control-label">Spouse's Surname</label>
+                    <input type="text" class="form-control input-sm" name="spouseSurname" ng-model="proposedAssuredSpouse.surname" ng-required="true"/>
+
+                    <div class="error" ng-messages="spouseDetails.spouseSurname.$error">
+                        <small class="error" ng-message="required">Please enter Spouse's Surname</small>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label">Spouse's Email ID</label>
+                    <input type="text" class="form-control input-sm" name="spouseEmailId" ng-model="proposedAssuredSpouse.emailAddress"/>
+                </div>
+            </div>
+        </accordion-group>
 
 
         <accordion-group is-open="accordionStatus.proposedAssuredDetails.employment" ng-form="employmentDetails">
@@ -124,54 +169,84 @@
                 Employment Details <i class="pull-right glyphicon"
                                       ng-class="{'glyphicon-chevron-down': accordionStatus.proposedAssuredDetails.employment, 'glyphicon-chevron-right': !accordionStatus.proposedAssuredDetails.employment}"></i>
             </accordion-heading>
-                <div class="col-md-6">
-                    <div class="form-group required">
-                        <label class="control-label">Occupation</label>
-                        <input type="text" class="form-control input-sm" name="occupation"/>
-                    </div>
-                    <div class="form-group required">
-                        <label class="control-label">Employment Date</label>
-                        <input type="text" class="form-control input-sm" name="employmentDate"/>
-                    </div>
-                    <div class="form-group required">
-                        <label class="control-label">Address Line 1</label>
-                        <input type="text" class="form-control input-sm" name="addressLine1"/>
-                    </div>
-                    <div class="form-group">
-                        <label class="control-label">Postal Code</label>
-                        <input type="text" class="form-control input-sm" name="postCode"/>
-                    </div>
-                    <div class="form-group required">
-                        <label class="control-label">Town</label>
-                        <select class="form-control input-sm">
-                            <option>Select One</option>
-                        </select>
+            <div class="col-md-6">
+                <div class="form-group required">
+                    <label class="control-label">Occupation</label>
+                    <select class="form-control input-sm" name="occupation" ng-required="true" ng-model="paemployment.occupation"
+                            ng-options="occupation.description as occupation.description for occupation in occupations"></select>
+
+                    <div class="error" ng-messages="employmentDetails.occupation.$error">
+                        <small class="error" ng-message="required">Please enter Occupation</small>
                     </div>
                 </div>
-                <div class="col-md-6">
-                    <div class="form-group required">
-                        <label class="control-label">Employer</label>
-                        <input type="text" class="form-control input-sm" name="employer"/>
-                    </div>
-                    <div class="form-group required">
-                        <label class="control-label">Employment Type</label>
-                        <input type="text" class="form-control input-sm" name="employmentType"/>
-                    </div>
-                    <div class="form-group">
-                        <label class="control-label">Address Line 2</label>
-                        <input type="text" class="form-control input-sm" name="addressLine2"/>
-                    </div>
-                    <div class="form-group required">
-                        <label class="control-label">Province</label>
-                        <select class="form-control input-sm">
-                            <option>Select One</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label class="control-label">Work phone</label>
-                        <input type="text" class="form-control input-sm" name="workPhone"/>
+                <div class="form-group required">
+                    <label class="control-label">Employment Date</label>
+                    <input type="text" class="form-control input-sm" name="employmentDate" ng-model="paemployment.employmentDate" ng-required="true"/>
+
+                    <div class="error" ng-messages="employmentDetails.employmentDate.$error">
+                        <small class="error" ng-message="required">Please enter Employment Date</small>
                     </div>
                 </div>
+                <div class="form-group required">
+                    <label class="control-label">Address Line 1</label>
+                    <input type="text" class="form-control input-sm" name="addressLine1" ng-model="paemployment.address1" ng-required="true"/>
+
+                    <div class="error" ng-messages="employmentDetails.employmentDate.$error">
+                        <small class="error" ng-message="required">Please enter Address Line 1</small>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label">Postal Code</label>
+                    <input type="text" class="form-control input-sm" name="postalCode" ng-model="paemployment.postalCode"/>
+                </div>
+                <div class="form-group required">
+                    <label class="control-label">Town</label>
+                    <select class="form-control input-sm" name="town" ng-required="true" ng-model="paemployment.town"
+                            ng-options="city.geoId as city.geoName for city in proposedAssuredEmploymentCities"/>
+
+                    <div class="error" ng-messages="employmentDetails.town.$error">
+                        <small class="error" ng-message="required">Please enter Town</small>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group required">
+                    <label class="control-label">Employer</label>
+                    <input type="text" class="form-control input-sm" name="employer" ng-required="true" ng-model="paemployment.employer"/>
+
+                    <div class="error" ng-messages="employmentDetails.employer.$error">
+                        <small class="error" ng-message="required">Please enter Employer</small>
+                    </div>
+                </div>
+                <div class="form-group required">
+                    <label class="control-label">Employment Type</label>
+                    <select class="form-control input-sm" name="employmentType"
+                            ng-options="employmentType.employment_id as employmentType.description for employmentType in employmentTypes" ng-model="paemployment.employmentType"
+                            ng-required="true"></select>
+
+                    <div class="error" ng-messages="employmentDetails.employmentType.$error">
+                        <small class="error" ng-message="required">Please enter Employment Type</small>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label">Address Line 2</label>
+                    <input type="text" class="form-control input-sm" name="addressLine2"/>
+                </div>
+                <div class="form-group required">
+                    <label class="control-label">Province</label>
+                    <select class="form-control input-sm" name="province" ng-options="province.provinceId as province.provinceName for province in provinces"
+                            ng-model="paemployment.province" ng-required="true">
+                    </select>
+
+                    <div class="error" ng-messages="employmentDetails.province.$error">
+                        <small class="error" ng-message="required">Please enter Province</small>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label">Work phone</label>
+                    <input type="text" class="form-control input-sm" name="workPhone" ng-model="paemployment.workPhone"/>
+                </div>
+            </div>
         </accordion-group>
 
 
@@ -180,64 +255,74 @@
                 Residential Details <i class="pull-right glyphicon"
                                        ng-class="{'glyphicon-chevron-down': accordionStatus.proposedAssuredDetails.resident, 'glyphicon-chevron-right': !accordionStatus.proposedAssuredDetails.resident}"></i>
             </accordion-heading>
-                <div class="col-md-6">
-                    <div class="form-group required">
-                        <label class="control-label">Address Line 1</label>
-                        <input type="text" class="form-control input-sm" name="residentAddress1"/>
-                    </div>
-                    <div class="form-group">
-                        <label class="control-label">Postal Code</label>
-                        <input type="text" class="form-control input-sm" name="residentPostalCode"/>
-                    </div>
-                    <div class="form-group required">
-                        <label class="control-label">Town</label>
-                        <select type="text" class="form-control input-sm" name="residentTown">
-                            <option>Select One</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label class="control-label">email Address</label>
-                        <input type="text" class="form-control input-sm" name="residentEmail"/>
+            <div class="col-md-6">
+                <div class="form-group required">
+                    <label class="control-label">Address Line 1</label>
+                    <input type="text" class="form-control input-sm" name="residentAddress1" ng-model="paresidential.address1" ng-required="true"/>
+
+                    <div class="error" ng-messages="residentDetails.residentAddress1.$error">
+                        <small class="error" ng-message="required">Please enter Address Line 1</small>
                     </div>
                 </div>
-                <div class="col-md-6">
-                    <div class="form-group">
-                        <label class="control-label">Address Line 2</label>
-                        <input type="text" class="form-control input-sm" name="residentAddress2"/>
-                    </div>
-                    <div class="form-group required">
-                        <label class="control-label">Province</label>
-                        <select type="text" class="form-control input-sm" name="residentProvince">
-                            <option>
-                                select One
-                            </option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label class="control-label">Home Phone</label>
-                        <input type="text" class="form-control input-sm" name="residentPhone"/>
+                <div class="form-group">
+                    <label class="control-label">Postal Code</label>
+                    <input type="text" class="form-control input-sm" name="residentPostalCode" ng-model="paresidential.postalCode"/>
+                </div>
+                <div class="form-group required">
+                    <label class="control-label">Town</label>
+                    <select type="text" class="form-control input-sm" name="residentTown" ng-model="paresidential.town"
+                            ng-options="city.geoId as city.geoName for city in proposedAssuredResidentialCities" ng-required="true">
+                    </select>
+
+                    <div class="error" ng-messages="residentDetails.residentTown.$error">
+                        <small class="error" ng-message="required">Please enter Town</small>
                     </div>
                 </div>
+                <div class="form-group">
+                    <label class="control-label">Email Address</label>
+                    <input type="text" class="form-control input-sm" name="residentEmail" ng-model="paresidential.emailAddress"/>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label class="control-label">Address Line 2</label>
+                    <input type="text" class="form-control input-sm" name="residentAddress2" ng-model="paresidential.address2"/>
+                </div>
+                <div class="form-group required">
+                    <label class="control-label">Province</label>
+                    <select class="form-control input-sm" name="residentProvince" ng-options="province.provinceId as province.provinceName for province in provinces"
+                            ng-model="paresidential.province" ng-required="true"/>
+
+                    <div class="error" ng-messages="residentDetails.residentProvince.$error">
+                        <small class="error" ng-message="required">Please enter Province</small>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label">Home Phone</label>
+                    <input type="text" class="form-control input-sm" name="residentPhone" ng-model="paresidential.phoneNumber"/>
+                </div>
+            </div>
         </accordion-group>
     </accordion>
     <div class="form-group required">
         <label class="control-label" style="margin-right: 25px">Is Proposed Assured the Proposer?</label>
         <label class="radio-inline">
-            <input type="radio" name="isProposed"  ng-value="'YES'" ng-required="true" ng-model="isProposed"/> Yes
+            <input type="radio" name="proposedAssuredAsProposer" ng-value="true" value="true" ng-required="true" ng-model="proposedAssuredAsProposer"/> Yes
         </label>
         <label class="radio-inline">
-            <input type="radio" name="isProposed"  ng-value="'NO'" ng-required="true" ng-model="isProposed"/> No
+            <input type="radio" name="proposedAssuredAsProposer" ng-value="false" value="false" ng-required="true" ng-model="proposedAssuredAsProposer"/> No
         </label>
-        <small class="error" ng-show="step1.$submitted &amp;&amp; step1.isProposed.$error.required">
-            Please select one.
-        </small>
+
+        <div class="error" ng-messages="step1.isProposed.$error">
+            <small class="error" ng-message="required">Please select one.</small>
+        </div>
     </div>
     <div class="row">
         <div class="col-sm-6">
             <button type="button" class="btn btn-default btn-sm">Cancel</button>
         </div>
         <div class="col-sm-6">
-            <button type="button" class="btn btn-default btn-sm" style="float: right" ng-click="savePrposedAssuredDetails()">Save</button>
+            <button type="button" class="btn btn-default btn-sm" style="float: right" ng-click="saveProposedAssuredDetails(proposedAssuredAsProposer)">Save</button>
         </div>
     </div>
 </ng-form>

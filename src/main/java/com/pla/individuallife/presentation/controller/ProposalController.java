@@ -6,6 +6,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.List;
@@ -22,7 +23,7 @@ public class ProposalController {
     private MasterFinder masterFinder;
 
     /**
-     * For routing of /core/plan to the index.html page under core/plan.
+     * For routing of proposal list page to the index.html page under core/plan.
      *
      * @return
      */
@@ -33,7 +34,6 @@ public class ProposalController {
         return modelAndView;
     }
 
-
     @RequestMapping(method = RequestMethod.GET, value = "/createProposalForm")
     public ModelAndView proposalForm() {
         ModelAndView modelAndView = new ModelAndView();
@@ -42,6 +42,7 @@ public class ProposalController {
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/getAllOccupation")
+    @ResponseBody
     public List<Map<String, Object>> getAllOccupationClassification() {
         List<Map<String, Object>> occupationClassList = masterFinder.getAllOccupationClassification();
         return occupationClassList;
@@ -55,9 +56,15 @@ public class ProposalController {
 
     @RequestMapping(method = RequestMethod.GET, value = "/getRiders")
     public List<Map<String, Object>> getOptionalCoverages(@PathVariable("planId") String planId) {
-        List<Map<String, Object>> planList = masterFinder.getOptionalCoverages(planId);
-        return planList;
+        List<Map<String, Object>> optionalCoverages = masterFinder.getOptionalCoverages(planId);
+        return optionalCoverages;
     }
 
+    @RequestMapping(method = RequestMethod.GET, value = "/getAllEmploymentType")
+    @ResponseBody
+    public List<Map<String, Object>> getAllEmploymentType() {
+        List<Map<String, Object>> allEmploymentTypes = masterFinder.getAllEmploymentTypes();
+        return allEmploymentTypes;
+    }
 
 }

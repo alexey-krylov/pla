@@ -912,6 +912,16 @@ DROP TABLE IF EXISTS `quotation_plandetail`;
     CONSTRAINT `FK_PLAN_DETAIL_QUOTATION_ID` FOREIGN KEY (`plan_detail_id`) REFERENCES `plan_detail` (`plan_detail_id`)
   ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+DROP TABLE IF EXISTS `employment_type`;
+CREATE TABLE `employment_type` (
+ `employment_id` BIGINT(20) NOT NULL AUTO_INCREMENT,
+  `code` VARCHAR(100) NOT NULL,
+  `description` VARCHAR(255) NOT NULL,
+  PRIMARY KEY (`employment_id`),
+  UNIQUE KEY (`code`,`description`)
+) ENGINE=INNODB DEFAULT CHARSET=utf8;
+
+
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;

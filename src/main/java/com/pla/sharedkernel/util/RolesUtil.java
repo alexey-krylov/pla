@@ -18,13 +18,11 @@ import java.util.function.Predicate;
 public class RolesUtil {
 
 
-    private static final String ADMIN_ROLE = "ROLE_ADMIN";
-
     public static final String GROUP_LIFE_QUOTATION_PROCESSOR_ROLE = "ROLE_GROUP_LIFE_QUOTATION_PROCESSOR";
-    
     public static final String GROUP_HEALTH_QUOTATION_PROCESSOR_ROLE = "ROLE_GROUP_HEALTH_QUOTATION_PROCESSOR";
-
     public static final String INDIVIDUAL_LIFE_QUOTATION_PROCESSOR_ROLE = "ROLE_INDIVIDUAL_LIFE_QUOTATION_PROCESSOR";
+    public static final String INDIVIDUAL_LIFE__PROPOSAL_PROCESSOR_ROLE = "ROLE_INDIVIDUAL_LIFE_PROPOSAL_PROCESSOR";
+    private static final String ADMIN_ROLE = "ROLE_ADMIN";
 
     private RolesUtil() {
     }
@@ -38,7 +36,7 @@ public class RolesUtil {
         long count = hasRole(GROUP_LIFE_QUOTATION_PROCESSOR_ROLE, authorities);
         return count == 1;
     }
-    
+
     public static boolean hasGroupHealthQuotationProcessorRole(Collection<? extends GrantedAuthority> authorities) {
         long count = hasRole(GROUP_HEALTH_QUOTATION_PROCESSOR_ROLE, authorities);
         return count == 1;
@@ -46,6 +44,11 @@ public class RolesUtil {
 
     public static boolean hasIndividualLifeQuotationProcessorRole(Collection<? extends GrantedAuthority> authorities) {
         long count = hasRole(INDIVIDUAL_LIFE_QUOTATION_PROCESSOR_ROLE, authorities);
+        return count == 1;
+    }
+
+    public static boolean hasIndividualLifeProposalProcessorRole(Collection<? extends GrantedAuthority> authorities) {
+        long count = hasRole(INDIVIDUAL_LIFE__PROPOSAL_PROCESSOR_ROLE, authorities);
         return count == 1;
     }
 
