@@ -68,6 +68,6 @@
     <extension:mongo-repository id="planMongoRepository" aggregate-type="com.pla.core.domain.model.plan.Plan"
                                 mongo-template="mongoTemplate"/>
     <extension:mongo-repository id="glQuotationMongoRepository"
-                                aggregate-type="com.pla.grouplife.quotation.domain.model.grouplife.GroupLifeQuotation"
+                                aggregate-type="com.pla.grouplife.quotation.domain.model.GroupLifeQuotation"
                                 mongo-template="mongoTemplate"/>
 </beans>

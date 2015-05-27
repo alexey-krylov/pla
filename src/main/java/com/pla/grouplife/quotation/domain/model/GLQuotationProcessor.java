@@ -1,4 +1,4 @@
-package com.pla.grouplife.quotation.domain.model.grouplife;
+package com.pla.grouplife.quotation.domain.model;
 
 import com.pla.core.domain.model.agent.AgentId;
 import com.pla.sharedkernel.identifier.QuotationId;

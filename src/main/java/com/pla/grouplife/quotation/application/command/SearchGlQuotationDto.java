@@ -1,4 +1,4 @@
-package com.pla.grouplife.quotation.application.command.grouplife;
+package com.pla.grouplife.quotation.application.command;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;

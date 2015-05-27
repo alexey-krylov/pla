@@ -1,4 +1,4 @@
-package org.nthdimenzion.application;
+package com.pla.sharedkernel.service;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

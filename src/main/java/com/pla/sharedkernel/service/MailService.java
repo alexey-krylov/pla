@@ -1,9 +1,11 @@
 package com.pla.sharedkernel.service;
 
 import org.dom4j.DocumentException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.mail.javamail.MimeMessagePreparator;
+import org.springframework.stereotype.Service;
 
 import javax.activation.FileDataSource;
 import javax.mail.internet.MimeMessage;
@@ -16,12 +18,12 @@ import java.util.Properties;
 /**
  * Created by Samir on 5/27/2015.
  */
-//@Service
+@Service
 public class MailService {
 
     private JavaMailSenderImpl mailSender;
 
-   // @Autowired
+    @Autowired
     public MailService(JavaMailSenderImpl mailSender) {
         this.mailSender = mailSender;
     }

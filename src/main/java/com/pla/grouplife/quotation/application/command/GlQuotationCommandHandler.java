@@ -1,11 +1,11 @@
-package com.pla.grouplife.quotation.application.command.grouplife;
+package com.pla.grouplife.quotation.application.command;
 
+import com.pla.grouplife.quotation.domain.model.*;
 import com.pla.publishedlanguage.contract.IPremiumCalculator;
 import com.pla.publishedlanguage.domain.model.ComputedPremiumDto;
 import com.pla.publishedlanguage.domain.model.PremiumCalculationDto;
 import com.pla.publishedlanguage.domain.model.PremiumFrequency;
 import com.pla.publishedlanguage.domain.model.PremiumInfluencingFactor;
-import com.pla.grouplife.quotation.domain.model.grouplife.*;
 import com.pla.grouplife.quotation.domain.service.GroupLifeQuotationService;
 import com.pla.grouplife.quotation.query.GLQuotationFinder;
 import com.pla.grouplife.quotation.query.InsuredDto;

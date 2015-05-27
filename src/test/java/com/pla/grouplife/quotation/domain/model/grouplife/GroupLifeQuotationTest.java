@@ -4,7 +4,7 @@ import com.pla.core.domain.model.agent.AgentId;
 import com.pla.grouplife.quotation.domain.event.ProposerAddedEvent;
 import com.pla.grouplife.quotation.domain.event.QuotationClosedEvent;
 import com.pla.grouplife.quotation.domain.exception.QuotationException;
-import com.pla.grouplife.quotation.domain.model.QuotationStatus;
+import com.pla.grouplife.quotation.domain.model.*;
 import com.pla.sharedkernel.identifier.QuotationId;
 import org.joda.time.LocalDate;
 import org.junit.Before;

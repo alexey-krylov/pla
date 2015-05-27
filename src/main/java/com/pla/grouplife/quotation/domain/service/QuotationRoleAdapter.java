@@ -1,6 +1,6 @@
 package com.pla.grouplife.quotation.domain.service;
 
-import com.pla.grouplife.quotation.domain.model.grouplife.GLQuotationProcessor;
+import com.pla.grouplife.quotation.domain.model.GLQuotationProcessor;
 import org.springframework.security.access.AuthorizationServiceException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;

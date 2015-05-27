@@ -1,4 +1,4 @@
-package com.pla.grouplife.quotation.application.command.grouplife;
+package com.pla.grouplife.quotation.application.command;
 
 import com.pla.grouplife.quotation.query.ProposerDto;
 import lombok.Getter;

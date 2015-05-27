@@ -1,7 +1,7 @@
 package com.pla.grouplife.quotation.domain.service;
 
 import com.google.common.collect.Lists;
-import com.pla.grouplife.quotation.domain.model.grouplife.GLQuotationProcessor;
+import com.pla.grouplife.quotation.domain.model.GLQuotationProcessor;
 import com.pla.sharedkernel.util.RolesUtil;
 import org.junit.Before;
 import org.junit.Test;

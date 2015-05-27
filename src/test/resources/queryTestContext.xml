@@ -79,7 +79,9 @@
 
     <import resource="META-INF/spring/cqrs-infrastructure-test-context.xml"/>
     <mongo:repositories base-package="com.pla"/>
-    <context:component-scan base-package="com.pla"/>
+    <context:component-scan base-package="com.pla">
+        <context:exclude-filter type="regex" expression="com.pla.sharedkernel.service.MailService"/>
+    </context:component-scan>
     <context:component-scan base-package="org.nthdimenzion">
         <context:exclude-filter type="regex" expression="org.nthdimenzion.ddd.infrastructure.stubs.*"/>
         <context:exclude-filter type="regex" expression="org.nthdimenzion.application.*"/>

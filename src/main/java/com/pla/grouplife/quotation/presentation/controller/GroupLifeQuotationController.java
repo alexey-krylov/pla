@@ -1,7 +1,7 @@
 package com.pla.grouplife.quotation.presentation.controller;
 
-import com.pla.grouplife.quotation.application.command.grouplife.*;
-import com.pla.grouplife.quotation.application.service.grouplife.GLQuotationService;
+import com.pla.grouplife.quotation.application.command.*;
+import com.pla.grouplife.quotation.application.service.GLQuotationService;
 import com.pla.grouplife.quotation.query.*;
 import com.pla.sharedkernel.identifier.QuotationId;
 import com.wordnik.swagger.annotations.ApiOperation;

@@ -1,11 +1,9 @@
-package com.pla.grouplife.quotation.domain.model.grouplife;
+package com.pla.grouplife.quotation.domain.model;
 
 import com.pla.core.domain.model.agent.AgentId;
 import com.pla.grouplife.quotation.domain.event.ProposerAddedEvent;
 import com.pla.grouplife.quotation.domain.event.QuotationClosedEvent;
 import com.pla.grouplife.quotation.domain.event.QuotationGeneratedEvent;
-import com.pla.grouplife.quotation.domain.model.IQuotation;
-import com.pla.grouplife.quotation.domain.model.QuotationStatus;
 import com.pla.sharedkernel.identifier.QuotationId;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -152,7 +150,7 @@ public class GroupLifeQuotation extends AbstractAggregateRoot<QuotationId> imple
     }
 
     public GroupLifeQuotation cloneQuotation(String quotationNumber, String quotationCreator, QuotationId quotationId) {
-        GroupLifeQuotation newQuotation = new GroupLifeQuotation(quotationCreator, quotationNumber, quotationId, this.versionNumber + 1, QuotationStatus.DRAFT);
+        GroupLifeQuotation newQuotation = new GroupLifeQuotation(quotationNumber, quotationCreator, quotationId, this.versionNumber + 1, QuotationStatus.DRAFT);
         newQuotation.parentQuotationId = this.quotationId;
         newQuotation.proposer = this.proposer;
         newQuotation.agentId = this.agentId;

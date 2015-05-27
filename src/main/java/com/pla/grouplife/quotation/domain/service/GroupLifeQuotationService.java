@@ -1,11 +1,11 @@
 package com.pla.grouplife.quotation.domain.service;
 
 import com.pla.core.domain.model.agent.AgentId;
+import com.pla.grouplife.quotation.domain.model.*;
 import com.pla.publishedlanguage.contract.IPremiumCalculator;
 import com.pla.publishedlanguage.domain.model.BasicPremiumDto;
 import com.pla.publishedlanguage.domain.model.ComputedPremiumDto;
 import com.pla.publishedlanguage.domain.model.PremiumFrequency;
-import com.pla.grouplife.quotation.domain.model.grouplife.*;
 import com.pla.grouplife.quotation.query.PremiumDetailDto;
 import com.pla.grouplife.quotation.query.ProposerDto;
 import com.pla.sharedkernel.identifier.QuotationId;

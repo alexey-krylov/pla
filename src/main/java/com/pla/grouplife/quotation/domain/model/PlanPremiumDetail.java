@@ -1,4 +1,4 @@
-package com.pla.grouplife.quotation.domain.model.grouplife;
+package com.pla.grouplife.quotation.domain.model;
 
 import com.pla.sharedkernel.identifier.PlanId;
 import lombok.AccessLevel;

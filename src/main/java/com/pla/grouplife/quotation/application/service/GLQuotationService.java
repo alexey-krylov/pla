@@ -1,14 +1,12 @@
-package com.pla.grouplife.quotation.application.service.grouplife;
+package com.pla.grouplife.quotation.application.service;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import com.pla.core.domain.model.agent.AgentId;
+import com.pla.grouplife.quotation.domain.model.*;
 import com.pla.publishedlanguage.contract.IPlanAdapter;
 import com.pla.publishedlanguage.dto.PlanCoverageDetailDto;
-import com.pla.grouplife.quotation.application.command.grouplife.SearchGlQuotationDto;
-import com.pla.grouplife.quotation.application.service.GLInsuredExcelGenerator;
-import com.pla.grouplife.quotation.application.service.GLInsuredExcelParser;
-import com.pla.grouplife.quotation.domain.model.grouplife.*;
+import com.pla.grouplife.quotation.application.command.SearchGlQuotationDto;
 import com.pla.grouplife.quotation.presentation.dto.GLQuotationDetailDto;
 import com.pla.grouplife.quotation.presentation.dto.PlanDetailDto;
 import com.pla.grouplife.quotation.query.*;

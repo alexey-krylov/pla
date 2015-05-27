@@ -1,7 +1,7 @@
 package com.pla.grouplife.quotation.query;
 
-import com.pla.grouplife.quotation.domain.model.grouplife.Proposer;
-import com.pla.grouplife.quotation.domain.model.grouplife.ProposerContactDetail;
+import com.pla.grouplife.quotation.domain.model.Proposer;
+import com.pla.grouplife.quotation.domain.model.ProposerContactDetail;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
