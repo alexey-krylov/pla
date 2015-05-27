@@ -70,8 +70,4 @@
     <extension:mongo-repository id="glQuotationMongoRepository"
                                 aggregate-type="com.pla.grouplife.quotation.domain.model.grouplife.GroupLifeQuotation"
                                 mongo-template="mongoTemplate"/>
-    <extension:mongo-repository id="ghQuotationMongoRepository"
-                                aggregate-type="com.pla.grouphealth.domain.model.quotation.GroupHealthQuotation"
-                                mongo-template="mongoTemplate"/>
-
 </beans>
