@@ -853,7 +853,7 @@ DROP TABLE IF EXISTS `quotation_assured`;
    `quotation_id` varchar(255) NOT NULL,
    `assured_id` varchar(255) NOT NULL,
    KEY `FK_QUOTATION_ID` (`quotation_id`),
-   CONSTRAINT `FK_QUOTATION_QUOTATION_ID` FOREIGN KEY (`quotation_id`) REFERENCES `quotation` (`quotation_id`),
+   CONSTRAINT `FK_QUOTATION_QUOTATION_ID` FOREIGN KEY (`quotation_id`) REFERENCES `individual_life_quotation` (`quotation_id`),
    CONSTRAINT `FK_ASSURED_ASSURED_ID` FOREIGN KEY (`assured_id`) REFERENCES `assured` (`assured_id`)
   ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 

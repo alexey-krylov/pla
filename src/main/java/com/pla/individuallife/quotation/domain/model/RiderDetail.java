@@ -15,7 +15,7 @@ import java.math.BigInteger;
 @NoArgsConstructor(access = AccessLevel.PACKAGE)
 @Getter
 @Setter(value = AccessLevel.PUBLIC)
-@EqualsAndHashCode(of = "optionalRidersId")
+@EqualsAndHashCode(of = "riderDetailId")
 public class RiderDetail {
 
     @Id
