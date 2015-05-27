@@ -1,7 +1,7 @@
 package com.pla.individuallife.quotation.domain.service;
 
 import com.pla.individuallife.proposal.domain.model.ProposalProcessor;
-import com.pla.individuallife.quotation.domain.model.quotation.ILQuotationProcessor;
+import com.pla.individuallife.quotation.domain.model.ILQuotationProcessor;
 import org.springframework.security.access.AuthorizationServiceException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;

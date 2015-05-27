@@ -1,6 +1,6 @@
 package com.pla.individuallife.quotation.presentation.dto;
 
-import com.pla.individuallife.quotation.domain.model.quotation.RiderDetail;
+import com.pla.individuallife.quotation.domain.model.RiderDetail;
 import com.pla.sharedkernel.identifier.PlanId;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

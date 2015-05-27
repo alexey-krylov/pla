@@ -1,6 +1,6 @@
 package com.pla.individuallife.quotation.presentation.dto;
 
-import com.pla.individuallife.quotation.domain.model.quotation.Proposer;
+import com.pla.individuallife.quotation.domain.model.Proposer;
 import com.pla.sharedkernel.domain.model.Gender;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

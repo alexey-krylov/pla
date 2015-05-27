@@ -1,7 +1,7 @@
 package com.pla.individuallife.quotation.domain.service;
 
 import com.pla.core.domain.model.agent.AgentId;
-import com.pla.individuallife.quotation.domain.model.quotation.*;
+import com.pla.individuallife.quotation.domain.model.*;
 import com.pla.individuallife.quotation.presentation.dto.PlanDetailDto;
 import com.pla.individuallife.quotation.presentation.dto.ProposedAssuredDto;
 import com.pla.individuallife.quotation.presentation.dto.ProposerDto;

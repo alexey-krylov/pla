@@ -1,4 +1,4 @@
-package com.pla.individuallife.quotation.domain.model.quotation;
+package com.pla.individuallife.quotation.domain.model;
 
 import com.pla.core.domain.model.agent.AgentId;
 import com.pla.sharedkernel.identifier.PlanId;

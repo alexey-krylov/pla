@@ -1,7 +1,7 @@
 package com.pla.individuallife.quotation.domain.service;
 
 import com.google.common.collect.Lists;
-import com.pla.individuallife.quotation.domain.model.quotation.ILQuotationProcessor;
+import com.pla.individuallife.quotation.domain.model.ILQuotationProcessor;
 import com.pla.sharedkernel.util.RolesUtil;
 import org.junit.Before;
 import org.junit.Test;

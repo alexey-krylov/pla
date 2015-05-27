@@ -1,6 +1,6 @@
-package com.pla.individuallife.quotation.application.command.quotation;
+package com.pla.individuallife.quotation.application.command;
 
-import com.pla.individuallife.quotation.domain.model.quotation.IndividualLifeQuotation;
+import com.pla.individuallife.quotation.domain.model.IndividualLifeQuotation;
 import com.pla.individuallife.quotation.domain.service.IndividualLifeQuotationService;
 import com.pla.sharedkernel.identifier.QuotationId;
 import org.axonframework.commandhandling.annotation.CommandHandler;

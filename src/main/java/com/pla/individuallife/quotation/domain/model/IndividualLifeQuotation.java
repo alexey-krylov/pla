@@ -1,7 +1,6 @@
-package com.pla.individuallife.quotation.domain.model.quotation;
+package com.pla.individuallife.quotation.domain.model;
 
 import com.pla.core.domain.model.agent.AgentId;
-import com.pla.individuallife.quotation.domain.model.ILQuotationStatus;
 import com.pla.quotation.domain.model.IQuotation;
 import com.pla.sharedkernel.identifier.PlanId;
 import com.pla.sharedkernel.identifier.QuotationId;

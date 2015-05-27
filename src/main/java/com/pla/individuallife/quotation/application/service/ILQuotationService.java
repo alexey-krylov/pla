@@ -1,7 +1,7 @@
-package com.pla.individuallife.quotation.application.service.quotation;
+package com.pla.individuallife.quotation.application.service;
 
-import com.pla.individuallife.quotation.domain.model.quotation.ProposedAssured;
-import com.pla.individuallife.quotation.domain.model.quotation.Proposer;
+import com.pla.individuallife.quotation.domain.model.ProposedAssured;
+import com.pla.individuallife.quotation.domain.model.Proposer;
 import com.pla.individuallife.quotation.presentation.dto.ProposedAssuredDto;
 import com.pla.individuallife.quotation.presentation.dto.ProposerDto;
 import com.pla.individuallife.quotation.query.ILQuotationDto;

@@ -1,4 +1,4 @@
-package com.pla.individuallife.quotation.application.command.quotation;
+package com.pla.individuallife.quotation.application.command;
 
 import com.pla.individuallife.quotation.presentation.dto.ProposedAssuredDto;
 import lombok.Getter;
