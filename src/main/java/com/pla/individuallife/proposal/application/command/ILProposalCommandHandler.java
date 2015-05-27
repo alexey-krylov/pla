@@ -14,9 +14,6 @@ public class ILProposalCommandHandler {
     public void handle(CreateProposalCommand proposalCommand) throws PlanValidationException {
 
         // invoice Proposal Service.createProposal
-            //
-
-
 //           proposalCommand.getProposedAssured();
 //           PlanBuilder planBuilder = planBuilder(proposalCommand);
 //        Plan plan = planBuilder.build(command.getPlanId());
