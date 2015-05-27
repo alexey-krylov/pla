@@ -21,7 +21,7 @@ public class MailService {
 
     private JavaMailSenderImpl mailSender;
 
-    //@Autowired
+   // @Autowired
     public MailService(JavaMailSenderImpl mailSender) {
         this.mailSender = mailSender;
     }

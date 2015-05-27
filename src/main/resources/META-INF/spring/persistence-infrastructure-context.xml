@@ -15,16 +15,10 @@
                 <bean class="com.pla.core.repository.ObjectIdToPlanIdConverter"/>
             </mongo:converter>
             <mongo:converter>
-                <bean class="com.pla.quotation.repository.QuotationIdToObjectIdConverter"/>
+                <bean class="com.pla.grouplife.quotation.repository.QuotationIdToObjectIdConverter"/>
             </mongo:converter>
             <mongo:converter>
-                <bean class="com.pla.quotation.repository.ObjectIdToQuotationIdConverter"/>
-            </mongo:converter>
-            <mongo:converter>
-                <bean class="com.pla.grouphealth.repository.QuotationIdToObjectIdConverter"/>
-            </mongo:converter>
-            <mongo:converter>
-                <bean class="com.pla.grouphealth.repository.ObjectIdToQuotationIdConverter"/>
+                <bean class="com.pla.grouplife.quotation.repository.ObjectIdToQuotationIdConverter"/>
             </mongo:converter>
         </mongo:custom-converters>
     </mongo:mapping-converter>
@@ -50,7 +44,7 @@
         <constructor-arg index="3" value="pla"/>
         <constructor-arg index="4" value="pla"/>
     </bean>
-    <mongo:mongo id="mongo" host="127.0.0.1" port="27017"/>
+    <mongo:mongo id="mongo" host="127.0.0.1" port="33016"/>
     <!--
         db.createUser({user:"pla", pwd:"pla" roles:[{role:"userAdmin",db:"pla"}]});
     -->

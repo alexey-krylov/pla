@@ -21,7 +21,7 @@ spring:
       show-sql: true
 
   profiles:
-        active: dev
+        active: ${spring.profiles.active}
 
   smeServer :
         logoutUrl: https://5.9.249.195:7443/myportal/control/logout
