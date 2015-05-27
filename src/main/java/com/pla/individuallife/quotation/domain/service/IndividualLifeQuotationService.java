@@ -18,14 +18,14 @@ import org.springframework.security.core.userdetails.UserDetails;
 @DomainService
 public class IndividualLifeQuotationService {
 
-    private RoleAdapter roleAdapter;
+    private ILQuotationRoleAdapter roleAdapter;
 
     private ILQuotationNumberGenerator ilQuotationNumberGenerator;
 
     private IIdGenerator idGenerator;
 
     @Autowired
-    public IndividualLifeQuotationService(RoleAdapter roleAdapter, ILQuotationNumberGenerator ilquotationNumberGenerator, IIdGenerator idGenerator) {
+    public IndividualLifeQuotationService(ILQuotationRoleAdapter roleAdapter, ILQuotationNumberGenerator ilquotationNumberGenerator, IIdGenerator idGenerator) {
         this.idGenerator = idGenerator;
         this.roleAdapter = roleAdapter;
         this.ilQuotationNumberGenerator = ilquotationNumberGenerator;

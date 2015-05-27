@@ -13,7 +13,7 @@ import static com.pla.sharedkernel.util.RolesUtil.hasIndividualLifeQuotationProc
  * Created by Karunakar on 5/13/2015.
  */
 @Component
-public class RoleAdapter {
+public class ILQuotationRoleAdapter {
 
     public ILQuotationProcessor userToQuotationProcessor(UserDetails userDetails) {
         boolean hasQuotationProcessorRole = hasIndividualLifeQuotationProcessorRole(userDetails.getAuthorities());
