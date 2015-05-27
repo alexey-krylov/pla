@@ -20,4 +20,8 @@ public class AgentDetailDto {
 
     private String branchName;
 
+    private String agentSalutation;
+
+    private String agentMobileNumber;
+
 }

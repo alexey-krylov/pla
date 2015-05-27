@@ -42,6 +42,8 @@ public class GLQuotationFinder {
 
     public static final String FIND_OCCUPATION_CLASS_QUERY = "SELECT code,description FROM occupation_class WHERE description=:occupation";
 
+    public static final String FIND_COVERAGE_BY_ID = "SELECT coverage_code AS coverageCode,coverage_name AS coverageName FROM coverage WHERE coverage_id=:coverageId";
+
     public Map<String, Object> getAgentById(String agentId) {
         Preconditions.checkArgument(isNotEmpty(agentId));
         return namedParameterJdbcTemplate.queryForMap(FIND_ACTIVE_AGENT_BY_ID_QUERY, new MapSqlParameterSource().addValue("agentId", agentId));
@@ -84,5 +86,9 @@ public class GLQuotationFinder {
             return (String) occupationClassMap.get("code");
         }
         return "";
+    }
+
+    public Map<String, Object> getCoverageDetail(String coverageId) {
+        return namedParameterJdbcTemplate.queryForMap(FIND_COVERAGE_BY_ID, new MapSqlParameterSource().addValue("coverageId", coverageId));
     }
 }

@@ -4,22 +4,28 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import com.pla.core.domain.model.agent.AgentId;
 import com.pla.publishedlanguage.contract.IPlanAdapter;
+import com.pla.publishedlanguage.dto.PlanCoverageDetailDto;
 import com.pla.quotation.application.command.grouplife.SearchGlQuotationDto;
 import com.pla.quotation.application.service.GLInsuredExcelGenerator;
 import com.pla.quotation.application.service.GLInsuredExcelParser;
 import com.pla.quotation.domain.model.grouplife.*;
+import com.pla.quotation.presentation.dto.GLQuotationDetailDto;
 import com.pla.quotation.presentation.dto.PlanDetailDto;
 import com.pla.quotation.query.*;
+import com.pla.quotation.repository.GlQuotationRepository;
 import com.pla.sharedkernel.identifier.PlanId;
 import com.pla.sharedkernel.identifier.QuotationId;
 import com.pla.sharedkernel.util.PDFGeneratorUtils;
 import net.sf.jasperreports.engine.JRException;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.bson.types.ObjectId;
+import org.nthdimenzion.presentation.AppUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.math.BigDecimal;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -42,12 +48,15 @@ public class GLQuotationService {
 
     private GLInsuredExcelParser glInsuredExcelParser;
 
+    private GlQuotationRepository glQuotationRepository;
+
     @Autowired
-    public GLQuotationService(GLQuotationFinder glQuotationFinder, IPlanAdapter planAdapter, GLInsuredExcelGenerator glInsuredExcelGenerator, GLInsuredExcelParser glInsuredExcelParser) {
+    public GLQuotationService(GLQuotationFinder glQuotationFinder, IPlanAdapter planAdapter, GLInsuredExcelGenerator glInsuredExcelGenerator, GLInsuredExcelParser glInsuredExcelParser, GlQuotationRepository glQuotationRepository) {
         this.glQuotationFinder = glQuotationFinder;
         this.planAdapter = planAdapter;
         this.glInsuredExcelGenerator = glInsuredExcelGenerator;
         this.glInsuredExcelParser = glInsuredExcelParser;
+        this.glQuotationRepository = glQuotationRepository;
     }
 
     public byte[] getPlanReadyReckoner(String quotationId) throws IOException, JRException {
@@ -56,6 +65,88 @@ public class GLQuotationService {
         List<PlanDetailDto> planDetailDtoList = PlanDetailDto.transformToPlanDetail(planAdapter.getPlanAndCoverageDetail(planIds));
         byte[] pdfData = PDFGeneratorUtils.createPDFReportByList(planDetailDtoList, "jasperpdf/template/grouplife/planReadyReckoner.jrxml");
         return pdfData;
+    }
+
+    public byte[] getQuotationPDF(String quotationId) throws IOException, JRException {
+        GLQuotationDetailDto glQuotationDetailDto = getGlQuotationDetailForPDF(quotationId);
+        byte[] pdfData = PDFGeneratorUtils.createPDFReportByList(Arrays.asList(glQuotationDetailDto), "jasperpdf/template/grouplife/glQuotation.jrxml");
+        return pdfData;
+    }
+
+    private GLQuotationDetailDto getGlQuotationDetailForPDF(String quotationId) {
+        GLQuotationDetailDto glQuotationDetailDto = new GLQuotationDetailDto();
+        GroupLifeQuotation quotation = glQuotationRepository.findOne(new QuotationId(quotationId));
+        AgentDetailDto agentDetailDto = getAgentDetail(new QuotationId(quotationId));
+        glQuotationDetailDto.setAgentBranch(agentDetailDto.getBranchName());
+        glQuotationDetailDto.setAgentCode(agentDetailDto.getAgentId());
+        glQuotationDetailDto.setAgentName(agentDetailDto.getAgentName());
+        glQuotationDetailDto.setAgentSalutation(agentDetailDto.getAgentSalutation());
+        glQuotationDetailDto.setAgentMobileNumber(agentDetailDto.getAgentMobileNumber());
+
+        Proposer proposer = quotation.getProposer();
+        glQuotationDetailDto.setProposerName(proposer.getProposerName());
+        ProposerContactDetail proposerContactDetail = proposer.getContactDetail();
+        glQuotationDetailDto.setProposerPhoneNumber(proposerContactDetail.getContactPersonDetail().getWorkPhoneNumber());
+        glQuotationDetailDto.setProposerAddress(proposerContactDetail.toString());
+        glQuotationDetailDto.setQuotationNumber(quotation.getQuotationNumber());
+
+        PremiumDetail premiumDetail = quotation.getPremiumDetail();
+        glQuotationDetailDto.setCoveragePeriod(premiumDetail.getPolicyTermValue() != null ? premiumDetail.getPolicyTermValue().toString() : "");
+        glQuotationDetailDto.setProfitAndSolvencyLoading(premiumDetail.getProfitAndSolvency() != null ? premiumDetail.getProfitAndSolvency().toString() : "");
+        glQuotationDetailDto.setAdditionalDiscountLoading(premiumDetail.getDiscount() != null ? premiumDetail.getDiscount().toString() : "");
+        glQuotationDetailDto.setAddOnBenefits(premiumDetail.getAddOnBenefit() != null ? premiumDetail.getAddOnBenefit().toString() : "");
+        glQuotationDetailDto.setAddOnBenefitsPercentage(premiumDetail.getAddOnBenefit() != null ? premiumDetail.getAddOnBenefit().toString() : "");
+        glQuotationDetailDto.setWaiverOfExcessLoadings("");
+        glQuotationDetailDto.setWaiverOfExcessLoadingsPercentage("");
+        BigDecimal netPremiumAmount = quotation.getNetAnnualPremiumPaymentAmount(premiumDetail, quotation.getTotalBasicPremiumForInsured());
+        glQuotationDetailDto.setNetPremium(netPremiumAmount != null ? netPremiumAmount.toString() : "");
+        glQuotationDetailDto.setTotalPremium(netPremiumAmount != null ? netPremiumAmount.toString() : "");
+        glQuotationDetailDto.setTotalLivesCovered(quotation.getTotalNoOfLifeCovered().toString());
+        glQuotationDetailDto.setTotalSumAssured(quotation.getTotalSumAssured().toString());
+        List<GLQuotationDetailDto.CoverDetail> coverDetails = Lists.newArrayList();
+        List<GLQuotationDetailDto.Annexure> annexures = Lists.newArrayList();
+        if (isNotEmpty(quotation.getInsureds())) {
+            for (Insured insured : quotation.getInsureds()) {
+                PlanPremiumDetail insuredPremiumDetail = insured.getPlanPremiumDetail();
+                List<PlanCoverageDetailDto> planCoverageDetailDtoList = planAdapter.getPlanAndCoverageDetail(Arrays.asList(insuredPremiumDetail.getPlanId()));
+                GLQuotationDetailDto.CoverDetail insuredPlanCoverDetail = glQuotationDetailDto.new CoverDetail(insured.getCategory(), "Self", planCoverageDetailDtoList.get(0).getPlanName(), insuredPremiumDetail.getSumAssured().toString());
+                coverDetails.add(insuredPlanCoverDetail);
+                if (isNotEmpty(insured.getCoveragePremiumDetails())) {
+                    for (CoveragePremiumDetail coveragePremiumDetail : insured.getCoveragePremiumDetails()) {
+                        Map<String, Object> coverageMap = glQuotationFinder.getCoverageDetail(coveragePremiumDetail.getCoverageId().getCoverageId());
+                        GLQuotationDetailDto.CoverDetail insuredCoverageCoverDetail = glQuotationDetailDto.new CoverDetail(insured.getCategory(), "Self",
+                                (String) coverageMap.get("coverageName"), coveragePremiumDetail.getSumAssured().toString());
+                        coverDetails.add(insuredCoverageCoverDetail);
+                    }
+                }
+                GLQuotationDetailDto.Annexure insuredAnnexure = glQuotationDetailDto.new Annexure(insured.getFirstName() + " " + insured.getLastName()
+                        , insured.getNrcNumber(), insured.getGender().name(), AppUtils.toString(insured.getDateOfBirth()),
+                        insured.getCategory(), "Self", AppUtils.getAge(insured.getDateOfBirth()).toString(), insured.getAnnualIncome() != null ? insured.getAnnualIncome().toString() : "", insuredPremiumDetail.getPremiumAmount() != null ? insuredPremiumDetail.getPremiumAmount().toString() : "");
+                annexures.add(insuredAnnexure);
+                if (isNotEmpty(insured.getInsuredDependents())) {
+                    for (InsuredDependent insuredDependent : insured.getInsuredDependents()) {
+                        PlanPremiumDetail insuredDependentPremiumDetail = insuredDependent.getPlanPremiumDetail();
+                        List<PlanCoverageDetailDto> dependentPlanCoverageDetailDtoList = planAdapter.getPlanAndCoverageDetail(Arrays.asList(insuredDependentPremiumDetail.getPlanId()));
+                        GLQuotationDetailDto.CoverDetail insuredDependentPlanCoverDetail = glQuotationDetailDto.new CoverDetail(insuredDependent.getCategory(), insuredDependent.getRelationship().description, dependentPlanCoverageDetailDtoList.get(0).getPlanName(), insuredDependentPremiumDetail.getSumAssured().toString());
+                        coverDetails.add(insuredDependentPlanCoverDetail);
+                        if (isNotEmpty(insuredDependent.getCoveragePremiumDetails())) {
+                            for (CoveragePremiumDetail dependentCoveragePremiumDetail : insuredDependent.getCoveragePremiumDetails()) {
+                                Map<String, Object> coverageMap = glQuotationFinder.getCoverageDetail(dependentCoveragePremiumDetail.getCoverageId().getCoverageId());
+                                GLQuotationDetailDto.CoverDetail insuredDependentCoverageCoverDetail = glQuotationDetailDto.new CoverDetail(insuredDependent.getCategory(), insuredDependent.getRelationship().name(), (String) coverageMap.get("coverageName"), dependentCoveragePremiumDetail.getSumAssured().toString());
+                                coverDetails.add(insuredDependentCoverageCoverDetail);
+                            }
+                        }
+                        GLQuotationDetailDto.Annexure annexure = glQuotationDetailDto.new Annexure(insuredDependent.getFirstName() + " " + insuredDependent.getLastName()
+                                , insuredDependent.getNrcNumber(), insuredDependent.getGender().name(), AppUtils.toString(insuredDependent.getDateOfBirth()),
+                                insuredDependent.getCategory(), insuredDependent.getRelationship().description, AppUtils.getAge(insuredDependent.getDateOfBirth()).toString(), "", insuredDependentPremiumDetail.getPremiumAmount() != null ? insuredDependentPremiumDetail.getPremiumAmount().toString() : "");
+                        annexures.add(annexure);
+                    }
+                }
+            }
+        }
+        glQuotationDetailDto.setCoverDetails(coverDetails);
+        glQuotationDetailDto.setAnnexure(annexures);
+        return glQuotationDetailDto;
     }
 
     public boolean isValidInsuredTemplate(String quotationId, HSSFWorkbook insuredTemplateWorkbook, boolean samePlanForAllCategory, boolean samePlanForAllRelationship) {

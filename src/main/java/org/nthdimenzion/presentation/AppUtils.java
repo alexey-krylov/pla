@@ -58,7 +58,7 @@ public class AppUtils {
         return userDetails;
     }
 
-    public static int getAge(LocalDate dateOfBirth) {
+    public static Integer getAge(LocalDate dateOfBirth) {
         Years age = Years.yearsBetween(dateOfBirth, LocalDate.now());
         return age.getYears();
     }

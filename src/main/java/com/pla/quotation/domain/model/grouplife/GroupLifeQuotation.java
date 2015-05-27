@@ -1,7 +1,9 @@
 package com.pla.quotation.domain.model.grouplife;
 
 import com.pla.core.domain.model.agent.AgentId;
+import com.pla.quotation.domain.event.ProposerAddedEvent;
 import com.pla.quotation.domain.event.QuotationClosedEvent;
+import com.pla.quotation.domain.event.QuotationGeneratedEvent;
 import com.pla.quotation.domain.model.IQuotation;
 import com.pla.quotation.domain.model.QuotationStatus;
 import com.pla.sharedkernel.identifier.QuotationId;
@@ -16,6 +18,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.math.BigDecimal;
 import java.util.Set;
+import java.util.function.ToIntFunction;
 
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.pla.quotation.domain.exception.QuotationException.raiseQuotationNotModifiableException;
@@ -134,13 +137,13 @@ public class GroupLifeQuotation extends AbstractAggregateRoot<QuotationId> imple
     public void generateQuotation(LocalDate generatedOn) {
         this.quotationStatus = QuotationStatus.GENERATED;
         this.generatedOn = generatedOn;
-        /*if (proposer != null && proposer.getContactDetail() != null) {
+        if (proposer != null && proposer.getContactDetail() != null) {
             ProposerContactDetail proposerContactDetail = proposer.getContactDetail();
             registerEvent(new ProposerAddedEvent(proposer.getProposerName(), proposer.getProposerCode(),
                     proposerContactDetail.getAddressLine1(), proposerContactDetail.getAddressLine2(), proposerContactDetail.getPostalCode(),
                     proposerContactDetail.getProvince(), proposerContactDetail.getTown(), proposerContactDetail.getEmailAddress()));
             registerEvent(new QuotationGeneratedEvent(quotationId));
-        }*/
+        }
     }
 
     @Override
@@ -178,6 +181,33 @@ public class GroupLifeQuotation extends AbstractAggregateRoot<QuotationId> imple
         return netPremiumAmount;
     }
 
+    public Integer getTotalNoOfLifeCovered() {
+        Integer totalNoOfLifeCovered = insureds.size();
+        Integer dependentSize = insureds.stream().mapToInt(new ToIntFunction<Insured>() {
+            @Override
+            public int applyAsInt(Insured value) {
+                return isNotEmpty(value.getInsuredDependents()) ? value.getInsuredDependents().size() : 0;
+            }
+        }).sum();
+        totalNoOfLifeCovered = totalNoOfLifeCovered + dependentSize;
+        return totalNoOfLifeCovered;
+    }
+
+    public BigDecimal getTotalSumAssured() {
+        BigDecimal totalSumAssured = BigDecimal.ZERO;
+        if (isNotEmpty(insureds)) {
+            for (Insured insured : insureds) {
+                PlanPremiumDetail insuredPlanPremiumDetail = insured.getPlanPremiumDetail();
+                totalSumAssured = totalSumAssured.add(insuredPlanPremiumDetail.getSumAssured());
+                if (isNotEmpty(insured.getInsuredDependents())) {
+                    for (InsuredDependent insuredDependent : insured.getInsuredDependents()) {
+                        totalSumAssured = totalSumAssured.add(insuredDependent.getPlanPremiumDetail().getSumAssured());
+                    }
+                }
+            }
+        }
+        return totalSumAssured;
+    }
 
     public BigDecimal getTotalBasicPremiumForInsured() {
         BigDecimal totalBasicAnnualPremium = BigDecimal.ZERO;

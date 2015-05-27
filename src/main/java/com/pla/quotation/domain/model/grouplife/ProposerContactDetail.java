@@ -6,6 +6,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.nthdimenzion.ddd.domain.annotations.ValueObject;
 
+import static org.nthdimenzion.utils.UtilValidator.isNotEmpty;
+
 /**
  * Created by Samir on 4/7/2015.
  */
@@ -61,5 +63,12 @@ public class ProposerContactDetail {
             this.mobileNumber = mobileNumber;
             this.workPhoneNumber = workPhoneNumber;
         }
+    }
+
+    @Override
+    public String toString() {
+        String addressLine2 = isNotEmpty(this.addressLine2) ? "," + this.addressLine2 : "";
+        String postalCode = isNotEmpty(this.postalCode) ? "," + this.postalCode : "";
+        return addressLine1 + addressLine2 + postalCode + "," + town + "," + province;
     }
 }

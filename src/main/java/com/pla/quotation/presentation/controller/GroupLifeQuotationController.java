@@ -173,6 +173,18 @@ public class GroupLifeQuotationController {
         outputStream.close();
     }
 
+    @RequestMapping(value = "/printquotation/{quotationId}", method = RequestMethod.GET)
+    public void printQuotation(@PathVariable("quotationId") String quotationId, HttpServletResponse response) throws IOException, JRException {
+        response.reset();
+        response.setContentType("application/pdf");
+        response.setHeader("content-disposition", "attachment; filename=" + "quotation.pdf" + "");
+        OutputStream outputStream = response.getOutputStream();
+        outputStream.write(glQuotationService.getQuotationPDF(quotationId));
+        outputStream.flush();
+        outputStream.close();
+    }
+
+
     @RequestMapping(value = "/downloadinsuredtemplate/{quotationId}", method = RequestMethod.GET)
     public void downloadInsuredTemplate(@PathVariable("quotationId") String quotationId, HttpServletResponse response) throws IOException {
         response.reset();
