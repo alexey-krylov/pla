@@ -7,15 +7,12 @@ import java.math.BigInteger;
 import java.util.Set;
 
 import static com.google.common.base.Preconditions.checkArgument;
-import static org.nthdimenzion.utils.UtilValidator.isNotEmpty;
 
 /**
  * Created by Karunakar on 5/25/2015.
  */
 @Getter
 public class PlanDetailBuilder {
-
-    private String planDetailId;
 
     private PlanId planId;
 
@@ -29,10 +26,6 @@ public class PlanDetailBuilder {
 
     public void withRiderDetails(Set<RiderDetail> riderDetails) {
         this.riderDetails = riderDetails;
-    }
-
-    public void withPlanDetailId(String planDetailId) {
-        this.planDetailId = planDetailId;
     }
 
     public void withPlanId(PlanId planId) {
@@ -51,13 +44,11 @@ public class PlanDetailBuilder {
         this.sumAssured = sumAssured;
     }
 
-    PlanDetailBuilder(String planDetailId, PlanId planId, Integer policyTerm, Integer premiumPaymentTerm, BigInteger sumAssured, Set<RiderDetail> riderDetails) {
-        checkArgument(isNotEmpty(planDetailId));
+    PlanDetailBuilder(PlanId planId, Integer policyTerm, Integer premiumPaymentTerm, BigInteger sumAssured, Set<RiderDetail> riderDetails) {
         checkArgument(planId != null);
         checkArgument(premiumPaymentTerm != null);
         checkArgument(policyTerm != null);
         checkArgument(sumAssured != null );
-        this.planDetailId = planDetailId;
         this.planId = planId;
         this.policyTerm = policyTerm;
         this.premiumPaymentTerm = premiumPaymentTerm;

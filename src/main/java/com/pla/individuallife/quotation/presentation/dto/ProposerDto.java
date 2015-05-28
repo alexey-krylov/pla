@@ -38,10 +38,10 @@ public class ProposerDto {
         this.proposerFName = proposer.getProposerFName();
         this.proposerSurname = proposer.getProposerSurname();
         this.proposerNRC = proposer.getProposerNRC();
-        this.dateOfBirth = proposer.getDateOfBirth();
+        this.dateOfBirth = proposer.getProposerDateOfBirth();
         this.ageNextBirthDay = proposer.getAgeNextBirthDay();
         this.gender = proposer.getGender();
-        this.mobileNumber = proposer.getMobileNumber();
-        this.emailId = proposer.getEmailId() != null ? proposer.getEmailId() : "";
+        this.mobileNumber = proposer.getProposerMobileNumber();
+        this.emailId = proposer.getProposerEmailId() != null ? proposer.getProposerEmailId() : "";
     }
 }

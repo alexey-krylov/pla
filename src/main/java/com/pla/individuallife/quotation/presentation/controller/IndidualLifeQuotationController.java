@@ -70,7 +70,7 @@ public class IndidualLifeQuotationController {
     @ResponseBody
     public Result getQuotationNumber(@PathVariable("quotationId") String quotationId) {
         Map quotationMap = ilQuotationFinder.getQuotationById(quotationId);
-        return Result.success("Quotation number ", (String) quotationMap.get("quotationNumber"));
+        return Result.success("Quotation number ", (String) quotationMap.get("quotation_number"));
     }
 
     @RequestMapping(value = "/getversionnumber/{quotationId}", method = RequestMethod.GET)
@@ -144,7 +144,7 @@ public class IndidualLifeQuotationController {
     @RequestMapping(value = "/getpremiumdetail/{quotationid}", method = RequestMethod.GET)
     @ResponseBody
     public PremiumDetailDto getPremiumDetail(@PathVariable("quotationid") String quotationId) {
-        return ilQuotationService.getPremiumDetail(new QuotationId(quotationId));
+       return ilQuotationService.getPremiumDetail(new QuotationId(quotationId));
     }
 
     @RequestMapping(value = "/recalculatePremium", method = RequestMethod.POST)

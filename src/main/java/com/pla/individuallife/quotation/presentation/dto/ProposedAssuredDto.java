@@ -15,8 +15,6 @@ import org.joda.time.LocalDate;
 @NoArgsConstructor
 public class ProposedAssuredDto {
 
-    private String assuredId;
-
     private String assuredTitle;
 
     private String assuredFName;
@@ -39,16 +37,15 @@ public class ProposedAssuredDto {
 
 
     public ProposedAssuredDto(ProposedAssured proposedAssured) {
-        this.assuredId = proposedAssured.getAssuredId();
         this.assuredTitle = proposedAssured.getAssuredTitle();
         this.assuredFName = proposedAssured.getAssuredFName();
         this.assuredSurname = proposedAssured.getAssuredSurname();
         this.assuredNRC = proposedAssured.getAssuredNRC();
-        this.dateOfBirth = proposedAssured.getDateOfBirth();
+        this.dateOfBirth = proposedAssured.getAssuredDateOfBirth();
         this.ageNextBirthDay = proposedAssured.getAgeNextBirthDay();
-        this.gender = proposedAssured.getGender();
-        this.mobileNumber = proposedAssured.getMobileNumber();
-        this.emailId = proposedAssured.getEmailId() != null ? proposedAssured.getEmailId() : "";
+        this.gender = proposedAssured.getAssuredGender();
+        this.mobileNumber = proposedAssured.getAssuredMobileNumber();
+        this.emailId = proposedAssured.getAssuredEmailId() != null ? proposedAssured.getAssuredEmailId() : "";
         this.occupation = proposedAssured.getOccupation();
     }
 }

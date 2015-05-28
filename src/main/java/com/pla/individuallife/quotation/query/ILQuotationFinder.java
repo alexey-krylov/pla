@@ -1,11 +1,10 @@
 package com.pla.individuallife.quotation.query;
 
 import com.google.common.base.Preconditions;
-import com.mongodb.BasicDBObject;
+import org.nthdimenzion.common.service.JpaRepositoryFactory;
 import org.nthdimenzion.ddd.domain.annotations.Finder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
-import org.springframework.data.mongodb.core.query.BasicQuery;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
@@ -29,13 +28,22 @@ public class ILQuotationFinder {
 
     private MongoTemplate mongoTemplate;
 
+    private JpaRepositoryFactory jpaRepositoryFactory;
+
+
+
     @Autowired
     public void setDataSource(DataSource dataSource, MongoTemplate mongoTemplate) {
         this.namedParameterJdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
         this.mongoTemplate = mongoTemplate;
+        this.jpaRepositoryFactory = jpaRepositoryFactory;
+
     }
 
     public static final String FIND_AGENT_BY_ID_QUERY = "select * from agent_team_branch_view where agentId =:agentId";
+
+    public static final String FIND_QUOTATION_BY_ID_QUERY = "select * from individual_life_quotation where quotation_id =:quotationId";
+
 
     public Map<String, Object> getAgentById(String agentId) {
         Preconditions.checkArgument(isNotEmpty(agentId));
@@ -43,10 +51,7 @@ public class ILQuotationFinder {
     }
 
     public Map getQuotationById(String quotationId) {
-        BasicDBObject query = new BasicDBObject();
-        query.put("_id", quotationId);
-        Map quotation = mongoTemplate.findOne(new BasicQuery(query), Map.class, "individual_life_quotation");
-        return quotation;
+        return namedParameterJdbcTemplate.queryForMap(FIND_QUOTATION_BY_ID_QUERY, new MapSqlParameterSource().addValue("quotationId", quotationId));
     }
 
     public List<Map> getAllQuotation() {
@@ -67,5 +72,4 @@ public class ILQuotationFinder {
         Query query = new Query(criteria);
         return mongoTemplate.find(query, Map.class, "individual_life_quotation");
     }
-
 }

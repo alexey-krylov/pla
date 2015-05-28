@@ -4,9 +4,10 @@ import com.pla.sharedkernel.identifier.PlanId;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
-import javax.persistence.*;
+import javax.persistence.ElementCollection;
+import javax.persistence.Embeddable;
+import javax.persistence.Embedded;
 import java.math.BigInteger;
 import java.util.Set;
 
@@ -15,15 +16,12 @@ import static com.google.common.base.Preconditions.checkArgument;
 /**
  * Created by Karunakar on 5/25/2015.
  */
-@Entity
+@Embeddable
 @NoArgsConstructor(access = AccessLevel.PACKAGE)
 @Getter
-@Setter(value = AccessLevel.PACKAGE)
 public class PlanDetail {
 
-    @Id
-    private String planDetailId;
-
+    @Embedded
     private PlanId planId;
 
     private Integer policyTerm;
@@ -32,13 +30,12 @@ public class PlanDetail {
 
     private BigInteger sumAssured;
 
-    @OneToMany(targetEntity = RiderDetail.class, fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JoinTable(name = "palndetail_rider", joinColumns = @JoinColumn(name = "PLAN_DETAIL_ID"), inverseJoinColumns = @JoinColumn(name = "RIDER_DETAIL_ID"))
+    @Embedded
+    @ElementCollection
     private Set<RiderDetail> riderDetails;
 
     PlanDetail(PlanDetailBuilder planDetailBuilder) {
         checkArgument(planDetailBuilder != null);
-        this.planDetailId = planDetailBuilder.getPlanDetailId();
         this.planId = planDetailBuilder.getPlanId();
         this.policyTerm = planDetailBuilder.getPolicyTerm();
         this.premiumPaymentTerm = planDetailBuilder.getPremiumPaymentTerm();
@@ -46,8 +43,8 @@ public class PlanDetail {
         this.riderDetails = planDetailBuilder.getRiderDetails();
     }
 
-    public static PlanDetailBuilder getPlanDetailBuilder( String planDetailId, PlanId planId, Integer policyTerm, Integer premiumPaymentTerm, BigInteger sumAssured, Set<RiderDetail> riderDetails) {
-        return new PlanDetailBuilder( planDetailId,  planId,  policyTerm,  premiumPaymentTerm,  sumAssured, riderDetails);
+    public static PlanDetailBuilder getPlanDetailBuilder(PlanId planId, Integer policyTerm, Integer premiumPaymentTerm, BigInteger sumAssured, Set<RiderDetail> riderDetails) {
+        return new PlanDetailBuilder(planId,  policyTerm,  premiumPaymentTerm,  sumAssured, riderDetails);
     }
 
 }

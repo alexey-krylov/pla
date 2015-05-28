@@ -9,10 +9,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.axonframework.domain.AbstractAggregateRoot;
 import org.axonframework.eventsourcing.annotation.AggregateIdentifier;
-import org.hibernate.annotations.DynamicInsert;
-import org.hibernate.annotations.DynamicUpdate;
 import org.joda.time.LocalDate;
-import org.nthdimenzion.common.crud.ICrudEntity;
 
 import javax.persistence.*;
 
@@ -24,12 +21,11 @@ import static org.nthdimenzion.utils.UtilValidator.isNotEmpty;
  * Created by Karunakar on 5/13/2015.
  */
 @Entity
-@Table (name = "individual_life_quotation")
-@Getter(value = AccessLevel.PUBLIC)
+@Table(name = "individual_life_quotation")
+@Getter
 @NoArgsConstructor(access = AccessLevel.PACKAGE)
-@DynamicInsert
-@DynamicUpdate
-public class IndividualLifeQuotation extends AbstractAggregateRoot<QuotationId> implements IQuotation, ICrudEntity {
+public class IndividualLifeQuotation extends AbstractAggregateRoot<QuotationId> implements IQuotation {
+
 
     @EmbeddedId
     @AggregateIdentifier
@@ -37,14 +33,13 @@ public class IndividualLifeQuotation extends AbstractAggregateRoot<QuotationId> 
 
     private String quotationCreator;
 
+    @Embedded
     private AgentId agentId;
 
-    @OneToOne(targetEntity = Proposer.class, fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JoinTable(name = "quotation_proposer", joinColumns = @JoinColumn(name = "QUOTATION_ID"), inverseJoinColumns = @JoinColumn(name = "PROPOSER_ID"))
+    @Embedded
     private Proposer proposer;
 
-    @OneToOne(targetEntity = ProposedAssured.class, fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JoinTable(name = "quotation_assured", joinColumns = @JoinColumn(name = "QUOTATION_ID"), inverseJoinColumns = @JoinColumn(name = "ASSURED_ID"))
+    @Embedded
     private ProposedAssured proposedAssured;
 
     @Enumerated(EnumType.STRING)
@@ -56,16 +51,14 @@ public class IndividualLifeQuotation extends AbstractAggregateRoot<QuotationId> 
 
     private LocalDate generatedOn;
 
-    @Transient
+    @Embedded
+    @AttributeOverrides(value = @AttributeOverride(name = "quotationId",column = @Column(name = "PARENT_QUOTATION_ID")))
     private QuotationId parentQuotationId;
 
-    private PlanId  planid;
-
-    @Column( nullable = false, columnDefinition = "BOOLEAN DEFAULT false" )
+    @Column( columnDefinition = "BOOLEAN DEFAULT false" )
     private Boolean isAssuredTheProposer;
 
-    @OneToOne(targetEntity = PlanDetail.class, fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JoinTable(name = "quotation_plandetail", joinColumns = @JoinColumn(name = "QUOTATION_ID"), inverseJoinColumns = @JoinColumn(name = "PLAN_DETAIL_ID"))
+    @Embedded
     private PlanDetail planDetail;
 
 
@@ -86,7 +79,6 @@ public class IndividualLifeQuotation extends AbstractAggregateRoot<QuotationId> 
         this.quotationId = quotationId;
         this.agentId = agentId;
         this.proposedAssured = proposedAssured;
-        this.planid = planId;
         this.ilQuotationStatus = ilQuotationStatus;
         this.versionNumber = versionNumber;
         this.quotationNumber = quotationNumber;
@@ -113,11 +105,8 @@ public class IndividualLifeQuotation extends AbstractAggregateRoot<QuotationId> 
         return this;
     }
 
-    public IndividualLifeQuotation updateWithProposer(Proposer proposer, AgentId agentId , String proposerId) {
+    public IndividualLifeQuotation updateWithProposer(Proposer proposer, AgentId agentId) {
         checkInvariant();
-        if( this.proposer != null)
-            proposerId = this.proposer.getProposerId();
-        proposer.setProposerId(proposerId);
         this.proposer = proposer;
         this.agentId = agentId;
         if(isAssuredTheProposer) {
@@ -127,15 +116,12 @@ public class IndividualLifeQuotation extends AbstractAggregateRoot<QuotationId> 
         return this;
     }
 
-    public IndividualLifeQuotation updateWithAssured(ProposedAssured proposedAssured, Boolean isAssuredTheProposer, String proposerId) {
+    public IndividualLifeQuotation updateWithAssured(ProposedAssured proposedAssured, Boolean isAssuredTheProposer) {
         checkInvariant();
-        proposedAssured.setAssuredId(this.proposedAssured.getAssuredId());
         this.proposedAssured = proposedAssured;
         this.isAssuredTheProposer = isAssuredTheProposer;
         if(isAssuredTheProposer) {
-            if (proposerId == null) proposerId = this.proposer.getProposerId();
             this.proposer = convertAssuredToProposer(proposedAssured);
-                this.proposer.setProposerId(proposerId);
 
         }
         return this;
@@ -194,7 +180,7 @@ public class IndividualLifeQuotation extends AbstractAggregateRoot<QuotationId> 
     }
 
     private Proposer convertAssuredToProposer(ProposedAssured proposedAssured) {
-        ProposerBuilder proposerBuilder= Proposer.getProposerBuilder(null, proposedAssured.getAssuredTitle(), proposedAssured.getAssuredFName(), proposedAssured.getAssuredSurname(), proposedAssured.getAssuredNRC(), proposedAssured.getDateOfBirth(), proposedAssured.getAgeNextBirthDay(), proposedAssured.getGender(), proposedAssured.getMobileNumber(), proposedAssured.getEmailId());
+        ProposerBuilder proposerBuilder= Proposer.getProposerBuilder(proposedAssured.getAssuredTitle(), proposedAssured.getAssuredFName(), proposedAssured.getAssuredSurname(), proposedAssured.getAssuredNRC(), proposedAssured.getAssuredDateOfBirth(), proposedAssured.getAgeNextBirthDay(), proposedAssured.getAssuredGender(), proposedAssured.getAssuredMobileNumber(), proposedAssured.getAssuredEmailId());
         return new Proposer(proposerBuilder);
     }
 

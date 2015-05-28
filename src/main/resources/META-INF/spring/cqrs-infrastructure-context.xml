@@ -70,4 +70,6 @@
     <extension:mongo-repository id="glQuotationMongoRepository"
                                 aggregate-type="com.pla.grouplife.quotation.domain.model.GroupLifeQuotation"
                                 mongo-template="mongoTemplate"/>
+    <axon:jpa-repository id="ilQuotationJpaRepository" aggregate-type="com.pla.individuallife.quotation.domain.model.IndividualLifeQuotation"
+                         event-bus="eventBus" />
 </beans>

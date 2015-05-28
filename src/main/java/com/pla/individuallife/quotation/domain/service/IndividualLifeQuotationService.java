@@ -31,46 +31,31 @@ public class IndividualLifeQuotationService {
         this.ilQuotationNumberGenerator = ilquotationNumberGenerator;
     }
 
-    public IndividualLifeQuotation createQuotation(AgentId agentId, String assuredId, String assuredTitle, String assuredFName, String assuredSurname, String assuredNRC, PlanId planId, UserDetails userDetails) {
+    public IndividualLifeQuotation createQuotation(AgentId agentId, String assuredTitle, String assuredFName, String assuredSurname, String assuredNRC, PlanId planId, UserDetails userDetails) {
         ILQuotationProcessor IlQuotationProcessor = roleAdapter.userToQuotationProcessor(userDetails);
         QuotationId quotationId = new QuotationId(idGenerator.nextId());
-        assuredId = idGenerator.nextId();
         String quotationNumber = ilQuotationNumberGenerator.getQuotationNumber("5", "2", IndividualLifeQuotation.class);
-        return IlQuotationProcessor.createIndividualLifeQuotation(quotationNumber, IlQuotationProcessor.getUserName(), quotationId, agentId, assuredId, assuredTitle, assuredFName, assuredSurname, assuredNRC, planId);
+        return IlQuotationProcessor.createIndividualLifeQuotation(quotationNumber, IlQuotationProcessor.getUserName(), quotationId, agentId, assuredTitle, assuredFName, assuredSurname, assuredNRC, planId);
     }
 
     public IndividualLifeQuotation updateWithProposer(IndividualLifeQuotation individualLifeQuotation, ProposerDto proposerDto, AgentId agentId, UserDetails userDetails) {
-        String proposerId = null;
         ILQuotationProcessor IlQuotationProcessor = roleAdapter.userToQuotationProcessor(userDetails);
         individualLifeQuotation = checkQuotationNeedForVersioningAndGetQuotation(IlQuotationProcessor, individualLifeQuotation);
-        if (individualLifeQuotation.getProposer() == null) {
-            proposerId = idGenerator.nextId();
-        } else {
-            proposerId = individualLifeQuotation.getProposer().getProposerId();
-        }
-        ProposerBuilder proposerBuilder = Proposer.getProposerBuilder(proposerId, proposerDto.getProposerTitle(), proposerDto.getProposerFName(), proposerDto.getProposerSurname(), proposerDto.getProposerNRC(), proposerDto.getDateOfBirth(), proposerDto.getAgeNextBirthDay(), proposerDto.getGender(), proposerDto.getMobileNumber(), proposerDto.getEmailId());
-        return IlQuotationProcessor.updateWithProposerAndAgentId(individualLifeQuotation, proposerBuilder.build(), agentId, proposerId);
+        ProposerBuilder proposerBuilder = Proposer.getProposerBuilder(proposerDto.getProposerTitle(), proposerDto.getProposerFName(), proposerDto.getProposerSurname(), proposerDto.getProposerNRC(), proposerDto.getDateOfBirth(), proposerDto.getAgeNextBirthDay(), proposerDto.getGender(), proposerDto.getMobileNumber(), proposerDto.getEmailId());
+        return IlQuotationProcessor.updateWithProposerAndAgentId(individualLifeQuotation, proposerBuilder.build(), agentId);
     }
 
     public IndividualLifeQuotation updateWithAssured(IndividualLifeQuotation individualLifeQuotation, ProposedAssuredDto proposedAssuredDto, Boolean isAssuredTheProposer, UserDetails userDetails) {
-        String proposerId = null;
         ILQuotationProcessor IlQuotationProcessor = roleAdapter.userToQuotationProcessor(userDetails);
         individualLifeQuotation = checkQuotationNeedForVersioningAndGetQuotation(IlQuotationProcessor, individualLifeQuotation);
-        ProposedAssuredBuilder proposedAssuredBuilder = ProposedAssured.getAssuredBuilder(proposedAssuredDto.getAssuredId(), proposedAssuredDto.getAssuredTitle(), proposedAssuredDto.getAssuredFName(), proposedAssuredDto.getAssuredSurname(), proposedAssuredDto.getAssuredNRC(), proposedAssuredDto.getDateOfBirth(), proposedAssuredDto.getAgeNextBirthDay(), proposedAssuredDto.getGender(), proposedAssuredDto.getMobileNumber(), proposedAssuredDto.getEmailId(), proposedAssuredDto.getOccupation());
-        if (isAssuredTheProposer && individualLifeQuotation.getProposer() == null) {
-            proposerId = idGenerator.nextId();
-        }
-        return IlQuotationProcessor.updateWithAssured(individualLifeQuotation, proposedAssuredBuilder.build(), isAssuredTheProposer, proposerId);
+        ProposedAssuredBuilder proposedAssuredBuilder = ProposedAssured.getAssuredBuilder(proposedAssuredDto.getAssuredTitle(), proposedAssuredDto.getAssuredFName(), proposedAssuredDto.getAssuredSurname(), proposedAssuredDto.getAssuredNRC(), proposedAssuredDto.getDateOfBirth(), proposedAssuredDto.getAgeNextBirthDay(), proposedAssuredDto.getGender(), proposedAssuredDto.getMobileNumber(), proposedAssuredDto.getEmailId(), proposedAssuredDto.getOccupation());
+        return IlQuotationProcessor.updateWithAssured(individualLifeQuotation, proposedAssuredBuilder.build(), isAssuredTheProposer);
     }
 
     public IndividualLifeQuotation updateWithPlan(IndividualLifeQuotation individualLifeQuotation, PlanDetailDto planDetailDto, UserDetails userDetails) {
         ILQuotationProcessor IlQuotationProcessor = roleAdapter.userToQuotationProcessor(userDetails);
-        if (planDetailDto.getPlanDetailId() == null) planDetailDto.setPlanDetailId(idGenerator.nextId());
-        if (planDetailDto.getRiderDetails() != null) {
-            planDetailDto.getRiderDetails().stream().filter(riderdetail -> riderdetail.getRiderDetailId() == null).forEach(riderdetail -> riderdetail.setRiderDetailId(idGenerator.nextId()));
-        }
         individualLifeQuotation = checkQuotationNeedForVersioningAndGetQuotation(IlQuotationProcessor, individualLifeQuotation);
-        PlanDetailBuilder planDetailBuilder = PlanDetail.getPlanDetailBuilder(planDetailDto.getPlanDetailId(), planDetailDto.getPlanId(), planDetailDto.getPolicyTerm(), planDetailDto.getPremiumPaymentTerm(), planDetailDto.getSumAssured(), planDetailDto.getRiderDetails());
+        PlanDetailBuilder planDetailBuilder = PlanDetail.getPlanDetailBuilder(planDetailDto.getPlanId(), planDetailDto.getPolicyTerm(), planDetailDto.getPremiumPaymentTerm(), planDetailDto.getSumAssured(), planDetailDto.getRiderDetails());
         return IlQuotationProcessor.updateWithPlan(individualLifeQuotation, planDetailBuilder.build());
     }
 

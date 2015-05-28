@@ -13,8 +13,6 @@ import static org.nthdimenzion.utils.UtilValidator.isNotEmpty;
 @Getter
 public class ProposerBuilder {
 
-    private String proposerId;
-
     private String proposerTitle;
 
     private String proposerFName;
@@ -33,7 +31,7 @@ public class ProposerBuilder {
 
     private String emailId;
 
-    ProposerBuilder( String  proposerId, String proposerTitle, String proposerFName, String proposerSurname, String proposerNRC, LocalDate dateOfBirth, Number ageNextBirthDay, Gender gender, String mobileNumber, String emailId) {
+    ProposerBuilder( String proposerTitle, String proposerFName, String proposerSurname, String proposerNRC, LocalDate dateOfBirth, Number ageNextBirthDay, Gender gender, String mobileNumber, String emailId) {
         checkArgument(isNotEmpty(proposerTitle));
         checkArgument(isNotEmpty(proposerFName));
         checkArgument(isNotEmpty(proposerSurname));
