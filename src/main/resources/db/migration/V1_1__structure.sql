@@ -921,8 +921,8 @@ CREATE TABLE `employment_type` (
   UNIQUE KEY (`code`,`description`)
 ) ENGINE=INNODB DEFAULT CHARSET=utf8;
 
-DROP TABLE IF EXISTS `plan_coverage_benefits_assoc`;
-CREATE TABLE `plan_coverage_benefits_assoc` (
+DROP TABLE IF EXISTS `plan_coverage_benefit_assoc`;
+CREATE TABLE `plan_coverage_benefit_assoc` (
 `id` bigint(20) NOT NULL AUTO_INCREMENT,
 `plan_id` varchar(60) NOT NULL,
 `coverage_id` varchar(255) NOT NULL,
