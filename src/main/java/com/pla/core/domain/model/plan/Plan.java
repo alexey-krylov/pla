@@ -252,7 +252,8 @@ public class Plan extends AbstractAnnotatedAggregateRoot<PlanId> {
 
     public List<Integer> getAllowedAges() {
         List<Integer> allowedAges = new ArrayList<>();
-        int maxAge = getMaximumMaturityAge();
+        int maxAge = this.getPlanDetail().maxEntryAge;
+        //int maxAge = getMaximumMaturityAge();
         int minAge = this.getPlanDetail().minEntryAge;
         while (minAge <= maxAge) {
             allowedAges.add(minAge);

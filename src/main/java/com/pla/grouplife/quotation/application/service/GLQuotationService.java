@@ -86,7 +86,10 @@ public class GLQuotationService {
             throw new RuntimeException("email-ID is not available of proposer");
         }
         String emailBody = VelocityEngineUtils.mergeTemplateIntoString(velocityEngine, "emailtemplate/grouplife/quotation/grouplifeQuotationTemplate.vm", Maps.newHashMap());
-        return new GLQuotationMailDto(subject, emailBody, new String[]{mailAddress});
+        GLQuotationMailDto dto=new GLQuotationMailDto(subject, emailBody, new String[]{mailAddress});
+        dto.setQuotationId(quotationId);
+        dto.setQuotationNumber(groupLifeQuotation.getQuotationNumber());
+        return dto;
     }
 
     private GLQuotationDetailDto getGlQuotationDetailForPDF(String quotationId) {
@@ -330,7 +333,7 @@ public class GLQuotationService {
     }
 
     public List<GlQuotationDto> searchQuotation(SearchGlQuotationDto searchGlQuotationDto) {
-        List<Map> allQuotations = glQuotationFinder.searchQuotation(searchGlQuotationDto.getQuotationNumber(), searchGlQuotationDto.getAgentCode(), searchGlQuotationDto.getProposerName());
+        List<Map> allQuotations = glQuotationFinder.searchQuotation(searchGlQuotationDto.getQuotationNumber(), searchGlQuotationDto.getAgentCode(), searchGlQuotationDto.getProposerName(),searchGlQuotationDto.getAgentName());
         List<GlQuotationDto> glQuotationDtoList = allQuotations.stream().map(new TransformToGLQuotationDto()).collect(Collectors.toList());
         return glQuotationDtoList;
     }

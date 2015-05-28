@@ -59,7 +59,7 @@ public class CoverageService {
         CoverageDto coverageDto  = new CoverageDto(coverage.getCoverageId().getCoverageId(), newCoverageName,newCoverageCode);
         boolean isCoverageAssociatedWithPlan = coverageIsAssociatedWithPlan.isSatisfiedBy(coverageDto);
         if (isCoverageAssociatedWithPlan){
-            throw new CoverageException("Coverage is associated with a Plan");
+            throw new CoverageException("Coverage is associated with an active Plan");
         }
         boolean isCodeAndNameIsUnique = coverageCodeIsUnique.And(coverageNameIsUnique).isSatisfiedBy(coverageDto);
         Coverage updatedCoverage = admin.updateCoverage(coverage, newCoverageName,newCoverageCode,description, benefits,isCodeAndNameIsUnique);
@@ -76,7 +76,7 @@ public class CoverageService {
         coverageDto.setCoverageId(coverage.getCoverageId().getCoverageId());
         boolean isCoverageAssociatedWithPlan = coverageIsAssociatedWithPlan.isSatisfiedBy(coverageDto);
         if (isCoverageAssociatedWithPlan){
-            throw new CoverageException("Coverage is associated with a Plan");
+            throw new CoverageException("Coverage is associated with an active Plan");
         }
         return admin.inactivateCoverage(coverage);
     }

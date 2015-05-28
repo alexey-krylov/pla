@@ -92,8 +92,9 @@
                             <span th:text="#{listOfQuotation}">List of Quotation</span>
                         </div>
                         <div class="col-md-4 col-md-offset-2">
-                            <a type="button" class="btn btn-default btn-sm btn-disabled" disabled="disabled">Print</a>
-                            <a type="button" class="btn btn-default btn-sm btn-disabled" disabled="disabled">Email</a>
+                            <a type="button" class="btn btn-default btn-sm btn-disabled" disabled="disabled" id="print"
+                                    onclick="viewQuotationModule.printQuotation()">Print</a>
+                            <a type="button" class="btn btn-default btn-sm btn-disabled" disabled="disabled" id="emailaddress" onclick="viewQuotationModule.emailQuotation()">Email</a>
                             <a type="button" class="btn btn-default btn-sm btn-disabled" disabled="disabled" onclick="viewQuotationModule.modifyQuotation()">Modify</a>
                             <a type="button" class="btn btn-default btn-sm btn-disabled" disabled="disabled"  onclick="viewQuotationModule.viewQuotation()">View</a>
                             <a type="button" class="btn btn-default btn-sm btn-disabled"  onclick="viewQuotationModule.createQuotation()">Create</a>
@@ -118,7 +119,10 @@
                         <form id="viewAgentsForm">
                             <!--/*/ <th:block th:each="quotation : ${searchResult}"> /*/-->
                             <tr>
-                                <td><input type="radio" name="quotationNumber" th:value="${quotation.quotationId}" value="5100000010315"/></td>
+                                <td>
+                                    <input type="radio" name="quotationNumber" th:value="${quotation.quotationId}" value="5100000010315"/>
+                                    <input type="hidden" name="quotationStatus" th:value="${quotation.quotationStatus}"/>
+                                </td>
                                 <td th:text="${quotation.quotationNumber}">5100000010315</td>
                                 <td th:text="${quotation.quotationGeneratedOn}">05/03/2015</td>
                                 <td th:text="${quotation.ageing}"></td>

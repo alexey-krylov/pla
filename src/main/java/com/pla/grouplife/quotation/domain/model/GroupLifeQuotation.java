@@ -44,7 +44,7 @@ public class GroupLifeQuotation extends AbstractAggregateRoot<QuotationId> imple
 
     private QuotationStatus quotationStatus;
 
-    private int versionNumber;
+    private int versionNumber=1;
 
     private String quotationNumber;
 

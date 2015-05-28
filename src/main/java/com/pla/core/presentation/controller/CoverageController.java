@@ -107,7 +107,7 @@ public class CoverageController {
             LOGGER.error("Error in updating coverage", e);
             return Result.failure(e.getMessage());
         }
-        return Result.success("coverage updated successfully");
+        return Result.success("Coverage updated successfully");
     }
 
     @RequestMapping(value = "/coverages/inactive", method = RequestMethod.POST)

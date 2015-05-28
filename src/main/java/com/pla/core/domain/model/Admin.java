@@ -51,7 +51,7 @@ public class Admin {
 
     public Benefit inactivateBenefit(Benefit benefit,boolean isBenefitUpdatable) {
         if (!isBenefitUpdatable) {
-            throw new BenefitDomainException("Benefit is associated with active coverage");
+            throw new BenefitDomainException("Benefit is associated with an active coverage");
         }
         Benefit updatedBenefit = benefit.inActivate();
         return updatedBenefit;

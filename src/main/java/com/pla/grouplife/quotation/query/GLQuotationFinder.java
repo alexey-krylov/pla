@@ -1,6 +1,7 @@
 package com.pla.grouplife.quotation.query;
 
 import com.google.common.base.Preconditions;
+import com.google.common.collect.Lists;
 import com.mongodb.BasicDBObject;
 import org.nthdimenzion.ddd.domain.annotations.Finder;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +18,7 @@ import javax.sql.DataSource;
 import java.util.List;
 import java.util.Map;
 
+import static org.nthdimenzion.utils.UtilValidator.isEmpty;
 import static org.nthdimenzion.utils.UtilValidator.isNotEmpty;
 
 /**
@@ -60,7 +62,7 @@ public class GLQuotationFinder {
         return mongoTemplate.findAll(Map.class, "group_life_quotation");
     }
 
-    public List<Map> searchQuotation(String quotationNumber, String agentCode, String proposerName) {
+    public List<Map> searchQuotation(String quotationNumber, String agentCode, String proposerName, String agentName) {
         Criteria criteria = null;
         if (isNotEmpty(quotationNumber)) {
             criteria = Criteria.where("quotationNumber").is(quotationNumber);
@@ -71,7 +73,14 @@ public class GLQuotationFinder {
         if (isNotEmpty(proposerName)) {
             criteria = criteria != null ? criteria.and("proposer.proposerName").is(proposerName) : Criteria.where("proposer.proposerName").is(proposerName);
         }
+        if (criteria == null && isEmpty(agentName)) {
+            return Lists.newArrayList();
+        } else if (isNotEmpty(agentName)) {
+
+        }
         Query query = new Query(criteria);
+        List quotationList = mongoTemplate.find(query, Map.class, "group_life_quotation");
+
         return mongoTemplate.find(query, Map.class, "group_life_quotation");
     }
 
