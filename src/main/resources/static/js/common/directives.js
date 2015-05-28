@@ -30,11 +30,13 @@ angular.module('directives', ['mgcrea.ngStrap.alert'])
             },
             link: function (scope, element, attr, ctrl) {
 
+
                 scope.$watch('selectedItem', function (newVal, oldVal) {
                     $(element).wizard('selectedItem', {
                         step: scope.selectedItem
                     });
                 });
+
                 scope.$watch('removeSteps', function (newVal, oldVal) {
                     if (newVal) {
                         $(element).wizard('removeSteps', newVal.index, newVal.howMany)

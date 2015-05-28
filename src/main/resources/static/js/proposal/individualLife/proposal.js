@@ -167,7 +167,7 @@ angular.module('pla.individual.proposal', [])
             if (proposedAssuredAsProposer) {
                 proposer = angular.copy(proposedAssured);
             }
-            $http.post('/pla/individualLife/proposal/saveProposedAssured', {"proposedAssured": proposedAssured, "proposer": proposer});
+            $http.post('/pla/individuallife/proposal/saveProposedAssured', {"proposedAssured": proposedAssured, "proposer": proposer});
         }
     }]);
 

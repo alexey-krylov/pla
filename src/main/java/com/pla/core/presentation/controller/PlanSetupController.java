@@ -109,6 +109,11 @@ public class PlanSetupController {
         return "pla/core/plan/plan_new";
     }
 
+    @RequestMapping(value = "/viewplan", method = RequestMethod.GET)
+    public String viewplan() {
+        return "pla/core/plan/planview";
+    }
+
     @RequestMapping(value = "/create", method = RequestMethod.POST, consumes = {MediaType.APPLICATION_JSON_VALUE})
     public ModelAndView createPlan(@RequestBody @Valid CreatePlanCommand command, HttpServletResponse response) {
         PlanId planId = new PlanId(new ObjectId().toString());

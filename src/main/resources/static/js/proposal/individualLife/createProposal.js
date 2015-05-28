@@ -3,7 +3,7 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
         'globalConstants', 'ProposalService', 'employmentType', 'occupations', 'provinces',
         function ($scope, resources, $bsmodal, globalConstants, ProposalService, employmentTypes, occupations, provinces) {
 
-
+            console.log('create proposal');
             $scope.employmentTypes = employmentTypes;
             $scope.occupations = occupations;
             $scope.provinces = provinces;
@@ -197,7 +197,7 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
             resolve: {
                 occupations: ['$q', '$http', function ($q, $http) {
                     var deferred = $q.defer();
-                    $http.get('/pla/individualLife/proposal/getAllOccupation').success(function (response, status, headers, config) {
+                    $http.get('/pla/individuallife/proposal/getAllOccupation').success(function (response, status, headers, config) {
                         deferred.resolve(response);
                     }).error(function (response, status, headers, config) {
                         deferred.reject();
@@ -207,7 +207,7 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
                 }],
                 employmentType: ['$q', '$http', function ($q, $http) {
                     var deferred = $q.defer();
-                    $http.get('/pla/individualLife/proposal/getAllEmploymentType').success(function (response, status, headers, config) {
+                    $http.get('/pla/individuallife/proposal/getAllEmploymentType').success(function (response, status, headers, config) {
                         deferred.resolve(response);
                     }).error(function (response, status, headers, config) {
                         deferred.reject();
@@ -226,12 +226,13 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
                 }],
                 planList: ['$q', '$http', function ($q, $http) {
                     var deferred = $q.defer();
-                    $http.get('/pla/individualLife/proposal/getAllIndividualLifePlans').success(function (response, status, headers, config) {
+                    /* $http.get('/pla/individuallife/proposal/getAllindividuallifePlans').success(function (response, status, headers, config) {
                         deferred.resolve(response)
                     }).error(function (response, status, headers, config) {
                         deferred.reject();
                     });
-                    return deferred.promise;
+                     return deferred.promise;*/
+                    return [];
                 }]
             }
         });
@@ -249,16 +250,16 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
 
     }])
     .constant('resources', {
-        agentModal: "/pla/proposal/individualLife/getPage/agentDetailModal",
-        proposedAssuredUrl: "/pla/proposal/individualLife/getPage/proposedAssuredDetails",
-        proposerDetails: "/pla/proposal/individualLife/getPage/proposerDetails",
-        planDetails: "/pla/proposal/individualLife/getPage/planDetails",
-        beneficiaryModal: "/pla/proposal/individualLife/getPage/beneficiaryDetailModal",
-        generalDetails: "/pla/proposal/individualLife/getPage/generalDetails",
-        compulsoryHealthDetailsPart1: "/pla/proposal/individualLife/getPage/compulsoryHealthDetailsPart1",
-        compulsoryHealthDetailsPart2: "/pla/proposal/individualLife/getPage/compulsoryHealthDetailsPart2",
-        familyHabitAndBuild: "/pla/proposal/individualLife/getPage/familyHabitAndBuild",
-        additionalDetail: "/pla/proposal/individualLife/getPage/additionalDetail"
+        agentModal: "/pla/individuallife/proposal/getPage/agentDetailModal",
+        proposedAssuredUrl: "/pla/individuallife/proposal/getPage/proposedAssuredDetails",
+        proposerDetails: "/pla/individuallife/proposal/getPage/proposerDetails",
+        planDetails: "/pla/individuallife/proposal/getPage/planDetails",
+        beneficiaryModal: "/pla/individuallife/proposal/getPage/beneficiaryDetailModal",
+        generalDetails: "/pla/individuallife/proposal/getPage/generalDetails",
+        compulsoryHealthDetailsPart1: "/pla/individuallife/proposal/getPage/compulsoryHealthDetailsPart1",
+        compulsoryHealthDetailsPart2: "/pla/individuallife/proposal/getPage/compulsoryHealthDetailsPart2",
+        familyHabitAndBuild: "/pla/individuallife/proposal/getPage/familyHabitAndBuild",
+        additionalDetail: "/pla/individuallife/proposal/getPage/additionalDetail"
     })
     .filter('getTrustedUrl', ['$sce', function ($sce) {
         return function (url) {

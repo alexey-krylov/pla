@@ -8,11 +8,11 @@
 <div th:include="fragments/common :: bodyHeader" th:remove="tag"/>
 <script>
     /*  require(['moment'], function (moment) {
-     require(['/pla/js/proposal/individualLife/proposal.js'], function () {
+     require(['/pla/js/proposal/individuallife/proposal.js'], function () {
      })
      });*/
     requirejs(['main', '/pla/js/proposal/individualLife/proposal.js'], function () {
-        require(['/pla/js/proposal/individualLife/createProposal.js?t=01'], function () {
+        require(['/pla/js/proposal/individualLife/createProposal.js?t=33'], function () {
             angular.bootstrap(document, ['createProposal']);
         });
     });

@@ -20,6 +20,37 @@ app.config(function ($routeProvider, $locationProvider) {
         .when('/plan', {
             templateUrl: 'plan/list'
         })
+        .when('/viewplan/:planid', {
+            controller: 'PlanViewController',
+            templateUrl: 'plan/viewplan',
+            resolve: {
+                plan: ['$q', '$route', '$http', function ($q, $route, $http) {
+                    var deferred = $q.defer();
+                    if (angular.isDefined($route.current.params.planid)) {
+                        $http({
+                            method: 'GET',
+                            url: '/pla/core/plan/getPlanById/' + $route.current.params.planid
+                        }).success(function (data) {
+                            deferred.resolve(data);
+                        }).error(function (msg) {
+                            deferred.reject(msg);
+                        });
+                    } else {
+                        deferred.resolve();
+                    }
+                    return deferred.promise;
+                }],
+                activeCoverages: ['$q', '$http', function ($q, $http) {
+                    var deferred = $q.defer();
+                    $http.get('/pla/core/coverages/activecoverage').success(function (response, status, headers, config) {
+                        deferred.resolve(response);
+                    }).error(function (response, status, headers, config) {
+                        deferred.reject();
+                    });
+                    return deferred.promise;
+                }]
+            }
+        })
         .when('/newplan', {
             templateUrl: "plan/newplan",
             controller: 'PlanSetupController',
@@ -59,7 +90,7 @@ app.config(function ($routeProvider, $locationProvider) {
                 }]
             }
         })
-        .when('/viewplan/:planid', {
+        .when('/editplan/:planid', {
             templateUrl: "plan/viewplan/:planid",
             controller: 'PlanSetupController',
             resolve: {
@@ -106,8 +137,54 @@ app.controller('PlanListController', ['$scope', 'planList', function ($scope, pl
     $scope.planList = planList;
 }
 ]);
+
+app.controller('PlanViewController', ['$scope', 'plan', 'activeCoverages',
+    function ($scope, plan, activeCoverages) {
+        $scope.plan = plan;
+
+        $scope.coverages = activeCoverages;
+        $scope.getCoverageName = function (coverageId) {
+            var coverage = _.findWhere($scope.coverages, {coverageId: coverageId});
+            if (coverage) {
+                return coverage.coverageName;
+            }
+            return '';
+        };
+
+        $scope.getBenefitName = function (coverageId, benefitId) {
+            var coverage = _.findWhere($scope.coverages, {coverageId: coverageId});
+            if (coverage) {
+                var benefit = _.findWhere(coverage.benefitDtos, {benefitId: benefitId});
+                if (benefit) {
+                    return benefit.benefitName;
+                }
+            }
+            return '';
+        };
+
+        var relations = [
+            {val: 'BROTHER', desc: 'Brother'},
+            {val: 'DAUGHTER', desc: 'Daughter'},
+            {val: 'DEPENDENTS', desc: 'Dependents'},
+            {val: 'FATHER', desc: 'Father'},
+            {val: 'FATHER_IN_LAW', desc: 'Father-in-law'},
+            {val: 'MOTHER', desc: 'Mother'},
+            {val: 'MOTHER_IN_LAW', desc: 'Mother-in-law'},
+            {val: 'SELF', desc: 'Self'},
+            {val: 'SISTER', desc: 'Sister'},
+            {val: 'SON', desc: 'Son'},
+            {val: 'SPOUSE', desc: 'Spouse'},
+            {val: 'STEP_DAUGHTER', desc: 'Step Daughter'},
+            {val: 'STEP_SON', desc: 'Step Son'}];
+
+        $scope.resolveRelationship = function (relation) {
+            return _.findWhere(relations, {val: relation}).desc;
+        }
+    }
+])
 app.controller('PlanSetupController', ['$scope', '$http', '$location', '$routeParams', '$templateCache', '$bsmodal', '$log', 'plan', 'activeCoverages', 'endorsementTypes',
         function ($scope, $http, $location, $routeParams, $templateCache, $modal, $log, plan, activeCoverages, endorsementTypes) {
+
 
             $scope.plan = plan;
             $scope.coverageList = activeCoverages;

@@ -39,7 +39,10 @@
                         <td th:text="${plan.line_of_business}"></td>
                         <td th:text="${#dates.format(plan.launch_date,'dd/MM/yyyy')}"></td>
                         <td th:text="${{plan.withdrawal_date}}"></td>
-                        <td><a th:href="'#viewplan/'+${plan.plan_id}+''">View</a></td>
+                        <td class="text-center">
+                            <a th:href="'#viewplan/'+${plan.plan_id}+''"><span class="btn btn-default btn-xs"><i class="glyphicon glyphicon-eye-open"></i>&nbsp;View</span></a>&nbsp;|&nbsp;
+                            <a th:href="'#editplan/'+${plan.plan_id}+''"><span class="btn btn-default btn-xs"><i class="glyphicon glyphicon-edit"></i>&nbsp;Edit</span></a>
+                        </td>
                     </tr>
                     </tbody>
                 </table>

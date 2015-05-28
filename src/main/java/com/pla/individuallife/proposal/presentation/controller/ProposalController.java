@@ -16,7 +16,7 @@ import java.util.Map;
  * Created by pradyumna on 21-05-2015.
  */
 @Controller
-@RequestMapping(value = "/individualLife/proposal")
+@RequestMapping(value = "/individuallife/proposal")
 public class ProposalController {
 
     @Autowired
@@ -30,14 +30,21 @@ public class ProposalController {
     @RequestMapping(method = RequestMethod.GET)
     public ModelAndView proposalListPage() {
         ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("pla/core/proposal/individualLife/createProposal/index");
+        modelAndView.setViewName("pla/individuallife/proposal/index");
+        return modelAndView;
+    }
+
+    @RequestMapping(value = "/getPage/{pageName}", method = RequestMethod.GET)
+    public ModelAndView proposal(@PathVariable("pageName") String pageName) {
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("pla/individuallife/proposal/" + pageName);
         return modelAndView;
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/createProposalForm")
     public ModelAndView proposalForm() {
         ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("pla/core/proposal/individualLife/createProposal/createProposal");
+        modelAndView.setViewName("pla/individuallife/proposal/createProposal");
         return modelAndView;
     }
 

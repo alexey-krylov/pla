@@ -28,7 +28,7 @@ import static org.nthdimenzion.presentation.AppUtils.getLoggedInUSerDetail;
  * Created by Karunakar on 5/13/2015.
  */
 @Controller
-@RequestMapping(value = "/quotation/individuallife")
+@RequestMapping(value = "/individuallife/quotation")
 public class IndidualLifeQuotationController {
 
     private CommandGateway commandGateway;
@@ -44,10 +44,24 @@ public class IndidualLifeQuotationController {
         this.ilQuotationFinder = ilQuotationFinder;
     }
 
-    @RequestMapping(value = "/createindividuallifequotation", method = RequestMethod.GET)
-    public ModelAndView createQuotationPage() {
+    @RequestMapping(method = RequestMethod.GET)
+    public ModelAndView index() {
         ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("pla/quotation/individualLife/index");
+        modelAndView.setViewName("pla/quotation/individuallife/index");
+        return modelAndView;
+    }
+
+    @RequestMapping(method = RequestMethod.GET, value = "/list")
+    public ModelAndView gotoList() {
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("pla/quotation/individuallife/quotationlist");
+        return modelAndView;
+    }
+
+    @RequestMapping(method = RequestMethod.GET, value = "/new")
+    public ModelAndView editQuotationPage() {
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("pla/quotation/individuallife/createQuotation.html");
         return modelAndView;
     }
 

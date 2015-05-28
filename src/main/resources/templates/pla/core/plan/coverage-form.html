@@ -93,15 +93,15 @@
                         </div>
                     </div>
                 </div>
-                <div class="control-group required col-md-3">
+                <div class="control-group col-md-3" ng-class="newCoverage.coverageType=='OPTIONAL'?'required':''">
                     <label class="control-label">Tax Applicable</label>
 
                     <div class="controls">
                         <label class="radio-inline">
-                            <input type="radio" ng-value="true" name="taxApplicable" ng-model="newCoverage.taxApplicable" ng-required="true"/>Yes
+                            <input type="radio" ng-value="true" name="taxApplicable" ng-model="newCoverage.taxApplicable" ng-required="newCoverage.coverageType=='OPTIONAL'"/>Yes
                         </label>
                         <label class="radio-inline">
-                            <input type="radio" ng-value="false" name="taxApplicable" ng-model="newCoverage.taxApplicable" ng-required="true"/>No
+                            <input type="radio" ng-value="false" name="taxApplicable" ng-model="newCoverage.taxApplicable" ng-required="newCoverage.coverageType=='OPTIONAL'"/>No
                         </label>
 
                         <div class="error"
