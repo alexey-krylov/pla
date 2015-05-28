@@ -240,7 +240,6 @@ app.controller('PlanSetupController', ['$scope', '$http', '$location', '$routePa
             $scope.clientType = $scope.plan.planDetail.clientType;
 
             $scope.$watch('plan.planDetail.lineOfBusinessId', function (newval, oldval) {
-                console.log(' Line of Business Id ' + newval);
                 if (newval != undefined) {
                     if (newval != 'INDIVIDUAL_LIFE') {
                         $scope.clientType = 'GROUP';
@@ -287,100 +286,101 @@ app.controller('PlanSetupController', ['$scope', '$http', '$location', '$routePa
             $scope.emptyCoverage = {maturityAmounts: []};
 
             //var myOtherModal = $modal({scope: $scope, template: '/pla/plan/coverage-form.html', show: false});
-
             $scope.showCoverageForm = function (coverage, isEditing) {
-                $modal.open({
-                    templateUrl: '/pla/core/plan/coverage-form.html',
-                    backdrop: true,
-                    windowClass: 'modal',
-                    controller: function ($scope, $modalInstance, $log, newCoverage, plan, coverageList, isEditing, stepForm) {
-                        $scope.plan = plan;
-                        $scope.coverageList = coverageList;
-                        $scope.newCoverage = newCoverage;
-                        $scope.editFlag = isEditing;
-                        $scope.stepForm = stepForm;
+                if ($scope.currentStep == 4) {
+                    $modal.open({
+                        templateUrl: '/pla/core/plan/coverage-form.html',
+                        backdrop: true,
+                        windowClass: 'modal',
+                        controller: function ($scope, $modalInstance, $log, newCoverage, plan, coverageList, isEditing, stepForm) {
+                            $scope.plan = plan;
+                            $scope.coverageList = coverageList;
+                            $scope.newCoverage = newCoverage;
+                            $scope.editFlag = isEditing;
+                            $scope.stepForm = stepForm;
 
-                        $scope.cancel = function () {
-                            $modalInstance.dismiss('cancel');
-                        };
+                            $scope.cancel = function () {
+                                $modalInstance.dismiss('cancel');
+                            };
 
-                        $scope.addMaturityRow = function () {
-                            $scope.newCoverage.maturityAmounts.push({});
-                        };
+                            $scope.addMaturityRow = function () {
+                                $scope.newCoverage.maturityAmounts.push({});
+                            };
 
-                        $scope.removeMaturityRow = function (index) {
-                            $scope.newCoverage.maturityAmounts.splice(index, 1);
-                        };
+                            $scope.removeMaturityRow = function (index) {
+                                $scope.newCoverage.maturityAmounts.splice(index, 1);
+                            };
 
-                        $scope.addCoverage = function (newCoverage) {
-                            $scope.plan.coverages.push(newCoverage);
-                            $scope.newCoverage = angular.copy($scope.emptyCoverage);
-                            //$scope.coverageForm.$setPristine();
-                            //$scope.coverageForm.$setUntouched();
-                            $scope.coverageForm.$setValidity();
-                            $scope.coverageSumAssured = [];
-                            $scope.coverageTerm = [];
-                            $scope.coverageMaturityAge = [];
-                            $scope.stepForm.hasError = false;
-                            $scope.cancel();
-                        };
+                            $scope.addCoverage = function (newCoverage) {
+                                $scope.plan.coverages.push(newCoverage);
+                                $scope.newCoverage = angular.copy($scope.emptyCoverage);
+                                //$scope.coverageForm.$setPristine();
+                                //$scope.coverageForm.$setUntouched();
+                                $scope.coverageForm.$setValidity();
+                                $scope.coverageSumAssured = [];
+                                $scope.coverageTerm = [];
+                                $scope.coverageMaturityAge = [];
+                                $scope.stepForm.hasError = false;
+                                $scope.cancel();
+                            };
 
-                        /**
-                         *
-                         * Reset the coverage sum assured as the Sum Assured Changes.
-                         */
-                        $scope.resetPlanCoverageSumAssured = function () {
-                            $scope.newCoverage.coverageSumAssured.sumAssuredValue = [];
-                            $scope.newCoverage.coverageSumAssured.percentage = null;
-                            $scope.newCoverage.coverageSumAssured.maxLimit = null;
-                            $scope.newCoverage.coverageSumAssured.minSumInsured = null;
-                            $scope.newCoverage.coverageSumAssured.maxSumInsured = null;
-                            $scope.newCoverage.coverageSumAssured.multiplesOf = null;
+                            /**
+                             *
+                             * Reset the coverage sum assured as the Sum Assured Changes.
+                             */
+                            $scope.resetPlanCoverageSumAssured = function () {
+                                $scope.newCoverage.coverageSumAssured.sumAssuredValue = [];
+                                $scope.newCoverage.coverageSumAssured.percentage = null;
+                                $scope.newCoverage.coverageSumAssured.maxLimit = null;
+                                $scope.newCoverage.coverageSumAssured.minSumInsured = null;
+                                $scope.newCoverage.coverageSumAssured.maxSumInsured = null;
+                                $scope.newCoverage.coverageSumAssured.multiplesOf = null;
 
-                        }
-
-                        /**
-                         *
-                         * Reset the coverage coverageTerm as the Sum Assured Changes.
-                         */
-                        $scope.resetPlanCoverageTerm = function () {
-                            if (newCoverage.coverageTerm) {
-                                $scope.newCoverage.coverageTerm.validTerms = [];
-                                $scope.newCoverage.coverageTerm.maturityAges = [];
                             }
 
-                        }
+                            /**
+                             *
+                             * Reset the coverage coverageTerm as the Sum Assured Changes.
+                             */
+                            $scope.resetPlanCoverageTerm = function () {
+                                if (newCoverage.coverageTerm) {
+                                    $scope.newCoverage.coverageTerm.validTerms = [];
+                                    $scope.newCoverage.coverageTerm.maturityAges = [];
+                                }
 
-                        $scope.removeCoverage = function (idx) {
-                            if ($scope.plan.coverages)
-                                $scope.plan.coverages.splice(idx, 1);
-                        };
+                            }
 
-                    },
-                    resolve: {
-                        newCoverage: function () {
-                            return angular.isUndefined(coverage) ? {maturityAmounts: []} : coverage;
+                            $scope.removeCoverage = function (idx) {
+                                if ($scope.plan.coverages)
+                                    $scope.plan.coverages.splice(idx, 1);
+                            };
+
                         },
-                        coverageList: function () {
-                            return $scope.coverageList;
-                            /* var listOfCoverageIds = _.pluck($scope.plan.coverages, "coverageId");
-                             return listOfCoverageIds;*/
-                            /*var unUsedCoverageList = _.reject($scope.coverageList, function (coverage) {
-                             return _.contains(listOfCoverageIds, coverage.coverageId);
-                             });
-                             return unUsedCoverageList;*/
-                        },
-                        plan: function () {
-                            return $scope.plan;
-                        },
-                        isEditing: function () {
-                            return isEditing;
-                        },
-                        stepForm: function () {
-                            return $scope.step5;
+                        resolve: {
+                            newCoverage: function () {
+                                return angular.isUndefined(coverage) ? {maturityAmounts: []} : coverage;
+                            },
+                            coverageList: function () {
+                                return $scope.coverageList;
+                                /* var listOfCoverageIds = _.pluck($scope.plan.coverages, "coverageId");
+                                 return listOfCoverageIds;*/
+                                /*var unUsedCoverageList = _.reject($scope.coverageList, function (coverage) {
+                                 return _.contains(listOfCoverageIds, coverage.coverageId);
+                                 });
+                                 return unUsedCoverageList;*/
+                            },
+                            plan: function () {
+                                return $scope.plan;
+                            },
+                            isEditing: function () {
+                                return isEditing;
+                            },
+                            stepForm: function () {
+                                return $scope.step5;
+                            }
                         }
-                    }
-                });
+                    });
+                }
             };
 
             /**
@@ -675,7 +675,9 @@ app.controller('PlanSetupController', ['$scope', '$http', '$location', '$routePa
 
             $scope.step5 = {};
             $scope.step6 = {};
+            $scope.currentStep = 1;
             $scope.$on('actionclicked.fu.wizard', function (name, event, data) {
+                $scope.currentStep = data.step;
                 if (data.step == 5) {
                     if ($scope.plan.coverages.length == 0) {
                         $scope.step5.hasError = true;
