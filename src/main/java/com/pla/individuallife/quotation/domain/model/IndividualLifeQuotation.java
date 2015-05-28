@@ -31,7 +31,6 @@ import static org.nthdimenzion.utils.UtilValidator.isNotEmpty;
 @DynamicUpdate
 public class IndividualLifeQuotation extends AbstractAggregateRoot<QuotationId> implements IQuotation, ICrudEntity {
 
-
     @EmbeddedId
     @AggregateIdentifier
     private QuotationId quotationId;

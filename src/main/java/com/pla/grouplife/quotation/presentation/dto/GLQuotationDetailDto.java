@@ -33,7 +33,7 @@ public class GLQuotationDetailDto {
     private String additionalDiscountLoading;
     private String serviceTax;
     private String totalPremium;
-    private String specialConditions;
+    private String specialConditions="";
     private String addOnBenefits;
     private String addOnBenefitsPercentage;
     private String waiverOfExcessLoadings;

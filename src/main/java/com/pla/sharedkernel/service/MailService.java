@@ -31,7 +31,6 @@ public class MailService {
     public Map<String, Object> sendMailWithAttachment(final String subject, final String messageBody, final List<EmailAttachment> attachments, final String[] recipientMailAddress) throws DocumentException,
             IOException {
         final Map<String, Object> resultMap = new HashMap<String, Object>();
-        System.out.println("Send Mail service invoked");
         try {
             MimeMessagePreparator preparator = new MimeMessagePreparator() {
                 public void prepare(MimeMessage mimeMessage) throws Exception {

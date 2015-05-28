@@ -196,7 +196,7 @@ public class GroupLifeQuotationController {
         }
         try {
             byte[] quotationData = glQuotationService.getQuotationPDF(mailDto.getQuotationId());
-            String fileName = "Quotation No: " + mailDto.getQuotationNumber() + ".pdf";
+            String fileName = "QuotationNo-" + mailDto.getQuotationNumber() + ".pdf";
             File file = new File(fileName);
             FileOutputStream fileOutputStream = new FileOutputStream(file);
             fileOutputStream.write(quotationData);
@@ -208,7 +208,7 @@ public class GroupLifeQuotationController {
             return Result.success("Email sent successfully");
 
         } catch (Exception e) {
-            Result.failure("Email cannot be sent for network issue");
+            Result.failure(e.getMessage());
         }
         return Result.success("Email sent successfully");
     }
