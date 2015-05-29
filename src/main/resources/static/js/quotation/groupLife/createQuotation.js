@@ -259,14 +259,19 @@ angular.module('createQuotation', ['common', 'ngRoute', 'mgcrea.ngStrap.select',
 
                 });
             };
-
+            $scope.premiumInstallment=false;
             $scope.recalculatePremium = function(){
                  $http.post('/pla/quotation/grouplife/recalculatePremium', angular.extend({},
                     {premiumDetailDto: $scope.quotationDetails.premium},
                     {"quotationId": $scope.quotationId})).success(function(data){
-                    console.log(data);
-                     $scope.quotationDetails.premium=data;
-                     $scope.premiumData.totalPremium=data.totalPremium;
+                    console.log(data.data);
+                     $scope.quotationDetails.premium=data.data;
+                     $scope.premiumData.totalPremium=data.data.totalPremium;
+                     if(data.data.premiumInstallment){
+                         $scope.quotationDetails.premium.numberOfInstallments=data.data.premiumInstallment.installmentNo;
+                         $scope.quotationDetails.premium.installmentAmount=data.data.premiumInstallment.installmentAmount;
+                         $scope.premiumInstallment=true;
+                     }
                 });
 
             }

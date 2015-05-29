@@ -282,10 +282,17 @@
                                         </small>
                                     </div>
                                 </div>
-                                <div class="col-lg-6" ng-hide="!isPolicyTermNot365 || inappropriatePolicyTerm">
+                                <div class="col-lg-3" ng-hide="!isPolicyTermNot365 || inappropriatePolicyTerm">
                                     <div class="form-group">
                                         <label >Number Of Installments</label>
                                         <select class="form-control" ng-model="quotationDetails.premium.numberOfInstallments" ng-options="numberOfInstallments for numberOfInstallments in numberOfInstallmentsDropDown"></select>
+                                    </div>
+                                </div>
+                                <div class="col-lg-3">
+                                    <div class="form-group" ng-show="premiumInstallment">
+                                        <label >Installment Amount</label>
+                                        <input class="form-control input-sm"  ng-required="true" ng-model="quotationDetails.premium.installmentAmount" />
+
                                     </div>
                                 </div>
                             </div>
