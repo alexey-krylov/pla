@@ -13,10 +13,7 @@ App.controller('CreatePremiumController', ['$scope', '$http', function ($scope, 
     $scope.showOptionalCoverage = false;
     $scope.selectedDate = moment().add(1, 'days').format("YYYY-MM-DD");
     $scope.newDateField = {};
-    $scope.selectedUsers = [];
-$scope.showSelectedCheckboxValue = function(){
-    alert(selectedUsers);
-}
+
 
     $scope.datePickerSettings = {
         isOpened: false,
@@ -43,6 +40,8 @@ $scope.showSelectedCheckboxValue = function(){
         }
 
     }
+
+
     $scope.$watch('createPremium.definedFor',function(newValue, oldValue){
         if(newValue=='optionalCoverage'){
             $scope.createPremium.planId="";
@@ -67,6 +66,33 @@ $scope.showSelectedCheckboxValue = function(){
        console.log(createPremium);
 
     };*/
+
+
+    $scope.createPremium.premiumInfluencingFactors=[];
+    $scope.premiumInfluencingFactors=[];
+    $scope.checkboxValues=false;
+    $scope.toggleSelection = function toggleSelection(influencingFactorCode) {
+        $scope.createPremium.premiumInfluencingFactors = $scope.premiumInfluencingFactors ;
+        var idx = $scope.createPremium.premiumInfluencingFactors.indexOf(influencingFactorCode);
+        // alert($scope.createPremium.premiumInfluencingFactors.length);
+        if (idx > -1) {
+            $scope.createPremium.premiumInfluencingFactors.splice(idx, 1);
+            $scope.premiumInfluencingFactors = $scope.createPremium.premiumInfluencingFactors;
+
+
+        }
+        else {
+            $scope.createPremium.premiumInfluencingFactors.push(influencingFactorCode);
+            $scope.premiumInfluencingFactors = $scope.createPremium.premiumInfluencingFactors;
+        }
+        if($scope.createPremium.premiumInfluencingFactors.length > 0){
+            $scope.checkboxValues=true;
+        }else{
+            $scope.checkboxValues=false;
+        }
+    };
+
+
     $http.get('/pla/core/plan/getallplan').success(function (data) {
         for (var i = 0; i < data.length; i++) {
             $scope.planList = data[i];
