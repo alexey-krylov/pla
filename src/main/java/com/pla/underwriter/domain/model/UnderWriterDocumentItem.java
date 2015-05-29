@@ -15,7 +15,7 @@ import java.util.Set;
 @Setter
 public class UnderWriterDocumentItem {
 
-    private Set<String> documents;
+    private Set<String> documentIds;
 
     private Set<UnderWriterLineItem> underWriterLineItems;
 
@@ -26,7 +26,7 @@ public class UnderWriterDocumentItem {
             if (AppConstants.UNDER_WRITER_DOCUMENT.equals(underWriterMap.getKey())) {
                 for (Map.Entry<String, Object> underWritingMap : underWriterMap.getValue().entrySet()){
                     if (underWritingMap.getKey().equals(AppConstants.UNDER_WRITER_DOCUMENT)){
-                        underWritingRoutingLevelItem.setDocuments((Set)underWritingMap.getValue());
+                        underWritingRoutingLevelItem.setDocumentIds((Set) underWritingMap.getValue());
                     }
                 }
             } else {

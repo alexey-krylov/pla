@@ -167,7 +167,8 @@ public class Premium {
         return premiumAmount;
     }
 
-    public boolean hasAllInfluencingFactor(List<PremiumInfluencingFactor> premiumInfluencingFactors) {
-        return premiumInfluencingFactors.containsAll(this.premiumInfluencingFactors);
+    public boolean
+    hasAllInfluencingFactor(List<PremiumInfluencingFactor> premiumInfluencingFactors) {
+        return this.premiumInfluencingFactors.containsAll(premiumInfluencingFactors);
     }
 }

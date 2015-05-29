@@ -50,7 +50,7 @@ public class UnderWriterDocumentUnitTest {
         Set<UnderWriterDocumentItem> underWriterDocumentItems =  UnderWriterDocument.withUnderWritingLevelItem(underWriterDocument);
         assertNotNull(underWriterDocumentItems);
         UnderWriterDocumentItem underWriterDocumentItem = underWriterDocumentItems.iterator().next();
-        assertThat(underWriterDocumentItem.getDocuments(), is(documents));
+        assertThat(underWriterDocumentItem.getDocumentIds(), is(documents));
     }
 
     @Test

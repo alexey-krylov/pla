@@ -17,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
@@ -53,12 +54,21 @@ public class PlanAdapterImpl implements IPlanAdapter {
         return planCoverageDetailDtoList;
     }
 
-    //TODO: Check with Samir why is this required.
     @Override
     public List<PlanCoverageDetailDto> getAllPlanAndCoverageDetail() {
-      /*  List<Plan> plans = planFinder.findAllPlanForThymeleaf();
-        List<PlanCoverageDetailDto> planCoverageDetailDtoList = plans.stream().map(new PlanCoverageDetailTransformer()).collect(Collectors.toList());*/
-        return null;
+        List<Map<String,Object>> plans = planFinder.getAllPlans();
+        if (isEmpty(plans)){
+            return Collections.EMPTY_LIST;
+        }
+        List<PlanCoverageDetailDto> planDetail = Lists.newArrayList();
+        plans.forEach(planMap->{
+            PlanCoverageDetailDto planCoverageDetailDto = new PlanCoverageDetailDto(new PlanId(planMap.get("planId").toString()),planMap.get("planName").toString(),planMap.get("planCode").toString());
+            planCoverageDetailDto.addCoverage(Lists.newArrayList());
+            planCoverageDetailDto.addSumAssured(planCoverageDetailDto.new SumAssuredDto(Lists.newArrayList()));
+            planCoverageDetailDto.addRelationTypes(Lists.newArrayList());
+            planDetail.add(planCoverageDetailDto);
+        });
+        return planDetail;
     }
 
     @Override

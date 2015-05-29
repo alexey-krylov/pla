@@ -1,5 +1,6 @@
 package com.pla.underwriter.domain.model;
 
+import com.google.common.collect.Lists;
 import com.pla.sharedkernel.identifier.CoverageId;
 import com.pla.sharedkernel.identifier.UnderWriterRoutingLevelId;
 import lombok.*;
@@ -35,6 +36,7 @@ public class UnderWriterRoutingLevel {
 
     private UnderWriterProcessType processType;
 
+    @Getter
     private Set<UnderWritingRoutingLevelItem> underWritingRoutingLevelItems;
 
     private List<UnderWriterInfluencingFactor> underWriterInfluencingFactors;
@@ -92,5 +94,13 @@ public class UnderWriterRoutingLevel {
             UnderWritingRoutingLevelItem underWritingRoutingLevelItem = UnderWritingRoutingLevelItem.create(underWriterRoutingLevelMap);
             return underWritingRoutingLevelItem;
         }
+    }
+
+    public boolean hasAllInfluencingFactor(List<String> underWriterInfluencingFactor) {
+        List<UnderWriterInfluencingFactor> underWriterInfluencingFactorsList = Lists.newArrayList();
+        underWriterInfluencingFactor.forEach(influencingFactor->{
+            underWriterInfluencingFactorsList.add(UnderWriterInfluencingFactor.valueOf(influencingFactor));
+        });
+        return this.underWriterInfluencingFactors.containsAll(underWriterInfluencingFactorsList);
     }
 }

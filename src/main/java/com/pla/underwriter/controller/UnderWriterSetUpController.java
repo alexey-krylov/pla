@@ -17,6 +17,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
@@ -56,16 +57,21 @@ public class UnderWriterSetUpController {
         this.underWriterFinder = underWriterFinder;
     }
 
-    @RequestMapping(value = "/getplancoveragedetail",method = RequestMethod.GET)
-    @ResponseBody
-    public List<PlanCoverageDetailDto> getAllPlanCoverageDetail(){
-        return underWriterService.getPlanCoverageDetail();
+
+    /*
+    *       ========== thymeleaf page routing starts ===========
+    * */
+    @RequestMapping(value = "/viewroutinglevel",method = RequestMethod.GET)
+    public String viewRoutingLevelSetup(){
+        return "pla/core/underwriter/routingLevelSetup/viewRoutingLevelSetup";
     }
 
-    @RequestMapping(value = "/getoptionalcoverage/{planId}",method = RequestMethod.GET)
-    @ResponseBody
-    public List<PlanCoverageDetailDto> getOptionalCoverageFor(@PathVariable("planId") PlanId planId){
-        return underWriterService.getAllOptionalCoverageFor(Lists.newArrayList(planId));
+    @RequestMapping(value = "/opencreateroutinglevel",method = RequestMethod.GET)
+    public ModelAndView openCreatePage( ){
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.addObject("createUnderWriterRoutingLevelCommand", new CreateUnderWriterRoutingLevelCommand());
+        modelAndView.setViewName("pla/core/underwriter/routingLevelSetup/createRoutingLevelSetup");
+        return modelAndView;
     }
 
     @RequestMapping(value = "/viewdocumentsetup",method = RequestMethod.GET)
@@ -81,6 +87,25 @@ public class UnderWriterSetUpController {
         modelAndView.setViewName("pla/core/underwriter/documentSetup/createDocumentSetup");
         return modelAndView;
     }
+
+    /*
+     *   ========== thymeleaf page routing ends ===========
+     * */
+
+
+
+    @RequestMapping(value = "/getplancoveragedetail",method = RequestMethod.GET)
+    @ResponseBody
+    public List<PlanCoverageDetailDto> getAllPlanCoverageDetail(){
+        return underWriterService.getPlanCoverageDetail();
+    }
+
+    @RequestMapping(value = "/getoptionalcoverage/{planId}",method = RequestMethod.GET)
+    @ResponseBody
+    public List<PlanCoverageDetailDto> getOptionalCoverageFor(@PathVariable("planId") PlanId planId){
+        return underWriterService.getAllOptionalCoverageFor(Lists.newArrayList(planId));
+    }
+
 
     @RequestMapping(value = "/checkforoverlapping",method = RequestMethod.POST)
     @ResponseBody
@@ -224,4 +249,9 @@ public class UnderWriterSetUpController {
         return underWriterService.getInfluencingFactorRange(underWriterInfluencingFactors);
     }
 
+    @RequestMapping(value = "/getdocumentapprovedbyprovider", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public List<Map<String, Object>> getAllDocumentApprovedByServiceProvider() {
+        return underWriterFinder.getAllDocumentApprovedByServiceProvider();
+    }
 }

@@ -118,12 +118,33 @@ public class UnderWriterRoutingLevelUnitTest {
 
     @Test
     public void givenAExpireDate_thenItShouldAssignTheExpireDateToTheUnderWriterRoutingLevel(){
-        UnderWriterRoutingLevelId underWriterRoutingLevelId = new UnderWriterRoutingLevelId("UR001");
-        String planCode = "P002";
-        CoverageId coverageId = new CoverageId("C002");
-        List<UnderWriterInfluencingFactor> underWriterInfluencingFactors = Lists.newArrayList(UnderWriterInfluencingFactor.AGE);
-        UnderWriterRoutingLevel underWriterRoutingLevel = UnderWriterRoutingLevel.createUnderWriterRoutingLevelWithOptionalCoverage(underWriterRoutingLevelId, planCode, coverageId, UnderWriterProcessType.CLAIM, underWriterDocumentItem, underWriterInfluencingFactors, new LocalDate("2016-12-30"));
+        UnderWriterRoutingLevel underWriterRoutingLevel =getUnderWriterRoutingLevel();
         underWriterRoutingLevel.expireUnderWriterRoutingLevel(new LocalDate("2017-01-01"));
         assertThat(underWriterRoutingLevel.getValidTill(),is(new LocalDate("2017-01-01")));
     }
+
+    @Test
+    public void givenUnderWriterInfluencingFactor_whenUnderWriterRoutingLevelHasAllTheInfluencingFactors_thenItShouldReturnTrue(){
+        List<String> expectedInfluencingFactorList = Lists.newArrayList(UnderWriterInfluencingFactor.AGE.name(),UnderWriterInfluencingFactor.SUM_ASSURED.name());
+        UnderWriterRoutingLevel underWriterRoutingLevel = getUnderWriterRoutingLevel();
+        boolean hasAllInfluencingFactor = underWriterRoutingLevel.hasAllInfluencingFactor(expectedInfluencingFactorList);
+        assertTrue(hasAllInfluencingFactor);
+    }
+
+    @Test
+    public void givenUnderWriterInfluencingFactor_whenUnderWriterRoutingLevelDoesNotHaveAllTheInfluencingFactors_thenItShouldReturnFalse(){
+        List<String> expectedInfluencingFactorList = Lists.newArrayList(UnderWriterInfluencingFactor.AGE.name(),UnderWriterInfluencingFactor.SUM_ASSURED.name(),UnderWriterInfluencingFactor.BMI.name());
+        UnderWriterRoutingLevel underWriterRoutingLevel = getUnderWriterRoutingLevel();
+        boolean hasAllInfluencingFactor = underWriterRoutingLevel.hasAllInfluencingFactor(expectedInfluencingFactorList);
+        assertFalse(hasAllInfluencingFactor);
+    }
+
+    private UnderWriterRoutingLevel getUnderWriterRoutingLevel(){
+        UnderWriterRoutingLevelId underWriterRoutingLevelId = new UnderWriterRoutingLevelId("UR001");
+        String planCode = "P002";
+        CoverageId coverageId = new CoverageId("C002");
+        List<UnderWriterInfluencingFactor> underWriterInfluencingFactors = Lists.newArrayList(UnderWriterInfluencingFactor.AGE,UnderWriterInfluencingFactor.SUM_ASSURED);
+        return UnderWriterRoutingLevel.createUnderWriterRoutingLevelWithOptionalCoverage(underWriterRoutingLevelId, planCode, coverageId, UnderWriterProcessType.CLAIM, underWriterDocumentItem, underWriterInfluencingFactors, new LocalDate("2016-12-30"));
+    }
+
 }

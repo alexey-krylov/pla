@@ -24,6 +24,7 @@ import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.BasicQuery;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.jdbc.core.ColumnMapRowMapper;
 import org.springframework.jdbc.core.namedparam.EmptySqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Service;
@@ -111,7 +112,6 @@ public class PlanFinder {
         }
         return plan;
     }
-
 
     private void covertSumAssuredToTags(Map sumAssured) {
         List values = new LinkedList();
@@ -214,4 +214,8 @@ public class PlanFinder {
         }
     }
 
+    public List<Map<String,Object>> getAllPlans(){
+        final String FIND_ALL_PLAN_QUERY = "SELECT DISTINCT planId,planName,planCode FROM plan_coverage_benefit_assoc_view";
+            return namedParameterJdbcTemplate.query(FIND_ALL_PLAN_QUERY,new ColumnMapRowMapper());
+    }
 }

@@ -86,6 +86,15 @@ public enum UnderWriterInfluencingFactor {
                 return isValid;
             }
         }
+
+        @Override
+        public boolean isValueIsInRange(String value, String fromValue, String toValue) {
+            BigDecimal valueToBeChecked = new BigDecimal(value);
+            BigDecimal sumAssuredFromValue = new BigDecimal(fromValue);
+            BigDecimal sumAssuredToValue = new BigDecimal(toValue);
+            return (valueToBeChecked.compareTo(sumAssuredFromValue) >= 0 && valueToBeChecked.compareTo(sumAssuredToValue) <= 0);
+        }
+
     },
     AGE("Age"){
         @Override
@@ -155,6 +164,11 @@ public enum UnderWriterInfluencingFactor {
                 return isValid;
             }
         }
+
+        @Override
+        public boolean isValueIsInRange(String value, String fromValue, String toValue) {
+            return (Integer.valueOf(value).compareTo(Integer.valueOf(fromValue))>=0 && Integer.valueOf(value).compareTo(Integer.valueOf(toValue)) <= 0);
+        }
     },
 
     BMI("BMI"){
@@ -201,6 +215,11 @@ public enum UnderWriterInfluencingFactor {
         @Override
         public boolean isValueAvailableForTheProduct(Row currentRow, String planCode, String coverageId, Map<String, Integer> indexMap, StringBuilder errorMessageBuilder, IPlanAdapter iPlanAdapter, String fromValue, String toValue) {
             return true;
+        }
+
+        @Override
+        public boolean isValueIsInRange(String value, String fromValue, String toValue) {
+            return (Double.valueOf(value).compareTo(Double.valueOf(fromValue))>=0 && Double.valueOf(value).compareTo(Double.valueOf(toValue)) <=0);
         }
 
     },
@@ -250,6 +269,11 @@ public enum UnderWriterInfluencingFactor {
         public boolean isValueAvailableForTheProduct(Row currentRow, String planCode, String coverageId, Map<String, Integer> indexMap, StringBuilder errorMessageBuilder, IPlanAdapter iPlanAdapter, String fromValue, String toValue) {
             return true;
         }
+
+        @Override
+        public boolean isValueIsInRange(String value, String fromValue, String toValue) {
+            return (Double.valueOf(value).compareTo(Double.valueOf(fromValue))>=0 && Double.valueOf(value).compareTo(Double.valueOf(toValue)) <= 0);
+        }
     },
 
     WEIGHT("Weight"){
@@ -297,6 +321,11 @@ public enum UnderWriterInfluencingFactor {
         @Override
         public boolean isValueAvailableForTheProduct(Row currentRow, String planCode, String coverageId, Map<String, Integer> indexMap, StringBuilder errorMessageBuilder, IPlanAdapter iPlanAdapter, String fromValue, String toValue) {
             return true;
+        }
+
+        @Override
+        public boolean isValueIsInRange(String value, String fromValue, String toValue) {
+            return (Double.valueOf(value).compareTo(Double.valueOf(fromValue))>=0 && Double.valueOf(value).compareTo(Double.valueOf(toValue))  <= 0);
         }
 
     },
@@ -348,6 +377,14 @@ public enum UnderWriterInfluencingFactor {
             return true;
         }
 
+        @Override
+        public boolean isValueIsInRange(String value, String fromValue, String toValue) {
+            BigDecimal valueToBeChecked = new BigDecimal(value);
+            BigDecimal claimAmountFrom = new BigDecimal(fromValue);
+            BigDecimal claimAmountTo = new BigDecimal(toValue);
+            return (valueToBeChecked.compareTo(claimAmountFrom) >= 0 && valueToBeChecked.compareTo(claimAmountTo)  <= 0);
+        }
+
     };
 
     private String description;
@@ -361,7 +398,7 @@ public enum UnderWriterInfluencingFactor {
     public abstract List<String> getInfluencingFactorRange(List<String> influencingFactorRange);
     public abstract Map<Object,Map<String,Object>> groupUnderWriterRoutingLevelItem(Map<String,Object> underWriterLineItem, Map<Object,Map<String,Object>> underWriterInfluencingFactorMap);
     public abstract boolean isValueAvailableForTheProduct(Row currentRow, String planCode, String coverageId, Map<String, Integer> indexMap, StringBuilder errorMessageBuilder, IPlanAdapter iPlanAdapter, String fromValue, String toValue);
-
+    public abstract boolean isValueIsInRange(String value,String fromValue,String toValue);
 }
 
 enum InfluencingFactorRange{

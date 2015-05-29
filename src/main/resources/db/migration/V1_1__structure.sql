@@ -758,6 +758,15 @@ CREATE TABLE `document` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
+DROP VIEW IF EXISTS `document_view`;
+CREATE VIEW document_view AS
+  (SELECT
+     document_code 	documentCode,
+     document_name 	documentName,
+     is_provided 		isProvided
+   FROM document );
+
+
 DROP TABLE IF EXISTS `industry`;
 CREATE TABLE `industry` (
   `code` varchar(100) NOT NULL,
@@ -805,6 +814,21 @@ ALTER TABLE `plan_coverage_benefits_assoc`
   ADD COLUMN `line_of_business` varchar(60) NOT NULL AFTER `client_type`,
   ADD COLUMN `funeral_cover` tinyint(1) DEFAULT NULL;
 
+DROP VIEW IF EXISTS `plan_coverage_benefit_assoc_view`;
+CREATE  VIEW `plan_coverage_benefit_assoc_view` AS
+  ( SELECT
+      plan_id                          planId,
+      plan_name                        planName,
+      plan_code                        planCode,
+      launch_date                      launchDate,
+      withdrawal_date                  withdrawalDate,
+      client_type                      clientType,
+      line_of_business                 lineOfBusinessId,
+      coverage_id                      coverageId,
+      benefit_id                       benefitId,
+      optional                         optional,
+      funeral_cover                    funeralCover
+    FROM plan_coverage_benefits_assoc ORDER BY plan_name,launch_date );
 
 DROP TABLE IF EXISTS `endorsement_type`;
 CREATE TABLE `endorsement_type` (

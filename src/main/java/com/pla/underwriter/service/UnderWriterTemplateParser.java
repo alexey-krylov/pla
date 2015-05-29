@@ -264,7 +264,7 @@ public class UnderWriterTemplateParser {
         List<String> influencingFactorRange = Lists.newArrayList();
         underWriterInfluencingFactors.forEach(underWriterInfluencingFactor->
                 underWriterInfluencingFactor.getInfluencingFactorRange(influencingFactorRange));
-        Collections.sort(influencingFactorRange);
+       /* Collections.sort(influencingFactorRange);*/
         return influencingFactorRange;
     }
 
