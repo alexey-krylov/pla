@@ -40,18 +40,16 @@ angular.module('createQuotation', ['common', 'ngRoute', 'mgcrea.ngStrap.select',
             $scope.quotationNumber = quotationNumber;
 
             $scope.provinces = provinces;
-
+           // console.log($scope.premiumData);
             $scope.quotationDetails = {
                 /*initialize with default values*/
                 plan: {
                     samePlanForAllRelation: false,
                     samePlanForAllCategory: false
                 },
-                premium: {
-                    addOnBenefit: 20,
-                    profitAndSolvencyLoading: 0,
-                    discounts: 0
-                }
+
+
+            premium: $scope.premiumData
             };
 
             $scope.quotationDetails.basic = agentDetails;
@@ -63,8 +61,8 @@ angular.module('createQuotation', ['common', 'ngRoute', 'mgcrea.ngStrap.select',
             $scope.$watchCollection('[quotationId,showDownload]', function (n) {
                 if (n[0]) {
                     $scope.qId = n[0];
-                    console.log(n[0]);
-                    console.log(n[1]);
+                  //  console.log(n[0]);
+                   // console.log(n[1]);
                     if (n[1]) {
                         $scope.dropdown = [
                             {
@@ -249,7 +247,7 @@ angular.module('createQuotation', ['common', 'ngRoute', 'mgcrea.ngStrap.select',
                     if (data.status == "200") {
                         $http.get("/pla/quotation/grouplife/getpremiumdetail/" + $scope.quotationId)
                             .success(function (data) {
-                                console.log(data);
+                               // console.log(data);
                                 $scope.premiumData = data;
                             })
                         saveStep();
@@ -261,6 +259,19 @@ angular.module('createQuotation', ['common', 'ngRoute', 'mgcrea.ngStrap.select',
 
                 });
             };
+
+            $scope.recalculatePremium = function(){
+                 $http.post('/pla/quotation/grouplife/recalculatePremium', angular.extend({},
+                    {premiumDetailDto: $scope.quotationDetails.premium},
+                    {"quotationId": $scope.quotationId})).success(function(data){
+                    console.log(data);
+                     $scope.quotationDetails.premium=data;
+                     $scope.premiumData.totalPremium=data.totalPremium;
+                });
+
+            }
+
+
 
             $scope.savePremiumDetails = function () {
                 $http.post("/pla/quotation/grouplife/generate", angular.extend({},

@@ -295,6 +295,7 @@ public class GLQuotationService {
     }
 
     public PremiumDetailDto getPremiumDetail(QuotationId quotationId) {
+
         Map quotation = glQuotationFinder.getQuotationById(quotationId.getQuotationId());
         PremiumDetail premiumDetail = (PremiumDetail) quotation.get("premiumDetail");
         if (premiumDetail == null) {

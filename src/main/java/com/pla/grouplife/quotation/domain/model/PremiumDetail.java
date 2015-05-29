@@ -9,6 +9,8 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.function.Predicate;
 
+import static org.nthdimenzion.utils.UtilValidator.isEmpty;
+
 /**
  * Created by Samir on 4/23/2015.
  */
@@ -89,6 +91,9 @@ public class PremiumDetail {
 
 
     private Policy getPolicy(PremiumFrequency premiumFrequency) {
+        if(isEmpty(this.policies)){
+            return null;
+        }
         Optional<Policy> policyOptional = this.policies.stream().filter(new Predicate<Policy>() {
             @Override
             public boolean test(Policy policy) {

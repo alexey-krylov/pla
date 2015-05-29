@@ -19,7 +19,6 @@
         if (charCode ==13) {
             event.preventDefault();
         }
-
     }
     requirejs(['main','angular-file-upload'],function(){
         require(['/pla/js/quotation/groupLife/createQuotation.js?t=19'], function () {
@@ -261,15 +260,15 @@
                                 <div class="col-lg-6">
                                     <div class="form-group required">
                                         <label class="control-label">Add-On Benefits</label>
-                                        <input class="form-control input-sm"  ng-required="true" name="addOnBenefits" ng-model="quotationDetails.premium.addOnBenefit"/>
+                                        <input class="form-control input-sm"  ng-required="true" name="addOnBenefits" ng-model="quotationDetails.premium.addOnBenefit" ng-blur="recalculatePremium();"/>
                                     </div>
                                     <div class="form-group required">
                                         <label class="control-label">Profit and Solvency Loading</label>
-                                        <input class="form-control input-sm"  ng-required="true" name="profitAndSolvencyLoading" ng-model="quotationDetails.premium.profitAndSolvencyLoading"/>
+                                        <input class="form-control input-sm"  ng-required="true" name="profitAndSolvencyLoading" ng-model="quotationDetails.premium.profitAndSolvencyLoading" ng-blur="recalculatePremium();"/>
                                     </div>
                                     <div class="form-group required">
                                         <label class="control-label">Discounts</label>
-                                        <input class="form-control input-sm"  ng-required="true" name="discounts" ng-model="quotationDetails.premium.discounts"/>
+                                        <input class="form-control input-sm"  ng-required="true" name="discounts" ng-model="quotationDetails.premium.discounts" ng-blur="recalculatePremium();"/>
                                     </div>
                                 </div>
                             </div>
@@ -277,7 +276,7 @@
                                 <div class="col-lg-6">
                                     <div class="form-group">
                                         <label >Policy Term Value (Days)</label>
-                                        <input class="form-control input-sm"  ng-required="true" ng-model="quotationDetails.premium.policyTermValue"/>
+                                        <input class="form-control input-sm"  ng-required="true" ng-model="quotationDetails.premium.policyTermValue" ng-blur="recalculatePremium();"/>
                                         <small class="error" ng-show="inappropriatePolicyTerm">
                                             Please enter a number between 30 and 999.
                                         </small>
