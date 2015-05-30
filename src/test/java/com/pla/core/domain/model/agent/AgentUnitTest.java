@@ -85,7 +85,7 @@ public class AgentUnitTest {
 
     @Test(expected = AgentException.class)
     public void itsShouldNotUpdateContactDetailWhenAgentIsInactive() {
-        agent = agent.updateStatus(AgentStatus.INACTIVE);
+        agent = agent.updateStatus(AgentStatus.TERMINATED);
         agent = agent.withContactDetail("991623044", "802574500", "8021345687", "abc@gmail.com", "bangalore", "kormangala", 560068, "India", "Bangalore");
     }
 
@@ -109,7 +109,7 @@ public class AgentUnitTest {
 
     @Test(expected = AgentException.class)
     public void itShouldNotUpdatePhysicalAddressWhenAgentIsInactive() {
-        agent = agent.updateStatus(AgentStatus.INACTIVE);
+        agent = agent.updateStatus(AgentStatus.TERMINATED);
         agent = agent.withPhysicalAddress("AshokNagar", "Lane1", 761102, "India", "Berhampur");
     }
 
@@ -128,7 +128,7 @@ public class AgentUnitTest {
 
     @Test(expected = AgentException.class)
     public void itShouldNotUpdatePlanWhenAgentIsInactive() {
-        agent = agent.updateStatus(AgentStatus.INACTIVE);
+        agent = agent.updateStatus(AgentStatus.TERMINATED);
         Set<PlanId> plans = Sets.newHashSet(new PlanId(), new PlanId());
         agent = agent.withPlans(plans);
     }
@@ -149,7 +149,7 @@ public class AgentUnitTest {
 
     @Test(expected = AgentException.class)
     public void itShouldNotUpdateChannelTypeWhenAgentIsInactive() {
-        agent = agent.updateStatus(AgentStatus.INACTIVE);
+        agent = agent.updateStatus(AgentStatus.TERMINATED);
         agent = agent.withChannelType("BRK001", "Broker");
     }
 
