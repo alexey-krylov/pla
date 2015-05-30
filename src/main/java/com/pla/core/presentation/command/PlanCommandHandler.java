@@ -1,6 +1,7 @@
 package com.pla.core.presentation.command;
 
 import com.pla.core.domain.exception.DuplicatePlanException;
+import com.pla.core.domain.exception.PlanException;
 import com.pla.core.domain.exception.PlanValidationException;
 import com.pla.core.domain.model.plan.*;
 import com.pla.core.specification.PlanCodeSpecification;
@@ -36,17 +37,23 @@ public class PlanCommandHandler {
     }
 
     @CommandHandler
-    public void handle(CreatePlanCommand command) throws DuplicatePlanException, PlanValidationException {
-        boolean isSatisfied = planCodeSpecification.satisfiedOnCreate(command.getPlanId(), command.getPlanDetail().getPlanName(),
-                command.getPlanDetail().getPlanCode());
-        if (!isSatisfied) {
-            throw new DuplicatePlanException(String.format(DUPLICATE_PLAN_CODE, command.getPlanDetail().getPlanName()));
+    public void handle(CreatePlanCommand command) throws DuplicatePlanException, PlanValidationException, PlanException {
+        try {
+
+
+            boolean isSatisfied = planCodeSpecification.satisfiedOnCreate(command.getPlanId(), command.getPlanDetail().getPlanName(),
+                    command.getPlanDetail().getPlanCode());
+            if (!isSatisfied) {
+                throw new DuplicatePlanException(String.format(DUPLICATE_PLAN_CODE, command.getPlanDetail().getPlanName()));
+            }
+            String planCode = sequenceGenerator.getSequence(Plan.class);
+            command.getPlanDetail().setPlanCode(planCode);
+            PlanBuilder planBuilder = planBuilder(command);
+            Plan plan = planBuilder.build(command.getPlanId());
+            planMongoRepository.add(plan);
+        } catch (Exception e) {
+            throw new PlanException(e.getMessage());
         }
-        String planCode = sequenceGenerator.getSequence(Plan.class);
-        command.getPlanDetail().setPlanCode(planCode);
-        PlanBuilder planBuilder = planBuilder(command);
-        Plan plan = planBuilder.build(command.getPlanId());
-        planMongoRepository.add(plan);
     }
 
     private PlanBuilder planBuilder(CreatePlanCommand command) {
@@ -117,14 +124,24 @@ public class PlanCommandHandler {
     }
 
     @CommandHandler
-    public void handle(UpdatePlanCommand command) throws DuplicatePlanException, PlanValidationException {
-        boolean isSatisfied = planCodeSpecification.satisfiedOnUpdate(command.getPlanId(), command.getPlanDetail().getPlanName(),
-                command.getPlanDetail().getPlanCode());
-        if (!isSatisfied) {
-            throw new DuplicatePlanException(String.format(DUPLICATE_PLAN_CODE, command.getPlanDetail().getPlanName()));
+    public void handle(UpdatePlanCommand command) throws DuplicatePlanException, PlanValidationException, PlanException {
+        try {
+            boolean isSatisfied = planCodeSpecification.satisfiedOnUpdate(command.getPlanId(), command.getPlanDetail().getPlanName(),
+                    command.getPlanDetail().getPlanCode());
+            if (!isSatisfied) {
+                throw new DuplicatePlanException(String.format(DUPLICATE_PLAN_CODE, command.getPlanDetail().getPlanName()));
+            }
+            PlanBuilder planBuilder = planBuilder(command);
+            Plan plan = planMongoRepository.load(command.getPlanId());
+            plan.updatePlan(planBuilder);
+        } catch (Exception e) {
+            throw new PlanException(e.getMessage());
         }
-        PlanBuilder planBuilder = planBuilder(command);
+    }
+
+    @CommandHandler
+    public void handle(ExpirePlanCommand command) throws DuplicatePlanException, PlanValidationException {
         Plan plan = planMongoRepository.load(command.getPlanId());
-        plan.updatePlan(planBuilder);
+        plan.withdrawPlan();
     }
 }

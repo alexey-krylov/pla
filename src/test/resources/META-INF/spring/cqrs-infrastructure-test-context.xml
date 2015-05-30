@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns:axon="http://www.axonframework.org/schema/core"
+       xmlns:p="http://www.springframework.org/schema/p"
        xmlns:context="http://www.springframework.org/schema/context"
        xmlns:extension="http://www.nthdimenzion.com/schema/axon-extension"
        xmlns="http://www.springframework.org/schema/beans"
@@ -39,33 +40,29 @@
         <property name="waitForTasksToCompleteOnShutdown" value="true"/>
     </bean>
 
-    <!-- <bean id="ehcache" class="org.axonframework.cache.EhCacheAdapter">
-         <constructor-arg name="ehCache" ref="wrappedEhcache"/>
-     </bean>
 
-     <bean id="wrappedEhcache" factory-bean="cacheManager" factory-method="getCache">
-         <constructor-arg value="testCache"/>
-     </bean>-->
+    <bean id="sagaRepository" class="org.axonframework.saga.repository.mongo.MongoSagaRepository">
+        <constructor-arg ref="mongoSagaTemplate"/>
+        <property name="resourceInjector">
+            <bean class="org.axonframework.saga.spring.SpringResourceInjector"/>
+        </property>
+    </bean>
 
-    <!--<bean id="cacheManager" class="org.springframework.cache.ehcache.EhCacheManagerFactoryBean"/>-->
+    <axon:jpa-saga-repository id="jpaSagaRepository"/>
 
-        <bean id="sagaRepository" class="org.axonframework.saga.repository.mongo.MongoSagaRepository">
-            <constructor-arg ref="mongoSagaTemplate"/>
-            <property name="resourceInjector">
-                <bean class="org.axonframework.saga.spring.SpringResourceInjector"/>
-            </property>
-        </bean>
-
-        <axon:saga-manager id="sagaManager" saga-repository="sagaRepository" event-bus="eventBus">
-            <axon:async executor="taskExecutor" transaction-manager="transactionManager"/>
-            <axon:types>
-                com.pla.core.domain.model.plan.PlanManagementSaga
-            </axon:types>
-        </axon:saga-manager>
+    <axon:saga-manager id="sagaManager" saga-repository="sagaRepository" event-bus="eventBus">
+        <axon:async executor="taskExecutor" transaction-manager="transactionManager"/>
+        <axon:types>
+            com.pla.core.domain.model.plan.PlanSaga
+        </axon:types>
+    </axon:saga-manager>
+    <bean id="schedulerFactoryBean" class="org.springframework.scheduling.quartz.SchedulerFactoryBean"
+          p:dataSource-ref="jobsDataSource"/>
+    <bean id="axonEventScheduler" class="org.axonframework.eventhandling.scheduling.quartz.QuartzEventScheduler">
+        <property name="eventBus" ref="eventBus"></property>
+        <property name="scheduler" ref="schedulerFactoryBean"></property>
+    </bean>
     <extension:mongo-repository id="planMongoRepository" aggregate-type="com.pla.core.domain.model.plan.Plan"
                                 mongo-template="mongoTemplate"/>
-    <!--<bean id="planMongoRepository" class="org.nthdimenzion.axonframework.repository.GenericMongoRepository">
-        <constructor-arg ref="mongoTemplate" name="mongoTemplate"/>
-        <constructor-arg name="aggregateType" value="com.pla.core.domain.model.plan.Plan"/>
-    </bean>-->
+
 </beans>

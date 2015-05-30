@@ -503,6 +503,20 @@ CREATE TABLE `employment_type` (
   PRIMARY KEY (`employment_id`),
   UNIQUE KEY (`code`,`description`)
 );
+DROP TABLE IF EXISTS `individual_life_quotation`;
+  CREATE TABLE `individual_life_quotation` (
+    `quotation_id` varchar(255) NOT NULL,
+    `version` bigint(20) DEFAULT NULL,
+    `agent_id` varchar(255) DEFAULT NULL,
+    `generated_on` tinyblob,
+    `il_quotation_status` varchar(20) DEFAULT NULL,
+    `is_assured_the_proposer` tinyint(1) NOT NULL DEFAULT '0',
+    `plan_id` varchar(255) DEFAULT NULL,
+    `quotation_creator` varchar(255) DEFAULT NULL,
+    `quotation_number` varchar(255) DEFAULT NULL,
+    `version_number` int(11) NOT NULL,
+    PRIMARY KEY (`quotation_id`)
+  );
 
 DROP TABLE IF EXISTS `plan_coverage_benefit_assoc`;
 CREATE TABLE `plan_coverage_benefit_assoc` (

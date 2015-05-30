@@ -1,6 +1,6 @@
 package com.pla.core.presentation.controller;
 
-import com.pla.core.domain.exception.DuplicatePlanException;
+import com.pla.core.domain.exception.PlanException;
 import com.pla.core.presentation.command.CreatePlanCommand;
 import com.pla.core.presentation.command.PlanCommandGateway;
 import com.pla.core.presentation.command.UpdatePlanCommand;
@@ -25,7 +25,7 @@ import java.util.Map;
 /**
  * Controller for handling all the User Interface calls related to
  * creation/edition of Plan.
- * <p>
+ * <p/>
  * It also have interface to handled ajax calls to return list of plans.
  *
  * @author: pradyumna
@@ -126,14 +126,10 @@ public class PlanSetupController {
             planCommandGateway.createPlan(command);
             viewMap.put("message", "Plan created successfully");
             viewMap.put("id", planId.toString());
-        } catch (DuplicatePlanException dupExp) {
+        } catch (PlanException e) {
             response.reset();
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-            viewMap.put("message", dupExp.getMessage());
-        } catch (Exception t) {
-            response.reset();
-            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-            viewMap.put("message", t.getMessage());
+            viewMap.put("message", e.getMessage());
         }
         view.setAttributesMap(viewMap);
         return new ModelAndView(view);
@@ -157,14 +153,10 @@ public class PlanSetupController {
         try {
             planCommandGateway.updatePlan(command);
             viewMap.put("message", "Plan updated successfully");
-        } catch (DuplicatePlanException dupExp) {
+        } catch (PlanException exception) {
             response.reset();
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-            viewMap.put("message", dupExp.getMessage());
-        } catch (Exception t) {
-            response.reset();
-            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-            viewMap.put("message", t.getMessage());
+            viewMap.put("message", exception.getMessage());
         }
         view.setAttributesMap(viewMap);
         return new ModelAndView(view);

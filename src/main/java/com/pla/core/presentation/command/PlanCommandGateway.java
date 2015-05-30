@@ -1,6 +1,7 @@
 package com.pla.core.presentation.command;
 
 import com.pla.core.domain.exception.DuplicatePlanException;
+import com.pla.core.domain.exception.PlanException;
 
 import java.util.concurrent.TimeoutException;
 
@@ -10,8 +11,8 @@ import java.util.concurrent.TimeoutException;
 public interface PlanCommandGateway {
 
     void createPlan(CreatePlanCommand command)
-            throws TimeoutException, InterruptedException, DuplicatePlanException;
+            throws PlanException;
 
     void updatePlan(CreatePlanCommand command)
-            throws TimeoutException, InterruptedException, DuplicatePlanException;
+            throws PlanException;
 }

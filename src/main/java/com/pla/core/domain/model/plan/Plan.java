@@ -7,6 +7,7 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import com.pla.core.domain.event.PlanCoverageAssociationEvent;
 import com.pla.core.domain.event.PlanCreatedEvent;
+import com.pla.core.domain.event.PlanWithdrawnEvent;
 import com.pla.core.domain.event.PlanDeletedEvent;
 import com.pla.core.domain.exception.PlanValidationException;
 import com.pla.sharedkernel.domain.model.*;
@@ -67,6 +68,9 @@ public class Plan extends AbstractAnnotatedAggregateRoot<PlanId> {
             copyPropertiesFromPlanBuilder(planBuilder);
             if (planBuilder.getPlanDetail() != null) {
                 super.registerEvent(new PlanCreatedEvent(planId));
+                if (this.planDetail.withdrawalDate != null) {
+                    super.registerEvent(new PlanWithdrawnEvent(planId, this.planDetail.withdrawalDate));
+                }
                 super.registerEvent(new PlanCoverageAssociationEvent(this.planId, this.planDetail.getPlanName(), this.planDetail.getPlanCode(),
                         this.planDetail.lineOfBusinessId, this.planDetail.getClientType(), this.planDetail.planType, this.planDetail.launchDate, this.planDetail.withdrawalDate,
                         this.planDetail.funeralCover,
@@ -112,6 +116,9 @@ public class Plan extends AbstractAnnotatedAggregateRoot<PlanId> {
         try {
             Preconditions.checkState(this.status == PlanStatus.DRAFT, "Plan in draft status can only be updated.");
             copyPropertiesFromPlanBuilder(planBuilder);
+            if (this.planDetail.withdrawalDate != null) {
+                super.registerEvent(new PlanWithdrawnEvent(planId, this.planDetail.withdrawalDate));
+            }
             super.registerEvent(new PlanCoverageAssociationEvent(this.planId, this.planDetail.getPlanName(), this.planDetail.getPlanCode(),
                     this.planDetail.lineOfBusinessId, this.planDetail.getClientType(), this.planDetail.planType, this.planDetail.launchDate, this.planDetail.withdrawalDate,
                     this.planDetail.funeralCover,
