@@ -49,8 +49,8 @@ public class AgentService {
     public void createAgent(String agentId, AgentProfileDto agentProfileDto, LicenseNumberDto licenseNumberDto, TeamDetailDto teamDetailDto, ContactDetailDto contactDetailDto, PhysicalAddressDto physicalAddressDto, ChannelTypeDto channelTypeDto, Set<PlanId> authorizedPlans) {
         UtilValidator.isNotEmpty("");
         boolean isLicenseNumberUnique = UtilValidator.isNotEmpty(licenseNumberDto.getLicenseNumber()) ? agentLicenseNumberIsUnique.isSatisfiedBy(new LicenseNumber(licenseNumberDto.getLicenseNumber())) : true;
-        AgentDto agentDto = new AgentDto(agentProfileDto.getNrcNumber(),agentId);
-        boolean isNrcNumberIsUnique =  agentProfileDto.getNrcNumber()!=null ? nrcNumberIsUnique.isSatisfiedBy(agentDto) : true;
+        AgentDto agentDto = new AgentDto(agentProfileDto.getNrcNumber(), agentId);
+        boolean isNrcNumberIsUnique = agentProfileDto.getNrcNumber() != null ? nrcNumberIsUnique.isSatisfiedBy(agentDto) : true;
         if (!isLicenseNumberUnique) {
             raiseAgentLicenseNumberUniqueException();
         }
@@ -68,19 +68,19 @@ public class AgentService {
         boolean isLicenseNumberUnique = true;
         JpaRepository<Agent, AgentId> agentRepository = jpaRepositoryFactory.getCrudRepository(Agent.class);
         Agent agent = agentRepository.getOne(new AgentId(agentId));
+        agent = agent.updateStatus(agentStatus);
         isLicenseNumberUnique = (UtilValidator.isNotEmpty(licenseNumberDto.getLicenseNumber()) && !(agent.getLicenseNumber().getLicenseNumber().equals(licenseNumberDto.getLicenseNumber()))) ? agentLicenseNumberIsUnique.isSatisfiedBy(new LicenseNumber(licenseNumberDto.getLicenseNumber())) : true;
         if (!isLicenseNumberUnique) {
             raiseAgentLicenseNumberUniqueException();
         }
-        AgentDto agentDto = new AgentDto(agentProfileDto.getNrcNumber(),agentId);
-        boolean isNrcNumberIsUnique = agentProfileDto.getNrcNumber()!=null? nrcNumberIsUnique.isSatisfiedBy(agentDto) : true;
+        AgentDto agentDto = new AgentDto(agentProfileDto.getNrcNumber(), agentId);
+        boolean isNrcNumberIsUnique = agentProfileDto.getNrcNumber() != null ? nrcNumberIsUnique.isSatisfiedBy(agentDto) : true;
         if (!isNrcNumberIsUnique) {
             raiseAgentNrcNumberUniqueException();
         }
         Agent updatedAgent = populateAgentDetail(agent, agentProfileDto, licenseNumberDto, teamDetailDto, contactDetailDto, physicalAddressDto, channelTypeDto);
         Agent agentWithPlans = updatedAgent.withPlans(authorizedPlans);
-        Agent agentWithUpdatedStatus = agentWithPlans.updateStatus(agentStatus);
-        agentRepository.save(agentWithUpdatedStatus);
+        agentRepository.save(agentWithPlans);
     }
 
 
@@ -90,9 +90,7 @@ public class AgentService {
         updatedAgentWithProfile = updatedAgentWithProfile.updateAgentProfileWithNrcNumber(agentProfileDto.getNrcNumber());
         updatedAgentWithProfile = updatedAgentWithProfile.updateAgentProfileWithTitle(agentProfileDto.getTitle());
         Agent agentWithLicenseNumber = updatedAgentWithProfile.withLicenseNumber(licenseNumberDto.getLicenseNumber());
-        if(!"BROKER".equals(channelTypeDto.getChannelCode())) {
-            agentWithLicenseNumber = agentWithLicenseNumber.withTeamDetail(teamDetailDto.getTeamId());
-        }
+        agentWithLicenseNumber = agentWithLicenseNumber.withTeamDetail(teamDetailDto.getTeamId());
         GeoDetailDto geoDetailDto = contactDetailDto.getGeoDetail();
         Agent agentWithContactDetail = agentWithLicenseNumber.withContactDetail(contactDetailDto.getMobileNumber(), contactDetailDto.getHomePhoneNumber(), contactDetailDto.getWorkPhoneNumber(), contactDetailDto.getEmailAddress(), contactDetailDto.getAddressLine1(), contactDetailDto.getAddressLine2(), geoDetailDto.getPostalCode(), geoDetailDto.getProvinceCode(), geoDetailDto.getCityCode());
         GeoDetailDto physicalGeoDetailDto = physicalAddressDto.getPhysicalGeoDetail();

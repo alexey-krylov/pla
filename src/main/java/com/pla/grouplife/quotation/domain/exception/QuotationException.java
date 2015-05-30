@@ -12,4 +12,8 @@ public class QuotationException extends RuntimeException {
     public static void raiseQuotationNotModifiableException() {
         throw new QuotationException("Quotation Cannot be modified");
     }
+
+    public static void raiseAgentIsInactiveException() {
+        throw new QuotationException("Quotation cannot be updated as agent is inactive.");
+    }
 }

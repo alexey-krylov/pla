@@ -59,7 +59,6 @@ public enum PremiumInfluencingFactor {
             } else {
                 ages = plan.getAllowedAges();
             }
-            plan.getAllowedAges();
             Collections.sort(ages);
             String[] data = new String[ages.size()];
             for (int count = 0; count < ages.size(); count++) {

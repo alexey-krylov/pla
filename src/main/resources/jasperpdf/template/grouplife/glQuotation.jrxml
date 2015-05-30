@@ -2,8 +2,9 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Quotation" pageWidth="842" pageHeight="1500" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="957e75dd-e876-4376-9d34-ee0e5f53cdeb">
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
 	<property name="ireport.zoom" value="1.0"/>
-	<property name="ireport.x" value="85"/>
-	<property name="ireport.y" value="288"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="789"/>
+	<subDataset name="dataset1" uuid="cb7c3b79-1e7b-49c3-9bac-8ee5b60d6edc"/>
 	<queryString>
 		<![CDATA[]]>
 	</queryString>
@@ -86,22 +87,19 @@
 		<band splitType="Stretch"/>
 	</background>
 	<pageHeader>
-		<band height="35" splitType="Stretch">
+		<band height="82" splitType="Stretch">
 			<frame>
-				<reportElement x="0" y="0" width="800" height="35" uuid="71e63112-66c1-4692-9d09-ed53faf95a88"/>
+				<reportElement x="0" y="0" width="800" height="82" uuid="71e63112-66c1-4692-9d09-ed53faf95a88"/>
 				<box>
 					<topPen lineWidth="0.6" lineStyle="Double"/>
 					<leftPen lineWidth="0.6" lineStyle="Double"/>
 					<bottomPen lineWidth="0.6" lineStyle="Double"/>
 					<rightPen lineWidth="0.6" lineStyle="Double"/>
 				</box>
-				<staticText>
-					<reportElement x="224" y="3" width="355" height="31" uuid="1b127f06-f77d-46ce-a37c-a80bedad5e06"/>
-					<textElement textAlignment="Center" verticalAlignment="Middle">
-						<font fontName="Arial" size="18" isBold="true"/>
-					</textElement>
-					<text><![CDATA[Header for Quotation Document]]></text>
-				</staticText>
+				<image>
+					<reportElement x="329" y="0" width="366" height="82" uuid="d92a575b-0386-46ae-857a-56c0b8ea4043"/>
+					<imageExpression><![CDATA["jasperpdf//Plal_Logo.jpg"]]></imageExpression>
+				</image>
 			</frame>
 		</band>
 	</pageHeader>
@@ -126,7 +124,7 @@
 		</band>
 	</columnHeader>
 	<detail>
-		<band height="812" splitType="Stretch">
+		<band height="819" splitType="Stretch">
 			<frame>
 				<reportElement x="0" y="0" width="800" height="710" uuid="3e3c739a-dd56-4b8c-85ba-494ac85a39f4"/>
 				<box>
@@ -468,9 +466,9 @@
 		</band>
 	</detail>
 	<columnFooter>
-		<band height="45" splitType="Stretch">
+		<band height="34" splitType="Stretch">
 			<frame>
-				<reportElement x="0" y="0" width="800" height="45" uuid="96059769-100b-46e9-b930-4f0fc1367e5a"/>
+				<reportElement mode="Opaque" x="0" y="-1" width="803" height="34" forecolor="#FFFFFF" backcolor="#003399" uuid="96059769-100b-46e9-b930-4f0fc1367e5a"/>
 				<box>
 					<topPen lineWidth="1.0" lineStyle="Double"/>
 					<leftPen lineWidth="1.0" lineStyle="Double"/>
@@ -478,11 +476,11 @@
 					<rightPen lineWidth="1.0" lineStyle="Double"/>
 				</box>
 				<staticText>
-					<reportElement x="221" y="8" width="366" height="30" uuid="ba2f1eb9-cfca-4b1e-a830-f22a61a87045"/>
+					<reportElement mode="Opaque" x="221" y="8" width="366" height="24" forecolor="#FFFFFF" backcolor="#003399" uuid="ba2f1eb9-cfca-4b1e-a830-f22a61a87045"/>
 					<textElement textAlignment="Center" verticalAlignment="Top">
 						<font fontName="Arial" size="14" isBold="true"/>
 					</textElement>
-					<text><![CDATA[Group Life Quotation Footer]]></text>
+					<text><![CDATA[Professional Life Assurance Limited]]></text>
 				</staticText>
 			</frame>
 		</band>
@@ -490,19 +488,39 @@
 	<pageFooter>
 		<band height="54" splitType="Stretch">
 			<frame>
-				<reportElement x="0" y="0" width="800" height="54" uuid="5e96c5ca-556d-4698-bed9-97cc05331a70"/>
-				<box>
-					<topPen lineWidth="1.0" lineStyle="Double"/>
-					<leftPen lineWidth="1.0" lineStyle="Double"/>
-					<bottomPen lineWidth="1.0" lineStyle="Double"/>
-					<rightPen lineWidth="1.0" lineStyle="Double"/>
-				</box>
+				<reportElement mode="Transparent" x="0" y="0" width="800" height="54" forecolor="#000000" uuid="8c334bc8-c8d7-49ba-ac25-fafaa1cbd1e4"/>
 				<staticText>
-					<reportElement x="212" y="13" width="375" height="30" uuid="a38b7d30-7451-405b-b10a-e633385a5c31"/>
-					<textElement textAlignment="Center" verticalAlignment="Top">
-						<font fontName="Arial" size="14" isBold="true"/>
+					<reportElement x="71" y="0" width="234" height="54" forecolor="#0000CC" uuid="c4f0d631-7bc7-417a-817b-5e45605e4317"/>
+					<textElement>
+						<font fontName="Arial" size="8" isBold="true"/>
 					</textElement>
-					<text><![CDATA[Group Life Quotation Page Footer]]></text>
+					<text><![CDATA[  Head Office
+  Finsbury Park, Cairo Road,
+  North End ,P.O.Box 31357,Lusaka-Zambia
+  Tel : 021-1-222233,366704,Fax: 021-1-220128
+  email : ho@proflife.co.zm.Website : www.proflife.co.zm]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="368" y="2" width="127" height="52" forecolor="#0000CC" uuid="76a67ea6-5a45-4b0f-ad28-fdad1368b3ad"/>
+					<textElement>
+						<font fontName="Arial" size="8" isBold="true"/>
+					</textElement>
+					<text><![CDATA[  KITWE Branch
+  17,Kanyanta Road
+  P.O.Box 20564
+  Kitwe - Zambia
+  Tel : 021-2-224270,225611]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="578" y="0" width="212" height="52" forecolor="#3300CC" uuid="82d4caa4-425c-4cda-9036-ac7eba50f3f6"/>
+					<textElement>
+						<font fontName="Arial" size="8" isBold="true"/>
+					</textElement>
+					<text><![CDATA[  Ndola Branch
+  1stFloor, Finance House,President Avenue,
+  P.O.Box:71177,Ndola,Zambia
+  Tel - 021-2-612466
+  Fax-021-2-612466]]></text>
 				</staticText>
 			</frame>
 		</band>

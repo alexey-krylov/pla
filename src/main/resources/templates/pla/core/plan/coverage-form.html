@@ -61,10 +61,10 @@
 
                         <div ng-show="coverageForm.minEntryAge.$dirty &amp;&amp; coverageForm.minEntryAge.$invalid">
                             <small class="error" ng-show="coverageForm.minEntryAge.$error.min">
-                                Minimum age cannot be less than Plan Entry Minimum Age.
+                                Minimum age cannot be less than Plan Minimum Entry  Age.
                             </small>
                             <small class="error" ng-show="coverageForm.minEntryAge.$error.max">
-                                Minimum age cannot be greater than Plan Entry Maximum Entry Age.
+                                Minimum age cannot be greater than Plan Maximum Entry Age.
                             </small>
                         </div>
                     </div>
@@ -149,11 +149,11 @@
                         <div ng-show="coverageForm.maxEntryAge.$dirty &amp;&amp; coverageForm.maxEntryAge.$invalid">
                             <small class="error" ng-show="coverageForm.maxEntryAge.$error.max">
                                <!-- Maximum age cannot be greater than Plan Entry Minimum age.-->
-                                Maximum Entry Age cannot be greater than the Plan Minimum Entry Age.
+                                Maximum Entry Age cannot be greater than the Plan Maximum Entry Age.
                             </small>
                             <small class="error" ng-show="coverageForm.maxEntryAge.$error.min">
                                 <!--Maximum age cannot be less than Minimum age.-->
-                                Maximum Entry Age cannot be less than Minimum Entry Age.
+                                Maximum Entry Age cannot be less than Plan Minimum Entry Age.
                             </small>
                             <small class="error" ng-show="coverageForm.maxEntryAge.$error.number">Please
                                 enter Numbers only.

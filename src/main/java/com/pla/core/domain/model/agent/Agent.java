@@ -115,8 +115,8 @@ public class Agent implements ICrudEntity {
 
     public Agent withContactDetail(String mobileNumber, String homePhoneNumber, String workPhoneNumber,
                                    String emailAddress, String addressLine1, String addressLine2, Integer postalCode, String province, String city) {
-        if (AgentStatus.TERMINATED.equals(this.agentStatus) || AgentStatus.INACTIVE.equals(this.agentStatus)) {
-            raiseAgentUpdateNotAllowedException("Agent detail cannot be updated as it is inactivated/terminated");
+        if (AgentStatus.TERMINATED.equals(this.agentStatus)) {
+            raiseAgentUpdateNotAllowedException("Agent detail cannot be updated as it is terminated");
         }
         EmailAddress email = new EmailAddress(emailAddress);
         GeoDetail geoDetail = new GeoDetail(postalCode, province, city);
@@ -128,8 +128,8 @@ public class Agent implements ICrudEntity {
     }
 
     public Agent withPhysicalAddress(String addressLine1, String addressLine2, Integer postalCode, String province, String city) {
-        if (AgentStatus.TERMINATED.equals(this.agentStatus) || AgentStatus.INACTIVE.equals(this.agentStatus)) {
-            raiseAgentUpdateNotAllowedException("Agent detail cannot be updated as it is inactivated/terminated");
+        if (AgentStatus.TERMINATED.equals(this.agentStatus)) {
+            raiseAgentUpdateNotAllowedException("Agent detail cannot be updated as it is terminated");
         }
         GeoDetail geoDetail = new GeoDetail(postalCode, province, city);
         PhysicalAddress physicalAddress = new PhysicalAddress(addressLine1, geoDetail);
@@ -139,8 +139,8 @@ public class Agent implements ICrudEntity {
     }
 
     public Agent withPlans(Set<PlanId> planIds) {
-        if (AgentStatus.TERMINATED.equals(this.agentStatus) || AgentStatus.INACTIVE.equals(this.agentStatus)) {
-            raiseAgentUpdateNotAllowedException("Agent detail cannot be updated as it is inactivated/terminated");
+        if (AgentStatus.TERMINATED.equals(this.agentStatus)) {
+            raiseAgentUpdateNotAllowedException("Agent detail cannot be updated as it is terminated");
         }
         checkArgument(isNotEmpty(planIds));
         this.authorizePlansToSell = planIds;
@@ -148,8 +148,8 @@ public class Agent implements ICrudEntity {
     }
 
     public Agent withChannelType(String channelCode, String channelDescription) {
-        if (AgentStatus.TERMINATED.equals(this.agentStatus) || AgentStatus.INACTIVE.equals(this.agentStatus)) {
-            raiseAgentUpdateNotAllowedException("Agent detail cannot be updated as it is inactivated/terminated");
+        if (AgentStatus.TERMINATED.equals(this.agentStatus)) {
+            raiseAgentUpdateNotAllowedException("Agent detail cannot be updated as it is terminated");
         }
         ChannelType channelType = new ChannelType(channelCode, channelDescription);
         this.channelType = channelType;

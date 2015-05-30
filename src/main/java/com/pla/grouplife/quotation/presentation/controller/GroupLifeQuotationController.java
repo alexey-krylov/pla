@@ -1,5 +1,6 @@
 package com.pla.grouplife.quotation.presentation.controller;
 
+import com.google.common.collect.Lists;
 import com.pla.grouplife.quotation.application.command.*;
 import com.pla.grouplife.quotation.application.service.GLQuotationService;
 import com.pla.grouplife.quotation.presentation.dto.GLQuotationMailDto;
@@ -118,7 +119,11 @@ public class GroupLifeQuotationController {
     public ModelAndView searchQuotation(SearchGlQuotationDto searchGlQuotationDto) {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("pla/quotation/groupLife/viewQuotation");
-        modelAndView.addObject("searchResult", glQuotationService.searchQuotation(searchGlQuotationDto));
+        try {
+            modelAndView.addObject("searchResult", glQuotationService.searchQuotation(searchGlQuotationDto));
+        } catch (Exception e) {
+            modelAndView.addObject("searchResult", Lists.newArrayList());
+        }
         modelAndView.addObject("searchCriteria", searchGlQuotationDto);
         return modelAndView;
     }

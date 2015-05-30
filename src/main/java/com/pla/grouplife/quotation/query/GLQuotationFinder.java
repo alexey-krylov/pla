@@ -2,6 +2,7 @@ package com.pla.grouplife.quotation.query;
 
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import com.mongodb.BasicDBObject;
 import org.nthdimenzion.ddd.domain.annotations.Finder;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +18,9 @@ import org.springframework.stereotype.Service;
 import javax.sql.DataSource;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 import static org.nthdimenzion.utils.UtilValidator.isEmpty;
 import static org.nthdimenzion.utils.UtilValidator.isNotEmpty;
@@ -40,6 +44,8 @@ public class GLQuotationFinder {
 
     public static final String FIND_ACTIVE_AGENT_BY_ID_QUERY = "select * from agent_team_branch_view where agentId =:agentId AND agentStatus='ACTIVE'";
 
+    public static final String FIND_ACTIVE_AGENT_BY_FIRST_NAME_QUERY = "SELECT * FROM agent_team_branch_view WHERE firstName =:firstName";
+
     public static final String FIND_AGENT_PLANS_QUERY = "SELECT agent_id as agentId,plan_id as planId FROM `agent_authorized_plan` WHERE agent_id=:agentId";
 
     public static final String FIND_OCCUPATION_CLASS_QUERY = "SELECT code,description FROM occupation_class WHERE description=:occupation";
@@ -48,7 +54,8 @@ public class GLQuotationFinder {
 
     public Map<String, Object> getAgentById(String agentId) {
         Preconditions.checkArgument(isNotEmpty(agentId));
-        return namedParameterJdbcTemplate.queryForMap(FIND_ACTIVE_AGENT_BY_ID_QUERY, new MapSqlParameterSource().addValue("agentId", agentId));
+        List<Map<String, Object>> agentList = namedParameterJdbcTemplate.queryForList(FIND_ACTIVE_AGENT_BY_ID_QUERY, new MapSqlParameterSource().addValue("agentId", agentId));
+        return isNotEmpty(agentList) ? agentList.get(0) : Maps.newHashMap();
     }
 
     public Map getQuotationById(String quotationId) {
@@ -63,9 +70,12 @@ public class GLQuotationFinder {
     }
 
     public List<Map> searchQuotation(String quotationNumber, String agentCode, String proposerName, String agentName) {
-        Criteria criteria = null;
+        Criteria criteria = Criteria.where("quotationStatus").in(new String[]{"DRAFT", "GENERATED"});
+        if (isEmpty(quotationNumber) && isEmpty(agentCode) && isEmpty(proposerName) && isEmpty(agentName)) {
+            return Lists.newArrayList();
+        }
         if (isNotEmpty(quotationNumber)) {
-            criteria = Criteria.where("quotationNumber").is(quotationNumber);
+            criteria = criteria.and("quotationNumber").is(quotationNumber);
         }
         if (isNotEmpty(agentCode)) {
             criteria = criteria != null ? criteria.and("agentId.agentId").is(agentCode) : Criteria.where("agentId.agentId").is(agentCode);
@@ -73,14 +83,20 @@ public class GLQuotationFinder {
         if (isNotEmpty(proposerName)) {
             criteria = criteria != null ? criteria.and("proposer.proposerName").is(proposerName) : Criteria.where("proposer.proposerName").is(proposerName);
         }
-        if (criteria == null && isEmpty(agentName)) {
-            return Lists.newArrayList();
-        } else if (isNotEmpty(agentName)) {
-
+        Set<String> agentIds = null;
+        if (isNotEmpty(agentName)) {
+            List<Map<String, Object>> agentList = namedParameterJdbcTemplate.queryForList(FIND_ACTIVE_AGENT_BY_FIRST_NAME_QUERY, new MapSqlParameterSource().addValue("firstName", agentName));
+            agentIds = agentList.stream().map(new Function<Map<String, Object>, String>() {
+                @Override
+                public String apply(Map<String, Object> stringObjectMap) {
+                    return (String) stringObjectMap.get("agentId");
+                }
+            }).collect(Collectors.toSet());
+        }
+        if (isNotEmpty(agentIds)) {
+            criteria = criteria.and("agentId.agentId").in(agentIds);
         }
         Query query = new Query(criteria);
-        List quotationList = mongoTemplate.find(query, Map.class, "group_life_quotation");
-
         return mongoTemplate.find(query, Map.class, "group_life_quotation");
     }
 

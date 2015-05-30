@@ -33,7 +33,6 @@ class TeamDetail {
     private String teamId;
 
     TeamDetail(String teamId) {
-        checkArgument(isNotEmpty(teamId));
         this.teamId = teamId;
     }
 }
