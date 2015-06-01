@@ -27,7 +27,18 @@
             });
         });
     });
+    </script>
+<script th:inline="javascript">
+    /*<![CDATA[*/
+    var isNumeric= function (evt){
 
+        var charCode = (evt.which) ? evt.which : evt.keyCode;
+
+        if (charCode > 31 && charCode !=8 && charCode !=0 && (charCode < 48 || charCode > 57 ))
+            return false;
+        return true;
+    }
+    /*]]>*/
 </script>
 <script type="text/ng-template" id="createQuotationTpl.html">
     <nth-alert></nth-alert>
@@ -261,15 +272,15 @@
                                 <div class="col-lg-6">
                                     <div class="form-group required">
                                         <label class="control-label">Add-On Benefits</label>
-                                        <input class="form-control input-sm"  ng-required="true" name="addOnBenefits" ng-model="quotationDetails.premium.addOnBenefit" ng-blur="recalculatePremium();"/>
+                                        <input class="form-control input-sm" onkeypress="return isNumeric(event)" ng-required="true" name="addOnBenefits" ng-model="quotationDetails.premium.addOnBenefit" ng-blur="recalculatePremium();"/>
                                     </div>
                                     <div class="form-group required">
                                         <label class="control-label">Profit and Solvency Loading</label>
-                                        <input class="form-control input-sm"  ng-required="true" name="profitAndSolvencyLoading" ng-model="quotationDetails.premium.profitAndSolvencyLoading" ng-blur="recalculatePremium();"/>
+                                        <input class="form-control input-sm" onkeypress="return isNumeric(event)"  ng-required="true" name="profitAndSolvencyLoading" ng-model="quotationDetails.premium.profitAndSolvencyLoading" ng-blur="recalculatePremium();"/>
                                     </div>
                                     <div class="form-group required">
                                         <label class="control-label">Discounts</label>
-                                        <input class="form-control input-sm"  ng-required="true" name="discounts" ng-model="quotationDetails.premium.discounts" ng-blur="recalculatePremium();"/>
+                                        <input class="form-control input-sm" onkeypress="return isNumeric(event)" ng-required="true" name="discounts" ng-model="quotationDetails.premium.discounts" ng-blur="recalculatePremium();"/>
                                     </div>
                                 </div>
                             </div>
@@ -277,7 +288,7 @@
                                 <div class="col-lg-6">
                                     <div class="form-group">
                                         <label >Policy Term Value (Days)</label>
-                                        <input class="form-control input-sm"  ng-required="true" ng-model="quotationDetails.premium.policyTermValue" ng-blur="recalculatePremium();"/>
+                                        <input class="form-control input-sm"  onkeypress="return isNumeric(event)" ng-required="true" ng-model="quotationDetails.premium.policyTermValue" ng-blur="recalculatePremium();"/>
                                         <small class="error" ng-show="inappropriatePolicyTerm">
                                             Please enter a number between 30 and 999.
                                         </small>
@@ -292,7 +303,7 @@
                                 <div class="col-lg-3">
                                     <div class="form-group" ng-show="premiumInstallment">
                                         <label >Installment Amount</label>
-                                        <input class="form-control input-sm"  ng-required="true" ng-model="quotationDetails.premium.installmentAmount" />
+                                        <input class="form-control input-sm" readonly="true"   ng-model="quotationDetails.premium.installmentAmount" />
 
                                     </div>
                                 </div>
