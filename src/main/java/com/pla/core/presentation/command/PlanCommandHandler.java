@@ -88,7 +88,7 @@ public class PlanCommandHandler {
                 coverageTerm = new Term(each.getCoverageTerm().getValidTerms(), each.getCoverageTerm().getMaxMaturityAge());
             }
             pcBuilder.withCoverageTerm(each.getCoverageTermType(), coverageTerm);
-            pcBuilder.withTaxApplicable(each.getTaxApplicable());
+            pcBuilder.withTaxApplicable(each.isTaxApplicable());
             pcBuilder.withCoverageType(each.getCoverageType());
             pcBuilder.withDeductibleType(each.getDeductibleType());
             pcBuilder.withDeductible(each.getDeductibleAmount());
