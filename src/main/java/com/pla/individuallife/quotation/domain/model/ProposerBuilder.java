@@ -23,15 +23,13 @@ public class ProposerBuilder {
 
     private LocalDate dateOfBirth;
 
-    private Number ageNextBirthDay;
-
     private Gender gender;
 
     private String mobileNumber;
 
     private String emailId;
 
-    ProposerBuilder( String proposerTitle, String proposerFName, String proposerSurname, String proposerNRC, LocalDate dateOfBirth, Number ageNextBirthDay, Gender gender, String mobileNumber, String emailId) {
+    ProposerBuilder(String proposerTitle, String proposerFName, String proposerSurname, String proposerNRC, LocalDate dateOfBirth, Gender gender, String mobileNumber, String emailId) {
         checkArgument(isNotEmpty(proposerTitle));
         checkArgument(isNotEmpty(proposerFName));
         checkArgument(isNotEmpty(proposerSurname));
@@ -44,7 +42,6 @@ public class ProposerBuilder {
         this.proposerSurname = proposerSurname;
         this.proposerNRC = proposerNRC;
         this.dateOfBirth = dateOfBirth;
-        this.ageNextBirthDay =  ageNextBirthDay;
         this.gender = gender;
         this.mobileNumber = mobileNumber;
         this.emailId = emailId;
@@ -52,15 +49,5 @@ public class ProposerBuilder {
 
     public Proposer build() {
         return new Proposer(this);
-    }
-
-    public static void main(String[] args) {
-        try {
-            return;
-        }catch (Exception e){
-
-        }finally {
-            System.out.println("XX");
-        }
     }
 }

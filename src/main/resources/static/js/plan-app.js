@@ -646,7 +646,6 @@ app.controller('PlanSetupController', ['$scope', '$http', '$location', '$routePa
                 $event.preventDefault();
                 $event.stopPropagation();
                 $scope.launchDateOpen = true;
-
             };
             $scope.openWithdrawalDate = function ($event) {
                 $event.preventDefault();

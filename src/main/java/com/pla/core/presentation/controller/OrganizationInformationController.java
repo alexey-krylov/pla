@@ -24,7 +24,7 @@ import java.util.List;
 import java.util.Map;
 
 import static com.google.common.base.Preconditions.checkArgument;
-import static org.nthdimenzion.presentation.AppUtils.getLoggedInUSerDetail;
+import static org.nthdimenzion.presentation.AppUtils.getLoggedInUserDetail;
 
 /**
  * Created by Admin on 4/8/2015.
@@ -72,7 +72,7 @@ public class OrganizationInformationController {
         }
         try {
             checkArgument(generalInformationDto!=null);
-            UserDetails userDetails = getLoggedInUSerDetail(request);
+            UserDetails userDetails = getLoggedInUserDetail(request);
             generalInformationService.createOrganizationInformation(generalInformationDto, userDetails);
         }catch (GeneralInformationException e){
             LOGGER.debug(e.getMessage());
@@ -90,7 +90,7 @@ public class OrganizationInformationController {
             return Result.failure("Error in Updating Organization Information", bindingResult.getAllErrors());
         }
         try {
-            UserDetails userDetails = getLoggedInUSerDetail(request);
+            UserDetails userDetails = getLoggedInUserDetail(request);
             generalInformationService.updateOrganizationInformation(generalInformationDto, userDetails);
         } catch (GeneralInformationException e){
             LOGGER.debug(e.getMessage());

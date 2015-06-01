@@ -15,33 +15,30 @@ import org.joda.time.LocalDate;
 @NoArgsConstructor
 public class ProposerDto {
 
-    private String proposerTitle;
+    private String title;
 
-    private String proposerFName;
+    private String firstName;
 
-    private String proposerSurname;
+    private String surname;
 
-    private String proposerNRC;
+    private String nrcNumber;
 
     private LocalDate dateOfBirth;
-
-    private Number ageNextBirthDay;
 
     private Gender gender;
 
     private String mobileNumber;
 
-    private String emailId;
+    private String emailAddress;
 
     public ProposerDto(Proposer proposer) {
-        this.proposerTitle = proposer.getProposerTitle();
-        this.proposerFName = proposer.getProposerFName();
-        this.proposerSurname = proposer.getProposerSurname();
-        this.proposerNRC = proposer.getProposerNRC();
+        this.title = proposer.getProposerTitle();
+        this.firstName = proposer.getProposerFName();
+        this.surname = proposer.getProposerSurname();
+        this.nrcNumber = proposer.getProposerNRC();
         this.dateOfBirth = proposer.getProposerDateOfBirth();
-        this.ageNextBirthDay = proposer.getAgeNextBirthDay();
         this.gender = proposer.getGender();
         this.mobileNumber = proposer.getProposerMobileNumber();
-        this.emailId = proposer.getProposerEmailId() != null ? proposer.getProposerEmailId() : "";
+        this.emailAddress = proposer.getProposerEmailId() != null ? proposer.getProposerEmailId() : "";
     }
 }

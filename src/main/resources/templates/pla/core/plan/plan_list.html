@@ -23,7 +23,6 @@
                         <th th:text="#{planName}">Plan Name</th>
                         <th th:text="#{planCode}">Plan Code</th>
                         <th th:text="#{clientType}">Client Type</th>
-                        <!--<th th:text="#{planType}">Plan Type</th>-->
                         <th th:text="#{lineOfBusinessId}">Line of Business</th>
                         <th th:text="#{launchDate}">Launch Date</th>
                         <th th:text="#{withdrawalDate}">Withdrawal Date</th>
@@ -35,10 +34,11 @@
                         <td th:text="${plan.plan_name}"></td>
                         <td th:text="${plan.plan_code}"></td>
                         <td th:text="${plan.client_type}"></td>
-                        <!--<td th:text="${plan.plan_type}"></td>-->
                         <td th:text="${plan.line_of_business}"></td>
                         <td th:text="${#dates.format(plan.launch_date,'dd/MM/yyyy')}"></td>
-                        <td th:text="${{plan.withdrawal_date}}"></td>
+                        <td th:if="${{plan.withdrawal_date==null}}"></td>
+                        <td th:if="${plan.withdrawal_date!=null}"><span
+                                th:text="${#dates.format(plan.withdrawal_date,'dd/MM/yyyy')}"></span></td>
                         <td class="text-center">
                             <a th:href="'#viewplan/'+${plan.plan_id}+''"><span class="btn btn-default btn-xs"><i class="glyphicon glyphicon-eye-open"></i>&nbsp;View</span></a>&nbsp;|&nbsp;
                             <a th:href="'#editplan/'+${plan.plan_id}+''"><span class="btn btn-default btn-xs"><i class="glyphicon glyphicon-edit"></i>&nbsp;Edit</span></a>

@@ -30,7 +30,7 @@ import java.util.List;
 import java.util.Map;
 
 import static com.google.common.base.Preconditions.checkArgument;
-import static org.nthdimenzion.presentation.AppUtils.getLoggedInUSerDetail;
+import static org.nthdimenzion.presentation.AppUtils.getLoggedInUserDetail;
 
 /**
  * Created by Samir on 4/14/2015.
@@ -136,7 +136,7 @@ public class GroupLifeQuotationController {
             return Result.failure("Create quotation data is not valid", bindingResult.getAllErrors());
         }
         try {
-            createGLQuotationCommand.setUserDetails(getLoggedInUSerDetail(request));
+            createGLQuotationCommand.setUserDetails(getLoggedInUserDetail(request));
             String quotationId = commandGateway.sendAndWait(createGLQuotationCommand);
             return Result.success("Quotation created successfully", quotationId);
         } catch (Exception e) {
@@ -151,7 +151,7 @@ public class GroupLifeQuotationController {
             return Result.failure("Update quotation agent data is not valid", bindingResult.getAllErrors());
         }
         try {
-            updateGLQuotationWithAgentCommand.setUserDetails(getLoggedInUSerDetail(request));
+            updateGLQuotationWithAgentCommand.setUserDetails(getLoggedInUserDetail(request));
             String quotationId = commandGateway.sendAndWait(updateGLQuotationWithAgentCommand);
             return Result.success("Agent detail updated successfully", quotationId);
         } catch (Exception e) {
@@ -166,7 +166,7 @@ public class GroupLifeQuotationController {
             return Result.failure("Update quotation proposer data is not valid", bindingResult.getAllErrors());
         }
         try {
-            updateGLQuotationWithProposerCommand.setUserDetails(getLoggedInUSerDetail(request));
+            updateGLQuotationWithProposerCommand.setUserDetails(getLoggedInUserDetail(request));
             String quotationId = commandGateway.sendAndWait(updateGLQuotationWithProposerCommand);
             return Result.success("Proposer detail updated successfully", quotationId);
         } catch (Exception e) {
@@ -277,7 +277,7 @@ public class GroupLifeQuotationController {
                 return Result.failure("Uploaded Insured template is not valid.Please download to check the errors");
             }
             List<InsuredDto> insuredDtos = glQuotationService.transformToInsuredDto(insuredTemplateWorkbook, uploadInsuredDetailDto.getQuotationId(), uploadInsuredDetailDto.isSamePlanForAllCategory(), uploadInsuredDetailDto.isSamePlanForAllRelation());
-            commandGateway.sendAndWait(new UpdateGLQuotationWithInsuredCommand(uploadInsuredDetailDto.getQuotationId(), insuredDtos, getLoggedInUSerDetail(request)));
+            commandGateway.sendAndWait(new UpdateGLQuotationWithInsuredCommand(uploadInsuredDetailDto.getQuotationId(), insuredDtos, getLoggedInUserDetail(request)));
         } catch (Exception e) {
             e.printStackTrace();
             return Result.failure(e.getMessage());
@@ -296,7 +296,7 @@ public class GroupLifeQuotationController {
     public Result reCalculatePremium(@RequestBody UpdateGLQuotationWithPremiumDetailCommand updateGLQuotationWithPremiumDetailCommand, HttpServletRequest request) {
         PremiumDetailDto premiumDetailDto = null;
         try {
-            updateGLQuotationWithPremiumDetailCommand.setUserDetails(getLoggedInUSerDetail(request));
+            updateGLQuotationWithPremiumDetailCommand.setUserDetails(getLoggedInUserDetail(request));
             commandGateway.sendAndWait(updateGLQuotationWithPremiumDetailCommand);
             premiumDetailDto = glQuotationService.getPremiumDetail(new QuotationId(updateGLQuotationWithPremiumDetailCommand.getQuotationId()));
             return Result.success("Premium recalculated successfully", premiumDetailDto);

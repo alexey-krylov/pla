@@ -24,7 +24,7 @@ import javax.validation.Valid;
 import java.util.List;
 import java.util.Map;
 
-import static org.nthdimenzion.presentation.AppUtils.getLoggedInUSerDetail;
+import static org.nthdimenzion.presentation.AppUtils.getLoggedInUserDetail;
 
 
 /**
@@ -71,7 +71,7 @@ public class BenefitController {
             return Result.failure("Error in creating benefit", bindingResult.getAllErrors());
         }
         try {
-            UserDetails userDetails = getLoggedInUSerDetail(request);
+            UserDetails userDetails = getLoggedInUserDetail(request);
             createBenefitCommand.setUserDetails(userDetails);
             commandGateway.sendAndWait(createBenefitCommand);
         } catch (BenefitApplicationException e) {
@@ -92,7 +92,7 @@ public class BenefitController {
             return Result.failure("Error in updating benefit", bindingResult.getAllErrors());
         }
         try {
-            UserDetails userDetails = getLoggedInUSerDetail(request);
+            UserDetails userDetails = getLoggedInUserDetail(request);
             updateBenefitCommand.setUserDetails(userDetails);
             commandGateway.sendAndWait(updateBenefitCommand);
         } catch (BenefitApplicationException e) {
@@ -113,7 +113,7 @@ public class BenefitController {
             return Result.failure("Error in inactivating benefit", bindingResult.getAllErrors());
         }
         try {
-            UserDetails userDetails = getLoggedInUSerDetail(request);
+            UserDetails userDetails = getLoggedInUserDetail(request);
             inactivateBenefitCommand.setUserDetails(userDetails);
             commandGateway.sendAndWait(inactivateBenefitCommand);
         } catch (BenefitApplicationException e) {

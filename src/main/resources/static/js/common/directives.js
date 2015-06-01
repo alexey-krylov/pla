@@ -49,7 +49,10 @@ angular.module('directives', ['mgcrea.ngStrap.alert'])
                 } else {
                     $(element).wizard();
                 }
+                console.log('fueluxWizard ' + JSON.stringify(scope.selectedItem));
+
                 $(element).on('actionclicked.fu.wizard', function (event, data) {
+                    console.log('actionclicked.fu.wizard ' + JSON.stringify(data));
                     if (data.direction == 'previous')return;
                     if (ctrl && ctrl[0]) {
                         var currentStep = ctrl[0]['step' + data.step] && ctrl[0]['step' + data.step].$name;

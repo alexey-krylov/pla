@@ -10,7 +10,10 @@ import org.joda.time.LocalDate;
 import org.joda.time.Years;
 import org.nthdimenzion.ddd.domain.annotations.ValueObject;
 
-import javax.persistence.*;
+import javax.persistence.Embeddable;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.Table;
 
 import static com.google.common.base.Preconditions.checkArgument;
 
@@ -36,9 +39,6 @@ public class ProposedAssured {
     @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentLocalDate")
     private LocalDate assuredDateOfBirth;
 
-    @Transient
-    private Number ageNextBirthDay;
-
     @Enumerated(EnumType.STRING)
     private Gender assuredGender;
 
@@ -49,29 +49,23 @@ public class ProposedAssured {
     private String occupation;
 
 
-
     ProposedAssured(ProposedAssuredBuilder proposedAssuredBuilder) {
         checkArgument(proposedAssuredBuilder != null);
-        this.assuredTitle = proposedAssuredBuilder.getAssuredTitle();
-        this.assuredFName = proposedAssuredBuilder.getAssuredFName();
-        this.assuredSurname = proposedAssuredBuilder.getAssuredSurname();
-        this.assuredNRC = proposedAssuredBuilder.getAssuredNRC();
+        this.assuredTitle = proposedAssuredBuilder.getTitle();
+        this.assuredFName = proposedAssuredBuilder.getFirstName();
+        this.assuredSurname = proposedAssuredBuilder.getSurname();
+        this.assuredNRC = proposedAssuredBuilder.getNrcNumber();
         this.assuredDateOfBirth = proposedAssuredBuilder.getDateOfBirth();
         this.assuredGender = proposedAssuredBuilder.getGender();
         this.assuredMobileNumber = proposedAssuredBuilder.getMobileNumber();
-        this.assuredEmailId = proposedAssuredBuilder.getEmailId();
+        this.assuredEmailId = proposedAssuredBuilder.getEmailAddress();
         this.occupation = proposedAssuredBuilder.getOccupation();
-        this.ageNextBirthDay = proposedAssuredBuilder.getAgeNextBirthDay();
     }
 
-
-    public static ProposedAssuredBuilder getAssuredBuilder( String title, String firstName, String surname, String nrc ) {
-        return new ProposedAssuredBuilder( title,firstName,  surname,  nrc);
+    public static ProposedAssuredBuilder proposedAssuredBuilder() {
+        return new ProposedAssuredBuilder();
     }
 
-    public static ProposedAssuredBuilder getAssuredBuilder( String title, String firstName, String surname, String nrc, LocalDate dateOfBirth, Number ageNextBirthDay, Gender gender, String mobileNumber, String emailId, String occupation ) {
-        return new ProposedAssuredBuilder( title,firstName,  surname,  nrc, dateOfBirth, ageNextBirthDay, gender, mobileNumber, emailId,occupation );
-    }
 
     public Number getAgeNextBirthDay() {
         return Years.yearsBetween(assuredDateOfBirth, LocalDate.now()).getYears() + 1;

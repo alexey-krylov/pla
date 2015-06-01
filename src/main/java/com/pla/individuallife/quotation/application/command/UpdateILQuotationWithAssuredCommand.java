@@ -14,7 +14,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 @NoArgsConstructor
 public class UpdateILQuotationWithAssuredCommand {
 
-    private ProposedAssuredDto proposedAssuredDto;
+    private ProposedAssuredDto proposedAssured;
 
     private Boolean isAssuredTheProposer;
 

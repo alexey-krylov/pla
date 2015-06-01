@@ -1,7 +1,5 @@
 package com.pla.individuallife.quotation.application.command;
 
-import com.pla.core.domain.model.agent.AgentId;
-import com.pla.sharedkernel.identifier.PlanId;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -19,28 +17,28 @@ import javax.validation.constraints.NotNull;
 public class CreateILQuotationCommand {
 
     @NotNull(message = "{Agent ID cannot be null}")
-    private AgentId agentId;
+    private String agentId;
 
     private String assuredId;
 
     @NotNull(message = "{Assured Title cannot be null}")
     @NotEmpty(message = "{Assured Title cannot be empty}")
-    private String assuredTitle;
+    private String title;
 
     @NotNull(message = "{Assured First Name  cannot be null}")
     @NotEmpty(message = "{Assured First Name  cannot be empty}")
-    private String assuredFName;
+    private String firstName;
 
     @NotNull(message = "{Assured Surname  cannot be null}")
     @NotEmpty(message = "{Assured Surname  cannot be empty}")
-    private String assuredSurame;
+    private String surname;
 
     @NotNull(message = "{Assured NRC  cannot be null}")
     @NotEmpty(message = "{Assured NRC  cannot be empty}")
-    private String assuredNRC;
+    private String nrcNumber;
 
     @NotNull(message = "{Plan ID cannot be null}")
-    private PlanId planId;
+    private String planId;
 
     private UserDetails userDetails;
 }

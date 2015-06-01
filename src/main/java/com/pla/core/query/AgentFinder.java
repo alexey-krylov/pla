@@ -29,13 +29,6 @@ import java.util.Map;
 @Service
 public class AgentFinder {
 
-    private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
-
-    @Autowired
-    public void setDataSource(DataSource dataSource) {
-        this.namedParameterJdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
-    }
-
     public static final String FIND_AGENT_COUNT_FOR_A_GIVEN_LICENSE_NUMBER_QUERY = "SELECT COUNT(agent_id) FROM agent WHERE license_number =:licenseNumber";
 
     public static final String FIND_AGENT_BY_ID_QUERY = "select * from agent_team_branch_view where agentId =:agentId";
@@ -45,6 +38,23 @@ public class AgentFinder {
     public static final String FIND_ALL_AGENT_BY_STATUS_QUERY = "select * from agent_team_branch_view where agentStatus IN (:agentStatuses)";
 
     public static final String FIND_AGENT_PLAN_QUERY = "SELECT agent_id AS agentId,plan_id AS planId FROM `agent_authorized_plan`";
+
+    public static final String SEARCH_AGENT_BY_PLAN_LOB = "SELECT A.*,c.line_of_business FROM AGENT A JOIN agent_authorized_plan b " +
+            "ON A.`agent_id`=B.`agent_id` JOIN plan_coverage_benefits_assoc C " +
+            "ON B.`plan_id`=C.`plan_id` where c.line_of_business=:lineOfBusiness and A.agent_status='ACTIVE'";
+
+    /**
+     * Find all the Plans by Agent Id and for a line of business.
+     */
+    private static final String SEARCH_PLAN_BY_AGENT_ID = "SELECT C.* FROM AGENT A JOIN agent_authorized_plan b " +
+            "ON A.`agent_id`=B.`agent_id` JOIN plan_coverage_benefits_assoc C " +
+            "ON B.`plan_id`=C.`plan_id` where A.agent_id=:agentId and c.line_of_business=:lineOfBusiness";
+    private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
+
+    @Autowired
+    public void setDataSource(DataSource dataSource) {
+        this.namedParameterJdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
+    }
 
     public int getAgentCountByLicenseNumber(String licenseNumber) {
         Number noOfBenefit = namedParameterJdbcTemplate.queryForObject(FIND_AGENT_COUNT_FOR_A_GIVEN_LICENSE_NUMBER_QUERY, new MapSqlParameterSource().addValue("licenseNumber", licenseNumber), Number.class);
@@ -66,8 +76,17 @@ public class AgentFinder {
     }
 
     public int getAgentCountByNrcNumber(AgentDto agentDto) {
-        Number noOfAgentCount = namedParameterJdbcTemplate.queryForObject(FIND_AGENT_COUNT_BY_NRC_NUMBER_QUERY,  new MapSqlParameterSource().addValue("nrcNumber", agentDto.getNrcNumber()).addValue("agentId",agentDto.getAgentId()), Number.class);
+        Number noOfAgentCount = namedParameterJdbcTemplate.queryForObject(FIND_AGENT_COUNT_BY_NRC_NUMBER_QUERY, new MapSqlParameterSource().addValue("nrcNumber", agentDto.getNrcNumber()).addValue("agentId", agentDto.getAgentId()), Number.class);
         return noOfAgentCount.intValue();
     }
 
+
+    public List<Map<String, Object>> searchAgent(String searchStr) {
+        return namedParameterJdbcTemplate.query(SEARCH_AGENT_BY_PLAN_LOB, new MapSqlParameterSource().addValue("lineOfBusiness", "Individual Life"), new ColumnMapRowMapper());
+
+    }
+
+    public List<Map<String, Object>> searchPlanByAgentId(String agentId) {
+        return namedParameterJdbcTemplate.query(SEARCH_PLAN_BY_AGENT_ID, new MapSqlParameterSource().addValue("agentId", agentId).addValue("lineOfBusiness", "Individual Life"), new ColumnMapRowMapper());
+    }
 }

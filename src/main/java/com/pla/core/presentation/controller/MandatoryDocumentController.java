@@ -23,7 +23,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.Map;
 
-import static org.nthdimenzion.presentation.AppUtils.getLoggedInUSerDetail;
+import static org.nthdimenzion.presentation.AppUtils.getLoggedInUserDetail;
 
 /**
  * Created by Admin on 3/30/2015.
@@ -89,7 +89,7 @@ public class MandatoryDocumentController {
             return Result.failure("Error in creating benefit", bindingResult.getAllErrors());
         }
         try {
-            UserDetails userDetails = getLoggedInUSerDetail(request);
+            UserDetails userDetails = getLoggedInUserDetail(request);
             createMandatoryDocumentCommand.setUserDetails(userDetails);
             commandGateway.sendAndWait(createMandatoryDocumentCommand);
         } catch (MandatoryDocumentException e) {
@@ -107,7 +107,7 @@ public class MandatoryDocumentController {
             return Result.failure("Error in creating benefit", bindingResult.getAllErrors());
         }
         try {
-            UserDetails userDetails = getLoggedInUSerDetail(request);
+            UserDetails userDetails = getLoggedInUserDetail(request);
             updateMandatoryDocumentCommand.setUserDetails(userDetails);
             commandGateway.sendAndWait(updateMandatoryDocumentCommand);
         } catch (MandatoryDocumentException e) {

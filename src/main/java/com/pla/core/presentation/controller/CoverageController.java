@@ -36,10 +36,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
-
 import java.util.List;
 
-import static org.nthdimenzion.presentation.AppUtils.getLoggedInUSerDetail;
+import static org.nthdimenzion.presentation.AppUtils.getLoggedInUserDetail;
 
 @Controller
 @RequestMapping(value = "/core")
@@ -82,7 +81,7 @@ public class CoverageController {
             return Result.failure("Error in creating benefit", bindingResult.getAllErrors());
         }
         try {
-            UserDetails userDetails = getLoggedInUSerDetail(request);
+            UserDetails userDetails = getLoggedInUserDetail(request);
             createCoverageCommand.setUserDetails(userDetails);
             commandGateway.sendAndWait(createCoverageCommand);
         } catch (CoverageException e) {
@@ -100,7 +99,7 @@ public class CoverageController {
             return Result.failure("Error in updating coverage", bindingResult.getAllErrors());
         }
         try {
-            UserDetails userDetails = getLoggedInUSerDetail(request);
+            UserDetails userDetails = getLoggedInUserDetail(request);
             updateCoverageCommand.setUserDetails(userDetails);
             commandGateway.sendAndWait(updateCoverageCommand);
         } catch (CoverageException e) {
@@ -118,7 +117,7 @@ public class CoverageController {
             return Result.failure("Error in inactivating coverage", bindingResult.getAllErrors());
         }
         try {
-            UserDetails userDetails = getLoggedInUSerDetail(request);
+            UserDetails userDetails = getLoggedInUserDetail(request);
             inactivateCoverageCommand.setUserDetails(userDetails);
             commandGateway.sendAndWait(inactivateCoverageCommand);
         } catch (CoverageException e) {

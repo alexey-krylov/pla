@@ -54,7 +54,7 @@
 
                         <div class="col-md-4">
                             <dl class="dl-horizontal">
-                                <dt>Maximum Entry Age</dt>
+                                <dt>Minimum Entry Age</dt>
                                 <dd>{{plan.planDetail.minEntryAge}}</dd>
                             </dl>
                         </div>
@@ -132,7 +132,11 @@
                                             <div ng-if="plan.policyTermType=='SPECIFIED_VALUES'">
                                                 <span ng-repeat="term in plan.policyTerm.validTerms">{{term.text}} &nbsp;<b ng-if="!$last">,</b>&nbsp;
                                                 </span>
-                                                <h6>Age at Maturity should not be more than {{plan.policyTerm.maxMaturityAge}} year</h6>
+                                                <h6 ng-if="plan.planDetail.clientType==INDIVIDUAL">Age at Maturity
+                                                    should not be more than {{plan.policyTerm.maxMaturityAge}} year</h6>
+                                                <h6 ng-if="plan.planDetail.clientType==GROUP">Policy valid for 365 days
+                                                    only.</h6>
+
                                             </div>
                                             <div ng-if="plan.policyTermType=='MATURITY_AGE_DEPENDENT'">
                                                 <span ng-repeat="term in plan.policyTerm.validTerms">{{term.text}}&nbsp;<b ng-if="!$last">,</b>&nbsp;
@@ -200,9 +204,9 @@
                                             </div>
                                             <div class="col-md-4">
                                                 <dl class="dl-horizontal">
-                                                    <dt>Minimum Age</dt>
+                                                    <dt>Minimum Entry Age</dt>
                                                     <dd>{{planCoverage.minAge}}</dd>
-                                                    <dt>Maximum Age</dt>
+                                                    <dt>Maximum Entry Age</dt>
                                                     <dd>{{planCoverage.maxAge}}</dd>
                                                 </dl>
                                             </div>
@@ -241,11 +245,11 @@
                                             <div class="col-md-4">
 
                                                 <dl class="dl-horizontal">
-                                                    <dt>Benefit Namer</dt>
+                                                    <dt>Benefit Name</dt>
                                                     <dd>{{getBenefitName(planCoverage.coverageId,benefit.benefitId)}}</dd>
-                                                    <dt>Coverage Cover</dt>
+                                                    <dt>Limit Defined</dt>
                                                     <dd>{{benefit.definedPer}}</dd>
-                                                    <dt>Benefit Type</dt>
+                                                    <dt>Limit Type</dt>
                                                     <dd>{{benefit.coverageBenefitType}}</dd>
                                                 </dl>
                                             </div>
@@ -253,7 +257,7 @@
                                                 <dl class="dl-horizontal">
                                                     <dt>Benefit Limit</dt>
                                                     <dd>{{benefit.benefitLimit}}</dd>
-                                                    <dt>Maximum Amount</dt>
+                                                    <dt>Maximum Limit</dt>
                                                     <dd>{{benefit.maxLimit}}</dd>
                                                 </dl>
                                             </div>

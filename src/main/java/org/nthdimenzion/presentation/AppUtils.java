@@ -53,7 +53,7 @@ public class AppUtils {
     }
 
 
-    public static UserDetails getLoggedInUSerDetail(HttpServletRequest request) {
+    public static UserDetails getLoggedInUserDetail(HttpServletRequest request) {
         UserDetails userDetails = (UserDetails) request.getSession().getAttribute(AppConstants.LOGGED_IN_USER);
         return userDetails;
     }

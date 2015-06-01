@@ -5,8 +5,10 @@ import com.pla.individuallife.quotation.application.command.UpdateILQuotationWit
 import com.pla.individuallife.quotation.application.command.UpdateILQuotationWithPlanCommand;
 import com.pla.individuallife.quotation.application.command.UpdateILQuotationWithProposerCommand;
 import com.pla.individuallife.quotation.application.service.ILQuotationService;
+import com.pla.individuallife.quotation.presentation.dto.ILSearchQuotationDto;
 import com.pla.individuallife.quotation.presentation.dto.ProposedAssuredDto;
 import com.pla.individuallife.quotation.presentation.dto.ProposerDto;
+import com.pla.individuallife.quotation.query.ILQuotationDto;
 import com.pla.individuallife.quotation.query.ILQuotationFinder;
 import com.pla.individuallife.quotation.query.PremiumDetailDto;
 import com.pla.sharedkernel.identifier.QuotationId;
@@ -20,9 +22,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.Map;
 
-import static org.nthdimenzion.presentation.AppUtils.getLoggedInUSerDetail;
+import static org.nthdimenzion.presentation.AppUtils.getLoggedInUserDetail;
 
 /**
  * Created by Karunakar on 5/13/2015.
@@ -51,9 +52,20 @@ public class IndidualLifeQuotationController {
         return modelAndView;
     }
 
-    @RequestMapping(method = RequestMethod.GET, value = "/list")
-    public ModelAndView gotoList() {
+    @RequestMapping(value = "/searchForm", method = RequestMethod.GET)
+    public ModelAndView gotoSearchForm(ILSearchQuotationDto searchDto) {
         ModelAndView modelAndView = new ModelAndView();
+        modelAndView.addObject("searchCriteria", new ILSearchQuotationDto());
+        modelAndView.setViewName("pla/quotation/individuallife/quotationlist");
+        return modelAndView;
+    }
+
+
+    @RequestMapping(value = "/searchquotation", method = RequestMethod.POST)
+    public ModelAndView searchQuotation(ILSearchQuotationDto searchGlQuotationDto) {
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.addObject("searchResult", ilQuotationService.searchQuotation(searchGlQuotationDto));
+        modelAndView.addObject("searchCriteria", searchGlQuotationDto);
         modelAndView.setViewName("pla/quotation/individuallife/quotationlist");
         return modelAndView;
     }
@@ -61,7 +73,7 @@ public class IndidualLifeQuotationController {
     @RequestMapping(method = RequestMethod.GET, value = "/new")
     public ModelAndView editQuotationPage() {
         ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("pla/quotation/individuallife/createQuotation.html");
+        modelAndView.setViewName("pla/quotation/individuallife/createQuotation");
         return modelAndView;
     }
 
@@ -69,15 +81,15 @@ public class IndidualLifeQuotationController {
     @ApiOperation(httpMethod = "GET", value = "Get Quotation number for a given quotation Id")
     @ResponseBody
     public Result getQuotationNumber(@PathVariable("quotationId") String quotationId) {
-        Map quotationMap = ilQuotationFinder.getQuotationById(quotationId);
-        return Result.success("Quotation number ", (String) quotationMap.get("quotation_number"));
+        ILQuotationDto quotationMap = ilQuotationFinder.getQuotationById(quotationId);
+        return Result.success("Quotation number ", quotationMap.getQuotationNumber());
     }
 
     @RequestMapping(value = "/getversionnumber/{quotationId}", method = RequestMethod.GET)
     @ResponseBody
     public Result getVersionNumber(@PathVariable("quotationId") String quotationId) {
-        Map quotationMap = ilQuotationFinder.getQuotationById(quotationId);
-        return Result.success("Quotation Version number ", quotationMap.get("versionNumber"));
+        ILQuotationDto quotationMap = ilQuotationFinder.getQuotationById(quotationId);
+        return Result.success("Quotation Version number ", quotationMap.getVersionNumber());
     }
 
     @RequestMapping(value = "/createquotation", method = RequestMethod.POST)
@@ -88,22 +100,23 @@ public class IndidualLifeQuotationController {
             return Result.failure("Create quotation data is not valid", bindingResult.getAllErrors());
         }
         try {
-            createILQuotationCommand.setUserDetails(getLoggedInUSerDetail(request));
+            createILQuotationCommand.setUserDetails(getLoggedInUserDetail(request));
             String quotationId = commandGateway.sendAndWait(createILQuotationCommand);
             return Result.success("Quotation created successfully", quotationId);
         } catch (Exception e) {
+            e.printStackTrace();
             return Result.failure(e.getMessage());
         }
     }
 
     @RequestMapping(value = "/updatewithproposerdetail", method = RequestMethod.POST)
-      @ResponseBody
-      public Result updateQuotationWithProposerDetail(@RequestBody UpdateILQuotationWithProposerCommand updateILQuotationWithProposerCommand, BindingResult bindingResult, HttpServletRequest request) {
+    @ResponseBody
+    public Result updateQuotationWithProposerDetail(@RequestBody UpdateILQuotationWithProposerCommand updateILQuotationWithProposerCommand, BindingResult bindingResult, HttpServletRequest request) {
         if (bindingResult.hasErrors()) {
             return Result.failure("Update quotation proposer data is not valid", bindingResult.getAllErrors());
         }
         try {
-            updateILQuotationWithProposerCommand.setUserDetails(getLoggedInUSerDetail(request));
+            updateILQuotationWithProposerCommand.setUserDetails(getLoggedInUserDetail(request));
             String quotationId = commandGateway.sendAndWait(updateILQuotationWithProposerCommand);
             return Result.success("Proposer detail updated successfully", quotationId);
         } catch (Exception e) {
@@ -118,7 +131,7 @@ public class IndidualLifeQuotationController {
             return Result.failure("Update quotation Assured data is not valid", bindingResult.getAllErrors());
         }
         try {
-            updateILQuotationWithAssuredCommand.setUserDetails(getLoggedInUSerDetail(request));
+            updateILQuotationWithAssuredCommand.setUserDetails(getLoggedInUserDetail(request));
             String quotationId = commandGateway.sendAndWait(updateILQuotationWithAssuredCommand);
             return Result.success("Assured detail updated successfully", quotationId);
         } catch (Exception e) {
@@ -133,7 +146,7 @@ public class IndidualLifeQuotationController {
             return Result.failure("Update quotation Plan details data is not valid", bindingResult.getAllErrors());
         }
         try {
-            updateILQuotationWithPlanCommand.setUserDetails(getLoggedInUSerDetail(request));
+            updateILQuotationWithPlanCommand.setUserDetails(getLoggedInUserDetail(request));
             String quotationId = commandGateway.sendAndWait(updateILQuotationWithPlanCommand);
             return Result.success("Plan details updated successfully", quotationId);
         } catch (Exception e) {
@@ -144,7 +157,7 @@ public class IndidualLifeQuotationController {
     @RequestMapping(value = "/getpremiumdetail/{quotationid}", method = RequestMethod.GET)
     @ResponseBody
     public PremiumDetailDto getPremiumDetail(@PathVariable("quotationid") String quotationId) {
-       return ilQuotationService.getPremiumDetail(new QuotationId(quotationId));
+        return ilQuotationService.getPremiumDetail(new QuotationId(quotationId));
     }
 
     @RequestMapping(value = "/recalculatePremium", method = RequestMethod.POST)
@@ -154,8 +167,8 @@ public class IndidualLifeQuotationController {
     }
 
     @RequestMapping(value = "/getproposerdetail/{quotationId}")
-     @ResponseBody
-     public ProposerDto getProposerDetail(@PathVariable("quotationId") String quotationId) {
+    @ResponseBody
+    public ProposerDto getProposerDetail(@PathVariable("quotationId") String quotationId) {
         return ilQuotationService.getProposerDetail(new QuotationId(quotationId));
     }
 

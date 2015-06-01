@@ -25,7 +25,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
-import static org.nthdimenzion.presentation.AppUtils.getLoggedInUSerDetail;
+import static org.nthdimenzion.presentation.AppUtils.getLoggedInUserDetail;
 
 /**
  * Created by Nischitha on 10-Mar-15.
@@ -101,7 +101,7 @@ public class CommissionController {
             return Result.failure("Error in creating commission", bindingResult.getAllErrors());
         }
         try {
-            UserDetails userDetails = getLoggedInUSerDetail(request);
+            UserDetails userDetails = getLoggedInUserDetail(request);
             createCommissionCommand.setUserDetails(userDetails);
             commandGateway.sendAndWait(createCommissionCommand);
         } catch (Exception e) {
@@ -116,7 +116,7 @@ public class CommissionController {
     @ResponseBody
     Result updateCommission(@RequestBody UpdateCommissionCommand updateCommissionCommand, BindingResult bindingResult, HttpServletRequest request) {
         try {
-            UserDetails userDetails = getLoggedInUSerDetail(request);
+            UserDetails userDetails = getLoggedInUserDetail(request);
             updateCommissionCommand.setUserDetails(userDetails);
             commandGateway.sendAndWait(updateCommissionCommand);
         } catch (Exception e) {

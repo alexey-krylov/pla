@@ -21,7 +21,8 @@ public class ILQuotationProcessor {
 
 
     public IndividualLifeQuotation createIndividualLifeQuotation(String quotationNumber, String quotationCreator, QuotationId quotationId, AgentId agentId, String assuredTitle, String assuredFName, String assuredSurname, String assuredNRC, PlanId planid ) {
-        ProposedAssuredBuilder proposedAssuredBuilder = ProposedAssured.getAssuredBuilder(assuredTitle, assuredFName, assuredSurname, assuredNRC);
+        ProposedAssuredBuilder proposedAssuredBuilder = ProposedAssured.proposedAssuredBuilder();
+        proposedAssuredBuilder.withFirstName(assuredFName).withSurname(assuredSurname).withNrcNumber(assuredNRC).withTitle(assuredTitle);
         return IndividualLifeQuotation.createWithBasicDetail(quotationNumber, quotationCreator, quotationId, agentId, proposedAssuredBuilder.build(), planid);
     }
 

@@ -4,80 +4,76 @@ import com.pla.sharedkernel.domain.model.Gender;
 import lombok.Getter;
 import org.joda.time.LocalDate;
 
-import static com.google.common.base.Preconditions.checkArgument;
-import static org.nthdimenzion.utils.UtilValidator.isNotEmpty;
-
 /**
  * Created by Karunakar on 5/13/2015.
  */
 @Getter
 public class ProposedAssuredBuilder {
 
-    private String assuredTitle;
+    private String title;
 
-    private String assuredFName;
+    private String firstName;
 
-    private String assuredSurname;
+    private String surname;
 
-    private String assuredNRC;
+    private String nrcNumber;
 
     private LocalDate dateOfBirth;
-
-    private Number ageNextBirthDay;
 
     private Gender gender;
 
     private String mobileNumber;
 
-    private String emailId;
+    private String emailAddress;
 
     private String occupation;
 
-    ProposedAssuredBuilder(String title, String firstName, String surname, String nrc) {
-        checkArgument(isNotEmpty(title));
-        checkArgument(isNotEmpty(firstName));
-        checkArgument(isNotEmpty(surname));
-        checkArgument(isNotEmpty(nrc));
-        this.assuredTitle = title;
-        this.assuredFName = firstName;
-        this.assuredSurname = surname;
-        this.assuredNRC = nrc;
+    public ProposedAssuredBuilder withTitle(String title) {
+        this.title = title;
+        return this;
     }
 
-    public ProposedAssuredBuilder(String title, String firstName, String surname, String nrc, LocalDate dateOfBirth, Number ageNextBirthDay, Gender gender, String mobileNumber, String emailId, String occupation) {
-        checkArgument(isNotEmpty(title));
-        checkArgument(isNotEmpty(firstName));
-        checkArgument(isNotEmpty(surname));
-        checkArgument(isNotEmpty(nrc));
-        checkArgument(dateOfBirth != null);
-        checkArgument(gender != null);
-        checkArgument(mobileNumber != null);
-        checkArgument(emailId != null);
-        checkArgument(isNotEmpty(occupation));
-        checkArgument(ageNextBirthDay != null);
-        this.assuredTitle = title;
-        this.assuredFName = firstName;
-        this.assuredSurname = surname;
-        this.assuredNRC = nrc;
+    public ProposedAssuredBuilder withFirstName(String firstName) {
+        this.firstName = firstName;
+        return this;
+    }
+
+    public ProposedAssuredBuilder withSurname(String surname) {
+        this.surname = surname;
+        return this;
+    }
+
+    public ProposedAssuredBuilder withNrcNumber(String nrcNumber) {
+        this.nrcNumber = nrcNumber;
+        return this;
+    }
+
+    public ProposedAssuredBuilder withDateOfBirth(LocalDate dateOfBirth) {
         this.dateOfBirth = dateOfBirth;
+        return this;
+    }
+
+    public ProposedAssuredBuilder withGender(Gender gender) {
         this.gender = gender;
+        return this;
+    }
+
+    public ProposedAssuredBuilder withMobileNumber(String mobileNumber) {
         this.mobileNumber = mobileNumber;
-        this.emailId = emailId;
+        return this;
+    }
+
+    public ProposedAssuredBuilder withEmailAddress(String emailAddress) {
+        this.emailAddress = emailAddress;
+        return this;
+    }
+
+    public ProposedAssuredBuilder withOccupation(String occupation) {
         this.occupation = occupation;
-        this.ageNextBirthDay = ageNextBirthDay;
+        return this;
     }
 
     public ProposedAssured build() {
         return new ProposedAssured(this);
-    }
-
-    public static void main(String[] args) {
-        try {
-            return;
-        }catch (Exception e){
-
-        }finally {
-            System.out.println("XX");
-        }
     }
 }

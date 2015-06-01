@@ -52,17 +52,14 @@ public class IndividualLifeQuotation extends AbstractAggregateRoot<QuotationId> 
     private LocalDate generatedOn;
 
     @Embedded
-    @AttributeOverrides(value = @AttributeOverride(name = "quotationId",column = @Column(name = "PARENT_QUOTATION_ID")))
+    @AttributeOverrides(value = @AttributeOverride(name = "quotationId", column = @Column(name = "PARENT_QUOTATION_ID")))
     private QuotationId parentQuotationId;
-
-    @Column( columnDefinition = "BOOLEAN DEFAULT false" )
-    private Boolean isAssuredTheProposer;
 
     @Embedded
     private PlanDetail planDetail;
 
 
-    private IndividualLifeQuotation(String quotationCreator, String quotationNumber, QuotationId quotationId, AgentId agentId, ProposedAssured proposedAssured, PlanId planId,  ILQuotationStatus ilQuotationStatus, int versionNumber) {
+    private IndividualLifeQuotation(String quotationCreator, String quotationNumber, QuotationId quotationId, AgentId agentId, ProposedAssured proposedAssured, PlanId planId, ILQuotationStatus ilQuotationStatus, int versionNumber) {
         checkArgument(isNotEmpty(quotationCreator));
         checkArgument(isNotEmpty(quotationNumber));
         checkArgument(quotationId != null);
@@ -95,7 +92,7 @@ public class IndividualLifeQuotation extends AbstractAggregateRoot<QuotationId> 
         this.ilQuotationStatus = ilQuotationStatus;
     }
 
-    public static IndividualLifeQuotation createWithBasicDetail(String quotationNumber, String quotationCreator, QuotationId quotationId,  AgentId agentId, ProposedAssured proposedAssured, PlanId planid) {
+    public static IndividualLifeQuotation createWithBasicDetail(String quotationNumber, String quotationCreator, QuotationId quotationId, AgentId agentId, ProposedAssured proposedAssured, PlanId planid) {
         return new IndividualLifeQuotation(quotationCreator, quotationNumber, quotationId, agentId, proposedAssured, planid, ILQuotationStatus.DRAFT, 0);
     }
 
@@ -109,20 +106,14 @@ public class IndividualLifeQuotation extends AbstractAggregateRoot<QuotationId> 
         checkInvariant();
         this.proposer = proposer;
         this.agentId = agentId;
-        if(isAssuredTheProposer) {
-            raiseQuotationNotModifiableException();
-
-        }
         return this;
     }
 
     public IndividualLifeQuotation updateWithAssured(ProposedAssured proposedAssured, Boolean isAssuredTheProposer) {
         checkInvariant();
         this.proposedAssured = proposedAssured;
-        this.isAssuredTheProposer = isAssuredTheProposer;
-        if(isAssuredTheProposer) {
+        if (isAssuredTheProposer) {
             this.proposer = convertAssuredToProposer(proposedAssured);
-
         }
         return this;
     }
@@ -180,7 +171,7 @@ public class IndividualLifeQuotation extends AbstractAggregateRoot<QuotationId> 
     }
 
     private Proposer convertAssuredToProposer(ProposedAssured proposedAssured) {
-        ProposerBuilder proposerBuilder= Proposer.getProposerBuilder(proposedAssured.getAssuredTitle(), proposedAssured.getAssuredFName(), proposedAssured.getAssuredSurname(), proposedAssured.getAssuredNRC(), proposedAssured.getAssuredDateOfBirth(), proposedAssured.getAgeNextBirthDay(), proposedAssured.getAssuredGender(), proposedAssured.getAssuredMobileNumber(), proposedAssured.getAssuredEmailId());
+        ProposerBuilder proposerBuilder = Proposer.getProposerBuilder(proposedAssured.getAssuredTitle(), proposedAssured.getAssuredFName(), proposedAssured.getAssuredSurname(), proposedAssured.getAssuredNRC(), proposedAssured.getAssuredDateOfBirth(), proposedAssured.getAssuredGender(), proposedAssured.getAssuredMobileNumber(), proposedAssured.getAssuredEmailId());
         return new Proposer(proposerBuilder);
     }
 

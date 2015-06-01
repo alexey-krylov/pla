@@ -27,7 +27,7 @@ import java.util.Optional;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
-import static org.nthdimenzion.presentation.AppUtils.getLoggedInUSerDetail;
+import static org.nthdimenzion.presentation.AppUtils.getLoggedInUserDetail;
 
 /**
  * Created by Nischitha on 10-Mar-15.
@@ -102,7 +102,7 @@ public class TeamController {
             return Result.failure("Error in creating team", bindingResult.getAllErrors());
         }
         try {
-            UserDetails userDetails = getLoggedInUSerDetail(request);
+            UserDetails userDetails = getLoggedInUserDetail(request);
             createTeamCommand.setUserDetails(userDetails);
             commandGateway.sendAndWait(createTeamCommand);
         } catch (Exception e) {
@@ -117,7 +117,7 @@ public class TeamController {
     @ResponseBody
     Result updateTeamLead(@RequestBody UpdateTeamCommand updateTeamCommand, BindingResult bindingResult, HttpServletRequest request) {
         try {
-            UserDetails userDetails = getLoggedInUSerDetail(request);
+            UserDetails userDetails = getLoggedInUserDetail(request);
             updateTeamCommand.setUserDetails(userDetails);
             commandGateway.sendAndWait(updateTeamCommand);
         } catch (Exception e) {
@@ -134,7 +134,7 @@ public class TeamController {
             return Result.failure("Error in inactivating team", bindingResult.getAllErrors());
         }
         try {
-            UserDetails userDetails = getLoggedInUSerDetail(request);
+            UserDetails userDetails = getLoggedInUserDetail(request);
             inactivateTeamCommand.setUserDetails(userDetails);
             commandGateway.sendAndWait(inactivateTeamCommand);
         } catch (Exception e) {

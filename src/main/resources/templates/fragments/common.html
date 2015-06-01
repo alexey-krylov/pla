@@ -1,6 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/xhtml"
-        >
+<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/xhtml">
 <head th:fragment="headTag">
 
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
@@ -28,7 +27,7 @@
     <script th:src="@{/js/webjars.js}"></script>
     <script th:src="@{/webjars/requirejs/2.1.15/require.min.js}"></script>
     <script>
-        define('basic', ['datatables', 'bootstrap'], function (datatables) {
+        define('basic', ['datatables', 'angular', 'bootstrap'], function (datatables) {
             $("#cssmenu ul li>a").click(function(event){
                 event.preventDefault();
                 var windowHref = window.location.href;
@@ -51,7 +50,6 @@
                 'checklistmodel': '/pla/js/common/checklist-model',
                 'commonModule': '/pla/js/common/commonModule',
                 'bt_datatable': '/pla/js/common/bootstrap-datatables'
-
             },
             "shim": {"checklistmodel": ["angular"],
                 "directives": {deps: ['angular', 'fuelux', "datatables"]},
@@ -115,7 +113,7 @@
                 <a href="javascript:void(0)"><span class="glyphicon glyphicon-list-alt"></span>&nbsp;Quotation</a>
                 <ul>
                     <li><a th:href="@{/quotation/grouplife/listgrouplifequotation}">GroupLife </a></li>
-                    <li><a th:href="@{/quotation/individual/createindividuallife}">Individual Life </a></li>
+                    <li><a th:href="@{/individuallife/quotation}">Individual Life </a></li>
                 </ul>
             </li>
             <li class="has-sub">
@@ -125,8 +123,6 @@
                     <li><a th:href="@{/individuallife/proposal}">Individual Life </a></li>
                 </ul>
             </li>
-
-
             <li class='last' style="float:right">
                 <a href="#" class="menu-button" th:href="@{/logout}"><span class="glyphicon glyphicon-log-out" aria-hidden="true"></span>&nbsp;Log off</a></li>
         </ul>
@@ -137,7 +133,5 @@
         <p class="text-muted"></p>
     </div>
 </footer>
-
 </body>
-
 </html>

@@ -23,7 +23,7 @@ import java.util.List;
 import java.util.Map;
 
 import static com.google.common.base.Preconditions.checkArgument;
-import static org.nthdimenzion.presentation.AppUtils.getLoggedInUSerDetail;
+import static org.nthdimenzion.presentation.AppUtils.getLoggedInUserDetail;
 
 /**
  * Created by Admin on 4/1/2015.
@@ -68,7 +68,7 @@ public class ProductLineInformationController {
         }
         try {
             checkArgument(generalInformationDto!=null);
-            UserDetails userDetails = getLoggedInUSerDetail(request);
+            UserDetails userDetails = getLoggedInUserDetail(request);
             generalInformationService.createProductLineInformation(generalInformationDto.getProductLine(), userDetails, generalInformationDto);
         }catch (GeneralInformationException e){
             LOGGER.debug(e.getMessage());
@@ -86,7 +86,7 @@ public class ProductLineInformationController {
             return Result.failure("Error in Updating Product Line Information", bindingResult.getAllErrors());
         }
         try {
-            UserDetails userDetails = getLoggedInUSerDetail(request);
+            UserDetails userDetails = getLoggedInUserDetail(request);
             generalInformationService.updateProductLineInformation(generalInformationDto, userDetails);
         } catch (GeneralInformationException e){
             LOGGER.debug(e.getMessage());

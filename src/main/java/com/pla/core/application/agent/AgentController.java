@@ -36,7 +36,7 @@ import javax.validation.Valid;
 import java.util.List;
 import java.util.Map;
 
-import static org.nthdimenzion.presentation.AppUtils.getLoggedInUSerDetail;
+import static org.nthdimenzion.presentation.AppUtils.getLoggedInUserDetail;
 import static org.nthdimenzion.utils.UtilValidator.isNotEmpty;
 
 /**
@@ -80,6 +80,7 @@ public class AgentController {
         modelAndView.addObject("agentList", CreateAgentCommand.transformToAgentCommand(nonTerminatedAgents, allAgentPlans, mongoTemplate.findAll(Map.class, "PLAN")));
         return modelAndView;
     }
+
 
 
     @RequestMapping(value = "/opencreatepage", method = RequestMethod.GET)
@@ -140,7 +141,7 @@ public class AgentController {
             return Result.failure("Error in creating agent", bindingResult.getAllErrors());
         }
         try {
-            UserDetails userDetails = getLoggedInUSerDetail(request);
+            UserDetails userDetails = getLoggedInUserDetail(request);
             createAgentCommand.setUserDetails(userDetails);
             commandGateway.sendAndWait(createAgentCommand);
         } catch (AgentApplicationException e) {
@@ -162,7 +163,7 @@ public class AgentController {
             return Result.failure("Error in updating agent", bindingResult.getAllErrors());
         }
         try {
-            UserDetails userDetails = getLoggedInUSerDetail(request);
+            UserDetails userDetails = getLoggedInUserDetail(request);
             updateAgentCommand.setUserDetails(userDetails);
             commandGateway.sendAndWait(updateAgentCommand);
         } catch (AgentApplicationException e) {
@@ -192,4 +193,26 @@ public class AgentController {
     public List<Map> getAllPlans() {
         return mongoTemplate.findAll(Map.class, "PLAN");
     }
+
+    /**
+     * Used for Searching Agent for Individual Life
+     *
+     * @param searchStr
+     * @return
+     */
+    @RequestMapping(value = "/search/{searchString}", method = RequestMethod.GET)
+    @ResponseBody
+    public List<Map<String, Object>> searchAgent(@PathVariable("searchString") String searchStr) {
+        List<Map<String, Object>> agentList = agentFinder.searchAgent(searchStr);
+        return agentList;
+    }
+
+    @RequestMapping(value = "/searchplan", method = RequestMethod.GET)
+    @ResponseBody
+    public List<Map<String, Object>> searchPlan(@RequestParam("agentId") String agentId) {
+        List<Map<String, Object>> planList = agentFinder.searchPlanByAgentId(agentId);
+        return planList;
+    }
+
+
 }

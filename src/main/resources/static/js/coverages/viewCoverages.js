@@ -9,7 +9,7 @@ require(['jquery','bootstrap','datatables'],function(){
         $('#coverageName').focus()
     });
 
-    $('#coverage-table').dataTable({
+    /* $('#coverage-table').dataTable({
         "bProcessing": true,
         "bDeferRender": true,
           "bFilter": true,
@@ -27,7 +27,7 @@ require(['jquery','bootstrap','datatables'],function(){
              {"sWidth": "45%","bSearchable": true  },
             {"sWidth": "5%","bSearchable": false,"bSortable":false},
             {"sWidth": "15%","bSearchable": false,"bSortable":false }
-    ]});
+     ]});*/
 
     openPopover();
     $('.next').click(function () {

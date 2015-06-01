@@ -41,15 +41,16 @@ public class IndividualLifeQuotationService {
     public IndividualLifeQuotation updateWithProposer(IndividualLifeQuotation individualLifeQuotation, ProposerDto proposerDto, AgentId agentId, UserDetails userDetails) {
         ILQuotationProcessor IlQuotationProcessor = roleAdapter.userToQuotationProcessor(userDetails);
         individualLifeQuotation = checkQuotationNeedForVersioningAndGetQuotation(IlQuotationProcessor, individualLifeQuotation);
-        ProposerBuilder proposerBuilder = Proposer.getProposerBuilder(proposerDto.getProposerTitle(), proposerDto.getProposerFName(), proposerDto.getProposerSurname(), proposerDto.getProposerNRC(), proposerDto.getDateOfBirth(), proposerDto.getAgeNextBirthDay(), proposerDto.getGender(), proposerDto.getMobileNumber(), proposerDto.getEmailId());
+        ProposerBuilder proposerBuilder = Proposer.getProposerBuilder(proposerDto.getTitle(), proposerDto.getFirstName(), proposerDto.getSurname(), proposerDto.getNrcNumber(), proposerDto.getDateOfBirth(), proposerDto.getGender(), proposerDto.getMobileNumber(), proposerDto.getEmailAddress());
         return IlQuotationProcessor.updateWithProposerAndAgentId(individualLifeQuotation, proposerBuilder.build(), agentId);
     }
 
-    public IndividualLifeQuotation updateWithAssured(IndividualLifeQuotation individualLifeQuotation, ProposedAssuredDto proposedAssuredDto, Boolean isAssuredTheProposer, UserDetails userDetails) {
-        ILQuotationProcessor IlQuotationProcessor = roleAdapter.userToQuotationProcessor(userDetails);
-        individualLifeQuotation = checkQuotationNeedForVersioningAndGetQuotation(IlQuotationProcessor, individualLifeQuotation);
-        ProposedAssuredBuilder proposedAssuredBuilder = ProposedAssured.getAssuredBuilder(proposedAssuredDto.getAssuredTitle(), proposedAssuredDto.getAssuredFName(), proposedAssuredDto.getAssuredSurname(), proposedAssuredDto.getAssuredNRC(), proposedAssuredDto.getDateOfBirth(), proposedAssuredDto.getAgeNextBirthDay(), proposedAssuredDto.getGender(), proposedAssuredDto.getMobileNumber(), proposedAssuredDto.getEmailId(), proposedAssuredDto.getOccupation());
-        return IlQuotationProcessor.updateWithAssured(individualLifeQuotation, proposedAssuredBuilder.build(), isAssuredTheProposer);
+    public IndividualLifeQuotation updateWithAssured(IndividualLifeQuotation quotation, ProposedAssuredDto dto, Boolean isAssuredTheProposer, UserDetails userDetails) {
+        ILQuotationProcessor quotationProcessor = roleAdapter.userToQuotationProcessor(userDetails);
+        quotation = checkQuotationNeedForVersioningAndGetQuotation(quotationProcessor, quotation);
+        ProposedAssuredBuilder proposedAssuredBuilder = ProposedAssured.proposedAssuredBuilder();
+        proposedAssuredBuilder.withGender(dto.getGender()).withTitle(dto.getTitle()).withFirstName(dto.getFirstName()).withNrcNumber(dto.getNrcNumber()).withEmailAddress(dto.getEmailAddress()).withMobileNumber(dto.getMobileNumber()).withDateOfBirth(dto.getDateOfBirth()).withOccupation(dto.getOccupation()).withSurname(dto.getSurname());
+        return quotationProcessor.updateWithAssured(quotation, proposedAssuredBuilder.build(), isAssuredTheProposer);
     }
 
     public IndividualLifeQuotation updateWithPlan(IndividualLifeQuotation individualLifeQuotation, PlanDetailDto planDetailDto, UserDetails userDetails) {

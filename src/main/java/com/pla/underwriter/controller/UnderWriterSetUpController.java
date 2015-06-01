@@ -34,7 +34,7 @@ import java.io.OutputStream;
 import java.util.List;
 import java.util.Map;
 
-import static org.nthdimenzion.presentation.AppUtils.getLoggedInUSerDetail;
+import static org.nthdimenzion.presentation.AppUtils.getLoggedInUserDetail;
 
 /**
  * Created by Admin on 5/11/2015.
@@ -43,12 +43,11 @@ import static org.nthdimenzion.presentation.AppUtils.getLoggedInUSerDetail;
 @RequestMapping(value = "/underwriter")
 public class UnderWriterSetUpController {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(UnderWriterSetUpController.class);
+    private static final String UNDER_WRITER_TEMPLATE_FILE_NAME_SUFFIX = "-UnderWritingTemplate.xls";
     private UnderWriterService underWriterService;
     private CommandGateway commandGateway;
     private UnderWriterFinder underWriterFinder;
-    private static final Logger LOGGER = LoggerFactory.getLogger(UnderWriterSetUpController.class);
-
-    private static final String UNDER_WRITER_TEMPLATE_FILE_NAME_SUFFIX = "-UnderWritingTemplate.xls";
 
     @Autowired
     public UnderWriterSetUpController(UnderWriterService underWriterService, CommandGateway commandGateway, UnderWriterFinder underWriterFinder){
@@ -141,7 +140,7 @@ public class UnderWriterSetUpController {
             if (!isValid){
                 return new ResponseEntity(errorMessageBuilder, HttpStatus.PRECONDITION_FAILED);
             }
-            UserDetails userDetails = getLoggedInUSerDetail(request);
+            UserDetails userDetails = getLoggedInUserDetail(request);
             createUnderWriterDocumentCommand.setUserDetails(userDetails);
             commandGateway.sendAndWait(createUnderWriterDocumentCommand);
         }catch (UnderWriterTemplateParseException e){
@@ -200,7 +199,7 @@ public class UnderWriterSetUpController {
                 outputStream.close();
             }
             else {
-                UserDetails userDetails = getLoggedInUSerDetail(request);
+                UserDetails userDetails = getLoggedInUserDetail(request);
                 createUnderWriterRoutingLevelCommand.setUserDetails(userDetails);
                 List<Map<Object,Map<String,Object>>>  underWriterRoutingLevelDataFromExcel = underWriterService.parseUnderWriterExcelTemplate(premiumTemplateWorkbook, createUnderWriterRoutingLevelCommand.getUnderWriterInfluencingFactors());
                 createUnderWriterRoutingLevelCommand.setUnderWriterDocumentItem(underWriterRoutingLevelDataFromExcel);

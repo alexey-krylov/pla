@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/xhtml"
+      lang="en">
+<head th:include="fragments/common :: headTag">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+</head>
+<body>
+
+<style>
+    .error {
+        font-size: 10px;
+        color: firebrick;
+    }
+</style>
+<div th:include="fragments/common :: bodyHeader" th:remove="tag"/>
+<script>
+    require(['ng-tags-input', 'checklistmodel', 'angular-ui-router'], function (a, b) {
+    });
+    requirejs(['main', 'http://ghiden.github.io/angucomplete-alt/js/libs/angucomplete-alt.js',
+        '/pla/js/quotation/individuallife/quotation.js'], function (a, b, c) {
+        angular.bootstrap(document, ['individualQuotation']);
+    });
+</script>
+<div class="container fuelux">
+    <ng-view>
+
+    </ng-view>
+</div>
+<footer class="footer" th:include="fragments/common :: footer"></footer>
+</body>
+</html>
