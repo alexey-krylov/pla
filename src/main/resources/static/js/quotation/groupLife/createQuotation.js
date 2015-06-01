@@ -151,10 +151,12 @@ angular.module('createQuotation', ['common', 'ngRoute', 'mgcrea.ngStrap.select',
 
             $scope.searchAgent = function () {
                 $http.get("/pla/quotation/grouplife/getagentdetail/" + $scope.quotationDetails.basic.agentId)
-                    .success(function (data, status) {
-                        if (data.status == "200") {
+                    .success(function (data) {
+                        if (data.status === "200") {
                             $scope.agentNotFound = false;
                             $scope.quotationDetails.basic = data.data;
+                            var agentName = $scope.quotationDetails.basic.agentName.replace("null", '').replace('null', '').trim();
+                            $scope.quotationDetails.basic.agentName = agentName;
                         } else {
                             $scope.agentNotFound = true;
                         }

@@ -129,7 +129,7 @@ class PlanCoverageDetail {
     private int waitingPeriod;
     private int minAge;
     private int maxAge;
-    private Boolean taxApplicable;
+    private boolean taxApplicable;
     private AssuredDetail coverageSumAssured;
     private TermDetail coverageTerm;
     private CoverageTermType coverageTermType;
