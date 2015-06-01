@@ -157,6 +157,10 @@ public class GlQuotationCommandHandler {
             groupLifeQuotation = groupLifeQuotationService.updateInsured(groupLifeQuotation, insureds, updateGLQuotationWithPremiumDetailCommand.getUserDetails());
         }
         groupLifeQuotation = groupLifeQuotationService.updateWithPremiumDetail(groupLifeQuotation, premiumDetailDto, updateGLQuotationWithPremiumDetailCommand.getUserDetails());
+        boolean isVersioningRequire = groupLifeQuotation.requireVersioning();
+        if (isVersioningRequire) {
+            glQuotationMongoRepository.add(groupLifeQuotation);
+        }
         return groupLifeQuotation.getIdentifier().getQuotationId();
     }
 

@@ -91,7 +91,7 @@ public class PremiumDetail {
 
 
     private Policy getPolicy(PremiumFrequency premiumFrequency) {
-        if(isEmpty(this.policies)){
+        if (isEmpty(this.policies)) {
             return null;
         }
         Optional<Policy> policyOptional = this.policies.stream().filter(new Predicate<Policy>() {
@@ -115,5 +115,10 @@ public class PremiumDetail {
             this.installmentAmount = installmentAmount;
         }
 
+    }
+
+    public BigDecimal getTotalInstallmentAmount() {
+        BigDecimal totalInstallmentAmount = this.premiumInstallment.installmentAmount.multiply(new BigDecimal(this.premiumInstallment.getNoOfInstallment()));
+        return totalInstallmentAmount;
     }
 }

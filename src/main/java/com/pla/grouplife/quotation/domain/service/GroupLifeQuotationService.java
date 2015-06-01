@@ -90,7 +90,7 @@ public class GroupLifeQuotationService {
         if (!groupLifeQuotation.requireVersioning()) {
             return groupLifeQuotation;
         }
-        String quotationNumber = quotationNumberGenerator.getQuotationNumber("5", "1", GroupLifeQuotation.class,LocalDate.now());
+        String quotationNumber = quotationNumberGenerator.getQuotationNumber("5", "1", GroupLifeQuotation.class, LocalDate.now());
         QuotationId quotationId = new QuotationId(new ObjectId().toString());
         return groupLifeQuotation.cloneQuotation(quotationNumber, glQuotationProcessor.getUserName(), quotationId);
     }
@@ -111,12 +111,17 @@ public class GroupLifeQuotationService {
             premiumDetail = premiumDetail.addPolicies(policies);
         } else if (premiumDetailDto.getPolicyTermValue() != null && premiumDetailDto.getPolicyTermValue() > 0 && premiumDetailDto.getPolicyTermValue() != 365) {
             int noOfInstallment = premiumDetailDto.getPolicyTermValue() / 30;
-            BigDecimal installmentPremium = groupLifeQuotation.getTotalBasicPremiumForInsured();
-            premiumDetail = premiumDetail.addPremiumInstallment(noOfInstallment, installmentPremium);
+            int reminder = premiumDetailDto.getPolicyTermValue() % 30;
+            if (reminder == 0) {
+                noOfInstallment = noOfInstallment - 1;
+            }
+            BigDecimal installmentPremiumAmount = groupLifeQuotation.getTotalBasicPremiumForInsured();
+            installmentPremiumAmount = installmentPremiumAmount.divide(new BigDecimal(noOfInstallment),2,BigDecimal.ROUND_CEILING);
+            premiumDetail = premiumDetail.addPremiumInstallment(noOfInstallment, installmentPremiumAmount);
         }
         GLQuotationProcessor glQuotationProcessor = quotationRoleAdapter.userToQuotationProcessor(userDetails);
+        premiumDetail = premiumDetail.updateWithNetPremium(groupLifeQuotation.getNetAnnualPremiumPaymentAmount(premiumDetail));
         groupLifeQuotation = checkQuotationNeedForVersioningAndGetQuotation(glQuotationProcessor, groupLifeQuotation);
-        premiumDetail = premiumDetail.updateWithNetPremium(groupLifeQuotation.getNetAnnualPremiumPaymentAmount(premiumDetail, groupLifeQuotation.getTotalBasicPremiumForInsured()));
         groupLifeQuotation = glQuotationProcessor.updateWithPremiumDetail(groupLifeQuotation, premiumDetail);
         return groupLifeQuotation;
     }

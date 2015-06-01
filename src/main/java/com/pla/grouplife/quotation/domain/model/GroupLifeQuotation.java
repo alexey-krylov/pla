@@ -44,7 +44,7 @@ public class GroupLifeQuotation extends AbstractAggregateRoot<QuotationId> imple
 
     private QuotationStatus quotationStatus;
 
-    private int versionNumber=1;
+    private int versionNumber = 1;
 
     private String quotationNumber;
 
@@ -165,13 +165,8 @@ public class GroupLifeQuotation extends AbstractAggregateRoot<QuotationId> imple
         }
     }
 
-    public BigDecimal getNetAnnualPremiumPaymentAmount(PremiumDetail premiumDetail, BigDecimal totalInsuredPremiumAmount) {
-        if (premiumDetail.getPolicyTermValue() != 365) {
-            totalInsuredPremiumAmount = premiumDetail.getPremiumInstallment().getInstallmentAmount();
-        } else {
-            Policy annualPolicy = premiumDetail.getAnnualPolicy();
-            totalInsuredPremiumAmount = annualPolicy != null ? annualPolicy.getPremium() : totalInsuredPremiumAmount;
-        }
+    public BigDecimal getNetAnnualPremiumPaymentAmount(PremiumDetail premiumDetail) {
+        BigDecimal totalInsuredPremiumAmount = this.getTotalBasicPremiumForInsured();
         BigDecimal addOnBenefitAmount = premiumDetail.getAddOnBenefit() != null ? totalInsuredPremiumAmount.multiply((premiumDetail.getAddOnBenefit().divide(new BigDecimal(100))).setScale(2, BigDecimal.ROUND_CEILING)) : BigDecimal.ZERO;
         BigDecimal profitAndSolvencyAmount = premiumDetail.getProfitAndSolvency() != null ? totalInsuredPremiumAmount.multiply((premiumDetail.getProfitAndSolvency().divide(new BigDecimal(100))).setScale(2, BigDecimal.ROUND_CEILING)) : BigDecimal.ZERO;
         BigDecimal discountAmount = premiumDetail.getDiscount() != null ? totalInsuredPremiumAmount.multiply((premiumDetail.getDiscount().divide(new BigDecimal(100))).setScale(2, BigDecimal.ROUND_CEILING)) : BigDecimal.ZERO;
