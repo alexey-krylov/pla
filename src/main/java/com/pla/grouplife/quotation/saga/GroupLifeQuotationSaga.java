@@ -12,6 +12,7 @@ import com.pla.sharedkernel.identifier.LineOfBusinessEnum;
 import org.axonframework.commandhandling.gateway.CommandGateway;
 import org.axonframework.eventhandling.scheduling.EventScheduler;
 import org.axonframework.saga.annotation.AbstractAnnotatedSaga;
+import org.axonframework.saga.annotation.EndSaga;
 import org.axonframework.saga.annotation.SagaEventHandler;
 import org.axonframework.saga.annotation.StartSaga;
 import org.joda.time.DateTime;
@@ -66,6 +67,7 @@ public class GroupLifeQuotationSaga extends AbstractAnnotatedSaga {
     }
 
     @SagaEventHandler(associationProperty = "quotationId")
+    @EndSaga
     public void handle(GLQuotationPurgeEvent event) {
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("Handling GL Quotation Purge Event .....", event);
@@ -74,7 +76,6 @@ public class GroupLifeQuotationSaga extends AbstractAnnotatedSaga {
         if (!QuotationStatus.CLOSED.equals(groupLifeQuotation.getQuotationStatus())) {
             commandGateway.send(new PurgeGLQuotationCommand(event.getQuotationId()));
         }
-        end();
     }
 
     @SagaEventHandler(associationProperty = "quotationId")
@@ -85,7 +86,6 @@ public class GroupLifeQuotationSaga extends AbstractAnnotatedSaga {
         GroupLifeQuotation groupLifeQuotation = glQuotationRepository.findOne(event.getQuotationId());
         if (QuotationStatus.GENERATED.equals(groupLifeQuotation.getQuotationStatus())) {
             this.noOfReminderSent = noOfReminderSent + 1;
-
             System.out.println("************ Send Reminder ****************");
             if (this.noOfReminderSent == 1) {
                 int firstReminderDay = processInfoAdapter.getDaysForFirstReminder(LineOfBusinessEnum.GROUP_LIFE, ProcessType.QUOTATION);
@@ -110,10 +110,10 @@ public class GroupLifeQuotationSaga extends AbstractAnnotatedSaga {
     }
 
     @SagaEventHandler(associationProperty = "quotationId")
+    @EndSaga
     public void handle(GLQuotationClosedEvent event) {
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("Handling GL Quotation Closure Event .....", event);
         }
-        end();
     }
 }

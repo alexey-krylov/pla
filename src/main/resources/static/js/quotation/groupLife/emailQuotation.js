@@ -11,7 +11,7 @@ function bodyOnLoad() {
             return 'label label-primary';
         }
     };
-    to.tagsinput(tagsClass);
+    //to.tagsinput(tagsClass);
     //to.tagsinput('add', "shivaraj@nthdimenzion.com");
     tinymce.init({
         selector: "textarea#mailContent",
@@ -36,20 +36,16 @@ function sendEmail() {
     var quotationNumber=$('#quotationNumber').val();
 
 
-    alert(JSON.stringify({
-        recipientMailAddress: toAddress.split(','), subject: subject, mailContent:mailContent,
-        quotationId:quotationId,quotationNumber:quotationNumber
-    }));
+
     $.ajax({
             url: '/pla/quotation/grouplife/emailQuotation',
             type: 'POST',
             data: JSON.stringify({
-                recipientMailAddress: toAddress.split(','), subject: subject, mailContent:mailContent,
+                recipientMailAddress: toAddress.split(';'), subject: subject, mailContent:mailContent,
                 quotationId:quotationId,quotationNumber:quotationNumber
             }),
             contentType: 'application/json; charset=utf-8',
             success: function (msg) {
-                alert(JSON.stringify(msg));
                 if (msg.status == '200') {
                     $('#alert-modal-success').show();
                 }
