@@ -285,7 +285,7 @@
                                 <div class="col-lg-3" ng-hide="!isPolicyTermNot365 || inappropriatePolicyTerm">
                                     <div class="form-group">
                                         <label >Number Of Installments</label>
-                                        <select class="form-control" ng-model="quotationDetails.premium.numberOfInstallments" ng-options="numberOfInstallments for numberOfInstallments in numberOfInstallmentsDropDown"></select>
+                                        <select class="form-control" ng-model="quotationDetails.premium.numberOfInstallments" ng-options="numberOfInstallments for numberOfInstallments in numberOfInstallmentsDropDown" ng-change="updateNumberOfInstallments(quotationDetails.premium.numberOfInstallments)"></select>
                                     </div>
                                 </div>
                                 <div class="col-lg-3">

@@ -185,7 +185,7 @@ angular.module('createQuotation', ['common', 'ngRoute', 'mgcrea.ngStrap.select',
                     $scope.inappropriatePolicyTerm = false;
                     var numberOfInstallments = newVal / 30;
                     if (isInteger(numberOfInstallments)) {
-                        generateListOfInstallments(numberOfInstallments - 1)
+                        generateListOfInstallments(numberOfInstallments)
                     } else {
                         generateListOfInstallments(Math.floor(numberOfInstallments));
                     }
@@ -260,17 +260,39 @@ angular.module('createQuotation', ['common', 'ngRoute', 'mgcrea.ngStrap.select',
                 });
             };
             $scope.premiumInstallment=false;
+
+            if($scope.premiumData.premiumInstallment){
+                if(isInteger($scope.premiumData.premiumInstallment.installmentNo)) {
+                    generateListOfInstallments($scope.premiumData.premiumInstallment.installmentNo);
+                }
+                $scope.quotationDetails.premium.installmentAmount=$scope.premiumData.premiumInstallment.installmentAmount;
+
+            }
+            $scope.updateNumberOfInstallments = function(installmntNo){
+                if(installmntNo > 0) {
+                    $scope.premiumInstallment = true;
+                }
+            }
             $scope.recalculatePremium = function(){
+                $scope.premiumInstallment=false;
                  $http.post('/pla/quotation/grouplife/recalculatePremium', angular.extend({},
                     {premiumDetailDto: $scope.quotationDetails.premium},
                     {"quotationId": $scope.quotationId})).success(function(data){
-                    console.log(data.data);
+                   // console.log(data.data);
                      $scope.quotationDetails.premium=data.data;
                      $scope.premiumData.totalPremium=data.data.totalPremium;
+                     if(data.data.annualPremium){
+                         $scope.premiumData.annualPremium=data.data.annualPremium;
+                         $scope.premiumData.semiannualPremium=data.data.semiannualPremium;
+                         $scope.premiumData.quarterlyPremium=data.data.quarterlyPremium;
+                         $scope.premiumData.monthlyPremium=data.data.monthlyPremium;
+                     }
                      if(data.data.premiumInstallment){
-                         $scope.quotationDetails.premium.numberOfInstallments=data.data.premiumInstallment.installmentNo;
+                         if(isInteger(data.data.premiumInstallment.installmentNo)) {
+                             generateListOfInstallments(data.data.premiumInstallment.installmentNo);                         }
+
                          $scope.quotationDetails.premium.installmentAmount=data.data.premiumInstallment.installmentAmount;
-                         $scope.premiumInstallment=true;
+
                      }
                 });
 
