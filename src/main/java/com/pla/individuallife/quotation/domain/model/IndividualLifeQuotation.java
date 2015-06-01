@@ -144,7 +144,7 @@ public class IndividualLifeQuotation extends AbstractAggregateRoot<QuotationId> 
     }
 
     @Override
-    public void inactiveQuotation() {
+    public void purgeQuotation() {
         this.ilQuotationStatus = ILQuotationStatus.INACTIVE;
     }
 

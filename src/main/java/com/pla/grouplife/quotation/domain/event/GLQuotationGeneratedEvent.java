@@ -1,17 +1,20 @@
 package com.pla.grouplife.quotation.domain.event;
 
 import com.pla.sharedkernel.identifier.QuotationId;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 /**
  * Created by Samir on 4/8/2015.
  */
 @Getter
-public class QuotationGeneratedEvent {
+@ToString
+@NoArgsConstructor
+@AllArgsConstructor
+public class GLQuotationGeneratedEvent {
 
     private QuotationId quotationId;
 
-    public QuotationGeneratedEvent(QuotationId quotationId) {
-        this.quotationId = quotationId;
-    }
 }

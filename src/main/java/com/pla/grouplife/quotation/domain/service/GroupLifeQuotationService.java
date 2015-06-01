@@ -10,6 +10,7 @@ import com.pla.publishedlanguage.domain.model.ComputedPremiumDto;
 import com.pla.publishedlanguage.domain.model.PremiumFrequency;
 import com.pla.sharedkernel.identifier.QuotationId;
 import org.bson.types.ObjectId;
+import org.joda.time.LocalDate;
 import org.nthdimenzion.common.AppConstants;
 import org.nthdimenzion.ddd.domain.annotations.DomainService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,7 +52,7 @@ public class GroupLifeQuotationService {
             raiseAgentIsInactiveException();
         }
         QuotationId quotationId = new QuotationId(new ObjectId().toString());
-        String quotationNumber = quotationNumberGenerator.getQuotationNumber("5", "1", GroupLifeQuotation.class);
+        String quotationNumber = quotationNumberGenerator.getQuotationNumber("5", "1", GroupLifeQuotation.class, LocalDate.now());
         return glQuotationProcessor.createGroupLifeQuotation(quotationNumber, glQuotationProcessor.getUserName(), quotationId, new AgentId(agentId), proposerName);
     }
 
@@ -89,7 +90,7 @@ public class GroupLifeQuotationService {
         if (!groupLifeQuotation.requireVersioning()) {
             return groupLifeQuotation;
         }
-        String quotationNumber = quotationNumberGenerator.getQuotationNumber("5", "1", GroupLifeQuotation.class);
+        String quotationNumber = quotationNumberGenerator.getQuotationNumber("5", "1", GroupLifeQuotation.class,LocalDate.now());
         QuotationId quotationId = new QuotationId(new ObjectId().toString());
         return groupLifeQuotation.cloneQuotation(quotationNumber, glQuotationProcessor.getUserName(), quotationId);
     }

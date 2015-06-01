@@ -7,11 +7,11 @@ import lombok.EqualsAndHashCode;
  * Created by Samir on 4/8/2015.
  */
 @EqualsAndHashCode
-public class QuotationClosedEvent {
+public class GLQuotationClosedEvent {
 
     private QuotationId quotationId;
 
-    public QuotationClosedEvent(QuotationId quotationId) {
+    public GLQuotationClosedEvent(QuotationId quotationId) {
         this.quotationId = quotationId;
     }
 }

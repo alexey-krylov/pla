@@ -9,7 +9,7 @@ public interface IQuotation {
 
     void closeQuotation();
 
-    void inactiveQuotation();
+    void purgeQuotation();
 
     void declineQuotation();
 

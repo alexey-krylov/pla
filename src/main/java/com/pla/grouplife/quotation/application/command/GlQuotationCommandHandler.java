@@ -215,4 +215,16 @@ public class GlQuotationCommandHandler {
         BigDecimal installmentPremium= premiumCalculator.computeProratePremium(premiumCalculationDto);
         return installmentPremium;
     }
+
+    @CommandHandler
+    public void purgeGLQuotation(PurgeGLQuotationCommand purgeGLQuotationCommand){
+        GroupLifeQuotation groupLifeQuotation = glQuotationMongoRepository.load(purgeGLQuotationCommand.getQuotationId());
+        groupLifeQuotation.purgeQuotation();
+    }
+
+    @CommandHandler
+    public void closureGLQuotation(ClosureGLQuotationCommand closureGLQuotationCommand){
+        GroupLifeQuotation groupLifeQuotation = glQuotationMongoRepository.load(closureGLQuotationCommand.getQuotationId());
+        groupLifeQuotation.declineQuotation();
+    }
 }

@@ -2,8 +2,8 @@ package com.pla.grouplife.quotation.domain.model;
 
 import com.pla.core.domain.model.agent.AgentId;
 import com.pla.grouplife.quotation.domain.event.ProposerAddedEvent;
-import com.pla.grouplife.quotation.domain.event.QuotationClosedEvent;
-import com.pla.grouplife.quotation.domain.event.QuotationGeneratedEvent;
+import com.pla.grouplife.quotation.domain.event.GLQuotationClosedEvent;
+import com.pla.grouplife.quotation.domain.event.GLQuotationGeneratedEvent;
 import com.pla.sharedkernel.identifier.QuotationId;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -118,12 +118,12 @@ public class GroupLifeQuotation extends AbstractAggregateRoot<QuotationId> imple
     @Override
     public void closeQuotation() {
         this.quotationStatus = QuotationStatus.CLOSED;
-        registerEvent(new QuotationClosedEvent(quotationId));
+        registerEvent(new GLQuotationClosedEvent(quotationId));
     }
 
     @Override
-    public void inactiveQuotation() {
-        this.quotationStatus = QuotationStatus.INACTIVE;
+    public void purgeQuotation() {
+        this.quotationStatus = QuotationStatus.PURGED;
     }
 
     @Override
@@ -140,7 +140,7 @@ public class GroupLifeQuotation extends AbstractAggregateRoot<QuotationId> imple
             registerEvent(new ProposerAddedEvent(proposer.getProposerName(), proposer.getProposerCode(),
                     proposerContactDetail.getAddressLine1(), proposerContactDetail.getAddressLine2(), proposerContactDetail.getPostalCode(),
                     proposerContactDetail.getProvince(), proposerContactDetail.getTown(), proposerContactDetail.getEmailAddress()));
-            registerEvent(new QuotationGeneratedEvent(quotationId));
+            registerEvent(new GLQuotationGeneratedEvent(quotationId));
         }
     }
 

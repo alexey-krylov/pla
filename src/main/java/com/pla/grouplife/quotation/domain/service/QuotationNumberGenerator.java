@@ -26,9 +26,9 @@ public class QuotationNumberGenerator {
      * @param clazz
      * @return transactionType-division-runningSequence-SystemMonthSystemYear
      */
-    public String getQuotationNumber(String transactionType, String division, Class clazz) {
+    public String getQuotationNumber(String transactionType, String division, Class clazz,LocalDate now) {
         String quotationSequence = sequenceGenerator.getSequence(clazz);
-        String currentDateInString = LocalDate.now().toString(DateTimeFormat.forPattern("dd/MM/yyyy"));
+        String currentDateInString = now.toString(DateTimeFormat.forPattern("dd/MM/yyyy"));
         String month = currentDateInString.substring(3, 5).trim();
         String year = currentDateInString.substring(8, 10).trim();
         String quotationNumber = transactionType + "-" + division + "-" + quotationSequence + "-" + month + year;

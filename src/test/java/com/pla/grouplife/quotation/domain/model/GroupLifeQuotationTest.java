@@ -2,9 +2,8 @@ package com.pla.grouplife.quotation.domain.model;
 
 import com.pla.core.domain.model.agent.AgentId;
 import com.pla.grouplife.quotation.domain.event.ProposerAddedEvent;
-import com.pla.grouplife.quotation.domain.event.QuotationClosedEvent;
+import com.pla.grouplife.quotation.domain.event.GLQuotationClosedEvent;
 import com.pla.grouplife.quotation.domain.exception.QuotationException;
-import com.pla.grouplife.quotation.domain.model.*;
 import com.pla.sharedkernel.identifier.QuotationId;
 import org.joda.time.LocalDate;
 import org.junit.Before;
@@ -110,8 +109,8 @@ public class GroupLifeQuotationTest {
     @Test
     public void whenGlQuotationIsCloseItShouldRegisterQuotationClosedEvent() {
         this.groupLifeQuotation.closeQuotation();
-        QuotationClosedEvent quotationClosedEvent = (QuotationClosedEvent) this.groupLifeQuotation.getUncommittedEvents().peek().getPayload();
-        assertThat(new QuotationClosedEvent(this.groupLifeQuotation.getQuotationId()), is(quotationClosedEvent));
+        GLQuotationClosedEvent GLQuotationClosedEvent = (GLQuotationClosedEvent) this.groupLifeQuotation.getUncommittedEvents().peek().getPayload();
+        assertThat(new GLQuotationClosedEvent(this.groupLifeQuotation.getQuotationId()), is(GLQuotationClosedEvent));
     }
 
     @Test
@@ -123,8 +122,8 @@ public class GroupLifeQuotationTest {
 
     @Test
     public void itShouldInactivateGLQuotation() {
-        this.groupLifeQuotation.inactiveQuotation();
-        assertEquals(QuotationStatus.INACTIVE, this.groupLifeQuotation.getQuotationStatus());
+        this.groupLifeQuotation.purgeQuotation();
+        assertEquals(QuotationStatus.PURGED, this.groupLifeQuotation.getQuotationStatus());
     }
 
     @Test

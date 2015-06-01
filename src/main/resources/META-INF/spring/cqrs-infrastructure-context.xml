@@ -63,7 +63,7 @@
     <axon:saga-manager id="sagaManager" saga-repository="sagaRepository" event-bus="eventBus">
         <axon:async executor="taskExecutor" transaction-manager="transactionManager"/>
         <axon:types>
-            com.pla.core.domain.model.plan.PlanSaga
+            com.pla.core.saga.PlanSaga,com.pla.grouplife.quotation.saga.GroupLifeQuotationSaga
         </axon:types>
     </axon:saga-manager>
 

@@ -7,6 +7,7 @@ import com.pla.individuallife.proposal.domain.model.ProposedAssured;
 import com.pla.individuallife.proposal.domain.model.Proposer;
 import com.pla.individuallife.quotation.domain.service.ILQuotationRoleAdapter;
 import org.bson.types.ObjectId;
+import org.joda.time.LocalDate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -30,7 +31,7 @@ public class ProposalService {
                                      Proposer proposer) {
         ProposalProcessor proposalProcessor = roleAdapter.userToProposalProcessor(userDetails);
         ProposalId proposalId = new ProposalId(new ObjectId().toString());
-        String proposalNumber = proposalNumberGenerator.getProposalNumber();
+        String proposalNumber = proposalNumberGenerator.getProposalNumber(LocalDate.now());
         proposalProcessor.generateProposal(proposalNumber);
         return proposalId;
     }
