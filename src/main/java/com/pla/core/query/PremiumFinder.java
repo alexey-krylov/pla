@@ -31,6 +31,8 @@ public class PremiumFinder {
                 .and("effectiveFrom").lte(premiumCalculationDto.getCalculateAsOf().toDate()).and("validTill").is(null);
         if (premiumCalculationDto.getCoverageId() != null) {
             premiumCriteria.and("coverageId.coverageId").is(premiumCalculationDto.getCoverageId().getCoverageId());
+        }else{
+            premiumCriteria.and("coverageId").is(null);
         }
         Query query = new Query(premiumCriteria);
         List<Premium> premiums = mongoTemplate.find(query, Premium.class);

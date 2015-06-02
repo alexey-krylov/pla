@@ -503,20 +503,55 @@ CREATE TABLE `employment_type` (
   PRIMARY KEY (`employment_id`),
   UNIQUE KEY (`code`,`description`)
 );
+
 DROP TABLE IF EXISTS `individual_life_quotation`;
-  CREATE TABLE `individual_life_quotation` (
-    `quotation_id` varchar(255) NOT NULL,
-    `version` bigint(20) DEFAULT NULL,
-    `agent_id` varchar(255) DEFAULT NULL,
-    `generated_on` tinyblob,
-    `il_quotation_status` varchar(20) DEFAULT NULL,
-    `is_assured_the_proposer` tinyint(1) NOT NULL DEFAULT '0',
-    `plan_id` varchar(255) DEFAULT NULL,
-    `quotation_creator` varchar(255) DEFAULT NULL,
-    `quotation_number` varchar(255) DEFAULT NULL,
-    `version_number` int(11) NOT NULL,
-    PRIMARY KEY (`quotation_id`)
-  );
+ CREATE TABLE `individual_life_quotation` (
+   `quotation_id` varchar(255) NOT NULL,
+   `last_event_sequence_number` bigint(20) DEFAULT NULL,
+   `version` bigint(20) DEFAULT NULL,
+   `agent_id` varchar(255) DEFAULT NULL,
+   `generated_on` tinyblob,
+   `il_quotation_status` varchar(255) DEFAULT NULL,
+   `is_assured_the_proposer` tinyint(1) DEFAULT '0',
+   `parent_quotation_id` varchar(255) DEFAULT NULL,
+   `plan_id` varchar(255) DEFAULT NULL,
+   `policy_term` int(11) DEFAULT NULL,
+   `premium_payment_term` int(11) DEFAULT NULL,
+   `sum_assured` decimal(19,2) DEFAULT NULL,
+   `age_next_birth_day` tinyblob,
+   `assured_date_of_birth` date DEFAULT NULL,
+   `assured_email_id` varchar(255) DEFAULT NULL,
+   `assuredfname` varchar(255) DEFAULT NULL,
+   `assured_gender` varchar(255) DEFAULT NULL,
+   `assured_mobile_number` varchar(255) DEFAULT NULL,
+   `assurednrc` varchar(255) DEFAULT NULL,
+   `assured_surname` varchar(255) DEFAULT NULL,
+   `assured_title` varchar(255) DEFAULT NULL,
+   `occupation` varchar(255) DEFAULT NULL,
+   `gender` varchar(255) DEFAULT NULL,
+   `proposer_date_of_birth` date DEFAULT NULL,
+   `proposer_email_id` varchar(255) DEFAULT NULL,
+   `proposerfname` varchar(255) DEFAULT NULL,
+   `proposer_mobile_number` varchar(255) DEFAULT NULL,
+   `proposernrc` varchar(255) DEFAULT NULL,
+   `proposer_surname` varchar(255) DEFAULT NULL,
+   `proposer_title` varchar(255) DEFAULT NULL,
+   `quotation_creator` varchar(255) DEFAULT NULL,
+   `quotation_number` varchar(255) DEFAULT NULL,
+   `version_number` int(11) NOT NULL,
+  PRIMARY KEY (`quotation_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+DROP TABLE IF EXISTS `individual_life_quotation_rider_details`;
+ CREATE TABLE `individual_life_quotation_rider_details` (
+   `individual_life_quotation_quotationId` varchar(255) NOT NULL,
+   `cover_term` int(11) DEFAULT NULL,
+   `coverage_id` varchar(255) DEFAULT NULL,
+   `sum_assured` decimal(19,2) DEFAULT NULL,
+   `waiver_of_premium` int(11) DEFAULT NULL,
+   KEY `FK_QUOTATION_RIDER` (`individual_life_quotation_quotationId`),
+   CONSTRAINT `FK_QUOTATION_QUOTATON_ID` FOREIGN KEY (`individual_life_quotation_quotationId`) REFERENCES `individual_life_quotation` (`quotation_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 DROP TABLE IF EXISTS `plan_coverage_benefit_assoc`;
 CREATE TABLE `plan_coverage_benefit_assoc` (

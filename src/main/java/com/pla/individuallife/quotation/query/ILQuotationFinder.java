@@ -30,17 +30,36 @@ public class ILQuotationFinder {
     private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
     private MongoTemplate mongoTemplate;
 
+    //private JpaRepositoryFactory jpaRepositoryFactory;
+
+    public static final String FIND_QUOTATION_FOR_PREMIUMBY_ID_QUERY = "SELECT q.`quotation_id` AS QUOTATIONID, q.`plan_id` AS PLANID, q.`assured_date_of_birth` AS ASSURED_DOB, \n" +
+            "q.`assured_gender` AS ASSURED_GENDER, q.`policy_term` AS POLICYTERM, q.`occupation` AS ASSURED_OCCUPATION, \n" +
+            "q.`premium_payment_term` AS PREMIUMPAYMENT_TERM, q.`sum_assured` AS SUMASSURED,\n" +
+            "r.`coverage_id` AS COVERAGEID, r.`cover_term` AS COVERTERM, r.`sum_assured` AS RIDER_SA,\n" +
+            "r.`waiver_of_premium` AS RIDER_PREMIUM_WAIVER, c.`coverage_name` AS COVERAGENAME\n" +
+            " FROM individual_life_quotation q LEFT JOIN individual_life_quotation_rider_details r \n" +
+            "ON q.`quotation_id` = r.`individual_life_quotation_quotationId`\n" +
+            " LEFT JOIN coverage c\n" +
+            "ON r.`coverage_id` = c.`coverage_id`\n" +
+            "WHERE q.quotation_id =:quotationId";
+
     @Autowired
     public void setDataSource(DataSource dataSource, MongoTemplate mongoTemplate) {
         this.namedParameterJdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
         this.mongoTemplate = mongoTemplate;
+        //this.jpaRepositoryFactory = jpaRepositoryFactory;
+
     }
+
 
     public Map<String, Object> getAgentById(String agentId) {
         Preconditions.checkArgument(isNotEmpty(agentId));
         return namedParameterJdbcTemplate.queryForMap(FIND_AGENT_BY_ID_QUERY, new MapSqlParameterSource().addValue("agentId", agentId));
     }
 
+    public Map getQuotationforPremiumById(String quotationId) {
+        return namedParameterJdbcTemplate.queryForMap(FIND_QUOTATION_FOR_PREMIUMBY_ID_QUERY, new MapSqlParameterSource().addValue("quotationId", quotationId));
+    }
     public ILQuotationDto getQuotationById(String quotationId) {
         return namedParameterJdbcTemplate.queryForObject(FIND_QUOTATION_BY_ID_QUERY, new MapSqlParameterSource().addValue("quotationId", quotationId), new BeanPropertyRowMapper<ILQuotationDto>(ILQuotationDto.class));
     }
@@ -63,5 +82,4 @@ public class ILQuotationFinder {
         Query query = new Query(criteria);
         return mongoTemplate.find(query, Map.class, "individual_life_quotation");
     }
-
 }

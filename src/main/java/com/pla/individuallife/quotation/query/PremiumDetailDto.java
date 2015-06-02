@@ -1,7 +1,5 @@
 package com.pla.individuallife.quotation.query;
 
-import com.pla.core.domain.model.CoverageName;
-import com.pla.sharedkernel.identifier.CoverageId;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -17,9 +15,6 @@ import java.util.Set;
 @NoArgsConstructor
 public class PremiumDetailDto {
 
-
-    private Integer policyTermValue;
-
     private BigDecimal planAnnualPremium;
 
     private BigDecimal semiannualPremium;
@@ -31,17 +26,5 @@ public class PremiumDetailDto {
     private BigDecimal totalPremium;
 
     private Set<RiderPremiumDto> riderPremiumDtos;
-
-    @Getter
-    @Setter
-    @NoArgsConstructor
-    public class RiderPremiumDto {
-
-        private CoverageId coverageId;
-
-        private CoverageName coverageName;
-
-        private BigDecimal annualPremium;
-    }
 
 }
