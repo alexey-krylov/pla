@@ -3,7 +3,6 @@ package com.pla.individuallife.quotation.domain.model.proposal;
 import com.pla.individuallife.proposal.domain.model.*;
 import com.pla.sharedkernel.domain.model.Gender;
 import com.pla.sharedkernel.domain.model.MaritalStatus;
-import com.pla.sharedkernel.domain.model.TitleEnum;
 import org.joda.time.LocalDate;
 import org.junit.Test;
 
@@ -27,7 +26,7 @@ public class ProposedAssuredBuilderUnitTest {
     public void givenAProposalAssuredBuilder_whenAllTheSetUpIsCorrect_thenItShouldCreateProposalAssured(){
 
         proposedAssuredBuilder1=new ProposedAssuredBuilder()
-                .withTitle("DR")
+                .withTitle("Dr.")
                 .withFirstName("NthDimenzion")
                 .withSurname("PvtLtd")
                 .withEmailAddress("@XYZ.com")
@@ -46,7 +45,7 @@ public class ProposedAssuredBuilderUnitTest {
         proposedAssured = proposedAssuredBuilder1.createProposedAssured();
 
         assertEquals(Gender.MALE, proposedAssured.getGender());
-        assertThat(TitleEnum.DR, is(proposedAssured.getTitle()));
+        assertThat("Dr.", is(proposedAssured.getTitle()));
         assertEquals("NthDimenzion", proposedAssured.getFirstName());
         assertEquals("PvtLtd",proposedAssured.getSurname());
         assertEquals("@XYZ.com",proposedAssured.getEmailAddress());
