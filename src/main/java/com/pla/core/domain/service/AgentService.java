@@ -68,7 +68,6 @@ public class AgentService {
         boolean isLicenseNumberUnique = true;
         JpaRepository<Agent, AgentId> agentRepository = jpaRepositoryFactory.getCrudRepository(Agent.class);
         Agent agent = agentRepository.getOne(new AgentId(agentId));
-        agent = agent.updateStatus(agentStatus);
         isLicenseNumberUnique = (UtilValidator.isNotEmpty(licenseNumberDto.getLicenseNumber()) && !(agent.getLicenseNumber().getLicenseNumber().equals(licenseNumberDto.getLicenseNumber()))) ? agentLicenseNumberIsUnique.isSatisfiedBy(new LicenseNumber(licenseNumberDto.getLicenseNumber())) : true;
         if (!isLicenseNumberUnique) {
             raiseAgentLicenseNumberUniqueException();
@@ -80,6 +79,7 @@ public class AgentService {
         }
         Agent updatedAgent = populateAgentDetail(agent, agentProfileDto, licenseNumberDto, teamDetailDto, contactDetailDto, physicalAddressDto, channelTypeDto);
         Agent agentWithPlans = updatedAgent.withPlans(authorizedPlans);
+        agentWithPlans = agentWithPlans.updateStatus(agentStatus);
         agentRepository.save(agentWithPlans);
     }
 
