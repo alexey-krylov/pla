@@ -31,6 +31,7 @@ import java.util.Map;
 
 import static com.google.common.base.Preconditions.checkArgument;
 import static org.nthdimenzion.presentation.AppUtils.getLoggedInUserDetail;
+import static org.nthdimenzion.utils.UtilValidator.isEmpty;
 
 /**
  * Created by Samir on 4/14/2015.
@@ -86,18 +87,17 @@ public class GroupLifeQuotationController {
     @RequestMapping(value = "/getagentdetail/{agentId}", method = RequestMethod.GET)
     @ResponseBody
     public Result getAgentDetail(@PathVariable("agentId") String agentId) {
-        Map<String, Object> agentDetail = null;
-        try {
-            agentDetail = glQuotationFinder.getAgentById(agentId);
-        } catch (Exception e) {
+
+        Map<String, Object> agentDetail = glQuotationFinder.getAgentById(agentId);
+        if (isEmpty(agentDetail)) {
             return Result.failure("Agent detail not found");
         }
         checkArgument(agentDetail != null);
         CreateGLQuotationCommand createGLQuotationCommand = new CreateGLQuotationCommand();
         createGLQuotationCommand.setAgentId(agentId);
-        createGLQuotationCommand.setBranchName((String) agentDetail.get("branchName"));
-        createGLQuotationCommand.setTeamName((String) agentDetail.get("teamName"));
-        createGLQuotationCommand.setAgentName(agentDetail.get("firstName") + " " + agentDetail.get("lastName"));
+        createGLQuotationCommand.setBranchName(agentDetail.get("branchName") != null ? (String) agentDetail.get("branchName") : "");
+        createGLQuotationCommand.setTeamName(agentDetail.get("teamName") != null ? (String) agentDetail.get("teamName") : "");
+        createGLQuotationCommand.setAgentName(agentDetail.get("firstName") != null ? (String) agentDetail.get("firstName") : "" + " " + agentDetail.get("lastName") != null ? (String) agentDetail.get("lastName") : "");
         return Result.success("Agent found", createGLQuotationCommand);
     }
 
