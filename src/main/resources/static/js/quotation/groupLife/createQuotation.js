@@ -1,8 +1,8 @@
 angular.module('createQuotation', ['common', 'ngRoute', 'mgcrea.ngStrap.select', 'mgcrea.ngStrap.alert', 'mgcrea.ngStrap.popover', 'directives', 'angularFileUpload',
     'mgcrea.ngStrap.dropdown', 'ngSanitize', 'commonServices'])
-    .controller('quotationCtrl', ['$scope', '$http', '$timeout', '$upload', 'provinces', 'getProvinceAndCityDetail', 'globalConstants', 'agentDetails', 'stepsSaved', 'proposerDetails',
+    .controller('quotationCtrl', ['$scope', '$http', '$timeout', '$location', '$route', '$upload', 'provinces', 'getProvinceAndCityDetail', 'globalConstants', 'agentDetails', 'stepsSaved', 'proposerDetails',
         'quotationNumber', 'getQueryParameter', '$window', 'checkIfInsuredUploaded', 'premiumData',
-        function ($scope, $http, $timeout, $upload, provinces, getProvinceAndCityDetail, globalConstants, agentDetails, stepsSaved, proposerDetails, quotationNumber, getQueryParameter,
+        function ($scope, $http, $timeout, $location, $route, $upload, provinces, getProvinceAndCityDetail, globalConstants, agentDetails, stepsSaved, proposerDetails, quotationNumber, getQueryParameter,
                   $window, checkIfInsuredUploaded, premiumData) {
             var mode = getQueryParameter("mode");
             $scope.qId = null;
@@ -12,7 +12,6 @@ angular.module('createQuotation', ['common', 'ngRoute', 'mgcrea.ngStrap.select',
             } else if (mode == 'edit') {
                 $scope.isEditMode = true;
             }
-
 
             $scope.premiumData = premiumData;
 
@@ -34,13 +33,13 @@ angular.module('createQuotation', ['common', 'ngRoute', 'mgcrea.ngStrap.select',
             /*Inter id used for programmatic purpose*/
             $scope.quotationId = getQueryParameter('quotationId') || null;
 
-            $scope.versionNumber = getQueryParameter('version') || null;
+            $scope.versionNumber = 0;
 
             /*actual quotation number to be used in the view*/
             $scope.quotationNumber = quotationNumber;
 
             $scope.provinces = provinces;
-           // console.log($scope.premiumData);
+            // console.log($scope.premiumData);
             $scope.quotationDetails = {
                 /*initialize with default values*/
                 plan: {
@@ -49,7 +48,7 @@ angular.module('createQuotation', ['common', 'ngRoute', 'mgcrea.ngStrap.select',
                 },
 
 
-            premium: $scope.premiumData
+                premium: $scope.premiumData
             };
 
             $scope.quotationDetails.basic = agentDetails;
@@ -61,8 +60,8 @@ angular.module('createQuotation', ['common', 'ngRoute', 'mgcrea.ngStrap.select',
             $scope.$watchCollection('[quotationId,showDownload]', function (n) {
                 if (n[0]) {
                     $scope.qId = n[0];
-                  //  console.log(n[0]);
-                   // console.log(n[1]);
+                    //  console.log(n[0]);
+                    // console.log(n[1]);
                     if (n[1]) {
                         $scope.dropdown = [
                             {
@@ -92,24 +91,6 @@ angular.module('createQuotation', ['common', 'ngRoute', 'mgcrea.ngStrap.select',
                     }
                 }
             });
-
-
-            /*used for bs-dropdown*/
-            /*  $scope.dropdown = [
-             {
-             "text": "<a><img src=\"/pla/images/xls-icon.png\">Ready Reckoner</a>",
-             "href": "/pla/quotation/grouplife/downloadplandetail/" + $scope.qId
-             },
-             {
-             "text": "<a><img src=\"/pla/images/xls-icon.png\">Template</a>",
-             "href": "/pla/quotation/grouplife/downloadinsuredtemplate/" + $scope.qId
-             },
-             {
-             "text": "<a><img src=\"/pla/images/xls-icon.png\">Error File</a>",
-             "href": "/pla/quotation/grouplife/downloadinsuredtemplate/" + $scope.qId
-             }
-             ];*/
-
 
             $scope.$watch('quotationDetails.proposer.province', function (newVal, oldVal) {
                 if (newVal) {
@@ -170,31 +151,25 @@ angular.module('createQuotation', ['common', 'ngRoute', 'mgcrea.ngStrap.select',
                 return Math.round(x) === x;
             }
 
+            $scope.quotationDetails.premium.profitAndSolvencyLoading = $scope.quotationDetails.premium.profitAndSolvencyLoading || 0;
+            $scope.quotationDetails.premium.discounts = $scope.quotationDetails.premium.discounts || 0;
 
-            function generateListOfInstallments(numberOfInstallments) {
-                $scope.numberOfInstallmentsDropDown = [];
-                for (var installment = 1; installment <= numberOfInstallments; installment++) {
-                    $scope.numberOfInstallmentsDropDown.push(installment);
-                }
-            }
-
+            $scope.inappropriatePolicyTerm = false;
             $scope.$watch('quotationDetails.premium.policyTermValue', function (newVal, oldVal) {
                 /*TODO check for the minimum amd maximum value for the policy term value*/
-                if (newVal && newVal != 365 && newVal >= 30 && newVal <= 999) {
+                console.log(' 1 ' + newVal);
+                if (newVal && newVal != 365 && newVal >= 30 && newVal <= 9999) {
                     /*used to toggle controls between dropdown and text*/
                     $scope.isPolicyTermNot365 = true;
                     /*used to show the error message when inappropriate value is entered*/
                     $scope.inappropriatePolicyTerm = false;
-                    var numberOfInstallments = newVal / 30;
-                    if (isInteger(numberOfInstallments)) {
-                        generateListOfInstallments(numberOfInstallments)
-                    } else {
-                        generateListOfInstallments(Math.floor(numberOfInstallments));
-                    }
+
                 } else {
-                    if (newVal < 30 || newVal > 999) {
+                    console.log(' 2 ' + newVal);
+                    if (newVal < 30 || newVal > 9999) {
                         $scope.inappropriatePolicyTerm = true;
                     } else {
+                        $scope.inappropriatePolicyTerm = false;
                         $scope.isPolicyTermNot365 = false;
                     }
                 }
@@ -211,18 +186,39 @@ angular.module('createQuotation', ['common', 'ngRoute', 'mgcrea.ngStrap.select',
                     });
             };
 
+
+            $scope.$watch('quotationId', function (newval, oldval) {
+                if (newval && newval != oldval) {
+                    $window.location.href = '/pla/quotation/grouplife/creategrouplifequotation?quotationId=' + $scope.quotationId + '&mode=edit';
+                }
+            });
+
             $scope.saveBasicDetails = function () {
-                $http.post("/pla/quotation/grouplife/createquotation", angular.extend($scope.quotationDetails.basic, {proposerName: $scope.quotationDetails.proposer.proposerName}))
-                    .success(function (agentDetails) {
-                        if (agentDetails.status == "200") {
-                            $scope.quotationId = agentDetails.id;
-                            setQuotationNumberAndVersionNumber(agentDetails.id);
+                if ($scope.quotationId) {
+                    $http.post("/pla/quotation/grouplife/updatewithagentdetail", angular.extend($scope.quotationDetails.basic, {
+                        proposerName: $scope.quotationDetails.proposer.proposerName
+                        , quotationId: $scope.quotationId
+                    }))
+                        .success(function (agentDetails) {
+                            if (agentDetails.status == "200") {
+                                $scope.quotationId = agentDetails.id;
 
-                            saveStep();
-                        }
-                    });
+                                setQuotationNumberAndVersionNumber(agentDetails.id);
+                                saveStep();
+                            }
+                        });
+                } else {
+                    $http.post("/pla/quotation/grouplife/createquotation", angular.extend($scope.quotationDetails.basic, {proposerName: $scope.quotationDetails.proposer.proposerName}))
+                        .success(function (agentDetails) {
+                            if (agentDetails.status == "200") {
+                                $scope.quotationId = agentDetails.id;
+                                setQuotationNumberAndVersionNumber(agentDetails.id);
+
+                                saveStep();
+                            }
+                        });
+                }
             };
-
             var saveStep = function () {
                 $scope.stepsSaved[$scope.selectedItem] = true;
             };
@@ -233,11 +229,11 @@ angular.module('createQuotation', ['common', 'ngRoute', 'mgcrea.ngStrap.select',
                     {"quotationId": $scope.quotationId}))
                     .success(function (data) {
                         if (data.status == "200") {
+                            $scope.quotationId = data.id;
                             saveStep();
                         }
                     });
             };
-
 
             $scope.savePlanDetails = function () {
                 $upload.upload({
@@ -247,10 +243,13 @@ angular.module('createQuotation', ['common', 'ngRoute', 'mgcrea.ngStrap.select',
                     file: $scope.fileSaved
                 }).success(function (data, status, headers, config) {
                     if (data.status == "200") {
+                        $scope.quotationId = data.id;
                         $http.get("/pla/quotation/grouplife/getpremiumdetail/" + $scope.quotationId)
                             .success(function (data) {
-                               // console.log(data);
+                                $scope.quotationDetails.premium = data;
                                 $scope.premiumData = data;
+                                //quotationDetails.premium.policyTermValue
+                                $scope.quotationDetails.premium.policyTermValue = data.policyTermValue;
                             })
                         saveStep();
                         $scope.showDownload = true;
@@ -261,55 +260,54 @@ angular.module('createQuotation', ['common', 'ngRoute', 'mgcrea.ngStrap.select',
 
                 });
             };
-            $scope.premiumInstallment=false;
+            $scope.premiumInstallment = false;
 
-            if($scope.premiumData.premiumInstallment){
-                if(isInteger($scope.premiumData.premiumInstallment.installmentNo)) {
-                    generateListOfInstallments($scope.premiumData.premiumInstallment.installmentNo);
-                }
-                $scope.quotationDetails.premium.installmentAmount=$scope.premiumData.premiumInstallment.installmentAmount;
 
-            }
-            $scope.updateNumberOfInstallments = function(installmntNo){
-                if(installmntNo > 0) {
+            $scope.updateNumberOfInstallments = function (installmntNo) {
+                if (installmntNo > 0) {
                     $scope.premiumInstallment = true;
                 }
-            }
-            $scope.recalculatePremium = function(){
-                $scope.premiumInstallment=false;
-                 $http.post('/pla/quotation/grouplife/recalculatePremium', angular.extend({},
+            };
+
+            $scope.installments = $scope.premiumData.installments;
+
+            $scope.recalculatePremium = function () {
+                $scope.premiumInstallment = false;
+                $scope.quotationDetails.premium.premiumInstallment = $scope.selectedInstallment || null;
+                $http.post('/pla/quotation/grouplife/recalculatePremium', angular.extend({},
                     {premiumDetailDto: $scope.quotationDetails.premium},
-                    {"quotationId": $scope.quotationId})).success(function(data){
-                   // console.log(data.data);
-                     $scope.quotationDetails.premium=data.data;
-                     $scope.premiumData.totalPremium=data.data.totalPremium;
-                     if(data.data.annualPremium){
-                         $scope.premiumData.annualPremium=data.data.annualPremium;
-                         $scope.premiumData.semiannualPremium=data.data.semiannualPremium;
-                         $scope.premiumData.quarterlyPremium=data.data.quarterlyPremium;
-                         $scope.premiumData.monthlyPremium=data.data.monthlyPremium;
-                     }
-                     if(data.data.premiumInstallment){
-                         if(isInteger(data.data.premiumInstallment.installmentNo)) {
-                             generateListOfInstallments(data.data.premiumInstallment.installmentNo);                         }
-
-                         $scope.quotationDetails.premium.installmentAmount=data.data.premiumInstallment.installmentAmount;
-
-                     }
+                    {"quotationId": $scope.quotationId})).success(function (data) {
+                    // console.log(data.data);
+                    $scope.quotationDetails.premium = data.data;
+                    $scope.premiumData.totalPremium = data.data.totalPremium;
+                    if (data.data.annualPremium) {
+                        $scope.premiumData.annualPremium = data.data.annualPremium;
+                        $scope.premiumData.semiannualPremium = data.data.semiannualPremium;
+                        $scope.premiumData.quarterlyPremium = data.data.quarterlyPremium;
+                        $scope.premiumData.monthlyPremium = data.data.monthlyPremium;
+                    }
+                    if (data.data.installments) {
+                        $scope.selectedInstallment = null;
+                        $scope.installments = data.data.installments;
+                    }
                 });
 
             }
 
-
-
             $scope.savePremiumDetails = function () {
-                $http.post("/pla/quotation/grouplife/generate", angular.extend({},
-                    {"quotationId": $scope.quotationId}))
-                    .success(function (data) {
-                        if (data.status == "200") {
-                            saveStep();
-                        }
-                    });
+                $http.post('/pla/quotation/grouplife/recalculatePremium', angular.extend({},
+                    {premiumDetailDto: $scope.quotationDetails.premium},
+                    {"quotationId": $scope.quotationId})).success(function (data) {
+                    $http.post("/pla/quotation/grouplife/generate", angular.extend({},
+                        {"quotationId": $scope.quotationId}))
+                        .success(function (data) {
+                            if (data.status == "200") {
+                                saveStep();
+                                $('#searchFormQuotation').val($scope.quotationId);
+                                $('#searchForm').submit();
+                            }
+                        });
+                });
 
             }
 

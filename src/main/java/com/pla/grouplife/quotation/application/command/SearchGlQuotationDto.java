@@ -19,4 +19,6 @@ public class SearchGlQuotationDto {
     private String agentName;
 
     private String agentCode;
+
+    private String quotationId;
 }

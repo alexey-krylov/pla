@@ -2,6 +2,7 @@ package com.pla.grouplife.quotation.domain.service;
 
 import com.pla.core.domain.model.agent.AgentId;
 import com.pla.grouplife.quotation.domain.model.*;
+import com.pla.grouplife.quotation.query.GLQuotationFinder;
 import com.pla.grouplife.quotation.query.PremiumDetailDto;
 import com.pla.grouplife.quotation.query.ProposerDto;
 import com.pla.publishedlanguage.contract.IPremiumCalculator;
@@ -18,11 +19,13 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import static com.pla.grouplife.quotation.domain.exception.QuotationException.raiseAgentIsInactiveException;
+import static org.nthdimenzion.utils.UtilValidator.isNotEmpty;
 
 /**
  * Created by Samir on 4/8/2015.
@@ -38,12 +41,15 @@ public class GroupLifeQuotationService {
 
     private AgentIsActive agentIsActive;
 
+    private GLQuotationFinder glQuotationFinder;
+
     @Autowired
-    public GroupLifeQuotationService(QuotationRoleAdapter quotationRoleAdapter, QuotationNumberGenerator quotationNumberGenerator, IPremiumCalculator premiumCalculator, AgentIsActive agentIsActive) {
+    public GroupLifeQuotationService(QuotationRoleAdapter quotationRoleAdapter, QuotationNumberGenerator quotationNumberGenerator, IPremiumCalculator premiumCalculator, AgentIsActive agentIsActive, GLQuotationFinder glQuotationFinder) {
         this.quotationRoleAdapter = quotationRoleAdapter;
         this.quotationNumberGenerator = quotationNumberGenerator;
         this.premiumCalculator = premiumCalculator;
         this.agentIsActive = agentIsActive;
+        this.glQuotationFinder = glQuotationFinder;
     }
 
     public GroupLifeQuotation createQuotation(String agentId, String proposerName, UserDetails userDetails) {
@@ -86,13 +92,18 @@ public class GroupLifeQuotationService {
         return glQuotationProcessor.updateWithInsured(groupLifeQuotation, insureds);
     }
 
-    private GroupLifeQuotation checkQuotationNeedForVersioningAndGetQuotation(GLQuotationProcessor glQuotationProcessor, GroupLifeQuotation groupLifeQuotation) {
-        if (!groupLifeQuotation.requireVersioning()) {
-            return groupLifeQuotation;
+    private GroupLifeQuotation checkQuotationNeedForVersioningAndGetQuotation(GLQuotationProcessor glQuotationProcessor, GroupLifeQuotation currentQuotation) {
+        if (!currentQuotation.requireVersioning()) {
+            return currentQuotation;
         }
-        String quotationNumber = quotationNumberGenerator.getQuotationNumber("5", "1", GroupLifeQuotation.class, LocalDate.now());
+        String parentQuotationId = currentQuotation.getParentQuotationId() == null ? currentQuotation.getQuotationId().getQuotationId() : currentQuotation.getParentQuotationId().getQuotationId();
+        List<Map> childQuotations = glQuotationFinder.getChildQuotations(parentQuotationId);
+        int versionNumber = 1;
+        if (isNotEmpty(childQuotations)) {
+            versionNumber = versionNumber + childQuotations.size();
+        }
         QuotationId quotationId = new QuotationId(new ObjectId().toString());
-        return groupLifeQuotation.cloneQuotation(quotationNumber, glQuotationProcessor.getUserName(), quotationId);
+        return currentQuotation.cloneQuotation(currentQuotation.getQuotationNumber(), glQuotationProcessor.getUserName(), quotationId, versionNumber, new QuotationId(parentQuotationId));
     }
 
     public GroupLifeQuotation updateWithPremiumDetail(GroupLifeQuotation groupLifeQuotation, PremiumDetailDto premiumDetailDto, UserDetails userDetails) {
@@ -100,6 +111,7 @@ public class GroupLifeQuotationService {
             raiseAgentIsInactiveException();
         }
         PremiumDetail premiumDetail = new PremiumDetail(premiumDetailDto.getAddOnBenefit(), premiumDetailDto.getProfitAndSolvencyLoading(), premiumDetailDto.getDiscounts(), premiumDetailDto.getPolicyTermValue());
+        premiumDetail = premiumDetail.updateWithNetPremium(groupLifeQuotation.getNetAnnualPremiumPaymentAmount(premiumDetail));
         if (premiumDetailDto.getPolicyTermValue() != null && premiumDetailDto.getPolicyTermValue() == 365) {
             List<ComputedPremiumDto> computedPremiumDtoList = premiumCalculator.calculateModalPremium(new BasicPremiumDto(PremiumFrequency.ANNUALLY, groupLifeQuotation.getTotalBasicPremiumForInsured()));
             Set<Policy> policies = computedPremiumDtoList.stream().map(new Function<ComputedPremiumDto, Policy>() {
@@ -109,19 +121,22 @@ public class GroupLifeQuotationService {
                 }
             }).collect(Collectors.toSet());
             premiumDetail = premiumDetail.addPolicies(policies);
+            premiumDetail = premiumDetail.nullifyPremiumInstallment();
         } else if (premiumDetailDto.getPolicyTermValue() != null && premiumDetailDto.getPolicyTermValue() > 0 && premiumDetailDto.getPolicyTermValue() != 365) {
             int noOfInstallment = premiumDetailDto.getPolicyTermValue() / 30;
-            int reminder = premiumDetailDto.getPolicyTermValue() % 30;
-            if (reminder == 0) {
+            if ((premiumDetailDto.getPolicyTermValue() % 30) == 0) {
                 noOfInstallment = noOfInstallment - 1;
             }
-            BigDecimal installmentPremiumAmount = groupLifeQuotation.getTotalBasicPremiumForInsured();
-            installmentPremiumAmount = installmentPremiumAmount.divide(new BigDecimal(noOfInstallment),2,BigDecimal.ROUND_CEILING);
-            premiumDetail = premiumDetail.addPremiumInstallment(noOfInstallment, installmentPremiumAmount);
+            for (int count = 1; count <= noOfInstallment; count++) {
+                BigDecimal installmentAmount = premiumDetail.getNetTotalPremium().divide(new BigDecimal(count), 2, BigDecimal.ROUND_CEILING);
+                premiumDetail = premiumDetail.addInstallments(count, installmentAmount);
+            }
+            if (premiumDetailDto.getPremiumInstallment() != null) {
+                premiumDetail = premiumDetail.addChoosenPremiumInstallment(premiumDetailDto.getPremiumInstallment().getInstallmentNo(), premiumDetailDto.getPremiumInstallment().getInstallmentAmount());
+            }
+            premiumDetail = premiumDetail.nullifyFrequencyPremium();
         }
         GLQuotationProcessor glQuotationProcessor = quotationRoleAdapter.userToQuotationProcessor(userDetails);
-        premiumDetail = premiumDetail.updateWithNetPremium(groupLifeQuotation.getNetAnnualPremiumPaymentAmount(premiumDetail));
-        groupLifeQuotation = checkQuotationNeedForVersioningAndGetQuotation(glQuotationProcessor, groupLifeQuotation);
         groupLifeQuotation = glQuotationProcessor.updateWithPremiumDetail(groupLifeQuotation, premiumDetail);
         return groupLifeQuotation;
     }

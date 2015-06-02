@@ -125,6 +125,7 @@ public class GlQuotationCommandHandler {
     @CommandHandler
     public String updateWithPremiumDetail(UpdateGLQuotationWithPremiumDetailCommand updateGLQuotationWithPremiumDetailCommand) {
         GroupLifeQuotation groupLifeQuotation = glQuotationMongoRepository.load(new QuotationId(updateGLQuotationWithPremiumDetailCommand.getQuotationId()));
+        boolean isVersioningRequire = groupLifeQuotation.requireVersioning();
         PremiumDetailDto premiumDetailDto = updateGLQuotationWithPremiumDetailCommand.getPremiumDetailDto();
         if (premiumDetailDto.getPolicyTermValue() != 365) {
             Set<Insured> insureds = groupLifeQuotation.getInsureds();
@@ -157,7 +158,6 @@ public class GlQuotationCommandHandler {
             groupLifeQuotation = groupLifeQuotationService.updateInsured(groupLifeQuotation, insureds, updateGLQuotationWithPremiumDetailCommand.getUserDetails());
         }
         groupLifeQuotation = groupLifeQuotationService.updateWithPremiumDetail(groupLifeQuotation, premiumDetailDto, updateGLQuotationWithPremiumDetailCommand.getUserDetails());
-        boolean isVersioningRequire = groupLifeQuotation.requireVersioning();
         if (isVersioningRequire) {
             glQuotationMongoRepository.add(groupLifeQuotation);
         }

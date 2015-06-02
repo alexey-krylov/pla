@@ -124,7 +124,11 @@
                                     <input type="hidden" name="quotationStatus" th:value="${quotation.quotationStatus}"/>
                                 </td>
                                 <td th:text="${quotation.quotationNumber}">5100000010315</td>
-                                <td th:text="${quotation.quotationGeneratedOn}">05/03/2015</td>
+                                <td th:if="${quotation.quotationGeneratedOn!=null}"><span
+                                        th:text="${#dates.format(quotation.quotationGeneratedOn,'dd/MM/yyyy')}"></span></td>
+
+                                <td th:if="${quotation.quotationGeneratedOn==null}">
+                                        </td>
                                 <td th:text="${quotation.ageing}"></td>
                                 <td th:text="${quotation.agentName}">Agent Name</td>
                                 <td th:text="${quotation.proposeName}"></td>

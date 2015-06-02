@@ -68,7 +68,8 @@ public class GroupLifeQuotationController {
     @ResponseBody
     public Result getQuotationNumber(@PathVariable("quotationId") String quotationId) {
         Map quotationMap = glQuotationFinder.getQuotationById(quotationId);
-        return Result.success("Quotation number ", (String) quotationMap.get("quotationNumber"));
+        String versionNumber = (Integer) quotationMap.get("versionNumber") != 0 ? ("/" + ((Integer) quotationMap.get("versionNumber")).toString()) : "";
+        return Result.success("Quotation number ", (String) quotationMap.get("quotationNumber") + versionNumber);
     }
 
     @RequestMapping(value = "/isinsureddetailavailable/{quotationId}", method = RequestMethod.GET)
@@ -282,7 +283,7 @@ public class GroupLifeQuotationController {
             e.printStackTrace();
             return Result.failure(e.getMessage());
         }
-        return Result.success("Insured detail uploaded successfully");
+        return Result.success("Insured detail uploaded successfully", uploadInsuredDetailDto.getQuotationId());
     }
 
     @RequestMapping(value = "/getpremiumdetail/{quotationid}", method = RequestMethod.GET)
@@ -300,6 +301,18 @@ public class GroupLifeQuotationController {
             commandGateway.sendAndWait(updateGLQuotationWithPremiumDetailCommand);
             premiumDetailDto = glQuotationService.getPremiumDetail(new QuotationId(updateGLQuotationWithPremiumDetailCommand.getQuotationId()));
             return Result.success("Premium recalculated successfully", premiumDetailDto);
+        } catch (Exception e) {
+            return Result.success(e.getMessage());
+        }
+    }
+
+    @RequestMapping(value = "/savepremiumdetail", method = RequestMethod.POST)
+    @ResponseBody
+    public Result savePremiumDetail(@RequestBody UpdateGLQuotationWithPremiumDetailCommand updateGLQuotationWithPremiumDetailCommand, HttpServletRequest request) {
+        try {
+            updateGLQuotationWithPremiumDetailCommand.setUserDetails(getLoggedInUserDetail(request));
+            commandGateway.sendAndWait(updateGLQuotationWithPremiumDetailCommand);
+            return Result.success("Premium detail saved successfully");
         } catch (Exception e) {
             return Result.success(e.getMessage());
         }

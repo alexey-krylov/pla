@@ -44,7 +44,7 @@ public class GroupLifeQuotation extends AbstractAggregateRoot<QuotationId> imple
 
     private QuotationStatus quotationStatus;
 
-    private int versionNumber = 1;
+    private int versionNumber;
 
     private String quotationNumber;
 
@@ -149,9 +149,9 @@ public class GroupLifeQuotation extends AbstractAggregateRoot<QuotationId> imple
         return QuotationStatus.GENERATED.equals(this.quotationStatus);
     }
 
-    public GroupLifeQuotation cloneQuotation(String quotationNumber, String quotationCreator, QuotationId quotationId) {
-        GroupLifeQuotation newQuotation = new GroupLifeQuotation(quotationNumber, quotationCreator, quotationId, this.versionNumber + 1, QuotationStatus.DRAFT);
-        newQuotation.parentQuotationId = this.quotationId;
+    public GroupLifeQuotation cloneQuotation(String quotationNumber, String quotationCreator, QuotationId quotationId, int versionNumber, QuotationId parentQuotationId) {
+        GroupLifeQuotation newQuotation = new GroupLifeQuotation(quotationNumber, quotationCreator, quotationId, versionNumber, QuotationStatus.DRAFT);
+        newQuotation.parentQuotationId = parentQuotationId;
         newQuotation.proposer = this.proposer;
         newQuotation.agentId = this.agentId;
         newQuotation.insureds = this.insureds;
@@ -171,6 +171,7 @@ public class GroupLifeQuotation extends AbstractAggregateRoot<QuotationId> imple
         BigDecimal profitAndSolvencyAmount = premiumDetail.getProfitAndSolvency() != null ? totalInsuredPremiumAmount.multiply((premiumDetail.getProfitAndSolvency().divide(new BigDecimal(100))).setScale(2, BigDecimal.ROUND_CEILING)) : BigDecimal.ZERO;
         BigDecimal discountAmount = premiumDetail.getDiscount() != null ? totalInsuredPremiumAmount.multiply((premiumDetail.getDiscount().divide(new BigDecimal(100))).setScale(2, BigDecimal.ROUND_CEILING)) : BigDecimal.ZERO;
         BigDecimal netPremiumAmount = (totalInsuredPremiumAmount.add(addOnBenefitAmount).add(profitAndSolvencyAmount)).subtract(discountAmount);
+        netPremiumAmount = netPremiumAmount.setScale(2,BigDecimal.ROUND_CEILING);
         return netPremiumAmount;
     }
 

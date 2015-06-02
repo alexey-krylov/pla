@@ -1,10 +1,14 @@
 package com.pla.grouplife.quotation.query;
 
+import com.google.common.collect.Sets;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.math.BigDecimal;
+import java.util.Set;
+
+import static org.nthdimenzion.utils.UtilValidator.isEmpty;
 
 /**
  * Created by Samir on 4/14/2015.
@@ -36,6 +40,8 @@ public class PremiumDetailDto {
 
     private PremiumInstallmentDto premiumInstallment;
 
+    private Set<PremiumInstallmentDto> installments;
+
 
     public PremiumDetailDto(BigDecimal addOnBenefit, BigDecimal profitAndSolvencyLoading, BigDecimal discounts, Integer policyTermValue) {
         this.addOnBenefit = addOnBenefit;
@@ -50,11 +56,19 @@ public class PremiumDetailDto {
 
     }
 
-    public PremiumDetailDto addInstallmentDetail(int noOfInstallment, BigDecimal installmentAmount) {
+    public PremiumDetailDto addOptedInstallmentDetail(int noOfInstallment, BigDecimal installmentAmount) {
         this.premiumInstallment = new PremiumInstallmentDto(noOfInstallment, installmentAmount);
         return this;
     }
 
+    public PremiumDetailDto addInstallments(int noOfInstallment, BigDecimal installmentAmount) {
+        if (isEmpty(this.installments)) {
+            this.installments = Sets.newHashSet();
+        }
+        PremiumInstallmentDto premiumInstallment = new PremiumInstallmentDto(noOfInstallment, installmentAmount);
+        this.installments.add(premiumInstallment);
+        return this;
+    }
 
     public PremiumDetailDto addFrequencyPremiumAmount(BigDecimal annualPremiumAmount, BigDecimal semiannualPremiumAmount, BigDecimal quarterlyPremiumAmount, BigDecimal monthlyPremiumAmount) {
         this.annualPremium = annualPremiumAmount;
@@ -68,20 +82,4 @@ public class PremiumDetailDto {
         this.totalPremium = netTotalAmount;
         return this;
     }
-
-    @Getter
-    @Setter
-    @NoArgsConstructor
-    public class PremiumInstallmentDto {
-
-        private Integer installmentNo;
-
-        private BigDecimal installmentAmount;
-
-        public PremiumInstallmentDto(int installmentNo, BigDecimal installmentAmount) {
-            this.installmentNo = installmentNo;
-            this.installmentAmount = installmentAmount;
-        }
-    }
-
 }

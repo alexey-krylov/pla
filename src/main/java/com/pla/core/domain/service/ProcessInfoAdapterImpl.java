@@ -14,12 +14,12 @@ public class ProcessInfoAdapterImpl implements IProcessInfoAdapter {
 
     @Override
     public int getPurgeTimePeriod(LineOfBusinessEnum lineOfBusinessEnum, ProcessType processType) {
-        return 0;
+        return 3650;
     }
 
     @Override
     public int getClosureTimePeriod(LineOfBusinessEnum lineOfBusinessEnum, ProcessType processType) {
-        return 0;
+        return 3650;
     }
 
     @Override

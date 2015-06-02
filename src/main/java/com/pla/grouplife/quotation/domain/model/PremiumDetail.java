@@ -1,5 +1,6 @@
 package com.pla.grouplife.quotation.domain.model;
 
+import com.google.common.collect.Sets;
 import com.pla.publishedlanguage.domain.model.PremiumFrequency;
 import lombok.*;
 import org.nthdimenzion.ddd.domain.annotations.ValueObject;
@@ -30,6 +31,8 @@ public class PremiumDetail {
 
     private PremiumInstallment premiumInstallment;
 
+    private Set<PremiumInstallment> installments;
+
     private Set<Policy> policies;
 
     private BigDecimal netTotalPremium;
@@ -57,7 +60,19 @@ public class PremiumDetail {
         return policyOptional.isPresent() ? policyOptional.get() : null;
     }
 
-    public PremiumDetail addPremiumInstallment(int noOfInstallment, BigDecimal installmentAmount) {
+    public PremiumDetail nullifyPremiumInstallment() {
+        this.premiumInstallment = null;
+        this.installments = null;
+        return this;
+    }
+
+    public PremiumDetail nullifyFrequencyPremium() {
+        this.policies = null;
+        return this;
+    }
+
+
+    public PremiumDetail addChoosenPremiumInstallment(Integer noOfInstallment, BigDecimal installmentAmount) {
         PremiumInstallment premiumInstallment = new PremiumInstallment(noOfInstallment, installmentAmount);
         this.premiumInstallment = premiumInstallment;
         return this;
@@ -65,6 +80,15 @@ public class PremiumDetail {
 
     public PremiumDetail addPolicies(Set<Policy> policies) {
         this.policies = policies;
+        return this;
+    }
+
+    public PremiumDetail addInstallments(Integer installmentNo, BigDecimal installmentAmount) {
+        PremiumInstallment premiumInstallment = new PremiumInstallment(installmentNo, installmentAmount);
+        if (isEmpty(this.installments)) {
+            this.installments = Sets.newHashSet();
+        }
+        this.installments.add(premiumInstallment);
         return this;
     }
 
@@ -117,8 +141,5 @@ public class PremiumDetail {
 
     }
 
-    public BigDecimal getTotalInstallmentAmount() {
-        BigDecimal totalInstallmentAmount = this.premiumInstallment.installmentAmount.multiply(new BigDecimal(this.premiumInstallment.getNoOfInstallment()));
-        return totalInstallmentAmount;
-    }
+
 }

@@ -4,6 +4,8 @@ import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.mongodb.BasicDBObject;
+import com.pla.sharedkernel.identifier.QuotationId;
+import org.bson.types.ObjectId;
 import org.nthdimenzion.ddd.domain.annotations.Finder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
@@ -65,14 +67,23 @@ public class GLQuotationFinder {
         return quotation;
     }
 
+    public List<Map> getChildQuotations(String parentQuotationId) {
+        Criteria criteria = Criteria.where("parentQuotationId").in(new ObjectId(parentQuotationId));
+        Query query = new Query(criteria);
+        return mongoTemplate.find(query, Map.class, "group_life_quotation");
+    }
+
     public List<Map> getAllQuotation() {
         return mongoTemplate.findAll(Map.class, "group_life_quotation");
     }
 
-    public List<Map> searchQuotation(String quotationNumber, String agentCode, String proposerName, String agentName) {
+    public List<Map> searchQuotation(String quotationNumber, String agentCode, String proposerName, String agentName, String quotationId) {
         Criteria criteria = Criteria.where("quotationStatus").in(new String[]{"DRAFT", "GENERATED"});
-        if (isEmpty(quotationNumber) && isEmpty(agentCode) && isEmpty(proposerName) && isEmpty(agentName)) {
+        if (isEmpty(quotationNumber) && isEmpty(quotationId) && isEmpty(agentCode) && isEmpty(proposerName) && isEmpty(agentName)) {
             return Lists.newArrayList();
+        }
+        if (isNotEmpty(quotationId)) {
+            criteria = criteria.and("_id").is(new QuotationId(quotationId));
         }
         if (isNotEmpty(quotationNumber)) {
             criteria = criteria.and("quotationNumber").is(quotationNumber);

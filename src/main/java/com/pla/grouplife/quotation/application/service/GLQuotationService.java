@@ -295,7 +295,6 @@ public class GLQuotationService {
     }
 
     public PremiumDetailDto getPremiumDetail(QuotationId quotationId) {
-
         Map quotation = glQuotationFinder.getQuotationById(quotationId.getQuotationId());
         PremiumDetail premiumDetail = (PremiumDetail) quotation.get("premiumDetail");
         if (premiumDetail == null) {
@@ -304,7 +303,12 @@ public class GLQuotationService {
         PremiumDetailDto premiumDetailDto = new PremiumDetailDto(premiumDetail.getAddOnBenefit(), premiumDetail.getProfitAndSolvency(), premiumDetail.getDiscount(), premiumDetail.getPolicyTermValue());
         PremiumDetail.PremiumInstallment premiumInstallment = premiumDetail.getPremiumInstallment();
         if (premiumInstallment != null) {
-            premiumDetailDto = premiumDetailDto.addInstallmentDetail(premiumInstallment.getNoOfInstallment(), premiumInstallment.getInstallmentAmount());
+            premiumDetailDto = premiumDetailDto.addOptedInstallmentDetail(premiumInstallment.getNoOfInstallment(), premiumInstallment.getInstallmentAmount());
+        }
+        if (isNotEmpty(premiumDetail.getInstallments())) {
+            for (PremiumDetail.PremiumInstallment installment : premiumDetail.getInstallments()) {
+                premiumDetailDto = premiumDetailDto.addInstallments(installment.getNoOfInstallment(), installment.getInstallmentAmount());
+            }
         }
         premiumDetailDto = premiumDetailDto.addFrequencyPremiumAmount(premiumDetail.getAnnualPremiumAmount(), premiumDetail.getSemiAnnualPremiumAmount(), premiumDetail.getQuarterlyPremiumAmount(), premiumDetail.getMonthlyPremiumAmount());
         premiumDetailDto = premiumDetailDto.addNetTotalPremiumAmount(premiumDetail.getNetTotalPremium());
@@ -334,7 +338,7 @@ public class GLQuotationService {
     }
 
     public List<GlQuotationDto> searchQuotation(SearchGlQuotationDto searchGlQuotationDto) {
-        List<Map> allQuotations = glQuotationFinder.searchQuotation(searchGlQuotationDto.getQuotationNumber(), searchGlQuotationDto.getAgentCode(), searchGlQuotationDto.getProposerName(), searchGlQuotationDto.getAgentName());
+        List<Map> allQuotations = glQuotationFinder.searchQuotation(searchGlQuotationDto.getQuotationNumber(), searchGlQuotationDto.getAgentCode(), searchGlQuotationDto.getProposerName(), searchGlQuotationDto.getAgentName(),searchGlQuotationDto.getQuotationId());
         if (isEmpty(allQuotations)) {
             return Lists.newArrayList();
         }
