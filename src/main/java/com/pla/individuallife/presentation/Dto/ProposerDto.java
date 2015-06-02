@@ -1,47 +1,42 @@
-package com.pla.individuallife.proposal.presentation.dto;
+package com.pla.individuallife.presentation.Dto;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.pla.sharedkernel.domain.model.Gender;
 import com.pla.sharedkernel.domain.model.MaritalStatus;
-import com.pla.sharedkernel.domain.model.TitleEnum;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.validator.constraints.NotEmpty;
-import org.joda.time.LocalDate;
 import org.nthdimenzion.presentation.LocalJodaDateDeserializer;
 import org.nthdimenzion.presentation.LocalJodaDateSerializer;
+import org.joda.time.LocalDate;
 
 import javax.validation.constraints.NotNull;
 
 /**
- * Created by Prasant on 26-May-15.
+ * Created by ASUS on 26-May-15.
  */
 @Getter
 @Setter
 @NoArgsConstructor
-public class ProposedAssuredDto {
-
+public class ProposerDto {
     private String title;
-
     private String firstName;
-
     private String surname;
-
     private String otherName;
     private String nrc;
-    private boolean isProposer;
 
     @JsonDeserialize(using = LocalJodaDateDeserializer.class)
     @JsonSerialize(using = LocalJodaDateSerializer.class)
-    private LocalDate dateOfBirth;
-    private Gender gender;
-    private Long mobileNumber;
-    private String emailAddress;
+     private LocalDate dateOfBirth;
+
+     private Gender gender;
+     private Long mobileNumber;
+     private String emailAddress;
     private MaritalStatus maritalStatus;
+
     private ResidentialAddressDto residentialAddress;
     private EmploymentDto employment;
     private SpouseDto spouse;
-
 }

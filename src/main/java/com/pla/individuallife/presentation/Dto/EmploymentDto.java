@@ -1,4 +1,4 @@
-package com.pla.individuallife.proposal.presentation.dto;
+package com.pla.individuallife.presentation.Dto;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
@@ -10,7 +10,7 @@ import org.nthdimenzion.presentation.LocalJodaDateDeserializer;
 import org.nthdimenzion.presentation.LocalJodaDateSerializer;
 
 /**
- * Created by Prasant on 26-May-15.
+ * Created by ASUS on 26-May-15.
  */
 
 @Getter
@@ -23,11 +23,9 @@ public class EmploymentDto {
 
     @JsonDeserialize(using = LocalJodaDateDeserializer.class)
     @JsonSerialize(using = LocalJodaDateSerializer.class)
-    private LocalDate employmentDate;// "11/07/2008",
-    private String employmentType;
+    LocalDate employmentDate;// "11/07/2008",
+    private int employmentType;
     private String address1;
-    private String address2;
-    private int postalCode;
     private String province;
     private String town;
 }

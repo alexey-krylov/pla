@@ -1,9 +1,6 @@
 package com.pla.individuallife.quotation.domain.model.proposal;
 
-import com.pla.individuallife.proposal.domain.model.Address;
-import com.pla.individuallife.proposal.domain.model.EmploymentDetail;
-import com.pla.individuallife.proposal.domain.model.ProposedAssured;
-import com.pla.individuallife.proposal.domain.model.ProposedAssuredBuilder;
+import com.pla.individuallife.proposal.domain.model.*;
 import com.pla.sharedkernel.domain.model.Gender;
 import com.pla.sharedkernel.domain.model.MaritalStatus;
 import com.pla.sharedkernel.domain.model.TitleEnum;
@@ -30,19 +27,20 @@ public class ProposedAssuredBuilderUnitTest {
     public void givenAProposalAssuredBuilder_whenAllTheSetUpIsCorrect_thenItShouldCreateProposalAssured(){
 
         proposedAssuredBuilder1=new ProposedAssuredBuilder()
-                .withTitle(TitleEnum.DR)
+                .withTitle("DR")
                 .withFirstName("NthDimenzion")
                 .withSurname("PvtLtd")
                 .withEmailAddress("@XYZ.com")
-                .withEmploymentDetail(new EmploymentDetail())
+                .withEmploymentDetail(new EmploymentDetailBuilder().createEmploymentDetail())
                 .withGender(Gender.MALE).withDateOfBirth(localDate)
                 .withMobileNumber(98765432)
                 .withMaritalStatus(MaritalStatus.MARRIED)
                 .withSpouseFirstName("NthDimenzion")
                 .withSpouseLastName("PvtLtd")
                 .withSpouseEmailAddress("abc@nthDimenzion")
-                .withEmploymentDetail(new EmploymentDetail())
-                .withResidentialAddress(new Address())
+                .withEmploymentDetail(new EmploymentDetailBuilder().createEmploymentDetail())
+//                .withResidentialAddress(new AddressBuilder().createAddress())
+                .withResidentialAddress(new ResidentialAddress(new AddressBuilder().createAddress(),897784243))
                 .withIsProposer(true)
                 .withNrc("123456/78/9");
         proposedAssured = proposedAssuredBuilder1.createProposedAssured();

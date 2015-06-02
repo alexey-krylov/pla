@@ -3,6 +3,7 @@ package com.pla.individuallife.proposal.domain.model;
 import com.pla.sharedkernel.domain.model.Gender;
 import com.pla.sharedkernel.domain.model.MaritalStatus;
 import com.pla.sharedkernel.domain.model.TitleEnum;
+import lombok.AccessLevel;
 import lombok.Getter;
 import org.joda.time.LocalDate;
 
@@ -12,7 +13,7 @@ import org.joda.time.LocalDate;
 @Getter
 public class Proposer {
 
-    private TitleEnum title;
+    private String title;
     private String firstName;
     private String surname;
     private String nrc;
@@ -25,9 +26,9 @@ public class Proposer {
     private String spouseLastName;
     private String spouseEmailAddress;
     private EmploymentDetail employmentDetail;
-    private Address residentialAddress;
+    private ResidentialAddress residentialAddress;
 
-    public Proposer(TitleEnum title, String firstName, String surname, String nrc, LocalDate dateOfBirth, Gender gender, long mobileNumber, String emailAddress, MaritalStatus maritalStatus, String spouseFirstName, String spouseLastName, String spouseEmailAddress, EmploymentDetail employmentDetail, Address residentialAddress) {
+    public Proposer(String title, String firstName, String surname, String nrc, LocalDate dateOfBirth, Gender gender, long mobileNumber, String emailAddress, MaritalStatus maritalStatus, String spouseFirstName, String spouseLastName, String spouseEmailAddress, EmploymentDetail employmentDetail, ResidentialAddress residentialAddress) {
         this.title = title;
         this.firstName = firstName;
         this.surname = surname;
