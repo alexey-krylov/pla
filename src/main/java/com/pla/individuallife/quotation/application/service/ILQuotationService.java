@@ -25,8 +25,6 @@ import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-import static org.nthdimenzion.utils.UtilValidator.isNotEmpty;
-
 /**
  * Created by Karunakar on 5/13/2015.
  */
@@ -83,34 +81,39 @@ public class ILQuotationService {
 
         premiumDetailDto.setPlanAnnualPremium(ComputedPremiumDto.getAnnualPremium(computedPremiums));
 
-        if (isNotEmpty(quotation.get("COVERAGEID").toString())) {
-            premiumCalculationDto = new PremiumCalculationDto(new PlanId(quotation.get("PLANID").toString()), LocalDate.now(), PremiumFrequency.ANNUALLY, 365);
-            premiumCalculationDto = premiumCalculationDto.addCoverage(new CoverageId(quotation.get("COVERAGEID").toString()));
-            premiumInfluencingFactors = premiumFinder.findPremium(premiumCalculationDto).getPremiumInfluencingFactors();
+        List<Map<String, Object>> riderList = ilQuotationFinder.getQuotationforPremiumWithRiderById(quotationId.getQuotationId());
 
-            for (PremiumInfluencingFactor premiumInfluencingFactor : premiumInfluencingFactors) {
-                if(premiumInfluencingFactor.name().equalsIgnoreCase(String.valueOf(PremiumInfluencingFactor.SUM_ASSURED)))
-                    premiumCalculationDto.addInfluencingFactorItemValue(PremiumInfluencingFactor.SUM_ASSURED, quotation.get("RIDER_SA").toString());
-                if(premiumInfluencingFactor.name().equalsIgnoreCase(String.valueOf(PremiumInfluencingFactor.GENDER)))
-                    premiumCalculationDto.addInfluencingFactorItemValue(PremiumInfluencingFactor.GENDER, quotation.get("ASSURED_GENDER").toString());
-                if(premiumInfluencingFactor.name().equalsIgnoreCase(String.valueOf(PremiumInfluencingFactor.AGE)))
-                    premiumCalculationDto.addInfluencingFactorItemValue(PremiumInfluencingFactor.AGE, String.valueOf(age));
-                if(premiumInfluencingFactor.name().equalsIgnoreCase(String.valueOf(PremiumInfluencingFactor.POLICY_TERM)))
-                    premiumCalculationDto.addInfluencingFactorItemValue(PremiumInfluencingFactor.POLICY_TERM, quotation.get("COVERTERM").toString());
-                if(premiumInfluencingFactor.name().equalsIgnoreCase(String.valueOf(PremiumInfluencingFactor.PREMIUM_PAYMENT_TERM)))
-                    premiumCalculationDto.addInfluencingFactorItemValue(PremiumInfluencingFactor.PREMIUM_PAYMENT_TERM, quotation.get("RIDER_PREMIUM_WAIVER").toString());
-                if(premiumInfluencingFactor.name().equalsIgnoreCase(String.valueOf(PremiumInfluencingFactor.OCCUPATION_CLASS)))
-                    premiumCalculationDto.addInfluencingFactorItemValue(PremiumInfluencingFactor.OCCUPATION_CLASS, quotation.get("ASSURED_OCCUPATION").toString());
+        if(riderList != null) {
+            for (Map  rider : riderList){
+                premiumCalculationDto = new PremiumCalculationDto(new PlanId(quotation.get("PLANID").toString()), LocalDate.now(), PremiumFrequency.ANNUALLY, 365);
+                premiumCalculationDto = premiumCalculationDto.addCoverage(new CoverageId(rider.get("COVERAGEID").toString()));
+                premiumInfluencingFactors = premiumFinder.findPremium(premiumCalculationDto).getPremiumInfluencingFactors();
+
+                for (PremiumInfluencingFactor premiumInfluencingFactor : premiumInfluencingFactors) {
+                    if(premiumInfluencingFactor.name().equalsIgnoreCase(String.valueOf(PremiumInfluencingFactor.SUM_ASSURED)))
+                        premiumCalculationDto.addInfluencingFactorItemValue(PremiumInfluencingFactor.SUM_ASSURED, rider.get("RIDER_SA").toString());
+                    if(premiumInfluencingFactor.name().equalsIgnoreCase(String.valueOf(PremiumInfluencingFactor.GENDER)))
+                        premiumCalculationDto.addInfluencingFactorItemValue(PremiumInfluencingFactor.GENDER, quotation.get("ASSURED_GENDER").toString());
+                    if(premiumInfluencingFactor.name().equalsIgnoreCase(String.valueOf(PremiumInfluencingFactor.AGE)))
+                        premiumCalculationDto.addInfluencingFactorItemValue(PremiumInfluencingFactor.AGE, String.valueOf(age));
+                    if(premiumInfluencingFactor.name().equalsIgnoreCase(String.valueOf(PremiumInfluencingFactor.POLICY_TERM)))
+                        premiumCalculationDto.addInfluencingFactorItemValue(PremiumInfluencingFactor.POLICY_TERM, rider.get("COVERTERM").toString());
+                    if(premiumInfluencingFactor.name().equalsIgnoreCase(String.valueOf(PremiumInfluencingFactor.PREMIUM_PAYMENT_TERM)))
+                        premiumCalculationDto.addInfluencingFactorItemValue(PremiumInfluencingFactor.PREMIUM_PAYMENT_TERM, rider.get("RIDER_PREMIUM_WAIVER").toString());
+                    if(premiumInfluencingFactor.name().equalsIgnoreCase(String.valueOf(PremiumInfluencingFactor.OCCUPATION_CLASS)))
+                        premiumCalculationDto.addInfluencingFactorItemValue(PremiumInfluencingFactor.OCCUPATION_CLASS, quotation.get("ASSURED_OCCUPATION").toString());
+                }
+                computedPremiums = premiumCalculator.calculateBasicPremium(premiumCalculationDto);
+                RiderPremiumDto rd = new RiderPremiumDto();
+                rd.setCoverageId(new CoverageId (rider.get("COVERAGEID").toString()));
+                if(rider.get("COVERAGENAME") != null )
+                    rd.setCoverageName(new CoverageName (rider.get("COVERAGENAME").toString()));
+                computedPremiums = premiumCalculator.calculateBasicPremium(premiumCalculationDto);
+                rd.setAnnualPremium(ComputedPremiumDto.getAnnualPremium(computedPremiums));
+                riderPremiumDtoSet.add(rd);
             }
-            computedPremiums = premiumCalculator.calculateBasicPremium(premiumCalculationDto);
-            RiderPremiumDto rd = new RiderPremiumDto();
-            rd.setCoverageId(new CoverageId (quotation.get("COVERAGEID").toString()));
-            if(quotation.get("COVERAGENAME") != null )
-            rd.setCoverageName(new CoverageName (quotation.get("COVERAGENAME").toString()));
-            computedPremiums = premiumCalculator.calculateBasicPremium(premiumCalculationDto);
-            rd.setAnnualPremium(ComputedPremiumDto.getAnnualPremium(computedPremiums));
-            riderPremiumDtoSet.add(rd);
         }
+
         premiumDetailDto.setRiderPremiumDtos(riderPremiumDtoSet);
 
         BigDecimal totalPremium = premiumDetailDto.getPlanAnnualPremium().add(riderPremiumDtoSet.stream().map(RiderPremiumDto::getAnnualPremium).reduce(BigDecimal::add).get());
