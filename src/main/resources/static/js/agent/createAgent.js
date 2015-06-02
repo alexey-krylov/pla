@@ -12,7 +12,10 @@ angular.module('createAgent',['common','ngRoute','mgcrea.ngStrap.select','mgcrea
                 isEmpty:false,
                 isSearched:false
             };
-            $scope.agentDetails={};
+            $scope.agentDetails={
+                teamDetail:{"teamId":"","teamName":"","teamCode":"","currentTeamLeader":"","firstName":"","lastName":"","fromDate":""
+                    ,"endDate":"","branchCode":"","regionCode":""}
+            };
             $scope.isFormSubmitted =  false;
             /*Initially hide the alert window
             * which will be shown only when the search result is empty
@@ -105,8 +108,6 @@ angular.module('createAgent',['common','ngRoute','mgcrea.ngStrap.select','mgcrea
                         $scope.teamDetailsForm.$valid=true;
                         $scope.teamDetailsForm.$submitted=true;
 
-                        $scope.agentDetails.teamDetail={};
-
                     }
                 }
 
@@ -118,8 +119,25 @@ angular.module('createAgent',['common','ngRoute','mgcrea.ngStrap.select','mgcrea
                     var provinceDetails = $scope.getProvinceDetails(newVal);
                     $scope.physicalCities =  provinceDetails.cities;
                     $scope.agentDetails.physicalAddress.physicalGeoDetail.provinceName = provinceDetails.provinceName;
+
                 }
             });
+
+            $scope.$watch('selectedWizard',function(newVal,oldVal){
+                if(newVal >1){
+                    if($scope.agentDetails) {
+                        if ($scope.agentDetails.channelType) {
+                            if ($scope.agentDetails.channelType.channelName == 'Broker') {
+                                $scope.teamDetailsForm.$valid = true;
+                                $scope.teamDetailsForm.$submitted = true;
+
+
+                            }
+                        }
+                    }
+                }
+            });
+
             $scope.$watch('agentDetails.contactDetail.geoDetail.provinceCode',function(newVal,oldVal){
                 if(newVal){
                     var provinceDetails = $scope.getProvinceDetails(newVal);
@@ -213,13 +231,14 @@ angular.module('createAgent',['common','ngRoute','mgcrea.ngStrap.select','mgcrea
                 $scope.branchName =teamDetails.branchName;
                 $scope.regionName = teamDetails.regionName;
 
+
             };
             $scope.cancel = function(){
                 $window.location.href = "listagent"
             };
             $scope.update =  function(){
-                $scope.isFormSubmitted = true;
-                console.log($scope.agentDetails);
+               $scope.isFormSubmitted = true;
+              //  console.log($scope.agentDetails);
                 if($scope.agentDetailsForm.$valid && $scope.teamDetailsForm.$valid && $scope.contactDetailsForm.$valid){
                     $http.post('/pla/core/agent/update',transformJson.createCompatibleJson(angular.copy($scope.agentDetails),$scope.physicalCities,$scope.primaryCities,$scope.trainingCompleteOn,true))
                         .success(function(response, status, headers, config){
@@ -233,11 +252,11 @@ angular.module('createAgent',['common','ngRoute','mgcrea.ngStrap.select','mgcrea
             };
             $scope.submit = function(){
                 $scope.isFormSubmitted = true;
-               // console.log($scope.teamDetailsForm.$valid);
-                //console.log($scope.agentDetails);
-
-              //  console.log($scope.teamDetailsForm.$submitted);
-              if($scope.agentDetailsForm.$valid && $scope.teamDetailsForm.$valid && $scope.contactDetailsForm.$valid){
+                if ($scope.agentDetails.channelType.channelName == 'Broker') {
+                    $scope.teamDetailsForm.$valid = true;
+                    $scope.teamDetailsForm.$submitted = true;
+                }
+              if($scope.agentDetailsForm.$valid && $scope.teamDetailsForm.$valid  && $scope.contactDetailsForm.$valid){
                     $http.post('/pla/core/agent/create',transformJson.createCompatibleJson(angular.copy($scope.agentDetails),$scope.physicalCities,$scope.primaryCities,$scope.trainingCompleteOn,false))
                         .success(function(response, status, headers, config){
                             if(response.status=="200"){
@@ -259,10 +278,13 @@ angular.module('createAgent',['common','ngRoute','mgcrea.ngStrap.select','mgcrea
                 agentDetails.agentProfile.trainingCompleteOn = formatJSDateToDDMMYYYY(trainingCompleteOn);
                 delete agentDetails.agentStatus;
             }
-            if(agentDetails.teamDetail.regionName) {
-                delete agentDetails.teamDetail.regionName;
-                delete agentDetails.teamDetail.branchName;
+            if(agentDetails.teamDetail){
+                if(agentDetails.teamDetail.regionName) {
+                    delete agentDetails.teamDetail.regionName;
+                    delete agentDetails.teamDetail.branchName;
+                }
             }
+
                  if (!agentDetails.licenseNumber || _.size(agentDetails.licenseNumber.licenseNumber) == 0) {
                     delete agentDetails.licenseNumber;
                    }
