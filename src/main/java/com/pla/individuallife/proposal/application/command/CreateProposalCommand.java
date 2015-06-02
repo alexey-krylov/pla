@@ -1,10 +1,12 @@
 package com.pla.individuallife.proposal.application.command;
 
+import com.pla.individuallife.identifier.ProposalId;
 import com.pla.individuallife.proposal.presentation.dto.ProposedAssuredDto;
 import com.pla.individuallife.proposal.presentation.dto.ProposerDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.security.core.userdetails.UserDetails;
 
 /**
  * Created by Prasant on 26-May-15.
@@ -17,5 +19,8 @@ public class CreateProposalCommand {
     private ProposedAssuredDto proposedAssured;
 
     private ProposerDto proposer;
+
+    private UserDetails userDetails;
+    private ProposalId proposalId;
 
 }

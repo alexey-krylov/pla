@@ -31,7 +31,7 @@ public class ProposalNumberGeneratorTest {
     @Test
     public void testGeneration() {
         ProposalNumberGenerator proposalNumberGenerator = new ProposalNumberGenerator(sequenceGenerator);
-        String proposalNumber = proposalNumberGenerator.getProposalNumber(LocalDate.now());
+        String proposalNumber = proposalNumberGenerator.getProposalNumber();
         String currentDateInString = LocalDate.now().toString(DateTimeFormat.forPattern("dd/MM/yyyy"));
         String month = currentDateInString.substring(3, 5).trim();
         String year = currentDateInString.substring(8, 10).trim();

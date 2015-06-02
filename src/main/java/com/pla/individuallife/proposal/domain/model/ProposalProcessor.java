@@ -1,5 +1,6 @@
 package com.pla.individuallife.proposal.domain.model;
 
+import com.pla.individuallife.identifier.ProposalId;
 import lombok.Getter;
 
 /**
@@ -14,11 +15,4 @@ public class ProposalProcessor {
         this.userName = userName;
     }
 
-    public ProposalAggregate generateProposal(String proposalNumber) {
-        return null;
-    }
-
-    public ProposalAggregate updateProposal(String proposalNumber) {
-        return null;
-    }
 }

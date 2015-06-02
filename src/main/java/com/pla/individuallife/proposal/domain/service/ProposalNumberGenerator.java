@@ -24,10 +24,10 @@ public class ProposalNumberGenerator {
     /**
      * @return transactionType-division-runningSequence-SystemMonthSystemYear
      */
-    public String getProposalNumber(LocalDate now) {
+    public String getProposalNumber() {
         String proposalNumber = sequenceGenerator.getSequence(ProposalAggregate.class);
         proposalNumber = StringUtils.leftPad(proposalNumber, 7, "0");
-        String currentDateInString = now.toString(DateTimeFormat.forPattern("dd/MM/yyyy"));
+        String currentDateInString = LocalDate.now().toString(DateTimeFormat.forPattern("dd/MM/yyyy"));
         String month = currentDateInString.substring(3, 5).trim();
         String year = currentDateInString.substring(8, 10).trim();
         proposalNumber = new String("6-2-" + proposalNumber + "-" + month + year);

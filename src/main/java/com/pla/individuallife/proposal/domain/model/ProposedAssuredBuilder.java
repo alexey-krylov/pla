@@ -6,7 +6,7 @@ import com.pla.sharedkernel.domain.model.TitleEnum;
 import org.joda.time.LocalDate;
 
 public class ProposedAssuredBuilder {
-    private TitleEnum title;
+    private String title;
     private String firstName;
     private String surname;
     private String nrc;
@@ -18,11 +18,11 @@ public class ProposedAssuredBuilder {
     private String spouseFirstName;
     private String spouseLastName;
     private String spouseEmailAddress;
+    private ResidentialAddress residentialAddress;
     private EmploymentDetail employmentDetail;
-    private Address residentialAddress;
     private boolean isProposer;
 
-    public ProposedAssuredBuilder withTitle(TitleEnum title) {
+    public ProposedAssuredBuilder withTitle(String title) {
         this.title = title;
         return this;
     }
@@ -87,7 +87,7 @@ public class ProposedAssuredBuilder {
         return this;
     }
 
-    public ProposedAssuredBuilder withResidentialAddress(Address residentialAddress) {
+    public ProposedAssuredBuilder withResidentialAddress(ResidentialAddress residentialAddress) {
         this.residentialAddress = residentialAddress;
         return this;
     }

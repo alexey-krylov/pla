@@ -1,13 +1,12 @@
 package com.pla.individuallife.proposal.domain.model;
 
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.google.common.base.Preconditions;
 import com.pla.individuallife.identifier.ProposalId;
-import com.pla.sharedkernel.domain.model.ProposalNumber;
 import org.axonframework.eventsourcing.annotation.AbstractAnnotatedAggregateRoot;
 import org.axonframework.eventsourcing.annotation.AggregateIdentifier;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.security.access.AuthorizationServiceException;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.Id;
 import java.math.BigDecimal;
@@ -16,6 +15,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import static com.pla.sharedkernel.util.RolesUtil.hasIndividualLifeProposalProcessorRole;
+
 /**
  * Created by pradyumna on 22-05-2015.
  */
@@ -23,12 +24,11 @@ import java.util.Set;
 public class ProposalAggregate extends AbstractAnnotatedAggregateRoot<ProposalId> {
 
     private final BigDecimal PERCENTAGE = new BigDecimal(100.00);
-    private ProposalSpecification specification;
+    private ProposalSpecification specification=new ProposalSpecification();
     private ProposedAssured proposedAssured;
     private Proposer proposer;
     private Set<RiderDetail> riders;
-    @JsonSerialize(using = ToStringSerializer.class)
-    private ProposalNumber proposalNumber;
+    private String proposalNumber;
     @Id
     @AggregateIdentifier
     private ProposalId proposalId;
@@ -36,17 +36,21 @@ public class ProposalAggregate extends AbstractAnnotatedAggregateRoot<ProposalId
     private List<Beneficiary> beneficiaries;
     private BigDecimal totalBeneficiaryShare = BigDecimal.ZERO;
 
-    public ProposalAggregate() {
+    ProposalAggregate() {
         riders = new HashSet<RiderDetail>();
         beneficiaries = new ArrayList<Beneficiary>();
     }
 
-    public ProposalAggregate(ProposalNumber proposalNumber, ProposalPlanDetail proposalPlanDetail, ProposedAssured proposedAssured, Proposer proposer, Set<RiderDetail> riders) {
+    public ProposalAggregate(UserDetails userDetails, ProposalId proposalId, String proposalNumber, ProposedAssured proposedAssured, Proposer proposer) {
+        boolean hasProposalPreprocessorRole = hasIndividualLifeProposalProcessorRole(userDetails.getAuthorities());
+        if (!hasProposalPreprocessorRole) {
+            throw new AuthorizationServiceException("User does not have Individual Life Proposal processor(ROLE_PROPOSAL_PROCESSOR) authority");
+        }
+        Preconditions.checkArgument(hasProposalPreprocessorRole);
         this.proposalNumber = proposalNumber;
+        this.proposalId = proposalId;
         assignProposedAssured(proposedAssured);
         assignProposer(proposer);
-        assignPlan(proposalPlanDetail);
-        this.riders = riders;
     }
 
     private void assignProposedAssured(ProposedAssured proposedAssured) {

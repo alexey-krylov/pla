@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.pla.sharedkernel.domain.model.Gender;
 import com.pla.sharedkernel.domain.model.MaritalStatus;
+import com.pla.sharedkernel.domain.model.TitleEnum;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -12,7 +13,7 @@ import org.nthdimenzion.presentation.LocalJodaDateSerializer;
 import org.joda.time.LocalDate;
 
 /**
- * Created by ASUS on 26-May-15.
+ * Created by Prasant on 26-May-15.
  */
 @Getter
 @Setter
@@ -36,4 +37,5 @@ public class ProposerDto {
     private ResidentialAddressDto residentialAddress;
     private EmploymentDto employment;
     private SpouseDto spouse;
+    private boolean isProposer;
 }
