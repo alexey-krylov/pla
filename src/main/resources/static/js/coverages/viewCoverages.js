@@ -9,7 +9,7 @@ require(['jquery','bootstrap','datatables'],function(){
         $('#coverageName').focus()
     });
 
-    /* $('#coverage-table').dataTable({
+     $('#coverage-table').dataTable({
         "bProcessing": true,
         "bDeferRender": true,
           "bFilter": true,
@@ -27,7 +27,7 @@ require(['jquery','bootstrap','datatables'],function(){
              {"sWidth": "45%","bSearchable": true  },
             {"sWidth": "5%","bSearchable": false,"bSortable":false},
             {"sWidth": "15%","bSearchable": false,"bSortable":false }
-     ]});*/
+     ]});
 
     openPopover();
     $('.next').click(function () {
@@ -66,6 +66,10 @@ var modalOptions = {
 };
 
 var openCoverageCreateModal = function(){
+    $('#coverageName').val(coverageName).attr("disabled",false);
+    $('#coverageCode').val(coverageCode).attr("disabled",false);
+    $('#description').val(description).attr("disabled",false);
+    $('#checkBenefits').removeAttr("disabled");
     $('#coverageName').val(null);
     $('#coverageCode').val(null);
     $('#description').val(null);
@@ -94,26 +98,23 @@ var openCoverageCreateModal = function(){
            var keyValue = value.split("=");
            keyValue[0] = keyValue[0].replace("BenefitDto","");
           keyValue[0] = keyValue[0].replace("{","");
-         // keyValue[1] = keyValue[1].replace("}","");
-          if(keyValue[0].trim()=="benefitId"){
+           if(keyValue[0].trim()=="benefitId"){
                     selected.push(keyValue[1].replace(/'/g, ''));
           }
       });
      return selected;
  };
 var openCoverageUpdateModal = function(coverageId,coverageName,coverageCode,description,benefitList){
-  $('#coverageName').val(coverageName);
+  $('#coverageName').val(coverageName).attr("disabled",false);
   $('#coverageCode').val(coverageCode).attr("disabled",true);
-   $('#description').val(description);
+  $('#description').val(description).attr("disabled",false);
+  $('#checkBenefits').removeAttr("disabled");
   var benefit=[];
   benefitMap= convertThymeleafObjectToJavascriptObject(benefitList);
-  var element = angular.element("#selectedBenefits");
-  var controller = element.controller();
-  var scope = element.scope();
- scope.$apply(function(){
-             scope.createCoverage.benefitIds = benefitMap;
-});
-
+    var scope = angular.element($("#checkBenefits")).scope();
+    scope.$apply(function(){
+        scope.createCoverage.benefitIds = benefitMap;
+    });
     $('#createUpdate').text('Update');
     $('#alert').hide();
     $('#alert-danger').hide();
@@ -132,18 +133,14 @@ var updateCoverage = function(coverageId){
     if(validate()){
         return;
     }
-    var coverageData = {
-
-    };
+    var coverageData = {};
     $('#createCoverage *').filter(':text').each(function(key,value){
         coverageData[$(value)[0].id]=$(value).val();
     });
     coverageData["coverageId"] = coverageId;
-    var updatedBenefit = [];
-    updatedBenefit= angular.element("#selectedBenefits").scope().createCoverage.benefitIds;
-    coverageData["benefitIds"]=  updatedBenefit;
-    //console.log(coverageData);
-    $.ajax({
+    var scope = angular.element($("#checkBenefits")).scope();
+    coverageData["benefitIds"]=  scope.createCoverage.benefitIds;
+   $.ajax({
         url: '/pla/core/coverages/update',
         type: 'POST',
         data: JSON.stringify(coverageData),
@@ -155,7 +152,7 @@ var updateCoverage = function(coverageId){
                 document.getElementById("coverageName").disabled = true;
                 document.getElementById("coverageCode").disabled = true;
                 document.getElementById("description").disabled = true;
-                $('#selectedBenefits').prop('disabled', 'disabled');
+                $('#checkBenefits').prop('disabled', 'disabled');
                 $('#cancel-button').text('Done');
                 $('#createUpdate').hide();
             }else if(msg.status=='500'){
@@ -164,7 +161,7 @@ var updateCoverage = function(coverageId){
                 document.getElementById("coverageName").disabled = true;
                 document.getElementById("coverageCode").disabled = true;
                 document.getElementById("description").disabled = true;
-                $('#selectedBenefits').prop('disabled', 'disabled');
+                $('#checkBenefits').prop('disabled', 'disabled');
             }
         }
     });
@@ -178,10 +175,8 @@ var createCoverage = function(){
     $('#createCoverage *').filter(':text').each(function(key,value){
           coverageData[$(value)[0].id]=$(value).val();
     });
-     var selected = [];
-    selected= angular.element("#selectedBenefits").scope().createCoverage.benefitIds;
-   // console.log("***************->"+ coverageData);
-    coverageData["benefitIds"]=  selected;
+    var scope = angular.element($("#checkBenefits")).scope();
+    coverageData["benefitIds"]=  scope.createCoverage.benefitIds;
     $.ajax({
         url: '/pla/core/coverages/create',
         type: 'POST',
@@ -194,7 +189,7 @@ var createCoverage = function(){
                 document.getElementById("coverageName").disabled = true;
                 document.getElementById("coverageCode").disabled = true;
                 document.getElementById("description").disabled = true;
-                $('#selectedBenefits').prop('disabled', 'disabled');
+                $('#checkBenefits').prop('disabled', 'disabled');
                 $('#cancel-button').text('Done');
                 $('#createUpdate').hide();
             }else if(msg.status=='500'){
