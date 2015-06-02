@@ -56,7 +56,7 @@ public class Region implements ICrudEntity {
         RegionalManagerFulfillment currentRegionFulfillment = getRegionalManagerFulfillmentForARegionalManager(this.regionalManager);
         if (currentRegionFulfillment != null) {
             boolean isRegionalManagerExists = isNewRegionalManagerFulfillmentValid(effectiveFrom, currentRegionFulfillment.getFromDate());
-            if (isRegionalManagerExists) {
+            if (!isRegionalManagerExists) {
                 throw new RegionDomainException("Another Regional Manager has already been associated with this region for this period");
             }
             this.regionalManagerFulfillments = updateRegionalMangerFulfillment(this.regionalManagerFulfillments, currentRegionFulfillment.getRegionalManager(), effectiveFrom.plusDays(-1));
