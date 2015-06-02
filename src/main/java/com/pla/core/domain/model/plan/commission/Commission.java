@@ -164,7 +164,9 @@ public class Commission implements ICrudEntity {
         try {
             checkArgument(fromDate.isAfter(this.fromDate));
         } catch (IllegalArgumentException e) {
-            throw new CommissionDomainException("From Date should be greater than " + this.fromDate);
+            String message = CommissionType.NORMAL.equals(this.commissionType) ? "Commission has already been associated with this product and designation for this period" :
+                    "Over-ride Commission has already been associated with this product and designation for this period";
+            throw new CommissionDomainException(message);
         }
     }
 }
