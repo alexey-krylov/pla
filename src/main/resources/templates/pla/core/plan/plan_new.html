@@ -613,7 +613,9 @@
                     <span class="sr-only">Error:</span>{{stepErrorMsg}}
                 </div>
                 <div style="float:right;padding:0px 0px 2px 0px">
-                    <button class="btn btn-default" ng-click="showCoverageForm()">Add Coverage</button>
+                    <button name="showCoverageButton" class="btn btn-default"
+                            ng-click="showCoverageForm(null,false,$event)">Add Coverage
+                    </button>
                 </div>
                 <table class="table table-bordered table-hover table-stripped" style="background-color: #fff">
                     <thead>
