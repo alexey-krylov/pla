@@ -6,7 +6,6 @@
     <META HTTP-EQUIV="Pragma" CONTENT="no-cache"/>
     <META HTTP-EQUIV="Expires" CONTENT="-1"/>
     <title></title>
-
     <link href="http://cdn.jsdelivr.net/bootstrap/3.3.4/css/bootstrap.min.css"
           th:href="@{/webjars/bootstrap/3.3.4/css/bootstrap.min.css}" rel="stylesheet" />
     <link href="http://cdn.datatables.net/1.10.4/css/jquery.dataTables.css"
@@ -146,7 +145,7 @@
                                     <li><a th:href="@{/core/mandatorydocument/view}">Mandatory Documents </a></li>
                                     <li class="dropdown"><a href="#">General Information
                                         <i class="glyphicon glyphicon-chevron-right "></i></a>
-                                        <ul style="display: none;" class="dropdown-menu sub-menu-level2 bold">
+                                        <ul style="display: none;" class="dropdown-menu sub-menu-level1 bold">
                                             <li class='dropdown'><a href="#">Product Line Information</a>
                                                 <ul style="display: none;" class="dropdown-menu sub-menu-level2 bold">
                                                     <li><a th:href="@{/core/productlineinformation/openview}">View</a>
@@ -204,8 +203,6 @@
     /*global jQuery:false */
     $(document).ready(function ($) {
         "use strict";
-
-
     });
     /*]]>*/
 </script>
