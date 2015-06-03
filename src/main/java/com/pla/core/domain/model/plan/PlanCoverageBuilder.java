@@ -79,7 +79,7 @@ public class PlanCoverageBuilder {
     }
 
     public PlanCoverageBuilder withMinAndMaxAge(int minAge, int maxAge) {
-        checkArgument(minAge < maxAge);
+        checkArgument(minAge <= maxAge,"Minimum Age should be less than Maximum Age");
         this.minAge = minAge;
         this.maxAge = maxAge;
         return this;

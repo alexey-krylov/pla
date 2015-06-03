@@ -294,12 +294,11 @@ public class GroupLifeQuotationController {
 
     @RequestMapping(value = "/recalculatePremium", method = RequestMethod.POST)
     @ResponseBody
-    public Result reCalculatePremium(@RequestBody UpdateGLQuotationWithPremiumDetailCommand updateGLQuotationWithPremiumDetailCommand, HttpServletRequest request) {
+    public Result reCalculatePremium(@RequestBody GLRecalculatedInsuredPremiumCommand glRecalculatedInsuredPremiumCommand, HttpServletRequest request) {
         PremiumDetailDto premiumDetailDto = null;
         try {
-            updateGLQuotationWithPremiumDetailCommand.setUserDetails(getLoggedInUserDetail(request));
-            commandGateway.sendAndWait(updateGLQuotationWithPremiumDetailCommand);
-            premiumDetailDto = glQuotationService.getPremiumDetail(new QuotationId(updateGLQuotationWithPremiumDetailCommand.getQuotationId()));
+            glRecalculatedInsuredPremiumCommand.setUserDetails(getLoggedInUserDetail(request));
+            premiumDetailDto = glQuotationService.recalculatePremium(glRecalculatedInsuredPremiumCommand);
             return Result.success("Premium recalculated successfully", premiumDetailDto);
         } catch (Exception e) {
             return Result.success(e.getMessage());

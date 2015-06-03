@@ -167,12 +167,14 @@ public class GroupLifeQuotation extends AbstractAggregateRoot<QuotationId> imple
 
     public BigDecimal getNetAnnualPremiumPaymentAmount(PremiumDetail premiumDetail) {
         BigDecimal totalInsuredPremiumAmount = this.getTotalBasicPremiumForInsured();
-        BigDecimal addOnBenefitAmount = premiumDetail.getAddOnBenefit() != null ? totalInsuredPremiumAmount.multiply((premiumDetail.getAddOnBenefit().divide(new BigDecimal(100))).setScale(2, BigDecimal.ROUND_CEILING)) : BigDecimal.ZERO;
-        BigDecimal profitAndSolvencyAmount = premiumDetail.getProfitAndSolvency() != null ? totalInsuredPremiumAmount.multiply((premiumDetail.getProfitAndSolvency().divide(new BigDecimal(100))).setScale(2, BigDecimal.ROUND_CEILING)) : BigDecimal.ZERO;
-        BigDecimal discountAmount = premiumDetail.getDiscount() != null ? totalInsuredPremiumAmount.multiply((premiumDetail.getDiscount().divide(new BigDecimal(100))).setScale(2, BigDecimal.ROUND_CEILING)) : BigDecimal.ZERO;
-        BigDecimal netPremiumAmount = (totalInsuredPremiumAmount.add(addOnBenefitAmount).add(profitAndSolvencyAmount)).subtract(discountAmount);
-        netPremiumAmount = netPremiumAmount.setScale(2,BigDecimal.ROUND_CEILING);
-        return netPremiumAmount;
+        BigDecimal addOnBenefitAmount = premiumDetail.getAddOnBenefit() == null ? BigDecimal.ZERO : totalInsuredPremiumAmount.multiply((premiumDetail.getAddOnBenefit().divide(new BigDecimal(100))));
+        totalInsuredPremiumAmount = totalInsuredPremiumAmount.add(addOnBenefitAmount);
+        BigDecimal profitAndSolvencyAmount = premiumDetail.getProfitAndSolvency() == null ? BigDecimal.ZERO : totalInsuredPremiumAmount.multiply((premiumDetail.getProfitAndSolvency().divide(new BigDecimal(100))));
+        totalInsuredPremiumAmount = totalInsuredPremiumAmount.add(profitAndSolvencyAmount);
+        BigDecimal discountAmount = premiumDetail.getDiscount() == null ? BigDecimal.ZERO : totalInsuredPremiumAmount.multiply((premiumDetail.getDiscount().divide(new BigDecimal(100))));
+        totalInsuredPremiumAmount = totalInsuredPremiumAmount.subtract(discountAmount);
+        totalInsuredPremiumAmount = totalInsuredPremiumAmount.setScale(2, BigDecimal.ROUND_CEILING);
+        return totalInsuredPremiumAmount;
     }
 
     public Integer getTotalNoOfLifeCovered() {

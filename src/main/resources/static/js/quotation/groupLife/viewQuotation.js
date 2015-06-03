@@ -28,7 +28,9 @@ var viewQuotationModule = (function () {
     }
 
     services.emailQuotation = function (){
-        window.location.href='/pla/quotation/grouplife/openemailquotation/'+this.selectedItem;
+        alert('DD');
+        window.open('/pla/quotation/grouplife/openemailquotation/'+this.selectedItem,"_blank","toolbar=no,resizable=no," +
+        "scrollable=no,menubar=no,personalbar=no,dependent=yes,dialog=yes,titlebar=no,resizable=no,location=no,left=100px");
     }
 
     services.modifyQuotation = function () {

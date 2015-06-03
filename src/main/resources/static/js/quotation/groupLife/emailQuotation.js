@@ -47,7 +47,7 @@ function sendEmail() {
             contentType: 'application/json; charset=utf-8',
             success: function (msg) {
                 if (msg.status == '200') {
-                    $('#alert-modal-success').show();
+                    $('#alert-modal-success').modal();
                 }
             }
         });

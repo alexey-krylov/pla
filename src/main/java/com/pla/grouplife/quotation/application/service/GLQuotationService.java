@@ -4,6 +4,7 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import com.pla.core.domain.model.agent.AgentId;
+import com.pla.grouplife.quotation.application.command.GLRecalculatedInsuredPremiumCommand;
 import com.pla.grouplife.quotation.application.command.SearchGlQuotationDto;
 import com.pla.grouplife.quotation.domain.model.*;
 import com.pla.grouplife.quotation.presentation.dto.GLQuotationDetailDto;
@@ -19,8 +20,10 @@ import com.pla.sharedkernel.util.PDFGeneratorUtils;
 import net.sf.jasperreports.engine.JRException;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.velocity.app.VelocityEngine;
+import org.axonframework.commandhandling.gateway.CommandGateway;
 import org.bson.types.ObjectId;
 import org.joda.time.LocalDate;
+import org.nthdimenzion.common.AppConstants;
 import org.nthdimenzion.presentation.AppUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -54,14 +57,17 @@ public class GLQuotationService {
 
     private VelocityEngine velocityEngine;
 
+    private CommandGateway commandGateway;
+
     @Autowired
-    public GLQuotationService(GLQuotationFinder glQuotationFinder, IPlanAdapter planAdapter, GLInsuredExcelGenerator glInsuredExcelGenerator, GLInsuredExcelParser glInsuredExcelParser, GlQuotationRepository glQuotationRepository, VelocityEngine velocityEngine) {
+    public GLQuotationService(GLQuotationFinder glQuotationFinder, IPlanAdapter planAdapter, GLInsuredExcelGenerator glInsuredExcelGenerator, GLInsuredExcelParser glInsuredExcelParser, GlQuotationRepository glQuotationRepository, VelocityEngine velocityEngine, CommandGateway commandGateway) {
         this.glQuotationFinder = glQuotationFinder;
         this.planAdapter = planAdapter;
         this.glInsuredExcelGenerator = glInsuredExcelGenerator;
         this.glInsuredExcelParser = glInsuredExcelParser;
         this.glQuotationRepository = glQuotationRepository;
         this.velocityEngine = velocityEngine;
+        this.commandGateway = commandGateway;
     }
 
     public byte[] getPlanReadyReckoner(String quotationId) throws IOException, JRException {
@@ -82,10 +88,14 @@ public class GLQuotationService {
         GroupLifeQuotation groupLifeQuotation = glQuotationRepository.findOne(new QuotationId(quotationId));
         String subject = "PLA Insurance - Group Life - Quotation ID : " + groupLifeQuotation.getQuotationNumber();
         String mailAddress = groupLifeQuotation.getProposer().getContactDetail().getContactPersonDetail().getContactPersonEmail();
-        if (isEmpty(mailAddress)) {
-            throw new RuntimeException("email-ID is not available of proposer");
-        }
-        String emailBody = VelocityEngineUtils.mergeTemplateIntoString(velocityEngine, "emailtemplate/grouplife/quotation/grouplifeQuotationTemplate.vm", Maps.newHashMap());
+        mailAddress = isEmpty(mailAddress) ? "" : mailAddress;
+        Map<String, Object> emailContent = Maps.newHashMap();
+        emailContent.put("mailSentDate", groupLifeQuotation.getGeneratedOn().toString(AppConstants.DD_MM_YYY_FORMAT));
+        emailContent.put("contactPersonName", groupLifeQuotation.getProposer().getContactDetail().getContactPersonDetail().getContactPersonName());
+        emailContent.put("proposerName", groupLifeQuotation.getProposer().getProposerName());
+        Map<String, Object> emailContentMap = Maps.newHashMap();
+        emailContentMap.put("emailContent", emailContent);
+        String emailBody = VelocityEngineUtils.mergeTemplateIntoString(velocityEngine, "emailtemplate/grouplife/quotation/grouplifeQuotationTemplate.vm", emailContentMap);
         GLQuotationMailDto dto = new GLQuotationMailDto(subject, emailBody, new String[]{mailAddress});
         dto.setQuotationId(quotationId);
         dto.setQuotationNumber(groupLifeQuotation.getQuotationNumber());
@@ -295,8 +305,19 @@ public class GLQuotationService {
     }
 
     public PremiumDetailDto getPremiumDetail(QuotationId quotationId) {
-        Map quotation = glQuotationFinder.getQuotationById(quotationId.getQuotationId());
-        PremiumDetail premiumDetail = (PremiumDetail) quotation.get("premiumDetail");
+        GroupLifeQuotation groupLifeQuotation = glQuotationRepository.findOne(quotationId);
+        PremiumDetailDto premiumDetailDto = getPremiumDetail(groupLifeQuotation);
+        return premiumDetailDto;
+    }
+
+    public PremiumDetailDto recalculatePremium(GLRecalculatedInsuredPremiumCommand glRecalculatedInsuredPremiumCommand) {
+        GroupLifeQuotation groupLifeQuotation = commandGateway.sendAndWait(glRecalculatedInsuredPremiumCommand);
+        PremiumDetailDto premiumDetailDto = getPremiumDetail(groupLifeQuotation);
+        return premiumDetailDto;
+    }
+
+    private PremiumDetailDto getPremiumDetail(GroupLifeQuotation groupLifeQuotation) {
+        PremiumDetail premiumDetail = groupLifeQuotation.getPremiumDetail();
         if (premiumDetail == null) {
             return new PremiumDetailDto();
         }
@@ -315,7 +336,6 @@ public class GLQuotationService {
         return premiumDetailDto;
     }
 
-
     public AgentDetailDto getAgentDetail(QuotationId quotationId) {
         Map quotation = glQuotationFinder.getQuotationById(quotationId.getQuotationId());
         AgentId agentMap = (AgentId) quotation.get("agentId");
@@ -325,7 +345,7 @@ public class GLQuotationService {
         agentDetailDto.setAgentId(agentId);
         agentDetailDto.setBranchName((String) agentDetail.get("branchName"));
         agentDetailDto.setTeamName((String) agentDetail.get("teamName"));
-        agentDetailDto.setAgentName(agentDetail.get("firstName") + " " + agentDetail.get("lastName"));
+        agentDetailDto.setAgentName(agentDetail.get("firstName") + " " +(agentDetail.get("lastName") == null ? "" : (String) agentDetail.get("lastName")));
         agentDetailDto.setAgentMobileNumber(agentDetail.get("mobileNumber") != null ? (String) agentDetail.get("mobileNumber") : "");
         agentDetailDto.setAgentSalutation(agentDetail.get("title") != null ? (String) agentDetail.get("title") : "");
         return agentDetailDto;
@@ -338,7 +358,7 @@ public class GLQuotationService {
     }
 
     public List<GlQuotationDto> searchQuotation(SearchGlQuotationDto searchGlQuotationDto) {
-        List<Map> allQuotations = glQuotationFinder.searchQuotation(searchGlQuotationDto.getQuotationNumber(), searchGlQuotationDto.getAgentCode(), searchGlQuotationDto.getProposerName(), searchGlQuotationDto.getAgentName(),searchGlQuotationDto.getQuotationId());
+        List<Map> allQuotations = glQuotationFinder.searchQuotation(searchGlQuotationDto.getQuotationNumber(), searchGlQuotationDto.getAgentCode(), searchGlQuotationDto.getProposerName(), searchGlQuotationDto.getAgentName(), searchGlQuotationDto.getQuotationId());
         if (isEmpty(allQuotations)) {
             return Lists.newArrayList();
         }

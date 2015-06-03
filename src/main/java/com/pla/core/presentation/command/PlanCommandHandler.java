@@ -52,6 +52,7 @@ public class PlanCommandHandler {
             Plan plan = planBuilder.build(command.getPlanId());
             planMongoRepository.add(plan);
         } catch (Exception e) {
+            e.printStackTrace();
             throw new PlanException(e.getMessage());
         }
     }
