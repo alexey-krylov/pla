@@ -40,6 +40,9 @@ public class BenefitFinder {
     public static final String ACTIVE_BENEFIT_COUNT_BY_BENEFIT_NAME_Query = "select count(benefit_id) from benefit where benefit_name=:benefitName and status='ACTIVE' " +
             " and benefit_id !=:benefitId";
 
+    public static final String ACTIVE_BENEFIT_COUNT_BY_BENEFIT_CODE_Query = "select count(benefit_id) from benefit where benefit_code=:benefitCode and status='ACTIVE' " +
+            " and benefit_id !=:benefitId";
+
     public static final String FIND_BENEFIT_FOR_A_GIVEN_BENEFIT_ID_Query = "SELECT benefit_id AS benefitId,benefit_name AS benefitName,STATUS AS benefitStatus FROM benefit where benefit_id=:benefitId";
 
     public static final String FIND_ALL_BENEFIT_Query = "SELECT benefit_id AS benefitId,benefit_name AS benefitName,STATUS AS benefitStatus FROM benefit";
@@ -56,6 +59,12 @@ public class BenefitFinder {
     public int getBenefitCountByBenefitName(String benefitName,String benefitId) {
         Preconditions.checkNotNull(benefitName);
         Number noOfBenefit = namedParameterJdbcTemplate.queryForObject(ACTIVE_BENEFIT_COUNT_BY_BENEFIT_NAME_Query, new MapSqlParameterSource("benefitId",benefitId).addValue("benefitName", benefitName), Number.class);
+        return noOfBenefit.intValue();
+    }
+
+    public int getBenefitCountByBenefitCode(String benefitCode,String benefitId) {
+        Preconditions.checkNotNull(benefitCode);
+        Number noOfBenefit = namedParameterJdbcTemplate.queryForObject(ACTIVE_BENEFIT_COUNT_BY_BENEFIT_CODE_Query, new MapSqlParameterSource("benefitId",benefitId).addValue("benefitCode",benefitCode), Number.class);
         return noOfBenefit.intValue();
     }
 

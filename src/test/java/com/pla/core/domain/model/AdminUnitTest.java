@@ -15,9 +15,11 @@ import com.pla.core.domain.model.generalinformation.OrganizationGeneralInformati
 import com.pla.core.domain.model.generalinformation.ProductLineGeneralInformation;
 import com.pla.core.dto.BenefitDto;
 import com.pla.core.query.BenefitFinder;
+import com.pla.core.specification.BenefitCodeIsUnique;
 import com.pla.core.specification.BenefitIsAssociatedWithCoverage;
 import com.pla.core.specification.BenefitNameIsUnique;
 import com.pla.publishedlanguage.domain.model.PremiumFrequency;
+import com.pla.sharedkernel.domain.model.ProcessType;
 import com.pla.sharedkernel.domain.model.*;
 import com.pla.sharedkernel.identifier.CoverageId;
 import com.pla.sharedkernel.identifier.LineOfBusinessEnum;
@@ -54,6 +56,10 @@ public class AdminUnitTest {
     List<Map<DiscountFactorItem, BigDecimal>> listOfDiscountFactorItem;
     @Mock
     private BenefitNameIsUnique benefitNameIsUnique;
+
+    @Mock
+    private BenefitCodeIsUnique benefitCodeIsUnique;
+
     @Mock
     private BenefitFinder benefitFinder;
     @Mock
@@ -65,7 +71,7 @@ public class AdminUnitTest {
         admin = new Admin();
         String name = "CI Benefit";
         boolean isBenefitNameUnique = true;
-        Benefit benefit = admin.createBenefit(isBenefitNameUnique, "1", name);
+        Benefit benefit = admin.createBenefit(isBenefitNameUnique, "1", name,"B_CC" );
         benefitSet.add(benefit);
 
         listOfProcessItems = Lists.newArrayList();
@@ -123,22 +129,23 @@ public class AdminUnitTest {
     @Test
     public void givenABenefitNameItShouldCreateBenefit() {
         String name = "CI Benefit";
-        BenefitDto benefitDto = new BenefitDto("1", name);
+        BenefitDto benefitDto = new BenefitDto("1", name,"B_CC");
         boolean isBenefitNameUnique = true;
         when(benefitNameIsUnique.isSatisfiedBy(benefitDto)).thenReturn(isBenefitNameUnique);
-        Benefit benefit = admin.createBenefit(isBenefitNameUnique, "1", name);
+        Benefit benefit = admin.createBenefit(isBenefitNameUnique, "1", name,"B_CC" );
         BenefitName benefitName = (BenefitName) invokeGetterMethod(benefit, "getBenefitName");
         assertEquals(name, benefitName.getBenefitName());
+        assertEquals("B_CC", invokeGetterMethod(benefit, "benefitCode"));
         assertEquals(BenefitStatus.ACTIVE, invokeGetterMethod(benefit, "getStatus"));
     }
 
     @Test
     public void itShouldInactivateABenefit() {
         String name = "CI Benefit";
-        BenefitDto benefitDto = new BenefitDto("1", name);
+        BenefitDto benefitDto = new BenefitDto("1", name,"B_ONE");
         boolean isBenefitNameUnique = true;
         when(benefitNameIsUnique.isSatisfiedBy(benefitDto)).thenReturn(isBenefitNameUnique);
-        Benefit benefit = admin.createBenefit(isBenefitNameUnique, "1", name);
+        Benefit benefit = admin.createBenefit(isBenefitNameUnique, "1", name,"B_ONE" );
         benefit = admin.inactivateBenefit(benefit,true);
         assertEquals(BenefitStatus.INACTIVE, invokeGetterMethod(benefit, "getStatus"));
     }
@@ -146,14 +153,14 @@ public class AdminUnitTest {
     @Test
     public void itShouldUpdateABenefit() {
         String name = "CI Benefit";
-        BenefitDto benefitDto = new BenefitDto("1", name);
+        BenefitDto benefitDto = new BenefitDto("1", name,"B_TWO");
         boolean isBenefitNameUnique = true;
         when(benefitNameIsUnique.isSatisfiedBy(benefitDto)).thenReturn(isBenefitNameUnique);
         boolean isUpdatable = true;
         when(benefitIsAssociatedWithCoverage.isSatisfiedBy(benefitDto)).thenReturn(isUpdatable);
-        Benefit benefit = admin.createBenefit(isBenefitNameUnique, "1", name);
+        Benefit benefit = admin.createBenefit(isBenefitNameUnique, "1", name,"B_TWO" );
         String updatedName = "Accidental Benefit";
-        Benefit updatedBenefit = admin.updateBenefit(benefit, updatedName, isUpdatable);
+        Benefit updatedBenefit = admin.updateBenefit(benefit, updatedName, isUpdatable, "B_TWO");
         BenefitName updatedBenefitName = (BenefitName) invokeGetterMethod(updatedBenefit, "getBenefitName");
         assertEquals(updatedName, updatedBenefitName.getBenefitName());
     }

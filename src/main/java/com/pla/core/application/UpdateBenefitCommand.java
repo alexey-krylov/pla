@@ -32,6 +32,8 @@ public class UpdateBenefitCommand {
     @Length(max = 100, min = 1,message = "{Benefit name length should be between 1-100}")
     private String benefitName;
 
+    private String benefitCode;
+
     private UserDetails userDetails;
 
 

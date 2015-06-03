@@ -31,7 +31,7 @@ public class BenefitNameIsUpdatableUnitTest {
     public void shouldReturnTrueWhenBenefitIsNotAssociatedWithCoverage() {
         when(benefitFinder.getBenefitCountAssociatedWithActiveCoverage("1")).thenReturn(0);
         BenefitIsAssociatedWithCoverage benefitNameIsUpdatable = new BenefitIsAssociatedWithCoverage(benefitFinder);
-        BenefitDto benefitDto = new BenefitDto("1", "CI Benefit");
+        BenefitDto benefitDto = new BenefitDto("1", "CI Benefit","B_ONE");
         boolean benefitNameUpdatable = benefitNameIsUpdatable.isSatisfiedBy(benefitDto);
         assertTrue(benefitNameUpdatable);
     }
@@ -40,7 +40,7 @@ public class BenefitNameIsUpdatableUnitTest {
     public void shouldReturnFalseWhenBenefitIsAssociateWithActiveCoverage() {
         when(benefitFinder.getBenefitCountAssociatedWithActiveCoverage("1")).thenReturn(1);
         BenefitIsAssociatedWithCoverage benefitNameIsUpdatable = new BenefitIsAssociatedWithCoverage(benefitFinder);
-        BenefitDto benefitDto = new BenefitDto("1", "CI Benefit");
+        BenefitDto benefitDto = new BenefitDto("1", "CI Benefit","B_ONE");
         boolean benefitNameUpdatable = benefitNameIsUpdatable.isSatisfiedBy(benefitDto);
         assertFalse(benefitNameUpdatable);
     }
@@ -52,7 +52,7 @@ public class BenefitNameIsUpdatableUnitTest {
         when(benefitFinder.getBenefitCountByBenefitName(benefitName,"B001")).thenReturn(0);
         BenefitIsAssociatedWithCoverage benefitIsAssociatedWithCoverage = new BenefitIsAssociatedWithCoverage(benefitFinder);
         BenefitNameIsUnique benefitNameIsUnique = new BenefitNameIsUnique(benefitFinder);
-        BenefitDto benefitDto = new BenefitDto("1", benefitName);
+        BenefitDto benefitDto = new BenefitDto("1", benefitName,"B_ONE");
         boolean isUpdatable = benefitIsAssociatedWithCoverage.And(benefitNameIsUnique).isSatisfiedBy(benefitDto);
         assertTrue(isUpdatable);
     }
@@ -64,7 +64,7 @@ public class BenefitNameIsUpdatableUnitTest {
         when(benefitFinder.getBenefitCountByBenefitName(benefitName,"B001")).thenReturn(0);
         BenefitIsAssociatedWithCoverage benefitIsAssociatedWithCoverage = new BenefitIsAssociatedWithCoverage(benefitFinder);
         BenefitNameIsUnique benefitNameIsUnique = new BenefitNameIsUnique(benefitFinder);
-        BenefitDto benefitDto = new BenefitDto("1", benefitName);
+        BenefitDto benefitDto = new BenefitDto("1", benefitName,"B_ONE");
         boolean isUpdatable = benefitIsAssociatedWithCoverage.And(benefitNameIsUnique).isSatisfiedBy(benefitDto);
         assertFalse(isUpdatable);
     }
@@ -76,7 +76,7 @@ public class BenefitNameIsUpdatableUnitTest {
         when(benefitFinder.getBenefitCountByBenefitName(benefitName,"B001")).thenReturn(1);
         BenefitIsAssociatedWithCoverage benefitIsAssociatedWithCoverage = new BenefitIsAssociatedWithCoverage(benefitFinder);
         BenefitNameIsUnique benefitNameIsUnique = new BenefitNameIsUnique(benefitFinder);
-        BenefitDto benefitDto = new BenefitDto("1", benefitName);
+        BenefitDto benefitDto = new BenefitDto("1", benefitName,"B_ONE");
         boolean isUpdatable = benefitIsAssociatedWithCoverage.And(benefitNameIsUnique).isSatisfiedBy(benefitDto);
         assertFalse(isUpdatable);
     }

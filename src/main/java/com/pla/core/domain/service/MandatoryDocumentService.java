@@ -3,7 +3,7 @@ package com.pla.core.domain.service;
 import com.google.common.collect.Lists;
 import com.pla.core.domain.model.Admin;
 import com.pla.core.domain.model.MandatoryDocument;
-import com.pla.core.domain.model.ProcessType;
+import com.pla.sharedkernel.domain.model.ProcessType;
 import com.pla.core.dto.CoverageDto;
 import com.pla.core.dto.MandatoryDocumentDto;
 import com.pla.core.query.CoverageFinder;

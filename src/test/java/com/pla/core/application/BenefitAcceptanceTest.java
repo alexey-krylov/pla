@@ -35,6 +35,7 @@ import static org.junit.Assert.assertTrue;
  * @author: Samir
  * @since 1.0 05/03/2015
  */
+
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = "classpath*:queryTestContext.xml")
 @TestExecutionListeners({DependencyInjectionTestExecutionListener.class, DbUnitTestExecutionListener.class})
@@ -59,7 +60,7 @@ public class BenefitAcceptanceTest {
     @Test
     @ExpectedDatabase(value = "classpath:testdata/endtoend/benefit/expectedbenefitdata.xml", assertionMode = DatabaseAssertionMode.NON_STRICT)
     public void givenABenefitNameItShouldCreateBenefit() {
-        CreateBenefitCommand createBenefitCommand = new CreateBenefitCommand(userDetails, "Accidental Death Benefit");
+        CreateBenefitCommand createBenefitCommand = new CreateBenefitCommand(userDetails, "Accidental Death Benefit","B_ONE");
         Boolean isSuccess = Boolean.FALSE;
         try {
             commandGateway.sendAndWait(createBenefitCommand);
@@ -76,7 +77,7 @@ public class BenefitAcceptanceTest {
     @ExpectedDatabase(value = "classpath:testdata/endtoend/benefit/expectedupdatedbenefitdata.xml", assertionMode = DatabaseAssertionMode.NON_STRICT)
     @DatabaseTearDown(value = "classpath:testdata/endtoend/benefit/testdataforupdatebenefit.xml",type = DatabaseOperation.DELETE)
     public void givenAnActiveBenefitWithNewNameItShouldUpdateBenefit() {
-        UpdateBenefitCommand updateBenefitCommand = new UpdateBenefitCommand("1", "CI Benefit", userDetails);
+        UpdateBenefitCommand updateBenefitCommand = new UpdateBenefitCommand("1", "CI Benefit","B_THREE", userDetails);
         Boolean isSuccess = Boolean.FALSE;
         try {
             commandGateway.sendAndWait(updateBenefitCommand);

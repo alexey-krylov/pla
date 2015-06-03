@@ -2,7 +2,8 @@ package com.pla.core.domain.service;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import com.pla.core.domain.model.ProcessType;
+import com.pla.sharedkernel.exception.ProcessInfoException;
+import com.pla.sharedkernel.domain.model.ProcessType;
 import com.pla.core.domain.model.generalinformation.ProductLineGeneralInformation;
 import com.pla.sharedkernel.domain.model.ProductLineProcessType;
 import com.pla.sharedkernel.identifier.LineOfBusinessEnum;
@@ -60,17 +61,17 @@ public class ProcessInfoAdapterImplUnitTest {
     }
 
     @Test
-    public void givenLineOfBusinessIdAndProcessType_whenProcessTypeIsProposalAndProcessTypeIsClosureTimePeriod_thenItShouldReturnTheClosureTimePeriodOfProposalProcess(){
+    public void givenLineOfBusinessIdAndProcessType_whenProcessTypeIsProposalAndProcessTypeIsClosureTimePeriod_thenItShouldReturnTheClosureTimePeriodOfProposalProcess() throws ProcessInfoException {
         ProductLineGeneralInformation productLineGeneralInformation = ProductLineGeneralInformation.createProductLineGeneralInformation(LineOfBusinessEnum.GROUP_HEALTH);
         productLineGeneralInformation = productLineGeneralInformation.withQuotationProcessInformation(listOfProcessItems);
         productLineGeneralInformation = productLineGeneralInformation.withEnrollmentProcessGeneralInformation(listOfProcessItems);
         when(generalInformationService.findProductLineInformationByLineOfBusinessId(LineOfBusinessEnum.GROUP_HEALTH)).thenReturn(productLineGeneralInformation);
         int closureTimePeriod =  processInfoAdapter.getClosureTimePeriod(LineOfBusinessEnum.GROUP_HEALTH, ProcessType.PROPOSAL);
-        assertThat(closureTimePeriod,is(14));
+        assertThat(closureTimePeriod,is(10));
     }
 
     @Test
-    public void givenLineOfBusinessIdAndProcessType_whenProcessTypeIsQuotationAndProcessTypePurgeTimePeriod_thenItShouldReturnThePurgeTimePeriodOfQuotationProcess(){
+    public void givenLineOfBusinessIdAndProcessType_whenProcessTypeIsQuotationAndProcessTypePurgeTimePeriod_thenItShouldReturnThePurgeTimePeriodOfQuotationProcess() throws ProcessInfoException {
         ProductLineGeneralInformation productLineGeneralInformation = ProductLineGeneralInformation.createProductLineGeneralInformation(LineOfBusinessEnum.GROUP_HEALTH);
         productLineGeneralInformation = productLineGeneralInformation.withQuotationProcessInformation(listOfProcessItems);
         productLineGeneralInformation = productLineGeneralInformation.withEnrollmentProcessGeneralInformation(listOfProcessItems);
@@ -80,32 +81,32 @@ public class ProcessInfoAdapterImplUnitTest {
     }
 
     @Test
-    public void givenLineOfBusinessIdAndProcessType_whenProcessTypeIsQuotationAndTheProcessTypeIsFirstReminder_thenItShouldReturnTheDaysForFirstReminder(){
+    public void givenLineOfBusinessIdAndProcessType_whenProcessTypeIsQuotationAndTheProcessTypeIsFirstReminder_thenItShouldReturnTheDaysForFirstReminder() throws ProcessInfoException {
         ProductLineGeneralInformation productLineGeneralInformation = ProductLineGeneralInformation.createProductLineGeneralInformation(LineOfBusinessEnum.GROUP_HEALTH);
         productLineGeneralInformation = productLineGeneralInformation.withQuotationProcessInformation(listOfProcessItems);
         productLineGeneralInformation = productLineGeneralInformation.withEnrollmentProcessGeneralInformation(listOfProcessItems);
         when(generalInformationService.findProductLineInformationByLineOfBusinessId(LineOfBusinessEnum.GROUP_HEALTH)).thenReturn(productLineGeneralInformation);
         int closureTimePeriod =  processInfoAdapter.getDaysForFirstReminder(LineOfBusinessEnum.GROUP_HEALTH, ProcessType.QUOTATION);
-        assertThat(closureTimePeriod,is(12));
+        assertThat(closureTimePeriod,is(10));
     }
 
     @Test
-    public void givenLineOfBusinessIdAndProcessType_whenProcessTypeIsQuotationAndProcessTypeIsSecondReminder_thenItShouldReturnTheDaysForSecondReminder(){
+    public void givenLineOfBusinessIdAndProcessType_whenProcessTypeIsQuotationAndProcessTypeIsSecondReminder_thenItShouldReturnTheDaysForSecondReminder() throws ProcessInfoException {
         ProductLineGeneralInformation productLineGeneralInformation = ProductLineGeneralInformation.createProductLineGeneralInformation(LineOfBusinessEnum.GROUP_HEALTH);
         productLineGeneralInformation = productLineGeneralInformation.withQuotationProcessInformation(listOfProcessItems);
         productLineGeneralInformation = productLineGeneralInformation.withEnrollmentProcessGeneralInformation(listOfProcessItems);
         when(generalInformationService.findProductLineInformationByLineOfBusinessId(LineOfBusinessEnum.GROUP_HEALTH)).thenReturn(productLineGeneralInformation);
         int closureTimePeriod =  processInfoAdapter.getDaysForSecondReminder(LineOfBusinessEnum.GROUP_HEALTH, ProcessType.QUOTATION);
-        assertThat(closureTimePeriod,is(11));
+        assertThat(closureTimePeriod,is(10));
     }
 
     @Test
-    public void givenLineOfBusinessIdAndProcessType_whenProcessTypeIsEndorsementAndTheProcessTypeIsSecondReminder_thenItShouldReturnTheDaysForSecondReminder(){
+    public void givenLineOfBusinessIdAndProcessType_whenProcessTypeIsEndorsementAndTheProcessTypeIsSecondReminder_thenItShouldReturnTheDaysForSecondReminder() throws ProcessInfoException {
         ProductLineGeneralInformation productLineGeneralInformation = ProductLineGeneralInformation.createProductLineGeneralInformation(LineOfBusinessEnum.GROUP_HEALTH);
         productLineGeneralInformation = productLineGeneralInformation.withQuotationProcessInformation(listOfProcessItems);
         productLineGeneralInformation = productLineGeneralInformation.withEnrollmentProcessGeneralInformation(listOfProcessItems);
         when(generalInformationService.findProductLineInformationByLineOfBusinessId(LineOfBusinessEnum.GROUP_HEALTH)).thenReturn(productLineGeneralInformation);
         int closureTimePeriod =  processInfoAdapter.getDaysForSecondReminder(LineOfBusinessEnum.GROUP_HEALTH, ProcessType.QUOTATION);
-        assertThat(closureTimePeriod,is(11));
+        assertThat(closureTimePeriod,is(10));
     }
 }

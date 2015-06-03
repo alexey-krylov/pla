@@ -30,19 +30,23 @@ public class Benefit implements ICrudEntity {
     @EmbeddedId
     private BenefitId benefitId;
 
+    private String benefitCode;
+
     @Embedded
     private BenefitName benefitName;
 
     @Enumerated(EnumType.STRING)
     private BenefitStatus status;
 
-    Benefit(BenefitId benefitId, BenefitName benefitName, BenefitStatus benefitStatus) {
+    Benefit(BenefitId benefitId, BenefitName benefitName, BenefitStatus benefitStatus, String benefitCode) {
         Preconditions.checkNotNull(benefitId);
         Preconditions.checkNotNull(benefitName);
         Preconditions.checkState(benefitStatus.equals(BenefitStatus.ACTIVE));
         this.benefitId = benefitId;
         this.benefitName = benefitName;
         this.status = benefitStatus;
+        this.benefitCode = benefitCode;
+
     }
 
     public Benefit updateBenefitName(BenefitName benefitName) {
@@ -73,4 +77,8 @@ public class Benefit implements ICrudEntity {
         return true;
     }
 
+    public Benefit updateBenefitCode(String benefitCode) {
+        this.benefitCode = benefitCode;
+        return this;
+    }
 }

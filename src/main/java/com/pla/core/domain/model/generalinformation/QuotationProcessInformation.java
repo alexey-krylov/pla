@@ -1,6 +1,7 @@
 package com.pla.core.domain.model.generalinformation;
 
 import com.pla.core.domain.exception.GeneralInformationException;
+import com.pla.sharedkernel.exception.ProcessInfoException;
 import com.pla.sharedkernel.domain.model.ProductLineProcessType;
 import lombok.AccessLevel;
 import lombok.EqualsAndHashCode;
@@ -9,10 +10,13 @@ import lombok.Setter;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
+
+import static com.pla.sharedkernel.exception.ProcessInfoException.raiseProductLineItemNotFoundException;
 
 /**
  * Created by Admin on 4/1/2015.
@@ -46,9 +50,12 @@ class QuotationProcessInformation {
         }
     }
 
-    public int getTheProductLineProcessTypeValue(ProductLineProcessType productLineProcessType){
-        ProductLineProcessItem productLineProcessItem = quotationProcessItems.stream().filter(new FilterProductLineProcessItem(productLineProcessType)).findAny().get();
-        return productLineProcessItem.getValue();
+    public int getTheProductLineProcessTypeValue(ProductLineProcessType productLineProcessType) throws ProcessInfoException {
+        Optional<ProductLineProcessItem> optionalProductLineProcessItem = quotationProcessItems.stream().filter(new FilterProductLineProcessItem(productLineProcessType)).findAny();
+        if (!optionalProductLineProcessItem.isPresent()) {
+            raiseProductLineItemNotFoundException();
+        }
+        return optionalProductLineProcessItem.get().getValue();
     }
 
     private class FilterProductLineProcessItem implements Predicate<ProductLineProcessItem> {

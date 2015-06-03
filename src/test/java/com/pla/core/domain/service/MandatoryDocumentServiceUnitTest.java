@@ -3,7 +3,7 @@ package com.pla.core.domain.service;
 import com.pla.core.domain.exception.MandatoryDocumentException;
 import com.pla.core.domain.model.Admin;
 import com.pla.core.domain.model.MandatoryDocument;
-import com.pla.core.domain.model.ProcessType;
+import com.pla.sharedkernel.domain.model.ProcessType;
 import com.pla.core.query.CoverageFinder;
 import com.pla.core.query.MandatoryDocumentFinder;
 import com.pla.core.query.PlanFinder;

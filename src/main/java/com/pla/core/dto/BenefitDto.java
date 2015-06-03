@@ -16,20 +16,23 @@ import lombok.Setter;
  */
 @Getter
 @Setter
-@EqualsAndHashCode(of = "benefitId")
+@EqualsAndHashCode
 public class BenefitDto {
 
     private String benefitId;
 
     private String benefitName;
 
+    private String benefitCode;
+
     public BenefitDto() {
 
     }
 
-    public BenefitDto(String benefitId, String benefitName) {
+    public BenefitDto(String benefitId, String benefitName,String benefitCode) {
         this.benefitId = benefitId;
         this.benefitName = benefitName;
+        this.benefitCode = benefitCode;
     }
 
     @Override
@@ -37,6 +40,7 @@ public class BenefitDto {
         return "BenefitDto{" +
                 "benefitId='" + benefitId + '\'' +
                 ", benefitName='" + benefitName + '\'' +
+                ", benefitCode='" + benefitCode + '\'' +
                 '}';
     }
 }

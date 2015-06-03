@@ -1,4 +1,4 @@
-package com.pla.core.domain.model;
+package com.pla.sharedkernel.domain.model;
 
 /**
  * Created by Admin on 3/27/2015.

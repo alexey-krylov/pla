@@ -43,9 +43,9 @@ public class BenefitUnitTest {
         admin = new Admin();
         boolean isBenefitNameUnique = true;
         String name = "Accidental death benefit";
-        BenefitDto benefitDto = new BenefitDto("1","Accidental death benefit") ;
+        BenefitDto benefitDto = new BenefitDto("1","Accidental death benefit","B_ONE") ;
         when(benefitNameIsUnique.isSatisfiedBy(benefitDto)).thenReturn(isBenefitNameUnique);
-        benefit = admin.createBenefit(isBenefitNameUnique, "1", name);
+        benefit = admin.createBenefit(isBenefitNameUnique, "1", name,"B_ONE" );
     }
 
     @Test
@@ -92,14 +92,14 @@ public class BenefitUnitTest {
     }
     @Test
     public void givenBenefitIdAndName_whenIdAndNameAreNotNull_thenItShouldCreateTheBenefit(){
-        Benefit benefit = new Benefit(new BenefitId("B001"),new BenefitName("Health benefit"),BenefitStatus.ACTIVE);
+        Benefit benefit = new Benefit(new BenefitId("B001"),new BenefitName("Health benefit"),BenefitStatus.ACTIVE, "B_ONE");
         assertNotNull(benefit);
         assertEquals(new BenefitName("Health benefit"), invokeGetterMethod(benefit, "getBenefitName"));
     }
 
     @Test(expected = NullPointerException.class)
     public void givenBenefitIdAndName_whenIdAndNameAAreNull_thenItShouldThrowTheException(){
-        Benefit benefit = new Benefit(null,new BenefitName("Health benefit"),BenefitStatus.ACTIVE);
+        Benefit benefit = new Benefit(null,new BenefitName("Health benefit"),BenefitStatus.ACTIVE,"B_ONE" );
         assertNotNull(benefit);
         assertEquals(new BenefitName("Health benefit"), invokeGetterMethod(benefit, "getBenefitName"));
     }

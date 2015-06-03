@@ -10,6 +10,7 @@ import com.pla.core.domain.exception.BenefitDomainException;
 import com.pla.core.domain.model.Admin;
 import com.pla.core.domain.model.Benefit;
 import com.pla.core.dto.BenefitDto;
+import com.pla.core.specification.BenefitCodeIsUnique;
 import com.pla.core.specification.BenefitIsAssociatedWithCoverage;
 import com.pla.core.specification.BenefitNameIsUnique;
 import org.nthdimenzion.ddd.domain.annotations.DomainService;
@@ -29,35 +30,38 @@ public class BenefitService {
 
     private BenefitNameIsUnique benefitNameIsUnique;
 
+    private BenefitCodeIsUnique benefitCodeIsUnique;
+
     private IIdGenerator idGenerator;
 
     private BenefitIsAssociatedWithCoverage benefitIsAssociatedWithCoverage;
 
     @Autowired
-    public BenefitService(AdminRoleAdapter adminRoleAdapter, BenefitNameIsUnique benefitNameIsUnique, IIdGenerator idGenerator, BenefitIsAssociatedWithCoverage benefitIsAssociatedWithCoverage) {
+    public BenefitService(AdminRoleAdapter adminRoleAdapter, BenefitNameIsUnique benefitNameIsUnique, IIdGenerator idGenerator, BenefitIsAssociatedWithCoverage benefitIsAssociatedWithCoverage, BenefitCodeIsUnique benefitCodeIsUnique) {
         this.adminRoleAdapter = adminRoleAdapter;
         this.benefitNameIsUnique = benefitNameIsUnique;
         this.idGenerator = idGenerator;
         this.benefitIsAssociatedWithCoverage = benefitIsAssociatedWithCoverage;
+        this.benefitCodeIsUnique = benefitCodeIsUnique;
     }
 
-    public Benefit createBenefit(String name, UserDetails userDetails) {
+    public Benefit createBenefit(String name, UserDetails userDetails, String benefitCode) {
         String benefitId = idGenerator.nextId();
         Admin admin = adminRoleAdapter.userToAdmin(userDetails);
-        BenefitDto benefitDto = new BenefitDto(benefitId, name);
-        boolean isBenefitNameUnique = benefitNameIsUnique.isSatisfiedBy(benefitDto);
-        Benefit benefit = admin.createBenefit(isBenefitNameUnique, benefitId, name);
+        BenefitDto benefitDto = new BenefitDto(benefitId, name,benefitCode);
+        boolean isBenefitNameAndCodeIsUnique = benefitCodeIsUnique.And(benefitNameIsUnique).isSatisfiedBy(benefitDto);
+        Benefit benefit = admin.createBenefit(isBenefitNameAndCodeIsUnique, benefitId, name,benefitCode );
         return benefit;
     }
 
-    public Benefit updateBenefit(Benefit benefit, String newBenefitName, UserDetails userDetails) {
+    public Benefit updateBenefit(Benefit benefit, String newBenefitName, UserDetails userDetails, String benefitCode) {
         Admin admin = adminRoleAdapter.userToAdmin(userDetails);
-        BenefitDto  benefitDto = new BenefitDto(benefit.getBenefitId().getBenefitId(), newBenefitName);
-        boolean isBenefitNameUnique = benefitNameIsUnique.isSatisfiedBy(benefitDto);
-        if (!isBenefitNameUnique)
+        BenefitDto  benefitDto = new BenefitDto(benefit.getBenefitId().getBenefitId(), newBenefitName,benefitCode);
+        boolean isBenefitNameAndCodeIsUnique = benefitCodeIsUnique.And(benefitNameIsUnique).isSatisfiedBy(benefitDto);
+        if (!isBenefitNameAndCodeIsUnique)
             throw new BenefitDomainException("Benefit already described");
         boolean isBenefitUpdatable = benefitIsAssociatedWithCoverage.And(benefitNameIsUnique).isSatisfiedBy(benefitDto);
-        Benefit updatedBenefit = admin.updateBenefit(benefit, newBenefitName, isBenefitUpdatable);
+        Benefit updatedBenefit = admin.updateBenefit(benefit, newBenefitName, isBenefitUpdatable,benefitCode);
         return updatedBenefit;
     }
 
@@ -68,7 +72,7 @@ public class BenefitService {
 
     public Benefit inactivateBenefit(Benefit benefit, UserDetails userDetails) {
         Admin admin = adminRoleAdapter.userToAdmin(userDetails);
-        BenefitDto benefitDto = new BenefitDto(benefit.getBenefitId().getBenefitId(), benefit.getBenefitName().getBenefitName());
+        BenefitDto benefitDto = new BenefitDto(benefit.getBenefitId().getBenefitId(), benefit.getBenefitName().getBenefitName(),benefit.getBenefitCode());
         boolean isBenefitUpdatable = benefitIsAssociatedWithCoverage.isSatisfiedBy(benefitDto);
         Benefit updatedBenefit = admin.inactivateBenefit(benefit,isBenefitUpdatable);
         return updatedBenefit;
