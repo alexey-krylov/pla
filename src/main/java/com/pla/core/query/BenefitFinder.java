@@ -43,13 +43,13 @@ public class BenefitFinder {
     public static final String ACTIVE_BENEFIT_COUNT_BY_BENEFIT_CODE_Query = "select count(benefit_id) from benefit where benefit_code=:benefitCode and status='ACTIVE' " +
             " and benefit_id !=:benefitId";
 
-    public static final String FIND_BENEFIT_FOR_A_GIVEN_BENEFIT_ID_Query = "SELECT benefit_id AS benefitId,benefit_name AS benefitName,STATUS AS benefitStatus,benefit_code benefitCode FROM benefit where benefit_id=:benefitId";
+    public static final String FIND_BENEFIT_FOR_A_GIVEN_BENEFIT_ID_Query = "SELECT benefit_id AS benefitId,benefit_name AS benefitName,STATUS AS benefitStatus,IFNULL(benefit_code,'') benefitCode FROM benefit where benefit_id=:benefitId";
 
-    public static final String FIND_ALL_BENEFIT_Query = "SELECT benefit_id AS benefitId,benefit_code benefitCode,benefit_name AS benefitName,benefit_code benefitCode,STATUS AS benefitStatus FROM benefit";
+    public static final String FIND_ALL_BENEFIT_Query = "SELECT benefit_id AS benefitId,IFNULL(benefit_code,'') benefitCode,benefit_name AS benefitName,STATUS AS benefitStatus FROM benefit";
 
     public static final String BENEFIT_COUNT_ASSOCIATED_WITH_ACTIVE_COVERAGE_Query = "SELECT COUNT(CB.benefit_id) FROM `coverage_benefit` CB,`coverage` C WHERE CB.coverage_id=C.coverage_id AND C.status IN('ACTIVE','INUSE') AND CB.benefit_id=:benefitId";
 
-    public static final String FIND_ALL_ACTIVE_BENEFITS_Query = "SELECT benefit_id benefitId,STATUS STATUS ,benefit_name benefitName, benefit_code benefitCode FROM " +
+    public static final String FIND_ALL_ACTIVE_BENEFITS_Query = "SELECT benefit_id benefitId,STATUS STATUS ,benefit_name benefitName, IFNULL(benefit_code,'') benefitCode FROM " +
             " benefit WHERE STATUS='ACTIVE'";
 
     public List<Map<String, Object>> findBenefitFor(String benefitName) {
