@@ -3,6 +3,8 @@ package com.pla.core.domain.model.generalinformation;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Sets;
 import com.pla.core.domain.exception.GeneralInformationException;
+import com.pla.sharedkernel.domain.model.ProcessType;
+import com.pla.sharedkernel.exception.ProcessInfoException;
 import com.pla.publishedlanguage.domain.model.PremiumFrequency;
 import com.pla.sharedkernel.domain.model.*;
 import com.pla.sharedkernel.identifier.LineOfBusinessEnum;
@@ -19,6 +21,8 @@ import java.util.Set;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
+
+import static com.pla.sharedkernel.exception.ProcessInfoException.raiseProcessTypeNotFoundException;
 
 
 /**
@@ -148,21 +152,8 @@ public class ProductLineGeneralInformation {
         return premiumFollowUpFrequencyItems.getPremiumFollowUpFrequencyItems();
     }
 
-    public int getProductLineProcessItemValue(String processType, ProductLineProcessType productLineProcessType){
-        ImmutableMap<String, Object> processTypeMap = ImmutableMap.of("QUOTATION", this.quotationProcessInformation, "PROPOSAL", this.enrollmentProcessInformation);
-        switch (processType){
-            case "QUOTATION":
-                QuotationProcessInformation quotationProcessInformation = (QuotationProcessInformation) processTypeMap.get(processType);
-                return quotationProcessInformation.getTheProductLineProcessTypeValue(productLineProcessType);
-            case "PROPOSAL":
-                EnrollmentProcessInformation enrollmentProcessInformation = (EnrollmentProcessInformation) processTypeMap.get(processType);
-                return enrollmentProcessInformation.getTheProductLineProcessTypeValue(productLineProcessType);
-            default:
-                return 0;
-        }
-    }
-
     private static class QuotationProcessInformationTransformer implements Function<Map<ProductLineProcessType,Integer>,ProductLineProcessItem> {
+
         @Override
         public ProductLineProcessItem apply(Map<ProductLineProcessType,Integer> productLineProcessItemMap) {
             Map.Entry<ProductLineProcessType,Integer> entry = productLineProcessItemMap.entrySet().iterator().next();
@@ -172,6 +163,21 @@ public class ProductLineGeneralInformation {
             ProductLineProcessItem productLineProcessItem = new ProductLineProcessItem(entry.getKey(), entry.getValue());
             return productLineProcessItem;
         }
+    }
+
+    public int getProductLineProcessItemValue(ProcessType processType, ProductLineProcessType productLineProcessType) throws ProcessInfoException {
+        ImmutableMap<ProcessType, Object> processTypeMap = ImmutableMap.of(ProcessType.QUOTATION, this.quotationProcessInformation,ProcessType.PROPOSAL, this.enrollmentProcessInformation);
+        switch (processType.name()){
+            case "QUOTATION":
+                QuotationProcessInformation quotationProcessInformation = (QuotationProcessInformation) processTypeMap.get(processType);
+                return quotationProcessInformation.getTheProductLineProcessTypeValue(productLineProcessType);
+            case "PROPOSAL":
+                EnrollmentProcessInformation enrollmentProcessInformation = (EnrollmentProcessInformation) processTypeMap.get(processType);
+                return enrollmentProcessInformation.getTheProductLineProcessTypeValue(productLineProcessType);
+            default:
+                  raiseProcessTypeNotFoundException(processType.name());
+        }
+        return 0;
     }
 
 }

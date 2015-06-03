@@ -1,6 +1,7 @@
 package com.pla.grouplife.quotation.saga;
 
-import com.pla.core.domain.model.ProcessType;
+import com.pla.sharedkernel.exception.ProcessInfoException;
+import com.pla.sharedkernel.domain.model.ProcessType;
 import com.pla.grouplife.quotation.application.command.ClosureGLQuotationCommand;
 import com.pla.grouplife.quotation.application.command.PurgeGLQuotationCommand;
 import com.pla.grouplife.quotation.domain.event.*;
@@ -46,7 +47,7 @@ public class GroupLifeQuotationSaga extends AbstractAnnotatedSaga {
 
     @StartSaga
     @SagaEventHandler(associationProperty = "quotationId")
-    public void handle(GLQuotationGeneratedEvent event) {
+    public void handle(GLQuotationGeneratedEvent event) throws ProcessInfoException {
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("Handling GL Quotation Generated Event .....", event);
         }
@@ -79,7 +80,7 @@ public class GroupLifeQuotationSaga extends AbstractAnnotatedSaga {
     }
 
     @SagaEventHandler(associationProperty = "quotationId")
-    public void handle(GLQuotationReminderEvent event) {
+    public void handle(GLQuotationReminderEvent event) throws ProcessInfoException {
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("Handling GL Quotation Reminder Event .....", event);
         }

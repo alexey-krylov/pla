@@ -32,7 +32,7 @@ public class BenefitNameIsUniqueTest {
     public void shouldReturnTrueWhenBenefitNameUnique() {
         when(benefitFinder.getBenefitCountByBenefitName("Death Benefit","B001")).thenReturn(0);
         BenefitNameIsUnique benefitNameIsUnique = new BenefitNameIsUnique(benefitFinder);
-        BenefitDto benefitDto = new BenefitDto("1", "Death Benefit");
+        BenefitDto benefitDto = new BenefitDto("1", "Death Benefit","B_ONE");
         boolean alreadyExists = benefitNameIsUnique.isSatisfiedBy(benefitDto);
         assertTrue(alreadyExists);
     }
@@ -41,7 +41,7 @@ public class BenefitNameIsUniqueTest {
     public void shouldReturnFalseWhenBenefitNameNotUnique() {
         when(benefitFinder.getBenefitCountByBenefitName("Death Benefit","1")).thenReturn(1);
         BenefitNameIsUnique benefitNameIsUnique = new BenefitNameIsUnique(benefitFinder);
-        BenefitDto benefitDto = new BenefitDto("1", "Death Benefit");
+        BenefitDto benefitDto = new BenefitDto("1", "Death Benefit","B_ONE");
         boolean alreadyExists = benefitNameIsUnique.isSatisfiedBy(benefitDto);
         assertFalse(alreadyExists);
     }

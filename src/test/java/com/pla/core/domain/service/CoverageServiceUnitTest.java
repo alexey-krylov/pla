@@ -70,7 +70,7 @@ public class CoverageServiceUnitTest {
 
         String name = "CI Benefit";
         when(adminRoleAdapter.userToAdmin(userDetails)).thenReturn(admin);
-        Benefit benefit = admin.createBenefit(true, "B001", name);
+        Benefit benefit = admin.createBenefit(true, "B001", name,"B_ONE" );
         benefits.add(benefit);
     }
 

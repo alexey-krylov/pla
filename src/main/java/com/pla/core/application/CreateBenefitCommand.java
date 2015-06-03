@@ -30,4 +30,6 @@ public class CreateBenefitCommand {
     @NotEmpty(message = "{Benefit name cannot be empty}")
     @Length(max = 100, min = 1,message = "{Benefit name length should be between 1-100}")
     private String benefitName;
+
+    private String benefitCode;
 }

@@ -45,7 +45,7 @@ public class BenefitCommandHandler {
         }
         JpaRepository<Benefit, String> benefitRepository = jpaRepositoryFactory.getCrudRepository(Benefit.class);
         try {
-            Benefit benefit = benefitService.createBenefit(createBenefitCommand.getBenefitName(), createBenefitCommand.getUserDetails());
+            Benefit benefit = benefitService.createBenefit(createBenefitCommand.getBenefitName(), createBenefitCommand.getUserDetails(),createBenefitCommand.getBenefitCode());
             benefitRepository.save(benefit);
         } catch (RuntimeException e) {
             LOGGER.error("*****Saving benefit failed*****", e);
@@ -62,7 +62,7 @@ public class BenefitCommandHandler {
         BenefitId benefitId = new BenefitId(updateBenefitCommand.getBenefitId());
         Benefit benefit = benefitRepository.findOne(benefitId);
         try {
-            benefit = benefitService.updateBenefit(benefit, updateBenefitCommand.getBenefitName(), updateBenefitCommand.getUserDetails());
+            benefit = benefitService.updateBenefit(benefit, updateBenefitCommand.getBenefitName(), updateBenefitCommand.getUserDetails(),updateBenefitCommand.getBenefitCode());
             benefitRepository.save(benefit);
         } catch (RuntimeException e) {
             LOGGER.error("*****Updating benefit failed*****", e);

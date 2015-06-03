@@ -1,9 +1,10 @@
 package com.pla.core.domain.service;
 
-import com.pla.core.domain.model.ProcessType;
+import com.pla.sharedkernel.domain.model.ProductLineProcessType;
+import com.pla.sharedkernel.exception.ProcessInfoException;
+import com.pla.sharedkernel.domain.model.ProcessType;
 import com.pla.core.domain.model.generalinformation.ProductLineGeneralInformation;
 import com.pla.publishedlanguage.contract.IProcessInfoAdapter;
-import com.pla.sharedkernel.domain.model.ProductLineProcessType;
 import com.pla.sharedkernel.identifier.LineOfBusinessEnum;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -22,27 +23,27 @@ public class ProcessInfoAdapterImpl implements IProcessInfoAdapter {
     }
 
     @Override
-    public int getPurgeTimePeriod(LineOfBusinessEnum lineOfBusinessEnum, ProcessType processType) {
-        ProductLineGeneralInformation productLineGeneralInformation = generalInformationService.findProductLineInformationByLineOfBusinessId(lineOfBusinessEnum);
-        return productLineGeneralInformation.getProductLineProcessItemValue(processType.name(), ProductLineProcessType.PURGE_TIME_PERIOD);
+    public int getPurgeTimePeriod(LineOfBusinessEnum lineOfBusinessEnum, ProcessType processType) throws ProcessInfoException {
+        ProductLineGeneralInformation productLineGeneralInformation =  generalInformationService.findProductLineInformationByLineOfBusinessId(lineOfBusinessEnum);
+        return productLineGeneralInformation.getProductLineProcessItemValue(processType, ProductLineProcessType.PURGE_TIME_PERIOD);
     }
 
     @Override
-    public int getClosureTimePeriod(LineOfBusinessEnum lineOfBusinessEnum, ProcessType processType) {
+    public int getClosureTimePeriod(LineOfBusinessEnum lineOfBusinessEnum, ProcessType processType) throws ProcessInfoException {
         ProductLineGeneralInformation productLineGeneralInformation = generalInformationService.findProductLineInformationByLineOfBusinessId(lineOfBusinessEnum);
-        return productLineGeneralInformation.getProductLineProcessItemValue(processType.name(), ProductLineProcessType.CLOSURE);
+        return productLineGeneralInformation.getProductLineProcessItemValue(processType, ProductLineProcessType.CLOSURE);
     }
 
     @Override
-    public int getDaysForFirstReminder(LineOfBusinessEnum lineOfBusinessEnum, ProcessType processType) {
+    public int getDaysForFirstReminder(LineOfBusinessEnum lineOfBusinessEnum, ProcessType processType) throws ProcessInfoException {
         ProductLineGeneralInformation productLineGeneralInformation = generalInformationService.findProductLineInformationByLineOfBusinessId(lineOfBusinessEnum);
-        return productLineGeneralInformation.getProductLineProcessItemValue(processType.name(), ProductLineProcessType.FIRST_REMAINDER);
+        return productLineGeneralInformation.getProductLineProcessItemValue(processType,ProductLineProcessType.FIRST_REMAINDER );
     }
 
     @Override
-    public int getDaysForSecondReminder(LineOfBusinessEnum lineOfBusinessEnum, ProcessType processType) {
+    public int getDaysForSecondReminder(LineOfBusinessEnum lineOfBusinessEnum, ProcessType processType) throws ProcessInfoException {
         ProductLineGeneralInformation productLineGeneralInformation = generalInformationService.findProductLineInformationByLineOfBusinessId(lineOfBusinessEnum);
-        return productLineGeneralInformation.getProductLineProcessItemValue(processType.name(), ProductLineProcessType.SECOND_REMAINDER);
+        return productLineGeneralInformation.getProductLineProcessItemValue(processType,ProductLineProcessType.SECOND_REMAINDER );
     }
 
 }

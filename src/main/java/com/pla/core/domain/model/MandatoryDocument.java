@@ -1,5 +1,6 @@
 package com.pla.core.domain.model;
 
+import com.pla.sharedkernel.domain.model.ProcessType;
 import com.pla.sharedkernel.identifier.CoverageId;
 import com.pla.sharedkernel.identifier.PlanId;
 import lombok.*;

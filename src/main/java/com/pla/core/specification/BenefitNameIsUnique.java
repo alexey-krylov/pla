@@ -24,7 +24,6 @@ public class BenefitNameIsUnique implements ISpecification<BenefitDto> {
     @Autowired
     public BenefitNameIsUnique(BenefitFinder benefitFinder) {
         this.benefitFinder = benefitFinder;
-
     }
 
     @Override

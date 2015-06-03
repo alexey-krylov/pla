@@ -15,6 +15,7 @@ import com.pla.core.domain.model.generalinformation.ProductLineGeneralInformatio
 import com.pla.core.domain.model.plan.commission.Commission;
 import com.pla.core.domain.model.plan.commission.CommissionTerm;
 import com.pla.publishedlanguage.domain.model.PremiumFrequency;
+import com.pla.sharedkernel.domain.model.ProcessType;
 import com.pla.sharedkernel.domain.model.*;
 import com.pla.sharedkernel.identifier.*;
 import org.bson.types.ObjectId;
@@ -34,18 +35,18 @@ import java.util.Set;
 public class Admin {
 
 
-    public Benefit createBenefit(boolean isUniqueBenefitName, String benefitId, String benefitName) {
+    public Benefit createBenefit(boolean isUniqueBenefitName, String benefitId, String benefitName, String benefitCode) {
         if (!isUniqueBenefitName) {
             throw new BenefitDomainException("Benefit already described");
         }
-        return new Benefit(new BenefitId(benefitId), new BenefitName(benefitName), BenefitStatus.ACTIVE);
+        return new Benefit(new BenefitId(benefitId), new BenefitName(benefitName), BenefitStatus.ACTIVE,benefitCode);
     }
 
-    public Benefit updateBenefit(Benefit benefit, String newBenefitName, boolean benefitIsUpdatable) {
+    public Benefit updateBenefit(Benefit benefit, String newBenefitName, boolean benefitIsUpdatable, String benefitCode) {
         if (!benefitIsUpdatable) {
             throw new BenefitDomainException("Benefit is associated with active coverage");
         }
-        Benefit updatedBenefit = benefit.updateBenefitName(new BenefitName(newBenefitName));
+        Benefit updatedBenefit = benefit.updateBenefitName(new BenefitName(newBenefitName)).updateBenefitCode(benefitCode);
         return updatedBenefit;
     }
 

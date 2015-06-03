@@ -8,7 +8,7 @@ import com.github.springtestdbunit.annotation.ExpectedDatabase;
 import com.github.springtestdbunit.assertion.DatabaseAssertionMode;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
-import com.pla.core.domain.model.ProcessType;
+import com.pla.sharedkernel.domain.model.ProcessType;
 import org.axonframework.commandhandling.gateway.CommandGateway;
 import org.junit.Before;
 import org.junit.Test;

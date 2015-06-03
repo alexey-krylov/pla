@@ -108,8 +108,8 @@ CREATE TABLE `benefit`(
   `benefit_id` varchar(255) NOT NULL,
   `status` varchar(255) NOT NULL,
   `benefit_name` varchar(100) NOT NULL,
-  PRIMARY KEY (`benefit_id`),
-  UNIQUE KEY `UNQ_BENEFIT_NAME` (`benefit_name`)
+  `benefit_code` varchar(100) NOT NULL,
+  PRIMARY KEY (`benefit_id`)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 /*Data for the table `benefit` */

@@ -1,6 +1,6 @@
 package com.pla.core.application;
 
-import com.pla.core.domain.model.ProcessType;
+import com.pla.sharedkernel.domain.model.ProcessType;
 import lombok.*;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.security.core.userdetails.UserDetails;

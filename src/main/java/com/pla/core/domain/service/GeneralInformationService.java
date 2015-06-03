@@ -39,10 +39,10 @@ public class GeneralInformationService {
 
     private AdminRoleAdapter adminRoleAdapter;
     private ObjectMapper objectMapper;
-    private MongoTemplate springMongoTemplate;
+    private MongoTemplate mongoTemplate;
 
     @Autowired
-    public GeneralInformationService(AdminRoleAdapter adminRoleAdapter, MongoTemplate springMongoTemplate) {
+    public GeneralInformationService(AdminRoleAdapter adminRoleAdapter, MongoTemplate mongoTemplate) {
         objectMapper = new ObjectMapper();
         objectMapper.registerModule(new JodaModule());
         objectMapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
@@ -53,7 +53,7 @@ public class GeneralInformationService {
                 .withSetterVisibility(JsonAutoDetect.Visibility.NONE)
                 .withCreatorVisibility(JsonAutoDetect.Visibility.ANY));
         this.adminRoleAdapter = adminRoleAdapter;
-        this.springMongoTemplate = springMongoTemplate;
+        this.mongoTemplate = mongoTemplate;
     }
 
     public boolean createProductLineInformation(LineOfBusinessEnum lineOfBusinessId, UserDetails userDetails, GeneralInformationDto generalInformationDto) {
@@ -72,7 +72,7 @@ public class GeneralInformationService {
         List<Map<DiscountFactorItem, BigDecimal>> discountFactorItems =  transformDiscountFactorItem(generalInformationDto.getDiscountFactorItems());
         ProductLineGeneralInformation productLineGeneralInformation = admin.createProductLineGeneralInformation(lineOfBusinessId, quotationProcessItem,enrollmentProcessItem,reinstatementProcessItem,endorsementProcessItem,claimProcessItem,policyFeeProcess,minimumLimitProcess,surrenderProcessItem,maturityProcessItem,
                 premiumFollowUpFrequencyItems,modalFactorItems,discountFactorItems);
-        springMongoTemplate.save(productLineGeneralInformation);
+        mongoTemplate.save(productLineGeneralInformation);
         return AppConstants.SUCCESS;
     }
 
@@ -123,7 +123,7 @@ public class GeneralInformationService {
         Map<Tax,BigDecimal> serviceTax = Maps.newLinkedHashMap();
         serviceTax.put(generalInformationDto.getServiceTax().getTax(),generalInformationDto.getServiceTax().getValue());
         OrganizationGeneralInformation organizationGeneralInformation = admin.createOrganizationGeneralInformation(modelFactorItems, discountFactorItems, serviceTax);
-        springMongoTemplate.save(organizationGeneralInformation);
+        mongoTemplate.save(organizationGeneralInformation);
         return AppConstants.SUCCESS;
     }
 
@@ -132,7 +132,7 @@ public class GeneralInformationService {
         Query findGeneralInformation = new Query();
         Update update = new Update();
         findGeneralInformation.addCriteria(Criteria.where("organizationInformationId").is(generalInformationDto.getOrganizationInformationId()));
-        OrganizationGeneralInformation organizationGeneralInformation = springMongoTemplate.findOne(findGeneralInformation, OrganizationGeneralInformation.class);
+        OrganizationGeneralInformation organizationGeneralInformation = mongoTemplate.findOne(findGeneralInformation, OrganizationGeneralInformation.class);
         checkArgument(organizationGeneralInformation != null);
         List<Map<ModalFactorItem, BigDecimal>>  modalFactorItem =  transformModalFactorItem(generalInformationDto.getModelFactorItems());
         List<Map<DiscountFactorItem, BigDecimal>>  discountFactorItem =  transformDiscountFactorItem(generalInformationDto.getDiscountFactorItems());
@@ -142,7 +142,7 @@ public class GeneralInformationService {
         update.set("modelFactorItems", organizationGeneralInformation.getModelFactorItems());
         update.set("discountFactorItems", organizationGeneralInformation.getDiscountFactorItems());
         update.set("serviceTax", organizationGeneralInformation.getServiceTax());
-        springMongoTemplate.updateFirst(findGeneralInformation, update, OrganizationGeneralInformation.class);
+        mongoTemplate.updateFirst(findGeneralInformation, update, OrganizationGeneralInformation.class);
         return AppConstants.SUCCESS;
     }
 
@@ -151,7 +151,7 @@ public class GeneralInformationService {
         Update update = new Update();
         Query findGeneralInformation = new Query();
         findGeneralInformation.addCriteria(Criteria.where("productLineInformationId").is(generalInformationDto.getProductLineInformationId()));
-        ProductLineGeneralInformation productLineGeneralInformation = springMongoTemplate.findOne(findGeneralInformation, ProductLineGeneralInformation.class);
+        ProductLineGeneralInformation productLineGeneralInformation = mongoTemplate.findOne(findGeneralInformation, ProductLineGeneralInformation.class);
         checkArgument(productLineGeneralInformation != null);
         List<Map<ProductLineProcessType,Integer>> quotationProcessItem = transformProductLine(generalInformationDto.getQuotationProcessItems());
         List<Map<ProductLineProcessType,Integer>> enrollmentProcessItem = transformProductLine(generalInformationDto.getEnrollmentProcessItems());
@@ -167,7 +167,7 @@ public class GeneralInformationService {
         List<Map<DiscountFactorItem, BigDecimal>> discountFactorItems = transformDiscountFactorItem(generalInformationDto.getDiscountFactorItems());
         productLineGeneralInformation = admin.updateProductLineInformation(productLineGeneralInformation,  quotationProcessItem,enrollmentProcessItem,reinstatementProcessItem,endorsementProcessItem,claimProcessItem,policyFeeProcess,minimumLimitProcess,surrenderProcessItem,maturityProcessItem,premiumFrequencyFollowUp,modalFactorItems,discountFactorItems);
         update = updateProductLineInformation(update, productLineGeneralInformation);
-        springMongoTemplate.updateFirst(findGeneralInformation, update, ProductLineGeneralInformation.class);
+        mongoTemplate.updateFirst(findGeneralInformation, update, ProductLineGeneralInformation.class);
         return AppConstants.SUCCESS;
     }
 
@@ -345,7 +345,7 @@ public class GeneralInformationService {
 
     private List<Map> findAllProductLineInformation() {
         List<Map> productLineInformationList = new ArrayList<Map>();
-        List<ProductLineGeneralInformation> productLineInformation =  springMongoTemplate.findAll(ProductLineGeneralInformation.class, "product_line_information");
+        List<ProductLineGeneralInformation> productLineInformation =  mongoTemplate.findAll(ProductLineGeneralInformation.class, "product_line_information");
         for (ProductLineGeneralInformation productLineGeneralInformation : productLineInformation) {
             Map plan = objectMapper.convertValue(productLineGeneralInformation, Map.class);
             productLineInformationList.add(plan);
@@ -355,7 +355,7 @@ public class GeneralInformationService {
 
     private List<Map> findAllOrganizationInformation() {
         List<Map> organizationInformationList = new ArrayList<Map>();
-        List<OrganizationGeneralInformation> organizationGeneralInformations =  springMongoTemplate.findAll(OrganizationGeneralInformation.class, "organization_information");
+        List<OrganizationGeneralInformation> organizationGeneralInformations =  mongoTemplate.findAll(OrganizationGeneralInformation.class, "organization_information");
         for (OrganizationGeneralInformation organizationGeneralInformation : organizationGeneralInformations) {
             Map plan = objectMapper.convertValue(organizationGeneralInformation, Map.class);
             organizationInformationList.add(plan);
@@ -428,7 +428,7 @@ public class GeneralInformationService {
     public ProductLineGeneralInformation findProductLineInformationByLineOfBusinessId(LineOfBusinessEnum lineOfBusinessEnum)    {
         Query findGeneralInformation = new Query();
         findGeneralInformation.addCriteria(Criteria.where("productLine").is(lineOfBusinessEnum));
-        ProductLineGeneralInformation productLineGeneralInformation = springMongoTemplate.findOne(findGeneralInformation, ProductLineGeneralInformation.class);
+        ProductLineGeneralInformation productLineGeneralInformation = mongoTemplate.findOne(findGeneralInformation, ProductLineGeneralInformation.class);
         return productLineGeneralInformation;
     }
 }

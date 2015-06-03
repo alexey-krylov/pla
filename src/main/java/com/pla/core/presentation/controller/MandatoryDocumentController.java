@@ -5,7 +5,7 @@ import com.google.common.collect.Maps;
 import com.pla.core.application.CreateMandatoryDocumentCommand;
 import com.pla.core.application.UpdateMandatoryDocumentCommand;
 import com.pla.core.domain.exception.MandatoryDocumentException;
-import com.pla.core.domain.model.ProcessType;
+import com.pla.sharedkernel.domain.model.ProcessType;
 import com.pla.core.domain.service.MandatoryDocumentService;
 import com.pla.core.dto.MandatoryDocumentDto;
 import org.axonframework.commandhandling.gateway.CommandGateway;
