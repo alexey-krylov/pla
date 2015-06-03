@@ -102,6 +102,7 @@ App.controller('CreatePremiumController', ['$scope', '$http', function ($scope, 
     });
     $scope.$watch('createPremium.planId', function (newValue, oldValue) {
         if (newValue) {
+            $scope.createPremium.coverageId="";
             $scope.showOptionalCoverage = true;
             var planId = $scope.createPremium.planId;
             $scope.premiumForm.planId = planId;
