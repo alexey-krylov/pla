@@ -165,15 +165,15 @@ public class ProductLineGeneralInformation {
         }
     }
 
-    public int getProductLineProcessItemValue(ProcessType processType) throws ProcessInfoException {
+    public int getProductLineProcessItemValue(ProcessType processType, ProductLineProcessType productLineProcessType) throws ProcessInfoException {
         ImmutableMap<ProcessType, Object> processTypeMap = ImmutableMap.of(ProcessType.QUOTATION, this.quotationProcessInformation,ProcessType.PROPOSAL, this.enrollmentProcessInformation);
         switch (processType.name()){
             case "QUOTATION":
                 QuotationProcessInformation quotationProcessInformation = (QuotationProcessInformation) processTypeMap.get(processType);
-                return quotationProcessInformation.getTheProductLineProcessTypeValue(ProductLineProcessType.PURGE_TIME_PERIOD);
+                return quotationProcessInformation.getTheProductLineProcessTypeValue(productLineProcessType);
             case "PROPOSAL":
                 EnrollmentProcessInformation enrollmentProcessInformation = (EnrollmentProcessInformation) processTypeMap.get(processType);
-                return enrollmentProcessInformation.getTheProductLineProcessTypeValue(ProductLineProcessType.PURGE_TIME_PERIOD);
+                return enrollmentProcessInformation.getTheProductLineProcessTypeValue(productLineProcessType);
             default:
                   raiseProcessTypeNotFoundException(processType.name());
         }
