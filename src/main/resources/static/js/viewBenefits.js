@@ -59,11 +59,18 @@ var openBenefitCreateModal = function(){
     modalOptions.show = true;
     $('#myModal').modal(modalOptions);
 };
-var openBenefitUpdateModal = function(benefitId,benefitName,benefitCode){
+var openBenefitUpdateModal = function(benefitId){
    // var benefitMap = convertThymeleafObjectToJavascriptObject(benefit);
+console.log("BENEFIT ID-->"+benefitId);
+//    console.log("BENEFIT NAME-->"+benefitName);
+  //  console.log("BENEFIT CODE-->"+benefitCode);
+    $.get('/pla/core/benefit/getbenefitbyid/'+benefitId, function(data, status){
+        console.log("Data: " + data + "\nStatus: " + status);
+        $('#benefitName').val(data.benefitName).attr("disabled",false);
+        $('#benefitCode').val(data.benefitCode).attr("disabled",true);
+    });
 
-    $('#benefitName').val(benefitName).attr("disabled",false);
-    $('#benefitCode').val(benefitCode).attr("disabled",true);
+
     $('#createUpdate').text('Update');
     $('#alert').hide();
     $('#alert-danger').hide();
