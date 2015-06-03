@@ -13,8 +13,6 @@ App.controller('CreatePremiumController', ['$scope', '$http', function ($scope, 
     $scope.showOptionalCoverage = false;
     $scope.selectedDate = moment().add(1, 'days').format("YYYY-MM-DD");
     $scope.newDateField = {};
-
-
     $scope.datePickerSettings = {
         isOpened: false,
         dateOptions: {
@@ -32,7 +30,7 @@ App.controller('CreatePremiumController', ['$scope', '$http', function ($scope, 
     $scope.getDefinedOption = function () {
 
         if ($scope.createPremium.definedFor == "plan") {
-            $scope.showOptionalCoverage = false;
+            $scope.showOptionalCoverage = true;
         } else {
            // $scope.createPremium.definedFor = "optionalCoverage"
             $scope.showOptionalCoverage = true;
@@ -45,27 +43,21 @@ App.controller('CreatePremiumController', ['$scope', '$http', function ($scope, 
     $scope.$watch('createPremium.definedFor',function(newValue, oldValue){
         if(newValue=='optionalCoverage'){
             $scope.createPremium.planId="";
+            $scope.createPremium.coverageId="";
             $scope.showOptionalCoverageValue = false;
+        }else if (newValue == 'plan'){
+            $scope.createPremium.planId="";
+            $scope.showOptionalCoverageValue = true;
+
         }
 
     });
     $scope.$watch('createPremium.coverageId',function(newValue, oldValue){
-
         if(newValue){
 
             $scope.showOptionalCoverageValue=true;
         }
     });
-    $scope.$watch('createPremium.premiumInfluencingFactors',function(newValue, oldValue){
-
-        if(newValue){
-          //  alert(newValue);
-        }
-    });
-   /* $scope.submitFormToServer=function(){
-       console.log(createPremium);
-
-    };*/
 
 
     $scope.createPremium.premiumInfluencingFactors=[];
@@ -110,6 +102,7 @@ App.controller('CreatePremiumController', ['$scope', '$http', function ($scope, 
     });
     $scope.$watch('createPremium.planId', function (newValue, oldValue) {
         if (newValue) {
+            $scope.showOptionalCoverage = true;
             var planId = $scope.createPremium.planId;
             $scope.premiumForm.planId = planId;
             $http.get('/pla/core/plan/getcoveragebyplanid/' + planId).success(function (data) {
