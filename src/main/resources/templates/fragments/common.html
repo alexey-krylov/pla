@@ -56,7 +56,55 @@
                 "fuelux":{deps:['jquery','bootstrap']},
                 "services":{deps:['angular']}},
             "packages": []
-        })
+        });
+
+        require(['jquery'], function ($) {
+            //add some elements with animate effect
+            $(".box").hover(
+                    function () {
+                        $(this).find('span.badge').addClass("animated fadeInLeft");
+                        $(this).find('.ico').addClass("animated fadeIn");
+                    },
+                    function () {
+                        $(this).find('span.badge').removeClass("animated fadeInLeft");
+                        $(this).find('.ico').removeClass("animated fadeIn");
+                    }
+            );
+            (function () {
+
+                var $menu = $('.navigation nav'),
+                        optionsList = '<option value="" selected="selected">Go to..</option>';
+                $menu.find('li').each(function () {
+                    var $this = $(this),
+                            $anchor = $this.children('a'),
+                            depth = $this.parents('ul').length - 1,
+                            indent = '';
+
+                    if (depth) {
+                        while (depth > 0) {
+                            indent += ' - ';
+                            depth--;
+                        }
+
+                    }
+                    $(".nav li").parent().addClass("bold");
+
+                    optionsList += '<option value="' + $anchor.attr('href') + '">' + indent + ' ' + $anchor.text() + '</option>';
+                }).end()
+                        .after('<select class="selectmenu">' + optionsList + '</select>');
+
+                $('select.selectmenu').on('change', function () {
+                    window.location = $(this).val();
+                });
+
+            })();
+            //Navi hover
+            $('ul.nav li.dropdown').hover(function () {
+                $(this).find('.dropdown-menu').stop(true, true).delay(200).fadeIn();
+            }, function () {
+                $(this).find('.dropdown-menu').stop(true, true).delay(200).fadeOut();
+            });
+        });
     </script>
 </head>
 <body>
@@ -66,58 +114,73 @@
             background-color: #C7C7C7!important;
         }
     </style>
-
     <!-- Fixed navbar -->
-
-    <div id='cssmenu'>
-        <ul>
-            <li><a th:href="@{/home}"><span class="glyphicon glyphicon-home" aria-hidden="true">&nbsp;</span><span>Home</span></a></li>
-            <li class="has-sub">
-                <a href="javascript:void(0)"><span class="glyphicon glyphicon-wrench"></span>&nbsp;Core</a>
-                <ul>
-                    <li>
-                        <a th:href="@{/core/agent/listagent}">Agents</a>
-                    </li>
-                    <li><a th:href="@{/core/benefit/listbenefit}">Benefits</a>
-                    </li>
-                    <li>
-                        <a th:href="@{/core/coverages/view}">Coverages</a>
-                    </li>
-                    <li><a th:href="@{/core/team/view}">Team</a></li>
-                    <li><a th:href="@{/core/plan}">Plan</a></li>
-                    <li><a th:href="@{/core/branch/view}">Branch Manager</a></li>
-                    <li><a th:href="@{/core/region/view}">Regional Manager</a></li>
-                    <li><a th:href="@{/core/commission/list/NORMAL}">Commission</a></li>
-                    <li><a th:href="@{/core/commission/list/OVERRIDE}">Over-ride Commission</a></li>
-                    <li><a th:href="@{/core/premium/listpremium}">Premium</a></li>
-                    <li><a th:href="@{/core/mandatorydocument/view}">Mandatory Documents </a></li>
-                    <li class='last has-sub'><a href="#">General Information</a>
-                        <ul>
-                            <li class='last has-sub' ><a href="#">Product Line Information</a>
-                            <ul>
-                                <li><a th:href="@{/core/productlineinformation/openview}">View</a></li>
-                                <li><a th:href="@{/core/productlineinformation/openupdate}">Update</a></li>
-                            </ul>
+    <header>
+        <div class="container">
+            <div class="navbar navbar-static-top">
+                <div class="navigation">
+                    <nav>
+                        <ul class="nav topnav bold">
+                            <li class="dropdown active">
+                                <a th:href="@{/home}">
+                                    <span class="glyphicon glyphicon-home"
+                                          aria-hidden="true">&nbsp;</span><span>Home</span>
+                                </a>
                             </li>
-                            <li class='last has-sub'><a href="#">Organizational Level Information</a>
-                            <ul>
-                                <li><a th:href="@{/core/organizationinformation/openview}">View Organizational Level Information</a></li>
-                                <li><a th:href="@{/core/organizationinformation/openupdate}"> Set Organizational Level Information</a></li>
-                             </ul></li>
-                        </ul>
-                    </li>
-                </ul>
-            </li>
-            <li class="has-sub">
-                <a href="javascript:void(0)"><span class="glyphicon glyphicon-list-alt"></span>&nbsp;Quotation</a>
-                <ul>
-                    <li><a th:href="@{/quotation/grouplife/listgrouplifequotation}">GroupLife </a></li>
-                    <li><a th:href="@{/individuallife/quotation}">Individual Life </a></li>
-                </ul>
-            </li>
-            <li class="has-sub">
-                <a href="javascript:void(0)"><span class="glyphicon glyphicon-list-alt"></span>&nbsp;Proposal</a>
-                <ul>
+                            <li class="dropdown">
+                                <a href="javascript:void(0)">
+                                    <span class="glyphicon glyphicon-wrench"></span>&nbsp;Core<i
+                                        class="icon-angle-down"></i>
+                                </a>
+                                <ul style="display: none;" class="dropdown-menu sub-menu-level1 bold">
+                                    <li><a th:href="@{/core/agent/listagent}">Agents</a></li>
+                                    <li><a th:href="@{/core/benefit/listbenefit}">Benefits</a></li>
+                                    <li><a th:href="@{/core/coverages/view}">Coverages</a></li>
+                                    <li><a th:href="@{/core/team/view}">Team</a></li>
+                                    <li><a th:href="@{/core/plan}">Plan</a></li>
+                                    <li><a th:href="@{/core/branch/view}">Branch Manager</a></li>
+                                    <li><a th:href="@{/core/region/view}">Regional Manager</a></li>
+                                    <li><a th:href="@{/core/commission/list/NORMAL}">Commission</a></li>
+                                    <li><a th:href="@{/core/commission/list/OVERRIDE}">Over-ride Commission</a></li>
+                                    <li><a th:href="@{/core/premium/listpremium}">Premium</a></li>
+                                    <li><a th:href="@{/core/mandatorydocument/view}">Mandatory Documents </a></li>
+                                    <li class="dropdown"><a href="#">General Information
+                                        <i class="glyphicon glyphicon-chevron-right "></i></a>
+                                        <ul style="display: none;" class="dropdown-menu sub-menu-level2 bold">
+                                            <li class='dropdown'><a href="#">Product Line Information</a>
+                                                <ul style="display: none;" class="dropdown-menu sub-menu-level2 bold">
+                                                    <li><a th:href="@{/core/productlineinformation/openview}">View</a>
+                                                    </li>
+                                                    <li>
+                                                        <a th:href="@{/core/productlineinformation/openupdate}">Update</a>
+                                                    </li>
+                                                </ul>
+                                            </li>
+                                            <li class='dropdown'><a href="#">Organizational Level Information</a>
+                                                <ul style="display: none;" class="dropdown-menu sub-menu-level2 bold">
+                                                    <li><a th:href="@{/core/organizationinformation/openview}">View
+                                                        Organizational Level Information</a></li>
+                                                    <li><a th:href="@{/core/organizationinformation/openupdate}"> Set
+                                                        Organizational Level Information</a></li>
+                                                </ul>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li class="dropdown">
+                                <a href="javascript:void(0)">
+                                    <span class="glyphicon glyphicon-list-alt"></span>&nbsp;Quotation<i
+                                        class="icon-angle-down"></i></a>
+                                <ul style="display: none;" class="dropdown-menu sub-menu-level1 bold">
+                                    <li><a th:href="@{/quotation/grouplife/listgrouplifequotation}">GroupLife </a></li>
+                                    <li><a th:href="@{/individuallife/quotation}">Individual Life </a></li>
+                                </ul>
+                            </li>
+                            <li class="dropdown">
+                                <a href="javascript:void(0)"><span class="glyphicon glyphicon-list-alt"></span>&nbsp;Proposal<i
+                                        class="icon-angle-down"></i></a>
+                                <ul style="display: none;" class="dropdown-menu sub-menu-level1 bold">
                     <li><a th:href="@{/core/proposal/listgrouplifeproposal}">GroupLife </a></li>
                     <li><a th:href="@{/individuallife/proposal}">Individual Life </a></li>
                 </ul>
@@ -125,12 +188,26 @@
             <li class='last' style="float:right">
                 <a href="#" class="menu-button" th:href="@{/logout}"><span class="glyphicon glyphicon-log-out" aria-hidden="true"></span>&nbsp;Log off</a></li>
         </ul>
-    </div>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </header>
 </div>
-<footer class="footer"  th:fragment="footer">
+<footer class="footer" th:fragment="footer">
     <div class="container">
         <p class="text-muted"></p>
     </div>
 </footer>
+<script th:inline="javascript">
+    /*<![CDATA[*/
+    /*global jQuery:false */
+    $(document).ready(function ($) {
+        "use strict";
+
+
+    });
+    /*]]>*/
+</script>
 </body>
 </html>

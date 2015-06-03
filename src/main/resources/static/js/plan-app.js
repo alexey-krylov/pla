@@ -614,7 +614,6 @@ app.controller('PlanSetupController', ['$scope', '$http', '$location', '$routePa
             $scope.createPlan = function () {
                 $scope.validationFailed = false;
 
-
                 $scope.plan.planDetail.withdrawalDate = new moment($scope.withdrawalDt).format('DD/MM/YYYY');
 
                 $scope.plan.planDetail.launchDate = new moment($scope.launchDt).format('DD/MM/YYYY');
