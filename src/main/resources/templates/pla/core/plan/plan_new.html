@@ -134,6 +134,7 @@
                                     <input type="text" class="form-control input-sm"
                                            datepicker-popup=""
                                            ng-required="{{plan.planId!=undefined}}"
+                                           min-date="minDate"
                                            is-open="launchDateOpen"
                                            ng-model="launchDt" name="launchDate" id='launchDate'/>
                                     <span class="input-group-btn">
@@ -162,6 +163,10 @@
                                         <i class="glyphicon glyphicon-calendar"></i></button>
                                   </span>
                                 </div>
+                                <div ng-show="step1.withdrawalDate.$dirty &amp;&amp; step1.withdrawalDate.$invalid">
+                                    <small class="error" ng-show="step1.withdrawalDate.$error.max">Error
+                                    </small>
+                                </div>
                             </div>
                         </div>
                         <div class="col-md-3">
@@ -170,7 +175,6 @@
                                 <input type="number" ng-required="true"
                                        class="form-control input-sm" name="minEntryAge" id='minEntryAge'
                                        ng-model="plan.planDetail.minEntryAge"/>
-
                                 <div ng-show="step1.minEntryAge.$dirty &amp;&amp; step1.minEntryAge.$invalid">
                                     <small class="error" ng-show="step1.minEntryAge.$error.number">Please
                                         enter Numbers only.
@@ -416,7 +420,6 @@
                                 <div class="panel-body">
                                     <div class="control-group required col-md-4">
                                         <label class="control-label">Income Multiplier</label>
-
                                         <div class="controls">
                                             <input type="text" name="incomeMultiplier" ng-pattern="onlyNumbers" class="form-control input-sm  col-sm-3"
                                                    ng-model="plan.sumAssured.incomeMultiplier" ng-required="true"/>
@@ -607,8 +610,7 @@
 
                 <div class="alert alert-danger" role="alert" ng-if="step5.hasError">
                     <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
-                    <span class="sr-only">Error:</span>
-                    {{stepErrorMsg}}
+                    <span class="sr-only">Error:</span>{{stepErrorMsg}}
                 </div>
                 <div style="float:right;padding:0px 0px 2px 0px">
                     <button class="btn btn-default" ng-click="showCoverageForm()">Add Coverage</button>
@@ -617,7 +619,7 @@
                     <thead>
                     <tr>
                         <th> Coverage Name</th>
-                        <th>Accelerated / Additional Cover</th>
+                        <th> Accelerated / Additional Cover</th>
                         <th> Base/Optional</th>
                         <th> Deductible Type</th>
                         <th> Sum Assured Type</th>
@@ -629,7 +631,7 @@
                         <td>{{coverage.coverageCover}}</td>
                         <td>{{coverage.coverageType}}</td>
                         <td>{{coverage.deductibleType}}</td>
-                        <td>{{coverage.coverageSumAssured.sumAssuredType}}</td>
+                        <td>{{coverage.coverageSumAssured.sumAssuredType|resolveEnum}}</td>
                         <td style="text-align:center">
                             <button type="button" class="btn btn-default btn-xs"
                                     ng-click="editPlanCoverage(coverage)">

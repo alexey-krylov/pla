@@ -14,12 +14,22 @@
 </style>
 <div th:include="fragments/common :: bodyHeader" th:remove="tag"/>
 <script>
+
+    requirejs.config({
+        paths: {
+            angucomplete: 'http://ghiden.github.io/angucomplete-alt/js/libs/angucomplete-alt',
+            ilquotation: '/pla/js/quotation/individuallife/quotation'
+        },
+        "shim": {"ilquotation": ["angular", 'angucomplete']}
+    });
     require(['ng-tags-input', 'checklistmodel', 'angular-ui-router'], function (a, b) {
     });
-    requirejs(['main', 'http://ghiden.github.io/angucomplete-alt/js/libs/angucomplete-alt.js',
-        '/pla/js/quotation/individuallife/quotation.js'], function (a, b, c) {
-        angular.bootstrap(document, ['individualQuotation']);
+    requirejs(['main'], function () {
+        require(['ilquotation', 'jquery'], function (app, $) {
+            angular.bootstrap(document, ['individualQuotation']);
+        });
     });
+
 </script>
 <div class="container fuelux">
     <ng-view>
@@ -27,5 +37,71 @@
     </ng-view>
 </div>
 <footer class="footer" th:include="fragments/common :: footer"></footer>
+
+<script id="plan-sumassured.tpl" type="text/ng-template">
+    <div ng-switch="plan.sumAssured.sumAssuredType">
+        <div ng-switch-when="SPECIFIED_VALUES">
+            <select class="form-control input-sm" ng-model="quotation.sumAssured" name="sumAssured"
+                    ng-options="value as value for value in plan.sumAssured.sumAssuredValue"
+                    ng-required="true"></select>
+        </div>
+        <div ng-switch-when="RANGE">
+            <input type="number" class="form-control input-sm" min="{{plan.sumAssured.minSumInsured}}"
+                   name="sumAssured"
+                   max="{{plan.sumAssured.maxSumInsured}}" ng-model="quotation.sumAssured" ng-required="true"/>
+
+            <div class="error" ng-messages="step4.sumAssured.$error">
+                <small ng-message="min">Sum Assured cannot be less then {{plan.sumAssured.minSumInsured}}.</small>
+                <small ng-message="max">Sum Assured cannot be more than {{plan.sumAssured.maxSumInsured}}.</small>
+            </div>
+        </div>
+        <div ng-switch-when="INCOME_MULTIPLIER">
+            <input type="number" class="form-control input-sm" min="0" max="{{plan.sumAssured.incomeMultiplier}}"
+                   name="sumAssured"
+                   ng-model="quotation.sumAssured" ng-required="true"/>
+
+            <div class="error" ng-messages="step4.sumAssured.$error" ng-if="step1.$dirty">
+                <small ng-message="max">Sum Assured cannot be greater than {{plan.sumAssured.incomeMultiplier}}.
+                </small>
+            </div>
+        </div>
+    </div>
+</script>
+
+<script id="plan-policyterm.tpl" type="text/ng-template">
+    <div ng-switch="plan.policyTermType">
+        <div ng-switch-when="SPECIFIED_VALUES">
+            <select class="form-control input-sm" ng-model="quotation.policyTerm" name="policyTerm"
+                    ng-options="value as value for value in policyTerms()" ng-required="true"></select>
+        </div>
+        <div ng-switch-when="MATURITY_AGE_DEPENDENT">
+            <select class="form-control input-sm" ng-model="quotation.policyTerm" name="policyTerm"
+                    ng-options="value as value for value in policyTerms()" ng-required="true"></select>
+        </div>
+    </div>
+</script>
+
+<script id="plan-premiumterm.tpl" type="text/ng-template">
+    <div ng-switch="plan.premiumTermType">
+        <div ng-switch-when="SPECIFIED_VALUES">
+            <select class="form-control input-sm" ng-model="quotation.premiumTerm" name="premiumTerm"
+                    ng-options="value as value for value in premiumTerms()" ng-required="true"></select>
+        </div>
+        <div ng-switch-when="SPECIFIED_AGES">
+            <select class="form-control input-sm" ng-model="quotation.premiumTerm" name="premiumTerm"
+                    ng-options="value as value for value in premiumTerms()" ng-required="true"></select>
+        </div>
+        <div ng-switch-when="REGULAR">
+            <input type="number" class="form-control input-sm" readonly="true" ng-model="quotation.premiumTerm"
+                   name="premiumTerm"/>
+        </div>
+        <div ng-switch-when="SINGLE">
+            <input type="number" class="form-control input-sm" ng-required="true" ng-model="quotation.premiumTerm"
+                   name="premiumTerm"/>
+        </div>
+    </div>
+</script>
 </body>
 </html>
+
+

@@ -707,6 +707,20 @@ app.controller('PlanSetupController', ['$scope', '$http', '$location', '$routePa
 
         }]
 );
+app.filter('resolveEnum', function () {
+    return function (input) {
+        input = input || '';
+        var out = "";
+        if ('SPECIFIED_VALUES' == input) {
+            out = 'Specified Values';
+        } else if ('RANGE' === input) {
+            out = 'Specified Range';
+        } else if ('DERIVED' === input) {
+            out = '% of the Plan Sum Assured';
+        }
+        return out;
+    };
+});
 app.filter('getTrustedUrl', ['$sce', function ($sce) {
     return function (url) {
         return $sce.getTrustedResourceUrl(url);
