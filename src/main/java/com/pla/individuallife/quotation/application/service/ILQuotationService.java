@@ -114,19 +114,17 @@ public class ILQuotationService {
             }
         }
 
-        premiumDetailDto.setRiderPremiumDtos(riderPremiumDtoSet);
-
-        BigDecimal totalPremium = premiumDetailDto.getPlanAnnualPremium().add(riderPremiumDtoSet.stream().map(RiderPremiumDto::getAnnualPremium).reduce(BigDecimal::add).get());
-
+        BigDecimal totalPremium = premiumDetailDto.getPlanAnnualPremium();
+        if(riderPremiumDtoSet.size() > 0) {
+            premiumDetailDto.setRiderPremiumDtos(riderPremiumDtoSet);
+            totalPremium = totalPremium.add(riderPremiumDtoSet.stream().map(RiderPremiumDto::getAnnualPremium).reduce(BigDecimal::add).get());
+        }
         premiumDetailDto.setTotalPremium(totalPremium);
 
 
         List<ComputedPremiumDto> computedPremiums1 = premiumCalculator.calculateModalPremium(new BasicPremiumDto(PremiumFrequency.ANNUALLY, totalPremium));
-
         premiumDetailDto.setMonthlyPremium(ComputedPremiumDto.getMonthlyPremium(computedPremiums1));
-
         premiumDetailDto.setQuarterlyPremium(ComputedPremiumDto.getQuarterlyPremium(computedPremiums1));
-
         premiumDetailDto.setSemiannualPremium(ComputedPremiumDto.getSemiAnnualPremium(computedPremiums1));
 
         return premiumDetailDto;

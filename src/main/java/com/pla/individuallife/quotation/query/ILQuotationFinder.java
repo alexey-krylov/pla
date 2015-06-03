@@ -38,7 +38,7 @@ public class ILQuotationFinder {
 
     public static final String FIND_QUOTATION_BY_ID_FOR_PREMIUM_WITH_RIDER_QUERY = "SELECT  r.`coverage_id` AS COVERAGEID, r.`cover_term` AS COVERTERM, r.`sum_assured` AS RIDER_SA,\n"+
             "r.`waiver_of_premium` AS RIDER_PREMIUM_WAIVER, c.`coverage_name` AS COVERAGENAME\n"+
-            "  FROM individual_life_quotation_rider_details r  LEFT JOIN coverage c\n"+
+            "  FROM individual_life_quotation_rider_details r  INNER JOIN coverage c\n"+
             "ON r.`coverage_id` = c.`coverage_id`\n"+
             "WHERE r.`individual_life_quotation_quotationId` =:quotationId";
 
