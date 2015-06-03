@@ -70,8 +70,10 @@ angular.module('createAgent',['common','ngRoute','mgcrea.ngStrap.select','mgcrea
             * */
             if(_.size(agentDetails)!=0){
                 $scope.agentDetails=angular.copy(agentDetails);
-                if(agentDetails.agentProfile.overrideCommissionApplicable) {
-                    $scope.agentDetails.overrideCommissionApplicable = agentDetails.agentProfile.overrideCommissionApplicable;
+                if(agentDetails.agentProfile) {
+                    if (agentDetails.agentProfile.overrideCommissionApplicable) {
+                        $scope.agentDetails.overrideCommissionApplicable = agentDetails.agentProfile.overrideCommissionApplicable;
+                    }
                 }
                 /*This is used to disabled and hide some of the fields in the UI*/
                 $scope.isEditMode =  true;
