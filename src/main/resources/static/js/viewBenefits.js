@@ -18,7 +18,7 @@ function preConfigurations(){
     $('#benefit-table').dataTable(
         {
             "aoColumnDefs": [
-                { "bSearchable": false, "bSortable":false, "aTargets": [ 1 ] }
+                { "bSearchable": false, "bSortable":false, "aTargets": [ 2 ] }
             ] }
     );
 }
@@ -45,6 +45,7 @@ var modalOptions = {
 
 var openBenefitCreateModal = function(){
     $('#benefitName').val(null);
+    $('#benefitCode').val(null);
     $('#createUpdate').text('Create');
     $('#alert').hide();
     $('#alert-danger').hide();
@@ -58,16 +59,17 @@ var openBenefitCreateModal = function(){
     modalOptions.show = true;
     $('#myModal').modal(modalOptions);
 };
-var openBenefitUpdateModal = function(benefit){
-    var benefitMap = convertThymeleafObjectToJavascriptObject(benefit);
-    $('#benefitName').val(benefitMap.benefitName);
+var openBenefitUpdateModal = function(benefitId,benefitName,benefitCode){
+   // var benefitMap = convertThymeleafObjectToJavascriptObject(benefit);
+    $('#benefitName').val(benefitName);
+    $('#benefitCode').val(benefitCode);
     $('#createUpdate').text('Update');
     $('#alert').hide();
     $('#alert-danger').hide();
     $('#createUpdate').unbind('click');
     $('#createUpdate').click(
         function(){
-            updateBenefit(benefitMap);
+            updateBenefit(benefitId);
         }
     );
     $('#myModalLabel').text("Update Benefit");
@@ -75,12 +77,13 @@ var openBenefitUpdateModal = function(benefit){
     $('#myModal').modal(modalOptions);
 };
 
-var updateBenefit = function(benefitMap){
+var updateBenefit = function(benefitId){
+    console.log("benefitId"+benefitId);
     if(validate()){
         return;
     }
     var benefitData = {
-        benefitId:benefitMap.benefitId
+        benefitId:benefitId
     };
     $('#createBenefit *').filter(':text').each(function(key,value){
         benefitData[$(value)[0].id]=$(value).val();
@@ -95,6 +98,7 @@ var updateBenefit = function(benefitMap){
                 hideAlerts();
                 $('#alert').text(msg.message).show();
                 document.getElementById("benefitName").disabled = true;
+                document.getElementById("benefitCode").disabled = true;
                 $('#cancel-button').text('Done');
                 $('#createUpdate').hide();
             }else if(msg.status=='500'){
@@ -128,6 +132,7 @@ var createBenefit = function(){
                 hideAlerts();
                 $('#alert').text(msg.message).show();
                 document.getElementById("benefitName").disabled = true;
+                document.getElementById("benefitCode").disabled = true;
                 $('#cancel-button').text('Done');
                 $('#createUpdate').hide();
             }else if(msg.status=='500'){
