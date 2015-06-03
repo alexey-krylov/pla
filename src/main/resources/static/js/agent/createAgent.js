@@ -62,12 +62,17 @@ angular.module('createAgent',['common','ngRoute','mgcrea.ngStrap.select','mgcrea
                     }
                 }
             }
+
+
+
             /*agentDetails will be empty if its a create page else it is an update
             * and agentDetails will be pre-populated
             * */
             if(_.size(agentDetails)!=0){
                 $scope.agentDetails=angular.copy(agentDetails);
-               // $scope.agentDetails.overrideCommissionApplicable = 'NO'
+                if(agentDetails.agentProfile.overrideCommissionApplicable) {
+                    $scope.agentDetails.overrideCommissionApplicable = agentDetails.agentProfile.overrideCommissionApplicable;
+                }
                 /*This is used to disabled and hide some of the fields in the UI*/
                 $scope.isEditMode =  true;
                 $scope.trainingCompleteOn = agentDetails.agentProfile.trainingCompleteOn;
