@@ -61,8 +61,9 @@ var openBenefitCreateModal = function(){
 };
 var openBenefitUpdateModal = function(benefitId,benefitName,benefitCode){
    // var benefitMap = convertThymeleafObjectToJavascriptObject(benefit);
-    $('#benefitName').val(benefitName);
-    $('#benefitCode').val(benefitCode);
+
+    $('#benefitName').val(benefitName).attr("disabled",false);
+    $('#benefitCode').val(benefitCode).attr("disabled",true);
     $('#createUpdate').text('Update');
     $('#alert').hide();
     $('#alert-danger').hide();
