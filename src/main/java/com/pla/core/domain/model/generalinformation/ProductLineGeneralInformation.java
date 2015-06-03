@@ -1,5 +1,6 @@
 package com.pla.core.domain.model.generalinformation;
 
+import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Sets;
 import com.pla.core.domain.exception.GeneralInformationException;
 import com.pla.publishedlanguage.domain.model.PremiumFrequency;
@@ -59,7 +60,6 @@ public class ProductLineGeneralInformation {
     private ModalFactorProcessInformation  modalFactorProcessInformation;
 
     private DiscountFactorProcessInformation discountFactorProcessInformation;
-
 
     private ProductLineGeneralInformation(String productLineInformationId, LineOfBusinessEnum productLineId) {
         this.productLineInformationId = productLineInformationId;
@@ -146,6 +146,20 @@ public class ProductLineGeneralInformation {
             }
         }).findAny().get();
         return premiumFollowUpFrequencyItems.getPremiumFollowUpFrequencyItems();
+    }
+
+    public int getProductLineProcessItemValue(String processType, ProductLineProcessType productLineProcessType){
+        ImmutableMap<String, Object> processTypeMap = ImmutableMap.of("QUOTATION", this.quotationProcessInformation, "PROPOSAL", this.enrollmentProcessInformation);
+        switch (processType){
+            case "QUOTATION":
+                QuotationProcessInformation quotationProcessInformation = (QuotationProcessInformation) processTypeMap.get(processType);
+                return quotationProcessInformation.getTheProductLineProcessTypeValue(productLineProcessType);
+            case "PROPOSAL":
+                EnrollmentProcessInformation enrollmentProcessInformation = (EnrollmentProcessInformation) processTypeMap.get(processType);
+                return enrollmentProcessInformation.getTheProductLineProcessTypeValue(productLineProcessType);
+            default:
+                return 0;
+        }
     }
 
     private static class QuotationProcessInformationTransformer implements Function<Map<ProductLineProcessType,Integer>,ProductLineProcessItem> {

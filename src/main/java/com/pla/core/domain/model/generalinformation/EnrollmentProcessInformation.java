@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 /**
@@ -39,6 +40,25 @@ class EnrollmentProcessInformation {
             }
             ProductLineProcessItem productLineProcessItem = new ProductLineProcessItem(entry.getKey(), entry.getValue());
             return productLineProcessItem;
+        }
+    }
+
+    public int getTheProductLineProcessTypeValue(ProductLineProcessType productLineProcessType){
+        ProductLineProcessItem productLineProcessItem = enrollmentProcessItems.stream().filter(new FilterProductLineProcessItem(productLineProcessType)).findAny().get();
+        return productLineProcessItem.getValue();
+    }
+
+    private class FilterProductLineProcessItem implements Predicate<ProductLineProcessItem> {
+        ProductLineProcessType productLineProcessType;
+        public FilterProductLineProcessItem(ProductLineProcessType productLineProcessType) {
+            this.productLineProcessType =  productLineProcessType;
+        }
+
+        @Override
+        public boolean test(ProductLineProcessItem productLineProcessItem) {
+            if (productLineProcessType.equals(productLineProcessItem.getProductLineProcessItem()))
+                return true;
+            return false;
         }
     }
 }

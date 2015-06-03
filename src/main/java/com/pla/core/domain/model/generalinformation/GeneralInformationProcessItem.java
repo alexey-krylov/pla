@@ -1,7 +1,8 @@
-package com.pla.sharedkernel.domain.model;
+package com.pla.core.domain.model.generalinformation;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import com.pla.sharedkernel.domain.model.*;
 import com.pla.sharedkernel.identifier.LineOfBusinessEnum;
 
 import java.util.Arrays;

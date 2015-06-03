@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -121,12 +122,14 @@ public class MandatoryDocumentController {
     @ResponseBody
     public List<Map<String,String>> getDefinedProcess(){
         List<Map<String,String>> processTypeList = Lists.newArrayList();
-        for (ProcessType processType : ProcessType.values()){
-            Map<String,String> processTypeMap = Maps.newLinkedHashMap();
-            processTypeMap.put("processType",processType.name());
-            processTypeMap.put("description", processType.description);
-            processTypeList.add(processTypeMap);
-        }
+        Arrays.asList(ProcessType.values()).forEach(process->{
+            if (!Arrays.asList(ProcessType.PROPOSAL,ProcessType.QUOTATION).contains(process)){
+                Map<String,String> processTypeMap = Maps.newLinkedHashMap();
+                processTypeMap.put("processType",process.name());
+                processTypeMap.put("description", process.description);
+                processTypeList.add(processTypeMap);
+            }
+        });
         return processTypeList;
     }
 

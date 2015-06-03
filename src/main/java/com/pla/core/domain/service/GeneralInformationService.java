@@ -7,6 +7,7 @@ import com.fasterxml.jackson.datatype.joda.JodaModule;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.pla.core.domain.model.Admin;
+import com.pla.core.domain.model.generalinformation.GeneralInformationProcessItem;
 import com.pla.core.domain.model.generalinformation.OrganizationGeneralInformation;
 import com.pla.core.domain.model.generalinformation.ProductLineGeneralInformation;
 import com.pla.core.dto.*;
@@ -424,4 +425,10 @@ public class GeneralInformationService {
         return premiumFrequencyFollowUpList;
     }
 
+    public ProductLineGeneralInformation findProductLineInformationByLineOfBusinessId(LineOfBusinessEnum lineOfBusinessEnum)    {
+        Query findGeneralInformation = new Query();
+        findGeneralInformation.addCriteria(Criteria.where("productLine").is(lineOfBusinessEnum));
+        ProductLineGeneralInformation productLineGeneralInformation = springMongoTemplate.findOne(findGeneralInformation, ProductLineGeneralInformation.class);
+        return productLineGeneralInformation;
+    }
 }
