@@ -162,6 +162,7 @@ var updateCoverage = function(coverageId){
                 document.getElementById("coverageCode").disabled = true;
                 document.getElementById("description").disabled = true;
                 $('#checkBenefits').prop('disabled', 'disabled');
+                $('#createUpdate').hide();
             }
         }
     });
