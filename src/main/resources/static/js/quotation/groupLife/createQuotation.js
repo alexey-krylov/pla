@@ -5,6 +5,7 @@ angular.module('createQuotation', ['common', 'ngRoute', 'mgcrea.ngStrap.select',
         function ($scope, $http, $timeout, $location, $route, $upload, provinces, getProvinceAndCityDetail, globalConstants, agentDetails, stepsSaved, proposerDetails, quotationNumber, getQueryParameter,
                   $window, checkIfInsuredUploaded, premiumData) {
             var mode = getQueryParameter("mode");
+            $scope.mode=mode;
             $scope.qId = null;
             if (mode == 'view') {
                 $scope.isViewMode = true;
@@ -50,8 +51,6 @@ angular.module('createQuotation', ['common', 'ngRoute', 'mgcrea.ngStrap.select',
 
                 premium: $scope.premiumData
             };
-
-            $scope.selectedInstallment=$scope.premiumData.premiumInstallment||{};
 
             $scope.quotationDetails.basic = agentDetails;
             $scope.quotationDetails.proposer = proposerDetails;
@@ -129,7 +128,7 @@ angular.module('createQuotation', ['common', 'ngRoute', 'mgcrea.ngStrap.select',
             };
 
             $scope.isSaveDisabled = function (formName) {
-                return formName.$invalid || ($scope.stepsSaved[$scope.selectedItem] && !$scope.isEditMode)
+                return formName.$invalid || ($scope.stepsSaved[$scope.selectedItem] && !mode=='new')
             };
 
             $scope.searchAgent = function () {
@@ -204,7 +203,6 @@ angular.module('createQuotation', ['common', 'ngRoute', 'mgcrea.ngStrap.select',
                         .success(function (agentDetails) {
                             if (agentDetails.status == "200") {
                                 $scope.quotationId = agentDetails.id;
-
                                 setQuotationNumberAndVersionNumber(agentDetails.id);
                                 saveStep();
                             }
@@ -213,9 +211,7 @@ angular.module('createQuotation', ['common', 'ngRoute', 'mgcrea.ngStrap.select',
                     $http.post("/pla/quotation/grouplife/createquotation", angular.extend($scope.quotationDetails.basic, {proposerName: $scope.quotationDetails.proposer.proposerName}))
                         .success(function (agentDetails) {
                             if (agentDetails.status == "200") {
-                                $scope.quotationId = agentDetails.id;
-                                setQuotationNumberAndVersionNumber(agentDetails.id);
-
+                                $window.location.href = '/pla/quotation/grouplife/creategrouplifequotation?quotationId=' + agentDetails.id + '&mode=new';
                                 saveStep();
                             }
                         });
@@ -305,8 +301,8 @@ angular.module('createQuotation', ['common', 'ngRoute', 'mgcrea.ngStrap.select',
 
             $scope.savePremiumDetails = function () {
                 var premiumDetailDto=$scope.quotationDetails.premium;
-                premiumDetailDto.premiumInstallment=$scope.selectedInstallment;
-                $http.post('/pla/quotation/grouplife/savepremiumdetail', angular.extend({premiumDetailDto:premiumDetailDto},
+                premiumDetailDto.premiumInstallment=
+                $http.post('/pla/quotation/grouplife/savepremiumdetail', angular.extend({premiumDetailDto: $scope.quotationDetails.premium},
                     {"quotationId": $scope.quotationId})).success(function (data) {
                     $http.post("/pla/quotation/grouplife/generate", angular.extend({},
                         {"quotationId": $scope.quotationId}))
