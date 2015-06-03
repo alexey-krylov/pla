@@ -28,7 +28,6 @@ var viewQuotationModule = (function () {
     }
 
     services.emailQuotation = function (){
-        alert('DD');
         window.open('/pla/quotation/grouplife/openemailquotation/'+this.selectedItem,"_blank","toolbar=no,resizable=no," +
         "scrollable=no,menubar=no,personalbar=no,dependent=yes,dialog=yes,titlebar=no,resizable=no,location=no,left=100px");
     }

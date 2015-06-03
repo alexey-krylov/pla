@@ -28,14 +28,28 @@ function bodyOnLoad() {
     });
 };
 
+function IsValidEmail(email) {
+    var regex = /^([a-zA-Z0-9_.+-])+\@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+    return regex.test(email);
+}
 function sendEmail() {
     var toAddress = $('#to').val();
     var subject = $('#subject').val();
     var mailContent = $('#mailContent').val();
     var quotationId = $('#quotationId').val();
     var quotationNumber=$('#quotationNumber').val();
-
-
+    if(toAddress == undefined || toAddress=='' || toAddress.length==0){
+        alert('Please enter email address.');
+        return;
+    }
+    var recipientMailAddress=toAddress.split(';');
+    var i=0;
+    for(;i<recipientMailAddress.length;i++){
+        if(!IsValidEmail(recipientMailAddress[i])){
+            alert('Please enter a valid email address.');
+            return;
+        }
+    }
 
     $.ajax({
             url: '/pla/quotation/grouplife/emailQuotation',
@@ -47,7 +61,11 @@ function sendEmail() {
             contentType: 'application/json; charset=utf-8',
             success: function (msg) {
                 if (msg.status == '200') {
-                    $('#alert-modal-success').modal();
+                    $('#alert-modal-success').modal('show');
+
+                    $('#alert-modal-success').on('hidden.bs.modal', function (){
+                        window.close();
+                    });
                 }
             }
         });
