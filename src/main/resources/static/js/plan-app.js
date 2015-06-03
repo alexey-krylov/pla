@@ -67,7 +67,7 @@ app.config(function ($routeProvider, $locationProvider) {
                         "premiumTerm": {},
                         "sumAssured": {},
                         "coverages": []
-                    }
+                    };
                 },
                 endorsementTypes: ['$q', '$http', function ($q, $http) {
                     var deferred = $q.defer();
@@ -194,7 +194,6 @@ app.controller('PlanSetupController', ['$scope', '$http', '$location', '$routePa
             $scope.onlyNumbers = /^[0-9]+$/;
 
             $scope.minDate = new Date();
-
             $scope.productName;
             $scope.planSetUpForm = {};
             $scope.relations = [
@@ -286,8 +285,8 @@ app.controller('PlanSetupController', ['$scope', '$http', '$location', '$routePa
             $scope.emptyCoverage = {maturityAmounts: []};
 
             //var myOtherModal = $modal({scope: $scope, template: '/pla/plan/coverage-form.html', show: false});
-            $scope.showCoverageForm = function (coverage, isEditing) {
-                if ($scope.currentStep == 4) {
+            $scope.showCoverageForm = function (coverage, isEditing, $event) {
+                if ($scope.currentStep == 5) {
                     $modal.open({
                         templateUrl: '/pla/core/plan/coverage-form.html',
                         backdrop: true,
@@ -349,7 +348,6 @@ app.controller('PlanSetupController', ['$scope', '$http', '$location', '$routePa
                                 }
 
                             }
-
                             $scope.removeCoverage = function (idx) {
                                 if ($scope.plan.coverages)
                                     $scope.plan.coverages.splice(idx, 1);
@@ -361,13 +359,15 @@ app.controller('PlanSetupController', ['$scope', '$http', '$location', '$routePa
                                 return angular.isUndefined(coverage) ? {maturityAmounts: []} : coverage;
                             },
                             coverageList: function () {
-                                return $scope.coverageList;
-                                /* var listOfCoverageIds = _.pluck($scope.plan.coverages, "coverageId");
-                                 return listOfCoverageIds;*/
-                                /*var unUsedCoverageList = _.reject($scope.coverageList, function (coverage) {
-                                 return _.contains(listOfCoverageIds, coverage.coverageId);
-                                 });
-                                 return unUsedCoverageList;*/
+                                if (isEditing)
+                                    return $scope.coverageList;
+                                else {
+                                    var listOfCoverageIds = _.pluck($scope.plan.coverages, "coverageId");
+                                    var unUsedCoverageList = _.reject($scope.coverageList, function (coverage) {
+                                        return _.contains(listOfCoverageIds, coverage.coverageId);
+                                    });
+                                    return unUsedCoverageList;
+                                }
                             },
                             plan: function () {
                                 return $scope.plan;
@@ -603,9 +603,6 @@ app.controller('PlanSetupController', ['$scope', '$http', '$location', '$routePa
                 var planCoverageBenefit = _.find($scope.plan.planCoverageBenefits, function (each) {
                     return each.benefitId == $scope.newPlanCoverageBenefit.benefitId;
                 });
-
-                console.log(JSON.stringify(planCoverageBenefit));
-
                 planCoverage.planCoverageBenefits.push($scope.newPlanCoverageBenefit);
                 $scope.newPlanCoverageBenefit = angular.copy({benefitLimit: null, maxLimit: null});
                 benefitForm.$setPristine();
@@ -616,6 +613,11 @@ app.controller('PlanSetupController', ['$scope', '$http', '$location', '$routePa
 
             $scope.createPlan = function () {
                 $scope.validationFailed = false;
+
+
+                $scope.plan.planDetail.withdrawalDate = new moment($scope.withdrawalDt).format('DD/MM/YYYY');
+
+                $scope.plan.planDetail.launchDate = new moment($scope.launchDt).format('DD/MM/YYYY');
 
                 if ($scope.plan.planDetail.withdrawalDate == "Invalid date") {
                     $scope.plan.planDetail.withdrawalDate = null;
@@ -633,7 +635,6 @@ app.controller('PlanSetupController', ['$scope', '$http', '$location', '$routePa
                         $scope.serverErrMsg = data.message;
                     });
             };
-
 
             $scope.datePickerSettings = {
                 isOpened: false,
@@ -655,7 +656,9 @@ app.controller('PlanSetupController', ['$scope', '$http', '$location', '$routePa
             };
             $scope.launchDt = $scope.plan.planDetail.launchDate;
             $scope.withdrawalDt = $scope.plan.planDetail.withdrawalDate;
-            $scope.$watch('launchDt', function (newVal) {
+
+
+            /* $scope.$watch('launchDt', function (newVal) {
                 if (!angular.isUndefined(newVal) && angular.isDefined($scope.plan.planId)) {
                     $scope.plan.planDetail.launchDate = moment(newVal).format('DD/MM/YYYY');
                 } else {
@@ -666,7 +669,7 @@ app.controller('PlanSetupController', ['$scope', '$http', '$location', '$routePa
                 if (!angular.isUndefined(newVal) && newVal != "Invalid Date") {
                     $scope.plan.planDetail.withdrawalDate = moment(newVal).format('DD/MM/YYYY');
                 }
-            });
+             });*/
 
             $scope.isValid = function (formField) {
                 return formField.$dirty && formField.$invalid
@@ -675,8 +678,12 @@ app.controller('PlanSetupController', ['$scope', '$http', '$location', '$routePa
             $scope.step5 = {};
             $scope.step6 = {};
             $scope.currentStep = 1;
-            $scope.$on('actionclicked.fu.wizard', function (name, event, data) {
+
+            $scope.$on('changed.fu.wizard', function (name, sevent, data) {
                 $scope.currentStep = data.step;
+                console.log('changed.fu.wizard' + $scope.currentStep);
+            });
+            $scope.$on('actionclicked.fu.wizard', function (name, event, data) {
                 if (data.step == 5) {
                     if ($scope.plan.coverages.length == 0) {
                         $scope.step5.hasError = true;

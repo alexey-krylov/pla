@@ -70,6 +70,7 @@ angular.module('createAgent',['common','ngRoute','mgcrea.ngStrap.select','mgcrea
             * */
             if(_.size(agentDetails)!=0){
                 $scope.agentDetails=angular.copy(agentDetails);
+                //console.log(agentDetails);
                 if(agentDetails.agentProfile) {
                     if (agentDetails.agentProfile.overrideCommissionApplicable) {
                         $scope.agentDetails.overrideCommissionApplicable = agentDetails.agentProfile.overrideCommissionApplicable;
@@ -245,7 +246,7 @@ angular.module('createAgent',['common','ngRoute','mgcrea.ngStrap.select','mgcrea
             };
             $scope.update =  function(){
                $scope.isFormSubmitted = true;
-              //  console.log($scope.agentDetails);
+                console.log($scope.agentDetails);
                 if($scope.agentDetailsForm.$valid && $scope.teamDetailsForm.$valid && $scope.contactDetailsForm.$valid){
                     $http.post('/pla/core/agent/update',transformJson.createCompatibleJson(angular.copy($scope.agentDetails),$scope.physicalCities,$scope.primaryCities,$scope.trainingCompleteOn,true))
                         .success(function(response, status, headers, config){
@@ -274,6 +275,8 @@ angular.module('createAgent',['common','ngRoute','mgcrea.ngStrap.select','mgcrea
                         });
                 }
             };
+
+
 
         }])
     .factory('transformJson',['formatJSDateToDDMMYYYY',function(formatJSDateToDDMMYYYY){

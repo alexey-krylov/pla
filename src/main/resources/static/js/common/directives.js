@@ -49,7 +49,6 @@ angular.module('directives', ['mgcrea.ngStrap.alert'])
                 } else {
                     $(element).wizard();
                 }
-                console.log('fueluxWizard ' + JSON.stringify(scope.selectedItem));
 
                 $(element).on('actionclicked.fu.wizard', function (event, data) {
                     console.log('actionclicked.fu.wizard ' + JSON.stringify(data));
@@ -67,6 +66,7 @@ angular.module('directives', ['mgcrea.ngStrap.alert'])
                     scope.$emit('actionclicked.fu.wizard', event, data);
                 });
                 $(element).on('changed.fu.wizard', function (event, data) {
+                    scope.$emit('changed.fu.wizard', event, data);
                     $timeout(function () {
                         scope.selectedItem = data.step;
                     });
