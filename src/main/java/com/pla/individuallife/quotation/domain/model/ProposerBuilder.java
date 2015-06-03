@@ -4,9 +4,6 @@ import com.pla.sharedkernel.domain.model.Gender;
 import lombok.Getter;
 import org.joda.time.LocalDate;
 
-import static com.google.common.base.Preconditions.checkArgument;
-import static org.nthdimenzion.utils.UtilValidator.isNotEmpty;
-
 /**
  * Created by Karunakar on 5/13/2015.
  */
@@ -29,22 +26,44 @@ public class ProposerBuilder {
 
     private String emailId;
 
-    ProposerBuilder(String proposerTitle, String proposerFName, String proposerSurname, String proposerNRC, LocalDate dateOfBirth, Gender gender, String mobileNumber, String emailId) {
-        checkArgument(isNotEmpty(proposerTitle));
-        checkArgument(isNotEmpty(proposerFName));
-        checkArgument(isNotEmpty(proposerSurname));
-        checkArgument(isNotEmpty(proposerNRC));
-        checkArgument(dateOfBirth != null);
-        checkArgument(gender != null);
-        checkArgument(isNotEmpty(mobileNumber));
+    public ProposerBuilder withProposerTitle(String proposerTitle) {
         this.proposerTitle = proposerTitle;
+        return this;
+    }
+
+    public ProposerBuilder withProposerFName(String proposerFName) {
         this.proposerFName = proposerFName;
+        return this;
+    }
+
+    public ProposerBuilder withProposerSurname(String proposerSurname) {
         this.proposerSurname = proposerSurname;
+        return this;
+    }
+
+    public ProposerBuilder withProposerNRC(String proposerNRC) {
         this.proposerNRC = proposerNRC;
+        return this;
+    }
+
+    public ProposerBuilder withDateOfBirth(LocalDate dateOfBirth) {
         this.dateOfBirth = dateOfBirth;
+        return this;
+    }
+
+    public ProposerBuilder withGender(Gender gender) {
         this.gender = gender;
+        return this;
+    }
+
+    public ProposerBuilder withMobileNumber(String mobileNumber) {
         this.mobileNumber = mobileNumber;
+        return this;
+    }
+
+    public ProposerBuilder withEmailId(String emailId) {
         this.emailId = emailId;
+        return this;
     }
 
     public Proposer build() {

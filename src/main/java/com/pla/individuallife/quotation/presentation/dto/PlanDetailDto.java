@@ -1,7 +1,6 @@
 package com.pla.individuallife.quotation.presentation.dto;
 
 import com.pla.individuallife.quotation.domain.model.RiderDetail;
-import com.pla.sharedkernel.identifier.PlanId;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -17,9 +16,7 @@ import java.util.Set;
 @NoArgsConstructor
 public class PlanDetailDto {
 
-    private String planDetailId;
-
-    private PlanId planId;
+    private String planId;
 
     private Integer policyTerm;
 

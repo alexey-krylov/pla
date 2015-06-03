@@ -40,16 +40,9 @@ public class ILQuotationCommandHandler {
     }
 
     @CommandHandler
-    public String updateWithProposer(UpdateILQuotationWithProposerCommand updateILQuotationWithProposerCommand) {
-        IndividualLifeQuotation individualLifeQuotation = ilQuotationJpaRepository.load((new QuotationId(updateILQuotationWithProposerCommand.getQuotationId())));
-        individualLifeQuotation = individualLifeQuotationService.updateWithProposer(individualLifeQuotation, updateILQuotationWithProposerCommand.getProposerDto(), updateILQuotationWithProposerCommand.getAgentId(), updateILQuotationWithProposerCommand.getUserDetails());
-        return individualLifeQuotation.getIdentifier().getQuotationId();
-    }
-
-    @CommandHandler
-    public String updateWithAssured(UpdateILQuotationWithAssuredCommand updateILQuotationWithProposerCommand) {
-        IndividualLifeQuotation individualLifeQuotation = ilQuotationJpaRepository.load((new QuotationId(updateILQuotationWithProposerCommand.getQuotationId())));
-        IndividualLifeQuotation individualLifeQuotation2 = individualLifeQuotationService.updateWithAssured(individualLifeQuotation, updateILQuotationWithProposerCommand.getProposedAssured(), updateILQuotationWithProposerCommand.getIsAssuredTheProposer(), updateILQuotationWithProposerCommand.getUserDetails());
+    public String updateWithProposer(UpdateILQuotationWithProposerCommand cmd) {
+        IndividualLifeQuotation individualLifeQuotation = ilQuotationJpaRepository.load((new QuotationId(cmd.getQuotationId())));
+        IndividualLifeQuotation individualLifeQuotation2 = individualLifeQuotationService.updateWithProposer(individualLifeQuotation, cmd.getProposerDto(), new AgentId(cmd.getAgentId()), cmd.getUserDetails());
         if (individualLifeQuotation.equals(individualLifeQuotation))
             return individualLifeQuotation.getIdentifier().getQuotationId();
         else {
@@ -59,10 +52,27 @@ public class ILQuotationCommandHandler {
     }
 
     @CommandHandler
-    public String updateWithPlan(UpdateILQuotationWithPlanCommand updateILQuotationWithPlanCommand) {
-        IndividualLifeQuotation individualLifeQuotation = ilQuotationJpaRepository.load((new QuotationId(updateILQuotationWithPlanCommand.getQuotationId())));
-        individualLifeQuotation = individualLifeQuotationService.updateWithPlan(individualLifeQuotation, updateILQuotationWithPlanCommand.getPlanDetailDto(), updateILQuotationWithPlanCommand.getUserDetails());
-        return individualLifeQuotation.getIdentifier().getQuotationId();
+    public String updateWithAssured(UpdateILQuotationWithAssuredCommand updateILQuotationWithAssuredCommand) {
+        IndividualLifeQuotation individualLifeQuotation = ilQuotationJpaRepository.load((new QuotationId(updateILQuotationWithAssuredCommand.getQuotationId())));
+        IndividualLifeQuotation individualLifeQuotation2 = individualLifeQuotationService.updateWithAssured(individualLifeQuotation, updateILQuotationWithAssuredCommand.getProposedAssured(), updateILQuotationWithAssuredCommand.getIsAssuredTheProposer(), updateILQuotationWithAssuredCommand.getUserDetails());
+        if (individualLifeQuotation.equals(individualLifeQuotation))
+            return individualLifeQuotation.getIdentifier().getQuotationId();
+        else {
+            ilQuotationJpaRepository.add(individualLifeQuotation2);
+            return individualLifeQuotation2.getIdentifier().getQuotationId();
+        }
+    }
+
+    @CommandHandler
+    public String updateWithPlan(UpdateILQuotationWithPlanCommand cmd) {
+        IndividualLifeQuotation individualLifeQuotation = ilQuotationJpaRepository.load((new QuotationId(cmd.getQuotationId())));
+        IndividualLifeQuotation individualLifeQuotation2 = individualLifeQuotationService.updateWithPlan(individualLifeQuotation, cmd.getPlanDetailDto(), cmd.getUserDetails());
+        if (individualLifeQuotation.equals(individualLifeQuotation))
+            return individualLifeQuotation.getIdentifier().getQuotationId();
+        else {
+            ilQuotationJpaRepository.add(individualLifeQuotation2);
+            return individualLifeQuotation2.getIdentifier().getQuotationId();
+        }
     }
 
 }

@@ -6,8 +6,6 @@ import lombok.Getter;
 import java.math.BigInteger;
 import java.util.Set;
 
-import static com.google.common.base.Preconditions.checkArgument;
-
 /**
  * Created by Karunakar on 5/25/2015.
  */
@@ -24,40 +22,34 @@ public class PlanDetailBuilder {
 
     private Set<RiderDetail> riderDetails;
 
-    public void withRiderDetails(Set<RiderDetail> riderDetails) {
+    public PlanDetailBuilder withRiderDetails(Set<RiderDetail> riderDetails) {
         this.riderDetails = riderDetails;
+        return this;
     }
 
-    public void withPlanId(PlanId planId) {
+    public PlanDetailBuilder withPlanId(PlanId planId) {
         this.planId = planId;
+        return this;
     }
 
-    public void withPolicyTerm(Integer policyTerm) {
+    public PlanDetailBuilder withPolicyTerm(Integer policyTerm) {
         this.policyTerm = policyTerm;
+        return this;
     }
 
-    public void withPremiumPaymentTerm(Integer premiumPaymentTerm) {
+    public PlanDetailBuilder withPremiumPaymentTerm(Integer premiumPaymentTerm) {
         this.premiumPaymentTerm = premiumPaymentTerm;
+        return this;
     }
 
-    public void withSumAssured(BigInteger sumAssured) {
+    public PlanDetailBuilder withSumAssured(BigInteger sumAssured) {
         this.sumAssured = sumAssured;
-    }
-
-    PlanDetailBuilder(PlanId planId, Integer policyTerm, Integer premiumPaymentTerm, BigInteger sumAssured, Set<RiderDetail> riderDetails) {
-        checkArgument(planId != null);
-        checkArgument(premiumPaymentTerm != null);
-        checkArgument(policyTerm != null);
-        checkArgument(sumAssured != null );
-        this.planId = planId;
-        this.policyTerm = policyTerm;
-        this.premiumPaymentTerm = premiumPaymentTerm;
-        this.sumAssured = sumAssured;
-        this.riderDetails = riderDetails;
+        return this;
     }
 
     public PlanDetail build() {
         return new PlanDetail(this);
     }
+
 
 }

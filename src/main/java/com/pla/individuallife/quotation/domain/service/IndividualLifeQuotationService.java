@@ -41,7 +41,8 @@ public class IndividualLifeQuotationService {
     public IndividualLifeQuotation updateWithProposer(IndividualLifeQuotation individualLifeQuotation, ProposerDto proposerDto, AgentId agentId, UserDetails userDetails) {
         ILQuotationProcessor IlQuotationProcessor = roleAdapter.userToQuotationProcessor(userDetails);
         individualLifeQuotation = checkQuotationNeedForVersioningAndGetQuotation(IlQuotationProcessor, individualLifeQuotation);
-        ProposerBuilder proposerBuilder = Proposer.getProposerBuilder(proposerDto.getTitle(), proposerDto.getFirstName(), proposerDto.getSurname(), proposerDto.getNrcNumber(), proposerDto.getDateOfBirth(), proposerDto.getGender(), proposerDto.getMobileNumber(), proposerDto.getEmailAddress());
+        ProposerBuilder proposerBuilder = Proposer.proposerBuilder();
+        proposerBuilder.withProposerTitle(proposerDto.getTitle()).withProposerFName(proposerDto.getFirstName()).withProposerSurname(proposerDto.getSurname()).withProposerNRC(proposerDto.getNrcNumber()).withDateOfBirth( proposerDto.getDateOfBirth()).withGender(proposerDto.getGender()).withMobileNumber(proposerDto.getMobileNumber()).withEmailId(proposerDto.getEmailAddress());
         return IlQuotationProcessor.updateWithProposerAndAgentId(individualLifeQuotation, proposerBuilder.build(), agentId);
     }
 
@@ -56,7 +57,8 @@ public class IndividualLifeQuotationService {
     public IndividualLifeQuotation updateWithPlan(IndividualLifeQuotation individualLifeQuotation, PlanDetailDto planDetailDto, UserDetails userDetails) {
         ILQuotationProcessor IlQuotationProcessor = roleAdapter.userToQuotationProcessor(userDetails);
         individualLifeQuotation = checkQuotationNeedForVersioningAndGetQuotation(IlQuotationProcessor, individualLifeQuotation);
-        PlanDetailBuilder planDetailBuilder = PlanDetail.getPlanDetailBuilder(planDetailDto.getPlanId(), planDetailDto.getPolicyTerm(), planDetailDto.getPremiumPaymentTerm(), planDetailDto.getSumAssured(), planDetailDto.getRiderDetails());
+        PlanDetailBuilder planDetailBuilder = PlanDetail.planDetailBuilder();
+        planDetailBuilder.withPlanId(new PlanId(planDetailDto.getPlanId())).withPolicyTerm(planDetailDto.getPolicyTerm()).withPremiumPaymentTerm(planDetailDto.getPremiumPaymentTerm()).withSumAssured(planDetailDto.getSumAssured()).withRiderDetails(planDetailDto.getRiderDetails());
         return IlQuotationProcessor.updateWithPlan(individualLifeQuotation, planDetailBuilder.build());
     }
 

@@ -1,10 +1,10 @@
 package com.pla.individuallife.quotation.domain.model;
 
-import com.pla.sharedkernel.identifier.CoverageId;
-import lombok.*;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.Embeddable;
-import javax.persistence.Embedded;
 import java.math.BigInteger;
 
 /**
@@ -16,8 +16,7 @@ import java.math.BigInteger;
 @Getter
 public class RiderDetail {
 
-    @Embedded
-    private CoverageId coverageId;
+    private String coverageId;
 
     private BigInteger sumAssured;
 
@@ -25,7 +24,7 @@ public class RiderDetail {
 
     private Integer waiverOfPremium;
 
-    public RiderDetail(CoverageId coverageId, BigInteger sumAssured, Integer coverTerm, Integer waiverOfPremium) {
+    public RiderDetail(String coverageId, BigInteger sumAssured, Integer coverTerm, Integer waiverOfPremium) {
         this.coverageId = coverageId;
         this.sumAssured = sumAssured;
         this.coverTerm = coverTerm;

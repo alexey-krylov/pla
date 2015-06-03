@@ -13,7 +13,6 @@ import org.nthdimenzion.ddd.domain.annotations.ValueObject;
 import javax.persistence.Embeddable;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import javax.persistence.Table;
 
 import static com.google.common.base.Preconditions.checkArgument;
 
@@ -21,7 +20,6 @@ import static com.google.common.base.Preconditions.checkArgument;
  * Created by Karunakar on 5/18/2015.
  */
 @Embeddable
-@Table(name = "assured")
 @ValueObject
 @NoArgsConstructor(access = AccessLevel.PACKAGE)
 @Getter

@@ -1,6 +1,5 @@
 package com.pla.individuallife.quotation.application.command;
 
-import com.pla.core.domain.model.agent.AgentId;
 import com.pla.individuallife.quotation.presentation.dto.ProposerDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -17,7 +16,7 @@ public class UpdateILQuotationWithProposerCommand {
 
     private ProposerDto proposerDto;
 
-    private AgentId agentId;
+    private String agentId;
 
     private String quotationId;
 

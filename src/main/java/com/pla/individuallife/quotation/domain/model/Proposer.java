@@ -43,9 +43,10 @@ public class Proposer {
 
     private String proposerEmailId;
 
+
+
     Proposer(ProposerBuilder proposerBuilder) {
         checkArgument(proposerBuilder != null);
-        //this.proposerId = proposerBuilder.getProposerId();
         this.proposerTitle = proposerBuilder.getProposerTitle();
         this.proposerFName = proposerBuilder.getProposerFName();
         this.proposerSurname = proposerBuilder.getProposerSurname();
@@ -56,8 +57,8 @@ public class Proposer {
         this.proposerEmailId = proposerBuilder.getEmailId();
     }
 
-    public static ProposerBuilder getProposerBuilder(String proposerTitle, String proposerFName, String proposerSurname, String proposerNRC, LocalDate dateOfBirth, Gender gender, String mobileNumber, String emailId) {
-        return new ProposerBuilder(proposerTitle, proposerFName, proposerSurname, proposerNRC, dateOfBirth, gender, mobileNumber, emailId);
+    public static ProposerBuilder proposerBuilder() {
+        return new ProposerBuilder();
     }
 
 

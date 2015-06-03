@@ -1,13 +1,12 @@
 package com.pla.individuallife.quotation.presentation.dto;
 
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.pla.individuallife.quotation.domain.model.ProposedAssured;
 import com.pla.sharedkernel.domain.model.Gender;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.Type;
 import org.joda.time.LocalDate;
-import org.nthdimenzion.presentation.LocalJodaDateDeserializer;
 
 /**
  * Created by Karunakar on 5/20/2015.
@@ -25,7 +24,7 @@ public class ProposedAssuredDto {
 
     private String nrcNumber;
 
-    @JsonDeserialize(using = LocalJodaDateDeserializer.class)
+    @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentLocalDate")
     private LocalDate dateOfBirth;
 
     private Gender gender;

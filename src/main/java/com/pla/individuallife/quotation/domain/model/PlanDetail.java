@@ -43,8 +43,8 @@ public class PlanDetail {
         this.riderDetails = planDetailBuilder.getRiderDetails();
     }
 
-    public static PlanDetailBuilder getPlanDetailBuilder(PlanId planId, Integer policyTerm, Integer premiumPaymentTerm, BigInteger sumAssured, Set<RiderDetail> riderDetails) {
-        return new PlanDetailBuilder(planId,  policyTerm,  premiumPaymentTerm,  sumAssured, riderDetails);
+    public static PlanDetailBuilder planDetailBuilder() {
+        return new PlanDetailBuilder();
     }
 
 }

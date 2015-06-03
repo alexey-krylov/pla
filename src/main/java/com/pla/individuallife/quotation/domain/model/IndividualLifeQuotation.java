@@ -58,6 +58,9 @@ public class IndividualLifeQuotation extends AbstractAggregateRoot<QuotationId> 
     @Embedded
     private PlanDetail planDetail;
 
+    @Column( columnDefinition = "BOOLEAN DEFAULT false" )
+    private Boolean isAssuredTheProposer;
+
 
     private IndividualLifeQuotation(String quotationCreator, String quotationNumber, QuotationId quotationId, AgentId agentId, ProposedAssured proposedAssured, PlanId planId, ILQuotationStatus ilQuotationStatus, int versionNumber) {
         checkArgument(isNotEmpty(quotationCreator));
@@ -112,6 +115,8 @@ public class IndividualLifeQuotation extends AbstractAggregateRoot<QuotationId> 
     public IndividualLifeQuotation updateWithAssured(ProposedAssured proposedAssured, Boolean isAssuredTheProposer) {
         checkInvariant();
         this.proposedAssured = proposedAssured;
+        this.isAssuredTheProposer = isAssuredTheProposer;
+
         if (isAssuredTheProposer) {
             this.proposer = convertAssuredToProposer(proposedAssured);
         }
@@ -171,7 +176,7 @@ public class IndividualLifeQuotation extends AbstractAggregateRoot<QuotationId> 
     }
 
     private Proposer convertAssuredToProposer(ProposedAssured proposedAssured) {
-        ProposerBuilder proposerBuilder = Proposer.getProposerBuilder(proposedAssured.getAssuredTitle(), proposedAssured.getAssuredFName(), proposedAssured.getAssuredSurname(), proposedAssured.getAssuredNRC(), proposedAssured.getAssuredDateOfBirth(), proposedAssured.getAssuredGender(), proposedAssured.getAssuredMobileNumber(), proposedAssured.getAssuredEmailId());
+        ProposerBuilder proposerBuilder = Proposer.proposerBuilder().withProposerTitle(proposedAssured.getAssuredTitle()).withProposerFName(proposedAssured.getAssuredFName()).withProposerSurname(proposedAssured.getAssuredSurname()).withProposerNRC(proposedAssured.getAssuredNRC()).withDateOfBirth(proposedAssured.getAssuredDateOfBirth()).withGender(proposedAssured.getAssuredGender()).withMobileNumber(proposedAssured.getAssuredMobileNumber()).withEmailId(proposedAssured.getAssuredEmailId());
         return new Proposer(proposerBuilder);
     }
 
