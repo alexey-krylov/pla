@@ -180,7 +180,12 @@
                     <ng-form name="teamDetailsForm">
                         <!--Team Details left start-->
                         <div class="col-md-6">
-                            <div class="form-group">
+                            <div class="form-group" ng-if="agentDetails.channelType.channelName=='Broker'">
+                                <label>Team Code</label>
+                                <select  class="form-control input-sm" ng-model="agentDetails.teamDetail" ng-options="teamDetail as teamDetail.teamName for teamDetail in teamDetails track by teamDetail.teamId" >
+                                </select>
+                            </div>
+                            <div class="form-group" ng-if="agentDetails.channelType.channelName!='Broker'">
                                 <label>Team Code</label>
                                 <select  class="form-control input-sm" ng-model="agentDetails.teamDetail" ng-options="teamDetail as teamDetail.teamName for teamDetail in teamDetails track by teamDetail.teamId" ng-required="true" >
                                 </select>
@@ -206,7 +211,7 @@
                     </ng-form>
                 </div>
             </div>
-            <div class="step-pane" data-step="4" disable-all-fields="editContactDetails()">
+            <div class="step-pane" data-step="4" disable-all-fields="editContactDetails()" >
                 <ng-form name="contactDetailsForm">
                     <!--Contact Details  start-->
                     <div class="row">
