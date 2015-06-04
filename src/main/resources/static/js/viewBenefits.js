@@ -61,7 +61,7 @@ var openBenefitCreateModal = function(){
 };
 var openBenefitUpdateModal = function(benefitId){
    // var benefitMap = convertThymeleafObjectToJavascriptObject(benefit);
-console.log("BENEFIT ID-->"+benefitId);
+//console.log("BENEFIT ID-->"+benefitId);
 //    console.log("BENEFIT NAME-->"+benefitName);
   //  console.log("BENEFIT CODE-->"+benefitCode);
     $.get('/pla/core/benefit/getbenefitbyid/'+benefitId, function(data, status){

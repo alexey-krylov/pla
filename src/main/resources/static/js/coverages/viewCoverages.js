@@ -46,7 +46,7 @@ var openPopover = function(){
 
            var content='';
            for (var i=0; i<text.length; i++ ){
-                content=content + text[i].replace("@","<br />");
+                content=content + text[i].replace("♣","<br />");
 
            }
            content=content.replace("Benefits","");
@@ -87,33 +87,16 @@ var openCoverageCreateModal = function(){
          modalOptions.show = true;
     $('#coverageModal').modal(modalOptions);
 };
- var convertThymeleafObjectToJavascriptObject= function(thymeleafObject){
-     /*pattern : objectName(key=value,key=value)*/
-     var javascriptObject = {};
-    thymeleafObject = thymeleafObject.replace("[","");
-    thymeleafObject = thymeleafObject.replace("]","");
-    var selected = [];
-
-     $.each(thymeleafObject.split(","),function(key,value){
-           var keyValue = value.split("=");
-           keyValue[0] = keyValue[0].replace("BenefitDto","");
-          keyValue[0] = keyValue[0].replace("{","");
-           if(keyValue[0].trim()=="benefitId"){
-                    selected.push(keyValue[1].replace(/'/g, ''));
-          }
-      });
-     return selected;
- };
-var openCoverageUpdateModal = function(coverageId,coverageName,coverageCode,description,benefitList){
-  $('#coverageName').val(coverageName).attr("disabled",false);
-  $('#coverageCode').val(coverageCode).attr("disabled",true);
-  $('#description').val(description).attr("disabled",false);
-  $('#checkBenefits').removeAttr("disabled");
-  var benefit=[];
-  benefitMap= convertThymeleafObjectToJavascriptObject(benefitList);
-    var scope = angular.element($("#checkBenefits")).scope();
-    scope.$apply(function(){
-        scope.createCoverage.benefitIds = benefitMap;
+ var openCoverageUpdateModal = function(coverageId){
+    $.get('/pla/core/coverages/getcoveragebyid/'+coverageId, function(data, status){
+        $('#coverageName').val(data.coverageName).attr("disabled",false);
+        $('#coverageCode').val(data.coverageCode).attr("disabled",true);
+        $('#description').val(data.description).attr("disabled",false);
+        $('#checkBenefits').removeAttr("disabled");
+        var scope = angular.element($("#checkBenefits")).scope();
+        scope.$apply(function(){
+            scope.createCoverage.benefitIds = data.benefitIds;
+        });
     });
     $('#createUpdate').text('Update');
     $('#alert').hide();

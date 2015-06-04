@@ -136,13 +136,13 @@
                                <button href="#" class="details-box btn btn-primary btn-xs" rel="popover"  data-content="" > Benefits
                                     <div class="popover-body" style="display:none;">
                                    <ul  type="square"    th:each="benefit : ${coverage.benefitDtos}" >
-                                        <li style="text-align:left;font-size:12px;" th:text="'&diams;&nbsp;'+${{benefit.benefitName}}+'@'"   ></li>
+                                        <li style="text-align:left;font-size:12px;" th:text="'&diams;&nbsp;'+${{benefit.benefitName}}+'♣'"   ></li>
                                     </ul>
                                         </div>
                                 </button>
                             </td>
                             <td style="text-align:center;width:15%">
-                                <button type="button" class="btn btn-default btn-xs"  th:onclick="'openCoverageUpdateModal(&quot;'+${coverage.coverageId}+'&quot;,&quot;'+${coverage.coverageName}+'&quot;,&quot;'+${coverage.coverageCode}+'&quot;,&quot;'+${coverage.description}+'&quot;,&quot;'+${coverage.benefitDtos}+'&quot;)'">Update</button>
+                                   <button type="button" class="btn btn-default btn-xs"  th:onclick="'openCoverageUpdateModal(\'' + ${coverage.coverageId} + '\');'">Update</button>
                                 <button type="button" class="btn btn-danger btn-xs"  data-toggle="modal" data-target="#alert-modal" th:onclick="'inactivate(&quot;'+${coverage.coverageId}+'&quot;,&quot;save&quot;)'" >Inactivate</button>
                             </td>
                         </tr>
