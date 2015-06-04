@@ -622,6 +622,7 @@ app.controller('PlanSetupController', ['$scope', '$http', '$location', '$routePa
                     $scope.plan.planDetail.withdrawalDate = null;
                 }
 
+                console.log('$scope.plan.planId ' + $scope.plan.planId);
                 $http.post(angular.isUndefined($scope.plan.planId) ? '/pla/core/plan/create' : '/pla/core/plan/update', $scope.plan).
                     success(function (data, status, headers, config) {
                         $scope.plan.planId = data.id;

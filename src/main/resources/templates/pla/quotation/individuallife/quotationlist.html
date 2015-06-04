@@ -38,7 +38,6 @@
         color: firebrick;
     }
 </style>
-<div th:include="fragments/common :: bodyHeader" th:remove="tag"/>
 <div class="container" style="padding-top: 10px">
     <form method="post" action="quotation/searchquotation" novalidate="true" name="quotationForm" id="quotationForm">
         <div class="row well well-sm" style="margin: 0;">
@@ -108,7 +107,6 @@
                             <th style="width: 1%"></th>
                             <th th:text="#{quotationNumber}">Quotation Number</th>
                             <th th:text="#{quotationCreatedOn}">Quotation Date</th>
-                            <th th:text="#{ageing}">Ageing</th>
                             <th th:text="#{agentName}">Agent Name</th>
                             <th th:text="#{proposerName}">Proposer Name</th>
                             <th th:text="#{versionNumber}">Version Number</th>
@@ -117,41 +115,16 @@
                         </thead>
                         <tbody>
                         <form id="viewAgentsForm">
-                            <!--/*/ <th:block > /*/-->
                             <tr th:each="quotation : ${searchResult}">
                                 <td><input type="radio" name="quotationNumber" th:value="${quotation.quotationId}"/>
                                 </td>
                                 <td th:text="${quotation.quotationNumber}">5100000010315</td>
                                 <td th:text="${quotation.quotationGeneratedOn}">05/03/2015</td>
-                                <td th:text="${quotation}"></td>
-                                <td th:text="${quotation.agentName}">Agent Name</td>
-                                <td th:text="${quotation.proposerName}"></td>
-                                <td th:text="${quotation.versionNumber}">001</td>
+                                <td>Agent Name</td>
+                                <td></td>
+                                <td>001</td>
                                 <td th:text="${quotation.quotationStatus}"></td>
                             </tr>
-                            <!--/*-->
-                            <tr>
-                                <td><input type="radio" name="quotationNumber" value="5100000020415"/></td>
-                                <td>5100000020415</td>
-                                <td>06/04/2015</td>
-                                <td>ZPC</td>
-                                <td>Death plan</td>
-                                <td>Agent Name 2</td>
-                                <td>A002</td>
-                                <td>002</td>
-                            </tr>
-                            <tr>
-                                <td><input type="radio" name="quotationNumber" value="5100000030515"/></td>
-                                <td>5100000030515</td>
-                                <td>06/05/2015</td>
-                                <td>Pla</td>
-                                <td>CI plan</td>
-                                <td>Agent Name 3</td>
-                                <td>A003</td>
-                                <td>003</td>
-                            </tr>
-                            <!--*/-->
-                            <!--/*/ </th:block> /*/-->
                         </form>
                         </tbody>
                     </table>

@@ -33,6 +33,22 @@
                     }]
                 }
             })
+            .when('/edit/:quotationId', {
+                templateUrl: 'quotation/new',
+                controller: 'QuotationController',
+                controllerAs: 'ctrl',
+                resolve: {
+                    occupations: ['$q', '$http', function ($q, $http) {
+                        var deferred = $q.defer();
+                        $http.get('/pla/individuallife/proposal/getAllOccupation').success(function (response, status, headers, config) {
+                            deferred.resolve(response);
+                        }).error(function (response, status, headers, config) {
+                            deferred.reject();
+                        });
+                        return deferred.promise;
+                    }]
+                }
+            })
         $routeProvider.otherwise({
             templateUrl: 'quotation/searchForm'
         });
@@ -92,104 +108,34 @@
                 }]
             };
         })
-        .controller('QuotationController', ['$scope', '$http', '$bsmodal',
+        .controller('QuotationController', ['$scope', '$http', '$route', '$bsmodal',
         'globalConstants', 'occupations',
-        function ($scope, $http, $bsmodal, globalConstants, occupations) {
-            console.log('Quoation controlelrererer************8');
+            function ($scope, $http, $route, $bsmodal, globalConstants, occupations) {
+
             $scope.titleList = globalConstants.title;
             $scope.occupations = occupations;
             $scope.quotation = {};
             $scope.selectedItem = 1;
             $scope.onlyNumbers = /^[0-9]+$/;
 
-            $scope.proposedAssured = {
-                dateOfBirth: '1978-02-17',
-                firstName: "ewrretre",
-                "nrcNumber": "retretret",
-                surname: "ertretre",
-                title: "Mrs."
-            }
+                var quotationId = $route.current.params.quotationId;
+                if (quotationId) {
+                    $http.get('/pla/individuallife/quotation/getquotation/' + quotationId).success(function (response, status, headers, config) {
+                        $scope.quotation = response;
+                        $scope.proposedAssured = $scope.quotation.proposedAssured || {};
+                        $scope.proposer = $scope.quotation.proposer || {};
+                        $scope.selectedAgent = {};
+                        $scope.selectedAgent.title = response.agentDetail.firstName || '';
+                        $scope.selectedAgent.title = $scope.selectedAgent.title + ' ' + response.agentDetail.lastName || '';
+                        $scope.selectedAgent.description = response.agentDetail;
 
-            $scope.plan = {
-                "_class": "com.pla.core.domain.model.plan.Plan",
-                "planDetail": {
-                    "planName": "GL Self",
-                    "planCode": "1001",
-                    "launchDate": new Date("21-5-2015 00:00:00"),
-                    "withdrawalDate": new Date("31-5-2015 00:00:00"),
-                    "freeLookPeriod": 15,
-                    "minEntryAge": 25,
-                    "maxEntryAge": 60,
-                    "taxApplicable": false,
-                    "funeralCover": false,
-                    "surrenderAfter": 0,
-                    "applicableRelationships": ["SELF"],
-                    "endorsementTypes": [{
-                        "description": "Change of Contact Details- Life Assured"
-                    }],
-                    "lineOfBusinessId": "GROUP_LIFE",
-                    "planType": "NON_INVESTMENT",
-                    "clientType": "GROUP",
-                    "_class": "com.pla.core.domain.model.plan.PlanDetail"
-                },
-                "status": "DRAFT",
-                "sumAssured": {
-                    "sumAssuredValue": ["100000", "200000", "300000", "400000", "500000"],
-                    "minSumInsured": 1000,
-                    "maxSumInsured": 2000,
-                    "incomeMultiplier": 10,
-                    "percentage": 0,
-                    "multiplesOf": 0,
-                    "sumAssuredType": "RANGE",//SPECIFIED_VALUES//RANGE//INCOME_MULTIPLIER
-                    "_class": "com.pla.core.domain.model.plan.SumAssured"
-                },
-                "policyTermType": "SPECIFIED_VALUES",
-                "premiumTermType": "REGULAR",
-                "premiumTerm": {
-                    "validTerms": [35, 40, 45, 50, 55],
-                    "maturityAges": [],
-                    "maxMaturityAge": 0,
-                    "groupTerm": 365,
-                    "_class": "com.pla.core.domain.model.plan.Term"
-                },
-                "policyTerm": {
-                    "validTerms": [35, 90, 25, 50, 55],
-                    "maturityAges": [],
-                    "maxMaturityAge": 40,
-                    "groupTerm": 365,
-                    "_class": "com.pla.core.domain.model.plan.Term"
-                },
-                "coverages": [{
-                    "coverageId": {
-                        "coverageId": "90CB7D65-33A9-4E71-8A86-81C1F4F2A98E"
-                    },
-                    "coverageCover": "ACCELERATED",
-                    "coverageType": "OPTIONAL",
-                    "deductibleType": "PERCENTAGE",
-                    "waitingPeriod": 0,
-                    "minAge": 30,
-                    "maxAge": 50,
-                    "taxApplicable": false,
-                    "coverageSumAssured": {
-                        "sumAssuredValue": ["10000", "20000", "30000"],
-                        "percentage": 0,
-                        "multiplesOf": 0,
-                        "sumAssuredType": "SPECIFIED_VALUES"
-                    },
-                    "coverageTermType": "POLICY_TERM",
-                    "maturityAmounts": [],
-                    "planCoverageBenefits": [{
-                        "benefitId": {
-                            "benefitId": "DC72FA2D-A2B9-4301-AEBC-D9AEE69B6DE1"
-                        },
-                        "definedPer": "INCIDENCE",
-                        "coverageBenefitType": "AMOUNT",
-                        "benefitLimit": "10000",
-                        "maxLimit": "30000"
-                    }],
-                    "_class": "com.pla.core.domain.model.plan.PlanCoverage"
-                }]
-            };
+
+                        $scope.selectedPlan = {};
+                        $scope.selectedPlan.title = response.planDetail.planDetail.planName || '';
+                        $scope.selectedPlan.description = response.planDetail;
+                    }).error(function (response, status, headers, config) {
+                    });
+            }
 
             $scope.$watch('selectedAgent', function (newval) {
                 console.log('selectedAgent' + JSON.stringify(newval));
@@ -318,32 +264,12 @@ var viewILQuotationModule = (function () {
 
     services.modifyQuotation = function () {
         var quotationId = this.selectedItem;
-        $.ajax({
-            url: '/pla/individuallife/quotation/getversionnumber/' + quotationId,
-            type: 'GET',
-            contentType: 'application/json; charset=utf-8',
-            success: function (msg) {
-                if (msg.status == '200') {
-                    window.location.href = "/pla/quotation/grouplife/creategrouplifequotation?quotationId=" + quotationId + "&version=" + msg.data + "&mode=edit";
-                } else if (msg.status == '500') {
-                }
-            }
-        });
+        window.location.href = "/pla/individuallife/quotation#/edit/" + quotationId;
     };
 
     services.viewQuotation = function () {
         var quotationId = this.selectedItem;
-        $.ajax({
-            url: '/pla/individuallife/quotation/getversionnumber/' + quotationId,
-            type: 'GET',
-            contentType: 'application/json; charset=utf-8',
-            success: function (msg) {
-                if (msg.status == '200') {
-                    window.location.href = "/pla/individuallife/quotation/creategrouplifequotation?quotationId=" + quotationId + "&version=" + msg.data + "&mode=view";
-                } else if (msg.status == '500') {
-                }
-            }
-        });
+        window.location.href = "/pla/individuallife/quotation/creategrouplifequotation?quotationId=" + quotationId + "&version=" + msg.data + "&mode=view";
     };
 
     return services;
