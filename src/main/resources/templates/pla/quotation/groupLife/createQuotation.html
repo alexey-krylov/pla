@@ -208,7 +208,7 @@
                                         <input type="text" onkeypress="return isEnterKey(event)" class="form-control input-sm" maxlength="13" minlength="13" name="workPhone" ng-required="true" ng-pattern="numberPattern" ng-model="quotationDetails.proposer.contactPersonWorkPhoneNumber"/>
                                         <div ng-show="step2.workPhone.$invalid &amp;&amp; step2.workPhone.$dirty">
                                             <small class="error" ng-show="!step2.workPhone.$error.pattern &amp;&amp; step2.workPhone.$error.minlength">
-                                                Please enter a valid mobile number.
+                                                Please enter a valid work phone.
                                             </small>
                                             <small class="error" ng-show="step2.workPhone.$error.pattern">
                                                 Only numbers are allowed.
