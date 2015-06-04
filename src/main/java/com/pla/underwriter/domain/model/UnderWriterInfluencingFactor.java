@@ -95,6 +95,21 @@ public enum UnderWriterInfluencingFactor {
             return (valueToBeChecked.compareTo(sumAssuredFromValue) >= 0 && valueToBeChecked.compareTo(sumAssuredToValue) <= 0);
         }
 
+        @Override
+        public Map<String, Object> getTheUnderWriterDocumentLineItemByType(List<Map<String, Object>> underWriterDocumentLineItems) {
+            Map<String,Object> underWriterLineItem = Maps.newLinkedHashMap();
+            underWriterDocumentLineItems.forEach(influencingFactor->{
+                if (InfluencingFactorRange.SUM_ASSURED_FROM.description.equals(influencingFactor.get("underWriterInfluencingFactor"))){
+                    underWriterLineItem.put(InfluencingFactorRange.SUM_ASSURED_FROM.description,influencingFactor.get("influencingItem"));
+                }
+                else if (InfluencingFactorRange.SUM_ASSURED_TO.description.equals(influencingFactor.get("underWriterInfluencingFactor"))){
+                    underWriterLineItem.put(InfluencingFactorRange.SUM_ASSURED_TO.description,influencingFactor.get("influencingItem"));
+                }
+            });
+            return underWriterLineItem;
+        }
+
+
     },
     AGE("Age"){
         @Override
@@ -169,6 +184,20 @@ public enum UnderWriterInfluencingFactor {
         public boolean isValueIsInRange(String value, String fromValue, String toValue) {
             return (Integer.valueOf(value).compareTo(Integer.valueOf(fromValue))>=0 && Integer.valueOf(value).compareTo(Integer.valueOf(toValue)) <= 0);
         }
+
+        @Override
+        public Map<String, Object> getTheUnderWriterDocumentLineItemByType(List<Map<String, Object>> underWriterDocumentLineItems) {
+            Map<String,Object> underWriterLineItem = Maps.newLinkedHashMap();
+            underWriterDocumentLineItems.forEach(influencingFactor->{
+                if (InfluencingFactorRange.AGE_FROM.description.equals(influencingFactor.get("underWriterInfluencingFactor"))){
+                    underWriterLineItem.put(InfluencingFactorRange.AGE_FROM.description,influencingFactor.get("influencingItem"));
+                }
+                else if (InfluencingFactorRange.AGE_TO.description.equals(influencingFactor.get("underWriterInfluencingFactor"))){
+                    underWriterLineItem.put(InfluencingFactorRange.AGE_TO.description,influencingFactor.get("influencingItem"));
+                }
+            });
+            return underWriterLineItem;
+        }
     },
 
     BMI("BMI"){
@@ -220,6 +249,20 @@ public enum UnderWriterInfluencingFactor {
         @Override
         public boolean isValueIsInRange(String value, String fromValue, String toValue) {
             return (Double.valueOf(value).compareTo(Double.valueOf(fromValue))>=0 && Double.valueOf(value).compareTo(Double.valueOf(toValue)) <=0);
+        }
+
+        @Override
+        public Map<String, Object> getTheUnderWriterDocumentLineItemByType(List<Map<String, Object>> underWriterDocumentLineItems) {
+            Map<String,Object> underWriterLineItem = Maps.newLinkedHashMap();
+            underWriterDocumentLineItems.forEach(influencingFactor->{
+                if (InfluencingFactorRange.BMI_FROM.description.equals(influencingFactor.get("underWriterInfluencingFactor"))){
+                    underWriterLineItem.put(InfluencingFactorRange.BMI_FROM.description,influencingFactor.get("influencingItem"));
+                }
+                else if (InfluencingFactorRange.BMI_TO.description.equals(influencingFactor.get("underWriterInfluencingFactor"))){
+                    underWriterLineItem.put(InfluencingFactorRange.BMI_TO.description,influencingFactor.get("influencingItem"));
+                }
+            });
+            return underWriterLineItem;
         }
 
     },
@@ -274,6 +317,20 @@ public enum UnderWriterInfluencingFactor {
         public boolean isValueIsInRange(String value, String fromValue, String toValue) {
             return (Double.valueOf(value).compareTo(Double.valueOf(fromValue))>=0 && Double.valueOf(value).compareTo(Double.valueOf(toValue)) <= 0);
         }
+
+        @Override
+        public Map<String, Object> getTheUnderWriterDocumentLineItemByType(List<Map<String, Object>> underWriterDocumentLineItems) {
+            Map<String,Object> underWriterLineItem = Maps.newLinkedHashMap();
+            underWriterDocumentLineItems.forEach(influencingFactor->{
+                if (InfluencingFactorRange.HEIGHT_FROM.description.equals(influencingFactor.get("underWriterInfluencingFactor"))){
+                    underWriterLineItem.put(InfluencingFactorRange.HEIGHT_FROM.description,influencingFactor.get("influencingItem"));
+                }
+                else if (InfluencingFactorRange.HEIGHT_TO.description.equals(influencingFactor.get("underWriterInfluencingFactor"))){
+                    underWriterLineItem.put(InfluencingFactorRange.HEIGHT_TO.description,influencingFactor.get("influencingItem"));
+                }
+            });
+            return underWriterLineItem;
+        }
     },
 
     WEIGHT("Weight"){
@@ -326,6 +383,20 @@ public enum UnderWriterInfluencingFactor {
         @Override
         public boolean isValueIsInRange(String value, String fromValue, String toValue) {
             return (Double.valueOf(value).compareTo(Double.valueOf(fromValue))>=0 && Double.valueOf(value).compareTo(Double.valueOf(toValue))  <= 0);
+        }
+
+        @Override
+        public Map<String, Object> getTheUnderWriterDocumentLineItemByType(List<Map<String, Object>> underWriterDocumentLineItems) {
+            Map<String,Object> underWriterLineItem = Maps.newLinkedHashMap();
+            underWriterDocumentLineItems.forEach(influencingFactor->{
+                if (InfluencingFactorRange.WEIGHT_FROM.description.equals(influencingFactor.get("underWriterInfluencingFactor"))){
+                    underWriterLineItem.put(InfluencingFactorRange.WEIGHT_FROM.description,influencingFactor.get("influencingItem"));
+                }
+                else if (InfluencingFactorRange.WEIGHT_TO.description.equals(influencingFactor.get("underWriterInfluencingFactor"))){
+                    underWriterLineItem.put(InfluencingFactorRange.WEIGHT_TO.description,influencingFactor.get("influencingItem"));
+                }
+            });
+            return underWriterLineItem;
         }
 
     },
@@ -385,6 +456,20 @@ public enum UnderWriterInfluencingFactor {
             return (valueToBeChecked.compareTo(claimAmountFrom) >= 0 && valueToBeChecked.compareTo(claimAmountTo)  <= 0);
         }
 
+        @Override
+        public Map<String, Object> getTheUnderWriterDocumentLineItemByType(List<Map<String, Object>> underWriterDocumentLineItems) {
+            Map<String,Object> underWriterLineItem = Maps.newLinkedHashMap();
+            underWriterDocumentLineItems.forEach(influencingFactor->{
+                if (InfluencingFactorRange.CLAIM_AMOUNT_FROM.description.equals(influencingFactor.get("underWriterInfluencingFactor"))){
+                    underWriterLineItem.put(InfluencingFactorRange.CLAIM_AMOUNT_FROM.description,influencingFactor.get("influencingItem"));
+                }
+                else if (InfluencingFactorRange.CLAIM_AMOUNT_TO.description.equals(influencingFactor.get("underWriterInfluencingFactor"))){
+                    underWriterLineItem.put(InfluencingFactorRange.CLAIM_AMOUNT_TO.description,influencingFactor.get("influencingItem"));
+                }
+            });
+            return underWriterLineItem;
+        }
+
     };
 
     private String description;
@@ -399,6 +484,7 @@ public enum UnderWriterInfluencingFactor {
     public abstract Map<Object,Map<String,Object>> groupUnderWriterRoutingLevelItem(Map<String,Object> underWriterLineItem, Map<Object,Map<String,Object>> underWriterInfluencingFactorMap);
     public abstract boolean isValueAvailableForTheProduct(Row currentRow, String planCode, String coverageId, Map<String, Integer> indexMap, StringBuilder errorMessageBuilder, IPlanAdapter iPlanAdapter, String fromValue, String toValue);
     public abstract boolean isValueIsInRange(String value,String fromValue,String toValue);
+    public abstract Map<String,Object> getTheUnderWriterDocumentLineItemByType(List<Map<String,Object>> underWriterDocumentLineItems);
 }
 
 enum InfluencingFactorRange{

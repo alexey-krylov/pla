@@ -22,6 +22,8 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
+import static com.pla.sharedkernel.domain.model.ProcessType.QUOTATION;
+import static com.pla.sharedkernel.domain.model.ProcessType.PROPOSAL;
 import static com.pla.sharedkernel.exception.ProcessInfoException.raiseProcessTypeNotFoundException;
 
 
@@ -166,7 +168,7 @@ public class ProductLineGeneralInformation {
     }
 
     public int getProductLineProcessItemValue(ProcessType processType, ProductLineProcessType productLineProcessType) throws ProcessInfoException {
-        ImmutableMap<ProcessType, Object> processTypeMap = ImmutableMap.of(ProcessType.QUOTATION, this.quotationProcessInformation,ProcessType.PROPOSAL, this.enrollmentProcessInformation);
+        ImmutableMap<ProcessType, Object> processTypeMap = ImmutableMap.of(QUOTATION, this.quotationProcessInformation,PROPOSAL, this.enrollmentProcessInformation);
         switch (processType.name()){
             case "QUOTATION":
                 QuotationProcessInformation quotationProcessInformation = (QuotationProcessInformation) processTypeMap.get(processType);
