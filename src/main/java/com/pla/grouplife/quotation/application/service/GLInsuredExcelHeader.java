@@ -18,7 +18,7 @@ import org.nthdimenzion.presentation.AppUtils;
 import java.math.BigDecimal;
 import java.util.List;
 
-import static com.pla.grouphealth.quotation.application.service.exception.GLInsuredTemplateExcelParseException.raiseNotValidValueException;
+import static com.pla.grouplife.quotation.application.service.exception.GLInsuredTemplateExcelParseException.raiseNotValidValueException;
 import static com.pla.sharedkernel.util.ExcelGeneratorUtil.getCellValue;
 import static org.nthdimenzion.utils.UtilValidator.*;
 

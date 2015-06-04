@@ -28,4 +28,8 @@ public class GLInsuredTemplateExcelParseException extends RuntimeException {
     public static void raiseNotSamePlanForAllCategoryAndRelationshipException() {
         throw new GLInsuredTemplateExcelParseException("For all relationship plan code should be same");
     }
+
+    public static void raiseNotValidValueException(String message) {
+        throw new GLInsuredTemplateExcelParseException(message);
+    }
 }
