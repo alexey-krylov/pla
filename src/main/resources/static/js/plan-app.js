@@ -184,12 +184,12 @@ app.controller('PlanViewController', ['$scope', 'plan', 'activeCoverages',
 app.controller('PlanSetupController', ['$scope', '$http', '$location', '$routeParams', '$templateCache', '$bsmodal', '$log', 'plan', 'activeCoverages', 'endorsementTypes',
         function ($scope, $http, $location, $routeParams, $templateCache, $modal, $log, plan, activeCoverages, endorsementTypes) {
 
-
             $scope.plan = plan;
             $scope.coverageList = activeCoverages;
             $scope.steps = [{"title": "step-1"}, {"title": "step-2"}];
             $scope.currentStepIndex = 0;
 
+            $scope.expiryDate = null;
             $scope.onlyNumbers = /^[0-9]+$/;
 
             $scope.minDate = new Date();

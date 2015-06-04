@@ -21,6 +21,9 @@ public class PlanDetail {
 
     private BigInteger sumAssured;
 
+    PlanDetail() {
+    }
+
     public PlanDetail(PlanId planId, Integer policyTerm, Integer premiumPaymentTerm, BigInteger sumAssured) {
         this.planId = planId;
         this.policyTerm = policyTerm;
