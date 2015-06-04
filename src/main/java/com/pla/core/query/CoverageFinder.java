@@ -3,6 +3,7 @@ package com.pla.core.query;
 import com.google.common.base.Preconditions;
 import com.pla.core.dto.CoverageDto;
 import org.nthdimenzion.ddd.domain.annotations.Finder;
+import org.nthdimenzion.utils.UtilValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.ColumnMapRowMapper;
@@ -14,6 +15,8 @@ import org.springframework.stereotype.Service;
 import javax.sql.DataSource;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 /**
  * Created with IntelliJ IDEA.
@@ -46,7 +49,7 @@ public class CoverageFinder {
             "inner join coverage_benefit cb on b.benefit_id=cb.benefit_id inner join coverage c on cb.coverage_id=c.coverage_id " +
             "where c.status='ACTIVE' and b.status='ACTIVE' and c.coverage_id=:coverageId ORDER BY b.benefit_name ASC ";
 
-    public static final String FIND_COVERAGE_BY_ID = "SELECT coverage_code AS coverageCode,coverage_name AS coverageName FROM coverage WHERE coverage_id=:coverageId";
+    public static final String FIND_COVERAGE_BY_ID = "SELECT coverage_id coverageId,coverage_code AS coverageCode,coverage_name AS coverageName,description description FROM coverage WHERE coverage_id=:coverageId";
 
     public int getCoverageCountByCoverageName(String coverageName, String coverageId) {
         Preconditions.checkNotNull(coverageName);
@@ -73,6 +76,25 @@ public class CoverageFinder {
 
     public Map<String, Object> getCoverageDetail(String coverageId) {
         return namedParameterJdbcTemplate.queryForMap(FIND_COVERAGE_BY_ID, new MapSqlParameterSource().addValue("coverageId", coverageId));
+    }
+
+    public CoverageDto findCoverageById(String coverageId){
+        SqlParameterSource sqlParameterSource = new MapSqlParameterSource("coverageId",coverageId);
+        List<CoverageDto> coverageList = namedParameterJdbcTemplate.query(FIND_COVERAGE_BY_ID, sqlParameterSource,new BeanPropertyRowMapper(CoverageDto.class));
+        if (UtilValidator.isEmpty(coverageList)) {
+            return null;
+        }
+        List<Map<String, Object>> listOfBenefits = namedParameterJdbcTemplate.query(FIND_ALL_BENEFITS_ASSOCIATED_WITH_THE_COVERAGE_QUERY, sqlParameterSource, new ColumnMapRowMapper());
+        List<String> benefitIds = listOfBenefits.stream().map(new BenefitIdTransformer()).collect(Collectors.toList());
+        coverageList.get(0).setBenefitIds(benefitIds);
+        return coverageList.get(0);
+    }
+
+    private class BenefitIdTransformer implements Function<Map<String, Object>,String> {
+        @Override
+        public String apply(Map<String, Object> benefitDetailMap) {
+            return benefitDetailMap.get("benefitId").toString();
+        }
     }
 }
 

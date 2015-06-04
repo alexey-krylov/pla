@@ -20,6 +20,7 @@ public class CoverageDto {
     private String description;
     private String coverageStatus;
     private List<Map<String,Object>> benefitDtos ;
+    private List<String> benefitIds;
 
     public CoverageDto() {
     }
