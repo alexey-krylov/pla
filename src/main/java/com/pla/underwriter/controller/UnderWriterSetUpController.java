@@ -13,12 +13,12 @@ import com.pla.underwriter.service.UnderWriterService;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.poifs.filesystem.POIFSFileSystem;
 import org.axonframework.commandhandling.gateway.CommandGateway;
+import org.nthdimenzion.presentation.Result;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -108,49 +108,51 @@ public class UnderWriterSetUpController {
 
     @RequestMapping(value = "/checkforoverlapping",method = RequestMethod.POST)
     @ResponseBody
-    public ResponseEntity isRowValid(@RequestBody CreateUnderWriterDocumentCommand createUnderWriterDocumentCommand,  BindingResult bindingResult,HttpServletRequest request){
+    public Result isRowValid(@RequestBody CreateUnderWriterDocumentCommand createUnderWriterDocumentCommand,  BindingResult bindingResult,HttpServletRequest request){
         if (bindingResult.hasErrors()) {
-            return new ResponseEntity( bindingResult.getAllErrors(), HttpStatus.PRECONDITION_FAILED);
+            return Result.failure("Document setup has error",bindingResult.getAllErrors());
         }
         try{
             List<String> errorMessageBuilder = Lists.newArrayList();
-            boolean isValid = underWriterService.validateTheUnderWriterDocument(createUnderWriterDocumentCommand.getPlanCode(),createUnderWriterDocumentCommand.getCoverageId(),createUnderWriterDocumentCommand.getUnderWriterDocumentItems(),errorMessageBuilder);
+            createUnderWriterDocumentCommand.setUnderWriterDocumentItems(createUnderWriterDocumentCommand.transformTheUnderWriterDocumentLineItem());
+            boolean isValid = underWriterService.validateTheUnderWriterDocument(createUnderWriterDocumentCommand.getUnderWriterDocumentItems(),errorMessageBuilder);
             if (!isValid){
-                return new ResponseEntity(errorMessageBuilder, HttpStatus.PRECONDITION_FAILED);
+                return Result.failure(errorMessageBuilder.toString());
             }
         }catch (UnderWriterTemplateParseException e){
-            return new ResponseEntity(e.getMessage(), HttpStatus.PRECONDITION_FAILED);
+            return Result.failure(e.getMessage());
         }
         catch (Exception e) {
-            return new ResponseEntity(e.getMessage(), HttpStatus.PRECONDITION_FAILED);
+            return Result.failure(e.getMessage());
         }
-        return new ResponseEntity("Row got created successfully", HttpStatus.OK);
+        return Result.success("Row got created successfully", HttpStatus.OK);
     }
 
     @RequestMapping(value = "/create/underwriterdocument",method = RequestMethod.POST)
     @ResponseBody
-    public ResponseEntity createUnderWriterDocument(@RequestBody CreateUnderWriterDocumentCommand createUnderWriterDocumentCommand,  BindingResult bindingResult,HttpServletRequest request){
+    public Result createUnderWriterDocument(@RequestBody CreateUnderWriterDocumentCommand createUnderWriterDocumentCommand,  BindingResult bindingResult,HttpServletRequest request){
         if (bindingResult.hasErrors()) {
-            return new ResponseEntity( bindingResult.getAllErrors(), HttpStatus.PRECONDITION_FAILED);
+            return Result.failure("Document setup has error",bindingResult.getAllErrors());
         }
         try {
             List<String> errorMessageBuilder = Lists.newArrayList();
+            createUnderWriterDocumentCommand.setUnderWriterDocumentItems(createUnderWriterDocumentCommand.transformTheUnderWriterDocumentLineItem());
             underWriterService.checkValidPlanAndCoverageCode(createUnderWriterDocumentCommand.getPlanCode());
             boolean isValid = underWriterService.validateTheUnderWriterDocumentData(createUnderWriterDocumentCommand.getPlanCode(),createUnderWriterDocumentCommand.getCoverageId(),createUnderWriterDocumentCommand.getUnderWriterDocumentItems(),errorMessageBuilder);
             if (!isValid){
-                return new ResponseEntity(errorMessageBuilder, HttpStatus.PRECONDITION_FAILED);
+                return Result.failure(errorMessageBuilder.toString());
             }
             UserDetails userDetails = getLoggedInUserDetail(request);
             createUnderWriterDocumentCommand.setUserDetails(userDetails);
             commandGateway.sendAndWait(createUnderWriterDocumentCommand);
         }catch (UnderWriterTemplateParseException e){
-            return new ResponseEntity(e.getMessage(), HttpStatus.PRECONDITION_FAILED);
+            return Result.failure(e.getMessage());
         }
         catch (Exception e) {
             LOGGER.error("Error in creating Under Writing document", e);
-            return new ResponseEntity(e.getMessage(), HttpStatus.PRECONDITION_FAILED);
+            return Result.failure(e.getMessage());
         }
-        return new ResponseEntity("Under Writing document created successfully", HttpStatus.OK);
+        return Result.success("Under Writing document created successfully", HttpStatus.OK);
     }
 
     @RequestMapping(value = "/downloadunderwritingtemplate", method = RequestMethod.POST)
