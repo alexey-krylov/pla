@@ -1,9 +1,9 @@
-package com.pla.grouplife.quotation.domain.model;
+package com.pla.grouphealth.quotation.domain.model;
 
 import com.pla.core.domain.model.agent.AgentId;
-import com.pla.grouplife.quotation.domain.event.ProposerAddedEvent;
-import com.pla.grouplife.quotation.domain.event.GLQuotationClosedEvent;
-import com.pla.grouplife.quotation.domain.exception.QuotationException;
+import com.pla.grouphealth.quotation.domain.event.GLQuotationClosedEvent;
+import com.pla.grouphealth.quotation.domain.event.ProposerAddedEvent;
+import com.pla.grouphealth.quotation.domain.exception.GHQuotationException;
 import com.pla.sharedkernel.identifier.QuotationId;
 import org.joda.time.LocalDate;
 import org.junit.Before;
@@ -15,55 +15,55 @@ import static org.junit.Assert.*;
 /**
  * Created by Samir on 4/25/2015.
  */
-public class GroupLifeQuotationTest {
+public class GroupHealthQuotationTest {
 
     private QuotationId quotationId;
 
     private AgentId agentId;
 
-    private GroupLifeQuotation groupLifeQuotation;
+    private GroupHealthQuotation groupHealthQuotation;
 
     @Before
     public void setUp() {
         quotationId = new QuotationId("11");
         agentId = new AgentId("121");
-        ProposerBuilder proposerBuilder = Proposer.getProposerBuilder("NthDimenzion");
-        Proposer proposer = proposerBuilder.build();
-        groupLifeQuotation = GroupLifeQuotation.createWithAgentAndProposerDetail("5-1-100001-0415", "Admin", quotationId, agentId, proposer);
-        assertNotNull(groupLifeQuotation);
+        GHProposerBuilder proposerBuilder = GHProposer.getProposerBuilder("NthDimenzion");
+        GHProposer proposer = proposerBuilder.build();
+        groupHealthQuotation = GroupHealthQuotation.createWithAgentAndProposerDetail("5-1-100001-0415", "Admin", quotationId, agentId, proposer);
+        assertNotNull(groupHealthQuotation);
     }
 
     @Test
     public void shouldCreateGLQuotationWithAgentDetail() {
-        assertEquals("5-1-100001-0415", groupLifeQuotation.getQuotationNumber());
+        assertEquals("5-1-100001-0415", groupHealthQuotation.getQuotationNumber());
     }
 
-    @Test(expected = QuotationException.class)
+    @Test(expected = GHQuotationException.class)
     public void itShouldThrowExceptionWhenAClosedQuotationGetsUpdated() {
-        groupLifeQuotation.closeQuotation();
-        groupLifeQuotation.updateWithAgent(new AgentId("22"));
+        groupHealthQuotation.closeQuotation();
+        groupHealthQuotation.updateWithAgent(new AgentId("22"));
     }
 
-    @Test(expected = QuotationException.class)
+    @Test(expected = GHQuotationException.class)
     public void itShouldThrowExceptionWhenADeclinedQuotationGetsUpdated() {
-        groupLifeQuotation.declineQuotation();
-        groupLifeQuotation.updateWithAgent(new AgentId("22"));
+        groupHealthQuotation.declineQuotation();
+        groupHealthQuotation.updateWithAgent(new AgentId("22"));
     }
 
     @Test
     public void itShouldUpdateProposeDetailOfDraftedGLQuotation() {
-        ProposerBuilder proposerBuilder = Proposer.getProposerBuilder("NthDimenzion", "Nth001").
+        GHProposerBuilder proposerBuilder = GHProposer.getProposerBuilder("NthDimenzion", "Nth001").
                 withContactDetail("5th Block", "Kormangla", "560076", "Karnataka", "Bangalore", "info@nthdimenzion.com")
                 .withContactPersonDetail("Jones", "abc@gmail.com", "9916971270", "657576576");
 
-        Proposer proposer = proposerBuilder.build();
-        GroupLifeQuotation groupLifeQuotation = this.groupLifeQuotation.updateWithProposer(proposer);
-        Proposer updatedProposerDetail = groupLifeQuotation.getProposer();
+        GHProposer proposer = proposerBuilder.build();
+        GroupHealthQuotation groupHealthQuotation = this.groupHealthQuotation.updateWithProposer(proposer);
+        GHProposer updatedProposerDetail = groupHealthQuotation.getProposer();
 
-        ProposerContactDetail proposerContactDetail = proposerBuilder.getProposerContactDetail();
-        ProposerContactDetail updatedProposerContactDetail = updatedProposerDetail.getContactDetail();
-        ProposerContactDetail.ContactPersonDetail contactPersonDetail = proposerContactDetail.getContactPersonDetail();
-        ProposerContactDetail.ContactPersonDetail updatedContactPersonDetail = updatedProposerContactDetail.getContactPersonDetail();
+        GHProposerContactDetail proposerContactDetail = proposerBuilder.getProposerContactDetail();
+        GHProposerContactDetail updatedProposerContactDetail = updatedProposerDetail.getContactDetail();
+        GHProposerContactDetail.ContactPersonDetail contactPersonDetail = proposerContactDetail.getContactPersonDetail();
+        GHProposerContactDetail.ContactPersonDetail updatedContactPersonDetail = updatedProposerContactDetail.getContactPersonDetail();
 
         assertEquals(proposerBuilder.getProposerName(), updatedProposerDetail.getProposerName());
         assertEquals(proposerBuilder.getProposerCode(), updatedProposerDetail.getProposerCode());
@@ -83,52 +83,52 @@ public class GroupLifeQuotationTest {
     @Test
     public void givenADraftedGLQuotationItShouldUpdateWithAgentDetail() {
         AgentId newAgentId = new AgentId("10002");
-        GroupLifeQuotation updatedGlQuotation = this.groupLifeQuotation.updateWithAgent(newAgentId);
+        GroupHealthQuotation updatedGlQuotation = this.groupHealthQuotation.updateWithAgent(newAgentId);
         assertEquals(newAgentId, updatedGlQuotation.getAgentId());
     }
 
 
     @Test
     public void whenGLQuotationIsGeneratedItShouldRegisterProposerAddedEvent() {
-        ProposerBuilder proposerBuilder = Proposer.getProposerBuilder("NthDimenzion", "Nth001").
+        GHProposerBuilder proposerBuilder = GHProposer.getProposerBuilder("NthDimenzion", "Nth001").
                 withContactDetail("5th Block", "Kormangla", "560076", "Karnataka", "Bangalore", "info@nthdimenzion.com")
                 .withContactPersonDetail("Jones", "abc@gmail.com", "9916971270", "657576576");
 
-        Proposer proposer = proposerBuilder.build();
-        GroupLifeQuotation groupLifeQuotation = this.groupLifeQuotation.updateWithProposer(proposer);
-        groupLifeQuotation.generateQuotation(LocalDate.now());
-        ProposerContactDetail proposerContactDetail = proposerBuilder.getProposerContactDetail();
+        GHProposer proposer = proposerBuilder.build();
+        GroupHealthQuotation groupHealthQuotation = this.groupHealthQuotation.updateWithProposer(proposer);
+        groupHealthQuotation.generateQuotation(LocalDate.now());
+        GHProposerContactDetail proposerContactDetail = proposerBuilder.getProposerContactDetail();
         ProposerAddedEvent proposerAddedEvent = new ProposerAddedEvent(proposerBuilder.getProposerName(), proposerBuilder.getProposerCode(),
                 proposerContactDetail.getAddressLine1(), proposerContactDetail.getAddressLine2(),
                 proposerContactDetail.getPostalCode(), proposerContactDetail.getProvince(), proposerContactDetail.getTown(), proposerContactDetail.getEmailAddress());
-        ProposerAddedEvent registeredProposerEvent = (ProposerAddedEvent) groupLifeQuotation.getUncommittedEvents().peek().getPayload();
+        ProposerAddedEvent registeredProposerEvent = (ProposerAddedEvent) groupHealthQuotation.getUncommittedEvents().peek().getPayload();
         assertThat(registeredProposerEvent, is(proposerAddedEvent));
     }
 
 
     @Test
     public void whenGlQuotationIsCloseItShouldRegisterQuotationClosedEvent() {
-        this.groupLifeQuotation.closeQuotation();
-        GLQuotationClosedEvent GLQuotationClosedEvent = (GLQuotationClosedEvent) this.groupLifeQuotation.getUncommittedEvents().peek().getPayload();
-        assertThat(new GLQuotationClosedEvent(this.groupLifeQuotation.getQuotationId()), is(GLQuotationClosedEvent));
+        this.groupHealthQuotation.closeQuotation();
+        GLQuotationClosedEvent GLQuotationClosedEvent = (GLQuotationClosedEvent) this.groupHealthQuotation.getUncommittedEvents().peek().getPayload();
+        assertThat(new GLQuotationClosedEvent(this.groupHealthQuotation.getQuotationId()), is(GLQuotationClosedEvent));
     }
 
     @Test
     public void isShouldReturnTrueWhenQuotationStatusIsGenerated() {
-        this.groupLifeQuotation.generateQuotation(LocalDate.now());
-        boolean requireVersioning = this.groupLifeQuotation.requireVersioning();
+        this.groupHealthQuotation.generateQuotation(LocalDate.now());
+        boolean requireVersioning = this.groupHealthQuotation.requireVersioning();
         assertTrue(requireVersioning);
     }
 
     @Test
     public void itShouldInactivateGLQuotation() {
-        this.groupLifeQuotation.purgeQuotation();
-        assertEquals(QuotationStatus.PURGED, this.groupLifeQuotation.getQuotationStatus());
+        this.groupHealthQuotation.purgeQuotation();
+        assertEquals(GHQuotationStatus.PURGED, this.groupHealthQuotation.getQuotationStatus());
     }
 
     @Test
     public void itShouldDeclineQuotation() {
-        this.groupLifeQuotation.declineQuotation();
-        assertEquals(QuotationStatus.DECLINED, this.groupLifeQuotation.getQuotationStatus());
+        this.groupHealthQuotation.declineQuotation();
+        assertEquals(GHQuotationStatus.DECLINED, this.groupHealthQuotation.getQuotationStatus());
     }
 }

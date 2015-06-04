@@ -530,7 +530,7 @@ VALUES ("KON","Konkola Copper Mine","Private Clinic",null,"CI-CHIL","PR-COP",nul
 insert  into `entity_sequence`(`sequence_id`,`sequence_name`,`sequence_number`,`sequence_prefix`) values (1,'com.pla.core.domain.model.agent.Agent',0,'1000');
 insert  into `entity_sequence`(`sequence_id`,`sequence_name`,`sequence_number`,`sequence_prefix`) values (2,'com.pla.grouplife.quotation.domain.model.GroupLifeQuotation',1000000,' ');
 INSERT INTO `entity_sequence`(`sequence_id`,`sequence_name`,`sequence_number`,`sequence_prefix`) values ('3','com.pla.core.domain.model.plan.Plan',1000,' ');
-insert  into `entity_sequence`(`sequence_id`,`sequence_name`,`sequence_number`,`sequence_prefix`) values (4,'com.pla.grouphealth.domain.model.quotation.GroupHealthQuotation',2000000,' ');
+insert  into `entity_sequence`(`sequence_id`,`sequence_name`,`sequence_number`,`sequence_prefix`) values (4,'com.pla.grouphealth.quotation.domain.model.GroupHealthQuotation',2000000,' ');
 insert  into `entity_sequence`(`sequence_id`,`sequence_name`,`sequence_number`,`sequence_prefix`) values (5,'com.pla.individuallife.domain.model.quotation.IndividualLifeQuotation',3000000,' ');
 insert  into `entity_sequence`(`sequence_id`,`sequence_name`,`sequence_number`,`sequence_prefix`) values (6,'com.pla.individuallife.proposal.domain.model.ProposalAggregate',0,' ');
 

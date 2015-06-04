@@ -82,17 +82,14 @@
                                 aggregate-type="com.pla.grouplife.quotation.domain.model.GroupLifeQuotation"
                                 mongo-template="mongoTemplate"/>
 
-    <!--<extension:mongo-repository id="ghQuotationMongoRepository"
-                                aggregate-type="com.pla.grouphealth.quotation.domain.model.GroupHealthQuotation"
-                                mongo-template="mongoTemplate"/>-->
+
     <axon:jpa-repository id="ilQuotationJpaRepository"
                          aggregate-type="com.pla.individuallife.quotation.domain.model.IndividualLifeQuotation"
                          event-bus="eventBus"/>
 
-    <!--<extension:mongo-repository id="ghQuotationMongoRepository"
-                                aggregate-type="com.pla.grouphealth.domain.model.quotation.GroupHealthQuotation"
+    <extension:mongo-repository id="ghQuotationMongoRepository"
+                                aggregate-type="com.pla.grouphealth.quotation.domain.model.GroupHealthQuotation"
                                 mongo-template="mongoTemplate"/>
--->
     <extension:mongo-repository id="ilProposalMongoRepository"
                                 aggregate-type="com.pla.individuallife.proposal.domain.model.ProposalAggregate"
                                 mongo-template="mongoTemplate"/>
