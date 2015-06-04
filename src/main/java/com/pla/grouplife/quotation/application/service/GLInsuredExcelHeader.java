@@ -2,9 +2,9 @@ package com.pla.grouplife.quotation.application.service;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
+import com.pla.grouplife.quotation.query.InsuredDto;
 import com.pla.publishedlanguage.contract.IPlanAdapter;
 import com.pla.publishedlanguage.dto.PlanCoverageDetailDto;
-import com.pla.grouplife.quotation.query.InsuredDto;
 import com.pla.sharedkernel.domain.model.Gender;
 import com.pla.sharedkernel.domain.model.Relationship;
 import com.pla.sharedkernel.identifier.PlanId;
@@ -18,6 +18,7 @@ import org.nthdimenzion.presentation.AppUtils;
 import java.math.BigDecimal;
 import java.util.List;
 
+import static com.pla.grouphealth.quotation.application.service.exception.GLInsuredTemplateExcelParseException.raiseNotValidValueException;
 import static com.pla.sharedkernel.util.ExcelGeneratorUtil.getCellValue;
 import static org.nthdimenzion.utils.UtilValidator.*;
 
@@ -641,8 +642,25 @@ public enum GLInsuredExcelHeader {
             int cellNumber = headers.indexOf(this.getDescription());
             Cell cell = row.getCell(cellNumber);
             String cellValue = getCellValue(cell);
+            BigDecimal sumAssured = null;
+            Cell incomeMultiplierCell = row.getCell(headers.indexOf(INCOME_MULTIPLIER.getDescription()));
+            String incomeMultiplierCellValue = getCellValue(incomeMultiplierCell);
+            Cell annualIncomeCell = row.getCell(headers.indexOf(ANNUAL_INCOME.getDescription()));
+            String annualIncomeCellValue = getCellValue(annualIncomeCell);
+            if (isNotEmpty(cellValue)) {
+                sumAssured = BigDecimal.valueOf(Double.valueOf(cellValue));
+            } else if (isNotEmpty(incomeMultiplierCellValue) && isNotEmpty(annualIncomeCellValue)) {
+                try {
+                    Double incomeMultiplierValue = Double.parseDouble(incomeMultiplierCellValue);
+                    Double annualIncomeValue = Double.parseDouble(annualIncomeCellValue);
+                    sumAssured = BigDecimal.valueOf(incomeMultiplierValue).multiply(BigDecimal.valueOf(annualIncomeValue));
+                } catch (Exception e) {
+                    raiseNotValidValueException("Income multiplier and Annual Income should be numeric");
+                }
+            }
             InsuredDto.PlanPremiumDetailDto planPremiumDetailDto = insuredDto.getPlanPremiumDetail() != null ? insuredDto.getPlanPremiumDetail() : new InsuredDto.PlanPremiumDetailDto();
-            planPremiumDetailDto.setSumAssured(isNotEmpty(cellValue) ? BigDecimal.valueOf(Double.valueOf(cellValue)) : null);
+            planPremiumDetailDto.setSumAssured(sumAssured);
+
             insuredDto.setPlanPremiumDetail(planPremiumDetailDto);
             return insuredDto;
         }
