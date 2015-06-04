@@ -92,5 +92,5 @@
         <context:exclude-filter type="regex" expression="org.nthdimenzion.presentation.SwaggerConfiguration"/>
     </context:component-scan>
 
-    <jpa:repositories base-package="com.pla"/>
+    <jpa:repositories base-package="com.pla.individuallife.quotation.query"/>
 </beans>
