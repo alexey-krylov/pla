@@ -1,65 +1,57 @@
 package com.pla.individuallife.quotation.domain.model;
 
 import com.pla.sharedkernel.domain.model.Gender;
-import lombok.AccessLevel;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.Type;
 import org.joda.time.LocalDate;
 import org.nthdimenzion.ddd.domain.annotations.ValueObject;
 
+import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-
-import static com.google.common.base.Preconditions.checkArgument;
 
 /**
  * Created by Karunakar on 5/18/2015.
  */
 @Embeddable
 @ValueObject
-@NoArgsConstructor(access = AccessLevel.PACKAGE)
 @Getter
-@Setter(value = AccessLevel.PACKAGE)
+@Setter
 public class Proposer {
 
-    private String proposerTitle;
+    private String title;
 
-    private String proposerFName;
+    private String firstName;
 
-    private String proposerSurname;
+    private String surname;
 
-    private String proposerNRC;
+    private String nrcNumber;
 
     @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentLocalDate")
-    private LocalDate proposerDateOfBirth;
+    private LocalDate dateOfBirth;
 
+    @Column(name = "proposerGender")
     @Enumerated(EnumType.STRING)
     private Gender gender;
 
-    private String proposerMobileNumber;
+    private String mobileNumber;
 
-    private String proposerEmailId;
+    private String emailAddress;
 
-
-
-    Proposer(ProposerBuilder proposerBuilder) {
-        checkArgument(proposerBuilder != null);
-        this.proposerTitle = proposerBuilder.getProposerTitle();
-        this.proposerFName = proposerBuilder.getProposerFName();
-        this.proposerSurname = proposerBuilder.getProposerSurname();
-        this.proposerNRC = proposerBuilder.getProposerNRC();
-        this.proposerDateOfBirth = proposerBuilder.getDateOfBirth();
-        this.gender = proposerBuilder.getGender();
-        this.proposerMobileNumber = proposerBuilder.getMobileNumber();
-        this.proposerEmailId = proposerBuilder.getEmailId();
+    public Proposer() {
     }
 
-    public static ProposerBuilder proposerBuilder() {
-        return new ProposerBuilder();
+    public Proposer(String title, String firstName, String surname, String nrcNumber, LocalDate dateOfBirth, Gender gender, String mobileNumber, String emailAddress) {
+        this.title = title;
+        this.firstName = firstName;
+        this.surname = surname;
+        this.nrcNumber = nrcNumber;
+        this.dateOfBirth = dateOfBirth;
+        this.gender = gender;
+        this.mobileNumber = mobileNumber;
+        this.emailAddress = emailAddress;
     }
-
 
 }

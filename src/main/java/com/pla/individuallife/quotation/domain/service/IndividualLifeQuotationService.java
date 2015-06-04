@@ -7,10 +7,13 @@ import com.pla.individuallife.quotation.presentation.dto.ProposedAssuredDto;
 import com.pla.individuallife.quotation.presentation.dto.ProposerDto;
 import com.pla.sharedkernel.identifier.PlanId;
 import com.pla.sharedkernel.identifier.QuotationId;
+import org.apache.commons.beanutils.BeanUtils;
 import org.nthdimenzion.ddd.domain.annotations.DomainService;
 import org.nthdimenzion.object.utils.IIdGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
+
+import java.lang.reflect.InvocationTargetException;
 
 /**
  * Created by Karunakar on 5/13/2015.
@@ -38,12 +41,18 @@ public class IndividualLifeQuotationService {
         return IlQuotationProcessor.createIndividualLifeQuotation(quotationNumber, IlQuotationProcessor.getUserName(), quotationId, agentId, assuredTitle, assuredFName, assuredSurname, assuredNRC, planId);
     }
 
-    public IndividualLifeQuotation updateWithProposer(IndividualLifeQuotation individualLifeQuotation, ProposerDto proposerDto, AgentId agentId, UserDetails userDetails) {
+    public IndividualLifeQuotation updateWithProposer(IndividualLifeQuotation individualLifeQuotation, ProposerDto dto, AgentId agentId, UserDetails userDetails) {
         ILQuotationProcessor IlQuotationProcessor = roleAdapter.userToQuotationProcessor(userDetails);
         individualLifeQuotation = checkQuotationNeedForVersioningAndGetQuotation(IlQuotationProcessor, individualLifeQuotation);
-        ProposerBuilder proposerBuilder = Proposer.proposerBuilder();
-        proposerBuilder.withProposerTitle(proposerDto.getTitle()).withProposerFName(proposerDto.getFirstName()).withProposerSurname(proposerDto.getSurname()).withProposerNRC(proposerDto.getNrcNumber()).withDateOfBirth( proposerDto.getDateOfBirth()).withGender(proposerDto.getGender()).withMobileNumber(proposerDto.getMobileNumber()).withEmailId(proposerDto.getEmailAddress());
-        return IlQuotationProcessor.updateWithProposerAndAgentId(individualLifeQuotation, proposerBuilder.build(), agentId);
+        Proposer proposer = new Proposer();
+        try {
+            BeanUtils.copyProperties(proposer, dto);
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        } catch (InvocationTargetException e) {
+            e.printStackTrace();
+        }
+        return IlQuotationProcessor.updateWithProposerAndAgentId(individualLifeQuotation, proposer, agentId);
     }
 
     public IndividualLifeQuotation updateWithAssured(IndividualLifeQuotation quotation, ProposedAssuredDto dto, Boolean isAssuredTheProposer, UserDetails userDetails) {
@@ -57,9 +66,8 @@ public class IndividualLifeQuotationService {
     public IndividualLifeQuotation updateWithPlan(IndividualLifeQuotation individualLifeQuotation, PlanDetailDto planDetailDto, UserDetails userDetails) {
         ILQuotationProcessor IlQuotationProcessor = roleAdapter.userToQuotationProcessor(userDetails);
         individualLifeQuotation = checkQuotationNeedForVersioningAndGetQuotation(IlQuotationProcessor, individualLifeQuotation);
-        PlanDetailBuilder planDetailBuilder = PlanDetail.planDetailBuilder();
-        planDetailBuilder.withPlanId(new PlanId(planDetailDto.getPlanId())).withPolicyTerm(planDetailDto.getPolicyTerm()).withPremiumPaymentTerm(planDetailDto.getPremiumPaymentTerm()).withSumAssured(planDetailDto.getSumAssured()).withRiderDetails(planDetailDto.getRiderDetails());
-        return IlQuotationProcessor.updateWithPlan(individualLifeQuotation, planDetailBuilder.build());
+        PlanDetail planDetail = new PlanDetail(new PlanId(planDetailDto.getPlanId()), planDetailDto.getPolicyTerm(), planDetailDto.getPremiumPaymentTerm(), planDetailDto.getSumAssured());
+        return IlQuotationProcessor.updateWithPlan(individualLifeQuotation, planDetail);
     }
 
     private IndividualLifeQuotation checkQuotationNeedForVersioningAndGetQuotation(ILQuotationProcessor ILQuotationProcessor, IndividualLifeQuotation individualLifeQuotation) {

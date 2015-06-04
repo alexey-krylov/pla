@@ -48,6 +48,7 @@ public class JacksonConfig implements BeanPostProcessor {
             jodaModule.addDeserializer(Money.class, new MoneyDeSerializer());
             objectMapper.registerModule(jodaModule);
             objectMapper.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
+            objectMapper.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
             objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
             objectMapper.configure(DeserializationFeature.ACCEPT_EMPTY_STRING_AS_NULL_OBJECT, true);
         }

@@ -12,6 +12,7 @@ import org.axonframework.eventsourcing.annotation.AggregateIdentifier;
 import org.joda.time.LocalDate;
 
 import javax.persistence.*;
+import java.util.Set;
 
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.pla.individuallife.quotation.domain.exception.QuotationException.raiseQuotationNotModifiableException;
@@ -37,9 +38,20 @@ public class IndividualLifeQuotation extends AbstractAggregateRoot<QuotationId> 
     private AgentId agentId;
 
     @Embedded
+    @AttributeOverrides({
+            @AttributeOverride(name = "firstName", column = @Column(name = "proposedFirstName")),
+            @AttributeOverride(name = "surname", column = @Column(name = "proposerSurname")),
+            @AttributeOverride(name = "nrcNumber", column = @Column(name = "proposerNrcNumber")),
+            @AttributeOverride(name = "mobileNumber", column = @Column(name = "proposerMobileNumber")),
+            @AttributeOverride(name = "emailAddress", column = @Column(name = "proposerEmailAddress")),
+            @AttributeOverride(name = "gender", column = @Column(name = "proposerGender")),
+            @AttributeOverride(name = "title", column = @Column(name = "proposerTitle")),
+            @AttributeOverride(name = "dateOfBirth", column = @Column(name = "proposerDateOfBirth")),
+    })
     private Proposer proposer;
 
     @Embedded
+
     private ProposedAssured proposedAssured;
 
     @Enumerated(EnumType.STRING)
@@ -61,6 +73,8 @@ public class IndividualLifeQuotation extends AbstractAggregateRoot<QuotationId> 
     @Column( columnDefinition = "BOOLEAN DEFAULT false" )
     private Boolean isAssuredTheProposer;
 
+    @ElementCollection
+    private Set<RiderDetail> riderDetails;
 
     private IndividualLifeQuotation(String quotationCreator, String quotationNumber, QuotationId quotationId, AgentId agentId, ProposedAssured proposedAssured, PlanId planId, ILQuotationStatus ilQuotationStatus, int versionNumber) {
         checkArgument(isNotEmpty(quotationCreator));
@@ -69,10 +83,10 @@ public class IndividualLifeQuotation extends AbstractAggregateRoot<QuotationId> 
         checkArgument(isNotEmpty(quotationId.getQuotationId()));
         checkArgument(agentId != null);
         checkArgument(proposedAssured != null);
-        checkArgument(proposedAssured.getAssuredFName() != null);
-        checkArgument(proposedAssured.getAssuredSurname() != null);
-        checkArgument(proposedAssured.getAssuredTitle() != null);
-        checkArgument(proposedAssured.getAssuredNRC() != null);
+        checkArgument(proposedAssured.getFirstName() != null);
+        checkArgument(proposedAssured.getSurname() != null);
+        checkArgument(proposedAssured.getTitle() != null);
+        checkArgument(proposedAssured.getNrcNumber() != null);
         checkArgument(planId != null);
         checkArgument(ILQuotationStatus.DRAFT.equals(ilQuotationStatus));
         this.quotationCreator = quotationCreator;
@@ -82,6 +96,7 @@ public class IndividualLifeQuotation extends AbstractAggregateRoot<QuotationId> 
         this.ilQuotationStatus = ilQuotationStatus;
         this.versionNumber = versionNumber;
         this.quotationNumber = quotationNumber;
+        this.planDetail = new PlanDetail(planId, null, null, null);
     }
 
     private IndividualLifeQuotation(String quotationNumber, String quotationCreator, QuotationId quotationId, int versionNumber, ILQuotationStatus ilQuotationStatus) {
@@ -176,8 +191,8 @@ public class IndividualLifeQuotation extends AbstractAggregateRoot<QuotationId> 
     }
 
     private Proposer convertAssuredToProposer(ProposedAssured proposedAssured) {
-        ProposerBuilder proposerBuilder = Proposer.proposerBuilder().withProposerTitle(proposedAssured.getAssuredTitle()).withProposerFName(proposedAssured.getAssuredFName()).withProposerSurname(proposedAssured.getAssuredSurname()).withProposerNRC(proposedAssured.getAssuredNRC()).withDateOfBirth(proposedAssured.getAssuredDateOfBirth()).withGender(proposedAssured.getAssuredGender()).withMobileNumber(proposedAssured.getAssuredMobileNumber()).withEmailId(proposedAssured.getAssuredEmailId());
-        return new Proposer(proposerBuilder);
+        Proposer proposer = new Proposer(proposedAssured.getTitle(), proposedAssured.getFirstName(), proposedAssured.getSurname(), proposedAssured.getNrcNumber(), proposedAssured.getDateOfBirth(), proposedAssured.getGender(), proposedAssured.getMobileNumber(), proposedAssured.getEmailAddress());
+        return proposer;
     }
 
 }

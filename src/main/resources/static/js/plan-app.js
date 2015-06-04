@@ -58,7 +58,6 @@ app.config(function ($routeProvider, $locationProvider) {
                 plan: function () {
                     return {
                         "planDetail": {
-                            launchDate: moment().format('DD/MM/YYYY'),
                             freeLookPeriod: 15
                         },
                         "policyTermType": "SPECIFIED_VALUES",
@@ -614,6 +613,7 @@ app.controller('PlanSetupController', ['$scope', '$http', '$location', '$routePa
             $scope.createPlan = function () {
                 $scope.validationFailed = false;
                 $scope.plan.planDetail.withdrawalDate = null;
+                console.log('create plan withdrawal date ' + $scope.withdrawalDt);
                 if ($scope.withdrawalDt) {
                     $scope.plan.planDetail.withdrawalDate = new moment($scope.withdrawalDt).format('DD/MM/YYYY');
                 }
