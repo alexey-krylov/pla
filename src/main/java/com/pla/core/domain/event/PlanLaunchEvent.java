@@ -15,7 +15,7 @@ import java.io.Serializable;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-public class PlanExpireEvent implements Serializable{
+public class PlanLaunchEvent implements Serializable {
 
     private PlanId planId;
 

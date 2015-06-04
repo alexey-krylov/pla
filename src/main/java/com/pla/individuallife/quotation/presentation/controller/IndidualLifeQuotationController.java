@@ -1,16 +1,17 @@
 package com.pla.individuallife.quotation.presentation.controller;
 
+import com.pla.core.query.AgentFinder;
+import com.pla.core.query.PlanFinder;
 import com.pla.individuallife.quotation.application.command.CreateILQuotationCommand;
 import com.pla.individuallife.quotation.application.command.UpdateILQuotationWithAssuredCommand;
 import com.pla.individuallife.quotation.application.command.UpdateILQuotationWithPlanCommand;
 import com.pla.individuallife.quotation.application.command.UpdateILQuotationWithProposerCommand;
 import com.pla.individuallife.quotation.application.service.ILQuotationService;
 import com.pla.individuallife.quotation.presentation.dto.ILSearchQuotationDto;
-import com.pla.individuallife.quotation.presentation.dto.ProposedAssuredDto;
-import com.pla.individuallife.quotation.presentation.dto.ProposerDto;
 import com.pla.individuallife.quotation.query.ILQuotationDto;
 import com.pla.individuallife.quotation.query.ILQuotationFinder;
 import com.pla.individuallife.quotation.query.PremiumDetailDto;
+import com.pla.sharedkernel.identifier.PlanId;
 import com.pla.sharedkernel.identifier.QuotationId;
 import com.wordnik.swagger.annotations.ApiOperation;
 import org.axonframework.commandhandling.gateway.CommandGateway;
@@ -22,6 +23,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Map;
 
 import static org.nthdimenzion.presentation.AppUtils.getLoggedInUserDetail;
 
@@ -32,18 +34,16 @@ import static org.nthdimenzion.presentation.AppUtils.getLoggedInUserDetail;
 @RequestMapping(value = "/individuallife/quotation")
 public class IndidualLifeQuotationController {
 
-    private CommandGateway commandGateway;
-
-    private ILQuotationService ilQuotationService;
-
-    private ILQuotationFinder ilQuotationFinder;
-
     @Autowired
-    public IndidualLifeQuotationController(CommandGateway commandGateway, ILQuotationService ilQuotationService, ILQuotationFinder ilQuotationFinder) {
-        this.commandGateway = commandGateway;
-        this.ilQuotationService = ilQuotationService;
-        this.ilQuotationFinder = ilQuotationFinder;
-    }
+    private CommandGateway commandGateway;
+    @Autowired
+    private ILQuotationService ilQuotationService;
+    @Autowired
+    private ILQuotationFinder ilQuotationFinder;
+    @Autowired
+    private AgentFinder agentFinder;
+    @Autowired
+    private PlanFinder planFinder;
 
     @RequestMapping(method = RequestMethod.GET)
     public ModelAndView index() {
@@ -71,11 +71,12 @@ public class IndidualLifeQuotationController {
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/new")
-    public ModelAndView editQuotationPage() {
+    public ModelAndView newQuotation() {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("pla/quotation/individuallife/createQuotation");
         return modelAndView;
     }
+
 
     @RequestMapping(value = "/getquotationnumber/{quotationId}", method = RequestMethod.GET)
     @ApiOperation(httpMethod = "GET", value = "Get Quotation number for a given quotation Id")
@@ -107,6 +108,18 @@ public class IndidualLifeQuotationController {
             e.printStackTrace();
             return Result.failure(e.getMessage());
         }
+    }
+
+    @RequestMapping(method = RequestMethod.GET, value = "getquotation/{quotationId}")
+    @ApiOperation(httpMethod = "GET", value = "This call for edit quotation screen.")
+    @ResponseBody
+    public ILQuotationDto getQuotationById(@PathVariable("quotationId") String quotationId) {
+        ILQuotationDto dto = ilQuotationFinder.getQuotationById(quotationId);
+        Map agentDetail = agentFinder.getAgentById(dto.getAgentId());
+        Map planDetail = planFinder.findPlanByPlanId(new PlanId(dto.getPlanId()));
+        dto.setAgentDetail(agentDetail);
+        dto.setPlanDetail(planDetail);
+        return dto;
     }
 
     @RequestMapping(value = "/updatewithproposerdetail", method = RequestMethod.POST)
@@ -165,18 +178,5 @@ public class IndidualLifeQuotationController {
     public PremiumDetailDto reCalculatePremium(@RequestBody PremiumDetailDto premiumDetailDto) {
         return ilQuotationService.getReCalculatePremium(premiumDetailDto);
     }
-
-    @RequestMapping(value = "/getproposerdetail/{quotationId}")
-    @ResponseBody
-    public ProposerDto getProposerDetail(@PathVariable("quotationId") String quotationId) {
-        return ilQuotationService.getProposerDetail(new QuotationId(quotationId));
-    }
-
-    @RequestMapping(value = "/getassureddetail/{quotationId}")
-    @ResponseBody
-    public ProposedAssuredDto getAssuredDetail(@PathVariable("quotationId") String quotationId) {
-        return ilQuotationService.getAssuredDetail(new QuotationId(quotationId));
-    }
-
 
 }

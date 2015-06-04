@@ -7,8 +7,8 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import com.pla.core.domain.event.PlanCoverageAssociationEvent;
 import com.pla.core.domain.event.PlanCreatedEvent;
-import com.pla.core.domain.event.PlanWithdrawnEvent;
 import com.pla.core.domain.event.PlanDeletedEvent;
+import com.pla.core.domain.event.PlanWithdrawnEvent;
 import com.pla.core.domain.exception.PlanValidationException;
 import com.pla.sharedkernel.domain.model.*;
 import com.pla.sharedkernel.identifier.BenefitId;
@@ -67,7 +67,7 @@ public class Plan extends AbstractAnnotatedAggregateRoot<PlanId> {
             this.status = PlanStatus.DRAFT;
             copyPropertiesFromPlanBuilder(planBuilder);
             if (planBuilder.getPlanDetail() != null) {
-                super.registerEvent(new PlanCreatedEvent(planId));
+                super.registerEvent(new PlanCreatedEvent(planId, planDetail.getLaunchDate()));
                 if (this.planDetail.withdrawalDate != null) {
                     super.registerEvent(new PlanWithdrawnEvent(planId, this.planDetail.withdrawalDate));
                 }
@@ -106,7 +106,7 @@ public class Plan extends AbstractAnnotatedAggregateRoot<PlanId> {
                 allTerms.add(term);
             }
         });
-        Preconditions.checkState(specification.checkCoverageTerm(this, allTerms));
+        Preconditions.checkState(specification.checkCoverageTerm(this, allTerms), "Coverage and Plan terms are conflicting.");
         if (planBuilder.getSumAssured() != null && planBuilder.getSumAssured().getSumAssuredType() == SumAssuredType.INCOME_MULTIPLIER) {
             Preconditions.checkState(planBuilder.getPlanDetail().getClientType() == ClientType.GROUP);
         }
@@ -321,6 +321,10 @@ public class Plan extends AbstractAnnotatedAggregateRoot<PlanId> {
     public void withdrawPlan() {
         this.status = PlanStatus.WITHDRAWN;
         this.planDetail.setWithdrawalDate(LocalDate.now());
+    }
+
+    public void markLaunched() {
+        this.status = PlanStatus.LAUNCHED;
     }
 
     public boolean isPlanApplicableForRelationship(Relationship relationship) {

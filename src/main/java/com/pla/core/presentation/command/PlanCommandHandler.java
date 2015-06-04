@@ -39,8 +39,6 @@ public class PlanCommandHandler {
     @CommandHandler
     public void handle(CreatePlanCommand command) throws DuplicatePlanException, PlanValidationException, PlanException {
         try {
-
-
             boolean isSatisfied = planCodeSpecification.satisfiedOnCreate(command.getPlanId(), command.getPlanDetail().getPlanName(),
                     command.getPlanDetail().getPlanCode());
             if (!isSatisfied) {

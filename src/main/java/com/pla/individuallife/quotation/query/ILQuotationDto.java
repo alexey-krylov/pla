@@ -1,12 +1,15 @@
 package com.pla.individuallife.quotation.query;
 
-import com.pla.core.domain.model.agent.AgentId;
+import com.pla.individuallife.quotation.presentation.dto.ProposedAssuredDto;
+import com.pla.individuallife.quotation.presentation.dto.ProposerDto;
 import com.pla.sharedkernel.identifier.QuotationId;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.joda.time.LocalDate;
+
+import java.util.Map;
 
 /**
  * Created by Karunakar on 4/30/2015.
@@ -23,7 +26,9 @@ public class ILQuotationDto {
 
     private LocalDate quotationGeneratedOn;
 
-    private AgentId agentId;
+    private String agentId;
+
+    private String planId;
 
     private QuotationId parentQuotationId;
 
@@ -31,6 +36,9 @@ public class ILQuotationDto {
 
     private String quotationNumber;
 
-    private String proposeName;
+    private ProposerDto proposer;
+    private ProposedAssuredDto proposedAssured;
 
+    private Map<String, Object> agentDetail;
+    private Map<String, Object> planDetail;
 }

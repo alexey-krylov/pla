@@ -813,7 +813,8 @@ ALTER TABLE `plan_coverage_benefits_assoc`
   ADD COLUMN `withdrawal_date` date AFTER `launch_date`,
   ADD COLUMN `client_type` varchar(60) NOT NULL AFTER `withdrawal_date`,
   ADD COLUMN `line_of_business` varchar(60) NOT NULL AFTER `client_type`,
-  ADD COLUMN `funeral_cover` tinyint(1) DEFAULT NULL;
+  ADD COLUMN `funeral_cover` tinyint(1) DEFAULT NULL,
+  ADD COLUMN `plan_status` varchar(60) DEFAULT NULL;
 
 DROP VIEW IF EXISTS `plan_coverage_benefit_assoc_view`;
 CREATE  VIEW `plan_coverage_benefit_assoc_view` AS

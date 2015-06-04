@@ -613,15 +613,14 @@ app.controller('PlanSetupController', ['$scope', '$http', '$location', '$routePa
 
             $scope.createPlan = function () {
                 $scope.validationFailed = false;
-
-                $scope.plan.planDetail.withdrawalDate = new moment($scope.withdrawalDt).format('DD/MM/YYYY');
-
+                $scope.plan.planDetail.withdrawalDate = null;
+                if ($scope.withdrawalDt) {
+                    $scope.plan.planDetail.withdrawalDate = new moment($scope.withdrawalDt).format('DD/MM/YYYY');
+                }
                 $scope.plan.planDetail.launchDate = new moment($scope.launchDt).format('DD/MM/YYYY');
-
                 if ($scope.plan.planDetail.withdrawalDate == "Invalid date") {
                     $scope.plan.planDetail.withdrawalDate = null;
                 }
-
                 console.log('$scope.plan.planId ' + $scope.plan.planId);
                 $http.post(angular.isUndefined($scope.plan.planId) ? '/pla/core/plan/create' : '/pla/core/plan/update', $scope.plan).
                     success(function (data, status, headers, config) {
@@ -654,10 +653,15 @@ app.controller('PlanSetupController', ['$scope', '$http', '$location', '$routePa
                 $scope.withdrawalDateOpen = true;
 
             };
-            $scope.launchDt = $scope.plan.planDetail.launchDate;
-            $scope.withdrawalDt = $scope.plan.planDetail.withdrawalDate;
 
-
+            if ($scope.plan.planId) {
+                $scope.launchDt = new moment($scope.plan.planDetail.launchDate, 'YYYY-MM-DD').format('DD/MM/YYYY');
+                if ($scope.plan.planDetail.withdrawalDate) {
+                    $scope.withdrawalDt = new moment($scope.plan.planDetail.withdrawalDate, 'YYYY-MM-DD').format('DD/MM/YYYY');
+                }
+            }
+            console.log('Launch Date' + $scope.launchDt);
+            console.log('Withdrawal Date' + $scope.withdrawalDt);
             /* $scope.$watch('launchDt', function (newVal) {
                 if (!angular.isUndefined(newVal) && angular.isDefined($scope.plan.planId)) {
                     $scope.plan.planDetail.launchDate = moment(newVal).format('DD/MM/YYYY');

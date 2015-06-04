@@ -768,10 +768,6 @@ public enum GLInsuredExcelHeader {
         this.description = description;
     }
 
-    public String getDescription() {
-        return description;
-    }
-
     public static List<String> getAllHeader() {
         List<String> headers = Lists.newArrayList();
         for (GLInsuredExcelHeader glInsuredExcelHeader : GLInsuredExcelHeader.values()) {
@@ -787,7 +783,6 @@ public enum GLInsuredExcelHeader {
         }
         return headers;
     }
-
 
     public static List<String> getAllowedHeaders(IPlanAdapter planAdapter, List<PlanId> planIds) {
         List<PlanCoverageDetailDto> planCoverageDetailDtoList = planAdapter.getPlanAndCoverageDetail(planIds);
@@ -811,6 +806,10 @@ public enum GLInsuredExcelHeader {
             headers.add((AppConstants.OPTIONAL_COVERAGE_HEADER + count) + " " + AppConstants.OPTIONAL_COVERAGE_SA_HEADER);
         }
         return ImmutableList.copyOf(headers);
+    }
+
+    public String getDescription() {
+        return description;
     }
 
     public abstract String getAllowedValue(InsuredDto insuredDto);

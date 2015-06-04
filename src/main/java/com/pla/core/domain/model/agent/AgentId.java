@@ -29,9 +29,12 @@ public class AgentId implements Serializable {
 
     private String agentId;
 
-
     public AgentId(String agentId) {
         Preconditions.checkArgument(agentId != null);
         this.agentId = agentId;
+    }
+
+    public String toString() {
+        return agentId;
     }
 }

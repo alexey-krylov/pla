@@ -4,8 +4,6 @@ import com.pla.core.domain.model.CoverageName;
 import com.pla.core.domain.model.plan.premium.Premium;
 import com.pla.core.query.PremiumFinder;
 import com.pla.individuallife.quotation.presentation.dto.ILSearchQuotationDto;
-import com.pla.individuallife.quotation.presentation.dto.ProposedAssuredDto;
-import com.pla.individuallife.quotation.presentation.dto.ProposerDto;
 import com.pla.individuallife.quotation.query.ILQuotationDto;
 import com.pla.individuallife.quotation.query.ILQuotationFinder;
 import com.pla.individuallife.quotation.query.PremiumDetailDto;
@@ -22,8 +20,6 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.util.*;
-import java.util.function.Function;
-import java.util.stream.Collectors;
 
 /**
  * Created by Karunakar on 5/13/2015.
@@ -44,7 +40,6 @@ public class ILQuotationService {
         this.premiumCalculator = premiumCalculator;
         this.premiumFinder = premiumFinder;
     }
-
 
     public PremiumDetailDto getPremiumDetail(QuotationId quotationId) {
 
@@ -134,24 +129,9 @@ public class ILQuotationService {
         return new PremiumDetailDto();
     }
 
-
-    public ProposerDto getProposerDetail(QuotationId quotationId) {
-//        Map quotation = ilQuotationFinder.getQuotationById(quotationId.getQuotationId());
-//        Proposer proposer = (Proposer) quotation.get("proposer");
-        return new ProposerDto(null);
-    }
-
-    public ProposedAssuredDto getAssuredDetail(QuotationId quotationId) {
-       /* Map quotation = ilQuotationFinder.getQuotationById(quotationId.getQuotationId());
-        ProposedAssured assured = (ProposedAssured) quotation.get("proposedAssured");*/
-        return new ProposedAssuredDto(null);
-    }
-
-
     public List<ILQuotationDto> getAllQuotation() {
-        List<Map> allQuotations = ilQuotationFinder.getAllQuotation();
-        List<ILQuotationDto> ILQuotationDtoList = allQuotations.stream().map(new TransformToILQuotationDto()).collect(Collectors.toList());
-        return ILQuotationDtoList;
+        List<ILQuotationDto> allQuotations = ilQuotationFinder.getAllQuotation();
+        return allQuotations;
     }
 
     public List<ILQuotationDto> searchQuotation(ILSearchQuotationDto searchGlQuotationDto) {
@@ -159,11 +139,4 @@ public class ILQuotationService {
     }
 
 
-    private class TransformToILQuotationDto implements Function<Map, ILQuotationDto> {
-
-        @Override
-        public ILQuotationDto apply(Map map) {
-            return null;
-        }
-    }
 }

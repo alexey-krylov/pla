@@ -1,7 +1,9 @@
 package com.pla.external.listener;
 
 import com.pla.core.domain.event.PlanCoverageAssociationEvent;
+import com.pla.core.domain.event.PlanLaunchEvent;
 import com.pla.sharedkernel.domain.model.CoverageType;
+import com.pla.sharedkernel.domain.model.PlanStatus;
 import com.pla.sharedkernel.identifier.BenefitId;
 import com.pla.sharedkernel.identifier.CoverageId;
 import org.axonframework.eventhandling.annotation.EventHandler;
@@ -108,5 +110,17 @@ public class PlanCoverageAssocListener {
                         });
             }
         }
+    }
+
+    public void handle(PlanLaunchEvent event) {
+        String planId = event.getPlanId().toString();
+        namedParameterJdbcTemplate.execute("update from plan_coverage_benefits_assoc set plan_status='" + PlanStatus.LAUNCHED + "' where " +
+                        "plan_id='" + planId + "'",
+                new EmptySqlParameterSource(), new PreparedStatementCallback<Object>() {
+                    @Override
+                    public Object doInPreparedStatement(PreparedStatement ps) throws SQLException, DataAccessException {
+                        return ps.execute();
+                    }
+                });
     }
 }
