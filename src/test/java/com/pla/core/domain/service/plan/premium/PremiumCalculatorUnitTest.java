@@ -19,6 +19,7 @@ import com.pla.sharedkernel.identifier.PremiumId;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.joda.time.LocalDate;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
@@ -37,6 +38,7 @@ import static org.mockito.Mockito.when;
  * Created by Samir on 4/26/2015.
  */
 @RunWith(value = MockitoJUnitRunner.class)
+@Ignore
 public class PremiumCalculatorUnitTest {
 
     @Mock
