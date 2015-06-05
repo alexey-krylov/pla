@@ -33,13 +33,11 @@ import java.util.stream.Collectors;
  * @author: pradyumna
  * @since 1.0 11/03/2015
  */
-
 @Document(collection = "PLAN")
 @Getter
 @ToString(exclude = {"logger"})
 @EqualsAndHashCode(exclude = {"logger", "specification"}, callSuper = false, doNotUseGetters = true)
 public class Plan extends AbstractAnnotatedAggregateRoot<PlanId> {
-
 
     public static final String DOCUMENT_NAME = "PLAN";
     @Id

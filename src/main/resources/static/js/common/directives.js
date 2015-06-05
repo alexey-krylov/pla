@@ -67,9 +67,7 @@ angular.module('directives', ['mgcrea.ngStrap.alert'])
                 });
                 $(element).on('changed.fu.wizard', function (event, data) {
                     scope.$emit('changed.fu.wizard', event, data);
-                    $timeout(function () {
-                        scope.selectedItem = data.step;
-                    });
+                    scope.selectedItem = data.step;
                 });
                 $(element).on('stepclicked.fu.wizard', function (event, data) {
                     scope.$emit('stepclicked.fu.wizard', event, data);

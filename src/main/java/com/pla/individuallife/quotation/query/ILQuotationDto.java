@@ -1,5 +1,6 @@
 package com.pla.individuallife.quotation.query;
 
+import com.pla.individuallife.quotation.presentation.dto.PlanDetailDto;
 import com.pla.individuallife.quotation.presentation.dto.ProposedAssuredDto;
 import com.pla.individuallife.quotation.presentation.dto.ProposerDto;
 import com.pla.sharedkernel.identifier.QuotationId;
@@ -38,7 +39,7 @@ public class ILQuotationDto {
 
     private ProposerDto proposer;
     private ProposedAssuredDto proposedAssured;
-
     private Map<String, Object> agentDetail;
     private Map<String, Object> planDetail;
+    private PlanDetailDto planDetailDto;
 }

@@ -28,7 +28,6 @@
                         <div class="col-lg-6">
                             <div class="form-group required">
                                 <label class="control-label">Agent ID</label>
-
                                 <div data-angucomplete-alt="" id="ex5" placeholder="Search Agents" pause="500"
                                      selected-object="selectedAgent"
                                      remote-url="/pla/core/agent/search/" field-required="true"
@@ -40,7 +39,6 @@
                                 <div class="error" ng-messages="step1.title.$error" ng-if="step1.$dirty">
                                     <small ng-message="autocomplete-required">Please enter title.</small>
                                 </div>
-
                             </div>
                         </div>
 
@@ -48,7 +46,6 @@
                     <div class="bs-callout  bs-callout-info" style="margin-bottom: 7px">
                         <div class="row">
                             <p><Strong>Proposed Assured Details</Strong></p>
-
                             <div class="col-lg-6">
                                 <div class="form-group required">
                                     <label class="control-label">Title</label>
@@ -56,14 +53,11 @@
                                             ng-model="proposedAssured.title"
                                             ng-options="title as title for title in titleList">
                                     </select>
-
-
                                 </div>
                                 <div class="form-group required">
                                     <label class="control-label">Surname</label>
                                     <input type="text" class="form-control input-sm" name="surname" ng-required="true"
                                            ng-model="proposedAssured.surname"/>
-
                                     <div class="error" ng-messages="step1.surname.$error" ng-if="step1.$dirty">
                                         <small ng-message="required">Please enter surname.</small>
                                     </div>
@@ -74,7 +68,6 @@
                                     <label class="control-label">First Name</label>
                                     <input type="text" class="form-control input-sm" name="firstName" ng-required="true"
                                            ng-model="proposedAssured.firstName"/>
-
                                     <div class="error" ng-messages="step1.firstName.$error" ng-if="step1.$dirty">
                                         <small ng-message="required">Please enter FirstName.</small>
                                     </div>
@@ -83,7 +76,6 @@
                                     <label class="control-label">NRC Number</label>
                                     <input type="text" class="form-control input-sm" name="nrcNumber" ng-required="true"
                                            ng-model="proposedAssured.nrcNumber"/>
-
                                     <div class="error" ng-messages="step1.nrcNumber.$error" ng-if="step1.$dirty">
                                         <small ng-message="required">Please enter NRC Number.</small>
                                     </div>
@@ -96,7 +88,7 @@
                             <div class="form-group required">
                                 <label class="control-label">Plan</label>
 
-                                <div data-angucomplete-alt="" id="plan" placeholder="Search Plan" pause="500"
+                                <div data-angucomplete-alt="" placeholder="Search Plan" pause="500"
                                      selected-object="selectedPlan"
                                      remote-url="/pla/core/agent/searchplan"
                                      remote-url-request-formatter="remoteUrlRequestFn" field-required="true"
@@ -147,7 +139,7 @@
                                            datepicker-popup=""
                                            ng-required="true"
                                            is-open="launchdob1"
-                                           ng-model="proposedAssured.dateOfBirth" name="dob"/>
+                                           ng-model="paDOB" name="dob"/>
                                     <span class="input-group-btn">
                                     <button type="button" class="btn btn-default btn-sm"
                                             ng-click="launchProposedAssuredDOB($event)">
@@ -263,7 +255,7 @@
                                            datepicker-popup=""
                                            ng-required="true"
                                            is-open="launchdob2"
-                                           ng-model="proposer.dateOfBirth" name="dob"/>
+                                           ng-model="pDOB" name="dob"/>
                                     <span class="input-group-btn">
                                     <button type="button" class="btn btn-default btn-sm"
                                             ng-click="launchProposerDOB($event)">
@@ -335,45 +327,46 @@
                             <div class="form-group required">
                                 <label>Plan</label>
 
-                                <div data-angucomplete-alt="" placeholder="Search Plan" pause="500"
+                                <div data-angucomplete-alt="" id="plan" placeholder="Search Plan" pause="500"
                                      selected-object="selectedPlan"
                                      remote-url="/pla/core/agent/searchplan"
                                      remote-url-request-formatter="remoteUrlRequestFn" field-required="true"
+                                     initial-value="{{selectedPlan.title}}"
                                      remote-url-data-field="" title-field="plan_name" minlength="2"
-                                     input-class="form-control form-control-small" match-class="highlight">
+                                     input-class="form-control form-control-small"
+                                     match-class="highlight">
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label>Policy Term</label>
-                                <policyterm plan="plan" proposedAssured="proposedAssured"></policyterm>
+                                <policyterm term-type="plan.policyTermType"
+                                            proposedAssured="proposedAssured"></policyterm>
                             </div>
-                            <div class="form-group">
-                                <label>Optional Coverages Applied For</label>
-                                <select class="form-control input-sm">
-                                    <option>Optional Cover One</option>
-                                    <option>Optional Cover Two</option>
-                                </select>
-                            </div>
-                            <div class="form-group">
                                 <table class="table table-bordered">
                                     <thead>
                                     <tr>
+                                        <th>Optional Cover</th>
                                         <th>Optional Cover Sum Assured</th>
                                         <th>Optional Cover Term</th>
+                                        <th>Premium Waiver</th>
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    <tr>
-                                        <td>1000</td>
-                                        <td>5</td>
-                                    </tr>
-                                    <tr>
-                                        <td>2000</td>
-                                        <td>5</td>
+                                    <tr ng-repeat="rider in planDetailDto.riderDetails">
+                                        <td>{{rider.coverageName}}</td>
+                                        <td>
+                                            <coverage-sumassured></coverage-sumassured>
+                                        </td>
+                                        <td>
+                                            <coverage-term></coverage-term>
+                                        </td>
+                                        <td>
+                                            <input type="number" ng-model="rider.waiverOfPremium"
+                                                   class="form-control input-sm"/>
+                                        </td>
                                     </tr>
                                     </tbody>
                                 </table>
-                            </div>
                         </div>
                         <div class="col-sm-6">
                             <div class="form-group">
@@ -391,7 +384,9 @@
                             <button type="button" class="btn btn-default btn-sm">Cancel</button>
                         </div>
                         <div class="col-sm-6">
-                            <button type="button" class="btn btn-default btn-sm" style="float: right">Submit</button>
+                            <button type="button" class="btn btn-default btn-sm" style="float: right"
+                                    ng-click="saveStep4()">Submit
+                            </button>
                         </div>
                     </div>
                 </ng-form>
@@ -400,35 +395,37 @@
                 <ng-form name="step5" novalidate="">
                     <div class="row">
                         <div class="col-lg-6">
-                            <div class="form-group">
-                                <label>Coverage 1 Annual Premium</label>
-                                <input type="text" class="form-control input-sm"/>
-                            </div>
-                            <div class="form-group">
-                                <label>Coverage 2 Annual Premium</label>
-                                <input type="text" class="form-control input-sm"/>
-                            </div>
-                            <div class="form-group">
-                                <label>Plan Annual Premium</label>
-                                <input type="text" class="form-control input-sm" readonly="true"/>
+                            <div class="form-group" ng-repeat="rider in premiumData.riderPremiumDtos">
+                                <label>{{rider.coverageName.coverageName}}</label>
+                                <input type="text" class="form-control input-sm" readonly="true"
+                                       ng-model="rider.annualPremium"/>
                             </div>
                         </div>
                         <div class="col-lg-6">
                             <div class="form-group">
-                                <label>Toatl Annual Premium</label>
-                                <input type="text" class="form-control input-sm" readonly="true"/>
+                                <label>Total Annual Premium</label>
+                                <input type="text" class="form-control input-sm" readonly="true"
+                                       ng-model="premiumData.planAnnualPremium"/>
                             </div>
                             <div class="form-group">
                                 <label>Semi-Annual Premium</label>
-                                <input type="text" class="form-control input-sm" readonly="true"/>
+                                <input type="text" class="form-control input-sm" readonly="true"
+                                       ng-model="premiumData.semiannualPremium"/>
                             </div>
                             <div class="form-group">
                                 <label>Quarterly Premium</label>
-                                <input type="text" class="form-control input-sm" readonly="true"/>
+                                <input type="text" class="form-control input-sm" readonly="true"
+                                       ng-model="premiumData.quarterlyPremium"/>
                             </div>
                             <div class="form-group">
                                 <label>Monthly Premium</label>
-                                <input type="text" class="form-control input-sm" readonly="true"/>
+                                <input type="text" class="form-control input-sm" readonly="true"
+                                       ng-model="premiumData.monthlyPremium"/>
+                            </div>
+                            <div class="form-group">
+                                <label>Total Premium</label>
+                                <input type="text" class="form-control input-sm" readonly="true"
+                                       ng-model="premiumData.totalPremium"/>
                             </div>
                         </div>
                     </div>

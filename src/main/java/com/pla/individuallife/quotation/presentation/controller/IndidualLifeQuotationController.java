@@ -5,6 +5,7 @@ import com.pla.core.query.PlanFinder;
 import com.pla.individuallife.quotation.application.command.*;
 import com.pla.individuallife.quotation.application.service.ILQuotationService;
 import com.pla.individuallife.quotation.presentation.dto.ILSearchQuotationDto;
+import com.pla.individuallife.quotation.presentation.dto.RiderDetailDto;
 import com.pla.individuallife.quotation.query.ILQuotationDto;
 import com.pla.individuallife.quotation.query.ILQuotationFinder;
 import com.pla.individuallife.quotation.query.PremiumDetailDto;
@@ -20,6 +21,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import static org.nthdimenzion.presentation.AppUtils.getLoggedInUserDetail;
@@ -119,6 +122,22 @@ public class IndidualLifeQuotationController {
         return dto;
     }
 
+    @RequestMapping(method = RequestMethod.GET, value = "getridersforplan/{planId}")
+    @ApiOperation(httpMethod = "GET", value = "This call for edit quotation screen.")
+    @ResponseBody
+    public List<RiderDetailDto> getRidersForPlan(@PathVariable("planId") String planId) {
+        List<Map<String, Object>> optionalCoverages = ilQuotationFinder.findAllOptionalCoverages(planId);
+        List<RiderDetailDto> riderDetails = new ArrayList<>();
+        for (Map<String, Object> m : optionalCoverages) {
+            RiderDetailDto dto = new RiderDetailDto();
+            dto.setCoverageName(m.get("coverage_name").toString());
+            dto.setCoverageId(m.get("coverage_id").toString());
+            riderDetails.add(dto);
+        }
+        return riderDetails;
+    }
+
+
     @RequestMapping(value = "/updatewithproposerdetail", method = RequestMethod.POST)
     @ResponseBody
     public Result updateQuotationWithProposerDetail(@RequestBody UpdateILQuotationWithProposerCommand updateILQuotationWithProposerCommand, BindingResult bindingResult, HttpServletRequest request) {
@@ -160,6 +179,7 @@ public class IndidualLifeQuotationController {
             String quotationId = commandGateway.sendAndWait(updateILQuotationWithPlanCommand);
             return Result.success("Plan details updated successfully", quotationId);
         } catch (Exception e) {
+            e.printStackTrace();
             return Result.failure();
         }
     }

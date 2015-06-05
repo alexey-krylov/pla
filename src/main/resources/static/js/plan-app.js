@@ -17,7 +17,7 @@ app.config(['datepickerPopupConfig', function (datepickerPopupConfig) {
 }]);
 app.config(function ($routeProvider, $locationProvider) {
     $routeProvider
-        .when('/plan', {
+        .when('/', {
             templateUrl: 'plan/list'
         })
         .when('/viewplan/:planid', {
@@ -133,6 +133,7 @@ app.config(function ($routeProvider, $locationProvider) {
     $routeProvider.otherwise({redirectTo: '/plan'});
 });
 app.controller('PlanListController', ['$scope', 'planList', function ($scope, planList) {
+    console.log(' PlanListController *** ');
     $scope.planList = planList;
 }
 ]);

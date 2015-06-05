@@ -1,6 +1,5 @@
 package com.pla.individuallife.quotation.presentation.dto;
 
-import com.pla.individuallife.quotation.domain.model.RiderDetail;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -24,5 +23,5 @@ public class PlanDetailDto {
 
     private BigInteger sumAssured;
 
-    private Set<RiderDetail> riderDetails;
+    private Set<RiderDetailDto> riderDetails;
 }

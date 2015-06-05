@@ -1,6 +1,7 @@
 package com.pla.individuallife.quotation.domain.model;
 
 import lombok.AccessLevel;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -14,6 +15,7 @@ import java.math.BigInteger;
 @Embeddable
 @NoArgsConstructor(access = AccessLevel.PACKAGE)
 @Getter
+@EqualsAndHashCode(of = {"coverageId"})
 public class RiderDetail {
 
     private String coverageId;

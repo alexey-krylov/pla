@@ -1,6 +1,7 @@
 package com.pla.core.application.plan.premium;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.pla.publishedlanguage.domain.model.PremiumInfluencingFactor;
 import com.pla.sharedkernel.domain.model.PremiumFactor;
 import com.pla.sharedkernel.domain.model.PremiumRateFrequency;
@@ -9,6 +10,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.joda.time.LocalDate;
 import org.nthdimenzion.presentation.LocalJodaDateDeserializer;
+import org.nthdimenzion.presentation.LocalJodaDateSerializer;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.constraints.NotNull;
@@ -40,6 +42,7 @@ public class CreatePremiumCommand {
     private PremiumFactor premiumFactor = PremiumFactor.FLAT_AMOUNT;
 
     @NotNull
+    @JsonSerialize(using = LocalJodaDateSerializer.class)
     @JsonDeserialize(using = LocalJodaDateDeserializer.class)
     private LocalDate effectiveFrom;
     @NotNull

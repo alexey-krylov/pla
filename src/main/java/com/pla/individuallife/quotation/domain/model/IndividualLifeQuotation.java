@@ -9,6 +9,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.axonframework.domain.AbstractAggregateRoot;
 import org.axonframework.eventsourcing.annotation.AggregateIdentifier;
+import org.hibernate.annotations.Type;
 import org.joda.time.LocalDate;
 
 import javax.persistence.*;
@@ -51,7 +52,6 @@ public class IndividualLifeQuotation extends AbstractAggregateRoot<QuotationId> 
     private Proposer proposer;
 
     @Embedded
-
     private ProposedAssured proposedAssured;
 
     @Enumerated(EnumType.STRING)
@@ -61,6 +61,7 @@ public class IndividualLifeQuotation extends AbstractAggregateRoot<QuotationId> 
 
     private String quotationNumber;
 
+    @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentLocalDate")
     private LocalDate generatedOn;
 
     @Embedded
@@ -189,4 +190,7 @@ public class IndividualLifeQuotation extends AbstractAggregateRoot<QuotationId> 
         return proposer;
     }
 
+    public void updateRiderDetails(Set<RiderDetail> riderDetails) {
+        this.riderDetails = riderDetails;
+    }
 }

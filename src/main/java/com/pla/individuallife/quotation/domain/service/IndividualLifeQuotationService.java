@@ -5,6 +5,7 @@ import com.pla.individuallife.quotation.domain.model.*;
 import com.pla.individuallife.quotation.presentation.dto.PlanDetailDto;
 import com.pla.individuallife.quotation.presentation.dto.ProposedAssuredDto;
 import com.pla.individuallife.quotation.presentation.dto.ProposerDto;
+import com.pla.individuallife.quotation.presentation.dto.RiderDetailDto;
 import com.pla.sharedkernel.identifier.PlanId;
 import com.pla.sharedkernel.identifier.QuotationId;
 import org.apache.commons.beanutils.BeanUtils;
@@ -14,6 +15,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.lang.reflect.InvocationTargetException;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Created by Karunakar on 5/13/2015.
@@ -67,7 +70,16 @@ public class IndividualLifeQuotationService {
         ILQuotationProcessor IlQuotationProcessor = roleAdapter.userToQuotationProcessor(userDetails);
         individualLifeQuotation = checkQuotationNeedForVersioningAndGetQuotation(IlQuotationProcessor, individualLifeQuotation);
         PlanDetail planDetail = new PlanDetail(new PlanId(planDetailDto.getPlanId()), planDetailDto.getPolicyTerm(), planDetailDto.getPremiumPaymentTerm(), planDetailDto.getSumAssured());
-        return IlQuotationProcessor.updateWithPlan(individualLifeQuotation, planDetail);
+        individualLifeQuotation = IlQuotationProcessor.updateWithPlan(individualLifeQuotation, planDetail);
+
+        Set riders = new HashSet();
+        if (planDetailDto.getRiderDetails() != null) {
+            for (RiderDetailDto each : planDetailDto.getRiderDetails()) {
+                riders.add(new RiderDetail(each.getCoverageId(), each.getSumAssured(), each.getCoverTerm(), each.getWaiverOfPremium() == null ? 0 : each.getWaiverOfPremium()));
+            }
+        }
+        individualLifeQuotation.updateRiderDetails(riders);
+        return individualLifeQuotation;
     }
 
     private IndividualLifeQuotation checkQuotationNeedForVersioningAndGetQuotation(ILQuotationProcessor ILQuotationProcessor, IndividualLifeQuotation individualLifeQuotation) {

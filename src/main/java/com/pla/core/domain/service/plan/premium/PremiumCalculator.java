@@ -47,7 +47,8 @@ public class PremiumCalculator implements IPremiumCalculator {
     @Override
     public List<ComputedPremiumDto> calculateBasicPremium(PremiumCalculationDto premiumCalculationDto) {
         Premium premium = premiumFinder.findPremium(premiumCalculationDto);
-        boolean hasAllInfluencingFactor = premium.hasAllInfluencingFactor(premiumCalculationDto.getInfluencingFactors());
+        boolean hasAllInfluencingFactor =
+                premium.hasAllInfluencingFactor(premiumCalculationDto.getInfluencingFactors());
         if (!hasAllInfluencingFactor) {
             raiseInfluencingFactorMismatchException();
         }
@@ -129,6 +130,16 @@ public class PremiumCalculator implements IPremiumCalculator {
         return premiumItemList.get(0);
     }
 
+    private boolean isMatchesInfluencingFactorAndValue(PremiumInfluencingFactorLineItem premiumInfluencingFactorLineItem, Set<PremiumCalculationDto.PremiumCalculationInfluencingFactorItem> premiumCalculationInfluencingFactorItems) {
+        for (PremiumCalculationDto.PremiumCalculationInfluencingFactorItem premiumCalculationInfluencingFactorItem : premiumCalculationInfluencingFactorItems) {
+            if (premiumCalculationInfluencingFactorItem.getPremiumInfluencingFactor().equals(premiumInfluencingFactorLineItem.getPremiumInfluencingFactor())
+                    && premiumCalculationInfluencingFactorItem.getValue().equals(premiumInfluencingFactorLineItem.getValue())) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     private class FilterPremiumItemPredicate implements Predicate<PremiumItem> {
 
         private Set<PremiumCalculationDto.PremiumCalculationInfluencingFactorItem> premiumCalculationInfluencingFactorItems;
@@ -148,16 +159,6 @@ public class PremiumCalculator implements IPremiumCalculator {
             }
             return premiumCalculationInfluencingFactorItems.size() == noOfMatch;
         }
-    }
-
-    private boolean isMatchesInfluencingFactorAndValue(PremiumInfluencingFactorLineItem premiumInfluencingFactorLineItem, Set<PremiumCalculationDto.PremiumCalculationInfluencingFactorItem> premiumCalculationInfluencingFactorItems) {
-        for (PremiumCalculationDto.PremiumCalculationInfluencingFactorItem premiumCalculationInfluencingFactorItem : premiumCalculationInfluencingFactorItems) {
-            if (premiumCalculationInfluencingFactorItem.getPremiumInfluencingFactor().equals(premiumInfluencingFactorLineItem.getPremiumInfluencingFactor())
-                    && premiumCalculationInfluencingFactorItem.getValue().equals(premiumInfluencingFactorLineItem.getValue())) {
-                return true;
-            }
-        }
-        return false;
     }
 
 

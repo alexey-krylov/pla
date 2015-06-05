@@ -18,7 +18,7 @@
     requirejs.config({
         paths: {
             angucomplete: 'http://ghiden.github.io/angucomplete-alt/js/libs/angucomplete-alt',
-            ilquotation: '/pla/js/quotation/individuallife/quotation.js?t=0'
+            ilquotation: '/pla/js/quotation/individuallife/quotation.js?t=3320'
         },
         "shim": {"ilquotation": ["angular", 'angucomplete']}
     });
@@ -41,14 +41,14 @@
 <script id="plan-sumassured.tpl" type="text/ng-template">
     <div ng-switch="plan.sumAssured.sumAssuredType">
         <div ng-switch-when="SPECIFIED_VALUES">
-            <select class="form-control input-sm" ng-model="quotation.sumAssured" name="sumAssured"
-                    ng-options="value as value for value in plan.sumAssured.sumAssuredValue"
+            <select class="form-control input-sm" ng-model="planDetailDto.sumAssured" name="sumAssured"
+                    ng-options="value.text as value.text for value in plan.sumAssured.sumAssuredValue"
                     ng-required="true"></select>
         </div>
         <div ng-switch-when="RANGE">
             <input type="number" class="form-control input-sm" min="{{plan.sumAssured.minSumInsured}}"
                    name="sumAssured"
-                   max="{{plan.sumAssured.maxSumInsured}}" ng-model="quotation.sumAssured" ng-required="true"/>
+                   max="{{plan.sumAssured.maxSumInsured}}" ng-model="planDetailDto.sumAssured" ng-required="true"/>
 
             <div class="error" ng-messages="step4.sumAssured.$error">
                 <small ng-message="min">Sum Assured cannot be less then {{plan.sumAssured.minSumInsured}}.</small>
@@ -58,7 +58,7 @@
         <div ng-switch-when="INCOME_MULTIPLIER">
             <input type="number" class="form-control input-sm" min="0" max="{{plan.sumAssured.incomeMultiplier}}"
                    name="sumAssured"
-                   ng-model="quotation.sumAssured" ng-required="true"/>
+                   ng-model="planDetailDto.sumAssured" ng-required="true"/>
 
             <div class="error" ng-messages="step4.sumAssured.$error" ng-if="step1.$dirty">
                 <small ng-message="max">Sum Assured cannot be greater than {{plan.sumAssured.incomeMultiplier}}.
@@ -67,16 +67,70 @@
         </div>
     </div>
 </script>
+<script id="coverage-sumassured.tpl" type="text/ng-template">
+    <div ng-switch="getSumAssuredType(rider)">
+        <div ng-switch-when="SPECIFIED_VALUES">
+            <select class="form-control input-sm" ng-model="rider.sumAssured" name="sumAssured"
+                    ng-options="value.text as value.text for value in coverage.coverageSumAssured.sumAssuredValue"
+                    ng-required="true"></select>
+        </div>
+        <div ng-switch-when="RANGE">
+            <input type="number" class="form-control input-sm" min="{{coverage.sumAssured.minSumInsured}}"
+                   name="sumAssured"
+                   max="{{coverage.sumAssured.maxSumInsured}}" ng-model="rider.sumAssured" ng-required="true"/>
+
+            <div class="error" ng-messages="step4.sumAssured.$error">
+                <small ng-message="min">Sum Assured cannot be less then {{coverage.sumAssured.minSumInsured}}.</small>
+                <small ng-message="max">Sum Assured cannot be more than {{coverage.sumAssured.maxSumInsured}}.</small>
+            </div>
+        </div>
+        <div ng-switch-when="DERIVED">
+            <input type="number" class="form-control input-sm" min="0" max="{{coverage.sumAssured.maxLimit}}"
+                   name="sumAssured"
+                   ng-model="rider.sumAssured" ng-required="true"/>
+
+            <div class="error" ng-messages="step4.sumAssured.$error" ng-if="step1.$dirty">
+                <small ng-message="max">Sum Assured cannot be greater than {{coverage.sumAssured.incomeMultiplier}}.
+                </small>
+            </div>
+        </div>
+        <div ng-switch-when="INCOME_MULTIPLIER">
+            <input type="number" class="form-control input-sm" min="0" max="{{coverage.sumAssured.incomeMultiplier}}"
+                   name="sumAssured"
+                   ng-model="rider.sumAssured" ng-required="true"/>
+
+            <div class="error" ng-messages="step4.sumAssured.$error" ng-if="step1.$dirty">
+                <small ng-message="max">Sum Assured cannot be greater than {{coverage.sumAssured.incomeMultiplier}}.
+                </small>
+            </div>
+        </div>
+    </div>
+</script>
+
 
 <script id="plan-policyterm.tpl" type="text/ng-template">
     <div ng-switch="plan.policyTermType">
         <div ng-switch-when="SPECIFIED_VALUES">
-            <select class="form-control input-sm" ng-model="quotation.policyTerm" name="policyTerm"
-                    ng-options="value as value for value in policyTerms()" ng-required="true"></select>
+            <select class="form-control input-sm" ng-model="planDetailDto.policyTerm" name="policyTerm"
+                    ng-options="value.text as value.text for value in policyTerms()" ng-required="true"></select>
         </div>
         <div ng-switch-when="MATURITY_AGE_DEPENDENT">
-            <select class="form-control input-sm" ng-model="quotation.policyTerm" name="policyTerm"
-                    ng-options="value as value for value in policyTerms()" ng-required="true"></select>
+            <select class="form-control input-sm" ng-model="planDetailDto.policyTerm" name="policyTerm"
+                    ng-options="value.text as value.text for value in policyTerms()" ng-required="true"></select>
+        </div>
+    </div>
+</script>
+
+<script id="plan-coverage.tpl" type="text/ng-template">
+    <i ng-bind=""></i>
+    <div ng-switch="getCoverageTermType(rider)">
+        <div ng-switch-when="SPECIFIED_VALUES">
+            <select class="form-control input-sm" ng-model="rider.coverTerm" name="policyTerm"
+                    ng-options="value.text as value.text for value in policyTerms" ng-required="true"></select>
+        </div>
+        <div ng-switch-when="MATURITY_AGE_DEPENDENT">
+            <select class="form-control input-sm" ng-model="rider.coverTerm" name="policyTerm"
+                    ng-options="value.text as value.text for value in policyTerms" ng-required="true"></select>
         </div>
     </div>
 </script>
@@ -84,19 +138,21 @@
 <script id="plan-premiumterm.tpl" type="text/ng-template">
     <div ng-switch="plan.premiumTermType">
         <div ng-switch-when="SPECIFIED_VALUES">
-            <select class="form-control input-sm" ng-model="quotation.premiumTerm" name="premiumTerm"
+            <select class="form-control input-sm" ng-model="planDetailDto.premiumPaymentTerm" name="premiumTerm"
                     ng-options="value as value for value in premiumTerms()" ng-required="true"></select>
         </div>
         <div ng-switch-when="SPECIFIED_AGES">
-            <select class="form-control input-sm" ng-model="quotation.premiumTerm" name="premiumTerm"
+            <select class="form-control input-sm" ng-model="planDetailDto.premiumPaymentTerm" name="premiumTerm"
                     ng-options="value as value for value in premiumTerms()" ng-required="true"></select>
         </div>
         <div ng-switch-when="REGULAR">
-            <input type="number" class="form-control input-sm" readonly="true" ng-model="quotation.premiumTerm"
+            <input type="number" class="form-control input-sm" readonly="true"
+                   ng-model="planDetailDto.premiumPaymentTerm"
                    name="premiumTerm"/>
         </div>
         <div ng-switch-when="SINGLE">
-            <input type="number" class="form-control input-sm" ng-required="true" ng-model="quotation.premiumTerm"
+            <input type="number" class="form-control input-sm" ng-required="true"
+                   ng-model="planDetailDto.premiumPaymentTerm"
                    name="premiumTerm"/>
         </div>
     </div>
