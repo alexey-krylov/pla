@@ -19,8 +19,6 @@ public class CreateILQuotationCommand {
     @NotNull(message = "{Agent ID cannot be null}")
     private String agentId;
 
-    private String assuredId;
-
     @NotNull(message = "{Assured Title cannot be null}")
     @NotEmpty(message = "{Assured Title cannot be empty}")
     private String title;

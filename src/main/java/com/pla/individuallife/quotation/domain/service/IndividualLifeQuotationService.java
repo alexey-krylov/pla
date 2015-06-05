@@ -74,9 +74,8 @@ public class IndividualLifeQuotationService {
         if (!individualLifeQuotation.requireVersioning()) {
             return individualLifeQuotation;
         }
-        String quotationNumber = ilQuotationNumberGenerator.getQuotationNumber("5", "2", IndividualLifeQuotation.class);
         QuotationId quotationId = new QuotationId(idGenerator.nextId());
-        return individualLifeQuotation.cloneQuotation(quotationNumber, ILQuotationProcessor.getUserName(), quotationId);
+        return individualLifeQuotation.cloneQuotation(ILQuotationProcessor.getUserName(), quotationId);
     }
 
 

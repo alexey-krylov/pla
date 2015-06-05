@@ -6,6 +6,7 @@
 
 package com.pla.core.domain.service;
 
+import com.pla.core.domain.exception.BenefitDomainException;
 import com.pla.core.domain.model.Admin;
 import com.pla.core.domain.model.Benefit;
 import com.pla.core.domain.model.BenefitName;
@@ -27,6 +28,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.mockito.Matchers.anyObject;
+import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.util.ReflectionTestUtils.invokeGetterMethod;
 
@@ -79,23 +82,40 @@ public class BenefitServiceUnitTest {
         assertEquals(name, createdBenefitName.getBenefitName());
     }
 
-    /*
-    *
-    * @TODO make the test pass
-    *
-    * */
-   /* @Test
+
+
+    @Test
     public void givenABenefitWithUpdatedNameItShouldUpdateBenefit() {
         String name = "Accidental death benefit";
         boolean isBenefitNameUnique = Boolean.TRUE;
         Benefit benefit = admin.createBenefit(isBenefitNameUnique, "1", name, "B_ONE");
         when(adminRoleAdapter.userToAdmin(userDetails)).thenReturn(admin);
         when(benefitFinder.getBenefitCountAssociatedWithActiveCoverage("1")).thenReturn(0);
-        Benefit updatedBenefit = benefitService.updateBenefit(benefit, name, userDetails,"B_ONE" );
+        when(benefitNameIsUnique.isSatisfiedBy(anyObject())).thenReturn(true);
+        when(benefitCodeIsUnique.isSatisfiedBy(anyObject())).thenReturn(true);
+        when(benefitFinder.getBenefitCountByBenefitCode(anyString(), anyObject())).thenReturn(0);
+        Benefit updatedBenefit = benefitService.updateBenefit(benefit, name, userDetails,"B_TWO" );
         BenefitName updatedBenefitName = (BenefitName) invokeGetterMethod(updatedBenefit, "getBenefitName");
         assertEquals(BenefitStatus.ACTIVE, invokeGetterMethod(updatedBenefit, "getStatus"));
         assertEquals(name, updatedBenefitName.getBenefitName());
-    }*/
+    }
+
+
+    @Test( expected = BenefitDomainException.class)
+    public void givenABenefit_whenBenefitNameOrBenefitCodeIsNotUnique_thenItShouldThrowTheException() {
+        String name = "Accidental death benefit";
+        boolean isBenefitNameUnique = Boolean.TRUE;
+        Benefit benefit = admin.createBenefit(isBenefitNameUnique, "1", name, "B_ONE");
+        when(adminRoleAdapter.userToAdmin(userDetails)).thenReturn(admin);
+        when(benefitFinder.getBenefitCountAssociatedWithActiveCoverage("1")).thenReturn(0);
+        when(benefitNameIsUnique.isSatisfiedBy(anyObject())).thenReturn(false);
+        when(benefitCodeIsUnique.isSatisfiedBy(anyObject())).thenReturn(true);
+        when(benefitFinder.getBenefitCountByBenefitCode(anyString(), anyObject())).thenReturn(0);
+        Benefit updatedBenefit = benefitService.updateBenefit(benefit, name, userDetails,"B_TWO" );
+        BenefitName updatedBenefitName = (BenefitName) invokeGetterMethod(updatedBenefit, "getBenefitName");
+        assertEquals(BenefitStatus.ACTIVE, invokeGetterMethod(updatedBenefit, "getStatus"));
+        assertEquals(name, updatedBenefitName.getBenefitName());
+    }
 
     @Test
     public void givenABenefitWhenMarkAsUsedItShouldBeInUsedStatus() {

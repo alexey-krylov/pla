@@ -57,8 +57,7 @@ public class BenefitService {
     public Benefit updateBenefit(Benefit benefit, String newBenefitName, UserDetails userDetails, String benefitCode) {
         Admin admin = adminRoleAdapter.userToAdmin(userDetails);
         BenefitDto  benefitDto = new BenefitDto(benefit.getBenefitId().getBenefitId(), newBenefitName,benefitCode);
-        boolean isBenefitNameAndCodeIsUnique = benefitCodeIsUnique.And(benefitNameIsUnique).isSatisfiedBy(benefitDto);
-        if (!isBenefitNameAndCodeIsUnique)
+        if (!(benefitCodeIsUnique.isSatisfiedBy(benefitDto) && benefitNameIsUnique.isSatisfiedBy(benefitDto)))
             throw new BenefitDomainException("Benefit already described");
         boolean isBenefitUpdatable = benefitIsAssociatedWithCoverage.And(benefitNameIsUnique).isSatisfiedBy(benefitDto);
         Benefit updatedBenefit = admin.updateBenefit(benefit, newBenefitName, isBenefitUpdatable,benefitCode);

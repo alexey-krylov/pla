@@ -61,8 +61,8 @@ public class UnderWriterService {
         return iPlanAdapter.getPlanAndCoverageDetail(planIds);
     }
 
-    public boolean validateTheUnderWriterDocument(String planCode, String coverageId, List<UnderWriterDto> listOfUnderWriterDto, List<String> errorMessageBuilder){
-        boolean isRowOverLapping = isValidInfluencingFactorForTheProduct(listOfUnderWriterDto,planCode,coverageId,errorMessageBuilder);
+    public boolean validateTheUnderWriterDocument(List<UnderWriterDto> listOfUnderWriterDto, List<String> errorMessageBuilder){
+        boolean isRowOverLapping = true;
         List<UnderWriterDto> comparedBy = Lists.newArrayList(listOfUnderWriterDto);
         UnderWriterDto currentUnderWriterDto = listOfUnderWriterDto.get(listOfUnderWriterDto.size()-1);
         return  doesAnyRowOverLappingEachOther(currentUnderWriterDto, comparedBy, isRowOverLapping, errorMessageBuilder);
@@ -97,7 +97,7 @@ public class UnderWriterService {
             }
             if (isAnyOneFactorNotOverlapping){
                 isRowOverLapping = false;
-                errorMessageBuilder.add(" Overlapping with row "+rowIndex+", ");
+                errorMessageBuilder.add("Overlapping with row "+rowIndex);
             }
             rowIndex++;
         }
@@ -120,7 +120,6 @@ public class UnderWriterService {
             rowIndex++;
         }
         return isValidInfluencingFactorValue;
-
     }
 
     public List<Map<Object,Map<String,Object>>> transformUnderWriterDocument(List<UnderWriterDto> underWriterDocumentItems){

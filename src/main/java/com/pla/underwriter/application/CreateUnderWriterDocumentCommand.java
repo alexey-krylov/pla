@@ -11,6 +11,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.validation.constraints.NotNull;
 import java.util.List;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 /**
  * Created by Admin on 5/13/2015.
@@ -36,4 +38,16 @@ public class CreateUnderWriterDocumentCommand {
 
     private UserDetails userDetails;
 
+    public List<UnderWriterDto> transformTheUnderWriterDocumentLineItem(){
+        return underWriterDocumentItems.stream().map(new UnderWriterDocumentTransformer()).collect(Collectors.toList());
+    }
+
+    private class UnderWriterDocumentTransformer implements Function<UnderWriterDto, UnderWriterDto> {
+        @Override
+        public UnderWriterDto apply(UnderWriterDto underWriterDto) {
+            underWriterDto.transformUnderWriterDocument(underWriterDto.getUnderWriterDocuments());
+            underWriterDto.setUnderWriterLineItem(underWriterDto.getUnderWriterDocumentLineItem(),underWriterInfluencingFactors);
+            return underWriterDto;
+        }
+    }
 }

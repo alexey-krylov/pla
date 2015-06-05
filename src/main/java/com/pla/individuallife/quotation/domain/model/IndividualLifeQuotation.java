@@ -114,12 +114,6 @@ public class IndividualLifeQuotation extends AbstractAggregateRoot<QuotationId> 
         return new IndividualLifeQuotation(quotationCreator, quotationNumber, quotationId, agentId, proposedAssured, planid, ILQuotationStatus.DRAFT, 0);
     }
 
-    public IndividualLifeQuotation updateWithAgent(AgentId agentId) {
-        checkInvariant();
-        this.agentId = agentId;
-        return this;
-    }
-
     public IndividualLifeQuotation updateWithProposer(Proposer proposer, AgentId agentId) {
         checkInvariant();
         this.proposer = proposer;
@@ -156,7 +150,7 @@ public class IndividualLifeQuotation extends AbstractAggregateRoot<QuotationId> 
 
     @Override
     public void purgeQuotation() {
-        this.ilQuotationStatus = ILQuotationStatus.INACTIVE;
+        this.ilQuotationStatus = ILQuotationStatus.PURGED;
     }
 
     @Override
@@ -175,7 +169,7 @@ public class IndividualLifeQuotation extends AbstractAggregateRoot<QuotationId> 
         return ILQuotationStatus.GENERATED.equals(this.ilQuotationStatus);
     }
 
-    public IndividualLifeQuotation cloneQuotation(String quotationNumber, String quotationCreator, QuotationId quotationId) {
+    public IndividualLifeQuotation cloneQuotation(String quotationCreator, QuotationId quotationId) {
         IndividualLifeQuotation newQuotation = new IndividualLifeQuotation(quotationCreator, quotationNumber, quotationId, this.versionNumber + 1, ILQuotationStatus.DRAFT);
         newQuotation.parentQuotationId = this.quotationId;
         newQuotation.proposer = this.proposer;
