@@ -540,7 +540,7 @@ DROP TABLE IF EXISTS `individual_life_quotation`;
    `quotation_number` varchar(255) DEFAULT NULL,
    `version_number` int(11) NOT NULL,
   PRIMARY KEY (`quotation_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+);
 
 DROP TABLE IF EXISTS `individual_life_quotation_rider_details`;
  CREATE TABLE `individual_life_quotation_rider_details` (
@@ -551,7 +551,7 @@ DROP TABLE IF EXISTS `individual_life_quotation_rider_details`;
    `waiver_of_premium` int(11) DEFAULT NULL,
    KEY `FK_QUOTATION_RIDER` (`individual_life_quotation_quotationId`),
    CONSTRAINT `FK_QUOTATION_QUOTATON_ID` FOREIGN KEY (`individual_life_quotation_quotationId`) REFERENCES `individual_life_quotation` (`quotation_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+);
 
 DROP TABLE IF EXISTS `plan_coverage_benefit_assoc`;
 CREATE TABLE `plan_coverage_benefit_assoc` (

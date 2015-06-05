@@ -30,18 +30,19 @@ import static org.nthdimenzion.utils.UtilValidator.isNotEmpty;
 public class ILQuotationFinder {
 
     public static final String FIND_AGENT_BY_ID_QUERY = "select * from agent_team_branch_view where agentId =:agentId";
-    public static final String FIND_QUOTATION_BY_ID_FOR_PREMIUM_WITH_RIDER_QUERY = "SELECT  r.`coverage_id` AS COVERAGEID, r.`cover_term` AS COVERTERM, r.`sum_assured` AS RIDER_SA," +
+    public static final String FIND_QUOTATION_BY_ID_FOR_PREMIUM_WITH_RIDER_QUERY =
+            "SELECT  r.`coverage_id` AS COVERAGEID, r.`cover_term` AS COVERTERM, r.`sum_assured` AS RIDER_SA," +
             "r.`waiver_of_premium` AS RIDER_PREMIUM_WAIVER, c.`coverage_name` AS COVERAGENAME" +
             "  FROM individual_life_quotation_rider_details r  INNER JOIN coverage c" +
             "ON r.`coverage_id` = c.`coverage_id`" +
             "WHERE r.`individual_life_quotation_quotationId` =:quotationId";
-    private static final String IL_QUOTATION_TABLE = "individual_life_quotation";
-    public static final String FIND_QUOTATION_BY_ID_QUERY = "select * from " + IL_QUOTATION_TABLE + " where quotation_id =:quotationId";
     public static final String FIND_QUOTATION_BY_ID_FOR_PREMIUM_QUERY = "SELECT quotation_id AS QUOTATIONID, plan_id AS PLANID, date_of_birth AS ASSURED_DOB, " +
             "gender AS ASSURED_GENDER, policy_term AS POLICYTERM, occupation AS ASSURED_OCCUPATION," +
             "premium_payment_term AS PREMIUMPAYMENT_TERM, sum_assured AS SUMASSURED" +
-            "FROM "+ IL_QUOTATION_TABLE  +
+            "FROM individual_life_quotation" +
             " WHERE quotation_id =:quotationId";
+    private static final String IL_QUOTATION_TABLE = "individual_life_quotation";
+    public static final String FIND_QUOTATION_BY_ID_QUERY = "select * from " + IL_QUOTATION_TABLE + " where quotation_id =:quotationId";
     private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
     @Autowired
     private ILQuotationRepository ilQuotationRepository;
