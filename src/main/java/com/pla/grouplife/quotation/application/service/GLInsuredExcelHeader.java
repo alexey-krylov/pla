@@ -648,12 +648,12 @@ public enum GLInsuredExcelHeader {
             Cell annualIncomeCell = row.getCell(headers.indexOf(ANNUAL_INCOME.getDescription()));
             String annualIncomeCellValue = getCellValue(annualIncomeCell);
             if (isNotEmpty(cellValue)) {
-                sumAssured = BigDecimal.valueOf(Double.valueOf(cellValue));
+                sumAssured = BigDecimal.valueOf(Double.valueOf(cellValue).intValue());
             } else if (isNotEmpty(incomeMultiplierCellValue) && isNotEmpty(annualIncomeCellValue)) {
                 try {
                     Double incomeMultiplierValue = Double.parseDouble(incomeMultiplierCellValue);
                     Double annualIncomeValue = Double.parseDouble(annualIncomeCellValue);
-                    sumAssured = BigDecimal.valueOf(incomeMultiplierValue).multiply(BigDecimal.valueOf(annualIncomeValue));
+                    sumAssured = BigDecimal.valueOf(incomeMultiplierValue.intValue()).multiply(BigDecimal.valueOf(annualIncomeValue.intValue()));
                 } catch (Exception e) {
                     raiseNotValidValueException("Income multiplier and Annual Income should be numeric");
                 }
@@ -671,7 +671,7 @@ public enum GLInsuredExcelHeader {
             Cell cell = row.getCell(cellNumber);
             String cellValue = getCellValue(cell);
             InsuredDto.PlanPremiumDetailDto planPremiumDetailDto = insuredDependentDto.getPlanPremiumDetail() != null ? insuredDependentDto.getPlanPremiumDetail() : new InsuredDto.PlanPremiumDetailDto();
-            planPremiumDetailDto.setSumAssured(isNotEmpty(cellValue) ? BigDecimal.valueOf(Double.valueOf(cellValue)) : null);
+            planPremiumDetailDto.setSumAssured(isNotEmpty(cellValue) ? BigDecimal.valueOf(Double.valueOf(cellValue).intValue()) : null);
             insuredDependentDto.setPlanPremiumDetail(planPremiumDetailDto);
             return insuredDependentDto;
         }
