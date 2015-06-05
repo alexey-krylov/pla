@@ -29,8 +29,10 @@ public class UnderWriterDocument {
     @Id
     private UnderWriterDocumentId underWriterDocumentId;
 
+    @Getter
     private String planCode;
 
+    @Getter
     private CoverageId coverageId;
 
     private UnderWriterProcessType processType;

@@ -12,7 +12,9 @@ import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.jdbc.core.ColumnMapRowMapper;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.stereotype.Service;
 
 import javax.sql.DataSource;
@@ -55,13 +57,30 @@ public class UnderWriterFinder {
         this.namedParameterJdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
     }
 
-public static final String FIND_ALL_DOCUMENT_APPROVED_BY_SERVICE_PROVIDER =  "SELECT documentName,documentCode FROM document_view WHERE isProvided = 'YES'";
+    public static final String FIND_ALL_DOCUMENT_APPROVED_BY_SERVICE_PROVIDER =  "SELECT documentName,documentCode FROM document_view WHERE isProvided = 'YES'";
+
+    public static final String FIND_PLAN_COVERAGE_DETAIL_BY_PLAN_CODE = " SELECT DISTINCT planName,c.coverage_name coverageName FROM  plan_coverage_benefit_assoc_view p INNER JOIN coverage c " +
+            "   ON coverageId = c.coverage_id " +
+            "   WHERE planCode=:code AND coverageId=:id AND optional ='0' ";
+
+    public static final String FIND_PLAN_NAME_BY_CODE = "SELECT planName FROM plan_coverage_benefit_assoc_view WHERE planCode =:code LIMIT 1";
 
     public List<Map> findAllUnderWriterDocument() {
         List<UnderWriterDocument> allUnderWriterDocument = mongoTemplate.findAll(UnderWriterDocument.class, "under_writer_document");
         List<Map> underWriterDocumentList = new ArrayList<Map>();
         for (UnderWriterDocument underWriterDocument : allUnderWriterDocument) {
-            Map underWriterDocumentMap = objectMapper.convertValue(underWriterDocument, Map.class);
+            Map<String,Object> underWriterDocumentMap = objectMapper.convertValue(underWriterDocument, Map.class);
+            if (underWriterDocument.getCoverageId()!=null) {
+                SqlParameterSource sqlParameterSource = new MapSqlParameterSource("code", underWriterDocument.getPlanCode()).addValue("id", underWriterDocument.getCoverageId().getCoverageId());
+                Map<String, Object> planCoverageDetail = namedParameterJdbcTemplate.queryForMap(FIND_PLAN_COVERAGE_DETAIL_BY_PLAN_CODE, sqlParameterSource);
+                underWriterDocumentMap.put("planName",planCoverageDetail.get("planName"));
+                underWriterDocumentMap.put("coverageName",planCoverageDetail.get("coverageName"));
+            }
+            else {
+                SqlParameterSource sqlParameterSource = new MapSqlParameterSource("code", underWriterDocument.getPlanCode());
+                String planName =(String) namedParameterJdbcTemplate.queryForMap(FIND_PLAN_NAME_BY_CODE, sqlParameterSource).get("planName");
+                underWriterDocumentMap.put("planName",planName);
+            }
             underWriterDocumentList.add(underWriterDocumentMap);
         }
         return underWriterDocumentList;
@@ -93,5 +112,5 @@ public static final String FIND_ALL_DOCUMENT_APPROVED_BY_SERVICE_PROVIDER =  "SE
     public List<Map<String, Object>> getAllDocumentApprovedByServiceProvider() {
         return namedParameterJdbcTemplate.query(FIND_ALL_DOCUMENT_APPROVED_BY_SERVICE_PROVIDER, new ColumnMapRowMapper());
     }
-
 }
+

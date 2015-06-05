@@ -74,8 +74,11 @@ public class UnderWriterSetUpController {
     }
 
     @RequestMapping(value = "/viewdocumentsetup",method = RequestMethod.GET)
-    public String viewDocumentSetup(){
-        return "pla/core/underwriter/documentSetup/viewDocumentSetup";
+    public ModelAndView viewDocumentSetup(){
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("pla/core/underwriter/documentSetup/viewDocumentSetup");
+        modelAndView.addObject("underWriterDocumentList", underWriterFinder.findAllUnderWriterDocument());
+        return modelAndView;
     }
 
 
