@@ -314,7 +314,7 @@ public class PremiumTemplateParser {
             int formulaCellType = cell.getCachedFormulaResultType();
             cellValue = Cell.CELL_TYPE_NUMERIC == formulaCellType ? ((Double) cell.getNumericCellValue()).toString() : cell.getRichStringCellValue().getString();
         } else {
-            cellValue = Cell.CELL_TYPE_NUMERIC == cell.getCellType() ? ((Double) cell.getNumericCellValue()).toString() : cell.getStringCellValue();
+            cellValue = Cell.CELL_TYPE_NUMERIC == cell.getCellType() ? String.valueOf(((Double) cell.getNumericCellValue()).intValue()) : cell.getStringCellValue();
         }
         return cellValue;
     }

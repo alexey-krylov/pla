@@ -232,6 +232,9 @@ public class Plan extends AbstractAnnotatedAggregateRoot<PlanId> {
 
 
     public boolean isValidSumAssured(BigDecimal sumAssured) {
+        if (SumAssuredType.INCOME_MULTIPLIER.equals(this.sumAssured.getSumAssuredType())) {
+            return true;
+        }
         List<BigDecimal> sumAssuredValues = getAllowedSumAssuredValues();
         return sumAssuredValues.contains(sumAssured);
     }
