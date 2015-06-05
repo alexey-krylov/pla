@@ -1,10 +1,9 @@
-var App = angular.module('createPremium', ['ngRoute', 'ui.bootstrap', 'ngSanitize','angularFileUpload','mgcrea.ngStrap.select','checklist-model']);
+var App = angular.module('createPremium', ['ngRoute', 'ui.bootstrap', 'ngSanitize']);
 
 App.controller('CreatePremiumController', ['$scope', '$http', function ($scope, $http) {
 
     console.log(JSON.stringify(createPremium));
     $scope.uploaded = false;
-    $scope.showOptionalCoverageValue=true;
     $scope.verified = false;
     $scope.boolVal = false;
     $scope.newPlanList = [];
@@ -30,60 +29,12 @@ App.controller('CreatePremiumController', ['$scope', '$http', function ($scope, 
     $scope.getDefinedOption = function () {
 
         if ($scope.createPremium.definedFor == "plan") {
-            $scope.showOptionalCoverage = true;
+            $scope.showOptionalCoverage = false;
         } else {
-           // $scope.createPremium.definedFor = "optionalCoverage"
             $scope.showOptionalCoverage = true;
-
         }
 
     }
-
-
-    $scope.$watch('createPremium.definedFor',function(newValue, oldValue){
-        if(newValue=='optionalCoverage'){
-            $scope.createPremium.planId="";
-            $scope.createPremium.coverageId="";
-            $scope.showOptionalCoverageValue = false;
-        }else if (newValue == 'plan'){
-            $scope.createPremium.planId="";
-            $scope.showOptionalCoverageValue = true;
-
-        }
-
-    });
-    $scope.$watch('createPremium.coverageId',function(newValue, oldValue){
-        if(newValue){
-
-            $scope.showOptionalCoverageValue=true;
-        }
-    });
-
-
-    $scope.createPremium.premiumInfluencingFactors=[];
-    $scope.premiumInfluencingFactors=[];
-    $scope.checkboxValues=false;
-    $scope.toggleSelection = function toggleSelection(influencingFactorCode) {
-        $scope.createPremium.premiumInfluencingFactors = $scope.premiumInfluencingFactors ;
-        var idx = $scope.createPremium.premiumInfluencingFactors.indexOf(influencingFactorCode);
-        // alert($scope.createPremium.premiumInfluencingFactors.length);
-        if (idx > -1) {
-            $scope.createPremium.premiumInfluencingFactors.splice(idx, 1);
-            $scope.premiumInfluencingFactors = $scope.createPremium.premiumInfluencingFactors;
-
-
-        }
-        else {
-            $scope.createPremium.premiumInfluencingFactors.push(influencingFactorCode);
-            $scope.premiumInfluencingFactors = $scope.createPremium.premiumInfluencingFactors;
-        }
-        if($scope.createPremium.premiumInfluencingFactors.length > 0){
-            $scope.checkboxValues=true;
-        }else{
-            $scope.checkboxValues=false;
-        }
-    };
-
 
     $http.get('/pla/core/plan/getallplan').success(function (data) {
         for (var i = 0; i < data.length; i++) {
@@ -95,20 +46,14 @@ App.controller('CreatePremiumController', ['$scope', '$http', function ($scope, 
             });
         }
     });
-    $http.get('/pla/core/premium/getpremiuminfluencingfactors').success(function(data){
 
-        $scope.mulSelect=data;
-
-    });
     $scope.$watch('createPremium.planId', function (newValue, oldValue) {
         if (newValue) {
-            $scope.createPremium.coverageId="";
-            $scope.showOptionalCoverage = true;
             var planId = $scope.createPremium.planId;
             $scope.premiumForm.planId = planId;
             $http.get('/pla/core/plan/getcoveragebyplanid/' + planId).success(function (data) {
                 $scope.optionalCoverageList = data;
-                //console.log($scope.optionalCoverageList);
+                console.log($scope.optionalCoverageList);
             });
         }
     });
