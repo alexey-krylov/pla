@@ -29,6 +29,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.List;
@@ -61,8 +62,11 @@ public class UnderWriterSetUpController {
     *       ========== thymeleaf page routing starts ===========
     * */
     @RequestMapping(value = "/viewroutinglevel",method = RequestMethod.GET)
-    public String viewRoutingLevelSetup(){
-        return "pla/core/underwriter/routingLevelSetup/viewRoutingLevelSetup";
+    public ModelAndView viewRoutingLevelSetup(){
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("pla/core/underwriter/routingLevelSetup/viewRoutingLevelSetup");
+        modelAndView.addObject("underWriterDocumentList", underWriterFinder.findAllUnderWriterRoutingLevel());
+        return modelAndView;
     }
 
     @RequestMapping(value = "/opencreateroutinglevel",method = RequestMethod.GET)
@@ -87,6 +91,20 @@ public class UnderWriterSetUpController {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.addObject("CreateUnderWriterDocumentCommand", new CreateUnderWriterDocumentCommand());
         modelAndView.setViewName("pla/core/underwriter/documentSetup/createDocumentSetup");
+        return modelAndView;
+    }
+
+    @RequestMapping(value = "/redirecttoupdatePage", method = RequestMethod.GET)
+      public ModelAndView redirectToUpdatePage() {
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("pla/core/underwriter/updateDocumentSetup");
+        return modelAndView;
+    }
+
+    @RequestMapping(value = "/redirecttoviewPage", method = RequestMethod.GET)
+    public ModelAndView redirectToViewPage() {
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("pla/core/underwriter/viewDocumentRecord");
         return modelAndView;
     }
 
@@ -159,7 +177,7 @@ public class UnderWriterSetUpController {
     }
 
     @RequestMapping(value = "/downloadunderwritingtemplate", method = RequestMethod.POST)
-    public void downloadUnderWritingTemplate(@RequestBody UnderWritingRouterDto underWritingRouterDto, HttpServletRequest request, HttpServletResponse response) throws IOException {
+    public void downloadUnderWritingTemplate(@Valid @ModelAttribute UnderWritingRouterDto underWritingRouterDto, HttpServletRequest request, HttpServletResponse response) throws IOException {
         response.reset();
         response.setContentType("application/msexcel");
         String templateFileName = underWritingRouterDto.getPlanName()+ UNDER_WRITER_TEMPLATE_FILE_NAME_SUFFIX;
@@ -175,8 +193,7 @@ public class UnderWriterSetUpController {
     }
 
     @RequestMapping(value = "/uploadunderwriterroutingleveltemplate", method = RequestMethod.POST)
-    @ResponseBody
-    public ModelAndView uploadUnderwriterRoutingLevel(@RequestBody CreateUnderWriterRoutingLevelCommand createUnderWriterRoutingLevelCommand, BindingResult bindingResult, HttpServletRequest request,
+    public ModelAndView uploadUnderwriterRoutingLevel(@Valid @ModelAttribute CreateUnderWriterRoutingLevelCommand createUnderWriterRoutingLevelCommand, BindingResult bindingResult, HttpServletRequest request,
                                                       HttpServletResponse response) throws IOException {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("pla/core/underwriter/routingLevelSetup/createRoutingLevelSetup");

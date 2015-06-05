@@ -7,6 +7,7 @@ import com.fasterxml.jackson.datatype.joda.JodaModule;
 import com.pla.publishedlanguage.dto.UnderWriterRoutingLevelDetailDto;
 import com.pla.underwriter.domain.model.UnderWriterDocument;
 import com.pla.underwriter.domain.model.UnderWriterRoutingLevel;
+import org.nthdimenzion.utils.UtilValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
@@ -66,24 +67,30 @@ public class UnderWriterFinder {
     public static final String FIND_PLAN_NAME_BY_CODE = "SELECT planName FROM plan_coverage_benefit_assoc_view WHERE planCode =:code LIMIT 1";
 
     public List<Map> findAllUnderWriterDocument() {
+
         List<UnderWriterDocument> allUnderWriterDocument = mongoTemplate.findAll(UnderWriterDocument.class, "under_writer_document");
         List<Map> underWriterDocumentList = new ArrayList<Map>();
         for (UnderWriterDocument underWriterDocument : allUnderWriterDocument) {
             Map<String,Object> underWriterDocumentMap = objectMapper.convertValue(underWriterDocument, Map.class);
-            if (underWriterDocument.getCoverageId()!=null) {
-                SqlParameterSource sqlParameterSource = new MapSqlParameterSource("code", underWriterDocument.getPlanCode()).addValue("id", underWriterDocument.getCoverageId().getCoverageId());
-                Map<String, Object> planCoverageDetail = namedParameterJdbcTemplate.queryForMap(FIND_PLAN_COVERAGE_DETAIL_BY_PLAN_CODE, sqlParameterSource);
-                underWriterDocumentMap.put("planName",planCoverageDetail.get("planName"));
-                underWriterDocumentMap.put("coverageName",planCoverageDetail.get("coverageName"));
-            }
-            else {
-                SqlParameterSource sqlParameterSource = new MapSqlParameterSource("code", underWriterDocument.getPlanCode());
-                String planName =(String) namedParameterJdbcTemplate.queryForMap(FIND_PLAN_NAME_BY_CODE, sqlParameterSource).get("planName");
-                underWriterDocumentMap.put("planName",planName);
-            }
+            underWriterDocumentMap = planCoverageDetailTransformer(underWriterDocument.getCoverageId().getCoverageId(),underWriterDocument.getPlanCode(),underWriterDocumentMap);
             underWriterDocumentList.add(underWriterDocumentMap);
         }
         return underWriterDocumentList;
+    }
+
+    private Map<String,Object> planCoverageDetailTransformer(String coverageId,String planCode,Map<String,Object> underWriterMap){
+        if (UtilValidator.isNotEmpty(coverageId)) {
+            SqlParameterSource sqlParameterSource = new MapSqlParameterSource("code", planCode).addValue("id", coverageId);
+            Map<String, Object> planCoverageDetail = namedParameterJdbcTemplate.queryForMap(FIND_PLAN_COVERAGE_DETAIL_BY_PLAN_CODE, sqlParameterSource);
+            underWriterMap.put("planName", planCoverageDetail.get("planName"));
+            underWriterMap.put("coverageName", planCoverageDetail.get("coverageName"));
+        }
+        else {
+            SqlParameterSource sqlParameterSource = new MapSqlParameterSource("code",planCode);
+            String planName =(String) namedParameterJdbcTemplate.queryForMap(FIND_PLAN_NAME_BY_CODE, sqlParameterSource).get("planName");
+            underWriterMap.put("planName",planName);
+        }
+        return underWriterMap;
     }
 
     public List<Map> findAllUnderWriterRoutingLevel() {
@@ -91,6 +98,7 @@ public class UnderWriterFinder {
         List<Map> underWritingRoutingLevelList = new ArrayList<Map>();
         for (UnderWriterRoutingLevel underWriterRoutingLevel : allUnderWriterRoutingLevel) {
             Map underWritingRoutingLevelMap = objectMapper.convertValue(underWriterRoutingLevel, Map.class);
+            underWritingRoutingLevelMap = planCoverageDetailTransformer(underWriterRoutingLevel.getCoverageId().getCoverageId(),underWriterRoutingLevel.getPlanCode(),underWritingRoutingLevelMap);
             underWritingRoutingLevelList.add(underWritingRoutingLevelMap);
         }
         return underWritingRoutingLevelList;

@@ -30,8 +30,10 @@ public class UnderWriterRoutingLevel {
     @Id
     private UnderWriterRoutingLevelId underWriterRoutingLevelId;
 
+    @Getter
     private String planCode;
 
+    @Getter
     private CoverageId coverageId;
 
     private UnderWriterProcessType processType;
