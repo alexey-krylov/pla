@@ -133,7 +133,7 @@
 						<rightPen lineColor="#F22522"/>
 					</box>
 					<textElement verticalAlignment="Middle" markup="none">
-						<font fontName="Calibri" size="12" isBold="true"/>
+                        <font fontName="Arial" size="12" isBold="true"/>
 					</textElement>
 					<text><![CDATA[Agent Name :]]></text>
 				</staticText>
@@ -147,7 +147,7 @@
 				<staticText>
 					<reportElement x="490" y="12" width="110" height="24" uuid="3d80a0b0-f997-454c-b31d-0dc020c6ed22"/>
 					<textElement textAlignment="Left" verticalAlignment="Middle">
-						<font fontName="Calibri" size="12" isBold="true"/>
+                        <font fontName="Arial" size="12" isBold="true"/>
 					</textElement>
 					<text><![CDATA[Contact  Number :]]></text>
 				</staticText>
@@ -164,7 +164,7 @@
 				<staticText>
 					<reportElement x="460" y="50" width="140" height="20" uuid="ac1b81a8-9484-4246-b06f-dc2cf3c4c4f3"/>
 					<textElement verticalAlignment="Middle">
-						<font fontName="Calibri" size="12" isBold="true"/>
+                        <font fontName="Arial" size="12" isBold="true"/>
 					</textElement>
 					<text><![CDATA[Policy Servicing Office :]]></text>
 				</staticText>
@@ -176,7 +176,7 @@
 				<staticText>
 					<reportElement x="49" y="50" width="81" height="20" uuid="adf044ed-7118-4885-8628-16e1d83764ce"/>
 					<textElement verticalAlignment="Middle">
-						<font fontName="Calibri" size="12" isBold="true"/>
+                        <font fontName="Arial" size="12" isBold="true"/>
 					</textElement>
 					<text><![CDATA[  Agent Code :]]></text>
 				</staticText>
@@ -197,7 +197,7 @@
 							<rightPen lineColor="#F22522"/>
 						</box>
 						<textElement verticalAlignment="Middle" markup="none">
-							<font fontName="Calibri" size="12" isBold="true"/>
+                            <font fontName="Arial" size="12" isBold="true"/>
 						</textElement>
 						<text><![CDATA[Name :]]></text>
 					</staticText>
@@ -217,7 +217,7 @@
 							<rightPen lineColor="#F22522"/>
 						</box>
 						<textElement verticalAlignment="Middle" markup="none">
-							<font fontName="Calibri" size="12" isBold="true"/>
+                            <font fontName="Arial" size="12" isBold="true"/>
 						</textElement>
 						<text><![CDATA[  Address :]]></text>
 					</staticText>
@@ -240,7 +240,7 @@
 							<rightPen lineColor="#F22522"/>
 						</box>
 						<textElement markup="none">
-							<font fontName="Calibri" size="12" isBold="true"/>
+                            <font fontName="Arial" size="12" isBold="true"/>
 						</textElement>
 						<text><![CDATA[Telephone Number :]]></text>
 					</staticText>
