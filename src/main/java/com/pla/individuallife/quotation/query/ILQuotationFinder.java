@@ -35,8 +35,8 @@ public class ILQuotationFinder {
             "WHERE r.`individual_life_quotation_quotationId` =:quotationId";
     private static final String IL_QUOTATION_TABLE = "individual_life_quotation";
     public static final String FIND_QUOTATION_BY_ID_QUERY = "select * from " + IL_QUOTATION_TABLE + " where quotation_id =:quotationId";
-    public static final String FIND_QUOTATION_BY_ID_FOR_PREMIUM_QUERY = "SELECT quotation_id AS QUOTATIONID, plan_id AS PLANID, assured_date_of_birth AS ASSURED_DOB, \n" +
-            "assured_gender AS ASSURED_GENDER, policy_term AS POLICYTERM, occupation AS ASSURED_OCCUPATION,\n" +
+    public static final String FIND_QUOTATION_BY_ID_FOR_PREMIUM_QUERY = "SELECT quotation_id AS QUOTATIONID, plan_id AS PLANID, date_of_birth AS ASSURED_DOB, \n" +
+            "gender AS ASSURED_GENDER, policy_term AS POLICYTERM, occupation AS ASSURED_OCCUPATION,\n" +
             "premium_payment_term AS PREMIUMPAYMENT_TERM, sum_assured AS SUMASSURED\n" +
             "FROM "+ IL_QUOTATION_TABLE  +
             " WHERE quotation_id =:quotationId";
