@@ -9,10 +9,10 @@ import com.pla.core.domain.model.plan.premium.PremiumItem;
 import com.pla.core.query.PremiumFinder;
 import com.pla.core.repository.OrganizationGeneralInformationRepository;
 import com.pla.publishedlanguage.contract.IPremiumCalculator;
-import com.pla.publishedlanguage.domain.model.BasicPremiumDto;
-import com.pla.publishedlanguage.domain.model.ComputedPremiumDto;
-import com.pla.publishedlanguage.domain.model.PremiumCalculationDto;
-import com.pla.publishedlanguage.domain.model.PremiumFrequency;
+import com.pla.publishedlanguage.domain.model.*;
+import com.pla.sharedkernel.identifier.CoverageId;
+import com.pla.sharedkernel.identifier.PlanId;
+import org.joda.time.LocalDate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -86,6 +86,18 @@ public class PremiumCalculator implements IPremiumCalculator {
         Set<PremiumItem> premiumItems = premium.getPremiumItems();
         PremiumItem premiumItem = findPremiumItem(premiumItems, premiumCalculationDto.getPremiumCalculationInfluencingFactorItems());
         return computeProratePremium(premium, premiumItem, premiumCalculationDto.getNoOfDays());
+    }
+
+    @Override
+    public List<PremiumInfluencingFactor> getPremiumInfluencingFactors(PlanId planId, LocalDate calculateDate) {
+        Premium premium = premiumFinder.findPremium(planId, null, calculateDate);
+        return premium.getPremiumInfluencingFactors();
+    }
+
+    @Override
+    public List<PremiumInfluencingFactor> getPremiumInfluencingFactors(PlanId planId, CoverageId coverageId, LocalDate calculateDate) {
+        Premium premium = premiumFinder.findPremium(planId, coverageId, calculateDate);
+        return premium.getPremiumInfluencingFactors();
     }
 
 

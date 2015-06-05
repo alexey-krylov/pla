@@ -2,6 +2,9 @@ package com.pla.core.query;
 
 import com.pla.core.domain.model.plan.premium.Premium;
 import com.pla.publishedlanguage.domain.model.PremiumCalculationDto;
+import com.pla.sharedkernel.identifier.CoverageId;
+import com.pla.sharedkernel.identifier.PlanId;
+import org.joda.time.LocalDate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
@@ -27,11 +30,16 @@ public class PremiumFinder {
     }
 
     public Premium findPremium(PremiumCalculationDto premiumCalculationDto) {
-        Criteria premiumCriteria = Criteria.where("planId").is(premiumCalculationDto.getPlanId())
-                .and("effectiveFrom").lte(premiumCalculationDto.getCalculateAsOf().toDate()).and("validTill").is(null);
-        if (premiumCalculationDto.getCoverageId() != null) {
-            premiumCriteria.and("coverageId.coverageId").is(premiumCalculationDto.getCoverageId().getCoverageId());
-        }else{
+        Premium premium = findPremium(premiumCalculationDto.getPlanId(), premiumCalculationDto.getCoverageId(), premiumCalculationDto.getCalculateAsOf());
+        return premium;
+    }
+
+    public Premium findPremium(PlanId planId, CoverageId coverageId, LocalDate effectiveDate) {
+        Criteria premiumCriteria = Criteria.where("planId").is(planId)
+                .and("effectiveFrom").lte(effectiveDate.toDate()).and("validTill").is(null);
+        if (coverageId != null) {
+            premiumCriteria.and("coverageId.coverageId").is(coverageId.getCoverageId());
+        } else {
             premiumCriteria.and("coverageId").is(null);
         }
         Query query = new Query(premiumCriteria);
