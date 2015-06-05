@@ -8,6 +8,7 @@ import com.pla.sharedkernel.identifier.PlanId;
 import com.pla.sharedkernel.identifier.QuotationId;
 import org.axonframework.commandhandling.annotation.CommandHandler;
 import org.axonframework.repository.Repository;
+import org.joda.time.LocalDate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -75,4 +76,11 @@ public class ILQuotationCommandHandler {
         }
     }
 
+
+    @CommandHandler
+    public String generateQuotation(ILGenerateQuotationCommand cmd) {
+        IndividualLifeQuotation individualLifeQuotation = ilQuotationJpaRepository.load((new QuotationId(cmd.getQuotationId())));
+        individualLifeQuotation.generateQuotation(LocalDate.now());
+        return individualLifeQuotation.getQuotationId().toString();
+    }
 }

@@ -2,10 +2,7 @@ package com.pla.individuallife.quotation.presentation.controller;
 
 import com.pla.core.query.AgentFinder;
 import com.pla.core.query.PlanFinder;
-import com.pla.individuallife.quotation.application.command.CreateILQuotationCommand;
-import com.pla.individuallife.quotation.application.command.UpdateILQuotationWithAssuredCommand;
-import com.pla.individuallife.quotation.application.command.UpdateILQuotationWithPlanCommand;
-import com.pla.individuallife.quotation.application.command.UpdateILQuotationWithProposerCommand;
+import com.pla.individuallife.quotation.application.command.*;
 import com.pla.individuallife.quotation.application.service.ILQuotationService;
 import com.pla.individuallife.quotation.presentation.dto.ILSearchQuotationDto;
 import com.pla.individuallife.quotation.query.ILQuotationDto;
@@ -173,10 +170,16 @@ public class IndidualLifeQuotationController {
         return ilQuotationService.getPremiumDetail(new QuotationId(quotationId));
     }
 
-    @RequestMapping(value = "/recalculatePremium", method = RequestMethod.POST)
+    @RequestMapping(value = "/generatequotation", method = RequestMethod.POST)
     @ResponseBody
-    public PremiumDetailDto reCalculatePremium(@RequestBody PremiumDetailDto premiumDetailDto) {
-        return ilQuotationService.getReCalculatePremium(premiumDetailDto);
+    public Result reCalculatePremium(@RequestBody ILGenerateQuotationCommand generateQuotationCommand) {
+        try{
+            String quotationId =commandGateway.sendAndWait(generateQuotationCommand)   ;
+            return Result.success("Quotation Generated Successfully",quotationId);
+        }catch (Exception e){
+            e.printStackTrace();
+            return Result.failure(e.getMessage());
+        }
     }
 
 }
