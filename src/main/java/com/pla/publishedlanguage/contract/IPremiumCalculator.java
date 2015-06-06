@@ -19,6 +19,8 @@ public interface IPremiumCalculator {
 
     List<ComputedPremiumDto> calculateBasicPremium(PremiumCalculationDto premiumCalculationDto);
 
+    List<ComputedPremiumDto> calculateBasicPremiumWithPolicyFee(PremiumCalculationDto premiumCalculationDto);
+
     List<ComputedPremiumDto> calculateModalPremium(BasicPremiumDto basicPremiumDto);
 
     BigDecimal computeProratePremium(PremiumCalculationDto premiumCalculationDto);

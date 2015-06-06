@@ -72,7 +72,7 @@ public class ILQuotationService {
                 premiumCalculationDto.addInfluencingFactorItemValue(PremiumInfluencingFactor.OCCUPATION_CLASS, quotation.get("ASSURED_OCCUPATION").toString());
         }
 
-        List<ComputedPremiumDto> computedPremiums = premiumCalculator.calculateBasicPremium(premiumCalculationDto);
+        List<ComputedPremiumDto> computedPremiums = premiumCalculator.calculateBasicPremiumWithPolicyFee(premiumCalculationDto);
 
         premiumDetailDto.setPlanAnnualPremium(ComputedPremiumDto.getAnnualPremium(computedPremiums));
 
@@ -98,7 +98,7 @@ public class ILQuotationService {
                     if(premiumInfluencingFactor.name().equalsIgnoreCase(String.valueOf(PremiumInfluencingFactor.OCCUPATION_CLASS)))
                         premiumCalculationDto.addInfluencingFactorItemValue(PremiumInfluencingFactor.OCCUPATION_CLASS, quotation.get("ASSURED_OCCUPATION").toString());
                 }
-                computedPremiums = premiumCalculator.calculateBasicPremium(premiumCalculationDto);
+                computedPremiums = premiumCalculator.calculateBasicPremiumWithPolicyFee(premiumCalculationDto);
                 RiderPremiumDto rd = new RiderPremiumDto();
                 rd.setCoverageId(new CoverageId (rider.get("COVERAGEID").toString()));
                 if(rider.get("COVERAGENAME") != null )

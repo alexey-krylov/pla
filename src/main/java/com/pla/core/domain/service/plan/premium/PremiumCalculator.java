@@ -3,6 +3,8 @@ package com.pla.core.domain.service.plan.premium;
 import com.google.common.collect.Lists;
 import com.pla.core.domain.model.generalinformation.ModelFactorOrganizationInformation;
 import com.pla.core.domain.model.generalinformation.OrganizationGeneralInformation;
+import com.pla.core.domain.model.generalinformation.PolicyFeeProcessInformation;
+import com.pla.core.domain.model.generalinformation.ProductLineGeneralInformation;
 import com.pla.core.domain.model.plan.premium.Premium;
 import com.pla.core.domain.model.plan.premium.PremiumInfluencingFactorLineItem;
 import com.pla.core.domain.model.plan.premium.PremiumItem;
@@ -14,6 +16,9 @@ import com.pla.sharedkernel.identifier.CoverageId;
 import com.pla.sharedkernel.identifier.PlanId;
 import org.joda.time.LocalDate;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
@@ -39,6 +44,9 @@ public class PremiumCalculator implements IPremiumCalculator {
     private OrganizationGeneralInformationRepository organizationGeneralInformationRepository;
 
     @Autowired
+    private MongoTemplate mongoTemplate;
+
+    @Autowired
     public PremiumCalculator(PremiumFinder premiumFinder, OrganizationGeneralInformationRepository organizationGeneralInformationRepository) {
         this.premiumFinder = premiumFinder;
         this.organizationGeneralInformationRepository = organizationGeneralInformationRepository;
@@ -57,6 +65,20 @@ public class PremiumCalculator implements IPremiumCalculator {
         List<OrganizationGeneralInformation> organizationGeneralInformations = organizationGeneralInformationRepository.findAll();
         checkArgument(isNotEmpty(organizationGeneralInformations));
         return computePremium(premium, premiumItem, organizationGeneralInformations.get(0), premiumCalculationDto.getNoOfDays());
+    }
+
+    @Override
+    public List<ComputedPremiumDto> calculateBasicPremiumWithPolicyFee(PremiumCalculationDto premiumCalculationDto) {
+        Premium premium = premiumFinder.findPremium(premiumCalculationDto);
+        boolean hasAllInfluencingFactor = premium.hasAllInfluencingFactor(premiumCalculationDto.getInfluencingFactors());
+        if (!hasAllInfluencingFactor) {
+            raiseInfluencingFactorMismatchException();
+        }
+        Set<PremiumItem> premiumItems = premium.getPremiumItems();
+        PremiumItem premiumItem = findPremiumItem(premiumItems, premiumCalculationDto.getPremiumCalculationInfluencingFactorItems());
+        List<OrganizationGeneralInformation> organizationGeneralInformations = organizationGeneralInformationRepository.findAll();
+        checkArgument(isNotEmpty(organizationGeneralInformations));
+        return computePremiumWithPolicyFee(premium, premiumItem, organizationGeneralInformations.get(0), premiumCalculationDto.getNoOfDays());
     }
 
     @Override
@@ -107,6 +129,33 @@ public class PremiumCalculator implements IPremiumCalculator {
         ComputedPremiumDto semiAnnualPremium = new ComputedPremiumDto(PremiumFrequency.SEMI_ANNUALLY, premium.getSemiAnnuallyPremium(premiumItem, organizationGeneralInformation.getModelFactorItems(), organizationGeneralInformation.getDiscountFactorItems(), noOfDays));
         ComputedPremiumDto quarterlyPremium = new ComputedPremiumDto(PremiumFrequency.QUARTERLY, premium.getQuarterlyPremium(premiumItem, organizationGeneralInformation.getModelFactorItems(), organizationGeneralInformation.getDiscountFactorItems(), noOfDays));
         ComputedPremiumDto monthlyPremium = new ComputedPremiumDto(PremiumFrequency.MONTHLY, premium.getMonthlyPremium(premiumItem, organizationGeneralInformation.getModelFactorItems(), noOfDays));
+        List<ComputedPremiumDto> computedPremiumDtoList = Lists.newArrayList();
+        computedPremiumDtoList.add(annualPremium);
+        computedPremiumDtoList.add(semiAnnualPremium);
+        computedPremiumDtoList.add(quarterlyPremium);
+        computedPremiumDtoList.add(monthlyPremium);
+        return computedPremiumDtoList;
+    }
+
+    public List<ComputedPremiumDto> computePremiumWithPolicyFee(Premium premium, PremiumItem premiumItem, OrganizationGeneralInformation organizationGeneralInformation, int noOfDays) {
+
+        Criteria policyCriteria = Criteria.where("productLine").is("INDIVIDUAL_LIFE");
+        Query query = new Query(policyCriteria);
+        List<ProductLineGeneralInformation> productLineInformation = mongoTemplate.find(query, ProductLineGeneralInformation.class);
+        PolicyFeeProcessInformation policyFeeProcessInformation = productLineInformation.get(0).getPolicyFeeProcessInformation();
+
+        int annual = policyFeeProcessInformation.getPolicyFeeProcessItems().stream().filter(p -> p.getPolicyFeeProcessType().name().equals("ANNUAL")).collect(Collectors.toList()).get(0).getPolicyFee();
+        int semiannaul = policyFeeProcessInformation.getPolicyFeeProcessItems().stream().filter(p -> p.getPolicyFeeProcessType().name().equals("SEMI_ANNUAL")).collect(Collectors.toList()).get(0).getPolicyFee();
+        int quarterly = policyFeeProcessInformation.getPolicyFeeProcessItems().stream().filter(p -> p.getPolicyFeeProcessType().name().equals("QUARTERLY")).collect(Collectors.toList()).get(0).getPolicyFee();
+        int monthly = policyFeeProcessInformation.getPolicyFeeProcessItems().stream().filter(p -> p.getPolicyFeeProcessType().name().equals("MONTHLY")).collect(Collectors.toList()).get(0).getPolicyFee();
+
+        ComputedPremiumDto annualPremium = new ComputedPremiumDto(PremiumFrequency.ANNUALLY, premium.getAnnualPremium(premiumItem, organizationGeneralInformation.getDiscountFactorItems(), noOfDays).add(BigDecimal.valueOf(annual)));
+        ComputedPremiumDto semiAnnualPremium = new ComputedPremiumDto(PremiumFrequency.SEMI_ANNUALLY, premium.getSemiAnnuallyPremium(premiumItem, organizationGeneralInformation.getModelFactorItems(), organizationGeneralInformation.getDiscountFactorItems(), noOfDays).add(BigDecimal.valueOf(semiannaul)));
+        ComputedPremiumDto quarterlyPremium = new ComputedPremiumDto(PremiumFrequency.QUARTERLY, premium.getQuarterlyPremium(premiumItem, organizationGeneralInformation.getModelFactorItems(), organizationGeneralInformation.getDiscountFactorItems(), noOfDays).add(BigDecimal.valueOf(quarterly)));
+        ComputedPremiumDto monthlyPremium = new ComputedPremiumDto(PremiumFrequency.MONTHLY, premium.getMonthlyPremium(premiumItem, organizationGeneralInformation.getModelFactorItems(), noOfDays).add(BigDecimal.valueOf(monthly)));
+
+
+
         List<ComputedPremiumDto> computedPremiumDtoList = Lists.newArrayList();
         computedPremiumDtoList.add(annualPremium);
         computedPremiumDtoList.add(semiAnnualPremium);

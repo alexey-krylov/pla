@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
  * Created by Admin on 4/1/2015.
  */
 
-@Getter(AccessLevel.PACKAGE)
+@Getter
 @Setter(AccessLevel.PACKAGE)
 public class PolicyFeeProcessInformation {
 
