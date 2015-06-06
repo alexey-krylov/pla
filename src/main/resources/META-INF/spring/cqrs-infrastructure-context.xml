@@ -10,9 +10,8 @@
        http://www.axonframework.org/schema/core http://www.axonframework.org/schema/axon-core.xsd
        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
 
-<import resource="persistence-infrastructure-context.xml"/>
+    <import resource="persistence-infrastructure-context.xml"/>
     <axon:annotation-config/>
-    <context:component-scan base-package="com.pla"/>
     <context:annotation-config/>
 
     <bean id="beanValidationInterceptor"
@@ -81,15 +80,14 @@
     <extension:mongo-repository id="glQuotationMongoRepository"
                                 aggregate-type="com.pla.grouplife.quotation.domain.model.GroupLifeQuotation"
                                 mongo-template="mongoTemplate"/>
-
+    <extension:mongo-repository id="ghQuotationMongoRepository"
+                                aggregate-type="com.pla.grouphealth.quotation.domain.model.GroupHealthQuotation"
+                                mongo-template="mongoTemplate"/>
 
     <axon:jpa-repository id="ilQuotationJpaRepository"
                          aggregate-type="com.pla.individuallife.quotation.domain.model.IndividualLifeQuotation"
                          event-bus="eventBus"/>
 
-    <extension:mongo-repository id="ghQuotationMongoRepository"
-                                aggregate-type="com.pla.grouphealth.quotation.domain.model.GroupHealthQuotation"
-                                mongo-template="mongoTemplate"/>
     <extension:mongo-repository id="ilProposalMongoRepository"
                                 aggregate-type="com.pla.individuallife.proposal.domain.model.ProposalAggregate"
                                 mongo-template="mongoTemplate"/>
