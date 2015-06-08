@@ -130,7 +130,7 @@ app.config(function ($routeProvider, $locationProvider) {
                 }]
             }
         });
-    $routeProvider.otherwise({redirectTo: '/plan'});
+    $routeProvider.otherwise({redirectTo: '/'});
 });
 app.controller('PlanListController', ['$scope', 'planList', function ($scope, planList) {
     console.log(' PlanListController *** ');

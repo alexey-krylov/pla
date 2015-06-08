@@ -9,6 +9,7 @@ import com.pla.sharedkernel.identifier.PlanId;
 import org.axonframework.commandhandling.CommandBus;
 import org.axonframework.commandhandling.gateway.GatewayProxyFactory;
 import org.bson.types.ObjectId;
+import org.nthdimenzion.presentation.Result;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
@@ -176,5 +177,11 @@ public class PlanSetupController {
         return plan;
     }
 
+
+    @ExceptionHandler
+    @ResponseBody
+    public Result handleException(Exception ex) {
+        return Result.failure(ex.getMessage());
+    }
 
 }

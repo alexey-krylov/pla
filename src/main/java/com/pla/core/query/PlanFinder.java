@@ -73,7 +73,7 @@ public class PlanFinder {
     }
 
     public List<Map<String, Object>> findAllPlanForThymeleaf() {
-        List<Map<String, Object>> planList = namedParameterJdbcTemplate.queryForList("SELECT * FROM plan_coverage_benefits_assoc group by plan_code ORDER BY plan_name,launch_date", EmptySqlParameterSource.INSTANCE);
+        List<Map<String, Object>> planList = namedParameterJdbcTemplate.queryForList("SELECT * FROM plan_coverage_benefits_assoc WHERE withdrawal_date >= NOW() OR withdrawal_date IS NULL GROUP BY plan_code ORDER BY plan_name,launch_date", EmptySqlParameterSource.INSTANCE);
         return planList;
     }
 
@@ -193,6 +193,11 @@ public class PlanFinder {
         return endorsementTypeList;
     }
 
+    public List<Map<String, Object>> getAllPlans() {
+        final String FIND_ALL_PLAN_QUERY = "SELECT DISTINCT planId,planName,planCode FROM plan_coverage_benefit_assoc_view";
+        return namedParameterJdbcTemplate.query(FIND_ALL_PLAN_QUERY, new ColumnMapRowMapper());
+    }
+
     private class TransformPlanCoverageWithCoverageName implements Function<Map, Map<String, Object>> {
 
         private List<CoverageDto> allCoverages;
@@ -212,10 +217,5 @@ public class PlanFinder {
             planCoverageMap.put("coverageName", coverageMap.getCoverageName());
             return planCoverageMap;
         }
-    }
-
-    public List<Map<String,Object>> getAllPlans(){
-        final String FIND_ALL_PLAN_QUERY = "SELECT DISTINCT planId,planName,planCode FROM plan_coverage_benefit_assoc_view";
-            return namedParameterJdbcTemplate.query(FIND_ALL_PLAN_QUERY,new ColumnMapRowMapper());
     }
 }
