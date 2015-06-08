@@ -31,6 +31,8 @@ public class InsuredDependentBuilder {
 
     private String firstName;
 
+    private String occupationClass;
+
     private String lastName;
 
     private LocalDate dateOfBirth;
@@ -87,6 +89,11 @@ public class InsuredDependentBuilder {
 
     public InsuredDependentBuilder withCategory(String category) {
         this.category = category;
+        return this;
+    }
+
+    public InsuredDependentBuilder withOccupationClass(String occupation) {
+        this.occupationClass = occupation;
         return this;
     }
 

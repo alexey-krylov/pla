@@ -66,6 +66,7 @@ public class InsuredDependent {
         this.relationship = insuredDependentBuilder.getRelationship();
         this.planPremiumDetail = insuredDependentBuilder.getPlanPremiumDetail();
         this.coveragePremiumDetails = insuredDependentBuilder.getCoveragePremiumDetails();
+        this.occupationClass=insuredDependentBuilder.getOccupationClass();
     }
 
     public static InsuredDependentBuilder getInsuredDependentBuilder(PlanId planId, String planCode, BigDecimal premiumAmount, BigDecimal sumAssured) {
