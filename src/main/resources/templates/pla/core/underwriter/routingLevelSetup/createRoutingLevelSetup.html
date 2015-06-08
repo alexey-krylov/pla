@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/xhtml"
+      lang="en">
+<head th:include="fragments/common :: headTag">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+</head>
+<body>
+<div th:include="fragments/common :: bodyHeader" th:remove="tag"/>
+<script>
+    require(['moment'], function (moment) {
+        // alert(moment().format('dddd, MMMM Do YYYY, h:mm:ss a'));
+    });
+    requirejs(['jquery', 'main', 'angular-file-upload'], function ($) {
+        require(['/pla/js/underwriter/createRoutingLevelSetup.js?t=5'], function () {
+            angular.bootstrap(document, ['createRoutingLevel']);
+        });
+        $(document).on('change', '.btn-file :file', function () {
+            var input = $(this),
+                    numFiles = input.get(0).files ? input.get(0).files.length : 1,
+                    label = input.val().replace(/\\/g, '/').replace(/.*\//, '');
+            input.trigger('fileselect', [numFiles, label]);
+        });
+
+        $(document).ready(function () {
+            $('.btn-file :file').on('fileselect', function (event, numFiles, label) {
+                var input = $(this).parents('.input-group').find(':text'),
+                        log = numFiles > 1 ? numFiles + ' files selected' : label;
+                if (input.length) {
+                    input.val(log);
+
+                } else {
+                    if (log) alert(log);
+                }
+
+            });
+        });
+
+    });
+
+
+</script>
+<script th:inline="javascript">
+    /*<![CDATA[*/
+    var createRoutingLevel = {};
+   var coverageId = /*[[${createUnderWriterRoutingLevelCommand.coverageId}]]*/null;
+    if (coverageId) {
+        createRoutingLevel.definedFor = 'optionalCoverage';
+        createRoutingLevel.coverageId = coverageId;
+    } else {
+        createRoutingLevel.definedFor = 'plan';
+    }
+    var planName = /*[[${createUnderWriterRoutingLevelCommand.planName}]]*/null;
+    createRoutingLevel.planName = planName;
+    var planCode = /*[[${createUnderWriterRoutingLevelCommand.planCode}]]*/null;
+    createRoutingLevel.planCode = planCode;
+    var effectiveFrom = /*[[${{createUnderWriterRoutingLevelCommand.effectiveFrom}}]]*/null;
+    createRoutingLevel.effectiveFrom = effectiveFrom;
+    // var underWriterInfluencingFactors;
+   // if(underWriterInfluencingFactors) {
+    //     createRoutingLevel.underWriterInfluencingFactors = underWriterInfluencingFactors;
+  //  }
+    var isNumeric = function (event){
+
+        var charCode = (event.which) ? event.which : event.keyCode;
+        // alert(charCode);
+        if (charCode > 31 && charCode !=8 && charCode !=0 ) {
+            event.preventDefault();
+
+        }
+        if(charCode ==8){
+            event.preventDefault();
+        }
+
+    };
+       /*]]>*/
+</script>
+
+<div class="container ng-cloak">
+
+   <div class="alert alert-danger" role="alert" th:if="${#fields.hasErrors('createUnderWriterRoutingLevelCommand')}">
+        <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+        <span class="sr-only">Error:</span>
+        <p th:errors="${createRoutingLevelCommand}"></p>
+    </div>
+    <div class="alert alert-danger" role="alert" th:if="!${#strings.isEmpty(message)}">
+        <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+        <p th:text="${message}"></p>
+    </div>
+    <!-- <div class="alert alert-danger" role="alert" th:text="${message !=null} ?${message}"></div>-->
+
+    <form class="css-form" method="post" enctype="multipart/form-data" action="uploadunderwriterroutingleveltemplate" name="routingForm" id="routingForm" ng-submit="submitFormToServer()"
+          ng-controller="CreateRoutingLevelController">
+
+
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <div class="row">
+                    <div class="col-lg-3"><span th:text="#{createRoutingLevelsetup}">Create Routing Level Setup
+                        </span></div>
+                </div>
+            </div>
+            <div class="panel-body" style="padding-top:5px">
+                <!--<notification ></notification>-->
+                <div class="row">
+                    <div class="form-group col-md-6 required">
+                        <label class="control-label">Defined For</label>
+
+                        <div class="radio">
+                            <label style="margin-right:30px">
+                                <input type="radio" name="definedFor" value="plan" ng-model="createRoutingLevel.definedFor" ng-change="getDefinedOption()"/>Plan
+                            </label>
+                            <label>
+                                <input type="radio" name="definedFor" value="optionalCoverage" ng-model="createRoutingLevel.definedFor" ng-change="getDefinedOption()"/>Optional
+                                Coverage
+                            </label>
+                        </div>
+                    </div>
+                    <div class="form-group col-md-6 required">
+                        <label class="control-label">Plan Name</label>
+                        <input type="hidden" name="planCode" class="form-control input-lg" value="{{createRoutingLevel.planCode}}"/>
+                        <input type="hidden" name="planName" class="form-control input-lg" value="{{createRoutingLevel.planName}}"/>
+                        <select class="form-control input-sm" ng-model="createRoutingLevel.planCode"
+                                ng-options="plan.planCode as plan.planName for plan in planList | orderBy:'planName'">
+                            <option value="">----Select Plan----</option>
+                        </select>
+                    </div>
+                    </div>
+                    <div class="row">
+
+                    <div ng-switch="" on="createRoutingLevel.definedFor" class="animate-switch-container">
+                        <div class="form-group col-md-6 required animate-switch" ng-switch-when="optionalCoverage">
+                            <label class="control-label">Optional Coverage</label>
+                            <input type="hidden" name="coverageId" class="form-control input-lg" value="{{createRoutingLevel.coverageId}}"/>
+                            <select class="form-control input-sm" id="optionalCoverage" ng-required="true" ng-model="createRoutingLevel.coverageId" ng-disabled="!createRoutingLevel.planCode"
+                                    ng-options="optionalCoverage.coverageId as optionalCoverage.coverageName for optionalCoverage in optionalCoverageList | orderBy:'coverageName'">
+                                <option value="">----Select Optional Coverage ----</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group col-md-6 required">
+                        <label class="control-label">Process</label>
+                        <input type="hidden" name="processType" class="form-control input-lg" value="{{createRoutingLevel.processType}}"/>
+                        <select class="form-control input-sm" ng-model="createRoutingLevel.processType"
+                                ng-options="process.processType as process.description for process in processList | orderBy:'processType'">
+                            <option value="">----Select Plan----</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="row">
+
+                    <div class="form-group col-md-6 required">
+                        <label class="control-label">From Date</label>
+
+                        <p class="input-group">
+                            <input type="text" class="form-control input-sm" onkeypress="return isNumeric(event)" ng-click="open($event)" min-date="selectedDate" ng-required="true" datepicker-popup="dd/MM/yyyy"
+                                   ng-model="createRoutingLevel.effectiveFrom" datepicker-options="datePickerSettings.dateOptions" is-open="datePickerSettings.isOpened"
+                                   name="effectiveFrom"
+                                   close-text="Close" show-button-bar="false"/>
+                                        <span class="input-group-btn">
+                                            <button type="button" class="btn btn-default btn-sm" ng-click="open($event)"><i class="glyphicon glyphicon-calendar"></i></button>
+                                        </span>
+                        </p>
+                    </div>
+                    <div class="form-group col-md-6 required" ng-show="createRoutingLevel.processType">
+                        <label class="control-label">Influencing Factors</label>
+
+                   <!--  <div  th:each="underWriterInfluencingFactors: ${T(com.pla.underwriter.domain.model.UnderWriterInfluencingFactor).values()}">
+                            <input name="underWriterInfluencingFactors" type="checkbox"
+                                   th:field="*{createUnderWriterRoutingLevelCommand.underWriterInfluencingFactors}"
+                                   th:id="${{underWriterInfluencingFactors}}" th:value="${{underWriterInfluencingFactors}}" />
+                            <label th:text="${{underWriterInfluencingFactors.description}}" ></label>
+                        </div>-->
+                       <input type="hidden" name="underWriterInfluencingFactors" class="form-control input-lg" ng-model="createRoutingLevel.underWriterInfluencingFactors"  value="{{createRoutingLevel.underWriterInfluencingFactors}}"/>
+                        <div ng-repeat="influencingFactor in mulSelect">
+                            <div class="action-checkbox">
+                                <input id="{{influencingFactor.influencingFactor}}" type="checkbox"    value="{{influencingFactor.influencingFactor}}" ng-checked="createRoutingLevel.underWriterInfluencingFactors.indexOf(influencingFactor.influencingFactor) > -1" ng-click="toggleSelection(influencingFactor.influencingFactor)" />
+                                <label for="{{influencingFactor.influencingFactor}}"></label>
+                                {{influencingFactor.description}}
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="row">
+                    <div class="form-group col-md-6">
+                        <div>
+                            <input type="submit" class="btn btn-default" onclick="javascript:downloadTemplate();" ng-disabled="(!showOptionalCoverageValue || !createRoutingLevel.planCode || !createRoutingLevel.effectiveFrom ||  !createRoutingLevel.processType || !checkboxValues)" value="Download Template"/>
+                        </div>
+                    </div>
+
+
+
+
+                    <!--  <div class="form-group col-md-6 required">
+                           <label class="control-label">Influencing Factors</label>
+                           <div>
+                               <button type="button" class="btn btn-default bs-select" ng-model="createPremium.premiumInfluencingFactors" data-all-none-buttons="true" data-html="1" data-multiple="1"  ng-options="premiumInfluencingFactors.code as premiumInfluencingFactors.description for premiumInfluencingFactors in mulSelect" >
+                                   Action <span class="caret"></span>
+                               </button>
+
+                           </div>
+                       </div>-->
+                </div>
+                <div class="row">
+                    <div class="form-group col-md-6 required">
+                        <label class="control-label">Upload</label>
+
+                        <div>
+                            <div class="input-group">
+                                <span class="input-group-btn">
+                                    <span class="btn btn-default btn-file">
+                                        Browse...
+                                        <input type="file" name="file" />
+                                    </span>
+                                </span>
+                                <input type="text" class="form-control"/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-12" style="text-align: center;margin-top:3px;">
+                        <a class="btn btn-default" th:href="@{/underwriter/viewroutinglevel}">Cancel</a>
+                        <input type="submit" class="btn btn-primary" value="Upload &amp; Save" ng-disabled="(!createRoutingLevel.planCode || !createRoutingLevel.effectiveFrom )" onclick="javascript:uploadTemplate();"/>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </form>
+</div>
+<script type="application/javascript">
+
+    function downloadTemplate() {
+        var str =createRoutingLevel.underWriterInfluencingFactors;
+         createRoutingLevel.underWriterInfluencingFactors= str.join(',');
+       // alert(JSON.stringify(createRoutingLevel));
+        $('#routingForm').attr('action', 'downloadunderwritingtemplate');
+      return true;
+    }
+
+    function uploadTemplate() {
+       // var str =createRoutingLevel.underWriterInfluencingFactors;
+      //  createRoutingLevel.underWriterInfluencingFactors= str.join(',');
+       // alert(JSON.stringify(createRoutingLevel));
+        $('#routingForm').attr('action', 'uploadunderwriterroutingleveltemplate');
+        return true;
+    }
+</script>
+<style>
+    .form-control {
+        font-size: 12px;
+        padding: 5px;
+    }
+
+    .btn {
+        font-size: 12px;
+    }
+
+</style>
+<footer class="footer" th:include="fragments/common :: footer">
+</footer>
+</body>
+</html>

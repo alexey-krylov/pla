@@ -50,6 +50,19 @@
     createPremium.premiumRate = premiumRate.$name;
     var premiumFactor = /*[[${createPremiumCommand.premiumFactor}]]*/null;
     createPremium.premiumFactor = premiumFactor.$name;
+    var isNumeric = function (event){
+
+        var charCode = (event.which) ? event.which : event.keyCode;
+        // alert(charCode);
+        if (charCode > 31 && charCode !=8 && charCode !=0 ) {
+            event.preventDefault();
+
+        }
+        if(charCode ==8){
+            event.preventDefault();
+        }
+
+    };
     /*]]>*/
 </script>
 
@@ -127,7 +140,7 @@
                         <label class="control-label">From Date</label>
 
                         <p class="input-group">
-                            <input type="text" class="form-control input-sm" ng-click="open($event)" min-date="selectedDate" ng-required="true" datepicker-popup="dd/MM/yyyy"
+                            <input type="text" class="form-control input-sm" onkeypress="return isNumeric(event)" ng-click="open($event)" min-date="selectedDate" ng-required="true" datepicker-popup="dd/MM/yyyy"
                                    ng-model="createPremium.effectiveFrom" datepicker-options="datePickerSettings.dateOptions" is-open="datePickerSettings.isOpened"
                                    name="effectiveFrom"
                                    close-text="Close" show-button-bar="false"/>
