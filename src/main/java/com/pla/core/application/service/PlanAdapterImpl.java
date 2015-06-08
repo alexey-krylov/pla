@@ -21,7 +21,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
-import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 import static org.nthdimenzion.utils.UtilValidator.isEmpty;
@@ -84,17 +83,13 @@ public class PlanAdapterImpl implements IPlanAdapter {
     @Override
     public boolean isValidPlanCoverage(String planCode, String coverageCode) {
         List<Plan> plans = planRepository.findPlanByCodeAndName(planCode);
+        Map<String,Object> coverageMap = coverageFinder.getCoverageDetailByCode(coverageCode);
+        String coverageId = (String)coverageMap.get("coverageId");
         if (isEmpty(plans)) {
             return false;
         }
         Plan plan = plans.get(0);
-        boolean isCoverageExist = plan.getCoverages().stream().filter(new Predicate<PlanCoverage>() {
-            @Override
-            public boolean test(PlanCoverage planCoverage) {
-                return coverageCode.equals(planCoverage.getCoverageCode());
-            }
-        }).findAny().isPresent();
-        return isCoverageExist;
+        return plan.isValidCoverage(new CoverageId(coverageId));
     }
 
     @Override

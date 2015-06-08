@@ -186,6 +186,15 @@ public class Plan extends AbstractAnnotatedAggregateRoot<PlanId> {
         return coverageTerms.contains(coverageTerm);
     }
 
+    public boolean isValidCoverage(CoverageId coverageId) {
+        boolean isCoverageExist = this.getCoverages().stream().filter(new Predicate<PlanCoverage>() {
+            @Override
+            public boolean test(PlanCoverage planCoverage) {
+                return coverageId.equals(planCoverage.getCoverageId());
+            }
+        }).findAny().isPresent();
+        return isCoverageExist;
+    }
 
     public Set<Integer> getAllowedPremiumTerms() {
         if (PremiumTermType.SPECIFIED_VALUES.equals(this.premiumTermType)) {

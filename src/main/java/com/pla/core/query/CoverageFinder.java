@@ -49,7 +49,9 @@ public class CoverageFinder {
             "inner join coverage_benefit cb on b.benefit_id=cb.benefit_id inner join coverage c on cb.coverage_id=c.coverage_id " +
             "where c.status='ACTIVE' and b.status='ACTIVE' and c.coverage_id=:coverageId ORDER BY b.benefit_name ASC ";
 
-    public static final String FIND_COVERAGE_BY_ID = "SELECT coverage_id coverageId,coverage_code AS coverageCode,coverage_name AS coverageName,description description FROM coverage WHERE coverage_id=:coverageId";
+    public static final String FIND_COVERAGE_BY_ID_QUERY = "SELECT coverage_id coverageId,coverage_code AS coverageCode,coverage_name AS coverageName,description description FROM coverage WHERE coverage_id=:coverageId";
+
+    public static final String FIND_COVERAGE_BY_CODE_QUERY = "SELECT coverage_id coverageId,coverage_code AS coverageCode,coverage_name AS coverageName,description description FROM coverage WHERE coverage_code=:coverageCode";
 
     public int getCoverageCountByCoverageName(String coverageName, String coverageId) {
         Preconditions.checkNotNull(coverageName);
@@ -75,12 +77,16 @@ public class CoverageFinder {
     }
 
     public Map<String, Object> getCoverageDetail(String coverageId) {
-        return namedParameterJdbcTemplate.queryForMap(FIND_COVERAGE_BY_ID, new MapSqlParameterSource().addValue("coverageId", coverageId));
+        return namedParameterJdbcTemplate.queryForMap(FIND_COVERAGE_BY_ID_QUERY, new MapSqlParameterSource().addValue("coverageId", coverageId));
+    }
+
+    public Map<String, Object> getCoverageDetailByCode(String coverageCode) {
+        return namedParameterJdbcTemplate.queryForMap(FIND_COVERAGE_BY_CODE_QUERY, new MapSqlParameterSource().addValue("coverageCode", coverageCode));
     }
 
     public CoverageDto findCoverageById(String coverageId){
         SqlParameterSource sqlParameterSource = new MapSqlParameterSource("coverageId",coverageId);
-        List<CoverageDto> coverageList = namedParameterJdbcTemplate.query(FIND_COVERAGE_BY_ID, sqlParameterSource,new BeanPropertyRowMapper(CoverageDto.class));
+        List<CoverageDto> coverageList = namedParameterJdbcTemplate.query(FIND_COVERAGE_BY_ID_QUERY, sqlParameterSource,new BeanPropertyRowMapper(CoverageDto.class));
         if (UtilValidator.isEmpty(coverageList)) {
             return null;
         }

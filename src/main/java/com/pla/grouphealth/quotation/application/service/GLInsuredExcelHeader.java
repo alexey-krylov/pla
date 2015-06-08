@@ -2,7 +2,7 @@ package com.pla.grouphealth.quotation.application.service;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
-import com.pla.grouphealth.quotation.query.InsuredDto;
+import com.pla.grouphealth.quotation.query.GHInsuredDto;
 import com.pla.publishedlanguage.contract.IPlanAdapter;
 import com.pla.publishedlanguage.dto.PlanCoverageDetailDto;
 import com.pla.sharedkernel.domain.model.Gender;
@@ -28,12 +28,12 @@ public enum GLInsuredExcelHeader {
 
     PROPOSER_NAME("Proposer Name") {
         @Override
-        public String getAllowedValue(com.pla.grouphealth.quotation.query.InsuredDto insuredDto) {
+        public String getAllowedValue(GHInsuredDto insuredDto) {
             return insuredDto.getCompanyName();
         }
 
         @Override
-        public com.pla.grouphealth.quotation.query.InsuredDto populateInsuredDetail(com.pla.grouphealth.quotation.query.InsuredDto insuredDto, Row row, List<String> headers) {
+        public GHInsuredDto populateInsuredDetail(GHInsuredDto insuredDto, Row row, List<String> headers) {
             int cellNumber = headers.indexOf(this.getDescription());
             Cell cell = row.getCell(cellNumber);
             String cellValue = getCellValue(cell);
@@ -42,7 +42,7 @@ public enum GLInsuredExcelHeader {
         }
 
         @Override
-        public InsuredDto.InsuredDependentDto populateInsuredDependentDetail(InsuredDto.InsuredDependentDto insuredDependentDto, Row row, List<String> headers) {
+        public GHInsuredDto.GHInsuredDependentDto populateInsuredDependentDetail(GHInsuredDto.GHInsuredDependentDto insuredDependentDto, Row row, List<String> headers) {
             int cellNumber = headers.indexOf(this.getDescription());
             Cell cell = row.getCell(cellNumber);
             String cellValue = getCellValue(cell);
@@ -51,7 +51,7 @@ public enum GLInsuredExcelHeader {
         }
 
         @Override
-        public String getAllowedValue(InsuredDto.InsuredDependentDto insuredDependentDto) {
+        public String getAllowedValue(GHInsuredDto.GHInsuredDependentDto insuredDependentDto) {
             return insuredDependentDto.getCompanyName();
         }
 
@@ -61,12 +61,12 @@ public enum GLInsuredExcelHeader {
         }
     }, MAN_NUMBER("MAN Number") {
         @Override
-        public String getAllowedValue(com.pla.grouphealth.quotation.query.InsuredDto insuredDto) {
+        public String getAllowedValue(GHInsuredDto insuredDto) {
             return insuredDto.getManNumber();
         }
 
         @Override
-        public com.pla.grouphealth.quotation.query.InsuredDto populateInsuredDetail(com.pla.grouphealth.quotation.query.InsuredDto insuredDto, Row row, List<String> headers) {
+        public GHInsuredDto populateInsuredDetail(GHInsuredDto insuredDto, Row row, List<String> headers) {
             int cellNumber = headers.indexOf(this.getDescription());
             Cell cell = row.getCell(cellNumber);
             String cellValue = getCellValue(cell);
@@ -75,7 +75,7 @@ public enum GLInsuredExcelHeader {
         }
 
         @Override
-        public InsuredDto.InsuredDependentDto populateInsuredDependentDetail(InsuredDto.InsuredDependentDto insuredDependentDto, Row row, List<String> headers) {
+        public GHInsuredDto.GHInsuredDependentDto populateInsuredDependentDetail(GHInsuredDto.GHInsuredDependentDto insuredDependentDto, Row row, List<String> headers) {
             int cellNumber = headers.indexOf(this.getDescription());
             Cell cell = row.getCell(cellNumber);
             String cellValue = getCellValue(cell);
@@ -84,7 +84,7 @@ public enum GLInsuredExcelHeader {
         }
 
         @Override
-        public String getAllowedValue(InsuredDto.InsuredDependentDto insuredDependentDto) {
+        public String getAllowedValue(GHInsuredDto.GHInsuredDependentDto insuredDependentDto) {
             return insuredDependentDto.getManNumber();
         }
 
@@ -94,12 +94,12 @@ public enum GLInsuredExcelHeader {
         }
     }, NRC_NUMBER("NRC Number") {
         @Override
-        public String getAllowedValue(com.pla.grouphealth.quotation.query.InsuredDto insuredDto) {
+        public String getAllowedValue(GHInsuredDto insuredDto) {
             return insuredDto.getNrcNumber();
         }
 
         @Override
-        public com.pla.grouphealth.quotation.query.InsuredDto populateInsuredDetail(com.pla.grouphealth.quotation.query.InsuredDto insuredDto, Row row, List<String> headers) {
+        public GHInsuredDto populateInsuredDetail(GHInsuredDto insuredDto, Row row, List<String> headers) {
             int cellNumber = headers.indexOf(this.getDescription());
             Cell cell = row.getCell(cellNumber);
             String cellValue = getCellValue(cell);
@@ -108,7 +108,7 @@ public enum GLInsuredExcelHeader {
         }
 
         @Override
-        public InsuredDto.InsuredDependentDto populateInsuredDependentDetail(InsuredDto.InsuredDependentDto insuredDependentDto, Row row, List<String> headers) {
+        public GHInsuredDto.GHInsuredDependentDto populateInsuredDependentDetail(GHInsuredDto.GHInsuredDependentDto insuredDependentDto, Row row, List<String> headers) {
             int cellNumber = headers.indexOf(this.getDescription());
             Cell cell = row.getCell(cellNumber);
             String cellValue = getCellValue(cell);
@@ -117,7 +117,7 @@ public enum GLInsuredExcelHeader {
         }
 
         @Override
-        public String getAllowedValue(InsuredDto.InsuredDependentDto insuredDependentDto) {
+        public String getAllowedValue(GHInsuredDto.GHInsuredDependentDto insuredDependentDto) {
             return insuredDependentDto.getNrcNumber();
         }
 
@@ -131,12 +131,12 @@ public enum GLInsuredExcelHeader {
         }
     }, ANNUAL_INCOME("Annual Income") {
         @Override
-        public String getAllowedValue(com.pla.grouphealth.quotation.query.InsuredDto insuredDto) {
+        public String getAllowedValue(GHInsuredDto insuredDto) {
             return insuredDto.getAnnualIncome() != null ? insuredDto.getAnnualIncome().toString() : "";
         }
 
         @Override
-        public com.pla.grouphealth.quotation.query.InsuredDto populateInsuredDetail(com.pla.grouphealth.quotation.query.InsuredDto insuredDto, Row row, List<String> headers) {
+        public GHInsuredDto populateInsuredDetail(GHInsuredDto insuredDto, Row row, List<String> headers) {
             int cellNumber = headers.indexOf(this.getDescription());
             Cell cell = row.getCell(cellNumber);
             String cellValue = getCellValue(cell);
@@ -145,12 +145,12 @@ public enum GLInsuredExcelHeader {
         }
 
         @Override
-        public InsuredDto.InsuredDependentDto populateInsuredDependentDetail(InsuredDto.InsuredDependentDto insuredDependentDto, Row row, List<String> headers) {
+        public GHInsuredDto.GHInsuredDependentDto populateInsuredDependentDetail(GHInsuredDto.GHInsuredDependentDto insuredDependentDto, Row row, List<String> headers) {
             return insuredDependentDto;
         }
 
         @Override
-        public String getAllowedValue(InsuredDto.InsuredDependentDto insuredDependentDto) {
+        public String getAllowedValue(GHInsuredDto.GHInsuredDependentDto insuredDependentDto) {
             return "";
         }
 
@@ -179,12 +179,12 @@ public enum GLInsuredExcelHeader {
     },
     SALUTATION("Salutation") {
         @Override
-        public String getAllowedValue(com.pla.grouphealth.quotation.query.InsuredDto insuredDto) {
+        public String getAllowedValue(GHInsuredDto insuredDto) {
             return insuredDto.getSalutation();
         }
 
         @Override
-        public com.pla.grouphealth.quotation.query.InsuredDto populateInsuredDetail(com.pla.grouphealth.quotation.query.InsuredDto insuredDto, Row row, List<String> headers) {
+        public GHInsuredDto populateInsuredDetail(GHInsuredDto insuredDto, Row row, List<String> headers) {
             int cellNumber = headers.indexOf(this.getDescription());
             Cell cell = row.getCell(cellNumber);
             String cellValue = getCellValue(cell);
@@ -193,7 +193,7 @@ public enum GLInsuredExcelHeader {
         }
 
         @Override
-        public InsuredDto.InsuredDependentDto populateInsuredDependentDetail(InsuredDto.InsuredDependentDto insuredDependentDto, Row row, List<String> headers) {
+        public GHInsuredDto.GHInsuredDependentDto populateInsuredDependentDetail(GHInsuredDto.GHInsuredDependentDto insuredDependentDto, Row row, List<String> headers) {
             int cellNumber = headers.indexOf(this.getDescription());
             Cell cell = row.getCell(cellNumber);
             String cellValue = getCellValue(cell);
@@ -202,7 +202,7 @@ public enum GLInsuredExcelHeader {
         }
 
         @Override
-        public String getAllowedValue(InsuredDto.InsuredDependentDto insuredDependentDto) {
+        public String getAllowedValue(GHInsuredDto.GHInsuredDependentDto insuredDependentDto) {
             return insuredDependentDto.getSalutation();
         }
 
@@ -212,12 +212,12 @@ public enum GLInsuredExcelHeader {
         }
     }, FIRST_NAME("First Name") {
         @Override
-        public String getAllowedValue(com.pla.grouphealth.quotation.query.InsuredDto insuredDto) {
+        public String getAllowedValue(GHInsuredDto insuredDto) {
             return insuredDto.getFirstName();
         }
 
         @Override
-        public com.pla.grouphealth.quotation.query.InsuredDto populateInsuredDetail(com.pla.grouphealth.quotation.query.InsuredDto insuredDto, Row row, List<String> headers) {
+        public GHInsuredDto populateInsuredDetail(GHInsuredDto insuredDto, Row row, List<String> headers) {
             int cellNumber = headers.indexOf(this.getDescription());
             Cell cell = row.getCell(cellNumber);
             String cellValue = getCellValue(cell);
@@ -226,7 +226,7 @@ public enum GLInsuredExcelHeader {
         }
 
         @Override
-        public InsuredDto.InsuredDependentDto populateInsuredDependentDetail(InsuredDto.InsuredDependentDto insuredDependentDto, Row row, List<String> headers) {
+        public GHInsuredDto.GHInsuredDependentDto populateInsuredDependentDetail(GHInsuredDto.GHInsuredDependentDto insuredDependentDto, Row row, List<String> headers) {
             int cellNumber = headers.indexOf(this.getDescription());
             Cell cell = row.getCell(cellNumber);
             String cellValue = getCellValue(cell);
@@ -235,7 +235,7 @@ public enum GLInsuredExcelHeader {
         }
 
         @Override
-        public String getAllowedValue(InsuredDto.InsuredDependentDto insuredDependentDto) {
+        public String getAllowedValue(GHInsuredDto.GHInsuredDependentDto insuredDependentDto) {
             return insuredDependentDto.getFirstName();
         }
 
@@ -245,12 +245,12 @@ public enum GLInsuredExcelHeader {
         }
     }, LAST_NAME("Last Name") {
         @Override
-        public String getAllowedValue(com.pla.grouphealth.quotation.query.InsuredDto insuredDto) {
+        public String getAllowedValue(GHInsuredDto insuredDto) {
             return insuredDto.getLastName();
         }
 
         @Override
-        public com.pla.grouphealth.quotation.query.InsuredDto populateInsuredDetail(com.pla.grouphealth.quotation.query.InsuredDto insuredDto, Row row, List<String> headers) {
+        public GHInsuredDto populateInsuredDetail(GHInsuredDto insuredDto, Row row, List<String> headers) {
             int cellNumber = headers.indexOf(this.getDescription());
             Cell cell = row.getCell(cellNumber);
             String cellValue = getCellValue(cell);
@@ -259,7 +259,7 @@ public enum GLInsuredExcelHeader {
         }
 
         @Override
-        public InsuredDto.InsuredDependentDto populateInsuredDependentDetail(InsuredDto.InsuredDependentDto insuredDependentDto, Row row, List<String> headers) {
+        public GHInsuredDto.GHInsuredDependentDto populateInsuredDependentDetail(GHInsuredDto.GHInsuredDependentDto insuredDependentDto, Row row, List<String> headers) {
             int cellNumber = headers.indexOf(this.getDescription());
             Cell cell = row.getCell(cellNumber);
             String cellValue = getCellValue(cell);
@@ -268,7 +268,7 @@ public enum GLInsuredExcelHeader {
         }
 
         @Override
-        public String getAllowedValue(InsuredDto.InsuredDependentDto insuredDependentDto) {
+        public String getAllowedValue(GHInsuredDto.GHInsuredDependentDto insuredDependentDto) {
             return insuredDependentDto.getLastName();
         }
 
@@ -278,12 +278,12 @@ public enum GLInsuredExcelHeader {
         }
     }, DATE_OF_BIRTH("Date of Birth") {
         @Override
-        public String getAllowedValue(com.pla.grouphealth.quotation.query.InsuredDto insuredDto) {
+        public String getAllowedValue(GHInsuredDto insuredDto) {
             return AppUtils.toString(insuredDto.getDateOfBirth());
         }
 
         @Override
-        public com.pla.grouphealth.quotation.query.InsuredDto populateInsuredDetail(com.pla.grouphealth.quotation.query.InsuredDto insuredDto, Row row, List<String> headers) {
+        public GHInsuredDto populateInsuredDetail(GHInsuredDto insuredDto, Row row, List<String> headers) {
             int cellNumber = headers.indexOf(this.getDescription());
             Cell cell = row.getCell(cellNumber);
             String cellValue = getCellValue(cell);
@@ -292,7 +292,7 @@ public enum GLInsuredExcelHeader {
         }
 
         @Override
-        public InsuredDto.InsuredDependentDto populateInsuredDependentDetail(InsuredDto.InsuredDependentDto insuredDependentDto, Row row, List<String> headers) {
+        public GHInsuredDto.GHInsuredDependentDto populateInsuredDependentDetail(GHInsuredDto.GHInsuredDependentDto insuredDependentDto, Row row, List<String> headers) {
             int cellNumber = headers.indexOf(this.getDescription());
             Cell cell = row.getCell(cellNumber);
             String cellValue = getCellValue(cell);
@@ -301,7 +301,7 @@ public enum GLInsuredExcelHeader {
         }
 
         @Override
-        public String getAllowedValue(InsuredDto.InsuredDependentDto insuredDependentDto) {
+        public String getAllowedValue(GHInsuredDto.GHInsuredDependentDto insuredDependentDto) {
             return AppUtils.toString(insuredDependentDto.getDateOfBirth());
         }
 
@@ -319,12 +319,12 @@ public enum GLInsuredExcelHeader {
     },
     GENDER("Gender") {
         @Override
-        public String getAllowedValue(com.pla.grouphealth.quotation.query.InsuredDto insuredDto) {
+        public String getAllowedValue(GHInsuredDto insuredDto) {
             return insuredDto.getGender().name();
         }
 
         @Override
-        public com.pla.grouphealth.quotation.query.InsuredDto populateInsuredDetail(com.pla.grouphealth.quotation.query.InsuredDto insuredDto, Row row, List<String> headers) {
+        public GHInsuredDto populateInsuredDetail(GHInsuredDto insuredDto, Row row, List<String> headers) {
             int cellNumber = headers.indexOf(this.getDescription());
             Cell cell = row.getCell(cellNumber);
             String cellValue = getCellValue(cell);
@@ -333,7 +333,7 @@ public enum GLInsuredExcelHeader {
         }
 
         @Override
-        public InsuredDto.InsuredDependentDto populateInsuredDependentDetail(InsuredDto.InsuredDependentDto insuredDependentDto, Row row, List<String> headers) {
+        public GHInsuredDto.GHInsuredDependentDto populateInsuredDependentDetail(GHInsuredDto.GHInsuredDependentDto insuredDependentDto, Row row, List<String> headers) {
             int cellNumber = headers.indexOf(this.getDescription());
             Cell cell = row.getCell(cellNumber);
             String cellValue = getCellValue(cell);
@@ -342,7 +342,7 @@ public enum GLInsuredExcelHeader {
         }
 
         @Override
-        public String getAllowedValue(InsuredDto.InsuredDependentDto insuredDependentDto) {
+        public String getAllowedValue(GHInsuredDto.GHInsuredDependentDto insuredDependentDto) {
             return insuredDependentDto.getGender().name();
         }
 
@@ -359,12 +359,12 @@ public enum GLInsuredExcelHeader {
         }
     }, OCCUPATION("Occupation") {
         @Override
-        public String getAllowedValue(com.pla.grouphealth.quotation.query.InsuredDto insuredDto) {
+        public String getAllowedValue(GHInsuredDto insuredDto) {
             return insuredDto.getOccupationClass();
         }
 
         @Override
-        public com.pla.grouphealth.quotation.query.InsuredDto populateInsuredDetail(com.pla.grouphealth.quotation.query.InsuredDto insuredDto, Row row, List<String> headers) {
+        public GHInsuredDto populateInsuredDetail(GHInsuredDto insuredDto, Row row, List<String> headers) {
             int cellNumber = headers.indexOf(this.getDescription());
             Cell cell = row.getCell(cellNumber);
             String cellValue = getCellValue(cell);
@@ -373,7 +373,7 @@ public enum GLInsuredExcelHeader {
         }
 
         @Override
-        public InsuredDto.InsuredDependentDto populateInsuredDependentDetail(InsuredDto.InsuredDependentDto insuredDependentDto, Row row, List<String> headers) {
+        public GHInsuredDto.GHInsuredDependentDto populateInsuredDependentDetail(GHInsuredDto.GHInsuredDependentDto insuredDependentDto, Row row, List<String> headers) {
             int cellNumber = headers.indexOf(this.getDescription());
             Cell cell = row.getCell(cellNumber);
             String cellValue = getCellValue(cell);
@@ -382,7 +382,7 @@ public enum GLInsuredExcelHeader {
         }
 
         @Override
-        public String getAllowedValue(InsuredDto.InsuredDependentDto insuredDependentDto) {
+        public String getAllowedValue(GHInsuredDto.GHInsuredDependentDto insuredDependentDto) {
             return insuredDependentDto.getOccupationClass();
         }
 
@@ -401,12 +401,12 @@ public enum GLInsuredExcelHeader {
         }
     }, CATEGORY("Category") {
         @Override
-        public String getAllowedValue(com.pla.grouphealth.quotation.query.InsuredDto insuredDto) {
+        public String getAllowedValue(GHInsuredDto insuredDto) {
             return insuredDto.getOccupationCategory();
         }
 
         @Override
-        public com.pla.grouphealth.quotation.query.InsuredDto populateInsuredDetail(com.pla.grouphealth.quotation.query.InsuredDto insuredDto, Row row, List<String> headers) {
+        public GHInsuredDto populateInsuredDetail(GHInsuredDto insuredDto, Row row, List<String> headers) {
             int cellNumber = headers.indexOf(this.getDescription());
             Cell cell = row.getCell(cellNumber);
             String cellValue = getCellValue(cell);
@@ -415,7 +415,7 @@ public enum GLInsuredExcelHeader {
         }
 
         @Override
-        public InsuredDto.InsuredDependentDto populateInsuredDependentDetail(InsuredDto.InsuredDependentDto insuredDependentDto, Row row, List<String> headers) {
+        public GHInsuredDto.GHInsuredDependentDto populateInsuredDependentDetail(GHInsuredDto.GHInsuredDependentDto insuredDependentDto, Row row, List<String> headers) {
             int cellNumber = headers.indexOf(this.getDescription());
             Cell cell = row.getCell(cellNumber);
             String cellValue = getCellValue(cell);
@@ -424,7 +424,7 @@ public enum GLInsuredExcelHeader {
         }
 
         @Override
-        public String getAllowedValue(InsuredDto.InsuredDependentDto insuredDependentDto) {
+        public String getAllowedValue(GHInsuredDto.GHInsuredDependentDto insuredDependentDto) {
             return insuredDependentDto.getOccupationCategory();
         }
 
@@ -438,17 +438,17 @@ public enum GLInsuredExcelHeader {
         }
     }, RELATIONSHIP("Relationship") {
         @Override
-        public String getAllowedValue(com.pla.grouphealth.quotation.query.InsuredDto insuredDto) {
+        public String getAllowedValue(GHInsuredDto insuredDto) {
             return "Self";
         }
 
         @Override
-        public com.pla.grouphealth.quotation.query.InsuredDto populateInsuredDetail(com.pla.grouphealth.quotation.query.InsuredDto insuredDto, Row row, List<String> headers) {
+        public GHInsuredDto populateInsuredDetail(GHInsuredDto insuredDto, Row row, List<String> headers) {
             return insuredDto;
         }
 
         @Override
-        public InsuredDto.InsuredDependentDto populateInsuredDependentDetail(InsuredDto.InsuredDependentDto insuredDependentDto, Row row, List<String> headers) {
+        public GHInsuredDto.GHInsuredDependentDto populateInsuredDependentDetail(GHInsuredDto.GHInsuredDependentDto insuredDependentDto, Row row, List<String> headers) {
             int cellNumber = headers.indexOf(this.getDescription());
             Cell cell = row.getCell(cellNumber);
             String cellValue = getCellValue(cell);
@@ -457,7 +457,7 @@ public enum GLInsuredExcelHeader {
         }
 
         @Override
-        public String getAllowedValue(InsuredDto.InsuredDependentDto insuredDependentDto) {
+        public String getAllowedValue(GHInsuredDto.GHInsuredDependentDto insuredDependentDto) {
             return insuredDependentDto.getRelationship().description;
         }
 
@@ -474,12 +474,12 @@ public enum GLInsuredExcelHeader {
     },
     NO_OF_ASSURED("No Of Assured") {
         @Override
-        public String getAllowedValue(com.pla.grouphealth.quotation.query.InsuredDto insuredDto) {
+        public String getAllowedValue(GHInsuredDto insuredDto) {
             return insuredDto.getNoOfAssured() != null ? insuredDto.getNoOfAssured().toString() : "";
         }
 
         @Override
-        public com.pla.grouphealth.quotation.query.InsuredDto populateInsuredDetail(com.pla.grouphealth.quotation.query.InsuredDto insuredDto, Row row, List<String> headers) {
+        public GHInsuredDto populateInsuredDetail(GHInsuredDto insuredDto, Row row, List<String> headers) {
             int cellNumber = headers.indexOf(this.getDescription());
             Cell cell = row.getCell(cellNumber);
             String cellValue = getCellValue(cell);
@@ -488,12 +488,12 @@ public enum GLInsuredExcelHeader {
         }
 
         @Override
-        public InsuredDto.InsuredDependentDto populateInsuredDependentDetail(InsuredDto.InsuredDependentDto insuredDependentDto, Row row, List<String> headers) {
+        public GHInsuredDto.GHInsuredDependentDto populateInsuredDependentDetail(GHInsuredDto.GHInsuredDependentDto insuredDependentDto, Row row, List<String> headers) {
             return insuredDependentDto;
         }
 
         @Override
-        public String getAllowedValue(InsuredDto.InsuredDependentDto insuredDependentDto) {
+        public String getAllowedValue(GHInsuredDto.GHInsuredDependentDto insuredDependentDto) {
             return "";
         }
 
@@ -503,12 +503,12 @@ public enum GLInsuredExcelHeader {
         }
     }, PLAN("Plan") {
         @Override
-        public String getAllowedValue(com.pla.grouphealth.quotation.query.InsuredDto insuredDto) {
+        public String getAllowedValue(GHInsuredDto insuredDto) {
             return insuredDto.getPlanPremiumDetail().getPlanCode();
         }
 
         @Override
-        public com.pla.grouphealth.quotation.query.InsuredDto populateInsuredDetail(com.pla.grouphealth.quotation.query.InsuredDto insuredDto, Row row, List<String> headers) {
+        public GHInsuredDto populateInsuredDetail(GHInsuredDto insuredDto, Row row, List<String> headers) {
             int cellNumber = headers.indexOf(this.getDescription());
             Cell cell = row.getCell(cellNumber);
             String cellValue = getCellValue(cell);
@@ -518,14 +518,14 @@ public enum GLInsuredExcelHeader {
             } catch (Exception e) {
                 planCode = cellValue;
             }
-            InsuredDto.PlanPremiumDetailDto planPremiumDetailDto = insuredDto.getPlanPremiumDetail() == null ? new InsuredDto.PlanPremiumDetailDto() : insuredDto.getPlanPremiumDetail();
+            GHInsuredDto.GHPlanPremiumDetailDto planPremiumDetailDto = insuredDto.getPlanPremiumDetail() == null ? new GHInsuredDto.GHPlanPremiumDetailDto() : insuredDto.getPlanPremiumDetail();
             planPremiumDetailDto.setPlanCode(planCode);
             insuredDto.setPlanPremiumDetail(planPremiumDetailDto);
             return insuredDto;
         }
 
         @Override
-        public InsuredDto.InsuredDependentDto populateInsuredDependentDetail(InsuredDto.InsuredDependentDto insuredDependentDto, Row row, List<String> headers) {
+        public GHInsuredDto.GHInsuredDependentDto populateInsuredDependentDetail(GHInsuredDto.GHInsuredDependentDto insuredDependentDto, Row row, List<String> headers) {
             int cellNumber = headers.indexOf(this.getDescription());
             Cell cell = row.getCell(cellNumber);
             String cellValue = getCellValue(cell);
@@ -535,14 +535,14 @@ public enum GLInsuredExcelHeader {
             } catch (Exception e) {
                 planCode = cellValue;
             }
-            InsuredDto.PlanPremiumDetailDto planPremiumDetailDto = insuredDependentDto.getPlanPremiumDetail() != null ? insuredDependentDto.getPlanPremiumDetail() : new InsuredDto.PlanPremiumDetailDto();
+            GHInsuredDto.GHPlanPremiumDetailDto planPremiumDetailDto = insuredDependentDto.getPlanPremiumDetail() != null ? insuredDependentDto.getPlanPremiumDetail() : new GHInsuredDto.GHPlanPremiumDetailDto();
             planPremiumDetailDto.setPlanCode(planCode);
             insuredDependentDto.setPlanPremiumDetail(planPremiumDetailDto);
             return insuredDependentDto;
         }
 
         @Override
-        public String getAllowedValue(InsuredDto.InsuredDependentDto insuredDependentDto) {
+        public String getAllowedValue(GHInsuredDto.GHInsuredDependentDto insuredDependentDto) {
             return insuredDependentDto.getPlanPremiumDetail().getPlanCode();
         }
 
@@ -573,33 +573,33 @@ public enum GLInsuredExcelHeader {
         }
     }, INCOME_MULTIPLIER("Income Multiplier") {
         @Override
-        public String getAllowedValue(com.pla.grouphealth.quotation.query.InsuredDto insuredDto) {
+        public String getAllowedValue(GHInsuredDto insuredDto) {
             return insuredDto.getPlanPremiumDetail().getIncomeMultiplier() != null ? insuredDto.getPlanPremiumDetail().getIncomeMultiplier().toString() : "";
         }
 
         @Override
-        public com.pla.grouphealth.quotation.query.InsuredDto populateInsuredDetail(com.pla.grouphealth.quotation.query.InsuredDto insuredDto, Row row, List<String> headers) {
+        public GHInsuredDto populateInsuredDetail(GHInsuredDto insuredDto, Row row, List<String> headers) {
             int cellNumber = headers.indexOf(this.getDescription());
             Cell cell = row.getCell(cellNumber);
             String cellValue = getCellValue(cell);
-            InsuredDto.PlanPremiumDetailDto planPremiumDetailDto = insuredDto.getPlanPremiumDetail() != null ? insuredDto.getPlanPremiumDetail() : new InsuredDto.PlanPremiumDetailDto();
+            GHInsuredDto.GHPlanPremiumDetailDto planPremiumDetailDto = insuredDto.getPlanPremiumDetail() != null ? insuredDto.getPlanPremiumDetail() : new GHInsuredDto.GHPlanPremiumDetailDto();
             planPremiumDetailDto.setIncomeMultiplier(isNotEmpty(cellValue) ? BigDecimal.valueOf(Double.valueOf(cellValue)) : null);
             insuredDto.setPlanPremiumDetail(planPremiumDetailDto);
             return insuredDto;
         }
 
         @Override
-        public InsuredDto.InsuredDependentDto populateInsuredDependentDetail(InsuredDto.InsuredDependentDto insuredDependentDto, Row row, List<String> headers) {
+        public GHInsuredDto.GHInsuredDependentDto populateInsuredDependentDetail(GHInsuredDto.GHInsuredDependentDto insuredDependentDto, Row row, List<String> headers) {
             int cellNumber = headers.indexOf(this.getDescription());
             Cell cell = row.getCell(cellNumber);
             String cellValue = getCellValue(cell);
-            InsuredDto.PlanPremiumDetailDto planPremiumDetailDto = insuredDependentDto.getPlanPremiumDetail() != null ? insuredDependentDto.getPlanPremiumDetail() : new InsuredDto.PlanPremiumDetailDto();
+            GHInsuredDto.GHPlanPremiumDetailDto planPremiumDetailDto = insuredDependentDto.getPlanPremiumDetail() != null ? insuredDependentDto.getPlanPremiumDetail() : new GHInsuredDto.GHPlanPremiumDetailDto();
             planPremiumDetailDto.setIncomeMultiplier(isNotEmpty(cellValue) ? BigDecimal.valueOf(Double.valueOf(cellValue)) : null);
             return insuredDependentDto;
         }
 
         @Override
-        public String getAllowedValue(InsuredDto.InsuredDependentDto insuredDependentDto) {
+        public String getAllowedValue(GHInsuredDto.GHInsuredDependentDto insuredDependentDto) {
             return insuredDependentDto.getPlanPremiumDetail().getIncomeMultiplier() != null ? insuredDependentDto.getPlanPremiumDetail().getIncomeMultiplier().toString() : "";
         }
 
@@ -632,34 +632,34 @@ public enum GLInsuredExcelHeader {
         }
     }, SUM_ASSURED("Sum Assured") {
         @Override
-        public String getAllowedValue(com.pla.grouphealth.quotation.query.InsuredDto insuredDto) {
+        public String getAllowedValue(GHInsuredDto insuredDto) {
             return insuredDto.getPlanPremiumDetail().getSumAssured() != null ? insuredDto.getPlanPremiumDetail().getSumAssured().toString() : "";
         }
 
         @Override
-        public com.pla.grouphealth.quotation.query.InsuredDto populateInsuredDetail(com.pla.grouphealth.quotation.query.InsuredDto insuredDto, Row row, List<String> headers) {
+        public GHInsuredDto populateInsuredDetail(GHInsuredDto insuredDto, Row row, List<String> headers) {
             int cellNumber = headers.indexOf(this.getDescription());
             Cell cell = row.getCell(cellNumber);
             String cellValue = getCellValue(cell);
-            InsuredDto.PlanPremiumDetailDto planPremiumDetailDto = insuredDto.getPlanPremiumDetail() != null ? insuredDto.getPlanPremiumDetail() : new InsuredDto.PlanPremiumDetailDto();
+            GHInsuredDto.GHPlanPremiumDetailDto planPremiumDetailDto = insuredDto.getPlanPremiumDetail() != null ? insuredDto.getPlanPremiumDetail() : new GHInsuredDto.GHPlanPremiumDetailDto();
             planPremiumDetailDto.setSumAssured(isNotEmpty(cellValue) ? BigDecimal.valueOf(Double.valueOf(cellValue)) : null);
             insuredDto.setPlanPremiumDetail(planPremiumDetailDto);
             return insuredDto;
         }
 
         @Override
-        public InsuredDto.InsuredDependentDto populateInsuredDependentDetail(InsuredDto.InsuredDependentDto insuredDependentDto, Row row, List<String> headers) {
+        public GHInsuredDto.GHInsuredDependentDto populateInsuredDependentDetail(GHInsuredDto.GHInsuredDependentDto insuredDependentDto, Row row, List<String> headers) {
             int cellNumber = headers.indexOf(this.getDescription());
             Cell cell = row.getCell(cellNumber);
             String cellValue = getCellValue(cell);
-            InsuredDto.PlanPremiumDetailDto planPremiumDetailDto = insuredDependentDto.getPlanPremiumDetail() != null ? insuredDependentDto.getPlanPremiumDetail() : new InsuredDto.PlanPremiumDetailDto();
+            GHInsuredDto.GHPlanPremiumDetailDto planPremiumDetailDto = insuredDependentDto.getPlanPremiumDetail() != null ? insuredDependentDto.getPlanPremiumDetail() : new GHInsuredDto.GHPlanPremiumDetailDto();
             planPremiumDetailDto.setSumAssured(isNotEmpty(cellValue) ? BigDecimal.valueOf(Double.valueOf(cellValue)) : null);
             insuredDependentDto.setPlanPremiumDetail(planPremiumDetailDto);
             return insuredDependentDto;
         }
 
         @Override
-        public String getAllowedValue(InsuredDto.InsuredDependentDto insuredDependentDto) {
+        public String getAllowedValue(GHInsuredDto.GHInsuredDependentDto insuredDependentDto) {
             return insuredDependentDto.getPlanPremiumDetail().getSumAssured() != null ? insuredDependentDto.getPlanPremiumDetail().getSumAssured().toString() : "";
         }
 
@@ -701,34 +701,34 @@ public enum GLInsuredExcelHeader {
     },
     PLAN_PREMIUM("Plan Premium") {
         @Override
-        public String getAllowedValue(com.pla.grouphealth.quotation.query.InsuredDto insuredDto) {
+        public String getAllowedValue(GHInsuredDto insuredDto) {
             return insuredDto.getPlanPremiumDetail().getPremiumAmount() != null ? insuredDto.getPlanPremiumDetail().getPremiumAmount().toString() : "";
         }
 
         @Override
-        public com.pla.grouphealth.quotation.query.InsuredDto populateInsuredDetail(com.pla.grouphealth.quotation.query.InsuredDto insuredDto, Row row, List<String> headers) {
+        public GHInsuredDto populateInsuredDetail(GHInsuredDto insuredDto, Row row, List<String> headers) {
             int cellNumber = headers.indexOf(this.getDescription());
             Cell cell = row.getCell(cellNumber);
             String cellValue = getCellValue(cell);
-            InsuredDto.PlanPremiumDetailDto planPremiumDetailDto = insuredDto.getPlanPremiumDetail() != null ? insuredDto.getPlanPremiumDetail() : new InsuredDto.PlanPremiumDetailDto();
+            GHInsuredDto.GHPlanPremiumDetailDto planPremiumDetailDto = insuredDto.getPlanPremiumDetail() != null ? insuredDto.getPlanPremiumDetail() : new GHInsuredDto.GHPlanPremiumDetailDto();
             planPremiumDetailDto.setPremiumAmount(isNotEmpty(cellValue) ? BigDecimal.valueOf(Double.valueOf(cellValue)) : null);
             insuredDto.setPlanPremiumDetail(planPremiumDetailDto);
             return insuredDto;
         }
 
         @Override
-        public InsuredDto.InsuredDependentDto populateInsuredDependentDetail(InsuredDto.InsuredDependentDto insuredDependentDto, Row row, List<String> headers) {
+        public GHInsuredDto.GHInsuredDependentDto populateInsuredDependentDetail(GHInsuredDto.GHInsuredDependentDto insuredDependentDto, Row row, List<String> headers) {
             int cellNumber = headers.indexOf(this.getDescription());
             Cell cell = row.getCell(cellNumber);
             String cellValue = getCellValue(cell);
-            InsuredDto.PlanPremiumDetailDto planPremiumDetailDto = insuredDependentDto.getPlanPremiumDetail() != null ? insuredDependentDto.getPlanPremiumDetail() : new InsuredDto.PlanPremiumDetailDto();
+            GHInsuredDto.GHPlanPremiumDetailDto planPremiumDetailDto = insuredDependentDto.getPlanPremiumDetail() != null ? insuredDependentDto.getPlanPremiumDetail() : new GHInsuredDto.GHPlanPremiumDetailDto();
             planPremiumDetailDto.setPremiumAmount(isNotEmpty(cellValue) ? BigDecimal.valueOf(Double.valueOf(cellValue)) : null);
             insuredDependentDto.setPlanPremiumDetail(planPremiumDetailDto);
             return insuredDependentDto;
         }
 
         @Override
-        public String getAllowedValue(InsuredDto.InsuredDependentDto insuredDependentDto) {
+        public String getAllowedValue(GHInsuredDto.GHInsuredDependentDto insuredDependentDto) {
             return insuredDependentDto.getPlanPremiumDetail().getPremiumAmount() != null ? insuredDependentDto.getPlanPremiumDetail().getPremiumAmount().toString() : "";
         }
 
@@ -795,13 +795,13 @@ public enum GLInsuredExcelHeader {
         return ImmutableList.copyOf(headers);
     }
 
-    public abstract String getAllowedValue(InsuredDto insuredDto);
+    public abstract String getAllowedValue(GHInsuredDto insuredDto);
 
-    public abstract InsuredDto populateInsuredDetail(InsuredDto insuredDto, Row row, List<String> headers);
+    public abstract GHInsuredDto populateInsuredDetail(GHInsuredDto insuredDto, Row row, List<String> headers);
 
-    public abstract InsuredDto.InsuredDependentDto populateInsuredDependentDetail(InsuredDto.InsuredDependentDto insuredDependentDto, Row row, List<String> headers);
+    public abstract GHInsuredDto.GHInsuredDependentDto populateInsuredDependentDetail(GHInsuredDto.GHInsuredDependentDto insuredDependentDto, Row row, List<String> headers);
 
-    public abstract String getAllowedValue(InsuredDto.InsuredDependentDto insuredDependentDto);
+    public abstract String getAllowedValue(GHInsuredDto.GHInsuredDependentDto insuredDependentDto);
 
     public abstract String validateAndIfNotBuildErrorMessage(IPlanAdapter planAdapter, Row row, String value, List<String> excelHeaders);
 

@@ -262,7 +262,7 @@ public class GroupLifeQuotationController {
     @ResponseBody
     public Result uploadInsuredDetail(UploadInsuredDetailDto uploadInsuredDetailDto, HttpServletRequest request) throws IOException {
         MultipartFile file = uploadInsuredDetailDto.getFile();
-        if (!("application/ms-excel".equals(file.getContentType()) || "application/msexcel".equals(file.getContentType()) || "application/vnd.ms-excel".equals(file.getContentType()))) {
+        if (!("application/x-ms-excel".equals(file.getContentType()) || "application/ms-excel".equals(file.getContentType()) || "application/msexcel".equals(file.getContentType()) || "application/vnd.ms-excel".equals(file.getContentType()))) {
             return Result.failure("Uploaded file is not valid excel");
         }
         POIFSFileSystem fs = new POIFSFileSystem(file.getInputStream());

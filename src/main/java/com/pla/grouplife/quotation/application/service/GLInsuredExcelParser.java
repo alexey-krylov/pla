@@ -181,15 +181,17 @@ public class GLInsuredExcelParser {
     private String validateOptionalCoverageCell(List<String> headers, Row row) {
         Cell planCell = row.getCell(headers.indexOf(GLInsuredExcelHeader.PLAN.getDescription()));
         String planCode = getCellValue(planCell);
+        planCode = planCode.substring(0,planCode.indexOf("."));
         Set<String> errorMessages = Sets.newHashSet();
         List<Cell> optionalCoverageCells = findNonEmptyOptionalCoverageCell(headers, row);
+        final String finalPlanCode = planCode;
         optionalCoverageCells.forEach(optionalCoverageCell -> {
             String optionalCoverageCode = getCellValue(optionalCoverageCell);
-            if (isNotEmpty(optionalCoverageCode) && !isValidCoverage(planCode, optionalCoverageCode)) {
-                errorMessages.add(optionalCoverageCode + "  is not valid for plan " + planCode + ".");
+            if (isNotEmpty(optionalCoverageCode) && !isValidCoverage(finalPlanCode, optionalCoverageCode)) {
+                errorMessages.add(optionalCoverageCode + "  is not valid for plan " + finalPlanCode + ".");
             }
         });
-        optionalCoverageCells.forEach(optionalCoverageCell -> {
+/*        optionalCoverageCells.forEach(optionalCoverageCell -> {
             String coverageCode = getCellValue(optionalCoverageCell);
             optionalCoverageCells.forEach(nextOptionalCoverageCell -> {
                 String nextCoverageCode = getCellValue(nextOptionalCoverageCell);
@@ -197,7 +199,7 @@ public class GLInsuredExcelParser {
                     errorMessages.add("Row contains Duplicate coverage code.");
                 }
             });
-        });
+        });*/
         return buildErrorMessage(errorMessages);
     }
 
