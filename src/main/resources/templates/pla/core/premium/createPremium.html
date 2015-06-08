@@ -96,9 +96,11 @@
                     <div ng-switch="" on="createPremium.definedFor" class="animate-switch-container">
                         <div class="form-group col-md-6 required animate-switch" ng-switch-when="optionalCoverage">
                             <label class="control-label">Optional Coverage</label>
-                            <select class="form-control input-sm" id="optionalCoverage" ng-required="true" ng-model="createPremium.coverageId" ng-disabled="!createPremium.planId"
-                                    ng-options="optionalCoverage.coverageId as optionalCoverage.coverageName for optionalCoverage in optionalCoverageList | orderBy:'coverageName'">
+                            <select class="form-control input-sm" name="coverageId" id="optionalCoverage" ng-required="true" ng-model="createPremium.coverageId"
+                                    ng-disabled="!createPremium.planId">
                                 <option value="">----Select Optional Coverage ----</option>
+                                <option value="{{optionalCoverage.coverageId}}"
+                                        ng-repeat="optionalCoverage in optionalCoverageList | orderBy:'coverageName'">{{optionalCoverage.coverageName}}</option>
                             </select>
                         </div>
                     </div>

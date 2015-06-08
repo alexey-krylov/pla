@@ -152,7 +152,8 @@ public class PremiumSetUpController {
                 modelAndView.setViewName("redirect:listpremium");
             }
         } catch (Exception e) {
-            modelAndView.addObject("message", e.getMessage());
+            e.printStackTrace();
+            bindingResult.addError(new ObjectError("message", e.getMessage()));
         }
         return modelAndView;
     }
