@@ -73,7 +73,8 @@ public class UnderWriterFinder {
         List<Map> underWriterDocumentList = new ArrayList<Map>();
         for (UnderWriterDocument underWriterDocument : allUnderWriterDocument) {
             Map<String,Object> underWriterDocumentMap = objectMapper.convertValue(underWriterDocument, Map.class);
-            underWriterDocumentMap = planCoverageDetailTransformer(underWriterDocument.getCoverageId().getCoverageId(),underWriterDocument.getPlanCode(),underWriterDocumentMap);
+            String coverageId = underWriterDocument.getCoverageId()!=null?underWriterDocument.getCoverageId().getCoverageId():null;
+            underWriterDocumentMap = planCoverageDetailTransformer(coverageId,underWriterDocument.getPlanCode(),underWriterDocumentMap);
             underWriterDocumentList.add(underWriterDocumentMap);
         }
         return underWriterDocumentList;
@@ -84,7 +85,8 @@ public class UnderWriterFinder {
         List<Map> underWritingRoutingLevelList = new ArrayList<Map>();
         for (UnderWriterRoutingLevel underWriterRoutingLevel : allUnderWriterRoutingLevel) {
             Map underWritingRoutingLevelMap = objectMapper.convertValue(underWriterRoutingLevel, Map.class);
-            underWritingRoutingLevelMap = planCoverageDetailTransformer(underWriterRoutingLevel.getCoverageId().getCoverageId(),underWriterRoutingLevel.getPlanCode(),underWritingRoutingLevelMap);
+            String coverageId = underWriterRoutingLevel.getCoverageId()!=null?underWriterRoutingLevel.getCoverageId().getCoverageId():null;
+            underWritingRoutingLevelMap = planCoverageDetailTransformer(coverageId,underWriterRoutingLevel.getPlanCode(),underWritingRoutingLevelMap);
             underWritingRoutingLevelList.add(underWritingRoutingLevelMap);
         }
         return underWritingRoutingLevelList;
