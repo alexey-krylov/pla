@@ -4,7 +4,7 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
-import com.pla.grouphealth.quotation.query.InsuredDto;
+import com.pla.grouphealth.quotation.query.GHInsuredDto;
 import com.pla.publishedlanguage.contract.IPlanAdapter;
 import com.pla.sharedkernel.domain.model.Relationship;
 import com.pla.sharedkernel.identifier.PlanId;
@@ -42,24 +42,24 @@ public class GHInsuredExcelParser {
     }
 
 
-    public List<InsuredDto> transformToInsuredDto(HSSFWorkbook hssfWorkbook, List<PlanId> agentPlans) {
+    public List<GHInsuredDto> transformToInsuredDto(HSSFWorkbook hssfWorkbook, List<PlanId> agentPlans) {
         HSSFSheet hssfSheet = hssfWorkbook.getSheetAt(0);
         Iterator<Row> rowIterator = hssfSheet.rowIterator();
         Row headerRow = rowIterator.next();
         final List<String> headers = GLInsuredExcelHeader.getAllowedHeaderForParser(planAdapter, agentPlans);
         final List<String> excelHeaders = getHeaders(headerRow);
         Map<Row, List<Row>> insuredTemplateDataRowMap = groupByRelationship(Lists.newArrayList(rowIterator), GLInsuredExcelHeader.getAllowedHeaders(planAdapter, agentPlans));
-        List<InsuredDto> insuredDtoList = insuredTemplateDataRowMap.entrySet().stream().map(new Function<Map.Entry<Row, List<Row>>, InsuredDto>() {
+        List<GHInsuredDto> insuredDtoList = insuredTemplateDataRowMap.entrySet().stream().map(new Function<Map.Entry<Row, List<Row>>, GHInsuredDto>() {
             @Override
-            public InsuredDto apply(Map.Entry<Row, List<Row>> rowListEntry) {
+            public GHInsuredDto apply(Map.Entry<Row, List<Row>> rowListEntry) {
                 Row insuredRow = rowListEntry.getKey();
                 List<Row> dependentRows = rowListEntry.getValue();
-                InsuredDto insuredDto = createInsuredDto(insuredRow, excelHeaders, headers, findNonEmptyOptionalCoverageCell(excelHeaders, insuredRow));
+                GHInsuredDto insuredDto = createInsuredDto(insuredRow, excelHeaders, headers, findNonEmptyOptionalCoverageCell(excelHeaders, insuredRow));
                 insuredDto.getPlanPremiumDetail().setPlanId(planAdapter.getPlanId(insuredDto.getPlanPremiumDetail().getPlanCode()).getPlanId());
-                Set<InsuredDto.InsuredDependentDto> insuredDependentDtoSet = dependentRows.stream().map(new Function<Row, InsuredDto.InsuredDependentDto>() {
+                Set<GHInsuredDto.GHInsuredDependentDto> insuredDependentDtoSet = dependentRows.stream().map(new Function<Row, GHInsuredDto.GHInsuredDependentDto>() {
                     @Override
-                    public InsuredDto.InsuredDependentDto apply(Row row) {
-                        InsuredDto.InsuredDependentDto insuredDependentDto = createInsuredDependentDto(row, excelHeaders, headers, findNonEmptyOptionalCoverageCell(excelHeaders, row));
+                    public GHInsuredDto.GHInsuredDependentDto apply(Row row) {
+                        GHInsuredDto.GHInsuredDependentDto insuredDependentDto = createInsuredDependentDto(row, excelHeaders, headers, findNonEmptyOptionalCoverageCell(excelHeaders, row));
                         insuredDependentDto.getPlanPremiumDetail().setPlanId(planAdapter.getPlanId(insuredDependentDto.getPlanPremiumDetail().getPlanCode()).getPlanId());
                         return insuredDependentDto;
                     }
@@ -72,17 +72,17 @@ public class GHInsuredExcelParser {
     }
 
 
-    private InsuredDto.InsuredDependentDto createInsuredDependentDto(Row dependentRow, List<String> excelHeaders, List<String> headers, List<Cell> optionalCoverageCells) {
-        InsuredDto.InsuredDependentDto insuredDependentDto = new InsuredDto.InsuredDependentDto();
+    private GHInsuredDto.GHInsuredDependentDto createInsuredDependentDto(Row dependentRow, List<String> excelHeaders, List<String> headers, List<Cell> optionalCoverageCells) {
+        GHInsuredDto.GHInsuredDependentDto insuredDependentDto = new GHInsuredDto.GHInsuredDependentDto();
         for (String header : headers) {
             if (!header.contains(AppConstants.OPTIONAL_COVERAGE_HEADER)) {
                 insuredDependentDto = GLInsuredExcelHeader.valueOf(header).populateInsuredDependentDetail(insuredDependentDto, dependentRow, excelHeaders);
             }
         }
-        List<InsuredDto.CoveragePremiumDetailDto> coveragePremiumDetails = optionalCoverageCells.stream().map(new Function<Cell, InsuredDto.CoveragePremiumDetailDto>() {
+        List<GHInsuredDto.CoveragePremiumDetailDto> coveragePremiumDetails = optionalCoverageCells.stream().map(new Function<Cell, GHInsuredDto.CoveragePremiumDetailDto>() {
             @Override
-            public InsuredDto.CoveragePremiumDetailDto apply(Cell cell) {
-                InsuredDto.CoveragePremiumDetailDto coveragePremiumDetailDto = new InsuredDto.CoveragePremiumDetailDto();
+            public GHInsuredDto.CoveragePremiumDetailDto apply(Cell cell) {
+                GHInsuredDto.CoveragePremiumDetailDto coveragePremiumDetailDto = new GHInsuredDto.CoveragePremiumDetailDto();
                 coveragePremiumDetailDto.setCoverageCode(ExcelGeneratorUtil.getCellValue(cell));
                 return coveragePremiumDetailDto;
             }
@@ -91,17 +91,17 @@ public class GHInsuredExcelParser {
         return insuredDependentDto;
     }
 
-    private InsuredDto createInsuredDto(Row row, List<String> excelHeaders, List<String> headers, List<Cell> optionalCoverageCell) {
-        InsuredDto insuredDto = new InsuredDto();
+    private GHInsuredDto createInsuredDto(Row row, List<String> excelHeaders, List<String> headers, List<Cell> optionalCoverageCell) {
+        GHInsuredDto insuredDto = new GHInsuredDto();
         for (String header : headers) {
             if (!header.contains(AppConstants.OPTIONAL_COVERAGE_HEADER)) {
                 insuredDto = GLInsuredExcelHeader.valueOf(header).populateInsuredDetail(insuredDto, row, excelHeaders);
             }
         }
-        List<InsuredDto.CoveragePremiumDetailDto> coveragePremiumDetails = optionalCoverageCell.stream().map(new Function<Cell, InsuredDto.CoveragePremiumDetailDto>() {
+        List<GHInsuredDto.CoveragePremiumDetailDto> coveragePremiumDetails = optionalCoverageCell.stream().map(new Function<Cell, GHInsuredDto.CoveragePremiumDetailDto>() {
             @Override
-            public InsuredDto.CoveragePremiumDetailDto apply(Cell cell) {
-                InsuredDto.CoveragePremiumDetailDto coveragePremiumDetailDto = new InsuredDto.CoveragePremiumDetailDto();
+            public GHInsuredDto.CoveragePremiumDetailDto apply(Cell cell) {
+                GHInsuredDto.CoveragePremiumDetailDto coveragePremiumDetailDto = new GHInsuredDto.CoveragePremiumDetailDto();
                 coveragePremiumDetailDto.setCoverageCode(ExcelGeneratorUtil.getCellValue(cell));
                 return coveragePremiumDetailDto;
             }

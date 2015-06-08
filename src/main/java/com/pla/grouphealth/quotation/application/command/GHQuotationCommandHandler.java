@@ -3,7 +3,7 @@ package com.pla.grouphealth.quotation.application.command;
 import com.pla.grouphealth.quotation.domain.model.*;
 import com.pla.grouphealth.quotation.domain.service.GroupHealthQuotationService;
 import com.pla.grouphealth.quotation.query.GHQuotationFinder;
-import com.pla.grouphealth.quotation.query.InsuredDto;
+import com.pla.grouphealth.quotation.query.GHInsuredDto;
 import com.pla.grouphealth.quotation.query.PremiumDetailDto;
 import com.pla.grouphealth.quotation.repository.GHQuotationRepository;
 import com.pla.publishedlanguage.contract.IPremiumCalculator;
@@ -94,11 +94,11 @@ public class GHQuotationCommandHandler {
 
     @CommandHandler
     public String updateWithInsureDetail(UpdateGLQuotationWithInsuredCommand updateGLQuotationWithInsuredCommand) {
-        List<InsuredDto> insuredDtos = updateGLQuotationWithInsuredCommand.getInsuredDtos();
-        Set<GHInsured> insureds = insuredDtos.stream().map(new Function<InsuredDto, GHInsured>() {
+        List<GHInsuredDto> insuredDtos = updateGLQuotationWithInsuredCommand.getInsuredDtos();
+        Set<GHInsured> insureds = insuredDtos.stream().map(new Function<GHInsuredDto, GHInsured>() {
             @Override
-            public GHInsured apply(InsuredDto insuredDto) {
-                InsuredDto.PlanPremiumDetailDto premiumDetail = insuredDto.getPlanPremiumDetail();
+            public GHInsured apply(GHInsuredDto insuredDto) {
+                GHInsuredDto.GHPlanPremiumDetailDto premiumDetail = insuredDto.getPlanPremiumDetail();
                 String occupationClass = ghQuotationFinder.getOccupationClass(insuredDto.getOccupationClass());
                 BigDecimal basicAnnualPremium = premiumDetail.getPremiumAmount() != null ? premiumDetail.getPremiumAmount() :
                         computePlanBasicAnnualPremium(premiumDetail.getPlanId(), premiumDetail.getSumAssured().toPlainString(), String.valueOf(getAge(insuredDto.getDateOfBirth())), occupationClass, insuredDto.getGender().name(), 365, null);
@@ -182,11 +182,11 @@ public class GHQuotationCommandHandler {
 
     }
 
-    private Set<GHInsuredDependent> getInsuredDependent(Set<InsuredDto.InsuredDependentDto> insuredDependentDtos) {
-        Set<GHInsuredDependent> insuredDependents = insuredDependentDtos.stream().map(new Function<InsuredDto.InsuredDependentDto, GHInsuredDependent>() {
+    private Set<GHInsuredDependent> getInsuredDependent(Set<GHInsuredDto.GHInsuredDependentDto> insuredDependentDtos) {
+        Set<GHInsuredDependent> insuredDependents = insuredDependentDtos.stream().map(new Function<GHInsuredDto.GHInsuredDependentDto, GHInsuredDependent>() {
             @Override
-            public GHInsuredDependent apply(InsuredDto.InsuredDependentDto insuredDependentDto) {
-                InsuredDto.PlanPremiumDetailDto premiumDetail = insuredDependentDto.getPlanPremiumDetail();
+            public GHInsuredDependent apply(GHInsuredDto.GHInsuredDependentDto insuredDependentDto) {
+                GHInsuredDto.GHPlanPremiumDetailDto premiumDetail = insuredDependentDto.getPlanPremiumDetail();
                 BigDecimal basicAnnualPremium = computePlanBasicAnnualPremium(premiumDetail.getPlanId(), premiumDetail.getSumAssured().toPlainString(),
                         String.valueOf(getAge(insuredDependentDto.getDateOfBirth()))
                         , null, insuredDependentDto.getGender().name(), 365, null);

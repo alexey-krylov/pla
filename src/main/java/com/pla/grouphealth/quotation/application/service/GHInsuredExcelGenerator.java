@@ -3,7 +3,7 @@ package com.pla.grouphealth.quotation.application.service;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.pla.core.query.MasterFinder;
-import com.pla.grouphealth.quotation.query.InsuredDto;
+import com.pla.grouphealth.quotation.query.GHInsuredDto;
 import com.pla.publishedlanguage.contract.IPlanAdapter;
 import com.pla.sharedkernel.domain.model.Gender;
 import com.pla.sharedkernel.domain.model.OccupationCategory;
@@ -39,10 +39,10 @@ public class GHInsuredExcelGenerator {
         this.masterFinder = masterFinder;
     }
 
-    public HSSFWorkbook generateInsuredExcel(List<InsuredDto> insureds, List<PlanId> planIds) throws IOException {
+    public HSSFWorkbook generateInsuredExcel(List<GHInsuredDto> insureds, List<PlanId> planIds) throws IOException {
         final List<String> headers = GLInsuredExcelHeader.getAllowedHeaders(planAdapter, planIds);
         List<Map<Integer, String>> excelData = Lists.newArrayList();
-        for (InsuredDto insuredDto : insureds) {
+        for (GHInsuredDto insuredDto : insureds) {
             List<Map<Integer, String>> tranformedList = transformInsuredDtoToExcelData(insuredDto, GLInsuredExcelHeader.getAllowedHeaderForParser(planAdapter, planIds));
             for (Map<Integer, String> insuredMap : tranformedList) {
                 excelData.add(insuredMap);
@@ -57,7 +57,7 @@ public class GHInsuredExcelGenerator {
         return workbook;
     }
 
-    private List<Map<Integer, String>> transformInsuredDtoToExcelData(InsuredDto insuredDto, List<String> headers) {
+    private List<Map<Integer, String>> transformInsuredDtoToExcelData(GHInsuredDto insuredDto, List<String> headers) {
         List<Map<Integer, String>> excelRowData = Lists.newArrayList();
         Map<Integer, String> excelDataMap = Maps.newHashMap();
         headers.forEach(header -> {
@@ -65,15 +65,15 @@ public class GHInsuredExcelGenerator {
                 excelDataMap.put(headers.indexOf(header), GLInsuredExcelHeader.valueOf(header).getAllowedValue(insuredDto));
             }
         });
-        List<InsuredDto.CoveragePremiumDetailDto> coveragePremiumDetailDtoList = insuredDto.getCoveragePremiumDetails();
+        List<GHInsuredDto.CoveragePremiumDetailDto> coveragePremiumDetailDtoList = insuredDto.getCoveragePremiumDetails();
         coveragePremiumDetailDtoList.forEach(coveragePremiumDetail -> {
             int indexOfOptionalCoverage = headers.indexOf(AppConstants.OPTIONAL_COVERAGE_HEADER + coveragePremiumDetailDtoList.indexOf(coveragePremiumDetail) + 1);
             excelDataMap.put(indexOfOptionalCoverage, coveragePremiumDetail.getCoverageCode());
             excelDataMap.put(indexOfOptionalCoverage + 1, coveragePremiumDetail.getPremium() != null ? coveragePremiumDetail.getPremium().toString() : "");
         });
-        List<Map<Integer, String>> dependentDetailExcelRowData = insuredDto.getInsuredDependents().stream().map(new Function<InsuredDto.InsuredDependentDto, Map<Integer, String>>() {
+        List<Map<Integer, String>> dependentDetailExcelRowData = insuredDto.getInsuredDependents().stream().map(new Function<GHInsuredDto.GHInsuredDependentDto, Map<Integer, String>>() {
             @Override
-            public Map<Integer, String> apply(InsuredDto.InsuredDependentDto insuredDependentDto) {
+            public Map<Integer, String> apply(GHInsuredDto.GHInsuredDependentDto insuredDependentDto) {
                 return transformInsuredDependentDtoToExcelData(insuredDependentDto, headers);
             }
         }).collect(Collectors.toList());
@@ -82,14 +82,14 @@ public class GHInsuredExcelGenerator {
         return excelRowData;
     }
 
-    private Map<Integer, String> transformInsuredDependentDtoToExcelData(InsuredDto.InsuredDependentDto insuredDependentDto, List<String> headers) {
+    private Map<Integer, String> transformInsuredDependentDtoToExcelData(GHInsuredDto.GHInsuredDependentDto insuredDependentDto, List<String> headers) {
         Map<Integer, String> excelDataMap = Maps.newHashMap();
         headers.forEach(header -> {
             if (!header.contains(AppConstants.OPTIONAL_COVERAGE_HEADER)) {
                 excelDataMap.put(headers.indexOf(header), GLInsuredExcelHeader.valueOf(header).getAllowedValue(insuredDependentDto));
             }
         });
-        List<InsuredDto.CoveragePremiumDetailDto> coveragePremiumDetailDtoList = insuredDependentDto.getCoveragePremiumDetails();
+        List<GHInsuredDto.CoveragePremiumDetailDto> coveragePremiumDetailDtoList = insuredDependentDto.getCoveragePremiumDetails();
         coveragePremiumDetailDtoList.forEach(coveragePremiumDetail -> {
             int indexOfOptionalCoverage = headers.indexOf(AppConstants.OPTIONAL_COVERAGE_HEADER + coveragePremiumDetailDtoList.indexOf(coveragePremiumDetail) + 1);
             excelDataMap.put(indexOfOptionalCoverage, coveragePremiumDetail.getCoverageCode());

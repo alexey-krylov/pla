@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.Set;
 
 /**
- * Created by Admin on 6/8/2015.
+ * Created by Samir on 4/29/2015.
  */
 @Getter
 @Setter
@@ -53,8 +53,8 @@ public class GHInsuredDto {
     private List<CoveragePremiumDetailDto> coveragePremiumDetails;
 
 
-    public GHInsuredDto addInsuredDependent(Set<GHInsuredDependentDto> insuredDependentDtos){
-        this.insuredDependents=insuredDependentDtos;
+    public GHInsuredDto addInsuredDependent(Set<GHInsuredDependentDto> insuredDependentDtos) {
+        this.insuredDependents = insuredDependentDtos;
         return this;
     }
 
@@ -162,7 +162,6 @@ public class GHInsuredDto {
             this.premium = premium;
             this.sumAssured = sumAssured;
         }
-
 
 
     }

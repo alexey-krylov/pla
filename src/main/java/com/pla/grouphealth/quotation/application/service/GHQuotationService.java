@@ -206,10 +206,10 @@ public class GHQuotationService {
         return ghInsuredExcelParser.isValidInsuredExcel(insuredTemplateWorkbook, samePlanForAllCategory, samePlanForAllRelationship, agentPlans);
     }
 
-    public List<InsuredDto> transformToInsuredDto(HSSFWorkbook workbook, String quotationId, boolean samePlanForAllCategory, boolean samePlanForAllRelations) {
+    public List<GHInsuredDto> transformToInsuredDto(HSSFWorkbook workbook, String quotationId, boolean samePlanForAllCategory, boolean samePlanForAllRelations) {
         AgentDetailDto agentDetailDto = getAgentDetail(new QuotationId(quotationId));
         List<PlanId> agentAuthorizedPlans = getAgentAuthorizedPlans(agentDetailDto.getAgentId());
-        List<InsuredDto> insuredDtoList = ghInsuredExcelParser.transformToInsuredDto(workbook, agentAuthorizedPlans);
+        List<GHInsuredDto> insuredDtoList = ghInsuredExcelParser.transformToInsuredDto(workbook, agentAuthorizedPlans);
         return insuredDtoList;
     }
 
@@ -230,10 +230,10 @@ public class GHQuotationService {
         List<PlanId> planIds = getAgentAuthorizedPlans(agentDetailDto.getAgentId());
         Map quotation = ghQuotationFinder.getQuotationById(quotationId);
         List<GHInsured> insureds = (List<GHInsured>) quotation.get("insureds");
-        List<InsuredDto> insuredDtoList = isNotEmpty(insureds) ? insureds.stream().map(new Function<GHInsured, InsuredDto>() {
+        List<GHInsuredDto> insuredDtoList = isNotEmpty(insureds) ? insureds.stream().map(new Function<GHInsured, GHInsuredDto>() {
             @Override
-            public InsuredDto apply(GHInsured insured) {
-                InsuredDto insuredDto = new InsuredDto();
+            public GHInsuredDto apply(GHInsured insured) {
+                GHInsuredDto insuredDto = new GHInsuredDto();
                 insuredDto.setCompanyName(insured.getCompanyName());
                 insuredDto.setManNumber(insured.getManNumber());
                 insuredDto.setNrcNumber(insured.getNrcNumber());
@@ -248,21 +248,21 @@ public class GHQuotationService {
                 insuredDto.setOccupationCategory(insured.getOccupationCategory());
                 insuredDto.setNoOfAssured(insured.getNoOfAssured());
                 GHPlanPremiumDetail planPremiumDetail = insured.getPlanPremiumDetail();
-                InsuredDto.PlanPremiumDetailDto planPremiumDetailDto = new InsuredDto.PlanPremiumDetailDto(planPremiumDetail.getPlanId().getPlanId(), planPremiumDetail.getPlanCode(), planPremiumDetail.getPremiumAmount(), planPremiumDetail.getSumAssured());
+                GHInsuredDto.GHPlanPremiumDetailDto planPremiumDetailDto = new GHInsuredDto.GHPlanPremiumDetailDto(planPremiumDetail.getPlanId().getPlanId(), planPremiumDetail.getPlanCode(), planPremiumDetail.getPremiumAmount(), planPremiumDetail.getSumAssured());
                 insuredDto = insuredDto.addPlanPremiumDetail(planPremiumDetailDto);
-                List<InsuredDto.CoveragePremiumDetailDto> coveragePremiumDetailDtoList = isNotEmpty(insured.getCoveragePremiumDetails()) ? insured.getCoveragePremiumDetails().stream().map(new Function<CoveragePremiumDetail, InsuredDto.CoveragePremiumDetailDto>() {
+                List<GHInsuredDto.CoveragePremiumDetailDto> coveragePremiumDetailDtoList = isNotEmpty(insured.getCoveragePremiumDetails()) ? insured.getCoveragePremiumDetails().stream().map(new Function<CoveragePremiumDetail, GHInsuredDto.CoveragePremiumDetailDto>() {
                     @Override
-                    public InsuredDto.CoveragePremiumDetailDto apply(CoveragePremiumDetail coveragePremiumDetail) {
-                        InsuredDto.CoveragePremiumDetailDto coveragePremiumDetailDto = new InsuredDto.CoveragePremiumDetailDto(coveragePremiumDetail.getCoverageCode(),
+                    public GHInsuredDto.CoveragePremiumDetailDto apply(CoveragePremiumDetail coveragePremiumDetail) {
+                        GHInsuredDto.CoveragePremiumDetailDto coveragePremiumDetailDto = new GHInsuredDto.CoveragePremiumDetailDto(coveragePremiumDetail.getCoverageCode(),
                                 coveragePremiumDetail.getCoverageId().getCoverageId(), coveragePremiumDetail.getPremium(), coveragePremiumDetail.getSumAssured());
                         return coveragePremiumDetailDto;
                     }
                 }).collect(Collectors.toList()) : Lists.newArrayList();
                 insuredDto = insuredDto.addCoveragePremiumDetails(coveragePremiumDetailDtoList);
-                Set<InsuredDto.InsuredDependentDto> insuredDependentDtoList = isNotEmpty(insured.getInsuredDependents()) ? insured.getInsuredDependents().stream().map(new Function<GHInsuredDependent, InsuredDto.InsuredDependentDto>() {
+                Set<GHInsuredDto.GHInsuredDependentDto> insuredDependentDtoList = isNotEmpty(insured.getInsuredDependents()) ? insured.getInsuredDependents().stream().map(new Function<GHInsuredDependent, GHInsuredDto.GHInsuredDependentDto>() {
                     @Override
-                    public InsuredDto.InsuredDependentDto apply(GHInsuredDependent insuredDependent) {
-                        InsuredDto.InsuredDependentDto insuredDependentDto = new InsuredDto.InsuredDependentDto();
+                    public GHInsuredDto.GHInsuredDependentDto apply(GHInsuredDependent insuredDependent) {
+                        GHInsuredDto.GHInsuredDependentDto insuredDependentDto = new GHInsuredDto.GHInsuredDependentDto();
                         insuredDependentDto.setCompanyName(insuredDependent.getCompanyName());
                         insuredDependentDto.setManNumber(insuredDependent.getManNumber());
                         insuredDependentDto.setNrcNumber(insuredDependent.getNrcNumber());
@@ -276,12 +276,12 @@ public class GHQuotationService {
                         insuredDependentDto.setOccupationClass(insuredDependent.getOccupationClass());
                         insuredDependentDto.setOccupationCategory(insuredDependent.getOccupationCategory());
                         GHPlanPremiumDetail planPremiumDetail = insuredDependent.getPlanPremiumDetail();
-                        InsuredDto.PlanPremiumDetailDto planPremiumDetailDto = new InsuredDto.PlanPremiumDetailDto(planPremiumDetail.getPlanId().getPlanId(), planPremiumDetail.getPlanCode(), planPremiumDetail.getPremiumAmount(), planPremiumDetail.getSumAssured());
+                        GHInsuredDto.GHPlanPremiumDetailDto planPremiumDetailDto = new GHInsuredDto.GHPlanPremiumDetailDto(planPremiumDetail.getPlanId().getPlanId(), planPremiumDetail.getPlanCode(), planPremiumDetail.getPremiumAmount(), planPremiumDetail.getSumAssured());
                         insuredDependentDto = insuredDependentDto.addPlanPremiumDetail(planPremiumDetailDto);
-                        List<InsuredDto.CoveragePremiumDetailDto> dependentCoveragePremiumDetailDtoList = isNotEmpty(insuredDependent.getCoveragePremiumDetails()) ? insuredDependent.getCoveragePremiumDetails().stream().map(new Function<CoveragePremiumDetail, InsuredDto.CoveragePremiumDetailDto>() {
+                        List<GHInsuredDto.CoveragePremiumDetailDto> dependentCoveragePremiumDetailDtoList = isNotEmpty(insuredDependent.getCoveragePremiumDetails()) ? insuredDependent.getCoveragePremiumDetails().stream().map(new Function<CoveragePremiumDetail, GHInsuredDto.CoveragePremiumDetailDto>() {
                             @Override
-                            public InsuredDto.CoveragePremiumDetailDto apply(CoveragePremiumDetail coveragePremiumDetail) {
-                                InsuredDto.CoveragePremiumDetailDto coveragePremiumDetailDto = new InsuredDto.CoveragePremiumDetailDto(coveragePremiumDetail.getCoverageCode(),
+                            public GHInsuredDto.CoveragePremiumDetailDto apply(CoveragePremiumDetail coveragePremiumDetail) {
+                                GHInsuredDto.CoveragePremiumDetailDto coveragePremiumDetailDto = new GHInsuredDto.CoveragePremiumDetailDto(coveragePremiumDetail.getCoverageCode(),
                                         coveragePremiumDetail.getCoverageId().getCoverageId(), coveragePremiumDetail.getPremium(), coveragePremiumDetail.getSumAssured());
                                 return coveragePremiumDetailDto;
                             }
@@ -372,7 +372,7 @@ public class GHQuotationService {
         public GlQuotationDto apply(Map map) {
             String quotationId = map.get("_id").toString();
             AgentDetailDto agentDetailDto = getAgentDetail(new QuotationId(quotationId));
-            LocalDate generatedOn = map.get("generatedOn") != null ? new LocalDate((Date) map.get("generatedOn")) : null;
+            LocalDate generatedOn = map.get("generatedOn") != null ? new LocalDate(map.get("generatedOn")) : null;
             String quotationStatus = map.get("quotationStatus") != null ? (String) map.get("quotationStatus") : "";
             String quotationNumber = map.get("quotationNumber") != null ? (String) map.get("quotationNumber") : "";
             ObjectId parentQuotationIdMap = map.get("parentQuotationId") != null ? (ObjectId) map.get("parentQuotationId") : null;

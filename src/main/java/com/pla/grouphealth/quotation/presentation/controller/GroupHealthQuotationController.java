@@ -67,8 +67,8 @@ public class GroupHealthQuotationController {
     @ResponseBody
     public Result getQuotationNumber(@PathVariable("quotationId") String quotationId) {
         Map quotationMap = ghQuotationFinder.getQuotationById(quotationId);
-        String versionNumber = (Integer) quotationMap.get("versionNumber") != 0 ? ("/" + ((Integer) quotationMap.get("versionNumber")).toString()) : "";
-        return Result.success("Quotation number ", (String) quotationMap.get("quotationNumber") + versionNumber);
+        String versionNumber = (Integer) quotationMap.get("versionNumber") != 0 ? ("/" + quotationMap.get("versionNumber").toString()) : "";
+        return Result.success("Quotation number ", quotationMap.get("quotationNumber") + versionNumber);
     }
 
     @RequestMapping(value = "/isinsureddetailavailable/{quotationId}", method = RequestMethod.GET)
@@ -276,7 +276,7 @@ public class GroupHealthQuotationController {
                 fileOutputStream.close();
                 return Result.failure("Uploaded Insured template is not valid.Please download to check the errors");
             }
-            List<InsuredDto> insuredDtos = ghQuotationService.transformToInsuredDto(insuredTemplateWorkbook, uploadInsuredDetailDto.getQuotationId(), uploadInsuredDetailDto.isSamePlanForAllCategory(), uploadInsuredDetailDto.isSamePlanForAllRelation());
+            List<GHInsuredDto> insuredDtos = ghQuotationService.transformToInsuredDto(insuredTemplateWorkbook, uploadInsuredDetailDto.getQuotationId(), uploadInsuredDetailDto.isSamePlanForAllCategory(), uploadInsuredDetailDto.isSamePlanForAllRelation());
             commandGateway.sendAndWait(new UpdateGLQuotationWithInsuredCommand(uploadInsuredDetailDto.getQuotationId(), insuredDtos, getLoggedInUserDetail(request)));
         } catch (Exception e) {
             e.printStackTrace();

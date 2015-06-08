@@ -1,6 +1,6 @@
 package com.pla.grouphealth.quotation.application.command;
 
-import com.pla.grouphealth.quotation.query.InsuredDto;
+import com.pla.grouphealth.quotation.query.GHInsuredDto;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -20,7 +20,7 @@ public class UpdateGLQuotationWithInsuredCommand {
 
     private String quotationId;
 
-    private List<InsuredDto> insuredDtos;
+    private List<GHInsuredDto> insuredDtos;
 
     private UserDetails userDetails;
 
