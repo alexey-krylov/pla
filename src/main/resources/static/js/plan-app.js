@@ -1,5 +1,5 @@
 'use strict';
-var app = angular.module('planSetup', ['common', 'ngTagsInput', 'checklist-model', 'ngRoute']);
+var app = angular.module('planSetup', ['common', 'ngTagsInput', 'checklist-model', 'ngRoute', 'xeditable', 'ui.bootstrap', 'ui.bootstrap.tpls']);
 
 app.config(function (tagsInputConfigProvider) {
     tagsInputConfigProvider.setDefaults('tagsInput', {
@@ -303,6 +303,9 @@ app.controller('PlanSetupController', ['$scope', '$http', '$location', '$routePa
                             };
 
                             $scope.addMaturityRow = function () {
+                                if (!$scope.newCoverage) {
+                                    $scope.newCoverage = {maturityAmounts: []};
+                                }
                                 $scope.newCoverage.maturityAmounts.push({});
                             };
 
