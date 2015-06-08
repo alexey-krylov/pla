@@ -4,6 +4,8 @@ import com.pla.core.query.PlanFinder;
 import com.pla.individuallife.identifier.ProposalId;
 import com.pla.individuallife.proposal.application.command.CreateProposalCommand;
 import com.pla.individuallife.proposal.application.command.ProposalCommandGateway;
+import com.pla.individuallife.proposal.application.command.UpdateCompulsoryHealthStatementCommand;
+import com.pla.individuallife.proposal.presentation.dto.QuestionAnswerDto;
 import org.axonframework.commandhandling.CommandBus;
 import org.axonframework.commandhandling.gateway.GatewayProxyFactory;
 import org.bson.types.ObjectId;
@@ -13,12 +15,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeoutException;
 
@@ -35,8 +36,7 @@ public class ILProposalSetUpController {
     private final PlanFinder planFinder;
 
     @Autowired
-    public ILProposalSetUpController(CommandBus commandBus, PlanFinder planFinder)
-    {
+    public ILProposalSetUpController(CommandBus commandBus, PlanFinder planFinder) {
         this.planFinder = planFinder;
         GatewayProxyFactory factory = new GatewayProxyFactory(commandBus);
         proposalCommandGateway = factory.createGateway(ProposalCommandGateway.class);
@@ -44,15 +44,14 @@ public class ILProposalSetUpController {
 
     @ResponseBody
     @RequestMapping(value = "/proposaltwo")
-    public ResponseEntity<Map> dataInsert(@RequestBody CreateProposalCommand createProposalCommand , BindingResult bindingResult, HttpServletRequest request)
-    {
+    public ResponseEntity<Map> dataInsert(@RequestBody CreateProposalCommand createProposalCommand, BindingResult bindingResult, HttpServletRequest request) {
         ProposalId proposalId = null;
 
         if (bindingResult.hasErrors()) {
-            return new ResponseEntity( bindingResult.getAllErrors(), HttpStatus.PRECONDITION_FAILED);
+            return new ResponseEntity(bindingResult.getAllErrors(), HttpStatus.PRECONDITION_FAILED);
         }
         try {
-             proposalId = new ProposalId(new ObjectId().toString());
+            proposalId = new ProposalId(new ObjectId().toString());
             UserDetails userDetails = getLoggedInUserDetail(request);
             createProposalCommand.setUserDetails(userDetails);
             createProposalCommand.setProposalId(proposalId);
@@ -64,11 +63,37 @@ public class ILProposalSetUpController {
         }
 
 
-        Map map=new HashMap<>();
-        map.put("msg","Proposal got created successfully");
-        map.put("proposalId",proposalId.toString());
+        Map map = new HashMap<>();
+        map.put("msg", "Proposal got created successfully");
+        map.put("proposalId", proposalId.toString());
 //        return new ResponseEntity("Proposal got created successfully", HttpStatus.OK);
-        return new ResponseEntity(map,HttpStatus.OK);
-
+        return new ResponseEntity(map, HttpStatus.OK);
     }
+
+    @ResponseBody
+    @RequestMapping(value = "/updateCompulsoryHealthStatement/{proposalId}", method = RequestMethod.POST)
+    public ResponseEntity<List<QuestionAnswerDto>> updateCompulsoryHealthStatement(
+            @RequestBody UpdateCompulsoryHealthStatementCommand updateCompulsoryHealthStatementCommand,
+            @PathVariable("proposalId") String proposalIdUrl, HttpServletRequest request,
+            BindingResult bindingResult) {
+        ProposalId proposalId = null;
+        if (bindingResult.hasErrors()) {
+            return new ResponseEntity(bindingResult.getAllErrors(), HttpStatus.PRECONDITION_FAILED);
+        }
+        try {
+            proposalId = new ProposalId(proposalIdUrl);
+            UserDetails userDetails = getLoggedInUserDetail(request);
+            updateCompulsoryHealthStatementCommand.setUserDetails(userDetails);
+            updateCompulsoryHealthStatementCommand.setProposalId(proposalId);
+            proposalCommandGateway.updateCompulsoryHealthStatement(updateCompulsoryHealthStatementCommand);
+        } catch (TimeoutException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        List<QuestionAnswerDto> list=updateCompulsoryHealthStatementCommand.getQuestions();
+        return new ResponseEntity(list, HttpStatus.OK);
+    }
+
+
 }

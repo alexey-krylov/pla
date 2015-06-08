@@ -1,13 +1,18 @@
 package com.pla.individuallife.proposal.application.command;
 
+import com.pla.individuallife.identifier.ProposalId;
 import com.pla.individuallife.proposal.domain.model.*;
 import com.pla.individuallife.proposal.domain.service.ProposalNumberGenerator;
+import com.pla.individuallife.proposal.presentation.dto.QuestionAnswerDto;
 import org.axonframework.commandhandling.annotation.CommandHandler;
-import org.nthdimenzion.axonframework.repository.GenericMongoRepository;
+import org.axonframework.repository.AggregateNotFoundException;
+import org.axonframework.repository.Repository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import java.util.*;
 
 /**
  * Created by Prasant on 26-May-15.
@@ -17,8 +22,9 @@ public class ILProposalCommandHandler {
 
     @Autowired
     private ProposalNumberGenerator proposalNumberGenerator;
+
     @Autowired
-    private GenericMongoRepository<ProposalAggregate> ilProposalMongoRepository;
+    private Repository<ProposalAggregate> ilProposalMongoRepository;
 
     private static final Logger logger = LoggerFactory.getLogger(ILProposalCommandHandler.class);
 
@@ -103,5 +109,19 @@ public class ILProposalCommandHandler {
                         proposalCommand.getProposedAssured().getResidentialAddress().getHomePhone())).createProposedAssured();
 
         return proposedAssured;
+    }
+
+
+    @CommandHandler
+    public void updateCompulsoryHealthStatement(UpdateCompulsoryHealthStatementCommand updateCompulsoryHealthStatementCommand) {
+        ProposalAggregate proposalAggregate = null;
+        ProposalId proposalId = updateCompulsoryHealthStatementCommand.getProposalId();
+        List<QuestionAnswerDto> questionAnswerDtoList=updateCompulsoryHealthStatementCommand.getQuestions();
+        try {
+            proposalAggregate = ilProposalMongoRepository.load(proposalId);
+            proposalAggregate.updateCompulsoryHealthStatement(questionAnswerDtoList);
+        } catch (AggregateNotFoundException e) {
+            e.printStackTrace();
+        }
     }
 }

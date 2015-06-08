@@ -20,6 +20,12 @@
             <mongo:converter>
                 <bean class="com.pla.grouplife.quotation.repository.ObjectIdToQuotationIdConverter"/>
             </mongo:converter>
+            <mongo:converter>
+            <bean class="com.pla.individuallife.proposal.repository.ProposalIdToObjectIdConverter"/>
+            </mongo:converter>
+            <mongo:converter>
+                <bean class="com.pla.individuallife.proposal.repository.ObjectIdToProposalIdConverter"/>
+            </mongo:converter>
         </mongo:custom-converters>
     </mongo:mapping-converter>
 

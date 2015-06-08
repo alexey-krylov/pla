@@ -2,6 +2,7 @@ package com.pla.individuallife.proposal.domain.model;
 
 import com.google.common.base.Preconditions;
 import com.pla.individuallife.identifier.ProposalId;
+import com.pla.individuallife.proposal.presentation.dto.QuestionAnswerDto;
 import org.axonframework.eventsourcing.annotation.AbstractAnnotatedAggregateRoot;
 import org.axonframework.eventsourcing.annotation.AggregateIdentifier;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -10,10 +11,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.Id;
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 import static com.pla.sharedkernel.util.RolesUtil.hasIndividualLifeProposalProcessorRole;
 
@@ -35,6 +33,7 @@ public class ProposalAggregate extends AbstractAnnotatedAggregateRoot<ProposalId
     private ProposalPlanDetail proposalPlanDetail;
     private List<Beneficiary> beneficiaries;
     private BigDecimal totalBeneficiaryShare = BigDecimal.ZERO;
+    private List<QuestionAnswerDto> compulsoryHealthStatement;
 
     ProposalAggregate() {
         riders = new HashSet<RiderDetail>();
@@ -73,5 +72,11 @@ public class ProposalAggregate extends AbstractAnnotatedAggregateRoot<ProposalId
         boolean sameBeneficiaryExists = beneficiaries.parallelStream().anyMatch(each -> (each.equals(beneficiary)));
         Preconditions.checkArgument(!sameBeneficiaryExists, "Beneficiary already exists.");
         totalBeneficiaryShare = newTotal;
+    }
+
+    public void updateCompulsoryHealthStatement(List<QuestionAnswerDto> compulsoryHealthStatement){
+
+        //Update Logic
+        this.compulsoryHealthStatement=compulsoryHealthStatement;
     }
 }
