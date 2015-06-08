@@ -45,9 +45,9 @@ public class UnderWriterCommandHandler {
     public void createUnderWriterDocumentHandler(CreateUnderWriterDocumentCommand createUnderWriterDocumentCommand) {
         UnderWriterDocument underWriterDocument = null;
         if (isNotEmpty(createUnderWriterDocumentCommand.getPlanCode()) && isNotEmpty(createUnderWriterDocumentCommand.getCoverageId())) {
-            underWriterDocument = underWriterDocumentRepository.findByPlanCodeAndCoverageIdAndValidityDate(createUnderWriterDocumentCommand.getPlanCode(), new CoverageId(createUnderWriterDocumentCommand.getCoverageId()), null);
+            underWriterDocument = underWriterDocumentRepository.findByPlanCodeAndCoverageIdAndValidityDate(createUnderWriterDocumentCommand.getPlanCode(), new CoverageId(createUnderWriterDocumentCommand.getCoverageId()), null,createUnderWriterDocumentCommand.getProcessType().name());
         } else if (isNotEmpty(createUnderWriterDocumentCommand.getPlanCode()) && isEmpty(createUnderWriterDocumentCommand.getCoverageId())) {
-            underWriterDocument = underWriterDocumentRepository.findByPlanCodeAndValidityDate(createUnderWriterDocumentCommand.getPlanCode(), null);
+            underWriterDocument = underWriterDocumentRepository.findByPlanCodeAndValidityDate(createUnderWriterDocumentCommand.getPlanCode(), null,createUnderWriterDocumentCommand.getProcessType().name());
         }
         if (underWriterDocument != null) {
             underWriterDocument = underWriterDocument.expireUnderWriterDocument(createUnderWriterDocumentCommand.getEffectiveFrom().minusDays(1));
@@ -66,9 +66,9 @@ public class UnderWriterCommandHandler {
     public void createUnderWriterRoutingLevelHandler(CreateUnderWriterRoutingLevelCommand createUnderWriterRoutingLevelCommand) {
         UnderWriterRoutingLevel underWriterRoutingLevel = null;
         if (isNotEmpty(createUnderWriterRoutingLevelCommand.getPlanCode()) && isNotEmpty(createUnderWriterRoutingLevelCommand.getCoverageId())) {
-            underWriterRoutingLevel = underWriterRoutingLevelRepository.findByPlanCodeAndCoverageIdAndValidityDate(createUnderWriterRoutingLevelCommand.getPlanCode(), new CoverageId(createUnderWriterRoutingLevelCommand.getCoverageId()), null);
+            underWriterRoutingLevel = underWriterRoutingLevelRepository.findByPlanCodeAndCoverageIdAndValidityDate(createUnderWriterRoutingLevelCommand.getPlanCode(), new CoverageId(createUnderWriterRoutingLevelCommand.getCoverageId()), null,createUnderWriterRoutingLevelCommand.getProcessType().name());
         } else if (isNotEmpty(createUnderWriterRoutingLevelCommand.getPlanCode()) && isEmpty(createUnderWriterRoutingLevelCommand.getCoverageId())) {
-            underWriterRoutingLevel = underWriterRoutingLevelRepository.findByPlanCodeAndValidityDate(createUnderWriterRoutingLevelCommand.getPlanCode(), null);
+            underWriterRoutingLevel = underWriterRoutingLevelRepository.findByPlanCodeAndValidityDate(createUnderWriterRoutingLevelCommand.getPlanCode(), null,createUnderWriterRoutingLevelCommand.getProcessType().name());
         }
         if (underWriterRoutingLevel != null) {
             underWriterRoutingLevel = underWriterRoutingLevel.expireUnderWriterRoutingLevel(createUnderWriterRoutingLevelCommand.getEffectiveFrom().minusDays(1));

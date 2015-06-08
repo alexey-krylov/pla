@@ -65,7 +65,7 @@ public class UnderWriterSetUpController {
     public ModelAndView viewRoutingLevelSetup(){
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("pla/core/underwriter/routingLevelSetup/viewRoutingLevelSetup");
-        modelAndView.addObject("underWriterDocumentList", underWriterFinder.findAllUnderWriterRoutingLevel());
+        modelAndView.addObject("underWriterRoutingLevelList", underWriterFinder.findAllUnderWriterRoutingLevel());
         return modelAndView;
     }
 
