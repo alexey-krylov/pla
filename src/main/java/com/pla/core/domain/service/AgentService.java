@@ -90,7 +90,9 @@ public class AgentService {
         updatedAgentWithProfile = updatedAgentWithProfile.updateAgentProfileWithNrcNumber(agentProfileDto.getNrcNumber());
         updatedAgentWithProfile = updatedAgentWithProfile.updateAgentProfileWithTitle(agentProfileDto.getTitle());
         Agent agentWithLicenseNumber = updatedAgentWithProfile.withLicenseNumber(licenseNumberDto.getLicenseNumber());
-        agentWithLicenseNumber = agentWithLicenseNumber.withTeamDetail(teamDetailDto.getTeamId());
+        if (teamDetailDto != null) {
+            agentWithLicenseNumber = agentWithLicenseNumber.withTeamDetail(teamDetailDto.getTeamId());
+        }
         GeoDetailDto geoDetailDto = contactDetailDto.getGeoDetail();
         Agent agentWithContactDetail = agentWithLicenseNumber.withContactDetail(contactDetailDto.getMobileNumber(), contactDetailDto.getHomePhoneNumber(), contactDetailDto.getWorkPhoneNumber(), contactDetailDto.getEmailAddress(), contactDetailDto.getAddressLine1(), contactDetailDto.getAddressLine2(), geoDetailDto.getPostalCode(), geoDetailDto.getProvinceCode(), geoDetailDto.getCityCode());
         GeoDetailDto physicalGeoDetailDto = physicalAddressDto.getPhysicalGeoDetail();
