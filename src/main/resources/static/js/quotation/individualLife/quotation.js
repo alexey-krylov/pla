@@ -165,9 +165,9 @@
                 }]
             };
         })
-        .controller('QuotationController', ['$scope', '$http', '$route', '$bsmodal',
+        .controller('QuotationController', ['$scope', '$http', '$route', '$location', '$bsmodal',
         'globalConstants', 'occupations',
-            function ($scope, $http, $route, $bsmodal, globalConstants, occupations) {
+            function ($scope, $http, $route, $location, $bsmodal, globalConstants, occupations) {
 
             $scope.titleList = globalConstants.title;
             $scope.occupations = occupations;
@@ -273,18 +273,21 @@
             };
 
                 $scope.$watchGroup(['paDOB', 'pDOB'], function (newval, oldval) {
-                if (newval) {
-                    if (newval[0]) {
-                        $scope.proposedAssuredAge = calculateAge(newval[0]);
-                    }
-                    if (newval[1] && typeof newval[1] === 'object') {
-                        $scope.proposerAge = calculateAge(newval[1]);
-                    }
+                    if (newval) {
+                        if (newval[0]) {
+                            $scope.proposedAssuredAge = calculateAge(newval[0]);
                 }
-            });
-
+                        if (newval[1] && typeof newval[1] === 'object') {
+                            $scope.proposerAge = calculateAge(newval[1]);
+                        }
+                    }
+                });
 
                 $scope.saveStep1 = function () {
+                    if (quotationId) {
+                        return;
+                    }
+                    console.log('saving step 1...');
                 $http.post('quotation/createquotation',
                     angular.extend($scope.proposedAssured, {
                         agentId: $scope.quotation.agentId,
@@ -293,11 +296,12 @@
                     }))
                     .success(function (data) {
                         $scope.quotation.quotationId = data.id;
-                        $http.get('quotation/getquotationnumber/' + data.id).success(function (data) {
-                            $scope.quotation.quotationNumber = data.id;
-                        });
+                        //$http.get('quotation/getquotationnumber/' + data.id).success(function (data) {
+                        //    $scope.quotation.quotationNumber = data.id;
+                        //});
+                        $location.path('/edit/' + $scope.quotation.quotationId);
                     });
-            };
+                };
 
             $scope.saveStep2 = function () {
                 var request = {proposedAssured: $scope.proposedAssured};
@@ -348,15 +352,25 @@
 
                 $scope.$on('finished.fu.wizard', function (name, event, data) {
                     $http.post('quotation/generatequotation/', {quotationId: quotationId}).success(function (response) {
-
-                    });
+                });
                 });
 
             $scope.remoteUrlRequestFn = function (str) {
                 return {agentId: $scope.quotation.agentId};
             };
+
         }]
-);
+    ).directive('uneditable', function () {
+            return function (scope, element, attrs) {
+                $scope.$watch(attrs.uneditable, function (val) {
+                    if (val)
+                        element.removeAttr("disabled");
+                    else
+                        element.attr("disabled", "disabled");
+                });
+            }
+        });
+
 })(angular);
 
 

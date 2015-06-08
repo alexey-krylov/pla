@@ -51,8 +51,9 @@
                 <li data-step="4"><span class="badge">4</span>Premium Details<span class="chevron"></span></li>
             </ul>
             <div class="actions">
-                <span style="font-weight: bolder;margin-right: 15px;color: #999">Quotation ID :<span style="font-size: 13px;color: #3a87ad;">
-                    {{quotationNumber}}<span ng-show="versionNumber &amp;&amp; versionNumber!=0">/{{versionNumber}}</span></span></span>
+                <span style="font-weight: bolder;margin-right: 15px;color: #999">
+                    Quotation ID :<span style="font-size: 13px;color: #3a87ad;">{{quotationNumber}}</span>
+                </span>
                 <button type="button" class="btn btn-default btn-prev" disabled="disabled"><span class="glyphicon glyphicon-arrow-left"></span>Prev</button>
                 <button type="button" class="btn btn-default btn-next" ng-disabled="!stepsSaved[selectedItem]">Next<span class="glyphicon glyphicon-arrow-right"></span></button>
             </div>
@@ -153,7 +154,10 @@
                                 <div class="col-lg-6" disable-all-fields="isViewMode">
                                     <div class="form-group required">
                                         <label class="control-label">Proposer Code</label>
-                                        <input type="text" onkeypress="return isEnterKey(event)" ng-disabled="mode!='new'" class="form-control input-sm" ng-required="true" name="proposerCode" ng-model="quotationDetails.proposer.proposerCode"/>
+                                        <input type="text" onkeypress="return isEnterKey(event)"
+                                               class="form-control input-sm" ng-disabled="mode!='new'"
+                                               ng-required="true" name="proposerCode"
+                                               ng-model="quotationDetails.proposer.proposerCode"/>
                                     </div>
                                     <div class="form-group">
                                         <label >Address Line 2</label>
@@ -236,7 +240,6 @@
                             <div class="checkbox">
                                 <label class="checkbox-custom" data-initialize="checkbox">
                                     <input type="hidden" ng-value="quotationId" name="quotationId" ng-model="quotationId"/>
-
                                     <input class="sr-only" type="checkbox" ng-true-value="true" ng-false-value="false" name="planChoice" ng-model="quotationDetails.plan.samePlanForAllRelation"/>
                                     <span class="checkbox-label" style="position: relative;top:5px;font-weight: bold;color:#000000;margin-left:5px">Same Plan for all Relationships</span>
                                 </label>
@@ -288,11 +291,28 @@
                                         <input class="form-control input-sm" onkeypress="return isNumeric(event)"  name="profitAndSolvencyLoading"
                                                ng-model="quotationDetails.premium.profitAndSolvencyLoading" ng-blur="recalculatePremium();" value="0"/>
                                     </div>
+                                    <div class="form-group required">
+                                        <label class="control-label">Waiver of Excess Loading</label>
+                                        <input class="form-control input-sm" onkeypress="return isNumeric(event)"
+                                               ng-required="true" name="addOnBenefits"
+                                               type="number" min="0" max="100"
+                                               ng-model="quotationDetails.premium.waiverOfExcessLoading"
+                                               ng-blur="recalculatePremium();" value="0"/>
+                                    </div>
                                     <div class="form-group">
                                         <label class="control-label">Discounts</label>
                                         <input class="form-control input-sm" onkeypress="return isNumeric(event)"  name="discounts"
                                                ng-model="quotationDetails.premium.discounts" ng-blur="recalculatePremium();" value="0"/>
                                     </div>
+                                    <div class="form-group">
+                                        <label class="control-label">Service Tax / VAT</label>
+                                        <input class="form-control input-sm" onkeypress="return isNumeric(event)"
+                                               ng-required="true"
+
+                                               name="addOnBenefits" ng-model="quotationDetails.premium.vat"
+                                               ng-blur="recalculatePremium();" value="0"/>
+                                    </div>
+
                                 </div>
                             </div>
                             <div class="row">
@@ -301,7 +321,7 @@
                                         <label >Policy Term Value (Days)</label>
                                         <input class="form-control input-sm"  onkeypress="return isNumeric(event)"
                                                ng-required="true" ng-model="quotationDetails.premium.policyTermValue"
-                                               ng-blur="recalculatePremium();"/>
+                                               ng-blur="recalculatePremium();" ng-pattern="/^[0-9]{3}$/"/>
                                         <small class="error" ng-show="inappropriatePolicyTerm">
                                             Please enter a number between 30 and 9999.
                                         </small>
@@ -396,6 +416,9 @@
             width: 18px;
         }
 
+        .bs-callout-info {
+            border-left-color: purple !important;
+        }
     </style>
 </script>
 <div class="ng-view container">

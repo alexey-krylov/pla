@@ -60,7 +60,6 @@ public class IndidualLifeQuotationController {
         return modelAndView;
     }
 
-
     @RequestMapping(value = "/searchquotation", method = RequestMethod.POST)
     public ModelAndView searchQuotation(ILSearchQuotationDto searchGlQuotationDto) {
         ModelAndView modelAndView = new ModelAndView();

@@ -152,8 +152,10 @@ angular.module('createQuotation', ['common', 'ngRoute', 'mgcrea.ngStrap.select',
                 return Math.round(x) === x;
             }
 
+            $scope.quotationDetails.premium.addOnBenefit = $scope.quotationDetails.premium.addOnBenefit || 20;
             $scope.quotationDetails.premium.profitAndSolvencyLoading = $scope.quotationDetails.premium.profitAndSolvencyLoading || 0;
             $scope.quotationDetails.premium.discounts = $scope.quotationDetails.premium.discounts || 0;
+            $scope.quotationDetails.premium.waiverOfExcessLoading = $scope.quotationDetails.premium.waiverOfExcessLoading || 15;
 
             $scope.inappropriatePolicyTerm = false;
             $scope.$watch('quotationDetails.premium.policyTermValue', function (newVal, oldVal) {
