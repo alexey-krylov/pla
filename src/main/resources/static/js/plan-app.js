@@ -1,5 +1,5 @@
 'use strict';
-var app = angular.module('planSetup', ['common', 'ngTagsInput', 'checklist-model', 'ngRoute', 'xeditable', 'ui.bootstrap', 'ui.bootstrap.tpls']);
+var app = angular.module('planSetup', ['common', 'ngTagsInput', 'checklist-model', 'ngRoute']);
 
 app.config(function (tagsInputConfigProvider) {
     tagsInputConfigProvider.setDefaults('tagsInput', {
@@ -17,7 +17,7 @@ app.config(['datepickerPopupConfig', function (datepickerPopupConfig) {
 }]);
 app.config(function ($routeProvider, $locationProvider) {
     $routeProvider
-        .when('/', {
+        .when('/plan', {
             templateUrl: 'plan/list'
         })
         .when('/viewplan/:planid', {
@@ -130,10 +130,9 @@ app.config(function ($routeProvider, $locationProvider) {
                 }]
             }
         });
-    $routeProvider.otherwise({redirectTo: '/'});
+    $routeProvider.otherwise({redirectTo: '/plan'});
 });
 app.controller('PlanListController', ['$scope', 'planList', function ($scope, planList) {
-    console.log(' PlanListController *** ');
     $scope.planList = planList;
 }
 ]);
@@ -303,9 +302,6 @@ app.controller('PlanSetupController', ['$scope', '$http', '$location', '$routePa
                             };
 
                             $scope.addMaturityRow = function () {
-                                if (!$scope.newCoverage) {
-                                    $scope.newCoverage = {maturityAmounts: []};
-                                }
                                 $scope.newCoverage.maturityAmounts.push({});
                             };
 
