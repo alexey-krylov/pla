@@ -50,7 +50,7 @@ public class ProcessInfoAdapterImpl implements IProcessInfoAdapter {
 
     @Override
     public BigDecimal getServiceTaxAmount() {
-        return BigDecimal.ZERO;
+        return generalInformationService.getTheServiceTaxAmount();
     }
 
 }

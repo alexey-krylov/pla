@@ -82,4 +82,7 @@ public class OrganizationGeneralInformation {
             return discountFactorOrganizationInformation;
         }
     }
+    public BigDecimal getTheServiceTaxAmount(){
+        return this.serviceTax.getValue();
+    }
 }

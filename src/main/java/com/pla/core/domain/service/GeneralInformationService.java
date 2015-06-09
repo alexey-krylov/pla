@@ -15,6 +15,7 @@ import com.pla.publishedlanguage.domain.model.PremiumFrequency;
 import com.pla.sharedkernel.domain.model.*;
 import com.pla.sharedkernel.identifier.LineOfBusinessEnum;
 import org.nthdimenzion.common.AppConstants;
+import org.nthdimenzion.utils.UtilValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
@@ -106,7 +107,7 @@ public class GeneralInformationService {
         return productLineProcessList;
     }
 
-        public Map<PremiumFrequency, List<Map<ProductLineProcessType,Integer>>> transformPremiumFrequencyFollowUp(List<PremiumFrequencyFollowUpDto> premiumFrequencyFollowUpDtos){
+    public Map<PremiumFrequency, List<Map<ProductLineProcessType,Integer>>> transformPremiumFrequencyFollowUp(List<PremiumFrequencyFollowUpDto> premiumFrequencyFollowUpDtos){
         Map<PremiumFrequency, List<Map<ProductLineProcessType,Integer>>> premiumFrequencyFollowUp = Maps.newLinkedHashMap();
         for (PremiumFrequencyFollowUpDto premiumFrequencyFollowUpDto : premiumFrequencyFollowUpDtos){
             List<Map<ProductLineProcessType,Integer>> productLineProcessItem =  transformProductLine(premiumFrequencyFollowUpDto.getPremiumFollowUpFrequencyItems());
@@ -430,5 +431,14 @@ public class GeneralInformationService {
         findGeneralInformation.addCriteria(Criteria.where("productLine").is(lineOfBusinessEnum));
         ProductLineGeneralInformation productLineGeneralInformation = mongoTemplate.findOne(findGeneralInformation, ProductLineGeneralInformation.class);
         return productLineGeneralInformation;
+    }
+
+    public BigDecimal getTheServiceTaxAmount(){
+        List<OrganizationGeneralInformation> organizationGeneralInformationList = mongoTemplate.findAll(OrganizationGeneralInformation.class);
+        if(UtilValidator.isNotEmpty(organizationGeneralInformationList)){
+            OrganizationGeneralInformation organizationGeneralInformation = organizationGeneralInformationList.get(0);
+            return organizationGeneralInformation.getTheServiceTaxAmount();
+        }
+        return BigDecimal.ZERO;
     }
 }
