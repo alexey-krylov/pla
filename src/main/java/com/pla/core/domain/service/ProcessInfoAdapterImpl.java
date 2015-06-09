@@ -9,6 +9,8 @@ import com.pla.sharedkernel.identifier.LineOfBusinessEnum;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
+
 /**
  * Created by Samir on 5/31/2015.
  */
@@ -44,6 +46,11 @@ public class ProcessInfoAdapterImpl implements IProcessInfoAdapter {
     public int getDaysForSecondReminder(LineOfBusinessEnum lineOfBusinessEnum, ProcessType processType) throws ProcessInfoException {
         ProductLineGeneralInformation productLineGeneralInformation = generalInformationService.findProductLineInformationByLineOfBusinessId(lineOfBusinessEnum);
         return productLineGeneralInformation.getProductLineProcessItemValue(processType,ProductLineProcessType.SECOND_REMAINDER );
+    }
+
+    @Override
+    public BigDecimal getServiceTaxAmount() {
+        return BigDecimal.ZERO;
     }
 
 }

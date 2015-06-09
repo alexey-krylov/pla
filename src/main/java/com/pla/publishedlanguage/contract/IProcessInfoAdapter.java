@@ -4,6 +4,8 @@ import com.pla.sharedkernel.exception.ProcessInfoException;
 import com.pla.sharedkernel.domain.model.ProcessType;
 import com.pla.sharedkernel.identifier.LineOfBusinessEnum;
 
+import java.math.BigDecimal;
+
 /**
  * Created by Samir on 5/31/2015.
  */
@@ -16,4 +18,6 @@ public interface IProcessInfoAdapter {
     public int getDaysForFirstReminder(LineOfBusinessEnum lineOfBusinessEnum, ProcessType processType) throws ProcessInfoException;
 
     public int getDaysForSecondReminder(LineOfBusinessEnum lineOfBusinessEnum, ProcessType processType) throws ProcessInfoException;
+
+    public BigDecimal getServiceTaxAmount();
 }
