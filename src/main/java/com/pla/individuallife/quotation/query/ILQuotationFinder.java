@@ -1,6 +1,7 @@
 package com.pla.individuallife.quotation.query;
 
 import com.google.common.base.Preconditions;
+import com.google.common.collect.Lists;
 import com.pla.individuallife.quotation.domain.model.IndividualLifeQuotation;
 import com.pla.individuallife.quotation.domain.model.RiderDetail;
 import com.pla.individuallife.quotation.presentation.dto.PlanDetailDto;
@@ -20,6 +21,7 @@ import javax.sql.DataSource;
 import java.lang.reflect.InvocationTargetException;
 import java.util.*;
 
+import static org.nthdimenzion.utils.UtilValidator.isEmpty;
 import static org.nthdimenzion.utils.UtilValidator.isNotEmpty;
 
 /**
@@ -138,8 +140,51 @@ public class ILQuotationFinder {
                 new BeanPropertyRowMapper<ILQuotationDto>(ILQuotationDto.class));
     }
 
-    //TODO Needs to be implemented
-    public List<Map> searchQuotation(String quotationNumber, String agentCode, String proposerName) {
-        return null;
-    }
+     public List<ILQuotationDto> searchQuotation(String quotationNumber, String proposerName, String proposerNrcNumber, String agentCode ) {
+         boolean isFirst = true;
+
+         if (isEmpty(quotationNumber) && isEmpty(proposerName) && isEmpty(proposerNrcNumber) && isEmpty(agentCode) ) {
+             return Lists.newArrayList();
+         }
+
+         StringBuilder query = new StringBuilder("select quotation_id,agent_id,generated_on,   il_quotation_status as quotation_status, `parent_quotation_id`, `plan_id` `sum_assured`,`quotation_creator`, `quotation_number`, `version_number` from " + IL_QUOTATION_TABLE);
+
+         if (isNotEmpty(quotationNumber)) {
+             if (isFirst) {
+                 query.append(" where quotation_number = '"+quotationNumber +"'");
+             } else {
+                 query.append(" and quotation_number = '"+quotationNumber +"'");
+             }
+             isFirst = false;
+         }
+
+         if (isNotEmpty(proposerName)) {
+             if (isFirst) {
+                 query.append(" where proposed_first_name = '"+ proposerName + "'");
+             } else {
+                 query.append(" and proposed_first_name = '"+ proposerName + "'");
+             }
+             isFirst = false;
+         }
+
+         if (isNotEmpty(proposerNrcNumber)) {
+             if (isFirst) {
+                 query.append(" where proposer_nrc_number = '"+ proposerNrcNumber + "'");
+             } else {
+                 query.append(" and proposer_nrc_number = '"+ proposerNrcNumber + "'");
+             }
+             isFirst = false;
+         }
+
+         if (isNotEmpty(agentCode)) {
+             if (isFirst) {
+                 query.append(" where agent_id = '" + agentCode + "'");
+             } else {
+                 query.append(" and agent_id = '" + agentCode + "'");
+             }
+             isFirst = false;
+         }
+
+         return namedParameterJdbcTemplate.query(query.toString(), new BeanPropertyRowMapper<ILQuotationDto>(ILQuotationDto.class));
+     }
 }

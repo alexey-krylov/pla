@@ -131,8 +131,9 @@ public class ILQuotationService {
         return allQuotations;
     }
 
-    public List<ILQuotationDto> searchQuotation(ILSearchQuotationDto searchGlQuotationDto) {
-        return getAllQuotation();
+    public List<ILQuotationDto> searchQuotation(ILSearchQuotationDto searchIlQuotationDto) {
+        List<ILQuotationDto> searchQuotations = ilQuotationFinder.searchQuotation(searchIlQuotationDto.getQuotationNumber(), searchIlQuotationDto.getProposerFirstName(), searchIlQuotationDto.getProposerNrcNumber(), searchIlQuotationDto.getAgentCode());
+        return searchQuotations;
     }
 
 

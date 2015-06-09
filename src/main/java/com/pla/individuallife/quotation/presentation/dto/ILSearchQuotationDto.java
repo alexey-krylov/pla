@@ -15,6 +15,7 @@ public class ILSearchQuotationDto {
     private String quotationNumber;
     private String proposerFirstName;
     private String proposerSurname;
+    private String proposerNrcNumber;
     private String agentName;
     private String agentCode;
     private ProposedAssuredDto proposedAssured;
