@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Created with Jaspersoft Studio version 6.0.4.final using JasperReports Library version 6.0.4  -->
-<!-- 2015-05-08T13:26:55 -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="cover" pageWidth="842" pageHeight="500" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="7eac5401-a67e-44d2-9810-556f68c0a117">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
 	<queryString>
 		<![CDATA[]]>
 	</queryString>
@@ -31,7 +32,7 @@
 					<rightPen lineWidth="0.6"/>
 				</box>
 				<staticText>
-					<reportElement mode="Opaque" x="271" y="2" width="279" height="34" forecolor="#FFFFFF" backcolor="#CC6633" uuid="aa717d92-a23a-43bf-9f64-baeaacbb1ff9"/>
+					<reportElement mode="Opaque" x="150" y="0" width="279" height="34" forecolor="#FFFFFF" backcolor="#CC6633" uuid="aa717d92-a23a-43bf-9f64-baeaacbb1ff9"/>
 					<box>
 						<topPen lineWidth="0.0"/>
 						<leftPen lineWidth="0.0"/>
@@ -149,7 +150,7 @@
 					<rightPen lineWidth="0.6" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textField isStretchWithOverflow="true">
-					<reportElement x="21" y="8" width="79" height="16" uuid="955db16d-f395-4fb7-b749-202ae2519557"/>
+					<reportElement x="0" y="8" width="116" height="16" uuid="955db16d-f395-4fb7-b749-202ae2519557"/>
 					<box>
 						<topPen lineWidth="0.0"/>
 						<leftPen lineWidth="0.0"/>

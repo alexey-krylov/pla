@@ -241,7 +241,7 @@
 					<rightPen lineWidth="0.6" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textField isStretchWithOverflow="true">
-					<reportElement x="19" y="11" width="91" height="13" uuid="eb5eb5d9-9f3e-4f73-ae7b-7a0429d0286d"/>
+					<reportElement x="0" y="11" width="121" height="13" uuid="eb5eb5d9-9f3e-4f73-ae7b-7a0429d0286d"/>
 					<textElement textAlignment="Center" verticalAlignment="Middle"/>
 					<textFieldExpression><![CDATA[$F{insuredName}]]></textFieldExpression>
 				</textField>
@@ -351,7 +351,7 @@
 					<rightPen lineWidth="0.6"/>
 				</box>
 				<textField isStretchWithOverflow="true">
-					<reportElement x="21" y="10" width="41" height="19" uuid="c795e38c-fd3c-42dd-839d-cd20ffce3a5d"/>
+					<reportElement x="0" y="10" width="90" height="19" uuid="c795e38c-fd3c-42dd-839d-cd20ffce3a5d"/>
 					<textElement textAlignment="Center" verticalAlignment="Middle"/>
 					<textFieldExpression><![CDATA[$F{annualIncome}]]></textFieldExpression>
 				</textField>
@@ -365,7 +365,7 @@
 					<rightPen lineWidth="0.6"/>
 				</box>
 				<textField isStretchWithOverflow="true">
-					<reportElement x="20" y="6" width="41" height="19" uuid="762fecae-afc3-45f2-812a-ff31d392142c"/>
+					<reportElement x="0" y="6" width="84" height="19" uuid="762fecae-afc3-45f2-812a-ff31d392142c"/>
 					<textElement textAlignment="Center" verticalAlignment="Middle"/>
 					<textFieldExpression><![CDATA[$F{basicPremium}]]></textFieldExpression>
 				</textField>
