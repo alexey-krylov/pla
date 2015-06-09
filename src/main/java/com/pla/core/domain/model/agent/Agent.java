@@ -6,6 +6,7 @@
 
 package com.pla.core.domain.model.agent;
 
+import com.pla.core.application.exception.AgentApplicationException;
 import com.pla.sharedkernel.domain.model.EmailAddress;
 import com.pla.sharedkernel.domain.model.OverrideCommissionApplicable;
 import com.pla.sharedkernel.identifier.PlanId;
@@ -73,9 +74,9 @@ public class Agent implements ICrudEntity {
         return new Agent(agentId, AgentStatus.ACTIVE);
     }
 
-    public Agent createWithAgentProfile(String firstName, String lastName, LocalDate trainingCompleteOn, String designationCode, String designationDescription) {
+    public Agent createWithAgentProfile(String firstName, String lastName, LocalDate trainingCompleteOn, String designationCode, String designationDescription, OverrideCommissionApplicable overrideCommissionApplicable) {
         Designation designation = new Designation(designationCode, designationDescription);
-        applyOverrideCommissionEligibility(designationCode, designationDescription);
+        applyOverrideCommissionEligibility(designationCode, designationDescription, overrideCommissionApplicable);
         this.agentProfile = new AgentProfile(firstName, lastName, trainingCompleteOn, designation);
         return this;
     }
@@ -156,9 +157,12 @@ public class Agent implements ICrudEntity {
         return this;
     }
 
-    public Agent applyOverrideCommissionEligibility(String designationCode, String designationDescription) {
+    public Agent applyOverrideCommissionEligibility(String designationCode, String designationDescription, OverrideCommissionApplicable overrideCommissionApplicable) {
         Designation designationOb = new Designation(designationCode, designationDescription);
-        this.overrideCommissionApplicable = designationOb.getOverrideCommissionApplicable();
+        if (OverrideCommissionApplicable.YES.equals(overrideCommissionApplicable) && OverrideCommissionApplicable.NO.equals(designationOb.getOverrideCommissionApplicable()) && (!designationCode.equals("BRANCH_BDE"))) {
+            throw new AgentApplicationException("Employee not a Branch BDE");
+        }
+        this.overrideCommissionApplicable = overrideCommissionApplicable;
         return this;
     }
 

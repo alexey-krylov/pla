@@ -27,7 +27,7 @@ import static org.nthdimenzion.utils.UtilValidator.isNotEmpty;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 class Designation {
 
-    private static final String BDE_CODE = "BDE";
+    private static final String BDE_CODE = "BRANCH_BDE";
 
     private String designationCode;
 

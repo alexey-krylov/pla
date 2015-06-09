@@ -16,6 +16,7 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import com.pla.core.domain.model.agent.AgentStatus;
 import com.pla.core.dto.*;
+import com.pla.sharedkernel.domain.model.OverrideCommissionApplicable;
 import com.pla.sharedkernel.identifier.PlanId;
 import org.axonframework.commandhandling.gateway.CommandGateway;
 import org.joda.time.LocalDate;
@@ -56,12 +57,14 @@ public class AgentAcceptanceTest {
 
     @Test
     @ExpectedDatabase(value = "classpath:testdata/endtoend/agent/expectedagentcreateddata.xml", assertionMode = DatabaseAssertionMode.NON_STRICT)
-    public void givenAgentDetailWithUniqueLicenseNumberItShouldCreateAgent() {
+    public void
+    givenAgentDetailWithUniqueLicenseNumberItShouldCreateAgent() {
         CreateAgentCommand createAgentCommand = new CreateAgentCommand();
         createAgentCommand.setAgentId("100011");
         createAgentCommand.setAuthorizePlansToSell(Sets.newHashSet(new PlanId("1000"), new PlanId("1001")));
         createAgentCommand.setUserDetails(userDetails);
         createAgentCommand.setAgentStatus(AgentStatus.ACTIVE);
+        createAgentCommand.setOverrideCommissionApplicable(OverrideCommissionApplicable.NO);
         DesignationDto designationDto = new DesignationDto("Employee", "Employee");
         LocalDate trainingCompletionDate = new LocalDate(2015, 3, 24);
         createAgentCommand.setAgentProfile(new AgentProfileDto("Mr", "Test", "Agent", 1111, "EMP002", trainingCompletionDate, designationDto));
@@ -84,6 +87,7 @@ public class AgentAcceptanceTest {
         updateAgentCommand.setAuthorizePlansToSell(Sets.newHashSet(new PlanId("1000"), new PlanId("1001")));
         updateAgentCommand.setUserDetails(userDetails);
         updateAgentCommand.setAgentStatus(AgentStatus.ACTIVE);
+        updateAgentCommand.setOverrideCommissionApplicable(OverrideCommissionApplicable.NO);
         DesignationDto designationDto = new DesignationDto("Employee", "Employee");
         LocalDate trainingCompletionDate = new LocalDate(2015, 3, 24);
         updateAgentCommand.setAgentProfile(new AgentProfileDto("Mr", "Test", "Agent", 1111, "EMP002", trainingCompletionDate, designationDto));

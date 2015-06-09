@@ -6,6 +6,7 @@
 
 package com.pla.core.domain.model.agent;
 
+import com.pla.sharedkernel.domain.model.OverrideCommissionApplicable;
 import org.joda.time.LocalDate;
 import org.junit.Before;
 import org.junit.Test;
@@ -23,7 +24,7 @@ public class AgentProfileUnitTest {
     @Before
     public void setUp() {
         Agent agent = Agent.createAgent(new AgentId("1"));
-        agentProfile = agent.createWithAgentProfile("First", "Agent", LocalDate.now(), "Programmer", "Programmer").getAgentProfile();
+        agentProfile = agent.createWithAgentProfile("First", "Agent", LocalDate.now(), "Programmer", "Programmer", OverrideCommissionApplicable.NO).getAgentProfile();
     }
 
 

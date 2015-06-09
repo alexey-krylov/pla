@@ -34,7 +34,7 @@ public class AgentUnitTest {
     @Test
     public void itShouldCreateAgentWithProfileDetailWhenTrainingCompletionDateIsPast() {
         LocalDate trainingCompletionDate = LocalDate.now();
-        agent = agent.createWithAgentProfile("First", "Agent", trainingCompletionDate, "Programmer", "Programmer");
+        agent = agent.createWithAgentProfile("First", "Agent", trainingCompletionDate, "Programmer", "Programmer", OverrideCommissionApplicable.NO);
         AgentProfile agentProfile = agent.getAgentProfile();
         assertEquals("First", agentProfile.getFirstName());
         assertEquals("Agent", agentProfile.getLastName());
@@ -46,13 +46,13 @@ public class AgentUnitTest {
     @Test(expected = IllegalStateException.class)
     public void itShouldNotCreateAgentWhenTrainingCompletionDateIsFuture() {
         LocalDate trainingCompletionDate = LocalDate.now().plusDays(1);
-        agent = agent.createWithAgentProfile("First", "Agent", trainingCompletionDate, "Programmer", "Programmer");
+        agent = agent.createWithAgentProfile("First", "Agent", trainingCompletionDate, "Programmer", "Programmer", OverrideCommissionApplicable.NO);
     }
 
     @Test
     public void agentShouldHaveProvisionToCollectOverrideCommissionIfDesignationIsBDE() {
         LocalDate trainingCompletionDate = LocalDate.now();
-        agent = agent.createWithAgentProfile("First", "Agent", trainingCompletionDate, "BDE", "BDE");
+        agent = agent.createWithAgentProfile("First", "Agent", trainingCompletionDate, "BRANCH_BDE", "BDE", OverrideCommissionApplicable.YES);
         assertEquals(OverrideCommissionApplicable.YES, agent.getOverrideCommissionApplicable());
     }
 
@@ -161,7 +161,7 @@ public class AgentUnitTest {
 
     @Test
     public void itShouldMakeAgentEligibleForOverrideCommissionIfAgentIsBDE() {
-        agent = agent.applyOverrideCommissionEligibility("BDE", "BDE");
+        agent = agent.applyOverrideCommissionEligibility("BRANCH_BDE", "BDE", OverrideCommissionApplicable.YES);
         assertEquals(OverrideCommissionApplicable.YES, agent.getOverrideCommissionApplicable());
     }
 

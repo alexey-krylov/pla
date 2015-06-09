@@ -13,6 +13,7 @@ import com.pla.core.domain.model.agent.LicenseNumber;
 import com.pla.core.dto.*;
 import com.pla.core.specification.AgentLicenseNumberIsUnique;
 import com.pla.core.specification.NrcNumberIsUnique;
+import com.pla.sharedkernel.domain.model.OverrideCommissionApplicable;
 import com.pla.sharedkernel.identifier.PlanId;
 import org.nthdimenzion.common.service.JpaRepositoryFactory;
 import org.nthdimenzion.ddd.domain.annotations.DomainService;
@@ -46,7 +47,8 @@ public class AgentService {
         this.nrcNumberIsUnique = nrcNumberIsUnique;
     }
 
-    public void createAgent(String agentId, AgentProfileDto agentProfileDto, LicenseNumberDto licenseNumberDto, TeamDetailDto teamDetailDto, ContactDetailDto contactDetailDto, PhysicalAddressDto physicalAddressDto, ChannelTypeDto channelTypeDto, Set<PlanId> authorizedPlans) {
+    public void createAgent(String agentId, AgentProfileDto agentProfileDto, LicenseNumberDto licenseNumberDto, TeamDetailDto teamDetailDto, ContactDetailDto contactDetailDto, PhysicalAddressDto physicalAddressDto, ChannelTypeDto channelTypeDto, Set<PlanId> authorizedPlans,
+                            OverrideCommissionApplicable overrideCommissionApplicable) {
         UtilValidator.isNotEmpty("");
         boolean isLicenseNumberUnique = UtilValidator.isNotEmpty(licenseNumberDto.getLicenseNumber()) ? agentLicenseNumberIsUnique.isSatisfiedBy(new LicenseNumber(licenseNumberDto.getLicenseNumber())) : true;
         AgentDto agentDto = new AgentDto(agentProfileDto.getNrcNumber(), agentId);
@@ -58,13 +60,14 @@ public class AgentService {
             raiseAgentNrcNumberUniqueException();
         }
         Agent agent = Agent.createAgent(new AgentId(agentId));
-        Agent agentDetail = populateAgentDetail(agent, agentProfileDto, licenseNumberDto, teamDetailDto, contactDetailDto, physicalAddressDto, channelTypeDto);
+        Agent agentDetail = populateAgentDetail(agent, agentProfileDto, licenseNumberDto, teamDetailDto, contactDetailDto, physicalAddressDto, channelTypeDto, overrideCommissionApplicable);
         Agent agentWithPlans = agentDetail.withPlans(authorizedPlans);
         JpaRepository<Agent, AgentId> agentRepository = jpaRepositoryFactory.getCrudRepository(Agent.class);
         agentRepository.save(agentWithPlans);
     }
 
-    public void updateAgent(String agentId, AgentProfileDto agentProfileDto, LicenseNumberDto licenseNumberDto, TeamDetailDto teamDetailDto, ContactDetailDto contactDetailDto, PhysicalAddressDto physicalAddressDto, ChannelTypeDto channelTypeDto, Set<PlanId> authorizedPlans, AgentStatus agentStatus) {
+    public void updateAgent(String agentId, AgentProfileDto agentProfileDto, LicenseNumberDto licenseNumberDto, TeamDetailDto teamDetailDto, ContactDetailDto contactDetailDto, PhysicalAddressDto physicalAddressDto, ChannelTypeDto channelTypeDto, Set<PlanId> authorizedPlans,
+                            AgentStatus agentStatus, OverrideCommissionApplicable overrideCommissionApplicable) {
         boolean isLicenseNumberUnique = true;
         JpaRepository<Agent, AgentId> agentRepository = jpaRepositoryFactory.getCrudRepository(Agent.class);
         Agent agent = agentRepository.getOne(new AgentId(agentId));
@@ -77,15 +80,16 @@ public class AgentService {
         if (!isNrcNumberIsUnique) {
             raiseAgentNrcNumberUniqueException();
         }
-        Agent updatedAgent = populateAgentDetail(agent, agentProfileDto, licenseNumberDto, teamDetailDto, contactDetailDto, physicalAddressDto, channelTypeDto);
+        Agent updatedAgent = populateAgentDetail(agent, agentProfileDto, licenseNumberDto, teamDetailDto, contactDetailDto, physicalAddressDto, channelTypeDto, overrideCommissionApplicable);
         Agent agentWithPlans = updatedAgent.withPlans(authorizedPlans);
         agentWithPlans = agentWithPlans.updateStatus(agentStatus);
         agentRepository.save(agentWithPlans);
     }
 
 
-    private Agent populateAgentDetail(Agent agent, AgentProfileDto agentProfileDto, LicenseNumberDto licenseNumberDto, TeamDetailDto teamDetailDto, ContactDetailDto contactDetailDto, PhysicalAddressDto physicalAddressDto, ChannelTypeDto channelTypeDto) {
-        Agent agentWithProfile = agent.createWithAgentProfile(agentProfileDto.getFirstName(), agentProfileDto.getLastName(), agentProfileDto.getTrainingCompleteOn(), agentProfileDto.getDesignationDto().getCode(), agentProfileDto.getDesignationDto().getDescription());
+    private Agent populateAgentDetail(Agent agent, AgentProfileDto agentProfileDto, LicenseNumberDto licenseNumberDto, TeamDetailDto teamDetailDto, ContactDetailDto contactDetailDto, PhysicalAddressDto physicalAddressDto, ChannelTypeDto channelTypeDto, OverrideCommissionApplicable overrideCommissionApplicable
+    ) {
+        Agent agentWithProfile = agent.createWithAgentProfile(agentProfileDto.getFirstName(), agentProfileDto.getLastName(), agentProfileDto.getTrainingCompleteOn(), agentProfileDto.getDesignationDto().getCode(), agentProfileDto.getDesignationDto().getDescription(), overrideCommissionApplicable);
         Agent updatedAgentWithProfile = agentWithProfile.updateAgentProfileWithEmployeeId(agentProfileDto.getEmployeeId());
         updatedAgentWithProfile = updatedAgentWithProfile.updateAgentProfileWithNrcNumber(agentProfileDto.getNrcNumber());
         updatedAgentWithProfile = updatedAgentWithProfile.updateAgentProfileWithTitle(agentProfileDto.getTitle());
