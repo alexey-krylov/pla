@@ -97,7 +97,8 @@ public class UnderWriterSetUpController {
     @RequestMapping(value = "/redirecttoupdatePage", method = RequestMethod.GET)
       public ModelAndView redirectToUpdatePage() {
         ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("pla/core/underwriter/updateDocumentSetup");
+        modelAndView.addObject("CreateUnderWriterDocumentCommand", new CreateUnderWriterDocumentCommand());
+        modelAndView.setViewName("pla/core/underwriter/documentSetup/updateDocumentSetup");
         return modelAndView;
     }
 
@@ -274,5 +275,11 @@ public class UnderWriterSetUpController {
     @ResponseBody
     public List<Map<String, Object>> getAllDocumentApprovedByServiceProvider() {
         return underWriterFinder.getAllDocumentApprovedByServiceProvider();
+    }
+
+    @RequestMapping(value = "/getdoumentbyid/{documentId}",method = RequestMethod.GET)
+    @ResponseBody
+    public Map<String, Object> getUnderWriterDocumentById(@PathVariable("documentId") String documentId){
+        return underWriterFinder.getUnderWriterDocumentById(documentId);
     }
 }

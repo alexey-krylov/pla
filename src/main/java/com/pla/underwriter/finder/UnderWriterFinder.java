@@ -4,11 +4,16 @@ import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.joda.JodaModule;
+import com.google.common.collect.Lists;
 import com.pla.publishedlanguage.dto.UnderWriterRoutingLevelDetailDto;
+import com.pla.sharedkernel.identifier.CoverageId;
+import com.pla.sharedkernel.identifier.UnderWriterDocumentId;
 import com.pla.underwriter.domain.model.UnderWriterDocument;
 import com.pla.underwriter.domain.model.UnderWriterRoutingLevel;
 import com.pla.underwriter.repository.UnderWriterDocumentRepository;
 import com.pla.underwriter.repository.UnderWriterRoutingLevelRepository;
+import org.joda.time.LocalDate;
+import org.nthdimenzion.common.AppConstants;
 import org.nthdimenzion.utils.UtilValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.ColumnMapRowMapper;
@@ -18,9 +23,9 @@ import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.stereotype.Service;
 
 import javax.sql.DataSource;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 import static com.google.common.base.Preconditions.checkArgument;
 import static org.nthdimenzion.utils.UtilValidator.isNotEmpty;
@@ -61,6 +66,8 @@ public class UnderWriterFinder {
     }
 
     public static final String FIND_ALL_DOCUMENT_APPROVED_BY_SERVICE_PROVIDER =  "SELECT documentName,documentCode FROM document_view WHERE isProvided = 'YES'";
+
+    public static final String FIND_DOCUMENT_DETAIL_BY_DOCUMENT_CODE =  "SELECT documentName,documentCode FROM document_view WHERE documentCode in(:documentIds)";
 
     public static final String FIND_PLAN_COVERAGE_DETAIL_BY_PLAN_CODE = " SELECT DISTINCT planName,c.coverage_name coverageName FROM  plan_coverage_benefit_assoc_view p INNER JOIN coverage c " +
             "   ON coverageId = c.coverage_id " +
@@ -104,6 +111,34 @@ public class UnderWriterFinder {
         return namedParameterJdbcTemplate.query(FIND_ALL_DOCUMENT_APPROVED_BY_SERVICE_PROVIDER, new ColumnMapRowMapper());
     }
 
+    public UnderWriterDocument getUnderWriterDocumentSetUp(String planCode,CoverageId coverageId,LocalDate effectiveFrom,String processType){
+        List<UnderWriterDocument> underWriterDocument =  underWriterDocumentRepository.findUnderWriterDocument(planCode, coverageId, effectiveFrom, null, processType);
+        checkArgument(isNotEmpty(underWriterDocument), "Under Writer Document can not be null");
+        checkArgument(underWriterDocument.size() == 1);
+        return underWriterDocument.get(0);
+    }
+
+    public Map<String,Object> getUnderWriterDocumentById(String underWriterRoutingLevelId){
+        UnderWriterDocument underWriterDocument = underWriterDocumentRepository.findOne(new UnderWriterDocumentId(underWriterRoutingLevelId));
+        Map<String,Object> underWriterDocumentMap = objectMapper.convertValue(underWriterDocument, Map.class);
+        List<Map<String,Object>> underWriterLineItemList = underWriterDocument.transformUnderWriterDocumentLineItem();
+        underWriterLineItemList = underWriterLineItemList.stream().map(new Function<Map<String,Object>, Map<String,Object>>() {
+            @Override
+            public Map<String, Object> apply(Map<String, Object> underWriterDocumentLineItem) {
+                Set<String> documentIds = (Set<String>) underWriterDocumentLineItem.get("underWriterDocuments");
+                underWriterDocumentLineItem.put("underWriterDocuments", getDocumentDetailByDocumentCode(Lists.newArrayList(documentIds)));
+                return underWriterDocumentLineItem;
+            }
+        }).collect(Collectors.toList());
+        underWriterDocumentMap = planCoverageDetailTransformer(underWriterDocument.getCoverageId().getCoverageId(),underWriterDocument.getPlanCode(),underWriterDocumentMap);
+        underWriterDocumentMap.put("underWriterDocumentItems", underWriterLineItemList);
+        return underWriterDocumentMap;
+    }
+
+    private List<Map<String,Object>> getDocumentDetailByDocumentCode(List<String> listOfDocumentCode){
+        return namedParameterJdbcTemplate.query(FIND_DOCUMENT_DETAIL_BY_DOCUMENT_CODE,new MapSqlParameterSource("documentIds", listOfDocumentCode),new ColumnMapRowMapper());
+    }
+
     private Map<String,Object> planCoverageDetailTransformer(String coverageId,String planCode,Map<String,Object> underWriterMap){
         if (UtilValidator.isNotEmpty(coverageId)) {
             SqlParameterSource sqlParameterSource = new MapSqlParameterSource("code", planCode).addValue("id", coverageId);
@@ -117,8 +152,9 @@ public class UnderWriterFinder {
             underWriterMap.put("planName",planName);
             underWriterMap.put("coverageName", "");
         }
+        underWriterMap.put("effectiveFrom", underWriterMap.get("effectiveFrom")!=null?LocalDate.parse(underWriterMap.get("effectiveFrom").toString()).toString(AppConstants.DD_MM_YYY_FORMAT):null);
+        underWriterMap.put("validTill", underWriterMap.get("validTill")!=null?LocalDate.parse(underWriterMap.get("validTill").toString()).toString(AppConstants.DD_MM_YYY_FORMAT):null);
         return underWriterMap;
     }
-
 }
 

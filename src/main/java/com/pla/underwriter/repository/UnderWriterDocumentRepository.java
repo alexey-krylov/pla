@@ -24,4 +24,7 @@ public interface UnderWriterDocumentRepository extends MongoRepository<UnderWrit
     @Query(value = "{'validTill':?0}")
     public List<UnderWriterDocument> findEffectiveUnderWriterDocument(LocalDate validTill);
 
+    @Query(value = "{'planCode' : ?0,'coverageId' : ?1, 'effectiveFrom' :?2, 'validTill' :?3, 'processType' :?4 }")
+    public List<UnderWriterDocument> findUnderWriterDocument(String planCode,CoverageId coverageId,LocalDate effectiveFrom,LocalDate validTill,String processType);
+
 }

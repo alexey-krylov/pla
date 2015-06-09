@@ -1,5 +1,7 @@
 package com.pla.underwriter.domain.model;
 
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import com.pla.sharedkernel.identifier.CoverageId;
 import com.pla.sharedkernel.identifier.UnderWriterDocumentId;
 import lombok.*;
@@ -37,7 +39,8 @@ public class UnderWriterDocument {
 
     private UnderWriterProcessType processType;
 
-    private  Set<UnderWriterDocumentItem> underWriterDocumentItems;
+    @Getter
+    private Set<UnderWriterDocumentItem> underWriterDocumentItems;
 
     private List<UnderWriterInfluencingFactor> underWriterInfluencingFactors;
 
@@ -89,12 +92,42 @@ public class UnderWriterDocument {
         return listOfUnderWriterRoutingLevelData;
     }
 
+    public boolean hasAllInfluencingFactor(List<String> underWriterInfluencingFactor) {
+        return underWriterInfluencingFactor.containsAll(this.underWriterInfluencingFactors);
+    }
+
     public static class TransformUnderWriterRoutingLevel implements Function<Map<Object, Map<String, Object>>, UnderWriterDocumentItem> {
         @Override
         public UnderWriterDocumentItem apply(Map<Object, Map<String, Object>> underWriterRoutingLevelMap) {
             UnderWriterDocumentItem underWritingRoutingLevelItem = UnderWriterDocumentItem.create(underWriterRoutingLevelMap);
             return underWritingRoutingLevelItem;
         }
+    }
+
+    public List<Map<String,Object>> transformUnderWriterDocumentLineItem(){
+        return this.underWriterDocumentItems.stream().map(new Function<UnderWriterDocumentItem, Map<String, Object>>() {
+            @Override
+            public Map<String, Object> apply(UnderWriterDocumentItem underWriterDocumentItem) {
+                Map<String, Object> underWriterItemMap = Maps.newLinkedHashMap();
+                List<Map<String, Object>> documentLineItemList = Lists.newArrayList();
+                underWriterDocumentItem.getUnderWriterLineItems().stream().map(new Function<UnderWriterLineItem, Map<String, Object>>() {
+                    @Override
+                    public Map<String, Object> apply(UnderWriterLineItem underWriterLineItem) {
+                        Map<String, Object> underWriterLineItems = underWriterLineItem.getUnderWriterInfluencingFactor().transformUnderWriterDocumentLineItem(underWriterLineItem.getInfluencingItemFrom(), underWriterLineItem.getInfluencingItemTo());
+                        for (Map.Entry<String, Object> underWriterLineItemMap : underWriterLineItems.entrySet()) {
+                            Map<String, Object> underWriterItemMap = Maps.newLinkedHashMap();
+                            underWriterItemMap.put("underWriterInfluencingFactor", underWriterLineItemMap.getKey());
+                            underWriterItemMap.put("influencingItem", underWriterLineItemMap.getValue());
+                            documentLineItemList.add(underWriterItemMap);
+                        }
+                        return underWriterItemMap;
+                    }
+                }).collect(Collectors.toList());
+                underWriterItemMap.put("underWriterDocumentLineItem", documentLineItemList);
+                underWriterItemMap.put("underWriterDocuments", underWriterDocumentItem.getDocumentIds());
+                return underWriterItemMap;
+            }
+        }).collect(Collectors.toList());
     }
 
 }

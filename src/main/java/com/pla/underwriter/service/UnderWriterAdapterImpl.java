@@ -3,9 +3,7 @@ package com.pla.underwriter.service;
 import com.google.common.collect.Lists;
 import com.pla.publishedlanguage.dto.UnderWriterRoutingLevelDetailDto;
 import com.pla.publishedlanguage.underwriter.contract.IUnderWriterAdapter;
-import com.pla.underwriter.domain.model.UnderWriterLineItem;
-import com.pla.underwriter.domain.model.UnderWriterRoutingLevel;
-import com.pla.underwriter.domain.model.UnderWritingRoutingLevelItem;
+import com.pla.underwriter.domain.model.*;
 import com.pla.underwriter.finder.UnderWriterFinder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -45,6 +43,11 @@ public class UnderWriterAdapterImpl implements IUnderWriterAdapter {
     }
 
     @Override
+    public List<String> getUnderWriterDocument(UnderWriterRoutingLevelDetailDto underWriterRoutingLevelDetailDto) {
+        return getDefinedUnderWriterDocument(underWriterRoutingLevelDetailDto);
+    }
+
+    @Override
     public List<Map<String, Object>> getDocumentsForApproverApproval() {
         return null;
     }
@@ -60,8 +63,32 @@ public class UnderWriterAdapterImpl implements IUnderWriterAdapter {
         return underWritingRoutingLevelItem.getRoutingLevel().name();
     }
 
+    private List<String> getDefinedUnderWriterDocument(UnderWriterRoutingLevelDetailDto underWriterRoutingLevelDetailDto){
+        UnderWriterDocument underWriterDocument =  underWriterFinder.getUnderWriterDocumentSetUp(underWriterRoutingLevelDetailDto.getPlanCode(), underWriterRoutingLevelDetailDto.getCoverageId(), underWriterRoutingLevelDetailDto.getEffectiveFrom(), underWriterRoutingLevelDetailDto.getProcess());
+        boolean hasAllInfluencingFactor = underWriterDocument.hasAllInfluencingFactor(transformUnderWriterInfluencingFactor(underWriterRoutingLevelDetailDto.getUnderWriterInfluencingFactor()));
+        if (!hasAllInfluencingFactor) {
+            raiseInfluencingFactorMismatchException();
+        }
+        Set<UnderWriterDocumentItem> underWriterDocumentItems = underWriterDocument.getUnderWriterDocumentItems();
+        UnderWriterDocumentItem underWriterDocumentItem = findUnderWriterDocumentLineItem(underWriterDocumentItems, underWriterRoutingLevelDetailDto.getUnderWriterInfluencingFactor());
+        return Lists.newArrayList(underWriterDocumentItem.getDocumentIds());
+    }
+
+
     public UnderWritingRoutingLevelItem findUnderWriterRoutingLevelItem(Set<UnderWritingRoutingLevelItem> underWriterItems, List<UnderWriterRoutingLevelDetailDto.UnderWriterInfluencingFactorItem> underWriterInfluencingFactorDetailDtos) {
-        List<UnderWritingRoutingLevelItem> underWriterItemList = underWriterItems.stream().filter(new FilterUnderWriterItemPredicate(underWriterInfluencingFactorDetailDtos)).collect(Collectors.toList());
+        List<UnderWritingRoutingLevelItem> underWriterItemList = underWriterItems.stream().filter(new Predicate<UnderWritingRoutingLevelItem>() {
+            @Override
+            public boolean test(UnderWritingRoutingLevelItem underWritingRoutingLevelItem) {
+                int noOfMatch = 0;
+                for (UnderWriterLineItem underWriterLineItem : underWritingRoutingLevelItem.getUnderWriterLineItems()) {
+                    if (isMatchesInfluencingFactorAndValue(underWriterLineItem, underWriterInfluencingFactorDetailDtos)) {
+                        noOfMatch = noOfMatch + 1;
+                        continue;
+                    }
+                }
+                return underWriterInfluencingFactorDetailDtos.size() == noOfMatch;
+            }
+        }).collect(Collectors.toList());
         if (isEmpty(underWriterItemList)) {
             raiseUnderWriterNotFoundException();
         }
@@ -69,25 +96,25 @@ public class UnderWriterAdapterImpl implements IUnderWriterAdapter {
         return underWriterItemList.get(0);
     }
 
-    private class FilterUnderWriterItemPredicate implements Predicate<UnderWritingRoutingLevelItem> {
-
-        private List<UnderWriterRoutingLevelDetailDto.UnderWriterInfluencingFactorItem> underWriterInfluencingFactorDetailDtos;
-
-        FilterUnderWriterItemPredicate(List<UnderWriterRoutingLevelDetailDto.UnderWriterInfluencingFactorItem> underWriterInfluencingFactorDetailDtos) {
-            this.underWriterInfluencingFactorDetailDtos = underWriterInfluencingFactorDetailDtos;
-        }
-
-        @Override
-        public boolean test(UnderWritingRoutingLevelItem underWritingRoutingLevelItem) {
-            int noOfMatch = 0;
-            for (UnderWriterLineItem underWriterLineItem : underWritingRoutingLevelItem.getUnderWriterLineItems()) {
-                if (isMatchesInfluencingFactorAndValue(underWriterLineItem, underWriterInfluencingFactorDetailDtos)) {
-                    noOfMatch = noOfMatch + 1;
-                    continue;
+    private UnderWriterDocumentItem findUnderWriterDocumentLineItem(Set<UnderWriterDocumentItem> underWriterDocumentItems, List<UnderWriterRoutingLevelDetailDto.UnderWriterInfluencingFactorItem> underWriterInfluencingFactor) {
+        List<UnderWriterDocumentItem> underWriterItemList = underWriterDocumentItems.stream().filter(new Predicate<UnderWriterDocumentItem>() {
+            @Override
+            public boolean test(UnderWriterDocumentItem underWriterDocumentItem) {
+                int noOfMatch = 0;
+                for (UnderWriterLineItem underWriterLineItem : underWriterDocumentItem.getUnderWriterLineItems()) {
+                    if (isMatchesInfluencingFactorAndValue(underWriterLineItem, underWriterInfluencingFactor)) {
+                        noOfMatch = noOfMatch + 1;
+                        continue;
+                    }
                 }
+                return underWriterInfluencingFactor.size() == noOfMatch;
             }
-            return underWriterInfluencingFactorDetailDtos.size() == noOfMatch;
+        }).collect(Collectors.toList());
+        if (isEmpty(underWriterItemList)) {
+            raiseUnderWriterNotFoundException();
         }
+        checkArgument(underWriterItemList.size() == 1);
+        return underWriterItemList.get(0);
     }
 
     private boolean isMatchesInfluencingFactorAndValue(UnderWriterLineItem underWriterLineItem, List<UnderWriterRoutingLevelDetailDto.UnderWriterInfluencingFactorItem> underWriterInfluencingFactorDetailDtos) {
@@ -99,12 +126,11 @@ public class UnderWriterAdapterImpl implements IUnderWriterAdapter {
         return false;
     }
 
-      List<String> transformUnderWriterInfluencingFactor(List<UnderWriterRoutingLevelDetailDto.UnderWriterInfluencingFactorItem> underWriterInfluencingFactorDetailDtos) {
+    List<String> transformUnderWriterInfluencingFactor(List<UnderWriterRoutingLevelDetailDto.UnderWriterInfluencingFactorItem> underWriterInfluencingFactorDetailDtos) {
         List<String> underWriterInfluencingFactors = Lists.newArrayList();
         underWriterInfluencingFactorDetailDtos.forEach(influencingFactor -> {
             underWriterInfluencingFactors.add(influencingFactor.getUnderWriterInfluencingFactor());
         });
         return underWriterInfluencingFactors;
     }
-
 }

@@ -14,5 +14,9 @@ public interface IUnderWriterAdapter {
 
     public List<Map<String,Object>> getDocumentsForUnderWriterApproval(UnderWriterRoutingLevelDetailDto underWriterRoutingLevelDetailDto);
 
+    public List<String> getUnderWriterDocument(UnderWriterRoutingLevelDetailDto underWriterRoutingLevelDetailDto);
+
     public List<Map<String,Object>> getDocumentsForApproverApproval();
+
+
 }
