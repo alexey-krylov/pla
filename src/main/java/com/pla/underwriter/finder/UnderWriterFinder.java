@@ -4,7 +4,6 @@ import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.joda.JodaModule;
-import com.google.common.collect.Lists;
 import com.pla.publishedlanguage.dto.UnderWriterRoutingLevelDetailDto;
 import com.pla.sharedkernel.identifier.CoverageId;
 import com.pla.sharedkernel.identifier.UnderWriterDocumentId;
@@ -23,9 +22,9 @@ import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.stereotype.Service;
 
 import javax.sql.DataSource;
-import java.util.*;
-import java.util.function.Function;
-import java.util.stream.Collectors;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 import static com.google.common.base.Preconditions.checkArgument;
 import static org.nthdimenzion.utils.UtilValidator.isNotEmpty;
@@ -66,8 +65,6 @@ public class UnderWriterFinder {
     }
 
     public static final String FIND_ALL_DOCUMENT_APPROVED_BY_SERVICE_PROVIDER =  "SELECT documentName,documentCode FROM document_view WHERE isProvided = 'YES'";
-
-    public static final String FIND_DOCUMENT_DETAIL_BY_DOCUMENT_CODE =  "SELECT documentName,documentCode FROM document_view WHERE documentCode in(:documentIds)";
 
     public static final String FIND_PLAN_COVERAGE_DETAIL_BY_PLAN_CODE = " SELECT DISTINCT planName,c.coverage_name coverageName FROM  plan_coverage_benefit_assoc_view p INNER JOIN coverage c " +
             "   ON coverageId = c.coverage_id " +
@@ -122,21 +119,10 @@ public class UnderWriterFinder {
         UnderWriterDocument underWriterDocument = underWriterDocumentRepository.findOne(new UnderWriterDocumentId(underWriterRoutingLevelId));
         Map<String,Object> underWriterDocumentMap = objectMapper.convertValue(underWriterDocument, Map.class);
         List<Map<String,Object>> underWriterLineItemList = underWriterDocument.transformUnderWriterDocumentLineItem();
-        underWriterLineItemList = underWriterLineItemList.stream().map(new Function<Map<String,Object>, Map<String,Object>>() {
-            @Override
-            public Map<String, Object> apply(Map<String, Object> underWriterDocumentLineItem) {
-                Set<String> documentIds = (Set<String>) underWriterDocumentLineItem.get("underWriterDocuments");
-                underWriterDocumentLineItem.put("underWriterDocuments", getDocumentDetailByDocumentCode(Lists.newArrayList(documentIds)));
-                return underWriterDocumentLineItem;
-            }
-        }).collect(Collectors.toList());
-        underWriterDocumentMap = planCoverageDetailTransformer(underWriterDocument.getCoverageId().getCoverageId(),underWriterDocument.getPlanCode(),underWriterDocumentMap);
+        String coverageId = underWriterDocument.getCoverageId()!=null?underWriterDocument.getCoverageId().getCoverageId():null;
+        underWriterDocumentMap = planCoverageDetailTransformer(coverageId,underWriterDocument.getPlanCode(),underWriterDocumentMap);
         underWriterDocumentMap.put("underWriterDocumentItems", underWriterLineItemList);
         return underWriterDocumentMap;
-    }
-
-    private List<Map<String,Object>> getDocumentDetailByDocumentCode(List<String> listOfDocumentCode){
-        return namedParameterJdbcTemplate.query(FIND_DOCUMENT_DETAIL_BY_DOCUMENT_CODE,new MapSqlParameterSource("documentIds", listOfDocumentCode),new ColumnMapRowMapper());
     }
 
     private Map<String,Object> planCoverageDetailTransformer(String coverageId,String planCode,Map<String,Object> underWriterMap){
