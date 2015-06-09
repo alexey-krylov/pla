@@ -181,7 +181,9 @@ public class GLInsuredExcelParser {
     private String validateOptionalCoverageCell(List<String> headers, Row row) {
         Cell planCell = row.getCell(headers.indexOf(GLInsuredExcelHeader.PLAN.getDescription()));
         String planCode = getCellValue(planCell);
-        planCode = planCode.substring(0,planCode.indexOf("."));
+        if (planCode.indexOf(".") != -1) {
+            planCode = planCode.substring(0, planCode.indexOf("."));
+        }
         Set<String> errorMessages = Sets.newHashSet();
         List<Cell> optionalCoverageCells = findNonEmptyOptionalCoverageCell(headers, row);
         final String finalPlanCode = planCode;
