@@ -287,14 +287,14 @@ public class GroupHealthQuotationController {
 
     @RequestMapping(value = "/getpremiumdetail/{quotationid}", method = RequestMethod.GET)
     @ResponseBody
-    public PremiumDetailDto getPremiumDetail(@PathVariable("quotationid") String quotationId) {
+    public GHPremiumDetailDto getPremiumDetail(@PathVariable("quotationid") String quotationId) {
         return ghQuotationService.getPremiumDetail(new QuotationId(quotationId));
     }
 
     @RequestMapping(value = "/recalculatePremium", method = RequestMethod.POST)
     @ResponseBody
-    public Result reCalculatePremium(@RequestBody GLRecalculatedInsuredPremiumCommand glRecalculatedInsuredPremiumCommand, HttpServletRequest request) {
-        PremiumDetailDto premiumDetailDto = null;
+    public Result reCalculatePremium(@RequestBody GHRecalculatedInsuredPremiumCommand glRecalculatedInsuredPremiumCommand, HttpServletRequest request) {
+        GHPremiumDetailDto premiumDetailDto = null;
         try {
             glRecalculatedInsuredPremiumCommand.setUserDetails(getLoggedInUserDetail(request));
             premiumDetailDto = ghQuotationService.recalculatePremium(glRecalculatedInsuredPremiumCommand);
@@ -306,7 +306,7 @@ public class GroupHealthQuotationController {
 
     @RequestMapping(value = "/savepremiumdetail", method = RequestMethod.POST)
     @ResponseBody
-    public Result savePremiumDetail(@RequestBody UpdateGLQuotationWithPremiumDetailCommand updateGLQuotationWithPremiumDetailCommand, HttpServletRequest request) {
+    public Result savePremiumDetail(@RequestBody UpdateGHQuotationWithPremiumDetailCommand updateGLQuotationWithPremiumDetailCommand, HttpServletRequest request) {
         try {
             updateGLQuotationWithPremiumDetailCommand.setUserDetails(getLoggedInUserDetail(request));
             commandGateway.sendAndWait(updateGLQuotationWithPremiumDetailCommand);

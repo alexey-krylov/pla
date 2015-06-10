@@ -45,6 +45,8 @@ public class BenefitFinder {
 
     public static final String FIND_BENEFIT_FOR_A_GIVEN_BENEFIT_ID_Query = "SELECT benefit_id AS benefitId,benefit_name AS benefitName,STATUS AS benefitStatus,IFNULL(benefit_code,'') benefitCode FROM benefit where benefit_id=:benefitId";
 
+    public static final String FIND_BENEFIT_FOR_A_GIVEN_BENEFIT_CODE_QUERY = "SELECT benefit_id AS benefitId,benefit_name AS benefitName,STATUS AS benefitStatus,IFNULL(benefit_code,'') benefitCode FROM benefit where benefit_code=:benefitCode";
+
     public static final String FIND_ALL_BENEFIT_Query = "SELECT benefit_id AS benefitId,IFNULL(benefit_code,'') benefitCode,benefit_name AS benefitName,STATUS AS benefitStatus FROM benefit";
 
     public static final String BENEFIT_COUNT_ASSOCIATED_WITH_ACTIVE_COVERAGE_Query = "SELECT COUNT(CB.benefit_id) FROM `coverage_benefit` CB,`coverage` C WHERE CB.coverage_id=C.coverage_id AND C.status IN('ACTIVE','INUSE') AND CB.benefit_id=:benefitId";
@@ -70,6 +72,11 @@ public class BenefitFinder {
 
     public Map<String, Object> findBenefitById(String benefitId) {
         return namedParameterJdbcTemplate.queryForMap(FIND_BENEFIT_FOR_A_GIVEN_BENEFIT_ID_Query, new MapSqlParameterSource().addValue("benefitId", benefitId));
+    }
+
+
+    public Map<String, Object> findBenefitByCode(String benefitCode) {
+        return namedParameterJdbcTemplate.queryForMap(FIND_BENEFIT_FOR_A_GIVEN_BENEFIT_CODE_QUERY, new MapSqlParameterSource().addValue("benefitCode", benefitCode));
     }
 
     public List<Map<String, Object>> getAllBenefit() {

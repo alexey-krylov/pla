@@ -1,20 +1,17 @@
-package com.pla.grouphealth.quotation.domain.event;
+package com.pla.grouphealth.quotation.application.command;
 
 import com.pla.sharedkernel.identifier.QuotationId;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.ToString;
 
 /**
- * Created by Samir on 4/8/2015.
+ * Created by Samir on 5/31/2015.
  */
 @Getter
-@ToString
 @NoArgsConstructor
 @AllArgsConstructor
-public class GLQuotationGeneratedEvent {
+public class GHClosureGLQuotationCommand {
 
     private QuotationId quotationId;
-
 }

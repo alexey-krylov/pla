@@ -1,7 +1,7 @@
 package com.pla.grouphealth.quotation.domain.model;
 
 import com.pla.core.domain.model.agent.AgentId;
-import com.pla.grouphealth.quotation.domain.event.GLQuotationClosedEvent;
+import com.pla.grouphealth.quotation.domain.event.GHQuotationClosedEvent;
 import com.pla.grouphealth.quotation.domain.event.ProposerAddedEvent;
 import com.pla.grouphealth.quotation.domain.exception.GHQuotationException;
 import com.pla.sharedkernel.identifier.QuotationId;
@@ -109,8 +109,8 @@ public class GroupHealthQuotationTest {
     @Test
     public void whenGlQuotationIsCloseItShouldRegisterQuotationClosedEvent() {
         this.groupHealthQuotation.closeQuotation();
-        GLQuotationClosedEvent GLQuotationClosedEvent = (GLQuotationClosedEvent) this.groupHealthQuotation.getUncommittedEvents().peek().getPayload();
-        assertThat(new GLQuotationClosedEvent(this.groupHealthQuotation.getQuotationId()), is(GLQuotationClosedEvent));
+        GHQuotationClosedEvent ghQuotationClosedEvent = (GHQuotationClosedEvent) this.groupHealthQuotation.getUncommittedEvents().peek().getPayload();
+        assertThat(new GHQuotationClosedEvent(this.groupHealthQuotation.getQuotationId()), is(ghQuotationClosedEvent));
     }
 
     @Test

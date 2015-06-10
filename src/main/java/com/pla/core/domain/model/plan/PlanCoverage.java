@@ -3,16 +3,15 @@ package com.pla.core.domain.model.plan;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import com.pla.sharedkernel.domain.model.*;
+import com.pla.sharedkernel.identifier.BenefitId;
 import com.pla.sharedkernel.identifier.CoverageId;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.ToString;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
+import java.util.function.Predicate;
 
 import static com.google.common.base.Preconditions.checkArgument;
 
@@ -93,6 +92,11 @@ public class PlanCoverage {
     }
 
 
+    public boolean isValidSumAssured(BigDecimal sumAssured) {
+        List<BigDecimal> sumAssureds = getAllowedCoverageSumAssuredValues();
+        return sumAssureds.contains(sumAssured);
+    }
+
     public List<BigDecimal> getAllowedCoverageSumAssuredValues() {
         List<BigDecimal> allowedValues = Lists.newArrayList();
         if (SumAssuredType.SPECIFIED_VALUES.equals(this.coverageSumAssured.getSumAssuredType())) {
@@ -132,4 +136,26 @@ public class PlanCoverage {
         return allowedAges;
     }
 
+    private PlanCoverageBenefit findBenefit(BenefitId benefitId) {
+        Optional<PlanCoverageBenefit> planCoverageBenefitOptional = this.planCoverageBenefits.stream().filter(new Predicate<PlanCoverageBenefit>() {
+            @Override
+            public boolean test(PlanCoverageBenefit planCoverageBenefit) {
+                return benefitId.equals(planCoverageBenefit.getBenefitId());
+            }
+        }).findAny();
+        return planCoverageBenefitOptional.isPresent() ? planCoverageBenefitOptional.get() : null;
+    }
+
+    public boolean isValidBenefit(BenefitId benefitId){
+        PlanCoverageBenefit planCoverageBenefit = findBenefit(benefitId);
+        return planCoverageBenefit!=null;
+    }
+
+    public boolean isValidBenefitLimit(BenefitId benefitId, BigDecimal sumAssured) {
+        PlanCoverageBenefit planCoverageBenefit = findBenefit(benefitId);
+        if (planCoverageBenefit == null) {
+            return false;
+        }
+        return planCoverageBenefit.isValidBenefitLimit(sumAssured);
+    }
 }

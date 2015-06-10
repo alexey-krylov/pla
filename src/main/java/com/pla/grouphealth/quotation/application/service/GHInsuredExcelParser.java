@@ -6,9 +6,11 @@ import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import com.pla.grouphealth.quotation.query.GHInsuredDto;
 import com.pla.publishedlanguage.contract.IPlanAdapter;
+import com.pla.publishedlanguage.dto.PlanCoverageDetailDto;
 import com.pla.sharedkernel.domain.model.Relationship;
 import com.pla.sharedkernel.identifier.PlanId;
 import com.pla.sharedkernel.util.ExcelGeneratorUtil;
+import lombok.Getter;
 import org.apache.poi.hssf.usermodel.HSSFCellStyle;
 import org.apache.poi.hssf.usermodel.HSSFFont;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
@@ -19,6 +21,7 @@ import org.nthdimenzion.common.AppConstants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.math.BigDecimal;
 import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -46,20 +49,20 @@ public class GHInsuredExcelParser {
         HSSFSheet hssfSheet = hssfWorkbook.getSheetAt(0);
         Iterator<Row> rowIterator = hssfSheet.rowIterator();
         Row headerRow = rowIterator.next();
-        final List<String> headers = GLInsuredExcelHeader.getAllowedHeaderForParser(planAdapter, agentPlans);
+        final List<String> headers = GHInsuredExcelHeader.getAllowedHeaderForParser(planAdapter, agentPlans);
         final List<String> excelHeaders = getHeaders(headerRow);
-        Map<Row, List<Row>> insuredTemplateDataRowMap = groupByRelationship(Lists.newArrayList(rowIterator), GLInsuredExcelHeader.getAllowedHeaders(planAdapter, agentPlans));
+        Map<Row, List<Row>> insuredTemplateDataRowMap = groupByRelationship(Lists.newArrayList(rowIterator), GHInsuredExcelHeader.getAllowedHeaders(planAdapter, agentPlans));
         List<GHInsuredDto> insuredDtoList = insuredTemplateDataRowMap.entrySet().stream().map(new Function<Map.Entry<Row, List<Row>>, GHInsuredDto>() {
             @Override
             public GHInsuredDto apply(Map.Entry<Row, List<Row>> rowListEntry) {
                 Row insuredRow = rowListEntry.getKey();
                 List<Row> dependentRows = rowListEntry.getValue();
-                GHInsuredDto insuredDto = createInsuredDto(insuredRow, excelHeaders, headers, findNonEmptyOptionalCoverageCell(excelHeaders, insuredRow));
+                GHInsuredDto insuredDto = createInsuredDto(insuredRow, excelHeaders, headers, findNonEmptyOptionalCoverageCell(excelHeaders, insuredRow, agentPlans));
                 insuredDto.getPlanPremiumDetail().setPlanId(planAdapter.getPlanId(insuredDto.getPlanPremiumDetail().getPlanCode()).getPlanId());
                 Set<GHInsuredDto.GHInsuredDependentDto> insuredDependentDtoSet = dependentRows.stream().map(new Function<Row, GHInsuredDto.GHInsuredDependentDto>() {
                     @Override
                     public GHInsuredDto.GHInsuredDependentDto apply(Row row) {
-                        GHInsuredDto.GHInsuredDependentDto insuredDependentDto = createInsuredDependentDto(row, excelHeaders, headers, findNonEmptyOptionalCoverageCell(excelHeaders, row));
+                        GHInsuredDto.GHInsuredDependentDto insuredDependentDto = createInsuredDependentDto(row, excelHeaders, headers, findNonEmptyOptionalCoverageCell(excelHeaders, row, agentPlans));
                         insuredDependentDto.getPlanPremiumDetail().setPlanId(planAdapter.getPlanId(insuredDependentDto.getPlanPremiumDetail().getPlanCode()).getPlanId());
                         return insuredDependentDto;
                     }
@@ -72,18 +75,28 @@ public class GHInsuredExcelParser {
     }
 
 
-    private GHInsuredDto.GHInsuredDependentDto createInsuredDependentDto(Row dependentRow, List<String> excelHeaders, List<String> headers, List<Cell> optionalCoverageCells) {
+    private GHInsuredDto.GHInsuredDependentDto createInsuredDependentDto(Row dependentRow, List<String> excelHeaders, List<String> headers, List<OptionalCoverageCellHolder> optionalCoverageCells) {
         GHInsuredDto.GHInsuredDependentDto insuredDependentDto = new GHInsuredDto.GHInsuredDependentDto();
         for (String header : headers) {
             if (!header.contains(AppConstants.OPTIONAL_COVERAGE_HEADER)) {
-                insuredDependentDto = GLInsuredExcelHeader.valueOf(header).populateInsuredDependentDetail(insuredDependentDto, dependentRow, excelHeaders);
+                insuredDependentDto = GHInsuredExcelHeader.valueOf(header).populateInsuredDependentDetail(insuredDependentDto, dependentRow, excelHeaders);
             }
         }
-        List<GHInsuredDto.CoveragePremiumDetailDto> coveragePremiumDetails = optionalCoverageCells.stream().map(new Function<Cell, GHInsuredDto.CoveragePremiumDetailDto>() {
+        List<GHInsuredDto.GHCoveragePremiumDetailDto> coveragePremiumDetails = optionalCoverageCells.stream().map(new Function<OptionalCoverageCellHolder, GHInsuredDto.GHCoveragePremiumDetailDto>() {
             @Override
-            public GHInsuredDto.CoveragePremiumDetailDto apply(Cell cell) {
-                GHInsuredDto.CoveragePremiumDetailDto coveragePremiumDetailDto = new GHInsuredDto.CoveragePremiumDetailDto();
-                coveragePremiumDetailDto.setCoverageCode(ExcelGeneratorUtil.getCellValue(cell));
+            public GHInsuredDto.GHCoveragePremiumDetailDto apply(OptionalCoverageCellHolder optionalCoverageCellHolder) {
+                GHInsuredDto.GHCoveragePremiumDetailDto coveragePremiumDetailDto = new GHInsuredDto.GHCoveragePremiumDetailDto();
+                coveragePremiumDetailDto.setCoverageCode(ExcelGeneratorUtil.getCellValue(optionalCoverageCellHolder.getOptionalCoverageCell()));
+                coveragePremiumDetailDto.setPremiumVisibility(ExcelGeneratorUtil.getCellValue(optionalCoverageCellHolder.getOptionalCoverageVisibilityCell()));
+                int coverageSA = Double.valueOf(ExcelGeneratorUtil.getCellValue(optionalCoverageCellHolder.getOptionalCoverageSACell())).intValue();
+                coveragePremiumDetailDto.setSumAssured(BigDecimal.valueOf(coverageSA));
+                for (OptionalCoverageBenefitCellHolder optionalCoverageBenefitCellHolder : optionalCoverageCellHolder.getBenefitCellHolders()) {
+                    GHInsuredDto.GHCoveragePremiumDetailDto.GHCoverageBenefitDetailDto ghCoverageBenefitDetailDto = new GHInsuredDto.GHCoveragePremiumDetailDto.GHCoverageBenefitDetailDto();
+                    ghCoverageBenefitDetailDto.setBenefitCode(ExcelGeneratorUtil.getCellValue(optionalCoverageBenefitCellHolder.getBenefitCell()));
+                    int benefitLimit = Double.valueOf(ExcelGeneratorUtil.getCellValue(optionalCoverageBenefitCellHolder.getBenefitLimitCell())).intValue();
+                    ghCoverageBenefitDetailDto.setBenefitLimit(BigDecimal.valueOf(benefitLimit));
+                    coveragePremiumDetailDto = coveragePremiumDetailDto.addBenefit(ghCoverageBenefitDetailDto);
+                }
                 return coveragePremiumDetailDto;
             }
         }).collect(Collectors.toList());
@@ -91,18 +104,28 @@ public class GHInsuredExcelParser {
         return insuredDependentDto;
     }
 
-    private GHInsuredDto createInsuredDto(Row row, List<String> excelHeaders, List<String> headers, List<Cell> optionalCoverageCell) {
+    private GHInsuredDto createInsuredDto(Row row, List<String> excelHeaders, List<String> headers, List<OptionalCoverageCellHolder> optionalCoverageCells) {
         GHInsuredDto insuredDto = new GHInsuredDto();
         for (String header : headers) {
             if (!header.contains(AppConstants.OPTIONAL_COVERAGE_HEADER)) {
-                insuredDto = GLInsuredExcelHeader.valueOf(header).populateInsuredDetail(insuredDto, row, excelHeaders);
+                insuredDto = GHInsuredExcelHeader.valueOf(header).populateInsuredDetail(insuredDto, row, excelHeaders);
             }
         }
-        List<GHInsuredDto.CoveragePremiumDetailDto> coveragePremiumDetails = optionalCoverageCell.stream().map(new Function<Cell, GHInsuredDto.CoveragePremiumDetailDto>() {
+        List<GHInsuredDto.GHCoveragePremiumDetailDto> coveragePremiumDetails = optionalCoverageCells.stream().map(new Function<OptionalCoverageCellHolder, GHInsuredDto.GHCoveragePremiumDetailDto>() {
             @Override
-            public GHInsuredDto.CoveragePremiumDetailDto apply(Cell cell) {
-                GHInsuredDto.CoveragePremiumDetailDto coveragePremiumDetailDto = new GHInsuredDto.CoveragePremiumDetailDto();
-                coveragePremiumDetailDto.setCoverageCode(ExcelGeneratorUtil.getCellValue(cell));
+            public GHInsuredDto.GHCoveragePremiumDetailDto apply(OptionalCoverageCellHolder optionalCoverageCellHolder) {
+                GHInsuredDto.GHCoveragePremiumDetailDto coveragePremiumDetailDto = new GHInsuredDto.GHCoveragePremiumDetailDto();
+                coveragePremiumDetailDto.setCoverageCode(ExcelGeneratorUtil.getCellValue(optionalCoverageCellHolder.getOptionalCoverageCell()));
+                coveragePremiumDetailDto.setPremiumVisibility(ExcelGeneratorUtil.getCellValue(optionalCoverageCellHolder.getOptionalCoverageVisibilityCell()));
+                int coverageSA = Double.valueOf(ExcelGeneratorUtil.getCellValue(optionalCoverageCellHolder.getOptionalCoverageSACell())).intValue();
+                coveragePremiumDetailDto.setSumAssured(BigDecimal.valueOf(coverageSA));
+                for (OptionalCoverageBenefitCellHolder optionalCoverageBenefitCellHolder : optionalCoverageCellHolder.getBenefitCellHolders()) {
+                    GHInsuredDto.GHCoveragePremiumDetailDto.GHCoverageBenefitDetailDto ghCoverageBenefitDetailDto = new GHInsuredDto.GHCoveragePremiumDetailDto.GHCoverageBenefitDetailDto();
+                    ghCoverageBenefitDetailDto.setBenefitCode(ExcelGeneratorUtil.getCellValue(optionalCoverageBenefitCellHolder.getBenefitCell()));
+                    int benefitLimit = Double.valueOf(ExcelGeneratorUtil.getCellValue(optionalCoverageBenefitCellHolder.getBenefitLimitCell())).intValue();
+                    ghCoverageBenefitDetailDto.setBenefitLimit(BigDecimal.valueOf(benefitLimit));
+                    coveragePremiumDetailDto = coveragePremiumDetailDto.addBenefit(ghCoverageBenefitDetailDto);
+                }
                 return coveragePremiumDetailDto;
             }
         }).collect(Collectors.toList());
@@ -140,8 +163,9 @@ public class GHInsuredExcelParser {
         Iterator<Row> dataRowIterator = dataRows.iterator();
         while (dataRowIterator.hasNext()) {
             Row currentRow = dataRowIterator.next();
-            String errorMessage = validateRow(currentRow, GLInsuredExcelHeader.getAllowedHeaderForParser(planAdapter, agentPlans));
-            String coverageErrorMessage = validateOptionalCoverageCell(headers, currentRow);
+            String errorMessage = validateRow(currentRow, GHInsuredExcelHeader.getAllowedHeaderForParser(planAdapter, agentPlans));
+            List<OptionalCoverageCellHolder> optionalCoverageCellHolders = findNonEmptyOptionalCoverageCell(headers, currentRow, agentPlans);
+            String coverageErrorMessage = validateOptionalCoverageCell(headers, currentRow, optionalCoverageCellHolders);
             if (isEmpty(errorMessage) && isEmpty(coverageErrorMessage)) {
                 continue;
             }
@@ -163,7 +187,7 @@ public class GHInsuredExcelParser {
     }
 
     private boolean isValidHeader(List<String> headers, List<PlanId> planIds) {
-        List<String> allowedHeaders = GLInsuredExcelHeader.getAllowedHeaders(planAdapter, planIds);
+        List<String> allowedHeaders = GHInsuredExcelHeader.getAllowedHeaders(planAdapter, planIds);
         return isTemplateContainsSameExcelHeader(allowedHeaders, headers);
     }
 
@@ -178,41 +202,87 @@ public class GHInsuredExcelParser {
         return containsHeader;
     }
 
-    private String validateOptionalCoverageCell(List<String> headers, Row row) {
-        Cell planCell = row.getCell(headers.indexOf(GLInsuredExcelHeader.PLAN.getDescription()));
+    private String validateOptionalCoverageCell(List<String> headers, Row row, List<OptionalCoverageCellHolder> optionalCoverageCellHolders) {
+        Cell planCell = row.getCell(headers.indexOf(GHInsuredExcelHeader.PLAN.getDescription()));
         String planCode = getCellValue(planCell);
         Set<String> errorMessages = Sets.newHashSet();
-        List<Cell> optionalCoverageCells = findNonEmptyOptionalCoverageCell(headers, row);
-        optionalCoverageCells.forEach(optionalCoverageCell -> {
-            String optionalCoverageCode = getCellValue(optionalCoverageCell);
+        optionalCoverageCellHolders.forEach(optionalCoverageCellHolder -> {
+            String optionalCoverageCode = getCellValue(optionalCoverageCellHolder.getOptionalCoverageCell());
             if (isNotEmpty(optionalCoverageCode) && !isValidCoverage(planCode, optionalCoverageCode)) {
                 errorMessages.add(optionalCoverageCode + "  is not valid for plan " + planCode + ".");
             }
-        });
-        optionalCoverageCells.forEach(optionalCoverageCell -> {
-            String coverageCode = getCellValue(optionalCoverageCell);
-            optionalCoverageCells.forEach(nextOptionalCoverageCell -> {
-                String nextCoverageCode = getCellValue(nextOptionalCoverageCell);
-                if (isNotEmpty(coverageCode) && isNotEmpty(nextCoverageCode) && coverageCode.equals(nextCoverageCode)) {
-                    errorMessages.add("Row contains Duplicate coverage code.");
+            String coverageSA = getCellValue(optionalCoverageCellHolder.getOptionalCoverageSACell());
+            if (isEmpty(coverageSA)) {
+                errorMessages.add("Sum Assured is empty for" + optionalCoverageCode + ".");
+            }
+            String premiumVisibility = getCellValue(optionalCoverageCellHolder.getOptionalCoverageVisibilityCell());
+            if (isEmpty(premiumVisibility) && !("NO".equals(premiumVisibility) || "YES".equals(premiumVisibility))) {
+                errorMessages.add("Premium visibility for optional coverage " + optionalCoverageCode + " should be YES/NO.");
+            }
+            try {
+                BigDecimal coverageSumAssured = BigDecimal.valueOf(Double.valueOf(coverageSA).intValue());
+                if (!planAdapter.isValidPlanCoverageSumAssured(planCode, optionalCoverageCode, coverageSumAssured)) {
+                    errorMessages.add(coverageSA + "  is not valid Sum Assured for coverage " + optionalCoverageCode + ".");
                 }
-            });
+                for (OptionalCoverageBenefitCellHolder optionalCoverageBenefitCellHolder : optionalCoverageCellHolder.getBenefitCellHolders()) {
+                    String benefitCode = getCellValue(optionalCoverageBenefitCellHolder.getBenefitCell());
+                    if (!planAdapter.isValidPlanCoverageBenefit(planCode, optionalCoverageCode, benefitCode)) {
+                        errorMessages.add(benefitCode + "  is not valid Benefit Code for coverage " + optionalCoverageCode + ".");
+                    }
+                    String benefitLimit = getCellValue(optionalCoverageBenefitCellHolder.getBenefitLimitCell());
+                    if (isEmpty(benefitLimit)) {
+                        errorMessages.add("Benefit Limit is empty for benefit" + benefitCode + ".");
+                    }
+                    try {
+                        BigDecimal benefitLimitBigDecimal = BigDecimal.valueOf(Double.valueOf(benefitLimit).intValue());
+                        if (!planAdapter.isValidPlanCoverageBenefitLimit(planCode, optionalCoverageCode, benefitCode, benefitLimitBigDecimal)) {
+                            errorMessages.add(benefitLimit + " is not valid Benefit Limit for benefit" + benefitCode + ".");
+                        }
+                    } catch (Exception e) {
+
+                    }
+                }
+            } catch (Exception e) {
+                errorMessages.add(coverageSA + "  is not numeric.");
+            }
+
         });
         return buildErrorMessage(errorMessages);
     }
 
-    private List<Cell> findNonEmptyOptionalCoverageCell(List<String> headers, Row row) {
-        List<Cell> optionalCoverageCells = Lists.newArrayList();
-        headers.forEach(header -> {
-            if (header.contains(AppConstants.OPTIONAL_COVERAGE_HEADER) && !header.contains(AppConstants.PREMIUM_CELL_HEADER_NAME)) {
-                int cellNumber = headers.indexOf(header);
+    private List<OptionalCoverageCellHolder> findNonEmptyOptionalCoverageCell(List<String> headers, Row row, List<PlanId> planIds) {
+        List<OptionalCoverageCellHolder> optionalCoverageCellHolders = Lists.newArrayList();
+        List<PlanCoverageDetailDto> planCoverageDetailDtoList = planAdapter.getPlanAndCoverageDetail(planIds);
+        int count = 1;
+        for (PlanCoverageDetailDto planCoverageDetailDto : planCoverageDetailDtoList) {
+            for (PlanCoverageDetailDto.CoverageDto coverageDto : planCoverageDetailDto.getCoverageDtoList()) {
+                String coverageHeader = AppConstants.OPTIONAL_COVERAGE_HEADER + count;
+                int cellNumber = headers.indexOf(coverageHeader);
                 Cell cell = row.getCell(cellNumber);
+                int optionalCoverageSACellNumber = headers.indexOf(coverageHeader + " " + AppConstants.OPTIONAL_COVERAGE_SA_HEADER);
+                int optionalCoverageVisibilityCellNumber = headers.indexOf((AppConstants.OPTIONAL_COVERAGE_HEADER + count) + " " + AppConstants.OPTIONAL_COVERAGE_PREMIUM_VISIBILITY_HEADER);
+                Cell optionalCoverageSACell = row.getCell(optionalCoverageSACellNumber);
+                OptionalCoverageCellHolder optionalCoverageCellHolder = null;
                 if (isNotEmpty(getCellValue(cell))) {
-                    optionalCoverageCells.add(cell);
+                    optionalCoverageCellHolder = new OptionalCoverageCellHolder(cell, optionalCoverageSACell, row.getCell(optionalCoverageVisibilityCellNumber));
+                    int benefitCount = 1;
+                    for (PlanCoverageDetailDto.BenefitDto benefitDto : coverageDto.getBenefits()) {
+                        String benefitHeader = coverageHeader + " " + (AppConstants.OPTIONAL_COVERAGE_BENEFIT_HEADER + benefitCount);
+                        String benefitLimitHeader = coverageHeader + " " + (AppConstants.OPTIONAL_COVERAGE_BENEFIT_HEADER + benefitCount + " Limit");
+                        Cell benefitCell = row.getCell(headers.indexOf(benefitHeader));
+                        Cell benefitLimitCell = row.getCell(headers.indexOf(benefitLimitHeader));
+                        if (optionalCoverageCellHolder != null && isNotEmpty(getCellValue(benefitCell))) {
+                            OptionalCoverageBenefitCellHolder optionalCoverageBenefitCellHolder = new OptionalCoverageBenefitCellHolder(benefitCell, benefitLimitCell);
+                            optionalCoverageCellHolder = optionalCoverageCellHolder.addBenefitCellHolder(optionalCoverageBenefitCellHolder);
+                        }
+                        benefitCount++;
+                    }
+                    optionalCoverageCellHolders.add(optionalCoverageCellHolder);
                 }
+                count++;
             }
-        });
-        return optionalCoverageCells;
+        }
+        return optionalCoverageCellHolders;
     }
 
     private String validateRow(Row insureDataRow, List<String> headers) {
@@ -222,8 +292,8 @@ public class GHInsuredExcelParser {
             if (!header.contains(AppConstants.OPTIONAL_COVERAGE_HEADER)) {
                 Cell cell = insureDataRow.getCell(headers.indexOf(header));
                 String cellValue = getCellValue(cell);
-                GLInsuredExcelHeader glInsuredExcelHeader = GLInsuredExcelHeader.valueOf(header);
-                errorMessages.add(glInsuredExcelHeader.validateAndIfNotBuildErrorMessage(planAdapter, insureDataRow, cellValue, headers));
+                GHInsuredExcelHeader ghInsuredExcelHeader = GHInsuredExcelHeader.valueOf(header);
+                errorMessages.add(ghInsuredExcelHeader.validateAndIfNotBuildErrorMessage(planAdapter, insureDataRow, cellValue, headers));
             }
         });
         errorMessage = buildErrorMessage(errorMessages);
@@ -246,7 +316,7 @@ public class GHInsuredExcelParser {
 
     private boolean isFirstRowContainsSelfRelationship(List<Row> dataRows, List<String> headers) {
         Row row = dataRows.iterator().next();
-        Cell relationshipCell = row.getCell(headers.indexOf(GLInsuredExcelHeader.RELATIONSHIP.getDescription()));
+        Cell relationshipCell = row.getCell(headers.indexOf(GHInsuredExcelHeader.RELATIONSHIP.getDescription()));
         String relationship = getCellValue(relationshipCell);
         return Relationship.SELF.description.equals(relationship);
     }
@@ -257,7 +327,7 @@ public class GHInsuredExcelParser {
         Row selfRelationshipRow = null;
         while (rowIterator.hasNext()) {
             Row row = rowIterator.next();
-            Cell relationshipCell = getCellByName(row, headers, GLInsuredExcelHeader.RELATIONSHIP.getDescription());
+            Cell relationshipCell = getCellByName(row, headers, GHInsuredExcelHeader.RELATIONSHIP.getDescription());
             String relationship = getCellValue(relationshipCell);
             if (Relationship.SELF.description.equals(relationship)) {
                 selfRelationshipRow = row;
@@ -276,14 +346,14 @@ public class GHInsuredExcelParser {
         boolean isSamePlanForAllCategory = false;
         for (Map.Entry<Row, List<Row>> rowEntry : relationshipGroupRowMap.entrySet()) {
             Row row = rowEntry.getKey();
-            Cell planCell = getCellByName(row, headers, GLInsuredExcelHeader.PLAN.getDescription());
+            Cell planCell = getCellByName(row, headers, GHInsuredExcelHeader.PLAN.getDescription());
             String planCode = getCellValue(planCell);
             if (isSamePlanForAllCategory) {
                 break;
             }
             for (Map.Entry<Row, List<Row>> otherRowEntry : relationshipGroupRowMap.entrySet()) {
                 Row otherRow = otherRowEntry.getKey();
-                Cell otherPlanCell = getCellByName(otherRow, headers, GLInsuredExcelHeader.PLAN.getDescription());
+                Cell otherPlanCell = getCellByName(otherRow, headers, GHInsuredExcelHeader.PLAN.getDescription());
                 String otherPlanCode = getCellValue(otherPlanCell);
                 if (isNotEmpty(planCode) && isNotEmpty(otherPlanCode) && planCode.equals(otherPlanCode)) {
                     isSamePlanForAllCategory = true;
@@ -308,10 +378,10 @@ public class GHInsuredExcelParser {
             if (isRowContainsSamePlan) {
                 break;
             }
-            Cell planCell = getCellByName(row, headers, GLInsuredExcelHeader.PLAN.getDescription());
+            Cell planCell = getCellByName(row, headers, GHInsuredExcelHeader.PLAN.getDescription());
             String planCode = getCellValue(planCell);
             for (Row otherRow : rows) {
-                Cell otherPlanCell = getCellByName(otherRow, headers, GLInsuredExcelHeader.PLAN.getDescription());
+                Cell otherPlanCell = getCellByName(otherRow, headers, GHInsuredExcelHeader.PLAN.getDescription());
                 String otherPlanCode = getCellValue(otherPlanCell);
                 if (isNotEmpty(planCode) && isNotEmpty(otherPlanCode) && planCode.equals(otherPlanCode)) {
                     isRowContainsSamePlan = true;
@@ -335,5 +405,45 @@ public class GHInsuredExcelParser {
             headers.add(headerCell.getStringCellValue());
         }
         return ImmutableList.copyOf(headers);
+    }
+
+    @Getter
+    public class OptionalCoverageBenefitCellHolder {
+
+        private Cell benefitCell;
+
+        private Cell benefitLimitCell;
+
+        public OptionalCoverageBenefitCellHolder(Cell benefitCell, Cell benefitLimitCell) {
+            this.benefitCell = benefitCell;
+            this.benefitLimitCell = benefitLimitCell;
+        }
+
+    }
+
+    @Getter
+    public class OptionalCoverageCellHolder {
+
+        private Cell optionalCoverageCell;
+
+        private Cell optionalCoverageSACell;
+
+        private Cell optionalCoverageVisibilityCell;
+
+        private Set<OptionalCoverageBenefitCellHolder> benefitCellHolders;
+
+        public OptionalCoverageCellHolder(Cell optionalCoverageCell, Cell optionalCoverageSACell, Cell optionalCoverageVisibilityCell) {
+            this.optionalCoverageCell = optionalCoverageCell;
+            this.optionalCoverageSACell = optionalCoverageSACell;
+            this.optionalCoverageVisibilityCell = optionalCoverageVisibilityCell;
+        }
+
+        public OptionalCoverageCellHolder addBenefitCellHolder(OptionalCoverageBenefitCellHolder benefitCellHolder) {
+            if (isEmpty(this.benefitCellHolders)) {
+                this.benefitCellHolders = Sets.newHashSet();
+            }
+            this.benefitCellHolders.add(benefitCellHolder);
+            return this;
+        }
     }
 }

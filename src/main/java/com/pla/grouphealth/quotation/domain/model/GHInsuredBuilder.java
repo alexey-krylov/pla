@@ -7,7 +7,8 @@ import lombok.Getter;
 import org.joda.time.LocalDate;
 
 import java.math.BigDecimal;
-import java.util.HashSet;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 import static com.google.common.base.Preconditions.checkArgument;
@@ -38,21 +39,26 @@ public class GHInsuredBuilder {
 
     private String category;
 
-    private BigDecimal annualIncome;
-
     private Set<GHInsuredDependent> insuredDependents;
 
     private GHPlanPremiumDetail planPremiumDetail;
 
     private String occupation;
 
-    private Set< CoveragePremiumDetail> coveragePremiumDetails;
+    private List<GHCoveragePremiumDetail> coveragePremiumDetails;
+
+    private String existingIllness;
+
+    private Integer minAgeEntry;
+
+    private Integer maxAgeEntry;
+
 
     GHInsuredBuilder(PlanId insuredPlan, String planCode, BigDecimal premiumAmount, BigDecimal sumAssured) {
         checkArgument(insuredPlan != null);
         checkArgument(isNotEmpty(planCode));
         checkArgument(premiumAmount != null);
-         GHPlanPremiumDetail planPremiumDetail = new GHPlanPremiumDetail(insuredPlan, planCode, premiumAmount, sumAssured);
+        GHPlanPremiumDetail planPremiumDetail = new GHPlanPremiumDetail(insuredPlan, planCode, premiumAmount, sumAssured);
         this.planPremiumDetail = planPremiumDetail;
     }
 
@@ -98,26 +104,34 @@ public class GHInsuredBuilder {
         return this;
     }
 
-    public GHInsuredBuilder withAnnualIncome(BigDecimal annualIncome) {
-        this.annualIncome = annualIncome;
-        return this;
-    }
-
     public GHInsuredBuilder withOccupation(String occupation) {
         this.occupation = occupation;
         return this;
     }
 
-    public GHInsuredBuilder withCoveragePremiumDetail(String coverageName, String coverageCode, String coverageId, BigDecimal premium) {
-         CoveragePremiumDetail coveragePremiumDetail = new  CoveragePremiumDetail(coverageName, coverageCode, new CoverageId(coverageId), premium);
+    public GHInsuredBuilder withCoveragePremiumDetail(GHCoveragePremiumDetailBuilder ghCoveragePremiumDetailBuilder) {
+        GHCoveragePremiumDetail coveragePremiumDetail = new GHCoveragePremiumDetail(ghCoveragePremiumDetailBuilder.getCoverageName(), ghCoveragePremiumDetailBuilder.getCoverageCode(), new CoverageId(ghCoveragePremiumDetailBuilder.getCoverageId()), ghCoveragePremiumDetailBuilder.getPremium(), ghCoveragePremiumDetailBuilder.getPremiumVisibility());
+        coveragePremiumDetail = coveragePremiumDetail.addAllBenefitLimit(ghCoveragePremiumDetailBuilder.getBenefitPremiumLimits());
         if (isEmpty(this.coveragePremiumDetails)) {
-            this.coveragePremiumDetails = new HashSet<>();
+            this.coveragePremiumDetails = new ArrayList<>();
         }
         this.coveragePremiumDetails.add(coveragePremiumDetail);
+        return this;
+    }
+
+    public GHInsuredBuilder withMinAndMaxAge(Integer minAgeEntry, Integer maxAgeEntry) {
+        this.minAgeEntry = minAgeEntry;
+        this.maxAgeEntry = maxAgeEntry;
+        return this;
+    }
+
+    public GHInsuredBuilder withExistingIllness(String existingIllness) {
+        this.existingIllness = existingIllness;
         return this;
     }
 
     public GHInsured build() {
         return new GHInsured(this);
     }
+
 }

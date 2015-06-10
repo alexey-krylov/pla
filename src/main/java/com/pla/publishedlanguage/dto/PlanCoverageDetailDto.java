@@ -1,14 +1,18 @@
 package com.pla.publishedlanguage.dto;
 
+import com.google.common.collect.Sets;
+import com.pla.sharedkernel.identifier.BenefitId;
 import com.pla.sharedkernel.identifier.CoverageId;
 import com.pla.sharedkernel.identifier.PlanId;
 import lombok.Getter;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+import static org.nthdimenzion.utils.UtilValidator.isEmpty;
 import static org.nthdimenzion.utils.UtilValidator.isNotEmpty;
 
 /**
@@ -86,6 +90,32 @@ public class PlanCoverageDetailDto {
         }
     }
 
+
+    @Getter
+    public class BenefitDto {
+
+        private String benefitCode;
+
+        private BenefitId benefitId;
+
+        private String benefitName;
+
+        private BigDecimal benefitLimit;
+
+        public BenefitDto(BenefitId benefitId, String benefitName,String benefitCode,BigDecimal benefitLimit) {
+            this.benefitCode = benefitCode;
+            this.benefitId = benefitId;
+            this.benefitName = benefitName;
+            this.benefitLimit = benefitLimit;
+        }
+
+        public BenefitDto(BenefitId benefitId, BigDecimal benefitLimit) {
+            this.benefitId = benefitId;
+            this.benefitLimit = benefitLimit;
+        }
+
+    }
+
     @Getter
     public class CoverageDto {
 
@@ -97,10 +127,20 @@ public class PlanCoverageDetailDto {
 
         private String coverageName;
 
+        private Set<BenefitDto> benefits;
+
         public CoverageDto(String coverageCode, String coverageName, CoverageId coverageId) {
             this.coverageCode = coverageCode;
             this.coverageName = coverageName;
             this.coverageId = coverageId;
+        }
+
+        public CoverageDto addAllBenefitDetail(Set<BenefitDto> benefitDtos) {
+            if (isEmpty(benefits)) {
+                this.benefits = Sets.newHashSet();
+            }
+            this.benefits.addAll(benefitDtos);
+            return this;
         }
 
         public CoverageDto addSumAssured(SumAssuredDto sumAssuredDto) {

@@ -2,6 +2,7 @@ package com.pla.publishedlanguage.contract;
 
 import com.pla.publishedlanguage.dto.PlanCoverageDetailDto;
 import com.pla.sharedkernel.domain.model.Relationship;
+import com.pla.sharedkernel.identifier.LineOfBusinessEnum;
 import com.pla.sharedkernel.identifier.PlanId;
 
 import java.math.BigDecimal;
@@ -20,17 +21,25 @@ public interface IPlanAdapter {
 
     boolean isValidPlanCoverage(String planCode, String coverageCode);
 
+    boolean isValidPlanCoverageSumAssured(String planCode, String coverageCode, BigDecimal sumAssured);
+
+    boolean isValidPlanCoverageBenefit(String planCode, String coverageCode, String benefitCode);
+
+    boolean isValidPlanCoverageBenefitLimit(String planCode, String coverageCode, String benefitCode, BigDecimal benefitLimit);
+
     boolean isValidPlanSumAssured(String planCode, BigDecimal sumAssured);
 
-    boolean isValidCoverageSumAssured(String planCode,String coverageId,BigDecimal sumAssured);
+    boolean isValidCoverageSumAssured(String planCode, String coverageId, BigDecimal sumAssured);
 
     boolean isValidPlanAge(String planCode, int age);
 
-    boolean isValidCoverageAge(String planCode,String coverageId,int age);
+    boolean isValidCoverageAge(String planCode, String coverageId, int age);
 
     boolean hasPlanContainsIncomeMultiplierSumAssured(String planCode);
 
     boolean isValidPlanCode(String planCode);
+
+    boolean isValidPlanCodeForBusinessLine(String planCode,LineOfBusinessEnum lineOfBusinessEnum);
 
     PlanId getPlanId(String planCode);
 }

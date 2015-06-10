@@ -11,9 +11,9 @@ import org.joda.time.LocalDate;
 import org.nthdimenzion.ddd.domain.annotations.ValueObject;
 
 import java.math.BigDecimal;
-import java.util.Set;
 
 import static com.google.common.base.Preconditions.checkArgument;
+import static org.nthdimenzion.utils.UtilValidator.isNotEmpty;
 
 /**
  * Created by Samir on 4/7/2015.
@@ -50,7 +50,11 @@ public class GHInsuredDependent {
 
     private GHPlanPremiumDetail planPremiumDetail;
 
-    private Set<CoveragePremiumDetail> coveragePremiumDetails;
+    private String existingIllness;
+
+    private Integer minAgeEntry;
+
+    private Integer maxAgeEntry;
 
     GHInsuredDependent(GHInsuredDependentBuilder insuredDependentBuilder) {
         checkArgument(insuredDependentBuilder != null);
@@ -65,7 +69,13 @@ public class GHInsuredDependent {
         this.category = insuredDependentBuilder.getCategory();
         this.relationship = insuredDependentBuilder.getRelationship();
         this.planPremiumDetail = insuredDependentBuilder.getPlanPremiumDetail();
-        this.coveragePremiumDetails = insuredDependentBuilder.getCoveragePremiumDetails();
+        if (isNotEmpty(insuredDependentBuilder.getCoveragePremiumDetails())) {
+            this.planPremiumDetail.addAllCoveragePremiumDetail(insuredDependentBuilder.getCoveragePremiumDetails());
+        }
+        this.existingIllness = insuredDependentBuilder.getExistingIllness();
+        this.minAgeEntry = insuredDependentBuilder.getMinAgeEntry();
+        this.maxAgeEntry = insuredDependentBuilder.getMaxAgeEntry();
+        this.occupationClass=insuredDependentBuilder.getOccupationClass();
     }
 
     public static GHInsuredDependentBuilder getInsuredDependentBuilder(PlanId planId, String planCode, BigDecimal premiumAmount, BigDecimal sumAssured) {
@@ -76,4 +86,32 @@ public class GHInsuredDependent {
         this.planPremiumDetail = this.planPremiumDetail.updatePremiumAmount(insuredPlanProratePremium);
         return this;
     }
+
+    public BigDecimal getBasicAnnualVisibleCoveragePremiumForDependent() {
+        BigDecimal basicAnnualVisibleCoveragePremiumOfDependent = BigDecimal.ZERO;
+        GHPlanPremiumDetail planPremiumDetail = this.getPlanPremiumDetail();
+        if (isNotEmpty(planPremiumDetail.getCoveragePremiumDetails())) {
+            for (GHCoveragePremiumDetail coveragePremiumDetail : planPremiumDetail.getCoveragePremiumDetails()) {
+                if ("YES".equals(coveragePremiumDetail.getPremiumVisibility())) {
+                    basicAnnualVisibleCoveragePremiumOfDependent = basicAnnualVisibleCoveragePremiumOfDependent.add(coveragePremiumDetail.getPremium() != null ? coveragePremiumDetail.getPremium() : BigDecimal.ZERO);
+                }
+            }
+        }
+        return basicAnnualVisibleCoveragePremiumOfDependent;
+    }
+
+    public BigDecimal getBasicAnnualPlanPremiumIncludingNonVisibleCoveragePremiumForDependent() {
+        BigDecimal basicAnnualPremiumOfDependent = BigDecimal.ZERO;
+        GHPlanPremiumDetail planPremiumDetail = this.getPlanPremiumDetail();
+        basicAnnualPremiumOfDependent = basicAnnualPremiumOfDependent.add(planPremiumDetail != null ? planPremiumDetail.getPremiumAmount() : BigDecimal.ZERO);
+        if (isNotEmpty(planPremiumDetail.getCoveragePremiumDetails())) {
+            for (GHCoveragePremiumDetail coveragePremiumDetail : planPremiumDetail.getCoveragePremiumDetails()) {
+                if ("NO".equals(coveragePremiumDetail.getPremiumVisibility())) {
+                    basicAnnualPremiumOfDependent = basicAnnualPremiumOfDependent.add(coveragePremiumDetail.getPremium() != null ? coveragePremiumDetail.getPremium() : BigDecimal.ZERO);
+                }
+            }
+        }
+        return basicAnnualPremiumOfDependent;
+    }
+
 }

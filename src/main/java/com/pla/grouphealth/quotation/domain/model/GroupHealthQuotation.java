@@ -1,8 +1,8 @@
 package com.pla.grouphealth.quotation.domain.model;
 
 import com.pla.core.domain.model.agent.AgentId;
-import com.pla.grouphealth.quotation.domain.event.GLQuotationClosedEvent;
-import com.pla.grouphealth.quotation.domain.event.GLQuotationGeneratedEvent;
+import com.pla.grouphealth.quotation.domain.event.GHQuotationClosedEvent;
+import com.pla.grouphealth.quotation.domain.event.GHQuotationGeneratedEvent;
 import com.pla.grouphealth.quotation.domain.event.ProposerAddedEvent;
 import com.pla.sharedkernel.identifier.QuotationId;
 import lombok.AccessLevel;
@@ -118,7 +118,7 @@ public class GroupHealthQuotation extends AbstractAggregateRoot<QuotationId> imp
     @Override
     public void closeQuotation() {
         this.quotationStatus = GHQuotationStatus.CLOSED;
-        registerEvent(new GLQuotationClosedEvent(quotationId));
+        registerEvent(new GHQuotationClosedEvent(quotationId));
     }
 
     @Override
@@ -140,7 +140,7 @@ public class GroupHealthQuotation extends AbstractAggregateRoot<QuotationId> imp
             registerEvent(new ProposerAddedEvent(proposer.getProposerName(), proposer.getProposerCode(),
                     proposerContactDetail.getAddressLine1(), proposerContactDetail.getAddressLine2(), proposerContactDetail.getPostalCode(),
                     proposerContactDetail.getProvince(), proposerContactDetail.getTown(), proposerContactDetail.getEmailAddress()));
-            registerEvent(new GLQuotationGeneratedEvent(quotationId));
+            registerEvent(new GHQuotationGeneratedEvent(quotationId));
         }
     }
 
@@ -171,9 +171,13 @@ public class GroupHealthQuotation extends AbstractAggregateRoot<QuotationId> imp
         totalInsuredPremiumAmount = totalInsuredPremiumAmount.add(addOnBenefitAmount);
         BigDecimal profitAndSolvencyAmount = premiumDetail.getProfitAndSolvency() == null ? BigDecimal.ZERO : totalInsuredPremiumAmount.multiply((premiumDetail.getProfitAndSolvency().divide(new BigDecimal(100))));
         totalInsuredPremiumAmount = totalInsuredPremiumAmount.add(profitAndSolvencyAmount);
+        BigDecimal waiverOfExcessLoading = premiumDetail.getWaiverOfExcessLoading() == null ? BigDecimal.ZERO : totalInsuredPremiumAmount.multiply((premiumDetail.getWaiverOfExcessLoading().divide(new BigDecimal(100))));
+        totalInsuredPremiumAmount = totalInsuredPremiumAmount.subtract(waiverOfExcessLoading);
         BigDecimal discountAmount = premiumDetail.getDiscount() == null ? BigDecimal.ZERO : totalInsuredPremiumAmount.multiply((premiumDetail.getDiscount().divide(new BigDecimal(100))));
         totalInsuredPremiumAmount = totalInsuredPremiumAmount.subtract(discountAmount);
         totalInsuredPremiumAmount = totalInsuredPremiumAmount.setScale(2, BigDecimal.ROUND_CEILING);
+        BigDecimal vat = premiumDetail.getVat() == null ? BigDecimal.ZERO : totalInsuredPremiumAmount.multiply((premiumDetail.getVat().divide(new BigDecimal(100))));
+        totalInsuredPremiumAmount = totalInsuredPremiumAmount.add(vat);
         return totalInsuredPremiumAmount;
     }
 
@@ -211,5 +215,22 @@ public class GroupHealthQuotation extends AbstractAggregateRoot<QuotationId> imp
             totalBasicAnnualPremium = totalBasicAnnualPremium.add(insured.getBasicAnnualPremium());
         }
         return totalBasicAnnualPremium;
+    }
+
+    public BigDecimal getTotalPlanPremiumIncludingNonVisibilityCoveragePremium() {
+        BigDecimal totalPlanPremium = BigDecimal.ZERO;
+        for (GHInsured insured : this.insureds) {
+            totalPlanPremium = totalPlanPremium.add(insured.getBasicAnnualPlanPremiumIncludingNonVisibleCoveragePremium());
+        }
+        return totalPlanPremium;
+    }
+
+    public BigDecimal getTotalVisibleCoveragePremium() {
+        BigDecimal totalVisibleCoveragePremium = BigDecimal.ZERO;
+        for (GHInsured insured : this.insureds) {
+            totalVisibleCoveragePremium = totalVisibleCoveragePremium.add(insured.getInsuredBasicAnnualVisibleCoveragePremium());
+        }
+
+        return totalVisibleCoveragePremium;
     }
 }

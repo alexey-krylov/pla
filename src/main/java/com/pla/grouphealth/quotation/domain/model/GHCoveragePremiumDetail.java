@@ -5,6 +5,7 @@ import lombok.*;
 import org.nthdimenzion.ddd.domain.annotations.ValueObject;
 
 import java.math.BigDecimal;
+import java.util.Set;
 
 /**
  * Created by Samir on 4/29/2015.
@@ -14,7 +15,7 @@ import java.math.BigDecimal;
 @Getter
 @Setter(value = AccessLevel.PACKAGE)
 @EqualsAndHashCode(of = "coverageCode")
-public class CoveragePremiumDetail {
+public class GHCoveragePremiumDetail {
 
     private String coverageCode;
 
@@ -26,15 +27,25 @@ public class CoveragePremiumDetail {
 
     private BigDecimal sumAssured;
 
-    CoveragePremiumDetail(String coverageName, String coverageCode, CoverageId coverageId, BigDecimal premium) {
+    private String premiumVisibility;
+
+    private Set<BenefitPremiumLimit> benefitPremiumLimits;
+
+    GHCoveragePremiumDetail(String coverageName, String coverageCode, CoverageId coverageId, BigDecimal premium, String premiumVisibility) {
         this.coverageCode = coverageCode;
         this.coverageId = coverageId;
         this.premium = premium;
         this.coverageName = coverageName;
+        this.premiumVisibility = premiumVisibility;
     }
 
-    public  CoveragePremiumDetail updateWithPremium(BigDecimal premiumAmount) {
+    public GHCoveragePremiumDetail updateWithPremium(BigDecimal premiumAmount) {
         this.premium = premiumAmount;
+        return this;
+    }
+
+    public GHCoveragePremiumDetail addAllBenefitLimit(Set<BenefitPremiumLimit> benefitPremiumLimits) {
+        this.benefitPremiumLimits = benefitPremiumLimits;
         return this;
     }
 }

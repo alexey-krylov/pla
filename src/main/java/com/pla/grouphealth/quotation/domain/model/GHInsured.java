@@ -42,8 +42,6 @@ public class GHInsured {
 
     private String category;
 
-    private BigDecimal annualIncome;
-
     private String occupationClass;
 
     private String occupationCategory;
@@ -54,7 +52,11 @@ public class GHInsured {
 
     private GHPlanPremiumDetail planPremiumDetail;
 
-    private Set<CoveragePremiumDetail> coveragePremiumDetails;
+    private String existingIllness;
+
+    private Integer minAgeEntry;
+
+    private Integer maxAgeEntry;
 
     GHInsured(GHInsuredBuilder insuredBuilder) {
         checkArgument(insuredBuilder != null);
@@ -69,9 +71,13 @@ public class GHInsured {
         this.gender = insuredBuilder.getGender();
         this.category = insuredBuilder.getCategory();
         this.insuredDependents = insuredBuilder.getInsuredDependents();
-        this.annualIncome = insuredBuilder.getAnnualIncome();
         this.occupationClass = insuredBuilder.getOccupation();
-        this.coveragePremiumDetails = insuredBuilder.getCoveragePremiumDetails();
+        if (isNotEmpty(insuredBuilder.getCoveragePremiumDetails())) {
+            this.planPremiumDetail.addAllCoveragePremiumDetail(insuredBuilder.getCoveragePremiumDetails());
+        }
+        this.existingIllness = insuredBuilder.getExistingIllness();
+        this.minAgeEntry = insuredBuilder.getMinAgeEntry();
+        this.maxAgeEntry = insuredBuilder.getMaxAgeEntry();
 
     }
 
@@ -86,28 +92,74 @@ public class GHInsured {
 
     public BigDecimal getBasicAnnualPremium() {
         BigDecimal basicAnnualPremium = planPremiumDetail.getPremiumAmount();
-        if (isNotEmpty(coveragePremiumDetails)) {
-            for (CoveragePremiumDetail coveragePremiumDetail : coveragePremiumDetails) {
-                basicAnnualPremium = basicAnnualPremium.add(coveragePremiumDetail.getPremium());
+        if (isNotEmpty(planPremiumDetail.getCoveragePremiumDetails())) {
+            for (GHCoveragePremiumDetail coveragePremiumDetail : planPremiumDetail.getCoveragePremiumDetails()) {
+                basicAnnualPremium = basicAnnualPremium.add(coveragePremiumDetail.getPremium() != null ? coveragePremiumDetail.getPremium() : BigDecimal.ZERO);
             }
         }
         basicAnnualPremium = basicAnnualPremium.add(getBasicAnnualPremiumForDependent());
         return basicAnnualPremium;
     }
 
+    public BigDecimal getBasicAnnualPlanPremiumIncludingNonVisibleCoveragePremium() {
+        BigDecimal basicAnnualPremium = planPremiumDetail.getPremiumAmount();
+        if (isNotEmpty(planPremiumDetail.getCoveragePremiumDetails())) {
+            for (GHCoveragePremiumDetail coveragePremiumDetail : planPremiumDetail.getCoveragePremiumDetails()) {
+                if ("NO".equals(coveragePremiumDetail.getPremiumVisibility())) {
+                    basicAnnualPremium = basicAnnualPremium.add(coveragePremiumDetail.getPremium() != null ? coveragePremiumDetail.getPremium() : BigDecimal.ZERO);
+                }
+            }
+        }
+        basicAnnualPremium = basicAnnualPremium.add(getBasicAnnualPlanPremiumIncludingNonVisibleCoveragePremiumForDependent());
+        return basicAnnualPremium;
+    }
+
+    public BigDecimal getInsuredBasicAnnualVisibleCoveragePremium() {
+        BigDecimal totalVisibleCoveragePremium = BigDecimal.ZERO;
+        if (isNotEmpty(planPremiumDetail.getCoveragePremiumDetails())) {
+            for (GHCoveragePremiumDetail coveragePremiumDetail : planPremiumDetail.getCoveragePremiumDetails()) {
+                if ("YES".equals(coveragePremiumDetail.getPremiumVisibility())) {
+                    totalVisibleCoveragePremium = totalVisibleCoveragePremium.add(coveragePremiumDetail.getPremium() != null ? coveragePremiumDetail.getPremium() : BigDecimal.ZERO);
+                }
+            }
+        }
+        totalVisibleCoveragePremium = totalVisibleCoveragePremium.add(getBasicAnnualVisibleCoveragePremiumForDependent());
+        return totalVisibleCoveragePremium;
+    }
+
     private BigDecimal getBasicAnnualPremiumForDependent() {
         BigDecimal basicAnnualPremiumOfDependent = BigDecimal.ZERO;
         if (isNotEmpty(this.insuredDependents)) {
             for (GHInsuredDependent insuredDependent : this.insuredDependents) {
-                 GHPlanPremiumDetail planPremiumDetail = insuredDependent.getPlanPremiumDetail();
+                GHPlanPremiumDetail planPremiumDetail = insuredDependent.getPlanPremiumDetail();
                 basicAnnualPremiumOfDependent = basicAnnualPremiumOfDependent.add(planPremiumDetail != null ? planPremiumDetail.getPremiumAmount() : BigDecimal.ZERO);
-                if (isNotEmpty(insuredDependent.getCoveragePremiumDetails())) {
-                    for (CoveragePremiumDetail coveragePremiumDetail : insuredDependent.getCoveragePremiumDetails()) {
-                        basicAnnualPremiumOfDependent = basicAnnualPremiumOfDependent.add(coveragePremiumDetail.getPremium());
+                if (isNotEmpty(planPremiumDetail.getCoveragePremiumDetails())) {
+                    for (GHCoveragePremiumDetail coveragePremiumDetail : planPremiumDetail.getCoveragePremiumDetails()) {
+                        basicAnnualPremiumOfDependent = basicAnnualPremiumOfDependent.add(coveragePremiumDetail.getPremium() != null ? coveragePremiumDetail.getPremium() : BigDecimal.ZERO);
                     }
                 }
             }
         }
         return basicAnnualPremiumOfDependent;
+    }
+
+    private BigDecimal getBasicAnnualPlanPremiumIncludingNonVisibleCoveragePremiumForDependent() {
+        BigDecimal basicAnnualPremiumOfDependent = BigDecimal.ZERO;
+        if (isNotEmpty(this.insuredDependents)) {
+            for (GHInsuredDependent insuredDependent : this.insuredDependents) {
+                basicAnnualPremiumOfDependent = insuredDependent.getBasicAnnualPlanPremiumIncludingNonVisibleCoveragePremiumForDependent();
+            }
+        }
+        return basicAnnualPremiumOfDependent;
+    }
+
+    private BigDecimal getBasicAnnualVisibleCoveragePremiumForDependent() {
+        BigDecimal basicAnnualVisibleCoveragePremiumOfDependent = BigDecimal.ZERO;
+        if (isNotEmpty(this.insuredDependents)) {
+            for (GHInsuredDependent insuredDependent : this.insuredDependents) {
+                basicAnnualVisibleCoveragePremiumOfDependent = basicAnnualVisibleCoveragePremiumOfDependent.add(insuredDependent.getBasicAnnualVisibleCoveragePremiumForDependent());
+            }
+        }
+        return basicAnnualVisibleCoveragePremiumOfDependent;
     }
 }

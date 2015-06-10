@@ -5,9 +5,9 @@
       xmlns="http://www.w3.org/TR/REC-html40">
 <body>
 <div>
-    <h1 style='margin-right:-.25in;tab-stops:.5in'>
+    <h3 style='margin-right:-.25in;tab-stops:.5in'>
         <span style='mso-no-proof:yes'>${emailContent.mailSentDate}</span></span>
-    </h1>
+    </h3>
 
     <p class=MsoNormal style='margin-left:.25in'><span style='font-size:11.0pt;
 font-family:"Tahoma","sans-serif"'>The Account Executive<o:p></o:p></span></p>

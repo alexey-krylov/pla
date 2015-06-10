@@ -45,13 +45,36 @@ public class PlanDetailDto {
 
         private String coverageName;
         private String sumAssured;
+        private List<BenefitDetailDto> benefits;
 
         public CoverageDetailDto(String coverageName, String sumAssured) {
             this.coverageName = coverageName;
             this.sumAssured = sumAssured;
         }
+
+        public CoverageDetailDto addBenefit(BenefitDetailDto benefitDetailDto) {
+            if (isEmpty(this.benefits)) {
+                this.benefits = Lists.newArrayList();
+            }
+            this.benefits.add(benefitDetailDto);
+            return this;
+        }
+
     }
 
+
+    @Getter
+    public static class BenefitDetailDto {
+
+        private String benefitName;
+
+        private String benefitLimit;
+
+        public BenefitDetailDto(String benefitName, String benefitLimit) {
+            this.benefitName = benefitName;
+            this.benefitLimit = benefitLimit;
+        }
+    }
 
     public static List<PlanDetailDto> transformToPlanDetail(List<PlanCoverageDetailDto> planCoverageDetailDtoList) {
         List<PlanDetailDto> planDetailDtoList = planCoverageDetailDtoList.stream().map(new Function<PlanCoverageDetailDto, PlanDetailDto>() {
@@ -63,9 +86,14 @@ public class PlanDetailDto {
                 String coverages = planCoverageDetailDto.coveragesInString();
                 PlanDetailDto planDetailDto = new PlanDetailDto(product, sumAssured, coverages, relationship);
                 planCoverageDetailDto.getCoverageDtoList().forEach(planCoverageDto -> {
-                    String coverageName = planCoverageDto.getCoverageName() + " (" + planCoverageDto.getCoverageCode() + ")";
-                    CoverageDetailDto coverageDetailDto = new CoverageDetailDto(coverageName, planCoverageDto.getSumAssuredDto().getSumAssuredInString());
-                    planDetailDto.addCoverageDetail(coverageDetailDto);
+                    String coverageName = planCoverageDto.getCoverageName() + "(" + planCoverageDto.getCoverageCode() + ")";
+                    final CoverageDetailDto[] coverageDetailDto = {new CoverageDetailDto(coverageName, planCoverageDto.getSumAssuredDto().getSumAssuredInString())};
+                    planCoverageDto.getBenefits().forEach(coverageBenefit -> {
+                        String benefitName = coverageBenefit.getBenefitName() + "(" + coverageBenefit.getBenefitCode() + ")";
+                        BenefitDetailDto benefitDetailDto = new BenefitDetailDto(benefitName, coverageBenefit.getBenefitLimit() != null ? coverageBenefit.getBenefitLimit().toPlainString() : "");
+                        coverageDetailDto[0] = coverageDetailDto[0].addBenefit(benefitDetailDto);
+                    });
+                    planDetailDto.addCoverageDetail(coverageDetailDto[0]);
                 });
                 return planDetailDto;
             }

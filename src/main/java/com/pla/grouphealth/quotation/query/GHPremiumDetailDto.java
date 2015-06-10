@@ -16,7 +16,7 @@ import static org.nthdimenzion.utils.UtilValidator.isEmpty;
 @Getter
 @Setter
 @NoArgsConstructor
-public class PremiumDetailDto {
+public class GHPremiumDetailDto {
 
     private BigDecimal addOnBenefit;
 
@@ -42,26 +42,38 @@ public class PremiumDetailDto {
 
     private Set<PremiumInstallmentDto> installments;
 
+    private BigDecimal waiverOfExcessLoading;
 
-    public PremiumDetailDto(BigDecimal addOnBenefit, BigDecimal profitAndSolvencyLoading, BigDecimal discounts, Integer policyTermValue) {
+
+    public GHPremiumDetailDto(BigDecimal addOnBenefit, BigDecimal profitAndSolvencyLoading, BigDecimal discounts, BigDecimal waiverOfExcessLoading, BigDecimal vat, Integer policyTermValue) {
         this.addOnBenefit = addOnBenefit;
         this.profitAndSolvencyLoading = profitAndSolvencyLoading;
         this.discounts = discounts;
         this.policyTermValue = policyTermValue;
+        this.waiverOfExcessLoading = waiverOfExcessLoading;
+        this.vat = vat;
     }
 
-    public PremiumDetailDto(BigDecimal addOnBenefit, Integer policyTermValue) {
+    public GHPremiumDetailDto(BigDecimal addOnBenefit, Integer policyTermValue) {
         this.addOnBenefit = addOnBenefit;
         this.policyTermValue = policyTermValue;
 
     }
 
-    public PremiumDetailDto addOptedInstallmentDetail(int noOfInstallment, BigDecimal installmentAmount) {
+    public GHPremiumDetailDto(BigDecimal addOnBenefit, Integer policyTermValue, BigDecimal waiverOfExcessLoading, BigDecimal vat) {
+        this.addOnBenefit = addOnBenefit;
+        this.policyTermValue = policyTermValue;
+        this.waiverOfExcessLoading = waiverOfExcessLoading;
+        this.vat = vat;
+    }
+
+
+    public GHPremiumDetailDto addOptedInstallmentDetail(int noOfInstallment, BigDecimal installmentAmount) {
         this.premiumInstallment = new PremiumInstallmentDto(noOfInstallment, installmentAmount);
         return this;
     }
 
-    public PremiumDetailDto addInstallments(int noOfInstallment, BigDecimal installmentAmount) {
+    public GHPremiumDetailDto addInstallments(int noOfInstallment, BigDecimal installmentAmount) {
         if (isEmpty(this.installments)) {
             this.installments = Sets.newHashSet();
         }
@@ -70,7 +82,7 @@ public class PremiumDetailDto {
         return this;
     }
 
-    public PremiumDetailDto addFrequencyPremiumAmount(BigDecimal annualPremiumAmount, BigDecimal semiannualPremiumAmount, BigDecimal quarterlyPremiumAmount, BigDecimal monthlyPremiumAmount) {
+    public GHPremiumDetailDto addFrequencyPremiumAmount(BigDecimal annualPremiumAmount, BigDecimal semiannualPremiumAmount, BigDecimal quarterlyPremiumAmount, BigDecimal monthlyPremiumAmount) {
         this.annualPremium = annualPremiumAmount;
         this.semiannualPremium = semiannualPremiumAmount;
         this.quarterlyPremium = quarterlyPremiumAmount;
@@ -78,7 +90,7 @@ public class PremiumDetailDto {
         return this;
     }
 
-    public PremiumDetailDto addNetTotalPremiumAmount(BigDecimal netTotalAmount) {
+    public GHPremiumDetailDto addNetTotalPremiumAmount(BigDecimal netTotalAmount) {
         this.totalPremium = netTotalAmount;
         return this;
     }

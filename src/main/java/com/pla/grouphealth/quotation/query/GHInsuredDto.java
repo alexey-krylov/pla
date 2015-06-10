@@ -1,5 +1,6 @@
 package com.pla.grouphealth.quotation.query;
 
+import com.google.common.collect.Lists;
 import com.pla.sharedkernel.domain.model.Gender;
 import com.pla.sharedkernel.domain.model.Relationship;
 import com.pla.sharedkernel.identifier.CoverageId;
@@ -12,6 +13,8 @@ import org.joda.time.LocalDate;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Set;
+
+import static org.nthdimenzion.utils.UtilValidator.isEmpty;
 
 /**
  * Created by Samir on 4/29/2015.
@@ -46,11 +49,17 @@ public class GHInsuredDto {
 
     private Integer noOfAssured;
 
+    private String existingIllness;
+
+    private Integer minAgeEntry;
+
+    private Integer maxAgeEntry;
+
     private Set<GHInsuredDependentDto> insuredDependents;
 
     private GHPlanPremiumDetailDto planPremiumDetail;
 
-    private List<CoveragePremiumDetailDto> coveragePremiumDetails;
+    private List<GHCoveragePremiumDetailDto> coveragePremiumDetails;
 
 
     public GHInsuredDto addInsuredDependent(Set<GHInsuredDependentDto> insuredDependentDtos) {
@@ -64,7 +73,7 @@ public class GHInsuredDto {
         return this;
     }
 
-    public GHInsuredDto addCoveragePremiumDetails(List<CoveragePremiumDetailDto> coveragePremiumDetailDtos) {
+    public GHInsuredDto addCoveragePremiumDetails(List<GHCoveragePremiumDetailDto> coveragePremiumDetailDtos) {
         this.coveragePremiumDetails = coveragePremiumDetailDtos;
         return this;
     }
@@ -103,14 +112,20 @@ public class GHInsuredDto {
 
         private GHPlanPremiumDetailDto planPremiumDetail;
 
-        private List<CoveragePremiumDetailDto> coveragePremiumDetails;
+        private String existingIllness;
+
+        private Integer minAgeEntry;
+
+        private Integer maxAgeEntry;
+
+        private List<GHCoveragePremiumDetailDto> coveragePremiumDetails;
 
         public GHInsuredDependentDto addPlanPremiumDetail(GHPlanPremiumDetailDto planPremiumDetailDto) {
             this.planPremiumDetail = planPremiumDetailDto;
             return this;
         }
 
-        public GHInsuredDependentDto addCoveragePremiumDetails(List<CoveragePremiumDetailDto> coveragePremiumDetailDtos) {
+        public GHInsuredDependentDto addCoveragePremiumDetails(List<GHCoveragePremiumDetailDto> coveragePremiumDetailDtos) {
             this.coveragePremiumDetails = coveragePremiumDetailDtos;
             return this;
         }
@@ -143,7 +158,7 @@ public class GHInsuredDto {
     @Getter
     @Setter
     @NoArgsConstructor
-    public static class CoveragePremiumDetailDto {
+    public static class GHCoveragePremiumDetailDto {
 
         private String coverageCode;
 
@@ -155,14 +170,38 @@ public class GHInsuredDto {
 
         private BigDecimal sumAssured;
 
+        private String premiumVisibility;
 
-        public CoveragePremiumDetailDto(String coverageCode, String coverageId, BigDecimal premium, BigDecimal sumAssured) {
+        private List<GHCoverageBenefitDetailDto> benefitDetails;
+
+        public GHCoveragePremiumDetailDto(String coverageCode, String coverageId, BigDecimal premium, BigDecimal sumAssured,String premiumVisibility) {
             this.coverageCode = coverageCode;
             this.coverageId = coverageId;
             this.premium = premium;
             this.sumAssured = sumAssured;
+            this.premiumVisibility=premiumVisibility;
         }
 
+        public GHCoveragePremiumDetailDto addBenefit(GHCoverageBenefitDetailDto benefitDetail) {
+            if (isEmpty(this.benefitDetails)) {
+                this.benefitDetails = Lists.newArrayList();
+            }
+            this.addBenefit(benefitDetail);
+            return this;
+        }
+
+        @Getter
+        @Setter
+        @NoArgsConstructor
+        public static class GHCoverageBenefitDetailDto {
+
+            private String benefitCode;
+
+            private String benefitId;
+
+            private BigDecimal benefitLimit;
+
+        }
 
     }
 }

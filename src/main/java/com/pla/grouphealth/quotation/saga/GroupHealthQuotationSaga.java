@@ -1,7 +1,7 @@
 package com.pla.grouphealth.quotation.saga;
 
-import com.pla.grouphealth.quotation.application.command.ClosureGLQuotationCommand;
-import com.pla.grouphealth.quotation.application.command.PurgeGLQuotationCommand;
+import com.pla.grouphealth.quotation.application.command.GHClosureGLQuotationCommand;
+import com.pla.grouphealth.quotation.application.command.GHPurgeGLQuotationCommand;
 import com.pla.grouphealth.quotation.domain.event.*;
 import com.pla.grouphealth.quotation.domain.model.GroupHealthQuotation;
 import com.pla.grouphealth.quotation.domain.model.GHQuotationStatus;
@@ -47,7 +47,7 @@ public class GroupHealthQuotationSaga extends AbstractAnnotatedSaga {
 
     @StartSaga
     @SagaEventHandler(associationProperty = "quotationId")
-    public void handle(GLQuotationGeneratedEvent event) throws ProcessInfoException {
+    public void handle(GHQuotationGeneratedEvent event) throws ProcessInfoException {
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("Handling GL Quotation Generated Event .....", event);
         }
@@ -62,25 +62,25 @@ public class GroupHealthQuotationSaga extends AbstractAnnotatedSaga {
         DateTime purgeScheduleDateTime = purgeDate.toDateTimeAtStartOfDay();
         DateTime closureScheduleDateTime = closureDate.toDateTimeAtStartOfDay();
         DateTime firstReminderDateTime = firstReminderDate.toDateTimeAtStartOfDay();
-        eventScheduler.schedule(firstReminderDateTime, new GLQuotationReminderEvent(event.getQuotationId()));
-        eventScheduler.schedule(purgeScheduleDateTime, new GLQuotationPurgeEvent(event.getQuotationId()));
-        eventScheduler.schedule(closureScheduleDateTime, new GLQuotationClosureEvent(event.getQuotationId()));
+        eventScheduler.schedule(firstReminderDateTime, new GHQuotationReminderEvent(event.getQuotationId()));
+        eventScheduler.schedule(purgeScheduleDateTime, new GHQuotationPurgeEvent(event.getQuotationId()));
+        eventScheduler.schedule(closureScheduleDateTime, new GHQuotationClosureEvent(event.getQuotationId()));
     }
 
     @SagaEventHandler(associationProperty = "quotationId")
     @EndSaga
-    public void handle(GLQuotationPurgeEvent event) {
+    public void handle(GHQuotationPurgeEvent event) {
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("Handling GL Quotation Purge Event .....", event);
         }
         GroupHealthQuotation groupHealthQuotation = ghQuotationRepository.findOne(event.getQuotationId());
         if (!GHQuotationStatus.CLOSED.equals(groupHealthQuotation.getQuotationStatus())) {
-            commandGateway.send(new PurgeGLQuotationCommand(event.getQuotationId()));
+            commandGateway.send(new GHPurgeGLQuotationCommand(event.getQuotationId()));
         }
     }
 
     @SagaEventHandler(associationProperty = "quotationId")
-    public void handle(GLQuotationReminderEvent event) throws ProcessInfoException {
+    public void handle(GHQuotationReminderEvent event) throws ProcessInfoException {
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("Handling GL Quotation Reminder Event .....", event);
         }
@@ -94,25 +94,25 @@ public class GroupHealthQuotationSaga extends AbstractAnnotatedSaga {
                 LocalDate quotationGeneratedDate = groupHealthQuotation.getGeneratedOn();
                 LocalDate secondReminderDate = quotationGeneratedDate.plusDays(firstReminderDay + secondReminderDay);
                 DateTime secondReminderDateTime = secondReminderDate.toDateTimeAtStartOfDay();
-                eventScheduler.schedule(secondReminderDateTime, new GLQuotationReminderEvent(event.getQuotationId()));
+                eventScheduler.schedule(secondReminderDateTime, new GHQuotationReminderEvent(event.getQuotationId()));
             }
         }
     }
 
     @SagaEventHandler(associationProperty = "quotationId")
-    public void handle(GLQuotationClosureEvent event) {
+    public void handle(GHQuotationClosureEvent event) {
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("Handling GL Quotation Closure Event .....", event);
         }
         GroupHealthQuotation groupHealthQuotation = ghQuotationRepository.findOne(event.getQuotationId());
         if (!GHQuotationStatus.CLOSED.equals(groupHealthQuotation.getQuotationStatus())) {
-            commandGateway.send(new ClosureGLQuotationCommand(event.getQuotationId()));
+            commandGateway.send(new GHClosureGLQuotationCommand(event.getQuotationId()));
         }
     }
 
     @SagaEventHandler(associationProperty = "quotationId")
     @EndSaga
-    public void handle(GLQuotationClosedEvent event) {
+    public void handle(GHQuotationClosedEvent event) {
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("Handling GL Quotation Closure Event .....", event);
         }

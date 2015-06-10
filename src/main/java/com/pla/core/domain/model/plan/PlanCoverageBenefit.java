@@ -1,10 +1,9 @@
 package com.pla.core.domain.model.plan;
 
 import com.google.common.base.Preconditions;
-import com.pla.sharedkernel.identifier.BenefitId;
 import com.pla.sharedkernel.domain.model.CoverageBenefitDefinition;
 import com.pla.sharedkernel.domain.model.CoverageBenefitType;
-import lombok.AccessLevel;
+import com.pla.sharedkernel.identifier.BenefitId;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.ToString;
@@ -16,9 +15,9 @@ import java.math.BigDecimal;
  * @since 1.0 13/03/2015
  */
 @ToString
-@Getter(AccessLevel.PACKAGE)
+@Getter
 @EqualsAndHashCode(of = {"benefitId"})
-class PlanCoverageBenefit {
+public class PlanCoverageBenefit {
 
     private BenefitId benefitId;
     private CoverageBenefitDefinition definedPer;
@@ -42,6 +41,10 @@ class PlanCoverageBenefit {
         this.coverageBenefitType = coverageBenefitType;
         this.benefitLimit = benefitLimit;
         this.maxLimit = maxLimit;
+    }
+
+    public boolean isValidBenefitLimit(BigDecimal benefitLimit) {
+        return benefitLimit.equals(this.benefitLimit) || (benefitLimit.compareTo(this.maxLimit) == -1 || benefitLimit.compareTo(this.maxLimit) == 0);
     }
 
 }

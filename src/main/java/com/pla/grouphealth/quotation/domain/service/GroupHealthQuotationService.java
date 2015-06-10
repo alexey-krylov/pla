@@ -3,7 +3,7 @@ package com.pla.grouphealth.quotation.domain.service;
 import com.pla.core.domain.model.agent.AgentId;
 import com.pla.grouphealth.quotation.domain.model.*;
 import com.pla.grouphealth.quotation.query.GHQuotationFinder;
-import com.pla.grouphealth.quotation.query.PremiumDetailDto;
+import com.pla.grouphealth.quotation.query.GHPremiumDetailDto;
 import com.pla.grouphealth.quotation.query.ProposerDto;
 import com.pla.publishedlanguage.contract.IPremiumCalculator;
 import com.pla.publishedlanguage.domain.model.BasicPremiumDto;
@@ -109,11 +109,12 @@ public class GroupHealthQuotationService {
         return currentQuotation.cloneQuotation(currentQuotation.getQuotationNumber(), ghQuotationProcessor.getUserName(), quotationId, versionNumber, new QuotationId(parentQuotationId));
     }
 
-    public GroupHealthQuotation updateWithPremiumDetail(GroupHealthQuotation groupHealthQuotation, PremiumDetailDto premiumDetailDto, UserDetails userDetails) {
+    public GroupHealthQuotation updateWithPremiumDetail(GroupHealthQuotation groupHealthQuotation, GHPremiumDetailDto premiumDetailDto, UserDetails userDetails) {
         if (!agentIsActive.isSatisfiedBy(groupHealthQuotation.getAgentId())) {
             raiseAgentIsInactiveException();
         }
-        GHPremiumDetail premiumDetail = new GHPremiumDetail(premiumDetailDto.getAddOnBenefit(), premiumDetailDto.getProfitAndSolvencyLoading(), premiumDetailDto.getDiscounts(), premiumDetailDto.getPolicyTermValue());
+        GHPremiumDetail premiumDetail = new GHPremiumDetail(premiumDetailDto.getAddOnBenefit(), premiumDetailDto.getProfitAndSolvencyLoading(),
+                premiumDetailDto.getDiscounts(), premiumDetailDto.getWaiverOfExcessLoading(), premiumDetailDto.getVat(), premiumDetailDto.getPolicyTermValue());
         premiumDetail = premiumDetail.updateWithNetPremium(groupHealthQuotation.getNetAnnualPremiumPaymentAmount(premiumDetail));
         if (premiumDetailDto.getPolicyTermValue() != null && premiumDetailDto.getPolicyTermValue() == 365) {
             List<ComputedPremiumDto> computedPremiumDtoList = premiumCalculator.calculateModalPremium(new BasicPremiumDto(PremiumFrequency.ANNUALLY, premiumDetail.getNetTotalPremium()));

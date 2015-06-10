@@ -167,7 +167,7 @@ public class Plan extends AbstractAnnotatedAggregateRoot<PlanId> {
 
 
     public Set<Integer> getAllowedCoverageTerm(CoverageId coverageId) {
-        PlanCoverage planCoverage = getPlanCoverageFor(coverageId);
+        PlanCoverage planCoverage = findPlanCoverage(coverageId);
         if (CoverageTermType.POLICY_TERM.equals(planCoverage.getCoverageTermType())) {
             return getAllowedPolicyTerm();
         }
@@ -215,7 +215,7 @@ public class Plan extends AbstractAnnotatedAggregateRoot<PlanId> {
 
 
     public List<BigDecimal> getAllowedCoverageSumAssuredValues(CoverageId coverageId) {
-        PlanCoverage planCoverage = getPlanCoverageFor(coverageId);
+        PlanCoverage planCoverage = findPlanCoverage(coverageId);
         return planCoverage.getAllowedCoverageSumAssuredValues();
     }
 
@@ -253,6 +253,16 @@ public class Plan extends AbstractAnnotatedAggregateRoot<PlanId> {
     }
 
 
+    public boolean isValidPlanCoverageBenefit(CoverageId coverageId, BenefitId benefitId) {
+        PlanCoverage planCoverage = findPlanCoverage(coverageId);
+        return planCoverage.isValidBenefit(benefitId);
+    }
+
+    public boolean isValidPlanCoverageBenefitLimit(CoverageId coverageId, BenefitId benefitId, BigDecimal benefitLimit) {
+        PlanCoverage planCoverage = findPlanCoverage(coverageId);
+        return planCoverage.isValidBenefitLimit(benefitId, benefitLimit);
+    }
+
     public int getMaximumMaturityAge() {
         int maximumMaturityAge = 0;
         if (PolicyTermType.SPECIFIED_VALUES.equals(this.policyTermType)) {
@@ -281,7 +291,7 @@ public class Plan extends AbstractAnnotatedAggregateRoot<PlanId> {
 
 
     public List<Integer> getAllowedCoverageAges(CoverageId coverageId) {
-        PlanCoverage planCoverage = getPlanCoverageFor(coverageId);
+        PlanCoverage planCoverage = findPlanCoverage(coverageId);
         return planCoverage.getAllowedAges();
     }
 
@@ -297,7 +307,7 @@ public class Plan extends AbstractAnnotatedAggregateRoot<PlanId> {
         return validAges.contains(age);
     }
 
-    PlanCoverage getPlanCoverageFor(CoverageId coverageId) {
+    PlanCoverage findPlanCoverage(CoverageId coverageId) {
         List<PlanCoverage> planCoverages = this.coverages.stream().filter(new Predicate<PlanCoverage>() {
             @Override
             public boolean test(PlanCoverage planCoverage) {

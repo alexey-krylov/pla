@@ -1,5 +1,6 @@
 package com.pla.grouphealth.quotation.domain.model;
 
+import com.google.common.collect.Lists;
 import com.pla.sharedkernel.identifier.PlanId;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -8,8 +9,10 @@ import lombok.Setter;
 import org.nthdimenzion.ddd.domain.annotations.ValueObject;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 import static com.google.common.base.Preconditions.checkArgument;
+import static org.nthdimenzion.utils.UtilValidator.isEmpty;
 import static org.nthdimenzion.utils.UtilValidator.isNotEmpty;
 
 /**
@@ -29,6 +32,8 @@ public class GHPlanPremiumDetail {
 
     private BigDecimal sumAssured;
 
+    private List<GHCoveragePremiumDetail> coveragePremiumDetails;
+
     GHPlanPremiumDetail(PlanId planId, String planCode, BigDecimal premiumAmount, BigDecimal sumAssured) {
         checkArgument(planId != null);
         checkArgument(isNotEmpty(planCode));
@@ -37,11 +42,19 @@ public class GHPlanPremiumDetail {
         this.planId = planId;
         this.planCode = planCode;
         this.premiumAmount = premiumAmount;
-        this.sumAssured=sumAssured;
+        this.sumAssured = sumAssured;
     }
 
-    public GHPlanPremiumDetail updatePremiumAmount(BigDecimal premiumAmount){
-        this.premiumAmount=premiumAmount;
+    public GHPlanPremiumDetail updatePremiumAmount(BigDecimal premiumAmount) {
+        this.premiumAmount = premiumAmount;
+        return this;
+    }
+
+    public GHPlanPremiumDetail addAllCoveragePremiumDetail(List<GHCoveragePremiumDetail> ghCoveragePremiumDetails) {
+        if (isEmpty(this.coveragePremiumDetails)) {
+            this.coveragePremiumDetails = Lists.newArrayList();
+        }
+        this.coveragePremiumDetails.addAll(ghCoveragePremiumDetails);
         return this;
     }
 }

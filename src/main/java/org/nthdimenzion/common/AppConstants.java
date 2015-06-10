@@ -47,7 +47,11 @@ public interface AppConstants {
 
     String OPTIONAL_COVERAGE_HEADER = "OptionalCoverage";
 
+    String OPTIONAL_COVERAGE_BENEFIT_HEADER = "Benefit";
+
     String OPTIONAL_COVERAGE_SA_HEADER = "Sum Assured";
+
+    String OPTIONAL_COVERAGE_PREMIUM_VISIBILITY_HEADER = "Premium Visibility";
 
     RoundingMode roundingMode = RoundingMode.CEILING;
 

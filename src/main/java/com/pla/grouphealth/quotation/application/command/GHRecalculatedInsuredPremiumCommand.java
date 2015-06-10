@@ -1,6 +1,6 @@
 package com.pla.grouphealth.quotation.application.command;
 
-import com.pla.grouphealth.quotation.query.PremiumDetailDto;
+import com.pla.grouphealth.quotation.query.GHPremiumDetailDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -12,11 +12,11 @@ import org.springframework.security.core.userdetails.UserDetails;
 @Getter
 @Setter
 @NoArgsConstructor
-public class GLRecalculatedInsuredPremiumCommand {
+public class GHRecalculatedInsuredPremiumCommand {
 
     private String quotationId;
 
-    private PremiumDetailDto premiumDetailDto;
+    private GHPremiumDetailDto premiumDetailDto;
 
     private UserDetails userDetails;
 }

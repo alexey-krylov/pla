@@ -1,11 +1,9 @@
-package com.pla.grouphealth.quotation.domain.event;
+package com.pla.grouphealth.quotation.application.command;
 
 import com.pla.sharedkernel.identifier.QuotationId;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.ToString;
-import org.nthdimenzion.axonframework.event.ISagaEvent;
 
 /**
  * Created by Samir on 5/31/2015.
@@ -13,8 +11,7 @@ import org.nthdimenzion.axonframework.event.ISagaEvent;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString
-public class GLQuotationClosureEvent implements ISagaEvent {
+public class GHPurgeGLQuotationCommand {
 
     private QuotationId quotationId;
 }

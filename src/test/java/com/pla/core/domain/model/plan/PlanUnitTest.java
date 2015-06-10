@@ -451,7 +451,7 @@ public class PlanUnitTest {
 
     @Test
     public void givenACoverageId_thenItShouldReturnThePlanCoverageForTheGivenCoverageId() {
-        PlanCoverage planCoverage = plan.getPlanCoverageFor(coverageId);
+        PlanCoverage planCoverage = plan.findPlanCoverage(coverageId);
         assertThat(CoverageCover.ACCELERATED, is(planCoverage.getCoverageCover()));
         assertThat(Sets.newHashSet(30, 35, 40, 45, 50, 55, 60, 70, 80), is(planCoverage.getCoverageTerm().validTerms));
     }

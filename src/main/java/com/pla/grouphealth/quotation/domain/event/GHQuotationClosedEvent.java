@@ -1,23 +1,22 @@
 package com.pla.grouphealth.quotation.domain.event;
 
 import com.pla.sharedkernel.identifier.QuotationId;
-import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.ToString;
 import org.nthdimenzion.axonframework.event.ISagaEvent;
 
 /**
- * Created by Samir on 5/31/2015.
+ * Created by Samir on 4/8/2015.
  */
+@EqualsAndHashCode
 @Getter
-@NoArgsConstructor
-@AllArgsConstructor
 @ToString
-public class GLQuotationPurgeEvent implements ISagaEvent {
-
+public class GHQuotationClosedEvent implements ISagaEvent{
 
     private QuotationId quotationId;
 
-
+    public GHQuotationClosedEvent(QuotationId quotationId) {
+        this.quotationId = quotationId;
+    }
 }

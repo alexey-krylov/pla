@@ -7,6 +7,7 @@ import com.pla.publishedlanguage.contract.IPlanAdapter;
 import com.pla.publishedlanguage.dto.PlanCoverageDetailDto;
 import com.pla.sharedkernel.domain.model.Gender;
 import com.pla.sharedkernel.domain.model.Relationship;
+import com.pla.sharedkernel.identifier.LineOfBusinessEnum;
 import com.pla.sharedkernel.identifier.PlanId;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
@@ -17,6 +18,8 @@ import org.nthdimenzion.presentation.AppUtils;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import static com.pla.sharedkernel.util.ExcelGeneratorUtil.getCellValue;
 import static org.nthdimenzion.utils.UtilValidator.*;
@@ -24,7 +27,7 @@ import static org.nthdimenzion.utils.UtilValidator.*;
 /**
  * Created by Samir on 5/4/2015.
  */
-public enum GLInsuredExcelHeader {
+public enum GHInsuredExcelHeader {
 
     PROPOSER_NAME("Proposer Name") {
         @Override
@@ -129,53 +132,6 @@ public enum GLInsuredExcelHeader {
             }
             return errorMessage;
         }
-    }, ANNUAL_INCOME("Annual Income") {
-        @Override
-        public String getAllowedValue(GHInsuredDto insuredDto) {
-            return insuredDto.getAnnualIncome() != null ? insuredDto.getAnnualIncome().toString() : "";
-        }
-
-        @Override
-        public GHInsuredDto populateInsuredDetail(GHInsuredDto insuredDto, Row row, List<String> headers) {
-            int cellNumber = headers.indexOf(this.getDescription());
-            Cell cell = row.getCell(cellNumber);
-            String cellValue = getCellValue(cell);
-            insuredDto.setAnnualIncome(isNotEmpty(cellValue) ? BigDecimal.valueOf(Double.valueOf(cellValue)) : null);
-            return insuredDto;
-        }
-
-        @Override
-        public GHInsuredDto.GHInsuredDependentDto populateInsuredDependentDetail(GHInsuredDto.GHInsuredDependentDto insuredDependentDto, Row row, List<String> headers) {
-            return insuredDependentDto;
-        }
-
-        @Override
-        public String getAllowedValue(GHInsuredDto.GHInsuredDependentDto insuredDependentDto) {
-            return "";
-        }
-
-        @Override
-        public String validateAndIfNotBuildErrorMessage(IPlanAdapter planAdapter, Row row, String value, List<String> excelHeaders) {
-            String errorMessage = "";
-            Cell incomeMultiplierCell = row.getCell(excelHeaders.indexOf(INCOME_MULTIPLIER.name()));
-            Cell annualIncomeCell = row.getCell(excelHeaders.indexOf(ANNUAL_INCOME.name()));
-            String incomeMultiplier = getCellValue(incomeMultiplierCell);
-            String annualIncome = getCellValue(annualIncomeCell);
-            if (isEmpty(annualIncome) && isNotEmpty(incomeMultiplier)) {
-                errorMessage = errorMessage + "Annual income cannot be blank.";
-                return errorMessage;
-            }
-            if (isEmpty(value)) {
-                return errorMessage;
-            }
-            try {
-                Double.parseDouble(annualIncome);
-            } catch (Exception e) {
-                errorMessage = errorMessage + "Annual income should be numeric.";
-            }
-            return errorMessage;
-        }
-
     },
     SALUTATION("Salutation") {
         @Override
@@ -313,6 +269,26 @@ public enum GLInsuredExcelHeader {
             String errorMessage = "";
             if (!isValidDate(value)) {
                 errorMessage = errorMessage + "Date of birth should be in format(dd/MM/yyyy).";
+                return errorMessage;
+            }
+            Cell minimumAgeCell = row.getCell(excelHeaders.indexOf(MIN_ENTRY_AGE.name()));
+            String minimumAgeCellValue = getCellValue(minimumAgeCell);
+            Cell maximumAgeCell = row.getCell(excelHeaders.indexOf(MAX_ENTRY_AGE.name()));
+            String maximumAgeCellValue = getCellValue(maximumAgeCell);
+            int age = AppUtils.getAge(LocalDate.parse(value, DateTimeFormat.forPattern(AppConstants.DD_MM_YYY_FORMAT)));
+            if (isNotEmpty(minimumAgeCellValue) && isNotEmpty(maximumAgeCellValue) && isEmpty(MIN_ENTRY_AGE.validateAndIfNotBuildErrorMessage(planAdapter, row, minimumAgeCellValue, excelHeaders)) && isEmpty(MAX_ENTRY_AGE.validateAndIfNotBuildErrorMessage(planAdapter, row, maximumAgeCellValue, excelHeaders))) {
+                int minimumAge = Double.valueOf(minimumAgeCellValue.trim()).intValue();
+                int maximumAge = Double.valueOf(maximumAgeCellValue.trim()).intValue();
+                if (!(age >= minimumAge && age <= maximumAge)) {
+                    errorMessage = errorMessage + " Age should between " + minimumAgeCellValue + " and " + maximumAgeCellValue + ".";
+                    return errorMessage;
+                }
+            } else {
+                Cell planCell = row.getCell(excelHeaders.indexOf(PLAN.name()));
+                String planCode = String.valueOf(Double.valueOf(getCellValue(planCell)).intValue());
+                if (!planAdapter.isValidPlanAge(planCode, age)) {
+                    errorMessage = errorMessage + " Age is not valid for plan " + planCode + ".";
+                }
             }
             return errorMessage;
         }
@@ -563,6 +539,10 @@ public enum GLInsuredExcelHeader {
             if (!isValidPlan) {
                 errorMessage = errorMessage + "Plan code does not exist.";
             }
+            boolean isValidPlanForGH = planAdapter.isValidPlanCodeForBusinessLine(planCode, LineOfBusinessEnum.GROUP_HEALTH);
+            if (!isValidPlanForGH) {
+                errorMessage = errorMessage + "Plan code is not a Group Health Plan.";
+            }
             Cell relationshipCell = row.getCell(excelHeaders.indexOf(RELATIONSHIP.name()));
             String relationship = getCellValue(relationshipCell);
             boolean isValidPlanForRelationship = planAdapter.isValidPlanForRelationship(planCode, Relationship.getRelationship(relationship));
@@ -571,66 +551,93 @@ public enum GLInsuredExcelHeader {
             }
             return errorMessage;
         }
-    }, INCOME_MULTIPLIER("Income Multiplier") {
+    },
+    MIN_ENTRY_AGE("Minimum Entry Age") {
         @Override
         public String getAllowedValue(GHInsuredDto insuredDto) {
-            return insuredDto.getPlanPremiumDetail().getIncomeMultiplier() != null ? insuredDto.getPlanPremiumDetail().getIncomeMultiplier().toString() : "";
+            return insuredDto.getMinAgeEntry() != null ? insuredDto.getMinAgeEntry().toString() : "";
         }
 
         @Override
         public GHInsuredDto populateInsuredDetail(GHInsuredDto insuredDto, Row row, List<String> headers) {
-            int cellNumber = headers.indexOf(this.getDescription());
-            Cell cell = row.getCell(cellNumber);
-            String cellValue = getCellValue(cell);
-            GHInsuredDto.GHPlanPremiumDetailDto planPremiumDetailDto = insuredDto.getPlanPremiumDetail() != null ? insuredDto.getPlanPremiumDetail() : new GHInsuredDto.GHPlanPremiumDetailDto();
-            planPremiumDetailDto.setIncomeMultiplier(isNotEmpty(cellValue) ? BigDecimal.valueOf(Double.valueOf(cellValue)) : null);
-            insuredDto.setPlanPremiumDetail(planPremiumDetailDto);
+            Cell minAgeCell = row.getCell(headers.indexOf(this.getDescription()));
+            String minAgeCellValue = getCellValue(minAgeCell);
+            Integer minimumAge = isNotEmpty(minAgeCellValue) ? Double.valueOf(minAgeCellValue.trim()).intValue() : null;
+            insuredDto.setMinAgeEntry(minimumAge);
             return insuredDto;
         }
 
         @Override
         public GHInsuredDto.GHInsuredDependentDto populateInsuredDependentDetail(GHInsuredDto.GHInsuredDependentDto insuredDependentDto, Row row, List<String> headers) {
-            int cellNumber = headers.indexOf(this.getDescription());
-            Cell cell = row.getCell(cellNumber);
-            String cellValue = getCellValue(cell);
-            GHInsuredDto.GHPlanPremiumDetailDto planPremiumDetailDto = insuredDependentDto.getPlanPremiumDetail() != null ? insuredDependentDto.getPlanPremiumDetail() : new GHInsuredDto.GHPlanPremiumDetailDto();
-            planPremiumDetailDto.setIncomeMultiplier(isNotEmpty(cellValue) ? BigDecimal.valueOf(Double.valueOf(cellValue)) : null);
+            Cell minAgeCell = row.getCell(headers.indexOf(this.getDescription()));
+            String minAgeCellValue = getCellValue(minAgeCell);
+            Integer minimumAge = isNotEmpty(minAgeCellValue) ? Double.valueOf(minAgeCellValue.trim()).intValue() : null;
+            insuredDependentDto.setMaxAgeEntry(minimumAge);
             return insuredDependentDto;
         }
 
         @Override
         public String getAllowedValue(GHInsuredDto.GHInsuredDependentDto insuredDependentDto) {
-            return insuredDependentDto.getPlanPremiumDetail().getIncomeMultiplier() != null ? insuredDependentDto.getPlanPremiumDetail().getIncomeMultiplier().toString() : "";
+            return insuredDependentDto.getMinAgeEntry() != null ? insuredDependentDto.getMinAgeEntry().toString() : "";
         }
 
         @Override
         public String validateAndIfNotBuildErrorMessage(IPlanAdapter planAdapter, Row row, String value, List<String> excelHeaders) {
-            String errorMessage = "";
-            Cell planCell = row.getCell(excelHeaders.indexOf(PLAN.name()));
-            Cell relationshipCell = row.getCell(excelHeaders.indexOf(RELATIONSHIP.name()));
-            String relationship = getCellValue(relationshipCell);
-            String planCode = getCellValue(planCell);
-            if (isEmpty(planCode)) {
-                errorMessage = errorMessage + "Plan code cannot be empty.";
-                return errorMessage;
+            if (isEmpty(value)) {
+                return "";
             }
-            try {
-                planCode = String.valueOf(Double.valueOf(planCode).intValue());
-            } catch (Exception e) {
+            String minAgeValue = String.valueOf(Double.valueOf(value.trim()).intValue());
+            Pattern pattern = Pattern.compile("^[1-9]{1,2}");
+            Matcher matcher = pattern.matcher(minAgeValue.trim());
+            if (!matcher.find()) {
+                return "Minimum Entry Age is not valid.";
             }
-            boolean isValidPlan = planAdapter.isValidPlanCode(planCode);
-            if (!isValidPlan) {
-                errorMessage = errorMessage + "Plan code does not exist.";
-                return errorMessage;
-            }
-            boolean hasPlanIncomeMultiplierSumAssuredType = planAdapter.hasPlanContainsIncomeMultiplierSumAssured(planCode);
-            if (hasPlanIncomeMultiplierSumAssuredType && isEmpty(value) && Relationship.SELF.description.equals(relationship.trim())) {
-                errorMessage = errorMessage + "Income multiplier cannot be empty as selected plan  has sum assured type as Income multiplier.";
-                return errorMessage;
-            }
-            return errorMessage;
+            return "";
         }
-    }, SUM_ASSURED("Sum Assured") {
+    }, MAX_ENTRY_AGE("Maximum Entry Age") {
+        @Override
+        public String getAllowedValue(GHInsuredDto insuredDto) {
+            return insuredDto.getMaxAgeEntry() != null ? insuredDto.getMaxAgeEntry().toString() : "";
+        }
+
+        @Override
+        public GHInsuredDto populateInsuredDetail(GHInsuredDto insuredDto, Row row, List<String> headers) {
+            Cell maxAgeCell = row.getCell(headers.indexOf(this.getDescription()));
+            String maxAgeCellValue = getCellValue(maxAgeCell);
+            Integer maximumAge = isNotEmpty(maxAgeCellValue) ? Double.valueOf(maxAgeCellValue.trim()).intValue() : null;
+            insuredDto.setMaxAgeEntry(maximumAge);
+            return insuredDto;
+        }
+
+        @Override
+        public GHInsuredDto.GHInsuredDependentDto populateInsuredDependentDetail(GHInsuredDto.GHInsuredDependentDto insuredDependentDto, Row row, List<String> headers) {
+            Cell maxAgeCell = row.getCell(headers.indexOf(this.getDescription()));
+            String maxAgeCellValue = getCellValue(maxAgeCell);
+            Integer maximumAge = isNotEmpty(maxAgeCellValue)? Double.valueOf(maxAgeCellValue.trim()).intValue():null;
+            insuredDependentDto.setMaxAgeEntry(maximumAge);
+            return insuredDependentDto;
+        }
+
+        @Override
+        public String getAllowedValue(GHInsuredDto.GHInsuredDependentDto insuredDependentDto) {
+            return insuredDependentDto.getMaxAgeEntry() != null ? insuredDependentDto.getMaxAgeEntry().toString() : "";
+        }
+
+        @Override
+        public String validateAndIfNotBuildErrorMessage(IPlanAdapter planAdapter, Row row, String value, List<String> excelHeaders) {
+            if (isEmpty(value)) {
+                return "";
+            }
+            String maxAgeValue = String.valueOf(Double.valueOf(value.trim()).intValue());
+            Pattern pattern = Pattern.compile("^[1-9]{1,2}");
+            Matcher matcher = pattern.matcher(maxAgeValue);
+            if (!matcher.find()) {
+                return "Maximum Entry Age is not valid.";
+            }
+            return "";
+        }
+    },
+    ANNUAL_LIMIT("Annual Limit") {
         @Override
         public String getAllowedValue(GHInsuredDto insuredDto) {
             return insuredDto.getPlanPremiumDetail().getSumAssured() != null ? insuredDto.getPlanPremiumDetail().getSumAssured().toString() : "";
@@ -642,7 +649,7 @@ public enum GLInsuredExcelHeader {
             Cell cell = row.getCell(cellNumber);
             String cellValue = getCellValue(cell);
             GHInsuredDto.GHPlanPremiumDetailDto planPremiumDetailDto = insuredDto.getPlanPremiumDetail() != null ? insuredDto.getPlanPremiumDetail() : new GHInsuredDto.GHPlanPremiumDetailDto();
-            planPremiumDetailDto.setSumAssured(isNotEmpty(cellValue) ? BigDecimal.valueOf(Double.valueOf(cellValue)) : null);
+            planPremiumDetailDto.setSumAssured(isNotEmpty(cellValue) ? BigDecimal.valueOf(Double.valueOf(cellValue).intValue()) : null);
             insuredDto.setPlanPremiumDetail(planPremiumDetailDto);
             return insuredDto;
         }
@@ -653,7 +660,7 @@ public enum GLInsuredExcelHeader {
             Cell cell = row.getCell(cellNumber);
             String cellValue = getCellValue(cell);
             GHInsuredDto.GHPlanPremiumDetailDto planPremiumDetailDto = insuredDependentDto.getPlanPremiumDetail() != null ? insuredDependentDto.getPlanPremiumDetail() : new GHInsuredDto.GHPlanPremiumDetailDto();
-            planPremiumDetailDto.setSumAssured(isNotEmpty(cellValue) ? BigDecimal.valueOf(Double.valueOf(cellValue)) : null);
+            planPremiumDetailDto.setSumAssured(isNotEmpty(cellValue) ? BigDecimal.valueOf(Double.valueOf(cellValue).intValue()) : null);
             insuredDependentDto.setPlanPremiumDetail(planPremiumDetailDto);
             return insuredDependentDto;
         }
@@ -666,9 +673,10 @@ public enum GLInsuredExcelHeader {
         @Override
         public String validateAndIfNotBuildErrorMessage(IPlanAdapter planAdapter, Row row, String value, List<String> excelHeaders) {
             String errorMessage = "";
+            if(isEmpty(value)){
+                return "Annual Limit is blank.";
+            }
             Cell planCell = row.getCell(excelHeaders.indexOf(PLAN.name()));
-            Cell relationshipCell = row.getCell(excelHeaders.indexOf(RELATIONSHIP.name()));
-            String relationship = getCellValue(relationshipCell);
             String planCode = getCellValue(planCell);
             if (isEmpty(planCode)) {
                 errorMessage = errorMessage + "Plan code cannot be empty.";
@@ -683,18 +691,9 @@ public enum GLInsuredExcelHeader {
                 errorMessage = errorMessage + "Plan code does not exist.";
                 return errorMessage;
             }
-            boolean hasPlanIncomeMultiplierSumAssuredType = planAdapter.hasPlanContainsIncomeMultiplierSumAssured(planCode);
-            if (!hasPlanIncomeMultiplierSumAssuredType && Relationship.SELF.description.endsWith(relationship.trim()) && isEmpty(value)) {
-                errorMessage = errorMessage + "Sum assured cannot be empty.";
-                return errorMessage;
-            }
-            if (!hasPlanIncomeMultiplierSumAssuredType && !Relationship.SELF.description.equals(relationship.trim()) && isEmpty(value)) {
-                errorMessage = errorMessage + "Sum assured cannot be empty.";
-                return errorMessage;
-            }
-            boolean isValidSumAssured = isNotEmpty(value) ? planAdapter.isValidPlanSumAssured(planCode, BigDecimal.valueOf(Double.valueOf(value).intValue())) : true;
+            boolean isValidSumAssured = isNotEmpty(value) ? planAdapter.isValidPlanSumAssured(planCode, BigDecimal.valueOf(Double.valueOf(value).intValue())) : false;
             if (!isValidSumAssured) {
-                errorMessage = errorMessage + "Sum assured is not valid for selected plan.";
+                errorMessage = errorMessage + "Annual Limit is not valid for selected plan.";
             }
             return errorMessage;
         }
@@ -742,11 +741,44 @@ public enum GLInsuredExcelHeader {
             }
             return errorMessage;
         }
+    }, PRE_EXISTING_ILLNESS("Pre-Existing Illness") {
+        @Override
+        public String getAllowedValue(GHInsuredDto insuredDto) {
+            return "";
+        }
+
+        @Override
+        public GHInsuredDto populateInsuredDetail(GHInsuredDto insuredDto, Row row, List<String> headers) {
+            int cellNumber = headers.indexOf(this.getDescription());
+            Cell cell = row.getCell(cellNumber);
+            String cellValue = getCellValue(cell);
+            insuredDto.setExistingIllness(cellValue);
+            return insuredDto;
+        }
+
+        @Override
+        public GHInsuredDto.GHInsuredDependentDto populateInsuredDependentDetail(GHInsuredDto.GHInsuredDependentDto insuredDependentDto, Row row, List<String> headers) {
+            int cellNumber = headers.indexOf(this.getDescription());
+            Cell cell = row.getCell(cellNumber);
+            String cellValue = getCellValue(cell);
+            insuredDependentDto.setExistingIllness(cellValue);
+            return insuredDependentDto;
+        }
+
+        @Override
+        public String getAllowedValue(GHInsuredDto.GHInsuredDependentDto insuredDependentDto) {
+            return insuredDependentDto.getExistingIllness();
+        }
+
+        @Override
+        public String validateAndIfNotBuildErrorMessage(IPlanAdapter planAdapter, Row row, String value, List<String> excelHeaders) {
+            return "";
+        }
     };
 
     private String description;
 
-    GLInsuredExcelHeader(String description) {
+    GHInsuredExcelHeader(String description) {
         this.description = description;
     }
 
@@ -756,15 +788,15 @@ public enum GLInsuredExcelHeader {
 
     public static List<String> getAllHeader() {
         List<String> headers = Lists.newArrayList();
-        for (GLInsuredExcelHeader glInsuredExcelHeader : GLInsuredExcelHeader.values()) {
-            headers.add(glInsuredExcelHeader.getDescription());
+        for (GHInsuredExcelHeader ghInsuredExcelHeader : GHInsuredExcelHeader.values()) {
+            headers.add(ghInsuredExcelHeader.getDescription());
         }
         return headers;
     }
 
     public static List<String> getAllHeaderForParser() {
         List<String> headers = Lists.newArrayList();
-        for (com.pla.grouplife.quotation.application.service.GLInsuredExcelHeader glInsuredExcelHeader : com.pla.grouplife.quotation.application.service.GLInsuredExcelHeader.values()) {
+        for (GHInsuredExcelHeader glInsuredExcelHeader : GHInsuredExcelHeader.values()) {
             headers.add(glInsuredExcelHeader.name());
         }
         return headers;
@@ -773,24 +805,45 @@ public enum GLInsuredExcelHeader {
 
     public static List<String> getAllowedHeaders(IPlanAdapter planAdapter, List<PlanId> planIds) {
         List<PlanCoverageDetailDto> planCoverageDetailDtoList = planAdapter.getPlanAndCoverageDetail(planIds);
-        int noOfOptionalCoverage = PlanCoverageDetailDto.getNoOfOptionalCoverage(planCoverageDetailDtoList);
-        List<String> headers = com.pla.grouplife.quotation.application.service.GLInsuredExcelHeader.getAllHeader();
-        for (int count = 1; count <= noOfOptionalCoverage; count++) {
-            headers.add((AppConstants.OPTIONAL_COVERAGE_HEADER + count));
-            headers.add((AppConstants.OPTIONAL_COVERAGE_HEADER + count) + " " + AppConstants.PREMIUM_CELL_HEADER_NAME);
-            headers.add((AppConstants.OPTIONAL_COVERAGE_HEADER + count) + " " + AppConstants.OPTIONAL_COVERAGE_SA_HEADER);
+        List<String> headers = GHInsuredExcelHeader.getAllHeader();
+        int count = 1;
+        for (PlanCoverageDetailDto planCoverageDetailDto : planCoverageDetailDtoList) {
+            for (PlanCoverageDetailDto.CoverageDto coverageDto : planCoverageDetailDto.getCoverageDtoList()) {
+                headers.add((AppConstants.OPTIONAL_COVERAGE_HEADER + count));
+                headers.add((AppConstants.OPTIONAL_COVERAGE_HEADER + count) + " " + AppConstants.OPTIONAL_COVERAGE_SA_HEADER);
+                headers.add((AppConstants.OPTIONAL_COVERAGE_HEADER + count) + " " + AppConstants.PREMIUM_CELL_HEADER_NAME);
+                headers.add((AppConstants.OPTIONAL_COVERAGE_HEADER + count) + " " + AppConstants.OPTIONAL_COVERAGE_PREMIUM_VISIBILITY_HEADER);
+                int benefitCount = 1;
+                for (PlanCoverageDetailDto.BenefitDto benefitDto : coverageDto.getBenefits()) {
+                    headers.add((AppConstants.OPTIONAL_COVERAGE_HEADER + count) + " " + (AppConstants.OPTIONAL_COVERAGE_BENEFIT_HEADER + benefitCount));
+                    headers.add((AppConstants.OPTIONAL_COVERAGE_HEADER + count) + " " + (AppConstants.OPTIONAL_COVERAGE_BENEFIT_HEADER + benefitCount + " Limit"));
+                    benefitCount++;
+                }
+                count++;
+            }
         }
+
         return ImmutableList.copyOf(headers);
     }
 
     public static List<String> getAllowedHeaderForParser(IPlanAdapter planAdapter, List<PlanId> planIds) {
         List<PlanCoverageDetailDto> planCoverageDetailDtoList = planAdapter.getPlanAndCoverageDetail(planIds);
-        int noOfOptionalCoverage = PlanCoverageDetailDto.getNoOfOptionalCoverage(planCoverageDetailDtoList);
-        List<String> headers = com.pla.grouplife.quotation.application.service.GLInsuredExcelHeader.getAllHeaderForParser();
-        for (int count = 1; count <= noOfOptionalCoverage; count++) {
-            headers.add((AppConstants.OPTIONAL_COVERAGE_HEADER + count));
-            headers.add((AppConstants.OPTIONAL_COVERAGE_HEADER + count) + " " + AppConstants.PREMIUM_CELL_HEADER_NAME);
-            headers.add((AppConstants.OPTIONAL_COVERAGE_HEADER + count) + " " + AppConstants.OPTIONAL_COVERAGE_SA_HEADER);
+        List<String> headers = GHInsuredExcelHeader.getAllHeaderForParser();
+        int count = 1;
+        for (PlanCoverageDetailDto planCoverageDetailDto : planCoverageDetailDtoList) {
+            for (PlanCoverageDetailDto.CoverageDto coverageDto : planCoverageDetailDto.getCoverageDtoList()) {
+                headers.add((AppConstants.OPTIONAL_COVERAGE_HEADER + count));
+                headers.add((AppConstants.OPTIONAL_COVERAGE_HEADER + count) + " " + AppConstants.OPTIONAL_COVERAGE_SA_HEADER);
+                headers.add((AppConstants.OPTIONAL_COVERAGE_HEADER + count) + " " + AppConstants.PREMIUM_CELL_HEADER_NAME);
+                headers.add((AppConstants.OPTIONAL_COVERAGE_HEADER + count) + " " + AppConstants.OPTIONAL_COVERAGE_PREMIUM_VISIBILITY_HEADER);
+                int benefitCount = 1;
+                for (PlanCoverageDetailDto.BenefitDto benefitDto : coverageDto.getBenefits()) {
+                    headers.add((AppConstants.OPTIONAL_COVERAGE_HEADER + count) + " " + (AppConstants.OPTIONAL_COVERAGE_BENEFIT_HEADER + benefitCount));
+                    headers.add((AppConstants.OPTIONAL_COVERAGE_HEADER + count) + " " + (AppConstants.OPTIONAL_COVERAGE_BENEFIT_HEADER + benefitCount + " Limit"));
+                    benefitCount++;
+                }
+                count++;
+            }
         }
         return ImmutableList.copyOf(headers);
     }

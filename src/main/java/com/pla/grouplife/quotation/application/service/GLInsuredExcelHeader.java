@@ -7,6 +7,7 @@ import com.pla.publishedlanguage.contract.IPlanAdapter;
 import com.pla.publishedlanguage.dto.PlanCoverageDetailDto;
 import com.pla.sharedkernel.domain.model.Gender;
 import com.pla.sharedkernel.domain.model.Relationship;
+import com.pla.sharedkernel.identifier.LineOfBusinessEnum;
 import com.pla.sharedkernel.identifier.PlanId;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
@@ -564,6 +565,10 @@ public enum GLInsuredExcelHeader {
             if (!isValidPlan) {
                 errorMessage = errorMessage + "Plan code does not exist.";
             }
+            boolean isValidPlanForGL = planAdapter.isValidPlanCodeForBusinessLine(planCode, LineOfBusinessEnum.GROUP_LIFE);
+            if (!isValidPlanForGL) {
+                errorMessage = errorMessage + "Plan code is not a Group Line Plan.";
+            }
             Cell relationshipCell = row.getCell(excelHeaders.indexOf(RELATIONSHIP.name()));
             String relationship = getCellValue(relationshipCell);
             boolean isValidPlanForRelationship = planAdapter.isValidPlanForRelationship(planCode, Relationship.getRelationship(relationship));
@@ -802,8 +807,8 @@ public enum GLInsuredExcelHeader {
         List<String> headers = GLInsuredExcelHeader.getAllHeaderForParser();
         for (int count = 1; count <= noOfOptionalCoverage; count++) {
             headers.add((AppConstants.OPTIONAL_COVERAGE_HEADER + count));
-            headers.add((AppConstants.OPTIONAL_COVERAGE_HEADER + count) + " " + AppConstants.PREMIUM_CELL_HEADER_NAME);
             headers.add((AppConstants.OPTIONAL_COVERAGE_HEADER + count) + " " + AppConstants.OPTIONAL_COVERAGE_SA_HEADER);
+            headers.add((AppConstants.OPTIONAL_COVERAGE_HEADER + count) + " " + AppConstants.PREMIUM_CELL_HEADER_NAME);
         }
         return ImmutableList.copyOf(headers);
     }

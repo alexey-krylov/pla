@@ -13,7 +13,7 @@
     <!--*/-->
 </head>
 <script src="http://timschlechter.github.io/bootstrap-tagsinput/examples/lib/jquery/dist/jquery.min.js"></script>
-<script src="/pla/js/quotation/groupLife/emailQuotation.js"></script>
+<script src="/pla/js/grouphealth/quotation/emailQuotation.js"></script>
 <script src="//tinymce.cachefly.net/4.1/tinymce.min.js"></script>
 <script src="http://timschlechter.github.io/bootstrap-tagsinput/examples/lib/bootstrap-tagsinput/bootstrap-tagsinput.js"></script>
 <body onload="javascript:bodyOnLoad();">
@@ -82,7 +82,7 @@
                         </div>
                         <div class="row">
                             <div class="col-md-12">
-                                <a th:href="@{/quotation/grouplife/printquotation/{quotationId}(quotationId=${mailContent.quotationId})}">
+                                <a th:href="@{/quotation/grouphealth/printquotation/{quotationId}(quotationId=${mailContent.quotationId})}">
                                     <span class="glyphicon glyphicon-file" style="font-size: 18px"></span>
                                     <label th:utext="${mailContent.subject}+'.PDF'"></label>
                                 </a>

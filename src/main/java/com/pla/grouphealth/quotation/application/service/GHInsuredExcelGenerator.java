@@ -22,6 +22,8 @@ import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+import static org.nthdimenzion.utils.UtilValidator.isNotEmpty;
+
 /**
  * Created by Samir on 5/4/2015.
  */
@@ -40,10 +42,10 @@ public class GHInsuredExcelGenerator {
     }
 
     public HSSFWorkbook generateInsuredExcel(List<GHInsuredDto> insureds, List<PlanId> planIds) throws IOException {
-        final List<String> headers = GLInsuredExcelHeader.getAllowedHeaders(planAdapter, planIds);
+        final List<String> headers = GHInsuredExcelHeader.getAllowedHeaders(planAdapter, planIds);
         List<Map<Integer, String>> excelData = Lists.newArrayList();
         for (GHInsuredDto insuredDto : insureds) {
-            List<Map<Integer, String>> tranformedList = transformInsuredDtoToExcelData(insuredDto, GLInsuredExcelHeader.getAllowedHeaderForParser(planAdapter, planIds));
+            List<Map<Integer, String>> tranformedList = transformInsuredDtoToExcelData(insuredDto, GHInsuredExcelHeader.getAllowedHeaderForParser(planAdapter, planIds));
             for (Map<Integer, String> insuredMap : tranformedList) {
                 excelData.add(insuredMap);
             }
@@ -62,14 +64,30 @@ public class GHInsuredExcelGenerator {
         Map<Integer, String> excelDataMap = Maps.newHashMap();
         headers.forEach(header -> {
             if (!header.contains(AppConstants.OPTIONAL_COVERAGE_HEADER)) {
-                excelDataMap.put(headers.indexOf(header), GLInsuredExcelHeader.valueOf(header).getAllowedValue(insuredDto));
+                excelDataMap.put(headers.indexOf(header), GHInsuredExcelHeader.valueOf(header).getAllowedValue(insuredDto));
             }
         });
-        List<GHInsuredDto.CoveragePremiumDetailDto> coveragePremiumDetailDtoList = insuredDto.getCoveragePremiumDetails();
+        List<GHInsuredDto.GHCoveragePremiumDetailDto> coveragePremiumDetailDtoList = insuredDto.getCoveragePremiumDetails();
         coveragePremiumDetailDtoList.forEach(coveragePremiumDetail -> {
-            int indexOfOptionalCoverage = headers.indexOf(AppConstants.OPTIONAL_COVERAGE_HEADER + coveragePremiumDetailDtoList.indexOf(coveragePremiumDetail) + 1);
+            int indexOfCoveragePremiumDetail = coveragePremiumDetailDtoList.indexOf(coveragePremiumDetail) + 1;
+            int indexOfOptionalCoverage = headers.indexOf(AppConstants.OPTIONAL_COVERAGE_HEADER + indexOfCoveragePremiumDetail);
+            int indexOfOptionalCoverageSA = headers.indexOf((AppConstants.OPTIONAL_COVERAGE_HEADER + indexOfCoveragePremiumDetail) + " " + AppConstants.OPTIONAL_COVERAGE_SA_HEADER);
+            int indexOfOptionalCoveragePremium = headers.indexOf((AppConstants.OPTIONAL_COVERAGE_HEADER + indexOfCoveragePremiumDetail) + " " + AppConstants.PREMIUM_CELL_HEADER_NAME);
+            int indexOfOptionalCoverageVisibility = headers.indexOf((AppConstants.OPTIONAL_COVERAGE_HEADER + indexOfCoveragePremiumDetail) + " " + AppConstants.OPTIONAL_COVERAGE_PREMIUM_VISIBILITY_HEADER);
             excelDataMap.put(indexOfOptionalCoverage, coveragePremiumDetail.getCoverageCode());
-            excelDataMap.put(indexOfOptionalCoverage + 1, coveragePremiumDetail.getPremium() != null ? coveragePremiumDetail.getPremium().toString() : "");
+            excelDataMap.put(indexOfOptionalCoverageSA, coveragePremiumDetail.getSumAssured() != null ? coveragePremiumDetail.getSumAssured().toString() : "");
+            excelDataMap.put(indexOfOptionalCoveragePremium, coveragePremiumDetail.getPremium() != null ? coveragePremiumDetail.getPremium().toString() : "");
+            excelDataMap.put(indexOfOptionalCoverageVisibility, coveragePremiumDetail.getPremiumVisibility() != null ? coveragePremiumDetail.getPremiumVisibility() : "");
+            List<GHInsuredDto.GHCoveragePremiumDetailDto.GHCoverageBenefitDetailDto> benefitDetailList = coveragePremiumDetail.getBenefitDetails();
+            if (isNotEmpty(benefitDetailList)) {
+                benefitDetailList.forEach(benefitDetail -> {
+                    int indexOfBenefitDetail = benefitDetailList.indexOf(benefitDetail) + 1;
+                    int indexOfBenefitCode = headers.indexOf((AppConstants.OPTIONAL_COVERAGE_HEADER + indexOfCoveragePremiumDetail) + " " + (AppConstants.OPTIONAL_COVERAGE_BENEFIT_HEADER + indexOfBenefitDetail));
+                    int indexOfBenefitLimit = headers.indexOf((AppConstants.OPTIONAL_COVERAGE_HEADER + indexOfCoveragePremiumDetail) + " " + (AppConstants.OPTIONAL_COVERAGE_BENEFIT_HEADER + indexOfBenefitDetail + " Limit"));
+                    excelDataMap.put(indexOfBenefitCode, benefitDetail.getBenefitCode());
+                    excelDataMap.put(indexOfBenefitLimit, benefitDetail.getBenefitLimit() != null ? benefitDetail.getBenefitLimit().toPlainString() : "");
+                });
+            }
         });
         List<Map<Integer, String>> dependentDetailExcelRowData = insuredDto.getInsuredDependents().stream().map(new Function<GHInsuredDto.GHInsuredDependentDto, Map<Integer, String>>() {
             @Override
@@ -86,14 +104,30 @@ public class GHInsuredExcelGenerator {
         Map<Integer, String> excelDataMap = Maps.newHashMap();
         headers.forEach(header -> {
             if (!header.contains(AppConstants.OPTIONAL_COVERAGE_HEADER)) {
-                excelDataMap.put(headers.indexOf(header), GLInsuredExcelHeader.valueOf(header).getAllowedValue(insuredDependentDto));
+                excelDataMap.put(headers.indexOf(header), GHInsuredExcelHeader.valueOf(header).getAllowedValue(insuredDependentDto));
             }
         });
-        List<GHInsuredDto.CoveragePremiumDetailDto> coveragePremiumDetailDtoList = insuredDependentDto.getCoveragePremiumDetails();
+        List<GHInsuredDto.GHCoveragePremiumDetailDto> coveragePremiumDetailDtoList = insuredDependentDto.getCoveragePremiumDetails();
         coveragePremiumDetailDtoList.forEach(coveragePremiumDetail -> {
-            int indexOfOptionalCoverage = headers.indexOf(AppConstants.OPTIONAL_COVERAGE_HEADER + coveragePremiumDetailDtoList.indexOf(coveragePremiumDetail) + 1);
+            int indexOfCoveragePremiumDetail = coveragePremiumDetailDtoList.indexOf(coveragePremiumDetail) + 1;
+            int indexOfOptionalCoverage = headers.indexOf(AppConstants.OPTIONAL_COVERAGE_HEADER + indexOfCoveragePremiumDetail);
+            int indexOfOptionalCoverageSA = headers.indexOf((AppConstants.OPTIONAL_COVERAGE_HEADER + indexOfCoveragePremiumDetail) + " " + AppConstants.OPTIONAL_COVERAGE_SA_HEADER);
+            int indexOfOptionalCoveragePremium = headers.indexOf((AppConstants.OPTIONAL_COVERAGE_HEADER + indexOfCoveragePremiumDetail) + " " + AppConstants.PREMIUM_CELL_HEADER_NAME);
+            int indexOfOptionalCoverageVisibility = headers.indexOf((AppConstants.OPTIONAL_COVERAGE_HEADER + indexOfCoveragePremiumDetail) + " " + AppConstants.OPTIONAL_COVERAGE_PREMIUM_VISIBILITY_HEADER);
             excelDataMap.put(indexOfOptionalCoverage, coveragePremiumDetail.getCoverageCode());
-            excelDataMap.put(indexOfOptionalCoverage + 1, coveragePremiumDetail.getPremium() != null ? coveragePremiumDetail.getPremium().toString() : "");
+            excelDataMap.put(indexOfOptionalCoverageSA, coveragePremiumDetail.getSumAssured() != null ? coveragePremiumDetail.getSumAssured().toString() : "");
+            excelDataMap.put(indexOfOptionalCoveragePremium, coveragePremiumDetail.getPremium() != null ? coveragePremiumDetail.getPremium().toString() : "");
+            excelDataMap.put(indexOfOptionalCoverageVisibility, coveragePremiumDetail.getPremiumVisibility() != null ? coveragePremiumDetail.getPremiumVisibility() : "");
+            List<GHInsuredDto.GHCoveragePremiumDetailDto.GHCoverageBenefitDetailDto> benefitDetailList = coveragePremiumDetail.getBenefitDetails();
+            if (isNotEmpty(benefitDetailList)) {
+                benefitDetailList.forEach(benefitDetail -> {
+                    int indexOfBenefitDetail = benefitDetailList.indexOf(benefitDetail) + 1;
+                    int indexOfBenefitCode = headers.indexOf((AppConstants.OPTIONAL_COVERAGE_HEADER + indexOfCoveragePremiumDetail) + " " + (AppConstants.OPTIONAL_COVERAGE_BENEFIT_HEADER + indexOfBenefitDetail));
+                    int indexOfBenefitLimit = headers.indexOf((AppConstants.OPTIONAL_COVERAGE_HEADER + indexOfCoveragePremiumDetail) + " " + (AppConstants.OPTIONAL_COVERAGE_BENEFIT_HEADER + indexOfBenefitDetail + " Limit"));
+                    excelDataMap.put(indexOfBenefitCode, benefitDetail.getBenefitCode());
+                    excelDataMap.put(indexOfBenefitLimit, benefitDetail.getBenefitLimit() != null ? benefitDetail.getBenefitLimit().toPlainString() : "");
+                });
+            }
         });
         return excelDataMap;
     }

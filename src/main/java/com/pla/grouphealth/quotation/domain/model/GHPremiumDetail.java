@@ -28,6 +28,8 @@ public class GHPremiumDetail {
 
     private BigDecimal profitAndSolvency;
 
+    private BigDecimal waiverOfExcessLoading;
+
     private BigDecimal discount;
 
     private Integer policyTermValue;
@@ -40,11 +42,15 @@ public class GHPremiumDetail {
 
     private BigDecimal netTotalPremium;
 
-    public GHPremiumDetail(BigDecimal addOnBenefit, BigDecimal profitAndSolvency, BigDecimal discount, Integer policyTermValue) {
+    private BigDecimal vat;
+
+    public GHPremiumDetail(BigDecimal addOnBenefit, BigDecimal profitAndSolvency, BigDecimal discount, BigDecimal waiverOfExcessLoading, BigDecimal vat, Integer policyTermValue) {
         this.addOnBenefit = addOnBenefit;
         this.profitAndSolvency = profitAndSolvency;
         this.discount = discount;
         this.policyTermValue = policyTermValue;
+        this.waiverOfExcessLoading = waiverOfExcessLoading;
+        this.vat = vat;
     }
 
 

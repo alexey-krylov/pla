@@ -33,7 +33,7 @@ public class GLQuotationDetailDto {
     private String additionalDiscountLoading;
     private String serviceTax;
     private String totalPremium;
-    private String specialConditions="";
+    private String specialConditions = "";
     private String addOnBenefits;
     private String addOnBenefitsPercentage;
     private String waiverOfExcessLoadings;
@@ -72,8 +72,11 @@ public class GLQuotationDetailDto {
         private String age;
         private String annualIncome;
         private String basicPremium;
+        private String planPremium;
+        private String visibleCoveragePremium;
 
-        public Annexure(String insuredName, String nrc, String sex, String dob, String category, String status, String age, String annualIncome, String basicPremium) {
+
+        public Annexure(String insuredName, String nrc, String sex, String dob, String category, String status, String age, String annualIncome, String basicPremium, String planPremium, String visibleCoveragePremium) {
             this.insuredName = insuredName;
             this.nrc = nrc;
             this.sex = sex;
@@ -83,6 +86,8 @@ public class GLQuotationDetailDto {
             this.age = age;
             this.annualIncome = annualIncome;
             this.basicPremium = basicPremium;
+            this.planPremium = planPremium;
+            this.visibleCoveragePremium = visibleCoveragePremium;
         }
     }
 }
