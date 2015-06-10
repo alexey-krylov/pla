@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with Jaspersoft Studio version 6.0.4.final using JasperReports Library version 6.0.4  -->
-<!-- 2015-06-10T17:29:51 -->
+<!-- 2015-06-10T17:43:08 -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="planReadyReckoner" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="d00c8d26-b471-4e08-b063-b05b93be6bca">
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
 	<queryString>
@@ -134,9 +134,9 @@
 		</band>
 	</detail>
 	<pageFooter>
-		<band height="45" splitType="Stretch">
+		<band height="33" splitType="Stretch">
 			<frame>
-				<reportElement x="0" y="13" width="800" height="32" uuid="39390376-5a81-4966-936e-67fd68987e63"/>
+				<reportElement x="1" y="0" width="800" height="32" uuid="39390376-5a81-4966-936e-67fd68987e63"/>
 				<box>
 					<topPen lineWidth="0.6"/>
 					<leftPen lineWidth="0.6"/>
