@@ -175,9 +175,9 @@ public class GroupHealthQuotation extends AbstractAggregateRoot<QuotationId> imp
         totalInsuredPremiumAmount = totalInsuredPremiumAmount.subtract(waiverOfExcessLoading);
         BigDecimal discountAmount = premiumDetail.getDiscount() == null ? BigDecimal.ZERO : totalInsuredPremiumAmount.multiply((premiumDetail.getDiscount().divide(new BigDecimal(100))));
         totalInsuredPremiumAmount = totalInsuredPremiumAmount.subtract(discountAmount);
-        totalInsuredPremiumAmount = totalInsuredPremiumAmount.setScale(2, BigDecimal.ROUND_CEILING);
         BigDecimal vat = premiumDetail.getVat() == null ? BigDecimal.ZERO : totalInsuredPremiumAmount.multiply((premiumDetail.getVat().divide(new BigDecimal(100))));
         totalInsuredPremiumAmount = totalInsuredPremiumAmount.add(vat);
+        totalInsuredPremiumAmount = totalInsuredPremiumAmount.setScale(2, BigDecimal.ROUND_CEILING);
         return totalInsuredPremiumAmount;
     }
 

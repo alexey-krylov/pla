@@ -22,6 +22,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.function.Function;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import static org.nthdimenzion.utils.UtilValidator.isEmpty;
@@ -94,7 +95,8 @@ public class GLQuotationFinder {
             criteria = criteria != null ? criteria.and("agentId.agentId").is(agentCode) : Criteria.where("agentId.agentId").is(agentCode);
         }
         if (isNotEmpty(proposerName)) {
-            criteria = criteria != null ? criteria.and("proposer.proposerName").is(proposerName) : Criteria.where("proposer.proposerName").is(proposerName);
+            String proposerPattern = "^"+proposerName;
+            criteria = criteria != null ? criteria.and("proposer.proposerName").regex(Pattern.compile(proposerPattern,Pattern.CASE_INSENSITIVE)) : Criteria.where("proposer.proposerName").regex(Pattern.compile(proposerPattern,Pattern.CASE_INSENSITIVE));
         }
         Set<String> agentIds = null;
         if (isNotEmpty(agentName)) {

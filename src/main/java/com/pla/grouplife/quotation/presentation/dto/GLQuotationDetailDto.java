@@ -1,8 +1,10 @@
 package com.pla.grouplife.quotation.presentation.dto;
 
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -33,7 +35,7 @@ public class GLQuotationDetailDto {
     private String additionalDiscountLoading;
     private String serviceTax;
     private String totalPremium;
-    private String specialConditions="";
+    private String specialConditions = "";
     private String addOnBenefits;
     private String addOnBenefitsPercentage;
     private String waiverOfExcessLoadings;
@@ -46,17 +48,30 @@ public class GLQuotationDetailDto {
 
     @Getter
     @Setter
+    @EqualsAndHashCode(of = {"category", "relationship", "planCoverageName"})
     public class CoverDetail {
         private String category;
         private String relationship;
         private String planCoverageName;
         private String planCoverageSumAssured;
+        private BigDecimal sumAssured;
 
-        public CoverDetail(String category, String relationship, String planCoverageName, String planCoverageSumAssured) {
+        public CoverDetail(String category, String relationship, String planCoverageName, BigDecimal sumAssured) {
             this.category = category;
             this.relationship = relationship;
             this.planCoverageName = planCoverageName;
-            this.planCoverageSumAssured = planCoverageSumAssured;
+            this.sumAssured = sumAssured;
+        }
+
+        public CoverDetail(String category, String relationship, String planCoverageName) {
+            this.category = category;
+            this.relationship = relationship;
+            this.planCoverageName = planCoverageName;
+        }
+
+        public CoverDetail addSumAssured(String sumAssured) {
+            this.planCoverageSumAssured = sumAssured;
+            return this;
         }
     }
 

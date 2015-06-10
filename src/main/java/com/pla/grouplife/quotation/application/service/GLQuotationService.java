@@ -102,6 +102,7 @@ public class GLQuotationService {
         return dto;
     }
 
+    //TODO Need to change the JASPER Field Key as per the object property and then use BeanUtils to copy object properties
     private GLQuotationDetailDto getGlQuotationDetailForPDF(String quotationId) {
         GLQuotationDetailDto glQuotationDetailDto = new GLQuotationDetailDto();
         GroupLifeQuotation quotation = glQuotationRepository.findOne(new QuotationId(quotationId));
@@ -118,7 +119,6 @@ public class GLQuotationService {
         Map<String, Object> provinceGeoMap = glQuotationFinder.findGeoDetail(proposerContactDetail.getProvince());
         Map<String, Object> townGeoMap = glQuotationFinder.findGeoDetail(proposerContactDetail.getTown());
         glQuotationDetailDto.setProposerAddress(proposerContactDetail.getAddress((String) townGeoMap.get("geoName"), (String) provinceGeoMap.get("geoName")));
-        glQuotationDetailDto.setProposerAddress(proposerContactDetail.toString());
         glQuotationDetailDto.setQuotationNumber(quotation.getQuotationNumber());
 
         PremiumDetail premiumDetail = quotation.getPremiumDetail();
@@ -147,7 +147,7 @@ public class GLQuotationService {
                 List<PlanCoverageDetailDto> planCoverageDetailDtoList = planAdapter.getPlanAndCoverageDetail(Arrays.asList(insuredPremiumDetail.getPlanId()));
                 BigDecimal insuredPlanSA = insuredPremiumDetail.getSumAssured();
                 insuredPlanSA = insuredPlanSA.setScale(2, BigDecimal.ROUND_CEILING);
-                GLQuotationDetailDto.CoverDetail insuredPlanCoverDetail = glQuotationDetailDto.new CoverDetail(isEmpty(insured.getCategory()) ? "" : insured.getCategory(), "Self", planCoverageDetailDtoList.get(0).getPlanName(), insuredPlanSA.toPlainString());
+                GLQuotationDetailDto.CoverDetail insuredPlanCoverDetail = glQuotationDetailDto.new CoverDetail(isEmpty(insured.getCategory()) ? "" : insured.getCategory(), "Self", planCoverageDetailDtoList.get(0).getPlanName(), insuredPlanSA);
                 coverDetails.add(insuredPlanCoverDetail);
                 if (isNotEmpty(insured.getCoveragePremiumDetails())) {
                     for (CoveragePremiumDetail coveragePremiumDetail : insured.getCoveragePremiumDetails()) {
@@ -155,7 +155,7 @@ public class GLQuotationService {
                         BigDecimal insuredCoverageSA = coveragePremiumDetail.getSumAssured();
                         insuredCoverageSA = insuredCoverageSA.setScale(2, BigDecimal.ROUND_CEILING);
                         GLQuotationDetailDto.CoverDetail insuredCoverageCoverDetail = glQuotationDetailDto.new CoverDetail(isEmpty(insured.getCategory()) ? "" : insured.getCategory(), "Self",
-                                (String) coverageMap.get("coverageName"), insuredCoverageSA.toPlainString());
+                                (String) coverageMap.get("coverageName"), insuredCoverageSA);
                         coverDetails.add(insuredCoverageCoverDetail);
                     }
                 }
@@ -177,14 +177,14 @@ public class GLQuotationService {
                         List<PlanCoverageDetailDto> dependentPlanCoverageDetailDtoList = planAdapter.getPlanAndCoverageDetail(Arrays.asList(insuredDependentPremiumDetail.getPlanId()));
                         BigDecimal insuredDependentPlanSA = insuredDependentPremiumDetail.getSumAssured();
                         insuredDependentPlanSA = insuredDependentPlanSA.setScale(2, BigDecimal.ROUND_CEILING);
-                        GLQuotationDetailDto.CoverDetail insuredDependentPlanCoverDetail = glQuotationDetailDto.new CoverDetail(isEmpty(insuredDependent.getCategory()) ? "" : insuredDependent.getCategory(), insuredDependent.getRelationship().description, dependentPlanCoverageDetailDtoList.get(0).getPlanName(), insuredDependentPlanSA.toPlainString());
+                        GLQuotationDetailDto.CoverDetail insuredDependentPlanCoverDetail = glQuotationDetailDto.new CoverDetail(isEmpty(insuredDependent.getCategory()) ? "" : insuredDependent.getCategory(), insuredDependent.getRelationship().description, dependentPlanCoverageDetailDtoList.get(0).getPlanName(), insuredDependentPlanSA);
                         coverDetails.add(insuredDependentPlanCoverDetail);
                         if (isNotEmpty(insuredDependent.getCoveragePremiumDetails())) {
                             for (CoveragePremiumDetail dependentCoveragePremiumDetail : insuredDependent.getCoveragePremiumDetails()) {
                                 BigDecimal insuredDependentCoverageSA = dependentCoveragePremiumDetail.getSumAssured();
                                 insuredDependentCoverageSA = insuredDependentCoverageSA.setScale(2, BigDecimal.ROUND_CEILING);
                                 Map<String, Object> coverageMap = glQuotationFinder.getCoverageDetail(dependentCoveragePremiumDetail.getCoverageId().getCoverageId());
-                                GLQuotationDetailDto.CoverDetail insuredDependentCoverageCoverDetail = glQuotationDetailDto.new CoverDetail(isEmpty(insuredDependent.getCategory()) ? "" : insuredDependent.getCategory(), insuredDependent.getRelationship().name(), (String) coverageMap.get("coverageName"), insuredDependentCoverageSA.toPlainString());
+                                GLQuotationDetailDto.CoverDetail insuredDependentCoverageCoverDetail = glQuotationDetailDto.new CoverDetail(isEmpty(insuredDependent.getCategory()) ? "" : insuredDependent.getCategory(), insuredDependent.getRelationship().name(), (String) coverageMap.get("coverageName"), insuredDependentCoverageSA);
                                 coverDetails.add(insuredDependentCoverageCoverDetail);
                             }
                         }
@@ -198,9 +198,38 @@ public class GLQuotationService {
                 }
             }
         }
-        glQuotationDetailDto.setCoverDetails(coverDetails);
+        List<GLQuotationDetailDto.CoverDetail> unifiedCoverDetails = unifyCoverDetails(coverDetails, glQuotationDetailDto);
+        glQuotationDetailDto.setCoverDetails(unifiedCoverDetails);
         glQuotationDetailDto.setAnnexure(annexures);
         return glQuotationDetailDto;
+    }
+
+    private List<GLQuotationDetailDto.CoverDetail> unifyCoverDetails(List<GLQuotationDetailDto.CoverDetail> coverDetails, GLQuotationDetailDto glQuotationDetailDto) {
+        Map<GLQuotationDetailDto.CoverDetail, List<GLQuotationDetailDto.CoverDetail>> coverDetailsMap = Maps.newLinkedHashMap();
+        for (GLQuotationDetailDto.CoverDetail coverDetail : coverDetails) {
+            if (coverDetailsMap.get(coverDetail) == null) {
+                coverDetailsMap.put(coverDetail, new ArrayList<>());
+            } else {
+                List<GLQuotationDetailDto.CoverDetail> coverDetailList = coverDetailsMap.get(coverDetail);
+                coverDetailList.add(coverDetail);
+                coverDetailsMap.put(coverDetail, coverDetailList);
+            }
+        }
+        List<GLQuotationDetailDto.CoverDetail> unifiedCoverDetails = coverDetailsMap.entrySet().stream().map(new Function<Map.Entry<GLQuotationDetailDto.CoverDetail, List<GLQuotationDetailDto.CoverDetail>>, GLQuotationDetailDto.CoverDetail>() {
+            @Override
+            public GLQuotationDetailDto.CoverDetail apply(Map.Entry<GLQuotationDetailDto.CoverDetail, List<GLQuotationDetailDto.CoverDetail>> coverDetailListEntry) {
+                GLQuotationDetailDto.CoverDetail coverDetailKey = coverDetailListEntry.getKey();
+                GLQuotationDetailDto.CoverDetail coverDetail = glQuotationDetailDto.new CoverDetail(coverDetailKey.getCategory(), coverDetailKey.getRelationship(), coverDetailKey.getPlanCoverageName());
+                BigDecimal totalSA = BigDecimal.ZERO;
+                for (GLQuotationDetailDto.CoverDetail valueCoverDetail : coverDetailListEntry.getValue()) {
+                    totalSA = totalSA.add(valueCoverDetail.getSumAssured());
+                }
+                totalSA=totalSA.add(coverDetailKey.getSumAssured());
+                coverDetail = coverDetail.addSumAssured(totalSA.toPlainString());
+                return coverDetail;
+            }
+        }).collect(Collectors.toList());
+        return unifiedCoverDetails;
     }
 
     public boolean isValidInsuredTemplate(String quotationId, HSSFWorkbook insuredTemplateWorkbook, boolean samePlanForAllCategory, boolean samePlanForAllRelationship) {

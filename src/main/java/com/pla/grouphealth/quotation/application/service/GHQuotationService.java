@@ -7,7 +7,7 @@ import com.pla.core.domain.model.agent.AgentId;
 import com.pla.grouphealth.quotation.application.command.GHRecalculatedInsuredPremiumCommand;
 import com.pla.grouphealth.quotation.application.command.SearchGlQuotationDto;
 import com.pla.grouphealth.quotation.domain.model.*;
-import com.pla.grouphealth.quotation.presentation.dto.GLQuotationDetailDto;
+import com.pla.grouphealth.quotation.presentation.dto.GHQuotationDetailDto;
 import com.pla.grouphealth.quotation.presentation.dto.GLQuotationMailDto;
 import com.pla.grouphealth.quotation.presentation.dto.PlanDetailDto;
 import com.pla.grouphealth.quotation.query.*;
@@ -79,8 +79,8 @@ public class GHQuotationService {
     }
 
     public byte[] getQuotationPDF(String quotationId) throws IOException, JRException {
-        GLQuotationDetailDto glQuotationDetailDto = getGlQuotationDetailForPDF(quotationId);
-        byte[] pdfData = PDFGeneratorUtils.createPDFReportByList(Arrays.asList(glQuotationDetailDto), "jasperpdf/template/grouphealth/quotation/ghQuotation.jrxml");
+        GHQuotationDetailDto ghQuotationDetailDto = getGlQuotationDetailForPDF(quotationId);
+        byte[] pdfData = PDFGeneratorUtils.createPDFReportByList(Arrays.asList(ghQuotationDetailDto), "jasperpdf/template/grouphealth/quotation/ghQuotation.jrxml");
         return pdfData;
     }
 
@@ -102,66 +102,67 @@ public class GHQuotationService {
         return dto;
     }
 
-    private GLQuotationDetailDto getGlQuotationDetailForPDF(String quotationId) {
-        GLQuotationDetailDto glQuotationDetailDto = new GLQuotationDetailDto();
+    //TODO Need to change the JASPER Field Key as per the object property and then use BeanUtils to copy object properties
+    private GHQuotationDetailDto getGlQuotationDetailForPDF(String quotationId) {
+        GHQuotationDetailDto ghQuotationDetailDto = new GHQuotationDetailDto();
         GroupHealthQuotation quotation = ghQuotationRepository.findOne(new QuotationId(quotationId));
         AgentDetailDto agentDetailDto = getAgentDetail(new QuotationId(quotationId));
-        glQuotationDetailDto.setAgentBranch(isEmpty(agentDetailDto.getBranchName()) ? "" : agentDetailDto.getBranchName());
-        glQuotationDetailDto.setAgentCode(agentDetailDto.getAgentId());
-        glQuotationDetailDto.setAgentName(agentDetailDto.getAgentSalutation() + "  " + agentDetailDto.getAgentName());
-        glQuotationDetailDto.setAgentMobileNumber(agentDetailDto.getAgentMobileNumber());
+        ghQuotationDetailDto.setAgentBranch(isEmpty(agentDetailDto.getBranchName()) ? "" : agentDetailDto.getBranchName());
+        ghQuotationDetailDto.setAgentCode(agentDetailDto.getAgentId());
+        ghQuotationDetailDto.setAgentName(agentDetailDto.getAgentSalutation() + "  " + agentDetailDto.getAgentName());
+        ghQuotationDetailDto.setAgentMobileNumber(agentDetailDto.getAgentMobileNumber());
 
         GHProposer proposer = quotation.getProposer();
-        glQuotationDetailDto.setProposerName(proposer.getProposerName());
+        ghQuotationDetailDto.setProposerName(proposer.getProposerName());
         GHProposerContactDetail proposerContactDetail = proposer.getContactDetail();
-        glQuotationDetailDto.setProposerPhoneNumber(proposerContactDetail.getContactPersonDetail().getWorkPhoneNumber());
-        Map<String,Object> provinceGeoMap = ghQuotationFinder.findGeoDetail(proposerContactDetail.getProvince());
-        Map<String,Object> townGeoMap = ghQuotationFinder.findGeoDetail(proposerContactDetail.getTown());
-        glQuotationDetailDto.setProposerAddress(proposerContactDetail.getAddress((String)townGeoMap.get("geoName"),(String)provinceGeoMap.get("geoName")));
-        glQuotationDetailDto.setQuotationNumber(quotation.getQuotationNumber());
+        ghQuotationDetailDto.setProposerPhoneNumber(proposerContactDetail.getContactPersonDetail().getWorkPhoneNumber());
+        Map<String, Object> provinceGeoMap = ghQuotationFinder.findGeoDetail(proposerContactDetail.getProvince());
+        Map<String, Object> townGeoMap = ghQuotationFinder.findGeoDetail(proposerContactDetail.getTown());
+        ghQuotationDetailDto.setProposerAddress(proposerContactDetail.getAddress((String) townGeoMap.get("geoName"), (String) provinceGeoMap.get("geoName")));
+        ghQuotationDetailDto.setQuotationNumber(quotation.getQuotationNumber());
 
         GHPremiumDetail premiumDetail = quotation.getPremiumDetail();
-        glQuotationDetailDto.setCoveragePeriod(premiumDetail.getPolicyTermValue() != null ? premiumDetail.getPolicyTermValue().toString() + "  days" : "");
-        glQuotationDetailDto.setProfitAndSolvencyLoading(premiumDetail.getProfitAndSolvency() != null ? premiumDetail.getProfitAndSolvency().toString() + "%" : "");
-        glQuotationDetailDto.setAdditionalDiscountLoading(premiumDetail.getDiscount() != null ? premiumDetail.getDiscount().toString() + "%" : "");
-        glQuotationDetailDto.setAddOnBenefits(premiumDetail.getAddOnBenefit() != null ? premiumDetail.getAddOnBenefit().toString() + "%" : "");
-        glQuotationDetailDto.setAddOnBenefitsPercentage(premiumDetail.getAddOnBenefit() != null ? premiumDetail.getAddOnBenefit().toString() + "%" : "");
-        glQuotationDetailDto.setWaiverOfExcessLoadings(premiumDetail.getWaiverOfExcessLoading() != null ? premiumDetail.getWaiverOfExcessLoading().toString() + "%" : "");
-        glQuotationDetailDto.setServiceTax(premiumDetail.getVat() != null ? premiumDetail.getVat().toString() + "%" : "");
-        glQuotationDetailDto.setWaiverOfExcessLoadingsPercentage("");
+        ghQuotationDetailDto.setCoveragePeriod(premiumDetail.getPolicyTermValue() != null ? premiumDetail.getPolicyTermValue().toString() + "  days" : "");
+        ghQuotationDetailDto.setProfitAndSolvencyLoading(premiumDetail.getProfitAndSolvency() != null ? premiumDetail.getProfitAndSolvency().toString() + "%" : "");
+        ghQuotationDetailDto.setAdditionalDiscountLoading(premiumDetail.getDiscount() != null ? premiumDetail.getDiscount().toString() + "%" : "");
+        ghQuotationDetailDto.setAddOnBenefits(premiumDetail.getAddOnBenefit() != null ? premiumDetail.getAddOnBenefit().toString() + "%" : "");
+        ghQuotationDetailDto.setAddOnBenefitsPercentage(premiumDetail.getAddOnBenefit() != null ? premiumDetail.getAddOnBenefit().toString() + "%" : "");
+        ghQuotationDetailDto.setWaiverOfExcessLoadings(premiumDetail.getWaiverOfExcessLoading() != null ? premiumDetail.getWaiverOfExcessLoading().toString() + "%" : "");
+        ghQuotationDetailDto.setServiceTax(premiumDetail.getVat() != null ? premiumDetail.getVat().toString() + "%" : "");
+        ghQuotationDetailDto.setWaiverOfExcessLoadingsPercentage("");
         BigDecimal totalPremiumAmount = quotation.getNetAnnualPremiumPaymentAmount(premiumDetail);
         totalPremiumAmount = totalPremiumAmount.setScale(2, BigDecimal.ROUND_CEILING);
         BigDecimal netPremiumOfInsured = quotation.getTotalBasicPremiumForInsured();
         netPremiumOfInsured = netPremiumOfInsured.setScale(2, BigDecimal.ROUND_CEILING);
-        glQuotationDetailDto.setNetPremium(netPremiumOfInsured.toPlainString());
-        glQuotationDetailDto.setTotalPremium(totalPremiumAmount.toPlainString());
-        glQuotationDetailDto.setTotalLivesCovered(quotation.getTotalNoOfLifeCovered().toString());
+        ghQuotationDetailDto.setNetPremium(netPremiumOfInsured.toPlainString());
+        ghQuotationDetailDto.setTotalPremium(totalPremiumAmount.toPlainString());
+        ghQuotationDetailDto.setTotalLivesCovered(quotation.getTotalNoOfLifeCovered().toString());
         BigDecimal totalSumAssured = quotation.getTotalSumAssured();
         totalSumAssured = totalSumAssured.setScale(2, BigDecimal.ROUND_CEILING);
-        glQuotationDetailDto.setTotalSumAssured(totalSumAssured.toPlainString());
-        List<GLQuotationDetailDto.CoverDetail> coverDetails = Lists.newArrayList();
-        List<GLQuotationDetailDto.Annexure> annexures = Lists.newArrayList();
+        ghQuotationDetailDto.setTotalSumAssured(totalSumAssured.toPlainString());
+        List<GHQuotationDetailDto.CoverDetail> coverDetails = Lists.newArrayList();
+        List<GHQuotationDetailDto.Annexure> annexures = Lists.newArrayList();
         if (isNotEmpty(quotation.getInsureds())) {
             for (GHInsured insured : quotation.getInsureds()) {
                 GHPlanPremiumDetail insuredPremiumDetail = insured.getPlanPremiumDetail();
                 List<PlanCoverageDetailDto> planCoverageDetailDtoList = planAdapter.getPlanAndCoverageDetail(Arrays.asList(insuredPremiumDetail.getPlanId()));
                 BigDecimal insuredPlanSA = insuredPremiumDetail.getSumAssured();
                 insuredPlanSA = insuredPlanSA.setScale(2, BigDecimal.ROUND_CEILING);
-                GLQuotationDetailDto.CoverDetail insuredPlanCoverDetail = glQuotationDetailDto.new CoverDetail(isEmpty(insured.getCategory()) ? "" : insured.getCategory(), "Self", planCoverageDetailDtoList.get(0).getPlanName(), insuredPlanSA.toPlainString());
+                GHQuotationDetailDto.CoverDetail insuredPlanCoverDetail = ghQuotationDetailDto.new CoverDetail(isEmpty(insured.getCategory()) ? "" : insured.getCategory(), "Self", planCoverageDetailDtoList.get(0).getPlanName(), insuredPlanSA);
                 coverDetails.add(insuredPlanCoverDetail);
                 if (isNotEmpty(insured.getPlanPremiumDetail().getCoveragePremiumDetails())) {
                     for (GHCoveragePremiumDetail coveragePremiumDetail : insured.getPlanPremiumDetail().getCoveragePremiumDetails()) {
                         Map<String, Object> coverageMap = ghQuotationFinder.getCoverageDetail(coveragePremiumDetail.getCoverageId().getCoverageId());
                         BigDecimal insuredCoverageSA = coveragePremiumDetail.getSumAssured();
                         insuredCoverageSA = insuredCoverageSA.setScale(2, BigDecimal.ROUND_CEILING);
-                        GLQuotationDetailDto.CoverDetail insuredCoverageCoverDetail = glQuotationDetailDto.new CoverDetail(isEmpty(insured.getCategory()) ? "" : insured.getCategory(), "Self",
-                                (String) coverageMap.get("coverageName"), insuredCoverageSA.toPlainString());
+                        GHQuotationDetailDto.CoverDetail insuredCoverageCoverDetail = ghQuotationDetailDto.new CoverDetail(isEmpty(insured.getCategory()) ? "" : insured.getCategory(), "Self",
+                                (String) coverageMap.get("coverageName"), insuredCoverageSA);
                         coverDetails.add(insuredCoverageCoverDetail);
                     }
                 }
                 BigDecimal insuredBasicPremium = insuredPremiumDetail.getPremiumAmount();
                 insuredBasicPremium = insuredBasicPremium.setScale(2, BigDecimal.ROUND_CEILING);
-                GLQuotationDetailDto.Annexure insuredAnnexure = glQuotationDetailDto.new Annexure(insured.getFirstName() + " " + insured.getLastName()
+                GHQuotationDetailDto.Annexure insuredAnnexure = ghQuotationDetailDto.new Annexure(insured.getFirstName() + " " + insured.getLastName()
                         , insured.getNrcNumber(), insured.getGender().name(), AppUtils.toString(insured.getDateOfBirth()),
                         isEmpty(insured.getCategory()) ? "" : insured.getCategory(), "Self", AppUtils.getAge(insured.getDateOfBirth()).toString(), "",
                         insuredBasicPremium.toPlainString(), insured.getBasicAnnualPlanPremiumIncludingNonVisibleCoveragePremium().toPlainString(), insured.getInsuredBasicAnnualVisibleCoveragePremium().toPlainString());
@@ -172,20 +173,20 @@ public class GHQuotationService {
                         List<PlanCoverageDetailDto> dependentPlanCoverageDetailDtoList = planAdapter.getPlanAndCoverageDetail(Arrays.asList(insuredDependentPremiumDetail.getPlanId()));
                         BigDecimal insuredDependentPlanSA = insuredDependentPremiumDetail.getSumAssured();
                         insuredDependentPlanSA = insuredDependentPlanSA.setScale(2, BigDecimal.ROUND_CEILING);
-                        GLQuotationDetailDto.CoverDetail insuredDependentPlanCoverDetail = glQuotationDetailDto.new CoverDetail(isEmpty(insuredDependent.getCategory()) ? "" : insuredDependent.getCategory(), insuredDependent.getRelationship().description, dependentPlanCoverageDetailDtoList.get(0).getPlanName(), insuredDependentPlanSA.toPlainString());
+                        GHQuotationDetailDto.CoverDetail insuredDependentPlanCoverDetail = ghQuotationDetailDto.new CoverDetail(isEmpty(insuredDependent.getCategory()) ? "" : insuredDependent.getCategory(), insuredDependent.getRelationship().description, dependentPlanCoverageDetailDtoList.get(0).getPlanName(), insuredDependentPlanSA);
                         coverDetails.add(insuredDependentPlanCoverDetail);
                         if (isNotEmpty(insuredDependent.getPlanPremiumDetail().getCoveragePremiumDetails())) {
                             for (GHCoveragePremiumDetail dependentCoveragePremiumDetail : insuredDependent.getPlanPremiumDetail().getCoveragePremiumDetails()) {
                                 BigDecimal insuredDependentCoverageSA = dependentCoveragePremiumDetail.getSumAssured();
                                 insuredDependentCoverageSA = insuredDependentCoverageSA.setScale(2, BigDecimal.ROUND_CEILING);
                                 Map<String, Object> coverageMap = ghQuotationFinder.getCoverageDetail(dependentCoveragePremiumDetail.getCoverageId().getCoverageId());
-                                GLQuotationDetailDto.CoverDetail insuredDependentCoverageCoverDetail = glQuotationDetailDto.new CoverDetail(isEmpty(insuredDependent.getCategory()) ? "" : insuredDependent.getCategory(), insuredDependent.getRelationship().name(), (String) coverageMap.get("coverageName"), insuredDependentCoverageSA.toPlainString());
+                                GHQuotationDetailDto.CoverDetail insuredDependentCoverageCoverDetail = ghQuotationDetailDto.new CoverDetail(isEmpty(insuredDependent.getCategory()) ? "" : insuredDependent.getCategory(), insuredDependent.getRelationship().name(), (String) coverageMap.get("coverageName"), insuredDependentCoverageSA);
                                 coverDetails.add(insuredDependentCoverageCoverDetail);
                             }
                         }
                         BigDecimal insuredDependentBasicPremium = insuredDependentPremiumDetail.getPremiumAmount();
                         insuredDependentBasicPremium = insuredDependentBasicPremium.setScale(2, BigDecimal.ROUND_CEILING);
-                        GLQuotationDetailDto.Annexure annexure = glQuotationDetailDto.new Annexure(insuredDependent.getFirstName() + " " + insuredDependent.getLastName()
+                        GHQuotationDetailDto.Annexure annexure = ghQuotationDetailDto.new Annexure(insuredDependent.getFirstName() + " " + insuredDependent.getLastName()
                                 , insuredDependent.getNrcNumber(), insuredDependent.getGender().name(), AppUtils.toString(insuredDependent.getDateOfBirth()),
                                 isEmpty(insuredDependent.getCategory()) ? "" : insuredDependent.getCategory(), insuredDependent.getRelationship().description, AppUtils.getAge(insuredDependent.getDateOfBirth()).toString(), "",
                                 insuredDependentBasicPremium.toPlainString(), insuredDependent.getBasicAnnualPlanPremiumIncludingNonVisibleCoveragePremiumForDependent().toPlainString(), insuredDependent.getBasicAnnualVisibleCoveragePremiumForDependent().toPlainString());
@@ -194,9 +195,38 @@ public class GHQuotationService {
                 }
             }
         }
-        glQuotationDetailDto.setCoverDetails(coverDetails);
-        glQuotationDetailDto.setAnnexure(annexures);
-        return glQuotationDetailDto;
+        List<GHQuotationDetailDto.CoverDetail> unifiedCoverDetails = unifyCoverDetails(coverDetails,ghQuotationDetailDto);
+        ghQuotationDetailDto.setCoverDetails(unifiedCoverDetails);
+        ghQuotationDetailDto.setAnnexure(annexures);
+        return ghQuotationDetailDto;
+    }
+
+    private List<GHQuotationDetailDto.CoverDetail> unifyCoverDetails(List<GHQuotationDetailDto.CoverDetail> coverDetails, GHQuotationDetailDto ghQuotationDetailDto) {
+        Map<GHQuotationDetailDto.CoverDetail, List<GHQuotationDetailDto.CoverDetail>> coverDetailsMap = Maps.newLinkedHashMap();
+        for (GHQuotationDetailDto.CoverDetail coverDetail : coverDetails) {
+            if (coverDetailsMap.get(coverDetail) == null) {
+                coverDetailsMap.put(coverDetail, new ArrayList<>());
+            } else {
+                List<GHQuotationDetailDto.CoverDetail> coverDetailList = coverDetailsMap.get(coverDetail);
+                coverDetailList.add(coverDetail);
+                coverDetailsMap.put(coverDetail, coverDetailList);
+            }
+        }
+        List<GHQuotationDetailDto.CoverDetail> unifiedCoverDetails = coverDetailsMap.entrySet().stream().map(new Function<Map.Entry<GHQuotationDetailDto.CoverDetail, List<GHQuotationDetailDto.CoverDetail>>, GHQuotationDetailDto.CoverDetail>() {
+            @Override
+            public GHQuotationDetailDto.CoverDetail apply(Map.Entry<GHQuotationDetailDto.CoverDetail, List<GHQuotationDetailDto.CoverDetail>> coverDetailListEntry) {
+                GHQuotationDetailDto.CoverDetail coverDetailKey = coverDetailListEntry.getKey();
+                GHQuotationDetailDto.CoverDetail coverDetail = ghQuotationDetailDto.new CoverDetail(coverDetailKey.getCategory(), coverDetailKey.getRelationship(), coverDetailKey.getPlanCoverageName());
+                BigDecimal totalSA = BigDecimal.ZERO;
+                for (GHQuotationDetailDto.CoverDetail valueCoverDetail : coverDetailListEntry.getValue()) {
+                    totalSA = totalSA.add(valueCoverDetail.getSumAssured());
+                }
+                totalSA = totalSA.add(coverDetailKey.getSumAssured());
+                coverDetail = coverDetail.addSumAssured(totalSA.toPlainString());
+                return coverDetail;
+            }
+        }).collect(Collectors.toList());
+        return unifiedCoverDetails;
     }
 
     public boolean isValidInsuredTemplate(String quotationId, HSSFWorkbook insuredTemplateWorkbook, boolean samePlanForAllCategory, boolean samePlanForAllRelationship) {
