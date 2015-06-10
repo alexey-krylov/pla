@@ -65,10 +65,10 @@ public class GHProposerContactDetail {
         }
     }
 
-    @Override
-    public String toString() {
+
+    public String getAddress(String townName, String provinceName) {
         String addressLine2 = isNotEmpty(this.addressLine2) ? "," + this.addressLine2 : "";
         String postalCode = isNotEmpty(this.postalCode) ? "," + this.postalCode : "";
-        return addressLine1 + addressLine2 + postalCode + "," + town + "," + province;
+        return addressLine1 + addressLine2 + postalCode + "," + townName + "," + provinceName;
     }
 }

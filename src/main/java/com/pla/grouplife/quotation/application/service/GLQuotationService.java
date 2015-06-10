@@ -106,7 +106,7 @@ public class GLQuotationService {
         GLQuotationDetailDto glQuotationDetailDto = new GLQuotationDetailDto();
         GroupLifeQuotation quotation = glQuotationRepository.findOne(new QuotationId(quotationId));
         AgentDetailDto agentDetailDto = getAgentDetail(new QuotationId(quotationId));
-        glQuotationDetailDto.setAgentBranch(agentDetailDto.getBranchName());
+        glQuotationDetailDto.setAgentBranch(isNotEmpty(agentDetailDto.getBranchName()) ? agentDetailDto.getBranchName() : "");
         glQuotationDetailDto.setAgentCode(agentDetailDto.getAgentId());
         glQuotationDetailDto.setAgentName(agentDetailDto.getAgentSalutation() + "  " + agentDetailDto.getAgentName());
         glQuotationDetailDto.setAgentMobileNumber(agentDetailDto.getAgentMobileNumber());
@@ -115,6 +115,9 @@ public class GLQuotationService {
         glQuotationDetailDto.setProposerName(proposer.getProposerName());
         ProposerContactDetail proposerContactDetail = proposer.getContactDetail();
         glQuotationDetailDto.setProposerPhoneNumber(proposerContactDetail.getContactPersonDetail().getWorkPhoneNumber());
+        Map<String, Object> provinceGeoMap = glQuotationFinder.findGeoDetail(proposerContactDetail.getProvince());
+        Map<String, Object> townGeoMap = glQuotationFinder.findGeoDetail(proposerContactDetail.getTown());
+        glQuotationDetailDto.setProposerAddress(proposerContactDetail.getAddress((String) townGeoMap.get("geoName"), (String) provinceGeoMap.get("geoName")));
         glQuotationDetailDto.setProposerAddress(proposerContactDetail.toString());
         glQuotationDetailDto.setQuotationNumber(quotation.getQuotationNumber());
 
@@ -345,7 +348,7 @@ public class GLQuotationService {
         agentDetailDto.setAgentId(agentId);
         agentDetailDto.setBranchName((String) agentDetail.get("branchName"));
         agentDetailDto.setTeamName((String) agentDetail.get("teamName"));
-        agentDetailDto.setAgentName(agentDetail.get("firstName") + " " +(agentDetail.get("lastName") == null ? "" : (String) agentDetail.get("lastName")));
+        agentDetailDto.setAgentName(agentDetail.get("firstName") + " " + (agentDetail.get("lastName") == null ? "" : (String) agentDetail.get("lastName")));
         agentDetailDto.setAgentMobileNumber(agentDetail.get("mobileNumber") != null ? (String) agentDetail.get("mobileNumber") : "");
         agentDetailDto.setAgentSalutation(agentDetail.get("title") != null ? (String) agentDetail.get("title") : "");
         return agentDetailDto;

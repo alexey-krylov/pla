@@ -52,7 +52,9 @@ public class GLQuotationFinder {
 
     public static final String FIND_OCCUPATION_CLASS_QUERY = "SELECT code,description FROM occupation_class WHERE description=:occupation";
 
-    public static final String FIND_COVERAGE_BY_ID = "SELECT coverage_code AS coverageCode,coverage_name AS coverageName FROM coverage WHERE coverage_id=:coverageId";
+    public static final String FIND_COVERAGE_BY_ID_QUERY = "SELECT coverage_code AS coverageCode,coverage_name AS coverageName FROM coverage WHERE coverage_id=:coverageId";
+
+    public static final String FIND_GEO_BY_ID_QUERY = "SELECT geo_id AS geoId,parent_geo_id AS parentGeoId,geo_type AS geoType,geo_description AS geoName FROM geo WHERE geo_id=:geoId";
 
     public Map<String, Object> getAgentById(String agentId) {
         Preconditions.checkArgument(isNotEmpty(agentId));
@@ -125,6 +127,10 @@ public class GLQuotationFinder {
     }
 
     public Map<String, Object> getCoverageDetail(String coverageId) {
-        return namedParameterJdbcTemplate.queryForMap(FIND_COVERAGE_BY_ID, new MapSqlParameterSource().addValue("coverageId", coverageId));
+        return namedParameterJdbcTemplate.queryForMap(FIND_COVERAGE_BY_ID_QUERY, new MapSqlParameterSource().addValue("coverageId", coverageId));
+    }
+
+    public Map<String, Object> findGeoDetail(String geoId) {
+        return namedParameterJdbcTemplate.queryForMap(FIND_GEO_BY_ID_QUERY, new MapSqlParameterSource().addValue("geoId", geoId));
     }
 }

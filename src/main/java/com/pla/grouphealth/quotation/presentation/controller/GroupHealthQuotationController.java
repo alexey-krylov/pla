@@ -223,7 +223,7 @@ public class GroupHealthQuotationController {
     public void printQuotation(@PathVariable("quotationId") String quotationId, HttpServletResponse response) throws IOException, JRException {
         response.reset();
         response.setContentType("application/pdf");
-        response.setHeader("content-disposition", "attachment; filename=" + "quotation.pdf" + "");
+        response.setHeader("content-disposition", "attachment; filename=" + "GHQuotation.pdf" + "");
         OutputStream outputStream = response.getOutputStream();
         outputStream.write(ghQuotationService.getQuotationPDF(quotationId));
         outputStream.flush();
@@ -235,7 +235,7 @@ public class GroupHealthQuotationController {
     public void downloadInsuredTemplate(@PathVariable("quotationId") String quotationId, HttpServletResponse response) throws IOException {
         response.reset();
         response.setContentType("application/msexcel");
-        response.setHeader("content-disposition", "attachment; filename=" + "insuredTemplate.xls" + "");
+        response.setHeader("content-disposition", "attachment; filename=" + "GHInsuredTemplate.xls" + "");
         OutputStream outputStream = response.getOutputStream();
         HSSFWorkbook planDetailExcel = ghQuotationService.getInsuredTemplateExcel(quotationId);
         planDetailExcel.write(outputStream);
@@ -247,7 +247,7 @@ public class GroupHealthQuotationController {
     public void downloadErrorInsuredTemplate(@PathVariable("quotationId") String quotationId, HttpServletResponse response) throws IOException {
         response.reset();
         response.setContentType("application/msexcel");
-        response.setHeader("content-disposition", "attachment; filename=" + "insuredTemplate.xls" + "");
+        response.setHeader("content-disposition", "attachment; filename=" + "GHInsuredTemplate.xls" + "");
         OutputStream outputStream = response.getOutputStream();
         File errorTemplateFile = new File(quotationId);
         InputStream inputStream = new FileInputStream(errorTemplateFile);

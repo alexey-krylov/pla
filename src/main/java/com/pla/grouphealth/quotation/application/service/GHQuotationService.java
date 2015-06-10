@@ -106,7 +106,7 @@ public class GHQuotationService {
         GLQuotationDetailDto glQuotationDetailDto = new GLQuotationDetailDto();
         GroupHealthQuotation quotation = ghQuotationRepository.findOne(new QuotationId(quotationId));
         AgentDetailDto agentDetailDto = getAgentDetail(new QuotationId(quotationId));
-        glQuotationDetailDto.setAgentBranch(agentDetailDto.getBranchName());
+        glQuotationDetailDto.setAgentBranch(isEmpty(agentDetailDto.getBranchName()) ? "" : agentDetailDto.getBranchName());
         glQuotationDetailDto.setAgentCode(agentDetailDto.getAgentId());
         glQuotationDetailDto.setAgentName(agentDetailDto.getAgentSalutation() + "  " + agentDetailDto.getAgentName());
         glQuotationDetailDto.setAgentMobileNumber(agentDetailDto.getAgentMobileNumber());
@@ -115,7 +115,9 @@ public class GHQuotationService {
         glQuotationDetailDto.setProposerName(proposer.getProposerName());
         GHProposerContactDetail proposerContactDetail = proposer.getContactDetail();
         glQuotationDetailDto.setProposerPhoneNumber(proposerContactDetail.getContactPersonDetail().getWorkPhoneNumber());
-        glQuotationDetailDto.setProposerAddress(proposerContactDetail.toString());
+        Map<String,Object> provinceGeoMap = ghQuotationFinder.findGeoDetail(proposerContactDetail.getProvince());
+        Map<String,Object> townGeoMap = ghQuotationFinder.findGeoDetail(proposerContactDetail.getTown());
+        glQuotationDetailDto.setProposerAddress(proposerContactDetail.getAddress((String)townGeoMap.get("geoName"),(String)provinceGeoMap.get("geoName")));
         glQuotationDetailDto.setQuotationNumber(quotation.getQuotationNumber());
 
         GHPremiumDetail premiumDetail = quotation.getPremiumDetail();
