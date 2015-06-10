@@ -45,12 +45,17 @@
         }
     }, 300);
 </script>
-<div class="container" style="padding-top: 10px">
-
+<div class="container-fluid">
+    <p class="lead">
+    <ol class="breadcrumb">
+        <li>Quotation</li>
+        <li>Group Health</li>
+    </ol>
+    </p>
     <form method="post" action="searchquotation" novalidate="true" name="quotationForm" id="quotationForm">
         <div class="row well well-sm" style="margin: 0;">
             <div class="col-md-2">
-                <h4 th:text="#{searchQuotation}" class="pull-left">Search Quotation</h4>
+                <h5 th:text="#{searchQuotation}" class="pull-left">Search Quotation</h5>
             </div>
             <div class="col-md-2">
                 <div class="form-group">

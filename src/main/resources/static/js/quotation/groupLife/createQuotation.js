@@ -54,6 +54,10 @@ angular.module('createQuotation', ['common', 'ngRoute', 'mgcrea.ngStrap.select',
 
             $scope.quotationDetails.basic = agentDetails;
             $scope.quotationDetails.proposer = proposerDetails;
+
+            if(proposerDetails && proposerDetails.proposerCode){
+                $scope.proposerCodeDisabled=true;
+            }
             // console.log(getQueryParameter('quotationId'));
             // console.log($scope.quotationId);
 
@@ -228,6 +232,7 @@ angular.module('createQuotation', ['common', 'ngRoute', 'mgcrea.ngStrap.select',
                     .success(function (data) {
                         if (data.status == "200") {
                             $scope.quotationId = data.id;
+                            $scope.proposerCodeDisabled=true;
                             saveStep();
                         }
                     });

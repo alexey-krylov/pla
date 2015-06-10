@@ -31,9 +31,14 @@
     });
 
 </script>
-<div class="container fuelux">
+<div class="container-fluid fuelux">
+    <p class="lead">
+    <ol class="breadcrumb">
+        <li>Quotation</li>
+        <li>Individual Life</li>
+    </ol>
+    </p>
     <ng-view>
-
     </ng-view>
 </div>
 <footer class="footer" th:include="fragments/common :: footer"></footer>
@@ -106,8 +111,6 @@
         </div>
     </div>
 </script>
-
-
 <script id="plan-policyterm.tpl" type="text/ng-template">
     <div ng-switch="plan.policyTermType">
         <div ng-switch-when="SPECIFIED_VALUES">
@@ -120,7 +123,6 @@
         </div>
     </div>
 </script>
-
 <script id="plan-coverage.tpl" type="text/ng-template">
     <i ng-bind=""></i>
     <div ng-switch="getCoverageTermType(rider)">
@@ -134,7 +136,6 @@
         </div>
     </div>
 </script>
-
 <script id="plan-premiumterm.tpl" type="text/ng-template">
     <div ng-switch="plan.premiumTermType">
         <div ng-switch-when="SPECIFIED_VALUES">

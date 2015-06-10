@@ -230,6 +230,7 @@ angular.module('createQuotation', ['common', 'ngRoute', 'mgcrea.ngStrap.select',
                     .success(function (data) {
                         if (data.status == "200") {
                             $scope.quotationId = data.id;
+                            $scope.proposerCodeDisabled=true;
                             saveStep();
                         }
                     });

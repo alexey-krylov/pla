@@ -41,6 +41,12 @@
     /*]]>*/
 </script>
 <script type="text/ng-template" id="createQuotationTpl.html">
+    <p class="lead">
+    <ol class="breadcrumb">
+        <li>Quotation</li>
+        <li>Group Health</li>
+    </ol>
+    </p>
     <nth-alert></nth-alert>
     <form name="quotationForm" novalidate="true">
         <div class="wizard fueluxWizard" style="overflow: visible" selected-item="selectedItem">
@@ -155,7 +161,7 @@
                                     <div class="form-group required">
                                         <label class="control-label">Proposer Code</label>
                                         <input type="text" onkeypress="return isEnterKey(event)"
-                                               class="form-control input-sm" ng-disabled="mode!='new'"
+                                               class="form-control input-sm" ng-disabled="proposerCodeDisabled"
                                                ng-required="true" name="proposerCode"
                                                ng-model="quotationDetails.proposer.proposerCode"/>
                                     </div>
@@ -212,7 +218,7 @@
                                         <input type="text" onkeypress="return isEnterKey(event)" class="form-control input-sm" maxlength="13" minlength="13" name="workPhone" ng-required="true" ng-pattern="numberPattern" ng-model="quotationDetails.proposer.contactPersonWorkPhoneNumber"/>
                                         <div ng-show="step2.workPhone.$invalid &amp;&amp; step2.workPhone.$dirty">
                                             <small class="error" ng-show="!step2.workPhone.$error.pattern &amp;&amp; step2.workPhone.$error.minlength">
-                                                Please enter a valid mobile number.
+                                                Please enter a valid Work Phone.
                                             </small>
                                             <small class="error" ng-show="step2.workPhone.$error.pattern">
                                                 Only numbers are allowed.
@@ -327,20 +333,21 @@
                                         </small>
                                     </div>
                                 </div>
-                                <div class="col-lg-3" ng-if="!(!isPolicyTermNot365 || inappropriatePolicyTerm)">
-                                    <div class="form-group required">
-                                        <label class="control-label">Number Of Installments</label>
-                                        <select class="form-control" ng-model="selectedInstallment.installmentNo" name="installments" ng-required="true"
-                                                ng-options="installment.installmentNo as installment.installmentNo for installment in installments|orderBy:'installmentNo'"></select>
+                                <div class="col-lg-6" ng-if="!(!isPolicyTermNot365 || inappropriatePolicyTerm)">
+                                    <div class="col-lg-6">
+                                        <div class="form-group required">
+                                            <label class="control-label">Number Of Installments</label>
+                                            <select class="form-control" ng-model="selectedInstallment" name="installments" ng-required="true"
+                                                    ng-options="installment as installment.installmentNo for installment in installments|orderBy:'installmentNo'"></select>
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="col-lg-3"  ng-if="!(!isPolicyTermNot365 || inappropriatePolicyTerm)">
+                                <div class="col-lg-6">
                                     <div class="form-group" ng-if="selectedInstallment!=null">
                                         <label >Installment Amount</label>
                                         <input class="form-control input-sm" readonly="true" ng-model="selectedInstallment.installmentAmount" />
-
                                     </div>
                                 </div>
+                                    </div>
                             </div>
                             </ng-form>
                         </div>
@@ -421,7 +428,7 @@
         }
     </style>
 </script>
-<div class="ng-view container">
+<div class="ng-view container-fluid">
 
 </div>
 <footer class="footer" th:include="fragments/common :: footer">
