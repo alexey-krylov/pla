@@ -4,6 +4,7 @@ import com.google.common.collect.Lists;
 import com.pla.core.domain.model.CoverageName;
 import com.pla.core.domain.model.agent.AgentId;
 import com.pla.core.domain.model.plan.premium.Premium;
+import com.pla.core.query.PlanFinder;
 import com.pla.core.query.PremiumFinder;
 import com.pla.grouplife.quotation.query.AgentDetailDto;
 import com.pla.individuallife.quotation.presentation.dto.*;
@@ -40,6 +41,9 @@ public class ILQuotationService {
     private IPremiumCalculator premiumCalculator;
 
     private PremiumFinder premiumFinder;
+
+    @Autowired
+    private PlanFinder planFinder;
 
     @Autowired
     public ILQuotationService(ILQuotationFinder ilQuotationFinder, IPremiumCalculator premiumCalculator, PremiumFinder premiumFinder) {
@@ -177,9 +181,9 @@ public class ILQuotationService {
 
         PlanDetailDto planDetailDto = quotationMap.getPlanDetailDto();
         List<ILQuotationDetailDto.CoverDetail> coverDetails = Lists.newArrayList();
-        ILQuotationDetailDto.CoverDetail assuredPlanCoverDetail = ilQuotationDetailDto.new CoverDetail(planDetailDto.getPlanId(), planDetailDto.getSumAssured().setScale(2, BigDecimal.ROUND_CEILING).toPlainString(), planDetailDto.getPolicyTerm());;
+        ILQuotationDetailDto.CoverDetail assuredPlanCoverDetail = ilQuotationDetailDto.new CoverDetail(planFinder.getPlanName(new PlanId(planDetailDto.getPlanId())), planDetailDto.getSumAssured().setScale(2, BigDecimal.ROUND_CEILING).toPlainString(), planDetailDto.getPolicyTerm());;
         coverDetails.add(assuredPlanCoverDetail);
-        ilQuotationDetailDto.setProposedCoverPeriod(planDetailDto.getPolicyTerm());
+        ilQuotationDetailDto.setProposedCoverPeriod(planDetailDto.getPolicyTerm() + " Years");
 
 
         for (RiderDetailDto riderDetailDto : quotationMap.getPlanDetailDto().getRiderDetails()) {
@@ -189,7 +193,7 @@ public class ILQuotationService {
         ilQuotationDetailDto.setCoverDetails(coverDetails);
 
         PremiumDetailDto premiumDetailDto = getPremiumDetail(new QuotationId(quotationId));
-        ilQuotationDetailDto.setNetAnnualPremium(premiumDetailDto.getPlanAnnualPremium().setScale(2, BigDecimal.ROUND_CEILING).toPlainString());
+        ilQuotationDetailDto.setNetAnnualPremium(premiumDetailDto.getTotalPremium().setScale(2, BigDecimal.ROUND_CEILING).toPlainString());
         ilQuotationDetailDto.setNetSemiAnnualPremium(premiumDetailDto.getSemiannualPremium().setScale(2, BigDecimal.ROUND_CEILING).toPlainString());
         ilQuotationDetailDto.setNetQuarterlyPremium(premiumDetailDto.getQuarterlyPremium().setScale(2, BigDecimal.ROUND_CEILING).toPlainString());
         ilQuotationDetailDto.setNetMonthlyPremium(premiumDetailDto.getMonthlyPremium().setScale(2, BigDecimal.ROUND_CEILING).toPlainString());

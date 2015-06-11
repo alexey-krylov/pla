@@ -23,7 +23,7 @@ public class ILQuotationDetailDto {
     private String proposerMobileNumber;
 
     private String quotationNumber;
-    private Integer proposedCoverPeriod;
+    private String proposedCoverPeriod;
 
     private String proposedAssuredName;
     private String proposedAssuredDob;

@@ -62,10 +62,10 @@
 						<bottomPen lineWidth="0.0"/>
 						<rightPen lineWidth="0.0"/>
 					</box>
-					<textElement textAlignment="Center" verticalAlignment="Bottom">
+					<textElement textAlignment="Center" verticalAlignment="Middle">
 						<font size="20" isBold="true"/>
 					</textElement>
-					<text><![CDATA[Plan/Coverage Name]]></text>
+					<text><![CDATA[Plan / Coverage Name]]></text>
 				</staticText>
 			</frame>
 			<frame>
@@ -109,7 +109,7 @@
 					<textElement textAlignment="Center" verticalAlignment="Middle">
 						<font size="20" isBold="true"/>
 					</textElement>
-					<text><![CDATA[coverTerm]]></text>
+					<text><![CDATA[Term]]></text>
 				</staticText>
 			</frame>
 		</band>
