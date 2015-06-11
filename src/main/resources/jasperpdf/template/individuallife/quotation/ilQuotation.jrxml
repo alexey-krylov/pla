@@ -4,9 +4,30 @@
 	<property name="ireport.zoom" value="1.0"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="655"/>
+	<style name="table">
+		<box>
+			<pen lineWidth="1.0" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_TH" mode="Opaque" backcolor="#F0F8FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_CH" mode="Opaque" backcolor="#BFE1FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
 	<subDataset name="dataset1" uuid="cb7c3b79-1e7b-49c3-9bac-8ee5b60d6edc"/>
 	<subDataset name="CoverDetails" uuid="9a1e43bb-03d2-41f5-8c59-1059a851e097"/>
 	<subDataset name="Table Dataset 1" uuid="3ec3ad09-ed02-4580-b0c9-de8492501fe4"/>
+	<subDataset name="Table Dataset 2" uuid="d946c433-9b60-4b59-ab0c-a1c31962b123"/>
 	<queryString>
 		<![CDATA[]]>
 	</queryString>
@@ -81,11 +102,42 @@
 					</textElement>
 					<text><![CDATA[Individual Life Quotation]]></text>
 				</staticText>
+				<staticText>
+					<reportElement x="339" y="2" width="100" height="20" uuid="1c4d7b25-136d-49b8-b1e3-4552f5a31366"/>
+					<text><![CDATA[netAnnualPremium]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="335" y="2" width="100" height="20" uuid="92650850-b9f6-4ba8-8570-29fa126d5900"/>
+					<text><![CDATA[netSemiAnnualPremium]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="342" y="2" width="100" height="20" uuid="73a70e6c-2e1a-4ae9-8e52-8d34bad5e9ba"/>
+					<text><![CDATA[netQuarterlyPremium]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="317" y="2" width="100" height="20" uuid="a474e756-9218-46b9-b78a-2f59e9a50a9a"/>
+					<text><![CDATA[netMonthlyPremium]]></text>
+				</staticText>
 			</frame>
 		</band>
 	</columnHeader>
 	<detail>
 		<band height="776" splitType="Stretch">
+			<frame>
+				<reportElement positionType="FixRelativeToBottom" x="2" y="675" width="800" height="100" uuid="c5a12892-372b-4548-b6c6-44e151377510"/>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Double"/>
+					<leftPen lineWidth="1.0" lineStyle="Double"/>
+					<bottomPen lineWidth="1.0" lineStyle="Double"/>
+					<rightPen lineWidth="1.0" lineStyle="Double"/>
+				</box>
+				<staticText>
+					<reportElement x="38" y="10" width="692" height="80" uuid="5979e608-1ef8-4ffb-a8c5-92693a6d5225"/>
+					<text><![CDATA[Note:                                                                                                                                                                                                                                                                                                          1.  Cover is granted subject to completion of an 'Active at Work' declaration.
+2.  For members above the FCL medical underwriting information will be required depending on the amount by which the sum insured exceeds the FCL.The minimum requirement is completion of a medical questionnaire and an HIV test.  In the event of a member not providing the medical information  required, cover will be restricted to the FCL in the event of death arising from natural causes.However the full sum assured would be paid on accidental death.                                                                                                                                                                                               3.  A Register of lives assured showing a breakdown of the premium for each life assured will be provided with the policy document.
+]]></text>
+				</staticText>
+			</frame>
 			<frame>
 				<reportElement x="25" y="10" width="755" height="648" uuid="3e3c739a-dd56-4b8c-85ba-494ac85a39f4"/>
 				<box>
@@ -332,21 +384,81 @@
 					</textElement>
 					<text><![CDATA[Special Conditions (If Any)]]></text>
 				</staticText>
-			</frame>
-			<frame>
-				<reportElement positionType="FixRelativeToBottom" x="2" y="675" width="800" height="100" uuid="c5a12892-372b-4548-b6c6-44e151377510"/>
-				<box>
-					<topPen lineWidth="1.0" lineStyle="Double"/>
-					<leftPen lineWidth="1.0" lineStyle="Double"/>
-					<bottomPen lineWidth="1.0" lineStyle="Double"/>
-					<rightPen lineWidth="1.0" lineStyle="Double"/>
-				</box>
+				<rectangle>
+					<reportElement x="27" y="588" width="224" height="20" uuid="351278ae-2dac-47b3-8c18-7a39fb04934b"/>
+				</rectangle>
+				<rectangle>
+					<reportElement x="251" y="568" width="321" height="20" uuid="1d5b6b66-3e14-40b7-9416-aa7cafaa7005"/>
+				</rectangle>
+				<rectangle>
+					<reportElement x="251" y="588" width="321" height="20" uuid="40f8cb4a-697d-4bff-8b61-df26ef3b40f6"/>
+				</rectangle>
+				<rectangle>
+					<reportElement x="27" y="608" width="224" height="20" uuid="f3c0eabb-14f3-4a54-b89d-ca8337903956"/>
+				</rectangle>
+				<rectangle>
+					<reportElement x="251" y="608" width="321" height="20" uuid="5e9eafaa-c6a4-41a3-907a-8f73cef1b1fb"/>
+				</rectangle>
+				<rectangle>
+					<reportElement x="27" y="628" width="224" height="20" uuid="fc583062-e76e-4d5f-b223-df8aac671ce1"/>
+				</rectangle>
+				<rectangle>
+					<reportElement x="251" y="628" width="321" height="20" uuid="0260cfbd-f6d6-4d3d-b3fb-c8e4ad8e357c"/>
+				</rectangle>
+				<rectangle>
+					<reportElement x="27" y="568" width="224" height="20" uuid="d5d6c5a3-086e-4b7f-87a6-273afb9ad4a3"/>
+				</rectangle>
 				<staticText>
-					<reportElement x="38" y="10" width="692" height="80" uuid="5979e608-1ef8-4ffb-a8c5-92693a6d5225"/>
-					<text><![CDATA[Note:                                                                                                                                                                                                                                                                                                          1.  Cover is granted subject to completion of an 'Active at Work' declaration.
-2.  For members above the FCL medical underwriting information will be required depending on the amount by which the sum insured exceeds the FCL.The minimum requirement is completion of a medical questionnaire and an HIV test.  In the event of a member not providing the medical information  required, cover will be restricted to the FCL in the event of death arising from natural causes.However the full sum assured would be paid on accidental death.                                                                                                                                                                                               3.  A Register of lives assured showing a breakdown of the premium for each life assured will be provided with the policy document.
-]]></text>
+					<reportElement x="27" y="573" width="226" height="15" uuid="f64e71bf-9d54-4193-be1b-373d29e4723d"/>
+					<textElement>
+						<font size="11" isBold="false"/>
+					</textElement>
+					<text><![CDATA[Net Annual Premium]]></text>
 				</staticText>
+				<staticText>
+					<reportElement mode="Transparent" x="27" y="593" width="226" height="15" forecolor="#000000" backcolor="#FFFFFF" uuid="8848e3b9-c39b-4d60-801f-4ce82a9ee35c"/>
+					<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" markup="none">
+						<font fontName="SansSerif" size="11" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+						<paragraph lineSpacing="Single"/>
+					</textElement>
+					<text><![CDATA[Net Semi-Annual Premium]]></text>
+				</staticText>
+				<staticText>
+					<reportElement mode="Transparent" x="27" y="608" width="226" height="15" forecolor="#000000" backcolor="#FFFFFF" uuid="f574dbb2-a8fa-4c16-9715-bd2a120970bf"/>
+					<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" markup="none">
+						<font fontName="SansSerif" size="11" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+						<paragraph lineSpacing="Single"/>
+					</textElement>
+					<text><![CDATA[Net Quarterly Premium]]></text>
+				</staticText>
+				<staticText>
+					<reportElement mode="Transparent" x="25" y="628" width="226" height="15" forecolor="#000000" backcolor="#FFFFFF" uuid="774ea2cd-ddc2-44b1-bd92-722a09cce156"/>
+					<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" markup="none">
+						<font fontName="SansSerif" size="11" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+						<paragraph lineSpacing="Single"/>
+					</textElement>
+					<text><![CDATA[Net Monthly Premium]]></text>
+				</staticText>
+				<textField>
+					<reportElement x="263" y="570" width="254" height="20" uuid="e78cc526-0954-40be-8662-884ea2d63ed2"/>
+					<textFieldExpression><![CDATA[$F{netAnnualPremium}]]></textFieldExpression>
+				</textField>
+				<textField pattern="" isBlankWhenNull="false">
+					<reportElement mode="Transparent" x="263" y="590" width="254" height="20" forecolor="#000000" backcolor="#FFFFFF" uuid="ca08b19c-474b-499a-b31b-c38fea111b13"/>
+					<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" markup="none">
+						<font fontName="SansSerif" size="10" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+						<paragraph lineSpacing="Single"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{netSemiAnnualPremium}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="263" y="610" width="254" height="20" uuid="3990ad24-724f-4046-885b-4c0a97cae46f"/>
+					<textFieldExpression><![CDATA[$F{netQuarterlyPremium}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="263" y="631" width="254" height="14" uuid="954f858e-8c11-4826-8456-f5d0c6a756d7"/>
+					<textFieldExpression><![CDATA[$F{netMonthlyPremium}]]></textFieldExpression>
+				</textField>
 			</frame>
 		</band>
 	</detail>
