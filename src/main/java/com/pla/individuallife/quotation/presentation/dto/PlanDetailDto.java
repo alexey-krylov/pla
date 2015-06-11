@@ -4,7 +4,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.math.BigInteger;
+import java.math.BigDecimal;
 import java.util.Set;
 
 /**
@@ -21,7 +21,7 @@ public class PlanDetailDto {
 
     private Integer premiumPaymentTerm;
 
-    private BigInteger sumAssured;
+    private BigDecimal sumAssured;
 
     private Set<RiderDetailDto> riderDetails;
 }

@@ -98,6 +98,9 @@ public class IndividualLifeQuotation extends AbstractAggregateRoot<QuotationId> 
         this.versionNumber = versionNumber;
         this.quotationNumber = quotationNumber;
         this.planDetail = new PlanDetail(planId, null, null, null);
+        if(this.isAssuredTheProposer == null) {
+            this.isAssuredTheProposer = Boolean.FALSE;
+        }
     }
 
     private IndividualLifeQuotation(String quotationNumber, String quotationCreator, QuotationId quotationId, int versionNumber, ILQuotationStatus ilQuotationStatus) {

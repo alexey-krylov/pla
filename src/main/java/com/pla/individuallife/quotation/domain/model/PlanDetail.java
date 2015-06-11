@@ -4,7 +4,7 @@ import com.pla.sharedkernel.identifier.PlanId;
 import lombok.Getter;
 
 import javax.persistence.Embeddable;
-import java.math.BigInteger;
+import java.math.BigDecimal;
 
 /**
  * Created by Karunakar on 5/25/2015.
@@ -19,12 +19,12 @@ public class PlanDetail {
 
     private Integer premiumPaymentTerm;
 
-    private BigInteger sumAssured;
+    private BigDecimal sumAssured;
 
     PlanDetail() {
     }
 
-    public PlanDetail(PlanId planId, Integer policyTerm, Integer premiumPaymentTerm, BigInteger sumAssured) {
+    public PlanDetail(PlanId planId, Integer policyTerm, Integer premiumPaymentTerm, BigDecimal sumAssured) {
         this.planId = planId;
         this.policyTerm = policyTerm;
         this.premiumPaymentTerm = premiumPaymentTerm;
