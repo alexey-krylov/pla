@@ -12,6 +12,7 @@ import com.pla.individuallife.quotation.query.PremiumDetailDto;
 import com.pla.sharedkernel.identifier.PlanId;
 import com.pla.sharedkernel.identifier.QuotationId;
 import com.wordnik.swagger.annotations.ApiOperation;
+import net.sf.jasperreports.engine.JRException;
 import org.axonframework.commandhandling.gateway.CommandGateway;
 import org.nthdimenzion.presentation.Result;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +22,9 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -199,6 +203,17 @@ public class IndidualLifeQuotationController {
             e.printStackTrace();
             return Result.failure(e.getMessage());
         }
+    }
+
+    @RequestMapping(value = "/printquotation/{quotationId}", method = RequestMethod.GET)
+    public void printQuotation(@PathVariable("quotationId") String quotationId, HttpServletResponse response) throws IOException, JRException {
+        response.reset();
+        response.setContentType("application/pdf");
+        response.setHeader("content-disposition", "attachment; filename=" + "quotation.pdf" + "");
+        OutputStream outputStream = response.getOutputStream();
+        outputStream.write(ilQuotationService.getQuotationPDF(quotationId));
+        outputStream.flush();
+        outputStream.close();
     }
 
 }

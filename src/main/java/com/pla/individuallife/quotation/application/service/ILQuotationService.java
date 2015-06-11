@@ -1,9 +1,13 @@
 package com.pla.individuallife.quotation.application.service;
 
+import com.google.common.collect.Lists;
 import com.pla.core.domain.model.CoverageName;
+import com.pla.core.domain.model.agent.AgentId;
 import com.pla.core.domain.model.plan.premium.Premium;
+import com.pla.core.query.PlanFinder;
 import com.pla.core.query.PremiumFinder;
-import com.pla.individuallife.quotation.presentation.dto.ILSearchQuotationDto;
+import com.pla.grouplife.quotation.query.AgentDetailDto;
+import com.pla.individuallife.quotation.presentation.dto.*;
 import com.pla.individuallife.quotation.query.ILQuotationDto;
 import com.pla.individuallife.quotation.query.ILQuotationFinder;
 import com.pla.individuallife.quotation.query.PremiumDetailDto;
@@ -13,11 +17,15 @@ import com.pla.publishedlanguage.domain.model.*;
 import com.pla.sharedkernel.identifier.CoverageId;
 import com.pla.sharedkernel.identifier.PlanId;
 import com.pla.sharedkernel.identifier.QuotationId;
+import com.pla.sharedkernel.util.PDFGeneratorUtils;
+import net.sf.jasperreports.engine.JRException;
 import org.joda.time.LocalDate;
 import org.joda.time.Years;
+import org.nthdimenzion.presentation.AppUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.*;
 
@@ -33,6 +41,9 @@ public class ILQuotationService {
     private IPremiumCalculator premiumCalculator;
 
     private PremiumFinder premiumFinder;
+
+    @Autowired
+    private PlanFinder planFinder;
 
     @Autowired
     public ILQuotationService(ILQuotationFinder ilQuotationFinder, IPremiumCalculator premiumCalculator, PremiumFinder premiumFinder) {
@@ -137,4 +148,68 @@ public class ILQuotationService {
     }
 
 
+    public byte[] getQuotationPDF(String quotationId) throws IOException, JRException {
+
+        ILQuotationDetailDto ilQuotationDetailDto = getIlQuotationDetailForPDF(quotationId);
+        byte[] pdfData = PDFGeneratorUtils.createPDFReportByList(Arrays.asList(ilQuotationDetailDto), "jasperpdf/template/individuallife/quotation/ilQuotation.jrxml");
+
+        return pdfData;
+    }
+
+    private ILQuotationDetailDto getIlQuotationDetailForPDF(String quotationId) {
+
+        ILQuotationDetailDto ilQuotationDetailDto = new ILQuotationDetailDto();
+        ILQuotationDto quotationMap = ilQuotationFinder.getQuotationById(quotationId);
+
+        AgentDetailDto agentDetailDto = getAgentDetail(new AgentId(quotationMap.getAgentId()));
+        ilQuotationDetailDto.setAgentBranch(agentDetailDto.getBranchName());
+        ilQuotationDetailDto.setAgentCode(agentDetailDto.getAgentId());
+        ilQuotationDetailDto.setAgentName(agentDetailDto.getAgentSalutation() + "  " + agentDetailDto.getAgentName());
+        ilQuotationDetailDto.setAgentMobileNumber(agentDetailDto.getAgentMobileNumber());
+
+        ProposerDto proposerDto = quotationMap.getProposer();
+        ilQuotationDetailDto.setProposerName(proposerDto.getFirstName());
+        ilQuotationDetailDto.setProposerEmailAddress(proposerDto.getEmailAddress());
+        ilQuotationDetailDto.setProposerMobileNumber(proposerDto.getMobileNumber());
+
+        ilQuotationDetailDto.setQuotationNumber(quotationMap.getQuotationNumber());
+
+        ProposedAssuredDto proposedAssuredDto = quotationMap.getProposedAssured();
+        ilQuotationDetailDto.setProposedAssuredName(proposedAssuredDto.getFirstName());
+        ilQuotationDetailDto.setProposedAssuredDob(AppUtils.toString(proposedAssuredDto.getDateOfBirth()));
+        ilQuotationDetailDto.setProposedAssuredMobileNumber(proposedAssuredDto.getMobileNumber());
+
+        PlanDetailDto planDetailDto = quotationMap.getPlanDetailDto();
+        List<ILQuotationDetailDto.CoverDetail> coverDetails = Lists.newArrayList();
+        ILQuotationDetailDto.CoverDetail assuredPlanCoverDetail = ilQuotationDetailDto.new CoverDetail(planFinder.getPlanName(new PlanId(planDetailDto.getPlanId())), planDetailDto.getSumAssured().setScale(2, BigDecimal.ROUND_CEILING).toPlainString(), planDetailDto.getPolicyTerm());;
+        coverDetails.add(assuredPlanCoverDetail);
+        ilQuotationDetailDto.setProposedCoverPeriod(planDetailDto.getPolicyTerm() + " Years");
+
+
+        for (RiderDetailDto riderDetailDto : quotationMap.getPlanDetailDto().getRiderDetails()) {
+            assuredPlanCoverDetail = ilQuotationDetailDto.new CoverDetail(riderDetailDto.getCoverageName(), riderDetailDto.getSumAssured().setScale(2, BigDecimal.ROUND_CEILING).toPlainString(), riderDetailDto.getCoverTerm());
+            coverDetails.add(assuredPlanCoverDetail);
+        }
+        ilQuotationDetailDto.setCoverDetails(coverDetails);
+
+        PremiumDetailDto premiumDetailDto = getPremiumDetail(new QuotationId(quotationId));
+        ilQuotationDetailDto.setNetAnnualPremium(premiumDetailDto.getTotalPremium().setScale(2, BigDecimal.ROUND_CEILING).toPlainString());
+        ilQuotationDetailDto.setNetSemiAnnualPremium(premiumDetailDto.getSemiannualPremium().setScale(2, BigDecimal.ROUND_CEILING).toPlainString());
+        ilQuotationDetailDto.setNetQuarterlyPremium(premiumDetailDto.getQuarterlyPremium().setScale(2, BigDecimal.ROUND_CEILING).toPlainString());
+        ilQuotationDetailDto.setNetMonthlyPremium(premiumDetailDto.getMonthlyPremium().setScale(2, BigDecimal.ROUND_CEILING).toPlainString());
+
+        return ilQuotationDetailDto;
+    }
+
+    public AgentDetailDto getAgentDetail(AgentId  agentId) {
+        Map<String, Object> agentDetail = ilQuotationFinder.getAgentById(agentId.toString());
+        AgentDetailDto agentDetailDto = new AgentDetailDto();
+        agentDetailDto.setAgentId(agentId.toString());
+        agentDetailDto.setBranchName((String) agentDetail.get("branchName"));
+        agentDetailDto.setTeamName((String) agentDetail.get("teamName"));
+        agentDetailDto.setAgentName(agentDetail.get("firstName") + " " +(agentDetail.get("lastName") == null ? "" : (String) agentDetail.get("lastName")));
+        agentDetailDto.setAgentMobileNumber(agentDetail.get("mobileNumber") != null ? (String) agentDetail.get("mobileNumber") : "");
+        agentDetailDto.setAgentSalutation(agentDetail.get("title") != null ? (String) agentDetail.get("title") : "");
+        return agentDetailDto;
+    }
 }

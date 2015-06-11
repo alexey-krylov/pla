@@ -6,7 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.Embeddable;
-import java.math.BigInteger;
+import java.math.BigDecimal;
 
 /**
  * Created by Karunakar on 5/25/2015.
@@ -20,13 +20,13 @@ public class RiderDetail {
 
     private String coverageId;
 
-    private BigInteger sumAssured;
+    private BigDecimal sumAssured;
 
     private Integer coverTerm;
 
     private Integer waiverOfPremium;
 
-    public RiderDetail(String coverageId, BigInteger sumAssured, Integer coverTerm, Integer waiverOfPremium) {
+    public RiderDetail(String coverageId, BigDecimal sumAssured, Integer coverTerm, Integer waiverOfPremium) {
         this.coverageId = coverageId;
         this.sumAssured = sumAssured;
         this.coverTerm = coverTerm;
