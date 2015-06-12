@@ -304,7 +304,7 @@ public enum GHInsuredExcelHeader {
             int cellNumber = headers.indexOf(this.getDescription());
             Cell cell = row.getCell(cellNumber);
             String cellValue = getCellValue(cell);
-            insuredDto.setGender(Gender.valueOf(cellValue));
+            insuredDto.setGender(isNotEmpty(cellValue)? Gender.valueOf(cellValue):null);
             return insuredDto;
         }
 
@@ -313,7 +313,7 @@ public enum GHInsuredExcelHeader {
             int cellNumber = headers.indexOf(this.getDescription());
             Cell cell = row.getCell(cellNumber);
             String cellValue = getCellValue(cell);
-            insuredDependentDto.setGender(Gender.valueOf(cellValue));
+            insuredDependentDto.setGender(isNotEmpty(cellValue)?Gender.valueOf(cellValue):null);
             return insuredDependentDto;
         }
 
@@ -325,6 +325,11 @@ public enum GHInsuredExcelHeader {
         @Override
         public String validateAndIfNotBuildErrorMessage(IPlanAdapter planAdapter, Row row, String value, List<String> excelHeaders) {
             String errorMessage = "";
+            Cell noOfSumAssuredCell = row.getCell(excelHeaders.indexOf(NO_OF_ASSURED.name()));
+            String noOfSumAssured = getCellValue(noOfSumAssuredCell);
+            if (isNotEmpty(noOfSumAssured) && isEmpty(value)) {
+                return "";
+            }
             try {
                 Gender.valueOf(value);
             } catch (Exception e) {
@@ -367,10 +372,12 @@ public enum GHInsuredExcelHeader {
             String errorMessage = "";
             Cell relationshipCell = row.getCell(excelHeaders.indexOf(RELATIONSHIP.name()));
             String relationship = getCellValue(relationshipCell);
+            Cell noOfSumAssuredCell = row.getCell(excelHeaders.indexOf(NO_OF_ASSURED.name()));
+            String noOfSumAssured = getCellValue(noOfSumAssuredCell);
             if (isEmpty(relationship)) {
                 errorMessage = errorMessage + "Relationship cannot be empty.";
             }
-            if (Relationship.SELF.description.equals(relationship) && isEmpty(value)) {
+            if (isEmpty(noOfSumAssured) && isEmpty(value)) {
                 errorMessage = errorMessage + "Occupation cannot be empty.";
             }
             return errorMessage;
@@ -613,7 +620,7 @@ public enum GHInsuredExcelHeader {
         public GHInsuredDto.GHInsuredDependentDto populateInsuredDependentDetail(GHInsuredDto.GHInsuredDependentDto insuredDependentDto, Row row, List<String> headers) {
             Cell maxAgeCell = row.getCell(headers.indexOf(this.getDescription()));
             String maxAgeCellValue = getCellValue(maxAgeCell);
-            Integer maximumAge = isNotEmpty(maxAgeCellValue)? Double.valueOf(maxAgeCellValue.trim()).intValue():null;
+            Integer maximumAge = isNotEmpty(maxAgeCellValue) ? Double.valueOf(maxAgeCellValue.trim()).intValue() : null;
             insuredDependentDto.setMaxAgeEntry(maximumAge);
             return insuredDependentDto;
         }
@@ -673,7 +680,7 @@ public enum GHInsuredExcelHeader {
         @Override
         public String validateAndIfNotBuildErrorMessage(IPlanAdapter planAdapter, Row row, String value, List<String> excelHeaders) {
             String errorMessage = "";
-            if(isEmpty(value)){
+            if (isEmpty(value)) {
                 return "Annual Limit is blank.";
             }
             Cell planCell = row.getCell(excelHeaders.indexOf(PLAN.name()));

@@ -204,7 +204,7 @@ public class GHQuotationCommandHandler {
             public GHInsuredDependent apply(GHInsuredDto.GHInsuredDependentDto insuredDependentDto) {
                 GHInsuredDto.GHPlanPremiumDetailDto premiumDetail = insuredDependentDto.getPlanPremiumDetail();
                 String occupationClass = ghQuotationFinder.getOccupationClass(insuredDependentDto.getOccupationClass());
-                BigDecimal basicAnnualPremium = computePlanBasicAnnualPremium(premiumDetail.getPlanId(), premiumDetail.getSumAssured().toPlainString(),
+                BigDecimal basicAnnualPremium = premiumDetail.getPremiumAmount()!=null?premiumDetail.getPremiumAmount() :computePlanBasicAnnualPremium(premiumDetail.getPlanId(), premiumDetail.getSumAssured().toPlainString(),
                         String.valueOf(getAge(insuredDependentDto.getDateOfBirth()))
                         , occupationClass, insuredDependentDto.getGender().name(), 365, null);
                 final GHInsuredDependentBuilder[] insuredDependentBuilder = {GHInsuredDependent.getInsuredDependentBuilder(new PlanId(premiumDetail.getPlanId()), premiumDetail.getPlanCode(), basicAnnualPremium, premiumDetail.getSumAssured())};

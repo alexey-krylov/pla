@@ -49,7 +49,7 @@ public class GroupHealthQuotationSaga extends AbstractAnnotatedSaga {
     @SagaEventHandler(associationProperty = "quotationId")
     public void handle(GHQuotationGeneratedEvent event) throws ProcessInfoException {
         if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("Handling GL Quotation Generated Event .....", event);
+            LOGGER.debug("Handling GH Quotation Generated Event .....", event);
         }
         int noOfDaysToPurge = processInfoAdapter.getPurgeTimePeriod(LineOfBusinessEnum.GROUP_HEALTH, ProcessType.QUOTATION);
         int noOfDaysToClosure = processInfoAdapter.getClosureTimePeriod(LineOfBusinessEnum.GROUP_HEALTH, ProcessType.QUOTATION);
@@ -71,7 +71,7 @@ public class GroupHealthQuotationSaga extends AbstractAnnotatedSaga {
     @EndSaga
     public void handle(GHQuotationPurgeEvent event) {
         if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("Handling GL Quotation Purge Event .....", event);
+            LOGGER.debug("Handling GH Quotation Purge Event .....", event);
         }
         GroupHealthQuotation groupHealthQuotation = ghQuotationRepository.findOne(event.getQuotationId());
         if (!GHQuotationStatus.CLOSED.equals(groupHealthQuotation.getQuotationStatus())) {
@@ -82,7 +82,7 @@ public class GroupHealthQuotationSaga extends AbstractAnnotatedSaga {
     @SagaEventHandler(associationProperty = "quotationId")
     public void handle(GHQuotationReminderEvent event) throws ProcessInfoException {
         if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("Handling GL Quotation Reminder Event .....", event);
+            LOGGER.debug("Handling GH Quotation Reminder Event .....", event);
         }
         GroupHealthQuotation groupHealthQuotation = ghQuotationRepository.findOne(event.getQuotationId());
         if (GHQuotationStatus.GENERATED.equals(groupHealthQuotation.getQuotationStatus())) {
@@ -102,7 +102,7 @@ public class GroupHealthQuotationSaga extends AbstractAnnotatedSaga {
     @SagaEventHandler(associationProperty = "quotationId")
     public void handle(GHQuotationClosureEvent event) {
         if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("Handling GL Quotation Closure Event .....", event);
+            LOGGER.debug("Handling GH Quotation Closure Event .....", event);
         }
         GroupHealthQuotation groupHealthQuotation = ghQuotationRepository.findOne(event.getQuotationId());
         if (!GHQuotationStatus.CLOSED.equals(groupHealthQuotation.getQuotationStatus())) {
@@ -114,7 +114,7 @@ public class GroupHealthQuotationSaga extends AbstractAnnotatedSaga {
     @EndSaga
     public void handle(GHQuotationClosedEvent event) {
         if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("Handling GL Quotation Closure Event .....", event);
+            LOGGER.debug("Handling GH Quotation Closure Event .....", event);
         }
     }
 }
