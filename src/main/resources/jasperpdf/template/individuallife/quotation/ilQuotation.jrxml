@@ -153,11 +153,11 @@
 					<textFieldExpression><![CDATA[$F{agentBranch}]]></textFieldExpression>
 				</textField>
 				<staticText>
-					<reportElement x="447" y="50" width="140" height="20" uuid="ac1b81a8-9484-4246-b06f-dc2cf3c4c4f3"/>
+					<reportElement x="481" y="50" width="100" height="20" uuid="ac1b81a8-9484-4246-b06f-dc2cf3c4c4f3"/>
 					<textElement verticalAlignment="Middle">
 						<font fontName="Arial" size="12" isBold="true"/>
 					</textElement>
-					<text><![CDATA[Policy Servicing Office :]]></text>
+					<text><![CDATA[Servicing Office :]]></text>
 				</staticText>
 				<textField isStretchWithOverflow="true">
 					<reportElement x="142" y="54" width="100" height="15" uuid="ba824947-a77a-416a-80cc-8c1257048ce0"/>

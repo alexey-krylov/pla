@@ -4,6 +4,7 @@ import com.pla.core.query.AgentFinder;
 import com.pla.core.query.PlanFinder;
 import com.pla.individuallife.quotation.application.command.*;
 import com.pla.individuallife.quotation.application.service.ILQuotationService;
+import com.pla.individuallife.quotation.presentation.dto.ILQuotationMailDto;
 import com.pla.individuallife.quotation.presentation.dto.ILSearchQuotationDto;
 import com.pla.individuallife.quotation.presentation.dto.RiderDetailDto;
 import com.pla.individuallife.quotation.query.ILQuotationDto;
@@ -11,6 +12,8 @@ import com.pla.individuallife.quotation.query.ILQuotationFinder;
 import com.pla.individuallife.quotation.query.PremiumDetailDto;
 import com.pla.sharedkernel.identifier.PlanId;
 import com.pla.sharedkernel.identifier.QuotationId;
+import com.pla.sharedkernel.service.EmailAttachment;
+import com.pla.sharedkernel.service.MailService;
 import com.wordnik.swagger.annotations.ApiOperation;
 import net.sf.jasperreports.engine.JRException;
 import org.axonframework.commandhandling.gateway.CommandGateway;
@@ -23,9 +26,12 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -48,6 +54,8 @@ public class IndidualLifeQuotationController {
     private AgentFinder agentFinder;
     @Autowired
     private PlanFinder planFinder;
+    @Autowired
+    private MailService mailService;
 
     @RequestMapping(method = RequestMethod.GET)
     public ModelAndView index() {
@@ -215,5 +223,31 @@ public class IndidualLifeQuotationController {
         outputStream.flush();
         outputStream.close();
     }
+
+    @RequestMapping(value = "/emailQuotation", method = RequestMethod.POST)
+    @ResponseBody
+    public Result emailQuotation(@RequestBody ILQuotationMailDto mailDto, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            return Result.failure("Email cannot be sent due to wrong data");
+        }
+        try {
+            byte[] quotationData = ilQuotationService.getQuotationPDF(mailDto.getQuotationId());
+            String fileName = "QuotationNo-" + mailDto.getQuotationNumber() + ".pdf";
+            File file = new File(fileName);
+            FileOutputStream fileOutputStream = new FileOutputStream(file);
+            fileOutputStream.write(quotationData);
+            fileOutputStream.flush();
+            fileOutputStream.close();
+            EmailAttachment emailAttachment = new EmailAttachment(fileName, "application/pdf", file);
+            mailService.sendMailWithAttachment(mailDto.getSubject(), mailDto.getMailContent(), Arrays.asList(emailAttachment), mailDto.getRecipientMailAddress());
+            file.delete();
+            return Result.success("Email sent successfully");
+
+        } catch (Exception e) {
+            Result.failure(e.getMessage());
+        }
+        return Result.success("Email sent successfully");
+    }
+
 
 }
