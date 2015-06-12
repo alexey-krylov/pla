@@ -25,7 +25,7 @@ public class ProcessInfoAdapterImpl implements IProcessInfoAdapter {
     }
 
     @Override
-    public int getPurgeTimePeriod(LineOfBusinessEnum lineOfBusinessEnum, ProcessType processType) throws ProcessInfoException {
+     public int getPurgeTimePeriod(LineOfBusinessEnum lineOfBusinessEnum, ProcessType processType) throws ProcessInfoException {
         ProductLineGeneralInformation productLineGeneralInformation =  generalInformationService.findProductLineInformationByLineOfBusinessId(lineOfBusinessEnum);
         return productLineGeneralInformation.getProductLineProcessItemValue(processType, ProductLineProcessType.PURGE_TIME_PERIOD);
     }
@@ -49,7 +49,7 @@ public class ProcessInfoAdapterImpl implements IProcessInfoAdapter {
     }
 
     @Override
-    public BigDecimal getServiceTaxAmount() {
+     public BigDecimal getServiceTaxAmount() {
         return generalInformationService.getTheServiceTaxAmount();
     }
 

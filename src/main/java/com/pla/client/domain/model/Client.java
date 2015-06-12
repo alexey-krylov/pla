@@ -1,11 +1,13 @@
 package com.pla.client.domain.model;
 
+import com.google.common.collect.Maps;
 import com.pla.sharedkernel.identifier.ClientId;
 import lombok.*;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -55,15 +57,25 @@ public class Client {
         return new Client(clientBuilder,clientCode);
     }
 
+
     private Set<ClientDocument> withClientDocument(List<ClientBuilder.ClientDocumentBuilder> clientDocumentsBuilder){
-        Set<ClientDocument> clientDocuments = clientDocumentsBuilder.stream().map(new TransformClientDocument()).collect(Collectors.toSet());
+        Set<ClientDocument> clientDocuments = clientDocumentsBuilder.stream().map(new Function<ClientBuilder.ClientDocumentBuilder, ClientDocument>() {
+            @Override
+            public ClientDocument apply(ClientBuilder.ClientDocumentBuilder clientDocumentBuilder) {
+                return new ClientDocument(clientDocumentBuilder);
+            }
+        }).collect(Collectors.toSet());
         return clientDocuments;
     }
 
-    private class TransformClientDocument implements Function<ClientBuilder.ClientDocumentBuilder, ClientDocument> {
-        @Override
-        public ClientDocument apply(ClientBuilder.ClientDocumentBuilder clientDocumentBuilder) {
-            return new ClientDocument(clientDocumentBuilder);
-        }
+    public List<Map<String,Object>> findClientDocument(){
+        return this.clientDocuments.stream().map(new Function<ClientDocument, Map<String, Object>>() {
+            @Override
+            public Map<String, Object> apply(ClientDocument clientDocument) {
+                Map<String,Object> clientDocumentMap = Maps.newLinkedHashMap();
+                clientDocumentMap.put(clientDocument.getDocumentCode(), clientDocument.getRoutingLevel());
+                return clientDocumentMap;
+            }
+        }).collect(Collectors.toList());
     }
 }

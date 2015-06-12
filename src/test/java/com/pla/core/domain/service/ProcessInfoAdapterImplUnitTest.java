@@ -100,13 +100,13 @@ public class ProcessInfoAdapterImplUnitTest {
         assertThat(closureTimePeriod,is(11));
     }
 
-    @Test
+    @Test(expected = ProcessInfoException.class)
     public void givenLineOfBusinessIdAndProcessType_whenProcessTypeIsEndorsementAndTheProcessTypeIsSecondReminder_thenItShouldReturnTheDaysForSecondReminder() throws ProcessInfoException {
         ProductLineGeneralInformation productLineGeneralInformation = ProductLineGeneralInformation.createProductLineGeneralInformation(LineOfBusinessEnum.GROUP_HEALTH);
         productLineGeneralInformation = productLineGeneralInformation.withQuotationProcessInformation(listOfProcessItems);
         productLineGeneralInformation = productLineGeneralInformation.withEnrollmentProcessGeneralInformation(listOfProcessItems);
         when(generalInformationService.findProductLineInformationByLineOfBusinessId(LineOfBusinessEnum.GROUP_HEALTH)).thenReturn(productLineGeneralInformation);
-        int closureTimePeriod =  processInfoAdapter.getDaysForSecondReminder(LineOfBusinessEnum.GROUP_HEALTH, ProcessType.QUOTATION);
+        int closureTimePeriod =  processInfoAdapter.getDaysForSecondReminder(LineOfBusinessEnum.GROUP_HEALTH, ProcessType.ENDORSEMENT);
         assertThat(closureTimePeriod,is(11));
     }
 }

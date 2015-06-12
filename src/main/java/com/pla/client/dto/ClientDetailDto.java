@@ -1,8 +1,6 @@
 package com.pla.client.dto;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.List;
@@ -12,8 +10,6 @@ import java.util.List;
  */
 @Getter
 @Setter
-@NoArgsConstructor
-@AllArgsConstructor
 public class ClientDetailDto {
 
     private String clientName;
@@ -30,11 +26,12 @@ public class ClientDetailDto {
 
     private String emailAddress;
 
-    private List<ClientDocumentDetailDto> clientDocumentDetailDto;
+    private List<ClientDocumentDetailDto> clientDocumentDetailDtoList;
+
 
     @Getter
     @Setter
-    public   class ClientDocumentDetailDto{
+    public class ClientDocumentDetailDto{
 
         private String documentId;
 

@@ -1,6 +1,6 @@
 package com.pla.client.domain.model;
 
-import com.pla.underwriter.domain.model.RoutingLevel;
+import com.pla.sharedkernel.domain.model.RoutingLevel;
 import lombok.AccessLevel;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -30,7 +30,7 @@ public class ClientDocument {
         this.documentId = clientDocumentBuilder.getDocumentId();
         this.documentCode = clientDocumentBuilder.getDocumentCode();
         this.documentType = DocumentType.valueOf(clientDocumentBuilder.getDocumentType());
-        this.routingLevel  = clientDocumentBuilder.getDocumentType()!=null?RoutingLevel.valueOf(clientDocumentBuilder.getRoutingLevel()):null;
+        this.routingLevel  = clientDocumentBuilder.getDocumentType()!=null?DocumentType.UNDERWRITER.equals(DocumentType.valueOf(clientDocumentBuilder.getDocumentType()))?RoutingLevel.valueOf(clientDocumentBuilder.getRoutingLevel()):null:null;
         this.documentContent = clientDocumentBuilder.getDocumentContent();
     }
 

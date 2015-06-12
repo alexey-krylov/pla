@@ -1,4 +1,4 @@
-package com.pla.underwriter.domain.model;
+package com.pla.sharedkernel.domain.model;
 
 import lombok.Getter;
 

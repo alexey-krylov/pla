@@ -9,12 +9,13 @@ import com.pla.publishedlanguage.dto.UnderWriterRoutingLevelDetailDto;
 import com.pla.sharedkernel.identifier.CoverageId;
 import com.pla.sharedkernel.identifier.UnderWriterDocumentId;
 import com.pla.underwriter.domain.model.UnderWriterDocument;
+import com.pla.underwriter.domain.model.UnderWriterInfluencingFactor;
+import com.pla.underwriter.domain.model.UnderWriterProcessType;
 import com.pla.underwriter.domain.model.UnderWriterRoutingLevel;
 import com.pla.underwriter.repository.UnderWriterDocumentRepository;
 import com.pla.underwriter.repository.UnderWriterRoutingLevelRepository;
 import org.joda.time.LocalDate;
 import org.nthdimenzion.common.AppConstants;
-import org.nthdimenzion.utils.UtilValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.ColumnMapRowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
@@ -23,7 +24,10 @@ import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.stereotype.Service;
 
 import javax.sql.DataSource;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -76,10 +80,11 @@ public class UnderWriterFinder {
     public static final String FIND_PLAN_NAME_BY_CODE = "SELECT planName FROM plan_coverage_benefit_assoc_view WHERE planCode =:code LIMIT 1";
 
     public List<Map> findAllUnderWriterDocument() {
-        List<UnderWriterDocument> allUnderWriterDocument =  underWriterDocumentRepository.findEffectiveUnderWriterDocument(null);
+        List<UnderWriterDocument> allUnderWriterDocument =  underWriterDocumentRepository.findAll();
         List<Map> underWriterDocumentList = new ArrayList<Map>();
         for (UnderWriterDocument underWriterDocument : allUnderWriterDocument) {
             Map<String,Object> underWriterDocumentMap = objectMapper.convertValue(underWriterDocument, Map.class);
+            underWriterDocumentMap = underWriterInfluencingFactorAndProcessTypeTransformer(underWriterDocumentMap);
             String coverageId = underWriterDocument.getCoverageId()!=null?underWriterDocument.getCoverageId().getCoverageId():null;
             underWriterDocumentMap = planCoverageDetailTransformer(coverageId,underWriterDocument.getPlanCode(),underWriterDocumentMap);
             underWriterDocumentList.add(underWriterDocumentMap);
@@ -88,10 +93,11 @@ public class UnderWriterFinder {
     }
 
     public List<Map> findAllUnderWriterRoutingLevel() {
-        List<UnderWriterRoutingLevel> allUnderWriterRoutingLevel = underWriterRoutingLevelRepository.findEffectiveUnderWriterRoutingLevel(null);
+        List<UnderWriterRoutingLevel> allUnderWriterRoutingLevel = underWriterRoutingLevelRepository.findAll();
         List<Map> underWritingRoutingLevelList = new ArrayList<Map>();
         for (UnderWriterRoutingLevel underWriterRoutingLevel : allUnderWriterRoutingLevel) {
             Map underWritingRoutingLevelMap = objectMapper.convertValue(underWriterRoutingLevel, Map.class);
+            underWritingRoutingLevelMap = underWriterInfluencingFactorAndProcessTypeTransformer(underWritingRoutingLevelMap);
             String coverageId = underWriterRoutingLevel.getCoverageId()!=null?underWriterRoutingLevel.getCoverageId().getCoverageId():null;
             underWritingRoutingLevelMap = planCoverageDetailTransformer(coverageId,underWriterRoutingLevel.getPlanCode(),underWritingRoutingLevelMap);
             underWritingRoutingLevelList.add(underWritingRoutingLevelMap);
@@ -99,10 +105,22 @@ public class UnderWriterFinder {
         return underWritingRoutingLevelList;
     }
 
+    private Map underWriterInfluencingFactorAndProcessTypeTransformer(Map underWritingRoutingLevelMap){
+        List underWriterRoutingLevelInfluencingFactor = (List) underWritingRoutingLevelMap.get("underWriterInfluencingFactors");
+        underWritingRoutingLevelMap.put("underWriterInfluencingFactors", underWriterRoutingLevelInfluencingFactor.parallelStream().map(new Function<Object, String>() {
+            @Override
+            public String apply(Object underWriterInfluencingFactor) {
+                return UnderWriterInfluencingFactor.valueOf((String)underWriterInfluencingFactor).getDescription();
+            }
+        }).collect(Collectors.toList()));
+        underWritingRoutingLevelMap.put("processType", UnderWriterProcessType.valueOf((String)underWritingRoutingLevelMap.get("processType")));
+        return underWritingRoutingLevelMap;
+    }
+
     public UnderWriterRoutingLevel findUnderWriterRoutingLevel(UnderWriterRoutingLevelDetailDto underWriterRoutingLevelDetailDto) {
         List<UnderWriterRoutingLevel> underWriterRoutingLevel = underWriterRoutingLevelRepository.findUnderWriterRoutingLevel(underWriterRoutingLevelDetailDto.getPlanCode(),underWriterRoutingLevelDetailDto.getCoverageId(),
-                underWriterRoutingLevelDetailDto.getEffectiveFrom(),null,underWriterRoutingLevelDetailDto.getProcess());
-        checkArgument(isNotEmpty(underWriterRoutingLevel), "Under Writer Routing Level can not be null");
+                null,underWriterRoutingLevelDetailDto.getProcess());
+        checkArgument(isNotEmpty(underWriterRoutingLevel), "Under Writer Document can not be null");
         checkArgument(underWriterRoutingLevel.size() == 1);
         return underWriterRoutingLevel.get(0);
     }
@@ -130,7 +148,8 @@ public class UnderWriterFinder {
                 return underWriterDocumentLineItem;
             }
         }).collect(Collectors.toList());
-        underWriterDocumentMap = planCoverageDetailTransformer(underWriterDocument.getCoverageId().getCoverageId(),underWriterDocument.getPlanCode(),underWriterDocumentMap);
+        String coverageId =  underWriterDocument.getCoverageId()!=null?underWriterDocument.getCoverageId().getCoverageId():null;
+        underWriterDocumentMap = planCoverageDetailTransformer(coverageId,underWriterDocument.getPlanCode(),underWriterDocumentMap);
         underWriterDocumentMap.put("underWriterDocumentItems", underWriterLineItemList);
         return underWriterDocumentMap;
     }
@@ -140,7 +159,7 @@ public class UnderWriterFinder {
     }
 
     private Map<String,Object> planCoverageDetailTransformer(String coverageId,String planCode,Map<String,Object> underWriterMap){
-        if (UtilValidator.isNotEmpty(coverageId)) {
+        if (isNotEmpty(coverageId)) {
             SqlParameterSource sqlParameterSource = new MapSqlParameterSource("code", planCode).addValue("id", coverageId);
             Map<String, Object> planCoverageDetail = namedParameterJdbcTemplate.queryForMap(FIND_PLAN_COVERAGE_DETAIL_BY_PLAN_CODE, sqlParameterSource);
             underWriterMap.put("planName", planCoverageDetail.get("planName"));

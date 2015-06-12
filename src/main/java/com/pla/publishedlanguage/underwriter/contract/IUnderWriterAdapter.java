@@ -1,22 +1,21 @@
 package com.pla.publishedlanguage.underwriter.contract;
 
+import com.pla.publishedlanguage.dto.ClientDocumentDto;
 import com.pla.publishedlanguage.dto.UnderWriterRoutingLevelDetailDto;
+import com.pla.sharedkernel.domain.model.RoutingLevel;
 
 import java.util.List;
-import java.util.Map;
 
 /**
  * Created by Admin on 5/27/2015.
  */
 public interface IUnderWriterAdapter {
 
-    public String getRoutingLevel(UnderWriterRoutingLevelDetailDto underWriterRoutingLevelDetailDto);
+    public RoutingLevel getRoutingLevel(UnderWriterRoutingLevelDetailDto underWriterRoutingLevelDetailDto);
 
-    public List<Map<String,Object>> getDocumentsForUnderWriterApproval(UnderWriterRoutingLevelDetailDto underWriterRoutingLevelDetailDto);
+    public List<ClientDocumentDto> getDocumentsForUnderWriterApproval(UnderWriterRoutingLevelDetailDto underWriterRoutingLevelDetailDto);
 
-    public List<String> getUnderWriterDocument(UnderWriterRoutingLevelDetailDto underWriterRoutingLevelDetailDto);
-
-    public List<Map<String,Object>> getDocumentsForApproverApproval();
+    public List<ClientDocumentDto> getDocumentsForApproverApproval();
 
 
 }

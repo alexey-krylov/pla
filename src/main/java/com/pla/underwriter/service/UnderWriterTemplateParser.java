@@ -3,7 +3,7 @@ package com.pla.underwriter.service;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.pla.publishedlanguage.contract.IPlanAdapter;
-import com.pla.underwriter.domain.model.RoutingLevel;
+import com.pla.sharedkernel.domain.model.RoutingLevel;
 import com.pla.underwriter.domain.model.UnderWriterInfluencingFactor;
 import org.apache.commons.lang.math.NumberUtils;
 import org.apache.poi.hssf.usermodel.HSSFCell;

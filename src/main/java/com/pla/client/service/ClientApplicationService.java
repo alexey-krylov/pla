@@ -7,7 +7,6 @@ import com.pla.client.repository.ClientRepository;
 import org.nthdimenzion.object.utils.IIdGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 /**
  * Created by Admin on 5/28/2015.
@@ -25,12 +24,11 @@ public class ClientApplicationService {
         this.idGenerator = idGenerator;
     }
 
-    @Transactional
     public boolean createClient(ClientDetailDto clientDetailDto) {
         ClientBuilder clientBuilder = new ClientBuilder(clientDetailDto.getClientName());
         clientBuilder.withClientAddress(clientDetailDto.getAddress1(),clientDetailDto.getAddress2(),clientDetailDto.getProvience(),clientDetailDto.getPostalCode(),clientDetailDto.getTown());
         clientBuilder.withEmailAddress(clientDetailDto.getEmailAddress());
-        clientBuilder.withClientDocument(clientDetailDto.getClientDocumentDetailDto());
+        clientBuilder.withClientDocument(clientDetailDto.getClientDocumentDetailDtoList());
         Client client = Client.createClient(clientBuilder, idGenerator.nextId());
         clientRepository.save(client);
         return true;

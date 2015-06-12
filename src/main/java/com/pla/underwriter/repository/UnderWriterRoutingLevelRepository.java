@@ -20,10 +20,7 @@ public interface UnderWriterRoutingLevelRepository  extends MongoRepository<Unde
     @Query(value = "{'planCode' : ?0,'coverageId' : ?1 ,'validTill':?2,'processType' :?3}")
     public UnderWriterRoutingLevel findByPlanCodeAndCoverageIdAndValidityDate(String planCode, CoverageId coverageId, LocalDate validTill,String processType);
 
-    @Query(value = "{'validTill':?0}")
-    public List<UnderWriterRoutingLevel> findEffectiveUnderWriterRoutingLevel(LocalDate validTill);
-
-    @Query(value = "{'planCode' : ?0,'coverageId' : ?1, 'effectiveFrom' :?2, 'validTill' :?3, 'processType' :?4 }")
-    public List<UnderWriterRoutingLevel> findUnderWriterRoutingLevel(String planCode,CoverageId coverageId,LocalDate effectiveFrom,LocalDate validTill,String processType);
+    @Query(value = "{'planCode' : ?0,'coverageId' : ?1,'validTill' :?2, 'processType' :?3 }")
+    public List<UnderWriterRoutingLevel> findUnderWriterRoutingLevel(String planCode,CoverageId coverageId,LocalDate validTill,String processType);
 
 }

@@ -19,6 +19,8 @@ public class UnderWriterRoutingLevelDetailDto {
 
     private String planCode;
 
+    private String clientId;
+
     private String process;
 
     private CoverageId coverageId;

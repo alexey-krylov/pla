@@ -1,6 +1,7 @@
 package com.pla.underwriter.domain.model;
 
 import com.google.common.collect.Sets;
+import com.pla.sharedkernel.domain.model.RoutingLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
