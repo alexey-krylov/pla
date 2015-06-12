@@ -80,11 +80,11 @@ public class UnderWriterFinder {
     public static final String FIND_PLAN_NAME_BY_CODE = "SELECT planName FROM plan_coverage_benefit_assoc_view WHERE planCode =:code LIMIT 1";
 
     public List<Map> findAllUnderWriterDocument() {
-        List<UnderWriterDocument> allUnderWriterDocument =  underWriterDocumentRepository.findAll();
+        List<UnderWriterDocument> allUnderWriterDocument =  underWriterDocumentRepository.findEffectiveUnderWriterDocument(null);
         List<Map> underWriterDocumentList = new ArrayList<Map>();
         for (UnderWriterDocument underWriterDocument : allUnderWriterDocument) {
             Map<String,Object> underWriterDocumentMap = objectMapper.convertValue(underWriterDocument, Map.class);
-            underWriterDocumentMap = underWriterInfluencingFactorAndProcessTypeTransformer(underWriterDocumentMap);
+            underWriterDocumentMap.put("processType", UnderWriterProcessType.valueOf((String) underWriterDocumentMap.get("processType")).getDescription());
             String coverageId = underWriterDocument.getCoverageId()!=null?underWriterDocument.getCoverageId().getCoverageId():null;
             underWriterDocumentMap = planCoverageDetailTransformer(coverageId,underWriterDocument.getPlanCode(),underWriterDocumentMap);
             underWriterDocumentList.add(underWriterDocumentMap);
@@ -113,7 +113,7 @@ public class UnderWriterFinder {
                 return UnderWriterInfluencingFactor.valueOf((String)underWriterInfluencingFactor).getDescription();
             }
         }).collect(Collectors.toList()));
-        underWritingRoutingLevelMap.put("processType", UnderWriterProcessType.valueOf((String)underWritingRoutingLevelMap.get("processType")));
+        underWritingRoutingLevelMap.put("processType", UnderWriterProcessType.valueOf((String)underWritingRoutingLevelMap.get("processType")).getDescription());
         return underWritingRoutingLevelMap;
     }
 
