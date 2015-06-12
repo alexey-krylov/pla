@@ -105,7 +105,7 @@ public class UnderWriterSetUpController {
     @RequestMapping(value = "/redirecttoviewPage", method = RequestMethod.GET)
     public ModelAndView redirectToViewPage() {
         ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("pla/core/underwriter/viewDocumentRecord");
+        modelAndView.setViewName("pla/core/underwriter/documentSetup/viewDocumentRecord");
         return modelAndView;
     }
 
