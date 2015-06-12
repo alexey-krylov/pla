@@ -80,7 +80,7 @@ public class UnderWriterFinder {
     public static final String FIND_PLAN_NAME_BY_CODE = "SELECT planName FROM plan_coverage_benefit_assoc_view WHERE planCode =:code LIMIT 1";
 
     public List<Map> findAllUnderWriterDocument() {
-        List<UnderWriterDocument> allUnderWriterDocument =  underWriterDocumentRepository.findEffectiveUnderWriterDocument(null);
+        List<UnderWriterDocument> allUnderWriterDocument =  underWriterDocumentRepository.findEffectiveUnderWriterDocument();
         List<Map> underWriterDocumentList = new ArrayList<Map>();
         for (UnderWriterDocument underWriterDocument : allUnderWriterDocument) {
             Map<String,Object> underWriterDocumentMap = objectMapper.convertValue(underWriterDocument, Map.class);
@@ -118,8 +118,8 @@ public class UnderWriterFinder {
     }
 
     public UnderWriterRoutingLevel findUnderWriterRoutingLevel(UnderWriterRoutingLevelDetailDto underWriterRoutingLevelDetailDto) {
-        List<UnderWriterRoutingLevel> underWriterRoutingLevel = underWriterRoutingLevelRepository.findUnderWriterRoutingLevel(underWriterRoutingLevelDetailDto.getPlanCode(),underWriterRoutingLevelDetailDto.getCoverageId(),
-                null,underWriterRoutingLevelDetailDto.getProcess());
+        List<UnderWriterRoutingLevel> underWriterRoutingLevel = underWriterRoutingLevelRepository.findByPlanCodeAndCoverageIdAndValidTillAndProcessType(underWriterRoutingLevelDetailDto.getPlanCode(), underWriterRoutingLevelDetailDto.getCoverageId(),
+                null, underWriterRoutingLevelDetailDto.getProcess());
         checkArgument(isNotEmpty(underWriterRoutingLevel), "Under Writer Document can not be null");
         checkArgument(underWriterRoutingLevel.size() == 1);
         return underWriterRoutingLevel.get(0);

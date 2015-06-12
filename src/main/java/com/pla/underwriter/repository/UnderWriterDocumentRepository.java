@@ -15,7 +15,7 @@ import java.util.List;
 
 public interface UnderWriterDocumentRepository extends MongoRepository<UnderWriterDocument,UnderWriterDocumentId> {
 
-    @Query(value = "{'planCode' : ?0,'validTill':?1, 'processType' :?2 }")
+    @Query(value = "{'planCode' : ?0,'validTill':?1, 'processType' :?2 ,'coverageId' : null}")
     public UnderWriterDocument findByPlanCodeAndValidityDate(String planCode, LocalDate validTill,String processType);
 
     @Query(value = "{'planCode' : ?0,'coverageId' : ?1 ,'validTill':?2 ,'processType' :?3}")
@@ -24,7 +24,7 @@ public interface UnderWriterDocumentRepository extends MongoRepository<UnderWrit
     @Query(value = "{'planCode' : ?0,'coverageId' : ?1, 'effectiveFrom' :?2, 'validTill' :?3, 'processType' :?4 }")
     public List<UnderWriterDocument> findUnderWriterDocument(String planCode,CoverageId coverageId,LocalDate effectiveFrom,LocalDate validTill,String processType);
 
-    @Query(value = "{'validTill':?0}")
-    public List<UnderWriterDocument> findEffectiveUnderWriterDocument(LocalDate validTill);
+    @Query(value = "{'validTill': null}")
+    public List<UnderWriterDocument> findEffectiveUnderWriterDocument();
 
 }

@@ -14,13 +14,13 @@ import java.util.List;
  */
 public interface UnderWriterRoutingLevelRepository  extends MongoRepository<UnderWriterRoutingLevel,UnderWriterRoutingLevelId> {
 
-    @Query(value = "{'planCode' : ?0,'validTill':?1 , 'processType' : ?2}")
-    public UnderWriterRoutingLevel findByPlanCodeAndValidityDate(String planCode, LocalDate validTill,String processType);
+    @Query("{'planCode' : ?0,'validTill':?1 , 'processType' : ?2,'coverageId' : null}")
+    public UnderWriterRoutingLevel findByPlanCodeAndValidTillAndProcessType(String planCode, LocalDate validTill, String processType);
 
-    @Query(value = "{'planCode' : ?0,'coverageId' : ?1 ,'validTill':?2,'processType' :?3}")
-    public UnderWriterRoutingLevel findByPlanCodeAndCoverageIdAndValidityDate(String planCode, CoverageId coverageId, LocalDate validTill,String processType);
+    @Query("{'planCode' : ?0,'coverageId' : ?1 ,'validTill':?2,'processType' :?3}")
+    public UnderWriterRoutingLevel findByPlanCodeAndCoverageIdAndValidityTillAndProcessType(String planCode, CoverageId coverageId, LocalDate validTill, String processType);
 
-    @Query(value = "{'planCode' : ?0,'coverageId' : ?1,'validTill' :?2, 'processType' :?3 }")
-    public List<UnderWriterRoutingLevel> findUnderWriterRoutingLevel(String planCode,CoverageId coverageId,LocalDate validTill,String processType);
+    @Query("{'planCode' : ?0,'coverageId' : ?1,'validTill' :?2, 'processType' :?3 }")
+    public List<UnderWriterRoutingLevel> findByPlanCodeAndCoverageIdAndValidTillAndProcessType(String planCode, CoverageId coverageId, LocalDate validTill, String processType);
 
 }

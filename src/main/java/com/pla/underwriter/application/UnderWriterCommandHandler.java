@@ -66,9 +66,9 @@ public class UnderWriterCommandHandler {
     public void createUnderWriterRoutingLevelHandler(CreateUnderWriterRoutingLevelCommand createUnderWriterRoutingLevelCommand) {
         UnderWriterRoutingLevel underWriterRoutingLevel = null;
         if (isNotEmpty(createUnderWriterRoutingLevelCommand.getPlanCode()) && isNotEmpty(createUnderWriterRoutingLevelCommand.getCoverageId())) {
-            underWriterRoutingLevel = underWriterRoutingLevelRepository.findByPlanCodeAndCoverageIdAndValidityDate(createUnderWriterRoutingLevelCommand.getPlanCode(), new CoverageId(createUnderWriterRoutingLevelCommand.getCoverageId()), null,createUnderWriterRoutingLevelCommand.getProcessType().name());
+            underWriterRoutingLevel = underWriterRoutingLevelRepository.findByPlanCodeAndCoverageIdAndValidityTillAndProcessType(createUnderWriterRoutingLevelCommand.getPlanCode(), new CoverageId(createUnderWriterRoutingLevelCommand.getCoverageId()), null, createUnderWriterRoutingLevelCommand.getProcessType().name());
         } else if (isNotEmpty(createUnderWriterRoutingLevelCommand.getPlanCode()) && isEmpty(createUnderWriterRoutingLevelCommand.getCoverageId())) {
-            underWriterRoutingLevel = underWriterRoutingLevelRepository.findByPlanCodeAndValidityDate(createUnderWriterRoutingLevelCommand.getPlanCode(), null,createUnderWriterRoutingLevelCommand.getProcessType().name());
+            underWriterRoutingLevel = underWriterRoutingLevelRepository.findByPlanCodeAndValidTillAndProcessType(createUnderWriterRoutingLevelCommand.getPlanCode(), null, createUnderWriterRoutingLevelCommand.getProcessType().name());
         }
         if (underWriterRoutingLevel != null) {
             underWriterRoutingLevel = underWriterRoutingLevel.expireUnderWriterRoutingLevel(createUnderWriterRoutingLevelCommand.getEffectiveFrom().minusDays(1));
