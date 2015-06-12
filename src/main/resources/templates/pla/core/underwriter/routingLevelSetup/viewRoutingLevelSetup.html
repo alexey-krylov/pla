@@ -59,7 +59,7 @@
                         </thead>
                         <tbody>
                         <tr th:each="underwriterRouting : ${underWriterRoutingLevelList}">
-
+                     <!-- <p th:text="${underWriterRoutingLevelList}"></p>-->
                           <td th:text="${underwriterRouting.planName}">Plan Name</td>
                             <td th:text="${underwriterRouting.coverageName !=null}? ${underwriterRouting.coverageName}">Coverage Name</td>
                             <td style="text-align:center" class="pop" >

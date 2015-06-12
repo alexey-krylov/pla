@@ -147,7 +147,7 @@
                                     <li><a th:href="@{/core/premium/listpremium}">Premium</a></li>
                                     <li><a th:href="@{/core/mandatorydocument/view}">Mandatory Documents </a></li>
                                     <li class="dropdown"><a href="#">General Information
-                                        <small style="margin-top:5px"><i class="glyphicon glyphicon-chevron-right"></i>
+                                        <small style="margin-top:5px"><i style="margin-top:12px;" class="glyphicon glyphicon-chevron-right"></i>
                                         </small>
                                     </a>
                                         <ul style="display: none;" class="dropdown-menu sub-menu-level1 bold">
@@ -170,7 +170,7 @@
                                             </li>
                                         </ul>
                                     </li>
-                                    <li class="dropdown"><a href="#">Underwriter<i class="glyphicon glyphicon-chevron-right "></i></a>
+                                    <li class="dropdown"><a href="#">Underwriting<i style="margin-top:12px;" class="glyphicon glyphicon-chevron-right "></i></a>
                                         <ul style="display: none;" class="dropdown-menu sub-menu-level1 bold">
                                             <li><a th:href="@{/underwriter/viewdocumentsetup}">Document Setup</a></li>
                                             <li><a th:href="@{/underwriter/viewroutinglevel}">Routing Level Setup</a></li>
@@ -193,7 +193,12 @@
                                 <a href="javascript:void(0)"><span class="glyphicon glyphicon-list-alt"></span>&nbsp;Proposal<i
                                         class="icon-angle-down"></i></a>
                                 <ul style="display: none;" class="dropdown-menu sub-menu-level1 bold">
-                                    <li><a th:href="@{/core/proposal/listgrouplifeproposal}">GroupLife </a></li>
+                                    <li class="dropdown"><a href="#">GroupLife<i style="margin-top:12px;" class="glyphicon glyphicon-chevron-right "></i></a>
+                                        <ul style="display: none;" class="dropdown-menu sub-menu-level1 bold">
+                                            <li><a th:href="@{/core/proposal/listgrouplifeproposal}">Create Proposal</a></li>
+                                            <li><a th:href="@{/core/proposal/searchgrouplifeproposal}">Search Proposal</a></li>
+                                        </ul>
+                                    </li>
                                     <li><a th:href="@{/individuallife/proposal}">Individual Life </a></li>
                                 </ul>
                             </li>

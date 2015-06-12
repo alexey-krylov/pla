@@ -48,9 +48,9 @@
                             <th th:text="#{fromDate}">
                                 From Date
                             </th>
-                           <!-- <th th:text="#{actions}">
+                          <th th:text="#{actions}">
                                 Action
-                            </th>-->
+                            </th>
 
                         </tr>
                         </thead>
@@ -61,9 +61,9 @@
                             <td th:text="${underwriterDocument.processType}">Process</td>
                             <td th:text="${underwriterDocument.effectiveFrom}"></td>
                             <!--<td th:text="${#dates.format(underwriterDocument.effectiveFrom,'dd/MM/yyyy')}"></td>-->
-                          <!--  <td> <a class="btn btn-default btn-xs"  th:href="'/pla/core/underwriter/redirecttoupdatePage?underWriterDocumentId='+${underwriterDocument.underWriterDocumentId}+''" >Update</a>
-                                <a  class="btn btn-default btn-xs"  th:href="'/pla/core/underwriter/redirecttoviewPage?underWriterDocumentId='+${underwriterDocument.underWriterDocumentId}+''" >view</a>
-                            </td>-->
+                          <td> <a class="btn btn-default btn-xs"  th:href="'/pla/underwriter/redirecttoupdatePage?documentId='+${underwriterDocument.underWriterDocumentId}+''" >Update</a>
+                                <a  class="btn btn-default btn-xs"  th:href="'/pla/underwriter/redirecttoviewPage?documentId='+${underwriterDocument.underWriterDocumentId}+''" >View</a>
+                            </td>
                         </tr>
 
                         </tbody>

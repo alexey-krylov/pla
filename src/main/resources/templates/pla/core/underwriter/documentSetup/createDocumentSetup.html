@@ -56,9 +56,7 @@
                 </div>
                 <div class="panel-body ng-cloak">
                     <form  name="myForm" novalidate="true" class="css-form">
-                        <notification></notification>
-                        <notification1></notification1>
-                        <nth-alert></nth-alert>
+                       <nth-alert></nth-alert>
                         <div class="row">
                             <div class="form-group col-md-6 required">
                                 <label class="control-label">Defined For</label>
@@ -141,14 +139,14 @@
                                     <button type="button" class="btn btn-default bs-select" ng-model="mandatoryDocument.documents" max-length="0" data-all-none-buttons="true" data-html="1" data-multiple="1" placeholder="----Select----" ng-options="mandatoryDocument.documentCode as mandatoryDocument.documentName for mandatoryDocument in documentList | orderBy:'documentName'"   ng-change="makeChanged(mandatoryDocument.documents)" >
                                     Action <span class="caret"></span>
                                     </button>
-                                <button type="button" class="btn btn-primary btn-sm" bs-alert="alert" data-placement="top-right" data-container="notification" data-duration="5" data-content="{{alert.content}}" ng-disabled="(addDocumentForm.$invalid || (!mandatoryDocument.documents.length > 0))" ng-click="addDocumentDetails(addDocumentForm)">Add</button>
+                                <button type="button" class="btn btn-primary btn-sm"  ng-disabled="(addDocumentForm.$invalid || (!mandatoryDocument.documents.length > 0))" ng-click="addDocumentDetails(addDocumentForm)">Add</button>
 
                             </div>
 
 
                         </div>
                             </ng-form>
-                        <table class="table table-striped table-bordered" ng-show="headerDataList.length > 0">
+                        <table class="table table-striped table-bordered"  ng-show="headerDataList.length > 0">
                             <thead>
                             <tr  >
                                 <th ng-repeat="headerData in headerDataList">{{headerData.name}}</th>
@@ -164,7 +162,7 @@
                                   <span >{{v.influencingItem}}</span>
                               </td>
 
-                             <td style="text-align:center" class="pop" >
+                             <td style="text-align:left" class="pop" >
                                   <a data-placement="top" href="#" class="btn btn-primary btn-sm ng-scope " id="new-quote-popover" data-trigger="hover"  popover="">Mandatory Documents
                                      <div class="popover-head hide" >Documents</div>
                                      <div class="popover-content hide"  ng-repeat="document in col.underWriterDocuments">
@@ -180,7 +178,7 @@
 
                         <div class="row">
                             <div class="form-group col-lg-12" >
-                                <button type="button" class="btn btn-default" style="float:right;" bs-alert="alert" data-placement="top-right" data-container="notification1" data-duration="5" data-content="{{alert.content}}"  ng-disabled="(!showOptionalCoverageValue || !createDocumentLevel.effectiveFrom || !createDocumentLevel.processType || !createDocumentLevel.planCode  || (!dataList.length > 0))"   ng-click="submitDocumentSetUp()">Save</button>
+                                <button type="button" class="btn btn-default" style="float:right;"   ng-disabled="(!showOptionalCoverageValue || !createDocumentLevel.effectiveFrom || !createDocumentLevel.processType || !createDocumentLevel.planCode  || (!dataList.length > 0))"   ng-click="submitDocumentSetUp()">Save</button>
                                 <a class="btn btn-default"  style="float:left;" th:href="@{/underwriter/viewdocumentsetup}" >Cancel</a>
 
                             </div>
@@ -207,6 +205,7 @@
          font-size: 11px;
          padding-left:3px;
      }
+
 </style>
 <footer class="footer" th:include="fragments/common :: footer">
 </footer>
