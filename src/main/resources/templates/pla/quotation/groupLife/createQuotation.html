@@ -10,7 +10,7 @@
     <script data-main="../../../../static/js/requireConfig" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.1.16/require.min.js"></script>
     <!--*/-->
 </head>
-<body class="fuelux ng-cloak">
+<body class="fuelux ng-cloak" style="overflow-x: hidden;">
 <div th:include="fragments/common :: bodyHeader" th:remove="tag"/>
 <script>
     var isEnterKey = function (event){
@@ -41,14 +41,14 @@
     /*]]>*/
 </script>
 <script type="text/ng-template" id="createQuotationTpl.html">
-    <p class="lead">
-    <ol class="breadcrumb">
+    <p class="container lead">
+    <ol class="container breadcrumb">
         <li>Quotation</li>
         <li>Group Life</li>
     </ol>
     </p>
     <nth-alert></nth-alert>
-    <form name="quotationForm" novalidate="true">
+    <form name="quotationForm" novalidate="true" class="container">
         <div class="wizard fueluxWizard" style="overflow: visible" selected-item="selectedItem">
             <ul class="steps" style="margin-left: 0">
                 <li data-step="1"><span class="badge badge-info">1</span>Basic Details<span class="chevron"></span></li>
