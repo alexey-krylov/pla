@@ -88,6 +88,7 @@
                         </div>
 
                         <ng-form name="addDocumentForm" ng-show="updateDocumentLevel.underWriterInfluencingFactors.length > 0" >
+                            <div  class="bs-callout  bs-callout-info" style="padding:5px;">
                             <div class="row" >
                                 <div class="form-group col-md-2 required" ng-repeat="headerData in headerDataList">
                                     <label class="control-label"  >{{headerData.name}}</label>
@@ -103,6 +104,7 @@
                                     <button type="button" class="btn btn-primary btn-sm"  ng-disabled="(addDocumentForm.$invalid || (!mandatoryDocument.documents.length > 0))" ng-click="addDocumentDetails(addDocumentForm)">Add</button>
                                 </div>
                             </div>
+                                </div>
                         </ng-form>
                         <table class="table table-striped table-bordered"  cellspacing="0" width="100%" ng-show="headerDataList.length > 0">
                             <thead>
