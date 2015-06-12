@@ -28,24 +28,19 @@ App.controller('CreateRoutingLevelController', ['$scope', '$http', function ($sc
         $scope.datePickerSettings.isOpened = true;
     };
 
-    $scope.getDefinedOption = function () {
-
-        if ($scope.createRoutingLevel.definedFor == "plan") {
-            $scope.showOptionalCoverage = false;
-        } else {
-            // $scope.createPremium.definedFor = "optionalCoverage"
-            $scope.showOptionalCoverage = true;
-
-        }
-
-    }
     $scope.$watch('createRoutingLevel.definedFor',function(newValue, oldValue){
         if(newValue=='optionalCoverage'){
-            $scope.createRoutingLevel.planCode="";
+            $scope.createRoutingLevel.planId="";
+            $scope.createRoutingLevel.coverageId="";
             $scope.showOptionalCoverageValue = false;
+        }else if (newValue == 'plan'){
+            $scope.createRoutingLevel.planId="";
+            $scope.showOptionalCoverageValue = true;
+
         }
 
     });
+
     $scope.$watch('createRoutingLevel.coverageId',function(newValue, oldValue){
 
         if(newValue){
