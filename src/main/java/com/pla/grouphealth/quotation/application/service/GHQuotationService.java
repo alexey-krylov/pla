@@ -163,7 +163,7 @@ public class GHQuotationService {
                 BigDecimal insuredBasicPremium = insuredPremiumDetail.getPremiumAmount();
                 insuredBasicPremium = insuredBasicPremium.setScale(2, BigDecimal.ROUND_CEILING);
                 GHQuotationDetailDto.Annexure insuredAnnexure = ghQuotationDetailDto.new Annexure(insured.getFirstName() + " " + insured.getLastName()
-                        , insured.getNrcNumber(), insured.getGender().name(), AppUtils.toString(insured.getDateOfBirth()),
+                        , insured.getNrcNumber(), insured.getGender()!=null?insured.getGender().name():"", AppUtils.toString(insured.getDateOfBirth()),
                         isEmpty(insured.getCategory()) ? "" : insured.getCategory(), "Self", AppUtils.getAge(insured.getDateOfBirth()).toString(), "",
                         insuredBasicPremium.toPlainString(), insured.getBasicAnnualPlanPremiumIncludingNonVisibleCoveragePremium().toPlainString(), insured.getInsuredBasicAnnualVisibleCoveragePremium().toPlainString());
                 annexures.add(insuredAnnexure);
@@ -187,7 +187,7 @@ public class GHQuotationService {
                         BigDecimal insuredDependentBasicPremium = insuredDependentPremiumDetail.getPremiumAmount();
                         insuredDependentBasicPremium = insuredDependentBasicPremium.setScale(2, BigDecimal.ROUND_CEILING);
                         GHQuotationDetailDto.Annexure annexure = ghQuotationDetailDto.new Annexure(insuredDependent.getFirstName() + " " + insuredDependent.getLastName()
-                                , insuredDependent.getNrcNumber(), insuredDependent.getGender().name(), AppUtils.toString(insuredDependent.getDateOfBirth()),
+                                , insuredDependent.getNrcNumber(), insuredDependent.getGender()!=null?insuredDependent.getGender().name():"", AppUtils.toString(insuredDependent.getDateOfBirth()),
                                 isEmpty(insuredDependent.getCategory()) ? "" : insuredDependent.getCategory(), insuredDependent.getRelationship().description, AppUtils.getAge(insuredDependent.getDateOfBirth()).toString(), "",
                                 insuredDependentBasicPremium.toPlainString(), insuredDependent.getBasicAnnualPlanPremiumIncludingNonVisibleCoveragePremiumForDependent().toPlainString(), insuredDependent.getBasicAnnualVisibleCoveragePremiumForDependent().toPlainString());
                         annexures.add(annexure);
