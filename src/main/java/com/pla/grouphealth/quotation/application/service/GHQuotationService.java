@@ -87,11 +87,11 @@ public class GHQuotationService {
     public GLQuotationMailDto getPreScriptedEmail(String quotationId) {
         GroupHealthQuotation groupHealthQuotation = ghQuotationRepository.findOne(new QuotationId(quotationId));
         String subject = "PLA Insurance - Group Health - Quotation ID : " + groupHealthQuotation.getQuotationNumber();
-        String mailAddress = groupHealthQuotation.getProposer().getContactDetail().getContactPersonDetail().getContactPersonEmail();
+        String mailAddress = groupHealthQuotation.getProposer().getContactDetail()!=null?groupHealthQuotation.getProposer().getContactDetail().getContactPersonDetail().getContactPersonEmail():"";
         mailAddress = isEmpty(mailAddress) ? "" : mailAddress;
         Map<String, Object> emailContent = Maps.newHashMap();
         emailContent.put("mailSentDate", groupHealthQuotation.getGeneratedOn().toString(AppConstants.DD_MM_YYY_FORMAT));
-        emailContent.put("contactPersonName", groupHealthQuotation.getProposer().getContactDetail().getContactPersonDetail().getContactPersonName());
+        emailContent.put("contactPersonName", groupHealthQuotation.getProposer().getContactDetail()!=null?groupHealthQuotation.getProposer().getContactDetail().getContactPersonDetail().getContactPersonName():"");
         emailContent.put("proposerName", groupHealthQuotation.getProposer().getProposerName());
         Map<String, Object> emailContentMap = Maps.newHashMap();
         emailContentMap.put("emailContent", emailContent);
@@ -115,10 +115,15 @@ public class GHQuotationService {
         GHProposer proposer = quotation.getProposer();
         ghQuotationDetailDto.setProposerName(proposer.getProposerName());
         GHProposerContactDetail proposerContactDetail = proposer.getContactDetail();
-        ghQuotationDetailDto.setProposerPhoneNumber(proposerContactDetail.getContactPersonDetail().getWorkPhoneNumber());
-        Map<String, Object> provinceGeoMap = ghQuotationFinder.findGeoDetail(proposerContactDetail.getProvince());
-        Map<String, Object> townGeoMap = ghQuotationFinder.findGeoDetail(proposerContactDetail.getTown());
-        ghQuotationDetailDto.setProposerAddress(proposerContactDetail.getAddress((String) townGeoMap.get("geoName"), (String) provinceGeoMap.get("geoName")));
+        if (proposerContactDetail != null) {
+            ghQuotationDetailDto.setProposerPhoneNumber(proposerContactDetail.getContactPersonDetail() != null ? proposerContactDetail.getContactPersonDetail().getWorkPhoneNumber() : "");
+            Map<String, Object> provinceGeoMap = ghQuotationFinder.findGeoDetail(proposerContactDetail.getProvince());
+            Map<String, Object> townGeoMap = ghQuotationFinder.findGeoDetail(proposerContactDetail.getTown());
+            ghQuotationDetailDto.setProposerAddress(proposerContactDetail.getAddress((String) townGeoMap.get("geoName"), (String) provinceGeoMap.get("geoName")));
+        } else {
+            ghQuotationDetailDto.setProposerAddress("");
+            ghQuotationDetailDto.setProposerPhoneNumber("");
+        }
         ghQuotationDetailDto.setQuotationNumber(quotation.getQuotationNumber());
 
         GHPremiumDetail premiumDetail = quotation.getPremiumDetail();
@@ -163,7 +168,7 @@ public class GHQuotationService {
                 BigDecimal insuredBasicPremium = insuredPremiumDetail.getPremiumAmount();
                 insuredBasicPremium = insuredBasicPremium.setScale(2, BigDecimal.ROUND_CEILING);
                 GHQuotationDetailDto.Annexure insuredAnnexure = ghQuotationDetailDto.new Annexure(insured.getFirstName() + " " + insured.getLastName()
-                        , insured.getNrcNumber(), insured.getGender()!=null?insured.getGender().name():"", AppUtils.toString(insured.getDateOfBirth()),
+                        , insured.getNrcNumber(), insured.getGender() != null ? insured.getGender().name() : "", AppUtils.toString(insured.getDateOfBirth()),
                         isEmpty(insured.getCategory()) ? "" : insured.getCategory(), "Self", AppUtils.getAge(insured.getDateOfBirth()).toString(), "",
                         insuredBasicPremium.toPlainString(), insured.getBasicAnnualPlanPremiumIncludingNonVisibleCoveragePremium().toPlainString(), insured.getInsuredBasicAnnualVisibleCoveragePremium().toPlainString());
                 annexures.add(insuredAnnexure);
@@ -187,7 +192,7 @@ public class GHQuotationService {
                         BigDecimal insuredDependentBasicPremium = insuredDependentPremiumDetail.getPremiumAmount();
                         insuredDependentBasicPremium = insuredDependentBasicPremium.setScale(2, BigDecimal.ROUND_CEILING);
                         GHQuotationDetailDto.Annexure annexure = ghQuotationDetailDto.new Annexure(insuredDependent.getFirstName() + " " + insuredDependent.getLastName()
-                                , insuredDependent.getNrcNumber(), insuredDependent.getGender()!=null?insuredDependent.getGender().name():"", AppUtils.toString(insuredDependent.getDateOfBirth()),
+                                , insuredDependent.getNrcNumber(), insuredDependent.getGender() != null ? insuredDependent.getGender().name() : "", AppUtils.toString(insuredDependent.getDateOfBirth()),
                                 isEmpty(insuredDependent.getCategory()) ? "" : insuredDependent.getCategory(), insuredDependent.getRelationship().description, AppUtils.getAge(insuredDependent.getDateOfBirth()).toString(), "",
                                 insuredDependentBasicPremium.toPlainString(), insuredDependent.getBasicAnnualPlanPremiumIncludingNonVisibleCoveragePremiumForDependent().toPlainString(), insuredDependent.getBasicAnnualVisibleCoveragePremiumForDependent().toPlainString());
                         annexures.add(annexure);
@@ -195,7 +200,7 @@ public class GHQuotationService {
                 }
             }
         }
-        List<GHQuotationDetailDto.CoverDetail> unifiedCoverDetails = unifyCoverDetails(coverDetails,ghQuotationDetailDto);
+        List<GHQuotationDetailDto.CoverDetail> unifiedCoverDetails = unifyCoverDetails(coverDetails, ghQuotationDetailDto);
         ghQuotationDetailDto.setCoverDetails(unifiedCoverDetails);
         ghQuotationDetailDto.setAnnexure(annexures);
         return ghQuotationDetailDto;
