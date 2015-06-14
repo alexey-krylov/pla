@@ -5,11 +5,7 @@
     "use strict";
 
     function calculateAge(dob) {
-        var age = 0;
-        if (moment.isMoment(dob))
-            age = moment().diff(dob, 'years') + 1;
-        else if (moment.isDate(dob))
-            age = moment().diff(new moment(dob.toDateString()), 'years') + 1;
+        var age = moment().diff(new moment(new Date(dob)), 'years') + 1;
         return age;
     };
 
@@ -21,48 +17,6 @@
         datepickerPopupConfig.closeText = 'Done';
         datepickerPopupConfig.closeOnDateSelection = true;
     }])
-        .config(['$routeProvider', function ($routeProvider) {
-        $routeProvider
-            .when('/', {
-                templateUrl: 'quotation/searchForm'
-            })
-            .when('/new', {
-                templateUrl: 'quotation/new',
-                controller: 'QuotationController',
-                controllerAs: 'ctrl',
-                resolve: {
-                    occupations: ['$q', '$http', function ($q, $http) {
-                        var deferred = $q.defer();
-                        $http.get('/pla/individuallife/proposal/getAllOccupation').success(function (response, status, headers, config) {
-                            deferred.resolve(response);
-                        }).error(function (response, status, headers, config) {
-                            deferred.reject();
-                        });
-                        return deferred.promise;
-                        ;
-                    }]
-                }
-            })
-            .when('/edit/:quotationId', {
-                templateUrl: 'quotation/new',
-                controller: 'QuotationController',
-                controllerAs: 'ctrl',
-                resolve: {
-                    occupations: ['$q', '$http', function ($q, $http) {
-                        var deferred = $q.defer();
-                        $http.get('/pla/individuallife/proposal/getAllOccupation').success(function (response, status, headers, config) {
-                            deferred.resolve(response);
-                        }).error(function (response, status, headers, config) {
-                            deferred.reject();
-                        });
-                        return deferred.promise;
-                    }]
-                }
-            })
-        $routeProvider.otherwise({
-            templateUrl: 'quotation/searchForm'
-        });
-        }])
         .directive('sumassured', function () {
             return {
                 restrict: 'E',
@@ -140,6 +94,7 @@
                 templateUrl: 'plan-premiumterm.tpl',
                 link: function (scope, element, attr, ctrl) {
                     scope.$watch('planDetailDto.policyTerm', function (newval) {
+                        if (newval)
                         scope.planDetailDto.premiumPaymentTerm = newval;
                     })
                 },
@@ -166,46 +121,39 @@
             };
         })
         .controller('QuotationController', ['$scope', '$http', '$route', '$location', '$bsmodal',
-        'globalConstants', 'occupations',
-            function ($scope, $http, $route, $location, $bsmodal, globalConstants, occupations) {
+            'globalConstants', 'getQueryParameter',
+            function ($scope, $http, $route, $location, $bsmodal, globalConstants, getQueryParameter) {
 
             $scope.titleList = globalConstants.title;
-            $scope.occupations = occupations;
             $scope.quotation = {};
+                $scope.stepsSaved = {"1": true, "2": false, "3": false, "4": false, "5": false};
             $scope.selectedItem = 1;
+                $http.get('/pla/individuallife/proposal/getAllOccupation').success(function (response, status, headers, config) {
+                    $scope.occupations = response;
+                });
             $scope.onlyNumbers = /^[0-9]+$/;
                 $scope.planDetailDto = {};
-                $scope.proposedAssured = {
-                    title: "Mr.",
-                    'dateOfBirth': moment("17/02/1978", "DD/MM/YYYY"),
-                    'emailAddress': "pradyumna.mohapatra@gmail.com",
-                    'firstName': "PRADYUMNA",
-                    'gender': "MALE",
-                    'mobileNumber': "1234567890",
-                    'nrcNumber': "nrc555",
-                    'occupation': "Accountants",
-                    'surname': "MOHAPATRA"
-                };
+                $scope.proposedAssured = {};
+                $scope.uneditable = false;
+                $scope.proposerSameAsProposedAssured = false;
 
-                var quotationId = $route.current.params.quotationId;
-                if (quotationId) {
-                    $http.get('/pla/individuallife/quotation/getquotation/' + quotationId).success(function (response, status, headers, config) {
+                $scope.quotationId = getQueryParameter('quotationId');
+                if ($scope.quotationId) {
+
+                    $scope.uneditable = true;
+                    $http.get('/pla/individuallife/quotation/getquotation/' + $scope.quotationId).success(function (response, status, headers, config) {
                         $scope.quotation = response;
                         $scope.proposedAssured = $scope.quotation.proposedAssured || {};
                         $scope.proposer = $scope.quotation.proposer || {};
+                        $scope.proposerSameAsProposedAssured = $scope.quotation.proposedAssured.isAssuredTheProposer;
 
                         if ($scope.proposedAssured.dateOfBirth) {
-                            $scope.paDOB = $scope.proposedAssured.dateOfBirth;
-                            $scope.proposedAssured.dateOfBirth = moment($scope.proposedAssured.dateOfBirth, 'DD/MM/YYYY');
                             $scope.proposedAssuredAge = calculateAge($scope.proposedAssured.dateOfBirth);
                         }
 
                         if ($scope.proposer.dateOfBirth) {
-                            $scope.pDOB = $scope.proposer.dateOfBirth;
-                            $scope.proposer.dateOfBirth = moment($scope.proposer.dateOfBirth, 'DD/MM/YYYY');
-                            $scope.proposerAge = calculateAge($scope.proposedAssured.dateOfBirth);
+                            $scope.proposerAge = calculateAge($scope.proposer.dateOfBirth);
                         }
-
                         //This is for making the default selection during edit
                         $scope.selectedAgent = {};
                         $scope.selectedAgent.title = response.agentDetail.firstName || '';
@@ -218,15 +166,15 @@
                         selectedPlan.description = response.planDetail;
                         $scope.selectedPlan = selectedPlan;
                         $scope.planDetailDto = response.planDetailDto;
+                        $scope.selectedItem = 1;
+                        $scope.stepsSaved["1"] = true;
                         $http.get('/pla/core/plan/getPlanById/' + response.planId)
                             .success(function (plandata) {
                                 $scope.plan = plandata;
-                                console.log(JSON.stringify($scope.plan));
                             });
                     }).error(function (response, status, headers, config) {
                     });
-            }
-
+                }
             $scope.$watch('selectedAgent', function (newval) {
                 if (newval) {
                     $scope.agent = newval.description;
@@ -235,7 +183,6 @@
             });
 
             $scope.$watch('selectedPlan', function (newval, oldval) {
-                console.log('plan selected event ');
                 if (newval && newval.description && newval.description.plan_id) {
                     $http.get('/pla/core/plan/getPlanById/' + newval.description.plan_id)
                         .success(function (response) {
@@ -245,8 +192,7 @@
             });
 
                 $scope.$watch('plan.planId', function (newval) {
-                    if (newval && !quotationId) {
-                        console.log('getPlanById***********');
+                    if (newval && !$scope.quotationId) {
                         $http.get('/pla/individuallife/quotation/getridersforplan/' + newval)
                             .success(function (response) {
                                 $scope.planDetailDto.riderDetails = response;
@@ -260,98 +206,107 @@
                 }
             });
 
-            $scope.launchProposerDOB = function ($event) {
-                $event.preventDefault();
-                $event.stopPropagation();
-                $scope.launchdob2 = true;
-            };
-
-            $scope.launchProposedAssuredDOB = function ($event) {
-                $event.preventDefault();
-                $event.stopPropagation();
-                $scope.launchdob1 = true;
-            };
-
-                $scope.$watchGroup(['paDOB', 'pDOB'], function (newval, oldval) {
+                $scope.$watchGroup(['proposedAssured.dateOfBirth', 'proposer.dateOfBirth'], function (newval, oldval) {
                     if (newval) {
                         if (newval[0]) {
                             $scope.proposedAssuredAge = calculateAge(newval[0]);
-                }
-                        if (newval[1] && typeof newval[1] === 'object') {
+                        }
+                        if (newval[1]) {
                             $scope.proposerAge = calculateAge(newval[1]);
                         }
                     }
                 });
 
                 $scope.saveStep1 = function () {
-                    if (quotationId) {
+                    if ($scope.quotationId) {
                         return;
                     }
-                    console.log('saving step 1...');
-                $http.post('quotation/createquotation',
-                    angular.extend($scope.proposedAssured, {
-                        agentId: $scope.quotation.agentId,
-                        planId: $scope.plan.planId,
-                        isAssuredTheProposer: false
-                    }))
-                    .success(function (data) {
-                        $scope.quotation.quotationId = data.id;
-                        //$http.get('quotation/getquotationnumber/' + data.id).success(function (data) {
-                        //    $scope.quotation.quotationNumber = data.id;
-                        //});
-                        $location.path('/edit/' + $scope.quotation.quotationId);
-                    });
+                    $http.post('createquotation',
+                        angular.extend($scope.proposedAssured, {
+                            agentId: $scope.quotation.agentId,
+                            planId: $scope.plan.planId,
+                            isAssuredTheProposer: false
+                        }))
+                        .success(function (data) {
+                            if (data.id)
+                                $location.path('/edit/' + data.id);
+                        });
+                };
+
+
+                $scope.$watch('quotationId', function (newval, oldval) {
+                    if (newval != oldval) {
+                        $location.path('/edit/' + newval);
+                    }
+                });
+
+                $scope.launchProposerDOB = function ($event) {
+                    $event.preventDefault();
+                    $event.stopPropagation();
+                    $scope.launchdob2 = true;
+                };
+
+                $scope.launchProposedAssuredDOB = function ($event) {
+                    $event.preventDefault();
+                    $event.stopPropagation();
+                    $scope.launchdob1 = true;
                 };
 
             $scope.saveStep2 = function () {
                 var request = {proposedAssured: $scope.proposedAssured};
-                $http.post('quotation/updatewithassureddetail',
+                $http.post('updatewithassureddetail',
                     angular.extend(request, {
-                        quotationId: $scope.quotation.quotationId,
+                        quotationId: $scope.quotationId,
                         isAssuredTheProposer: $scope.proposerSameAsProposedAssured
                     }))
                     .success(function (data) {
+                        $scope.stepsSaved[$scope.selectedItem] = true;
+                        $scope.quotationId = data.id;
                     });
             };
 
             $scope.saveStep3 = function () {
-                console.log('saving step 3 form data');
-                var request = {proposer: $scope.proposer};
-                $http.post('quotation/updatewithproposerdetail',
+                var request = {proposerDto: $scope.proposer};
+                $http.post('updatewithproposerdetail',
                     angular.extend(request, {
-                        quotationId: $scope.quotation.quotationId
+                        quotationId: $scope.quotationId
                     }))
                     .success(function (data) {
+                        $scope.stepsSaved[$scope.selectedItem] = true;
+                        $scope.quotationId = data.id;
                     });
             };
 
                 $scope.saveStep4 = function () {
                     $scope.planDetailDto.planId = $scope.plan.planId;
                     var request = angular.extend($scope.planDetailDto, {
-                        quotationId: quotationId
+                        quotationId: $scope.quotationId
                     });
-                    console.log('saving step 4 form data' + JSON.stringify(request));
-
-                    $http.post('quotation/updatewithplandetail', {
+                    $http.post('updatewithplandetail', {
                         planDetailDto: request,
-                        quotationId: $scope.quotation.quotationId
+                        quotationId: $scope.quotationId
                     })
                         .success(function (data) {
+                            $scope.stepsSaved[$scope.selectedItem] = true;
+                            $scope.stepsSaved["5"] = true;
+                            $scope.quotationId = data.id;
+
                         });
                 };
 
+
                 $scope.$on('changed.fu.wizard', function (name, event, data) {
-                    //4 denotes we are in Premium Page, hence fetching the data
+                    $scope.selectedItem = data.step;
                     if (data && data.step == 4) {
-                        $http.get('quotation/getpremiumdetail/' + quotationId).success(function (response) {
-                            console.log(JSON.stringify(response))
+                        $http.get('getpremiumdetail/' + $scope.quotationId).success(function (response) {
                             $scope.premiumData = response;
                         });
                     }
                 });
 
                 $scope.$on('finished.fu.wizard', function (name, event, data) {
-                    $http.post('quotation/generatequotation/', {quotationId: quotationId}).success(function (response) {
+                    $http.post('generatequotation/', {quotationId: $scope.quotationId}).success(function (response) {
+                        $('#wizardStep').attr('disabled', true);
                 });
                 });
 
@@ -360,17 +315,7 @@
             };
 
         }]
-    ).directive('uneditable', function () {
-            return function (scope, element, attrs) {
-                $scope.$watch(attrs.uneditable, function (val) {
-                    if (val)
-                        element.removeAttr("disabled");
-                    else
-                        element.attr("disabled", "disabled");
-                });
-            }
-        });
-
+    )
 })(angular);
 
 
@@ -405,7 +350,7 @@ var viewILQuotationModule = (function () {
 
     services.modifyQuotation = function () {
         var quotationId = this.selectedItem;
-        window.location.href = "/pla/individuallife/quotation#/edit/" + quotationId;
+        window.location.href = "/pla/individuallife/quotation/edit?quotationId=" + quotationId;
     };
 
     services.viewQuotation = function () {

@@ -9,6 +9,12 @@ server:
   context-path: /pla
 
 spring:
+
+  jackson:
+    dateFormat: dd/MM/yyyy
+    serialization:
+      WRITE_DATE_KEYS_AS_TIMESTAMPS: false
+
   thymeleaf:
       check-template-location: true
       cache: false

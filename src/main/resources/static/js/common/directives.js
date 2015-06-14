@@ -29,8 +29,6 @@ angular.module('directives', ['mgcrea.ngStrap.alert'])
                 removeSteps: '=?'
             },
             link: function (scope, element, attr, ctrl) {
-
-
                 scope.$watch('selectedItem', function (newVal, oldVal) {
                     $(element).wizard('selectedItem', {
                         step: scope.selectedItem
@@ -51,7 +49,6 @@ angular.module('directives', ['mgcrea.ngStrap.alert'])
                 }
 
                 $(element).on('actionclicked.fu.wizard', function (event, data) {
-                    console.log('actionclicked.fu.wizard ' + JSON.stringify(data));
                     if (data.direction == 'previous')return;
                     if (ctrl && ctrl[0]) {
                         var currentStep = ctrl[0]['step' + data.step] && ctrl[0]['step' + data.step].$name;
@@ -66,8 +63,11 @@ angular.module('directives', ['mgcrea.ngStrap.alert'])
                     scope.$emit('actionclicked.fu.wizard', event, data);
                 });
                 $(element).on('changed.fu.wizard', function (event, data) {
-                    scope.$emit('changed.fu.wizard', event, data);
                     scope.selectedItem = data.step;
+                    scope.$emit('changed.fu.wizard', event, data);
+                    $timeout(function () {
+                        scope.$apply();
+                    });
                 });
                 $(element).on('stepclicked.fu.wizard', function (event, data) {
                     scope.$emit('stepclicked.fu.wizard', event, data);

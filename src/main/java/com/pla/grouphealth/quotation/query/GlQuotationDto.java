@@ -41,4 +41,12 @@ public class GlQuotationDto {
     private String proposeName;
 
     private Integer ageing;
+
+    public String getQuotationNumber() {
+        if (versionNumber != null && versionNumber > 0) {
+            return quotationNumber + "/" + versionNumber;
+        } else {
+            return quotationNumber;
+        }
+    }
 }

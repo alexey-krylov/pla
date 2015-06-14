@@ -2,7 +2,7 @@ package com.pla.individuallife.quotation.domain.model;
 
 import com.pla.sharedkernel.domain.model.Gender;
 import lombok.Getter;
-import org.joda.time.LocalDate;
+import org.joda.time.DateTime;
 
 /**
  * Created by Karunakar on 5/13/2015.
@@ -18,7 +18,7 @@ public class ProposedAssuredBuilder {
 
     private String nrcNumber;
 
-    private LocalDate dateOfBirth;
+    private DateTime dateOfBirth;
 
     private Gender gender;
 
@@ -48,7 +48,7 @@ public class ProposedAssuredBuilder {
         return this;
     }
 
-    public ProposedAssuredBuilder withDateOfBirth(LocalDate dateOfBirth) {
+    public ProposedAssuredBuilder withDateOfBirth(DateTime dateOfBirth) {
         this.dateOfBirth = dateOfBirth;
         return this;
     }

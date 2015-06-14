@@ -1,8 +1,5 @@
 package com.pla.individuallife.quotation.domain.model;
 
-import com.pla.core.domain.model.agent.AgentId;
-import com.pla.sharedkernel.identifier.PlanId;
-import com.pla.sharedkernel.identifier.QuotationId;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 
@@ -19,23 +16,4 @@ public class ILQuotationProcessor {
         this.userName = userName;
     }
 
-
-    public IndividualLifeQuotation createIndividualLifeQuotation(String quotationNumber, String quotationCreator, QuotationId quotationId, AgentId agentId, String assuredTitle, String assuredFName, String assuredSurname, String assuredNRC, PlanId planid ) {
-        ProposedAssuredBuilder proposedAssuredBuilder = ProposedAssured.proposedAssuredBuilder();
-        proposedAssuredBuilder.withFirstName(assuredFName).withSurname(assuredSurname).withNrcNumber(assuredNRC).withTitle(assuredTitle);
-        return IndividualLifeQuotation.createWithBasicDetail(quotationNumber, quotationCreator, quotationId, agentId, proposedAssuredBuilder.build(), planid);
-    }
-
-    public IndividualLifeQuotation updateWithProposerAndAgentId(IndividualLifeQuotation individualLifeQuotation, Proposer proposer, AgentId agentId) {
-        return individualLifeQuotation.updateWithProposer(proposer, agentId);
-    }
-
-    public IndividualLifeQuotation updateWithAssured(IndividualLifeQuotation individualLifeQuotation, ProposedAssured proposedAssured, Boolean isAssuredTheProposer) {
-        return individualLifeQuotation.updateWithAssured(proposedAssured, isAssuredTheProposer);
-    }
-
-
-    public IndividualLifeQuotation updateWithPlan(IndividualLifeQuotation individualLifeQuotation, PlanDetail planDetail) {
-        return individualLifeQuotation.updateWithPlan(planDetail);
-    }
 }

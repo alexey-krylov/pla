@@ -33,7 +33,7 @@ import java.util.*;
  * Created by Karunakar on 5/13/2015.
  */
 @Service
-public class ILQuotationService {
+public class ILQuotationAppService {
 
 
     private ILQuotationFinder ilQuotationFinder;
@@ -46,7 +46,7 @@ public class ILQuotationService {
     private PlanFinder planFinder;
 
     @Autowired
-    public ILQuotationService(ILQuotationFinder ilQuotationFinder, IPremiumCalculator premiumCalculator, PremiumFinder premiumFinder) {
+    public ILQuotationAppService(ILQuotationFinder ilQuotationFinder, IPremiumCalculator premiumCalculator, PremiumFinder premiumFinder) {
         this.ilQuotationFinder = ilQuotationFinder;
         this.premiumCalculator = premiumCalculator;
         this.premiumFinder = premiumFinder;
@@ -137,16 +137,10 @@ public class ILQuotationService {
         return premiumDetailDto;
     }
 
-    public List<ILQuotationDto> getAllQuotation() {
-        List<ILQuotationDto> allQuotations = ilQuotationFinder.getAllQuotation();
-        return allQuotations;
-    }
-
     public List<ILQuotationDto> searchQuotation(ILSearchQuotationDto searchIlQuotationDto) {
         List<ILQuotationDto> searchQuotations = ilQuotationFinder.searchQuotation(searchIlQuotationDto.getQuotationNumber(), searchIlQuotationDto.getProposerFirstName(), searchIlQuotationDto.getProposerNrcNumber(), searchIlQuotationDto.getAgentCode());
         return searchQuotations;
     }
-
 
     public byte[] getQuotationPDF(String quotationId) throws IOException, JRException {
 

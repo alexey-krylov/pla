@@ -2,6 +2,7 @@ package org.nthdimenzion.presentation;
 
 import org.joda.money.CurrencyUnit;
 import org.joda.money.Money;
+import org.joda.time.DateTime;
 import org.joda.time.Days;
 import org.joda.time.LocalDate;
 import org.joda.time.Years;
@@ -42,6 +43,13 @@ public class AppUtils {
     }
 
     public static String toString(LocalDate date) {
+        if (date == null) {
+            return "";
+        }
+        return date.toString(AppConstants.DD_MM_YYY_FORMAT);
+    }
+
+    public static String toString(DateTime date) {
         if (date == null) {
             return "";
         }

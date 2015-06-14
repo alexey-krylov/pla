@@ -2,7 +2,7 @@ package com.pla.individuallife.quotation.query;
 
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
-import com.pla.individuallife.quotation.domain.model.IndividualLifeQuotation;
+import com.pla.individuallife.quotation.domain.model.ILQuotation;
 import com.pla.individuallife.quotation.domain.model.RiderDetail;
 import com.pla.individuallife.quotation.presentation.dto.PlanDetailDto;
 import com.pla.individuallife.quotation.presentation.dto.ProposedAssuredDto;
@@ -19,6 +19,7 @@ import org.springframework.stereotype.Service;
 
 import javax.sql.DataSource;
 import java.lang.reflect.InvocationTargetException;
+import java.math.BigDecimal;
 import java.util.*;
 
 import static org.nthdimenzion.utils.UtilValidator.isEmpty;
@@ -35,9 +36,9 @@ public class ILQuotationFinder {
     public static final String FIND_QUOTATION_BY_ID_FOR_PREMIUM_WITH_RIDER_QUERY =
             " SELECT  r.`coverage_id` AS COVERAGEID, r.`cover_term` AS COVERTERM, r.`sum_assured` AS RIDER_SA, " +
             " r.`waiver_of_premium` AS RIDER_PREMIUM_WAIVER, c.`coverage_name` AS COVERAGENAME " +
-            " FROM individual_life_quotation_rider_details r  INNER JOIN coverage c " +
+                    " FROM individual_life_quotation_rider r  INNER JOIN coverage c " +
             " ON r.`coverage_id` = c.`coverage_id` " +
-            " WHERE r.`individual_life_quotation_quotationId` =:quotationId";
+                    " WHERE r.`quotation_id` =:quotationId";
     public static final String FIND_QUOTATION_BY_ID_FOR_PREMIUM_QUERY = "SELECT quotation_id AS QUOTATIONID, plan_id AS PLANID, date_of_birth AS ASSURED_DOB, " +
             " gender AS ASSURED_GENDER, policy_term AS POLICYTERM, occupation AS ASSURED_OCCUPATION, " +
             " premium_payment_term AS PREMIUMPAYMENT_TERM, sum_assured AS SUMASSURED " +
@@ -69,7 +70,7 @@ public class ILQuotationFinder {
     }
 
     public ILQuotationDto getQuotationById(String quotationId) {
-        IndividualLifeQuotation quotation = ilQuotationRepository.findOne(new QuotationId(quotationId));
+        ILQuotation quotation = ilQuotationRepository.findOne(new QuotationId(quotationId));
         ILQuotationDto dto = new ILQuotationDto();
         ProposerDto proposerDto = new ProposerDto();
         ProposedAssuredDto proposedAssuredDto = new ProposedAssuredDto();
@@ -102,10 +103,10 @@ public class ILQuotationFinder {
             coverageReferenceMap.put(m.get("coverage_id").toString(), m);
         }
         List<RiderDetailDto> riderDetailDtoList = new ArrayList<>();
-        if (quotation.getRiderDetails() != null) {
+        if (quotation.getRiderDetails() != null && quotation.getRiderDetails().size() > 0) {
             for (RiderDetail rider : quotation.getRiderDetails()) {
                 RiderDetailDto riderDetailDto = new RiderDetailDto();
-                Map m = coverageReferenceMap.get(rider.getCoverageId());
+                Map m = coverageReferenceMap.remove(rider.getCoverageId());
                 riderDetailDto.setCoverageName(m.get("coverage_name").toString());
                 riderDetailDto.setCoverageId(rider.getCoverageId());
                 riderDetailDto.setCoverTerm(rider.getCoverTerm());
@@ -113,6 +114,17 @@ public class ILQuotationFinder {
                 riderDetailDto.setWaiverOfPremium(rider.getWaiverOfPremium());
                 riderDetailDtoList.add(riderDetailDto);
             }
+        }
+
+        for (String coverageId : coverageReferenceMap.keySet()) {
+            RiderDetailDto riderDetailDto = new RiderDetailDto();
+            Map m = coverageReferenceMap.get(coverageId);
+            riderDetailDto.setCoverageName(m.get("coverage_name").toString());
+            riderDetailDto.setCoverageId(coverageId);
+            riderDetailDto.setCoverTerm(0);
+            riderDetailDto.setSumAssured(BigDecimal.ZERO);
+            riderDetailDto.setWaiverOfPremium(0);
+            riderDetailDtoList.add(riderDetailDto);
         }
         planDetailDto.setRiderDetails(new HashSet<RiderDetailDto>(riderDetailDtoList));
         dto.setPlanDetailDto(planDetailDto);
@@ -184,7 +196,7 @@ public class ILQuotationFinder {
              }
              isFirst = false;
          }
-
+         query.append(" order by version_number desc");
          return namedParameterJdbcTemplate.query(query.toString(), new BeanPropertyRowMapper<ILQuotationDto>(ILQuotationDto.class));
      }
 }

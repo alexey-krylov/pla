@@ -12,6 +12,8 @@ import org.springframework.data.mongodb.core.query.BasicQuery;
 
 import javax.persistence.Transient;
 import java.lang.reflect.Field;
+import java.util.Arrays;
+import java.util.List;
 
 import static java.lang.String.format;
 
@@ -22,6 +24,7 @@ public class GenericMongoRepository<T extends AggregateRoot> extends AbstractRep
 
     private final MongoTemplate mongoTemplate;
     private final String collectionName;
+    private final List<String> restrictedFields = Arrays.asList();
     private Field idFieldName;
 
     /**
@@ -67,7 +70,7 @@ public class GenericMongoRepository<T extends AggregateRoot> extends AbstractRep
         for (Field field : fields) {
             try {
                 field.setAccessible(true);
-                if (shouldProcessField(field)) {
+                if (ignoreFields(field)) {
                     dbo.put(field.getName(), field.get(t));
                 }
             } catch (IllegalAccessException e) {
@@ -80,10 +83,10 @@ public class GenericMongoRepository<T extends AggregateRoot> extends AbstractRep
         mongoTemplate.save(dbo, collectionName);
     }
 
-    private boolean shouldProcessField(Field field) {
-        return !field.isAnnotationPresent(Transient.class)
-                && !field.isAnnotationPresent(org.springframework.data.annotation.Transient.class)
-                && !java.lang.reflect.Modifier.isStatic(field.getModifiers());
+    private boolean ignoreFields(Field field) {
+        return field.isAnnotationPresent(Transient.class)
+                || field.isAnnotationPresent(org.springframework.data.annotation.Transient.class)
+                || java.lang.reflect.Modifier.isStatic(field.getModifiers());
     }
 
     @Override

@@ -39,13 +39,13 @@
                         <td th:if="${{plan.withdrawal_date==null}}"></td>
                         <td th:if="${plan.withdrawal_date!=null}"><span
                                 th:text="${#dates.format(plan.withdrawal_date,'dd/MM/yyyy')}"></span></td>
-                        <td th:if="${plan.plan_status!='LAUNCHED'}">
+                        <td th:if="${plan.plan_status=='DRAFT'}">
                             <a th:href="'#viewplan/'+${plan.plan_id}+''"><span class="btn btn-default btn-xs"><i class="glyphicon glyphicon-eye-open"></i>&nbsp;View</span></a>&nbsp;|&nbsp;
-                            <a th:href="'#editplan/'+${plan.plan_id}+''" th:if="${plan.plan_status!='LAUNCHED'}"><span
+                            <a th:href="'#editplan/'+${plan.plan_id}+''"><span
                                     class="btn btn-default btn-xs"><i
                                     class="glyphicon glyphicon-edit"></i>&nbsp;Edit</span></a>
                         </td>
-                        <td th:if="${plan.plan_status=='LAUNCHED'}">
+                        <td th:if="${plan.plan_status!='DRAFT'}">
                             <a th:href="'#viewplan/'+${plan.plan_id}+''"><span class="btn btn-default btn-xs"><i
                                     class="glyphicon glyphicon-eye-open"></i>&nbsp;View</span></a>
                         </td>

@@ -221,6 +221,7 @@ angular.module('createQuotation', ['common', 'ngRoute', 'mgcrea.ngStrap.select',
                         });
                 }
             };
+
             var saveStep = function () {
                 $scope.stepsSaved[$scope.selectedItem] = true;
             };

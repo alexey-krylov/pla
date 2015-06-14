@@ -3,7 +3,7 @@ package com.pla.individuallife.quotation.presentation.controller;
 import com.pla.core.query.AgentFinder;
 import com.pla.core.query.PlanFinder;
 import com.pla.individuallife.quotation.application.command.*;
-import com.pla.individuallife.quotation.application.service.ILQuotationService;
+import com.pla.individuallife.quotation.application.service.ILQuotationAppService;
 import com.pla.individuallife.quotation.presentation.dto.ILQuotationMailDto;
 import com.pla.individuallife.quotation.presentation.dto.ILSearchQuotationDto;
 import com.pla.individuallife.quotation.presentation.dto.RiderDetailDto;
@@ -42,12 +42,12 @@ import static org.nthdimenzion.presentation.AppUtils.getLoggedInUserDetail;
  */
 @Controller
 @RequestMapping(value = "/individuallife/quotation")
-public class IndidualLifeQuotationController {
+public class IndividualLifeQuotationController {
 
     @Autowired
     private CommandGateway commandGateway;
     @Autowired
-    private ILQuotationService ilQuotationService;
+    private ILQuotationAppService ilQuotationService;
     @Autowired
     private ILQuotationFinder ilQuotationFinder;
     @Autowired
@@ -60,6 +60,7 @@ public class IndidualLifeQuotationController {
     @RequestMapping(method = RequestMethod.GET)
     public ModelAndView index() {
         ModelAndView modelAndView = new ModelAndView();
+        modelAndView.addObject("searchCriteria", new ILSearchQuotationDto());
         modelAndView.setViewName("pla/quotation/individuallife/index");
         return modelAndView;
     }
@@ -68,21 +69,28 @@ public class IndidualLifeQuotationController {
     public ModelAndView gotoSearchForm(ILSearchQuotationDto searchDto) {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.addObject("searchCriteria", new ILSearchQuotationDto());
-        modelAndView.setViewName("pla/quotation/individuallife/quotationlist");
+        modelAndView.setViewName("pla/quotation/individuallife/index");
         return modelAndView;
     }
 
-    @RequestMapping(value = "/searchquotation", method = RequestMethod.POST)
+    @RequestMapping(method = RequestMethod.POST)
     public ModelAndView searchQuotation(ILSearchQuotationDto searchGlQuotationDto) {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.addObject("searchResult", ilQuotationService.searchQuotation(searchGlQuotationDto));
         modelAndView.addObject("searchCriteria", searchGlQuotationDto);
-        modelAndView.setViewName("pla/quotation/individuallife/quotationlist");
+        modelAndView.setViewName("pla/quotation/individuallife/index");
         return modelAndView;
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/new")
     public ModelAndView newQuotation() {
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("pla/quotation/individuallife/createQuotation");
+        return modelAndView;
+    }
+
+    @RequestMapping(method = RequestMethod.GET, value = "/edit")
+    public ModelAndView editQuotation() {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("pla/quotation/individuallife/createQuotation");
         return modelAndView;
@@ -113,8 +121,8 @@ public class IndidualLifeQuotationController {
         }
         try {
             createILQuotationCommand.setUserDetails(getLoggedInUserDetail(request));
-            String quotationId = commandGateway.sendAndWait(createILQuotationCommand);
-            return Result.success("Quotation created successfully", quotationId);
+            QuotationId quotationId = commandGateway.sendAndWait(createILQuotationCommand);
+            return Result.success("Quotation created successfully", quotationId.toString());
         } catch (Exception e) {
             e.printStackTrace();
             return Result.failure(e.getMessage());
@@ -157,8 +165,8 @@ public class IndidualLifeQuotationController {
         }
         try {
             updateILQuotationWithProposerCommand.setUserDetails(getLoggedInUserDetail(request));
-            String quotationId = commandGateway.sendAndWait(updateILQuotationWithProposerCommand);
-            return Result.success("Proposer detail updated successfully", quotationId);
+            QuotationId quotationId = commandGateway.sendAndWait(updateILQuotationWithProposerCommand);
+            return Result.success("Proposer detail updated successfully", quotationId.toString());
         } catch (Exception e) {
             return Result.failure();
         }
@@ -172,8 +180,8 @@ public class IndidualLifeQuotationController {
         }
         try {
             updateILQuotationWithAssuredCommand.setUserDetails(getLoggedInUserDetail(request));
-            String quotationId = commandGateway.sendAndWait(updateILQuotationWithAssuredCommand);
-            return Result.success("Assured detail updated successfully", quotationId);
+            QuotationId quotationId = commandGateway.sendAndWait(updateILQuotationWithAssuredCommand);
+            return Result.success("Assured detail updated successfully", quotationId.toString());
         } catch (Exception e) {
             return Result.failure();
         }
@@ -187,8 +195,8 @@ public class IndidualLifeQuotationController {
         }
         try {
             updateILQuotationWithPlanCommand.setUserDetails(getLoggedInUserDetail(request));
-            String quotationId = commandGateway.sendAndWait(updateILQuotationWithPlanCommand);
-            return Result.success("Plan details updated successfully", quotationId);
+            QuotationId quotationId = commandGateway.sendAndWait(updateILQuotationWithPlanCommand);
+            return Result.success("Plan details updated successfully", quotationId.toString());
         } catch (Exception e) {
             e.printStackTrace();
             return Result.failure();

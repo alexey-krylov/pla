@@ -6,7 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.Type;
-import org.joda.time.LocalDate;
+import org.joda.time.DateTime;
 import org.nthdimenzion.ddd.domain.annotations.ValueObject;
 
 import javax.persistence.Embeddable;
@@ -35,8 +35,8 @@ public class ProposedAssured {
 
     private String nrcNumber;
 
-    @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentLocalDate")
-    private LocalDate dateOfBirth;
+    @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
+    private DateTime dateOfBirth;
 
     @Enumerated(EnumType.STRING)
     private Gender gender;

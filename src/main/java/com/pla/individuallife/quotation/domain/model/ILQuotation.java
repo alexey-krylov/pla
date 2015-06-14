@@ -4,11 +4,7 @@ import com.pla.core.domain.model.agent.AgentId;
 import com.pla.grouplife.quotation.domain.model.IQuotation;
 import com.pla.sharedkernel.identifier.PlanId;
 import com.pla.sharedkernel.identifier.QuotationId;
-import lombok.AccessLevel;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
-import org.axonframework.domain.AbstractAggregateRoot;
-import org.axonframework.eventsourcing.annotation.AggregateIdentifier;
 import org.hibernate.annotations.Type;
 import org.joda.time.LocalDate;
 
@@ -25,12 +21,10 @@ import static org.nthdimenzion.utils.UtilValidator.isNotEmpty;
 @Entity
 @Table(name = "individual_life_quotation")
 @Getter
-@NoArgsConstructor(access = AccessLevel.PACKAGE)
-public class IndividualLifeQuotation extends AbstractAggregateRoot<QuotationId> implements IQuotation {
+public class ILQuotation implements IQuotation {
 
 
     @EmbeddedId
-    @AggregateIdentifier
     private QuotationId quotationId;
 
     private String quotationCreator;
@@ -64,24 +58,26 @@ public class IndividualLifeQuotation extends AbstractAggregateRoot<QuotationId> 
     @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentLocalDate")
     private LocalDate generatedOn;
 
-    @Embedded
-    @AttributeOverrides(value = @AttributeOverride(name = "quotationId", column = @Column(name = "PARENT_QUOTATION_ID")))
-    private QuotationId parentQuotationId;
+    @Column(name = "parent_quotation_id")
+    private String parentQuotationId;
 
     @Embedded
     private PlanDetail planDetail;
 
     @Column( columnDefinition = "BOOLEAN DEFAULT false" )
-    private Boolean isAssuredTheProposer;
+    private boolean isAssuredTheProposer;
 
     @ElementCollection
+    @CollectionTable(name = "individual_life_quotation_rider", joinColumns = @JoinColumn(name = "quotation_id"))
     private Set<RiderDetail> riderDetails;
 
-    private IndividualLifeQuotation(String quotationCreator, String quotationNumber, QuotationId quotationId, AgentId agentId, ProposedAssured proposedAssured, PlanId planId, ILQuotationStatus ilQuotationStatus, int versionNumber) {
-        checkArgument(isNotEmpty(quotationCreator));
+    private ILQuotation() {
+    }
+
+    public ILQuotation(ILQuotationProcessor quotationCreator, String quotationARId, String quotationNumber, QuotationId quotationId, AgentId agentId, ProposedAssured proposedAssured, PlanId planId, ILQuotationStatus ilQuotationStatus, int versionNumber) {
+        checkArgument(quotationCreator != null);
         checkArgument(isNotEmpty(quotationNumber));
         checkArgument(quotationId != null);
-        checkArgument(isNotEmpty(quotationId.getQuotationId()));
         checkArgument(agentId != null);
         checkArgument(proposedAssured != null);
         checkArgument(proposedAssured.getFirstName() != null);
@@ -90,42 +86,33 @@ public class IndividualLifeQuotation extends AbstractAggregateRoot<QuotationId> 
         checkArgument(proposedAssured.getNrcNumber() != null);
         checkArgument(planId != null);
         checkArgument(ILQuotationStatus.DRAFT.equals(ilQuotationStatus));
-        this.quotationCreator = quotationCreator;
+        this.quotationCreator = quotationCreator.getUserName();
         this.quotationId = quotationId;
         this.agentId = agentId;
         this.proposedAssured = proposedAssured;
         this.ilQuotationStatus = ilQuotationStatus;
         this.versionNumber = versionNumber;
         this.quotationNumber = quotationNumber;
+        this.parentQuotationId = quotationARId;
         this.planDetail = new PlanDetail(planId, null, null, null);
-        if(this.isAssuredTheProposer == null) {
-            this.isAssuredTheProposer = Boolean.FALSE;
-        }
     }
 
-    private IndividualLifeQuotation(String quotationNumber, String quotationCreator, QuotationId quotationId, int versionNumber, ILQuotationStatus ilQuotationStatus) {
-        checkArgument(isNotEmpty(quotationNumber));
-        checkArgument(isNotEmpty(quotationCreator));
-        checkArgument(quotationId != null);
-        checkArgument(ILQuotationStatus.DRAFT.equals(ilQuotationStatus));
-        this.quotationCreator = quotationCreator;
-        this.quotationId = quotationId;
-        this.versionNumber = versionNumber;
-        this.ilQuotationStatus = ilQuotationStatus;
+    private ILQuotation(ILQuotationProcessor quotationCreator, String quotationNumber, QuotationId quotationId) {
+
     }
 
-    public static IndividualLifeQuotation createWithBasicDetail(String quotationNumber, String quotationCreator, QuotationId quotationId, AgentId agentId, ProposedAssured proposedAssured, PlanId planid) {
-        return new IndividualLifeQuotation(quotationCreator, quotationNumber, quotationId, agentId, proposedAssured, planid, ILQuotationStatus.DRAFT, 0);
+    public static ILQuotation createWithBasicDetail(ILQuotationProcessor quotationCreator, String quotationARId, String quotationNumber, QuotationId quotationId, AgentId agentId, ProposedAssured proposedAssured, PlanId planid) {
+        return new ILQuotation(quotationCreator, quotationARId, quotationNumber, quotationId, agentId, proposedAssured, planid, ILQuotationStatus.DRAFT, 0);
     }
 
-    public IndividualLifeQuotation updateWithProposer(Proposer proposer, AgentId agentId) {
+    public void updateWithProposer(ILQuotationProcessor quotationProcessor, Proposer proposer) {
+        checkArgument(quotationProcessor != null, " The user need to be an Quotation Processor.");
         checkInvariant();
         this.proposer = proposer;
-        this.agentId = agentId;
-        return this;
     }
 
-    public IndividualLifeQuotation updateWithAssured(ProposedAssured proposedAssured, Boolean isAssuredTheProposer) {
+    public void updateWithAssured(ILQuotationProcessor quotationProcessor, ProposedAssured proposedAssured, boolean isAssuredTheProposer) {
+        checkArgument(quotationProcessor != null, " The user need to be an Quotation Processor.");
         checkInvariant();
         this.proposedAssured = proposedAssured;
         this.isAssuredTheProposer = isAssuredTheProposer;
@@ -133,18 +120,12 @@ public class IndividualLifeQuotation extends AbstractAggregateRoot<QuotationId> 
         if (isAssuredTheProposer) {
             this.proposer = convertAssuredToProposer(proposedAssured);
         }
-        return this;
     }
 
-    public IndividualLifeQuotation updateWithPlan(PlanDetail planDetail) {
+    public ILQuotation updateWithPlan(ILQuotationProcessor quotationProcessor, PlanDetail planDetail) {
         checkInvariant();
         this.planDetail = planDetail;
         return this;
-    }
-
-    @Override
-    public QuotationId getIdentifier() {
-        return quotationId;
     }
 
     @Override
@@ -173,12 +154,23 @@ public class IndividualLifeQuotation extends AbstractAggregateRoot<QuotationId> 
         return ILQuotationStatus.GENERATED.equals(this.ilQuotationStatus);
     }
 
-    public IndividualLifeQuotation cloneQuotation(String quotationCreator, QuotationId quotationId) {
-        IndividualLifeQuotation newQuotation = new IndividualLifeQuotation(quotationCreator, quotationNumber, quotationId, this.versionNumber + 1, ILQuotationStatus.DRAFT);
-        newQuotation.parentQuotationId = this.quotationId;
+    public ILQuotation cloneQuotation(ILQuotationProcessor quotationCreator, QuotationId quotationId, String quotationNumber,
+                                      int versionNumber) {
+        checkArgument(isNotEmpty(quotationNumber));
+        checkArgument(quotationCreator != null, "User is does not have Quotation Preprocessor Role.");
+        checkArgument(quotationId != null);
+
+        ILQuotation newQuotation = new ILQuotation();
+        newQuotation.quotationCreator = quotationCreator.getUserName();
+        newQuotation.quotationId = quotationId;
+        newQuotation.versionNumber = versionNumber;
+        newQuotation.ilQuotationStatus = ILQuotationStatus.DRAFT;
+        newQuotation.quotationNumber = quotationNumber;
+        newQuotation.parentQuotationId = this.parentQuotationId;
         newQuotation.proposer = this.proposer;
         newQuotation.agentId = this.agentId;
         newQuotation.proposedAssured = this.proposedAssured;
+        newQuotation.planDetail = this.planDetail;
         return newQuotation;
     }
 

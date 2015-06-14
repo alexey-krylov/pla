@@ -1,14 +1,10 @@
 package com.pla.individuallife.quotation.presentation.dto;
 
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.pla.sharedkernel.domain.model.Gender;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.joda.time.LocalDate;
-import org.nthdimenzion.presentation.LocalJodaDateDeserializer;
-import org.nthdimenzion.presentation.LocalJodaDateSerializer;
+import org.joda.time.DateTime;
 
 /**
  * Created by Karunakar on 5/20/2015.
@@ -26,9 +22,7 @@ public class ProposedAssuredDto {
 
     private String nrcNumber;
 
-    @JsonDeserialize(using = LocalJodaDateDeserializer.class)
-    @JsonSerialize(using = LocalJodaDateSerializer.class)
-    private LocalDate dateOfBirth;
+    private DateTime dateOfBirth;
 
     private Gender gender;
 
@@ -37,5 +31,9 @@ public class ProposedAssuredDto {
     private String emailAddress;
 
     private String occupation;
+
+    public DateTime getDateOfBirth() {
+        return dateOfBirth;
+    }
 
 }

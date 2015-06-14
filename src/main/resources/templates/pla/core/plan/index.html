@@ -13,6 +13,8 @@
     }
 </style>
 <div th:include="fragments/common :: bodyHeader" th:remove="tag"/>
+<link href="/pla/css/xeditable.css"/>
+
 <div class="splash" ng-cloak="">
     <div class="color-line"></div>
     <div class="splash-title">
@@ -21,9 +23,10 @@
 <script>
     requirejs.config({
         paths: {
-            'plansetup': '/pla/js/plan-app.js?t=10'
+            'plansetup': '/pla/js/plan-app.js?t=10',
+            'xeditable': '/pla/js/xeditable.min.js?t=90'
         },
-        "shim": {"plansetup": ["angular"]}
+        "shim": {"plansetup": ["xeditable", "angular"]}
     });
 
     require(['ng-tags-input', 'checklistmodel', 'angular-ui-router'], function (a, b) {

@@ -21,17 +21,15 @@ public class ILQuotationNumberGenerator {
 
 
     /**
-     * @param transactionType
-     * @param division
      * @param clazz
      * @return transactionType-division-runningSequence-SystemMonthSystemYear
      */
-    public String getQuotationNumber(String transactionType, String division, Class clazz) {
+    public String getQuotationNumber(Class clazz) {
         String quotationSequence = sequenceGenerator.getSequence(clazz);
         String currentDateInString = LocalDate.now().toString(DateTimeFormat.forPattern("dd/MM/yyyy"));
         String month = currentDateInString.substring(3, 5).trim();
         String year = currentDateInString.substring(8, 10).trim();
-        String quotationNumber = transactionType + "-" + division + "-" + quotationSequence + "-" + month + year;
+        String quotationNumber = "5-2" + quotationSequence + "-" + month + year;
         return quotationNumber;
     }
 }

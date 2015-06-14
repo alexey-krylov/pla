@@ -1,10 +1,35 @@
-<div class="col-lg-col2">
-</div>
-<div class="col-lg-col2">
-</div>
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/xhtml"
+      lang="en">
+<head th:include="fragments/common :: headTag">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+
+</head>
+<body class="fuelux ng-cloak" style="overflow-x: hidden;">
+
+<div th:include="fragments/common :: bodyHeader" th:remove="tag"/>
+<script>
+    requirejs.config({
+        paths: {
+            angucomplete: 'http://ghiden.github.io/angucomplete-alt/js/libs/angucomplete-alt',
+            ilquotation: '/pla/js/quotation/individuallife/quotation.js?t=1221'
+        },
+        "shim": {"ilquotation": ["angular", 'angucomplete']}
+    });
+    require(['ng-tags-input', 'checklistmodel', 'angular-ui-router'], function (a, b) {
+    });
+    requirejs(['main'], function () {
+        require(['ilquotation', 'jquery'], function (app, $) {
+            angular.bootstrap(document, ['individualQuotation']);
+        });
+    });
+
+</script>
+<div class="container-fluid" ng-controller="QuotationController">
+    <nth-alert></nth-alert>
 <form novalidate="true" name="quotationForm">
 
-    <div class="wizard fuelux-wizard" id="planSetUpWizard" skip-validation="[]" selected-item="selectedItem">
+    <div class="wizard fuelux-wizard" id="planSetUpWizard" selected-item="selectedItem">
         <ul class="steps" style="margin-left: 0">
             <li data-step="1"><span class="badge badge-info">1</span>Basic Details<span class="chevron"></span></li>
             <li data-step="2"><span class="badge">2</span>Proposed Assured Details<span class="chevron"></span></li>
@@ -12,13 +37,15 @@
             <li data-step="4"><span class="badge">4</span>Plan Details<span class="chevron"></span></li>
             <li data-step="5"><span class="badge">5</span>Premium Information<span class="chevron"></span></li>
         </ul>
+
         <div class="actions">
             <span style="font-weight: bolder;margin-right: 15px;color: #999">Quotation ID :<span
                     style="font-size: 13px;color: #3a87ad;">{{quotation.quotationNumber}}</span></span>
             <button type="button" class="btn btn-default btn-prev">
                 <span class="glyphicon glyphicon-arrow-left"></span>Prev
             </button>
-            <button type="button" class="btn btn-default btn-next" data-last="Complete">Next<span
+            <button type="button" class="btn btn-default btn-next" ng-disabled="!stepsSaved[selectedItem]"
+                    data-last="Complete" id="wizardStep">Next<span
                     class="glyphicon glyphicon-arrow-right"></span></button>
         </div>
         <div class="step-content">
@@ -29,14 +56,14 @@
                             <div class="form-group required">
                                 <label class="control-label">Agent ID</label>
                                 <div data-angucomplete-alt="" id="ex5" placeholder="Search Agents" pause="500"
-                                     selected-object="selectedAgent"
+                                     selected-object="selectedAgent" disable-input="uneditable"
                                      remote-url="/pla/core/agent/search/" field-required="true"
-                                     initial-value="{{selectedAgent.title}}"
+                                     initial-value="selectedAgent.title"
                                      remote-url-data-field="" title-field="first_name,last_name" minlength="3"
                                      input-class="form-control form-control-small"
                                      match-class="highlight">
                                 </div>
-                                <div class="error" ng-messages="step1.title.$error" ng-if="step1.$dirty">
+                                <div class="error" ng-messages="step1.title.$error" ng-if="step1.title.$dirty">
                                     <small ng-message="autocomplete-required">Please enter title.</small>
                                 </div>
                             </div>
@@ -50,15 +77,16 @@
                                 <div class="form-group required">
                                     <label class="control-label">Title</label>
                                     <select class="form-control input-sm" name="title" ng-required="true"
-                                            ng-model="proposedAssured.title"
+                                            ng-model="proposedAssured.title" ng-disabled="uneditable"
                                             ng-options="title as title for title in titleList">
                                     </select>
                                 </div>
                                 <div class="form-group required">
                                     <label class="control-label">Surname</label>
                                     <input type="text" class="form-control input-sm" name="surname" ng-required="true"
-                                           ng-model="proposedAssured.surname"/>
-                                    <div class="error" ng-messages="step1.surname.$error" ng-if="step1.$dirty">
+                                           ng-model="proposedAssured.surname" ng-disabled="uneditable"/>
+
+                                    <div class="error" ng-messages="step1.surname.$error" ng-if="step1.surname.$dirty">
                                         <small ng-message="required">Please enter surname.</small>
                                     </div>
                                 </div>
@@ -67,18 +95,22 @@
                                 <div class="form-group required">
                                     <label class="control-label">First Name</label>
                                     <input type="text" class="form-control input-sm" name="firstName" ng-required="true"
-                                           ng-model="proposedAssured.firstName"/>
-                                    <div class="error" ng-messages="step1.firstName.$error" ng-if="step1.$dirty">
+                                           ng-model="proposedAssured.firstName" ng-disabled="uneditable"/>
+
+                                    <div class="error" ng-messages="step1.firstName.$error"
+                                         ng-if="step1.firstName.$dirty">
                                         <small ng-message="required">Please enter FirstName.</small>
                                     </div>
                                 </div>
                                 <div class="form-group required">
                                     <label class="control-label">NRC Number</label>
                                     <input type="text" class="form-control input-sm" name="nrcNumber" ng-required="true"
-                                           placeholder=""
+                                           ng-disabled="uneditable"
                                            ng-model="proposedAssured.nrcNumber"
                                            ng-pattern="/^[0-9]{6}\/[0-9]{2}\/[0-9]{1}$/"/>
-                                    <div class="error" ng-messages="step1.nrcNumber.$error" ng-if="step1.$dirty">
+
+                                    <div class="error" ng-messages="step1.nrcNumber.$error"
+                                         ng-if="step1.nrcNumber.$dirty">
                                         <small ng-message="required">Please enter NRC Number.</small>
                                     </div>
                                 </div>
@@ -89,12 +121,11 @@
                         <div class="col-lg-6">
                             <div class="form-group required">
                                 <label class="control-label">Plan</label>
-
                                 <div data-angucomplete-alt="" placeholder="Search Plan" pause="500"
-                                     selected-object="selectedPlan"
+                                     selected-object="selectedPlan" disable-input="uneditable"
                                      remote-url="/pla/core/agent/searchplan"
                                      remote-url-request-formatter="remoteUrlRequestFn" field-required="true"
-                                     initial-value="{{selectedPlan.title}}"
+                                     initial-value="selectedPlan.title"
                                      remote-url-data-field="" title-field="plan_name" minlength="2"
                                      input-class="form-control form-control-small"
                                      match-class="highlight">
@@ -104,11 +135,13 @@
                     </div>
                     <div class="row">
                         <div class="col-sm-6">
-                            <button type="button" class="btn btn-default btn-sm">Cancel</button>
+                            <button type="button" class="btn btn-default btn-sm"
+                                    onclick="window.location='/pla/individuallife/quotation/searchForm'">Cancel
+                            </button>
                         </div>
                         <div class="col-sm-6">
                             <button type="button" class="btn btn-default btn-sm" style="float: right"
-                                    ng-click="saveStep1()">Save
+                                    ng-click="saveStep1()" ng-hide="uneditable" ng-disabled="step1.$invalid">Save
                             </button>
                         </div>
                     </div>
@@ -135,21 +168,21 @@
                             </div>
                             <div class="form-group">
                                 <label class="control-label">Date of Birth</label>
-
                                 <div class='input-group date'>
                                     <input type="text" class="form-control input-sm"
                                            datepicker-popup=""
                                            ng-required="true"
                                            is-open="launchdob1"
-                                           ng-model="paDOB" name="dob"/>
+                                           ng-model="proposedAssured.dateOfBirth" name="dob"/>
                                     <span class="input-group-btn">
                                     <button type="button" class="btn btn-default btn-sm"
                                             ng-click="launchProposedAssuredDOB($event)">
                                         <i class="glyphicon glyphicon-calendar"></i></button>
                                   </span>
                                 </div>
-                                <div class="error" ng-messages="step2.dob.$error" ng-if="step2.$dirty">
+                                <div class="error" ng-messages="step2.dob.$error" ng-if="step2.dob.$dirty">
                                     <small ng-message="required">Please enter Date of Birth.</small>
+                                    <small ng-message="date">Invalid Date.</small>
                                 </div>
                             </div>
                             <div class="form-group">
@@ -163,6 +196,10 @@
                                 <label class="control-label">Email</label>
                                 <input type="email" class="form-control input-sm" name="email"
                                        ng-model="proposedAssured.emailAddress"/>
+
+                                <div class="error" ng-messages="step2.email.$error" ng-if="step2.email.$dirty">
+                                    <small ng-message="email">Invalid Email.</small>
+                                </div>
                             </div>
                             <div class="form-group">
                                 <label style="text-align: left">Is Proposed Assured the proposer?</label>
@@ -204,14 +241,19 @@
                                 <input type="text" ng-maxlength="10"
                                        class="form-control input-sm" name="mobile" ng-required="true"
                                        ng-model="proposedAssured.mobileNumber"/>
+
+                                <div class="error" ng-messages="step2.mobile.$error" ng-if="step2.$dirty">
+                                    <small ng-message="required">Please enter Mobile Number.</small>
+                                </div>
                             </div>
                             <div class="form-group required">
                                 <label class="control-label">Occupation</label>
                                 <select class="form-control input-sm" name="occupation" ng-required="true"
                                         ng-model="proposedAssured.occupation"
                                         ng-options="occupation.description as occupation.description for occupation in occupations"></select>
-                                <div class="error" ng-messages="step2.occupation.$error">
-                                    <small class="error" ng-message="required">Please enter Occupation</small>
+
+                                <div class="error" ng-messages="step2.occupation.$error" ng-if="step2.$dirty">
+                                    <small ng-message="required">Please enter Occupation</small>
                                 </div>
                             </div>
                         </div>
@@ -222,7 +264,7 @@
                         </div>
                         <div class="col-sm-6">
                             <button type="button" class="btn btn-default btn-sm" style="float: right"
-                                    ng-click="saveStep2()">Save
+                                    ng-click="saveStep2()" ng-disabled="step2.$invalid">Save
                             </button>
                         </div>
                     </div>
@@ -230,17 +272,17 @@
             </div>
             <div class="step-pane" data-step="3">
                 <ng-form name="step3" novalidate="">
-                    <div class="row">{{proposer}}
+                    <div class="row">
                         <div class="col-lg-6">
                             <div class="form-group">
                                 <label>Title</label>
                                 <select class="form-control input-sm">
-                                    <option>Mr.</option>
-                                    <option>Mrs.</option>
-                                    <option>Miss.</option>
-                                    <option>Dr.</option>
-                                    <option>Prof.</option>
-                                    <option>Hon.</option>
+                                    <option value="Mr.">Mr.</option>
+                                    <option value="Mrs.">Mrs.</option>
+                                    <option value="Miss.">Miss.</option>
+                                    <option value="Dr.">Dr.</option>
+                                    <option value="Prof.">Prof.</option>
+                                    <option value="Hon.">Hon.</option>
                                 </select>
                             </div>
                             <div class="form-group required">
@@ -260,7 +302,7 @@
                                            datepicker-popup=""
                                            ng-required="true"
                                            is-open="launchdob2"
-                                           ng-model="pDOB" name="dob"/>
+                                           ng-model="proposer.dateOfBirth" name="dob"/>
                                     <span class="input-group-btn">
                                     <button type="button" class="btn btn-default btn-sm"
                                             ng-click="launchProposerDOB($event)">
@@ -319,7 +361,7 @@
                         </div>
                         <div class="col-sm-6">
                             <button type="button" class="btn btn-default btn-sm" style="float: right"
-                                    ng-click="saveStep3()">Save 3
+                                    ng-click="saveStep3()" ng-disabled="step3.$invalid">Save
                             </button>
                         </div>
                     </div>
@@ -336,7 +378,7 @@
                                      selected-object="selectedPlan"
                                      remote-url="/pla/core/agent/searchplan"
                                      remote-url-request-formatter="remoteUrlRequestFn" field-required="true"
-                                     initial-value="{{selectedPlan.title}}"
+                                     initial-value="selectedPlan.title"
                                      remote-url-data-field="" title-field="plan_name" minlength="2"
                                      input-class="form-control form-control-small"
                                      match-class="highlight">
@@ -390,7 +432,7 @@
                         </div>
                         <div class="col-sm-6">
                             <button type="button" class="btn btn-default btn-sm" style="float: right"
-                                    ng-click="saveStep4()">Submit
+                                    ng-click="saveStep4()">Save
                             </button>
                         </div>
                     </div>
@@ -438,9 +480,6 @@
                         <div class="col-sm-6">
                             <button type="button" class="btn btn-default btn-sm">Cancel</button>
                         </div>
-                        <div class="col-sm-6">
-                            <button type="button" class="btn btn-default btn-sm" style="float: right">Save</button>
-                        </div>
                     </div>
                 </ng-form>
             </div>
@@ -448,6 +487,7 @@
 
     </div>
 </form>
+</div>
 <style>
     .bs-callout-info {
         border-left-color: #1b809e !important;
@@ -524,3 +564,121 @@
     }
 </style>
 
+<script id="plan-sumassured.tpl" type="text/ng-template">
+    <div ng-switch="plan.sumAssured.sumAssuredType">
+        <div ng-switch-when="SPECIFIED_VALUES">
+            <select class="form-control input-sm" ng-model="planDetailDto.sumAssured" name="sumAssured"
+                    ng-options="value.text as value.text for value in plan.sumAssured.sumAssuredValue"
+                    ng-required="true"></select>
+        </div>
+        <div ng-switch-when="RANGE">
+            <input type="number" class="form-control input-sm" min="{{plan.sumAssured.minSumInsured}}"
+                   name="sumAssured"
+                   max="{{plan.sumAssured.maxSumInsured}}" ng-model="planDetailDto.sumAssured" ng-required="true"/>
+
+            <div class="error" ng-messages="step4.sumAssured.$error">
+                <small ng-message="min">Sum Assured cannot be less then {{plan.sumAssured.minSumInsured}}.</small>
+                <small ng-message="max">Sum Assured cannot be more than {{plan.sumAssured.maxSumInsured}}.</small>
+            </div>
+        </div>
+        <div ng-switch-when="INCOME_MULTIPLIER">
+            <input type="number" class="form-control input-sm" min="0" max="{{plan.sumAssured.incomeMultiplier}}"
+                   name="sumAssured"
+                   ng-model="planDetailDto.sumAssured" ng-required="true"/>
+
+            <div class="error" ng-messages="step4.sumAssured.$error" ng-if="step1.$dirty">
+                <small ng-message="max">Sum Assured cannot be greater than {{plan.sumAssured.incomeMultiplier}}.
+                </small>
+            </div>
+        </div>
+    </div>
+</script>
+<script id="coverage-sumassured.tpl" type="text/ng-template">
+    <div ng-switch="getSumAssuredType(rider)">
+        <div ng-switch-when="SPECIFIED_VALUES">
+            <select class="form-control input-sm" ng-model="rider.sumAssured" name="sumAssured"
+                    ng-options="value.text as value.text for value in coverage.coverageSumAssured.sumAssuredValue"
+                    ng-required="true"></select>
+        </div>
+        <div ng-switch-when="RANGE">
+            <input type="number" class="form-control input-sm" min="{{coverage.sumAssured.minSumInsured}}"
+                   name="sumAssured"
+                   max="{{coverage.sumAssured.maxSumInsured}}" ng-model="rider.sumAssured" ng-required="true"/>
+
+            <div class="error" ng-messages="step4.sumAssured.$error">
+                <small ng-message="min">Sum Assured cannot be less then {{coverage.sumAssured.minSumInsured}}.</small>
+                <small ng-message="max">Sum Assured cannot be more than {{coverage.sumAssured.maxSumInsured}}.</small>
+            </div>
+        </div>
+        <div ng-switch-when="DERIVED">
+            <input type="number" class="form-control input-sm" min="0" max="{{coverage.sumAssured.maxLimit}}"
+                   name="sumAssured"
+                   ng-model="rider.sumAssured" ng-required="true"/>
+
+            <div class="error" ng-messages="step4.sumAssured.$error" ng-if="step1.$dirty">
+                <small ng-message="max">Sum Assured cannot be greater than {{coverage.sumAssured.incomeMultiplier}}.
+                </small>
+            </div>
+        </div>
+        <div ng-switch-when="INCOME_MULTIPLIER">
+            <input type="number" class="form-control input-sm" min="0" max="{{coverage.sumAssured.incomeMultiplier}}"
+                   name="sumAssured"
+                   ng-model="rider.sumAssured" ng-required="true"/>
+
+            <div class="error" ng-messages="step4.sumAssured.$error" ng-if="step1.$dirty">
+                <small ng-message="max">Sum Assured cannot be greater than {{coverage.sumAssured.incomeMultiplier}}.
+                </small>
+            </div>
+        </div>
+    </div>
+</script>
+<script id="plan-policyterm.tpl" type="text/ng-template">
+    <div ng-switch="plan.policyTermType">
+        <div ng-switch-when="SPECIFIED_VALUES">
+            <select class="form-control input-sm" ng-model="planDetailDto.policyTerm" name="policyTerm"
+                    ng-options="value.text as value.text for value in policyTerms()" ng-required="true"></select>
+        </div>
+        <div ng-switch-when="MATURITY_AGE_DEPENDENT">
+            <select class="form-control input-sm" ng-model="planDetailDto.policyTerm" name="policyTerm"
+                    ng-options="value.text as value.text for value in policyTerms()" ng-required="true"></select>
+        </div>
+    </div>
+</script>
+<script id="plan-coverage.tpl" type="text/ng-template">
+    <i ng-bind=""></i>
+    <div ng-switch="getCoverageTermType(rider)">
+        <div ng-switch-when="SPECIFIED_VALUES">
+            <select class="form-control input-sm" ng-model="rider.coverTerm" name="policyTerm"
+                    ng-options="value.text as value.text for value in policyTerms" ng-required="true"></select>
+        </div>
+        <div ng-switch-when="MATURITY_AGE_DEPENDENT">
+            <select class="form-control input-sm" ng-model="rider.coverTerm" name="policyTerm"
+                    ng-options="value.text as value.text for value in policyTerms" ng-required="true"></select>
+        </div>
+    </div>
+</script>
+<script id="plan-premiumterm.tpl" type="text/ng-template">
+    <div ng-switch="plan.premiumTermType">
+        <div ng-switch-when="SPECIFIED_VALUES">
+            <select class="form-control input-sm" ng-model="planDetailDto.premiumPaymentTerm" name="premiumTerm"
+                    ng-options="value as value for value in premiumTerms()" ng-required="true"></select>
+        </div>
+        <div ng-switch-when="SPECIFIED_AGES">
+            <select class="form-control input-sm" ng-model="planDetailDto.premiumPaymentTerm" name="premiumTerm"
+                    ng-options="value as value for value in premiumTerms()" ng-required="true"></select>
+        </div>
+        <div ng-switch-when="REGULAR">
+            <input type="number" class="form-control input-sm" readonly="true"
+                   ng-model="planDetailDto.premiumPaymentTerm"
+                   name="premiumTerm"/>
+        </div>
+        <div ng-switch-when="SINGLE">
+            <input type="number" class="form-control input-sm" ng-required="true"
+                   ng-model="planDetailDto.premiumPaymentTerm"
+                   name="premiumTerm"/>
+        </div>
+    </div>
+</script>
+<footer class="footer" th:include="fragments/common :: footer"></footer>
+</body>
+</html>

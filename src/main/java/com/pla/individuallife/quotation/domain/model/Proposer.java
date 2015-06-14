@@ -4,7 +4,7 @@ import com.pla.sharedkernel.domain.model.Gender;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.Type;
-import org.joda.time.LocalDate;
+import org.joda.time.DateTime;
 import org.nthdimenzion.ddd.domain.annotations.ValueObject;
 
 import javax.persistence.Column;
@@ -29,8 +29,8 @@ public class Proposer {
 
     private String nrcNumber;
 
-    @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentLocalDate")
-    private LocalDate dateOfBirth;
+    @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
+    private DateTime dateOfBirth;
 
     @Column(name = "proposerGender")
     @Enumerated(EnumType.STRING)
@@ -43,7 +43,7 @@ public class Proposer {
     public Proposer() {
     }
 
-    public Proposer(String title, String firstName, String surname, String nrcNumber, LocalDate dateOfBirth, Gender gender, String mobileNumber, String emailAddress) {
+    public Proposer(String title, String firstName, String surname, String nrcNumber, DateTime dateOfBirth, Gender gender, String mobileNumber, String emailAddress) {
         this.title = title;
         this.firstName = firstName;
         this.surname = surname;

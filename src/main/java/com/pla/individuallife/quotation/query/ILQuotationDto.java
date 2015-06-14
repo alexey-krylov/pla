@@ -31,7 +31,7 @@ public class ILQuotationDto {
 
     private String planId;
 
-    private QuotationId parentQuotationId;
+    private String parentQuotationId;
 
     private String quotationStatus;
 

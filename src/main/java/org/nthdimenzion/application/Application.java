@@ -15,7 +15,6 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.ImportResource;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
-import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 import javax.sql.DataSource;
 
@@ -29,7 +28,6 @@ import javax.sql.DataSource;
         "org.axonframework.saga", "org.axonframework.eventstore.jpa"})
 @ImportResource(value = {"classpath*:META-INF/spring/cqrs-infrastructure-context.xml"})
 @EnableMongoRepositories(basePackages = {"com.pla"})
-@EnableWebMvc
 @EnableJpaRepositories(basePackages = {"com.pla.individuallife.quotation.query"})
 public class Application {
 

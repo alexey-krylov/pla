@@ -1,66 +1,80 @@
 package com.pla.individuallife.quotation.domain.model;
 
+import com.google.common.collect.Lists;
 import com.pla.core.domain.model.agent.AgentId;
 import com.pla.individuallife.quotation.domain.exception.QuotationException;
+import com.pla.individuallife.quotation.domain.service.ILQuotationRoleAdapter;
 import com.pla.sharedkernel.domain.model.Gender;
 import com.pla.sharedkernel.identifier.PlanId;
 import com.pla.sharedkernel.identifier.QuotationId;
+import com.pla.sharedkernel.util.RolesUtil;
+import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import org.junit.Before;
 import org.junit.Test;
+import org.nthdimenzion.security.service.UserLoginDetailDto;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+
+import java.util.List;
 
 import static org.junit.Assert.*;
 
 /**
  * Created by Karunakar on 6/4/2015.
  */
-public class IndividualLifeQuotationTest {
-
-    private QuotationId quotationId;
-
-    private AgentId agentId;
-
-    private PlanId planId;
-
-    private IndividualLifeQuotation individualLifeQuotation;
+public class ILQuotationTest {
 
     ProposedAssured proposedAssured;
+    UserLoginDetailDto userLoginDetailDto;
+    ILQuotationProcessor quotationProcessor;
+    private QuotationId quotationId;
+    private AgentId agentId;
+    private PlanId planId;
+    private ILQuotation quotation;
 
     @Before
     public void setUp() {
         quotationId = new QuotationId("11");
         agentId = new AgentId("121");
         planId = new PlanId(("1211"));
+        userLoginDetailDto = UserLoginDetailDto.createUserLoginDetailDto("", "");
+        SimpleGrantedAuthority simpleGrantedAuthority = new SimpleGrantedAuthority(RolesUtil.INDIVIDUAL_LIFE_QUOTATION_PROCESSOR_ROLE);
+        List<SimpleGrantedAuthority> authorities = Lists.newArrayList();
+        authorities.add(simpleGrantedAuthority);
+        userLoginDetailDto.setAuthorities(authorities);
+        quotationProcessor = ILQuotationRoleAdapter.userToQuotationProcessor(userLoginDetailDto);
         ProposedAssuredBuilder proposedAssuredBuilder = ProposedAssured.proposedAssuredBuilder();
         proposedAssuredBuilder.withTitle("Mr").withFirstName("Jones").withSurname("Dean").withNrcNumber("123456");
         proposedAssured = proposedAssuredBuilder.build();
-        individualLifeQuotation = IndividualLifeQuotation.createWithBasicDetail("5-2-300001-0415", "Admin", quotationId, agentId, proposedAssured, planId);
-        assertNotNull(individualLifeQuotation);
+        String quotationARId = "1000";
+        quotation = quotation.createWithBasicDetail(quotationProcessor, quotationARId,
+                "5-2-300001-0415", quotationId, agentId, proposedAssured, planId);
+        assertNotNull(quotation);
     }
 
     @Test
     public void shouldCreateILQuotationWithAgentDetail() {
-        assertEquals("5-2-300001-0415", individualLifeQuotation.getQuotationNumber());
+        assertEquals("5-2-300001-0415", quotation.getQuotationNumber());
     }
 
     @Test(expected = QuotationException.class)
     public void itShouldThrowExceptionWhenAClosedQuotationGetsUpdated() {
-        individualLifeQuotation.closeQuotation();
-        individualLifeQuotation.updateWithAssured(proposedAssured, false);
+        quotation.closeQuotation();
+        quotation.updateWithAssured(quotationProcessor, proposedAssured, false);
     }
 
     @Test(expected = QuotationException.class)
     public void itShouldThrowExceptionWhenADeclinedQuotationGetsUpdated() {
-        individualLifeQuotation.declineQuotation();
-        individualLifeQuotation.updateWithAssured(proposedAssured, false);
+        quotation.declineQuotation();
+        quotation.updateWithAssured(quotationProcessor, proposedAssured, false);
     }
 
     @Test
     public void itShouldUpdateProposeDetailOfDraftedILQuotation() {
 
-        Proposer proposer = new Proposer("Mr" , "Jones", "Dean", "123456", new LocalDate("2000-05-05"), Gender.MALE, "78878888989", "dean.jones@gmail.com");
-        IndividualLifeQuotation individualLifeQuotation = this.individualLifeQuotation.updateWithProposer(proposer, agentId);
-        Proposer updatedProposerDetail = individualLifeQuotation.getProposer();
+        Proposer proposer = new Proposer("Mr", "Jones", "Dean", "123456", new DateTime("2000-05-05"), Gender.MALE, "78878888989", "dean.jones@gmail.com");
+        this.quotation.updateWithProposer(quotationProcessor, proposer);
+        Proposer updatedProposerDetail = quotation.getProposer();
 
         assertEquals(proposer.getFirstName(), updatedProposerDetail.getFirstName());
         assertEquals(proposer.getTitle(), updatedProposerDetail.getTitle());
@@ -77,12 +91,11 @@ public class IndividualLifeQuotationTest {
     public void itShouldUpdateProposedAssuredDetailOfDraftedILQuotation() {
 
         ProposedAssuredBuilder proposedAssuredBuilder = ProposedAssured.proposedAssuredBuilder();
-        proposedAssuredBuilder.withTitle("Mr").withFirstName("Jones").withSurname("Dean").withNrcNumber("123456").withDateOfBirth(new LocalDate("2000-05-05")).withGender(Gender.MALE).withMobileNumber("78878888989").withEmailAddress("dean.jones@gmail.com").withOccupation("Accountant");
+        proposedAssuredBuilder.withTitle("Mr").withFirstName("Jones").withSurname("Dean").withNrcNumber("123456").withDateOfBirth(new DateTime("2000-05-05")).withGender(Gender.MALE).withMobileNumber("78878888989").withEmailAddress("dean.jones@gmail.com").withOccupation("Accountant");
         ProposedAssured proposedAssured = proposedAssuredBuilder.build();
 
-        IndividualLifeQuotation individualLifeQuotation = this.individualLifeQuotation.updateWithAssured(proposedAssured, false);
-        ProposedAssured updatedProposedAssuredDetail = individualLifeQuotation.getProposedAssured();
-
+        this.quotation.updateWithAssured(quotationProcessor, proposedAssured, false);
+        ProposedAssured updatedProposedAssuredDetail = quotation.getProposedAssured();
         assertEquals(proposedAssuredBuilder.getFirstName(), updatedProposedAssuredDetail.getFirstName());
         assertEquals(proposedAssuredBuilder.getTitle(), updatedProposedAssuredDetail.getTitle());
         assertEquals(proposedAssuredBuilder.getSurname(), updatedProposedAssuredDetail.getSurname());
@@ -98,20 +111,20 @@ public class IndividualLifeQuotationTest {
 
     @Test
     public void isShouldReturnTrueWhenQuotationStatusIsGenerated() {
-        this.individualLifeQuotation.generateQuotation(LocalDate.now());
-        boolean requireVersioning = this.individualLifeQuotation.requireVersioning();
+        this.quotation.generateQuotation(LocalDate.now());
+        boolean requireVersioning = this.quotation.requireVersioning();
         assertTrue(requireVersioning);
     }
 
     @Test
     public void itShouldInactivateILQuotation() {
-        this.individualLifeQuotation.purgeQuotation();
-        assertEquals(ILQuotationStatus.PURGED, this.individualLifeQuotation.getIlQuotationStatus());
+        this.quotation.purgeQuotation();
+        assertEquals(ILQuotationStatus.PURGED, this.quotation.getIlQuotationStatus());
     }
 
     @Test
     public void itShouldDeclineQuotation() {
-        this.individualLifeQuotation.declineQuotation();
-        assertEquals(ILQuotationStatus.DECLINED, this.individualLifeQuotation.getIlQuotationStatus());
+        this.quotation.declineQuotation();
+        assertEquals(ILQuotationStatus.DECLINED, this.quotation.getIlQuotationStatus());
     }
 }

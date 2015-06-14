@@ -85,7 +85,7 @@
                                 mongo-template="mongoTemplate"/>
 
     <axon:jpa-repository id="ilQuotationJpaRepository"
-                         aggregate-type="com.pla.individuallife.quotation.domain.model.IndividualLifeQuotation"
+                         aggregate-type="com.pla.individuallife.quotation.domain.model.ILQuotationAR"
                          event-bus="eventBus"/>
 
     <extension:mongo-repository id="ilProposalMongoRepository"

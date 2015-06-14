@@ -1,22 +1,5 @@
 package org.nthdimenzion.presentation;
 
-import com.fasterxml.jackson.core.JsonGenerator;
-import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.databind.*;
-import com.fasterxml.jackson.datatype.joda.JodaModule;
-import org.joda.money.Money;
-import org.joda.time.LocalDate;
-import org.joda.time.format.DateTimeFormatter;
-import org.springframework.beans.BeansException;
-import org.springframework.beans.factory.config.BeanPostProcessor;
-import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
-import org.springframework.stereotype.Component;
-
-import java.io.IOException;
-
-import static org.nthdimenzion.common.AppConstants.MONEY_FORMATTER;
-import static org.nthdimenzion.presentation.AppUtils.*;
-
 /**
  * https://github.com/FasterXML/jackson-datatype-joda/issues/12
  * <p/>
@@ -25,8 +8,9 @@ import static org.nthdimenzion.presentation.AppUtils.*;
  * Locale based formats hacks http://stackoverflow.com/questions/25551011/change-date-pattern-from-shortdate-format-in-jodatime
  */
 
-@Component
-public class JacksonConfig implements BeanPostProcessor {
+//@Component
+public class JacksonConfig {
+/*
 
     private static DateTimeFormatter formatter = getDateTimeFormat();
 
@@ -41,18 +25,25 @@ public class JacksonConfig implements BeanPostProcessor {
         if (bean instanceof MappingJackson2HttpMessageConverter) {
             MappingJackson2HttpMessageConverter jsonConverter = (MappingJackson2HttpMessageConverter) bean;
             ObjectMapper objectMapper = jsonConverter.getObjectMapper();
+            objectMapper.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
+            objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+            objectMapper.configure(DeserializationFeature.ACCEPT_EMPTY_STRING_AS_NULL_OBJECT, true);
             final JodaModule jodaModule = new JodaModule();
+            jodaModule.addSerializer(DateTime.class, new DateTimeAsJavascriptDateSerializer());
             jodaModule.addSerializer(LocalDate.class, new LocalDateSerializer());
             jodaModule.addDeserializer(LocalDate.class, new LocalDateDeSerializer());
             jodaModule.addSerializer(Money.class, new MoneySerializer());
             jodaModule.addDeserializer(Money.class, new MoneyDeSerializer());
             objectMapper.registerModule(jodaModule);
-            objectMapper.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
-            objectMapper.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
-            objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-            objectMapper.configure(DeserializationFeature.ACCEPT_EMPTY_STRING_AS_NULL_OBJECT, true);
         }
         return bean;
+    }
+    private class DateTimeAsJavascriptDateSerializer extends JsonSerializer<DateTime> {
+
+        @Override
+        public void serialize(DateTime value, JsonGenerator jgen, SerializerProvider provider) throws IOException {
+            jgen.writeString(formatter.print(value));
+        }
     }
 
     private class LocalDateSerializer extends JsonSerializer<LocalDate> {
@@ -86,6 +77,7 @@ public class JacksonConfig implements BeanPostProcessor {
             return MONEY_FORMATTER.parseMoney(prependCurrencyUnit(jp.getValueAsString()));
         }
     }
+*/
 
 }
 

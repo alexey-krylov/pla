@@ -56,13 +56,29 @@
             com.pla.core.saga.PlanSaga,com.pla.grouplife.quotation.saga.GroupLifeQuotationSaga
         </axon:types>
     </axon:saga-manager>
+
     <bean id="schedulerFactoryBean" class="org.springframework.scheduling.quartz.SchedulerFactoryBean"
           p:dataSource-ref="jobsDataSource"/>
     <bean id="axonEventScheduler" class="org.axonframework.eventhandling.scheduling.quartz.QuartzEventScheduler">
         <property name="eventBus" ref="eventBus"></property>
         <property name="scheduler" ref="schedulerFactoryBean"></property>
     </bean>
+
     <extension:mongo-repository id="planMongoRepository" aggregate-type="com.pla.core.domain.model.plan.Plan"
+                                mongo-template="mongoTemplate"/>
+    <extension:mongo-repository id="glQuotationMongoRepository"
+                                aggregate-type="com.pla.grouplife.quotation.domain.model.GroupLifeQuotation"
+                                mongo-template="mongoTemplate"/>
+    <extension:mongo-repository id="ghQuotationMongoRepository"
+                                aggregate-type="com.pla.grouphealth.quotation.domain.model.GroupHealthQuotation"
+                                mongo-template="mongoTemplate"/>
+
+    <axon:jpa-repository id="ilQuotationJpaRepository"
+                         aggregate-type="com.pla.individuallife.quotation.domain.model.ILQuotationAR"
+                         event-bus="eventBus"/>
+
+    <extension:mongo-repository id="ilProposalMongoRepository"
+                                aggregate-type="com.pla.individuallife.proposal.domain.model.ProposalAggregate"
                                 mongo-template="mongoTemplate"/>
 
 </beans>

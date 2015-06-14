@@ -5,7 +5,7 @@
                 <div class="panel-body">
                     <h3>View Plan
                         <small>{{plan.planDetail.planName}}</small>
-                        &nbsp;&nbsp;&nbsp;<span class="label label-success align-right">Active</span></h3>
+                        &nbsp;&nbsp;&nbsp;<span class="label label-success align-right">{{plan.status}}</span></h3>
                     <div class="row">
                         <div class="col-md-4">
                             <dl class="dl-horizontal">
@@ -37,7 +37,12 @@
                                 <dt>Launch Date</dt>
                                 <dd>{{plan.planDetail.launchDate|date:'dd/MM/yyyy'}}</dd>
                                 <dt>Withdrawal Date</dt>
-                                <dd>{{plan.planDetail.withdrawalDate|date:'dd/MM/yyyy'}}</dd>
+                                <dd>
+                                    <a href="#" editable-bsdate="plan.planDetail.withdrawalDate"
+                                       e-datepicker-popup="dd/MM/yyyy">
+                                        {{ (plan.planDetail.withdrawalDate | date:"dd/MM/yyyy") || 'empty' }}
+                                    </a>
+                                </dd>
                                 <dt>Surrender After</dt>
                                 <dd>{{plan.planDetail.surrenderAfter}}</dd>
                                 <dt>Tax Applicable</dt>
