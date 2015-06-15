@@ -30,11 +30,11 @@ App.controller('CreateRoutingLevelController', ['$scope', '$http', function ($sc
 
     $scope.$watch('createRoutingLevel.definedFor',function(newValue, oldValue){
         if(newValue=='optionalCoverage'){
-            $scope.createRoutingLevel.planId="";
+            $scope.createRoutingLevel.planCode="";
             $scope.createRoutingLevel.coverageId="";
             $scope.showOptionalCoverageValue = false;
         }else if (newValue == 'plan'){
-            $scope.createRoutingLevel.planId="";
+            $scope.createRoutingLevel.planCode="";
             $scope.showOptionalCoverageValue = true;
 
         }

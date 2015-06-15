@@ -165,7 +165,7 @@ App.controller('UpdateDocumentSetupController', ['$scope', '$http','$window','$l
         $scope.updateDocumentLevel.underWriterDocumentItems=$scope.finalList;
         $scope.newDateField.fromDate = moment($scope.updateDocumentLevel.effectiveFrom).format("YYYY-MM-DD");
         $scope.updateDocumentLevel.effectiveFrom = $scope.newDateField.fromDate;
-
+        //console.log($scope.updateDocumentLevel);
       $http.post('create/underwriterdocument',$scope.updateDocumentLevel).success(function (data) {
 
             if(data.status=="200"){
@@ -212,7 +212,6 @@ App.controller('ViewDocumentSetupController', ['$scope', '$http','$window','$loc
 
                     $scope.fieldData.push(_.findWhere($scope.mulSelect,{influencingFactor: $scope.viewDocumentLevel.underWriterInfluencingFactors[j]}));
                 }
-                console.log( $scope.fieldData);
                 $scope.viewDocumentLevel.underWriterInfluencingFactors= $scope.fieldData;
             });
 
