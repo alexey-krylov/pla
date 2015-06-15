@@ -720,8 +720,14 @@ public enum GHInsuredExcelHeader {
             int cellNumber = headers.indexOf(this.getDescription());
             Cell cell = row.getCell(cellNumber);
             String cellValue = getCellValue(cell);
+            Cell noOfAssuredCell = row.getCell(headers.indexOf(NO_OF_ASSURED.getDescription()));
+            String noOfAssuredCellValue = getCellValue(noOfAssuredCell);
+            BigDecimal planPremium = null;
+            if(isNotEmpty(noOfAssuredCellValue) && isNotEmpty(cellValue)){
+                planPremium = BigDecimal.valueOf(Double.valueOf(noOfAssuredCellValue)).multiply(BigDecimal.valueOf(Double.valueOf(cellValue)));
+            }
             GHInsuredDto.GHPlanPremiumDetailDto planPremiumDetailDto = insuredDto.getPlanPremiumDetail() != null ? insuredDto.getPlanPremiumDetail() : new GHInsuredDto.GHPlanPremiumDetailDto();
-            planPremiumDetailDto.setPremiumAmount(isNotEmpty(cellValue) ? BigDecimal.valueOf(Double.valueOf(cellValue)) : null);
+            planPremiumDetailDto.setPremiumAmount(planPremium);
             insuredDto.setPlanPremiumDetail(planPremiumDetailDto);
             return insuredDto;
         }
@@ -731,8 +737,14 @@ public enum GHInsuredExcelHeader {
             int cellNumber = headers.indexOf(this.getDescription());
             Cell cell = row.getCell(cellNumber);
             String cellValue = getCellValue(cell);
+            Cell noOfAssuredCell = row.getCell(headers.indexOf(NO_OF_ASSURED.getDescription()));
+            String noOfAssuredCellValue = getCellValue(noOfAssuredCell);
+            BigDecimal planPremium = null;
+            if(isNotEmpty(noOfAssuredCellValue) && isNotEmpty(cellValue)){
+                planPremium = BigDecimal.valueOf(Double.valueOf(noOfAssuredCellValue)).multiply(BigDecimal.valueOf(Double.valueOf(cellValue)));
+            }
             GHInsuredDto.GHPlanPremiumDetailDto planPremiumDetailDto = insuredDependentDto.getPlanPremiumDetail() != null ? insuredDependentDto.getPlanPremiumDetail() : new GHInsuredDto.GHPlanPremiumDetailDto();
-            planPremiumDetailDto.setPremiumAmount(isNotEmpty(cellValue) ? BigDecimal.valueOf(Double.valueOf(cellValue)) : null);
+            planPremiumDetailDto.setPremiumAmount(planPremium);
             insuredDependentDto.setPlanPremiumDetail(planPremiumDetailDto);
             return insuredDependentDto;
         }

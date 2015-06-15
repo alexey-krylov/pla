@@ -14,7 +14,7 @@ import javax.validation.constraints.NotNull;
 @Getter
 @Setter
 @NoArgsConstructor
-public class CreateILQuotationCommand {
+public class ILCreateQuotationCommand {
 
     @NotNull(message = "{Agent ID cannot be null}")
     private String agentId;

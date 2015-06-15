@@ -531,7 +531,7 @@ insert  into `entity_sequence`(`sequence_id`,`sequence_name`,`sequence_number`,`
 insert  into `entity_sequence`(`sequence_id`,`sequence_name`,`sequence_number`,`sequence_prefix`) values (2,'com.pla.grouplife.quotation.domain.model.GroupLifeQuotation',1000000,' ');
 INSERT INTO `entity_sequence`(`sequence_id`,`sequence_name`,`sequence_number`,`sequence_prefix`) values ('3','com.pla.core.domain.model.plan.Plan',1000,' ');
 insert  into `entity_sequence`(`sequence_id`,`sequence_name`,`sequence_number`,`sequence_prefix`) values (4,'com.pla.grouphealth.quotation.domain.model.GroupHealthQuotation',2000000,' ');
-insert  into `entity_sequence`(`sequence_id`,`sequence_name`,`sequence_number`,`sequence_prefix`) values (5,'com.pla.individuallife.quotation.domain.model.IndividualLifeQuotation',3000000,' ');
+insert  into `entity_sequence`(`sequence_id`,`sequence_name`,`sequence_number`,`sequence_prefix`) values (5,'com.pla.individuallife.quotation.domain.model.ILQuotation',3000000,' ');
 insert  into `entity_sequence`(`sequence_id`,`sequence_name`,`sequence_number`,`sequence_prefix`) values (6,'com.pla.individuallife.proposal.domain.model.ProposalAggregate',0,' ');
 
 insert into `channel_type` (`CHANNEL_CODE`, `CHANNEL_DESCRIPTION`) values('BROKER','Broker');

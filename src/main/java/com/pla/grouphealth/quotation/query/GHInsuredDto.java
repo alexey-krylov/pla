@@ -188,7 +188,7 @@ public class GHInsuredDto {
             if (isEmpty(this.benefitDetails)) {
                 this.benefitDetails = Lists.newArrayList();
             }
-            this.addBenefit(benefitDetail);
+            this.benefitDetails.add(benefitDetail);
             return this;
         }
 
