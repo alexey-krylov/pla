@@ -550,15 +550,15 @@ DROP TABLE IF EXISTS `individual_life_quotation`;
   CONSTRAINT `FK_aiyhilehr449calfhsithdoo1` FOREIGN KEY (`parent_quotation_id`) REFERENCES `individual_quotation_ar` (`quotation_ar_id`)
 );
 
-DROP table `individual_quotation_rider`;
-CREATE TABLE `individual_quotation_rider` (
+DROP table `individual_life_quotation_rider`;
+CREATE TABLE `individual_life_quotation_rider` (
   `quotation_id` varchar(255) NOT NULL,
   `cover_term` int(11) DEFAULT NULL,
   `coverage_id` varchar(255) DEFAULT NULL,
   `sum_assured` decimal(19,2) DEFAULT NULL,
   `waiver_of_premium` int(11) DEFAULT NULL,
-  KEY `FK_5r93vhcdtxcuv950j05mos777` (`quotation_id`),
-  CONSTRAINT `FK_5r93vhcdtxcuv950j05mos777` FOREIGN KEY (`quotation_id`) REFERENCES `individual_life_quotation` (`quotation_id`)
+  KEY `FK_82p2ghj4gkcunxja72xnvjurb` (`quotation_id`),
+  CONSTRAINT `FK_82p2ghj4gkcunxja72xnvjurb` FOREIGN KEY (`quotation_id`) REFERENCES `individual_life_quotation` (`quotation_id`)
 );
 
 DROP TABLE IF EXISTS `plan_coverage_benefit_assoc`;

@@ -5,6 +5,8 @@ import com.pla.grouplife.quotation.domain.model.IQuotation;
 import com.pla.sharedkernel.identifier.PlanId;
 import com.pla.sharedkernel.identifier.QuotationId;
 import lombok.Getter;
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.CascadeType;
 import org.hibernate.annotations.Type;
 import org.joda.time.LocalDate;
 
@@ -67,6 +69,7 @@ public class ILQuotation implements IQuotation {
     @Column( columnDefinition = "BOOLEAN DEFAULT false" )
     private boolean isAssuredTheProposer;
 
+    @Cascade(CascadeType.ALL)
     @ElementCollection
     @CollectionTable(name = "individual_life_quotation_rider", joinColumns = @JoinColumn(name = "quotation_id"))
     private Set<RiderDetail> riderDetails;
@@ -122,9 +125,11 @@ public class ILQuotation implements IQuotation {
         }
     }
 
-    public ILQuotation updateWithPlan(ILQuotationProcessor quotationProcessor, PlanDetail planDetail) {
+    public ILQuotation updateWithPlan(ILQuotationProcessor quotationProcessor, PlanDetail planDetail, Set<RiderDetail> riders) {
         checkInvariant();
         this.planDetail = planDetail;
+        if (riders != null)
+            this.riderDetails = riders;
         return this;
     }
 
@@ -185,7 +190,4 @@ public class ILQuotation implements IQuotation {
         return proposer;
     }
 
-    public void updateRiderDetails(Set<RiderDetail> riderDetails) {
-        this.riderDetails = riderDetails;
-    }
 }

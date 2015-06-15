@@ -95,8 +95,7 @@ public class ILQuotationService {
         QuotationId newQuotationId = new QuotationId(idGenerator.nextId());
         String quotationNumber = ilQuotationNumberGenerator.getQuotationNumber(ILQuotation.class);
         ILQuotation newQuotation = quotationAR.nextVersion(quotationProcessor, quotation, newQuotationId, quotationNumber);
-        newQuotation.updateWithPlan(quotationProcessor, planDetail);
-        newQuotation.updateRiderDetails(riders);
+        newQuotation.updateWithPlan(quotationProcessor, planDetail, riders);
         return newQuotationId;
     }
 

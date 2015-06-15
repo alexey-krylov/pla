@@ -56,6 +56,7 @@
     }
 </style>
 <div th:include="fragments/common :: bodyHeader" th:remove="tag"/>
+QUOTATION LIST
 <div class="container-fluid">
     <ng-view>
         <form method="post" action="/pla/individuallife/quotation" novalidate="true" name="quotationForm"
@@ -109,9 +110,11 @@
                             </div>
                             <div class="col-md-4 col-md-offset-2">
                                 <a type="button" class="btn btn-default btn-sm btn-disabled"
-                                   disabled="disabled">Print</a>
+                                   disabled="disabled"
+                                   onclick="viewILQuotationModule.printQuotation()">Print</a>
                                 <a type="button" class="btn btn-default btn-sm btn-disabled"
-                                   disabled="disabled">Email</a>
+                                   disabled="disabled"
+                                   onclick="viewILQuotationModule.emailQuotation()">Email</a>
                                 <a type="button" class="btn btn-default btn-sm btn-disabled" disabled="disabled"
                                    onclick="viewILQuotationModule.modifyQuotation()">Modify</a>
                                 <a type="button" class="btn btn-default btn-sm btn-disabled" disabled="disabled"

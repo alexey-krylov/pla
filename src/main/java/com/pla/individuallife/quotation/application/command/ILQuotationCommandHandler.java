@@ -145,8 +145,7 @@ public class ILQuotationCommandHandler {
             return newQuotationId;
 
         } else {
-            quotation.updateWithPlan(quotationProcessor, planDetail);
-            quotation.updateRiderDetails(riders);
+            quotation.updateWithPlan(quotationProcessor, planDetail, riders);
             quotationRepository.save(quotation);
             return new QuotationId(cmd.getQuotationId());
         }
