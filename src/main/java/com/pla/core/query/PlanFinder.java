@@ -84,6 +84,7 @@ public class PlanFinder {
 
     public List<Map> findAllPlan() {
         List<Plan> allPlans = mongoTemplate.findAll(Plan.class, "PLAN");
+        allPlans.sort(Comparator.comparing(e -> e.getPlanDetail().getPlanName()));
         List<Map> planList = new ArrayList<Map>();
         for (Plan p : allPlans) {
             Map plan = objectMapper.convertValue(p, Map.class);
