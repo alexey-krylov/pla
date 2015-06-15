@@ -2,8 +2,8 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Quotation" pageWidth="842" pageHeight="1500" orientation="Landscape" whenNoDataType="AllSectionsNoDetail" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="957e75dd-e876-4376-9d34-ee0e5f53cdeb">
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
 	<property name="ireport.zoom" value="1.0"/>
-	<property name="ireport.x" value="2"/>
-	<property name="ireport.y" value="0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="243"/>
 	<style name="table">
 		<box>
 			<pen lineWidth="1.0" lineColor="#000000"/>
@@ -243,11 +243,11 @@
 						<rightPen lineWidth="0.6" lineStyle="Solid" lineColor="#000000"/>
 					</box>
 					<staticText>
-						<reportElement x="8" y="2" width="121" height="21" uuid="c2652866-9fe2-490f-84c4-3caa84050503"/>
+						<reportElement x="8" y="2" width="142" height="21" uuid="c2652866-9fe2-490f-84c4-3caa84050503"/>
 						<textElement>
 							<font size="14" isBold="true"/>
 						</textElement>
-						<text><![CDATA[Propsed Assured]]></text>
+						<text><![CDATA[Proposed Assured]]></text>
 					</staticText>
 					<staticText>
 						<reportElement x="9" y="24" width="51" height="19" uuid="bc10e285-9c9f-41f0-8cbe-c2ed5516cf80"/>
