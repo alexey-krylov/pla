@@ -296,7 +296,7 @@ public enum GHInsuredExcelHeader {
     GENDER("Gender") {
         @Override
         public String getAllowedValue(GHInsuredDto insuredDto) {
-            return insuredDto.getGender().name();
+            return insuredDto.getGender()!=null?insuredDto.getGender().name():"";
         }
 
         @Override
@@ -385,7 +385,7 @@ public enum GHInsuredExcelHeader {
     }, CATEGORY("Category") {
         @Override
         public String getAllowedValue(GHInsuredDto insuredDto) {
-            return insuredDto.getOccupationCategory();
+            return insuredDto.getCategory();
         }
 
         @Override
@@ -408,7 +408,7 @@ public enum GHInsuredExcelHeader {
 
         @Override
         public String getAllowedValue(GHInsuredDto.GHInsuredDependentDto insuredDependentDto) {
-            return insuredDependentDto.getOccupationCategory();
+            return insuredDependentDto.getCategory();
         }
 
         @Override
