@@ -70,7 +70,7 @@ public class GenericMongoRepository<T extends AggregateRoot> extends AbstractRep
         for (Field field : fields) {
             try {
                 field.setAccessible(true);
-                if (ignoreFields(field)) {
+                if (!ignoreFields(field)) {
                     dbo.put(field.getName(), field.get(t));
                 }
             } catch (IllegalAccessException e) {
