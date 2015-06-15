@@ -205,11 +205,15 @@ public class GHInsuredExcelParser {
     private String validateOptionalCoverageCell(List<String> headers, Row row, List<OptionalCoverageCellHolder> optionalCoverageCellHolders) {
         Cell planCell = row.getCell(headers.indexOf(GHInsuredExcelHeader.PLAN.getDescription()));
         String planCode = getCellValue(planCell);
+        if (planCode.indexOf(".") != -1) {
+            planCode = planCode.substring(0, planCode.indexOf("."));
+        }
         Set<String> errorMessages = Sets.newHashSet();
+        final String finalPlanCode = planCode;
         optionalCoverageCellHolders.forEach(optionalCoverageCellHolder -> {
             String optionalCoverageCode = getCellValue(optionalCoverageCellHolder.getOptionalCoverageCell());
-            if (isNotEmpty(optionalCoverageCode) && !isValidCoverage(planCode, optionalCoverageCode)) {
-                errorMessages.add(optionalCoverageCode + "  is not valid for plan " + planCode + ".");
+            if (isNotEmpty(optionalCoverageCode) && !isValidCoverage(finalPlanCode, optionalCoverageCode)) {
+                errorMessages.add(optionalCoverageCode + "  is not valid for plan " + finalPlanCode + ".");
             }
             String coverageSA = getCellValue(optionalCoverageCellHolder.getOptionalCoverageSACell());
             if (isEmpty(coverageSA)) {
@@ -221,12 +225,12 @@ public class GHInsuredExcelParser {
             }
             try {
                 BigDecimal coverageSumAssured = BigDecimal.valueOf(Double.valueOf(coverageSA).intValue());
-                if (!planAdapter.isValidPlanCoverageSumAssured(planCode, optionalCoverageCode, coverageSumAssured)) {
+                if (!planAdapter.isValidPlanCoverageSumAssured(finalPlanCode, optionalCoverageCode, coverageSumAssured)) {
                     errorMessages.add(coverageSA + "  is not valid Sum Assured for coverage " + optionalCoverageCode + ".");
                 }
                 for (OptionalCoverageBenefitCellHolder optionalCoverageBenefitCellHolder : optionalCoverageCellHolder.getBenefitCellHolders()) {
                     String benefitCode = getCellValue(optionalCoverageBenefitCellHolder.getBenefitCell());
-                    if (!planAdapter.isValidPlanCoverageBenefit(planCode, optionalCoverageCode, benefitCode)) {
+                    if (!planAdapter.isValidPlanCoverageBenefit(finalPlanCode, optionalCoverageCode, benefitCode)) {
                         errorMessages.add(benefitCode + "  is not valid Benefit Code for coverage " + optionalCoverageCode + ".");
                     }
                     String benefitLimit = getCellValue(optionalCoverageBenefitCellHolder.getBenefitLimitCell());
@@ -235,7 +239,7 @@ public class GHInsuredExcelParser {
                     }
                     try {
                         BigDecimal benefitLimitBigDecimal = BigDecimal.valueOf(Double.valueOf(benefitLimit).intValue());
-                        if (!planAdapter.isValidPlanCoverageBenefitLimit(planCode, optionalCoverageCode, benefitCode, benefitLimitBigDecimal)) {
+                        if (!planAdapter.isValidPlanCoverageBenefitLimit(finalPlanCode, optionalCoverageCode, benefitCode, benefitLimitBigDecimal)) {
                             errorMessages.add(benefitLimit + " is not valid Benefit Limit for benefit" + benefitCode + ".");
                         }
                     } catch (Exception e) {
