@@ -53,6 +53,8 @@ public class GHInsuredDependentBuilder {
 
     private String occupationClass;
 
+    private Integer noOfAssured;
+
 
     GHInsuredDependentBuilder(PlanId planId, String planCode, BigDecimal premiumAmount, BigDecimal sumAssured) {
         checkArgument(planId != null);
@@ -83,6 +85,12 @@ public class GHInsuredDependentBuilder {
         this.manNumber = manNumber;
         return this;
     }
+
+    public GHInsuredDependentBuilder withNoOfAssured(Integer noOfAssured) {
+        this.noOfAssured = noOfAssured;
+        return this;
+    }
+
 
     public GHInsuredDependentBuilder withDateOfBirth(LocalDate dateOfBirth) {
         this.dateOfBirth = dateOfBirth;

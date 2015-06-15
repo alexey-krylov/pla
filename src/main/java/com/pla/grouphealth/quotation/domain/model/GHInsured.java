@@ -78,6 +78,7 @@ public class GHInsured {
         this.existingIllness = insuredBuilder.getExistingIllness();
         this.minAgeEntry = insuredBuilder.getMinAgeEntry();
         this.maxAgeEntry = insuredBuilder.getMaxAgeEntry();
+        this.noOfAssured = insuredBuilder.getNoOfAssured();
 
     }
 

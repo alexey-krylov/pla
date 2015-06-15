@@ -120,6 +120,8 @@ public class GHInsuredDto {
 
         private List<GHCoveragePremiumDetailDto> coveragePremiumDetails;
 
+        private Integer noOfAssured;
+
         public GHInsuredDependentDto addPlanPremiumDetail(GHPlanPremiumDetailDto planPremiumDetailDto) {
             this.planPremiumDetail = planPremiumDetailDto;
             return this;

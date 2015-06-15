@@ -53,6 +53,8 @@ public class GHInsuredBuilder {
 
     private Integer maxAgeEntry;
 
+    private Integer noOfAssured;
+
 
     GHInsuredBuilder(PlanId insuredPlan, String planCode, BigDecimal premiumAmount, BigDecimal sumAssured) {
         checkArgument(insuredPlan != null);
@@ -106,6 +108,12 @@ public class GHInsuredBuilder {
 
     public GHInsuredBuilder withOccupation(String occupation) {
         this.occupation = occupation;
+        return this;
+    }
+
+
+    public GHInsuredBuilder withNoOfAssured(Integer noOfAssured) {
+        this.noOfAssured=noOfAssured;
         return this;
     }
 

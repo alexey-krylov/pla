@@ -472,6 +472,10 @@ public enum GHInsuredExcelHeader {
 
         @Override
         public GHInsuredDto.GHInsuredDependentDto populateInsuredDependentDetail(GHInsuredDto.GHInsuredDependentDto insuredDependentDto, Row row, List<String> headers) {
+            int cellNumber = headers.indexOf(this.getDescription());
+            Cell cell = row.getCell(cellNumber);
+            String cellValue = getCellValue(cell);
+            insuredDependentDto.setNoOfAssured(isNotEmpty(cellValue) ? Double.valueOf(cellValue).intValue() : null);
             return insuredDependentDto;
         }
 

@@ -56,6 +56,8 @@ public class GHInsuredDependent {
 
     private Integer maxAgeEntry;
 
+    private Integer noOfAssured;
+
     GHInsuredDependent(GHInsuredDependentBuilder insuredDependentBuilder) {
         checkArgument(insuredDependentBuilder != null);
         this.companyName = insuredDependentBuilder.getCompanyName();
@@ -75,7 +77,8 @@ public class GHInsuredDependent {
         this.existingIllness = insuredDependentBuilder.getExistingIllness();
         this.minAgeEntry = insuredDependentBuilder.getMinAgeEntry();
         this.maxAgeEntry = insuredDependentBuilder.getMaxAgeEntry();
-        this.occupationClass=insuredDependentBuilder.getOccupationClass();
+        this.occupationClass = insuredDependentBuilder.getOccupationClass();
+        this.noOfAssured = insuredDependentBuilder.getNoOfAssured();
     }
 
     public static GHInsuredDependentBuilder getInsuredDependentBuilder(PlanId planId, String planCode, BigDecimal premiumAmount, BigDecimal sumAssured) {
