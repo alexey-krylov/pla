@@ -257,5 +257,13 @@ public class ILQuotationController {
         return Result.success("Email sent successfully");
     }
 
+    @RequestMapping(value = "/openemailquotation/{quotationId}", method = RequestMethod.GET)
+    public ModelAndView openEmailPage(@PathVariable("quotationId") String quotationId) {
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("pla/quotation/individuallife/emailQuotation");
+        modelAndView.addObject("mailContent", ilQuotationService.getPreScriptedEmail(quotationId));
+        return modelAndView;
+    }
+
 
 }

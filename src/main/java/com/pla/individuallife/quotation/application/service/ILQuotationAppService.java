@@ -1,6 +1,7 @@
 package com.pla.individuallife.quotation.application.service;
 
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import com.pla.core.domain.model.CoverageName;
 import com.pla.core.domain.model.agent.AgentId;
 import com.pla.core.domain.model.plan.premium.Premium;
@@ -19,15 +20,20 @@ import com.pla.sharedkernel.identifier.PlanId;
 import com.pla.sharedkernel.identifier.QuotationId;
 import com.pla.sharedkernel.util.PDFGeneratorUtils;
 import net.sf.jasperreports.engine.JRException;
+import org.apache.velocity.app.VelocityEngine;
 import org.joda.time.LocalDate;
 import org.joda.time.Years;
+import org.nthdimenzion.common.AppConstants;
 import org.nthdimenzion.presentation.AppUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.ui.velocity.VelocityEngineUtils;
 
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.*;
+
+import static org.nthdimenzion.utils.UtilValidator.isEmpty;
 
 /**
  * Created by Karunakar on 5/13/2015.
@@ -41,6 +47,9 @@ public class ILQuotationAppService {
     private IPremiumCalculator premiumCalculator;
 
     private PremiumFinder premiumFinder;
+
+    @Autowired
+    private VelocityEngine velocityEngine;
 
     @Autowired
     private PlanFinder planFinder;
@@ -205,5 +214,23 @@ public class ILQuotationAppService {
         agentDetailDto.setAgentMobileNumber(agentDetail.get("mobileNumber") != null ? (String) agentDetail.get("mobileNumber") : "");
         agentDetailDto.setAgentSalutation(agentDetail.get("title") != null ? (String) agentDetail.get("title") : "");
         return agentDetailDto;
+    }
+
+    public ILQuotationMailDto getPreScriptedEmail(String quotationId) {
+        ILQuotationDto ilQuotationDto = ilQuotationFinder.getQuotationById(quotationId);
+        String subject = "PLA Insurance - Individual Life - Quotation ID : " + ilQuotationDto.getQuotationNumber();
+        String mailAddress = ilQuotationDto.getProposer().getEmailAddress();
+        mailAddress = isEmpty(mailAddress) ? "" : mailAddress;
+        Map<String, Object> emailContent = Maps.newHashMap();
+        emailContent.put("mailSentDate", ilQuotationDto.getQuotationGeneratedOn().toString(AppConstants.DD_MM_YYY_FORMAT));
+        emailContent.put("contactPersonName", ilQuotationDto.getProposer().getFirstName());
+        emailContent.put("proposerName", ilQuotationDto.getProposer().getFirstName());
+        Map<String, Object> emailContentMap = Maps.newHashMap();
+        emailContentMap.put("emailContent", emailContent);
+        String emailBody = VelocityEngineUtils.mergeTemplateIntoString(velocityEngine, "emailtemplate/individuallife/quotation/individuallifeQuotationTemplate.vm", emailContentMap);
+        ILQuotationMailDto dto = new ILQuotationMailDto(subject, emailBody, new String[]{mailAddress});
+        dto.setQuotationId(quotationId);
+        dto.setQuotationNumber(ilQuotationDto.getQuotationNumber());
+        return dto;
     }
 }

@@ -348,7 +348,7 @@ var viewILQuotationModule = (function () {
     }
 
     services.emailQuotation = function () {
-        window.location.href = '/pla/individuallife/quotation/emailQuotation/' + this.selectedItem;
+        window.location.href = '/pla/individuallife/quotation/openemailquotation/' + this.selectedItem;
     }
 
     services.modifyQuotation = function () {
