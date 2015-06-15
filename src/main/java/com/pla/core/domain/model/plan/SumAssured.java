@@ -56,7 +56,6 @@ public class SumAssured {
 
         checkArgument(minSumInsured != null, "Min Sum Insured Amount is required.");
         checkArgument(maxSumInsured != null, "Max Sum Insured Amount is required.");
-        checkArgument(multiplesOf % 10 == 0, "It has to be multiples of 10.");
         checkArgument(maxSumInsured.compareTo(minSumInsured) == 1, "Expected maxSumInsured > minSumInsured, but %s<%s", maxSumInsured, minSumInsured);
         checkArgument(maxSumInsured.compareTo(BigDecimal.ZERO) == 1,
                 "MinSumAssuredAmount greater than zero Expected, but got %d", minSumInsured);
@@ -65,7 +64,6 @@ public class SumAssured {
         checkArgument(maxSumInsured.compareTo(minSumInsured) == 1,
                 "MaxSumAssuredAmount>MinSumAssuredAmount Expected, but %d>%d",
                 maxSumInsured, minSumInsured);
-        checkArgument(multiplesOf % 10 == 0, " Not valid Multiples.");
         this.minSumInsured = minSumInsured;
         this.maxSumInsured = maxSumInsured;
         this.multiplesOf = multiplesOf;

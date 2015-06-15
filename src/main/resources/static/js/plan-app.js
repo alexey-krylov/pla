@@ -100,6 +100,7 @@ app.config(function ($routeProvider, $locationProvider) {
                             method: 'GET',
                             url: '/pla/core/plan/getPlanById/' + $route.current.params.planid
                         }).success(function (data) {
+                            console.log(' plan ' + JSON.stringify(data));
                             deferred.resolve(data);
                         }).error(function (msg) {
                             deferred.reject(msg);
@@ -612,16 +613,9 @@ app.controller('PlanSetupController', ['$scope', '$http', '$location', '$routePa
 
             $scope.createPlan = function () {
                 $scope.validationFailed = false;
-                $scope.plan.planDetail.withdrawalDate = null;
-                console.log('create plan withdrawal date ' + $scope.withdrawalDt);
-                if ($scope.withdrawalDt) {
-                    $scope.plan.planDetail.withdrawalDate = new moment($scope.withdrawalDt).format('DD/MM/YYYY');
-                }
-                $scope.plan.planDetail.launchDate = new moment($scope.launchDt).format('DD/MM/YYYY');
-                if ($scope.plan.planDetail.withdrawalDate == "Invalid date") {
-                    $scope.plan.planDetail.withdrawalDate = null;
-                }
-                console.log('$scope.plan.planId ' + $scope.plan.planId);
+
+                console.log('  create plan ' + JSON.stringify($scope.plan));
+
                 $http.post(angular.isUndefined($scope.plan.planId) ? '/pla/core/plan/create' : '/pla/core/plan/update', $scope.plan).
                     success(function (data, status, headers, config) {
                         $scope.plan.planId = data.id;
@@ -653,27 +647,6 @@ app.controller('PlanSetupController', ['$scope', '$http', '$location', '$routePa
                 $scope.withdrawalDateOpen = true;
 
             };
-
-            if ($scope.plan.planId) {
-                $scope.launchDt = new moment($scope.plan.planDetail.launchDate, 'YYYY-MM-DD').format('DD/MM/YYYY');
-                if ($scope.plan.planDetail.withdrawalDate) {
-                    $scope.withdrawalDt = new moment($scope.plan.planDetail.withdrawalDate, 'YYYY-MM-DD').format('DD/MM/YYYY');
-                }
-            }
-            console.log('Launch Date' + $scope.launchDt);
-            console.log('Withdrawal Date' + $scope.withdrawalDt);
-            /* $scope.$watch('launchDt', function (newVal) {
-                if (!angular.isUndefined(newVal) && angular.isDefined($scope.plan.planId)) {
-                    $scope.plan.planDetail.launchDate = moment(newVal).format('DD/MM/YYYY');
-                } else {
-                    $scope.plan.planDetail.launchDate = newVal;
-                }
-            });
-            $scope.$watch('withdrawalDt', function (newVal) {
-                if (!angular.isUndefined(newVal) && newVal != "Invalid Date") {
-                    $scope.plan.planDetail.withdrawalDate = moment(newVal).format('DD/MM/YYYY');
-                }
-             });*/
 
             $scope.isValid = function (formField) {
                 return formField.$dirty && formField.$invalid

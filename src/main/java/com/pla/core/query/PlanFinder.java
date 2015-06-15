@@ -97,8 +97,8 @@ public class PlanFinder {
         query.put("planId", planId);
         Plan _plan = mongoTemplate.findOne(new BasicQuery(query), Plan.class, "PLAN");
         Map plan = objectMapper.convertValue(_plan, Map.class);
-        covertSumAssuredToTags((Map) plan.get("sumAssured"));
 
+        covertSumAssuredToTags((Map) plan.get("sumAssured"));
         Map policyTerm = (Map) plan.get("policyTerm");
         convertTermToTags(policyTerm);
         Map premiumTerm = (Map) plan.get("premiumTerm");

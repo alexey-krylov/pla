@@ -65,7 +65,7 @@ public class PlanCommandHandler {
                 .withEndorsementTypes(dtl.getEndorsementTypes())
                 .withFreeLookPeriod(dtl.getFreeLookPeriod())
                 .withLaunchDate(dtl.getLaunchDate())
-                .withWithdrawalDate(dtl.getWithdrawalDate())
+
                 .withLineOfBusinessId(dtl.getLineOfBusinessId())
                 .withMaxEntryAge(dtl.getMaxEntryAge())
                 .withMinEntryAge(dtl.getMinEntryAge())
@@ -73,6 +73,9 @@ public class PlanCommandHandler {
                 .withPlanType(dtl.getPlanType())
                 .withSurrenderAfter(dtl.getSurrenderAfter())
                 .withFuneralCover(dtl.funeralCover);
+        if (dtl.getWithdrawalDate() != null) {
+            pdBuilder.withWithdrawalDate(dtl.getWithdrawalDate());
+        }
         PlanDetail pd = pdBuilder.build(false);
 
         Set<PlanCoverage> coverageSet = new HashSet<PlanCoverage>();

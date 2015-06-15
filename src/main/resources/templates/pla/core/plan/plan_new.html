@@ -136,7 +136,7 @@
                                            ng-required="{{plan.planId!=undefined}}"
                                            min-date="minDate"
                                            is-open="launchDateOpen"
-                                           ng-model="launchDt" name="launchDate" id='launchDate'/>
+                                           ng-model="plan.planDetail.launchDate" name="launchDate" id='launchDate'/>
                                     <span class="input-group-btn">
                                     <button type="button" class="btn btn-default btn-sm" ng-click="openLaunchDate($event)">
                                         <i class="glyphicon glyphicon-calendar"></i></button>
@@ -157,7 +157,7 @@
                                            is-open="withdrawalDateOpen"
                                            min-date="launchDt"
                                            datepicker-popup="" name="withdrawalDate"
-                                           ng-model="withdrawalDt" id='withdrawalDate'/>
+                                           ng-model="plan.planDetail.withdrawalDate" id='withdrawalDate'/>
                                     <span class="input-group-btn">
                                     <button type="button" class="btn btn-default btn-sm" ng-click="openWithdrawalDate($event)">
                                         <i class="glyphicon glyphicon-calendar"></i></button>

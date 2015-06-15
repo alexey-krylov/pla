@@ -5,7 +5,7 @@ import com.pla.sharedkernel.domain.model.EndorsementType;
 import com.pla.sharedkernel.domain.model.PlanType;
 import com.pla.sharedkernel.domain.model.Relationship;
 import com.pla.sharedkernel.identifier.LineOfBusinessEnum;
-import org.joda.time.LocalDate;
+import org.joda.time.DateTime;
 
 import java.util.Set;
 
@@ -18,8 +18,8 @@ public class PlanDetailBuilder {
     boolean taxApplicable;
     String planName;
     String planCode;
-    LocalDate launchDate;
-    LocalDate withdrawalDate;
+    DateTime launchDate;
+    DateTime withdrawalDate;
     int freeLookPeriod;
     int minEntryAge;
     int maxEntryAge;
@@ -41,12 +41,12 @@ public class PlanDetailBuilder {
         return this;
     }
 
-    public PlanDetailBuilder withLaunchDate(LocalDate launchDate) {
+    public PlanDetailBuilder withLaunchDate(DateTime launchDate) {
         this.launchDate = launchDate;
         return this;
     }
 
-    public PlanDetailBuilder withWithdrawalDate(LocalDate withdrawalDate) {
+    public PlanDetailBuilder withWithdrawalDate(DateTime withdrawalDate) {
         this.withdrawalDate = withdrawalDate;
         return this;
     }

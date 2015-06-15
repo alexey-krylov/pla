@@ -19,7 +19,7 @@ import lombok.Getter;
 import lombok.ToString;
 import org.axonframework.eventsourcing.annotation.AbstractAnnotatedAggregateRoot;
 import org.axonframework.eventsourcing.annotation.AggregateIdentifier;
-import org.joda.time.LocalDate;
+import org.joda.time.DateTime;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.Transient;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -340,7 +340,7 @@ public class Plan extends AbstractAnnotatedAggregateRoot<PlanId> {
 
     public void withdrawPlan() {
         this.status = PlanStatus.WITHDRAWN;
-        this.planDetail.setWithdrawalDate(LocalDate.now());
+        this.planDetail.setWithdrawalDate(DateTime.now());
     }
 
     public void markLaunched() {

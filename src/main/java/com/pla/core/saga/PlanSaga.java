@@ -12,7 +12,6 @@ import org.axonframework.saga.annotation.AbstractAnnotatedSaga;
 import org.axonframework.saga.annotation.SagaEventHandler;
 import org.axonframework.saga.annotation.StartSaga;
 import org.joda.time.DateTime;
-import org.joda.time.LocalDate;
 import org.nthdimenzion.axonframework.repository.GenericMongoRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -42,9 +41,8 @@ public class PlanSaga extends AbstractAnnotatedSaga {
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("Handling Plan Withdrawn Event .....", event);
         }
-        LocalDate withDrawnDate = event.getWithDrawlDate();
-        DateTime scheduleDateTime = withDrawnDate.toDateTimeAtStartOfDay();
-        eventScheduler.schedule(scheduleDateTime, new PlanExpireEvent(event.getPlanId()));
+        DateTime withDrawnDate = event.getWithDrawlDate();
+        eventScheduler.schedule(withDrawnDate, new PlanExpireEvent(event.getPlanId()));
     }
 
     @StartSaga
@@ -53,9 +51,8 @@ public class PlanSaga extends AbstractAnnotatedSaga {
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("Handling Plan Withdrawn Event .....", event);
         }
-        LocalDate launchDate = event.getLaunchDate();
-        DateTime scheduleDateTime = launchDate.toDateTimeAtStartOfDay();
-        eventScheduler.schedule(scheduleDateTime, new PlanLaunchEvent(event.getPlanId()));
+        DateTime launchDate = event.getLaunchDate();
+        eventScheduler.schedule(launchDate, new PlanLaunchEvent(event.getPlanId()));
     }
 
     @SagaEventHandler(associationProperty = "planId")

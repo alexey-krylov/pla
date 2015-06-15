@@ -9,7 +9,7 @@ import com.pla.sharedkernel.identifier.LineOfBusinessEnum;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.ToString;
-import org.joda.time.LocalDate;
+import org.joda.time.DateTime;
 import org.nthdimenzion.utils.UtilValidator;
 
 import java.util.Set;
@@ -29,8 +29,8 @@ public class PlanDetail {
     private static final String errorMessage = "Error in creating Plan: %s";
     String planName;
     String planCode;
-    LocalDate launchDate;
-    LocalDate withdrawalDate;
+    DateTime launchDate;
+    DateTime withdrawalDate;
     int freeLookPeriod = 15;
     int minEntryAge;
     int maxEntryAge;
@@ -62,7 +62,7 @@ public class PlanDetail {
 
         checkArgument(planDetailBuilder.launchDate != null, String.format(errorMessage, "Cannot create a Plan without Launch Date"));
         if (isNewPlan)
-        checkArgument(planDetailBuilder.launchDate.isAfter(LocalDate.now().minusDays(1)), String.format(errorMessage, "Cannot create a Plan with Launch Date with Past Date."));
+            checkArgument(planDetailBuilder.launchDate.isAfter(DateTime.now().minusDays(1)), String.format(errorMessage, "Cannot create a Plan with Launch Date with Past Date."));
 
         this.launchDate = planDetailBuilder.launchDate;
 
@@ -96,7 +96,7 @@ public class PlanDetail {
         return new PlanDetailBuilder();
     }
 
-    void setWithdrawalDate(LocalDate withdrawalDate) {
+    void setWithdrawalDate(DateTime withdrawalDate) {
         if (withdrawalDate != null) {
             checkArgument(withdrawalDate.isAfter(launchDate), String.format(errorMessage, "Withdrawal cannot be less than launchDate"));
             this.withdrawalDate = withdrawalDate;

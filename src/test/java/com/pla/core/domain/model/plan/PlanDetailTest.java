@@ -6,6 +6,7 @@ import com.pla.sharedkernel.domain.model.EndorsementType;
 import com.pla.sharedkernel.domain.model.PlanType;
 import com.pla.sharedkernel.domain.model.Relationship;
 import com.pla.sharedkernel.identifier.LineOfBusinessEnum;
+import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import org.junit.Test;
 
@@ -28,8 +29,8 @@ public class PlanDetailTest {
         PlanDetailBuilder builder = PlanDetail.builder();
         builder.withPlanName("Plan 1")
                 .withPlanCode("0001900")
-                .withLaunchDate(LocalDate.now().plusDays(10))
-                .withWithdrawalDate(LocalDate.now().plusDays(3))
+                .withLaunchDate(DateTime.now().plusDays(10))
+                .withWithdrawalDate(DateTime.now().plusDays(3))
                 .withMinEntryAge(21)
                 .withMaxEntryAge(60)
                 .withFreeLookPeriod(15)
@@ -44,8 +45,8 @@ public class PlanDetailTest {
 
     PlanDetail createPlanDetail() {
         PlanDetailBuilder builder = PlanDetail.builder();
-        LocalDate launchDate = LocalDate.now().plusDays(10);
-        LocalDate withdrawalDate = LocalDate.now().plusDays(30);
+        DateTime launchDate = DateTime.now().plusDays(10);
+        DateTime withdrawalDate = DateTime.now().plusDays(30);
         Set<Relationship> relationshipSet = new HashSet<>(Arrays.asList(Relationship.BROTHER, Relationship.DAUGHTER));
         PlanDetail planDetail = builder.withPlanName("Plan 1")
                 .withPlanCode("0001900")

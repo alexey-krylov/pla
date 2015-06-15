@@ -5,7 +5,7 @@ import com.pla.core.domain.exception.PlanValidationException;
 import com.pla.sharedkernel.domain.model.*;
 import com.pla.sharedkernel.identifier.CoverageId;
 import com.pla.sharedkernel.identifier.LineOfBusinessEnum;
-import org.joda.time.LocalDate;
+import org.joda.time.DateTime;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -29,8 +29,8 @@ public class PlanTest {
     @Before
     public void setUp() {
         PlanDetailBuilder builder = PlanDetail.builder();
-        LocalDate launchDate = LocalDate.now().plusDays(10);
-        LocalDate withdrawalDate = LocalDate.now().plusDays(30);
+        DateTime launchDate = DateTime.now().plusDays(10);
+        DateTime withdrawalDate = DateTime.now().plusDays(30);
         Set<Relationship> relationshipSet = new HashSet<>(Arrays.asList(Relationship.BROTHER, Relationship.DAUGHTER));
 
         planDetail = builder.withPlanName("Plan 1")

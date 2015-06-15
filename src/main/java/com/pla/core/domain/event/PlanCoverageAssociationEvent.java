@@ -8,7 +8,7 @@ import com.pla.sharedkernel.identifier.CoverageId;
 import com.pla.sharedkernel.identifier.LineOfBusinessEnum;
 import com.pla.sharedkernel.identifier.PlanId;
 import lombok.Getter;
-import org.joda.time.LocalDate;
+import org.joda.time.DateTime;
 
 import java.util.List;
 import java.util.Map;
@@ -24,14 +24,14 @@ public class PlanCoverageAssociationEvent {
     private final LineOfBusinessEnum lineOfBusinessId;
     private final ClientType clientType;
     private final PlanType planType;
-    private final LocalDate launchDate;
-    private final LocalDate withdrawalDate;
+    private final DateTime launchDate;
+    private final DateTime withdrawalDate;
     private final boolean funeralCover;
 
     private final Map<CoverageType, Map<CoverageId, List<BenefitId>>> coverageAndBenefits;
 
     public PlanCoverageAssociationEvent(PlanId planId, String planName, String planCode, LineOfBusinessEnum lineOfBusinessId,
-                                        ClientType clientType, PlanType planType, LocalDate launchDate, LocalDate withdrawalDate, boolean funeralCover,
+                                        ClientType clientType, PlanType planType, DateTime launchDate, DateTime withdrawalDate, boolean funeralCover,
                                         Map<CoverageType, Map<CoverageId, List<BenefitId>>> coverageAndBenefits) {
         this.planId = planId;
         this.planName = planName;
