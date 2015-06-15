@@ -42,7 +42,7 @@ import static org.nthdimenzion.presentation.AppUtils.getLoggedInUserDetail;
  */
 @Controller
 @RequestMapping(value = "/individuallife/quotation")
-public class IndividualLifeQuotationController {
+public class ILQuotationController {
 
     @Autowired
     private CommandGateway commandGateway;
@@ -115,7 +115,7 @@ public class IndividualLifeQuotationController {
     @RequestMapping(value = "/createquotation", method = RequestMethod.POST)
     @ApiOperation(httpMethod = "POST", value = "Create Individual Life Quotation")
     @ResponseBody
-    public Result createQuotation(@RequestBody CreateILQuotationCommand createILQuotationCommand, BindingResult bindingResult, HttpServletRequest request) {
+    public Result createQuotation(@RequestBody ILCreateQuotationCommand createILQuotationCommand, BindingResult bindingResult, HttpServletRequest request) {
         if (bindingResult.hasErrors()) {
             return Result.failure("Create quotation data is not valid", bindingResult.getAllErrors());
         }
@@ -159,7 +159,7 @@ public class IndividualLifeQuotationController {
 
     @RequestMapping(value = "/updatewithproposerdetail", method = RequestMethod.POST)
     @ResponseBody
-    public Result updateQuotationWithProposerDetail(@RequestBody UpdateILQuotationWithProposerCommand updateILQuotationWithProposerCommand, BindingResult bindingResult, HttpServletRequest request) {
+    public Result updateQuotationWithProposerDetail(@RequestBody ILUpdateQuotationWithProposerCommand updateILQuotationWithProposerCommand, BindingResult bindingResult, HttpServletRequest request) {
         if (bindingResult.hasErrors()) {
             return Result.failure("Update quotation proposer data is not valid", bindingResult.getAllErrors());
         }
@@ -174,7 +174,7 @@ public class IndividualLifeQuotationController {
 
     @RequestMapping(value = "/updatewithassureddetail", method = RequestMethod.POST)
     @ResponseBody
-    public Result updateQuotationWithAssuredDetail(@RequestBody UpdateILQuotationWithAssuredCommand updateILQuotationWithAssuredCommand, BindingResult bindingResult, HttpServletRequest request) {
+    public Result updateQuotationWithAssuredDetail(@RequestBody ILUpdateQuotationWithAssuredCommand updateILQuotationWithAssuredCommand, BindingResult bindingResult, HttpServletRequest request) {
         if (bindingResult.hasErrors()) {
             return Result.failure("Update quotation Assured data is not valid", bindingResult.getAllErrors());
         }
@@ -189,7 +189,7 @@ public class IndividualLifeQuotationController {
 
     @RequestMapping(value = "/updatewithplandetail", method = RequestMethod.POST)
     @ResponseBody
-    public Result updateQuotationWithPlanDetail(@RequestBody UpdateILQuotationWithPlanCommand updateILQuotationWithPlanCommand, BindingResult bindingResult, HttpServletRequest request) {
+    public Result updateQuotationWithPlanDetail(@RequestBody ILUpdateQuotationWithPlanCommand updateILQuotationWithPlanCommand, BindingResult bindingResult, HttpServletRequest request) {
         if (bindingResult.hasErrors()) {
             return Result.failure("Update quotation Plan details data is not valid", bindingResult.getAllErrors());
         }

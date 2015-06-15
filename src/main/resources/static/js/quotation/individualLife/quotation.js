@@ -228,8 +228,10 @@
                             isAssuredTheProposer: false
                         }))
                         .success(function (data) {
-                            if (data.id)
+                            if (data.id) {
                                 $location.path('/edit/' + data.id);
+                                $scope.quotationId = data.id;
+                                }
                         });
                 };
 
@@ -346,7 +348,7 @@ var viewILQuotationModule = (function () {
     }
 
     services.emailQuotation = function () {
-        window.location.href = '/pla/individuallife/quotation/openemailquotation/' + this.selectedItem;
+        window.location.href = '/pla/individuallife/quotation/emailQuotation/' + this.selectedItem;
     }
 
     services.modifyQuotation = function () {

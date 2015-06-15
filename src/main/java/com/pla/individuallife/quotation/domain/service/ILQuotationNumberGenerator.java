@@ -29,7 +29,7 @@ public class ILQuotationNumberGenerator {
         String currentDateInString = LocalDate.now().toString(DateTimeFormat.forPattern("dd/MM/yyyy"));
         String month = currentDateInString.substring(3, 5).trim();
         String year = currentDateInString.substring(8, 10).trim();
-        String quotationNumber = "5-2" + quotationSequence + "-" + month + year;
+        String quotationNumber = "5-2-" + quotationSequence + "-" + month + year;
         return quotationNumber;
     }
 }

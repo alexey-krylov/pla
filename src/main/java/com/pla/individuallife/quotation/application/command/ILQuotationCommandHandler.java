@@ -52,7 +52,7 @@ public class ILQuotationCommandHandler {
     }
 
     @CommandHandler
-    public QuotationId createQuotation(CreateILQuotationCommand cmd) {
+    public QuotationId createQuotation(ILCreateQuotationCommand cmd) {
         ILQuotationProcessor quotationProcessor = ILQuotationRoleAdapter.userToQuotationProcessor(cmd.getUserDetails());
         QuotationId quotationId = new QuotationId(idGenerator.nextId());
         ProposedAssured proposedAssured = ProposedAssured.proposedAssuredBuilder()
@@ -67,7 +67,7 @@ public class ILQuotationCommandHandler {
     }
 
     @CommandHandler
-    public QuotationId updateProposerDetail(UpdateILQuotationWithProposerCommand cmd) {
+    public QuotationId updateProposerDetail(ILUpdateQuotationWithProposerCommand cmd) {
         ILQuotation quotation = quotationRepository.findOne(new QuotationId(cmd.getQuotationId()));
         ILQuotationProcessor quotationProcessor = ILQuotationRoleAdapter.userToQuotationProcessor(cmd.getUserDetails());
         ProposerDto dto = cmd.getProposerDto();
@@ -89,7 +89,7 @@ public class ILQuotationCommandHandler {
     }
 
     @CommandHandler
-    public QuotationId updateProposedAssuredDetail(UpdateILQuotationWithAssuredCommand cmd) {
+    public QuotationId updateProposedAssuredDetail(ILUpdateQuotationWithAssuredCommand cmd) {
 
         ILQuotation quotation = quotationRepository.findOne(new QuotationId(cmd.getQuotationId()));
         ILQuotationProcessor quotationProcessor = ILQuotationRoleAdapter.userToQuotationProcessor(cmd.getUserDetails());
@@ -123,7 +123,7 @@ public class ILQuotationCommandHandler {
     }
 
     @CommandHandler
-    public QuotationId updatePlanDetail(UpdateILQuotationWithPlanCommand cmd) {
+    public QuotationId updatePlanDetail(ILUpdateQuotationWithPlanCommand cmd) {
         ILQuotation quotation = quotationRepository.findOne(new QuotationId(cmd.getQuotationId()));
         ILQuotationProcessor quotationProcessor = ILQuotationRoleAdapter.userToQuotationProcessor(cmd.getUserDetails());
         PlanDetailDto dto = cmd.getPlanDetailDto();
