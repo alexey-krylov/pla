@@ -49,14 +49,6 @@ public class SumAssuredUnitTest {
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void givenMinAndMaxInsured_whenTheMultipleOfValueIsOtherThanMultiplesOf10_thenItShouldThrowAnException(){
-        int multiplesOf = 25;
-        SumAssured sumAssured = new SumAssured(minSumInsured,maxSumInsured,multiplesOf);
-        assertNotNull(sumAssured);
-
-    }
-
-    @Test(expected = IllegalArgumentException.class)
     public void givenMinAndMaxInsured_whenTheMinSumInsuredIsGreaterThanMaxSumInsured_thenItShouldThrowAnException(){
         int multiplesOf = 20;
         BigDecimal minSumInsured = new BigDecimal(40);

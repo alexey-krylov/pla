@@ -40,8 +40,8 @@ public class AgentFinder {
     public static final String FIND_AGENT_PLAN_QUERY = "SELECT agent_id AS agentId,plan_id AS planId FROM `agent_authorized_plan`";
 
     public static final String SEARCH_AGENT_BY_PLAN_LOB = "SELECT A.*,c.line_of_business FROM AGENT A JOIN agent_authorized_plan b " +
-            "ON A.`agent_id`=B.`agent_id` JOIN plan_coverage_benefits_assoc C " +
-            "ON B.`plan_id`=C.`plan_id` where c.line_of_business=:lineOfBusiness and A.agent_status='ACTIVE'";
+            " ON A.`agent_id`=B.`agent_id` JOIN plan_coverage_benefits_assoc C " +
+            " ON B.`plan_id`=C.`plan_id` where c.line_of_business=:lineOfBusiness and A.agent_status='ACTIVE' group by A.agent_id";
 
     /**
      * Find all the Plans by Agent Id and for a line of business.

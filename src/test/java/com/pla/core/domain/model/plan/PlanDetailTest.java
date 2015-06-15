@@ -7,7 +7,6 @@ import com.pla.sharedkernel.domain.model.PlanType;
 import com.pla.sharedkernel.domain.model.Relationship;
 import com.pla.sharedkernel.identifier.LineOfBusinessEnum;
 import org.joda.time.DateTime;
-import org.joda.time.LocalDate;
 import org.junit.Test;
 
 import java.util.Arrays;
@@ -68,8 +67,8 @@ public class PlanDetailTest {
 
     @Test
     public void should_create_plan_detail() {
-        LocalDate launchDate = LocalDate.now().plusDays(10);
-        LocalDate withdrawalDate = LocalDate.now().plusDays(30);
+        DateTime launchDate = DateTime.now().plusDays(10);
+        DateTime withdrawalDate = DateTime.now().plusDays(30);
         Set<Relationship> relationshipSet = new HashSet<>(Arrays.asList(Relationship.BROTHER, Relationship.DAUGHTER));
         PlanDetail planDetail = createPlanDetail();
         assertFalse(planDetail.isTaxApplicable());
