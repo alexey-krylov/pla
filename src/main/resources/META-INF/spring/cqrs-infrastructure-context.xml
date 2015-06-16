@@ -57,12 +57,12 @@
             <bean class="org.axonframework.saga.spring.SpringResourceInjector"/>
         </property>
     </bean>
-    <axon:jpa-saga-repository id="jpaSagaRepository"/>
 
-    <axon:saga-manager id="sagaManager" saga-repository="sagaRepository" event-bus="eventBus">
-        <axon:async executor="taskExecutor" transaction-manager="transactionManager"/>
+    <axon:saga-manager id="sagaManager" saga-repository="sagaRepository">
+        <!--<axon:async executor="taskExecutor" transaction-manager="transactionManager"/>-->
         <axon:types>
-            com.pla.core.saga.PlanSaga,com.pla.grouplife.quotation.saga.GroupLifeQuotationSaga
+            com.pla.core.saga.PlanSaga,com.pla.grouplife.quotation.saga.GroupLifeQuotationSaga,
+            com.pla.individuallife.quotation.saga.ILQuotationARSaga
         </axon:types>
     </axon:saga-manager>
 
@@ -84,8 +84,11 @@
                                 aggregate-type="com.pla.grouphealth.quotation.domain.model.GroupHealthQuotation"
                                 mongo-template="mongoTemplate"/>
 
-    <axon:jpa-repository id="ilQuotationJpaRepository"
+    <axon:jpa-repository id="ilQuotationARRepository"
                          aggregate-type="com.pla.individuallife.quotation.domain.model.ILQuotationAR"
+                         event-bus="eventBus"/>
+    <axon:jpa-repository id="ilQuotationRepository"
+                         aggregate-type="com.pla.individuallife.quotation.domain.model.ILQuotation"
                          event-bus="eventBus"/>
 
     <extension:mongo-repository id="ilProposalMongoRepository"

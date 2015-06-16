@@ -77,7 +77,7 @@ public class ILQuotationFinder {
         PlanDetailDto planDetailDto = new PlanDetailDto();
         dto.setAgentId(quotation.getAgentId().toString());
         dto.setPlanId(quotation.getPlanDetail().getPlanId().toString());
-        dto.setParentQuotationId(quotation.getParentQuotationId());
+        dto.setParentQuotationId(quotation.getQuotationARId());
         dto.setVersionNumber(quotation.getVersionNumber());
         dto.setQuotationGeneratedOn(quotation.getGeneratedOn());
         dto.setQuotationNumber(quotation.getQuotationNumber());

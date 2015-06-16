@@ -1,10 +1,15 @@
 package com.pla.individuallife.quotation.domain.model;
 
+import com.google.common.base.Preconditions;
 import com.pla.core.domain.model.agent.AgentId;
 import com.pla.grouplife.quotation.domain.model.IQuotation;
+import com.pla.individuallife.quotation.domain.event.ILQuotationGeneratedEvent;
+import com.pla.individuallife.quotation.domain.event.ILQuotationVersionEvent;
 import com.pla.sharedkernel.identifier.PlanId;
 import com.pla.sharedkernel.identifier.QuotationId;
 import lombok.Getter;
+import org.axonframework.domain.AbstractAggregateRoot;
+import org.axonframework.eventsourcing.annotation.AggregateIdentifier;
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
 import org.hibernate.annotations.Type;
@@ -23,9 +28,10 @@ import static org.nthdimenzion.utils.UtilValidator.isNotEmpty;
 @Entity
 @Table(name = "individual_life_quotation")
 @Getter
-public class ILQuotation implements IQuotation {
+public class ILQuotation extends AbstractAggregateRoot<QuotationId> implements IQuotation {
 
 
+    @AggregateIdentifier
     @EmbeddedId
     private QuotationId quotationId;
 
@@ -60,8 +66,11 @@ public class ILQuotation implements IQuotation {
     @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentLocalDate")
     private LocalDate generatedOn;
 
+    @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentLocalDate")
+    private LocalDate sharedOn;
+
     @Column(name = "parent_quotation_id")
-    private String parentQuotationId;
+    private String quotationARId;
 
     @Embedded
     private PlanDetail planDetail;
@@ -96,12 +105,8 @@ public class ILQuotation implements IQuotation {
         this.ilQuotationStatus = ilQuotationStatus;
         this.versionNumber = versionNumber;
         this.quotationNumber = quotationNumber;
-        this.parentQuotationId = quotationARId;
+        this.quotationARId = quotationARId;
         this.planDetail = new PlanDetail(planId, null, null, null);
-    }
-
-    private ILQuotation(ILQuotationProcessor quotationCreator, String quotationNumber, QuotationId quotationId) {
-
     }
 
     public static ILQuotation createWithBasicDetail(ILQuotationProcessor quotationCreator, String quotationARId, String quotationNumber, QuotationId quotationId, AgentId agentId, ProposedAssured proposedAssured, PlanId planid) {
@@ -125,7 +130,8 @@ public class ILQuotation implements IQuotation {
         }
     }
 
-    public ILQuotation updateWithPlan(ILQuotationProcessor quotationProcessor, PlanDetail planDetail, Set<RiderDetail> riders) {
+    public ILQuotation updateWithPlanAndRider(ILQuotationProcessor quotationProcessor, PlanDetail planDetail, Set<RiderDetail> riders) {
+        checkArgument(quotationProcessor != null, " The user need to be an Quotation Processor.");
         checkInvariant();
         this.planDetail = planDetail;
         if (riders != null)
@@ -150,8 +156,10 @@ public class ILQuotation implements IQuotation {
 
     @Override
     public void generateQuotation(LocalDate generatedOn) {
+        Preconditions.checkArgument(ILQuotationStatus.DRAFT == this.ilQuotationStatus, " Quotation in Draft state can only be generated.");
         this.ilQuotationStatus = ILQuotationStatus.GENERATED;
         this.generatedOn = generatedOn;
+        registerEvent(new ILQuotationGeneratedEvent(this.quotationId));
     }
 
     @Override
@@ -171,11 +179,12 @@ public class ILQuotation implements IQuotation {
         newQuotation.versionNumber = versionNumber;
         newQuotation.ilQuotationStatus = ILQuotationStatus.DRAFT;
         newQuotation.quotationNumber = quotationNumber;
-        newQuotation.parentQuotationId = this.parentQuotationId;
+        newQuotation.quotationARId = this.quotationARId;
         newQuotation.proposer = this.proposer;
         newQuotation.agentId = this.agentId;
         newQuotation.proposedAssured = this.proposedAssured;
         newQuotation.planDetail = this.planDetail;
+        registerEvent(new ILQuotationVersionEvent(quotationARId, this.quotationId));
         return newQuotation;
     }
 
@@ -190,4 +199,12 @@ public class ILQuotation implements IQuotation {
         return proposer;
     }
 
+    public void assignVersion(int versionNumber) {
+        this.versionNumber = versionNumber;
+    }
+
+    @Override
+    public QuotationId getIdentifier() {
+        return this.getQuotationId();
+    }
 }

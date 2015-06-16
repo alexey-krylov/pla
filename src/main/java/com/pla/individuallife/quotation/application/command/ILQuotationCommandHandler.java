@@ -8,7 +8,6 @@ import com.pla.individuallife.quotation.presentation.dto.PlanDetailDto;
 import com.pla.individuallife.quotation.presentation.dto.ProposedAssuredDto;
 import com.pla.individuallife.quotation.presentation.dto.ProposerDto;
 import com.pla.individuallife.quotation.presentation.dto.RiderDetailDto;
-import com.pla.publishedlanguage.contract.IPremiumCalculator;
 import com.pla.sharedkernel.identifier.PlanId;
 import com.pla.sharedkernel.identifier.QuotationId;
 import org.axonframework.commandhandling.annotation.CommandHandler;
@@ -16,7 +15,6 @@ import org.axonframework.repository.Repository;
 import org.joda.time.LocalDate;
 import org.nthdimenzion.object.utils.IIdGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.jpa.repository.support.SimpleJpaRepository;
 import org.springframework.stereotype.Component;
 
@@ -34,14 +32,15 @@ import java.util.Set;
 @Component
 public class ILQuotationCommandHandler {
 
-    private Repository<ILQuotationAR> quotationARRepository;
+    private Repository<ILQuotationAR> ilQuotationARRepository;
     private IIdGenerator idGenerator;
     private ILQuotationService quotationService;
     private SimpleJpaRepository<ILQuotation, QuotationId> quotationRepository;
 
     @Autowired
-    public ILQuotationCommandHandler(@Qualifier(value = "ilQuotationJpaRepository") Repository<ILQuotationAR> quotationRepository, ILQuotationService quotationService, IPremiumCalculator premiumCalculator, IIdGenerator idGenerator) {
-        this.quotationARRepository = quotationRepository;
+    public ILQuotationCommandHandler(Repository<ILQuotationAR> ilQuotationARRepository, ILQuotationService quotationService,
+                                     IIdGenerator idGenerator) {
+        this.ilQuotationARRepository = ilQuotationARRepository;
         this.quotationService = quotationService;
         this.idGenerator = idGenerator;
     }
@@ -62,7 +61,7 @@ public class ILQuotationCommandHandler {
                 .withTitle(cmd.getTitle()).build();
         ILQuotationAR quotationAR = quotationService.createQuotation(quotationProcessor, quotationId, new AgentId(cmd.getAgentId()),
                 proposedAssured, new PlanId(cmd.getPlanId()));
-        quotationARRepository.add(quotationAR);
+        ilQuotationARRepository.add(quotationAR);
         return quotationId;
     }
 
@@ -75,8 +74,8 @@ public class ILQuotationCommandHandler {
                 dto.getDateOfBirth(), dto.getGender(), dto.getMobileNumber(), dto.getEmailAddress());
 
         if (quotation.requireVersioning()) {
-            String quotationARId = quotation.getParentQuotationId();
-            ILQuotationAR quotationAR = quotationARRepository.load(quotationARId);
+            String quotationARId = quotation.getQuotationARId();
+            ILQuotationAR quotationAR = ilQuotationARRepository.load(quotationARId);
             QuotationId newQuotationId = quotationService.updateProposerWithVersion(quotationAR, quotation, proposer,
                     cmd.getUserDetails());
             return newQuotationId;
@@ -106,8 +105,8 @@ public class ILQuotationCommandHandler {
                 .withSurname(dto.getSurname()).build();
 
         if (quotation.requireVersioning()) {
-            String quotationARId = quotation.getParentQuotationId();
-            ILQuotationAR quotationAR = quotationARRepository.load(quotationARId);
+            String quotationARId = quotation.getQuotationARId();
+            ILQuotationAR quotationAR = ilQuotationARRepository.load(quotationARId);
             QuotationId newQuotationId = quotationService.updateAssuredDetailWithVersion(quotationProcessor,
                     quotationAR, quotation, proposedAssured,
                     cmd.isAssuredTheProposer());
@@ -137,15 +136,15 @@ public class ILQuotationCommandHandler {
             }
         }
         if (quotation.requireVersioning()) {
-            String quotationARId = quotation.getParentQuotationId();
-            ILQuotationAR quotationAR = quotationARRepository.load(quotationARId);
+            String quotationARId = quotation.getQuotationARId();
+            ILQuotationAR quotationAR = ilQuotationARRepository.load(quotationARId);
             QuotationId newQuotationId = quotationService.updateWithPlanWithVersion(quotationProcessor,
                     quotationAR, quotation, planDetail,
                     riders);
             return newQuotationId;
 
         } else {
-            quotation.updateWithPlan(quotationProcessor, planDetail, riders);
+            quotation.updateWithPlanAndRider(quotationProcessor, planDetail, riders);
             quotationRepository.save(quotation);
             return new QuotationId(cmd.getQuotationId());
         }

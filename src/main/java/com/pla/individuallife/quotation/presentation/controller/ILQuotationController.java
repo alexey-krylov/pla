@@ -241,6 +241,14 @@ public class ILQuotationController {
         return modelAndView;
     }
 
+    //TODO
+
+    /**
+     * Quotation Shared with Client (This status should be updated on first click for print/email Quotation and the date should also be updated.
+     * Subsequent clicks should have no impact the Status or the Date
+     */
+
+
     @RequestMapping(value = "/emailQuotation", method = RequestMethod.POST)
     @ResponseBody
     public Result emailQuotation(@RequestBody ILQuotationMailDto mailDto, BindingResult bindingResult) {

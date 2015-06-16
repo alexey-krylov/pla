@@ -5,6 +5,7 @@ import com.pla.core.domain.model.agent.AgentId;
 import com.pla.individuallife.quotation.domain.model.*;
 import com.pla.sharedkernel.identifier.PlanId;
 import com.pla.sharedkernel.identifier.QuotationId;
+import org.axonframework.repository.Repository;
 import org.nthdimenzion.ddd.domain.annotations.DomainService;
 import org.nthdimenzion.object.utils.IIdGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +24,9 @@ public class ILQuotationService {
     private ILQuotationNumberGenerator ilQuotationNumberGenerator;
     @Autowired
     private IIdGenerator idGenerator;
+
+    @Autowired
+    private Repository<ILQuotation> ilQuotationRepository;
 
     /**
      * @param quotationProcessor
@@ -43,7 +47,8 @@ public class ILQuotationService {
                 new ILQuotation(quotationProcessor, quotationARId,
                         quotationNumber, quotationId, agentId, proposedAssured, planId,
                         ILQuotationStatus.DRAFT, 0);
-        ILQuotationAR quotationAR = new ILQuotationAR(quotationARId, quotation);
+        ilQuotationRepository.add(quotation);
+        ILQuotationAR quotationAR = new ILQuotationAR(quotationARId);
         return quotationAR;
     }
 
@@ -60,8 +65,11 @@ public class ILQuotationService {
         Preconditions.checkState(quotation.requireVersioning());
         QuotationId newQuotationId = new QuotationId(idGenerator.nextId());
         String quotationNumber = ilQuotationNumberGenerator.getQuotationNumber(ILQuotation.class);
-        ILQuotation newQuotation = quotationAR.nextVersion(quotationProcessor, quotation, newQuotationId, quotationNumber);
+
+        ILQuotation newQuotation = quotation.cloneQuotation(quotationProcessor, newQuotationId,
+                quotationNumber, -1);
         newQuotation.updateWithProposer(quotationProcessor, proposer);
+        ilQuotationRepository.add(newQuotation);
         return newQuotationId;
     }
 
@@ -82,7 +90,8 @@ public class ILQuotationService {
         Preconditions.checkState(quotation.requireVersioning());
         QuotationId newQuotationId = new QuotationId(idGenerator.nextId());
         String quotationNumber = ilQuotationNumberGenerator.getQuotationNumber(ILQuotation.class);
-        ILQuotation newQuotation = quotationAR.nextVersion(quotationProcessor, quotation, newQuotationId, quotationNumber);
+        ILQuotation newQuotation = quotation.cloneQuotation(quotationProcessor, newQuotationId,
+                quotationNumber, -1);
         newQuotation.updateWithAssured(quotationProcessor, proposedAssured, isAssuredTheProposer);
         return newQuotationId;
     }
@@ -94,8 +103,10 @@ public class ILQuotationService {
         Preconditions.checkState(quotation.requireVersioning());
         QuotationId newQuotationId = new QuotationId(idGenerator.nextId());
         String quotationNumber = ilQuotationNumberGenerator.getQuotationNumber(ILQuotation.class);
-        ILQuotation newQuotation = quotationAR.nextVersion(quotationProcessor, quotation, newQuotationId, quotationNumber);
-        newQuotation.updateWithPlan(quotationProcessor, planDetail, riders);
+        ILQuotation newQuotation = quotation.cloneQuotation(quotationProcessor, newQuotationId,
+                quotationNumber, -1);
+        newQuotation.updateWithPlanAndRider(quotationProcessor, planDetail, riders);
+        ilQuotationRepository.add(newQuotation);
         return newQuotationId;
     }
 
