@@ -139,6 +139,8 @@ public class ILQuotationAppService {
 
         //TODO Do not call this modal. As this is already factored.
         List<ComputedPremiumDto> computedPremiums1 = premiumCalculator.calculateModalPremium(new BasicPremiumDto(PremiumFrequency.ANNUALLY, totalPremium));
+        premiumDetailDto.setPlanName(planFinder.getPlanName(new PlanId(quotation.get("PLANID").toString())));
+        premiumDetailDto.setAnnualPremium(totalPremium);
         premiumDetailDto.setMonthlyPremium(ComputedPremiumDto.getMonthlyPremium(computedPremiums1));
         premiumDetailDto.setQuarterlyPremium(ComputedPremiumDto.getQuarterlyPremium(computedPremiums1));
         premiumDetailDto.setSemiannualPremium(ComputedPremiumDto.getSemiAnnualPremium(computedPremiums1));

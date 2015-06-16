@@ -442,6 +442,11 @@
                 <ng-form name="step5" novalidate="">
                     <div class="row">
                         <div class="col-lg-6">
+                            <div class="form-group">
+                                <label>{{premiumData.planName}}</label>
+                                <input type="text" class="form-control input-sm" readonly="true"
+                                       ng-model="premiumData.planAnnualPremium"/>
+                            </div>
                             <div class="form-group" ng-repeat="rider in premiumData.riderPremiumDtos">
                                 <label>{{rider.coverageName.coverageName}}</label>
                                 <input type="text" class="form-control input-sm" readonly="true"
@@ -452,7 +457,7 @@
                             <div class="form-group">
                                 <label>Total Annual Premium</label>
                                 <input type="text" class="form-control input-sm" readonly="true"
-                                       ng-model="premiumData.planAnnualPremium"/>
+                                       ng-model="premiumData.annualPremium"/>
                             </div>
                             <div class="form-group">
                                 <label>Semi-Annual Premium</label>
