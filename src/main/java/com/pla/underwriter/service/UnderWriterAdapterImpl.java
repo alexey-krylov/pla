@@ -6,6 +6,7 @@ import com.pla.client.repository.ClientRepository;
 import com.pla.publishedlanguage.dto.ClientDocumentDto;
 import com.pla.publishedlanguage.dto.UnderWriterRoutingLevelDetailDto;
 import com.pla.publishedlanguage.underwriter.contract.IUnderWriterAdapter;
+import com.pla.sharedkernel.domain.model.ProcessType;
 import com.pla.sharedkernel.domain.model.RoutingLevel;
 import com.pla.sharedkernel.identifier.ClientId;
 import com.pla.underwriter.domain.model.*;
@@ -78,8 +79,24 @@ public class UnderWriterAdapterImpl implements IUnderWriterAdapter {
     *
     * */
     @Override
-    public List<ClientDocumentDto> getDocumentsForApproverApproval() {
-        return null;
+    public List<ClientDocumentDto> getDocumentsForApproverApproval(String clientId,ProcessType processType) {
+        List<Map<String,Object>> mandatoryDocument = underWriterFinder.findMandatoryDocumentByProcess(processType);
+        List<ClientDocumentDto> clientDocumentList =  mandatoryDocument.parallelStream().map(new Function<Map<String, Object>, String>() {
+            @Override
+            public String apply(Map<String, Object> mandatoryDocument) {
+                return (String) mandatoryDocument.get("documentCode");
+            }}).collect(Collectors.toList()).stream().map(new Function<String, ClientDocumentDto>() {
+            @Override
+            public ClientDocumentDto apply(String documentCode) {
+                return new ClientDocumentDto(documentCode, false);
+            }}).collect(Collectors.toList());
+        List<String> mandatoryDocumentByClientId = findDefinedMandatoryDocumentByClientId(clientId);
+        for (ClientDocumentDto clientDocumentDto : clientDocumentList){
+            if (mandatoryDocumentByClientId.contains(clientDocumentDto.getDocumentCode())){
+                clientDocumentDto.setOptional(true);
+            }
+        }
+        return clientDocumentList;
     }
 
     public RoutingLevel findRoutingLevel(UnderWriterRoutingLevelDetailDto underWriterRoutingLevelDetailDto) {
@@ -140,6 +157,20 @@ public class UnderWriterAdapterImpl implements IUnderWriterAdapter {
             public String apply(Map<String, Object> documentMap) {
                 Optional<Map.Entry<String, Object>> optionalClientDocument =  documentMap.entrySet().parallelStream().findAny();
                 return optionalClientDocument.isPresent()?optionalClientDocument.get().getValue()!=null?
+                        optionalClientDocument.get().getKey():null:null;
+            }
+        }).collect(Collectors.toList());
+        return documents;
+    }
+
+    private List<String> findDefinedMandatoryDocumentByClientId(String clientId){
+        Client client = clientRepository.findOne(new ClientId(clientId));
+        List<Map<String,Object>>  clientDocumentList =  client.findClientDocument();
+        List<String> documents =  clientDocumentList.parallelStream().map(new Function<Map<String,Object>, String>() {
+            @Override
+            public String apply(Map<String, Object> documentMap) {
+                Optional<Map.Entry<String, Object>> optionalClientDocument =  documentMap.entrySet().parallelStream().findAny();
+                return optionalClientDocument.isPresent()?optionalClientDocument.get().getValue()==null?
                         optionalClientDocument.get().getKey():null:null;
             }
         }).collect(Collectors.toList());

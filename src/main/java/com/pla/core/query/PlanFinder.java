@@ -73,7 +73,7 @@ public class PlanFinder {
     }
 
     public List<Map<String, Object>> findAllPlanForThymeleaf() {
-        List<Map<String, Object>> planList = namedParameterJdbcTemplate.queryForList("SELECT * FROM plan_coverage_benefits_assoc WHERE withdrawal_date >= NOW() OR withdrawal_date IS NULL GROUP BY plan_code ORDER BY plan_name,launch_date", EmptySqlParameterSource.INSTANCE);
+        List<Map<String, Object>> planList = namedParameterJdbcTemplate.queryForList("SELECT * FROM plan_coverage_benefit_assoc WHERE withdrawal_date >= NOW() OR withdrawal_date IS NULL GROUP BY plan_code ORDER BY plan_name,launch_date", EmptySqlParameterSource.INSTANCE);
         return planList;
     }
 

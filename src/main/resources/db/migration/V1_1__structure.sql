@@ -792,45 +792,6 @@ CREATE TABLE `designation` (
   PRIMARY KEY (`code`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-DROP TABLE IF EXISTS `plan_coverage_benefits_assoc`;
-CREATE TABLE `plan_coverage_benefits_assoc` (
-  `id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `plan_id` varchar(60) NOT NULL,
-  `coverage_id` varchar(255) NOT NULL,
-  `benefit_id` varchar(255) NOT NULL,
-  `optional` tinyint(1) DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  KEY `FK_PLAN_BENEFIT_ID` (`benefit_id`),
-  KEY `FK_PLAN_COVERAGE_ID` (`coverage_id`),
-  CONSTRAINT `FK_PLAN_BENEFIT_ID` FOREIGN KEY (`benefit_id`) REFERENCES `benefit` (`benefit_id`),
-  CONSTRAINT `FK_PLAN_COVERAGE_ID` FOREIGN KEY (`coverage_id`) REFERENCES `coverage` (`coverage_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8;
-
-ALTER TABLE `plan_coverage_benefits_assoc`
-  ADD COLUMN `plan_name` VARCHAR(100) NULL AFTER `plan_id`,
-  ADD COLUMN `plan_code` VARCHAR(10) NULL AFTER `plan_name`,
-  ADD COLUMN `launch_date` date NOT NULL AFTER `plan_code`,
-  ADD COLUMN `withdrawal_date` date AFTER `launch_date`,
-  ADD COLUMN `client_type` varchar(60) NOT NULL AFTER `withdrawal_date`,
-  ADD COLUMN `line_of_business` varchar(60) NOT NULL AFTER `client_type`,
-  ADD COLUMN `funeral_cover` tinyint(1) DEFAULT NULL,
-  ADD COLUMN `plan_status` varchar(60) DEFAULT NULL;
-
-DROP VIEW IF EXISTS `plan_coverage_benefit_assoc_view`;
-CREATE  VIEW `plan_coverage_benefit_assoc_view` AS
-  ( SELECT
-      plan_id                          planId,
-      plan_name                        planName,
-      plan_code                        planCode,
-      launch_date                      launchDate,
-      withdrawal_date                  withdrawalDate,
-      client_type                      clientType,
-      line_of_business                 lineOfBusinessId,
-      coverage_id                      coverageId,
-      benefit_id                       benefitId,
-      optional                         optional,
-      funeral_cover                    funeralCover
-    FROM plan_coverage_benefits_assoc ORDER BY plan_name,launch_date );
 
 DROP TABLE IF EXISTS `endorsement_type`;
 CREATE TABLE `endorsement_type` (
@@ -855,6 +816,7 @@ CREATE TABLE `individual_quotation_ar` (
 DROP TABLE IF EXISTS `individual_life_quotation`;
  CREATE TABLE `individual_life_quotation` (
   `quotation_id` varchar(255) NOT NULL,
+    `version` bigint(20) DEFAULT NULL,
   `agent_id` varchar(255) DEFAULT NULL,
   `generated_on` date DEFAULT NULL,
   `il_quotation_status` varchar(255) DEFAULT NULL,
@@ -889,7 +851,7 @@ DROP TABLE IF EXISTS `individual_life_quotation`;
   CONSTRAINT `FK_aiyhilehr449calfhsithdoo1` FOREIGN KEY (`parent_quotation_id`) REFERENCES `individual_quotation_ar` (`quotation_ar_id`)
 );
 
-DROP TABLE `individual_quotation_rider`;
+DROP TABLE IF EXISTS `individual_quotation_rider`;
 CREATE TABLE `individual_quotation_rider` (
   `quotation_id` varchar(255) NOT NULL,
   `cover_term` int(11) DEFAULT NULL,
@@ -1003,7 +965,8 @@ CONSTRAINT `FK_PLAN_BENEFIT_ID` FOREIGN KEY (`benefit_id`) REFERENCES `benefit` 
 CONSTRAINT `FK_PLAN_COVERAGE_ID` FOREIGN KEY (`coverage_id`) REFERENCES `coverage` (`coverage_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8;
 
-ALTER TABLE `plan_coverage_benefits_assoc`
+
+ALTER TABLE `plan_coverage_benefit_assoc`
 ADD COLUMN `plan_name` VARCHAR(100) NULL AFTER `plan_id`,
 ADD COLUMN `plan_code` VARCHAR(10) NULL AFTER `plan_name`,
 ADD COLUMN `launch_date` date NOT NULL AFTER `plan_code`,
@@ -1012,53 +975,21 @@ ADD COLUMN `client_type` varchar(60) NOT NULL AFTER `withdrawal_date`,
 ADD COLUMN `line_of_business` varchar(60) NOT NULL AFTER `client_type`,
 ADD COLUMN `funeral_cover` tinyint(1) DEFAULT NULL;
 
-DROP TABLE `individual_life_quotation`;
-CREATE TABLE `individual_life_quotation` (
-  `quotation_id` varchar(255) NOT NULL,
-  `last_event_sequence_number` bigint(20) DEFAULT NULL,
-  `version` bigint(20) DEFAULT NULL,
-  `agent_id` varchar(255) DEFAULT NULL,
-  `generated_on` tinyblob,
-  `il_quotation_status` varchar(255) DEFAULT NULL,
-  `is_assured_the_proposer` tinyint(1) DEFAULT '0',
-  `parent_quotation_id` varchar(255) DEFAULT NULL,
-  `plan_id` varchar(255) DEFAULT NULL,
-  `policy_term` int(11) DEFAULT NULL,
-  `premium_payment_term` int(11) DEFAULT NULL,
-  `sum_assured` decimal(19,2) DEFAULT NULL,
-  `date_of_birth` date DEFAULT NULL,
-  `email_address` varchar(255) DEFAULT NULL,
-  `first_name` varchar(255) DEFAULT NULL,
-  `gender` varchar(255) DEFAULT NULL,
-  `mobile_number` varchar(255) DEFAULT NULL,
-  `nrc_number` varchar(255) DEFAULT NULL,
-  `occupation` varchar(255) DEFAULT NULL,
-  `surname` varchar(255) DEFAULT NULL,
-  `title` varchar(255) DEFAULT NULL,
-  `proposer_date_of_birth` date DEFAULT NULL,
-  `proposer_email_address` varchar(255) DEFAULT NULL,
-  `proposed_first_name` varchar(255) DEFAULT NULL,
-  `proposer_gender` varchar(255) DEFAULT NULL,
-  `proposer_mobile_number` varchar(255) DEFAULT NULL,
-  `proposer_nrc_number` varchar(255) DEFAULT NULL,
-  `proposer_surname` varchar(255) DEFAULT NULL,
-  `proposer_title` varchar(255) DEFAULT NULL,
-  `quotation_creator` varchar(255) DEFAULT NULL,
-  `quotation_number` varchar(255) DEFAULT NULL,
-  `version_number` int(11) NOT NULL,
-  PRIMARY KEY (`quotation_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8
-
-DROP TABLE `individual_life_quotation_rider_details`;
-CREATE TABLE `individual_life_quotation_rider_details` (
-  `individual_life_quotation_quotationId` varchar(255) NOT NULL,
-  `cover_term` int(11) DEFAULT NULL,
-  `coverage_id` varchar(255) DEFAULT NULL,
-  `sum_assured` decimal(19,2) DEFAULT NULL,
-  `waiver_of_premium` int(11) DEFAULT NULL,
-  KEY `FK_g4ygn4up72w7vaw0466y0uhxv` (`individual_life_quotation_quotationId`),
-  CONSTRAINT `FK_g4ygn4up72w7vaw0466y0uhxv` FOREIGN KEY (`individual_life_quotation_quotationId`) REFERENCES `individual_life_quotation` (`quotation_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+DROP VIEW IF EXISTS `plan_coverage_benefit_assoc_view`;
+CREATE  VIEW `plan_coverage_benefit_assoc_view` AS
+  ( SELECT
+      plan_id                          planId,
+      plan_name                        planName,
+      plan_code                        planCode,
+      launch_date                      launchDate,
+      withdrawal_date                  withdrawalDate,
+      client_type                      clientType,
+      line_of_business                 lineOfBusinessId,
+      coverage_id                      coverageId,
+      benefit_id                       benefitId,
+      optional                         optional,
+      funeral_cover                    funeralCover
+    FROM plan_coverage_benefit_assoc ORDER BY plan_name,launch_date );
 
 CREATE OR REPLACE VIEW `plan_coverage` AS
 SELECT
@@ -1067,7 +998,7 @@ SELECT
   `b`.`coverage_name` AS `coverage_name`,
   `a`.`coverage_id`   AS `coverage_id`,
   `a`.`optional` AS `optional`
-FROM (`plan_coverage_benefits_assoc` `a`
+FROM (`plan_coverage_benefit_assoc` `a`
    JOIN `coverage` `b`
      ON (`a`.`coverage_id` = `b`.`coverage_id`));
 

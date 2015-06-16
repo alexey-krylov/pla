@@ -2,6 +2,7 @@ package com.pla.publishedlanguage.underwriter.contract;
 
 import com.pla.publishedlanguage.dto.ClientDocumentDto;
 import com.pla.publishedlanguage.dto.UnderWriterRoutingLevelDetailDto;
+import com.pla.sharedkernel.domain.model.ProcessType;
 import com.pla.sharedkernel.domain.model.RoutingLevel;
 
 import java.util.List;
@@ -15,7 +16,7 @@ public interface IUnderWriterAdapter {
 
     public List<ClientDocumentDto> getDocumentsForUnderWriterApproval(UnderWriterRoutingLevelDetailDto underWriterRoutingLevelDetailDto);
 
-    public List<ClientDocumentDto> getDocumentsForApproverApproval();
+    public List<ClientDocumentDto> getDocumentsForApproverApproval(String clientId,ProcessType processType);
 
 
 }

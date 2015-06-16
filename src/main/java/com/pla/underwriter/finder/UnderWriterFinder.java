@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.joda.JodaModule;
 import com.google.common.collect.Lists;
 import com.pla.publishedlanguage.dto.UnderWriterRoutingLevelDetailDto;
+import com.pla.sharedkernel.domain.model.ProcessType;
 import com.pla.sharedkernel.identifier.CoverageId;
 import com.pla.sharedkernel.identifier.UnderWriterDocumentId;
 import com.pla.underwriter.domain.model.UnderWriterDocument;
@@ -70,6 +71,9 @@ public class UnderWriterFinder {
     }
 
     public static final String FIND_ALL_DOCUMENT_APPROVED_BY_SERVICE_PROVIDER =  "SELECT documentName,documentCode FROM document_view WHERE isProvided = 'YES'";
+
+    public static final String findMandatoryDocumentByProcessType = "SELECT document_code documentCode FROM mandatory_document md INNER JOIN mandatory_documents ms " +
+            " ON md.document_id = ms.document_id WHERE md.process = :processType";
 
     public static final String FIND_DOCUMENT_DETAIL_BY_DOCUMENT_CODE =  "SELECT documentName,documentCode FROM document_view WHERE documentCode in(:documentIds)";
 
@@ -174,6 +178,11 @@ public class UnderWriterFinder {
         underWriterMap.put("effectiveFrom", underWriterMap.get("effectiveFrom")!=null?LocalDate.parse(underWriterMap.get("effectiveFrom").toString()).toString(AppConstants.DD_MM_YYY_FORMAT):null);
         underWriterMap.put("validTill", underWriterMap.get("validTill")!=null?LocalDate.parse(underWriterMap.get("validTill").toString()).toString(AppConstants.DD_MM_YYY_FORMAT):null);
         return underWriterMap;
+    }
+
+    public List<Map<String,Object>> findMandatoryDocumentByProcess(ProcessType processType){
+        SqlParameterSource sqlParameterSource = new MapSqlParameterSource("processType",processType.name());
+        return namedParameterJdbcTemplate.query(findMandatoryDocumentByProcessType,sqlParameterSource,new ColumnMapRowMapper());
     }
 }
 

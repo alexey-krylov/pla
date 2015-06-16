@@ -185,9 +185,9 @@ public class UnderWriterSetUpController {
         templateFileName = templateFileName.replaceAll("[\\s]*", "").trim();
         response.setHeader("content-disposition", "attachment; filename=" + templateFileName + "");
         OutputStream outputStream = response.getOutputStream();
-        HSSFWorkbook premiumTemplateWorkbook = underWriterService.generateUnderWriterExcelTemplate(underWritingRouterDto.getUnderWriterInfluencingFactors(),
+        HSSFWorkbook underWriterTemplateWorkbook = underWriterService.generateUnderWriterExcelTemplate(underWritingRouterDto.getUnderWriterInfluencingFactors(),
                 underWritingRouterDto.getPlanName());
-        premiumTemplateWorkbook.write(outputStream);
+        underWriterTemplateWorkbook.write(outputStream);
         outputStream.flush();
         outputStream.close();
         response.flushBuffer();
