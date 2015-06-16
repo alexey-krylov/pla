@@ -7,7 +7,7 @@
     function calculateAge(dob) {
         var age = moment().diff(new moment(new Date(dob)), 'years') + 1;
         return age;
-    };
+    }
 
     angular.module('individualQuotation', ['common', 'ngRoute', 'commonServices', 'ngMessages', 'angucomplete-alt'])
         .config(['datepickerPopupConfig', function (datepickerPopupConfig) {
@@ -92,7 +92,7 @@
             return {
                 restrict: 'E',
                 templateUrl: 'plan-premiumterm.tpl',
-                link: function (scope, element, attr, ctrl) {
+                link: function (scope) {
                     scope.$watch('planDetailDto.policyTerm', function (newval) {
                         if (newval)
                         scope.planDetailDto.premiumPaymentTerm = newval;
@@ -120,9 +120,9 @@
                 }]
             };
         })
-        .controller('QuotationController', ['$scope', '$http', '$route', '$location', '$bsmodal',
+        .controller('QuotationController', ['$scope', '$http', '$route', '$location', '$bsmodal', '$window',
             'globalConstants', 'getQueryParameter',
-            function ($scope, $http, $route, $location, $bsmodal, globalConstants, getQueryParameter) {
+            function ($scope, $http, $route, $location, $bsmodal, $window, globalConstants, getQueryParameter) {
 
             $scope.titleList = globalConstants.title;
             $scope.quotation = {};
@@ -139,42 +139,44 @@
 
                 $scope.quotationId = getQueryParameter('quotationId');
                 if ($scope.quotationId) {
-
                     $scope.uneditable = true;
-                    $http.get('/pla/individuallife/quotation/getquotation/' + $scope.quotationId).success(function (response, status, headers, config) {
-                        $scope.quotation = response;
-                        $scope.proposedAssured = $scope.quotation.proposedAssured || {};
-                        $scope.proposer = $scope.quotation.proposer || {};
-                        $scope.proposerSameAsProposedAssured = $scope.quotation.proposedAssured.isAssuredTheProposer;
+                    $http.get('/pla/individuallife/quotation/getquotation/' + $scope.quotationId)
+                        .success(function (response) {
+                            $scope.quotation = response;
+                            $scope.proposedAssured = $scope.quotation.proposedAssured || {};
+                            $scope.proposer = $scope.quotation.proposer || {};
+                            $scope.proposerSameAsProposedAssured = $scope.quotation.proposedAssured.isAssuredTheProposer;
 
-                        if ($scope.proposedAssured.dateOfBirth) {
-                            $scope.proposedAssuredAge = calculateAge($scope.proposedAssured.dateOfBirth);
-                        }
+                            if ($scope.proposedAssured.dateOfBirth) {
+                                $scope.proposedAssuredAge = calculateAge($scope.proposedAssured.dateOfBirth);
+                            }
 
-                        if ($scope.proposer.dateOfBirth) {
-                            $scope.proposerAge = calculateAge($scope.proposer.dateOfBirth);
-                        }
-                        //This is for making the default selection during edit
-                        $scope.selectedAgent = {};
-                        $scope.selectedAgent.title = response.agentDetail.firstName || '';
-                        $scope.selectedAgent.title = $scope.selectedAgent.title + ' ' + response.agentDetail.lastName || '';
-                        $scope.selectedAgent.description = response.agentDetail;
+                            if ($scope.proposer.dateOfBirth) {
+                                $scope.proposerAge = calculateAge($scope.proposer.dateOfBirth);
+                            }
+                            //This is for making the default selection during edit
+                            $scope.selectedAgent = {};
+                            $scope.selectedAgent.title = response.agentDetail.firstName || '';
+                            $scope.selectedAgent.title = $scope.selectedAgent.title + ' ' + response.agentDetail.lastName || '';
+                            $scope.selectedAgent.description = response.agentDetail;
 
-                        //This is for making the default selection during edit
-                        var selectedPlan = {};
-                        selectedPlan.title = response.planDetail.planDetail.planName || '';
-                        selectedPlan.description = response.planDetail;
-                        $scope.selectedPlan = selectedPlan;
-                        $scope.planDetailDto = response.planDetailDto;
-                        $scope.selectedItem = 1;
-                        $scope.stepsSaved["1"] = true;
-                        $http.get('/pla/core/plan/getPlanById/' + response.planId)
-                            .success(function (plandata) {
-                                $scope.plan = plandata;
-                            });
-                    }).error(function (response, status, headers, config) {
-                    });
+                            //This is for making the default selection during edit
+                            var selectedPlan = {};
+                            selectedPlan.title = response.planDetail.planDetail.planName || '';
+                            selectedPlan.description = response.planDetail;
+                            $scope.selectedPlan = selectedPlan;
+                            $scope.planDetailDto = response.planDetailDto;
+                            $scope.selectedItem = 1;
+                            $scope.stepsSaved["1"] = true;
+                            $http.get('/pla/core/plan/getPlanById/' + response.planId)
+                                .success(function (plandata) {
+                                    $scope.plan = plandata;
+                                });
+                        })
+                        .error(function (response, status, headers, config) {
+                        });
                 }
+
             $scope.$watch('selectedAgent', function (newval) {
                 if (newval) {
                     $scope.agent = newval.description;
@@ -213,7 +215,7 @@
                         }
                         if (newval[1]) {
                             $scope.proposerAge = calculateAge(newval[1]);
-                        }
+                    }
                     }
                 });
 
@@ -228,13 +230,10 @@
                             isAssuredTheProposer: false
                         }))
                         .success(function (data) {
-                            if (data.id) {
-                                $location.path('/edit/' + data.id);
-                                $scope.quotationId = data.id;
-                                }
+                            if (data.id)
+                                $window.location = '/pla/individuallife/quotation/edit?quotationId=' + data.id;
                         });
                 };
-
 
                 $scope.$watch('quotationId', function (newval, oldval) {
                     if (newval != oldval) {
@@ -296,7 +295,6 @@
                         });
                 };
 
-
                 $scope.$on('changed.fu.wizard', function (name, event, data) {
                     $scope.selectedItem = data.step;
                     if (data && data.step == 4) {
@@ -309,7 +307,7 @@
                 $scope.$on('finished.fu.wizard', function (name, event, data) {
                     $http.post('generatequotation/', {quotationId: $scope.quotationId}).success(function (response) {
                         $('#wizardStep').attr('disabled', true);
-                });
+                    });
                 });
 
             $scope.remoteUrlRequestFn = function (str) {
@@ -348,7 +346,7 @@ var viewILQuotationModule = (function () {
     }
 
     services.emailQuotation = function () {
-        window.location.href = '/pla/individuallife/quotation/openemailquotation/' + this.selectedItem;
+        window.location.href = '/pla/individuallife/quotation/emailQuotation/' + this.selectedItem;
     }
 
     services.modifyQuotation = function () {

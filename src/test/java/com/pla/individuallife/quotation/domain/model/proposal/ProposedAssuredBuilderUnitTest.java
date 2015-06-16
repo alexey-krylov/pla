@@ -3,7 +3,7 @@ package com.pla.individuallife.quotation.domain.model.proposal;
 import com.pla.individuallife.proposal.domain.model.*;
 import com.pla.sharedkernel.domain.model.Gender;
 import com.pla.sharedkernel.domain.model.MaritalStatus;
-import org.joda.time.LocalDate;
+import org.joda.time.DateTime;
 import org.junit.Test;
 
 import static org.hamcrest.core.Is.is;
@@ -18,7 +18,7 @@ import static org.junit.Assert.assertThat;
 public class ProposedAssuredBuilderUnitTest {
     ProposedAssuredBuilder proposedAssuredBuilder1;
     ProposedAssured proposedAssured;
-    LocalDate localDate =new LocalDate("2015-05-26");
+    DateTime localDate = new DateTime("2015-05-26");
     EmploymentDetail employmentDetail;
     Address residentialAddress;
 
@@ -38,8 +38,7 @@ public class ProposedAssuredBuilderUnitTest {
                 .withSpouseLastName("PvtLtd")
                 .withSpouseEmailAddress("abc@nthDimenzion")
                 .withEmploymentDetail(new EmploymentDetailBuilder().createEmploymentDetail())
-//                .withResidentialAddress(new AddressBuilder().createAddress())
-                .withResidentialAddress(new ResidentialAddress(new AddressBuilder().createAddress(),897784243))
+                .withResidentialAddress(new ResidentialAddress(new AddressBuilder().createAddress(), 897784243))
                 .withIsProposer(true)
                 .withNrc("123456/78/9");
         proposedAssured = proposedAssuredBuilder1.createProposedAssured();

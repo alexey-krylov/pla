@@ -232,6 +232,14 @@ public class ILQuotationController {
         outputStream.close();
     }
 
+    @RequestMapping(value = "/emailQuotation/{quotationId}", method = RequestMethod.GET)
+    @ResponseBody
+    public ModelAndView openEmail() {
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("pla/quotation/individuallife/emailQuotation");
+        return modelAndView;
+    }
+
     @RequestMapping(value = "/emailQuotation", method = RequestMethod.POST)
     @ResponseBody
     public Result emailQuotation(@RequestBody ILQuotationMailDto mailDto, BindingResult bindingResult) {

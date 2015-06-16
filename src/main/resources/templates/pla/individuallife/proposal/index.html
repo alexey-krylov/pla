@@ -7,15 +7,19 @@
 <body>
 <div th:include="fragments/common :: bodyHeader" th:remove="tag"/>
 <script>
-    /*  require(['moment'], function (moment) {
-     require(['/pla/js/proposal/individuallife/proposal.js'], function () {
-     })
-     });*/
-    requirejs(['main', '/pla/js/proposal/individualLife/proposal.js'], function () {
-        require(['/pla/js/proposal/individualLife/createProposal.js?t=33'], function () {
+    requirejs.config({
+        paths: {
+            ilproposal_common: '/pla/js/proposal/individuallife/proposal.js?t=1221',
+            ilproposal: '/pla/js/proposal/individuallife/createProposal.js?t=1221'
+        },
+        "shim": {"ilproposal": ["angular", "ilproposal_common"]}
+    });
+    requirejs(['main'], function () {
+        require(['ilproposal', 'jquery'], function (app, $) {
             angular.bootstrap(document, ['createProposal']);
         });
     });
+
 </script>
 <div class="container fuelux">
     <ng-view>

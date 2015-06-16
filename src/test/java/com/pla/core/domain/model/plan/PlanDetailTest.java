@@ -23,6 +23,9 @@ import static org.junit.Assert.assertFalse;
 public class PlanDetailTest {
 
 
+    DateTime launchDate = DateTime.now().plusDays(10);
+    DateTime withdrawalDate = DateTime.now().plusDays(30);
+
     @Test(expected = IllegalArgumentException.class)
     public void should_not_create_plan_detail_when_withdrawal_date_less_than_launchDate() {
         PlanDetailBuilder builder = PlanDetail.builder();
@@ -44,8 +47,6 @@ public class PlanDetailTest {
 
     PlanDetail createPlanDetail() {
         PlanDetailBuilder builder = PlanDetail.builder();
-        DateTime launchDate = DateTime.now().plusDays(10);
-        DateTime withdrawalDate = DateTime.now().plusDays(30);
         Set<Relationship> relationshipSet = new HashSet<>(Arrays.asList(Relationship.BROTHER, Relationship.DAUGHTER));
         PlanDetail planDetail = builder.withPlanName("Plan 1")
                 .withPlanCode("0001900")
@@ -67,8 +68,6 @@ public class PlanDetailTest {
 
     @Test
     public void should_create_plan_detail() {
-        DateTime launchDate = DateTime.now().plusDays(10);
-        DateTime withdrawalDate = DateTime.now().plusDays(30);
         Set<Relationship> relationshipSet = new HashSet<>(Arrays.asList(Relationship.BROTHER, Relationship.DAUGHTER));
         PlanDetail planDetail = createPlanDetail();
         assertFalse(planDetail.isTaxApplicable());

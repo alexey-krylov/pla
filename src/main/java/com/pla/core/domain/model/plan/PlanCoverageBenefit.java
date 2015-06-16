@@ -4,6 +4,7 @@ import com.google.common.base.Preconditions;
 import com.pla.sharedkernel.domain.model.CoverageBenefitDefinition;
 import com.pla.sharedkernel.domain.model.CoverageBenefitType;
 import com.pla.sharedkernel.identifier.BenefitId;
+import com.pla.sharedkernel.identifier.CoverageId;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.ToString;
@@ -24,11 +25,16 @@ public class PlanCoverageBenefit {
     private CoverageBenefitType coverageBenefitType;
     private BigDecimal benefitLimit;
     private BigDecimal maxLimit;
+    private CoverageId coverageId;
+    private String coverageName;
+    private String benefitName;
 
     PlanCoverageBenefit() {
     }
 
-    PlanCoverageBenefit(String benefitId, CoverageBenefitDefinition definedPer,
+    PlanCoverageBenefit(CoverageId coverageId, String coverageName,
+                        String benefitName,
+                        String benefitId, CoverageBenefitDefinition definedPer,
                         CoverageBenefitType coverageBenefitType,
                         BigDecimal benefitLimit, BigDecimal maxLimit) {
 
@@ -36,12 +42,16 @@ public class PlanCoverageBenefit {
         Preconditions.checkArgument(definedPer != null, "Expected definedPer!=null, but %s!=null.", definedPer);
         Preconditions.checkArgument(coverageBenefitType != null, "Expected coverageBenefitType!=null, but %s!=null.", coverageBenefitType);
         Preconditions.checkArgument(benefitLimit != null, "Expected limit!=null, but %s!=null.", benefitLimit);
+        this.coverageId = coverageId;
+        this.coverageName = coverageName;
+        this.benefitName = benefitName;
         this.benefitId = new BenefitId(benefitId);
         this.definedPer = definedPer;
         this.coverageBenefitType = coverageBenefitType;
         this.benefitLimit = benefitLimit;
         this.maxLimit = maxLimit;
     }
+
 
     public boolean isValidBenefitLimit(BigDecimal benefitLimit) {
         return benefitLimit.equals(this.benefitLimit) || (benefitLimit.compareTo(this.maxLimit) == -1 || benefitLimit.compareTo(this.maxLimit) == 0);

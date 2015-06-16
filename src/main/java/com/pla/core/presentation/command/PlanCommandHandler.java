@@ -7,6 +7,7 @@ import com.pla.core.domain.model.plan.*;
 import com.pla.core.specification.PlanCodeSpecification;
 import com.pla.sharedkernel.domain.model.CoverageTermType;
 import com.pla.sharedkernel.domain.model.SumAssuredType;
+import com.pla.sharedkernel.identifier.CoverageId;
 import com.pla.sharedkernel.util.SequenceGenerator;
 import org.axonframework.commandhandling.annotation.CommandHandler;
 import org.axonframework.repository.Repository;
@@ -14,7 +15,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Set;
+import java.util.function.Predicate;
 
 /**
  * @author: pradyumna
@@ -80,6 +84,7 @@ public class PlanCommandHandler {
 
         Set<PlanCoverage> coverageSet = new HashSet<PlanCoverage>();
         for (PlanCoverageDetail each : command.getCoverages()) {
+
             PlanCoverageBuilder pcBuilder = PlanCoverage.builder();
             pcBuilder.withCoverageCover(each.getCoverageCover());
             pcBuilder.withCoverage(each.getCoverageId());
@@ -94,18 +99,24 @@ public class PlanCommandHandler {
             pcBuilder.withCoverageType(each.getCoverageType());
             pcBuilder.withDeductibleType(each.getDeductibleType());
             pcBuilder.withDeductible(each.getDeductibleAmount());
-            for (MaturityAmountDetail maturityRec : each.getMaturityAmounts())
-                pcBuilder.withMaturityAmount(maturityRec.getMaturityYear(), maturityRec.getGuaranteedSurvivalBenefitAmount());
             pcBuilder.withMinAndMaxAge(each.getMinAge(), each.getMaxAge());
             pcBuilder.withWaitingPeriod(each.getWaitingPeriod());
+
+            for (MaturityAmountDetail maturityRec : each.getMaturityAmounts())
+                pcBuilder.withMaturityAmount(maturityRec.getMaturityYear(), maturityRec.getGuaranteedSurvivalBenefitAmount());
+
 
             pcBuilder.withSumAssuredForPlanCoverage(each.getCoverageSumAssured().getSumAssuredType(), each.getCoverageSumAssured().getMinSumInsured(),
                     SumAssuredType.DERIVED.equals(each.getCoverageSumAssured().getSumAssuredType()) ? each.getCoverageSumAssured().getMaxLimit() : each.getCoverageSumAssured().getMaxSumInsured(), each.getCoverageSumAssured().getMultiplesOf(), each.getCoverageSumAssured().getSumAssuredValue(),
                     each.getCoverageSumAssured().getPercentage());
 
-            for (PlanCoverageBenefitDetail rec : each.getPlanCoverageBenefits())
-                pcBuilder.withBenefitLimit(rec.getBenefitId().toString(), rec.getDefinedPer(), rec.getCoverageBenefitType(), rec.getBenefitLimit(), rec.getMaxLimit());
-
+            for (Iterator<PlanCoverageBenefitDetail> iter = filterBenefits(command.getPlanCoverageBenefits(),
+                    each.getCoverageId());
+                 iter.hasNext(); ) {
+                PlanCoverageBenefitDetail rec = iter.next();
+                pcBuilder.withBenefitLimit(each.getCoverageId(), rec.getCoverageName(), rec.getBenefitName(), rec.getBenefitId().toString(),
+                        rec.getDefinedPer(), rec.getCoverageBenefitType(), rec.getBenefitLimit(), rec.getMaxLimit());
+            }
             PlanCoverage planCoverage = pcBuilder.build();
             coverageSet.add(planCoverage);
         }
@@ -123,6 +134,15 @@ public class PlanCommandHandler {
         planBuilder.withPremiumTerm(command.getPremiumTermType(), command.getPremiumTerm().getValidTerms(), command.getPremiumTerm().getMaxMaturityAge());
         planBuilder.withPlanCoverages(coverageSet);
         return planBuilder;
+    }
+
+    private Iterator<PlanCoverageBenefitDetail> filterBenefits(List<PlanCoverageBenefitDetail> benefits, CoverageId coverageId) {
+        return benefits.stream().filter(new Predicate<PlanCoverageBenefitDetail>() {
+            @Override
+            public boolean test(PlanCoverageBenefitDetail planCoverageBenefitDetail) {
+                return planCoverageBenefitDetail.getCoverageId().equals(coverageId);
+            }
+        }).iterator();
     }
 
     @CommandHandler

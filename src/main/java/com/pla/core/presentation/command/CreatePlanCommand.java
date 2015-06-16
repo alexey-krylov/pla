@@ -30,6 +30,8 @@ public class CreatePlanCommand {
     PremiumTermType premiumTermType;
     PolicyTermType policyTermType;
     List<PlanCoverageDetail> coverages = new ArrayList<>();
+    List<PlanCoverageBenefitDetail> planCoverageBenefits = new ArrayList<>();
+
 }
 
 @Getter
@@ -130,7 +132,6 @@ class PlanCoverageDetail {
     private TermDetail coverageTerm;
     private CoverageTermType coverageTermType;
     private List<MaturityAmountDetail> maturityAmounts = new ArrayList<>();
-    private List<PlanCoverageBenefitDetail> planCoverageBenefits = new ArrayList<>();
 
 }
 
@@ -145,10 +146,13 @@ class MaturityAmountDetail {
 @Getter
 @Setter
 class PlanCoverageBenefitDetail {
+    private CoverageId coverageId;
     private BenefitId benefitId;
     private CoverageBenefitDefinition definedPer;
     private CoverageBenefitType coverageBenefitType;
     private BigDecimal benefitLimit;
     private BigDecimal maxLimit;
+    private String coverageName;
+    private String benefitName;
 
 }

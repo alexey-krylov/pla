@@ -100,7 +100,6 @@ app.config(function ($routeProvider, $locationProvider) {
                             method: 'GET',
                             url: '/pla/core/plan/getPlanById/' + $route.current.params.planid
                         }).success(function (data) {
-                            console.log(' plan ' + JSON.stringify(data));
                             deferred.resolve(data);
                         }).error(function (msg) {
                             deferred.reject(msg);
@@ -291,12 +290,14 @@ app.controller('PlanSetupController', ['$scope', '$http', '$location', '$routePa
                         templateUrl: '/pla/core/plan/coverage-form.html',
                         backdrop: true,
                         windowClass: 'modal',
-                        controller: function ($scope, $modalInstance, $log, newCoverage, plan, coverageList, isEditing, stepForm) {
+                        controller: function ($scope, $modalInstance, $log, newCoverage, plan, coverageList, isEditing, stepForm, benefitList) {
                             $scope.plan = plan;
                             $scope.coverageList = coverageList;
                             $scope.newCoverage = newCoverage;
                             $scope.editFlag = isEditing;
                             $scope.stepForm = stepForm;
+
+                            $scope.$emit('COVERAGE_ADDED', {});
 
                             $scope.cancel = function () {
                                 $modalInstance.dismiss('cancel');
@@ -312,15 +313,18 @@ app.controller('PlanSetupController', ['$scope', '$http', '$location', '$routePa
 
                             $scope.addCoverage = function (newCoverage) {
                                 $scope.plan.coverages.push(newCoverage);
+                                $scope.$emit('COVERAGE_ADDED', {test: 'test'});
+                                $scope.$broadcast('COVERAGE_ADDED', {test: 'test'});
+                                console.log('newCoverage ' + JSON.stringify(newCoverage));
+                                console.log('benefitList ' + benefitList.length);
                                 $scope.newCoverage = angular.copy($scope.emptyCoverage);
-                                //$scope.coverageForm.$setPristine();
-                                //$scope.coverageForm.$setUntouched();
                                 $scope.coverageForm.$setValidity();
                                 $scope.coverageSumAssured = [];
                                 $scope.coverageTerm = [];
                                 $scope.coverageMaturityAge = [];
                                 $scope.stepForm.hasError = false;
                                 $scope.cancel();
+
                             };
 
                             /**
@@ -342,7 +346,7 @@ app.controller('PlanSetupController', ['$scope', '$http', '$location', '$routePa
                              * Reset the coverage coverageTerm as the Sum Assured Changes.
                              */
                             $scope.resetPlanCoverageTerm = function () {
-                                if (newCoverage.coverageTerm) {
+                                if ($scope.newCoverage.coverageTerm) {
                                     $scope.newCoverage.coverageTerm.validTerms = [];
                                     $scope.newCoverage.coverageTerm.maturityAges = [];
                                 }
@@ -377,11 +381,46 @@ app.controller('PlanSetupController', ['$scope', '$http', '$location', '$routePa
                             },
                             stepForm: function () {
                                 return $scope.step5;
+                            },
+                            benefitList: function () {
+                                return $scope.benefits;
                             }
                         }
                     });
                 }
             };
+
+
+            $scope.$watchCollection('plan.coverages', function (newCollection, oldCollection) {
+
+                var addEvent = newCollection.length > oldCollection.length;
+                var difference = _.difference(newCollection, oldCollection);
+                console.log(addEvent + ' difference ' + JSON.stringify(difference));
+                if (difference.length == 1 && addEvent) {
+                    var coverage = $scope.resolveCoverage(difference[0].coverageId);
+                    angular.forEach(coverage.benefitDtos, function (benefit) {
+                        $scope.benefits.unshift({
+                            coverageId: coverage.coverageId,
+                            "coverageName": coverage.coverageName,
+                            "benefitId": benefit.benefitId,
+                            "benefitName": benefit.benefitName,
+                            "definedPer": null,
+                            "coverageBenefitType": null,
+                            "benefitLimit": null,
+                            "maxLimit": null
+                        });
+                    });
+                } else {
+                    console.log('remove event ');
+                    var difference = _.difference(oldCollection, newCollection);
+                    console.log(addEvent + ' difference ' + JSON.stringify(difference));
+                    if (difference.length == 1) {
+                        $scope.benefits = _.reject($scope.benefits, function (each) {
+                            return each.coverageId == difference[0].coverageId;
+                        });
+                    }
+                }
+            });
 
             /**
              * This is used to nullify the planSumAssured on toggling the
@@ -408,55 +447,6 @@ app.controller('PlanSetupController', ['$scope', '$http', '$location', '$routePa
             };
 
             /**
-             * This returns the Benefit Name for displaying in the Existing Benefits table.
-             * The BenefitId is only stored in the PlanCoverage Association. This benefitId
-             * is then searched against the List of coverages that is injected.
-             *
-             * @param benefitId
-             * @returns {*}
-             */
-            $scope.getCoverageNameFromBenefit = function (benefitId) {
-                var i = 0;
-                for (; i < $scope.plan.coverages.length; i++) {
-                    var eachCoverage = $scope.plan.coverages[i];
-                    var benefit = _.findWhere(eachCoverage.planCoverageBenefits, {'benefitId': benefitId});
-                    if (benefit) {
-                        var coverage = $scope.resolveCoverage(eachCoverage.coverageId);
-                        return coverage.coverageName;
-                    }
-                }
-                return '';
-            }
-
-
-            $scope.geBenefitNameFromBenefit = function (benefitId) {
-                var i = 0;
-                for (; i < $scope.coverageList.length; i++) {
-                    var eachCoverage = $scope.coverageList[i];
-                    var benefit = _.findWhere(eachCoverage.benefitDtos, {'benefitId': benefitId});
-                    if (benefit) {
-                        return benefit.benefitName;
-                    }
-                }
-                return '';
-            };
-
-            /**
-             * This returns the list of all the coverages that are attached
-             * to the Plan. This is used for populating the Coverages drop
-             * down in benefit section.
-             *
-             * @returns {*}
-             */
-            $scope.configuredCoverages = function () {
-                var planCoverages = _.pluck($scope.plan.coverages, 'coverageId');
-                var configuredCoverages = _.filter($scope.coverageList, function (coverage) {
-                    return _.contains(planCoverages, coverage.coverageId);
-                });
-                return configuredCoverages;
-            };
-
-            /**
              * Open the Coverage Modal Form for editing the selected Plan Coverage details.
              *
              * @param coverage
@@ -471,19 +461,6 @@ app.controller('PlanSetupController', ['$scope', '$http', '$location', '$routePa
              * @param coverage
              */
             $scope.removePlanCoverage = function (index) {
-                if ($scope.plan.coverages && $scope.plan.coverages[index].planCoverageBenefits && $scope.plan.coverages[index].planCoverageBenefits.length > 0) {
-                    $modal.open({
-                        backdrop: true,
-                        windowClass: 'modal',
-                        size: 'sm',
-                        templateUrl: 'coverageAlert.html',
-                        controller: function ($scope, $modalInstance) {
-                            $scope.cancel = function () {
-                                $modalInstance.dismiss('cancel');
-                            };
-                        }
-                    });
-                } else
                     $modal.open({
                         backdrop: true,
                         windowClass: 'modal',
@@ -515,107 +492,46 @@ app.controller('PlanSetupController', ['$scope', '$http', '$location', '$routePa
              * @returns {Array}
              */
             $scope.getAllBenefits = function () {
-                var benefits = [];
-                var i = 0;
-                for (i = 0; i < $scope.plan.coverages.length; i++) {
-                    var coverage = $scope.plan.coverages[i];
-                    var j = 0;
-                    if (angular.isDefined(coverage.planCoverageBenefits)) {
-                        for (; j < coverage.planCoverageBenefits.length; j++) {
-                            benefits.push(coverage.planCoverageBenefits[j]);
+                $scope.benefits = [];
+                if ($scope.plan.planId) {
+                    var i = 0;
+                    for (i = 0; i < $scope.plan.coverages.length; i++) {
+                        var coverage = $scope.plan.coverages[i];
+                        var j = 0;
+                        if (angular.isDefined(coverage.planCoverageBenefits)) {
+                            for (; j < coverage.planCoverageBenefits.length; j++) {
+                                $scope.benefits.push(coverage.planCoverageBenefits[j]);
+                            }
                         }
                     }
-                }
-                return benefits;
-            };
 
-
-            /**
-             * To populate the benefit drop down based on the selected coverage.
-             *
-             * @param selectedCoverage
-             */
-            $scope.populateBenefits = function (selectedCoverage) {
-                var coverage = _.where($scope.coverageList, {coverageId: selectedCoverage.coverageId});
-                if (coverage && coverage.length > 0) {
-                    var benefits = coverage[0].benefitDtos;
-                    /* var planCoverage= _.where($scope.plan.coverages,{coverageId:selectedCoverage.coverageId});
-                     if (angular.isDefined(planCoverage.planCoverageBenefits)) {
-                     var i=0;
-                     for(;i<planCoverage.planCoverageBenefits.length;i++){
-                     $log.info('Filtering benefits');
-                     benefits= _.reject(benefits,{benefitId:planCoverage.planCoverageBenefits[i].benefitId});
-                     }
-                     }*/
-                    $scope.benefits = benefits;
-                }
-            };
-
-            /**
-             * Remove the Benefits configured from the plan.
-             *
-             * @param coverage
-             */
-            $scope.removeBenefit = function (benefitId) {
-                $modal.open({
-                    backdrop: true,
-                    windowClass: 'modal',
-                    size: 'sm',
-                    templateUrl: 'benefitConfirmation.html',
-                    controller: function ($scope, $modalInstance, $log, plan) {
-                        $scope.plan = plan;
-                        $scope.cancel = function () {
-                            $modalInstance.dismiss('cancel');
-                        };
-                        $scope.ok = function () {
-                            $log.info(' removing the benefit');
-                            angular.forEach($scope.plan.coverages, function (value, key) {
-                                var i = 0;
-                                for (; i < value.planCoverageBenefits.length; i++) {
-                                    if (value.planCoverageBenefits[i].benefitId == benefitId) {
-                                        value.planCoverageBenefits.splice(i, 1);
-                                        break;
-                                    }
-                                }
+                } else {
+                    angular.forEach($scope.plan.coverages, function (selectedCoverage) {
+                        var coverage = $scope.resolveCoverage(selectedCoverage.coverageId);
+                        angular.forEach(coverage.benefitDtos, function (benefit) {
+                            $scope.benefits.push({
+                                coverageId: coverage.coverageId,
+                                "coverageName": coverage.coverageName,
+                                "benefitId": benefit.benefitId,
+                                "benefitName": benefit.benefitName,
+                                "definedPer": null,
+                                "coverageBenefitType": null,
+                                "benefitLimit": null,
+                                "maxLimit": null
                             });
-                            $scope.cancel();
-                        };
-                    },
-                    resolve: {
-                        plan: function () {
-                            return $scope.plan;
-                        }
-                    }
-                });
-            };
-
-
-            $scope.newPlanCoverageBenefit = {};
-
-            $scope.addBenefit = function (selectedCoverage, benefitForm) {
-                var planCoverage = _.find($scope.plan.coverages, function (planCoverage) {
-                    return planCoverage.coverageId == selectedCoverage.coverageId;
-                });
-                if (angular.isUndefined(planCoverage.planCoverageBenefits)) {
-                    planCoverage.planCoverageBenefits = [];
+                        });
+                    });
                 }
-
-                var planCoverageBenefit = _.find($scope.plan.planCoverageBenefits, function (each) {
-                    return each.benefitId == $scope.newPlanCoverageBenefit.benefitId;
-                });
-                planCoverage.planCoverageBenefits.push($scope.newPlanCoverageBenefit);
-                $scope.newPlanCoverageBenefit = angular.copy({benefitLimit: null, maxLimit: null});
-                benefitForm.$setPristine();
-                benefitForm.$setUntouched();
-                benefitForm.$setValidity();
-                $scope.step6.$error = false;
             };
+            $scope.getAllBenefits();
+
+            $scope.$on('COVERAGE_ADDED', function (event, data) {
+                console.log(JSON.stringify(data));
+            });
 
             $scope.createPlan = function () {
                 $scope.validationFailed = false;
-
-                console.log('  create plan ' + JSON.stringify($scope.plan));
-
+                angular.extend($scope.plan, {planCoverageBenefits: $scope.benefits})
                 $http.post(angular.isUndefined($scope.plan.planId) ? '/pla/core/plan/create' : '/pla/core/plan/update', $scope.plan).
                     success(function (data, status, headers, config) {
                         $scope.plan.planId = data.id;
@@ -653,13 +569,14 @@ app.controller('PlanSetupController', ['$scope', '$http', '$location', '$routePa
             }
 
             $scope.step5 = {};
-            $scope.step6 = {};
             $scope.currentStep = 1;
+
 
             $scope.$on('changed.fu.wizard', function (name, sevent, data) {
                 $scope.currentStep = data.step;
                 console.log('changed.fu.wizard' + $scope.currentStep);
             });
+
             $scope.$on('actionclicked.fu.wizard', function (name, event, data) {
                 if (data.step == 5) {
                     if ($scope.plan.coverages.length == 0) {
@@ -671,11 +588,11 @@ app.controller('PlanSetupController', ['$scope', '$http', '$location', '$routePa
                 }
             });
 
+
             $scope.$on('finished.fu.wizard', function (name, event, data) {
-                if ($scope.getAllBenefits().length == 0) {
-                    $scope.step6.$error = true;
+                if ($scope.step6.$invalid) {
                     $scope.step6_errorMsg = "Configure Benefits.";
-                    $scope.$apply();
+                    $scope.$digest();
                     event.preventDefault();
                 } else {
                     $scope.createPlan();

@@ -1,9 +1,31 @@
-angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute', 'commonServices', 'ngMessages'])
-    .controller('createProposalCtrl', ['$scope', 'resources', '$bsmodal',
+(function (angular) {
+    "use strict";
+
+    var createProposalApp = angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute', 'commonServices', 'ngMessages'])
+
+    createProposalApp.config(['datepickerPopupConfig', function (datepickerPopupConfig) {
+        datepickerPopupConfig.datepickerPopup = 'dd/MM/yyyy';
+        datepickerPopupConfig.currentText = 'Today';
+        datepickerPopupConfig.clearText = 'Clear';
+        datepickerPopupConfig.closeText = 'Done';
+        datepickerPopupConfig.closeOnDateSelection = true;
+    }]);
+    createProposalApp.controller('createProposalCtrl', ['$scope', 'resources', '$bsmodal',
         'globalConstants', 'ProposalService', 'employmentType', 'occupations', 'provinces',
         function ($scope, resources, $bsmodal, globalConstants, ProposalService, employmentTypes, occupations, provinces) {
 
-            console.log('create proposal');
+            $scope.launchProposerDOB = function ($event) {
+                $event.preventDefault();
+                $event.stopPropagation();
+                $scope.dob2 = true;
+            };
+
+            $scope.launchProposedDOB = function ($event) {
+                $event.preventDefault();
+                $event.stopPropagation();
+                $scope.dob1 = true;
+            };
+
             $scope.employmentTypes = employmentTypes;
             $scope.occupations = occupations;
             $scope.provinces = provinces;
@@ -162,9 +184,8 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
             }
 
 
-        }])
-    .
-    controller('modalCtrl', ['$scope', '$modalInstance', function ($scope, $modalInstance) {
+        }]);
+    createProposalApp.controller('modalCtrl', ['$scope', '$modalInstance', function ($scope, $modalInstance) {
         $scope.addAgent = function () {
             $modalInstance.close([]);
         };
@@ -179,8 +200,8 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
         $scope.cancel = function () {
             $modalInstance.dismiss('cancel');
         };
-    }])
-    .controller('addBeneficiaryCtrl', ['$scope', '$modalInstance', 'globalConstants', function ($scope, $modalInstance, globalConstants) {
+        }]);
+    createProposalApp.controller('addBeneficiaryCtrl', ['$scope', '$modalInstance', 'globalConstants', function ($scope, $modalInstance, globalConstants) {
         $scope.titleList = globalConstants.title;
         $scope.genderList = globalConstants.gender;
         $scope.addBeneficiary = function (beneficiary) {
@@ -189,8 +210,8 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
         $scope.cancel = function () {
             $modalInstance.dismiss('cancel');
         };
-    }])
-    .config(["$routeProvider", "$provide", function ($routeProvider, $provide) {
+    }]);
+    createProposalApp.config(["$routeProvider", "$provide", function ($routeProvider, $provide) {
         $routeProvider.when('/', {
             templateUrl: 'proposal/createProposalForm',
             controller: 'createProposalCtrl',
@@ -227,10 +248,10 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
                 planList: ['$q', '$http', function ($q, $http) {
                     var deferred = $q.defer();
                     /* $http.get('/pla/individuallife/proposal/getAllindividuallifePlans').success(function (response, status, headers, config) {
-                        deferred.resolve(response)
-                    }).error(function (response, status, headers, config) {
-                        deferred.reject();
-                    });
+                     deferred.resolve(response)
+                     }).error(function (response, status, headers, config) {
+                     deferred.reject();
+                     });
                      return deferred.promise;*/
                     return [];
                 }]
@@ -248,8 +269,8 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
          return $delegate;
          }]);*/
 
-    }])
-    .constant('resources', {
+    }]);
+    createProposalApp.constant('resources', {
         agentModal: "/pla/individuallife/proposal/getPage/agentDetailModal",
         proposedAssuredUrl: "/pla/individuallife/proposal/getPage/proposedAssuredDetails",
         proposerDetails: "/pla/individuallife/proposal/getPage/proposerDetails",
@@ -260,10 +281,10 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
         compulsoryHealthDetailsPart2: "/pla/individuallife/proposal/getPage/compulsoryHealthDetailsPart2",
         familyHabitAndBuild: "/pla/individuallife/proposal/getPage/familyHabitAndBuild",
         additionalDetail: "/pla/individuallife/proposal/getPage/additionalDetail"
-    })
-    .filter('getTrustedUrl', ['$sce', function ($sce) {
+    });
+    createProposalApp.filter('getTrustedUrl', ['$sce', function ($sce) {
         return function (url) {
             return $sce.getTrustedResourceUrl(url);
         }
     }]);
-
+})(angular);

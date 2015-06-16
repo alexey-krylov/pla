@@ -91,7 +91,8 @@ public class GHQuotationService {
         mailAddress = isEmpty(mailAddress) ? "" : mailAddress;
         Map<String, Object> emailContent = Maps.newHashMap();
         emailContent.put("mailSentDate", groupHealthQuotation.getGeneratedOn().toString(AppConstants.DD_MM_YYY_FORMAT));
-        emailContent.put("contactPersonName", groupHealthQuotation.getProposer().getContactDetail()!=null?groupHealthQuotation.getProposer().getContactDetail().getContactPersonDetail().getContactPersonName():"");
+        emailContent.put("contactPersonName",
+                groupHealthQuotation.getProposer().getContactDetail() != null ? groupHealthQuotation.getProposer().getContactDetail().getContactPersonDetail().getContactPersonName() : "");
         emailContent.put("proposerName", groupHealthQuotation.getProposer().getProposerName());
         Map<String, Object> emailContentMap = Maps.newHashMap();
         emailContentMap.put("emailContent", emailContent);

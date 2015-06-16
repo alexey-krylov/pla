@@ -170,12 +170,13 @@ public class PlanCoverageBuilder {
     }
 
     //TODO Change benefitId String to BenefitId type
-    public PlanCoverageBuilder withBenefitLimit(String benefitId,
-                                                CoverageBenefitDefinition definedPer,
+    public PlanCoverageBuilder withBenefitLimit(
+            CoverageId coverageId, String coverageName, String benefitName,
+            String benefitId, CoverageBenefitDefinition definedPer,
                                                 CoverageBenefitType coverageBenefitType,
                                                 BigDecimal benefitLimit,
                                                 BigDecimal maxLimit) {
-        this.planCoverageBenefits.add(new PlanCoverageBenefit(benefitId, definedPer, coverageBenefitType,
+        this.planCoverageBenefits.add(new PlanCoverageBenefit(coverageId, coverageName, benefitName, benefitId, definedPer, coverageBenefitType,
                 benefitLimit, maxLimit));
         return this;
     }

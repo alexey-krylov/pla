@@ -1,4 +1,4 @@
-<form novalidate="true" name="planSetUpForm">
+<form novalidate="ng" name="planSetUpForm">
     <style>
         .row {
             padding: 10px;
@@ -646,111 +646,89 @@
                 </table>
             </div>
             <div class="step-pane" data-step="6" style="min-height: 250px">
-                <div class="alert alert-danger" role="alert" ng-if="step6.$error">
+                <ng-form novalidate="true" id="step6" name="step6">
+                    <div class="alert alert-danger" role="alert" ng-if="step6.$dirty &amp;&amp; step6.$invalid">
                     <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
                     <span class="sr-only">Error:</span>
-                    {{step6_errorMsg}}
+                        All the fields are mandatory.
                 </div>
-                <h4>Benefits</h4>
                 <accordion>
-                    <accordion-group heading="Existing Benefits" is-open="true">
+                    <accordion-group heading="Configure Benefits" is-open="true">
+                        <div ng-init="setBenefitForm(benefitForm);"></div>
                         <table class="table table-bordered table-hover table-stripped" style="background-color: #fff">
                             <thead>
                             <tr>
-                                <th> Coverage</th>
-                                <th> Benefit</th>
-                                <th> Limit Defined</th>
-                                <th> Limit Type</th>
-                                <th> Benefit Limit</th>
-                                <th> Maximum Limit</th>
-                                <th>Action</th>
+                                <th width="20%"><label class="control-label">Coverage</label></th>
+                                <th width="20%"><label class="control-label">Benefit</label></th>
+                                <th width="10%" class="required"><label class="control-label">Limit Defined </label>
+                                </th>
+                                <th width="20%" class="required"><label class="control-label">Limit Type </label></th>
+                                <th width="15%" class="required"><label class="control-label">Benefit Limit</label></th>
+                                <th width="15%" class="required"><label class="control-label">Maximum Limit</label></th>
                             </tr>
                             </thead>
-                            <tr ng-repeat="benefit in getAllBenefits()">
-                                <td>{{getCoverageNameFromBenefit(benefit.benefitId)}}</td>
-                                <td>{{geBenefitNameFromBenefit(benefit.benefitId)}}</td>
-                                <td>{{benefit.definedPer}}</td>
-                                <td>{{benefit.coverageBenefitType}}</td>
-                                <td>{{benefit.benefitLimit}}</td>
-                                <td>{{benefit.maxLimit}}</td>
+                            <tr ng-repeat="benefit in benefits">
+                                <td>{{benefit.coverageName}}</td>
+                                <td>{{benefit.benefitName}}</td>
                                 <td>
-                                    <button type="button" class="btn btn-danger btn-xs"
-                                            ng-click="removeBenefit(benefit.benefitId)" title="Remove Benefit">X
-                                    </button>
+                                    <select class="form-control input-sm" name="definedPer_{{$index}}"
+                                            ng-model="benefit.definedPer" ng-required="true">
+                                        <option value="INCIDENCE">Per Incidence</option>
+                                        <option value="DAY">Per Day</option>
+                                        <option value="YEAR">Per Year</option>
+                                    </select>
+
+                                    <div class="error"
+                                         ng-show="step6.definedPer_{{$index}}.$dirty &amp;&amp;  step6.$dirty">
+                                        <small class="error" ng-show="step6.definedPer_{{$index}}.$error.required">
+                                            Benefit Defined Per is required.
+                                        </small>
+                                    </div>
+                                </td>
+                                <td>
+                                    <select class="form-control input-sm" name="benefitType_{{$index}}"
+                                            ng-model="benefit.coverageBenefitType" ng-required="true">
+                                        <option value="AMOUNT">Amount</option>
+                                        <option value="PRODUCT_LIMIT">Percentage of Plan Limit</option>
+                                        <option value="COVERAGE_LIMIT">Percentage of Coverage Limit</option>
+                                    </select>
+
+                                    <div class="error"
+                                         ng-show="step6.benefitType_{{$index}}.$dirty &amp;&amp; step6.$dirty">
+                                        <small class="error" ng-show="step6.benefitType_{{$index}}.$error.required">
+                                            Benefit Limit Type is required.
+                                        </small>
+                                    </div>
+                                </td>
+                                <td>
+                                    <input type="number" class="form-control input-sm" max="benefit.maxLimit"
+                                           name="benefitLimit_{{$index}}"
+                                           ng-model="benefit.benefitLimit" ng-required="true"/>
+
+                                    <div class="error"
+                                         ng-show="step6.$invalid &amp;&amp; step6.benefitLimit_{{$index}}.$dirty">
+                                        <small class="error" ng-show="step6.benefitLimit_{{$index}}.$error.required">
+                                            Benefit Limit is required.
+                                        </small>
+                                    </div>
+                                </td>
+                                <td>
+                                    <input type="number" class="form-control input-sm" name="maxLimit_{{$index}}"
+                                           ng-model="benefit.maxLimit" ng-required="true"/>
+
+                                    <div class="error"
+                                         ng-show="step6.$invalid &amp;&amp; step6.maxLimit_{{$index}}.$dirty">
+                                        <small class="error" ng-show="step6.maxLimit_{{$index}}.$error.required">
+                                            Max Limit is required.
+                                        </small>
+                                    </div>
                                 </td>
                             </tr>
                         </table>
-                    </accordion-group>
-                    <accordion-group heading="New Benefit">
-                        <ng-form id="benefitForm" name="benefitForm" novalidate="true">
-                            <div class="row">
-                                <div class="control-group required col-md-6">
-                                    <label class="control-label">Coverage</label>
 
-                                    <div class="controls">
-                                        <select ng-model="selectedCoverage"
-                                                ng-options="item as item.coverageName for item in configuredCoverages()" ng-required="true"
-                                                class="form-control input-sm" ng-change="populateBenefits(selectedCoverage)">
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="control-group required col-md-6">
-                                    <label class="control-label">Benefits</label>
-
-                                    <div class="controls">
-                                        <select ng-model="newPlanCoverageBenefit.benefitId" class="form-control input-sm" ng-required="true"
-                                                ng-options="benefit.benefitId as benefit.benefitName for benefit in benefits" ng-disabled="!selectedCoverage">
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="control-group required col-md-6">
-                                    <label class="control-label">Limit Defined</label>
-
-                                    <div class="controls">
-                                        <select class="form-control input-sm" ng-model="newPlanCoverageBenefit.definedPer" ng-required="true">
-                                            <option value="INCIDENCE">Per Incidence</option>
-                                            <option value="DAY">Per Day</option>
-                                            <option value="YEAR">Per Year</option>
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="control-group required col-md-6">
-                                    <label class="control-label">Limit Type</label>
-
-                                    <div class="controls">
-                                        <select class="form-control input-sm"
-                                                ng-model="newPlanCoverageBenefit.coverageBenefitType" ng-required="true">
-                                            <option value="AMOUNT">Amount</option>
-                                            <option value="PRODUCT_LIMIT">Percentage of Plan Limit</option>
-                                            <option value="COVERAGE_LIMIT">Percentage of Coverage Limit</option>
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="control-group required col-md-6">
-                                    <label class="control-label">Benefit Limit</label>
-
-                                    <div class="controls">
-                                        <input type="number" class="form-control input-sm" max="newPlanCoverageBenefit.maxLimit" name="benefitLimit"
-                                               ng-model="newPlanCoverageBenefit.benefitLimit" ng-required="true"/>
-                                    </div>
-                                </div>
-                                <div class="control-group required col-md-6">
-                                    <label class="control-label">Maximum Limit</label>
-
-                                    <div class="controls">
-                                        <input type="number" class="form-control input-sm" name="maxLimit"
-                                               ng-model="newPlanCoverageBenefit.maxLimit" ng-required="true"/>
-                                    </div>
-                                </div>
-                            </div>
-                            <p class="pager" style="line-height:10px;">
-                                <button class="btn btn-primary" ng-click="addBenefit(selectedCoverage,benefitForm)" ng-disabled="benefitForm.$invalid">
-                                    <span class="glyphicon glyphicon-add" aria-hidden="true">Add</span>
-                                </button>
-                            </p>
-                        </ng-form>
                     </accordion-group>
                 </accordion>
+                </ng-form>
             </div>
         </div>
     </div>

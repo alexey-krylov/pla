@@ -24,7 +24,7 @@
     requirejs.config({
         paths: {
             'plansetup': '/pla/js/plan-app.js?t=10',
-            'xeditable': '/pla/js/xeditable.min.js?t=1290'
+            'xeditable': '/pla/js/xeditable.min.js?t=12190'
         },
         "shim": {"plansetup": ["xeditable", "angular"]}
     });
@@ -37,7 +37,7 @@
         });
     });
 </script>
-<div class="container fuelux">
+<div class="container-fluid fuelux">
     <ng-view></ng-view>
 </div>
 <footer class="footer" th:include="fragments/common :: footer">
