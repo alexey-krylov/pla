@@ -39,14 +39,14 @@ public class AgentFinder {
 
     public static final String FIND_AGENT_PLAN_QUERY = "SELECT agent_id AS agentId,plan_id AS planId FROM `agent_authorized_plan`";
 
-    public static final String SEARCH_AGENT_BY_PLAN_LOB_QUERY = "SELECT A.*,c.line_of_business FROM AGENT A JOIN agent_authorized_plan b " +
+    public static final String SEARCH_AGENT_BY_PLAN_LOB = "SELECT A.*,c.line_of_business FROM AGENT A JOIN agent_authorized_plan b " +
             " ON A.`agent_id`=B.`agent_id` JOIN plan_coverage_benefit_assoc C " +
             " ON B.`plan_id`=C.`plan_id` where c.line_of_business=:lineOfBusiness and A.agent_status='ACTIVE' group by A.agent_id";
 
     /**
      * Find all the Plans by Agent Id and for a line of business.
      */
-    private static final String SEARCH_PLAN_BY_AGENT_ID_QUERY = "SELECT C.* FROM AGENT A JOIN agent_authorized_plan b " +
+    private static final String SEARCH_PLAN_BY_AGENT_ID = "SELECT C.* FROM AGENT A JOIN agent_authorized_plan b " +
             "ON A.`agent_id`=B.`agent_id` JOIN plan_coverage_benefit_assoc C " +
             "ON B.`plan_id`=C.`plan_id` where A.agent_id=:agentId and c.line_of_business=:lineOfBusiness";
     private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
@@ -82,11 +82,11 @@ public class AgentFinder {
 
 
     public List<Map<String, Object>> searchAgent(String searchStr) {
-        return namedParameterJdbcTemplate.query(SEARCH_AGENT_BY_PLAN_LOB_QUERY, new MapSqlParameterSource().addValue("lineOfBusiness", "Individual Life"), new ColumnMapRowMapper());
+        return namedParameterJdbcTemplate.query(SEARCH_AGENT_BY_PLAN_LOB, new MapSqlParameterSource().addValue("lineOfBusiness", "Individual Life"), new ColumnMapRowMapper());
 
     }
 
     public List<Map<String, Object>> searchPlanByAgentId(String agentId) {
-        return namedParameterJdbcTemplate.query(SEARCH_PLAN_BY_AGENT_ID_QUERY, new MapSqlParameterSource().addValue("agentId", agentId).addValue("lineOfBusiness", "Individual Life"), new ColumnMapRowMapper());
+        return namedParameterJdbcTemplate.query(SEARCH_PLAN_BY_AGENT_ID, new MapSqlParameterSource().addValue("agentId", agentId).addValue("lineOfBusiness", "Individual Life"), new ColumnMapRowMapper());
     }
 }
