@@ -137,6 +137,69 @@ app.controller('PlanListController', ['$scope', 'planList', function ($scope, pl
 }
 ]);
 
+
+app.directive('sumassuredCheck', function () {
+    return {
+        // restrict to an attribute type.
+        restrict: 'A',
+        // element must have ng-model attribute.
+        require: 'ngModel',
+        link: function (scope, ele, attrs, ctrl) {
+            var multipleSelected = null;
+            ctrl.$parsers.unshift(function (value) {
+                var sumAssured = scope.$eval('plan.sumAssured');
+                if (value && sumAssured) {
+                    multipleSelected = parseInt(value);
+                    var sumAssuredAmt = parseInt(sumAssured.minSumInsured) + parseInt(value);
+                    var valid = sumAssuredAmt <= parseInt(sumAssured.maxSumInsured);
+                    ctrl.$setValidity('invalidMultiple', valid);
+                }
+                return valid ? value : undefined;
+            });
+
+            scope.$watchGroup(['plan.sumAssured.maxSumInsured', 'plan.sumAssured.minSumInsured'], function (newval) {
+                var sumAssured = scope.$eval('plan.sumAssured');
+                var sumAssuredAmt = parseInt(sumAssured.minSumInsured) + parseInt(multipleSelected);
+                var valid = sumAssuredAmt <= parseInt(sumAssured.maxSumInsured);
+                ctrl.$setValidity('invalidMultiple', valid);
+            });
+
+
+        }
+    }
+});
+
+app.directive('coverageCheck', function () {
+    return {
+        // restrict to an attribute type.
+        restrict: 'A',
+        // element must have ng-model attribute.
+        require: 'ngModel',
+        link: function (scope, ele, attrs, ctrl) {
+            var multipleSelected = null;
+            ctrl.$parsers.unshift(function (value) {
+                var sumAssured = scope.$eval('newCoverage.coverageSumAssured');
+                if (value && sumAssured) {
+                    multipleSelected = parseInt(value);
+                    var sumAssuredAmt = parseInt(sumAssured.minSumInsured) + parseInt(value);
+                    var valid = sumAssuredAmt <= parseInt(sumAssured.maxSumInsured);
+                    ctrl.$setValidity('invalidMultiple', valid);
+                }
+                return valid ? value : undefined;
+            });
+
+            scope.$watchGroup(['newCoverage.coverageSumAssured.maxSumInsured', 'newCoverage.coverageSumAssured.minSumInsured'], function (newval) {
+                var sumAssured = scope.$eval('newCoverage.coverageSumAssured');
+                var sumAssuredAmt = parseInt(sumAssured.minSumInsured) + parseInt(multipleSelected);
+                var valid = sumAssuredAmt <= parseInt(sumAssured.maxSumInsured);
+                ctrl.$setValidity('invalidMultiple', valid);
+            });
+
+
+        }
+    }
+});
+
 app.controller('PlanViewController', ['$scope', 'plan', 'activeCoverages',
     function ($scope, plan, activeCoverages) {
         $scope.plan = plan;
@@ -360,7 +423,10 @@ app.controller('PlanSetupController', ['$scope', '$http', '$location', '$routePa
                         },
                         resolve: {
                             newCoverage: function () {
-                                return angular.isUndefined(coverage) ? {maturityAmounts: []} : coverage;
+                                return angular.isUndefined(coverage) ? {
+                                    maturityAmounts: [],
+                                    coverageTerm: {}
+                                } : coverage;
                             },
                             coverageList: function () {
                                 if (isEditing)

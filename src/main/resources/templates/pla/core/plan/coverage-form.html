@@ -207,12 +207,13 @@
                                    ng-required="true"/>
                         </div>
                     </div>
-                    <div class="control-group col-md-3" ng-switch-when="RANGE">
+                    <div class="control-group required col-md-3" ng-switch-when="RANGE">
                         <label class="control-label">Multiples Of</label>
-
                         <div class="controls">
                             <select ng-model="newCoverage.coverageSumAssured.multiplesOf"
                                     ng-required="true"
+                                    coverage-check="ng"
+                                    name="multiplesOf"
                                     class="form-control input-sm">
                                 <option value="1">1</option>
                                 <option value="10">10</option>
@@ -221,6 +222,15 @@
                                 <option value="10000">10000</option>
                                 <option value="100000">100000</option>
                             </select>
+
+                            <div ng-show="coverageForm.multiplesOf.$dirty &amp;&amp; coverageForm.multiplesOf.$invalid">
+                                <small class="error" ng-show="coverageForm.multiplesOf.$error.required">
+                                    Multiples is required.
+                                </small>
+                                <small class="error" ng-show="coverageForm.multiplesOf.$error.invalidMultiple">
+                                    Invalid Multiples.
+                                </small>
+                            </div>
                         </div>
                     </div>
 
@@ -304,7 +314,8 @@
             </div>
             <hr/>
             <div>
-                <button class="btn btn-default btn-sm" ng-click="addMaturityRow(newCoverage)">
+                <button class="btn btn-default btn-sm" ng-click="addMaturityRow(newCoverage)"
+                        ng-disabled="coverageForm.$invalid">
                     <span class="glyphicon glyphicon-plus">More Rows</span>
                 </button>
                 <table class="table table-bordered table-condensed  table-striped">
