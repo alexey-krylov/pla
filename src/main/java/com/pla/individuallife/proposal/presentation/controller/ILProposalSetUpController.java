@@ -6,6 +6,7 @@ import com.pla.individuallife.proposal.application.command.CreateProposalCommand
 import com.pla.individuallife.proposal.application.command.CreateQuestionCommand;
 import com.pla.individuallife.proposal.application.command.ProposalCommandGateway;
 import com.pla.individuallife.proposal.application.command.UpdateCompulsoryHealthStatementCommand;
+import com.pla.individuallife.proposal.domain.model.QuestionAnswer;
 import com.pla.individuallife.proposal.presentation.dto.QuestionAnswerDto;
 import org.axonframework.commandhandling.CommandBus;
 import org.axonframework.commandhandling.gateway.GatewayProxyFactory;
@@ -92,7 +93,7 @@ public class ILProposalSetUpController {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        List<QuestionAnswerDto> list=updateCompulsoryHealthStatementCommand.getQuestions();
+        List<QuestionAnswer> list=updateCompulsoryHealthStatementCommand.getQuestions();
         return new ResponseEntity(list, HttpStatus.OK);
     }
 

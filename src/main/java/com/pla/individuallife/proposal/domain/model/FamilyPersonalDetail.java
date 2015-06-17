@@ -1,8 +1,4 @@
 package com.pla.individuallife.proposal.domain.model;
-
-import com.pla.individuallife.proposal.presentation.dto.BuildDto;
-import com.pla.individuallife.proposal.presentation.dto.FamilyHistoryDto;
-import com.pla.individuallife.proposal.presentation.dto.HabitDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -13,11 +9,10 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-
 public class FamilyPersonalDetail {
-    private FamilyHistoryDto familyHistory;
-    private HabitDto habit;
-    private BuildDto build;
+    private FamilyHistoryDetail familyHistory;
+    private HabitDetails habit;
+    private BuildDetail build;
     private boolean isPregnant;
     private int pregnancyMonth;
 }

@@ -1,17 +1,18 @@
-package com.pla.individuallife.proposal.presentation.dto;
+package com.pla.individuallife.proposal.domain.model;
 
-import com.pla.individuallife.proposal.domain.model.Question;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 
 /**
- * Created by ASUS on 12-Jun-15.
+ * Created by Prasant on 17-Jun-15.
  */
 @Getter
 @Setter
 @NoArgsConstructor
-public class BuildDto {
+@ToString
+public class BuildDetail {
     private float height;
     private String heightType;
     private double weight;

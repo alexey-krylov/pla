@@ -33,7 +33,7 @@ public class ProposalAggregate extends AbstractAnnotatedAggregateRoot<ProposalId
     private ProposalPlanDetail proposalPlanDetail;
     private List<Beneficiary> beneficiaries;
     private BigDecimal totalBeneficiaryShare = BigDecimal.ZERO;
-    private List<QuestionAnswerDto> compulsoryHealthStatement;
+    private List<QuestionAnswer> compulsoryHealthStatement;
     private FamilyPersonalDetail familyPersonalDetail;
 
     ProposalAggregate() {
@@ -75,7 +75,7 @@ public class ProposalAggregate extends AbstractAnnotatedAggregateRoot<ProposalId
         totalBeneficiaryShare = newTotal;
     }
 
-    public void updateCompulsoryHealthStatement(List<QuestionAnswerDto> compulsoryHealthStatement){
+    public void updateCompulsoryHealthStatement(List<QuestionAnswer> compulsoryHealthStatement){
         this.compulsoryHealthStatement=compulsoryHealthStatement;
     }
 

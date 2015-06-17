@@ -1,31 +1,9 @@
-(function (angular) {
-    "use strict";
-
-    var createProposalApp = angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute', 'commonServices', 'ngMessages'])
-
-    createProposalApp.config(['datepickerPopupConfig', function (datepickerPopupConfig) {
-        datepickerPopupConfig.datepickerPopup = 'dd/MM/yyyy';
-        datepickerPopupConfig.currentText = 'Today';
-        datepickerPopupConfig.clearText = 'Clear';
-        datepickerPopupConfig.closeText = 'Done';
-        datepickerPopupConfig.closeOnDateSelection = true;
-    }]);
-    createProposalApp.controller('createProposalCtrl', ['$scope', 'resources', '$bsmodal',
+angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute', 'commonServices', 'ngMessages'])
+    .controller('createProposalCtrl', ['$scope', 'resources', '$bsmodal','$http',
         'globalConstants', 'ProposalService', 'employmentType', 'occupations', 'provinces',
-        function ($scope, resources, $bsmodal, globalConstants, ProposalService, employmentTypes, occupations, provinces) {
+        function ($scope, resources, $bsmodal,$http, globalConstants, ProposalService, employmentTypes, occupations, provinces) {
 
-            $scope.launchProposerDOB = function ($event) {
-                $event.preventDefault();
-                $event.stopPropagation();
-                $scope.dob2 = true;
-            };
-
-            $scope.launchProposedDOB = function ($event) {
-                $event.preventDefault();
-                $event.stopPropagation();
-                $scope.dob1 = true;
-            };
-
+            console.log('create proposal');
             $scope.employmentTypes = employmentTypes;
             $scope.occupations = occupations;
             $scope.provinces = provinces;
@@ -34,7 +12,7 @@
             $scope.part = {
                 isPart: true
             };
-            $scope.selectedWizard = 1;
+            $scope.selectedWizard = 5;
             $scope.proposedAssured = {
                 title: "Mr.",
                 firstName: "Proposed Firstname",
@@ -78,6 +56,24 @@
             $scope.proposerSpouse = {};
             $scope.proposerEmployment = {};
             $scope.proposerResidential = {};
+
+            $scope.familyPersonalDetail={isPregnant:null,pregnancyMonth:null};
+             $scope.familyHistory={father:{},mother:{},brother:{},sister:{},question_16:{}};
+             $scope.habit={question_17:{}, question_18:{}, question_19:{}, question_20:{}};
+             $scope.build={question_21:{}};
+
+
+            $scope.saveFamilyHistory = function (){
+               console.log($scope.isPregnant);
+                 var request = {"familyHistory":$scope.familyHistory,
+                     "habit":$scope.habit,
+                 "build":$scope.build};
+
+                request = angular.extend($scope.familyPersonalDetail,request);4
+                request = {familyPersonalDetail:request};
+                console.log('request '+JSON.stringify(request));
+                $http.post('proposal/createQuestion/55800602db324d0f4ae21254',request);
+            }
 
             $scope.$watchGroup(['paemployment.province', 'paresidential.province', 'proposerEmployment.province', 'proposerResidential.province'], function (newVal, oldVal) {
                 if (!newVal) return;
@@ -184,8 +180,9 @@
             }
 
 
-        }]);
-    createProposalApp.controller('modalCtrl', ['$scope', '$modalInstance', function ($scope, $modalInstance) {
+        }])
+    .
+    controller('modalCtrl', ['$scope', '$modalInstance', function ($scope, $modalInstance) {
         $scope.addAgent = function () {
             $modalInstance.close([]);
         };
@@ -200,8 +197,8 @@
         $scope.cancel = function () {
             $modalInstance.dismiss('cancel');
         };
-        }]);
-    createProposalApp.controller('addBeneficiaryCtrl', ['$scope', '$modalInstance', 'globalConstants', function ($scope, $modalInstance, globalConstants) {
+    }])
+    .controller('addBeneficiaryCtrl', ['$scope', '$modalInstance', 'globalConstants', function ($scope, $modalInstance, globalConstants) {
         $scope.titleList = globalConstants.title;
         $scope.genderList = globalConstants.gender;
         $scope.addBeneficiary = function (beneficiary) {
@@ -210,8 +207,8 @@
         $scope.cancel = function () {
             $modalInstance.dismiss('cancel');
         };
-    }]);
-    createProposalApp.config(["$routeProvider", "$provide", function ($routeProvider, $provide) {
+    }])
+    .config(["$routeProvider", "$provide", function ($routeProvider, $provide) {
         $routeProvider.when('/', {
             templateUrl: 'proposal/createProposalForm',
             controller: 'createProposalCtrl',
@@ -248,10 +245,10 @@
                 planList: ['$q', '$http', function ($q, $http) {
                     var deferred = $q.defer();
                     /* $http.get('/pla/individuallife/proposal/getAllindividuallifePlans').success(function (response, status, headers, config) {
-                     deferred.resolve(response)
-                     }).error(function (response, status, headers, config) {
-                     deferred.reject();
-                     });
+                        deferred.resolve(response)
+                    }).error(function (response, status, headers, config) {
+                        deferred.reject();
+                    });
                      return deferred.promise;*/
                     return [];
                 }]
@@ -269,8 +266,8 @@
          return $delegate;
          }]);*/
 
-    }]);
-    createProposalApp.constant('resources', {
+    }])
+    .constant('resources', {
         agentModal: "/pla/individuallife/proposal/getPage/agentDetailModal",
         proposedAssuredUrl: "/pla/individuallife/proposal/getPage/proposedAssuredDetails",
         proposerDetails: "/pla/individuallife/proposal/getPage/proposerDetails",
@@ -281,10 +278,10 @@
         compulsoryHealthDetailsPart2: "/pla/individuallife/proposal/getPage/compulsoryHealthDetailsPart2",
         familyHabitAndBuild: "/pla/individuallife/proposal/getPage/familyHabitAndBuild",
         additionalDetail: "/pla/individuallife/proposal/getPage/additionalDetail"
-    });
-    createProposalApp.filter('getTrustedUrl', ['$sce', function ($sce) {
+    })
+    .filter('getTrustedUrl', ['$sce', function ($sce) {
         return function (url) {
             return $sce.getTrustedResourceUrl(url);
         }
     }]);
-})(angular);
+

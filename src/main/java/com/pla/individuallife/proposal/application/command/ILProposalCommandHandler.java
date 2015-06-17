@@ -116,7 +116,7 @@ public class ILProposalCommandHandler {
     public void updateCompulsoryHealthStatement(UpdateCompulsoryHealthStatementCommand updateCompulsoryHealthStatementCommand) {
         ProposalAggregate proposalAggregate = null;
         ProposalId proposalId = updateCompulsoryHealthStatementCommand.getProposalId();
-        List<QuestionAnswerDto> questionAnswerDtoList=updateCompulsoryHealthStatementCommand.getQuestions();
+        List<QuestionAnswer> questionAnswerDtoList=updateCompulsoryHealthStatementCommand.getQuestions();
         try {
             proposalAggregate = ilProposalMongoRepository.load(proposalId);
             proposalAggregate.updateCompulsoryHealthStatement(questionAnswerDtoList);

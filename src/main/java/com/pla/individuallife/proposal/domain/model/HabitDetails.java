@@ -1,17 +1,19 @@
-package com.pla.individuallife.proposal.presentation.dto;
+package com.pla.individuallife.proposal.domain.model;
 
-import com.pla.individuallife.proposal.domain.model.Question;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 
 /**
- * Created by Prasant on 12-Jun-15.
+ * Created by ASUS on 17-Jun-15.
  */
+
 @Getter
 @Setter
 @NoArgsConstructor
-public class HabitDto {
+@ToString
+public class HabitDetails {
     private int wine;
     private int beer;
     private int spirit;
