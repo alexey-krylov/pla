@@ -133,7 +133,7 @@
                                 <div class='input-group date'>
                                     <input type="text" class="form-control input-sm"
                                            datepicker-popup=""
-                                           ng-required="{{plan.planId!=undefined}}"
+                                           ng-required="true"
                                            min-date="minDate"
                                            is-open="launchDateOpen"
                                            ng-model="plan.planDetail.launchDate" name="launchDate" id='launchDate'/>
@@ -397,6 +397,7 @@
                                         <div class="controls">
                                             <select ng-model="plan.sumAssured.multiplesOf"
                                                     ng-required="true" name="multiplesOf"
+                                                    sumassured-check="ng"
                                                     class="form-control input-sm col-sm-3">
                                                 <option value="1">1</option>
                                                 <option value="10">10</option>
@@ -405,10 +406,12 @@
                                                 <option value="10000">10000</option>
                                                 <option value="100000">100000</option>
                                             </select>
-
                                             <div class="error" ng-show="step2.multiplesOf.$dirty &amp;&amp; step2.multiplesOf.$invalid">
                                                 <small class="error" ng-show="step2.multiplesOf.$error.required">
                                                     Multiples is required.
+                                                </small>
+                                                <small class="error" ng-show="step2.multiplesOf.$error.invalidMultiple">
+                                                    Invalid Multiples.
                                                 </small>
                                             </div>
                                         </div>

@@ -68,7 +68,21 @@
                                 </div>
                             </div>
                         </div>
+                        <div class="col-lg-6">
+                            <div class="form-group required">
+                                <label class="control-label">Plan</label>
 
+                                <div data-angucomplete-alt="" placeholder="Search Plan" pause="500"
+                                     selected-object="selectedPlan" disable-input="uneditable"
+                                     remote-url="/pla/core/agent/searchplan"
+                                     remote-url-request-formatter="remoteUrlRequestFn" field-required="true"
+                                     initial-value="selectedPlan.title"
+                                     remote-url-data-field="" title-field="plan_name" minlength="2"
+                                     input-class="form-control form-control-small"
+                                     match-class="highlight">
+                                </div>
+                            </div>
+                        </div>
                     </div>
                     <div class="bs-callout  bs-callout-info" style="margin-bottom: 7px">
                         <div class="row">
@@ -118,20 +132,7 @@
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-lg-6">
-                            <div class="form-group required">
-                                <label class="control-label">Plan</label>
-                                <div data-angucomplete-alt="" placeholder="Search Plan" pause="500"
-                                     selected-object="selectedPlan" disable-input="uneditable"
-                                     remote-url="/pla/core/agent/searchplan"
-                                     remote-url-request-formatter="remoteUrlRequestFn" field-required="true"
-                                     initial-value="selectedPlan.title"
-                                     remote-url-data-field="" title-field="plan_name" minlength="2"
-                                     input-class="form-control form-control-small"
-                                     match-class="highlight">
-                                </div>
-                            </div>
-                        </div>
+
                     </div>
                     <div class="row">
                         <div class="col-sm-6">
