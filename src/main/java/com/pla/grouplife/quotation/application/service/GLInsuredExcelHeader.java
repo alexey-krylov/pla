@@ -330,7 +330,7 @@ public enum GLInsuredExcelHeader {
             int cellNumber = headers.indexOf(this.getDescription());
             Cell cell = row.getCell(cellNumber);
             String cellValue = getCellValue(cell);
-            insuredDto.setGender(Gender.valueOf(cellValue));
+            insuredDto.setGender(isNotEmpty(cellValue)?Gender.valueOf(cellValue):null);
             return insuredDto;
         }
 
@@ -339,7 +339,7 @@ public enum GLInsuredExcelHeader {
             int cellNumber = headers.indexOf(this.getDescription());
             Cell cell = row.getCell(cellNumber);
             String cellValue = getCellValue(cell);
-            insuredDependentDto.setGender(Gender.valueOf(cellValue));
+            insuredDependentDto.setGender(isNotEmpty(cellValue)?Gender.valueOf(cellValue):null);
             return insuredDependentDto;
         }
 
@@ -351,6 +351,11 @@ public enum GLInsuredExcelHeader {
         @Override
         public String validateAndIfNotBuildErrorMessage(IPlanAdapter planAdapter, Row row, String value, List<String> excelHeaders) {
             String errorMessage = "";
+            Cell noOfSumAssuredCell = row.getCell(excelHeaders.indexOf(NO_OF_ASSURED.name()));
+            String noOfSumAssured = getCellValue(noOfSumAssuredCell);
+            if (isNotEmpty(noOfSumAssured) && isEmpty(value)) {
+                return "";
+            }
             try {
                 Gender.valueOf(value);
             } catch (Exception e) {
