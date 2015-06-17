@@ -11,6 +11,8 @@ import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+import static org.nthdimenzion.utils.UtilValidator.isNotEmpty;
+
 /**
  * Created by Admin on 3/26/2015.
  */
@@ -26,7 +28,8 @@ public class SMEGatewayImpl implements ISMEGateway {
         String url = serverUrl;
         Preconditions.checkNotNull(serverUrl);
         RestTemplate restTemplate = new RestTemplate();
-        String employeeDetailByIDAndNRCNumberURL = employeeId!=null?url + "/getemployee?employeeId=" + employeeId:url+"/getemployee?nrcNumber=" + nrcNumber;
+        nrcNumber = isNotEmpty(nrcNumber) ? nrcNumber.replaceAll("/", "").trim() : nrcNumber;
+        String employeeDetailByIDAndNRCNumberURL = employeeId != null ? url + "/getemployee?employeeId=" + employeeId : url + "/getemployee?nrcNumber=" + nrcNumber;
         EmployeeDto employeeDetail = restTemplate.getForObject(employeeDetailByIDAndNRCNumberURL, EmployeeDto.class);
         Preconditions.checkNotNull(employeeDetail);
         return employeeDetail;

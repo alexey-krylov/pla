@@ -43,6 +43,8 @@ public class AgentFinder {
             " ON A.`agent_id`=B.`agent_id` JOIN plan_coverage_benefit_assoc C " +
             " ON B.`plan_id`=C.`plan_id` where c.line_of_business=:lineOfBusiness and A.agent_status='ACTIVE' group by A.agent_id";
 
+    public static final String FIND_AGENT_BY_NRC_NUMBER_QUERY = " SELECT COUNT(agent_id) FROM agent WHERE nrc_number= :nrcNumber ";
+
     /**
      * Find all the Plans by Agent Id and for a line of business.
      */
@@ -84,10 +86,14 @@ public class AgentFinder {
 
     public List<Map<String, Object>> searchAgent(String searchStr) {
         return namedParameterJdbcTemplate.query(SEARCH_AGENT_BY_PLAN_LOB, new MapSqlParameterSource().addValue("lineOfBusiness", "Individual Life"), new ColumnMapRowMapper());
-
     }
 
     public List<Map<String, Object>> searchPlanByAgentId(String agentId) {
         return namedParameterJdbcTemplate.query(SEARCH_PLAN_BY_AGENT_ID, new MapSqlParameterSource().addValue("agentId", agentId).addValue("lineOfBusiness", "Individual Life"), new ColumnMapRowMapper());
+    }
+
+    public Integer findAgentCountByNrcNumber(String nrcNumber){
+        Number count = namedParameterJdbcTemplate.queryForObject(FIND_AGENT_BY_NRC_NUMBER_QUERY,new MapSqlParameterSource("nrcNumber",nrcNumber),Number.class);
+        return count.intValue();
     }
 }

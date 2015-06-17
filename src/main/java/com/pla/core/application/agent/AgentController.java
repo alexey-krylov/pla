@@ -82,7 +82,6 @@ public class AgentController {
     }
 
 
-
     @RequestMapping(value = "/opencreatepage", method = RequestMethod.GET)
     public View openAgentCreatePage() {
         return new RedirectView("createagent", true);
@@ -147,8 +146,7 @@ public class AgentController {
         } catch (AgentApplicationException e) {
             LOGGER.error("Error in creating agent", e);
             return Result.failure(e.getMessage());
-        }
-        catch (Exception e){
+        } catch (Exception e) {
             LOGGER.error("Error in creating agent", e);
             return Result.failure(e.getMessage());
         }
@@ -175,14 +173,16 @@ public class AgentController {
 
     @RequestMapping(value = "/getemployeedeatil", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.ALL_VALUE)
     @ResponseBody
-    public ResponseEntity getEmployeeDetail(@RequestParam(value = "employeeId",required = false) String employeeId, @RequestParam(value = "nrcNumber",required = false) String nrcNumber) {
+    public ResponseEntity getEmployeeDetail(@RequestParam(value = "employeeId", required = false) String employeeId, @RequestParam(value = "nrcNumber", required = false) String nrcNumber) {
         EmployeeDto employeeDto;
         try {
             if (isNotEmpty(nrcNumber)) {
-                nrcNumber = nrcNumber.replaceAll("/", "").trim();
+                Integer agentCount = agentFinder.findAgentCountByNrcNumber(nrcNumber);
+                if (agentCount != 0)
+                    return new ResponseEntity("Agent cannot be updated as nrc number is in use", HttpStatus.PRECONDITION_FAILED);
             }
             employeeDto = smeGateway.getEmployeeDetailByIdOrByNRCNumber(employeeId, nrcNumber);
-        }catch (Exception e){
+        } catch (Exception e) {
             return new ResponseEntity(e.getLocalizedMessage(), HttpStatus.PRECONDITION_FAILED);
         }
         return new ResponseEntity(employeeDto, HttpStatus.OK);
@@ -213,6 +213,5 @@ public class AgentController {
         List<Map<String, Object>> planList = agentFinder.searchPlanByAgentId(agentId);
         return planList;
     }
-
 
 }
