@@ -52,6 +52,8 @@ public class InsuredDependent {
 
     private Set<CoveragePremiumDetail> coveragePremiumDetails;
 
+    private Integer noOfAssured;
+
     InsuredDependent(InsuredDependentBuilder insuredDependentBuilder) {
         checkArgument(insuredDependentBuilder != null);
         this.companyName = insuredDependentBuilder.getCompanyName();
@@ -66,11 +68,12 @@ public class InsuredDependent {
         this.relationship = insuredDependentBuilder.getRelationship();
         this.planPremiumDetail = insuredDependentBuilder.getPlanPremiumDetail();
         this.coveragePremiumDetails = insuredDependentBuilder.getCoveragePremiumDetails();
-        this.occupationClass=insuredDependentBuilder.getOccupationClass();
+        this.occupationClass = insuredDependentBuilder.getOccupationClass();
+        this.noOfAssured = insuredDependentBuilder.getNoOfAssured();
     }
 
     public static InsuredDependentBuilder getInsuredDependentBuilder(PlanId planId, String planCode, BigDecimal premiumAmount, BigDecimal sumAssured) {
-        return new InsuredDependentBuilder(planId,planCode,premiumAmount,sumAssured);
+        return new InsuredDependentBuilder(planId, planCode, premiumAmount, sumAssured);
     }
 
     public InsuredDependent updatePlanPremiumAmount(BigDecimal insuredPlanProratePremium) {

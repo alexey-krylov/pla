@@ -114,7 +114,8 @@ public class GHQuotationCommandHandler {
                 insuredBuilder[0].withCategory(insuredDto.getOccupationCategory()).withInsuredName(insuredDto.getSalutation(), insuredDto.getFirstName(), insuredDto.getLastName())
                         .withOccupation(insuredDto.getOccupationClass()).withInsuredNrcNumber(insuredDto.getNrcNumber()).withCompanyName(insuredDto.getCompanyName())
                         .withManNumber(insuredDto.getManNumber()).withDateOfBirth(insuredDto.getDateOfBirth()).
-                        withGender(insuredDto.getGender()).withMinAndMaxAge(insuredDto.getMinAgeEntry(), insuredDto.getMaxAgeEntry()).withExistingIllness(insuredDto.getExistingIllness()).withNoOfAssured(insuredDto.getNoOfAssured());
+                        withGender(insuredDto.getGender()).withMinAndMaxAge(insuredDto.getMinAgeEntry(), insuredDto.getMaxAgeEntry())
+                        .withExistingIllness(insuredDto.getExistingIllness()).withNoOfAssured(insuredDto.getNoOfAssured());
                 insuredDto.getCoveragePremiumDetails().forEach(coveragePremiumDetail -> {
                     BigDecimal coverageBasicPremium = coveragePremiumDetail.getPremium() == null ? computePlanBasicAnnualPremium(premiumDetail.getPlanId(), coveragePremiumDetail.getSumAssured().toPlainString(), String.valueOf(getAge(insuredDto.getDateOfBirth())), occupationClass, insuredDto.getGender().name(), 365, coveragePremiumDetail.getCoverageId()) : coveragePremiumDetail.getPremium();
                     final GHCoveragePremiumDetailBuilder[] ghCoveragePremiumDetailBuilder = {new GHCoveragePremiumDetailBuilder(coveragePremiumDetail.getCoverageCode(), coveragePremiumDetail.getCoverageId(), coveragePremiumDetail.getCoverageName(), coverageBasicPremium, coveragePremiumDetail.getPremiumVisibility())};

@@ -72,6 +72,7 @@ public class Insured {
         this.annualIncome = insuredBuilder.getAnnualIncome();
         this.occupationClass = insuredBuilder.getOccupation();
         this.coveragePremiumDetails = insuredBuilder.getCoveragePremiumDetails();
+        this.noOfAssured=insuredBuilder.getNoOfAssured();
 
     }
 

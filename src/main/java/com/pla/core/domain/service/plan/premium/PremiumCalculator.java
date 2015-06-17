@@ -63,7 +63,7 @@ public class PremiumCalculator implements IPremiumCalculator {
         Set<PremiumItem> premiumItems = premium.getPremiumItems();
         PremiumItem premiumItem = findPremiumItem(premiumItems, premiumCalculationDto.getPremiumCalculationInfluencingFactorItems());
         List<OrganizationGeneralInformation> organizationGeneralInformations = organizationGeneralInformationRepository.findAll();
-        checkArgument(isNotEmpty(organizationGeneralInformations));
+        checkArgument(isNotEmpty(organizationGeneralInformations),"Configure Organizational Level Information");
         return computePremium(premium, premiumItem, organizationGeneralInformations.get(0), premiumCalculationDto.getNoOfDays());
     }
 

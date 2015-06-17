@@ -105,6 +105,8 @@ public class InsuredDto {
 
         private List<CoveragePremiumDetailDto> coveragePremiumDetails;
 
+        private Integer noOfAssured;
+
         public InsuredDependentDto addPlanPremiumDetail(PlanPremiumDetailDto planPremiumDetailDto) {
             this.planPremiumDetail = planPremiumDetailDto;
             return this;

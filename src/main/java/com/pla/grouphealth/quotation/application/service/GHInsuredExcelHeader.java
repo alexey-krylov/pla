@@ -296,7 +296,7 @@ public enum GHInsuredExcelHeader {
     GENDER("Gender") {
         @Override
         public String getAllowedValue(GHInsuredDto insuredDto) {
-            return insuredDto.getGender()!=null?insuredDto.getGender().name():"";
+            return insuredDto.getGender() != null ? insuredDto.getGender().name() : "";
         }
 
         @Override
@@ -304,7 +304,7 @@ public enum GHInsuredExcelHeader {
             int cellNumber = headers.indexOf(this.getDescription());
             Cell cell = row.getCell(cellNumber);
             String cellValue = getCellValue(cell);
-            insuredDto.setGender(isNotEmpty(cellValue)? Gender.valueOf(cellValue):null);
+            insuredDto.setGender(isNotEmpty(cellValue) ? Gender.valueOf(cellValue) : null);
             return insuredDto;
         }
 
@@ -313,7 +313,7 @@ public enum GHInsuredExcelHeader {
             int cellNumber = headers.indexOf(this.getDescription());
             Cell cell = row.getCell(cellNumber);
             String cellValue = getCellValue(cell);
-            insuredDependentDto.setGender(isNotEmpty(cellValue)?Gender.valueOf(cellValue):null);
+            insuredDependentDto.setGender(isNotEmpty(cellValue) ? Gender.valueOf(cellValue) : null);
             return insuredDependentDto;
         }
 
@@ -481,7 +481,7 @@ public enum GHInsuredExcelHeader {
 
         @Override
         public String getAllowedValue(GHInsuredDto.GHInsuredDependentDto insuredDependentDto) {
-            return "";
+            return insuredDependentDto.getNoOfAssured() != null ? insuredDependentDto.getNoOfAssured().toString() : "";
         }
 
         @Override
@@ -723,7 +723,7 @@ public enum GHInsuredExcelHeader {
             Cell noOfAssuredCell = row.getCell(headers.indexOf(NO_OF_ASSURED.getDescription()));
             String noOfAssuredCellValue = getCellValue(noOfAssuredCell);
             BigDecimal planPremium = null;
-            if(isNotEmpty(noOfAssuredCellValue) && isNotEmpty(cellValue)){
+            if (isNotEmpty(noOfAssuredCellValue) && isNotEmpty(cellValue)) {
                 planPremium = BigDecimal.valueOf(Double.valueOf(noOfAssuredCellValue)).multiply(BigDecimal.valueOf(Double.valueOf(cellValue)));
             }
             GHInsuredDto.GHPlanPremiumDetailDto planPremiumDetailDto = insuredDto.getPlanPremiumDetail() != null ? insuredDto.getPlanPremiumDetail() : new GHInsuredDto.GHPlanPremiumDetailDto();
@@ -740,7 +740,7 @@ public enum GHInsuredExcelHeader {
             Cell noOfAssuredCell = row.getCell(headers.indexOf(NO_OF_ASSURED.getDescription()));
             String noOfAssuredCellValue = getCellValue(noOfAssuredCell);
             BigDecimal planPremium = null;
-            if(isNotEmpty(noOfAssuredCellValue) && isNotEmpty(cellValue)){
+            if (isNotEmpty(noOfAssuredCellValue) && isNotEmpty(cellValue)) {
                 planPremium = BigDecimal.valueOf(Double.valueOf(noOfAssuredCellValue)).multiply(BigDecimal.valueOf(Double.valueOf(cellValue)));
             }
             GHInsuredDto.GHPlanPremiumDetailDto planPremiumDetailDto = insuredDependentDto.getPlanPremiumDetail() != null ? insuredDependentDto.getPlanPremiumDetail() : new GHInsuredDto.GHPlanPremiumDetailDto();

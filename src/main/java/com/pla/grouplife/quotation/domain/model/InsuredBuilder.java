@@ -48,6 +48,8 @@ public class InsuredBuilder {
 
     private Set<CoveragePremiumDetail> coveragePremiumDetails;
 
+    private Integer noOfAssured;
+
     InsuredBuilder(PlanId insuredPlan, String planCode, BigDecimal premiumAmount, BigDecimal sumAssured) {
         checkArgument(insuredPlan != null);
         checkArgument(isNotEmpty(planCode));
@@ -105,6 +107,11 @@ public class InsuredBuilder {
 
     public InsuredBuilder withOccupation(String occupation) {
         this.occupation = occupation;
+        return this;
+    }
+
+    public InsuredBuilder withNoOfAssured(Integer noOfAssured) {
+        this.noOfAssured = noOfAssured;
         return this;
     }
 

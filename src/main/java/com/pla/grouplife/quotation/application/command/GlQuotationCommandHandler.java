@@ -109,9 +109,9 @@ public class GlQuotationCommandHandler {
                 insuredBuilder[0].withCategory(insuredDto.getOccupationCategory()).withInsuredName(insuredDto.getSalutation(), insuredDto.getFirstName(), insuredDto.getLastName())
                         .withAnnualIncome(insuredDto.getAnnualIncome()).withOccupation(insuredDto.getOccupationClass()).
                         withInsuredNrcNumber(insuredDto.getNrcNumber()).withCompanyName(insuredDto.getCompanyName())
-                        .withManNumber(insuredDto.getManNumber()).withDateOfBirth(insuredDto.getDateOfBirth()).withGender(insuredDto.getGender());
+                        .withManNumber(insuredDto.getManNumber()).withDateOfBirth(insuredDto.getDateOfBirth()).withGender(insuredDto.getGender()).withNoOfAssured(insuredDto.getNoOfAssured());
                 insuredDto.getCoveragePremiumDetails().forEach(coveragePremiumDetail -> {
-                    BigDecimal coverageBasicPremium = computePlanBasicAnnualPremium(premiumDetail.getPlanId(), coveragePremiumDetail.getSumAssured().toPlainString(), String.valueOf(getAge(insuredDto.getDateOfBirth())), null, insuredDto.getGender().name(), 365, coveragePremiumDetail.getCoverageId());
+                    BigDecimal coverageBasicPremium = coveragePremiumDetail.getPremium() == null ? computePlanBasicAnnualPremium(premiumDetail.getPlanId(), coveragePremiumDetail.getSumAssured().toPlainString(), String.valueOf(getAge(insuredDto.getDateOfBirth())), null, insuredDto.getGender().name(), 365, coveragePremiumDetail.getCoverageId()) : coveragePremiumDetail.getPremium();
                     insuredBuilder[0] = insuredBuilder[0].withCoveragePremiumDetail(coveragePremiumDetail.getCoverageName(), coveragePremiumDetail.getCoverageCode(), coveragePremiumDetail.getCoverageId(), coverageBasicPremium);
                 });
                 Set<InsuredDependent> insuredDependents = getInsuredDependent(insuredDto.getInsuredDependents());
@@ -149,24 +149,24 @@ public class GlQuotationCommandHandler {
             for (Insured insured : insureds) {
                 PlanPremiumDetail planPremiumDetail = insured.getPlanPremiumDetail();
                 String occupationClass = glQuotationFinder.getOccupationClass(insured.getOccupationClass());
-                BigDecimal insuredPlanProratePremium = computeBasicProratePremium(planPremiumDetail.getPlanId().getPlanId(), planPremiumDetail.getSumAssured().toPlainString(), getAge(insured.getDateOfBirth()).toString(), occupationClass, insured.getGender().name(), premiumDetailDto.getPolicyTermValue(), null);
+                BigDecimal insuredPlanProratePremium =insured.getNoOfAssured()!=null?planPremiumDetail.getPremiumAmount(): computeBasicProratePremium(planPremiumDetail.getPlanId().getPlanId(), planPremiumDetail.getSumAssured().toPlainString(), getAge(insured.getDateOfBirth()).toString(), occupationClass, insured.getGender().name(), premiumDetailDto.getPolicyTermValue(), null);
                 insured.updatePlanPremiumAmount(insuredPlanProratePremium);
                 if (isNotEmpty(insured.getCoveragePremiumDetails())) {
                     Set<CoveragePremiumDetail> coveragePremiumDetails = insured.getCoveragePremiumDetails();
                     for (CoveragePremiumDetail coveragePremiumDetail : coveragePremiumDetails) {
-                        BigDecimal insuredCoveragePremiumDetail = computeBasicProratePremium(planPremiumDetail.getPlanId().getPlanId(), coveragePremiumDetail.getSumAssured().toPlainString(), getAge(insured.getDateOfBirth()).toString(), occupationClass, insured.getGender().name(), premiumDetailDto.getPolicyTermValue(), coveragePremiumDetail.getCoverageId().getCoverageId());
+                        BigDecimal insuredCoveragePremiumDetail =insured.getNoOfAssured()!=null?coveragePremiumDetail.getPremium(): computeBasicProratePremium(planPremiumDetail.getPlanId().getPlanId(), coveragePremiumDetail.getSumAssured().toPlainString(), getAge(insured.getDateOfBirth()).toString(), occupationClass, insured.getGender().name(), premiumDetailDto.getPolicyTermValue(), coveragePremiumDetail.getCoverageId().getCoverageId());
                         coveragePremiumDetail.updateWithPremium(insuredCoveragePremiumDetail);
                     }
                 }
                 for (InsuredDependent insuredDependent : insured.getInsuredDependents()) {
                     PlanPremiumDetail insuredDependentPlanPremiumDetail = insuredDependent.getPlanPremiumDetail();
                     String dependentOccupationClass = glQuotationFinder.getOccupationClass(insuredDependent.getOccupationClass());
-                    BigDecimal insuredDependentPlanProratePremium = computeBasicProratePremium(insuredDependentPlanPremiumDetail.getPlanId().getPlanId(), insuredDependentPlanPremiumDetail.getSumAssured().toPlainString(), getAge(insuredDependent.getDateOfBirth()).toString(), dependentOccupationClass, insuredDependent.getGender().name(), premiumDetailDto.getPolicyTermValue(), null);
+                    BigDecimal insuredDependentPlanProratePremium =insuredDependent.getNoOfAssured()!=null?insuredDependentPlanPremiumDetail.getPremiumAmount(): computeBasicProratePremium(insuredDependentPlanPremiumDetail.getPlanId().getPlanId(), insuredDependentPlanPremiumDetail.getSumAssured().toPlainString(), getAge(insuredDependent.getDateOfBirth()).toString(), dependentOccupationClass, insuredDependent.getGender().name(), premiumDetailDto.getPolicyTermValue(), null);
                     insuredDependent.updatePlanPremiumAmount(insuredDependentPlanProratePremium);
                     Set<CoveragePremiumDetail> insuredDependentCoveragePremiumDetails = insuredDependent.getCoveragePremiumDetails();
                     if (isNotEmpty(insuredDependentCoveragePremiumDetails)) {
                         for (CoveragePremiumDetail insuredDependentCoveragePremiumDetail : insuredDependentCoveragePremiumDetails) {
-                            BigDecimal insuredCoveragePremiumDetail = computeBasicProratePremium(insuredDependentPlanPremiumDetail.getPlanId().getPlanId(), insuredDependentCoveragePremiumDetail.getSumAssured().toPlainString(), getAge(insuredDependent.getDateOfBirth()).toString(), dependentOccupationClass, insuredDependent.getGender().name(), premiumDetailDto.getPolicyTermValue(), insuredDependentCoveragePremiumDetail.getCoverageId().getCoverageId());
+                            BigDecimal insuredCoveragePremiumDetail = insuredDependent.getNoOfAssured()!=null?insuredDependentCoveragePremiumDetail.getPremium(): computeBasicProratePremium(insuredDependentPlanPremiumDetail.getPlanId().getPlanId(), insuredDependentCoveragePremiumDetail.getSumAssured().toPlainString(), getAge(insuredDependent.getDateOfBirth()).toString(), dependentOccupationClass, insuredDependent.getGender().name(), premiumDetailDto.getPolicyTermValue(), insuredDependentCoveragePremiumDetail.getCoverageId().getCoverageId());
                             insuredDependentCoveragePremiumDetail.updateWithPremium(insuredCoveragePremiumDetail);
                         }
                     }
@@ -192,15 +192,16 @@ public class GlQuotationCommandHandler {
             public InsuredDependent apply(InsuredDto.InsuredDependentDto insuredDependentDto) {
                 InsuredDto.PlanPremiumDetailDto premiumDetail = insuredDependentDto.getPlanPremiumDetail();
                 String occupationClass = glQuotationFinder.getOccupationClass(insuredDependentDto.getOccupationClass());
-                BigDecimal basicAnnualPremium = computePlanBasicAnnualPremium(premiumDetail.getPlanId(), premiumDetail.getSumAssured().toPlainString(),
+                BigDecimal basicAnnualPremium = premiumDetail.getPremiumAmount() != null ? premiumDetail.getPremiumAmount() : computePlanBasicAnnualPremium(premiumDetail.getPlanId(), premiumDetail.getSumAssured().toPlainString(),
                         String.valueOf(getAge(insuredDependentDto.getDateOfBirth()))
                         , isNotEmpty(occupationClass) ? occupationClass : null, insuredDependentDto.getGender().name(), 365, null);
                 final InsuredDependentBuilder[] insuredDependentBuilder = {InsuredDependent.getInsuredDependentBuilder(new PlanId(premiumDetail.getPlanId()), premiumDetail.getPlanCode(), basicAnnualPremium, premiumDetail.getSumAssured())};
                 insuredDependentBuilder[0].withCategory(insuredDependentDto.getOccupationCategory()).withInsuredName(insuredDependentDto.getSalutation(), insuredDependentDto.getFirstName(), insuredDependentDto.getLastName())
                         .withInsuredNrcNumber(insuredDependentDto.getNrcNumber()).withCompanyName(insuredDependentDto.getCompanyName()).withOccupationClass(insuredDependentDto.getOccupationClass())
-                        .withDateOfBirth(insuredDependentDto.getDateOfBirth()).withGender(insuredDependentDto.getGender()).withRelationship(insuredDependentDto.getRelationship());
+                        .withDateOfBirth(insuredDependentDto.getDateOfBirth()).withGender(insuredDependentDto.getGender())
+                        .withRelationship(insuredDependentDto.getRelationship()).withNoOfAssured(insuredDependentDto.getNoOfAssured());
                 insuredDependentDto.getCoveragePremiumDetails().forEach(coveragePremiumDetail -> {
-                    BigDecimal coverageBasicPremium = computePlanBasicAnnualPremium(premiumDetail.getPlanId(), coveragePremiumDetail.getSumAssured().toPlainString(), String.valueOf(getAge(insuredDependentDto.getDateOfBirth())), null, insuredDependentDto.getGender().name(), 365, coveragePremiumDetail.getCoverageId());
+                    BigDecimal coverageBasicPremium = coveragePremiumDetail.getPremium() == null ? computePlanBasicAnnualPremium(premiumDetail.getPlanId(), coveragePremiumDetail.getSumAssured().toPlainString(), String.valueOf(getAge(insuredDependentDto.getDateOfBirth())), null, insuredDependentDto.getGender().name(), 365, coveragePremiumDetail.getCoverageId()):coveragePremiumDetail.getPremium();
                     insuredDependentBuilder[0] = insuredDependentBuilder[0].withCoveragePremiumDetail(coveragePremiumDetail.getCoverageName(), coveragePremiumDetail.getCoverageCode(), coveragePremiumDetail.getCoverageId(), coverageBasicPremium);
                 });
                 return insuredDependentBuilder[0].build();

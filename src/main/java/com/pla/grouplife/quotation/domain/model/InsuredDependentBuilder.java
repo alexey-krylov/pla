@@ -47,6 +47,8 @@ public class InsuredDependentBuilder {
 
     private Set<CoveragePremiumDetail> coveragePremiumDetails;
 
+    private Integer noOfAssured;
+
     InsuredDependentBuilder(PlanId planId, String planCode, BigDecimal premiumAmount, BigDecimal sumAssured) {
         checkArgument(planId != null);
         checkArgument(isNotEmpty(planCode));
@@ -99,6 +101,11 @@ public class InsuredDependentBuilder {
 
     public InsuredDependentBuilder withRelationship(Relationship relationship) {
         this.relationship = relationship;
+        return this;
+    }
+
+    public InsuredDependentBuilder withNoOfAssured(Integer noOfAssured) {
+        this.noOfAssured = noOfAssured;
         return this;
     }
 
