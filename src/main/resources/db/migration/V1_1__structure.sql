@@ -804,15 +804,6 @@ CREATE TABLE `endorsement_type` (
 ALTER TABLE `endorsement_type`
   ADD  UNIQUE INDEX `UNIQUE` (`description`, `category`);
 
-DROP TABLE IF EXISTS `individual_quotation_ar`;
-CREATE TABLE `individual_quotation_ar` (
-  `quotation_ar_id` varchar(255) NOT NULL,
-  `last_event_sequence_number` bigint(20) DEFAULT NULL,
-  `version` bigint(20) DEFAULT NULL,
-  `version_number` int(11) NOT NULL,
-  PRIMARY KEY (`quotation_ar_id`)
-);
-
 DROP TABLE IF EXISTS `individual_life_quotation`;
  CREATE TABLE `individual_life_quotation` (
   `quotation_id` varchar(255) NOT NULL,
@@ -846,9 +837,7 @@ DROP TABLE IF EXISTS `individual_life_quotation`;
   `quotation_creator` varchar(255) DEFAULT NULL,
   `quotation_number` varchar(255) DEFAULT NULL,
   `version_number` int(11) NOT NULL,
-  PRIMARY KEY (`quotation_id`),
-  KEY `FK_aiyhilehr449calfhsithdoo1` (`parent_quotation_id`),
-  CONSTRAINT `FK_aiyhilehr449calfhsithdoo1` FOREIGN KEY (`parent_quotation_id`) REFERENCES `individual_quotation_ar` (`quotation_ar_id`)
+  PRIMARY KEY (`quotation_id`)
 );
 
 DROP TABLE IF EXISTS `individual_quotation_rider`;

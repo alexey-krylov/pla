@@ -136,9 +136,9 @@
                                             <div ng-if="plan.policyTermType=='SPECIFIED_VALUES'">
                                                 <span ng-repeat="term in plan.policyTerm.validTerms">{{term.text}} &nbsp;<b ng-if="!$last">,</b>&nbsp;
                                                 </span>
-                                                <h6 ng-if="plan.planDetail.clientType==INDIVIDUAL">Age at Maturity
+                                                <h6 ng-if="plan.planDetail.clientType=='INDIVIDUAL'">Age at Maturity
                                                     should not be more than {{plan.policyTerm.maxMaturityAge}} year</h6>
-                                                <h6 ng-if="plan.planDetail.clientType==GROUP">Policy valid for 365 days
+                                                <h6 ng-if="plan.planDetail.clientType=='GROUP'">Policy Term for 365 days
                                                     only.</h6>
                                             </div>
                                             <div ng-if="plan.policyTermType=='MATURITY_AGE_DEPENDENT'">
@@ -152,6 +152,11 @@
                                                 <div ng-if="plan.policyTermType=='SPECIFIED_VALUES'">
                                                     <span ng-repeat="term in plan.policyTerm.validTerms">{{term.text}}&nbsp;<b ng-if="!$last">,</b>&nbsp;
                                                     </span>
+                                                    <h6 ng-if="plan.planDetail.clientType=='INDIVIDUAL'">Age at Maturity
+                                                        should not be more than {{plan.policyTerm.maxMaturityAge}}
+                                                        year</h6>
+                                                    <h6 ng-if="plan.planDetail.clientType=='GROUP'">Premium Term for 365
+                                                        days only.</h6>
                                                 </div>
                                                 <div ng-if="plan.policyTermType=='MATURITY_AGE_DEPENDENT'">
                                                     <span ng-repeat="term in plan.policyTerm.validTerms">{{term.text}}&nbsp;<b ng-if="!$last">,</b>&nbsp;
