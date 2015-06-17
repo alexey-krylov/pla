@@ -3,6 +3,7 @@ package com.pla.individuallife.proposal.presentation.controller;
 import com.pla.core.query.PlanFinder;
 import com.pla.individuallife.identifier.ProposalId;
 import com.pla.individuallife.proposal.application.command.CreateProposalCommand;
+import com.pla.individuallife.proposal.application.command.CreateQuestionCommand;
 import com.pla.individuallife.proposal.application.command.ProposalCommandGateway;
 import com.pla.individuallife.proposal.application.command.UpdateCompulsoryHealthStatementCommand;
 import com.pla.individuallife.proposal.presentation.dto.QuestionAnswerDto;
@@ -29,7 +30,7 @@ import static org.nthdimenzion.presentation.AppUtils.getLoggedInUserDetail;
  * Created by Prasant on 26-May-15.
  */
 @Controller
-@RequestMapping(value = "/proposaltwo")
+@RequestMapping(value = "/individuallife/proposal")
 public class ILProposalSetUpController {
 
     private final ProposalCommandGateway proposalCommandGateway;
@@ -43,8 +44,8 @@ public class ILProposalSetUpController {
     }
 
     @ResponseBody
-    @RequestMapping(value = "/proposaltwo")
-    public ResponseEntity<Map> dataInsert(@RequestBody CreateProposalCommand createProposalCommand, BindingResult bindingResult, HttpServletRequest request) {
+    @RequestMapping(value = "/create")
+    public ResponseEntity<Map> createProposal(@RequestBody CreateProposalCommand createProposalCommand, BindingResult bindingResult, HttpServletRequest request) {
         ProposalId proposalId = null;
 
         if (bindingResult.hasErrors()) {
@@ -95,5 +96,30 @@ public class ILProposalSetUpController {
         return new ResponseEntity(list, HttpStatus.OK);
     }
 
+
+    @ResponseBody
+    @RequestMapping(value = "/createQuestion/{proposalId}", method = RequestMethod.POST)
+    public ResponseEntity createQuestion(@RequestBody CreateQuestionCommand createQuestionCommand,@PathVariable("proposalId") String proposalIdUrl,HttpServletRequest request,
+                                         BindingResult bindingResult) {
+
+        ProposalId proposalId = null;
+        if (bindingResult.hasErrors()) {
+            return new ResponseEntity(bindingResult.getAllErrors(), HttpStatus.PRECONDITION_FAILED);
+        }
+
+        try {
+            proposalId = new ProposalId(proposalIdUrl);
+            UserDetails userDetails = getLoggedInUserDetail(request);
+            createQuestionCommand.setUserDetails(userDetails);
+            createQuestionCommand.setProposalId(proposalId);
+            proposalCommandGateway.createCompulsoryQuestion(createQuestionCommand);
+        } catch (TimeoutException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        return new ResponseEntity("SucessFull",HttpStatus.OK);
+    }
 
 }

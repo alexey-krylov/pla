@@ -33,40 +33,42 @@
                             <td>Father</td>
                             <td>
                                 <label class="radio-inline">
-                                    <input type="radio" name="fatherStatus"  value="ALIVE" /> Alive
+                                    <input type="radio" name="fatherStatus" ng-model="familyHistory.father.isAlive"
+                                           value="true" ng-value="true"/> Alive
                                 </label>
                                 <label class="radio-inline">
-                                    <input type="radio" name="fatherStatus"  value="DEAD"/> Dead
+                                    <input type="radio" name="fatherStatus" ng-model="familyHistory.father.isAlive" ng-value="false"
+                                           value="false"/> Dead
                                 </label>
                             </td>
                             <td>
-                                <input type="text" class="form-control input-sm"/>
+                                <input type="text" class="form-control input-sm" ng-model="familyHistory.father.healthState"/>
                             </td>
                             <td>
-                                <input type="text" class="form-control input-sm"/>
+                                <input type="text" class="form-control input-sm" ng-model="familyHistory.father.deathAge"/>
                             </td>
                             <td>
-                                <input type="text" class="form-control input-sm"/>
+                                <input type="text" class="form-control input-sm" ng-model="familyHistory.father.deathCause"/>
                             </td>
                         </tr>
                         <tr>
                             <td>Mother</td>
                             <td>
                                 <label class="radio-inline">
-                                    <input type="radio" name="motherStatus"  value="ALIVE" /> Alive
+                                    <input type="radio" name="motherStatus" ng-model="familyHistory.mother.isAlive"  ng-value="true" value="true" /> Alive
                                 </label>
                                 <label class="radio-inline">
-                                    <input type="radio" name="motherStatus"  value="DEAD"/> Dead
+                                    <input type="radio" name="motherStatus"  ng-model="familyHistory.mother.isAlive"  ng-value="false" value="false" /> Dead
                                 </label>
                             </td>
                             <td>
-                                <input type="text" class="form-control input-sm"/>
+                                <input type="text" class="form-control input-sm" ng-model="familyHistory.mother.healthState"/>
                             </td>
                             <td>
-                                <input type="text" class="form-control input-sm"/>
+                                <input type="text" class="form-control input-sm" ng-model="familyHistory.mother.deathAge"/>
                             </td>
                             <td>
-                                <input type="text" class="form-control input-sm"/>
+                                <input type="text" class="form-control input-sm" ng-model="familyHistory.mother.deathCause"/>
                             </td>
                         </tr>
                         </tbody>
@@ -101,19 +103,19 @@
                         <tbody>
                         <tr>
                             <td>Brothers</td>
-                            <td><input type="text" class="form-control input-sm"/></td>
-                            <td><input type="text" class="form-control input-sm"/></td>
-                            <td><input type="text" class="form-control input-sm"/></td>
-                            <td><input type="text" class="form-control input-sm"/></td>
-                            <td><input type="text" class="form-control input-sm"/></td>
+                            <td><input type="text" class="form-control input-sm" ng-model="familyHistory.brother.alive"/></td>
+                            <td><input type="text" class="form-control input-sm" ng-model="familyHistory.brother.death"/></td>
+                            <td><input type="text" class="form-control input-sm" ng-model="familyHistory.brother.healthState"/></td>
+                            <td><input type="text" class="form-control input-sm" ng-model="familyHistory.brother.deathAge"/></td>
+                            <td><input type="text" class="form-control input-sm" ng-model="familyHistory.brother.deathCause"/></td>
                         </tr>
                         <tr>
                             <td>Sisters</td>
-                            <td><input type="text" class="form-control input-sm"/></td>
-                            <td><input type="text" class="form-control input-sm"/></td>
-                            <td><input type="text" class="form-control input-sm"/></td>
-                            <td><input type="text" class="form-control input-sm"/></td>
-                            <td><input type="text" class="form-control input-sm"/></td>
+                            <td><input type="text" class="form-control input-sm" ng-model="familyHistory.sister.alive"/></td>
+                            <td><input type="text" class="form-control input-sm" ng-model="familyHistory.sister.death"/></td>
+                            <td><input type="text" class="form-control input-sm" ng-model="familyHistory.sister.healthState"/></td>
+                            <td><input type="text" class="form-control input-sm" ng-model="familyHistory.sister.deathAge"/></td>
+                            <td><input type="text" class="form-control input-sm" ng-model="familyHistory.sister.deathCause"/></td>
                         </tr>
                         </tbody>
                     </table>
@@ -124,16 +126,16 @@
                     If not already stated, is any close blood relative suffering from (or has any one had) diabetes, heart disease, high blood pressure, mental illness etc.
                 </div>
                 <div class="col-md-2">
-                    <select class="form-control input-sm">
+                    <select class="form-control input-sm" ng-model="familyHistory.question_16.answer">
                         <option value="">--Select One--</option>
-                        <option value="YES">Yes</option>
-                        <option value="NO">No</option>
+                        <option value="true">Yes</option>
+                        <option value="false">No</option>
                     </select>
                 </div>
             </div>
             <div class="row">
                 <div class="col-md-10">
-                    <textarea class="form-control" placeholder="Please give full details"></textarea>
+                    <textarea class="form-control" placeholder="Please give full details" ng-model="familyHistory.question_16.answerResponse"></textarea>
                 </div>
             </div>
         </accordion-group>
@@ -160,13 +162,13 @@
                         <tbody>
                         <tr>
                             <td>
-                                <input type="text" class="form-control input-sm"/>
+                                <input type="text" class="form-control input-sm" ng-model="habit.wine"/>
                             </td>
                             <td>
-                                <input type="text" class="form-control input-sm"/>
+                                <input type="text" class="form-control input-sm" ng-model="habit.beer"/>
                             </td>
                             <td>
-                                <input type="text" class="form-control input-sm"/>
+                                <input type="text" class="form-control input-sm" ng-model="habit.spirit"/>
                             </td>
                         </tr>
                         </tbody>
@@ -178,7 +180,7 @@
                     How much, and what do you smoke per day?
                 </div>
                 <div class="col-md-2">
-                    <input type="text" class="form-control input-sm"/>
+                    <input type="text" class="form-control input-sm" ng-model="habit.smokePerDay"/>
                 </div>
             </div>
             <div class="row" style="margin: 0">
@@ -192,15 +194,17 @@
                                        ng-class="{'glyphicon-chevron-down': accordionStatus.familyHabitAndBuild.tab2_1, 'glyphicon-chevron-right': !accordionStatus.familyHabitAndBuild.tab2_1}"></i>
                                 </accordion-heading>
                                 <div class="col-md-12">
-                                    <textarea class="form-control" placeholder="Please give full details  e.g. name and address of attending doctor, diagnosis etc"></textarea>
+                                    <textarea class="form-control" ng-model="habit.question_17.answerResponse"
+                                              placeholder="Please give full details  e.g. name and address of attending doctor, diagnosis etc">
+                                    </textarea>
                                 </div>
                             </accordion-group>
                         </div>
                         <div class="col-md-2">
-                            <select class="form-control input-sm">
+                            <select class="form-control input-sm" ng-model="habit.question_17.answer">
                                 <option value="">--Select One--</option>
-                                <option value="YES">Yes</option>
-                                <option value="NO">No</option>
+                                <option value="true">Yes</option>
+                                <option value="false">No</option>
                             </select>
                         </div>
                     </div>
@@ -214,15 +218,16 @@
                                        ng-class="{'glyphicon-chevron-down': accordionStatus.familyHabitAndBuild.tab2_2, 'glyphicon-chevron-right': !accordionStatus.familyHabitAndBuild.tab2_2}"></i>
                                 </accordion-heading>
                                 <div class="col-md-12">
-                                    <textarea class="form-control" placeholder="Please give full details  "></textarea>
+                                    <textarea class="form-control" ng-model="habit.question_18.answerResponse"
+                                              placeholder="Please give full details  "></textarea>
                                 </div>
                             </accordion-group>
                         </div>
                         <div class="col-md-2">
-                            <select class="form-control input-sm">
+                            <select class="form-control input-sm" ng-model="habit.question_18.answer">
                                 <option value="">--Select One--</option>
-                                <option value="YES">Yes</option>
-                                <option value="NO">No</option>
+                                <option value="true">Yes</option>
+                                <option value="false">No</option>
                             </select>
                         </div>
                     </div>
@@ -236,15 +241,15 @@
                                        ng-class="{'glyphicon-chevron-down': accordionStatus.familyHabitAndBuild.tab2_3, 'glyphicon-chevron-right': !accordionStatus.familyHabitAndBuild.tab2_3}"></i>
                                 </accordion-heading>
                                 <div class="col-md-12">
-                                    <textarea class="form-control" placeholder="Please give full details  "></textarea>
+                                    <textarea class="form-control" ng-model="habit.question_19.answerResponse" placeholder="Please give full details  "></textarea>
                                 </div>
                             </accordion-group>
                         </div>
                         <div class="col-md-2">
-                            <select class="form-control input-sm">
+                            <select class="form-control input-sm" ng-model="habit.question_19.answer">
                                 <option value="">--Select One--</option>
-                                <option value="YES">Yes</option>
-                                <option value="NO">No</option>
+                                <option value="true">Yes</option>
+                                <option value="false">No</option>
                             </select>
                         </div>
                     </div>
@@ -258,15 +263,15 @@
                                        ng-class="{'glyphicon-chevron-down': accordionStatus.familyHabitAndBuild.tab2_4, 'glyphicon-chevron-right': !accordionStatus.familyHabitAndBuild.tab2_4}"></i>
                                 </accordion-heading>
                                 <div class="col-md-12">
-                                    <textarea class="form-control" placeholder="Please give full details  "></textarea>
+                                    <textarea class="form-control" placeholder="Please give full details " ng-model="habit.question_20.answerResponse" ></textarea>
                                 </div>
                             </accordion-group>
                         </div>
                         <div class="col-md-2">
-                            <select class="form-control input-sm">
+                            <select class="form-control input-sm" ng-model="habit.question_20.answer">
                                 <option value="">--Select One--</option>
-                                <option value="YES">Yes</option>
-                                <option value="NO">No</option>
+                                <option value="true">Yes</option>
+                                <option value="false">No</option>
                             </select>
                         </div>
                     </div>
@@ -292,9 +297,9 @@
                         </thead>
                         <tbody>
                         <tr>
-                            <td><input type="text" class="form-control input-sm"/></td>
-                            <td><input type="text" class="form-control input-sm"/></td>
-                            <td><input type="text" class="form-control input-sm"/></td>
+                            <td><input type="text" class="form-control input-sm" ng-model="build.height"/></td>
+                            <td><input type="text" class="form-control input-sm" ng-model="build.heightType"/></td>
+                            <td><input type="text" class="form-control input-sm" ng-model="build.weight"/></td>
                         </tr>
                         </tbody>
                     </table>
@@ -311,46 +316,49 @@
                                    ng-class="{'glyphicon-chevron-down': accordionStatus.familyHabitAndBuild.tab3_1, 'glyphicon-chevron-right': !accordionStatus.familyHabitAndBuild.tab3_1}"></i>
                             </accordion-heading>
                             <div class="col-md-12">
-                                <textarea class="form-control" placeholder="state whether increase or decrease, by how much, reason and for long present weight has remained constant."></textarea>
+                                <textarea class="form-control" ng-model="build.question_21.answerResponse"
+                                          placeholder="state whether increase or decrease, by how much, reason and for long present weight has remained constant."></textarea>
                             </div>
                         </accordion-group>
                     </div>
                     <div class="col-md-2">
-                        <select class="form-control input-sm">
+                        <select class="form-control input-sm" ng-model="build.question_21.answer">
                             <option value="">--Select One--</option>
-                            <option value="YES">Yes</option>
-                            <option value="NO">No</option>
+                            <option value="true">Yes</option>
+                            <option value="false">No</option>
                         </select>
                     </div>
                 </div>
             </accordion>
         </accordion-group>
-    </accordion>
+
     <strong>For Female Applicants</strong>
     <div class="row bs-callout  bs-callout-info" style="margin: 5px;padding:10px">
         <div class="col-md-2">
             Are you now pregnant?
         </div>
         <div class="col-md-2">
-            <select class="form-control input-sm">
+            <select class="form-control input-sm" ng-model="familyPersonalDetail.isPregnant">
                 <option value="">--Select One--</option>
-                <option value="YES">Yes</option>
-                <option value="NO">No</option>
+                <option value="true" ng-value="true">Yes</option>
+                <option value="false" ng-value="false">No</option>
             </select>
         </div>
         <div class="col-md-2 col-md-offset-6">
             <div class="form-group">
                 <label class="control-label">If <strong>Yes</strong> how many months?</label>
-                <input type="text" class="form-control input-sm"/>
+                <input type="text" class="form-control input-sm" ng-model="familyPersonalDetail.pregnancyMonth"/>
             </div>
         </div>
     </div>
+    </accordion>
     <div class="row">
         <div class="col-sm-6">
             <button type="button" class="btn btn-default btn-sm">Cancel</button>
         </div>
         <div class="col-sm-6">
-            <button type="button" class="btn btn-default btn-sm" style="float: right">Save</button>
+            <button type="button" class="btn btn-default btn-sm" style="float: right"
+                    ng-click="saveFamilyHistory()">Save</button>
         </div>
     </div>
 </ng-form>

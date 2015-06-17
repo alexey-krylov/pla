@@ -124,4 +124,20 @@ public class ILProposalCommandHandler {
             e.printStackTrace();
         }
     }
+
+    @CommandHandler
+   public void createCompulsoryQuestion(CreateQuestionCommand createQuestionCommand)
+   {
+       ProposalAggregate proposalAggregate = null;
+       ProposalId proposalId=createQuestionCommand.getProposalId();
+       FamilyPersonalDetail familyPersonalDetail=createQuestionCommand.getFamilyPersonalDetail();
+
+       try{
+           proposalAggregate=ilProposalMongoRepository.load(proposalId);
+           proposalAggregate.updateFamilyPersonalDetail(familyPersonalDetail);
+       }
+       catch (AggregateNotFoundException e) {
+           e.printStackTrace();
+       }
+   }
 }

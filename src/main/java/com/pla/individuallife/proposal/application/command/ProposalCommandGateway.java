@@ -16,4 +16,7 @@ public interface ProposalCommandGateway {
     void updateCompulsoryHealthStatement(UpdateCompulsoryHealthStatementCommand updateCompulsoryHealthStatementCommand)
             throws  TimeoutException,InterruptedException;
 
+    void createCompulsoryQuestion(CreateQuestionCommand questionCommand)
+            throws TimeoutException, InterruptedException;
+
 }

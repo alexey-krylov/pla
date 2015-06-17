@@ -42,16 +42,14 @@ spring:
         url: jdbc:mysql://localhost:3306/pla?useUnicode=true&characterEncoding=utf8&characterSetResults=utf8&rewriteBatchedStatements=true&autoReconnect=true&autoReconnectForPools=true
         driverClassName: com.mysql.jdbc.Driver
         username: root
-        password: welcome
-        maxIdleTime: 0
+        password: root
 
       jobs:
         name: jobsDataSource
         url: jdbc:mysql://localhost:3306/plajobs?useUnicode=true&characterEncoding=utf8&characterSetResults=utf8&rewriteBatchedStatements=true&autoReconnect=true&autoReconnectForPools=true
         driverClassName: com.mysql.jdbc.Driver
         username: root
-        password: welcome
-        maxIdleTime: 0
+        password: root
 flyway:
   check-location: true
   enabled: true

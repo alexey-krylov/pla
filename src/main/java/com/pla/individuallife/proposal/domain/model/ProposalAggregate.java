@@ -9,7 +9,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.security.access.AuthorizationServiceException;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import javax.persistence.Id;
+import org.springframework.data.annotation.Id;
 import java.math.BigDecimal;
 import java.util.*;
 
@@ -34,6 +34,7 @@ public class ProposalAggregate extends AbstractAnnotatedAggregateRoot<ProposalId
     private List<Beneficiary> beneficiaries;
     private BigDecimal totalBeneficiaryShare = BigDecimal.ZERO;
     private List<QuestionAnswerDto> compulsoryHealthStatement;
+    private FamilyPersonalDetail familyPersonalDetail;
 
     ProposalAggregate() {
         riders = new HashSet<RiderDetail>();
@@ -75,8 +76,10 @@ public class ProposalAggregate extends AbstractAnnotatedAggregateRoot<ProposalId
     }
 
     public void updateCompulsoryHealthStatement(List<QuestionAnswerDto> compulsoryHealthStatement){
-
-        //Update Logic
         this.compulsoryHealthStatement=compulsoryHealthStatement;
+    }
+
+    public void updateFamilyPersonalDetail(FamilyPersonalDetail personalDetail){
+        this.familyPersonalDetail=personalDetail;
     }
 }
