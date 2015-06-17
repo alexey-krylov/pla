@@ -159,6 +159,9 @@ app.directive('sumassuredCheck', function () {
 
             scope.$watchGroup(['plan.sumAssured.maxSumInsured', 'plan.sumAssured.minSumInsured'], function (newval) {
                 var sumAssured = scope.$eval('plan.sumAssured');
+                if (multipleSelected == null) {
+                    multipleSelected = sumAssured.multiplesOf;
+                }
                 var sumAssuredAmt = parseInt(sumAssured.minSumInsured) + parseInt(multipleSelected);
                 var valid = sumAssuredAmt <= parseInt(sumAssured.maxSumInsured);
                 ctrl.$setValidity('invalidMultiple', valid);
