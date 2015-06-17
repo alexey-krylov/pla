@@ -2,12 +2,12 @@ package com.pla.individuallife.quotation.saga;
 
 import com.pla.individuallife.quotation.domain.event.*;
 import com.pla.individuallife.quotation.domain.model.ILQuotation;
-import com.pla.individuallife.quotation.domain.model.ILQuotationAR;
 import com.pla.publishedlanguage.contract.IProcessInfoAdapter;
 import com.pla.sharedkernel.domain.model.ProcessType;
 import com.pla.sharedkernel.exception.ProcessInfoException;
 import com.pla.sharedkernel.identifier.LineOfBusinessEnum;
-import org.axonframework.eventhandling.annotation.EventHandler;
+import org.axonframework.commandhandling.GenericCommandMessage;
+import org.axonframework.commandhandling.gateway.CommandGateway;
 import org.axonframework.eventhandling.scheduling.EventScheduler;
 import org.axonframework.repository.Repository;
 import org.axonframework.saga.annotation.AbstractAnnotatedSaga;
@@ -20,30 +20,36 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.io.Serializable;
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * Created by pradyumna on 16-06-2015.
  */
 @Component
-public class ILQuotationARSaga extends AbstractAnnotatedSaga {
+public class ILQuotationARSaga extends AbstractAnnotatedSaga implements Serializable {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(ILQuotationARSaga.class);
+
+    private transient static final Logger LOGGER = LoggerFactory.getLogger(ILQuotationARSaga.class);
+    private static final long serialVersionUID = 2052253346405498007L;
+    int version;
     @Autowired
     private transient IProcessInfoAdapter processInfoAdapter;
     @Autowired
     private transient EventScheduler eventScheduler;
-
     @Autowired
-    private Repository<ILQuotationAR> ilQuotationARRepository;
-
+    private transient Repository<ILQuotation> ilQuotationRepository;
     @Autowired
-    private Repository<ILQuotation> ilQuotationRepository;
+    private transient CommandGateway commandGateway;
 
     //TODO discuss what happens if a quotation is just created and nothing happens after that
     //TODO Basically can it move from DRAFT to PURGE OR CLOSE OR ????
+    @StartSaga
+    @SagaEventHandler(associationProperty = "quotationARId")
+    public void handle(ILQuotationCreatedEvent event) {
+        LOGGER.debug("SAGA CREATED GL Quotation Generated Event .....", event);
 
-    @SagaEventHandler(associationProperty = "quotationId")
-    public void handle(ILQuotationCreatedEvent event) throws ProcessInfoException {
-        System.out.println(" Start Monitoring Quotations *** related to AR " + event.getQuotationARId());
     }
 
     @StartSaga
@@ -70,13 +76,13 @@ public class ILQuotationARSaga extends AbstractAnnotatedSaga {
         eventScheduler.schedule(closureScheduleDateTime, new ILQuotationClosureEvent(event.getQuotationId()));
     }
 
-
-    @EventHandler()
-    public void handle(ILQuotationVersionEvent event) throws ProcessInfoException {
+    @SagaEventHandler(associationProperty = "quotationARId")
+    public void handle(final ILQuotationVersionEvent event) {
         System.out.println(" Update Quotation Version Number " + event.getQuotationId());
-        ILQuotationAR quotationAR = ilQuotationARRepository.load(event.getQuotationARId());
-        ILQuotation quotation = ilQuotationRepository.load(event.getQuotationId());
-        int version = quotationAR.incrementVersion();
-        quotation.assignVersion(version);
+        version++;
+        Map payLoad = new HashMap();
+        payLoad.put("quotationId", event.getQuotationId());
+        payLoad.put("version", version);
+        commandGateway.send(new GenericCommandMessage("QUOTATION_VERSION_CMD", payLoad, null));
     }
 }

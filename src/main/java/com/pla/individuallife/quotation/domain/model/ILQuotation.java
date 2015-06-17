@@ -3,6 +3,7 @@ package com.pla.individuallife.quotation.domain.model;
 import com.google.common.base.Preconditions;
 import com.pla.core.domain.model.agent.AgentId;
 import com.pla.grouplife.quotation.domain.model.IQuotation;
+import com.pla.individuallife.quotation.domain.event.ILQuotationCreatedEvent;
 import com.pla.individuallife.quotation.domain.event.ILQuotationGeneratedEvent;
 import com.pla.individuallife.quotation.domain.event.ILQuotationVersionEvent;
 import com.pla.sharedkernel.identifier.PlanId;
@@ -107,6 +108,7 @@ public class ILQuotation extends AbstractAggregateRoot<QuotationId> implements I
         this.quotationNumber = quotationNumber;
         this.quotationARId = quotationARId;
         this.planDetail = new PlanDetail(planId, null, null, null);
+        registerEvent(new ILQuotationCreatedEvent(this.quotationARId));
     }
 
     public static ILQuotation createWithBasicDetail(ILQuotationProcessor quotationCreator, String quotationARId, String quotationNumber, QuotationId quotationId, AgentId agentId, ProposedAssured proposedAssured, PlanId planid) {
@@ -159,7 +161,7 @@ public class ILQuotation extends AbstractAggregateRoot<QuotationId> implements I
         Preconditions.checkArgument(ILQuotationStatus.DRAFT == this.ilQuotationStatus, " Quotation in Draft state can only be generated.");
         this.ilQuotationStatus = ILQuotationStatus.GENERATED;
         this.generatedOn = generatedOn;
-        registerEvent(new ILQuotationGeneratedEvent(this.quotationId));
+        registerEvent(new ILQuotationGeneratedEvent(this.quotationARId, this.quotationId));
     }
 
     @Override
@@ -172,7 +174,6 @@ public class ILQuotation extends AbstractAggregateRoot<QuotationId> implements I
         checkArgument(isNotEmpty(quotationNumber));
         checkArgument(quotationCreator != null, "User is does not have Quotation Preprocessor Role.");
         checkArgument(quotationId != null);
-
         ILQuotation newQuotation = new ILQuotation();
         newQuotation.quotationCreator = quotationCreator.getUserName();
         newQuotation.quotationId = quotationId;
@@ -184,7 +185,7 @@ public class ILQuotation extends AbstractAggregateRoot<QuotationId> implements I
         newQuotation.agentId = this.agentId;
         newQuotation.proposedAssured = this.proposedAssured;
         newQuotation.planDetail = this.planDetail;
-        registerEvent(new ILQuotationVersionEvent(quotationARId, this.quotationId));
+        registerEvent(new ILQuotationVersionEvent(quotationARId, newQuotation.quotationId));
         return newQuotation;
     }
 
@@ -200,6 +201,8 @@ public class ILQuotation extends AbstractAggregateRoot<QuotationId> implements I
     }
 
     public void assignVersion(int versionNumber) {
+        System.out.println(" assign version " + versionNumber + "for quotation id " + this.quotationId);
+        if (versionNumber != -1)
         this.versionNumber = versionNumber;
     }
 

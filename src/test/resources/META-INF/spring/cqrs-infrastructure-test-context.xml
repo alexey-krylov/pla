@@ -73,10 +73,6 @@
                                 aggregate-type="com.pla.grouphealth.quotation.domain.model.GroupHealthQuotation"
                                 mongo-template="mongoTemplate"/>
 
-    <axon:jpa-repository id="ilQuotationARRepository"
-                         aggregate-type="com.pla.individuallife.quotation.domain.model.ILQuotationAR"
-                         event-bus="eventBus"/>
-
     <axon:jpa-repository id="ilQuotationRepository"
                          aggregate-type="com.pla.individuallife.quotation.domain.model.ILQuotation"
                          event-bus="eventBus"/>

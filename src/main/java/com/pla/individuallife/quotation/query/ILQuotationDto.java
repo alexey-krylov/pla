@@ -42,4 +42,11 @@ public class ILQuotationDto {
     private Map<String, Object> agentDetail;
     private Map<String, Object> planDetail;
     private PlanDetailDto planDetailDto;
+
+    public String getQuotationNumber() {
+        if (versionNumber > 0) {
+            return quotationNumber + "/" + versionNumber;
+        }
+        return quotationNumber;
+    }
 }

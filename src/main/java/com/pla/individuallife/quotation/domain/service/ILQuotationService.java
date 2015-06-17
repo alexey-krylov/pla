@@ -9,7 +9,6 @@ import org.axonframework.repository.Repository;
 import org.nthdimenzion.ddd.domain.annotations.DomainService;
 import org.nthdimenzion.object.utils.IIdGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Set;
 import java.util.UUID;
@@ -36,7 +35,7 @@ public class ILQuotationService {
      * @param planId
      * @return
      */
-    public ILQuotationAR createQuotation(ILQuotationProcessor quotationProcessor, QuotationId quotationId,
+    public void createQuotation(ILQuotationProcessor quotationProcessor, QuotationId quotationId,
                                          AgentId agentId, ProposedAssured proposedAssured, PlanId planId) {
         Preconditions.checkArgument(quotationId != null, "Quotation Id is empty.");
         Preconditions.checkArgument(agentId != null, "Agent Id is empty.");
@@ -48,20 +47,18 @@ public class ILQuotationService {
                         quotationNumber, quotationId, agentId, proposedAssured, planId,
                         ILQuotationStatus.DRAFT, 0);
         ilQuotationRepository.add(quotation);
-        ILQuotationAR quotationAR = new ILQuotationAR(quotationARId);
-        return quotationAR;
     }
 
     /**
-     * @param quotationAR
+     *
+     * @param quotationProcessor
      * @param quotation
      * @param proposer
-     * @param userDetails
      * @return
      */
-    public QuotationId updateProposerWithVersion(ILQuotationAR quotationAR,
-                                                 ILQuotation quotation, Proposer proposer, UserDetails userDetails) {
-        ILQuotationProcessor quotationProcessor = ILQuotationRoleAdapter.userToQuotationProcessor(userDetails);
+    public QuotationId updateProposerWithVersion(ILQuotationProcessor quotationProcessor,
+                                                 ILQuotation quotation, Proposer proposer) {
+        Preconditions.checkArgument(quotationProcessor != null);
         Preconditions.checkState(quotation.requireVersioning());
         QuotationId newQuotationId = new QuotationId(idGenerator.nextId());
         String quotationNumber = ilQuotationNumberGenerator.getQuotationNumber(ILQuotation.class);
@@ -78,14 +75,14 @@ public class ILQuotationService {
      * Create a cloned quotation with next version and updated the ProposedAssured Details.
      *
      * @param quotationProcessor
-     * @param quotationAR
      * @param quotation
      * @param proposedAssured
      * @param isAssuredTheProposer
      * @return
      */
     public QuotationId updateAssuredDetailWithVersion(ILQuotationProcessor quotationProcessor,
-                                                      ILQuotationAR quotationAR, ILQuotation quotation, ProposedAssured proposedAssured, boolean isAssuredTheProposer) {
+                                                      ILQuotation quotation, ProposedAssured proposedAssured,
+                                                      boolean isAssuredTheProposer) {
         Preconditions.checkArgument(quotationProcessor != null);
         Preconditions.checkState(quotation.requireVersioning());
         QuotationId newQuotationId = new QuotationId(idGenerator.nextId());
@@ -93,11 +90,12 @@ public class ILQuotationService {
         ILQuotation newQuotation = quotation.cloneQuotation(quotationProcessor, newQuotationId,
                 quotationNumber, -1);
         newQuotation.updateWithAssured(quotationProcessor, proposedAssured, isAssuredTheProposer);
+        ilQuotationRepository.add(newQuotation);
         return newQuotationId;
     }
 
     public QuotationId updateWithPlanWithVersion(ILQuotationProcessor quotationProcessor,
-                                                 ILQuotationAR quotationAR, ILQuotation quotation,
+                                                 ILQuotation quotation,
                                                  PlanDetail planDetail, Set<RiderDetail> riders) {
         Preconditions.checkArgument(quotationProcessor != null);
         Preconditions.checkState(quotation.requireVersioning());

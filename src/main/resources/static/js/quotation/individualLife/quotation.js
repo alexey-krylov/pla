@@ -237,7 +237,7 @@
 
             $scope.$watch('quotationId', function (newval, oldval) {
                 if (newval != oldval) {
-                    $location.path('/edit/' + newval);
+                    $window.location = '/pla/individuallife/quotation/edit?quotationId=' + newval;
                 }
             });
 
@@ -362,10 +362,3 @@ var viewILQuotationModule = (function () {
     return services;
 })();
 
-/*function QuotationController(){
- this.selectedItem=5;
- this.proposedAssured={
- title:'MR'
- };
- }
- */
