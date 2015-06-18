@@ -322,7 +322,7 @@ public enum GLInsuredExcelHeader {
     GENDER("Gender") {
         @Override
         public String getAllowedValue(InsuredDto insuredDto) {
-            return insuredDto.getGender().name();
+            return insuredDto.getGender()!=null?insuredDto.getGender().name():"";
         }
 
         @Override
@@ -345,7 +345,7 @@ public enum GLInsuredExcelHeader {
 
         @Override
         public String getAllowedValue(InsuredDto.InsuredDependentDto insuredDependentDto) {
-            return insuredDependentDto.getGender().name();
+            return insuredDependentDto.getGender()!=null?insuredDependentDto.getGender().name():"";
         }
 
         @Override
@@ -816,8 +816,8 @@ public enum GLInsuredExcelHeader {
         List<String> headers = GLInsuredExcelHeader.getAllHeader();
         for (int count = 1; count <= noOfOptionalCoverage; count++) {
             headers.add((AppConstants.OPTIONAL_COVERAGE_HEADER + count));
-            headers.add((AppConstants.OPTIONAL_COVERAGE_HEADER + count) + " " + AppConstants.PREMIUM_CELL_HEADER_NAME);
             headers.add((AppConstants.OPTIONAL_COVERAGE_HEADER + count) + " " + AppConstants.OPTIONAL_COVERAGE_SA_HEADER);
+            headers.add((AppConstants.OPTIONAL_COVERAGE_HEADER + count) + " " + AppConstants.PREMIUM_CELL_HEADER_NAME);
         }
         return ImmutableList.copyOf(headers);
     }
