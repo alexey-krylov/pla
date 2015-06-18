@@ -2,14 +2,14 @@ package com.pla.individuallife.proposal.domain.model;
 
 import com.pla.sharedkernel.domain.model.Gender;
 import com.pla.sharedkernel.domain.model.MaritalStatus;
-import org.joda.time.DateTime;
+import org.joda.time.LocalDate;
 
 public class ProposedAssuredBuilder {
     private String title;
     private String firstName;
     private String surname;
     private String nrc;
-    private DateTime dateOfBirth;
+    private LocalDate dateOfBirth;
     private Gender gender;
     private long mobileNumber;
     private String emailAddress;
@@ -41,7 +41,7 @@ public class ProposedAssuredBuilder {
         return this;
     }
 
-    public ProposedAssuredBuilder withDateOfBirth(DateTime dateOfBirth) {
+    public ProposedAssuredBuilder withDateOfBirth(LocalDate dateOfBirth) {
         this.dateOfBirth = dateOfBirth;
         return this;
     }

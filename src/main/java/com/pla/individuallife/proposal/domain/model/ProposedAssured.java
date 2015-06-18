@@ -4,7 +4,7 @@ import com.pla.sharedkernel.domain.model.Gender;
 import com.pla.sharedkernel.domain.model.MaritalStatus;
 import lombok.Getter;
 import lombok.ToString;
-import org.joda.time.DateTime;
+import org.joda.time.LocalDate;
 import org.joda.time.Years;
 
 /**
@@ -18,7 +18,7 @@ public class ProposedAssured {
     private String firstName;
     private String surname;
     private String nrc;
-    private DateTime dateOfBirth;
+    private LocalDate dateOfBirth;
     private Gender gender;
     private long mobileNumber;
     private String emailAddress;
@@ -30,7 +30,7 @@ public class ProposedAssured {
     private ResidentialAddress residentialAddress;
     private boolean isProposer;
 
-    ProposedAssured(String title, String firstName, String surname, String nrc, DateTime dateOfBirth, Gender gender, long mobileNumber, String emailAddress,
+    ProposedAssured(String title, String firstName, String surname, String nrc, LocalDate dateOfBirth, Gender gender, long mobileNumber, String emailAddress,
                     MaritalStatus maritalStatus, String spouseFirstName, String spouseLastName, String spouseEmailAddress,
                     EmploymentDetail employmentDetail, ResidentialAddress residentialAddress, boolean isProposer) {
         this.title = title;
@@ -51,7 +51,6 @@ public class ProposedAssured {
     }
 
     public int getAgeNextBirthday() {
-        return Years.yearsBetween(dateOfBirth, DateTime.now()).getYears() + 1;
+        return Years.yearsBetween(dateOfBirth, LocalDate.now()).getYears() + 1;
     }
-
 }
