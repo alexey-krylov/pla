@@ -2,7 +2,6 @@ package com.pla.individuallife.proposal.application.command;
 
 import com.pla.individuallife.identifier.ProposalId;
 import com.pla.individuallife.proposal.domain.model.QuestionAnswer;
-import com.pla.individuallife.proposal.presentation.dto.QuestionAnswerDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -15,8 +14,8 @@ import java.util.List;
 @Getter
 @Setter
 @NoArgsConstructor
-public class UpdateCompulsoryHealthStatementCommand  {
 
+public class UpdateCompulsoryHealthStatementCommand  {
     private List<QuestionAnswer> questions;
     private UserDetails userDetails;
     private ProposalId proposalId;

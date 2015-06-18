@@ -3,7 +3,7 @@ package com.pla.individuallife.quotation.domain.model.proposal;
 import com.pla.individuallife.proposal.domain.model.*;
 import com.pla.sharedkernel.domain.model.Gender;
 import com.pla.sharedkernel.domain.model.MaritalStatus;
-import org.joda.time.DateTime;
+import org.joda.time.LocalDate;
 import org.junit.Test;
 
 import static org.hamcrest.core.Is.is;
@@ -18,7 +18,7 @@ import static org.junit.Assert.assertThat;
 public class ProposedAssuredBuilderUnitTest {
     ProposedAssuredBuilder proposedAssuredBuilder1;
     ProposedAssured proposedAssured;
-    DateTime localDate = new DateTime("2015-05-26");
+    LocalDate localDate = new LocalDate("2015-05-26");
     EmploymentDetail employmentDetail;
     Address residentialAddress;
 

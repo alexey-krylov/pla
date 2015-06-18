@@ -3,7 +3,7 @@ package com.pla.individuallife.proposal.domain.model;
 import com.pla.sharedkernel.domain.model.Gender;
 import com.pla.sharedkernel.domain.model.MaritalStatus;
 import lombok.Getter;
-import org.joda.time.DateTime;
+import org.joda.time.LocalDate;
 
 /**
  * Created by pradyumna on 22-05-2015.
@@ -15,7 +15,7 @@ public class Proposer {
     private String firstName;
     private String surname;
     private String nrc;
-    private DateTime dateOfBirth;
+    private LocalDate dateOfBirth;
     private Gender gender;
     private long mobileNumber;
     private String emailAddress;
@@ -26,7 +26,7 @@ public class Proposer {
     private EmploymentDetail employmentDetail;
     private ResidentialAddress residentialAddress;
 
-    public Proposer(String title, String firstName, String surname, String nrc, DateTime dateOfBirth, Gender gender, long mobileNumber, String emailAddress, MaritalStatus maritalStatus, String spouseFirstName, String spouseLastName, String spouseEmailAddress, EmploymentDetail employmentDetail, ResidentialAddress residentialAddress) {
+    public Proposer(String title, String firstName, String surname, String nrc, LocalDate dateOfBirth, Gender gender, long mobileNumber, String emailAddress, MaritalStatus maritalStatus, String spouseFirstName, String spouseLastName, String spouseEmailAddress, EmploymentDetail employmentDetail, ResidentialAddress residentialAddress) {
         this.title = title;
         this.firstName = firstName;
         this.surname = surname;

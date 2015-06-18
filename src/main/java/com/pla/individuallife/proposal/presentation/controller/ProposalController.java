@@ -1,6 +1,7 @@
 package com.pla.individuallife.proposal.presentation.controller;
 
 import com.pla.core.query.MasterFinder;
+import com.pla.individuallife.proposal.presentation.dto.ILSearchProposalDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -30,7 +31,8 @@ public class ProposalController {
     @RequestMapping(method = RequestMethod.GET)
     public ModelAndView proposalListPage() {
         ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("pla/individuallife/proposal/index");
+        modelAndView.addObject("searchCriteria", new ILSearchProposalDto());
+        modelAndView.setViewName("pla/individualLife/proposal/index");
         return modelAndView;
     }
 
