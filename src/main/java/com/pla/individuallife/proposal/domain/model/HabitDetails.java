@@ -18,8 +18,8 @@ public class HabitDetails {
     private int beer;
     private int spirit;
     private int smokePerDay;
-    Question question_17;
-    Question question_18;
-    Question question_19;
-    Question question_20;
+    private Question question_17;
+    private Question question_18;
+    private Question question_19;
+    private Question question_20;
 }
