@@ -5,6 +5,7 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import com.pla.grouphealth.quotation.application.service.GHInsuredExcelHeader;
+import com.pla.grouplife.quotation.query.GLQuotationFinder;
 import com.pla.grouplife.quotation.query.InsuredDto;
 import com.pla.publishedlanguage.contract.IPlanAdapter;
 import com.pla.publishedlanguage.dto.PlanCoverageDetailDto;
@@ -40,9 +41,12 @@ public class GLInsuredExcelParser {
 
     private IPlanAdapter planAdapter;
 
+    private GLQuotationFinder glQuotationFinder;
+
     @Autowired
-    public GLInsuredExcelParser(IPlanAdapter planAdapter) {
+    public GLInsuredExcelParser(IPlanAdapter planAdapter, GLQuotationFinder glQuotationFinder) {
         this.planAdapter = planAdapter;
+        this.glQuotationFinder = glQuotationFinder;
     }
 
 
@@ -89,6 +93,10 @@ public class GLInsuredExcelParser {
             public InsuredDto.CoveragePremiumDetailDto apply(OptionalCoverageCellHolder optionalCoverageCellHolder) {
                 InsuredDto.CoveragePremiumDetailDto coveragePremiumDetailDto = new InsuredDto.CoveragePremiumDetailDto();
                 coveragePremiumDetailDto.setCoverageCode(ExcelGeneratorUtil.getCellValue(optionalCoverageCellHolder.getOptionalCoverageCell()));
+                if (isNotEmpty(coveragePremiumDetailDto.getCoverageCode())) {
+                    Map<String, Object> coverageMap = glQuotationFinder.findCoverageDetailByCoverageCode(coveragePremiumDetailDto.getCoverageCode());
+                    coveragePremiumDetailDto.setCoverageId((String) coverageMap.get("coverageId"));
+                }
                 String optionalCoveragePremiumCellValue = ExcelGeneratorUtil.getCellValue(optionalCoverageCellHolder.getOptionalCoveragePremiumCell());
                 BigDecimal coveragePremium = null;
                 if (isNotEmpty(optionalCoveragePremiumCellValue) && finalInsuredDependentDto.getNoOfAssured() != null) {
@@ -117,6 +125,10 @@ public class GLInsuredExcelParser {
             public InsuredDto.CoveragePremiumDetailDto apply(OptionalCoverageCellHolder optionalCoverageCellHolder) {
                 InsuredDto.CoveragePremiumDetailDto coveragePremiumDetailDto = new InsuredDto.CoveragePremiumDetailDto();
                 coveragePremiumDetailDto.setCoverageCode(ExcelGeneratorUtil.getCellValue(optionalCoverageCellHolder.getOptionalCoverageCell()));
+                if (isNotEmpty(coveragePremiumDetailDto.getCoverageCode())) {
+                    Map<String, Object> coverageMap = glQuotationFinder.findCoverageDetailByCoverageCode(coveragePremiumDetailDto.getCoverageCode());
+                    coveragePremiumDetailDto.setCoverageId((String) coverageMap.get("coverageId"));
+                }
                 int coverageSA = Double.valueOf(ExcelGeneratorUtil.getCellValue(optionalCoverageCellHolder.getOptionalCoverageSACell())).intValue();
                 coveragePremiumDetailDto.setSumAssured(BigDecimal.valueOf(coverageSA));
                 String optionalCoveragePremiumCellValue = ExcelGeneratorUtil.getCellValue(optionalCoverageCellHolder.getOptionalCoveragePremiumCell());

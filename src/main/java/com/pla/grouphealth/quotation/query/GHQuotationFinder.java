@@ -55,6 +55,8 @@ public class GHQuotationFinder {
 
     public static final String FIND_COVERAGE_BY_ID_QUERY = "SELECT coverage_code AS coverageCode,coverage_name AS coverageName FROM coverage WHERE coverage_id=:coverageId";
 
+    public static final String FIND_COVERAGE_BY_CODE_QUERY = "SELECT coverage_id AS coverageId, coverage_code AS coverageCode,coverage_name AS coverageName FROM coverage WHERE coverage_code=:coverageCode";
+
     public static final String FIND_GEO_BY_ID_QUERY = "SELECT geo_id AS geoId,parent_geo_id AS parentGeoId,geo_type AS geoType,geo_description AS geoName FROM geo WHERE geo_id=:geoId";
 
     public Map<String, Object> getAgentById(String agentId) {
@@ -130,6 +132,10 @@ public class GHQuotationFinder {
 
     public Map<String, Object> getCoverageDetail(String coverageId) {
         return namedParameterJdbcTemplate.queryForMap(FIND_COVERAGE_BY_ID_QUERY, new MapSqlParameterSource().addValue("coverageId", coverageId));
+    }
+
+    public Map<String, Object> findCoverageDetailByCoverageCode(String coverageCode) {
+        return namedParameterJdbcTemplate.queryForMap(FIND_COVERAGE_BY_CODE_QUERY, new MapSqlParameterSource().addValue("coverageCode", coverageCode));
     }
 
     public Map<String, Object> findGeoDetail(String geoId) {

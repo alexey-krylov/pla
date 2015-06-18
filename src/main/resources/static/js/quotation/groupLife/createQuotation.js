@@ -47,10 +47,11 @@ angular.module('createQuotation', ['common', 'ngRoute', 'mgcrea.ngStrap.select',
                     samePlanForAllRelation: false,
                     samePlanForAllCategory: false
                 },
-
-
                 premium: $scope.premiumData
             };
+
+            if($scope.premiumData)
+            $scope.selectedInstallment = $scope.premiumData.premiumInstallment;
 
             $scope.quotationDetails.basic = agentDetails;
             $scope.quotationDetails.proposer = proposerDetails;
@@ -280,7 +281,9 @@ angular.module('createQuotation', ['common', 'ngRoute', 'mgcrea.ngStrap.select',
                 }
             };
 
-            $scope.installments = $scope.premiumData.installments;
+            $scope.installments =_.sortBy($scope.premiumData.installments,'installmentNo');
+
+
 
             $scope.recalculatePremium = function () {
                 $scope.premiumInstallment = false;
@@ -299,17 +302,25 @@ angular.module('createQuotation', ['common', 'ngRoute', 'mgcrea.ngStrap.select',
                     }
                     if (data.data.installments) {
                         $scope.selectedInstallment = null;
-                        $scope.installments = data.data.installments;
+                        $scope.installments =_.sortBy(data.data.installments,'installmentNo');
                     }
                 });
 
             }
 
+
+            $scope.setSelectedInstallment = function (selectedInstallment){
+                $scope.selectedInstallment=selectedInstallment;
+                console.log('setSelectedInstallment ***');
+            }
+
             $scope.savePremiumDetails = function () {
-                var premiumDetailDto=$scope.quotationDetails.premium;
-                premiumDetailDto.premiumInstallment=
-                $http.post('/pla/quotation/grouplife/savepremiumdetail', angular.extend({premiumDetailDto: $scope.quotationDetails.premium},
-                    {"quotationId": $scope.quotationId})).success(function (data) {
+                console.log($scope.selectedInstallment);
+                var request= angular.extend({premiumDetailDto: $scope.quotationDetails.premium},
+                    {"quotationId": $scope.quotationId});
+                request.premiumDetailDto["premiumInstallment"]=$scope.selectedInstallment;
+                console.log(JSON.stringify(request));
+                $http.post('/pla/quotation/grouplife/savepremiumdetail',request).success(function (data) {
                     $http.post("/pla/quotation/grouplife/generate", angular.extend({},
                         {"quotationId": $scope.quotationId}))
                         .success(function (data) {
@@ -320,7 +331,6 @@ angular.module('createQuotation', ['common', 'ngRoute', 'mgcrea.ngStrap.select',
                             }
                         });
                 });
-
             }
 
             $scope.back = function () {

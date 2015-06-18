@@ -93,7 +93,7 @@ public class GroupHealthQuotationController {
             return Result.failure("Agent detail not found");
         }
         checkArgument(agentDetail != null);
-         CreateGLQuotationCommand createGLQuotationCommand = new  CreateGLQuotationCommand();
+        CreateGLQuotationCommand createGLQuotationCommand = new CreateGLQuotationCommand();
         createGLQuotationCommand.setAgentId(agentId);
         createGLQuotationCommand.setBranchName(agentDetail.get("branchName") != null ? (String) agentDetail.get("branchName") : "");
         createGLQuotationCommand.setTeamName(agentDetail.get("teamName") != null ? (String) agentDetail.get("teamName") : "");
@@ -116,7 +116,7 @@ public class GroupHealthQuotationController {
     }
 
     @RequestMapping(value = "/searchquotation", method = RequestMethod.POST)
-    public ModelAndView searchQuotation( SearchGlQuotationDto searchGlQuotationDto) {
+    public ModelAndView searchQuotation(SearchGlQuotationDto searchGlQuotationDto) {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("pla/grouphealth/quotation/viewQuotation");
         try {
@@ -131,7 +131,7 @@ public class GroupHealthQuotationController {
     @RequestMapping(value = "/createquotation", method = RequestMethod.POST)
     @ApiOperation(httpMethod = "POST", value = "Create Group Life Quotation")
     @ResponseBody
-    public Result createQuotation(@RequestBody  CreateGLQuotationCommand createGLQuotationCommand, BindingResult bindingResult, HttpServletRequest request) {
+    public Result createQuotation(@RequestBody CreateGLQuotationCommand createGLQuotationCommand, BindingResult bindingResult, HttpServletRequest request) {
         if (bindingResult.hasErrors()) {
             return Result.failure("Create quotation data is not valid", bindingResult.getAllErrors());
         }
@@ -146,7 +146,7 @@ public class GroupHealthQuotationController {
 
     @RequestMapping(value = "/updatewithagentdetail", method = RequestMethod.POST)
     @ResponseBody
-    public Result updateQuotationWithAgentDetail(@RequestBody  UpdateGLQuotationWithAgentCommand updateGLQuotationWithAgentCommand, BindingResult bindingResult, HttpServletRequest request) {
+    public Result updateQuotationWithAgentDetail(@RequestBody UpdateGLQuotationWithAgentCommand updateGLQuotationWithAgentCommand, BindingResult bindingResult, HttpServletRequest request) {
         if (bindingResult.hasErrors()) {
             return Result.failure("Update quotation agent data is not valid", bindingResult.getAllErrors());
         }
@@ -161,7 +161,7 @@ public class GroupHealthQuotationController {
 
     @RequestMapping(value = "/updatewithproposerdetail", method = RequestMethod.POST)
     @ResponseBody
-    public Result updateQuotationWithProposerDetail(@RequestBody  UpdateGLQuotationWithProposerCommand updateGLQuotationWithProposerCommand, BindingResult bindingResult, HttpServletRequest request) {
+    public Result updateQuotationWithProposerDetail(@RequestBody UpdateGLQuotationWithProposerCommand updateGLQuotationWithProposerCommand, BindingResult bindingResult, HttpServletRequest request) {
         if (bindingResult.hasErrors()) {
             return Result.failure("Update quotation proposer data is not valid", bindingResult.getAllErrors());
         }
@@ -259,7 +259,7 @@ public class GroupHealthQuotationController {
 
     @RequestMapping(value = "/uploadinsureddetail", method = RequestMethod.POST)
     @ResponseBody
-    public Result uploadInsuredDetail( UploadInsuredDetailDto uploadInsuredDetailDto, HttpServletRequest request) throws IOException {
+    public Result uploadInsuredDetail(UploadInsuredDetailDto uploadInsuredDetailDto, HttpServletRequest request) throws IOException {
         MultipartFile file = uploadInsuredDetailDto.getFile();
         if (!("application/ms-excel".equals(file.getContentType()) || "application/msexcel".equals(file.getContentType()) || "application/vnd.ms-excel".equals(file.getContentType()))) {
             return Result.failure("Uploaded file is not valid excel");
@@ -277,12 +277,12 @@ public class GroupHealthQuotationController {
                 return Result.failure("Uploaded Insured template is not valid.Please download to check the errors");
             }
             List<GHInsuredDto> insuredDtos = ghQuotationService.transformToInsuredDto(insuredTemplateWorkbook, uploadInsuredDetailDto.getQuotationId(), uploadInsuredDetailDto.isSamePlanForAllCategory(), uploadInsuredDetailDto.isSamePlanForAllRelation());
-            commandGateway.sendAndWait(new UpdateGLQuotationWithInsuredCommand(uploadInsuredDetailDto.getQuotationId(), insuredDtos, getLoggedInUserDetail(request)));
+            String quotationId = commandGateway.sendAndWait(new UpdateGLQuotationWithInsuredCommand(uploadInsuredDetailDto.getQuotationId(), insuredDtos, getLoggedInUserDetail(request)));
+            return Result.success("Insured detail uploaded successfully", quotationId);
         } catch (Exception e) {
             e.printStackTrace();
             return Result.failure(e.getMessage());
         }
-        return Result.success("Insured detail uploaded successfully", uploadInsuredDetailDto.getQuotationId());
     }
 
     @RequestMapping(value = "/getpremiumdetail/{quotationid}", method = RequestMethod.GET)
