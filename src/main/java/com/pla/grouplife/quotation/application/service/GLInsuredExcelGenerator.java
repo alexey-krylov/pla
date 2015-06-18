@@ -3,8 +3,8 @@ package com.pla.grouplife.quotation.application.service;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.pla.core.query.MasterFinder;
-import com.pla.publishedlanguage.contract.IPlanAdapter;
 import com.pla.grouplife.quotation.query.InsuredDto;
+import com.pla.publishedlanguage.contract.IPlanAdapter;
 import com.pla.sharedkernel.domain.model.Gender;
 import com.pla.sharedkernel.domain.model.OccupationCategory;
 import com.pla.sharedkernel.domain.model.Relationship;
@@ -67,10 +67,15 @@ public class GLInsuredExcelGenerator {
         });
         List<InsuredDto.CoveragePremiumDetailDto> coveragePremiumDetailDtoList = insuredDto.getCoveragePremiumDetails();
         coveragePremiumDetailDtoList.forEach(coveragePremiumDetail -> {
-            int indexOfOptionalCoverage = headers.indexOf(AppConstants.OPTIONAL_COVERAGE_HEADER + coveragePremiumDetailDtoList.indexOf(coveragePremiumDetail) + 1);
+            int indexOfCoveragePremiumDetail = coveragePremiumDetailDtoList.indexOf(coveragePremiumDetail) + 1;
+            int indexOfOptionalCoverage = headers.indexOf(AppConstants.OPTIONAL_COVERAGE_HEADER + indexOfCoveragePremiumDetail);
+            int indexOfOptionalCoverageSA = headers.indexOf((AppConstants.OPTIONAL_COVERAGE_HEADER + indexOfCoveragePremiumDetail) + " " + AppConstants.OPTIONAL_COVERAGE_SA_HEADER);
+            int indexOfOptionalCoveragePremium = headers.indexOf((AppConstants.OPTIONAL_COVERAGE_HEADER + indexOfCoveragePremiumDetail) + " " + AppConstants.PREMIUM_CELL_HEADER_NAME);
             excelDataMap.put(indexOfOptionalCoverage, coveragePremiumDetail.getCoverageCode());
-            excelDataMap.put(indexOfOptionalCoverage + 1, coveragePremiumDetail.getPremium() != null ? coveragePremiumDetail.getPremium().toString() : "");
+            excelDataMap.put(indexOfOptionalCoverageSA, coveragePremiumDetail.getSumAssured() != null ? coveragePremiumDetail.getSumAssured().toString() : "");
+            excelDataMap.put(indexOfOptionalCoveragePremium, coveragePremiumDetail.getPremium() != null ? coveragePremiumDetail.getPremium().toString() : "");
         });
+
         List<Map<Integer, String>> dependentDetailExcelRowData = insuredDto.getInsuredDependents().stream().map(new Function<InsuredDto.InsuredDependentDto, Map<Integer, String>>() {
             @Override
             public Map<Integer, String> apply(InsuredDto.InsuredDependentDto insuredDependentDto) {
@@ -91,9 +96,13 @@ public class GLInsuredExcelGenerator {
         });
         List<InsuredDto.CoveragePremiumDetailDto> coveragePremiumDetailDtoList = insuredDependentDto.getCoveragePremiumDetails();
         coveragePremiumDetailDtoList.forEach(coveragePremiumDetail -> {
-            int indexOfOptionalCoverage = headers.indexOf(AppConstants.OPTIONAL_COVERAGE_HEADER + coveragePremiumDetailDtoList.indexOf(coveragePremiumDetail) + 1);
+            int indexOfCoveragePremiumDetail = coveragePremiumDetailDtoList.indexOf(coveragePremiumDetail) + 1;
+            int indexOfOptionalCoverage = headers.indexOf(AppConstants.OPTIONAL_COVERAGE_HEADER + indexOfCoveragePremiumDetail);
+            int indexOfOptionalCoverageSA = headers.indexOf((AppConstants.OPTIONAL_COVERAGE_HEADER + indexOfCoveragePremiumDetail) + " " + AppConstants.OPTIONAL_COVERAGE_SA_HEADER);
+            int indexOfOptionalCoveragePremium = headers.indexOf((AppConstants.OPTIONAL_COVERAGE_HEADER + indexOfCoveragePremiumDetail) + " " + AppConstants.PREMIUM_CELL_HEADER_NAME);
             excelDataMap.put(indexOfOptionalCoverage, coveragePremiumDetail.getCoverageCode());
-            excelDataMap.put(indexOfOptionalCoverage + 1, coveragePremiumDetail.getPremium() != null ? coveragePremiumDetail.getPremium().toString() : "");
+            excelDataMap.put(indexOfOptionalCoverageSA, coveragePremiumDetail.getSumAssured() != null ? coveragePremiumDetail.getSumAssured().toString() : "");
+            excelDataMap.put(indexOfOptionalCoveragePremium, coveragePremiumDetail.getPremium() != null ? coveragePremiumDetail.getPremium().toString() : "");
         });
         return excelDataMap;
     }

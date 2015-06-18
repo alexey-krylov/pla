@@ -93,11 +93,14 @@ public class ILQuotationAppService {
         }
 
         List<ComputedPremiumDto> computedPremiums = premiumCalculator.calculateBasicPremiumWithPolicyFee(premiumCalculationDto);
-
         premiumDetailDto.setPlanAnnualPremium(ComputedPremiumDto.getAnnualPremium(computedPremiums));
 
-        List<Map<String, Object>> riderList = ilQuotationFinder.getQuotationforPremiumWithRiderById(quotationId.getQuotationId());
+        BigDecimal totalPremium = premiumDetailDto.getPlanAnnualPremium();
+        BigDecimal semiAnnualPremium = ComputedPremiumDto.getSemiAnnualPremium(computedPremiums);
+        BigDecimal quarterlyPremium = ComputedPremiumDto.getQuarterlyPremium(computedPremiums);
+        BigDecimal monthlyPremium = ComputedPremiumDto.getMonthlyPremium(computedPremiums);
 
+        List<Map<String, Object>> riderList = ilQuotationFinder.getQuotationforPremiumWithRiderById(quotationId.getQuotationId());
         if(riderList != null) {
             for (Map  rider : riderList){
                 premiumCalculationDto = new PremiumCalculationDto(new PlanId(quotation.get("PLANID").toString()), LocalDate.now(), PremiumFrequency.ANNUALLY, 365);
@@ -118,33 +121,26 @@ public class ILQuotationAppService {
                     if(premiumInfluencingFactor.name().equalsIgnoreCase(String.valueOf(PremiumInfluencingFactor.OCCUPATION_CLASS)))
                         premiumCalculationDto.addInfluencingFactorItemValue(PremiumInfluencingFactor.OCCUPATION_CLASS, quotation.get("ASSURED_OCCUPATION").toString());
                 }
-                computedPremiums = premiumCalculator.calculateBasicPremiumWithPolicyFee(premiumCalculationDto);
                 RiderPremiumDto rd = new RiderPremiumDto();
                 rd.setCoverageId(new CoverageId (rider.get("COVERAGEID").toString()));
                 if(rider.get("COVERAGENAME") != null )
                     rd.setCoverageName(new CoverageName (rider.get("COVERAGENAME").toString()));
                 computedPremiums = premiumCalculator.calculateBasicPremium(premiumCalculationDto);
                 rd.setAnnualPremium(ComputedPremiumDto.getAnnualPremium(computedPremiums));
+                totalPremium = totalPremium.add(ComputedPremiumDto.getAnnualPremium(computedPremiums));
+                semiAnnualPremium = semiAnnualPremium.add(ComputedPremiumDto.getSemiAnnualPremium(computedPremiums));
+                quarterlyPremium = quarterlyPremium.add(ComputedPremiumDto.getQuarterlyPremium(computedPremiums));
+                monthlyPremium = monthlyPremium.add(ComputedPremiumDto.getMonthlyPremium(computedPremiums));
                 riderPremiumDtoSet.add(rd);
             }
         }
-
-        BigDecimal totalPremium = premiumDetailDto.getPlanAnnualPremium();
-        if(riderPremiumDtoSet.size() > 0) {
-            premiumDetailDto.setRiderPremiumDtos(riderPremiumDtoSet);
-            totalPremium = totalPremium.add(riderPremiumDtoSet.stream().map(RiderPremiumDto::getAnnualPremium).reduce(BigDecimal::add).get());
-        }
+        premiumDetailDto.setRiderPremiumDtos(riderPremiumDtoSet);
         premiumDetailDto.setTotalPremium(totalPremium);
-
-
-        //TODO Do not call this modal. As this is already factored.
-        List<ComputedPremiumDto> computedPremiums1 = premiumCalculator.calculateModalPremium(new BasicPremiumDto(PremiumFrequency.ANNUALLY, totalPremium));
         premiumDetailDto.setPlanName(planFinder.getPlanName(new PlanId(quotation.get("PLANID").toString())));
         premiumDetailDto.setAnnualPremium(totalPremium);
-        premiumDetailDto.setMonthlyPremium(ComputedPremiumDto.getMonthlyPremium(computedPremiums1));
-        premiumDetailDto.setQuarterlyPremium(ComputedPremiumDto.getQuarterlyPremium(computedPremiums1));
-        premiumDetailDto.setSemiannualPremium(ComputedPremiumDto.getSemiAnnualPremium(computedPremiums1));
-
+        premiumDetailDto.setMonthlyPremium(monthlyPremium);
+        premiumDetailDto.setQuarterlyPremium(quarterlyPremium);
+        premiumDetailDto.setSemiannualPremium(semiAnnualPremium);
         return premiumDetailDto;
     }
 
