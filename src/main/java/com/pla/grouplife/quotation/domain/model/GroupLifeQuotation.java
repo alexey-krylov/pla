@@ -1,9 +1,10 @@
 package com.pla.grouplife.quotation.domain.model;
 
 import com.pla.core.domain.model.agent.AgentId;
-import com.pla.grouplife.quotation.domain.event.ProposerAddedEvent;
 import com.pla.grouplife.quotation.domain.event.GLQuotationClosedEvent;
+import com.pla.grouplife.quotation.domain.event.GLQuotationEndSagaEvent;
 import com.pla.grouplife.quotation.domain.event.GLQuotationGeneratedEvent;
+import com.pla.grouplife.quotation.domain.event.ProposerAddedEvent;
 import com.pla.sharedkernel.identifier.QuotationId;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -15,6 +16,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.math.BigDecimal;
+import java.util.List;
 import java.util.Set;
 import java.util.function.ToIntFunction;
 
@@ -133,6 +135,10 @@ public class GroupLifeQuotation extends AbstractAggregateRoot<QuotationId> imple
 
     @Override
     public void generateQuotation(LocalDate generatedOn) {
+
+    }
+
+    public void generateQuotation(LocalDate generatedOn, List<GroupLifeQuotation> generatedQuotations) {
         this.quotationStatus = QuotationStatus.GENERATED;
         this.generatedOn = generatedOn;
         if (proposer != null && proposer.getContactDetail() != null) {
@@ -141,6 +147,11 @@ public class GroupLifeQuotation extends AbstractAggregateRoot<QuotationId> imple
                     proposerContactDetail.getAddressLine1(), proposerContactDetail.getAddressLine2(), proposerContactDetail.getPostalCode(),
                     proposerContactDetail.getProvince(), proposerContactDetail.getTown(), proposerContactDetail.getEmailAddress()));
             registerEvent(new GLQuotationGeneratedEvent(quotationId));
+            if (isNotEmpty(generatedQuotations)) {
+                generatedQuotations.forEach(generatedQuotation -> {
+                    registerEvent(new GLQuotationEndSagaEvent(generatedQuotation.getQuotationId()));
+                });
+            }
         }
     }
 

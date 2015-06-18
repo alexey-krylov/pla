@@ -1,5 +1,6 @@
 package com.pla.grouplife.quotation.saga;
 
+import com.google.common.collect.Lists;
 import com.pla.sharedkernel.exception.ProcessInfoException;
 import com.pla.sharedkernel.domain.model.ProcessType;
 import com.pla.grouplife.quotation.application.command.ClosureGLQuotationCommand;
@@ -12,6 +13,7 @@ import com.pla.publishedlanguage.contract.IProcessInfoAdapter;
 import com.pla.sharedkernel.identifier.LineOfBusinessEnum;
 import org.axonframework.commandhandling.gateway.CommandGateway;
 import org.axonframework.eventhandling.scheduling.EventScheduler;
+import org.axonframework.eventhandling.scheduling.ScheduleToken;
 import org.axonframework.saga.annotation.AbstractAnnotatedSaga;
 import org.axonframework.saga.annotation.EndSaga;
 import org.axonframework.saga.annotation.SagaEventHandler;
@@ -22,6 +24,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import java.util.List;
 
 /**
  * Created by Samir on 5/31/2015.
@@ -45,6 +49,9 @@ public class GroupLifeQuotationSaga extends AbstractAnnotatedSaga {
     @Autowired
     private transient CommandGateway commandGateway;
 
+    private List<ScheduleToken> scheduledTokens = Lists.newArrayList();
+
+
     @StartSaga
     @SagaEventHandler(associationProperty = "quotationId")
     public void handle(GLQuotationGeneratedEvent event) throws ProcessInfoException {
@@ -62,9 +69,12 @@ public class GroupLifeQuotationSaga extends AbstractAnnotatedSaga {
         DateTime purgeScheduleDateTime = purgeDate.toDateTimeAtStartOfDay();
         DateTime closureScheduleDateTime = closureDate.toDateTimeAtStartOfDay();
         DateTime firstReminderDateTime = firstReminderDate.toDateTimeAtStartOfDay();
-        eventScheduler.schedule(firstReminderDateTime, new GLQuotationReminderEvent(event.getQuotationId()));
-        eventScheduler.schedule(purgeScheduleDateTime, new GLQuotationPurgeEvent(event.getQuotationId()));
-        eventScheduler.schedule(closureScheduleDateTime, new GLQuotationClosureEvent(event.getQuotationId()));
+        ScheduleToken firstReminderScheduleToken = eventScheduler.schedule(firstReminderDateTime, new GLQuotationReminderEvent(event.getQuotationId()));
+        ScheduleToken purgeScheduleToken = eventScheduler.schedule(purgeScheduleDateTime, new GLQuotationPurgeEvent(event.getQuotationId()));
+        ScheduleToken closureScheduleToken = eventScheduler.schedule(closureScheduleDateTime, new GLQuotationClosureEvent(event.getQuotationId()));
+        scheduledTokens.add(firstReminderScheduleToken);
+        scheduledTokens.add(purgeScheduleToken);
+        scheduledTokens.add(closureScheduleToken);
     }
 
     @SagaEventHandler(associationProperty = "quotationId")
@@ -94,7 +104,8 @@ public class GroupLifeQuotationSaga extends AbstractAnnotatedSaga {
                 LocalDate quotationGeneratedDate = groupLifeQuotation.getGeneratedOn();
                 LocalDate secondReminderDate = quotationGeneratedDate.plusDays(firstReminderDay + secondReminderDay);
                 DateTime secondReminderDateTime = secondReminderDate.toDateTimeAtStartOfDay();
-                eventScheduler.schedule(secondReminderDateTime, new GLQuotationReminderEvent(event.getQuotationId()));
+                ScheduleToken secondReminderScheduleToken = eventScheduler.schedule(secondReminderDateTime, new GLQuotationReminderEvent(event.getQuotationId()));
+                scheduledTokens.add(secondReminderScheduleToken);
             }
         }
     }
@@ -116,5 +127,13 @@ public class GroupLifeQuotationSaga extends AbstractAnnotatedSaga {
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("Handling GL Quotation Closure Event .....", event);
         }
+    }
+
+    @SagaEventHandler(associationProperty = "quotationId")
+    @EndSaga
+    public void handle(GLQuotationEndSagaEvent event) {
+        scheduledTokens.forEach(scheduledToken -> {
+            eventScheduler.cancelSchedule(scheduledToken);
+        });
     }
 }

@@ -2,6 +2,7 @@ package com.pla.grouphealth.quotation.domain.model;
 
 import com.pla.core.domain.model.agent.AgentId;
 import com.pla.grouphealth.quotation.domain.event.GHQuotationClosedEvent;
+import com.pla.grouphealth.quotation.domain.event.GHQuotationEndSagaEvent;
 import com.pla.grouphealth.quotation.domain.event.GHQuotationGeneratedEvent;
 import com.pla.grouphealth.quotation.domain.event.ProposerAddedEvent;
 import com.pla.sharedkernel.identifier.QuotationId;
@@ -15,6 +16,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.math.BigDecimal;
+import java.util.List;
 import java.util.Set;
 import java.util.function.ToIntFunction;
 
@@ -133,6 +135,10 @@ public class GroupHealthQuotation extends AbstractAggregateRoot<QuotationId> imp
 
     @Override
     public void generateQuotation(LocalDate generatedOn) {
+
+    }
+
+    public void generateQuotation(LocalDate generatedOn, List<GroupHealthQuotation> generatedQuotations) {
         this.quotationStatus = GHQuotationStatus.GENERATED;
         this.generatedOn = generatedOn;
         if (proposer != null && proposer.getContactDetail() != null) {
@@ -141,6 +147,11 @@ public class GroupHealthQuotation extends AbstractAggregateRoot<QuotationId> imp
                     proposerContactDetail.getAddressLine1(), proposerContactDetail.getAddressLine2(), proposerContactDetail.getPostalCode(),
                     proposerContactDetail.getProvince(), proposerContactDetail.getTown(), proposerContactDetail.getEmailAddress()));
             registerEvent(new GHQuotationGeneratedEvent(quotationId));
+        }
+        if (isNotEmpty(generatedQuotations)) {
+            generatedQuotations.forEach(generatedQuotation -> {
+                registerEvent(new GHQuotationEndSagaEvent(generatedQuotation.getQuotationId()));
+            });
         }
     }
 

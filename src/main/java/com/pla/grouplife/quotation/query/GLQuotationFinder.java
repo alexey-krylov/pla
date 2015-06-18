@@ -8,6 +8,7 @@ import com.pla.sharedkernel.identifier.QuotationId;
 import org.bson.types.ObjectId;
 import org.nthdimenzion.ddd.domain.annotations.Finder;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.BasicQuery;
 import org.springframework.data.mongodb.core.query.Criteria;
@@ -114,6 +115,8 @@ public class GLQuotationFinder {
             criteria = criteria.and("agentId.agentId").in(agentIds);
         }
         Query query = new Query(criteria);
+        query.with(new Sort(Sort.Direction.ASC,"quotationNumber"));
+        query.with(new Sort(Sort.Direction.DESC,"versionNumber"));
         return mongoTemplate.find(query, Map.class, "group_life_quotation");
     }
 

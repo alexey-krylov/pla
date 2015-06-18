@@ -3,8 +3,8 @@ package com.pla.grouphealth.quotation.application.command;
 import com.pla.grouphealth.quotation.domain.model.*;
 import com.pla.grouphealth.quotation.domain.service.GroupHealthQuotationService;
 import com.pla.grouphealth.quotation.query.GHInsuredDto;
-import com.pla.grouphealth.quotation.query.GHQuotationFinder;
 import com.pla.grouphealth.quotation.query.GHPremiumDetailDto;
+import com.pla.grouphealth.quotation.query.GHQuotationFinder;
 import com.pla.grouphealth.quotation.repository.GHQuotationRepository;
 import com.pla.publishedlanguage.contract.IPremiumCalculator;
 import com.pla.publishedlanguage.contract.IProcessInfoAdapter;
@@ -95,7 +95,8 @@ public class GHQuotationCommandHandler {
     @CommandHandler
     public String generateQuotation(com.pla.grouphealth.quotation.application.command.GenerateGLQuotationCommand generateGLQuotationCommand) {
         GroupHealthQuotation groupHealthQuotation = ghQuotationMongoRepository.load(new QuotationId(generateGLQuotationCommand.getQuotationId()));
-        groupHealthQuotation.generateQuotation(LocalDate.now());
+        List<GroupHealthQuotation> generatedQuotations = ghQuotationRepository.findQuotationByQuotNumberAndStatusByExcludingGivenQuotId(groupHealthQuotation.getQuotationNumber(), groupHealthQuotation.getQuotationId(), GHQuotationStatus.GENERATED.name());
+        groupHealthQuotation.generateQuotation(LocalDate.now(),generatedQuotations);
         return groupHealthQuotation.getIdentifier().getQuotationId();
     }
 

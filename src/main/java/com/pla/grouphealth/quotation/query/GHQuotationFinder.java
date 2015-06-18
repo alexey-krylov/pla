@@ -8,6 +8,7 @@ import com.pla.sharedkernel.identifier.QuotationId;
 import org.bson.types.ObjectId;
 import org.nthdimenzion.ddd.domain.annotations.Finder;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.BasicQuery;
 import org.springframework.data.mongodb.core.query.Criteria;
@@ -97,7 +98,7 @@ public class GHQuotationFinder {
             criteria = criteria != null ? criteria.and("agentId.agentId").is(agentCode) : Criteria.where("agentId.agentId").is(agentCode);
         }
         if (isNotEmpty(proposerName)) {
-            String proposerPattern = "^"+proposerName;
+            String proposerPattern = "^" + proposerName;
             criteria = criteria != null ? criteria.and("proposer.proposerName").regex(Pattern.compile(proposerPattern, Pattern.CASE_INSENSITIVE)) : Criteria.where("proposer.proposerName").regex(Pattern.compile(proposerPattern, Pattern.CASE_INSENSITIVE));
         }
         Set<String> agentIds = null;
@@ -114,6 +115,8 @@ public class GHQuotationFinder {
             criteria = criteria.and("agentId.agentId").in(agentIds);
         }
         Query query = new Query(criteria);
+        query.with(new Sort(Sort.Direction.ASC, "quotationNumber"));
+        query.with(new Sort(Sort.Direction.DESC, "versionNumber"));
         return mongoTemplate.find(query, Map.class, "group_health_quotation");
     }
 
