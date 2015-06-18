@@ -1,6 +1,6 @@
 package com.pla.core.presentation.dto;
 
-import com.pla.core.domain.model.notification.WaitingForEnum;
+import com.pla.sharedkernel.domain.model.WaitingForEnum;
 import com.pla.sharedkernel.domain.model.ProcessType;
 import com.pla.sharedkernel.identifier.LineOfBusinessEnum;
 
