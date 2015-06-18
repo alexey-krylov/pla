@@ -1,4 +1,4 @@
-package com.pla.core.presentation.dto;
+package com.pla.core.dto;
 
 import com.pla.sharedkernel.domain.model.WaitingForEnum;
 import com.pla.sharedkernel.domain.model.ProcessType;
