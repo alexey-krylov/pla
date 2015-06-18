@@ -1,10 +1,229 @@
 <!DOCTYPE html>
-<html>
-<head lang="en">
-    <meta charset="UTF-8">
-    <title></title>
+<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/xhtml"
+      lang="en">
+<head th:include="fragments/common :: headTag">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <title name="Notification Role List"/>
 </head>
-<body>
+<body ng-controller="ReminderTemplateCtrl">
 
+<style>
+    .error {
+        font-size: 10px;
+        color: firebrick;
+    }
+</style>
+<div th:include="fragments/common :: bodyHeader" th:remove="tag"></div>
+<link href="/pla/css/xeditable.css"/>
+<div class="splash">
+    <div class="color-line"></div>
+    <div class="splash-title"></div>
+</div>
+<div class="container-fluid">
+    <div class="panel panel-primary">
+        <div class="panel-heading">
+            <div class="row">
+                <div class="col-lg-6"><span th:text="#{planList}">List of Notification Roles
+                        </span></div>
+                <div class="col-lg-6">
+                    <a class="btn btn-default btn-sm" style="float: right"
+                       href="#newTemplate" data-toggle="modal" data-target="#newTemplate">New Role Mapping</a>
+                </div>
+            </div>
+        </div>
+        <div class="panel-body ">
+            <div class="col-md-9">
+                <nth-alert/>
+            </div>
+            <table class="dataTables_wrapper dataTable table table-striped table-bordered"
+                   datatable="" cellspacing="0" width="100%">
+                <thead>
+                <tr>
+                    <th>Line of Business</th>
+                    <th>Process Type</th>
+                    <th>Waiting For</th>
+                    <th>Reminder Type</th>
+                    <th>Template</th>
+                    <th>Action</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="role : ${templateList}">
+                    <td th:text="${role.lineOfBusiness}"></td>
+                    <td th:text="${role.processType}"></td>
+                    <td th:text="${role.waitingFor}"></td>
+                    <td th:text="${role.reminderType}"></td>
+                    <td><a>Download Template</a></td>
+                    <td></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="panel-footer">
+            <ul class="pagination" id="logs-pagination-default"></ul>
+        </div>
+    </div>
+
+
+    <div class="modal fade" id="newTemplate" tabindex="-1" role="dialog" aria-labelledby="newTemplate">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                            aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">New Template</h4>
+                </div>
+                <div class="modal-body">
+                    <ng-alert></ng-alert>
+                    <form name="templateForm" action="/core/notification/uploadTemplate" method="POST"
+                          enctype="multipart/form-data">
+
+                        <div class="panel panel-default">
+                            <div class="panel-body">
+                                <div class="control-group required col-md-6">
+                                    <label class="control-label">Line of Business</label>
+                                    <select class="form-control input-sm" id="lineOfBusiness"
+                                            ng-model="template.lineOfBusiness" name="lineOfBusiness"
+                                            ng-required="true">
+                                        <option value="INDIVIDUAL_LIFE">Individual Life</option>
+                                        <option value="GROUP_HEALTH">Group Health</option>
+                                        <option value="GROUP_LIFE">Group Life</option>
+                                    </select>
+
+                                    <div class="error"
+                                         ng-show="templateForm.lineOfBusiness.$submitted &amp;&amp; templateForm.lineOfBusiness.$invalid">
+                                        <small class="error" ng-show="templateForm.lineOfBusiness.$error.required">
+                                            Please indicate the Line Of Business.
+                                        </small>
+                                    </div>
+                                </div>
+                                <div class="control-group required col-md-4">
+                                    <label class="control-label">Process Type</label>
+                                    <select class="form-control input-sm" id="processType"
+                                            ng-model="template.processType" name="processType"
+                                            ng-required="true">
+                                        <option value="QUOTATION">Quotation</option>
+                                        <option value="CLAIM">Claim</option>
+                                        <option value="PROPOSAL">Proposal</option>
+                                        <option value="REINSTATEMENT">Reinstatement</option>
+                                        <option value="ENDORSEMENT">Endorsement</option>
+                                        <option value="SURRENDER">Surrender</option>
+                                        <option value="MATURITY">Maturity</option>
+                                    </select>
+
+                                    <div class="error"
+                                         ng-show="templateForm.processType.$submitted &amp;&amp; templateForm.processType.$invalid">
+                                        <small class="error" ng-show="templateForm.processType.$error.required">
+                                            Please indicate the Process Type.
+                                        </small>
+                                    </div>
+                                </div>
+                                <div class="control-group required col-md-6">
+                                    <label class="control-label">Waiting For</label>
+                                    <select class="form-control input-sm" id="role"
+                                            ng-model="template.waitingFor" name="waitingFor" ng-required="true">
+                                        <option value="QUOTATION_PREPROCESSOR">Quotation</option>
+                                        <option value="PROPOSAL_PREPROCESSOR">Proposal</option>
+                                        <option value="CLAIM_PREPROCESSOR">Claim</option>
+                                    </select>
+
+                                    <div class="error"
+                                         ng-show="templateForm.waitingFor.$submitted &amp;&amp; templateForm.waitingFor.$invalid">
+                                        <small class="error" ng-show="templateForm.waitingFor.$error.required">
+                                            Please select Role.
+                                        </small>
+                                    </div>
+                                </div>
+                                <div class="control-group required col-md-6">
+                                    <label class="control-label">Select Template</label>
+                                    <myUpload key="file"></myUpload>
+                                    <ng-messages class="error"
+                                                 ng-show="templateForm.waitingFor.$submitted &amp;&amp; templateForm.waitingFor.$invalid">
+                                        <ng-message for="required">Please select Role.</ng-message>
+                                    </ng-messages>
+                                </div>
+                            </div>
+                        </div>
+
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" ng-click="save()" ng-disabled="templateForm.$invalid">
+                        Upload
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<footer class="footer" th:include="fragments/common :: footer"></footer>
+
+<script>
+    requirejs(['main'], function () {
+        require(['angular', 'jquery'], function (app, $) {
+            var module = angular.module('ReminderTemplateModule', ['common']);
+            module.controller('ReminderTemplateCtrl', ['$scope', '$http', '$window', function ($scope, $http, $window) {
+                console.log('Reminder Template Module Controller ');
+                $scope.mapping = {};
+
+                $scope.save = function () {
+                    console.log('invoke saved...');
+                    var requestUrl = '';//new Url
+                    if ($scope.mapping.id) {
+                        requestUrl = '';//editUrl as it has an Id
+                    }
+                    $('#');
+                    $('#newRoleMapping').modal('hide');
+                    $scope.reload();
+                };
+
+                $scope.clear = function () {
+                    $scope.mapping = {lineOfBusiness: null, processType: null, id: null, roleType: null};
+                };
+
+                $scope.edit = function (mapping) {
+                    $scope.mapping = mapping.copy();
+                    $('#newRoleMapping').modal('show');
+                };
+
+                $scope.reload = function () {
+                    $window.location = '';
+                };
+
+            }]);
+
+            module.directive('myUpload', function () {
+                return {
+                    link: function postLink(scope, element, attrs) {
+                        element.find("input").bind("change", function (changeEvent) {
+                            var reader = new FileReader();
+                            reader.onload = function (loadEvent) {
+                                scope.$apply(function () {
+                                    scope[attrs.key] = loadEvent.target.result;
+                                });
+                            }
+                            if (typeof(changeEvent.target.files[0]) === 'object') {
+                                reader.readAsDataURL(changeEvent.target.files[0]);
+                            }
+                            ;
+                        });
+
+                    },
+                    controller: 'FileUploadCtrl',
+                    template: '<span class="btn btn-success fileinput-button">' +
+                    '<i class="glyphicon glyphicon-plus"></i>' +
+                    '<span>Replace Image</span>' +
+                    '<input type="file" accept="image/*" name="files[]" multiple=""/>' +
+                    '</span>',
+                    restrict: 'E'
+
+                };
+            });
+            angular.bootstrap(document, ['ReminderTemplateModule']);
+        });
+    });
+
+</script>
 </body>
 </html>

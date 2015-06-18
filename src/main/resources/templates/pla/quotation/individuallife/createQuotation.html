@@ -44,6 +44,7 @@
             <button type="button" class="btn btn-default btn-prev">
                 <span class="glyphicon glyphicon-arrow-left"></span>Prev
             </button>
+
             <button type="button" class="btn btn-default btn-next" ng-disabled="!stepsSaved[selectedItem]"
                     data-last="Complete" id="wizardStep">Next<span
                     class="glyphicon glyphicon-arrow-right"></span></button>
@@ -71,7 +72,6 @@
                         <div class="col-lg-6">
                             <div class="form-group required">
                                 <label class="control-label">Plan</label>
-
                                 <div data-angucomplete-alt="" placeholder="Search Plan" pause="500"
                                      selected-object="selectedPlan" disable-input="uneditable"
                                      remote-url="/pla/core/agent/searchplan"
@@ -101,7 +101,7 @@
                                            ng-model="proposedAssured.surname" ng-disabled="uneditable"/>
 
                                     <div class="error" ng-messages="step1.surname.$error" ng-if="step1.surname.$dirty">
-                                        <small ng-message="required">Please enter surname.</small>
+                                        <small ng-message="required">Please enter Surname.</small>
                                     </div>
                                 </div>
                             </div>
@@ -117,7 +117,7 @@
                                     </div>
                                 </div>
                                 <div class="form-group required">
-                                    <label class="control-label">NRC Number</label>
+                                    <label class="control-label">NRC</label>
                                     <input type="text" class="form-control input-sm" name="nrcNumber" ng-required="true"
                                            ng-disabled="uneditable"
                                            ng-model="proposedAssured.nrcNumber"
@@ -125,7 +125,7 @@
 
                                     <div class="error" ng-messages="step1.nrcNumber.$error"
                                          ng-if="step1.nrcNumber.$dirty">
-                                        <small ng-message="required">Please enter NRC Number.</small>
+                                        <small ng-message="required">Please enter NRC.</small>
                                     </div>
                                 </div>
                             </div>
@@ -167,7 +167,7 @@
                                 <input type="text" class="form-control input-sm" name="surname" readonly="true"
                                        ng-model="proposedAssured.surname"/>
                             </div>
-                            <div class="form-group">
+                            <div class="form-group">{
                                 <label class="control-label">Date of Birth</label>
                                 <div class='input-group date'>
                                     <input type="text" class="form-control input-sm"
@@ -186,9 +186,10 @@
                                     <small ng-message="date">Invalid Date.</small>
                                 </div>
                             </div>
-                            <div class="form-group">
+                            <div class="form-group required">
                                 <label class="control-label">Sex</label>
-                                <select class="form-control input-sm" ng-model="proposedAssured.gender">
+                                <select class="form-control input-sm" ng-model="proposedAssured.gender"
+                                        ng-required="true">
                                     <option value="MALE">Male</option>
                                     <option value="FEMALE">Female</option>
                                 </select>
@@ -202,15 +203,22 @@
                                     <small ng-message="email">Invalid Email.</small>
                                 </div>
                             </div>
-                            <div class="form-group">
+                            <div class="form-group required">
                                 <label style="text-align: left">Is Proposed Assured the proposer?</label>
                                 <label style="padding-right: 5px">
-                                    <input type="radio" name="proposerSameAsProposedAssured"
+                                    <input type="radio" name="sameProposer" ng-required="true"
                                            ng-model="proposerSameAsProposedAssured" ng-value="true"
                                            value="yes"/>Yes</label>
-                                <label><input type="radio" name="proposerSameAsProposedAssured"
+                                <label><input type="radio" name="sameProposer" ng-required="true"
                                               ng-model="proposerSameAsProposedAssured" ng-value="false"
                                               value="no"/>No</label>
+
+                                <div class="error" ng-messages="step2.sameProposer.$error"
+                                     ng-if="step2.sameProposer.$dirty">
+                                    <small ng-message="required">Please indicate whether Proposed Assured is the
+                                        Proposer.
+                                    </small>
+                                </div>
                             </div>
                         </div>
                         <div class="col-lg-6">
@@ -228,14 +236,21 @@
                                 <div class="error" ng-messages="step2.nrcNumber.$error" ng-if="step2.$dirty">
                                     <small ng-message="required">Please enter NRC Number.</small>
                                 </div>
-                                <div class="error" ng-messages="step2.pattern.$error" ng-if="step2.$dirty">
-                                    <small ng-message="required">Please enter NRC Number.</small>
+                                <div class="error" ng-messages="step2.nrcNumber.$error" ng-if="step2.$dirty">
+                                    <small ng-message="pattern">Please enter NRC Number.</small>
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label class="control-label">Age Next Birthday</label>
-                                <input type="text" class="form-control input-sm" name="age"
+                                <input type="text" class="form-control input-sm" name="age" validate-dob="ng"
                                        ng-model="proposedAssuredAge" readonly="readonly"/>
+
+                                <div class="error" ng-messages="step2.age.$error" ng-if="step2.$dirty">
+                                    <small ng-message="invalidAge">The age should be greater or equal to
+                                        {{plan.planDetail.minEntryAge}} and less or equal to
+                                        {{plan.planDetail.maxEntryAge}}
+                                    </small>
+                                </div>
                             </div>
                             <div class="form-group required">
                                 <label class="control-label">Mobile Number</label>
@@ -261,11 +276,14 @@
                     </div>
                     <div class="row">
                         <div class="col-sm-6">
-                            <button type="button" class="btn btn-default btn-sm">Cancel</button>
+                            <button type="button" class="btn btn-default btn-sm"
+                                    onclick="window.location='/pla/individuallife/quotation/searchForm'">Cancel
+                            </button>
                         </div>
                         <div class="col-sm-6">
                             <button type="button" class="btn btn-default btn-sm" style="float: right"
-                                    ng-click="saveStep2()" ng-disabled="step2.$invalid">Save
+                                    ng-click="saveStep2()"
+                                    ng-disabled="isSaveDisabled(step2)">Save
                             </button>
                         </div>
                     </div>
@@ -275,9 +293,10 @@
                 <ng-form name="step3" novalidate="">
                     <div class="row">
                         <div class="col-lg-6">
-                            <div class="form-group">
+                            <div class="form-group required">
                                 <label>Title</label>
-                                <select class="form-control input-sm">
+                                <select class="form-control input-sm" ng-model="proposer.title" name="ptitle"
+                                        ng-disabled="proposerSameAsProposedAssured" ng-required="true">
                                     <option value="Mr.">Mr.</option>
                                     <option value="Mrs.">Mrs.</option>
                                     <option value="Miss.">Miss.</option>
@@ -285,22 +304,25 @@
                                     <option value="Prof.">Prof.</option>
                                     <option value="Hon.">Hon.</option>
                                 </select>
+
+                                <div class="error" ng-messages="step3.ptitle.$error" ng-if="step3.ptitle.$dirty">
+                                    <small ng-message="required">Please enter Title.</small>
+                                </div>
                             </div>
                             <div class="form-group required">
                                 <label class="control-label">Surname</label>
                                 <input type="text" class="form-control input-sm" name="surname" ng-required="true"
-                                       ng-mode="proposer.surname" readonly="true"/>
-
+                                       ng-model="proposer.surname" ng-disabled="proposerSameAsProposedAssured"/>
                                 <div class="error" ng-messages="step3.surname.$error" ng-if="step3.$dirty">
                                     <small ng-message="required">Please enter Surname.</small>
                                 </div>
                             </div>
                             <div class="form-group required">
                                 <label class="control-label">Date of Birth</label>
-
                                 <div class='input-group date'>
                                     <input type="text" class="form-control input-sm"
                                            datepicker-popup=""
+                                           ng-disabled="proposerSameAsProposedAssured"
                                            ng-required="true"
                                            is-open="launchdob2"
                                            ng-model="proposer.dateOfBirth" name="dob"/>
@@ -317,7 +339,7 @@
                             <div class="form-group required">
                                 <label class="control-label">Sex</label>
                                 <select class="form-control input-sm" name="gender" ng-model="proposer.gender"
-                                        ng-required="true">
+                                        ng-required="true" ng-disabled="proposerSameAsProposedAssured">
                                     <option value="MALE">Male</option>
                                     <option value="FEMALE">Female</option>
                                 </select>
@@ -329,19 +351,32 @@
                             <div class="form-group">
                                 <label class="control-label">Email</label>
                                 <input type="email" class="form-control input-sm" name="email"
+                                       ng-disabled="proposerSameAsProposedAssured"
                                        ng-model="proposer.emailAddress"/>
                             </div>
                         </div>
                         <div class="col-lg-6">
-                            <div class="form-group">
+                            <div class="form-group required">
                                 <label class="control-label">First Name</label>
-                                <input type="text" class="form-control input-sm" name="firstName" readonly="true"
+                                <input type="text" class="form-control input-sm" name="pfirstName"
+                                       ng-disabled="proposerSameAsProposedAssured"
                                        ng-model="proposer.firstName" ng-required="true"/>
+
+                                <div class="error" ng-messages="step3.pfirstName.$error"
+                                     ng-if="step3.pfirstName.$dirty">
+                                    <small ng-message="required">Please enter FirstName.</small>
+                                </div>
                             </div>
                             <div class="form-group">
                                 <label class="control-label">NRC</label>
-                                <input type="text" class="form-control input-sm" name="nrcNumber" readonly="true"
+                                <input type="text" class="form-control input-sm" name="nrcNumber"
+                                       ng-disabled="proposerSameAsProposedAssured"
+                                       ng-pattern="/^[0-9]{6}\/[0-9]{2}\/[0-9]{1}$/"
                                        ng-model="proposer.nrcNumber" ng-required="true"/>
+
+                                <div class="error" ng-messages="step3.nrcNumber.$error" ng-if="step3.$dirty">
+                                    <small ng-message="required">Please enter NRC.</small>
+                                </div>
                             </div>
                             <div class="form-group">
                                 <label class="control-label">Age Next Birthday</label>
@@ -351,18 +386,28 @@
                             <div class="form-group required">
                                 <label class="control-label">Mobile Number</label>
                                 <input type="text" ng-pattern="onlyNumbers" ng-maxlength="10"
-                                       class="form-control input-sm" ng-required="true" ng-model="proposer.mobileNumber"
+                                       ng-disabled="proposerSameAsProposedAssured"
+
+                                       class="form-control input-sm" ng-required="true"
+                                       ng-model="proposer.mobileNumber"
                                        name="mobile"/>
+
+                                <div class="error" ng-messages="step3.mobile.$error" ng-if="step3.$dirty">
+                                    <small ng-message="required">Please enter Mobile Number.</small>
+                                </div>
                             </div>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-sm-6">
-                            <button type="button" class="btn btn-default btn-sm">Cancel</button>
+                            <button type="button" class="btn btn-default btn-sm"
+                                    onclick="window.location='/pla/individuallife/quotation/searchForm'">Cancel
+                            </button>
                         </div>
                         <div class="col-sm-6">
                             <button type="button" class="btn btn-default btn-sm" style="float: right"
-                                    ng-click="saveStep3()" ng-disabled="step3.$invalid">Save
+                                    ng-click="saveStep3()"
+                                    ng-disabled="isSaveDisabled(step3) &amp;&amp; !proposerSameAsProposedAssured">Save
                             </button>
                         </div>
                     </div>
@@ -370,11 +415,10 @@
             </div>
             <div class="step-pane" data-step="4">
                 <ng-form name="step4" novalidate="">
-                    <div class="row">
+                    <div class="row">{{step4.$error}}
                         <div class="col-sm-6">
                             <div class="form-group required">
                                 <label>Plan</label>
-
                                 <div data-angucomplete-alt="" id="plan" placeholder="Search Plan" pause="500"
                                      selected-object="selectedPlan"
                                      remote-url="/pla/core/agent/searchplan"
@@ -385,8 +429,8 @@
                                      match-class="highlight">
                                 </div>
                             </div>
-                            <div class="form-group">
-                                <label>Policy Term</label>
+                            <div class="form-group required">
+                                <label class="control-label">Policy Term</label>
                                 <policyterm term-type="plan.policyTermType"
                                             proposedAssured="proposedAssured"></policyterm>
                             </div>
@@ -417,23 +461,25 @@
                                 </table>
                         </div>
                         <div class="col-sm-6">
-                            <div class="form-group">
-                                <label>Sum Assured</label>
+                            <div class="form-group required">
+                                <label class="control-label">Sum Assured</label>
                                 <sumassured plan="plan"></sumassured>
                             </div>
-                            <div class="form-group">
-                                <label>Premium Payment Term</label>
+                            <div class="form-group required">
+                                <label class="control-label">Premium Payment Term</label>
                                 <premiumterm plan="plan" proposedAssured="proposedAssured"></premiumterm>
                             </div>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-sm-6">
-                            <button type="button" class="btn btn-default btn-sm">Cancel</button>
+                            <button type="button" class="btn btn-default btn-sm"
+                                    onclick="window.location='/pla/individuallife/quotation/searchForm'">Cancel
+                            </button>
                         </div>
                         <div class="col-sm-6">
                             <button type="button" class="btn btn-default btn-sm" style="float: right"
-                                    ng-click="saveStep4()">Save
+                                    ng-click="saveStep4()" ng-disabled="isSaveDisabled(step4)">Save
                             </button>
                         </div>
                     </div>
@@ -484,7 +530,9 @@
                     </div>
                     <div class="row">
                         <div class="col-sm-6">
-                            <button type="button" class="btn btn-default btn-sm">Cancel</button>
+                            <button type="button" class="btn btn-default btn-sm"
+                                    onclick="window.location='/pla/individuallife/quotation/searchForm'">Cancel
+                            </button>
                         </div>
                     </div>
                 </ng-form>

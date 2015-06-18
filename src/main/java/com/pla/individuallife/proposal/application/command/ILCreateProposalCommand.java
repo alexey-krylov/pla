@@ -16,9 +16,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 public class ILCreateProposalCommand {
 
     private ProposedAssuredDto proposedAssured;
-
     private ProposerDto proposer;
-
     private UserDetails userDetails;
 
     private String proposalId;

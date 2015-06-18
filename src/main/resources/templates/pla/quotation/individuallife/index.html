@@ -110,8 +110,10 @@
                             <div class="col-md-4 col-md-offset-2">
                                 <a type="button" class="btn btn-default btn-sm btn-disabled"
                                    disabled="disabled"
+                                   id="print"
                                    onclick="viewILQuotationModule.printQuotation()">Print</a>
                                 <a type="button" class="btn btn-default btn-sm btn-disabled"
+                                   id="emailaddress"
                                    disabled="disabled" onclick="viewILQuotationModule.emailQuotation()"
                                         >Email</a>
                                 <a type="button" class="btn btn-default btn-sm btn-disabled" disabled="disabled"
@@ -140,14 +142,18 @@
                             <tbody>
                             <form id="viewAgentsForm">
                                 <tr th:each="quotation : ${searchResult}">
-                                    <td><input type="radio" name="quotationNumber" th:value="${quotation.quotationId}"/>
+                                    <td>
+                                        <input type="hidden" name="quotationStatus"
+                                               th:value="${quotation.quotationStatus}"/>
+                                        <input type="radio" name="quotationNumber" th:value="${quotation.quotationId}"/>
                                     </td>
                                     <td th:text="${quotation.quotationNumber}">5100000010315</td>
                                     <td th:text="${quotation.quotationGeneratedOn}">05/03/2015</td>
                                     <td>Agent Name</td>
                                     <td></td>
                                     <td th:text="${quotation.versionNumber}"></td>
-                                    <td th:text="${quotation.quotationStatus}"></td>
+                                    <td th:text="${quotation.quotationStatus}">
+                                    </td>
                                 </tr>
                             </form>
                             </tbody>

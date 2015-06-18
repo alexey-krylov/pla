@@ -33,7 +33,7 @@ public class ReminderSetupController {
         return () -> {
             ModelAndView modelAndView = new ModelAndView();
             modelAndView.setViewName("/pla/core/notification/templatelist");
-            modelAndView.addObject("roleList", notificationFinder.findAllTemplates());
+            modelAndView.addObject("templateList", notificationFinder.findAllTemplates());
             return modelAndView;
         };
     }
