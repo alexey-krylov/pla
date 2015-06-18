@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/xhtml"
+      lang="en">
+<head th:include="fragments/common :: headTag">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <title name="Notification Role List"/>
+</head>
+<body>
+
+<style>
+    .error {
+        font-size: 10px;
+        color: firebrick;
+    }
+</style>
+<div th:include="fragments/common :: bodyHeader" th:remove="tag"></div>
+<link href="/pla/css/xeditable.css"/>
+<div class="splash">
+    <div class="color-line"></div>
+    <div class="splash-title"></div>
+</div>
+<div class="container-fluid">
+    <div class="panel panel-primary">
+        <div class="panel-heading">
+            <div class="row">
+                <div class="col-lg-6"><span th:text="#{planList}">List of Notification Roles
+                        </span></div>
+                <div class="col-lg-6">
+                    <a class="btn btn-default btn-sm" style="float: right"
+                       href="#newRoleMapping">New Role Mapping</a>
+                </div>
+            </div>
+        </div>
+        <div class="panel-body ">
+            <div class="col-md-9">
+                <nth-alert/>
+            </div>
+            <table class="dataTables_wrapper dataTable table table-striped table-bordered"
+                   datatable="" cellspacing="0" width="100%">
+                <thead>
+                <tr>
+                    <th>Plan Name</th>
+                    <th>Plan Code</th>
+                    <th>Client Type</th>
+                    <th>Line of Business</th>
+                    <th>Launch Date</th>
+                    <th>Withdrawal Date</th>
+                    <th>Action</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="role : ${roleList}">
+                    <td th:text="${role.roleType}"></td>
+                    <td th:text="${role.lineOfBusiness}"></td>
+                    <td th:text="${role.processType}"></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="panel-footer">
+            <ul class="pagination" id="logs-pagination-default"></ul>
+        </div>
+    </div>
+</div>
+<footer class="footer" th:include="fragments/common :: footer"></footer>
+</body>
+</html>
