@@ -1,4 +1,4 @@
-package com.pla.core.domain.model.notification;
+package com.pla.sharedkernel.domain.model;
 
 /**
  * Created by pradyumna on 18-06-2015.

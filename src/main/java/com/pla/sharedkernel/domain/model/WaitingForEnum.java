@@ -1,6 +1,5 @@
 package com.pla.sharedkernel.domain.model;
 
-import com.pla.core.domain.model.notification.ReminderTypeEnum;
 import lombok.Getter;
 
 import java.util.EnumSet;
