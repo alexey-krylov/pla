@@ -3,7 +3,6 @@ package com.pla.individuallife.proposal.application.command;
 import com.pla.individuallife.identifier.ProposalId;
 import com.pla.individuallife.proposal.domain.model.*;
 import com.pla.individuallife.proposal.domain.service.ProposalNumberGenerator;
-import com.pla.individuallife.proposal.presentation.dto.QuestionAnswerDto;
 import org.axonframework.commandhandling.annotation.CommandHandler;
 import org.axonframework.repository.AggregateNotFoundException;
 import org.axonframework.repository.Repository;
@@ -12,7 +11,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.*;
+import java.util.List;
 
 /**
  * Created by Prasant on 26-May-15.
@@ -29,17 +28,17 @@ public class ILProposalCommandHandler {
     private static final Logger logger = LoggerFactory.getLogger(ILProposalCommandHandler.class);
 
     @CommandHandler
-    public void createProposal(CreateProposalCommand cmd) {
+    public void createProposal(ILCreateProposalCommand cmd) {
         ProposedAssured proposedAssured = getProposedAssured(cmd);
         if (logger.isDebugEnabled()) {
             logger.debug(" ProposedAssured :: " + proposedAssured);
         }
         String proposalNumber = proposalNumberGenerator.getProposalNumber();
-        ProposalAggregate aggregate = new ProposalAggregate(cmd.getUserDetails(), cmd.getProposalId(), proposalNumber, proposedAssured, getProposer(cmd));
+        ProposalAggregate aggregate = new ProposalAggregate(cmd.getUserDetails(), new ProposalId(cmd.getProposalId()), proposalNumber, proposedAssured, getProposer(cmd));
         ilProposalMongoRepository.add(aggregate);
     }
 
-    private Proposer getProposer(CreateProposalCommand proposalCommand) {
+    private Proposer getProposer(ILCreateProposalCommand proposalCommand) {
         Proposer proposer = new ProposerBuilder()
                 .withDateOfBirth(proposalCommand.getProposer().getDateOfBirth())
                 .withEmailAddress(proposalCommand.getProposer().getEmailAddress())
@@ -75,7 +74,7 @@ public class ILProposalCommandHandler {
         return proposer;
     }
 
-    public ProposedAssured getProposedAssured(CreateProposalCommand proposalCommand) {
+    public ProposedAssured getProposedAssured(ILCreateProposalCommand proposalCommand) {
         ProposedAssured proposedAssured = new ProposedAssuredBuilder()
                 .withTitle(proposalCommand.getProposedAssured().getTitle())
                 .withFirstName(proposalCommand.getProposedAssured().getFirstName())
@@ -113,9 +112,9 @@ public class ILProposalCommandHandler {
 
 
     @CommandHandler
-    public void updateCompulsoryHealthStatement(UpdateCompulsoryHealthStatementCommand updateCompulsoryHealthStatementCommand) {
+    public void updateCompulsoryHealthStatement(ILUpdateCompulsoryHealthStatementCommand updateCompulsoryHealthStatementCommand) {
         ProposalAggregate proposalAggregate = null;
-        ProposalId proposalId = updateCompulsoryHealthStatementCommand.getProposalId();
+        ProposalId proposalId = new ProposalId(updateCompulsoryHealthStatementCommand.getProposalId());
         List<QuestionAnswer> questionAnswerDtoList=updateCompulsoryHealthStatementCommand.getQuestions();
         try {
             proposalAggregate = ilProposalMongoRepository.load(proposalId);
@@ -126,10 +125,10 @@ public class ILProposalCommandHandler {
     }
 
     @CommandHandler
-   public void createCompulsoryQuestion(CreateQuestionCommand createQuestionCommand)
+   public void createCompulsoryQuestion(ILCreateQuestionCommand createQuestionCommand)
    {
        ProposalAggregate proposalAggregate = null;
-       ProposalId proposalId=createQuestionCommand.getProposalId();
+       ProposalId proposalId=new ProposalId(createQuestionCommand.getProposalId());
        FamilyPersonalDetail familyPersonalDetail=createQuestionCommand.getFamilyPersonalDetail();
 
        try{

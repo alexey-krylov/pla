@@ -1,6 +1,5 @@
 package com.pla.individuallife.proposal.application.command;
 
-import com.pla.individuallife.identifier.ProposalId;
 import com.pla.individuallife.proposal.presentation.dto.ProposedAssuredDto;
 import com.pla.individuallife.proposal.presentation.dto.ProposerDto;
 import lombok.Getter;
@@ -14,13 +13,14 @@ import org.springframework.security.core.userdetails.UserDetails;
 @Getter
 @Setter
 @NoArgsConstructor
-public class CreateProposalCommand {
+public class ILCreateProposalCommand {
 
     private ProposedAssuredDto proposedAssured;
 
     private ProposerDto proposer;
 
     private UserDetails userDetails;
-    private ProposalId proposalId;
+
+    private String proposalId;
 
 }

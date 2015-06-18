@@ -1,11 +1,11 @@
 package com.pla.individuallife.proposal.application.command;
 
-import com.pla.individuallife.identifier.ProposalId;
 import com.pla.individuallife.proposal.domain.model.QuestionAnswer;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.security.core.userdetails.UserDetails;
+
 import java.util.List;
 
 /**
@@ -15,8 +15,8 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 
-public class UpdateCompulsoryHealthStatementCommand  {
+public class ILUpdateCompulsoryHealthStatementCommand  {
     private List<QuestionAnswer> questions;
     private UserDetails userDetails;
-    private ProposalId proposalId;
+    private String proposalId;
 }
