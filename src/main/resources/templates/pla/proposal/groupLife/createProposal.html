@@ -34,7 +34,9 @@
                 <li data-step="5"><span class="badge">5</span>Documents<span class="chevron"></span></li>
             </ul>
             <div class="actions">
-                <span style="font-weight: bolder;margin-right: 15px;color: #999">Quotation ID :<span style="font-size: 13px;color: #3a87ad;">{{quotationNumber}}<span ng-show="versionNumber &amp;&amp; versionNumber!=0">/{{versionNumber}}</span></span></span>
+                <span style="font-weight: bolder;margin-right: 15px;color: #999">Quotation ID :<span
+                        style="font-size: 13px;color: #3a87ad;">{{
+                    quotationNumber}}<span ng-show="versionNumber &amp;&amp; versionNumber!=0">/{{versionNumber}}</span></span></span>
                 <button type="button" class="btn btn-default btn-prev" disabled="disabled"><span class="glyphicon glyphicon-arrow-left"></span>Prev</button>
                 <button type="button" class="btn btn-default btn-next" ng-disabled="!setpsSaved[selectedItem]" >Next<span class="glyphicon glyphicon-arrow-right"></span></button><!-- -->
             </div>
@@ -50,9 +52,13 @@
                                     <div class="form-group required">
                                         <label class="control-label">Agent ID</label>
                                         <div class="input-group">
-                                            <input type="text" class="form-control input-sm" name="agentId" ng-model="proposalDetails.basic.agentId"  ng-required="true" ng-change="clearAgentDetails()" ng-disabled="isEditMode"/>
+                                            <input type="text" class="form-control input-sm" name="agentId"
+                                                   ng-model="quotationDetails.basic.agentId" ng-required="true"
+                                                   ng-change="clearAgentDetails()" ng-disabled="isEditMode"/>
                                             <div class="input-group-btn">
-                                                <button type="button" class="btn btn-default btn-sm" ng-click="searchAgent()" ng-disabled="!proposalDetails.basic.agentId || isEditMode">
+                                                <button type="button" class="btn btn-default btn-sm"
+                                                        ng-click="searchAgent()"
+                                                        ng-disabled="!quotationDetails.basic.agentId || isEditMode">
                                                     <span class="glyphicon glyphicon-search"></span>
                                                 </button>
                                             </div>
