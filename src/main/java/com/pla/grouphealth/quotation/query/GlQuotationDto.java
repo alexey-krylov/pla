@@ -42,11 +42,11 @@ public class GlQuotationDto {
 
     private Integer ageing;
 
-    public String getQuotationNumber() {
+   /* public String getQuotationNumber() {
         if (versionNumber != null && versionNumber > 0) {
             return quotationNumber + "/" + versionNumber;
         } else {
             return quotationNumber;
         }
-    }
+    }*/
 }

@@ -1,6 +1,5 @@
 package com.pla.individuallife.proposal.application.command;
 
-import com.pla.individuallife.identifier.ProposalId;
 import com.pla.individuallife.proposal.domain.model.FamilyPersonalDetail;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -14,8 +13,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 @Setter
 @NoArgsConstructor
 
-public class CreateQuestionCommand {
+public class ILCreateQuestionCommand {
     private FamilyPersonalDetail familyPersonalDetail;
     private UserDetails userDetails;
-    private ProposalId proposalId;
+    private String proposalId;
 }

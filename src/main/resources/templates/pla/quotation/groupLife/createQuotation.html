@@ -318,8 +318,10 @@
                                 <div class="col-lg-6">
                                     <div class="form-group required">
                                         <label class="control-label">Number Of Installments</label>
-                                        <select class="form-control" ng-model="selectedInstallment" name="installments" ng-required="true"
-                                                ng-options="installment as installment.installmentNo for installment in installments|orderBy:'installmentNo'"></select>
+                                        <select class="form-control" ng-model="selectedInstallment"
+                                                ng-change="setSelectedInstallment(selectedInstallment)"
+                                                name="installments" ng-required="true"
+                                                ng-options="installment as installment.installmentNo for installment in installments track by installment.installmentNo"></select>
                                     </div>
                                     </div>
                                     <div class="col-lg-6">

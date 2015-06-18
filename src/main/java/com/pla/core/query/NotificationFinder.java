@@ -1,7 +1,6 @@
 package com.pla.core.query;
 
 import com.pla.core.domain.model.notification.NotificationRole;
-import com.pla.core.presentation.dto.NotificationTemplateDto;
 import org.springframework.stereotype.Component;
 
 import java.util.Collections;
@@ -17,7 +16,7 @@ public class NotificationFinder {
         return Collections.EMPTY_LIST;
     }
 
-    public List<NotificationTemplateDto> findAllTemplates() {
+    public List<NotificationRole> findAllTemplates() {
         return Collections.EMPTY_LIST;
     }
 }
