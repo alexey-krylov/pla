@@ -163,9 +163,9 @@ public class ILQuotationFinder {
 
          if (isNotEmpty(quotationNumber)) {
              if (isFirst) {
-                 query.append(" where quotation_number = '"+quotationNumber +"'");
+                 query.append(" where quotation_number = '"+quotationNumber +"'" + "or quotation_id = '"+quotationNumber +"'");
              } else {
-                 query.append(" and quotation_number = '"+quotationNumber +"'");
+                 query.append(" and (quotation_number = '"+quotationNumber +"'" + "or quotation_id = '"+quotationNumber +"')");
              }
              isFirst = false;
          }
