@@ -4,7 +4,6 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
-import com.pla.grouphealth.quotation.application.service.GHInsuredExcelHeader;
 import com.pla.grouplife.quotation.query.GLQuotationFinder;
 import com.pla.grouplife.quotation.query.InsuredDto;
 import com.pla.publishedlanguage.contract.IPlanAdapter;
@@ -214,8 +213,8 @@ public class GLInsuredExcelParser {
     }
 
     private String validateOptionalCoverageCell(List<String> headers, Row row, List<OptionalCoverageCellHolder> optionalCoverageCellHolders) {
-        Cell planCell = row.getCell(headers.indexOf(GHInsuredExcelHeader.PLAN.getDescription()));
-        Cell noOfAssuredCell = row.getCell(headers.indexOf(GHInsuredExcelHeader.NO_OF_ASSURED.getDescription()));
+        Cell planCell = row.getCell(headers.indexOf(GLInsuredExcelHeader.PLAN.getDescription()));
+        Cell noOfAssuredCell = row.getCell(headers.indexOf(GLInsuredExcelHeader.NO_OF_ASSURED.getDescription()));
         String planCode = getCellValue(planCell);
         String noOfAssuredCellValue = getCellValue(noOfAssuredCell);
         if (planCode.indexOf(".") != -1) {
