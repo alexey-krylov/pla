@@ -576,7 +576,7 @@ public enum GLInsuredExcelHeader {
             }
             boolean isValidPlanForGL = planAdapter.isValidPlanCodeForBusinessLine(planCode, LineOfBusinessEnum.GROUP_LIFE);
             if (!isValidPlanForGL) {
-                errorMessage = errorMessage + "Plan code is not a Group Line Plan.";
+                errorMessage = errorMessage + "Plan code is not a Group Life Plan.";
             }
             Cell relationshipCell = row.getCell(excelHeaders.indexOf(RELATIONSHIP.name()));
             String relationship = getCellValue(relationshipCell);

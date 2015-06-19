@@ -16,7 +16,6 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.math.BigDecimal;
-import java.util.List;
 import java.util.Set;
 import java.util.function.ToIntFunction;
 
@@ -135,24 +134,19 @@ public class GroupLifeQuotation extends AbstractAggregateRoot<QuotationId> imple
 
     @Override
     public void generateQuotation(LocalDate generatedOn) {
-
-    }
-
-    public void generateQuotation(LocalDate generatedOn, List<GroupLifeQuotation> generatedQuotations) {
         this.quotationStatus = QuotationStatus.GENERATED;
         this.generatedOn = generatedOn;
-        if (proposer != null && proposer.getContactDetail() != null) {
-            ProposerContactDetail proposerContactDetail = proposer.getContactDetail();
+        ProposerContactDetail proposerContactDetail = this.proposer.getContactDetail();
+        if (this.proposer != null && this.proposer.getContactDetail() != null) {
             registerEvent(new ProposerAddedEvent(proposer.getProposerName(), proposer.getProposerCode(),
                     proposerContactDetail.getAddressLine1(), proposerContactDetail.getAddressLine2(), proposerContactDetail.getPostalCode(),
                     proposerContactDetail.getProvince(), proposerContactDetail.getTown(), proposerContactDetail.getEmailAddress()));
-            registerEvent(new GLQuotationGeneratedEvent(quotationId));
-            if (isNotEmpty(generatedQuotations)) {
-                generatedQuotations.forEach(generatedQuotation -> {
-                    registerEvent(new GLQuotationEndSagaEvent(generatedQuotation.getQuotationId()));
-                });
-            }
         }
+        registerEvent(new GLQuotationGeneratedEvent(quotationId));
+    }
+
+    public void cancelSchedules() {
+        registerEvent(new GLQuotationEndSagaEvent(this.getQuotationId()));
     }
 
     @Override

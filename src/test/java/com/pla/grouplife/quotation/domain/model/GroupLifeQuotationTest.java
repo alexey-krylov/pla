@@ -15,7 +15,7 @@ import static org.junit.Assert.*;
 /**
  * Created by Samir on 4/25/2015.
  */
-public class GroupHealthQuotationTest {
+public class GroupLifeQuotationTest {
 
     private QuotationId quotationId;
 
