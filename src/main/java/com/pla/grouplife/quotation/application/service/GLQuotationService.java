@@ -224,7 +224,7 @@ public class GLQuotationService {
                 for (GLQuotationDetailDto.CoverDetail valueCoverDetail : coverDetailListEntry.getValue()) {
                     totalSA = totalSA.add(valueCoverDetail.getSumAssured());
                 }
-                totalSA=totalSA.add(coverDetailKey.getSumAssured());
+                totalSA = totalSA.add(coverDetailKey.getSumAssured());
                 coverDetail = coverDetail.addSumAssured(totalSA.toPlainString());
                 return coverDetail;
             }
@@ -307,6 +307,7 @@ public class GLQuotationService {
                         insuredDependentDto.setCategory(insuredDependent.getCategory());
                         insuredDependentDto.setOccupationClass(insuredDependent.getOccupationClass());
                         insuredDependentDto.setOccupationCategory(insuredDependent.getOccupationCategory());
+                        insuredDependentDto.setNoOfAssured(insuredDependent.getNoOfAssured());
                         PlanPremiumDetail planPremiumDetail = insuredDependent.getPlanPremiumDetail();
                         InsuredDto.PlanPremiumDetailDto planPremiumDetailDto = new InsuredDto.PlanPremiumDetailDto(planPremiumDetail.getPlanId().getPlanId(), planPremiumDetail.getPlanCode(), planPremiumDetail.getPremiumAmount(), planPremiumDetail.getSumAssured());
                         insuredDependentDto = insuredDependentDto.addPlanPremiumDetail(planPremiumDetailDto);
