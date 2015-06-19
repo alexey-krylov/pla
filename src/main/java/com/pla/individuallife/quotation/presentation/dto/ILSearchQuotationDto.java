@@ -21,4 +21,5 @@ public class ILSearchQuotationDto {
     private ProposedAssuredDto proposedAssured;
     private ProposerDto proposer;
     private PlanDetailDto planDetail;
+    private String quotationStatus;
 }

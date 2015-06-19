@@ -152,7 +152,7 @@ public class ILQuotationFinder {
                 new BeanPropertyRowMapper<ILQuotationDto>(ILQuotationDto.class));
     }
 
-     public List<ILQuotationDto> searchQuotation(String quotationNumber, String proposerName, String proposerNrcNumber, String agentCode ) {
+     public List<ILQuotationDto> searchQuotation(String quotationNumber, String proposerName, String proposerNrcNumber, String agentCode, String quotationStatus ) {
          boolean isFirst = true;
 
          if (isEmpty(quotationNumber) && isEmpty(proposerName) && isEmpty(proposerNrcNumber) && isEmpty(agentCode) ) {
@@ -196,6 +196,16 @@ public class ILQuotationFinder {
              }
              isFirst = false;
          }
+
+         if (isNotEmpty(quotationStatus)) {
+             if (isFirst) {
+                 query.append(" where il_quotation_status = '" + quotationStatus + "'");
+             } else {
+                 query.append(" and il_quotation_status = '" + quotationStatus + "'");
+             }
+             isFirst = false;
+         }
+
          query.append(" order by version_number desc");
          return namedParameterJdbcTemplate.query(query.toString(), new BeanPropertyRowMapper<ILQuotationDto>(ILQuotationDto.class));
      }
