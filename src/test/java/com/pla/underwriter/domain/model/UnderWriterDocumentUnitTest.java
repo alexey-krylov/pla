@@ -5,7 +5,7 @@ import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import com.pla.sharedkernel.identifier.CoverageId;
 import com.pla.sharedkernel.identifier.UnderWriterDocumentId;
-import org.joda.time.LocalDate;
+import org.joda.time.DateTime;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -58,7 +58,7 @@ public class UnderWriterDocumentUnitTest {
         UnderWriterDocumentId underWriterRoutingLevelId = new UnderWriterDocumentId("UR001");
         String planCode = "P001";
         List<UnderWriterInfluencingFactor> underWriterInfluencingFactors = Lists.newArrayList(UnderWriterInfluencingFactor.AGE);
-        UnderWriterDocument  underWriterDocumentWithPlan  = UnderWriterDocument.createUnderWriterDocumentWithPlan(underWriterRoutingLevelId, planCode, UnderWriterProcessType.CLAIM, underWriterDocument, underWriterInfluencingFactors, new LocalDate("2016-12-31"));
+        UnderWriterDocument  underWriterDocumentWithPlan  = UnderWriterDocument.createUnderWriterDocumentWithPlan(underWriterRoutingLevelId, planCode, UnderWriterProcessType.CLAIM, underWriterDocument, underWriterInfluencingFactors, new DateTime("2016-12-31"));
         assertNotNull(underWriterDocumentWithPlan);
         assertThat("P001", is(underWriterDocumentWithPlan.getPlanCode()));
         assertThat(underWriterInfluencingFactors.size(),is(underWriterDocumentWithPlan.getUnderWriterInfluencingFactors().size()));
@@ -71,7 +71,7 @@ public class UnderWriterDocumentUnitTest {
         String planCode ="P002";
         CoverageId coverageId = new CoverageId("C002");
         List<UnderWriterInfluencingFactor> underWriterInfluencingFactors = Lists.newArrayList(UnderWriterInfluencingFactor.AGE);
-        UnderWriterDocument  underWriterDocumentWithOptionalCoverage  = UnderWriterDocument.createUnderWriterDocumentWithOptionalCoverage(underWriterDocumentId, planCode, coverageId, UnderWriterProcessType.CLAIM, underWriterDocument, underWriterInfluencingFactors, new LocalDate("2016-12-31"));
+        UnderWriterDocument  underWriterDocumentWithOptionalCoverage  = UnderWriterDocument.createUnderWriterDocumentWithOptionalCoverage(underWriterDocumentId, planCode, coverageId, UnderWriterProcessType.CLAIM, underWriterDocument, underWriterInfluencingFactors, new DateTime("2016-12-31"));
         assertNotNull(underWriterDocumentWithOptionalCoverage);
         assertThat("P002", is(underWriterDocumentWithOptionalCoverage.getPlanCode()));
         assertThat(underWriterInfluencingFactors.size(),is(underWriterDocumentWithOptionalCoverage.getUnderWriterInfluencingFactors().size()));
@@ -84,8 +84,8 @@ public class UnderWriterDocumentUnitTest {
         String planCode ="P002";
         CoverageId coverageId = new CoverageId("C002");
         List<UnderWriterInfluencingFactor> underWriterInfluencingFactors = Lists.newArrayList(UnderWriterInfluencingFactor.AGE);
-        UnderWriterDocument  underWriterDocumentWithOptionalCoverage  = UnderWriterDocument.createUnderWriterDocumentWithOptionalCoverage(underWriterDocumentId, planCode, coverageId, UnderWriterProcessType.CLAIM, underWriterDocument, underWriterInfluencingFactors, new LocalDate("2016-12-30"));
-        underWriterDocumentWithOptionalCoverage.expireUnderWriterDocument(new LocalDate("2017-01-01"));
-        assertThat(underWriterDocumentWithOptionalCoverage.getValidTill(),is(new LocalDate("2017-01-01")));
+        UnderWriterDocument  underWriterDocumentWithOptionalCoverage  = UnderWriterDocument.createUnderWriterDocumentWithOptionalCoverage(underWriterDocumentId, planCode, coverageId, UnderWriterProcessType.CLAIM, underWriterDocument, underWriterInfluencingFactors, new DateTime("2016-12-30"));
+        underWriterDocumentWithOptionalCoverage.expireUnderWriterDocument(new DateTime("2017-01-01"));
+        assertThat(underWriterDocumentWithOptionalCoverage.getValidTill(),is(new DateTime("2017-01-01")));
     }
 }

@@ -5,7 +5,7 @@ import com.google.common.collect.Maps;
 import com.pla.sharedkernel.identifier.CoverageId;
 import com.pla.sharedkernel.identifier.UnderWriterDocumentId;
 import lombok.*;
-import org.joda.time.LocalDate;
+import org.joda.time.DateTime;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -44,12 +44,13 @@ public class UnderWriterDocument {
 
     private List<UnderWriterInfluencingFactor> underWriterInfluencingFactors;
 
-    private LocalDate effectiveFrom;
 
-    private LocalDate validTill;
+    private DateTime effectiveFrom;
+
+    private DateTime validTill;
 
 
-    private UnderWriterDocument(UnderWriterDocumentId underWriterDocumentId,String planCode,UnderWriterProcessType processType,Set<UnderWriterDocumentItem> underWriterDocumentItems,List<UnderWriterInfluencingFactor> underWriterInfluencingFactors,LocalDate effectiveFrom) {
+    private UnderWriterDocument(UnderWriterDocumentId underWriterDocumentId,String planCode,UnderWriterProcessType processType,Set<UnderWriterDocumentItem> underWriterDocumentItems,List<UnderWriterInfluencingFactor> underWriterInfluencingFactors,DateTime effectiveFrom) {
         checkArgument(underWriterDocumentId != null);
         checkArgument(planCode != null);
         checkArgument(effectiveFrom != null);
@@ -64,12 +65,12 @@ public class UnderWriterDocument {
     }
 
 
-    public static UnderWriterDocument createUnderWriterDocumentWithPlan(UnderWriterDocumentId underWriterDocumentId,String planCode, UnderWriterProcessType processType,List<Map<Object, Map<String, Object>>> underWriterRoutingLevelDataFromExcel, List<UnderWriterInfluencingFactor> underWriterInfluencingFactors,LocalDate effectiveFrom) {
+    public static UnderWriterDocument createUnderWriterDocumentWithPlan(UnderWriterDocumentId underWriterDocumentId,String planCode, UnderWriterProcessType processType,List<Map<Object, Map<String, Object>>> underWriterRoutingLevelDataFromExcel, List<UnderWriterInfluencingFactor> underWriterInfluencingFactors,DateTime effectiveFrom) {
         Set<UnderWriterDocumentItem>  underWriterDocumentItems =  withUnderWritingLevelItem(underWriterRoutingLevelDataFromExcel);
         return new UnderWriterDocument(underWriterDocumentId,planCode,processType,underWriterDocumentItems,underWriterInfluencingFactors,effectiveFrom);
     }
 
-    public static UnderWriterDocument createUnderWriterDocumentWithOptionalCoverage(UnderWriterDocumentId underWriterDocumentId ,String  planCode, CoverageId coverageId, UnderWriterProcessType processType, List<Map<Object, Map<String, Object>>> underWriterRoutingLevelDataFromExcel, List<UnderWriterInfluencingFactor> underWriterInfluencingFactors,LocalDate effectiveFrom) {
+    public static UnderWriterDocument createUnderWriterDocumentWithOptionalCoverage(UnderWriterDocumentId underWriterDocumentId ,String  planCode, CoverageId coverageId, UnderWriterProcessType processType, List<Map<Object, Map<String, Object>>> underWriterRoutingLevelDataFromExcel, List<UnderWriterInfluencingFactor> underWriterInfluencingFactors,DateTime effectiveFrom) {
         Set<UnderWriterDocumentItem>  underWriterDocumentItems =  withUnderWritingLevelItem(underWriterRoutingLevelDataFromExcel);
         UnderWriterDocument underWriterDocument =  new UnderWriterDocument(underWriterDocumentId,planCode,processType,underWriterDocumentItems,underWriterInfluencingFactors,effectiveFrom);
         underWriterDocument.coverageId = coverageId;
@@ -81,7 +82,7 @@ public class UnderWriterDocument {
         return underWriterLineItems;
     }
 
-    public UnderWriterDocument expireUnderWriterDocument(LocalDate validTill) {
+    public UnderWriterDocument expireUnderWriterDocument(DateTime validTill) {
         this.validTill  = validTill;
         return this;
     }

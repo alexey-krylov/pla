@@ -15,6 +15,7 @@ import com.pla.underwriter.domain.model.UnderWriterProcessType;
 import com.pla.underwriter.domain.model.UnderWriterRoutingLevel;
 import com.pla.underwriter.repository.UnderWriterDocumentRepository;
 import com.pla.underwriter.repository.UnderWriterRoutingLevelRepository;
+import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import org.nthdimenzion.common.AppConstants;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -77,7 +78,7 @@ public class UnderWriterFinder {
 
     public static final String FIND_DOCUMENT_DETAIL_BY_DOCUMENT_CODE =  "SELECT documentName,documentCode FROM document_view WHERE documentCode in(:documentIds)";
 
-    public static final String FIND_PLAN_COVERAGE_DETAIL_BY_PLAN_CODE = " SELECT DISTINCT planName,c.coverage_name coverageName FROM  plan_coverage_benefit_assoc_view p INNER JOIN coverage c " +
+    public static final String FIND_PLAN_COVERAGE_DETAIL_BY_PLAN_CODE = "SELECT DISTINCT planName,c.coverage_name coverageName FROM  plan_coverage_benefit_assoc_view p INNER JOIN coverage c " +
             "   ON coverageId = c.coverage_id " +
             "   WHERE planCode=:code AND coverageId=:id AND optional ='0' ";
 
@@ -163,20 +164,23 @@ public class UnderWriterFinder {
     }
 
     private Map<String,Object> planCoverageDetailTransformer(String coverageId,String planCode,Map<String,Object> underWriterMap){
+        underWriterMap.put("planName", "");
+        underWriterMap.put("coverageName", "");
         if (isNotEmpty(coverageId)) {
             SqlParameterSource sqlParameterSource = new MapSqlParameterSource("code", planCode).addValue("id", coverageId);
-            Map<String, Object> planCoverageDetail = namedParameterJdbcTemplate.queryForMap(FIND_PLAN_COVERAGE_DETAIL_BY_PLAN_CODE, sqlParameterSource);
-            underWriterMap.put("planName", planCoverageDetail.get("planName"));
-            underWriterMap.put("coverageName", planCoverageDetail.get("coverageName"));
+            List<Map<String, Object>> planCoverageDetail = namedParameterJdbcTemplate.query(FIND_PLAN_COVERAGE_DETAIL_BY_PLAN_CODE, sqlParameterSource, new ColumnMapRowMapper());
+            if (isNotEmpty(planCoverageDetail)) {
+                underWriterMap.put("planName", planCoverageDetail.get(0).get("planName"));
+                underWriterMap.put("coverageName", planCoverageDetail.get(0).get("coverageName"));
+            }
         }
         else {
             SqlParameterSource sqlParameterSource = new MapSqlParameterSource("code",planCode);
             String planName =(String) namedParameterJdbcTemplate.queryForMap(FIND_PLAN_NAME_BY_CODE, sqlParameterSource).get("planName");
             underWriterMap.put("planName",planName);
-            underWriterMap.put("coverageName", "");
         }
-        underWriterMap.put("effectiveFrom", underWriterMap.get("effectiveFrom")!=null?LocalDate.parse(underWriterMap.get("effectiveFrom").toString()).toString(AppConstants.DD_MM_YYY_FORMAT):null);
-        underWriterMap.put("validTill", underWriterMap.get("validTill")!=null?LocalDate.parse(underWriterMap.get("validTill").toString()).toString(AppConstants.DD_MM_YYY_FORMAT):null);
+        underWriterMap.put("effectiveFrom", underWriterMap.get("effectiveFrom")!=null? DateTime.parse(underWriterMap.get("effectiveFrom").toString()).toString(AppConstants.DD_MM_YYY_FORMAT):null);
+        underWriterMap.put("validTill", underWriterMap.get("validTill")!=null?DateTime.parse(underWriterMap.get("validTill").toString()).toString(AppConstants.DD_MM_YYY_FORMAT):null);
         return underWriterMap;
     }
 

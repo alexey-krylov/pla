@@ -6,7 +6,7 @@ import com.pla.underwriter.dto.UnderWriterDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.joda.time.LocalDate;
+import org.joda.time.DateTime;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.validation.constraints.NotNull;
@@ -34,7 +34,7 @@ public class CreateUnderWriterDocumentCommand {
     private List<UnderWriterInfluencingFactor> underWriterInfluencingFactors;
 
     @NotNull
-    private LocalDate effectiveFrom;
+    private DateTime effectiveFrom;
 
     private UserDetails userDetails;
 

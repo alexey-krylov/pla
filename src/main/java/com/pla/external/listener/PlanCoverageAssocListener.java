@@ -112,9 +112,10 @@ public class PlanCoverageAssocListener {
         }
     }
 
+    @EventHandler
     public void handle(PlanLaunchEvent event) {
         String planId = event.getPlanId().toString();
-        namedParameterJdbcTemplate.execute("update from plan_coverage_benefit_assoc set plan_status='" + PlanStatus.LAUNCHED + "' where " +
+        namedParameterJdbcTemplate.execute("update plan_coverage_benefit_assoc set plan_status='" + PlanStatus.LAUNCHED + "' where " +
                         "plan_id='" + planId + "'",
                 new EmptySqlParameterSource(), new PreparedStatementCallback<Object>() {
                     @Override
