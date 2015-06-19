@@ -1,16 +1,9 @@
 package com.pla.individuallife.proposal.domain.model;
 
 import com.google.common.base.Preconditions;
-import com.pla.core.domain.model.plan.PlanDetail;
-import com.pla.core.query.PlanFinder;
 import com.pla.sharedkernel.domain.model.MaritalStatus;
 import com.pla.sharedkernel.identifier.PlanId;
 import org.nthdimenzion.utils.UtilValidator;
-import org.springframework.beans.factory.annotation.Autowired;
-
-import javax.xml.soap.SOAPPart;
-import java.util.Collections;
-import java.util.Map;
 
 /**
  * Created by pradyumna on 22-05-2015.
@@ -28,7 +21,7 @@ public class ProposalSpecification {
         Preconditions.checkArgument(UtilValidator.isNotEmpty(proposedAssured.getFirstName()), "Please specify Firstname.");
         Preconditions.checkArgument(UtilValidator.isNotEmpty(proposedAssured.getSurname()), "Please specify Surname.");
         Preconditions.checkArgument(UtilValidator.isNotEmpty(proposedAssured.getNrc()), "Please specify NRC.");
-        Preconditions.checkArgument(proposedAssured.getMobileNumber() > 0, "Please specify MobileNumber.");
+        Preconditions.checkArgument(UtilValidator.isNotEmpty(proposedAssured.getMobileNumber()), "Please specify MobileNumber.");
         Preconditions.checkArgument(proposedAssured.getGender() != null, "Please specify Sex.");
         Preconditions.checkArgument(proposedAssured.getDateOfBirth() != null, "Please specify Date of Birth.");
 
@@ -61,7 +54,7 @@ public class ProposalSpecification {
         Preconditions.checkArgument(UtilValidator.isNotEmpty(proposer.getFirstName()), "Please specify Firstname.");
         Preconditions.checkArgument(UtilValidator.isNotEmpty(proposer.getSurname()), "Please specify Surname.");
         Preconditions.checkArgument(UtilValidator.isNotEmpty(proposer.getNrc()), "Please specify NRC.");
-        Preconditions.checkArgument(proposer.getMobileNumber() > 0, "Please specify MobileNumber.");
+        Preconditions.checkArgument(UtilValidator.isNotEmpty(proposer.getMobileNumber()), "Please specify MobileNumber.");
         Preconditions.checkArgument(proposer.getGender() != null, "Please specify Sex.");
         Preconditions.checkArgument(proposer.getDateOfBirth() != null, "Please specify Date of Birth.");
         Preconditions.checkArgument(proposer.getEmploymentDetail().getOccupationClass() != null, "Please specify Occupation.");

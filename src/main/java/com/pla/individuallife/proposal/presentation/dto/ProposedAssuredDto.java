@@ -7,10 +7,11 @@ import com.pla.sharedkernel.domain.model.MaritalStatus;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-/*import org.hibernate.validator.constraints.NotEmpty;*/
-import org.joda.time.LocalDate;
+import org.joda.time.DateTime;
 import org.nthdimenzion.presentation.LocalJodaDateDeserializer;
 import org.nthdimenzion.presentation.LocalJodaDateSerializer;
+
+/*import org.hibernate.validator.constraints.NotEmpty;*/
 /**
  * Created by Prasant on 26-May-15.
  */
@@ -27,9 +28,9 @@ public class ProposedAssuredDto {
     private boolean isProposer;
     @JsonDeserialize(using = LocalJodaDateDeserializer.class)
     @JsonSerialize(using = LocalJodaDateSerializer.class)
-    private LocalDate dateOfBirth;
+    private DateTime dateOfBirth;
     private Gender gender;
-    private Long mobileNumber;
+    private String mobileNumber;
     private String emailAddress;
     private MaritalStatus maritalStatus;
     private ResidentialAddressDto residentialAddress;

@@ -3,6 +3,7 @@ package com.pla.individuallife.proposal.application.command;
 import com.pla.individuallife.identifier.ProposalId;
 import com.pla.individuallife.proposal.domain.model.*;
 import com.pla.individuallife.proposal.domain.service.ProposalNumberGenerator;
+import com.pla.individuallife.quotation.query.ILQuotationFinder;
 import org.axonframework.commandhandling.annotation.CommandHandler;
 import org.axonframework.repository.AggregateNotFoundException;
 import org.axonframework.repository.Repository;
@@ -25,6 +26,9 @@ public class ILProposalCommandHandler {
     @Autowired
     private Repository<ProposalAggregate> ilProposalMongoRepository;
 
+    @Autowired
+    private ILQuotationFinder ilQuotationFinder;
+
     private static final Logger logger = LoggerFactory.getLogger(ILProposalCommandHandler.class);
 
     @CommandHandler
@@ -37,6 +41,8 @@ public class ILProposalCommandHandler {
         ProposalAggregate aggregate = new ProposalAggregate(cmd.getUserDetails(), new ProposalId(cmd.getProposalId()), proposalNumber, proposedAssured, getProposer(cmd));
         ilProposalMongoRepository.add(aggregate);
     }
+
+
 
     private Proposer getProposer(ILCreateProposalCommand proposalCommand) {
         Proposer proposer = new ProposerBuilder()

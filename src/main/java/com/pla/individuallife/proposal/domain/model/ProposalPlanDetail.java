@@ -1,9 +1,10 @@
 package com.pla.individuallife.proposal.domain.model;
 
-import com.pla.core.domain.model.plan.SumAssured;
-import com.pla.core.domain.model.plan.Term;
-import com.pla.sharedkernel.identifier.PlanId;
+import com.pla.individuallife.quotation.presentation.dto.RiderDetailDto;
 import lombok.Getter;
+
+import java.math.BigDecimal;
+import java.util.Set;
 
 /**
  * Created by pradyumna on 22-05-2015.
@@ -11,19 +12,14 @@ import lombok.Getter;
 @Getter
 public class ProposalPlanDetail {
 
-    private PlanId planId;
-    private SumAssured sumAssured;
-    private Term policyTerm;
-    private Term paymentTerm;
-    private Term premiumTerm;
+    private String planId;
 
-    ProposalPlanDetail(PlanId planId, SumAssured sumAssured, Term policyTerm, Term paymentTerm, Term premiumTerm) {
-        this.planId = planId;
-        this.sumAssured = sumAssured;
-        this.policyTerm = policyTerm;
-        this.paymentTerm = paymentTerm;
-        this.premiumTerm = premiumTerm;
-    }
+    private Integer policyTerm;
 
+    private Integer premiumPaymentTerm;
+
+    private BigDecimal sumAssured;
+
+    private Set<RiderDetailDto> riderDetails;
 
 }

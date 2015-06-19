@@ -2,16 +2,16 @@ package com.pla.individuallife.proposal.domain.model;
 
 import com.pla.sharedkernel.domain.model.Gender;
 import com.pla.sharedkernel.domain.model.MaritalStatus;
-import org.joda.time.LocalDate;
+import org.joda.time.DateTime;
 
 public class ProposerBuilder {
     private String title;
     private String firstName;
     private String surname;
     private String nrc;
-    private LocalDate dateOfBirth;
+    private DateTime dateOfBirth;
     private Gender gender;
-    private long mobileNumber;
+    private String mobileNumber;
     private String emailAddress;
     private MaritalStatus maritalStatus;
     private String spouseFirstName;
@@ -40,7 +40,7 @@ public class ProposerBuilder {
         return this;
     }
 
-    public ProposerBuilder withDateOfBirth(LocalDate dateOfBirth) {
+    public ProposerBuilder withDateOfBirth(DateTime dateOfBirth) {
         this.dateOfBirth = dateOfBirth;
         return this;
     }
@@ -50,7 +50,7 @@ public class ProposerBuilder {
         return this;
     }
 
-    public ProposerBuilder withMobileNumber(long mobileNumber) {
+    public ProposerBuilder withMobileNumber(String mobileNumber) {
         this.mobileNumber = mobileNumber;
         return this;
     }

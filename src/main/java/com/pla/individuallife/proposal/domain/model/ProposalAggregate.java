@@ -2,16 +2,18 @@ package com.pla.individuallife.proposal.domain.model;
 
 import com.google.common.base.Preconditions;
 import com.pla.individuallife.identifier.ProposalId;
-import com.pla.individuallife.proposal.presentation.dto.QuestionAnswerDto;
 import org.axonframework.eventsourcing.annotation.AbstractAnnotatedAggregateRoot;
 import org.axonframework.eventsourcing.annotation.AggregateIdentifier;
+import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.security.access.AuthorizationServiceException;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import org.springframework.data.annotation.Id;
 import java.math.BigDecimal;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 import static com.pla.sharedkernel.util.RolesUtil.hasIndividualLifeProposalProcessorRole;
 
@@ -35,6 +37,7 @@ public class ProposalAggregate extends AbstractAnnotatedAggregateRoot<ProposalId
     private BigDecimal totalBeneficiaryShare = BigDecimal.ZERO;
     private List<QuestionAnswer> compulsoryHealthStatement;
     private FamilyPersonalDetail familyPersonalDetail;
+    private AgentCommissionShareModel agentCommissionShareModel;
 
     ProposalAggregate() {
         riders = new HashSet<RiderDetail>();
@@ -81,5 +84,9 @@ public class ProposalAggregate extends AbstractAnnotatedAggregateRoot<ProposalId
 
     public void updateFamilyPersonalDetail(FamilyPersonalDetail personalDetail){
         this.familyPersonalDetail=personalDetail;
+    }
+
+    public void updateAgentDetails(AgentCommissionShareModel agentModel){
+        this.agentCommissionShareModel=agentModel;
     }
 }

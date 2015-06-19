@@ -1,5 +1,6 @@
 package com.pla.individuallife.proposal.application.command;
 
+import com.pla.individuallife.proposal.domain.model.ProposalPlanDetail;
 import com.pla.individuallife.proposal.presentation.dto.ProposedAssuredDto;
 import com.pla.individuallife.proposal.presentation.dto.ProposerDto;
 import lombok.Getter;
@@ -17,6 +18,7 @@ public class ILCreateProposalCommand {
 
     private ProposedAssuredDto proposedAssured;
     private ProposerDto proposer;
+    private ProposalPlanDetail planDetail;
     private UserDetails userDetails;
 
     private String proposalId;
