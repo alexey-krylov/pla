@@ -91,8 +91,7 @@ public class GlQuotationCommandHandler {
     @CommandHandler
     public String generateQuotation(GenerateGLQuotationCommand generateGLQuotationCommand) {
         GroupLifeQuotation groupLifeQuotation = glQuotationMongoRepository.load(new QuotationId(generateGLQuotationCommand.getQuotationId()));
-        List<GroupLifeQuotation> generatedQuotations = glQuotationRepository.findQuotationByQuotNumberAndStatusByExcludingGivenQuotId(groupLifeQuotation.getQuotationNumber(), groupLifeQuotation.getQuotationId(), QuotationStatus.GENERATED.name());
-        groupLifeQuotation.generateQuotation(LocalDate.now(), generatedQuotations);
+        groupLifeQuotation.generateQuotation(LocalDate.now());
         return groupLifeQuotation.getIdentifier().getQuotationId();
     }
 
