@@ -87,7 +87,7 @@ public class GHQuotationService {
     public GLQuotationMailDto getPreScriptedEmail(String quotationId) {
         GroupHealthQuotation groupHealthQuotation = ghQuotationRepository.findOne(new QuotationId(quotationId));
         String subject = "PLA Insurance - Group Health - Quotation ID : " + groupHealthQuotation.getQuotationNumber();
-        String mailAddress = groupHealthQuotation.getProposer().getContactDetail()!=null?groupHealthQuotation.getProposer().getContactDetail().getContactPersonDetail().getContactPersonEmail():"";
+        String mailAddress = groupHealthQuotation.getProposer().getContactDetail() != null ? groupHealthQuotation.getProposer().getContactDetail().getContactPersonDetail().getContactPersonEmail() : "";
         mailAddress = isEmpty(mailAddress) ? "" : mailAddress;
         Map<String, Object> emailContent = Maps.newHashMap();
         emailContent.put("mailSentDate", groupHealthQuotation.getGeneratedOn().toString(AppConstants.DD_MM_YYY_FORMAT));
@@ -324,6 +324,7 @@ public class GHQuotationService {
                         insuredDependentDto.setMaxAgeEntry(insuredDependent.getMaxAgeEntry());
                         insuredDependentDto.setOccupationClass(insuredDependent.getOccupationClass());
                         insuredDependentDto.setOccupationCategory(insuredDependent.getOccupationCategory());
+                        insuredDependentDto.setNoOfAssured(insuredDependent.getNoOfAssured());
                         GHPlanPremiumDetail planPremiumDetail = insuredDependent.getPlanPremiumDetail();
                         GHInsuredDto.GHPlanPremiumDetailDto planPremiumDetailDto = new GHInsuredDto.GHPlanPremiumDetailDto(planPremiumDetail.getPlanId().getPlanId(), planPremiumDetail.getPlanCode(), planPremiumDetail.getPremiumAmount(), planPremiumDetail.getSumAssured());
                         insuredDependentDto = insuredDependentDto.addPlanPremiumDetail(planPremiumDetailDto);

@@ -16,7 +16,6 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.math.BigDecimal;
-import java.util.List;
 import java.util.Set;
 import java.util.function.ToIntFunction;
 
@@ -135,24 +134,19 @@ public class GroupHealthQuotation extends AbstractAggregateRoot<QuotationId> imp
 
     @Override
     public void generateQuotation(LocalDate generatedOn) {
-
-    }
-
-    public void generateQuotation(LocalDate generatedOn, List<GroupHealthQuotation> generatedQuotations) {
         this.quotationStatus = GHQuotationStatus.GENERATED;
         this.generatedOn = generatedOn;
-        if (proposer != null && proposer.getContactDetail() != null) {
-            GHProposerContactDetail proposerContactDetail = proposer.getContactDetail();
+        GHProposerContactDetail proposerContactDetail = proposer.getContactDetail();
+        if (this.proposer != null && this.proposer.getContactDetail() != null) {
             registerEvent(new ProposerAddedEvent(proposer.getProposerName(), proposer.getProposerCode(),
                     proposerContactDetail.getAddressLine1(), proposerContactDetail.getAddressLine2(), proposerContactDetail.getPostalCode(),
                     proposerContactDetail.getProvince(), proposerContactDetail.getTown(), proposerContactDetail.getEmailAddress()));
-            registerEvent(new GHQuotationGeneratedEvent(quotationId));
         }
-        if (isNotEmpty(generatedQuotations)) {
-            generatedQuotations.forEach(generatedQuotation -> {
-                registerEvent(new GHQuotationEndSagaEvent(generatedQuotation.getQuotationId()));
-            });
-        }
+        registerEvent(new GHQuotationGeneratedEvent(quotationId));
+    }
+
+    public void cancelSchedules() {
+        registerEvent(new GHQuotationEndSagaEvent(this.getQuotationId()));
     }
 
     @Override

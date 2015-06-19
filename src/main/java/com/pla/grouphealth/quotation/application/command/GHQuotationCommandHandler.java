@@ -95,8 +95,7 @@ public class GHQuotationCommandHandler {
     @CommandHandler
     public String generateQuotation(com.pla.grouphealth.quotation.application.command.GenerateGLQuotationCommand generateGLQuotationCommand) {
         GroupHealthQuotation groupHealthQuotation = ghQuotationMongoRepository.load(new QuotationId(generateGLQuotationCommand.getQuotationId()));
-        List<GroupHealthQuotation> generatedQuotations = ghQuotationRepository.findQuotationByQuotNumberAndStatusByExcludingGivenQuotId(groupHealthQuotation.getQuotationNumber(), groupHealthQuotation.getQuotationId(), GHQuotationStatus.GENERATED.name());
-        groupHealthQuotation.generateQuotation(LocalDate.now(),generatedQuotations);
+        groupHealthQuotation.generateQuotation(LocalDate.now());
         return groupHealthQuotation.getIdentifier().getQuotationId();
     }
 

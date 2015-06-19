@@ -27,6 +27,8 @@ import org.springframework.stereotype.Component;
 
 import java.util.List;
 
+import static org.nthdimenzion.utils.UtilValidator.isNotEmpty;
+
 /**
  * Created by Samir on 5/31/2015.
  */
@@ -75,6 +77,12 @@ public class GroupLifeQuotationSaga extends AbstractAnnotatedSaga {
         scheduledTokens.add(firstReminderScheduleToken);
         scheduledTokens.add(purgeScheduleToken);
         scheduledTokens.add(closureScheduleToken);
+        List<GroupLifeQuotation> generatedVersionedQuotations = glQuotationRepository.findQuotationByQuotNumberAndStatusByExcludingGivenQuotId(groupLifeQuotation.getQuotationNumber(), groupLifeQuotation.getQuotationId(), QuotationStatus.GENERATED.name());
+        if(isNotEmpty(generatedVersionedQuotations)){
+            generatedVersionedQuotations.forEach(generatedVersionedQuotation->{
+                generatedVersionedQuotation.cancelSchedules();
+            });
+        }
     }
 
     @SagaEventHandler(associationProperty = "quotationId")

@@ -1,6 +1,7 @@
 package com.pla.core.query;
 
 import com.google.common.base.Preconditions;
+import com.google.common.collect.Maps;
 import com.pla.core.dto.CoverageDto;
 import org.nthdimenzion.ddd.domain.annotations.Finder;
 import org.nthdimenzion.utils.UtilValidator;
@@ -17,6 +18,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+
+import static org.nthdimenzion.utils.UtilValidator.isNotEmpty;
 
 /**
  * Created with IntelliJ IDEA.
@@ -81,12 +84,13 @@ public class CoverageFinder {
     }
 
     public Map<String, Object> getCoverageDetailByCode(String coverageCode) {
-        return namedParameterJdbcTemplate.queryForMap(FIND_COVERAGE_BY_CODE_QUERY, new MapSqlParameterSource().addValue("coverageCode", coverageCode));
+        List<Map<String, Object>> coverageMapList = namedParameterJdbcTemplate.queryForList(FIND_COVERAGE_BY_CODE_QUERY, new MapSqlParameterSource().addValue("coverageCode", coverageCode));
+        return isNotEmpty(coverageMapList) ? coverageMapList.get(0) : Maps.newHashMap();
     }
 
-    public CoverageDto findCoverageById(String coverageId){
-        SqlParameterSource sqlParameterSource = new MapSqlParameterSource("coverageId",coverageId);
-        List<CoverageDto> coverageList = namedParameterJdbcTemplate.query(FIND_COVERAGE_BY_ID_QUERY, sqlParameterSource,new BeanPropertyRowMapper(CoverageDto.class));
+    public CoverageDto findCoverageById(String coverageId) {
+        SqlParameterSource sqlParameterSource = new MapSqlParameterSource("coverageId", coverageId);
+        List<CoverageDto> coverageList = namedParameterJdbcTemplate.query(FIND_COVERAGE_BY_ID_QUERY, sqlParameterSource, new BeanPropertyRowMapper(CoverageDto.class));
         if (UtilValidator.isEmpty(coverageList)) {
             return null;
         }
@@ -96,7 +100,7 @@ public class CoverageFinder {
         return coverageList.get(0);
     }
 
-    private class BenefitIdTransformer implements Function<Map<String, Object>,String> {
+    private class BenefitIdTransformer implements Function<Map<String, Object>, String> {
         @Override
         public String apply(Map<String, Object> benefitDetailMap) {
             return benefitDetailMap.get("benefitId").toString();
