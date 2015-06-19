@@ -49,7 +49,7 @@ public class ProposedAssuredBuilderUnitTest {
         assertEquals("PvtLtd",proposedAssured.getSurname());
         assertEquals("@XYZ.com",proposedAssured.getEmailAddress());
         assertEquals(localDate,proposedAssured.getDateOfBirth());
-        assertEquals(98765432,proposedAssured.getMobileNumber());
+        assertEquals("98765432",proposedAssured.getMobileNumber());
         assertEquals(MaritalStatus.MARRIED,proposedAssured.getMaritalStatus());
         assertEquals("NthDimenzion",proposedAssured.getSpouseFirstName());
         assertEquals("PvtLtd",proposedAssured.getSpouseLastName());
