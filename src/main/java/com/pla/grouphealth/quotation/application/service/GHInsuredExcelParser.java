@@ -6,6 +6,7 @@ import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import com.pla.grouphealth.quotation.query.GHInsuredDto;
 import com.pla.grouphealth.quotation.query.GHQuotationFinder;
+import com.pla.grouplife.quotation.application.service.GLInsuredExcelHeader;
 import com.pla.publishedlanguage.contract.IPlanAdapter;
 import com.pla.publishedlanguage.dto.PlanCoverageDetailDto;
 import com.pla.sharedkernel.domain.model.Relationship;
@@ -44,9 +45,9 @@ public class GHInsuredExcelParser {
 
 
     @Autowired
-    public GHInsuredExcelParser(IPlanAdapter planAdapter,GHQuotationFinder ghQuotationFinder) {
+    public GHInsuredExcelParser(IPlanAdapter planAdapter, GHQuotationFinder ghQuotationFinder) {
         this.planAdapter = planAdapter;
-        this.ghQuotationFinder=ghQuotationFinder;
+        this.ghQuotationFinder = ghQuotationFinder;
     }
 
 
@@ -95,7 +96,7 @@ public class GHInsuredExcelParser {
                 coveragePremiumDetailDto.setCoverageCode(ExcelGeneratorUtil.getCellValue(optionalCoverageCellHolder.getOptionalCoverageCell()));
                 if (isNotEmpty(coveragePremiumDetailDto.getCoverageCode())) {
                     Map<String, Object> coverageMap = ghQuotationFinder.findCoverageDetailByCoverageCode(coveragePremiumDetailDto.getCoverageCode());
-                    coveragePremiumDetailDto.setCoverageId((String)coverageMap.get("coverageId"));
+                    coveragePremiumDetailDto.setCoverageId((String) coverageMap.get("coverageId"));
                 }
                 coveragePremiumDetailDto.setPremiumVisibility(ExcelGeneratorUtil.getCellValue(optionalCoverageCellHolder.getOptionalCoverageVisibilityCell()));
                 String optionalCoveragePremiumCellValue = ExcelGeneratorUtil.getCellValue(optionalCoverageCellHolder.getOptionalCoveragePremiumCell());
@@ -135,7 +136,7 @@ public class GHInsuredExcelParser {
                 coveragePremiumDetailDto.setCoverageCode(ExcelGeneratorUtil.getCellValue(optionalCoverageCellHolder.getOptionalCoverageCell()));
                 if (isNotEmpty(coveragePremiumDetailDto.getCoverageCode())) {
                     Map<String, Object> coverageMap = ghQuotationFinder.findCoverageDetailByCoverageCode(coveragePremiumDetailDto.getCoverageCode());
-                    coveragePremiumDetailDto.setCoverageId((String)coverageMap.get("coverageId"));
+                    coveragePremiumDetailDto.setCoverageId((String) coverageMap.get("coverageId"));
                 }
                 coveragePremiumDetailDto.setPremiumVisibility(ExcelGeneratorUtil.getCellValue(optionalCoverageCellHolder.getOptionalCoverageVisibilityCell()));
                 int coverageSA = Double.valueOf(ExcelGeneratorUtil.getCellValue(optionalCoverageCellHolder.getOptionalCoverageSACell())).intValue();
@@ -190,7 +191,7 @@ public class GHInsuredExcelParser {
         Iterator<Row> dataRowIterator = dataRows.iterator();
         while (dataRowIterator.hasNext()) {
             Row currentRow = dataRowIterator.next();
-            String errorMessage = validateRow(currentRow, GHInsuredExcelHeader.getAllowedHeaderForParser(planAdapter, agentPlans));
+            String errorMessage = validateRow(currentRow, GHInsuredExcelHeader.getAllowedHeaderForParser(planAdapter, agentPlans), agentPlans);
             List<OptionalCoverageCellHolder> optionalCoverageCellHolders = findNonEmptyOptionalCoverageCell(headers, currentRow, agentPlans);
             String coverageErrorMessage = validateOptionalCoverageCell(headers, currentRow, optionalCoverageCellHolders);
             if (isEmpty(errorMessage) && isEmpty(coverageErrorMessage)) {
@@ -324,9 +325,16 @@ public class GHInsuredExcelParser {
         return optionalCoverageCellHolders;
     }
 
-    private String validateRow(Row insureDataRow, List<String> headers) {
+    private String validateRow(Row insureDataRow, List<String> headers, List<PlanId> agentPlans) {
         String errorMessage = "";
         Set<String> errorMessages = Sets.newHashSet();
+        String planCellValue = getCellValue(insureDataRow.getCell(headers.indexOf(GLInsuredExcelHeader.PLAN.name())));
+        if (isNotEmpty(planCellValue)) {
+            PlanId planId = planAdapter.getPlanId(planCellValue);
+            if (!agentPlans.contains(planId)) {
+                errorMessages.add("Plan code is not valid for the selected agent.");
+            }
+        }
         headers.forEach(header -> {
             if (!header.contains(AppConstants.OPTIONAL_COVERAGE_HEADER)) {
                 Cell cell = insureDataRow.getCell(headers.indexOf(header));
