@@ -277,7 +277,7 @@ public class GLQuotationService {
                 insuredDto.setCategory(insured.getCategory());
                 insuredDto.setAnnualIncome(insured.getAnnualIncome());
                 insuredDto.setOccupationClass(insured.getOccupationClass());
-                insuredDto.setOccupationCategory(insured.getOccupationCategory());
+                insuredDto.setOccupationCategory(insured.getCategory());
                 insuredDto.setNoOfAssured(insured.getNoOfAssured());
                 PlanPremiumDetail planPremiumDetail = insured.getPlanPremiumDetail();
                 InsuredDto.PlanPremiumDetailDto planPremiumDetailDto = new InsuredDto.PlanPremiumDetailDto(planPremiumDetail.getPlanId().getPlanId(), planPremiumDetail.getPlanCode(), planPremiumDetail.getPremiumAmount(), planPremiumDetail.getSumAssured());
@@ -306,7 +306,7 @@ public class GLQuotationService {
                         insuredDependentDto.setGender(insuredDependent.getGender());
                         insuredDependentDto.setCategory(insuredDependent.getCategory());
                         insuredDependentDto.setOccupationClass(insuredDependent.getOccupationClass());
-                        insuredDependentDto.setOccupationCategory(insuredDependent.getOccupationCategory());
+                        insuredDependentDto.setOccupationCategory(insuredDependent.getCategory());
                         insuredDependentDto.setNoOfAssured(insuredDependent.getNoOfAssured());
                         PlanPremiumDetail planPremiumDetail = insuredDependent.getPlanPremiumDetail();
                         InsuredDto.PlanPremiumDetailDto planPremiumDetailDto = new InsuredDto.PlanPremiumDetailDto(planPremiumDetail.getPlanId().getPlanId(), planPremiumDetail.getPlanCode(), planPremiumDetail.getPremiumAmount(), planPremiumDetail.getSumAssured());
