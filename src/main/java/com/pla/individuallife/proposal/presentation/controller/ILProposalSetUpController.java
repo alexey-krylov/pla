@@ -94,7 +94,7 @@ public class ILProposalSetUpController {
 
         ILQuotationDto quotationMap = ilQuotationFinder.getQuotationById(QuotationId);
         AgentCommissionShareModel agentCommissionShareModel = new AgentCommissionShareModel();
-        agentCommissionShareModel.addAgentCommission(new AgentId(quotationMap.getAgentId()), new BigDecimal(0.00));
+        agentCommissionShareModel.addAgentCommission(new AgentId(quotationMap.getAgentId()), new BigDecimal(1.00));
 
         ProposerDto proposerDto = new ProposerDto();
         ProposedAssuredDto proposedAssuredDto = new ProposedAssuredDto();
