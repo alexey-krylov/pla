@@ -473,7 +473,6 @@
                                 <div class="panel-body">
                                     <div class="control-group col-sm-12">
                                         <label class="control-label" for="groupTerm">Various Maturity Ages</label>
-
                                         <div class="controls">
                                             <tags-input class="ti-input-lg"
                                                         ng-model="plan.premiumTerm.maturityAges"
@@ -494,18 +493,18 @@
                                     <h3 class="panel-title">Policy Term Based on Term Values</h3>
                                 </div>
                                 <div class="panel-body">
-                                    <div class="control-group col-sm-3">
+                                    <div class="control-group required col-sm-3">
                                         <label class="control-label">Maximum Maturity Age</label>
                                         <div class="controls">
                                             <input type="number" ng-pattern="onlyNumbers" name="maxMaturityAge"
                                                    class="form-control input-sm col-sm-3" style="margin-top: 8px"
                                                    min="{{plan.planDetail.maxEntryAge}}"
+                                                   ng-required="true"
                                                    ng-model="plan.policyTerm.maxMaturityAge"/>
                                         </div>
                                     </div>
                                     <div class="control-group required col-sm-9">
                                         <label class="control-label">Policy Term Values</label>
-
                                         <div class="controls">
                                             <tags-input class="ti-input-lg"
                                                         name="policyValidTerms"

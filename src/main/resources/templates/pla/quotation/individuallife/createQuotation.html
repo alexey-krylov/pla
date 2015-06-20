@@ -542,7 +542,7 @@
 
 
     <form id="quotationSearchForm" action="/pla/individuallife/quotation" method="POST">
-        <input type="hidden" name="quotationNumber" id="qsf_quotationNumber"/>
+        <input type="hidden" name="quotationId" ng-value="quotationId"/>
     </form>
 
 </div>
@@ -717,13 +717,13 @@
 </script>
 <script id="plan-premiumterm.tpl" type="text/ng-template">
     <div ng-switch="plan.premiumTermType">
-        <div ng-switch-when="SPECIFIED_VALUES">
+        <div ng-switch-when="SPECIFIED_VALUES">{{premiumTerms}}
             <select class="form-control input-sm" ng-model="planDetailDto.premiumPaymentTerm" name="premiumTerm"
-                    ng-options="value as value for value in premiumTerms()" ng-required="true"></select>
+                    ng-options="value.text as value.text for value in premiumTerms()" ng-required="true"></select>
         </div>
         <div ng-switch-when="SPECIFIED_AGES">
             <select class="form-control input-sm" ng-model="planDetailDto.premiumPaymentTerm" name="premiumTerm"
-                    ng-options="value as value for value in premiumTerms()" ng-required="true"></select>
+                    ng-options="value.text as value.text for value in premiumTerms()" ng-required="true"></select>
         </div>
         <div ng-switch-when="REGULAR">
             <input type="number" class="form-control input-sm" readonly="true"

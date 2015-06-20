@@ -14,7 +14,10 @@ import com.pla.individuallife.quotation.query.ILQuotationFinder;
 import com.pla.individuallife.quotation.query.PremiumDetailDto;
 import com.pla.individuallife.quotation.query.RiderPremiumDto;
 import com.pla.publishedlanguage.contract.IPremiumCalculator;
-import com.pla.publishedlanguage.domain.model.*;
+import com.pla.publishedlanguage.domain.model.ComputedPremiumDto;
+import com.pla.publishedlanguage.domain.model.PremiumCalculationDto;
+import com.pla.publishedlanguage.domain.model.PremiumFrequency;
+import com.pla.publishedlanguage.domain.model.PremiumInfluencingFactor;
 import com.pla.sharedkernel.identifier.CoverageId;
 import com.pla.sharedkernel.identifier.PlanId;
 import com.pla.sharedkernel.identifier.QuotationId;
@@ -145,7 +148,10 @@ public class ILQuotationAppService {
     }
 
     public List<ILQuotationDto> searchQuotation(ILSearchQuotationDto searchIlQuotationDto) {
-        List<ILQuotationDto> searchQuotations = ilQuotationFinder.searchQuotation(searchIlQuotationDto.getQuotationNumber(), searchIlQuotationDto.getProposerFirstName(), searchIlQuotationDto.getProposerNrcNumber(), searchIlQuotationDto.getAgentCode(), searchIlQuotationDto.getQuotationStatus());
+        List<ILQuotationDto> searchQuotations = ilQuotationFinder.searchQuotation(searchIlQuotationDto.getQuotationNumber(),
+                searchIlQuotationDto.getProposerFirstName(), searchIlQuotationDto.getProposerNrcNumber(), searchIlQuotationDto.getAgentCode(),
+                searchIlQuotationDto.getQuotationStatus(),
+                searchIlQuotationDto.getQuotationId());
         return searchQuotations;
     }
 

@@ -82,6 +82,7 @@ public class ILQuotationFinder {
         dto.setQuotationGeneratedOn(quotation.getGeneratedOn());
         dto.setQuotationNumber(quotation.getQuotationNumber());
         dto.setQuotationId(quotation.getQuotationId());
+        dto.setQuotationStatus(quotation.getIlQuotationStatus().name());
         //TODO change the type in dto
 //        dto.setQuotationStatus(quotation.getIlQuotationStatus());
         try {
@@ -152,10 +153,13 @@ public class ILQuotationFinder {
                 new BeanPropertyRowMapper<ILQuotationDto>(ILQuotationDto.class));
     }
 
-     public List<ILQuotationDto> searchQuotation(String quotationNumber, String proposerName, String proposerNrcNumber, String agentCode, String quotationStatus ) {
+    public List<ILQuotationDto> searchQuotation(
+            String quotationNumber, String proposerName, String proposerNrcNumber, String agentCode, String quotationStatus,
+            String quotationId) {
          boolean isFirst = true;
 
-         if (isEmpty(quotationNumber) && isEmpty(proposerName) && isEmpty(proposerNrcNumber) && isEmpty(agentCode) ) {
+        if (isEmpty(quotationNumber) && isEmpty(proposerName) && isEmpty(proposerNrcNumber) && isEmpty(agentCode)
+                && isEmpty(quotationId)) {
              return Lists.newArrayList();
          }
 
@@ -205,6 +209,15 @@ public class ILQuotationFinder {
              }
              isFirst = false;
          }
+
+        if (isNotEmpty(quotationId)) {
+            if (isFirst) {
+                query.append(" where quotation_id = '" + quotationId + "'");
+            } else {
+                query.append(" and quotation_id = '" + quotationId + "'");
+            }
+            isFirst = false;
+        }
 
          query.append(" order by version_number desc");
          return namedParameterJdbcTemplate.query(query.toString(), new BeanPropertyRowMapper<ILQuotationDto>(ILQuotationDto.class));

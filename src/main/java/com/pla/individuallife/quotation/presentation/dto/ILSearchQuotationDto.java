@@ -22,4 +22,5 @@ public class ILSearchQuotationDto {
     private ProposerDto proposer;
     private PlanDetailDto planDetail;
     private String quotationStatus;
+    private String quotationId;
 }

@@ -99,16 +99,15 @@
                     })
                 },
                 controller: ['$scope', function ($scope) {
-                    $scope.premiumTerm = function () {
+                    $scope.premiumTerms = function () {
+                        var ageNextBirthday = calculateAge($scope.proposedAssured.dateOfBirth);
                         if ($scope.plan.premiumTermType === 'SPECIFIED_VALUES') {
                             var maxMaturityAge = $scope.plan.premiumTermType.maxMaturityAge || 1000;
-                            var ageNextBirthday = moment().diff($scope.proposedAssured.dateOfBirth.toDateString(), 'years') + 1;
-                            return _.filter($scope.plan.premiumTermType.validTerms, function (term) {
-                                return ageNextBirthday + term <= maxMaturityAge;
+                            return _.filter($scope.plan.premiumTerm.validTerms, function (term) {
+                                return ageNextBirthday + parseInt(term.text) <= maxMaturityAge;
                             });
                         } else if ($scope.plan.premiumTermType === 'SPECIFIED_AGES') {
-                            var ageNextBirthday = moment().diff($scope.proposedAssured.dateOfBirth.toDateString(), 'years') + 1;
-                            return _.filter($scope.plan.premiumTermType.maturityAges, function (term) {
+                            return _.filter($scope.plan.premiumTerm.maturityAges, function (term) {
                                 return term > ageNextBirthday;
                             });
                         } else if ($scope.plan.premiumTermType === 'REGULAR') {
@@ -134,7 +133,6 @@
                             var dateOfBirth = scope.$eval('proposedAssured.dateOfBirth');
                             var age = calculateAge(dateOfBirth);
                             var valid = planDetail.minEntryAge <= age && age <= planDetail.maxEntryAge;
-                            console.log(' valid ' + valid);
                             ctrl.$setValidity('invalidAge', valid);
                         }
                         return valid ? value : undefined;
@@ -142,11 +140,9 @@
 
                     scope.$watch('proposedAssured.dateOfBirth', function (newval) {
                         var planDetail = scope.$eval('plan.planDetail');
-                        console.log(' planDetail ' + JSON.stringify(planDetail));
                         if (planDetail) {
                             var age = calculateAge(newval);
                             var valid = planDetail.minEntryAge <= age && age <= planDetail.maxEntryAge;
-                            console.log(' valid ' + valid);
                             ctrl.$setValidity('invalidAge', valid);
                         }
                     });
@@ -161,7 +157,6 @@
                 $scope.quotation = {};
                 $scope.stepsSaved = {"1": false, "2": false, "3": false, "4": true, "5": false};
                 $scope.selectedItem = 1;
-
                 $http.get('/pla/individuallife/proposal/getAllOccupation').success(function (response, status, headers, config) {
                     $scope.occupations = response;
                 });
@@ -245,7 +240,13 @@
                         });
                     $scope.stepsSaved["5"] = true;
                 }
+                ;
 
+                $scope.$watch('quotation.quotationStatus', function (newval, oldval) {
+                    if (newval != oldval) {
+                        $scope.stepsSaved["5"] = false;
+                    }
+                });
 
                 $scope.$watch('selectedAgent', function (newval) {
                     if (newval) {
@@ -325,8 +326,7 @@
                 };
 
                 $scope.saveStep2 = function () {
-                    $('#qsf_quotationNumber').val($scope.quotation.quotationNumber);
-                    $('#quotationSearchForm').submit();
+
                     var request = {proposedAssured: $scope.proposedAssured};
                     $http.post('updatewithassureddetail',
                         angular.extend(request, {
@@ -376,11 +376,9 @@
                         });
                     }
                 });
-
                 $scope.$on('finished.fu.wizard', function (name, event, data) {
                     $http.post('generatequotation/', {quotationId: $scope.quotationId}).success(function (response, status) {
                         $('#wizardStep').attr('disabled', true);
-                        $('#qsf_quotationNumber').val($scope.quotation.quotationNumber);
                         $('#quotationSearchForm').submit();
                     });
                 });
