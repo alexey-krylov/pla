@@ -5,6 +5,8 @@ import com.pla.grouplife.quotation.application.command.*;
 import com.pla.grouplife.quotation.application.service.GLQuotationService;
 import com.pla.grouplife.quotation.presentation.dto.GLQuotationMailDto;
 import com.pla.grouplife.quotation.query.*;
+import com.pla.publishedlanguage.contract.IClientProvider;
+import com.pla.publishedlanguage.dto.ClientDetailDto;
 import com.pla.sharedkernel.identifier.QuotationId;
 import com.pla.sharedkernel.service.EmailAttachment;
 import com.pla.sharedkernel.service.MailService;
@@ -48,12 +50,16 @@ public class GroupLifeQuotationController {
 
     private MailService mailService;
 
+    private IClientProvider clientProvider;
+
     @Autowired
-    public GroupLifeQuotationController(CommandGateway commandGateway, GLQuotationService glQuotationService, GLQuotationFinder glQuotationFinder, MailService mailService) {
+    public GroupLifeQuotationController(CommandGateway commandGateway, GLQuotationService glQuotationService, GLQuotationFinder glQuotationFinder, MailService mailService, IClientProvider clientProvider) {
         this.commandGateway = commandGateway;
         this.glQuotationService = glQuotationService;
         this.glQuotationFinder = glQuotationFinder;
         this.mailService = mailService;
+        this.clientProvider = clientProvider;
+
     }
 
     @RequestMapping(value = "/creategrouplifequotation", method = RequestMethod.GET)
@@ -88,7 +94,6 @@ public class GroupLifeQuotationController {
     @RequestMapping(value = "/getagentdetail/{agentId}", method = RequestMethod.GET)
     @ResponseBody
     public Result getAgentDetail(@PathVariable("agentId") String agentId) {
-
         Map<String, Object> agentDetail = glQuotationFinder.getAgentById(agentId);
         if (isEmpty(agentDetail)) {
             return Result.failure("Agent detail not found");
@@ -106,6 +111,27 @@ public class GroupLifeQuotationController {
     @ResponseBody
     public AgentDetailDto getAgentDetailFromQuotation(@PathVariable("quotationId") String quotationId) {
         return glQuotationService.getAgentDetail(new QuotationId(quotationId));
+    }
+
+    @RequestMapping(value = "/getproposerdetailfromclient/{proposerCode}/{quotationId}", method = RequestMethod.GET)
+    @ResponseBody
+    public ProposerDto getProposerDetailFromClientRepository(@PathVariable("proposerCode") String proposerCode,@PathVariable("quotationId") String quotationId) {
+        ClientDetailDto clientDetailDto = clientProvider.getClientDetail(proposerCode);
+        ProposerDto proposerDto = new ProposerDto();
+        if (clientDetailDto != null) {
+            proposerDto.setProposerName(clientDetailDto.getClientName());
+            proposerDto.setAddressLine1(clientDetailDto.getAddress1());
+            proposerDto.setAddressLine2(clientDetailDto.getAddress2());
+            proposerDto.setPostalCode(clientDetailDto.getPostalCode());
+            proposerDto.setContactPersonEmail(clientDetailDto.getEmailAddress());
+            proposerDto.setTown(clientDetailDto.getTown());
+            proposerDto.setProvince(clientDetailDto.getProvince());
+            proposerDto.setProposerCode(proposerCode);
+        }else{
+            proposerDto = getProposerDetail(quotationId);
+            proposerDto.setProposerCode(proposerCode);
+        }
+        return proposerDto;
     }
 
     @RequestMapping(value = "/listgrouplifequotation", method = RequestMethod.GET)
