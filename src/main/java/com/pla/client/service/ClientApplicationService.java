@@ -24,7 +24,6 @@ public class ClientApplicationService {
         ClientBuilder clientBuilder = new ClientBuilder(clientDetailDto.getClientName());
         clientBuilder.withClientAddress(clientDetailDto.getAddress1(), clientDetailDto.getAddress2(), clientDetailDto.getProvince(), clientDetailDto.getPostalCode(), clientDetailDto.getTown());
         clientBuilder.withEmailAddress(clientDetailDto.getEmailAddress());
-        clientBuilder.withClientDocument(clientDetailDto.getClientDocumentDetailDtoList());
         Client client = Client.createClient(clientBuilder, clientDetailDto.getClientCode());
         clientRepository.save(client);
         return true;
