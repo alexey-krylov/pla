@@ -71,10 +71,10 @@ public class GHQuotationCommandHandler {
     }
 
     @CommandHandler
-    public String updateWithProposer(UpdateGLQuotationWithProposerCommand updateGLQuotationWithProposerCommand) {
-        GroupHealthQuotation groupHealthQuotation = ghQuotationMongoRepository.load(new QuotationId(updateGLQuotationWithProposerCommand.getQuotationId()));
+    public String updateWithProposer(UpdateGHQuotationWithProposerCommand updateGHQuotationWithProposerCommand) {
+        GroupHealthQuotation groupHealthQuotation = ghQuotationMongoRepository.load(new QuotationId(updateGHQuotationWithProposerCommand.getQuotationId()));
         boolean isVersioningRequire = groupHealthQuotation.requireVersioning();
-        groupHealthQuotation = groupHealthQuotationService.updateWithProposer(groupHealthQuotation, updateGLQuotationWithProposerCommand.getProposerDto(), updateGLQuotationWithProposerCommand.getUserDetails());
+        groupHealthQuotation = groupHealthQuotationService.updateWithProposer(groupHealthQuotation, updateGHQuotationWithProposerCommand.getProposerDto(), updateGHQuotationWithProposerCommand.getUserDetails());
         if (isVersioningRequire) {
             ghQuotationMongoRepository.add(groupHealthQuotation);
         }

@@ -14,6 +14,7 @@ import com.pla.grouphealth.quotation.query.*;
 import com.pla.grouphealth.quotation.repository.GHQuotationRepository;
 import com.pla.publishedlanguage.contract.IPlanAdapter;
 import com.pla.publishedlanguage.dto.PlanCoverageDetailDto;
+import com.pla.sharedkernel.identifier.OpportunityId;
 import com.pla.sharedkernel.identifier.PlanId;
 import com.pla.sharedkernel.identifier.QuotationId;
 import com.pla.sharedkernel.util.PDFGeneratorUtils;
@@ -413,7 +414,12 @@ public class GHQuotationService {
     public ProposerDto getProposerDetail(QuotationId quotationId) {
         Map quotation = ghQuotationFinder.getQuotationById(quotationId.getQuotationId());
         GHProposer proposer = (GHProposer) quotation.get("proposer");
-        return new ProposerDto(proposer);
+        ProposerDto proposerDto = new ProposerDto(proposer);
+        if (quotation.get("opportunityId") != null) {
+            OpportunityId opportunityId = (OpportunityId) quotation.get("opportunityId");
+            proposerDto.setOpportunityId(opportunityId.getOpportunityId());
+        }
+        return proposerDto;
     }
 
     public List<GlQuotationDto> searchQuotation(SearchGlQuotationDto searchGlQuotationDto) {

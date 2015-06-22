@@ -4,7 +4,8 @@ import com.pla.core.domain.model.agent.AgentId;
 import com.pla.grouphealth.quotation.domain.event.GHQuotationClosedEvent;
 import com.pla.grouphealth.quotation.domain.event.GHQuotationEndSagaEvent;
 import com.pla.grouphealth.quotation.domain.event.GHQuotationGeneratedEvent;
-import com.pla.grouphealth.quotation.domain.event.ProposerAddedEvent;
+import com.pla.sharedkernel.event.GHProposerAddedEvent;
+import com.pla.sharedkernel.identifier.OpportunityId;
 import com.pla.sharedkernel.identifier.QuotationId;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -111,6 +112,8 @@ public class GroupHealthQuotation extends AbstractAggregateRoot<QuotationId> imp
         return this;
     }
 
+    private OpportunityId opportunityId;
+
     @Override
     public QuotationId getIdentifier() {
         return quotationId;
@@ -138,11 +141,16 @@ public class GroupHealthQuotation extends AbstractAggregateRoot<QuotationId> imp
         this.generatedOn = generatedOn;
         GHProposerContactDetail proposerContactDetail = proposer.getContactDetail();
         if (this.proposer != null && this.proposer.getContactDetail() != null) {
-            registerEvent(new ProposerAddedEvent(proposer.getProposerName(), proposer.getProposerCode(),
+            registerEvent(new GHProposerAddedEvent(proposer.getProposerName(), proposer.getProposerCode(),
                     proposerContactDetail.getAddressLine1(), proposerContactDetail.getAddressLine2(), proposerContactDetail.getPostalCode(),
                     proposerContactDetail.getProvince(), proposerContactDetail.getTown(), proposerContactDetail.getEmailAddress()));
         }
         registerEvent(new GHQuotationGeneratedEvent(quotationId));
+    }
+
+    public GroupHealthQuotation updateWithOpportunityId(OpportunityId opportunityId) {
+        this.opportunityId = opportunityId;
+        return this;
     }
 
     public void cancelSchedules() {
@@ -177,7 +185,7 @@ public class GroupHealthQuotation extends AbstractAggregateRoot<QuotationId> imp
         BigDecimal profitAndSolvencyAmount = premiumDetail.getProfitAndSolvency() == null ? BigDecimal.ZERO : totalInsuredPremiumAmount.multiply((premiumDetail.getProfitAndSolvency().divide(new BigDecimal(100))));
         totalInsuredPremiumAmount = totalInsuredPremiumAmount.add(profitAndSolvencyAmount);
         BigDecimal waiverOfExcessLoading = premiumDetail.getWaiverOfExcessLoading() == null ? BigDecimal.ZERO : totalInsuredPremiumAmount.multiply((premiumDetail.getWaiverOfExcessLoading().divide(new BigDecimal(100))));
-        totalInsuredPremiumAmount = totalInsuredPremiumAmount.subtract(waiverOfExcessLoading);
+        totalInsuredPremiumAmount = totalInsuredPremiumAmount.add(waiverOfExcessLoading);
         BigDecimal discountAmount = premiumDetail.getDiscount() == null ? BigDecimal.ZERO : totalInsuredPremiumAmount.multiply((premiumDetail.getDiscount().divide(new BigDecimal(100))));
         totalInsuredPremiumAmount = totalInsuredPremiumAmount.subtract(discountAmount);
         BigDecimal vat = premiumDetail.getVat() == null ? BigDecimal.ZERO : totalInsuredPremiumAmount.multiply((premiumDetail.getVat().divide(new BigDecimal(100))));

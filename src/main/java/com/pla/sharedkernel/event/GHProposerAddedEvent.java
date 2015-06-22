@@ -1,12 +1,14 @@
-package com.pla.grouplife.quotation.domain.event;
+package com.pla.sharedkernel.event;
 
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
 
 /**
  * Created by Samir on 4/8/2015.
  */
+@Getter
 @EqualsAndHashCode
-public class ProposerAddedEvent {
+public class GHProposerAddedEvent {
 
     private String proposerName;
 
@@ -24,7 +26,7 @@ public class ProposerAddedEvent {
 
     private String emailAddress;
 
-    public ProposerAddedEvent(String proposerName, String proposerCode, String addressLine1, String addressLine2, String postalCode, String province, String town, String emailAddress) {
+    public GHProposerAddedEvent(String proposerName, String proposerCode, String addressLine1, String addressLine2, String postalCode, String province, String town, String emailAddress) {
         this.proposerName = proposerName;
         this.proposerCode = proposerCode;
         this.addressLine1 = addressLine1;

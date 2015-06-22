@@ -12,7 +12,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 @Getter
 @Setter
 @NoArgsConstructor
-public class UpdateGLQuotationWithProposerCommand {
+public class UpdateGHQuotationWithProposerCommand {
 
     private ProposerDto proposerDto;
 

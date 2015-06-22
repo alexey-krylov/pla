@@ -14,6 +14,7 @@ import com.pla.grouplife.quotation.query.*;
 import com.pla.grouplife.quotation.repository.GlQuotationRepository;
 import com.pla.publishedlanguage.contract.IPlanAdapter;
 import com.pla.publishedlanguage.dto.PlanCoverageDetailDto;
+import com.pla.sharedkernel.identifier.OpportunityId;
 import com.pla.sharedkernel.identifier.PlanId;
 import com.pla.sharedkernel.identifier.QuotationId;
 import com.pla.sharedkernel.util.PDFGeneratorUtils;
@@ -388,7 +389,12 @@ public class GLQuotationService {
     public ProposerDto getProposerDetail(QuotationId quotationId) {
         Map quotation = glQuotationFinder.getQuotationById(quotationId.getQuotationId());
         Proposer proposer = (Proposer) quotation.get("proposer");
-        return new ProposerDto(proposer);
+        ProposerDto proposerDto = new ProposerDto(proposer);
+        if (quotation.get("opportunityId") != null) {
+            OpportunityId opportunityId = (OpportunityId) quotation.get("opportunityId");
+            proposerDto.setOpportunityId(opportunityId.getOpportunityId());
+        }
+        return proposerDto;
     }
 
     public List<GlQuotationDto> searchQuotation(SearchGlQuotationDto searchGlQuotationDto) {

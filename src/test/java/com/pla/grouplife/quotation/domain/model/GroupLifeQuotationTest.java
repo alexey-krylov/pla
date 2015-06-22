@@ -1,9 +1,9 @@
 package com.pla.grouplife.quotation.domain.model;
 
 import com.pla.core.domain.model.agent.AgentId;
-import com.pla.grouplife.quotation.domain.event.ProposerAddedEvent;
 import com.pla.grouplife.quotation.domain.event.GLQuotationClosedEvent;
 import com.pla.grouplife.quotation.domain.exception.QuotationException;
+import com.pla.sharedkernel.event.GLProposerAddedEvent;
 import com.pla.sharedkernel.identifier.QuotationId;
 import org.joda.time.LocalDate;
 import org.junit.Before;
@@ -98,11 +98,11 @@ public class GroupLifeQuotationTest {
         GroupLifeQuotation groupLifeQuotation = this.groupLifeQuotation.updateWithProposer(proposer);
         groupLifeQuotation.generateQuotation(LocalDate.now());
         ProposerContactDetail proposerContactDetail = proposerBuilder.getProposerContactDetail();
-        ProposerAddedEvent proposerAddedEvent = new ProposerAddedEvent(proposerBuilder.getProposerName(), proposerBuilder.getProposerCode(),
+        GLProposerAddedEvent GLProposerAddedEvent = new GLProposerAddedEvent(proposerBuilder.getProposerName(), proposerBuilder.getProposerCode(),
                 proposerContactDetail.getAddressLine1(), proposerContactDetail.getAddressLine2(),
                 proposerContactDetail.getPostalCode(), proposerContactDetail.getProvince(), proposerContactDetail.getTown(), proposerContactDetail.getEmailAddress());
-        ProposerAddedEvent registeredProposerEvent = (ProposerAddedEvent) groupLifeQuotation.getUncommittedEvents().peek().getPayload();
-        assertThat(registeredProposerEvent, is(proposerAddedEvent));
+        GLProposerAddedEvent registeredProposerEvent = (GLProposerAddedEvent) groupLifeQuotation.getUncommittedEvents().peek().getPayload();
+        assertThat(registeredProposerEvent, is(GLProposerAddedEvent));
     }
 
 

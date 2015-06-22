@@ -2,8 +2,8 @@ package com.pla.grouphealth.quotation.domain.model;
 
 import com.pla.core.domain.model.agent.AgentId;
 import com.pla.grouphealth.quotation.domain.event.GHQuotationClosedEvent;
-import com.pla.grouphealth.quotation.domain.event.ProposerAddedEvent;
 import com.pla.grouphealth.quotation.domain.exception.GHQuotationException;
+import com.pla.sharedkernel.event.GHProposerAddedEvent;
 import com.pla.sharedkernel.identifier.QuotationId;
 import org.joda.time.LocalDate;
 import org.junit.Before;
@@ -98,11 +98,11 @@ public class GroupHealthQuotationTest {
         GroupHealthQuotation groupHealthQuotation = this.groupHealthQuotation.updateWithProposer(proposer);
         groupHealthQuotation.generateQuotation(LocalDate.now());
         GHProposerContactDetail proposerContactDetail = proposerBuilder.getProposerContactDetail();
-        ProposerAddedEvent proposerAddedEvent = new ProposerAddedEvent(proposerBuilder.getProposerName(), proposerBuilder.getProposerCode(),
+        GHProposerAddedEvent GHProposerAddedEvent = new GHProposerAddedEvent(proposerBuilder.getProposerName(), proposerBuilder.getProposerCode(),
                 proposerContactDetail.getAddressLine1(), proposerContactDetail.getAddressLine2(),
                 proposerContactDetail.getPostalCode(), proposerContactDetail.getProvince(), proposerContactDetail.getTown(), proposerContactDetail.getEmailAddress());
-        ProposerAddedEvent registeredProposerEvent = (ProposerAddedEvent) groupHealthQuotation.getUncommittedEvents().peek().getPayload();
-        assertThat(registeredProposerEvent, is(proposerAddedEvent));
+        GHProposerAddedEvent registeredProposerEvent = (GHProposerAddedEvent) groupHealthQuotation.getUncommittedEvents().peek().getPayload();
+        assertThat(registeredProposerEvent, is(GHProposerAddedEvent));
     }
 
 

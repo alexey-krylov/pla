@@ -277,6 +277,9 @@ public class GLInsuredExcelParser {
         Set<String> errorMessages = Sets.newHashSet();
         String planCellValue = getCellValue(insureDataRow.getCell(headers.indexOf(GLInsuredExcelHeader.PLAN.name())));
         if (isNotEmpty(planCellValue)) {
+            if (planCellValue.indexOf(".") != -1) {
+                planCellValue = planCellValue.substring(0, planCellValue.indexOf("."));
+            }
             PlanId planId = planAdapter.getPlanId(planCellValue);
             if (!agentPlans.contains(planId)) {
                 errorMessages.add("Plan code is not valid for the selected agent.");

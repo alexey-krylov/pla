@@ -1,6 +1,6 @@
 package com.pla.client.domain.model;
 
-import com.pla.client.dto.ClientDetailDto;
+import com.pla.publishedlanguage.dto.ClientDetailDto;
 import lombok.Getter;
 
 import java.util.List;

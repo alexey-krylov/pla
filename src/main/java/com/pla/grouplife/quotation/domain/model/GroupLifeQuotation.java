@@ -4,7 +4,8 @@ import com.pla.core.domain.model.agent.AgentId;
 import com.pla.grouplife.quotation.domain.event.GLQuotationClosedEvent;
 import com.pla.grouplife.quotation.domain.event.GLQuotationEndSagaEvent;
 import com.pla.grouplife.quotation.domain.event.GLQuotationGeneratedEvent;
-import com.pla.grouplife.quotation.domain.event.ProposerAddedEvent;
+import com.pla.sharedkernel.event.GLProposerAddedEvent;
+import com.pla.sharedkernel.identifier.OpportunityId;
 import com.pla.sharedkernel.identifier.QuotationId;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -54,6 +55,8 @@ public class GroupLifeQuotation extends AbstractAggregateRoot<QuotationId> imple
     private QuotationId parentQuotationId;
 
     private PremiumDetail premiumDetail;
+
+    private OpportunityId opportunityId;
 
     private GroupLifeQuotation(String quotationCreator, String quotationNumber, QuotationId quotationId, AgentId agentId, Proposer proposer, QuotationStatus quotationStatus, int versionNumber) {
         checkArgument(isNotEmpty(quotationCreator));
@@ -111,6 +114,11 @@ public class GroupLifeQuotation extends AbstractAggregateRoot<QuotationId> imple
         return this;
     }
 
+    public GroupLifeQuotation updateWithOpportunityId(OpportunityId opportunityId) {
+        this.opportunityId = opportunityId;
+        return this;
+    }
+
     @Override
     public QuotationId getIdentifier() {
         return quotationId;
@@ -138,7 +146,7 @@ public class GroupLifeQuotation extends AbstractAggregateRoot<QuotationId> imple
         this.generatedOn = generatedOn;
         ProposerContactDetail proposerContactDetail = this.proposer.getContactDetail();
         if (this.proposer != null && this.proposer.getContactDetail() != null) {
-            registerEvent(new ProposerAddedEvent(proposer.getProposerName(), proposer.getProposerCode(),
+            registerEvent(new GLProposerAddedEvent(proposer.getProposerName(), proposer.getProposerCode(),
                     proposerContactDetail.getAddressLine1(), proposerContactDetail.getAddressLine2(), proposerContactDetail.getPostalCode(),
                     proposerContactDetail.getProvince(), proposerContactDetail.getTown(), proposerContactDetail.getEmailAddress()));
         }

@@ -161,13 +161,13 @@ public class GroupHealthQuotationController {
 
     @RequestMapping(value = "/updatewithproposerdetail", method = RequestMethod.POST)
     @ResponseBody
-    public Result updateQuotationWithProposerDetail(@RequestBody UpdateGLQuotationWithProposerCommand updateGLQuotationWithProposerCommand, BindingResult bindingResult, HttpServletRequest request) {
+    public Result updateQuotationWithProposerDetail(@RequestBody UpdateGHQuotationWithProposerCommand updateGHQuotationWithProposerCommand, BindingResult bindingResult, HttpServletRequest request) {
         if (bindingResult.hasErrors()) {
             return Result.failure("Update quotation proposer data is not valid", bindingResult.getAllErrors());
         }
         try {
-            updateGLQuotationWithProposerCommand.setUserDetails(getLoggedInUserDetail(request));
-            String quotationId = commandGateway.sendAndWait(updateGLQuotationWithProposerCommand);
+            updateGHQuotationWithProposerCommand.setUserDetails(getLoggedInUserDetail(request));
+            String quotationId = commandGateway.sendAndWait(updateGHQuotationWithProposerCommand);
             return Result.success("Proposer detail updated successfully", quotationId);
         } catch (Exception e) {
             return Result.failure();

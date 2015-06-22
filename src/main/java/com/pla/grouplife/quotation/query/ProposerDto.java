@@ -38,6 +38,8 @@ public class ProposerDto {
 
     private String contactPersonWorkPhoneNumber;
 
+    private String opportunityId;
+
     public ProposerDto(Proposer proposer) {
         ProposerContactDetail proposerContactDetail = proposer.getContactDetail();
         ProposerContactDetail.ContactPersonDetail contactPersonDetail = proposerContactDetail != null ? proposerContactDetail.getContactPersonDetail() : null;

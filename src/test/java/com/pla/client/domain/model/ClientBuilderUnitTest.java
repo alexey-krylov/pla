@@ -1,7 +1,7 @@
 package com.pla.client.domain.model;
 
 import com.google.common.collect.Lists;
-import com.pla.client.dto.ClientDetailDto;
+import com.pla.publishedlanguage.dto.ClientDetailDto;
 import org.junit.Before;
 import org.junit.Test;
 

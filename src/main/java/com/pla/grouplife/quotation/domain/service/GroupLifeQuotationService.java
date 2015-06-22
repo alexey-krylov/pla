@@ -9,6 +9,7 @@ import com.pla.publishedlanguage.contract.IPremiumCalculator;
 import com.pla.publishedlanguage.domain.model.BasicPremiumDto;
 import com.pla.publishedlanguage.domain.model.ComputedPremiumDto;
 import com.pla.publishedlanguage.domain.model.PremiumFrequency;
+import com.pla.sharedkernel.identifier.OpportunityId;
 import com.pla.sharedkernel.identifier.QuotationId;
 import org.bson.types.ObjectId;
 import org.joda.time.LocalDate;
@@ -71,7 +72,12 @@ public class GroupLifeQuotationService {
         ProposerBuilder proposerBuilder = Proposer.getProposerBuilder(proposerDto.getProposerName(), proposerDto.getProposerCode());
         proposerBuilder.withContactDetail(proposerDto.getAddressLine1(), proposerDto.getAddressLine2(), proposerDto.getPostalCode(), proposerDto.getProvince(), proposerDto.getTown(), proposerDto.getEmailAddress())
                 .withContactPersonDetail(proposerDto.getContactPersonName(), proposerDto.getContactPersonEmail(), proposerDto.getContactPersonMobileNumber(), proposerDto.getContactPersonWorkPhoneNumber());
-        return glQuotationProcessor.updateWithProposer(groupLifeQuotation, proposerBuilder.build());
+        groupLifeQuotation = glQuotationProcessor.updateWithProposer(groupLifeQuotation, proposerBuilder.build());
+        if (isNotEmpty(proposerDto.getOpportunityId())) {
+            OpportunityId opportunityId = new OpportunityId(proposerDto.getOpportunityId());
+            groupLifeQuotation = groupLifeQuotation.updateWithOpportunityId(opportunityId);
+        }
+        return groupLifeQuotation;
     }
 
     public GroupLifeQuotation updateWithAgent(GroupLifeQuotation groupLifeQuotation, String agentId, UserDetails userDetails) {
