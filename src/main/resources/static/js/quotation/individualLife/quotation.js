@@ -154,14 +154,13 @@
                 // element must have ng-model attribute.
                 require: 'ngModel',
                 link: function (scope, ele, attrs, ctrl) {
-
                     ctrl.$parsers.unshift(function (value) {
                         var planDetail = scope.$eval('plan.planDetail');
                         if (value && planDetail) {
                             var dateOfBirth = scope.$eval('proposedAssured.dateOfBirth');
                             var age = calculateAge(dateOfBirth);
                             var valid = planDetail.minEntryAge <= age && age <= planDetail.maxEntryAge;
-                            ctrl.$setValidity('invalidAge', valid);
+                            //ctrl.$setValidity('invalidMinAge', planDetail.minEntryAge <= age);
                         }
                         return valid ? value : undefined;
                     });
@@ -170,9 +169,17 @@
                         var planDetail = scope.$eval('plan.planDetail');
                         if (planDetail) {
                             var age = calculateAge(newval);
-                            var valid = planDetail.minEntryAge <= age && age <= planDetail.maxEntryAge;
-                            ctrl.$setValidity('invalidAge', valid);
+                            ctrl.$setValidity('invalidMinAge', age >= planDetail.minEntryAge);
+                            ctrl.$setValidity('invalidMaxAge', age <= planDetail.maxEntryAge);
+
                         }
+                    });
+
+                    scope.$watch('proposer.dateOfBirth', function (newval) {
+                        if (!newval) return;
+                        var age = calculateAge(newval);
+                        ctrl.$setValidity('invalidMinAge', age >= 18);
+                        ctrl.$setValidity('invalidMaxAge', age <= 60);
                     });
                 }
             }
@@ -189,14 +196,25 @@
                     $scope.occupations = response;
                 });
 
+                $scope.todayDate = new Date();
+                $scope.todayDate.setDate($scope.todayDate.getDate() - 1);
+
                 $scope.onlyNumbers = /^[0-9]+$/;
+                $scope.onlyText = /^[a-zA-Z ]*$/;
                 $scope.planDetailDto = {};
                 $scope.proposedAssured = {};
                 $scope.uneditable = false;
                 $scope.proposerSameAsProposedAssured = false;
 
                 $scope.isSaveDisabled = function (stepForm) {
-                    return (!stepForm.$dirty) || stepForm.$invalid || !($scope.stepsSaved[$scope.selectedItem]);
+                    var returnval = true;
+                    if (stepForm.$dirty || stepForm.$invalid) {
+                        $scope.stepsSaved[stepForm.$name == 'step2' ? "2" : stepForm.$name == 'step3' ? "3" : stepForm.$name == 'step4' ? "4" : "5"] = false;
+                        returnval = false;
+                    } else {
+                        returnval = true;
+                    }
+                    return returnval;
                 };
 
 
@@ -359,8 +377,8 @@
                     $scope.launchdob1 = true;
                 };
 
-                $scope.saveStep2 = function () {
-
+                $scope.saveStep2 = function (stepForm) {
+                    stepForm.$setPristine();
                     var request = {proposedAssured: $scope.proposedAssured};
                     $http.post('updatewithassureddetail',
                         angular.extend(request, {
@@ -373,7 +391,8 @@
                         });
                 };
 
-                $scope.saveStep3 = function () {
+                $scope.saveStep3 = function (stepForm) {
+                    stepForm.$setPristine();
                     var request = {proposerDto: $scope.proposer};
                     $http.post('updatewithproposerdetail',
                         angular.extend(request, {
@@ -385,7 +404,8 @@
                         });
                 };
 
-                $scope.saveStep4 = function () {
+                $scope.saveStep4 = function (stepForm) {
+                    stepForm.$setPristine();
                     $scope.planDetailDto.planId = $scope.plan.planId;
                     var request = angular.extend($scope.planDetailDto, {
                         quotationId: $scope.quotationId

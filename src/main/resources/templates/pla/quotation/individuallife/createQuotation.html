@@ -98,22 +98,28 @@
                                     <div class="form-group required">
                                         <label class="control-label">Surname</label>
                                         <input type="text" class="form-control input-sm" name="surname" ng-required="true"
-                                               ng-model="proposedAssured.surname" ng-disabled="uneditable"/>
+                                               ng-model="proposedAssured.surname" ng-maxlength="20"
+                                               ng-pattern="onlyText" ng-disabled="uneditable"/>
 
                                         <div class="error" ng-messages="step1.surname.$error" ng-if="step1.surname.$dirty">
                                             <small ng-message="required">Please enter Surname.</small>
+                                            <small ng-message="maxlength">Only 20 characters are allowed.</small>
+                                            <small ng-message="pattern">Only alphabets are allowed.</small>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="col-lg-6">
                                     <div class="form-group required">
                                         <label class="control-label">First Name</label>
-                                        <input type="text" class="form-control input-sm" name="firstName" ng-required="true"
-                                               ng-model="proposedAssured.firstName" ng-disabled="uneditable"/>
-
+                                        <input type="text" class="form-control input-sm" ng-pattern="onlyText"
+                                               name="firstName" ng-required="true"
+                                               ng-model="proposedAssured.firstName" ng-maxlength="20"
+                                               ng-disabled="uneditable"/>
                                         <div class="error" ng-messages="step1.firstName.$error"
                                              ng-if="step1.firstName.$dirty">
                                             <small ng-message="required">Please enter FirstName.</small>
+                                            <small ng-message="maxlength">Only 20 characters are allowed.</small>
+                                            <small ng-message="pattern">Only alphabets are allowed.</small>
                                         </div>
                                     </div>
                                     <div class="form-group required">
@@ -171,6 +177,8 @@
                                                datepicker-popup=""
                                                ng-required="true"
                                                is-open="launchdob1"
+                                               max-date="todayDate"
+                                               validate-dob=""
                                                ng-model="proposedAssured.dateOfBirth" name="dob"/>
                                     <span class="input-group-btn">
                                     <button type="button" class="btn btn-default btn-sm"
@@ -181,6 +189,12 @@
                                     <div class="error" ng-messages="step2.dob.$error" ng-if="step2.dob.$dirty">
                                         <small ng-message="required">Please enter Date of Birth.</small>
                                         <small ng-message="date">Invalid Date.</small>
+                                        <small ng-message="invalidMinAge">Minimum Entry Age For Proposed Assured is
+                                            {{plan.planDetail.minEntryAge}} years.
+                                        </small>
+                                        <small ng-message="invalidMaxAge">Maximum Entry Age For Proposed Assured is
+                                            {{plan.planDetail.maxEntryAge}} Years.
+                                        </small>
                                     </div>
                                 </div>
                                 <div class="form-group required">
@@ -204,7 +218,8 @@
                                     <label style="text-align: left">Is Proposed Assured the Proposer?</label>
                                     <label style="padding-right: 5px">
                                         <input type="radio" name="sameProposer" ng-required="true" ng-value="true"
-                                               ng-model="proposerSameAsProposedAssured"/>Yes</label>
+                                               ng-model="proposerSameAsProposedAssured"
+                                               ng-disabled="proposer.surname!=undefined"/>Yes</label>
                                     <label>
                                         <input type="radio" name="sameProposer" ng-required="true"
                                                   ng-model="proposerSameAsProposedAssured" ng-value="false"/>No</label>
@@ -223,16 +238,16 @@
                                            ng-model="proposedAssured.firstName"/>
                                 </div>
                                 <div class="form-group">
-                                    <label class="control-label">NRC Number</label>
+                                    <label class="control-label">NRC</label>
                                     <input type="text" class="form-control input-sm" name="nrcNumber" readonly="true"
                                            placeholder="xxxxxx/xx/x"
                                            ng-model="proposedAssured.nrcNumber"/>
 
                                     <div class="error" ng-messages="step2.nrcNumber.$error" ng-if="step2.$dirty">
-                                        <small ng-message="required">Please enter NRC Number.</small>
+                                        <small ng-message="required">Please enter NRC.</small>
                                     </div>
                                     <div class="error" ng-messages="step2.nrcNumber.$error" ng-if="step2.$dirty">
-                                        <small ng-message="pattern">Please enter NRC Number.</small>
+                                        <small ng-message="pattern">Please enter NRC.</small>
                                     </div>
                                 </div>
                                 <div class="form-group">
@@ -241,10 +256,6 @@
                                            ng-model="proposedAssuredAge" readonly="readonly"/>
 
                                     <div class="error" ng-messages="step2.age.$error" ng-if="step2.$dirty">
-                                        <small ng-message="invalidAge">The age should be greater or equal to
-                                            {{plan.planDetail.minEntryAge}} and less or equal to
-                                            {{plan.planDetail.maxEntryAge}}
-                                        </small>
                                     </div>
                                 </div>
                                 <div class="form-group required">
@@ -277,10 +288,9 @@
                                 </button>
                             </div>
                             <div class="col-sm-6">
-                                <button type="button" class="btn btn-default btn-sm" style="float: right;clear:both"
-                                        ng-click="saveStep2()"
-                                        ng-disabled="isSaveDisabled(step2)">Save
-                                </button>
+                                <input type="submit" class="btn btn-default btn-sm" style="float: right;clear:both"
+                                       ng-click="saveStep2(step2)"
+                                       ng-disabled="isSaveDisabled(step2)" value="Save"/>
                             </div>
                         </div>
                     </ng-form>
@@ -308,9 +318,12 @@
                                 <div class="form-group required">
                                     <label class="control-label">Surname</label>
                                     <input type="text" class="form-control input-sm" name="surname" ng-required="true"
-                                           ng-model="proposer.surname" ng-disabled="proposerSameAsProposedAssured"/>
+                                           ng-model="proposer.surname" ng-pattern="onlyText" ng-maxlength="20"
+                                           ng-disabled="proposerSameAsProposedAssured"/>
                                     <div class="error" ng-messages="step3.surname.$error" ng-if="step3.$dirty">
                                         <small ng-message="required">Please enter Surname.</small>
+                                        <small ng-message="maxlength">Only 20 characters are allowed.</small>
+                                        <small ng-message="pattern">Only alphabets are allowed.</small>
                                     </div>
                                 </div>
                                 <div class="form-group required">
@@ -321,6 +334,8 @@
                                                ng-disabled="proposerSameAsProposedAssured"
                                                ng-required="true"
                                                is-open="launchdob2"
+                                               validate-dob=""
+                                               max-date="todayDate"
                                                ng-model="proposer.dateOfBirth" name="dob2"/>
                                     <span class="input-group-btn">
                                     <button type="button" class="btn btn-default btn-sm"
@@ -330,6 +345,10 @@
                                     </div>
                                     <div class="error" ng-messages="step3.dob2.$error" ng-if="step3.dob2.$dirty">
                                         <small ng-message="required">Please enter Date of Birth.</small>
+                                        <small ng-message="invalidMinAge">Minimum Entry Age For Proposer is 18 years.
+                                        </small>
+                                        <small ng-message="invalidMaxAge">Maximum Entry Age For Proposer is 60 Years.
+                                        </small>
                                     </div>
                                 </div>
                                 <div class="form-group required">
@@ -356,11 +375,14 @@
                                     <label class="control-label">First Name</label>
                                     <input type="text" class="form-control input-sm" name="pfirstName"
                                            ng-disabled="proposerSameAsProposedAssured"
+                                           ng-pattern="onlyText" ng-maxlength="20"
                                            ng-model="proposer.firstName" ng-required="true"/>
 
                                     <div class="error" ng-messages="step3.pfirstName.$error"
                                          ng-if="step3.pfirstName.$dirty">
                                         <small ng-message="required">Please enter FirstName.</small>
+                                        <small ng-message="maxlength">Only 20 characters are allowed.</small>
+                                        <small ng-message="pattern">Only alphabets are allowed.</small>
                                     </div>
                                 </div>
                                 <div class="form-group">
@@ -394,7 +416,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="row" style="position: absolute;bottom:50px;">
+                        <div class="row">
                             <div class="col-sm-6">
                                 <button type="button" class="btn btn-default btn-sm"
                                         onclick="window.location='/pla/individuallife/quotation/searchForm'">Cancel
@@ -402,7 +424,7 @@
                             </div>
                             <div class="col-sm-6 action-panel">
                                 <button type="button" class="btn btn-default btn-sm" style="float: right;clear:both"
-                                        ng-click="saveStep3()"
+                                        ng-click="saveStep3(step3)"
                                         ng-disabled="isSaveDisabled(step3) &amp;&amp; !proposerSameAsProposedAssured">Save
                                 </button>
                             </div>
@@ -475,7 +497,7 @@
                             </div>
                             <div class="col-sm-6">
                                 <button type="button" class="btn btn-default btn-sm" style="float: right"
-                                        ng-click="saveStep4()" ng-disabled="isSaveDisabled(step4)">Save
+                                        ng-click="saveStep4(step4)" ng-disabled="isSaveDisabled(step4)">Save
                                 </button>
                             </div>
                         </div>
