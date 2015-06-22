@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
  * Created by Admin on 5/28/2015.
  */
 @Document(collection = "client")
-@Getter(value = AccessLevel.PACKAGE)
+@Getter
 @Setter(value = AccessLevel.PACKAGE)
 @NoArgsConstructor(access = AccessLevel.PACKAGE)
 @EqualsAndHashCode(of = "clientCode")
@@ -50,7 +50,6 @@ public class Client {
         this.provience = clientBuilder.getProvience();
         this.town = clientBuilder.getTown();
         this.emailAddress = clientBuilder.getEmailAddress();
-        this.clientDocuments = withClientDocument(clientBuilder.getClientDocuments());
     }
 
     public static Client createClient(ClientBuilder clientBuilder,String clientCode){
