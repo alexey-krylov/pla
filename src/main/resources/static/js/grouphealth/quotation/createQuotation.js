@@ -108,6 +108,14 @@ angular.module('createQuotation', ['common', 'ngRoute', 'mgcrea.ngStrap.select',
                     $scope.cities = provinceDetails.cities;
                 }
             };
+
+            $scope.populateProposerDetailFromClientRepository = function () {
+                $http.get("/pla/quotation/grouphealth/getproposerdetailfromclient/" + $scope.quotationDetails.proposer.proposerCode+"/"+$scope.quotationId)
+                    .success(function (data) {
+                        $scope.quotationDetails.proposer = data;
+                    });
+            }
+
             $scope.accordionStatus = {
                 contact: false,
                 proposer: true

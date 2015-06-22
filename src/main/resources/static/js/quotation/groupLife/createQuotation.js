@@ -5,7 +5,7 @@ angular.module('createQuotation', ['common', 'ngRoute', 'mgcrea.ngStrap.select',
         function ($scope, $http, $timeout, $location, $route, $upload, provinces, getProvinceAndCityDetail, globalConstants, agentDetails, stepsSaved, proposerDetails, quotationNumber, getQueryParameter,
                   $window, checkIfInsuredUploaded, premiumData) {
             var mode = getQueryParameter("mode");
-            $scope.mode=mode;
+            $scope.mode = mode;
             $scope.qId = null;
             if (mode == 'view') {
                 $scope.isViewMode = true;
@@ -50,14 +50,14 @@ angular.module('createQuotation', ['common', 'ngRoute', 'mgcrea.ngStrap.select',
                 premium: $scope.premiumData
             };
 
-            if($scope.premiumData)
-            $scope.selectedInstallment = $scope.premiumData.premiumInstallment;
+            if ($scope.premiumData)
+                $scope.selectedInstallment = $scope.premiumData.premiumInstallment;
 
             $scope.quotationDetails.basic = agentDetails;
             $scope.quotationDetails.proposer = proposerDetails;
 
-            if(proposerDetails && proposerDetails.proposerCode){
-                $scope.proposerCodeDisabled=true;
+            if (proposerDetails && proposerDetails.proposerCode) {
+                $scope.proposerCodeDisabled = true;
             }
             // console.log(getQueryParameter('quotationId'));
             // console.log($scope.quotationId);
@@ -104,6 +104,13 @@ angular.module('createQuotation', ['common', 'ngRoute', 'mgcrea.ngStrap.select',
                 }
             });
 
+            $scope.populateProposerDetailFromClientRepository = function () {
+                $http.get("/pla/quotation/grouplife/getproposerdetailfromclient/" + $scope.quotationDetails.proposer.proposerCode+"/"+$scope.quotationId)
+                    .success(function (data) {
+                        $scope.quotationDetails.proposer = data;
+                    });
+            }
+
             $scope.getProvinceDetails = function (provinceCode) {
                 var provinceDetails = getProvinceAndCityDetail(provinces, provinceCode);
                 if (provinceDetails) {
@@ -133,7 +140,7 @@ angular.module('createQuotation', ['common', 'ngRoute', 'mgcrea.ngStrap.select',
             };
 
             $scope.isSaveDisabled = function (formName) {
-                return formName.$invalid || ($scope.stepsSaved[$scope.selectedItem] && !mode=='new')
+                return formName.$invalid || ($scope.stepsSaved[$scope.selectedItem] && !mode == 'new')
             };
 
             $scope.searchAgent = function () {
@@ -234,16 +241,16 @@ angular.module('createQuotation', ['common', 'ngRoute', 'mgcrea.ngStrap.select',
                     .success(function (data) {
                         if (data.status == "200") {
                             $scope.quotationId = data.id;
-                            $scope.proposerCodeDisabled=true;
+                            $scope.proposerCodeDisabled = true;
                             saveStep();
                         }
                     });
             };
 
-            $scope.updatePremiumDetail = function(quotationId) {
-                $http.get("/pla/quotation/grouplife/getpremiumdetail/" +quotationId)
+            $scope.updatePremiumDetail = function (quotationId) {
+                $http.get("/pla/quotation/grouplife/getpremiumdetail/" + quotationId)
                     .success(function (data) {
-                        console.log('received data'+JSON.stringify(data));
+                        console.log('received data' + JSON.stringify(data));
                         $scope.quotationDetails.premium = data;
                         $scope.premiumData = data;
                         $scope.quotationDetails.premium.policyTermValue = data.policyTermValue;
@@ -281,8 +288,7 @@ angular.module('createQuotation', ['common', 'ngRoute', 'mgcrea.ngStrap.select',
                 }
             };
 
-            $scope.installments =_.sortBy($scope.premiumData.installments,'installmentNo');
-
+            $scope.installments = _.sortBy($scope.premiumData.installments, 'installmentNo');
 
 
             $scope.recalculatePremium = function () {
@@ -302,25 +308,25 @@ angular.module('createQuotation', ['common', 'ngRoute', 'mgcrea.ngStrap.select',
                     }
                     if (data.data.installments) {
                         $scope.selectedInstallment = null;
-                        $scope.installments =_.sortBy(data.data.installments,'installmentNo');
+                        $scope.installments = _.sortBy(data.data.installments, 'installmentNo');
                     }
                 });
 
             }
 
 
-            $scope.setSelectedInstallment = function (selectedInstallment){
-                $scope.selectedInstallment=selectedInstallment;
+            $scope.setSelectedInstallment = function (selectedInstallment) {
+                $scope.selectedInstallment = selectedInstallment;
                 console.log('setSelectedInstallment ***');
             }
 
             $scope.savePremiumDetails = function () {
                 console.log($scope.selectedInstallment);
-                var request= angular.extend({premiumDetailDto: $scope.quotationDetails.premium},
+                var request = angular.extend({premiumDetailDto: $scope.quotationDetails.premium},
                     {"quotationId": $scope.quotationId});
-                request.premiumDetailDto["premiumInstallment"]=$scope.selectedInstallment;
+                request.premiumDetailDto["premiumInstallment"] = $scope.selectedInstallment;
                 console.log(JSON.stringify(request));
-                $http.post('/pla/quotation/grouplife/savepremiumdetail',request).success(function (data) {
+                $http.post('/pla/quotation/grouplife/savepremiumdetail', request).success(function (data) {
                     $http.post("/pla/quotation/grouplife/generate", angular.extend({},
                         {"quotationId": $scope.quotationId}))
                         .success(function (data) {

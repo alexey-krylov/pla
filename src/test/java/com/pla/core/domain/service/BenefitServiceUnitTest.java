@@ -17,6 +17,7 @@ import com.pla.core.specification.BenefitIsAssociatedWithCoverage;
 import com.pla.core.specification.BenefitNameIsUnique;
 import com.pla.sharedkernel.domain.model.BenefitStatus;
 import com.pla.sharedkernel.identifier.BenefitId;
+import com.pla.sharedkernel.util.SequenceGenerator;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -61,10 +62,13 @@ public class BenefitServiceUnitTest {
 
     private Admin admin;
 
+    @Mock
+    private SequenceGenerator sequenceGenerator;
+
     @Before
     public void setUp() {
         BenefitIsAssociatedWithCoverage benefitIsAssociatedWithCoverage = new BenefitIsAssociatedWithCoverage(benefitFinder);
-        benefitService = new BenefitService(adminRoleAdapter, benefitNameIsUnique, idGenerator, benefitIsAssociatedWithCoverage, benefitCodeIsUnique);
+        benefitService = new BenefitService(adminRoleAdapter, benefitNameIsUnique, idGenerator, benefitIsAssociatedWithCoverage, benefitCodeIsUnique,sequenceGenerator);
         userDetails = UserLoginDetailDto.createUserLoginDetailDto("", "");
         admin = new Admin();
     }

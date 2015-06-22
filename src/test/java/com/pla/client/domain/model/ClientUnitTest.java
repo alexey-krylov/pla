@@ -49,7 +49,6 @@ public class ClientUnitTest {
 
         assertNotNull(client);
         assertThat(client.getClientCode(), is(new ClientId("C001")));
-        assertThat(client.getClientDocuments().size(), is(2));
         assertThat(expectedAddress1, is(client.getAddress1()));
         assertThat(expectedAddress2,is(client.getAddress2()));
         assertThat(provience,is(client.getProvience()));

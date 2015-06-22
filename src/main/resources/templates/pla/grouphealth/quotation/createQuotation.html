@@ -162,7 +162,7 @@
                                         <label class="control-label">Proposer Code</label>
                                         <input type="text" onkeypress="return isEnterKey(event)"
                                                class="form-control input-sm" ng-disabled="proposerCodeDisabled"
-                                               ng-required="true" name="proposerCode"
+                                               ng-required="true" name="proposerCode" ng-blur="populateProposerDetailFromClientRepository();"
                                                ng-model="quotationDetails.proposer.proposerCode"/>
                                     </div>
                                     <div class="form-group">

@@ -4,6 +4,8 @@ import com.google.common.collect.Lists;
 import com.pla.grouphealth.quotation.application.command.*;
 import com.pla.grouphealth.quotation.application.service.GHQuotationService;
 import com.pla.grouphealth.quotation.query.*;
+import com.pla.publishedlanguage.contract.IClientProvider;
+import com.pla.publishedlanguage.dto.ClientDetailDto;
 import com.pla.sharedkernel.identifier.QuotationId;
 import com.pla.sharedkernel.service.EmailAttachment;
 import com.pla.sharedkernel.service.MailService;
@@ -47,12 +49,15 @@ public class GroupHealthQuotationController {
 
     private MailService mailService;
 
+    private IClientProvider clientProvider;
+
     @Autowired
-    public GroupHealthQuotationController(CommandGateway commandGateway, GHQuotationService ghQuotationService, GHQuotationFinder ghQuotationFinder, MailService mailService) {
+    public GroupHealthQuotationController(CommandGateway commandGateway, GHQuotationService ghQuotationService, GHQuotationFinder ghQuotationFinder, MailService mailService, IClientProvider clientProvider) {
         this.commandGateway = commandGateway;
         this.ghQuotationService = ghQuotationService;
         this.ghQuotationFinder = ghQuotationFinder;
         this.mailService = mailService;
+        this.clientProvider = clientProvider;
     }
 
     @RequestMapping(value = "/creategrouphealthquotation", method = RequestMethod.GET)
@@ -69,6 +74,27 @@ public class GroupHealthQuotationController {
         Map quotationMap = ghQuotationFinder.getQuotationById(quotationId);
         String versionNumber = (Integer) quotationMap.get("versionNumber") != 0 ? ("/" + quotationMap.get("versionNumber").toString()) : "";
         return Result.success("Quotation number ", quotationMap.get("quotationNumber") + versionNumber);
+    }
+
+    @RequestMapping(value = "/getproposerdetailfromclient/{proposerCode}/{quotationId}", method = RequestMethod.GET)
+    @ResponseBody
+    public ProposerDto getProposerDetailFromClientRepository(@PathVariable("proposerCode") String proposerCode, @PathVariable("quotationId") String quotationId) {
+        ClientDetailDto clientDetailDto = clientProvider.getClientDetail(proposerCode);
+        ProposerDto proposerDto = new ProposerDto();
+        if (clientDetailDto != null) {
+            proposerDto.setProposerName(clientDetailDto.getClientName());
+            proposerDto.setAddressLine1(clientDetailDto.getAddress1());
+            proposerDto.setAddressLine2(clientDetailDto.getAddress2());
+            proposerDto.setPostalCode(clientDetailDto.getPostalCode());
+            proposerDto.setContactPersonEmail(clientDetailDto.getEmailAddress());
+            proposerDto.setTown(clientDetailDto.getTown());
+            proposerDto.setProvince(clientDetailDto.getProvince());
+            proposerDto.setProposerCode(proposerCode);
+        } else {
+            proposerDto = getProposerDetail(quotationId);
+            proposerDto.setProposerCode(proposerCode);
+        }
+        return proposerDto;
     }
 
     @RequestMapping(value = "/isinsureddetailavailable/{quotationId}", method = RequestMethod.GET)

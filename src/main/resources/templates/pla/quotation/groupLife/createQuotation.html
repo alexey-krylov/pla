@@ -159,7 +159,7 @@
                                 <div class="col-lg-6" disable-all-fields="isViewMode">
                                     <div class="form-group required">
                                         <label class="control-label">Proposer Code</label>
-                                        <input type="text" onkeypress="return isEnterKey(event)" ng-disabled="proposerCodeDisabled"
+                                        <input type="text" onkeypress="return isEnterKey(event)" ng-disabled="proposerCodeDisabled" ng-blur="populateProposerDetailFromClientRepository();"
                                                class="form-control input-sm" ng-required="true" name="proposerCode" ng-model="quotationDetails.proposer.proposerCode"/>
                                     </div>
                                     <div class="form-group">

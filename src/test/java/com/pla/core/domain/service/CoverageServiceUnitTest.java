@@ -8,6 +8,7 @@ import com.pla.core.specification.CoverageCodeIsUnique;
 import com.pla.core.specification.CoverageIsAssociatedWithPlan;
 import com.pla.core.specification.CoverageNameIsUnique;
 import com.pla.sharedkernel.identifier.CoverageId;
+import com.pla.sharedkernel.util.SequenceGenerator;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -49,6 +50,9 @@ public class CoverageServiceUnitTest {
     private CoverageIsAssociatedWithPlan coverageIsAssociatedWithPlan;
 
     @Mock
+    private SequenceGenerator sequenceGenerator;
+
+    @Mock
     private CoverageFinder coverageFinder;
 
     @Mock
@@ -64,7 +68,7 @@ public class CoverageServiceUnitTest {
     @Before
     public void setUp() {
         CoverageCodeIsUnique coverageCodeIsUnique = new CoverageCodeIsUnique(coverageFinder);
-        coverageService = new CoverageService(adminRoleAdapter, coverageNameIsUnique,coverageCodeIsUnique, idGenerator,coverageIsAssociatedWithPlan);
+        coverageService = new CoverageService(adminRoleAdapter, coverageNameIsUnique,coverageCodeIsUnique, idGenerator,coverageIsAssociatedWithPlan,sequenceGenerator);
         userDetails = UserLoginDetailDto.createUserLoginDetailDto("", "");
         admin = new Admin();
 

@@ -27,17 +27,16 @@
                     <div class="alert alert-success" hidden="true" id="alert"></div>
                     <div class="alert alert-danger" hidden="true" id="alert-danger"></div>
                     <div class="form-group" style="margin: auto;">
-                        <label for="benefitName" class="col-sm-3 control-label">Benefit Name</label>
+                        <label for="benefitCode" class="col-sm-3 control-label">Benefit Code</label>
                         <div class="col-sm-9">
-                            <input type="text" name="benefitName"  maxlength="100" class="form-control" id="benefitName"  onkeypress="resetError(this)"/>
-                            <span hidden="true" style="color: darkred;font-size: 10px">Please check if it is empty or exceeded more than 100 character</span>
+                            <input type="text" readonly="true" name="benefitCode" maxlength="50"  class="form-control" id="benefitCode"/>
                         </div>
                     </div>
                     <div class="form-group required" style="margin: auto;">
-                        <label for="benefitCode" class="col-sm-3 control-label">Benefit Code</label>
+                        <label for="benefitName" class="col-sm-3 control-label">Benefit Name</label>
                         <div class="col-sm-9">
-                            <input type="text" name="benefitCode" maxlength="50" required="true" class="form-control" id="benefitCode" onkeypress="return isAlphaNumeric(event)" />
-                            <span hidden="true" style="color: darkred;font-size: 10px">Please check if it is empty </span>
+                            <input type="text" name="benefitName" required="true" maxlength="100" class="form-control" id="benefitName"  onkeypress="resetError(this)"/>
+                            <span hidden="true" style="color: darkred;font-size: 10px">Please check if it is empty or exceeded more than 100 character</span>
                         </div>
                     </div>
                 </div>

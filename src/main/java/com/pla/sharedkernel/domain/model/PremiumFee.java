@@ -8,7 +8,7 @@ import lombok.Getter;
 @Getter
 public enum PremiumFee {
 
-    POLICY_FEE("Policy Fee"), INVESTMENT_FEE("Investment Fee");
+    POLICY_FEE("Policy Fee"), INVESTMENT_FEE("Investment Fee"),RISK_PREMIUM("Premium-Policy Fee - Risk Premium");
 
     private String description;
 
