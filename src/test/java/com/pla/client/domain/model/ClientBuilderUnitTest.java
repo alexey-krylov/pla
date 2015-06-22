@@ -68,8 +68,6 @@ public class ClientBuilderUnitTest {
         clientDocumentDetail.setRoutingLevel("UNDERWRITING_LEVEL_TWO");
         clientDocument.add(clientDocumentDetail);
 
-        clientBuilder = clientBuilder.withClientDocument(clientDocument);
-        assertThat(clientBuilder.getClientDocuments().size(),is(2));
     }
 
 }
