@@ -44,6 +44,7 @@ public class ILQuotationFinder {
             " premium_payment_term AS PREMIUMPAYMENT_TERM, sum_assured AS SUMASSURED " +
             " FROM individual_life_quotation " +
             " WHERE quotation_id =:quotationId";
+
     private static final String IL_QUOTATION_TABLE = "individual_life_quotation";
     public static final String FIND_QUOTATION_BY_ID_QUERY = "select * from " + IL_QUOTATION_TABLE + " where quotation_id =:quotationId";
     private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
@@ -83,6 +84,7 @@ public class ILQuotationFinder {
         dto.setQuotationNumber(quotation.getQuotationNumber());
         dto.setQuotationId(quotation.getQuotationId());
         dto.setQuotationStatus(quotation.getIlQuotationStatus().name());
+        dto.setAssuredTheProposer(quotation.isAssuredTheProposer());
         //TODO change the type in dto
 //        dto.setQuotationStatus(quotation.getIlQuotationStatus());
         try {
@@ -163,7 +165,8 @@ public class ILQuotationFinder {
              return Lists.newArrayList();
          }
 
-         StringBuilder query = new StringBuilder("select quotation_id,agent_id,generated_on,   il_quotation_status as quotation_status, `parent_quotation_id`, `plan_id` `sum_assured`,`quotation_creator`, `quotation_number`, `version_number` from " + IL_QUOTATION_TABLE);
+        StringBuilder query = new StringBuilder("select quotation_id,agent_id,generated_on, il_quotation_status as quotation_status, " +
+                "`parent_quotation_id`, `plan_id` `sum_assured`,`quotation_creator`, `quotation_number`, `version_number` from " + IL_QUOTATION_TABLE);
 
          if (isNotEmpty(quotationNumber)) {
              if (isFirst) {

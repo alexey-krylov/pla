@@ -73,7 +73,7 @@ public class PlanCoverageAssocListener {
                         .addValue("clientType", event.getClientType().toString());
                 namedParameterJdbcTemplate.execute("insert into plan_coverage_benefit_assoc (`plan_id`,`plan_name`,`plan_code`,`launch_date`,`withdrawal_date`,`line_of_business`,`client_type`," +
                                 "`coverage_id`,`benefit_id`,`funeral_cover`,`optional`,`plan_status`) values (:planId,:planName,:planCode,:launchDate,:withdrawalDate,:lineOfBusiness,:clientType," +
-                                ":coverageId,:benefitId,1,:funeralCover,'DRAFT')", parameterSource,
+                                ":coverageId,:benefitId,:funeralCover,1,'DRAFT')", parameterSource,
                         new PreparedStatementCallback<Object>() {
                             @Override
                             public Object doInPreparedStatement(PreparedStatement ps) throws SQLException, DataAccessException {
@@ -100,8 +100,9 @@ public class PlanCoverageAssocListener {
                         .addValue("withdrawalDate", event.getWithdrawalDate() != null ? new Date(event.getWithdrawalDate().toDate().getTime()) : null)
                         .addValue("funeralCover", event.isFuneralCover())
                         .addValue("clientType", event.getClientType().toString());
-                namedParameterJdbcTemplate.execute("insert into plan_coverage_benefit_assoc (`plan_id`,`plan_name`,`plan_code`,`launch_date`,`withdrawal_date`,`line_of_business`,`client_type`,`coverage_id`," +
-                                "`benefit_id`,`optional`,`funeral_cover`,`plan_status`) values (:planId,:planName,:planCode,:launchDate,:withdrawalDate,:lineOfBusiness,:clientType,:coverageId,:benefitId,0,:funeralCover,'DRAFT')", parameterSource,
+                namedParameterJdbcTemplate.execute("insert into plan_coverage_benefit_assoc (`plan_id`,`plan_name`,`plan_code`,`launch_date`,`withdrawal_date`,`line_of_business`," +
+                                "`client_type`,`coverage_id`,`benefit_id`,`optional`,`funeral_cover`,`plan_status`)" +
+                                " values (:planId,:planName,:planCode,:launchDate,:withdrawalDate,:lineOfBusiness,:clientType,:coverageId,:benefitId,0,:funeralCover,'DRAFT')", parameterSource,
                         new PreparedStatementCallback<Object>() {
                             @Override
                             public Object doInPreparedStatement(PreparedStatement ps) throws SQLException, DataAccessException {

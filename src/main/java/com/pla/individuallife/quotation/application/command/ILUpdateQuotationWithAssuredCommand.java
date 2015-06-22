@@ -16,7 +16,7 @@ public class ILUpdateQuotationWithAssuredCommand {
 
     private ProposedAssuredDto proposedAssured;
 
-    private boolean isAssuredTheProposer;
+    private boolean assuredTheProposer;
 
     private String quotationId;
 

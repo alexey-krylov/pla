@@ -17,10 +17,37 @@
             datepickerPopupConfig.closeText = 'Done';
             datepickerPopupConfig.closeOnDateSelection = true;
         }])
-        .directive('sumassured', function () {
+        .directive('validateSumassured', function ($compile) {
+            return {}
+        })
+        .directive('sumassured', function ($compile) {
             return {
                 restrict: 'E',
-                templateUrl: 'plan-sumassured.tpl'
+                templateUrl: 'plan-sumassured.tpl',
+                // element must have ng-model attribute.
+                require: 'ngModel',
+                link: function (scope, elem, attrs, ctrl) {
+                    console.log('validateSumassured = ' + ctrl);
+                    if (!ctrl)return;
+                    scope.$watch('planDetailDto.sumAssured', function (newval, oldval) {
+                        if (newval == oldval)return;
+                        var plan = scope.$eval('plan');
+                        console.log(JSON.stringify(plan.sumAssured));
+                        if (plan.sumAssured.sumAssuredType !== 'RANGE')
+                            return;
+                        console.log(plan.sumAssured.multiplesOf);
+                        if (newval && plan) {
+                            var multiplesOf = plan.sumAssured.multiplesOf;
+                            console.log('multiples ' + multiplesOf);
+                            var modulus = parseInt(newval) % parseInt(multiplesOf);
+                            console.log('modulus = ' + modulus);
+                            var valid = modulus == 0;
+                            console.log('valid = ' + valid);
+                            ctrl.$setValidity('invalidMultiple', valid);
+                        }
+                        return valid ? newval : undefined;
+                    });
+                }
             };
         })
         .directive('policyterm', function () {
@@ -45,6 +72,7 @@
                 }]
             };
         })
+
         .directive('coverageTerm', function () {
             return {
                 restrict: 'E',
@@ -207,6 +235,9 @@
                             if ($scope.proposer.dateOfBirth) {
                                 $scope.proposerAge = calculateAge($scope.proposer.dateOfBirth);
                             }
+
+                            $scope.proposerSameAsProposedAssured = response.assuredTheProposer;
+
                             //This is for making the default selection during edit
                             $scope.selectedAgent = {};
                             $scope.selectedAgent.title = response.agentDetail.firstName || '';
@@ -275,8 +306,12 @@
                 });
 
                 $scope.$watch('proposerSameAsProposedAssured', function (newval, oldval) {
-                    if (newval) {
-                        $scope.proposer = $scope.proposedAssured;
+                    if (newval != oldval) {
+                        if (newval) {
+                            $scope.proposer = $scope.proposedAssured;
+                            $scope.proposer.dateOfBirth = $scope.proposedAssured.dateOfBirth;
+                        } else
+                            $scope.proposer = {};
                     }
                 });
 
@@ -299,7 +334,6 @@
                         angular.extend($scope.proposedAssured, {
                             agentId: $scope.quotation.agentId,
                             planId: $scope.plan.planId,
-                            isAssuredTheProposer: false
                         }))
                         .success(function (data) {
                             if (data.id)
@@ -331,7 +365,7 @@
                     $http.post('updatewithassureddetail',
                         angular.extend(request, {
                             quotationId: $scope.quotationId,
-                            isAssuredTheProposer: $scope.proposerSameAsProposedAssured
+                            assuredTheProposer: $scope.proposerSameAsProposedAssured
                         }))
                         .success(function (data) {
                             $scope.stepsSaved[$scope.selectedItem] = true;

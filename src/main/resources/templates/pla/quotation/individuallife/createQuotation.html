@@ -132,15 +132,12 @@
                             </div>
                         </div>
                         <div class="row">
-
-                        </div>
-                        <div class="row">
                             <div class="col-sm-6">
                                 <button type="button" class="btn btn-default btn-sm"
                                         onclick="window.location='/pla/individuallife/quotation/searchForm'">Cancel
                                 </button>
                             </div>
-                            <div class="col-sm-6">
+                            <div class="col-sm-6" style="float:right">
                                 <button type="button" class="btn btn-default btn-sm" style="float: right"
                                         ng-click="saveStep1()" ng-hide="uneditable">Save
                                 </button>
@@ -167,7 +164,7 @@
                                     <input type="text" class="form-control input-sm" name="surname" readonly="true"
                                            ng-model="proposedAssured.surname"/>
                                 </div>
-                                <div class="form-group">
+                                <div class="form-group required">
                                     <label class="control-label">Date of Birth</label>
                                     <div class='input-group date'>
                                         <input type="text" class="form-control input-sm"
@@ -252,11 +249,11 @@
                                 </div>
                                 <div class="form-group required">
                                     <label class="control-label">Mobile Number</label>
-                                    <input type="text" ng-maxlength="10"
+                                    <input type="text" ng-maxlength="10" ng-pattern="onlyNumbers"
                                            class="form-control input-sm" name="mobile" ng-required="true"
                                            ng-model="proposedAssured.mobileNumber"/>
 
-                                    <div class="error" ng-messages="step2.mobile.$error" ng-if="step2.$dirty">
+                                    <div class="error" ng-messages="step2.mobile.$error" ng-if="step2.mobile.$dirty">
                                         <small ng-message="required">Please enter Mobile Number.</small>
                                     </div>
                                 </div>
@@ -266,7 +263,8 @@
                                             ng-model="proposedAssured.occupation"
                                             ng-options="occupation.description as occupation.description for occupation in occupations"></select>
 
-                                    <div class="error" ng-messages="step2.occupation.$error" ng-if="step2.$dirty">
+                                    <div class="error" ng-messages="step2.occupation.$error"
+                                         ng-if="step2.occupation.$dirty">
                                         <small ng-message="required">Please enter Occupation</small>
                                     </div>
                                 </div>
@@ -279,7 +277,7 @@
                                 </button>
                             </div>
                             <div class="col-sm-6">
-                                <button type="button" class="btn btn-default btn-sm" style="float: right"
+                                <button type="button" class="btn btn-default btn-sm" style="float: right;clear:both"
                                         ng-click="saveStep2()"
                                         ng-disabled="isSaveDisabled(step2)">Save
                                 </button>
@@ -323,14 +321,14 @@
                                                ng-disabled="proposerSameAsProposedAssured"
                                                ng-required="true"
                                                is-open="launchdob2"
-                                               ng-model="proposer.dateOfBirth" name="dob"/>
+                                               ng-model="proposer.dateOfBirth" name="dob2"/>
                                     <span class="input-group-btn">
                                     <button type="button" class="btn btn-default btn-sm"
                                             ng-click="launchProposerDOB($event)">
                                         <i class="glyphicon glyphicon-calendar"></i></button>
                                   </span>
                                     </div>
-                                    <div class="error" ng-messages="step3.dob.$error" ng-if="step3.$dirty">
+                                    <div class="error" ng-messages="step3.dob2.$error" ng-if="step3.dob2.$dirty">
                                         <small ng-message="required">Please enter Date of Birth.</small>
                                     </div>
                                 </div>
@@ -396,14 +394,14 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="row">
+                        <div class="row" style="position: absolute;bottom:50px;">
                             <div class="col-sm-6">
                                 <button type="button" class="btn btn-default btn-sm"
                                         onclick="window.location='/pla/individuallife/quotation/searchForm'">Cancel
                                 </button>
                             </div>
-                            <div class="col-sm-6">
-                                <button type="button" class="btn btn-default btn-sm" style="float: right"
+                            <div class="col-sm-6 action-panel">
+                                <button type="button" class="btn btn-default btn-sm" style="float: right;clear:both"
                                         ng-click="saveStep3()"
                                         ng-disabled="isSaveDisabled(step3) &amp;&amp; !proposerSameAsProposedAssured">Save
                                 </button>
@@ -418,7 +416,7 @@
                                 <div class="form-group required">
                                     <label>Plan</label>
                                     <div data-angucomplete-alt="" id="plan" placeholder="Search Plan" pause="500"
-                                         selected-object="selectedPlan"
+                                         selected-object="selectedPlan" disable-input="uneditable"
                                          remote-url="/pla/core/agent/searchplan"
                                          remote-url-request-formatter="remoteUrlRequestFn" field-required="true"
                                          initial-value="selectedPlan.title"
@@ -461,7 +459,7 @@
                             <div class="col-sm-6">
                                 <div class="form-group required">
                                     <label class="control-label">Sum Assured</label>
-                                    <sumassured plan="plan"></sumassured>
+                                    <sumassured ng-model="planDetail.sumAssured"></sumassured>
                                 </div>
                                 <div class="form-group required">
                                     <label class="control-label">Premium Payment Term</label>
@@ -633,10 +631,10 @@
             <input type="number" class="form-control input-sm" min="{{plan.sumAssured.minSumInsured}}"
                    name="sumAssured"
                    max="{{plan.sumAssured.maxSumInsured}}" ng-model="planDetailDto.sumAssured" ng-required="true"/>
-
             <div class="error" ng-messages="step4.sumAssured.$error">
                 <small ng-message="min">Sum Assured cannot be less then {{plan.sumAssured.minSumInsured}}.</small>
                 <small ng-message="max">Sum Assured cannot be more than {{plan.sumAssured.maxSumInsured}}.</small>
+                <small ng-message="invalidMultiple">Invalid Multiples.</small>
             </div>
         </div>
         <div ng-switch-when="INCOME_MULTIPLIER">

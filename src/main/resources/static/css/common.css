@@ -1,3 +1,8 @@
+.fuelux .wizard {
+    min-height: 600px !important;
+}
+
+
 .breadcrumb{
     font-size: 16px;
     font-weight: bolder;
@@ -779,3 +784,4 @@ select.selectmenu {
         margin: 10px 0 0 0;
     }
 }
+

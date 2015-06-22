@@ -42,6 +42,7 @@ public class ILQuotationDto {
     private Map<String, Object> agentDetail;
     private Map<String, Object> planDetail;
     private PlanDetailDto planDetailDto;
+    private boolean assuredTheProposer;
 
     public String getQuotationNumber() {
         if (versionNumber > 0) {
@@ -49,4 +50,5 @@ public class ILQuotationDto {
         }
         return quotationNumber;
     }
+
 }
