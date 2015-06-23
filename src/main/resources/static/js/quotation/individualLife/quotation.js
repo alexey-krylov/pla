@@ -208,12 +208,13 @@
 
                 $scope.isSaveDisabled = function (stepForm) {
                     var returnval = true;
-                    if (stepForm.$dirty || stepForm.$invalid) {
+                    if (stepForm.$dirty && stepForm.$valid) {
                         $scope.stepsSaved[stepForm.$name == 'step2' ? "2" : stepForm.$name == 'step3' ? "3" : stepForm.$name == 'step4' ? "4" : "5"] = false;
                         returnval = false;
                     } else {
                         returnval = true;
                     }
+                    console.log('Form Name ' + stepForm.$name + returnval);
                     return returnval;
                 };
 
