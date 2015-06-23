@@ -96,6 +96,14 @@ public class ILQuotationController {
         return modelAndView;
     }
 
+    @RequestMapping(method = RequestMethod.GET, value = "/view")
+    public ModelAndView viewQuotation() {
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("pla/quotation/individuallife/createQuotation");
+        return modelAndView;
+    }
+
+
 
     @RequestMapping(value = "/getquotationnumber/{quotationId}", method = RequestMethod.GET)
     @ApiOperation(httpMethod = "GET", value = "Get Quotation number for a given quotation Id")

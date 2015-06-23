@@ -17,9 +17,6 @@
             datepickerPopupConfig.closeText = 'Done';
             datepickerPopupConfig.closeOnDateSelection = true;
         }])
-        .directive('validateSumassured', function ($compile) {
-            return {}
-        })
         .directive('sumassured', function ($compile) {
             return {
                 restrict: 'E',
@@ -27,7 +24,6 @@
                 // element must have ng-model attribute.
                 require: 'ngModel',
                 link: function (scope, elem, attrs, ctrl) {
-                    console.log('validateSumassured = ' + ctrl);
                     if (!ctrl)return;
                     scope.$watch('planDetailDto.sumAssured', function (newval, oldval) {
                         if (newval == oldval)return;
@@ -35,20 +31,30 @@
                         console.log(JSON.stringify(plan.sumAssured));
                         if (plan.sumAssured.sumAssuredType !== 'RANGE')
                             return;
-                        console.log(plan.sumAssured.multiplesOf);
                         if (newval && plan) {
                             var multiplesOf = plan.sumAssured.multiplesOf;
-                            console.log('multiples ' + multiplesOf);
                             var modulus = parseInt(newval) % parseInt(multiplesOf);
-                            console.log('modulus = ' + modulus);
                             var valid = modulus == 0;
-                            console.log('valid = ' + valid);
                             ctrl.$setValidity('invalidMultiple', valid);
                         }
                         return valid ? newval : undefined;
                     });
                 }
             };
+        })
+        .directive('viewEnabled', function () {
+            return {
+                link: function (scope, elem, attr, ctrl) {
+                    var mode = scope.mode;
+                    if (mode != 'view') {
+                        return;
+                    }
+                    $(elem).attr('readonly', true);
+                    $(elem).attr('disabled', true);
+
+                }
+            }
+
         })
         .directive('policyterm', function () {
             return {
@@ -72,7 +78,6 @@
                 }]
             };
         })
-
         .directive('coverageTerm', function () {
             return {
                 restrict: 'E',
@@ -188,7 +193,10 @@
             'globalConstants', 'getQueryParameter',
             function ($scope, $http, $route, $location, $bsmodal, $window, globalConstants, getQueryParameter) {
 
+                var absUrl = $location.absUrl();
                 $scope.titleList = globalConstants.title;
+                $scope.mode = absUrl.indexOf('view') != -1 ? 'view' : null;
+                $scope.quotationId = getQueryParameter('quotationId');
                 $scope.quotation = {};
                 $scope.stepsSaved = {"1": false, "2": false, "3": false, "4": true, "5": false};
                 $scope.selectedItem = 1;
@@ -214,7 +222,7 @@
                     } else {
                         returnval = true;
                     }
-                    console.log('Form Name ' + stepForm.$name + returnval);
+                    //console.log('Form Name ' + stepForm.$name + returnval);
                     return returnval;
                 };
 
@@ -238,7 +246,6 @@
                 });
 
 
-                $scope.quotationId = getQueryParameter('quotationId');
                 if ($scope.quotationId) {
                     $scope.uneditable = true;
                     $http.get('/pla/individuallife/quotation/getquotation/' + $scope.quotationId)
@@ -485,7 +492,7 @@ var viewILQuotationModule = (function () {
 
     services.viewQuotation = function () {
         var quotationId = this.selectedItem;
-        window.location.href = "/pla/individuallife/quotation/creategrouplifequotation?quotationId=" + quotationId + "&version=" + msg.data + "&mode=view";
+        window.location.href = "/pla/individuallife/quotation/view?quotationId=" + quotationId + "&mode=view";
     };
 
     return services;
