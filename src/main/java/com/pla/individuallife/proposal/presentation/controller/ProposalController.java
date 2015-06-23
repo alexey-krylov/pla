@@ -1,5 +1,6 @@
 package com.pla.individuallife.proposal.presentation.controller;
 
+import com.pla.core.query.AgentFinder;
 import com.pla.core.query.MasterFinder;
 import com.pla.individuallife.proposal.presentation.dto.ILSearchProposalDto;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +14,8 @@ import org.springframework.web.servlet.ModelAndView;
 import java.util.List;
 import java.util.Map;
 
+import static com.google.common.base.Preconditions.checkArgument;
+
 /**
  * Created by pradyumna on 21-05-2015.
  */
@@ -22,6 +25,8 @@ public class ProposalController {
 
     @Autowired
     private MasterFinder masterFinder;
+    @Autowired
+    private AgentFinder agentFinder;
 
     /**
      * For routing of proposal list page to the index.html page under core/plan.
@@ -74,6 +79,14 @@ public class ProposalController {
     public List<Map<String, Object>> getAllEmploymentType() {
         List<Map<String, Object>> allEmploymentTypes = masterFinder.getAllEmploymentTypes();
         return allEmploymentTypes;
+    }
+
+    @RequestMapping(value = "/getagentdetail/{agentId}", method = RequestMethod.GET)
+    @ResponseBody
+    public Map<String, Object> getAgentDetail(@PathVariable("agentId") String agentId) {
+        Map<String, Object> agentDetail = agentFinder.getAgentById(agentId);
+        checkArgument(agentDetail != null, "Agent not found");
+        return agentDetail;
     }
 
 }
