@@ -46,12 +46,12 @@ public class ClientUnitTest {
         clientBuilder = clientBuilder.withClientAddress("test Address One", "test Address Two", "IND", "590062", "Bengaluru");
         clientBuilder = clientBuilder.withClientDocument(clientDocument);
         Client client = Client.createClient(clientBuilder, "C001");
-
+        client.withClientDocument(clientBuilder.getClientDocuments());
         assertNotNull(client);
         assertThat(client.getClientCode(), is(new ClientId("C001")));
+        assertThat(client.getClientDocuments().size(), is(2));
         assertThat(expectedAddress1, is(client.getAddress1()));
         assertThat(expectedAddress2,is(client.getAddress2()));
         assertThat(provience,is(client.getProvience()));
-
     }
 }

@@ -18,13 +18,13 @@ angular.module('createAgent',['common','ngRoute','mgcrea.ngStrap.select','mgcrea
             };
             $scope.isFormSubmitted =  false;
             /*Initially hide the alert window
-            * which will be shown only when the search result is empty
-            * */
+             * which will be shown only when the search result is empty
+             * */
             $scope.hideAlert=true;
             $scope.isEditMode =  false;
             /*The values that will be shown in the ui for each step
-            * Search step will hold value 1 and 2,3,4 for agent team and contact
-            * */
+             * Search step will hold value 1 and 2,3,4 for agent team and contact
+             * */
             $scope.stepValues = {
                 agent:2,
                 team:3,
@@ -43,11 +43,11 @@ angular.module('createAgent',['common','ngRoute','mgcrea.ngStrap.select','mgcrea
             $scope.editContactDetails=function() {
                 //   console.log($scope.search);
                 if ($scope.searchedValue) {
-                   $http.get("/pla/core/agent/getemployeedeatil", {params: $scope.search})
+                    $http.get("/pla/core/agent/getemployeedeatil", {params: $scope.search})
                         .success(function (data, status) {
 
                             $scope.empDetails = data;
-                           console.log($scope.empDetails);
+                            console.log($scope.empDetails);
                             if ($scope.empDetails.employeeId) {
                                 return false;
                             } else {
@@ -55,7 +55,7 @@ angular.module('createAgent',['common','ngRoute','mgcrea.ngStrap.select','mgcrea
                             }
                         });
                 } else if (_.size(agentDetails) != 0) {
-                  if (agentDetails.agentProfile.employeeId) {
+                    if (agentDetails.agentProfile.employeeId) {
                         return true;
                     } else {
                         return false;
@@ -66,8 +66,8 @@ angular.module('createAgent',['common','ngRoute','mgcrea.ngStrap.select','mgcrea
 
 
             /*agentDetails will be empty if its a create page else it is an update
-            * and agentDetails will be pre-populated
-            * */
+             * and agentDetails will be pre-populated
+             * */
             if(_.size(agentDetails)!=0){
                 $scope.agentDetails=angular.copy(agentDetails);
                 //console.log(agentDetails);
@@ -99,10 +99,10 @@ angular.module('createAgent',['common','ngRoute','mgcrea.ngStrap.select','mgcrea
 
 
 
-               // console.log($scope.agentDetails);
+                // console.log($scope.agentDetails);
                 /*remove search step in the wizard in edit mode
-                * @link directive.js
-                * */
+                 * @link directive.js
+                 * */
                 $scope.stepsToRemove={index:1,howMany:1};
             }
             $scope.$watch('agentDetails.teamDetail.teamId',function(newVal,oldVal){
@@ -168,7 +168,7 @@ angular.module('createAgent',['common','ngRoute','mgcrea.ngStrap.select','mgcrea
             $scope.isSearchDisabled =  function(){
                 var searchPattern = new RegExp("^[0-9]{6}\/[0-9]{2}\/[0-9]{1}$");
                 if($scope.search && $scope.search.nrcNumber && !searchPattern.test($scope.search.nrcNumber)){
-                   return true;
+                    return true;
                 }
                 if($scope.search && ((!$scope.search.nrcNumber && $scope.search.employeeId) || ($scope.search.nrcNumber && !$scope.search.employeeId))){
                     return false;
@@ -204,8 +204,16 @@ angular.module('createAgent',['common','ngRoute','mgcrea.ngStrap.select','mgcrea
                 $scope.searchedValue=true;
                 $scope.searchResult.isSearched=true;
                 $http.get("/pla/core/agent/getemployeedeatil",{params:$scope.search})
-                    .success(function(data,status){
-                        if(data && (_.size(data) ==0 || data.firstName==null)){
+                    .success(function(response,status){
+                        var data = response.data;
+                      //make alreadyExists as true when the Agent is already existed in PLA DB with the nrc number.
+                        if(response.status==500 && response.message!=null){
+                            $scope.alreadyExists=true;
+                            $scope.serverErrorMsg=response.message;
+                            return;
+                        }
+
+                        if(response.status==500 && response.message==null){
                             $scope.hideAlert=false;
                             $scope.searchResult.isEmpty=true;
                             $scope.agentDetails.agentProfile.nrcNumberInString=$scope.search.nrcNumber;
@@ -231,7 +239,7 @@ angular.module('createAgent',['common','ngRoute','mgcrea.ngStrap.select','mgcrea
 
             };
             $scope.isSearchEmptyOrIsEdit = function(){
-              return !$scope.searchResult.isEmpty || $scope.isEditMode;
+                return !$scope.searchResult.isEmpty || $scope.isEditMode;
             };
             $scope.prePopulateTeamLeader = function(){
                 var teamDetails = _.findWhere($scope.teamDetails, {teamId:$scope.agentDetails.teamDetail.teamId});
@@ -245,7 +253,7 @@ angular.module('createAgent',['common','ngRoute','mgcrea.ngStrap.select','mgcrea
                 $window.location.href = "listagent"
             };
             $scope.update =  function(){
-               $scope.isFormSubmitted = true;
+                $scope.isFormSubmitted = true;
                 console.log($scope.agentDetails);
                 if($scope.agentDetailsForm.$valid && $scope.teamDetailsForm.$valid && $scope.contactDetailsForm.$valid){
                     $http.post('/pla/core/agent/update',transformJson.createCompatibleJson(angular.copy($scope.agentDetails),$scope.physicalCities,$scope.primaryCities,$scope.trainingCompleteOn,true))
@@ -264,7 +272,7 @@ angular.module('createAgent',['common','ngRoute','mgcrea.ngStrap.select','mgcrea
                     $scope.teamDetailsForm.$valid = true;
                     $scope.teamDetailsForm.$submitted = true;
                 }
-              if($scope.agentDetailsForm.$valid && $scope.teamDetailsForm.$valid  && $scope.contactDetailsForm.$valid){
+                if($scope.agentDetailsForm.$valid && $scope.teamDetailsForm.$valid  && $scope.contactDetailsForm.$valid){
                     $http.post('/pla/core/agent/create',transformJson.createCompatibleJson(angular.copy($scope.agentDetails),$scope.physicalCities,$scope.primaryCities,$scope.trainingCompleteOn,false))
                         .success(function(response, status, headers, config){
                             if(response.status=="200"){
@@ -295,13 +303,13 @@ angular.module('createAgent',['common','ngRoute','mgcrea.ngStrap.select','mgcrea
                 }
             }
 
-                 if (!agentDetails.licenseNumber || _.size(agentDetails.licenseNumber.licenseNumber) == 0) {
-                    delete agentDetails.licenseNumber;
-                   }
-                   return agentDetails;
+            if (!agentDetails.licenseNumber || _.size(agentDetails.licenseNumber.licenseNumber) == 0) {
+                delete agentDetails.licenseNumber;
+            }
+            return agentDetails;
 
 
-              };
+        };
         transformService.toPlanIdPlanNameObject = function(authorisedToSell){
             var plans = [];
             angular.forEach(authorisedToSell,function(plan,key){

@@ -12,10 +12,25 @@ import java.util.EnumSet;
 @Getter
 public enum LineOfBusinessEnum {
 
-    GROUP_HEALTH("Group Health",EnumSet.of(ProcessType.QUOTATION,ProcessType.PROPOSAL,ProcessType.ENDORSEMENT,ProcessType.CLAIM)),
-    GROUP_LIFE("Group Life",EnumSet.of(ProcessType.QUOTATION,ProcessType.PROPOSAL,ProcessType.ENDORSEMENT,ProcessType.CLAIM)),
-    INDIVIDUAL_LIFE("Individual Life",EnumSet.of(ProcessType.QUOTATION,ProcessType.PROPOSAL,ProcessType.ENDORSEMENT,ProcessType.CLAIM,ProcessType.SURRENDER,
-            ProcessType.MATURITY,ProcessType.REINSTATEMENT));
+    GROUP_HEALTH("Group Health", EnumSet.of(ProcessType.QUOTATION, ProcessType.PROPOSAL, ProcessType.ENDORSEMENT, ProcessType.CLAIM)) {
+        @Override
+        public boolean isValidProcess(ProcessType processType) {
+            return getProcessTypeList().contains(processType);
+        }
+    },
+    GROUP_LIFE("Group Life", EnumSet.of(ProcessType.QUOTATION, ProcessType.PROPOSAL, ProcessType.ENDORSEMENT, ProcessType.CLAIM)) {
+        @Override
+        public boolean isValidProcess(ProcessType processType) {
+            return getProcessTypeList().contains(processType);
+        }
+    },
+    INDIVIDUAL_LIFE("Individual Life", EnumSet.of(ProcessType.QUOTATION, ProcessType.PROPOSAL, ProcessType.ENDORSEMENT, ProcessType.CLAIM, ProcessType.SURRENDER,
+            ProcessType.MATURITY, ProcessType.REINSTATEMENT)) {
+        @Override
+        public boolean isValidProcess(ProcessType processType) {
+            return getProcessTypeList().contains(processType);
+        }
+    };
 
     private String description;
 
@@ -33,4 +48,6 @@ public enum LineOfBusinessEnum {
     public String toString() {
         return description;
     }
+
+    public abstract boolean isValidProcess(ProcessType processType);
 }

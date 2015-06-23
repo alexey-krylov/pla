@@ -580,6 +580,14 @@ CONSTRAINT `FK_PLAN_BENEFIT_ID` FOREIGN KEY (`benefit_id`) REFERENCES `benefit` 
 CONSTRAINT `FK_PLAN_COVERAGE_ID` FOREIGN KEY (`coverage_id`) REFERENCES `coverage` (`coverage_id`)
 );
 
+DROP TABLE IF EXISTS `notification_role`;
+CREATE TABLE `notification_role` (
+  `line_of_business` varchar(255) NOT NULL,
+  `process` varchar(255) NOT NULL,
+  `role_type` varchar(255) NOT NULL,
+  PRIMARY KEY (`line_of_business`,`process`,`role_type`)
+);
+
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;

@@ -57,13 +57,15 @@ public class BenefitAcceptanceTest {
         userDetails = userLoginDetailDto.populateAuthorities(permissions);
     }
 
-    /*@Test
-    @ExpectedDatabase(value = "classpath:testdata/endtoend/benefit/expectedbenefitdata.xml", assertionMode = DatabaseAssertionMode.NON_STRICT)
+    @Test
+    @DatabaseSetup(value = "classpath:testdata/endtoend/benefit/testdataforcreatebenefit.xml",type = DatabaseOperation.CLEAN_INSERT)
+    @ExpectedDatabase(value = "classpath:testdata/endtoend/benefit/expectedbenefitdata.xml", assertionMode = DatabaseAssertionMode.NON_STRICT_UNORDERED)
+    @DatabaseTearDown(value = "classpath:testdata/endtoend/benefit/testdataforcreatebenefit.xml",type = DatabaseOperation.DELETE)
     public void givenABenefitNameItShouldCreateBenefit() {
-        CreateBenefitCommand createBenefitCommand = new CreateBenefitCommand(userDetails, "Accidental Death Benefit","B_ONE");
+        CreateBenefitCommand createBenefitCommand = new CreateBenefitCommand(userDetails, "Accidental Death Benefit","B_FOUR");
         Boolean isSuccess = Boolean.FALSE;
         try {
-            //commandGateway.sendAndWait(createBenefitCommand);
+            commandGateway.sendAndWait(createBenefitCommand);
             isSuccess = Boolean.TRUE;
         } catch (Exception e) {
             logger.error("Error in creating benefit", e);
@@ -71,13 +73,13 @@ public class BenefitAcceptanceTest {
         assertTrue(isSuccess);
 
     }
-*/
+
     @Test
     @DatabaseSetup(value = "classpath:testdata/endtoend/benefit/testdataforupdatebenefit.xml",type = DatabaseOperation.CLEAN_INSERT)
     @ExpectedDatabase(value = "classpath:testdata/endtoend/benefit/expectedupdatedbenefitdata.xml", assertionMode = DatabaseAssertionMode.NON_STRICT)
     @DatabaseTearDown(value = "classpath:testdata/endtoend/benefit/testdataforupdatebenefit.xml",type = DatabaseOperation.DELETE)
     public void givenAnActiveBenefitWithNewNameItShouldUpdateBenefit() {
-        UpdateBenefitCommand updateBenefitCommand = new UpdateBenefitCommand("1", "CI Benefit","B_THREE", userDetails);
+        UpdateBenefitCommand updateBenefitCommand = new UpdateBenefitCommand("1", "CI Benefit","10001", userDetails);
         Boolean isSuccess = Boolean.FALSE;
         try {
             commandGateway.sendAndWait(updateBenefitCommand);

@@ -4,7 +4,7 @@ import com.google.common.collect.Lists;
 import com.pla.sharedkernel.identifier.CoverageId;
 import com.pla.sharedkernel.identifier.UnderWriterRoutingLevelId;
 import lombok.*;
-import org.joda.time.LocalDate;
+import org.joda.time.DateTime;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -43,12 +43,12 @@ public class UnderWriterRoutingLevel {
 
     private List<UnderWriterInfluencingFactor> underWriterInfluencingFactors;
 
-    private LocalDate effectiveFrom;
+    private DateTime effectiveFrom;
 
-    private LocalDate validTill;
+    private DateTime validTill;
 
 
-    private UnderWriterRoutingLevel(UnderWriterRoutingLevelId underWriterRoutingLevelId, String planCode, UnderWriterProcessType processType, Set<UnderWritingRoutingLevelItem> underWritingRoutingLevelItems, List<UnderWriterInfluencingFactor> underWriterInfluencingFactors, LocalDate effectiveFrom) {
+    private UnderWriterRoutingLevel(UnderWriterRoutingLevelId underWriterRoutingLevelId, String planCode, UnderWriterProcessType processType, Set<UnderWritingRoutingLevelItem> underWritingRoutingLevelItems, List<UnderWriterInfluencingFactor> underWriterInfluencingFactors, DateTime effectiveFrom) {
         checkArgument(underWriterRoutingLevelId != null);
         checkArgument(planCode != null);
         checkArgument(effectiveFrom != null);
@@ -63,12 +63,12 @@ public class UnderWriterRoutingLevel {
     }
 
 
-    public static UnderWriterRoutingLevel createUnderWriterRoutingLevelWithPlan(UnderWriterRoutingLevelId underWriterRoutingLevelId,String planCode, UnderWriterProcessType processType,  List<Map<Object, Map<String, Object>>>  underWriterRoutingLevelDataFromExcel, List<UnderWriterInfluencingFactor> underWriterInfluencingFactors,LocalDate effectiveFrom) {
+    public static UnderWriterRoutingLevel createUnderWriterRoutingLevelWithPlan(UnderWriterRoutingLevelId underWriterRoutingLevelId,String planCode, UnderWriterProcessType processType,  List<Map<Object, Map<String, Object>>>  underWriterRoutingLevelDataFromExcel, List<UnderWriterInfluencingFactor> underWriterInfluencingFactors,DateTime effectiveFrom) {
         Set<UnderWritingRoutingLevelItem>  underWriterDocumentItems =  withUnderWritingLevelItem(underWriterRoutingLevelDataFromExcel);
         return new UnderWriterRoutingLevel(underWriterRoutingLevelId,planCode,processType,underWriterDocumentItems,underWriterInfluencingFactors,effectiveFrom);
     }
 
-    public static UnderWriterRoutingLevel createUnderWriterRoutingLevelWithOptionalCoverage(UnderWriterRoutingLevelId underWriterRoutingLevelId ,String planCode, CoverageId coverageId, UnderWriterProcessType processType, List<Map<Object, Map<String, Object>>> underWriterRoutingLevelDataFromExcel, List<UnderWriterInfluencingFactor> underWriterInfluencingFactors,LocalDate effectiveFrom) {
+    public static UnderWriterRoutingLevel createUnderWriterRoutingLevelWithOptionalCoverage(UnderWriterRoutingLevelId underWriterRoutingLevelId ,String planCode, CoverageId coverageId, UnderWriterProcessType processType, List<Map<Object, Map<String, Object>>> underWriterRoutingLevelDataFromExcel, List<UnderWriterInfluencingFactor> underWriterInfluencingFactors,DateTime effectiveFrom) {
         Set<UnderWritingRoutingLevelItem> underWriterDocumentItems =  withUnderWritingLevelItem(underWriterRoutingLevelDataFromExcel);
         UnderWriterRoutingLevel underWriterDocument =  new UnderWriterRoutingLevel(underWriterRoutingLevelId,planCode,processType,underWriterDocumentItems,underWriterInfluencingFactors,effectiveFrom);
         underWriterDocument.coverageId = coverageId;
@@ -80,7 +80,7 @@ public class UnderWriterRoutingLevel {
         return writingRoutingLevelItems;
     }
 
-    public UnderWriterRoutingLevel expireUnderWriterRoutingLevel(LocalDate validTill) {
+    public UnderWriterRoutingLevel expireUnderWriterRoutingLevel(DateTime validTill) {
         this.validTill  = validTill;
         return this;
     }

@@ -5,7 +5,7 @@ import com.pla.underwriter.domain.model.UnderWriterProcessType;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.joda.time.LocalDate;
+import org.joda.time.DateTime;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -36,7 +36,7 @@ public class CreateUnderWriterRoutingLevelCommand {
     private List<UnderWriterInfluencingFactor> underWriterInfluencingFactors;
 
     @NotNull
-    private LocalDate effectiveFrom;
+    private DateTime effectiveFrom;
 
     private UserDetails userDetails;
 

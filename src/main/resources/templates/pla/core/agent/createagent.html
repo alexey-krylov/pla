@@ -54,6 +54,13 @@
                             </div>
                         </div>
                     </div>
+                    <div class="row" ng-if="alreadyExists">
+                        <div class="col-md-7">
+                            <div class="alert alert-danger">
+                                <strong>{{serverErrorMsg}}</strong>.
+                            </div>
+                        </div>
+                    </div>
                     <div class="row">
                         <div class="col-md-5">
                             <input type="text" class="form-control input-sm"  placeholder="NRC" ng-model="search.nrcNumber" />

@@ -5,7 +5,7 @@ import com.google.common.collect.Maps;
 import com.pla.sharedkernel.identifier.CoverageId;
 import com.pla.sharedkernel.identifier.UnderWriterRoutingLevelId;
 import com.pla.underwriter.service.UnderWriterTemplateParser;
-import org.joda.time.LocalDate;
+import org.joda.time.DateTime;
 import org.junit.Before;
 import org.junit.Test;
 import org.nthdimenzion.common.AppConstants;
@@ -96,7 +96,7 @@ public class UnderWriterRoutingLevelUnitTest {
         UnderWriterRoutingLevelId underWriterRoutingLevelId = new UnderWriterRoutingLevelId("UR001");
         String planCode = "P001";
         List<UnderWriterInfluencingFactor> underWriterInfluencingFactors = Lists.newArrayList(UnderWriterInfluencingFactor.AGE);
-        UnderWriterRoutingLevel underWriterRoutingLevel = UnderWriterRoutingLevel.createUnderWriterRoutingLevelWithPlan(underWriterRoutingLevelId, planCode, UnderWriterProcessType.CLAIM, underWriterDocumentItem, underWriterInfluencingFactors, new LocalDate("2016-12-31"));
+        UnderWriterRoutingLevel underWriterRoutingLevel = UnderWriterRoutingLevel.createUnderWriterRoutingLevelWithPlan(underWriterRoutingLevelId, planCode, UnderWriterProcessType.CLAIM, underWriterDocumentItem, underWriterInfluencingFactors, new DateTime("2016-12-31"));
         assertNotNull(underWriterRoutingLevel);
         assertThat("P001", is(underWriterRoutingLevel.getPlanCode()));
         assertThat(underWriterInfluencingFactors.size(),is(underWriterRoutingLevel.getUnderWriterInfluencingFactors().size()));
@@ -109,7 +109,7 @@ public class UnderWriterRoutingLevelUnitTest {
         String planCode = "P002";
         CoverageId coverageId = new CoverageId("C002");
         List<UnderWriterInfluencingFactor> underWriterInfluencingFactors = Lists.newArrayList(UnderWriterInfluencingFactor.AGE);
-        UnderWriterRoutingLevel underWriterRoutingLevel = UnderWriterRoutingLevel.createUnderWriterRoutingLevelWithOptionalCoverage(underWriterRoutingLevelId, planCode, coverageId, UnderWriterProcessType.CLAIM, underWriterDocumentItem, underWriterInfluencingFactors, new LocalDate("2016-12-31"));
+        UnderWriterRoutingLevel underWriterRoutingLevel = UnderWriterRoutingLevel.createUnderWriterRoutingLevelWithOptionalCoverage(underWriterRoutingLevelId, planCode, coverageId, UnderWriterProcessType.CLAIM, underWriterDocumentItem, underWriterInfluencingFactors, new DateTime("2016-12-31"));
         assertNotNull(underWriterRoutingLevel);
         assertThat("P002", is(underWriterRoutingLevel.getPlanCode()));
         assertThat(underWriterInfluencingFactors.size(),is(underWriterRoutingLevel.getUnderWriterInfluencingFactors().size()));
@@ -119,8 +119,8 @@ public class UnderWriterRoutingLevelUnitTest {
     @Test
     public void givenAExpireDate_thenItShouldAssignTheExpireDateToTheUnderWriterRoutingLevel(){
         UnderWriterRoutingLevel underWriterRoutingLevel =getUnderWriterRoutingLevel();
-        underWriterRoutingLevel.expireUnderWriterRoutingLevel(new LocalDate("2017-01-01"));
-        assertThat(underWriterRoutingLevel.getValidTill(),is(new LocalDate("2017-01-01")));
+        underWriterRoutingLevel.expireUnderWriterRoutingLevel(new DateTime("2017-01-01"));
+        assertThat(underWriterRoutingLevel.getValidTill(),is(new DateTime("2017-01-01")));
     }
 
     @Test
@@ -144,7 +144,7 @@ public class UnderWriterRoutingLevelUnitTest {
         String planCode = "P002";
         CoverageId coverageId = new CoverageId("C002");
         List<UnderWriterInfluencingFactor> underWriterInfluencingFactors = Lists.newArrayList(UnderWriterInfluencingFactor.AGE,UnderWriterInfluencingFactor.SUM_ASSURED);
-        return UnderWriterRoutingLevel.createUnderWriterRoutingLevelWithOptionalCoverage(underWriterRoutingLevelId, planCode, coverageId, UnderWriterProcessType.CLAIM, underWriterDocumentItem, underWriterInfluencingFactors, new LocalDate("2016-12-30"));
+        return UnderWriterRoutingLevel.createUnderWriterRoutingLevelWithOptionalCoverage(underWriterRoutingLevelId, planCode, coverageId, UnderWriterProcessType.CLAIM, underWriterDocumentItem, underWriterInfluencingFactors, new DateTime("2016-12-30"));
     }
 
 }

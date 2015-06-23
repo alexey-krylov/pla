@@ -57,14 +57,14 @@ public class Client {
     }
 
 
-    private Set<ClientDocument> withClientDocument(List<ClientBuilder.ClientDocumentBuilder> clientDocumentsBuilder){
-        Set<ClientDocument> clientDocuments = clientDocumentsBuilder.stream().map(new Function<ClientBuilder.ClientDocumentBuilder, ClientDocument>() {
+    public Client withClientDocument(List<ClientBuilder.ClientDocumentBuilder> clientDocumentsBuilder){
+        this.clientDocuments = clientDocumentsBuilder.stream().map(new Function<ClientBuilder.ClientDocumentBuilder, ClientDocument>() {
             @Override
             public ClientDocument apply(ClientBuilder.ClientDocumentBuilder clientDocumentBuilder) {
                 return new ClientDocument(clientDocumentBuilder);
             }
         }).collect(Collectors.toSet());
-        return clientDocuments;
+        return this;
     }
 
     public List<Map<String,Object>> findClientDocument(){

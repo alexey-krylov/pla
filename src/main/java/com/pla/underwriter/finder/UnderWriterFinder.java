@@ -80,7 +80,7 @@ public class UnderWriterFinder {
 
     public static final String FIND_PLAN_COVERAGE_DETAIL_BY_PLAN_CODE = "SELECT DISTINCT planName,c.coverage_name coverageName FROM  plan_coverage_benefit_assoc_view p INNER JOIN coverage c " +
             "   ON coverageId = c.coverage_id " +
-            "   WHERE planCode=:code AND coverageId=:id AND optional ='0' ";
+            "   WHERE planCode=:code AND coverageId=:id AND optional ='1' ";
 
     public static final String FIND_PLAN_NAME_BY_CODE = "SELECT planName FROM plan_coverage_benefit_assoc_view WHERE planCode =:code LIMIT 1";
 

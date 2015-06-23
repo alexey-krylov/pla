@@ -20,9 +20,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -173,19 +171,20 @@ public class AgentController {
 
     @RequestMapping(value = "/getemployeedeatil", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.ALL_VALUE)
     @ResponseBody
-    public ResponseEntity getEmployeeDetail(@RequestParam(value = "employeeId", required = false) String employeeId, @RequestParam(value = "nrcNumber", required = false) String nrcNumber) {
+    public Result getEmployeeDetail(@RequestParam(value = "employeeId", required = false) String employeeId, @RequestParam(value = "nrcNumber", required = false) String nrcNumber) {
         EmployeeDto employeeDto;
         try {
-            if (isNotEmpty(nrcNumber)) {
-                Integer agentCount = agentFinder.findAgentCountByNrcNumber(nrcNumber);
+            if (isNotEmpty(nrcNumber)){
+               String nrcNumberWithoutSlash = nrcNumber.replaceAll("/", "").trim();
+                Integer agentCount = agentFinder.findAgentCountByNrcNumber(nrcNumberWithoutSlash);
                 if (agentCount != 0)
-                    return new ResponseEntity("Agent cannot be updated as nrc number is in use", HttpStatus.PRECONDITION_FAILED);
+                    return Result.failure("Agent cannot be created as nrc number is in use");
             }
             employeeDto = smeGateway.getEmployeeDetailByIdOrByNRCNumber(employeeId, nrcNumber);
         } catch (Exception e) {
-            return new ResponseEntity(e.getLocalizedMessage(), HttpStatus.PRECONDITION_FAILED);
+            return Result.failure(e.getLocalizedMessage());
         }
-        return new ResponseEntity(employeeDto, HttpStatus.OK);
+        return Result.success("Agent Details",employeeDto);
     }
 
     @RequestMapping(value = "/getallplan", method = RequestMethod.GET)

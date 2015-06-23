@@ -3,9 +3,11 @@ package com.pla.core.application;
 import com.github.springtestdbunit.DbUnitTestExecutionListener;
 import com.github.springtestdbunit.annotation.DatabaseOperation;
 import com.github.springtestdbunit.annotation.DatabaseSetup;
+import com.github.springtestdbunit.annotation.DatabaseTearDown;
 import com.github.springtestdbunit.annotation.ExpectedDatabase;
 import com.github.springtestdbunit.assertion.DatabaseAssertionMode;
 import com.google.common.collect.Lists;
+import com.pla.sharedkernel.identifier.BenefitId;
 import org.axonframework.commandhandling.gateway.CommandGateway;
 import org.junit.Before;
 import org.junit.Test;
@@ -20,7 +22,9 @@ import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import static org.junit.Assert.assertTrue;
 
@@ -48,10 +52,10 @@ public class CoverageAcceptanceTest {
         userDetails = userLoginDetailDto.populateAuthorities(permissions);
     }
 
-  /*  @Test
+  @Test
     @DatabaseSetup(value = "classpath:testdata/endtoend/coverage/testbenefitdataforcreatecoverage.xml", type = DatabaseOperation.CLEAN_INSERT)
     @ExpectedDatabase(value = "classpath:testdata/endtoend/coverage/expectedcoveragedata.xml", assertionMode = DatabaseAssertionMode.NON_STRICT)
-//    @DatabaseTearDown(value = "classpath:testdata/endtoend/coverage/testbenefitdataforcreatecoverage.xml",type = DatabaseOperation.TRUNCATE_TABLE)
+    @DatabaseTearDown(value = "classpath:testdata/endtoend/coverage/testbenefitdataforcreatecoverage.xml",type = DatabaseOperation.TRUNCATE_TABLE)
     public void givenACoverageNameAndSetOfBenefit_whenTheCoverageNameIsUniqueAndUserHasAdminRole_thenCreateACoverage() {
 
         Set<BenefitId> backendIdSet = new HashSet<>();
@@ -60,14 +64,14 @@ public class CoverageAcceptanceTest {
         CreateCoverageCommand createCoverageCommand = new CreateCoverageCommand(userDetails, "testing Coverage name", "C_ONE", "coverage description", backendIdSet);
         Boolean isSuccess = Boolean.FALSE;
         try {
-            //commandGateway.sendAndWait(createCoverageCommand);
+            commandGateway.sendAndWait(createCoverageCommand);
             isSuccess = Boolean.TRUE;
         } catch (Exception e) {
             logger.error("Error in creating coverage", e);
         }
         assertTrue(isSuccess);
 
-    }*/
+    }
 
 
     /*@Test
