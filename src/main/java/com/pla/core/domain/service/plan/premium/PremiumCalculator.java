@@ -55,8 +55,7 @@ public class PremiumCalculator implements IPremiumCalculator {
     @Override
     public List<ComputedPremiumDto> calculateBasicPremium(PremiumCalculationDto premiumCalculationDto) {
         Premium premium = premiumFinder.findPremium(premiumCalculationDto);
-        boolean hasAllInfluencingFactor =
-                premium.hasAllInfluencingFactor(premiumCalculationDto.getInfluencingFactors());
+        boolean hasAllInfluencingFactor =premium.hasAllInfluencingFactor(premiumCalculationDto.getInfluencingFactors());
         if (!hasAllInfluencingFactor) {
             raiseInfluencingFactorMismatchException();
         }

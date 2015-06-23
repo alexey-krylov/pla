@@ -25,7 +25,8 @@ public interface IPremiumCalculator {
 
     BigDecimal computeProratePremium(PremiumCalculationDto premiumCalculationDto);
 
-    List<PremiumInfluencingFactor> getPremiumInfluencingFactors(PlanId planId,LocalDate calculateDate);
+    List<PremiumInfluencingFactor> getPremiumInfluencingFactors(PlanId planId, LocalDate calculateDate);
 
-    List<PremiumInfluencingFactor> getPremiumInfluencingFactors(PlanId planId,CoverageId coverageId,LocalDate calculateDate);
+    List<PremiumInfluencingFactor> getPremiumInfluencingFactors(PlanId planId, CoverageId coverageId, LocalDate calculateDate);
+
 }

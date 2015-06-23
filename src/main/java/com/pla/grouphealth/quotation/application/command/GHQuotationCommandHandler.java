@@ -6,13 +6,16 @@ import com.pla.grouphealth.quotation.query.GHInsuredDto;
 import com.pla.grouphealth.quotation.query.GHPremiumDetailDto;
 import com.pla.grouphealth.quotation.query.GHQuotationFinder;
 import com.pla.grouphealth.quotation.repository.GHQuotationRepository;
+import com.pla.publishedlanguage.contract.IGeneralInformationProvider;
 import com.pla.publishedlanguage.contract.IPremiumCalculator;
 import com.pla.publishedlanguage.contract.IProcessInfoAdapter;
 import com.pla.publishedlanguage.domain.model.ComputedPremiumDto;
 import com.pla.publishedlanguage.domain.model.PremiumCalculationDto;
 import com.pla.publishedlanguage.domain.model.PremiumFrequency;
 import com.pla.publishedlanguage.domain.model.PremiumInfluencingFactor;
+import com.pla.publishedlanguage.dto.AgentLoadingFactorDto;
 import com.pla.sharedkernel.identifier.CoverageId;
+import com.pla.sharedkernel.identifier.LineOfBusinessEnum;
 import com.pla.sharedkernel.identifier.PlanId;
 import com.pla.sharedkernel.identifier.QuotationId;
 import org.axonframework.commandhandling.annotation.CommandHandler;
@@ -52,15 +55,18 @@ public class GHQuotationCommandHandler {
 
     private IProcessInfoAdapter processInfoAdapter;
 
+    private IGeneralInformationProvider generalInformationProvider;
+
 
     @Autowired
-    public GHQuotationCommandHandler(Repository<GroupHealthQuotation> ghQuotationMongoRepository, GroupHealthQuotationService groupHealthQuotationService, IPremiumCalculator premiumCalculator, GHQuotationFinder ghQuotationFinder, GHQuotationRepository ghQuotationRepository, IProcessInfoAdapter processInfoAdapter) {
+    public GHQuotationCommandHandler(Repository<GroupHealthQuotation> ghQuotationMongoRepository, GroupHealthQuotationService groupHealthQuotationService, IPremiumCalculator premiumCalculator, GHQuotationFinder ghQuotationFinder, GHQuotationRepository ghQuotationRepository, IProcessInfoAdapter processInfoAdapter, IGeneralInformationProvider generalInformationProvider) {
         this.ghQuotationMongoRepository = ghQuotationMongoRepository;
         this.groupHealthQuotationService = groupHealthQuotationService;
         this.ghQuotationFinder = ghQuotationFinder;
         this.premiumCalculator = premiumCalculator;
         this.ghQuotationRepository = ghQuotationRepository;
         this.processInfoAdapter = processInfoAdapter;
+        this.generalInformationProvider = generalInformationProvider;
     }
 
     @CommandHandler
@@ -110,6 +116,10 @@ public class GHQuotationCommandHandler {
                 BigDecimal basicAnnualPremium = premiumDetail.getPremiumAmount() != null ? premiumDetail.getPremiumAmount() :
                         computePlanBasicAnnualPremium(premiumDetail.getPlanId(), premiumDetail.getSumAssured().toPlainString(),
                                 String.valueOf(getAgeOnNextBirthDate(insuredDto.getDateOfBirth())), occupationClass, insuredDto.getGender().name(), 365, null);
+                if (insuredDto.getNoOfAssured() == null && insuredDto.getDateOfBirth() != null) {
+                    int ageOnNextBirthDate = getAgeOnNextBirthDate(insuredDto.getDateOfBirth());
+                    basicAnnualPremium = computePremiumByApplyingAgeLoadingFactor(ageOnNextBirthDate, basicAnnualPremium);
+                }
                 final GHInsuredBuilder[] insuredBuilder = {GHInsured.getInsuredBuilder(new PlanId(premiumDetail.getPlanId()), premiumDetail.getPlanCode(), basicAnnualPremium, premiumDetail.getSumAssured())};
                 insuredBuilder[0].withCategory(insuredDto.getOccupationCategory()).withInsuredName(insuredDto.getSalutation(), insuredDto.getFirstName(), insuredDto.getLastName())
                         .withOccupation(insuredDto.getOccupationClass()).withInsuredNrcNumber(insuredDto.getNrcNumber()).withCompanyName(insuredDto.getCompanyName())
@@ -118,6 +128,10 @@ public class GHQuotationCommandHandler {
                         .withExistingIllness(insuredDto.getExistingIllness()).withNoOfAssured(insuredDto.getNoOfAssured());
                 insuredDto.getCoveragePremiumDetails().forEach(coveragePremiumDetail -> {
                     BigDecimal coverageBasicPremium = coveragePremiumDetail.getPremium() == null ? computePlanBasicAnnualPremium(premiumDetail.getPlanId(), coveragePremiumDetail.getSumAssured().toPlainString(), String.valueOf(getAgeOnNextBirthDate(insuredDto.getDateOfBirth())), occupationClass, insuredDto.getGender().name(), 365, coveragePremiumDetail.getCoverageId()) : coveragePremiumDetail.getPremium();
+                    if (insuredDto.getNoOfAssured() == null && insuredDto.getDateOfBirth() != null) {
+                        int ageOnNextBirthDate = getAgeOnNextBirthDate(insuredDto.getDateOfBirth());
+                        coverageBasicPremium = computePremiumByApplyingAgeLoadingFactor(ageOnNextBirthDate, coverageBasicPremium);
+                    }
                     final GHCoveragePremiumDetailBuilder[] ghCoveragePremiumDetailBuilder = {new GHCoveragePremiumDetailBuilder(coveragePremiumDetail.getCoverageCode(), coveragePremiumDetail.getCoverageId(), coveragePremiumDetail.getCoverageName(), coverageBasicPremium, coveragePremiumDetail.getPremiumVisibility())};
                     if (isNotEmpty(coveragePremiumDetail.getBenefitDetails())) {
                         coveragePremiumDetail.getBenefitDetails().forEach(benefitDetail -> {
@@ -143,7 +157,6 @@ public class GHQuotationCommandHandler {
         return groupHealthQuotation.getIdentifier().getQuotationId();
     }
 
-
     @CommandHandler
     public String updateWithPremiumDetail(UpdateGHQuotationWithPremiumDetailCommand updateGLQuotationWithPremiumDetailCommand) {
         GroupHealthQuotation groupHealthQuotation = ghQuotationMongoRepository.load(new QuotationId(updateGLQuotationWithPremiumDetailCommand.getQuotationId()));
@@ -163,11 +176,17 @@ public class GHQuotationCommandHandler {
                 GHPlanPremiumDetail planPremiumDetail = insured.getPlanPremiumDetail();
                 String occupationClass = ghQuotationFinder.getOccupationClass(insured.getOccupationClass());
                 BigDecimal insuredPlanProratePremium = insured.getNoOfAssured() != null ? insured.getPlanPremiumDetail().getPremiumAmount() : computeBasicProratePremium(planPremiumDetail.getPlanId().getPlanId(), planPremiumDetail.getSumAssured().toPlainString(), getAgeOnNextBirthDate(insured.getDateOfBirth()).toString(), occupationClass, insured.getGender().name(), premiumDetailDto.getPolicyTermValue(), null);
+                if (insured.getNoOfAssured() == null && insured.getDateOfBirth() != null) {
+                    insuredPlanProratePremium = computePremiumByApplyingAgeLoadingFactor(getAgeOnNextBirthDate(insured.getDateOfBirth()), insuredPlanProratePremium);
+                }
                 insured.updatePlanPremiumAmount(insuredPlanProratePremium);
                 if (isNotEmpty(insured.getPlanPremiumDetail().getCoveragePremiumDetails())) {
                     List<GHCoveragePremiumDetail> coveragePremiumDetails = insured.getPlanPremiumDetail().getCoveragePremiumDetails();
                     for (GHCoveragePremiumDetail coveragePremiumDetail : coveragePremiumDetails) {
                         BigDecimal insuredCoveragePremiumDetail = insured.getNoOfAssured() != null ? coveragePremiumDetail.getPremium() : computeBasicProratePremium(planPremiumDetail.getPlanId().getPlanId(), coveragePremiumDetail.getSumAssured().toPlainString(), getAgeOnNextBirthDate(insured.getDateOfBirth()).toString(), occupationClass, insured.getGender().name(), premiumDetailDto.getPolicyTermValue(), coveragePremiumDetail.getCoverageId().getCoverageId());
+                        if (insured.getNoOfAssured() == null && insured.getDateOfBirth() != null) {
+                            insuredCoveragePremiumDetail = computePremiumByApplyingAgeLoadingFactor(getAgeOnNextBirthDate(insured.getDateOfBirth()), insuredCoveragePremiumDetail);
+                        }
                         coveragePremiumDetail.updateWithPremium(insuredCoveragePremiumDetail);
                     }
                 }
@@ -175,11 +194,17 @@ public class GHQuotationCommandHandler {
                     GHPlanPremiumDetail insuredDependentPlanPremiumDetail = insuredDependent.getPlanPremiumDetail();
                     String dependentOccupationClass = ghQuotationFinder.getOccupationClass(insuredDependent.getOccupationClass());
                     BigDecimal insuredDependentPlanProratePremium = insuredDependent.getNoOfAssured() != null ? insuredDependent.getPlanPremiumDetail().getPremiumAmount() : computeBasicProratePremium(insuredDependentPlanPremiumDetail.getPlanId().getPlanId(), insuredDependentPlanPremiumDetail.getSumAssured().toPlainString(), getAgeOnNextBirthDate(insuredDependent.getDateOfBirth()).toString(), dependentOccupationClass, insuredDependent.getGender().name(), premiumDetailDto.getPolicyTermValue(), null);
+                    if (insuredDependent.getNoOfAssured() == null && insuredDependent.getDateOfBirth() != null) {
+                        insuredDependentPlanProratePremium = computePremiumByApplyingAgeLoadingFactor(getAgeOnNextBirthDate(insuredDependent.getDateOfBirth()), insuredDependentPlanProratePremium);
+                    }
                     insuredDependent.updatePlanPremiumAmount(insuredDependentPlanProratePremium);
                     List<GHCoveragePremiumDetail> insuredDependentCoveragePremiumDetails = insuredDependent.getPlanPremiumDetail().getCoveragePremiumDetails();
                     if (isNotEmpty(insuredDependentCoveragePremiumDetails)) {
                         for (GHCoveragePremiumDetail insuredDependentCoveragePremiumDetail : insuredDependentCoveragePremiumDetails) {
                             BigDecimal insuredCoveragePremiumDetail = insuredDependent.getNoOfAssured() != null ? insuredDependentCoveragePremiumDetail.getPremium() : computeBasicProratePremium(insuredDependentPlanPremiumDetail.getPlanId().getPlanId(), insuredDependentCoveragePremiumDetail.getSumAssured().toPlainString(), getAgeOnNextBirthDate(insuredDependent.getDateOfBirth()).toString(), dependentOccupationClass, insuredDependent.getGender().name(), premiumDetailDto.getPolicyTermValue(), insuredDependentCoveragePremiumDetail.getCoverageId().getCoverageId());
+                            if (insuredDependent.getNoOfAssured() == null && insuredDependent.getDateOfBirth() != null) {
+                                insuredCoveragePremiumDetail = computePremiumByApplyingAgeLoadingFactor(getAgeOnNextBirthDate(insuredDependent.getDateOfBirth()), insuredCoveragePremiumDetail);
+                            }
                             insuredDependentCoveragePremiumDetail.updateWithPremium(insuredCoveragePremiumDetail);
                         }
                     }
@@ -208,6 +233,10 @@ public class GHQuotationCommandHandler {
                 BigDecimal basicAnnualPremium = premiumDetail.getPremiumAmount() != null ? premiumDetail.getPremiumAmount() : computePlanBasicAnnualPremium(premiumDetail.getPlanId(), premiumDetail.getSumAssured().toPlainString(),
                         String.valueOf(getAgeOnNextBirthDate(insuredDependentDto.getDateOfBirth()))
                         , occupationClass, insuredDependentDto.getGender().name(), 365, null);
+                if (insuredDependentDto.getNoOfAssured() == null && insuredDependentDto.getDateOfBirth() != null) {
+                    int ageOnNextBirthDate = getAgeOnNextBirthDate(insuredDependentDto.getDateOfBirth());
+                    basicAnnualPremium = computePremiumByApplyingAgeLoadingFactor(ageOnNextBirthDate, basicAnnualPremium);
+                }
                 final GHInsuredDependentBuilder[] insuredDependentBuilder = {GHInsuredDependent.getInsuredDependentBuilder(new PlanId(premiumDetail.getPlanId()), premiumDetail.getPlanCode(), basicAnnualPremium, premiumDetail.getSumAssured())};
                 insuredDependentBuilder[0].withCategory(insuredDependentDto.getOccupationCategory()).withInsuredName(insuredDependentDto.getSalutation(), insuredDependentDto.getFirstName(), insuredDependentDto.getLastName())
                         .withInsuredNrcNumber(insuredDependentDto.getNrcNumber()).withCompanyName(insuredDependentDto.getCompanyName())
@@ -215,6 +244,10 @@ public class GHQuotationCommandHandler {
                         withRelationship(insuredDependentDto.getRelationship()).withOccupationClass(insuredDependentDto.getOccupationClass()).withMinAndMaxAge(insuredDependentDto.getMinAgeEntry(), insuredDependentDto.getMaxAgeEntry()).withExistingIllness(insuredDependentDto.getExistingIllness()).withNoOfAssured(insuredDependentDto.getNoOfAssured());
                 insuredDependentDto.getCoveragePremiumDetails().forEach(coveragePremiumDetail -> {
                     BigDecimal coverageBasicPremium = coveragePremiumDetail.getPremium() == null ? computePlanBasicAnnualPremium(premiumDetail.getPlanId(), coveragePremiumDetail.getSumAssured().toPlainString(), String.valueOf(getAgeOnNextBirthDate(insuredDependentDto.getDateOfBirth())), occupationClass, insuredDependentDto.getGender().name(), 365, coveragePremiumDetail.getCoverageId()) : coveragePremiumDetail.getPremium();
+                    if (insuredDependentDto.getNoOfAssured() == null && insuredDependentDto.getDateOfBirth() != null) {
+                        int ageOnNextBirthDate = getAgeOnNextBirthDate(insuredDependentDto.getDateOfBirth());
+                        coverageBasicPremium = computePremiumByApplyingAgeLoadingFactor(ageOnNextBirthDate, coverageBasicPremium);
+                    }
                     final GHCoveragePremiumDetailBuilder[] ghCoveragePremiumDetailBuilder = {new GHCoveragePremiumDetailBuilder(coveragePremiumDetail.getCoverageCode(), coveragePremiumDetail.getCoverageId(), coveragePremiumDetail.getCoverageName(), coverageBasicPremium, coveragePremiumDetail.getPremiumVisibility())};
                     if (isNotEmpty(coveragePremiumDetail.getBenefitDetails())) {
                         coveragePremiumDetail.getBenefitDetails().forEach(benefitDetail -> {
@@ -303,6 +336,16 @@ public class GHQuotationCommandHandler {
         }
         return premiumCalculator.getPremiumInfluencingFactors(new PlanId(planId), new CoverageId(coverageId), effectiveDate);
     }
+
+    private BigDecimal computePremiumByApplyingAgeLoadingFactor(int age, BigDecimal basicPremium) {
+        AgentLoadingFactorDto agentLoadingFactorDto = generalInformationProvider.getAgeLoadingFactor(LineOfBusinessEnum.GROUP_HEALTH);
+        if (age > agentLoadingFactorDto.getAge()) {
+            BigDecimal loadingFactor = agentLoadingFactorDto.getLoadingFactor() == null ? BigDecimal.ZERO : basicPremium.multiply((agentLoadingFactorDto.getLoadingFactor().divide(new BigDecimal(100))));
+            basicPremium = basicPremium.add(loadingFactor);
+        }
+        return basicPremium;
+    }
+
 
     @CommandHandler
     public void purgeGLQuotation(GHPurgeGLQuotationCommand purgeGLQuotationCommand) {

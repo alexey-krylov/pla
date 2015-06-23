@@ -1,17 +1,20 @@
 package com.pla.grouplife.quotation.application.command;
 
 import com.pla.grouplife.quotation.domain.model.*;
+import com.pla.grouplife.quotation.domain.service.GroupLifeQuotationService;
+import com.pla.grouplife.quotation.query.GLQuotationFinder;
+import com.pla.grouplife.quotation.query.InsuredDto;
+import com.pla.grouplife.quotation.query.PremiumDetailDto;
 import com.pla.grouplife.quotation.repository.GlQuotationRepository;
+import com.pla.publishedlanguage.contract.IGeneralInformationProvider;
 import com.pla.publishedlanguage.contract.IPremiumCalculator;
 import com.pla.publishedlanguage.domain.model.ComputedPremiumDto;
 import com.pla.publishedlanguage.domain.model.PremiumCalculationDto;
 import com.pla.publishedlanguage.domain.model.PremiumFrequency;
 import com.pla.publishedlanguage.domain.model.PremiumInfluencingFactor;
-import com.pla.grouplife.quotation.domain.service.GroupLifeQuotationService;
-import com.pla.grouplife.quotation.query.GLQuotationFinder;
-import com.pla.grouplife.quotation.query.InsuredDto;
-import com.pla.grouplife.quotation.query.PremiumDetailDto;
+import com.pla.publishedlanguage.dto.AgentLoadingFactorDto;
 import com.pla.sharedkernel.identifier.CoverageId;
+import com.pla.sharedkernel.identifier.LineOfBusinessEnum;
 import com.pla.sharedkernel.identifier.PlanId;
 import com.pla.sharedkernel.identifier.QuotationId;
 import org.axonframework.commandhandling.annotation.CommandHandler;
@@ -49,14 +52,17 @@ public class GlQuotationCommandHandler {
 
     private GlQuotationRepository glQuotationRepository;
 
+    private IGeneralInformationProvider generalInformationProvider;
+
 
     @Autowired
-    public GlQuotationCommandHandler(Repository<GroupLifeQuotation> glQuotationMongoRepository, GroupLifeQuotationService groupLifeQuotationService, IPremiumCalculator premiumCalculator, GLQuotationFinder glQuotationFinder, GlQuotationRepository glQuotationRepository) {
+    public GlQuotationCommandHandler(Repository<GroupLifeQuotation> glQuotationMongoRepository, GroupLifeQuotationService groupLifeQuotationService, IPremiumCalculator premiumCalculator, GLQuotationFinder glQuotationFinder, GlQuotationRepository glQuotationRepository, IGeneralInformationProvider generalInformationProvider) {
         this.glQuotationMongoRepository = glQuotationMongoRepository;
         this.groupLifeQuotationService = groupLifeQuotationService;
         this.glQuotationFinder = glQuotationFinder;
         this.premiumCalculator = premiumCalculator;
         this.glQuotationRepository = glQuotationRepository;
+        this.generalInformationProvider = generalInformationProvider;
     }
 
     @CommandHandler
@@ -105,6 +111,10 @@ public class GlQuotationCommandHandler {
                 String occupationClass = glQuotationFinder.getOccupationClass(insuredDto.getOccupationClass());
                 BigDecimal basicAnnualPremium = premiumDetail.getPremiumAmount() != null ? premiumDetail.getPremiumAmount() :
                         computePlanBasicAnnualPremium(premiumDetail.getPlanId(), premiumDetail.getSumAssured().toPlainString(), String.valueOf(getAgeOnNextBirthDate(insuredDto.getDateOfBirth())), occupationClass, insuredDto.getGender().name(), 365, null);
+                if (insuredDto.getNoOfAssured() == null && insuredDto.getDateOfBirth() != null) {
+                    int ageOnNextBirthDate = getAgeOnNextBirthDate(insuredDto.getDateOfBirth());
+                    basicAnnualPremium = computePremiumByApplyingAgeLoadingFactor(ageOnNextBirthDate, basicAnnualPremium);
+                }
                 final InsuredBuilder[] insuredBuilder = {Insured.getInsuredBuilder(new PlanId(premiumDetail.getPlanId()), premiumDetail.getPlanCode(), basicAnnualPremium, premiumDetail.getSumAssured())};
                 insuredBuilder[0].withCategory(insuredDto.getOccupationCategory()).withInsuredName(insuredDto.getSalutation(), insuredDto.getFirstName(), insuredDto.getLastName())
                         .withAnnualIncome(insuredDto.getAnnualIncome()).withOccupation(insuredDto.getOccupationClass()).
@@ -112,6 +122,10 @@ public class GlQuotationCommandHandler {
                         .withManNumber(insuredDto.getManNumber()).withDateOfBirth(insuredDto.getDateOfBirth()).withGender(insuredDto.getGender()).withNoOfAssured(insuredDto.getNoOfAssured());
                 insuredDto.getCoveragePremiumDetails().forEach(coveragePremiumDetail -> {
                     BigDecimal coverageBasicPremium = coveragePremiumDetail.getPremium() == null ? computePlanBasicAnnualPremium(premiumDetail.getPlanId(), coveragePremiumDetail.getSumAssured().toPlainString(), String.valueOf(getAgeOnNextBirthDate(insuredDto.getDateOfBirth())), null, insuredDto.getGender().name(), 365, coveragePremiumDetail.getCoverageId()) : coveragePremiumDetail.getPremium();
+                    if (insuredDto.getNoOfAssured() == null && insuredDto.getDateOfBirth() != null) {
+                        int ageOnNextBirthDate = getAgeOnNextBirthDate(insuredDto.getDateOfBirth());
+                        coverageBasicPremium = computePremiumByApplyingAgeLoadingFactor(ageOnNextBirthDate, coverageBasicPremium);
+                    }
                     insuredBuilder[0] = insuredBuilder[0].withCoveragePremiumDetail(coveragePremiumDetail.getCoverageName(), coveragePremiumDetail.getCoverageCode(), coveragePremiumDetail.getCoverageId(), coverageBasicPremium);
                 });
                 Set<InsuredDependent> insuredDependents = getInsuredDependent(insuredDto.getInsuredDependents());
@@ -150,11 +164,19 @@ public class GlQuotationCommandHandler {
                 PlanPremiumDetail planPremiumDetail = insured.getPlanPremiumDetail();
                 String occupationClass = glQuotationFinder.getOccupationClass(insured.getOccupationClass());
                 BigDecimal insuredPlanProratePremium = insured.getNoOfAssured() != null ? planPremiumDetail.getPremiumAmount() : computeBasicProratePremium(planPremiumDetail.getPlanId().getPlanId(), planPremiumDetail.getSumAssured().toPlainString(), getAgeOnNextBirthDate(insured.getDateOfBirth()).toString(), occupationClass, insured.getGender().name(), premiumDetailDto.getPolicyTermValue(), null);
+                if (insured.getNoOfAssured() == null && insured.getDateOfBirth() != null) {
+                    int ageOnNextBirthDate = getAgeOnNextBirthDate(insured.getDateOfBirth());
+                    insuredPlanProratePremium = computePremiumByApplyingAgeLoadingFactor(ageOnNextBirthDate, insuredPlanProratePremium);
+                }
                 insured.updatePlanPremiumAmount(insuredPlanProratePremium);
                 if (isNotEmpty(insured.getCoveragePremiumDetails())) {
                     Set<CoveragePremiumDetail> coveragePremiumDetails = insured.getCoveragePremiumDetails();
                     for (CoveragePremiumDetail coveragePremiumDetail : coveragePremiumDetails) {
                         BigDecimal insuredCoveragePremiumDetail = insured.getNoOfAssured() != null ? coveragePremiumDetail.getPremium() : computeBasicProratePremium(planPremiumDetail.getPlanId().getPlanId(), coveragePremiumDetail.getSumAssured().toPlainString(), getAgeOnNextBirthDate(insured.getDateOfBirth()).toString(), occupationClass, insured.getGender().name(), premiumDetailDto.getPolicyTermValue(), coveragePremiumDetail.getCoverageId().getCoverageId());
+                        if (insured.getNoOfAssured() == null && insured.getDateOfBirth() != null) {
+                            int ageOnNextBirthDate = getAgeOnNextBirthDate(insured.getDateOfBirth());
+                            insuredCoveragePremiumDetail = computePremiumByApplyingAgeLoadingFactor(ageOnNextBirthDate, insuredCoveragePremiumDetail);
+                        }
                         coveragePremiumDetail.updateWithPremium(insuredCoveragePremiumDetail);
                     }
                 }
@@ -162,11 +184,19 @@ public class GlQuotationCommandHandler {
                     PlanPremiumDetail insuredDependentPlanPremiumDetail = insuredDependent.getPlanPremiumDetail();
                     String dependentOccupationClass = glQuotationFinder.getOccupationClass(insuredDependent.getOccupationClass());
                     BigDecimal insuredDependentPlanProratePremium = insuredDependent.getNoOfAssured() != null ? insuredDependentPlanPremiumDetail.getPremiumAmount() : computeBasicProratePremium(insuredDependentPlanPremiumDetail.getPlanId().getPlanId(), insuredDependentPlanPremiumDetail.getSumAssured().toPlainString(), getAgeOnNextBirthDate(insuredDependent.getDateOfBirth()).toString(), dependentOccupationClass, insuredDependent.getGender().name(), premiumDetailDto.getPolicyTermValue(), null);
+                    if (insuredDependent.getNoOfAssured() == null && insuredDependent.getDateOfBirth() != null) {
+                        int ageOnNextBirthDate = getAgeOnNextBirthDate(insuredDependent.getDateOfBirth());
+                        insuredDependentPlanProratePremium = computePremiumByApplyingAgeLoadingFactor(ageOnNextBirthDate, insuredDependentPlanProratePremium);
+                    }
                     insuredDependent.updatePlanPremiumAmount(insuredDependentPlanProratePremium);
                     Set<CoveragePremiumDetail> insuredDependentCoveragePremiumDetails = insuredDependent.getCoveragePremiumDetails();
                     if (isNotEmpty(insuredDependentCoveragePremiumDetails)) {
                         for (CoveragePremiumDetail insuredDependentCoveragePremiumDetail : insuredDependentCoveragePremiumDetails) {
                             BigDecimal insuredCoveragePremiumDetail = insuredDependent.getNoOfAssured() != null ? insuredDependentCoveragePremiumDetail.getPremium() : computeBasicProratePremium(insuredDependentPlanPremiumDetail.getPlanId().getPlanId(), insuredDependentCoveragePremiumDetail.getSumAssured().toPlainString(), getAgeOnNextBirthDate(insuredDependent.getDateOfBirth()).toString(), dependentOccupationClass, insuredDependent.getGender().name(), premiumDetailDto.getPolicyTermValue(), insuredDependentCoveragePremiumDetail.getCoverageId().getCoverageId());
+                            if (insuredDependent.getNoOfAssured() == null && insuredDependent.getDateOfBirth() != null) {
+                                int ageOnNextBirthDate = getAgeOnNextBirthDate(insuredDependent.getDateOfBirth());
+                                insuredCoveragePremiumDetail = computePremiumByApplyingAgeLoadingFactor(ageOnNextBirthDate, insuredCoveragePremiumDetail);
+                            }
                             insuredDependentCoveragePremiumDetail.updateWithPremium(insuredCoveragePremiumDetail);
                         }
                     }
@@ -195,6 +225,10 @@ public class GlQuotationCommandHandler {
                 BigDecimal basicAnnualPremium = premiumDetail.getPremiumAmount() != null ? premiumDetail.getPremiumAmount() : computePlanBasicAnnualPremium(premiumDetail.getPlanId(), premiumDetail.getSumAssured().toPlainString(),
                         String.valueOf(getAgeOnNextBirthDate(insuredDependentDto.getDateOfBirth()))
                         , isNotEmpty(occupationClass) ? occupationClass : null, insuredDependentDto.getGender().name(), 365, null);
+                if (insuredDependentDto.getNoOfAssured() == null && insuredDependentDto.getDateOfBirth() != null) {
+                    int ageOnNextBirthDate = getAgeOnNextBirthDate(insuredDependentDto.getDateOfBirth());
+                    basicAnnualPremium = computePremiumByApplyingAgeLoadingFactor(ageOnNextBirthDate, basicAnnualPremium);
+                }
                 final InsuredDependentBuilder[] insuredDependentBuilder = {InsuredDependent.getInsuredDependentBuilder(new PlanId(premiumDetail.getPlanId()), premiumDetail.getPlanCode(), basicAnnualPremium, premiumDetail.getSumAssured())};
                 insuredDependentBuilder[0].withCategory(insuredDependentDto.getOccupationCategory()).withInsuredName(insuredDependentDto.getSalutation(), insuredDependentDto.getFirstName(), insuredDependentDto.getLastName())
                         .withInsuredNrcNumber(insuredDependentDto.getNrcNumber()).withCompanyName(insuredDependentDto.getCompanyName()).withOccupationClass(insuredDependentDto.getOccupationClass())
@@ -202,6 +236,10 @@ public class GlQuotationCommandHandler {
                         .withRelationship(insuredDependentDto.getRelationship()).withNoOfAssured(insuredDependentDto.getNoOfAssured());
                 insuredDependentDto.getCoveragePremiumDetails().forEach(coveragePremiumDetail -> {
                     BigDecimal coverageBasicPremium = coveragePremiumDetail.getPremium() == null ? computePlanBasicAnnualPremium(premiumDetail.getPlanId(), coveragePremiumDetail.getSumAssured().toPlainString(), String.valueOf(getAgeOnNextBirthDate(insuredDependentDto.getDateOfBirth())), null, insuredDependentDto.getGender().name(), 365, coveragePremiumDetail.getCoverageId()) : coveragePremiumDetail.getPremium();
+                    if (insuredDependentDto.getNoOfAssured() == null && insuredDependentDto.getDateOfBirth() != null) {
+                        int ageOnNextBirthDate = getAgeOnNextBirthDate(insuredDependentDto.getDateOfBirth());
+                        coverageBasicPremium = computePremiumByApplyingAgeLoadingFactor(ageOnNextBirthDate, coverageBasicPremium);
+                    }
                     insuredDependentBuilder[0] = insuredDependentBuilder[0].withCoveragePremiumDetail(coveragePremiumDetail.getCoverageName(), coveragePremiumDetail.getCoverageCode(), coveragePremiumDetail.getCoverageId(), coverageBasicPremium);
                 });
                 return insuredDependentBuilder[0].build();
@@ -283,6 +321,15 @@ public class GlQuotationCommandHandler {
 
         }
         return premiumCalculator.getPremiumInfluencingFactors(new PlanId(planId), new CoverageId(coverageId), effectiveDate);
+    }
+
+    private BigDecimal computePremiumByApplyingAgeLoadingFactor(int age, BigDecimal basicPremium) {
+        AgentLoadingFactorDto agentLoadingFactorDto = generalInformationProvider.getAgeLoadingFactor(LineOfBusinessEnum.GROUP_LIFE);
+        if (age > agentLoadingFactorDto.getAge()) {
+            BigDecimal loadingFactor = agentLoadingFactorDto.getLoadingFactor() == null ? BigDecimal.ZERO : basicPremium.multiply((agentLoadingFactorDto.getLoadingFactor().divide(new BigDecimal(100))));
+            basicPremium = basicPremium.add(loadingFactor);
+        }
+        return basicPremium;
     }
 
     @CommandHandler
