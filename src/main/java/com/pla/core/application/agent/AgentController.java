@@ -35,6 +35,7 @@ import java.util.List;
 import java.util.Map;
 
 import static org.nthdimenzion.presentation.AppUtils.getLoggedInUserDetail;
+import static org.nthdimenzion.utils.UtilValidator.isEmpty;
 import static org.nthdimenzion.utils.UtilValidator.isNotEmpty;
 
 /**
@@ -175,12 +176,15 @@ public class AgentController {
         EmployeeDto employeeDto;
         try {
             if (isNotEmpty(nrcNumber)){
-               String nrcNumberWithoutSlash = nrcNumber.replaceAll("/", "").trim();
+                String nrcNumberWithoutSlash = nrcNumber.replaceAll("/", "").trim();
                 Integer agentCount = agentFinder.findAgentCountByNrcNumber(nrcNumberWithoutSlash);
                 if (agentCount != 0)
                     return Result.failure("Agent cannot be created as nrc number is in use");
             }
             employeeDto = smeGateway.getEmployeeDetailByIdOrByNRCNumber(employeeId, nrcNumber);
+            if (isEmpty(employeeDto.getNrcNumber()) || isEmpty(employeeDto.getEmployeeId())){
+                return Result.failure();
+            }
         } catch (Exception e) {
             return Result.failure(e.getLocalizedMessage());
         }
