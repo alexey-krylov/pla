@@ -66,12 +66,13 @@ public class AppUtils {
         return userDetails;
     }
 
-    public static Integer getAge(LocalDate dateOfBirth) {
-        if(dateOfBirth==null){
+    public static Integer getAgeOnNextBirthDate(LocalDate dateOfBirth) {
+        if (dateOfBirth == null) {
             return 0;
         }
         Years age = Years.yearsBetween(dateOfBirth, LocalDate.now());
-        return age.getYears();
+        int ageOnNextBirthDate = age.getYears() + 1;
+        return ageOnNextBirthDate;
     }
 
     public static Integer getIntervalInDays(LocalDate date) {
@@ -83,7 +84,7 @@ public class AppUtils {
     }
 
     public static void main(String[] args) {
-        System.out.println(getAge(new LocalDate(1985, 5, 25)));
+        System.out.println(getAgeOnNextBirthDate(new LocalDate(1985, 5, 25)));
     }
 }
 

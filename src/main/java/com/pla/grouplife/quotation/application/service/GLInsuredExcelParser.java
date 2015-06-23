@@ -11,6 +11,7 @@ import com.pla.publishedlanguage.dto.PlanCoverageDetailDto;
 import com.pla.sharedkernel.domain.model.Relationship;
 import com.pla.sharedkernel.identifier.PlanId;
 import com.pla.sharedkernel.util.ExcelGeneratorUtil;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import org.apache.poi.hssf.usermodel.HSSFCellStyle;
 import org.apache.poi.hssf.usermodel.HSSFFont;
@@ -173,10 +174,21 @@ public class GLInsuredExcelParser {
         Iterator<Row> dataRowIterator = dataRows.iterator();
         while (dataRowIterator.hasNext()) {
             Row currentRow = dataRowIterator.next();
-            String errorMessage = validateRow(currentRow, GLInsuredExcelHeader.getAllowedHeaderForParser(planAdapter, agentPlans), agentPlans);
+            List<String> excelHeaders = GLInsuredExcelHeader.getAllowedHeaderForParser(planAdapter, agentPlans);
+            String errorMessage = validateRow(currentRow, excelHeaders, agentPlans);
             List<OptionalCoverageCellHolder> optionalCoverageCellHolders = findNonEmptyOptionalCoverageCell(headers, currentRow, agentPlans);
             String coverageErrorMessage = validateOptionalCoverageCell(headers, currentRow, optionalCoverageCellHolders);
-            if (isEmpty(errorMessage) && isEmpty(coverageErrorMessage)) {
+            List<Row> duplicateRows = findDuplicateRow(dataRows, currentRow, excelHeaders);
+            String duplicateRowErrorMessage = "";
+            if (isNotEmpty(duplicateRows)) {
+                duplicateRowErrorMessage = "This row is duplicate with row no(s) ";
+                final String[] rowNumbers = {""};
+                duplicateRows.forEach(duplicateRow -> {
+                    rowNumbers[0] = rowNumbers[0] + (duplicateRow.getRowNum() + 1) + ",";
+                });
+                duplicateRowErrorMessage = duplicateRowErrorMessage + rowNumbers[0] + ".\n";
+            }
+            if (isEmpty(errorMessage) && isEmpty(coverageErrorMessage) && isEmpty(duplicateRowErrorMessage)) {
                 continue;
             }
             isValidTemplate = false;
@@ -190,10 +202,50 @@ public class GLInsuredExcelParser {
                 errorMessageHeaderCell.setCellStyle(cellStyle);
             }
             errorMessage = errorMessage + "\n" + coverageErrorMessage;
+            errorMessage = errorMessage + duplicateRowErrorMessage;
             Cell errorMessageCell = currentRow.createCell(headers.size());
             errorMessageCell.setCellValue(errorMessage);
         }
         return isValidTemplate;
+    }
+
+    private List<Row> findDuplicateRow(List<Row> dataRowsForDuplicateCheck, Row currentRow, List<String> headers) {
+        List<Row> duplicateRows = Lists.newArrayList();
+        Cell firstNameCell = currentRow.getCell(headers.indexOf(GLInsuredExcelHeader.FIRST_NAME.name()));
+        String firstNameCellValue = getCellValue(firstNameCell);
+        Cell lastNameCell = currentRow.getCell(headers.indexOf(GLInsuredExcelHeader.LAST_NAME.name()));
+        String lastNameCellValue = getCellValue(lastNameCell);
+        Cell dateOfBirthCell = currentRow.getCell(headers.indexOf(GLInsuredExcelHeader.DATE_OF_BIRTH.name()));
+        String dateOfBirthCellValue = getCellValue(dateOfBirthCell);
+        NameRelationshipCellValueHolder currentRowNameRelationshipHolder = new NameRelationshipCellValueHolder(firstNameCellValue, lastNameCellValue, dateOfBirthCellValue);
+        dataRowsForDuplicateCheck.forEach(dataRowForDuplicateCheck -> {
+            if (currentRow.getRowNum() != dataRowForDuplicateCheck.getRowNum()) {
+                Cell otherRowFirstNameCell = dataRowForDuplicateCheck.getCell(headers.indexOf(GLInsuredExcelHeader.FIRST_NAME.name()));
+                String otherRowFirstNameCellValue = getCellValue(otherRowFirstNameCell);
+                Cell otherRowLastNameCell = dataRowForDuplicateCheck.getCell(headers.indexOf(GLInsuredExcelHeader.LAST_NAME.name()));
+                String otherRowLastNameCellValue = getCellValue(otherRowLastNameCell);
+                Cell otherRowDateOfBirthCell = dataRowForDuplicateCheck.getCell(headers.indexOf(GLInsuredExcelHeader.DATE_OF_BIRTH.name()));
+                String otherRowDateOfBirthCellValue = getCellValue(otherRowDateOfBirthCell);
+                NameRelationshipCellValueHolder otherRowNameRelationshipHolder = new NameRelationshipCellValueHolder(otherRowFirstNameCellValue, otherRowLastNameCellValue, otherRowDateOfBirthCellValue);
+                if (currentRowNameRelationshipHolder.equals(otherRowNameRelationshipHolder)) {
+                    duplicateRows.add(dataRowForDuplicateCheck);
+                }
+            }
+        });
+        return duplicateRows;
+    }
+
+    @EqualsAndHashCode
+    private class NameRelationshipCellValueHolder {
+        private String firstName;
+        private String lastName;
+        private String dateOfBirth;
+
+        public NameRelationshipCellValueHolder(String firstName, String lastName, String dateOfBirth) {
+            this.firstName = firstName;
+            this.lastName = lastName;
+            this.dateOfBirth = dateOfBirth;
+        }
     }
 
     private boolean isValidHeader(List<String> headers, List<PlanId> planIds) {

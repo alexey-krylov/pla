@@ -734,7 +734,12 @@ public enum GLInsuredExcelHeader {
     PLAN_PREMIUM("Plan Premium") {
         @Override
         public String getAllowedValue(InsuredDto insuredDto) {
-            return insuredDto.getPlanPremiumDetail().getPremiumAmount() != null ? insuredDto.getPlanPremiumDetail().getPremiumAmount().toString() : "";
+            String premium=insuredDto.getPlanPremiumDetail().getPremiumAmount() != null ? insuredDto.getPlanPremiumDetail().getPremiumAmount().toString() : "";
+            if(insuredDto.getPlanPremiumDetail().getPremiumAmount() != null && insuredDto.getNoOfAssured()!=null){
+                BigDecimal premiumAmount = insuredDto.getPlanPremiumDetail().getPremiumAmount().divide(new BigDecimal(insuredDto.getNoOfAssured()));
+                premium=premiumAmount.toPlainString();
+            }
+            return premium;
         }
 
         @Override
@@ -773,7 +778,12 @@ public enum GLInsuredExcelHeader {
 
         @Override
         public String getAllowedValue(InsuredDto.InsuredDependentDto insuredDependentDto) {
-            return insuredDependentDto.getPlanPremiumDetail().getPremiumAmount() != null ? insuredDependentDto.getPlanPremiumDetail().getPremiumAmount().toString() : "";
+            String premium=insuredDependentDto.getPlanPremiumDetail().getPremiumAmount() != null ? insuredDependentDto.getPlanPremiumDetail().getPremiumAmount().toString() : "";
+            if(insuredDependentDto.getPlanPremiumDetail().getPremiumAmount() != null && insuredDependentDto.getNoOfAssured()!=null){
+                BigDecimal premiumAmount = insuredDependentDto.getPlanPremiumDetail().getPremiumAmount().divide(new BigDecimal(insuredDependentDto.getNoOfAssured()));
+                premium=premiumAmount.toPlainString();
+            }
+            return premium;
         }
 
         @Override

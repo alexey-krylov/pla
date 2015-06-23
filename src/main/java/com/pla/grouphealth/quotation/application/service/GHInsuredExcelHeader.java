@@ -275,7 +275,7 @@ public enum GHInsuredExcelHeader {
             String minimumAgeCellValue = getCellValue(minimumAgeCell);
             Cell maximumAgeCell = row.getCell(excelHeaders.indexOf(MAX_ENTRY_AGE.name()));
             String maximumAgeCellValue = getCellValue(maximumAgeCell);
-            int age = AppUtils.getAge(LocalDate.parse(value, DateTimeFormat.forPattern(AppConstants.DD_MM_YYY_FORMAT)));
+            int age = AppUtils.getAgeOnNextBirthDate(LocalDate.parse(value, DateTimeFormat.forPattern(AppConstants.DD_MM_YYY_FORMAT)));
             if (isNotEmpty(minimumAgeCellValue) && isNotEmpty(maximumAgeCellValue) && isEmpty(MIN_ENTRY_AGE.validateAndIfNotBuildErrorMessage(planAdapter, row, minimumAgeCellValue, excelHeaders)) && isEmpty(MAX_ENTRY_AGE.validateAndIfNotBuildErrorMessage(planAdapter, row, maximumAgeCellValue, excelHeaders))) {
                 int minimumAge = Double.valueOf(minimumAgeCellValue.trim()).intValue();
                 int maximumAge = Double.valueOf(maximumAgeCellValue.trim()).intValue();
@@ -712,7 +712,12 @@ public enum GHInsuredExcelHeader {
     PLAN_PREMIUM("Plan Premium") {
         @Override
         public String getAllowedValue(GHInsuredDto insuredDto) {
-            return insuredDto.getPlanPremiumDetail().getPremiumAmount() != null ? insuredDto.getPlanPremiumDetail().getPremiumAmount().toString() : "";
+            String premium = insuredDto.getPlanPremiumDetail().getPremiumAmount() != null ? insuredDto.getPlanPremiumDetail().getPremiumAmount().toString() : "";
+            if (insuredDto.getPlanPremiumDetail().getPremiumAmount() != null && insuredDto.getNoOfAssured() != null) {
+                BigDecimal premiumAmount = insuredDto.getPlanPremiumDetail().getPremiumAmount().divide(new BigDecimal(insuredDto.getNoOfAssured()));
+                premium = premiumAmount.toPlainString();
+            }
+            return premium;
         }
 
         @Override
@@ -751,7 +756,12 @@ public enum GHInsuredExcelHeader {
 
         @Override
         public String getAllowedValue(GHInsuredDto.GHInsuredDependentDto insuredDependentDto) {
-            return insuredDependentDto.getPlanPremiumDetail().getPremiumAmount() != null ? insuredDependentDto.getPlanPremiumDetail().getPremiumAmount().toString() : "";
+            String premium = insuredDependentDto.getPlanPremiumDetail().getPremiumAmount() != null ? insuredDependentDto.getPlanPremiumDetail().getPremiumAmount().toString() : "";
+            if (insuredDependentDto.getPlanPremiumDetail().getPremiumAmount() != null && insuredDependentDto.getNoOfAssured() != null) {
+                BigDecimal premiumAmount = insuredDependentDto.getPlanPremiumDetail().getPremiumAmount().divide(new BigDecimal(insuredDependentDto.getNoOfAssured()));
+                premium = premiumAmount.toPlainString();
+            }
+            return premium;
         }
 
         @Override

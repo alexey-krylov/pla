@@ -17,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
@@ -73,7 +74,12 @@ public class GLInsuredExcelGenerator {
             int indexOfOptionalCoveragePremium = headers.indexOf((AppConstants.OPTIONAL_COVERAGE_HEADER + indexOfCoveragePremiumDetail) + " " + AppConstants.PREMIUM_CELL_HEADER_NAME);
             excelDataMap.put(indexOfOptionalCoverage, coveragePremiumDetail.getCoverageCode());
             excelDataMap.put(indexOfOptionalCoverageSA, coveragePremiumDetail.getSumAssured() != null ? coveragePremiumDetail.getSumAssured().toString() : "");
-            excelDataMap.put(indexOfOptionalCoveragePremium, coveragePremiumDetail.getPremium() != null ? coveragePremiumDetail.getPremium().toString() : "");
+            String coveragePremium = coveragePremiumDetail.getPremium() != null ? coveragePremiumDetail.getPremium().toString() : "";
+            if (coveragePremiumDetail.getPremium() != null && insuredDto.getNoOfAssured() != null) {
+                BigDecimal coveragePremiumAmount = coveragePremiumDetail.getPremium().divide(new BigDecimal(insuredDto.getNoOfAssured()));
+                coveragePremium = coveragePremiumAmount.toPlainString();
+            }
+            excelDataMap.put(indexOfOptionalCoveragePremium, coveragePremium);
         });
 
         List<Map<Integer, String>> dependentDetailExcelRowData = insuredDto.getInsuredDependents().stream().map(new Function<InsuredDto.InsuredDependentDto, Map<Integer, String>>() {
@@ -102,7 +108,12 @@ public class GLInsuredExcelGenerator {
             int indexOfOptionalCoveragePremium = headers.indexOf((AppConstants.OPTIONAL_COVERAGE_HEADER + indexOfCoveragePremiumDetail) + " " + AppConstants.PREMIUM_CELL_HEADER_NAME);
             excelDataMap.put(indexOfOptionalCoverage, coveragePremiumDetail.getCoverageCode());
             excelDataMap.put(indexOfOptionalCoverageSA, coveragePremiumDetail.getSumAssured() != null ? coveragePremiumDetail.getSumAssured().toString() : "");
-            excelDataMap.put(indexOfOptionalCoveragePremium, coveragePremiumDetail.getPremium() != null ? coveragePremiumDetail.getPremium().toString() : "");
+            String coveragePremium = coveragePremiumDetail.getPremium() != null ? coveragePremiumDetail.getPremium().toString() : "";
+            if (coveragePremiumDetail.getPremium() != null && insuredDependentDto.getNoOfAssured() != null) {
+                BigDecimal coveragePremiumAmount = coveragePremiumDetail.getPremium().divide(new BigDecimal(insuredDependentDto.getNoOfAssured()));
+                coveragePremium = coveragePremiumAmount.toPlainString();
+            }
+            excelDataMap.put(indexOfOptionalCoveragePremium, coveragePremium);
         });
         return excelDataMap;
     }
