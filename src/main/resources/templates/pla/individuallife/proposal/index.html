@@ -6,23 +6,7 @@
 </head>
 <body>
 <div th:include="fragments/common :: bodyHeader" th:remove="tag"/>
-<script>
-    requirejs.config({
-        paths: {
-            ilproposal_common: '/pla/js/proposal/individualLife/proposal.js?t=1221',
-            ilproposal: '/pla/js/proposal/individualLife/createProposal.js?t=1221'
-        },
-        "shim": {"ilproposal": ["angular", "ilproposal_common"]}
-    });
-    requirejs(['main'], function () {
-        require(['ilproposal', 'jquery'], function (app, $) {
-            /*angular.bootstrap(document, ['createProposal']);*/
-        });
-    });
-
-</script>
 <div class="container fuelux">
-    <ng-view>
         <form method="post" action="/pla/individuallife/proposal" novalidate="true" name="proposalForm"
               id="proposalForm">
             <div class="row well well-sm" style="margin: 0;">
@@ -84,7 +68,7 @@
                                 <a type="button" class="btn btn-default btn-sm btn-disabled" disabled="disabled"
                                    onclick="">View</a>
                                 <a type="button" class="btn btn-default btn-sm btn-disabled"
-                                   href="proposal/createProposalForm">Create</a>
+                                   href="proposal/edit">Create</a>
                             </div>
                         </div>
                     </div>
@@ -121,7 +105,6 @@
                 </div>
             </div>
         </div>
-    </ng-view>
 </div>
 <footer class="footer" th:include="fragments/common :: footer"></footer>
 </body>

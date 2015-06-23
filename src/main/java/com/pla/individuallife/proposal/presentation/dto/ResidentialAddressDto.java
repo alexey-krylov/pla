@@ -21,4 +21,5 @@ private String province;
 private String town;
 private int postalCode;
 private long homePhone;
+private String emailAddress;
         }

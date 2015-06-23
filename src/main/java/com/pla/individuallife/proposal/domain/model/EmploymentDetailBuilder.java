@@ -1,12 +1,12 @@
 package com.pla.individuallife.proposal.domain.model;
 
-import org.joda.time.LocalDate;
+import org.joda.time.DateTime;
 
 public class EmploymentDetailBuilder {
     private String occupationId;
     private String occupationClass;
     private String employer;
-    private LocalDate employmentDate;
+    private DateTime employmentDate;
     private String employmentTypeId;
     private long workPhone;
     private Address address;
@@ -26,7 +26,7 @@ public class EmploymentDetailBuilder {
         return this;
     }
 
-    public EmploymentDetailBuilder withEmploymentDate(LocalDate employmentDate) {
+    public EmploymentDetailBuilder withEmploymentDate(DateTime employmentDate) {
         this.employmentDate = employmentDate;
         return this;
     }

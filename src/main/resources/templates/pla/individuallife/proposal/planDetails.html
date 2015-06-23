@@ -8,15 +8,15 @@
             <div class="col-md-6">
                 <div class="form-group">
                     <label class="control-label">Plan</label>
-                    <input type="text" class="form-control input-sm" name="plan"/>
+                    <input type="text" class="form-control input-sm" name="plan" ng-model="proposalPlanDetail.plan"/>
                 </div>
                 <div class="form-group">
                     <label class="control-label">Policy Term</label>
-                    <input type="text" class="form-control input-sm" name="policyTerm"/>
+                    <input type="text" class="form-control input-sm" name="policyTerm" ng-model="proposalPlanDetail.policyterm"/>
                 </div>
                 <div class="form-group">
                     <label class="control-label">Riders Applied For</label>
-                    <input type="text" class="form-control input-sm" name="ridersAppliedFor"/>
+                    <input type="text" class="form-control input-sm" name="ridersAppliedFor" ng-model="proposalPlanDetail.ridersapplied"/>
                 </div>
                 <table class="table table-bordered">
                     <thead>
@@ -37,11 +37,11 @@
             <div class="col-md-6">
                 <div class="form-group">
                     <label class="control-label">Sum Assured</label>
-                    <input type="text" class="form-control input-sm" name="sumAssured"/>
+                    <input type="text" class="form-control input-sm" name="sumAssured" ng-model="proposalPlanDetail.sumassured"/>
                 </div>
                 <div class="form-group">
                     <label class="control-label">Premium Payment Term</label>
-                    <input type="text" class="form-control input-sm" name="plan"/>
+                    <input type="text" class="form-control input-sm" name="plan" ng-model="proposalPlanDetail.premiumpaymentterm"/>
                 </div>
             </div>
         </accordion-group>
@@ -54,7 +54,9 @@
             </accordion-heading>
             <div class="row" style="margin: 0px">
                 <div class="col-md-12">
-                    <button type="button" class="btn btn-default btn-xs pull-right" ng-click="openBeneficiaryModal()" style="margin-bottom: 5px"><strong>Add Beneficiary</strong></button>
+                    <button type="button" class="btn btn-default btn-xs pull-right"
+                            data-toggle="modal" data-target="#beneficialModal"
+                            style="margin-bottom: 5px"><strong>Add Beneficiary</strong></button>
                     <table class="table table-bordered">
                         <thead>
                         <tr>
@@ -69,9 +71,23 @@
                             </th>
                         </tr>
                         </thead>
+                        <!--<tbody>
+                            <tr ng-repeat="beneficiary in beneficiaries">
+                                <td></td>
+                            </tr>
+                        </tbody>-->
                     </table>
                 </div>
             </div>
         </accordion-group>
     </accordion>
+    <div class="row">
+        <div class="col-sm-6">
+            <button type="button" class="btn btn-default btn-sm">Cancel</button>
+        </div>
+        <div class="col-sm-6">
+            <button type="button" class="btn btn-default btn-sm" style="float: right" ng-click="savePlanDetail()">Save</button>
+        </div>
+    </div>
 </ng-form>
+

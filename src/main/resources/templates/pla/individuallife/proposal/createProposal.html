@@ -1,61 +1,156 @@
-<nth-alert></nth-alert>
-<form name="createProposal">
-    <div class="wizard fuelux-wizard" selected-item="selectedWizard">
-    <ul class="steps" style="margin-left: 0">
-        <li data-step="1">
-            <span class="badge badge-info">A</span><span class="chevron"></span>
-        </li>
-        <li data-step="2">
-            <span class="badge badge-info">B</span><span class="chevron"></span>
-        </li>
-        <li data-step="3">
-            <span class="badge badge-info">C</span><span class="chevron"></span>
-        </li>
-        <li data-step="4">
-            <span class="badge badge-info">D</span><span class="chevron"></span>
-        </li>
-        <li data-step="5">
-            <span class="badge badge-info">E</span><span class="chevron"></span>
-        </li>
-        <li data-step="6">
-            <span class="badge badge-info">F</span><span class="chevron"></span>
-        </li>
-        <li data-step="7">
-            <span class="badge badge-info">G</span><span class="chevron"></span>
-        </li>
-        <li data-step="8">
-            <span class="badge badge-info">H</span><span class="chevron"></span>
-        </li>
-    </ul>
-    <div class="actions">
-        <button type="button" class="btn btn-default btn-prev" disabled="disabled"><span class="glyphicon glyphicon-arrow-left"></span>Prev</button>
-        <button type="button" class="btn btn-default btn-next">Next<span class="glyphicon glyphicon-arrow-right"></span></button>
-    </div>
-    <div class="step-content">
-        <div class="step-pane" data-step="1">
-            <ng-include src="resources.proposedAssuredUrl | getTrustedUrl"></ng-include>
-        </div>
-        <div class="step-pane" data-step="2">
-            <ng-include src="resources.proposerDetails | getTrustedUrl"></ng-include>
-        </div>
-        <div class="step-pane" data-step="3">
-            <ng-include src="resources.planDetails | getTrustedUrl"></ng-include>
-        </div>
-        <div class="step-pane" data-step="4">
-            <ng-include src="resources.generalDetails | getTrustedUrl"></ng-include>
-        </div>
-        <div class="step-pane" data-step="5">
-            <ng-include src="resources.compulsoryHealthDetailsPart1 | getTrustedUrl"></ng-include>
-        </div>
-        <div class="step-pane" data-step="6">
-            <ng-include src="resources.compulsoryHealthDetailsPart2 | getTrustedUrl"></ng-include>
-        </div>
-        <div class="step-pane" data-step="7">
-            <ng-include src="resources.familyHabitAndBuild | getTrustedUrl"></ng-include>
-        </div>
-        <div class="step-pane" data-step="8">
-            <ng-include src="resources.additionalDetail | getTrustedUrl"></ng-include>
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head th:include="fragments/common :: headTag">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <title></title>
+</head>
+<body>
+<div th:include="fragments/common :: bodyHeader" th:remove="tag"/>
+<script>
+    requirejs.config({
+         paths: {
+         ilproposal_common: '/pla/js/proposal/individuallife/proposal.js?t=11221',
+         ilproposal: '/pla/js/proposal/individuallife/createProposal.js?t=12121'
+         },
+         "shim": {"ilproposal": ["angular", "ilproposal_common"]}
+    });
+    requirejs(['main'], function () {
+        require(['ilproposal', 'jquery'], function (app, $) {
+            angular.bootstrap(document, ['createProposal']);
+        });
+    });
+
+</script>
+<div class="container fuelux" ng-controller="createProposalCtrl">
+        <nth-alert></nth-alert>
+        <form>
+            <div class="wizard fuelux-wizard" selected-item="selectedWizard">
+                <ul class="steps" style="margin-left: 0">
+                    <li data-step="1">
+                        <span class="badge badge-info">A</span><span class="chevron"></span>
+                    </li>
+                    <li data-step="2">
+                        <span class="badge badge-info">B</span><span class="chevron"></span>
+                    </li>
+                    <li data-step="3">
+                        <span class="badge badge-info">C</span><span class="chevron"></span>
+                    </li>
+                    <li data-step="4">
+                        <span class="badge badge-info">D</span><span class="chevron"></span>
+                    </li>
+                    <li data-step="5">
+                        <span class="badge badge-info">E</span><span class="chevron"></span>
+                    </li>
+                    <li data-step="6">
+                        <span class="badge badge-info">F</span><span class="chevron"></span>
+                    </li>
+                    <li data-step="7">
+                        <span class="badge badge-info">G</span><span class="chevron"></span>
+                    </li>
+                    <li data-step="8">
+                        <span class="badge badge-info">H</span><span class="chevron"></span>
+                    </li>
+                    <!--<li data-step="9">
+                        <span class="badge badge-info">I</span><span class="chevron"></span>
+                    </li>-->
+                </ul>
+                <div class="actions">
+                    <button type="button" class="btn btn-default btn-prev" disabled="disabled"><span class="glyphicon glyphicon-arrow-left"></span>Prev</button>
+                    <button type="button" class="btn btn-default btn-next">Next<span class="glyphicon glyphicon-arrow-right"></span></button>
+                </div>
+                <div class="step-content">
+                    <div class="step-pane" data-step="1">
+                        <ng-include src="resources.proposedAssuredUrl | getTrustedUrl"></ng-include>
+                    </div>
+                    <div class="step-pane" data-step="2">
+                        <ng-include src="resources.proposerDetails | getTrustedUrl"></ng-include>
+                    </div>
+                    <div class="step-pane" data-step="3">
+                        <ng-include src="resources.planDetails | getTrustedUrl"></ng-include>
+                    </div>
+                    <div class="step-pane" data-step="4">
+                        <ng-include src="resources.generalDetails | getTrustedUrl"></ng-include>
+                    </div>
+                    <div class="step-pane" data-step="5">
+                        <ng-include src="resources.compulsoryHealthDetailsPart1 | getTrustedUrl"></ng-include>
+                    </div>
+                    <div class="step-pane" data-step="6">
+                        <ng-include src="resources.compulsoryHealthDetailsPart2 | getTrustedUrl"></ng-include>
+                    </div>
+                    <div class="step-pane" data-step="7">
+                        <ng-include src="resources.familyHabitAndBuild | getTrustedUrl"></ng-include>
+                    </div>
+                    <div class="step-pane" data-step="8">
+                        <ng-include src="resources.additionalDetail | getTrustedUrl"></ng-include>
+                    </div>
+                </div>
+            </div>
+        </form>
+
+
+
+    <div class="modal fade" id="beneficialModal" tabindex="-1" role="dialog" aria-labelledby="beneficialModal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="modal-title">Beneficiary Details</h3>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="control-label">Title</label>
+                                <select class="form-control input-sm" name="beneficiaryTitle" ng-model="beneficiary.title" ng-options="title for title in titleList">
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label">First Name</label>
+                                <input type="text" class="form-control input-sm" name="beneficiaryFirstName" ng-model="beneficiary.firstName"/>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label">NRC</label>
+                                <input type="text" class="form-control input-sm" name="beneficiaryNrc" ng-model="beneficiary.nrc"/>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label">Age</label>
+                                <input type="text" class="form-control input-sm" name="beneficiaryAge" ng-model="beneficiary.age" ng-readonly="true"/>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label">Relationship To Life Assured</label>
+                                <input type="text" class="form-control input-sm" name="relationship" ng-model="beneficiary.relationship"/>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="control-label">Surname</label>
+                                <input type="text" class="form-control input-sm" name="beneficiarySurname" ng-model="beneficiary.surname"/>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label">Date Of Birth</label>
+                                <input type="text" class="form-control input-sm" name="dob" ng-model="beneficiary.dob"/>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label">Sex</label>
+                                <select type="text" class="form-control input-sm" name="sex" ng-model="beneficiary.sex" ng-options="gender.code as gender.description for gender in genderList"></select>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label">Share %</label>
+                                <select type="text" class="form-control input-sm" name="share" ng-model="beneficiary.share">
+                                    <option value="15">Select One</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-default" data-dismiss="modal" ng-click="addBeneficiary(beneficiary)">Add this</button>
+                    <button class="btn btn-default" data-dismiss="modal">Cancel</button>
+                </div>
+            </div>
         </div>
     </div>
 </div>
-</form>
+<footer class="footer" th:include="fragments/common :: footer"></footer>
+
+</body>
+</html>

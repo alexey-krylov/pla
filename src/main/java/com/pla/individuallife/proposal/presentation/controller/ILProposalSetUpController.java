@@ -202,7 +202,7 @@ public class ILProposalSetUpController {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.addObject("searchResult", ilQuotationService.searchQuotation(searchIlQuotationDto));
         modelAndView.addObject("searchCriteria", searchIlQuotationDto);
-        modelAndView.setViewName("pla/individuallife/proposal/createProposal");
+        modelAndView.setViewName("pla/individuallife/proposal/searchquotationforilproposal");
         return modelAndView;
     }
 

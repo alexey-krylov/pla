@@ -1,112 +1,193 @@
 angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute', 'commonServices', 'ngMessages'])
-    .controller('createProposalCtrl', ['$scope', 'resources', '$bsmodal','$http',
-        'globalConstants', 'ProposalService', 'employmentType', 'occupations', 'provinces',
-        function ($scope, resources, $bsmodal,$http, globalConstants, ProposalService, employmentTypes, occupations, provinces) {
+    .controller('createProposalCtrl', ['$scope', 'resources', '$bsmodal', '$http',
+        'globalConstants', 'ProposalService',
+        function ($scope, resources, $bsmodal, $http, globalConstants, ProposalService) {
 
             console.log('create proposal');
-            $scope.employmentTypes = employmentTypes;
-            $scope.occupations = occupations;
-            $scope.provinces = provinces;
+            $scope.employmentTypes = [];
+            $scope.occupations = [];
+            $scope.provinces = [];
+
+            $http.get('/pla/individuallife/proposal/getAllOccupation').success(function (response, status, headers, config) {
+                $scope.occupations = response;
+            }).error(function (response, status, headers, config) {
+            });
+            $http.get('/pla/individuallife/proposal/getAllEmploymentType').success(function (response, status, headers, config) {
+                $scope.employmentTypes = response;
+            }).error(function (response, status, headers, config) {
+            });
+            $http.get('/pla/core/master/getgeodetail').success(function (response, status, headers, config) {
+                $scope.provinces = response;
+            }).error(function (response, status, headers, config) {
+            });
 
             $scope.titles = globalConstants.title;
             $scope.part = {
                 isPart: true
             };
-            $scope.selectedWizard = 5;
+
+            $scope.selectedWizard = 3;
             $scope.proposedAssured = {
-                title: "Mr.",
-                firstName: "Proposed Firstname",
-                surname: "Proposed Surname",
-                otherName: "OtherName",
-                nrc: "NRC0001",
-                dateOfBirth: new Date('1978-12-12'),
-                gender: "MALE",
-                mobileNumber: "9343044175",
-                emailAddress: "someAddress@gmail.com",
-                maritalStatus: "MARRIED"
-            };
-            $scope.proposedAssuredSpouse = {
-                "firstName": "Proposed Spouse Firstname",
-                "surname": "Proposed Spouse Surname",
+                "title": "Mr.",
+                "firstName": "Proposed Firstname",
+                "surname": "Proposed Surname",
+                "otherName": "OtherName",
+               "nrc": "NRC0001",
+                "dateOfBirth": new Date('1978-12-12'),
+                "gender": "MALE",
                 "mobileNumber": "9343044175",
-                "emailAddress": 'spouse@mail.com'
-            };
-            $scope.paemployment = {
-                "occupation": "Advocates",
-                "employer": "Nthdimenzion Solutions Pvt Limited",
-                "employmentDate": "12/12/008",
-                "employmentType": 1,
-                "address1": "Address Line 1",
-                "province": "PR-CEN",
-                "town": "CI-CHIB"
+                "emailAddress": "someAddress@gmail.com",
+                "maritalStatus": "MARRIED",
+                "isProposer":null
             };
 
-            $scope.paresidential = {
-                "address1": "Address Line 1",
-                "province": "PR-CEN",
-                "town": "CI-CHIB"
+            $scope.beneficiaries = [];
+            $scope.titleList = globalConstants.title;
+            $scope.genderList = globalConstants.gender;
+
+            $scope.addBeneficiary = function (beneficiary){
+                console.log('Inside addBeneficiary Method..');
+                $scope.beneficiaries.unshift(beneficiary);
+                $('#beneficiaryModal').modal('hide');
             };
+            $scope.proposalPlanDetail =
+            {
+                "plan":null,
+                "policyterm":null,
+                "ridersapplied":null,
+                "sumassured":null,
+                "premiumpaymentterm":null
+            }
+
+            $scope.savePlanDetail=function()
+            {
+                console.log('Save');
+                var request = {
+                    "proposalPlanDetail": $scope.proposalPlanDetail
+                };
+                request = {proposalPlanDetail: request};
+                request = angular.extend($scope.beneficiaries, request);
+                console.log('proposalPlanDetail' + JSON.stringify(request));
+
+            }
 
             $scope.$on('actionclicked.fu.wizard', function (name, event, data) {
                 if (data.step == 1) {
                 }
             });
 
-            $scope.proposer = {};
+            $scope.proposer = {
+                "title": "Mr.",
+                "firstName": "Proposed Firstname",
+                "surname": "Proposed Surname",
+                "otherName": "OtherName",
+                "nrc": "NRC0001",
+                "dateOfBirth": new Date('1978-12-12'),
+                "gender": "MALE",
+                "mobileNumber": "9343044175",
+                "emailAddress": "someAddress@gmail.com",
+                "maritalStatus": "MARRIED"
+            };
             $scope.proposerSpouse = {};
             $scope.proposerEmployment = {};
             $scope.proposerResidential = {};
 
-            $scope.familyPersonalDetail={isPregnant:null,pregnancyMonth:null};
-             $scope.familyHistory={father:{},mother:{},brother:{},sister:{},question_16:{}};
-             $scope.habit={question_17:{}, question_18:{}, question_19:{}, question_20:{}};
-             $scope.build={question_21:{}};
+            $scope.spouse={};
+            $scope.employment={};
+            $scope.residentialAddress={};
+
+            $scope.familyPersonalDetail = {isPregnant: null, pregnancyMonth: null};
+            $scope.familyHistory = {father: {}, mother: {}, brother: {}, sister: {}, question_16: {}};
+            $scope.habit = {question_17: {}, question_18: {}, question_19: {}, question_20: {}};
+            $scope.build = {question_21: {}};
 
 
-            $scope.saveFamilyHistory = function (){
-               console.log($scope.isPregnant);
-                 var request = {"familyHistory":$scope.familyHistory,
-                     "habit":$scope.habit,
-                 "build":$scope.build};
+            $scope.saveFamilyHistory = function () {
+                console.log($scope.isPregnant);
+                var request = {
+                    "familyHistory": $scope.familyHistory,
+                    "habit": $scope.habit,
+                    "build": $scope.build
+                };
 
-                request = angular.extend($scope.familyPersonalDetail,request);4
-                request = {familyPersonalDetail:request};
-                console.log('request '+JSON.stringify(request));
-                $http.post('proposal/createQuestion/55800602db324d0f4ae21254',request);
+                request = angular.extend($scope.familyPersonalDetail, request);
+                request = {familyPersonalDetail: request};
+                console.log('request ' + JSON.stringify(request));
+                $http.post('proposal/createQuestion/55800602db324d0f4ae21254', request);
             }
 
-            $scope.$watchGroup(['paemployment.province', 'paresidential.province', 'proposerEmployment.province', 'proposerResidential.province'], function (newVal, oldVal) {
+            $scope.$watchGroup(['employment.province', 'residentialAddress.province', 'proposerEmployment.province', 'proposerResidential.province'], function (newVal, oldVal) {
                 if (!newVal) return;
 
                 if (newVal[0]) {
-                    var provinceDetails = _.findWhere(provinces, {provinceId: newVal[0]});
-                    $scope.proposedAssuredEmploymentCities = provinceDetails.cities;
+                    var provinceDetails = _.findWhere($scope.provinces, {provinceId: newVal[0]});
+                    if (provinceDetails)
+                        $scope.proposedAssuredEmploymentCities = provinceDetails.cities;
                 }
                 if (newVal[1]) {
-                    var provinceDetails = _.findWhere(provinces, {provinceId: newVal[1]});
-                    $scope.proposedAssuredResidentialCities = provinceDetails.cities;
+                    var provinceDetails = _.findWhere($scope.provinces, {provinceId: newVal[1]});
+                    if (provinceDetails)
+                        $scope.proposedAssuredResidentialCities = provinceDetails.cities;
                 }
                 if (newVal[2]) {
                     console.log('employment ' + newVal[2]);
-                    var provinceDetails = _.findWhere(provinces, {provinceId: newVal[2]});
-                    $scope.proposerEmploymentCities = provinceDetails.cities;
+                    var provinceDetails = _.findWhere($scope.provinces, {provinceId: newVal[2]});
+                    if (provinceDetails)
+                        $scope.proposerEmploymentCities = provinceDetails.cities;
                 }
                 if (newVal[3]) {
                     console.log('residential ' + newVal[3]);
-                    var provinceDetails = _.findWhere(provinces, {provinceId: newVal[3]});
-                    $scope.proposerResidentialCities = provinceDetails.cities;
+                    var provinceDetails = _.findWhere($scope.provinces, {provinceId: newVal[3]});
+                    if (provinceDetails)
+                        $scope.proposerResidentialCities = provinceDetails.cities;
                 }
             });
 
 
-            $scope.saveProposedAssuredDetails = function (proposedAssuredAsProposer) {
+            $scope.saveProposedAssuredDetails = function () {
                 //ProposalService.saveProposedAssured($scope.proposedAssured, $scope.proposedAssuredSpouse, $scope.paemployment, $scope.paresidential, proposedAssuredAsProposer, null);
-                if (proposedAssuredAsProposer) {
+
+              /*if (proposedAssuredAsProposer) {
                     $scope.proposer = angular.copy($scope.proposedAssured);
-                    $scope.proposerSpouse = angular.copy($scope.proposedAssuredSpouse);
-                    $scope.proposerEmployment = angular.copy($scope.paemployment);
-                    $scope.proposerResidential = angular.copy($scope.paresidential);
-                }
+                    $scope.proposerSpouse = angular.copy($scope.spouse);
+                    $scope.proposerEmployment = angular.copy($scope.employment);
+                    $scope.proposerResidential = angular.copy($scope.residentialAddress);
+
+
+                  var prorequest={
+                      "spouse": $scope.proposerSpouse,
+                      "employment": $scope.proposerEmployment,
+                      "residentialAddress": $scope.proposerResidential
+                  };
+                  prorequest=angular.extend($scope.proposer,prorequest);
+                  prorequest={proposer:prorequest};
+                  console.log('ProRequest' +JSON.stringify(prorequest));
+                } */
+
+                var request = {
+                    "spouse": $scope.spouse,
+                    "employment": $scope.employment,
+                    "residentialAddress": $scope.residentialAddress
+                };
+
+                request = angular.extend($scope.proposedAssured, request);
+                request = {proposedAssured: request};
+                console.log('request ' + JSON.stringify(request));
+
+                //$http.post('proposal/create', request);
+            };
+
+            $scope.saveProposerDetails=function(){
+                //console.log('Save method of Proposer');
+
+                var prorequest={
+                    "spouse": $scope.proposerSpouse,
+                    "employment": $scope.proposerEmployment,
+                    "residentialAddress": $scope.proposerResidential
+                };
+                prorequest=angular.extend($scope.proposer,prorequest);
+                prorequest={proposer:prorequest};
+                console.log('ProRequest' +JSON.stringify(prorequest));
             };
 
             $scope.$watch('proposedAssuredAsProposer', function (newval, oldval) {
@@ -155,14 +236,6 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
                 });
             };
 
-            $scope.openBeneficiaryModal = function () {
-                var beneficiaryModalInstance = $bsmodal.open({
-                    templateUrl: resources.beneficiaryModal,
-                    controller: 'addBeneficiaryCtrl',
-                    backdrop: 'static'
-                });
-            };
-
             $scope.hasAccordionError = function (form) {
                 return false;
             };
@@ -177,12 +250,12 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
                  return false;
                  }*/
                 return true;
-            }
+            };
 
+            $scope.openBeneficiaryModal
 
         }])
-    .
-    controller('modalCtrl', ['$scope', '$modalInstance', function ($scope, $modalInstance) {
+    .controller('modalCtrl', ['$scope', '$modalInstance', function ($scope, $modalInstance) {
         $scope.addAgent = function () {
             $modalInstance.close([]);
         };
@@ -198,62 +271,27 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
             $modalInstance.dismiss('cancel');
         };
     }])
-    .controller('addBeneficiaryCtrl', ['$scope', '$modalInstance', 'globalConstants', function ($scope, $modalInstance, globalConstants) {
-        $scope.titleList = globalConstants.title;
-        $scope.genderList = globalConstants.gender;
-        $scope.addBeneficiary = function (beneficiary) {
-            $modalInstance.close(beneficiary);
-        };
-        $scope.cancel = function () {
-            $modalInstance.dismiss('cancel');
-        };
-    }])
+
     .config(["$routeProvider", "$provide", function ($routeProvider, $provide) {
-        $routeProvider.when('/', {
-            templateUrl: 'proposal/createProposalForm',
+        $routeProvider.when('', {
+            templateUrl: 'editsdasfsa',
             controller: 'createProposalCtrl',
             resolve: {
-                occupations: ['$q', '$http', function ($q, $http) {
-                    var deferred = $q.defer();
-                    $http.get('/pla/individuallife/proposal/getAllOccupation').success(function (response, status, headers, config) {
-                        deferred.resolve(response);
-                    }).error(function (response, status, headers, config) {
-                        deferred.reject();
-                    });
-                    return deferred.promise;
-                    ;
-                }],
-                employmentType: ['$q', '$http', function ($q, $http) {
-                    var deferred = $q.defer();
-                    $http.get('/pla/individuallife/proposal/getAllEmploymentType').success(function (response, status, headers, config) {
-                        deferred.resolve(response);
-                    }).error(function (response, status, headers, config) {
-                        deferred.reject();
-                    });
-                    return deferred.promise;
-                    ;
-                }],
-                provinces: ['$q', '$http', function ($q, $http) {
-                    var deferred = $q.defer();
-                    $http.get('/pla/core/master/getgeodetail').success(function (response, status, headers, config) {
-                        deferred.resolve(response)
-                    }).error(function (response, status, headers, config) {
-                        deferred.reject();
-                    });
-                    return deferred.promise;
-                }],
+
                 planList: ['$q', '$http', function ($q, $http) {
                     var deferred = $q.defer();
                     /* $http.get('/pla/individuallife/proposal/getAllindividuallifePlans').success(function (response, status, headers, config) {
-                        deferred.resolve(response)
-                    }).error(function (response, status, headers, config) {
-                        deferred.reject();
-                    });
+                     deferred.resolve(response)
+                     }).error(function (response, status, headers, config) {
+                     deferred.reject();
+                     });
                      return deferred.promise;*/
                     return [];
                 }]
             }
         });
+        $routeProvider.otherwise({redirectTo: '/plan'});
+
         /*$provide.decorator('accordionGroupDirective', ['$delegate', function($delegate) {
          var ngModel = $delegate[0];
          ngModel.templateUrl = 'accordionGroup.html';
@@ -281,6 +319,7 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
     })
     .filter('getTrustedUrl', ['$sce', function ($sce) {
         return function (url) {
+            console.log('getTrustedUrl' + url);
             return $sce.getTrustedResourceUrl(url);
         }
     }]);

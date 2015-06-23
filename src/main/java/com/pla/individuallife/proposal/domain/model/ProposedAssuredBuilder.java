@@ -20,6 +20,13 @@ public class ProposedAssuredBuilder {
     private ResidentialAddress residentialAddress;
     private EmploymentDetail employmentDetail;
     private boolean isProposer;
+    private String otherName;
+
+    public ProposedAssuredBuilder withOtherName(String otherName)
+    {
+        this.otherName=otherName;
+        return this;
+    }
 
     public ProposedAssuredBuilder withTitle(String title) {
         this.title = title;
@@ -35,6 +42,7 @@ public class ProposedAssuredBuilder {
         this.surname = surname;
         return this;
     }
+
 
     public ProposedAssuredBuilder withNrc(String nrc) {
         this.nrc = nrc;
@@ -98,6 +106,6 @@ public class ProposedAssuredBuilder {
 
     public ProposedAssured createProposedAssured() {
 
-        return new ProposedAssured(title, firstName, surname, nrc, dateOfBirth, gender, mobileNumber, emailAddress, maritalStatus, spouseFirstName, spouseLastName, spouseEmailAddress, employmentDetail, residentialAddress, isProposer);
+        return new ProposedAssured(title, firstName, surname, nrc, dateOfBirth, gender, mobileNumber, emailAddress, maritalStatus, spouseFirstName, spouseLastName, spouseEmailAddress, employmentDetail, residentialAddress, isProposer,otherName);
     }
 }

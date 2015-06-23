@@ -48,13 +48,19 @@ public class ProposalController {
         return modelAndView;
     }
 
-    @RequestMapping(method = RequestMethod.GET, value = "/createProposalForm")
+    @RequestMapping(method = RequestMethod.GET, value = "/edit")
     public ModelAndView proposalForm() {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("pla/individuallife/proposal/createProposal");
         return modelAndView;
     }
 
+    @RequestMapping(method = RequestMethod.GET, value = "/search")
+    public ModelAndView searchQuotationForm() {
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("pla/individuallife/proposal/searchquotationforilproposal");
+        return modelAndView;
+    }
     @RequestMapping(method = RequestMethod.GET, value = "/getAllOccupation")
     @ResponseBody
     public List<Map<String, Object>> getAllOccupationClassification() {

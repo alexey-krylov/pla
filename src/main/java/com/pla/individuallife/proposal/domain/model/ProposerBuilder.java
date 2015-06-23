@@ -1,14 +1,23 @@
 package com.pla.individuallife.proposal.domain.model;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.pla.sharedkernel.domain.model.Gender;
 import com.pla.sharedkernel.domain.model.MaritalStatus;
+import org.hibernate.annotations.Type;
 import org.joda.time.DateTime;
+import org.joda.time.LocalDate;
+import org.nthdimenzion.presentation.LocalJodaDateDeserializer;
+import org.nthdimenzion.presentation.LocalJodaDateSerializer;
 
 public class ProposerBuilder {
     private String title;
     private String firstName;
     private String surname;
     private String nrc;
+    @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
+    private DateTime employmentDate;
+    @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
     private DateTime dateOfBirth;
     private Gender gender;
     private String mobileNumber;
@@ -19,6 +28,13 @@ public class ProposerBuilder {
     private String spouseEmailAddress;
     private EmploymentDetail employmentDetail;
     private ResidentialAddress residentialAddress;
+    private String otherName;
+
+    public ProposerBuilder withOtherName(String otherName)
+    {
+        this.otherName=otherName;
+        return this;
+    }
 
     public ProposerBuilder withTitle(String title) {
         this.title = title;
@@ -91,6 +107,6 @@ public class ProposerBuilder {
     }
 
     public Proposer createProposer() {
-        return new Proposer(title, firstName, surname, nrc, dateOfBirth, gender, mobileNumber, emailAddress, maritalStatus, spouseFirstName, spouseLastName, spouseEmailAddress, employmentDetail, residentialAddress);
+        return new Proposer(title, firstName, surname, nrc, dateOfBirth, gender, mobileNumber, emailAddress, maritalStatus, spouseFirstName, spouseLastName, spouseEmailAddress, employmentDetail, residentialAddress,otherName);
     }
 }

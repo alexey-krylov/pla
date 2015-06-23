@@ -20,16 +20,13 @@ import java.util.List;
 @Component
 public class ILProposalCommandHandler {
 
+    private static final Logger logger = LoggerFactory.getLogger(ILProposalCommandHandler.class);
     @Autowired
     private ProposalNumberGenerator proposalNumberGenerator;
-
     @Autowired
     private Repository<ProposalAggregate> ilProposalMongoRepository;
-
     @Autowired
     private ILQuotationFinder ilQuotationFinder;
-
-    private static final Logger logger = LoggerFactory.getLogger(ILProposalCommandHandler.class);
 
     @CommandHandler
     public void createProposal(ILCreateProposalCommand cmd) {
@@ -46,6 +43,7 @@ public class ILProposalCommandHandler {
 
     private Proposer getProposer(ILCreateProposalCommand proposalCommand) {
         Proposer proposer = new ProposerBuilder()
+                .withOtherName(proposalCommand.getProposer().getOtherName())
                 .withDateOfBirth(proposalCommand.getProposer().getDateOfBirth())
                 .withEmailAddress(proposalCommand.getProposer().getEmailAddress())
                 .withFirstName(proposalCommand.getProposer().getFirstName())
@@ -57,13 +55,15 @@ public class ILProposalCommandHandler {
                 .withMaritalStatus(proposalCommand.getProposer().getMaritalStatus())
                 .withSpouseEmailAddress(proposalCommand.getProposer().getSpouse().getEmailAddress())
                 .withSpouseFirstName(proposalCommand.getProposer().getSpouse().getFirstName())
-                .withSpouseLastName(proposalCommand.getProposer().getSpouse().getSurname())
+                .withMobileNumber(proposalCommand.getProposer().getSpouse().getMobileNumber())
+                        .withSpouseLastName(proposalCommand.getProposer().getSpouse().getSurname())
                 .withNrc(proposalCommand.getProposer().getNrc())
                 .withMaritalStatus(proposalCommand.getProposer().getMaritalStatus())
                 .withEmploymentDetail(new EmploymentDetailBuilder()
                         .withEmploymentDate(proposalCommand.getProposer().getEmployment().getEmploymentDate())
                         .withEmploymentTypeId(proposalCommand.getProposer().getEmployment().getEmploymentType())
                         .withEmployer(proposalCommand.getProposer().getEmployment().getEmployer())
+                        .withWorkPhone(proposalCommand.getProposer().getEmployment().getWorkPhone())
                         .withAddress(new AddressBuilder()
                                 .withAddress1(proposalCommand.getProposer().getEmployment().getAddress1())
                                 .withAddress2(proposalCommand.getProposer().getEmployment().getAddress2())
@@ -76,12 +76,14 @@ public class ILProposalCommandHandler {
                         .withProvince(proposalCommand.getProposer().getResidentialAddress().getProvince())
                         .withPostalCode(proposalCommand.getProposer().getResidentialAddress().getPostalCode())
                         .withTown(proposalCommand.getProposer().getResidentialAddress().getTown()).createAddress(),
-                        proposalCommand.getProposer().getResidentialAddress().getHomePhone())).createProposer();
+                        proposalCommand.getProposer().getResidentialAddress().getHomePhone(),
+                        proposalCommand.getProposer().getResidentialAddress().getEmailAddress())).createProposer();
         return proposer;
     }
 
     public ProposedAssured getProposedAssured(ILCreateProposalCommand proposalCommand) {
         ProposedAssured proposedAssured = new ProposedAssuredBuilder()
+                .withOtherName(proposalCommand.getProposedAssured().getOtherName())
                 .withTitle(proposalCommand.getProposedAssured().getTitle())
                 .withFirstName(proposalCommand.getProposedAssured().getFirstName())
                 .withSurname(proposalCommand.getProposedAssured().getSurname())
@@ -92,6 +94,7 @@ public class ILProposalCommandHandler {
                 .withEmailAddress(proposalCommand.getProposedAssured().getEmailAddress())
                 .withMaritalStatus(proposalCommand.getProposedAssured().getMaritalStatus())
                 .withSpouseFirstName(proposalCommand.getProposedAssured().getSpouse().getFirstName())
+                .withMobileNumber(proposalCommand.getProposedAssured().getSpouse().getMobileNumber())
                 .withSpouseLastName(proposalCommand.getProposedAssured().getSpouse().getSurname())
                 .withSpouseEmailAddress(proposalCommand.getProposedAssured().getSpouse().getEmailAddress())
                 .withIsProposer(proposalCommand.getProposedAssured().isProposer())
@@ -99,6 +102,7 @@ public class ILProposalCommandHandler {
                         .withEmployer(proposalCommand.getProposedAssured().getEmployment().getEmployer())
                         .withEmploymentDate(proposalCommand.getProposedAssured().getEmployment().getEmploymentDate())
                         .withEmploymentTypeId(proposalCommand.getProposedAssured().getEmployment().getEmploymentType())
+                        .withWorkPhone(proposalCommand.getProposedAssured().getEmployment().getWorkPhone())
                         .withAddress(new AddressBuilder()
                                 .withAddress1(proposalCommand.getProposedAssured().getEmployment().getAddress1())
                                 .withAddress2(proposalCommand.getProposedAssured().getEmployment().getAddress2())
@@ -111,7 +115,7 @@ public class ILProposalCommandHandler {
                         .withProvince(proposalCommand.getProposedAssured().getResidentialAddress().getProvince())
                         .withPostalCode(proposalCommand.getProposedAssured().getResidentialAddress().getPostalCode())
                         .withTown(proposalCommand.getProposedAssured().getResidentialAddress().getTown()).createAddress(),
-                        proposalCommand.getProposedAssured().getResidentialAddress().getHomePhone())).createProposedAssured();
+                        proposalCommand.getProposedAssured().getResidentialAddress().getHomePhone(), proposalCommand.getProposedAssured().getResidentialAddress().getEmailAddress())).createProposedAssured();
 
         return proposedAssured;
     }

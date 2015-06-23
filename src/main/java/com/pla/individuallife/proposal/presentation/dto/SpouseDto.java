@@ -15,6 +15,6 @@ public class SpouseDto {
 
     private String firstName ;
     private String surname;// "Proposed Spouse Surname",
-    private Long mobileNumber;
+    private String mobileNumber;
     private String emailAddress;
 }

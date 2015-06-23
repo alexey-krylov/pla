@@ -29,10 +29,11 @@ public class ProposedAssured {
     private EmploymentDetail employmentDetail;
     private ResidentialAddress residentialAddress;
     private boolean isProposer;
+    private String otherName;
 
     ProposedAssured(String title, String firstName, String surname, String nrc, DateTime dateOfBirth, Gender gender, String mobileNumber, String emailAddress,
                     MaritalStatus maritalStatus, String spouseFirstName, String spouseLastName, String spouseEmailAddress,
-                    EmploymentDetail employmentDetail, ResidentialAddress residentialAddress, boolean isProposer) {
+                    EmploymentDetail employmentDetail, ResidentialAddress residentialAddress, boolean isProposer,String otherName) {
         this.title = title;
         this.firstName = firstName;
         this.surname = surname;
@@ -48,6 +49,7 @@ public class ProposedAssured {
         this.employmentDetail = employmentDetail;
         this.residentialAddress = residentialAddress;
         this.isProposer = isProposer;
+        this.otherName=otherName;
     }
 
     public int getAgeNextBirthday() {
