@@ -71,11 +71,13 @@
                             </th>
                         </tr>
                         </thead>
-                        <!--<tbody>
+                        <tbody>
                             <tr ng-repeat="beneficiary in beneficiaries">
-                                <td></td>
+                                <td>{{beneficiary.firstName +' '+ beneficiary.surname}}</td>
+                                <td>{{beneficiary.relationship}}</td>
+                                <td>{{beneficiary.share}}</td>
                             </tr>
-                        </tbody>-->
+                        </tbody>
                     </table>
                 </div>
             </div>

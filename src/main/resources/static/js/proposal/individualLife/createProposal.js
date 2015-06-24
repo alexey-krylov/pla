@@ -26,19 +26,19 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
                 isPart: true
             };
 
-            $scope.selectedWizard = 3;
+            $scope.selectedWizard = 1;
             $scope.proposedAssured = {
                 "title": "Mr.",
                 "firstName": "Proposed Firstname",
                 "surname": "Proposed Surname",
                 "otherName": "OtherName",
-               "nrc": "NRC0001",
+                "nrc": "NRC0001",
                 "dateOfBirth": new Date('1978-12-12'),
                 "gender": "MALE",
                 "mobileNumber": "9343044175",
                 "emailAddress": "someAddress@gmail.com",
                 "maritalStatus": "MARRIED",
-                "isProposer":null
+                "isProposer": null
             };
 
             $scope.beneficiaries = [];
@@ -50,26 +50,19 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
                 $scope.beneficiaries.unshift(beneficiary);
                 $('#beneficiaryModal').modal('hide');
             };
-            $scope.proposalPlanDetail =
-            {
-                "plan":null,
-                "policyterm":null,
-                "ridersapplied":null,
-                "sumassured":null,
-                "premiumpaymentterm":null
-            }
 
+            $scope.proposalPlanDetail ={};
             $scope.savePlanDetail=function()
             {
                 console.log('Save');
                 var request = {
-                    "proposalPlanDetail": $scope.proposalPlanDetail
-                };
-                request = {proposalPlanDetail: request};
-                request = angular.extend($scope.beneficiaries, request);
-                console.log('proposalPlanDetail' + JSON.stringify(request));
+                    "proposalPlanDetail": $scope.proposalPlanDetail,
+                    "beneficiaries":$scope.beneficiaries
+                }
 
-            }
+                /*request = {proposalPlanDetail: request};*/
+                console.log('proposalPlanDetail' + JSON.stringify(request));
+            };
 
             $scope.$on('actionclicked.fu.wizard', function (name, event, data) {
                 if (data.step == 1) {
@@ -101,7 +94,6 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
             $scope.habit = {question_17: {}, question_18: {}, question_19: {}, question_20: {}};
             $scope.build = {question_21: {}};
 
-
             $scope.saveFamilyHistory = function () {
                 console.log($scope.isPregnant);
                 var request = {
@@ -115,6 +107,18 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
                 console.log('request ' + JSON.stringify(request));
                 $http.post('proposal/createQuestion/55800602db324d0f4ae21254', request);
             }
+
+            $scope.launchProposedAssuredeDate = function ($event) {
+                $event.preventDefault();
+                $event.stopPropagation();
+                $scope.launchdob1 = true;
+            };
+
+            $scope.launchProposerDate = function ($event) {
+                $event.preventDefault();
+                $event.stopPropagation();
+                $scope.launchdob1 = true;
+            };
 
             $scope.$watchGroup(['employment.province', 'residentialAddress.province', 'proposerEmployment.province', 'proposerResidential.province'], function (newVal, oldVal) {
                 if (!newVal) return;
@@ -143,6 +147,12 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
                 }
             });
 
+            $scope.agentDetails = [];
+            $scope.addAgent = function (agent){
+                console.log('Inside addagent Method..');
+                $scope.agentDetails.unshift(agent);
+                $('#agentModal').modal('hide');
+            };
 
             $scope.saveProposedAssuredDetails = function () {
                 //ProposalService.saveProposedAssured($scope.proposedAssured, $scope.proposedAssuredSpouse, $scope.paemployment, $scope.paresidential, proposedAssuredAsProposer, null);
@@ -171,14 +181,26 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
                 };
 
                 request = angular.extend($scope.proposedAssured, request);
-                request = {proposedAssured: request};
+                //request = {proposedAssured: request};
                 console.log('request ' + JSON.stringify(request));
 
+                var request1={
+                    "proposedAssured":$scope.proposedAssured,
+                    "agentCommissionDetails":$scope.agentDetails
+                }
+
+                console.log('Result ' + JSON.stringify(request1));
                 //$http.post('proposal/create', request);
+
+               /* $http.post('proposal/create', request).success(function (response, status, headers, config) {
+                 $scope.proposalId = response;
+                 console.log('proposalId : '+$scope.proposalId );
+                 }).error(function (response, status, headers, config) {
+                 });*/
             };
 
             $scope.saveProposerDetails=function(){
-                //console.log('Save method of Proposer');
+                console.log('Save method of Proposer');
 
                 var prorequest={
                     "spouse": $scope.proposerSpouse,
@@ -189,6 +211,7 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
                 prorequest={proposer:prorequest};
                 console.log('ProRequest' +JSON.stringify(prorequest));
             };
+
 
             $scope.$watch('proposedAssuredAsProposer', function (newval, oldval) {
                 console.log(' proposedAssuredAsProposer ' + newval);
@@ -317,10 +340,13 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
         familyHabitAndBuild: "/pla/individuallife/proposal/getPage/familyHabitAndBuild",
         additionalDetail: "/pla/individuallife/proposal/getPage/additionalDetail"
     })
+
+
     .filter('getTrustedUrl', ['$sce', function ($sce) {
         return function (url) {
             console.log('getTrustedUrl' + url);
             return $sce.getTrustedResourceUrl(url);
         }
     }]);
+
 

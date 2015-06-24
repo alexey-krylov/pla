@@ -21,6 +21,7 @@
     });
 
 </script>
+
 <div class="container fuelux" ng-controller="createProposalCtrl">
         <nth-alert></nth-alert>
         <form>
@@ -86,8 +87,43 @@
                 </div>
             </div>
         </form>
-
-
+    <div class="modal fade" id="agentModal" tabindex="-1" role="dialog" aria-labelledby="agentModal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="modal-title">Agent Details</h3>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group required">
+                                <label class="control-label">Agent Code</label>
+                                <input type="text" class="form-control input-sm" name="surname" ng-model="agent.agentCode"/>
+                            </div>
+                            <div class="form-group required">
+                                <label class="control-label">Commission %</label>
+                                <input type="number" max="allowedPercentage" min="0" class="form-control input-sm" name="commission" ng-model="agent.commission"/>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group required">
+                                <label class="control-label">First Name</label>
+                                <input type="text" class="form-control input-sm" name="surname"  ng-model="agent.firstName"/>
+                            </div>
+                            <div class="form-group required">
+                                <label class="control-label">Last Name</label>
+                                <input type="text" class="form-control input-sm" name="surname" ng-model="agent.lastName"/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-default" data-dismiss="modal" ng-click="addAgent(agent)">Add</button>
+                    <button class="btn btn-default" data-dismiss="modal" ng-click="cancel()">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <div class="modal fade" id="beneficialModal" tabindex="-1" role="dialog" aria-labelledby="beneficialModal">
         <div class="modal-dialog">
