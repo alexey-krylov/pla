@@ -1,9 +1,6 @@
 package com.pla.grouplife.quotation.saga;
 
 import com.google.common.collect.Lists;
-import com.pla.publishedlanguage.contract.ISMEGateway;
-import com.pla.sharedkernel.exception.ProcessInfoException;
-import com.pla.sharedkernel.domain.model.ProcessType;
 import com.pla.grouplife.quotation.application.command.ClosureGLQuotationCommand;
 import com.pla.grouplife.quotation.application.command.PurgeGLQuotationCommand;
 import com.pla.grouplife.quotation.domain.event.*;
@@ -11,6 +8,9 @@ import com.pla.grouplife.quotation.domain.model.GroupLifeQuotation;
 import com.pla.grouplife.quotation.domain.model.QuotationStatus;
 import com.pla.grouplife.quotation.repository.GlQuotationRepository;
 import com.pla.publishedlanguage.contract.IProcessInfoAdapter;
+import com.pla.publishedlanguage.contract.ISMEGateway;
+import com.pla.sharedkernel.domain.model.ProcessType;
+import com.pla.sharedkernel.exception.ProcessInfoException;
 import com.pla.sharedkernel.identifier.LineOfBusinessEnum;
 import org.axonframework.commandhandling.gateway.CommandGateway;
 import org.axonframework.eventhandling.scheduling.EventScheduler;
@@ -21,7 +21,6 @@ import org.axonframework.saga.annotation.SagaEventHandler;
 import org.axonframework.saga.annotation.StartSaga;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
-import org.nthdimenzion.common.AppConstants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -88,7 +87,6 @@ public class GroupLifeQuotationSaga extends AbstractAnnotatedSaga {
                 generatedVersionedQuotation.cancelSchedules();
             });
         }
-        smeGateway.updateOpportunityStatus(groupLifeQuotation.getOpportunityId().getOpportunityId(), AppConstants.OPPORTUNITY_CLOSE_STATUS);
     }
 
     @SagaEventHandler(associationProperty = "quotationId")
@@ -133,7 +131,7 @@ public class GroupLifeQuotationSaga extends AbstractAnnotatedSaga {
         if (!QuotationStatus.CLOSED.equals(groupLifeQuotation.getQuotationStatus())) {
             commandGateway.send(new ClosureGLQuotationCommand(event.getQuotationId()));
         }
-        if (isNotEmpty(groupLifeQuotation.getOpportunityId().getOpportunityId())) {
+        if (groupLifeQuotation.getOpportunityId() != null) {
             smeGateway.updateOpportunityStatus(groupLifeQuotation.getOpportunityId().getOpportunityId(), "");
         }
     }
@@ -145,7 +143,7 @@ public class GroupLifeQuotationSaga extends AbstractAnnotatedSaga {
             LOGGER.debug("Handling GL Quotation Closure Event .....", event);
         }
         GroupLifeQuotation groupLifeQuotation = glQuotationRepository.findOne(event.getQuotationId());
-        if (isNotEmpty(groupLifeQuotation.getOpportunityId().getOpportunityId())) {
+        if (groupLifeQuotation.getOpportunityId() != null) {
             smeGateway.updateOpportunityStatus(groupLifeQuotation.getOpportunityId().getOpportunityId(), "");
         }
     }
