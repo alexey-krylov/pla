@@ -19,7 +19,7 @@ public interface ILProposalCommandGateway {
     void createCompulsoryQuestion(ILCreateQuestionCommand questionCommand)
             throws TimeoutException, InterruptedException;
 
-    ProposalId convertToProposal(ILConvertToProposalCommand convertToProposalCommand)
-            throws TimeoutException, InterruptedException;
 
+    String updateWithPlandetail(ILProposalUpdateWithPlanAndBeneficiariesCommand updateWithPlanAndBeneficiariesCommand)
+            throws TimeoutException, InterruptedException;
 }

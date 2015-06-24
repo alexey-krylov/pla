@@ -1,15 +1,12 @@
 package com.pla.individuallife.proposal.presentation.dto;
 
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.pla.sharedkernel.domain.model.Gender;
 import com.pla.sharedkernel.domain.model.MaritalStatus;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.Type;
 import org.joda.time.DateTime;
-import org.nthdimenzion.presentation.LocalJodaDateDeserializer;
-import org.nthdimenzion.presentation.LocalJodaDateSerializer;
 
 /*import org.hibernate.validator.constraints.NotEmpty;*/
 /**
@@ -26,8 +23,7 @@ public class ProposedAssuredDto {
     private String otherName;
     private String nrc;
     private boolean isProposer;
-    @JsonDeserialize(using = LocalJodaDateDeserializer.class)
-    @JsonSerialize(using = LocalJodaDateSerializer.class)
+    @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
     private DateTime dateOfBirth;
     private Gender gender;
     private String mobileNumber;

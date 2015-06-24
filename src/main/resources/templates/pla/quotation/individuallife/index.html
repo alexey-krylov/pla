@@ -75,7 +75,7 @@
                     <div class="form-group">
                         <label>Proposer Name</label>
                         <input type="text" class="form-control input-sm" name="proposerName"
-                               th:value="${searchCriteria.proposerFirstName}"/>
+                               th:value="${searchCriteria.proposerName}"/>
                     </div>
             </div>
                 <div class="col-md-2">
@@ -148,10 +148,10 @@
                                         <input type="radio" name="quotationNumber" th:value="${quotation.quotationId}"/>
                                     </td>
                                     <td th:text="${quotation.quotationNumber}">5100000010315</td>
-                                    <td th:text="${quotation.quotationGeneratedOn}">05/03/2015</td>
-                                    <td>Agent Name</td>
-                                    <td></td>
-                                    <td th:text="${quotation.versionNumber}"></td>
+                                    <td th:text="${quotation.createdOn}">05/03/2015</td>
+                                    <td th:text="${quotation.agentName}"></td>
+                                    <td th:text="${quotation.proposerName}"></td>
+                                    <td th:text="${quotation.version}"></td>
                                     <td th:text="${quotation.quotationStatus}">
                                     </td>
                                 </tr>

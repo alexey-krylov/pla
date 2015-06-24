@@ -2,6 +2,7 @@ package com.pla.individuallife.proposal.domain.model;
 
 import lombok.AccessLevel;
 import lombok.Getter;
+import org.hibernate.annotations.Type;
 import org.joda.time.DateTime;
 
 /**
@@ -13,6 +14,7 @@ public class EmploymentDetail {
     private String occupationId;
     private String occupationClass;
     private String employer;
+    @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
     private DateTime employmentDate;
     private String employmentTypeId;
     private long workPhone;

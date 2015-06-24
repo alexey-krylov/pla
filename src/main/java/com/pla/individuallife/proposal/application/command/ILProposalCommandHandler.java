@@ -35,7 +35,7 @@ public class ILProposalCommandHandler {
             logger.debug(" ProposedAssured :: " + proposedAssured);
         }
         String proposalNumber = proposalNumberGenerator.getProposalNumber();
-        ProposalAggregate aggregate = new ProposalAggregate(cmd.getUserDetails(), new ProposalId(cmd.getProposalId()), proposalNumber, proposedAssured, getProposer(cmd));
+        ProposalAggregate aggregate = new ProposalAggregate(cmd.getUserDetails(), new ProposalId(cmd.getProposalId()), proposalNumber, proposedAssured, cmd.getAgentCommissionDetails());
         ilProposalMongoRepository.add(aggregate);
     }
 
@@ -149,4 +149,22 @@ public class ILProposalCommandHandler {
            e.printStackTrace();
        }
    }
+
+    /* @CommandHandler
+    public String updateWithPlanDetail(ILProposalUpdateWithPlanAndBeneficiariesCommand cmd)
+    {
+        ProposalAggregate proposalAggregate = null;
+        ProposalId proposalId=new ProposalId(cmd.getProposalId());
+        ProposalPlanDetail proposalPlanDetail=cmd.getProposalPlanDetail();
+
+        try{
+            proposalAggregate=ilProposalMongoRepository.load(proposalId);
+            proposalAggregate.
+        }
+        catch (AggregateNotFoundException e) {
+            e.printStackTrace();
+        }
+    } */
+
+
 }

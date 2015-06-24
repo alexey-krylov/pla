@@ -2,19 +2,25 @@ package com.pla.individuallife.proposal.application.command;
 
 import com.pla.individuallife.proposal.domain.model.Beneficiary;
 import com.pla.individuallife.proposal.domain.model.ProposalPlanDetail;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.springframework.security.core.userdetails.UserDetails;
 import java.util.Set;
 
 /**
  * Created by Karunakar on 6/19/2015.
  */
-public class ILUpdatePlanAndBeneficiariesCommand {
+@Getter
+@Setter
+@NoArgsConstructor
+public class ILProposalUpdateWithPlanAndBeneficiariesCommand {
 
     private UserDetails userDetails;
 
     private String proposalId;
 
-    ProposalPlanDetail proposalPlanDetail;
+    private ProposalPlanDetail proposalPlanDetail;
 
     private Set<Beneficiary> beneficiaries;
 

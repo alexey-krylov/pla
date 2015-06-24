@@ -4,10 +4,7 @@ import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
 import com.pla.individuallife.quotation.domain.model.ILQuotation;
 import com.pla.individuallife.quotation.domain.model.RiderDetail;
-import com.pla.individuallife.quotation.presentation.dto.PlanDetailDto;
-import com.pla.individuallife.quotation.presentation.dto.ProposedAssuredDto;
-import com.pla.individuallife.quotation.presentation.dto.ProposerDto;
-import com.pla.individuallife.quotation.presentation.dto.RiderDetailDto;
+import com.pla.individuallife.quotation.presentation.dto.*;
 import com.pla.sharedkernel.identifier.QuotationId;
 import org.apache.commons.beanutils.BeanUtils;
 import org.nthdimenzion.ddd.domain.annotations.Finder;
@@ -155,18 +152,20 @@ public class ILQuotationFinder {
                 new BeanPropertyRowMapper<ILQuotationDto>(ILQuotationDto.class));
     }
 
-    public List<ILQuotationDto> searchQuotation(
-            String quotationNumber, String proposerName, String proposerNrcNumber, String agentCode, String quotationStatus,
-            String quotationId) {
+    public List<ILSearchDto> searchQuotation(
+            String quotationNumber, String proposerName, String proposerNrcNumber, String agentCode, String quotationStatus) {
          boolean isFirst = true;
 
-        if (isEmpty(quotationNumber) && isEmpty(proposerName) && isEmpty(proposerNrcNumber) && isEmpty(agentCode)
-                && isEmpty(quotationId)) {
+        if (isEmpty(quotationNumber) && isEmpty(proposerName) && isEmpty(proposerNrcNumber) && isEmpty(agentCode)) {
              return Lists.newArrayList();
          }
 
-        StringBuilder query = new StringBuilder("select quotation_id,agent_id,generated_on, il_quotation_status as quotation_status, " +
-                "`parent_quotation_id`, `plan_id` `sum_assured`,`quotation_creator`, `quotation_number`, `version_number` from " + IL_QUOTATION_TABLE);
+        StringBuilder query = new StringBuilder("SELECT quotation_id AS quotationId ,i.agent_id,generated_on AS createdOn, il_quotation_status AS quotationStatus, \" +\n" +
+                "                \"`parent_quotation_id`, `plan_id` `sum_assured`,`quotation_creator`, `quotation_number` AS quotationNumber, `version_number` AS VERSION,\n" +
+                "                CONCAT(`proposed_first_name`, \" \", `proposer_surname`) AS proposername,\n" +
+                "                `proposer_nrc_number` AS proposerNrcNumber,\n" +
+                "                CONCAT (a.`first_name`, \" \", a.`last_name`) AS agentName FROM\n" +
+                "                `individual_life_quotation` AS i LEFT JOIN agent AS a ON i.agent_id = a.`agent_id`");
 
          if (isNotEmpty(quotationNumber)) {
              if (isFirst) {
@@ -213,16 +212,7 @@ public class ILQuotationFinder {
              isFirst = false;
          }
 
-        if (isNotEmpty(quotationId)) {
-            if (isFirst) {
-                query.append(" where quotation_id = '" + quotationId + "'");
-            } else {
-                query.append(" and quotation_id = '" + quotationId + "'");
-            }
-            isFirst = false;
-        }
-
          query.append(" order by version_number desc");
-         return namedParameterJdbcTemplate.query(query.toString(), new BeanPropertyRowMapper<ILQuotationDto>(ILQuotationDto.class));
+         return namedParameterJdbcTemplate.query(query.toString(), new BeanPropertyRowMapper(ILSearchDto.class));
      }
 }

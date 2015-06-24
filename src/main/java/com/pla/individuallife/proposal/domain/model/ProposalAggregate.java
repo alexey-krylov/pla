@@ -1,6 +1,7 @@
 package com.pla.individuallife.proposal.domain.model;
 
 import com.google.common.base.Preconditions;
+import com.pla.core.domain.model.agent.AgentId;
 import com.pla.sharedkernel.identifier.ProposalId;
 import org.axonframework.eventsourcing.annotation.AbstractAnnotatedAggregateRoot;
 import org.axonframework.eventsourcing.annotation.AggregateIdentifier;
@@ -10,10 +11,7 @@ import org.springframework.security.access.AuthorizationServiceException;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 import static com.pla.sharedkernel.util.RolesUtil.hasIndividualLifeProposalProcessorRole;
 
@@ -42,9 +40,10 @@ public class ProposalAggregate extends AbstractAnnotatedAggregateRoot<ProposalId
     ProposalAggregate() {
         riders = new HashSet<RiderDetail>();
         beneficiaries = new ArrayList<Beneficiary>();
+        agentCommissionShareModel = new AgentCommissionShareModel();
     }
 
-    public ProposalAggregate(UserDetails userDetails, ProposalId proposalId, String proposalNumber, ProposedAssured proposedAssured, Proposer proposer) {
+    public ProposalAggregate(UserDetails userDetails, ProposalId proposalId, String proposalNumber, ProposedAssured proposedAssured, Map<AgentId, BigDecimal> agentCommissionDetails) {
         boolean hasProposalPreprocessorRole = hasIndividualLifeProposalProcessorRole(userDetails.getAuthorities());
         if (!hasProposalPreprocessorRole) {
             throw new AuthorizationServiceException("User does not have Individual Life Proposal processor(ROLE_PROPOSAL_PROCESSOR) authority");
@@ -53,7 +52,9 @@ public class ProposalAggregate extends AbstractAnnotatedAggregateRoot<ProposalId
         this.proposalNumber = proposalNumber;
         this.proposalId = proposalId;
         assignProposedAssured(proposedAssured);
-        assignProposer(proposer);
+        AgentCommissionShareModel agentCommissionShareModel = new AgentCommissionShareModel();
+       agentCommissionDetails.forEach((agentId, agentCommission) -> agentCommissionShareModel.addAgentCommission(agentId, agentCommission));
+        assignAgents(agentCommissionShareModel);
     }
 
     private void assignProposedAssured(ProposedAssured proposedAssured) {
@@ -68,6 +69,10 @@ public class ProposalAggregate extends AbstractAnnotatedAggregateRoot<ProposalId
 
     private void assignPlan(ProposalPlanDetail proposalPlanDetail) {
         this.proposalPlanDetail = proposalPlanDetail;
+    }
+
+    private void assignAgents(AgentCommissionShareModel agentCommissionModel) {
+        this.agentCommissionShareModel = agentCommissionModel;
     }
 
     public void addBeneficiary(Beneficiary beneficiary) {

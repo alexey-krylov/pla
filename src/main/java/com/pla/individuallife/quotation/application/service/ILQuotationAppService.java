@@ -147,11 +147,10 @@ public class ILQuotationAppService {
         return premiumDetailDto;
     }
 
-    public List<ILQuotationDto> searchQuotation(ILSearchQuotationDto searchIlQuotationDto) {
-        List<ILQuotationDto> searchQuotations = ilQuotationFinder.searchQuotation(searchIlQuotationDto.getQuotationNumber(),
-                searchIlQuotationDto.getProposerFirstName(), searchIlQuotationDto.getProposerNrcNumber(), searchIlQuotationDto.getAgentCode(),
-                searchIlQuotationDto.getQuotationStatus(),
-                searchIlQuotationDto.getQuotationId());
+    public List<ILSearchDto> searchQuotation(ILSearchDto searchIlDto) {
+        List<ILSearchDto> searchQuotations = ilQuotationFinder.searchQuotation(searchIlDto.getQuotationNumber(),
+                searchIlDto.getProposerName(), searchIlDto.getProposerNrcNumber(), searchIlDto.getAgentCode(),
+                searchIlDto.getQuotationStatus());
         return searchQuotations;
     }
 
