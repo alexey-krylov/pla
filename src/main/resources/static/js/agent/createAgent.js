@@ -212,8 +212,7 @@ angular.module('createAgent',['common','ngRoute','mgcrea.ngStrap.select','mgcrea
                             $scope.serverErrorMsg=response.message;
                             return;
                         }
-
-                        if(response.status==500 && response.message==null){
+                        if(data && (_.size(data) ==0 || data.firstName==null)){
                             $scope.hideAlert=false;
                             $scope.searchResult.isEmpty=true;
                             $scope.agentDetails.agentProfile.nrcNumberInString=$scope.search.nrcNumber;

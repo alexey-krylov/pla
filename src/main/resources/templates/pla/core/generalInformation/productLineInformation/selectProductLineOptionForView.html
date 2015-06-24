@@ -50,18 +50,18 @@
                     </div>
                 </div>
                 <div class="panel-body ng-cloak">
-                        <div class="row">
-                            <div class="form-group col-md-6 required" >
-                                <label class="control-label">Select Product Line information</label>
+                    <div class="row">
+                        <div class="form-group col-md-6 required" >
+                            <label class="control-label">Select Product Line information</label>
 
-                                <select class="form-control input-sm" ng-model="selectedOption.productLine"   >
-                                    <option value="">----Select one----</option>
-                                    <option value="groupHealth" >Group Health Level Information</option>
-                                    <option value="groupLife">Group Life Level Information</option>
-                                    <option value="individualLife">Individual Life Level Information</option>
-                                </select>
-                            </div>
+                            <select class="form-control input-sm" ng-model="selectedOption.productLine"   >
+                                <option value="">----Select one----</option>
+                                <option value="groupHealth" >Group Health Level Information</option>
+                                <option value="groupLife">Group Life Level Information</option>
+                                <option value="individualLife">Individual Life Level Information</option>
+                            </select>
                         </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -92,15 +92,15 @@
                             </div>
                             <div id="collapseOne" class="panel-collapse collapse in">
                                 <div class="panel-body">
-                                        <div class="row">
-                                            <div class="form-group col-md-4" ng-repeat="quotationProcessItems in items.quotationProcessItems">
-                                                <label class="control-label" data-toggle="tooltip" data-placement="top" title="Number of days after which Quotation should be purged" ng-bind="getFieldName(quotationProcessItems.productLineProcessItem)"></label>
-                                                <p class="input-group" >
-                                                    <input type="text" class="form-control input-sm"  value="{{quotationProcessItems.value}}" readonly="true"/>
-                                                </p>
+                                    <div class="row">
+                                        <div class="form-group col-md-4" ng-repeat="quotationProcessItems in items.quotationProcessItems">
+                                            <label class="control-label" data-toggle="tooltip" data-placement="top" title="Number of days after which Quotation should be purged" ng-bind="getFieldName(quotationProcessItems.productLineProcessItem)"></label>
+                                            <p class="input-group" >
+                                                <input type="text" class="form-control input-sm"  value="{{quotationProcessItems.value}}" readonly="true"/>
+                                            </p>
 
-                                            </div>
                                         </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -139,14 +139,14 @@
                             </div>
                             <div id="collapseThree" class="panel-collapse collapse">
                                 <div class="panel-body">
-                                        <div class="row">
-                                            <div class="form-group col-md-4" ng-repeat="premiumFollowUpFrequencyItems in items.premiumFollowUpFrequency[0].premiumFollowUpFrequencyItems">
-                                                <label class="control-label"  data-toggle="tooltip" data-placement="top" title="Number of days after which Closed (complete)Reinstatement request should be purged" ng-bind="getFieldName(premiumFollowUpFrequencyItems.productLineProcessItem)"></label>
-                                                <p class="input-group">
-                                                    <input type="number" class="form-control input-sm" value="{{premiumFollowUpFrequencyItems.value}}" readonly="true"/>
-                                                </p>
-                                            </div>
+                                    <div class="row">
+                                        <div class="form-group col-md-4" ng-repeat="premiumFollowUpFrequencyItems in items.premiumFollowUpFrequency[0].premiumFollowUpFrequencyItems">
+                                            <label class="control-label"  data-toggle="tooltip" data-placement="top" title="Number of days after which Closed (complete)Reinstatement request should be purged" ng-bind="getFieldName(premiumFollowUpFrequencyItems.productLineProcessItem)"></label>
+                                            <p class="input-group">
+                                                <input type="number" class="form-control input-sm" value="{{premiumFollowUpFrequencyItems.value}}" readonly="true"/>
+                                            </p>
                                         </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -160,14 +160,14 @@
                             </div>
                             <div id="collapseFour" class="panel-collapse collapse">
                                 <div class="panel-body">
-                                        <div class="row">
-                                            <div class="form-group col-md-4" ng-repeat="premiumFollowUpFrequencyItems in items.premiumFollowUpFrequency[1].premiumFollowUpFrequencyItems">
-                                                <label class="control-label"  data-toggle="tooltip" data-placement="top" title="Number of days after which Closed (complete)Reinstatement request should be purged" ng-bind="getFieldName(premiumFollowUpFrequencyItems.productLineProcessItem)"></label>
-                                                <p class="input-group">
-                                                    <input type="number" class="form-control input-sm"  value="{{premiumFollowUpFrequencyItems.value}}" readonly="true"/>
-                                                </p>
-                                            </div>
+                                    <div class="row">
+                                        <div class="form-group col-md-4" ng-repeat="premiumFollowUpFrequencyItems in items.premiumFollowUpFrequency[1].premiumFollowUpFrequencyItems">
+                                            <label class="control-label"  data-toggle="tooltip" data-placement="top" title="Number of days after which Closed (complete)Reinstatement request should be purged" ng-bind="getFieldName(premiumFollowUpFrequencyItems.productLineProcessItem)"></label>
+                                            <p class="input-group">
+                                                <input type="number" class="form-control input-sm"  value="{{premiumFollowUpFrequencyItems.value}}" readonly="true"/>
+                                            </p>
                                         </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -181,14 +181,14 @@
                             </div>
                             <div id="collapseFive" class="panel-collapse collapse">
                                 <div class="panel-body">
-                                        <div class="row">
-                                            <div class="form-group col-md-4" ng-repeat="premiumFollowUpFrequencyItems in items.premiumFollowUpFrequency[2].premiumFollowUpFrequencyItems">
-                                                <label class="control-label"  data-toggle="tooltip" data-placement="top" title="Number of days after which Closed (complete)Reinstatement request should be purged" ng-bind="getFieldName(premiumFollowUpFrequencyItems.productLineProcessItem)"></label>
-                                                <p class="input-group">
-                                                    <input type="number" class="form-control input-sm"  value="{{premiumFollowUpFrequencyItems.value}}" readonly="true"/>
-                                                </p>
-                                            </div>
+                                    <div class="row">
+                                        <div class="form-group col-md-4" ng-repeat="premiumFollowUpFrequencyItems in items.premiumFollowUpFrequency[2].premiumFollowUpFrequencyItems">
+                                            <label class="control-label"  data-toggle="tooltip" data-placement="top" title="Number of days after which Closed (complete)Reinstatement request should be purged" ng-bind="getFieldName(premiumFollowUpFrequencyItems.productLineProcessItem)"></label>
+                                            <p class="input-group">
+                                                <input type="number" class="form-control input-sm"  value="{{premiumFollowUpFrequencyItems.value}}" readonly="true"/>
+                                            </p>
                                         </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -203,14 +203,14 @@
                             </div>
                             <div id="collapseSix" class="panel-collapse collapse">
                                 <div class="panel-body">
-                                        <div class="row">
-                                            <div class="form-group col-md-4" ng-repeat="premiumFollowUpFrequencyItems in items.premiumFollowUpFrequency[3].premiumFollowUpFrequencyItems">
-                                                <label class="control-label"  data-toggle="tooltip" data-placement="top" title="Number of days after which Closed (complete)Reinstatement request should be purged" ng-bind="getFieldName(premiumFollowUpFrequencyItems.productLineProcessItem)"></label>
-                                                <p class="input-group">
-                                                    <input type="number" class="form-control input-sm"  value="{{premiumFollowUpFrequencyItems.value}}" readonly="true"/>
-                                                </p>
-                                            </div>
+                                    <div class="row">
+                                        <div class="form-group col-md-4" ng-repeat="premiumFollowUpFrequencyItems in items.premiumFollowUpFrequency[3].premiumFollowUpFrequencyItems">
+                                            <label class="control-label"  data-toggle="tooltip" data-placement="top" title="Number of days after which Closed (complete)Reinstatement request should be purged" ng-bind="getFieldName(premiumFollowUpFrequencyItems.productLineProcessItem)"></label>
+                                            <p class="input-group">
+                                                <input type="number" class="form-control input-sm"  value="{{premiumFollowUpFrequencyItems.value}}" readonly="true"/>
+                                            </p>
                                         </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -308,7 +308,7 @@
                             <div class="panel-heading">
                                 <h4 class="panel-title">
                                     <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapseEleven">
-                                         Modal Factors
+                                        Modal Factors
                                     </a><i class="indicator glyphicon glyphicon-chevron-down  pull-right"></i>
                                 </h4>
                             </div>
@@ -347,6 +347,39 @@
                             </div>
                         </div>
 
+                        <!---->
+
+                        <div class="panel panel-default" id="panel13">
+                            <div class="panel-heading">
+                                <h4 class="panel-title">
+                                    <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapseThirteen">
+                                        Age Loading Factor
+                                    </a><i class="indicator glyphicon glyphicon-chevron-down  pull-right"></i>
+                                </h4>
+                            </div>
+                            <div id="collapseThirteen" class="panel-collapse collapse">
+                                <div class="panel-body">
+                                    <div class="row">
+                                        <div class="form-group col-md-4" >
+                                            <label class="control-label"  data-toggle="tooltip" data-placement="top" title="Age Loading Factor" >
+                                                Age
+                                            </label>
+                                            <p class="input-group">
+                                                <input type="text" class="form-control input-sm"  value="{{items.ageLoadingFactor.age}}" readonly="true"/>
+                                            </p>
+                                        </div>
+                                        <div class="form-group col-md-4">
+                                            <label class="control-label"  data-toggle="tooltip" data-placement="top" title="Age Loading Factor" >
+                                                Loading Factor
+                                            </label>
+                                            <p class="input-group">
+                                                <input type="text" class="form-control input-sm"  value="{{items.ageLoadingFactor.loadingFactor}}" readonly="true"/>
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
@@ -379,15 +412,15 @@
                             </div>
                             <div id="collapseTwoOne" class="panel-collapse collapse in">
                                 <div class="panel-body">
-                                        <div class="row">
-                                            <div class="form-group col-md-4" ng-repeat="quotationProcessItems in items.quotationProcessItems">
-                                                <label class="control-label" data-toggle="tooltip" data-placement="top" title="Number of days after which Quotation should be purged" ng-bind="getFieldName(quotationProcessItems.productLineProcessItem)"></label>
-                                                <p class="input-group" >
-                                                    <input type="text" class="form-control input-sm" value="{{quotationProcessItems.value}}" readonly="true"/>
-                                                </p>
+                                    <div class="row">
+                                        <div class="form-group col-md-4" ng-repeat="quotationProcessItems in items.quotationProcessItems">
+                                            <label class="control-label" data-toggle="tooltip" data-placement="top" title="Number of days after which Quotation should be purged" ng-bind="getFieldName(quotationProcessItems.productLineProcessItem)"></label>
+                                            <p class="input-group" >
+                                                <input type="text" class="form-control input-sm" value="{{quotationProcessItems.value}}" readonly="true"/>
+                                            </p>
 
-                                            </div>
                                         </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -425,14 +458,14 @@
                             </div>
                             <div id="collapseTwoThree" class="panel-collapse collapse">
                                 <div class="panel-body">
-                                        <div class="row">
-                                            <div class="form-group col-md-4" ng-repeat="premiumFollowUpFrequencyItems in items.premiumFollowUpFrequency[0].premiumFollowUpFrequencyItems">
-                                                <label class="control-label"  data-toggle="tooltip" data-placement="top" title="Number of days after which Closed (complete)Reinstatement request should be purged" ng-bind="getFieldName(premiumFollowUpFrequencyItems.productLineProcessItem)"></label>
-                                                <p class="input-group">
-                                                    <input type="number" class="form-control input-sm" value="{{premiumFollowUpFrequencyItems.value}}" readonly="true"/>
-                                                </p>
-                                            </div>
+                                    <div class="row">
+                                        <div class="form-group col-md-4" ng-repeat="premiumFollowUpFrequencyItems in items.premiumFollowUpFrequency[0].premiumFollowUpFrequencyItems">
+                                            <label class="control-label"  data-toggle="tooltip" data-placement="top" title="Number of days after which Closed (complete)Reinstatement request should be purged" ng-bind="getFieldName(premiumFollowUpFrequencyItems.productLineProcessItem)"></label>
+                                            <p class="input-group">
+                                                <input type="number" class="form-control input-sm" value="{{premiumFollowUpFrequencyItems.value}}" readonly="true"/>
+                                            </p>
                                         </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -446,14 +479,14 @@
                             </div>
                             <div id="collapseTwoFour" class="panel-collapse collapse">
                                 <div class="panel-body">
-                                        <div class="row">
-                                            <div class="form-group col-md-4" ng-repeat="premiumFollowUpFrequencyItems in items.premiumFollowUpFrequency[1].premiumFollowUpFrequencyItems">
-                                                <label class="control-label"  data-toggle="tooltip" data-placement="top" title="Number of days after which Closed (complete)Reinstatement request should be purged" ng-bind="getFieldName(premiumFollowUpFrequencyItems.productLineProcessItem)"></label>
-                                                <p class="input-group">
-                                                    <input type="number" class="form-control input-sm"  value="{{premiumFollowUpFrequencyItems.value}}" readonly="true"/>
-                                                </p>
-                                            </div>
+                                    <div class="row">
+                                        <div class="form-group col-md-4" ng-repeat="premiumFollowUpFrequencyItems in items.premiumFollowUpFrequency[1].premiumFollowUpFrequencyItems">
+                                            <label class="control-label"  data-toggle="tooltip" data-placement="top" title="Number of days after which Closed (complete)Reinstatement request should be purged" ng-bind="getFieldName(premiumFollowUpFrequencyItems.productLineProcessItem)"></label>
+                                            <p class="input-group">
+                                                <input type="number" class="form-control input-sm"  value="{{premiumFollowUpFrequencyItems.value}}" readonly="true"/>
+                                            </p>
                                         </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -467,14 +500,14 @@
                             </div>
                             <div id="collapseTwoFive" class="panel-collapse collapse">
                                 <div class="panel-body">
-                                        <div class="row">
-                                            <div class="form-group col-md-4" ng-repeat="premiumFollowUpFrequencyItems in items.premiumFollowUpFrequency[2].premiumFollowUpFrequencyItems">
-                                                <label class="control-label"  data-toggle="tooltip" data-placement="top" title="Number of days after which Closed (complete)Reinstatement request should be purged" ng-bind="getFieldName(premiumFollowUpFrequencyItems.productLineProcessItem)"></label>
-                                                <p class="input-group">
-                                                    <input type="number" class="form-control input-sm"  value="{{premiumFollowUpFrequencyItems.value}}" readonly="true"/>
-                                                </p>
-                                            </div>
+                                    <div class="row">
+                                        <div class="form-group col-md-4" ng-repeat="premiumFollowUpFrequencyItems in items.premiumFollowUpFrequency[2].premiumFollowUpFrequencyItems">
+                                            <label class="control-label"  data-toggle="tooltip" data-placement="top" title="Number of days after which Closed (complete)Reinstatement request should be purged" ng-bind="getFieldName(premiumFollowUpFrequencyItems.productLineProcessItem)"></label>
+                                            <p class="input-group">
+                                                <input type="number" class="form-control input-sm"  value="{{premiumFollowUpFrequencyItems.value}}" readonly="true"/>
+                                            </p>
                                         </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -489,14 +522,14 @@
                             </div>
                             <div id="collapseTwoSix" class="panel-collapse collapse">
                                 <div class="panel-body">
-                                        <div class="row">
-                                            <div class="form-group col-md-4" ng-repeat="premiumFollowUpFrequencyItems in items.premiumFollowUpFrequency[3].premiumFollowUpFrequencyItems">
-                                                <label class="control-label"  data-toggle="tooltip" data-placement="top" title="Number of days after which Closed (complete)Reinstatement request should be purged" ng-bind="getFieldName(premiumFollowUpFrequencyItems.productLineProcessItem)"></label>
-                                                <p class="input-group">
-                                                    <input type="number" class="form-control input-sm"  value="{{premiumFollowUpFrequencyItems.value}}" readonly="true"/>
-                                                </p>
-                                            </div>
+                                    <div class="row">
+                                        <div class="form-group col-md-4" ng-repeat="premiumFollowUpFrequencyItems in items.premiumFollowUpFrequency[3].premiumFollowUpFrequencyItems">
+                                            <label class="control-label"  data-toggle="tooltip" data-placement="top" title="Number of days after which Closed (complete)Reinstatement request should be purged" ng-bind="getFieldName(premiumFollowUpFrequencyItems.productLineProcessItem)"></label>
+                                            <p class="input-group">
+                                                <input type="number" class="form-control input-sm"  value="{{premiumFollowUpFrequencyItems.value}}" readonly="true"/>
+                                            </p>
                                         </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -567,7 +600,7 @@
                                 </div>
                             </div>
                         </div>
-                         <div class="panel panel-default" id="panel30">
+                        <div class="panel panel-default" id="panel30">
                             <div class="panel-heading">
                                 <h4 class="panel-title">
                                     <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion1" href="#collapseThreeZero">
@@ -588,7 +621,7 @@
                                 </div>
                             </div>
                         </div>
-                      <div class="panel panel-default" id="panel31">
+                        <div class="panel panel-default" id="panel31">
                             <div class="panel-heading">
                                 <h4 class="panel-title">
                                     <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion1" href="#collapseThreeOne">
@@ -630,6 +663,41 @@
                                 </div>
                             </div>
                         </div>
+
+                        <!---->
+
+                        <div class="panel panel-default" id="panel55">
+                            <div class="panel-heading">
+                                <h4 class="panel-title">
+                                    <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapseFiveFive">
+                                        Age Loading Factor
+                                    </a><i class="indicator glyphicon glyphicon-chevron-down  pull-right"></i>
+                                </h4>
+                            </div>
+                            <div id="collapseFiveFive" class="panel-collapse collapse">
+                                <div class="panel-body">
+                                    <div class="row">
+                                        <div class="form-group col-md-4" >
+                                            <label class="control-label"  data-toggle="tooltip" data-placement="top" title="Age Loading Factor" >
+                                                Age
+                                            </label>
+                                            <p class="input-group">
+                                                <input type="text" class="form-control input-sm"  value="{{items.ageLoadingFactor.age}}" readonly="true"/>
+                                            </p>
+                                        </div>
+                                        <div class="form-group col-md-4">
+                                            <label class="control-label"  data-toggle="tooltip" data-placement="top" title="Age Loading Factor" >
+                                                Loading Factor
+                                            </label>
+                                            <p class="input-group">
+                                                <input type="text" class="form-control input-sm"  value="{{items.ageLoadingFactor.loadingFactor}}" readonly="true"/>
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
                     </div>
                 </div>
 
@@ -919,6 +987,39 @@
                             </div>
                         </div>
 
+                        <!---->
+
+                        <div class="panel panel-default" id="panel56">
+                            <div class="panel-heading">
+                                <h4 class="panel-title">
+                                    <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapseFiveSix">
+                                        Age Loading Factor
+                                    </a><i class="indicator glyphicon glyphicon-chevron-down  pull-right"></i>
+                                </h4>
+                            </div>
+                            <div id="collapseFiveSix" class="panel-collapse collapse">
+                                <div class="panel-body">
+                                    <div class="row">
+                                        <div class="form-group col-md-4" >
+                                            <label class="control-label"  data-toggle="tooltip" data-placement="top" title="Age Loading Factor" >
+                                                Age
+                                            </label>
+                                            <p class="input-group">
+                                                <input type="text" class="form-control input-sm"  value="{{items.ageLoadingFactor.age}}" readonly="true"/>
+                                            </p>
+                                        </div>
+                                        <div class="form-group col-md-4">
+                                            <label class="control-label"  data-toggle="tooltip" data-placement="top" title="Age Loading Factor" >
+                                                Loading Factor
+                                            </label>
+                                            <p class="input-group">
+                                                <input type="text" class="form-control input-sm"  value="{{items.ageLoadingFactor.loadingFactor}}" readonly="true"/>
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
 

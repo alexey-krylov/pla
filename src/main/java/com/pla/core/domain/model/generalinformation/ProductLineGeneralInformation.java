@@ -67,6 +67,9 @@ public class ProductLineGeneralInformation {
 
     private DiscountFactorProcessInformation discountFactorProcessInformation;
 
+    private AgentLoadingFactor ageLoadingFactor;
+
+
     private ProductLineGeneralInformation(String productLineInformationId, LineOfBusinessEnum productLineId) {
         this.productLineInformationId = productLineInformationId;
         this.productLine = productLineId;
@@ -141,6 +144,11 @@ public class ProductLineGeneralInformation {
         for (Map.Entry<PremiumFrequency, List<Map<ProductLineProcessType, Integer>>> premiumFrequencyFollowUpMap : premiumFollowUpFrequencyItems.entrySet()) {
             premiumFollowUpFrequency.add(new PremiumFollowUpFrequency(premiumFrequencyFollowUpMap.getKey(), create(premiumFrequencyFollowUpMap.getValue())));
         }
+        return this;
+    }
+
+    public ProductLineGeneralInformation withAgeLoadingFactor(int age, BigDecimal loadingFactor){
+        this.ageLoadingFactor = new AgentLoadingFactor(age,loadingFactor);
         return this;
     }
 

@@ -12,6 +12,7 @@ import com.pla.sharedkernel.identifier.LineOfBusinessEnum;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -446,5 +447,16 @@ public class ProductLineInformationUnitTest {
         productLineGeneralInformation.setPremiumFollowUpFrequency(premiumFollowUpFrequencyList);
         Set<ProductLineProcessItem>  productLineProcessItems =  productLineGeneralInformation.getPremiumFollowUpFrequencyFor(PremiumFrequency.MONTHLY);
         assertThat(premiumFollowUpFrequencyItems,is(productLineProcessItems));
+    }
+
+    @Test
+    public void givenAgeLoadingFactor_thenItShouldAddAgeLoadingFactorToProductLineInformation(){
+        ProductLineGeneralInformation productLineGeneralInformation = ProductLineGeneralInformation.createProductLineGeneralInformation(LineOfBusinessEnum.GROUP_HEALTH);
+        productLineGeneralInformation = productLineGeneralInformation.withAgeLoadingFactor(20, new BigDecimal(45.58));
+
+        AgentLoadingFactor ageLoadingFactor = productLineGeneralInformation.getAgeLoadingFactor();
+        assertNotNull(ageLoadingFactor);
+        assertThat(ageLoadingFactor.getAge(),is(20));
+        assertThat(ageLoadingFactor.getLoadingFactor(),is(new BigDecimal(45.58)));
     }
 }

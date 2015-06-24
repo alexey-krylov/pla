@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.joda.JodaModule;
+import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.pla.core.domain.model.Admin;
@@ -72,7 +73,7 @@ public class GeneralInformationService {
         List<Map<ModalFactorItem, BigDecimal>> modalFactorItems =  transformModalFactorItem(generalInformationDto.getModelFactorItems());
         List<Map<DiscountFactorItem, BigDecimal>> discountFactorItems =  transformDiscountFactorItem(generalInformationDto.getDiscountFactorItems());
         ProductLineGeneralInformation productLineGeneralInformation = admin.createProductLineGeneralInformation(lineOfBusinessId, quotationProcessItem,enrollmentProcessItem,reinstatementProcessItem,endorsementProcessItem,claimProcessItem,policyFeeProcess,minimumLimitProcess,surrenderProcessItem,maturityProcessItem,
-                premiumFollowUpFrequencyItems,modalFactorItems,discountFactorItems);
+                premiumFollowUpFrequencyItems,modalFactorItems,discountFactorItems,generalInformationDto.getAgeLoadingFactor());
         mongoTemplate.save(productLineGeneralInformation);
         return AppConstants.SUCCESS;
     }
@@ -166,7 +167,7 @@ public class GeneralInformationService {
         Map<PremiumFrequency, List<Map<ProductLineProcessType,Integer>>>  premiumFrequencyFollowUp =  transformPremiumFrequencyFollowUp(generalInformationDto.getPremiumFollowUpFrequency());
         List<Map<ModalFactorItem, BigDecimal>> modalFactorItems  = transformModalFactorItem(generalInformationDto.getModelFactorItems());
         List<Map<DiscountFactorItem, BigDecimal>> discountFactorItems = transformDiscountFactorItem(generalInformationDto.getDiscountFactorItems());
-        productLineGeneralInformation = admin.updateProductLineInformation(productLineGeneralInformation,  quotationProcessItem,enrollmentProcessItem,reinstatementProcessItem,endorsementProcessItem,claimProcessItem,policyFeeProcess,minimumLimitProcess,surrenderProcessItem,maturityProcessItem,premiumFrequencyFollowUp,modalFactorItems,discountFactorItems);
+        productLineGeneralInformation = admin.updateProductLineInformation(productLineGeneralInformation,  quotationProcessItem,enrollmentProcessItem,reinstatementProcessItem,endorsementProcessItem,claimProcessItem,policyFeeProcess,minimumLimitProcess,surrenderProcessItem,maturityProcessItem,premiumFrequencyFollowUp,modalFactorItems,discountFactorItems,generalInformationDto.getAgeLoadingFactor());
         update = updateProductLineInformation(update, productLineGeneralInformation);
         mongoTemplate.updateFirst(findGeneralInformation, update, ProductLineGeneralInformation.class);
         return AppConstants.SUCCESS;
@@ -185,6 +186,7 @@ public class GeneralInformationService {
         update.set("premiumFollowUpFrequency", updatedProductLineInformation.getPremiumFollowUpFrequency());
         update.set("modalFactorProcessInformation", updatedProductLineInformation.getModalFactorProcessInformation());
         update.set("discountFactorProcessInformation", updatedProductLineInformation.getDiscountFactorProcessInformation());
+        update.set("ageLoadingFactor", updatedProductLineInformation.getAgeLoadingFactor());
         return update;
     }
 
@@ -321,6 +323,7 @@ public class GeneralInformationService {
             productLineInformationByBusinessId.put("discountFactorItems",discountFactorMap.get("discountFactorItems"));
             Map  modalFactorMap = (Map) productLineInformationMap.get("modalFactorProcessInformation");
             productLineInformationByBusinessId.put("modelFactorItems",modalFactorMap.get("modelFactorItems"));
+            productLineInformationByBusinessId.put("ageLoadingFactor",productLineInformationMap.get("ageLoadingFactor"));
 
             productLineInformationList.add(productLineInformationByBusinessId);
         }
@@ -411,6 +414,7 @@ public class GeneralInformationService {
         productLineInformationMap.put("premiumFollowUpFrequency", transformPremiumFollowUp(lineOfBusinessId));
         productLineInformationMap.put("modelFactorItems",GeneralInformationProcessItem.MODAL_FACTOR.getOrganizationLevelProcessInformationItem(lineOfBusinessId));
         productLineInformationMap.put("discountFactorItems",GeneralInformationProcessItem.DISCOUNT_FACTOR.getOrganizationLevelProcessInformationItem(lineOfBusinessId));
+        productLineInformationMap.put("ageLoadingFactor", ImmutableMap.of("age",0,"loadingFactor",0));
         return productLineInformationMap;
     }
 

@@ -1,8 +1,11 @@
 package com.pla.core.domain.service;
 
+import com.pla.core.domain.model.generalinformation.AgentLoadingFactor;
+import com.pla.core.domain.model.generalinformation.ProductLineGeneralInformation;
 import com.pla.publishedlanguage.contract.IGeneralInformationProvider;
 import com.pla.publishedlanguage.dto.AgentLoadingFactorDto;
 import com.pla.sharedkernel.identifier.LineOfBusinessEnum;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -12,8 +15,19 @@ import java.math.BigDecimal;
  */
 @Service(value = "generalInformationProvider")
 public class GeneralInformationProviderImpl implements IGeneralInformationProvider {
+
+    private GeneralInformationService generalInformationService;
+
+
+    @Autowired
+    public GeneralInformationProviderImpl(GeneralInformationService generalInformationService){
+        this.generalInformationService = generalInformationService;
+    }
+
     @Override
     public AgentLoadingFactorDto getAgeLoadingFactor(LineOfBusinessEnum lineOfBusinessEnum) {
-        return new AgentLoadingFactorDto(0, BigDecimal.ZERO);
+        ProductLineGeneralInformation productLineGeneralInformation =  generalInformationService.findProductLineInformationByLineOfBusinessId(lineOfBusinessEnum);
+        AgentLoadingFactor ageLoadingFactor =  productLineGeneralInformation.getAgeLoadingFactor();
+        return ageLoadingFactor!=null?new AgentLoadingFactorDto(ageLoadingFactor.getAge(), ageLoadingFactor.getLoadingFactor()):new AgentLoadingFactorDto(0, BigDecimal.ZERO);
     }
 }

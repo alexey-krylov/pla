@@ -340,7 +340,7 @@
                                         <div class="form-group col-md-4 required" ng-repeat="modelFactorItems in items.modelFactorItems">
                                             <label class="control-label"  data-toggle="tooltip" data-placement="top" title="Annual" ng-bind="getFieldName(modelFactorItems.modalFactorItem)"></label>
                                             <p class="input-group">
-                                                <input type="number" class="form-control input-sm" min="0.0001" ng-pattern="/^(^[0-9]{1})+(\.[0-9]{1,4})?$/" ng-model="modelFactorItems.value" value="{{modelFactorItems.value}}" ng-required="true"/>
+                                                <input type="number" class="form-control input-sm" min="0.0001" ng-pattern="/^(^[0-9]{1,2})+(\.[0-9]{1,4})?$/" ng-model="modelFactorItems.value" value="{{modelFactorItems.value}}" ng-required="true"/>
                                             </p>
                                         </div>
                                     </div>
@@ -372,10 +372,45 @@
                                 </div>
                             </div>
                         </div>
+        <!--              -->
+                        <div class="panel panel-default" id="panel13" ng-class="forms.form13.$valid ? '' : 'errorClass'">
+                            <div class="panel-heading">
+                                <h4 class="panel-title">
+                                    <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapseThirteen">
+                                        Age Loading Factor
+                                    </a><i class="indicator glyphicon glyphicon-chevron-down  pull-right"></i>
+                                </h4>
+                            </div>
+                            <div id="collapseThirteen" class="panel-collapse collapse">
+                                <div class="panel-body">
+                                    <form  novalidate="true" role="form" name="forms.form13">
+                                        <div class="row">
+                                            <div class="form-group col-md-4 required" >
+                                                <label class="control-label"  data-toggle="tooltip" data-placement="top" title="Age Loading Factor" >
+                                                    Age
+                                                </label>
+                                                <p class="input-group">
+                                                    <input type="number" class="form-control input-sm" min="1" ng-pattern="/^([0-9]{1,2})?$/" ng-model="items.ageLoadingFactor.age" value="{{items.ageLoadingFactor.age}}" ng-required="true" />
+                                                </p>
+                                            </div>
+                                            <div class="form-group col-md-4 required" >
+                                                <label class="control-label"  data-toggle="tooltip" data-placement="top" title="Age Loading Factor" >
+                                                    Loading Factor
+                                                </label>
+                                                <p class="input-group">
+                                                    <input type="number" class="form-control input-sm" min="0.0001" ng-pattern="/^(^[0-9]{1,2})+(\.[0-9]{1,4})?$/" ng-model="items.ageLoadingFactor.loadingFactor" value="{{items.ageLoadingFactor.loadingFactor}}" ng-required="true" />
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+
                         <div class="row">
                             <div class="col-lg-12" style="text-align: center;margin-top:10px;">
 
-                                <button type="button" class="btn btn-default" style="float:right;" ng-disabled="(!forms.form1.$valid || !forms.form2.$valid || !forms.form3.$valid || !forms.form4.$valid || !forms.form5.$valid || !forms.form6.$valid || !forms.form7.$valid || !forms.form8.$valid || !forms.form9.$valid || !forms.form10.$valid || !forms.form11.$valid || !forms.form12.$valid)" data-placement="top-right" data-container="notification" data-duration="10" bs-alert="alert"   ng-click="submitGroupHealth()">Save</button>
+                                <button type="button" class="btn btn-default" style="float:right;" ng-disabled="(!forms.form1.$valid || !forms.form2.$valid || !forms.form3.$valid || !forms.form4.$valid || !forms.form5.$valid || !forms.form6.$valid || !forms.form7.$valid || !forms.form8.$valid || !forms.form9.$valid || !forms.form10.$valid || !forms.form11.$valid || !forms.form12.$valid || !forms.form13.$valid)" data-placement="top-right" data-container="notification" data-duration="10" bs-alert="alert"   ng-click="submitGroupHealth()">Save</button>
                                 <a class="btn btn-default" ng-click="reloadPage()" style="float:left;">Cancel</a>
 
                             </div>
@@ -644,10 +679,12 @@
                                 </div>
                             </div>
                         </div>
-                       <div class="panel panel-default" id="panel110" ng-class="forms.form11.$valid ? '' : 'errorClass'">
+
+
+                        <div class="panel panel-default" id="panel110" ng-class="forms.form11.$valid ? '' : 'errorClass'">
                             <div class="panel-heading">
                                 <h4 class="panel-title">
-                                    <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion1" href="#collapseOneOneZero">
+                                    <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapseOneOneZero">
                                         Modal Factors
                                     </a><i class="indicator glyphicon glyphicon-chevron-down  pull-right"></i>
                                 </h4>
@@ -655,15 +692,15 @@
                             <div id="collapseOneOneZero" class="panel-collapse collapse">
                                 <div class="panel-body">
                                     <form  novalidate="true" role="form" name="forms.form11">
-                                    <div class="row">
-                                        <div class="form-group col-md-4 required" ng-repeat="modelFactorItems in items.modelFactorItems">
-                                            <label class="control-label"  data-toggle="tooltip" data-placement="top" title="Annual" ng-bind="getFieldName(modelFactorItems.modalFactorItem)"></label>
-                                            <p class="input-group">
-                                                <input type="number" class="form-control input-sm" min="0.0001" ng-pattern="/^(^[0-9]{1})+(\.[0-9]{1,4})?$/" ng-model="modelFactorItems.value" value="{{modelFactorItems.value}}" ng-required="true"/>
-                                            </p>
+                                        <div class="row">
+                                            <div class="form-group col-md-4 required" ng-repeat="modelFactorItems in items.modelFactorItems">
+                                                <label class="control-label"  data-toggle="tooltip" data-placement="top" title="Annual" ng-bind="getFieldName(modelFactorItems.modalFactorItem)"></label>
+                                                <p class="input-group">
+                                                    <input type="number" class="form-control input-sm" min="0.0001" ng-pattern="/^(^[0-9]{1,2})+(\.[0-9]{1,4})?$/" ng-model="modelFactorItems.value" value="{{modelFactorItems.value}}" ng-required="true"/>
+                                                </p>
+                                            </div>
                                         </div>
-                                    </div>
-                                        </form>
+                                    </form>
                                 </div>
                             </div>
                         </div>
@@ -690,10 +727,46 @@
                                 </div>
                             </div>
                         </div>
+
+                        <!--  Added the Age Loading Factor -->
+                        <div class="panel panel-default" id="panel113" ng-class="forms.form13.$valid ? '' : 'errorClass'">
+                            <div class="panel-heading">
+                                <h4 class="panel-title">
+                                    <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapseOneOneThree">
+                                        Age Loading Factor
+                                    </a><i class="indicator glyphicon glyphicon-chevron-down  pull-right"></i>
+                                </h4>
+                            </div>
+                            <div id="collapseOneOneThree" class="panel-collapse collapse">
+                                <div class="panel-body">
+                                    <form  novalidate="true" role="form" name="forms.form13">
+                                        <div class="row">
+                                            <div class="form-group col-md-4 required" >
+                                                <label class="control-label"  data-toggle="tooltip" data-placement="top" title="Age Loading Factor" >
+                                                    Age
+                                                </label>
+                                                <p class="input-group">
+                                                    <input type="number" class="form-control input-sm" min="1" ng-pattern="/^([0-9]{1,2})?$/" ng-model="items.ageLoadingFactor.age" value="{{items.ageLoadingFactor.age}}" ng-required="true" />
+                                                </p>
+                                            </div>
+                                            <div class="form-group col-md-4 required" >
+                                                <label class="control-label"  data-toggle="tooltip" data-placement="top" title="Age Loading Factor" >
+                                                    Loading Factor
+                                                </label>
+                                                <p class="input-group">
+                                                    <input type="number" class="form-control input-sm" min="0.0001" ng-pattern="/^(^[0-9]{1,2})+(\.[0-9]{1,4})?$/" ng-model="items.ageLoadingFactor.loadingFactor" value="{{items.ageLoadingFactor.loadingFactor}}" ng-required="true" />
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+
                         <div class="row">
                             <div class="col-lg-12" style="text-align: center;margin-top:10px;">
 
-                                <button type="button" class="btn btn-default" style="float:right;" ng-disabled="(!forms.form1.$valid || !forms.form2.$valid || !forms.form3.$valid || !forms.form4.$valid || !forms.form5.$valid || !forms.form6.$valid || !forms.form7.$valid || !forms.form8.$valid || !forms.form9.$valid || !forms.form10.$valid || !forms.form11.$valid || !forms.form12.$valid)" data-placement="top-right" data-container="notification1" data-duration="10" bs-alert="alert"   ng-click="submitGroupLife()">Save</button>
+                                <button type="button" class="btn btn-default" style="float:right;" ng-disabled="(!forms.form1.$valid || !forms.form2.$valid || !forms.form3.$valid || !forms.form4.$valid || !forms.form5.$valid || !forms.form6.$valid || !forms.form7.$valid || !forms.form8.$valid || !forms.form9.$valid || !forms.form10.$valid || !forms.form11.$valid || !forms.form12.$valid || !forms.form13.$valid)" data-placement="top-right" data-container="notification1" data-duration="10" bs-alert="alert"   ng-click="submitGroupLife()">Save</button>
                                 <a class="btn btn-default" ng-click="reloadPage()" style="float:left;">Cancel</a>
 
                             </div>
@@ -1008,10 +1081,47 @@
                                 </div>
                             </div>
                         </div>
+
+                        <!--              -->
+                        <div class="panel panel-default" id="panel133" ng-class="forms.form13.$valid ? '' : 'errorClass'">
+                            <div class="panel-heading">
+                                <h4 class="panel-title">
+                                    <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapseThreeThree">
+                                        Age Loading Factor
+                                    </a><i class="indicator glyphicon glyphicon-chevron-down  pull-right"></i>
+                                </h4>
+                            </div>
+                            <div id="collapseThreeThree" class="panel-collapse collapse">
+                                <div class="panel-body">
+                                    <form  novalidate="true" role="form" name="forms.form13">
+                                        <div class="row">
+                                            <div class="form-group col-md-4 required" >
+                                                <label class="control-label"  data-toggle="tooltip" data-placement="top" title="Age Loading Factor" >
+                                                    Age
+                                                </label>
+                                                <p class="input-group">
+                                                    <input type="number" class="form-control input-sm" min="1" ng-pattern="/^([0-9]{1,2})?$/" ng-model="items.ageLoadingFactor.age" value="{{items.ageLoadingFactor.age}}" ng-required="true" />
+                                                </p>
+                                            </div>
+                                            <div class="form-group col-md-4 required" >
+                                                <label class="control-label"  data-toggle="tooltip" data-placement="top" title="Age Loading Factor" >
+                                                    Loading Factor
+                                                </label>
+                                                <p class="input-group">
+                                                    <input type="number" class="form-control input-sm" min="0.0001" ng-pattern="/^(^[0-9]{1,2})+(\.[0-9]{1,4})?$/" ng-model="items.ageLoadingFactor.loadingFactor" value="{{items.ageLoadingFactor.loadingFactor}}" ng-required="true" />
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+
+
                         <div class="row">
                             <div class="col-lg-12" style="text-align: center;margin-top:10px;">
 
-                                <button type="button" class="btn btn-default" style="float:right;" ng-disabled="(!forms.form1.$valid || !forms.form2.$valid || !forms.form3.$valid || !forms.form4.$valid || !forms.form5.$valid || !forms.form6.$valid || !forms.form7.$valid || !forms.form8.$valid || !forms.form9.$valid || !forms.form10.$valid || !forms.form11.$valid || !forms.form12.$valid)" data-placement="top-right" data-container="notification2" data-duration="5" bs-alert="alert"   ng-click="submitIndividualLife()">Save</button>
+                                <button type="button" class="btn btn-default" style="float:right;" ng-disabled="(!forms.form1.$valid || !forms.form2.$valid || !forms.form3.$valid || !forms.form4.$valid || !forms.form5.$valid || !forms.form6.$valid || !forms.form7.$valid || !forms.form8.$valid || !forms.form9.$valid || !forms.form10.$valid || !forms.form11.$valid || !forms.form12.$valid || !forms.form13.$valid)" data-placement="top-right" data-container="notification2" data-duration="5" bs-alert="alert"   ng-click="submitIndividualLife()">Save</button>
                                 <a class="btn btn-default" ng-click="reloadPage()" style="float:left;">Cancel</a>
 
                             </div>
