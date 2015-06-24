@@ -1,7 +1,7 @@
 package com.pla.individuallife.proposal.application.command;
 
 
-import com.pla.individuallife.identifier.ProposalId;
+import com.pla.sharedkernel.identifier.ProposalId;
 
 import java.util.concurrent.TimeoutException;
 

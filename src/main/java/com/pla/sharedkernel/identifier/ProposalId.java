@@ -1,4 +1,4 @@
-package com.pla.individuallife.identifier;
+package com.pla.sharedkernel.identifier;
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import lombok.EqualsAndHashCode;

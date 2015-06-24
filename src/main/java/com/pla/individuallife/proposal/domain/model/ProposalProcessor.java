@@ -1,6 +1,5 @@
 package com.pla.individuallife.proposal.domain.model;
 
-import com.pla.individuallife.identifier.ProposalId;
 import lombok.Getter;
 
 /**

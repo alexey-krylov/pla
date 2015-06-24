@@ -1,6 +1,6 @@
 package com.pla.individuallife.proposal.application.command;
 
-import com.pla.individuallife.identifier.ProposalId;
+import com.pla.sharedkernel.identifier.ProposalId;
 import com.pla.individuallife.proposal.domain.model.*;
 import com.pla.individuallife.proposal.domain.service.ProposalNumberGenerator;
 import com.pla.individuallife.quotation.query.ILQuotationFinder;

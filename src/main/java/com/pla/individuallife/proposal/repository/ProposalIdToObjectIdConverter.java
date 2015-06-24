@@ -1,6 +1,6 @@
 package com.pla.individuallife.proposal.repository;
 
-import com.pla.individuallife.identifier.ProposalId;
+import com.pla.sharedkernel.identifier.ProposalId;
 import org.bson.types.ObjectId;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.util.StringUtils;

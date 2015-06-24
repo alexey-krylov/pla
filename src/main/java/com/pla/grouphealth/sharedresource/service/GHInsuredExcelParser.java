@@ -192,7 +192,7 @@ public class GHInsuredExcelParser {
         Iterator<Row> dataRowIterator = dataRows.iterator();
         while (dataRowIterator.hasNext()) {
             Row currentRow = dataRowIterator.next();
-            List<String> excelHeaders = GLInsuredExcelHeader.getAllowedHeaderForParser(planAdapter, agentPlans);
+            List<String> excelHeaders = GHInsuredExcelHeader.getAllowedHeaderForParser(planAdapter, agentPlans);
             String errorMessage = validateRow(currentRow, excelHeaders, agentPlans);
             List<OptionalCoverageCellHolder> optionalCoverageCellHolders = findNonEmptyOptionalCoverageCell(headers, currentRow, agentPlans);
             String coverageErrorMessage = validateOptionalCoverageCell(headers, currentRow, optionalCoverageCellHolders);

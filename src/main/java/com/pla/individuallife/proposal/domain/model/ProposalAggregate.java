@@ -1,7 +1,7 @@
 package com.pla.individuallife.proposal.domain.model;
 
 import com.google.common.base.Preconditions;
-import com.pla.individuallife.identifier.ProposalId;
+import com.pla.sharedkernel.identifier.ProposalId;
 import org.axonframework.eventsourcing.annotation.AbstractAnnotatedAggregateRoot;
 import org.axonframework.eventsourcing.annotation.AggregateIdentifier;
 import org.springframework.data.annotation.Id;
