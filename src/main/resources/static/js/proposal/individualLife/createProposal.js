@@ -220,11 +220,11 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
                 console.log('Result ' + JSON.stringify(request1));
                 //$http.post('proposal/create', request);
 
-               /* $http.post('proposal/create', request).success(function (response, status, headers, config) {
+                $http.post('/create', request).success(function (response, status, headers, config) {
                  $scope.proposalId = response;
                  console.log('proposalId : '+$scope.proposalId );
                  }).error(function (response, status, headers, config) {
-                 });*/
+                 });
             };
 
             $scope.saveProposerDetails=function(){
