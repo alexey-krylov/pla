@@ -4,7 +4,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.joda.time.DateTime;
 
 /**
  * Created by Karunakar on 24-06-2015.
@@ -22,6 +21,6 @@ public class ILSearchDto {
     private String proposerNrcNumber;
     private String agentName;
     private String agentCode;
-    private DateTime createdOn;
+    private String createdOn;
     private String version;
 }
