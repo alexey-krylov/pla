@@ -26,11 +26,12 @@ public class CoveragePremiumDetail {
 
     private BigDecimal sumAssured;
 
-    CoveragePremiumDetail(String coverageName, String coverageCode, CoverageId coverageId, BigDecimal premium) {
+    CoveragePremiumDetail(String coverageName, String coverageCode, CoverageId coverageId, BigDecimal premium,BigDecimal sumAssured) {
         this.coverageCode = coverageCode;
         this.coverageId = coverageId;
         this.premium = premium;
         this.coverageName = coverageName;
+        this.sumAssured=sumAssured;
     }
 
     public CoveragePremiumDetail updateWithPremium(BigDecimal premiumAmount) {

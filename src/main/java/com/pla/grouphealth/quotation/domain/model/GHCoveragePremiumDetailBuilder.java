@@ -25,14 +25,17 @@ public class GHCoveragePremiumDetailBuilder {
 
     private String premiumVisibility;
 
+    private BigDecimal sumAssured;
+
     private Set<BenefitPremiumLimit> benefitPremiumLimits;
 
-    public GHCoveragePremiumDetailBuilder(String coverageCode, String coverageId, String coverageName, BigDecimal premium, String premiumVisibility) {
+    public GHCoveragePremiumDetailBuilder(String coverageCode, String coverageId, String coverageName, BigDecimal premium, String premiumVisibility,BigDecimal sumAssured) {
         this.coverageCode = coverageCode;
         this.coverageId = coverageId;
         this.coverageName = coverageName;
         this.premium = premium;
         this.premiumVisibility = premiumVisibility;
+        this.sumAssured=sumAssured;
     }
 
     public GHCoveragePremiumDetailBuilder withBenefit(String benefitCode, String benefitId, BigDecimal benefitLimit) {

@@ -132,7 +132,7 @@ public class GHQuotationCommandHandler {
                         int ageOnNextBirthDate = getAgeOnNextBirthDate(insuredDto.getDateOfBirth());
                         coverageBasicPremium = computePremiumByApplyingAgeLoadingFactor(ageOnNextBirthDate, coverageBasicPremium);
                     }
-                    final GHCoveragePremiumDetailBuilder[] ghCoveragePremiumDetailBuilder = {new GHCoveragePremiumDetailBuilder(coveragePremiumDetail.getCoverageCode(), coveragePremiumDetail.getCoverageId(), coveragePremiumDetail.getCoverageName(), coverageBasicPremium, coveragePremiumDetail.getPremiumVisibility())};
+                    final GHCoveragePremiumDetailBuilder[] ghCoveragePremiumDetailBuilder = {new GHCoveragePremiumDetailBuilder(coveragePremiumDetail.getCoverageCode(), coveragePremiumDetail.getCoverageId(), coveragePremiumDetail.getCoverageName(), coverageBasicPremium, coveragePremiumDetail.getPremiumVisibility(),coveragePremiumDetail.getSumAssured())};
                     if (isNotEmpty(coveragePremiumDetail.getBenefitDetails())) {
                         coveragePremiumDetail.getBenefitDetails().forEach(benefitDetail -> {
                             ghCoveragePremiumDetailBuilder[0] = ghCoveragePremiumDetailBuilder[0].withBenefit(benefitDetail.getBenefitCode(), benefitDetail.getBenefitId(), benefitDetail.getBenefitLimit());
@@ -248,7 +248,7 @@ public class GHQuotationCommandHandler {
                         int ageOnNextBirthDate = getAgeOnNextBirthDate(insuredDependentDto.getDateOfBirth());
                         coverageBasicPremium = computePremiumByApplyingAgeLoadingFactor(ageOnNextBirthDate, coverageBasicPremium);
                     }
-                    final GHCoveragePremiumDetailBuilder[] ghCoveragePremiumDetailBuilder = {new GHCoveragePremiumDetailBuilder(coveragePremiumDetail.getCoverageCode(), coveragePremiumDetail.getCoverageId(), coveragePremiumDetail.getCoverageName(), coverageBasicPremium, coveragePremiumDetail.getPremiumVisibility())};
+                    final GHCoveragePremiumDetailBuilder[] ghCoveragePremiumDetailBuilder = {new GHCoveragePremiumDetailBuilder(coveragePremiumDetail.getCoverageCode(), coveragePremiumDetail.getCoverageId(), coveragePremiumDetail.getCoverageName(), coverageBasicPremium, coveragePremiumDetail.getPremiumVisibility(),coveragePremiumDetail.getSumAssured())};
                     if (isNotEmpty(coveragePremiumDetail.getBenefitDetails())) {
                         coveragePremiumDetail.getBenefitDetails().forEach(benefitDetail -> {
                             ghCoveragePremiumDetailBuilder[0] = ghCoveragePremiumDetailBuilder[0].withBenefit(benefitDetail.getBenefitCode(), benefitDetail.getBenefitId(), benefitDetail.getBenefitLimit());

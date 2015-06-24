@@ -126,7 +126,7 @@ public class GlQuotationCommandHandler {
                         int ageOnNextBirthDate = getAgeOnNextBirthDate(insuredDto.getDateOfBirth());
                         coverageBasicPremium = computePremiumByApplyingAgeLoadingFactor(ageOnNextBirthDate, coverageBasicPremium);
                     }
-                    insuredBuilder[0] = insuredBuilder[0].withCoveragePremiumDetail(coveragePremiumDetail.getCoverageName(), coveragePremiumDetail.getCoverageCode(), coveragePremiumDetail.getCoverageId(), coverageBasicPremium);
+                    insuredBuilder[0] = insuredBuilder[0].withCoveragePremiumDetail(coveragePremiumDetail.getCoverageName(), coveragePremiumDetail.getCoverageCode(), coveragePremiumDetail.getCoverageId(), coverageBasicPremium, coveragePremiumDetail.getSumAssured());
                 });
                 Set<InsuredDependent> insuredDependents = getInsuredDependent(insuredDto.getInsuredDependents());
                 insuredBuilder[0] = insuredBuilder[0].withDependents(insuredDependents);
@@ -240,7 +240,7 @@ public class GlQuotationCommandHandler {
                         int ageOnNextBirthDate = getAgeOnNextBirthDate(insuredDependentDto.getDateOfBirth());
                         coverageBasicPremium = computePremiumByApplyingAgeLoadingFactor(ageOnNextBirthDate, coverageBasicPremium);
                     }
-                    insuredDependentBuilder[0] = insuredDependentBuilder[0].withCoveragePremiumDetail(coveragePremiumDetail.getCoverageName(), coveragePremiumDetail.getCoverageCode(), coveragePremiumDetail.getCoverageId(), coverageBasicPremium);
+                    insuredDependentBuilder[0] = insuredDependentBuilder[0].withCoveragePremiumDetail(coveragePremiumDetail.getCoverageName(), coveragePremiumDetail.getCoverageCode(), coveragePremiumDetail.getCoverageId(), coverageBasicPremium, coveragePremiumDetail.getSumAssured());
                 });
                 return insuredDependentBuilder[0].build();
             }

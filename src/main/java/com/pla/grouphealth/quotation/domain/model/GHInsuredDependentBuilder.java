@@ -118,7 +118,7 @@ public class GHInsuredDependentBuilder {
     }
 
     public GHInsuredDependentBuilder withCoveragePremiumDetail(GHCoveragePremiumDetailBuilder ghCoveragePremiumDetailBuilder) {
-        GHCoveragePremiumDetail coveragePremiumDetail = new GHCoveragePremiumDetail(ghCoveragePremiumDetailBuilder.getCoverageName(), ghCoveragePremiumDetailBuilder.getCoverageCode(), new CoverageId(ghCoveragePremiumDetailBuilder.getCoverageId()), ghCoveragePremiumDetailBuilder.getPremium(), ghCoveragePremiumDetailBuilder.getPremiumVisibility());
+        GHCoveragePremiumDetail coveragePremiumDetail = new GHCoveragePremiumDetail(ghCoveragePremiumDetailBuilder.getCoverageName(), ghCoveragePremiumDetailBuilder.getCoverageCode(), new CoverageId(ghCoveragePremiumDetailBuilder.getCoverageId()), ghCoveragePremiumDetailBuilder.getPremium(), ghCoveragePremiumDetailBuilder.getPremiumVisibility(), ghCoveragePremiumDetailBuilder.getSumAssured());
         coveragePremiumDetail = coveragePremiumDetail.addAllBenefitLimit(ghCoveragePremiumDetailBuilder.getBenefitPremiumLimits());
         if (isEmpty(this.coveragePremiumDetails)) {
             this.coveragePremiumDetails = new ArrayList<>();

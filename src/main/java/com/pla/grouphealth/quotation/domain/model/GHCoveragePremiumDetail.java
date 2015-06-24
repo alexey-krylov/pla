@@ -31,12 +31,13 @@ public class GHCoveragePremiumDetail {
 
     private Set<BenefitPremiumLimit> benefitPremiumLimits;
 
-    GHCoveragePremiumDetail(String coverageName, String coverageCode, CoverageId coverageId, BigDecimal premium, String premiumVisibility) {
+    GHCoveragePremiumDetail(String coverageName, String coverageCode, CoverageId coverageId, BigDecimal premium, String premiumVisibility, BigDecimal sumAssured) {
         this.coverageCode = coverageCode;
         this.coverageId = coverageId;
         this.premium = premium;
         this.coverageName = coverageName;
         this.premiumVisibility = premiumVisibility;
+        this.sumAssured = sumAssured;
     }
 
     public GHCoveragePremiumDetail updateWithPremium(BigDecimal premiumAmount) {

@@ -115,8 +115,8 @@ public class InsuredBuilder {
         return this;
     }
 
-    public InsuredBuilder withCoveragePremiumDetail(String coverageName, String coverageCode, String coverageId, BigDecimal premium) {
-        CoveragePremiumDetail coveragePremiumDetail = new CoveragePremiumDetail(coverageName, coverageCode, new CoverageId(coverageId), premium);
+    public InsuredBuilder withCoveragePremiumDetail(String coverageName, String coverageCode, String coverageId, BigDecimal premium, BigDecimal sumAssured) {
+        CoveragePremiumDetail coveragePremiumDetail = new CoveragePremiumDetail(coverageName, coverageCode, new CoverageId(coverageId), premium, sumAssured);
         if (isEmpty(this.coveragePremiumDetails)) {
             this.coveragePremiumDetails = new HashSet<>();
         }

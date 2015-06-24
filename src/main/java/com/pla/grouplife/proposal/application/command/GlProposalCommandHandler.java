@@ -112,7 +112,7 @@ public class GlProposalCommandHandler {
                         .withManNumber(insuredDto.getManNumber()).withDateOfBirth(insuredDto.getDateOfBirth()).withGender(insuredDto.getGender());
                 insuredDto.getCoveragePremiumDetails().forEach(coveragePremiumDetail -> {
                     BigDecimal coverageBasicPremium = computePlanBasicAnnualPremium(premiumDetail.getPlanId(), coveragePremiumDetail.getSumAssured().toPlainString(), String.valueOf(getAgeOnNextBirthDate(insuredDto.getDateOfBirth())), null, insuredDto.getGender().name(), 365, coveragePremiumDetail.getCoverageId());
-                    insuredBuilder[0] = insuredBuilder[0].withCoveragePremiumDetail(coveragePremiumDetail.getCoverageName(), coveragePremiumDetail.getCoverageCode(), coveragePremiumDetail.getCoverageId(), coverageBasicPremium);
+                    insuredBuilder[0] = insuredBuilder[0].withCoveragePremiumDetail(coveragePremiumDetail.getCoverageName(), coveragePremiumDetail.getCoverageCode(), coveragePremiumDetail.getCoverageId(), coverageBasicPremium,coveragePremiumDetail.getSumAssured());
                 });
                 Set<InsuredDependent> insuredDependents = getInsuredDependent(insuredDto.getInsuredDependents());
                 insuredBuilder[0] = insuredBuilder[0].withDependents(insuredDependents);
@@ -201,7 +201,7 @@ public class GlProposalCommandHandler {
                         .withDateOfBirth(insuredDependentDto.getDateOfBirth()).withGender(insuredDependentDto.getGender()).withRelationship(insuredDependentDto.getRelationship());
                 insuredDependentDto.getCoveragePremiumDetails().forEach(coveragePremiumDetail -> {
                     BigDecimal coverageBasicPremium = computePlanBasicAnnualPremium(premiumDetail.getPlanId(), coveragePremiumDetail.getSumAssured().toPlainString(), String.valueOf(getAgeOnNextBirthDate(insuredDependentDto.getDateOfBirth())), null, insuredDependentDto.getGender().name(), 365, coveragePremiumDetail.getCoverageId());
-                    insuredDependentBuilder[0] = insuredDependentBuilder[0].withCoveragePremiumDetail(coveragePremiumDetail.getCoverageName(), coveragePremiumDetail.getCoverageCode(), coveragePremiumDetail.getCoverageId(), coverageBasicPremium);
+                    insuredDependentBuilder[0] = insuredDependentBuilder[0].withCoveragePremiumDetail(coveragePremiumDetail.getCoverageName(), coveragePremiumDetail.getCoverageCode(), coveragePremiumDetail.getCoverageId(), coverageBasicPremium,coveragePremiumDetail.getSumAssured());
                 });
                 return insuredDependentBuilder[0].build();
             }
