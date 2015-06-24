@@ -536,7 +536,7 @@ DROP TABLE IF EXISTS `individual_life_quotation`;
   `title` varchar(255) DEFAULT NULL,
   `proposer_date_of_birth` datetime DEFAULT NULL,
   `proposer_email_address` varchar(255) DEFAULT NULL,
-  `proposed_first_name` varchar(255) DEFAULT NULL,
+  `proposer_first_name` varchar(255) DEFAULT NULL,
   `proposer_gender` varchar(255) DEFAULT NULL,
   `proposer_mobile_number` varchar(255) DEFAULT NULL,
   `proposer_nrc_number` varchar(255) DEFAULT NULL,
