@@ -305,15 +305,10 @@
                             <div class="col-lg-6">
                                 <div class="form-group required">
                                     <label>Title</label>
-                                    <select class="form-control input-sm" view-enabled="" ng-model="proposer.title"
-                                            name="ptitle"
-                                            ng-disabled="proposerSameAsProposedAssured" ng-required="true">
-                                        <option value="Mr.">Mr.</option>
-                                        <option value="Mrs.">Mrs.</option>
-                                        <option value="Miss.">Miss.</option>
-                                        <option value="Dr.">Dr.</option>
-                                        <option value="Prof.">Prof.</option>
-                                        <option value="Hon.">Hon.</option>
+                                    <select class="form-control input-sm" name="ptitle"
+                                            ng-model="proposer.title"
+                                            ng-disabled="proposerSameAsProposedAssured" ng-required="true"
+                                            ng-options="title as title for title in titleList">
                                     </select>
 
                                     <div class="error" ng-messages="step3.ptitle.$error" ng-if="step3.ptitle.$dirty">

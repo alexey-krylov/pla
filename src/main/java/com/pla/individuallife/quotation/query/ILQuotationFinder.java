@@ -45,7 +45,7 @@ public class ILQuotationFinder {
             " FROM individual_life_quotation " +
             " WHERE quotation_id =:quotationId";
 
-    private static final String QUOTATION_SEARCH_QUERY = "SELECT " +
+    public static final String QUOTATION_SEARCH_QUERY = "SELECT " +
             "  CONCAT(COALESCE(A.FIRST_NAME,' '), ' ', COALESCE(A.last_name,'')) AS agentName," +
             "  CONCAT(COALESCE(IL.first_name,' '), ' ', COALESCE(surname,'')) AS proposerName," +
             "  CONCAT(proposer_first_name,' ',proposer_surname) AS proposedName," +
