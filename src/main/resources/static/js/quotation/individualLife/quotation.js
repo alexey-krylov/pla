@@ -143,11 +143,12 @@
                             return _.filter($scope.plan.premiumTerm.maturityAges, function (term) {
                                 return term > ageNextBirthday;
                             });
-                        } else if ($scope.plan.premiumTermType === 'REGULAR') {
-                            $scope.$on('planDetailDto.policyTerm', function (newval) {
-                                $scope.planDetailDto.premiumPaymentTerm = newval;
-                            });
                         }
+                        $scope.$on('planDetailDto.policyTerm', function (newval) {
+                            if ($scope.plan.premiumTermType === 'REGULAR')
+                                $scope.planDetailDto.premiumPaymentTerm = newval;
+                        });
+
                     };
                 }]
             };

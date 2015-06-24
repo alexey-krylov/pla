@@ -748,7 +748,7 @@
 </script>
 <script id="plan-premiumterm.tpl" type="text/ng-template">
     <div ng-switch="plan.premiumTermType">
-        <div ng-switch-when="SPECIFIED_VALUES">{{premiumTerms}}
+        <div ng-switch-when="SPECIFIED_VALUES">
             <select view-enabled="" class="form-control input-sm" ng-model="planDetailDto.premiumPaymentTerm"
                     name="premiumTerm"
                     ng-options="value.text as value.text for value in premiumTerms()" ng-required="true"></select>

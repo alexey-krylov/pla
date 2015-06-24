@@ -37,6 +37,8 @@ public class AgentFinder {
 
     public static final String FIND_ALL_AGENT_BY_STATUS_QUERY = "select * from agent_team_branch_view where agentStatus IN (:agentStatuses)";
 
+    public static final String FIND_ALL_BROKER_BY_STATUS_QUERY = "select * from agent_team_branch_view where agentStatus IN (:agentStatuses) and channelCode='BROKER'";
+
     public static final String FIND_AGENT_PLAN_QUERY = "SELECT agent_id AS agentId,plan_id AS planId FROM `agent_authorized_plan`";
 
     public static final String SEARCH_AGENT_BY_PLAN_LOB = "SELECT A.*,c.line_of_business FROM AGENT A JOIN agent_authorized_plan b " +
@@ -77,6 +79,11 @@ public class AgentFinder {
     public List<Map<String, Object>> getAllNonTerminatedAgent() {
         return namedParameterJdbcTemplate.query(FIND_ALL_AGENT_BY_STATUS_QUERY, new MapSqlParameterSource().addValue("agentStatuses", Lists.newArrayList("ACTIVE", "INACTIVE")), new ColumnMapRowMapper());
     }
+
+    public List<Map<String, Object>> getAllNonTerminatedBrokers() {
+        return namedParameterJdbcTemplate.query(FIND_ALL_BROKER_BY_STATUS_QUERY, new MapSqlParameterSource().addValue("agentStatuses", Lists.newArrayList("ACTIVE", "INACTIVE")), new ColumnMapRowMapper());
+    }
+
 
     public int getAgentCountByNrcNumber(AgentDto agentDto) {
         Number noOfAgentCount = namedParameterJdbcTemplate.queryForObject(FIND_AGENT_COUNT_BY_NRC_NUMBER_QUERY, new MapSqlParameterSource().addValue("nrcNumber", agentDto.getNrcNumber()).addValue("agentId", agentDto.getAgentId()), Number.class);

@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/xhtml"
+      lang="en">
+<head th:include="fragments/common :: headTag">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <!--/*-->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/datatables/1.10.5/css/jquery.dataTables.min.css"
+          rel="stylesheet"/>
+    <link href="http://cdn.datatables.net/plug-ins/f2c75b7247b/integration/bootstrap/3/dataTables.bootstrap.css"
+          rel="stylesheet"/>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/datatables/1.10.5/js/jquery.dataTables.min.js"></script>
+    <script src="http://cdn.datatables.net/plug-ins/f2c75b7247b/integration/bootstrap/3/dataTables.bootstrap.js"></script>
+    <!--*/-->
+</head>
+<body>
+<div th:include="fragments/common :: bodyHeader" th:remove="tag"/>
+<script>
+    var interval = setInterval(function () {
+        if (require.defined("basic")) {
+            requirejs(['/pla/js/agent/viewbroker.js'], function () {
+                $(document).ready(function () {
+                    $('#agent-table').dataTable({
+                        "fnDrawCallback": function () {
+                            $("input[type=radio]").on("click", function () {
+                                viewBrokerModule.getTheItemSelected(this)
+                            });
+                        }
+                    });
+                });
+            });
+            clearInterval(interval);
+        }
+    }, 300);
+</script>
+
+<div class="modal fade" id="alert-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"
+     data-backdrop="static">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"
+                        onclick="viewBrokerModule.reload()"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">Alert</h4>
+            </div>
+            <div class="modal-body">
+                <div class="alert alert-success" hidden="true" id="alert" style="padding: 5px"></div>
+                <div class="alert alert-danger" hidden="true" id="alert-danger" style="padding: 5px"></div>
+                Are you sure to inactivate the Broker?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" id="confirm-button"
+                        onclick="viewBrokerModule.inactivateBroker()">Yes
+                </button>
+                <button type="button" class="btn btn-danger" data-dismiss="modal" id="cancel-button"
+                        onclick="viewBrokerModule.reload()">No
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="container">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <span th:text="#{listOfBrokers}">List of Brokers</span>
+                        </div>
+                        <div class="col-lg-3 col-lg-offset-3">
+                            <a type="button" class="btn btn-default btn-sm" onclick="viewBrokerModule.createBroker()">Create</a>
+                            <button type="button" class="btn btn-default btn-sm" id="agent-view" disabled="disabled"
+                                    onclick="viewBrokerModule.viewBroker()">View
+                            </button>
+                            <button type="button" class="btn btn-default btn-sm" id="agent-update" disabled="disabled"
+                                    onclick="viewBrokerModule.updateBroker()">Update
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="panel-body">
+                    <table class="table table-striped table-bordered" id="agent-table" cellspacing="0" width="100%">
+                        <thead>
+                        <tr>
+                            <th></th>
+                            <th th:text="#{brokerName}">Broker Name</th>
+                            <th th:text="#{brokerCode}">Broker Code</th>
+                            <th th:text="#{teamName}">Team Name</th>
+                            <th>NRC</th>
+                            <th>Team Leader Name</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <form id="viewBrokersForm">
+                            <!--/*/ <th:block th:each="agent : ${agentList}"> /*/-->
+                            <tr>
+                                <td><input type="radio" name="agentCode" th:value="${agent.agentId}" value="001"/></td>
+                                <td th:text="${agent.agentProfile.lastName !=null} ? ${agent.agentProfile.firstName+' '+agent.agentProfile.lastName}:${agent.agentProfile.firstName}">
+                                    Robert downey
+                                </td>
+                                <td th:text="${agent.agentId}">001</td>
+                                <td th:text="${agent.teamDetail !=null} ? ${agent.teamDetail.teamName}">A Team</td>
+                                <td th:text="${agent.agentProfile.nrcNumberInString !=null}? ${agent.agentProfile.nrcNumberInString}">
+                                    Lusaka
+                                </td>
+                                <!-- -->
+                                <td th:text="${agent.teamDetail !=null} ? ${agent.teamDetail.leaderFirstName+' '+agent.teamDetail.leaderLastName}">
+                                    South
+                                </td>
+                            </tr>
+                            <!--/*-->
+                            <tr>
+                                <td><input type="radio" name="agentCode" value="002"/></td>
+                                <td>Jack sparrow</td>
+                                <td>002</td>
+                                <td>P Team</td>
+                                <td>Zambezi</td>
+                                <td>North</td>
+                            </tr>
+                            <tr>
+                                <td><input type="radio" name="agentCode" name="agentCode" value="003"/></td>
+                                <td>Bruce wane</td>
+                                <td>003</td>
+                                <td>B Team</td>
+                                <td>Chile</td>
+                                <td>East</td>
+                            </tr>
+                            <!--*/-->
+                            <!--/*/ </th:block> /*/-->
+                        </form>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="panel-footer">
+                    <ul class="pagination" id="logs-pagination-default"></ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<footer class="footer" th:include="fragments/common :: footer">
+</footer>
+</body>
+</html>

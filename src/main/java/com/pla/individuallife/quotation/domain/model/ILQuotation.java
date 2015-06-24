@@ -6,6 +6,7 @@ import com.pla.grouplife.quotation.domain.model.IQuotation;
 import com.pla.individuallife.quotation.domain.event.ILQuotationCreatedEvent;
 import com.pla.individuallife.quotation.domain.event.ILQuotationGeneratedEvent;
 import com.pla.individuallife.quotation.domain.event.ILQuotationVersionEvent;
+import com.pla.sharedkernel.identifier.OpportunityId;
 import com.pla.sharedkernel.identifier.PlanId;
 import com.pla.sharedkernel.identifier.QuotationId;
 import lombok.Getter;
@@ -38,12 +39,16 @@ public class ILQuotation extends AbstractAggregateRoot<QuotationId> implements I
 
     private String quotationCreator;
 
+    //TODO need to understand how this would be set by the user.
+    @Embedded
+    private OpportunityId opportunityId;
+
     @Embedded
     private AgentId agentId;
 
     @Embedded
     @AttributeOverrides({
-            @AttributeOverride(name = "firstName", column = @Column(name = "proposedFirstName")),
+            @AttributeOverride(name = "firstName", column = @Column(name = "proposerFirstName")),
             @AttributeOverride(name = "surname", column = @Column(name = "proposerSurname")),
             @AttributeOverride(name = "nrcNumber", column = @Column(name = "proposerNrcNumber")),
             @AttributeOverride(name = "mobileNumber", column = @Column(name = "proposerMobileNumber")),
