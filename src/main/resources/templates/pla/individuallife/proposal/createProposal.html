@@ -7,6 +7,14 @@
 <body>
 <div th:include="fragments/common :: bodyHeader" th:remove="tag"/>
 <script>
+    var isEnterKey = function (event){
+        var charCode = (event.which) ? event.which : event.keyCode;
+
+        if (charCode ==13) {
+            event.preventDefault();
+        }
+    }
+
     requirejs.config({
          paths: {
          ilproposal_common: '/pla/js/proposal/individuallife/proposal.js?t=11221',
@@ -98,8 +106,23 @@
                         <div class="col-md-6">
                             <div class="form-group required">
                                 <label class="control-label">Agent Code</label>
-                                <input type="text" class="form-control input-sm" name="surname" ng-model="agent.agentCode"/>
+                                <input type="text" class="form-control input-sm" name="surname" ng-model="agent.agentId"/>
                             </div>
+                            <!--<div class="form-group required">
+                                <label class="control-label">Agent Code</label>
+                                <div class="input-group">
+                                    <input type="text" onkeypress="return isEnterKey(event)" class="form-control input-sm" name="agentId"
+                                           ng-model="agent.agentId" ng-required="true" ng-change="clearAgentDetails()"
+                                           ng-blur="searchAgent()"
+                                           ng-disabled="mode=='new'||mode=='edit'"/>
+                                    <div class="input-group-btn">
+                                        <button type="button" class="btn btn-default btn-sm" ng-click="searchAgent()"
+                                                ng-disabled="!quotationDetails.basic.agentId || mode=='new'||mode=='edit'">
+                                            <span class="glyphicon glyphicon-search"></span>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>-->
                             <div class="form-group required">
                                 <label class="control-label">Commission %</label>
                                 <input type="number" max="allowedPercentage" min="0" class="form-control input-sm" name="commission" ng-model="agent.commission"/>

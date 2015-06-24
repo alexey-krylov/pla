@@ -85,9 +85,37 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
             $scope.proposerEmployment = {};
             $scope.proposerResidential = {};
 
-            $scope.spouse={};
-            $scope.employment={};
-            $scope.residentialAddress={};
+            $scope.spouse=
+            {
+                "firstName": "vffh",
+                "surname": "hgd",
+                "mobileNumber": "544545",
+                "emailAddress": "drdy@jb.com"
+
+            };
+            $scope.employment=
+            {
+                "occupation": null,
+                "employer": "Nth Dimenzion",
+                "employmentDate": null,
+                "employmentType": null,
+                "address1": "trrtu",
+                "address2": "tur",
+                "province": null,
+                "postalCode": "12345",
+                "town": null,
+                "workPhone": "000000000000000"
+            };
+            $scope.residentialAddress=
+            {
+                "address1": "ryye",
+                "address2": "yry",
+                "postalCode": "12345",
+                "province": null,
+                "town": null,
+                "homePhone": "000000",
+                "emailAddress": "rtreter@ggmmm.com"
+            };
 
             $scope.familyPersonalDetail = {isPregnant: null, pregnancyMonth: null};
             $scope.familyHistory = {father: {}, mother: {}, brother: {}, sister: {}, question_16: {}};
