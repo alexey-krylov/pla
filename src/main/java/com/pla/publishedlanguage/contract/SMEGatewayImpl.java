@@ -1,7 +1,6 @@
 package com.pla.publishedlanguage.contract;
 
 import com.google.common.base.Preconditions;
-import com.google.common.collect.Maps;
 import com.pla.publishedlanguage.domain.model.EmployeeDto;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -58,11 +57,11 @@ public class SMEGatewayImpl implements ISMEGateway {
     @Override
     public void updateOpportunityStatus(String opportunityId, String opportunityStage) {
         RestTemplate restTemplate = new RestTemplate();
-        Map<String, Object> opportunityIdMap = Maps.newHashMap();
+      /*  Map<String, Object> opportunityIdMap = Maps.newHashMap();
         opportunityIdMap.put("salesOpportunityId", opportunityId);
-        opportunityIdMap.put("opportunityStageId", opportunityStage);
+        opportunityIdMap.put("opportunityStageId", opportunityStage);*/
         String url = serverUrl;
-        String sfaUrl = "http://localhost:9090/partymgr/control" + "/changeopportunitystatus";
-        restTemplate.postForObject(sfaUrl, opportunityIdMap, String.class);
+        String sfaUrl = "http://localhost:9090/partymgr/control" + "/changeopportunitystatus?salesOpportunityId="+opportunityId+"&opportunityStageId="+opportunityStage;
+        restTemplate.getForObject(sfaUrl, String.class);
     }
 }
