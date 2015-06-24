@@ -45,6 +45,20 @@ public class ILQuotationFinder {
             " FROM individual_life_quotation " +
             " WHERE quotation_id =:quotationId";
 
+    private static final String QUOTATION_SEARCH_QUERY = "SELECT " +
+            "  CONCAT(COALESCE(A.FIRST_NAME,' '), ' ', COALESCE(A.last_name,'')) AS agentName," +
+            "  CONCAT(COALESCE(IL.first_name,' '), ' ', COALESCE(surname,'')) AS proposerName," +
+            "  CONCAT(proposer_first_name,' ',proposer_surname) AS proposedName," +
+            "  il_quotation_status AS quotationStatus," +
+            "  quotation_id AS quotation_id," +
+            "  quotation_number AS quotationNumber," +
+            "  generated_on AS generatedOn," +
+            "  version_number AS versionNumber " +
+            "FROM" +
+            "  individual_life_quotation IL " +
+            "  JOIN agent A " +
+            "    ON IL.agent_id = A.agent_id ";
+
     private static final String IL_QUOTATION_TABLE = "individual_life_quotation";
 
     private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
@@ -153,10 +167,7 @@ public class ILQuotationFinder {
              return Lists.newArrayList();
          }
 
-        StringBuilder query = new StringBuilder("SELECT CONCAT(A.FIRST_NAME, ' ' ,A.last_name ) AS agentName, CONCAT(IL.first_name,' ',surname) AS proposerName," +
-                " CONCAT(proposer_first_name, ' ' ,proposer_surname) AS proposedName, il_quotation_status as quotationStatus, " +
-                " quotation_id AS quotation_id, quotation_number AS quotationNumber, generated_on AS generatedOn, version_number AS versionNumber" +
-                " FROM individual_life_quotation IL JOIN agent A ON IL.agent_id=A.agent_id ");
+        StringBuilder query = new StringBuilder(QUOTATION_SEARCH_QUERY);
 
          if (isNotEmpty(quotationNumber)) {
              if (isFirst) {
@@ -169,9 +180,9 @@ public class ILQuotationFinder {
 
          if (isNotEmpty(proposerName)) {
              if (isFirst) {
-                 query.append(" where proposed_first_name = '"+ proposerName + "'");
+                 query.append(" where lower(proposer_first_name) like '" + proposerName.toLowerCase() + "%' OR proposer_surname like '" + proposerName.toLowerCase() + "%' ");
              } else {
-                 query.append(" and proposed_first_name = '"+ proposerName + "'");
+                 query.append(" and lower(proposer_first_name) like '" + proposerName.toLowerCase() + "%' OR proposer_surname like '" + proposerName.toLowerCase() + "%' ");
              }
              isFirst = false;
          }

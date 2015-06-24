@@ -8,7 +8,7 @@ import com.pla.individuallife.proposal.application.command.ILUpdateCompulsoryHea
 import com.pla.individuallife.proposal.domain.model.QuestionAnswer;
 import com.pla.individuallife.proposal.presentation.dto.QuestionAnswerDto;
 import com.pla.individuallife.quotation.application.service.ILQuotationAppService;
-import com.pla.individuallife.quotation.presentation.dto.ILSearchDto;
+import com.pla.individuallife.quotation.presentation.dto.ILSearchQuotationDto;
 import com.pla.individuallife.quotation.query.ILQuotationFinder;
 import org.axonframework.commandhandling.CommandBus;
 import org.axonframework.commandhandling.gateway.GatewayProxyFactory;
@@ -133,7 +133,7 @@ public class ILProposalSetUpController {
     }
 
     @RequestMapping(value="/searchQuotation", method = RequestMethod.POST)
-    public ModelAndView searchQuotation(ILSearchDto searchIlDto) {
+    public ModelAndView searchQuotation(ILSearchQuotationDto searchIlDto) {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.addObject("searchResult", ilQuotationService.searchQuotation(searchIlDto));
         modelAndView.addObject("searchCriteria", searchIlDto);

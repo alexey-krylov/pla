@@ -146,7 +146,7 @@ public class ILQuotationAppService {
 
     public List<ILSearchQuotationResultDto> searchQuotation(ILSearchQuotationDto searchIlQuotationDto) {
         List<ILSearchQuotationResultDto> searchQuotations = ilQuotationFinder.searchQuotation(searchIlQuotationDto.getQuotationNumber(),
-                searchIlQuotationDto.getProposerFirstName(), searchIlQuotationDto.getProposerNrcNumber(), searchIlQuotationDto.getAgentCode(),
+                searchIlQuotationDto.getProposerName(), searchIlQuotationDto.getProposerNrcNumber(), searchIlQuotationDto.getAgentCode(),
                 searchIlQuotationDto.getQuotationStatus(),
                 searchIlQuotationDto.getQuotationId());
         return searchQuotations;

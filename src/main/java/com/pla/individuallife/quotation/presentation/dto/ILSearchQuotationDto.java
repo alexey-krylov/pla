@@ -13,8 +13,7 @@ import lombok.Setter;
 public class ILSearchQuotationDto {
 
     private String quotationNumber;
-    private String proposerFirstName;
-    private String proposerSurname;
+    private String proposerName;
     private String proposerNrcNumber;
     private String agentName;
     private String agentCode;

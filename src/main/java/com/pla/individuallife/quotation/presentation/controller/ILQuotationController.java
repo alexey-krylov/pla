@@ -5,7 +5,7 @@ import com.pla.core.query.PlanFinder;
 import com.pla.individuallife.quotation.application.command.*;
 import com.pla.individuallife.quotation.application.service.ILQuotationAppService;
 import com.pla.individuallife.quotation.presentation.dto.ILQuotationMailDto;
-import com.pla.individuallife.quotation.presentation.dto.ILSearchDto;
+import com.pla.individuallife.quotation.presentation.dto.ILSearchQuotationDto;
 import com.pla.individuallife.quotation.presentation.dto.RiderDetailDto;
 import com.pla.individuallife.quotation.query.ILQuotationDto;
 import com.pla.individuallife.quotation.query.ILQuotationFinder;
@@ -60,21 +60,21 @@ public class ILQuotationController {
     @RequestMapping(method = RequestMethod.GET)
     public ModelAndView index() {
         ModelAndView modelAndView = new ModelAndView();
-        modelAndView.addObject("searchCriteria", new ILSearchDto());
+        modelAndView.addObject("searchCriteria", new ILSearchQuotationDto());
         modelAndView.setViewName("pla/quotation/individuallife/index");
         return modelAndView;
     }
 
     @RequestMapping(value = "/searchForm", method = RequestMethod.GET)
-    public ModelAndView gotoSearchForm(ILSearchDto ilSearchDto) {
+    public ModelAndView gotoSearchForm(ILSearchQuotationDto ilSearchDto) {
         ModelAndView modelAndView = new ModelAndView();
-        modelAndView.addObject("searchCriteria", new ILSearchDto());
+        modelAndView.addObject("searchCriteria", new ILSearchQuotationDto());
         modelAndView.setViewName("pla/quotation/individuallife/index");
         return modelAndView;
     }
 
     @RequestMapping(method = RequestMethod.POST)
-    public ModelAndView searchQuotation( ILSearchDto ilSearchDto) {
+    public ModelAndView searchQuotation(ILSearchQuotationDto ilSearchDto) {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.addObject("searchResult", ilQuotationService.searchQuotation(ilSearchDto));
         modelAndView.addObject("searchCriteria", ilSearchDto);
