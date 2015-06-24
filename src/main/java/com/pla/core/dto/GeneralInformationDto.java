@@ -1,12 +1,12 @@
 package com.pla.core.dto;
 
-import com.pla.publishedlanguage.dto.AgentLoadingFactorDto;
 import com.pla.sharedkernel.identifier.LineOfBusinessEnum;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by Admin on 4/1/2015.
@@ -28,7 +28,7 @@ public class GeneralInformationDto {
     private List<ProductLineProcessItemDto> surrenderProcessItems;
     private List<ProductLineProcessItemDto> maturityProcessItems;
     private List<PremiumFrequencyFollowUpDto> premiumFollowUpFrequency;
-    private AgentLoadingFactorDto ageLoadingFactor;
+    private Map<String,Object> ageLoadingFactor;
     private String organizationInformationId;
     private List<DiscountFactorInformationDto> discountFactorItems;
     private List<ModalFactorInformationDto> modelFactorItems;
