@@ -1,6 +1,7 @@
 package com.pla.publishedlanguage.dto;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 
@@ -8,6 +9,7 @@ import java.math.BigDecimal;
  * Created by Samir on 6/23/2015.
  */
 @Getter
+@NoArgsConstructor
 public class AgentLoadingFactorDto {
 
     private int age;

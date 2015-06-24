@@ -1,9 +1,9 @@
-package com.pla.grouphealth.quotation.application.service;
+package com.pla.grouphealth.sharedresource.service;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.pla.core.query.MasterFinder;
-import com.pla.grouphealth.quotation.query.GHInsuredDto;
+import com.pla.grouphealth.sharedresource.dto.GHInsuredDto;
 import com.pla.publishedlanguage.contract.IPlanAdapter;
 import com.pla.sharedkernel.domain.model.Gender;
 import com.pla.sharedkernel.domain.model.OccupationCategory;

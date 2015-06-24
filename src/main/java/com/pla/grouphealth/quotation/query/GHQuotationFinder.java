@@ -52,8 +52,6 @@ public class GHQuotationFinder {
 
     public static final String FIND_AGENT_PLANS_QUERY = "SELECT agent_id as agentId,plan_id as planId FROM `agent_authorized_plan` WHERE agent_id=:agentId";
 
-    public static final String FIND_OCCUPATION_CLASS_QUERY = "SELECT code,description FROM occupation_class WHERE description=:occupation";
-
     public static final String FIND_COVERAGE_BY_ID_QUERY = "SELECT coverage_code AS coverageCode,coverage_name AS coverageName FROM coverage WHERE coverage_id=:coverageId";
 
     public static final String FIND_COVERAGE_BY_CODE_QUERY = "SELECT coverage_id AS coverageId, coverage_code AS coverageCode,coverage_name AS coverageName FROM coverage WHERE coverage_code=:coverageCode";
@@ -122,15 +120,6 @@ public class GHQuotationFinder {
 
     public List<Map<String, Object>> getAgentAuthorizedPlan(String agentId) {
         return namedParameterJdbcTemplate.query(FIND_AGENT_PLANS_QUERY, new MapSqlParameterSource().addValue("agentId", agentId), new ColumnMapRowMapper());
-    }
-
-    public String getOccupationClass(String occupation) {
-        List<Map<String, Object>> occupationClassList = namedParameterJdbcTemplate.query(FIND_OCCUPATION_CLASS_QUERY, new MapSqlParameterSource().addValue("occupation", occupation), new ColumnMapRowMapper());
-        if (isNotEmpty(occupationClassList)) {
-            Map<String, Object> occupationClassMap = occupationClassList.get(0);
-            return (String) occupationClassMap.get("code");
-        }
-        return "";
     }
 
     public Map<String, Object> getCoverageDetail(String coverageId) {

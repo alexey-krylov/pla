@@ -1,6 +1,6 @@
 package com.pla.grouphealth.quotation.application.command;
 
-import com.pla.grouphealth.quotation.query.GHInsuredDto;
+import com.pla.grouphealth.sharedresource.dto.GHInsuredDto;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

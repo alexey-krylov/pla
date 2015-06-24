@@ -1,4 +1,4 @@
-package com.pla.grouphealth.quotation.query;
+package com.pla.grouphealth.sharedresource.dto;
 
 import com.google.common.collect.Sets;
 import lombok.Getter;

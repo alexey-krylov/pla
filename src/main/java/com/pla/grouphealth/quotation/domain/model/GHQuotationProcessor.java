@@ -1,6 +1,10 @@
 package com.pla.grouphealth.quotation.domain.model;
 
 import com.pla.core.domain.model.agent.AgentId;
+import com.pla.grouphealth.sharedresource.model.vo.GHInsured;
+import com.pla.grouphealth.sharedresource.model.vo.GHPremiumDetail;
+import com.pla.grouphealth.sharedresource.model.vo.GHProposer;
+import com.pla.grouphealth.sharedresource.model.vo.GHProposerBuilder;
 import com.pla.sharedkernel.identifier.QuotationId;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;

@@ -4,6 +4,7 @@ import com.pla.core.domain.model.agent.AgentId;
 import com.pla.grouphealth.quotation.domain.event.GHQuotationClosedEvent;
 import com.pla.grouphealth.quotation.domain.event.GHQuotationEndSagaEvent;
 import com.pla.grouphealth.quotation.domain.event.GHQuotationGeneratedEvent;
+import com.pla.grouphealth.sharedresource.model.vo.*;
 import com.pla.sharedkernel.event.GHProposerAddedEvent;
 import com.pla.sharedkernel.identifier.OpportunityId;
 import com.pla.sharedkernel.identifier.QuotationId;

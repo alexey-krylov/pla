@@ -1,4 +1,4 @@
-package com.pla.grouphealth.quotation.query;
+package com.pla.grouphealth.sharedresource.dto;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;

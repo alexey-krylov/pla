@@ -1,8 +1,8 @@
-package com.pla.grouphealth.quotation.application.service;
+package com.pla.grouphealth.sharedresource.service;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
-import com.pla.grouphealth.quotation.query.GHInsuredDto;
+import com.pla.grouphealth.sharedresource.dto.GHInsuredDto;
 import com.pla.publishedlanguage.contract.IPlanAdapter;
 import com.pla.publishedlanguage.dto.PlanCoverageDetailDto;
 import com.pla.sharedkernel.domain.model.Gender;

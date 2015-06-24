@@ -1,4 +1,4 @@
-package com.pla.grouphealth.quotation.domain.model;
+package com.pla.grouphealth.sharedresource.model.vo;
 
 import com.pla.sharedkernel.domain.model.Gender;
 import com.pla.sharedkernel.domain.model.Relationship;

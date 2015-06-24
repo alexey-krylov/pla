@@ -1,7 +1,7 @@
-package com.pla.grouphealth.quotation.query;
+package com.pla.grouphealth.sharedresource.dto;
 
-import com.pla.grouphealth.quotation.domain.model.GHProposer;
-import com.pla.grouphealth.quotation.domain.model.GHProposerContactDetail;
+import com.pla.grouphealth.sharedresource.model.vo.GHProposer;
+import com.pla.grouphealth.sharedresource.model.vo.GHProposerContactDetail;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;

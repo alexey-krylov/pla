@@ -20,14 +20,14 @@ public class GeneralInformationProviderImpl implements IGeneralInformationProvid
 
 
     @Autowired
-    public GeneralInformationProviderImpl(GeneralInformationService generalInformationService){
+    public GeneralInformationProviderImpl(GeneralInformationService generalInformationService) {
         this.generalInformationService = generalInformationService;
     }
 
     @Override
     public AgentLoadingFactorDto getAgeLoadingFactor(LineOfBusinessEnum lineOfBusinessEnum) {
-        ProductLineGeneralInformation productLineGeneralInformation =  generalInformationService.findProductLineInformationByLineOfBusinessId(lineOfBusinessEnum);
-        AgentLoadingFactor ageLoadingFactor =  productLineGeneralInformation.getAgeLoadingFactor();
-        return ageLoadingFactor!=null?new AgentLoadingFactorDto(ageLoadingFactor.getAge(), ageLoadingFactor.getLoadingFactor()):new AgentLoadingFactorDto(0, BigDecimal.ZERO);
+        ProductLineGeneralInformation productLineGeneralInformation = generalInformationService.findProductLineInformationByLineOfBusinessId(lineOfBusinessEnum);
+        AgentLoadingFactor ageLoadingFactor = productLineGeneralInformation.getAgeLoadingFactor();
+        return ageLoadingFactor != null ? new AgentLoadingFactorDto(ageLoadingFactor.getAge(), ageLoadingFactor.getLoadingFactor()) : new AgentLoadingFactorDto(0, BigDecimal.ZERO);
     }
 }

@@ -2,9 +2,10 @@ package com.pla.grouphealth.quotation.domain.service;
 
 import com.pla.core.domain.model.agent.AgentId;
 import com.pla.grouphealth.quotation.domain.model.*;
-import com.pla.grouphealth.quotation.query.GHPremiumDetailDto;
+import com.pla.grouphealth.sharedresource.dto.GHPremiumDetailDto;
 import com.pla.grouphealth.quotation.query.GHQuotationFinder;
-import com.pla.grouphealth.quotation.query.ProposerDto;
+import com.pla.grouphealth.sharedresource.dto.ProposerDto;
+import com.pla.grouphealth.sharedresource.model.vo.*;
 import com.pla.publishedlanguage.contract.IPremiumCalculator;
 import com.pla.publishedlanguage.domain.model.BasicPremiumDto;
 import com.pla.publishedlanguage.domain.model.ComputedPremiumDto;

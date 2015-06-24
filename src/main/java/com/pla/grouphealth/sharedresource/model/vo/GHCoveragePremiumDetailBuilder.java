@@ -1,4 +1,4 @@
-package com.pla.grouphealth.quotation.domain.model;
+package com.pla.grouphealth.sharedresource.model.vo;
 
 import com.google.common.collect.Sets;
 import com.pla.sharedkernel.identifier.BenefitId;

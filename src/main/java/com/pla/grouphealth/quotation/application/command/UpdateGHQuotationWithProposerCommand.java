@@ -1,6 +1,6 @@
 package com.pla.grouphealth.quotation.application.command;
 
-import com.pla.grouphealth.quotation.query.ProposerDto;
+import com.pla.grouphealth.sharedresource.dto.ProposerDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
