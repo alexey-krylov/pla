@@ -10,6 +10,8 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 
+import static com.google.common.base.Preconditions.checkArgument;
+
 /**
  * Created by Samir on 6/23/2015.
  */
@@ -20,14 +22,15 @@ public class GeneralInformationProviderImpl implements IGeneralInformationProvid
 
 
     @Autowired
-    public GeneralInformationProviderImpl(GeneralInformationService generalInformationService){
+    public GeneralInformationProviderImpl(GeneralInformationService generalInformationService) {
         this.generalInformationService = generalInformationService;
     }
 
     @Override
     public AgentLoadingFactorDto getAgeLoadingFactor(LineOfBusinessEnum lineOfBusinessEnum) {
-        ProductLineGeneralInformation productLineGeneralInformation =  generalInformationService.findProductLineInformationByLineOfBusinessId(lineOfBusinessEnum);
-        AgentLoadingFactor ageLoadingFactor =  productLineGeneralInformation.getAgeLoadingFactor();
-        return ageLoadingFactor!=null?new AgentLoadingFactorDto(ageLoadingFactor.getAge(), ageLoadingFactor.getLoadingFactor()):new AgentLoadingFactorDto(0, BigDecimal.ZERO);
+        ProductLineGeneralInformation productLineGeneralInformation = generalInformationService.findProductLineInformationByLineOfBusinessId(lineOfBusinessEnum);
+        checkArgument(productLineGeneralInformation != null, "Configure product line general information");
+        AgentLoadingFactor ageLoadingFactor = productLineGeneralInformation.getAgeLoadingFactor();
+        return ageLoadingFactor != null ? new AgentLoadingFactorDto(ageLoadingFactor.getAge(), ageLoadingFactor.getLoadingFactor()) : new AgentLoadingFactorDto(0, BigDecimal.ZERO);
     }
 }
