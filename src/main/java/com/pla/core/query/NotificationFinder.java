@@ -10,7 +10,6 @@ import com.pla.sharedkernel.domain.model.ProcessType;
 import com.pla.sharedkernel.domain.model.ReminderTypeEnum;
 import com.pla.sharedkernel.domain.model.WaitingForEnum;
 import com.pla.sharedkernel.identifier.LineOfBusinessEnum;
-import org.nthdimenzion.ddd.domain.annotations.Finder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.ColumnMapRowMapper;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
@@ -27,7 +26,6 @@ import java.util.stream.Collectors;
 /**
  * Created by pradyumna on 18-06-2015.
  */
-@Finder
 @Component
 public class NotificationFinder {
 
@@ -55,7 +53,7 @@ public class NotificationFinder {
                 .withCreatorVisibility(JsonAutoDetect.Visibility.ANY));
     }
 
-    public static final String findAllNotificationRoleQuery = " SELECT role_type roleType,line_of_business lineOfBusiness,process processType FROM notification_role";
+    public static final String findAllNotificationRole = " SELECT role_type roleType,line_of_business lineOfBusiness,process processType FROM notification_role";
 
     private static Properties roleTypeProperties = new Properties();
     static {
@@ -68,7 +66,7 @@ public class NotificationFinder {
     }
 
     public List<Map<String,Object>> findAllNotificationRole(){
-        return namedParameterJdbcTemplate.query(findAllNotificationRoleQuery, new ColumnMapRowMapper()).parallelStream().map(new Function<Map<String, Object>, Map<String, Object>>() {
+        return namedParameterJdbcTemplate.query(findAllNotificationRole, new ColumnMapRowMapper()).parallelStream().map(new Function<Map<String, Object>, Map<String, Object>>() {
             @Override
             public Map<String, Object> apply(Map<String, Object> notificationRoleMap) {
                 notificationRoleMap.put("lineOfBusiness", LineOfBusinessEnum.valueOf(notificationRoleMap.get("lineOfBusiness").toString()));
