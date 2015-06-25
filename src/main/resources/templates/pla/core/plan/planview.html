@@ -204,8 +204,8 @@
                                                     <dd>{{planCoverage.deductibleType}}</dd>
                                                     <dt>Tax Applicable</dt>
                                                     <dd>
-                                                        <span style="color:#3c763d" ng-if="planCoverage.taxApplicable"><i class="glyphicon glyphicon-ok"></i></span>
-                                                        <span style="color:#a94442" ng-if="!planCoverage.taxApplicable"><i class="glyphicon glyphicon-remove"></i></span>
+                                                        <span ng-if="planCoverage.taxApplicable">Yes</span>
+                                                        <span ng-if="!planCoverage.taxApplicable">No</span>
                                                     </dd>
                                                 </dl>
                                             </div>
