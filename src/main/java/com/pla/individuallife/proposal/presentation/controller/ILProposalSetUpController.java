@@ -1,9 +1,11 @@
 package com.pla.individuallife.proposal.presentation.controller;
 
+import com.google.common.collect.Lists;
 import com.pla.core.query.PlanFinder;
 import com.pla.individuallife.proposal.application.command.*;
 import com.pla.individuallife.proposal.domain.model.QuestionAnswer;
 import com.pla.individuallife.proposal.presentation.dto.QuestionAnswerDto;
+import com.pla.individuallife.proposal.query.ILProposalFinder;
 import com.pla.individuallife.quotation.application.service.ILQuotationAppService;
 import com.pla.individuallife.quotation.presentation.dto.ILSearchQuotationDto;
 import com.pla.individuallife.quotation.query.ILQuotationFinder;
@@ -39,6 +41,9 @@ public class ILProposalSetUpController {
 
     @Autowired
     private ILQuotationFinder ilQuotationFinder;
+
+    @Autowired
+    private ILProposalFinder ilProposalFinder;
 
     @Autowired
     private ILQuotationAppService ilQuotationService;
@@ -160,6 +165,19 @@ public class ILProposalSetUpController {
         modelAndView.addObject("searchResult", ilQuotationService.searchQuotation(searchIlDto));
         modelAndView.addObject("searchCriteria", searchIlDto);
         modelAndView.setViewName("pla/individuallife/proposal/searchquotationforilproposal");
+        return modelAndView;
+    }
+
+    @RequestMapping(method = RequestMethod.POST)
+    public ModelAndView searchProposal(ILSearchProposalDto ilSearchProposalDto) {
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("pla/individuallife/proposal/index");
+        try {
+            modelAndView.addObject("searchResult", ilProposalFinder.searchProposal(ilSearchProposalDto));
+        } catch (Exception e) {
+            modelAndView.addObject("searchResult", Lists.newArrayList());
+        }
+        modelAndView.addObject("searchCriteria", ilSearchProposalDto);
         return modelAndView;
     }
 

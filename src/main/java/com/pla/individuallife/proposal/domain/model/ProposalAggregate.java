@@ -67,6 +67,7 @@ public class ProposalAggregate extends AbstractAnnotatedAggregateRoot<ProposalId
         AgentCommissionShareModel agentCommissionShareModel = new AgentCommissionShareModel();
         agentCommissionDetails.forEach(agentCommission -> agentCommissionShareModel.addAgentCommission(new AgentId(agentCommission.getAgentId()), agentCommission.getCommission()));
         assignAgents(agentCommissionShareModel);
+        this.proposalStatus = ILProposalStatus.DRAFT;
     }
 
     public void updateWithProposer(ProposalAggregate aggregate, ProposerDto dto, UserDetails userDetails) {
