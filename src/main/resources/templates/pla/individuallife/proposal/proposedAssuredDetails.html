@@ -103,14 +103,30 @@
                     <label class="control-label">Other Name</label>
                     <input type="text" class="form-control input-sm" name="otherName" ng-model="proposedAssured.otherName"/>
                 </div>
+
                 <div class="form-group required">
                     <label class="control-label">Date Of Birth</label>
-                    <input type="text" class="form-control input-sm" name="dateOfBirth" ng-model="proposedAssured.dateOfBirth" ng-required="true"/>
+                    <div class='input-group date'>
+                        <input type="text" class="form-control input-sm"
+                               datepicker-popup="" view-enabled=""
+                               ng-required="true"
+                               is-open="launchdob1"
+                               max-date="todayDate"
 
-                    <div class="error" ng-messages="proposedAssuredDetails.dateOfBirth.$error">
-                        <small class="error" ng-message="required">Please enter Date of Birth</small>
+                               ng-model="proposedAssured.dateOfBirth" name="dob"/>
+                                    <span class="input-group-btn">
+                                    <button type="button" class="btn btn-default btn-sm"
+                                            ng-click="launchProposedAssuredeDate($event)">
+                                        <i class="glyphicon glyphicon-calendar"></i></button>
+                                  </span>
+                    </div>
+                    <div class="error" ng-messages="step2.dob.$error" ng-if="step2.dob.$dirty">
+                        <small ng-message="required">Please enter Employment Date.</small>
+                        <small ng-message="date">Invalid Date.</small>
+
                     </div>
                 </div>
+
                 <div class="form-group required">
                     <label class="control-label">Sex</label>
                     <select class="form-control input-sm" name="gender" ng-model="proposedAssured.gender" ng-required="true">
