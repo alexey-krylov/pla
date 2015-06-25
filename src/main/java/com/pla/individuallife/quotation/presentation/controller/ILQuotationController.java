@@ -19,6 +19,8 @@ import net.sf.jasperreports.engine.JRException;
 import org.axonframework.commandhandling.gateway.CommandGateway;
 import org.nthdimenzion.presentation.Result;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -143,9 +145,12 @@ public class ILQuotationController {
     public ILQuotationDto getQuotationById(@PathVariable("quotationId") String quotationId) {
         ILQuotationDto dto = ilQuotationFinder.getQuotationById(quotationId);
         Map agentDetail = agentFinder.getAgentById(dto.getAgentId());
+        if (agentDetail.get("lastName") == null) {
+            agentDetail.put("lastName", "");
+        }
         Map planDetail = planFinder.findPlanByPlanId(new PlanId(dto.getPlanId()));
-        dto.setAgentDetail(agentDetail);
         dto.setPlanDetail(planDetail);
+        dto.setAgentDetail(agentDetail);
         return dto;
     }
 
@@ -213,8 +218,14 @@ public class ILQuotationController {
 
     @RequestMapping(value = "/getpremiumdetail/{quotationid}", method = RequestMethod.GET)
     @ResponseBody
-    public PremiumDetailDto getPremiumDetail(@PathVariable("quotationid") String quotationId) {
-        return ilQuotationService.getPremiumDetail(new QuotationId(quotationId));
+    public ResponseEntity getPremiumDetail(@PathVariable("quotationid") String quotationId) {
+        PremiumDetailDto dto = null;
+        try {
+            dto = ilQuotationService.getPremiumDetail(new QuotationId(quotationId));
+        } catch (IllegalArgumentException iag) {
+            return new ResponseEntity(Result.failure(iag.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        return new ResponseEntity(dto, HttpStatus.OK);
     }
 
     @RequestMapping(value = "/generatequotation", method = RequestMethod.POST)

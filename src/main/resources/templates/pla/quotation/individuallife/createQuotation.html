@@ -30,6 +30,11 @@
     <form novalidate="true" name="quotationForm">
 
         <div class="wizard fuelux-wizard" id="planSetUpWizard" selected-item="selectedItem">
+            <div class="alert alert-danger" role="alert" ng-if="serverError">
+                <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+                <span class="sr-only">Error:</span>
+                {{serverErrMsg}}
+            </div>
             <ul class="steps" style="margin-left: 0">
                 <li data-step="1"><span class="badge badge-info">1</span>Basic Details<span class="chevron"></span></li>
                 <li data-step="2"><span class="badge">2</span>Proposed Assured Details<span class="chevron"></span></li>
@@ -435,7 +440,7 @@
                 </div>
                 <div class="step-pane" data-step="4">
                     <ng-form name="step4" novalidate="">
-                        <div class="row">
+                        <div class="row"> {{step4.$error}}
                             <div class="col-sm-6">
                                 <div class="form-group required">
                                     <label>Plan</label>
@@ -458,8 +463,8 @@
                                     <thead>
                                     <tr>
                                         <th>Optional Cover</th>
-                                        <th>Optional Cover Sum Assured</th>
-                                        <th>Optional Cover Term</th>
+                                        <th>Optional Cover Sum Assured *</th>
+                                        <th>Optional Cover Term *</th>
                                         <th>Premium Waiver</th>
                                     </tr>
                                     </thead>
@@ -660,6 +665,10 @@
                 <small ng-message="max">Sum Assured cannot be more than {{plan.sumAssured.maxSumInsured}}.</small>
                 <small ng-message="invalidMultiple">Invalid Multiples.</small>
             </div>
+            <div class="error" ng-messages="step4.invalidMultiple.$error" ng-if="step4.$dirty">
+                <small ng-message="invalidMultiple">Invalid Multiplier
+                </small>
+            </div>
         </div>
         <div ng-switch-when="INCOME_MULTIPLIER">
             <input type="number" view-enabled="" class="form-control input-sm" min="0"
@@ -667,7 +676,7 @@
                    name="sumAssured"
                    ng-model="planDetailDto.sumAssured" ng-required="true"/>
 
-            <div class="error" ng-messages="step4.sumAssured.$error" ng-if="step1.$dirty">
+            <div class="error" ng-messages="step4.sumAssured.$error" ng-if="step4.$dirty">
                 <small ng-message="max">Sum Assured cannot be greater than {{plan.sumAssured.incomeMultiplier}}.
                 </small>
             </div>
@@ -729,7 +738,6 @@
     </div>
 </script>
 <script id="plan-coverage.tpl" type="text/ng-template">
-    <i ng-bind=""></i>
     <div ng-switch="getCoverageTermType(rider)">
         <div ng-switch-when="SPECIFIED_VALUES">
             <select class="form-control input-sm" view-enabled="" ng-model="rider.coverTerm" name="policyTerm"

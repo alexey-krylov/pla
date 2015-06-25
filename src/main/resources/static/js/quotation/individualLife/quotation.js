@@ -27,15 +27,14 @@
                     if (!ctrl)return;
                     scope.$watch('planDetailDto.sumAssured', function (newval, oldval) {
                         if (newval == oldval)return;
-                        var plan = scope.$eval('plan');
-                        console.log(JSON.stringify(plan.sumAssured));
-                        if (plan.sumAssured.sumAssuredType !== 'RANGE')
-                            return;
-                        if (newval && plan) {
-                            var multiplesOf = plan.sumAssured.multiplesOf;
-                            var modulus = parseInt(newval) % parseInt(multiplesOf);
-                            var valid = modulus == 0;
-                            ctrl.$setValidity('invalidMultiple', valid);
+                        if (newval) {
+                            var plan = scope.$eval('plan');
+                            if (plan && plan.sumAssured.sumAssuredType == 'RANGE') {
+                                var multiplesOf = plan.sumAssured.multiplesOf;
+                                var modulus = parseInt(newval) % parseInt(multiplesOf);
+                                var valid = modulus == 0;
+                                ctrl.$setValidity('invalidMultiple', valid);
+                            }
                         }
                         return valid ? newval : undefined;
                     });
@@ -93,7 +92,7 @@
                                 $scope.policyTerms = _.filter(coverage.coverageTerm.validTerms, function (term) {
                                     return ageNextBirthday + term.text <= maxMaturityAge;
                                 });
-                            } else if (coverage.coverageTermType === 'MATURITY_AGE_DEPENDENT') {
+                            } else if (coverage.coverageTermType === 'AGE_DEPENDENT') {
                                 $scope.policyTerms = _.filter(coverage.coverageTerm.maturityAges, function (term) {
                                     return term > ageNextBirthday;
                                 });
@@ -126,10 +125,13 @@
                 restrict: 'E',
                 templateUrl: 'plan-premiumterm.tpl',
                 link: function (scope) {
-                    scope.$watch('planDetailDto.policyTerm', function (newval) {
-                        if (newval)
+                    scope.$on('planDetailDto.policyTerm', function (newval) {
+                        if (scope.plan.premiumTermType === 'REGULAR') {
+                            console.log(' changing premium payment term ' + newval);
                             scope.planDetailDto.premiumPaymentTerm = newval;
-                    })
+                        }
+
+                    });
                 },
                 controller: ['$scope', function ($scope) {
                     $scope.premiumTerms = function () {
@@ -144,10 +146,7 @@
                                 return term > ageNextBirthday;
                             });
                         }
-                        $scope.$on('planDetailDto.policyTerm', function (newval) {
-                            if ($scope.plan.premiumTermType === 'REGULAR')
-                                $scope.planDetailDto.premiumPaymentTerm = newval;
-                        });
+
 
                     };
                 }]
@@ -433,10 +432,16 @@
 
                 $scope.$on('changed.fu.wizard', function (name, event, data) {
                     $scope.selectedItem = data.step;
-                    if (data && data.step == 4) {
-                        $http.get('getpremiumdetail/' + $scope.quotationId).success(function (response) {
-                            $scope.premiumData = response;
-                        });
+                    if (data && data.step == 5) {
+                        $http.get('getpremiumdetail/' + $scope.quotationId)
+                            .success(function (response) {
+                                console.log('success ***');
+                                $scope.premiumData = response;
+                            }).error(function (response) {
+                                $scope.stepsSaved["5"] = false;
+                                $scope.serverError = true;
+                                $scope.serverErrMsg = response.message;
+                            });
                     }
                 });
                 $scope.$on('finished.fu.wizard', function (name, event, data) {

@@ -65,13 +65,18 @@
             <div class="panel panel-primary">
                 <div class="panel-heading">
                     <div class="row">
+                        <div class="col-lg-12">
                         <div class="col-lg-6">
                             <span th:text="#{listOfAgents}">List of Agents</span>
                         </div>
-                        <div class="col-lg-3 col-lg-offset-3">
-                            <a type="button" class="btn btn-default btn-sm" onclick="viewAgentModule.createAgent()">Create</a>
+                            <div class="col-lg-6" style="text-align: right">
+                                <a type="button" class="btn btn-default btn-sm" onclick="viewAgentModule.createAgent()">Create
+                                    Agent</a>
+                                <a type="button" class="btn btn-default btn-sm"
+                                   onclick="viewAgentModule.createBroker()">Create Broker</a>
                             <button type="button" class="btn btn-default btn-sm" id="agent-view" disabled="disabled" onclick="viewAgentModule.viewAgent()">View</button>
                             <button type="button" class="btn btn-default btn-sm" id="agent-update" disabled="disabled" onclick="viewAgentModule.updateAgent()">Update</button>
+                            </div>
                         </div>
                     </div>
                 </div>

@@ -10,7 +10,7 @@ define(['angular','angular-loading-bar','directives','angular-animate','ui-boots
             return {
                 'response': function(response) {
                     if(response.config.method=="POST" && response.status==200){
-                        if(response.data.status=="500"){
+                        if (response.data && response.data.status == "500") {
                             $rootScope.$broadcast('httpInterceptorAlert',{
                                 message:response.data.message,
                                 type:"danger"
@@ -27,6 +27,6 @@ define(['angular','angular-loading-bar','directives','angular-animate','ui-boots
             }
         }])
         .config(['$httpProvider',function($httpProvider){
-            $httpProvider.interceptors.push('nthHttpInterceptor');
+            //$httpProvider.interceptors.push('nthHttpInterceptor');
         }]);
 });
