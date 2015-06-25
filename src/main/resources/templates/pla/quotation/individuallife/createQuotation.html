@@ -65,7 +65,8 @@
                                          selected-object="selectedAgent" disable-input="uneditable"
                                          remote-url="/pla/core/agent/search/" field-required="true"
                                          initial-value="selectedAgent.title"
-                                         remote-url-data-field="" title-field="first_name,last_name" minlength="3"
+                                         remote-url-data-field="" title-field="agent_id,first_name,last_name"
+                                         minlength="3"
                                          input-class="form-control form-control-small"
                                          match-class="highlight">
                                     </div>
@@ -183,10 +184,9 @@
                                                ng-required="true"
                                                is-open="launchdob1"
                                                max-date="todayDate"
-
                                                ng-model="proposedAssured.dateOfBirth" name="dob"/>
                                     <span class="input-group-btn">
-                                    <button type="button" class="btn btn-default btn-sm"
+                                    <button type="button" class="btn btn-default btn-sm" view-enabled=""
                                             ng-click="launchProposedAssuredDOB($event)">
                                         <i class="glyphicon glyphicon-calendar"></i></button>
                                   </span>
@@ -311,7 +311,7 @@
                                 <div class="form-group required">
                                     <label>Title</label>
                                     <select class="form-control input-sm" name="ptitle"
-                                            ng-model="proposer.title"
+                                            ng-model="proposer.title" view-enabled=""
                                             ng-disabled="proposerSameAsProposedAssured" ng-required="true"
                                             ng-options="title as title for title in titleList">
                                     </select>
@@ -344,7 +344,7 @@
                                                max-date="todayDate"
                                                ng-model="proposer.dateOfBirth" name="dob2"/>
                                     <span class="input-group-btn">
-                                    <button type="button" class="btn btn-default btn-sm"
+                                    <button type="button" class="btn btn-default btn-sm" view-enabled=""
                                             ng-click="launchProposerDOB($event)">
                                         <i class="glyphicon glyphicon-calendar"></i></button>
                                   </span>

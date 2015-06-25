@@ -498,9 +498,25 @@
                                         <div class="controls">
                                             <input type="number" ng-pattern="onlyNumbers" name="maxMaturityAge"
                                                    class="form-control input-sm col-sm-3" style="margin-top: 8px"
-                                                   min="{{plan.planDetail.maxEntryAge}}"
+                                                   max="{{plan.planDetail.maxEntryAge}}"
+                                                   min="{{plan.planDetail.minEntryAge}}"
                                                    ng-required="true"
                                                    ng-model="plan.policyTerm.maxMaturityAge"/>
+
+                                            <div class="error"
+                                                 ng-show="step3.maxMaturityAge.$dirty &amp;&amp; step3.maxMaturityAge.$invalid">
+                                                <small class="error" ng-show="step3.maxMaturityAge.$error.required">
+                                                    Maximum Maturity Age is required.
+                                                </small>
+                                                <small class="error" ng-show="step3.maxMaturityAge.$error.max">
+                                                    Cannot be more than Plan Max Entry Age
+                                                    {{plan.planDetail.maxEntryAge}}
+                                                </small>
+                                                <small class="error" ng-show="step3.maxMaturityAge.$error.min">
+                                                    Cannot be more than Plan Min Entry Age
+                                                    {{plan.planDetail.minEntryAge}}
+                                                </small>
+                                            </div>
                                         </div>
                                     </div>
                                     <div class="control-group required col-sm-9">
