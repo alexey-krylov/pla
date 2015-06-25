@@ -77,7 +77,7 @@ public class GHQuotationCommandHandler {
     }
 
     @CommandHandler
-    public String updateWithAgentDetail(com.pla.grouphealth.quotation.application.command.UpdateGLQuotationWithAgentCommand updateGLQuotationWithAgentCommand) {
+    public String updateWithAgentDetail(UpdateGLQuotationWithAgentCommand updateGLQuotationWithAgentCommand) {
         GroupHealthQuotation groupHealthQuotation = ghQuotationMongoRepository.load(new QuotationId(updateGLQuotationWithAgentCommand.getQuotationId()));
         boolean isVersioningRequire = groupHealthQuotation.requireVersioning();
         groupHealthQuotation = groupHealthQuotationService.updateWithAgent(groupHealthQuotation, updateGLQuotationWithAgentCommand.getAgentId(), updateGLQuotationWithAgentCommand.getUserDetails());
@@ -88,7 +88,7 @@ public class GHQuotationCommandHandler {
     }
 
     @CommandHandler
-    public String generateQuotation(com.pla.grouphealth.quotation.application.command.GenerateGLQuotationCommand generateGLQuotationCommand) {
+    public String generateQuotation(GenerateGLQuotationCommand generateGLQuotationCommand) {
         GroupHealthQuotation groupHealthQuotation = ghQuotationMongoRepository.load(new QuotationId(generateGLQuotationCommand.getQuotationId()));
         groupHealthQuotation.generateQuotation(LocalDate.now());
         return groupHealthQuotation.getIdentifier().getQuotationId();
