@@ -3,7 +3,6 @@ package com.pla.individuallife.proposal.domain.model;
 import com.google.common.base.Preconditions;
 import com.pla.core.domain.model.agent.AgentId;
 import com.pla.individuallife.proposal.presentation.dto.AgentDetailDto;
-import com.pla.individuallife.proposal.presentation.dto.ProposerDto;
 import com.pla.sharedkernel.identifier.ProposalId;
 import org.apache.commons.beanutils.BeanUtils;
 import org.axonframework.eventsourcing.annotation.AbstractAnnotatedAggregateRoot;
@@ -70,24 +69,14 @@ public class ProposalAggregate extends AbstractAnnotatedAggregateRoot<ProposalId
         this.proposalStatus = ILProposalStatus.DRAFT;
     }
 
-    public void updateWithProposer(ProposalAggregate aggregate, ProposerDto dto, UserDetails userDetails) {
+    public void updateWithProposer(ProposalAggregate aggregate, Proposer proposer, UserDetails userDetails) {
 
         boolean hasProposalPreprocessorRole = hasIndividualLifeProposalProcessorRole(userDetails.getAuthorities());
         if (!hasProposalPreprocessorRole) {
             throw new AuthorizationServiceException("User does not have Individual Life Proposal processor(ROLE_PROPOSAL_PROCESSOR) authority");
         }
         Preconditions.checkArgument(hasProposalPreprocessorRole);
-        try {
-            Proposer proposer = new Proposer();
-            BeanUtils.copyProperties(proposer, dto);
             assignProposer(proposer);
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        } catch (InvocationTargetException e) {
-            e.printStackTrace();
-        }
-
-
     }
 
     private void assignProposer(ProposedAssured proposedAssured) {

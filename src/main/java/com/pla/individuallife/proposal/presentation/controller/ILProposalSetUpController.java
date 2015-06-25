@@ -85,16 +85,13 @@ public class ILProposalSetUpController {
     @ResponseBody
     @RequestMapping(value = "/updateproposer")
     public ResponseEntity<Map> updateWithProposerDetails(@RequestBody ILProposalUpdateWithProposerCommand cmd, BindingResult bindingResult, HttpServletRequest request) {
-        String proposalId = null;
-
+        String proposalId = cmd.getProposalId();
         if (bindingResult.hasErrors()) {
             return new ResponseEntity(bindingResult.getAllErrors(), HttpStatus.PRECONDITION_FAILED);
         }
         try {
-            proposalId = new ObjectId().toString();
             UserDetails userDetails = getLoggedInUserDetail(request);
             cmd.setUserDetails(userDetails);
-            cmd.setProposalId(proposalId);
             proposalCommandGateway.updateWithProposer(cmd);
         } catch (TimeoutException e) {
             e.printStackTrace();

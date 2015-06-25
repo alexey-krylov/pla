@@ -1,8 +1,10 @@
 package com.pla.individuallife.proposal.query;
 
 import com.google.common.collect.Lists;
+import com.pla.individuallife.proposal.domain.model.Proposer;
 import com.pla.individuallife.proposal.presentation.dto.ILSearchProposalDto;
 import com.pla.sharedkernel.identifier.QuotationId;
+import org.joda.time.LocalDate;
 import org.nthdimenzion.ddd.domain.annotations.Finder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
@@ -14,6 +16,7 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Service;
 
 import javax.sql.DataSource;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -44,7 +47,7 @@ public class ILProposalFinder {
     public static final String FIND_ACTIVE_AGENT_BY_FIRST_NAME_QUERY = "SELECT * FROM agent_team_branch_view WHERE firstName =:firstName";
 
 
-    public List<Map> searchProposal(ILSearchProposalDto ilSearchProposalDto) {
+    public List<ILSearchProposalDto> searchProposal(ILSearchProposalDto ilSearchProposalDto) {
         Criteria criteria = Criteria.where("proposalStatus").in(new String[]{"DRAFT", "SUBMITTED"});
         String proposalNumber = ilSearchProposalDto.getProposalNumber();
         String proposalId = ilSearchProposalDto.getProposalId();
@@ -81,9 +84,27 @@ public class ILProposalFinder {
             criteria = criteria.and("agentId.agentId").in(agentIds);
         }
         Query query = new Query(criteria);
-        query.with(new Sort(Sort.Direction.ASC,"quotationNumber"));
+        query.with(new Sort(Sort.Direction.ASC,"proposalNumber"));
         query.with(new Sort(Sort.Direction.DESC,"versionNumber"));
-        return mongoTemplate.find(query, Map.class, "individual_life_proposal");
+        List<Map> allProposals = mongoTemplate.find(query, Map.class, "individual_life_proposal");
+        List<ILSearchProposalDto> ilProposalDtoList = allProposals.stream().map(new TransformToILSearchProposalDto()).collect(Collectors.toList());
+        return ilProposalDtoList;
+    }
+
+    private class TransformToILSearchProposalDto implements Function<Map, ILSearchProposalDto> {
+
+        @Override
+        public ILSearchProposalDto apply(Map map) {
+            String proposalId = map.get("_id").toString();
+            //AgentDetailDto agentDetailDto = getAgentDetail(new QuotationId(quotationId));
+            LocalDate generatedOn = map.get("generatedOn") != null ? new LocalDate((Date) map.get("generatedOn")) : null;
+            String proposalStatus = map.get("proposalStatus") != null ? (String) map.get("proposalStatus") : "";
+            String proposalNumber = map.get("proposalNumber") != null ? (String) map.get("proposalNumber") : "";
+            Proposer proposerMap = map.get("proposer") != null ? (Proposer) map.get("proposer") : null;
+            String proposerName = proposerMap != null ? proposerMap.getFirstName() : "";
+            ILSearchProposalDto ilSearchProposalDto = new ILSearchProposalDto(proposalNumber, proposerName, "NRCNumber", "AgenName", "Agent Code", proposalId, "createdOn", "version", proposalStatus);
+            return ilSearchProposalDto;
+        }
     }
 
 }

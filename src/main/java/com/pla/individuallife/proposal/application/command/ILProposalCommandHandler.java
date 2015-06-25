@@ -42,53 +42,53 @@ public class ILProposalCommandHandler {
 
     @CommandHandler
     public void updateProposalProposer(ILProposalUpdateWithProposerCommand cmd) {
-        ProposerDto dto = cmd.getProposer();
+        Proposer proposer = getProposer(cmd.getProposer());
         if (logger.isDebugEnabled()) {
-            logger.debug(" Proposer :: " + dto);
+            logger.debug(" Proposer :: " + proposer);
         }
         ProposalAggregate aggregate = ilProposalMongoRepository.load(new ProposalId(cmd.getProposalId()));
-        aggregate.updateWithProposer(aggregate, dto, cmd.getUserDetails());
+        aggregate.updateWithProposer(aggregate, proposer, cmd.getUserDetails());
         ilProposalMongoRepository.add(aggregate);
     }
 
 
-    private Proposer getProposer(ILCreateProposalCommand proposalCommand) {
+    private Proposer getProposer(ProposerDto dto) {
         Proposer proposer = new ProposerBuilder()
-                .withOtherName(proposalCommand.getProposer().getOtherName())
-                .withDateOfBirth(proposalCommand.getProposer().getDateOfBirth())
-                .withEmailAddress(proposalCommand.getProposer().getEmailAddress())
-                .withFirstName(proposalCommand.getProposer().getFirstName())
-                .withSurname(proposalCommand.getProposer().getSurname())
-                .withTitle(proposalCommand.getProposer().getTitle())
-                .withDateOfBirth(proposalCommand.getProposer().getDateOfBirth())
-                .withGender(proposalCommand.getProposer().getGender())
-                .withMobileNumber(proposalCommand.getProposer().getMobileNumber())
-                .withMaritalStatus(proposalCommand.getProposer().getMaritalStatus())
-                .withSpouseEmailAddress(proposalCommand.getProposer().getSpouse().getEmailAddress())
-                .withSpouseFirstName(proposalCommand.getProposer().getSpouse().getFirstName())
-                .withMobileNumber(proposalCommand.getProposer().getSpouse().getMobileNumber())
-                        .withSpouseLastName(proposalCommand.getProposer().getSpouse().getSurname())
-                .withNrc(proposalCommand.getProposer().getNrc())
-                .withMaritalStatus(proposalCommand.getProposer().getMaritalStatus())
+                .withOtherName(dto.getOtherName())
+                .withDateOfBirth(dto.getDateOfBirth())
+                .withEmailAddress(dto.getEmailAddress())
+                .withFirstName(dto.getFirstName())
+                .withSurname(dto.getSurname())
+                .withTitle(dto.getTitle())
+                .withDateOfBirth(dto.getDateOfBirth())
+                .withGender(dto.getGender())
+                .withMobileNumber(dto.getMobileNumber())
+                .withMaritalStatus(dto.getMaritalStatus())
+                .withSpouseEmailAddress(dto.getSpouse().getEmailAddress())
+                .withSpouseFirstName(dto.getSpouse().getFirstName())
+                .withMobileNumber(dto.getSpouse().getMobileNumber())
+                        .withSpouseLastName(dto.getSpouse().getSurname())
+                .withNrc(dto.getNrc())
+                .withMaritalStatus(dto.getMaritalStatus())
                 .withEmploymentDetail(new EmploymentDetailBuilder()
-                        .withEmploymentDate(proposalCommand.getProposer().getEmployment().getEmploymentDate())
-                        .withEmploymentTypeId(proposalCommand.getProposer().getEmployment().getEmploymentType())
-                        .withEmployer(proposalCommand.getProposer().getEmployment().getEmployer())
-                        .withWorkPhone(proposalCommand.getProposer().getEmployment().getWorkPhone())
+                        .withEmploymentDate(dto.getEmployment().getEmploymentDate())
+                        .withEmploymentTypeId(dto.getEmployment().getEmploymentType())
+                        .withEmployer(dto.getEmployment().getEmployer())
+                        .withWorkPhone(dto.getEmployment().getWorkPhone())
                         .withAddress(new AddressBuilder()
-                                .withAddress1(proposalCommand.getProposer().getEmployment().getAddress1())
-                                .withAddress2(proposalCommand.getProposer().getEmployment().getAddress2())
-                                .withProvince(proposalCommand.getProposer().getEmployment().getProvince())
-                                .withTown(proposalCommand.getProposer().getEmployment().getTown()).createAddress())
-                        .withOccupationClass(proposalCommand.getProposer().getEmployment().getOccupation()).createEmploymentDetail())
+                                .withAddress1(dto.getEmployment().getAddress1())
+                                .withAddress2(dto.getEmployment().getAddress2())
+                                .withProvince(dto.getEmployment().getProvince())
+                                .withTown(dto.getEmployment().getTown()).createAddress())
+                        .withOccupationClass(dto.getEmployment().getOccupation()).createEmploymentDetail())
                 .withResidentialAddress(new ResidentialAddress(new AddressBuilder()
-                        .withAddress1(proposalCommand.getProposer().getResidentialAddress().getAddress1())
-                        .withAddress2(proposalCommand.getProposer().getResidentialAddress().getAddress2())
-                        .withProvince(proposalCommand.getProposer().getResidentialAddress().getProvince())
-                        .withPostalCode(proposalCommand.getProposer().getResidentialAddress().getPostalCode())
-                        .withTown(proposalCommand.getProposer().getResidentialAddress().getTown()).createAddress(),
-                        proposalCommand.getProposer().getResidentialAddress().getHomePhone(),
-                        proposalCommand.getProposer().getResidentialAddress().getEmailAddress())).createProposer();
+                        .withAddress1(dto.getResidentialAddress().getAddress1())
+                        .withAddress2(dto.getResidentialAddress().getAddress2())
+                        .withProvince(dto.getResidentialAddress().getProvince())
+                        .withPostalCode(dto.getResidentialAddress().getPostalCode())
+                        .withTown(dto.getResidentialAddress().getTown()).createAddress(),
+                        dto.getResidentialAddress().getHomePhone(),
+                        dto.getResidentialAddress().getEmailAddress())).createProposer();
         return proposer;
     }
 
