@@ -18,6 +18,8 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
 import static com.google.common.base.Preconditions.checkArgument;
+import static com.pla.core.domain.exception.NotificationException.raiseDuplicateEntryException;
+import static com.pla.core.domain.exception.NotificationException.raiseErrorInReload;
 
 /**
  * Created by Admin on 6/18/2015.
@@ -51,8 +53,12 @@ public class NotificationService {
 
     public boolean uploadNotificationTemplate(LineOfBusinessEnum lineOfBusiness, ProcessType processType, WaitingForEnum waitingFor, ReminderTypeEnum reminderType, byte[] reminderFile){
         checkArgument(lineOfBusiness.isValidProcess(processType), "The process "+processType+" is not associated with "+lineOfBusiness);
-        checkArgument(processType.isValidWaitingFor(waitingFor), "The "+waitingFor+" waiting for is not associated with "+lineOfBusiness);
+        checkArgument(processType.isValidWaitingFor(waitingFor), "The "+waitingFor+" waiting for is not associated with "+processType);
         checkArgument(waitingFor.isValidReminderType(reminderType), "The "+reminderType+" is not associated with "+waitingFor);
+        boolean isExists = isNotificationTemplateExists(lineOfBusiness,processType,waitingFor,reminderType);
+        if (isExists){
+            raiseDuplicateEntryException();
+        }
         NotificationTemplateId notificationTemplateId = new NotificationTemplateId(idGenerator.nextId());
         NotificationTemplate notificationTemplate = NotificationTemplate.createNotification(notificationTemplateId,lineOfBusiness, processType,
                 waitingFor, reminderType);
@@ -63,6 +69,9 @@ public class NotificationService {
 
     public boolean reloadNotificationTemplate(String notificationId,byte[] reminderFile){
         NotificationTemplate existedNotificationTemplate = notificationRepository.findOne(new NotificationTemplateId(notificationId));
+        if (existedNotificationTemplate==null){
+            raiseErrorInReload();
+        }
         existedNotificationTemplate = existedNotificationTemplate.withReminderFile(reminderFile);
         notificationRepository.save(existedNotificationTemplate);
         return AppConstants.SUCCESS;

@@ -25,6 +25,7 @@ import java.util.Map;
 import java.util.concurrent.Callable;
 
 import static com.google.common.base.Preconditions.checkArgument;
+import static com.pla.core.domain.exception.NotificationException.raiseProcessIsNotValid;
 
 /**
  * Created by pradyumna on 18-06-2015.
@@ -73,7 +74,7 @@ public class ReminderSetupController {
                 checkArgument(roleType != null, "role type cannot be null");
                 boolean isValidProcess = lineOfBusinessEnum.isValidProcess(processType);
                 if (!isValidProcess) {
-                    throw new NotificationException("The process " + processType + " is not associated with " + lineOfBusinessEnum);
+                    raiseProcessIsNotValid(processType.toString(),lineOfBusinessEnum.toString());
                 }
                 notificationService.createNotificationRoleMapping(roleType, lineOfBusinessEnum, processType);
             } catch (NotificationException e) {
@@ -113,8 +114,9 @@ public class ReminderSetupController {
         return ()-> {
             try {
                 MultipartFile template = notificationTemplateDto.getTemplate();
+           /*     byte[] reminderFile = FileUtils.readFileToByteArray(notificationTemplateDto.getTemplate());*/
                 boolean isCreated = notificationService.uploadNotificationTemplate(notificationTemplateDto.getLineOfBusiness(), notificationTemplateDto.getProcessType(),
-                        notificationTemplateDto.getWaitingFor(), notificationTemplateDto.getReminderType(), template.getBytes());
+                        notificationTemplateDto.getWaitingFor(), notificationTemplateDto.getReminderType(), template.getBytes() );
                 if (!isCreated) {
                     return new ResponseEntity(Result.failure("Error in uploading the notification template"), HttpStatus.INTERNAL_SERVER_ERROR);
                 }
@@ -132,6 +134,7 @@ public class ReminderSetupController {
         return ()-> {
             try {
                 MultipartFile template = notificationTemplateDto.getTemplate();
+               /* byte[] reminderFile = FileUtils.readFileToByteArray(notificationTemplateDto.getTemplate());*/
                 boolean isCreated = notificationService.reloadNotificationTemplate(notificationTemplateDto.getNotificationTemplateId(), template.getBytes());
                 if (!isCreated) {
                     return new ResponseEntity(Result.failure("Error in Updating the notification template"), HttpStatus.INTERNAL_SERVER_ERROR);
