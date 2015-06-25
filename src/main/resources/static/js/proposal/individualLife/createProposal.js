@@ -26,6 +26,12 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
                 isPart: true
             };
 
+            $scope.searchILProposal=function()
+            {
+                console.log('searchILProposal');
+            };
+
+
             $scope.selectedWizard = 1;
             $scope.proposedAssured = {
                 "title": "Mr.",
@@ -185,6 +191,18 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
             $scope.clear=function()
             {
                 $scope.agent={};
+            };
+
+            $scope.searchAgent = function () {
+                console.log('Testing In SearchCode..');
+                $scope.agentId=$scope.agent.agentId;
+                console.log('Value is: '+$scope.agentId);
+                $http.get("getagentdetail/" +$scope.agentId).success(function (response, status, headers, config) {
+                 $scope.agent = response;
+                 }).error(function (response, status, headers, config) {
+
+                 });
+
             };
 
             $scope.saveProposedAssuredDetails = function () {
