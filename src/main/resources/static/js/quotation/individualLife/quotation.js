@@ -94,7 +94,7 @@
                                 });
                             } else if (coverage.coverageTermType === 'AGE_DEPENDENT') {
                                 $scope.policyTerms = _.filter(coverage.coverageTerm.maturityAges, function (term) {
-                                    return term > ageNextBirthday;
+                                    return term.text > ageNextBirthday;
                                 });
                             }
                             return coverage.coverageTermType;

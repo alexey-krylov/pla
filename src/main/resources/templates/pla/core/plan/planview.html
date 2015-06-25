@@ -27,8 +27,8 @@
                                 <dd>{{plan.planDetail.freeLookPeriod}}</dd>
                                 <dt>Funeral Cover</dt>
                                 <dd>
-                                    <span style="color:#3c763d" ng-if="funeralCover"><i class="glyphicon glyphicon-ok"></i></span>
-                                    <span style="color:#a94442" ng-if="!funeralCover"><i class="glyphicon glyphicon-remove"></i></span>
+                                    <span ng-if="funeralCover">Yes</span>
+                                    <span ng-if="!funeralCover">No</span>
                                 </dd>
                             </dl>
                         </div>
@@ -47,8 +47,8 @@
                                 <dd>{{plan.planDetail.surrenderAfter}}</dd>
                                 <dt>Tax Applicable</dt>
                                 <dd>
-                                    <span style="color:#3c763d" ng-if="taxApplicable"><i class="glyphicon glyphicon-ok"></i></span>
-                                    <span style="color:#a94442" ng-if="!taxApplicable"><i class="glyphicon glyphicon-remove"></i></span>
+                                    <span ng-if="taxApplicable">Yes</span>
+                                    <span ng-if="!taxApplicable">No</span>
                                 </dd>
                             </dl>
                         </div>
