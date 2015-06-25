@@ -22,4 +22,7 @@ public interface ILProposalCommandGateway {
 
     String updateWithPlandetail(ILProposalUpdateWithPlanAndBeneficiariesCommand updateWithPlanAndBeneficiariesCommand)
             throws TimeoutException, InterruptedException;
+
+    String updateWithProposer(ILProposalUpdateWithProposerCommand cmd)
+            throws TimeoutException, InterruptedException;
 }

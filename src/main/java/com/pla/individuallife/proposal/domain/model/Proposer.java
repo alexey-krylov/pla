@@ -1,18 +1,18 @@
 package com.pla.individuallife.proposal.domain.model;
 
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.pla.sharedkernel.domain.model.Gender;
 import com.pla.sharedkernel.domain.model.MaritalStatus;
 import lombok.Getter;
-import org.hibernate.annotations.Type;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.joda.time.DateTime;
-import org.joda.time.LocalDate;
 
 /**
  * Created by pradyumna on 22-05-2015.
  */
 @Getter
+@Setter
+@NoArgsConstructor
 public class Proposer {
 
     private String title;

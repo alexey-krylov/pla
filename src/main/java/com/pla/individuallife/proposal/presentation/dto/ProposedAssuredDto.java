@@ -22,7 +22,7 @@ public class ProposedAssuredDto {
     private String surname;
     private String otherName;
     private String nrc;
-    private boolean isProposer;
+    private Boolean isProposer;
     @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
     private DateTime dateOfBirth;
     private Gender gender;

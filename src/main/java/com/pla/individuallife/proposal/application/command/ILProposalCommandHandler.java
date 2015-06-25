@@ -1,9 +1,10 @@
 package com.pla.individuallife.proposal.application.command;
 
-import com.pla.sharedkernel.identifier.ProposalId;
 import com.pla.individuallife.proposal.domain.model.*;
 import com.pla.individuallife.proposal.domain.service.ProposalNumberGenerator;
+import com.pla.individuallife.proposal.presentation.dto.ProposerDto;
 import com.pla.individuallife.quotation.query.ILQuotationFinder;
+import com.pla.sharedkernel.identifier.ProposalId;
 import org.axonframework.commandhandling.annotation.CommandHandler;
 import org.axonframework.repository.AggregateNotFoundException;
 import org.axonframework.repository.Repository;
@@ -39,6 +40,16 @@ public class ILProposalCommandHandler {
         ilProposalMongoRepository.add(aggregate);
     }
 
+    @CommandHandler
+    public void updateProposalProposer(ILProposalUpdateWithProposerCommand cmd) {
+        ProposerDto dto = cmd.getProposer();
+        if (logger.isDebugEnabled()) {
+            logger.debug(" Proposer :: " + dto);
+        }
+        ProposalAggregate aggregate = ilProposalMongoRepository.load(new ProposalId(cmd.getProposalId()));
+        aggregate.updateWithProposer(aggregate, dto, cmd.getUserDetails());
+        ilProposalMongoRepository.add(aggregate);
+    }
 
 
     private Proposer getProposer(ILCreateProposalCommand proposalCommand) {
@@ -97,7 +108,7 @@ public class ILProposalCommandHandler {
                 .withMobileNumber(proposalCommand.getProposedAssured().getSpouse().getMobileNumber())
                 .withSpouseLastName(proposalCommand.getProposedAssured().getSpouse().getSurname())
                 .withSpouseEmailAddress(proposalCommand.getProposedAssured().getSpouse().getEmailAddress())
-                .withIsProposer(proposalCommand.getProposedAssured().isProposer())
+                .withIsProposer(proposalCommand.getProposedAssured().getIsProposer())
                 .withEmploymentDetail(new EmploymentDetailBuilder()
                         .withEmployer(proposalCommand.getProposedAssured().getEmployment().getEmployer())
                         .withEmploymentDate(proposalCommand.getProposedAssured().getEmployment().getEmploymentDate())

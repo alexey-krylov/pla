@@ -28,7 +28,7 @@ public class ProposedAssured {
     private String spouseEmailAddress;
     private EmploymentDetail employmentDetail;
     private ResidentialAddress residentialAddress;
-    private boolean isProposer;
+    private Boolean isProposer;
     private String otherName;
 
     ProposedAssured(String title, String firstName, String surname, String nrc, DateTime dateOfBirth, Gender gender, String mobileNumber, String emailAddress,
