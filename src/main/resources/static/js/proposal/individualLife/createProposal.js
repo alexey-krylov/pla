@@ -26,12 +26,6 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
                 isPart: true
             };
 
-            $scope.searchILProposal=function()
-            {
-                console.log('searchILProposal');
-            };
-
-
             $scope.selectedWizard = 1;
             $scope.proposedAssured = {
                 "title": "Mr.",
@@ -244,7 +238,7 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
                 /*$http.post('create', request1);
 */
                 $http.post('create', request1).success(function (response, status, headers, config) {
-                 $scope.proposalId = response;
+                 $scope.proposal = response;
                  console.log('proposalId : '+$scope.proposalId );
                  }).error(function (response, status, headers, config) {
                  });

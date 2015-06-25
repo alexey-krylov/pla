@@ -24,14 +24,14 @@
                     <div class="form-group">
                         <label>Proposer Name</label>
                         <input type="text" class="form-control input-sm" name="proposerName"
-                               th:value="${searchCriteria.proposerFirstName}"/>
+                               th:value="${searchCriteria.proposerName}"/>
                     </div>
                 </div>
                 <div class="col-md-2">
                     <div class="form-group">
                         <label>NRC Number</label>
                         <input type="text" class="form-control input-sm" name="agentName"
-                               th:value="${searchCriteria.agentName}"/>
+                               th:value="${searchCriteria.proposerNrcNumber}"/>
                     </div>
                 </div>
                 <div class="col-md-2">
@@ -88,15 +88,15 @@
                             </thead>
                             <tbody>
                             <form id="viewAgentsForm">
-                                <tr th:each="quotation : ${searchResult}">
-                                    <td><input type="radio" name="quotationNumber" th:value="${quotation.quotationId}"/>
+                                <tr th:each="proposal : ${searchResult}">
+                                    <td><input type="radio" name="quotationNumber" th:value="${proposal.proposalId}"/>
                                     </td>
-                                    <td th:text="${quotation.proposalNumber}">5100000010315</td>
-                                    <td th:text="${quotation.proposalGeneratedOn}">05/03/2015</td>
-                                    <td>Agent Name</td>
-                                    <td></td>
-                                    <td th:text="${quotation.versionNumber}"></td>
-                                    <td th:text="${quotation.quotationStatus}"></td>
+                                    <td th:text="${proposal.proposalNumber}">5100000010315</td>
+                                    <td th:text="${proposal.createdOn}">05/03/2015</td>
+                                    <td th:text="${proposal.agentName}">Agent Name</td>
+                                    <td th:text="${proposal.proposerName}"></td>
+                                    <td th:text="${proposal.version}"></td>
+                                    <td th:text="${proposal.ProposalStatus}"></td>
                                 </tr>
                             </form>
                             </tbody>
