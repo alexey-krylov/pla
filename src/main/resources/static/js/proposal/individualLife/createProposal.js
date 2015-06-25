@@ -33,7 +33,7 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
                 "surname": "Proposed Surname",
                 "otherName": "OtherName",
                 "nrc": "NRC0001",
-                "dateOfBirth": new Date('1978-12-12'),
+                "dateOfBirth": null,
                 "gender": "MALE",
                 "mobileNumber": "9343044175",
                 "emailAddress": "someAddress@gmail.com",
