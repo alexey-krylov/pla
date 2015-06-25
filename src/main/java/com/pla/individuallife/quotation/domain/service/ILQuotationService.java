@@ -61,10 +61,7 @@ public class ILQuotationService {
         Preconditions.checkArgument(quotationProcessor != null);
         Preconditions.checkState(quotation.requireVersioning());
         QuotationId newQuotationId = new QuotationId(idGenerator.nextId());
-        String quotationNumber = ilQuotationNumberGenerator.getQuotationNumber(ILQuotation.class);
-
-        ILQuotation newQuotation = quotation.cloneQuotation(quotationProcessor, newQuotationId,
-                quotationNumber, -1);
+        ILQuotation newQuotation = quotation.cloneQuotation(quotationProcessor, newQuotationId, -1);
         newQuotation.updateWithProposer(quotationProcessor, proposer);
         ilQuotationRepository.add(newQuotation);
         return newQuotationId;
@@ -86,9 +83,7 @@ public class ILQuotationService {
         Preconditions.checkArgument(quotationProcessor != null);
         Preconditions.checkState(quotation.requireVersioning());
         QuotationId newQuotationId = new QuotationId(idGenerator.nextId());
-        String quotationNumber = ilQuotationNumberGenerator.getQuotationNumber(ILQuotation.class);
-        ILQuotation newQuotation = quotation.cloneQuotation(quotationProcessor, newQuotationId,
-                quotationNumber, -1);
+        ILQuotation newQuotation = quotation.cloneQuotation(quotationProcessor, newQuotationId, -1);
         newQuotation.updateWithAssured(quotationProcessor, proposedAssured, isAssuredTheProposer);
         ilQuotationRepository.add(newQuotation);
         return newQuotationId;
@@ -100,9 +95,7 @@ public class ILQuotationService {
         Preconditions.checkArgument(quotationProcessor != null);
         Preconditions.checkState(quotation.requireVersioning());
         QuotationId newQuotationId = new QuotationId(idGenerator.nextId());
-        String quotationNumber = ilQuotationNumberGenerator.getQuotationNumber(ILQuotation.class);
-        ILQuotation newQuotation = quotation.cloneQuotation(quotationProcessor, newQuotationId,
-                quotationNumber, -1);
+        ILQuotation newQuotation = quotation.cloneQuotation(quotationProcessor, newQuotationId, -1);
         newQuotation.updateWithPlanAndRider(quotationProcessor, planDetail, riders);
         ilQuotationRepository.add(newQuotation);
         return newQuotationId;

@@ -174,8 +174,7 @@ public class ILQuotation extends AbstractAggregateRoot<QuotationId> implements I
         return ILQuotationStatus.GENERATED.equals(this.ilQuotationStatus);
     }
 
-    public ILQuotation cloneQuotation(ILQuotationProcessor quotationCreator, QuotationId quotationId, String quotationNumber,
-                                      int versionNumber) {
+    public ILQuotation cloneQuotation(ILQuotationProcessor quotationCreator, QuotationId quotationId, int versionNumber) {
         checkArgument(isNotEmpty(quotationNumber));
         checkArgument(quotationCreator != null, "User is does not have Quotation Preprocessor Role.");
         checkArgument(quotationId != null);
@@ -184,7 +183,7 @@ public class ILQuotation extends AbstractAggregateRoot<QuotationId> implements I
         newQuotation.quotationId = quotationId;
         newQuotation.versionNumber = versionNumber;
         newQuotation.ilQuotationStatus = ILQuotationStatus.DRAFT;
-        newQuotation.quotationNumber = quotationNumber;
+        newQuotation.quotationNumber = this.quotationNumber;
         newQuotation.quotationARId = this.quotationARId;
         newQuotation.proposer = this.proposer;
         newQuotation.agentId = this.agentId;
