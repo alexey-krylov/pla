@@ -10,15 +10,60 @@ import java.util.EnumSet;
 @Getter
 public enum ProcessType {
 
-    ASSIGNMENT("Assignment"),
-    CLAIM("Claim",EnumSet.of(WaitingForEnum.MANDATORY_DOCUMENTS)),
-    ENDORSEMENT("Endorsement",EnumSet.of(WaitingForEnum.MANDATORY_DOCUMENTS,WaitingForEnum.PREMIUM)),
-    ENROLLMENT("Enrollment"),
-    MATURITY("Maturity Claim",EnumSet.of(WaitingForEnum.MANDATORY_DOCUMENTS)),
-    PROPOSAL("Proposal",EnumSet.of(WaitingForEnum.MANDATORY_DOCUMENTS,WaitingForEnum.CONSENT_LETTER,WaitingForEnum.MEDICALS,WaitingForEnum.INITIAL_PREMIUM)),
-    REINSTATEMENT("Reinstatement",EnumSet.of(WaitingForEnum.MANDATORY_DOCUMENTS,WaitingForEnum.PREMIUM)),
-    SURRENDER("Surrender Claim",EnumSet.of(WaitingForEnum.MANDATORY_DOCUMENTS)),
-    QUOTATION("Quotation", EnumSet.of(WaitingForEnum.QUOTATION_RESPONSE));
+    ASSIGNMENT("Assignment") {
+        @Override
+        public boolean isValidWaitingFor(WaitingForEnum waitingForEnum) {
+            return false;
+        }
+    },
+    CLAIM("Claim",EnumSet.of(WaitingForEnum.MANDATORY_DOCUMENTS)) {
+        @Override
+        public boolean isValidWaitingFor(WaitingForEnum waitingForEnum) {
+            return getWaitingForList().contains(waitingForEnum);
+        }
+    },
+    ENDORSEMENT("Endorsement",EnumSet.of(WaitingForEnum.MANDATORY_DOCUMENTS,WaitingForEnum.PREMIUM)) {
+        @Override
+        public boolean isValidWaitingFor(WaitingForEnum waitingForEnum) {
+            return getWaitingForList().contains(waitingForEnum);
+        }
+    },
+    ENROLLMENT("Enrollment") {
+        @Override
+        public boolean isValidWaitingFor(WaitingForEnum waitingForEnum) {
+            return getWaitingForList().contains(waitingForEnum);
+        }
+    },
+    MATURITY("Maturity Claim",EnumSet.of(WaitingForEnum.MANDATORY_DOCUMENTS)) {
+        @Override
+        public boolean isValidWaitingFor(WaitingForEnum waitingForEnum) {
+            return getWaitingForList().contains(waitingForEnum);
+        }
+    },
+    PROPOSAL("Proposal",EnumSet.of(WaitingForEnum.MANDATORY_DOCUMENTS,WaitingForEnum.CONSENT_LETTER,WaitingForEnum.MEDICALS,WaitingForEnum.INITIAL_PREMIUM)) {
+        @Override
+        public boolean isValidWaitingFor(WaitingForEnum waitingForEnum) {
+            return getWaitingForList().contains(waitingForEnum);
+        }
+    },
+    REINSTATEMENT("Reinstatement",EnumSet.of(WaitingForEnum.MANDATORY_DOCUMENTS,WaitingForEnum.PREMIUM)) {
+        @Override
+        public boolean isValidWaitingFor(WaitingForEnum waitingForEnum) {
+            return getWaitingForList().contains(waitingForEnum);
+        }
+    },
+    SURRENDER("Surrender Claim",EnumSet.of(WaitingForEnum.MANDATORY_DOCUMENTS)) {
+        @Override
+        public boolean isValidWaitingFor(WaitingForEnum waitingForEnum) {
+            return getWaitingForList().contains(waitingForEnum);
+        }
+    },
+    QUOTATION("Quotation", EnumSet.of(WaitingForEnum.QUOTATION_RESPONSE)) {
+        @Override
+        public boolean isValidWaitingFor(WaitingForEnum waitingForEnum) {
+            return getWaitingForList().contains(waitingForEnum);
+        }
+    };
 
     public String description;
 
@@ -37,5 +82,5 @@ public enum ProcessType {
     public String toString() {
         return description;
     }
-
+    public abstract boolean isValidWaitingFor(WaitingForEnum waitingForEnum);
 }
