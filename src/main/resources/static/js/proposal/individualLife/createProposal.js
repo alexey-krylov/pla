@@ -1,7 +1,7 @@
 angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute', 'commonServices', 'ngMessages'])
     .controller('createProposalCtrl', ['$scope', 'resources', '$bsmodal', '$http',
         'globalConstants', 'ProposalService',
-        function ($scope, resources, $bsmodal, $http, globalConstants, ProposalService) {
+        function ($scope, resources,$bsmodal, $http, globalConstants, ProposalService) {
 
             console.log('create proposal');
             $scope.employmentTypes = [];
@@ -180,6 +180,11 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
                 console.log('Inside addagent Method..');
                 $scope.agentDetails.unshift(agent);
                 $('#agentModal').modal('hide');
+                $scope.clear();
+            };
+            $scope.clear=function()
+            {
+                $scope.agent={};
             };
 
             $scope.saveProposedAssuredDetails = function () {
