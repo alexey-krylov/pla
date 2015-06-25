@@ -13,7 +13,20 @@ import lombok.Setter;
 public class ILSearchProposalDto {
 
     private String proposalNumber;
-    private String proposerFirstName;
+
+    private String proposerName;
+
+    private String proposerNrcNumber;
+
     private String agentName;
+
     private String agentCode;
+
+    private String proposalId;
+
+    private String createdOn;
+
+    private String version;
+
+    private String ProposalStatus;
 }

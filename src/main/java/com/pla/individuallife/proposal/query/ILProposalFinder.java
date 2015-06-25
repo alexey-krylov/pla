@@ -1,7 +1,7 @@
 package com.pla.individuallife.proposal.query;
 
 import com.google.common.collect.Lists;
-import com.pla.individuallife.proposal.application.command.ILSearchProposalDto;
+import com.pla.individuallife.proposal.presentation.dto.ILSearchProposalDto;
 import com.pla.sharedkernel.identifier.QuotationId;
 import org.nthdimenzion.ddd.domain.annotations.Finder;
 import org.springframework.beans.factory.annotation.Autowired;
