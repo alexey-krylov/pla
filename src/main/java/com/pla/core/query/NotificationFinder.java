@@ -10,9 +10,11 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Component;
 
 import javax.sql.DataSource;
+import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -30,14 +32,25 @@ public class NotificationFinder {
         this.namedParameterJdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
     }
 
-    public static final String findAllNotificationRoleQuery = " SELECT role_type roleType,line_of_business lineOfBusiness,process process FROM notification_role";
+    public static final String findAllNotificationRoleQuery = " SELECT role_type roleType,line_of_business lineOfBusiness,process processType FROM notification_role";
 
-    public List<Map<String,Object>> findAllNotificationRole() {
+    private static Properties roleTypeProperties = new Properties();
+    static {
+        ClassLoader bundleClassLoader = Thread.currentThread().getContextClassLoader();
+        try {
+            roleTypeProperties.load(bundleClassLoader.getResourceAsStream("messages_en.properties"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public List<Map<String,Object>> findAllNotificationRole(){
         return namedParameterJdbcTemplate.query(findAllNotificationRoleQuery, new ColumnMapRowMapper()).parallelStream().map(new Function<Map<String, Object>, Map<String, Object>>() {
             @Override
             public Map<String, Object> apply(Map<String, Object> notificationRoleMap) {
                 notificationRoleMap.put("lineOfBusiness", LineOfBusinessEnum.valueOf(notificationRoleMap.get("lineOfBusiness").toString()).getDescription());
-                notificationRoleMap.put("processType", ProcessType.valueOf(notificationRoleMap.get("process").toString()).getDescription());
+                notificationRoleMap.put("processType", ProcessType.valueOf(notificationRoleMap.get("processType").toString()).getDescription());
+                notificationRoleMap.put("roleType", roleTypeProperties.getProperty(notificationRoleMap.get("roleType").toString()));
                 return notificationRoleMap;
             }
         }).collect(Collectors.toList());
