@@ -142,6 +142,12 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
                 $scope.launchdob1 = true;
             };
 
+            $scope.launchProposedAssuredeDob = function ($event) {
+                $event.preventDefault();
+                $event.stopPropagation();
+                $scope.launchdob1 = true;
+            };
+
             $scope.launchProposerDate = function ($event) {
                 $event.preventDefault();
                 $event.stopPropagation();
