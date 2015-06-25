@@ -4,15 +4,14 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
-import com.pla.grouphealth.sharedresource.dto.GHInsuredDto;
 import com.pla.grouphealth.quotation.query.GHQuotationFinder;
+import com.pla.grouphealth.sharedresource.dto.GHInsuredDto;
 import com.pla.grouplife.quotation.application.service.GLInsuredExcelHeader;
 import com.pla.publishedlanguage.contract.IPlanAdapter;
 import com.pla.publishedlanguage.dto.PlanCoverageDetailDto;
 import com.pla.sharedkernel.domain.model.Relationship;
 import com.pla.sharedkernel.identifier.PlanId;
 import com.pla.sharedkernel.util.ExcelGeneratorUtil;
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import org.apache.poi.hssf.usermodel.HSSFCellStyle;
 import org.apache.poi.hssf.usermodel.HSSFFont;
@@ -252,7 +251,6 @@ public class GHInsuredExcelParser {
         return duplicateRows;
     }
 
-    @EqualsAndHashCode
     private class NameRelationshipCellValueHolder {
         private String firstName;
         private String lastName;
@@ -262,6 +260,25 @@ public class GHInsuredExcelParser {
             this.firstName = firstName;
             this.lastName = lastName;
             this.dateOfBirth = dateOfBirth;
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
+
+            NameRelationshipCellValueHolder that = (NameRelationshipCellValueHolder) o;
+
+            if (dateOfBirth != null ? !dateOfBirth.equals(that.dateOfBirth) : that.dateOfBirth != null) return false;
+            if (firstName != null ? !firstName.equalsIgnoreCase(that.firstName) : that.firstName != null) return false;
+            if (lastName != null ? !lastName.equalsIgnoreCase(that.lastName) : that.lastName != null) return false;
+
+            return true;
+        }
+
+        @Override
+        public int hashCode() {
+            return dateOfBirth != null ? dateOfBirth.hashCode() : 0;
         }
     }
 

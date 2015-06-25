@@ -8,6 +8,7 @@ import com.pla.grouphealth.quotation.domain.model.GHQuotationStatus;
 import com.pla.grouphealth.quotation.domain.model.GroupHealthQuotation;
 import com.pla.grouphealth.quotation.repository.GHQuotationRepository;
 import com.pla.publishedlanguage.contract.IProcessInfoAdapter;
+import com.pla.publishedlanguage.contract.ISMEGateway;
 import com.pla.sharedkernel.domain.model.ProcessType;
 import com.pla.sharedkernel.exception.ProcessInfoException;
 import com.pla.sharedkernel.identifier.LineOfBusinessEnum;
@@ -20,6 +21,7 @@ import org.axonframework.saga.annotation.SagaEventHandler;
 import org.axonframework.saga.annotation.StartSaga;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
+import org.nthdimenzion.common.AppConstants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,6 +54,9 @@ public class GroupHealthQuotationSaga extends AbstractAnnotatedSaga {
     private transient CommandGateway commandGateway;
 
     private List<ScheduleToken> scheduledTokens = Lists.newArrayList();
+
+    @Autowired
+    private transient ISMEGateway smeGateway;
 
     @StartSaga
     @SagaEventHandler(associationProperty = "quotationId")
@@ -126,6 +131,9 @@ public class GroupHealthQuotationSaga extends AbstractAnnotatedSaga {
         if (!GHQuotationStatus.CLOSED.equals(groupHealthQuotation.getQuotationStatus())) {
             commandGateway.send(new GHClosureGLQuotationCommand(event.getQuotationId()));
         }
+        if (groupHealthQuotation.getOpportunityId() != null) {
+            smeGateway.updateOpportunityStatus(groupHealthQuotation.getOpportunityId().getOpportunityId(), AppConstants.OPPORTUNITY_LOST_STATUS);
+        }
     }
 
     @SagaEventHandler(associationProperty = "quotationId")
@@ -133,6 +141,10 @@ public class GroupHealthQuotationSaga extends AbstractAnnotatedSaga {
     public void handle(GHQuotationClosedEvent event) {
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("Handling GH Quotation Closure Event .....", event);
+        }
+        GroupHealthQuotation groupHealthQuotation = ghQuotationRepository.findOne(event.getQuotationId());
+        if (groupHealthQuotation.getOpportunityId() != null) {
+            smeGateway.updateOpportunityStatus(groupHealthQuotation.getOpportunityId().getOpportunityId(), AppConstants.OPPORTUNITY_CLOSE_STATUS);
         }
     }
 

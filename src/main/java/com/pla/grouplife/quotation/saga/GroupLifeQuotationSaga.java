@@ -21,6 +21,7 @@ import org.axonframework.saga.annotation.SagaEventHandler;
 import org.axonframework.saga.annotation.StartSaga;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
+import org.nthdimenzion.common.AppConstants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -132,7 +133,7 @@ public class GroupLifeQuotationSaga extends AbstractAnnotatedSaga {
             commandGateway.send(new ClosureGLQuotationCommand(event.getQuotationId()));
         }
         if (groupLifeQuotation.getOpportunityId() != null) {
-            smeGateway.updateOpportunityStatus(groupLifeQuotation.getOpportunityId().getOpportunityId(), "");
+            smeGateway.updateOpportunityStatus(groupLifeQuotation.getOpportunityId().getOpportunityId(), AppConstants.OPPORTUNITY_LOST_STATUS);
         }
     }
 
@@ -144,7 +145,7 @@ public class GroupLifeQuotationSaga extends AbstractAnnotatedSaga {
         }
         GroupLifeQuotation groupLifeQuotation = glQuotationRepository.findOne(event.getQuotationId());
         if (groupLifeQuotation.getOpportunityId() != null) {
-            smeGateway.updateOpportunityStatus(groupLifeQuotation.getOpportunityId().getOpportunityId(), "");
+            smeGateway.updateOpportunityStatus(groupLifeQuotation.getOpportunityId().getOpportunityId(), AppConstants.OPPORTUNITY_CLOSE_STATUS);
         }
     }
 
