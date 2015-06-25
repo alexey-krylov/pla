@@ -4,6 +4,7 @@ import com.google.common.collect.Lists;
 import com.pla.core.query.PlanFinder;
 import com.pla.individuallife.proposal.application.command.*;
 import com.pla.individuallife.proposal.domain.model.QuestionAnswer;
+import com.pla.individuallife.proposal.presentation.dto.ILSearchProposalDto;
 import com.pla.individuallife.proposal.presentation.dto.QuestionAnswerDto;
 import com.pla.individuallife.proposal.query.ILProposalFinder;
 import com.pla.individuallife.quotation.application.service.ILQuotationAppService;
