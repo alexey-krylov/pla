@@ -44,7 +44,7 @@ public class NotificationFinder {
         }
     }
 
-    public List<Map<String,Object>> findAllNotificationRole() throws IOException {
+    public List<Map<String,Object>> findAllNotificationRole(){
         return namedParameterJdbcTemplate.query(findAllNotificationRoleQuery, new ColumnMapRowMapper()).parallelStream().map(new Function<Map<String, Object>, Map<String, Object>>() {
             @Override
             public Map<String, Object> apply(Map<String, Object> notificationRoleMap) {
