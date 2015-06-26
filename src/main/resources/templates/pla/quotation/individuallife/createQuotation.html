@@ -221,7 +221,7 @@
                                         <input type="radio" name="sameProposer" ng-required="true" view-enabled=""
                                                ng-value="true"
                                                ng-model="proposerSameAsProposedAssured"
-                                               ng-disabled="proposer.surname!=undefined"/>Yes</label>
+                                               ng-disabled="proposer.surname!=undefined &amp;&amp;checkIfPlanSupportsSelf()"/>Yes</label>
                                     <label>
                                         <input type="radio" name="sameProposer" ng-required="true" view-enabled=""
                                                   ng-model="proposerSameAsProposedAssured" ng-value="false"/>No</label>
@@ -440,7 +440,7 @@
                 </div>
                 <div class="step-pane" data-step="4">
                     <ng-form name="step4" novalidate="">
-                        <div class="row"> {{step4.$error}}
+                        <div class="row">
                             <div class="col-sm-6">
                                 <div class="form-group required">
                                     <label>Plan</label>
@@ -754,12 +754,14 @@
         <div ng-switch-when="SPECIFIED_VALUES">
             <select view-enabled="" class="form-control input-sm" ng-model="planDetailDto.premiumPaymentTerm"
                     name="premiumTerm"
-                    ng-options="value.text as value.text for value in premiumTerms()" ng-required="true"></select>
+                    ng-options="value.text as value.text for value in premiumTerms() | filter:lessThanEqualTo('text',planDetailDto.policyTerm)"
+                    ng-required="true"></select>
         </div>
         <div ng-switch-when="SPECIFIED_AGES">
             <select view-enabled="" class="form-control input-sm" ng-model="planDetailDto.premiumPaymentTerm"
                     name="premiumTerm"
-                    ng-options="value.text as value.text for value in premiumTerms()" ng-required="true"></select>
+                    ng-options="value.text as value.text for value in premiumTerms() | filter:lessThanEqualTo('text',planDetailDto.policyTerm)"
+                    ng-required="true"></select>
         </div>
         <div ng-switch-when="REGULAR">
             <input type="number" class="form-control input-sm" readonly="true"

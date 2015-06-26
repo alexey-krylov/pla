@@ -143,15 +143,20 @@
                             });
                         } else if ($scope.plan.premiumTermType === 'SPECIFIED_AGES') {
                             return _.filter($scope.plan.premiumTerm.maturityAges, function (term) {
-                                return term > ageNextBirthday;
+                                return parseInt(term.text) > ageNextBirthday;
                             });
                         }
-
-
                     };
+
+                    $scope.lessThanEqualTo = function (prop, val) {
+                        return function (item) {
+                            return item[prop] <= val;
+                        }
+                    }
                 }]
             };
         })
+
         .directive('validateDob', function () {
             return {
                 // restrict to an attribute type.
@@ -190,8 +195,9 @@
             }
         })
         .controller('QuotationController', ['$scope', '$http', '$route', '$location', '$bsmodal', '$window',
-            'globalConstants', 'getQueryParameter',
-            function ($scope, $http, $route, $location, $bsmodal, $window, globalConstants, getQueryParameter) {
+            'globalConstants', 'getQueryParameter', '$timeout',
+            function ($scope, $http, $route, $location, $bsmodal, $window, globalConstants, getQueryParameter, $timeout) {
+
 
                 var absUrl = $location.absUrl();
                 $scope.titleList = globalConstants.title;
@@ -274,7 +280,9 @@
                             var selectedPlan = {};
                             selectedPlan.title = response.planDetail.planDetail.planName || '';
                             selectedPlan.description = response.planDetail;
+
                             $scope.selectedPlan = selectedPlan;
+
                             $scope.planDetailDto = response.planDetailDto;
                             $scope.selectedItem = 1;
                             $scope.stepsSaved["1"] = true;
@@ -318,8 +326,11 @@
                         $http.get('/pla/core/plan/getPlanById/' + newval.description.plan_id)
                             .success(function (response) {
                                 $scope.plan = response;
+
                             });
+
                     }
+
                 });
 
                 $scope.$watch('plan.planId', function (newval) {
@@ -453,6 +464,17 @@
 
                 $scope.remoteUrlRequestFn = function (str) {
                     return {agentId: $scope.quotation.agentId};
+                };
+
+                $scope.checkIfPlanSupportsSelf = function () {
+                    if (!$scope.plan)return false;
+                    var relation = _.find($scope.plan.planDetail.applicableRelationships, function (val) {
+                        return val == 'SELF'
+                    });
+                    if (relation != 'SELF') {
+                        $scope.proposerSameAsProposedAssured = false;
+                    }
+                    return relation != 'SELF';
                 };
 
             }]
