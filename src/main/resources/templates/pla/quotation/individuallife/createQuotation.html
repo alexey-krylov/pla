@@ -334,7 +334,8 @@
                                 </div>
                                 <div class="form-group required">
                                     <label class="control-label">Date of Birth</label>
-                                    <div class='input-group date'>
+
+                                    <div class='input-group date' ng-if="!proposerSameAsProposedAssured">
                                         <input type="text" class="form-control input-sm"
                                                datepicker-popup=""
                                                ng-disabled="proposerSameAsProposedAssured"
@@ -343,12 +344,19 @@
                                                validate-dob=""
                                                max-date="todayDate"
                                                ng-model="proposer.dateOfBirth" name="dob2"/>
-                                    <span class="input-group-btn">
-                                    <button type="button" class="btn btn-default btn-sm" view-enabled=""
-                                            ng-click="launchProposerDOB($event)">
-                                        <i class="glyphicon glyphicon-calendar"></i></button>
-                                  </span>
+                                        <span class="input-group-btn">
+                                        <button type="button" class="btn btn-default btn-sm"
+                                                view-enabled=""
+                                                ng-click="launchProposerDOB($event)">
+                                            <i class="glyphicon glyphicon-calendar"></i></button>
+                                        </span>
                                     </div>
+                                    <input type="text" class="form-control input-sm"
+                                           ng-if="proposerSameAsProposedAssured"
+                                           ng-disabled="proposerSameAsProposedAssured"
+                                           view-enabled=""
+                                           ng-model="proposer.dateOfBirth|date:'dd/MM/yyyy'"/>
+
                                     <div class="error" ng-messages="step3.dob2.$error" ng-if="step3.dob2.$dirty">
                                         <small ng-message="required">Please enter Date of Birth.</small>
                                         <small ng-message="invalidMinAge">Minimum Entry Age For Proposer is 18 years.
@@ -432,7 +440,7 @@
                             <div class="col-sm-6 action-panel">
                                 <button type="button" class="btn btn-default btn-sm" style="float: right;clear:both"
                                         ng-click="saveStep3(step3)"
-                                        ng-disabled="isSaveDisabled(step3) &amp;&amp; !proposerSameAsProposedAssured">Save
+                                        ng-disabled="isSaveDisabled(step3) || proposerSameAsProposedAssured">Save
                                 </button>
                             </div>
                         </div>

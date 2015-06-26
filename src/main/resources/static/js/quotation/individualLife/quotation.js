@@ -251,7 +251,7 @@
 
                 });
 
-
+                $scope.originalProposer = {};
                 if ($scope.quotationId) {
                     $scope.uneditable = true;
                     $http.get('/pla/individuallife/quotation/getquotation/' + $scope.quotationId)
@@ -259,6 +259,7 @@
                             $scope.quotation = response;
                             $scope.proposedAssured = $scope.quotation.proposedAssured || {};
                             $scope.proposer = $scope.quotation.proposer || {};
+                            $scope.originalProposer = $scope.quotation.proposer || {};
 
                             if ($scope.proposedAssured.dateOfBirth) {
                                 $scope.proposedAssuredAge = calculateAge($scope.proposedAssured.dateOfBirth);
@@ -388,6 +389,16 @@
                     $scope.launchdob1 = true;
                 };
 
+                $scope.$watch('proposerSameAsProposedAssured', function (newval, oldval) {
+                    if (newval == oldval)return;
+
+                    if (!newval) {
+                        $scope.proposer = angular.copy($scope.originalProposer);
+                    } else {
+                        $scope.proposer = $scope.proposedAssured;
+                    }
+                });
+
                 $scope.saveStep2 = function (stepForm) {
                     stepForm.$setPristine();
                     var request = {proposedAssured: $scope.proposedAssured};
@@ -399,11 +410,6 @@
                         .success(function (data) {
                             $scope.stepsSaved[$scope.selectedItem] = true;
                             $scope.quotationId = data.id;
-                            if ($scope.proposerSameAsProposedAssured) {
-                                $scope.proposer = angular.copy($scope.proposedAssured);
-                            } else
-                                $scope.proposer = {};
-
                             //$window.location = '/pla/individuallife/quotation/edit?quotationId=' + data.id;
                         });
                 };
