@@ -93,7 +93,7 @@ public class ProposalController {
     @RequestMapping(value = "/getagentdetail/{agentId}", method = RequestMethod.GET)
     @ResponseBody
     public Map<String, Object> getAgentDetail(@PathVariable("agentId") String agentId) {
-        Map<String, Object> agentDetail = agentFinder.getAgentById(agentId);
+        Map<String, Object> agentDetail = proposalFinder.getAgentById(agentId);
         checkArgument(agentDetail != null, "Agent not found");
         return agentDetail;
     }

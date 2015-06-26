@@ -1,11 +1,13 @@
 package com.pla.individuallife.proposal.query;
 
+import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
 import com.pla.individuallife.proposal.domain.model.Proposer;
 import com.pla.individuallife.proposal.presentation.dto.ILSearchProposalDto;
 import com.pla.sharedkernel.identifier.QuotationId;
 import org.joda.time.LocalDate;
 import org.nthdimenzion.ddd.domain.annotations.Finder;
+import org.nthdimenzion.utils.UtilValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoTemplate;
@@ -44,7 +46,14 @@ public class ILProposalFinder {
         this.mongoTemplate = mongoTemplate;
     }
 
-    public static final String FIND_ACTIVE_AGENT_BY_FIRST_NAME_QUERY = "SELECT * FROM agent_team_branch_view WHERE firstName =:firstName";
+    public static final String FIND_ACTIVE_AGENT_BY_FIRST_NAME_QUERY = "SELECT * FROM agent WHERE firstName =:firstName";
+
+    public static final String FIND_AGENT_BY_ID_QUERY = "SELECT agent_id as agentId, first_name as firstName, last_name as lastName FROM agent WHERE agent_id=:agentId AND `agent_status` = \"ACTIVE\"";
+
+    public Map<String, Object> getAgentById(String agentId) {
+        Preconditions.checkArgument(UtilValidator.isNotEmpty(agentId));
+        return namedParameterJdbcTemplate.queryForMap(FIND_AGENT_BY_ID_QUERY, new MapSqlParameterSource().addValue("agentId", agentId));
+    }
 
     public List<ILSearchProposalDto> searchProposal(ILSearchProposalDto ilSearchProposalDto) {
         Criteria criteria = Criteria.where("proposalStatus").in(new String[]{"DRAFT", "SUBMITTED"});
@@ -100,7 +109,6 @@ public class ILProposalFinder {
         @Override
         public ILSearchProposalDto apply(Map map) {
             String proposalId = map.get("_id").toString();
-            //AgentDetailDto agentDetailDto = getAgentDetail(new QuotationId(quotationId));
             LocalDate generatedOn = map.get("generatedOn") != null ? new LocalDate((Date) map.get("generatedOn")) : null;
             String proposalStatus = map.get("proposalStatus") != null ? (String) map.get("proposalStatus") : "";
             String proposalNumber = map.get("proposalNumber") != null ? (String) map.get("proposalNumber") : "";
