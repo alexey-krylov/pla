@@ -149,12 +149,13 @@ public class PlanSetupController {
         command.setNewPlanId(planId);
         MappingJackson2JsonView view = new MappingJackson2JsonView();
         Map<String, String> viewMap = new HashMap<String, String>();
-        response.setCharacterEncoding("UTF-8");
         response.setContentType("text/json");
+        response.setCharacterEncoding("UTF-8");
         try {
             planCommandGateway.updatePlan(command);
             viewMap.put("message", "Plan updated successfully");
         } catch (PlanException exception) {
+            exception.printStackTrace();
             response.reset();
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             viewMap.put("message", exception.getMessage());
