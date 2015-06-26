@@ -141,8 +141,8 @@
                 <div class="form-group required">
                     <label class="control-label">Sex</label>
                     <select class="form-control input-sm" name="gender" ng-model="proposedAssured.gender" ng-required="true">
-                        <option value="MALE" ng-value="MALE">Male</option>
-                        <option value="FEMALE" ng-value="FEMALE">Female</option>
+                        <option value="MALE" ng-value="MALE">MALE</option>
+                        <option value="FEMALE" ng-value="FEMALE">FEMALE</option>
                     </select>
 
                     <div class="error" ng-messages="proposedAssuredDetails.gender.$error" ng-if="proposedAssuredDetails.gender.$dirty">
@@ -419,7 +419,7 @@
             <button type="button" class="btn btn-default btn-sm">Cancel</button>
         </div>
         <div class="col-sm-6">
-            <button type="button" class="btn btn-default btn-sm" style="float: right"  ng-disabled="step1.$invalid" ng-click="saveProposedAssuredDetails()">Save</button>
+            <button type="button" class="btn btn-default btn-sm" style="float: right"  ng-click="saveProposedAssuredDetails()">Save</button>
         </div>
     </div>
 </ng-form>
