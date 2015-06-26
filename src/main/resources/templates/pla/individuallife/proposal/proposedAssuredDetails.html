@@ -125,7 +125,6 @@
                                ng-required="true"
                                is-open="launchdob"
                                max-date="todayDate"
-
                                ng-model="proposedAssured.dateOfBirth" name="dob" ng-blur="showDob(proposedAssured.dateOfBirth)"/>
                                     <span class="input-group-btn">
                                     <button type="button" class="btn btn-default btn-sm"
@@ -136,7 +135,6 @@
                     <div class="error" ng-messages="proposedAssuredDetails.dob.$error" ng-if="proposedAssuredDetails.dob.$dirty">
                         <small ng-message="required">Please enter Employment Date.</small>
                         <small ng-message="date">Invalid Date.</small>
-
                     </div>
                 </div>
 
