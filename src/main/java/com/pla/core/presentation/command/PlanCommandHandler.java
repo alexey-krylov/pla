@@ -6,6 +6,7 @@ import com.pla.core.domain.exception.PlanValidationException;
 import com.pla.core.domain.model.plan.*;
 import com.pla.core.specification.PlanCodeSpecification;
 import com.pla.sharedkernel.domain.model.CoverageTermType;
+import com.pla.sharedkernel.domain.model.PolicyTermType;
 import com.pla.sharedkernel.domain.model.SumAssuredType;
 import com.pla.sharedkernel.identifier.CoverageId;
 import com.pla.sharedkernel.util.SequenceGenerator;
@@ -107,7 +108,8 @@ public class PlanCommandHandler {
 
 
             pcBuilder.withSumAssuredForPlanCoverage(each.getCoverageSumAssured().getSumAssuredType(), each.getCoverageSumAssured().getMinSumInsured(),
-                    SumAssuredType.DERIVED.equals(each.getCoverageSumAssured().getSumAssuredType()) ? each.getCoverageSumAssured().getMaxLimit() : each.getCoverageSumAssured().getMaxSumInsured(), each.getCoverageSumAssured().getMultiplesOf(), each.getCoverageSumAssured().getSumAssuredValue(),
+                    SumAssuredType.DERIVED.equals(each.getCoverageSumAssured().getSumAssuredType()) ? each.getCoverageSumAssured().getMaxLimit() : each.getCoverageSumAssured().getMaxSumInsured(),
+                    each.getCoverageSumAssured().getMultiplesOf(), each.getCoverageSumAssured().getSumAssuredValue(),
                     each.getCoverageSumAssured().getPercentage());
 
             for (Iterator<PlanCoverageBenefitDetail> iter = filterBenefits(command.getPlanCoverageBenefits(),
@@ -129,7 +131,10 @@ public class PlanCommandHandler {
                 command.getSumAssured().getMultiplesOf(),
                 command.getSumAssured().getSumAssuredValue(),
                 command.getSumAssured().getIncomeMultiplier());
-        planBuilder.withPolicyTerm(command.getPolicyTermType(), command.getPolicyTerm().getValidTerms(), command.getPolicyTerm().getMaxMaturityAge(), command.getPolicyTerm().getGroupTerm());
+        planBuilder.withPolicyTerm(command.getPolicyTermType(),
+                command.getPolicyTermType().equals(PolicyTermType.MATURITY_AGE_DEPENDENT) ?
+                        command.getPolicyTerm().getMaturityAges() : command.getPolicyTerm().getValidTerms(),
+                command.getPolicyTerm().getMaxMaturityAge(), command.getPolicyTerm().getGroupTerm());
         System.out.println(command.getPremiumTerm());
         planBuilder.withPremiumTerm(command.getPremiumTermType(), command.getPremiumTerm().getValidTerms(), command.getPremiumTerm().getMaxMaturityAge());
         planBuilder.withPlanCoverages(coverageSet);
@@ -157,6 +162,7 @@ public class PlanCommandHandler {
             Plan plan = planMongoRepository.load(command.getPlanId());
             plan.updatePlan(planBuilder);
         } catch (Exception e) {
+            e.printStackTrace();
             throw new PlanException(e.getMessage());
         }
     }

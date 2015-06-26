@@ -3,6 +3,7 @@ package com.pla.individuallife.proposal.presentation.controller;
 import com.pla.core.query.AgentFinder;
 import com.pla.core.query.MasterFinder;
 import com.pla.individuallife.proposal.presentation.dto.ILSearchProposalDto;
+import com.pla.individuallife.proposal.query.ILProposalFinder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -27,6 +28,8 @@ public class ProposalController {
     private MasterFinder masterFinder;
     @Autowired
     private AgentFinder agentFinder;
+    @Autowired
+    private ILProposalFinder proposalFinder;
 
     /**
      * For routing of proposal list page to the index.html page under core/plan.
@@ -94,5 +97,4 @@ public class ProposalController {
         checkArgument(agentDetail != null, "Agent not found");
         return agentDetail;
     }
-
 }

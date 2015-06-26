@@ -17,7 +17,7 @@
             {{serverErrMsg}}
         </div>
         <ul class="steps">
-            <li data-step="1" data-name="campaign" class="active">
+            <li data-step="1" class="active">
                 <span class="badge">1</span>Plan Details<span class="chevron"></span></li>
             <li data-step="2"><span class="badge">2</span>Sum Assured<span class="chevron"></span></li>
             <li data-step="3"><span class="badge">3</span>Policy Term<span class="chevron"></span></li>
@@ -475,7 +475,7 @@
                                         <label class="control-label" for="groupTerm">Various Maturity Ages</label>
                                         <div class="controls">
                                             <tags-input class="ti-input-lg"
-                                                        ng-model="plan.premiumTerm.maturityAges"
+                                                        ng-model="plan.policyTerm.maturityAges"
                                                         name="maturityAges"
                                                         placeholder="Add a number" allow-leftover-text="false"
                                                         allowed-tags-pattern="^[0-9]+$"></tags-input>
@@ -498,9 +498,19 @@
                                         <div class="controls">
                                             <input type="number" ng-pattern="onlyNumbers" name="maxMaturityAge"
                                                    class="form-control input-sm col-sm-3" style="margin-top: 8px"
-                                                   min="{{plan.planDetail.maxEntryAge}}"
+                                                   min="{{plan.planDetail.maxEntryAge+1}}"
                                                    ng-required="true"
                                                    ng-model="plan.policyTerm.maxMaturityAge"/>
+                                            <div class="error"
+                                                 ng-show="step3.maxMaturityAge.$dirty &amp;&amp; step3.maxMaturityAge.$invalid">
+                                                <small class="error" ng-show="step3.maxMaturityAge.$error.required">
+                                                    Maximum Maturity Age is required.
+                                                </small>
+                                                <small class="error" ng-show="step3.maxMaturityAge.$error.min">
+                                                    Cannot be less than Plan Max Entry Age
+                                                    {{plan.planDetail.maxEntryAge}}
+                                                </small>
+                                            </div>
                                         </div>
                                     </div>
                                     <div class="control-group required col-sm-9">

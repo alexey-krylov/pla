@@ -27,15 +27,14 @@
                     if (!ctrl)return;
                     scope.$watch('planDetailDto.sumAssured', function (newval, oldval) {
                         if (newval == oldval)return;
-                        var plan = scope.$eval('plan');
-                        console.log(JSON.stringify(plan.sumAssured));
-                        if (plan.sumAssured.sumAssuredType !== 'RANGE')
-                            return;
-                        if (newval && plan) {
-                            var multiplesOf = plan.sumAssured.multiplesOf;
-                            var modulus = parseInt(newval) % parseInt(multiplesOf);
-                            var valid = modulus == 0;
-                            ctrl.$setValidity('invalidMultiple', valid);
+                        if (newval) {
+                            var plan = scope.$eval('plan');
+                            if (plan && plan.sumAssured.sumAssuredType == 'RANGE') {
+                                var multiplesOf = plan.sumAssured.multiplesOf;
+                                var modulus = parseInt(newval) % parseInt(multiplesOf);
+                                var valid = modulus == 0;
+                                ctrl.$setValidity('invalidMultiple', valid);
+                            }
                         }
                         return valid ? newval : undefined;
                     });
@@ -93,9 +92,9 @@
                                 $scope.policyTerms = _.filter(coverage.coverageTerm.validTerms, function (term) {
                                     return ageNextBirthday + term.text <= maxMaturityAge;
                                 });
-                            } else if (coverage.coverageTermType === 'MATURITY_AGE_DEPENDENT') {
+                            } else if (coverage.coverageTermType === 'AGE_DEPENDENT') {
                                 $scope.policyTerms = _.filter(coverage.coverageTerm.maturityAges, function (term) {
-                                    return term > ageNextBirthday;
+                                    return term.text > ageNextBirthday;
                                 });
                             }
                             return coverage.coverageTermType;
@@ -126,10 +125,13 @@
                 restrict: 'E',
                 templateUrl: 'plan-premiumterm.tpl',
                 link: function (scope) {
-                    scope.$watch('planDetailDto.policyTerm', function (newval) {
-                        if (newval)
+                    scope.$on('planDetailDto.policyTerm', function (newval) {
+                        if (scope.plan.premiumTermType === 'REGULAR') {
+                            console.log(' changing premium payment term ' + newval);
                             scope.planDetailDto.premiumPaymentTerm = newval;
-                    })
+                        }
+
+                    });
                 },
                 controller: ['$scope', function ($scope) {
                     $scope.premiumTerms = function () {
@@ -141,18 +143,20 @@
                             });
                         } else if ($scope.plan.premiumTermType === 'SPECIFIED_AGES') {
                             return _.filter($scope.plan.premiumTerm.maturityAges, function (term) {
-                                return term > ageNextBirthday;
+                                return parseInt(term.text) > ageNextBirthday;
                             });
                         }
-                        $scope.$on('planDetailDto.policyTerm', function (newval) {
-                            if ($scope.plan.premiumTermType === 'REGULAR')
-                                $scope.planDetailDto.premiumPaymentTerm = newval;
-                        });
-
                     };
+
+                    $scope.lessThanEqualTo = function (prop, val) {
+                        return function (item) {
+                            return item[prop] <= val;
+                        }
+                    }
                 }]
             };
         })
+
         .directive('validateDob', function () {
             return {
                 // restrict to an attribute type.
@@ -191,8 +195,9 @@
             }
         })
         .controller('QuotationController', ['$scope', '$http', '$route', '$location', '$bsmodal', '$window',
-            'globalConstants', 'getQueryParameter',
-            function ($scope, $http, $route, $location, $bsmodal, $window, globalConstants, getQueryParameter) {
+            'globalConstants', 'getQueryParameter', '$timeout',
+            function ($scope, $http, $route, $location, $bsmodal, $window, globalConstants, getQueryParameter, $timeout) {
+
 
                 var absUrl = $location.absUrl();
                 $scope.titleList = globalConstants.title;
@@ -246,7 +251,7 @@
 
                 });
 
-
+                $scope.originalProposer = {};
                 if ($scope.quotationId) {
                     $scope.uneditable = true;
                     $http.get('/pla/individuallife/quotation/getquotation/' + $scope.quotationId)
@@ -254,6 +259,7 @@
                             $scope.quotation = response;
                             $scope.proposedAssured = $scope.quotation.proposedAssured || {};
                             $scope.proposer = $scope.quotation.proposer || {};
+                            $scope.originalProposer = $scope.quotation.proposer || {};
 
                             if ($scope.proposedAssured.dateOfBirth) {
                                 $scope.proposedAssuredAge = calculateAge($scope.proposedAssured.dateOfBirth);
@@ -275,7 +281,9 @@
                             var selectedPlan = {};
                             selectedPlan.title = response.planDetail.planDetail.planName || '';
                             selectedPlan.description = response.planDetail;
+
                             $scope.selectedPlan = selectedPlan;
+
                             $scope.planDetailDto = response.planDetailDto;
                             $scope.selectedItem = 1;
                             $scope.stepsSaved["1"] = true;
@@ -319,8 +327,11 @@
                         $http.get('/pla/core/plan/getPlanById/' + newval.description.plan_id)
                             .success(function (response) {
                                 $scope.plan = response;
+
                             });
+
                     }
+
                 });
 
                 $scope.$watch('plan.planId', function (newval) {
@@ -332,20 +343,12 @@
                     }
                 });
 
-                $scope.$watch('proposerSameAsProposedAssured', function (newval, oldval) {
-                    if (newval != oldval) {
-                        if (newval) {
-                            $scope.proposer = $scope.proposedAssured;
-                            $scope.proposer.dateOfBirth = $scope.proposedAssured.dateOfBirth;
-                        } else
-                            $scope.proposer = {};
-                    }
-                });
 
                 $scope.$watchGroup(['proposedAssured.dateOfBirth', 'proposer.dateOfBirth'], function (newval, oldval) {
                     if (newval) {
                         if (newval[0]) {
                             $scope.proposedAssuredAge = calculateAge(newval[0]);
+                            $scope.proposer.dateOfBirth = newval[0];
                         }
                         if (newval[1]) {
                             $scope.proposerAge = calculateAge(newval[1]);
@@ -386,6 +389,16 @@
                     $scope.launchdob1 = true;
                 };
 
+                $scope.$watch('proposerSameAsProposedAssured', function (newval, oldval) {
+                    if (newval == oldval)return;
+
+                    if (!newval) {
+                        $scope.proposer = angular.copy($scope.originalProposer);
+                    } else {
+                        $scope.proposer = $scope.proposedAssured;
+                    }
+                });
+
                 $scope.saveStep2 = function (stepForm) {
                     stepForm.$setPristine();
                     var request = {proposedAssured: $scope.proposedAssured};
@@ -397,6 +410,7 @@
                         .success(function (data) {
                             $scope.stepsSaved[$scope.selectedItem] = true;
                             $scope.quotationId = data.id;
+                            //$window.location = '/pla/individuallife/quotation/edit?quotationId=' + data.id;
                         });
                 };
 
@@ -433,10 +447,16 @@
 
                 $scope.$on('changed.fu.wizard', function (name, event, data) {
                     $scope.selectedItem = data.step;
-                    if (data && data.step == 4) {
-                        $http.get('getpremiumdetail/' + $scope.quotationId).success(function (response) {
-                            $scope.premiumData = response;
-                        });
+                    if (data && data.step == 5) {
+                        $http.get('getpremiumdetail/' + $scope.quotationId)
+                            .success(function (response) {
+                                console.log('success ***');
+                                $scope.premiumData = response;
+                            }).error(function (response) {
+                                $scope.stepsSaved["5"] = false;
+                                $scope.serverError = true;
+                                $scope.serverErrMsg = response.message;
+                            });
                     }
                 });
                 $scope.$on('finished.fu.wizard', function (name, event, data) {
@@ -448,6 +468,17 @@
 
                 $scope.remoteUrlRequestFn = function (str) {
                     return {agentId: $scope.quotation.agentId};
+                };
+
+                $scope.checkIfPlanSupportsSelf = function () {
+                    if (!$scope.plan)return false;
+                    var relation = _.find($scope.plan.planDetail.applicableRelationships, function (val) {
+                        return val == 'SELF'
+                    });
+                    if (relation != 'SELF') {
+                        $scope.proposerSameAsProposedAssured = false;
+                    }
+                    return relation != 'SELF';
                 };
 
             }]

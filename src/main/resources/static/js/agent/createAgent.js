@@ -176,8 +176,7 @@ angular.module('createAgent',['common','ngRoute','mgcrea.ngStrap.select','mgcrea
                 return true;
             };
             $scope.channelTypes = [{channelName:"Personal Selling",channelCode:"PERSONAL_SELLING"},
-                {channelName:"Direct",channelCode:"DIRECT"},
-                {channelName:"Broker",channelCode:"BROKER"}];
+                {channelName: "Direct", channelCode: "DIRECT"}];
             $scope.authorisedToSell = authorisedToSell;
             $scope.teamDetails= teamDetails;
             $scope.provinces=provinces;

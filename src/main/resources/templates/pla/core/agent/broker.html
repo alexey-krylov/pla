@@ -18,168 +18,48 @@
 </script>
 <script type="text/ng-template" id="createBrokerTpl.html">
     <nth-alert></nth-alert>
-    <div class="wizard fuelux-wizard" selected-item="selectedWizard" style="overflow: visible"
-         ng-class="{'form-submitted':isFormSubmitted}" remove-steps="stepsToRemove">
+    <div class="wizard fuelux-wizard" style="overflow: visible">
         <ul class="steps" style="margin-left: 0">
-            <li data-step="1">
-                <span class="badge badge-info">1</span>Search Agent<span class="chevron"></span>
-            </li>
-            <li data-step="2" ng-class="{'red-text-color':(isFormSubmitted&amp;&amp;agentDetailsForm.$invalid)}">
-                <span class="badge badge-info"
-                      ng-class="{'background-red':(isFormSubmitted&amp;&amp;agentDetailsForm.$invalid)}">{{stepValues.agent}}</span>Agent<span
+            <li data-step="1" class="active">
+                <span class="badge badge-info">1</span>Broker<span
                     class="chevron"></span>
             </li>
-            <li data-step="3" class=""
-                ng-class="{'red-text-color':(isFormSubmitted&amp;&amp;contactDetailsForm.$invalid)}">
-                <span class="badge"
-                      ng-class="{'background-red':(isFormSubmitted&amp;&amp;contactDetailsForm.$invalid)}">{{stepValues.contact}}</span>Contact<span
+            <li data-step="2">
+                <span class="badge">2</span>Contact<span
                     class="chevron"></span>
             </li>
         </ul>
         <div class="actions">
-            <button type="button" class="btn btn-default btn-prev" disabled="disabled"><span
+            <button type="button" class="btn btn-default btn-prev"><span
                     class="glyphicon glyphicon-arrow-left"></span>Prev
             </button>
-            <button type="button" class="btn btn-default btn-next"
-                    ng-disabled="!searchResult.isSearched &amp;&amp;!isEditMode">Next<span
+            <button type="button" class="btn btn-default btn-next" data-last="Complete">Next<span
                     class="glyphicon glyphicon-arrow-right"></span></button>
         </div>
         <div class="step-content">
             <div class="step-pane" data-step="1">
-                <div class="bs-callout-info bs-callout">
-                    <div class="row" ng-if="!hideAlert">
-                        <div class="col-md-7">
-                            <div class="alert alert-info">
-                                <strong>Entered details not found in HR Records!</strong> Please proceed in case Agent
-                                is not an employee.
-                                <button type="button" class="btn btn-primary btn-xs pull-right" style="width:15%"
-                                        ng-click="jumpToNthStep(2)"><Strong>Proceed</Strong></button>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row" ng-if="alreadyExists">
-                        <div class="col-md-7">
-                            <div class="alert alert-danger">
-                                <strong>{{serverErrorMsg}}</strong>.
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-5">
-                            <input type="text" class="form-control input-sm" placeholder="NRC"
-                                   ng-model="search.nrcNumber"/>
-                        </div>
-                        <div class="col-md-1" style="text-align: center;margin-top: 5px">
-                            <Strong>OR</Strong>
-                        </div>
-                        <div class="col-md-5">
-                            <input type="text" class="form-control input-sm" placeholder="Employee ID"
-                                   ng-model="search.employeeId"/>
-                        </div>
-                        <div class="col-md-1">
-                            <button type="button" class="btn btn-default btn-sm" ng-click="searchAgent()"
-                                    ng-disabled="isSearchDisabled()">Search
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="step-pane" data-step="2">
-                <ng-form name="agentDetailsForm">
+                <ng-form name="step1">
                     <div class="row">
                         <div class="col-md-6">
-                            <div class="form-group" ng-if="agentDetails.channelType.channelName=='Broker'">
-                                <label class="control-label">NRC</label>
-                                <input type="text" class="form-control input-sm" name="nrc"
-                                       ng-disabled="isSearchEmptyOrIsEdit()"
-                                       placeholder="Enter NRC" ng-model="agentDetails.agentProfile.nrcNumberInString"
-                                       ng-pattern="/^[0-9]{6}\/[0-9]{2}\/[0-9]{1}$/"/>
-                            </div>
-                            <div class="form-group required" ng-if="agentDetails.channelType.channelName!='Broker'">
-                                <label class="control-label">NRC</label>
-                                <input type="text" class="form-control input-sm" name="nrc"
-                                       ng-disabled="isSearchEmptyOrIsEdit()"
-                                       placeholder="Enter NRC" ng-model="agentDetails.agentProfile.nrcNumberInString"
-                                       ng-required="true" ng-pattern="/^[0-9]{6}\/[0-9]{2}\/[0-9]{1}$/"/>
-                            </div>
                             <div class="form-group">
-                                <label>Title</label>
-                                <select name="title" ng-model="agentDetails.agentProfile.title"
-                                        class="form-control input-sm" ng-disabled="isEditMode">
-                                    <option value="mr">Mr.</option>
-                                    <option value="mrs">Mrs.</option>
-                                    <option value="miss">Miss</option>
-                                    <option value="dr">Dr.</option>
-                                </select>
-                            </div>
-                            <div class="form-group required">
-                                <label class="control-label">First Name</label>
-                                <input type="text" class="form-control input-sm" name="firstName" ng-required="true"
-                                       ng-maxlength="20"
-                                       placeholder="Enter first Name" ng-model="agentDetails.agentProfile.firstName"
-                                       ng-disabled="isSearchEmptyOrIsEdit()"/>
-                            </div>
-                            <div class="form-group required">
-                                <label class="control-label">Agent ID</label>
-                                <input type="text" class="form-control input-sm" name="agentId" ng-required="true"
-                                       ng-maxlength="7" ng-disabled="true"
-                                       placeholder="Enter agent ID" ng-model="agentDetails.agentId"
-                                       ng-pattern="numberPattern"/>
-                            </div>
-                            <div class="form-group required" disable-all-fields="disableChannelType()">
                                 <label class="control-label">Channel Type</label>
-                                <select name="channelType" class="form-control input-sm" ng-required="true"
-                                        ng-model="agentDetails.channelType"
-                                        ng-options="channelType as channelType.channelName for channelType in channelTypes track by channelType.channelCode">
-                                </select>
+                                <input name="channelType" disabled="true" class="form-control input-sm"
+                                       ng-required="true"
+                                       ng-model="agentDetails.channelType"/>
                             </div>
                             <div class="form-group required">
-                                <label class="control-label">Authorized to Sell</label>
-                                <button style="display: block;" type="button" class="btn btn-default btn-sm bs-select"
-                                        data-all-none-buttons="true"
-                                        ng-model="agentDetails.authorizePlansToSell" data-multiple="1"
-                                        ng-required="true"
-                                        ng-options="authorisedToS.planId as authorisedToS.planName for authorisedToS in authorisedToSell"
-                                        placeholder="Select one or more plans">
-                                    Action <span class="caret"></span>
-                                </button>
-                            </div>
-                            <div class="form-group" ng-if="agentDetails.agentProfile.designationDto.code=='BRANCH_BDE'">
-                                <!-- -->
-                                <label style="text-align: left">Can Collect override Commissions?</label>
-                                <label style="padding-right: 5px"><input type="radio" name="overrideCommission"
-                                                                         ng-model="agentDetails.overrideCommissionApplicable"
-                                                                         value="YES"/>Yes</label>
-                                <label><input type="radio" name="overrideCommission"
-                                              ng-model="agentDetails.overrideCommissionApplicable"
-                                              value="NO"/>No</label>
+                                <label class="control-label">Name</label>
+                                <input type="text" class="form-control input-sm" name="name" ng-required="true"
+                                       ng-maxlength="20"
+                                       placeholder="Enter Name" ng-model="agentDetails.agentProfile.firstName"/>
                             </div>
                         </div>
-                        <!--Agent Details left end-->
-                        <!--Agent Details right start-->
+
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label>Employee ID</label>
-                                <input type="text" class="form-control input-sm" ng-disabled="true" name="employeeId"
-                                       placeholder="Enter employee ID" ng-model="agentDetails.agentProfile.employeeId"/>
-                            </div>
-                            <div class="form-group" ng-if="agentDetails.channelType.channelName=='Broker'">
-                                <label class="control-label">Surname</label>
-                                <input type="text" class="form-control input-sm" name="surname" ng-maxlength="20"
-                                       ng-disabled="isSearchEmptyOrIsEdit()"
-                                       placeholder="Enter surname" ng-model="agentDetails.agentProfile.lastName"/>
-                            </div>
-                            <div class="form-group required" ng-if="agentDetails.channelType.channelName!='Broker'">
-                                <label class="control-label">Surname</label>
-                                <input type="text" class="form-control input-sm" name="surname" ng-required="true"
-                                       ng-maxlength="20" ng-disabled="isSearchEmptyOrIsEdit()"
-                                       placeholder="Enter surname" ng-model="agentDetails.agentProfile.lastName"/>
-                            </div>
-                            <div class="form-group required">
-                                <label class="control-label">Designation</label>
-                                <input type="text" class="form-control input-sm" name="designation" ng-required="true"
-                                       ng-model="agentDetails.agentProfile.designationDto.description"
-                                       ng-disabled="true"/><!--ng-disabled="!searchResult.isEmpty"-->
+                                <label class="control-label">Agent ID</label>
+                                <input name="channelType" readonly="true" class="form-control input-sm"
+                                       ng-model="agentDetails.agentId"/>
                             </div>
                             <div class="form-group required">
                                 <label class="control-label">Agent Status</label>
@@ -190,7 +70,9 @@
                                     <option value="TERMINATED">Terminated</option>
                                 </select>
                             </div>
-                            <div class="form-group required">
+                        </div>
+                        <div class="col-md-12" style="padding-left:0px">
+                            <div class="form-group required col-md-6">
                                 <label class="control-label">Training Completed On</label>
 
                                 <p class="input-group">
@@ -207,39 +89,116 @@
                                         </span>
                                 </p>
                             </div>
-                            <div class="form-group ">
-                                <label>Licence Number</label>
-                                <input type="text" class="form-control input-sm" name="licenceNumber" maxlength="8"
-                                       minlength="8" ng-pattern="/^[A-z0-9]+$/" placeholder="Enter licence number"
-                                       ng-disabled="isEditMode"
-                                       ng-model="agentDetails.licenseNumber.licenseNumber"/>
+                            <div class="form-group required col-md-6">
+                                <label class="control-label">Authorized to Sell</label>
+                                <button style="display: block;" type="button" class="btn btn-default btn-sm bs-select"
+                                        data-all-none-buttons="true"
+                                        ng-model="agentDetails.authorizePlansToSell" data-multiple="1"
+                                        ng-required="true"
+                                        ng-options="authorisedToS.planId as authorisedToS.planName for authorisedToS in authorisedToSell"
+                                        placeholder="Select one or more plans">
+                                    Action <span class="caret"></span>
+                                </button>
                             </div>
                         </div>
-                        <!--Agent Details right end-->
+
+                        <div class="col-md-12" style="padding-left:0px">
+                            <div class="form-group col-md-6">
+                                <label>Licence Number</label>
+                                <input type="text" class="form-control input-sm"
+                                       name="licenceNumber" maxlength="8" minlength="8" ng-maxlength="8"
+                                       ng-minlength="8"
+                                       ng-pattern="/^[A-z0-9]+$/" placeholder="Enter licence number"
+                                       ng-disabled="isEditMode"
+                                       ng-model="agentDetails.licenseNumber"/>
+
+                                <div class="error" ng-messages="step1.licenseNumber.$error"
+                                     ng-if="step1.licenseNumber.$dirty">
+                                    <small ng-message="minlength">License number should be 8 digits.</small>
+                                </div>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label>Registration Number</label>
+                                <input type="text" class="form-control input-sm"
+                                       name="registrationNumber" ng-maxlength="12" ng-minlength="12"
+                                       ng-pattern="/^[A-z0-9]+$/" placeholder="Enter Registration number"
+                                       ng-disabled="isEditMode"
+                                       ng-model="agentDetails.registrationNumber"/>
+
+                                <div class="error" ng-messages="step1.registrationNumber.$error"
+                                     ng-if="step1.registrationNumber.$dirty">
+                                    <small ng-message="minlength">Registration Number number should be 12 digits.
+                                    </small>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row" style="padding:15px;margin-top:30px">
+                            <h4 style="margin-left: 10px">Contact Person Details</h4>
+
+                            <div class="col-md-12">
+                                <table class="table table-bordered">
+                                    <thead>
+                                    <tr>
+                                        <th>Line of Business</th>
+                                        <th>Salutation</th>
+                                        <th>Full Name</th>
+                                        <th>email ID</th>
+                                        <th>Work Phone</th>
+                                        <th>Fax</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr ng-repeat="contact in contactPersons">
+                                        <td width="13%">
+                                            <select class="form-control input-sm"
+                                                    ng-model="contact.lineOfBusinessId" ng-required="true">
+                                                <option value="INDIVIDUAL_LIFE">Individual Life</option>
+                                                <option value="GROUP_HEALTH">Group Health</option>
+                                                <option value="GROUP_LIFE">Group Life</option>
+                                            </select>
+                                        </td>
+                                        <td width="7%">
+                                            <select class="form-control input-sm" name="title" ng-required="true"
+                                                    ng-model="contact.title" ng-disabled="uneditable"
+                                                    ng-options="title as title for title in titleList">
+                                            </select>
+                                        </td>
+                                        <td width="30%">
+                                            <input type="text" class="form-control input-sm" ng-model="contact.fullName"
+                                                   ng-required="true"/>
+                                        </td>
+                                        <td>
+                                            <input type="text" class="form-control input-sm" ng-model="contact.emailId"
+                                                   ng-required="true"/>
+                                        </td>
+                                        <td width="15%">
+                                            <input type="text" ng-minlength="15" ng-maxlength="15"
+                                                   class="form-control input-sm" ng-model="contact.workPhone"
+                                                   ng-required="true"/>
+                                        </td>
+                                        <td width="15%">
+                                            <input type="text" ng-minlength="15" ng-maxlength="15"
+                                                   class="form-control input-sm" ng-model="contact.fax"
+                                                   ng-required="true"/>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
                     </div>
                     <!--Agent Details Left start-->
                 </ng-form>
             </div>
 
-            <div class="step-pane" data-step="3" disable-all-fields="editContactDetails()">
+            <div class="step-pane" data-step="2">
                 <ng-form name="contactDetailsForm">
                     <!--Contact Details  start-->
                     <div class="row">
+                        <h4 style="margin-left: 10px">Postal Address</h4>
                         <div class="col-md-6">
-                            <div class="form-group required">
-                                <label class="control-label">Mobile Number</label>
-                                <input type="text" class="form-control input-sm" name="mobileNumber"
-                                       placeholder="Enter mobile number"
-                                       ng-model="agentDetails.contactDetail.mobileNumber" ng-required="true"
-                                       maxlength="10" minlength="10" ng-pattern="numberPattern"/>
-                            </div>
-                            <div class="form-group">
-                                <label>Work phone</label>
-                                <input type="text" class="form-control input-sm" name="workPhone"
-                                       placeholder="Enter work phone"
-                                       ng-model="agentDetails.contactDetail.workPhoneNumber" maxlength="15"
-                                       ng-pattern="numberPattern"/>
-                            </div>
                             <div class="form-group required">
                                 <label class="control-label">Address Line 1</label>
                                 <input type="text" class="form-control input-sm" name="addressLine1"
@@ -263,18 +222,6 @@
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label>Home Phone</label>
-                                <input type="text" class="form-control input-sm" name="homePhone"
-                                       placeholder="Enter home phone"
-                                       ng-model="agentDetails.contactDetail.homePhoneNumber" maxlength="15"
-                                       ng-pattern="numberPattern"/>
-                            </div>
-                            <div class="form-group">
-                                <label>Email ID</label>
-                                <input type="email" class="form-control input-sm" name="emailId"
-                                       placeholder="Enter email ID" ng-model="agentDetails.contactDetail.emailAddress"/>
-                            </div>
-                            <div class="form-group">
                                 <label>Address Line 2</label>
                                 <input type="text" class="form-control input-sm" name="addressLine2"
                                        placeholder="Enter address" ng-model="agentDetails.contactDetail.addressLine2"
@@ -291,7 +238,6 @@
                     </div>
                     <div class="row">
                         <h4 style="margin-left: 10px">Physical Address</h4>
-
                         <div class="col-md-6">
                             <div class="form-group required">
                                 <label class="control-label">Address Line 1</label>

@@ -299,7 +299,8 @@
 
                             <div class="controls">
                                 <input type="number" ng-model="newCoverage.coverageTerm.maxMaturityAge"
-                                       class="form-control" name="maxMaturityAge" min="{{newCoverage.maxAge}}" max="{{plan.planDetail.maxEntryAge}}"
+                                       validate-term=""
+                                       class="form-control" name="maxMaturityAge" min="{{newCoverage.maxAge}}"
                                        ng-required="true"/>
 
                                 <div ng-show="coverageForm.maxMaturityAge.$dirty &amp;&amp; coverageForm.maxMaturityAge.$invalid">
@@ -368,7 +369,7 @@
 </div>
 <style>
     .modal-dialog {
-        width: 60%
+        width: 75%
     }
 </style>
 <!-- /.modal-content -->

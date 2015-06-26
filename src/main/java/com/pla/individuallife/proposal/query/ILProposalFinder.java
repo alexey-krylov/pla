@@ -46,7 +46,6 @@ public class ILProposalFinder {
 
     public static final String FIND_ACTIVE_AGENT_BY_FIRST_NAME_QUERY = "SELECT * FROM agent_team_branch_view WHERE firstName =:firstName";
 
-
     public List<ILSearchProposalDto> searchProposal(ILSearchProposalDto ilSearchProposalDto) {
         Criteria criteria = Criteria.where("proposalStatus").in(new String[]{"DRAFT", "SUBMITTED"});
         String proposalNumber = ilSearchProposalDto.getProposalNumber();
@@ -54,7 +53,8 @@ public class ILProposalFinder {
         String agentCode = ilSearchProposalDto.getAgentCode();
         String proposerName = ilSearchProposalDto.getProposerName();
         String agentName = ilSearchProposalDto.getAgentName();
-        if (isEmpty(proposalNumber) && isEmpty(proposalId) && isEmpty(agentCode) && isEmpty(proposerName) && isEmpty(agentName)) {
+        String proposerNrcNumber =  ilSearchProposalDto.getProposerNrcNumber();
+        if (isEmpty(proposalNumber) && isEmpty(proposalId) && isEmpty(agentCode) && isEmpty(proposerName) && isEmpty(agentName) && isEmpty(proposerNrcNumber)) {
             return Lists.newArrayList();
         }
         if (isNotEmpty(proposalId)) {
@@ -64,11 +64,15 @@ public class ILProposalFinder {
             criteria = criteria.and("proposalNumber").is(proposalNumber);
         }
         if (isNotEmpty(agentCode)) {
-            criteria = criteria != null ? criteria.and("agentId.agentId").is(agentCode) : Criteria.where("agentId.agentId").is(agentCode);
+            criteria = criteria != null ? criteria.and("agentCommissionShareModel.commissionShare.agentId.agentId").is(agentCode) : Criteria.where("agentCommissionShareModel.commissionShare.agentId.agentId").is(agentCode);
         }
         if (isNotEmpty(proposerName)) {
             String proposerPattern = "^"+proposerName;
             criteria = criteria != null ? criteria.and("proposer.firstName").regex(Pattern.compile(proposerPattern, Pattern.CASE_INSENSITIVE)) : Criteria.where("proposer.firstName").regex(Pattern.compile(proposerPattern,Pattern.CASE_INSENSITIVE));
+        }
+        if (isNotEmpty(proposerNrcNumber)) {
+            String proposerNrcPattern = "^"+proposerNrcNumber;
+            criteria = criteria != null ? criteria.and("proposer.nrc").regex(Pattern.compile(proposerNrcPattern, Pattern.CASE_INSENSITIVE)) : Criteria.where("proposer.nrc").regex(Pattern.compile(proposerNrcPattern,Pattern.CASE_INSENSITIVE));
         }
         Set<String> agentIds = null;
         if (isNotEmpty(agentName)) {

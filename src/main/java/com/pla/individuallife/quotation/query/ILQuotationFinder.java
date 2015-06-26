@@ -47,8 +47,8 @@ public class ILQuotationFinder {
 
     public static final String QUOTATION_SEARCH_QUERY = "SELECT " +
             "  CONCAT(COALESCE(A.FIRST_NAME,' '), ' ', COALESCE(A.last_name,'')) AS agentName," +
-            "  CONCAT(COALESCE(IL.first_name,' '), ' ', COALESCE(surname,'')) AS proposerName," +
-            "  CONCAT(proposer_first_name,' ',proposer_surname) AS proposedName," +
+            "  CONCAT(COALESCE(IL.first_name,' '), ' ', COALESCE(surname,'')) AS proposedName," +
+            "  CONCAT(proposer_first_name,' ',proposer_surname) AS proposerName," +
             "  il_quotation_status AS quotationStatus," +
             "  quotation_id AS quotation_id," +
             "  quotation_number AS quotationNumber," +

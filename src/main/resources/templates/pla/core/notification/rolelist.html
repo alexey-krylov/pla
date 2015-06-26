@@ -4,6 +4,20 @@
 <head th:include="fragments/common :: headTag">
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <title name="Notification Role List"/>
+    <script>
+        requirejs.config({
+            paths: {
+                notification_role: '/pla/js/notification/notification-role.js?t=1221'
+            },
+            "shim": {"ilquotation": ["angular"]}
+        });
+        requirejs(['main'], function () {
+            require(['notification_role', 'jquery'], function (app, $) {
+                angular.bootstrap(document, ['NotificationRoleModule']);
+            });
+        });
+
+    </script>
 </head>
 <body ng-controller="RoleMappingCtrl">
 
@@ -27,7 +41,7 @@
                         </span></div>
                 <div class="col-lg-6">
                     <a class="btn btn-default btn-sm" style="float: right"
-                       href="#newRoleMapping" data-toggle="modal" data-target="#newRoleMapping">New Role Mapping</a>
+                       href="#newRoleMapping" data-toggle="modal" ng-click="newRoleMapping()">New Role Mapping</a>
                 </div>
             </div>
         </div>
@@ -151,14 +165,12 @@
             var module = angular.module('RoleMappingModule', []);
             module.controller('RoleMappingCtrl', ['$scope', '$http', '$window', function ($scope, $http, $window) {
                 console.log('Role Mapping Controller ');
+                $scope.original = {lineOfBusiness: null, processType: null, roleType: null};
                 $scope.mapping = {};
 
                 $scope.save = function () {
                     console.log('invoke saved...');
-                    var requestUrl = '';//new Url
-                    if ($scope.mapping.id) {
-                        requestUrl = '';//editUrl as it has an Id
-                    }
+                    var requestUrl = '/pla/core/notification/createnotificationrolemapping';//new Url
                     $http.post(requestUrl, $scope.mapping).success();
                     $scope.clear();
                     $('#newRoleMapping').modal('hide');
@@ -166,12 +178,7 @@
                 };
 
                 $scope.clear = function () {
-                    $scope.mapping = {lineOfBusiness: null, processType: null, id: null, roleType: null};
-                };
-
-                $scope.edit = function (mapping) {
-                    $scope.mapping = mapping.copy();
-                    $('#newRoleMapping').modal('show');
+                    $scope.mapping = angular.copy($scope.original);
                 };
 
                 $scope.reload = function () {

@@ -1,6 +1,7 @@
 package com.pla.external.listener;
 
 import com.pla.core.domain.event.PlanCoverageAssociationEvent;
+import com.pla.core.domain.event.PlanExpireEvent;
 import com.pla.core.domain.event.PlanLaunchEvent;
 import com.pla.sharedkernel.domain.model.CoverageType;
 import com.pla.sharedkernel.domain.model.PlanStatus;
@@ -117,6 +118,19 @@ public class PlanCoverageAssocListener {
     public void handle(PlanLaunchEvent event) {
         String planId = event.getPlanId().toString();
         namedParameterJdbcTemplate.execute("update plan_coverage_benefit_assoc set plan_status='" + PlanStatus.LAUNCHED + "' where " +
+                        "plan_id='" + planId + "'",
+                new EmptySqlParameterSource(), new PreparedStatementCallback<Object>() {
+                    @Override
+                    public Object doInPreparedStatement(PreparedStatement ps) throws SQLException, DataAccessException {
+                        return ps.execute();
+                    }
+                });
+    }
+
+    @EventHandler
+    public void handle(PlanExpireEvent event) {
+        String planId = event.getPlanId().toString();
+        namedParameterJdbcTemplate.execute("update plan_coverage_benefit_assoc set plan_status='" + PlanStatus.WITHDRAWN + "', withdrawal_date = now() where " +
                         "plan_id='" + planId + "'",
                 new EmptySqlParameterSource(), new PreparedStatementCallback<Object>() {
                     @Override
