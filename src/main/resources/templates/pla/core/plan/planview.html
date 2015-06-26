@@ -27,8 +27,8 @@
                                 <dd>{{plan.planDetail.freeLookPeriod}}</dd>
                                 <dt>Funeral Cover</dt>
                                 <dd>
-                                    <span ng-if="funeralCover">Yes</span>
-                                    <span ng-if="!funeralCover">No</span>
+                                    <span ng-if="plan.planDetail.funeralCover">Yes</span>
+                                    <span ng-if="!plan.planDetail.funeralCover">No</span>
                                 </dd>
                             </dl>
                         </div>
@@ -47,8 +47,8 @@
                                 <dd>{{plan.planDetail.surrenderAfter}}</dd>
                                 <dt>Tax Applicable</dt>
                                 <dd>
-                                    <span ng-if="taxApplicable">Yes</span>
-                                    <span ng-if="!taxApplicable">No</span>
+                                    <span ng-if="plan.planDetail.taxApplicable">Yes</span>
+                                    <span ng-if="!plan.planDetail.taxApplicable">No</span>
                                 </dd>
                             </dl>
                         </div>
