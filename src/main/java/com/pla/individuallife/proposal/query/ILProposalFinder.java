@@ -46,9 +46,9 @@ public class ILProposalFinder {
         this.mongoTemplate = mongoTemplate;
     }
 
-    public static final String FIND_ACTIVE_AGENT_BY_FIRST_NAME_QUERY = "SELECT * FROM agent WHERE firstName =:firstName";
+    public static final String FIND_ACTIVE_AGENT_BY_FIRST_NAME_QUERY = "SELECT * FROM agent WHERE first_name =:firstName";
 
-    public static final String FIND_AGENT_BY_ID_QUERY = "SELECT agent_id as agentId, first_name as firstName, last_name as lastName FROM agent WHERE agent_id=:agentId AND `agent_status` = \"ACTIVE\"";
+    public static final String FIND_AGENT_BY_ID_QUERY = "SELECT agent_id as agentId, first_name as firstName, last_name as lastName FROM agent WHERE agent_id=:agentId AND agent_status = 'ACTIVE'";
 
     public Map<String, Object> getAgentById(String agentId) {
         Preconditions.checkArgument(UtilValidator.isNotEmpty(agentId));

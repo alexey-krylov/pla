@@ -105,6 +105,30 @@ public class ILProposalSetUpController {
         return new ResponseEntity(map, HttpStatus.OK);
     }
 
+    @ResponseBody
+    @RequestMapping(value = "/updateplan")
+    public ResponseEntity<Map> updateWithPlanDetails(@RequestBody ILProposalUpdateWithPlanAndBeneficiariesCommand cmd, BindingResult bindingResult, HttpServletRequest request) {
+        String proposalId = cmd.getProposalId();
+        if (bindingResult.hasErrors()) {
+            return new ResponseEntity(bindingResult.getAllErrors(), HttpStatus.PRECONDITION_FAILED);
+        }
+        try {
+            UserDetails userDetails = getLoggedInUserDetail(request);
+            cmd.setUserDetails(userDetails);
+            proposalCommandGateway.updateWithPlandetail(cmd);
+        } catch (TimeoutException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        Map map = new HashMap<>();
+        map.put("msg", "Proposal updated with Plan and Beneficiary Details successfully");
+        map.put("proposalId", proposalId);
+        return new ResponseEntity(map, HttpStatus.OK);
+    }
+
+
 
     @ResponseBody
     @RequestMapping(value = "/updateCompulsoryHealthStatement/{proposalId}", method = RequestMethod.POST)

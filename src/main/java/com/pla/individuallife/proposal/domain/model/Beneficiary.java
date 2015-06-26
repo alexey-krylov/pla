@@ -4,7 +4,8 @@ import com.google.common.base.Objects;
 import com.pla.sharedkernel.domain.model.Gender;
 import com.pla.sharedkernel.domain.model.TitleEnum;
 import lombok.Getter;
-import org.joda.time.LocalDate;
+import org.hibernate.annotations.Type;
+import org.joda.time.DateTime;
 
 import java.math.BigDecimal;
 
@@ -18,7 +19,8 @@ public class Beneficiary {
     private String firstName;
     private String surname;
     private String nrc;
-    private LocalDate dateOfBirth;
+    @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
+    private DateTime dateOfBirth;
     private Gender gender;
     private String relationshipId;
     private BigDecimal share;

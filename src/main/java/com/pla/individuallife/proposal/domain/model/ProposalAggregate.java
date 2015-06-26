@@ -52,6 +52,8 @@ public class ProposalAggregate extends AbstractAnnotatedAggregateRoot<ProposalId
     }
 
     public ProposalAggregate(UserDetails userDetails, ProposalId proposalId, String proposalNumber, ProposedAssured proposedAssured, Set<AgentDetailDto> agentCommissionDetails) {
+        riders = new HashSet<RiderDetail>();
+        beneficiaries = new ArrayList<Beneficiary>();
         boolean hasProposalPreprocessorRole = hasIndividualLifeProposalProcessorRole(userDetails.getAuthorities());
         if (!hasProposalPreprocessorRole) {
             throw new AuthorizationServiceException("User does not have Individual Life Proposal processor(ROLE_PROPOSAL_PROCESSOR) authority");
@@ -77,6 +79,26 @@ public class ProposalAggregate extends AbstractAnnotatedAggregateRoot<ProposalId
         }
         Preconditions.checkArgument(hasProposalPreprocessorRole);
             assignProposer(proposer);
+    }
+
+    public void updatePlan(ProposalAggregate aggregate, ProposalPlanDetail proposalPlanDetail, Set<Beneficiary> beneficiaries, UserDetails userDetails) {
+        boolean hasProposalPreprocessorRole = hasIndividualLifeProposalProcessorRole(userDetails.getAuthorities());
+        if (!hasProposalPreprocessorRole) {
+            throw new AuthorizationServiceException("User does not have Individual Life Proposal processor(ROLE_PROPOSAL_PROCESSOR) authority");
+        }
+        Preconditions.checkArgument(hasProposalPreprocessorRole);
+        assignPlanDetail(proposalPlanDetail);
+        assignBeneficiaries(beneficiaries);
+
+
+    }
+
+    private void assignBeneficiaries(Set<Beneficiary> beneficiaries) {
+        beneficiaries.forEach(beneficiary -> this.addBeneficiary(beneficiary));
+    }
+
+    private void assignPlanDetail(ProposalPlanDetail proposalPlanDetail) {
+        this.proposalPlanDetail = proposalPlanDetail;
     }
 
     private void assignProposer(ProposedAssured proposedAssured) {
@@ -117,6 +139,7 @@ public class ProposalAggregate extends AbstractAnnotatedAggregateRoot<ProposalId
         Preconditions.checkArgument(newTotal.compareTo(PERCENTAGE) == -1, "Total share exceeds 100%. Cannot add any more beneficiary.");
         boolean sameBeneficiaryExists = beneficiaries.parallelStream().anyMatch(each -> (each.equals(beneficiary)));
         Preconditions.checkArgument(!sameBeneficiaryExists, "Beneficiary already exists.");
+        beneficiaries.add(beneficiary);
         totalBeneficiaryShare = newTotal;
     }
 

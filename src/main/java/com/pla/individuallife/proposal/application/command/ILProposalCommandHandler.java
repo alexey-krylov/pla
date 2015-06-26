@@ -161,21 +161,21 @@ public class ILProposalCommandHandler {
        }
    }
 
-    /* @CommandHandler
-    public String updateWithPlanDetail(ILProposalUpdateWithPlanAndBeneficiariesCommand cmd)
+     @CommandHandler
+    public void updateWithPlanDetail(ILProposalUpdateWithPlanAndBeneficiariesCommand cmd)
     {
-        ProposalAggregate proposalAggregate = null;
+        ProposalAggregate aggregate = null;
         ProposalId proposalId=new ProposalId(cmd.getProposalId());
-        ProposalPlanDetail proposalPlanDetail=cmd.getProposalPlanDetail();
 
         try{
-            proposalAggregate=ilProposalMongoRepository.load(proposalId);
-            proposalAggregate.
+            aggregate=ilProposalMongoRepository.load(proposalId);
+            aggregate.updatePlan(aggregate, cmd.getProposalPlanDetail(), cmd.getBeneficiaries(),  cmd.getUserDetails());
+            ilProposalMongoRepository.add(aggregate);
         }
         catch (AggregateNotFoundException e) {
             e.printStackTrace();
         }
-    } */
+    }
 
 
 }
