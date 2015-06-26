@@ -412,7 +412,7 @@
             <input type="radio" name="proposedAssuredAsProposer" ng-value="false" value="false" ng-required="true" ng-model="proposedAssured.isProposer"/> No
         </label>
 
-        <div class="error" ng-messages="step1.isProposed.$error" ng-if="step1.isProposed.$dirty">
+        <div class="error" ng-messages="step1.proposedAssuredAsProposer.$error" ng-if="step1.proposedAssuredAsProposer.$pristine">
             <small class="error" ng-message="required">Please select one.</small>
         </div>
     </div>
