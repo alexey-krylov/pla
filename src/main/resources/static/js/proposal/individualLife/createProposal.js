@@ -26,18 +26,20 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
                 isPart: true
             };
 
+
             $scope.selectedWizard = 1;
             $scope.proposedAssured = {
-                "title": "Mr.",
-                "firstName": "Proposed Firstname",
-                "surname": "Proposed Surname",
-                "otherName": "OtherName",
-                "nrc": "NRC0001",
-                "dateOfBirth": new Date('1978-12-12'),
-                "gender": "MALE",
-                "mobileNumber": "9343044175",
-                "emailAddress": "someAddress@gmail.com",
-                "maritalStatus": "MARRIED",
+                "title": null,
+                "firstName": null,
+                "surname": null,
+                "otherName": null,
+                "nrc": null,
+                "dateOfBirth": null,
+                "gender": null,
+                "mobileNumber": null,
+                "emailAddress": null,
+                "maritalStatus": null,
+                "nextDob":null,
                 "isProposer": null
             };
 
@@ -49,6 +51,14 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
                 console.log('Inside addBeneficiary Method..');
                 $scope.beneficiaries.unshift(beneficiary);
                 $('#beneficiaryModal').modal('hide');
+            };
+
+            $scope.showDob=function(dob)
+            {
+                console.log('Dob Calculation..');
+                console.log('DOB' + JSON.stringify(dob));
+                $scope.proposedAssured.nextDob= moment().diff(new moment(new Date(dob)), 'years') + 1;
+
             };
 
             $scope.proposalPlanDetail ={};
@@ -70,16 +80,16 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
             });
 
             $scope.proposer = {
-                "title": "Mr.",
-                "firstName": "Proposed Firstname",
-                "surname": "Proposed Surname",
-                "otherName": "OtherName",
-                "nrc": "NRC0001",
-                "dateOfBirth": new Date('1978-12-12'),
-                "gender": "MALE",
-                "mobileNumber": "9343044175",
-                "emailAddress": "someAddress@gmail.com",
-                "maritalStatus": "MARRIED"
+                "title": null,
+                "firstName":null,
+                "surname": null,
+                "otherName": null,
+                "nrc": null,
+                "dateOfBirth": null,
+                "gender": null,
+                "mobileNumber": null,
+                "emailAddress": null,
+                "maritalStatus": null
             };
             $scope.proposerSpouse = {};
             $scope.proposerEmployment = {};
@@ -87,34 +97,34 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
 
             $scope.spouse=
             {
-                "firstName": "vffh",
-                "surname": "hgd",
-                "mobileNumber": "544545",
-                "emailAddress": "drdy@jb.com"
+                "firstName": null,
+                "surname": null,
+                "mobileNumber": null,
+                "emailAddress": null
 
             };
             $scope.employment=
             {
                 "occupation": null,
-                "employer": "Nth Dimenzion",
+                "employer": null,
                 "employmentDate": null,
                 "employmentType": null,
-                "address1": "trrtu",
-                "address2": "tur",
+                "address1": null,
+                "address2": null,
                 "province": null,
-                "postalCode": "12345",
+                "postalCode": null,
                 "town": null,
-                "workPhone": "000000000000000"
+                "workPhone": null
             };
             $scope.residentialAddress=
             {
-                "address1": "ryye",
-                "address2": "yry",
-                "postalCode": "12345",
+                "address1": null,
+                "address2": null,
+                "postalCode":null,
                 "province": null,
                 "town": null,
-                "homePhone": "000000",
-                "emailAddress": "rtreter@ggmmm.com"
+                "homePhone": null,
+                "emailAddress":null
             };
 
             $scope.familyPersonalDetail = {isPregnant: null, pregnancyMonth: null};
@@ -141,6 +151,14 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
                 $event.stopPropagation();
                 $scope.launchdob1 = true;
             };
+
+            $scope.launchProposedAssuredeDob = function ($event) {
+                $event.preventDefault();
+                $event.stopPropagation();
+                $scope.launchdob = true;
+            };
+
+
             $scope.launchProposerDate = function ($event) {
                 $event.preventDefault();
                 $event.stopPropagation();
@@ -186,38 +204,30 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
                 $scope.agent={};
             };
 
+
             $scope.searchAgent = function () {
+                $scope.check=false;
+                $scope.checking=true;
                 console.log('Testing In SearchCode..');
                 $scope.agentId=$scope.agent.agentId;
                 console.log('Value is: '+$scope.agentId);
                 $http.get("getagentdetail/" +$scope.agentId).success(function (response, status, headers, config) {
                  $scope.agent = response;
+                    $scope.checking=false;
                  }).error(function (response, status, headers, config) {
-
+                    var check=status;
+                    if(check == 500)
+                    {
+                        $scope.check=true;
+                        $scope.agent.firstName=null;
+                        $scope.agent.lastName=null;
+                    }
                  });
 
             };
 
             $scope.saveProposedAssuredDetails = function () {
                 //ProposalService.saveProposedAssured($scope.proposedAssured, $scope.proposedAssuredSpouse, $scope.paemployment, $scope.paresidential, proposedAssuredAsProposer, null);
-
-              /*if (proposedAssuredAsProposer) {
-                    $scope.proposer = angular.copy($scope.proposedAssured);
-                    $scope.proposerSpouse = angular.copy($scope.spouse);
-                    $scope.proposerEmployment = angular.copy($scope.employment);
-                    $scope.proposerResidential = angular.copy($scope.residentialAddress);
-
-
-                  var prorequest={
-                      "spouse": $scope.proposerSpouse,
-                      "employment": $scope.proposerEmployment,
-                      "residentialAddress": $scope.proposerResidential
-                  };
-                  prorequest=angular.extend($scope.proposer,prorequest);
-                  prorequest={proposer:prorequest};
-                  console.log('ProRequest' +JSON.stringify(prorequest));
-                } */
-
                 var request = {
                     "spouse": $scope.spouse,
                     "employment": $scope.employment,
@@ -234,8 +244,7 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
                 }
 
                 console.log('Result ' + JSON.stringify(request1));
-                /*$http.post('create', request1);
-*/
+               /* $http.post('create', request1);*/
                 $http.post('create', request1).success(function (response, status, headers, config) {
                  $scope.proposal = response;
                  console.log('proposalId : '+$scope.proposalId );
@@ -254,6 +263,13 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
                 prorequest=angular.extend($scope.proposer,prorequest);
                 prorequest={proposer:prorequest};
                 console.log('ProRequest' +JSON.stringify(prorequest));
+
+                var request1={
+                    "proposer":$scope.proposedAssured,
+                    "proposalId":$scope.proposal.proposalId
+                }
+
+                $http.post('updateproposer', request1);
             };
 
 

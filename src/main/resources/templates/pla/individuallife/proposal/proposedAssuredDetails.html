@@ -44,36 +44,41 @@
                     <select class="form-control input-sm" name="title" ng-required="true" ng-model="proposedAssured.title" ng-options="title as title for title in titles">
                     </select>
 
-                    <div class="error" ng-messages="proposedAssuredDetails.title.$error">
+                    <div class="error" ng-messages="proposedAssuredDetails.title.$error" ng-if="proposedAssuredDetails.title.$dirty">
                         <small ng-message="required">Please enter title.</small>
                     </div>
                 </div>
                 <div class="form-group required">
                     <label class="control-label">Surname</label>
-                    <input type="text" class="form-control input-sm" name="surname" ng-required="true" ng-model="proposedAssured.surname"/>
+                    <input type="text" class="form-control input-sm" name="surname" ng-required="true" ng-model="proposedAssured.surname" ng-maxlength="20"/>
 
-                    <div class="error" ng-messages="proposedAssuredDetails.surname.$error">
+                    <div class="error" ng-messages="proposedAssuredDetails.surname.$error" ng-if="proposedAssuredDetails.surname.$dirty">
                         <small class="error" ng-message="required">Please enter Surname.</small>
+                        <small ng-message="maxlength">Only 20 characters are allowed.</small>
+                        <small ng-message="pattern">Only alphabets are allowed.</small>
                     </div>
                 </div>
                 <div class="form-group required">
                     <label class="control-label">NRC</label>
-                    <input type="text" class="form-control input-sm" name="nrc" ng-model="proposedAssured.nrc" ng-required="true"/>
+                    <input type="text" class="form-control input-sm" name="nrc" ng-model="proposedAssured.nrc" ng-required="true" ng-maxlength="9" ng-pattern="/^[0-9]{6}\/[0-9]{2}\/[0-9]{1}$/"/>
 
-                    <div class="error" ng-messages="proposedAssuredDetails.nrc.$error">
+                    <div class="error" ng-messages="proposedAssuredDetails.nrc.$error" ng-if="proposedAssuredDetails.nrc.$dirty">
                         <small class="error" ng-message="required">Please enter NRC.</small>
+                        <small ng-message="maxlength">Only 9 characters are allowed.</small>
                     </div>
                 </div>
                 <div class="form-group required">
                     <label class="control-label">Age Next Birthday</label>
-                    <input type="text" class="form-control input-sm" name="ageNextBirthday"/>
+                    <input type="text" class="form-control input-sm" name="ageNextBirthday" ng-model="proposedAssured.nextDob"/>
                 </div>
                 <div class="form-group required">
                     <label class="control-label">Mobile Number</label>
-                    <input type="text" class="form-control input-sm" name="mobileNumber" ng-model="proposedAssured.mobileNumber" ng-required="true" ng-maxLength="10"/>
+                    <input type="text" class="form-control input-sm" name="mobileNumber" ng-model="proposedAssured.mobileNumber" ng-pattern="/^\d+$/" ng-required="true" ng-maxLength="10" />
 
-                    <div class="error" ng-messages="proposedAssuredDetails.mobileNumber.$error">
+                    <div class="error" ng-messages="proposedAssuredDetails.mobileNumber.$error" ng-if="proposedAssuredDetails.mobileNumber.$dirty">
                         <small class="error" ng-message="required">Please enter Mobile Number</small>
+                        <small ng-message="maxlength">Only 10 number are allowed.</small>
+                        <small ng-message="pattern">Only numeric are allowed.</small>
                     </div>
                 </div>
                 <div class="form-group required">
@@ -83,7 +88,7 @@
                         <option value="UNMARRIED">UnMarried</option>
                     </select>
 
-                    <div class="error" ng-messages="proposedAssuredDetails.maritalStatus.$error">
+                    <div class="error" ng-messages="proposedAssuredDetails.maritalStatus.$error" ng-if="proposedAssuredDetails.maritalStatus.$dirty">
                         <small class="error" ng-message="required">Please enter Marital Status</small>
                     </div>
                 </div>
@@ -91,26 +96,57 @@
             <div class="col-md-6">
                 <div class="form-group required">
                     <label class="control-label">First Name</label>
-                    <input type="text" class="form-control input-sm" name="firstName" ng-model="proposedAssured.firstName" ng-required="true"/>
+                    <input type="text" class="form-control input-sm" name="firstName" ng-pattern="onlyText" ng-model="proposedAssured.firstName" ng-maxlength="20" ng-required="true"/>
 
-                    <div class="error" ng-messages="proposedAssuredDetails.firstName.$error">
+                    <div class="error" ng-messages="proposedAssuredDetails.firstName.$error" ng-if="proposedAssuredDetails.firstName.$dirty">
                         <small class="error" ng-message="required">
                             Please enter FirstName
                         </small>
+                        <small ng-message="maxlength">Only 20 characters are allowed.</small>
+                        <small ng-message="pattern">Only alphabets are allowed.</small>
                     </div>
                 </div>
                 <div class="form-group">
                     <label class="control-label">Other Name</label>
-                    <input type="text" class="form-control input-sm" name="otherName" ng-model="proposedAssured.otherName"/>
+                    <input type="text" class="form-control input-sm" name="otherName" ng-maxlength="20" ng-model="proposedAssured.otherName" ng-pattern="onlyText"/>
+
+                    <div class="error" ng-messages="proposedAssuredDetails.otherName.$error" ng-if="proposedAssuredDetails.otherName.$dirty">
+                        <small ng-message="maxlength">Only 20 characters are allowed.</small>
+                        <small ng-message="pattern">Only alphabets are allowed.</small>
+                    </div>
                 </div>
-                <div class="form-group required">
+               <!-- <div class="form-group required">
                     <label class="control-label">Date Of Birth</label>
                     <input type="text" class="form-control input-sm" name="dateOfBirth" ng-model="proposedAssured.dateOfBirth" ng-required="true"/>
 
                     <div class="error" ng-messages="proposedAssuredDetails.dateOfBirth.$error">
                         <small class="error" ng-message="required">Please enter Date of Birth</small>
                     </div>
+                </div>-->
+
+                <div class="form-group required">
+                    <label class="control-label">dateOfBirth</label>
+                    <div class='input-group date'>
+                        <input type="text" class="form-control input-sm"
+                               datepicker-popup="" view-enabled=""
+                               ng-required="true"
+                               is-open="launchdob"
+                               max-date="todayDate"
+
+                               ng-model="proposedAssured.dateOfBirth" name="dob" ng-blur="showDob(proposedAssured.dateOfBirth)"/>
+                                    <span class="input-group-btn">
+                                    <button type="button" class="btn btn-default btn-sm"
+                                            ng-click="launchProposedAssuredeDob($event)">
+                                        <i class="glyphicon glyphicon-calendar"></i></button>
+                                  </span>
+                    </div>
+                    <div class="error" ng-messages="proposedAssuredDetails.dateOfBirth.$error" ng-if="proposedAssuredDetails.dateOfBirth.$dirty">
+                        <small ng-message="required">Please enter Employment Date.</small>
+                        <small ng-message="date">Invalid Date.</small>
+
+                    </div>
                 </div>
+
                 <div class="form-group required">
                     <label class="control-label">Sex</label>
                     <select class="form-control input-sm" name="gender" ng-model="proposedAssured.gender" ng-required="true">
@@ -118,13 +154,18 @@
                         <option value="FEMALE" ng-value="FEMALE">Female</option>
                     </select>
 
-                    <div class="error" ng-messages="proposedAssuredDetails.gender.$error">
+                    <div class="error" ng-messages="proposedAssuredDetails.gender.$error" ng-if="proposedAssuredDetails.gender.$dirty">
                         <small class="error" ng-message="required">Please enter Sex</small>
                     </div>
                 </div>
                 <div class="form-group">
                     <label class="control-label">Email Address</label>
                     <input type="text" class="form-control input-sm" name="email" ng-model="proposedAssured.emailAddress"/>
+
+                    <div class="error" ng-messages="proposedAssuredDetails.emailAddress.$error"  ng-if="proposedAssuredDetails.emailAddress.$dirty">
+                        <small class="error" ng-message="required">Please enter Valid email address. </small>
+                    </div>
+
                 </div>
             </div>
         </accordion-group>
@@ -137,17 +178,19 @@
             <div class="col-md-6">
                 <div class="form-group required">
                     <label class="control-label">Spouse's First Name</label>
-                    <input type="text" class="form-control input-sm" name="spouseFirstName" ng-model="spouse.firstName" ng-required="true"/>
+                    <input type="text" class="form-control input-sm" name="spouseFirstName" ng-maxlength="20" ng-pattern="onlyText" ng-model="spouse.firstName" ng-required="true"/>
 
-                    <div class="error" ng-messages="spouseDetails.spouseFirstName.$error">
+                    <div class="error" ng-messages="spouseDetails.spouseFirstName.$error" ng-if="spouseDetails.spouseFirstName.$dirty">
                         <small class="error" ng-message="required">Please enter Spouse's First Name</small>
+                        <small ng-message="pattern">Only alphabets are allowed.</small>
+                        <small ng-message="maxlength">Only 20 characters are allowed.</small>
                     </div>
                 </div>
                 <div class="form-group required">
                     <label class="control-label">Spouse's Mobile Number</label>
                     <input type="text" class="form-control input-sm" name="spouseMobileNumber" ng-model="spouse.mobileNumber" ng-required="true"/>
 
-                    <div class="error" ng-messages="spouseDetails.spouseMobileNumber.$error">
+                    <div class="error" ng-messages="spouseDetails.spouseMobileNumber.$error" ng-if="spouseDetails.spouseMobileNumber.$dirty">
                         <small class="error" ng-message="required">Please enter Spouse's Mobile Number</small>
                     </div>
                 </div>
@@ -155,10 +198,12 @@
             <div class="col-md-6">
                 <div class="form-group required">
                     <label class="control-label">Spouse's Surname</label>
-                    <input type="text" class="form-control input-sm" name="spouseSurname" ng-model="spouse.surname" ng-required="true"/>
+                    <input type="text" class="form-control input-sm" name="spouseSurname" ng-pattern="onlyText" ng-maxlength="20" ng-model="spouse.surname" ng-required="true"/>
 
-                    <div class="error" ng-messages="spouseDetails.spouseSurname.$error">
+                    <div class="error" ng-messages="spouseDetails.spouseSurname.$error" ng-if="spouseDetails.spouseSurname.$dirty">
                         <small class="error" ng-message="required">Please enter Spouse's Surname</small>
+                        <small ng-message="maxlength">Only 20 characters are allowed.</small>
+                        <small ng-message="pattern">Only alphabets are allowed.</small>
                     </div>
                 </div>
                 <div class="form-group">
@@ -180,7 +225,7 @@
                     <select class="form-control input-sm" name="occupation" ng-required="true" ng-model="employment.occupation"
                             ng-options="occupation.description as occupation.description for occupation in occupations"></select>
 
-                    <div class="error" ng-messages="employmentDetails.occupation.$error">
+                    <div class="error" ng-messages="employmentDetails.occupation.$error" ng-if="employmentDetails.occupation.$dirty">
                         <small class="error" ng-message="required">Please enter Occupation</small>
                     </div>
                 </div>
@@ -200,7 +245,7 @@
                                         <i class="glyphicon glyphicon-calendar"></i></button>
                                   </span>
                     </div>
-                    <div class="error" ng-messages="step2.dob.$error" ng-if="step2.dob.$dirty">
+                    <div class="error" ng-messages="employmentDetails.employmentDate.$error" ng-if="employmentDetails.employmentDate.$dirty">
                         <small ng-message="required">Please enter Employment Date.</small>
                         <small ng-message="date">Invalid Date.</small>
 
@@ -209,22 +254,28 @@
 
                 <div class="form-group required">
                     <label class="control-label">Address Line 1</label>
-                    <input type="text" class="form-control input-sm" name="addressLine1" ng-model="employment.address1" ng-required="true"/>
+                    <input type="text" class="form-control input-sm" name="addressLine1" ng-maxlength="100" ng-model="employment.address1" ng-required="true"/>
 
-                    <div class="error" ng-messages="employmentDetails.employmentDate.$error">
+                    <div class="error" ng-messages="employmentDetails.address1.$error" ng-if="employmentDetails.address1.$dirty">
                         <small class="error" ng-message="required">Please enter Address Line 1</small>
+                        <small ng-message="maxlength">Only 100 characters are allowed.</small>
                     </div>
                 </div>
                 <div class="form-group">
                     <label class="control-label">Postal Code</label>
-                    <input type="text" class="form-control input-sm" name="postalCode" ng-model="employment.postalCode"/>
+                    <input type="text" class="form-control input-sm" name="postalCode" ng-maxlength="7" ng-pattern="/^\d+$/" ng-model="employment.postalCode"/>
+
+                    <div class="error" ng-messages="employmentDetails.postalCode.$error" ng-if="employmentDetails.postalCode.$dirty">
+                        <small ng-message="maxlength">Only 7 characters are allowed.</small>
+                        <small ng-message="pattern">Only Numeric are allowed.</small>
+                    </div>
                 </div>
                 <div class="form-group required">
                     <label class="control-label">Town</label>
                     <select class="form-control input-sm" name="town" ng-required="true" ng-model="employment.town"
                             ng-options="city.geoId as city.geoName for city in proposedAssuredEmploymentCities"/>
 
-                    <div class="error" ng-messages="employmentDetails.town.$error">
+                    <div class="error" ng-messages="employmentDetails.town.$error" ng-if="employmentDetails.town.$dirty">
                         <small class="error" ng-message="required">Please enter Town</small>
                     </div>
                 </div>
@@ -232,10 +283,11 @@
             <div class="col-md-6">
                 <div class="form-group required">
                     <label class="control-label">Employer</label>
-                    <input type="text" class="form-control input-sm" name="employer" ng-required="true" ng-model="employment.employer"/>
+                    <input type="text" class="form-control input-sm" name="employer" ng-required="true" ng-maxlength="30" ng-model="employment.employer"/>
 
-                    <div class="error" ng-messages="employmentDetails.employer.$error">
+                    <div class="error" ng-messages="employmentDetails.employer.$error" ng-if="employmentDetails.employer.$dirty">
                         <small class="error" ng-message="required">Please enter Employer</small>
+                        <small ng-message="maxlength">Only 30 characters are allowed.</small>
                     </div>
                 </div>
                 <div class="form-group required">
@@ -243,13 +295,17 @@
                     <select class="form-control input-sm" name="employmentType" ng-required="true" ng-model="employment.employmentType" ng-options="employmentType.employment_id as employmentType.description for employmentType in employmentTypes">
                             </select>
 
-                    <div class="error" ng-messages="employmentDetails.employmentType.$error">
+                    <div class="error" ng-messages="employmentDetails.employmentType.$error" ng-if="employmentDetails.employmentType.$dirty">
                         <small class="error" ng-message="required">Please enter Employment Type</small>
                     </div>
                 </div>
                 <div class="form-group">
                     <label class="control-label">Address Line 2</label>
-                    <input type="text" class="form-control input-sm" name="addressLine2" ng-model="employment.address2"/>
+                    <input type="text" class="form-control input-sm" name="addressLine2" ng-maxlength="100" ng-model="employment.address2"/>
+
+                    <div class="error" ng-messages="employmentDetails.address2.$error" ng-if="employmentDetails.address2.$dirty">
+                        <small ng-message="maxlength">Only 100 characters are allowed.</small>
+                    </div>
                 </div>
                 <div class="form-group required">
                     <label class="control-label">Province</label>
@@ -257,13 +313,18 @@
                             ng-model="employment.province" ng-required="true">
                     </select>
 
-                    <div class="error" ng-messages="employmentDetails.province.$error">
+                    <div class="error" ng-messages="employmentDetails.province.$error" ng-if="employmentDetails.province.$dirty">
                         <small class="error" ng-message="required">Please enter Province</small>
                     </div>
                 </div>
                 <div class="form-group">
                     <label class="control-label">Work phone</label>
-                    <input type="text" class="form-control input-sm" name="workPhone" ng-model="employment.workPhone"/>
+                    <input type="text" class="form-control input-sm" name="workPhone" ng-maxlength="10" ng-pattern="/^\d+$/" ng-model="employment.workPhone"/>
+
+                    <div class="error" ng-messages="employmentDetails.workPhone.$error" ng-if="employmentDetails.workPhone.$dirty">
+                        <small ng-message="maxlength">Only 10 characters are allowed.</small>
+                        <small ng-message="pattern">Only Numeric are allowed.</small>
+                    </div>
                 </div>
             </div>
         </accordion-group>
@@ -277,15 +338,21 @@
             <div class="col-md-6">
                 <div class="form-group required">
                     <label class="control-label">Address Line 1</label>
-                    <input type="text" class="form-control input-sm" name="residentAddress1" ng-model="residentialAddress.address1" ng-required="true"/>
+                    <input type="text" class="form-control input-sm" name="residentAddress1" ng-maxlength="100" ng-model="residentialAddress.address1" ng-required="true"/>
 
-                    <div class="error" ng-messages="residentDetails.residentAddress1.$error">
+                    <div class="error" ng-messages="residentDetails.residentAddress1.$error" ng-if="residentDetails.residentAddress1.$dirty">
                         <small class="error" ng-message="required">Please enter Address Line 1</small>
+                        <small ng-message="maxlength">Only 100 characters are allowed.</small>
                     </div>
                 </div>
                 <div class="form-group">
                     <label class="control-label">Postal Code</label>
-                    <input type="text" class="form-control input-sm" name="residentPostalCode" ng-model="residentialAddress.postalCode"/>
+                    <input type="text" class="form-control input-sm" name="residentPostalCode" ng-pattern="/^\d+$/" ng-maxlength="7" ng-model="residentialAddress.postalCode"/>
+
+                    <div class="error" ng-messages="residentDetails.postalCode.$error" ng-if="residentDetails.postalCode.$dirty">
+                        <small ng-message="maxlength">Only 7 characters are allowed.</small>
+                        <small ng-message="pattern">Only Numeric are allowed.</small>
+                    </div>
                 </div>
                 <div class="form-group required">
                     <label class="control-label">Town</label>
@@ -293,7 +360,7 @@
                             ng-options="city.geoId as city.geoName for city in proposedAssuredResidentialCities" ng-required="true">
                     </select>
 
-                    <div class="error" ng-messages="residentDetails.residentTown.$error">
+                    <div class="error" ng-messages="residentDetails.residentTown.$error" ng-if="residentDetails.residentTown.$dirty">
                         <small class="error" ng-message="required">Please enter Town</small>
                     </div>
                 </div>
@@ -305,20 +372,30 @@
             <div class="col-md-6">
                 <div class="form-group">
                     <label class="control-label">Address Line 2</label>
-                    <input type="text" class="form-control input-sm" name="residentAddress2" ng-model="residentialAddress.address2"/>
+                    <input type="text" class="form-control input-sm" name="residentAddress2" ng-maxlenght="100" ng-model="residentialAddress.address2"/>
+
+                     <div class="error" ng-messages="residentDetails.address2.$error" ng-if="residentDetails.address2.$dirty">
+                         <small ng-message="maxlength">Only 20 characters are allowed.</small>
+                    </div>
                 </div>
                 <div class="form-group required">
                     <label class="control-label">Province</label>
                     <select class="form-control input-sm" name="residentProvince" ng-options="province.provinceId as province.provinceName for province in provinces"
                             ng-model="residentialAddress.province" ng-required="true"/>
 
-                    <div class="error" ng-messages="residentDetails.residentProvince.$error">
+                    <div class="error" ng-messages="residentDetails.residentProvince.$error" ng-if="residentDetails.residentProvince.$dirty">
                         <small class="error" ng-message="required">Please enter Province</small>
                     </div>
                 </div>
                 <div class="form-group">
                     <label class="control-label">Home Phone</label>
-                    <input type="text" class="form-control input-sm" name="residentPhone" ng-model="residentialAddress.homePhone"/>
+                    <input type="text" class="form-control input-sm" name="residentPhone" ng-maxlength="10" ng-pattern="/^\d+$/" ng-model="residentialAddress.homePhone"/>
+
+                    <div class="error" ng-messages="residentDetails.homePhone.$error" ng-if="residentDetails.homePhone.$dirty">
+                        <small ng-message="maxlength">Only 10 characters are allowed.</small>
+                        <small ng-message="pattern">Only Numeric are allowed.</small>
+                    </div>
+
                 </div>
             </div>
         </accordion-group>
@@ -332,7 +409,7 @@
             <input type="radio" name="proposedAssuredAsProposer" ng-value="false" value="false" ng-required="true" ng-model="proposedAssured.isProposer"/> No
         </label>
 
-        <div class="error" ng-messages="step1.isProposed.$error">
+        <div class="error" ng-messages="step1.isProposed.$error" ng-if="step1.isProposed.$dirty">
             <small class="error" ng-message="required">Please select one.</small>
         </div>
     </div>

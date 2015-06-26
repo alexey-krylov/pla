@@ -16,11 +16,11 @@
     }
 
     requirejs.config({
-         paths: {
-         ilproposal_common: '/pla/js/proposal/individuallife/proposal.js?t=11221',
-         ilproposal: '/pla/js/proposal/individuallife/createProposal.js?t=12121'
-         },
-         "shim": {"ilproposal": ["angular", "ilproposal_common"]}
+        paths: {
+            ilproposal_common: '/pla/js/proposal/individuallife/proposal.js?t=11221',
+            ilproposal: '/pla/js/proposal/individuallife/createProposal.js?t=12121'
+        },
+        "shim": {"ilproposal": ["angular", "ilproposal_common"]}
     });
     requirejs(['main'], function () {
         require(['ilproposal', 'jquery'], function (app, $) {
@@ -31,70 +31,70 @@
 </script>
 
 <div class="container fuelux" ng-controller="createProposalCtrl">
-        <nth-alert></nth-alert>
-        <form>
-            <div class="wizard fuelux-wizard" selected-item="selectedWizard">
-                <ul class="steps" style="margin-left: 0">
-                    <li data-step="1">
-                        <span class="badge badge-info">A</span><span class="chevron"></span>
-                    </li>
-                    <li data-step="2">
-                        <span class="badge badge-info">B</span><span class="chevron"></span>
-                    </li>
-                    <li data-step="3">
-                        <span class="badge badge-info">C</span><span class="chevron"></span>
-                    </li>
-                    <li data-step="4">
-                        <span class="badge badge-info">D</span><span class="chevron"></span>
-                    </li>
-                    <li data-step="5">
-                        <span class="badge badge-info">E</span><span class="chevron"></span>
-                    </li>
-                    <li data-step="6">
-                        <span class="badge badge-info">F</span><span class="chevron"></span>
-                    </li>
-                    <li data-step="7">
-                        <span class="badge badge-info">G</span><span class="chevron"></span>
-                    </li>
-                    <li data-step="8">
-                        <span class="badge badge-info">H</span><span class="chevron"></span>
-                    </li>
-                </ul>
-                <div class="actions">
+    <nth-alert></nth-alert>
+    <form>
+        <div class="wizard fuelux-wizard" selected-item="selectedWizard">
+            <ul class="steps" style="margin-left: 0">
+                <li data-step="1">
+                    <span class="badge badge-info">A</span><span class="chevron"></span>
+                </li>
+                <li data-step="2">
+                    <span class="badge badge-info">B</span><span class="chevron"></span>
+                </li>
+                <li data-step="3">
+                    <span class="badge badge-info">C</span><span class="chevron"></span>
+                </li>
+                <li data-step="4">
+                    <span class="badge badge-info">D</span><span class="chevron"></span>
+                </li>
+                <li data-step="5">
+                    <span class="badge badge-info">E</span><span class="chevron"></span>
+                </li>
+                <li data-step="6">
+                    <span class="badge badge-info">F</span><span class="chevron"></span>
+                </li>
+                <li data-step="7">
+                    <span class="badge badge-info">G</span><span class="chevron"></span>
+                </li>
+                <li data-step="8">
+                    <span class="badge badge-info">H</span><span class="chevron"></span>
+                </li>
+            </ul>
+            <div class="actions">
                     <span style="font-weight: bolder;margin-right: 15px;color: #999">
                     Proposal ID :<span style="font-size: 13px;color: #3a87ad;">{{proposal.proposalId}}</span>
                      </span>
-                    <button type="button" class="btn btn-default btn-prev" disabled="disabled"><span class="glyphicon glyphicon-arrow-left"></span>Prev</button>
-                    <button type="button" class="btn btn-default btn-next">Next<span class="glyphicon glyphicon-arrow-right"></span></button>
+                <button type="button" class="btn btn-default btn-prev" disabled="disabled"><span class="glyphicon glyphicon-arrow-left"></span>Prev</button>
+                <button type="button" class="btn btn-default btn-next">Next<span class="glyphicon glyphicon-arrow-right"></span></button>
+            </div>
+            <div class="step-content">
+                <div class="step-pane" data-step="1">
+                    <ng-include src="resources.proposedAssuredUrl | getTrustedUrl"></ng-include>
                 </div>
-                <div class="step-content">
-                    <div class="step-pane" data-step="1">
-                        <ng-include src="resources.proposedAssuredUrl | getTrustedUrl"></ng-include>
-                    </div>
-                    <div class="step-pane" data-step="2">
-                        <ng-include src="resources.proposerDetails | getTrustedUrl"></ng-include>
-                    </div>
-                    <div class="step-pane" data-step="3">
-                        <ng-include src="resources.planDetails | getTrustedUrl"></ng-include>
-                    </div>
-                    <div class="step-pane" data-step="4">
-                        <ng-include src="resources.generalDetails | getTrustedUrl"></ng-include>
-                    </div>
-                    <div class="step-pane" data-step="5">
-                        <ng-include src="resources.compulsoryHealthDetailsPart1 | getTrustedUrl"></ng-include>
-                    </div>
-                    <div class="step-pane" data-step="6">
-                        <ng-include src="resources.compulsoryHealthDetailsPart2 | getTrustedUrl"></ng-include>
-                    </div>
-                    <div class="step-pane" data-step="7">
-                        <ng-include src="resources.familyHabitAndBuild | getTrustedUrl"></ng-include>
-                    </div>
-                    <div class="step-pane" data-step="8">
-                        <ng-include src="resources.additionalDetail | getTrustedUrl"></ng-include>
-                    </div>
+                <div class="step-pane" data-step="2">
+                    <ng-include src="resources.proposerDetails | getTrustedUrl"></ng-include>
+                </div>
+                <div class="step-pane" data-step="3">
+                    <ng-include src="resources.planDetails | getTrustedUrl"></ng-include>
+                </div>
+                <div class="step-pane" data-step="4">
+                    <ng-include src="resources.generalDetails | getTrustedUrl"></ng-include>
+                </div>
+                <div class="step-pane" data-step="5">
+                    <ng-include src="resources.compulsoryHealthDetailsPart1 | getTrustedUrl"></ng-include>
+                </div>
+                <div class="step-pane" data-step="6">
+                    <ng-include src="resources.compulsoryHealthDetailsPart2 | getTrustedUrl"></ng-include>
+                </div>
+                <div class="step-pane" data-step="7">
+                    <ng-include src="resources.familyHabitAndBuild | getTrustedUrl"></ng-include>
+                </div>
+                <div class="step-pane" data-step="8">
+                    <ng-include src="resources.additionalDetail | getTrustedUrl"></ng-include>
                 </div>
             </div>
-        </form>
+        </div>
+    </form>
     <div class="modal fade" id="agentModal" tabindex="-1" role="dialog" aria-labelledby="agentModal">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -114,7 +114,8 @@
                                     <input type="text" onkeypress="return isEnterKey(event)" class="form-control input-sm" name="agentId"
                                            ng-model="agent.agentId" ng-required="true" ng-change="clearAgentDetails()"
                                            ng-blur="searchAgent()"
-                                           ng-disabled="mode=='new'||mode=='edit'"/>
+                                           ng-disabled="mode=='new'||mode=='edit'">
+                                           </input>
                                     <div class="input-group-btn">
                                         <button type="button" class="btn btn-default btn-sm" ng-click="searchAgent()"
                                                 ng-disabled="!agent.agentId || mode=='new'||mode=='edit'">
@@ -123,6 +124,10 @@
                                     </div>
                                 </div>
                             </div>
+                            <div class="form-group required" ng-show="check">
+                                <span style="color:red">Invalid Agent Code</span>
+                            </div>
+
                             <div class="form-group required">
                                 <label class="control-label">Commission %</label>
                                 <input type="number" max="allowedPercentage" min="0" class="form-control input-sm" name="commission" ng-model="agent.commission"/>
@@ -141,7 +146,7 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button class="btn btn-default" data-dismiss="modal" ng-click="addAgent(agent)">Add</button>
+                    <button class="btn btn-default" data-dismiss="modal" ng-disabled="checking" ng-click="addAgent(agent)">Add</button>
                     <button class="btn btn-default" data-dismiss="modal" ng-click="cancel()">Cancel</button>
                 </div>
             </div>
