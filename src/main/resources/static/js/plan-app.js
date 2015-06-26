@@ -172,6 +172,35 @@ app.directive('sumassuredCheck', function () {
     }
 });
 
+app.directive('validateTerm', function () {
+    return {
+        // restrict to an attribute type.
+        restrict: 'A',
+        require: 'ngModel',
+        link: function (scope, ele, attrs, ctrl) {
+            scope.$watch('newCoverage.coverageTerm.maxMaturityAge', function (newval, oldval) {
+                if (newval == oldval)return;
+                var maxMaturityAge = 0;
+                var valid = true;
+                var policyTermType = scope.$eval('plan.policyTermType');
+                if (policyTermType == 'MATURITY_AGE_DEPENDENT') {
+                    console.log(JSON.stringify(scope.$eval('plan.policyTerm')));
+                    var maturityAges = scope.$eval('plan.policyTerm.maturityAges');
+                    maturityAges = _.sortBy(maturityAges, 'text');
+                    maxMaturityAge = maturityAges[maturityAges.length - 1].text;
+                    console.log(maxMaturityAge);
+                    valid = newval <= maxMaturityAge;
+                    console.log(valid);
+                } else {
+                    maxMaturityAge = scope.$eval('plan.policyTerm.maxMaturityAge');
+                    valid = newval <= maxMaturityAge;
+                }
+                ctrl.$setValidity('max', valid);
+            });
+        }
+    }
+});
+
 app.directive('coverageCheck', function () {
     return {
         // restrict to an attribute type.
@@ -192,8 +221,9 @@ app.directive('coverageCheck', function () {
             });
 
             scope.$watchGroup(['newCoverage.coverageSumAssured.maxSumInsured', 'newCoverage.coverageSumAssured.minSumInsured'], function (newval) {
+
                 var sumAssured = scope.$eval('newCoverage.coverageSumAssured');
-                var sumAssuredAmt = parseInt(sumAssured.minSumInsured) + parseInt(multipleSelected);
+                var sumAssuredAmt = parseInt(sumAssured.minSumInsured) + parseInt(sumAssured.multiplesOf);
                 var valid = sumAssuredAmt <= parseInt(sumAssured.maxSumInsured);
                 ctrl.$setValidity('invalidMultiple', valid);
             });
@@ -370,6 +400,10 @@ app.controller('PlanSetupController', ['$scope', '$http', '$location', '$routePa
                             };
 
                             $scope.addMaturityRow = function () {
+                                if ($scope.newCoverage && !$scope.newCoverage.maturityAmounts) {
+                                    console.log('newCoverage *** ');
+                                    $scope.newCoverage.maturityAmounts = [];
+                                }
                                 $scope.newCoverage.maturityAmounts.push({});
                             };
 

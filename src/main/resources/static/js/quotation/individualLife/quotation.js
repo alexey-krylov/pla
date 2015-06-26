@@ -342,20 +342,12 @@
                     }
                 });
 
-                $scope.$watch('proposerSameAsProposedAssured', function (newval, oldval) {
-                    if (newval != oldval) {
-                        if (newval) {
-                            $scope.proposer = $scope.proposedAssured;
-                            $scope.proposer.dateOfBirth = $scope.proposedAssured.dateOfBirth;
-                        } else
-                            $scope.proposer = {};
-                    }
-                });
 
                 $scope.$watchGroup(['proposedAssured.dateOfBirth', 'proposer.dateOfBirth'], function (newval, oldval) {
                     if (newval) {
                         if (newval[0]) {
                             $scope.proposedAssuredAge = calculateAge(newval[0]);
+                            $scope.proposer.dateOfBirth = newval[0];
                         }
                         if (newval[1]) {
                             $scope.proposerAge = calculateAge(newval[1]);
@@ -407,6 +399,12 @@
                         .success(function (data) {
                             $scope.stepsSaved[$scope.selectedItem] = true;
                             $scope.quotationId = data.id;
+                            if ($scope.proposerSameAsProposedAssured) {
+                                $scope.proposer = angular.copy($scope.proposedAssured);
+                            } else
+                                $scope.proposer = {};
+
+                            //$window.location = '/pla/individuallife/quotation/edit?quotationId=' + data.id;
                         });
                 };
 

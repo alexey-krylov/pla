@@ -475,7 +475,7 @@
                                         <label class="control-label" for="groupTerm">Various Maturity Ages</label>
                                         <div class="controls">
                                             <tags-input class="ti-input-lg"
-                                                        ng-model="plan.premiumTerm.maturityAges"
+                                                        ng-model="plan.policyTerm.maturityAges"
                                                         name="maturityAges"
                                                         placeholder="Add a number" allow-leftover-text="false"
                                                         allowed-tags-pattern="^[0-9]+$"></tags-input>
@@ -498,10 +498,9 @@
                                         <div class="controls">
                                             <input type="number" ng-pattern="onlyNumbers" name="maxMaturityAge"
                                                    class="form-control input-sm col-sm-3" style="margin-top: 8px"
-                                                   min="{{plan.planDetail.maxEntryAge}}"
+                                                   min="{{plan.planDetail.maxEntryAge+1}}"
                                                    ng-required="true"
                                                    ng-model="plan.policyTerm.maxMaturityAge"/>
-
                                             <div class="error"
                                                  ng-show="step3.maxMaturityAge.$dirty &amp;&amp; step3.maxMaturityAge.$invalid">
                                                 <small class="error" ng-show="step3.maxMaturityAge.$error.required">
