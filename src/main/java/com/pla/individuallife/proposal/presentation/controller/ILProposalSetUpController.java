@@ -131,46 +131,42 @@ public class ILProposalSetUpController {
 
 
     @ResponseBody
-    @RequestMapping(value = "/updateCompulsoryHealthStatement/{proposalId}", method = RequestMethod.POST)
+    @RequestMapping(value = "/updateCompulsoryHealthStatement", method = RequestMethod.POST)
     public ResponseEntity<List<QuestionAnswerDto>> updateCompulsoryHealthStatement(
-            @RequestBody ILUpdateCompulsoryHealthStatementCommand updateCompulsoryHealthStatementCommand,
-            @PathVariable("proposalId") String proposalIdUrl, HttpServletRequest request,
+            @RequestBody ILUpdateCompulsoryHealthStatementCommand cmd,
+            HttpServletRequest request,
             BindingResult bindingResult) {
-        String proposalId = null;
+        String proposalId = cmd.getProposalId();
         if (bindingResult.hasErrors()) {
             return new ResponseEntity(bindingResult.getAllErrors(), HttpStatus.PRECONDITION_FAILED);
         }
         try {
-            proposalId = proposalIdUrl;
             UserDetails userDetails = getLoggedInUserDetail(request);
-            updateCompulsoryHealthStatementCommand.setUserDetails(userDetails);
-            updateCompulsoryHealthStatementCommand.setProposalId(proposalId);
-            proposalCommandGateway.updateCompulsoryHealthStatement(updateCompulsoryHealthStatementCommand);
+            cmd.setUserDetails(userDetails);
+            proposalCommandGateway.updateCompulsoryHealthStatement(cmd);
         } catch (TimeoutException e) {
             e.printStackTrace();
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        List<QuestionAnswer> list=updateCompulsoryHealthStatementCommand.getQuestions();
+        List<QuestionAnswer> list=cmd.getQuestions();
         return new ResponseEntity(list, HttpStatus.OK);
     }
 
 
     @ResponseBody
-    @RequestMapping(value = "/updateFamily/{proposalId}", method = RequestMethod.POST)
-    public ResponseEntity updateFamilyPersonal(@RequestBody ILUpdateFamilyPersonalDetailsCommand cmd,@PathVariable("proposalId") String proposalIdUrl,HttpServletRequest request,
+    @RequestMapping(value = "/updateFamily", method = RequestMethod.POST)
+    public ResponseEntity updateFamilyPersonalDetails(@RequestBody ILUpdateFamilyPersonalDetailsCommand cmd,HttpServletRequest request,
                                          BindingResult bindingResult) {
 
-        String proposalId = null;
+        String proposalId = cmd.getProposalId();
         if (bindingResult.hasErrors()) {
             return new ResponseEntity(bindingResult.getAllErrors(), HttpStatus.PRECONDITION_FAILED);
         }
 
         try {
-            proposalId = proposalIdUrl;
             UserDetails userDetails = getLoggedInUserDetail(request);
             cmd.setUserDetails(userDetails);
-            cmd.setProposalId(proposalId);
             proposalCommandGateway.updateFamilyPersonal(cmd);
         } catch (TimeoutException e) {
             e.printStackTrace();
@@ -178,7 +174,7 @@ public class ILProposalSetUpController {
             e.printStackTrace();
         }
 
-        return new ResponseEntity("SucessFull",HttpStatus.OK);
+        return new ResponseEntity("Proposal updated with Family and Personal Details successfully",HttpStatus.OK);
     }
 
     @RequestMapping(value="/searchQuotation", method = RequestMethod.POST)
