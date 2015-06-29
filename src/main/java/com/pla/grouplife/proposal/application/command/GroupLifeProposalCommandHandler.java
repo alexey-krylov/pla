@@ -1,6 +1,5 @@
 package com.pla.grouplife.proposal.application.command;
 
-import com.pla.grouphealth.sharedresource.util.GHInsuredFactory;
 import com.pla.grouplife.proposal.domain.model.GroupLifeProposal;
 import com.pla.grouplife.proposal.domain.service.GroupLifeProposalService;
 import com.pla.grouplife.sharedresource.util.GLInsuredFactory;
@@ -15,14 +14,16 @@ import org.springframework.stereotype.Component;
 @Component
 public class GroupLifeProposalCommandHandler {
 
-    GroupLifeProposalService groupLifeProposalService;
-    Repository<GroupLifeProposal> groupLifeProposalRepository;
+    private GroupLifeProposalService groupLifeProposalService;
+
+    private Repository<GroupLifeProposal> groupLifeProposalRepository;
+
     private GLInsuredFactory glInsuredFactory;
 
 
     @Autowired
     GroupLifeProposalCommandHandler(GroupLifeProposalService groupLifeProposalService,
-                                    Repository<GroupLifeProposal> groupLifeProposalRepository, GHInsuredFactory ghInsuredFactory){
+                                    Repository<GroupLifeProposal> groupLifeProposalRepository, GLInsuredFactory glInsuredFactory) {
         this.groupLifeProposalService = groupLifeProposalService;
         this.groupLifeProposalRepository = groupLifeProposalRepository;
         this.glInsuredFactory = glInsuredFactory;
