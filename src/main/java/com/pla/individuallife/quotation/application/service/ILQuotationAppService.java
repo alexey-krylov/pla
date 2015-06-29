@@ -7,7 +7,7 @@ import com.pla.core.domain.model.agent.AgentId;
 import com.pla.core.domain.model.plan.premium.Premium;
 import com.pla.core.query.PlanFinder;
 import com.pla.core.query.PremiumFinder;
-import com.pla.grouplife.quotation.query.AgentDetailDto;
+import com.pla.individuallife.quotation.query.AgentDetailDto;
 import com.pla.individuallife.quotation.presentation.dto.*;
 import com.pla.individuallife.quotation.query.*;
 import com.pla.publishedlanguage.contract.IPremiumCalculator;
