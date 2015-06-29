@@ -13,7 +13,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 @Setter
 @NoArgsConstructor
 
-public class ILCreateQuestionCommand {
+public class ILUpdateFamilyPersonalDetailsCommand {
     private FamilyPersonalDetail familyPersonalDetail;
     private UserDetails userDetails;
     private String proposalId;

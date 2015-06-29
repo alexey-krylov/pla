@@ -157,8 +157,8 @@ public class ILProposalSetUpController {
 
 
     @ResponseBody
-    @RequestMapping(value = "/createQuestion/{proposalId}", method = RequestMethod.POST)
-    public ResponseEntity createQuestion(@RequestBody ILCreateQuestionCommand createQuestionCommand,@PathVariable("proposalId") String proposalIdUrl,HttpServletRequest request,
+    @RequestMapping(value = "/updateFamily/{proposalId}", method = RequestMethod.POST)
+    public ResponseEntity updateFamilyPersonal(@RequestBody ILUpdateFamilyPersonalDetailsCommand cmd,@PathVariable("proposalId") String proposalIdUrl,HttpServletRequest request,
                                          BindingResult bindingResult) {
 
         String proposalId = null;
@@ -169,9 +169,9 @@ public class ILProposalSetUpController {
         try {
             proposalId = proposalIdUrl;
             UserDetails userDetails = getLoggedInUserDetail(request);
-            createQuestionCommand.setUserDetails(userDetails);
-            createQuestionCommand.setProposalId(proposalId);
-            proposalCommandGateway.createCompulsoryQuestion(createQuestionCommand);
+            cmd.setUserDetails(userDetails);
+            cmd.setProposalId(proposalId);
+            proposalCommandGateway.updateFamilyPersonal(cmd);
         } catch (TimeoutException e) {
             e.printStackTrace();
         } catch (InterruptedException e) {

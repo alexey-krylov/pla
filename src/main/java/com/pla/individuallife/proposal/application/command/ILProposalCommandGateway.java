@@ -16,7 +16,7 @@ public interface ILProposalCommandGateway {
     void updateCompulsoryHealthStatement(ILUpdateCompulsoryHealthStatementCommand updateCompulsoryHealthStatementCommand)
             throws  TimeoutException,InterruptedException;
 
-    void createCompulsoryQuestion(ILCreateQuestionCommand questionCommand)
+    void updateFamilyPersonal(ILUpdateFamilyPersonalDetailsCommand questionCommand)
             throws TimeoutException, InterruptedException;
 
 

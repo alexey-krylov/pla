@@ -152,7 +152,4 @@ public class ProposalAggregate extends AbstractAnnotatedAggregateRoot<ProposalId
         this.familyPersonalDetail=personalDetail;
     }
 
-    public void updateAgentDetails(AgentCommissionShareModel agentModel){
-        this.agentCommissionShareModel=agentModel;
-    }
 }

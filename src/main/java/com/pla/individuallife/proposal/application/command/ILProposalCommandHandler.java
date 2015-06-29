@@ -146,11 +146,11 @@ public class ILProposalCommandHandler {
     }
 
     @CommandHandler
-   public void createCompulsoryQuestion(ILCreateQuestionCommand createQuestionCommand)
+   public void updateFamilyPersonalDetails(ILUpdateFamilyPersonalDetailsCommand cmd)
    {
        ProposalAggregate proposalAggregate = null;
-       ProposalId proposalId=new ProposalId(createQuestionCommand.getProposalId());
-       FamilyPersonalDetail familyPersonalDetail=createQuestionCommand.getFamilyPersonalDetail();
+       ProposalId proposalId=new ProposalId(cmd.getProposalId());
+       FamilyPersonalDetail familyPersonalDetail=cmd.getFamilyPersonalDetail();
 
        try{
            proposalAggregate=ilProposalMongoRepository.load(proposalId);
