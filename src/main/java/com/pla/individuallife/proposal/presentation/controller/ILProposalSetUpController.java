@@ -150,7 +150,11 @@ public class ILProposalSetUpController {
             e.printStackTrace();
         }
         List<QuestionAnswer> list=cmd.getQuestions();
-        return new ResponseEntity(list, HttpStatus.OK);
+        Map map = new HashMap<>();
+        map.put("msg", "Proposal updated with Family and Personal Details successfully");
+        map.put("proposalId", proposalId);
+        map.put("questions", list);
+        return new ResponseEntity(map, HttpStatus.OK);
     }
 
 
@@ -174,7 +178,10 @@ public class ILProposalSetUpController {
             e.printStackTrace();
         }
 
-        return new ResponseEntity("Proposal updated with Family and Personal Details successfully",HttpStatus.OK);
+        Map map = new HashMap<>();
+        map.put("msg", "Proposal updated with Family and Personal Details successfully");
+        map.put("proposalId", proposalId);
+        return new ResponseEntity(map, HttpStatus.OK);
     }
 
     @RequestMapping(value="/searchQuotation", method = RequestMethod.POST)

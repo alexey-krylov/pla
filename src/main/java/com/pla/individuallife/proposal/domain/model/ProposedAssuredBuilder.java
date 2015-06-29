@@ -17,6 +17,7 @@ public class ProposedAssuredBuilder {
     private String spouseFirstName;
     private String spouseLastName;
     private String spouseEmailAddress;
+    private String spouseMobileNumber;
     private ResidentialAddress residentialAddress;
     private EmploymentDetail employmentDetail;
     private boolean isProposer;
@@ -86,6 +87,11 @@ public class ProposedAssuredBuilder {
 
     public ProposedAssuredBuilder withSpouseEmailAddress(String spouseEmailAddress) {
         this.spouseEmailAddress = spouseEmailAddress;
+        return this;
+    }
+
+    public ProposedAssuredBuilder withSpouseMobileNumber(String mobileNumber) {
+        this.spouseMobileNumber = mobileNumber;
         return this;
     }
 

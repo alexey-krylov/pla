@@ -1,14 +1,9 @@
 package com.pla.individuallife.proposal.domain.model;
 
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.pla.sharedkernel.domain.model.Gender;
 import com.pla.sharedkernel.domain.model.MaritalStatus;
 import org.hibernate.annotations.Type;
 import org.joda.time.DateTime;
-import org.joda.time.LocalDate;
-import org.nthdimenzion.presentation.LocalJodaDateDeserializer;
-import org.nthdimenzion.presentation.LocalJodaDateSerializer;
 
 public class ProposerBuilder {
     private String title;
@@ -26,6 +21,7 @@ public class ProposerBuilder {
     private String spouseFirstName;
     private String spouseLastName;
     private String spouseEmailAddress;
+    private String spouseMobileNumber;
     private EmploymentDetail employmentDetail;
     private ResidentialAddress residentialAddress;
     private String otherName;
@@ -88,6 +84,11 @@ public class ProposerBuilder {
 
     public ProposerBuilder withSpouseLastName(String spouseLastName) {
         this.spouseLastName = spouseLastName;
+        return this;
+    }
+
+    public ProposerBuilder withSpouseMobileNumber(String mobileNumber) {
+        this.spouseMobileNumber = mobileNumber;
         return this;
     }
 
