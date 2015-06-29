@@ -82,7 +82,7 @@
                                 mongo-template="mongoTemplate"/>
 
     <extension:mongo-repository id="groupLifeProposalRepository"
-                                aggregate-type="com.pla.grouplife.proposal.domain.model.GroupLifeProposale"
+                                aggregate-type="com.pla.grouplife.proposal.domain.model.GroupLifeProposal"
                                 mongo-template="mongoTemplate"/>
 
 </beans>
