@@ -290,7 +290,7 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
                  });
 
             };
-            $scope.proposalId=null;
+         $scope.proposalId=null;
 
             $scope.saveProposedAssuredDetails = function () {
                 //ProposalService.saveProposedAssured($scope.proposedAssured, $scope.proposedAssuredSpouse, $scope.paemployment, $scope.paresidential, proposedAssuredAsProposer, null);
@@ -320,8 +320,8 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
                     console.log('Sucess..');
 
                     $http.post('create', request1).success(function (response, status, headers, config) {
-                        $scope.proposalId = response;
-                        console.log('proposalId : '+$scope.proposalId );
+                        $scope.proposal = response;
+                        console.log('proposalId : '+$scope.proposal.proposalId );
                     }).error(function (response, status, headers, config) {
                     });
                 }
