@@ -81,4 +81,8 @@
                                 aggregate-type="com.pla.individuallife.proposal.domain.model.ProposalAggregate"
                                 mongo-template="mongoTemplate"/>
 
+    <extension:mongo-repository id="groupLifeProposalRepository"
+                                aggregate-type="com.pla.grouplife.proposal.domain.model.GroupLifeProposale"
+                                mongo-template="mongoTemplate"/>
+
 </beans>
