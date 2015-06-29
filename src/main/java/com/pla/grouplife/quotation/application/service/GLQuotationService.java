@@ -86,8 +86,8 @@ public class GLQuotationService {
         return pdfData;
     }
 
-    public byte[] getQuotationPDF(String quotationId) throws IOException, JRException {
-        GLQuotationDetailDto glQuotationDetailDto = getGlQuotationDetailForPDF(quotationId);
+    public byte[] getQuotationPDF(String quotationId, boolean withOutSplit) throws IOException, JRException {
+        GLQuotationDetailDto glQuotationDetailDto = getGlQuotationDetailForPDF(quotationId,withOutSplit);
         byte[] pdfData = PDFGeneratorUtils.createPDFReportByList(Arrays.asList(glQuotationDetailDto), "jasperpdf/template/grouplife/glQuotation.jrxml");
         return pdfData;
     }
@@ -111,7 +111,7 @@ public class GLQuotationService {
     }
 
     //TODO Need to change the JASPER Field Key as per the object property and then use BeanUtils to copy object properties
-    private GLQuotationDetailDto getGlQuotationDetailForPDF(String quotationId) {
+    private GLQuotationDetailDto getGlQuotationDetailForPDF(String quotationId, boolean withOutSplit) {
         GLQuotationDetailDto glQuotationDetailDto = new GLQuotationDetailDto();
         GroupLifeQuotation quotation = glQuotationRepository.findOne(new QuotationId(quotationId));
         AgentDetailDto agentDetailDto = getAgentDetail(new QuotationId(quotationId));
@@ -131,13 +131,13 @@ public class GLQuotationService {
 
         PremiumDetail premiumDetail = quotation.getPremiumDetail();
         glQuotationDetailDto.setCoveragePeriod(premiumDetail.getPolicyTermValue() != null ? premiumDetail.getPolicyTermValue().toString() + "  days" : "");
-        glQuotationDetailDto.setProfitAndSolvencyLoading(premiumDetail.getProfitAndSolvency() != null ? premiumDetail.getProfitAndSolvency().toString() + " %" : "");
+        glQuotationDetailDto.setProfitAndSolvencyLoading((premiumDetail.getProfitAndSolvency() != null && !withOutSplit) ? premiumDetail.getProfitAndSolvency().toString() + " %" : "");
         glQuotationDetailDto.setAdditionalDiscountLoading(premiumDetail.getDiscount() != null ? premiumDetail.getDiscount().toString() + " %" : "");
-        glQuotationDetailDto.setAddOnBenefits(premiumDetail.getAddOnBenefit() != null ? premiumDetail.getAddOnBenefit().toString() + " %" : "");
-        glQuotationDetailDto.setAddOnBenefitsPercentage(premiumDetail.getAddOnBenefit() != null ? premiumDetail.getAddOnBenefit().toString() + " %" : "");
+        glQuotationDetailDto.setAddOnBenefits((premiumDetail.getAddOnBenefit() != null && !withOutSplit) ? premiumDetail.getAddOnBenefit().toString() + " %" : "");
+        glQuotationDetailDto.setAddOnBenefitsPercentage((premiumDetail.getAddOnBenefit() != null && !withOutSplit) ? premiumDetail.getAddOnBenefit().toString() + " %" : "");
         glQuotationDetailDto.setWaiverOfExcessLoadings("");
         glQuotationDetailDto.setWaiverOfExcessLoadingsPercentage("");
-        BigDecimal totalPremiumAmount = quotation.getNetAnnualPremiumPaymentAmount(premiumDetail);
+        BigDecimal totalPremiumAmount = withOutSplit ? quotation.getNetAnnualPremiumPaymentAmountWithoutDiscount(premiumDetail) : quotation.getNetAnnualPremiumPaymentAmount(premiumDetail);
         totalPremiumAmount = totalPremiumAmount.setScale(2, BigDecimal.ROUND_CEILING);
         BigDecimal netPremiumOfInsured = quotation.getTotalBasicPremiumForInsured();
         netPremiumOfInsured = netPremiumOfInsured.setScale(2, BigDecimal.ROUND_CEILING);

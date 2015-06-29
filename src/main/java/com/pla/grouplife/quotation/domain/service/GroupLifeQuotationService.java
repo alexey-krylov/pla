@@ -122,6 +122,8 @@ public class GroupLifeQuotationService {
         if (!agentIsActive.isSatisfiedBy(groupLifeQuotation.getAgentId())) {
             raiseAgentIsInactiveException();
         }
+        GLQuotationProcessor glQuotationProcessor = quotationRoleAdapter.userToQuotationProcessor(userDetails);
+        groupLifeQuotation = checkQuotationNeedForVersioningAndGetQuotation(glQuotationProcessor, groupLifeQuotation);
         PremiumDetail premiumDetail = new PremiumDetail(premiumDetailDto.getAddOnBenefit(), premiumDetailDto.getProfitAndSolvencyLoading(), premiumDetailDto.getDiscounts(), premiumDetailDto.getPolicyTermValue());
         premiumDetail = premiumDetail.updateWithNetPremium(groupLifeQuotation.getNetAnnualPremiumPaymentAmount(premiumDetail));
         if (premiumDetailDto.getPolicyTermValue() != null && premiumDetailDto.getPolicyTermValue() == 365) {
@@ -148,7 +150,6 @@ public class GroupLifeQuotationService {
             }
             premiumDetail = premiumDetail.nullifyFrequencyPremium();
         }
-        GLQuotationProcessor glQuotationProcessor = quotationRoleAdapter.userToQuotationProcessor(userDetails);
         groupLifeQuotation = glQuotationProcessor.updateWithPremiumDetail(groupLifeQuotation, premiumDetail);
         return groupLifeQuotation;
     }

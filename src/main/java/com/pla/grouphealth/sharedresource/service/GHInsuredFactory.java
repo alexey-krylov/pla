@@ -1,4 +1,4 @@
-package com.pla.grouphealth.sharedresource.util;
+package com.pla.grouphealth.sharedresource.service;
 
 import com.pla.grouphealth.sharedresource.dto.GHInsuredDto;
 import com.pla.grouphealth.sharedresource.dto.GHPremiumDetailDto;
@@ -6,7 +6,6 @@ import com.pla.grouphealth.sharedresource.model.vo.*;
 import com.pla.grouphealth.sharedresource.query.GHFinder;
 import com.pla.publishedlanguage.contract.IGeneralInformationProvider;
 import com.pla.publishedlanguage.contract.IPremiumCalculator;
-import com.pla.publishedlanguage.contract.IProcessInfoAdapter;
 import com.pla.publishedlanguage.domain.model.ComputedPremiumDto;
 import com.pla.publishedlanguage.domain.model.PremiumCalculationDto;
 import com.pla.publishedlanguage.domain.model.PremiumFrequency;
@@ -39,16 +38,13 @@ public class GHInsuredFactory {
 
     private IPremiumCalculator premiumCalculator;
 
-    private IProcessInfoAdapter processInfoAdapter;
-
     private IGeneralInformationProvider generalInformationProvider;
 
     private GHFinder ghFinder;
 
     @Autowired
-    public GHInsuredFactory(IPremiumCalculator premiumCalculator, IProcessInfoAdapter processInfoAdapter, IGeneralInformationProvider generalInformationProvider, GHFinder ghFinder) {
+    public GHInsuredFactory(IPremiumCalculator premiumCalculator, IGeneralInformationProvider generalInformationProvider, GHFinder ghFinder) {
         this.premiumCalculator = premiumCalculator;
-        this.processInfoAdapter = processInfoAdapter;
         this.generalInformationProvider = generalInformationProvider;
         this.ghFinder = ghFinder;
     }

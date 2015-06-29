@@ -177,7 +177,7 @@
                                     <div class="form-group">
                                         <label>Opportunity ID</label>
                                         <input type="text" onkeypress="return isEnterKey(event)"
-                                               class="form-control input-sm" maxlength="100"
+                                               class="form-control input-sm" maxlength="100" ng-disabled="mode=='edit'"
                                                ng-model="quotationDetails.proposer.opportunityId"/>
                                     </div>
                                     <!--<div class="form-group">

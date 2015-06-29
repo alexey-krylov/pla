@@ -191,6 +191,17 @@ public class GroupLifeQuotation extends AbstractAggregateRoot<QuotationId> imple
         return totalInsuredPremiumAmount;
     }
 
+    public BigDecimal getNetAnnualPremiumPaymentAmountWithoutDiscount(PremiumDetail premiumDetail) {
+        BigDecimal totalInsuredPremiumAmount = this.getTotalBasicPremiumForInsured();
+        BigDecimal addOnBenefitAmount = premiumDetail.getAddOnBenefit() == null ? BigDecimal.ZERO : totalInsuredPremiumAmount.multiply((premiumDetail.getAddOnBenefit().divide(new BigDecimal(100))));
+        totalInsuredPremiumAmount = totalInsuredPremiumAmount.add(addOnBenefitAmount);
+        BigDecimal profitAndSolvencyAmount = premiumDetail.getProfitAndSolvency() == null ? BigDecimal.ZERO : totalInsuredPremiumAmount.multiply((premiumDetail.getProfitAndSolvency().divide(new BigDecimal(100))));
+        totalInsuredPremiumAmount = totalInsuredPremiumAmount.add(profitAndSolvencyAmount);
+        totalInsuredPremiumAmount = totalInsuredPremiumAmount.setScale(2, BigDecimal.ROUND_CEILING);
+        return totalInsuredPremiumAmount;
+    }
+
+
     public Integer getTotalNoOfLifeCovered() {
         Integer totalNoOfLifeCovered = insureds.size();
         Integer dependentSize = insureds.stream().mapToInt(new ToIntFunction<Insured>() {

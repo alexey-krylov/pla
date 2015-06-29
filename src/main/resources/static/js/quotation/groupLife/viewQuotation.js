@@ -27,7 +27,16 @@ var viewQuotationModule = (function () {
         window.location.href='/pla/quotation/grouplife/printquotation/'+this.selectedItem;
     }
 
+    services.printQuotationWOSplit = function () {
+        window.location.href='/pla/quotation/grouplife/printquotationwithoutsplit/'+this.selectedItem;
+    }
+
     services.emailQuotation = function (){
+        window.open('/pla/quotation/grouplife/openemailquotation/'+this.selectedItem,"_blank","toolbar=no,resizable=no," +
+        "scrollable=no,menubar=no,personalbar=no,dependent=yes,dialog=yes,titlebar=no,resizable=no,location=no,left=100px");
+    }
+
+    services.emailQuotationWOSplit = function (){
         window.open('/pla/quotation/grouplife/openemailquotation/'+this.selectedItem,"_blank","toolbar=no,resizable=no," +
         "scrollable=no,menubar=no,personalbar=no,dependent=yes,dialog=yes,titlebar=no,resizable=no,location=no,left=100px");
     }

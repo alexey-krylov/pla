@@ -44,4 +44,8 @@ public class GHProposalFinder {
     public List<Map<String, Object>> getAgentAuthorizedPlan(String agentId) {
         return null;
     }
+
+    public Map findProposalByQuotationNumber(String quotationNumber){
+        return null;
+    }
 }

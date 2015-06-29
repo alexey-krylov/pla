@@ -38,7 +38,7 @@ public class GHPremiumDetail {
 
     private Set<PremiumInstallment> installments;
 
-    private Set<GHPolicy> policies;
+    private Set<GHFrequencyPremium> frequencyPremiums;
 
     private BigDecimal netTotalPremium;
 
@@ -59,10 +59,10 @@ public class GHPremiumDetail {
         return this;
     }
 
-    public GHPolicy getAnnualPolicy() {
-        Optional<GHPolicy> policyOptional = this.policies.stream().filter(new Predicate<GHPolicy>() {
+    public GHFrequencyPremium getAnnualPolicy() {
+        Optional<GHFrequencyPremium> policyOptional = this.frequencyPremiums.stream().filter(new Predicate<GHFrequencyPremium>() {
             @Override
-            public boolean test(GHPolicy policy) {
+            public boolean test(GHFrequencyPremium policy) {
                 return false;
             }
         }).findAny();
@@ -76,7 +76,7 @@ public class GHPremiumDetail {
     }
 
     public GHPremiumDetail nullifyFrequencyPremium() {
-        this.policies = null;
+        this.frequencyPremiums = null;
         return this;
     }
 
@@ -87,8 +87,8 @@ public class GHPremiumDetail {
         return this;
     }
 
-    public GHPremiumDetail addPolicies(Set<GHPolicy> policies) {
-        this.policies = policies;
+    public GHPremiumDetail addPolicies(Set<GHFrequencyPremium> policies) {
+        this.frequencyPremiums = policies;
         return this;
     }
 
@@ -102,34 +102,34 @@ public class GHPremiumDetail {
     }
 
     public BigDecimal getAnnualPremiumAmount() {
-        GHPolicy policy = getPolicy(PremiumFrequency.ANNUALLY);
+        GHFrequencyPremium policy = getPolicy(PremiumFrequency.ANNUALLY);
         return policy != null ? policy.getPremium() : null;
     }
 
     public BigDecimal getSemiAnnualPremiumAmount() {
-        GHPolicy policy = getPolicy(PremiumFrequency.SEMI_ANNUALLY);
+        GHFrequencyPremium policy = getPolicy(PremiumFrequency.SEMI_ANNUALLY);
         return policy != null ? policy.getPremium() : null;
     }
 
 
     public BigDecimal getQuarterlyPremiumAmount() {
-        GHPolicy policy = getPolicy(PremiumFrequency.QUARTERLY);
+        GHFrequencyPremium policy = getPolicy(PremiumFrequency.QUARTERLY);
         return policy != null ? policy.getPremium() : null;
     }
 
     public BigDecimal getMonthlyPremiumAmount() {
-        GHPolicy policy = getPolicy(PremiumFrequency.MONTHLY);
+        GHFrequencyPremium policy = getPolicy(PremiumFrequency.MONTHLY);
         return policy != null ? policy.getPremium() : null;
     }
 
 
-    private GHPolicy getPolicy(PremiumFrequency premiumFrequency) {
-        if (isEmpty(this.policies)) {
+    private GHFrequencyPremium getPolicy(PremiumFrequency premiumFrequency) {
+        if (isEmpty(this.frequencyPremiums)) {
             return null;
         }
-        Optional<GHPolicy> policyOptional = this.policies.stream().filter(new Predicate<GHPolicy>() {
+        Optional<GHFrequencyPremium> policyOptional = this.frequencyPremiums.stream().filter(new Predicate<GHFrequencyPremium>() {
             @Override
-            public boolean test(GHPolicy policy) {
+            public boolean test(GHFrequencyPremium policy) {
                 return premiumFrequency.equals(policy.getPremiumFrequency());
             }
         }).findAny();

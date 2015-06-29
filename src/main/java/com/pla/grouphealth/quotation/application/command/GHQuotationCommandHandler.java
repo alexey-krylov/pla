@@ -7,7 +7,7 @@ import com.pla.grouphealth.quotation.repository.GHQuotationRepository;
 import com.pla.grouphealth.sharedresource.dto.GHInsuredDto;
 import com.pla.grouphealth.sharedresource.dto.GHPremiumDetailDto;
 import com.pla.grouphealth.sharedresource.model.vo.GHInsured;
-import com.pla.grouphealth.sharedresource.util.GHInsuredFactory;
+import com.pla.grouphealth.sharedresource.service.GHInsuredFactory;
 import com.pla.publishedlanguage.contract.IGeneralInformationProvider;
 import com.pla.publishedlanguage.contract.IPremiumCalculator;
 import com.pla.publishedlanguage.contract.IProcessInfoAdapter;

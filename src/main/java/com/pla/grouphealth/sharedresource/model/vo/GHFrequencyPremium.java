@@ -19,13 +19,13 @@ import static com.google.common.base.Preconditions.checkArgument;
 @NoArgsConstructor(access = AccessLevel.PACKAGE)
 @Getter(value = AccessLevel.PACKAGE)
 @Setter(value = AccessLevel.PACKAGE)
-public class GHPolicy {
+public class GHFrequencyPremium {
 
     private PremiumFrequency premiumFrequency;
 
     private BigDecimal premium;
 
-    public GHPolicy(PremiumFrequency premiumFrequency, BigDecimal premium) {
+    public GHFrequencyPremium(PremiumFrequency premiumFrequency, BigDecimal premium) {
         checkArgument(premiumFrequency != null);
         checkArgument(premium != null && premium.compareTo(BigDecimal.ZERO) == 1);
         this.premiumFrequency = premiumFrequency;

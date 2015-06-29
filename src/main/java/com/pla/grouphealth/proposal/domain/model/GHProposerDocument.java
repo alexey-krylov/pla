@@ -6,7 +6,7 @@ import lombok.Getter;
  * Created by Samir on 6/24/2015.
  */
 @Getter
-public class ProposerDocument {
+public class GHProposerDocument {
 
     private String documentId;
 
@@ -15,7 +15,7 @@ public class ProposerDocument {
     private boolean submitted;
 
 
-    public ProposerDocument(String documentId, String documentName, boolean submitted) {
+    public GHProposerDocument(String documentId, String documentName, boolean submitted) {
         this.documentId = documentId;
         this.documentName = documentName;
         this.submitted = submitted;

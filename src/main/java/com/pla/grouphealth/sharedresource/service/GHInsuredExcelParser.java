@@ -268,6 +268,15 @@ public class GHInsuredExcelParser {
 
             NameRelationshipCellValueHolder that = (NameRelationshipCellValueHolder) o;
 
+            if (isEmpty(this.dateOfBirth) || isEmpty(that.dateOfBirth)) {
+                return false;
+            }
+            if (isEmpty(this.firstName) || isEmpty(that.firstName)) {
+                return false;
+            }
+            if (isEmpty(this.lastName) || isEmpty(that.lastName)) {
+                return false;
+            }
             if (dateOfBirth != null ? !dateOfBirth.equals(that.dateOfBirth) : that.dateOfBirth != null) return false;
             if (firstName != null ? !firstName.equalsIgnoreCase(that.firstName) : that.firstName != null) return false;
             if (lastName != null ? !lastName.equalsIgnoreCase(that.lastName) : that.lastName != null) return false;
