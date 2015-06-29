@@ -27,7 +27,7 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
             };
 
 
-            $scope.selectedWizard = 4;
+            $scope.selectedWizard = 1;
             $scope.proposedAssured = {
                 "title": null,
                 "firstName": null,
@@ -192,13 +192,78 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
                 }
             });
 
+            $scope.selectSpouse=function()
+            {
+                console.log("MaritialStatus:"+ $scope.proposedAssured.maritalStatus);
+                var choice=$scope.proposedAssured.maritalStatus;
+                if(choice != "MARRIED")
+                {
+                    $scope.choose=true;
+                }
+                else
+                {
+                    $scope.choose=false;
+                }
+            };
+
             $scope.agentDetails = [];
+            $scope.flag=false;
+            $scope.countCheck=false;
             $scope.addAgent = function (agent){
                 console.log('Inside addagent Method..');
-                $scope.agentDetails.unshift(agent);
+
+                if($scope.agentDetails.length == 0)
+                {
+                    console.log('Lenght is Null..');
+                    $scope.agentDetails.unshift(agent);
+                }
+                else{
+
+                    for(i in $scope.agentDetails) {
+                        if($scope.agentDetails[i].agentId == agent.agentId)
+                        {
+                            console.log('Failure..');
+                            alert("Particular AgentId is Already Added..Please Choose different AgentId");
+                        }
+                        else
+                        {
+                            $scope.agentDetails.unshift(agent);
+                        }
+                    }
+
+                }
+
+               /* $scope.agentDetails.unshift(agent);*/
                 $('#agentModal').modal('hide');
                 $scope.clear();
             };
+
+            $scope.test=function(row)
+            {
+                console.log('Testing...');
+                console.log('Pass..'+JSON.stringify(row));
+
+                for(i in $scope.agentDetails)
+                {
+                    if($scope.agentDetails[i].agentId == row.agentId )
+                    {
+                        $scope.agentDetails[i]=row;
+                    }
+                }
+            };
+
+            $scope.countStatus=function()
+            {
+                var count=0;
+
+                    for(i in $scope.agentDetails) {
+
+                        count = parseInt(count)+parseInt($scope.agentDetails[i].commission);
+                    }
+                    console.log('count: '+ JSON.stringify(count));
+                return count;
+                };
+
             $scope.clear=function()
             {
                 $scope.agent={};
@@ -225,6 +290,7 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
                  });
 
             };
+            $scope.proposalId=null;
 
             $scope.saveProposedAssuredDetails = function () {
                 //ProposalService.saveProposedAssured($scope.proposedAssured, $scope.proposedAssuredSpouse, $scope.paemployment, $scope.paresidential, proposedAssuredAsProposer, null);
@@ -236,20 +302,35 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
 
                 request = angular.extend($scope.proposedAssured, request);
                 //request = {proposedAssured: request};
-                console.log('request ' + JSON.stringify(request));
+                //console.log('request ' + JSON.stringify(request));
 
                 var request1={
                     "proposedAssured":$scope.proposedAssured,
                     "agentCommissionDetails":$scope.agentDetails
                 }
 
-                console.log('Result ' + JSON.stringify(request1));
+                console.log('Final Result ' + JSON.stringify(request1));
                /* $http.post('create', request1);*/
-                $http.post('create', request1).success(function (response, status, headers, config) {
-                 $scope.proposal = response;
-                 console.log('proposalId : '+$scope.proposalId );
-                 }).error(function (response, status, headers, config) {
-                 });
+
+                var count1=$scope.countStatus();
+                console.log("Count In Save Method is:"+ JSON.stringify(count1));
+
+                if(count1 == 100)
+                {
+                    console.log('Sucess..');
+
+                    $http.post('create', request1).success(function (response, status, headers, config) {
+                        $scope.proposalId = response;
+                        console.log('proposalId : '+$scope.proposalId );
+                    }).error(function (response, status, headers, config) {
+                    });
+                }
+                else
+                {
+                    console.log('False..');
+                    $scope.updateFlag=true;
+                    $scope.agentAlert=true;
+                }
             };
 
             $scope.saveProposerDetails=function(){
