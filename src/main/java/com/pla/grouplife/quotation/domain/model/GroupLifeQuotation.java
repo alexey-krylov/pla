@@ -4,6 +4,7 @@ import com.pla.core.domain.model.agent.AgentId;
 import com.pla.grouplife.quotation.domain.event.GLQuotationClosedEvent;
 import com.pla.grouplife.quotation.domain.event.GLQuotationEndSagaEvent;
 import com.pla.grouplife.quotation.domain.event.GLQuotationGeneratedEvent;
+import com.pla.grouplife.sharedresource.model.vo.*;
 import com.pla.sharedkernel.event.GLProposerAddedEvent;
 import com.pla.sharedkernel.identifier.OpportunityId;
 import com.pla.sharedkernel.identifier.QuotationId;
@@ -189,6 +190,17 @@ public class GroupLifeQuotation extends AbstractAggregateRoot<QuotationId> imple
         totalInsuredPremiumAmount = totalInsuredPremiumAmount.setScale(2, BigDecimal.ROUND_CEILING);
         return totalInsuredPremiumAmount;
     }
+
+    public BigDecimal getNetAnnualPremiumPaymentAmountWithoutDiscount(PremiumDetail premiumDetail) {
+        BigDecimal totalInsuredPremiumAmount = this.getTotalBasicPremiumForInsured();
+        BigDecimal addOnBenefitAmount = premiumDetail.getAddOnBenefit() == null ? BigDecimal.ZERO : totalInsuredPremiumAmount.multiply((premiumDetail.getAddOnBenefit().divide(new BigDecimal(100))));
+        totalInsuredPremiumAmount = totalInsuredPremiumAmount.add(addOnBenefitAmount);
+        BigDecimal profitAndSolvencyAmount = premiumDetail.getProfitAndSolvency() == null ? BigDecimal.ZERO : totalInsuredPremiumAmount.multiply((premiumDetail.getProfitAndSolvency().divide(new BigDecimal(100))));
+        totalInsuredPremiumAmount = totalInsuredPremiumAmount.add(profitAndSolvencyAmount);
+        totalInsuredPremiumAmount = totalInsuredPremiumAmount.setScale(2, BigDecimal.ROUND_CEILING);
+        return totalInsuredPremiumAmount;
+    }
+
 
     public Integer getTotalNoOfLifeCovered() {
         Integer totalNoOfLifeCovered = insureds.size();

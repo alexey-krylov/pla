@@ -21,4 +21,6 @@ public class SearchGlQuotationDto {
     private String agentCode;
 
     private String quotationId;
+
+    private String status;
 }

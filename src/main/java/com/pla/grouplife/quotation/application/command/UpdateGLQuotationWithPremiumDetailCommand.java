@@ -1,6 +1,6 @@
 package com.pla.grouplife.quotation.application.command;
 
-import com.pla.grouplife.quotation.query.PremiumDetailDto;
+import com.pla.grouplife.sharedresource.dto.PremiumDetailDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;

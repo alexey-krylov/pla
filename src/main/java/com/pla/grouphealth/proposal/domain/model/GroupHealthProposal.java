@@ -4,8 +4,9 @@ import com.pla.core.domain.model.agent.AgentId;
 import com.pla.grouphealth.sharedresource.model.vo.GHInsured;
 import com.pla.grouphealth.sharedresource.model.vo.GHPremiumDetail;
 import com.pla.grouphealth.sharedresource.model.vo.GHProposer;
+import com.pla.sharedkernel.domain.model.Quotation;
 import com.pla.sharedkernel.identifier.ProposalId;
-import com.pla.sharedkernel.identifier.QuotationId;
+import com.pla.sharedkernel.identifier.ProposalNumber;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -20,7 +21,6 @@ import java.util.List;
 import java.util.Set;
 
 import static com.google.common.base.Preconditions.checkArgument;
-import static org.nthdimenzion.utils.UtilValidator.isNotEmpty;
 
 /**
  * Created by Samir on 6/24/2015.
@@ -34,9 +34,9 @@ public class GroupHealthProposal extends AbstractAggregateRoot<ProposalId> {
     @AggregateIdentifier
     private ProposalId proposalId;
 
-    private QuotationId quotationId;
+    private Quotation quotation;
 
-    private String proposalNumber;
+    private ProposalNumber proposalNumber;
 
     private DateTime submittedOn;
 
@@ -50,19 +50,19 @@ public class GroupHealthProposal extends AbstractAggregateRoot<ProposalId> {
 
     private GHProposalStatus proposalStatus;
 
-    private List<ProposerDocument> proposerDocuments;
+    private List<GHProposerDocument> proposerDocuments;
 
     @Override
     public ProposalId getIdentifier() {
         return proposalId;
     }
 
-    public GroupHealthProposal(ProposalId proposalId, QuotationId quotationId, String proposalNumber) {
+    public GroupHealthProposal(ProposalId proposalId, Quotation quotation, ProposalNumber proposalNumber) {
         checkArgument(proposalId != null, "Proposal ID cannot be blank");
-        checkArgument(quotationId != null, "Quotation ID cannot be blank");
-        checkArgument(isNotEmpty(proposalNumber), "Proposal Number cannot be blank");
+        checkArgument(quotation != null, "Quotation ID cannot be blank");
+        checkArgument(proposalNumber != null, "Proposal Number cannot be blank");
         this.proposalId = proposalId;
-        this.quotationId = quotationId;
+        this.quotation = quotation;
         this.proposalNumber = proposalNumber;
     }
 
@@ -88,7 +88,8 @@ public class GroupHealthProposal extends AbstractAggregateRoot<ProposalId> {
 
     //TODO Document followup should be scheduled after submitting the proposal or even before also?
     // TODO WIll additional documents also be followed up
-    public GroupHealthProposal updateWithDocuments(List<ProposerDocument> proposerDocuments) {
+    // TODO Answer: When Proposal becomes policy then  document reminder should go
+    public GroupHealthProposal updateWithDocuments(List<GHProposerDocument> proposerDocuments) {
         this.proposerDocuments = proposerDocuments;
         // raise event to store document in client BC
         return this;

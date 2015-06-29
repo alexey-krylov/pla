@@ -57,8 +57,8 @@ public interface AppConstants {
 
     int scale = 2;
 
-    String OPPORTUNITY_CLOSE_STATUS = "SOSTG_CLOSED";
+    String OPPORTUNITY_CLOSE_STATUS = "SOSTG_PROPOSAL";
 
-    String OPPORTUNITY_LOST_STATUS = "SOSTG_LOST";
+    String OPPORTUNITY_LOST_STATUS = "SOSTG_CLOSED";
 
 }

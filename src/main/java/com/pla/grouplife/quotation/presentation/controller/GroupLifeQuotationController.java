@@ -4,7 +4,11 @@ import com.google.common.collect.Lists;
 import com.pla.grouplife.quotation.application.command.*;
 import com.pla.grouplife.quotation.application.service.GLQuotationService;
 import com.pla.grouplife.quotation.presentation.dto.GLQuotationMailDto;
-import com.pla.grouplife.quotation.query.*;
+import com.pla.grouplife.quotation.query.GLQuotationFinder;
+import com.pla.grouplife.sharedresource.dto.*;
+import com.pla.grouplife.sharedresource.dto.InsuredDto;
+import com.pla.grouplife.sharedresource.dto.PremiumDetailDto;
+import com.pla.grouplife.sharedresource.dto.ProposerDto;
 import com.pla.publishedlanguage.contract.IClientProvider;
 import com.pla.publishedlanguage.dto.ClientDetailDto;
 import com.pla.sharedkernel.identifier.QuotationId;
@@ -16,6 +20,7 @@ import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.poifs.filesystem.POIFSFileSystem;
 import org.apache.poi.util.IOUtils;
 import org.axonframework.commandhandling.gateway.CommandGateway;
+import org.dom4j.DocumentException;
 import org.nthdimenzion.presentation.Result;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -74,8 +79,8 @@ public class GroupLifeQuotationController {
     @ResponseBody
     public Result getQuotationNumber(@PathVariable("quotationId") String quotationId) {
         Map quotationMap = glQuotationFinder.getQuotationById(quotationId);
-        String versionNumber = (Integer) quotationMap.get("versionNumber") != 0 ? ("/" + ((Integer) quotationMap.get("versionNumber")).toString()) : "";
-        return Result.success("Quotation number ", (String) quotationMap.get("quotationNumber") + versionNumber);
+        String versionNumber = (Integer) quotationMap.get("versionNumber") != 0 ? ("/" + quotationMap.get("versionNumber").toString()) : "";
+        return Result.success("Quotation number ", quotationMap.get("quotationNumber") + versionNumber);
     }
 
     @RequestMapping(value = "/isinsureddetailavailable/{quotationId}", method = RequestMethod.GET)
@@ -115,7 +120,7 @@ public class GroupLifeQuotationController {
 
     @RequestMapping(value = "/getproposerdetailfromclient/{proposerCode}/{quotationId}", method = RequestMethod.GET)
     @ResponseBody
-    public ProposerDto getProposerDetailFromClientRepository(@PathVariable("proposerCode") String proposerCode,@PathVariable("quotationId") String quotationId) {
+    public ProposerDto getProposerDetailFromClientRepository(@PathVariable("proposerCode") String proposerCode, @PathVariable("quotationId") String quotationId) {
         ClientDetailDto clientDetailDto = clientProvider.getClientDetail(proposerCode);
         ProposerDto proposerDto = new ProposerDto();
         if (clientDetailDto != null) {
@@ -127,7 +132,7 @@ public class GroupLifeQuotationController {
             proposerDto.setTown(clientDetailDto.getTown());
             proposerDto.setProvince(clientDetailDto.getProvince());
             proposerDto.setProposerCode(proposerCode);
-        }else{
+        } else {
             proposerDto = getProposerDetail(quotationId);
             proposerDto.setProposerCode(proposerCode);
         }
@@ -227,16 +232,25 @@ public class GroupLifeQuotationController {
             return Result.failure("Email cannot be sent due to wrong data");
         }
         try {
-            byte[] quotationData = glQuotationService.getQuotationPDF(mailDto.getQuotationId());
-            String fileName = "QuotationNo-" + mailDto.getQuotationNumber() + ".pdf";
-            File file = new File(fileName);
-            FileOutputStream fileOutputStream = new FileOutputStream(file);
-            fileOutputStream.write(quotationData);
-            fileOutputStream.flush();
-            fileOutputStream.close();
-            EmailAttachment emailAttachment = new EmailAttachment(fileName, "application/pdf", file);
-            mailService.sendMailWithAttachment(mailDto.getSubject(), mailDto.getMailContent(), Arrays.asList(emailAttachment), mailDto.getRecipientMailAddress());
-            file.delete();
+            byte[] quotationData = glQuotationService.getQuotationPDF(mailDto.getQuotationId(), false);
+            emailQuotation(quotationData, mailDto);
+            return Result.success("Email sent successfully");
+
+        } catch (Exception e) {
+            Result.failure(e.getMessage());
+        }
+        return Result.success("Email sent successfully");
+    }
+
+    @RequestMapping(value = "/emailQuotationwithoutsplit", method = RequestMethod.POST)
+    @ResponseBody
+    public Result emailQuotationWithoutSplit(@RequestBody GLQuotationMailDto mailDto, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            return Result.failure("Email cannot be sent due to wrong data");
+        }
+        try {
+            byte[] quotationData = glQuotationService.getQuotationPDF(mailDto.getQuotationId(), true);
+            emailQuotation(quotationData, mailDto);
             return Result.success("Email sent successfully");
 
         } catch (Exception e) {
@@ -246,13 +260,36 @@ public class GroupLifeQuotationController {
     }
 
 
+    private void emailQuotation(byte[] pdfData, GLQuotationMailDto mailDto) throws IOException, DocumentException {
+        String fileName = "QuotationNo-" + mailDto.getQuotationNumber() + ".pdf";
+        File file = new File(fileName);
+        FileOutputStream fileOutputStream = new FileOutputStream(file);
+        fileOutputStream.write(pdfData);
+        fileOutputStream.flush();
+        fileOutputStream.close();
+        EmailAttachment emailAttachment = new EmailAttachment(fileName, "application/pdf", file);
+        mailService.sendMailWithAttachment(mailDto.getSubject(), mailDto.getMailContent(), Arrays.asList(emailAttachment), mailDto.getRecipientMailAddress());
+        file.delete();
+    }
+
     @RequestMapping(value = "/printquotation/{quotationId}", method = RequestMethod.GET)
     public void printQuotation(@PathVariable("quotationId") String quotationId, HttpServletResponse response) throws IOException, JRException {
         response.reset();
         response.setContentType("application/pdf");
         response.setHeader("content-disposition", "attachment; filename=" + "quotation.pdf" + "");
         OutputStream outputStream = response.getOutputStream();
-        outputStream.write(glQuotationService.getQuotationPDF(quotationId));
+        outputStream.write(glQuotationService.getQuotationPDF(quotationId, false));
+        outputStream.flush();
+        outputStream.close();
+    }
+
+    @RequestMapping(value = "/printquotationwithoutsplit/{quotationId}", method = RequestMethod.GET)
+    public void printQuotationWithoutSplit(@PathVariable("quotationId") String quotationId, HttpServletResponse response) throws IOException, JRException {
+        response.reset();
+        response.setContentType("application/pdf");
+        response.setHeader("content-disposition", "attachment; filename=" + "quotation.pdf" + "");
+        OutputStream outputStream = response.getOutputStream();
+        outputStream.write(glQuotationService.getQuotationPDF(quotationId, true));
         outputStream.flush();
         outputStream.close();
     }

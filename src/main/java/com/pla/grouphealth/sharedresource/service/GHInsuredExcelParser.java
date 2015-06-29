@@ -6,7 +6,6 @@ import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import com.pla.grouphealth.quotation.query.GHQuotationFinder;
 import com.pla.grouphealth.sharedresource.dto.GHInsuredDto;
-import com.pla.grouplife.quotation.application.service.GLInsuredExcelHeader;
 import com.pla.publishedlanguage.contract.IPlanAdapter;
 import com.pla.publishedlanguage.dto.PlanCoverageDetailDto;
 import com.pla.sharedkernel.domain.model.Relationship;
@@ -227,20 +226,20 @@ public class GHInsuredExcelParser {
 
     private List<Row> findDuplicateRow(List<Row> dataRowsForDuplicateCheck, Row currentRow, List<String> headers) {
         List<Row> duplicateRows = Lists.newArrayList();
-        Cell firstNameCell = currentRow.getCell(headers.indexOf(GLInsuredExcelHeader.FIRST_NAME.name()));
+        Cell firstNameCell = currentRow.getCell(headers.indexOf(GHInsuredExcelHeader.FIRST_NAME.name()));
         String firstNameCellValue = getCellValue(firstNameCell);
-        Cell lastNameCell = currentRow.getCell(headers.indexOf(GLInsuredExcelHeader.LAST_NAME.name()));
+        Cell lastNameCell = currentRow.getCell(headers.indexOf(GHInsuredExcelHeader.LAST_NAME.name()));
         String lastNameCellValue = getCellValue(lastNameCell);
-        Cell dateOfBirthCell = currentRow.getCell(headers.indexOf(GLInsuredExcelHeader.DATE_OF_BIRTH.name()));
+        Cell dateOfBirthCell = currentRow.getCell(headers.indexOf(GHInsuredExcelHeader.DATE_OF_BIRTH.name()));
         String dateOfBirthCellValue = getCellValue(dateOfBirthCell);
         NameRelationshipCellValueHolder currentRowNameRelationshipHolder = new NameRelationshipCellValueHolder(firstNameCellValue, lastNameCellValue, dateOfBirthCellValue);
         dataRowsForDuplicateCheck.forEach(dataRowForDuplicateCheck -> {
             if (currentRow.getRowNum() != dataRowForDuplicateCheck.getRowNum()) {
-                Cell otherRowFirstNameCell = dataRowForDuplicateCheck.getCell(headers.indexOf(GLInsuredExcelHeader.FIRST_NAME.name()));
+                Cell otherRowFirstNameCell = dataRowForDuplicateCheck.getCell(headers.indexOf(GHInsuredExcelHeader.FIRST_NAME.name()));
                 String otherRowFirstNameCellValue = getCellValue(otherRowFirstNameCell);
-                Cell otherRowLastNameCell = dataRowForDuplicateCheck.getCell(headers.indexOf(GLInsuredExcelHeader.LAST_NAME.name()));
+                Cell otherRowLastNameCell = dataRowForDuplicateCheck.getCell(headers.indexOf(GHInsuredExcelHeader.LAST_NAME.name()));
                 String otherRowLastNameCellValue = getCellValue(otherRowLastNameCell);
-                Cell otherRowDateOfBirthCell = dataRowForDuplicateCheck.getCell(headers.indexOf(GLInsuredExcelHeader.DATE_OF_BIRTH.name()));
+                Cell otherRowDateOfBirthCell = dataRowForDuplicateCheck.getCell(headers.indexOf(GHInsuredExcelHeader.DATE_OF_BIRTH.name()));
                 String otherRowDateOfBirthCellValue = getCellValue(otherRowDateOfBirthCell);
                 NameRelationshipCellValueHolder otherRowNameRelationshipHolder = new NameRelationshipCellValueHolder(otherRowFirstNameCellValue, otherRowLastNameCellValue, otherRowDateOfBirthCellValue);
                 if (currentRowNameRelationshipHolder.equals(otherRowNameRelationshipHolder)) {
@@ -269,6 +268,15 @@ public class GHInsuredExcelParser {
 
             NameRelationshipCellValueHolder that = (NameRelationshipCellValueHolder) o;
 
+            if (isEmpty(this.dateOfBirth) || isEmpty(that.dateOfBirth)) {
+                return false;
+            }
+            if (isEmpty(this.firstName) || isEmpty(that.firstName)) {
+                return false;
+            }
+            if (isEmpty(this.lastName) || isEmpty(that.lastName)) {
+                return false;
+            }
             if (dateOfBirth != null ? !dateOfBirth.equals(that.dateOfBirth) : that.dateOfBirth != null) return false;
             if (firstName != null ? !firstName.equalsIgnoreCase(that.firstName) : that.firstName != null) return false;
             if (lastName != null ? !lastName.equalsIgnoreCase(that.lastName) : that.lastName != null) return false;
@@ -396,7 +404,7 @@ public class GHInsuredExcelParser {
     private String validateRow(Row insureDataRow, List<String> headers, List<PlanId> agentPlans) {
         String errorMessage = "";
         Set<String> errorMessages = Sets.newHashSet();
-        String planCellValue = getCellValue(insureDataRow.getCell(headers.indexOf(GLInsuredExcelHeader.PLAN.name())));
+        String planCellValue = getCellValue(insureDataRow.getCell(headers.indexOf(GHInsuredExcelHeader.PLAN.name())));
         if (isNotEmpty(planCellValue)) {
             if (planCellValue.indexOf(".") != -1) {
                 planCellValue = planCellValue.substring(0, planCellValue.indexOf("."));

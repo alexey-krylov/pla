@@ -6,12 +6,19 @@ import com.google.common.collect.Sets;
 import com.pla.core.domain.model.agent.AgentId;
 import com.pla.grouplife.quotation.application.command.GLRecalculatedInsuredPremiumCommand;
 import com.pla.grouplife.quotation.application.command.SearchGlQuotationDto;
-import com.pla.grouplife.quotation.domain.model.*;
+import com.pla.grouplife.quotation.domain.model.GroupLifeQuotation;
 import com.pla.grouplife.quotation.presentation.dto.GLQuotationDetailDto;
 import com.pla.grouplife.quotation.presentation.dto.GLQuotationMailDto;
 import com.pla.grouplife.quotation.presentation.dto.PlanDetailDto;
-import com.pla.grouplife.quotation.query.*;
+import com.pla.grouplife.quotation.query.GLQuotationFinder;
 import com.pla.grouplife.quotation.repository.GlQuotationRepository;
+import com.pla.grouplife.sharedresource.dto.*;
+import com.pla.grouplife.sharedresource.dto.InsuredDto;
+import com.pla.grouplife.sharedresource.dto.PremiumDetailDto;
+import com.pla.grouplife.sharedresource.dto.ProposerDto;
+import com.pla.grouplife.sharedresource.model.vo.*;
+import com.pla.grouplife.sharedresource.service.*;
+import com.pla.grouplife.sharedresource.service.GLInsuredExcelParser;
 import com.pla.publishedlanguage.contract.IPlanAdapter;
 import com.pla.publishedlanguage.dto.PlanCoverageDetailDto;
 import com.pla.sharedkernel.identifier.OpportunityId;
@@ -79,8 +86,8 @@ public class GLQuotationService {
         return pdfData;
     }
 
-    public byte[] getQuotationPDF(String quotationId) throws IOException, JRException {
-        GLQuotationDetailDto glQuotationDetailDto = getGlQuotationDetailForPDF(quotationId);
+    public byte[] getQuotationPDF(String quotationId, boolean withOutSplit) throws IOException, JRException {
+        GLQuotationDetailDto glQuotationDetailDto = getGlQuotationDetailForPDF(quotationId,withOutSplit);
         byte[] pdfData = PDFGeneratorUtils.createPDFReportByList(Arrays.asList(glQuotationDetailDto), "jasperpdf/template/grouplife/glQuotation.jrxml");
         return pdfData;
     }
@@ -104,7 +111,7 @@ public class GLQuotationService {
     }
 
     //TODO Need to change the JASPER Field Key as per the object property and then use BeanUtils to copy object properties
-    private GLQuotationDetailDto getGlQuotationDetailForPDF(String quotationId) {
+    private GLQuotationDetailDto getGlQuotationDetailForPDF(String quotationId, boolean withOutSplit) {
         GLQuotationDetailDto glQuotationDetailDto = new GLQuotationDetailDto();
         GroupLifeQuotation quotation = glQuotationRepository.findOne(new QuotationId(quotationId));
         AgentDetailDto agentDetailDto = getAgentDetail(new QuotationId(quotationId));
@@ -124,13 +131,13 @@ public class GLQuotationService {
 
         PremiumDetail premiumDetail = quotation.getPremiumDetail();
         glQuotationDetailDto.setCoveragePeriod(premiumDetail.getPolicyTermValue() != null ? premiumDetail.getPolicyTermValue().toString() + "  days" : "");
-        glQuotationDetailDto.setProfitAndSolvencyLoading(premiumDetail.getProfitAndSolvency() != null ? premiumDetail.getProfitAndSolvency().toString() + " %" : "");
+        glQuotationDetailDto.setProfitAndSolvencyLoading((premiumDetail.getProfitAndSolvency() != null && !withOutSplit) ? premiumDetail.getProfitAndSolvency().toString() + " %" : "");
         glQuotationDetailDto.setAdditionalDiscountLoading(premiumDetail.getDiscount() != null ? premiumDetail.getDiscount().toString() + " %" : "");
-        glQuotationDetailDto.setAddOnBenefits(premiumDetail.getAddOnBenefit() != null ? premiumDetail.getAddOnBenefit().toString() + " %" : "");
-        glQuotationDetailDto.setAddOnBenefitsPercentage(premiumDetail.getAddOnBenefit() != null ? premiumDetail.getAddOnBenefit().toString() + " %" : "");
+        glQuotationDetailDto.setAddOnBenefits((premiumDetail.getAddOnBenefit() != null && !withOutSplit) ? premiumDetail.getAddOnBenefit().toString() + " %" : "");
+        glQuotationDetailDto.setAddOnBenefitsPercentage((premiumDetail.getAddOnBenefit() != null && !withOutSplit) ? premiumDetail.getAddOnBenefit().toString() + " %" : "");
         glQuotationDetailDto.setWaiverOfExcessLoadings("");
         glQuotationDetailDto.setWaiverOfExcessLoadingsPercentage("");
-        BigDecimal totalPremiumAmount = quotation.getNetAnnualPremiumPaymentAmount(premiumDetail);
+        BigDecimal totalPremiumAmount = withOutSplit ? quotation.getNetAnnualPremiumPaymentAmountWithoutDiscount(premiumDetail) : quotation.getNetAnnualPremiumPaymentAmount(premiumDetail);
         totalPremiumAmount = totalPremiumAmount.setScale(2, BigDecimal.ROUND_CEILING);
         BigDecimal netPremiumOfInsured = quotation.getTotalBasicPremiumForInsured();
         netPremiumOfInsured = netPremiumOfInsured.setScale(2, BigDecimal.ROUND_CEILING);
@@ -412,7 +419,7 @@ public class GLQuotationService {
         public GlQuotationDto apply(Map map) {
             String quotationId = map.get("_id").toString();
             AgentDetailDto agentDetailDto = getAgentDetail(new QuotationId(quotationId));
-            LocalDate generatedOn = map.get("generatedOn") != null ? new LocalDate((Date) map.get("generatedOn")) : null;
+            LocalDate generatedOn = map.get("generatedOn") != null ? new LocalDate(map.get("generatedOn")) : null;
             String quotationStatus = map.get("quotationStatus") != null ? (String) map.get("quotationStatus") : "";
             String quotationNumber = map.get("quotationNumber") != null ? (String) map.get("quotationNumber") : "";
             ObjectId parentQuotationIdMap = map.get("parentQuotationId") != null ? (ObjectId) map.get("parentQuotationId") : null;

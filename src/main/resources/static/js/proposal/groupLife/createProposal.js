@@ -280,7 +280,7 @@ angular.module('createProposal',['common','ngRoute','mgcrea.ngStrap.select','mgc
         var stepsSaved = {};
         var queryParam = null;
         $routeProvider.when('/', {
-            templateUrl: 'createQuotationTpl.html',
+            templateUrl: 'createProposalTpl.html',
             controller: 'proposalCtrl',
             resolve: {
 

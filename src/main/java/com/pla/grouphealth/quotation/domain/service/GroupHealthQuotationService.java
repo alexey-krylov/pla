@@ -120,15 +120,17 @@ public class GroupHealthQuotationService {
         if (!agentIsActive.isSatisfiedBy(groupHealthQuotation.getAgentId())) {
             raiseAgentIsInactiveException();
         }
+        GHQuotationProcessor ghQuotationProcessor = quotationRoleAdapter.userToQuotationProcessor(userDetails);
+        groupHealthQuotation = checkQuotationNeedForVersioningAndGetQuotation(ghQuotationProcessor, groupHealthQuotation);
         GHPremiumDetail premiumDetail = new GHPremiumDetail(premiumDetailDto.getAddOnBenefit(), premiumDetailDto.getProfitAndSolvencyLoading(),
                 premiumDetailDto.getDiscounts(), premiumDetailDto.getWaiverOfExcessLoading(), premiumDetailDto.getVat(), premiumDetailDto.getPolicyTermValue());
         premiumDetail = premiumDetail.updateWithNetPremium(groupHealthQuotation.getNetAnnualPremiumPaymentAmount(premiumDetail));
         if (premiumDetailDto.getPolicyTermValue() != null && premiumDetailDto.getPolicyTermValue() == 365) {
             List<ComputedPremiumDto> computedPremiumDtoList = premiumCalculator.calculateModalPremium(new BasicPremiumDto(PremiumFrequency.ANNUALLY, premiumDetail.getNetTotalPremium()));
-            Set<GHPolicy> policies = computedPremiumDtoList.stream().map(new Function<ComputedPremiumDto, GHPolicy>() {
+            Set<GHFrequencyPremium> policies = computedPremiumDtoList.stream().map(new Function<ComputedPremiumDto, GHFrequencyPremium>() {
                 @Override
-                public GHPolicy apply(ComputedPremiumDto computedPremiumDto) {
-                    return new GHPolicy(computedPremiumDto.getPremiumFrequency(), computedPremiumDto.getPremium().setScale(AppConstants.scale, AppConstants.roundingMode));
+                public GHFrequencyPremium apply(ComputedPremiumDto computedPremiumDto) {
+                    return new GHFrequencyPremium(computedPremiumDto.getPremiumFrequency(), computedPremiumDto.getPremium().setScale(AppConstants.scale, AppConstants.roundingMode));
                 }
             }).collect(Collectors.toSet());
             premiumDetail = premiumDetail.addPolicies(policies);
@@ -147,7 +149,6 @@ public class GroupHealthQuotationService {
             }
             premiumDetail = premiumDetail.nullifyFrequencyPremium();
         }
-        GHQuotationProcessor ghQuotationProcessor = quotationRoleAdapter.userToQuotationProcessor(userDetails);
         groupHealthQuotation = ghQuotationProcessor.updateWithPremiumDetail(groupHealthQuotation, premiumDetail);
         return groupHealthQuotation;
     }

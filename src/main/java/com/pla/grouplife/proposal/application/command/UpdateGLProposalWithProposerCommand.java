@@ -1,6 +1,6 @@
 package com.pla.grouplife.proposal.application.command;
 
-import com.pla.grouplife.quotation.query.ProposerDto;
+import com.pla.grouplife.sharedresource.dto.ProposerDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;

@@ -45,7 +45,6 @@ public class GLQuotationDetailDto {
     private List<CoverDetail> coverDetails;
     private List<Annexure> annexure;
 
-
     @Getter
     @Setter
     @EqualsAndHashCode(of = {"category", "relationship", "planCoverageName"})

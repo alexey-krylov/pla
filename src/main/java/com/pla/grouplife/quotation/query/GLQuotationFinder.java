@@ -84,7 +84,17 @@ public class GLQuotationFinder {
     }
 
     public List<Map> searchQuotation(String quotationNumber, String agentCode, String proposerName, String agentName, String quotationId) {
-        Criteria criteria = Criteria.where("quotationStatus").in(new String[]{"DRAFT", "GENERATED"});
+        List<Map> quotations = searchQuotation(quotationNumber, agentCode, proposerName, agentName, quotationId, new String[]{"DRAFT", "GENERATED"});
+        return quotations;
+    }
+
+    public List<Map> searchQuotation(String quotationNumber) {
+        List<Map> quotations = searchQuotation(quotationNumber, null, null, null, null, new String[]{"GENERATED"});
+        return quotations;
+    }
+
+    private List<Map> searchQuotation(String quotationNumber, String agentCode, String proposerName, String agentName, String quotationId, String[] statuses) {
+        Criteria criteria = Criteria.where("quotationStatus").in(statuses);
         if (isEmpty(quotationNumber) && isEmpty(quotationId) && isEmpty(agentCode) && isEmpty(proposerName) && isEmpty(agentName)) {
             return Lists.newArrayList();
         }
@@ -119,6 +129,7 @@ public class GLQuotationFinder {
         query.with(new Sort(Sort.Direction.DESC,"versionNumber"));
         return mongoTemplate.find(query, Map.class, "group_life_quotation");
     }
+
 
     public List<Map<String, Object>> getAgentAuthorizedPlan(String agentId) {
         return namedParameterJdbcTemplate.query(FIND_AGENT_PLANS_QUERY, new MapSqlParameterSource().addValue("agentId", agentId), new ColumnMapRowMapper());

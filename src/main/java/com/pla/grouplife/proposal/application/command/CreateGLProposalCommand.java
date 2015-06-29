@@ -30,5 +30,9 @@ public class CreateGLProposalCommand {
 
     private String branchName;
 
+    private String quotationNumber;
+
+    private String quotationId;
+
     private UserDetails userDetails;
 }

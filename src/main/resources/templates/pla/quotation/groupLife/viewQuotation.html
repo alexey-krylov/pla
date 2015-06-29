@@ -21,7 +21,7 @@
 <script>
     var interval = setInterval(function(){
         if(require.defined("basic")){
-            requirejs(['/pla/js/quotation/groupLife/viewQuotation.js'],function(){
+            requirejs(['/pla/js/quotation/groupLife/viewQuotation.js?t=09'],function(){
                 $(document).ready(function(){
                     $("input[type='text']").keyup(function() {
                         var isDisabled =  true;
@@ -97,10 +97,30 @@
                         <div class="col-md-6">
                             <span th:text="#{listOfQuotation}">List of Quotation</span>
                         </div>
-                        <div class="col-md-4 col-md-offset-2">
-                            <a type="button" class="btn btn-default btn-sm btn-disabled" disabled="disabled" id="print"
-                                    onclick="viewQuotationModule.printQuotation()">Print</a>
+                        <div class="col-md-6" style="float:right">
+                           <!-- <a type="button" class="btn btn-default btn-sm btn-disabled" disabled="disabled" id="print1"
+                                    onclick="viewQuotationModule.printQuotation()">Print</a>-->
+                            <div class="btn-group">
+                                <button id="print" type="button" class="btn btn-default dropdown-toggle btn-sm btn-disabled" disabled="disabled" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    Print Action <span class="caret"></span>
+                                </button>
+                                <ul class="dropdown-menu">
+                                    <li><a href="#" onclick="viewQuotationModule.printQuotation()">Print Split</a></li>
+                                    <li><a href="#" onclick="viewQuotationModule.printQuotationWOSplit()">Print w/o Split</a></li>
+                                </ul>
+                            </div>
+<!--
                             <a type="button" class="btn btn-default btn-sm btn-disabled" disabled="disabled" id="emailaddress" onclick="viewQuotationModule.emailQuotation()">Email</a>
+-->
+                            <div class="btn-group">
+                                <button id="emailaddress" type="button" class="btn btn-default dropdown-toggle btn-sm btn-disabled" disabled="disabled" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    Email Action <span class="caret"></span>
+                                </button>
+                                <ul class="dropdown-menu">
+                                    <li><a href="#" onclick="viewQuotationModule.emailQuotation()">Email Split</a></li>
+                                    <li><a href="#" onclick="viewQuotationModule.emailQuotationWOSplit()">Email w/o Split</a></li>
+                                </ul>
+                            </div>
                             <a type="button" class="btn btn-default btn-sm btn-disabled" disabled="disabled" onclick="viewQuotationModule.modifyQuotation()">Modify</a>
                             <a type="button" class="btn btn-default btn-sm btn-disabled" disabled="disabled"  onclick="viewQuotationModule.viewQuotation()">View</a>
                             <a type="button" class="btn btn-default btn-sm btn-disabled"  onclick="viewQuotationModule.createQuotation()">Create</a>
