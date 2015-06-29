@@ -4,7 +4,11 @@ import com.google.common.collect.Lists;
 import com.pla.grouplife.quotation.application.command.*;
 import com.pla.grouplife.quotation.application.service.GLQuotationService;
 import com.pla.grouplife.quotation.presentation.dto.GLQuotationMailDto;
-import com.pla.grouplife.quotation.query.*;
+import com.pla.grouplife.quotation.query.GLQuotationFinder;
+import com.pla.grouplife.sharedresource.dto.*;
+import com.pla.grouplife.sharedresource.dto.InsuredDto;
+import com.pla.grouplife.sharedresource.dto.PremiumDetailDto;
+import com.pla.grouplife.sharedresource.dto.ProposerDto;
 import com.pla.publishedlanguage.contract.IClientProvider;
 import com.pla.publishedlanguage.dto.ClientDetailDto;
 import com.pla.sharedkernel.identifier.QuotationId;
@@ -74,8 +78,8 @@ public class GroupLifeQuotationController {
     @ResponseBody
     public Result getQuotationNumber(@PathVariable("quotationId") String quotationId) {
         Map quotationMap = glQuotationFinder.getQuotationById(quotationId);
-        String versionNumber = (Integer) quotationMap.get("versionNumber") != 0 ? ("/" + ((Integer) quotationMap.get("versionNumber")).toString()) : "";
-        return Result.success("Quotation number ", (String) quotationMap.get("quotationNumber") + versionNumber);
+        String versionNumber = (Integer) quotationMap.get("versionNumber") != 0 ? ("/" + quotationMap.get("versionNumber").toString()) : "";
+        return Result.success("Quotation number ", quotationMap.get("quotationNumber") + versionNumber);
     }
 
     @RequestMapping(value = "/isinsureddetailavailable/{quotationId}", method = RequestMethod.GET)

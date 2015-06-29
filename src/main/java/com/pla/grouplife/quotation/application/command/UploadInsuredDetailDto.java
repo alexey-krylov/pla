@@ -18,4 +18,6 @@ public class UploadInsuredDetailDto {
     private MultipartFile file;
 
     private String quotationId;
+
+
 }

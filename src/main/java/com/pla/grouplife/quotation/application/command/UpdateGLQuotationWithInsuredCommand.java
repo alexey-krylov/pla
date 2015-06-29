@@ -1,6 +1,6 @@
 package com.pla.grouplife.quotation.application.command;
 
-import com.pla.grouplife.quotation.query.InsuredDto;
+import com.pla.grouplife.sharedresource.dto.InsuredDto;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

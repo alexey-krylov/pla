@@ -1,10 +1,16 @@
 package com.pla.grouplife.quotation.domain.service;
 
 import com.pla.core.domain.model.agent.AgentId;
-import com.pla.grouplife.quotation.domain.model.*;
+import com.pla.grouplife.quotation.domain.model.GLQuotationProcessor;
+import com.pla.grouplife.quotation.domain.model.GroupLifeQuotation;
+import com.pla.grouplife.quotation.domain.model.Policy;
 import com.pla.grouplife.quotation.query.GLQuotationFinder;
-import com.pla.grouplife.quotation.query.PremiumDetailDto;
-import com.pla.grouplife.quotation.query.ProposerDto;
+import com.pla.grouplife.sharedresource.dto.PremiumDetailDto;
+import com.pla.grouplife.sharedresource.dto.ProposerDto;
+import com.pla.grouplife.sharedresource.model.vo.Insured;
+import com.pla.grouplife.sharedresource.model.vo.PremiumDetail;
+import com.pla.grouplife.sharedresource.model.vo.Proposer;
+import com.pla.grouplife.sharedresource.model.vo.ProposerBuilder;
 import com.pla.publishedlanguage.contract.IPremiumCalculator;
 import com.pla.publishedlanguage.domain.model.BasicPremiumDto;
 import com.pla.publishedlanguage.domain.model.ComputedPremiumDto;

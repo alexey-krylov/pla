@@ -17,7 +17,7 @@ import static com.google.common.base.Preconditions.checkArgument;
 
 @ValueObject
 @NoArgsConstructor(access = AccessLevel.PACKAGE)
-@Getter(value = AccessLevel.PACKAGE)
+@Getter(value = AccessLevel.PUBLIC)
 @Setter(value = AccessLevel.PACKAGE)
 public class Policy {
 

@@ -3,11 +3,9 @@ package com.pla.individuallife.quotation.application.service;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.pla.core.domain.model.CoverageName;
-import com.pla.core.domain.model.agent.AgentId;
 import com.pla.core.domain.model.plan.premium.Premium;
 import com.pla.core.query.PlanFinder;
 import com.pla.core.query.PremiumFinder;
-import com.pla.individuallife.quotation.query.AgentDetailDto;
 import com.pla.individuallife.quotation.presentation.dto.*;
 import com.pla.individuallife.quotation.query.*;
 import com.pla.publishedlanguage.contract.IPremiumCalculator;
@@ -71,7 +69,7 @@ public class ILQuotationAppService {
 
         PremiumCalculationDto premiumCalculationDto = new PremiumCalculationDto(new PlanId(quotation.get("PLANID").toString()), LocalDate.now(), PremiumFrequency.ANNUALLY, 365);
 
-        LocalDate dob = new LocalDate((Date) quotation.get("ASSURED_DOB"));
+        LocalDate dob = new LocalDate(quotation.get("ASSURED_DOB"));
         Integer age = Years.yearsBetween(dob, LocalDate.now()).getYears() + 1;
 
         Premium premium = premiumFinder.findPremium(premiumCalculationDto);
@@ -165,11 +163,11 @@ public class ILQuotationAppService {
         ILQuotationDetailDto ilQuotationDetailDto = new ILQuotationDetailDto();
         ILQuotationDto quotationMap = ilQuotationFinder.getQuotationById(quotationId);
 
-        AgentDetailDto agentDetailDto = getAgentDetail(new AgentId(quotationMap.getAgentId()));
+       /* AgentDetailDto agentDetailDto = getAgentDetail(new AgentId(quotationMap.getAgentId()));
         ilQuotationDetailDto.setAgentBranch(agentDetailDto.getBranchName());
         ilQuotationDetailDto.setAgentCode(agentDetailDto.getAgentId());
         ilQuotationDetailDto.setAgentName(agentDetailDto.getAgentSalutation() + "  " + agentDetailDto.getAgentName());
-        ilQuotationDetailDto.setAgentMobileNumber(agentDetailDto.getAgentMobileNumber());
+        ilQuotationDetailDto.setAgentMobileNumber(agentDetailDto.getAgentMobileNumber());*/
 
         ProposerDto proposerDto = quotationMap.getProposer();
         ilQuotationDetailDto.setProposerName(proposerDto.getFirstName());
@@ -185,7 +183,7 @@ public class ILQuotationAppService {
 
         PlanDetailDto planDetailDto = quotationMap.getPlanDetailDto();
         List<ILQuotationDetailDto.CoverDetail> coverDetails = Lists.newArrayList();
-        ILQuotationDetailDto.CoverDetail assuredPlanCoverDetail = ilQuotationDetailDto.new CoverDetail(planFinder.getPlanName(new PlanId(planDetailDto.getPlanId())), planDetailDto.getSumAssured().setScale(2, BigDecimal.ROUND_CEILING).toPlainString(), planDetailDto.getPolicyTerm());;
+        ILQuotationDetailDto.CoverDetail assuredPlanCoverDetail = ilQuotationDetailDto.new CoverDetail(planFinder.getPlanName(new PlanId(planDetailDto.getPlanId())), planDetailDto.getSumAssured().setScale(2, BigDecimal.ROUND_CEILING).toPlainString(), planDetailDto.getPolicyTerm());
         coverDetails.add(assuredPlanCoverDetail);
         ilQuotationDetailDto.setProposedCoverPeriod(planDetailDto.getPolicyTerm() + " Years");
 
@@ -205,7 +203,7 @@ public class ILQuotationAppService {
         return ilQuotationDetailDto;
     }
 
-    public AgentDetailDto getAgentDetail(AgentId  agentId) {
+    /*public AgentDetailDto getAgentDetail(AgentId  agentId) {
         Map<String, Object> agentDetail = ilQuotationFinder.getAgentById(agentId.toString());
         AgentDetailDto agentDetailDto = new AgentDetailDto();
         agentDetailDto.setAgentId(agentId.toString());
@@ -215,7 +213,7 @@ public class ILQuotationAppService {
         agentDetailDto.setAgentMobileNumber(agentDetail.get("mobileNumber") != null ? (String) agentDetail.get("mobileNumber") : "");
         agentDetailDto.setAgentSalutation(agentDetail.get("title") != null ? (String) agentDetail.get("title") : "");
         return agentDetailDto;
-    }
+    }*/
 
     public ILQuotationMailDto getPreScriptedEmail(String quotationId) {
         ILQuotationDto ilQuotationDto = ilQuotationFinder.getQuotationById(quotationId);

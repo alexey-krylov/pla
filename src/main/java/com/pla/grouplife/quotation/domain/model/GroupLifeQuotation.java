@@ -4,6 +4,7 @@ import com.pla.core.domain.model.agent.AgentId;
 import com.pla.grouplife.quotation.domain.event.GLQuotationClosedEvent;
 import com.pla.grouplife.quotation.domain.event.GLQuotationEndSagaEvent;
 import com.pla.grouplife.quotation.domain.event.GLQuotationGeneratedEvent;
+import com.pla.grouplife.sharedresource.model.vo.*;
 import com.pla.sharedkernel.event.GLProposerAddedEvent;
 import com.pla.sharedkernel.identifier.OpportunityId;
 import com.pla.sharedkernel.identifier.QuotationId;

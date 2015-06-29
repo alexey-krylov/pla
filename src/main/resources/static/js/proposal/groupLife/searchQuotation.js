@@ -23,7 +23,7 @@ var viewProposalModule = (function(){
             contentType: 'application/json; charset=utf-8',
             success: function(msg) {
                 if(msg.status=='200'){
-                    window.location.href = "/pla/proposal/grouplife/creategrouplifeproposal?quotationId="+quotationId+"&version="+msg.data+"&mode=edit";
+                    window.location.href = "/pla/proposal/grouplife/opengrouplifeproposal?quotationId=" + quotationId + "&version=" + msg.data + "&mode=edit";
                 }else if(msg.status=='500'){
                 }
             }
