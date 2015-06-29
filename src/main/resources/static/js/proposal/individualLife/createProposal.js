@@ -27,7 +27,7 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
             };
 
 
-            $scope.selectedWizard = 1;
+            $scope.selectedWizard = 4;
             $scope.proposedAssured = {
                 "title": null,
                 "firstName": null,

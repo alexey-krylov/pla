@@ -25,7 +25,7 @@ public class AgentCommissionShareModel {
         Preconditions.checkArgument(agentCommission.compareTo(BigDecimal.ZERO) == 1, "Agent Commission cannot be zero.");
         Preconditions.checkArgument(!commissionShare.contains(agentId), "Commission share is already defined for Agent with AgentId %s", agentId);
         BigDecimal newTotal = totalPercentage.add(agentCommission);
-        Preconditions.checkState(newTotal.compareTo(PERCENTAGE) == -1);
+        Preconditions.checkState(newTotal.compareTo(PERCENTAGE) <= 0);
         totalPercentage = newTotal;
         commissionShare.add(new AgentCommissionShare(agentId, agentCommission));
     }
