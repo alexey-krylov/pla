@@ -83,10 +83,6 @@
                                 aggregate-type="com.pla.grouphealth.quotation.domain.model.GroupHealthQuotation"
                                 mongo-template="mongoTemplate"/>
 
-    <extension:mongo-repository id="ghProposalMongoRepository"
-                                aggregate-type="com.pla.grouphealth.proposal.domain.model.GroupHealthProposal"
-                                mongo-template="mongoTemplate"/>
-
     <axon:jpa-repository id="ilQuotationRepository"
                          aggregate-type="com.pla.individuallife.quotation.domain.model.ILQuotation"
                          event-bus="eventBus"/>
