@@ -14,8 +14,8 @@
         </encoder>
     </appender>
     <logger name="com.pla" level="info"/>
-    <logger name="org.springframework.beans.factory.xml" level="info"/>
-    <logger name="org.springframework.core.convert" level="trace"/>
+    <logger name="org.springframework.beans.factory.xml" level="debug"/>
+    <logger name="org.springframework.core.convert" level="debug"/>
     <logger name="org.axonframework" level="debug"/>
     <root level="info">
         <appender-ref ref="console"/>

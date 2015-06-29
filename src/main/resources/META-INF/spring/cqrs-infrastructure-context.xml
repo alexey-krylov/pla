@@ -95,4 +95,8 @@
                                 aggregate-type="com.pla.grouplife.proposal.domain.model.GroupLifeProposal"
                                 mongo-template="mongoTemplate"/>
 
+    <extension:mongo-repository id="ghProposalMongoRepository"
+                                aggregate-type="com.pla.grouphealth.proposal.domain.model.GroupHealthProposal"
+                                mongo-template="mongoTemplate"/>
+
 </beans>
