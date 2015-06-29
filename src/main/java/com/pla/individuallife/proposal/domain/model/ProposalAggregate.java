@@ -53,7 +53,6 @@ public class ProposalAggregate extends AbstractAnnotatedAggregateRoot<ProposalId
 
     public ProposalAggregate(UserDetails userDetails, ProposalId proposalId, String proposalNumber, ProposedAssured proposedAssured, Set<AgentDetailDto> agentCommissionDetails) {
         riders = new HashSet<RiderDetail>();
-        beneficiaries = new ArrayList<Beneficiary>();
         boolean hasProposalPreprocessorRole = hasIndividualLifeProposalProcessorRole(userDetails.getAuthorities());
         if (!hasProposalPreprocessorRole) {
             throw new AuthorizationServiceException("User does not have Individual Life Proposal processor(ROLE_PROPOSAL_PROCESSOR) authority");
@@ -94,6 +93,8 @@ public class ProposalAggregate extends AbstractAnnotatedAggregateRoot<ProposalId
     }
 
     private void assignBeneficiaries(Set<Beneficiary> beneficiaries) {
+        this.beneficiaries = new ArrayList<Beneficiary>();
+        this.totalBeneficiaryShare = BigDecimal.ZERO;
         beneficiaries.forEach(beneficiary -> this.addBeneficiary(beneficiary));
     }
 

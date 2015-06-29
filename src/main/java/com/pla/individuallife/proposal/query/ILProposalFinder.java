@@ -73,7 +73,7 @@ public class ILProposalFinder {
             criteria = criteria.and("proposalNumber").is(proposalNumber);
         }
         if (isNotEmpty(agentCode)) {
-            criteria = criteria != null ? criteria.and("agentCommissionShareModel.commissionShare.agentId.agentId").is(agentCode) : Criteria.where("agentCommissionShareModel.commissionShare.agentId.agentId").is(agentCode);
+            criteria = criteria != null ? criteria.and("agentCommissionShareModel.commissionShare").elemMatch(Criteria.where("agentId.agentId").is(agentCode)) : Criteria.where("agentCommissionShareModel.commissionShare").elemMatch(Criteria.where("agentId.agentId").is(agentCode));
         }
         if (isNotEmpty(proposerName)) {
             String proposerPattern = "^"+proposerName;
