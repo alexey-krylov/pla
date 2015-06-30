@@ -42,4 +42,6 @@ public interface IPlanAdapter {
     boolean isValidPlanCodeForBusinessLine(String planCode,LineOfBusinessEnum lineOfBusinessEnum);
 
     PlanId getPlanId(String planCode);
+
+    boolean isPlanActive(String planCode);
 }

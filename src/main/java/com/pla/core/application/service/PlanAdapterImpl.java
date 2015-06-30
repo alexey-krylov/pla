@@ -213,6 +213,12 @@ public class PlanAdapterImpl implements IPlanAdapter {
         return isNotEmpty(plans) ? plans.get(0).getIdentifier() : null;
     }
 
+    // TODO TO be implemented  this method by Ravi Kumar
+    @Override
+    public boolean isPlanActive(String planCode) {
+        return true;
+    }
+
     private class PlanCoverageDetailTransformer implements Function<Plan, PlanCoverageDetailDto> {
 
         @Override

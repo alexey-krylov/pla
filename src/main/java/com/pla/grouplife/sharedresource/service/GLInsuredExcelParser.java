@@ -362,6 +362,10 @@ public class GLInsuredExcelParser {
             if (!agentPlans.contains(planId)) {
                 errorMessages.add("Plan code is not valid for the selected agent.");
             }
+            boolean isPlanLaunched = planAdapter.isPlanActive(planCellValue);
+            if(!isPlanLaunched){
+                errorMessages.add("This plan cannot be quoted as it has not been launched yet.");
+            }
         }
         headers.forEach(header -> {
             if (!header.contains(AppConstants.OPTIONAL_COVERAGE_HEADER)) {
