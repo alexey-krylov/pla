@@ -992,6 +992,14 @@ FROM (`plan_coverage_benefit_assoc` `a`
    JOIN `coverage` `b`
      ON (`a`.`coverage_id` = `b`.`coverage_id`));
 
+DROP TABLE IF EXISTS `notification_role`;
+CREATE TABLE `notification_role` (
+  `line_of_business` varchar(100) NOT NULL,
+  `process` varchar(100) NOT NULL,
+  `role_type` varchar(100) NOT NULL,
+  PRIMARY KEY (`line_of_business`,`process`,`role_type`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
 /*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
