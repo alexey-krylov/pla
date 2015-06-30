@@ -2,8 +2,15 @@ package com.pla.individuallife.proposal.query;
 
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
+import com.mongodb.BasicDBObject;
+import com.pla.individuallife.proposal.domain.model.AgentCommissionShareModel;
+import com.pla.individuallife.proposal.domain.model.ProposedAssured;
+import com.pla.individuallife.proposal.domain.model.ProposedAssuredBuilder;
 import com.pla.individuallife.proposal.domain.model.Proposer;
+import com.pla.individuallife.proposal.presentation.dto.AgentDetailDto;
+import com.pla.individuallife.proposal.presentation.dto.ILProposalDto;
 import com.pla.individuallife.proposal.presentation.dto.ILSearchProposalDto;
+import com.pla.individuallife.proposal.presentation.dto.ProposedAssuredDto;
 import com.pla.sharedkernel.identifier.QuotationId;
 import org.joda.time.LocalDate;
 import org.nthdimenzion.ddd.domain.annotations.Finder;
@@ -11,6 +18,7 @@ import org.nthdimenzion.utils.UtilValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.query.BasicQuery;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
@@ -18,10 +26,7 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Service;
 
 import javax.sql.DataSource;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.function.Function;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -114,9 +119,31 @@ public class ILProposalFinder {
             String proposalNumber = map.get("proposalNumber") != null ? (String) map.get("proposalNumber") : "";
             Proposer proposerMap = map.get("proposer") != null ? (Proposer) map.get("proposer") : null;
             String proposerName = proposerMap != null ? proposerMap.getFirstName() : "";
-            ILSearchProposalDto ilSearchProposalDto = new ILSearchProposalDto(proposalNumber, proposerName, "NRCNumber", "AgenName", "Agent Code", proposalId, "createdOn", "version", proposalStatus);
+            List <String> agents = new ArrayList<String>();
+            ((AgentCommissionShareModel) map.get("agentCommissionShareModel")).getCommissionShare().stream().forEach(x -> agents.add(x.getAgentId().toString()));
+            ILSearchProposalDto ilSearchProposalDto = new ILSearchProposalDto(proposalNumber, proposerName, "NRCNumber", agents.toString(), "Agent Code", proposalId, "createdOn", "version", proposalStatus);
             return ilSearchProposalDto;
         }
     }
+
+    public ILProposalDto getProposalById(String proposalId) {
+        ILProposalDto dto = new ILProposalDto();
+        BasicDBObject query = new BasicDBObject();
+        query.put("_id", proposalId);
+        Map proposal = mongoTemplate.findOne(new BasicQuery(query), Map.class, "individual_life_proposal");
+        ProposedAssured proposedAssured = (ProposedAssured) proposal.get("proposedAssured");
+        ProposedAssuredDto proposedAssuredDto = ProposedAssuredBuilder.getProposedAssured(proposedAssured).createProposedAssuredDto();
+
+        AgentCommissionShareModel model = (AgentCommissionShareModel)proposal.get("agentCommissionShareModel");
+        dto.setProposedAssured(proposedAssuredDto);
+        Set<AgentDetailDto> agentCommissionDetails = new HashSet<AgentDetailDto>();
+        model.getCommissionShare().forEach(commissionShare -> agentCommissionDetails.add(new AgentDetailDto(commissionShare.getAgentId().toString(), commissionShare.getAgentCommission())));
+        dto.setAgentCommissionDetails(agentCommissionDetails);
+        dto.setProposalId(proposalId);
+        return dto;
+    }
+
+
+
 
 }

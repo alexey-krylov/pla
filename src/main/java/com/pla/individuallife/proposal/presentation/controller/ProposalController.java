@@ -2,8 +2,10 @@ package com.pla.individuallife.proposal.presentation.controller;
 
 import com.pla.core.query.AgentFinder;
 import com.pla.core.query.MasterFinder;
+import com.pla.individuallife.proposal.presentation.dto.ILProposalDto;
 import com.pla.individuallife.proposal.presentation.dto.ILSearchProposalDto;
 import com.pla.individuallife.proposal.query.ILProposalFinder;
+import com.wordnik.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -43,6 +45,17 @@ public class ProposalController {
         modelAndView.setViewName("pla/individualLife/proposal/index");
         return modelAndView;
     }
+
+    @RequestMapping(method = RequestMethod.GET, value = "getproposal/{proposalId}")
+    @ApiOperation(httpMethod = "GET", value = "This call for edit proposal screen.")
+    @ResponseBody
+    public ILProposalDto getProposalById(@PathVariable("proposalId") String proposalId) {
+        ILProposalDto dto = proposalFinder.getProposalById(proposalId);
+        checkArgument(dto != null, "Proposal not found");
+        return dto;
+    }
+
+
 
     @RequestMapping(value = "/getPage/{pageName}", method = RequestMethod.GET)
     public ModelAndView proposal(@PathVariable("pageName") String pageName) {

@@ -2,7 +2,6 @@ package com.pla.individuallife.proposal.application.command;
 
 import com.pla.individuallife.proposal.domain.model.*;
 import com.pla.individuallife.proposal.domain.service.ProposalNumberGenerator;
-import com.pla.individuallife.proposal.presentation.dto.ProposedAssuredDto;
 import com.pla.individuallife.proposal.presentation.dto.ProposerDto;
 import com.pla.individuallife.quotation.query.ILQuotationFinder;
 import com.pla.sharedkernel.domain.model.MaritalStatus;
@@ -33,7 +32,7 @@ public class ILProposalCommandHandler {
 
     @CommandHandler
     public void createProposal(ILCreateProposalCommand cmd) {
-        ProposedAssured proposedAssured = getProposedAssured(cmd.getProposedAssured());
+        ProposedAssured proposedAssured = ProposedAssuredBuilder.getProposedAssured(cmd.getProposedAssured()).createProposedAssured();
         if (logger.isDebugEnabled()) {
             logger.debug(" ProposedAssured :: " + proposedAssured);
         }
@@ -97,50 +96,6 @@ public class ILProposalCommandHandler {
         return builder.createProposer();
 
     }
-
-    public ProposedAssured getProposedAssured(ProposedAssuredDto dto) {
-        ProposedAssuredBuilder builder = new ProposedAssuredBuilder();
-        builder.withOtherName(dto.getOtherName())
-                .withDateOfBirth(dto.getDateOfBirth())
-                .withEmailAddress(dto.getEmailAddress())
-                .withFirstName(dto.getFirstName())
-                .withSurname(dto.getSurname())
-                .withTitle(dto.getTitle())
-                .withDateOfBirth(dto.getDateOfBirth())
-                .withGender(dto.getGender())
-                .withMobileNumber(dto.getMobileNumber())
-                .withMaritalStatus(dto.getMaritalStatus())
-                .withNrc(dto.getNrc())
-                .withIsProposer(dto.getIsProposer())
-                .withEmploymentDetail(new EmploymentDetailBuilder()
-                        .withEmploymentDate(dto.getEmployment().getEmploymentDate())
-                        .withEmploymentTypeId(dto.getEmployment().getEmploymentType())
-                        .withEmployer(dto.getEmployment().getEmployer())
-                        .withWorkPhone(dto.getEmployment().getWorkPhone())
-                        .withAddress(new AddressBuilder()
-                                .withAddress1(dto.getEmployment().getAddress1())
-                                .withAddress2(dto.getEmployment().getAddress2())
-                                .withProvince(dto.getEmployment().getProvince())
-                                .withTown(dto.getEmployment().getTown()).createAddress())
-                        .withOccupationClass(dto.getEmployment().getOccupation()).createEmploymentDetail())
-                .withResidentialAddress(new ResidentialAddress(new AddressBuilder()
-                        .withAddress1(dto.getResidentialAddress().getAddress1())
-                        .withAddress2(dto.getResidentialAddress().getAddress2())
-                        .withProvince(dto.getResidentialAddress().getProvince())
-                        .withPostalCode(dto.getResidentialAddress().getPostalCode())
-                        .withTown(dto.getResidentialAddress().getTown()).createAddress(),
-                        dto.getResidentialAddress().getHomePhone(),
-                        dto.getResidentialAddress().getEmailAddress()));
-        if(dto.getMaritalStatus().equals(MaritalStatus.MARRIED)) {
-            builder.withSpouseEmailAddress(dto.getSpouse().getEmailAddress())
-                    .withSpouseFirstName(dto.getSpouse().getFirstName())
-                    .withSpouseMobileNumber(dto.getSpouse().getMobileNumber())
-                    .withSpouseLastName(dto.getSpouse().getSurname());
-        }
-
-        return builder.createProposedAssured();
-    }
-
 
     @CommandHandler
     public void updateCompulsoryHealthStatement(ILUpdateCompulsoryHealthStatementCommand updateCompulsoryHealthStatementCommand) {

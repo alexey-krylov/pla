@@ -1,5 +1,6 @@
 package com.pla.individuallife.proposal.domain.model;
 
+import com.pla.individuallife.proposal.presentation.dto.ProposedAssuredDto;
 import com.pla.sharedkernel.domain.model.Gender;
 import com.pla.sharedkernel.domain.model.MaritalStatus;
 import org.joda.time.DateTime;
@@ -112,6 +113,98 @@ public class ProposedAssuredBuilder {
 
     public ProposedAssured createProposedAssured() {
 
-        return new ProposedAssured(title, firstName, surname, nrc, dateOfBirth, gender, mobileNumber, emailAddress, maritalStatus, spouseFirstName, spouseLastName, spouseEmailAddress, employmentDetail, residentialAddress, isProposer,otherName);
+        return new ProposedAssured(title, firstName, surname, nrc, dateOfBirth, gender, mobileNumber, emailAddress, maritalStatus, spouseFirstName, spouseLastName, spouseEmailAddress, spouseMobileNumber, employmentDetail, residentialAddress, isProposer,otherName);
     }
+
+    public ProposedAssuredDto createProposedAssuredDto() {
+
+        return new ProposedAssuredDto(title, firstName, surname, nrc, dateOfBirth, gender, mobileNumber, emailAddress, maritalStatus, spouseFirstName, spouseLastName, spouseEmailAddress, spouseMobileNumber, employmentDetail, residentialAddress, isProposer,otherName);
+    }
+
+    public static ProposedAssuredBuilder getProposedAssured(ProposedAssuredDto dto) {
+        ProposedAssuredBuilder builder = new ProposedAssuredBuilder();
+        builder.withOtherName(dto.getOtherName())
+                .withDateOfBirth(dto.getDateOfBirth())
+                .withEmailAddress(dto.getEmailAddress())
+                .withFirstName(dto.getFirstName())
+                .withSurname(dto.getSurname())
+                .withTitle(dto.getTitle())
+                .withDateOfBirth(dto.getDateOfBirth())
+                .withGender(dto.getGender())
+                .withMobileNumber(dto.getMobileNumber())
+                .withMaritalStatus(dto.getMaritalStatus())
+                .withNrc(dto.getNrc())
+                .withIsProposer(dto.getIsProposer())
+                .withEmploymentDetail(new EmploymentDetailBuilder()
+                        .withEmploymentDate(dto.getEmployment().getEmploymentDate())
+                        .withEmploymentTypeId(dto.getEmployment().getEmploymentType())
+                        .withEmployer(dto.getEmployment().getEmployer())
+                        .withWorkPhone(dto.getEmployment().getWorkPhone())
+                        .withAddress(new AddressBuilder()
+                                .withAddress1(dto.getEmployment().getAddress1())
+                                .withAddress2(dto.getEmployment().getAddress2())
+                                .withProvince(dto.getEmployment().getProvince())
+                                .withTown(dto.getEmployment().getTown()).createAddress())
+                        .withOccupationClass(dto.getEmployment().getOccupation()).createEmploymentDetail())
+                .withResidentialAddress(new ResidentialAddress(new AddressBuilder()
+                        .withAddress1(dto.getResidentialAddress().getAddress1())
+                        .withAddress2(dto.getResidentialAddress().getAddress2())
+                        .withProvince(dto.getResidentialAddress().getProvince())
+                        .withPostalCode(dto.getResidentialAddress().getPostalCode())
+                        .withTown(dto.getResidentialAddress().getTown()).createAddress(),
+                        dto.getResidentialAddress().getHomePhone(),
+                        dto.getResidentialAddress().getEmailAddress()));
+        if(dto.getMaritalStatus().equals(MaritalStatus.MARRIED)) {
+            builder.withSpouseEmailAddress(dto.getSpouse().getEmailAddress())
+                    .withSpouseFirstName(dto.getSpouse().getFirstName())
+                    .withSpouseMobileNumber(dto.getSpouse().getMobileNumber())
+                    .withSpouseLastName(dto.getSpouse().getSurname());
+        }
+
+        return builder;
+    }
+
+    public static ProposedAssuredBuilder getProposedAssured(ProposedAssured pa) {
+        ProposedAssuredBuilder builder = new ProposedAssuredBuilder();
+        builder.withOtherName(pa.getOtherName())
+                .withDateOfBirth(pa.getDateOfBirth())
+                .withEmailAddress(pa.getEmailAddress())
+                .withFirstName(pa.getFirstName())
+                .withSurname(pa.getSurname())
+                .withTitle(pa.getTitle())
+                .withDateOfBirth(pa.getDateOfBirth())
+                .withGender(pa.getGender())
+                .withMobileNumber(pa.getMobileNumber())
+                .withMaritalStatus(pa.getMaritalStatus())
+                .withNrc(pa.getNrc())
+                .withIsProposer(pa.getIsProposer())
+                .withEmploymentDetail(new EmploymentDetailBuilder()
+                        .withEmploymentDate(pa.getEmploymentDetail().getEmploymentDate())
+                        .withEmploymentTypeId(pa.getEmploymentDetail().getEmploymentTypeId())
+                        .withEmployer(pa.getEmploymentDetail().getEmployer())
+                        .withWorkPhone(pa.getEmploymentDetail().getWorkPhone())
+                        .withAddress(new AddressBuilder()
+                                .withAddress1(pa.getEmploymentDetail().getAddress().getAddress1())
+                                .withAddress2(pa.getEmploymentDetail().getAddress().getAddress2())
+                                .withProvince(pa.getEmploymentDetail().getAddress().getProvince())
+                                .withTown(pa.getEmploymentDetail().getAddress().getTown()).createAddress())
+                        .withOccupationClass(pa.getEmploymentDetail().getOccupationId()).createEmploymentDetail())
+                .withResidentialAddress(new ResidentialAddress(new AddressBuilder()
+                        .withAddress1(pa.getResidentialAddress().getAddress().getAddress1())
+                        .withAddress2(pa.getResidentialAddress().getAddress().getAddress2())
+                        .withProvince(pa.getResidentialAddress().getAddress().getProvince())
+                        .withPostalCode(pa.getResidentialAddress().getAddress().getPostalCode())
+                        .withTown(pa.getResidentialAddress().getAddress().getTown()).createAddress(),
+                        pa.getResidentialAddress().getHomePhone(),
+                        pa.getResidentialAddress().getEmailAddress()));
+        if(pa.getMaritalStatus().equals(MaritalStatus.MARRIED)) {
+            builder.withSpouseEmailAddress(pa.getSpouseEmailAddress())
+                    .withSpouseFirstName(pa.getSpouseFirstName())
+                    .withSpouseMobileNumber(pa.getSpouseMobilNumber())
+                    .withSpouseLastName(pa.getSpouseLastName());
+        }
+
+        return builder;
+    }
+
 }

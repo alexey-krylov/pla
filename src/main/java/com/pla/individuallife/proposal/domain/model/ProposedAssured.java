@@ -26,13 +26,14 @@ public class ProposedAssured {
     private String spouseFirstName;
     private String spouseLastName;
     private String spouseEmailAddress;
+    private String spouseMobilNumber;
     private EmploymentDetail employmentDetail;
     private ResidentialAddress residentialAddress;
     private Boolean isProposer;
     private String otherName;
 
     ProposedAssured(String title, String firstName, String surname, String nrc, DateTime dateOfBirth, Gender gender, String mobileNumber, String emailAddress,
-                    MaritalStatus maritalStatus, String spouseFirstName, String spouseLastName, String spouseEmailAddress,
+                    MaritalStatus maritalStatus, String spouseFirstName, String spouseLastName, String spouseEmailAddress, String spouseMobilNumber,
                     EmploymentDetail employmentDetail, ResidentialAddress residentialAddress, boolean isProposer,String otherName) {
         this.title = title;
         this.firstName = firstName;
@@ -46,6 +47,7 @@ public class ProposedAssured {
         this.spouseFirstName = spouseFirstName;
         this.spouseLastName = spouseLastName;
         this.spouseEmailAddress = spouseEmailAddress;
+        this.spouseMobilNumber = spouseMobilNumber;
         this.employmentDetail = employmentDetail;
         this.residentialAddress = residentialAddress;
         this.isProposer = isProposer;

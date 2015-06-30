@@ -1,6 +1,5 @@
 package com.pla.individuallife.proposal.domain.model;
 
-import lombok.AccessLevel;
 import lombok.Getter;
 import org.hibernate.annotations.Type;
 import org.joda.time.DateTime;
@@ -9,7 +8,7 @@ import org.joda.time.DateTime;
  * Created by pradyumna on 22-05-2015.
  */
 
-@Getter(value = AccessLevel.PACKAGE)
+@Getter
 public class EmploymentDetail {
     private String occupationId;
     private String occupationClass;
