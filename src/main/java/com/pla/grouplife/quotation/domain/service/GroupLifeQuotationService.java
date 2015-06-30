@@ -82,7 +82,7 @@ public class GroupLifeQuotationService {
         groupLifeQuotation = glQuotationProcessor.updateWithProposer(groupLifeQuotation, proposerBuilder.build());
         Map<String, Object> industryMap = glFinder.findIndustryById(proposerDto.getIndustryId());
         if (industryMap != null) {
-            Industry industry = new Industry((String) industryMap.get("industryId"), (String) industryMap.get("industryName"), BigDecimal.valueOf((Double) industryMap.get("industryFactor")));
+            Industry industry = new Industry((String) industryMap.get("industryId"), (String) industryMap.get("industryName"), (BigDecimal) industryMap.get("industryFactor"));
             groupLifeQuotation = groupLifeQuotation.updateWithIndustry(industry);
         }
         if (isNotEmpty(proposerDto.getOpportunityId())) {

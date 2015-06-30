@@ -1,8 +1,8 @@
 angular.module('createQuotation', ['common', 'ngRoute', 'mgcrea.ngStrap.select', 'mgcrea.ngStrap.alert', 'mgcrea.ngStrap.popover', 'directives', 'angularFileUpload',
     'mgcrea.ngStrap.dropdown', 'ngSanitize', 'commonServices'])
-    .controller('quotationCtrl', ['$scope', '$http', '$timeout', '$location', '$route', '$upload', 'provinces', 'getProvinceAndCityDetail', 'globalConstants', 'agentDetails', 'stepsSaved', 'proposerDetails',
+    .controller('quotationCtrl', ['$scope', '$http', '$timeout', '$location', '$route', '$upload', 'provinces', 'industries', 'getProvinceAndCityDetail', 'globalConstants', 'agentDetails', 'stepsSaved', 'proposerDetails',
         'quotationNumber', 'getQueryParameter', '$window', 'checkIfInsuredUploaded', 'premiumData',
-        function ($scope, $http, $timeout, $location, $route, $upload, provinces, getProvinceAndCityDetail, globalConstants, agentDetails, stepsSaved, proposerDetails, quotationNumber, getQueryParameter,
+        function ($scope, $http, $timeout, $location, $route, $upload, provinces, industries, getProvinceAndCityDetail, globalConstants, agentDetails, stepsSaved, proposerDetails, quotationNumber, getQueryParameter,
                   $window, checkIfInsuredUploaded, premiumData) {
             var mode = getQueryParameter("mode");
             $scope.mode = mode;
@@ -13,6 +13,8 @@ angular.module('createQuotation', ['common', 'ngRoute', 'mgcrea.ngStrap.select',
             } else if (mode == 'edit') {
                 $scope.isEditMode = true;
             }
+
+            $scope.industries = industries;
 
             $scope.premiumData = premiumData;
 
@@ -105,7 +107,7 @@ angular.module('createQuotation', ['common', 'ngRoute', 'mgcrea.ngStrap.select',
             });
 
             $scope.populateProposerDetailFromClientRepository = function () {
-                $http.get("/pla/quotation/grouplife/getproposerdetailfromclient/" + $scope.quotationDetails.proposer.proposerCode+"/"+$scope.quotationId)
+                $http.get("/pla/quotation/grouplife/getproposerdetailfromclient/" + $scope.quotationDetails.proposer.proposerCode + "/" + $scope.quotationId)
                     .success(function (data) {
                         $scope.quotationDetails.proposer = data;
                     });
@@ -359,6 +361,15 @@ angular.module('createQuotation', ['common', 'ngRoute', 'mgcrea.ngStrap.select',
                 provinces: ['$q', '$http', function ($q, $http) {
                     var deferred = $q.defer();
                     $http.get('/pla/core/master/getgeodetail').success(function (response, status, headers, config) {
+                        deferred.resolve(response)
+                    }).error(function (response, status, headers, config) {
+                        deferred.reject();
+                    });
+                    return deferred.promise;
+                }],
+                industries: ['$q', '$http', function ($q, $http) {
+                    var deferred = $q.defer();
+                    $http.get('/pla/core/master/getindustry').success(function (response, status, headers, config) {
                         deferred.resolve(response)
                     }).error(function (response, status, headers, config) {
                         deferred.reject();

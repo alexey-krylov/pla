@@ -150,12 +150,12 @@
                         <tr>
                             <th style="width: 1%"></th>
                             <th th:text="#{quotationNumber}">Quotation Number</th>
+                            <th th:text="#{versionNumber}">Version Number</th>
                             <th th:text="#{quotationCreatedOn}">Quotation Date</th>
                             <th th:text="#{quotationSharedOn}">Quotation SharedOn</th>
                             <th th:text="#{ageing}">Ageing</th>
                             <th th:text="#{agentName}">Agent Name</th>
                             <th th:text="#{proposerName}">Proposer Name</th>
-                            <th th:text="#{versionNumber}">Version Number</th>
                             <th th:text="#{status}">Status</th>
                         </tr>
                         </thead>
@@ -170,6 +170,7 @@
                                            th:value="${quotation.quotationStatus}"/>
                                 </td>
                                 <td th:text="${quotation.quotationNumber}">5100000010315</td>
+                                <td th:text="${quotation.versionNumber}">001</td>
                                 <td th:if="${quotation.quotationGeneratedOn!=null}"><span
                                         th:text="${#dates.format(quotation.quotationGeneratedOn,'dd/MM/yyyy')}"></span>
                                 </td>
@@ -181,7 +182,6 @@
                                 <td th:text="${quotation.ageing}"></td>
                                 <td th:text="${quotation.agentName}">Agent Name</td>
                                 <td th:text="${quotation.proposeName}"></td>
-                                <td th:text="${quotation.versionNumber}">001</td>
                                 <td th:text="${quotation.quotationStatus}"></td>
                             </tr>
                             <!--/*-->

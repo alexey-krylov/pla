@@ -403,6 +403,10 @@ public class GLQuotationService {
             OpportunityId opportunityId = (OpportunityId) quotation.get("opportunityId");
             proposerDto.setOpportunityId(opportunityId.getOpportunityId());
         }
+        if (quotation.get("industry") != null) {
+            Industry industry = (Industry) quotation.get("industry");
+            proposerDto.setIndustryId(industry.getIndustryId());
+        }
         return proposerDto;
     }
 
