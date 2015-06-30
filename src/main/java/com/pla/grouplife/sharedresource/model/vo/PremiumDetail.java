@@ -29,8 +29,6 @@ public class PremiumDetail {
 
     private BigDecimal profitAndSolvency;
 
-    private BigDecimal discount;
-
     private Integer policyTermValue;
 
     private PremiumInstallment premiumInstallment;
@@ -41,10 +39,19 @@ public class PremiumDetail {
 
     private BigDecimal netTotalPremium;
 
-    public PremiumDetail(BigDecimal addOnBenefit, BigDecimal profitAndSolvency, BigDecimal discount, Integer policyTermValue) {
+    private BigDecimal hivDiscount;
+
+    private BigDecimal valuedClientDiscount;
+
+    private BigDecimal longTermDiscount;
+
+
+    public PremiumDetail(BigDecimal addOnBenefit, BigDecimal profitAndSolvency, BigDecimal hivDiscount, BigDecimal valuedClientDiscount, BigDecimal longTermDiscount, Integer policyTermValue) {
         this.addOnBenefit = addOnBenefit;
         this.profitAndSolvency = profitAndSolvency;
-        this.discount = discount;
+        this.hivDiscount = hivDiscount;
+        this.valuedClientDiscount = valuedClientDiscount;
+        this.longTermDiscount = longTermDiscount;
         this.policyTermValue = policyTermValue;
     }
 

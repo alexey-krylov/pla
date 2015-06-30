@@ -318,6 +318,9 @@ public class GHInsuredExcelParser {
         final String finalPlanCode = planCode;
         optionalCoverageCellHolders.forEach(optionalCoverageCellHolder -> {
             String optionalCoverageCode = getCellValue(optionalCoverageCellHolder.getOptionalCoverageCell());
+            if (optionalCoverageCode.indexOf(".") != -1) {
+                optionalCoverageCode = optionalCoverageCode.substring(0, optionalCoverageCode.indexOf("."));
+            }
             if (isNotEmpty(optionalCoverageCode) && !isValidCoverage(finalPlanCode, optionalCoverageCode)) {
                 errorMessages.add(optionalCoverageCode + "  is not valid for plan " + finalPlanCode + ".");
             }

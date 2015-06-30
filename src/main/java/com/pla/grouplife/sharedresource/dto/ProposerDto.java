@@ -40,6 +40,8 @@ public class ProposerDto {
 
     private String opportunityId;
 
+    private String industryId;
+
     public ProposerDto(Proposer proposer) {
         ProposerContactDetail proposerContactDetail = proposer.getContactDetail();
         ProposerContactDetail.ContactPersonDetail contactPersonDetail = proposerContactDetail != null ? proposerContactDetail.getContactPersonDetail() : null;

@@ -19,5 +19,7 @@ public class UploadInsuredDetailDto {
 
     private String quotationId;
 
+    private boolean applyIndustryLoadingFactor;
+
 
 }

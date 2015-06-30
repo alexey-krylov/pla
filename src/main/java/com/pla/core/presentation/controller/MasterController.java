@@ -42,6 +42,12 @@ public class MasterController {
         return masterFinder.getAllChanelType();
     }
 
+    @RequestMapping(value = "/getindustry")
+    @ResponseBody
+    public List<Map<String, Object>> getAllIndustry() {
+        return masterFinder.getAllIndustry();
+    }
+
     @RequestMapping(value = "/getgeodetail", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public List<GeoDto> getGeoDetail() {

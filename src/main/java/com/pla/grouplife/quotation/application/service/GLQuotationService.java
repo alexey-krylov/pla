@@ -132,7 +132,9 @@ public class GLQuotationService {
         PremiumDetail premiumDetail = quotation.getPremiumDetail();
         glQuotationDetailDto.setCoveragePeriod(premiumDetail.getPolicyTermValue() != null ? premiumDetail.getPolicyTermValue().toString() + "  days" : "");
         glQuotationDetailDto.setProfitAndSolvencyLoading((premiumDetail.getProfitAndSolvency() != null && !withOutSplit) ? premiumDetail.getProfitAndSolvency().toString() + " %" : "");
-        glQuotationDetailDto.setAdditionalDiscountLoading(premiumDetail.getDiscount() != null ? premiumDetail.getDiscount().toString() + " %" : "");
+        glQuotationDetailDto.setHivDiscount(premiumDetail.getHivDiscount() != null ? premiumDetail.getHivDiscount().toString() + " %" : "");
+        glQuotationDetailDto.setValuedClientDiscount(premiumDetail.getValuedClientDiscount() != null ? premiumDetail.getValuedClientDiscount().toString() + " %" : "");
+        glQuotationDetailDto.setLongTermDiscount(premiumDetail.getLongTermDiscount() != null ? premiumDetail.getLongTermDiscount().toString() + " %" : "");
         glQuotationDetailDto.setAddOnBenefits((premiumDetail.getAddOnBenefit() != null && !withOutSplit) ? premiumDetail.getAddOnBenefit().toString() + " %" : "");
         glQuotationDetailDto.setAddOnBenefitsPercentage((premiumDetail.getAddOnBenefit() != null && !withOutSplit) ? premiumDetail.getAddOnBenefit().toString() + " %" : "");
         glQuotationDetailDto.setWaiverOfExcessLoadings("");
@@ -363,7 +365,7 @@ public class GLQuotationService {
         if (premiumDetail == null) {
             return new PremiumDetailDto();
         }
-        PremiumDetailDto premiumDetailDto = new PremiumDetailDto(premiumDetail.getAddOnBenefit(), premiumDetail.getProfitAndSolvency(), premiumDetail.getDiscount(), premiumDetail.getPolicyTermValue());
+        PremiumDetailDto premiumDetailDto = new PremiumDetailDto(premiumDetail.getAddOnBenefit(), premiumDetail.getProfitAndSolvency(), premiumDetail.getHivDiscount(), premiumDetail.getValuedClientDiscount(), premiumDetail.getLongTermDiscount(), premiumDetail.getPolicyTermValue());
         PremiumDetail.PremiumInstallment premiumInstallment = premiumDetail.getPremiumInstallment();
         if (premiumInstallment != null) {
             premiumDetailDto = premiumDetailDto.addOptedInstallmentDetail(premiumInstallment.getNoOfInstallment(), premiumInstallment.getInstallmentAmount());

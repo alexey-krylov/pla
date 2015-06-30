@@ -7,10 +7,8 @@ import com.pla.grouplife.quotation.domain.model.Policy;
 import com.pla.grouplife.quotation.query.GLQuotationFinder;
 import com.pla.grouplife.sharedresource.dto.PremiumDetailDto;
 import com.pla.grouplife.sharedresource.dto.ProposerDto;
-import com.pla.grouplife.sharedresource.model.vo.Insured;
-import com.pla.grouplife.sharedresource.model.vo.PremiumDetail;
-import com.pla.grouplife.sharedresource.model.vo.Proposer;
-import com.pla.grouplife.sharedresource.model.vo.ProposerBuilder;
+import com.pla.grouplife.sharedresource.model.vo.*;
+import com.pla.grouplife.sharedresource.query.GLFinder;
 import com.pla.publishedlanguage.contract.IPremiumCalculator;
 import com.pla.publishedlanguage.domain.model.BasicPremiumDto;
 import com.pla.publishedlanguage.domain.model.ComputedPremiumDto;
@@ -51,6 +49,9 @@ public class GroupLifeQuotationService {
     private GLQuotationFinder glQuotationFinder;
 
     @Autowired
+    private GLFinder glFinder;
+
+    @Autowired
     public GroupLifeQuotationService(QuotationRoleAdapter quotationRoleAdapter, QuotationNumberGenerator quotationNumberGenerator, IPremiumCalculator premiumCalculator, AgentIsActive agentIsActive, GLQuotationFinder glQuotationFinder) {
         this.quotationRoleAdapter = quotationRoleAdapter;
         this.quotationNumberGenerator = quotationNumberGenerator;
@@ -79,6 +80,11 @@ public class GroupLifeQuotationService {
         proposerBuilder.withContactDetail(proposerDto.getAddressLine1(), proposerDto.getAddressLine2(), proposerDto.getPostalCode(), proposerDto.getProvince(), proposerDto.getTown(), proposerDto.getEmailAddress())
                 .withContactPersonDetail(proposerDto.getContactPersonName(), proposerDto.getContactPersonEmail(), proposerDto.getContactPersonMobileNumber(), proposerDto.getContactPersonWorkPhoneNumber());
         groupLifeQuotation = glQuotationProcessor.updateWithProposer(groupLifeQuotation, proposerBuilder.build());
+        Map<String, Object> industryMap = glFinder.findIndustryById(proposerDto.getIndustryId());
+        if (industryMap != null) {
+            Industry industry = new Industry((String) industryMap.get("industryId"), (String) industryMap.get("industryName"), BigDecimal.valueOf((Double) industryMap.get("industryFactor")));
+            groupLifeQuotation = groupLifeQuotation.updateWithIndustry(industry);
+        }
         if (isNotEmpty(proposerDto.getOpportunityId())) {
             OpportunityId opportunityId = new OpportunityId(proposerDto.getOpportunityId());
             groupLifeQuotation = groupLifeQuotation.updateWithOpportunityId(opportunityId);
@@ -95,12 +101,17 @@ public class GroupLifeQuotationService {
         return glQuotationProcessor.updateWithAgentId(groupLifeQuotation, new AgentId(agentId));
     }
 
-    public GroupLifeQuotation updateInsured(GroupLifeQuotation groupLifeQuotation, Set<Insured> insureds, UserDetails userDetails) {
+    public GroupLifeQuotation updateInsured(GroupLifeQuotation groupLifeQuotation, Set<Insured> insureds, UserDetails userDetails, boolean industryLoadingFactorApplicable) {
         if (!agentIsActive.isSatisfiedBy(groupLifeQuotation.getAgentId())) {
             raiseAgentIsInactiveException();
         }
         GLQuotationProcessor glQuotationProcessor = quotationRoleAdapter.userToQuotationProcessor(userDetails);
         groupLifeQuotation = checkQuotationNeedForVersioningAndGetQuotation(glQuotationProcessor, groupLifeQuotation);
+        Industry industry = groupLifeQuotation.getIndustry();
+        if (industry != null) {
+            industry = industry.markOnApplyLoadingFactorOnPremium(industryLoadingFactorApplicable);
+        }
+        groupLifeQuotation = groupLifeQuotation.updateWithIndustry(industry);
         return glQuotationProcessor.updateWithInsured(groupLifeQuotation, insureds);
     }
 
@@ -124,7 +135,7 @@ public class GroupLifeQuotationService {
         }
         GLQuotationProcessor glQuotationProcessor = quotationRoleAdapter.userToQuotationProcessor(userDetails);
         groupLifeQuotation = checkQuotationNeedForVersioningAndGetQuotation(glQuotationProcessor, groupLifeQuotation);
-        PremiumDetail premiumDetail = new PremiumDetail(premiumDetailDto.getAddOnBenefit(), premiumDetailDto.getProfitAndSolvencyLoading(), premiumDetailDto.getDiscounts(), premiumDetailDto.getPolicyTermValue());
+        PremiumDetail premiumDetail = new PremiumDetail(premiumDetailDto.getAddOnBenefit(), premiumDetailDto.getProfitAndSolvencyLoading(), premiumDetailDto.getHivDiscount(), premiumDetailDto.getValuedClientDiscount(), premiumDetailDto.getLongTermDiscount(), premiumDetailDto.getPolicyTermValue());
         premiumDetail = premiumDetail.updateWithNetPremium(groupLifeQuotation.getNetAnnualPremiumPaymentAmount(premiumDetail));
         if (premiumDetailDto.getPolicyTermValue() != null && premiumDetailDto.getPolicyTermValue() == 365) {
             List<ComputedPremiumDto> computedPremiumDtoList = premiumCalculator.calculateModalPremium(new BasicPremiumDto(PremiumFrequency.ANNUALLY, premiumDetail.getNetTotalPremium()));

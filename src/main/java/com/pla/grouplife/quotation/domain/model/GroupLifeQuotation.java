@@ -61,6 +61,8 @@ public class GroupLifeQuotation extends AbstractAggregateRoot<QuotationId> imple
 
     private OpportunityId opportunityId;
 
+    private Industry industry;
+
     private GroupLifeQuotation(String quotationCreator, String quotationNumber, QuotationId quotationId, AgentId agentId, Proposer proposer, QuotationStatus quotationStatus, int versionNumber) {
         checkArgument(isNotEmpty(quotationCreator));
         checkArgument(isNotEmpty(quotationNumber));
@@ -102,6 +104,12 @@ public class GroupLifeQuotation extends AbstractAggregateRoot<QuotationId> imple
     public GroupLifeQuotation updateWithAgent(AgentId agentId) {
         checkInvariant();
         this.agentId = agentId;
+        return this;
+    }
+
+    public GroupLifeQuotation updateWithIndustry(Industry industry) {
+        checkInvariant();
+        this.industry = industry;
         return this;
     }
 
@@ -179,6 +187,7 @@ public class GroupLifeQuotation extends AbstractAggregateRoot<QuotationId> imple
         newQuotation.agentId = this.agentId;
         newQuotation.insureds = this.insureds;
         newQuotation.premiumDetail = this.premiumDetail;
+        newQuotation.industry = this.industry;
         return newQuotation;
     }
 
@@ -190,12 +199,20 @@ public class GroupLifeQuotation extends AbstractAggregateRoot<QuotationId> imple
 
     public BigDecimal getNetAnnualPremiumPaymentAmount(PremiumDetail premiumDetail) {
         BigDecimal totalInsuredPremiumAmount = this.getTotalBasicPremiumForInsured();
+        BigDecimal hivDiscountAmount = premiumDetail.getHivDiscount() == null ? BigDecimal.ZERO : totalInsuredPremiumAmount.multiply((premiumDetail.getHivDiscount().divide(new BigDecimal(100))));
+        totalInsuredPremiumAmount = totalInsuredPremiumAmount.subtract(hivDiscountAmount);
+        BigDecimal valuedClientDiscountAmount = premiumDetail.getValuedClientDiscount() == null ? BigDecimal.ZERO : totalInsuredPremiumAmount.multiply((premiumDetail.getValuedClientDiscount().divide(new BigDecimal(100))));
+        totalInsuredPremiumAmount = totalInsuredPremiumAmount.subtract(valuedClientDiscountAmount);
+        BigDecimal longTermDiscountAmount = premiumDetail.getLongTermDiscount() == null ? BigDecimal.ZERO : totalInsuredPremiumAmount.multiply((premiumDetail.getLongTermDiscount().divide(new BigDecimal(100))));
+        totalInsuredPremiumAmount = totalInsuredPremiumAmount.subtract(longTermDiscountAmount);
+
         BigDecimal addOnBenefitAmount = premiumDetail.getAddOnBenefit() == null ? BigDecimal.ZERO : totalInsuredPremiumAmount.multiply((premiumDetail.getAddOnBenefit().divide(new BigDecimal(100))));
         totalInsuredPremiumAmount = totalInsuredPremiumAmount.add(addOnBenefitAmount);
         BigDecimal profitAndSolvencyAmount = premiumDetail.getProfitAndSolvency() == null ? BigDecimal.ZERO : totalInsuredPremiumAmount.multiply((premiumDetail.getProfitAndSolvency().divide(new BigDecimal(100))));
         totalInsuredPremiumAmount = totalInsuredPremiumAmount.add(profitAndSolvencyAmount);
-        BigDecimal discountAmount = premiumDetail.getDiscount() == null ? BigDecimal.ZERO : totalInsuredPremiumAmount.multiply((premiumDetail.getDiscount().divide(new BigDecimal(100))));
-        totalInsuredPremiumAmount = totalInsuredPremiumAmount.subtract(discountAmount);
+        if (this.industry != null && this.industry.isApplyOnPremium()) {
+            totalInsuredPremiumAmount = totalInsuredPremiumAmount.multiply(this.industry.getLoadingFactor());
+        }
         totalInsuredPremiumAmount = totalInsuredPremiumAmount.setScale(2, BigDecimal.ROUND_CEILING);
         return totalInsuredPremiumAmount;
     }

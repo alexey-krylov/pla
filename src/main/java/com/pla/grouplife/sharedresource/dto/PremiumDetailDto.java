@@ -23,8 +23,6 @@ public class PremiumDetailDto {
 
     private BigDecimal profitAndSolvencyLoading;
 
-    private BigDecimal discounts;
-
     private BigDecimal vat;
 
     private Integer policyTermValue;
@@ -39,20 +37,31 @@ public class PremiumDetailDto {
 
     private BigDecimal totalPremium;
 
-    private com.pla.grouplife.quotation.query.PremiumInstallmentDto premiumInstallment;
+    private PremiumInstallmentDto premiumInstallment;
 
-    private Set<com.pla.grouplife.quotation.query.PremiumInstallmentDto> installments;
+    private Set<PremiumInstallmentDto> installments;
+
+    private BigDecimal hivDiscount;
+
+    private BigDecimal valuedClientDiscount;
+
+    private BigDecimal longTermDiscount;
 
 
-    public PremiumDetailDto(BigDecimal addOnBenefit, BigDecimal profitAndSolvencyLoading, BigDecimal discounts, Integer policyTermValue) {
+    public PremiumDetailDto(BigDecimal addOnBenefit, BigDecimal profitAndSolvencyLoading, BigDecimal hivDiscount, BigDecimal valuedClientDiscount, BigDecimal longTermDiscount, Integer policyTermValue) {
         this.addOnBenefit = addOnBenefit;
         this.profitAndSolvencyLoading = profitAndSolvencyLoading;
-        this.discounts = discounts;
+        this.hivDiscount = hivDiscount;
+        this.valuedClientDiscount = valuedClientDiscount;
+        this.longTermDiscount = longTermDiscount;
         this.policyTermValue = policyTermValue;
     }
 
-    public PremiumDetailDto(BigDecimal addOnBenefit, Integer policyTermValue) {
+    public PremiumDetailDto(BigDecimal addOnBenefit, Integer policyTermValue, BigDecimal hivDiscount, BigDecimal valuedClientDiscount, BigDecimal longTermDiscount) {
         this.addOnBenefit = addOnBenefit;
+        this.hivDiscount = hivDiscount;
+        this.valuedClientDiscount = valuedClientDiscount;
+        this.longTermDiscount = longTermDiscount;
         this.policyTermValue = policyTermValue;
 
     }

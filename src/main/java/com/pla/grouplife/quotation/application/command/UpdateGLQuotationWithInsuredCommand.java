@@ -24,4 +24,6 @@ public class UpdateGLQuotationWithInsuredCommand {
 
     private UserDetails userDetails;
 
+    private boolean industryLoadingFactorApplicable;
+
 }
