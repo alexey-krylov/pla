@@ -533,7 +533,9 @@ INSERT INTO `entity_sequence`(`sequence_id`,`sequence_name`,`sequence_number`,`s
 insert  into `entity_sequence`(`sequence_id`,`sequence_name`,`sequence_number`,`sequence_prefix`) values (4,'com.pla.grouphealth.quotation.domain.model.GroupHealthQuotation',2000000,' ');
 insert  into `entity_sequence`(`sequence_id`,`sequence_name`,`sequence_number`,`sequence_prefix`) values (5,'com.pla.individuallife.quotation.domain.model.ILQuotation',3000000,' ');
 insert  into `entity_sequence`(`sequence_id`,`sequence_name`,`sequence_number`,`sequence_prefix`) values (6,'com.pla.individuallife.proposal.domain.model.ProposalAggregate',0,' ');
-insert  into `entity_sequence`(`sequence_id`,`sequence_name`,`sequence_number`,`sequence_prefix`) values (7,'com.pla.grouplife.proposal.domain.model.GroupLifeProposal',0000000,' ');
+insert  into `entity_sequence`(`sequence_id`,`sequence_name`,`sequence_number`,`sequence_prefix`) values (7,'com.pla.core.domain.model.Benefit',0,'1000');
+insert  into `entity_sequence`(`sequence_id`,`sequence_name`,`sequence_number`,`sequence_prefix`) values (8,'com.pla.core.domain.model.Coverage',0,'1000');
+insert  into `entity_sequence`(`sequence_id`,`sequence_name`,`sequence_number`,`sequence_prefix`) values (9,'com.pla.grouplife.proposal.domain.model.GroupLifeProposal',0000000,' ');
 
 insert into `channel_type` (`CHANNEL_CODE`, `CHANNEL_DESCRIPTION`) values('BROKER','Broker');
 insert into `channel_type` (`CHANNEL_CODE`, `CHANNEL_DESCRIPTION`) values('DIRECT','Direct');
@@ -543,29 +545,34 @@ insert into `region` (`region_code`, `region_name`, `regional_manager`) values('
 insert into `region` (`region_code`, `region_name`, `regional_manager`) values('SOUTH','South',NULL);
 
 
-insert into `branch` (`branch_code`, `current_branch_bde`, `current_branch_manager`, `branch_name`) values('Chingola',NULL,NULL,'Chingola');
-insert into `branch` (`branch_code`, `current_branch_bde`, `current_branch_manager`, `branch_name`) values('Chipata',NULL,NULL,'Chipata');
-insert into `branch` (`branch_code`, `current_branch_bde`, `current_branch_manager`, `branch_name`) values('Choma',NULL,NULL,'Choma');
-insert into `branch` (`branch_code`, `current_branch_bde`, `current_branch_manager`, `branch_name`) values('Kabwe',NULL,NULL,'Kabwe');
-insert into `branch` (`branch_code`, `current_branch_bde`, `current_branch_manager`, `branch_name`) values('Kasama',NULL,NULL,'Kasama');
-insert into `branch` (`branch_code`, `current_branch_bde`, `current_branch_manager`, `branch_name`) values('Kitwe',NULL,NULL,'Kitwe');
-insert into `branch` (`branch_code`, `current_branch_bde`, `current_branch_manager`, `branch_name`) values('Livingstone',NULL,NULL,'Livingstone');
-insert into `branch` (`branch_code`, `current_branch_bde`, `current_branch_manager`, `branch_name`) values('Lusaka',NULL,NULL,'Lusaka');
-insert into `branch` (`branch_code`, `current_branch_bde`, `current_branch_manager`, `branch_name`) values('Mazabuka',NULL,NULL,'Mazabuka');
-insert into `branch` (`branch_code`, `current_branch_bde`, `current_branch_manager`, `branch_name`) values('Ndola',NULL,NULL,'Ndola');
-insert into `branch` (`branch_code`, `current_branch_bde`, `current_branch_manager`, `branch_name`) values('Solwezi',NULL,NULL,'Solwezi');
+insert into `branch` (`branch_code`, `current_branch_bde`, `current_branch_manager`, `branch_name`) values('N03',NULL,NULL,'Chingola');
+insert into `branch` (`branch_code`, `current_branch_bde`, `current_branch_manager`, `branch_name`) values('S02',NULL,NULL,'Chipata');
+insert into `branch` (`branch_code`, `current_branch_bde`, `current_branch_manager`, `branch_name`) values('S05',NULL,NULL,'Choma');
+insert into `branch` (`branch_code`, `current_branch_bde`, `current_branch_manager`, `branch_name`) values('S03',NULL,NULL,'Kabwe');
+insert into `branch` (`branch_code`, `current_branch_bde`, `current_branch_manager`, `branch_name`) values('N05',NULL,NULL,'Kasama');
+insert into `branch` (`branch_code`, `current_branch_bde`, `current_branch_manager`, `branch_name`) values('N01',NULL,NULL,'Kitwe');
+insert into `branch` (`branch_code`, `current_branch_bde`, `current_branch_manager`, `branch_name`) values('S04',NULL,NULL,'Livingstone');
+insert into `branch` (`branch_code`, `current_branch_bde`, `current_branch_manager`, `branch_name`) values('S01',NULL,NULL,'Lusaka');
+insert into `branch` (`branch_code`, `current_branch_bde`, `current_branch_manager`, `branch_name`) values('S06',NULL,NULL,'Mazabuka');
+insert into `branch` (`branch_code`, `current_branch_bde`, `current_branch_manager`, `branch_name`) values('N02',NULL,NULL,'Ndola');
+insert into `branch` (`branch_code`, `current_branch_bde`, `current_branch_manager`, `branch_name`) values('N04',NULL,NULL,'Solwezi');
+INSERT INTO `branch` (`branch_code`, `current_branch_bde`, `current_branch_manager`, `branch_name`) VALUES ('S07',NULL,NULL,'Mongu');
+INSERT INTO `branch` (`branch_code`, `current_branch_bde`, `current_branch_manager`, `branch_name`) VALUES ('N06',NULL,NULL,'Mansa');;
 
-insert into `region_branch` (`region_code`, `branch_code`) values('North','Chingola');
-insert into `region_branch` (`region_code`, `branch_code`) values('South','Chipata');
-insert into `region_branch` (`region_code`, `branch_code`) values('South','Choma');
-insert into `region_branch` (`region_code`, `branch_code`) values('South','Kabwe');
-insert into `region_branch` (`region_code`, `branch_code`) values('North','Kasama');
-insert into `region_branch` (`region_code`, `branch_code`) values('North','Kitwe');
-insert into `region_branch` (`region_code`, `branch_code`) values('South','Livingstone');
-insert into `region_branch` (`region_code`, `branch_code`) values('South','Lusaka');
-insert into `region_branch` (`region_code`, `branch_code`) values('South','Mazabuka');
-insert into `region_branch` (`region_code`, `branch_code`) values('North','Ndola');
-insert into `region_branch` (`region_code`, `branch_code`) values('North','Solwezi');
+insert into `region_branch` (`region_code`, `branch_code`) values('North','N03');
+insert into `region_branch` (`region_code`, `branch_code`) values('South','S02');
+insert into `region_branch` (`region_code`, `branch_code`) values('South','S05');
+insert into `region_branch` (`region_code`, `branch_code`) values('South','S03');
+insert into `region_branch` (`region_code`, `branch_code`) values('North','N05');
+insert into `region_branch` (`region_code`, `branch_code`) values('North','N01');
+insert into `region_branch` (`region_code`, `branch_code`) values('South','S04');
+insert into `region_branch` (`region_code`, `branch_code`) values('South','S01');
+insert into `region_branch` (`region_code`, `branch_code`) values('South','S06');
+insert into `region_branch` (`region_code`, `branch_code`) values('North','N02');
+insert into `region_branch` (`region_code`, `branch_code`) values('North','N04');
+
+insert into `region_branch` (`region_code`, `branch_code`) values ('South','S07');
+insert into `region_branch` (`region_code`, `branch_code`) values ('North','N06');
 
 
 /*Data for the table `occupation_class` */
@@ -691,3 +698,5 @@ INSERT INTO `endorsement_type`(`description`,`category`) VALUES ('Change Incepti
 
 INSERT INTO `employment_type`(`code`,`description`) values('1','Permanent');
 INSERT INTO `employment_type`(`code`,`description`) values('2','Temporary');
+
+INSERT INTO `agent` (`agent_id`, `designation_code`, `designation_name`, `employee_id`, `first_name`, `last_name`, `nrc_number`, `title`, `training_complete_on`, `agent_status`, `channel_code`, `channel_name`, `address_line1`, `address_line2`, `email`, `city`, `postal_code`, `province`, `home_phone_number`, `mobile_number`, `work_phone_number`, `license_number`, `override_commission_applicable`, `physical_address_line1`, `physical_address_line2`, `physical_address_city`, `physical_address_postal_code`, `physical_address_province`, `team_id`) VALUES('000000','Direct','Direct',NULL,'DirectF','DirectL',NULL,NULL,NULL,'ACTIVE','DIRECT','Direct',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL);
