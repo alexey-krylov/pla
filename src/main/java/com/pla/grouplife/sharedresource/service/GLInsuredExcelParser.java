@@ -92,6 +92,11 @@ public class GLInsuredExcelParser {
             public InsuredDto.CoveragePremiumDetailDto apply(OptionalCoverageCellHolder optionalCoverageCellHolder) {
                 InsuredDto.CoveragePremiumDetailDto coveragePremiumDetailDto = new InsuredDto.CoveragePremiumDetailDto();
                 coveragePremiumDetailDto.setCoverageCode(ExcelGeneratorUtil.getCellValue(optionalCoverageCellHolder.getOptionalCoverageCell()));
+                String coverageCode = coveragePremiumDetailDto.getCoverageCode();
+                if (coverageCode.indexOf(".") != -1) {
+                    coverageCode = coverageCode.substring(0, coverageCode.indexOf("."));
+                }
+                coveragePremiumDetailDto.setCoverageCode(coverageCode);
                 if (isNotEmpty(coveragePremiumDetailDto.getCoverageCode())) {
                     Map<String, Object> coverageMap = glQuotationFinder.findCoverageDetailByCoverageCode(coveragePremiumDetailDto.getCoverageCode());
                     coveragePremiumDetailDto.setCoverageId((String) coverageMap.get("coverageId"));
@@ -124,6 +129,11 @@ public class GLInsuredExcelParser {
             public InsuredDto.CoveragePremiumDetailDto apply(OptionalCoverageCellHolder optionalCoverageCellHolder) {
                 InsuredDto.CoveragePremiumDetailDto coveragePremiumDetailDto = new InsuredDto.CoveragePremiumDetailDto();
                 coveragePremiumDetailDto.setCoverageCode(ExcelGeneratorUtil.getCellValue(optionalCoverageCellHolder.getOptionalCoverageCell()));
+                String coverageCode = coveragePremiumDetailDto.getCoverageCode();
+                if (coverageCode.indexOf(".") != -1) {
+                    coverageCode = coverageCode.substring(0, coverageCode.indexOf("."));
+                }
+                coveragePremiumDetailDto.setCoverageCode(coverageCode);
                 if (isNotEmpty(coveragePremiumDetailDto.getCoverageCode())) {
                     Map<String, Object> coverageMap = glQuotationFinder.findCoverageDetailByCoverageCode(coveragePremiumDetailDto.getCoverageCode());
                     coveragePremiumDetailDto.setCoverageId((String) coverageMap.get("coverageId"));
@@ -302,8 +312,11 @@ public class GLInsuredExcelParser {
         final String finalPlanCode = planCode;
         optionalCoverageCellHolders.forEach(optionalCoverageCellHolder -> {
             String optionalCoverageCode = getCellValue(optionalCoverageCellHolder.getOptionalCoverageCell());
+            if (optionalCoverageCode.indexOf(".") != -1) {
+                optionalCoverageCode = optionalCoverageCode.substring(0, optionalCoverageCode.indexOf("."));
+            }
             if (isNotEmpty(optionalCoverageCode) && !isValidCoverage(finalPlanCode, optionalCoverageCode)) {
-                errorMessages.add(optionalCoverageCode + "  is not valid for plan " + finalPlanCode + ".");
+                errorMessages.add("Coverage code: " + optionalCoverageCode + "  is not valid for plan " + finalPlanCode + ".");
             }
             String coverageSA = getCellValue(optionalCoverageCellHolder.getOptionalCoverageSACell());
             if (isEmpty(coverageSA)) {
@@ -363,7 +376,7 @@ public class GLInsuredExcelParser {
                 errorMessages.add("Plan code is not valid for the selected agent.");
             }
             boolean isPlanLaunched = planAdapter.isPlanActive(planCellValue);
-            if(!isPlanLaunched){
+            if (!isPlanLaunched) {
                 errorMessages.add("This plan cannot be quoted as it has not been launched yet.");
             }
         }

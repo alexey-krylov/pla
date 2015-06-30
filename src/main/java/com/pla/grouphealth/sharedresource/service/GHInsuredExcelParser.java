@@ -93,6 +93,11 @@ public class GHInsuredExcelParser {
             public GHInsuredDto.GHCoveragePremiumDetailDto apply(OptionalCoverageCellHolder optionalCoverageCellHolder) {
                 GHInsuredDto.GHCoveragePremiumDetailDto coveragePremiumDetailDto = new GHInsuredDto.GHCoveragePremiumDetailDto();
                 coveragePremiumDetailDto.setCoverageCode(ExcelGeneratorUtil.getCellValue(optionalCoverageCellHolder.getOptionalCoverageCell()));
+                String coverageCode = coveragePremiumDetailDto.getCoverageCode();
+                if (coverageCode.indexOf(".") != -1) {
+                    coverageCode = coverageCode.substring(0, coverageCode.indexOf("."));
+                }
+                coveragePremiumDetailDto.setCoverageCode(coverageCode);
                 if (isNotEmpty(coveragePremiumDetailDto.getCoverageCode())) {
                     Map<String, Object> coverageMap = ghQuotationFinder.findCoverageDetailByCoverageCode(coveragePremiumDetailDto.getCoverageCode());
                     coveragePremiumDetailDto.setCoverageId((String) coverageMap.get("coverageId"));
@@ -134,6 +139,11 @@ public class GHInsuredExcelParser {
                 GHInsuredDto.GHCoveragePremiumDetailDto coveragePremiumDetailDto = new GHInsuredDto.GHCoveragePremiumDetailDto();
                 coveragePremiumDetailDto.setCoverageCode(ExcelGeneratorUtil.getCellValue(optionalCoverageCellHolder.getOptionalCoverageCell()));
                 if (isNotEmpty(coveragePremiumDetailDto.getCoverageCode())) {
+                    String coverageCode = coveragePremiumDetailDto.getCoverageCode();
+                    if (coverageCode.indexOf(".") != -1) {
+                        coverageCode = coverageCode.substring(0, coverageCode.indexOf("."));
+                    }
+                    coveragePremiumDetailDto.setCoverageCode(coverageCode);
                     Map<String, Object> coverageMap = ghQuotationFinder.findCoverageDetailByCoverageCode(coveragePremiumDetailDto.getCoverageCode());
                     coveragePremiumDetailDto.setCoverageId((String) coverageMap.get("coverageId"));
                 }
@@ -146,12 +156,14 @@ public class GHInsuredExcelParser {
                     coveragePremium = BigDecimal.valueOf(Double.valueOf(optionalCoveragePremiumCellValue)).multiply(BigDecimal.valueOf(Double.valueOf(finalInsuredDto.getNoOfAssured())));
                 }
                 coveragePremiumDetailDto.setPremium(coveragePremium);
-                for (OptionalCoverageBenefitCellHolder optionalCoverageBenefitCellHolder : optionalCoverageCellHolder.getBenefitCellHolders()) {
-                    GHInsuredDto.GHCoveragePremiumDetailDto.GHCoverageBenefitDetailDto ghCoverageBenefitDetailDto = new GHInsuredDto.GHCoveragePremiumDetailDto.GHCoverageBenefitDetailDto();
-                    ghCoverageBenefitDetailDto.setBenefitCode(ExcelGeneratorUtil.getCellValue(optionalCoverageBenefitCellHolder.getBenefitCell()));
-                    int benefitLimit = Double.valueOf(ExcelGeneratorUtil.getCellValue(optionalCoverageBenefitCellHolder.getBenefitLimitCell())).intValue();
-                    ghCoverageBenefitDetailDto.setBenefitLimit(BigDecimal.valueOf(benefitLimit));
-                    coveragePremiumDetailDto = coveragePremiumDetailDto.addBenefit(ghCoverageBenefitDetailDto);
+                if (optionalCoverageCellHolder.getBenefitCellHolders() != null) {
+                    for (OptionalCoverageBenefitCellHolder optionalCoverageBenefitCellHolder : optionalCoverageCellHolder.getBenefitCellHolders()) {
+                        GHInsuredDto.GHCoveragePremiumDetailDto.GHCoverageBenefitDetailDto ghCoverageBenefitDetailDto = new GHInsuredDto.GHCoveragePremiumDetailDto.GHCoverageBenefitDetailDto();
+                        ghCoverageBenefitDetailDto.setBenefitCode(ExcelGeneratorUtil.getCellValue(optionalCoverageBenefitCellHolder.getBenefitCell()));
+                        int benefitLimit = Double.valueOf(ExcelGeneratorUtil.getCellValue(optionalCoverageBenefitCellHolder.getBenefitLimitCell())).intValue();
+                        ghCoverageBenefitDetailDto.setBenefitLimit(BigDecimal.valueOf(benefitLimit));
+                        coveragePremiumDetailDto = coveragePremiumDetailDto.addBenefit(ghCoverageBenefitDetailDto);
+                    }
                 }
                 return coveragePremiumDetailDto;
             }
@@ -333,7 +345,7 @@ public class GHInsuredExcelParser {
                 errorMessages.add("Premium cannot be empty for" + optionalCoverageCode + ".");
             }
             String premiumVisibility = getCellValue(optionalCoverageCellHolder.getOptionalCoverageVisibilityCell());
-            if (isEmpty(premiumVisibility) && !("NO".equals(premiumVisibility) || "YES".equals(premiumVisibility))) {
+            if (isNotEmpty(premiumVisibility) && !("NO".equals(premiumVisibility) || "YES".equals(premiumVisibility))) {
                 errorMessages.add("Premium visibility for optional coverage " + optionalCoverageCode + " should be YES/NO.");
             }
             try {
@@ -341,22 +353,24 @@ public class GHInsuredExcelParser {
                 if (!planAdapter.isValidPlanCoverageSumAssured(finalPlanCode, optionalCoverageCode, coverageSumAssured)) {
                     errorMessages.add(coverageSA + "  is not valid Sum Assured for coverage " + optionalCoverageCode + ".");
                 }
-                for (OptionalCoverageBenefitCellHolder optionalCoverageBenefitCellHolder : optionalCoverageCellHolder.getBenefitCellHolders()) {
-                    String benefitCode = getCellValue(optionalCoverageBenefitCellHolder.getBenefitCell());
-                    if (!planAdapter.isValidPlanCoverageBenefit(finalPlanCode, optionalCoverageCode, benefitCode)) {
-                        errorMessages.add(benefitCode + "  is not valid Benefit Code for coverage " + optionalCoverageCode + ".");
-                    }
-                    String benefitLimit = getCellValue(optionalCoverageBenefitCellHolder.getBenefitLimitCell());
-                    if (isEmpty(benefitLimit)) {
-                        errorMessages.add("Benefit Limit is empty for benefit" + benefitCode + ".");
-                    }
-                    try {
-                        BigDecimal benefitLimitBigDecimal = BigDecimal.valueOf(Double.valueOf(benefitLimit).intValue());
-                        if (!planAdapter.isValidPlanCoverageBenefitLimit(finalPlanCode, optionalCoverageCode, benefitCode, benefitLimitBigDecimal)) {
-                            errorMessages.add(benefitLimit + " is not valid Benefit Limit for benefit" + benefitCode + ".");
+                if (optionalCoverageCellHolder.getBenefitCellHolders() != null) {
+                    for (OptionalCoverageBenefitCellHolder optionalCoverageBenefitCellHolder : optionalCoverageCellHolder.getBenefitCellHolders()) {
+                        String benefitCode = getCellValue(optionalCoverageBenefitCellHolder.getBenefitCell());
+                        if (!planAdapter.isValidPlanCoverageBenefit(finalPlanCode, optionalCoverageCode, benefitCode)) {
+                            errorMessages.add(benefitCode + "  is not valid Benefit Code for coverage " + optionalCoverageCode + ".");
                         }
-                    } catch (Exception e) {
+                        String benefitLimit = getCellValue(optionalCoverageBenefitCellHolder.getBenefitLimitCell());
+                        if (isEmpty(benefitLimit)) {
+                            errorMessages.add("Benefit Limit is empty for benefit" + benefitCode + ".");
+                        }
+                        try {
+                            BigDecimal benefitLimitBigDecimal = BigDecimal.valueOf(Double.valueOf(benefitLimit).intValue());
+                            if (!planAdapter.isValidPlanCoverageBenefitLimit(finalPlanCode, optionalCoverageCode, benefitCode, benefitLimitBigDecimal)) {
+                                errorMessages.add(benefitLimit + " is not valid Benefit Limit for benefit" + benefitCode + ".");
+                            }
+                        } catch (Exception e) {
 
+                        }
                     }
                 }
             } catch (Exception e) {

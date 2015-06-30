@@ -427,9 +427,11 @@ CREATE TABLE `document` (
 
 DROP TABLE IF EXISTS `industry`;
 CREATE TABLE `industry` (
-  `code` varchar(100) NOT NULL,
-  `description` varchar(255) DEFAULT NULL,
-  PRIMARY KEY (`code`)
+  `industry_id` varchar(10) NOT NULL,
+  `industry_name` varchar(255) DEFAULT NULL,
+  `risk_class` int(11) DEFAULT NULL,
+  `industry_factor` decimal(10,4) DEFAULT NULL,
+  PRIMARY KEY (`industry_id`)
 );
 
 DROP TABLE IF EXISTS `occupation_class`;
