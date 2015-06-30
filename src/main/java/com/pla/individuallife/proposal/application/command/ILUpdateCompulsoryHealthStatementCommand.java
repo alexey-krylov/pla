@@ -1,6 +1,6 @@
 package com.pla.individuallife.proposal.application.command;
 
-import com.pla.individuallife.proposal.domain.model.QuestionAnswer;
+import com.pla.individuallife.proposal.presentation.dto.QuestionDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -16,7 +16,8 @@ import java.util.List;
 @NoArgsConstructor
 
 public class ILUpdateCompulsoryHealthStatementCommand  {
-    private List<QuestionAnswer> questions;
+    private List<QuestionDto> compulsoryHealthDetails;
+
     private UserDetails userDetails;
     private String proposalId;
 }

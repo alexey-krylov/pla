@@ -10,10 +10,10 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class QuestionAnswerDto {
 
-   private Long questionId;
+   private String questionId;
     private Boolean response;
 
-    public QuestionAnswerDto(long questionId, boolean response) {
+    public QuestionAnswerDto(String questionId, boolean response) {
         this.questionId = questionId;
         this.response = response;
     }

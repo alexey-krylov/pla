@@ -2,7 +2,9 @@ package com.pla.individuallife.proposal.domain.model;
 
 import com.google.common.base.Preconditions;
 import com.pla.core.domain.model.agent.AgentId;
+import com.pla.individuallife.identifier.QuestionId;
 import com.pla.individuallife.proposal.presentation.dto.AgentDetailDto;
+import com.pla.individuallife.proposal.presentation.dto.QuestionDto;
 import com.pla.sharedkernel.identifier.ProposalId;
 import org.apache.commons.beanutils.BeanUtils;
 import org.axonframework.eventsourcing.annotation.AbstractAnnotatedAggregateRoot;
@@ -39,7 +41,7 @@ public class ProposalAggregate extends AbstractAnnotatedAggregateRoot<ProposalId
     private ProposalPlanDetail proposalPlanDetail;
     private List<Beneficiary> beneficiaries;
     private BigDecimal totalBeneficiaryShare = BigDecimal.ZERO;
-    private List<QuestionAnswer> compulsoryHealthStatement;
+    private List<Question> compulsoryHealthStatement;
     private FamilyPersonalDetail familyPersonalDetail;
     private AgentCommissionShareModel agentCommissionShareModel;
 
@@ -144,8 +146,9 @@ public class ProposalAggregate extends AbstractAnnotatedAggregateRoot<ProposalId
         totalBeneficiaryShare = newTotal;
     }
 
-    public void updateCompulsoryHealthStatement(List<QuestionAnswer> compulsoryHealthStatement){
-        this.compulsoryHealthStatement=compulsoryHealthStatement;
+    public void updateCompulsoryHealthStatement(List<QuestionDto> compulsoryHealthStatement){
+        this.compulsoryHealthStatement = new ArrayList<Question>();
+        compulsoryHealthStatement.stream().forEach(ch -> this.compulsoryHealthStatement.add(new Question(new QuestionId(ch.getQuestionId()), ch.isAnswer(), ch.getAnswerResponse())));
     }
 
     public void updateFamilyPersonalDetail(FamilyPersonalDetail personalDetail){
