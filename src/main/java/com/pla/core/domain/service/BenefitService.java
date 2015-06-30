@@ -52,9 +52,9 @@ public class BenefitService {
     public Benefit createBenefit(String name, UserDetails userDetails, String benefitCode) {
         String benefitId = idGenerator.nextId();
         Admin admin = adminRoleAdapter.userToAdmin(userDetails);
-        BenefitDto benefitDto = new BenefitDto(benefitId, name, benefitCode);
-        boolean isBenefitNameAndCodeIsUnique = benefitCodeIsUnique.And(benefitNameIsUnique).isSatisfiedBy(benefitDto);
         String benefitCodeSequence = sequenceGenerator.getSequence(Benefit.class);
+        BenefitDto benefitDto = new BenefitDto(benefitId, name, benefitCodeSequence);
+        boolean isBenefitNameAndCodeIsUnique = benefitCodeIsUnique.And(benefitNameIsUnique).isSatisfiedBy(benefitDto);
         Benefit benefit = admin.createBenefit(isBenefitNameAndCodeIsUnique, benefitId, name, benefitCodeSequence);
         return benefit;
     }

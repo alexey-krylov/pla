@@ -52,9 +52,9 @@ public class CoverageService {
     public Coverage createCoverage(String name, String coverageCode, String description, Set<Benefit> benefitSet, UserDetails userDetails) {
         String coverageId = idGenerator.nextId();
         Admin admin = adminRoleAdapter.userToAdmin(userDetails);
-        CoverageDto coverageDto = new CoverageDto(coverageId, name, coverageCode);
-        boolean isCodeAndNameIsUnique = coverageCodeIsUnique.And(coverageNameIsUnique).isSatisfiedBy(coverageDto);
         String coverageCodeSequence = sequenceGenerator.getSequence(Coverage.class);
+        CoverageDto coverageDto = new CoverageDto(coverageId, name, coverageCodeSequence);
+        boolean isCodeAndNameIsUnique = coverageCodeIsUnique.And(coverageNameIsUnique).isSatisfiedBy(coverageDto);
         Coverage coverage = admin.createCoverage(isCodeAndNameIsUnique, coverageId, name, coverageCodeSequence, description, benefitSet);
         return coverage;
     }

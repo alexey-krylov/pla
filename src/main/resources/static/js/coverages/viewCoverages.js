@@ -201,7 +201,7 @@ var isAlphaNumeric= function (evt){
 
 
 var validate = function(){
-    $('#createCoverage *').filter(':text').each(function(key,value){
+    $('#coverageNameDiv *').filter(':text').each(function(key,value){
 
         var isRequired = $(value).prop("required");
         if(($(value).val().trim().length<=0 || $(value).val().trim().length>50) && isRequired){

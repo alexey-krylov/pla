@@ -157,7 +157,7 @@ var resetError =function(ele){
 };
 
 var validate = function(){
-    $('#createBenefit *').filter(':text').each(function(key,value){
+    $('#benefitNameDiv *').filter(':text').each(function(key,value){
         if(($(value).val().trim().length<=0 || $(value).val().trim().length>100)){
             hasError=true;
             $(value).parent().parent().addClass("has-error");
