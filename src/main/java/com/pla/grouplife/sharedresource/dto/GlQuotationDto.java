@@ -41,4 +41,9 @@ public class GlQuotationDto {
     private String proposeName;
 
     private Integer ageing;
+
+    @JsonSerialize(using = LocalJodaDateSerializer.class)
+    @JsonDeserialize(using = LocalJodaDateDeserializer.class)
+    @DateTimeFormat(pattern="dd/MM/yyyy")
+    private LocalDate quotationSharedOn;
 }

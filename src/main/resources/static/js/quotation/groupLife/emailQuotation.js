@@ -32,7 +32,7 @@ function IsValidEmail(email) {
     var regex = /^([a-zA-Z0-9_.+-])+\@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/;
     return regex.test(email);
 }
-function sendEmail() {
+function sendEmail(withoutslipt) {
     var toAddress = $('#to').val();
     var subject = $('#subject').val();
     var mailContent = $('#mailContent').val();
@@ -50,9 +50,12 @@ function sendEmail() {
             return;
         }
     }
-
+    var emailUrl='/pla/quotation/grouplife/emailQuotation';
+    if(withoutslipt){
+        emailUrl='/pla/quotation/grouplife/emailQuotationwithoutsplit';
+    }
     $.ajax({
-            url: '/pla/quotation/grouplife/emailQuotation',
+            url: emailUrl,
             type: 'POST',
             data: JSON.stringify({
                 recipientMailAddress: toAddress.split(';'), subject: subject, mailContent:mailContent,

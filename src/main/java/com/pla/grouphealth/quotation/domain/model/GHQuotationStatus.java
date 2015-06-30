@@ -5,5 +5,5 @@ package com.pla.grouphealth.quotation.domain.model;
  */
 public enum GHQuotationStatus {
 
-    DRAFT, GENERATED, CLOSED, PURGED, DECLINED
+    DRAFT, GENERATED, CLOSED, PURGED, DECLINED,SHARED
 }

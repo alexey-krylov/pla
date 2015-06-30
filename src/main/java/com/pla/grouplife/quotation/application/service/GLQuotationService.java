@@ -87,7 +87,7 @@ public class GLQuotationService {
     }
 
     public byte[] getQuotationPDF(String quotationId, boolean withOutSplit) throws IOException, JRException {
-        GLQuotationDetailDto glQuotationDetailDto = getGlQuotationDetailForPDF(quotationId,withOutSplit);
+        GLQuotationDetailDto glQuotationDetailDto = getGlQuotationDetailForPDF(quotationId, withOutSplit);
         byte[] pdfData = PDFGeneratorUtils.createPDFReportByList(Arrays.asList(glQuotationDetailDto), "jasperpdf/template/grouplife/glQuotation.jrxml");
         return pdfData;
     }
@@ -137,9 +137,9 @@ public class GLQuotationService {
         glQuotationDetailDto.setAddOnBenefitsPercentage((premiumDetail.getAddOnBenefit() != null && !withOutSplit) ? premiumDetail.getAddOnBenefit().toString() + " %" : "");
         glQuotationDetailDto.setWaiverOfExcessLoadings("");
         glQuotationDetailDto.setWaiverOfExcessLoadingsPercentage("");
-        BigDecimal totalPremiumAmount = withOutSplit ? quotation.getNetAnnualPremiumPaymentAmountWithoutDiscount(premiumDetail) : quotation.getNetAnnualPremiumPaymentAmount(premiumDetail);
+        BigDecimal totalPremiumAmount = quotation.getNetAnnualPremiumPaymentAmount(premiumDetail);
         totalPremiumAmount = totalPremiumAmount.setScale(2, BigDecimal.ROUND_CEILING);
-        BigDecimal netPremiumOfInsured = quotation.getTotalBasicPremiumForInsured();
+        BigDecimal netPremiumOfInsured = withOutSplit ? quotation.getNetAnnualPremiumPaymentAmountWithoutDiscount(premiumDetail) : quotation.getTotalBasicPremiumForInsured();
         netPremiumOfInsured = netPremiumOfInsured.setScale(2, BigDecimal.ROUND_CEILING);
         glQuotationDetailDto.setNetPremium(netPremiumOfInsured.toPlainString());
         glQuotationDetailDto.setTotalPremium(totalPremiumAmount.toPlainString());
@@ -420,13 +420,14 @@ public class GLQuotationService {
             String quotationId = map.get("_id").toString();
             AgentDetailDto agentDetailDto = getAgentDetail(new QuotationId(quotationId));
             LocalDate generatedOn = map.get("generatedOn") != null ? new LocalDate(map.get("generatedOn")) : null;
+            LocalDate sharedOn = map.get("sharedOn") != null ? new LocalDate(map.get("sharedOn")) : null;
             String quotationStatus = map.get("quotationStatus") != null ? (String) map.get("quotationStatus") : "";
             String quotationNumber = map.get("quotationNumber") != null ? (String) map.get("quotationNumber") : "";
             ObjectId parentQuotationIdMap = map.get("parentQuotationId") != null ? (ObjectId) map.get("parentQuotationId") : null;
             Proposer proposerMap = map.get("proposer") != null ? (Proposer) map.get("proposer") : null;
             String proposerName = proposerMap != null ? proposerMap.getProposerName() : "";
             String parentQuotationId = parentQuotationIdMap != null ? parentQuotationIdMap.toString() : "";
-            GlQuotationDto glQuotationDto = new GlQuotationDto(new QuotationId(quotationId), (Integer) map.get("versionNumber"), generatedOn, agentDetailDto.getAgentId(), agentDetailDto.getAgentName(), new QuotationId(parentQuotationId), quotationStatus, quotationNumber, proposerName, getIntervalInDays(generatedOn));
+            GlQuotationDto glQuotationDto = new GlQuotationDto(new QuotationId(quotationId), (Integer) map.get("versionNumber"), generatedOn, agentDetailDto.getAgentId(), agentDetailDto.getAgentName(), new QuotationId(parentQuotationId), quotationStatus, quotationNumber, proposerName, getIntervalInDays(sharedOn), sharedOn);
             return glQuotationDto;
         }
     }

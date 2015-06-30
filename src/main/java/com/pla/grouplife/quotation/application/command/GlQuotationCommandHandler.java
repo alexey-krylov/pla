@@ -136,4 +136,10 @@ public class GlQuotationCommandHandler {
         GroupLifeQuotation groupLifeQuotation = glQuotationMongoRepository.load(closureGLQuotationCommand.getQuotationId());
         groupLifeQuotation.declineQuotation();
     }
+
+    @CommandHandler
+    public void shareGLQuotation(ShareGLQuotationCommand shareGLQuotationCommand) {
+        GroupLifeQuotation groupLifeQuotation = glQuotationMongoRepository.load(shareGLQuotationCommand.getQuotationId());
+        groupLifeQuotation.shareQuotation(LocalDate.now());
+    }
 }

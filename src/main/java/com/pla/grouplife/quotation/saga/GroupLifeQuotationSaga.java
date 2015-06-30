@@ -61,7 +61,7 @@ public class GroupLifeQuotationSaga extends AbstractAnnotatedSaga {
 
     @StartSaga
     @SagaEventHandler(associationProperty = "quotationId")
-    public void handle(GLQuotationGeneratedEvent event) throws ProcessInfoException {
+    public void handle(GLQuotationSharedEvent event) throws ProcessInfoException {
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("Handling GL Quotation Generated Event .....", event);
         }
@@ -69,10 +69,10 @@ public class GroupLifeQuotationSaga extends AbstractAnnotatedSaga {
         int noOfDaysToClosure = processInfoAdapter.getClosureTimePeriod(LineOfBusinessEnum.GROUP_LIFE, ProcessType.QUOTATION);
         int firstReminderDay = processInfoAdapter.getDaysForFirstReminder(LineOfBusinessEnum.GROUP_LIFE, ProcessType.QUOTATION);
         GroupLifeQuotation groupLifeQuotation = glQuotationRepository.findOne(event.getQuotationId());
-        LocalDate quotationGeneratedDate = groupLifeQuotation.getGeneratedOn();
-        LocalDate firstReminderDate = quotationGeneratedDate.plusDays(firstReminderDay);
-        LocalDate purgeDate = quotationGeneratedDate.plusDays(noOfDaysToPurge);
-        LocalDate closureDate = quotationGeneratedDate.plusDays(noOfDaysToClosure);
+        LocalDate quotationSharedDate = groupLifeQuotation.getSharedOn();
+        LocalDate firstReminderDate = quotationSharedDate.plusDays(firstReminderDay);
+        LocalDate purgeDate = quotationSharedDate.plusDays(noOfDaysToPurge);
+        LocalDate closureDate = quotationSharedDate.plusDays(noOfDaysToClosure);
         DateTime purgeScheduleDateTime = purgeDate.toDateTimeAtStartOfDay();
         DateTime closureScheduleDateTime = closureDate.toDateTimeAtStartOfDay();
         DateTime firstReminderDateTime = firstReminderDate.toDateTimeAtStartOfDay();
@@ -114,8 +114,8 @@ public class GroupLifeQuotationSaga extends AbstractAnnotatedSaga {
             if (this.noOfReminderSent == 1) {
                 int firstReminderDay = processInfoAdapter.getDaysForFirstReminder(LineOfBusinessEnum.GROUP_LIFE, ProcessType.QUOTATION);
                 int secondReminderDay = processInfoAdapter.getDaysForSecondReminder(LineOfBusinessEnum.GROUP_LIFE, ProcessType.QUOTATION);
-                LocalDate quotationGeneratedDate = groupLifeQuotation.getGeneratedOn();
-                LocalDate secondReminderDate = quotationGeneratedDate.plusDays(firstReminderDay + secondReminderDay);
+                LocalDate quotationSharedDate = groupLifeQuotation.getSharedOn();
+                LocalDate secondReminderDate = quotationSharedDate.plusDays(firstReminderDay + secondReminderDay);
                 DateTime secondReminderDateTime = secondReminderDate.toDateTimeAtStartOfDay();
                 ScheduleToken secondReminderScheduleToken = eventScheduler.schedule(secondReminderDateTime, new GLQuotationReminderEvent(event.getQuotationId()));
                 scheduledTokens.add(secondReminderScheduleToken);

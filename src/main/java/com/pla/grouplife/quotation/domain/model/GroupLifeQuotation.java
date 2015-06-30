@@ -3,7 +3,7 @@ package com.pla.grouplife.quotation.domain.model;
 import com.pla.core.domain.model.agent.AgentId;
 import com.pla.grouplife.quotation.domain.event.GLQuotationClosedEvent;
 import com.pla.grouplife.quotation.domain.event.GLQuotationEndSagaEvent;
-import com.pla.grouplife.quotation.domain.event.GLQuotationGeneratedEvent;
+import com.pla.grouplife.quotation.domain.event.GLQuotationSharedEvent;
 import com.pla.grouplife.sharedresource.model.vo.*;
 import com.pla.sharedkernel.event.GLProposerAddedEvent;
 import com.pla.sharedkernel.identifier.OpportunityId;
@@ -52,6 +52,8 @@ public class GroupLifeQuotation extends AbstractAggregateRoot<QuotationId> imple
     private String quotationNumber;
 
     private LocalDate generatedOn;
+
+    private LocalDate sharedOn;
 
     private QuotationId parentQuotationId;
 
@@ -151,7 +153,14 @@ public class GroupLifeQuotation extends AbstractAggregateRoot<QuotationId> imple
                     proposerContactDetail.getAddressLine1(), proposerContactDetail.getAddressLine2(), proposerContactDetail.getPostalCode(),
                     proposerContactDetail.getProvince(), proposerContactDetail.getTown(), proposerContactDetail.getEmailAddress()));
         }
-        registerEvent(new GLQuotationGeneratedEvent(quotationId));
+    }
+
+    public void shareQuotation(LocalDate sharedOn) {
+        if (QuotationStatus.GENERATED.equals(this.quotationStatus)) {
+            this.quotationStatus = QuotationStatus.SHARED;
+            this.sharedOn = sharedOn;
+            registerEvent(new GLQuotationSharedEvent(quotationId));
+        }
     }
 
     public void cancelSchedules() {
@@ -160,7 +169,7 @@ public class GroupLifeQuotation extends AbstractAggregateRoot<QuotationId> imple
 
     @Override
     public boolean requireVersioning() {
-        return QuotationStatus.GENERATED.equals(this.quotationStatus);
+        return (QuotationStatus.GENERATED.equals(this.quotationStatus) || QuotationStatus.SHARED.equals(this.quotationStatus));
     }
 
     public GroupLifeQuotation cloneQuotation(String quotationNumber, String quotationCreator, QuotationId quotationId, int versionNumber, QuotationId parentQuotationId) {

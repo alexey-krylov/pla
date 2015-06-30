@@ -13,7 +13,7 @@ import lombok.ToString;
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
-public class GLQuotationGeneratedEvent {
+public class GLQuotationSharedEvent {
 
     private QuotationId quotationId;
 

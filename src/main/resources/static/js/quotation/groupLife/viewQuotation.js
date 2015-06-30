@@ -6,7 +6,7 @@ var viewQuotationModule = (function () {
         this.selectedItem = $(ele).val();
         this.status = $(ele).parent().find('input[type=hidden]').val();
         $(".btn-disabled").attr("disabled", false);
-        if (this.status == 'GENERATED'){
+        if (this.status == 'GENERATED' || this.status == 'SHARED'){
             $('#emailaddress').attr('disabled', false);
             $('#print').attr('disabled', false);
         }else{
@@ -33,12 +33,12 @@ var viewQuotationModule = (function () {
 
     services.emailQuotation = function (){
         window.open('/pla/quotation/grouplife/openemailquotation/'+this.selectedItem,"_blank","toolbar=no,resizable=no," +
-        "scrollable=no,menubar=no,personalbar=no,dependent=yes,dialog=yes,titlebar=no,resizable=no,location=no,left=100px");
+        "scrollable=no,menubar=no,personalbar=no,dependent=yes,dialog=yes,split=no,titlebar=no,resizable=no,location=no,left=100px");
     }
 
     services.emailQuotationWOSplit = function (){
-        window.open('/pla/quotation/grouplife/openemailquotation/'+this.selectedItem,"_blank","toolbar=no,resizable=no," +
-        "scrollable=no,menubar=no,personalbar=no,dependent=yes,dialog=yes,titlebar=no,resizable=no,location=no,left=100px");
+        window.open('/pla/quotation/grouplife/openemailquotationwosplit/'+this.selectedItem,"_blank","toolbar=no,resizable=no," +
+        "scrollable=no,menubar=no,personalbar=no,dependent=yes,dialog=yes,split=yes,titlebar=no,resizable=no,location=no,left=100px");
     }
 
     services.modifyQuotation = function () {

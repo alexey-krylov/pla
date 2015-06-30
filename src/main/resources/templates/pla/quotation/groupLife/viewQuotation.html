@@ -7,8 +7,10 @@
     <!--/*-->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/datatables/1.10.5/css/jquery.dataTables.min.css" rel="stylesheet" />
-    <link href="http://cdn.datatables.net/plug-ins/f2c75b7247b/integration/bootstrap/3/dataTables.bootstrap.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/datatables/1.10.5/css/jquery.dataTables.min.css"
+          rel="stylesheet"/>
+    <link href="http://cdn.datatables.net/plug-ins/f2c75b7247b/integration/bootstrap/3/dataTables.bootstrap.css"
+          rel="stylesheet"/>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/datatables/1.10.5/js/jquery.dataTables.min.js"></script>
@@ -19,23 +21,23 @@
 <body>
 <div th:include="fragments/common :: bodyHeader" th:remove="tag"/>
 <script>
-    var interval = setInterval(function(){
-        if(require.defined("basic")){
-            requirejs(['/pla/js/quotation/groupLife/viewQuotation.js?t=09'],function(){
-                $(document).ready(function(){
-                    $("input[type='text']").keyup(function() {
-                        var isDisabled =  true;
-                        $('#quotationForm *').filter(':text').each(function(key,value){
-                            if($(value).val().trim().length !=0){
+    var interval = setInterval(function () {
+        if (require.defined("basic")) {
+            requirejs(['/pla/js/quotation/groupLife/viewQuotation.js?t=09'], function () {
+                $(document).ready(function () {
+                    $("input[type='text']").keyup(function () {
+                        var isDisabled = true;
+                        $('#quotationForm *').filter(':text').each(function (key, value) {
+                            if ($(value).val().trim().length != 0) {
                                 isDisabled = false;
                             }
                         });
-                        $("#search").prop("disabled",isDisabled);
+                        $("#search").prop("disabled", isDisabled);
                     });
 
                     $('#quotation-table').dataTable({
-                        "fnDrawCallback":function(){
-                            $( "input[type=radio]" ).on( "click", function(){
+                        "fnDrawCallback": function () {
+                            $("input[type=radio]").on("click", function () {
                                 viewQuotationModule.getTheItemSelected(this);
                             });
                         }
@@ -61,30 +63,36 @@
             <div class="col-md-2">
                 <div class="form-group">
                     <label th:text="#{quotationNumber}">Quotation ID</label>
-                    <input type="text" class="form-control input-sm" name="quotationNumber" th:value="${searchCriteria.quotationNumber}"/>
+                    <input type="text" class="form-control input-sm" name="quotationNumber"
+                           th:value="${searchCriteria.quotationNumber}"/>
                 </div>
 
             </div>
             <div class="col-md-2">
                 <div class="form-group">
                     <label th:text="#{proposerName}">Proposer Name</label>
-                    <input type="text" class="form-control input-sm" name="proposerName" th:value="${searchCriteria.proposerName}"/>
+                    <input type="text" class="form-control input-sm" name="proposerName"
+                           th:value="${searchCriteria.proposerName}"/>
                 </div>
             </div>
             <div class="col-md-2">
                 <div class="form-group">
                     <label th:text="#{agentName}">Agent Name</label>
-                    <input type="text" class="form-control input-sm" name="agentName" th:value="${searchCriteria.agentName}"/>
+                    <input type="text" class="form-control input-sm" name="agentName"
+                           th:value="${searchCriteria.agentName}"/>
                 </div>
             </div>
             <div class="col-md-2">
                 <div class="form-group">
                     <label th:text="#{agentCode}" class="abc">Agent Code</label>
-                    <input type="text" class="form-control input-sm" name="agentCode" required="true" th:value="${searchCriteria.agentCode}"/>
+                    <input type="text" class="form-control input-sm" name="agentCode" required="true"
+                           th:value="${searchCriteria.agentCode}"/>
                 </div>
             </div>
             <div class="col-md-2">
-                <button type="submit" style="margin-left: 32%;margin-top: 20px" class="btn btn-default btn-sm" id="search" disabled="true">Search</button>
+                <button type="submit" style="margin-left: 32%;margin-top: 20px" class="btn btn-default btn-sm"
+                        id="search" disabled="true">Search
+                </button>
             </div>
         </div>
     </form>
@@ -98,32 +106,41 @@
                             <span th:text="#{listOfQuotation}">List of Quotation</span>
                         </div>
                         <div class="col-md-6" style="float:right">
-                           <!-- <a type="button" class="btn btn-default btn-sm btn-disabled" disabled="disabled" id="print1"
-                                    onclick="viewQuotationModule.printQuotation()">Print</a>-->
+                            <!-- <a type="button" class="btn btn-default btn-sm btn-disabled" disabled="disabled" id="print1"
+                                     onclick="viewQuotationModule.printQuotation()">Print</a>-->
                             <div class="btn-group">
-                                <button id="print" type="button" class="btn btn-default dropdown-toggle btn-sm btn-disabled" disabled="disabled" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <button id="print" type="button"
+                                        class="btn btn-default dropdown-toggle btn-sm btn-disabled" disabled="disabled"
+                                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                     Print Action <span class="caret"></span>
                                 </button>
                                 <ul class="dropdown-menu">
                                     <li><a href="#" onclick="viewQuotationModule.printQuotation()">Print Split</a></li>
-                                    <li><a href="#" onclick="viewQuotationModule.printQuotationWOSplit()">Print w/o Split</a></li>
+                                    <li><a href="#" onclick="viewQuotationModule.printQuotationWOSplit()">Print w/o
+                                        Split</a></li>
                                 </ul>
                             </div>
-<!--
-                            <a type="button" class="btn btn-default btn-sm btn-disabled" disabled="disabled" id="emailaddress" onclick="viewQuotationModule.emailQuotation()">Email</a>
--->
+                            <!--
+                                                        <a type="button" class="btn btn-default btn-sm btn-disabled" disabled="disabled" id="emailaddress" onclick="viewQuotationModule.emailQuotation()">Email</a>
+                            -->
                             <div class="btn-group">
-                                <button id="emailaddress" type="button" class="btn btn-default dropdown-toggle btn-sm btn-disabled" disabled="disabled" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <button id="emailaddress" type="button"
+                                        class="btn btn-default dropdown-toggle btn-sm btn-disabled" disabled="disabled"
+                                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                     Email Action <span class="caret"></span>
                                 </button>
                                 <ul class="dropdown-menu">
                                     <li><a href="#" onclick="viewQuotationModule.emailQuotation()">Email Split</a></li>
-                                    <li><a href="#" onclick="viewQuotationModule.emailQuotationWOSplit()">Email w/o Split</a></li>
+                                    <li><a href="#" onclick="viewQuotationModule.emailQuotationWOSplit()">Email w/o
+                                        Split</a></li>
                                 </ul>
                             </div>
-                            <a type="button" class="btn btn-default btn-sm btn-disabled" disabled="disabled" onclick="viewQuotationModule.modifyQuotation()">Modify</a>
-                            <a type="button" class="btn btn-default btn-sm btn-disabled" disabled="disabled"  onclick="viewQuotationModule.viewQuotation()">View</a>
-                            <a type="button" class="btn btn-default btn-sm btn-disabled"  onclick="viewQuotationModule.createQuotation()">Create</a>
+                            <a type="button" class="btn btn-default btn-sm btn-disabled" disabled="disabled"
+                               onclick="viewQuotationModule.modifyQuotation()">Modify</a>
+                            <a type="button" class="btn btn-default btn-sm btn-disabled" disabled="disabled"
+                               onclick="viewQuotationModule.viewQuotation()">View</a>
+                            <a type="button" class="btn btn-default btn-sm btn-disabled"
+                               onclick="viewQuotationModule.createQuotation()">Create</a>
                         </div>
                     </div>
                 </div>
@@ -134,6 +151,7 @@
                             <th style="width: 1%"></th>
                             <th th:text="#{quotationNumber}">Quotation Number</th>
                             <th th:text="#{quotationCreatedOn}">Quotation Date</th>
+                            <th th:text="#{quotationSharedOn}">Quotation SharedOn</th>
                             <th th:text="#{ageing}">Ageing</th>
                             <th th:text="#{agentName}">Agent Name</th>
                             <th th:text="#{proposerName}">Proposer Name</th>
@@ -146,15 +164,20 @@
                             <!--/*/ <th:block th:each="quotation : ${searchResult}"> /*/-->
                             <tr>
                                 <td>
-                                    <input type="radio" name="quotationNumber" th:value="${quotation.quotationId}" value="5100000010315"/>
-                                    <input type="hidden" name="quotationStatus" th:value="${quotation.quotationStatus}"/>
+                                    <input type="radio" name="quotationNumber" th:value="${quotation.quotationId}"
+                                           value="5100000010315"/>
+                                    <input type="hidden" name="quotationStatus"
+                                           th:value="${quotation.quotationStatus}"/>
                                 </td>
                                 <td th:text="${quotation.quotationNumber}">5100000010315</td>
                                 <td th:if="${quotation.quotationGeneratedOn!=null}"><span
-                                        th:text="${#dates.format(quotation.quotationGeneratedOn,'dd/MM/yyyy')}"></span></td>
-
-                                <td th:if="${quotation.quotationGeneratedOn==null}">
-                                        </td>
+                                        th:text="${#dates.format(quotation.quotationGeneratedOn,'dd/MM/yyyy')}"></span>
+                                </td>
+                                <td th:if="${quotation.quotationGeneratedOn==null}"></td>
+                                <td th:if="${quotation.quotationSharedOn!=null}"><span
+                                        th:text="${#dates.format(quotation.quotationSharedOn,'dd/MM/yyyy')}"></span>
+                                </td>
+                                <td th:if="${quotation.quotationSharedOn==null}"></td>
                                 <td th:text="${quotation.ageing}"></td>
                                 <td th:text="${quotation.agentName}">Agent Name</td>
                                 <td th:text="${quotation.proposeName}"></td>
@@ -163,7 +186,7 @@
                             </tr>
                             <!--/*-->
                             <tr>
-                                <td><input type="radio" name="quotationNumber"  value="5100000020415"/></td>
+                                <td><input type="radio" name="quotationNumber" value="5100000020415"/></td>
                                 <td>5100000020415</td>
                                 <td>06/04/2015</td>
                                 <td>ZPC</td>
@@ -173,7 +196,7 @@
                                 <td>002</td>
                             </tr>
                             <tr>
-                                <td><input type="radio" name="quotationNumber"  value="5100000030515"/></td>
+                                <td><input type="radio" name="quotationNumber" value="5100000030515"/></td>
                                 <td>5100000030515</td>
                                 <td>06/05/2015</td>
                                 <td>Pla</td>

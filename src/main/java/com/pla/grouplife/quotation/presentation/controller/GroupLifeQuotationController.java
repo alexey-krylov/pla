@@ -225,6 +225,14 @@ public class GroupLifeQuotationController {
         return modelAndView;
     }
 
+    @RequestMapping(value = "/openemailquotationwosplit/{quotationId}", method = RequestMethod.GET)
+    public ModelAndView openEmailPageWOSplit(@PathVariable("quotationId") String quotationId) {
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("pla/quotation/groupLife/emailQuotationWOSplit");
+        modelAndView.addObject("mailContent", glQuotationService.getPreScriptedEmail(quotationId));
+        return modelAndView;
+    }
+
     @RequestMapping(value = "/emailQuotation", method = RequestMethod.POST)
     @ResponseBody
     public Result emailQuotation(@RequestBody GLQuotationMailDto mailDto, BindingResult bindingResult) {
@@ -234,6 +242,7 @@ public class GroupLifeQuotationController {
         try {
             byte[] quotationData = glQuotationService.getQuotationPDF(mailDto.getQuotationId(), false);
             emailQuotation(quotationData, mailDto);
+            commandGateway.sendAndWait(new ShareGLQuotationCommand(new QuotationId(mailDto.getQuotationId())));
             return Result.success("Email sent successfully");
 
         } catch (Exception e) {
@@ -251,6 +260,7 @@ public class GroupLifeQuotationController {
         try {
             byte[] quotationData = glQuotationService.getQuotationPDF(mailDto.getQuotationId(), true);
             emailQuotation(quotationData, mailDto);
+            commandGateway.sendAndWait(new ShareGLQuotationCommand(new QuotationId(mailDto.getQuotationId())));
             return Result.success("Email sent successfully");
 
         } catch (Exception e) {
@@ -281,6 +291,7 @@ public class GroupLifeQuotationController {
         outputStream.write(glQuotationService.getQuotationPDF(quotationId, false));
         outputStream.flush();
         outputStream.close();
+        commandGateway.sendAndWait(new ShareGLQuotationCommand(new QuotationId(quotationId)));
     }
 
     @RequestMapping(value = "/printquotationwithoutsplit/{quotationId}", method = RequestMethod.GET)
@@ -292,6 +303,7 @@ public class GroupLifeQuotationController {
         outputStream.write(glQuotationService.getQuotationPDF(quotationId, true));
         outputStream.flush();
         outputStream.close();
+        commandGateway.sendAndWait(new ShareGLQuotationCommand(new QuotationId(quotationId)));
     }
 
 

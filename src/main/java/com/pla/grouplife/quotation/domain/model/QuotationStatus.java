@@ -5,5 +5,5 @@ package com.pla.grouplife.quotation.domain.model;
  */
 public enum QuotationStatus {
 
-    DRAFT, GENERATED, CLOSED, PURGED, DECLINED
+    DRAFT, GENERATED, CLOSED, PURGED, DECLINED,SHARED
 }
