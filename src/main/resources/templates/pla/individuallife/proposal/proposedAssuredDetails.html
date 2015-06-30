@@ -10,7 +10,7 @@
             <div class="col-md-12">
                <!--<button type="button" class="btn btn-default btn-xs pull-right" ng-click="openAgentModal()" style="margin-bottom: 5px"><strong>Add Agent</strong></button>-->
                 <p style="color:red" ng-show="agentAlert">
-                    Sum of Commission % is not 100..Please Update Commission % to Ensure it Should be 100
+                    Sum of commission % is not 100..Please update commission % to ensure it should be 100
                 </p>
                 <button type="button" class="btn btn-default btn-xs pull-right"
                         data-toggle="modal" data-target="#agentModal" style="margin-bottom: 5px"><strong>Add Agent</strong>
@@ -30,7 +30,7 @@
                         <td>{{row.firstName+ ' ' + (row.lastName !=null ?(row.lastName + ' ') : '')}}</td>
                         <!--<td contenteditable="true" ng-model ="row.commission" >{{row.commission}}</td>-->
                         <td>
-                            <textarea contenteditable="updateFlag" ng-model="row.commission" value="{{row.commission}}" ng-blur="test(row)" />
+                            <input type="text" contenteditable="updateFlag" ng-model="row.commission" value="{{row.commission}}" ng-blur="test(row)" />
                           <!-- <div contenteditable="true" ng-model="row.update" ng-blur="test(row)" ng-change="test(row)" >{{row.commission}}</div>-->
                         </td>
 
@@ -85,9 +85,9 @@
 
                     <div class="error" ng-messages="proposedAssuredDetails.mobileNumber.$error" ng-if="proposedAssuredDetails.mobileNumber.$dirty">
                         <small class="error" ng-message="required">Please enter Mobile Number</small>
+                        <small ng-message="pattern">Only numeric are allowed.</small>
                         <small ng-message="maxlength">Only 10 number are allowed.</small>
                         <small ng-message="minlength">Minimum 10 number are allowed.</small>
-                        <small ng-message="pattern">Only numeric are allowed.</small>
                     </div>
                 </div>
                 <div class="form-group required">
@@ -126,25 +126,25 @@
                 </div>
 
                 <div class="form-group required">
-                    <label class="control-label">dateOfBirth</label>
-                    <div class='input-group date'>
-                        <input type="text" class="form-control input-sm"
-                               datepicker-popup="" view-enabled=""
-                               ng-required="true"
-                               is-open="launchdob"
-                               max-date="todayDate"
-                               ng-model="proposedAssured.dateOfBirth" name="dob" ng-blur="showDob(proposedAssured.dateOfBirth)"/>
+                <label class="control-label">Date Of Birth</label>
+                <div class='input-group date'>
+                    <input type="text" class="form-control input-sm"
+                           datepicker-popup="" view-enabled=""
+                           ng-required="true"
+                           is-open="launchdob"
+                           max-date="todayDate"
+                           ng-model="proposedAssured.dateOfBirth" name="dob" ng-blur="showDob(proposedAssured.dateOfBirth)"/>
                                     <span class="input-group-btn">
                                     <button type="button" class="btn btn-default btn-sm"
                                             ng-click="launchProposedAssuredeDob($event)">
                                         <i class="glyphicon glyphicon-calendar"></i></button>
                                   </span>
-                    </div>
-                    <div class="error" ng-messages="proposedAssuredDetails.dob.$error" ng-if="proposedAssuredDetails.dob.$dirty">
-                        <small ng-message="required">Please enter Employment Date.</small>
-                        <small ng-message="date">Invalid Date.</small>
-                    </div>
                 </div>
+                <div class="error" ng-messages="proposedAssuredDetails.dob.$error" ng-if="proposedAssuredDetails.dob.$dirty">
+                    <small ng-message="required">Please enter Employment Date.</small>
+                    <small ng-message="date">Invalid Date.</small>
+                </div>
+            </div>
 
                 <div class="form-group required">
                     <label class="control-label">Sex</label>

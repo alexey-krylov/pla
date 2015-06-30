@@ -27,7 +27,7 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
             };
 
 
-            $scope.selectedWizard = 1;
+            $scope.selectedWizard = 5;
             $scope.proposedAssured = {
                 "title": null,
                 "firstName": null,
@@ -60,6 +60,16 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
                 $scope.proposedAssured.nextDob= moment().diff(new moment(new Date(dob)), 'years') + 1;
 
             };
+
+            $scope.showProposerDob=function(dob)
+            {
+                console.log('Dob Calculation..');
+                console.log('DOB' + JSON.stringify(dob));
+                $scope.proposer.nextDob= moment().diff(new moment(new Date(dob)), 'years') + 1;
+
+            };
+
+
 
             $scope.proposalPlanDetail ={};
             $scope.savePlanDetail=function()
@@ -162,7 +172,14 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
             $scope.launchProposerDate = function ($event) {
                 $event.preventDefault();
                 $event.stopPropagation();
-                $scope.launchdob1 = true;
+                $scope.launchdob2 = true;
+            };
+
+            $scope.launchProposerEmpDate=function($event)
+            {
+                $event.preventDefault();
+                $event.stopPropagation();
+                $scope.launchdob3 = true;
             };
 
             $scope.$watchGroup(['employment.province', 'residentialAddress.province', 'proposerEmployment.province', 'proposerResidential.province'], function (newVal, oldVal) {
@@ -290,8 +307,11 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
                  });
 
             };
-         $scope.proposalId=null;
-
+            $scope.proposal=
+            {
+                "msg":null,
+                "proposalId":null
+            };
             $scope.saveProposedAssuredDetails = function () {
                 //ProposalService.saveProposedAssured($scope.proposedAssured, $scope.proposedAssuredSpouse, $scope.paemployment, $scope.paresidential, proposedAssuredAsProposer, null);
                 var request = {
@@ -342,15 +362,21 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
                     "residentialAddress": $scope.proposerResidential
                 };
                 prorequest=angular.extend($scope.proposer,prorequest);
-                prorequest={proposer:prorequest};
+                prorequest=
+                {
+                    proposer:prorequest,
+                    "proposalId":$scope.proposal.proposalId
+                };
                 console.log('ProRequest' +JSON.stringify(prorequest));
 
-                var request1={
+               /* var request1={
                     "proposer":$scope.proposedAssured,
                     "proposalId":$scope.proposal.proposalId
-                }
+                }*/
 
-                $http.post('updateproposer', request1);
+                //console.log('Save Proposer'+JSON.stringify(request1));
+
+                //$http.post('updateproposer', prorequest);
             };
 
 
