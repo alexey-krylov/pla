@@ -89,7 +89,7 @@ public class GLQuotationFinder {
     }
 
     public List<Map> searchQuotation(String quotationNumber) {
-        List<Map> quotations = searchQuotation(quotationNumber, null, null, null, null, new String[]{"GENERATED"});
+        List<Map> quotations = searchQuotation(quotationNumber, null, null, null, null, new String[]{"GENERATED","SHARED"});
         return quotations;
     }
 

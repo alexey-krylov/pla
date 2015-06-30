@@ -60,7 +60,7 @@ public class GroupHealthQuotationSaga extends AbstractAnnotatedSaga {
 
     @StartSaga
     @SagaEventHandler(associationProperty = "quotationId")
-    public void handle(GHQuotationGeneratedEvent event) throws ProcessInfoException {
+    public void handle(GHQuotationSharedEvent event) throws ProcessInfoException {
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("Handling GH Quotation Generated Event .....", event);
         }
@@ -68,10 +68,10 @@ public class GroupHealthQuotationSaga extends AbstractAnnotatedSaga {
         int noOfDaysToClosure = processInfoAdapter.getClosureTimePeriod(LineOfBusinessEnum.GROUP_HEALTH, ProcessType.QUOTATION);
         int firstReminderDay = processInfoAdapter.getDaysForFirstReminder(LineOfBusinessEnum.GROUP_HEALTH, ProcessType.QUOTATION);
         GroupHealthQuotation groupHealthQuotation = ghQuotationRepository.findOne(event.getQuotationId());
-        LocalDate quotationGeneratedDate = groupHealthQuotation.getGeneratedOn();
-        LocalDate firstReminderDate = quotationGeneratedDate.plusDays(firstReminderDay);
-        LocalDate purgeDate = quotationGeneratedDate.plusDays(noOfDaysToPurge);
-        LocalDate closureDate = quotationGeneratedDate.plusDays(noOfDaysToClosure);
+        LocalDate quotationSharedDate = groupHealthQuotation.getSharedOn();
+        LocalDate firstReminderDate = quotationSharedDate.plusDays(firstReminderDay);
+        LocalDate purgeDate = quotationSharedDate.plusDays(noOfDaysToPurge);
+        LocalDate closureDate = quotationSharedDate.plusDays(noOfDaysToClosure);
         DateTime purgeScheduleDateTime = purgeDate.toDateTimeAtStartOfDay();
         DateTime closureScheduleDateTime = closureDate.toDateTimeAtStartOfDay();
         DateTime firstReminderDateTime = firstReminderDate.toDateTimeAtStartOfDay();
@@ -113,8 +113,8 @@ public class GroupHealthQuotationSaga extends AbstractAnnotatedSaga {
             if (this.noOfReminderSent == 1) {
                 int firstReminderDay = processInfoAdapter.getDaysForFirstReminder(LineOfBusinessEnum.GROUP_HEALTH, ProcessType.QUOTATION);
                 int secondReminderDay = processInfoAdapter.getDaysForSecondReminder(LineOfBusinessEnum.GROUP_HEALTH, ProcessType.QUOTATION);
-                LocalDate quotationGeneratedDate = groupHealthQuotation.getGeneratedOn();
-                LocalDate secondReminderDate = quotationGeneratedDate.plusDays(firstReminderDay + secondReminderDay);
+                LocalDate quotationSharedDate = groupHealthQuotation.getSharedOn();
+                LocalDate secondReminderDate = quotationSharedDate.plusDays(firstReminderDay + secondReminderDay);
                 DateTime secondReminderDateTime = secondReminderDate.toDateTimeAtStartOfDay();
                 ScheduleToken secondReminderScheduleToken = eventScheduler.schedule(secondReminderDateTime, new GHQuotationReminderEvent(event.getQuotationId()));
                 scheduledTokens.add(secondReminderScheduleToken);

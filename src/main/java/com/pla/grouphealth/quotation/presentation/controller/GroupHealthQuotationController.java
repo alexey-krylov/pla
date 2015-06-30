@@ -3,7 +3,8 @@ package com.pla.grouphealth.quotation.presentation.controller;
 import com.google.common.collect.Lists;
 import com.pla.grouphealth.quotation.application.command.*;
 import com.pla.grouphealth.quotation.application.service.GHQuotationService;
-import com.pla.grouphealth.quotation.query.*;
+import com.pla.grouphealth.quotation.presentation.dto.GLQuotationMailDto;
+import com.pla.grouphealth.quotation.query.GHQuotationFinder;
 import com.pla.grouphealth.sharedresource.dto.AgentDetailDto;
 import com.pla.grouphealth.sharedresource.dto.GHInsuredDto;
 import com.pla.grouphealth.sharedresource.dto.GHPremiumDetailDto;
@@ -19,6 +20,7 @@ import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.poifs.filesystem.POIFSFileSystem;
 import org.apache.poi.util.IOUtils;
 import org.axonframework.commandhandling.gateway.CommandGateway;
+import org.dom4j.DocumentException;
 import org.nthdimenzion.presentation.Result;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -223,29 +225,62 @@ public class GroupHealthQuotationController {
         return modelAndView;
     }
 
+
+    @RequestMapping(value = "/openemailquotationwosplit/{quotationId}", method = RequestMethod.GET)
+    public ModelAndView openEmailPageWithoutSplit(@PathVariable("quotationId") String quotationId) {
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("pla/grouphealth/quotation/emailQuotationWOSplit");
+        modelAndView.addObject("mailContent", ghQuotationService.getPreScriptedEmail(quotationId));
+        return modelAndView;
+    }
+
+
     @RequestMapping(value = "/emailQuotation", method = RequestMethod.POST)
     @ResponseBody
-    public Result emailQuotation(@RequestBody com.pla.grouphealth.quotation.presentation.dto.GLQuotationMailDto mailDto, BindingResult bindingResult) {
+    public Result emailQuotation(@RequestBody GLQuotationMailDto mailDto, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             return Result.failure("Email cannot be sent due to wrong data");
         }
         try {
-            byte[] quotationData = ghQuotationService.getQuotationPDF(mailDto.getQuotationId());
-            String fileName = "QuotationNo-" + mailDto.getQuotationNumber() + ".pdf";
-            File file = new File(fileName);
-            FileOutputStream fileOutputStream = new FileOutputStream(file);
-            fileOutputStream.write(quotationData);
-            fileOutputStream.flush();
-            fileOutputStream.close();
-            EmailAttachment emailAttachment = new EmailAttachment(fileName, "application/pdf", file);
-            mailService.sendMailWithAttachment(mailDto.getSubject(), mailDto.getMailContent(), Arrays.asList(emailAttachment), mailDto.getRecipientMailAddress());
-            file.delete();
+            byte[] quotationData = ghQuotationService.getQuotationPDF(mailDto.getQuotationId(), false);
+            emailQuotation(quotationData, mailDto);
+            commandGateway.send(new GHSharedQuotationCommand(new QuotationId(mailDto.getQuotationId())));
             return Result.success("Email sent successfully");
 
         } catch (Exception e) {
             Result.failure(e.getMessage());
         }
         return Result.success("Email sent successfully");
+    }
+
+    @RequestMapping(value = "/emailQuotationwosplit", method = RequestMethod.POST)
+    @ResponseBody
+    public Result emailQuotationWithoutSplit(@RequestBody GLQuotationMailDto mailDto, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            return Result.failure("Email cannot be sent due to wrong data");
+        }
+        try {
+            byte[] quotationData = ghQuotationService.getQuotationPDF(mailDto.getQuotationId(), true);
+            emailQuotation(quotationData, mailDto);
+            commandGateway.send(new GHSharedQuotationCommand(new QuotationId(mailDto.getQuotationId())));
+            return Result.success("Email sent successfully");
+
+        } catch (Exception e) {
+            Result.failure(e.getMessage());
+        }
+        return Result.success("Email sent successfully");
+    }
+
+    private void emailQuotation(byte[] quotationData, GLQuotationMailDto mailDto) throws IOException, DocumentException {
+        String fileName = "QuotationNo-" + mailDto.getQuotationNumber() + ".pdf";
+        File file = new File(fileName);
+        FileOutputStream fileOutputStream = new FileOutputStream(file);
+        fileOutputStream.write(quotationData);
+        fileOutputStream.flush();
+        fileOutputStream.close();
+        EmailAttachment emailAttachment = new EmailAttachment(fileName, "application/pdf", file);
+        mailService.sendMailWithAttachment(mailDto.getSubject(), mailDto.getMailContent(), Arrays.asList(emailAttachment), mailDto.getRecipientMailAddress());
+        file.delete();
     }
 
 
@@ -255,9 +290,22 @@ public class GroupHealthQuotationController {
         response.setContentType("application/pdf");
         response.setHeader("content-disposition", "attachment; filename=" + "GHQuotation.pdf" + "");
         OutputStream outputStream = response.getOutputStream();
-        outputStream.write(ghQuotationService.getQuotationPDF(quotationId));
+        outputStream.write(ghQuotationService.getQuotationPDF(quotationId, false));
         outputStream.flush();
         outputStream.close();
+        commandGateway.send(new GHSharedQuotationCommand(new QuotationId(quotationId)));
+    }
+
+    @RequestMapping(value = "/printquotationwosplit/{quotationId}", method = RequestMethod.GET)
+    public void printQuotationWithoutSplit(@PathVariable("quotationId") String quotationId, HttpServletResponse response) throws IOException, JRException {
+        response.reset();
+        response.setContentType("application/pdf");
+        response.setHeader("content-disposition", "attachment; filename=" + "GHQuotation.pdf" + "");
+        OutputStream outputStream = response.getOutputStream();
+        outputStream.write(ghQuotationService.getQuotationPDF(quotationId, true));
+        outputStream.flush();
+        outputStream.close();
+        commandGateway.send(new GHSharedQuotationCommand(new QuotationId(quotationId)));
     }
 
 

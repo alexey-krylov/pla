@@ -3,7 +3,7 @@ package com.pla.grouphealth.quotation.domain.model;
 import com.pla.core.domain.model.agent.AgentId;
 import com.pla.grouphealth.quotation.domain.event.GHQuotationClosedEvent;
 import com.pla.grouphealth.quotation.domain.event.GHQuotationEndSagaEvent;
-import com.pla.grouphealth.quotation.domain.event.GHQuotationGeneratedEvent;
+import com.pla.grouphealth.quotation.domain.event.GHQuotationSharedEvent;
 import com.pla.grouphealth.sharedresource.model.vo.*;
 import com.pla.sharedkernel.event.GHProposerAddedEvent;
 import com.pla.sharedkernel.identifier.OpportunityId;
@@ -56,6 +56,8 @@ public class GroupHealthQuotation extends AbstractAggregateRoot<QuotationId> imp
     private QuotationId parentQuotationId;
 
     private GHPremiumDetail premiumDetail;
+
+    private LocalDate sharedOn;
 
     private GroupHealthQuotation(String quotationCreator, String quotationNumber, QuotationId quotationId, AgentId agentId, GHProposer proposer, GHQuotationStatus quotationStatus, int versionNumber) {
         checkArgument(isNotEmpty(quotationCreator));
@@ -146,7 +148,14 @@ public class GroupHealthQuotation extends AbstractAggregateRoot<QuotationId> imp
                     proposerContactDetail.getAddressLine1(), proposerContactDetail.getAddressLine2(), proposerContactDetail.getPostalCode(),
                     proposerContactDetail.getProvince(), proposerContactDetail.getTown(), proposerContactDetail.getEmailAddress()));
         }
-        registerEvent(new GHQuotationGeneratedEvent(quotationId));
+    }
+
+    public void shareQuotation(LocalDate sharedOn) {
+        if (GHQuotationStatus.GENERATED.equals(this.getQuotationStatus())) {
+            this.sharedOn = sharedOn;
+            this.quotationStatus=GHQuotationStatus.SHARED;
+            registerEvent(new GHQuotationSharedEvent(quotationId));
+        }
     }
 
     public GroupHealthQuotation updateWithOpportunityId(OpportunityId opportunityId) {
@@ -160,7 +169,7 @@ public class GroupHealthQuotation extends AbstractAggregateRoot<QuotationId> imp
 
     @Override
     public boolean requireVersioning() {
-        return GHQuotationStatus.GENERATED.equals(this.quotationStatus);
+        return (GHQuotationStatus.GENERATED.equals(this.quotationStatus) || GHQuotationStatus.SHARED.equals(this.quotationStatus));
     }
 
     public GroupHealthQuotation cloneQuotation(String quotationNumber, String quotationCreator, QuotationId quotationId, int versionNumber, QuotationId parentQuotationId) {
@@ -194,6 +203,19 @@ public class GroupHealthQuotation extends AbstractAggregateRoot<QuotationId> imp
         totalInsuredPremiumAmount = totalInsuredPremiumAmount.setScale(2, BigDecimal.ROUND_CEILING);
         return totalInsuredPremiumAmount;
     }
+
+    public BigDecimal getNetAnnualPremiumPaymentAmountWithOutDiscountAndVAT(GHPremiumDetail premiumDetail) {
+        BigDecimal totalInsuredPremiumAmount = this.getTotalBasicPremiumForInsured();
+        BigDecimal addOnBenefitAmount = premiumDetail.getAddOnBenefit() == null ? BigDecimal.ZERO : totalInsuredPremiumAmount.multiply((premiumDetail.getAddOnBenefit().divide(new BigDecimal(100))));
+        totalInsuredPremiumAmount = totalInsuredPremiumAmount.add(addOnBenefitAmount);
+        BigDecimal profitAndSolvencyAmount = premiumDetail.getProfitAndSolvency() == null ? BigDecimal.ZERO : totalInsuredPremiumAmount.multiply((premiumDetail.getProfitAndSolvency().divide(new BigDecimal(100))));
+        totalInsuredPremiumAmount = totalInsuredPremiumAmount.add(profitAndSolvencyAmount);
+        BigDecimal waiverOfExcessLoading = premiumDetail.getWaiverOfExcessLoading() == null ? BigDecimal.ZERO : totalInsuredPremiumAmount.multiply((premiumDetail.getWaiverOfExcessLoading().divide(new BigDecimal(100))));
+        totalInsuredPremiumAmount = totalInsuredPremiumAmount.add(waiverOfExcessLoading);
+        totalInsuredPremiumAmount = totalInsuredPremiumAmount.setScale(2, BigDecimal.ROUND_CEILING);
+        return totalInsuredPremiumAmount;
+    }
+
 
     public Integer getTotalNoOfLifeCovered() {
         Integer totalNoOfLifeCovered = insureds.size();

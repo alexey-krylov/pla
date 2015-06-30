@@ -32,42 +32,46 @@ function IsValidEmail(email) {
     var regex = /^([a-zA-Z0-9_.+-])+\@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/;
     return regex.test(email);
 }
-function sendEmail() {
+function sendEmail(withoutSplit) {
     var toAddress = $('#to').val();
     var subject = $('#subject').val();
     var mailContent = $('#mailContent').val();
     var quotationId = $('#quotationId').val();
-    var quotationNumber=$('#quotationNumber').val();
-    if(toAddress == undefined || toAddress=='' || toAddress.length==0){
+    var quotationNumber = $('#quotationNumber').val();
+    if (toAddress == undefined || toAddress == '' || toAddress.length == 0) {
         alert('Please enter email address.');
         return;
     }
-    var recipientMailAddress=toAddress.split(';');
-    var i=0;
-    for(;i<recipientMailAddress.length;i++){
-        if(!IsValidEmail(recipientMailAddress[i])){
+    var recipientMailAddress = toAddress.split(';');
+    var i = 0;
+    for (; i < recipientMailAddress.length; i++) {
+        if (!IsValidEmail(recipientMailAddress[i])) {
             alert('Please enter a valid email address.');
             return;
         }
     }
+    var emailUrl = '/pla/quotation/grouphealth/emailQuotation';
+    if ('true' == withoutSplit) {
+        emailUrl = '/pla/quotation/grouphealth/emailQuotationwosplit';
+    }
 
     $.ajax({
-            url: '/pla/quotation/grouphealth/emailQuotation',
-            type: 'POST',
-            data: JSON.stringify({
-                recipientMailAddress: toAddress.split(';'), subject: subject, mailContent:mailContent,
-                quotationId:quotationId,quotationNumber:quotationNumber
-            }),
-            contentType: 'application/json; charset=utf-8',
-            success: function (msg) {
-                if (msg.status == '200') {
-                    $('#alert-modal-success').modal('show');
+        url: emailUrl,
+        type: 'POST',
+        data: JSON.stringify({
+            recipientMailAddress: toAddress.split(';'), subject: subject, mailContent: mailContent,
+            quotationId: quotationId, quotationNumber: quotationNumber
+        }),
+        contentType: 'application/json; charset=utf-8',
+        success: function (msg) {
+            if (msg.status == '200') {
+                $('#alert-modal-success').modal('show');
 
-                    $('#alert-modal-success').on('hidden.bs.modal', function (){
-                        window.close();
-                    });
-                }
+                $('#alert-modal-success').on('hidden.bs.modal', function () {
+                    window.close();
+                });
             }
-        });
+        }
+    });
 }
 //});

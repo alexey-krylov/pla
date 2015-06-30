@@ -37,40 +37,40 @@ function sendEmail(withoutslipt) {
     var subject = $('#subject').val();
     var mailContent = $('#mailContent').val();
     var quotationId = $('#quotationId').val();
-    var quotationNumber=$('#quotationNumber').val();
-    if(toAddress == undefined || toAddress=='' || toAddress.length==0){
+    var quotationNumber = $('#quotationNumber').val();
+    if (toAddress == undefined || toAddress == '' || toAddress.length == 0) {
         alert('Please enter email address.');
         return;
     }
-    var recipientMailAddress=toAddress.split(';');
-    var i=0;
-    for(;i<recipientMailAddress.length;i++){
-        if(!IsValidEmail(recipientMailAddress[i])){
+    var recipientMailAddress = toAddress.split(';');
+    var i = 0;
+    for (; i < recipientMailAddress.length; i++) {
+        if (!IsValidEmail(recipientMailAddress[i])) {
             alert('Please enter a valid email address.');
             return;
         }
     }
-    var emailUrl='/pla/quotation/grouplife/emailQuotation';
-    if(withoutslipt){
-        emailUrl='/pla/quotation/grouplife/emailQuotationwithoutsplit';
+    var emailUrl = '/pla/quotation/grouplife/emailQuotation';
+    if ('true' == withoutslipt) {
+        emailUrl = '/pla/quotation/grouplife/emailQuotationwithoutsplit';
     }
     $.ajax({
-            url: emailUrl,
-            type: 'POST',
-            data: JSON.stringify({
-                recipientMailAddress: toAddress.split(';'), subject: subject, mailContent:mailContent,
-                quotationId:quotationId,quotationNumber:quotationNumber
-            }),
-            contentType: 'application/json; charset=utf-8',
-            success: function (msg) {
-                if (msg.status == '200') {
-                    $('#alert-modal-success').modal('show');
+        url: emailUrl,
+        type: 'POST',
+        data: JSON.stringify({
+            recipientMailAddress: toAddress.split(';'), subject: subject, mailContent: mailContent,
+            quotationId: quotationId, quotationNumber: quotationNumber
+        }),
+        contentType: 'application/json; charset=utf-8',
+        success: function (msg) {
+            if (msg.status == '200') {
+                $('#alert-modal-success').modal('show');
 
-                    $('#alert-modal-success').on('hidden.bs.modal', function (){
-                        window.close();
-                    });
-                }
+                $('#alert-modal-success').on('hidden.bs.modal', function () {
+                    window.close();
+                });
             }
-        });
+        }
+    });
 }
 //});

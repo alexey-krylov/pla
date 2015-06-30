@@ -34,7 +34,7 @@
                         <div class="row">
                             <div class="col-md-3">
                                 <button type="button" class="btn btn-success btn-xs"
-                                        onclick="javascript:sendEmail('false')">Send Email
+                                        onclick="javascript:sendEmail('true')">Send Email
                                 </button>
                             </div>
                         </div>
@@ -82,7 +82,7 @@
                         </div>
                         <div class="row">
                             <div class="col-md-12">
-                                <a th:href="@{/quotation/grouphealth/printquotation/{quotationId}(quotationId=${mailContent.quotationId})}">
+                                <a th:href="@{/quotation/grouphealth/printquotationwosplit/{quotationId}(quotationId=${mailContent.quotationId})}">
                                     <span class="glyphicon glyphicon-file" style="font-size: 18px"></span>
                                     <label th:utext="${mailContent.subject}+'.PDF'"></label>
                                 </a>

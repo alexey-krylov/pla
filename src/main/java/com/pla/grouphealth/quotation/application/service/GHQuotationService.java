@@ -83,8 +83,8 @@ public class GHQuotationService {
         return pdfData;
     }
 
-    public byte[] getQuotationPDF(String quotationId) throws IOException, JRException {
-        GHQuotationDetailDto ghQuotationDetailDto = getGlQuotationDetailForPDF(quotationId);
+    public byte[] getQuotationPDF(String quotationId, boolean withOutSplit) throws IOException, JRException {
+        GHQuotationDetailDto ghQuotationDetailDto = getGlQuotationDetailForPDF(quotationId, withOutSplit);
         byte[] pdfData = PDFGeneratorUtils.createPDFReportByList(Arrays.asList(ghQuotationDetailDto), "jasperpdf/template/grouphealth/quotation/ghQuotation.jrxml");
         return pdfData;
     }
@@ -109,7 +109,7 @@ public class GHQuotationService {
     }
 
     //TODO Need to change the JASPER Field Key as per the object property and then use BeanUtils to copy object properties
-    private GHQuotationDetailDto getGlQuotationDetailForPDF(String quotationId) {
+    private GHQuotationDetailDto getGlQuotationDetailForPDF(String quotationId, boolean withOutSplit) {
         GHQuotationDetailDto ghQuotationDetailDto = new GHQuotationDetailDto();
         GroupHealthQuotation quotation = ghQuotationRepository.findOne(new QuotationId(quotationId));
         AgentDetailDto agentDetailDto = getAgentDetail(new QuotationId(quotationId));
@@ -134,16 +134,16 @@ public class GHQuotationService {
 
         GHPremiumDetail premiumDetail = quotation.getPremiumDetail();
         ghQuotationDetailDto.setCoveragePeriod(premiumDetail.getPolicyTermValue() != null ? premiumDetail.getPolicyTermValue().toString() + "  days" : "");
-        ghQuotationDetailDto.setProfitAndSolvencyLoading(premiumDetail.getProfitAndSolvency() != null ? premiumDetail.getProfitAndSolvency().toString() + "%" : "");
+        ghQuotationDetailDto.setProfitAndSolvencyLoading((!withOutSplit && premiumDetail.getProfitAndSolvency() != null) ? premiumDetail.getProfitAndSolvency().toString() + "%" : "");
         ghQuotationDetailDto.setAdditionalDiscountLoading(premiumDetail.getDiscount() != null ? premiumDetail.getDiscount().toString() + "%" : "");
-        ghQuotationDetailDto.setAddOnBenefits(premiumDetail.getAddOnBenefit() != null ? premiumDetail.getAddOnBenefit().toString() + "%" : "");
-        ghQuotationDetailDto.setAddOnBenefitsPercentage(premiumDetail.getAddOnBenefit() != null ? premiumDetail.getAddOnBenefit().toString() + "%" : "");
-        ghQuotationDetailDto.setWaiverOfExcessLoadings(premiumDetail.getWaiverOfExcessLoading() != null ? premiumDetail.getWaiverOfExcessLoading().toString() + "%" : "");
+        ghQuotationDetailDto.setAddOnBenefits((!withOutSplit && premiumDetail.getAddOnBenefit() != null) ? premiumDetail.getAddOnBenefit().toString() + "%" : "");
+        ghQuotationDetailDto.setAddOnBenefitsPercentage((!withOutSplit && premiumDetail.getAddOnBenefit() != null) ? premiumDetail.getAddOnBenefit().toString() + "%" : "");
+        ghQuotationDetailDto.setWaiverOfExcessLoadings((!withOutSplit && premiumDetail.getWaiverOfExcessLoading() != null) ? premiumDetail.getWaiverOfExcessLoading().toString() + "%" : "");
         ghQuotationDetailDto.setServiceTax(premiumDetail.getVat() != null ? premiumDetail.getVat().toString() + "%" : "");
         ghQuotationDetailDto.setWaiverOfExcessLoadingsPercentage("");
         BigDecimal totalPremiumAmount = quotation.getNetAnnualPremiumPaymentAmount(premiumDetail);
         totalPremiumAmount = totalPremiumAmount.setScale(2, BigDecimal.ROUND_CEILING);
-        BigDecimal netPremiumOfInsured = quotation.getTotalBasicPremiumForInsured();
+        BigDecimal netPremiumOfInsured = !withOutSplit ? quotation.getTotalBasicPremiumForInsured() : quotation.getNetAnnualPremiumPaymentAmountWithOutDiscountAndVAT(premiumDetail);
         netPremiumOfInsured = netPremiumOfInsured.setScale(2, BigDecimal.ROUND_CEILING);
         ghQuotationDetailDto.setNetPremium(netPremiumOfInsured.toPlainString());
         ghQuotationDetailDto.setTotalPremium(totalPremiumAmount.toPlainString());
@@ -442,13 +442,14 @@ public class GHQuotationService {
             String quotationId = map.get("_id").toString();
             AgentDetailDto agentDetailDto = getAgentDetail(new QuotationId(quotationId));
             LocalDate generatedOn = map.get("generatedOn") != null ? new LocalDate((Date) map.get("generatedOn")) : null;
+            LocalDate sharedOn = map.get("sharedOn") != null ? new LocalDate((Date) map.get("sharedOn")) : null;
             String quotationStatus = map.get("quotationStatus") != null ? (String) map.get("quotationStatus") : "";
             String quotationNumber = map.get("quotationNumber") != null ? (String) map.get("quotationNumber") : "";
             ObjectId parentQuotationIdMap = map.get("parentQuotationId") != null ? (ObjectId) map.get("parentQuotationId") : null;
             GHProposer proposerMap = map.get("proposer") != null ? (GHProposer) map.get("proposer") : null;
             String proposerName = proposerMap != null ? proposerMap.getProposerName() : "";
             String parentQuotationId = parentQuotationIdMap != null ? parentQuotationIdMap.toString() : "";
-            GlQuotationDto glQuotationDto = new GlQuotationDto(new QuotationId(quotationId), (Integer) map.get("versionNumber"), generatedOn, agentDetailDto.getAgentId(), agentDetailDto.getAgentName(), new QuotationId(parentQuotationId), quotationStatus, quotationNumber, proposerName, getIntervalInDays(generatedOn));
+            GlQuotationDto glQuotationDto = new GlQuotationDto(new QuotationId(quotationId), (Integer) map.get("versionNumber"), generatedOn, agentDetailDto.getAgentId(), agentDetailDto.getAgentName(), new QuotationId(parentQuotationId), quotationStatus, quotationNumber, proposerName, getIntervalInDays(sharedOn), sharedOn);
             return glQuotationDto;
         }
     }

@@ -141,6 +141,13 @@ public class GHQuotationCommandHandler {
         groupHealthQuotation.declineQuotation();
     }
 
+    @CommandHandler
+    public void shareGLQuotation(GHSharedQuotationCommand sharedQuotationCommand) {
+        GroupHealthQuotation groupHealthQuotation = ghQuotationMongoRepository.load(sharedQuotationCommand.getQuotationId());
+        groupHealthQuotation.shareQuotation(LocalDate.now());
+    }
+
+
     private GroupHealthQuotation populateAnnualBasicPremiumOfInsured(GroupHealthQuotation groupHealthQuotation, UserDetails userDetails, GHPremiumDetailDto premiumDetailDto) {
         if (premiumDetailDto.getPolicyTermValue() != 365) {
             Set<GHInsured> insureds = groupHealthQuotation.getInsureds();

@@ -42,6 +42,11 @@ public class GlQuotationDto {
 
     private Integer ageing;
 
+    @JsonSerialize(using = LocalJodaDateSerializer.class)
+    @JsonDeserialize(using = LocalJodaDateDeserializer.class)
+    @DateTimeFormat(pattern="dd/MM/yyyy")
+    private LocalDate sharedOn;
+
    /* public String getQuotationNumber() {
         if (versionNumber != null && versionNumber > 0) {
             return quotationNumber + "/" + versionNumber;
