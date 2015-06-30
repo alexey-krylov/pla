@@ -3,6 +3,7 @@ package com.pla.individuallife.proposal.application.command;
 import com.pla.individuallife.proposal.domain.model.*;
 import com.pla.individuallife.proposal.domain.service.ProposalNumberGenerator;
 import com.pla.individuallife.proposal.presentation.dto.ProposerDto;
+import com.pla.individuallife.proposal.presentation.dto.QuestionDto;
 import com.pla.individuallife.quotation.query.ILQuotationFinder;
 import com.pla.sharedkernel.domain.model.MaritalStatus;
 import com.pla.sharedkernel.identifier.ProposalId;
@@ -101,10 +102,10 @@ public class ILProposalCommandHandler {
     public void updateCompulsoryHealthStatement(ILUpdateCompulsoryHealthStatementCommand updateCompulsoryHealthStatementCommand) {
         ProposalAggregate proposalAggregate = null;
         ProposalId proposalId = new ProposalId(updateCompulsoryHealthStatementCommand.getProposalId());
-        List<QuestionAnswer> questionAnswerDtoList=updateCompulsoryHealthStatementCommand.getQuestions();
+        List<QuestionDto> questionDtoList=updateCompulsoryHealthStatementCommand.getCompulsoryHealthDetails();
         try {
             proposalAggregate = ilProposalMongoRepository.load(proposalId);
-            proposalAggregate.updateCompulsoryHealthStatement(questionAnswerDtoList);
+            proposalAggregate.updateCompulsoryHealthStatement(questionDtoList);
         } catch (AggregateNotFoundException e) {
             e.printStackTrace();
         }

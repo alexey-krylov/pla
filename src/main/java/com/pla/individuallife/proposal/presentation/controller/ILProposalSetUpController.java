@@ -3,9 +3,8 @@ package com.pla.individuallife.proposal.presentation.controller;
 import com.google.common.collect.Lists;
 import com.pla.core.query.PlanFinder;
 import com.pla.individuallife.proposal.application.command.*;
-import com.pla.individuallife.proposal.domain.model.QuestionAnswer;
 import com.pla.individuallife.proposal.presentation.dto.ILSearchProposalDto;
-import com.pla.individuallife.proposal.presentation.dto.QuestionAnswerDto;
+import com.pla.individuallife.proposal.presentation.dto.QuestionDto;
 import com.pla.individuallife.proposal.query.ILProposalFinder;
 import com.pla.individuallife.quotation.application.service.ILQuotationAppService;
 import com.pla.individuallife.quotation.presentation.dto.ILSearchQuotationDto;
@@ -19,7 +18,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
@@ -132,7 +134,7 @@ public class ILProposalSetUpController {
 
     @ResponseBody
     @RequestMapping(value = "/updateCompulsoryHealthStatement", method = RequestMethod.POST)
-    public ResponseEntity<List<QuestionAnswerDto>> updateCompulsoryHealthStatement(
+    public ResponseEntity<Map> updateCompulsoryHealthStatement(
             @RequestBody ILUpdateCompulsoryHealthStatementCommand cmd,
             HttpServletRequest request,
             BindingResult bindingResult) {
@@ -149,7 +151,7 @@ public class ILProposalSetUpController {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        List<QuestionAnswer> list=cmd.getQuestions();
+        List<QuestionDto> list=cmd.getCompulsoryHealthDetails();
         Map map = new HashMap<>();
         map.put("msg", "Proposal updated with Family and Personal Details successfully");
         map.put("proposalId", proposalId);
