@@ -2,10 +2,47 @@
 <html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/xhtml" lang="en">
 <head th:include="fragments/common :: headTag">
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <script src="/pla/js/proposal/individuallife/createProposal.js"></script>
+
+    <script>
+        requirejs.config({
+            paths: {
+                ilproposal_common: '/pla/js/proposal/individuallife/proposal.js?t=11221',
+                ilproposal: '/pla/js/proposal/individuallife/createProposal.js?t=12121'
+            },
+            "shim": {"ilproposal": ["angular", "ilproposal_common"]}
+        });
+        requirejs(['main'], function () {
+            require(['ilproposal', 'jquery'], function (app, $) {
+                angular.bootstrap(document, ['createProposal']);
+            });
+        });
+    </script>
+
     <title></title>
 </head>
 <body>
 <div th:include="fragments/common :: bodyHeader" th:remove="tag"/>
+
+<script>
+    var interval = setInterval(function () {
+        if (require.defined("basic")) {
+            requirejs(['/pla/js/proposal/individuallife/createProposal.js?t=12121'], function () {
+                $(document).ready(function () {
+                    $('#il-proposal-table').dataTable({
+                        "fnDrawCallback": function () {
+                            $("input[type=radio]").on("click", function () {
+                                viewILQuotationModule.getTheItemSelected(this);
+                            });
+                        }
+                    });
+                });
+            });
+            clearInterval(interval);
+        }
+    }, 300);
+</script>
+
 <div class="container fuelux">
         <form method="post" action="/pla/individuallife/proposal" novalidate="true" name="proposalForm"
               id="proposalForm">
@@ -59,21 +96,21 @@
                             <div class="col-md-4 col-md-offset-2">
                                 <a type="button" class="btn btn-default btn-sm btn-disabled"
                                    disabled="disabled"
-                                   onclick="viewILQuotationModule.printQuotation()">Print</a>
+                                   id="print" onclick="viewILQuotationModule.printQuotation()">Print</a>
                                 <a type="button" class="btn btn-default btn-sm btn-disabled"
-                                   disabled="disabled" onclick=""
+                                   disabled="disabled" id="emailaddress" onclick=""
                                         >Email</a>
                                 <a type="button" class="btn btn-default btn-sm btn-disabled" disabled="disabled"
                                    onclick="">Modify</a>
                                 <a type="button" class="btn btn-default btn-sm btn-disabled" disabled="disabled"
-                                   onclick="">View</a>
+                                   onclick="viewILQuotationModule.viewProposal()">View</a>
                                 <a type="button" class="btn btn-default btn-sm btn-disabled"
                                    href="proposal/edit">Create</a>
                             </div>
                         </div>
                     </div>
                     <div class="panel-body">
-                        <table class="table table-striped table-bordered" id="il-quotation-table" cellspacing="0"
+                        <table class="table table-striped table-bordered" id="il-proposal-table" cellspacing="0"
                                width="100%">
                             <thead>
                             <tr>

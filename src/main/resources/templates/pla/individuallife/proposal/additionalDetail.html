@@ -6,7 +6,7 @@
                 State name and address of your usual medical attendant(s)/Clinic Hospital
             </div>
             <div class="col-md-2">
-                <input type="text" class="form-control input-sm"/>
+                <input type="text" class="form-control input-sm" ng-model="medicalAttendant.usualdetails"/>
             </div>
         </div>
         <div class="row form-group">
@@ -14,7 +14,7 @@
                 For how long has he/she been your medical attendant?
             </div>
             <div class="col-md-2">
-                <input type="text" class="form-control input-sm"/>
+                <input type="text" class="form-control input-sm" ng-model="medicalAttendant.duration"/>
             </div>
         </div>
         <div class="row form-group">
@@ -22,10 +22,12 @@
                 Date and reason for most recent consultation. (i.e. during the last 5 years)
             </div>
             <div class="col-md-2">
-                <input type="text" class="form-control input-sm"/>
+                <input type="text" class="form-control input-sm" ng-model="medicalAttendant.mostrecentconsultationDetails"/>
             </div>
         </div>
     </div>
+    <div></div>
+    <strong>Replacement</strong>
     <accordion close-others="true">
         <div class="row" style="margin-bottom: 5px">
             <div class="col-md-10">
@@ -40,13 +42,13 @@
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label class="control-label">Name Of Office</label>
-                                    <input type="text" class="form-control input-sm"/>
+                                    <input type="text" class="form-control input-sm" ng-model="replacement.Response1"/>
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label class="control-label">Policy Number</label>
-                                    <input type="text" class="form-control input-sm"/>
+                                    <input type="text" class="form-control input-sm" ng-model="replacement.Response2"/>
                                 </div>
                             </div>
                         </div>
@@ -54,7 +56,7 @@
                 </accordion-group>
             </div>
             <div class="col-md-2">
-                <select class="form-control input-sm">
+                <select class="form-control input-sm" ng-model="replacement.answer">
                     <option value="">--Select One--</option>
                     <option value="YES">Yes</option>
                     <option value="NO">No</option>
@@ -62,4 +64,14 @@
             </div>
         </div>
     </accordion>
+        <div></div>
+        <div class="row">
+            <div class="col-sm-6">
+                <button type="button" class="btn btn-default btn-sm">Cancel</button>
+            </div>
+            <div class="col-sm-6">
+                <button type="button" class="btn btn-default btn-sm" style="float: right"
+                        ng-click="saveAdditionalDetail()">Save</button>
+            </div>
+    </div>
 </ng-form>
