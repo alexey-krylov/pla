@@ -48,6 +48,4 @@ public class NotificationTemplate {
         this.reminderFile = reminderFile;
         return this;
     }
-
-
 }

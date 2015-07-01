@@ -12,7 +12,7 @@ import org.springframework.data.mongodb.repository.Query;
 /**
  * Created by Admin on 6/24/2015.
  */
-public interface NotificationRepository extends MongoRepository<NotificationTemplate,NotificationTemplateId> {
+public interface NotificationTemplateRepository extends MongoRepository<NotificationTemplate,NotificationTemplateId> {
 
     @Query(value = "{'lineOfBusiness' : ?0,'processType':?1, 'waitingFor' :?2 ,'reminderType' : ?3}")
     public NotificationTemplate findNotification(LineOfBusinessEnum lineOfBusiness,ProcessType processType,WaitingForEnum waitingFor,ReminderTypeEnum reminderType);
