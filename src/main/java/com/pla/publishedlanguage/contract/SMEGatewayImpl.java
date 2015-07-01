@@ -31,7 +31,9 @@ public class SMEGatewayImpl implements ISMEGateway {
         nrcNumber = isNotEmpty(nrcNumber) ? nrcNumber.replaceAll("/", "").trim() : nrcNumber;
         String employeeDetailByIDAndNRCNumberURL = employeeId != null ? url + "/getemployee?employeeId=" + employeeId : url + "/getemployee?nrcNumber=" + nrcNumber;
         EmployeeDto employeeDetail = restTemplate.getForObject(employeeDetailByIDAndNRCNumberURL, EmployeeDto.class);
-        Preconditions.checkNotNull(employeeDetail);
+        if (employeeDetail==null){
+            return new EmployeeDto();
+        }
         return employeeDetail;
     }
 
