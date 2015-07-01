@@ -3,7 +3,7 @@ package com.pla.core.application.service.notification;
 import com.pla.core.domain.model.notification.NotificationRole;
 import com.pla.core.domain.model.notification.NotificationTemplate;
 import com.pla.core.domain.model.notification.NotificationTemplateId;
-import com.pla.core.repository.NotificationRepository;
+import com.pla.core.repository.NotificationTemplateRepository;
 import com.pla.sharedkernel.domain.model.ProcessType;
 import com.pla.sharedkernel.domain.model.ReminderTypeEnum;
 import com.pla.sharedkernel.domain.model.WaitingForEnum;
@@ -29,9 +29,10 @@ public class NotificationService {
 
     private EntityManager entityManager;
 
-    private NotificationRepository notificationRepository;
+    private NotificationTemplateRepository notificationTemplateRepository;
 
     private IIdGenerator idGenerator;
+
 
     @PersistenceContext
     public void setEntityManager(EntityManager entityManager) {
@@ -39,8 +40,8 @@ public class NotificationService {
     }
 
     @Autowired
-    public NotificationService(NotificationRepository notificationRepository, IIdGenerator idGenerator) {
-        this.notificationRepository = notificationRepository;
+    public NotificationService(NotificationTemplateRepository notificationTemplateRepository, IIdGenerator idGenerator) {
+        this.notificationTemplateRepository = notificationTemplateRepository;
         this.idGenerator = idGenerator;
     }
 
@@ -63,26 +64,35 @@ public class NotificationService {
         NotificationTemplate notificationTemplate = NotificationTemplate.createNotification(notificationTemplateId,lineOfBusiness, processType,
                 waitingFor, reminderType);
         notificationTemplate = notificationTemplate.withReminderFile(reminderFile);
-        notificationRepository.save(notificationTemplate);
+        notificationTemplateRepository.save(notificationTemplate);
         return AppConstants.SUCCESS;
     }
 
     public boolean reloadNotificationTemplate(String notificationId,byte[] reminderFile){
-        NotificationTemplate existedNotificationTemplate = notificationRepository.findOne(new NotificationTemplateId(notificationId));
+        NotificationTemplate existedNotificationTemplate = notificationTemplateRepository.findOne(new NotificationTemplateId(notificationId));
         if (existedNotificationTemplate==null){
             raiseErrorInReload();
         }
         existedNotificationTemplate = existedNotificationTemplate.withReminderFile(reminderFile);
-        notificationRepository.save(existedNotificationTemplate);
+        notificationTemplateRepository.save(existedNotificationTemplate);
         return AppConstants.SUCCESS;
     }
 
     public boolean isNotificationTemplateExists(LineOfBusinessEnum lineOfBusiness,ProcessType processType,WaitingForEnum waitingFor,ReminderTypeEnum reminderType){
-        NotificationTemplate notificationTemplate =  notificationRepository.findNotification(lineOfBusiness, processType, waitingFor, reminderType);
+        NotificationTemplate notificationTemplate =  notificationTemplateRepository.findNotification(lineOfBusiness, processType, waitingFor, reminderType);
         if (notificationTemplate !=null){
             return true;
         }
         return false;
     }
+
+    public byte[] getReminderFile(LineOfBusinessEnum lineOfBusiness,ProcessType processType,WaitingForEnum waitingFor,ReminderTypeEnum reminderType) {
+        NotificationTemplate notificationTemplate = notificationTemplateRepository.findNotification(lineOfBusiness, processType, waitingFor, reminderType);
+        checkArgument(notificationTemplate !=null,"Notification is not configured");
+        byte[] reminderFile =  notificationTemplate.getReminderFile();
+        return reminderFile;
+    }
+
+
 
 }

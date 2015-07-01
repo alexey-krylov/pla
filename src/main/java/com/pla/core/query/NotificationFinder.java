@@ -5,23 +5,25 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.joda.JodaModule;
 import com.pla.core.domain.model.notification.NotificationTemplate;
-import com.pla.core.repository.NotificationRepository;
+import com.pla.core.repository.NotificationTemplateRepository;
 import com.pla.sharedkernel.domain.model.ProcessType;
 import com.pla.sharedkernel.domain.model.ReminderTypeEnum;
 import com.pla.sharedkernel.domain.model.WaitingForEnum;
 import com.pla.sharedkernel.identifier.LineOfBusinessEnum;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.ColumnMapRowMapper;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Component;
 
 import javax.sql.DataSource;
 import java.io.IOException;
-import java.util.List;
-import java.util.Map;
-import java.util.Properties;
+import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+
+import static org.nthdimenzion.utils.UtilValidator.isNotEmpty;
 
 /**
  * Created by pradyumna on 18-06-2015.
@@ -31,7 +33,7 @@ public class NotificationFinder {
 
     private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
-    private NotificationRepository notificationRepository;
+    private NotificationTemplateRepository notificationTemplateRepository;
     private ObjectMapper objectMapper;
 
     @Autowired
@@ -40,8 +42,8 @@ public class NotificationFinder {
     }
 
     @Autowired
-    public NotificationFinder(NotificationRepository notificationRepository){
-        this.notificationRepository = notificationRepository;
+    public NotificationFinder(NotificationTemplateRepository notificationTemplateRepository){
+        this.notificationTemplateRepository = notificationTemplateRepository;
         objectMapper = new ObjectMapper();
         objectMapper.registerModule(new JodaModule());
         objectMapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
@@ -55,7 +57,18 @@ public class NotificationFinder {
 
     public static final String findAllNotificationRole = " SELECT role_type roleType,line_of_business lineOfBusiness,process processType FROM notification_role";
 
+    public static final String findAllNotification = "SELECT n.notification_id notificationId,n.generated_on generatedOn,n.line_of_business lineOfBusiness, " +
+            " n.process_type processType,n.reminder_template template,n.reminder_type reminderType,n.request_number requestNumber, " +
+            " n.waiting_for waitingFor FROM notification n INNER JOIN notification_role nr " +
+            " ON n.role_type=nr.role_type WHERE n.role_type in (:authorities) ";
+
+
+    public static final String findILQuotationProposerDetailQuery = "SELECT p.plan_name planName,il.proposer_email_address emailAddress,il.proposer_first_name firstName, il.proposer_surname surName, " +
+            " il.proposer_title salutation,il.quotation_number quotationNumber,il.shared_on sharedOn FROM individual_life_quotation il INNER JOIN plan_coverage_benefit_assoc p " +
+            " ON il.plan_id = p.plan_id WHERE il.quotation_id=:quotationId";
+
     private static Properties roleTypeProperties = new Properties();
+
     static {
         ClassLoader bundleClassLoader = Thread.currentThread().getContextClassLoader();
         try {
@@ -78,7 +91,7 @@ public class NotificationFinder {
     }
 
     public List<Map<String,Object>> findAllTemplates() {
-        List<NotificationTemplate> notificationTemplates = notificationRepository.findAll();
+        List<NotificationTemplate> notificationTemplates = notificationTemplateRepository.findAll();
         return notificationTemplates.parallelStream().map(new Function<NotificationTemplate, Map<String,Object>>() {
             @Override
             public Map<String,Object> apply(NotificationTemplate notificationTemplate) {
@@ -91,4 +104,20 @@ public class NotificationFinder {
             }
         }).collect(Collectors.toList());
     }
+
+    public List<Map<String,Object>> getNotificationByRole(Collection<? extends GrantedAuthority> authorities){
+        List<String> grantedAuthorities = authorities.parallelStream().map(new Function<GrantedAuthority, String>() {
+            @Override
+            public String apply(GrantedAuthority grantedAuthority) {
+                return grantedAuthority.getAuthority();
+            }
+        }).collect(Collectors.toList());
+        return namedParameterJdbcTemplate.query(findAllNotification, new MapSqlParameterSource("authorities", grantedAuthorities),new ColumnMapRowMapper());
+    }
+
+    public Map<String,Object> findILQuotationProposerDetail(String quotationId){
+        List<Map<String,Object>> quotationProposerDetail = namedParameterJdbcTemplate.query(findILQuotationProposerDetailQuery, new MapSqlParameterSource("quotationId", quotationId), new ColumnMapRowMapper());
+        return isNotEmpty(quotationProposerDetail)?quotationProposerDetail.get(0): Collections.EMPTY_MAP;
+    }
+
 }

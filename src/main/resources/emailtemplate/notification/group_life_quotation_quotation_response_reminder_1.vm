@@ -1,0 +1,29 @@
+Date: ${systemDate}
+
+${proposerName}
+${addressLine1},${addressLine2}
+${town},${province}
+
+
+Quotation Number: ${quotationNumber}
+Plan : ${planName}
+
+
+
+Subject: Quotation Reminder
+
+Dear ${proposerName},
+
+This communication is with reference to the quotation submitted under the above policy on date ${systemDate}.
+
+We wish to remind you that the quotation will expire in ${closureDays} days. Please make arrangements to sign a proposal form before the expiry date. 
+
+In case of any discrepancies in the information mentioned above or any other query, please feel free to contact us. Our Customer Services Executive will be glad to assist you. You can also write to us at xxxxx@xxxxx.co.zm
+
+We aim to serve you better.
+
+Yours Sincerely, 
+
+
+
+Manager – ${lineOfBusiness}
