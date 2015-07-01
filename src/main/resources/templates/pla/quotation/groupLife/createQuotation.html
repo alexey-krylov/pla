@@ -307,9 +307,19 @@
                                                ng-model="quotationDetails.premium.profitAndSolvencyLoading" ng-blur="recalculatePremium();" value="0"/>
                                     </div>
                                     <div class="form-group">
-                                        <label class="control-label">Discounts</label>
-                                        <input class="form-control input-sm" onkeypress="return isNumeric(event)"  name="discounts"
-                                               ng-model="quotationDetails.premium.discounts" ng-blur="recalculatePremium();" value="0"/>
+                                        <label class="control-label">HIV Discounts</label>
+                                        <input class="form-control input-sm" onkeypress="return isNumeric(event)"  name="hivDiscount"
+                                               ng-model="quotationDetails.premium.hivDiscount" ng-blur="recalculatePremium();" value="0"/>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="control-label">Valued Client Discounts</label>
+                                        <input class="form-control input-sm" onkeypress="return isNumeric(event)"  name="valuedClientDiscount"
+                                               ng-model="quotationDetails.premium.valuedClientDiscount" ng-blur="recalculatePremium();" value="0"/>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="control-label">Long Term Discounts</label>
+                                        <input class="form-control input-sm" onkeypress="return isNumeric(event)"  name="longTermDiscount"
+                                               ng-model="quotationDetails.premium.longTermDiscount" ng-blur="recalculatePremium();" value="0"/>
                                     </div>
                                 </div>
                             </div>
