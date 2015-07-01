@@ -5,6 +5,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
+import java.util.List;
+
 /**
  * Created by ASUS on 17-Jun-15.
  */
@@ -18,8 +20,5 @@ public class HabitDetails {
     private int beer;
     private int spirit;
     private int smokePerDay;
-    private Question question_17;
-    private Question question_18;
-    private Question question_19;
-    private Question question_20;
+    private List<Question> questions;
 }

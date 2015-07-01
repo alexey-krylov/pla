@@ -17,5 +17,5 @@ public class FamilyHistoryDetail {
     private ParentDetail mother;
     private SiblingsDetail brother;
     private SiblingsDetail sister;
-    private Question question_16;
+    private Question closeRelative;
 }

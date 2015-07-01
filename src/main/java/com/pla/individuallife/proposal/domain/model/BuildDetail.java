@@ -17,5 +17,5 @@ public class BuildDetail {
     private String heightType;
     private double weight;
     private String weightType;
-    private Question question_21;
+    private Question overWeightQuestion;
 }

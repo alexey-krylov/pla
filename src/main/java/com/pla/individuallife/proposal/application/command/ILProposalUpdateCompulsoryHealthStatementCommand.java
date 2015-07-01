@@ -14,7 +14,6 @@ import java.util.List;
 @Getter
 @Setter
 @NoArgsConstructor
-
 public class ILProposalUpdateCompulsoryHealthStatementCommand {
 
     private List<QuestionDto> compulsoryHealthDetails;

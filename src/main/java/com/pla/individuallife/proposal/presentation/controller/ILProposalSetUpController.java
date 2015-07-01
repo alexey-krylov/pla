@@ -153,7 +153,7 @@ public class ILProposalSetUpController {
         }
         List<QuestionDto> list=cmd.getCompulsoryHealthDetails();
         Map map = new HashMap<>();
-        map.put("msg", "Proposal updated with Family and Personal Details successfully");
+        map.put("msg", "Proposal updated with Compulsory Health Statement Details successfully");
         map.put("proposalId", proposalId);
         map.put("questions", list);
         return new ResponseEntity(map, HttpStatus.OK);
@@ -212,7 +212,7 @@ public class ILProposalSetUpController {
     }
 
     @ResponseBody
-    @RequestMapping(value = "/updateFamily", method = RequestMethod.POST)
+    @RequestMapping(value = "/updatefamily", method = RequestMethod.POST)
     public ResponseEntity updateFamilyPersonalDetails(@RequestBody ILProposalUpdateFamilyPersonalDetailsCommand cmd,HttpServletRequest request,
                                          BindingResult bindingResult) {
 
