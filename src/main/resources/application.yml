@@ -13,7 +13,7 @@ spring:
   jackson:
     dateFormat: dd/MM/yyyy
     serialization:
-      WRITE_DATE_KEYS_AS_TIMESTAMPS: false
+      WRITE_DATES_AS_TIMESTAMPS: false
 
   thymeleaf:
       check-template-location: true

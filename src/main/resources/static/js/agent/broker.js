@@ -51,7 +51,12 @@ angular.module('brokerModule', ['common', 'ngRoute', 'mgcrea.ngStrap.select', 'm
             };
 
 
-            $scope.contactPersons = [{}, {}, {}];
+            if (!$scope.agentDetails.contactPersons || $scope.agentDetails.contactPersons.length == 0)
+                $scope.agentDetails.contactPersons = [{}, {}, {}];
+
+            $scope.submit = function () {
+                console.log(JSON.stringify($scope.agentDetails));
+            }
 
         }])
     .factory('transformJson', ['formatJSDateToDDMMYYYY', function (formatJSDateToDDMMYYYY) {
@@ -166,7 +171,13 @@ angular.module('brokerModule', ['common', 'ngRoute', 'mgcrea.ngStrap.select', 'm
                     }
                 }],
                 authorisedToSell: ['$q', '$http', 'transformJson', function ($q, $http, transformJson) {
-                    return [];
+                    var deferred = $q.defer();
+                    $http.get('/pla/core/plan/getallplan').success(function (response, status, headers, config) {
+                        deferred.resolve(transformJson.toPlanIdPlanNameObject(response))
+                    }).error(function (response, status, headers, config) {
+                        deferred.reject();
+                    });
+                    return deferred.promise;
                 }],
                 provinces: ['$q', '$http', function ($q, $http) {
                     var deferred = $q.defer();
