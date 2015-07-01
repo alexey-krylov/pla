@@ -9,8 +9,6 @@ import org.nthdimenzion.ddd.domain.annotations.ValueObject;
 
 import java.math.BigDecimal;
 
-import static com.google.common.base.Preconditions.checkArgument;
-
 /**
  * Created by Samir on 4/7/2015.
  */
@@ -26,8 +24,6 @@ public class GHFrequencyPremium {
     private BigDecimal premium;
 
     public GHFrequencyPremium(PremiumFrequency premiumFrequency, BigDecimal premium) {
-        checkArgument(premiumFrequency != null);
-        checkArgument(premium != null && premium.compareTo(BigDecimal.ZERO) == 1);
         this.premiumFrequency = premiumFrequency;
         this.premium = premium;
     }
