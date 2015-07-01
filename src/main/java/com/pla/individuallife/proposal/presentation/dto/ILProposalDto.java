@@ -44,7 +44,7 @@ public class ILProposalDto {
 
     private Set<AgentDetailDto> agentCommissionDetails;
 
-    private ILProposalStatus proposalStatus;
+    private String proposalStatus;
 
 }
 
