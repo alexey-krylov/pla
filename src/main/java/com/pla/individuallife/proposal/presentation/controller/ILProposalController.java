@@ -24,7 +24,7 @@ import static com.google.common.base.Preconditions.checkArgument;
  */
 @Controller
 @RequestMapping(value = "/individuallife/proposal")
-public class ProposalController {
+public class ILProposalController {
 
     @Autowired
     private MasterFinder masterFinder;
@@ -45,6 +45,22 @@ public class ProposalController {
         modelAndView.setViewName("pla/individualLife/proposal/index");
         return modelAndView;
     }
+
+    @RequestMapping(method = RequestMethod.GET, value = "/new")
+    public ModelAndView newProposal() {
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("pla/proposal/individuallife/createProposal");
+        return modelAndView;
+    }
+
+
+    @RequestMapping(method = RequestMethod.GET, value = "/view")
+    public ModelAndView viewProposal() {
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("pla/proposal/individuallife/createProposal");
+        return modelAndView;
+    }
+
 
     @RequestMapping(method = RequestMethod.GET, value = "getproposal/{proposalId}")
     @ApiOperation(httpMethod = "GET", value = "This call for edit proposal screen.")

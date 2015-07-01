@@ -13,10 +13,10 @@ public interface ILProposalCommandGateway {
     ProposalId createProposal(ILCreateProposalCommand proposalCommand)
             throws TimeoutException, InterruptedException;
 
-    void updateCompulsoryHealthStatement(ILUpdateCompulsoryHealthStatementCommand updateCompulsoryHealthStatementCommand)
+    void updateCompulsoryHealthStatement(ILProposalUpdateCompulsoryHealthStatementCommand updateCompulsoryHealthStatementCommand)
             throws  TimeoutException,InterruptedException;
 
-    void updateFamilyPersonal(ILUpdateFamilyPersonalDetailsCommand questionCommand)
+    void updateFamilyPersonal(ILProposalUpdateFamilyPersonalDetailsCommand questionCommand)
             throws TimeoutException, InterruptedException;
 
 
@@ -24,5 +24,11 @@ public interface ILProposalCommandGateway {
             throws TimeoutException, InterruptedException;
 
     String updateWithProposer(ILProposalUpdateWithProposerCommand cmd)
+            throws TimeoutException, InterruptedException;
+
+    void updateGeneralDetails(ILProposalUpdateGeneralDetailsCommand cmd)
+            throws TimeoutException, InterruptedException;
+
+    void updateAdditionalDetails(ILProposalUpdateAdditionalDetailsCommand cmd)
             throws TimeoutException, InterruptedException;
 }

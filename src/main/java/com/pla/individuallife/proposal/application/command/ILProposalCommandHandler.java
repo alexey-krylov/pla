@@ -99,7 +99,32 @@ public class ILProposalCommandHandler {
     }
 
     @CommandHandler
-    public void updateCompulsoryHealthStatement(ILUpdateCompulsoryHealthStatementCommand updateCompulsoryHealthStatementCommand) {
+    public void updateGeneralDetails(ILProposalUpdateGeneralDetailsCommand cmd) {
+        ProposalAggregate proposalAggregate = null;
+        ProposalId proposalId = new ProposalId(cmd.getProposalId());
+        List<QuestionDto> dto = cmd.getGenerateDetails();
+        try {
+            proposalAggregate = ilProposalMongoRepository.load(proposalId);
+            proposalAggregate.updateGeneralDetails(dto);
+        } catch (AggregateNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @CommandHandler
+    public void updateAdditionalDetails(ILProposalUpdateAdditionalDetailsCommand cmd) {
+        ProposalAggregate proposalAggregate = null;
+        ProposalId proposalId = new ProposalId(cmd.getProposalId());
+        try {
+            proposalAggregate = ilProposalMongoRepository.load(proposalId);
+            proposalAggregate.updateAdditionalDetails(cmd.getMedicalAttendantDetails(), cmd.getMedicalAttendantDuration(), cmd.getDateAndReason(), cmd.getReplacementDetails());
+        } catch (AggregateNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @CommandHandler
+    public void updateCompulsoryHealthStatement(ILProposalUpdateCompulsoryHealthStatementCommand updateCompulsoryHealthStatementCommand) {
         ProposalAggregate proposalAggregate = null;
         ProposalId proposalId = new ProposalId(updateCompulsoryHealthStatementCommand.getProposalId());
         List<QuestionDto> questionDtoList=updateCompulsoryHealthStatementCommand.getCompulsoryHealthDetails();
@@ -112,33 +137,29 @@ public class ILProposalCommandHandler {
     }
 
     @CommandHandler
-   public void updateFamilyPersonalDetails(ILUpdateFamilyPersonalDetailsCommand cmd)
-   {
-       ProposalAggregate proposalAggregate = null;
-       ProposalId proposalId=new ProposalId(cmd.getProposalId());
-       FamilyPersonalDetail familyPersonalDetail=cmd.getFamilyPersonalDetail();
+    public void updateFamilyPersonalDetails(ILProposalUpdateFamilyPersonalDetailsCommand cmd) {
+        ProposalAggregate proposalAggregate = null;
+        ProposalId proposalId = new ProposalId(cmd.getProposalId());
+        FamilyPersonalDetail familyPersonalDetail = cmd.getFamilyPersonalDetail();
 
-       try{
-           proposalAggregate=ilProposalMongoRepository.load(proposalId);
-           proposalAggregate.updateFamilyPersonalDetail(familyPersonalDetail);
-       }
-       catch (AggregateNotFoundException e) {
-           e.printStackTrace();
-       }
-   }
-
-     @CommandHandler
-    public void updateWithPlanDetail(ILProposalUpdateWithPlanAndBeneficiariesCommand cmd)
-    {
-        ProposalAggregate aggregate = null;
-        ProposalId proposalId=new ProposalId(cmd.getProposalId());
-
-        try{
-            aggregate=ilProposalMongoRepository.load(proposalId);
-            aggregate.updatePlan(aggregate, cmd.getProposalPlanDetail(), cmd.getBeneficiaries(),  cmd.getUserDetails());
-            ilProposalMongoRepository.add(aggregate);
+        try {
+            proposalAggregate = ilProposalMongoRepository.load(proposalId);
+            proposalAggregate.updateFamilyPersonalDetail(familyPersonalDetail);
+        } catch (AggregateNotFoundException e) {
+            e.printStackTrace();
         }
-        catch (AggregateNotFoundException e) {
+    }
+
+    @CommandHandler
+    public void updateWithPlanDetail(ILProposalUpdateWithPlanAndBeneficiariesCommand cmd) {
+        ProposalAggregate aggregate = null;
+        ProposalId proposalId = new ProposalId(cmd.getProposalId());
+
+        try {
+            aggregate = ilProposalMongoRepository.load(proposalId);
+            aggregate.updatePlan(aggregate, cmd.getProposalPlanDetail(), cmd.getBeneficiaries(), cmd.getUserDetails());
+            ilProposalMongoRepository.add(aggregate);
+        } catch (AggregateNotFoundException e) {
             e.printStackTrace();
         }
     }

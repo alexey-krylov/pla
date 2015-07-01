@@ -9,15 +9,15 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.util.List;
 
 /**
- * Created by Prasant on 03-Jun-15.
+ * Created by Karunakar on 7/1/2015.
  */
 @Getter
 @Setter
 @NoArgsConstructor
+public class ILProposalUpdateGeneralDetailsCommand {
 
-public class ILUpdateCompulsoryHealthStatementCommand  {
-    private List<QuestionDto> compulsoryHealthDetails;
-
+    private List<QuestionDto> generateDetails;
     private UserDetails userDetails;
     private String proposalId;
+
 }

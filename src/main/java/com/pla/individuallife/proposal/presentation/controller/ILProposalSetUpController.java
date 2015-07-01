@@ -133,9 +133,9 @@ public class ILProposalSetUpController {
 
 
     @ResponseBody
-    @RequestMapping(value = "/updateCompulsoryHealthStatement", method = RequestMethod.POST)
+    @RequestMapping(value = "/updatecompulsoryhealthstatement", method = RequestMethod.POST)
     public ResponseEntity<Map> updateCompulsoryHealthStatement(
-            @RequestBody ILUpdateCompulsoryHealthStatementCommand cmd,
+            @RequestBody ILProposalUpdateCompulsoryHealthStatementCommand cmd,
             HttpServletRequest request,
             BindingResult bindingResult) {
         String proposalId = cmd.getProposalId();
@@ -159,10 +159,61 @@ public class ILProposalSetUpController {
         return new ResponseEntity(map, HttpStatus.OK);
     }
 
+    @ResponseBody
+    @RequestMapping(value = "/updategeneraldetails", method = RequestMethod.POST)
+    public ResponseEntity<Map> updateGeneralDetails(
+            @RequestBody ILProposalUpdateGeneralDetailsCommand cmd,
+            HttpServletRequest request,
+            BindingResult bindingResult) {
+        String proposalId = cmd.getProposalId();
+        if (bindingResult.hasErrors()) {
+            return new ResponseEntity(bindingResult.getAllErrors(), HttpStatus.PRECONDITION_FAILED);
+        }
+        try {
+            UserDetails userDetails = getLoggedInUserDetail(request);
+            cmd.setUserDetails(userDetails);
+            proposalCommandGateway.updateGeneralDetails(cmd);
+        } catch (TimeoutException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        List<QuestionDto> questions = cmd.getGenerateDetails();
+        Map map = new HashMap<>();
+        map.put("msg", "Proposal updated with General Details successfully");
+        map.put("proposalId", proposalId);
+        map.put("questions", questions);
+        return new ResponseEntity(map, HttpStatus.OK);
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "/updateadditionaldetails", method = RequestMethod.POST)
+    public ResponseEntity<Map> updateAdditionalDetails(
+            @RequestBody ILProposalUpdateAdditionalDetailsCommand cmd,
+            HttpServletRequest request,
+            BindingResult bindingResult) {
+        String proposalId = cmd.getProposalId();
+        if (bindingResult.hasErrors()) {
+            return new ResponseEntity(bindingResult.getAllErrors(), HttpStatus.PRECONDITION_FAILED);
+        }
+        try {
+            UserDetails userDetails = getLoggedInUserDetail(request);
+            cmd.setUserDetails(userDetails);
+            proposalCommandGateway.updateAdditionalDetails(cmd);
+        } catch (TimeoutException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        Map map = new HashMap<>();
+        map.put("msg", "Proposal updated with Additional Details successfully");
+        map.put("proposalId", proposalId);
+        return new ResponseEntity(map, HttpStatus.OK);
+    }
 
     @ResponseBody
     @RequestMapping(value = "/updateFamily", method = RequestMethod.POST)
-    public ResponseEntity updateFamilyPersonalDetails(@RequestBody ILUpdateFamilyPersonalDetailsCommand cmd,HttpServletRequest request,
+    public ResponseEntity updateFamilyPersonalDetails(@RequestBody ILProposalUpdateFamilyPersonalDetailsCommand cmd,HttpServletRequest request,
                                          BindingResult bindingResult) {
 
         String proposalId = cmd.getProposalId();

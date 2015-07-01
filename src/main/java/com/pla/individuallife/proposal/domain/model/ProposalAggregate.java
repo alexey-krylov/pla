@@ -42,8 +42,10 @@ public class ProposalAggregate extends AbstractAnnotatedAggregateRoot<ProposalId
     private List<Beneficiary> beneficiaries;
     private BigDecimal totalBeneficiaryShare = BigDecimal.ZERO;
     private List<Question> compulsoryHealthStatement;
+    private List<Question> generalDetails;
     private FamilyPersonalDetail familyPersonalDetail;
     private AgentCommissionShareModel agentCommissionShareModel;
+    private AdditionalDetails additionaldetails;
 
     private ILProposalStatus proposalStatus;
 
@@ -146,6 +148,11 @@ public class ProposalAggregate extends AbstractAnnotatedAggregateRoot<ProposalId
         totalBeneficiaryShare = newTotal;
     }
 
+    public void updateGeneralDetails(List<QuestionDto> generaldetails) {
+        this.generalDetails  = new ArrayList<Question>();
+        generaldetails.stream().forEach(gd -> this.generalDetails.add(new Question(new QuestionId(gd.getQuestionId()), gd.isAnswer(), gd.getAnswerResponse())));
+    }
+
     public void updateCompulsoryHealthStatement(List<QuestionDto> compulsoryHealthStatement){
         this.compulsoryHealthStatement = new ArrayList<Question>();
         compulsoryHealthStatement.stream().forEach(ch -> this.compulsoryHealthStatement.add(new Question(new QuestionId(ch.getQuestionId()), ch.isAnswer(), ch.getAnswerResponse())));
@@ -155,4 +162,8 @@ public class ProposalAggregate extends AbstractAnnotatedAggregateRoot<ProposalId
         this.familyPersonalDetail=personalDetail;
     }
 
+
+    public void updateAdditionalDetails(String medicalAttendantDetails, String medicalAttendantDuration, String dateAndReason, QuestionDto replacementDetails) {
+        this.additionaldetails = new AdditionalDetails(medicalAttendantDetails, medicalAttendantDuration, dateAndReason, new Question(new QuestionId(replacementDetails.getQuestionId()), replacementDetails.isAnswer(), replacementDetails.getAnswerResponse()));
+    }
 }
