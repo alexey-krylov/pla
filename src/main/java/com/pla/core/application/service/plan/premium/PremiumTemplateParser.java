@@ -274,7 +274,7 @@ public class PremiumTemplateParser {
                 influencingFactorValueMap.put(premiumInfluencingFactor, cellValue);
             }
             Cell premiumCell = dataRow.getCell(premiumCellNumber);
-            premiumLineItemMap.put(influencingFactorValueMap, Double.valueOf(getCellValue(premiumCell)));
+            premiumLineItemMap.put(influencingFactorValueMap, premiumCell.getNumericCellValue());
             premiumInfluencingFactorLineItem.add(premiumLineItemMap);
         }
         return premiumInfluencingFactorLineItem;
