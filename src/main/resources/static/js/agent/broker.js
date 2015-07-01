@@ -6,7 +6,7 @@ angular.module('brokerModule', ['common', 'ngRoute', 'mgcrea.ngStrap.select', 'm
             $scope.numberPattern = globalConstants.numberPattern;
 
             $scope.agentDetails = {
-                channelType: 'BROKER'
+                channelType: {channelCode: 'BROKER', channelName: 'Broker'}
             };
 
 
@@ -55,7 +55,8 @@ angular.module('brokerModule', ['common', 'ngRoute', 'mgcrea.ngStrap.select', 'm
                 $scope.agentDetails.contactPersons = [{}, {}, {}];
 
             $scope.submit = function () {
-                console.log(JSON.stringify($scope.agentDetails));
+                $scope.agentDetails.
+                    $http.post('/pla/core/agency/agent');
             }
 
         }])
