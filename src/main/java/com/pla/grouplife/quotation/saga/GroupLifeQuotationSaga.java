@@ -9,9 +9,13 @@ import com.pla.grouplife.quotation.domain.model.QuotationStatus;
 import com.pla.grouplife.quotation.repository.GlQuotationRepository;
 import com.pla.publishedlanguage.contract.IProcessInfoAdapter;
 import com.pla.publishedlanguage.contract.ISMEGateway;
+import com.pla.sharedkernel.application.CreateQuotationNotificationCommand;
 import com.pla.sharedkernel.domain.model.ProcessType;
+import com.pla.sharedkernel.domain.model.ReminderTypeEnum;
+import com.pla.sharedkernel.domain.model.WaitingForEnum;
 import com.pla.sharedkernel.exception.ProcessInfoException;
 import com.pla.sharedkernel.identifier.LineOfBusinessEnum;
+import com.pla.sharedkernel.util.RolesUtil;
 import org.axonframework.commandhandling.gateway.CommandGateway;
 import org.axonframework.eventhandling.scheduling.EventScheduler;
 import org.axonframework.eventhandling.scheduling.ScheduleToken;
@@ -108,9 +112,11 @@ public class GroupLifeQuotationSaga extends AbstractAnnotatedSaga {
             LOGGER.debug("Handling GL Quotation Reminder Event .....", event);
         }
         GroupLifeQuotation groupLifeQuotation = glQuotationRepository.findOne(event.getQuotationId());
-        if (QuotationStatus.GENERATED.equals(groupLifeQuotation.getQuotationStatus())) {
+        if (QuotationStatus.SHARED.equals(groupLifeQuotation.getQuotationStatus())) {
             this.noOfReminderSent = noOfReminderSent + 1;
             System.out.println("************ Send Reminder ****************");
+            commandGateway.send(new CreateQuotationNotificationCommand(event.getQuotationId(),RolesUtil.GROUP_LIFE_QUOTATION_PROCESSOR_ROLE,LineOfBusinessEnum.GROUP_LIFE,ProcessType.QUOTATION,
+                    WaitingForEnum.QUOTATION_RESPONSE, noOfReminderSent==1? ReminderTypeEnum.REMINDER_1:ReminderTypeEnum.REMINDER_2));
             if (this.noOfReminderSent == 1) {
                 int firstReminderDay = processInfoAdapter.getDaysForFirstReminder(LineOfBusinessEnum.GROUP_LIFE, ProcessType.QUOTATION);
                 int secondReminderDay = processInfoAdapter.getDaysForSecondReminder(LineOfBusinessEnum.GROUP_LIFE, ProcessType.QUOTATION);

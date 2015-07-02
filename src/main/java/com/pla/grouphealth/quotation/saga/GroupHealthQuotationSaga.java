@@ -9,9 +9,13 @@ import com.pla.grouphealth.quotation.domain.model.GroupHealthQuotation;
 import com.pla.grouphealth.quotation.repository.GHQuotationRepository;
 import com.pla.publishedlanguage.contract.IProcessInfoAdapter;
 import com.pla.publishedlanguage.contract.ISMEGateway;
+import com.pla.sharedkernel.application.CreateQuotationNotificationCommand;
 import com.pla.sharedkernel.domain.model.ProcessType;
+import com.pla.sharedkernel.domain.model.ReminderTypeEnum;
+import com.pla.sharedkernel.domain.model.WaitingForEnum;
 import com.pla.sharedkernel.exception.ProcessInfoException;
 import com.pla.sharedkernel.identifier.LineOfBusinessEnum;
+import com.pla.sharedkernel.util.RolesUtil;
 import org.axonframework.commandhandling.gateway.CommandGateway;
 import org.axonframework.eventhandling.scheduling.EventScheduler;
 import org.axonframework.eventhandling.scheduling.ScheduleToken;
@@ -107,9 +111,11 @@ public class GroupHealthQuotationSaga extends AbstractAnnotatedSaga {
             LOGGER.debug("Handling GH Quotation Reminder Event .....", event);
         }
         GroupHealthQuotation groupHealthQuotation = ghQuotationRepository.findOne(event.getQuotationId());
-        if (GHQuotationStatus.GENERATED.equals(groupHealthQuotation.getQuotationStatus())) {
+        if (GHQuotationStatus.SHARED.equals(groupHealthQuotation.getQuotationStatus())) {
             this.noOfReminderSent = noOfReminderSent + 1;
             System.out.println("************ Send Reminder ****************");
+            commandGateway.send(new CreateQuotationNotificationCommand(event.getQuotationId(),RolesUtil.GROUP_HEALTH_QUOTATION_PROCESSOR_ROLE,LineOfBusinessEnum.GROUP_HEALTH,ProcessType.QUOTATION,
+                    WaitingForEnum.QUOTATION_RESPONSE, noOfReminderSent==1? ReminderTypeEnum.REMINDER_1:ReminderTypeEnum.REMINDER_2));
             if (this.noOfReminderSent == 1) {
                 int firstReminderDay = processInfoAdapter.getDaysForFirstReminder(LineOfBusinessEnum.GROUP_HEALTH, ProcessType.QUOTATION);
                 int secondReminderDay = processInfoAdapter.getDaysForSecondReminder(LineOfBusinessEnum.GROUP_HEALTH, ProcessType.QUOTATION);
