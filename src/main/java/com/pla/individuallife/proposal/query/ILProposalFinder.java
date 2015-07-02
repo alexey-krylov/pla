@@ -17,6 +17,7 @@ import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.BasicQuery;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.jdbc.core.ColumnMapRowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Service;
@@ -51,6 +52,13 @@ public class ILProposalFinder {
 
     public static final String FIND_AGENT_BY_ID_QUERY = "SELECT agent_id as agentId, first_name as firstName, last_name as lastName FROM agent WHERE agent_id=:agentId AND agent_status = 'ACTIVE'";
 
+    /**
+     * Find all the Plans by Agent Id and for a line of business.
+     */
+    private static final String SEARCH_PLAN_BY_AGENT_IDS = "SELECT DISTINCT C.plan_id, A.`agent_id`, C.plan_name FROM AGENT A JOIN agent_authorized_plan b " +
+            "ON A.`agent_id`=B.`agent_id` JOIN plan_coverage_benefit_assoc C " +
+            "ON B.`plan_id`=C.`plan_id` where A.agent_id IN (:agentIds) and c.line_of_business=:lineOfBusiness group by A.agent_id";
+
     public Map<String, Object> getAgentById(String agentId) {
         Preconditions.checkArgument(UtilValidator.isNotEmpty(agentId));
         return namedParameterJdbcTemplate.queryForMap(FIND_AGENT_BY_ID_QUERY, new MapSqlParameterSource().addValue("agentId", agentId));
@@ -58,7 +66,7 @@ public class ILProposalFinder {
 
     public List<Map<String, Object>> findAllOptionalCoverages(String planId) {
         // Query against the view
-        List<Map<String, Object>> resultSet = namedParameterJdbcTemplate.queryForList("select * from plan_coverage where plan_id in (:planId) " +
+        List<Map<String, Object>> resultSet = namedParameterJdbcTemplate.queryForList("select DISTINCT * from plan_coverage where plan_id in (:planId) " +
                 "AND (optional = 1)", new MapSqlParameterSource().addValue("planId", planId.toString()));
         return resultSet;
     }
@@ -122,9 +130,8 @@ public class ILProposalFinder {
             String proposalNumber = map.get("proposalNumber") != null ? (String) map.get("proposalNumber") : "";
             Proposer proposerMap = map.get("proposer") != null ? (Proposer) map.get("proposer") : null;
             String proposerName = proposerMap != null ? proposerMap.getFirstName() : "";
-            List <String> agents = new ArrayList<String>();
-            ((AgentCommissionShareModel) map.get("agentCommissionShareModel")).getCommissionShare().stream().forEach(x -> agents.add(x.getAgentId().toString()));
-            ILSearchProposalDto ilSearchProposalDto = new ILSearchProposalDto(proposalNumber, proposerName, "NRCNumber", agents.toString(), "Agent Code", proposalId, "createdOn", "version", proposalStatus);
+            String agentIds = ((AgentCommissionShareModel) map.get("agentCommissionShareModel")).getCommissionShare().stream().map(x -> x.getAgentId().toString()).collect(Collectors.joining(","));
+            ILSearchProposalDto ilSearchProposalDto = new ILSearchProposalDto(proposalNumber, proposerName, "NRCNumber", agentIds, "Agent Code", proposalId, "createdOn", "version", proposalStatus);
             return ilSearchProposalDto;
         }
     }
@@ -152,7 +159,18 @@ public class ILProposalFinder {
         return dto;
     }
 
+    public List<Map<String, Object>> getAgents(String proposalId) {
+        BasicDBObject query = new BasicDBObject();
+        query.put("_id", proposalId);
+        Map proposal = mongoTemplate.findOne(new BasicQuery(query), Map.class, "individual_life_proposal");
 
+        List <String> agentIds = new ArrayList<String>();
+        ((AgentCommissionShareModel) proposal.get("agentCommissionShareModel")).getCommissionShare().stream().forEach(x -> agentIds.add(x.getAgentId().toString()));
 
+     //   String agentIds = ((AgentCommissionShareModel) proposal.get("agentCommissionShareModel")).getCommissionShare().stream().map(x -> x.getAgentId().toString()).collect(Collectors.joining("\",\""));
 
+        List<Map<String, Object>>  result =  namedParameterJdbcTemplate.query(SEARCH_PLAN_BY_AGENT_IDS, new MapSqlParameterSource().addValue("agentIds", agentIds).addValue("lineOfBusiness", "Individual Life"), new ColumnMapRowMapper());
+        return result;
+
+    }
 }

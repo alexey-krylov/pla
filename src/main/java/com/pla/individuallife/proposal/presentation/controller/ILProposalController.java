@@ -4,15 +4,12 @@ import com.pla.core.query.AgentFinder;
 import com.pla.core.query.MasterFinder;
 import com.pla.individuallife.proposal.presentation.dto.ILProposalDto;
 import com.pla.individuallife.proposal.presentation.dto.ILSearchProposalDto;
-import com.pla.individuallife.proposal.query.ILProposalFinder;
 import com.pla.individuallife.proposal.presentation.dto.RiderDetailDto;
+import com.pla.individuallife.proposal.query.ILProposalFinder;
 import com.wordnik.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.ArrayList;
@@ -136,5 +133,12 @@ public class ILProposalController {
         Map<String, Object> agentDetail = proposalFinder.getAgentById(agentId);
         checkArgument(agentDetail != null, "Agent not found");
         return agentDetail;
+    }
+
+    @RequestMapping(value = "/searchplan", method = RequestMethod.GET)
+    @ResponseBody
+    public List<Map<String, Object>> searchPlan(@RequestParam("proposalId") String proposalId) {
+        List<Map<String, Object>> planList = proposalFinder.getAgents(proposalId);
+        return planList;
     }
 }
