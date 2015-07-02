@@ -26,6 +26,7 @@ import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.jdbc.core.ColumnMapRowMapper;
 import org.springframework.jdbc.core.namedparam.EmptySqlParameterSource;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Service;
 
@@ -66,6 +67,8 @@ public class PlanFinder {
                 .withCreatorVisibility(JsonAutoDetect.Visibility.ANY));
         this.mongoTemplate = mongoTemplate;
     }
+
+    public static final String findActivePlanByPlanCode  = "SELECT COUNT(plan_id) FROM plan_coverage_benefit_assoc WHERE plan_code = :planCode AND plan_status = 'LAUNCHED'";
 
     @Autowired
     public void setDataSource(DataSource dataSource) {
@@ -218,5 +221,10 @@ public class PlanFinder {
             planCoverageMap.put("coverageName", coverageMap.getCoverageName());
             return planCoverageMap;
         }
+    }
+
+    public int findActivePlanByPlanCode(String planCode){
+        Number activePlanCount = namedParameterJdbcTemplate.queryForObject(findActivePlanByPlanCode, new MapSqlParameterSource("planCode", planCode), Number.class);
+        return activePlanCount.intValue();
     }
 }

@@ -216,7 +216,8 @@ public class PlanAdapterImpl implements IPlanAdapter {
     // TODO TO be implemented  this method by Ravi Kumar
     @Override
     public boolean isPlanActive(String planCode) {
-        return true;
+        int activePlanCount = planFinder.findActivePlanByPlanCode(planCode);
+        return activePlanCount!=0;
     }
 
     private class PlanCoverageDetailTransformer implements Function<Plan, PlanCoverageDetailDto> {
