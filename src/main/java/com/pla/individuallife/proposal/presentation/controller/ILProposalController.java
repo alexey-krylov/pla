@@ -106,7 +106,7 @@ public class ILProposalController {
         return planList;
     }
 
-    @RequestMapping(method = RequestMethod.GET, value = "/getRiders")
+    @RequestMapping(method = RequestMethod.GET, value = "/getRiders/{planId}")
     public List<Map<String, Object>> getOptionalCoverages(@PathVariable("planId") String planId) {
         List<Map<String, Object>> optionalCoverages = masterFinder.getOptionalCoverages(planId);
         return optionalCoverages;
