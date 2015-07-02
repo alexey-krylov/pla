@@ -70,8 +70,8 @@ public enum UnderWriterInfluencingFactor {
                 Cell sumAssuredTo = currentRow.getCell(indexMap.get(InfluencingFactorRange.SUM_ASSURED_TO.description));
                 String sumAssuredFromCellValue = Cell.CELL_TYPE_NUMERIC == sumAssuredFrom.getCellType() ? ((Double) sumAssuredFrom.getNumericCellValue()).toString() : sumAssuredFrom.getStringCellValue();
                 String sumAssuredToCellValue = Cell.CELL_TYPE_NUMERIC == sumAssuredTo.getCellType() ? ((Double) sumAssuredTo.getNumericCellValue()).toString() : sumAssuredTo.getStringCellValue();
-                BigDecimal sumAssuredFromCell = NumberUtils.isNumber(sumAssuredFromCellValue) == true ? new BigDecimal(sumAssuredFromCellValue) : BigDecimal.ZERO;
-                BigDecimal sumAssuredToCell = NumberUtils.isNumber(sumAssuredToCellValue) == true ? new BigDecimal(sumAssuredToCellValue) : BigDecimal.ZERO;
+                BigDecimal sumAssuredFromCell = NumberUtils.isNumber(sumAssuredFromCellValue) == true ? new BigDecimal(sumAssuredFromCellValue).setScale(0) : BigDecimal.ZERO;
+                BigDecimal sumAssuredToCell = NumberUtils.isNumber(sumAssuredToCellValue) == true ? new BigDecimal(sumAssuredToCellValue).setScale(0)  : BigDecimal.ZERO;
                 boolean isValid = !(isNotEmpty(planCode) && isNotEmpty(coverageId)) ? (iPlanAdapter.isValidPlanSumAssured(planCode, sumAssuredFromCell) && iPlanAdapter.isValidPlanSumAssured(planCode, sumAssuredToCell)) :
                         (iPlanAdapter.isValidCoverageSumAssured(planCode, coverageId, sumAssuredFromCell) && iPlanAdapter.isValidCoverageSumAssured(planCode, coverageId, sumAssuredToCell));
                 if (!isValid)
