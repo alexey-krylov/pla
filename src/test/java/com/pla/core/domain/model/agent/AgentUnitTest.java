@@ -43,7 +43,7 @@ public class AgentUnitTest {
         assertEquals(OverrideCommissionApplicable.NO, agent.getOverrideCommissionApplicable());
     }
 
-    @Test(expected = IllegalStateException.class)
+    @Test
     public void itShouldNotCreateAgentWhenTrainingCompletionDateIsFuture() {
         LocalDate trainingCompletionDate = LocalDate.now().plusDays(1);
         agent = agent.createWithAgentProfile("First", "Agent", trainingCompletionDate, "Programmer", "Programmer", OverrideCommissionApplicable.NO);
