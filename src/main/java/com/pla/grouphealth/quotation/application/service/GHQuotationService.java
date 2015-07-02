@@ -171,7 +171,7 @@ public class GHQuotationService {
                         coverDetails.add(insuredCoverageCoverDetail);
                     }
                 }
-                BigDecimal insuredBasicPremium = insuredPremiumDetail.getPremiumAmount();
+                BigDecimal insuredBasicPremium = insured.getBasicAnnualPlanPremiumIncludingNonVisibleCoveragePremium().add(insured.getInsuredBasicAnnualVisibleCoveragePremium());
                 insuredBasicPremium = insuredBasicPremium.setScale(2, BigDecimal.ROUND_CEILING);
                 GHQuotationDetailDto.Annexure insuredAnnexure = ghQuotationDetailDto.new Annexure(insured.getFirstName() + " " + insured.getLastName()
                         , insured.getNrcNumber(), insured.getGender() != null ? insured.getGender().name() : "", AppUtils.toString(insured.getDateOfBirth()),
@@ -195,7 +195,7 @@ public class GHQuotationService {
                                 coverDetails.add(insuredDependentCoverageCoverDetail);
                             }
                         }
-                        BigDecimal insuredDependentBasicPremium = insuredDependentPremiumDetail.getPremiumAmount();
+                        BigDecimal insuredDependentBasicPremium = insuredDependent.getBasicAnnualPlanPremiumIncludingNonVisibleCoveragePremiumForDependent().add(insuredDependent.getBasicAnnualVisibleCoveragePremiumForDependent());
                         insuredDependentBasicPremium = insuredDependentBasicPremium.setScale(2, BigDecimal.ROUND_CEILING);
                         GHQuotationDetailDto.Annexure annexure = ghQuotationDetailDto.new Annexure(insuredDependent.getFirstName() + " " + insuredDependent.getLastName()
                                 , insuredDependent.getNrcNumber(), insuredDependent.getGender() != null ? insuredDependent.getGender().name() : "", AppUtils.toString(insuredDependent.getDateOfBirth()),

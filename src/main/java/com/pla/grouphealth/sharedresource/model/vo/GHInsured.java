@@ -112,6 +112,7 @@ public class GHInsured {
             }
         }
         basicAnnualPremium = basicAnnualPremium.add(getBasicAnnualPlanPremiumIncludingNonVisibleCoveragePremiumForDependent());
+        basicAnnualPremium=basicAnnualPremium.setScale(2,BigDecimal.ROUND_CEILING);
         return basicAnnualPremium;
     }
 
@@ -125,6 +126,7 @@ public class GHInsured {
             }
         }
         totalVisibleCoveragePremium = totalVisibleCoveragePremium.add(getBasicAnnualVisibleCoveragePremiumForDependent());
+        totalVisibleCoveragePremium=totalVisibleCoveragePremium.setScale(2,BigDecimal.ROUND_CEILING);
         return totalVisibleCoveragePremium;
     }
 

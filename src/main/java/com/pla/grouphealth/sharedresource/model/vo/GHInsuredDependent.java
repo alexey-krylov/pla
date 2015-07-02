@@ -100,6 +100,7 @@ public class GHInsuredDependent {
                 }
             }
         }
+        basicAnnualVisibleCoveragePremiumOfDependent = basicAnnualVisibleCoveragePremiumOfDependent.setScale(2,BigDecimal.ROUND_CEILING);
         return basicAnnualVisibleCoveragePremiumOfDependent;
     }
 
@@ -114,6 +115,7 @@ public class GHInsuredDependent {
                 }
             }
         }
+        basicAnnualPremiumOfDependent = basicAnnualPremiumOfDependent.setScale(2,BigDecimal.ROUND_CEILING);
         return basicAnnualPremiumOfDependent;
     }
 
