@@ -3,10 +3,7 @@ package com.pla.individuallife.proposal.query;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
 import com.mongodb.BasicDBObject;
-import com.pla.individuallife.proposal.domain.model.AgentCommissionShareModel;
-import com.pla.individuallife.proposal.domain.model.ProposedAssured;
-import com.pla.individuallife.proposal.domain.model.ProposedAssuredBuilder;
-import com.pla.individuallife.proposal.domain.model.Proposer;
+import com.pla.individuallife.proposal.domain.model.*;
 import com.pla.individuallife.proposal.presentation.dto.AgentDetailDto;
 import com.pla.individuallife.proposal.presentation.dto.ILProposalDto;
 import com.pla.individuallife.proposal.presentation.dto.ILSearchProposalDto;
@@ -140,6 +137,7 @@ public class ILProposalFinder {
         model.getCommissionShare().forEach(commissionShare -> agentCommissionDetails.add(new AgentDetailDto(commissionShare.getAgentId().toString(), commissionShare.getAgentCommission())));
         dto.setAgentCommissionDetails(agentCommissionDetails);
         dto.setProposalId(proposalId);
+        dto.setProposalStatus(proposal.get("proposalStatus").toString());
         return dto;
     }
 

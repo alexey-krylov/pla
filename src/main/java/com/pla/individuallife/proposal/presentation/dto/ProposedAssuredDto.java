@@ -59,13 +59,23 @@ public class ProposedAssuredDto {
         eDto.setEmployer(employmentDetail.getEmployer());
         eDto.setEmploymentDate(employmentDetail.getEmploymentDate());
         eDto.setEmploymentType(employmentDetail.getEmploymentTypeId());
-        eDto.setOccupation(employmentDetail.getOccupationId());
+        eDto.setOccupation(employmentDetail.getOccupationClass());
         eDto.setPostalCode(employmentDetail.getAddress().getPostalCode());
         eDto.setProvince(employmentDetail.getAddress().getProvince());
         eDto.setTown(employmentDetail.getAddress().getTown());
         eDto.setWorkPhone(employmentDetail.getWorkPhone());
         this.employment = eDto;
         this.otherName = otherName;
+        ResidentialAddressDto rDto = new ResidentialAddressDto();
+        rDto.setAddress1(residentialAddress.getAddress().getAddress1());
+        rDto.setAddress2(residentialAddress.getAddress().getAddress2());
+        rDto.setEmailAddress(residentialAddress.getEmailAddress());
+        rDto.setHomePhone(residentialAddress.getHomePhone());
+        rDto.setPostalCode(residentialAddress.getAddress().getPostalCode());
+        rDto.setProvince(residentialAddress.getAddress().getProvince());
+        rDto.setTown(residentialAddress.getAddress().getTown());
+        this.residentialAddress = rDto;
+        this.isProposer = isProposer;
 
 
     }
