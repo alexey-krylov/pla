@@ -230,6 +230,7 @@ public class GHInsuredExcelParser {
                 errorMessageHeaderCell.setCellStyle(cellStyle);
             }
             errorMessage = errorMessage + "\n" + coverageErrorMessage;
+            errorMessage = errorMessage + "\n" + duplicateRowErrorMessage;
             Cell errorMessageCell = currentRow.createCell(headers.size());
             errorMessageCell.setCellValue(errorMessage);
         }
