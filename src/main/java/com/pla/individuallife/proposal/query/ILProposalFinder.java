@@ -56,6 +56,13 @@ public class ILProposalFinder {
         return namedParameterJdbcTemplate.queryForMap(FIND_AGENT_BY_ID_QUERY, new MapSqlParameterSource().addValue("agentId", agentId));
     }
 
+    public List<Map<String, Object>> findAllOptionalCoverages(String planId) {
+        // Query against the view
+        List<Map<String, Object>> resultSet = namedParameterJdbcTemplate.queryForList("select * from plan_coverage where plan_id in (:planId) " +
+                "AND (optional = 1)", new MapSqlParameterSource().addValue("planId", planId.toString()));
+        return resultSet;
+    }
+
     public List<ILSearchProposalDto> searchProposal(ILSearchProposalDto ilSearchProposalDto) {
         Criteria criteria = Criteria.where("proposalStatus").in(new String[]{"DRAFT", "SUBMITTED"});
         String proposalNumber = ilSearchProposalDto.getProposalNumber();

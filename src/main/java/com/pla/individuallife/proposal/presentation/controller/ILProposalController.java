@@ -5,6 +5,7 @@ import com.pla.core.query.MasterFinder;
 import com.pla.individuallife.proposal.presentation.dto.ILProposalDto;
 import com.pla.individuallife.proposal.presentation.dto.ILSearchProposalDto;
 import com.pla.individuallife.proposal.query.ILProposalFinder;
+import com.pla.individuallife.proposal.presentation.dto.RiderDetailDto;
 import com.wordnik.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -106,10 +108,19 @@ public class ILProposalController {
         return planList;
     }
 
-    @RequestMapping(method = RequestMethod.GET, value = "/getRiders/{planId}")
-    public List<Map<String, Object>> getOptionalCoverages(@PathVariable("planId") String planId) {
-        List<Map<String, Object>> optionalCoverages = masterFinder.getOptionalCoverages(planId);
-        return optionalCoverages;
+    @RequestMapping(method = RequestMethod.GET, value = "getridersforplan/{planId}")
+    @ApiOperation(httpMethod = "GET", value = "This call for edit quotation screen.")
+    @ResponseBody
+    public List<RiderDetailDto> getRidersForPlan(@PathVariable("planId") String planId) {
+        List<Map<String, Object>> optionalCoverages = proposalFinder.findAllOptionalCoverages(planId);
+        List<RiderDetailDto> riderDetails = new ArrayList<>();
+        for (Map<String, Object> m : optionalCoverages) {
+            RiderDetailDto dto = new RiderDetailDto();
+            dto.setCoverageName(m.get("coverage_name").toString());
+            dto.setCoverageId(m.get("coverage_id").toString());
+            riderDetails.add(dto);
+        }
+        return riderDetails;
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/getAllEmploymentType")
