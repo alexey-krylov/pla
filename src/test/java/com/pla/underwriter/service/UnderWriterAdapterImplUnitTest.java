@@ -13,7 +13,6 @@ import com.pla.sharedkernel.identifier.UnderWriterRoutingLevelId;
 import com.pla.underwriter.domain.model.*;
 import com.pla.underwriter.exception.UnderWriterException;
 import com.pla.underwriter.finder.UnderWriterFinder;
-import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import org.junit.Before;
 import org.junit.Test;
@@ -153,7 +152,7 @@ public class UnderWriterAdapterImplUnitTest {
         String planCode = "P001";
         List<UnderWriterInfluencingFactor> underWriterInfluencingFactors = Lists.newArrayList(UnderWriterInfluencingFactor.AGE,UnderWriterInfluencingFactor.SUM_ASSURED,UnderWriterInfluencingFactor.BMI,
                 UnderWriterInfluencingFactor.HEIGHT,UnderWriterInfluencingFactor.WEIGHT,UnderWriterInfluencingFactor.CLAIM_AMOUNT);
-        UnderWriterRoutingLevel underWriterRoutingLevel = UnderWriterRoutingLevel.createUnderWriterRoutingLevelWithPlan(underWriterRoutingLevelId, planCode, UnderWriterProcessType.CLAIM, underWriterDocumentItem, underWriterInfluencingFactors, new DateTime("2016-12-31"));
+        UnderWriterRoutingLevel underWriterRoutingLevel = UnderWriterRoutingLevel.createUnderWriterRoutingLevelWithPlan(underWriterRoutingLevelId, planCode, UnderWriterProcessType.CLAIM, underWriterDocumentItem, underWriterInfluencingFactors, new LocalDate("2016-12-31"));
         when(underWriterFinder.findUnderWriterRoutingLevel(underWriterRoutingLevelDetailDto)).thenReturn(underWriterRoutingLevel);
         when(clientRepository.findOne(anyObject())).thenReturn(client);
        /* RoutingLevel routingLevel =  underWriterAdapter.getRoutingLevel(underWriterRoutingLevelDetailDto);
