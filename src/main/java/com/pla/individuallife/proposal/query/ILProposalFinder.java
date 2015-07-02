@@ -7,7 +7,6 @@ import com.pla.individuallife.proposal.domain.model.*;
 import com.pla.individuallife.proposal.presentation.dto.AgentDetailDto;
 import com.pla.individuallife.proposal.presentation.dto.ILProposalDto;
 import com.pla.individuallife.proposal.presentation.dto.ILSearchProposalDto;
-import com.pla.individuallife.proposal.presentation.dto.ProposedAssuredDto;
 import com.pla.sharedkernel.identifier.QuotationId;
 import org.joda.time.LocalDate;
 import org.nthdimenzion.ddd.domain.annotations.Finder;
@@ -128,11 +127,15 @@ public class ILProposalFinder {
         BasicDBObject query = new BasicDBObject();
         query.put("_id", proposalId);
         Map proposal = mongoTemplate.findOne(new BasicQuery(query), Map.class, "individual_life_proposal");
-        ProposedAssured proposedAssured = (ProposedAssured) proposal.get("proposedAssured");
-        ProposedAssuredDto proposedAssuredDto = ProposedAssuredBuilder.getProposedAssured(proposedAssured).createProposedAssuredDto();
+        if (proposal.get("proposedAssured") != null) {
+            dto.setProposedAssured(ProposedAssuredBuilder.getProposedAssuredBuilder((ProposedAssured) proposal.get("proposedAssured")).createProposedAssuredDto());
+        }
+        if (proposal.get("proposer") != null) {
+            dto.setProposer(ProposerBuilder.getProposerBuilder((Proposer) proposal.get("proposer")).createProposerDto());
+        }
 
-        AgentCommissionShareModel model = (AgentCommissionShareModel)proposal.get("agentCommissionShareModel");
-        dto.setProposedAssured(proposedAssuredDto);
+        AgentCommissionShareModel model = (AgentCommissionShareModel) proposal.get("agentCommissionShareModel");
+
         Set<AgentDetailDto> agentCommissionDetails = new HashSet<AgentDetailDto>();
         model.getCommissionShare().forEach(commissionShare -> agentCommissionDetails.add(new AgentDetailDto(commissionShare.getAgentId().toString(), commissionShare.getAgentCommission())));
         dto.setAgentCommissionDetails(agentCommissionDetails);

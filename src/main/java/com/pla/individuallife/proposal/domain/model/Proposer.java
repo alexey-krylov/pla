@@ -27,11 +27,12 @@ public class Proposer {
     private String spouseFirstName;
     private String spouseLastName;
     private String spouseEmailAddress;
+    private String spouseMobileNumber;
     private EmploymentDetail employmentDetail;
     private ResidentialAddress residentialAddress;
     private String otherName;
 
-    public Proposer(String title, String firstName, String surname, String nrc, DateTime dateOfBirth, Gender gender, String mobileNumber, String emailAddress, MaritalStatus maritalStatus, String spouseFirstName, String spouseLastName, String spouseEmailAddress, EmploymentDetail employmentDetail, ResidentialAddress residentialAddress, String otherName) {
+    public Proposer(String title, String firstName, String surname, String nrc, DateTime dateOfBirth, Gender gender, String mobileNumber, String emailAddress, MaritalStatus maritalStatus, String spouseFirstName, String spouseLastName, String spouseEmailAddress, String spouseMobileNumber, EmploymentDetail employmentDetail, ResidentialAddress residentialAddress, String otherName) {
         this.title = title;
         this.firstName = firstName;
         this.surname = surname;
@@ -44,6 +45,7 @@ public class Proposer {
         this.spouseFirstName = spouseFirstName;
         this.spouseLastName = spouseLastName;
         this.spouseEmailAddress = spouseEmailAddress;
+        this.spouseMobileNumber = spouseMobileNumber;
         this.employmentDetail = employmentDetail;
         this.residentialAddress = residentialAddress;
         this.otherName=otherName;

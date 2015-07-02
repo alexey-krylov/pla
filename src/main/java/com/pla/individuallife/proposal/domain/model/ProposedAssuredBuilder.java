@@ -121,7 +121,7 @@ public class ProposedAssuredBuilder {
         return new ProposedAssuredDto(title, firstName, surname, nrc, dateOfBirth, gender, mobileNumber, emailAddress, maritalStatus, spouseFirstName, spouseLastName, spouseEmailAddress, spouseMobileNumber, employmentDetail, residentialAddress, isProposer,otherName);
     }
 
-    public static ProposedAssuredBuilder getProposedAssured(ProposedAssuredDto dto) {
+    public static ProposedAssuredBuilder getProposedAssuredBuilder(ProposedAssuredDto dto) {
         ProposedAssuredBuilder builder = new ProposedAssuredBuilder();
         builder.withOtherName(dto.getOtherName())
                 .withDateOfBirth(dto.getDateOfBirth())
@@ -164,7 +164,7 @@ public class ProposedAssuredBuilder {
         return builder;
     }
 
-    public static ProposedAssuredBuilder getProposedAssured(ProposedAssured pa) {
+    public static ProposedAssuredBuilder getProposedAssuredBuilder(ProposedAssured pa) {
         ProposedAssuredBuilder builder = new ProposedAssuredBuilder();
         builder.withOtherName(pa.getOtherName())
                 .withDateOfBirth(pa.getDateOfBirth())
@@ -200,7 +200,7 @@ public class ProposedAssuredBuilder {
         if(pa.getMaritalStatus().equals(MaritalStatus.MARRIED)) {
             builder.withSpouseEmailAddress(pa.getSpouseEmailAddress())
                     .withSpouseFirstName(pa.getSpouseFirstName())
-                    .withSpouseMobileNumber(pa.getSpouseMobilNumber())
+                    .withSpouseMobileNumber(pa.getSpouseMobileNumber())
                     .withSpouseLastName(pa.getSpouseLastName());
         }
 
