@@ -138,6 +138,7 @@ public class ILProposalFinder {
         dto.setAgentCommissionDetails(agentCommissionDetails);
         dto.setProposalId(proposalId);
         dto.setProposalStatus(proposal.get("proposalStatus").toString());
+        dto.setProposalNumber(proposal.get("proposalNumber").toString());
         return dto;
     }
 

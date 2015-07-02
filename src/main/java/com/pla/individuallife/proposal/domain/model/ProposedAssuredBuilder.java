@@ -188,7 +188,7 @@ public class ProposedAssuredBuilder {
                                 .withAddress2(pa.getEmploymentDetail().getAddress().getAddress2())
                                 .withProvince(pa.getEmploymentDetail().getAddress().getProvince())
                                 .withTown(pa.getEmploymentDetail().getAddress().getTown()).createAddress())
-                        .withOccupationClass(pa.getEmploymentDetail().getOccupationId()).createEmploymentDetail())
+                        .withOccupationClass(pa.getEmploymentDetail().getOccupationClass()).createEmploymentDetail())
                 .withResidentialAddress(new ResidentialAddress(new AddressBuilder()
                         .withAddress1(pa.getResidentialAddress().getAddress().getAddress1())
                         .withAddress2(pa.getResidentialAddress().getAddress().getAddress2())
