@@ -15,6 +15,7 @@ import org.joda.time.LocalDate;
 import org.nthdimenzion.common.crud.ICrudEntity;
 
 import javax.persistence.*;
+import java.util.List;
 import java.util.Set;
 
 import static com.google.common.base.Preconditions.checkArgument;
@@ -58,6 +59,10 @@ public class Agent implements ICrudEntity {
     @ElementCollection
     @JoinTable(name = "AGENT_AUTHORIZED_PLAN", joinColumns = @JoinColumn(name = "agentId"))
     private Set<PlanId> authorizePlansToSell;
+
+    @ElementCollection
+    @JoinTable(name = "AGENT_CONTACT_PERSONS", joinColumns = @JoinColumn(name = "agentId"))
+    private List<AgentContactPersonDetail> contactPersonDetails;
 
     @Enumerated(EnumType.STRING)
     private OverrideCommissionApplicable overrideCommissionApplicable;
@@ -111,6 +116,11 @@ public class Agent implements ICrudEntity {
     public Agent withTeamDetail(String teamId) {
         TeamDetail teamDetail = new TeamDetail(teamId);
         this.teamDetail = teamDetail;
+        return this;
+    }
+
+    public Agent withContactPersonDetail(List<AgentContactPersonDetail> contactPersonDetails) {
+        this.contactPersonDetails = contactPersonDetails;
         return this;
     }
 

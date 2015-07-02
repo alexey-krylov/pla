@@ -1,14 +1,16 @@
 angular.module('brokerModule', ['common', 'ngRoute', 'mgcrea.ngStrap.select', 'mgcrea.ngStrap.alert', 'commonServices', 'ngMessages'])
-    .controller('brokerController', ['$scope', '$http', 'authorisedToSell', 'provinces', '$timeout', '$alert', '$route', '$window', 'transformJson', 'getQueryParameter', 'agentDetails', 'globalConstants', 'nextAgentSequence', 'getProvinceAndCityDetail',
+    .controller('brokerController', ['$scope', '$http', 'authorisedToSell', 'provinces', '$timeout', '$alert', '$route', '$window', 'transformJson',
+        'getQueryParameter', 'agentDetails', 'globalConstants', 'nextAgentSequence', 'getProvinceAndCityDetail',
+
 
         function ($scope, $http,
                   authorisedToSell, provinces, $timeout, $alert, $route, $window, transformJson, getQueryParameter, agentDetails, globalConstants, nextAgentSequence, getProvinceAndCityDetail) {
             $scope.numberPattern = globalConstants.numberPattern;
 
-            $scope.agentDetails = {
-                channelType: {channelCode: 'BROKER', channelName: 'Broker'}
-            };
+            $scope.agentDetails = {agentId:nextAgentSequence};
 
+            if (!$scope.agentDetails.contactPersonDetails || $scope.agentDetails.contactPersonDetails.length == 0)
+                $scope.agentDetails.contactPersonDetails = [{}, {}, {}];
 
             $scope.isEditMode = false;
             $scope.titleList = globalConstants.title;
@@ -55,8 +57,13 @@ angular.module('brokerModule', ['common', 'ngRoute', 'mgcrea.ngStrap.select', 'm
                 $scope.agentDetails.contactPersons = [{}, {}, {}];
 
             $scope.submit = function () {
-                $scope.agentDetails.
-                    $http.post('/pla/core/agency/agent');
+                $http.post("/pla/core/agent/createbroker", $scope.agentDetails)
+                    .success(function (response, status, headers, config) {
+                        if (response.status == "200") {
+                        }
+                    })
+                    .error(function (response, status, headers, config) {
+                    });
             }
 
         }])
@@ -83,6 +90,7 @@ angular.module('brokerModule', ['common', 'ngRoute', 'mgcrea.ngStrap.select', 'm
 
 
         };
+
         transformService.toPlanIdPlanNameObject = function (authorisedToSell) {
             var plans = [];
             angular.forEach(authorisedToSell, function (plan, key) {

@@ -6,10 +6,7 @@
 
 package com.pla.core.domain.service;
 
-import com.pla.core.domain.model.agent.Agent;
-import com.pla.core.domain.model.agent.AgentId;
-import com.pla.core.domain.model.agent.AgentStatus;
-import com.pla.core.domain.model.agent.LicenseNumber;
+import com.pla.core.domain.model.agent.*;
 import com.pla.core.dto.*;
 import com.pla.core.specification.AgentLicenseNumberIsUnique;
 import com.pla.core.specification.NrcNumberIsUnique;
@@ -17,14 +14,18 @@ import com.pla.sharedkernel.domain.model.OverrideCommissionApplicable;
 import com.pla.sharedkernel.identifier.PlanId;
 import org.nthdimenzion.common.service.JpaRepositoryFactory;
 import org.nthdimenzion.ddd.domain.annotations.DomainService;
-import org.nthdimenzion.utils.UtilValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.util.List;
 import java.util.Set;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 import static com.pla.core.domain.exception.AgentException.raiseAgentLicenseNumberUniqueException;
 import static com.pla.core.domain.exception.AgentException.raiseAgentNrcNumberUniqueException;
+import static org.nthdimenzion.utils.UtilValidator.isEmpty;
+import static org.nthdimenzion.utils.UtilValidator.isNotEmpty;
 
 /**
  * @author: Samir
@@ -48,9 +49,9 @@ public class AgentService {
     }
 
     public void createAgent(String agentId, AgentProfileDto agentProfileDto, LicenseNumberDto licenseNumberDto, TeamDetailDto teamDetailDto, ContactDetailDto contactDetailDto, PhysicalAddressDto physicalAddressDto, ChannelTypeDto channelTypeDto, Set<PlanId> authorizedPlans,
-                            OverrideCommissionApplicable overrideCommissionApplicable) {
-        UtilValidator.isNotEmpty("");
-        boolean isLicenseNumberUnique = UtilValidator.isNotEmpty(licenseNumberDto.getLicenseNumber()) ? agentLicenseNumberIsUnique.isSatisfiedBy(new LicenseNumber(licenseNumberDto.getLicenseNumber())) : true;
+                            OverrideCommissionApplicable overrideCommissionApplicable, List<AgentContactPersonDetailDto> agentContactPersonDetailDtos) {
+        isNotEmpty("");
+        boolean isLicenseNumberUnique = isNotEmpty(licenseNumberDto.getLicenseNumber()) ? agentLicenseNumberIsUnique.isSatisfiedBy(new LicenseNumber(licenseNumberDto.getLicenseNumber())) : true;
         AgentDto agentDto = new AgentDto(agentProfileDto.getNrcNumber(), agentId);
         boolean isNrcNumberIsUnique = agentProfileDto.getNrcNumber() != null ? nrcNumberIsUnique.isSatisfiedBy(agentDto) : true;
         if (!isLicenseNumberUnique) {
@@ -62,16 +63,19 @@ public class AgentService {
         Agent agent = Agent.createAgent(new AgentId(agentId));
         Agent agentDetail = populateAgentDetail(agent, agentProfileDto, licenseNumberDto, teamDetailDto, contactDetailDto, physicalAddressDto, channelTypeDto, overrideCommissionApplicable);
         Agent agentWithPlans = agentDetail.withPlans(authorizedPlans);
+        if (isNotEmpty(agentContactPersonDetailDtos)) {
+            agentWithPlans = agentWithPlans.withContactPersonDetail(getAgentContactPersonDetails(agentContactPersonDetailDtos));
+        }
         JpaRepository<Agent, AgentId> agentRepository = jpaRepositoryFactory.getCrudRepository(Agent.class);
         agentRepository.save(agentWithPlans);
     }
 
     public void updateAgent(String agentId, AgentProfileDto agentProfileDto, LicenseNumberDto licenseNumberDto, TeamDetailDto teamDetailDto, ContactDetailDto contactDetailDto, PhysicalAddressDto physicalAddressDto, ChannelTypeDto channelTypeDto, Set<PlanId> authorizedPlans,
-                            AgentStatus agentStatus, OverrideCommissionApplicable overrideCommissionApplicable) {
+                            AgentStatus agentStatus, OverrideCommissionApplicable overrideCommissionApplicable, List<AgentContactPersonDetailDto> agentContactPersonDetailDtos) {
         boolean isLicenseNumberUnique = true;
         JpaRepository<Agent, AgentId> agentRepository = jpaRepositoryFactory.getCrudRepository(Agent.class);
         Agent agent = agentRepository.getOne(new AgentId(agentId));
-        isLicenseNumberUnique = (UtilValidator.isNotEmpty(licenseNumberDto.getLicenseNumber()) && !(agent.getLicenseNumber().getLicenseNumber().equals(licenseNumberDto.getLicenseNumber()))) ? agentLicenseNumberIsUnique.isSatisfiedBy(new LicenseNumber(licenseNumberDto.getLicenseNumber())) : true;
+        isLicenseNumberUnique = (isNotEmpty(licenseNumberDto.getLicenseNumber()) && !(agent.getLicenseNumber().getLicenseNumber().equals(licenseNumberDto.getLicenseNumber()))) ? agentLicenseNumberIsUnique.isSatisfiedBy(new LicenseNumber(licenseNumberDto.getLicenseNumber())) : true;
         if (!isLicenseNumberUnique) {
             raiseAgentLicenseNumberUniqueException();
         }
@@ -83,9 +87,26 @@ public class AgentService {
         Agent updatedAgent = populateAgentDetail(agent, agentProfileDto, licenseNumberDto, teamDetailDto, contactDetailDto, physicalAddressDto, channelTypeDto, overrideCommissionApplicable);
         Agent agentWithPlans = updatedAgent.withPlans(authorizedPlans);
         agentWithPlans = agentWithPlans.updateStatus(agentStatus);
+        if (isNotEmpty(agentContactPersonDetailDtos)) {
+            agentWithPlans = agentWithPlans.withContactPersonDetail(getAgentContactPersonDetails(agentContactPersonDetailDtos));
+        }
         agentRepository.save(agentWithPlans);
     }
 
+
+    private List<AgentContactPersonDetail> getAgentContactPersonDetails(List<AgentContactPersonDetailDto> agentContactPersonDetailDtos) {
+        if (isEmpty(agentContactPersonDetailDtos)) {
+            return null;
+        }
+        List<AgentContactPersonDetail> agentContactPersonDetails = agentContactPersonDetailDtos.stream().map(new Function<AgentContactPersonDetailDto, AgentContactPersonDetail>() {
+            @Override
+            public AgentContactPersonDetail apply(AgentContactPersonDetailDto agentContactPersonDetailDto) {
+                AgentContactPersonDetail agentContactPersonDetail = new AgentContactPersonDetail(agentContactPersonDetailDto.getLineOfBusinessId(), agentContactPersonDetailDto.getTitle(), agentContactPersonDetailDto.getFullName(), agentContactPersonDetailDto.getEmailId(), agentContactPersonDetailDto.getWorkPhone(), agentContactPersonDetailDto.getFax());
+                return agentContactPersonDetail;
+            }
+        }).collect(Collectors.toList());
+        return agentContactPersonDetails;
+    }
 
     private Agent populateAgentDetail(Agent agent, AgentProfileDto agentProfileDto, LicenseNumberDto licenseNumberDto, TeamDetailDto teamDetailDto, ContactDetailDto contactDetailDto, PhysicalAddressDto physicalAddressDto, ChannelTypeDto channelTypeDto, OverrideCommissionApplicable overrideCommissionApplicable
     ) {

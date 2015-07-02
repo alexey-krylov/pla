@@ -19,7 +19,6 @@ import javax.persistence.Embeddable;
 import javax.persistence.Embedded;
 
 import static com.google.common.base.Preconditions.checkArgument;
-import static com.google.common.base.Preconditions.checkState;
 import static org.nthdimenzion.utils.UtilValidator.isNotEmpty;
 
 /**
@@ -53,11 +52,11 @@ class AgentProfile {
 
     AgentProfile(String firstName, String lastName, LocalDate trainingCompleteOn, Designation designation) {
         checkArgument(isNotEmpty(firstName));
-        checkArgument(trainingCompleteOn != null);
+//        checkArgument(trainingCompleteOn != null);
         checkArgument(designation != null);
         //Assuming the agent completed training on the 12-01-2015 and is created in the
         //system on the same very day.
-        checkState(trainingCompleteOn.isBefore(LocalDate.now().plusDays(1)));
+        //checkState(trainingCompleteOn.isBefore(LocalDate.now().plusDays(1)));
         this.firstName = firstName;
         this.lastName = lastName;
         this.trainingCompleteOn = trainingCompleteOn;

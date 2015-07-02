@@ -16,6 +16,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -48,4 +49,6 @@ public class UpdateAgentCommand {
     private UserDetails userDetails;
 
     private AgentStatus agentStatus;
+
+    private List<AgentContactPersonDetailDto> contactPersonDetails;
 }

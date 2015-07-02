@@ -9,6 +9,8 @@ package com.pla.core.application.agent;
 import com.google.common.base.Preconditions;
 import com.pla.core.application.exception.AgentApplicationException;
 import com.pla.core.domain.model.agent.Agent;
+import com.pla.core.dto.ChannelTypeDto;
+import com.pla.core.dto.DesignationDto;
 import com.pla.core.query.AgentFinder;
 import com.pla.core.query.TeamFinder;
 import com.pla.publishedlanguage.contract.ISMEGateway;
@@ -75,7 +77,8 @@ public class AgentController {
         List<Map<String, Object>> allAgentPlans = agentFinder.getAllAgentPlan();
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("pla/core/agent/viewagent");
-        modelAndView.addObject("agentList", CreateAgentCommand.transformToAgentCommand(nonTerminatedAgents, allAgentPlans, mongoTemplate.findAll(Map.class, "PLAN")));
+        List<Map<String, Object>> agentContacts = agentFinder.getAllAgentContacts();
+        modelAndView.addObject("agentList", CreateAgentCommand.transformToAgentCommand(nonTerminatedAgents, allAgentPlans, mongoTemplate.findAll(Map.class, "PLAN"), agentContacts));
         return modelAndView;
     }
 
@@ -116,7 +119,8 @@ public class AgentController {
         Preconditions.checkArgument(isNotEmpty(agentId));
         Map<String, Object> agentDetail = agentFinder.getAgentById(agentId);
         List<Map<String, Object>> allAgentPlans = agentFinder.getAllAgentPlan();
-        return CreateAgentCommand.transformToAgentCommand(agentDetail, allAgentPlans, mongoTemplate.findAll(Map.class, "PLAN"));
+        List<Map<String, Object>> agentContacts = agentFinder.getAllAgentContacts();
+        return CreateAgentCommand.transformToAgentCommand(agentDetail, allAgentPlans, mongoTemplate.findAll(Map.class, "PLAN"), agentContacts);
     }
 
     @RequestMapping(value = "/viewagentdetail", method = RequestMethod.GET)
@@ -126,7 +130,8 @@ public class AgentController {
         Preconditions.checkArgument(isNotEmpty(agentId));
         Map<String, Object> agentDetail = agentFinder.getAgentById(agentId);
         List<Map<String, Object>> agentPlans = agentFinder.getAllAgentPlan();
-        modelAndView.addObject("agentDetail", CreateAgentCommand.transformToAgentCommand(agentDetail, agentPlans, mongoTemplate.findAll(Map.class, "PLAN")));
+        List<Map<String, Object>> agentContacts = agentFinder.getAllAgentContacts();
+        modelAndView.addObject("agentDetail", CreateAgentCommand.transformToAgentCommand(agentDetail, agentPlans, mongoTemplate.findAll(Map.class, "PLAN"), agentContacts));
         return modelAndView;
     }
 
@@ -149,6 +154,29 @@ public class AgentController {
             return Result.failure(e.getMessage());
         }
         return Result.success("Agent created successfully");
+    }
+
+    @RequestMapping(value = "/createbroker", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public
+    @ResponseBody
+    Result createBroker(@RequestBody @Valid CreateAgentCommand createAgentCommand, BindingResult bindingResult, HttpServletRequest request) {
+        if (bindingResult.hasErrors()) {
+            return Result.failure("Error in creating broker", bindingResult.getAllErrors());
+        }
+        try {
+            UserDetails userDetails = getLoggedInUserDetail(request);
+            createAgentCommand.setChannelType(new ChannelTypeDto("BROKER", "Broker"));
+            createAgentCommand.getAgentProfile().setDesignationDto(new DesignationDto("AGENT","Agent"));
+            createAgentCommand.setUserDetails(userDetails);
+            commandGateway.sendAndWait(createAgentCommand);
+        } catch (AgentApplicationException e) {
+            LOGGER.error("Error in creating broker", e);
+            return Result.failure(e.getMessage());
+        } catch (Exception e) {
+            LOGGER.error("Error in creating agent", e);
+            return Result.failure(e.getMessage());
+        }
+        return Result.success("Broker created successfully");
     }
 
     @RequestMapping(value = "/update", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
@@ -174,7 +202,7 @@ public class AgentController {
     public Result getEmployeeDetail(@RequestParam(value = "employeeId", required = false) String employeeId, @RequestParam(value = "nrcNumber", required = false) String nrcNumber) {
         EmployeeDto employeeDto;
         try {
-            if (isNotEmpty(nrcNumber)){
+            if (isNotEmpty(nrcNumber)) {
                 String nrcNumberWithoutSlash = nrcNumber.replaceAll("/", "").trim();
                 Integer agentCount = agentFinder.findAgentCountByNrcNumber(nrcNumberWithoutSlash);
                 if (agentCount != 0)
@@ -184,7 +212,7 @@ public class AgentController {
         } catch (Exception e) {
             return Result.failure(e.getLocalizedMessage());
         }
-        return Result.success("Agent Details",employeeDto);
+        return Result.success("Agent Details", employeeDto);
     }
 
     @RequestMapping(value = "/getallplan", method = RequestMethod.GET)

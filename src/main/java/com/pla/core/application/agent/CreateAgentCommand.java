@@ -11,6 +11,7 @@ import com.pla.core.domain.model.agent.AgentStatus;
 import com.pla.core.domain.model.plan.PlanDetail;
 import com.pla.core.dto.*;
 import com.pla.sharedkernel.domain.model.OverrideCommissionApplicable;
+import com.pla.sharedkernel.identifier.LineOfBusinessEnum;
 import com.pla.sharedkernel.identifier.PlanId;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -60,10 +61,13 @@ public class CreateAgentCommand {
 
     private List<PlanDetailDto> agentPlanDetails;
 
+    private List<AgentContactPersonDetailDto> contactPersonDetails;
 
-    public static CreateAgentCommand transformToAgentCommand(Map<String, Object> agentDetail, List<Map<String, Object>> allAgentPlans, List<Map> allMasterPlans) {
+
+    public static CreateAgentCommand transformToAgentCommand(Map<String, Object> agentDetail, List<Map<String, Object>> allAgentPlans, List<Map> allMasterPlans, List<Map<String, Object>> agentContacts) {
         CreateAgentCommand createAgentCommand = new CreateAgentCommand();
-        createAgentCommand.setAgentId((String) agentDetail.get("agentId"));
+        String agentId = (String) agentDetail.get("agentId");
+        createAgentCommand.setAgentId(agentId);
         createAgentCommand.setAgentProfile(AgentProfileDto.transFormToAgentProfileDto(agentDetail));
         LicenseNumberDto licenseNumberDto = agentDetail.get("licenseNumber") != null ? new LicenseNumberDto((String) agentDetail.get("licenseNumber")) : null;
         createAgentCommand.setLicenseNumber(licenseNumberDto);
@@ -82,11 +86,36 @@ public class CreateAgentCommand {
             List<PlanDetailDto> planDetailDtos = authorizedPlanToSell.stream().map(new TransformToPlanDetailDto(allMasterPlans)).collect(Collectors.toList());
             createAgentCommand.setAgentPlanDetails(planDetailDtos);
         }
+        if (isNotEmpty(agentContacts)) {
+            List<Map<String, Object>> agentContactMapOptional = agentContacts.stream().filter(new Predicate<Map<String, Object>>() {
+                @Override
+                public boolean test(Map<String, Object> stringObjectMap) {
+                    return agentId.equals((String) stringObjectMap.get("agentId"));
+                }
+            }).collect(Collectors.toList());
+
+            if (isNotEmpty(agentContactMapOptional)) {
+                List<AgentContactPersonDetailDto> agentContactPersonDetailDtos = agentContactMapOptional.stream().map(new Function<Map<String, Object>, AgentContactPersonDetailDto>() {
+                    @Override
+                    public AgentContactPersonDetailDto apply(Map<String, Object> stringObjectMap) {
+                        AgentContactPersonDetailDto agentContactPersonDetailDto = new AgentContactPersonDetailDto();
+                        agentContactPersonDetailDto.setLineOfBusinessId(stringObjectMap.get("lineOfBusiness") != null ? LineOfBusinessEnum.valueOf((String) stringObjectMap.get("lineOfBusiness")) : null);
+                        agentContactPersonDetailDto.setEmailId(stringObjectMap.get("emailId") != null ? (String) stringObjectMap.get("emailId") : "");
+                        agentContactPersonDetailDto.setWorkPhone(stringObjectMap.get("workPhoneNumber") != null ? (String) stringObjectMap.get("workPhoneNumber") : "");
+                        agentContactPersonDetailDto.setFax(stringObjectMap.get("faxNumber") != null ? (String) stringObjectMap.get("faxNumber") : "");
+                        agentContactPersonDetailDto.setFullName(stringObjectMap.get("personName") != null ? (String) stringObjectMap.get("personName") : "");
+                        agentContactPersonDetailDto.setTitle(stringObjectMap.get("salutation") != null ? (String) stringObjectMap.get("salutation") : "");
+                        return agentContactPersonDetailDto;
+                    }
+                }).collect(Collectors.toList());
+                createAgentCommand.setContactPersonDetails(agentContactPersonDetailDtos);
+            }
+        }
         return createAgentCommand;
     }
 
-    public static List<CreateAgentCommand> transformToAgentCommand(List<Map<String, Object>> nonTerminatedAgents, List<Map<String, Object>> allAgentPlans, List<Map> allMasterPlans) {
-        List<CreateAgentCommand> createAgentCommands = nonTerminatedAgents.stream().map(new TransformAgentDetailToAgentCommand(allAgentPlans, allMasterPlans)).collect(Collectors.toList());
+    public static List<CreateAgentCommand> transformToAgentCommand(List<Map<String, Object>> nonTerminatedAgents, List<Map<String, Object>> allAgentPlans, List<Map> allMasterPlans, List<Map<String, Object>> agentContacts) {
+        List<CreateAgentCommand> createAgentCommands = nonTerminatedAgents.stream().map(new TransformAgentDetailToAgentCommand(allAgentPlans, allMasterPlans, agentContacts)).collect(Collectors.toList());
         return createAgentCommands;
     }
 
@@ -119,14 +148,17 @@ public class CreateAgentCommand {
 
         private List<Map> allMasterPlans;
 
-        TransformAgentDetailToAgentCommand(List<Map<String, Object>> allAgentPlans, List<Map> allMasterPlans) {
+        private List<Map<String, Object>> agentContacts;
+
+        TransformAgentDetailToAgentCommand(List<Map<String, Object>> allAgentPlans, List<Map> allMasterPlans, List<Map<String, Object>> agentContacts) {
             this.allAgentPlans = allAgentPlans;
             this.allMasterPlans = allMasterPlans;
+            this.agentContacts = agentContacts;
         }
 
         @Override
         public CreateAgentCommand apply(Map<String, Object> agentDetail) {
-            return transformToAgentCommand(agentDetail, allAgentPlans, allMasterPlans);
+            return transformToAgentCommand(agentDetail, allAgentPlans, allMasterPlans, agentContacts);
         }
 
 

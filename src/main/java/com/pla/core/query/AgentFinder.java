@@ -41,6 +41,8 @@ public class AgentFinder {
 
     public static final String FIND_AGENT_PLAN_QUERY = "SELECT agent_id AS agentId,plan_id AS planId FROM `agent_authorized_plan`";
 
+    public static final String FIND_AGENT_CONTACT_QUERY = "SELECT agent_id AS agentId,email_id AS emailId,fax_number AS faxNumber,line_of_business AS lineOfBusiness,person_name AS personName,salutation,work_phone_number AS workPhoneNumber FROM `agent_contact_persons`";
+
     public static final String SEARCH_AGENT_BY_PLAN_LOB = "SELECT A.*,c.line_of_business FROM AGENT A JOIN agent_authorized_plan b " +
             " ON A.`agent_id`=B.`agent_id` JOIN plan_coverage_benefit_assoc C " +
             " ON B.`plan_id`=C.`plan_id` where c.line_of_business=:lineOfBusiness and A.agent_status='ACTIVE' group by A.agent_id";
@@ -74,6 +76,10 @@ public class AgentFinder {
 
     public List<Map<String, Object>> getAllAgentPlan() {
         return namedParameterJdbcTemplate.query(FIND_AGENT_PLAN_QUERY, new ColumnMapRowMapper());
+    }
+
+    public List<Map<String, Object>> getAllAgentContacts() {
+        return namedParameterJdbcTemplate.query(FIND_AGENT_CONTACT_QUERY, new ColumnMapRowMapper());
     }
 
     public List<Map<String, Object>> getAllNonTerminatedAgent() {

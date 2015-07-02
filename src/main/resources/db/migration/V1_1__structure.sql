@@ -768,12 +768,6 @@ CREATE VIEW document_view AS
    FROM document );
 
 
-DROP TABLE IF EXISTS `industry`;
-CREATE TABLE `industry` (
-  `code` varchar(100) NOT NULL,
-  `description` varchar(255) DEFAULT NULL,
-  PRIMARY KEY (`code`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 DROP TABLE IF EXISTS `occupation_class`;
 CREATE TABLE `occupation_class` (
@@ -998,6 +992,28 @@ CREATE TABLE `notification_role` (
   `process` varchar(100) NOT NULL,
   `role_type` varchar(100) NOT NULL,
   PRIMARY KEY (`line_of_business`,`process`,`role_type`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+DROP TABLE IF EXISTS `agent_contact_persons`;
+CREATE TABLE `agent_contact_persons` (
+  `agent_id` varchar(255) NOT NULL,
+  `email_id` varchar(255) DEFAULT NULL,
+  `fax_number` varchar(255) DEFAULT NULL,
+  `line_of_business` varchar(255) DEFAULT NULL,
+  `person_name` varchar(255) DEFAULT NULL,
+  `salutation` varchar(255) DEFAULT NULL,
+  `work_phone_number` varchar(255) DEFAULT NULL,
+  KEY `FK_611yrgoo7bksgx7q0c503pmcn` (`agent_id`),
+  CONSTRAINT `FK_611yrgoo7bksgx7q0c503pmcn` FOREIGN KEY (`agent_id`) REFERENCES `agent` (`agent_id`)
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+DROP TABLE IF EXISTS `industry`;
+CREATE TABLE `industry` (
+  `industry_id` varchar(10) NOT NULL,
+  `industry_name` varchar(255) DEFAULT NULL,
+  `risk_class` int(11) DEFAULT NULL,
+  `industry_factor` decimal(10,4) DEFAULT NULL,
+  PRIMARY KEY (`industry_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;

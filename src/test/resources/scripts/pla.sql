@@ -590,6 +590,18 @@ CREATE TABLE `notification_role` (
   PRIMARY KEY (`line_of_business`,`process`,`role_type`)
 );
 
+DROP TABLE IF EXISTS `agent_contact_persons`;
+CREATE TABLE `agent_contact_persons` (
+  `agent_id` varchar(255) NOT NULL,
+  `email_id` varchar(255) DEFAULT NULL,
+  `fax_number` varchar(255) DEFAULT NULL,
+  `line_of_business` varchar(255) DEFAULT NULL,
+  `person_name` varchar(255) DEFAULT NULL,
+  `salutation` varchar(255) DEFAULT NULL,
+  `work_phone_number` varchar(255) DEFAULT NULL,
+  KEY `FK_611yrgoo7bksgx7q0c503pmcn` (`agent_id`),
+  CONSTRAINT `FK_611yrgoo7bksgx7q0c503pmcn` FOREIGN KEY (`agent_id`) REFERENCES `agent` (`agent_id`)
+);
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;

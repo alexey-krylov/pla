@@ -48,7 +48,7 @@ public class CreateAgentCommandTest {
     public void itShouldTransFormToCreateAgentCommand() {
         agentDetail = agentFinder.getAgentById("100011");
         allAgentPlans = agentFinder.getAllAgentPlan();
-        CreateAgentCommand createAgentCommand = CreateAgentCommand.transformToAgentCommand(agentDetail, allAgentPlans, Lists.newArrayList());
+        CreateAgentCommand createAgentCommand = CreateAgentCommand.transformToAgentCommand(agentDetail, allAgentPlans, Lists.newArrayList(),Lists.newArrayList());
         assertEquals("100011", createAgentCommand.getAgentId());
         assertEquals(AgentStatus.ACTIVE, createAgentCommand.getAgentStatus());
         assertEquals(OverrideCommissionApplicable.NO, createAgentCommand.getOverrideCommissionApplicable());
