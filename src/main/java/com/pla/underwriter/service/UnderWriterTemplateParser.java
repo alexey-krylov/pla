@@ -6,12 +6,9 @@ import com.pla.publishedlanguage.contract.IPlanAdapter;
 import com.pla.sharedkernel.domain.model.RoutingLevel;
 import com.pla.underwriter.domain.model.UnderWriterInfluencingFactor;
 import org.apache.commons.lang.math.NumberUtils;
-import org.apache.poi.hssf.usermodel.HSSFCell;
-import org.apache.poi.hssf.usermodel.HSSFRow;
-import org.apache.poi.hssf.usermodel.HSSFSheet;
-import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.hssf.usermodel.*;
+import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.ss.util.CellRangeAddressList;
 import org.nthdimenzion.common.AppConstants;
 import org.springframework.stereotype.Component;
 
@@ -37,6 +34,18 @@ public class UnderWriterTemplateParser {
         HSSFWorkbook underWriterTemplateWorkbook = new HSSFWorkbook();
         HSSFSheet underWriterSheet = underWriterTemplateWorkbook.createSheet(planName);
         createHeaderRowWithInfluencingFactor(0, convertToStringArray(underWriterInfluencingFactors), underWriterSheet);
+        CellRangeAddressList addressList = new CellRangeAddressList(1, 1000, convertToStringArray(underWriterInfluencingFactors).size()-1,convertToStringArray(underWriterInfluencingFactors).size()-1);
+        List<String> routingLevelArray =  Arrays.asList(RoutingLevel.values()).stream().map(new Function<RoutingLevel, String>() {
+            @Override
+            public String apply(RoutingLevel routingLevel) {
+                return routingLevel.getDescription();
+            }
+        }).collect(Collectors.toList());
+        String[] data = Arrays.copyOf(routingLevelArray.toArray(), routingLevelArray.toArray().length, String[].class);
+        DVConstraint dvConstraint = DVConstraint.createExplicitListConstraint(data);
+        DataValidation dataValidation = new HSSFDataValidation(addressList, dvConstraint);
+        dataValidation.setSuppressDropDownArrow(false);
+        underWriterSheet.addValidationData(dataValidation);
         return underWriterTemplateWorkbook;
     }
 
