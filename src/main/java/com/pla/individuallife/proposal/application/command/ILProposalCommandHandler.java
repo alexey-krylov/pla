@@ -56,12 +56,12 @@ public class ILProposalCommandHandler {
 
     @CommandHandler
     public void updateGeneralDetails(ILProposalUpdateGeneralDetailsCommand cmd) {
-        ProposalAggregate proposalAggregate = null;
+        ProposalAggregate aggregate = null;
         ProposalId proposalId = new ProposalId(cmd.getProposalId());
         List<QuestionDto> dto = cmd.getGenerateDetails();
         try {
-            proposalAggregate = ilProposalMongoRepository.load(proposalId);
-            proposalAggregate.updateGeneralDetails(dto);
+            aggregate = ilProposalMongoRepository.load(proposalId);
+            aggregate.updateGeneralDetails(dto, cmd.getUserDetails());
         } catch (AggregateNotFoundException e) {
             e.printStackTrace();
         }
@@ -73,20 +73,20 @@ public class ILProposalCommandHandler {
         ProposalId proposalId = new ProposalId(cmd.getProposalId());
         try {
             proposalAggregate = ilProposalMongoRepository.load(proposalId);
-            proposalAggregate.updateAdditionalDetails(cmd.getMedicalAttendantDetails(), cmd.getMedicalAttendantDuration(), cmd.getDateAndReason(), cmd.getReplacementDetails());
+            proposalAggregate.updateAdditionalDetails(cmd.getUserDetails(), cmd.getMedicalAttendantDetails(), cmd.getMedicalAttendantDuration(), cmd.getDateAndReason(), cmd.getReplacementDetails());
         } catch (AggregateNotFoundException e) {
             e.printStackTrace();
         }
     }
 
     @CommandHandler
-    public void updateCompulsoryHealthStatement(ILProposalUpdateCompulsoryHealthStatementCommand updateCompulsoryHealthStatementCommand) {
+    public void updateCompulsoryHealthStatement(ILProposalUpdateCompulsoryHealthStatementCommand cmd) {
         ProposalAggregate proposalAggregate = null;
-        ProposalId proposalId = new ProposalId(updateCompulsoryHealthStatementCommand.getProposalId());
-        List<QuestionDto> questionDtoList=updateCompulsoryHealthStatementCommand.getCompulsoryHealthDetails();
+        ProposalId proposalId = new ProposalId(cmd.getProposalId());
+        List<QuestionDto> questionDtoList=cmd.getCompulsoryHealthDetails();
         try {
             proposalAggregate = ilProposalMongoRepository.load(proposalId);
-            proposalAggregate.updateCompulsoryHealthStatement(questionDtoList);
+            proposalAggregate.updateCompulsoryHealthStatement(questionDtoList, cmd.getUserDetails());
         } catch (AggregateNotFoundException e) {
             e.printStackTrace();
         }
@@ -100,7 +100,7 @@ public class ILProposalCommandHandler {
 
         try {
             proposalAggregate = ilProposalMongoRepository.load(proposalId);
-            proposalAggregate.updateFamilyPersonalDetail(familyPersonalDetail);
+            proposalAggregate.updateFamilyPersonalDetail(familyPersonalDetail, cmd.getUserDetails());
         } catch (AggregateNotFoundException e) {
             e.printStackTrace();
         }
@@ -120,5 +120,17 @@ public class ILProposalCommandHandler {
         }
     }
 
+    @CommandHandler
+    public void updateWithPremiumPaymentDetail(ILProposalUpdatePremiumPaymentDetailsCommand cmd) {
+        ProposalAggregate aggregate = null;
+        ProposalId proposalId = new ProposalId(cmd.getProposalId());
 
+        try {
+            aggregate = ilProposalMongoRepository.load(proposalId);
+            aggregate.updateWithPremiumPaymentDetail(aggregate, cmd.getPremiumPaymentDetails(), cmd.getUserDetails());
+            ilProposalMongoRepository.add(aggregate);
+        } catch (AggregateNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
 }

@@ -46,6 +46,7 @@ public class ProposalAggregate extends AbstractAnnotatedAggregateRoot<ProposalId
     private FamilyPersonalDetail familyPersonalDetail;
     private AgentCommissionShareModel agentCommissionShareModel;
     private AdditionalDetails additionaldetails;
+    private PremiumPaymentDetails premiumPaymentDetails;
 
     private ILProposalStatus proposalStatus;
 
@@ -57,11 +58,7 @@ public class ProposalAggregate extends AbstractAnnotatedAggregateRoot<ProposalId
 
     public ProposalAggregate(UserDetails userDetails, ProposalId proposalId, String proposalNumber, ProposedAssured proposedAssured, Set<AgentDetailDto> agentCommissionDetails) {
         riders = new HashSet<RiderDetail>();
-        boolean hasProposalPreprocessorRole = hasIndividualLifeProposalProcessorRole(userDetails.getAuthorities());
-        if (!hasProposalPreprocessorRole) {
-            throw new AuthorizationServiceException("User does not have Individual Life Proposal processor(ROLE_PROPOSAL_PROCESSOR) authority");
-        }
-        Preconditions.checkArgument(hasProposalPreprocessorRole);
+        checkAuthorization(userDetails);
         this.proposalNumber = proposalNumber;
         this.proposalId = proposalId;
         if(proposedAssured.getIsProposer()) {
@@ -75,25 +72,22 @@ public class ProposalAggregate extends AbstractAnnotatedAggregateRoot<ProposalId
     }
 
     public void updateWithProposer(ProposalAggregate aggregate, Proposer proposer, UserDetails userDetails) {
-
-        boolean hasProposalPreprocessorRole = hasIndividualLifeProposalProcessorRole(userDetails.getAuthorities());
-        if (!hasProposalPreprocessorRole) {
-            throw new AuthorizationServiceException("User does not have Individual Life Proposal processor(ROLE_PROPOSAL_PROCESSOR) authority");
-        }
-        Preconditions.checkArgument(hasProposalPreprocessorRole);
-            assignProposer(proposer);
+        checkAuthorization(userDetails);
+        assignProposer(proposer);
     }
 
     public void updatePlan(ProposalAggregate aggregate, ProposalPlanDetail proposalPlanDetail, Set<Beneficiary> beneficiaries, UserDetails userDetails) {
+        checkAuthorization(userDetails);
+        assignPlanDetail(proposalPlanDetail);
+        assignBeneficiaries(beneficiaries);
+    }
+
+    private void checkAuthorization(UserDetails userDetails){
         boolean hasProposalPreprocessorRole = hasIndividualLifeProposalProcessorRole(userDetails.getAuthorities());
         if (!hasProposalPreprocessorRole) {
             throw new AuthorizationServiceException("User does not have Individual Life Proposal processor(ROLE_PROPOSAL_PROCESSOR) authority");
         }
         Preconditions.checkArgument(hasProposalPreprocessorRole);
-        assignPlanDetail(proposalPlanDetail);
-        assignBeneficiaries(beneficiaries);
-
-
     }
 
     private void assignBeneficiaries(Set<Beneficiary> beneficiaries) {
@@ -148,22 +142,31 @@ public class ProposalAggregate extends AbstractAnnotatedAggregateRoot<ProposalId
         totalBeneficiaryShare = newTotal;
     }
 
-    public void updateGeneralDetails(List<QuestionDto> generaldetails) {
+    public void updateGeneralDetails(List<QuestionDto> generaldetails, UserDetails userDetails) {
+        checkAuthorization(userDetails);
         this.generalDetails  = new ArrayList<Question>();
         generaldetails.stream().forEach(gd -> this.generalDetails.add(new Question(new QuestionId(gd.getQuestionId()), gd.isAnswer(), gd.getAnswerResponse())));
     }
 
-    public void updateCompulsoryHealthStatement(List<QuestionDto> compulsoryHealthStatement){
+    public void updateCompulsoryHealthStatement(List<QuestionDto> compulsoryHealthStatement, UserDetails userDetails){
+        checkAuthorization(userDetails);
         this.compulsoryHealthStatement = new ArrayList<Question>();
         compulsoryHealthStatement.stream().forEach(ch -> this.compulsoryHealthStatement.add(new Question(new QuestionId(ch.getQuestionId()), ch.isAnswer(), ch.getAnswerResponse())));
     }
 
-    public void updateFamilyPersonalDetail(FamilyPersonalDetail personalDetail){
+    public void updateFamilyPersonalDetail(FamilyPersonalDetail personalDetail, UserDetails userDetails){
+        checkAuthorization(userDetails);
         this.familyPersonalDetail=personalDetail;
     }
 
 
-    public void updateAdditionalDetails(String medicalAttendantDetails, String medicalAttendantDuration, String dateAndReason, QuestionDto replacementDetails) {
+    public void updateAdditionalDetails(UserDetails userDetails, String medicalAttendantDetails, String medicalAttendantDuration, String dateAndReason, QuestionDto replacementDetails) {
+        checkAuthorization(userDetails);
         this.additionaldetails = new AdditionalDetails(medicalAttendantDetails, medicalAttendantDuration, dateAndReason, new Question(new QuestionId(replacementDetails.getQuestionId()), replacementDetails.isAnswer(), replacementDetails.getAnswerResponse()));
+    }
+
+    public void updateWithPremiumPaymentDetail(ProposalAggregate aggregate, PremiumPaymentDetails premiumPaymentDetails, UserDetails userDetails) {
+        checkAuthorization(userDetails);
+        this.premiumPaymentDetails = premiumPaymentDetails;
     }
 }
