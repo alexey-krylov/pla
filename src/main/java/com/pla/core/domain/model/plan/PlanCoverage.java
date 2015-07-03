@@ -11,9 +11,12 @@ import lombok.ToString;
 
 import java.math.BigDecimal;
 import java.util.*;
+import java.util.function.Function;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 import static com.google.common.base.Preconditions.checkArgument;
+import static org.nthdimenzion.utils.UtilValidator.isNotEmpty;
 
 
 /**
@@ -92,12 +95,7 @@ public class PlanCoverage {
     }
 
 
-    public boolean isValidSumAssured(BigDecimal sumAssured) {
-        List<BigDecimal> sumAssureds = getAllowedCoverageSumAssuredValues();
-        return sumAssureds.contains(sumAssured);
-    }
-
-    public List<BigDecimal> getAllowedCoverageSumAssuredValues() {
+    public List<BigDecimal> getAllowedCoverageSumAssuredValues(SumAssured planSumAssured) {
         List<BigDecimal> allowedValues = Lists.newArrayList();
         if (SumAssuredType.SPECIFIED_VALUES.equals(this.coverageSumAssured.getSumAssuredType())) {
             allowedValues.addAll(this.coverageSumAssured.getSumAssuredValue());
@@ -105,11 +103,37 @@ public class PlanCoverage {
         } else if (SumAssuredType.RANGE.equals(this.coverageSumAssured.getSumAssuredType())) {
             BigDecimal minimumSumAssuredValue = this.coverageSumAssured.getMinSumInsured();
             BigDecimal maximumSumAssuredValue = this.coverageSumAssured.getMaxSumInsured();
-            while (minimumSumAssuredValue.compareTo(maximumSumAssuredValue) == -1) {
+            while (minimumSumAssuredValue.compareTo(maximumSumAssuredValue) == 0 || minimumSumAssuredValue.compareTo(maximumSumAssuredValue) == -1) {
                 allowedValues.add(minimumSumAssuredValue);
                 minimumSumAssuredValue = minimumSumAssuredValue.add(new BigDecimal(this.coverageSumAssured.getMultiplesOf()));
             }
-            allowedValues.add(this.coverageSumAssured.getMaxSumInsured());
+        } else if (SumAssuredType.DERIVED.equals(this.coverageSumAssured.getSumAssuredType())) {
+            int percentage = this.coverageSumAssured.getPercentage();
+            if (SumAssuredType.SPECIFIED_VALUES.equals(planSumAssured.getSumAssuredType())) {
+                allowedValues = planSumAssured.getSumAssuredValue().stream().map(new Function<BigDecimal, BigDecimal>() {
+                    @Override
+                    public BigDecimal apply(BigDecimal planSA) {
+                        BigDecimal coverageSA = planSA.multiply((new BigDecimal(percentage).divide(new BigDecimal(100))));
+                        coverageSA = coverageSA.setScale(0);
+                        return coverageSA;
+                    }
+                }).collect(Collectors.toList());
+            } else if (SumAssuredType.RANGE.equals(planSumAssured.getSumAssuredType()) && planSumAssured.getMultiplesOf() != 0) {
+                BigDecimal minSA = planSumAssured.getMinSumInsured().multiply((new BigDecimal(percentage).divide(new BigDecimal(100))));
+                BigDecimal maxSA = planSumAssured.getMaxSumInsured().multiply((new BigDecimal(percentage).divide(new BigDecimal(100))));
+                minSA = minSA.setScale(0);
+                maxSA = maxSA.setScale(0);
+                BigDecimal multiplesOf = new BigDecimal(planSumAssured.getMultiplesOf()).multiply((new BigDecimal(percentage).divide(new BigDecimal(100))));
+                multiplesOf = multiplesOf.setScale(0);
+                while (minSA.compareTo(maxSA) == 0 || minSA.compareTo(maxSA) == -1) {
+                    allowedValues.add(minSA);
+                    minSA = minSA.add(multiplesOf);
+                }
+            } else if (SumAssuredType.INCOME_MULTIPLIER.equals(planSumAssured.getSumAssuredType())) {
+            }
+        }
+        if (isNotEmpty(allowedValues)) {
+            Collections.sort(allowedValues);
         }
         return allowedValues;
     }
@@ -146,9 +170,9 @@ public class PlanCoverage {
         return planCoverageBenefitOptional.isPresent() ? planCoverageBenefitOptional.get() : null;
     }
 
-    public boolean isValidBenefit(BenefitId benefitId){
+    public boolean isValidBenefit(BenefitId benefitId) {
         PlanCoverageBenefit planCoverageBenefit = findBenefit(benefitId);
-        return planCoverageBenefit!=null;
+        return planCoverageBenefit != null;
     }
 
     public boolean isValidBenefitLimit(BenefitId benefitId, BigDecimal sumAssured) {

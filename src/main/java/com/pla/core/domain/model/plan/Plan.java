@@ -216,7 +216,7 @@ public class Plan extends AbstractAnnotatedAggregateRoot<PlanId> {
 
     public List<BigDecimal> getAllowedCoverageSumAssuredValues(CoverageId coverageId) {
         PlanCoverage planCoverage = findPlanCoverage(coverageId);
-        return planCoverage.getAllowedCoverageSumAssuredValues();
+        return planCoverage.getAllowedCoverageSumAssuredValues(this.sumAssured);
     }
 
 
@@ -228,11 +228,10 @@ public class Plan extends AbstractAnnotatedAggregateRoot<PlanId> {
         } else if (SumAssuredType.RANGE.equals(this.sumAssured.getSumAssuredType())) {
             BigDecimal minimumSumAssuredValue = this.sumAssured.getMinSumInsured();
             BigDecimal maximumSumAssuredValue = this.sumAssured.getMaxSumInsured();
-            while (minimumSumAssuredValue.compareTo(maximumSumAssuredValue) == -1) {
+            while (minimumSumAssuredValue.compareTo(maximumSumAssuredValue) == 0 || minimumSumAssuredValue.compareTo(maximumSumAssuredValue) == -1) {
                 allowedValues.add(minimumSumAssuredValue);
                 minimumSumAssuredValue = minimumSumAssuredValue.add(new BigDecimal(this.sumAssured.getMultiplesOf()));
             }
-            allowedValues.add(this.sumAssured.getMaxSumInsured());
         }
         return allowedValues;
     }

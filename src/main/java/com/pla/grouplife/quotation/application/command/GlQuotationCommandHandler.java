@@ -84,7 +84,7 @@ public class GlQuotationCommandHandler {
         Set<Insured> insureds = glInsuredFactory.createInsuredDetail(insuredDtos);
         GroupLifeQuotation groupLifeQuotation = glQuotationMongoRepository.load(new QuotationId(updateGLQuotationWithInsuredCommand.getQuotationId()));
         boolean isVersioningRequire = groupLifeQuotation.requireVersioning();
-        groupLifeQuotation = groupLifeQuotationService.updateInsured(groupLifeQuotation, insureds, updateGLQuotationWithInsuredCommand.getUserDetails(), updateGLQuotationWithInsuredCommand.isIndustryLoadingFactorApplicable());
+        groupLifeQuotation = groupLifeQuotationService.updateInsured(groupLifeQuotation, insureds, updateGLQuotationWithInsuredCommand.getUserDetails());
         PremiumDetailDto premiumDetailDto = new PremiumDetailDto(BigDecimal.valueOf(20), 365, BigDecimal.valueOf(5), BigDecimal.valueOf(5), BigDecimal.valueOf(5));
         groupLifeQuotation = groupLifeQuotationService.updateWithPremiumDetail(groupLifeQuotation, premiumDetailDto, updateGLQuotationWithInsuredCommand.getUserDetails());
         if (isVersioningRequire) {
@@ -110,7 +110,7 @@ public class GlQuotationCommandHandler {
         if (premiumDetailDto.getPolicyTermValue() != 365) {
             Set<Insured> insureds = groupLifeQuotation.getInsureds();
             insureds = glInsuredFactory.recalculateProratePremiumForInsureds(premiumDetailDto, insureds);
-            groupLifeQuotation = groupLifeQuotationService.updateInsured(groupLifeQuotation, insureds, userDetails, groupLifeQuotation.getIndustry() != null ? groupLifeQuotation.getIndustry().isApplyOnPremium() : false);
+            groupLifeQuotation = groupLifeQuotationService.updateInsured(groupLifeQuotation, insureds, userDetails);
         }
         groupLifeQuotation = groupLifeQuotationService.updateWithPremiumDetail(groupLifeQuotation, premiumDetailDto, userDetails);
         return groupLifeQuotation;

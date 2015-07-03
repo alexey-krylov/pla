@@ -16,17 +16,10 @@ public class Industry {
 
     private BigDecimal loadingFactor;
 
-    private boolean applyOnPremium;
-
     public Industry(String industryId, String industryName, BigDecimal loadingFactor) {
         this.industryId = industryId;
         this.industryName = industryName;
         this.loadingFactor = loadingFactor;
     }
 
-
-    public Industry markOnApplyLoadingFactorOnPremium(boolean applyOnPremium) {
-        this.applyOnPremium = applyOnPremium;
-        return this;
-    }
 }

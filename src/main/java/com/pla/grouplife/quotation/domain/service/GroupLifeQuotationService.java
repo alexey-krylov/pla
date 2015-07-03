@@ -101,16 +101,13 @@ public class GroupLifeQuotationService {
         return glQuotationProcessor.updateWithAgentId(groupLifeQuotation, new AgentId(agentId));
     }
 
-    public GroupLifeQuotation updateInsured(GroupLifeQuotation groupLifeQuotation, Set<Insured> insureds, UserDetails userDetails, boolean industryLoadingFactorApplicable) {
+    public GroupLifeQuotation updateInsured(GroupLifeQuotation groupLifeQuotation, Set<Insured> insureds, UserDetails userDetails) {
         if (!agentIsActive.isSatisfiedBy(groupLifeQuotation.getAgentId())) {
             raiseAgentIsInactiveException();
         }
         GLQuotationProcessor glQuotationProcessor = quotationRoleAdapter.userToQuotationProcessor(userDetails);
         groupLifeQuotation = checkQuotationNeedForVersioningAndGetQuotation(glQuotationProcessor, groupLifeQuotation);
         Industry industry = groupLifeQuotation.getIndustry();
-        if (industry != null) {
-            industry = industry.markOnApplyLoadingFactorOnPremium(industryLoadingFactorApplicable);
-        }
         groupLifeQuotation = groupLifeQuotation.updateWithIndustry(industry);
         return glQuotationProcessor.updateWithInsured(groupLifeQuotation, insureds);
     }
