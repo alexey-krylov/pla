@@ -1,5 +1,6 @@
 package com.pla.underwriter.application;
 
+import com.pla.sharedkernel.identifier.UnderWriterDocumentId;
 import com.pla.underwriter.domain.model.UnderWriterInfluencingFactor;
 import com.pla.underwriter.domain.model.UnderWriterProcessType;
 import com.pla.underwriter.dto.UnderWriterDto;
@@ -21,6 +22,8 @@ import java.util.stream.Collectors;
 @Setter
 @NoArgsConstructor
 public class CreateUnderWriterDocumentCommand {
+
+    private UnderWriterDocumentId underWriterDocumentId;
 
     @NotNull
     private String planCode;
