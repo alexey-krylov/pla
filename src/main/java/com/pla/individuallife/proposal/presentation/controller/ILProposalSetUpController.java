@@ -237,6 +237,32 @@ public class ILProposalSetUpController {
         return new ResponseEntity(map, HttpStatus.OK);
     }
 
+    @ResponseBody
+    @RequestMapping(value = "/updatepremiumpaymentdetails", method = RequestMethod.POST)
+    public ResponseEntity updatePremiumPaymentDetails(@RequestBody ILProposalUpdatePremiumPaymentDetailsCommand cmd,HttpServletRequest request,
+                                                      BindingResult bindingResult) {
+
+        String proposalId = cmd.getProposalId();
+        if (bindingResult.hasErrors()) {
+            return new ResponseEntity(bindingResult.getAllErrors(), HttpStatus.PRECONDITION_FAILED);
+        }
+
+        try {
+            UserDetails userDetails = getLoggedInUserDetail(request);
+            cmd.setUserDetails(userDetails);
+            proposalCommandGateway.updatePremiumPaymentDetails(cmd);
+        } catch (TimeoutException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        Map map = new HashMap<>();
+        map.put("msg", "Proposal updated with Premium Payment Details successfully");
+        map.put("proposalId", proposalId);
+        return new ResponseEntity(map, HttpStatus.OK);
+    }
+
     @RequestMapping(value="/searchQuotation", method = RequestMethod.POST)
     public ModelAndView searchQuotation(ILSearchQuotationDto searchIlDto) {
         ModelAndView modelAndView = new ModelAndView();

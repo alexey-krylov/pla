@@ -4,10 +4,14 @@ import com.pla.core.query.AgentFinder;
 import com.pla.core.query.MasterFinder;
 import com.pla.individuallife.proposal.presentation.dto.ILProposalDto;
 import com.pla.individuallife.proposal.presentation.dto.ILSearchProposalDto;
+import com.pla.individuallife.proposal.presentation.dto.PremiumDetailDto;
 import com.pla.individuallife.proposal.presentation.dto.RiderDetailDto;
 import com.pla.individuallife.proposal.query.ILProposalFinder;
 import com.wordnik.swagger.annotations.ApiOperation;
+import org.nthdimenzion.presentation.Result;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
@@ -140,5 +144,17 @@ public class ILProposalController {
     public List<Map<String, Object>> searchPlan(@RequestParam("proposalId") String proposalId) {
         List<Map<String, Object>> planList = proposalFinder.getAgents(proposalId);
         return planList;
+    }
+
+    @RequestMapping(value = "/getpremiumdetail/{proposalId}", method = RequestMethod.GET)
+    @ResponseBody
+    public ResponseEntity getPremiumDetail(@PathVariable("proposalId") String proposalId) {
+        PremiumDetailDto dto = null;
+        try {
+            dto = proposalFinder.getPremiumDetail(proposalId);
+        } catch (IllegalArgumentException iag) {
+            return new ResponseEntity(Result.failure(iag.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        return new ResponseEntity(dto, HttpStatus.OK);
     }
 }

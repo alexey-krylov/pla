@@ -31,4 +31,7 @@ public interface ILProposalCommandGateway {
 
     void updateAdditionalDetails(ILProposalUpdateAdditionalDetailsCommand cmd)
             throws TimeoutException, InterruptedException;
+
+    void updatePremiumPaymentDetails(ILProposalUpdatePremiumPaymentDetailsCommand cmd)
+            throws TimeoutException, InterruptedException;
 }

@@ -14,8 +14,8 @@ public class RiderDetailDto {
 
     private String coverageId;
     private BigDecimal sumAssured;
-    private int coverTerm;
-    private int waiverOfPremium;
+    private Integer coverTerm;
+    private Integer waiverOfPremium;
     private String coverageName;
 
 }

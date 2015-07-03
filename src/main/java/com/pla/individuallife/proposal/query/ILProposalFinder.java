@@ -3,12 +3,24 @@ package com.pla.individuallife.proposal.query;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
 import com.mongodb.BasicDBObject;
+import com.pla.core.domain.model.CoverageName;
+import com.pla.core.domain.model.plan.premium.Premium;
+import com.pla.core.query.CoverageFinder;
+import com.pla.core.query.PlanFinder;
+import com.pla.core.query.PremiumFinder;
 import com.pla.individuallife.proposal.domain.model.*;
-import com.pla.individuallife.proposal.presentation.dto.AgentDetailDto;
-import com.pla.individuallife.proposal.presentation.dto.ILProposalDto;
-import com.pla.individuallife.proposal.presentation.dto.ILSearchProposalDto;
+import com.pla.individuallife.proposal.presentation.dto.*;
+import com.pla.publishedlanguage.contract.IPremiumCalculator;
+import com.pla.publishedlanguage.domain.model.ComputedPremiumDto;
+import com.pla.publishedlanguage.domain.model.PremiumCalculationDto;
+import com.pla.publishedlanguage.domain.model.PremiumFrequency;
+import com.pla.publishedlanguage.domain.model.PremiumInfluencingFactor;
+import com.pla.sharedkernel.identifier.CoverageId;
+import com.pla.sharedkernel.identifier.PlanId;
 import com.pla.sharedkernel.identifier.QuotationId;
+import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
+import org.joda.time.Years;
 import org.nthdimenzion.ddd.domain.annotations.Finder;
 import org.nthdimenzion.utils.UtilValidator;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +35,7 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Service;
 
 import javax.sql.DataSource;
+import java.math.BigDecimal;
 import java.util.*;
 import java.util.function.Function;
 import java.util.regex.Pattern;
@@ -41,6 +54,18 @@ public class ILProposalFinder {
     private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
     private MongoTemplate mongoTemplate;
+
+    @Autowired
+    private IPremiumCalculator premiumCalculator;
+
+    @Autowired
+    private PremiumFinder premiumFinder;
+
+    @Autowired
+    private PlanFinder planFinder;
+
+    @Autowired
+    private CoverageFinder coverageFinder;
 
     @Autowired
     public void setDataSource(DataSource dataSource, MongoTemplate mongoTemplate) {
@@ -118,6 +143,96 @@ public class ILProposalFinder {
         List<Map> allProposals = mongoTemplate.find(query, Map.class, "individual_life_proposal");
         List<ILSearchProposalDto> ilProposalDtoList = allProposals.stream().map(new TransformToILSearchProposalDto()).collect(Collectors.toList());
         return ilProposalDtoList;
+    }
+
+    public PremiumDetailDto getPremiumDetail(String proposalId) {
+
+        PremiumDetailDto premiumDetailDto = new PremiumDetailDto();
+
+        Set<RiderPremiumDto> riderPremiumDtoSet = new HashSet<RiderPremiumDto>();
+
+        BasicDBObject query = new BasicDBObject();
+        query.put("_id", proposalId);
+        Map proposal = mongoTemplate.findOne(new BasicQuery(query), Map.class, "individual_life_proposal");
+
+        ProposalPlanDetail planDetail = (ProposalPlanDetail) proposal.get("proposalPlanDetail");
+
+
+        PremiumCalculationDto premiumCalculationDto = new PremiumCalculationDto(new PlanId(planDetail.getPlanId()), LocalDate.now(), PremiumFrequency.ANNUALLY, 365);
+
+        DateTime dob = new DateTime(((ProposedAssured) proposal.get("proposedAssured")).getDateOfBirth());
+        Integer age = Years.yearsBetween(dob, DateTime.now()).getYears() + 1;
+
+        Premium premium = premiumFinder.findPremium(premiumCalculationDto);
+        List<PremiumInfluencingFactor> premiumInfluencingFactors = premium.getPremiumInfluencingFactors();
+
+        for (PremiumInfluencingFactor premiumInfluencingFactor : premiumInfluencingFactors) {
+            if (premiumInfluencingFactor.name().equalsIgnoreCase(String.valueOf(PremiumInfluencingFactor.SUM_ASSURED)))
+                premiumCalculationDto.addInfluencingFactorItemValue(PremiumInfluencingFactor.SUM_ASSURED, planDetail.getSumAssured().toString());
+            if (premiumInfluencingFactor.name().equalsIgnoreCase(String.valueOf(PremiumInfluencingFactor.GENDER)))
+                premiumCalculationDto.addInfluencingFactorItemValue(PremiumInfluencingFactor.GENDER, ((ProposedAssured) proposal.get("proposedAssured")).getGender().toString());
+            if (premiumInfluencingFactor.name().equalsIgnoreCase(String.valueOf(PremiumInfluencingFactor.AGE)))
+                premiumCalculationDto.addInfluencingFactorItemValue(PremiumInfluencingFactor.AGE, String.valueOf(age));
+            if (premiumInfluencingFactor.name().equalsIgnoreCase(String.valueOf(PremiumInfluencingFactor.POLICY_TERM)))
+                premiumCalculationDto.addInfluencingFactorItemValue(PremiumInfluencingFactor.POLICY_TERM, planDetail.getPolicyTerm().toString());
+            if (premiumInfluencingFactor.name().equalsIgnoreCase(String.valueOf(PremiumInfluencingFactor.PREMIUM_PAYMENT_TERM)))
+                premiumCalculationDto.addInfluencingFactorItemValue(PremiumInfluencingFactor.PREMIUM_PAYMENT_TERM, planDetail.getPremiumPaymentTerm().toString());
+            if (premiumInfluencingFactor.name().equalsIgnoreCase(String.valueOf(PremiumInfluencingFactor.OCCUPATION_CLASS)))
+                premiumCalculationDto.addInfluencingFactorItemValue(PremiumInfluencingFactor.OCCUPATION_CLASS, ((ProposedAssured) proposal.get("proposedAssured")).getEmploymentDetail().getOccupationClass());
+        }
+
+        List<ComputedPremiumDto> computedPremiums = premiumCalculator.calculateBasicPremiumWithPolicyFee(premiumCalculationDto);
+        premiumDetailDto.setPlanAnnualPremium(ComputedPremiumDto.getAnnualPremium(computedPremiums));
+
+        BigDecimal totalPremium = premiumDetailDto.getPlanAnnualPremium();
+        BigDecimal semiAnnualPremium = ComputedPremiumDto.getSemiAnnualPremium(computedPremiums);
+        BigDecimal quarterlyPremium = ComputedPremiumDto.getQuarterlyPremium(computedPremiums);
+        BigDecimal monthlyPremium = ComputedPremiumDto.getMonthlyPremium(computedPremiums);
+
+        Set<RiderDetailDto> riderList = planDetail.getRiderDetails();
+
+        if (riderList != null) {
+            for (RiderDetailDto rider : riderList) {
+                if ((new BigDecimal(rider.getSumAssured().toString()).compareTo(new BigDecimal("0.0")) != 0) || (rider.getCoverTerm() != 0)) {
+                    premiumCalculationDto = new PremiumCalculationDto(new PlanId(planDetail.getPlanId()), LocalDate.now(), PremiumFrequency.ANNUALLY, 365);
+                    premiumCalculationDto = premiumCalculationDto.addCoverage(new CoverageId(rider.getCoverageId()));
+                    premiumInfluencingFactors = premiumFinder.findPremium(premiumCalculationDto).getPremiumInfluencingFactors();
+
+                    for (PremiumInfluencingFactor premiumInfluencingFactor : premiumInfluencingFactors) {
+                        if (premiumInfluencingFactor.name().equalsIgnoreCase(String.valueOf(PremiumInfluencingFactor.SUM_ASSURED)))
+                            premiumCalculationDto.addInfluencingFactorItemValue(PremiumInfluencingFactor.SUM_ASSURED, rider.getSumAssured().toString());
+                        if (premiumInfluencingFactor.name().equalsIgnoreCase(String.valueOf(PremiumInfluencingFactor.GENDER)))
+                            premiumCalculationDto.addInfluencingFactorItemValue(PremiumInfluencingFactor.GENDER, ((ProposedAssured) proposal.get("proposedAssured")).getGender().toString());
+                        if (premiumInfluencingFactor.name().equalsIgnoreCase(String.valueOf(PremiumInfluencingFactor.AGE)))
+                            premiumCalculationDto.addInfluencingFactorItemValue(PremiumInfluencingFactor.AGE, String.valueOf(age));
+                        if (premiumInfluencingFactor.name().equalsIgnoreCase(String.valueOf(PremiumInfluencingFactor.POLICY_TERM)))
+                            premiumCalculationDto.addInfluencingFactorItemValue(PremiumInfluencingFactor.POLICY_TERM, rider.getCoverTerm().toString());
+                        if (premiumInfluencingFactor.name().equalsIgnoreCase(String.valueOf(PremiumInfluencingFactor.PREMIUM_PAYMENT_TERM)))
+                            premiumCalculationDto.addInfluencingFactorItemValue(PremiumInfluencingFactor.PREMIUM_PAYMENT_TERM, rider.getWaiverOfPremium().toString());
+                        if (premiumInfluencingFactor.name().equalsIgnoreCase(String.valueOf(PremiumInfluencingFactor.OCCUPATION_CLASS)))
+                            premiumCalculationDto.addInfluencingFactorItemValue(PremiumInfluencingFactor.OCCUPATION_CLASS, ((ProposedAssured) proposal.get("proposedAssured")).getEmploymentDetail().getOccupationClass());
+                    }
+                    RiderPremiumDto rd = new RiderPremiumDto();
+                    rd.setCoverageId(new CoverageId(rider.getCoverageId()));
+                    rd.setCoverageName(new CoverageName(coverageFinder.getCoverageDetail(rider.getCoverageId()).get("coverageName").toString()));
+                    computedPremiums = premiumCalculator.calculateBasicPremium(premiumCalculationDto);
+                    rd.setAnnualPremium(ComputedPremiumDto.getAnnualPremium(computedPremiums));
+                    totalPremium = totalPremium.add(ComputedPremiumDto.getAnnualPremium(computedPremiums));
+                    semiAnnualPremium = semiAnnualPremium.add(ComputedPremiumDto.getSemiAnnualPremium(computedPremiums));
+                    quarterlyPremium = quarterlyPremium.add(ComputedPremiumDto.getQuarterlyPremium(computedPremiums));
+                    monthlyPremium = monthlyPremium.add(ComputedPremiumDto.getMonthlyPremium(computedPremiums));
+                    riderPremiumDtoSet.add(rd);
+                }
+            }
+        }
+        premiumDetailDto.setRiderPremiumDtos(riderPremiumDtoSet);
+        premiumDetailDto.setTotalPremium(totalPremium);
+        premiumDetailDto.setPlanName(planFinder.getPlanName(new PlanId(planDetail.getPlanId())));
+        premiumDetailDto.setAnnualPremium(totalPremium);
+        premiumDetailDto.setMonthlyPremium(monthlyPremium);
+        premiumDetailDto.setQuarterlyPremium(quarterlyPremium);
+        premiumDetailDto.setSemiannualPremium(semiAnnualPremium);
+        return premiumDetailDto;
     }
 
     private class TransformToILSearchProposalDto implements Function<Map, ILSearchProposalDto> {

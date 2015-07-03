@@ -1,6 +1,6 @@
 package com.pla.individuallife.proposal.domain.model;
 
-import com.pla.individuallife.quotation.presentation.dto.RiderDetailDto;
+import com.pla.individuallife.proposal.presentation.dto.RiderDetailDto;
 import lombok.Getter;
 
 import java.math.BigDecimal;
