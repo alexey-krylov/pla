@@ -17,4 +17,8 @@ public class UnderWriterException extends RuntimeException {
         throw  new UnderWriterException("UnderWriter is not found");
     }
 
+    public static void raiseDuplicateUnderWriterDocumentSetUp(){
+        throw  new UnderWriterException("Underwriting documents already described");
+    }
+
 }

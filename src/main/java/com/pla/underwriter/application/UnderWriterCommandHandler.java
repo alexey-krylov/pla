@@ -4,6 +4,7 @@ import com.pla.sharedkernel.identifier.CoverageId;
 import com.pla.sharedkernel.identifier.UnderWriterDocumentId;
 import com.pla.sharedkernel.identifier.UnderWriterRoutingLevelId;
 import com.pla.underwriter.domain.model.UnderWriterDocument;
+import com.pla.underwriter.domain.model.UnderWriterProcessType;
 import com.pla.underwriter.domain.model.UnderWriterRoutingLevel;
 import com.pla.underwriter.repository.UnderWriterDocumentRepository;
 import com.pla.underwriter.repository.UnderWriterRoutingLevelRepository;
@@ -16,6 +17,7 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 import java.util.Map;
 
+import static com.pla.underwriter.exception.UnderWriterException.raiseDuplicateUnderWriterDocumentSetUp;
 import static org.nthdimenzion.utils.UtilValidator.isEmpty;
 import static org.nthdimenzion.utils.UtilValidator.isNotEmpty;
 
@@ -34,7 +36,7 @@ public class UnderWriterCommandHandler {
     private IIdGenerator idGenerator;
 
     @Autowired
-     public UnderWriterCommandHandler(UnderWriterService underWriterService,UnderWriterDocumentRepository underWriterDocumentRepository,UnderWriterRoutingLevelRepository underWriterRoutingLevelRepository, IIdGenerator idGenerator) {
+    public UnderWriterCommandHandler(UnderWriterService underWriterService,UnderWriterDocumentRepository underWriterDocumentRepository,UnderWriterRoutingLevelRepository underWriterRoutingLevelRepository, IIdGenerator idGenerator) {
         this.underWriterService = underWriterService;
         this.underWriterDocumentRepository = underWriterDocumentRepository;
         this.underWriterRoutingLevelRepository = underWriterRoutingLevelRepository;
@@ -44,11 +46,14 @@ public class UnderWriterCommandHandler {
     @CommandHandler
     public void createUnderWriterDocumentHandler(CreateUnderWriterDocumentCommand createUnderWriterDocumentCommand) {
         UnderWriterDocument underWriterDocument = null;
-        if (isNotEmpty(createUnderWriterDocumentCommand.getPlanCode()) && isNotEmpty(createUnderWriterDocumentCommand.getCoverageId())) {
-            underWriterDocument = underWriterDocumentRepository.findByPlanCodeAndCoverageIdAndValidityDate(createUnderWriterDocumentCommand.getPlanCode(), new CoverageId(createUnderWriterDocumentCommand.getCoverageId()), null,createUnderWriterDocumentCommand.getProcessType().name());
-        } else if (isNotEmpty(createUnderWriterDocumentCommand.getPlanCode()) && isEmpty(createUnderWriterDocumentCommand.getCoverageId())) {
-            underWriterDocument = underWriterDocumentRepository.findByPlanCodeAndValidityDate(createUnderWriterDocumentCommand.getPlanCode(), null,createUnderWriterDocumentCommand.getProcessType().name());
+        if (createUnderWriterDocumentCommand.getUnderWriterDocumentId()==null){
+            underWriterDocument = findUnderWriterDocumentSetUp(createUnderWriterDocumentCommand.getPlanCode(),createUnderWriterDocumentCommand.getCoverageId(),createUnderWriterDocumentCommand.getProcessType());
+            if(underWriterDocument!=null){
+                raiseDuplicateUnderWriterDocumentSetUp();
+                return;
+            }
         }
+        underWriterDocument = findUnderWriterDocumentSetUp(createUnderWriterDocumentCommand.getPlanCode(),createUnderWriterDocumentCommand.getCoverageId(),createUnderWriterDocumentCommand.getProcessType());
         if (underWriterDocument != null) {
             underWriterDocument = underWriterDocument.expireUnderWriterDocument(createUnderWriterDocumentCommand.getEffectiveFrom().minusDays(1));
             underWriterDocumentRepository.save(underWriterDocument);
@@ -80,5 +85,15 @@ public class UnderWriterCommandHandler {
         UnderWriterRoutingLevel document = isNotEmpty(createUnderWriterRoutingLevelCommand.getCoverageId()) ? UnderWriterRoutingLevel.createUnderWriterRoutingLevelWithOptionalCoverage(underWriterRoutingLevelId, planCode, coverageId, createUnderWriterRoutingLevelCommand.getProcessType(), createUnderWriterRoutingLevelCommand.getUnderWriterDocumentItem(), createUnderWriterRoutingLevelCommand.getUnderWriterInfluencingFactors(), createUnderWriterRoutingLevelCommand.getEffectiveFrom())
                 : UnderWriterRoutingLevel.createUnderWriterRoutingLevelWithPlan(underWriterRoutingLevelId, planCode, createUnderWriterRoutingLevelCommand.getProcessType(), createUnderWriterRoutingLevelCommand.getUnderWriterDocumentItem(), createUnderWriterRoutingLevelCommand.getUnderWriterInfluencingFactors(), createUnderWriterRoutingLevelCommand.getEffectiveFrom());
         underWriterRoutingLevelRepository.save(document);
+    }
+
+    public UnderWriterDocument findUnderWriterDocumentSetUp(String planCode,String coverageId,UnderWriterProcessType processType){
+        UnderWriterDocument underWriterDocument = null;
+        if (isNotEmpty(planCode) && isNotEmpty(coverageId) ){
+            underWriterDocument = underWriterDocumentRepository.findByPlanCodeAndCoverageIdAndValidityDate(planCode, new CoverageId(coverageId), null, processType.name());
+        } else if (isNotEmpty(planCode) && isEmpty(coverageId)) {
+            underWriterDocument = underWriterDocumentRepository.findByPlanCodeAndValidityDate(planCode, null, processType.name());
+        }
+        return underWriterDocument;
     }
 }
