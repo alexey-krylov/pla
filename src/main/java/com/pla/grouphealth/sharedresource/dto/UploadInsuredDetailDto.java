@@ -1,4 +1,4 @@
-package com.pla.grouphealth.quotation.application.command;
+package com.pla.grouphealth.sharedresource.dto;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -18,4 +18,6 @@ public class UploadInsuredDetailDto {
     private MultipartFile file;
 
     private String quotationId;
+
+    private String proposalId;
 }

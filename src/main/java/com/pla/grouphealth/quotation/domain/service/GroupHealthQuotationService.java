@@ -6,6 +6,7 @@ import com.pla.grouphealth.sharedresource.dto.GHPremiumDetailDto;
 import com.pla.grouphealth.quotation.query.GHQuotationFinder;
 import com.pla.grouphealth.sharedresource.dto.ProposerDto;
 import com.pla.grouphealth.sharedresource.model.vo.*;
+import com.pla.grouphealth.sharedresource.service.AgentIsActive;
 import com.pla.publishedlanguage.contract.IPremiumCalculator;
 import com.pla.publishedlanguage.domain.model.BasicPremiumDto;
 import com.pla.publishedlanguage.domain.model.ComputedPremiumDto;

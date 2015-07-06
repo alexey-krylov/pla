@@ -17,4 +17,6 @@ public class SearchGHProposalDto {
     private String agentName;
 
     private String agentCode;
+
+    private String proposalId;
 }

@@ -21,6 +21,7 @@
   CREATE TABLE `agent`(
     `agent_id` varchar(255) NOT NULL,
     `designation_code` varchar(255) DEFAULT NULL,
+    `registration_number` VARCHAR(255) NULL,
     `designation_name` varchar(255) DEFAULT NULL,
     `employee_id` varchar(255) DEFAULT NULL,
     `first_name` varchar(255) DEFAULT NULL,

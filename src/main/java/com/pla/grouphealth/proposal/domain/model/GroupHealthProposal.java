@@ -5,6 +5,7 @@ import com.pla.grouphealth.sharedresource.model.vo.GHInsured;
 import com.pla.grouphealth.sharedresource.model.vo.GHPremiumDetail;
 import com.pla.grouphealth.sharedresource.model.vo.GHProposer;
 import com.pla.sharedkernel.domain.model.Quotation;
+import com.pla.sharedkernel.identifier.OpportunityId;
 import com.pla.sharedkernel.identifier.ProposalId;
 import com.pla.sharedkernel.identifier.ProposalNumber;
 import lombok.AccessLevel;
@@ -51,6 +52,8 @@ public class GroupHealthProposal extends AbstractAggregateRoot<ProposalId> {
     private GHProposalStatus proposalStatus;
 
     private List<GHProposerDocument> proposerDocuments;
+
+    private OpportunityId opportunityId;
 
     @Override
     public ProposalId getIdentifier() {
@@ -102,7 +105,7 @@ public class GroupHealthProposal extends AbstractAggregateRoot<ProposalId> {
         return this;
     }
 
-    private GroupHealthProposal approvedByAprover(String approvedBy) {
+    private GroupHealthProposal approvedByApprover(String approvedBy) {
         this.proposalStatus = GHProposalStatus.APPROVED;
         //raise event
         return this;
@@ -142,5 +145,11 @@ public class GroupHealthProposal extends AbstractAggregateRoot<ProposalId> {
             totalBasicAnnualPremium = totalBasicAnnualPremium.add(insured.getBasicAnnualPremium());
         }
         return totalBasicAnnualPremium;
+    }
+
+    public GroupHealthProposal updateWithOpportunityId(OpportunityId opportunityId) {
+        this.opportunityId = opportunityId;
+        return this;
+
     }
 }

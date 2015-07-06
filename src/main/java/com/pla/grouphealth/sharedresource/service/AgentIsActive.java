@@ -1,4 +1,4 @@
-package com.pla.grouphealth.quotation.domain.service;
+package com.pla.grouphealth.sharedresource.service;
 
 import com.pla.core.domain.model.agent.AgentId;
 import com.pla.grouphealth.quotation.query.GHQuotationFinder;

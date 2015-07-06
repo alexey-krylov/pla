@@ -5,5 +5,5 @@ package com.pla.grouphealth.proposal.domain.model;
  */
 public enum GHProposalStatus {
 
-    SUBMITTED,APPROVED,RETURNED,PENDING_FIRST_PREMIUM,IN_FORCE
+     DRAFT,SUBMITTED,APPROVED,RETURNED,PENDING_FIRST_PREMIUM,IN_FORCE
 }

@@ -1,17 +1,14 @@
 package com.pla.grouphealth.proposal.presentation.controller;
 
 import com.google.common.collect.Lists;
+import com.pla.grouphealth.proposal.application.command.*;
 import com.pla.grouphealth.proposal.application.service.GHProposalService;
 import com.pla.grouphealth.proposal.presentation.dto.SearchGHProposalDto;
-import com.pla.grouphealth.quotation.application.command.*;
-import com.pla.grouphealth.sharedresource.dto.AgentDetailDto;
-import com.pla.grouphealth.sharedresource.dto.GHInsuredDto;
-import com.pla.grouphealth.sharedresource.dto.GHPremiumDetailDto;
-import com.pla.grouphealth.sharedresource.dto.ProposerDto;
+import com.pla.grouphealth.quotation.application.command.GenerateGLQuotationCommand;
+import com.pla.grouphealth.sharedresource.dto.*;
 import com.pla.publishedlanguage.contract.IClientProvider;
 import com.pla.publishedlanguage.dto.ClientDetailDto;
 import com.pla.sharedkernel.identifier.ProposalId;
-import com.pla.sharedkernel.identifier.QuotationId;
 import net.sf.jasperreports.engine.JRException;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.poifs.filesystem.POIFSFileSystem;
@@ -61,7 +58,10 @@ public class GroupHealthProposalController {
             modelAndView.setViewName("pla/grouphealth/proposal/searchQuotation");
             return modelAndView;
         }
+        String proposalId = commandGateway.sendAndWait(new GHQuotationToProposalCommand(quotationId));
+        AgentDetailDto agentDetailDto = ghProposalService.getAgentDetail(new ProposalId(proposalId));
         modelAndView.setViewName("pla/grouphealth/proposal/createProposal");
+        modelAndView.addObject("agentDetail", agentDetailDto);
         return modelAndView;
     }
 
@@ -106,7 +106,7 @@ public class GroupHealthProposalController {
     }
 
     @RequestMapping(value = "/listgrouphealthproposal", method = RequestMethod.GET)
-    public ModelAndView listQuotation() {
+    public ModelAndView listProposal() {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("pla/grouphealth/proposal/viewProposal");
         modelAndView.addObject("searchCriteria", new SearchGHProposalDto());
@@ -114,11 +114,11 @@ public class GroupHealthProposalController {
     }
 
     @RequestMapping(value = "/searchproposal", method = RequestMethod.POST)
-    public ModelAndView searchQuotation(SearchGHProposalDto searchGHProposalDto) {
+    public ModelAndView searchProposal(SearchGHProposalDto searchGHProposalDto) {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("pla/grouphealth/proposal/viewProposal");
         try {
-            modelAndView.addObject("searchResult", ghProposalService.searchProposal(searchGHProposalDto));
+            modelAndView.addObject("searchResult", ghProposalService.searchProposal(searchGHProposalDto, new String[]{"DRAFT", "SUBMITTED"}));
         } catch (Exception e) {
             modelAndView.addObject("searchResult", Lists.newArrayList());
         }
@@ -128,14 +128,14 @@ public class GroupHealthProposalController {
 
     @RequestMapping(value = "/updatewithagentdetail", method = RequestMethod.POST)
     @ResponseBody
-    public Result updateQuotationWithAgentDetail(@RequestBody UpdateGLQuotationWithAgentCommand updateGLQuotationWithAgentCommand, BindingResult bindingResult, HttpServletRequest request) {
+    public Result updateProposalWithAgentDetail(@RequestBody UpdateGHProposalWithAgentCommand updateGHProposalWithAgentCommand, BindingResult bindingResult, HttpServletRequest request) {
         if (bindingResult.hasErrors()) {
             return Result.failure("Update quotation agent data is not valid", bindingResult.getAllErrors());
         }
         try {
-            updateGLQuotationWithAgentCommand.setUserDetails(getLoggedInUserDetail(request));
-            String quotationId = commandGateway.sendAndWait(updateGLQuotationWithAgentCommand);
-            return Result.success("Agent detail updated successfully", quotationId);
+            updateGHProposalWithAgentCommand.setUserDetails(getLoggedInUserDetail(request));
+            String proposalId = commandGateway.sendAndWait(updateGHProposalWithAgentCommand);
+            return Result.success("Agent detail updated successfully", proposalId);
         } catch (Exception e) {
             return Result.failure(e.getMessage());
         }
@@ -143,14 +143,14 @@ public class GroupHealthProposalController {
 
     @RequestMapping(value = "/updatewithproposerdetail", method = RequestMethod.POST)
     @ResponseBody
-    public Result updateQuotationWithProposerDetail(@RequestBody UpdateGHQuotationWithProposerCommand updateGHQuotationWithProposerCommand, BindingResult bindingResult, HttpServletRequest request) {
+    public Result updateProposalWithProposerDetail(@RequestBody UpdateGHProposalWithProposerCommand updateGHProposalWithProposerCommand, BindingResult bindingResult, HttpServletRequest request) {
         if (bindingResult.hasErrors()) {
             return Result.failure("Update quotation proposer data is not valid", bindingResult.getAllErrors());
         }
         try {
-            updateGHQuotationWithProposerCommand.setUserDetails(getLoggedInUserDetail(request));
-            String quotationId = commandGateway.sendAndWait(updateGHQuotationWithProposerCommand);
-            return Result.success("Proposer detail updated successfully", quotationId);
+            updateGHProposalWithProposerCommand.setUserDetails(getLoggedInUserDetail(request));
+            String proposalId = commandGateway.sendAndWait(updateGHProposalWithProposerCommand);
+            return Result.success("Proposer detail updated successfully", proposalId);
         } catch (Exception e) {
             return Result.failure();
         }
@@ -205,35 +205,35 @@ public class GroupHealthProposalController {
         try {
             boolean isValidInsuredTemplate = ghProposalService.isValidInsuredTemplate(uploadInsuredDetailDto.getQuotationId(), insuredTemplateWorkbook, uploadInsuredDetailDto.isSamePlanForAllCategory(), uploadInsuredDetailDto.isSamePlanForAllRelation());
             if (!isValidInsuredTemplate) {
-                File insuredTemplateWithError = new File(uploadInsuredDetailDto.getQuotationId());
+                File insuredTemplateWithError = new File(uploadInsuredDetailDto.getProposalId());
                 FileOutputStream fileOutputStream = new FileOutputStream(insuredTemplateWithError);
                 insuredTemplateWorkbook.write(fileOutputStream);
                 fileOutputStream.flush();
                 fileOutputStream.close();
                 return Result.failure("Uploaded Insured template is not valid.Please download to check the errors");
             }
-            List<GHInsuredDto> insuredDtos = ghProposalService.transformToInsuredDto(insuredTemplateWorkbook, uploadInsuredDetailDto.getQuotationId(), uploadInsuredDetailDto.isSamePlanForAllCategory(), uploadInsuredDetailDto.isSamePlanForAllRelation());
-            String quotationId = commandGateway.sendAndWait(new UpdateGLQuotationWithInsuredCommand(uploadInsuredDetailDto.getQuotationId(), insuredDtos, getLoggedInUserDetail(request)));
-            return Result.success("Insured detail uploaded successfully", quotationId);
+            List<GHInsuredDto> insuredDtos = ghProposalService.transformToInsuredDto(insuredTemplateWorkbook, uploadInsuredDetailDto.getProposalId(), uploadInsuredDetailDto.isSamePlanForAllCategory(), uploadInsuredDetailDto.isSamePlanForAllRelation());
+            String proposalId = commandGateway.sendAndWait(new UpdateGHProposalWithInsuredCommand(uploadInsuredDetailDto.getProposalId(), insuredDtos, getLoggedInUserDetail(request)));
+            return Result.success("Insured detail uploaded successfully", proposalId);
         } catch (Exception e) {
             e.printStackTrace();
             return Result.failure(e.getMessage());
         }
     }
 
-    @RequestMapping(value = "/getpremiumdetail/{quotationid}", method = RequestMethod.GET)
+    @RequestMapping(value = "/getpremiumdetail/{proposalId}", method = RequestMethod.GET)
     @ResponseBody
-    public GHPremiumDetailDto getPremiumDetail(@PathVariable("quotationid") String quotationId) {
-        return ghProposalService.getPremiumDetail(new QuotationId(quotationId));
+    public GHPremiumDetailDto getPremiumDetail(@PathVariable("proposalId") String proposalId) {
+        return ghProposalService.getPremiumDetail(new ProposalId(proposalId));
     }
 
     @RequestMapping(value = "/recalculatePremium", method = RequestMethod.POST)
     @ResponseBody
-    public Result reCalculatePremium(@RequestBody GHRecalculatedInsuredPremiumCommand glRecalculatedInsuredPremiumCommand, HttpServletRequest request) {
+    public Result reCalculatePremium(@RequestBody GHProposalRecalculatedInsuredPremiumCommand ghProposalRecalculatedInsuredPremiumCommand, HttpServletRequest request) {
         GHPremiumDetailDto premiumDetailDto = null;
         try {
-            glRecalculatedInsuredPremiumCommand.setUserDetails(getLoggedInUserDetail(request));
-            premiumDetailDto = ghProposalService.recalculatePremium(glRecalculatedInsuredPremiumCommand);
+            ghProposalRecalculatedInsuredPremiumCommand.setUserDetails(getLoggedInUserDetail(request));
+            premiumDetailDto = ghProposalService.recalculatePremium(ghProposalRecalculatedInsuredPremiumCommand);
             return Result.success("Premium recalculated successfully", premiumDetailDto);
         } catch (Exception e) {
             return Result.success(e.getMessage());
@@ -242,10 +242,10 @@ public class GroupHealthProposalController {
 
     @RequestMapping(value = "/savepremiumdetail", method = RequestMethod.POST)
     @ResponseBody
-    public Result savePremiumDetail(@RequestBody UpdateGHQuotationWithPremiumDetailCommand updateGLQuotationWithPremiumDetailCommand, HttpServletRequest request) {
+    public Result savePremiumDetail(@RequestBody UpdateGHProposalWithPremiumDetailCommand updateGHProposalWithPremiumDetailCommand, HttpServletRequest request) {
         try {
-            updateGLQuotationWithPremiumDetailCommand.setUserDetails(getLoggedInUserDetail(request));
-            commandGateway.sendAndWait(updateGLQuotationWithPremiumDetailCommand);
+            updateGHProposalWithPremiumDetailCommand.setUserDetails(getLoggedInUserDetail(request));
+            commandGateway.sendAndWait(updateGHProposalWithPremiumDetailCommand);
             return Result.success("Premium detail saved successfully");
         } catch (Exception e) {
             return Result.success(e.getMessage());
@@ -263,7 +263,7 @@ public class GroupHealthProposalController {
         }
     }
 
-    @RequestMapping(value = "/getproposerdetail/{quotationId}")
+    @RequestMapping(value = "/getproposerdetail/{proposalId}")
     @ResponseBody
     public ProposerDto getProposerDetail(@PathVariable("proposalId") String proposalId) {
         return ghProposalService.getProposerDetail(new ProposalId(proposalId));

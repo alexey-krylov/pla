@@ -170,6 +170,7 @@ USE PLA;
 DROP TABLE IF EXISTS `agent`;
 CREATE TABLE `agent` (
   `agent_id`                       VARCHAR(255) NOT NULL,
+  `registration_number`            VARCHAR(255) DEFAULT NULL,
   `designation_code`               VARCHAR(255) DEFAULT NULL,
   `designation_name`               VARCHAR(255) DEFAULT NULL,
   `employee_id`                    VARCHAR(255) DEFAULT NULL,
