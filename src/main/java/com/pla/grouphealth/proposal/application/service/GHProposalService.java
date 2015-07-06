@@ -10,10 +10,8 @@ import com.pla.grouphealth.proposal.presentation.dto.SearchGHProposalDto;
 import com.pla.grouphealth.proposal.query.GHProposalFinder;
 import com.pla.grouphealth.proposal.repository.GHProposalRepository;
 import com.pla.grouphealth.quotation.presentation.dto.PlanDetailDto;
-import com.pla.grouphealth.sharedresource.dto.AgentDetailDto;
-import com.pla.grouphealth.sharedresource.dto.GHInsuredDto;
-import com.pla.grouphealth.sharedresource.dto.GHPremiumDetailDto;
-import com.pla.grouphealth.sharedresource.dto.ProposerDto;
+import com.pla.grouphealth.quotation.query.GHQuotationFinder;
+import com.pla.grouphealth.sharedresource.dto.*;
 import com.pla.grouphealth.sharedresource.model.vo.*;
 import com.pla.grouphealth.sharedresource.query.GHFinder;
 import com.pla.grouphealth.sharedresource.service.GHInsuredExcelGenerator;
@@ -28,7 +26,9 @@ import com.pla.sharedkernel.util.PDFGeneratorUtils;
 import net.sf.jasperreports.engine.JRException;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.axonframework.commandhandling.gateway.CommandGateway;
+import org.bson.types.ObjectId;
 import org.joda.time.DateTime;
+import org.joda.time.LocalDate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -40,6 +40,7 @@ import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+import static org.nthdimenzion.presentation.AppUtils.getIntervalInDays;
 import static org.nthdimenzion.utils.UtilValidator.isEmpty;
 import static org.nthdimenzion.utils.UtilValidator.isNotEmpty;
 
@@ -64,6 +65,9 @@ public class GHProposalService {
     private CommandGateway commandGateway;
 
     @Autowired
+    private GHQuotationFinder ghQuotationFinder;
+
+    @Autowired
     public GHProposalService(GHProposalFinder ghProposalFinder, IPlanAdapter planAdapter, GHFinder ghFinder, GHInsuredExcelGenerator ghInsuredExcelGenerator, GHInsuredExcelParser ghInsuredExcelParser, GHProposalRepository ghProposalRepository, CommandGateway commandGateway) {
         this.ghProposalFinder = ghProposalFinder;
         this.planAdapter = planAdapter;
@@ -81,8 +85,13 @@ public class GHProposalService {
         return proposalMap != null;
     }
 
-    public List<Map> searchGeneratedQuotation(String quotationNumber) {
-        return ghFinder.searchQuotation(quotationNumber, null, null, null, null, new String[]{"GENERATED", "SHARED"});
+    public List<GlQuotationDto> searchGeneratedQuotation(String quotationNumber) {
+        List<Map> allQuotations = ghFinder.searchQuotation(quotationNumber, null, null, null, null, new String[]{"GENERATED", "SHARED"});
+        if (isEmpty(allQuotations)) {
+            return Lists.newArrayList();
+        }
+        List<GlQuotationDto> glQuotationDtoList = allQuotations.stream().map(new TransformToGLQuotationDto()).collect(Collectors.toList());
+        return glQuotationDtoList;
     }
 
     public AgentDetailDto getAgentDetail(ProposalId proposalId) {
@@ -294,4 +303,39 @@ public class GHProposalService {
         List<GHInsuredDto> insuredDtoList = ghInsuredExcelParser.transformToInsuredDto(insuredTemplateWorkbook, agentAuthorizedPlans);
         return insuredDtoList;
     }
+
+    private class TransformToGLQuotationDto implements Function<Map, GlQuotationDto> {
+
+        @Override
+        public GlQuotationDto apply(Map map) {
+            String quotationId = map.get("_id").toString();
+            AgentDetailDto agentDetailDto = getAgentDetail(new QuotationId(quotationId));
+            LocalDate generatedOn = map.get("generatedOn") != null ? new LocalDate((Date) map.get("generatedOn")) : null;
+            LocalDate sharedOn = map.get("sharedOn") != null ? new LocalDate((Date) map.get("sharedOn")) : null;
+            String quotationStatus = map.get("quotationStatus") != null ? (String) map.get("quotationStatus") : "";
+            String quotationNumber = map.get("quotationNumber") != null ? (String) map.get("quotationNumber") : "";
+            ObjectId parentQuotationIdMap = map.get("parentQuotationId") != null ? (ObjectId) map.get("parentQuotationId") : null;
+            GHProposer proposerMap = map.get("proposer") != null ? (GHProposer) map.get("proposer") : null;
+            String proposerName = proposerMap != null ? proposerMap.getProposerName() : "";
+            String parentQuotationId = parentQuotationIdMap != null ? parentQuotationIdMap.toString() : "";
+            GlQuotationDto glQuotationDto = new GlQuotationDto(new QuotationId(quotationId), (Integer) map.get("versionNumber"), generatedOn, agentDetailDto.getAgentId(), agentDetailDto.getAgentName(), new QuotationId(parentQuotationId), quotationStatus, quotationNumber, proposerName, getIntervalInDays(sharedOn), sharedOn);
+            return glQuotationDto;
+        }
+    }
+
+    public AgentDetailDto getAgentDetail(QuotationId quotationId) {
+        Map quotation = ghQuotationFinder.getQuotationById(quotationId.getQuotationId());
+        AgentId agentMap = (AgentId) quotation.get("agentId");
+        String agentId = agentMap.getAgentId();
+        Map<String, Object> agentDetail = ghQuotationFinder.getAgentById(agentId);
+        AgentDetailDto agentDetailDto = new AgentDetailDto();
+        agentDetailDto.setAgentId(agentId);
+        agentDetailDto.setBranchName((String) agentDetail.get("branchName"));
+        agentDetailDto.setTeamName((String) agentDetail.get("teamName"));
+        agentDetailDto.setAgentName(agentDetail.get("firstName") + " " + (agentDetail.get("lastName") == null ? "" : (String) agentDetail.get("lastName")));
+        agentDetailDto.setAgentMobileNumber(agentDetail.get("mobileNumber") != null ? (String) agentDetail.get("mobileNumber") : "");
+        agentDetailDto.setAgentSalutation(agentDetail.get("title") != null ? (String) agentDetail.get("title") : "");
+        return agentDetailDto;
+    }
+
 }

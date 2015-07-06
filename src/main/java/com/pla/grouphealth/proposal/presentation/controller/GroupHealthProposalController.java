@@ -65,16 +65,23 @@ public class GroupHealthProposalController {
         return modelAndView;
     }
 
-    @RequestMapping(value = "/searchquotation/{quotationNumber}", method = RequestMethod.POST)
-    public ModelAndView searchQuotation(String quotationNumber) {
+    @RequestMapping(value = "/searchquotation", method = RequestMethod.POST)
+    public ModelAndView searchQuotation(@RequestParam("quotationNumber") String quotationNumber) {
         ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("pla/grouphealth/quotation/viewQuotation");
+        modelAndView.setViewName("pla/grouphealth/proposal/searchQuotation");
         try {
             modelAndView.addObject("searchResult", ghProposalService.searchGeneratedQuotation(quotationNumber));
         } catch (Exception e) {
             modelAndView.addObject("searchResult", Lists.newArrayList());
         }
         modelAndView.addObject("searchCriteria", quotationNumber);
+        return modelAndView;
+    }
+
+    @RequestMapping(value = "/opensearchquotation", method = RequestMethod.GET)
+    public ModelAndView openSearchQuotation() {
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("pla/grouphealth/proposal/searchQuotation");
         return modelAndView;
     }
 
@@ -125,6 +132,14 @@ public class GroupHealthProposalController {
         modelAndView.addObject("searchCriteria", searchGHProposalDto);
         return modelAndView;
     }
+
+    @RequestMapping(value = "/opensearchproposal", method = RequestMethod.GET)
+    public ModelAndView openSearchProposal(SearchGHProposalDto searchGHProposalDto) {
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("pla/grouphealth/proposal/viewProposal");
+        return modelAndView;
+    }
+
 
     @RequestMapping(value = "/updatewithagentdetail", method = RequestMethod.POST)
     @ResponseBody
@@ -252,9 +267,9 @@ public class GroupHealthProposalController {
         }
     }
 
-    @RequestMapping(value = "/generate", method = RequestMethod.POST)
+    @RequestMapping(value = "/submit", method = RequestMethod.POST)
     @ResponseBody
-    public Result generateQuotation(@RequestBody GenerateGLQuotationCommand generateGLQuotationCommand) {
+    public Result submitProposal(@RequestBody GenerateGLQuotationCommand generateGLQuotationCommand) {
         try {
             commandGateway.sendAndWait(generateGLQuotationCommand);
             return Result.success("Quotation generated successfully");
