@@ -36,9 +36,15 @@ public class ILProposalDto {
 
     private List<Beneficiary> beneficiaries;
 
+    private List<Question> generalDetails;
+
+    private AdditionalDetails additionaldetails;
+
+    private PremiumPaymentDetails premiumPaymentDetails;
+
     private BigDecimal totalBeneficiaryShare;
 
-    private List<QuestionAnswer> compulsoryHealthStatement;
+    private List<Question> compulsoryHealthStatement;
 
     private FamilyPersonalDetail familyPersonalDetail;
 
