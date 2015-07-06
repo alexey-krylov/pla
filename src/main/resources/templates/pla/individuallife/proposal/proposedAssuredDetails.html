@@ -430,7 +430,7 @@
             <button type="button" class="btn btn-default btn-sm">Cancel</button>
         </div>
         <div class="col-sm-6">
-            <button type="button" class="btn btn-default btn-sm" style="float: right" ng-disabled="step1.$invalid || mode=='new'||mode=='edit'||mode=='view'"   ng-click="saveProposedAssuredDetails()">Save</button>
+            <button type="button" class="btn btn-default btn-sm" style="float: right" ng-disabled="step1.$invalid"   ng-hide=" mode=='new'||mode=='edit'||mode=='view'" ng-click="saveProposedAssuredDetails()">Save</button>
         </div>
     </div>
 </ng-form>

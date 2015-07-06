@@ -8,15 +8,19 @@
             <div class="col-md-6">
                 <div class="form-group">
                     <label class="control-label">Plan</label>
-                    <input type="text" class="form-control input-sm" name="plan" ng-model="proposalPlanDetail.plan"/>
+                    <input type="text" class="form-control input-sm" name="plan" ng-blur="searchRiders()" ng-model="proposalPlanDetail.planId"/>
                 </div>
                 <div class="form-group">
                     <label class="control-label">Policy Term</label>
-                    <input type="text" class="form-control input-sm" name="policyTerm" ng-model="proposalPlanDetail.policyterm"/>
+                    <input type="text" class="form-control input-sm" name="policyTerm" ng-model="proposalPlanDetail.policyTerm"/>
                 </div>
                 <div class="form-group">
                     <label class="control-label">Riders Applied For</label>
-                    <input type="text" class="form-control input-sm" name="ridersAppliedFor" ng-model="proposalPlanDetail.ridersapplied"/>
+                    <!--<input type="text" class="form-control input-sm" name="ridersAppliedFor" ng-model="proposalPlanDetail.ridersapplied"/>-->
+
+                    <select class="form-control input-sm" name="ridersAppliedFor" ng-disabled="mode=='new'||mode=='edit'||mode=='view'" ng-options="searchRider.coverageName for searchRider in searchRiders"
+                            ng-model="proposalPlanDetail.ridersapplied" ng-required="true">
+                    </select>
                 </div>
                 <table class="table table-bordered">
                     <thead>
@@ -28,20 +32,44 @@
                             Sum Assured
                         </th>
                         <th>
-                            Term
+                            CoverTerm
+                        </th>
+                        <th>
+                            WaiverOfPremium
                         </th>
                     </tr>
                     </thead>
+                   <tbody>
+                        <tr ng-repeat="searchRider in searchRiders">
+                            <td>{{searchRider.coverageName}}</td>
+                            <!--<td>{{searchRider.sumAssured}}</td>-->
+                            <td>
+                                <input type="text" ng-disabled="mode=='new'||mode=='edit'||mode=='view'" ng-blur="testPlan(searchRider)" contenteditable="updateFlag" ng-model="searchRider.sumAssured" value="{{searchRider.sumAssured}}" />
+                                <!-- <div contenteditable="true" ng-model="row.update" ng-blur="test(row)" ng-change="test(row)" >{{row.commission}}</div>-->
+                            </td>
+                            <!--<td>{{searchRider.coverTerm}}</td>-->
+                            <td>
+                                <input type="text" ng-disabled="mode=='new'||mode=='edit'||mode=='view'" contenteditable="updateFlag" ng-blur="testPlan(searchRider)" ng-model="searchRider.coverTerm" value="{{searchRider.coverTerm}}" />
+                                <!-- <div contenteditable="true" ng-model="row.update" ng-blur="test(row)" ng-change="test(row)" >{{row.commission}}</div>-->
+                            </td>
+                            <!--<td>{{searchRider.waiverOfPremium}}</td>-->
+                            <td>
+                            <input type="text" ng-disabled="mode=='new'||mode=='edit'||mode=='view'" contenteditable="updateFlag" ng-blur="testPlan(searchRider)" ng-model="searchRider.waiverOfPremium" value="{{searchRider.waiverOfPremium}}"/>
+                            <!-- <div contenteditable="true" ng-model="row.update" ng-blur="test(row)" ng-change="test(row)" >{{row.commission}}</div>-->
+                        </td>
+                        </tr>
+                    </tbody>
+
                 </table>
             </div>
             <div class="col-md-6">
                 <div class="form-group">
                     <label class="control-label">Sum Assured</label>
-                    <input type="text" class="form-control input-sm" name="sumAssured" ng-model="proposalPlanDetail.sumassured"/>
+                    <input type="text" class="form-control input-sm" name="sumAssured" ng-model="proposalPlanDetail.sumAssured"/>
                 </div>
                 <div class="form-group">
                     <label class="control-label">Premium Payment Term</label>
-                    <input type="text" class="form-control input-sm" name="plan" ng-model="proposalPlanDetail.premiumpaymentterm"/>
+                    <input type="text" class="form-control input-sm" name="plan" ng-model="proposalPlanDetail.premiumPaymentTerm"/>
                 </div>
             </div>
         </accordion-group>

@@ -27,9 +27,12 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
                     };
 
                     $scope.proposal.proposalId=$scope.rcvProposal.proposalId;
-                    console.log('Proposal is:'+ $scope.proposal);
                     $scope.proposedAssured=$scope.rcvProposal.proposedAssured || {};
                     $scope.proposer=$scope.rcvProposal.proposer || {};
+                    $scope.proposerEmployment=$scope.proposer.employment;
+                    $scope.proposerResidential=$scope.proposer.residentialAddress;
+                    $scope.proposerSpouse=$scope.proposer.spouse;
+
 
                     if ($scope.proposedAssured.dateOfBirth) {
                         $scope.proposedAssured.nextDob= moment().diff(new moment(new Date($scope.proposedAssured.dateOfBirth)), 'years') + 1;
@@ -44,7 +47,7 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
                     $scope.residentialAddress=$scope.rcvProposal.proposedAssured.residentialAddress;
                     $scope.agentDetails=$scope.rcvProposal.agentCommissionDetails;
 
-                    $scope.proposerEmployment=$scope.proposer
+                    //$scope.proposerEmployment=$scope.proposer
 
                  }).error(function (response, status, headers, config) {
                  });
@@ -100,6 +103,8 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
                 console.log('Inside addBeneficiary Method..');
                 $scope.beneficiaries.unshift(beneficiary);
                 $('#beneficiaryModal').modal('hide');
+                var show=$scope.beneficiaries;
+                console.log('Showing is:'+show);
             };
 
             $scope.showDob=function(dob)
@@ -110,6 +115,14 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
 
             };
 
+            $scope.showBeneficiaryDob=function(dob)
+            {
+                console.log('Dob Calculation..');
+                console.log('DOB' + JSON.stringify(dob));
+                $scope.beneficiary.age= moment().diff(new moment(new Date(dob)), 'years');
+
+            };
+
             $scope.showProposerDob=function(dob)
             {
                 console.log('Dob Calculation..');
@@ -117,20 +130,33 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
                 $scope.proposer.nextDob= moment().diff(new moment(new Date(dob)), 'years') + 1;
 
             };
-
-
-
             $scope.proposalPlanDetail ={};
             $scope.savePlanDetail=function()
             {
-                console.log('Save');
+                console.log('Save Plan');
+
+                 var tempRequest={
+                     "riderDetails":$scope.searchRiders
+                 }
+                tempRequest=angular.extend($scope.proposalPlanDetail,tempRequest);
+
                 var request = {
-                    "proposalPlanDetail": $scope.proposalPlanDetail,
-                    "beneficiaries":$scope.beneficiaries
+                    "proposalPlanDetail":tempRequest,
+                    "beneficiaries":$scope.beneficiaries,
+                    "proposalId":$scope.proposal.proposalId
                 }
 
+                $http.post('updateplan', request).success(function (response, status, headers, config) {
+                    $scope.proposal = response;
+                    console.log('proposalId : '+$scope.proposal.proposalId );
+                }).error(function (response, status, headers, config) {
+                });
+
+
                 /*request = {proposalPlanDetail: request};*/
+                //$http.post('updateproposer', prorequest);
                 console.log('proposalPlanDetail' + JSON.stringify(request));
+
             };
 
             $scope.$on('actionclicked.fu.wizard', function (name, event, data) {
@@ -247,6 +273,13 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
                 $scope.launchdob3 = true;
             };
 
+            $scope.launchBeneficiaryDob=function($event)
+            {
+                $event.preventDefault();
+                $event.stopPropagation();
+                $scope.launchdob4 = true;
+            };
+
             $scope.$watchGroup(['employment.province', 'residentialAddress.province', 'proposerEmployment.province', 'proposerResidential.province'], function (newVal, oldVal) {
                 if (!newVal) return;
 
@@ -334,6 +367,21 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
                 }
             };
 
+
+            $scope.testPlan=function(searchRider)
+            {
+                console.log('Testing...');
+                console.log('Pass..'+JSON.stringify(searchRider));
+
+                for(i in $scope.searchRiders)
+                {
+                    if($scope.searchRiders[i].coverageName == searchRider.coverageName )
+                    {
+                        $scope.searchRiders[i]=searchRider;
+                    }
+                }
+            };
+
             $scope.countStatus=function()
             {
                 var count=0;
@@ -346,12 +394,31 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
                 return count;
                 };
 
+            $scope.riderDetails=[];
+
             $scope.clear=function()
             {
                 $scope.agent={};
             };
 
+            $scope.searchRiders=function()
+            {
+                $scope.planId=$scope.proposalPlanDetail.planId;
+                console.log('Search Riders Function..' +$scope.planId);
+                $http.get("getridersforplan/" +$scope.planId).success(function (response, status, headers, config) {
+                    $scope.searchRiders = response;
+                    console.log('Riders Details From Db is:');
+                    console.log($scope.searchRiders);
+                }).error(function (response, status, headers, config) {
+                    var check=status;
+                    if(check == 500)
+                    {
 
+                    }
+                });
+
+
+            }
             $scope.searchAgent = function () {
                 $scope.check=false;
                 $scope.checking=true;
@@ -451,7 +518,7 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
                 prorequest=angular.extend($scope.proposer,prorequest);
                 prorequest=
                 {
-                    proposer:prorequest,
+                    "proposer":prorequest,
                     "proposalId":$scope.proposal.proposalId
                 };
                 console.log('ProRequest' +JSON.stringify(prorequest));
