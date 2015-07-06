@@ -18,7 +18,7 @@
 </script>
 <script type="text/ng-template" id="createBrokerTpl.html">
     <nth-alert></nth-alert>
-    <div class="wizard fuelux-wizard" style="overflow: visible">
+    <div class="wizard fuelux-wizard" style="overflow: visible" remove-steps="stepsToRemove">
         <ul class="steps" style="margin-left: 0">
             <li data-step="1" class="active">
                 <span class="badge badge-info">1</span>Broker<span
@@ -33,7 +33,7 @@
             <button type="button" class="btn btn-default btn-prev"><span
                     class="glyphicon glyphicon-arrow-left"></span>Prev
             </button>
-            <button type="button" class="btn btn-default btn-next" data-last="Complete">Next<span
+            <button type="button" class="btn btn-default btn-next">Next<span
                     class="glyphicon glyphicon-arrow-right"></span></button>
         </div>
         <div class="step-content">
@@ -45,12 +45,12 @@
                                 <label class="control-label">Channel Type</label>
                                 <input name="channelType" disabled="true" class="form-control input-sm"
                                        ng-required="true"
-                                       ng-model="agentDetails.channelType"/>
+                                       value="Broker"/>
                             </div>
                             <div class="form-group required">
                                 <label class="control-label">Name</label>
                                 <input type="text" class="form-control input-sm" name="name" ng-required="true"
-                                       ng-maxlength="20"
+                                       ng-maxlength="20" view-enabled=""
                                        placeholder="Enter Name" ng-model="agentDetails.agentProfile.firstName"/>
                             </div>
                         </div>
@@ -63,7 +63,7 @@
                             </div>
                             <div class="form-group required">
                                 <label class="control-label">Agent Status</label>
-                                <select ng-required="isEditMode" class="form-control input-sm"
+                                <select ng-required="isEditMode" class="form-control input-sm" view-enabled=""
                                         ng-model="agentDetails.agentStatus" ng-disabled="!isEditMode">
                                     <option value="ACTIVE" ng-selected="!isEditMode">Active</option>
                                     <option value="INACTIVE">Inactive</option>
@@ -92,7 +92,7 @@
                             <div class="form-group required col-md-6">
                                 <label class="control-label">Authorized to Sell</label>
                                 <button style="display: block;" type="button" class="btn btn-default btn-sm bs-select"
-                                        data-all-none-buttons="true"
+                                        data-all-none-buttons="true" view-enabled=""
                                         ng-model="agentDetails.authorizePlansToSell" data-multiple="1"
                                         ng-required="true"
                                         ng-options="authorisedToS.planId as authorisedToS.planName for authorisedToS in authorisedToSell"
@@ -110,7 +110,7 @@
                                        ng-minlength="8"
                                        ng-pattern="/^[A-z0-9]+$/" placeholder="Enter licence number"
                                        ng-disabled="isEditMode"
-                                       ng-model="agentDetails.licenseNumber"/>
+                                       ng-model="agentDetails.licenseNumber.licenseNumber"/>
 
                                 <div class="error" ng-messages="step1.licenseNumber.$error"
                                      ng-if="step1.licenseNumber.$dirty">
@@ -122,7 +122,7 @@
                                 <input type="text" class="form-control input-sm"
                                        name="registrationNumber" ng-maxlength="12" ng-minlength="12"
                                        ng-pattern="/^[A-z0-9]+$/" placeholder="Enter Registration number"
-                                       ng-disabled="isEditMode"
+                                       ng-disabled="isEditMode" ng-required="true"
                                        ng-model="agentDetails.registrationNumber"/>
 
                                 <div class="error" ng-messages="step1.registrationNumber.$error"
@@ -132,6 +132,7 @@
                                 </div>
                             </div>
                         </div>
+
 
                         <div class="row" style="padding:15px;margin-top:30px">
                             <h4 style="margin-left: 10px">Contact Person Details</h4>
@@ -151,7 +152,7 @@
                                     <tbody>
                                     <tr ng-repeat="contact in agentDetails.contactPersonDetails">
                                         <td width="13%">
-                                            <select class="form-control input-sm"
+                                            <select class="form-control input-sm" view-enabled=""
                                                     ng-model="contact.lineOfBusinessId" ng-required="true">
                                                 <option value="INDIVIDUAL_LIFE">Individual Life</option>
                                                 <option value="GROUP_HEALTH">Group Health</option>
@@ -160,26 +161,29 @@
                                         </td>
                                         <td width="7%">
                                             <select class="form-control input-sm" name="title" ng-required="true"
-                                                    ng-model="contact.title" ng-disabled="uneditable"
+                                                    ng-model="contact.title" view-enabled=""
                                                     ng-options="title as title for title in titleList">
                                             </select>
                                         </td>
                                         <td width="30%">
                                             <input type="text" class="form-control input-sm" ng-model="contact.fullName"
+                                                   view-enabled=""
                                                    ng-required="true"/>
                                         </td>
                                         <td>
                                             <input type="text" class="form-control input-sm" ng-model="contact.emailId"
+                                                   view-enabled=""
                                                    ng-required="true"/>
                                         </td>
                                         <td width="15%">
                                             <input type="text" ng-minlength="15" ng-maxlength="15"
                                                    class="form-control input-sm" ng-model="contact.workPhone"
+                                                   view-enabled=""
                                                    ng-required="true"/>
                                         </td>
                                         <td width="15%">
                                             <input type="text" ng-minlength="15" ng-maxlength="15"
-                                                   class="form-control input-sm" ng-model="contact.fax"
+                                                   class="form-control input-sm" ng-model="contact.fax" view-enabled=""
                                                    ng-required="true"/>
                                         </td>
                                     </tr>
@@ -203,21 +207,21 @@
                                 <label class="control-label">Address Line 1</label>
                                 <input type="text" class="form-control input-sm" name="addressLine1"
                                        placeholder="Enter address" ng-model="agentDetails.contactDetail.addressLine1"
-                                       ng-required="true" ng-maxlength="100"/>
+                                       ng-required="true" ng-maxlength="100" view-enabled=""/>
                             </div>
                             <div class="form-group">
                                 <label>Postal Code</label>
                                 <input type="text" class="form-control input-sm" name="postalCode"
                                        placeholder="Enter postal code"
                                        ng-model="agentDetails.contactDetail.geoDetail.postalCode" maxlength="5"
-                                       minlength="5" ng-pattern="numberPattern"/>
+                                       minlength="5" ng-pattern="numberPattern" view-enabled=""/>
                             </div>
                             <div class="form-group required">
                                 <label class="control-label">Town</label>
                                 <select class="form-control input-sm" name="townCity"
                                         ng-model="agentDetails.contactDetail.geoDetail.cityCode"
                                         ng-options="city.geoId  as city.geoName for city in primaryCities"
-                                        ng-required="true"></select>
+                                        ng-required="true" view-enabled=""></select>
                             </div>
                         </div>
                         <div class="col-md-6">
@@ -225,14 +229,14 @@
                                 <label>Address Line 2</label>
                                 <input type="text" class="form-control input-sm" name="addressLine2"
                                        placeholder="Enter address" ng-model="agentDetails.contactDetail.addressLine2"
-                                       ng-maxlength="100"/>
+                                       ng-maxlength="100" view-enabled=""/>
                             </div>
                             <div class="form-group required">
                                 <label class="control-label">Province</label>
                                 <select class="form-control input-sm" name="province"
                                         ng-model="agentDetails.contactDetail.geoDetail.provinceCode"
                                         ng-options="province.provinceId  as province.provinceName for province in provinces"
-                                        ng-required="true"></select>
+                                        ng-required="true" view-enabled=""></select>
                             </div>
                         </div>
                     </div>
@@ -244,28 +248,28 @@
                                 <input type="text" class="form-control input-sm" name="physicalAddressLine1"
                                        placeholder="Enter address"
                                        ng-model="agentDetails.physicalAddress.physicalAddressLine1" ng-required="true"
-                                       ng-maxlength="100"/>
+                                       ng-maxlength="100" view-enabled=""/>
                             </div>
                             <div class="form-group">
                                 <label>Postal Code</label>
                                 <input type="text" class="form-control input-sm" name="physicalPostalCode"
                                        placeholder="Enter postal code"
                                        ng-model="agentDetails.physicalAddress.physicalGeoDetail.postalCode"
-                                       maxlength="5" minlength="5" ng-pattern="numberPattern"/>
+                                       maxlength="5" minlength="5" ng-pattern="numberPattern" view-enabled=""/>
                             </div>
                             <div class="form-group required">
                                 <label class="control-label">Town</label>
                                 <select class="form-control input-sm" name="physicalTownCity"
                                         ng-model="agentDetails.physicalAddress.physicalGeoDetail.cityCode"
                                         ng-options="city.geoId as city.geoName for city in physicalCities"
-                                        ng-required="true"></select>
+                                        ng-required="true" view-enabled=""></select>
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label>Address Line 2</label>
                                 <input type="text" class="form-control input-sm" name="physicalAddressLine2"
-                                       placeholder="Enter address"
+                                       placeholder="Enter address" view-enabled=""
                                        ng-model="agentDetails.physicalAddress.physicalAddressLine2" ng-maxlength="100"/>
                             </div>
                             <div class="form-group required">
@@ -273,16 +277,17 @@
                                 <select class="form-control input-sm" name="physicalAddressProvince"
                                         ng-model="agentDetails.physicalAddress.physicalGeoDetail.provinceCode"
                                         ng-options="province.provinceId  as province.provinceName for province in provinces"
-                                        ng-required="true"></select>
+                                        ng-required="true" view-enabled=""></select>
                             </div>
                             <div class="form-group" style="margin-top: 22px">
-                                <button type="submit" class="btn btn-default btn-sm"
-                                        style="width: 25%;margin-left: 260px" ng-if="!isEditMode"
+                                <button type="submit" class="btn btn-default btn-sm" id="BrokerSubmitBtn"
+                                        style="width: 25%;margin-left: 260px" ng-if="!isEditMode" view-enabled=""
                                         ng-click="submit()" ng-disabled="contactDetailsForm.$submitted">Submit
                                 </button>
                                 <button type="submit" class="btn btn-default btn-sm"
-                                        style="width: 25%;margin-left: 260px" ng-if="isEditMode"
-                                        ng-click="update()" ng-disabled="contactDetailsForm.$submitted">Update
+                                        style="width: 25%;margin-left: 260px" ng-if="isEditMode" id="BrokerUpdateBtn"
+                                        view-enabled=""
+                                        ng-click="submit()" ng-disabled="contactDetailsForm.$submitted">Update
                                 </button>
                                 <button type="button" class="btn btn-default btn-sm" style="width:25%;"
                                         ng-click="cancel()">{{contactDetailsForm.$submitted==true?'Back':'Cancel'}}
