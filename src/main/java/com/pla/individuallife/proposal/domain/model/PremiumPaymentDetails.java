@@ -11,19 +11,9 @@ import org.joda.time.DateTime;
 @Getter
 @ToString
 public class PremiumPaymentDetails {
-
     private PremiumFrequency premiumFrequency;
-    private String employeeId;
-    private String companyNameAndPostalAddress;
-    private String basicSalary;
-    private SalaryPer salaryPer;
-    private String bankBranchSortCode;
-    private String bankName;
-    private String bankBranchName;
-    private String bankAccountNumber;
-    private DateTime proposalSignDate;
     private PremiumPaymentMethod premiumPaymentMethod;
-    private String manNumber;
-    private String BankAccountType;
-
+    private EmployerDetails employerDetails;
+    private BankDetails bankDetails;
+    private DateTime proposalSignDate;
 }

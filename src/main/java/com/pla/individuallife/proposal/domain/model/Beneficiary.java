@@ -2,7 +2,6 @@ package com.pla.individuallife.proposal.domain.model;
 
 import com.google.common.base.Objects;
 import com.pla.sharedkernel.domain.model.Gender;
-import com.pla.sharedkernel.domain.model.TitleEnum;
 import lombok.Getter;
 import org.hibernate.annotations.Type;
 import org.joda.time.DateTime;
@@ -15,7 +14,7 @@ import java.math.BigDecimal;
 @Getter
 public class Beneficiary {
 
-    private TitleEnum title;
+    private String title;
     private String firstName;
     private String surname;
     private String nrc;
