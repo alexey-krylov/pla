@@ -435,6 +435,26 @@
         }
     </style>
 </script>
+
+
+<div class="modal fade" id="agentModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-danger" style="display: block">
+                <h3 class="modal-title">Confirmation</h3>
+            </div>
+            <div class="modal-body">
+                <h4 class="text-danger">Proposal already exists for the selected quotation. Do you want to
+                    override?</h4>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-danger" onclick="viewProposalModule.onConfirmation()">OK</button>
+                <button class="btn btn-warning" onclick="cancel()">Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <div class="ng-view container-fluid">
 
 </div>

@@ -197,7 +197,7 @@ public class GLProposalService {
         @Override
         public GLProposalDto apply(Map map) {
             String quotationId = map.get("_id").toString();
-            AgentDetailDto agentDetailDto = getAgentDetail(new QuotationId(quotationId));
+            AgentDetailDto agentDetailDto = getAgentDetail(new QuotationId("_id"));
             LocalDate generatedOn = map.get("generatedOn") != null ? new LocalDate((Date) map.get("generatedOn")) : null;
             String quotationStatus = map.get("quotationStatus") != null ? (String) map.get("quotationStatus") : "";
             String quotationNumber = map.get("quotationNumber") != null ? (String) map.get("quotationNumber") : "";

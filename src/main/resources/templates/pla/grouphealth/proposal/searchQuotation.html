@@ -20,7 +20,7 @@
 <script>
     var interval = setInterval(function(){
         if(require.defined("basic")){
-            requirejs(['/pla/js/proposal/groupLife/searchQuotation.js'],function(){
+            requirejs(['/pla/js/grouphealth/proposal/searchQuotation.js'], function () {
                 $(document).ready(function(){
                     $("input[type='text']").keyup(function() {
                         var isDisabled =  true;
@@ -49,7 +49,7 @@
         <li>Group Health</li>
     </ol>
     </p>
-    <form method="post" action="searchQuotationforGLProposal" name="searchQuotationforGLProposal" id="searchQuotationforGLProposal">
+    <form method="post" action="searchquotation" name="searchQuotationforGLProposal" id="searchQuotationforGLProposal">
         <div class="row well well-sm" style="margin: 0;">
             <div class="col-md-2">
                 <h4 th:text="#{searchQuotation}" class="pull-left">Search Quotation</h4>
@@ -62,7 +62,9 @@
 
             </div>
            <div class="col-md-2">
-                <button type="submit" style="margin-left: 32%;margin-top: 20px" class="btn btn-default btn-sm" id="search" disabled="true">Search</button>
+               <button type="submit" style="margin-left: 32%;margin-top: 20px" class="btn btn-default btn-sm"
+                       id="search">Search
+               </button>
             </div>
         </div>
     </form>
@@ -76,7 +78,8 @@
                             <span th:text="#{listOfQuotation}">List of Quotation</span>
                         </div>
                         <div class="col-md-4 col-md-offset-2">
-                            <a type="button" class="btn btn-default btn-sm btn-disabled" onclick="viewProposalModule.modifyProposal()">Create</a>
+                            <a type="button" class="btn btn-default btn-sm btn-disabled"
+                               onclick="viewProposalModule.createProposal()">Create</a>
                         </div>
                     </div>
                 </div>
@@ -91,6 +94,7 @@
                             <th th:text="#{agentName}">Agent Name</th>
                             <th th:text="#{proposerName}">Proposer Name</th>
                             <th th:text="#{versionNumber}">Version Number</th>
+                            N
                             <th th:text="#{status}">Status</th>
                         </tr>
                         </thead>
@@ -98,14 +102,15 @@
                         <form id="viewAgentsForm">
                             <!--/*/ <th:block th:each="quotation : ${searchResult}"> /*/-->
                             <tr>
-                                <td><input type="radio" name="proposalNumber" th:value="${proposal.proposalId}" value="5100000010315"/></td>
-                                <td th:text="${proposal.quotationNumber}">5100000010315</td>
-                                <td th:text="${proposal.quotationGeneratedOn}">05/03/2015</td>
-                                <td th:text="${proposal.ageing}"></td>
-                                <td th:text="${proposal.agentName}">Agent Name</td>
-                                <td th:text="${proposal.proposeName}"></td>
-                                <td th:text="${proposal.versionNumber}">001</td>
-                                <td th:text="${proposal.quotationStatus}"></td>
+                                <td><input type="radio" name="proposalNumber" th:value="${quotation.quotationId}"
+                                           value="5100000010315"/></td>
+                                <td th:text="${quotation.quotationNumber}">5100000010315</td>
+                                <td th:text="${quotation.quotationGeneratedOn}">05/03/2015</td>
+                                <td th:text="${quotation.ageing}"></td>
+                                <td th:text="${quotation.agentName}">Agent Name</td>
+                                <td th:text="${quotation.proposeName}"></td>
+                                <td th:text="${quotation.versionNumber}">001</td>
+                                <td th:text="${quotation.quotationStatus}"></td>
                             </tr>
                             <!--/*-->
                             <tr>
@@ -134,6 +139,25 @@
                         </tbody>
                     </table>
                 </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<div class="modal fade" id="proposalConfirm">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-danger" style="display: block">
+                <h3 class="modal-title">Confirmation</h3>
+            </div>
+            <div class="modal-body">
+                <h4 class="text-danger">Proposal already exists for the selected quotation. Do you want to
+                    override?</h4>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-danger" onclick="viewProposalModule.onConfirmation()">OK</button>
+                <button class="btn btn-warning" onclick="cancel()">Cancel</button>
             </div>
         </div>
     </div>

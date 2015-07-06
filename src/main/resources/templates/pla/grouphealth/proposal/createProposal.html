@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" lang="en">
+<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/xhtml" lang="en">
 <head th:include="fragments/common :: headTag">
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <!--/*-->
@@ -14,7 +14,7 @@
 <div th:include="fragments/common :: bodyHeader" th:remove="tag"/>
 <script>
     requirejs(['main','angular-file-upload'],function(){
-        require(['/pla/js/proposal/groupLife/createProposal.js'],function(){
+        require(['/pla/js/grouphealth/proposal/createProposal.js'], function () {
             angular.element(document).ready(function() {
                 angular.bootstrap(document, ['createProposal']);
             });
@@ -22,7 +22,7 @@
 
     });
 </script>
-<script type="text/ng-template" id="createQuotationTpl.html">
+<script type="text/ng-template" id="createProposalTpl.html">
     <nth-alert></nth-alert>
     <form name="quotationForm" novalidate="true"  class="css-form" method="post" enctype="multipart/form-data">
         <div class="wizard fueluxWizard" style="overflow: visible" selected-item="selectedItem">
@@ -34,9 +34,9 @@
                 <li data-step="5"><span class="badge">5</span>Documents<span class="chevron"></span></li>
             </ul>
             <div class="actions">
-                <span style="font-weight: bolder;margin-right: 15px;color: #999">Quotation ID :<span
-                        style="font-size: 13px;color: #3a87ad;">{{
-                    quotationNumber}}<span ng-show="versionNumber &amp;&amp; versionNumber!=0">/{{versionNumber}}</span></span></span>
+                <span style="font-weight: bolder;margin-right: 15px;color: #999">Proposal ID: <span
+                        style="font-size: 13px;color: #3a87ad;">{{proposalNumber}}<span
+                        ng-show="versionNumber &amp;&amp; versionNumber!=0">/{{versionNumber}}</span></span></span>
                 <button type="button" class="btn btn-default btn-prev" disabled="disabled"><span class="glyphicon glyphicon-arrow-left"></span>Prev</button>
                 <button type="button" class="btn btn-default btn-next" ng-disabled="!setpsSaved[selectedItem]" >Next<span class="glyphicon glyphicon-arrow-right"></span></button><!-- -->
             </div>
@@ -53,12 +53,12 @@
                                         <label class="control-label">Agent ID</label>
                                         <div class="input-group">
                                             <input type="text" class="form-control input-sm" name="agentId"
-                                                   ng-model="quotationDetails.basic.agentId" ng-required="true"
+                                                   ng-model="proposalDetails.basic.agentId" ng-required="true"
                                                    ng-change="clearAgentDetails()" ng-disabled="isEditMode"/>
                                             <div class="input-group-btn">
                                                 <button type="button" class="btn btn-default btn-sm"
                                                         ng-click="searchAgent()"
-                                                        ng-disabled="!quotationDetails.basic.agentId || isEditMode">
+                                                        ng-disabled="!proposalDetails.basic.agentId || isEditMode">
                                                     <span class="glyphicon glyphicon-search"></span>
                                                 </button>
                                             </div>

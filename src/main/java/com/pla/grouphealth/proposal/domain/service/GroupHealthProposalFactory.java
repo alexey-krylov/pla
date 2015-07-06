@@ -15,6 +15,8 @@ import org.joda.time.LocalDate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -45,7 +47,7 @@ public class GroupHealthProposalFactory {
         ProposalNumber proposalNumber = proposalMap != null ? (ProposalNumber) proposalMap.get("proposalNumber") : new ProposalNumber(ghProposalNumberGenerator.getProposalNumber(GroupHealthProposal.class, LocalDate.now()));
         Quotation quotation = new Quotation(quotationNumber, versionNumber);
         AgentId agentId = (AgentId) quotationMap.get("agentId");
-        Set<GHInsured> insureds = (Set<GHInsured>) quotationMap.get("insureds");
+        Set<GHInsured> insureds = new HashSet((List) quotationMap.get("insureds"));
         GHPremiumDetail premiumDetail = (GHPremiumDetail) quotationMap.get("premiumDetail");
         GHProposer proposer = (GHProposer) quotationMap.get("proposer");
         GroupHealthProposal groupHealthProposal = new GroupHealthProposal(proposalId, quotation, proposalNumber);

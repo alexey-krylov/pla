@@ -4,11 +4,14 @@ import com.google.common.collect.Lists;
 import com.pla.grouphealth.proposal.application.command.*;
 import com.pla.grouphealth.proposal.application.service.GHProposalService;
 import com.pla.grouphealth.proposal.presentation.dto.SearchGHProposalDto;
+import com.pla.grouphealth.proposal.query.GHProposalFinder;
 import com.pla.grouphealth.quotation.application.command.GenerateGLQuotationCommand;
 import com.pla.grouphealth.sharedresource.dto.*;
 import com.pla.publishedlanguage.contract.IClientProvider;
 import com.pla.publishedlanguage.dto.ClientDetailDto;
 import com.pla.sharedkernel.identifier.ProposalId;
+import com.pla.sharedkernel.identifier.ProposalNumber;
+import com.wordnik.swagger.annotations.ApiOperation;
 import net.sf.jasperreports.engine.JRException;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.poifs.filesystem.POIFSFileSystem;
@@ -16,9 +19,10 @@ import org.apache.poi.util.IOUtils;
 import org.axonframework.commandhandling.gateway.CommandGateway;
 import org.nthdimenzion.presentation.Result;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
@@ -27,6 +31,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
 import java.util.List;
+import java.util.Map;
 
 import static org.nthdimenzion.presentation.AppUtils.getLoggedInUserDetail;
 
@@ -43,26 +48,25 @@ public class GroupHealthProposalController {
 
     private IClientProvider clientProvider;
 
+    private GHProposalFinder ghProposalFinder;
+
     @Autowired
-    public GroupHealthProposalController(CommandGateway commandGateway, GHProposalService ghProposalService, IClientProvider clientProvider) {
+    public GroupHealthProposalController(CommandGateway commandGateway, GHProposalService ghProposalService, IClientProvider clientProvider,
+                                         GHProposalFinder ghProposalFinder) {
         this.commandGateway = commandGateway;
         this.ghProposalService = ghProposalService;
         this.clientProvider = clientProvider;
+        this.ghProposalFinder = ghProposalFinder;
     }
 
     @RequestMapping(value = "/opengrouphealthproposal/{quotationId}", method = RequestMethod.GET)
-    public ModelAndView createQuotationPage(@PathVariable("quotationId") String quotationId, BindingResult bindingResult) {
+    public ResponseEntity createQuotationPage(@PathVariable("quotationId") String quotationId) {
         ModelAndView modelAndView = new ModelAndView();
         if (ghProposalService.hasProposalForQuotation(quotationId)) {
-            bindingResult.addError(new ObjectError("message", "Proposal already exists for the selected quotation"));
-            modelAndView.setViewName("pla/grouphealth/proposal/searchQuotation");
-            return modelAndView;
+            return new ResponseEntity(Result.failure("Proposal already exists for the selected quotation"), HttpStatus.INTERNAL_SERVER_ERROR);
         }
         String proposalId = commandGateway.sendAndWait(new GHQuotationToProposalCommand(quotationId));
-        AgentDetailDto agentDetailDto = ghProposalService.getAgentDetail(new ProposalId(proposalId));
-        modelAndView.setViewName("pla/grouphealth/proposal/createProposal");
-        modelAndView.addObject("agentDetail", agentDetailDto);
-        return modelAndView;
+        return new ResponseEntity(Result.success("", proposalId), HttpStatus.OK);
     }
 
     @RequestMapping(value = "/searchquotation", method = RequestMethod.POST)
@@ -76,6 +80,19 @@ public class GroupHealthProposalController {
         }
         modelAndView.addObject("searchCriteria", quotationNumber);
         return modelAndView;
+    }
+
+    @RequestMapping(value = "/editProposal", method = RequestMethod.GET)
+    public ModelAndView gotoCreateProposal() {
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("pla/grouphealth/proposal/createProposal");
+        return modelAndView;
+    }
+
+    @RequestMapping(value = "/forcecreateproposal", method = RequestMethod.GET)
+    public ResponseEntity gotoCreateProposal(@RequestParam("quotationId") String quotationId) {
+        String proposalId = commandGateway.sendAndWait(new GHQuotationToProposalCommand(quotationId));
+        return new ResponseEntity(Result.success("", proposalId), HttpStatus.OK);
     }
 
     @RequestMapping(value = "/opensearchquotation", method = RequestMethod.GET)
@@ -282,5 +299,13 @@ public class GroupHealthProposalController {
     @ResponseBody
     public ProposerDto getProposerDetail(@PathVariable("proposalId") String proposalId) {
         return ghProposalService.getProposerDetail(new ProposalId(proposalId));
+    }
+
+    @RequestMapping(value = "/getproposalnumber/{proposalId}", method = RequestMethod.GET)
+    @ApiOperation(httpMethod = "GET", value = "Get Proposal number for a given proposal Id")
+    @ResponseBody
+    public Result getQuotationNumber(@PathVariable("proposalId") String proposalId) {
+        Map proposalMap = ghProposalFinder.findProposalById(proposalId);
+        return Result.success("Proposal number ", proposalMap.get("proposalNumber") != null ? ((ProposalNumber) proposalMap.get("proposalNumber")).getProposalNumber() : "");
     }
 }

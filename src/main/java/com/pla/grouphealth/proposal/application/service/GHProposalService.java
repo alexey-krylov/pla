@@ -80,7 +80,7 @@ public class GHProposalService {
 
     public boolean hasProposalForQuotation(String quotationId) {
         Map quotationMap = ghFinder.searchQuotationById(new QuotationId(quotationId));
-        String quotationNumber = (String) quotationMap.get("");
+        String quotationNumber = (String) quotationMap.get("quotationNumber");
         Map proposalMap = ghProposalFinder.findProposalByQuotationNumber(quotationNumber);
         return proposalMap != null;
     }
@@ -304,6 +304,21 @@ public class GHProposalService {
         return insuredDtoList;
     }
 
+    public AgentDetailDto getAgentDetail(QuotationId quotationId) {
+        Map quotation = ghQuotationFinder.getQuotationById(quotationId.getQuotationId());
+        AgentId agentMap = (AgentId) quotation.get("agentId");
+        String agentId = agentMap.getAgentId();
+        Map<String, Object> agentDetail = ghQuotationFinder.getAgentById(agentId);
+        AgentDetailDto agentDetailDto = new AgentDetailDto();
+        agentDetailDto.setAgentId(agentId);
+        agentDetailDto.setBranchName((String) agentDetail.get("branchName"));
+        agentDetailDto.setTeamName((String) agentDetail.get("teamName"));
+        agentDetailDto.setAgentName(agentDetail.get("firstName") + " " + (agentDetail.get("lastName") == null ? "" : (String) agentDetail.get("lastName")));
+        agentDetailDto.setAgentMobileNumber(agentDetail.get("mobileNumber") != null ? (String) agentDetail.get("mobileNumber") : "");
+        agentDetailDto.setAgentSalutation(agentDetail.get("title") != null ? (String) agentDetail.get("title") : "");
+        return agentDetailDto;
+    }
+
     private class TransformToGLQuotationDto implements Function<Map, GlQuotationDto> {
 
         @Override
@@ -321,21 +336,6 @@ public class GHProposalService {
             GlQuotationDto glQuotationDto = new GlQuotationDto(new QuotationId(quotationId), (Integer) map.get("versionNumber"), generatedOn, agentDetailDto.getAgentId(), agentDetailDto.getAgentName(), new QuotationId(parentQuotationId), quotationStatus, quotationNumber, proposerName, getIntervalInDays(sharedOn), sharedOn);
             return glQuotationDto;
         }
-    }
-
-    public AgentDetailDto getAgentDetail(QuotationId quotationId) {
-        Map quotation = ghQuotationFinder.getQuotationById(quotationId.getQuotationId());
-        AgentId agentMap = (AgentId) quotation.get("agentId");
-        String agentId = agentMap.getAgentId();
-        Map<String, Object> agentDetail = ghQuotationFinder.getAgentById(agentId);
-        AgentDetailDto agentDetailDto = new AgentDetailDto();
-        agentDetailDto.setAgentId(agentId);
-        agentDetailDto.setBranchName((String) agentDetail.get("branchName"));
-        agentDetailDto.setTeamName((String) agentDetail.get("teamName"));
-        agentDetailDto.setAgentName(agentDetail.get("firstName") + " " + (agentDetail.get("lastName") == null ? "" : (String) agentDetail.get("lastName")));
-        agentDetailDto.setAgentMobileNumber(agentDetail.get("mobileNumber") != null ? (String) agentDetail.get("mobileNumber") : "");
-        agentDetailDto.setAgentSalutation(agentDetail.get("title") != null ? (String) agentDetail.get("title") : "");
-        return agentDetailDto;
     }
 
 }

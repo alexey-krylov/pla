@@ -6,6 +6,7 @@ import com.pla.grouplife.proposal.application.command.UpdateGLProposalWithInsure
 import com.pla.grouplife.proposal.application.service.GLProposalService;
 import com.pla.grouplife.proposal.presentation.dto.SearchGLProposalDto;
 import com.pla.grouplife.quotation.application.command.*;
+import com.pla.grouplife.sharedresource.dto.AgentDetailDto;
 import com.pla.grouplife.sharedresource.dto.InsuredDto;
 import com.pla.grouplife.sharedresource.dto.PremiumDetailDto;
 import com.pla.grouplife.sharedresource.dto.ProposerDto;
@@ -24,7 +25,6 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
-import com.pla.grouplife.sharedresource.dto.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -53,18 +53,27 @@ public class GroupLifeProposalController {
         this.clientProvider = clientProvider;
     }
 
-    @RequestMapping(value = "/searchquotation/{quotationNumber}", method = RequestMethod.POST)
-    public ModelAndView searchQuotation(String quotationNumber) {
+    @RequestMapping(value = "/searchGLQuotationforProposal", method = RequestMethod.GET)
+    public ModelAndView searchQuotationForProposal() {
         ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("pla/grouplife/quotation/viewQuotation");
+        modelAndView.setViewName("pla/proposal/groupLife/searchQuotation");
+        return modelAndView;
+    }
+
+    @RequestMapping(value = "/searchquotation", method = RequestMethod.POST)
+    public ModelAndView searchQuotation(@RequestParam("quotationNumber") String quotationNumber) {
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("pla/proposal/groupLife/searchQuotation");
         try {
             modelAndView.addObject("searchResult", glProposalService.searchGeneratedQuotation(quotationNumber));
         } catch (Exception e) {
+            e.printStackTrace();
             modelAndView.addObject("searchResult", Lists.newArrayList());
         }
         modelAndView.addObject("searchCriteria", quotationNumber);
         return modelAndView;
     }
+
     @RequestMapping(value = "/opengrouplifeproposal/}", method = RequestMethod.GET)
     public Result createProposal(@RequestBody GLQuotationToProposalCommand gQuotationToProposalCommand) {
         if (glProposalService.hasProposalForQuotation(gQuotationToProposalCommand.getQuotationId())) {
@@ -75,7 +84,6 @@ public class GroupLifeProposalController {
         }
         return Result.success("Proposal successfully created");
     }
-
 
     @RequestMapping(value = "/getproposerdetailfromclient/{proposerCode}/{proposalId}", method = RequestMethod.GET)
     @ResponseBody

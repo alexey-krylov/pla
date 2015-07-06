@@ -36,24 +36,19 @@ import static org.nthdimenzion.utils.UtilValidator.isNotEmpty;
 public class GHProposalFinder {
 
 
+    public static final String FIND_ACTIVE_AGENT_BY_ID_QUERY = "select * from agent_team_branch_view where agentId =:agentId AND agentStatus='ACTIVE'";
+    public static final String FIND_ACTIVE_AGENT_BY_FIRST_NAME_QUERY = "SELECT * FROM agent_team_branch_view WHERE firstName =:firstName";
+    private static final String GH_PROPOSAL_COLLECTION_NAME = "group_health_proposal";
     private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
-
     private MongoTemplate mongoTemplate;
-
     @Autowired
     private GHFinder ghFinder;
-
-    private static final String GH_PROPOSAL_COLLECTION_NAME = "group_health_proposal";
 
     @Autowired
     public void setDataSource(DataSource dataSource, MongoTemplate mongoTemplate) {
         this.namedParameterJdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
         this.mongoTemplate = mongoTemplate;
     }
-
-    public static final String FIND_ACTIVE_AGENT_BY_ID_QUERY = "select * from agent_team_branch_view where agentId =:agentId AND agentStatus='ACTIVE'";
-
-    public static final String FIND_ACTIVE_AGENT_BY_FIRST_NAME_QUERY = "SELECT * FROM agent_team_branch_view WHERE firstName =:firstName";
 
     public Map<String, Object> getAgentById(String agentId) {
         Preconditions.checkArgument(isNotEmpty(agentId));
@@ -62,7 +57,7 @@ public class GHProposalFinder {
     }
 
     public List<Map<String, Object>> getAgentAuthorizedPlan(String agentId) {
-        return null;
+        return ghFinder.getAgentAuthorizedPlan(agentId);
     }
 
     public Map findProposalByQuotationNumber(String quotationNumber) {

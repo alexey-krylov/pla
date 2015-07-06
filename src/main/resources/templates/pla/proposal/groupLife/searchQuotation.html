@@ -6,8 +6,10 @@
     <!--/*-->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/datatables/1.10.5/css/jquery.dataTables.min.css" rel="stylesheet" />
-    <link href="http://cdn.datatables.net/plug-ins/f2c75b7247b/integration/bootstrap/3/dataTables.bootstrap.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/datatables/1.10.5/css/jquery.dataTables.min.css"
+          rel="stylesheet"/>
+    <link href="http://cdn.datatables.net/plug-ins/f2c75b7247b/integration/bootstrap/3/dataTables.bootstrap.css"
+          rel="stylesheet"/>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/datatables/1.10.5/js/jquery.dataTables.min.js"></script>
@@ -18,29 +20,11 @@
 <body>
 <div th:include="fragments/common :: bodyHeader" th:remove="tag"/>
 <script>
-    var interval = setInterval(function(){
-        if(require.defined("basic")){
-            requirejs(['/pla/js/proposal/groupLife/searchQuotation.js'],function(){
-                $(document).ready(function(){
-                    $("input[type='text']").keyup(function() {
-                        var isDisabled =  true;
-                        $('#searchQuotationforGLProposal *').filter(':text').each(function(key,value){
-                            if($(value).val().trim().length !=0){
-                                isDisabled = false;
-                            }
-                        });
-                        $("#search").prop("disabled",isDisabled);
-                    });
-
-                    $('#proposal-table').dataTable();
-                    $( "input[type=radio]" ).on( "click", function(){
-                        viewProposalModule.getTheItemSelected(this);
-                    });
-                });
-            });
-            clearInterval(interval);
-        }
-    }, 300);
+    function searchQuotation() {
+        var quotationNumber = $('#quotationNumber').val();
+        $('#searchQuotationforGLProposal').attr("action", 'searchquotation');
+        $('#searchQuotationforGLProposal').submit();
+    }
 </script>
 <div class="container" style="padding-top: 10px">
     <p class="lead">
@@ -49,7 +33,7 @@
         <li>Group Life</li>
     </ol>
     </p>
-    <form method="post" action="searchQuotationforGLProposal" name="searchQuotationforGLProposal" id="searchQuotationforGLProposal">
+    <form method="get" action="searchquotation" name="searchQuotationforGLProposal" id="searchQuotationforGLProposal">
         <div class="row well well-sm" style="margin: 0;">
             <div class="col-md-2">
                 <h4 th:text="#{searchQuotation}" class="pull-left">Search Quotation</h4>
@@ -57,12 +41,14 @@
             <div class="col-md-2">
                 <div class="form-group">
                     <label th:text="#{quotationNumber}">Quotation ID</label>
-                    <input type="text" class="form-control input-sm" name="quotationNumber" /><!--th:value="${searchCriteria.quotationNumber}"-->
+                    <input type="text" class="form-control input-sm" name="quotationNumber" id="quotationNumber"/><!--th:value="${searchCriteria.quotationNumber}"-->
                 </div>
 
             </div>
-           <div class="col-md-2">
-                <button type="submit" style="margin-left: 32%;margin-top: 20px" class="btn btn-default btn-sm" id="search" disabled="true">Search</button>
+            <div class="col-md-2">
+                <button type="submit" style="margin-left: 32%;margin-top: 20px" class="btn btn-default btn-sm"
+                        id="search" onclick="searchQuotation()">Search
+                </button>
             </div>
         </div>
     </form>
@@ -76,7 +62,8 @@
                             <span th:text="#{listOfQuotation}">List of Quotation</span>
                         </div>
                         <div class="col-md-4 col-md-offset-2">
-                            <a type="button" class="btn btn-default btn-sm btn-disabled" onclick="viewProposalModule.modifyProposal()">Create</a>
+                            <a type="button" class="btn btn-default btn-sm btn-disabled"
+                               onclick="viewProposalModule.modifyProposal()">Create</a>
                         </div>
                     </div>
                 </div>
@@ -98,7 +85,8 @@
                         <form id="viewAgentsForm">
                             <!--/*/ <th:block th:each="quotation : ${searchResult}"> /*/-->
                             <tr>
-                                <td><input type="radio" name="proposalNumber" th:value="${proposal.proposalId}" value="5100000010315"/></td>
+                                <td><input type="radio" name="proposalNumber" th:value="${proposal.proposalId}"
+                                           value="5100000010315"/></td>
                                 <td th:text="${proposal.quotationNumber}">5100000010315</td>
                                 <td th:text="${proposal.quotationGeneratedOn}">05/03/2015</td>
                                 <td th:text="${proposal.ageing}"></td>
@@ -109,7 +97,7 @@
                             </tr>
                             <!--/*-->
                             <tr>
-                                <td><input type="radio" name="quotationNumber"  value="5100000020415"/></td>
+                                <td><input type="radio" name="quotationNumber" value="5100000020415"/></td>
                                 <td>5100000020415</td>
                                 <td>06/04/2015</td>
                                 <td>ZPC</td>
@@ -119,7 +107,7 @@
                                 <td>002</td>
                             </tr>
                             <tr>
-                                <td><input type="radio" name="quotationNumber"  value="5100000030515"/></td>
+                                <td><input type="radio" name="quotationNumber" value="5100000030515"/></td>
                                 <td>5100000030515</td>
                                 <td>06/05/2015</td>
                                 <td>Pla</td>
