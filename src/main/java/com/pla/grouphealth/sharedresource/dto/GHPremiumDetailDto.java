@@ -1,6 +1,7 @@
 package com.pla.grouphealth.sharedresource.dto;
 
 import com.google.common.collect.Sets;
+import com.pla.publishedlanguage.domain.model.PremiumFrequency;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -43,6 +44,8 @@ public class GHPremiumDetailDto {
     private Set<PremiumInstallmentDto> installments;
 
     private BigDecimal waiverOfExcessLoading;
+
+    private PremiumFrequency policyPremiumFrequency;
 
 
     public GHPremiumDetailDto(BigDecimal addOnBenefit, BigDecimal profitAndSolvencyLoading, BigDecimal discounts, BigDecimal waiverOfExcessLoading, BigDecimal vat, Integer policyTermValue) {
@@ -94,4 +97,6 @@ public class GHPremiumDetailDto {
         this.totalPremium = netTotalAmount;
         return this;
     }
+
+
 }
