@@ -1,4 +1,18 @@
 angular.module('brokerModule', ['common', 'ngRoute', 'mgcrea.ngStrap.select', 'mgcrea.ngStrap.alert', 'commonServices', 'ngMessages'])
+    .directive('viewEnabled', ['$window', function ($window) {
+        return {
+            link: function (scope, elem, attr, ctrl) {
+                var viewmode = $window.location.href.indexOf("/view") > -1;
+                if (!viewmode) {
+                    return;
+                }
+                $(elem).attr('readonly', true);
+                $(elem).attr('disabled', true);
+                $("#BrokerUpdateBtn").css('visibility', 'hidden');
+                $("#BrokerSubmitBtn").css('visibility', 'hidden');
+            }
+        }
+    }])
     .controller('brokerController', ['$scope', '$http', 'authorisedToSell', 'provinces', '$timeout', '$alert', '$route', '$window', 'transformJson',
         'getQueryParameter', 'agentDetails', 'globalConstants', 'nextAgentSequence', 'getProvinceAndCityDetail',
 
@@ -7,12 +21,26 @@ angular.module('brokerModule', ['common', 'ngRoute', 'mgcrea.ngStrap.select', 'm
                   authorisedToSell, provinces, $timeout, $alert, $route, $window, transformJson, getQueryParameter, agentDetails, globalConstants, nextAgentSequence, getProvinceAndCityDetail) {
             $scope.numberPattern = globalConstants.numberPattern;
 
-            $scope.agentDetails = {agentId:nextAgentSequence};
+            console.log(' Broker Controller invoked.. ');
+            $scope.agentDetails = agentDetails;
+
+            if (_.size(agentDetails) != 0) {
+                //console.log(agentDetails);
+                if (agentDetails.agentProfile) {
+                    if (agentDetails.agentProfile.overrideCommissionApplicable) {
+                        $scope.agentDetails.overrideCommissionApplicable = agentDetails.agentProfile.overrideCommissionApplicable;
+                    }
+                }
+                /*This is used to disabled and hide some of the fields in the UI*/
+                $scope.isEditMode = true;
+                $scope.trainingCompleteOn = agentDetails.agentProfile.trainingCompleteOn;
+            } else {
+                $scope.agentDetails = {agentId: nextAgentSequence};
+            }
 
             if (!$scope.agentDetails.contactPersonDetails || $scope.agentDetails.contactPersonDetails.length == 0)
                 $scope.agentDetails.contactPersonDetails = [{}, {}, {}];
 
-            $scope.isEditMode = false;
             $scope.titleList = globalConstants.title;
             $scope.primaryCities = [];
             $scope.physicalCities = [];
@@ -24,6 +52,7 @@ angular.module('brokerModule', ['common', 'ngRoute', 'mgcrea.ngStrap.select', 'm
 
                 }
             });
+
 
             $scope.$watch('agentDetails.contactDetail.geoDetail.provinceCode', function (newVal, oldVal) {
                 if (newVal) {
@@ -52,19 +81,30 @@ angular.module('brokerModule', ['common', 'ngRoute', 'mgcrea.ngStrap.select', 'm
                 $scope.datePickerSettings.isOpened = true;
             };
 
-
-            if (!$scope.agentDetails.contactPersons || $scope.agentDetails.contactPersons.length == 0)
-                $scope.agentDetails.contactPersons = [{}, {}, {}];
+            if (!$scope.agentDetails.contactPersonDetails || $scope.agentDetails.contactPersonDetails.length == 0)
+                $scope.agentDetails.contactPersonDetails = [{}, {}, {}];
 
             $scope.submit = function () {
-                $http.post("/pla/core/agent/createbroker", $scope.agentDetails)
+                if ($scope.isEditMode) {
+                    $http.post("/pla/core/agent/update",
+                        transformJson.createCompatibleJson(angular.copy($scope.agentDetails), $scope.physicalCities, $scope.primaryCities, $scope.trainingCompleteOn, true))
+                        .success(function (response, status, headers, config) {
+                            if (response.status == "200") {
+                            }
+                        })
+                        .error(function (response, status, headers, config) {
+                        });
+                } else {
+                    $http.post("/pla/core/agent/createbroker",
+                        transformJson.createCompatibleJson(angular.copy($scope.agentDetails), $scope.physicalCities, $scope.primaryCities, $scope.trainingCompleteOn, false))
                     .success(function (response, status, headers, config) {
                         if (response.status == "200") {
                         }
                     })
                     .error(function (response, status, headers, config) {
                     });
-            }
+                }
+            };
 
         }])
     .factory('transformJson', ['formatJSDateToDDMMYYYY', function (formatJSDateToDDMMYYYY) {
@@ -153,7 +193,7 @@ angular.module('brokerModule', ['common', 'ngRoute', 'mgcrea.ngStrap.select', 'm
             controller: 'brokerController',
             resolve: {
                 nextAgentSequence: ['$q', '$http', '$window', function ($q, $http, $window) {
-                    if ($window.location.href.indexOf("/openeditpage") > -1) {
+                    if ($window.location.href.indexOf("/edit") > -1) {
                         return null;
                     } else {
                         var deferred = $q.defer();
@@ -166,17 +206,20 @@ angular.module('brokerModule', ['common', 'ngRoute', 'mgcrea.ngStrap.select', 'm
                     }
                 }],
                 agentDetails: ['$q', '$http', 'getQueryParameter', '$window', function ($q, $http, getQueryParameter, $window) {
-                    if ($window.location.href.indexOf("/openeditpage") > -1) {
-                        var queryParam = {'agentId': getQueryParameter('agentId')};
+                    var queryParam = {'agentId': getQueryParameter('agentId')};
+                    console.log('AGENT ID == ' + getQueryParameter('agentId'));
+                    if (angular.isDefined(getQueryParameter('agentId')) && getQueryParameter('agentId') != null) {
                         var deferred = $q.defer();
-                        $http.get('/pla/core/agent/agentdetail', {params: queryParam}).success(function (response, status, headers, config) {
+                        $http.get('/pla/core/agent/agentdetail', {params: queryParam})
+                            .success(function (response, status, headers, config) {
                             deferred.resolve(response)
-                        }).error(function (response, status, headers, config) {
+                            })
+                            .error(function (response, status, headers, config) {
                             deferred.reject();
                         });
                         return deferred.promise;
                     } else {
-                        return [];
+                        return {};
                     }
                 }],
                 authorisedToSell: ['$q', '$http', 'transformJson', function ($q, $http, transformJson) {
@@ -198,7 +241,7 @@ angular.module('brokerModule', ['common', 'ngRoute', 'mgcrea.ngStrap.select', 'm
                     return deferred.promise;
                 }]
             }
-        })
+        });
     }])
 
 

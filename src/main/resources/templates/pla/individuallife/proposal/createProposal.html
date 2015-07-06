@@ -22,6 +22,7 @@
         },
         "shim": {"ilproposal": ["angular", "ilproposal_common"]}
     });
+
     requirejs(['main'], function () {
         require(['ilproposal', 'jquery'], function (app, $) {
             angular.bootstrap(document, ['createProposal']);
@@ -181,7 +182,7 @@
                             </div>
                             <div class="form-group">
                                 <label class="control-label">Relationship To Life Assured</label>
-                                <input type="text" class="form-control input-sm" name="relationship" ng-model="beneficiary.relationship"/>
+                                <input type="text" class="form-control input-sm" name="relationship" ng-model="beneficiary.relationshipId"/>
                             </div>
                         </div>
                         <div class="col-md-6">
@@ -191,23 +192,37 @@
                             </div>
                             <div class="form-group">
                                 <label class="control-label">Date Of Birth</label>
-                                <input type="text" class="form-control input-sm" name="dob" ng-model="beneficiary.dob"/>
+                               <!-- <input type="text" class="form-control input-sm" name="dob" ng-model="beneficiary.dob"/>-->
+                                <div class='input-group date'>
+                                    <input type="text" class="form-control input-sm"
+                                           datepicker-popup="" view-enabled=""
+                                           ng-required="true"
+                                           is-open="launchdob4"
+                                           max-date="todayDate"
+                                           ng-model="beneficiary.dateOfBirth" name="dob" ng-disabled="mode=='new'||mode=='edit'||mode=='view'" ng-blur="showBeneficiaryDob(beneficiary.dateOfBirth)"/>
+                                    <span class="input-group-btn">
+                                    <button type="button" class="btn btn-default btn-sm"
+                                            ng-disabled="mode=='new'||mode=='edit'||mode=='view'" ng-click="launchBeneficiaryDob($event)">
+                                        <i class="glyphicon glyphicon-calendar"></i></button>
+                                  </span>
+                                </div>
                             </div>
                             <div class="form-group">
                                 <label class="control-label">Sex</label>
-                                <select type="text" class="form-control input-sm" name="sex" ng-model="beneficiary.sex" ng-options="gender.code as gender.description for gender in genderList"></select>
+                                <select type="text" class="form-control input-sm" name="sex" ng-model="beneficiary.gender" ng-options="gender.code as gender.description for gender in genderList"></select>
                             </div>
                             <div class="form-group">
                                 <label class="control-label">Share %</label>
-                                <select type="text" class="form-control input-sm" name="share" ng-model="beneficiary.share">
+                                <!--<select type="text" class="form-control input-sm" name="share" ng-model="beneficiary.share">
                                     <option value="15">Select One</option>
-                                </select>
+                                </select>-->
+                                <input type="text" class="form-control input-sm" name="share" ng-model="beneficiary.share"/>
                             </div>
                         </div>
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button class="btn btn-default" data-dismiss="modal" ng-click="addBeneficiary(beneficiary)">Add this</button>
+                    <button class="btn btn-default" data-dismiss="modal" ng-click="addBeneficiary(beneficiary)">Add</button>
                     <button class="btn btn-default" data-dismiss="modal">Cancel</button>
                 </div>
             </div>

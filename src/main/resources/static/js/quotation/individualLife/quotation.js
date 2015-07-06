@@ -269,6 +269,7 @@
                                 $scope.proposerAge = calculateAge($scope.proposer.dateOfBirth);
                             }
 
+
                             $scope.proposerSameAsProposedAssured = response.assuredTheProposer;
 
                             //This is for making the default selection during edit
@@ -485,7 +486,6 @@
     )
 })(angular);
 
-
 var viewILQuotationModule = (function () {
     var services = {};
     services.selectedItem = "";
@@ -523,8 +523,8 @@ var viewILQuotationModule = (function () {
     };
 
     services.viewQuotation = function () {
-        var quotationId = this.selectedItem;
-        window.location.href = "/pla/individuallife/quotation/view?quotationId=" + quotationId + "&mode=view";
+        var propsalId = this.selectedItem;
+        window.location.href = "/pla/individuallife/quotation/view?proposalId=" + propsalId + "&mode=view";
     };
 
     return services;
