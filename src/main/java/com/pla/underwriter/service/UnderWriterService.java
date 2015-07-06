@@ -81,6 +81,9 @@ public class UnderWriterService {
         int rowIndex = 1;
         comparedBy.remove(currentUnderWriterDto);
         List<UnderWriterLineItemDto> currentLineItem = currentUnderWriterDto.getUnderWriterLineItem();
+        if (!isValidToAndFromValues(currentLineItem,errorMessageBuilder)){
+            return false;
+        }
         for (UnderWriterDto underWriterDtoToBeCompared : comparedBy){
             List<UnderWriterLineItemDto> lineItemToBeCompared = underWriterDtoToBeCompared.getUnderWriterLineItem();
             boolean isAnyOneFactorNotOverlapping = true;
@@ -90,6 +93,11 @@ public class UnderWriterService {
                     Double currentToValue = getInfluencingFactorValue(currentLineItem.get(index).getInfluencingItemTo());
                     Double fromValue = getInfluencingFactorValue(lineItemToBeCompared.get(index).getInfluencingItemFrom());
                     Double toValue = getInfluencingFactorValue(lineItemToBeCompared.get(index).getInfluencingItemTo());
+                    if(currentFromValue.compareTo(currentToValue)>=0 || fromValue.compareTo(toValue)>=0){
+                        isRowOverLapping = false;
+                        String influencingFactor = currentLineItem.get(index).getUnderWriterInfluencingFactor().getDescription();
+                        errorMessageBuilder.add(influencingFactor+" To should be greater than "+influencingFactor+" From");
+                    }
                     if (!(currentFromValue.compareTo(toValue) <= 0 && fromValue.compareTo(currentToValue) <= 0)) {
                         isAnyOneFactorNotOverlapping = false;
                     }
@@ -102,6 +110,20 @@ public class UnderWriterService {
             rowIndex++;
         }
         return isRowOverLapping;
+    }
+
+    private boolean isValidToAndFromValues(List<UnderWriterLineItemDto> currentLineItem,List<String> errorMessageBuilder) {
+       boolean isValid=true;
+        for (int index=0; index<=currentLineItem.size()-1; index++){
+            String influencingFactor =  currentLineItem.get(index).getUnderWriterInfluencingFactor().getDescription();
+            Double currentFromValue = getInfluencingFactorValue(currentLineItem.get(index).getInfluencingItemFrom());
+            Double currentToValue = getInfluencingFactorValue(currentLineItem.get(index).getInfluencingItemTo());
+            if(currentFromValue.compareTo(currentToValue)>=0 ){
+                errorMessageBuilder.add(influencingFactor+" To should be greater than "+influencingFactor+" From");
+                isValid = false;
+            }
+        }
+        return isValid;
     }
 
 
@@ -180,7 +202,7 @@ public class UnderWriterService {
     public List<Map<String,Object>> getInfluencingFactorRange(List<UnderWriterInfluencingFactor> underWriterInfluencingFactors){
         List<Map<String,Object>> influencingFactorList = Lists.newArrayList();
         underWriterInfluencingFactors.forEach(influencingFactorRangeList->{
-           influencingFactorRangeList.getInfluencingFactorRange(Lists.newArrayList()).forEach(influencingFactor->{
+            influencingFactorRangeList.getInfluencingFactorRange(Lists.newArrayList()).forEach(influencingFactor->{
                 Map<String ,Object> influencingFactorMap = Maps.newLinkedHashMap();
                 influencingFactorMap.put("name",influencingFactor);
                 influencingFactorMap.put("value",0);

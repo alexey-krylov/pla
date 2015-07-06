@@ -31,7 +31,22 @@ App.controller('UpdateDocumentSetupController', ['$scope', '$http','$window','$l
     var multiSelectList=[];
     $scope.fieldData=[];
     $scope.successAlert={};
+    $scope.selectedDate = moment().add(1, 'days').format("YYYY-MM-DD");
     $scope.newDateField = {};
+    $scope.selectedUsers = [];
+    $scope.showtable  = false;
+    $scope.datePickerSettings = {
+        isOpened: false,
+        dateOptions: {
+            formatYear: 'yyyy',
+            startingDay: 1
+        }
+    };
+    $scope.open = function ($event) {
+        $event.preventDefault();
+        $event.stopPropagation();
+        $scope.datePickerSettings.isOpened = true;
+    };
     $scope.mandatoryDocument={documents:[]};
     $http.get('/pla/underwriter/getdoumentbyid/'+$scope.url).success(function(data){
         $scope.updateDocumentLevel= data;
@@ -163,8 +178,14 @@ App.controller('UpdateDocumentSetupController', ['$scope', '$http','$window','$l
         }
 
         $scope.updateDocumentLevel.underWriterDocumentItems=$scope.finalList;
-        $scope.newDateField.fromDate = moment($scope.updateDocumentLevel.effectiveFrom).format("YYYY-MM-DD");
-        $scope.updateDocumentLevel.effectiveFrom = $scope.newDateField.fromDate;
+        $scope.$watch('updateDocumentLevel.effectiveFrom', function (newValue, oldValue) {
+            if (newValue) {
+                if (!moment($scope.createDocumentLevel.effectiveFrom, 'YYYY-MM-DD').isValid()) {
+                    $scope.newDateField.fromDate = moment($scope.updateDocumentLevel.effectiveFrom).format("YYYY-MM-DD");
+                    $scope.updateDocumentLevel.effectiveFrom = $scope.newDateField.fromDate;
+                }
+            }
+        });
         //console.log($scope.updateDocumentLevel);
       $http.post('create/underwriterdocument',$scope.updateDocumentLevel).success(function (data) {
 

@@ -17,6 +17,7 @@
             angular.bootstrap(document, ['updateDocumentSetup']);
         });
     });
+
 </script>
 
 <div class="container ng-cloak" ng-Controller="UpdateDocumentSetupController">
@@ -72,8 +73,14 @@
                             <div class="form-group col-md-4 required">
                                 <label class="control-label">From Date</label>
 
-                                <p class="input-group" >
-                                    <input type="text" class="form-control input-sm"  value="{{updateDocumentLevel.effectiveFrom}}" readonly="true"/>
+                                <p class="input-group">
+                                    <input type="text" class="form-control input-sm" onkeypress="return isNumeric(event)" ng-click="open($event)" min-date="selectedDate" ng-required="true" datepicker-popup="dd/MM/yyyy"
+                                           ng-model="updateDocumentLevel.effectiveFrom" datepicker-options="datePickerSettings.dateOptions" is-open="datePickerSettings.isOpened"
+                                           name="effectiveFrom"
+                                           close-text="Close" show-button-bar="false"/>
+                                        <span class="input-group-btn">
+                                            <button type="button" class="btn btn-default btn-sm" ng-click="open($event)"><i class="glyphicon glyphicon-calendar"></i></button>
+                                        </span>
                                 </p>
                             </div>
                             <div class="form-group col-md-4 required" ng-show="updateDocumentLevel.processType">

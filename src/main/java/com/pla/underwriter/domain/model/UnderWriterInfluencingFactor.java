@@ -72,6 +72,10 @@ public enum UnderWriterInfluencingFactor {
                 String sumAssuredToCellValue = Cell.CELL_TYPE_NUMERIC == sumAssuredTo.getCellType() ? ((Double) sumAssuredTo.getNumericCellValue()).toString() : sumAssuredTo.getStringCellValue();
                 BigDecimal sumAssuredFromCell = NumberUtils.isNumber(sumAssuredFromCellValue) == true ? new BigDecimal(sumAssuredFromCellValue).setScale(0) : BigDecimal.ZERO;
                 BigDecimal sumAssuredToCell = NumberUtils.isNumber(sumAssuredToCellValue) == true ? new BigDecimal(sumAssuredToCellValue).setScale(0)  : BigDecimal.ZERO;
+                if (sumAssuredFromCell.compareTo(sumAssuredToCell)>=0){
+                    errorMessageBuilder.append(" Sum Assured To should be greater than Sum Assured From \n");
+                    return false;
+                }
                 boolean isValid = !(isNotEmpty(planCode) && isNotEmpty(coverageId)) ? (iPlanAdapter.isValidPlanSumAssured(planCode, sumAssuredFromCell) && iPlanAdapter.isValidPlanSumAssured(planCode, sumAssuredToCell)) :
                         (iPlanAdapter.isValidCoverageSumAssured(planCode, coverageId, sumAssuredFromCell) && iPlanAdapter.isValidCoverageSumAssured(planCode, coverageId, sumAssuredToCell));
                 if (!isValid)
@@ -164,6 +168,10 @@ public enum UnderWriterInfluencingFactor {
                 String ageToCellValue = Cell.CELL_TYPE_NUMERIC == ageTo.getCellType() ? ((Double) ageTo.getNumericCellValue()).toString() : ageTo.getStringCellValue();
                 Integer ageFromCellValue = NumberUtils.isNumber(cellValue)==true?Double.valueOf(cellValue).intValue():0;
                 Integer ageToValue  = NumberUtils.isNumber(ageToCellValue)==true?Double.valueOf(ageToCellValue).intValue():0;
+                if (ageFromCellValue.compareTo(ageToValue)>=0){
+                    errorMessageBuilder.append(" Age To should be greater than Age From \n");
+                    return false;
+                }
                 boolean isValid = !(isNotEmpty(planCode) && isNotEmpty(coverageId))?(iPlanAdapter.isValidPlanAge(planCode,ageFromCellValue) && iPlanAdapter.isValidPlanAge(planCode,ageToValue)):
                         (iPlanAdapter.isValidCoverageAge(planCode, coverageId, ageFromCellValue) && iPlanAdapter.isValidCoverageAge(planCode, coverageId, ageToValue));
                 if (!isValid)
@@ -243,7 +251,19 @@ public enum UnderWriterInfluencingFactor {
         }
         @Override
         public boolean isValueAvailableForTheProduct(Row currentRow, String planCode, String coverageId, Map<String, Integer> indexMap, StringBuilder errorMessageBuilder, IPlanAdapter iPlanAdapter, String fromValue, String toValue) {
-            return true;
+            if (currentRow!=null) {
+                Cell sumAssuredFrom = currentRow.getCell(indexMap.get(InfluencingFactorRange.BMI_FROM.description));
+                Cell sumAssuredTo = currentRow.getCell(indexMap.get(InfluencingFactorRange.BMI_TO.description));
+                String sumAssuredFromCellValue = Cell.CELL_TYPE_NUMERIC == sumAssuredFrom.getCellType() ? ((Double) sumAssuredFrom.getNumericCellValue()).toString() : sumAssuredFrom.getStringCellValue();
+                String sumAssuredToCellValue = Cell.CELL_TYPE_NUMERIC == sumAssuredTo.getCellType() ? ((Double) sumAssuredTo.getNumericCellValue()).toString() : sumAssuredTo.getStringCellValue();
+                BigDecimal sumAssuredFromCell = NumberUtils.isNumber(sumAssuredFromCellValue) == true ? new BigDecimal(sumAssuredFromCellValue).setScale(0) : BigDecimal.ZERO;
+                BigDecimal sumAssuredToCell = NumberUtils.isNumber(sumAssuredToCellValue) == true ? new BigDecimal(sumAssuredToCellValue).setScale(0)  : BigDecimal.ZERO;
+                if (sumAssuredFromCell.compareTo(sumAssuredToCell)>=0){
+                    errorMessageBuilder.append(" BMI To should be greater than BMI From \n");
+                    return false;
+                }
+            }
+           return true;
         }
 
         @Override
@@ -310,6 +330,18 @@ public enum UnderWriterInfluencingFactor {
 
         @Override
         public boolean isValueAvailableForTheProduct(Row currentRow, String planCode, String coverageId, Map<String, Integer> indexMap, StringBuilder errorMessageBuilder, IPlanAdapter iPlanAdapter, String fromValue, String toValue) {
+            if (currentRow!=null) {
+                Cell sumAssuredFrom = currentRow.getCell(indexMap.get(InfluencingFactorRange.HEIGHT_FROM.description));
+                Cell sumAssuredTo = currentRow.getCell(indexMap.get(InfluencingFactorRange.HEIGHT_TO.description));
+                String sumAssuredFromCellValue = Cell.CELL_TYPE_NUMERIC == sumAssuredFrom.getCellType() ? ((Double) sumAssuredFrom.getNumericCellValue()).toString() : sumAssuredFrom.getStringCellValue();
+                String sumAssuredToCellValue = Cell.CELL_TYPE_NUMERIC == sumAssuredTo.getCellType() ? ((Double) sumAssuredTo.getNumericCellValue()).toString() : sumAssuredTo.getStringCellValue();
+                BigDecimal sumAssuredFromCell = NumberUtils.isNumber(sumAssuredFromCellValue) == true ? new BigDecimal(sumAssuredFromCellValue).setScale(0) : BigDecimal.ZERO;
+                BigDecimal sumAssuredToCell = NumberUtils.isNumber(sumAssuredToCellValue) == true ? new BigDecimal(sumAssuredToCellValue).setScale(0)  : BigDecimal.ZERO;
+                if (sumAssuredFromCell.compareTo(sumAssuredToCell)>=0){
+                    errorMessageBuilder.append(" Height To should be greater than Height From \n");
+                    return false;
+                }
+            }
             return true;
         }
 
@@ -377,6 +409,18 @@ public enum UnderWriterInfluencingFactor {
 
         @Override
         public boolean isValueAvailableForTheProduct(Row currentRow, String planCode, String coverageId, Map<String, Integer> indexMap, StringBuilder errorMessageBuilder, IPlanAdapter iPlanAdapter, String fromValue, String toValue) {
+            if (currentRow!=null) {
+                Cell sumAssuredFrom = currentRow.getCell(indexMap.get(InfluencingFactorRange.WEIGHT_FROM.description));
+                Cell sumAssuredTo = currentRow.getCell(indexMap.get(InfluencingFactorRange.WEIGHT_TO.description));
+                String sumAssuredFromCellValue = Cell.CELL_TYPE_NUMERIC == sumAssuredFrom.getCellType() ? ((Double) sumAssuredFrom.getNumericCellValue()).toString() : sumAssuredFrom.getStringCellValue();
+                String sumAssuredToCellValue = Cell.CELL_TYPE_NUMERIC == sumAssuredTo.getCellType() ? ((Double) sumAssuredTo.getNumericCellValue()).toString() : sumAssuredTo.getStringCellValue();
+                BigDecimal sumAssuredFromCell = NumberUtils.isNumber(sumAssuredFromCellValue) == true ? new BigDecimal(sumAssuredFromCellValue).setScale(0) : BigDecimal.ZERO;
+                BigDecimal sumAssuredToCell = NumberUtils.isNumber(sumAssuredToCellValue) == true ? new BigDecimal(sumAssuredToCellValue).setScale(0)  : BigDecimal.ZERO;
+                if (sumAssuredFromCell.compareTo(sumAssuredToCell)>=0){
+                    errorMessageBuilder.append(" Weight To should be greater than Weight From \n");
+                    return false;
+                }
+            }
             return true;
         }
 
@@ -445,6 +489,18 @@ public enum UnderWriterInfluencingFactor {
 
         @Override
         public boolean isValueAvailableForTheProduct(Row currentRow, String planCode, String coverageId, Map<String, Integer> indexMap, StringBuilder errorMessageBuilder, IPlanAdapter iPlanAdapter, String fromValue, String toValue) {
+            if (currentRow!=null) {
+                Cell sumAssuredFrom = currentRow.getCell(indexMap.get(InfluencingFactorRange.CLAIM_AMOUNT_FROM.description));
+                Cell sumAssuredTo = currentRow.getCell(indexMap.get(InfluencingFactorRange.CLAIM_AMOUNT_TO.description));
+                String sumAssuredFromCellValue = Cell.CELL_TYPE_NUMERIC == sumAssuredFrom.getCellType() ? ((Double) sumAssuredFrom.getNumericCellValue()).toString() : sumAssuredFrom.getStringCellValue();
+                String sumAssuredToCellValue = Cell.CELL_TYPE_NUMERIC == sumAssuredTo.getCellType() ? ((Double) sumAssuredTo.getNumericCellValue()).toString() : sumAssuredTo.getStringCellValue();
+                BigDecimal sumAssuredFromCell = NumberUtils.isNumber(sumAssuredFromCellValue) == true ? new BigDecimal(sumAssuredFromCellValue).setScale(0) : BigDecimal.ZERO;
+                BigDecimal sumAssuredToCell = NumberUtils.isNumber(sumAssuredToCellValue) == true ? new BigDecimal(sumAssuredToCellValue).setScale(0)  : BigDecimal.ZERO;
+                if (sumAssuredFromCell.compareTo(sumAssuredToCell)>=0){
+                    errorMessageBuilder.append(" BMI To should be greater than BMI From \n");
+                    return false;
+                }
+            }
             return true;
         }
 
