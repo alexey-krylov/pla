@@ -12,6 +12,7 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 
+import static org.nthdimenzion.utils.UtilValidator.isEmpty;
 import static org.nthdimenzion.utils.UtilValidator.isNotEmpty;
 
 /**
@@ -64,7 +65,7 @@ public enum UnderWriterInfluencingFactor {
 
         @Override
         public boolean isValueAvailableForTheProduct(Row currentRow, String planCode, String coverageId, Map<String, Integer> indexMap, StringBuilder errorMessageBuilder, IPlanAdapter iPlanAdapter, String fromValue, String toValue) {
-            String errorMessage = "Defined Sum Assured not available for the Product";
+            String errorMessage = isEmpty(coverageId)?"Defined Sum Assured not available for the Plan":"Defined Sum Assured not available for the Coverage";
             if (currentRow!=null) {
                 Cell sumAssuredFrom = currentRow.getCell(indexMap.get(InfluencingFactorRange.SUM_ASSURED_FROM.description));
                 Cell sumAssuredTo = currentRow.getCell(indexMap.get(InfluencingFactorRange.SUM_ASSURED_TO.description));
@@ -159,6 +160,7 @@ public enum UnderWriterInfluencingFactor {
 
         @Override
         public boolean isValueAvailableForTheProduct(Row currentRow, String planCode, String coverageId, Map<String, Integer> indexMap, StringBuilder errorMessageBuilder, IPlanAdapter iPlanAdapter, String fromValue, String toValue) {
+            String errorMessage = isEmpty(coverageId)?" Defined Sum Assured not available for the Plan \n":" Defined Sum Assured not available for the Coverage \n";
             if (currentRow!=null){
                 int ageFromIndex = indexMap.get(InfluencingFactorRange.AGE_FROM.description);
                 int ageToIndex= indexMap.get(InfluencingFactorRange.AGE_TO.description);
@@ -175,14 +177,14 @@ public enum UnderWriterInfluencingFactor {
                 boolean isValid = !(isNotEmpty(planCode) && isNotEmpty(coverageId))?(iPlanAdapter.isValidPlanAge(planCode,ageFromCellValue) && iPlanAdapter.isValidPlanAge(planCode,ageToValue)):
                         (iPlanAdapter.isValidCoverageAge(planCode, coverageId, ageFromCellValue) && iPlanAdapter.isValidCoverageAge(planCode, coverageId, ageToValue));
                 if (!isValid)
-                    errorMessageBuilder.append(" Defined Age is not available for the Product ,");
+                    errorMessageBuilder.append(errorMessage);
                 return isValid;
             }
             else {
                 boolean isValid = !(isNotEmpty(planCode) && isNotEmpty(coverageId))?(iPlanAdapter.isValidPlanAge(planCode,Integer.valueOf(fromValue)) && iPlanAdapter.isValidPlanAge(planCode,Integer.valueOf(toValue))):
                         (iPlanAdapter.isValidCoverageAge(planCode, coverageId, Integer.valueOf(fromValue)) && iPlanAdapter.isValidCoverageAge(planCode, coverageId, Integer.valueOf(toValue)));
                 if (!isValid)
-                    errorMessageBuilder.append(" Defined Age is not available for the Product ,");
+                    errorMessageBuilder.append(errorMessage);
 
                 return isValid;
             }
