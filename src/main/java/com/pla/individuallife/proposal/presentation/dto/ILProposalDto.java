@@ -36,7 +36,7 @@ public class ILProposalDto {
 
     private List<Beneficiary> beneficiaries;
 
-    private List<Question> generalDetails;
+    private GeneralDetails generalDetails;
 
     private AdditionalDetails additionaldetails;
 
