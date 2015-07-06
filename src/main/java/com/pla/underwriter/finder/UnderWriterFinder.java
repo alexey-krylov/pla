@@ -34,6 +34,7 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import static com.google.common.base.Preconditions.checkArgument;
+import static org.nthdimenzion.utils.UtilValidator.isEmpty;
 import static org.nthdimenzion.utils.UtilValidator.isNotEmpty;
 
 /**
@@ -73,8 +74,10 @@ public class UnderWriterFinder {
 
     public static final String FIND_ALL_DOCUMENT_APPROVED_BY_SERVICE_PROVIDER =  "SELECT documentName,documentCode FROM document_view WHERE isProvided = 'YES'";
 
-    public static final String findMandatoryDocumentByProcessType = "SELECT document_code documentCode FROM mandatory_document md INNER JOIN mandatory_documents ms " +
-            " ON md.document_id = ms.document_id WHERE md.process = :processType";
+    public static  String findMandatoryDocumentByProcessType = "SELECT ms.document_code documentCode,d.document_name documentName FROM mandatory_document md INNER JOIN mandatory_documents ms   " +
+            "   ON md.document_id = ms.document_id  " +
+            "   INNER JOIN document d ON ms.document_code = d.document_code " +
+            "   WHERE md.process = :processType  AND md.plan_id=:planId ";
 
     public static final String FIND_DOCUMENT_DETAIL_BY_DOCUMENT_CODE =  "SELECT documentName,documentCode FROM document_view WHERE documentCode in(:documentIds)";
 
@@ -186,8 +189,9 @@ public class UnderWriterFinder {
         return underWriterMap;
     }
 
-    public List<Map<String,Object>> findMandatoryDocumentByProcess(ProcessType processType){
-        SqlParameterSource sqlParameterSource = new MapSqlParameterSource("processType",processType.name());
+    public List<Map<String,Object>> findMandatoryDocumentByProcess(ProcessType processType, String planId, String coverageId){
+        SqlParameterSource sqlParameterSource = new MapSqlParameterSource("processType",processType.name()).addValue("planId",planId).addValue("coverageId",coverageId);
+        findMandatoryDocumentByProcessType =   isEmpty(coverageId)?findMandatoryDocumentByProcessType+" AND md.coverage_id is null ":findMandatoryDocumentByProcessType+" AND md.coverage_id=:coverageId";
         return namedParameterJdbcTemplate.query(findMandatoryDocumentByProcessType,sqlParameterSource,new ColumnMapRowMapper());
     }
 }

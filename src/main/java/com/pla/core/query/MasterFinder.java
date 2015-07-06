@@ -43,7 +43,7 @@ public class MasterFinder {
     public static final String FIND_ALL_EMPLOYMENT_TYPE_QUERY = "select * from employment_type";
     public static final String FIND_ALL_INDUSTRY_QUERY = "SELECT industry_id AS industryId,industry_name AS industryName,risk_class AS riskClass,industry_factor AS industryFactor FROM industry";
     public static final String FIND_ALL_BANK_NAME_QUERY = "SELECT * FROM BANK_NAME";
-    private static final String FIND_ALL_BANK_BRANCH_NAME_QUERY = "SELECT * FROM BANK_BRANCH WHERE BANK_CODE =:bankCode" ;
+    public static final String FIND_ALL_BANK_BRANCH_NAME_QUERY = "SELECT * FROM BANK_BRANCH WHERE BANK_CODE =:bankCode" ;
     private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
     @Autowired

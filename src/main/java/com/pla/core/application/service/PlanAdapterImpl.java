@@ -213,7 +213,11 @@ public class PlanAdapterImpl implements IPlanAdapter {
         return isNotEmpty(plans) ? plans.get(0).getIdentifier() : null;
     }
 
-    // TODO TO be implemented  this method by Ravi Kumar
+   /*
+   *
+   * returns true if any plan is active and
+    *  false if plan is not active
+   * */
     @Override
     public boolean isPlanActive(String planCode) {
         int activePlanCount = planFinder.findActivePlanByPlanCode(planCode);

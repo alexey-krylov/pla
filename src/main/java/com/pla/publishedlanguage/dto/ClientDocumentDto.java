@@ -12,13 +12,14 @@ import lombok.Setter;
 public class ClientDocumentDto {
 
     private String documentCode;
-    private boolean isOptional;
+    private boolean hasSubmitted;
+    private String documentName;
 
     public ClientDocumentDto() {
     }
 
-    public ClientDocumentDto(String documentCode, boolean isOptional) {
+    public ClientDocumentDto(String documentCode, boolean hasSubmitted) {
         this.documentCode = documentCode;
-        this.isOptional = isOptional;
+        this.hasSubmitted = hasSubmitted;
     }
 }

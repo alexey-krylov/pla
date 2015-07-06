@@ -66,7 +66,7 @@ public class UnderWriterAdapterImpl implements IUnderWriterAdapter {
         List<String> documentDefinedForClient = findDefinedUnderWriterDocumentByClientId(underWriterRoutingLevelDetailDto.getClientId());
         for (ClientDocumentDto clientDocumentDto : clientDocument){
             if (documentDefinedForClient.contains(clientDocumentDto.getDocumentCode())){
-                clientDocumentDto.setOptional(true);
+                clientDocumentDto.setHasSubmitted(true);
             }
         }
         return clientDocument;
@@ -79,21 +79,21 @@ public class UnderWriterAdapterImpl implements IUnderWriterAdapter {
     *
     * */
     @Override
-    public List<ClientDocumentDto> getDocumentsForApproverApproval(String clientId,ProcessType processType) {
-        List<Map<String,Object>> mandatoryDocument = underWriterFinder.findMandatoryDocumentByProcess(processType);
-        List<ClientDocumentDto> clientDocumentList =  mandatoryDocument.parallelStream().map(new Function<Map<String, Object>, String>() {
+    public List<ClientDocumentDto> getMandatoryDocumentsForApproverApproval(String clientId, ProcessType processType, String planId, String coverageId) {
+        List<Map<String,Object>> mandatoryDocument = underWriterFinder.findMandatoryDocumentByProcess(processType, planId,coverageId );
+        List<ClientDocumentDto> clientDocumentList =  mandatoryDocument.parallelStream().map(new Function<Map<String, Object>, ClientDocumentDto>() {
             @Override
-            public String apply(Map<String, Object> mandatoryDocument) {
-                return (String) mandatoryDocument.get("documentCode");
-            }}).collect(Collectors.toList()).stream().map(new Function<String, ClientDocumentDto>() {
-            @Override
-            public ClientDocumentDto apply(String documentCode) {
-                return new ClientDocumentDto(documentCode, false);
+            public ClientDocumentDto apply(Map<String, Object> mandatoryDocument) {
+                String documentCode = (String) mandatoryDocument.get("documentCode");
+                String documentName = (String) mandatoryDocument.get("documentName");
+                ClientDocumentDto clientDocumentDto =  new ClientDocumentDto(documentCode, false);
+                clientDocumentDto.setDocumentName(documentName);
+                return clientDocumentDto;
             }}).collect(Collectors.toList());
         List<String> mandatoryDocumentByClientId = findDefinedMandatoryDocumentByClientId(clientId);
         for (ClientDocumentDto clientDocumentDto : clientDocumentList){
             if (mandatoryDocumentByClientId.contains(clientDocumentDto.getDocumentCode())){
-                clientDocumentDto.setOptional(true);
+                clientDocumentDto.setHasSubmitted(true);
             }
         }
         return clientDocumentList;

@@ -6,11 +6,14 @@ import lombok.*;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+
+import static org.nthdimenzion.utils.UtilValidator.isNotEmpty;
 
 /**
  * Created by Admin on 5/28/2015.
@@ -68,13 +71,16 @@ public class Client {
     }
 
     public List<Map<String,Object>> findClientDocument(){
-        return this.clientDocuments.stream().map(new Function<ClientDocument, Map<String, Object>>() {
-            @Override
-            public Map<String, Object> apply(ClientDocument clientDocument) {
-                Map<String,Object> clientDocumentMap = Maps.newLinkedHashMap();
-                clientDocumentMap.put(clientDocument.getDocumentCode(), clientDocument.getRoutingLevel());
-                return clientDocumentMap;
-            }
-        }).collect(Collectors.toList());
+        if (isNotEmpty(this.clientDocuments)) {
+            return this.clientDocuments.stream().map(new Function<ClientDocument, Map<String, Object>>() {
+                @Override
+                public Map<String, Object> apply(ClientDocument clientDocument) {
+                    Map<String, Object> clientDocumentMap = Maps.newLinkedHashMap();
+                    clientDocumentMap.put(clientDocument.getDocumentCode(), clientDocument.getRoutingLevel());
+                    return clientDocumentMap;
+                }
+            }).collect(Collectors.toList());
+        }
+        return Collections.EMPTY_LIST;
     }
 }

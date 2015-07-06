@@ -16,7 +16,8 @@ public interface IUnderWriterAdapter {
 
     public List<ClientDocumentDto> getDocumentsForUnderWriterApproval(UnderWriterRoutingLevelDetailDto underWriterRoutingLevelDetailDto);
 
-    public List<ClientDocumentDto> getDocumentsForApproverApproval(String clientId,ProcessType processType);
+
+    public List<ClientDocumentDto> getMandatoryDocumentsForApproverApproval(String clientId, ProcessType processType, String planId, String coverageId);
 
 
 }
