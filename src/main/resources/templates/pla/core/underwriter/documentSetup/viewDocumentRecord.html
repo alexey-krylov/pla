@@ -68,9 +68,10 @@
                             </div>
                             <div class="form-group col-md-4 required">
                                 <label class="control-label">From Date</label>
-
-                                <p class="input-group" >
-                                    <input type="text" class="form-control input-sm"  value="{{viewDocumentLevel.effectiveFrom}}" readonly="true"/>
+                                <p class="input-group">
+                                    <input type="text" class="form-control input-sm" ng-required="false" datepicker-popup="dd/MM/yyyy"
+                                           ng-model="viewDocumentLevel.effectiveFrom" datepicker-options="datePickerSettings.dateOptions" is-open="datePickerSettings.isOpened"
+                                           name="effectiveFrom" readonly="true"/>
                                 </p>
                             </div>
                             <div class="form-group col-md-4 required" >
