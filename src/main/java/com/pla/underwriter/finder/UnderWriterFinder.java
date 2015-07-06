@@ -92,6 +92,8 @@ public class UnderWriterFinder {
             underWriterDocumentMap.put("processType", UnderWriterProcessType.valueOf((String) underWriterDocumentMap.get("processType")).getDescription());
             String coverageId = underWriterDocument.getCoverageId()!=null?underWriterDocument.getCoverageId().getCoverageId():null;
             underWriterDocumentMap = planCoverageDetailTransformer(coverageId,underWriterDocument.getPlanCode(),underWriterDocumentMap);
+            underWriterDocumentMap.put("effectiveFrom", underWriterDocumentMap.get("effectiveFrom")!=null? DateTime.parse(underWriterDocumentMap.get("effectiveFrom").toString()).toString(AppConstants.DD_MM_YYY_FORMAT):null);
+            underWriterDocumentMap.put("validTill", underWriterDocumentMap.get("validTill")!=null?DateTime.parse(underWriterDocumentMap.get("validTill").toString()).toString(AppConstants.DD_MM_YYY_FORMAT):null);
             underWriterDocumentList.add(underWriterDocumentMap);
         }
         return underWriterDocumentList;
@@ -105,6 +107,8 @@ public class UnderWriterFinder {
             underWritingRoutingLevelMap = underWriterInfluencingFactorAndProcessTypeTransformer(underWritingRoutingLevelMap);
             String coverageId = underWriterRoutingLevel.getCoverageId()!=null?underWriterRoutingLevel.getCoverageId().getCoverageId():null;
             underWritingRoutingLevelMap = planCoverageDetailTransformer(coverageId,underWriterRoutingLevel.getPlanCode(),underWritingRoutingLevelMap);
+            underWritingRoutingLevelMap.put("effectiveFrom", underWritingRoutingLevelMap.get("effectiveFrom")!=null? DateTime.parse(underWritingRoutingLevelMap.get("effectiveFrom").toString()).toString(AppConstants.DD_MM_YYY_FORMAT):null);
+            underWritingRoutingLevelMap.put("validTill", underWritingRoutingLevelMap.get("validTill") != null ? DateTime.parse(underWritingRoutingLevelMap.get("validTill").toString()).toString(AppConstants.DD_MM_YYY_FORMAT) : null);
             underWritingRoutingLevelList.add(underWritingRoutingLevelMap);
         }
         return underWritingRoutingLevelList;
@@ -179,8 +183,6 @@ public class UnderWriterFinder {
             String planName =(String) namedParameterJdbcTemplate.queryForMap(FIND_PLAN_NAME_BY_CODE, sqlParameterSource).get("planName");
             underWriterMap.put("planName",planName);
         }
-        underWriterMap.put("effectiveFrom", underWriterMap.get("effectiveFrom")!=null? DateTime.parse(underWriterMap.get("effectiveFrom").toString()).toString(AppConstants.DD_MM_YYY_FORMAT):null);
-        underWriterMap.put("validTill", underWriterMap.get("validTill")!=null?DateTime.parse(underWriterMap.get("validTill").toString()).toString(AppConstants.DD_MM_YYY_FORMAT):null);
         return underWriterMap;
     }
 
