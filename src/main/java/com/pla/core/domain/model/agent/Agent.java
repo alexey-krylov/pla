@@ -47,6 +47,8 @@ public class Agent implements ICrudEntity {
     @Getter
     private LicenseNumber licenseNumber;
 
+    private String registrationNumber;
+
     @Embedded
     private TeamDetail teamDetail;
 
@@ -110,6 +112,11 @@ public class Agent implements ICrudEntity {
 
     public Agent withLicenseNumber(String licenseNumber) {
         this.licenseNumber = new LicenseNumber(licenseNumber);
+        return this;
+    }
+
+    public Agent withRegistrationNumber(String registrationNumber) {
+        this.registrationNumber = registrationNumber;
         return this;
     }
 

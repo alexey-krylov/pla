@@ -63,10 +63,14 @@ public class CreateAgentCommand {
 
     private List<AgentContactPersonDetailDto> contactPersonDetails;
 
+    private String registrationNumber;
+
 
     public static CreateAgentCommand transformToAgentCommand(Map<String, Object> agentDetail, List<Map<String, Object>> allAgentPlans, List<Map> allMasterPlans, List<Map<String, Object>> agentContacts) {
         CreateAgentCommand createAgentCommand = new CreateAgentCommand();
         String agentId = (String) agentDetail.get("agentId");
+        String registrationNumber = (String) agentDetail.get("registrationNumber");
+        createAgentCommand.setRegistrationNumber(registrationNumber);
         createAgentCommand.setAgentId(agentId);
         createAgentCommand.setAgentProfile(AgentProfileDto.transFormToAgentProfileDto(agentDetail));
         LicenseNumberDto licenseNumberDto = agentDetail.get("licenseNumber") != null ? new LicenseNumberDto((String) agentDetail.get("licenseNumber")) : null;

@@ -51,4 +51,6 @@ public class UpdateAgentCommand {
     private AgentStatus agentStatus;
 
     private List<AgentContactPersonDetailDto> contactPersonDetails;
+
+    private String registrationNumber;
 }

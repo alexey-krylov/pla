@@ -37,7 +37,7 @@ public class AgentCommandHandler {
             LOGGER.debug("*****Create Agent Command Received*****" + createAgentCommand);
         }
         try {
-            agentService.createAgent(createAgentCommand.getAgentId(), createAgentCommand.getAgentProfile(), createAgentCommand.getLicenseNumber(), createAgentCommand.getTeamDetail(), createAgentCommand.getContactDetail(), createAgentCommand.getPhysicalAddress(), createAgentCommand.getChannelType(), createAgentCommand.getAuthorizePlansToSell(), createAgentCommand.getOverrideCommissionApplicable(), createAgentCommand.getContactPersonDetails());
+            agentService.createAgent(createAgentCommand.getAgentId(), createAgentCommand.getAgentProfile(), createAgentCommand.getLicenseNumber(), createAgentCommand.getTeamDetail(), createAgentCommand.getContactDetail(), createAgentCommand.getPhysicalAddress(), createAgentCommand.getChannelType(), createAgentCommand.getAuthorizePlansToSell(), createAgentCommand.getOverrideCommissionApplicable(), createAgentCommand.getContactPersonDetails(), createAgentCommand.getRegistrationNumber());
         } catch (Exception e) {
             LOGGER.error("*****Saving agent failed*****", e);
             throw new AgentApplicationException(e.getMessage());
@@ -51,7 +51,7 @@ public class AgentCommandHandler {
             LOGGER.debug("*****Update Agent Command Received*****" + updateAgentCommand);
         }
         try {
-            agentService.updateAgent(updateAgentCommand.getAgentId(), updateAgentCommand.getAgentProfile(), updateAgentCommand.getLicenseNumber(), updateAgentCommand.getTeamDetail(), updateAgentCommand.getContactDetail(), updateAgentCommand.getPhysicalAddress(), updateAgentCommand.getChannelType(), updateAgentCommand.getAuthorizePlansToSell(), updateAgentCommand.getAgentStatus(), updateAgentCommand.getOverrideCommissionApplicable(), updateAgentCommand.getContactPersonDetails());
+            agentService.updateAgent(updateAgentCommand.getAgentId(), updateAgentCommand.getAgentProfile(), updateAgentCommand.getLicenseNumber(), updateAgentCommand.getTeamDetail(), updateAgentCommand.getContactDetail(), updateAgentCommand.getPhysicalAddress(), updateAgentCommand.getChannelType(), updateAgentCommand.getAuthorizePlansToSell(), updateAgentCommand.getAgentStatus(), updateAgentCommand.getOverrideCommissionApplicable(), updateAgentCommand.getContactPersonDetails(), updateAgentCommand.getRegistrationNumber());
         } catch (Exception e) {
             LOGGER.error("*****Update agent failed*****", e);
             throw new AgentApplicationException(e.getMessage());

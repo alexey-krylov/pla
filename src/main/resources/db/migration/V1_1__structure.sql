@@ -564,6 +564,7 @@ DROP VIEW IF EXISTS `agent_team_branch_view`;
 CREATE  VIEW `agent_team_branch_view` AS
   (SELECT DISTINCT
      `agent_id`                                                             AS agentId,
+     `registration_number`                                                  AS registrationNumber,
      A.title                                                                AS title,
      `designation_code`                                                     AS designationCode,
      `designation_name`                                                     AS designationName,
