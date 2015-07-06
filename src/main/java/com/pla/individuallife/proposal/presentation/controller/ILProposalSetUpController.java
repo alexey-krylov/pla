@@ -3,6 +3,7 @@ package com.pla.individuallife.proposal.presentation.controller;
 import com.google.common.collect.Lists;
 import com.pla.core.query.PlanFinder;
 import com.pla.individuallife.proposal.application.command.*;
+import com.pla.individuallife.proposal.domain.model.GeneralDetails;
 import com.pla.individuallife.proposal.presentation.dto.ILSearchProposalDto;
 import com.pla.individuallife.proposal.presentation.dto.QuestionDto;
 import com.pla.individuallife.proposal.query.ILProposalFinder;
@@ -178,7 +179,7 @@ public class ILProposalSetUpController {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        List<QuestionDto> questions = cmd.getGenerateDetails();
+        GeneralDetails questions = cmd.getGeneralDetails();
         Map map = new HashMap<>();
         map.put("msg", "Proposal updated with General Details successfully");
         map.put("proposalId", proposalId);

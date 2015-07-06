@@ -42,7 +42,7 @@ public class ProposalAggregate extends AbstractAnnotatedAggregateRoot<ProposalId
     private List<Beneficiary> beneficiaries;
     private BigDecimal totalBeneficiaryShare = BigDecimal.ZERO;
     private List<Question> compulsoryHealthStatement;
-    private List<Question> generalDetails;
+    private GeneralDetails generalDetails;
     private FamilyPersonalDetail familyPersonalDetail;
     private AgentCommissionShareModel agentCommissionShareModel;
     private AdditionalDetails additionaldetails;
@@ -142,10 +142,9 @@ public class ProposalAggregate extends AbstractAnnotatedAggregateRoot<ProposalId
         totalBeneficiaryShare = newTotal;
     }
 
-    public void updateGeneralDetails(List<QuestionDto> generaldetails, UserDetails userDetails) {
+    public void updateGeneralDetails(GeneralDetails generaldetails, UserDetails userDetails) {
         checkAuthorization(userDetails);
-        this.generalDetails  = new ArrayList<Question>();
-        generaldetails.stream().forEach(gd -> this.generalDetails.add(new Question(new QuestionId(gd.getQuestionId()), gd.isAnswer(), gd.getAnswerResponse())));
+        this.generalDetails = generaldetails;
     }
 
     public void updateCompulsoryHealthStatement(List<QuestionDto> compulsoryHealthStatement, UserDetails userDetails){

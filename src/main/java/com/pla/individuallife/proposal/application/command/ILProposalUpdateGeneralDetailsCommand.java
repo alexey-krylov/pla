@@ -1,12 +1,10 @@
 package com.pla.individuallife.proposal.application.command;
 
-import com.pla.individuallife.proposal.presentation.dto.QuestionDto;
+import com.pla.individuallife.proposal.domain.model.GeneralDetails;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.security.core.userdetails.UserDetails;
-
-import java.util.List;
 
 /**
  * Created by Karunakar on 7/1/2015.
@@ -16,7 +14,7 @@ import java.util.List;
 @NoArgsConstructor
 public class ILProposalUpdateGeneralDetailsCommand {
 
-    private List<QuestionDto> generateDetails;
+    private GeneralDetails generalDetails;
     private UserDetails userDetails;
     private String proposalId;
 
