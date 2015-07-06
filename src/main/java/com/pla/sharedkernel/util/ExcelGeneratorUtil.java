@@ -89,7 +89,7 @@ public class ExcelGeneratorUtil {
                     DVConstraint constraint = DVConstraint.createFormulaListConstraint(hiddenSheetName);
                     CellRangeAddressList addressList = new CellRangeAddressList(rowNumber, lastRowNumber, cellNumber, cellNumber);
                     HSSFDataValidation dataValidation = new HSSFDataValidation(addressList, constraint);
-                    dataValidation.setErrorStyle(DataValidation.ErrorStyle.INFO);
+                    dataValidation.setErrorStyle(DataValidation.ErrorStyle.STOP);
                     dataValidation.createErrorBox("Error", "Provide proper value");
                     workbook.setSheetHidden(workbook.getSheetIndex(hiddenSheetForNamedCell), true);
                     hssfSheet.addValidationData(dataValidation);
