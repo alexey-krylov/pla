@@ -109,6 +109,21 @@ public class ILProposalController {
         return planList;
     }
 
+    @RequestMapping(method = RequestMethod.GET, value = "/getAllBankNames")
+    @ResponseBody
+    public List<Map<String, Object>> getAllBankNames() {
+        List<Map<String, Object>> bankList = masterFinder.getAllBank();
+        return bankList;
+    }
+
+    @RequestMapping(method = RequestMethod.GET, value = "/getAllBankBranchNames/{bankCode}")
+    @ResponseBody
+    public List<Map<String, Object>> getAllBankBranchNames(@PathVariable("bankCode") String bankCode) {
+        List<Map<String, Object>> bankBranchList = masterFinder.getAllBankBranch(bankCode);
+        return bankBranchList;
+    }
+
+
     @RequestMapping(method = RequestMethod.GET, value = "getridersforplan/{planId}")
     @ApiOperation(httpMethod = "GET", value = "This call for edit quotation screen.")
     @ResponseBody
