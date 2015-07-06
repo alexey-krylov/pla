@@ -98,9 +98,10 @@ public class GHProposalService {
         Map proposalMap = ghProposalFinder.findProposalById(proposalId.getProposalId());
         AgentId agentMap = (AgentId) proposalMap.get("agentId");
         String agentId = agentMap.getAgentId();
-        Map<String, Object> agentDetail = ghFinder.getAgentById(agentId);
+        Map<String, Object> agentDetail = ghProposalFinder.getAgentById(agentId);
         AgentDetailDto agentDetailDto = new AgentDetailDto();
         agentDetailDto.setAgentId(agentId);
+        agentDetailDto.setActive("ACTIVE".equalsIgnoreCase((String) agentDetail.get("agentStatus")));
         agentDetailDto.setBranchName((String) agentDetail.get("branchName"));
         agentDetailDto.setTeamName((String) agentDetail.get("teamName"));
         agentDetailDto.setAgentName(agentDetail.get("firstName") + " " + (agentDetail.get("lastName") == null ? "" : (String) agentDetail.get("lastName")));

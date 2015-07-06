@@ -295,6 +295,16 @@ public class GroupHealthProposalController {
         }
     }
 
+    @RequestMapping(value = "/getmandatorydocuments", method = RequestMethod.POST)
+    @ResponseBody
+    public Result findMandatoryDocuments() {
+        try {
+            return Result.success("Quotation generated successfully");
+        } catch (Exception e) {
+            return Result.failure(e.getMessage());
+        }
+    }
+
     @RequestMapping(value = "/getproposerdetail/{proposalId}")
     @ResponseBody
     public ProposerDto getProposerDetail(@PathVariable("proposalId") String proposalId) {
