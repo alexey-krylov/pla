@@ -11,9 +11,11 @@ import org.springframework.security.core.userdetails.UserDetails;
 @Getter
 @Setter
 @NoArgsConstructor
-public class GenerateGLQuotationCommand {
+public class SubmitGHProposalCommand {
 
-    private String quotationId;
+    private String proposalId;
 
     private UserDetails userDetails;
+
+    private String comment;
 }

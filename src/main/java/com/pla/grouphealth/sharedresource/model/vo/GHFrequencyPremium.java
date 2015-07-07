@@ -15,7 +15,7 @@ import java.math.BigDecimal;
 
 @ValueObject
 @NoArgsConstructor(access = AccessLevel.PACKAGE)
-@Getter(value = AccessLevel.PACKAGE)
+@Getter
 @Setter(value = AccessLevel.PACKAGE)
 public class GHFrequencyPremium {
 

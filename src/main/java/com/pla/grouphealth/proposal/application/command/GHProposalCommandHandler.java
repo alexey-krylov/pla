@@ -1,6 +1,8 @@
 package com.pla.grouphealth.proposal.application.command;
 
+import com.pla.grouphealth.proposal.domain.model.GHProposalApprover;
 import com.pla.grouphealth.proposal.domain.model.GroupHealthProposal;
+import com.pla.grouphealth.proposal.domain.service.GHProposalRoleAdapter;
 import com.pla.grouphealth.proposal.domain.service.GroupHealthProposalFactory;
 import com.pla.grouphealth.proposal.domain.service.GroupHealthProposalService;
 import com.pla.grouphealth.proposal.query.GHProposalFinder;
@@ -16,6 +18,7 @@ import com.pla.sharedkernel.identifier.QuotationId;
 import org.axonframework.commandhandling.annotation.CommandHandler;
 import org.axonframework.repository.Repository;
 import org.bson.types.ObjectId;
+import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
@@ -47,8 +50,10 @@ public class GHProposalCommandHandler {
 
     private GHProposalRepository ghProposalRepository;
 
+    private GHProposalRoleAdapter ghProposalRoleAdapter;
+
     @Autowired
-    public GHProposalCommandHandler(GroupHealthProposalFactory groupHealthProposalFactory, Repository<GroupHealthProposal> ghProposalMongoRepository, GHProposalFinder ghProposalFinder, GHFinder ghFinder, GHInsuredFactory ghInsuredFactory, GroupHealthProposalService groupHealthProposalService, IProcessInfoAdapter processInfoAdapter, GHProposalRepository ghProposalRepository) {
+    public GHProposalCommandHandler(GroupHealthProposalFactory groupHealthProposalFactory, Repository<GroupHealthProposal> ghProposalMongoRepository, GHProposalFinder ghProposalFinder, GHFinder ghFinder, GHInsuredFactory ghInsuredFactory, GroupHealthProposalService groupHealthProposalService, IProcessInfoAdapter processInfoAdapter, GHProposalRepository ghProposalRepository, GHProposalRoleAdapter ghProposalRoleAdapter) {
         this.groupHealthProposalFactory = groupHealthProposalFactory;
         this.ghProposalMongoRepository = ghProposalMongoRepository;
         this.ghProposalFinder = ghProposalFinder;
@@ -57,6 +62,7 @@ public class GHProposalCommandHandler {
         this.groupHealthProposalService = groupHealthProposalService;
         this.processInfoAdapter = processInfoAdapter;
         this.ghProposalRepository = ghProposalRepository;
+        this.ghProposalRoleAdapter = ghProposalRoleAdapter;
     }
 
     @CommandHandler
@@ -114,6 +120,21 @@ public class GHProposalCommandHandler {
     public String updateWithPremiumDetail(UpdateGHProposalWithPremiumDetailCommand updateGHProposalWithPremiumDetailCommand) {
         GroupHealthProposal groupHealthProposal = ghProposalMongoRepository.load(new ProposalId(updateGHProposalWithPremiumDetailCommand.getProposalId()));
         groupHealthProposal = populateAnnualBasicPremiumOfInsured(groupHealthProposal, updateGHProposalWithPremiumDetailCommand.getUserDetails(), updateGHProposalWithPremiumDetailCommand.getPremiumDetailDto());
+        return groupHealthProposal.getIdentifier().getProposalId();
+    }
+
+    @CommandHandler
+    public String submitProposal(SubmitGHProposalCommand submitGHProposalCommand) {
+        GroupHealthProposal groupHealthProposal = ghProposalMongoRepository.load(new ProposalId(submitGHProposalCommand.getProposalId()));
+        groupHealthProposal = groupHealthProposal.submitForApproval(DateTime.now(), submitGHProposalCommand.getUserDetails().getUsername(), submitGHProposalCommand.getComment());
+        return groupHealthProposal.getIdentifier().getProposalId();
+    }
+
+    @CommandHandler
+    public String proposalApproval(GHProposalApprovalCommand ghProposalApprovalCommand) {
+        GroupHealthProposal groupHealthProposal = ghProposalMongoRepository.load(new ProposalId(ghProposalApprovalCommand.getProposalId()));
+        GHProposalApprover ghProposalApprover = ghProposalRoleAdapter.userToProposalApprover(ghProposalApprovalCommand.getUserDetails());
+        groupHealthProposal = ghProposalApprover.submitApproval(DateTime.now(), ghProposalApprovalCommand.getComment(), groupHealthProposal, ghProposalApprovalCommand.getStatus());
         return groupHealthProposal.getIdentifier().getProposalId();
     }
 

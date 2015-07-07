@@ -3,10 +3,13 @@ package com.pla.grouphealth.proposal.presentation.controller;
 import com.google.common.collect.Lists;
 import com.pla.grouphealth.proposal.application.command.*;
 import com.pla.grouphealth.proposal.application.service.GHProposalService;
+import com.pla.grouphealth.proposal.presentation.dto.GHProposalDto;
+import com.pla.grouphealth.proposal.presentation.dto.GHProposalMandatoryDocumentDto;
+import com.pla.grouphealth.proposal.presentation.dto.ProposalApproverCommentsDto;
 import com.pla.grouphealth.proposal.presentation.dto.SearchGHProposalDto;
 import com.pla.grouphealth.proposal.query.GHProposalFinder;
-import com.pla.grouphealth.quotation.application.command.GenerateGLQuotationCommand;
 import com.pla.grouphealth.sharedresource.dto.*;
+import com.pla.grouphealth.sharedresource.model.vo.ProposalStatus;
 import com.pla.publishedlanguage.contract.IClientProvider;
 import com.pla.publishedlanguage.dto.ClientDetailDto;
 import com.pla.sharedkernel.identifier.ProposalId;
@@ -142,12 +145,18 @@ public class GroupHealthProposalController {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("pla/grouphealth/proposal/viewProposal");
         try {
-            modelAndView.addObject("searchResult", ghProposalService.searchProposal(searchGHProposalDto, new String[]{"DRAFT", "SUBMITTED"}));
+            modelAndView.addObject("searchResult", ghProposalService.searchProposal(searchGHProposalDto, new String[]{"DRAFT", "PENDING_ACCEPTANCE", "RETURNED"}));
         } catch (Exception e) {
             modelAndView.addObject("searchResult", Lists.newArrayList());
         }
         modelAndView.addObject("searchCriteria", searchGHProposalDto);
         return modelAndView;
+    }
+
+    @RequestMapping(value = "/getsubmittedproposals", method = RequestMethod.POST)
+    public List<GHProposalDto> findSubmittedProposal(SearchGHProposalDto searchGHProposalDto) {
+        List<GHProposalDto> submittedProposals = ghProposalService.searchProposal(searchGHProposalDto, new String[]{"DRAFT", "PENDING_ACCEPTANCE", "RETURNED"});
+        return submittedProposals;
     }
 
     @RequestMapping(value = "/opensearchproposal", method = RequestMethod.GET)
@@ -286,23 +295,56 @@ public class GroupHealthProposalController {
 
     @RequestMapping(value = "/submit", method = RequestMethod.POST)
     @ResponseBody
-    public Result submitProposal(@RequestBody GenerateGLQuotationCommand generateGLQuotationCommand) {
+    public ResponseEntity submitProposal(@RequestBody SubmitGHProposalCommand submitGHProposalCommand, HttpServletRequest request) {
         try {
-            commandGateway.sendAndWait(generateGLQuotationCommand);
-            return Result.success("Quotation generated successfully");
+            submitGHProposalCommand.setUserDetails(getLoggedInUserDetail(request));
+            commandGateway.sendAndWait(submitGHProposalCommand);
+            return new ResponseEntity(Result.success("Proposal submitted successfully"), HttpStatus.OK);
         } catch (Exception e) {
-            return Result.failure(e.getMessage());
+            e.printStackTrace();
+            return new ResponseEntity(Result.failure(e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
-    @RequestMapping(value = "/getmandatorydocuments", method = RequestMethod.POST)
+    @RequestMapping(value = "/approve", method = RequestMethod.POST)
     @ResponseBody
-    public Result findMandatoryDocuments() {
+    public ResponseEntity approveProposal(@RequestBody GHProposalApprovalCommand ghProposalApprovalCommand, HttpServletRequest request) {
         try {
-            return Result.success("Quotation generated successfully");
+            ghProposalApprovalCommand.setUserDetails(getLoggedInUserDetail(request));
+            ghProposalApprovalCommand.setStatus(ProposalStatus.APPROVED);
+            commandGateway.sendAndWait(ghProposalApprovalCommand);
+            return new ResponseEntity(Result.success("Proposal approved successfully"), HttpStatus.OK);
         } catch (Exception e) {
-            return Result.failure(e.getMessage());
+            e.printStackTrace();
+            return new ResponseEntity(Result.failure(e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
         }
+    }
+
+    @RequestMapping(value = "/return", method = RequestMethod.POST)
+    @ResponseBody
+    public ResponseEntity returnProposal(@RequestBody GHProposalApprovalCommand ghProposalApprovalCommand, HttpServletRequest request) {
+        try {
+            ghProposalApprovalCommand.setUserDetails(getLoggedInUserDetail(request));
+            ghProposalApprovalCommand.setStatus(ProposalStatus.RETURNED);
+            commandGateway.sendAndWait(ghProposalApprovalCommand);
+            return new ResponseEntity(Result.success("Proposal returned successfully"), HttpStatus.OK);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResponseEntity(Result.failure(e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @RequestMapping(value = "/getapprovercomments", method = RequestMethod.GET)
+    @ResponseBody
+    public List<ProposalApproverCommentsDto> findApproverComments(@RequestBody GHProposalApprovalCommand ghProposalApprovalCommand, HttpServletRequest request) {
+        return ghProposalService.findApproverComments();
+    }
+
+    @RequestMapping(value = "/getmandatorydocuments/{proposalId}", method = RequestMethod.GET)
+    @ResponseBody
+    public List<GHProposalMandatoryDocumentDto> findMandatoryDocuments(@PathVariable("proposalId")String proposalId) {
+        List<GHProposalMandatoryDocumentDto> ghProposalMandatoryDocumentDtos = ghProposalService.findMnadatoryDocuemnts(proposalId);
+        return ghProposalMandatoryDocumentDtos;
     }
 
     @RequestMapping(value = "/getproposerdetail/{proposalId}")

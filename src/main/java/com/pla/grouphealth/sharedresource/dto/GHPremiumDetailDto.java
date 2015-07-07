@@ -45,7 +45,7 @@ public class GHPremiumDetailDto {
 
     private BigDecimal waiverOfExcessLoading;
 
-    private PremiumFrequency policyPremiumFrequency;
+    private PremiumFrequency optedPremiumFrequency;
 
 
     public GHPremiumDetailDto(BigDecimal addOnBenefit, BigDecimal profitAndSolvencyLoading, BigDecimal discounts, BigDecimal waiverOfExcessLoading, BigDecimal vat, Integer policyTermValue) {
@@ -98,5 +98,9 @@ public class GHPremiumDetailDto {
         return this;
     }
 
+    public GHPremiumDetailDto updateWithOptedFrequency(PremiumFrequency optedPremiumFrequency){
+        this.optedPremiumFrequency=optedPremiumFrequency;
+        return this;
+    }
 
 }

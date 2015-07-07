@@ -3,10 +3,12 @@ package com.pla.grouphealth.quotation.saga;
 import com.google.common.collect.Lists;
 import com.pla.grouphealth.quotation.application.command.GHClosureGLQuotationCommand;
 import com.pla.grouphealth.quotation.application.command.GHPurgeGLQuotationCommand;
+import com.pla.grouphealth.quotation.application.command.GHQuotationConvertedCommand;
 import com.pla.grouphealth.quotation.domain.event.*;
 import com.pla.grouphealth.quotation.domain.model.GHQuotationStatus;
 import com.pla.grouphealth.quotation.domain.model.GroupHealthQuotation;
 import com.pla.grouphealth.quotation.repository.GHQuotationRepository;
+import com.pla.grouphealth.sharedresource.event.GHQuotationConvertedToProposalEvent;
 import com.pla.publishedlanguage.contract.IProcessInfoAdapter;
 import com.pla.publishedlanguage.contract.ISMEGateway;
 import com.pla.sharedkernel.application.CreateQuotationNotificationCommand;
@@ -32,6 +34,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 import static org.nthdimenzion.utils.UtilValidator.isNotEmpty;
 
@@ -100,7 +104,7 @@ public class GroupHealthQuotationSaga extends AbstractAnnotatedSaga {
             LOGGER.debug("Handling GH Quotation Purge Event .....", event);
         }
         GroupHealthQuotation groupHealthQuotation = ghQuotationRepository.findOne(event.getQuotationId());
-        if (!GHQuotationStatus.CLOSED.equals(groupHealthQuotation.getQuotationStatus())) {
+        if (!GHQuotationStatus.CONVERTED.equals(groupHealthQuotation.getQuotationStatus())) {
             commandGateway.send(new GHPurgeGLQuotationCommand(event.getQuotationId()));
         }
     }
@@ -114,8 +118,8 @@ public class GroupHealthQuotationSaga extends AbstractAnnotatedSaga {
         if (GHQuotationStatus.SHARED.equals(groupHealthQuotation.getQuotationStatus())) {
             this.noOfReminderSent = noOfReminderSent + 1;
             System.out.println("************ Send Reminder ****************");
-            commandGateway.send(new CreateQuotationNotificationCommand(event.getQuotationId(),RolesUtil.GROUP_HEALTH_QUOTATION_PROCESSOR_ROLE,LineOfBusinessEnum.GROUP_HEALTH,ProcessType.QUOTATION,
-                    WaitingForEnum.QUOTATION_RESPONSE, noOfReminderSent==1? ReminderTypeEnum.REMINDER_1:ReminderTypeEnum.REMINDER_2));
+            commandGateway.send(new CreateQuotationNotificationCommand(event.getQuotationId(), RolesUtil.GROUP_HEALTH_QUOTATION_PROCESSOR_ROLE, LineOfBusinessEnum.GROUP_HEALTH, ProcessType.QUOTATION,
+                    WaitingForEnum.QUOTATION_RESPONSE, noOfReminderSent == 1 ? ReminderTypeEnum.REMINDER_1 : ReminderTypeEnum.REMINDER_2));
             if (this.noOfReminderSent == 1) {
                 int firstReminderDay = processInfoAdapter.getDaysForFirstReminder(LineOfBusinessEnum.GROUP_HEALTH, ProcessType.QUOTATION);
                 int secondReminderDay = processInfoAdapter.getDaysForSecondReminder(LineOfBusinessEnum.GROUP_HEALTH, ProcessType.QUOTATION);
@@ -134,7 +138,7 @@ public class GroupHealthQuotationSaga extends AbstractAnnotatedSaga {
             LOGGER.debug("Handling GH Quotation Closure Event .....", event);
         }
         GroupHealthQuotation groupHealthQuotation = ghQuotationRepository.findOne(event.getQuotationId());
-        if (!GHQuotationStatus.CLOSED.equals(groupHealthQuotation.getQuotationStatus())) {
+        if (!GHQuotationStatus.CONVERTED.equals(groupHealthQuotation.getQuotationStatus())) {
             commandGateway.send(new GHClosureGLQuotationCommand(event.getQuotationId()));
         }
         if (groupHealthQuotation.getOpportunityId() != null) {
@@ -144,7 +148,7 @@ public class GroupHealthQuotationSaga extends AbstractAnnotatedSaga {
 
     @SagaEventHandler(associationProperty = "quotationId")
     @EndSaga
-    public void handle(GHQuotationClosedEvent event) {
+    public void handle(GHQuotationConvertedEvent event) {
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("Handling GH Quotation Closure Event .....", event);
         }
@@ -161,4 +165,26 @@ public class GroupHealthQuotationSaga extends AbstractAnnotatedSaga {
             eventScheduler.cancelSchedule(scheduledToken);
         });
     }
+
+    @SagaEventHandler(associationProperty = "quotationId")
+    @EndSaga
+    public void handle(GHQuotationConvertedToProposalEvent event) {
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Handling GH Quotation Closure Event .....", event);
+        }
+        List<GroupHealthQuotation> groupHealthQuotations = ghQuotationRepository.findQuotationByQuotationNumber(event.getQuotationNumber());
+        List<GroupHealthQuotation> quotationsExcludingCurrentOne = groupHealthQuotations.stream().filter(new Predicate<GroupHealthQuotation>() {
+            @Override
+            public boolean test(GroupHealthQuotation groupHealthQuotation) {
+                return !event.getQuotationId().equals(groupHealthQuotation.getIdentifier());
+            }
+        }).collect(Collectors.toList());
+
+        commandGateway.send(new GHQuotationConvertedCommand(event.getQuotationId()));
+        quotationsExcludingCurrentOne.forEach(groupHealthQuotation -> {
+            commandGateway.send(new GHClosureGLQuotationCommand(groupHealthQuotation.getQuotationId()));
+        });
+
+    }
+
 }

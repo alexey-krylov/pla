@@ -45,7 +45,7 @@ public class GroupHealthProposalFactory {
         Integer versionNumber = (Integer) quotationMap.get("versionNumber");
         Map proposalMap = ghProposalFinder.findProposalByQuotationNumber(quotationNumber);
         ProposalNumber proposalNumber = proposalMap != null ? (ProposalNumber) proposalMap.get("proposalNumber") : new ProposalNumber(ghProposalNumberGenerator.getProposalNumber(GroupHealthProposal.class, LocalDate.now()));
-        Quotation quotation = new Quotation(quotationNumber, versionNumber);
+        Quotation quotation = new Quotation(quotationNumber, versionNumber,quotationId);
         AgentId agentId = (AgentId) quotationMap.get("agentId");
         Set<GHInsured> insureds = new HashSet((List) quotationMap.get("insureds"));
         GHPremiumDetail premiumDetail = (GHPremiumDetail) quotationMap.get("premiumDetail");

@@ -40,6 +40,8 @@ public class GHPremiumDetail {
 
     private Set<GHFrequencyPremium> frequencyPremiums;
 
+    private GHFrequencyPremium optedFrequencyPremium;
+
     private BigDecimal netTotalPremium;
 
     private BigDecimal vat;
@@ -59,15 +61,18 @@ public class GHPremiumDetail {
         return this;
     }
 
-    public GHFrequencyPremium getAnnualPolicy() {
+    public GHPremiumDetail updateWithOptedFrequencyPremium(PremiumFrequency premiumFrequency) {
         Optional<GHFrequencyPremium> policyOptional = this.frequencyPremiums.stream().filter(new Predicate<GHFrequencyPremium>() {
             @Override
             public boolean test(GHFrequencyPremium policy) {
-                return false;
+                return premiumFrequency.equals(policy.getPremiumFrequency());
             }
         }).findAny();
-        return policyOptional.isPresent() ? policyOptional.get() : null;
+        GHFrequencyPremium ghFrequencyPremium = policyOptional.isPresent() ? policyOptional.get() : null;
+        this.optedFrequencyPremium = ghFrequencyPremium;
+        return this;
     }
+
 
     public GHPremiumDetail nullifyPremiumInstallment() {
         this.premiumInstallment = null;

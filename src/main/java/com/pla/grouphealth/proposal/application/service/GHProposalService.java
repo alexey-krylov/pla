@@ -5,10 +5,14 @@ import com.google.common.collect.Sets;
 import com.pla.core.domain.model.agent.AgentId;
 import com.pla.grouphealth.proposal.application.command.GHProposalRecalculatedInsuredPremiumCommand;
 import com.pla.grouphealth.proposal.domain.model.GroupHealthProposal;
+import com.pla.grouphealth.proposal.domain.model.GroupHealthProposalStatusAudit;
 import com.pla.grouphealth.proposal.presentation.dto.GHProposalDto;
+import com.pla.grouphealth.proposal.presentation.dto.GHProposalMandatoryDocumentDto;
+import com.pla.grouphealth.proposal.presentation.dto.ProposalApproverCommentsDto;
 import com.pla.grouphealth.proposal.presentation.dto.SearchGHProposalDto;
 import com.pla.grouphealth.proposal.query.GHProposalFinder;
 import com.pla.grouphealth.proposal.repository.GHProposalRepository;
+import com.pla.grouphealth.proposal.repository.GHProposalStatusAuditRepository;
 import com.pla.grouphealth.quotation.presentation.dto.PlanDetailDto;
 import com.pla.grouphealth.quotation.query.GHQuotationFinder;
 import com.pla.grouphealth.sharedresource.dto.*;
@@ -24,6 +28,7 @@ import com.pla.sharedkernel.identifier.ProposalId;
 import com.pla.sharedkernel.identifier.QuotationId;
 import com.pla.sharedkernel.util.PDFGeneratorUtils;
 import net.sf.jasperreports.engine.JRException;
+import org.apache.commons.beanutils.BeanUtils;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.axonframework.commandhandling.gateway.CommandGateway;
 import org.bson.types.ObjectId;
@@ -33,6 +38,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -63,6 +69,9 @@ public class GHProposalService {
     private GHProposalRepository ghProposalRepository;
 
     private CommandGateway commandGateway;
+
+    @Autowired
+    private GHProposalStatusAuditRepository ghProposalStatusAuditRepository;
 
     @Autowired
     private GHQuotationFinder ghQuotationFinder;
@@ -153,11 +162,11 @@ public class GHProposalService {
     }
 
     public ProposerDto getProposerDetail(ProposalId proposalId) {
-        Map quotation = ghProposalFinder.findProposalById(proposalId.getProposalId());
-        GHProposer proposer = (GHProposer) quotation.get("proposer");
+        Map proposal = ghProposalFinder.findProposalById(proposalId.getProposalId());
+        GHProposer proposer = (GHProposer) proposal.get("proposer");
         ProposerDto proposerDto = new ProposerDto(proposer);
-        if (quotation.get("opportunityId") != null) {
-            OpportunityId opportunityId = (OpportunityId) quotation.get("opportunityId");
+        if (proposal.get("opportunityId") != null) {
+            OpportunityId opportunityId = (OpportunityId) proposal.get("opportunityId");
             proposerDto.setOpportunityId(opportunityId.getOpportunityId());
         }
         return proposerDto;
@@ -186,6 +195,7 @@ public class GHProposalService {
         }
         premiumDetailDto = premiumDetailDto.addFrequencyPremiumAmount(premiumDetail.getAnnualPremiumAmount(), premiumDetail.getSemiAnnualPremiumAmount(), premiumDetail.getQuarterlyPremiumAmount(), premiumDetail.getMonthlyPremiumAmount());
         premiumDetailDto = premiumDetailDto.addNetTotalPremiumAmount(premiumDetail.getNetTotalPremium());
+        premiumDetailDto = premiumDetailDto.updateWithOptedFrequency(premiumDetail.getOptedFrequencyPremium() != null ? premiumDetail.getOptedFrequencyPremium().getPremiumFrequency() : null);
         return premiumDetailDto;
     }
 
@@ -318,6 +328,35 @@ public class GHProposalService {
         agentDetailDto.setAgentMobileNumber(agentDetail.get("mobileNumber") != null ? (String) agentDetail.get("mobileNumber") : "");
         agentDetailDto.setAgentSalutation(agentDetail.get("title") != null ? (String) agentDetail.get("title") : "");
         return agentDetailDto;
+    }
+
+    public List<ProposalApproverCommentsDto> findApproverComments() {
+        List<GroupHealthProposalStatusAudit> audits = ghProposalStatusAuditRepository.findAll();
+        List<ProposalApproverCommentsDto> proposalApproverCommentsDtos = Lists.newArrayList();
+        if (isNotEmpty(audits)) {
+            proposalApproverCommentsDtos = audits.stream().map(new Function<GroupHealthProposalStatusAudit, ProposalApproverCommentsDto>() {
+                @Override
+                public ProposalApproverCommentsDto apply(GroupHealthProposalStatusAudit groupHealthProposalStatusAudit) {
+                    ProposalApproverCommentsDto proposalApproverCommentsDto = new ProposalApproverCommentsDto();
+                    try {
+                        BeanUtils.copyProperties(proposalApproverCommentsDto, groupHealthProposalStatusAudit);
+                    } catch (IllegalAccessException e) {
+                        e.printStackTrace();
+                    } catch (InvocationTargetException e) {
+                        e.printStackTrace();
+                    }
+                    return proposalApproverCommentsDto;
+                }
+            }).collect(Collectors.toList());
+        }
+        return proposalApproverCommentsDtos;
+    }
+
+    public List<GHProposalMandatoryDocumentDto> findMnadatoryDocuemnts(String proposalId) {
+        Map proposal = ghProposalFinder.findProposalById(proposalId);
+        List<GHInsured> insureds = (List<GHInsured>) proposal.get("insureds");
+
+        return Lists.newArrayList();
     }
 
     private class TransformToGLQuotationDto implements Function<Map, GlQuotationDto> {

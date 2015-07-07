@@ -1,7 +1,7 @@
 package com.pla.grouphealth.quotation.domain.model;
 
 import com.pla.core.domain.model.agent.AgentId;
-import com.pla.grouphealth.quotation.domain.event.GHQuotationClosedEvent;
+import com.pla.grouphealth.quotation.domain.event.GHQuotationConvertedEvent;
 import com.pla.grouphealth.quotation.domain.event.GHQuotationEndSagaEvent;
 import com.pla.grouphealth.quotation.domain.event.GHQuotationSharedEvent;
 import com.pla.grouphealth.sharedresource.model.vo.*;
@@ -124,8 +124,8 @@ public class GroupHealthQuotation extends AbstractAggregateRoot<QuotationId> imp
 
     @Override
     public void closeQuotation() {
-        this.quotationStatus = GHQuotationStatus.CLOSED;
-        registerEvent(new GHQuotationClosedEvent(quotationId));
+        this.quotationStatus = GHQuotationStatus.CONVERTED;
+        registerEvent(new GHQuotationConvertedEvent(quotationId));
     }
 
     @Override
@@ -183,7 +183,7 @@ public class GroupHealthQuotation extends AbstractAggregateRoot<QuotationId> imp
     }
 
     private void checkInvariant() {
-        if (GHQuotationStatus.CLOSED.equals(this.quotationStatus) || GHQuotationStatus.DECLINED.equals(this.quotationStatus)) {
+        if (GHQuotationStatus.CONVERTED.equals(this.quotationStatus) || GHQuotationStatus.DECLINED.equals(this.quotationStatus)) {
             raiseQuotationNotModifiableException();
         }
     }
@@ -263,5 +263,24 @@ public class GroupHealthQuotation extends AbstractAggregateRoot<QuotationId> imp
         }
 
         return totalVisibleCoveragePremium;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        GroupHealthQuotation that = (GroupHealthQuotation) o;
+
+        if (opportunityId != null ? !opportunityId.equals(that.opportunityId) : that.opportunityId != null)
+            return false;
+        if (quotationId != null ? !quotationId.equals(that.quotationId) : that.quotationId != null) return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        return quotationId != null ? quotationId.hashCode() : 0;
     }
 }

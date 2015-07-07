@@ -14,4 +14,8 @@ public interface GHQuotationRepository extends MongoRepository<GroupHealthQuotat
 
     @Query(value = "{'quotationNumber' : ?0,'quotationStatus' : ?2, 'quotationId' : {'$ne' : ?1}}")
     List<GroupHealthQuotation> findQuotationByQuotNumberAndStatusByExcludingGivenQuotId(String quotationNumber, QuotationId quotationId, String quotationStatus);
+
+    @Query(value = "{'quotationNumber' : ?0")
+    List<GroupHealthQuotation> findQuotationByQuotationNumber(String quotationNumber);
+
 }

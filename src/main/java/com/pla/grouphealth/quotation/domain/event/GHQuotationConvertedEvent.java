@@ -12,11 +12,11 @@ import org.nthdimenzion.axonframework.event.ISagaEvent;
 @EqualsAndHashCode
 @Getter
 @ToString
-public class GHQuotationClosedEvent implements ISagaEvent{
+public class GHQuotationConvertedEvent implements ISagaEvent{
 
     private QuotationId quotationId;
 
-    public GHQuotationClosedEvent(QuotationId quotationId) {
+    public GHQuotationConvertedEvent(QuotationId quotationId) {
         this.quotationId = quotationId;
     }
 }

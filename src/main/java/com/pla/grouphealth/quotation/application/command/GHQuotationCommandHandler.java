@@ -130,23 +130,29 @@ public class GHQuotationCommandHandler {
     }
 
     @CommandHandler
-    public void purgeGLQuotation(GHPurgeGLQuotationCommand purgeGLQuotationCommand) {
+    public void purgeGHQuotation(GHPurgeGLQuotationCommand purgeGLQuotationCommand) {
         GroupHealthQuotation groupHealthQuotation = ghQuotationMongoRepository.load(purgeGLQuotationCommand.getQuotationId());
         groupHealthQuotation.purgeQuotation();
     }
 
     @CommandHandler
-    public void closureGLQuotation(GHClosureGLQuotationCommand closureGLQuotationCommand) {
+    public void closureGHQuotation(GHClosureGLQuotationCommand closureGLQuotationCommand) {
         GroupHealthQuotation groupHealthQuotation = ghQuotationMongoRepository.load(closureGLQuotationCommand.getQuotationId());
         groupHealthQuotation.declineQuotation();
     }
 
     @CommandHandler
-    public void shareGLQuotation(GHSharedQuotationCommand sharedQuotationCommand) {
+    public void shareGHQuotation(GHSharedQuotationCommand sharedQuotationCommand) {
         GroupHealthQuotation groupHealthQuotation = ghQuotationMongoRepository.load(sharedQuotationCommand.getQuotationId());
         groupHealthQuotation.shareQuotation(LocalDate.now());
     }
 
+
+    @CommandHandler
+    public void convertedGHQuotation(GHQuotationConvertedCommand ghQuotationConvertedCommand) {
+        GroupHealthQuotation groupHealthQuotation = ghQuotationMongoRepository.load(ghQuotationConvertedCommand.getQuotationId());
+        groupHealthQuotation.closeQuotation();
+    }
 
     private GroupHealthQuotation populateAnnualBasicPremiumOfInsured(GroupHealthQuotation groupHealthQuotation, UserDetails userDetails, GHPremiumDetailDto premiumDetailDto) {
         if (premiumDetailDto.getPolicyTermValue() != 365) {

@@ -1,5 +1,6 @@
 package com.pla.sharedkernel.domain.model;
 
+import com.pla.sharedkernel.identifier.QuotationId;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 
@@ -14,8 +15,11 @@ public class Quotation {
 
     private int versionNumber;
 
-    public Quotation(String quotationNumber, int versionNumber) {
+    private QuotationId quotationId;
+
+    public Quotation(String quotationNumber, int versionNumber,QuotationId quotationId) {
         this.quotationNumber = quotationNumber;
         this.versionNumber = versionNumber;
+        this.quotationId=quotationId;
     }
 }

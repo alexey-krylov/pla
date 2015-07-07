@@ -1,8 +1,11 @@
 package com.pla.grouphealth.proposal.domain.model;
 
 import com.pla.core.domain.model.agent.AgentId;
+import com.pla.grouphealth.proposal.domain.event.GHProposalStatusAuditEvent;
+import com.pla.grouphealth.sharedresource.event.GHQuotationConvertedToProposalEvent;
 import com.pla.grouphealth.sharedresource.model.vo.GHInsured;
 import com.pla.grouphealth.sharedresource.model.vo.GHPremiumDetail;
+import com.pla.grouphealth.sharedresource.model.vo.ProposalStatus;
 import com.pla.grouphealth.sharedresource.model.vo.GHProposer;
 import com.pla.sharedkernel.domain.model.Quotation;
 import com.pla.sharedkernel.identifier.OpportunityId;
@@ -49,7 +52,7 @@ public class GroupHealthProposal extends AbstractAggregateRoot<ProposalId> {
 
     private GHPremiumDetail premiumDetail;
 
-    private GHProposalStatus proposalStatus;
+    private ProposalStatus proposalStatus;
 
     private List<GHProposerDocument> proposerDocuments;
 
@@ -98,28 +101,31 @@ public class GroupHealthProposal extends AbstractAggregateRoot<ProposalId> {
         return this;
     }
 
-    public GroupHealthProposal submitForApproval(DateTime submittedOn) {
+    public GroupHealthProposal submitForApproval(DateTime submittedOn, String submittedBy, String comment) {
         this.submittedOn = submittedOn;
-        this.proposalStatus = GHProposalStatus.SUBMITTED;
-        //raise Event
+        this.proposalStatus = ProposalStatus.PENDING_ACCEPTANCE;
+        registerEvent(new GHQuotationConvertedToProposalEvent(this.quotation.getQuotationNumber(), this.quotation.getQuotationId()));
+        registerEvent(new GHProposalStatusAuditEvent(this.getProposalId(), ProposalStatus.PENDING_ACCEPTANCE, submittedBy, comment, submittedOn));
         return this;
     }
 
-    private GroupHealthProposal approvedByApprover(String approvedBy) {
-        this.proposalStatus = GHProposalStatus.APPROVED;
-        //raise event
+    public GroupHealthProposal markApproverApproval(String approvedBy, DateTime approvedOn, String comment, ProposalStatus status) {
+        this.proposalStatus = status;
+        registerEvent(new GHProposalStatusAuditEvent(this.getProposalId(), status, approvedBy, comment, approvedOn));
+        markASFirstPremiumPending(approvedBy, approvedOn, comment);
+        markASINForce(approvedBy, approvedOn, comment);
         return this;
     }
 
-    private GroupHealthProposal markASFirstPremiumPending() {
-        this.proposalStatus = GHProposalStatus.PENDING_FIRST_PREMIUM;
-        //raise event
+    public GroupHealthProposal markASFirstPremiumPending(String approvedBy, DateTime approvedOn, String comment) {
+        this.proposalStatus = ProposalStatus.PENDING_FIRST_PREMIUM;
+        registerEvent(new GHProposalStatusAuditEvent(this.getProposalId(), ProposalStatus.PENDING_FIRST_PREMIUM, approvedBy, comment, approvedOn));
         return this;
     }
 
-    private GroupHealthProposal returnedByApprover(String returnedBy) {
-        this.proposalStatus = GHProposalStatus.RETURNED;
-        // raise event
+    public GroupHealthProposal markASINForce(String approvedBy, DateTime approvedOn, String comment) {
+        this.proposalStatus = ProposalStatus.IN_FORCE;
+        registerEvent(new GHProposalStatusAuditEvent(this.getProposalId(), ProposalStatus.IN_FORCE, approvedBy, comment, approvedOn));
         return this;
     }
 
