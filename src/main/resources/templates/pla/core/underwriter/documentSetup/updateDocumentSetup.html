@@ -8,6 +8,7 @@
 <body>
 <div th:include="fragments/common :: bodyHeader" th:remove="tag"/>
 <script>
+
     require(['moment'], function(moment) {
         // alert(moment().format('dddd, MMMM Do YYYY, h:mm:ss a'));
     });
@@ -19,6 +20,7 @@
     });
 
 </script>
+
 
 <div class="container ng-cloak" ng-Controller="UpdateDocumentSetupController">
 
@@ -85,11 +87,10 @@
                             </div>
                             <div class="form-group col-md-4 required" ng-show="updateDocumentLevel.processType">
                                 <label class="control-label">Influencing Factors</label>
-                                <div>
-                                    <button type="button" class="btn btn-default bs-select" ng-model="updateDocumentLevel.underWriterInfluencingFactors" ng-click="arrangeInfluencingFactors(updateDocumentLevel.underWriterInfluencingFactors)" max-length="0" data-all-none-buttons="true" data-html="1" data-multiple="1" placeholder="----Select Influencing Factor----" ng-options="influencingFactor.influencingFactor as influencingFactor.description for influencingFactor in mulSelect | orderBy:'description'"   >
-                                        Action <span class="caret"></span>
-                                    </button>
-                                </div>
+                                <p class="input-group" >
+                                <div ng-repeat="multiselect in updateDocumentLevel.underWriterInfluencingFactor" style="float:left;display:block;" readonly="true">{{multiselect.description}}{{$last ? '' : ', '}}</div>
+                                </p>
+
 
                             </div>
                         </div>

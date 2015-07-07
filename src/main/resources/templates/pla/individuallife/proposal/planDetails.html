@@ -37,7 +37,7 @@
                     <!--<input type="text" class="form-control input-sm" name="ridersAppliedFor" ng-model="proposalPlanDetail.ridersapplied"/>-->
 
                     <select class="form-control input-sm" name="ridersAppliedFor" ng-disabled="mode=='new'||mode=='edit'||mode=='view'" ng-options="searchRider.coverageName for searchRider in searchRiders"
-                            ng-model="proposalPlanDetail.ridersapplied" ng-required="true">
+                            ng-model="proposalPlanDetail.ridersapplied">
                     </select>
                 </div>
                 <table class="table table-bordered">

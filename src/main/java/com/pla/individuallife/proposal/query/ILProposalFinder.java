@@ -251,6 +251,7 @@ public class ILProposalFinder {
         }
     }
 
+
     public ILProposalDto getProposalById(String proposalId) {
         ILProposalDto dto = new ILProposalDto();
         BasicDBObject query = new BasicDBObject();
@@ -270,8 +271,9 @@ public class ILProposalFinder {
         dto.setFamilyPersonalDetail((FamilyPersonalDetail) proposal.get("familyPersonalDetail"));
         dto.setAdditionaldetails((AdditionalDetails) proposal.get("additionaldetails"));
         dto.setPremiumPaymentDetails((PremiumPaymentDetails) proposal.get("premiumPaymentDetails"));
-        if(dto.getProposalPlanDetail() != null)
-        dto.setPremiumDetailDto(getPremiumDetail(proposalId));
+        // TODO : commenting for time being untill premium tab details completed
+        /* if(dto.getProposalPlanDetail() != null)
+        dto.setPremiumDetailDto(getPremiumDetail(proposalId)); */
         // TODO : need to set document details once it is ready
 
         AgentCommissionShareModel model = (AgentCommissionShareModel) proposal.get("agentCommissionShareModel");
@@ -285,16 +287,20 @@ public class ILProposalFinder {
         return dto;
     }
 
-    public List<Map<String, Object>> getAgents(String proposalId) {
+    public String getProposalNumberById(String proposalId) {
+        BasicDBObject query = new BasicDBObject();
+        query.put("_id", proposalId);
+        Map proposal = mongoTemplate.findOne(new BasicQuery(query), Map.class, "individual_life_proposal");
+        return proposal.get("proposalNumber").toString();
+    }
+
+    public List<Map<String, Object>> getPlans(String proposalId) {
         BasicDBObject query = new BasicDBObject();
         query.put("_id", proposalId);
         Map proposal = mongoTemplate.findOne(new BasicQuery(query), Map.class, "individual_life_proposal");
 
         List <String> agentIds = new ArrayList<String>();
         ((AgentCommissionShareModel) proposal.get("agentCommissionShareModel")).getCommissionShare().stream().forEach(x -> agentIds.add(x.getAgentId().toString()));
-
-     //   String agentIds = ((AgentCommissionShareModel) proposal.get("agentCommissionShareModel")).getCommissionShare().stream().map(x -> x.getAgentId().toString()).collect(Collectors.joining("\",\""));
-
         List<Map<String, Object>>  result =  namedParameterJdbcTemplate.query(SEARCH_PLAN_BY_AGENT_IDS, new MapSqlParameterSource().addValue("agentIds", agentIds).addValue("lineOfBusiness", "Individual Life"), new ColumnMapRowMapper());
         return result;
 

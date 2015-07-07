@@ -74,6 +74,15 @@ public class ILProposalController {
         return dto;
     }
 
+    @RequestMapping(method = RequestMethod.GET, value = "getproposalnumber/{proposalId}")
+    @ApiOperation(httpMethod = "GET", value = "This call to get proposal number")
+    @ResponseBody
+    public String getProposalNumberById(@PathVariable("proposalId") String proposalId) {
+        String  proposalNumber = proposalFinder.getProposalNumberById(proposalId);
+        checkArgument(proposalNumber != null, "Proposal number not found");
+        return proposalNumber;
+    }
+
 
 
     @RequestMapping(value = "/getPage/{pageName}", method = RequestMethod.GET)
@@ -157,7 +166,7 @@ public class ILProposalController {
     @RequestMapping(value = "/searchplan", method = RequestMethod.GET)
     @ResponseBody
     public List<Map<String, Object>> searchPlan(@RequestParam("proposalId") String proposalId) {
-        List<Map<String, Object>> planList = proposalFinder.getAgents(proposalId);
+        List<Map<String, Object>> planList = proposalFinder.getPlans(proposalId);
         return planList;
     }
 

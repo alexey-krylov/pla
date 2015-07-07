@@ -80,7 +80,7 @@ public class ILProposalSetUpController {
         }
 
         Map map = new HashMap<>();
-        map.put("msg", "Proposal got created successfully");
+        map.put("message", "Proposal got created successfully");
         map.put("proposalId", proposalId);
         return new ResponseEntity(map, HttpStatus.OK);
     }
@@ -103,7 +103,7 @@ public class ILProposalSetUpController {
         }
 
         Map map = new HashMap<>();
-        map.put("msg", "Proposal updated with Proposer Details successfully");
+        map.put("message", "Proposal updated with Proposer Details successfully");
         map.put("proposalId", proposalId);
         return new ResponseEntity(map, HttpStatus.OK);
     }
@@ -126,7 +126,7 @@ public class ILProposalSetUpController {
         }
 
         Map map = new HashMap<>();
-        map.put("msg", "Proposal updated with Plan and Beneficiary Details successfully");
+        map.put("message", "Proposal updated with Plan and Beneficiary Details successfully");
         map.put("proposalId", proposalId);
         return new ResponseEntity(map, HttpStatus.OK);
     }
@@ -154,7 +154,7 @@ public class ILProposalSetUpController {
         }
         List<QuestionDto> list=cmd.getCompulsoryHealthDetails();
         Map map = new HashMap<>();
-        map.put("msg", "Proposal updated with Compulsory Health Statement Details successfully");
+        map.put("message", "Proposal updated with Compulsory Health Statement Details successfully");
         map.put("proposalId", proposalId);
         map.put("questions", list);
         return new ResponseEntity(map, HttpStatus.OK);
@@ -181,7 +181,7 @@ public class ILProposalSetUpController {
         }
         GeneralDetails questions = cmd.getGeneralDetails();
         Map map = new HashMap<>();
-        map.put("msg", "Proposal updated with General Details successfully");
+        map.put("message", "Proposal updated with General Details successfully");
         map.put("proposalId", proposalId);
         map.put("questions", questions);
         return new ResponseEntity(map, HttpStatus.OK);
@@ -207,7 +207,7 @@ public class ILProposalSetUpController {
             e.printStackTrace();
         }
         Map map = new HashMap<>();
-        map.put("msg", "Proposal updated with Additional Details successfully");
+        map.put("message", "Proposal updated with Additional Details successfully");
         map.put("proposalId", proposalId);
         return new ResponseEntity(map, HttpStatus.OK);
     }
@@ -233,7 +233,7 @@ public class ILProposalSetUpController {
         }
 
         Map map = new HashMap<>();
-        map.put("msg", "Proposal updated with Family and Personal Details successfully");
+        map.put("message", "Proposal updated with Family and Personal Details successfully");
         map.put("proposalId", proposalId);
         return new ResponseEntity(map, HttpStatus.OK);
     }
@@ -259,7 +259,7 @@ public class ILProposalSetUpController {
         }
 
         Map map = new HashMap<>();
-        map.put("msg", "Proposal updated with Premium Payment Details successfully");
+        map.put("message", "Proposal updated with Premium Payment Details successfully");
         map.put("proposalId", proposalId);
         return new ResponseEntity(map, HttpStatus.OK);
     }

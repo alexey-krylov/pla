@@ -33,7 +33,7 @@ App.controller('CreateDocumentSetupController', ['$scope', '$http','$alert','$wi
     $scope.mandatoryDocument = {
         documents:[]
     };
-    $scope.showOptionalCoverage = false;
+   // $scope.showOptionalCoverage = false;
     $scope.selectedDate = moment().add(1, 'days').format("YYYY-MM-DD");
     $scope.newDateField = {};
     $scope.selectedUsers = [];
@@ -52,21 +52,35 @@ App.controller('CreateDocumentSetupController', ['$scope', '$http','$alert','$wi
         $scope.datePickerSettings.isOpened = true;
     };
 
-    $scope.getDefinedOption = function () {
+   /* $scope.getDefinedOption = function () {
 
         if ($scope.createDocumentLevel.definedFor == "plan") {
             $scope.showOptionalCoverage = false;
         } else {
             $scope.showOptionalCoverage = true;
         }
-    }
-
+    }*/
     $scope.$watch('createDocumentLevel.definedFor',function(newValue, oldValue){
         if(newValue=='optionalCoverage'){
             $scope.createDocumentLevel.planCode="";
+            $scope.createDocumentLevel.coverageId="";
             $scope.showOptionalCoverageValue = false;
         }
+        if (newValue == 'plan'){
+            $scope.createDocumentLevel.planCode="";
+            $scope.showOptionalCoverageValue = true;
+
+        }
+
     });
+
+   /* $scope.$watch('createDocumentLevel.definedFor',function(newValue, oldValue){
+        if(newValue=='optionalCoverage'){
+            $scope.createDocumentLevel.planCode="";
+            $scope.showOptionalCoverageValue = false;
+
+        }
+    });*/
 
     $scope.$watch('createDocumentLevel.coverageId',function(newValue, oldValue){
         if(newValue){
@@ -136,11 +150,29 @@ App.controller('CreateDocumentSetupController', ['$scope', '$http','$alert','$wi
 
     $scope.$watch('createDocumentLevel.planCode', function (newValue, oldValue) {
         if (newValue) {
+           /* if($scope.createDocumentLevel.definedFor == 'optionalCoverage'){
+                $scope.createDocumentLevel.coverageId="";
+                $scope.showOptionalCoverageValue = false;
+            }*/
+
             var planCode = $scope.createDocumentLevel.planCode;
             var planDetails= _.findWhere($scope.newPlanList, {planCode: planCode});
             $scope.createDocumentLevel.planName = planDetails.planName;
             $http.get('/pla/underwriter/getoptionalcoverage/'+ planDetails.planId).success(function (data) {
-                $scope.optionalCoverageList = data[0].coverageDtoList;
+                if(data) {
+                    if(data[0]) {
+                        $scope.optionalCoverageList = data[0].coverageDtoList;
+                    }else{
+                        if($scope.createDocumentLevel.definedFor == 'optionalCoverage'){
+                            $scope.optionalCoverageList ="";
+                            $scope.createDocumentLevel.coverageId="";
+                            $scope.showOptionalCoverageValue = false;
+                        }
+
+                    }
+                }
+
+
             });
         }
     });
