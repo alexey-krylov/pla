@@ -8,6 +8,7 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
             $scope.occupations = [];
             $scope.provinces = [];
             $scope.proposal=[];
+            $scope.searchRiders=[];
              $scope. proposalId = getQueryParameter('proposalId')
             console.log("Proposal Id sent is:" + $scope. proposalId);
 
@@ -33,8 +34,9 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
                     $scope.proposerEmployment=$scope.proposer.employment;
                     $scope.proposerResidential=$scope.proposer.residentialAddress;
                     $scope.proposerSpouse=$scope.proposer.spouse;
-                    //$scope.proposalPlanDetail=$scope.rcvProposal.proposalPlanDetail;
-
+                    $scope.proposalPlanDetail=$scope.rcvProposal.proposalPlanDetail;
+                    $scope.searchRiders=$scope.rcvProposal.proposalPlanDetail.riderDetails;
+                    $scope.beneficiaries=$scope.rcvProposal.beneficiaries;
 
                     if ($scope.proposedAssured.dateOfBirth) {
                         $scope.proposedAssured.nextDob= moment().diff(new moment(new Date($scope.proposedAssured.dateOfBirth)), 'years') + 1;
