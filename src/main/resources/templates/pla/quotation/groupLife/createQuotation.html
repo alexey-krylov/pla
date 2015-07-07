@@ -324,7 +324,7 @@
                                 </div>
                             </div>
                             <div class="row">
-                                <div class="col-lg-6">
+                                <div class="col-lg-6" disable-all-fields="isViewMode">
                                     <div class="form-group">
                                         <label >Policy Term Value (Days)</label>
                                         <input class="form-control input-sm"  onkeypress="return isNumeric(event)"
@@ -336,7 +336,7 @@
                                     </div>
                                 </div>
                                 <div class="col-lg-6" ng-if="!(!isPolicyTermNot365 || inappropriatePolicyTerm)">
-                                <div class="col-lg-6">
+                                <div class="col-lg-6" disable-all-fields="isViewMode">
                                     <div class="form-group required">
                                         <label class="control-label">Number Of Installments</label>
                                         <select class="form-control" ng-model="selectedInstallment"
@@ -345,7 +345,7 @@
                                                 ng-options="installment as installment.installmentNo for installment in installments track by installment.installmentNo"></select>
                                     </div>
                                     </div>
-                                    <div class="col-lg-6">
+                                    <div class="col-lg-6" disable-all-fields="isViewMode">
                                     <div class="form-group" ng-class="selectedInstallment.installmentAmount==null?'hide':''">
                                         <label >Installment Amount</label>
                                         <input class="form-control input-sm" type="text"  readonly="true" ng-model="selectedInstallment.installmentAmount" />
