@@ -549,6 +549,45 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
                     $http.post('create', request1).success(function (response, status, headers, config) {
                         $scope.proposal = response;
                         console.log('proposalId : '+$scope.proposal.proposalId );
+                        //Testing
+                        $http.get("/pla/individuallife/proposal/getproposal/"+$scope.proposal.proposalId +"?mode=view").success(function (response, status, headers, config) {
+                            var result = response;
+                            console.log('Result:'+JSON.stringify(result));
+                            $scope.rcvProposal = response;
+                           /* $scope.proposal=
+                            {
+                                "msg":null,
+                                "proposalId":null
+                            };*/
+
+                            $scope.proposal.proposalId=$scope.rcvProposal.proposalId;
+                            $scope.proposedAssured=$scope.rcvProposal.proposedAssured || {};
+                            $scope.proposer=$scope.rcvProposal.proposer || {};
+                            $scope.proposerEmployment=$scope.proposer.employment;
+                            $scope.proposerResidential=$scope.proposer.residentialAddress;
+                            $scope.proposerSpouse=$scope.proposer.spouse;
+                            //$scope.proposalPlanDetail=$scope.rcvProposal.proposalPlanDetail;
+
+
+                            if ($scope.proposedAssured.dateOfBirth) {
+                                $scope.proposedAssured.nextDob= moment().diff(new moment(new Date($scope.proposedAssured.dateOfBirth)), 'years') + 1;
+                            }
+
+                            if ($scope.proposer.dateOfBirth) {
+                                $scope.proposer.nextDob= moment().diff(new moment(new Date($scope.proposedAssured.dateOfBirth)), 'years') + 1;
+                            }
+                            $scope.agentDetails=[];
+                            $scope.spouse= $scope.rcvProposal.proposedAssured.spouse;
+                            $scope.employment=$scope.rcvProposal.proposedAssured.employment;
+                            $scope.residentialAddress=$scope.rcvProposal.proposedAssured.residentialAddress;
+                            $scope.agentDetails=$scope.rcvProposal.agentCommissionDetails;
+
+                            //$scope.proposerEmployment=$scope.proposer
+
+                        }).error(function (response, status, headers, config) {
+                        });
+
+                        //Testing
                     }).error(function (response, status, headers, config) {
                     });
                 }
