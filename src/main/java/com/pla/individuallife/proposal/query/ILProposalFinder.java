@@ -270,8 +270,9 @@ public class ILProposalFinder {
         dto.setFamilyPersonalDetail((FamilyPersonalDetail) proposal.get("familyPersonalDetail"));
         dto.setAdditionaldetails((AdditionalDetails) proposal.get("additionaldetails"));
         dto.setPremiumPaymentDetails((PremiumPaymentDetails) proposal.get("premiumPaymentDetails"));
-        if(dto.getProposalPlanDetail() != null)
-        dto.setPremiumDetailDto(getPremiumDetail(proposalId));
+        // TODO : commenting for time being untill premium tab details completed
+        /* if(dto.getProposalPlanDetail() != null)
+        dto.setPremiumDetailDto(getPremiumDetail(proposalId)); */
         // TODO : need to set document details once it is ready
 
         AgentCommissionShareModel model = (AgentCommissionShareModel) proposal.get("agentCommissionShareModel");
