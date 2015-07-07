@@ -387,4 +387,17 @@ public class GroupHealthProposalController {
         Map proposalMap = ghProposalFinder.findProposalById(proposalId);
         return Result.success("Proposal number ", proposalMap.get("proposalNumber") != null ? ((ProposalNumber) proposalMap.get("proposalNumber")).getProposalNumber() : "");
     }
+
+    @RequestMapping(value = "/uploadmandatorydocuemnt", method = RequestMethod.POST)
+    @ResponseBody
+    public ResponseEntity uploadMandatoryDocument(GHMandatoryDocumentCommand ghMandatoryDocumentCommand, HttpServletRequest request) {
+        ghMandatoryDocumentCommand.setUserDetails(getLoggedInUserDetail(request));
+        try {
+           // commandGateway.sendAndWait(ghMandatoryDocumentCommand);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResponseEntity(Result.failure(e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        return new ResponseEntity(Result.success("Documents uploaded successfully"), HttpStatus.OK);
+    }
 }
