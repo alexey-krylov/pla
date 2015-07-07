@@ -1,6 +1,7 @@
 package com.pla.grouphealth.proposal.presentation.dto;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -9,6 +10,7 @@ import org.springframework.web.multipart.MultipartFile;
  */
 @Getter
 @Setter
+@NoArgsConstructor
 public class GHProposalMandatoryDocumentDto {
 
     private String documentId;
@@ -16,4 +18,9 @@ public class GHProposalMandatoryDocumentDto {
     private String documentName;
 
     private MultipartFile file;
+
+    public GHProposalMandatoryDocumentDto(String documentId, String documentName) {
+        this.documentId = documentId;
+        this.documentName = documentName;
+    }
 }

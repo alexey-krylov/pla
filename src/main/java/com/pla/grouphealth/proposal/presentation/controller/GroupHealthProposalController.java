@@ -369,7 +369,7 @@ public class GroupHealthProposalController {
     @ResponseBody
     @ApiOperation(httpMethod = "GET", value = "To list mandatory documents which is being configured in Mandatory Document SetUp")
     public List<GHProposalMandatoryDocumentDto> findMandatoryDocuments(@PathVariable("proposalId") String proposalId) {
-        List<GHProposalMandatoryDocumentDto> ghProposalMandatoryDocumentDtos = ghProposalService.findMnadatoryDocuemnts(proposalId);
+        List<GHProposalMandatoryDocumentDto> ghProposalMandatoryDocumentDtos = ghProposalService.findMandatoryDocuments(proposalId);
         return ghProposalMandatoryDocumentDtos;
     }
 

@@ -112,6 +112,6 @@ public class GHProposalFinder {
         }
         Query query = new Query(criteria);
         query.with(new Sort(Sort.Direction.ASC, "proposalNumber.proposalNumber"));
-        return mongoTemplate.find(query, Map.class, "group_health_quotation");
+        return mongoTemplate.find(query, Map.class, GH_PROPOSAL_COLLECTION_NAME);
     }
 }

@@ -70,6 +70,7 @@ public class GroupHealthProposal extends AbstractAggregateRoot<ProposalId> {
         this.proposalId = proposalId;
         this.quotation = quotation;
         this.proposalNumber = proposalNumber;
+        this.proposalStatus=ProposalStatus.DRAFT;
     }
 
     public GroupHealthProposal updateWithAgentId(AgentId agentId) {
