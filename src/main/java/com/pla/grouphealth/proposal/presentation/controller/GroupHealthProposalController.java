@@ -63,8 +63,8 @@ public class GroupHealthProposalController {
     }
 
     @RequestMapping(value = "/opengrouphealthproposal/{quotationId}", method = RequestMethod.GET)
+    @ApiOperation(httpMethod = "GET", value = "To create proposal from quotation")
     public ResponseEntity createQuotationPage(@PathVariable("quotationId") String quotationId) {
-        ModelAndView modelAndView = new ModelAndView();
         if (ghProposalService.hasProposalForQuotation(quotationId)) {
             return new ResponseEntity(Result.failure("Proposal already exists for the selected quotation"), HttpStatus.INTERNAL_SERVER_ERROR);
         }
@@ -73,6 +73,7 @@ public class GroupHealthProposalController {
     }
 
     @RequestMapping(value = "/searchquotation", method = RequestMethod.POST)
+    @ApiOperation(httpMethod = "POST", value = "Search GENERATED/SHARED quotations")
     public ModelAndView searchQuotation(@RequestParam("quotationNumber") String quotationNumber) {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("pla/grouphealth/proposal/searchQuotation");
@@ -86,6 +87,7 @@ public class GroupHealthProposalController {
     }
 
     @RequestMapping(value = "/editProposal", method = RequestMethod.GET)
+    @ApiOperation(httpMethod = "GET", value = "To open edit proposal page")
     public ModelAndView gotoCreateProposal() {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("pla/grouphealth/proposal/createProposal");
@@ -93,12 +95,14 @@ public class GroupHealthProposalController {
     }
 
     @RequestMapping(value = "/forcecreateproposal", method = RequestMethod.GET)
+    @ApiOperation(httpMethod = "GET", value = "To create proposal forcefully if proposal already exists for the same quotation number")
     public ResponseEntity gotoCreateProposal(@RequestParam("quotationId") String quotationId) {
         String proposalId = commandGateway.sendAndWait(new GHQuotationToProposalCommand(quotationId));
         return new ResponseEntity(Result.success("", proposalId), HttpStatus.OK);
     }
 
     @RequestMapping(value = "/opensearchquotation", method = RequestMethod.GET)
+    @ApiOperation(httpMethod = "GET", value = "To open search quotation page")
     public ModelAndView openSearchQuotation() {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("pla/grouphealth/proposal/searchQuotation");
@@ -107,6 +111,7 @@ public class GroupHealthProposalController {
 
     @RequestMapping(value = "/getproposerdetailfromclient/{proposerCode}/{proposalId}", method = RequestMethod.GET)
     @ResponseBody
+    @ApiOperation(httpMethod = "GET", value = "To get proposer detail from client DB based on the proposer code")
     public ProposerDto getProposerDetailFromClientRepository(@PathVariable("proposerCode") String proposerCode, @PathVariable("proposalId") String proposalId) {
         ClientDetailDto clientDetailDto = clientProvider.getClientDetail(proposerCode);
         ProposerDto proposerDto = new ProposerDto();
@@ -128,11 +133,13 @@ public class GroupHealthProposalController {
 
     @RequestMapping(value = "/getagentdetailfromproposal/{proposalId}", method = RequestMethod.GET)
     @ResponseBody
+    @ApiOperation(httpMethod = "GET", value = "Fetch agent detail for a given proposal ID")
     public AgentDetailDto getAgentDetailFromQuotation(@PathVariable("proposalId") String proposalId) {
         return ghProposalService.getAgentDetail(new ProposalId(proposalId));
     }
 
     @RequestMapping(value = "/listgrouphealthproposal", method = RequestMethod.GET)
+    @ApiOperation(httpMethod = "GET", value = "To open search proposal page")
     public ModelAndView listProposal() {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("pla/grouphealth/proposal/viewProposal");
@@ -141,6 +148,7 @@ public class GroupHealthProposalController {
     }
 
     @RequestMapping(value = "/searchproposal", method = RequestMethod.POST)
+    @ApiOperation(httpMethod = "POST", value = "To search proposal")
     public ModelAndView searchProposal(SearchGHProposalDto searchGHProposalDto) {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("pla/grouphealth/proposal/viewProposal");
@@ -154,21 +162,26 @@ public class GroupHealthProposalController {
     }
 
     @RequestMapping(value = "/getsubmittedproposals", method = RequestMethod.POST)
+    @ApiOperation(httpMethod = "POST", value = "To search submitted proposal for approver approval")
     public List<GHProposalDto> findSubmittedProposal(SearchGHProposalDto searchGHProposalDto) {
-        List<GHProposalDto> submittedProposals = ghProposalService.searchProposal(searchGHProposalDto, new String[]{"DRAFT", "PENDING_ACCEPTANCE", "RETURNED"});
+        List<GHProposalDto> submittedProposals = ghProposalService.searchProposal(searchGHProposalDto, new String[]{"PENDING_ACCEPTANCE"});
         return submittedProposals;
     }
 
     @RequestMapping(value = "/opensearchproposal", method = RequestMethod.GET)
-    public ModelAndView openSearchProposal(SearchGHProposalDto searchGHProposalDto) {
+    @ApiOperation(httpMethod = "GET", value = "To open search proposal page")
+    public ModelAndView openSearchProposal() {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("pla/grouphealth/proposal/viewProposal");
+        modelAndView.addObject("searchCriteria", new SearchGHProposalDto());
+
         return modelAndView;
     }
 
 
     @RequestMapping(value = "/updatewithagentdetail", method = RequestMethod.POST)
     @ResponseBody
+    @ApiOperation(httpMethod = "POST", value = "To update agent detail")
     public Result updateProposalWithAgentDetail(@RequestBody UpdateGHProposalWithAgentCommand updateGHProposalWithAgentCommand, BindingResult bindingResult, HttpServletRequest request) {
         if (bindingResult.hasErrors()) {
             return Result.failure("Update quotation agent data is not valid", bindingResult.getAllErrors());
@@ -184,6 +197,7 @@ public class GroupHealthProposalController {
 
     @RequestMapping(value = "/updatewithproposerdetail", method = RequestMethod.POST)
     @ResponseBody
+    @ApiOperation(httpMethod = "POST", value = "To update proposer detail")
     public Result updateProposalWithProposerDetail(@RequestBody UpdateGHProposalWithProposerCommand updateGHProposalWithProposerCommand, BindingResult bindingResult, HttpServletRequest request) {
         if (bindingResult.hasErrors()) {
             return Result.failure("Update quotation proposer data is not valid", bindingResult.getAllErrors());
@@ -197,18 +211,20 @@ public class GroupHealthProposalController {
         }
     }
 
-    @RequestMapping(value = "/downloadplandetail/{quotationId}", method = RequestMethod.GET)
-    public void downloadPlanDetail(@PathVariable("quotationId") String quotationId, HttpServletResponse response) throws IOException, JRException {
+    @RequestMapping(value = "/downloadplandetail/{proposalId}", method = RequestMethod.GET)
+    @ApiOperation(httpMethod = "GET", value = "To download plan ready reckoner")
+    public void downloadPlanDetail(@PathVariable("proposalId") String proposalId, HttpServletResponse response) throws IOException, JRException {
         response.reset();
         response.setContentType("application/pdf");
         response.setHeader("content-disposition", "attachment; filename=" + "planReadyReckoner.pdf" + "");
         OutputStream outputStream = response.getOutputStream();
-        outputStream.write(ghProposalService.getPlanReadyReckoner(quotationId));
+        outputStream.write(ghProposalService.getPlanReadyReckoner(proposalId));
         outputStream.flush();
         outputStream.close();
     }
 
     @RequestMapping(value = "/downloadinsuredtemplate/{proposalId}", method = RequestMethod.GET)
+    @ApiOperation(httpMethod = "GET", value = "To download insured template")
     public void downloadInsuredTemplate(@PathVariable("proposalId") String proposalId, HttpServletResponse response) throws IOException {
         response.reset();
         response.setContentType("application/msexcel");
@@ -221,6 +237,7 @@ public class GroupHealthProposalController {
     }
 
     @RequestMapping(value = "/downloaderrorinsuredtemplate/{proposalId}", method = RequestMethod.GET)
+    @ApiOperation(httpMethod = "GET", value = "To download error insured template after upload")
     public void downloadErrorInsuredTemplate(@PathVariable("proposalId") String proposalId, HttpServletResponse response) throws IOException {
         response.reset();
         response.setContentType("application/msexcel");
@@ -236,6 +253,7 @@ public class GroupHealthProposalController {
 
     @RequestMapping(value = "/uploadinsureddetail", method = RequestMethod.POST)
     @ResponseBody
+    @ApiOperation(httpMethod = "POST", value = "To upload insured template")
     public Result uploadInsuredDetail(UploadInsuredDetailDto uploadInsuredDetailDto, HttpServletRequest request) throws IOException {
         MultipartFile file = uploadInsuredDetailDto.getFile();
         if (!("application/ms-excel".equals(file.getContentType()) || "application/msexcel".equals(file.getContentType()) || "application/vnd.ms-excel".equals(file.getContentType()))) {
@@ -264,12 +282,14 @@ public class GroupHealthProposalController {
 
     @RequestMapping(value = "/getpremiumdetail/{proposalId}", method = RequestMethod.GET)
     @ResponseBody
+    @ApiOperation(httpMethod = "GET", value = "To get premium detail")
     public GHPremiumDetailDto getPremiumDetail(@PathVariable("proposalId") String proposalId) {
         return ghProposalService.getPremiumDetail(new ProposalId(proposalId));
     }
 
     @RequestMapping(value = "/recalculatePremium", method = RequestMethod.POST)
     @ResponseBody
+    @ApiOperation(httpMethod = "POST", value = "To recalculate premium")
     public Result reCalculatePremium(@RequestBody GHProposalRecalculatedInsuredPremiumCommand ghProposalRecalculatedInsuredPremiumCommand, HttpServletRequest request) {
         GHPremiumDetailDto premiumDetailDto = null;
         try {
@@ -283,6 +303,7 @@ public class GroupHealthProposalController {
 
     @RequestMapping(value = "/savepremiumdetail", method = RequestMethod.POST)
     @ResponseBody
+    @ApiOperation(httpMethod = "POST", value = "To save premium detail")
     public Result savePremiumDetail(@RequestBody UpdateGHProposalWithPremiumDetailCommand updateGHProposalWithPremiumDetailCommand, HttpServletRequest request) {
         try {
             updateGHProposalWithPremiumDetailCommand.setUserDetails(getLoggedInUserDetail(request));
@@ -295,6 +316,7 @@ public class GroupHealthProposalController {
 
     @RequestMapping(value = "/submit", method = RequestMethod.POST)
     @ResponseBody
+    @ApiOperation(httpMethod = "POST", value = "To submit proposal for approval")
     public ResponseEntity submitProposal(@RequestBody SubmitGHProposalCommand submitGHProposalCommand, HttpServletRequest request) {
         try {
             submitGHProposalCommand.setUserDetails(getLoggedInUserDetail(request));
@@ -308,6 +330,7 @@ public class GroupHealthProposalController {
 
     @RequestMapping(value = "/approve", method = RequestMethod.POST)
     @ResponseBody
+    @ApiOperation(httpMethod = "POST", value = "To approve proposal")
     public ResponseEntity approveProposal(@RequestBody GHProposalApprovalCommand ghProposalApprovalCommand, HttpServletRequest request) {
         try {
             ghProposalApprovalCommand.setUserDetails(getLoggedInUserDetail(request));
@@ -322,6 +345,7 @@ public class GroupHealthProposalController {
 
     @RequestMapping(value = "/return", method = RequestMethod.POST)
     @ResponseBody
+    @ApiOperation(httpMethod = "POST", value = "To return/reject proposal")
     public ResponseEntity returnProposal(@RequestBody GHProposalApprovalCommand ghProposalApprovalCommand, HttpServletRequest request) {
         try {
             ghProposalApprovalCommand.setUserDetails(getLoggedInUserDetail(request));
@@ -336,25 +360,28 @@ public class GroupHealthProposalController {
 
     @RequestMapping(value = "/getapprovercomments", method = RequestMethod.GET)
     @ResponseBody
+    @ApiOperation(httpMethod = "GET", value = "To list approval comments")
     public List<ProposalApproverCommentsDto> findApproverComments(@RequestBody GHProposalApprovalCommand ghProposalApprovalCommand, HttpServletRequest request) {
         return ghProposalService.findApproverComments();
     }
 
     @RequestMapping(value = "/getmandatorydocuments/{proposalId}", method = RequestMethod.GET)
     @ResponseBody
-    public List<GHProposalMandatoryDocumentDto> findMandatoryDocuments(@PathVariable("proposalId")String proposalId) {
+    @ApiOperation(httpMethod = "GET", value = "To list mandatory documents which is being configured in Mandatory Document SetUp")
+    public List<GHProposalMandatoryDocumentDto> findMandatoryDocuments(@PathVariable("proposalId") String proposalId) {
         List<GHProposalMandatoryDocumentDto> ghProposalMandatoryDocumentDtos = ghProposalService.findMnadatoryDocuemnts(proposalId);
         return ghProposalMandatoryDocumentDtos;
     }
 
     @RequestMapping(value = "/getproposerdetail/{proposalId}")
     @ResponseBody
+    @ApiOperation(httpMethod = "GET", value = "To get proposer detail from proposer")
     public ProposerDto getProposerDetail(@PathVariable("proposalId") String proposalId) {
         return ghProposalService.getProposerDetail(new ProposalId(proposalId));
     }
 
     @RequestMapping(value = "/getproposalnumber/{proposalId}", method = RequestMethod.GET)
-    @ApiOperation(httpMethod = "GET", value = "Get Proposal number for a given proposal Id")
+    @ApiOperation(httpMethod = "GET", value = "Get Proposal number for a given proposal ID")
     @ResponseBody
     public Result getQuotationNumber(@PathVariable("proposalId") String proposalId) {
         Map proposalMap = ghProposalFinder.findProposalById(proposalId);
