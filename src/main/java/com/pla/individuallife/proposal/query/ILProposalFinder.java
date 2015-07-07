@@ -251,6 +251,7 @@ public class ILProposalFinder {
         }
     }
 
+
     public ILProposalDto getProposalById(String proposalId) {
         ILProposalDto dto = new ILProposalDto();
         BasicDBObject query = new BasicDBObject();
@@ -284,6 +285,13 @@ public class ILProposalFinder {
         dto.setProposalStatus(proposal.get("proposalStatus").toString());
         dto.setProposalNumber(proposal.get("proposalNumber").toString());
         return dto;
+    }
+
+    public String getProposalNumberById(String proposalId) {
+        BasicDBObject query = new BasicDBObject();
+        query.put("_id", proposalId);
+        Map proposal = mongoTemplate.findOne(new BasicQuery(query), Map.class, "individual_life_proposal");
+        return proposal.get("proposalNumber").toString();
     }
 
     public List<Map<String, Object>> getAgents(String proposalId) {

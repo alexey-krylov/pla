@@ -74,6 +74,15 @@ public class ILProposalController {
         return dto;
     }
 
+    @RequestMapping(method = RequestMethod.GET, value = "getproposalnumber/{proposalId}")
+    @ApiOperation(httpMethod = "GET", value = "This call to get proposal number")
+    @ResponseBody
+    public String getProposalNumberById(@PathVariable("proposalId") String proposalId) {
+        String  proposalNumber = proposalFinder.getProposalNumberById(proposalId);
+        checkArgument(proposalNumber != null, "Proposal number not found");
+        return proposalNumber;
+    }
+
 
 
     @RequestMapping(value = "/getPage/{pageName}", method = RequestMethod.GET)
