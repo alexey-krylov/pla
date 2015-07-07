@@ -17,16 +17,21 @@
 
     requirejs.config({
         paths: {
+            angucomplete: 'http://ghiden.github.io/angucomplete-alt/js/libs/angucomplete-alt',
             ilproposal_common: '/pla/js/proposal/individuallife/proposal.js?t=11221',
             ilproposal: '/pla/js/proposal/individuallife/createProposal.js?t=12121'
         },
         "shim": {"ilproposal": ["angular", "ilproposal_common"]}
     });
 
+    require(['ng-tags-input', 'checklistmodel', 'angular-ui-router'], function (a, b) {
+    });
+
     requirejs(['main'], function () {
         require(['ilproposal', 'jquery'], function (app, $) {
             angular.bootstrap(document, ['createProposal']);
         });
+
     });
 
 </script>
@@ -153,6 +158,140 @@
             </div>
         </div>
     </div>
+
+<div class="modal fade" id="policyModal" tabindex="-1" role="dialog" aria-labelledby="policyModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Policy Details</h3>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group required">
+                            <label class="control-label">Policy Number</label>
+                            <input type="text" class="form-control input-sm" name="policyNumber" ng-model="policy.policyNumber"/>
+                        </div>
+                        <div class="form-group required">
+                            <label class="control-label">Sum Assured</label>
+                            <input type="text" class="form-control input-sm" name="sumAssured" ng-model="policy.sumAssured"/>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-default" ng-click="addPolicyDetails(policy)">Add</button>
+                <button class="btn btn-default" ng-click="cancel()">Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+    <div class="modal fade" id="assuredByOthersModal" tabindex="-1" role="dialog" aria-labelledby="assuredByOthersModal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="modal-title">Assurer/Insurer Details</h3>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group required">
+                                <label class="control-label">Name of Assurer/Insurer</label>
+                                <input type="text" class="form-control input-sm" name="name" ng-model="insurer1.assuredName"/>
+                            </div>
+                            <div class="form-group required">
+                                <label class="control-label">Policy Number</label>
+                                <input type="text" class="form-control input-sm" name="proposalNumber" ng-model="insurer1.policyNumber"/>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group required">
+                                <label class="control-label">Amount of Insurance</label>
+                                <input type="text" class="form-control input-sm" name="name" ng-model="insurer1.insuranceAmount"/>
+                            </div>
+                            <div class="form-group required">
+                                <label class="control-label">Policy Inception Date</label>
+                                <input type="text" class="form-control input-sm" name="proposalNumber" ng-model="insurer1.inceptionPolicyDate"/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-default" ng-click="">Add</button>
+                    <button class="btn btn-default" ng-click="cancel()">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="pendingInsuranceByOthersTpl" tabindex="-1" role="dialog" aria-labelledby="pendingInsuranceByOthersTpl">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="modal-title">Assurer/Insurer Details</h3>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group required">
+                                <label class="control-label">Name of Assurer/Insurer</label>
+                                <input type="text" class="form-control input-sm" name="name" ng-model="insurer1.assuredName"/>
+                            </div>
+                            <div class="form-group required">
+                                <label class="control-label">Policy Number</label>
+                                <input type="text" class="form-control input-sm" name="proposalNumber" ng-model="insurer2.policyNumber"/>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group required">
+                                <label class="control-label">Amount of Insurance</label>
+                                <input type="text" class="form-control input-sm" name="name" ng-model="insurer2.insuranceAmount"/>
+                            </div>
+                            <div class="form-group required">
+                                <label class="control-label">Date of Proposal</label>
+                                <input type="text" class="form-control input-sm" name="proposalNumber" ng-model="insurer1.inceptionPolicyDate"/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-default" ng-click="">Add This</button>
+                    <button class="btn btn-default" ng-click="cancel()">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="assuranceDeclinedTpl" tabindex="-1" role="dialog" aria-labelledby="assuranceDeclinedTpl">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="modal-title">Assurer/Insurer Details</h3>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group required">
+                                <label class="control-label">Name of Assurer/Insurer</label>
+                                <input type="text" class="form-control input-sm" name="name"/>
+                            </div>
+                            <div class="form-group required">
+                                <label class="control-label">Proposal Number</label>
+                                <input type="text" class="form-control input-sm" name="proposalNumber"/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-default" ng-click="">Add This TPL</button>
+                    <button class="btn btn-default" ng-click="cancel()">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
 
     <div class="modal fade" id="beneficialModal" tabindex="-1" role="dialog" aria-labelledby="beneficialModal">
         <div class="modal-dialog">

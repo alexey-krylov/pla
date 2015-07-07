@@ -7,6 +7,7 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
             $scope.employmentTypes = [];
             $scope.occupations = [];
             $scope.provinces = [];
+            $scope.proposal=[];
              $scope. proposalId = getQueryParameter('proposalId')
             console.log("Proposal Id sent is:" + $scope. proposalId);
 
@@ -32,6 +33,7 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
                     $scope.proposerEmployment=$scope.proposer.employment;
                     $scope.proposerResidential=$scope.proposer.residentialAddress;
                     $scope.proposerSpouse=$scope.proposer.spouse;
+                    //$scope.proposalPlanDetail=$scope.rcvProposal.proposalPlanDetail;
 
 
                     if ($scope.proposedAssured.dateOfBirth) {
@@ -58,10 +60,19 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
                 $scope.occupations = response;
             }).error(function (response, status, headers, config) {
             });
+
             $http.get('/pla/individuallife/proposal/getAllEmploymentType').success(function (response, status, headers, config) {
                 $scope.employmentTypes = response;
             }).error(function (response, status, headers, config) {
             });
+
+            $scope.iLplanDetails=[];
+           $http.get('/pla/individuallife/proposal/searchplan?proposalId='+ $scope.proposal.proposalId).success(function (response, status, headers, config) {
+                console.log('Retrieving PlanDetails..');
+                $scope.iLplanDetails = response;
+            }).error(function (response, status, headers, config) {
+            });
+
             $http.get('/pla/core/master/getgeodetail').success(function (response, status, headers, config) {
                 $scope.provinces = response;
             }).error(function (response, status, headers, config) {
@@ -72,8 +83,9 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
                 isPart: true
             };
 
+            $scope.selectedPlan=[];
 
-            $scope.selectedWizard = 1;
+            $scope.selectedWizard = 3;
             $scope.proposedAssured = {
                 "title": null,
                 "firstName": null,
@@ -242,9 +254,12 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
                 };
 
                 request = angular.extend($scope.familyPersonalDetail, request);
-                request = {familyPersonalDetail: request};
+                request = {
+                    "familyPersonalDetail": request,
+                    "proposalId":$scope.proposal.proposalId
+                };
                 console.log('request ' + JSON.stringify(request));
-                $http.post('proposal/createQuestion/55800602db324d0f4ae21254', request);
+                $http.post('proposal/updatefamily', request);
             }
 
             $scope.launchProposedAssuredeDate = function ($event) {
@@ -324,6 +339,42 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
             $scope.agentDetails = [];
             $scope.flag=false;
             $scope.countCheck=false;
+            $scope.policyDetails = [];
+            $scope.insurerDetails1=[];
+            $scope.insurerDetails2=[];
+            $scope.insurerDetails3=[];
+
+
+            $scope.addPolicyDetails=function(policy)
+            {
+                console.log('Inside Add PolicyDetails..');
+                console.log(JSON.stringify(policy));
+                //$scope.policyDetails.unshift(policy)
+
+                if($scope.policyDetails.length == 0)
+                {
+                    console.log('Lenght is Null..');
+                    $scope.policyDetails.unshift(policy);
+                }
+                else{
+
+                    for(i in $scope.policyDetails) {
+                        if($scope.policyDetails[i].policyNumber == policy.policyNumber)
+                        {
+                            console.log('Failure..');
+                            alert("Particular PolicyNumber is Already Added..Please Choose different PolicyNumber");
+                        }
+                        else
+                        {
+                            $scope.policyDetails.unshift(policy);
+                        }
+                    }
+
+                }
+                $('#policyModal').modal('hide');
+                $scope.clear();
+            };
+
             $scope.addAgent = function (agent){
                 console.log('Inside addagent Method..');
 
@@ -368,20 +419,6 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
             };
 
 
-            $scope.testPlan=function(searchRider)
-            {
-                console.log('Testing...');
-                console.log('Pass..'+JSON.stringify(searchRider));
-
-                for(i in $scope.searchRiders)
-                {
-                    if($scope.searchRiders[i].coverageName == searchRider.coverageName )
-                    {
-                        $scope.searchRiders[i]=searchRider;
-                    }
-                }
-            };
-
             $scope.countStatus=function()
             {
                 var count=0;
@@ -396,9 +433,25 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
 
             $scope.riderDetails=[];
 
+            $scope.testPlan=function(searchRider)
+            {
+                console.log('Testing...');
+                console.log('Pass..'+JSON.stringify(searchRider));
+
+                for(i in $scope.searchRiders)
+                {
+                    if($scope.searchRiders[i].coverageName == searchRider.coverageName )
+                    {
+                        $scope.searchRiders[i]=searchRider;
+                    }
+                }
+            };
+
             $scope.clear=function()
             {
                 $scope.agent={};
+                $scope.policy={};
+
             };
 
             $scope.searchRiders=function()

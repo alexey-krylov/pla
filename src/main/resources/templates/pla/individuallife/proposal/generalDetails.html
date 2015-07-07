@@ -9,7 +9,10 @@
                            ng-class="{'glyphicon-chevron-down': accordionStatus.generalDetails.tab1, 'glyphicon-chevron-right': !accordionStatus.generalDetails.tab1}"></i>
                     </accordion-heading>
                     <div class="col-md-1" ng-show="assuredByPlal == 'YES'">
-                        <button class="btn btn-default btn-sm" ng-click="openModalWindow('assuredByPlalTpl.html')"><strong>Add</strong></button>
+                        <!-- <button class="btn btn-default btn-sm" ng-click="openModalWindow('assuredByPlalTpl.html')"><strong>Add</strong></button>-->
+                        <button type="button" class="btn btn-default btn-xs pull-right"
+                                data-toggle="modal" data-target="#policyModal" style="margin-bottom: 10px"><strong>Add</strong>
+                        </button>
                     </div>
                     <div class="col-md-11">
                         <table class="table table-bordered" style="margin-top: 10px;margin-bottom: 0px" ng-show="assuredByPlal == 'YES'">
@@ -41,7 +44,10 @@
                            ng-class="{'glyphicon-chevron-down': accordionStatus.generalDetails.tab2, 'glyphicon-chevron-right': !accordionStatus.generalDetails.tab2}"></i>
                     </accordion-heading>
                     <div class="col-md-1" ng-show="assuredByOthers == 'YES'">
-                        <button class="btn btn-default btn-sm" ng-click="openModalWindow('assuredByOthersTpl.html')"><strong>Add</strong></button>
+                        <!--<button class="btn btn-default btn-sm" ng-click="openModalWindow('assuredByOthersTpl.html')"><strong>Add</strong></button>-->
+                        <button type="button" class="btn btn-default btn-xs pull-right"
+                        data-toggle="modal" data-target="#assuredByOthersModal" style="margin-bottom: 10px"><strong>Add</strong>
+                        </button>
                     </div>
                     <div class="col-md-11">
                         <table class="table table-bordered" style="margin-top: 10px;margin-bottom: 0px" ng-show="assuredByOthers == 'YES'">
@@ -74,7 +80,10 @@
                            ng-class="{'glyphicon-chevron-down': accordionStatus.generalDetails.tab3, 'glyphicon-chevron-right': !accordionStatus.generalDetails.tab3}"></i>
                     </accordion-heading>
                     <div class="col-md-1" ng-show="pendingInsuranceByOthers == 'YES'">
-                        <button class="btn btn-default btn-sm" ng-click="openModalWindow('pendingInsuranceByOthersTpl.html')"><strong>Add</strong></button>
+                        <!--<button class="btn btn-default btn-sm" ng-click="openModalWindow('pendingInsuranceByOthersTpl.html')"><strong>Add</strong></button>-->
+                        <button type="button" class="btn btn-default btn-xs pull-right"
+                                data-toggle="modal" data-target="#pendingInsuranceByOthersTpl" style="margin-bottom: 10px"><strong>Add</strong>
+                        </button>
                     </div>
                     <div class="col-md-11">
                         <table class="table table-bordered" style="margin-top: 10px;margin-bottom: 0px" ng-show="pendingInsuranceByOthers == 'YES'">
@@ -107,7 +116,10 @@
                            ng-class="{'glyphicon-chevron-down': accordionStatus.generalDetails.tab4, 'glyphicon-chevron-right': !accordionStatus.generalDetails.tab4}"></i>
                     </accordion-heading>
                     <div class="col-md-1" ng-show="assuranceDeclined == 'YES'">
-                        <button class="btn btn-default btn-sm" ng-click="openModalWindow('assuranceDeclinedTpl.html')"><strong>Add</strong></button>
+                        <!--<button class="btn btn-default btn-sm" ng-click="openModalWindow('assuranceDeclinedTpl.html')"><strong>Add</strong></button>-->
+                        <button type="button" class="btn btn-default btn-xs pull-right"
+                                data-toggle="modal" data-target="#assuranceDeclinedTpl" style="margin-bottom: 10px"><strong>Add</strong>
+                        </button>
                     </div>
                     <div class="col-md-11">
                         <table class="table table-bordered" style="margin-top: 10px;margin-bottom: 0px" ng-show="assuranceDeclined == 'YES'">

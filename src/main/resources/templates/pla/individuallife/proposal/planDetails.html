@@ -8,7 +8,25 @@
             <div class="col-md-6">
                 <div class="form-group">
                     <label class="control-label">Plan</label>
-                    <input type="text" class="form-control input-sm" name="plan" ng-blur="searchRiders()" ng-model="proposalPlanDetail.planId"/>
+                   <!--<input type="text" class="form-control input-sm" name="plan" ng-blur="searchRiders()" ng-model="proposalPlanDetail.planId"/>-->
+
+                <!-- <div data-angucomplete-alt="" id="searchPlan" placeholder="Search Plans" pause="500"
+                         selected-object="selectedPlan" disable-input="uneditable"
+                         remote-url="/pla/individuallife/proposal/searchplan?proposalId=" field-required="true"
+                         remote-url-data-field="" title-field="plan_name,plan_id"
+                         minlength="3"
+                         input-class="form-control form-control-small"
+                         match-class="highlight">
+                    </div>
+-->
+                    <select class="form-control input-sm" name="plan" ng-options=" planDetail.plan_id as planDetail.plan_name for planDetail in iLplanDetails"
+                            ng-model="proposalPlanDetail.planId" ng-required="true" ng-change="searchRiders()">
+                    </select>
+
+                    <div class="error" ng-messages="step1.title.$error" ng-if="step3.title.$dirty">
+                        <small ng-message="autocomplete-required">Please enter title.</small>
+                    </div>
+
                 </div>
                 <div class="form-group">
                     <label class="control-label">Policy Term</label>
@@ -102,7 +120,7 @@
                         <tbody>
                             <tr ng-repeat="beneficiary in beneficiaries">
                                 <td>{{beneficiary.firstName +' '+ beneficiary.surname}}</td>
-                                <td>{{beneficiary.relationship}}</td>
+                                <td>{{beneficiary.relationshipId}}</td>
                                 <td>{{beneficiary.share}}</td>
                             </tr>
                         </tbody>
