@@ -294,16 +294,13 @@ public class ILProposalFinder {
         return proposal.get("proposalNumber").toString();
     }
 
-    public List<Map<String, Object>> getAgents(String proposalId) {
+    public List<Map<String, Object>> getPlans(String proposalId) {
         BasicDBObject query = new BasicDBObject();
         query.put("_id", proposalId);
         Map proposal = mongoTemplate.findOne(new BasicQuery(query), Map.class, "individual_life_proposal");
 
         List <String> agentIds = new ArrayList<String>();
         ((AgentCommissionShareModel) proposal.get("agentCommissionShareModel")).getCommissionShare().stream().forEach(x -> agentIds.add(x.getAgentId().toString()));
-
-     //   String agentIds = ((AgentCommissionShareModel) proposal.get("agentCommissionShareModel")).getCommissionShare().stream().map(x -> x.getAgentId().toString()).collect(Collectors.joining("\",\""));
-
         List<Map<String, Object>>  result =  namedParameterJdbcTemplate.query(SEARCH_PLAN_BY_AGENT_IDS, new MapSqlParameterSource().addValue("agentIds", agentIds).addValue("lineOfBusiness", "Individual Life"), new ColumnMapRowMapper());
         return result;
 

@@ -166,7 +166,7 @@ public class ILProposalController {
     @RequestMapping(value = "/searchplan", method = RequestMethod.GET)
     @ResponseBody
     public List<Map<String, Object>> searchPlan(@RequestParam("proposalId") String proposalId) {
-        List<Map<String, Object>> planList = proposalFinder.getAgents(proposalId);
+        List<Map<String, Object>> planList = proposalFinder.getPlans(proposalId);
         return planList;
     }
 
