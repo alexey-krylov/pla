@@ -94,7 +94,7 @@
                                 <label class="control-label">Process</label>
                                 <select class="form-control input-sm" ng-model="createDocumentLevel.processType"
                                         ng-options="process.processType as process.description for process in processList | orderBy:'processType'">
-                                    <option value="">----Select Plan----</option>
+                                    <option value="">----Select Process----</option>
                                 </select>
                             </div>
                         </div>
@@ -135,7 +135,7 @@
 
                             </div>
                             <div class="form-group col-md-2 required">
-                                 <label class="control-label">Mandatory Documents</label>
+                                 <label class="control-label">Underwriting Documents</label>
                                     <button type="button" class="btn btn-default bs-select" ng-model="mandatoryDocument.documents" max-length="0" data-all-none-buttons="true" data-html="1" data-multiple="1" placeholder="----Select----" ng-options="mandatoryDocument.documentCode as mandatoryDocument.documentName for mandatoryDocument in documentList | orderBy:'documentName'"   ng-change="makeChanged(mandatoryDocument.documents)" >
                                     Action <span class="caret"></span>
                                     </button>

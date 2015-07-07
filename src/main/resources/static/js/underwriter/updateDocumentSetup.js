@@ -124,10 +124,17 @@ App.controller('UpdateDocumentSetupController', ['$scope', '$http','$window','$l
             $http.get('/pla/underwriter/getunderwriterinfluencingfactor/'+ newValue).success(function (data) {
                 multiSelectList=[];
                 $scope.mulSelect = data;
-                for(var i=0;i< $scope.mulSelect.length;i++){
+               /* for(var i=0;i< $scope.mulSelect.length;i++){
                     multiSelectList.push($scope.mulSelect[i].influencingFactor);
+                }*/
+                for (var j = 0; j < $scope.updateDocumentLevel.underWriterInfluencingFactors.length; j++) {
+
+                    $scope.fieldData.push(_.findWhere($scope.mulSelect,{influencingFactor: $scope.updateDocumentLevel.underWriterInfluencingFactors[j]}));
                 }
+                $scope.updateDocumentLevel.underWriterInfluencingFactor= $scope.fieldData;
+               // console.log($scope.updateDocumentLevel.underWriterInfluencingFactors);
             });
+
         }
     });
     $scope.$watch('updateDocumentLevel.underWriterInfluencingFactors',function(newValue, oldValue) {
