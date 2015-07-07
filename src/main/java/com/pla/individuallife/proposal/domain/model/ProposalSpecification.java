@@ -15,7 +15,7 @@ public class ProposalSpecification {
         if (proposedAssured.getMaritalStatus() == MaritalStatus.MARRIED) {
             Preconditions.checkArgument(UtilValidator.isNotEmpty(proposedAssured.getSpouseFirstName()));
             Preconditions.checkArgument(UtilValidator.isNotEmpty(proposedAssured.getSpouseLastName()));
-            Preconditions.checkArgument(UtilValidator.isNotEmpty(proposedAssured.getSpouseEmailAddress()));
+            Preconditions.checkArgument(UtilValidator.isNotEmpty(proposedAssured.getMobileNumber()));
         }
         Preconditions.checkArgument(proposedAssured.getTitle() != null, "Please specify Title.");
         Preconditions.checkArgument(UtilValidator.isNotEmpty(proposedAssured.getFirstName()), "Please specify Firstname.");
@@ -48,7 +48,7 @@ public class ProposalSpecification {
         if (proposer.getMaritalStatus() == MaritalStatus.MARRIED) {
             Preconditions.checkArgument(UtilValidator.isNotEmpty(proposer.getSpouseFirstName()));
             Preconditions.checkArgument(UtilValidator.isNotEmpty(proposer.getSpouseLastName()));
-            Preconditions.checkArgument(UtilValidator.isNotEmpty(proposer.getSpouseEmailAddress()));
+            Preconditions.checkArgument(UtilValidator.isNotEmpty(proposer.getMobileNumber()));
         }
         Preconditions.checkArgument(proposer.getTitle() != null, "Please specify Title.");
         Preconditions.checkArgument(UtilValidator.isNotEmpty(proposer.getFirstName()), "Please specify Firstname.");
