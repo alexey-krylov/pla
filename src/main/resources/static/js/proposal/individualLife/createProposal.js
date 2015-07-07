@@ -67,12 +67,6 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
             });
 
             $scope.iLplanDetails=[];
-           $http.get('/pla/individuallife/proposal/searchplan?proposalId='+ $scope.proposal.proposalId).success(function (response, status, headers, config) {
-                console.log('Retrieving PlanDetails..');
-                $scope.iLplanDetails = response;
-            }).error(function (response, status, headers, config) {
-            });
-
             $http.get('/pla/core/master/getgeodetail').success(function (response, status, headers, config) {
                 $scope.provinces = response;
             }).error(function (response, status, headers, config) {
@@ -85,7 +79,7 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
 
             $scope.selectedPlan=[];
 
-            $scope.selectedWizard = 3;
+            $scope.selectedWizard = 1;
             $scope.proposedAssured = {
                 "title": null,
                 "firstName": null,
@@ -157,6 +151,7 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
                     "beneficiaries":$scope.beneficiaries,
                     "proposalId":$scope.proposal.proposalId
                 }
+                console.log('Final to Plan DB..'+JSON.stringify(request));
 
                 $http.post('updateplan', request).success(function (response, status, headers, config) {
                     $scope.proposal = response;
@@ -550,6 +545,14 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
                         $scope.proposal = response;
                         console.log('proposalId : '+$scope.proposal.proposalId );
                         //Testing
+
+                        $http.get('/pla/individuallife/proposal/searchplan?proposalId='+$scope.proposal.proposalId).success(function (response, status, headers, config) {
+                            console.log('Retrieving PlanDetails..');
+                            $scope.iLplanDetails = response;
+                        }).error(function (response, status, headers, config) {
+                            console.log('status',+JSON.stringify(status));
+                        });
+
                         $http.get("/pla/individuallife/proposal/getproposal/"+$scope.proposal.proposalId +"?mode=view").success(function (response, status, headers, config) {
                             var result = response;
                             console.log('Result:'+JSON.stringify(result));
