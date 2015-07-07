@@ -77,10 +77,10 @@
                                             <input type="text" onkeypress="return isEnterKey(event)" class="form-control input-sm" name="agentId"
                                                    ng-model="quotationDetails.basic.agentId" ng-required="true" ng-change="clearAgentDetails()"
                                                    ng-blur="searchAgent()"
-                                                   ng-disabled="mode=='new'||mode=='edit'"/>
+                                                   ng-disabled="mode=='new'||mode=='edit'|| mode=='view'"/>
                                             <div class="input-group-btn">
                                                 <button type="button" class="btn btn-default btn-sm" ng-click="searchAgent()"
-                                                        ng-disabled="!quotationDetails.basic.agentId || mode=='new'||mode=='edit'">
+                                                        ng-disabled="!quotationDetails.basic.agentId || mode=='new'||mode=='edit'||mode=='view'">
                                                     <span class="glyphicon glyphicon-search"></span>
                                                 </button>
                                             </div>
@@ -91,7 +91,7 @@
                                     <div class="form-group required">
                                         <label class="control-label">Proposer Name</label>
                                         <input type="text"  onkeypress="return isEnterKey(event)" class="form-control input-sm" name="proposerName"
-                                               ng-model="quotationDetails.proposer.proposerName" ng-required="true" ng-disabled="mode=='new'||mode=='edit'"/>
+                                               ng-model="quotationDetails.proposer.proposerName" ng-required="true" ng-disabled="mode=='new'||mode=='edit'|| mode=='view'"/>
                                     </div>
                                 </div>
                             </div>
