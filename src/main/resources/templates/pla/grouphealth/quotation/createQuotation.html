@@ -289,11 +289,11 @@
                     </div>
                 </div>
                 <div class="step-pane" data-step="4">
-                    <div class="col-lg-9">
+                    <div class="col-lg-9" >
                         <div class="bs-callout  bs-callout-info">
                             <ng-form name="premiumForm" novalidate="true">
                             <div class="row">
-                                <div class="col-lg-6">
+                                <div class="col-lg-6" disable-all-fields="isViewMode">
                                     <div class="form-group required">
                                         <label class="control-label">Add-On Benefits</label>
                                         <input class="form-control input-sm" onkeypress="return isNumeric(event)" ng-required="true" name="addOnBenefits" ng-model="quotationDetails.premium.addOnBenefit" ng-blur="recalculatePremium();" value="0"/>
