@@ -135,7 +135,7 @@ public class ProposalAggregate extends AbstractAnnotatedAggregateRoot<ProposalId
 
     public void addBeneficiary(Beneficiary beneficiary) {
         BigDecimal newTotal = totalBeneficiaryShare.add(beneficiary.getShare());
-        Preconditions.checkArgument(newTotal.compareTo(PERCENTAGE) == -1, "Total share exceeds 100%. Cannot add any more beneficiary.");
+        Preconditions.checkArgument(newTotal.compareTo(PERCENTAGE) <= 0, "Total share exceeds 100%. Cannot add any more beneficiary.");
         boolean sameBeneficiaryExists = beneficiaries.parallelStream().anyMatch(each -> (each.equals(beneficiary)));
         Preconditions.checkArgument(!sameBeneficiaryExists, "Beneficiary already exists.");
         beneficiaries.add(beneficiary);
