@@ -87,7 +87,7 @@
 
                 <div class="panel-body ng-cloak">
                     <notification></notification>
-                    <div class="panel-group" id="accordion">
+                    <div class="panel-group ng-cloak" id="accordion" >
                         <div class="panel panel-default" id="panel1" ng-class="forms.form1.$valid ? '' : 'errorClass'">
                             <div class="panel-heading">
                                 <h4 class="panel-title">
@@ -103,7 +103,7 @@
                                     <form  novalidate="true" role="form" name="forms.form1">
                                         <div class="row">
                                             <div class="form-group col-md-4 required" ng-repeat="quotationProcessItems in items.quotationProcessItems">
-                                                <label class="control-label"  data-toggle="tooltip" tooltip="Tooltip on left" tooltip-placement="top" ng-bind="getFieldName(quotationProcessItems.productLineProcessItem)"></label>
+                                                <label class="control-label"    tooltip-placement="top" ng-bind="getFieldName(quotationProcessItems.productLineProcessItem)"></label>
                                                 <p class="input-group" >
                                                     <input type="number" class="form-control input-sm" min="1" ng-pattern="/^([0-9]{1,2})?$/"  ng-model="quotationProcessItems.value" value="{{quotationProcessItems.value}}" ng-required="true"/>
                                                 </p>
@@ -127,7 +127,7 @@
                                     <form  novalidate="true" role="form" name="forms.form2">
                                     <div class="row">
                                         <div class="form-group col-md-4 required" ng-repeat="enrollmentProcessItems in items.enrollmentProcessItems">
-                                            <label class="control-label"  data-toggle="tooltip" data-placement="top" title="Number of days after which Closed (Incomplete) New Business should be purged" ng-bind="getFieldName(enrollmentProcessItems.productLineProcessItem)"></label>
+                                            <label class="control-label"   data-placement="top"  ng-bind="getFieldName(enrollmentProcessItems.productLineProcessItem)"></label>
                                             <p class="input-group">
                                                 <input type="number" class="form-control input-sm" min="1" ng-pattern="/^([0-9]{1,2})?$/"  ng-model="enrollmentProcessItems.value" value="{{enrollmentProcessItems.value}}" ng-required="true"/>
                                             </p>
@@ -152,7 +152,7 @@
                                     <form  novalidate="true" role="form" name="forms.form3">
                                        <div class="row">
                                             <div class="form-group col-md-4 required" ng-repeat="premiumFollowUpFrequencyItems in items.premiumFollowUpFrequency[0].premiumFollowUpFrequencyItems">
-                                                <label class="control-label"  data-toggle="tooltip" data-placement="top" title="Number of days after which Closed (complete)Reinstatement request should be purged" ng-bind="getFieldName(premiumFollowUpFrequencyItems.productLineProcessItem)"></label>
+                                                <label class="control-label"   data-placement="top"  ng-bind="getFieldName(premiumFollowUpFrequencyItems.productLineProcessItem)"></label>
                                                 <p class="input-group">
                                                     <input type="number" class="form-control input-sm" min="1" ng-pattern="/^([0-9]{1,2})?$/"  ng-model="premiumFollowUpFrequencyItems.value" value="{{premiumFollowUpFrequencyItems.value}}" ng-required="true"/>
                                                 </p>
@@ -175,7 +175,7 @@
                                     <form  novalidate="true" role="form" name="forms.form4">
                                          <div class="row">
                                              <div class="form-group col-md-4 required" ng-repeat="premiumFollowUpFrequencyItems in items.premiumFollowUpFrequency[1].premiumFollowUpFrequencyItems">
-                                                 <label class="control-label"  data-toggle="tooltip" data-placement="top" title="Number of days after which Closed (complete)Reinstatement request should be purged" ng-bind="getFieldName(premiumFollowUpFrequencyItems.productLineProcessItem)"></label>
+                                                 <label class="control-label"   data-placement="top"  ng-bind="getFieldName(premiumFollowUpFrequencyItems.productLineProcessItem)"></label>
                                                  <p class="input-group">
                                                      <input type="number" class="form-control input-sm" min="1" ng-pattern="/^([0-9]{1,2})?$/"  ng-model="premiumFollowUpFrequencyItems.value" value="{{premiumFollowUpFrequencyItems.value}}" ng-required="true"/>
                                                  </p>
@@ -198,7 +198,7 @@
                                     <form  novalidate="true" role="form" name="forms.form5">
                                          <div class="row">
                                              <div class="form-group col-md-4 required" ng-repeat="premiumFollowUpFrequencyItems in items.premiumFollowUpFrequency[2].premiumFollowUpFrequencyItems">
-                                                 <label class="control-label"  data-toggle="tooltip" data-placement="top" title="Number of days after which Closed (complete)Reinstatement request should be purged" ng-bind="getFieldName(premiumFollowUpFrequencyItems.productLineProcessItem)"></label>
+                                                 <label class="control-label"   data-placement="top"  ng-bind="getFieldName(premiumFollowUpFrequencyItems.productLineProcessItem)"></label>
                                                  <p class="input-group">
                                                      <input type="number" class="form-control input-sm" min="1" ng-pattern="/^([0-9]{1,2})?$/"  ng-model="premiumFollowUpFrequencyItems.value" value="{{premiumFollowUpFrequencyItems.value}}" ng-required="true"/>
                                                  </p>
@@ -222,7 +222,7 @@
                                     <form  novalidate="true" role="form" name="forms.form6">
                                         <div class="row">
                                              <div class="form-group col-md-4 required" ng-repeat="premiumFollowUpFrequencyItems in items.premiumFollowUpFrequency[3].premiumFollowUpFrequencyItems">
-                                                 <label class="control-label"  data-toggle="tooltip" data-placement="top" title="Number of days after which Closed (complete)Reinstatement request should be purged" ng-bind="getFieldName(premiumFollowUpFrequencyItems.productLineProcessItem)"></label>
+                                                 <label class="control-label"   data-placement="top"  ng-bind="getFieldName(premiumFollowUpFrequencyItems.productLineProcessItem)"></label>
                                                  <p class="input-group">
                                                      <input type="number" class="form-control input-sm" min="1" ng-pattern="/^([0-9]{1,2})?$/"  ng-model="premiumFollowUpFrequencyItems.value" value="{{premiumFollowUpFrequencyItems.value}}" ng-required="true"/>
                                                  </p>
@@ -245,7 +245,7 @@
                                     <form  novalidate="true" role="form" name="forms.form7">
                                     <div class="row">
                                         <div class="form-group col-md-4 required" ng-repeat="reinstatementProcessItems in items.reinstatementProcessItems">
-                                            <label class="control-label"  data-toggle="tooltip" data-placement="top" title="Number of days after which Closed (complete)Reinstatement request should be purged" ng-bind="getFieldName(reinstatementProcessItems.productLineProcessItem)"></label>
+                                            <label class="control-label"   data-placement="top"  ng-bind="getFieldName(reinstatementProcessItems.productLineProcessItem)"></label>
                                             <p class="input-group">
                                                 <input type="number" class="form-control input-sm" min="1" ng-pattern="/^([0-9]{1,2})?$/"  ng-model="reinstatementProcessItems.value" value="{{reinstatementProcessItems.value}}" ng-required="true"/>
                                             </p>
@@ -268,7 +268,7 @@
                                     <form  novalidate="true" role="form" name="forms.form8">
                                     <div class="row">
                                         <div class="form-group col-md-4 required"  ng-repeat="endorsementProcessItems in items.endorsementProcessItems">
-                                            <label class="control-label"  data-toggle="tooltip" data-placement="top" title="Number of days after which Closed ( Incomplete) endorsement request should be purged" ng-bind="getFieldName(endorsementProcessItems.productLineProcessItem)"></label>
+                                            <label class="control-label"   data-placement="top"  ng-bind="getFieldName(endorsementProcessItems.productLineProcessItem)"></label>
                                             <p class="input-group">
                                                 <input type="number" class="form-control input-sm" min="1" ng-pattern="/^([0-9]{1,2})?$/"  ng-model="endorsementProcessItems.value" value="{{endorsementProcessItems.value}}" ng-required="true"/>
                                             </p>
@@ -292,7 +292,7 @@
                                     <form  novalidate="true" role="form" name="forms.form9">
                                     <div class="row">
                                         <div class="form-group col-md-4 required" ng-repeat="claimProcessItems in items.claimProcessItems">
-                                            <label class="control-label"  data-toggle="tooltip" data-placement="top" title="Number of days after which Closed (Incomplete) Claim request should be purged" ng-bind="getFieldName(claimProcessItems.productLineProcessItem)"></label>
+                                            <label class="control-label"   data-placement="top"  ng-bind="getFieldName(claimProcessItems.productLineProcessItem)"></label>
                                             <p class="input-group">
                                                 <input type="number" class="form-control input-sm" min="1" ng-pattern="/^([0-9]{1,2})?$/"  ng-model="claimProcessItems.value" value="{{claimProcessItems.value}}" ng-required="true"/>
                                             </p>
@@ -315,7 +315,7 @@
                                     <form  novalidate="true" role="form" name="forms.form10">
                                     <div class="row">
                                         <div class="form-group col-md-4 required" ng-repeat="policyProcessMinimumLimitItems in items.policyProcessMinimumLimitItems">
-                                            <label class="control-label"  data-toggle="tooltip" data-placement="top" title="Annual" ng-bind="getFieldName(policyProcessMinimumLimitItems.policyProcessMinimumLimitType)"></label>
+                                            <label class="control-label"   data-placement="top"  ng-bind="getFieldName(policyProcessMinimumLimitItems.policyProcessMinimumLimitType)"></label>
                                             <p class="input-group">
                                                 <input type="number" class="form-control input-sm" min="1" ng-pattern="/^([0-9]{1,5})?$/"  ng-model="policyProcessMinimumLimitItems.value" value="{{policyProcessMinimumLimitItems.value}}" ng-required="true" />
                                             </p>
@@ -338,7 +338,7 @@
                                     <form  novalidate="true" role="form" name="forms.form11">
                                     <div class="row">
                                         <div class="form-group col-md-4 required" ng-repeat="modelFactorItems in items.modelFactorItems">
-                                            <label class="control-label"  data-toggle="tooltip" data-placement="top" title="Annual" ng-bind="getFieldName(modelFactorItems.modalFactorItem)"></label>
+                                            <label class="control-label"   data-placement="top"  ng-bind="getFieldName(modelFactorItems.modalFactorItem)"></label>
                                             <p class="input-group">
                                                 <input type="number" class="form-control input-sm" min="0.0001" ng-pattern="/^(^[0-9]{1,2})+(\.[0-9]{1,4})?$/" ng-model="modelFactorItems.value" value="{{modelFactorItems.value}}" ng-required="true"/>
                                             </p>
@@ -362,7 +362,7 @@
 
                                     <div class="row">
                                         <div class="form-group col-md-4 required" ng-repeat="discountFactorItems in items.discountFactorItems">
-                                            <label class="control-label"  data-toggle="tooltip" data-placement="top" title="Annual" ng-bind="getFieldName(discountFactorItems.discountFactorItem)"></label>
+                                            <label class="control-label"   data-placement="top"  ng-bind="getFieldName(discountFactorItems.discountFactorItem)"></label>
                                             <p class="input-group">
                                                 <input type="number" class="form-control input-sm" min="0.0001" ng-pattern="/^(^[0-9]{1,2})+(\.[0-9]{1,4})?$/" ng-model="discountFactorItems.value" value="{{discountFactorItems.value}}" ng-required="true" />
                                             </p>
@@ -386,7 +386,7 @@
                                     <form  novalidate="true" role="form" name="forms.form13">
                                         <div class="row">
                                             <div class="form-group col-md-4 required" >
-                                                <label class="control-label"  data-toggle="tooltip" data-placement="top" title="Age Loading Factor" >
+                                                <label class="control-label"   data-placement="top"  >
                                                     Age
                                                 </label>
                                                 <p class="input-group">
@@ -394,7 +394,7 @@
                                                 </p>
                                             </div>
                                             <div class="form-group col-md-4 required" >
-                                                <label class="control-label"  data-toggle="tooltip" data-placement="top" title="Age Loading Factor" >
+                                                <label class="control-label"   data-placement="top"  >
                                                     Loading Factor
                                                 </label>
                                                 <p class="input-group">
@@ -442,7 +442,7 @@
                 </div>
                 <div class="panel-body ng-cloak">
                     <notification1></notification1>
-                    <div class="panel-group" id="accordion1">
+                    <div class="panel-group ng-cloak" id="accordion1">
                         <div class="panel panel-default" id="panel100" ng-class="forms.form1.$valid ? '' : 'errorClass'">
                             <div class="panel-heading">
                                 <h4 class="panel-title">
@@ -457,7 +457,7 @@
                                     <form  novalidate="true" role="form" name="forms.form1">
                                         <div class="row">
                                             <div class="form-group col-md-4 required" ng-repeat="quotationProcessItems in items.quotationProcessItems">
-                                                <label class="control-label" data-toggle="tooltip" data-placement="top" title="Number of days after which Quotation should be purged" ng-bind="getFieldName(quotationProcessItems.productLineProcessItem)"></label>
+                                                <label class="control-label"  data-placement="top"  ng-bind="getFieldName(quotationProcessItems.productLineProcessItem)"></label>
                                                 <p class="input-group" >
                                                     <input type="number" class="form-control input-sm" min="1" ng-pattern="/^([0-9]{1,2})?$/"  ng-model="quotationProcessItems.value" value="{{quotationProcessItems.value}}" ng-required="true"/>
                                                 </p>
@@ -481,7 +481,7 @@
                                     <form  novalidate="true" role="form" name="forms.form2">
                                     <div class="row">
                                         <div class="form-group col-md-4 required" ng-repeat="enrollmentProcessItems in items.enrollmentProcessItems">
-                                            <label class="control-label"  data-toggle="tooltip" data-placement="top" title="Number of days after which Closed (Incomplete) New Business should be purged" ng-bind="getFieldName(enrollmentProcessItems.productLineProcessItem)"></label>
+                                            <label class="control-label"   data-placement="top"  ng-bind="getFieldName(enrollmentProcessItems.productLineProcessItem)"></label>
                                             <p class="input-group">
                                                 <input type="number" class="form-control input-sm" min="1" ng-pattern="/^([0-9]{1,2})?$/"  ng-model="enrollmentProcessItems.value" value="{{enrollmentProcessItems.value}}" ng-required="true"/>
                                             </p>
@@ -505,7 +505,7 @@
                                     <form  novalidate="true" role="form" name="forms.form3">
                                      <div class="row">
                                              <div class="form-group col-md-4 required" ng-repeat="premiumFollowUpFrequencyItems in items.premiumFollowUpFrequency[0].premiumFollowUpFrequencyItems">
-                                                 <label class="control-label"  data-toggle="tooltip" data-placement="top" title="Number of days after which Closed (complete)Reinstatement request should be purged" ng-bind="getFieldName(premiumFollowUpFrequencyItems.productLineProcessItem)"></label>
+                                                 <label class="control-label"   data-placement="top"  ng-bind="getFieldName(premiumFollowUpFrequencyItems.productLineProcessItem)"></label>
                                                  <p class="input-group">
                                                      <input type="number" class="form-control input-sm" min="1" ng-pattern="/^([0-9]{1,2})?$/"  ng-model="premiumFollowUpFrequencyItems.value" value="{{premiumFollowUpFrequencyItems.value}}" ng-required="true"/>
                                                  </p>
@@ -528,7 +528,7 @@
                                     <form  novalidate="true" role="form" name="forms.form4">
                                         <div class="row">
                                              <div class="form-group col-md-4 required" ng-repeat="premiumFollowUpFrequencyItems in items.premiumFollowUpFrequency[1].premiumFollowUpFrequencyItems">
-                                                 <label class="control-label"  data-toggle="tooltip" data-placement="top" title="Number of days after which Closed (complete)Reinstatement request should be purged" ng-bind="getFieldName(premiumFollowUpFrequencyItems.productLineProcessItem)"></label>
+                                                 <label class="control-label"   data-placement="top"  ng-bind="getFieldName(premiumFollowUpFrequencyItems.productLineProcessItem)"></label>
                                                  <p class="input-group">
                                                      <input type="number" class="form-control input-sm" min="1" ng-pattern="/^([0-9]{1,2})?$/"  ng-model="premiumFollowUpFrequencyItems.value" value="{{premiumFollowUpFrequencyItems.value}}" ng-required="true"/>
                                                  </p>
@@ -551,7 +551,7 @@
                                     <form  novalidate="true" role="form" name="forms.form5">
                                          <div class="row">
                                              <div class="form-group col-md-4 required" ng-repeat="premiumFollowUpFrequencyItems in items.premiumFollowUpFrequency[2].premiumFollowUpFrequencyItems">
-                                                 <label class="control-label"  data-toggle="tooltip" data-placement="top" title="Number of days after which Closed (complete)Reinstatement request should be purged" ng-bind="getFieldName(premiumFollowUpFrequencyItems.productLineProcessItem)"></label>
+                                                 <label class="control-label"   data-placement="top"  ng-bind="getFieldName(premiumFollowUpFrequencyItems.productLineProcessItem)"></label>
                                                  <p class="input-group">
                                                      <input type="number" class="form-control input-sm" min="1" ng-pattern="/^([0-9]{1,2})?$/"  ng-model="premiumFollowUpFrequencyItems.value" value="{{premiumFollowUpFrequencyItems.value}}" ng-required="true"/>
                                                  </p>
@@ -575,7 +575,7 @@
                                     <form  novalidate="true" role="form" name="forms.form6">
                                         <div class="row">
                                              <div class="form-group col-md-4 required" ng-repeat="premiumFollowUpFrequencyItems in items.premiumFollowUpFrequency[3].premiumFollowUpFrequencyItems">
-                                                 <label class="control-label"  data-toggle="tooltip" data-placement="top" title="Number of days after which Closed (complete)Reinstatement request should be purged" ng-bind="getFieldName(premiumFollowUpFrequencyItems.productLineProcessItem)"></label>
+                                                 <label class="control-label"   data-placement="top"  ng-bind="getFieldName(premiumFollowUpFrequencyItems.productLineProcessItem)"></label>
                                                  <p class="input-group">
                                                      <input type="number" class="form-control input-sm" min="1" ng-pattern="/^([0-9]{1,2})?$/"  ng-model="premiumFollowUpFrequencyItems.value" value="{{premiumFollowUpFrequencyItems.value}}" ng-required="true"/>
                                                  </p>
@@ -598,7 +598,7 @@
                                     <form  novalidate="true" role="form" name="forms.form7">
                                        <div class="row">
                                         <div class="form-group col-md-4 required" ng-repeat="reinstatementProcessItems in items.reinstatementProcessItems">
-                                            <label class="control-label"  data-toggle="tooltip" data-placement="top" title="Number of days after which Closed (complete)Reinstatement request should be purged" ng-bind="getFieldName(reinstatementProcessItems.productLineProcessItem)"></label>
+                                            <label class="control-label"   data-placement="top"  ng-bind="getFieldName(reinstatementProcessItems.productLineProcessItem)"></label>
                                             <p class="input-group">
                                                 <input type="number" class="form-control input-sm" min="1" ng-pattern="/^([0-9]{1,2})?$/"  ng-model="reinstatementProcessItems.value" value="{{reinstatementProcessItems.value}}"  ng-required="true"/>
                                             </p>
@@ -621,7 +621,7 @@
                                     <form  novalidate="true" role="form" name="forms.form8">
                                     <div class="row">
                                         <div class="form-group col-md-4 required"  ng-repeat="endorsementProcessItems in items.endorsementProcessItems">
-                                            <label class="control-label"  data-toggle="tooltip" data-placement="top" title="Number of days after which Closed ( Incomplete) endorsement request should be purged" ng-bind="getFieldName(endorsementProcessItems.productLineProcessItem)"></label>
+                                            <label class="control-label"   data-placement="top"  ng-bind="getFieldName(endorsementProcessItems.productLineProcessItem)"></label>
                                             <p class="input-group">
                                                 <input type="number" class="form-control input-sm" min="1" ng-pattern="/^([0-9]{1,2})?$/"  ng-model="endorsementProcessItems.value" value="{{endorsementProcessItems.value}}" ng-required="true"/>
                                             </p>
@@ -645,7 +645,7 @@
                                     <form  novalidate="true" role="form" name="forms.form9">
                                     <div class="row">
                                         <div class="form-group col-md-4 required" ng-repeat="claimProcessItems in items.claimProcessItems">
-                                            <label class="control-label"  data-toggle="tooltip" data-placement="top" title="Number of days after which Closed (Incomplete) Claim request should be purged" ng-bind="getFieldName(claimProcessItems.productLineProcessItem)"></label>
+                                            <label class="control-label"   data-placement="top"  ng-bind="getFieldName(claimProcessItems.productLineProcessItem)"></label>
                                             <p class="input-group">
                                                 <input type="number" class="form-control input-sm" min="1" ng-pattern="/^([0-9]{1,2})?$/"  ng-model="claimProcessItems.value" value="{{claimProcessItems.value}}"  ng-required="true"/>
                                             </p>
@@ -669,7 +669,7 @@
                                     <form  novalidate="true" role="form" name="forms.form10">
                                     <div class="row">
                                         <div class="form-group col-md-4 required" ng-repeat="policyProcessMinimumLimitItems in items.policyProcessMinimumLimitItems">
-                                            <label class="control-label"  data-toggle="tooltip" data-placement="top" title="Annual" ng-bind="getFieldName(policyProcessMinimumLimitItems.policyProcessMinimumLimitType)"></label>
+                                            <label class="control-label"   data-placement="top"  ng-bind="getFieldName(policyProcessMinimumLimitItems.policyProcessMinimumLimitType)"></label>
                                             <p class="input-group">
                                                 <input type="number" class="form-control input-sm" min="1" ng-pattern="/^([0-9]{1,5})?$/"  ng-model="policyProcessMinimumLimitItems.value" value="{{policyProcessMinimumLimitItems.value}}"  ng-required="true"/>
                                             </p>
@@ -694,7 +694,7 @@
                                     <form  novalidate="true" role="form" name="forms.form11">
                                         <div class="row">
                                             <div class="form-group col-md-4 required" ng-repeat="modelFactorItems in items.modelFactorItems">
-                                                <label class="control-label"  data-toggle="tooltip" data-placement="top" title="Annual" ng-bind="getFieldName(modelFactorItems.modalFactorItem)"></label>
+                                                <label class="control-label"   data-placement="top"  ng-bind="getFieldName(modelFactorItems.modalFactorItem)"></label>
                                                 <p class="input-group">
                                                     <input type="number" class="form-control input-sm" min="0.0001" ng-pattern="/^(^[0-9]{1,2})+(\.[0-9]{1,4})?$/" ng-model="modelFactorItems.value" value="{{modelFactorItems.value}}" ng-required="true"/>
                                                 </p>
@@ -717,7 +717,7 @@
                                     <form  novalidate="true" role="form" name="forms.form12">
                                     <div class="row">
                                         <div class="form-group col-md-4 required" ng-repeat="discountFactorItems in items.discountFactorItems">
-                                            <label class="control-label"  data-toggle="tooltip" data-placement="top" title="Annual" ng-bind="getFieldName(discountFactorItems.discountFactorItem)"></label>
+                                            <label class="control-label"   data-placement="top"  ng-bind="getFieldName(discountFactorItems.discountFactorItem)"></label>
                                             <p class="input-group">
                                                 <input type="number" class="form-control input-sm" min="0.0001" ng-pattern="/^(^[0-9]{1,2})+(\.[0-9]{1,4})?$/" ng-model="discountFactorItems.value" value="{{discountFactorItems.value}}" ng-required="true"/>
                                             </p>
@@ -742,7 +742,7 @@
                                     <form  novalidate="true" role="form" name="forms.form13">
                                         <div class="row">
                                             <div class="form-group col-md-4 required" >
-                                                <label class="control-label"  data-toggle="tooltip" data-placement="top" title="Age Loading Factor" >
+                                                <label class="control-label"   data-placement="top"  >
                                                     Age
                                                 </label>
                                                 <p class="input-group">
@@ -750,7 +750,7 @@
                                                 </p>
                                             </div>
                                             <div class="form-group col-md-4 required" >
-                                                <label class="control-label"  data-toggle="tooltip" data-placement="top" title="Age Loading Factor" >
+                                                <label class="control-label"   data-placement="top"  >
                                                     Loading Factor
                                                 </label>
                                                 <p class="input-group">
@@ -798,7 +798,7 @@
                 </div>
                 <div class="panel-body ng-cloak">
                     <notification2></notification2>
-                    <div class="panel-group" id="accordion2">
+                    <div class="panel-group ng-cloak" id="accordion2">
                         <div class="panel panel-default" id="panel21" ng-class="forms.form1.$valid ? '' : 'errorClass'">
                             <div class="panel-heading">
                                 <h4 class="panel-title">
@@ -813,7 +813,7 @@
                                     <form  novalidate="true" role="form" name="forms.form1">
                                         <div class="row">
                                             <div class="form-group col-md-4 required" ng-repeat="quotationProcessItems in items.quotationProcessItems">
-                                                <label class="control-label" data-toggle="tooltip" data-placement="top" title="Number of days after which Quotation should be purged" ng-bind="getFieldName(quotationProcessItems.productLineProcessItem)"></label>
+                                                <label class="control-label"  data-placement="top"  ng-bind="getFieldName(quotationProcessItems.productLineProcessItem)"></label>
                                                 <p class="input-group" >
                                                     <input type="number" class="form-control input-sm" min="1" ng-pattern="/^([0-9]{1,2})?$/"  ng-model="quotationProcessItems.value" value="{{quotationProcessItems.value}}" ng-required="true"/>
                                                 </p>
@@ -837,7 +837,7 @@
                                     <form  novalidate="true" role="form" name="forms.form2">
                                         <div class="row">
                                             <div class="form-group col-md-4 required" ng-repeat="enrollmentProcessItems in items.enrollmentProcessItems">
-                                                <label class="control-label"  data-toggle="tooltip" data-placement="top" title="Number of days after which Closed (Incomplete) New Business should be purged" ng-bind="getFieldName(enrollmentProcessItems.productLineProcessItem)"></label>
+                                                <label class="control-label"   data-placement="top"  ng-bind="getFieldName(enrollmentProcessItems.productLineProcessItem)"></label>
                                                 <p class="input-group">
                                                     <input type="number" class="form-control input-sm" min="1" ng-pattern="/^([0-9]{1,2})?$/"  ng-model="enrollmentProcessItems.value" value="{{enrollmentProcessItems.value}}" ng-required="true"/>
                                                 </p>
@@ -861,7 +861,7 @@
                                     <form  novalidate="true" role="form" name="forms.form3">
                                         <div class="row">
                                              <div class="form-group col-md-4 required" ng-repeat="premiumFollowUpFrequencyItems in items.premiumFollowUpFrequency[0].premiumFollowUpFrequencyItems">
-                                                 <label class="control-label"  data-toggle="tooltip" data-placement="top" title="Number of days after which Closed (complete)Reinstatement request should be purged" ng-bind="getFieldName(premiumFollowUpFrequencyItems.productLineProcessItem)"></label>
+                                                 <label class="control-label"   data-placement="top"  ng-bind="getFieldName(premiumFollowUpFrequencyItems.productLineProcessItem)"></label>
                                                  <p class="input-group">
                                                      <input type="number" class="form-control input-sm" min="1" ng-pattern="/^([0-9]{1,2})?$/"  ng-model="premiumFollowUpFrequencyItems.value" value="{{premiumFollowUpFrequencyItems.value}}" ng-required="true"/>
                                                  </p>
@@ -884,7 +884,7 @@
                                     <form  novalidate="true" role="form" name="forms.form4">
                                          <div class="row">
                                              <div class="form-group col-md-4 required" ng-repeat="premiumFollowUpFrequencyItems in items.premiumFollowUpFrequency[1].premiumFollowUpFrequencyItems">
-                                                 <label class="control-label"  data-toggle="tooltip" data-placement="top" title="Number of days after which Closed (complete)Reinstatement request should be purged" ng-bind="getFieldName(premiumFollowUpFrequencyItems.productLineProcessItem)"></label>
+                                                 <label class="control-label"   data-placement="top"  ng-bind="getFieldName(premiumFollowUpFrequencyItems.productLineProcessItem)"></label>
                                                  <p class="input-group">
                                                      <input type="number" class="form-control input-sm" min="1" ng-pattern="/^([0-9]{1,2})?$/"  ng-model="premiumFollowUpFrequencyItems.value" value="{{premiumFollowUpFrequencyItems.value}}" ng-required="true"/>
                                                  </p>
@@ -907,7 +907,7 @@
                                     <form  novalidate="true" role="form" name="forms.form5">
                                        <div class="row">
                                              <div class="form-group col-md-4 required" ng-repeat="premiumFollowUpFrequencyItems in items.premiumFollowUpFrequency[2].premiumFollowUpFrequencyItems">
-                                                 <label class="control-label"  data-toggle="tooltip" data-placement="top" title="Number of days after which Closed (complete)Reinstatement request should be purged" ng-bind="getFieldName(premiumFollowUpFrequencyItems.productLineProcessItem)"></label>
+                                                 <label class="control-label"   data-placement="top"  ng-bind="getFieldName(premiumFollowUpFrequencyItems.productLineProcessItem)"></label>
                                                  <p class="input-group">
                                                      <input type="number" class="form-control input-sm" min="1" ng-pattern="/^([0-9]{1,2})?$/"  ng-model="premiumFollowUpFrequencyItems.value" value="{{premiumFollowUpFrequencyItems.value}}" ng-required="true"/>
                                                  </p>
@@ -931,7 +931,7 @@
                                     <form  novalidate="true" role="form" name="forms.form6">
                                         <div class="row">
                                              <div class="form-group col-md-4 required" ng-repeat="premiumFollowUpFrequencyItems in items.premiumFollowUpFrequency[3].premiumFollowUpFrequencyItems">
-                                                 <label class="control-label"  data-toggle="tooltip" data-placement="top" title="Number of days after which Closed (complete)Reinstatement request should be purged" ng-bind="getFieldName(premiumFollowUpFrequencyItems.productLineProcessItem)"></label>
+                                                 <label class="control-label"   data-placement="top"  ng-bind="getFieldName(premiumFollowUpFrequencyItems.productLineProcessItem)"></label>
                                                  <p class="input-group">
                                                      <input type="number" class="form-control input-sm" min="1" ng-pattern="/^([0-9]{1,2})?$/"  ng-model="premiumFollowUpFrequencyItems.value" value="{{premiumFollowUpFrequencyItems.value}}" ng-required="true"/>
                                                  </p>
@@ -954,7 +954,7 @@
                                     <form  novalidate="true" role="form" name="forms.form7">
                                         <div class="row">
                                             <div class="form-group col-md-4 required" ng-repeat="reinstatementProcessItems in items.reinstatementProcessItems">
-                                                <label class="control-label"  data-toggle="tooltip" data-placement="top" title="Number of days after which Closed (complete)Reinstatement request should be purged" ng-bind="getFieldName(reinstatementProcessItems.productLineProcessItem)"></label>
+                                                <label class="control-label"   data-placement="top"  ng-bind="getFieldName(reinstatementProcessItems.productLineProcessItem)"></label>
                                                 <p class="input-group">
                                                     <input type="number" class="form-control input-sm" min="1" ng-pattern="/^([0-9]{1,2})?$/"  ng-model="reinstatementProcessItems.value" value="{{reinstatementProcessItems.value}}"  ng-required="true"/>
                                                 </p>
@@ -977,7 +977,7 @@
                                     <form  novalidate="true" role="form" name="forms.form8">
                                         <div class="row">
                                             <div class="form-group col-md-4 required"  ng-repeat="endorsementProcessItems in items.endorsementProcessItems">
-                                                <label class="control-label"  data-toggle="tooltip" data-placement="top" title="Number of days after which Closed ( Incomplete) endorsement request should be purged" ng-bind="getFieldName(endorsementProcessItems.productLineProcessItem)"></label>
+                                                <label class="control-label"   data-placement="top"  ng-bind="getFieldName(endorsementProcessItems.productLineProcessItem)"></label>
                                                 <p class="input-group">
                                                     <input type="number" class="form-control input-sm" min="1" ng-pattern="/^([0-9]{1,2})?$/"  ng-model="endorsementProcessItems.value" value="{{endorsementProcessItems.value}}" ng-required="true"/>
                                                 </p>
@@ -1001,7 +1001,7 @@
                                     <form  novalidate="true" role="form" name="forms.form9">
                                         <div class="row">
                                             <div class="form-group col-md-4 required" ng-repeat="claimProcessItems in items.claimProcessItems">
-                                                <label class="control-label"  data-toggle="tooltip" data-placement="top" title="Number of days after which Closed (Incomplete) Claim request should be purged" ng-bind="getFieldName(claimProcessItems.productLineProcessItem)"></label>
+                                                <label class="control-label"   data-placement="top"  ng-bind="getFieldName(claimProcessItems.productLineProcessItem)"></label>
                                                 <p class="input-group">
                                                     <input type="number" class="form-control input-sm" min="1" ng-pattern="/^([0-9]{1,2})?$/"  ng-model="claimProcessItems.value" value="{{claimProcessItems.value}}"  ng-required="true"/>
                                                 </p>
@@ -1025,7 +1025,7 @@
                                     <form  novalidate="true" role="form" name="forms.form10">
                                         <div class="row">
                                             <div class="form-group col-md-4 required" ng-repeat="surrenderProcessItems in items.surrenderProcessItems">
-                                                <label class="control-label"  data-toggle="tooltip" data-placement="top" title="Annual" ng-bind="getFieldName(surrenderProcessItems.productLineProcessItem)"></label>
+                                                <label class="control-label"   data-placement="top"  ng-bind="getFieldName(surrenderProcessItems.productLineProcessItem)"></label>
                                                 <p class="input-group">
                                                     <input type="number" class="form-control input-sm" min="1" ng-pattern="/^([0-9]{1,2})?$/"  ng-model="surrenderProcessItems.value" value="{{surrenderProcessItems.value}}" ng-required="true"/>
                                                 </p>
@@ -1048,7 +1048,7 @@
                                     <form  novalidate="true" role="form" name="forms.form11">
                                         <div class="row">
                                             <div class="form-group col-md-4 required" ng-repeat="maturityProcessItems in items.maturityProcessItems">
-                                                <label class="control-label"  data-toggle="tooltip" data-placement="top" title="Annual" ng-bind="getFieldName(maturityProcessItems.productLineProcessItem)"></label>
+                                                <label class="control-label"   data-placement="top"  ng-bind="getFieldName(maturityProcessItems.productLineProcessItem)"></label>
                                                 <p class="input-group">
                                                     <input type="number" class="form-control input-sm" min="1" ng-pattern="/^([0-9]{1,2})?$/"  ng-model="maturityProcessItems.value" value="{{maturityProcessItems.value}}" ng-required="true"/>
                                                 </p>
@@ -1071,7 +1071,7 @@
                                     <form  novalidate="true" role="form" name="forms.form12">
                                         <div class="row">
                                             <div class="form-group col-md-4 required" ng-repeat="policyFeeProcessItems in items.policyFeeProcessItems">
-                                                <label class="control-label"  data-toggle="tooltip" data-placement="top" title="Annual" ng-bind="getFieldName(policyFeeProcessItems.policyFeeProcessType)"></label>
+                                                <label class="control-label"   data-placement="top"  ng-bind="getFieldName(policyFeeProcessItems.policyFeeProcessType)"></label>
                                                 <p class="input-group">
                                                     <input type="number" class="form-control input-sm" min="1" ng-pattern="/^([0-9]{1,3})?$/"  ng-model="policyFeeProcessItems.policyFee" value="{{policyFeeProcessItems.policyFee}}" ng-required="true"/>
                                                 </p>
@@ -1082,8 +1082,8 @@
                             </div>
                         </div>
 
-                        <!--              -->
-                        <div class="panel panel-default" id="panel133" ng-class="forms.form13.$valid ? '' : 'errorClass'">
+
+                       <!-- <div class="panel panel-default" id="panel133" ng-class="forms.form13.$valid ? '' : 'errorClass'">
                             <div class="panel-heading">
                                 <h4 class="panel-title">
                                     <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapseThreeThree">
@@ -1096,7 +1096,7 @@
                                     <form  novalidate="true" role="form" name="forms.form13">
                                         <div class="row">
                                             <div class="form-group col-md-4 required" >
-                                                <label class="control-label"  data-toggle="tooltip" data-placement="top" title="Age Loading Factor" >
+                                                <label class="control-label"   data-placement="top"  >
                                                     Age
                                                 </label>
                                                 <p class="input-group">
@@ -1104,7 +1104,7 @@
                                                 </p>
                                             </div>
                                             <div class="form-group col-md-4 required" >
-                                                <label class="control-label"  data-toggle="tooltip" data-placement="top" title="Age Loading Factor" >
+                                                <label class="control-label"   data-placement="top"  >
                                                     Loading Factor
                                                 </label>
                                                 <p class="input-group">
@@ -1115,7 +1115,7 @@
                                     </form>
                                 </div>
                             </div>
-                        </div>
+                        </div>-->
 
 
                         <div class="row">
