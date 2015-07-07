@@ -24,7 +24,7 @@ import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-import static com.pla.grouplife.quotation.domain.exception.QuotationException.raiseAgentIsInactiveException;
+import static com.pla.grouphealth.proposal.domain.exception.GHProposalException.raiseAgentIsInactiveException;
 import static org.nthdimenzion.utils.UtilValidator.isNotEmpty;
 
 /**
