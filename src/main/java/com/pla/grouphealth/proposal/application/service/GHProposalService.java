@@ -21,11 +21,11 @@ import com.pla.grouphealth.sharedresource.query.GHFinder;
 import com.pla.grouphealth.sharedresource.service.GHInsuredExcelGenerator;
 import com.pla.grouphealth.sharedresource.service.GHInsuredExcelParser;
 import com.pla.publishedlanguage.contract.IPlanAdapter;
-import com.pla.sharedkernel.domain.model.ProposalNumber;
-import com.pla.sharedkernel.identifier.OpportunityId;
-import com.pla.sharedkernel.identifier.PlanId;
-import com.pla.sharedkernel.identifier.ProposalId;
-import com.pla.sharedkernel.identifier.QuotationId;
+import com.pla.publishedlanguage.dto.ClientDocumentDto;
+import com.pla.publishedlanguage.dto.SearchDocumentDetailDto;
+import com.pla.publishedlanguage.underwriter.contract.IUnderWriterAdapter;
+import com.pla.sharedkernel.domain.model.ProcessType;
+import com.pla.sharedkernel.identifier.*;
 import com.pla.sharedkernel.util.PDFGeneratorUtils;
 import net.sf.jasperreports.engine.JRException;
 import org.apache.commons.beanutils.BeanUtils;
@@ -75,6 +75,9 @@ public class GHProposalService {
 
     @Autowired
     private GHQuotationFinder ghQuotationFinder;
+
+    @Autowired
+    private IUnderWriterAdapter underWriterAdapter;
 
     @Autowired
     public GHProposalService(GHProposalFinder ghProposalFinder, IPlanAdapter planAdapter, GHFinder ghFinder, GHInsuredExcelGenerator ghInsuredExcelGenerator, GHInsuredExcelParser ghInsuredExcelParser, GHProposalRepository ghProposalRepository, CommandGateway commandGateway) {
@@ -130,11 +133,11 @@ public class GHProposalService {
                 String proposalId = map.get("_id").toString();
                 AgentDetailDto agentDetailDto = getAgentDetail(new ProposalId(proposalId));
                 DateTime submittedOn = map.get("submittedOn") != null ? new DateTime((Date) map.get("submittedOn")) : null;
-                String quotationStatus = map.get("quotationStatus") != null ? (String) map.get("quotationStatus") : "";
+                String proposalStatus = map.get("proposalStatus") != null ? (String) map.get("proposalStatus") : "";
                 String proposalNumber = map.get("proposalNumber") != null ? ((ProposalNumber) map.get("proposalNumber")).getProposalNumber() : "";
                 GHProposer proposerMap = map.get("proposer") != null ? (GHProposer) map.get("proposer") : null;
                 String proposerName = proposerMap != null ? proposerMap.getProposerName() : "";
-                GHProposalDto ghProposalDto = new GHProposalDto(proposalId, submittedOn, agentDetailDto.getAgentId(), agentDetailDto.getAgentName(), quotationStatus, proposalNumber, proposerName);
+                GHProposalDto ghProposalDto = new GHProposalDto(proposalId, submittedOn, agentDetailDto.getAgentId(), agentDetailDto.getAgentName(), proposalStatus, proposalNumber, proposerName);
                 return ghProposalDto;
             }
         }).collect(Collectors.toList());
@@ -352,11 +355,50 @@ public class GHProposalService {
         return proposalApproverCommentsDtos;
     }
 
-    public List<GHProposalMandatoryDocumentDto> findMnadatoryDocuemnts(String proposalId) {
+    public List<GHProposalMandatoryDocumentDto> findMandatoryDocuments(String proposalId) {
         Map proposal = ghProposalFinder.findProposalById(proposalId);
         List<GHInsured> insureds = (List<GHInsured>) proposal.get("insureds");
-
-        return Lists.newArrayList();
+        List<SearchDocumentDetailDto> documentDetailDtos = Lists.newArrayList();
+        insureds.forEach(ghInsured -> {
+            GHPlanPremiumDetail planPremiumDetail = ghInsured.getPlanPremiumDetail();
+            SearchDocumentDetailDto searchDocumentDetailDto = new SearchDocumentDetailDto(planPremiumDetail.getPlanId());
+            documentDetailDtos.add(searchDocumentDetailDto);
+            if (isNotEmpty(planPremiumDetail.getCoveragePremiumDetails())) {
+                List<CoverageId> coverageIds = planPremiumDetail.getCoveragePremiumDetails().stream().map(new Function<GHCoveragePremiumDetail, CoverageId>() {
+                    @Override
+                    public CoverageId apply(GHCoveragePremiumDetail ghCoveragePremiumDetail) {
+                        return ghCoveragePremiumDetail.getCoverageId();
+                    }
+                }).collect(Collectors.toList());
+                documentDetailDtos.add(new SearchDocumentDetailDto(planPremiumDetail.getPlanId(), coverageIds));
+            }
+            if (isNotEmpty(ghInsured.getInsuredDependents())) {
+                ghInsured.getInsuredDependents().forEach(insuredDependent -> {
+                    GHPlanPremiumDetail dependentPlanPremiumDetail = insuredDependent.getPlanPremiumDetail();
+                    documentDetailDtos.add(new SearchDocumentDetailDto(dependentPlanPremiumDetail.getPlanId()));
+                    if (isNotEmpty(dependentPlanPremiumDetail.getCoveragePremiumDetails())) {
+                        List<CoverageId> coverageIds = dependentPlanPremiumDetail.getCoveragePremiumDetails().stream().map(new Function<GHCoveragePremiumDetail, CoverageId>() {
+                            @Override
+                            public CoverageId apply(GHCoveragePremiumDetail ghCoveragePremiumDetail) {
+                                return ghCoveragePremiumDetail.getCoverageId();
+                            }
+                        }).collect(Collectors.toList());
+                        documentDetailDtos.add(new SearchDocumentDetailDto(planPremiumDetail.getPlanId(), coverageIds));
+                    }
+                });
+            }
+        });
+        Set<ClientDocumentDto> mandatoryDocuments = underWriterAdapter.getMandatoryDocumentsForApproverApproval(documentDetailDtos, ProcessType.ENROLLMENT);
+        List<GHProposalMandatoryDocumentDto> mandatoryDocumentDtos = Lists.newArrayList();
+        if (isNotEmpty(mandatoryDocuments)) {
+            mandatoryDocumentDtos = mandatoryDocuments.stream().map(new Function<ClientDocumentDto, GHProposalMandatoryDocumentDto>() {
+                @Override
+                public GHProposalMandatoryDocumentDto apply(ClientDocumentDto clientDocumentDto) {
+                    return new GHProposalMandatoryDocumentDto(clientDocumentDto.getDocumentCode(), clientDocumentDto.getDocumentName());
+                }
+            }).collect(Collectors.toList());
+        }
+        return mandatoryDocumentDtos;
     }
 
     private class TransformToGLQuotationDto implements Function<Map, GlQuotationDto> {

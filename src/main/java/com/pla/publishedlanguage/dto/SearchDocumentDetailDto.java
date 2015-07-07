@@ -17,4 +17,13 @@ public class SearchDocumentDetailDto {
     private PlanId planId;
 
     private List<CoverageId> coverageIds;
+
+    public SearchDocumentDetailDto(PlanId planId) {
+        this.planId = planId;
+    }
+
+    public SearchDocumentDetailDto(PlanId planId, List<CoverageId> coverageIds) {
+        this.planId = planId;
+        this.coverageIds = coverageIds;
+    }
 }
