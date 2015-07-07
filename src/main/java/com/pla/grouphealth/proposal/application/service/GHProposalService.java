@@ -134,7 +134,7 @@ public class GHProposalService {
                 String proposalNumber = map.get("proposalNumber") != null ? ((ProposalNumber) map.get("proposalNumber")).getProposalNumber() : "";
                 GHProposer proposerMap = map.get("proposer") != null ? (GHProposer) map.get("proposer") : null;
                 String proposerName = proposerMap != null ? proposerMap.getProposerName() : "";
-                GHProposalDto ghProposalDto = new GHProposalDto(new ProposalId(proposalId), submittedOn, agentDetailDto.getAgentId(), agentDetailDto.getAgentName(), quotationStatus, proposalNumber, proposerName);
+                GHProposalDto ghProposalDto = new GHProposalDto(proposalId, submittedOn, agentDetailDto.getAgentId(), agentDetailDto.getAgentName(), quotationStatus, proposalNumber, proposerName);
                 return ghProposalDto;
             }
         }).collect(Collectors.toList());
