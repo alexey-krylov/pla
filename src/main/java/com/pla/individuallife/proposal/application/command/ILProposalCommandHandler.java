@@ -58,7 +58,7 @@ public class ILProposalCommandHandler {
     public void updateGeneralDetails(ILProposalUpdateGeneralDetailsCommand cmd) {
         ProposalAggregate aggregate = null;
         ProposalId proposalId = new ProposalId(cmd.getProposalId());
-        List<QuestionDto> dto = cmd.getGenerateDetails();
+        GeneralDetails dto = cmd.getGeneralDetails();
         try {
             aggregate = ilProposalMongoRepository.load(proposalId);
             aggregate.updateGeneralDetails(dto, cmd.getUserDetails());
