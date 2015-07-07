@@ -1,9 +1,11 @@
 package com.pla.underwriter.service;
 
 import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
 import com.pla.client.domain.model.Client;
 import com.pla.client.repository.ClientRepository;
 import com.pla.publishedlanguage.dto.ClientDocumentDto;
+import com.pla.publishedlanguage.dto.SearchDocumentDetailDto;
 import com.pla.publishedlanguage.dto.UnderWriterRoutingLevelDetailDto;
 import com.pla.publishedlanguage.underwriter.contract.IUnderWriterAdapter;
 import com.pla.sharedkernel.domain.model.ProcessType;
@@ -72,31 +74,27 @@ public class UnderWriterAdapterImpl implements IUnderWriterAdapter {
         return clientDocument;
     }
 
-
-    /*
-    *
-    * Get the Mandatory documents and check against the client mandatory documents
-    *
-    * */
     @Override
-    public List<ClientDocumentDto> getMandatoryDocumentsForApproverApproval(String clientId, ProcessType processType, String planId, String coverageId) {
-        List<Map<String,Object>> mandatoryDocument = underWriterFinder.findMandatoryDocumentByProcess(processType, planId,coverageId );
-        List<ClientDocumentDto> clientDocumentList =  mandatoryDocument.parallelStream().map(new Function<Map<String, Object>, ClientDocumentDto>() {
+    public Set<ClientDocumentDto> getMandatoryDocumentsForApproverApproval(List<SearchDocumentDetailDto> searchDetailList, ProcessType processType) {
+        Set<ClientDocumentDto> mandatoryDocumentSet = Sets.newLinkedHashSet();
+        searchDetailList.parallelStream().map(new Function<SearchDocumentDetailDto, ClientDocumentDto>() {
             @Override
-            public ClientDocumentDto apply(Map<String, Object> mandatoryDocument) {
-                String documentCode = (String) mandatoryDocument.get("documentCode");
-                String documentName = (String) mandatoryDocument.get("documentName");
-                ClientDocumentDto clientDocumentDto =  new ClientDocumentDto(documentCode, false);
-                clientDocumentDto.setDocumentName(documentName);
-                return clientDocumentDto;
-            }}).collect(Collectors.toList());
-        List<String> mandatoryDocumentByClientId = findDefinedMandatoryDocumentByClientId(clientId);
-        for (ClientDocumentDto clientDocumentDto : clientDocumentList){
-            if (mandatoryDocumentByClientId.contains(clientDocumentDto.getDocumentCode())){
-                clientDocumentDto.setHasSubmitted(true);
+            public ClientDocumentDto apply(SearchDocumentDetailDto searchDocumentDetailDto) {
+                List<Map<String, Object>> documentDetail = underWriterFinder.getMandatoryDocumentForPlanAndCoverage(searchDocumentDetailDto.getPlanId().getPlanId(), searchDocumentDetailDto.getCoverageIds(), processType);
+                documentDetail.parallelStream().map(new Function<Map<String, Object>, ClientDocumentDto>() {
+                    @Override
+                    public ClientDocumentDto apply(Map<String, Object> documentMap) {
+                        String documentName = (String) documentMap.get("documentName");
+                        String documentCode = (String) documentMap.get("documentCode");
+                        ClientDocumentDto clientDocumentDto = new ClientDocumentDto(documentCode, documentName,false);
+                        mandatoryDocumentSet.add(clientDocumentDto);
+                        return clientDocumentDto;
+                    }
+                }).collect(Collectors.toList());
+                return new ClientDocumentDto();
             }
-        }
-        return clientDocumentList;
+        }).collect(Collectors.toSet());
+        return mandatoryDocumentSet;
     }
 
     public RoutingLevel findRoutingLevel(UnderWriterRoutingLevelDetailDto underWriterRoutingLevelDetailDto) {
@@ -157,20 +155,6 @@ public class UnderWriterAdapterImpl implements IUnderWriterAdapter {
             public String apply(Map<String, Object> documentMap) {
                 Optional<Map.Entry<String, Object>> optionalClientDocument =  documentMap.entrySet().parallelStream().findAny();
                 return optionalClientDocument.isPresent()?optionalClientDocument.get().getValue()!=null?
-                        optionalClientDocument.get().getKey():null:null;
-            }
-        }).collect(Collectors.toList());
-        return documents;
-    }
-
-    private List<String> findDefinedMandatoryDocumentByClientId(String clientId){
-        Client client = clientRepository.findOne(new ClientId(clientId));
-        List<Map<String,Object>>  clientDocumentList =  client.findClientDocument();
-        List<String> documents =  clientDocumentList.parallelStream().map(new Function<Map<String,Object>, String>() {
-            @Override
-            public String apply(Map<String, Object> documentMap) {
-                Optional<Map.Entry<String, Object>> optionalClientDocument =  documentMap.entrySet().parallelStream().findAny();
-                return optionalClientDocument.isPresent()?optionalClientDocument.get().getValue()==null?
                         optionalClientDocument.get().getKey():null:null;
             }
         }).collect(Collectors.toList());

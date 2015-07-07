@@ -1,7 +1,9 @@
 package com.pla.publishedlanguage.dto;
 
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 /**
  * Created by Admin on 6/10/2015.
@@ -9,6 +11,8 @@ import lombok.Setter;
 
 @Getter
 @Setter
+@EqualsAndHashCode(of = {"documentCode"})
+@ToString
 public class ClientDocumentDto {
 
     private String documentCode;
@@ -22,4 +26,10 @@ public class ClientDocumentDto {
         this.documentCode = documentCode;
         this.hasSubmitted = hasSubmitted;
     }
+
+    public ClientDocumentDto(String documentCode, String documentName,boolean hasSubmitted) {
+        this(documentCode,hasSubmitted);
+        this.documentName = documentName;
+    }
+
 }

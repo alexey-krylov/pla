@@ -65,7 +65,7 @@ public enum UnderWriterInfluencingFactor {
 
         @Override
         public boolean isValueAvailableForTheProduct(Row currentRow, String planCode, String coverageId, Map<String, Integer> indexMap, StringBuilder errorMessageBuilder, IPlanAdapter iPlanAdapter, String fromValue, String toValue) {
-            String errorMessage = isEmpty(coverageId)?"Defined Sum Assured not available for the Plan \n":"Defined Sum Assured available for the Coverage \n";
+            String errorMessage = isEmpty(coverageId)?"Defined Sum Assured not available for the Plan \n":"Defined Sum Assured not available for the Coverage \n";
             if (currentRow!=null) {
                 Cell sumAssuredFrom = currentRow.getCell(indexMap.get(InfluencingFactorRange.SUM_ASSURED_FROM.description));
                 Cell sumAssuredTo = currentRow.getCell(indexMap.get(InfluencingFactorRange.SUM_ASSURED_TO.description));
@@ -265,7 +265,7 @@ public enum UnderWriterInfluencingFactor {
                     return false;
                 }
             }
-           return true;
+            return true;
         }
 
         @Override

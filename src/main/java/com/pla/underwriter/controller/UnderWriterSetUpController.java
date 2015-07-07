@@ -22,7 +22,6 @@ import org.springframework.http.MediaType;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
@@ -49,6 +48,7 @@ public class UnderWriterSetUpController {
     private UnderWriterService underWriterService;
     private CommandGateway commandGateway;
     private UnderWriterFinder underWriterFinder;
+
 
     @Autowired
     public UnderWriterSetUpController(UnderWriterService underWriterService, CommandGateway commandGateway, UnderWriterFinder underWriterFinder){
@@ -95,7 +95,7 @@ public class UnderWriterSetUpController {
     }
 
     @RequestMapping(value = "/redirecttoupdatePage", method = RequestMethod.GET)
-      public ModelAndView redirectToUpdatePage() {
+    public ModelAndView redirectToUpdatePage() {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.addObject("CreateUnderWriterDocumentCommand", new CreateUnderWriterDocumentCommand());
         modelAndView.setViewName("pla/core/underwriter/documentSetup/updateDocumentSetup");
@@ -202,15 +202,15 @@ public class UnderWriterSetUpController {
             return modelAndView;
         }
         MultipartFile file = createUnderWriterRoutingLevelCommand.getFile();
+        String templateFileName = createUnderWriterRoutingLevelCommand.getPlanName()+ UNDER_WRITER_TEMPLATE_FILE_NAME_SUFFIX;
+        templateFileName = templateFileName.replaceAll("[\\s]*", "").trim();
+        if (!("application/msexcel".equals(createUnderWriterRoutingLevelCommand.getFile().getContentType()) || "application/vnd.ms-excel".equals(file.getContentType())) && !templateFileName.equals(file.getOriginalFilename())) {
+            modelAndView.addObject("message", "Please upload a valid file");
+            return modelAndView;
+        }
         POIFSFileSystem fs = new POIFSFileSystem(file.getInputStream());
         HSSFWorkbook premiumTemplateWorkbook = new HSSFWorkbook(fs);
         try {
-            String templateFileName = createUnderWriterRoutingLevelCommand.getPlanName()+ UNDER_WRITER_TEMPLATE_FILE_NAME_SUFFIX;
-            templateFileName = templateFileName.replaceAll("[\\s]*", "").trim();
-            if (!("application/msexcel".equals(createUnderWriterRoutingLevelCommand.getFile().getContentType()) || "application/vnd.ms-excel".equals(file.getContentType())) && !templateFileName.equals(file.getOriginalFilename())) {
-                bindingResult.addError(new ObjectError("message", "Uploaded file is not valid excel"));
-                return modelAndView;
-            }
             boolean isValidTemplate = underWriterService.isValidUnderWriterRoutingLevelTemplate(premiumTemplateWorkbook,createUnderWriterRoutingLevelCommand.getPlanCode(),createUnderWriterRoutingLevelCommand.getCoverageId(), createUnderWriterRoutingLevelCommand.getUnderWriterInfluencingFactors());
             if (!isValidTemplate) {
                 response.reset();

@@ -189,10 +189,10 @@ public class UnderWriterFinder {
         return underWriterMap;
     }
 
-    public List<Map<String,Object>> findMandatoryDocumentByProcess(ProcessType processType, String planId, String coverageId){
-        SqlParameterSource sqlParameterSource = new MapSqlParameterSource("processType",processType.name()).addValue("planId",planId).addValue("coverageId",coverageId);
-        findMandatoryDocumentByProcessType =   isEmpty(coverageId)?findMandatoryDocumentByProcessType+" AND md.coverage_id is null ":findMandatoryDocumentByProcessType+" AND md.coverage_id=:coverageId";
-        return namedParameterJdbcTemplate.query(findMandatoryDocumentByProcessType,sqlParameterSource,new ColumnMapRowMapper());
+    public List<Map<String,Object>> getMandatoryDocumentForPlanAndCoverage(String planId, List<CoverageId> coverageIds, ProcessType processType) {
+        SqlParameterSource sqlParameterSource = new MapSqlParameterSource("processType",processType.name()).addValue("planId",planId).addValue("coverageIds",coverageIds);
+        findMandatoryDocumentByProcessType = isEmpty(coverageIds)?findMandatoryDocumentByProcessType+" AND md.coverage_id is null ":findMandatoryDocumentByProcessType+" AND md.coverage_id in (:coverageIds)";
+        return namedParameterJdbcTemplate.query(findMandatoryDocumentByProcessType, sqlParameterSource, new ColumnMapRowMapper());
     }
 }
 
