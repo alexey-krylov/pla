@@ -1,6 +1,7 @@
 package com.pla.publishedlanguage.dto;
 
 import com.pla.sharedkernel.identifier.CoverageId;
+import com.pla.sharedkernel.identifier.PlanId;
 import lombok.Getter;
 import lombok.Setter;
 import org.joda.time.LocalDate;
@@ -17,7 +18,7 @@ import static org.nthdimenzion.utils.UtilValidator.isNotEmpty;
 @Setter
 public class UnderWriterRoutingLevelDetailDto {
 
-    private String planCode;
+    private PlanId planId;
 
     private String clientId;
 
@@ -30,11 +31,11 @@ public class UnderWriterRoutingLevelDetailDto {
     private LocalDate effectiveFrom;
 
 
-    public UnderWriterRoutingLevelDetailDto(String planCode, LocalDate effectiveFrom,String process) {
-        checkArgument(planCode != null);
+    public UnderWriterRoutingLevelDetailDto(PlanId planId, LocalDate effectiveFrom,String process) {
+        checkArgument(planId != null);
         checkArgument(process != null);
         checkArgument(effectiveFrom != null);
-        this.planCode  = planCode;
+        this.planId  = planId;
         this.process = process;
         this.effectiveFrom = effectiveFrom;
     }

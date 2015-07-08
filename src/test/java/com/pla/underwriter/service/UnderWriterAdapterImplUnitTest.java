@@ -9,6 +9,7 @@ import com.pla.client.repository.ClientRepository;
 import com.pla.publishedlanguage.dto.ClientDetailDto;
 import com.pla.publishedlanguage.dto.UnderWriterRoutingLevelDetailDto;
 import com.pla.sharedkernel.domain.model.RoutingLevel;
+import com.pla.sharedkernel.identifier.PlanId;
 import com.pla.sharedkernel.identifier.UnderWriterRoutingLevelId;
 import com.pla.underwriter.domain.model.*;
 import com.pla.underwriter.exception.UnderWriterException;
@@ -74,7 +75,7 @@ public class UnderWriterAdapterImplUnitTest {
         UnderWritingRoutingLevelItem underWritingRoutingLevelItem = new UnderWritingRoutingLevelItem(RoutingLevel.UNDERWRITING_LEVEL_ONE,underWriterLineItems);
         underWriterItems.add(underWritingRoutingLevelItem);
 
-        underWriterRoutingLevelDetailDto = new UnderWriterRoutingLevelDetailDto("P001",new LocalDate("2015-01-01"),"CLAIM");
+        underWriterRoutingLevelDetailDto = new UnderWriterRoutingLevelDetailDto(new PlanId("P001"),new LocalDate("2015-01-01"),"CLAIM");
         underWriterRoutingLevelDetailDto.setUnderWriterInfluencingFactor(underWriterInfluencingFactorDetailDtos);
 
 
@@ -147,6 +148,7 @@ public class UnderWriterAdapterImplUnitTest {
 
         clientBuilder.withClientDocument(clientDocument);
         Client client = Client.createClient(clientBuilder, "CL001");
+        client.withClientDocument(clientBuilder.getClientDocuments());
 
         UnderWriterRoutingLevelId underWriterRoutingLevelId = new UnderWriterRoutingLevelId("UR001");
         String planCode = "P001";
@@ -155,7 +157,7 @@ public class UnderWriterAdapterImplUnitTest {
         UnderWriterRoutingLevel underWriterRoutingLevel = UnderWriterRoutingLevel.createUnderWriterRoutingLevelWithPlan(underWriterRoutingLevelId, planCode, UnderWriterProcessType.CLAIM, underWriterDocumentItem, underWriterInfluencingFactors, new LocalDate("2016-12-31"));
         when(underWriterFinder.findUnderWriterRoutingLevel(underWriterRoutingLevelDetailDto)).thenReturn(underWriterRoutingLevel);
         when(clientRepository.findOne(anyObject())).thenReturn(client);
-       /* RoutingLevel routingLevel =  underWriterAdapter.getRoutingLevel(underWriterRoutingLevelDetailDto);
-        assertThat(RoutingLevel.UNDERWRITING_LEVEL_TWO,is(routingLevel));*/
+        RoutingLevel routingLevel =  underWriterAdapter.getRoutingLevel(underWriterRoutingLevelDetailDto);
+        assertThat(RoutingLevel.UNDERWRITING_LEVEL_TWO,is(routingLevel));
     }
 }

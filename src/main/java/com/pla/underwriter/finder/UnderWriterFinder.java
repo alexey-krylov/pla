@@ -82,6 +82,10 @@ public class UnderWriterFinder {
 
     public static final String FIND_PLAN_NAME_BY_CODE = "SELECT planName FROM plan_coverage_benefit_assoc_view WHERE planCode =:code LIMIT 1";
 
+    public static final String FIND_PLAN_CODE_BY_PLAN_ID = "SELECT plan_code planCode FROM plan_coverage_benefit_assoc WHERE plan_id=:planId LIMIT 1";
+
+
+
     public List<Map> findAllUnderWriterDocument() {
         List<UnderWriterDocument> allUnderWriterDocument = underWriterDocumentRepository.findEffectiveUnderWriterDocument();
         List<Map> underWriterDocumentList = new ArrayList<Map>();
@@ -125,7 +129,8 @@ public class UnderWriterFinder {
     }
 
     public UnderWriterRoutingLevel findUnderWriterRoutingLevel(UnderWriterRoutingLevelDetailDto underWriterRoutingLevelDetailDto) {
-        List<UnderWriterRoutingLevel> underWriterRoutingLevel = underWriterRoutingLevelRepository.findByPlanCodeAndCoverageIdAndValidTillAndProcessType(underWriterRoutingLevelDetailDto.getPlanCode(), underWriterRoutingLevelDetailDto.getCoverageId(),
+        String planCode = getFindPlanCodeByPlanId(underWriterRoutingLevelDetailDto.getPlanId().getPlanId());
+        List<UnderWriterRoutingLevel> underWriterRoutingLevel = underWriterRoutingLevelRepository.findByPlanCodeAndCoverageIdAndValidTillAndProcessType(planCode, underWriterRoutingLevelDetailDto.getCoverageId(),
                 null, underWriterRoutingLevelDetailDto.getProcess());
         checkArgument(isNotEmpty(underWriterRoutingLevel), "Under Writer Document can not be null");
         checkArgument(underWriterRoutingLevel.size() == 1);
@@ -200,6 +205,12 @@ public class UnderWriterFinder {
         SqlParameterSource sqlParameterSource = new MapSqlParameterSource("processType", processType.name()).addValue("planId", planId).addValue("coverageIds", coverageIds);
         findMandatoryDocumentByProcessType = isEmpty(coverageIdsInString) ? findMandatoryDocumentByProcessType + " AND md.coverage_id is null " : findMandatoryDocumentByProcessType + " AND md.coverage_id in (:coverageIds)";
         return namedParameterJdbcTemplate.query(findMandatoryDocumentByProcessType, sqlParameterSource, new ColumnMapRowMapper());
+    }
+
+    public String getFindPlanCodeByPlanId(String planId){
+        SqlParameterSource sqlParameterSource = new MapSqlParameterSource("planId", planId);
+        List<Map<String,Object>> planCodeList =  namedParameterJdbcTemplate.query(FIND_PLAN_CODE_BY_PLAN_ID, sqlParameterSource, new ColumnMapRowMapper());
+        return isNotEmpty(planCodeList)?(String)planCodeList.get(0).get("planCode"):null;
     }
 }
 
