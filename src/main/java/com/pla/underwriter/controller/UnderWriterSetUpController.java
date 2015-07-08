@@ -204,7 +204,7 @@ public class UnderWriterSetUpController {
         MultipartFile file = createUnderWriterRoutingLevelCommand.getFile();
         String templateFileName = createUnderWriterRoutingLevelCommand.getPlanName()+ UNDER_WRITER_TEMPLATE_FILE_NAME_SUFFIX;
         templateFileName = templateFileName.replaceAll("[\\s]*", "").trim();
-        if (!("application/msexcel".equals(createUnderWriterRoutingLevelCommand.getFile().getContentType()) || "application/vnd.ms-excel".equals(file.getContentType())) && !templateFileName.equals(file.getOriginalFilename())) {
+        if (!("application/msexcel".equals(createUnderWriterRoutingLevelCommand.getFile().getContentType()) || "application/vnd.ms-excel".equals(file.getContentType())) || !templateFileName.equals(file.getOriginalFilename())) {
             modelAndView.addObject("message", "Please upload a valid file");
             return modelAndView;
         }
