@@ -1,4 +1,4 @@
-package com.pla.grouplife.quotation.domain.model;
+package com.pla.grouplife.sharedresource.model.vo;
 
 import com.pla.publishedlanguage.domain.model.PremiumFrequency;
 import lombok.AccessLevel;

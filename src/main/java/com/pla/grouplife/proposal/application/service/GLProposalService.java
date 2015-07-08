@@ -2,18 +2,23 @@ package com.pla.grouplife.proposal.application.service;
 
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
 import com.pla.core.domain.model.agent.AgentId;
+import com.pla.grouphealth.sharedresource.dto.GlQuotationDto;
+import com.pla.grouplife.proposal.application.command.GLRecalculatedInsuredPremiumCommand;
 import com.pla.grouplife.proposal.domain.model.GroupLifeProposal;
 import com.pla.grouplife.proposal.presentation.dto.GLProposalDto;
 import com.pla.grouplife.proposal.presentation.dto.SearchGLProposalDto;
 import com.pla.grouplife.proposal.query.GLProposalFinder;
 import com.pla.grouplife.proposal.repository.GlProposalRepository;
-import com.pla.grouplife.quotation.application.command.GLRecalculatedInsuredPremiumCommand;
 import com.pla.grouplife.quotation.presentation.dto.PlanDetailDto;
-import com.pla.grouplife.sharedresource.dto.*;
-import com.pla.grouplife.sharedresource.model.vo.PremiumDetail;
-import com.pla.grouplife.sharedresource.model.vo.Proposer;
+import com.pla.grouplife.sharedresource.dto.AgentDetailDto;
+import com.pla.grouplife.sharedresource.dto.InsuredDto;
+import com.pla.grouplife.sharedresource.dto.PremiumDetailDto;
+import com.pla.grouplife.sharedresource.dto.ProposerDto;
+import com.pla.grouplife.sharedresource.model.vo.*;
 import com.pla.grouplife.sharedresource.query.GLFinder;
+import com.pla.grouplife.sharedresource.service.GLInsuredExcelGenerator;
 import com.pla.grouplife.sharedresource.service.GLInsuredExcelParser;
 import com.pla.publishedlanguage.contract.IPlanAdapter;
 import com.pla.sharedkernel.identifier.PlanId;
@@ -31,6 +36,7 @@ import java.io.IOException;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -48,6 +54,8 @@ public class GLProposalService {
 
     private GLProposalFinder glProposalFinder;
 
+    private GLInsuredExcelGenerator glInsuredExcelGenerator;
+
     private IPlanAdapter planAdapter;
 
     private GlProposalRepository groupLifeProposalRepository;
@@ -56,12 +64,13 @@ public class GLProposalService {
 
     @Autowired
     public GLProposalService(GLFinder glFinder, GLProposalFinder glProposalFinder, IPlanAdapter planAdapter,
-                             GlProposalRepository groupLifeProposalRepository, GLInsuredExcelParser glInsuredExcelParser) {
+                             GlProposalRepository groupLifeProposalRepository, GLInsuredExcelParser glInsuredExcelParser,GLInsuredExcelGenerator glInsuredExcelGenerator) {
         this.glFinder = glFinder;
         this.planAdapter = planAdapter;
         this.glProposalFinder = glProposalFinder;
         this.groupLifeProposalRepository = groupLifeProposalRepository;
         this.glInsuredExcelParser = glInsuredExcelParser;
+        this.glInsuredExcelGenerator = glInsuredExcelGenerator;
 
     }
 
@@ -79,8 +88,23 @@ public class GLProposalService {
         if (isEmpty(allQuotations)) {
             return Lists.newArrayList();
         }
-        List glQuotationDtoList = allQuotations.stream().map(new TransformToGLProposalDto()).collect(Collectors.toList());
+        List glQuotationDtoList = allQuotations.stream().map(new TransformToGLQuotationDto()).collect(Collectors.toList());
         return glQuotationDtoList;
+    }
+
+    public AgentDetailDto getAgentDetail(String quotationId) {
+        Map quotation = glFinder.getQuotationById(quotationId);
+        AgentId agentMap = (AgentId) quotation.get("agentId");
+        String agentId = agentMap.getAgentId();
+        Map<String, Object> agentDetail = glFinder.getAgentById(agentId);
+        AgentDetailDto agentDetailDto = new AgentDetailDto();
+        agentDetailDto.setAgentId(agentId);
+        agentDetailDto.setBranchName((String) agentDetail.get("branchName"));
+        agentDetailDto.setTeamName((String) agentDetail.get("teamName"));
+        agentDetailDto.setAgentName(agentDetail.get("firstName") + " " + (agentDetail.get("lastName") == null ? "" : (String) agentDetail.get("lastName")));
+        agentDetailDto.setAgentMobileNumber(agentDetail.get("mobileNumber") != null ? (String) agentDetail.get("mobileNumber") : "");
+        agentDetailDto.setAgentSalutation(agentDetail.get("title") != null ? (String) agentDetail.get("title") : "");
+        return agentDetailDto;
     }
 
     public AgentDetailDto getAgentDetail(ProposalId proposalId) {
@@ -98,19 +122,11 @@ public class GLProposalService {
         return agentDetailDto;
     }
 
-    public AgentDetailDto getAgentDetail(QuotationId quotationId) {
-        Map quotation = glFinder.getQuotationById(quotationId.getQuotationId());
-        AgentId agentMap = (AgentId) quotation.get("agentId");
-        String agentId = agentMap.getAgentId();
-        Map<String, Object> agentDetail = glFinder.getAgentById(agentId);
-        AgentDetailDto agentDetailDto = new AgentDetailDto();
-        agentDetailDto.setAgentId(agentId);
-        agentDetailDto.setBranchName((String) agentDetail.get("branchName"));
-        agentDetailDto.setTeamName((String) agentDetail.get("teamName"));
-        agentDetailDto.setAgentName(agentDetail.get("firstName") + " " + (agentDetail.get("lastName") == null ? "" : (String) agentDetail.get("lastName")));
-        agentDetailDto.setAgentMobileNumber(agentDetail.get("mobileNumber") != null ? (String) agentDetail.get("mobileNumber") : "");
-        agentDetailDto.setAgentSalutation(agentDetail.get("title") != null ? (String) agentDetail.get("title") : "");
-        return agentDetailDto;
+    public ProposerDto getProposerDetail(ProposalId proposalId) {
+        Map proposal = glProposalFinder.getProposalById(proposalId);
+        Proposer proposer = (Proposer) proposal.get("proposer");
+        ProposerDto proposerDto = new ProposerDto(proposer);
+        return proposerDto;
     }
 
 
@@ -138,13 +154,6 @@ public class GLProposalService {
         return planIds;
     }
 
-    public ProposerDto getProposerDetail(ProposalId proposalId) {
-        Map proposal = glProposalFinder.getProposalById(proposalId);
-        Proposer proposer = (Proposer) proposal.get("proposer");
-        ProposerDto proposerDto = new ProposerDto(proposer);
-        return proposerDto;
-    }
-
     public PremiumDetailDto getPremiumDetail(ProposalId proposalId) {
         GroupLifeProposal groupLifeProposal = groupLifeProposalRepository.findOne(proposalId);
         PremiumDetailDto premiumDetailDto = getPremiumDetail(groupLifeProposal);
@@ -155,8 +164,78 @@ public class GLProposalService {
         return null;
     }
 
-    public HSSFWorkbook getInsuredTemplateExcel(String proposalId) {
-        return null;
+    public HSSFWorkbook getInsuredTemplateExcel(String proposalId) throws IOException {
+        AgentDetailDto agentDetailDto = getAgentDetail(new ProposalId(proposalId));
+        List<PlanId> planIds = getAgentAuthorizedPlans(agentDetailDto.getAgentId());
+        Map quotation = glProposalFinder.getProposalById(new ProposalId(proposalId));
+        List<Insured> insureds = (List<Insured>) quotation.get("insureds");
+        List<InsuredDto> insuredDtoList = isNotEmpty(insureds) ? insureds.stream().map(new Function<Insured, InsuredDto>() {
+            @Override
+            public InsuredDto apply(Insured insured) {
+                InsuredDto insuredDto = new InsuredDto();
+                insuredDto.setCompanyName(insured.getCompanyName());
+                insuredDto.setManNumber(insured.getManNumber());
+                insuredDto.setNrcNumber(insured.getNrcNumber());
+                insuredDto.setSalutation(insured.getSalutation());
+                insuredDto.setFirstName(insured.getFirstName());
+                insuredDto.setLastName(insured.getLastName());
+                insuredDto.setDateOfBirth(insured.getDateOfBirth());
+                insuredDto.setGender(insured.getGender());
+                insuredDto.setCategory(insured.getCategory());
+                insuredDto.setAnnualIncome(insured.getAnnualIncome());
+                insuredDto.setOccupationClass(insured.getOccupationClass());
+                insuredDto.setOccupationCategory(insured.getCategory());
+                insuredDto.setNoOfAssured(insured.getNoOfAssured());
+                PlanPremiumDetail planPremiumDetail = insured.getPlanPremiumDetail();
+                InsuredDto.PlanPremiumDetailDto planPremiumDetailDto = new InsuredDto.PlanPremiumDetailDto(planPremiumDetail.getPlanId().getPlanId(), planPremiumDetail.getPlanCode(), planPremiumDetail.getPremiumAmount(), planPremiumDetail.getSumAssured());
+                insuredDto = insuredDto.addPlanPremiumDetail(planPremiumDetailDto);
+                List<InsuredDto.CoveragePremiumDetailDto> coveragePremiumDetailDtoList = isNotEmpty(insured.getCoveragePremiumDetails()) ? insured.getCoveragePremiumDetails().stream().map(new Function<CoveragePremiumDetail, InsuredDto.CoveragePremiumDetailDto>() {
+                    @Override
+                    public InsuredDto.CoveragePremiumDetailDto apply(CoveragePremiumDetail coveragePremiumDetail) {
+                        InsuredDto.CoveragePremiumDetailDto coveragePremiumDetailDto = new InsuredDto.CoveragePremiumDetailDto(coveragePremiumDetail.getCoverageCode(),
+                                coveragePremiumDetail.getCoverageId().getCoverageId(), coveragePremiumDetail.getPremium(), coveragePremiumDetail.getSumAssured());
+                        return coveragePremiumDetailDto;
+                    }
+                }).collect(Collectors.toList()) : Lists.newArrayList();
+                insuredDto = insuredDto.addCoveragePremiumDetails(coveragePremiumDetailDtoList);
+                Set<InsuredDto.InsuredDependentDto> insuredDependentDtoList = isNotEmpty(insured.getInsuredDependents()) ? insured.getInsuredDependents().stream().map(new Function<InsuredDependent, InsuredDto.InsuredDependentDto>() {
+                    @Override
+                    public InsuredDto.InsuredDependentDto apply(InsuredDependent insuredDependent) {
+                        InsuredDto.InsuredDependentDto insuredDependentDto = new InsuredDto.InsuredDependentDto();
+                        insuredDependentDto.setCompanyName(insuredDependent.getCompanyName());
+                        insuredDependentDto.setManNumber(insuredDependent.getManNumber());
+                        insuredDependentDto.setNrcNumber(insuredDependent.getNrcNumber());
+                        insuredDependentDto.setSalutation(insuredDependent.getSalutation());
+                        insuredDependentDto.setFirstName(insuredDependent.getFirstName());
+                        insuredDependentDto.setLastName(insuredDependent.getLastName());
+                        insuredDependentDto.setDateOfBirth(insuredDependent.getDateOfBirth());
+                        insuredDependentDto.setRelationship(insuredDependent.getRelationship());
+                        insuredDependentDto.setGender(insuredDependent.getGender());
+                        insuredDependentDto.setCategory(insuredDependent.getCategory());
+                        insuredDependentDto.setOccupationClass(insuredDependent.getOccupationClass());
+                        insuredDependentDto.setOccupationCategory(insuredDependent.getCategory());
+                        insuredDependentDto.setNoOfAssured(insuredDependent.getNoOfAssured());
+                        PlanPremiumDetail planPremiumDetail = insuredDependent.getPlanPremiumDetail();
+                        InsuredDto.PlanPremiumDetailDto planPremiumDetailDto = new InsuredDto.PlanPremiumDetailDto(planPremiumDetail.getPlanId().getPlanId(), planPremiumDetail.getPlanCode(), planPremiumDetail.getPremiumAmount(), planPremiumDetail.getSumAssured());
+                        insuredDependentDto = insuredDependentDto.addPlanPremiumDetail(planPremiumDetailDto);
+                        List<InsuredDto.CoveragePremiumDetailDto> dependentCoveragePremiumDetailDtoList = isNotEmpty(insuredDependent.getCoveragePremiumDetails()) ? insuredDependent.getCoveragePremiumDetails().stream().map(new Function<CoveragePremiumDetail, InsuredDto.CoveragePremiumDetailDto>() {
+                            @Override
+                            public InsuredDto.CoveragePremiumDetailDto apply(CoveragePremiumDetail coveragePremiumDetail) {
+                                InsuredDto.CoveragePremiumDetailDto coveragePremiumDetailDto = new InsuredDto.CoveragePremiumDetailDto(coveragePremiumDetail.getCoverageCode(),
+                                        coveragePremiumDetail.getCoverageId().getCoverageId(), coveragePremiumDetail.getPremium(), coveragePremiumDetail.getSumAssured());
+                                return coveragePremiumDetailDto;
+                            }
+                        }).collect(Collectors.toList()) : Lists.newArrayList();
+                        insuredDependentDto = insuredDependentDto.addCoveragePremiumDetails(dependentCoveragePremiumDetailDtoList);
+                        return insuredDependentDto;
+                    }
+                }).collect(Collectors.toSet()) : Sets.newHashSet();
+                insuredDto = insuredDto.addInsuredDependent(insuredDependentDtoList);
+                return insuredDto;
+            }
+        }).collect(Collectors.toList()) : Lists.newArrayList();
+        HSSFWorkbook hssfWorkbook = glInsuredExcelGenerator.generateInsuredExcel(insuredDtoList, planIds);
+        return hssfWorkbook;
     }
 
     public boolean isValidInsuredTemplate(String proposalId, HSSFWorkbook insuredTemplateWorkbook, boolean samePlanForAllCategory, boolean samePlanForAllRelation) {
@@ -192,12 +271,11 @@ public class GLProposalService {
         return premiumDetailDto;
     }
 
-    private class TransformToGLProposalDto implements Function<Map, GLProposalDto> {
+    private class TransformToGLQuotationDto implements Function<Map, GLProposalDto> {
 
-        @Override
         public GLProposalDto apply(Map map) {
             String quotationId = map.get("_id").toString();
-            AgentDetailDto agentDetailDto = getAgentDetail(new QuotationId("_id"));
+            AgentDetailDto agentDetailDto = getAgentDetail(quotationId);
             LocalDate generatedOn = map.get("generatedOn") != null ? new LocalDate((Date) map.get("generatedOn")) : null;
             String quotationStatus = map.get("quotationStatus") != null ? (String) map.get("quotationStatus") : "";
             String quotationNumber = map.get("quotationNumber") != null ? (String) map.get("quotationNumber") : "";

@@ -18,7 +18,7 @@ import java.util.List;
 @AllArgsConstructor
 public class UpdateGLProposalWithInsuredCommand {
 
-    private String quotationId;
+    private String proposalId;
 
     private List<InsuredDto> insuredDtos;
 

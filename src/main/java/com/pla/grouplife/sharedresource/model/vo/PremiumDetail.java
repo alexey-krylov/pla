@@ -1,7 +1,6 @@
 package com.pla.grouplife.sharedresource.model.vo;
 
 import com.google.common.collect.Sets;
-import com.pla.grouplife.quotation.domain.model.Policy;
 import com.pla.publishedlanguage.domain.model.PremiumFrequency;
 import lombok.AccessLevel;
 import lombok.Getter;

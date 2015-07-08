@@ -1,47 +1,49 @@
+/**
+ * Created by User on 6/30/2015.
+ */
+
 package com.pla.grouplife.proposal.domain.service;
 
 import com.google.common.collect.Lists;
 import com.pla.core.domain.model.agent.AgentId;
+import com.pla.grouplife.proposal.application.command.GLRecalculatedInsuredPremiumCommand;
 import com.pla.grouplife.proposal.domain.model.GLProposalProcessor;
-import com.pla.grouplife.proposal.domain.model.GLProposalStatus;
 import com.pla.grouplife.proposal.domain.model.GroupLifeProposal;
 import com.pla.grouplife.proposal.presentation.dto.GLProposalDto;
 import com.pla.grouplife.proposal.presentation.dto.SearchGLProposalDto;
 import com.pla.grouplife.proposal.query.GLProposalFinder;
-import com.pla.grouplife.quotation.application.command.GLRecalculatedInsuredPremiumCommand;
-import com.pla.grouplife.quotation.domain.model.GroupLifeQuotation;
 import com.pla.grouplife.quotation.domain.service.AgentIsActive;
-import com.pla.grouplife.quotation.presentation.dto.PlanDetailDto;
 import com.pla.grouplife.sharedresource.dto.*;
-import com.pla.grouplife.sharedresource.model.vo.Proposer;
+import com.pla.grouplife.sharedresource.model.vo.*;
 import com.pla.grouplife.sharedresource.query.GLFinder;
 import com.pla.publishedlanguage.contract.IPlanAdapter;
+import com.pla.publishedlanguage.contract.IPremiumCalculator;
+import com.pla.publishedlanguage.domain.model.BasicPremiumDto;
+import com.pla.publishedlanguage.domain.model.ComputedPremiumDto;
+import com.pla.publishedlanguage.domain.model.PremiumFrequency;
 import com.pla.sharedkernel.identifier.PlanId;
 import com.pla.sharedkernel.identifier.ProposalId;
 import com.pla.sharedkernel.identifier.QuotationId;
-import com.pla.sharedkernel.util.PDFGeneratorUtils;
-import net.sf.jasperreports.engine.JRException;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-import org.axonframework.repository.Repository;
 import org.bson.types.ObjectId;
 import org.joda.time.LocalDate;
+import org.nthdimenzion.common.AppConstants;
 import org.nthdimenzion.ddd.domain.annotations.DomainService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.io.IOException;
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+import static com.pla.grouplife.proposal.domain.exception.ProposalException.raiseAgentIsInactiveException;
 import static org.nthdimenzion.presentation.AppUtils.getIntervalInDays;
 import static org.nthdimenzion.utils.UtilValidator.isEmpty;
 
-/**
- * Created by Samir on 4/8/2015.
- */
 @DomainService
 public class GroupLifeProposalService {
 
@@ -53,27 +55,20 @@ public class GroupLifeProposalService {
 
     private AgentIsActive agentIsActive;
 
-    private Repository<GroupLifeQuotation> glQuotationMongoRepository;
+    private IPremiumCalculator premiumCalculator;
 
-    private GLProposalNumberGenerator glProposalNumberGenerator;
 
-    private ProposalRoleAdapter proposalRoleAdapter;
+    private GroupLifeProposalRoleAdapter groupLifeProposalRoleAdapter;
 
     @Autowired
     public GroupLifeProposalService(GLFinder glFinder, GLProposalFinder glProposalFinder, IPlanAdapter planAdapter, AgentIsActive agentIsActive,
-                             Repository<GroupLifeQuotation> glQuotationMongoRepository, GLProposalNumberGenerator glProposalNumberGenerator) {
+                                    GroupLifeProposalRoleAdapter groupLifeProposalRoleAdapter) {
         this.glFinder = glFinder;
         this.planAdapter = planAdapter;
         this.glProposalFinder = glProposalFinder;
         this.agentIsActive = agentIsActive;
-        this.glQuotationMongoRepository = glQuotationMongoRepository;
-        this.glProposalNumberGenerator = glProposalNumberGenerator;
+        this.groupLifeProposalRoleAdapter = groupLifeProposalRoleAdapter;
 
-    }
-
-    //TODO implement
-    public boolean hasProposalForQuotation(String quotationId) {
-        return false;
     }
 
     public List<GlQuotationDto> searchGeneratedQuotation(String quotationNumber) {
@@ -85,29 +80,9 @@ public class GroupLifeProposalService {
         return glQuotationDtoList;
     }
 
-    public GroupLifeProposal createProposal(String quotationId, UserDetails userDetails) {
-        GLProposalProcessor glProposalProcessor = proposalRoleAdapter.userToProposalProcessor(userDetails);
-          /* AgentSpecification shared
-           if (!agentIsActive.isSatisfiedBy(new AgentId(agentId))) {
-                raiseAgentIsInactiveException();
-            }
-            Repository common
-            */
-        GroupLifeQuotation groupLifeQuotation = glQuotationMongoRepository.load(new QuotationId(quotationId));
-        ProposalId proposalId = new ProposalId(new ObjectId().toString());
-        String proposalNumber = glProposalNumberGenerator.getProposalNumber("6", "1", GroupLifeQuotation.class, LocalDate.now());
-        return GroupLifeProposal.createGroupLifeProposal(proposalId,groupLifeQuotation.getQuotationId(),proposalNumber,
-                groupLifeQuotation.getAgentId(),groupLifeQuotation.getProposer(),groupLifeQuotation.getInsureds(),groupLifeQuotation.getPremiumDetail(),
-                GLProposalStatus.PENDING_FIRST_PREMIUM);
 
-    }
-
-    public AgentDetailDto getAgentDetail(ProposalId proposalId) {
-        return null;
-    }
-
-    public AgentDetailDto getAgentDetail(QuotationId quotationId) {
-        Map quotation = glFinder.getQuotationById(quotationId.getQuotationId());
+    public AgentDetailDto getAgentDetail(String quotationId) {
+        Map quotation = glFinder.getQuotationById(quotationId);
         AgentId agentMap = (AgentId) quotation.get("agentId");
         String agentId = agentMap.getAgentId();
         Map<String, Object> agentDetail = glFinder.getAgentById(agentId);
@@ -116,22 +91,71 @@ public class GroupLifeProposalService {
         agentDetailDto.setBranchName((String) agentDetail.get("branchName"));
         agentDetailDto.setTeamName((String) agentDetail.get("teamName"));
         agentDetailDto.setAgentName(agentDetail.get("firstName") + " " + (agentDetail.get("lastName") == null ? "" : (String) agentDetail.get("lastName")));
-        agentDetailDto.setAgentMobileNumber(agentDetail.get("mobileNumber") != null ? (String) agentDetail.get("mobileNumber") : "");
-        agentDetailDto.setAgentSalutation(agentDetail.get("title") != null ? (String) agentDetail.get("title") : "");
         return agentDetailDto;
     }
+    public GroupLifeProposal updateWithAgent(GroupLifeProposal groupLifeProposal, String agentId, UserDetails userDetails) {
+        if (!agentIsActive.isSatisfiedBy(groupLifeProposal.getAgentId())) {
+            raiseAgentIsInactiveException();
+        }
+        GLProposalProcessor glProposalProcessor = groupLifeProposalRoleAdapter.userToProposalProcessor(userDetails);
+        return glProposalProcessor.updateWithAgentId(groupLifeProposal, new AgentId(agentId));
+    }
+    public GroupLifeProposal updateWithProposerDetail(GroupLifeProposal groupLifeProposal, ProposerDto proposerDto, UserDetails userDetails) {
+        GLProposalProcessor glProposalProcessor = groupLifeProposalRoleAdapter.userToProposalProcessor(userDetails);
+        ProposerBuilder proposerBuilder = Proposer.getProposerBuilder(proposerDto.getProposerName(), proposerDto.getProposerCode());
+        proposerBuilder.withContactDetail(proposerDto.getAddressLine1(), proposerDto.getAddressLine2(), proposerDto.getPostalCode(), proposerDto.getProvince(), proposerDto.getTown(), proposerDto.getEmailAddress())
+                .withContactPersonDetail(proposerDto.getContactPersonName(), proposerDto.getContactPersonEmail(), proposerDto.getContactPersonMobileNumber(), proposerDto.getContactPersonWorkPhoneNumber());
+        groupLifeProposal = glProposalProcessor.updateWithProposer(groupLifeProposal, proposerBuilder.build());
 
-
-    public List<GLProposalDto> searchProposal(SearchGLProposalDto searchGLProposalDto) {
-        return null;
+        return groupLifeProposal;
     }
 
-    public byte[] getPlanReadyReckoner(String proposalId) throws IOException, JRException {
-        AgentDetailDto agentDetailDto = getAgentDetail(new ProposalId(proposalId));
-        List<PlanId> planIds = getAgentAuthorizedPlans(agentDetailDto.getAgentId());
-        List<PlanDetailDto> planDetailDtoList = PlanDetailDto.transformToPlanDetail(planAdapter.getPlanAndCoverageDetail(planIds));
-        byte[] pdfData = PDFGeneratorUtils.createPDFReportByList(planDetailDtoList, "jasperpdf/template/grouplife/quotation/planReadyReckoner.jrxml");
-        return pdfData;
+
+    public GroupLifeProposal updateInsured(GroupLifeProposal groupLifeProposal, Set<Insured> insureds, UserDetails userDetails) {
+        if (!agentIsActive.isSatisfiedBy(groupLifeProposal.getAgentId())) {
+            raiseAgentIsInactiveException();
+        }
+        GLProposalProcessor glProposalProcessor = groupLifeProposalRoleAdapter.userToProposalProcessor(userDetails);
+        return glProposalProcessor.updateWithInsured(groupLifeProposal, insureds);
+    }
+
+
+    public GroupLifeProposal updateWithPremiumDetail(GroupLifeProposal groupLifeProposal, PremiumDetailDto premiumDetailDto, UserDetails userDetails) {
+        if (!agentIsActive.isSatisfiedBy(groupLifeProposal.getAgentId())) {
+            raiseAgentIsInactiveException();
+        }
+        GLProposalProcessor glProposalProcessor = groupLifeProposalRoleAdapter.userToProposalProcessor(userDetails);
+        PremiumDetail premiumDetail = new PremiumDetail(premiumDetailDto.getAddOnBenefit(), premiumDetailDto.getProfitAndSolvencyLoading(), premiumDetailDto.getHivDiscount(), premiumDetailDto.getValuedClientDiscount(), premiumDetailDto.getLongTermDiscount(), premiumDetailDto.getPolicyTermValue());
+        premiumDetail = premiumDetail.updateWithNetPremium(groupLifeProposal.getNetAnnualPremiumPaymentAmount(premiumDetail));
+        if (premiumDetailDto.getPolicyTermValue() != null && premiumDetailDto.getPolicyTermValue() == 365) {
+            List<ComputedPremiumDto> computedPremiumDtoList = premiumCalculator.calculateModalPremium(new BasicPremiumDto(PremiumFrequency.ANNUALLY, premiumDetail.getNetTotalPremium()));
+            Set<Policy> policies = computedPremiumDtoList.stream().map(new Function<ComputedPremiumDto, Policy>() {
+                @Override
+                public Policy apply(ComputedPremiumDto computedPremiumDto) {
+                    return new Policy(computedPremiumDto.getPremiumFrequency(), computedPremiumDto.getPremium().setScale(AppConstants.scale, AppConstants.roundingMode));
+                }
+            }).collect(Collectors.toSet());
+            premiumDetail = premiumDetail.addPolicies(policies);
+            premiumDetail = premiumDetail.nullifyPremiumInstallment();
+        } else if (premiumDetailDto.getPolicyTermValue() != null && premiumDetailDto.getPolicyTermValue() > 0 && premiumDetailDto.getPolicyTermValue() != 365) {
+            int noOfInstallment = premiumDetailDto.getPolicyTermValue() / 30;
+            if ((premiumDetailDto.getPolicyTermValue() % 30) == 0) {
+                noOfInstallment = noOfInstallment - 1;
+            }
+            for (int count = 1; count <= noOfInstallment; count++) {
+                BigDecimal installmentAmount = premiumDetail.getNetTotalPremium().divide(new BigDecimal(count), 2, BigDecimal.ROUND_CEILING);
+                premiumDetail = premiumDetail.addInstallments(count, installmentAmount);
+            }
+            if (premiumDetailDto.getPremiumInstallment() != null) {
+                premiumDetail = premiumDetail.addChoosenPremiumInstallment(premiumDetailDto.getPremiumInstallment().getInstallmentNo(), premiumDetailDto.getPremiumInstallment().getInstallmentAmount());
+            }
+            premiumDetail = premiumDetail.nullifyFrequencyPremium();
+        }
+        groupLifeProposal = glProposalProcessor.updateWithPremiumDetail(groupLifeProposal, premiumDetail);
+        return groupLifeProposal;
+    }
+    public List<GLProposalDto> searchProposal(SearchGLProposalDto searchGLProposalDto) {
+        return null;
     }
 
     private List<PlanId> getAgentAuthorizedPlans(String agentId) {
@@ -176,7 +200,7 @@ public class GroupLifeProposalService {
         @Override
         public GLProposalDto apply(Map map) {
             String quotationId = map.get("_id").toString();
-            AgentDetailDto agentDetailDto = getAgentDetail(new QuotationId(quotationId));
+            AgentDetailDto agentDetailDto = getAgentDetail(quotationId);
             LocalDate generatedOn = map.get("generatedOn") != null ? new LocalDate((Date) map.get("generatedOn")) : null;
             String quotationStatus = map.get("quotationStatus") != null ? (String) map.get("quotationStatus") : "";
             String quotationNumber = map.get("quotationNumber") != null ? (String) map.get("quotationNumber") : "";
@@ -189,3 +213,4 @@ public class GroupLifeProposalService {
         }
     }
 }
+

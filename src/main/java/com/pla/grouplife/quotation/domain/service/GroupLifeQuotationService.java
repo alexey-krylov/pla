@@ -3,7 +3,6 @@ package com.pla.grouplife.quotation.domain.service;
 import com.pla.core.domain.model.agent.AgentId;
 import com.pla.grouplife.quotation.domain.model.GLQuotationProcessor;
 import com.pla.grouplife.quotation.domain.model.GroupLifeQuotation;
-import com.pla.grouplife.quotation.domain.model.Policy;
 import com.pla.grouplife.quotation.query.GLQuotationFinder;
 import com.pla.grouplife.sharedresource.dto.PremiumDetailDto;
 import com.pla.grouplife.sharedresource.dto.ProposerDto;

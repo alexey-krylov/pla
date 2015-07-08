@@ -8,6 +8,7 @@ import org.nthdimenzion.ddd.domain.annotations.Finder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.BasicQuery;
+import org.springframework.jdbc.core.ColumnMapRowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Service;
@@ -37,6 +38,8 @@ public class GLProposalFinder {
         this.mongoTemplate = mongoTemplate;
     }
 
+    public static final String FIND_AGENT_PLANS_QUERY = "SELECT agent_id as agentId,plan_id as planId FROM `agent_authorized_plan` WHERE agent_id=:agentId";
+
     public static final String FIND_ACTIVE_AGENT_BY_ID_QUERY = "select * from agent_team_branch_view where agentId =:agentId AND agentStatus='ACTIVE'";
 
     public Map<String, Object> getAgentById(String agentId) {
@@ -62,6 +65,14 @@ public class GLProposalFinder {
     }
 
     public List<Map<String, Object>> getAgentAuthorizedPlan(String agentId) {
-        return null;
+        return namedParameterJdbcTemplate.query(FIND_AGENT_PLANS_QUERY, new MapSqlParameterSource().addValue("agentId", agentId), new ColumnMapRowMapper());
+    }
+
+    public Map findProposalByQuotationNumber(String quotationNumber){
+        checkArgument(quotationNumber != null);
+        BasicDBObject query = new BasicDBObject();
+        query.put("proposalNumber",quotationNumber);
+        Map groupLifeProposal = mongoTemplate.findOne(new BasicQuery(query), Map.class, "group_life_proposal");
+        return  groupLifeProposal;
     }
 }

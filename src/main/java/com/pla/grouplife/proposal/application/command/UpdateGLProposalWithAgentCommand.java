@@ -20,11 +20,7 @@ public class UpdateGLProposalWithAgentCommand {
     @NotEmpty(message = "{Agent ID cannot be empty}")
     private String agentId;
 
-    @NotNull(message = "{Proposer name cannot be null}")
-    @NotEmpty(message = "{Proposer name cannot be empty}")
-    private String proposerName;
-
-    private String quotationId;
+    private String proposalId;
 
     private UserDetails userDetails;
 }

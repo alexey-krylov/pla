@@ -1,9 +1,12 @@
 package com.pla.grouplife.proposal.domain.model;
 
 import com.pla.core.domain.model.agent.AgentId;
-import com.pla.grouplife.sharedresource.model.vo.*;
+import com.pla.grouplife.sharedresource.model.vo.Insured;
+import com.pla.grouplife.sharedresource.model.vo.PremiumDetail;
+import com.pla.grouplife.sharedresource.model.vo.Proposer;
+import com.pla.sharedkernel.domain.model.Quotation;
 import com.pla.sharedkernel.identifier.ProposalId;
-import com.pla.sharedkernel.identifier.QuotationId;
+import com.pla.sharedkernel.identifier.ProposalNumber;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -31,9 +34,9 @@ public class GroupLifeProposal extends AbstractAggregateRoot<ProposalId> {
     @AggregateIdentifier
     private ProposalId proposalId;
 
-    private QuotationId quotationId;
+    private Quotation quotation;
 
-    private String proposalNumber;
+    private ProposalNumber proposalNumber;
 
     private DateTime submittedOn;
 
@@ -54,29 +57,13 @@ public class GroupLifeProposal extends AbstractAggregateRoot<ProposalId> {
         return proposalId;
     }
 
-    public GroupLifeProposal(ProposalId proposalId, QuotationId quotationId, String proposalNumber,AgentId agentId,Proposer glProposer
-    ,Set<Insured> insureds, PremiumDetail premiumDetail,GLProposalStatus glProposalStatus) {
+    public GroupLifeProposal(ProposalId proposalId, Quotation quotation, ProposalNumber proposalNumber) {
         checkArgument(proposalId != null, "Proposal ID cannot be blank");
-        checkArgument(quotationId != null, "Quotation ID cannot be blank");
-        checkArgument(agentId != null, "Agent ID cannot be blank");
+        checkArgument(quotation != null, "Quotation ID cannot be blank");
         checkArgument(proposalNumber != null, "Proposal Number cannot be blank");
-        checkArgument(glProposer != null, "Proposer cannot be blank");
-       // checkArgument(insureds != null, "Insured Details cannot be blank");
-       // checkArgument(premiumDetail != null, "Premium Details cannot be blank");
-       // checkArgument(glProposalStatus != null, "Proposal Status cannot be blank");
         this.proposalId = proposalId;
-        this.quotationId = quotationId;
+        this.quotation = quotation;
         this.proposalNumber = proposalNumber;
-        this.agentId = agentId;
-        this.proposer = glProposer;
-        this.insureds = insureds;
-        this.premiumDetail = premiumDetail;
-        this.proposalStatus = glProposalStatus;
-    }
-
-    public static GroupLifeProposal createGroupLifeProposal(ProposalId proposalId, QuotationId quotationId, String proposalNumber,AgentId agentId,Proposer glProposer
-            ,Set<Insured> insureds, PremiumDetail premiumDetail,GLProposalStatus glProposalStatus){
-        return new GroupLifeProposal(proposalId,quotationId,proposalNumber,agentId,glProposer,insureds,premiumDetail,glProposalStatus);
     }
 
     public GroupLifeProposal updateWithAgentId(AgentId agentId) {
@@ -132,21 +119,20 @@ public class GroupLifeProposal extends AbstractAggregateRoot<ProposalId> {
         return this;
     }
 
-    /*public BigDecimal getNetAnnualPremiumPaymentAmount(PremiumDetail premiumDetail) {
-        BigDecimal totalInsuredPremiumAmount = this.getTotalBasicPremiumForInsured();
-        BigDecimal addOnBenefitAmount = premiumDetail.getAddOnBenefit() == null ? BigDecimal.ZERO : totalInsuredPremiumAmount.multiply((premiumDetail.getAddOnBenefit().divide(new BigDecimal(100))));
-        totalInsuredPremiumAmount = totalInsuredPremiumAmount.add(addOnBenefitAmount);
-        BigDecimal profitAndSolvencyAmount = premiumDetail.getProfitAndSolvency() == null ? BigDecimal.ZERO : totalInsuredPremiumAmount.multiply((premiumDetail.getProfitAndSolvency().divide(new BigDecimal(100))));
-        totalInsuredPremiumAmount = totalInsuredPremiumAmount.add(profitAndSolvencyAmount);
-        BigDecimal waiverOfExcessLoading = premiumDetail.getWaiverOfExcessLoading() == null ? BigDecimal.ZERO : totalInsuredPremiumAmount.multiply((premiumDetail.getWaiverOfExcessLoading().divide(new BigDecimal(100))));
-        totalInsuredPremiumAmount = totalInsuredPremiumAmount.add(waiverOfExcessLoading);
-        BigDecimal discountAmount = premiumDetail.getDiscount() == null ? BigDecimal.ZERO : totalInsuredPremiumAmount.multiply((premiumDetail.getDiscount().divide(new BigDecimal(100))));
-        totalInsuredPremiumAmount = totalInsuredPremiumAmount.subtract(discountAmount);
-        BigDecimal vat = premiumDetail.getVat() == null ? BigDecimal.ZERO : totalInsuredPremiumAmount.multiply((premiumDetail.getVat().divide(new BigDecimal(100))));
-        totalInsuredPremiumAmount = totalInsuredPremiumAmount.add(vat);
+    public BigDecimal getNetAnnualPremiumPaymentAmount(PremiumDetail premiumDetail) {
+        BigDecimal totalBasicPremium = this.getTotalBasicPremiumForInsured();
+        BigDecimal hivDiscountAmount = premiumDetail.getHivDiscount() == null ? BigDecimal.ZERO : totalBasicPremium.multiply((premiumDetail.getHivDiscount().divide(new BigDecimal(100))));
+        BigDecimal valuedClientDiscountAmount = premiumDetail.getValuedClientDiscount() == null ? BigDecimal.ZERO : totalBasicPremium.multiply((premiumDetail.getValuedClientDiscount().divide(new BigDecimal(100))));
+        BigDecimal longTermDiscountAmount = premiumDetail.getLongTermDiscount() == null ? BigDecimal.ZERO : totalBasicPremium.multiply((premiumDetail.getLongTermDiscount().divide(new BigDecimal(100))));
+
+        BigDecimal addOnBenefitAmount = premiumDetail.getAddOnBenefit() == null ? BigDecimal.ZERO : totalBasicPremium.multiply((premiumDetail.getAddOnBenefit().divide(new BigDecimal(100))));
+        BigDecimal profitAndSolvencyAmount = premiumDetail.getProfitAndSolvency() == null ? BigDecimal.ZERO : totalBasicPremium.multiply((premiumDetail.getProfitAndSolvency().divide(new BigDecimal(100))));
+        BigDecimal industryLoadingFactor = BigDecimal.ZERO;
+        BigDecimal totalLoadingAmount = (addOnBenefitAmount.add(profitAndSolvencyAmount).add(industryLoadingFactor)).subtract((hivDiscountAmount.add(valuedClientDiscountAmount).add(longTermDiscountAmount)));
+        BigDecimal totalInsuredPremiumAmount = totalBasicPremium.add(totalLoadingAmount);
         totalInsuredPremiumAmount = totalInsuredPremiumAmount.setScale(2, BigDecimal.ROUND_CEILING);
         return totalInsuredPremiumAmount;
-    }*/
+    }
 
     public BigDecimal getTotalBasicPremiumForInsured() {
         BigDecimal totalBasicAnnualPremium = BigDecimal.ZERO;

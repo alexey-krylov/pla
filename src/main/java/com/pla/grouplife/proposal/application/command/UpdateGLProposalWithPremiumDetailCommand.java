@@ -14,7 +14,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 @NoArgsConstructor
 public class UpdateGLProposalWithPremiumDetailCommand {
 
-    private String quotationId;
+    private String proposalId;
 
     private PremiumDetailDto premiumDetailDto;
 

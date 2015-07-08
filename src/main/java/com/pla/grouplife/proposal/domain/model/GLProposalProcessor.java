@@ -1,12 +1,18 @@
 package com.pla.grouplife.proposal.domain.model;
 
-import com.pla.grouplife.quotation.domain.model.GroupLifeQuotation;
+import com.pla.core.domain.model.agent.AgentId;
+import com.pla.grouplife.sharedresource.model.vo.Insured;
+import com.pla.grouplife.sharedresource.model.vo.PremiumDetail;
+import com.pla.grouplife.sharedresource.model.vo.Proposer;
+import com.pla.grouplife.sharedresource.util.GroupLifeProposalFactory;
 import com.pla.sharedkernel.identifier.ProposalId;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 
+import java.util.Set;
+
 /**
- * Created by Samir on 4/7/2015.
+ * Created by User on 7/1/2015.
  */
 @EqualsAndHashCode(of = "userName")
 @Getter
@@ -17,14 +23,24 @@ public class GLProposalProcessor {
     public GLProposalProcessor(String userName) {
         this.userName = userName;
     }
+    public GroupLifeProposal createProposal(String quotationId, ProposalId proposalId,GroupLifeProposalFactory groupLifeProposalFactory) {
+        return  groupLifeProposalFactory.createProposal(quotationId,proposalId);
+    }
 
+    public GroupLifeProposal updateWithAgentId(GroupLifeProposal groupLifeProposal, AgentId agentId) {
+        return groupLifeProposal.updateWithAgentId(agentId);
+    }
 
-    public GroupLifeProposal createGroupLifeProposal(ProposalId proposalId,String proposalNumber,GroupLifeQuotation groupLifeQuotation) {
+    public GroupLifeProposal updateWithProposer(GroupLifeProposal groupLifeProposal, Proposer proposer) {
+        return groupLifeProposal.updateWithProposer(proposer);
+    }
 
-            GroupLifeProposal groupLifeProposal = GroupLifeProposal.createGroupLifeProposal(proposalId,groupLifeQuotation.getQuotationId(),proposalNumber,
-                    groupLifeQuotation.getAgentId(),groupLifeQuotation.getProposer(),groupLifeQuotation.getInsureds(),groupLifeQuotation.getPremiumDetail(),
-                    GLProposalStatus.PENDING_FIRST_PREMIUM);
+    public GroupLifeProposal updateWithInsured(GroupLifeProposal groupLifeProposal, Set
+            <Insured> insureds) {
+        return groupLifeProposal.updateWithInsureds(insureds);
+    }
 
-        return null;
+    public GroupLifeProposal updateWithPremiumDetail(GroupLifeProposal groupLifeProposal, PremiumDetail premiumDetail) {
+        return groupLifeProposal.updateWithPremiumDetail(premiumDetail);
     }
 }

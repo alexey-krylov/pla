@@ -16,7 +16,7 @@ public class UpdateGLProposalWithProposerCommand {
 
     private ProposerDto proposerDto;
 
-    private String quotationId;
+    private String proposalId;
 
     private UserDetails userDetails;
 }
