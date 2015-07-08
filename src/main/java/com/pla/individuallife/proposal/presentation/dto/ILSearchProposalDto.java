@@ -28,7 +28,5 @@ public class ILSearchProposalDto {
 
     private String createdOn;
 
-    private String version;
-
     private String ProposalStatus;
 }

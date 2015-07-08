@@ -6,6 +6,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import javax.persistence.Embedded;
+
 /**
  * Created by Prasant on 12-Jun-15.
  */
@@ -14,6 +16,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Question {
+    @Embedded
     private QuestionId questionId;
     private boolean answer;
     private String answerResponse;

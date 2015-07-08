@@ -13,6 +13,6 @@ public class FamilyPersonalDetail {
     private FamilyHistoryDetail familyHistory;
     private HabitDetails habit;
     private BuildDetail build;
-    private boolean isPregnant;
+    private Boolean isPregnant;
     private int pregnancyMonth;
 }

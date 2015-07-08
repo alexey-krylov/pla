@@ -89,6 +89,15 @@ public class ILProposalFinder {
         return namedParameterJdbcTemplate.queryForMap(FIND_AGENT_BY_ID_QUERY, new MapSqlParameterSource().addValue("agentId", agentId));
     }
 
+    public String getAgentFullNameById(String agentId) {
+        Preconditions.checkArgument(UtilValidator.isNotEmpty(agentId));
+        Map<String, Object> map = namedParameterJdbcTemplate.queryForMap(FIND_AGENT_BY_ID_QUERY, new MapSqlParameterSource().addValue("agentId", agentId));
+        if (map.get("lastName") != null)
+            return map.get("firstName") + " " + map.get("lastName");
+        else
+            return map.get("firstName").toString();
+    }
+
     public List<Map<String, Object>> findAllOptionalCoverages(String planId) {
         // Query against the view
         List<Map<String, Object>> resultSet = namedParameterJdbcTemplate.queryForList("select DISTINCT * from plan_coverage where plan_id in (:planId) " +
@@ -240,13 +249,13 @@ public class ILProposalFinder {
         @Override
         public ILSearchProposalDto apply(Map map) {
             String proposalId = map.get("_id").toString();
-            LocalDate generatedOn = map.get("generatedOn") != null ? new LocalDate((Date) map.get("generatedOn")) : null;
+            String generatedOn = map.get("generatedOn") != null ? (String) map.get("generatedOn") : "";
             String proposalStatus = map.get("proposalStatus") != null ? (String) map.get("proposalStatus") : "";
             String proposalNumber = map.get("proposalNumber") != null ? (String) map.get("proposalNumber") : "";
             Proposer proposerMap = map.get("proposer") != null ? (Proposer) map.get("proposer") : null;
-            String proposerName = proposerMap != null ? proposerMap.getFirstName() : "";
-            String agentIds = ((AgentCommissionShareModel) map.get("agentCommissionShareModel")).getCommissionShare().stream().map(x -> x.getAgentId().toString()).collect(Collectors.joining(","));
-            ILSearchProposalDto ilSearchProposalDto = new ILSearchProposalDto(proposalNumber, proposerName, "NRCNumber", agentIds, "Agent Code", proposalId, "createdOn", "version", proposalStatus);
+            String proposerName = proposerMap != null ? proposerMap.getFirstName() + " " + proposerMap.getSurname() : "";
+            String agentNames = ((AgentCommissionShareModel) map.get("agentCommissionShareModel")).getCommissionShare().stream().map(x -> getAgentFullNameById(x.getAgentId().toString())).collect(Collectors.joining(" , "));
+            ILSearchProposalDto ilSearchProposalDto = new ILSearchProposalDto(proposalNumber, proposerName, "NRCNumber", agentNames, "Agent Code", proposalId, generatedOn, proposalStatus);
             return ilSearchProposalDto;
         }
     }
@@ -279,7 +288,7 @@ public class ILProposalFinder {
         AgentCommissionShareModel model = (AgentCommissionShareModel) proposal.get("agentCommissionShareModel");
 
         Set<AgentDetailDto> agentCommissionDetails = new HashSet<AgentDetailDto>();
-        model.getCommissionShare().forEach(commissionShare -> agentCommissionDetails.add(new AgentDetailDto(commissionShare.getAgentId().toString(), commissionShare.getAgentCommission())));
+        model.getCommissionShare().forEach(commissionShare -> agentCommissionDetails.add(new AgentDetailDto(commissionShare.getAgentId().toString(), getAgentFullNameById(commissionShare.getAgentId().toString()), commissionShare.getAgentCommission())));
         dto.setAgentCommissionDetails(agentCommissionDetails);
         dto.setProposalId(proposalId);
         dto.setProposalStatus(proposal.get("proposalStatus").toString());

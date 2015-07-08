@@ -16,5 +16,6 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 public class AgentDetailDto {
     private String agentId;
+    private String agentName;
     private BigDecimal commission;
 }

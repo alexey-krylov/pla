@@ -11,7 +11,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 public class ParentDetail {
-    private boolean isAlive;
+    private Boolean isAlive;
     private  String healthState;
     private int deathAge;
     private  String deathCause;
