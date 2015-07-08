@@ -25,6 +25,7 @@ import java.util.stream.Collectors;
 import static com.pla.sharedkernel.domain.model.ProcessType.QUOTATION;
 import static com.pla.sharedkernel.domain.model.ProcessType.PROPOSAL;
 import static com.pla.sharedkernel.exception.ProcessInfoException.raiseProcessTypeNotFoundException;
+import static org.nthdimenzion.utils.UtilValidator.isEmpty;
 
 
 /**
@@ -185,9 +186,29 @@ public class ProductLineGeneralInformation {
                 EnrollmentProcessInformation enrollmentProcessInformation = (EnrollmentProcessInformation) processTypeMap.get(processType);
                 return enrollmentProcessInformation.getTheProductLineProcessTypeValue(productLineProcessType);
             default:
-                  raiseProcessTypeNotFoundException(processType.name());
+                raiseProcessTypeNotFoundException(processType.name());
         }
         return 0;
     }
 
+    public int getPremiumFollowUpFrequencyLineItem(PremiumFrequency premiumFrequency, ProductLineProcessType productLineProcessType) throws ProcessInfoException {
+        if(isEmpty(premiumFollowUpFrequency)){
+            raiseProcessTypeNotFoundException("Premium FollowUp Frequency");
+        }
+       return premiumFollowUpFrequency.parallelStream().filter(new Predicate<PremiumFollowUpFrequency>() {
+            @Override
+            public boolean test(PremiumFollowUpFrequency premiumFollowUpFrequency) {
+                return premiumFollowUpFrequency.getPremiumFrequency().equals(premiumFrequency);
+            }}).map(new Function<PremiumFollowUpFrequency, Integer>() {
+            @Override
+            public Integer apply(PremiumFollowUpFrequency premiumFollowUpFrequency) {
+                try {
+                    return premiumFollowUpFrequency.getTheProductLineProcessTypeValue(productLineProcessType);
+                } catch (ProcessInfoException e) {
+                    e.printStackTrace();
+                }
+                return 0;
+            }
+        }).findAny().get();
+    }
 }

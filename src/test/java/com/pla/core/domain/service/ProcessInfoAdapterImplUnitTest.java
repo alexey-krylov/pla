@@ -2,6 +2,7 @@ package com.pla.core.domain.service;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import com.pla.publishedlanguage.domain.model.PremiumFrequency;
 import com.pla.sharedkernel.exception.ProcessInfoException;
 import com.pla.sharedkernel.domain.model.ProcessType;
 import com.pla.core.domain.model.generalinformation.ProductLineGeneralInformation;
@@ -35,6 +36,11 @@ public class ProcessInfoAdapterImplUnitTest {
     List<Map<ProductLineProcessType,Integer>> listOfProcessItems = Lists.newArrayList();
     Map<ProductLineProcessType,Integer> productLineProcessItemMap;
 
+    List<Map<ProductLineProcessType,Integer>> listOfAnnualPremiumFrequencyProcessItems;
+    List<Map<ProductLineProcessType,Integer>> listOfSemiAnnualPremiumFrequencyProcessItems;
+    List<Map<ProductLineProcessType,Integer>> listOfQuarterlyPremiumFrequencyProcessItems;
+    List<Map<ProductLineProcessType,Integer>> listOfMonthlyPremiumFrequencyProcessItems;
+
     @Before
     public void setUp(){
         processInfoAdapter = new ProcessInfoAdapterImpl(generalInformationService);
@@ -57,6 +63,71 @@ public class ProcessInfoAdapterImplUnitTest {
         productLineProcessItemMap = Maps.newLinkedHashMap();
         productLineProcessItemMap.put(ProductLineProcessType.CLOSURE, 14);
         listOfProcessItems.add(productLineProcessItemMap);
+
+        /*
+        * Annual Premium Follow up frequency
+        * */
+        listOfAnnualPremiumFrequencyProcessItems = Lists.newArrayList();
+        Map<ProductLineProcessType,Integer> productLineProcessItemMap  = Maps.newLinkedHashMap();
+        productLineProcessItemMap.put(ProductLineProcessType.SECOND_REMAINDER, 51);
+        listOfAnnualPremiumFrequencyProcessItems.add(productLineProcessItemMap);
+
+        productLineProcessItemMap = Maps.newLinkedHashMap();
+        productLineProcessItemMap.put(ProductLineProcessType.FIRST_REMAINDER,52);
+        listOfAnnualPremiumFrequencyProcessItems.add(productLineProcessItemMap);
+
+        productLineProcessItemMap = Maps.newLinkedHashMap();
+        productLineProcessItemMap.put(ProductLineProcessType.LAPSE, 53);
+        listOfAnnualPremiumFrequencyProcessItems.add(productLineProcessItemMap);
+
+        /*
+        * Semi Annual Premium Follow up frequency
+        * */
+        listOfSemiAnnualPremiumFrequencyProcessItems = Lists.newArrayList();
+        Map<ProductLineProcessType,Integer> semiAnnualProductLineProcessItemMap  = Maps.newLinkedHashMap();
+        semiAnnualProductLineProcessItemMap.put(ProductLineProcessType.SECOND_REMAINDER, 21);
+        listOfSemiAnnualPremiumFrequencyProcessItems.add(semiAnnualProductLineProcessItemMap);
+
+        semiAnnualProductLineProcessItemMap = Maps.newLinkedHashMap();
+        semiAnnualProductLineProcessItemMap.put(ProductLineProcessType.FIRST_REMAINDER,22);
+        listOfSemiAnnualPremiumFrequencyProcessItems.add(semiAnnualProductLineProcessItemMap);
+
+        semiAnnualProductLineProcessItemMap = Maps.newLinkedHashMap();
+        semiAnnualProductLineProcessItemMap.put(ProductLineProcessType.LAPSE, 24);
+        listOfSemiAnnualPremiumFrequencyProcessItems.add(semiAnnualProductLineProcessItemMap);
+
+        /*
+        * Quarterly Premium Follow up frequency
+        * */
+        listOfQuarterlyPremiumFrequencyProcessItems = Lists.newArrayList();
+        Map<ProductLineProcessType,Integer> quarterlyProductLineProcessItemMap  = Maps.newLinkedHashMap();
+        quarterlyProductLineProcessItemMap.put(ProductLineProcessType.SECOND_REMAINDER, 31);
+        listOfQuarterlyPremiumFrequencyProcessItems.add(quarterlyProductLineProcessItemMap);
+
+        quarterlyProductLineProcessItemMap = Maps.newLinkedHashMap();
+        quarterlyProductLineProcessItemMap.put(ProductLineProcessType.FIRST_REMAINDER,31);
+        listOfQuarterlyPremiumFrequencyProcessItems.add(quarterlyProductLineProcessItemMap);
+
+        quarterlyProductLineProcessItemMap = Maps.newLinkedHashMap();
+        quarterlyProductLineProcessItemMap.put(ProductLineProcessType.LAPSE, 34);
+        listOfQuarterlyPremiumFrequencyProcessItems.add(quarterlyProductLineProcessItemMap);
+
+        /*
+        *
+        * Monthly Premium Follow up frequency
+        * */
+        listOfMonthlyPremiumFrequencyProcessItems = Lists.newArrayList();
+        Map<ProductLineProcessType,Integer> monthlyProductLineProcessItemMap  = Maps.newLinkedHashMap();
+        monthlyProductLineProcessItemMap.put(ProductLineProcessType.SECOND_REMAINDER, 11);
+        listOfMonthlyPremiumFrequencyProcessItems.add(monthlyProductLineProcessItemMap);
+
+        monthlyProductLineProcessItemMap = Maps.newLinkedHashMap();
+        monthlyProductLineProcessItemMap.put(ProductLineProcessType.FIRST_REMAINDER,12);
+        listOfMonthlyPremiumFrequencyProcessItems.add(monthlyProductLineProcessItemMap);
+
+        monthlyProductLineProcessItemMap = Maps.newLinkedHashMap();
+        monthlyProductLineProcessItemMap.put(ProductLineProcessType.LAPSE, 14);
+        listOfMonthlyPremiumFrequencyProcessItems.add(monthlyProductLineProcessItemMap);
 
     }
 
@@ -108,5 +179,66 @@ public class ProcessInfoAdapterImplUnitTest {
         when(generalInformationService.findProductLineInformationByLineOfBusinessId(LineOfBusinessEnum.GROUP_HEALTH)).thenReturn(productLineGeneralInformation);
         int closureTimePeriod =  processInfoAdapter.getDaysForSecondReminder(LineOfBusinessEnum.GROUP_HEALTH, ProcessType.ENDORSEMENT);
         assertThat(closureTimePeriod,is(11));
+    }
+
+    @Test
+    public void givenLineOfBusinessIdAndPremiumFollowUpFrequency_whenPremiumFrequencyIsAnnualAndProcessTypeIsLapseTimePeriod_thenItShouldReturnTheLapseTimePeriodOfAnnualPremiumFrequency() throws ProcessInfoException {
+        Map<PremiumFrequency, List<Map<ProductLineProcessType,Integer>>> premiumFollowUpFrequencyItems = Maps.newLinkedHashMap();
+        premiumFollowUpFrequencyItems.put(PremiumFrequency.ANNUALLY,listOfAnnualPremiumFrequencyProcessItems);
+        premiumFollowUpFrequencyItems.put(PremiumFrequency.SEMI_ANNUALLY,listOfSemiAnnualPremiumFrequencyProcessItems);
+        premiumFollowUpFrequencyItems.put(PremiumFrequency.QUARTERLY,listOfQuarterlyPremiumFrequencyProcessItems);
+        premiumFollowUpFrequencyItems.put(PremiumFrequency.MONTHLY,listOfMonthlyPremiumFrequencyProcessItems);
+        ProductLineGeneralInformation productLineGeneralInformation = ProductLineGeneralInformation.createProductLineGeneralInformation(LineOfBusinessEnum.GROUP_HEALTH);
+        productLineGeneralInformation = productLineGeneralInformation.withPremiumFollowUpMonthly(premiumFollowUpFrequencyItems);
+        when(generalInformationService.findProductLineInformationByLineOfBusinessId(LineOfBusinessEnum.GROUP_HEALTH)).thenReturn(productLineGeneralInformation);
+        int lapseTimePeriod =  processInfoAdapter.getLapseTimePeriod(LineOfBusinessEnum.GROUP_HEALTH, PremiumFrequency.ANNUALLY);
+        assertThat(lapseTimePeriod,is(53));
+    }
+
+
+    @Test
+    public void givenLineOfBusinessIdAndPremiumFollowUpFrequency_whenPremiumFrequencyIsSemiAnnualAndProcessTypeIsFirstReminder_thenItShouldReturnTheFirstReminderOfSemiAnnualPremiumFrequency() throws ProcessInfoException {
+        Map<PremiumFrequency, List<Map<ProductLineProcessType,Integer>>> premiumFollowUpFrequencyItems = Maps.newLinkedHashMap();
+        premiumFollowUpFrequencyItems.put(PremiumFrequency.ANNUALLY,listOfAnnualPremiumFrequencyProcessItems);
+        premiumFollowUpFrequencyItems.put(PremiumFrequency.SEMI_ANNUALLY,listOfSemiAnnualPremiumFrequencyProcessItems);
+        premiumFollowUpFrequencyItems.put(PremiumFrequency.QUARTERLY,listOfQuarterlyPremiumFrequencyProcessItems);
+        premiumFollowUpFrequencyItems.put(PremiumFrequency.MONTHLY,listOfMonthlyPremiumFrequencyProcessItems);
+        ProductLineGeneralInformation productLineGeneralInformation = ProductLineGeneralInformation.createProductLineGeneralInformation(LineOfBusinessEnum.GROUP_HEALTH);
+        productLineGeneralInformation = productLineGeneralInformation.withPremiumFollowUpMonthly(premiumFollowUpFrequencyItems);
+        when(generalInformationService.findProductLineInformationByLineOfBusinessId(LineOfBusinessEnum.GROUP_HEALTH)).thenReturn(productLineGeneralInformation);
+        int daysForFirstReminder =  processInfoAdapter.getDaysForFirstReminder(LineOfBusinessEnum.GROUP_HEALTH, PremiumFrequency.SEMI_ANNUALLY);
+        assertThat(daysForFirstReminder,is(22));
+    }
+
+    @Test
+    public void givenLineOfBusinessIdAndPremiumFollowUpFrequency_whenPremiumFrequencyIsQuarterlyAndProcessTypeIsFirstReminder_thenItShouldReturnTheSecondReminderOfQuarterlyPremiumFrequency() throws ProcessInfoException {
+        Map<PremiumFrequency, List<Map<ProductLineProcessType,Integer>>> premiumFollowUpFrequencyItems = Maps.newLinkedHashMap();
+        premiumFollowUpFrequencyItems.put(PremiumFrequency.ANNUALLY,listOfAnnualPremiumFrequencyProcessItems);
+        premiumFollowUpFrequencyItems.put(PremiumFrequency.SEMI_ANNUALLY,listOfSemiAnnualPremiumFrequencyProcessItems);
+        premiumFollowUpFrequencyItems.put(PremiumFrequency.QUARTERLY,listOfQuarterlyPremiumFrequencyProcessItems);
+        premiumFollowUpFrequencyItems.put(PremiumFrequency.MONTHLY,listOfMonthlyPremiumFrequencyProcessItems);
+        ProductLineGeneralInformation productLineGeneralInformation = ProductLineGeneralInformation.createProductLineGeneralInformation(LineOfBusinessEnum.GROUP_HEALTH);
+        productLineGeneralInformation = productLineGeneralInformation.withPremiumFollowUpMonthly(premiumFollowUpFrequencyItems);
+        when(generalInformationService.findProductLineInformationByLineOfBusinessId(LineOfBusinessEnum.GROUP_HEALTH)).thenReturn(productLineGeneralInformation);
+        int daysForSecondReminder =  processInfoAdapter.getDaysForSecondReminder(LineOfBusinessEnum.GROUP_HEALTH, PremiumFrequency.QUARTERLY);
+        assertThat(daysForSecondReminder,is(31));
+    }
+
+    @Test
+    public void givenLineOfBusinessIdAndPremiumFollowUpFrequency_whenPremiumFrequencyIsMonthlyAndProcessTypeIsLapseTimePeriod_thenItShouldReturnTheLapseTimePeriodOfMonthlyPremiumFrequency() throws ProcessInfoException {
+        Map<PremiumFrequency, List<Map<ProductLineProcessType,Integer>>> premiumFollowUpFrequencyItems = Maps.newLinkedHashMap();
+        premiumFollowUpFrequencyItems.put(PremiumFrequency.ANNUALLY,listOfAnnualPremiumFrequencyProcessItems);
+        premiumFollowUpFrequencyItems.put(PremiumFrequency.SEMI_ANNUALLY,listOfSemiAnnualPremiumFrequencyProcessItems);
+        premiumFollowUpFrequencyItems.put(PremiumFrequency.QUARTERLY,listOfQuarterlyPremiumFrequencyProcessItems);
+        premiumFollowUpFrequencyItems.put(PremiumFrequency.MONTHLY,listOfMonthlyPremiumFrequencyProcessItems);
+        ProductLineGeneralInformation productLineGeneralInformation = ProductLineGeneralInformation.createProductLineGeneralInformation(LineOfBusinessEnum.GROUP_HEALTH);
+        productLineGeneralInformation = productLineGeneralInformation.withPremiumFollowUpMonthly(premiumFollowUpFrequencyItems);
+        when(generalInformationService.findProductLineInformationByLineOfBusinessId(LineOfBusinessEnum.GROUP_HEALTH)).thenReturn(productLineGeneralInformation);
+        int lapseTimePeriod =  processInfoAdapter.getLapseTimePeriod(LineOfBusinessEnum.GROUP_HEALTH, PremiumFrequency.MONTHLY);
+        int daysForFirstReminder =  processInfoAdapter.getDaysForFirstReminder(LineOfBusinessEnum.GROUP_HEALTH, PremiumFrequency.MONTHLY);
+        int daysForSecondReminder =  processInfoAdapter.getDaysForSecondReminder(LineOfBusinessEnum.GROUP_HEALTH, PremiumFrequency.MONTHLY);
+        assertThat(lapseTimePeriod,is(14));
+        assertThat(daysForSecondReminder,is(11));
+        assertThat(daysForFirstReminder,is(12));
     }
 }

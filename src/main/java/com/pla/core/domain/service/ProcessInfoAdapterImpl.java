@@ -1,5 +1,6 @@
 package com.pla.core.domain.service;
 
+import com.pla.publishedlanguage.domain.model.PremiumFrequency;
 import com.pla.sharedkernel.domain.model.ProductLineProcessType;
 import com.pla.sharedkernel.exception.ProcessInfoException;
 import com.pla.sharedkernel.domain.model.ProcessType;
@@ -46,6 +47,24 @@ public class ProcessInfoAdapterImpl implements IProcessInfoAdapter {
     public int getDaysForSecondReminder(LineOfBusinessEnum lineOfBusinessEnum, ProcessType processType) throws ProcessInfoException {
         ProductLineGeneralInformation productLineGeneralInformation = generalInformationService.findProductLineInformationByLineOfBusinessId(lineOfBusinessEnum);
         return productLineGeneralInformation.getProductLineProcessItemValue(processType,ProductLineProcessType.SECOND_REMAINDER );
+    }
+
+    @Override
+     public int getLapseTimePeriod(LineOfBusinessEnum lineOfBusinessEnum, PremiumFrequency premiumFrequency) throws ProcessInfoException {
+        ProductLineGeneralInformation productLineGeneralInformation = generalInformationService.findProductLineInformationByLineOfBusinessId(lineOfBusinessEnum);
+        return productLineGeneralInformation.getPremiumFollowUpFrequencyLineItem(premiumFrequency, ProductLineProcessType.LAPSE);
+    }
+
+    @Override
+    public int getDaysForFirstReminder(LineOfBusinessEnum lineOfBusinessEnum,PremiumFrequency premiumFrequency) throws ProcessInfoException {
+        ProductLineGeneralInformation productLineGeneralInformation = generalInformationService.findProductLineInformationByLineOfBusinessId(lineOfBusinessEnum);
+        return productLineGeneralInformation.getPremiumFollowUpFrequencyLineItem(premiumFrequency, ProductLineProcessType.FIRST_REMAINDER);
+    }
+
+    @Override
+    public int getDaysForSecondReminder(LineOfBusinessEnum lineOfBusinessEnum,PremiumFrequency premiumFrequency) throws ProcessInfoException {
+        ProductLineGeneralInformation productLineGeneralInformation = generalInformationService.findProductLineInformationByLineOfBusinessId(lineOfBusinessEnum);
+        return productLineGeneralInformation.getPremiumFollowUpFrequencyLineItem(premiumFrequency, ProductLineProcessType.SECOND_REMAINDER);
     }
 
     @Override
