@@ -1,26 +1,39 @@
 package com.pla.individuallife.proposal.presentation.controller;
 
+import com.google.common.collect.Lists;
 import com.pla.core.query.AgentFinder;
 import com.pla.core.query.MasterFinder;
-import com.pla.individuallife.proposal.presentation.dto.ILProposalDto;
-import com.pla.individuallife.proposal.presentation.dto.ILSearchProposalDto;
-import com.pla.individuallife.proposal.presentation.dto.PremiumDetailDto;
-import com.pla.individuallife.proposal.presentation.dto.RiderDetailDto;
+import com.pla.core.query.PlanFinder;
+import com.pla.individuallife.proposal.application.command.*;
+import com.pla.individuallife.proposal.domain.model.GeneralDetails;
+import com.pla.individuallife.proposal.presentation.dto.*;
 import com.pla.individuallife.proposal.query.ILProposalFinder;
+import com.pla.individuallife.quotation.application.service.ILQuotationAppService;
+import com.pla.individuallife.quotation.presentation.dto.ILSearchQuotationDto;
+import com.pla.individuallife.quotation.query.ILQuotationFinder;
 import com.wordnik.swagger.annotations.ApiOperation;
+import org.axonframework.commandhandling.CommandBus;
+import org.axonframework.commandhandling.gateway.GatewayProxyFactory;
+import org.bson.types.ObjectId;
 import org.nthdimenzion.presentation.Result;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeoutException;
 
 import static com.google.common.base.Preconditions.checkArgument;
+import static org.nthdimenzion.presentation.AppUtils.getLoggedInUserDetail;
 
 /**
  * Created by pradyumna on 21-05-2015.
@@ -35,6 +48,250 @@ public class ILProposalController {
     private AgentFinder agentFinder;
     @Autowired
     private ILProposalFinder proposalFinder;
+
+    private final ILProposalCommandGateway proposalCommandGateway;
+
+    private final PlanFinder planFinder;
+
+    @Autowired
+    private ILQuotationFinder ilQuotationFinder;
+
+    @Autowired
+    private ILQuotationAppService ilQuotationService;
+
+    @Autowired
+    public ILProposalController(CommandBus commandBus, PlanFinder planFinder) {
+        this.planFinder = planFinder;
+        GatewayProxyFactory factory = new GatewayProxyFactory(commandBus);
+        proposalCommandGateway = factory.createGateway(ILProposalCommandGateway.class);
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "/create")
+    public ResponseEntity<Map> createProposal(@RequestBody ILCreateProposalCommand createProposalCommand, BindingResult bindingResult, HttpServletRequest request) {
+        String proposalId = null;
+
+        if (bindingResult.hasErrors()) {
+            return new ResponseEntity(bindingResult.getAllErrors(), HttpStatus.PRECONDITION_FAILED);
+        }
+        try {
+            proposalId = new ObjectId().toString();
+            UserDetails userDetails = getLoggedInUserDetail(request);
+            createProposalCommand.setUserDetails(userDetails);
+            createProposalCommand.setProposalId(proposalId);
+            proposalCommandGateway.createProposal(createProposalCommand);
+        } catch (TimeoutException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        Map map = new HashMap<>();
+        map.put("message", "Proposal got created successfully");
+        map.put("proposalId", proposalId);
+        return new ResponseEntity(map, HttpStatus.OK);
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "/updateproposer")
+    public ResponseEntity<Map> updateWithProposerDetails(@RequestBody ILProposalUpdateWithProposerCommand cmd, BindingResult bindingResult, HttpServletRequest request) {
+        String proposalId = cmd.getProposalId();
+        if (bindingResult.hasErrors()) {
+            return new ResponseEntity(bindingResult.getAllErrors(), HttpStatus.PRECONDITION_FAILED);
+        }
+        try {
+            UserDetails userDetails = getLoggedInUserDetail(request);
+            cmd.setUserDetails(userDetails);
+            proposalCommandGateway.updateWithProposer(cmd);
+        } catch (TimeoutException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        Map map = new HashMap<>();
+        map.put("message", "Proposal updated with Proposer Details successfully");
+        map.put("proposalId", proposalId);
+        return new ResponseEntity(map, HttpStatus.OK);
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "/updateplan")
+    public ResponseEntity<Map> updateWithPlanDetails(@RequestBody ILProposalUpdateWithPlanAndBeneficiariesCommand cmd, BindingResult bindingResult, HttpServletRequest request) {
+        String proposalId = cmd.getProposalId();
+        if (bindingResult.hasErrors()) {
+            return new ResponseEntity(bindingResult.getAllErrors(), HttpStatus.PRECONDITION_FAILED);
+        }
+        try {
+            UserDetails userDetails = getLoggedInUserDetail(request);
+            cmd.setUserDetails(userDetails);
+            proposalCommandGateway.updateWithPlandetail(cmd);
+        } catch (TimeoutException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        Map map = new HashMap<>();
+        map.put("message", "Proposal updated with Plan and Beneficiary Details successfully");
+        map.put("proposalId", proposalId);
+        return new ResponseEntity(map, HttpStatus.OK);
+    }
+
+
+    @ResponseBody
+    @RequestMapping(value = "/updatecompulsoryhealthstatement", method = RequestMethod.POST)
+    public ResponseEntity<Map> updateCompulsoryHealthStatement(
+            @RequestBody ILProposalUpdateCompulsoryHealthStatementCommand cmd,
+            HttpServletRequest request,
+            BindingResult bindingResult) {
+        String proposalId = cmd.getProposalId();
+        if (bindingResult.hasErrors()) {
+            return new ResponseEntity(bindingResult.getAllErrors(), HttpStatus.PRECONDITION_FAILED);
+        }
+        try {
+            UserDetails userDetails = getLoggedInUserDetail(request);
+            cmd.setUserDetails(userDetails);
+            proposalCommandGateway.updateCompulsoryHealthStatement(cmd);
+        } catch (TimeoutException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        List<QuestionDto> list = cmd.getCompulsoryHealthDetails();
+        Map map = new HashMap<>();
+        map.put("message", "Proposal updated with Compulsory Health Statement Details successfully");
+        map.put("proposalId", proposalId);
+        map.put("questions", list);
+        return new ResponseEntity(map, HttpStatus.OK);
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "/updategeneraldetails", method = RequestMethod.POST)
+    public ResponseEntity<Map> updateGeneralDetails(
+            @RequestBody ILProposalUpdateGeneralDetailsCommand cmd,
+            HttpServletRequest request,
+            BindingResult bindingResult) {
+        String proposalId = cmd.getProposalId();
+        if (bindingResult.hasErrors()) {
+            return new ResponseEntity(bindingResult.getAllErrors(), HttpStatus.PRECONDITION_FAILED);
+        }
+        try {
+            UserDetails userDetails = getLoggedInUserDetail(request);
+            cmd.setUserDetails(userDetails);
+            proposalCommandGateway.updateGeneralDetails(cmd);
+        } catch (TimeoutException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        GeneralDetails questions = cmd.getGeneralDetails();
+        Map map = new HashMap<>();
+        map.put("message", "Proposal updated with General Details successfully");
+        map.put("proposalId", proposalId);
+        map.put("questions", questions);
+        return new ResponseEntity(map, HttpStatus.OK);
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "/updateadditionaldetails", method = RequestMethod.POST)
+    public ResponseEntity<Map> updateAdditionalDetails(
+            @RequestBody ILProposalUpdateAdditionalDetailsCommand cmd,
+            HttpServletRequest request,
+            BindingResult bindingResult) {
+        String proposalId = cmd.getProposalId();
+        if (bindingResult.hasErrors()) {
+            return new ResponseEntity(bindingResult.getAllErrors(), HttpStatus.PRECONDITION_FAILED);
+        }
+        try {
+            UserDetails userDetails = getLoggedInUserDetail(request);
+            cmd.setUserDetails(userDetails);
+            proposalCommandGateway.updateAdditionalDetails(cmd);
+        } catch (TimeoutException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        Map map = new HashMap<>();
+        map.put("message", "Proposal updated with Additional Details successfully");
+        map.put("proposalId", proposalId);
+        return new ResponseEntity(map, HttpStatus.OK);
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "/updatefamily", method = RequestMethod.POST)
+    public ResponseEntity updateFamilyPersonalDetails(@RequestBody ILProposalUpdateFamilyPersonalDetailsCommand cmd, HttpServletRequest request,
+                                                      BindingResult bindingResult) {
+
+        String proposalId = cmd.getProposalId();
+        if (bindingResult.hasErrors()) {
+            return new ResponseEntity(bindingResult.getAllErrors(), HttpStatus.PRECONDITION_FAILED);
+        }
+
+        try {
+            UserDetails userDetails = getLoggedInUserDetail(request);
+            cmd.setUserDetails(userDetails);
+            proposalCommandGateway.updateFamilyPersonal(cmd);
+        } catch (TimeoutException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        Map map = new HashMap<>();
+        map.put("message", "Proposal updated with Family and Personal Details successfully");
+        map.put("proposalId", proposalId);
+        return new ResponseEntity(map, HttpStatus.OK);
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "/updatepremiumpaymentdetails", method = RequestMethod.POST)
+    public ResponseEntity updatePremiumPaymentDetails(@RequestBody ILProposalUpdatePremiumPaymentDetailsCommand cmd, HttpServletRequest request,
+                                                      BindingResult bindingResult) {
+
+        String proposalId = cmd.getProposalId();
+        if (bindingResult.hasErrors()) {
+            return new ResponseEntity(bindingResult.getAllErrors(), HttpStatus.PRECONDITION_FAILED);
+        }
+
+        try {
+            UserDetails userDetails = getLoggedInUserDetail(request);
+            cmd.setUserDetails(userDetails);
+            proposalCommandGateway.updatePremiumPaymentDetails(cmd);
+        } catch (TimeoutException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        Map map = new HashMap<>();
+        map.put("message", "Proposal updated with Premium Payment Details successfully");
+        map.put("proposalId", proposalId);
+        return new ResponseEntity(map, HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/searchQuotation", method = RequestMethod.POST)
+    public ModelAndView searchQuotation(ILSearchQuotationDto searchIlDto) {
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.addObject("searchResult", ilQuotationService.searchQuotation(searchIlDto));
+        modelAndView.addObject("searchCriteria", searchIlDto);
+        modelAndView.setViewName("pla/individuallife/proposal/searchquotationforilproposal");
+        return modelAndView;
+    }
+
+    @RequestMapping(method = RequestMethod.POST)
+    public ModelAndView searchProposal(ILSearchProposalDto ilSearchProposalDto) {
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("pla/individuallife/proposal/index");
+        try {
+            modelAndView.addObject("searchResult", proposalFinder.searchProposal(ilSearchProposalDto));
+        } catch (Exception e) {
+            modelAndView.addObject("searchResult", Lists.newArrayList());
+        }
+        modelAndView.addObject("searchCriteria", ilSearchProposalDto);
+        return modelAndView;
+    }
+
 
     /**
      * For routing of proposal list page to the index.html page under core/plan.
@@ -78,11 +335,10 @@ public class ILProposalController {
     @ApiOperation(httpMethod = "GET", value = "This call to get proposal number")
     @ResponseBody
     public String getProposalNumberById(@PathVariable("proposalId") String proposalId) {
-        String  proposalNumber = proposalFinder.getProposalNumberById(proposalId);
+        String proposalNumber = proposalFinder.getProposalNumberById(proposalId);
         checkArgument(proposalNumber != null, "Proposal number not found");
         return proposalNumber;
     }
-
 
 
     @RequestMapping(value = "/getPage/{pageName}", method = RequestMethod.GET)
@@ -105,6 +361,7 @@ public class ILProposalController {
         modelAndView.setViewName("pla/individuallife/proposal/searchquotationforilproposal");
         return modelAndView;
     }
+
     @RequestMapping(method = RequestMethod.GET, value = "/getAllOccupation")
     @ResponseBody
     public List<Map<String, Object>> getAllOccupationClassification() {
