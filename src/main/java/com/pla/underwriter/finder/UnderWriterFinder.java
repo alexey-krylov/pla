@@ -8,6 +8,7 @@ import com.google.common.collect.Lists;
 import com.pla.publishedlanguage.dto.UnderWriterRoutingLevelDetailDto;
 import com.pla.sharedkernel.domain.model.ProcessType;
 import com.pla.sharedkernel.identifier.CoverageId;
+import com.pla.sharedkernel.identifier.PlanId;
 import com.pla.sharedkernel.identifier.UnderWriterDocumentId;
 import com.pla.underwriter.domain.model.UnderWriterDocument;
 import com.pla.underwriter.domain.model.UnderWriterInfluencingFactor;
@@ -76,13 +77,12 @@ public class UnderWriterFinder {
 
     public static final String FIND_DOCUMENT_DETAIL_BY_DOCUMENT_CODE = "SELECT documentName,documentCode FROM document_view WHERE documentCode in(:documentIds)";
 
-    public static final String FIND_PLAN_COVERAGE_DETAIL_BY_PLAN_CODE = "SELECT DISTINCT planName,c.coverage_name coverageName FROM  plan_coverage_benefit_assoc_view p INNER JOIN coverage c " +
+    public static final String FIND_PLAN_COVERAGE_DETAIL_BY_PLAN_CODE = "SELECT DISTINCT planName,c.coverage_name coverageName,planCode FROM  plan_coverage_benefit_assoc_view p INNER JOIN coverage c " +
             "   ON coverageId = c.coverage_id " +
-            "   WHERE planCode=:code AND coverageId=:id AND optional ='1' ";
+            "   WHERE planId=:planId AND coverageId=:coverageId AND optional ='1' ";
 
-    public static final String FIND_PLAN_NAME_BY_CODE = "SELECT planName FROM plan_coverage_benefit_assoc_view WHERE planCode =:code LIMIT 1";
+    public static final String FIND_PLAN_NAME_BY_CODE = "SELECT planName,planCode FROM plan_coverage_benefit_assoc_view WHERE planId =:planId LIMIT 1";
 
-    public static final String FIND_PLAN_CODE_BY_PLAN_ID = "SELECT plan_code planCode FROM plan_coverage_benefit_assoc WHERE plan_id=:planId LIMIT 1";
 
 
 
@@ -93,7 +93,7 @@ public class UnderWriterFinder {
             Map<String, Object> underWriterDocumentMap = objectMapper.convertValue(underWriterDocument, Map.class);
             underWriterDocumentMap.put("processType", UnderWriterProcessType.valueOf((String) underWriterDocumentMap.get("processType")).getDescription());
             String coverageId = underWriterDocument.getCoverageId() != null ? underWriterDocument.getCoverageId().getCoverageId() : null;
-            underWriterDocumentMap = planCoverageDetailTransformer(coverageId, underWriterDocument.getPlanCode(), underWriterDocumentMap);
+            underWriterDocumentMap = planCoverageDetailTransformer(coverageId, underWriterDocument.getPlanId().getPlanId(), underWriterDocumentMap);
             underWriterDocumentMap.put("effectiveFrom", underWriterDocumentMap.get("effectiveFrom") != null ? DateTime.parse(underWriterDocumentMap.get("effectiveFrom").toString()).toString(AppConstants.DD_MM_YYY_FORMAT) : null);
             underWriterDocumentMap.put("validTill", underWriterDocumentMap.get("validTill") != null ? DateTime.parse(underWriterDocumentMap.get("validTill").toString()).toString(AppConstants.DD_MM_YYY_FORMAT) : null);
             underWriterDocumentList.add(underWriterDocumentMap);
@@ -108,7 +108,7 @@ public class UnderWriterFinder {
             Map underWritingRoutingLevelMap = objectMapper.convertValue(underWriterRoutingLevel, Map.class);
             underWritingRoutingLevelMap = underWriterInfluencingFactorAndProcessTypeTransformer(underWritingRoutingLevelMap);
             String coverageId = underWriterRoutingLevel.getCoverageId() != null ? underWriterRoutingLevel.getCoverageId().getCoverageId() : null;
-            underWritingRoutingLevelMap = planCoverageDetailTransformer(coverageId, underWriterRoutingLevel.getPlanCode(), underWritingRoutingLevelMap);
+            underWritingRoutingLevelMap = planCoverageDetailTransformer(coverageId, underWriterRoutingLevel.getPlanId().getPlanId(), underWritingRoutingLevelMap);
             underWritingRoutingLevelMap.put("effectiveFrom", underWritingRoutingLevelMap.get("effectiveFrom") != null ? DateTime.parse(underWritingRoutingLevelMap.get("effectiveFrom").toString()).toString(AppConstants.DD_MM_YYY_FORMAT) : null);
             underWritingRoutingLevelMap.put("validTill", underWritingRoutingLevelMap.get("validTill") != null ? DateTime.parse(underWritingRoutingLevelMap.get("validTill").toString()).toString(AppConstants.DD_MM_YYY_FORMAT) : null);
             underWritingRoutingLevelList.add(underWritingRoutingLevelMap);
@@ -129,8 +129,7 @@ public class UnderWriterFinder {
     }
 
     public UnderWriterRoutingLevel findUnderWriterRoutingLevel(UnderWriterRoutingLevelDetailDto underWriterRoutingLevelDetailDto) {
-        String planCode = getFindPlanCodeByPlanId(underWriterRoutingLevelDetailDto.getPlanId().getPlanId());
-        List<UnderWriterRoutingLevel> underWriterRoutingLevel = underWriterRoutingLevelRepository.findByPlanCodeAndCoverageIdAndValidTillAndProcessType(planCode, underWriterRoutingLevelDetailDto.getCoverageId(),
+        List<UnderWriterRoutingLevel> underWriterRoutingLevel = underWriterRoutingLevelRepository.findByPlanCodeAndCoverageIdAndValidTillAndProcessType(underWriterRoutingLevelDetailDto.getPlanId(), underWriterRoutingLevelDetailDto.getCoverageId(),
                 null, underWriterRoutingLevelDetailDto.getProcess());
         checkArgument(isNotEmpty(underWriterRoutingLevel), "Under Writer Document can not be null");
         checkArgument(underWriterRoutingLevel.size() == 1);
@@ -141,8 +140,8 @@ public class UnderWriterFinder {
         return namedParameterJdbcTemplate.query(FIND_ALL_DOCUMENT_APPROVED_BY_SERVICE_PROVIDER, new ColumnMapRowMapper());
     }
 
-    public UnderWriterDocument getUnderWriterDocumentSetUp(String planCode, CoverageId coverageId, LocalDate effectiveFrom, String processType) {
-        List<UnderWriterDocument> underWriterDocument = underWriterDocumentRepository.findUnderWriterDocument(planCode, coverageId, effectiveFrom, null, processType);
+    public UnderWriterDocument getUnderWriterDocumentSetUp(PlanId planId, CoverageId coverageId, LocalDate effectiveFrom, String processType) {
+        List<UnderWriterDocument> underWriterDocument = underWriterDocumentRepository.findUnderWriterDocument(planId, coverageId, effectiveFrom, null, processType);
         checkArgument(isNotEmpty(underWriterDocument), "Under Writer Document can not be null");
         checkArgument(underWriterDocument.size() == 1);
         return underWriterDocument.get(0);
@@ -161,7 +160,7 @@ public class UnderWriterFinder {
             }
         }).collect(Collectors.toList());
         String coverageId = underWriterDocument.getCoverageId() != null ? underWriterDocument.getCoverageId().getCoverageId() : null;
-        underWriterDocumentMap = planCoverageDetailTransformer(coverageId, underWriterDocument.getPlanCode(), underWriterDocumentMap);
+        underWriterDocumentMap = planCoverageDetailTransformer(coverageId, underWriterDocument.getPlanId().getPlanId(), underWriterDocumentMap);
         underWriterDocumentMap.put("underWriterDocumentItems", underWriterLineItemList);
         return underWriterDocumentMap;
     }
@@ -170,20 +169,24 @@ public class UnderWriterFinder {
         return namedParameterJdbcTemplate.query(FIND_DOCUMENT_DETAIL_BY_DOCUMENT_CODE, new MapSqlParameterSource("documentIds", listOfDocumentCode), new ColumnMapRowMapper());
     }
 
-    private Map<String, Object> planCoverageDetailTransformer(String coverageId, String planCode, Map<String, Object> underWriterMap) {
+    private Map<String, Object> planCoverageDetailTransformer(String coverageId, String planId, Map<String, Object> underWriterMap) {
         underWriterMap.put("planName", "");
         underWriterMap.put("coverageName", "");
         if (isNotEmpty(coverageId)) {
-            SqlParameterSource sqlParameterSource = new MapSqlParameterSource("code", planCode).addValue("id", coverageId);
+            SqlParameterSource sqlParameterSource = new MapSqlParameterSource("planId", planId).addValue("coverageId", coverageId);
             List<Map<String, Object>> planCoverageDetail = namedParameterJdbcTemplate.query(FIND_PLAN_COVERAGE_DETAIL_BY_PLAN_CODE, sqlParameterSource, new ColumnMapRowMapper());
             if (isNotEmpty(planCoverageDetail)) {
                 underWriterMap.put("planName", planCoverageDetail.get(0).get("planName"));
                 underWriterMap.put("coverageName", planCoverageDetail.get(0).get("coverageName"));
+                underWriterMap.put("planCode", planCoverageDetail.get(0).get("planCode"));
             }
         } else {
-            SqlParameterSource sqlParameterSource = new MapSqlParameterSource("code", planCode);
-            String planName = (String) namedParameterJdbcTemplate.queryForMap(FIND_PLAN_NAME_BY_CODE, sqlParameterSource).get("planName");
-            underWriterMap.put("planName", planName);
+            SqlParameterSource sqlParameterSource = new MapSqlParameterSource("planId", planId);
+            List<Map<String,Object>> planDetailList =  namedParameterJdbcTemplate.query(FIND_PLAN_NAME_BY_CODE, sqlParameterSource, new ColumnMapRowMapper());
+            if (isNotEmpty(planDetailList)) {
+                underWriterMap.put("planName", planDetailList.get(0).get("planName"));
+                underWriterMap.put("planCode", planDetailList.get(0).get("planCode"));
+            }
         }
         return underWriterMap;
     }
@@ -205,12 +208,6 @@ public class UnderWriterFinder {
         SqlParameterSource sqlParameterSource = new MapSqlParameterSource("processType", processType.name()).addValue("planId", planId).addValue("coverageIds", coverageIds);
         findMandatoryDocumentByProcessType = isEmpty(coverageIdsInString) ? findMandatoryDocumentByProcessType + " AND md.coverage_id is null " : findMandatoryDocumentByProcessType + " AND md.coverage_id in (:coverageIds)";
         return namedParameterJdbcTemplate.query(findMandatoryDocumentByProcessType, sqlParameterSource, new ColumnMapRowMapper());
-    }
-
-    public String getFindPlanCodeByPlanId(String planId){
-        SqlParameterSource sqlParameterSource = new MapSqlParameterSource("planId", planId);
-        List<Map<String,Object>> planCodeList =  namedParameterJdbcTemplate.query(FIND_PLAN_CODE_BY_PLAN_ID, sqlParameterSource, new ColumnMapRowMapper());
-        return isNotEmpty(planCodeList)?(String)planCodeList.get(0).get("planCode"):null;
     }
 }
 

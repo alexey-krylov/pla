@@ -3,6 +3,7 @@ package com.pla.underwriter.domain.model;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.pla.sharedkernel.identifier.CoverageId;
+import com.pla.sharedkernel.identifier.PlanId;
 import com.pla.sharedkernel.identifier.UnderWriterDocumentId;
 import lombok.*;
 import org.joda.time.DateTime;
@@ -22,7 +23,7 @@ import static org.nthdimenzion.utils.UtilValidator.isNotEmpty;
  * Created by Admin on 4/27/2015.
  */
 @Document(collection = "under_writer_document")
-@Getter(value = AccessLevel.PACKAGE)
+@Getter
 @Setter(value = AccessLevel.PACKAGE)
 @NoArgsConstructor(access = AccessLevel.PACKAGE)
 @EqualsAndHashCode(of = {"underWriterDocumentId", "planId"})
@@ -31,33 +32,29 @@ public class UnderWriterDocument {
     @Id
     private UnderWriterDocumentId underWriterDocumentId;
 
-    @Getter
-    private String planCode;
+    private PlanId planId;
 
-    @Getter
     private CoverageId coverageId;
 
     private UnderWriterProcessType processType;
 
-    @Getter
     private Set<UnderWriterDocumentItem> underWriterDocumentItems;
 
     private List<UnderWriterInfluencingFactor> underWriterInfluencingFactors;
-
 
     private DateTime effectiveFrom;
 
     private DateTime validTill;
 
 
-    private UnderWriterDocument(UnderWriterDocumentId underWriterDocumentId,String planCode,UnderWriterProcessType processType,Set<UnderWriterDocumentItem> underWriterDocumentItems,List<UnderWriterInfluencingFactor> underWriterInfluencingFactors,DateTime effectiveFrom) {
+    private UnderWriterDocument(UnderWriterDocumentId underWriterDocumentId,PlanId planId,UnderWriterProcessType processType,Set<UnderWriterDocumentItem> underWriterDocumentItems,List<UnderWriterInfluencingFactor> underWriterInfluencingFactors,DateTime effectiveFrom) {
         checkArgument(underWriterDocumentId != null);
-        checkArgument(planCode != null);
+        checkArgument(planId != null);
         checkArgument(effectiveFrom != null);
         checkArgument(isNotEmpty(underWriterDocumentItems));
         checkArgument(isNotEmpty(underWriterInfluencingFactors));
         this.underWriterDocumentId = underWriterDocumentId;
-        this.planCode = planCode;
+        this.planId = planId;
         this.processType  = processType;
         this.underWriterDocumentItems = underWriterDocumentItems;
         this.underWriterInfluencingFactors=  underWriterInfluencingFactors;
@@ -65,14 +62,14 @@ public class UnderWriterDocument {
     }
 
 
-    public static UnderWriterDocument createUnderWriterDocumentWithPlan(UnderWriterDocumentId underWriterDocumentId,String planCode, UnderWriterProcessType processType,List<Map<Object, Map<String, Object>>> underWriterRoutingLevelDataFromExcel, List<UnderWriterInfluencingFactor> underWriterInfluencingFactors,DateTime effectiveFrom) {
+    public static UnderWriterDocument createUnderWriterDocumentWithPlan(UnderWriterDocumentId underWriterDocumentId,PlanId planId, UnderWriterProcessType processType,List<Map<Object, Map<String, Object>>> underWriterRoutingLevelDataFromExcel, List<UnderWriterInfluencingFactor> underWriterInfluencingFactors,DateTime effectiveFrom) {
         Set<UnderWriterDocumentItem>  underWriterDocumentItems =  withUnderWritingLevelItem(underWriterRoutingLevelDataFromExcel);
-        return new UnderWriterDocument(underWriterDocumentId,planCode,processType,underWriterDocumentItems,underWriterInfluencingFactors,effectiveFrom);
+        return new UnderWriterDocument(underWriterDocumentId,planId,processType,underWriterDocumentItems,underWriterInfluencingFactors,effectiveFrom);
     }
 
-    public static UnderWriterDocument createUnderWriterDocumentWithOptionalCoverage(UnderWriterDocumentId underWriterDocumentId ,String  planCode, CoverageId coverageId, UnderWriterProcessType processType, List<Map<Object, Map<String, Object>>> underWriterRoutingLevelDataFromExcel, List<UnderWriterInfluencingFactor> underWriterInfluencingFactors,DateTime effectiveFrom) {
+    public static UnderWriterDocument createUnderWriterDocumentWithOptionalCoverage(UnderWriterDocumentId underWriterDocumentId ,PlanId  planId, CoverageId coverageId, UnderWriterProcessType processType, List<Map<Object, Map<String, Object>>> underWriterRoutingLevelDataFromExcel, List<UnderWriterInfluencingFactor> underWriterInfluencingFactors,DateTime effectiveFrom) {
         Set<UnderWriterDocumentItem>  underWriterDocumentItems =  withUnderWritingLevelItem(underWriterRoutingLevelDataFromExcel);
-        UnderWriterDocument underWriterDocument =  new UnderWriterDocument(underWriterDocumentId,planCode,processType,underWriterDocumentItems,underWriterInfluencingFactors,effectiveFrom);
+        UnderWriterDocument underWriterDocument =  new UnderWriterDocument(underWriterDocumentId,planId,processType,underWriterDocumentItems,underWriterInfluencingFactors,effectiveFrom);
         underWriterDocument.coverageId = coverageId;
         return underWriterDocument;
     }
