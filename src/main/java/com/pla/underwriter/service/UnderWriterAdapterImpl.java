@@ -117,8 +117,7 @@ public class UnderWriterAdapterImpl implements IUnderWriterAdapter {
     }
 
     private List<String> findDefinedUnderWriterDocument(UnderWriterRoutingLevelDetailDto underWriterRoutingLevelDetailDto){
-        String planCode = underWriterFinder.getFindPlanCodeByPlanId(underWriterRoutingLevelDetailDto.getPlanId().getPlanId());
-        UnderWriterDocument underWriterDocument =  underWriterFinder.getUnderWriterDocumentSetUp(planCode, underWriterRoutingLevelDetailDto.getCoverageId(), underWriterRoutingLevelDetailDto.getEffectiveFrom(), underWriterRoutingLevelDetailDto.getProcess());
+        UnderWriterDocument underWriterDocument =  underWriterFinder.getUnderWriterDocumentSetUp(underWriterRoutingLevelDetailDto.getPlanId(), underWriterRoutingLevelDetailDto.getCoverageId(), underWriterRoutingLevelDetailDto.getEffectiveFrom(), underWriterRoutingLevelDetailDto.getProcess());
         boolean hasAllInfluencingFactor = underWriterDocument.hasAllInfluencingFactor(transformUnderWriterInfluencingFactor(underWriterRoutingLevelDetailDto.getUnderWriterInfluencingFactor()));
         if (!hasAllInfluencingFactor) {
             raiseInfluencingFactorMismatchException();

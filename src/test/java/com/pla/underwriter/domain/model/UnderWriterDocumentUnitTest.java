@@ -4,6 +4,7 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import com.pla.sharedkernel.identifier.CoverageId;
+import com.pla.sharedkernel.identifier.PlanId;
 import com.pla.sharedkernel.identifier.UnderWriterDocumentId;
 import org.joda.time.DateTime;
 import org.junit.Before;
@@ -56,11 +57,11 @@ public class UnderWriterDocumentUnitTest {
     @Test
     public void givenAPlanCodeAndUnderWriterInfluencingFactor_whenAllRequiredValuesAreNotNull_thenItShouldCreateTheUnderWriterDocumentWithPlan(){
         UnderWriterDocumentId underWriterRoutingLevelId = new UnderWriterDocumentId("UR001");
-        String planCode = "P001";
+        PlanId planId = new PlanId("P001");
         List<UnderWriterInfluencingFactor> underWriterInfluencingFactors = Lists.newArrayList(UnderWriterInfluencingFactor.AGE);
-        UnderWriterDocument  underWriterDocumentWithPlan  = UnderWriterDocument.createUnderWriterDocumentWithPlan(underWriterRoutingLevelId, planCode, UnderWriterProcessType.CLAIM, underWriterDocument, underWriterInfluencingFactors, new DateTime("2016-12-31"));
+        UnderWriterDocument  underWriterDocumentWithPlan  = UnderWriterDocument.createUnderWriterDocumentWithPlan(underWriterRoutingLevelId, planId, UnderWriterProcessType.CLAIM, underWriterDocument, underWriterInfluencingFactors, new DateTime("2016-12-31"));
         assertNotNull(underWriterDocumentWithPlan);
-        assertThat("P001", is(underWriterDocumentWithPlan.getPlanCode()));
+        assertThat(new PlanId("P001"), is(underWriterDocumentWithPlan.getPlanId()));
         assertThat(underWriterInfluencingFactors.size(),is(underWriterDocumentWithPlan.getUnderWriterInfluencingFactors().size()));
         assertNull(underWriterDocumentWithPlan.getCoverageId());
     }
@@ -68,12 +69,12 @@ public class UnderWriterDocumentUnitTest {
     @Test
     public void givenAPlanCodeCoverageIdAndUnderWriterInfluencingFactor_whenAllRequiredValuesAreNotNull_thenItShouldCreateTheUnderWriterDocumentWithPlanAndCoverage(){
         UnderWriterDocumentId underWriterDocumentId = new UnderWriterDocumentId("UR001");
-        String planCode ="P002";
+        PlanId planId = new PlanId("P002");
         CoverageId coverageId = new CoverageId("C002");
         List<UnderWriterInfluencingFactor> underWriterInfluencingFactors = Lists.newArrayList(UnderWriterInfluencingFactor.AGE);
-        UnderWriterDocument  underWriterDocumentWithOptionalCoverage  = UnderWriterDocument.createUnderWriterDocumentWithOptionalCoverage(underWriterDocumentId, planCode, coverageId, UnderWriterProcessType.CLAIM, underWriterDocument, underWriterInfluencingFactors, new DateTime("2016-12-31"));
+        UnderWriterDocument  underWriterDocumentWithOptionalCoverage  = UnderWriterDocument.createUnderWriterDocumentWithOptionalCoverage(underWriterDocumentId, planId, coverageId, UnderWriterProcessType.CLAIM, underWriterDocument, underWriterInfluencingFactors, new DateTime("2016-12-31"));
         assertNotNull(underWriterDocumentWithOptionalCoverage);
-        assertThat("P002", is(underWriterDocumentWithOptionalCoverage.getPlanCode()));
+        assertThat( new PlanId("P002"), is(underWriterDocumentWithOptionalCoverage.getPlanId()));
         assertThat(underWriterInfluencingFactors.size(),is(underWriterDocumentWithOptionalCoverage.getUnderWriterInfluencingFactors().size()));
         assertNotNull(underWriterDocumentWithOptionalCoverage.getCoverageId());
     }
@@ -81,10 +82,10 @@ public class UnderWriterDocumentUnitTest {
     @Test
     public void givenAExpireDate_thenItShouldAssignTheExpireDateToTheUnderWriterDocument(){
         UnderWriterDocumentId underWriterDocumentId = new UnderWriterDocumentId("UR001");
-        String planCode ="P002";
+        PlanId planId = new PlanId("P002");
         CoverageId coverageId = new CoverageId("C002");
         List<UnderWriterInfluencingFactor> underWriterInfluencingFactors = Lists.newArrayList(UnderWriterInfluencingFactor.AGE);
-        UnderWriterDocument  underWriterDocumentWithOptionalCoverage  = UnderWriterDocument.createUnderWriterDocumentWithOptionalCoverage(underWriterDocumentId, planCode, coverageId, UnderWriterProcessType.CLAIM, underWriterDocument, underWriterInfluencingFactors, new DateTime("2016-12-30"));
+        UnderWriterDocument  underWriterDocumentWithOptionalCoverage  = UnderWriterDocument.createUnderWriterDocumentWithOptionalCoverage(underWriterDocumentId, planId, coverageId, UnderWriterProcessType.CLAIM, underWriterDocument, underWriterInfluencingFactors, new DateTime("2016-12-30"));
         underWriterDocumentWithOptionalCoverage.expireUnderWriterDocument(new DateTime("2017-01-01"));
         assertThat(underWriterDocumentWithOptionalCoverage.getValidTill(),is(new DateTime("2017-01-01")));
     }

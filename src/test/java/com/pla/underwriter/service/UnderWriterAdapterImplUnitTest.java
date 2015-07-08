@@ -151,10 +151,10 @@ public class UnderWriterAdapterImplUnitTest {
         client.withClientDocument(clientBuilder.getClientDocuments());
 
         UnderWriterRoutingLevelId underWriterRoutingLevelId = new UnderWriterRoutingLevelId("UR001");
-        String planCode = "P001";
+        PlanId planId =  new PlanId("P001");
         List<UnderWriterInfluencingFactor> underWriterInfluencingFactors = Lists.newArrayList(UnderWriterInfluencingFactor.AGE,UnderWriterInfluencingFactor.SUM_ASSURED,UnderWriterInfluencingFactor.BMI,
                 UnderWriterInfluencingFactor.HEIGHT,UnderWriterInfluencingFactor.WEIGHT,UnderWriterInfluencingFactor.CLAIM_AMOUNT);
-        UnderWriterRoutingLevel underWriterRoutingLevel = UnderWriterRoutingLevel.createUnderWriterRoutingLevelWithPlan(underWriterRoutingLevelId, planCode, UnderWriterProcessType.CLAIM, underWriterDocumentItem, underWriterInfluencingFactors, new LocalDate("2016-12-31"));
+        UnderWriterRoutingLevel underWriterRoutingLevel = UnderWriterRoutingLevel.createUnderWriterRoutingLevelWithPlan(underWriterRoutingLevelId, planId, UnderWriterProcessType.CLAIM, underWriterDocumentItem, underWriterInfluencingFactors, new LocalDate("2016-12-31"));
         when(underWriterFinder.findUnderWriterRoutingLevel(underWriterRoutingLevelDetailDto)).thenReturn(underWriterRoutingLevel);
         when(clientRepository.findOne(anyObject())).thenReturn(client);
         RoutingLevel routingLevel =  underWriterAdapter.getRoutingLevel(underWriterRoutingLevelDetailDto);

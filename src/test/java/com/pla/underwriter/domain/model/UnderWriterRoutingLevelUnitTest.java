@@ -3,6 +3,7 @@ package com.pla.underwriter.domain.model;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.pla.sharedkernel.identifier.CoverageId;
+import com.pla.sharedkernel.identifier.PlanId;
 import com.pla.sharedkernel.identifier.UnderWriterRoutingLevelId;
 import com.pla.underwriter.service.UnderWriterTemplateParser;
 import org.joda.time.LocalDate;
@@ -94,11 +95,11 @@ public class UnderWriterRoutingLevelUnitTest {
     @Test
     public void givenAPlanCodeAndUnderWriterInfluencingFactor_whenAllRequiredValuesAreNotNull_thenItShouldCreateTheUnderWriterRoutingLevelWithPlan(){
         UnderWriterRoutingLevelId underWriterRoutingLevelId = new UnderWriterRoutingLevelId("UR001");
-        String planCode = "P001";
+        PlanId planId =  new PlanId("P001");
         List<UnderWriterInfluencingFactor> underWriterInfluencingFactors = Lists.newArrayList(UnderWriterInfluencingFactor.AGE);
-        UnderWriterRoutingLevel underWriterRoutingLevel = UnderWriterRoutingLevel.createUnderWriterRoutingLevelWithPlan(underWriterRoutingLevelId, planCode, UnderWriterProcessType.CLAIM, underWriterDocumentItem, underWriterInfluencingFactors, new LocalDate("2016-12-31"));
+        UnderWriterRoutingLevel underWriterRoutingLevel = UnderWriterRoutingLevel.createUnderWriterRoutingLevelWithPlan(underWriterRoutingLevelId, planId, UnderWriterProcessType.CLAIM, underWriterDocumentItem, underWriterInfluencingFactors, new LocalDate("2016-12-31"));
         assertNotNull(underWriterRoutingLevel);
-        assertThat("P001", is(underWriterRoutingLevel.getPlanCode()));
+        assertThat( new PlanId("P001"), is(underWriterRoutingLevel.getPlanId()));
         assertThat(underWriterInfluencingFactors.size(),is(underWriterRoutingLevel.getUnderWriterInfluencingFactors().size()));
         assertNull(underWriterRoutingLevel.getCoverageId());
     }
@@ -106,12 +107,12 @@ public class UnderWriterRoutingLevelUnitTest {
     @Test
     public void givenAPlanCodeCoverageIdAndUnderWriterInfluencingFactor_whenAllRequiredValuesAreNotNull_thenItShouldCreateTheUnderWriterRoutingLevelWithPlanAndCoverage(){
         UnderWriterRoutingLevelId underWriterRoutingLevelId = new UnderWriterRoutingLevelId("UR001");
-        String planCode = "P002";
+        PlanId planCode =  new PlanId("P002");
         CoverageId coverageId = new CoverageId("C002");
         List<UnderWriterInfluencingFactor> underWriterInfluencingFactors = Lists.newArrayList(UnderWriterInfluencingFactor.AGE);
         UnderWriterRoutingLevel underWriterRoutingLevel = UnderWriterRoutingLevel.createUnderWriterRoutingLevelWithOptionalCoverage(underWriterRoutingLevelId, planCode, coverageId, UnderWriterProcessType.CLAIM, underWriterDocumentItem, underWriterInfluencingFactors, new LocalDate("2016-12-31"));
         assertNotNull(underWriterRoutingLevel);
-        assertThat("P002", is(underWriterRoutingLevel.getPlanCode()));
+        assertThat( new PlanId("P002"), is(underWriterRoutingLevel.getPlanId()));
         assertThat(underWriterInfluencingFactors.size(),is(underWriterRoutingLevel.getUnderWriterInfluencingFactors().size()));
         assertNotNull(underWriterRoutingLevel.getCoverageId());
     }
@@ -141,10 +142,10 @@ public class UnderWriterRoutingLevelUnitTest {
 
     private UnderWriterRoutingLevel getUnderWriterRoutingLevel(){
         UnderWriterRoutingLevelId underWriterRoutingLevelId = new UnderWriterRoutingLevelId("UR001");
-        String planCode = "P002";
+        PlanId planId =  new PlanId("P002");
         CoverageId coverageId = new CoverageId("C002");
         List<UnderWriterInfluencingFactor> underWriterInfluencingFactors = Lists.newArrayList(UnderWriterInfluencingFactor.AGE,UnderWriterInfluencingFactor.SUM_ASSURED);
-        return UnderWriterRoutingLevel.createUnderWriterRoutingLevelWithOptionalCoverage(underWriterRoutingLevelId, planCode, coverageId, UnderWriterProcessType.CLAIM, underWriterDocumentItem, underWriterInfluencingFactors, new LocalDate("2016-12-30"));
+        return UnderWriterRoutingLevel.createUnderWriterRoutingLevelWithOptionalCoverage(underWriterRoutingLevelId, planId, coverageId, UnderWriterProcessType.CLAIM, underWriterDocumentItem, underWriterInfluencingFactors, new LocalDate("2016-12-30"));
     }
 
 }

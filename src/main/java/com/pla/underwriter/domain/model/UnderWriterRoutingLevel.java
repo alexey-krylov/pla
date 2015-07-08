@@ -2,6 +2,7 @@ package com.pla.underwriter.domain.model;
 
 import com.google.common.collect.Lists;
 import com.pla.sharedkernel.identifier.CoverageId;
+import com.pla.sharedkernel.identifier.PlanId;
 import com.pla.sharedkernel.identifier.UnderWriterRoutingLevelId;
 import lombok.*;
 import org.joda.time.LocalDate;
@@ -21,7 +22,7 @@ import static org.nthdimenzion.utils.UtilValidator.isNotEmpty;
  * Created by Admin on 4/27/2015.
  */
 @Document(collection = "under_writing_router")
-@Getter(value = AccessLevel.PACKAGE)
+@Getter
 @Setter(value = AccessLevel.PACKAGE)
 @NoArgsConstructor(access = AccessLevel.PACKAGE)
 @EqualsAndHashCode(of = {"underWriterRoutingLevelId", "planId"})
@@ -30,15 +31,12 @@ public class UnderWriterRoutingLevel {
     @Id
     private UnderWriterRoutingLevelId underWriterRoutingLevelId;
 
-    @Getter
-    private String planCode;
+    private PlanId planId;
 
-    @Getter
     private CoverageId coverageId;
 
     private UnderWriterProcessType processType;
 
-    @Getter
     private Set<UnderWritingRoutingLevelItem> underWritingRoutingLevelItems;
 
     private List<UnderWriterInfluencingFactor> underWriterInfluencingFactors;
@@ -48,14 +46,14 @@ public class UnderWriterRoutingLevel {
     private LocalDate validTill;
 
 
-    private UnderWriterRoutingLevel(UnderWriterRoutingLevelId underWriterRoutingLevelId, String planCode, UnderWriterProcessType processType, Set<UnderWritingRoutingLevelItem> underWritingRoutingLevelItems, List<UnderWriterInfluencingFactor> underWriterInfluencingFactors, LocalDate effectiveFrom) {
+    private UnderWriterRoutingLevel(UnderWriterRoutingLevelId underWriterRoutingLevelId, PlanId planId, UnderWriterProcessType processType, Set<UnderWritingRoutingLevelItem> underWritingRoutingLevelItems, List<UnderWriterInfluencingFactor> underWriterInfluencingFactors, LocalDate effectiveFrom) {
         checkArgument(underWriterRoutingLevelId != null);
-        checkArgument(planCode != null);
+        checkArgument(planId != null);
         checkArgument(effectiveFrom != null);
         checkArgument(isNotEmpty(underWritingRoutingLevelItems));
         checkArgument(isNotEmpty(underWriterInfluencingFactors));
         this.underWriterRoutingLevelId = underWriterRoutingLevelId;
-        this.planCode = planCode;
+        this.planId = planId;
         this.processType  = processType;
         this.underWritingRoutingLevelItems = underWritingRoutingLevelItems;
         this.underWriterInfluencingFactors=  underWriterInfluencingFactors;
@@ -63,14 +61,14 @@ public class UnderWriterRoutingLevel {
     }
 
 
-    public static UnderWriterRoutingLevel createUnderWriterRoutingLevelWithPlan(UnderWriterRoutingLevelId underWriterRoutingLevelId,String planCode, UnderWriterProcessType processType,  List<Map<Object, Map<String, Object>>>  underWriterRoutingLevelDataFromExcel, List<UnderWriterInfluencingFactor> underWriterInfluencingFactors,LocalDate effectiveFrom) {
+    public static UnderWriterRoutingLevel createUnderWriterRoutingLevelWithPlan(UnderWriterRoutingLevelId underWriterRoutingLevelId,PlanId planId, UnderWriterProcessType processType,  List<Map<Object, Map<String, Object>>>  underWriterRoutingLevelDataFromExcel, List<UnderWriterInfluencingFactor> underWriterInfluencingFactors,LocalDate effectiveFrom) {
         Set<UnderWritingRoutingLevelItem>  underWriterDocumentItems =  withUnderWritingLevelItem(underWriterRoutingLevelDataFromExcel);
-        return new UnderWriterRoutingLevel(underWriterRoutingLevelId,planCode,processType,underWriterDocumentItems,underWriterInfluencingFactors,effectiveFrom);
+        return new UnderWriterRoutingLevel(underWriterRoutingLevelId,planId,processType,underWriterDocumentItems,underWriterInfluencingFactors,effectiveFrom);
     }
 
-    public static UnderWriterRoutingLevel createUnderWriterRoutingLevelWithOptionalCoverage(UnderWriterRoutingLevelId underWriterRoutingLevelId ,String planCode, CoverageId coverageId, UnderWriterProcessType processType, List<Map<Object, Map<String, Object>>> underWriterRoutingLevelDataFromExcel, List<UnderWriterInfluencingFactor> underWriterInfluencingFactors,LocalDate effectiveFrom) {
+    public static UnderWriterRoutingLevel createUnderWriterRoutingLevelWithOptionalCoverage(UnderWriterRoutingLevelId underWriterRoutingLevelId ,PlanId planId, CoverageId coverageId, UnderWriterProcessType processType, List<Map<Object, Map<String, Object>>> underWriterRoutingLevelDataFromExcel, List<UnderWriterInfluencingFactor> underWriterInfluencingFactors,LocalDate effectiveFrom) {
         Set<UnderWritingRoutingLevelItem> underWriterDocumentItems =  withUnderWritingLevelItem(underWriterRoutingLevelDataFromExcel);
-        UnderWriterRoutingLevel underWriterDocument =  new UnderWriterRoutingLevel(underWriterRoutingLevelId,planCode,processType,underWriterDocumentItems,underWriterInfluencingFactors,effectiveFrom);
+        UnderWriterRoutingLevel underWriterDocument =  new UnderWriterRoutingLevel(underWriterRoutingLevelId,planId,processType,underWriterDocumentItems,underWriterInfluencingFactors,effectiveFrom);
         underWriterDocument.coverageId = coverageId;
         return underWriterDocument;
     }
