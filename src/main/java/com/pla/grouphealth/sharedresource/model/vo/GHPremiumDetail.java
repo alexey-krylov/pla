@@ -62,6 +62,7 @@ public class GHPremiumDetail {
     }
 
     public GHPremiumDetail updateWithOptedFrequencyPremium(PremiumFrequency premiumFrequency) {
+
         Optional<GHFrequencyPremium> policyOptional = this.frequencyPremiums.stream().filter(new Predicate<GHFrequencyPremium>() {
             @Override
             public boolean test(GHFrequencyPremium policy) {

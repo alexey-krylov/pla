@@ -2,8 +2,10 @@ angular.module('createProposal', ['common', 'ngRoute', 'mgcrea.ngStrap.select', 
     'angularFileUpload', 'mgcrea.ngStrap.dropdown', 'ngSanitize', 'commonServices'])
 
     .controller('proposalCtrl', ['$scope', '$http', '$timeout', '$upload', 'provinces', 'getProvinceAndCityDetail', 'globalConstants',
-        'agentDetails', 'stepsSaved', 'proposerDetails', 'proposalNumber', 'getQueryParameter', '$window',
-        function ($scope, $http, $timeout, $upload, provinces, getProvinceAndCityDetail, globalConstants, agentDetails, stepsSaved, proposerDetails, proposalNumber, getQueryParameter, $window) {
+        'agentDetails', 'stepsSaved', 'proposerDetails', 'proposalNumber', 'getQueryParameter', '$window', 'premiumData', 'documentList',
+        function ($scope, $http, $timeout, $upload, provinces, getProvinceAndCityDetail, globalConstants, agentDetails, stepsSaved, proposerDetails, proposalNumber,
+                  getQueryParameter, $window, premiumData, documentList) {
+
             var mode = getQueryParameter("mode");
             if (mode == 'view') {
                 $scope.isViewMode = true;
@@ -24,7 +26,7 @@ angular.module('createProposal', ['common', 'ngRoute', 'mgcrea.ngStrap.select', 
             $scope.selectedItem = 1;
 
             /*Holds the indicator for steps in which save button is clicked*/
-            $scope.setpsSaved = stepsSaved;
+            $scope.stepsSaved = stepsSaved;
 
             /*Inter id used for programmatic purpose*/
             $scope.proposalId = getQueryParameter('proposalId') || null;
@@ -36,34 +38,19 @@ angular.module('createProposal', ['common', 'ngRoute', 'mgcrea.ngStrap.select', 
 
             $scope.provinces = provinces;
 
-            $scope.documentList = [
-                {
-                    "documentName": "Document-ONE"
-                },
-                {
-                    "documentName": "Document-TWO"
-                },
-                {
-                    "documentName": "Document-THREE"
-                },
-                {
-                    "documentName": "Document-FOUR"
-                },
-                {
-                    "documentName": "Document-FIVE"
-                }
+            $scope.documentList = documentList;
 
-            ];
             $scope.uploadDocumentFiles = function () {
                 // console.log($scope.documentList.length);
                 for (var i = 0; i < $scope.documentList.length; i++) {
-                    var files = $scope.documentList[i].documentAttached;
+                    var document = $scope.documentList[i];
+                    var files = document.documentAttached;
                     // console.log(files);
                     if (files) {
-
                         $upload.upload({
-                            url: '/pla/core/proposal/uploadProposalDocument',
+                            url: '/pla/grouphealth/proposal/uploadmandatorydocuemnt',
                             file: files,
+                            fields: {documentId: document.documentId, proposalId: $scope.proposalId},
                             method: 'POST'
                         }).progress(function (evt) {
 
@@ -76,6 +63,38 @@ angular.module('createProposal', ['common', 'ngRoute', 'mgcrea.ngStrap.select', 
                 }
 
             };
+
+            $scope.additionalDocumentList = [{}, {}];
+
+            $scope.addAdditionalDocument = function () {
+                $scope.additionalDocumentList.unshift({});
+            };
+
+            $scope.removeAdditionalDocument = function (index) {
+                $scope.additionalDocumentList.splice(index, 1);
+            };
+
+            $scope.uploadAdditionalDocument = function () {
+                for (var i = 0; i < $scope.additionalDocumentList.length; i++) {
+                    var document = $scope.additionalDocumentList[i];
+                    var files = document.documentAttached;
+                    if (files) {
+                        $upload.upload({
+                            url: '/pla/grouphealth/proposal/uploadmandatorydocuemnt',
+                            file: files,
+                            fields: {documentId: document.documentName, proposalId: $scope.proposalId},
+                            method: 'POST'
+                        }).progress(function (evt) {
+
+                        }).success(function (data, status, headers, config) {
+                            //console.log('file ' + config.file.name + 'uploaded. Response: ' +
+                            // JSON.stringify(data));
+                        });
+                    }
+
+                }
+            };
+
             if ($scope.documentList) {
                 if ($scope.documentList.documentAttached) {
                     if ($scope.documentList.documentAttached.length == $scope.documentList.documentName.length) {
@@ -111,7 +130,22 @@ angular.module('createProposal', ['common', 'ngRoute', 'mgcrea.ngStrap.select', 
                     discounts: 0
                 }
             };
+
+
             $scope.proposalDetails.basic = agentDetails;
+
+            $scope.proposalDetails.premium = premiumData || {};
+
+            $scope.changeAgent = false;
+            console.log($scope.proposalDetails.basic['active']);
+            if (!$scope.proposalDetails.basic['active']) {
+                $('#agentModal').modal('show');
+                $scope.changeAgent = true;
+                $scope.stepsSaved["1"] = !$scope.changeAgent;
+            }
+            console.log(' $scope.changeAgent ' + $scope.changeAgent);
+
+
             $scope.proposalDetails.proposer = proposerDetails;
             /*used for bs-dropdown*/
             $scope.dropdown = [
@@ -164,7 +198,7 @@ angular.module('createProposal', ['common', 'ngRoute', 'mgcrea.ngStrap.select', 
             };
 
             $scope.isSaveDisabled = function (formName) {
-                //return formName.$invalid || ($scope.setpsSaved[$scope.selectedItem] && !$scope.isEditMode)
+                //return formName.$invalid || ($scope.stepsSaved[$scope.selectedItem] && !$scope.isEditMode)
             };
 
             $scope.searchAgent = function () {
@@ -186,7 +220,6 @@ angular.module('createProposal', ['common', 'ngRoute', 'mgcrea.ngStrap.select', 
                 return Math.round(x) === x;
             }
 
-
             function generateListOfInstallments(numberOfInstallments) {
                 $scope.numberOfInstallmentsDropDown = [];
                 for (var installment = 1; installment <= numberOfInstallments; installment++) {
@@ -194,54 +227,108 @@ angular.module('createProposal', ['common', 'ngRoute', 'mgcrea.ngStrap.select', 
                 }
             }
 
-            $scope.$watch('quotationDetails.premium.policyTermValue', function (newVal, oldVal) {
+            $scope.$watch('proposalDetails.premium.policyTermValue', function (newVal, oldVal) {
                 /*TODO check for the minimum amd maximum value for the policy term value*/
-                if (newVal && newVal != 365 && newVal >= 30 && newVal <= 999) {
+                if (newVal && newVal != 365 && newVal >= 30 && newVal <= 9999) {
                     /*used to toggle controls between dropdown and text*/
                     $scope.isPolicyTermNot365 = true;
                     /*used to show the error message when inappropriate value is entered*/
                     $scope.inappropriatePolicyTerm = false;
-                    var numberOfInstallments = newVal / 30;
-                    if (isInteger(numberOfInstallments)) {
-                        generateListOfInstallments(numberOfInstallments - 1)
-                    } else {
-                        generateListOfInstallments(Math.floor(numberOfInstallments));
-                    }
                 } else {
-                    if (newVal < 30 || newVal > 999) {
+                    console.log(' 2 ' + newVal);
+                    if (newVal < 30 || newVal > 9999) {
                         $scope.inappropriatePolicyTerm = true;
                     } else {
+                        $scope.inappropriatePolicyTerm = false;
                         $scope.isPolicyTermNot365 = false;
                     }
                 }
             });
 
+            $scope.selectedInstallment = premiumData.premiumInstallment;
+            $scope.installments = $scope.proposalDetails.premium.installments;
+            $scope.recalculatePremium = function () {
+                $scope.premiumInstallment = {};
+                $scope.proposalDetails.premium.premiumInstallment = $scope.selectedInstallment || null;
+                $http.post('/pla/grouphealth/proposal/recalculatePremium', angular.extend({},
+                    {premiumDetailDto: $scope.proposalDetails.premium},
+                    {"proposalId": $scope.proposalId})).success(function (data) {
+                    // console.log(data.data);
+                    $scope.proposalDetails.premium = data.data;
+                    $scope.proposalDetails.premium.totalPremium = data.data.totalPremium;
+                    if (data.data.annualPremium) {
+                        $scope.proposalDetails.premium.annualPremium = data.data.annualPremium;
+                        $scope.proposalDetails.premium.semiannualPremium = data.data.semiannualPremium;
+                        $scope.proposalDetails.premium.quarterlyPremium = data.data.quarterlyPremium;
+                        $scope.proposalDetails.premium.monthlyPremium = data.data.monthlyPremium;
+                    }
+                    if (data.data.installments) {
+                        $scope.selectedInstallment = null;
+                        $scope.installments = _.sortBy(data.data.installments, 'installmentNo');
+                    }
+                });
+
+            };
+
+            $scope.savePremiumDetails = function () {
+                console.log("$scope.selectedInstallment " + JSON.stringify($scope.selectedInstallment));
+                var premiumDetailDto = $scope.proposalDetails.premium;
+                var request = angular.extend({premiumDetailDto: $scope.proposalDetails.premium},
+                    {"proposalId": $scope.proposalId});
+                request.premiumDetailDto["premiumInstallment"] = $scope.selectedInstallment;
+                console.log(JSON.stringify(request.premiumDetailDto));
+                $http.post('/pla/grouphealth/proposal/savepremiumdetail', request).success(function (data) {
+                    /*$http.post("/pla/grouphealth/proposal/submit", angular.extend({},
+                     {"proposalId": $scope.proposalId}))
+                     .success(function (data) {
+                     });*/
+                    saveStep();
+                });
+
+            };
+
+            $scope.setSelectedInstallment = function (selectedInstallment) {
+                $scope.selectedInstallment = selectedInstallment;
+                console.log('setSelectedInstallment ***');
+            };
+
             var setproposalNumberAndVersionNumber = function (proposalId) {
-                $http.get("/pla/proposal/grouplife/getproposalNumber/" + proposalId)
+                $http.get("/pla/grouphealth/proposal/getproposalNumber/" + proposalId)
                     .success(function (data, status) {
                         $scope.proposalNumber = data.id;
                     });
-                $http.get("/pla/proposal/grouplife/getversionnumber/" + proposalId)
+                $http.get("/pla/grouphealth/proposal/getversionnumber/" + proposalId)
                     .success(function (data, status) {
                         $scope.versionNumber = data.id;
                     });
             };
+            /*
+             $scope.$on('actionclicked.fu.wizard', function (newval, oldval) {
+
+             if (data.step == 1) {
+             $http.post("/pla/grouphealth/proposal/", angular.extend($scope.proposalDetails.basic,
+             {proposerName: $scope.proposalDetails.proposer.proposerName}))
+             .success(function (agentDetails) {
+             });
+             }
+             });*/
 
             $scope.saveBasicDetails = function () {
-                // console.log($scope.proposalDetails.basic);
-                /*$http.post("/pla/grouphealth/proposal/createproposal", angular.extend($scope.proposalDetails.basic, {proposerName: $scope.proposalDetails.proposer.proposerName}))
-                 .success(function (agentDetails) {
-                 if (agentDetails.status == "200") {
-                 $scope.proposalId = agentDetails.id;
-                 setproposalNumberAndVersionNumber(agentDetails.id);
-                 saveStep();
-                 }
-                 });*/
-
+                $http.post("/pla/grouphealth/proposal/updatewithagentdetail", angular.extend($scope.proposalDetails.basic, {
+                    proposerName: $scope.proposalDetails.proposer.proposerName,
+                    proposalId: $scope.proposalId
+                }))
+                    .success(function (agentDetails) {
+                        if (agentDetails.status == "200") {
+                            $scope.proposalId = agentDetails.id;
+                            setproposalNumberAndVersionNumber(agentDetails.id);
+                            saveStep();
+                        }
+                    });
             };
 
             var saveStep = function () {
-                $scope.setpsSaved[$scope.selectedItem] = true;
+                $scope.stepsSaved[$scope.selectedItem] = true;
             };
 
             $scope.saveProposerDetails = function () {
@@ -254,6 +341,7 @@ angular.module('createProposal', ['common', 'ngRoute', 'mgcrea.ngStrap.select', 
                         }
                     });
             };
+
             $scope.savePlanDetails = function () {
                 $upload.upload({
                     url: '/pla/grouphealth/proposal/uploadinsureddetail',
@@ -274,6 +362,7 @@ angular.module('createProposal', ['common', 'ngRoute', 'mgcrea.ngStrap.select', 
             $scope.back = function () {
                 $window.location.href = 'listgrouplifeproposal';
             }
+
         }])
     .config(['$dropdownProvider', function ($dropdownProvider) {
         angular.extend($dropdownProvider.defaults, {
@@ -340,6 +429,33 @@ angular.module('createProposal', ['common', 'ngRoute', 'mgcrea.ngStrap.select', 
                         return deferred.promise;
                     } else {
                         return 1;
+                    }
+                }],
+                premiumData: ['$q', '$http', function ($q, $http) {
+                    if (queryParam && !_.isEmpty(queryParam)) {
+                        var deferred = $q.defer();
+                        $http.get('/pla/grouphealth/proposal/getpremiumdetail/' + queryParam).success(function (response, status, headers, config) {
+                            stepsSaved["4"] = true;
+                            deferred.resolve(response)
+                        }).error(function (response, status, headers, config) {
+                            deferred.reject();
+                        });
+                        return deferred.promise;
+                    } else {
+                        return false;
+                    }
+                }],
+                documentList: ['$q', '$http', function ($q, $http) {
+                    if (queryParam && !_.isEmpty(queryParam)) {
+                        var deferred = $q.defer();
+                        $http.get('/pla/grouphealth/proposal/getmandatorydocuments/' + queryParam).success(function (response, status, headers, config) {
+                            deferred.resolve(response)
+                        }).error(function (response, status, headers, config) {
+                            deferred.reject();
+                        });
+                        return deferred.promise;
+                    } else {
+                        return false;
                     }
                 }],
                 stepsSaved: function () {

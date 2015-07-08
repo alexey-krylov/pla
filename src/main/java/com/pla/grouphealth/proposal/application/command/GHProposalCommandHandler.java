@@ -53,7 +53,9 @@ public class GHProposalCommandHandler {
     private GHProposalRoleAdapter ghProposalRoleAdapter;
 
     @Autowired
-    public GHProposalCommandHandler(GroupHealthProposalFactory groupHealthProposalFactory, Repository<GroupHealthProposal> ghProposalMongoRepository, GHProposalFinder ghProposalFinder, GHFinder ghFinder, GHInsuredFactory ghInsuredFactory, GroupHealthProposalService groupHealthProposalService, IProcessInfoAdapter processInfoAdapter, GHProposalRepository ghProposalRepository, GHProposalRoleAdapter ghProposalRoleAdapter) {
+    public GHProposalCommandHandler(GroupHealthProposalFactory groupHealthProposalFactory, Repository<GroupHealthProposal> ghProposalMongoRepository, GHProposalFinder ghProposalFinder,
+                                    GHFinder ghFinder, GHInsuredFactory ghInsuredFactory, GroupHealthProposalService groupHealthProposalService,
+                                    IProcessInfoAdapter processInfoAdapter, GHProposalRepository ghProposalRepository, GHProposalRoleAdapter ghProposalRoleAdapter) {
         this.groupHealthProposalFactory = groupHealthProposalFactory;
         this.ghProposalMongoRepository = ghProposalMongoRepository;
         this.ghProposalFinder = ghProposalFinder;

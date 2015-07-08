@@ -48,7 +48,7 @@ public class GroupHealthProposalService {
     }
 
     public GroupHealthProposal updateWithAgent(GroupHealthProposal groupHealthProposal, String agentId, UserDetails userDetails) {
-        if (!agentIsActive.isSatisfiedBy(groupHealthProposal.getAgentId())) {
+        if (!agentIsActive.isSatisfiedBy(new AgentId(agentId))) {
             raiseAgentIsInactiveException();
         }
         GHProposalProcessor ghProposalProcessor = ghProposalRoleAdapter.userToProposalProcessor(userDetails);
@@ -111,7 +111,9 @@ public class GroupHealthProposalService {
             }
             premiumDetail = premiumDetail.nullifyFrequencyPremium();
         }
-        premiumDetail = premiumDetail.updateWithOptedFrequencyPremium(premiumDetailDto.getOptedPremiumFrequency());
+        if (premiumDetailDto.getOptedPremiumFrequency() != null)
+            premiumDetail = premiumDetail.updateWithOptedFrequencyPremium(premiumDetailDto.getOptedPremiumFrequency());
+
         groupHealthProposal = ghProposalProcessor.updateWithPremiumDetail(groupHealthProposal, premiumDetail);
         return groupHealthProposal;
     }

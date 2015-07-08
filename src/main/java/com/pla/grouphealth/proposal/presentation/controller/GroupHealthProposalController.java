@@ -297,6 +297,7 @@ public class GroupHealthProposalController {
             premiumDetailDto = ghProposalService.recalculatePremium(ghProposalRecalculatedInsuredPremiumCommand);
             return Result.success("Premium recalculated successfully", premiumDetailDto);
         } catch (Exception e) {
+            e.printStackTrace();
             return Result.success(e.getMessage());
         }
     }
@@ -393,11 +394,12 @@ public class GroupHealthProposalController {
     public ResponseEntity uploadMandatoryDocument(GHMandatoryDocumentCommand ghMandatoryDocumentCommand, HttpServletRequest request) {
         ghMandatoryDocumentCommand.setUserDetails(getLoggedInUserDetail(request));
         try {
-           // commandGateway.sendAndWait(ghMandatoryDocumentCommand);
+//            commandGateway.sendAndWait(ghMandatoryDocumentCommand);
         } catch (Exception e) {
             e.printStackTrace();
             return new ResponseEntity(Result.failure(e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
         }
         return new ResponseEntity(Result.success("Documents uploaded successfully"), HttpStatus.OK);
     }
+
 }
