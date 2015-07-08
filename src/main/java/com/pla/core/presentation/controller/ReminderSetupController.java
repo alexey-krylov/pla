@@ -1,5 +1,6 @@
 package com.pla.core.presentation.controller;
 
+import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.pla.core.application.service.notification.NotificationService;
 import com.pla.core.domain.exception.NotificationException;
@@ -8,6 +9,7 @@ import com.pla.core.dto.NotificationTemplateDto;
 import com.pla.core.query.NotificationFinder;
 import com.pla.sharedkernel.application.CreateQuotationNotificationCommand;
 import com.pla.sharedkernel.domain.model.ProcessType;
+import com.pla.sharedkernel.domain.model.WaitingForEnum;
 import com.pla.sharedkernel.identifier.LineOfBusinessEnum;
 import org.apache.commons.io.FileUtils;
 import org.axonframework.commandhandling.gateway.CommandGateway;
@@ -20,10 +22,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -66,6 +65,7 @@ public class ReminderSetupController {
             return modelAndView;
         };
     }
+
 
     @RequestMapping(value = "/templatelist")
     public Callable<ModelAndView> displayTemplateList() {
@@ -219,5 +219,32 @@ public class ReminderSetupController {
         outputStream.close();
         response.flushBuffer();
         return new ResponseEntity(Result.success(),HttpStatus.OK);
+    }
+
+
+    @RequestMapping(value = "/getprocessbylob/{lineOfBusiness}",method = RequestMethod.GET)
+    @ResponseBody
+    public List<Map<String,Object>> getProcessByLineOfBusiness(@PathVariable("lineOfBusiness") LineOfBusinessEnum lineOfBusiness){
+        List<Map<String,Object>> processList = Lists.newArrayList();
+        lineOfBusiness.getProcessTypeList().forEach(process->{
+            Map<String,Object> processMap = Maps.newLinkedHashMap();
+            processMap.put("processType",process.name());
+            processMap.put("description",process.toString());
+            processList.add(processMap);
+        });
+        return processList;
+    }
+
+    @RequestMapping(value = "/getwaitingfor/{lineOfBusiness}/{process}",method = RequestMethod.GET)
+    @ResponseBody
+    public List<Map<String,Object>> getWaitingForByProcess(@PathVariable("lineOfBusiness") LineOfBusinessEnum lineOfBusiness,@PathVariable("process") ProcessType process) {
+        return notificationService.getWaitingForBy(lineOfBusiness,process);
+    }
+
+
+    @RequestMapping(value = "/getnotificationtype/{lineOfBusiness}/{process}/{waitingFor}",method = RequestMethod.GET)
+    @ResponseBody
+    public List<Map<String,Object>> getNotificationType(@PathVariable("lineOfBusiness") LineOfBusinessEnum lineOfBusiness,@PathVariable("process") ProcessType process,@PathVariable("waitingFor") WaitingForEnum waitingFor) {
+        return notificationService.getNotificationTypeBy(lineOfBusiness,process,waitingFor);
     }
 }

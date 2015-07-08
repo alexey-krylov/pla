@@ -1,5 +1,6 @@
 package com.pla.core.application.service.notification;
 
+import com.google.common.collect.Maps;
 import com.pla.core.domain.model.notification.NotificationRole;
 import com.pla.core.domain.model.notification.NotificationTemplate;
 import com.pla.core.domain.model.notification.NotificationTemplateId;
@@ -16,6 +17,13 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.function.Function;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.pla.core.domain.exception.NotificationException.raiseDuplicateEntryException;
@@ -93,6 +101,55 @@ public class NotificationService {
         return reminderFile;
     }
 
+    public List<Map<String,Object>> getNotificationTypeBy(LineOfBusinessEnum lineOfBusinessEnum,ProcessType processType,WaitingForEnum waitingForEnum){
+        Optional<ProcessType> processTypeOptional = lineOfBusinessEnum.getProcessTypeList().parallelStream().filter(new ProcessFilterPredicate(processType)).findAny();
+        if (processTypeOptional.isPresent()){
+            Optional<WaitingForEnum> waitingForEnumOptional = processTypeOptional.get().getWaitingForList().parallelStream().filter(new Predicate<WaitingForEnum>() {
+                @Override
+                public boolean test(WaitingForEnum waitingFor) {
+                    return waitingFor.equals(waitingForEnum);
+                }
+            }).findAny();
+            if (waitingForEnumOptional.isPresent()){
+                return waitingForEnumOptional.get().getReminderTypes().parallelStream().map(new Function<ReminderTypeEnum, Map<String, Object>>() {
+                    @Override
+                    public Map<String, Object> apply(ReminderTypeEnum reminderTypeEnum) {
+                        Map<String, Object> waitingForMap = Maps.newLinkedHashMap();
+                        waitingForMap.put("reminderType", reminderTypeEnum);
+                        waitingForMap.put("description", reminderTypeEnum.toString());
+                        return waitingForMap;
+                    }
+                }).collect(Collectors.toList());
+            }
+        }
+        return Collections.EMPTY_LIST;
+    }
 
+    public List<Map<String,Object>> getWaitingForBy(LineOfBusinessEnum lineOfBusinessEnum,ProcessType processType) {
+        Optional<ProcessType> processTypeOptional = lineOfBusinessEnum.getProcessTypeList().parallelStream().filter(new ProcessFilterPredicate(processType)).findAny();
+        if (processTypeOptional.isPresent()) {
+            return processTypeOptional.get().getWaitingForList().parallelStream().map(new Function<WaitingForEnum, Map<String, Object>>() {
+                @Override
+                public Map<String, Object> apply(WaitingForEnum waitingForEnum) {
+                    Map<String, Object> waitingForMap = Maps.newLinkedHashMap();
+                    waitingForMap.put("waitingFor", waitingForEnum);
+                    waitingForMap.put("description", waitingForEnum.toString());
+                    return waitingForMap;
+                }
+            }).collect(Collectors.toList());
+        }
+        return Collections.EMPTY_LIST;
+    }
 
+    private class ProcessFilterPredicate implements Predicate<ProcessType> {
+        private ProcessType process;
+        public ProcessFilterPredicate(ProcessType processType) {
+            this.process  = processType;
+        }
+
+        @Override
+        public boolean test(ProcessType processType) {
+            return process.equals(processType);
+        }
+    }
 }
