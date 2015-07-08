@@ -101,7 +101,7 @@
                                    disabled="disabled" id="emailaddress" onclick=""
                                         >Email</a>
                                 <a type="button" class="btn btn-default btn-sm btn-disabled" disabled="disabled"
-                                   onclick="">Modify</a>
+                                   onclick="viewILQuotationModule.modifyProposal()">Modify</a>
                                 <a type="button" class="btn btn-default btn-sm btn-disabled" disabled="disabled"
                                    onclick="viewILQuotationModule.viewProposal()">View</a>
                                 <a type="button" class="btn btn-default btn-sm btn-disabled"
@@ -119,7 +119,6 @@
                                 <th th:text="#{proposalCreatedOn}">Proposal Date</th>
                                 <th th:text="#{agentName}">Agent Name</th>
                                 <th th:text="#{proposerName}">Proposer Name</th>
-                                <th th:text="#{versionNumber}">Version Number</th>
                                 <th th:text="#{status}">Status</th>
                             </tr>
                             </thead>
@@ -132,7 +131,6 @@
                                     <td th:text="${proposal.createdOn}">05/03/2015</td>
                                     <td th:text="${proposal.agentName}">Agent Name</td>
                                     <td th:text="${proposal.proposerName}"></td>
-                                    <td th:text="${proposal.version}"></td>
                                     <td th:text="${proposal.ProposalStatus}"></td>
                                 </tr>
                             </form>

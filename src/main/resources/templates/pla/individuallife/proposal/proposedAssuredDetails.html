@@ -12,7 +12,7 @@
                 <p style="color:red" ng-show="agentAlert">
                     Sum of commission % is not 100..Please update commission % to ensure it should be 100
                 </p>
-                <button ng-disabled="mode=='new'||mode=='edit'||mode=='view'" type="button" class="btn btn-default btn-xs pull-right"
+                <button ng-disabled="mode=='new'||mode=='view'" type="button" class="btn btn-default btn-xs pull-right"
                         data-toggle="modal" data-target="#agentModal" style="margin-bottom: 5px"><strong>Add Agent</strong>
                 </button>
 
@@ -30,7 +30,7 @@
                         <td>{{row.firstName+ ' ' + (row.lastName !=null ?(row.lastName + ' ') : '')}}</td>
                         <!--<td contenteditable="true" ng-model ="row.commission" >{{row.commission}}</td>-->
                         <td>
-                            <input type="text" ng-disabled="mode=='new'||mode=='edit'||mode=='view'" contenteditable="updateFlag" ng-model="row.commission" value="{{row.commission}}" ng-blur="test(row)" />
+                            <input type="text" ng-disabled="mode=='new'||mode=='view'" contenteditable="updateFlag" ng-model="row.commission" value="{{row.commission}}" ng-blur="test(row)" />
                           <!-- <div contenteditable="true" ng-model="row.update" ng-blur="test(row)" ng-change="test(row)" >{{row.commission}}</div>-->
                         </td>
 
@@ -48,7 +48,7 @@
             <div class="col-md-6">
                 <div class="form-group required">
                     <label class="control-label">Title</label>
-                    <select class="form-control input-sm" name="title" ng-disabled="mode=='new'||mode=='edit'||mode=='view'" ng-required="true" ng-model="proposedAssured.title" ng-options="title as title for title in titles">
+                    <select class="form-control input-sm" name="title" ng-disabled="mode=='new'||mode=='view'" ng-required="true" ng-model="proposedAssured.title" ng-options="title as title for title in titles">
                     </select>
 
                     <div class="error" ng-messages="proposedAssuredDetails.title.$error" ng-if="proposedAssuredDetails.title.$dirty">
@@ -57,7 +57,7 @@
                 </div>
                 <div class="form-group required">
                     <label class="control-label">Surname</label>
-                    <input type="text" class="form-control input-sm" name="surname"  ng-disabled="mode=='new'||mode=='edit'||mode=='view'" ng-pattern="/[a-zA-Z]/" ng-required="true" ng-model="proposedAssured.surname" ng-maxlength="20"/>
+                    <input type="text" class="form-control input-sm" name="surname"  ng-disabled="mode=='new'||mode=='view'" ng-pattern="/[a-zA-Z]/" ng-required="true" ng-model="proposedAssured.surname" ng-maxlength="20"/>
 
                     <div class="error" ng-messages="proposedAssuredDetails.surname.$error" ng-if="proposedAssuredDetails.surname.$dirty">
                         <small class="error" ng-message="required">Please enter Surname.</small>
@@ -67,7 +67,7 @@
                 </div>
                 <div class="form-group required">
                     <label class="control-label">NRC</label>
-                    <input type="text" class="form-control input-sm" name="nrc" ng-disabled="mode=='new'||mode=='edit'||mode=='view'" ng-model="proposedAssured.nrc" ng-required="true" ng-maxlength="11" ng-pattern="/^[0-9]{6}\/[0-9]{2}\/[0-9]{1}$/"/>
+                    <input type="text" class="form-control input-sm" name="nrc" ng-disabled="mode=='new'||mode=='view'" ng-model="proposedAssured.nrc" ng-required="true" ng-maxlength="11" ng-pattern="/^[0-9]{6}\/[0-9]{2}\/[0-9]{1}$/"/>
 
                     <div class="error" ng-messages="proposedAssuredDetails.nrc.$error" ng-if="proposedAssuredDetails.nrc.$dirty">
                         <small class="error" ng-message="required">Please enter NRC.</small>
@@ -77,11 +77,11 @@
                 </div>
                 <div class="form-group required">
                     <label class="control-label">Age Next Birthday</label>
-                    <input type="text" class="form-control input-sm" ng-disabled="mode=='new'||mode=='edit'||mode=='view'" name="ageNextBirthday" ng-model="proposedAssured.nextDob"/>
+                    <input type="text" class="form-control input-sm" ng-disabled="mode=='new'||mode=='view'" name="ageNextBirthday" ng-model="proposedAssured.nextDob"/>
                 </div>
                 <div class="form-group required">
                     <label class="control-label">Mobile Number</label>
-                    <input type="text" class="form-control input-sm" name="mobileNumber" ng-disabled="mode=='new'||mode=='edit'||mode=='view'" ng-model="proposedAssured.mobileNumber" ng-pattern="/^\d+$/" ng-required="true" ng-minlength="10" ng-maxLength="10" />
+                    <input type="text" class="form-control input-sm" name="mobileNumber" ng-disabled="mode=='new'||mode=='view'" ng-model="proposedAssured.mobileNumber" ng-pattern="/^\d+$/" ng-required="true" ng-minlength="10" ng-maxLength="10" />
 
                     <div class="error" ng-messages="proposedAssuredDetails.mobileNumber.$error" ng-if="proposedAssuredDetails.mobileNumber.$dirty">
                         <small class="error" ng-message="required">Please enter Mobile Number</small>
@@ -92,7 +92,7 @@
                 </div>
                 <div class="form-group required">
                     <label class="control-label">Marital Status</label>
-                    <select class="form-control input-sm" ng-disabled="mode=='new'||mode=='edit'||mode=='view'" ng-model="proposedAssured.maritalStatus" name="maritalStatus" ng-required="true" ng-change="selectSpouse()">
+                    <select class="form-control input-sm" ng-disabled="mode=='new'||mode=='view'" ng-model="proposedAssured.maritalStatus" name="maritalStatus" ng-required="true" ng-change="selectSpouse()">
                         <option value="MARRIED">Married</option>
                         <option value="UNMARRIED">UnMarried</option>
                     </select>
@@ -105,7 +105,7 @@
             <div class="col-md-6">
                 <div class="form-group required">
                     <label class="control-label">First Name</label>
-                    <input type="text" class="form-control input-sm" ng-pattern="/[a-zA-Z]/"  ng-disabled="mode=='new'||mode=='edit'||mode=='view'" name="firstName"  ng-model="proposedAssured.firstName" ng-maxlength="20" ng-required="true"/>
+                    <input type="text" class="form-control input-sm" ng-pattern="/[a-zA-Z]/"  ng-disabled="mode=='new'||mode=='view'" name="firstName"  ng-model="proposedAssured.firstName" ng-maxlength="20" ng-required="true"/>
 
                     <div class="error" ng-messages="proposedAssuredDetails.firstName.$error" ng-if="proposedAssuredDetails.firstName.$dirty">
                         <small class="error" ng-message="required">
@@ -117,7 +117,7 @@
                 </div>
                 <div class="form-group">
                     <label class="control-label">Other Name</label>
-                    <input type="text" class="form-control input-sm" ng-disabled="mode=='new'||mode=='edit'||mode=='view'" name="otherName" ng-maxlength="20" ng-model="proposedAssured.otherName" ng-pattern="/[a-zA-Z]/"/>
+                    <input type="text" class="form-control input-sm" ng-disabled="mode=='new'||mode=='view'" name="otherName" ng-maxlength="20" ng-model="proposedAssured.otherName" ng-pattern="/[a-zA-Z]/"/>
 
                     <div class="error" ng-messages="proposedAssuredDetails.otherName.$error" ng-if="proposedAssuredDetails.otherName.$dirty">
                         <small ng-message="maxlength">Only 20 characters are allowed.</small>
@@ -133,10 +133,10 @@
                            ng-required="true"
                            is-open="launchdob"
                            max-date="todayDate"
-                           ng-model="proposedAssured.dateOfBirth" name="dob" ng-disabled="mode=='new'||mode=='edit'||mode=='view'" ng-blur="showDob(proposedAssured.dateOfBirth)"/>
+                           ng-model="proposedAssured.dateOfBirth" name="dob" ng-disabled="mode=='new'||mode=='view'" ng-blur="showDob(proposedAssured.dateOfBirth)"/>
                                     <span class="input-group-btn">
                                     <button type="button" class="btn btn-default btn-sm"
-                                            ng-disabled="mode=='new'||mode=='edit'||mode=='view'" ng-click="launchProposedAssuredeDob($event)">
+                                            ng-disabled="mode=='new'||mode=='view'" ng-click="launchProposedAssuredeDob($event)">
                                         <i class="glyphicon glyphicon-calendar"></i></button>
                                   </span>
                 </div>
@@ -148,7 +148,7 @@
 
                 <div class="form-group required">
                     <label class="control-label">Sex</label>
-                    <select class="form-control input-sm" name="gender" ng-disabled="mode=='new'||mode=='edit'||mode=='view'" ng-model="proposedAssured.gender" ng-required="true">
+                    <select class="form-control input-sm" name="gender" ng-disabled="mode=='new'||mode=='view'" ng-model="proposedAssured.gender" ng-required="true">
                         <option value="MALE" ng-value="MALE">MALE</option>
                         <option value="FEMALE" ng-value="FEMALE">FEMALE</option>
                     </select>
@@ -159,7 +159,7 @@
                 </div>
                 <div class="form-group">
                     <label class="control-label">Email Address</label>
-                    <input type="email" class="form-control input-sm" name="email" ng-disabled="mode=='new'||mode=='edit'||mode=='view'" ng-model="proposedAssured.emailAddress"/>
+                    <input type="email" class="form-control input-sm" name="email" ng-disabled="mode=='new'||mode=='view'" ng-model="proposedAssured.emailAddress"/>
 
                     <div class="error" ng-messages="proposedAssuredDetails.email.$error"  ng-if="proposedAssuredDetails.email.$dirty">
                         <small class="error" ng-message="required">Please enter  email address. </small>
@@ -178,7 +178,7 @@
             <div class="col-md-6">
                 <div class="form-group required">
                     <label class="control-label">Spouse's First Name</label>
-                    <input type="text" class="form-control input-sm" name="spouseFirstName" ng-disabled="mode=='new'||mode=='edit'||mode=='view'" ng-maxlength="20" ng-pattern="/[a-zA-Z]/" ng-model="spouse.firstName" ng-required="true"/>
+                    <input type="text" class="form-control input-sm" name="spouseFirstName" ng-disabled="mode=='new'||mode=='view'" ng-maxlength="20" ng-pattern="/[a-zA-Z]/" ng-model="spouse.firstName" ng-required="true"/>
 
                     <div class="error" ng-messages="spouseDetails.spouseFirstName.$error" ng-if="spouseDetails.spouseFirstName.$dirty">
                         <small class="error" ng-message="required">Please enter Spouse's First Name</small>
@@ -188,7 +188,7 @@
                 </div>
                 <div class="form-group required">
                     <label class="control-label">Spouse's Mobile Number</label>
-                    <input type="text" class="form-control input-sm" name="spouseMobileNumber" ng-disabled="mode=='new'||mode=='edit'||mode=='view'" ng-pattern="/^\d+$/" ng-minlength="10" ng-maxLength="10" ng-model="spouse.mobileNumber" ng-required="true"/>
+                    <input type="text" class="form-control input-sm" name="spouseMobileNumber" ng-disabled="mode=='new'||mode=='view'" ng-pattern="/^\d+$/" ng-minlength="10" ng-maxLength="10" ng-model="spouse.mobileNumber" ng-required="true"/>
 
                     <div class="error" ng-messages="spouseDetails.spouseMobileNumber.$error" ng-if="spouseDetails.spouseMobileNumber.$dirty">
                         <small class="error" ng-message="required">Please enter Spouse's Mobile Number</small>
@@ -201,7 +201,7 @@
             <div class="col-md-6">
                 <div class="form-group required">
                     <label class="control-label">Spouse's Surname</label>
-                    <input type="text" class="form-control input-sm" name="spouseSurname" ng-disabled="mode=='new'||mode=='edit'||mode=='view'" ng-pattern="/[a-zA-Z]/" ng-maxlength="20" ng-model="spouse.surname" ng-required="true"/>
+                    <input type="text" class="form-control input-sm" name="spouseSurname" ng-disabled="mode=='new'||mode=='view'" ng-pattern="/[a-zA-Z]/" ng-maxlength="20" ng-model="spouse.surname" ng-required="true"/>
 
                     <div class="error" ng-messages="spouseDetails.spouseSurname.$error" ng-if="spouseDetails.spouseSurname.$dirty">
                         <small class="error" ng-message="required">Please enter Spouse's Surname</small>
@@ -211,7 +211,7 @@
                 </div>
                 <div class="form-group">
                     <label class="control-label">Spouse's Email ID</label>
-                    <input type="email" class="form-control input-sm" ng-disabled="mode=='new'||mode=='edit'||mode=='view'" name="spouseEmailId" ng-model="spouse.emailAddress"/>
+                    <input type="email" class="form-control input-sm" ng-disabled="mode=='new'||mode=='view'" name="spouseEmailId" ng-model="spouse.emailAddress"/>
 
                     <div class="error" ng-messages="spouseDetails.spouseEmailId.$error"  ng-if="spouseDetails.spouseEmailId.$dirty">
                         <small class="error" ng-message="email">Please enter  Valid email address. </small>
@@ -230,7 +230,7 @@
             <div class="col-md-6">
                 <div class="form-group required">
                     <label class="control-label">Occupation</label>
-                    <select class="form-control input-sm" name="occupation" ng-disabled="mode=='new'||mode=='edit'||mode=='view'" ng-required="true" ng-model="employment.occupation"
+                    <select class="form-control input-sm" name="occupation" ng-disabled="mode=='new'||mode=='view'" ng-required="true" ng-model="employment.occupation"
                             ng-options="occupation.description as occupation.description for occupation in occupations"></select>
 
                     <div class="error" ng-messages="employmentDetails.occupation.$error" ng-if="employmentDetails.occupation.$dirty">
@@ -245,10 +245,10 @@
                                ng-required="true"
                                is-open="launchdob1"
                                max-date="todayDate"
-                               ng-disabled="mode=='new'||mode=='edit'||mode=='view'" ng-model="employment.employmentDate" name="dob"/>
+                               ng-disabled="mode=='new'||mode=='view'" ng-model="employment.employmentDate" name="dob"/>
                                     <span class="input-group-btn">
                                     <button type="button" class="btn btn-default btn-sm"
-                                            ng-disabled="mode=='new'||mode=='edit'||mode=='view'" ng-click="launchProposedAssuredeDate($event)">
+                                            ng-disabled="mode=='new'||mode=='view'" ng-click="launchProposedAssuredeDate($event)">
                                         <i class="glyphicon glyphicon-calendar"></i></button>
                                   </span>
                     </div>
@@ -261,7 +261,7 @@
 
                 <div class="form-group required">
                     <label class="control-label">Address Line 1</label>
-                    <input type="text" class="form-control input-sm" ng-disabled="mode=='new'||mode=='edit'||mode=='view'" name="addressLine1" ng-maxlength="100" ng-model="employment.address1" ng-required="true"/>
+                    <input type="text" class="form-control input-sm" ng-disabled="mode=='new'||mode=='view'" name="addressLine1" ng-maxlength="100" ng-model="employment.address1" ng-required="true"/>
 
                     <div class="error" ng-messages="employmentDetails.address1.$error" ng-if="employmentDetails.address1.$dirty">
                         <small class="error" ng-message="required">Please enter Address Line 1</small>
@@ -270,7 +270,7 @@
                 </div>
                 <div class="form-group">
                     <label class="control-label">Postal Code</label>
-                    <input type="text" class="form-control input-sm" name="postalCode" ng-disabled="mode=='new'||mode=='edit'||mode=='view'" ng-maxlength="7" ng-pattern="/^\d+$/" ng-model="employment.postalCode"/>
+                    <input type="text" class="form-control input-sm" name="postalCode" ng-disabled="mode=='new'||mode=='view'" ng-maxlength="7" ng-pattern="/^\d+$/" ng-model="employment.postalCode"/>
 
                     <div class="error" ng-messages="employmentDetails.postalCode.$error" ng-if="employmentDetails.postalCode.$dirty">
                         <small ng-message="maxlength">Only 7 characters are allowed.</small>
@@ -279,7 +279,7 @@
                 </div>
                 <div class="form-group required">
                     <label class="control-label">Town</label>
-                    <select class="form-control input-sm" name="town" ng-disabled="mode=='new'||mode=='edit'||mode=='view'" ng-required="true" ng-model="employment.town"
+                    <select class="form-control input-sm" name="town" ng-disabled="mode=='new'||mode=='view'" ng-required="true" ng-model="employment.town"
                             ng-options="city.geoId as city.geoName for city in proposedAssuredEmploymentCities"/>
 
                     <div class="error" ng-messages="employmentDetails.town.$error" ng-if="employmentDetails.town.$dirty">
@@ -290,7 +290,7 @@
             <div class="col-md-6">
                 <div class="form-group required">
                     <label class="control-label">Employer</label>
-                    <input type="text" class="form-control input-sm" name="employer" ng-disabled="mode=='new'||mode=='edit'||mode=='view'" ng-required="true" ng-maxlength="30" ng-model="employment.employer"/>
+                    <input type="text" class="form-control input-sm" name="employer" ng-disabled="mode=='new'||mode=='view'" ng-required="true" ng-maxlength="30" ng-model="employment.employer"/>
 
                     <div class="error" ng-messages="employmentDetails.employer.$error" ng-if="employmentDetails.employer.$dirty">
                         <small class="error" ng-message="required">Please enter Employer</small>
@@ -299,7 +299,7 @@
                 </div>
                 <div class="form-group required">
                     <label class="control-label">Employment Type</label>
-                    <select class="form-control input-sm" name="employmentType" ng-required="true" ng-disabled="mode=='new'||mode=='edit'||mode=='view'" ng-model="employment.employmentType" ng-options="employmentType.employment_id as employmentType.description for employmentType in employmentTypes">
+                    <select class="form-control input-sm" name="employmentType" ng-required="true" ng-disabled="mode=='new'||mode=='view'" ng-model="employment.employmentType" ng-options="employmentType.employment_id as employmentType.description for employmentType in employmentTypes">
                             </select>
 
                     <div class="error" ng-messages="employmentDetails.employmentType.$error" ng-if="employmentDetails.employmentType.$dirty">
@@ -308,7 +308,7 @@
                 </div>
                 <div class="form-group">
                     <label class="control-label">Address Line 2</label>
-                    <input type="text" class="form-control input-sm" name="addressLine2" ng-disabled="mode=='new'||mode=='edit'||mode=='view'" ng-maxlength="100" ng-model="employment.address2"/>
+                    <input type="text" class="form-control input-sm" name="addressLine2" ng-disabled="mode=='new'||mode=='view'" ng-maxlength="100" ng-model="employment.address2"/>
 
                     <div class="error" ng-messages="employmentDetails.address2.$error" ng-if="employmentDetails.address2.$dirty">
                         <small ng-message="maxlength">Only 100 characters are allowed.</small>
@@ -316,7 +316,7 @@
                 </div>
                 <div class="form-group required">
                     <label class="control-label">Province</label>
-                                        <select class="form-control input-sm" name="province" ng-disabled="mode=='new'||mode=='edit'||mode=='view'" ng-options="province.provinceId as province.provinceName for province in provinces"
+                                        <select class="form-control input-sm" name="province" ng-disabled="mode=='new'||mode=='view'" ng-options="province.provinceId as province.provinceName for province in provinces"
                             ng-model="employment.province" ng-required="true">
                     </select>
 
@@ -326,7 +326,7 @@
                 </div>
                 <div class="form-group">
                     <label class="control-label">Work phone</label>
-                    <input type="text" class="form-control input-sm" name="workPhone" ng-disabled="mode=='new'||mode=='edit'||mode=='view'" ng-minlength="10" ng-maxlength="10" ng-pattern="/^\d+$/" ng-model="employment.workPhone"/>
+                    <input type="text" class="form-control input-sm" name="workPhone" ng-disabled="mode=='new'||mode=='view'" ng-minlength="10" ng-maxlength="10" ng-pattern="/^\d+$/" ng-model="employment.workPhone"/>
 
                     <div class="error" ng-messages="employmentDetails.workPhone.$error" ng-if="employmentDetails.workPhone.$dirty">
                         <small ng-message="maxlength">Only 10 Number are allowed.</small>
@@ -346,7 +346,7 @@
             <div class="col-md-6">
                 <div class="form-group required">
                     <label class="control-label">Address Line 1</label>
-                    <input type="text" class="form-control input-sm" name="residentAddress1" ng-disabled="mode=='new'||mode=='edit'||mode=='view'" ng-maxlength="100" ng-model="residentialAddress.address1" ng-required="true"/>
+                    <input type="text" class="form-control input-sm" name="residentAddress1" ng-disabled="mode=='new'||mode=='view'" ng-maxlength="100" ng-model="residentialAddress.address1" ng-required="true"/>
 
                     <div class="error" ng-messages="residentDetails.residentAddress1.$error" ng-if="residentDetails.residentAddress1.$dirty">
                         <small class="error" ng-message="required">Please enter Address Line 1</small>
@@ -355,7 +355,7 @@
                 </div>
                 <div class="form-group">
                     <label class="control-label">Postal Code</label>
-                    <input type="text" class="form-control input-sm" name="residentPostalCode" ng-disabled="mode=='new'||mode=='edit'||mode=='view'" ng-pattern="/^\d+$/" ng-maxlength="7" ng-model="residentialAddress.postalCode"/>
+                    <input type="text" class="form-control input-sm" name="residentPostalCode" ng-disabled="mode=='new'||mode=='view'" ng-pattern="/^\d+$/" ng-maxlength="7" ng-model="residentialAddress.postalCode"/>
 
                     <div class="error" ng-messages="residentDetails.residentPostalCode.$error" ng-if="residentDetails.residentPostalCode.$dirty">
                         <small ng-message="maxlength">Only 7 characters are allowed.</small>
@@ -364,7 +364,7 @@
                 </div>
                 <div class="form-group required">
                     <label class="control-label">Town</label>
-                    <select type="text" class="form-control input-sm" name="residentTown" ng-disabled="mode=='new'||mode=='edit'||mode=='view'" ng-model="residentialAddress.town"
+                    <select type="text" class="form-control input-sm" name="residentTown" ng-disabled="mode=='new'||mode=='view'" ng-model="residentialAddress.town"
                             ng-options="city.geoId as city.geoName for city in proposedAssuredResidentialCities" ng-required="true">
                     </select>
 
@@ -374,7 +374,7 @@
                 </div>
                 <div class="form-group">
                     <label class="control-label">Email Address</label>
-                    <input type="email" class="form-control input-sm" name="residentEmail" ng-disabled="mode=='new'||mode=='edit'||mode=='view'" ng-model="residentialAddress.emailAddress"/>
+                    <input type="email" class="form-control input-sm" name="residentEmail" ng-disabled="mode=='new'||mode=='view'" ng-model="residentialAddress.emailAddress"/>
 
                     <div class="error" ng-messages="residentDetails.residentEmail.$error"  ng-if="residentDetails.residentEmail.$dirty">
                         <small class="error" ng-message="email">Please enter  Valid email address. </small>
@@ -384,7 +384,7 @@
             <div class="col-md-6">
                 <div class="form-group">
                     <label class="control-label">Address Line 2</label>
-                    <input type="text" class="form-control input-sm" name="residentAddress2" ng-disabled="mode=='new'||mode=='edit'||mode=='view'" ng-maxlenght="100" ng-model="residentialAddress.address2"/>
+                    <input type="text" class="form-control input-sm" name="residentAddress2" ng-disabled="mode=='new'||mode=='view'" ng-maxlenght="100" ng-model="residentialAddress.address2"/>
 
                      <div class="error" ng-messages="residentDetails.residentAddress2.$error" ng-if="residentDetails.residentAddress2.$dirty">
                          <small ng-message="maxlength">Only 100 characters are allowed.</small>
@@ -392,7 +392,7 @@
                 </div>
                 <div class="form-group required">
                     <label class="control-label">Province</label>
-                    <select class="form-control input-sm" name="residentProvince" ng-disabled="mode=='new'||mode=='edit'||mode=='view'" ng-options="province.provinceId as province.provinceName for province in provinces"
+                    <select class="form-control input-sm" name="residentProvince" ng-disabled="mode=='new'||mode=='view'" ng-options="province.provinceId as province.provinceName for province in provinces"
                             ng-model="residentialAddress.province" ng-required="true"/>
 
                     <div class="error" ng-messages="residentDetails.residentProvince.$error" ng-if="residentDetails.residentProvince.$dirty">
@@ -401,7 +401,7 @@
                 </div>
                 <div class="form-group">
                     <label class="control-label">Home Phone</label>
-                    <input type="text" class="form-control input-sm" name="residentPhone" ng-disabled="mode=='new'||mode=='edit'||mode=='view'" ng-maxlength="10" ng-pattern="/^\d+$/" ng-model="residentialAddress.homePhone"/>
+                    <input type="text" class="form-control input-sm" name="residentPhone" ng-disabled="mode=='new'||mode=='view'" ng-maxlength="10" ng-pattern="/^\d+$/" ng-model="residentialAddress.homePhone"/>
 
                     <div class="error" ng-messages="residentDetails.residentPhone.$error" ng-if="residentDetails.residentPhone.$dirty">
                         <small ng-message="maxlength">Only 10 characters are allowed.</small>
@@ -415,7 +415,7 @@
     <div class="form-group required">
         <label class="control-label" style="margin-right: 25px">Is Proposed Assured the Proposer?</label>
         <label class="radio-inline">
-            <input type="radio" name="proposedAssuredAsProposer" ng-value="true" value="true" ng-disabled="mode=='new'||mode=='edit'||mode=='view'" ng-required="true" ng-model="proposedAssured.isProposer"/> Yes
+            <input type="radio" name="proposedAssuredAsProposer" ng-value="true" value="true" ng-disabled="mode=='new'||mode=='view'" ng-required="true" ng-model="proposedAssured.isProposer"/> Yes
         </label>
         <label class="radio-inline">
             <input type="radio" name="proposedAssuredAsProposer" ng-value="false" value="false" ng-required="true" ng-model="proposedAssured.isProposer"/> No
@@ -430,7 +430,7 @@
             <button type="button" class="btn btn-default btn-sm">Cancel</button>
         </div>
         <div class="col-sm-6">
-            <button type="button" class="btn btn-default btn-sm" style="float: right" ng-disabled="step1.$invalid"   ng-hide=" mode=='new'||mode=='edit'||mode=='view'" ng-click="saveProposedAssuredDetails()">Save</button>
+            <button type="button" class="btn btn-default btn-sm" style="float: right" ng-disabled="step1.$invalid"   ng-hide=" mode=='new'||mode=='view'" ng-click="saveProposedAssuredDetails()">Save</button>
         </div>
     </div>
 </ng-form>

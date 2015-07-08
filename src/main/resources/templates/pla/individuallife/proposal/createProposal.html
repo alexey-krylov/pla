@@ -68,7 +68,7 @@
             </ul>
             <div class="actions">
                     <span style="font-weight: bolder;margin-right: 15px;color: #999">
-                    Proposal ID :<span style="font-size: 13px;color: #3a87ad;">{{proposal.proposalId}}</span>
+                    Proposal Number :<span style="font-size: 13px;color: #3a87ad;">{{proposalNumberDetails.proposalNumber}}</span>
                      </span>
                 <button type="button" class="btn btn-default btn-prev" disabled="disabled"><span class="glyphicon glyphicon-arrow-left"></span>Prev</button>
                 <button type="button" class="btn btn-default btn-next">Next<span class="glyphicon glyphicon-arrow-right"></span></button>
@@ -120,11 +120,11 @@
                                     <input type="text" onkeypress="return isEnterKey(event)" class="form-control input-sm" name="agentId"
                                            ng-model="agent.agentId" ng-required="true" ng-change="clearAgentDetails()"
                                            ng-blur="searchAgent()"
-                                           ng-disabled="mode=='new'||mode=='edit'">
+                                           ng-disabled="mode=='new'">
                                            </input>
                                     <div class="input-group-btn">
                                         <button type="button" class="btn btn-default btn-sm" ng-click="searchAgent()"
-                                                ng-disabled="!agent.agentId || mode=='new'||mode=='edit'">
+                                                ng-disabled="!agent.agentId || mode=='new'">
                                             <span class="glyphicon glyphicon-search"></span>
                                         </button>
                                     </div>

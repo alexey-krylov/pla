@@ -126,7 +126,7 @@
                     If not already stated, is any close blood relative suffering from (or has any one had) diabetes, heart disease, high blood pressure, mental illness etc.
                 </div>
                 <div class="col-md-2">
-                    <select class="form-control input-sm" ng-model="familyHistory.question_16.answer">
+                    <select class="form-control input-sm" ng-model="familyHistory.closeRelative.answer" ng-change="familyHistory.closeRelative.questionId=16">
                         <option value="">--Select One--</option>
                         <option value="true">Yes</option>
                         <option value="false">No</option>
@@ -135,7 +135,7 @@
             </div>
             <div class="row">
                 <div class="col-md-10">
-                    <textarea class="form-control" placeholder="Please give full details" ng-model="familyHistory.question_16.answerResponse"></textarea>
+                    <textarea class="form-control" placeholder="Please give full details" ng-model="familyHistory.closeRelative.answerResponse"></textarea>
                 </div>
             </div>
         </accordion-group>
@@ -194,14 +194,14 @@
                                        ng-class="{'glyphicon-chevron-down': accordionStatus.familyHabitAndBuild.tab2_1, 'glyphicon-chevron-right': !accordionStatus.familyHabitAndBuild.tab2_1}"></i>
                                 </accordion-heading>
                                 <div class="col-md-12">
-                                    <textarea class="form-control" ng-model="habit.question_17.answerResponse"
+                                    <textarea class="form-control" ng-model="habit.questions[0].answerResponse"
                                               placeholder="Please give full details  e.g. name and address of attending doctor, diagnosis etc">
                                     </textarea>
                                 </div>
                             </accordion-group>
                         </div>
                         <div class="col-md-2">
-                            <select class="form-control input-sm" ng-model="habit.question_17.answer">
+                            <select class="form-control input-sm" ng-model="habit.questions[0].answer" ng-change="habit.questions[0].questionId=17">
                                 <option value="">--Select One--</option>
                                 <option value="true">Yes</option>
                                 <option value="false">No</option>
@@ -218,13 +218,13 @@
                                        ng-class="{'glyphicon-chevron-down': accordionStatus.familyHabitAndBuild.tab2_2, 'glyphicon-chevron-right': !accordionStatus.familyHabitAndBuild.tab2_2}"></i>
                                 </accordion-heading>
                                 <div class="col-md-12">
-                                    <textarea class="form-control" ng-model="habit.question_18.answerResponse"
+                                    <textarea class="form-control" ng-model="habit.questions[1].answerResponse"
                                               placeholder="Please give full details  "></textarea>
                                 </div>
                             </accordion-group>
                         </div>
                         <div class="col-md-2">
-                            <select class="form-control input-sm" ng-model="habit.question_18.answer">
+                            <select class="form-control input-sm" ng-model="habit.questions[1].answer" ng-change="habit.questions[0].questionId=18">
                                 <option value="">--Select One--</option>
                                 <option value="true">Yes</option>
                                 <option value="false">No</option>
@@ -241,12 +241,12 @@
                                        ng-class="{'glyphicon-chevron-down': accordionStatus.familyHabitAndBuild.tab2_3, 'glyphicon-chevron-right': !accordionStatus.familyHabitAndBuild.tab2_3}"></i>
                                 </accordion-heading>
                                 <div class="col-md-12">
-                                    <textarea class="form-control" ng-model="habit.question_19.answerResponse" placeholder="Please give full details  "></textarea>
+                                    <textarea class="form-control" ng-model="habit.questions[2].answerResponse" placeholder="Please give full details  "></textarea>
                                 </div>
                             </accordion-group>
                         </div>
                         <div class="col-md-2">
-                            <select class="form-control input-sm" ng-model="habit.question_19.answer">
+                            <select class="form-control input-sm" ng-model="habit.questions[2].answer" ng-change="habit.questions[2].questionId=19">
                                 <option value="">--Select One--</option>
                                 <option value="true">Yes</option>
                                 <option value="false">No</option>
@@ -263,12 +263,12 @@
                                        ng-class="{'glyphicon-chevron-down': accordionStatus.familyHabitAndBuild.tab2_4, 'glyphicon-chevron-right': !accordionStatus.familyHabitAndBuild.tab2_4}"></i>
                                 </accordion-heading>
                                 <div class="col-md-12">
-                                    <textarea class="form-control" placeholder="Please give full details " ng-model="habit.question_20.answerResponse" ></textarea>
+                                    <textarea class="form-control" placeholder="Please give full details " ng-model="habit.questions[3].answerResponse" ></textarea>
                                 </div>
                             </accordion-group>
                         </div>
                         <div class="col-md-2">
-                            <select class="form-control input-sm" ng-model="habit.question_20.answer">
+                            <select class="form-control input-sm" ng-model="habit.questions[3].answer" ng-change="habit.questions[3].questionId=20">
                                 <option value="">--Select One--</option>
                                 <option value="true">Yes</option>
                                 <option value="false">No</option>
@@ -316,13 +316,13 @@
                                    ng-class="{'glyphicon-chevron-down': accordionStatus.familyHabitAndBuild.tab3_1, 'glyphicon-chevron-right': !accordionStatus.familyHabitAndBuild.tab3_1}"></i>
                             </accordion-heading>
                             <div class="col-md-12">
-                                <textarea class="form-control" ng-model="build.question_21.answerResponse"
+                                <textarea class="form-control" ng-model="build.overWeightQuestion.answerResponse"
                                           placeholder="state whether increase or decrease, by how much, reason and for long present weight has remained constant."></textarea>
                             </div>
                         </accordion-group>
                     </div>
                     <div class="col-md-2">
-                        <select class="form-control input-sm" ng-model="build.question_21.answer">
+                        <select class="form-control input-sm" ng-model="build.overWeightQuestion.answer" ng-change="build.overWeightQuestion.questionId=21">
                             <option value="">--Select One--</option>
                             <option value="true">Yes</option>
                             <option value="false">No</option>

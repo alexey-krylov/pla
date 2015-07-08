@@ -9,11 +9,20 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
             $scope.provinces = [];
             $scope.proposal=[];
             $scope.searchRiders=[];
-             $scope. proposalId = getQueryParameter('proposalId')
+            $scope. proposalId = getQueryParameter('proposalId')
+            $scope.quotationId=getQueryParameter('quotationId');
             console.log("Proposal Id sent is:" + $scope. proposalId);
-
            $scope.mode= getQueryParameter('mode');
             console.log('modeType' + $scope.mode );
+
+            if($scope.quotationId)
+            {
+                alert("Navigate to Proposer Window...")
+            }
+            else
+            {
+                alert('No Quotation Id');
+            }
 
              if($scope. proposalId)
             {
@@ -22,6 +31,8 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
                  var result = response;
                  console.log('Result:'+JSON.stringify(result));
                     $scope.rcvProposal = response;
+                    //console.log('Proposal Number....');
+                    $scope.proposalNumberDetails.proposalNumber=$scope.rcvProposal.proposalNumber;
                     $scope.proposal=
                     {
                         "msg":null,
@@ -50,6 +61,14 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
                     $scope.employment=$scope.rcvProposal.proposedAssured.employment;
                     $scope.residentialAddress=$scope.rcvProposal.proposedAssured.residentialAddress;
                     $scope.agentDetails=$scope.rcvProposal.agentCommissionDetails;
+                    $scope.familyPersonalDetail=$scope.rcvProposal.familyPersonalDetail;
+                    console.log('FamilyHistory..'+$scope.rcvProposal.familyPersonalDetail.familyHistory.father);
+                    $scope.familyHistory=$scope.rcvProposal.familyPersonalDetail.familyHistory;
+                    $scope.habit=$scope.rcvProposal.familyPersonalDetail.habit;
+                    $scope.build=$scope.rcvProposal.familyPersonalDetail.build;
+                    $scope.compulsoryHealthDetails=$scope.rcvProposal.compulsoryHealthStatement;
+
+
 
                     //$scope.proposerEmployment=$scope.proposer
 
@@ -222,9 +241,11 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
             };
 
             $scope.familyPersonalDetail = {isPregnant: null, pregnancyMonth: null};
-            $scope.familyHistory = {father: {}, mother: {}, brother: {}, sister: {}, question_16: {}};
-            $scope.habit = {question_17: {}, question_18: {}, question_19: {}, question_20: {}};
-            $scope.build = {question_21: {}};
+            //$scope.familyHistory = {father: {}, mother: {}, brother: {}, sister: {},question_16: {}};
+            $scope.familyHistory = {father: {}, mother: {}, brother: {}, sister: {}, closeRelative:{}};
+            /*$scope.habit = {question_17: {}, question_18: {}, question_19: {}, question_20: {}};*/
+            $scope.habit = {};
+            $scope.build = {overWeightQuestion: {}};
             $scope.compulsoryHealthDetails=[];
 
             $scope.saveCompulsoryQuestionDetails=function()
@@ -256,7 +277,11 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
                     "proposalId":$scope.proposal.proposalId
                 };
                 console.log('request ' + JSON.stringify(request));
-                $http.post('proposal/updatefamily', request);
+                $http.post('/pla/individuallife/proposal/updatefamily',request).success(function (response, status, headers, config) {
+
+                }).error(function (response, status, headers, config) {
+                });
+
             }
 
             $scope.launchProposedAssuredeDate = function ($event) {
@@ -512,10 +537,23 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
                 //request=angular.extend($scope.additionalDetail,request);
                 var request1=
                 {
-                    "additionalDetail":request
+                    "additionalDetail":request,
+                    "proposalId":$scope.proposal.proposalId
                 }
                 console.log('RequiredJson:'+JSON.stringify(request1));
 
+            };
+
+            /*$http.get('/pla/individuallife/proposal/getproposalnumber/'+$scope.proposal.proposalId).success(function (response, status, headers, config) {
+                console.log('Retrieving Proposal Number..');
+                $scope.proposalNumber = response;
+            }).error(function (response, status, headers, config) {
+                console.log('status',+JSON.stringify(status));
+            });*/
+
+            $scope.proposalNumberDetails=
+            {
+                "proposalNumber":null
             };
 
             $scope.saveProposedAssuredDetails = function () {
@@ -545,9 +583,19 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
 
                     $http.post('create', request1).success(function (response, status, headers, config) {
                         $scope.proposal = response;
-                        console.log('proposalId : '+$scope.proposal.proposalId );
-                        //Testing
+                        console.log('Retrieving Proposal Number..');
 
+                        /*$http.get('/pla/individuallife/proposal/getproposalnumber/'+ $scope.proposal.proposalId).success(function (response, status, headers, config) {
+                         console.log('Retrieving Proposal Number..');
+                            $scope.proposalNumberDetails.proposalNumber = response;
+                            console.log('************* Start ********');
+                            console.log('Finding Number..'+$scope.proposalNumberDetails);
+                         }).error(function (response, status, headers, config) {
+                         console.log('status',+JSON.stringify(status));
+                         });
+*/
+
+                        //Testing
                         $http.get('/pla/individuallife/proposal/searchplan?proposalId='+$scope.proposal.proposalId).success(function (response, status, headers, config) {
                             console.log('Retrieving PlanDetails..');
                             $scope.iLplanDetails = response;
@@ -565,13 +613,13 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
                                 "proposalId":null
                             };*/
 
+                            $scope.proposalNumberDetails.proposalNumber=$scope.rcvProposal.proposalNumber;
                             $scope.proposal.proposalId=$scope.rcvProposal.proposalId;
                             $scope.proposedAssured=$scope.rcvProposal.proposedAssured || {};
                             $scope.proposer=$scope.rcvProposal.proposer || {};
                             $scope.proposerEmployment=$scope.proposer.employment;
                             $scope.proposerResidential=$scope.proposer.residentialAddress;
                             $scope.proposerSpouse=$scope.proposer.spouse;
-                            //$scope.proposalPlanDetail=$scope.rcvProposal.proposalPlanDetail;
 
 
                             if ($scope.proposedAssured.dateOfBirth) {
@@ -800,9 +848,10 @@ var viewILQuotationModule = (function ($http) {
         window.location.href = '/pla/individuallife/quotation/emailQuotation/' + this.selectedItem;
     }
 
-    services.modifyQuotation = function () {
-        var quotationId = this.selectedItem;
-        window.location.href = "/pla/individuallife/quotation/edit?quotationId=" + quotationId;
+    services.modifyProposal = function () {
+        var proposalId = this.selectedItem;
+        /*window.location.href = "/pla/individuallife/quotation/edit?quotationId=" + quotationId;*/
+        window.location.href="proposal/edit?proposalId=" + proposalId + "&mode=edit";
     };
 
     services.viewProposal = function () {
@@ -810,13 +859,14 @@ var viewILQuotationModule = (function ($http) {
         console.log('ID:'+JSON.stringify(proposalId));
 
          //window.location.href="/pla/individuallife/proposal/getproposal/"+ pid +"?mode=view";
-
-       /*$http.get("/pla/individuallife/proposal/getproposal/"+ pid +"?mode=view").success(function (response, status, headers, config) {
-           var result = response;
-            console.log('Result:'+JSON.stringify(result));
-        }).error(function (response, status, headers, config) {
-        });*/
         window.location.href="proposal/edit?proposalId=" + proposalId + "&mode=view";
+    };
+
+    services.createUpdateProposal=function()
+    {
+        alert("createUpdateProposal");
+        var quotationId = this.selectedItem;
+        window.location.href="edit?quotationId=" + quotationId + "&mode=update";
     };
 
     return services;
