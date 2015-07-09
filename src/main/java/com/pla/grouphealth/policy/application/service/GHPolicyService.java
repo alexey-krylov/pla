@@ -49,8 +49,19 @@ public class GHPolicyService {
         return policyDetailDto;
     }
 
-    public  List<PolicyDetailDto> searchPolicy(SearchGHPolicyDto searchGHPolicyDto){
-        return null;
+    public List<PolicyDetailDto> searchPolicy(SearchGHPolicyDto searchGHPolicyDto) {
+        List<Map> searchedPolices = ghPolicyFinder.searchPolicy(searchGHPolicyDto.getPolicyNumber(), searchGHPolicyDto.getPolicyHolderName());
+        if (isEmpty(searchedPolices)) {
+            return Lists.newArrayList();
+        }
+        List<PolicyDetailDto> transformedPolicies = searchedPolices.stream().map(new Function<Map, PolicyDetailDto>() {
+            @Override
+            public PolicyDetailDto apply(Map map) {
+                PolicyDetailDto policyDetailDto = transformToDto(map);
+                return policyDetailDto;
+            }
+        }).collect(Collectors.toList());
+        return transformedPolicies;
     }
 
     private PolicyDetailDto transformToDto(Map policyMap) {

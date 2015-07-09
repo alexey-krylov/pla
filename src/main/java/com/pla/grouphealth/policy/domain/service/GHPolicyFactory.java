@@ -8,6 +8,7 @@ import com.pla.grouphealth.sharedresource.model.vo.GHInsuredDependent;
 import com.pla.grouphealth.sharedresource.model.vo.GHPremiumDetail;
 import com.pla.grouphealth.sharedresource.model.vo.GHProposer;
 import com.pla.grouphealth.sharedresource.query.GHFinder;
+import com.pla.publishedlanguage.contract.ICommissionHierarchyProvider;
 import com.pla.sharedkernel.domain.model.*;
 import com.pla.sharedkernel.identifier.PolicyId;
 import com.pla.sharedkernel.identifier.ProposalId;
@@ -34,11 +35,14 @@ public class GHPolicyFactory {
 
     private GHPolicyNumberGenerator ghPolicyNumberGenerator;
 
+    private ICommissionHierarchyProvider commissionHierarchyProvider;
+
     @Autowired
-    public GHPolicyFactory(GHFinder ghFinder, SequenceGenerator sequenceGenerator, GHPolicyNumberGenerator ghPolicyNumberGenerator) {
+    public GHPolicyFactory(GHFinder ghFinder, SequenceGenerator sequenceGenerator, GHPolicyNumberGenerator ghPolicyNumberGenerator, ICommissionHierarchyProvider commissionHierarchyProvider) {
         this.ghFinder = ghFinder;
         this.sequenceGenerator = sequenceGenerator;
         this.ghPolicyNumberGenerator = ghPolicyNumberGenerator;
+        this.commissionHierarchyProvider = commissionHierarchyProvider;
     }
 
     public GroupHealthPolicy createPolicy(ProposalId proposalId) {
@@ -56,21 +60,12 @@ public class GHPolicyFactory {
         Proposal proposal = new Proposal(proposalId, proposalNumber);
         GroupHealthPolicy groupHealthPolicy = new GroupHealthPolicy(policyId, policyNumber, proposal, policyInceptionDate, policyExpireDate);
         insureds = populateFamilyId(insureds);
-        groupHealthPolicy = groupHealthPolicy.updateWithAgentId(agentId).updateWithProposer(proposer).updateWithInsured(insureds);
-        PolicyPremium policyPremium = getPolicyPremium(premiumDetail);
-        groupHealthPolicy = groupHealthPolicy.updateWithPremium(policyPremium);
+        groupHealthPolicy = groupHealthPolicy.addAgentId(agentId).addProposer(proposer).addInsured(insureds)
+                .addPremium(premiumDetail)
+                .addCommissionHierarchy(commissionHierarchyProvider.getCommissionHierarchy(agentId, DateTime.now()));
         return groupHealthPolicy;
     }
 
-    private PolicyPremium getPolicyPremium(GHPremiumDetail premiumDetail) {
-        PolicyPremium policyPremium = null;
-        if (premiumDetail.getOptedFrequencyPremium() != null && premiumDetail.getPremiumInstallment() == null) {
-            policyPremium = new PolicyPremium(premiumDetail.getOptedFrequencyPremium().getPremiumFrequency(), premiumDetail.getOptedFrequencyPremium().getPremium());
-        } else {
-            policyPremium = new PolicyPremium(premiumDetail.getPremiumInstallment().getNoOfInstallment(), premiumDetail.getPremiumInstallment().getInstallmentAmount());
-        }
-        return policyPremium;
-    }
 
     private Set<GHInsured> populateFamilyId(Set<GHInsured> insureds) {
         Map<String, Object> entitySequenceMap = sequenceGenerator.getEntitySequenceMap(GHInsured.class);

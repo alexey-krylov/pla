@@ -2,9 +2,10 @@ package com.pla.grouphealth.policy.domain.model;
 
 import com.pla.core.domain.model.agent.AgentId;
 import com.pla.grouphealth.sharedresource.model.vo.GHInsured;
+import com.pla.grouphealth.sharedresource.model.vo.GHPremiumDetail;
 import com.pla.grouphealth.sharedresource.model.vo.GHProposer;
+import com.pla.sharedkernel.domain.model.PolicyCommissionHierarchy;
 import com.pla.sharedkernel.domain.model.PolicyNumber;
-import com.pla.sharedkernel.domain.model.PolicyPremium;
 import com.pla.sharedkernel.domain.model.Proposal;
 import com.pla.sharedkernel.identifier.PolicyId;
 import lombok.AccessLevel;
@@ -46,9 +47,11 @@ public class GroupHealthPolicy extends AbstractAggregateRoot<PolicyId> {
 
     private Set<GHInsured> insureds;
 
-    private PolicyPremium premiumDetail;
+    private GHPremiumDetail premiumDetail;
 
     private PolicyStatus status;
+
+    private PolicyCommissionHierarchy commissionHierarchy;
 
     public GroupHealthPolicy(PolicyId policyId, PolicyNumber policyNumber, Proposal proposal, DateTime inceptionOn, DateTime expiredOn) {
         checkArgument(policyId != null, "Policy ID cannot be empty");
@@ -64,23 +67,29 @@ public class GroupHealthPolicy extends AbstractAggregateRoot<PolicyId> {
         this.status = PolicyStatus.IN_FORCE;
     }
 
-    public GroupHealthPolicy updateWithAgentId(AgentId agentId) {
+    public GroupHealthPolicy addAgentId(AgentId agentId) {
         this.agentId = agentId;
         return this;
     }
 
-    public GroupHealthPolicy updateWithProposer(GHProposer ghProposer) {
+    public GroupHealthPolicy addProposer(GHProposer ghProposer) {
         this.proposer = ghProposer;
         return this;
     }
 
-    public GroupHealthPolicy updateWithInsured(Set<GHInsured> insureds) {
+    public GroupHealthPolicy addInsured(Set<GHInsured> insureds) {
         this.insureds = insureds;
         return this;
     }
 
-    public GroupHealthPolicy updateWithPremium(PolicyPremium premiumDetail) {
+    public GroupHealthPolicy addPremium(GHPremiumDetail premiumDetail) {
         this.premiumDetail = premiumDetail;
+        return this;
+    }
+
+    public GroupHealthPolicy addCommissionHierarchy(PolicyCommissionHierarchy policyCommissionHierarchy) {
+        checkArgument(policyCommissionHierarchy != null, "Commission hierarchy should be provided");
+        this.commissionHierarchy = policyCommissionHierarchy;
         return this;
     }
 
