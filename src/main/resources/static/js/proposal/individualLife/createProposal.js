@@ -14,6 +14,7 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
             console.log("Proposal Id sent is:" + $scope. proposalId);
            $scope.mode= getQueryParameter('mode');
             console.log('modeType' + $scope.mode );
+            $scope.quotationStatus="GENERATED";
 
             if($scope.quotationId)
             {
@@ -276,6 +277,7 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
             $scope.saveGeneraLDetails=function()
             {
                 console.log('Inside saveGeneraLDetails Method..');
+                console.log($scope.generalAnswer);
                 var assuredByPLAL=
                 {
                     "questions":$scope.policyDetails,
