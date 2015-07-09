@@ -3,7 +3,7 @@
       lang="en">
 <head th:include="fragments/common :: headTag">
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-    <title name="Notification Role List"/>
+    <title name="Notification Upload Template List"/>
 </head>
 <body ng-controller="ReminderTemplateCtrl">
 
@@ -14,16 +14,34 @@
     }
 </style>
 <div th:include="fragments/common :: bodyHeader" th:remove="tag"></div>
+<script th:inline="javascript">
+    /*<![CDATA[*/
+    var template = {};
+    var lineOfBusiness = /*[[${NotificationTemplateDto.lineOfBusiness}]]*/null;
+    template.lineOfBusiness=lineOfBusiness;
+    var processType = /*[[${NotificationTemplateDto.processType}]]*/null;
+    template.processType = processType;
+    var waitingFor = /*[[${NotificationTemplateDto.waitingFor}]]*/null;
+    template.waitingFor = waitingFor;
+    var reminderType = /*[[${{NotificationTemplateDto.reminderType}}]]*/null;
+    template.reminderType = reminderType;
+
+    /*]]>*/
+</script>
+
+
+
+
 <link href="/pla/css/xeditable.css"/>
 <div class="splash">
     <div class="color-line"></div>
     <div class="splash-title"></div>
 </div>
-<div class="container-fluid">
+<div class="container-fluid ng-cloak">
     <div class="panel panel-primary">
         <div class="panel-heading">
             <div class="row">
-                <div class="col-lg-6"><span th:text="#{planList}">List of Notification Roles
+                <div class="col-lg-6"><span th:text="#{notificationUploadTemplates}">List of Notification Upload Templates
                         </span></div>
                 <div class="col-lg-6">
                     <a class="btn btn-default btn-sm" style="float: right"
@@ -48,11 +66,19 @@
                 </tr>
                 </thead>
                 <tbody>
-                <tr th:each="role : ${templateList}">
+             <!--   <tr th:each="role : ${templateList}">
                     <td th:text="${role.lineOfBusiness}"></td>
                     <td th:text="${role.processType}"></td>
                     <td th:text="${role.waitingFor}"></td>
                     <td th:text="${role.reminderType}"></td>
+                    <td><a>Download Template</a></td>
+                    <td></td>
+                </tr>-->
+                <tr ng-repeat="template in templateList">
+                    <td>{{template.lineOfBusiness}}</td>
+                    <td>{{template.processType}}</td>
+                    <td>{{template.waitingFor}}</td>
+                    <td>{{template.reminderType}}</td>
                     <td><a>Download Template</a></td>
                     <td></td>
                 </tr>
@@ -64,7 +90,7 @@
         </div>
     </div>
 
-
+</div>
     <div class="modal fade" id="newTemplate" tabindex="-1" role="dialog" aria-labelledby="newTemplate">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
@@ -75,8 +101,8 @@
                 </div>
                 <div class="modal-body">
                     <ng-alert></ng-alert>
-                    <form name="templateForm" action="/core/notification/uploadTemplate" method="POST"
-                          enctype="multipart/form-data">
+                    <form name="templateForm" action="uploadnotification"  id="templateForm" method="POST"
+                          enctype="multipart/form-data" ng-submit="submitFormToServer()">
 
                         <div class="panel panel-default">
                             <div class="panel-body">
@@ -99,7 +125,11 @@
                                 </div>
                                 <div class="control-group required col-md-4">
                                     <label class="control-label">Process Type</label>
-                                    <select class="form-control input-sm" id="processType"
+                                    <select class="form-control input-sm" id="processType" name="processType" ng-model="template.processType" ng-options="processTypes.processType as processTypes.description for processTypes in processTypeList | orderBy:'description' " ng-disabled="!template.lineOfBusiness">
+                                        <option value="">---Select Process Type---</option>
+                                    </select>
+
+                                   <!-- <select class="form-control input-sm" id="processType"
                                             ng-model="template.processType" name="processType"
                                             ng-required="true">
                                         <option value="QUOTATION">Quotation</option>
@@ -109,7 +139,7 @@
                                         <option value="ENDORSEMENT">Endorsement</option>
                                         <option value="SURRENDER">Surrender</option>
                                         <option value="MATURITY">Maturity</option>
-                                    </select>
+                                    </select>-->
 
                                     <div class="error"
                                          ng-show="templateForm.processType.$submitted &amp;&amp; templateForm.processType.$invalid">
@@ -120,12 +150,16 @@
                                 </div>
                                 <div class="control-group required col-md-6">
                                     <label class="control-label">Waiting For</label>
-                                    <select class="form-control input-sm" id="role"
+                                    <!--<select class="form-control input-sm" id="role"
                                             ng-model="template.waitingFor" name="waitingFor" ng-required="true">
                                         <option value="QUOTATION_PREPROCESSOR">Quotation</option>
                                         <option value="PROPOSAL_PREPROCESSOR">Proposal</option>
                                         <option value="CLAIM_PREPROCESSOR">Claim</option>
+                                    </select>-->
+                                    <select class="form-control input-sm" id="waitingFor" name="waitingFor"  ng-model="template.waitingFor" ng-options="waitingFors.waitingFor as waitingFors.description for waitingFors in waitingForList | orderBy:'description' " ng-disabled="!template.lineOfBusiness || !template.processType ">
+                                        <option value="">---Select Waiting For---</option>
                                     </select>
+
 
                                     <div class="error"
                                          ng-show="templateForm.waitingFor.$submitted &amp;&amp; templateForm.waitingFor.$invalid">
@@ -135,13 +169,48 @@
                                     </div>
                                 </div>
                                 <div class="control-group required col-md-6">
+                                    <label class="control-label">Notification Type</label>
+                                    <select class="form-control input-sm" id="reminderType" name="reminderType" ng-model="template.reminderType" ng-options="notificationTypes.reminderType as notificationTypes.description for notificationTypes in notificationTypeList | orderBy:'description' " ng-disabled="!template.lineOfBusiness || !template.processType || !template.waitingFor">
+                                        <option value="">---Select Notification Type---</option>
+                                    </select>
+
+
+                                    <div class="error"
+                                         ng-show="templateForm.reminderType.$submitted &amp;&amp; templateForm.reminderType.$invalid">
+                                        <small class="error" ng-show="templateForm.reminderType.$error.required">
+                                            Please select Role.
+                                        </small>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="form-group col-md-6 required">
+                                        <label class="control-label">Select Template</label>
+                                       <!-- <label class="input-sm" style="border:1px solid #ccc;width:230px;" >{{template.file[0].name}} </label>
+                                        <div class="btn btn-default" style="display:inline;float:right;margin-right:5px;" ng-file-select=""  ng-model="template.file"  >Browse</div>
+                                       --> <div>
+                                            <div class="input-group">
+                                <span class="input-group-btn">
+                                    <span class="btn btn-default btn-file" ng-file-select=""  ng-model="template.file"  >
+                                        Browse...
+                                      <!--  <input type="file" name="file" />-->
+                                    </span>
+                                </span>
+                                 <input type="text" class="form-control" value="{{template.file[0].name}}" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                               <!-- <div class="control-group required col-md-6">
                                     <label class="control-label">Select Template</label>
-                                    <myUpload key="file"></myUpload>
+                                   <input type="file" fileread="uploadfile"/>
+                                    &lt;!&ndash;<input type="file" fileread="vm.uploadme" />&ndash;&gt;
                                     <ng-messages class="error"
                                                  ng-show="templateForm.waitingFor.$submitted &amp;&amp; templateForm.waitingFor.$invalid">
                                         <ng-message for="required">Please select Role.</ng-message>
                                     </ng-messages>
-                                </div>
+                                </div>-->
                             </div>
                         </div>
 
@@ -149,41 +218,99 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary" ng-click="save()" ng-disabled="templateForm.$invalid">
+                   <button type="button" class="btn btn-primary"  ng-click="save(template.file)" ng-disabled="(!template.lineOfBusiness || !template.processType || !template.waitingFor || !template.reminderType)">
                         Upload
                     </button>
+                   <!-- <input type="submit" class="btn btn-primary" value="Upload" onclick="javascript:uploadTemplate();"/>-->
                 </div>
             </div>
         </div>
     </div>
-</div>
+
+<script type="application/javascript">
+
+      function uploadTemplate() {
+      // alert(JSON.stringify(template));
+        //  console.log(JSON.stringify(template));
+        $('#templateForm').attr('action', 'uploadnotification');
+        return true;
+    }
+</script>
+
 <footer class="footer" th:include="fragments/common :: footer"></footer>
 
 <script>
-    requirejs(['main'], function () {
+    requirejs(['main','angular-file-upload'], function () {
         require(['angular', 'jquery'], function (app, $) {
-            var module = angular.module('ReminderTemplateModule', ['common']);
-            module.controller('ReminderTemplateCtrl', ['$scope', '$http', '$window', function ($scope, $http, $window) {
+            var module = angular.module('ReminderTemplateModule', ['common','ngRoute', 'ui.bootstrap', 'ngSanitize','angularFileUpload']);
+            module.controller('ReminderTemplateCtrl', ['$scope', '$http', '$window','$upload', function ($scope, $http, $window,$upload) {
                 console.log('Reminder Template Module Controller ');
-                $scope.mapping = {};
+                console.log(JSON.stringify(template));
+                $scope.template = {};
+                $scope.template = template;
+                $http.get('/pla/core/notification/getnotificationtemplatelist').success(function(data){
+                    $scope.templateList=data;
+                });
+                $scope.$watch('template.lineOfBusiness',function(newValue, oldValue){
+                    if(newValue){
+                        $http.get('/pla/core/notification/getprocessbylob/'+newValue).success(function(data){
+                            $scope.processTypeList=data;
+                        });
+                    }
+                });
+                $scope.$watch('template.processType',function(newValue, oldValue){
+                    if(newValue){
+                        $http.get('/pla/core/notification/getwaitingfor/'+$scope.template.lineOfBusiness+'/'+newValue).success(function(data){
+                            $scope.waitingForList=data;
+                        });
+                    }
+                });
+                $scope.$watch('template.waitingFor',function(newValue, oldValue){
+                    if(newValue){
+                        $http.get('/pla/core/notification/getnotificationtype/'+$scope.template.lineOfBusiness+'/'+$scope.template.processType+'/'+newValue).success(function(data){
+                            $scope.notificationTypeList=data;
+                        });
+                    }
+                });
 
-                $scope.save = function () {
+
+                $scope.save = function (files) {
                     console.log('invoke saved...');
-                    var requestUrl = '';//new Url
-                    if ($scope.mapping.id) {
+                    console.log(files);
+                    /*var requestUrl = '/pla/core/notification/uploadnotification';//new Url
+                    console.log($scope.template);
+                    $http.post(requestUrl, $scope.template).success();
+                    if ($scope.template.id) {
                         requestUrl = '';//editUrl as it has an Id
                     }
-                    $('#');
+                   $('#');
+                   $('#newRoleMapping').modal('hide');
+                   $scope.reload();*/
+                    if (files) {
+                        $upload.upload({
+                            url: '/pla/core/notification/uploadnotification',
+                            file: files,
+                            fields:{lineOfBusiness:$scope.template.lineOfBusiness,processType:$scope.template.processType,
+                                waitingFor:$scope.template.waitingFor,reminderType:$scope.template.reminderType}
+                        }).progress(function (evt) {
+                            // var progressPercentage = parseInt(100.0 * evt.loaded / evt.total);
+                            // console.log('progress: ' + progressPercentage + '% ' +
+                            //      evt.config.file.name);
+                        }).success(function (data, status, headers, config) {
+                            console.log('file ' + config.file.name + 'uploaded. Response: ' +
+                            JSON.stringify(data));
+                        });
+                    }
                     $('#newRoleMapping').modal('hide');
                     $scope.reload();
                 };
 
                 $scope.clear = function () {
-                    $scope.mapping = {lineOfBusiness: null, processType: null, id: null, roleType: null};
+                    $scope.template = {lineOfBusiness: null, processType: null, id: null, roleType: null};
                 };
 
-                $scope.edit = function (mapping) {
-                    $scope.mapping = mapping.copy();
+                $scope.edit = function (template) {
+                    $scope.template = template.copy();
                     $('#newRoleMapping').modal('show');
                 };
 
@@ -192,8 +319,26 @@
                 };
 
             }]);
+          /*  module.directive("fileread", [function () {
+                return {
+                    scope: {
+                        fileread: "="
+                    },
+                    link: function (scope, element, attributes) {
+                        element.bind("change", function (changeEvent) {
+                            var reader = new FileReader();
+                            reader.onload = function (loadEvent) {
+                                scope.$apply(function () {
+                                    scope.fileread = loadEvent.target.result;
+                                });
+                            }
+                            reader.readAsDataURL(changeEvent.target.files[0]);
+                        });
+                    }
+                }
+            }]);*/
 
-            module.directive('myUpload', function () {
+          /*  module.directive('myUpload', function () {
                 return {
                     link: function postLink(scope, element, attrs) {
                         element.find("input").bind("change", function (changeEvent) {
@@ -206,7 +351,6 @@
                             if (typeof(changeEvent.target.files[0]) === 'object') {
                                 reader.readAsDataURL(changeEvent.target.files[0]);
                             }
-                            ;
                         });
 
                     },
@@ -219,8 +363,25 @@
                     restrict: 'E'
 
                 };
-            });
+            });*/
             angular.bootstrap(document, ['ReminderTemplateModule']);
+        });
+        $(document).on('change', '.btn-file :file', function () {
+            var input = $(this),
+                    numFiles = input.get(0).files ? input.get(0).files.length : 1,
+                    label = input.val().replace(/\\/g, '/').replace(/.*\//, '');
+            input.trigger('fileselect', [numFiles, label]);
+        });
+        $(document).ready(function () {
+            $('.btn-file :file').on('fileselect', function (event, numFiles, label) {
+                var input = $(this).parents('.input-group').find(':text'),
+                        log = numFiles > 1 ? numFiles + ' files selected' : label;
+                if (input.length) {
+                    input.val(log);
+                } else {
+                    if (log) alert(log);
+                }
+            });
         });
     });
 

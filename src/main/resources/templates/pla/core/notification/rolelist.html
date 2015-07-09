@@ -4,20 +4,7 @@
 <head th:include="fragments/common :: headTag">
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <title name="Notification Role List"/>
-    <script>
-        requirejs.config({
-            paths: {
-                notification_role: '/pla/js/notification/notification-role.js?t=1221'
-            },
-            "shim": {"ilquotation": ["angular"]}
-        });
-        requirejs(['main'], function () {
-            require(['notification_role', 'jquery'], function (app, $) {
-                angular.bootstrap(document, ['NotificationRoleModule']);
-            });
-        });
 
-    </script>
 </head>
 <body ng-controller="RoleMappingCtrl">
 
@@ -33,11 +20,11 @@
     <div class="color-line"></div>
     <div class="splash-title"></div>
 </div>
-<div class="container-fluid">
+<div class="container-fluid ng-cloak">
     <div class="panel panel-primary">
         <div class="panel-heading">
             <div class="row">
-                <div class="col-lg-6"><span th:text="#{planList}">List of Notification Roles
+                <div class="col-lg-6"><span th:text="#{notificationRoleList}">List of Notification Roles
                         </span></div>
                 <div class="col-lg-6">
                     <a class="btn btn-default btn-sm" style="float: right"
@@ -49,7 +36,7 @@
             <div class="col-md-9">
                 <nth-alert/>
             </div>
-            <table class="dataTables_wrapper dataTable table table-striped table-bordered"
+            <table  class="dataTables_wrapper dataTable table table-striped table-bordered"
                    datatable="" cellspacing="0" width="100%">
                 <thead>
                 <tr>
@@ -60,10 +47,16 @@
                 </tr>
                 </thead>
                 <tbody>
-                <tr th:each="role : ${roleList}">
+               <!-- <tr th:each="role : ${roleList}">
                     <td th:text="${role.roleType}"></td>
                     <td th:text="${role.lineOfBusiness}"></td>
                     <td th:text="${role.processType}"></td>
+                    <td></td>
+                </tr>-->
+                <tr ng-repeat="role in roleList">
+                    <td >{{role.roleType}}</td>
+                    <td>{{role.lineOfBusiness}}</td>
+                    <td >{{role.processType}}</td>
                     <td></td>
                 </tr>
                 </tbody>
@@ -74,7 +67,6 @@
         </div>
     </div>
 </div>
-
 
 <div class="modal fade" id="newRoleMapping" tabindex="-1" role="dialog" aria-labelledby="newRoleMapping">
     <div class="modal-dialog" role="document">
@@ -124,7 +116,7 @@
                             </div>
                             <div class="control-group required col-md-4">
                                 <label class="control-label">Process Type</label>
-                                <select class="form-control input-sm" id="processType"
+                               <!-- <select class="form-control input-sm" id="processType"
                                         ng-model="mapping.processType" name="processType"
                                         ng-required="true">
                                     <option value="QUOTATION">Quotation</option>
@@ -134,8 +126,10 @@
                                     <option value="ENDORSEMENT">Endorsement</option>
                                     <option value="SURRENDER">Surrender</option>
                                     <option value="MATURITY">Maturity</option>
+                                </select>-->
+                                <select class="form-control input-sm"  ng-model="mapping.processType" ng-options="processTypes.processType as processTypes.description for processTypes in processTypeList | orderBy:'description' " ng-disabled="!mapping.lineOfBusiness">
+                                    <option value="">---Select Process Type---</option>
                                 </select>
-
                                 <div class="error"
                                      ng-show="roleForm.processType.$submitted &amp;&amp; roleForm.processType.$invalid">
                                     <small class="error" ng-show="roleForm.processType.$error.required">
@@ -164,9 +158,20 @@
         require(['angular', 'jquery'], function (app, $) {
             var module = angular.module('RoleMappingModule', []);
             module.controller('RoleMappingCtrl', ['$scope', '$http', '$window', function ($scope, $http, $window) {
+
                 console.log('Role Mapping Controller ');
                 $scope.original = {lineOfBusiness: null, processType: null, roleType: null};
                 $scope.mapping = {};
+                $http.get('/pla/core/notification/getnotificationrolelist').success(function(data){
+                    $scope.roleList=data;
+                });
+                $scope.$watch('mapping.lineOfBusiness',function(newValue, oldValue){
+                    if(newValue){
+                        $http.get('/pla/core/notification/getprocessbylob/'+newValue).success(function(data){
+                            $scope.processTypeList=data;
+                        });
+                    }
+                });
 
                 $scope.save = function () {
                     console.log('invoke saved...');
