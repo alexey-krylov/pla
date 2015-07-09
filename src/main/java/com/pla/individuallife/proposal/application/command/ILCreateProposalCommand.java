@@ -18,14 +18,11 @@ import java.util.Set;
 @Setter
 @NoArgsConstructor
 public class ILCreateProposalCommand {
-
     private ProposedAssuredDto proposedAssured;
     private ProposerDto proposer;
     private ProposalPlanDetail planDetail;
     private UserDetails userDetails;
     private Set<AgentDetailDto> agentCommissionDetails;
-
     private String proposalId;
-
-
+    private String quotationId;
 }

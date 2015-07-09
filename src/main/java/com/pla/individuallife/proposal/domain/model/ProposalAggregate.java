@@ -5,6 +5,9 @@ import com.pla.core.domain.model.agent.AgentId;
 import com.pla.individuallife.identifier.QuestionId;
 import com.pla.individuallife.proposal.presentation.dto.AgentDetailDto;
 import com.pla.individuallife.proposal.presentation.dto.QuestionDto;
+import com.pla.individuallife.quotation.presentation.dto.PlanDetailDto;
+import com.pla.individuallife.quotation.presentation.dto.ProposerDto;
+import com.pla.individuallife.quotation.query.ILQuotationDto;
 import com.pla.sharedkernel.identifier.ProposalId;
 import org.apache.commons.beanutils.BeanUtils;
 import org.axonframework.eventsourcing.annotation.AbstractAnnotatedAggregateRoot;
@@ -17,7 +20,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.lang.reflect.InvocationTargetException;
 import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -33,7 +35,6 @@ public class ProposalAggregate extends AbstractAnnotatedAggregateRoot<ProposalId
     private ProposalSpecification specification=new ProposalSpecification();
     private ProposedAssured proposedAssured;
     private Proposer proposer;
-    private Set<RiderDetail> riders;
     private String proposalNumber;
     @Id
     @AggregateIdentifier
@@ -51,16 +52,14 @@ public class ProposalAggregate extends AbstractAnnotatedAggregateRoot<ProposalId
     private ILProposalStatus proposalStatus;
 
     ProposalAggregate() {
-        riders = new HashSet<RiderDetail>();
         beneficiaries = new ArrayList<Beneficiary>();
         agentCommissionShareModel = new AgentCommissionShareModel();
     }
 
-    public ProposalAggregate(UserDetails userDetails, ProposalId proposalId, String proposalNumber, ProposedAssured proposedAssured, Set<AgentDetailDto> agentCommissionDetails) {
-        riders = new HashSet<RiderDetail>();
+    public ProposalAggregate(UserDetails userDetails, String proposalId, String proposalNumber, ProposedAssured proposedAssured, Set<AgentDetailDto> agentCommissionDetails) {
         checkAuthorization(userDetails);
         this.proposalNumber = proposalNumber;
-        this.proposalId = proposalId;
+        this.proposalId = new ProposalId(proposalId);
         if(proposedAssured.getIsProposer()) {
             assignProposer(proposedAssured);
         }
@@ -69,6 +68,50 @@ public class ProposalAggregate extends AbstractAnnotatedAggregateRoot<ProposalId
         agentCommissionDetails.forEach(agentCommission -> agentCommissionShareModel.addAgentCommission(new AgentId(agentCommission.getAgentId()), agentCommission.getCommission()));
         assignAgents(agentCommissionShareModel);
         this.proposalStatus = ILProposalStatus.DRAFT;
+    }
+
+    public ProposalAggregate(UserDetails userDetails, String proposalId, String proposalNumber, ProposedAssured proposedAssured, Set<AgentDetailDto> agentCommissionDetails, ILQuotationDto quotationDto) {
+        checkAuthorization(userDetails);
+        this.proposalNumber = proposalNumber;
+        this.proposalId = new ProposalId(proposalId);
+        assignProposedAssured(proposedAssured);
+        AgentCommissionShareModel agentCommissionShareModel = new AgentCommissionShareModel();
+        agentCommissionDetails.forEach(agentCommission -> agentCommissionShareModel.addAgentCommission(new AgentId(agentCommission.getAgentId()), agentCommission.getCommission()));
+        assignAgents(agentCommissionShareModel);
+        if(proposedAssured.getIsProposer()) {
+            assignProposer(proposedAssured);
+        } else {
+            assignProposer(quotationDto.getProposer());
+        }
+
+        assignPlan(quotationDto.getPlanDetailDto());
+
+        this.proposalStatus = ILProposalStatus.DRAFT;
+
+    }
+
+    private void assignPlan(PlanDetailDto dto) {
+        ProposalPlanDetail planDetail = new ProposalPlanDetail();
+        try {
+            BeanUtils.copyProperties(planDetail, dto);
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        } catch (InvocationTargetException e) {
+            e.printStackTrace();
+        }
+        assignPlanDetail(planDetail);
+    }
+
+    private void assignProposer(ProposerDto dto) {
+        Proposer proposer = new Proposer();
+        proposer.setTitle(dto.getTitle());
+        proposer.setFirstName(dto.getFirstName());
+        proposer.setSurname(dto.getSurname());
+        proposer.setDateOfBirth(dto.getDateOfBirth());
+        proposer.setGender(dto.getGender());
+        proposer.setMobileNumber(dto.getMobileNumber());
+        proposer.setEmailAddress(dto.getEmailAddress());
+        this.proposer = proposer;
     }
 
     public void updateWithProposer(ProposalAggregate aggregate, Proposer proposer, UserDetails userDetails) {

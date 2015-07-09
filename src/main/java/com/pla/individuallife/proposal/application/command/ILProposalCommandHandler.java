@@ -1,9 +1,13 @@
 package com.pla.individuallife.proposal.application.command;
 
+import com.pla.core.query.AgentFinder;
+import com.pla.core.query.PlanFinder;
 import com.pla.individuallife.proposal.domain.model.*;
 import com.pla.individuallife.proposal.domain.service.ProposalNumberGenerator;
 import com.pla.individuallife.proposal.presentation.dto.QuestionDto;
+import com.pla.individuallife.quotation.query.ILQuotationDto;
 import com.pla.individuallife.quotation.query.ILQuotationFinder;
+import com.pla.sharedkernel.identifier.PlanId;
 import com.pla.sharedkernel.identifier.ProposalId;
 import org.axonframework.commandhandling.annotation.CommandHandler;
 import org.axonframework.repository.AggregateNotFoundException;
@@ -14,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by Prasant on 26-May-15.
@@ -26,17 +31,33 @@ public class ILProposalCommandHandler {
     private ProposalNumberGenerator proposalNumberGenerator;
     @Autowired
     private Repository<ProposalAggregate> ilProposalMongoRepository;
+
     @Autowired
-    private ILQuotationFinder ilQuotationFinder;
+    private ILQuotationFinder quotationFinder;
+
+    @Autowired
+    private AgentFinder agentFinder;
+
+    @Autowired
+    private PlanFinder planFinder;
 
     @CommandHandler
     public void createProposal(ILCreateProposalCommand cmd) {
+
+        ProposalAggregate aggregate;
         ProposedAssured proposedAssured = ProposedAssuredBuilder.getProposedAssuredBuilder(cmd.getProposedAssured()).createProposedAssured();
         if (logger.isDebugEnabled()) {
             logger.debug(" ProposedAssured :: " + proposedAssured);
         }
         String proposalNumber = proposalNumberGenerator.getProposalNumber();
-        ProposalAggregate aggregate = new ProposalAggregate(cmd.getUserDetails(), new ProposalId(cmd.getProposalId()), proposalNumber, proposedAssured, cmd.getAgentCommissionDetails());
+        if (cmd.getQuotationId() != null) {
+            ILQuotationDto dto = quotationFinder.getQuotationById(cmd.getQuotationId());
+            Map planDetail = planFinder.findPlanByPlanId(new PlanId(dto.getPlanId()));
+            dto.setPlanDetail(planDetail);
+            aggregate = new ProposalAggregate(cmd.getUserDetails(), cmd.getProposalId(), proposalNumber, proposedAssured, cmd.getAgentCommissionDetails(), dto);
+        } else {
+            aggregate = new ProposalAggregate(cmd.getUserDetails(), cmd.getProposalId(), proposalNumber, proposedAssured, cmd.getAgentCommissionDetails());
+        }
         ilProposalMongoRepository.add(aggregate);
     }
 
