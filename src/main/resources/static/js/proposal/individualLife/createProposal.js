@@ -278,11 +278,21 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
             {
                 console.log('Inside saveGeneraLDetails Method..');
                 console.log($scope.generalAnswer);
+                var assuredByPlal;
+                if($scope.assuredByPlal == "YES")
+                {
+                    assuredByPlal="true"
+                }
+                else
+                {
+                    assuredByPlal="false"
+                }
                 var assuredByPLAL=
                 {
                     "questions":$scope.policyDetails,
                     "questionId":"1",
-                    "answer": $scope.generalAnswer
+                    //"answer": $scope.generalAnswer
+                    "answer":assuredByPlal
                 }
 
                 var assuredByOthers=
