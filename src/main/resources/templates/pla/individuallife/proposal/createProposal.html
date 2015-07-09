@@ -198,27 +198,27 @@
                         <div class="col-md-6">
                             <div class="form-group required">
                                 <label class="control-label">Name of Assurer/Insurer</label>
-                                <input type="text" class="form-control input-sm" name="name" ng-model="insurer1.assuredName"/>
+                                <input type="text" class="form-control input-sm" name="assuredName" ng-model="insurer1.assuredName"/>
                             </div>
                             <div class="form-group required">
                                 <label class="control-label">Policy Number</label>
-                                <input type="text" class="form-control input-sm" name="proposalNumber" ng-model="insurer1.policyNumber"/>
+                                <input type="text" class="form-control input-sm" name="policyNumber" ng-model="insurer1.policyNumber"/>
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group required">
                                 <label class="control-label">Amount of Insurance</label>
-                                <input type="text" class="form-control input-sm" name="name" ng-model="insurer1.insuranceAmount"/>
+                                <input type="text" class="form-control input-sm" name="insuranceAmount" ng-model="insurer1.insuranceAmount"/>
                             </div>
                             <div class="form-group required">
                                 <label class="control-label">Policy Inception Date</label>
-                                <input type="text" class="form-control input-sm" name="proposalNumber" ng-model="insurer1.inceptionPolicyDate"/>
+                                <input type="text" class="form-control input-sm" name="inceptionPolicyDate" ng-model="insurer1.inceptionPolicyDate"/>
                             </div>
                         </div>
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button class="btn btn-default" ng-click="">Add</button>
+                    <button class="btn btn-default" ng-click="addAssuredByOthers(insurer1)">Add</button>
                     <button class="btn btn-default" ng-click="cancel()">Cancel</button>
                 </div>
             </div>
@@ -236,27 +236,27 @@
                         <div class="col-md-6">
                             <div class="form-group required">
                                 <label class="control-label">Name of Assurer/Insurer</label>
-                                <input type="text" class="form-control input-sm" name="name" ng-model="insurer1.assuredName"/>
+                                <input type="text" class="form-control input-sm" name="assuredName" ng-model="insurer2.assuredName"/>
                             </div>
                             <div class="form-group required">
                                 <label class="control-label">Policy Number</label>
-                                <input type="text" class="form-control input-sm" name="proposalNumber" ng-model="insurer2.policyNumber"/>
+                                <input type="text" class="form-control input-sm" name="policyNumber" ng-model="insurer2.policyNumber"/>
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group required">
                                 <label class="control-label">Amount of Insurance</label>
-                                <input type="text" class="form-control input-sm" name="name" ng-model="insurer2.insuranceAmount"/>
+                                <input type="text" class="form-control input-sm" name="insuranceAmount" ng-model="insurer2.insuranceAmount"/>
                             </div>
                             <div class="form-group required">
                                 <label class="control-label">Date of Proposal</label>
-                                <input type="text" class="form-control input-sm" name="proposalNumber" ng-model="insurer1.inceptionPolicyDate"/>
+                                <input type="text" class="form-control input-sm" name="proposalDate" ng-model="insurer2.proposalDate"/>
                             </div>
                         </div>
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button class="btn btn-default" ng-click="">Add This</button>
+                    <button class="btn btn-default" ng-click="addPendingInsuranceByOthersTpl(insurer2)">Add This</button>
                     <button class="btn btn-default" ng-click="cancel()">Cancel</button>
                 </div>
             </div>
@@ -274,17 +274,17 @@
                         <div class="col-md-12">
                             <div class="form-group required">
                                 <label class="control-label">Name of Assurer/Insurer</label>
-                                <input type="text" class="form-control input-sm" name="name"/>
+                                <input type="text" class="form-control input-sm" name="name" ng-model="insurer3.assuredName"/>
                             </div>
                             <div class="form-group required">
                                 <label class="control-label">Proposal Number</label>
-                                <input type="text" class="form-control input-sm" name="proposalNumber"/>
+                                <input type="text" class="form-control input-sm" name="proposalNumber" ng-model="insurer3.proposalNumber"/>
                             </div>
                         </div>
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button class="btn btn-default" ng-click="">Add This TPL</button>
+                    <button class="btn btn-default" ng-click="addaAssuranceDeclinedTpl(insurer3)">Add This TPL</button>
                     <button class="btn btn-default" ng-click="cancel()">Cancel</button>
                 </div>
             </div>

@@ -27,12 +27,13 @@
                 </accordion-group>
             </div>
             <div class="col-md-2">
-                <select class="form-control input-sm" ng-model="assuredByPlal" ng-change="openAccordion(assuredByPlal,'tab1')" name="assuredByPlal">
+                <select class="form-control input-sm" ng-model="assuredByPlal" ng-change="openAccordion(assuredByPlal,'tab1')">
                     <option value="">--Select One--</option>
                     <option value="YES">Yes</option>
                     <option value="NO">No</option>
                 </select>
             </div>
+
         </div>
         <div class="row" style="margin-bottom: 5px">
             <div class="col-md-10">
@@ -148,10 +149,10 @@
             <strong>Have you ever been or have you any intention of being engaged or employed at a mine of any sort?</strong>
         </div>
         <div class="col-md-2">
-            <select class="form-control input-sm" ng-model="employedAtMine">
+            <select class="form-control input-sm" ng-model="generalQuestion[0].answer" ng-change="generalQuestion[0].questionId='1'">
                 <option value="">--Select One--</option>
-                <option value="YES">Yes</option>
-                <option value="NO">No</option>
+                <option ng-value="true" value="true">Yes</option>
+                <option ng-value="false" value="false">No</option>
             </select>
         </div>
     </div>
@@ -162,10 +163,10 @@
             <strong>Have you ever been or have you any intention of being engaged or employed In aviation other than as a fare paying passenger on a regular airline?</strong>
         </div>
         <div class="col-md-2">
-            <select class="form-control input-sm" ng-model="employedAtAviation">
+            <select class="form-control input-sm" ng-model="generalQuestion[1].answer" ng-change="generalQuestion[1].questionId='2'">
                 <option value="">--Select One--</option>
-                <option value="YES">Yes</option>
-                <option value="NO">No</option>
+                <option ng-value="true" value="true">Yes</option>
+                <option ng-value="false" value="false">No</option>
             </select>
         </div>
     </div>
@@ -174,7 +175,7 @@
             <button type="button" class="btn btn-default btn-sm">Cancel</button>
         </div>
         <div class="col-sm-6">
-            <button type="button" class="btn btn-default btn-sm" style="float: right">Save</button>
+            <button type="button" class="btn btn-default btn-sm" style="float: right" ng-click="saveGeneraLDetails()">Save</button>
         </div>
     </div>
 </ng-form>

@@ -6,7 +6,7 @@
                 State name and address of your usual medical attendant(s)/Clinic Hospital
             </div>
             <div class="col-md-2">
-                <input type="text" class="form-control input-sm" ng-model="medicalAttendantDetails"/>
+                <input type="text" class="form-control input-sm" ng-model="medicalAttendant.medicalAttendantDetails"/>
             </div>
         </div>
         <div class="row form-group">
@@ -14,7 +14,7 @@
                 For how long has he/she been your medical attendant?
             </div>
             <div class="col-md-2">
-                <input type="text" class="form-control input-sm" ng-model="medicalAttendantDuration"/>
+                <input type="text" class="form-control input-sm" ng-model="medicalAttendant.medicalAttendantDuration"/>
             </div>
         </div>
         <div class="row form-group">
@@ -22,7 +22,7 @@
                 Date and reason for most recent consultation. (i.e. during the last 5 years)
             </div>
             <div class="col-md-2">
-                <input type="text" class="form-control input-sm" ng-model="dateAndReason"/>
+                <input type="text" class="form-control input-sm" ng-model="medicalAttendant.dateAndReason"/>
             </div>
         </div>
     </div>
@@ -56,7 +56,7 @@
                 </accordion-group>
             </div>
             <div class="col-md-2">
-                <select class="form-control input-sm" ng-model="replacement.answer">
+                <select class="form-control input-sm" ng-model="replacement.answer" ng-change="replacement.questionId='22' ">
                     <option value="">--Select One--</option>
                     <option value="YES">Yes</option>
                     <option value="NO">No</option>
