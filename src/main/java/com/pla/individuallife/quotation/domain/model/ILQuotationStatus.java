@@ -5,5 +5,5 @@ package com.pla.individuallife.quotation.domain.model;
  */
 public enum ILQuotationStatus {
 
-    DRAFT, GENERATED, CLOSED, PURGED, DECLINED
+    DRAFT, GENERATED, CLOSED, PURGED, DECLINED, SHARED, CONVERTED
 }

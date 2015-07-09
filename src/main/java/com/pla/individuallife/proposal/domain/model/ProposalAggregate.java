@@ -70,6 +70,8 @@ public class ProposalAggregate extends AbstractAnnotatedAggregateRoot<ProposalId
         this.proposalStatus = ILProposalStatus.DRAFT;
     }
 
+    //TODO : When the proposal goes to SUBMITTED status the remaining versions of the same quotation has to be declined
+    // and the quotation which is being converted to be changed with status CONVERTED when the proposal goes to state SUBMITTED
     public ProposalAggregate(UserDetails userDetails, String proposalId, String proposalNumber, ProposedAssured proposedAssured, Set<AgentDetailDto> agentCommissionDetails, ILQuotationDto quotationDto) {
         checkAuthorization(userDetails);
         this.proposalNumber = proposalNumber;
