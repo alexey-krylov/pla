@@ -5,10 +5,7 @@ import com.pla.grouphealth.policy.presentation.dto.PolicyDetailDto;
 import com.pla.grouphealth.policy.presentation.dto.SearchGHPolicyDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.List;
@@ -30,11 +27,19 @@ public class GHPolicyController {
     @RequestMapping(value = "/openpolicysearchpage", method = RequestMethod.GET)
     public ModelAndView openPolicySearchPage() {
         ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("pla/grouphealth/policy/viewPolicy");
+        modelAndView.setViewName("pla/grouphealth/policy/searchPolicy");
         modelAndView.addObject("searchResult", ghPolicyService.findAllPolicy());
         return modelAndView;
     }
 
+
+    @RequestMapping(value = "/viewpolicy", method = RequestMethod.GET)
+    public ModelAndView openPolicySearchPage(@RequestParam("policyId") String policyId) {
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("pla/grouphealth/policy/viewPolicy");
+        modelAndView.addObject("policyDetail", ghPolicyService.getPolicyDetail(policyId));
+        return modelAndView;
+    }
 
     @RequestMapping(value = "/getpolicydetail/{policyId}", method = RequestMethod.GET)
     @ResponseBody
