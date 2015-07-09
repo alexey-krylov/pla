@@ -15,5 +15,5 @@ public class AdditionalDetails {
     private String medicalAttendantDetails;
     private String medicalAttendantDuration;
     private String dateAndReason;
-    private Question replacementDetails;
+    private ReplacementQuestion replacementDetails;
 }

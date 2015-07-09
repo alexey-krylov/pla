@@ -1,6 +1,6 @@
 package com.pla.individuallife.proposal.application.command;
 
-import com.pla.individuallife.proposal.presentation.dto.QuestionDto;
+import com.pla.individuallife.proposal.domain.model.ReplacementQuestion;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -17,7 +17,7 @@ public class ILProposalUpdateAdditionalDetailsCommand {
     private String medicalAttendantDetails;
     private String medicalAttendantDuration;
     private String dateAndReason;
-    private QuestionDto replacementDetails;
+    private ReplacementQuestion replacementDetails;
     private UserDetails userDetails;
     private String proposalId;
 

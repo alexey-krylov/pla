@@ -202,9 +202,9 @@ public class ProposalAggregate extends AbstractAnnotatedAggregateRoot<ProposalId
     }
 
 
-    public void updateAdditionalDetails(UserDetails userDetails, String medicalAttendantDetails, String medicalAttendantDuration, String dateAndReason, QuestionDto replacementDetails) {
+    public void updateAdditionalDetails(UserDetails userDetails, String medicalAttendantDetails, String medicalAttendantDuration, String dateAndReason, ReplacementQuestion replacementDetails) {
         checkAuthorization(userDetails);
-        this.additionaldetails = new AdditionalDetails(medicalAttendantDetails, medicalAttendantDuration, dateAndReason, new Question(new QuestionId(replacementDetails.getQuestionId()), replacementDetails.isAnswer(), replacementDetails.getAnswerResponse()));
+        this.additionaldetails = new AdditionalDetails(medicalAttendantDetails, medicalAttendantDuration, dateAndReason, new ReplacementQuestion(replacementDetails.getQuestionId(), replacementDetails.isAnswer(), replacementDetails.getAnswerResponse1(), replacementDetails.getAnswerResponse2()));
     }
 
     public void updateWithPremiumPaymentDetail(ProposalAggregate aggregate, PremiumPaymentDetails premiumPaymentDetails, UserDetails userDetails) {
