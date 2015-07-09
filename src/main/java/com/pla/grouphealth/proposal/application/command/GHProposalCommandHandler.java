@@ -1,6 +1,8 @@
 package com.pla.grouphealth.proposal.application.command;
 
+import com.google.common.collect.Sets;
 import com.pla.grouphealth.proposal.domain.model.GHProposalApprover;
+import com.pla.grouphealth.proposal.domain.model.GHProposerDocument;
 import com.pla.grouphealth.proposal.domain.model.GroupHealthProposal;
 import com.pla.grouphealth.proposal.domain.service.GHProposalRoleAdapter;
 import com.pla.grouphealth.proposal.domain.service.GroupHealthProposalFactory;
@@ -20,13 +22,20 @@ import org.axonframework.repository.Repository;
 import org.bson.types.ObjectId;
 import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.data.mongodb.gridfs.GridFsTemplate;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.function.Predicate;
+
+import static org.nthdimenzion.utils.UtilValidator.isEmpty;
 
 /**
  * Created by Samir on 6/26/2015.
@@ -51,6 +60,9 @@ public class GHProposalCommandHandler {
     private GHProposalRepository ghProposalRepository;
 
     private GHProposalRoleAdapter ghProposalRoleAdapter;
+
+    @Autowired
+    private GridFsTemplate gridFsTemplate;
 
     @Autowired
     public GHProposalCommandHandler(GroupHealthProposalFactory groupHealthProposalFactory, Repository<GroupHealthProposal> ghProposalMongoRepository, GHProposalFinder ghProposalFinder,
@@ -140,6 +152,28 @@ public class GHProposalCommandHandler {
         return groupHealthProposal.getIdentifier().getProposalId();
     }
 
+    @CommandHandler
+    public void uploadMandatoryDocument(GHProposalDocumentCommand ghProposalDocumentCommand) throws IOException {
+        GroupHealthProposal groupHealthProposal = ghProposalMongoRepository.load(new ProposalId(ghProposalDocumentCommand.getProposalId()));
+        Set<GHProposerDocument> documents = groupHealthProposal.getProposerDocuments();
+        if (isEmpty(documents)) {
+            documents = Sets.newHashSet();
+        }
+        String gridFsDocId = gridFsTemplate.store(ghProposalDocumentCommand.getFile().getInputStream(), ghProposalDocumentCommand.getFile().getContentType(), ghProposalDocumentCommand.getFilename()).getId().toString();
+        GHProposerDocument currentDocument = new GHProposerDocument(ghProposalDocumentCommand.getDocumentId(), ghProposalDocumentCommand.getFilename(), gridFsDocId, ghProposalDocumentCommand.getFile().getContentType());
+        if (!documents.add(currentDocument)) {
+            GHProposerDocument existingDocument = documents.stream().filter(new Predicate<GHProposerDocument>() {
+                @Override
+                public boolean test(GHProposerDocument ghProposerDocument) {
+                    return currentDocument.equals(ghProposerDocument);
+                }
+            }).findAny().get();
+            gridFsTemplate.delete(new Query(Criteria.where("_id").is(existingDocument.getGridFsDocId())));
+            existingDocument = existingDocument.updateWithNameAndContent(ghProposalDocumentCommand.getFilename(), gridFsDocId, ghProposalDocumentCommand.getFile().getContentType());
+        }
+        groupHealthProposal = groupHealthProposal.updateWithDocuments(documents);
+    }
+
     private GroupHealthProposal populateAnnualBasicPremiumOfInsured(GroupHealthProposal groupHealthProposal, UserDetails userDetails, GHPremiumDetailDto premiumDetailDto) {
         if (premiumDetailDto.getPolicyTermValue() != 365) {
             Set<GHInsured> insureds = groupHealthProposal.getInsureds();
@@ -149,5 +183,6 @@ public class GHProposalCommandHandler {
         groupHealthProposal = groupHealthProposalService.updateWithPremiumDetail(groupHealthProposal, premiumDetailDto, userDetails);
         return groupHealthProposal;
     }
+
 
 }

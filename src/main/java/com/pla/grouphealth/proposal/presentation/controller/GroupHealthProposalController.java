@@ -362,7 +362,7 @@ public class GroupHealthProposalController {
     @RequestMapping(value = "/getapprovercomments", method = RequestMethod.GET)
     @ResponseBody
     @ApiOperation(httpMethod = "GET", value = "To list approval comments")
-    public List<ProposalApproverCommentsDto> findApproverComments(@RequestBody GHProposalApprovalCommand ghProposalApprovalCommand, HttpServletRequest request) {
+    public List<ProposalApproverCommentsDto> findApproverComments() {
         return ghProposalService.findApproverComments();
     }
 
@@ -389,12 +389,12 @@ public class GroupHealthProposalController {
         return Result.success("Proposal number ", proposalMap.get("proposalNumber") != null ? ((ProposalNumber) proposalMap.get("proposalNumber")).getProposalNumber() : "");
     }
 
-    @RequestMapping(value = "/uploadmandatorydocuemnt", method = RequestMethod.POST)
+    @RequestMapping(value = "/uploadmandatorydocument", method = RequestMethod.POST)
     @ResponseBody
-    public ResponseEntity uploadMandatoryDocument(GHMandatoryDocumentCommand ghMandatoryDocumentCommand, HttpServletRequest request) {
-        ghMandatoryDocumentCommand.setUserDetails(getLoggedInUserDetail(request));
+    public ResponseEntity uploadMandatoryDocument(GHProposalDocumentCommand ghProposalDocumentCommand, HttpServletRequest request) {
+        ghProposalDocumentCommand.setUserDetails(getLoggedInUserDetail(request));
         try {
-//            commandGateway.sendAndWait(ghMandatoryDocumentCommand);
+          commandGateway.sendAndWait(ghProposalDocumentCommand);
         } catch (Exception e) {
             e.printStackTrace();
             return new ResponseEntity(Result.failure(e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);

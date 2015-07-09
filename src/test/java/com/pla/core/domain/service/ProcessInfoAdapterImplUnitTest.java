@@ -191,7 +191,7 @@ public class ProcessInfoAdapterImplUnitTest {
         ProductLineGeneralInformation productLineGeneralInformation = ProductLineGeneralInformation.createProductLineGeneralInformation(LineOfBusinessEnum.GROUP_HEALTH);
         productLineGeneralInformation = productLineGeneralInformation.withPremiumFollowUpMonthly(premiumFollowUpFrequencyItems);
         when(generalInformationService.findProductLineInformationByLineOfBusinessId(LineOfBusinessEnum.GROUP_HEALTH)).thenReturn(productLineGeneralInformation);
-        int lapseTimePeriod =  processInfoAdapter.getLapseTimePeriod(LineOfBusinessEnum.GROUP_HEALTH, PremiumFrequency.ANNUALLY);
+        int lapseTimePeriod =  processInfoAdapter.getPolicyLapseTimePeriod(LineOfBusinessEnum.GROUP_HEALTH, PremiumFrequency.ANNUALLY);
         assertThat(lapseTimePeriod,is(53));
     }
 
@@ -206,7 +206,7 @@ public class ProcessInfoAdapterImplUnitTest {
         ProductLineGeneralInformation productLineGeneralInformation = ProductLineGeneralInformation.createProductLineGeneralInformation(LineOfBusinessEnum.GROUP_HEALTH);
         productLineGeneralInformation = productLineGeneralInformation.withPremiumFollowUpMonthly(premiumFollowUpFrequencyItems);
         when(generalInformationService.findProductLineInformationByLineOfBusinessId(LineOfBusinessEnum.GROUP_HEALTH)).thenReturn(productLineGeneralInformation);
-        int daysForFirstReminder =  processInfoAdapter.getDaysForFirstReminder(LineOfBusinessEnum.GROUP_HEALTH, PremiumFrequency.SEMI_ANNUALLY);
+        int daysForFirstReminder =  processInfoAdapter.getDaysForFirstPremiumReminder(LineOfBusinessEnum.GROUP_HEALTH, PremiumFrequency.SEMI_ANNUALLY);
         assertThat(daysForFirstReminder,is(22));
     }
 
@@ -220,7 +220,7 @@ public class ProcessInfoAdapterImplUnitTest {
         ProductLineGeneralInformation productLineGeneralInformation = ProductLineGeneralInformation.createProductLineGeneralInformation(LineOfBusinessEnum.GROUP_HEALTH);
         productLineGeneralInformation = productLineGeneralInformation.withPremiumFollowUpMonthly(premiumFollowUpFrequencyItems);
         when(generalInformationService.findProductLineInformationByLineOfBusinessId(LineOfBusinessEnum.GROUP_HEALTH)).thenReturn(productLineGeneralInformation);
-        int daysForSecondReminder =  processInfoAdapter.getDaysForSecondReminder(LineOfBusinessEnum.GROUP_HEALTH, PremiumFrequency.QUARTERLY);
+        int daysForSecondReminder =  processInfoAdapter.getDaysForSecondPremiumReminder(LineOfBusinessEnum.GROUP_HEALTH, PremiumFrequency.QUARTERLY);
         assertThat(daysForSecondReminder,is(31));
     }
 
@@ -234,9 +234,9 @@ public class ProcessInfoAdapterImplUnitTest {
         ProductLineGeneralInformation productLineGeneralInformation = ProductLineGeneralInformation.createProductLineGeneralInformation(LineOfBusinessEnum.GROUP_HEALTH);
         productLineGeneralInformation = productLineGeneralInformation.withPremiumFollowUpMonthly(premiumFollowUpFrequencyItems);
         when(generalInformationService.findProductLineInformationByLineOfBusinessId(LineOfBusinessEnum.GROUP_HEALTH)).thenReturn(productLineGeneralInformation);
-        int lapseTimePeriod =  processInfoAdapter.getLapseTimePeriod(LineOfBusinessEnum.GROUP_HEALTH, PremiumFrequency.MONTHLY);
-        int daysForFirstReminder =  processInfoAdapter.getDaysForFirstReminder(LineOfBusinessEnum.GROUP_HEALTH, PremiumFrequency.MONTHLY);
-        int daysForSecondReminder =  processInfoAdapter.getDaysForSecondReminder(LineOfBusinessEnum.GROUP_HEALTH, PremiumFrequency.MONTHLY);
+        int lapseTimePeriod =  processInfoAdapter.getPolicyLapseTimePeriod(LineOfBusinessEnum.GROUP_HEALTH, PremiumFrequency.MONTHLY);
+        int daysForFirstReminder =  processInfoAdapter.getDaysForFirstPremiumReminder(LineOfBusinessEnum.GROUP_HEALTH, PremiumFrequency.MONTHLY);
+        int daysForSecondReminder =  processInfoAdapter.getDaysForSecondPremiumReminder(LineOfBusinessEnum.GROUP_HEALTH, PremiumFrequency.MONTHLY);
         assertThat(lapseTimePeriod,is(14));
         assertThat(daysForSecondReminder,is(11));
         assertThat(daysForFirstReminder,is(12));

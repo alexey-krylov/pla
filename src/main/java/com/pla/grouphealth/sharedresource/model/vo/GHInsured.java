@@ -1,5 +1,6 @@
 package com.pla.grouphealth.sharedresource.model.vo;
 
+import com.pla.sharedkernel.domain.model.FamilyId;
 import com.pla.sharedkernel.domain.model.Gender;
 import com.pla.sharedkernel.identifier.PlanId;
 import lombok.AccessLevel;
@@ -58,6 +59,8 @@ public class GHInsured {
 
     private Integer maxAgeEntry;
 
+    private FamilyId familyId;
+
     GHInsured(GHInsuredBuilder insuredBuilder) {
         checkArgument(insuredBuilder != null);
         this.planPremiumDetail = insuredBuilder.getPlanPremiumDetail();
@@ -112,7 +115,7 @@ public class GHInsured {
             }
         }
         basicAnnualPremium = basicAnnualPremium.add(getBasicAnnualPlanPremiumIncludingNonVisibleCoveragePremiumForDependent());
-        basicAnnualPremium=basicAnnualPremium.setScale(2,BigDecimal.ROUND_CEILING);
+        basicAnnualPremium = basicAnnualPremium.setScale(2, BigDecimal.ROUND_CEILING);
         return basicAnnualPremium;
     }
 
@@ -126,7 +129,7 @@ public class GHInsured {
             }
         }
         totalVisibleCoveragePremium = totalVisibleCoveragePremium.add(getBasicAnnualVisibleCoveragePremiumForDependent());
-        totalVisibleCoveragePremium=totalVisibleCoveragePremium.setScale(2,BigDecimal.ROUND_CEILING);
+        totalVisibleCoveragePremium = totalVisibleCoveragePremium.setScale(2, BigDecimal.ROUND_CEILING);
         return totalVisibleCoveragePremium;
     }
 
@@ -164,5 +167,10 @@ public class GHInsured {
             }
         }
         return basicAnnualVisibleCoveragePremiumOfDependent;
+    }
+
+    public GHInsured updateWithFamilyId(FamilyId familyId) {
+        this.familyId = familyId;
+        return this;
     }
 }

@@ -1,27 +1,37 @@
 package com.pla.grouphealth.proposal.domain.model;
 
+import lombok.AccessLevel;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
-
-import java.io.InputStream;
+import lombok.NoArgsConstructor;
 
 /**
  * Created by Samir on 6/24/2015.
  */
 @Getter
+@EqualsAndHashCode(of = "documentId")
+@NoArgsConstructor(access = AccessLevel.PACKAGE)
 public class GHProposerDocument {
 
     private String documentId;
 
     private String documentName;
 
-    private boolean submitted;
+    private String contentType;
 
-    private InputStream content;
+    private String gridFsDocId;
 
-    public GHProposerDocument(String documentId, String documentName, boolean submitted, InputStream content) {
+    public GHProposerDocument(String documentId, String documentName, String gridFsDocId, String contentType) {
         this.documentId = documentId;
         this.documentName = documentName;
-        this.submitted = submitted;
-        this.content = content;
+        this.gridFsDocId = gridFsDocId;
+        this.contentType = contentType;
+    }
+
+    public GHProposerDocument updateWithNameAndContent(String documentName, String gridFsDocId, String contentType) {
+        this.documentName = documentName;
+        this.gridFsDocId = gridFsDocId;
+        this.contentType = contentType;
+        return this;
     }
 }

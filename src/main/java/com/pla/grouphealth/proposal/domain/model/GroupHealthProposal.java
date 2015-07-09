@@ -2,11 +2,12 @@ package com.pla.grouphealth.proposal.domain.model;
 
 import com.pla.core.domain.model.agent.AgentId;
 import com.pla.grouphealth.proposal.domain.event.GHProposalStatusAuditEvent;
+import com.pla.grouphealth.sharedresource.event.GHProposalToPolicyEvent;
 import com.pla.grouphealth.sharedresource.event.GHQuotationConvertedToProposalEvent;
 import com.pla.grouphealth.sharedresource.model.vo.GHInsured;
 import com.pla.grouphealth.sharedresource.model.vo.GHPremiumDetail;
-import com.pla.grouphealth.sharedresource.model.vo.ProposalStatus;
 import com.pla.grouphealth.sharedresource.model.vo.GHProposer;
+import com.pla.grouphealth.sharedresource.model.vo.ProposalStatus;
 import com.pla.sharedkernel.domain.model.Quotation;
 import com.pla.sharedkernel.identifier.OpportunityId;
 import com.pla.sharedkernel.identifier.ProposalId;
@@ -21,7 +22,6 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.math.BigDecimal;
-import java.util.List;
 import java.util.Set;
 
 import static com.google.common.base.Preconditions.checkArgument;
@@ -54,9 +54,11 @@ public class GroupHealthProposal extends AbstractAggregateRoot<ProposalId> {
 
     private ProposalStatus proposalStatus;
 
-    private List<GHProposerDocument> proposerDocuments;
+    private Set<GHProposerDocument> proposerDocuments;
 
     private OpportunityId opportunityId;
+
+    private String productType;
 
     @Override
     public ProposalId getIdentifier() {
@@ -70,7 +72,8 @@ public class GroupHealthProposal extends AbstractAggregateRoot<ProposalId> {
         this.proposalId = proposalId;
         this.quotation = quotation;
         this.proposalNumber = proposalNumber;
-        this.proposalStatus=ProposalStatus.DRAFT;
+        this.proposalStatus = ProposalStatus.DRAFT;
+        this.productType = "INSURANCE";
     }
 
     public GroupHealthProposal updateWithAgentId(AgentId agentId) {
@@ -96,7 +99,7 @@ public class GroupHealthProposal extends AbstractAggregateRoot<ProposalId> {
     //TODO Document followup should be scheduled after submitting the proposal or even before also?
     // TODO WIll additional documents also be followed up
     // TODO Answer: When Proposal becomes policy then  document reminder should go
-    public GroupHealthProposal updateWithDocuments(List<GHProposerDocument> proposerDocuments) {
+    public GroupHealthProposal updateWithDocuments(Set<GHProposerDocument> proposerDocuments) {
         this.proposerDocuments = proposerDocuments;
         // raise event to store document in client BC
         return this;
@@ -127,6 +130,7 @@ public class GroupHealthProposal extends AbstractAggregateRoot<ProposalId> {
     public GroupHealthProposal markASINForce(String approvedBy, DateTime approvedOn, String comment) {
         this.proposalStatus = ProposalStatus.IN_FORCE;
         registerEvent(new GHProposalStatusAuditEvent(this.getProposalId(), ProposalStatus.IN_FORCE, approvedBy, comment, approvedOn));
+        registerEvent(new GHProposalToPolicyEvent(this.proposalId));
         return this;
     }
 

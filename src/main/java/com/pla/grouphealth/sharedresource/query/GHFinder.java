@@ -3,11 +3,13 @@ package com.pla.grouphealth.sharedresource.query;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import com.mongodb.BasicDBObject;
 import com.pla.sharedkernel.identifier.QuotationId;
 import org.nthdimenzion.ddd.domain.annotations.Finder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.query.BasicQuery;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.jdbc.core.ColumnMapRowMapper;
@@ -133,4 +135,10 @@ public class GHFinder {
         return isNotEmpty(agentList) ? agentList.get(0) : Maps.newHashMap();
     }
 
+    public Map findProposalById(String proposalId) {
+        BasicDBObject query = new BasicDBObject();
+        query.put("_id", proposalId);
+        Map proposal = mongoTemplate.findOne(new BasicQuery(query), Map.class, "group_health_proposal");
+        return proposal;
+    }
 }

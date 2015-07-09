@@ -10,13 +10,15 @@ import org.springframework.web.multipart.MultipartFile;
  */
 @Getter
 @Setter
-public class GHMandatoryDocumentCommand {
+public class GHProposalDocumentCommand {
 
     private String proposalId;
 
     private UserDetails userDetails;
 
     private String documentId;
+
+    private String filename;
 
     private MultipartFile file;
 }

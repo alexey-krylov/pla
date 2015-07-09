@@ -48,7 +48,7 @@ angular.module('createProposal', ['common', 'ngRoute', 'mgcrea.ngStrap.select', 
                     // console.log(files);
                     if (files) {
                         $upload.upload({
-                            url: '/pla/grouphealth/proposal/uploadmandatorydocuemnt',
+                            url: '/pla/grouphealth/proposal/uploadmandatorydocument',
                             file: files,
                             fields: {documentId: document.documentId, proposalId: $scope.proposalId},
                             method: 'POST'
@@ -80,7 +80,7 @@ angular.module('createProposal', ['common', 'ngRoute', 'mgcrea.ngStrap.select', 
                     var files = document.documentAttached;
                     if (files) {
                         $upload.upload({
-                            url: '/pla/grouphealth/proposal/uploadmandatorydocuemnt',
+                            url: '/pla/grouphealth/proposal/uploadmandatorydocument',
                             file: files,
                             fields: {documentId: document.documentName, proposalId: $scope.proposalId},
                             method: 'POST'

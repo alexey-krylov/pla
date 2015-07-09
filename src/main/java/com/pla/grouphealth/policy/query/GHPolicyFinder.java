@@ -1,0 +1,43 @@
+package com.pla.grouphealth.policy.query;
+
+import com.google.common.collect.Lists;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.Map;
+
+import static org.nthdimenzion.utils.UtilValidator.isEmpty;
+
+/**
+ * Created by Samir on 7/9/2015.
+ */
+@Service
+public class GHPolicyFinder {
+
+    @Autowired
+    private MongoTemplate mongoTemplate;
+
+    private static final String GH_POLICY_COLLECTION_NAME = "group_health_policy";
+
+    public List<Map> findAllPolicy() {
+        return mongoTemplate.findAll(Map.class, GH_POLICY_COLLECTION_NAME);
+    }
+
+    public Map findPolicyById(String policyId) {
+        return mongoTemplate.findOne(new Query(Criteria.where("_id").is(policyId)), Map.class, GH_POLICY_COLLECTION_NAME);
+    }
+
+    public List<Map> searchPolicy(String policyNumber, String policyHolderName) {
+        if (isEmpty(policyHolderName) && isEmpty(policyNumber)) {
+            return Lists.newArrayList();
+        }
+
+        return null;
+    }
+
+
+}

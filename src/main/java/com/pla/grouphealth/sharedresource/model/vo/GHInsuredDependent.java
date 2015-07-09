@@ -1,5 +1,6 @@
 package com.pla.grouphealth.sharedresource.model.vo;
 
+import com.pla.sharedkernel.domain.model.FamilyId;
 import com.pla.sharedkernel.domain.model.Gender;
 import com.pla.sharedkernel.domain.model.Relationship;
 import com.pla.sharedkernel.identifier.PlanId;
@@ -58,6 +59,8 @@ public class GHInsuredDependent {
 
     private Integer noOfAssured;
 
+    private FamilyId familyId;
+
     GHInsuredDependent(GHInsuredDependentBuilder insuredDependentBuilder) {
         checkArgument(insuredDependentBuilder != null);
         this.companyName = insuredDependentBuilder.getCompanyName();
@@ -100,7 +103,7 @@ public class GHInsuredDependent {
                 }
             }
         }
-        basicAnnualVisibleCoveragePremiumOfDependent = basicAnnualVisibleCoveragePremiumOfDependent.setScale(2,BigDecimal.ROUND_CEILING);
+        basicAnnualVisibleCoveragePremiumOfDependent = basicAnnualVisibleCoveragePremiumOfDependent.setScale(2, BigDecimal.ROUND_CEILING);
         return basicAnnualVisibleCoveragePremiumOfDependent;
     }
 
@@ -115,8 +118,13 @@ public class GHInsuredDependent {
                 }
             }
         }
-        basicAnnualPremiumOfDependent = basicAnnualPremiumOfDependent.setScale(2,BigDecimal.ROUND_CEILING);
+        basicAnnualPremiumOfDependent = basicAnnualPremiumOfDependent.setScale(2, BigDecimal.ROUND_CEILING);
         return basicAnnualPremiumOfDependent;
+    }
+
+    public GHInsuredDependent updateWithFamilyId(FamilyId familyId) {
+        this.familyId = familyId;
+        return this;
     }
 
 }

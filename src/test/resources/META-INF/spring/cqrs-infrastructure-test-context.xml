@@ -89,5 +89,8 @@
     <extension:mongo-repository id="ghProposalMongoRepository"
                                 aggregate-type="com.pla.grouphealth.proposal.domain.model.GroupHealthProposal"
                                 mongo-template="mongoTemplate"/>
+    <extension:mongo-repository id="ghPolicyMongoRepository"
+                                aggregate-type="com.pla.grouphealth.policy.domain.model.GroupHealthPolicy"
+                                mongo-template="mongoTemplate"/>
 
 </beans>

@@ -73,10 +73,7 @@ public class GHProposalFinder {
     }
 
     public Map findProposalById(String proposalId) {
-        BasicDBObject query = new BasicDBObject();
-        query.put("_id", proposalId);
-        Map proposal = mongoTemplate.findOne(new BasicQuery(query), Map.class, GH_PROPOSAL_COLLECTION_NAME);
-        return proposal;
+        return ghFinder.findProposalById(proposalId);
     }
 
     public List<Map> searchProposal(String proposalNumber, String proposerName, String agentName, String agentCode, String proposalId, String[] statuses) {

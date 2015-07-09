@@ -50,19 +50,19 @@ public class ProcessInfoAdapterImpl implements IProcessInfoAdapter {
     }
 
     @Override
-     public int getLapseTimePeriod(LineOfBusinessEnum lineOfBusinessEnum, PremiumFrequency premiumFrequency) throws ProcessInfoException {
+     public int getPolicyLapseTimePeriod(LineOfBusinessEnum lineOfBusinessEnum, PremiumFrequency premiumFrequency) throws ProcessInfoException {
         ProductLineGeneralInformation productLineGeneralInformation = generalInformationService.findProductLineInformationByLineOfBusinessId(lineOfBusinessEnum);
         return productLineGeneralInformation.getPremiumFollowUpFrequencyLineItem(premiumFrequency, ProductLineProcessType.LAPSE);
     }
 
     @Override
-    public int getDaysForFirstReminder(LineOfBusinessEnum lineOfBusinessEnum,PremiumFrequency premiumFrequency) throws ProcessInfoException {
+    public int getDaysForFirstPremiumReminder(LineOfBusinessEnum lineOfBusinessEnum, PremiumFrequency premiumFrequency) throws ProcessInfoException {
         ProductLineGeneralInformation productLineGeneralInformation = generalInformationService.findProductLineInformationByLineOfBusinessId(lineOfBusinessEnum);
         return productLineGeneralInformation.getPremiumFollowUpFrequencyLineItem(premiumFrequency, ProductLineProcessType.FIRST_REMAINDER);
     }
 
     @Override
-    public int getDaysForSecondReminder(LineOfBusinessEnum lineOfBusinessEnum,PremiumFrequency premiumFrequency) throws ProcessInfoException {
+    public int getDaysForSecondPremiumReminder(LineOfBusinessEnum lineOfBusinessEnum, PremiumFrequency premiumFrequency) throws ProcessInfoException {
         ProductLineGeneralInformation productLineGeneralInformation = generalInformationService.findProductLineInformationByLineOfBusinessId(lineOfBusinessEnum);
         return productLineGeneralInformation.getPremiumFollowUpFrequencyLineItem(premiumFrequency, ProductLineProcessType.SECOND_REMAINDER);
     }

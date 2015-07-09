@@ -537,6 +537,7 @@ insert  into `entity_sequence`(`sequence_id`,`sequence_name`,`sequence_number`,`
 insert  into `entity_sequence`(`sequence_id`,`sequence_name`,`sequence_number`,`sequence_prefix`) values (8,'com.pla.core.domain.model.Coverage',0,'1000');
 insert  into `entity_sequence`(`sequence_id`,`sequence_name`,`sequence_number`,`sequence_prefix`) values (9,'com.pla.grouplife.proposal.domain.model.GroupLifeProposal',4000000,' ');
 insert  into `entity_sequence`(`sequence_id`,`sequence_name`,`sequence_number`,`sequence_prefix`) values (10,'com.pla.grouphealth.proposal.domain.model.GroupHealthProposal',5000000,' ');
+insert  into `entity_sequence`(`sequence_id`,`sequence_name`,`sequence_number`,`sequence_prefix`) values (11,'com.pla.grouphealth.policy.domain.model.GroupHealthPolicy',10000000,' ');
 
 insert into `channel_type` (`CHANNEL_CODE`, `CHANNEL_DESCRIPTION`) values('BROKER','Broker');
 insert into `channel_type` (`CHANNEL_CODE`, `CHANNEL_DESCRIPTION`) values('DIRECT','Direct');

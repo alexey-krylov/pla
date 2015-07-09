@@ -19,8 +19,18 @@ public class GHProposalMandatoryDocumentDto {
 
     private MultipartFile file;
 
+    private byte[] content;
+
+    private boolean submitted;
+
     public GHProposalMandatoryDocumentDto(String documentId, String documentName) {
         this.documentId = documentId;
         this.documentName = documentName;
+    }
+
+    public GHProposalMandatoryDocumentDto updateWithContent(byte[] content){
+        this.content=content;
+        this.submitted=true;
+        return this;
     }
 }

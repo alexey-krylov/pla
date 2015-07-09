@@ -20,11 +20,11 @@ public interface IProcessInfoAdapter {
 
     public int getDaysForSecondReminder(LineOfBusinessEnum lineOfBusinessEnum, ProcessType processType) throws ProcessInfoException;
 
-    public int getLapseTimePeriod(LineOfBusinessEnum lineOfBusinessEnum,PremiumFrequency premiumFrequency) throws ProcessInfoException;
+    public int getPolicyLapseTimePeriod(LineOfBusinessEnum lineOfBusinessEnum, PremiumFrequency premiumFrequency) throws ProcessInfoException;
 
-    public int getDaysForFirstReminder(LineOfBusinessEnum lineOfBusinessEnum,PremiumFrequency premiumFrequency) throws ProcessInfoException;
+    public int getDaysForFirstPremiumReminder(LineOfBusinessEnum lineOfBusinessEnum, PremiumFrequency premiumFrequency) throws ProcessInfoException;
 
-    public int getDaysForSecondReminder(LineOfBusinessEnum lineOfBusinessEnum,PremiumFrequency premiumFrequency) throws ProcessInfoException;
+    public int getDaysForSecondPremiumReminder(LineOfBusinessEnum lineOfBusinessEnum, PremiumFrequency premiumFrequency) throws ProcessInfoException;
 
     public BigDecimal getServiceTaxAmount();
 }

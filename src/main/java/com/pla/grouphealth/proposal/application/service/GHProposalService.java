@@ -2,8 +2,10 @@ package com.pla.grouphealth.proposal.application.service;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
+import com.mongodb.gridfs.GridFSDBFile;
 import com.pla.core.domain.model.agent.AgentId;
 import com.pla.grouphealth.proposal.application.command.GHProposalRecalculatedInsuredPremiumCommand;
+import com.pla.grouphealth.proposal.domain.model.GHProposerDocument;
 import com.pla.grouphealth.proposal.domain.model.GroupHealthProposal;
 import com.pla.grouphealth.proposal.domain.model.GroupHealthProposalStatusAudit;
 import com.pla.grouphealth.proposal.presentation.dto.GHProposalDto;
@@ -29,21 +31,23 @@ import com.pla.sharedkernel.identifier.*;
 import com.pla.sharedkernel.util.PDFGeneratorUtils;
 import net.sf.jasperreports.engine.JRException;
 import org.apache.commons.beanutils.BeanUtils;
+import org.apache.commons.io.IOUtils;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.axonframework.commandhandling.gateway.CommandGateway;
 import org.bson.types.ObjectId;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.data.mongodb.gridfs.GridFsTemplate;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 import static org.nthdimenzion.presentation.AppUtils.getIntervalInDays;
@@ -78,6 +82,9 @@ public class GHProposalService {
 
     @Autowired
     private IUnderWriterAdapter underWriterAdapter;
+
+    @Autowired
+    private GridFsTemplate gridFsTemplate;
 
     @Autowired
     public GHProposalService(GHProposalFinder ghProposalFinder, IPlanAdapter planAdapter, GHFinder ghFinder, GHInsuredExcelGenerator ghInsuredExcelGenerator, GHInsuredExcelParser ghInsuredExcelParser, GHProposalRepository ghProposalRepository, CommandGateway commandGateway) {
@@ -358,6 +365,7 @@ public class GHProposalService {
     public List<GHProposalMandatoryDocumentDto> findMandatoryDocuments(String proposalId) {
         Map proposal = ghProposalFinder.findProposalById(proposalId);
         List<GHInsured> insureds = (List<GHInsured>) proposal.get("insureds");
+        List<GHProposerDocument> uploadedDocuments = proposal.get("proposerDocuments") != null ? (List<GHProposerDocument>) proposal.get("proposerDocuments") : Lists.newArrayList();
         List<SearchDocumentDetailDto> documentDetailDtos = Lists.newArrayList();
         insureds.forEach(ghInsured -> {
             GHPlanPremiumDetail planPremiumDetail = ghInsured.getPlanPremiumDetail();
@@ -394,7 +402,24 @@ public class GHProposalService {
             mandatoryDocumentDtos = mandatoryDocuments.stream().map(new Function<ClientDocumentDto, GHProposalMandatoryDocumentDto>() {
                 @Override
                 public GHProposalMandatoryDocumentDto apply(ClientDocumentDto clientDocumentDto) {
-                    return new GHProposalMandatoryDocumentDto(clientDocumentDto.getDocumentCode(), clientDocumentDto.getDocumentName());
+                    GHProposalMandatoryDocumentDto mandatoryDocumentDto = new GHProposalMandatoryDocumentDto(clientDocumentDto.getDocumentCode(), clientDocumentDto.getDocumentName());
+                    Optional<GHProposerDocument> proposerDocumentOptional = uploadedDocuments.stream().filter(new Predicate<GHProposerDocument>() {
+                        @Override
+                        public boolean test(GHProposerDocument ghProposerDocument) {
+                            return clientDocumentDto.getDocumentCode().equals(ghProposerDocument.getDocumentId());
+                        }
+                    }).findAny();
+                    if (proposerDocumentOptional.isPresent()) {
+                        try {
+                            if (isNotEmpty(proposerDocumentOptional.get().getGridFsDocId())) {
+                                GridFSDBFile gridFSDBFile = gridFsTemplate.findOne(new Query(Criteria.where("_id").is(proposerDocumentOptional.get().getGridFsDocId())));
+                                mandatoryDocumentDto.updateWithContent(IOUtils.toByteArray(gridFSDBFile.getInputStream()));
+                            }
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                    return mandatoryDocumentDto;
                 }
             }).collect(Collectors.toList());
         }
