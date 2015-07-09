@@ -15,7 +15,7 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
            $scope.mode= getQueryParameter('mode');
             console.log('modeType' + $scope.mode );
             $scope.quotationStatus="GENERATED";
-
+            quotationStatus
             if($scope.quotationId)
             {
                 alert("Navigate to Proposer Window...")
