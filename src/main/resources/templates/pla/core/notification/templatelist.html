@@ -45,7 +45,7 @@
                         </span></div>
                 <div class="col-lg-6">
                     <a class="btn btn-default btn-sm" style="float: right"
-                       href="#newTemplate" data-toggle="modal" data-target="#newTemplate">New Role Mapping</a>
+                       href="#newTemplate" data-toggle="modal" data-target="#newTemplate">New Template</a>
                 </div>
             </div>
         </div>
@@ -79,8 +79,11 @@
                     <td>{{template.processType}}</td>
                     <td>{{template.waitingFor}}</td>
                     <td>{{template.reminderType}}</td>
-                    <td><a>Download Template</a></td>
-                    <td></td>
+                   <!-- <td><a>Download Template</a></td>-->
+                    <td><button type="button" class="btn btn-success btn-xs"  ng-click="downloadTemplate(template.notificationTemplateId)">DownloadTemplate</button></td>
+                    <td>
+                        <button type="button" class="btn btn-default btn-xs"  ng-click="updateTemplate(template.notificationTemplateId)">Update</button>
+                        <button type="button" class="btn btn-danger btn-xs"  data-toggle="modal" data-target="#alert-modal" ng-click="inactivate(template.notificationTemplateId)" >Inactivate</button></td>
                 </tr>
                 </tbody>
             </table>
@@ -227,16 +230,6 @@
         </div>
     </div>
 
-<script type="application/javascript">
-
-      function uploadTemplate() {
-      // alert(JSON.stringify(template));
-        //  console.log(JSON.stringify(template));
-        $('#templateForm').attr('action', 'uploadnotification');
-        return true;
-    }
-</script>
-
 <footer class="footer" th:include="fragments/common :: footer"></footer>
 
 <script>
@@ -317,6 +310,21 @@
                 $scope.reload = function () {
                     $window.location = '';
                 };
+
+                $scope.downloadTemplate = function(templateId){
+                    $scope.downloadedFileReminder =_.findWhere($scope.templateList,{notificationTemplateId:templateId});
+                    console.log($scope.downloadedFileReminder);
+                    $http.post('/pla/core/notification/getremindertype', $scope.downloadedFileReminder).success(function(data){
+                        if(data.status==200){
+                            // $scope.alert = {title:'Success Message! ', content:data.message, type: 'success'};
+
+                           // $window.location.href="/pla/core/mandatorydocument/view";
+
+                        }else{
+                            // $scope.alert = {title:'Error Message! ', content:data.message, type: 'danger'};
+                        }
+                    });
+                }
 
             }]);
           /*  module.directive("fileread", [function () {
