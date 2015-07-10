@@ -76,7 +76,7 @@
                     <td><button type="button" class="btn btn-success btn-xs"  ng-click="downloadTemplate(template.notificationTemplateId)">DownloadTemplate</button></td>
                     <td>
                         <button type="button" class="btn btn-default btn-xs" data-toggle="modal" data-target="#updateTemplate" ng-click="updateTemplate(template.notificationTemplateId)">Update</button>
-                        <button type="button" class="btn btn-danger btn-xs"  data-toggle="modal" data-target="#alert-modal" ng-click="inactivate(template.notificationTemplateId)" >Inactivate</button></td>
+                        <button type="button" class="btn btn-danger btn-xs"  data-toggle="modal" data-target="#alert-modal" ng-click="inactivate(template.notificationTemplateId,'save')" >Inactivate</button></td>
                 </tr>
                 </tbody>
             </table>
@@ -87,6 +87,29 @@
     </div>
 
 </div>
+
+<!-- ***************************** ALERT BOX ********************************-->
+
+<div class="modal fade" id="alert-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">Alert</h4>
+            </div>
+            <div class="modal-body">
+                <div class="alert alert-success" hidden="true" id="successMessage"></div>
+                <div class="alert alert-danger" hidden="true" id="inactivate-alert-danger"></div>
+                <div id="confirmationMsg">Are you sure you want to delete the upload template?</div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" id="approveButton" ng-click="inactivate('','confirm')">Yes</button>
+                <button type="button" class="btn btn-danger" id="changeToOk" data-dismiss="modal">Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <!-- ******************************** UPDATE EXISTING TEMPLATE ****************************-->
 <div class="modal fade" id="updateTemplate" tabindex="-1" role="dialog" aria-labelledby="updateTemplate">
     <div class="modal-dialog" role="document">
@@ -327,9 +350,7 @@
                             fields:{lineOfBusiness:$scope.template.lineOfBusiness,processType:$scope.template.processType,
                                 waitingFor:$scope.template.waitingFor,reminderType:$scope.template.reminderType}
                         }).progress(function (evt) {
-                            // var progressPercentage = parseInt(100.0 * evt.loaded / evt.total);
-                            // console.log('progress: ' + progressPercentage + '% ' +
-                            //      evt.config.file.name);
+
                         }).success(function (data, status, headers, config) {
                             console.log('file ' + config.file.name + 'uploaded. Response: ' +
                             JSON.stringify(data));
@@ -354,19 +375,8 @@
 
 
                 $scope.downloadTemplate = function(templateId){
-                    $scope.downloadedFileReminder =_.findWhere($scope.templateList,{notificationTemplateId:templateId});
-                    console.log($scope.downloadedFileReminder);
-                    $http.post('/pla/core/notification/getremindertype', $scope.downloadedFileReminder).success(function(data){
-                        if(data.status==200){
-                            // $scope.alert = {title:'Success Message! ', content:data.message, type: 'success'};
-
-                           // $window.location.href="/pla/core/mandatorydocument/view";
-
-                        }else{
-                            // $scope.alert = {title:'Error Message! ', content:data.message, type: 'danger'};
-                        }
-                    });
-                }
+                    window.location.href = '/pla/core/notification/getremindertype/'+templateId;
+                 }
                 $scope.updateTemplate = function(templateId){
                     $scope.updateTemplate =_.findWhere($scope.templateList,{notificationTemplateId:templateId});
                     console.log($scope.updateTemplate);
@@ -379,22 +389,43 @@
                             fields:{lineOfBusiness:$scope.updateTemplate.lineOfBusiness,processType:$scope.updateTemplate.processType,
                                 waitingFor:$scope.updateTemplate.waitingFor,reminderType:$scope.updateTemplate.reminderType}
                         }).progress(function (evt) {
-                            // var progressPercentage = parseInt(100.0 * evt.loaded / evt.total);
-                            // console.log('progress: ' + progressPercentage + '% ' +
-                            //      evt.config.file.name);
+
                         }).success(function (data, status, headers, config) {
                             console.log('file ' + config.file.name + 'uploaded. Response: ' +
                             JSON.stringify(data));
                         });
                     }
                     $('#updateTemplate').modal('hide');
-                    $scope.reload();
+                    window.setTimeout('location.reload()', 3000);
 
                 }
-                $scope.inactivate = function(){
 
+                var uploadTemplateToInactivate = '';
+                $scope.inactivate=function(value,flag){
+                    // hideAlerts();
+                    $('#approveButton').show();
+                    if(flag=='save'){
+                        console.log(value);
+                        uploadTemplateToInactivate =  value;
+                    }else{
+                        $http.get('/pla/core/notification/deletetemplate/'+uploadTemplateToInactivate).success(function(data){
+                             if(data.status=='200'){
+                                $('#alert-modal').show();
+                                $('#confirmationMsg').hide();
+                                $('#approveButton').hide();
+                                $('#changeToOk').text('Ok');
+                                $("#successMessage").text(data.message).show();
+                               window.setTimeout('location.reload()', 3000);
+                            }else{
 
-                }
+                                $('#approveButton').hide();
+                                $('#inactivate-alert-danger').text(data.message).show();
+                            }
+
+                        });
+
+                    }
+                };
 
             }]);
           /*  module.directive("fileread", [function () {
