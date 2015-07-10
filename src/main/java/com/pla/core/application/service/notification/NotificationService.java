@@ -50,7 +50,7 @@ public class NotificationService {
     }
 
     @Transactional
-     public boolean createNotificationRoleMapping(String roleType, LineOfBusinessEnum lineOfBusinessEnum, ProcessType processType){
+    public boolean createNotificationRoleMapping(String roleType, LineOfBusinessEnum lineOfBusinessEnum, ProcessType processType){
         NotificationRole notificationRole = NotificationRole.createNotificationRoleMapping(roleType,lineOfBusinessEnum,processType);
         entityManager.persist(notificationRole);
         return AppConstants.SUCCESS;
@@ -63,7 +63,6 @@ public class NotificationService {
         entityManager.remove(notificationRole);
         return AppConstants.SUCCESS;
     }
-
 
     public boolean uploadNotificationTemplate(LineOfBusinessEnum lineOfBusiness, ProcessType processType, WaitingForEnum waitingFor, ReminderTypeEnum reminderType, byte[] reminderFile){
         checkArgument(lineOfBusiness.isValidProcess(processType), "The process "+processType+" is not associated with "+lineOfBusiness);
@@ -82,14 +81,6 @@ public class NotificationService {
         createNotificationTemplate = createNotificationTemplate.withReminderFile(reminderFile);
         notificationTemplateRepository.save(createNotificationTemplate);
         return AppConstants.SUCCESS;
-    }
-
-    public boolean isNotificationTemplateExists(LineOfBusinessEnum lineOfBusiness,ProcessType processType,WaitingForEnum waitingFor,ReminderTypeEnum reminderType){
-        NotificationTemplate notificationTemplate =  notificationTemplateRepository.findNotification(lineOfBusiness, processType, waitingFor, reminderType);
-        if (notificationTemplate !=null){
-            return true;
-        }
-        return false;
     }
 
     public NotificationTemplate getReminderFile(NotificationTemplateId notificationTemplateId) {
@@ -149,5 +140,11 @@ public class NotificationService {
         public boolean test(ProcessType processType) {
             return process.equals(processType);
         }
+    }
+
+    public boolean deleteNotificationTemplate(NotificationTemplateId notificationTemplateId){
+        NotificationTemplate notificationTemplate = notificationTemplateRepository.findOne(notificationTemplateId);
+        notificationTemplateRepository.delete(notificationTemplate);
+        return AppConstants.SUCCESS;
     }
 }
