@@ -2,6 +2,7 @@ package com.pla.individuallife.proposal.domain.model;
 
 import com.google.common.base.Preconditions;
 import com.pla.core.domain.model.agent.AgentId;
+import com.pla.core.query.PlanFinder;
 import com.pla.individuallife.identifier.QuestionId;
 import com.pla.individuallife.proposal.presentation.dto.AgentDetailDto;
 import com.pla.individuallife.proposal.presentation.dto.QuestionDto;
@@ -72,7 +73,7 @@ public class ProposalAggregate extends AbstractAnnotatedAggregateRoot<ProposalId
 
     //TODO : When the proposal goes to SUBMITTED status the remaining versions of the same quotation has to be declined
     // and the quotation which is being converted to be changed with status CONVERTED when the proposal goes to state SUBMITTED
-    public ProposalAggregate(UserDetails userDetails, String proposalId, String proposalNumber, ProposedAssured proposedAssured, Set<AgentDetailDto> agentCommissionDetails, ILQuotationDto quotationDto) {
+    public ProposalAggregate(UserDetails userDetails, String proposalId, String proposalNumber, ProposedAssured proposedAssured, Set<AgentDetailDto> agentCommissionDetails, ILQuotationDto quotationDto, PlanFinder planFinder) {
         checkAuthorization(userDetails);
         this.proposalNumber = proposalNumber;
         this.proposalId = new ProposalId(proposalId);
@@ -86,13 +87,13 @@ public class ProposalAggregate extends AbstractAnnotatedAggregateRoot<ProposalId
             assignProposer(quotationDto.getProposer());
         }
 
-        assignPlan(quotationDto.getPlanDetailDto());
+        assignPlan(quotationDto.getPlanDetailDto(), planFinder);
 
         this.proposalStatus = ILProposalStatus.DRAFT;
 
     }
 
-    private void assignPlan(PlanDetailDto dto) {
+    private void assignPlan(PlanDetailDto dto, PlanFinder planFinder) {
         ProposalPlanDetail planDetail = new ProposalPlanDetail();
         try {
             BeanUtils.copyProperties(planDetail, dto);
@@ -101,7 +102,7 @@ public class ProposalAggregate extends AbstractAnnotatedAggregateRoot<ProposalId
         } catch (InvocationTargetException e) {
             e.printStackTrace();
         }
-        assignPlanDetail(planDetail);
+        assignPlanDetail(planDetail, planFinder);
     }
 
     private void assignProposer(ProposerDto dto) {
@@ -121,9 +122,9 @@ public class ProposalAggregate extends AbstractAnnotatedAggregateRoot<ProposalId
         assignProposer(proposer);
     }
 
-    public void updatePlan(ProposalAggregate aggregate, ProposalPlanDetail proposalPlanDetail, Set<Beneficiary> beneficiaries, UserDetails userDetails) {
+    public void updatePlan(ProposalAggregate aggregate, ProposalPlanDetail proposalPlanDetail, Set<Beneficiary> beneficiaries, UserDetails userDetails, PlanFinder planFinder) {
         checkAuthorization(userDetails);
-        assignPlanDetail(proposalPlanDetail);
+        assignPlanDetail(proposalPlanDetail, planFinder);
         assignBeneficiaries(beneficiaries);
     }
 
@@ -141,7 +142,8 @@ public class ProposalAggregate extends AbstractAnnotatedAggregateRoot<ProposalId
         beneficiaries.forEach(beneficiary -> this.addBeneficiary(beneficiary));
     }
 
-    private void assignPlanDetail(ProposalPlanDetail proposalPlanDetail) {
+    private void assignPlanDetail(ProposalPlanDetail proposalPlanDetail, PlanFinder planFinder) {
+        specification.checkProposerAgainstPlan(proposalPlanDetail, planFinder, this.proposedAssured);
         this.proposalPlanDetail = proposalPlanDetail;
     }
 

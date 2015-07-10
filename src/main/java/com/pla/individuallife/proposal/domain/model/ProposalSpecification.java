@@ -1,9 +1,13 @@
 package com.pla.individuallife.proposal.domain.model;
 
 import com.google.common.base.Preconditions;
+import com.pla.core.query.PlanFinder;
 import com.pla.sharedkernel.domain.model.MaritalStatus;
 import com.pla.sharedkernel.identifier.PlanId;
 import org.nthdimenzion.utils.UtilValidator;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by pradyumna on 22-05-2015.
@@ -74,12 +78,13 @@ public class ProposalSpecification {
         Preconditions.checkArgument(proposer.getResidentialAddress().getAddress().getTown() != null, "Please specify Residential Town.");
     }
 
-    public void checkProposerAgainstPlan(PlanId planId, ProposedAssured proposer) {
-       /* Map plan = planFinder.findPlanByPlanId(planId);
-        PlanDetail planDetail = (PlanDetail) plan.get("planDetail");
-        int minAge = planDetail.getMinEntryAge();
-        int maxAge = planDetail.getMaxEntryAge();
-        int proposerAge = proposer.getAgeNextBirthday();
-        Preconditions.checkState(proposerAge > minAge && proposerAge < maxAge);*/
+    public void checkProposerAgainstPlan(ProposalPlanDetail proposalPlanDetail, PlanFinder planFinder, ProposedAssured pa) {
+
+        Map plan = planFinder.findPlanByPlanId(new PlanId(proposalPlanDetail.getPlanId()));
+        Map planDetail = (HashMap) plan.get("planDetail");
+        int minAge = (int) planDetail.get("minEntryAge");
+        int maxAge = (int) planDetail.get("maxEntryAge");
+        int proposedAssuredAge = pa.getAgeNextBirthday();
+        Preconditions.checkState(proposedAssuredAge > minAge && proposedAssuredAge < maxAge, "Please specify Proposed Assured age between " + minAge +" and " + maxAge);
     }
 }

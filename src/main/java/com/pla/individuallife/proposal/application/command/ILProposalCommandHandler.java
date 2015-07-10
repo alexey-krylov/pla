@@ -54,7 +54,7 @@ public class ILProposalCommandHandler {
             ILQuotationDto dto = quotationFinder.getQuotationById(cmd.getQuotationId());
             Map planDetail = planFinder.findPlanByPlanId(new PlanId(dto.getPlanId()));
             dto.setPlanDetail(planDetail);
-            aggregate = new ProposalAggregate(cmd.getUserDetails(), cmd.getProposalId(), proposalNumber, proposedAssured, cmd.getAgentCommissionDetails(), dto);
+            aggregate = new ProposalAggregate(cmd.getUserDetails(), cmd.getProposalId(), proposalNumber, proposedAssured, cmd.getAgentCommissionDetails(), dto, planFinder);
         } else {
             aggregate = new ProposalAggregate(cmd.getUserDetails(), cmd.getProposalId(), proposalNumber, proposedAssured, cmd.getAgentCommissionDetails());
         }
@@ -134,7 +134,7 @@ public class ILProposalCommandHandler {
 
         try {
             aggregate = ilProposalMongoRepository.load(proposalId);
-            aggregate.updatePlan(aggregate, cmd.getProposalPlanDetail(), cmd.getBeneficiaries(), cmd.getUserDetails());
+            aggregate.updatePlan(aggregate, cmd.getProposalPlanDetail(), cmd.getBeneficiaries(), cmd.getUserDetails(), planFinder);
             ilProposalMongoRepository.add(aggregate);
         } catch (AggregateNotFoundException e) {
             e.printStackTrace();
