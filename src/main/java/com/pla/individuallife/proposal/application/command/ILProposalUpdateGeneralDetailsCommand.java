@@ -1,10 +1,13 @@
 package com.pla.individuallife.proposal.application.command;
 
-import com.pla.individuallife.proposal.domain.model.GeneralDetails;
+import com.pla.individuallife.proposal.domain.model.GeneralDetailQuestion;
+import com.pla.individuallife.proposal.presentation.dto.QuestionAnswerDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.security.core.userdetails.UserDetails;
+
+import java.util.List;
 
 /**
  * Created by Karunakar on 7/1/2015.
@@ -14,7 +17,12 @@ import org.springframework.security.core.userdetails.UserDetails;
 @NoArgsConstructor
 public class ILProposalUpdateGeneralDetailsCommand {
 
-    private GeneralDetails generalDetails;
+    private GeneralDetailQuestion assuredByPLAL;
+    private GeneralDetailQuestion assuredByOthers;
+    private GeneralDetailQuestion pendingInsuranceByOthers;
+    private GeneralDetailQuestion assuranceDeclined;
+    private List<QuestionAnswerDto> generalQuestion;
+
     private UserDetails userDetails;
     private String proposalId;
 
