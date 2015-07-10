@@ -15,11 +15,25 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
            $scope.mode= getQueryParameter('mode');
             console.log('modeType' + $scope.mode );
             $scope.quotationStatus="GENERATED";
-            quotationStatus
             if($scope.quotationId)
             {
-                alert("Navigate to Proposer Window...")
+                console.log('Navigate to quotation Window...');
+                $http.get("/pla/individuallife/quotation/getquotation/"+$scope. quotationId).success(function (response, status, headers, config) {
+                    var viewQuotationOutput=response;
+                    $scope.rcvProposalDetailQid=response;
+                    console.log('viewQuotationOutput' +JSON.stringify(viewQuotationOutput));
+
+                    $scope.proposedAssured=$scope.rcvProposalDetailQid.proposedAssured || {};
+                    $scope.proposedAssured.nrc=$scope.rcvProposalDetailQid.proposedAssured.nrcNumber || {};
+                    $scope.proposer=$scope.rcvProposalDetailQid.proposer || {};
+                    $scope.proposer.nrc=$scope.rcvProposalDetailQid.proposer.nrcNumber || {};
+                    $scope.proposalPlanDetail=$scope.rcvProposalDetailQid.proposalPlanDetail;
+                    $scope.agent=$scope.rcvProposalDetailQid.agentDetail;
+                    $scope.agentDetails.push($scope.agent);
+                }).error(function (response, status, headers, config) {
+                });
             }
+
              if($scope. proposalId)
             {
 
@@ -42,6 +56,16 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
                     $scope.proposerResidential=$scope.proposer.residentialAddress;
                     $scope.proposerSpouse=$scope.proposer.spouse;
                     $scope.proposalPlanDetail=$scope.rcvProposal.proposalPlanDetail;
+
+                    for(i in $scope.iLplanDetailsCopy) {
+                        if($scope.iLplanDetailsCopy[i].plan_id == $scope.proposalPlanDetail.planId)
+                        {
+                            $scope.proposalPlanDetail.planId=$scope.iLplanDetailsCopy[i].plan_name;
+                            console.log('PlanId is ..'+$scope.proposalPlanDetail.planId);
+                        }
+                    }
+
+
                     $scope.searchRiders=$scope.rcvProposal.proposalPlanDetail.riderDetails;
                     $scope.beneficiaries=$scope.rcvProposal.beneficiaries;
 
@@ -86,6 +110,7 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
             });
 
             $scope.iLplanDetails=[];
+            $scope.iLplanDetailsCopy=[];
             $http.get('/pla/core/master/getgeodetail').success(function (response, status, headers, config) {
                 $scope.provinces = response;
             }).error(function (response, status, headers, config) {
@@ -279,6 +304,9 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
                 console.log('Inside saveGeneraLDetails Method..');
                 console.log($scope.generalAnswer);
                 var assuredByPlal;
+                var assuredByOthers;
+                var pendingInsuranceByOthers;
+                var assuranceDeclined;
                 if($scope.assuredByPlal == "YES")
                 {
                     assuredByPlal="true"
@@ -287,6 +315,33 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
                 {
                     assuredByPlal="false"
                 }
+
+                if($scope.assuredByOthers == "YES")
+                {
+                    assuredByOthers="true"
+                }
+                else
+                {
+                    assuredByOthers="false"
+                }
+
+                if($scope.pendingInsuranceByOthers == "YES")
+                {
+                    pendingInsuranceByOthers="true"
+                }
+                else
+                {
+                    pendingInsuranceByOthers="false"
+                }
+
+                if($scope.assuranceDeclined == "YES")
+                {
+                    assuranceDeclined="true"
+                }
+                else
+                {
+                    assuranceDeclined="false"
+                }
                 var assuredByPLAL=
                 {
                     "questions":$scope.policyDetails,
@@ -294,26 +349,25 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
                     //"answer": $scope.generalAnswer
                     "answer":assuredByPlal
                 }
-
                 var assuredByOthers=
                 {
                     "questions":$scope.insurerDetails1,
                     "questionId":"2",
-                    "answer": $scope.generalAnswer
+                    "answer": assuredByOthers
                 }
 
                 var pendingInsuranceByOthers=
                 {
                     "questions":$scope.insurerDetails2,
                     "questionId":"3",
-                    "answer": $scope.generalAnswer
+                    "answer": pendingInsuranceByOthers
                 }
 
                 var assuranceDeclined=
                 {
                     "questions":$scope.insurerDetails3,
                     "questionId":"4",
-                    "answer": $scope.generalAnswer
+                    "answer": assuranceDeclined
                 }
                 var generalQuestion=$scope.generalQuestion;
                 var req=
@@ -322,7 +376,8 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
                     "assuredByOthers":assuredByOthers,
                     "pendingInsuranceByOthers":pendingInsuranceByOthers,
                     "assuranceDeclined":assuranceDeclined,
-                    "generalQuestion":generalQuestion
+                    "generalQuestion":generalQuestion,
+                    "proposalId":$scope.proposal.proposalId
                 }
 
                 //console.log('generalQuestion is: '+JSON.stringify(generalQuestion));
@@ -332,6 +387,12 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
                 console.log('To Test3'+JSON.stringify(pendingInsuranceByOthers));
                 console.log('To Test4'+JSON.stringify(assuranceDeclined));*/
                 console.log('Final General is'+JSON.stringify(req));
+                /*
+             $http.post('/pla/individuallife/proposal/updategeneraldetails',req).success(function (response, status, headers, config) {
+             $scope.occupations = response;
+             }).error(function (response, status, headers, config) {
+             });*/
+
             };
 
             $scope.saveFamilyHistory = function () {
@@ -711,20 +772,17 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
             $scope.saveAdditionalDetail=function()
             {
                 console.log('Inside SaveAdditionalDetail');
-                var request=
-                {
-                    "medicalAttendant":$scope.medicalAttendant,
-                    "replacement":$scope.replacement
-                };
-                //request=angular.extend($scope.additionalDetail,request);
-                var request1=
-                {
-                    "additionalDetail":request,
-                    "proposalId":$scope.proposal.proposalId
-                }
-                console.log('RequiredJson:'+JSON.stringify(request1));
 
-                $http.post('/pla/individuallife/proposal/updateadditionaldetails',request1).success(function (response, status, headers, config) {
+                var requestAddDetails=
+                {
+                    "medicalAttendantDetails": $scope.medicalAttendant.medicalAttendantDetails,
+                    "medicalAttendantDuration": $scope.medicalAttendant.medicalAttendantDuration,
+                    "dateAndReason": $scope.medicalAttendant.dateAndReason,
+                    "replacementDetails": $scope.replacement
+                }
+                console.log('RequiredJson:'+JSON.stringify(requestAddDetails));
+
+                $http.post('/pla/individuallife/proposal/updateadditionaldetails',requestAddDetails).success(function (response, status, headers, config) {
 
                 }).error(function (response, status, headers, config) {
                 });
@@ -786,6 +844,7 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
                         $http.get('/pla/individuallife/proposal/searchplan?proposalId='+$scope.proposal.proposalId).success(function (response, status, headers, config) {
                             console.log('Retrieving PlanDetails..');
                             $scope.iLplanDetails = response;
+                            $scope.iLplanDetailsCopy=response;
                         }).error(function (response, status, headers, config) {
                             console.log('status',+JSON.stringify(status));
                         });

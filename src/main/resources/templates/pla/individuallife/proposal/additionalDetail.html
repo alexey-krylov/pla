@@ -42,13 +42,13 @@
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label class="control-label">Name Of Office</label>
-                                    <input type="text" class="form-control input-sm" ng-model="replacement.Response1"/>
+                                    <input type="text" class="form-control input-sm" ng-model="replacement.answerResponse1"/>
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label class="control-label">Policy Number</label>
-                                    <input type="text" class="form-control input-sm" ng-model="replacement.Response2"/>
+                                    <input type="text" class="form-control input-sm" ng-model="replacement.answerResponse2"/>
                                 </div>
                             </div>
                         </div>
@@ -58,8 +58,8 @@
             <div class="col-md-2">
                 <select class="form-control input-sm" ng-model="replacement.answer" ng-change="replacement.questionId='22' ">
                     <option value="">--Select One--</option>
-                    <option value="YES">Yes</option>
-                    <option value="NO">No</option>
+                    <option ng-value="true" value="true">Yes</option>
+                    <option ng-value="false" value="false">No</option>
                 </select>
             </div>
         </div>
