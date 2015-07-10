@@ -66,23 +66,16 @@
                 </tr>
                 </thead>
                 <tbody>
-             <!--   <tr th:each="role : ${templateList}">
-                    <td th:text="${role.lineOfBusiness}"></td>
-                    <td th:text="${role.processType}"></td>
-                    <td th:text="${role.waitingFor}"></td>
-                    <td th:text="${role.reminderType}"></td>
-                    <td><a>Download Template</a></td>
-                    <td></td>
-                </tr>-->
+
                 <tr ng-repeat="template in templateList">
-                    <td>{{template.lineOfBusiness}}</td>
-                    <td>{{template.processType}}</td>
-                    <td>{{template.waitingFor}}</td>
-                    <td>{{template.reminderType}}</td>
+                    <td>{{template.lineOfBusinessDescription}}</td>
+                    <td>{{template.processTypeDescription}}</td>
+                    <td>{{template.waitingForDescription}}</td>
+                    <td>{{template.reminderTypeDescription}}</td>
                    <!-- <td><a>Download Template</a></td>-->
                     <td><button type="button" class="btn btn-success btn-xs"  ng-click="downloadTemplate(template.notificationTemplateId)">DownloadTemplate</button></td>
                     <td>
-                        <button type="button" class="btn btn-default btn-xs"  ng-click="updateTemplate(template.notificationTemplateId)">Update</button>
+                        <button type="button" class="btn btn-default btn-xs" data-toggle="modal" data-target="#updateTemplate" ng-click="updateTemplate(template.notificationTemplateId)">Update</button>
                         <button type="button" class="btn btn-danger btn-xs"  data-toggle="modal" data-target="#alert-modal" ng-click="inactivate(template.notificationTemplateId)" >Inactivate</button></td>
                 </tr>
                 </tbody>
@@ -94,6 +87,84 @@
     </div>
 
 </div>
+<!-- ******************************** UPDATE EXISTING TEMPLATE ****************************-->
+<div class="modal fade" id="updateTemplate" tabindex="-1" role="dialog" aria-labelledby="updateTemplate">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">Update Template</h4>
+            </div>
+            <div class="modal-body">
+                <ng-alert></ng-alert>
+                <form name="templateForm" action="uploadnotification"  id="updateTemplateForm" method="POST"
+                      enctype="multipart/form-data" ng-submit="submitFormToServer()">
+
+                    <div class="panel panel-default">
+                        <div class="panel-body">
+                            <div class="control-group required col-md-6">
+                                <label class="control-label">Line of Business</label>
+                                <p class="input-group" >
+                                    <input type="text" class="form-control input-sm"  value="{{updateTemplate.lineOfBusinessDescription}}" readonly="true"/>
+                                </p>
+
+                            </div>
+                            <div class="control-group required col-md-4">
+                                <label class="control-label">Process Type</label>
+                                <p class="input-group" >
+                                    <input type="text" class="form-control input-sm"  value="{{updateTemplate.processTypeDescription}}" readonly="true"/>
+                                </p>
+                           </div>
+                            <div class="control-group required col-md-6">
+                                <label class="control-label">Waiting For</label>
+                                <p class="input-group" >
+                                    <input type="text" class="form-control input-sm"  value="{{updateTemplate.waitingForDescription}}" readonly="true"/>
+                                </p>
+                            </div>
+                            <div class="control-group required col-md-6">
+                                <label class="control-label">Notification Type</label>
+                                <p class="input-group" >
+                                    <input type="text" class="form-control input-sm"  value="{{updateTemplate.reminderTypeDescription}}" readonly="true"/>
+                                </p>
+                            </div>
+
+                            <div class="row">
+                                <div class="form-group col-md-6 required">
+                                    <label class="control-label">Select Template</label>
+                                    <div>
+                                    <div class="input-group">
+                                <span class="input-group-btn">
+                                    <span class="btn btn-default btn-file" ng-file-select=""  ng-model="updateTemplate.file"  >
+                                        Browse...
+
+                                    </span>
+                                </span>
+                                        <input type="text" class="form-control" value="{{updateTemplate.file[0].name}}" />
+                                    </div>
+                                </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary"  ng-click="saveUpdatedTemplate(updateTemplate.file)" ng-disabled="(!updateTemplate.file)">
+                    Upload
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<!-- ******************************** CREATE NEW TEMPLATE ****************************-->
     <div class="modal fade" id="newTemplate" tabindex="-1" role="dialog" aria-labelledby="newTemplate">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
@@ -131,20 +202,7 @@
                                     <select class="form-control input-sm" id="processType" name="processType" ng-model="template.processType" ng-options="processTypes.processType as processTypes.description for processTypes in processTypeList | orderBy:'description' " ng-disabled="!template.lineOfBusiness">
                                         <option value="">---Select Process Type---</option>
                                     </select>
-
-                                   <!-- <select class="form-control input-sm" id="processType"
-                                            ng-model="template.processType" name="processType"
-                                            ng-required="true">
-                                        <option value="QUOTATION">Quotation</option>
-                                        <option value="CLAIM">Claim</option>
-                                        <option value="PROPOSAL">Proposal</option>
-                                        <option value="REINSTATEMENT">Reinstatement</option>
-                                        <option value="ENDORSEMENT">Endorsement</option>
-                                        <option value="SURRENDER">Surrender</option>
-                                        <option value="MATURITY">Maturity</option>
-                                    </select>-->
-
-                                    <div class="error"
+                                     <div class="error"
                                          ng-show="templateForm.processType.$submitted &amp;&amp; templateForm.processType.$invalid">
                                         <small class="error" ng-show="templateForm.processType.$error.required">
                                             Please indicate the Process Type.
@@ -153,12 +211,7 @@
                                 </div>
                                 <div class="control-group required col-md-6">
                                     <label class="control-label">Waiting For</label>
-                                    <!--<select class="form-control input-sm" id="role"
-                                            ng-model="template.waitingFor" name="waitingFor" ng-required="true">
-                                        <option value="QUOTATION_PREPROCESSOR">Quotation</option>
-                                        <option value="PROPOSAL_PREPROCESSOR">Proposal</option>
-                                        <option value="CLAIM_PREPROCESSOR">Claim</option>
-                                    </select>-->
+
                                     <select class="form-control input-sm" id="waitingFor" name="waitingFor"  ng-model="template.waitingFor" ng-options="waitingFors.waitingFor as waitingFors.description for waitingFors in waitingForList | orderBy:'description' " ng-disabled="!template.lineOfBusiness || !template.processType ">
                                         <option value="">---Select Waiting For---</option>
                                     </select>
@@ -189,14 +242,11 @@
                                 <div class="row">
                                     <div class="form-group col-md-6 required">
                                         <label class="control-label">Select Template</label>
-                                       <!-- <label class="input-sm" style="border:1px solid #ccc;width:230px;" >{{template.file[0].name}} </label>
-                                        <div class="btn btn-default" style="display:inline;float:right;margin-right:5px;" ng-file-select=""  ng-model="template.file"  >Browse</div>
-                                       --> <div>
+                                       <div>
                                             <div class="input-group">
                                 <span class="input-group-btn">
                                     <span class="btn btn-default btn-file" ng-file-select=""  ng-model="template.file"  >
                                         Browse...
-                                      <!--  <input type="file" name="file" />-->
                                     </span>
                                 </span>
                                  <input type="text" class="form-control" value="{{template.file[0].name}}" />
@@ -205,15 +255,7 @@
                                     </div>
                                 </div>
 
-                               <!-- <div class="control-group required col-md-6">
-                                    <label class="control-label">Select Template</label>
-                                   <input type="file" fileread="uploadfile"/>
-                                    &lt;!&ndash;<input type="file" fileread="vm.uploadme" />&ndash;&gt;
-                                    <ng-messages class="error"
-                                                 ng-show="templateForm.waitingFor.$submitted &amp;&amp; templateForm.waitingFor.$invalid">
-                                        <ng-message for="required">Please select Role.</ng-message>
-                                    </ng-messages>
-                                </div>-->
+
                             </div>
                         </div>
 
@@ -224,7 +266,6 @@
                    <button type="button" class="btn btn-primary"  ng-click="save(template.file)" ng-disabled="(!template.lineOfBusiness || !template.processType || !template.waitingFor || !template.reminderType)">
                         Upload
                     </button>
-                   <!-- <input type="submit" class="btn btn-primary" value="Upload" onclick="javascript:uploadTemplate();"/>-->
                 </div>
             </div>
         </div>
@@ -294,7 +335,7 @@
                             JSON.stringify(data));
                         });
                     }
-                    $('#newRoleMapping').modal('hide');
+                    $('#newTemplate').modal('hide');
                     $scope.reload();
                 };
 
@@ -304,7 +345,7 @@
 
                 $scope.edit = function (template) {
                     $scope.template = template.copy();
-                    $('#newRoleMapping').modal('show');
+                    $('#newTemplate').modal('show');
                 };
 
                 $scope.reload = function () {
@@ -325,6 +366,34 @@
                             // $scope.alert = {title:'Error Message! ', content:data.message, type: 'danger'};
                         }
                     });
+                }
+                $scope.updateTemplate = function(templateId){
+                    $scope.updateTemplate =_.findWhere($scope.templateList,{notificationTemplateId:templateId});
+                    console.log($scope.updateTemplate);
+                }
+                $scope.saveUpdatedTemplate =function(files){
+                    if (files) {
+                        $upload.upload({
+                            url: '/pla/core/notification/uploadnotification',
+                            file: files,
+                            fields:{lineOfBusiness:$scope.updateTemplate.lineOfBusiness,processType:$scope.updateTemplate.processType,
+                                waitingFor:$scope.updateTemplate.waitingFor,reminderType:$scope.updateTemplate.reminderType}
+                        }).progress(function (evt) {
+                            // var progressPercentage = parseInt(100.0 * evt.loaded / evt.total);
+                            // console.log('progress: ' + progressPercentage + '% ' +
+                            //      evt.config.file.name);
+                        }).success(function (data, status, headers, config) {
+                            console.log('file ' + config.file.name + 'uploaded. Response: ' +
+                            JSON.stringify(data));
+                        });
+                    }
+                    $('#updateTemplate').modal('hide');
+                    $scope.reload();
+
+                }
+                $scope.inactivate = function(){
+
+
                 }
 
             }]);

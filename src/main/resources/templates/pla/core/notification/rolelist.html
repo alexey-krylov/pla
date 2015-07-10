@@ -36,9 +36,9 @@
             <div class="col-md-9">
                 <nth-alert/>
             </div>
-            <table  class="dataTables_wrapper dataTable table table-striped table-bordered"
-                   datatable="" cellspacing="0" width="100%">
-                <thead>
+                          <table  class="dataTables_wrapper dataTable table table-striped table-bordered"
+                        datatable="" cellspacing="0" width="100%">
+                    <thead>
 
                 <tr>
                     <th>Role</th>
@@ -55,10 +55,10 @@
                     <td></td>
                 </tr>-->
                 <tr ng-repeat="role in roleList">
-                    <td >{{role.roleType}}</td>
-                    <td>{{role.lineOfBusiness}}</td>
-                    <td >{{role.processType}}</td>
-                    <td><!--<button type="button" class="btn btn-danger btn-xs"  data-toggle="modal" data-target="#alert-modal" ng-click="'inactivate({{role.}})" >Inactivate</button>-->
+                    <td >{{role.roleTypeDescription}}</td>
+                    <td>{{role.lineOfBusinessDescription}}</td>
+                    <td >{{role.processTypeDescription}}</td>
+                    <td><button type="button" class="btn btn-danger btn-xs"  data-toggle="modal" data-target="#alert-modal" ng-click="inactivate(role)" >Inactivate</button>
                     </td>
                 </tr>
                 </tbody>
@@ -87,9 +87,9 @@
                                 <label class="control-label">Role</label>
                                 <select class="form-control input-sm" id="role"
                                         ng-model="mapping.roleType" name="roleType" ng-required="true">
-                                    <option value="QUOTATION_PREPROCESSOR">Quotation</option>
-                                    <option value="PROPOSAL_PREPROCESSOR">Proposal</option>
-                                    <option value="CLAIM_PREPROCESSOR">Claim</option>
+                                    <option value="QUOTATION_PREPROCESSOR">Quotation Preprocessor</option>
+                                    <option value="PROPOSAL_PREPROCESSOR">Proposal Preprocessor</option>
+                                    <option value="CLAIM_PREPROCESSOR">Claim Preprocessor</option>
                                 </select>
 
                                 <div class="error"
@@ -191,6 +191,12 @@
                 $scope.reload = function () {
                     $window.location = '';
                 };
+                $scope.inactivate = function(role){
+                    $http.post('/pla/core/notification/deletenotificationrolemapping',role).success(function(data){
+                    });
+                    $scope.reload();
+
+                }
 
             }]);
             angular.bootstrap(document, ['RoleMappingModule']);
