@@ -79,10 +79,15 @@ public class ILProposalCommandHandler {
     public void updateGeneralDetails(ILProposalUpdateGeneralDetailsCommand cmd) {
         ProposalAggregate aggregate = null;
         ProposalId proposalId = new ProposalId(cmd.getProposalId());
-        GeneralDetails dto = cmd.getGeneralDetails();
+        GeneralDetails gd = new GeneralDetails();
+        gd.setAssuredByPLAL(cmd.getAssuredByPLAL());
+        gd.setPendingInsuranceByOthers(cmd.getPendingInsuranceByOthers());
+        gd.setAssuranceDeclined(cmd.getAssuranceDeclined());
+        gd.setAssuredByOthers(cmd.getAssuredByOthers());
+        gd.setQuestionAndAnswers(cmd.getGeneralQuestion());
         try {
             aggregate = ilProposalMongoRepository.load(proposalId);
-            aggregate.updateGeneralDetails(dto, cmd.getUserDetails());
+            aggregate.updateGeneralDetails(gd, cmd.getUserDetails());
         } catch (AggregateNotFoundException e) {
             e.printStackTrace();
         }

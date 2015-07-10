@@ -13,7 +13,7 @@ public class QuestionAnswerDto {
    private String questionId;
     private Boolean response;
 
-    public QuestionAnswerDto(String questionId, boolean response) {
+    public QuestionAnswerDto(String questionId, Boolean response) {
         this.questionId = questionId;
         this.response = response;
     }

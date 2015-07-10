@@ -17,6 +17,9 @@ import java.util.List;
 @ToString
 public class GeneralDetails {
 
-    private List<GeneralDetailQuestions> generalQuestions;
+    private GeneralDetailQuestion assuredByPLAL;
+    private GeneralDetailQuestion assuredByOthers;
+    private GeneralDetailQuestion pendingInsuranceByOthers;
+    private GeneralDetailQuestion assuranceDeclined;
     private List<QuestionAnswerDto> questionAndAnswers;
 }

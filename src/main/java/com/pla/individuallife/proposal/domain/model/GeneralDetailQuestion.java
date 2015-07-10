@@ -14,7 +14,7 @@ import java.util.Set;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class GeneralDetailQuestions {
+public class GeneralDetailQuestion {
     private String questionId;
     private boolean answer;
     private Set<GeneralDetailsQuestionResponse> answerResponse;

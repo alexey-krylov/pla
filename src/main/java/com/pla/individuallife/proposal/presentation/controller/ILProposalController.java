@@ -5,7 +5,6 @@ import com.pla.core.query.AgentFinder;
 import com.pla.core.query.MasterFinder;
 import com.pla.core.query.PlanFinder;
 import com.pla.individuallife.proposal.application.command.*;
-import com.pla.individuallife.proposal.domain.model.GeneralDetails;
 import com.pla.individuallife.proposal.presentation.dto.*;
 import com.pla.individuallife.proposal.query.ILProposalFinder;
 import com.pla.individuallife.quotation.application.service.ILQuotationAppService;
@@ -185,11 +184,9 @@ public class ILProposalController {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        GeneralDetails questions = cmd.getGeneralDetails();
         Map map = new HashMap<>();
         map.put("message", "Proposal updated with General Details successfully");
         map.put("proposalId", proposalId);
-        map.put("questions", questions);
         return new ResponseEntity(map, HttpStatus.OK);
     }
 
