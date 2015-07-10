@@ -76,7 +76,7 @@ public class NotificationTemplateService {
                     notificationQuotationMap.put("province", contactDetailMap.get("province"));
                     notificationQuotationMap.put("town", contactDetailMap.get("town"));
                     notificationQuotationMap.put("emailAddress", contactDetailMap.get("emailAddress"));
-                    notificationQuotationMap.put("quotationNumber", map.get("quotationNumber"));
+                    notificationQuotationMap.put("requestNumber", map.get("quotationNumber"));
                 }
                 return notificationQuotationMap;
             }

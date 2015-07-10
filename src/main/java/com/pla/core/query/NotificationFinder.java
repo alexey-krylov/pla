@@ -5,6 +5,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.joda.JodaModule;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
+import com.pla.core.domain.model.notification.NotificationId;
 import com.pla.core.domain.model.notification.NotificationTemplate;
 import com.pla.core.domain.model.notification.NotificationTemplateId;
 import com.pla.core.repository.NotificationTemplateRepository;
@@ -21,6 +23,7 @@ import org.springframework.stereotype.Component;
 
 import javax.sql.DataSource;
 import java.io.IOException;
+import java.nio.charset.Charset;
 import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -68,6 +71,10 @@ public class NotificationFinder {
     public static final String findILQuotationProposerDetailQuery = "SELECT p.plan_name planName,il.proposer_email_address emailAddress,il.proposer_first_name firstName, il.proposer_surname surName, " +
             " il.proposer_title salutation,il.quotation_number quotationNumber,il.shared_on sharedOn FROM individual_life_quotation il INNER JOIN plan_coverage_benefit_assoc p " +
             " ON il.plan_id = p.plan_id WHERE il.quotation_id=:quotationId";
+
+    public static final String findEmailNotificationContentQuery = "SELECT email_address emailId,generated_on generatedOn,line_of_business lineOfBusiness,process_type processType, " +
+            " reminder_template reminderTemplate,reminder_type reminderType,request_number requestNumber,waiting_for waitingFor FROM notification " +
+            " WHERE notification_id=:notificationId ";
 
     private static Properties roleTypeProperties = new Properties();
 
@@ -130,5 +137,24 @@ public class NotificationFinder {
             notificationTemplateMap.put("reminderTypeDescription", ReminderTypeEnum.valueOf(notificationTemplateMap.get("reminderType").toString()).toString());
             return notificationTemplateMap;
         }
+    }
+
+    public List<Map<String,Object>> emailContent(NotificationId notificationId){
+        List<Map<String,Object>> emailNotificationDetail = namedParameterJdbcTemplate.query(findEmailNotificationContentQuery, new MapSqlParameterSource("notificationId", notificationId.getNotificationId()), new ColumnMapRowMapper());
+        if (isNotEmpty(emailNotificationDetail)){
+            return emailNotificationDetail.parallelStream().map(new Function<Map<String,Object>, Map<String,Object>>() {
+                @Override
+                public Map<String, Object> apply(Map<String,Object> notificationMap) {
+                    Map<String,Object> emailContent = Maps.newLinkedHashMap();
+                    emailContent.put("subject","Quotation First Reminder");
+                    emailContent.put("mailSentDate", notificationMap.get("generatedOn"));
+                    emailContent.put("emailAddress",notificationMap.get("emailId"));
+                    String emailBody = new String((byte[])notificationMap.get("reminderTemplate"),  Charset.forName("UTF-8"));
+                    emailContent.put("emailBody",emailBody);
+                    return emailContent;
+                }
+            }).collect(Collectors.toList());
+        }
+        return Collections.EMPTY_LIST;
     }
 }

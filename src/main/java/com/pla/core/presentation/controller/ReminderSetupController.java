@@ -4,14 +4,17 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.pla.core.application.service.notification.NotificationService;
 import com.pla.core.domain.exception.NotificationException;
+import com.pla.core.domain.model.notification.NotificationId;
 import com.pla.core.domain.model.notification.NotificationRoleResolver;
 import com.pla.core.domain.model.notification.NotificationTemplate;
 import com.pla.core.domain.model.notification.NotificationTemplateId;
+import com.pla.core.dto.NotificationDto;
 import com.pla.core.dto.NotificationTemplateDto;
 import com.pla.core.query.NotificationFinder;
 import com.pla.sharedkernel.domain.model.ProcessType;
 import com.pla.sharedkernel.domain.model.WaitingForEnum;
 import com.pla.sharedkernel.identifier.LineOfBusinessEnum;
+import com.pla.sharedkernel.service.MailService;
 import org.apache.commons.io.IOUtils;
 import org.axonframework.commandhandling.gateway.CommandGateway;
 import org.nthdimenzion.presentation.Result;
@@ -51,11 +54,14 @@ public class ReminderSetupController {
     private NotificationService notificationService;
     private CommandGateway commandGateway;
 
+    private MailService mailService;
+
     @Autowired
-    public ReminderSetupController(NotificationFinder notificationFinder, NotificationService notificationService,CommandGateway commandGateway) {
+    public ReminderSetupController(NotificationFinder notificationFinder, NotificationService notificationService,CommandGateway commandGateway, MailService mailService) {
         this.notificationFinder = notificationFinder;
         this.notificationService = notificationService;
         this.commandGateway = commandGateway;
+        this.mailService = mailService;
     }
 
     @RequestMapping(value = "/rolelist")
@@ -172,11 +178,11 @@ public class ReminderSetupController {
         OutputStream outputStream = response.getOutputStream();
         NotificationTemplate  notificationTemplate = notificationService.getReminderFile(notificationTemplateId);
         String fileName =  notificationTemplate.getFileName();
-        response.setHeader("content-disposition", "attachment; filename=" + fileName + ".vm");
+        response.setHeader("content-disposition", "attachment; filename=" + fileName + ".txt");
         IOUtils.write(notificationTemplate.getReminderFile(), outputStream);
         outputStream.flush();
-        response.flushBuffer();
         outputStream.close();
+        response.flushBuffer();
     }
 
     @RequestMapping(value = "/getnotificationtemplate/{notificationTemplateId}",method = RequestMethod.GET)
@@ -185,16 +191,16 @@ public class ReminderSetupController {
         return notificationFinder.getNotificationTemplateById(notificationTemplateId);
     }
 
-    @RequestMapping(value = "/deletetemplate/{notificationTemplateId}",method = RequestMethod.GET)
+    @RequestMapping(value = "/deletetemplate/{notificationTemplateId}",method = RequestMethod.DELETE)
     @ResponseBody
     public Callable<ResponseEntity> deleteNotificationTemplate(@PathVariable("notificationTemplateId") NotificationTemplateId notificationTemplateId){
-       return()->{
-          boolean isDeleted =  notificationService.deleteNotificationTemplate(notificationTemplateId);
-           if (!isDeleted){
-               return new ResponseEntity(Result.failure("Unable to delete the Notification Template"),HttpStatus.INTERNAL_SERVER_ERROR);
-           }
-           return new ResponseEntity(Result.success("Notification Template deleted successfully"),HttpStatus.INTERNAL_SERVER_ERROR);
-       };
+        return()->{
+            boolean isDeleted =  notificationService.deleteNotificationTemplate(notificationTemplateId);
+            if (!isDeleted){
+                return new ResponseEntity(Result.failure("Unable to delete the Notification Template"),HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+            return new ResponseEntity(Result.success("Notification Template deleted successfully"),HttpStatus.OK);
+        };
     }
 
     @RequestMapping(value = "/getnotification",method = RequestMethod.GET)
@@ -243,11 +249,33 @@ public class ReminderSetupController {
         return  notificationFinder.findAllTemplates();
     }
 
-    /*@RequestMapping(value = "/openemailnotification/{requestNumber}", method = RequestMethod.GET)
-    public ModelAndView openEmailPage(@PathVariable("requestNumber") String requestNumber) {
+    @RequestMapping(value = "/openemailnotification/{notificationId}", method = RequestMethod.GET)
+    public ModelAndView openEmailPage(@PathVariable("notificationId") NotificationId notificationId) {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("pla/to/path");
-        modelAndView.addObject("mailContent", "");
+        modelAndView.addObject("mailContent", notificationFinder.emailContent(notificationId));
         return modelAndView;
-    }*/
+    }
+
+    @RequestMapping(value = "/getemailcontent/{notificationId}", method = RequestMethod.GET)
+    @ResponseBody
+    public List<Map<String,Object>> emailContent(@PathVariable("notificationId")NotificationId notificationId){
+        return notificationFinder.emailContent(notificationId);
+    }
+
+    @RequestMapping(value = "/emailnotification", method = RequestMethod.POST)
+    @ResponseBody
+    public ResponseEntity sendEmail(@RequestBody NotificationDto notificationDto,BindingResult bindingResult){
+        if (bindingResult.hasErrors()) {
+            return new ResponseEntity(Result.failure("Email cannot be sent due to wrong data"), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        try {
+//            emailQuotation(null);
+//           create a command
+        } catch (Exception e) {
+            Result.failure(e.getMessage());
+        }
+        return new ResponseEntity(Result.success("Email sent successfully"), HttpStatus.OK);
+    }
+
 }

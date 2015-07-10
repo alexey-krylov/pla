@@ -1,10 +1,7 @@
 package com.pla.core.application.service.notification;
 
 import com.google.common.collect.Maps;
-import com.pla.core.domain.model.notification.NotificationRole;
-import com.pla.core.domain.model.notification.NotificationTemplate;
-import com.pla.core.domain.model.notification.NotificationTemplateId;
-import com.pla.core.domain.model.notification.RoleId;
+import com.pla.core.domain.model.notification.*;
 import com.pla.core.repository.NotificationTemplateRepository;
 import com.pla.sharedkernel.domain.model.ProcessType;
 import com.pla.sharedkernel.domain.model.ReminderTypeEnum;
@@ -147,4 +144,5 @@ public class NotificationService {
         notificationTemplateRepository.delete(notificationTemplate);
         return AppConstants.SUCCESS;
     }
+
 }
