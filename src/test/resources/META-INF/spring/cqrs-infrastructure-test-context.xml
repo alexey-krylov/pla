@@ -1,11 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns:axon="http://www.axonframework.org/schema/core"
+       xmlns:mongo="http://www.springframework.org/schema/data/mongo"
        xmlns:p="http://www.springframework.org/schema/p"
        xmlns:context="http://www.springframework.org/schema/context"
        xmlns:extension="http://www.nthdimenzion.com/schema/axon-extension"
        xmlns="http://www.springframework.org/schema/beans"
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/data/mongo http://www.springframework.org/schema/data/mongo/spring-mongo.xsd
        http://www.nthdimenzion.com/schema/axon-extension http://www.nthdimenzion.com/schema/axon-extension.xsd
        http://www.axonframework.org/schema/core http://www.axonframework.org/schema/axon-core.xsd
        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
@@ -64,6 +66,29 @@
         <property name="scheduler" ref="schedulerFactoryBean"></property>
     </bean>
 
+    <mongo:mapping-converter db-factory-ref="mongoDbFactory">
+        <mongo:custom-converters>
+            <mongo:converter>
+                <bean class="com.pla.core.repository.PlanIdToObjectIdConverter"/>
+            </mongo:converter>
+            <mongo:converter>
+                <bean class="com.pla.core.repository.ObjectIdToPlanIdConverter"/>
+            </mongo:converter>
+            <mongo:converter>
+                <bean class="com.pla.grouplife.quotation.repository.QuotationIdToObjectIdConverter"/>
+            </mongo:converter>
+            <mongo:converter>
+                <bean class="com.pla.grouplife.quotation.repository.ObjectIdToQuotationIdConverter"/>
+            </mongo:converter>
+            <mongo:converter>
+                <bean class="com.pla.individuallife.proposal.repository.ProposalIdToObjectIdConverter"/>
+            </mongo:converter>
+            <mongo:converter>
+                <bean class="com.pla.individuallife.proposal.repository.ObjectIdToProposalIdConverter"/>
+            </mongo:converter>
+        </mongo:custom-converters>
+    </mongo:mapping-converter>
+
     <extension:mongo-repository id="planMongoRepository" aggregate-type="com.pla.core.domain.model.plan.Plan"
                                 mongo-template="mongoTemplate"/>
     <extension:mongo-repository id="glQuotationMongoRepository"
@@ -92,5 +117,10 @@
     <extension:mongo-repository id="ghPolicyMongoRepository"
                                 aggregate-type="com.pla.grouphealth.policy.domain.model.GroupHealthPolicy"
                                 mongo-template="mongoTemplate"/>
+
+    <bean id="gridFsTemplate" class="org.springframework.data.mongodb.gridfs.GridFsTemplate">
+        <constructor-arg name="dbFactory" ref="mongoDbFactory"/>
+        <constructor-arg name="converter" ref="mappingConverter"/>
+    </bean>
 
 </beans>

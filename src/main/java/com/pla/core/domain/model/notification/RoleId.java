@@ -28,7 +28,7 @@ public class RoleId implements Serializable {
     @Column(name = "process")
     private String process;
 
-    RoleId(String roleType,LineOfBusinessEnum lineOfBusinessEnum,ProcessType process){
+    public RoleId(String roleType,LineOfBusinessEnum lineOfBusinessEnum,ProcessType process){
         this.roleType  = roleType;
         this.lineOfBusiness = lineOfBusinessEnum.name();
         this.process = process.name();

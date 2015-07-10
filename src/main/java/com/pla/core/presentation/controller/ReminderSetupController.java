@@ -4,7 +4,9 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.pla.core.application.service.notification.NotificationService;
 import com.pla.core.domain.exception.NotificationException;
-import com.pla.core.domain.model.notification.NotificationRoleMapper;
+import com.pla.core.domain.model.notification.NotificationRoleResolver;
+import com.pla.core.domain.model.notification.NotificationTemplate;
+import com.pla.core.domain.model.notification.NotificationTemplateId;
 import com.pla.core.dto.NotificationTemplateDto;
 import com.pla.core.query.NotificationFinder;
 import com.pla.sharedkernel.application.CreateQuotationNotificationCommand;
@@ -28,6 +30,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
 import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
@@ -37,6 +40,7 @@ import java.util.Map;
 import java.util.concurrent.Callable;
 
 import static com.pla.core.domain.exception.NotificationException.raiseProcessIsNotValid;
+import static org.nthdimenzion.utils.UtilValidator.isEmpty;
 
 /**
  * Created by pradyumna on 18-06-2015.
@@ -71,6 +75,7 @@ public class ReminderSetupController {
     public Callable<ModelAndView> displayTemplateList() {
         return () -> {
             ModelAndView modelAndView = new ModelAndView();
+            modelAndView.addObject("NotificationTemplateDto", new NotificationTemplateDto());
             modelAndView.setViewName("/pla/core/notification/templatelist");
             modelAndView.addObject("templateList", notificationFinder.findAllTemplates());
             return modelAndView;
@@ -84,12 +89,16 @@ public class ReminderSetupController {
             try {
                 LineOfBusinessEnum lineOfBusinessEnum = LineOfBusinessEnum.valueOf(notificationRoleMapping.get("lineOfBusiness"));
                 ProcessType processType = ProcessType.valueOf(notificationRoleMapping.get("processType"));
+                String uiRole = notificationRoleMapping.get("roleType");
                 boolean isValidProcess = lineOfBusinessEnum.isValidProcess(processType);
                 if (!isValidProcess) {
                     raiseProcessIsNotValid(processType.toString(),lineOfBusinessEnum.toString());
                 }
-                String roleType = NotificationRoleMapper.getRoleTypeByLineOfBusiness(lineOfBusinessEnum);
-                notificationService.createNotificationRoleMapping(roleType, lineOfBusinessEnum, processType);
+                String systemRole = NotificationRoleResolver.notificationRoleResolver(lineOfBusinessEnum,uiRole);
+                if (isEmpty(systemRole)){
+                    return new ResponseEntity(Result.failure("No mapping available for the given combination"), HttpStatus.INTERNAL_SERVER_ERROR);
+                }
+                notificationService.createNotificationRoleMapping(systemRole, lineOfBusinessEnum, processType);
             } catch (NotificationException e) {
                 return new ResponseEntity(Result.failure(e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
             } catch (DataIntegrityViolationException e) {
@@ -98,6 +107,31 @@ public class ReminderSetupController {
                 return new ResponseEntity(Result.failure(e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
             }
             return new ResponseEntity(Result.success("Role Notification Mapping Configured successfully"), HttpStatus.OK);
+        };
+    }
+
+    @RequestMapping(value = "/deletenotificationrolemapping",method = RequestMethod.POST)
+    @ResponseBody
+    public Callable<ResponseEntity> deleteNotificationRoleMapping(@RequestBody Map<String, String> notificationRoleMapping){
+        return ()->{
+            try {
+                LineOfBusinessEnum lineOfBusinessEnum = LineOfBusinessEnum.valueOf(notificationRoleMapping.get("lineOfBusiness"));
+                ProcessType processType = ProcessType.valueOf(notificationRoleMapping.get("processType"));
+                String uiRole = notificationRoleMapping.get("roleType");
+                boolean isValidProcess = lineOfBusinessEnum.isValidProcess(processType);
+                if (!isValidProcess) {
+                    raiseProcessIsNotValid(processType.toString(),lineOfBusinessEnum.toString());
+                }
+                String systemRole = NotificationRoleResolver.notificationRoleResolver(lineOfBusinessEnum,uiRole);
+                notificationService.deleteNotificationRoleMapping(systemRole, lineOfBusinessEnum, processType);
+            } catch (NotificationException e) {
+                return new ResponseEntity(Result.failure(e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
+            } catch (DataIntegrityViolationException e) {
+                return new ResponseEntity(Result.failure("Error occurred in deleting the notification Role mapping"), HttpStatus.INTERNAL_SERVER_ERROR);
+            } catch (RuntimeException e) {
+                return new ResponseEntity(Result.failure(e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+            return new ResponseEntity(Result.success("Notification Role Mapping deleted successfully"), HttpStatus.OK);
         };
     }
 
@@ -122,53 +156,52 @@ public class ReminderSetupController {
     * @TODO check the file extension before uploading
     * */
     @RequestMapping(value = "/uploadnotification", method = RequestMethod.POST)
-    public Callable<ResponseEntity> uploadNotification(@RequestBody NotificationTemplateDto notificationTemplateDto) throws IOException {
+    public Callable<ResponseEntity> uploadNotification(@Valid @ModelAttribute NotificationTemplateDto notificationTemplateDto,BindingResult bindingResult) throws IOException {
         return ()-> {
+            ModelAndView modelAndView = new ModelAndView();
+            modelAndView.setViewName("pla/core/underwriter/routingLevelSetup/createRoutingLevelSetup");
+            if (bindingResult.hasErrors()) {
+                modelAndView.addObject("message", "Error in uploading the notification template");
+                return new ResponseEntity(modelAndView, HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+            MultipartFile template = notificationTemplateDto.getFile();
+            if (!("text/plain".equals(notificationTemplateDto.getFile().getContentType()))) {
+                modelAndView.addObject("message", "Please upload a valid file");
+                return new ResponseEntity(modelAndView, HttpStatus.INTERNAL_SERVER_ERROR);
+            }
             try {
-                MultipartFile template = notificationTemplateDto.getTemplate();
-                /*byte[] template = FileUtils.readFileToByteArray(notificationTemplateDto.getTemplate());*/
+
                 boolean isCreated = notificationService.uploadNotificationTemplate(notificationTemplateDto.getLineOfBusiness(), notificationTemplateDto.getProcessType(),
                         notificationTemplateDto.getWaitingFor(), notificationTemplateDto.getReminderType(), template.getBytes());
                 if (!isCreated) {
-                    return new ResponseEntity(Result.failure("Error in uploading the notification template"), HttpStatus.INTERNAL_SERVER_ERROR);
+                    modelAndView.addObject("message", "Error in uploading the notification template");
+                    return new ResponseEntity(modelAndView, HttpStatus.INTERNAL_SERVER_ERROR);
                 }
             } catch (RuntimeException e) {
-                return new ResponseEntity(Result.failure(e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
+                modelAndView.addObject("message", e.getMessage());
+                return new ResponseEntity(modelAndView, HttpStatus.INTERNAL_SERVER_ERROR);
             }
-            return new ResponseEntity(Result.success("Notification Template uploaded successfully"), HttpStatus.OK);
+            modelAndView.addObject("message", "Notification Template uploaded successfully");
+            return new ResponseEntity(modelAndView, HttpStatus.OK);
         };
     }
 
-
-    @RequestMapping(value = "/reloadnotification", method = RequestMethod.POST)
+    @RequestMapping(value = "/getnotificationtemplate/{notificationTemplateId}",method = RequestMethod.GET)
     @ResponseBody
-    public Callable<ResponseEntity> reloadNotification(@RequestBody NotificationTemplateDto notificationTemplateDto) throws IOException {
-        return ()-> {
-            try {
-                MultipartFile template = notificationTemplateDto.getTemplate();
-               /* byte[] template = FileUtils.readFileToByteArray(notificationTemplateDto.getTemplate());*/
-                boolean isCreated = notificationService.reloadNotificationTemplate(notificationTemplateDto.getNotificationTemplateId(), template.getBytes());
-                if (!isCreated) {
-                    return new ResponseEntity(Result.failure("Error in Updating the notification template"), HttpStatus.INTERNAL_SERVER_ERROR);
-                }
-            } catch (RuntimeException e) {
-                return new ResponseEntity(Result.failure(e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
-            }
-            return new ResponseEntity(Result.success("Notification Template updated successfully"), HttpStatus.OK);
-        };
+    public List<Map<String,Object>> getNotificationTemplateById(@PathVariable("notificationTemplateId") NotificationTemplateId notificationTemplateId){
+        return notificationFinder.getNotificationTemplateById(notificationTemplateId);
     }
 
-    @RequestMapping(value = "/getremindertype", method = RequestMethod.POST)
+    @RequestMapping(value = "/getremindertype/{notificationTemplateId}", method = RequestMethod.GET)
     @ResponseBody
-    public void getReminderFile(@RequestBody NotificationTemplateDto notificationTemplateDto, HttpServletRequest request, HttpServletResponse response) throws IOException {
+    public void getReminderFile(@PathVariable("notificationTemplateId") NotificationTemplateId notificationTemplateId, HttpServletRequest request, HttpServletResponse response) throws IOException {
         response.reset();
-        response.setContentType("text/xml");
-        String templateFileName = "reminderOne.txt";
-        templateFileName = templateFileName.replaceAll("[\\s]*", "").trim();
-        response.setHeader("content-disposition", "attachment; filename=" + templateFileName + "");
+        response.setContentType("text/plain");
         OutputStream outputStream = response.getOutputStream();
-        byte[]  inputStream  = notificationService.getReminderFile(notificationTemplateDto.getLineOfBusiness(), notificationTemplateDto.getProcessType(), notificationTemplateDto.getWaitingFor(), notificationTemplateDto.getReminderType());
-        outputStream.write(inputStream);
+        NotificationTemplate  notificationTemplate = notificationService.getReminderFile(notificationTemplateId);
+        String fileName =  notificationTemplate.getFileName();
+        response.setHeader("content-disposition", "attachment; filename=" + fileName+ ".vm");
+        outputStream.write(notificationTemplate.getReminderFile());
         outputStream.flush();
         outputStream.close();
         response.flushBuffer();
@@ -203,7 +236,7 @@ public class ReminderSetupController {
         try {
             response.reset();
             outputStream = response.getOutputStream();
-            response.setContentType("text/html; charset=utf-8");
+            response.setContentType("text/plain");
             String fileName = notificationTemplateDto.getLineOfBusiness().name()+ "_" + notificationTemplateDto.getProcessType().name()+ "_" + notificationTemplateDto.getWaitingFor().name() + "_" + notificationTemplateDto.getReminderType().name();
             response.setHeader("content-disposition", "attachment; filename=" + fileName.toLowerCase() + ".vm");
             File tempFile = new File("./src/main/resources/emailtemplate/notification/" + fileName.toLowerCase() + ".vm");
@@ -246,5 +279,17 @@ public class ReminderSetupController {
     @ResponseBody
     public List<Map<String,Object>> getNotificationType(@PathVariable("lineOfBusiness") LineOfBusinessEnum lineOfBusiness,@PathVariable("process") ProcessType process,@PathVariable("waitingFor") WaitingForEnum waitingFor) {
         return notificationService.getNotificationTypeBy(lineOfBusiness,process,waitingFor);
+    }
+
+    @RequestMapping(value = "/getnotificationrolelist", method = RequestMethod.GET)
+    @ResponseBody
+    public List<Map<String, Object>> getNotificationRoleList(){
+        return  notificationFinder.findAllNotificationRole();
+    }
+
+    @RequestMapping(value = "/getnotificationtemplatelist", method = RequestMethod.GET)
+    @ResponseBody
+    public List<Map<String, Object>> getNotificationTemplateList(){
+        return  notificationFinder.findAllTemplates();
     }
 }

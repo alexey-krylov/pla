@@ -4,7 +4,9 @@ import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.joda.JodaModule;
+import com.google.common.collect.Lists;
 import com.pla.core.domain.model.notification.NotificationTemplate;
+import com.pla.core.domain.model.notification.NotificationTemplateId;
 import com.pla.core.repository.NotificationTemplateRepository;
 import com.pla.sharedkernel.domain.model.ProcessType;
 import com.pla.sharedkernel.domain.model.ReminderTypeEnum;
@@ -82,9 +84,9 @@ public class NotificationFinder {
         return namedParameterJdbcTemplate.query(findAllNotificationRole, new ColumnMapRowMapper()).parallelStream().map(new Function<Map<String, Object>, Map<String, Object>>() {
             @Override
             public Map<String, Object> apply(Map<String, Object> notificationRoleMap) {
-                notificationRoleMap.put("lineOfBusiness", LineOfBusinessEnum.valueOf(notificationRoleMap.get("lineOfBusiness").toString()));
-                notificationRoleMap.put("processType", ProcessType.valueOf(notificationRoleMap.get("processType").toString()));
-                notificationRoleMap.put("roleType", roleTypeProperties.getProperty(notificationRoleMap.get("roleType").toString()));
+                notificationRoleMap.put("lineOfBusinessDescription", LineOfBusinessEnum.valueOf(notificationRoleMap.get("lineOfBusiness").toString()).toString());
+                notificationRoleMap.put("processTypeDescription", ProcessType.valueOf(notificationRoleMap.get("processType").toString()).toString());
+                notificationRoleMap.put("roleTypeDescription", roleTypeProperties.getProperty(notificationRoleMap.get("roleType").toString()).toString());
                 return notificationRoleMap;
             }
         }).collect(Collectors.toList());
@@ -92,20 +94,10 @@ public class NotificationFinder {
 
     public List<Map<String,Object>> findAllTemplates() {
         List<NotificationTemplate> notificationTemplates = notificationTemplateRepository.findAll();
-        return notificationTemplates.parallelStream().map(new Function<NotificationTemplate, Map<String,Object>>() {
-            @Override
-            public Map<String,Object> apply(NotificationTemplate notificationTemplate) {
-                Map<String,Object> notificationTemplateMap = objectMapper.convertValue(notificationTemplate, Map.class);
-                notificationTemplateMap.put("lineOfBusiness", LineOfBusinessEnum.valueOf(notificationTemplateMap.get("lineOfBusiness").toString()));
-                notificationTemplateMap.put("processType", ProcessType.valueOf(notificationTemplateMap.get("processType").toString()));
-                notificationTemplateMap.put("waitingFor", WaitingForEnum.valueOf(notificationTemplateMap.get("waitingFor").toString()));
-                notificationTemplateMap.put("reminderType", ReminderTypeEnum.valueOf(notificationTemplateMap.get("reminderType").toString()));
-                return notificationTemplateMap;
-            }
-        }).collect(Collectors.toList());
+        return notificationTemplates.parallelStream().map(new NotificationTemplateTransformer()).collect(Collectors.toList());
     }
 
-    public List<Map<String,Object>> getNotificationByRole(Collection<? extends GrantedAuthority> authorities){
+    public List<Map<String, Object>> getNotificationByRole(Collection<? extends GrantedAuthority> authorities) {
         List<String> grantedAuthorities = authorities.parallelStream().map(new Function<GrantedAuthority, String>() {
             @Override
             public String apply(GrantedAuthority grantedAuthority) {
@@ -120,4 +112,23 @@ public class NotificationFinder {
         return isNotEmpty(quotationProposerDetail)?quotationProposerDetail.get(0): Collections.EMPTY_MAP;
     }
 
+    public List<Map<String,Object>> getNotificationTemplateById(NotificationTemplateId notificationTemplateId){
+        NotificationTemplate notificationTemplate = notificationTemplateRepository.findOne(notificationTemplateId);
+        if(notificationTemplate!=null){
+            return Lists.newArrayList(notificationTemplate).parallelStream().map(new NotificationTemplateTransformer()).collect(Collectors.toList());
+        }
+        return Collections.EMPTY_LIST;
+    }
+
+    private class NotificationTemplateTransformer implements Function<NotificationTemplate, Map<String,Object>> {
+        @Override
+        public Map<String, Object> apply(NotificationTemplate notificationTemplate) {
+            Map<String, Object> notificationTemplateMap = objectMapper.convertValue(notificationTemplate, Map.class);
+            notificationTemplateMap.put("lineOfBusinessDescription", LineOfBusinessEnum.valueOf(notificationTemplateMap.get("lineOfBusiness").toString()).toString());
+            notificationTemplateMap.put("processTypeDescription", ProcessType.valueOf(notificationTemplateMap.get("processType").toString()).toString());
+            notificationTemplateMap.put("waitingForDescription", WaitingForEnum.valueOf(notificationTemplateMap.get("waitingFor").toString()).toString());
+            notificationTemplateMap.put("reminderTypeDescription", ReminderTypeEnum.valueOf(notificationTemplateMap.get("reminderType").toString()).toString());
+            return notificationTemplateMap;
+        }
+    }
 }

@@ -5,6 +5,9 @@ import com.pla.sharedkernel.domain.model.ReminderTypeEnum;
 import com.pla.sharedkernel.domain.model.WaitingForEnum;
 import com.pla.sharedkernel.identifier.LineOfBusinessEnum;
 import lombok.Getter;
+import org.bson.types.ObjectId;
+import org.hibernate.annotations.Type;
+import org.joda.time.LocalDate;
 
 import static com.google.common.base.Preconditions.checkArgument;
 
@@ -29,6 +32,9 @@ public class NotificationBuilder {
     private byte[] reminderTemplate;
 
     private String emailAddress;
+
+    @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentLocalDate")
+    private LocalDate generatedOn;
 
     public NotificationBuilder() {
     }
@@ -84,8 +90,17 @@ public class NotificationBuilder {
         return this;
     }
 
+    public NotificationBuilder withGeneratedOnDate(LocalDate generatedOn){
+        checkArgument(generatedOn!=null,"Generated On cannot be empty");
+        this.generatedOn = generatedOn;
+        return this;
+    }
 
     public Notification createNotification(NotificationId notificationId){
         return new Notification(notificationId,this);
+    }
+
+    public NotificationHistory createNotificationHistory(){
+        return new NotificationHistory(new ObjectId().toString(),this);
     }
 }

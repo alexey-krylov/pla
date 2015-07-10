@@ -66,7 +66,7 @@ public class NotificationCommandHandler {
     public void createProposalNotification(CreateProposalNotificationCommand createProposalNotificationCommand) throws Exception {
         checkArgument(createProposalNotificationCommand!=null,"Create Proposal command cannot be empty");
         JpaRepository<Notification, NotificationId> notificationRepository = jpaRepositoryFactory.getCrudRepository(Notification.class);
-        Map<String,Object>  proposalNotificationDetailMap =   notificationTemplateService.getQuotationNotificationTemplateData(createProposalNotificationCommand.getLineOfBusiness(), createProposalNotificationCommand.getProposalId().getProposalId());
+        Map<String,Object>  proposalNotificationDetailMap = notificationTemplateService.getQuotationNotificationTemplateData(createProposalNotificationCommand.getLineOfBusiness(), createProposalNotificationCommand.getProposalId().getProposalId());
         Notification notification = createNotification(createProposalNotificationCommand.getLineOfBusiness(),createProposalNotificationCommand.getProcessType(),createProposalNotificationCommand.getWaitingFor(),
                 createProposalNotificationCommand.getReminderType(),createProposalNotificationCommand.getProposalId().getProposalId(),createProposalNotificationCommand.getRoleType(),proposalNotificationDetailMap);
         notificationRepository.save(notification);

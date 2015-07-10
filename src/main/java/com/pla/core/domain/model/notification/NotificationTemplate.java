@@ -48,4 +48,8 @@ public class NotificationTemplate {
         this.reminderFile = reminderFile;
         return this;
     }
+
+    public String getFileName(){
+        return (this.lineOfBusiness.name()+"_"+this.processType.name()+"_"+this.waitingFor.name()+"_"+this.reminderType.name()).toLowerCase();
+    }
 }

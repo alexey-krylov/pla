@@ -29,6 +29,6 @@ public class NotificationTemplateDto {
 
     private ReminderTypeEnum  reminderType;
 
-    private MultipartFile template;
+    private MultipartFile file;
 
 }
