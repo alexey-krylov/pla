@@ -14,6 +14,7 @@ import com.pla.sharedkernel.domain.model.ProcessType;
 import com.pla.sharedkernel.domain.model.WaitingForEnum;
 import com.pla.sharedkernel.identifier.LineOfBusinessEnum;
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.IOUtils;
 import org.axonframework.commandhandling.gateway.CommandGateway;
 import org.nthdimenzion.presentation.Result;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -117,12 +118,11 @@ public class ReminderSetupController {
             try {
                 LineOfBusinessEnum lineOfBusinessEnum = LineOfBusinessEnum.valueOf(notificationRoleMapping.get("lineOfBusiness"));
                 ProcessType processType = ProcessType.valueOf(notificationRoleMapping.get("processType"));
-                String uiRole = notificationRoleMapping.get("roleType");
+                String systemRole = notificationRoleMapping.get("roleType");
                 boolean isValidProcess = lineOfBusinessEnum.isValidProcess(processType);
                 if (!isValidProcess) {
                     raiseProcessIsNotValid(processType.toString(),lineOfBusinessEnum.toString());
                 }
-                String systemRole = NotificationRoleResolver.notificationRoleResolver(lineOfBusinessEnum,uiRole);
                 notificationService.deleteNotificationRoleMapping(systemRole, lineOfBusinessEnum, processType);
             } catch (NotificationException e) {
                 return new ResponseEntity(Result.failure(e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
@@ -200,11 +200,11 @@ public class ReminderSetupController {
         OutputStream outputStream = response.getOutputStream();
         NotificationTemplate  notificationTemplate = notificationService.getReminderFile(notificationTemplateId);
         String fileName =  notificationTemplate.getFileName();
-        response.setHeader("content-disposition", "attachment; filename=" + fileName+ ".vm");
-        outputStream.write(notificationTemplate.getReminderFile());
+        response.setHeader("content-disposition", "attachment; filename=" + fileName + ".vm");
+        IOUtils.write(notificationTemplate.getReminderFile(), outputStream);
         outputStream.flush();
-        outputStream.close();
         response.flushBuffer();
+        outputStream.close();
     }
 
     @RequestMapping(value = "/createnotification", method = RequestMethod.POST)
