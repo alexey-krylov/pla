@@ -14,21 +14,15 @@
     }
 </style>
 <div th:include="fragments/common :: bodyHeader" th:remove="tag"></div>
-<script th:inline="javascript">
-    /*<![CDATA[*/
-    var template = {};
-    var lineOfBusiness = /*[[${NotificationTemplateDto.lineOfBusiness}]]*/null;
-    template.lineOfBusiness=lineOfBusiness;
-    var processType = /*[[${NotificationTemplateDto.processType}]]*/null;
-    template.processType = processType;
-    var waitingFor = /*[[${NotificationTemplateDto.waitingFor}]]*/null;
-    template.waitingFor = waitingFor;
-    var reminderType = /*[[${{NotificationTemplateDto.reminderType}}]]*/null;
-    template.reminderType = reminderType;
-
-    /*]]>*/
+<script>
+       var interval = setInterval(function(){
+        if(require.defined("basic")){
+            requirejs(['/pla/js/notification/viewUploadTemplate.js'],function(){
+            });
+            clearInterval(interval);
+        }
+    }, 600);
 </script>
-
 
 
 
@@ -37,56 +31,53 @@
     <div class="color-line"></div>
     <div class="splash-title"></div>
 </div>
+<!-- ***************************  LIST OF ROLE MAPPING *************-->
 <div class="container-fluid ng-cloak">
-    <div class="panel panel-primary">
-        <div class="panel-heading">
-            <div class="row">
-                <div class="col-lg-6"><span th:text="#{notificationUploadTemplates}">List of Notification Upload Templates
+    <div class="col-lg-12">
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+
+                <div class="row">
+                    <div class="col-lg-6"><span th:text="#{notificationUploadTemplates}">List of Notification Upload Templates
                         </span></div>
-                <div class="col-lg-6">
-                    <a class="btn btn-default btn-sm" style="float: right"
-                       href="#newTemplate" data-toggle="modal" data-target="#newTemplate">New Template</a>
+                    <div class="col-lg-6"><a class="btn btn-default btn-sm" style="float: right"
+                                             href="#newTemplate" data-toggle="modal" data-target="#newTemplate">New Template</a>
+
+                    </div>
                 </div>
             </div>
-        </div>
-        <div class="panel-body ">
-            <div class="col-md-9">
-                <nth-alert/>
+            <div class="panel-body">
+                <table class="table table-striped table-bordered" id="uploadTemplateList-table" cellspacing="0" width="100%">
+                    <thead>
+                    <tr>
+                        <th>Line of Business</th>
+                        <th>Process Type</th>
+                        <th>Waiting For</th>
+                        <th>Reminder Type</th>
+                        <th>Template</th>
+                        <th>Action</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr ng-repeat="template in templateList">
+                        <td>{{template.lineOfBusinessDescription}}</td>
+                        <td>{{template.processTypeDescription}}</td>
+                        <td>{{template.waitingForDescription}}</td>
+                        <td>{{template.reminderTypeDescription}}</td>
+                        <td><button type="button" class="btn btn-success btn-xs"  ng-click="downloadTemplate(template.notificationTemplateId)">DownloadTemplate</button></td>
+                        <td>
+                            <button type="button" class="btn btn-default btn-xs" data-toggle="modal" data-target="#updateTemplate" ng-click="updateTemplate(template.notificationTemplateId)">Update</button>
+                            <button type="button" class="btn btn-danger btn-xs"  data-toggle="modal" data-target="#alert-modal" ng-click="inactivate(template.notificationTemplateId,'save')" >Inactivate</button></td>
+                    </tr>
+                    </tbody>
+                </table>
             </div>
-            <table class="dataTables_wrapper dataTable table table-striped table-bordered"
-                   datatable="" cellspacing="0" width="100%">
-                <thead>
-                <tr>
-                    <th>Line of Business</th>
-                    <th>Process Type</th>
-                    <th>Waiting For</th>
-                    <th>Reminder Type</th>
-                    <th>Template</th>
-                    <th>Action</th>
-                </tr>
-                </thead>
-                <tbody>
 
-                <tr ng-repeat="template in templateList">
-                    <td>{{template.lineOfBusinessDescription}}</td>
-                    <td>{{template.processTypeDescription}}</td>
-                    <td>{{template.waitingForDescription}}</td>
-                    <td>{{template.reminderTypeDescription}}</td>
-                   <!-- <td><a>Download Template</a></td>-->
-                    <td><button type="button" class="btn btn-success btn-xs"  ng-click="downloadTemplate(template.notificationTemplateId)">DownloadTemplate</button></td>
-                    <td>
-                        <button type="button" class="btn btn-default btn-xs" data-toggle="modal" data-target="#updateTemplate" ng-click="updateTemplate(template.notificationTemplateId)">Update</button>
-                        <button type="button" class="btn btn-danger btn-xs"  data-toggle="modal" data-target="#alert-modal" ng-click="inactivate(template.notificationTemplateId,'save')" >Inactivate</button></td>
-                </tr>
-                </tbody>
-            </table>
-        </div>
-        <div class="panel-footer">
-            <ul class="pagination" id="logs-pagination-default"></ul>
         </div>
     </div>
-
 </div>
+
+
 
 <!-- ***************************** ALERT BOX ********************************-->
 
@@ -120,7 +111,8 @@
                 <h4 class="modal-title">Update Template</h4>
             </div>
             <div class="modal-body">
-                <ng-alert></ng-alert>
+                <div class="alert alert-success" hidden="true" id="updateSuccessMsg"></div>
+                <div class="alert alert-danger" hidden="true" id="updateDangerMsg"></div>
                 <form name="templateForm" action="uploadnotification"  id="updateTemplateForm" method="POST"
                       enctype="multipart/form-data" ng-submit="submitFormToServer()">
 
@@ -197,7 +189,9 @@
                     <h4 class="modal-title">New Template</h4>
                 </div>
                 <div class="modal-body">
-                    <ng-alert></ng-alert>
+                    <div class="alert alert-success" hidden="true" id="successMsg"></div>
+                    <div class="alert alert-danger" hidden="true" id="dangerMsg"></div>
+
                     <form name="templateForm" action="uploadnotification"  id="templateForm" method="POST"
                           enctype="multipart/form-data" ng-submit="submitFormToServer()">
 
@@ -299,12 +293,11 @@
 <script>
     requirejs(['main','angular-file-upload'], function () {
         require(['angular', 'jquery'], function (app, $) {
-            var module = angular.module('ReminderTemplateModule', ['common','ngRoute', 'ui.bootstrap', 'ngSanitize','angularFileUpload']);
+            var module = angular.module('ReminderTemplateModule', ['angularFileUpload']);
             module.controller('ReminderTemplateCtrl', ['$scope', '$http', '$window','$upload', function ($scope, $http, $window,$upload) {
                 console.log('Reminder Template Module Controller ');
-                console.log(JSON.stringify(template));
+
                 $scope.template = {};
-                $scope.template = template;
                 $http.get('/pla/core/notification/getnotificationtemplatelist').success(function(data){
                     $scope.templateList=data;
                 });
@@ -351,13 +344,27 @@
                                 waitingFor:$scope.template.waitingFor,reminderType:$scope.template.reminderType}
                         }).progress(function (evt) {
 
-                        }).success(function (data, status, headers, config) {
-                            console.log('file ' + config.file.name + 'uploaded. Response: ' +
-                            JSON.stringify(data));
+                        }).success(function (data) {
+                           if(data.status=='200'){
+                               $scope.clear();
+                               $('#dangerMsg').hide();
+                               $("#successMsg").text(data.message).show();
+                               window.setTimeout('location.reload()', 4000);
+                           }else{
+                               $("#successMsg").hide();
+                               $('#dangerMsg').text(data.message).show();
+
+                           }
+                        }).error(function(data) {
+                            if(data.status=='500'){
+                                $("#successMsg").hide();
+                                $('#dangerMsg').text(data.message).show();
+                            }
+
                         });
                     }
-                    $('#newTemplate').modal('hide');
-                    $scope.reload();
+                   // $('#newTemplate').modal('hide');
+                  //  $scope.reload();
                 };
 
                 $scope.clear = function () {
@@ -390,13 +397,28 @@
                                 waitingFor:$scope.updateTemplate.waitingFor,reminderType:$scope.updateTemplate.reminderType}
                         }).progress(function (evt) {
 
-                        }).success(function (data, status, headers, config) {
-                            console.log('file ' + config.file.name + 'uploaded. Response: ' +
-                            JSON.stringify(data));
+                        }).success(function (data) {
+                            if(data.status=='200'){
+                                $scope.clear();
+                                $('#dangerMsg').hide();
+                                $("#updateDangerMsg").text(data.message).show();
+                                window.setTimeout('location.reload()', 4000);
+                            }else{
+                                $("#updateSuccessMsg").hide();
+                                $('#updateDangerMsg').text(data.message).show();
+
+                            }
+
+                        }).error(function(data) {
+                            if(data.status=='500'){
+                                $("#updateSuccessMsg").hide();
+                                $('#updateDangerMsg').text(data.message).show();
+                            }
+
                         });
                     }
-                    $('#updateTemplate').modal('hide');
-                    window.setTimeout('location.reload()', 3000);
+                   // $('#updateTemplate').modal('hide');
+                  //  window.setTimeout('location.reload()', 3000);
 
                 }
 
@@ -408,14 +430,14 @@
                         console.log(value);
                         uploadTemplateToInactivate =  value;
                     }else{
-                        $http.get('/pla/core/notification/deletetemplate/'+uploadTemplateToInactivate).success(function(data){
+                        $http.delete('/pla/core/notification/deletetemplate/'+uploadTemplateToInactivate).success(function(data){
                              if(data.status=='200'){
                                 $('#alert-modal').show();
                                 $('#confirmationMsg').hide();
                                 $('#approveButton').hide();
                                 $('#changeToOk').text('Ok');
                                 $("#successMessage").text(data.message).show();
-                               window.setTimeout('location.reload()', 3000);
+                               window.setTimeout('location.reload()', 2000);
                             }else{
 
                                 $('#approveButton').hide();
