@@ -2,8 +2,8 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Quotation" pageWidth="842" pageHeight="1500" orientation="Landscape" whenNoDataType="AllSectionsNoDetail" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="957e75dd-e876-4376-9d34-ee0e5f53cdeb">
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
 	<property name="ireport.zoom" value="1.0"/>
-	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="868"/>
+	<property name="ireport.x" value="97"/>
+	<property name="ireport.y" value="484"/>
 	<subDataset name="dataset1" uuid="cb7c3b79-1e7b-49c3-9bac-8ee5b60d6edc"/>
 	<queryString>
 		<![CDATA[]]>
@@ -59,8 +59,14 @@
 	<field name="profitAndSolvencyLoading" class="java.lang.String">
 		<fieldDescription><![CDATA[profitAndSolvencyLoading]]></fieldDescription>
 	</field>
-	<field name="additionalDiscountLoading" class="java.lang.String">
-		<fieldDescription><![CDATA[additionalDiscountLoading]]></fieldDescription>
+	<field name="hivDiscount" class="java.lang.String">
+		<fieldDescription><![CDATA[hivDiscount]]></fieldDescription>
+	</field>
+	<field name="valuedClientDiscount" class="java.lang.String">
+		<fieldDescription><![CDATA[valuedClientDiscount]]></fieldDescription>
+	</field>
+	<field name="longTermDiscount" class="java.lang.String">
+		<fieldDescription><![CDATA[longTermDiscount]]></fieldDescription>
 	</field>
 	<field name="serviceTax" class="java.lang.String">
 		<fieldDescription><![CDATA[serviceTax]]></fieldDescription>
@@ -117,7 +123,9 @@
 	<detail>
 		<band height="776" splitType="Stretch">
 			<frame>
-				<reportElement x="0" y="0" width="800" height="675" uuid="3e3c739a-dd56-4b8c-85ba-494ac85a39f4"/>
+				<reportElement x="-20" y="-20" width="800" height="675" uuid="3e3c739a-dd56-4b8c-85ba-494ac85a39f4">
+					<propertyExpression name="valuedClientDiscount"><![CDATA[$F{valuedClientDiscount}]]></propertyExpression>
+				</reportElement>
 				<box>
 					<topPen lineWidth="0.6" lineStyle="Solid" lineColor="#000000"/>
 					<leftPen lineWidth="0.6" lineStyle="Solid" lineColor="#000000"/>
@@ -133,7 +141,7 @@
 						<rightPen lineColor="#F22522"/>
 					</box>
 					<textElement verticalAlignment="Middle" markup="none">
-                        <font fontName="Arial" size="12" isBold="true"/>
+						<font fontName="Arial" size="12" isBold="true"/>
 					</textElement>
 					<text><![CDATA[Agent Name :]]></text>
 				</staticText>
@@ -147,7 +155,7 @@
 				<staticText>
 					<reportElement x="490" y="12" width="110" height="24" uuid="3d80a0b0-f997-454c-b31d-0dc020c6ed22"/>
 					<textElement textAlignment="Left" verticalAlignment="Middle">
-                        <font fontName="Arial" size="12" isBold="true"/>
+						<font fontName="Arial" size="12" isBold="true"/>
 					</textElement>
 					<text><![CDATA[Contact  Number :]]></text>
 				</staticText>
@@ -164,7 +172,7 @@
 				<staticText>
 					<reportElement x="460" y="50" width="140" height="20" uuid="ac1b81a8-9484-4246-b06f-dc2cf3c4c4f3"/>
 					<textElement verticalAlignment="Middle">
-                        <font fontName="Arial" size="12" isBold="true"/>
+						<font fontName="Arial" size="12" isBold="true"/>
 					</textElement>
 					<text><![CDATA[Policy Servicing Office :]]></text>
 				</staticText>
@@ -176,7 +184,7 @@
 				<staticText>
 					<reportElement x="49" y="50" width="81" height="20" uuid="adf044ed-7118-4885-8628-16e1d83764ce"/>
 					<textElement verticalAlignment="Middle">
-                        <font fontName="Arial" size="12" isBold="true"/>
+						<font fontName="Arial" size="12" isBold="true"/>
 					</textElement>
 					<text><![CDATA[  Agent Code :]]></text>
 				</staticText>
@@ -197,7 +205,7 @@
 							<rightPen lineColor="#F22522"/>
 						</box>
 						<textElement verticalAlignment="Middle" markup="none">
-                            <font fontName="Arial" size="12" isBold="true"/>
+							<font fontName="Arial" size="12" isBold="true"/>
 						</textElement>
 						<text><![CDATA[Name :]]></text>
 					</staticText>
@@ -217,7 +225,7 @@
 							<rightPen lineColor="#F22522"/>
 						</box>
 						<textElement verticalAlignment="Middle" markup="none">
-                            <font fontName="Arial" size="12" isBold="true"/>
+							<font fontName="Arial" size="12" isBold="true"/>
 						</textElement>
 						<text><![CDATA[  Address :]]></text>
 					</staticText>
@@ -240,7 +248,7 @@
 							<rightPen lineColor="#F22522"/>
 						</box>
 						<textElement markup="none">
-                            <font fontName="Arial" size="12" isBold="true"/>
+							<font fontName="Arial" size="12" isBold="true"/>
 						</textElement>
 						<text><![CDATA[Telephone Number :]]></text>
 					</staticText>
@@ -319,7 +327,7 @@
 					<subreportExpression><![CDATA["jasperpdf/jasper/grouplife/coverdetailsubreport.jasper"]]></subreportExpression>
 				</subreport>
 				<frame>
-					<reportElement positionType="Float" x="58" y="408" width="722" height="139" uuid="1b0278c2-f175-414f-85b5-895178227955"/>
+					<reportElement positionType="Float" x="58" y="399" width="722" height="172" uuid="1b0278c2-f175-414f-85b5-895178227955"/>
 					<box>
 						<topPen lineWidth="0.6" lineColor="#000000"/>
 						<leftPen lineWidth="0.6" lineColor="#000000"/>
@@ -367,14 +375,14 @@
 						<textElement textAlignment="Right" verticalAlignment="Middle">
 							<font size="12" isBold="true"/>
 						</textElement>
-						<text><![CDATA[Additional Discount/Loading:]]></text>
+						<text><![CDATA[HIV Discount:]]></text>
 					</staticText>
 					<staticText>
-						<reportElement x="111" y="119" width="100" height="19" uuid="09c82c9b-9709-43c8-b964-221fcfe55b11"/>
+						<reportElement x="84" y="119" width="127" height="19" uuid="09c82c9b-9709-43c8-b964-221fcfe55b11"/>
 						<textElement textAlignment="Right" verticalAlignment="Middle">
 							<font size="12" isBold="true"/>
 						</textElement>
-						<text><![CDATA[Total Premium :]]></text>
+						<text><![CDATA[Long Term Discount :]]></text>
 					</staticText>
 					<textField isStretchWithOverflow="true">
 						<reportElement x="221" y="51" width="84" height="20" uuid="89fb0baf-1f19-435b-8a08-422ad8f89845"/>
@@ -384,12 +392,12 @@
 					<textField isStretchWithOverflow="true">
 						<reportElement x="223" y="99" width="147" height="17" uuid="c0f7417e-2640-4e6b-a364-eff91e4b09df"/>
 						<textElement textAlignment="Left" verticalAlignment="Middle"/>
-						<textFieldExpression><![CDATA[$F{additionalDiscountLoading}]]></textFieldExpression>
+						<textFieldExpression><![CDATA[$F{hivDiscount}]]></textFieldExpression>
 					</textField>
 					<textField isStretchWithOverflow="true">
-						<reportElement x="223" y="119" width="92" height="19" uuid="f265b2c7-cccd-459f-84dc-01efcb498bfd"/>
+						<reportElement x="223" y="119" width="147" height="19" uuid="f265b2c7-cccd-459f-84dc-01efcb498bfd"/>
 						<textElement textAlignment="Left" verticalAlignment="Middle"/>
-						<textFieldExpression><![CDATA[$F{totalPremium}]]></textFieldExpression>
+						<textFieldExpression><![CDATA[$F{longTermDiscount}]]></textFieldExpression>
 					</textField>
 					<textField isStretchWithOverflow="true">
 						<reportElement x="581" y="81" width="51" height="17" uuid="a481f5df-2207-4868-9e9c-bb8f6ed66c31"/>
@@ -407,6 +415,30 @@
 						<reportElement x="222" y="75" width="88" height="22" uuid="63983f1c-55d3-40b5-81fa-68203e120ef7"/>
 						<textElement verticalAlignment="Middle"/>
 						<textFieldExpression><![CDATA[$F{waiverOfExcessLoadings}]]></textFieldExpression>
+					</textField>
+					<staticText>
+						<reportElement x="381" y="99" width="189" height="20" uuid="495b3456-1b7c-48a6-979d-e113df53062c"/>
+						<textElement textAlignment="Right">
+							<font size="12" isBold="true"/>
+						</textElement>
+						<text><![CDATA[       Valued Client Discount:]]></text>
+					</staticText>
+					<textField>
+						<reportElement x="581" y="99" width="123" height="17" uuid="8752e5f1-046d-44db-9070-43fa61f2321b"/>
+						<textElement verticalAlignment="Middle"/>
+						<textFieldExpression><![CDATA[$F{valuedClientDiscount}]]></textFieldExpression>
+					</textField>
+					<staticText>
+						<reportElement x="111" y="142" width="100" height="20" uuid="3d2ef21b-7e4e-4765-8a56-4f02b96dd478"/>
+						<textElement textAlignment="Right">
+							<font size="12" isBold="true"/>
+						</textElement>
+						<text><![CDATA[Total Premium:]]></text>
+					</staticText>
+					<textField>
+						<reportElement x="223" y="142" width="147" height="20" uuid="2fc4e6cf-827f-4525-816b-265356e5a343"/>
+						<textElement verticalAlignment="Middle"/>
+						<textFieldExpression><![CDATA[$F{totalPremium}]]></textFieldExpression>
 					</textField>
 				</frame>
 				<subreport>
