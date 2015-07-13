@@ -435,4 +435,12 @@ public class ILProposalController {
         }
         return new ResponseEntity(dto, HttpStatus.OK);
     }
+
+    @RequestMapping(value = "/getmandatorydocuments/{proposalId}", method = RequestMethod.GET)
+    @ResponseBody
+    @ApiOperation(httpMethod = "GET", value = "To list mandatory documents which is being configured in Mandatory Document SetUp")
+    public List<ILProposalMandatoryDocumentDto> findMandatoryDocuments(@PathVariable("proposalId") String proposalId) {
+        List<ILProposalMandatoryDocumentDto> ilProposalMandatoryDocumentDtos = proposalFinder.findMandatoryDocuments(proposalId);
+        return ilProposalMandatoryDocumentDtos;
+    }
 }

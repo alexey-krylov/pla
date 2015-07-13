@@ -22,7 +22,7 @@ public interface UnderWriterDocumentRepository extends MongoRepository<UnderWrit
     @Query(value = "{'planId' : ?0,'coverageId' : ?1 ,'validTill':?2 ,'processType' :?3}")
     public UnderWriterDocument findByPlanCodeAndCoverageIdAndValidityDate(PlanId planId, CoverageId coverageId, LocalDate validTill,String processType);
 
-    @Query(value = "{'planId' : ?0,'coverageId' : ?1, 'effectiveFrom' :?2, 'validTill' :?3, 'processType' :?4 }")
+    @Query(value = "{'planId' : ?0,'coverageId' : ?1, 'effectiveFrom'  : {$lte : ?2}, 'validTill' :?3, 'processType' :?4 }")
     public List<UnderWriterDocument> findUnderWriterDocument(PlanId planId,CoverageId coverageId,LocalDate effectiveFrom,LocalDate validTill,String processType);
 
     @Query(value = "{'validTill': null}")

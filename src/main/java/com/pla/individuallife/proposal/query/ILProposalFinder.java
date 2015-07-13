@@ -3,6 +3,7 @@ package com.pla.individuallife.proposal.query;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
 import com.mongodb.BasicDBObject;
+import com.mongodb.gridfs.GridFSDBFile;
 import com.pla.core.domain.model.CoverageName;
 import com.pla.core.domain.model.plan.premium.Premium;
 import com.pla.core.query.CoverageFinder;
@@ -15,9 +16,17 @@ import com.pla.publishedlanguage.domain.model.ComputedPremiumDto;
 import com.pla.publishedlanguage.domain.model.PremiumCalculationDto;
 import com.pla.publishedlanguage.domain.model.PremiumFrequency;
 import com.pla.publishedlanguage.domain.model.PremiumInfluencingFactor;
+import com.pla.publishedlanguage.dto.ClientDocumentDto;
+import com.pla.publishedlanguage.dto.SearchDocumentDetailDto;
+import com.pla.publishedlanguage.dto.UnderWriterRoutingLevelDetailDto;
+import com.pla.publishedlanguage.underwriter.contract.IUnderWriterAdapter;
+import com.pla.sharedkernel.domain.model.ProcessType;
+import com.pla.sharedkernel.domain.model.RoutingLevel;
 import com.pla.sharedkernel.identifier.CoverageId;
 import com.pla.sharedkernel.identifier.PlanId;
 import com.pla.sharedkernel.identifier.QuotationId;
+import com.pla.underwriter.domain.model.UnderWriterInfluencingFactor;
+import org.apache.commons.io.IOUtils;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import org.joda.time.Years;
@@ -29,15 +38,18 @@ import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.BasicQuery;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.data.mongodb.gridfs.GridFsTemplate;
 import org.springframework.jdbc.core.ColumnMapRowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Service;
 
 import javax.sql.DataSource;
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.*;
 import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
@@ -66,6 +78,12 @@ public class ILProposalFinder {
 
     @Autowired
     private CoverageFinder coverageFinder;
+
+    @Autowired
+    private IUnderWriterAdapter underWriterAdapter;
+
+    @Autowired
+    private GridFsTemplate gridFsTemplate;
 
     @Autowired
     public void setDataSource(DataSource dataSource, MongoTemplate mongoTemplate) {
@@ -242,6 +260,63 @@ public class ILProposalFinder {
         premiumDetailDto.setQuarterlyPremium(quarterlyPremium);
         premiumDetailDto.setSemiannualPremium(semiAnnualPremium);
         return premiumDetailDto;
+    }
+
+    public List<ILProposalMandatoryDocumentDto> findMandatoryDocuments(String proposalId) {
+        BasicDBObject query = new BasicDBObject();
+        query.put("_id", proposalId);
+        Map proposal = mongoTemplate.findOne(new BasicQuery(query), Map.class, "individual_life_proposal");
+        List<ILProposerDocument> uploadedDocuments = proposal.get("proposalDocuments") != null ? (List<ILProposerDocument>) proposal.get("proposalDocuments") : Lists.newArrayList();
+        List<SearchDocumentDetailDto> documentDetailDtos = Lists.newArrayList();
+        ProposalPlanDetail planDetail = (ProposalPlanDetail) proposal.get("proposalPlanDetail");
+        SearchDocumentDetailDto searchDocumentDetailDto = new SearchDocumentDetailDto(new PlanId(planDetail.getPlanId()));
+        documentDetailDtos.add(searchDocumentDetailDto);
+        List<CoverageId> coverageIds = ((Set<RiderDetailDto>)planDetail.getRiderDetails()).stream().map(rider -> new CoverageId(rider.getCoverageId())).collect(Collectors.toList());
+        documentDetailDtos.add(new SearchDocumentDetailDto(new PlanId(planDetail.getPlanId()), coverageIds));
+
+        UnderWriterRoutingLevelDetailDto routingLevelDetailDto = new UnderWriterRoutingLevelDetailDto(new PlanId(planDetail.getPlanId()), LocalDate.now(), ProcessType.ENROLLMENT.name());
+        routingLevelDetailDto.addCoverage(coverageIds.get(0));
+        List<UnderWriterRoutingLevelDetailDto.UnderWriterInfluencingFactorItem> underWriterInfluencingFactorItems = new ArrayList<UnderWriterRoutingLevelDetailDto.UnderWriterInfluencingFactorItem>();
+        DateTime dob = new DateTime(((ProposedAssured) proposal.get("proposedAssured")).getDateOfBirth());
+        Integer age = Years.yearsBetween(dob, DateTime.now()).getYears() + 1;
+        underWriterInfluencingFactorItems.add(new UnderWriterRoutingLevelDetailDto.UnderWriterInfluencingFactorItem(UnderWriterInfluencingFactor.AGE.name(), age.toString()));
+        underWriterInfluencingFactorItems.add(new UnderWriterRoutingLevelDetailDto.UnderWriterInfluencingFactorItem(UnderWriterInfluencingFactor.SUM_ASSURED.name(), (((ProposalPlanDetail) proposal.get("proposalPlanDetail")).getSumAssured().toString())));
+        routingLevelDetailDto.setUnderWriterInfluencingFactor(underWriterInfluencingFactorItems);
+        RoutingLevel rl = underWriterAdapter.getRoutingLevel(routingLevelDetailDto);
+        List<ClientDocumentDto> mandatoryDocuments = new ArrayList<ClientDocumentDto>();
+        if (rl != null) {
+            mandatoryDocuments = underWriterAdapter.getDocumentsForUnderWriterApproval(routingLevelDetailDto);
+        } else {
+            mandatoryDocuments.addAll(underWriterAdapter.getMandatoryDocumentsForApproverApproval(documentDetailDtos, ProcessType.ENROLLMENT));
+        }
+        List<ILProposalMandatoryDocumentDto> mandatoryDocumentDtos = Lists.newArrayList();
+        if (isNotEmpty(mandatoryDocuments)) {
+            mandatoryDocumentDtos = mandatoryDocuments.stream().map(new Function<ClientDocumentDto, ILProposalMandatoryDocumentDto>() {
+                @Override
+                public ILProposalMandatoryDocumentDto apply(ClientDocumentDto clientDocumentDto) {
+                    ILProposalMandatoryDocumentDto mandatoryDocumentDto = new ILProposalMandatoryDocumentDto(clientDocumentDto.getDocumentCode(), clientDocumentDto.getDocumentName());
+                    Optional<ILProposerDocument> proposerDocumentOptional = uploadedDocuments.stream().filter(new Predicate<ILProposerDocument>() {
+                        @Override
+                        public boolean test(ILProposerDocument ilProposerDocument) {
+                            return clientDocumentDto.getDocumentCode().equals(ilProposerDocument.getDocumentId());
+                        }
+                    }).findAny();
+                    if (proposerDocumentOptional.isPresent()) {
+                        try {
+                            if (isNotEmpty(proposerDocumentOptional.get().getGridFsDocId())) {
+                                GridFSDBFile gridFSDBFile = gridFsTemplate.findOne(new Query(Criteria.where("_id").is(proposerDocumentOptional.get().getGridFsDocId())));
+                                mandatoryDocumentDto.updateWithContent(IOUtils.toByteArray(gridFSDBFile.getInputStream()));
+                            }
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                    return mandatoryDocumentDto;
+                }
+            }).collect(Collectors.toList());
+        }
+        return mandatoryDocumentDtos;
+
     }
 
     private class TransformToILSearchProposalDto implements Function<Map, ILSearchProposalDto> {
