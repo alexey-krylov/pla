@@ -25,6 +25,7 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 import static com.google.common.base.Preconditions.checkArgument;
+import static com.pla.core.domain.exception.NotificationException.raiseDuplicateEntryException;
 
 /**
  * Created by Admin on 6/18/2015.
@@ -65,19 +66,22 @@ public class NotificationService {
         return AppConstants.SUCCESS;
     }
 
-    public boolean uploadNotificationTemplate(LineOfBusinessEnum lineOfBusiness, ProcessType processType, WaitingForEnum waitingFor, ReminderTypeEnum reminderType, byte[] reminderFile){
+    public boolean uploadNotificationTemplate(String notificationTemplateId,LineOfBusinessEnum lineOfBusiness, ProcessType processType, WaitingForEnum waitingFor, ReminderTypeEnum reminderType, byte[] reminderFile){
         checkArgument(lineOfBusiness.isValidProcess(processType), "The process "+processType+" is not associated with "+lineOfBusiness);
         checkArgument(processType.isValidWaitingFor(waitingFor), "The "+waitingFor+" waiting for is not associated with "+processType);
         checkArgument(waitingFor.isValidReminderType(reminderType), "The "+reminderType+" is not associated with "+waitingFor);
-        NotificationTemplate notificationTemplate =  notificationTemplateRepository.findNotification(lineOfBusiness, processType, waitingFor, reminderType);
-        if (notificationTemplate!=null){
-            NotificationTemplate existedTemplate = notificationTemplateRepository.findOne(notificationTemplate.getNotificationTemplateId());
+        if (notificationTemplateId != null){
+            NotificationTemplate existedTemplate = notificationTemplateRepository.findOne(new NotificationTemplateId(notificationTemplateId));
             existedTemplate = existedTemplate.withReminderFile(reminderFile);
             notificationTemplateRepository.save(existedTemplate);
             return AppConstants.SUCCESS;
         }
-        NotificationTemplateId notificationTemplateId = new NotificationTemplateId(idGenerator.nextId());
-        NotificationTemplate createNotificationTemplate = NotificationTemplate.createNotification(notificationTemplateId,lineOfBusiness, processType,
+        NotificationTemplate notificationTemplate =  notificationTemplateRepository.findNotification(lineOfBusiness, processType, waitingFor, reminderType);
+        if (notificationTemplate!=null){
+            raiseDuplicateEntryException();
+        }
+        NotificationTemplateId id = new NotificationTemplateId(idGenerator.nextId());
+        NotificationTemplate createNotificationTemplate = NotificationTemplate.createNotification(id,lineOfBusiness, processType,
                 waitingFor, reminderType);
         createNotificationTemplate = createNotificationTemplate.withReminderFile(reminderFile);
         notificationTemplateRepository.save(createNotificationTemplate);

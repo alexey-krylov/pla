@@ -160,8 +160,7 @@ public class ReminderSetupController {
                 return new ResponseEntity(Result.failure("Please upload a valid file"), HttpStatus.INTERNAL_SERVER_ERROR);
             }
             try {
-
-                boolean isCreated = notificationService.uploadNotificationTemplate(notificationTemplateDto.getLineOfBusiness(), notificationTemplateDto.getProcessType(),
+                boolean isCreated = notificationService.uploadNotificationTemplate(notificationTemplateDto.getNotificationTemplateId(),notificationTemplateDto.getLineOfBusiness(), notificationTemplateDto.getProcessType(),
                         notificationTemplateDto.getWaitingFor(), notificationTemplateDto.getReminderType(), template.getBytes());
                 if (!isCreated) {
                     return new ResponseEntity(Result.failure("Error in uploading the notification template"), HttpStatus.INTERNAL_SERVER_ERROR);
