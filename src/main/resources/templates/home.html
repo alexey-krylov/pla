@@ -21,32 +21,89 @@
 
     <script src="//cdn.jsdelivr.net/bootstrap-modal/2.2.5/js/bootstrap-modal.js"
             th:src="@{/webjars/bootstrap-modal/2.2.5/js/bootstrap-modal.js}"></script>
+
 </head>
 
 <body>
 <div th:include="fragments/common :: bodyHeader" th:remove="tag"/>
+<script>
+    var interval = setInterval(function(){
+        if(require.defined("basic")){
+            requirejs(['/pla/js/notification/viewNotificationPortlet.js'],function(){
+            });
+            clearInterval(interval);
+        }
+    }, 900);
+</script>
 <div class="container-fluid" style="padding:10px">
-    <div class="row">
+    <div class="row " ng-controller="NotificationPortletCtrl">
         <div class="col-sm-5 col-md-6">
             <div class="chart-wrapper">
                 <div class="chart-title">
-                    Dashboard 1
+                    Notification Portlet
                 </div>
-                <div class="chart-stage">
-                    <div style="min-height: 175px"></div>
+                <div class="chart-stage ng-cloak">
+                    <div style="min-height: 175px">
+                        <table class="table table-striped table-bordered" id="notificationPortlet-table" cellspacing="0" width="100%">
+                            <thead>
+                            <tr>
+                                <th>Quotation/proposal/policy</th>
+                                <th>Process</th>
+                                <th>Document Name</th>
+                                <th>Generated On</th>
+                                <th>Action</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                             <tr ng-repeat="notification in notificationList" >
+                                 <td>{{notification.requestNumber}}</td>
+                                 <td>{{notification.processTypeDescription}}</td>
+                                 <td>{{notification.reminderTypeDescription}}</td>
+                                 <td>{{notification.generatedOn | date:'dd/MM/yyyy'}}</td>
+                                 <td>
+                                     <button type="button" class="btn btn-default btn-xs"  ng-click="openEmailWindow(notification.notificationId)">Email</button>
+                                     <button type="button" class="btn btn-default btn-xs" ng-click="openPrintWindow(notification.notificationId)"><span class="glyphicon glyphicon-print" aria-hidden="true"></span> Print</button></td>
+                             </tr>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>
         <div class="col-sm-6">
             <div class="chart-wrapper">
                 <div class="chart-title">
-                    Dashboard 2
+                    Notification History
                 </div>
-                <div class="chart-stage">
-                    <div style="min-height: 175px"></div>
+                <div class="chart-stage ng-cloak">
+                    <div style="min-height: 175px">
+                        <table class="table table-striped table-bordered" id="notificationHistory-table" cellspacing="0" width="100%">
+                            <thead>
+                            <tr>
+                                <th>Quotation/proposal/policy</th>
+                                <th>Process</th>
+                                <th>Document Name</th>
+                                <th>Sent On</th>
+                                <th>Action</th>
+                            </tr>
+                            </thead>
+                            <tbody >
+                            <tr ng-repeat="notificationHistory in notificationHistoryList" >
+                                <td>{{notificationHistory.requestNumber}}</td>
+                                <td>{{notificationHistory.processTypeDescription}}</td>
+                                <td>{{notificationHistory.reminderTypeDescription}}</td>
+                                <td>{{notificationHistory.sentOn | date:'dd/MM/yyyy'}}</td>
+                                <td>
+                                    <button type="button" class="btn btn-default btn-xs"  ng-click="openEmailReadOnlyWindow(notificationHistory.notificationHistoryId)">Email</button>
+                                    <button type="button" class="btn btn-default btn-xs" ng-click="openPrintReadOnlyWindow(notificationHistory.notificationHistoryId)"><span class="glyphicon glyphicon-print" aria-hidden="true"></span> Print</button></td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>
+
     </div>
     <div class="row">
         <div class="col-sm-5 col-md-6">
@@ -76,6 +133,47 @@
         <p class="text-muted">Place sticky footer content here.</p>
     </div>
 </footer>
+<script>
+
+    requirejs(['main'], function () {
+        require(['angular', 'jquery'], function (app, $) {
+            var module = angular.module('NotificationPortlet', []);
+            module.controller('NotificationPortletCtrl', ['$scope', '$http', '$window', function ($scope, $http, $window) {
+
+                console.log('Notification Portlet Controller ');
+
+
+                $http.get('/pla/core/notification/getnotification').success(function(data){
+                    $scope.notificationList=data;
+                });
+                $http.get('/pla/core/notification/getnotificationhistory').success(function(data){
+                    $scope.notificationHistoryList=data;
+                });
+
+
+                $scope.openEmailWindow = function (notificationId) {
+                   // console.log('invoke email...');
+                    window.open('/pla/core/notification/openemailnotification/'+notificationId,"_blank","toolbar=no,resizable=no," +
+                    "scrollable=no,menubar=no,personalbar=no,dependent=yes,dialog=yes,split=no,titlebar=no,resizable=no,location=no,left=100px");
+                };
+                $scope.openPrintWindow = function(notificationId){
+                    window.location.href='/pla/core/notification/printnotification/'+notificationId;
+                }
+                $scope.openEmailReadOnlyWindow = function (notificationId) {
+                    console.log('invoke email...');
+                    window.open('/pla/core/notification/openreadonlyemailnotification/'+notificationId,"_blank","toolbar=no,resizable=no," +
+                    "scrollable=no,menubar=no,personalbar=no,dependent=yes,dialog=yes,split=no,titlebar=no,resizable=no,location=no,left=100px");
+                };
+                $scope.openPrintReadOnlyWindow = function(notificationId){
+                    window.location.href='/pla/core/notification/printnotification/'+notificationId;
+                }
+
+             }]);
+            angular.bootstrap(document, ['NotificationPortlet']);
+        });
+    });
+    </script>
+
 </body>
 
 </html>
