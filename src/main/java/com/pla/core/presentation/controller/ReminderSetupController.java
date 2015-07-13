@@ -41,6 +41,7 @@ import javax.validation.Valid;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Callable;
@@ -49,6 +50,7 @@ import java.util.stream.Collectors;
 
 import static com.pla.core.domain.exception.NotificationException.raiseProcessIsNotValid;
 import static org.nthdimenzion.utils.UtilValidator.isEmpty;
+import static org.nthdimenzion.utils.UtilValidator.isNotEmpty;
 
 /**
  * Created by pradyumna on 18-06-2015.
@@ -64,7 +66,7 @@ public class ReminderSetupController {
     private MailService mailService;
 
     @Autowired
-     public ReminderSetupController(NotificationFinder notificationFinder, NotificationService notificationService,CommandGateway commandGateway, MailService mailService,NotificationTemplateService notificationTemplateService) {
+    public ReminderSetupController(NotificationFinder notificationFinder, NotificationService notificationService,CommandGateway commandGateway, MailService mailService,NotificationTemplateService notificationTemplateService) {
         this.notificationFinder = notificationFinder;
         this.notificationService = notificationService;
         this.commandGateway = commandGateway;
@@ -148,32 +150,27 @@ public class ReminderSetupController {
 
 
     @RequestMapping(value = "/uploadnotification", method = RequestMethod.POST)
-    public ModelAndView uploadNotification(@Valid @ModelAttribute NotificationTemplateDto notificationTemplateDto,BindingResult bindingResult) throws IOException {
-
-        ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("pla/core/underwriter/routingLevelSetup/createRoutingLevelSetup");
-        if (bindingResult.hasErrors()) {
-            modelAndView.addObject("message", "Error in uploading the notification template");
-            return modelAndView;
-        }
-        MultipartFile template = notificationTemplateDto.getFile();
-        if (!("text/plain".equals(notificationTemplateDto.getFile().getContentType()))) {
-            modelAndView.addObject("message", "Please upload a valid file");
-            return modelAndView;
-        }
-        try {
-            boolean isCreated = notificationService.uploadNotificationTemplate(notificationTemplateDto.getLineOfBusiness(), notificationTemplateDto.getProcessType(),
-                    notificationTemplateDto.getWaitingFor(), notificationTemplateDto.getReminderType(), template.getBytes());
-            if (!isCreated) {
-                modelAndView.addObject("message", "Error in uploading the notification template");
-                return modelAndView;
+    public Callable<ResponseEntity> uploadNotification(@Valid @ModelAttribute NotificationTemplateDto notificationTemplateDto,BindingResult bindingResult) throws IOException {
+        return ()-> {
+            if (bindingResult.hasErrors()) {
+                return new ResponseEntity(Result.failure("Error in uploading the notification template"), HttpStatus.INTERNAL_SERVER_ERROR);
             }
-        } catch (RuntimeException e) {
-            modelAndView.addObject("message", e.getMessage());
-            return modelAndView;
-        }
-        modelAndView.addObject("message", "Notification Template uploaded successfully");
-        return modelAndView;
+            MultipartFile template = notificationTemplateDto.getFile();
+            if (!("text/plain".equals(notificationTemplateDto.getFile().getContentType()))) {
+                return new ResponseEntity(Result.failure("Please upload a valid file"), HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+            try {
+
+                boolean isCreated = notificationService.uploadNotificationTemplate(notificationTemplateDto.getLineOfBusiness(), notificationTemplateDto.getProcessType(),
+                        notificationTemplateDto.getWaitingFor(), notificationTemplateDto.getReminderType(), template.getBytes());
+                if (!isCreated) {
+                    return new ResponseEntity(Result.failure("Error in uploading the notification template"), HttpStatus.INTERNAL_SERVER_ERROR);
+                }
+            } catch (RuntimeException e) {
+                return new ResponseEntity(Result.failure(e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+            return new ResponseEntity(Result.success("Notification Template uploaded successfully"), HttpStatus.OK);
+        };
     }
 
     @RequestMapping(value = "/getremindertype/{notificationTemplateId}", method = RequestMethod.GET,consumes = MediaType.ALL_VALUE)
@@ -214,19 +211,7 @@ public class ReminderSetupController {
     public List<Map<String, Object>> getNotification(){
         Collection<? extends GrantedAuthority> authorities = SecurityContextHolder.getContext().getAuthentication().getAuthorities();
         List<Map<String,Object>> notificationList =  notificationFinder.getNotificationByRole(authorities);
-        return notificationList.parallelStream().map(new Function<Map<String,Object>, Map<String,Object>>() {
-            @Override
-            public Map<String, Object> apply(Map<String, Object> notificationMap) {
-               ProcessType processType = ProcessType.valueOf(notificationMap.get("processType").toString());
-                LineOfBusinessEnum lineOfBusinessEnum  = LineOfBusinessEnum.valueOf(notificationMap.get("lineOfBusiness").toString());
-                try {
-                    notificationMap.put("requestNumber",notificationTemplateService.getRequestNumberBy(lineOfBusinessEnum,processType,notificationMap.get("requestNumber").toString()));
-                } catch (ProcessInfoException e) {
-                    e.printStackTrace();
-                }
-                return notificationMap;
-            }
-        }).collect(Collectors.toList());
+        return notificationList.parallelStream().map(new RequestNumberTransformer()).collect(Collectors.toList());
     }
 
 
@@ -283,7 +268,7 @@ public class ReminderSetupController {
             return new ResponseEntity(Result.failure("Email cannot be sent due to wrong data"), HttpStatus.INTERNAL_SERVER_ERROR);
         }
         try {
-            mailService.sendMailWithAttachment(notificationEmailDto.getSubject(),notificationEmailDto.getMailContent(),Lists.newArrayList(),notificationEmailDto.getRecipientMailAddress());
+            mailService.sendMailWithAttachment(notificationEmailDto.getSubject(),notificationEmailDto.getEmailBody(),Lists.newArrayList(),notificationEmailDto.getRecipientMailAddress());
             CreateNotificationHistoryCommand createNotificationHistoryCommand = notificationService.generateHistoryDetail(notificationEmailDto.getNotificationId(),notificationEmailDto.getRecipientMailAddress());
             commandGateway.send(createNotificationHistoryCommand);
         } catch (Exception e) {
@@ -306,5 +291,28 @@ public class ReminderSetupController {
         return Result.success("Notification created successfully");
     }
 
+    @RequestMapping(value = "/getnotificationhistory",method = RequestMethod.GET)
+    @ResponseBody
+    public List<Map<String,Object>> getNotificationHistory(){
+        List<Map<String,Object>> notificationHistory = notificationFinder.getNotificationHistoryDetail();
+        if (isNotEmpty(notificationHistory)){
+            return notificationHistory.parallelStream().map(new RequestNumberTransformer()).collect(Collectors.toList());
+        }
+        return Collections.EMPTY_LIST;
+    }
 
+    private class RequestNumberTransformer implements Function<Map<String, Object>,Map<String, Object> > {
+        @Override
+        public Map<String, Object> apply(Map<String, Object> notificationMap) {
+            ProcessType processType = ProcessType.valueOf(notificationMap.get("processType").toString());
+            LineOfBusinessEnum lineOfBusinessEnum = LineOfBusinessEnum.valueOf(notificationMap.get("lineOfBusiness").toString());
+            try {
+                notificationMap.put("requestNumber", notificationTemplateService.getRequestNumberBy(lineOfBusinessEnum, processType, notificationMap.get("requestNumber").toString()));
+            } catch (ProcessInfoException e) {
+                e.printStackTrace();
+                return notificationMap;
+            }
+            return notificationMap;
+        }
+    }
 }

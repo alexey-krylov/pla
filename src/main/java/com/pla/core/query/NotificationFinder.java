@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.joda.JodaModule;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import com.pla.core.domain.model.notification.NotificationHistory;
 import com.pla.core.domain.model.notification.NotificationId;
 import com.pla.core.domain.model.notification.NotificationTemplate;
 import com.pla.core.domain.model.notification.NotificationTemplateId;
@@ -15,6 +16,7 @@ import com.pla.sharedkernel.domain.model.ReminderTypeEnum;
 import com.pla.sharedkernel.domain.model.WaitingForEnum;
 import com.pla.sharedkernel.identifier.LineOfBusinessEnum;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.jdbc.core.ColumnMapRowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
@@ -40,6 +42,9 @@ public class NotificationFinder {
 
     private NotificationTemplateRepository notificationTemplateRepository;
     private ObjectMapper objectMapper;
+
+    @Autowired
+    private MongoTemplate mongoTemplate;
 
     @Autowired
     public void setDataSource(DataSource dataSource) {
@@ -112,19 +117,19 @@ public class NotificationFinder {
             }
         }).collect(Collectors.toList());
         List<Map<String,Object>> notificationList =  namedParameterJdbcTemplate.query(findAllNotification, new MapSqlParameterSource("authorities", grantedAuthorities),new ColumnMapRowMapper());
-       if (isNotEmpty(notificationList)) {
-           return notificationList.parallelStream().map(new Function<Map<String, Object>, Map<String, Object>>() {
-               @Override
-               public Map<String, Object> apply(Map<String, Object> notificationMap) {
-                   notificationMap.put("lineOfBusinessDescription", LineOfBusinessEnum.valueOf(notificationMap.get("lineOfBusiness").toString()).toString());
-                   notificationMap.put("processTypeDescription", ProcessType.valueOf(notificationMap.get("processType").toString()).toString());
-                   notificationMap.put("waitingForDescription", WaitingForEnum.valueOf(notificationMap.get("waitingFor").toString()).toString());
-                   notificationMap.put("reminderTypeDescription", ReminderTypeEnum.valueOf(notificationMap.get("reminderType").toString()).toString());
+        if (isNotEmpty(notificationList)) {
+            return notificationList.parallelStream().map(new Function<Map<String, Object>, Map<String, Object>>() {
+                @Override
+                public Map<String, Object> apply(Map<String, Object> notificationMap) {
+                    notificationMap.put("lineOfBusinessDescription", LineOfBusinessEnum.valueOf(notificationMap.get("lineOfBusiness").toString()).toString());
+                    notificationMap.put("processTypeDescription", ProcessType.valueOf(notificationMap.get("processType").toString()).toString());
+                    notificationMap.put("waitingForDescription", WaitingForEnum.valueOf(notificationMap.get("waitingFor").toString()).toString());
+                    notificationMap.put("reminderTypeDescription", ReminderTypeEnum.valueOf(notificationMap.get("reminderType").toString()).toString());
 
-                   return notificationMap;
-               }
-           }).collect(Collectors.toList());
-       }
+                    return notificationMap;
+                }
+            }).collect(Collectors.toList());
+        }
         return Collections.EMPTY_LIST;
     }
 
@@ -156,20 +161,34 @@ public class NotificationFinder {
     public List<Map<String,Object>> emailContent(NotificationId notificationId){
         List<Map<String,Object>> emailNotificationDetail = namedParameterJdbcTemplate.query(findEmailNotificationContentQuery, new MapSqlParameterSource("notificationId", notificationId.getNotificationId()), new ColumnMapRowMapper());
         if (isNotEmpty(emailNotificationDetail)){
-            return emailNotificationDetail.parallelStream().map(new Function<Map<String,Object>, Map<String,Object>>() {
+            return emailNotificationDetail.parallelStream().map(new Function<Map<String, Object>, Map<String, Object>>() {
                 @Override
-                public Map<String, Object> apply(Map<String,Object> notificationMap) {
-                    Map<String,Object> emailContent = Maps.newLinkedHashMap();
-                    emailContent.put("subject","Quotation First Reminder");
+                public Map<String, Object> apply(Map<String, Object> notificationMap) {
+                    Map<String, Object> emailContent = Maps.newLinkedHashMap();
+                    emailContent.put("subject", "Quotation First Reminder");
                     emailContent.put("mailSentDate", notificationMap.get("generatedOn"));
-                    emailContent.put("emailAddress",new String[]{notificationMap.get("emailId").toString()});
-                    String emailBody = new String((byte[])notificationMap.get("reminderTemplate"),  Charset.forName("UTF-8"));
+                    emailContent.put("emailAddress", new String[]{notificationMap.get("emailId").toString()});
+                    String emailBody = new String((byte[]) notificationMap.get("reminderTemplate"), Charset.forName("UTF-8"));
                     emailContent.put("emailBody", emailBody);
-                    emailContent.put("notificationId",notificationId);
+                    emailContent.put("notificationId", notificationId);
                     return emailContent;
                 }
             }).collect(Collectors.toList());
         }
         return Collections.EMPTY_LIST;
+    }
+
+    public List<Map<String,Object>> getNotificationHistoryDetail(){
+        List<NotificationHistory> notificationHistories = mongoTemplate.findAll(NotificationHistory.class);
+        if (isNotEmpty(notificationHistories)){
+           return notificationHistories.parallelStream().map(new Function<NotificationHistory, Map<String,Object>>() {
+                @Override
+                public Map<String, Object> apply(NotificationHistory notificationHistory) {
+                    Map<String, Object> notificationHistoryMap = objectMapper.convertValue(notificationHistory, Map.class);
+                    return notificationHistoryMap;
+                }
+            }).collect(Collectors.toList());
+        }
+       return Collections.EMPTY_LIST;
     }
 }

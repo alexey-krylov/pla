@@ -14,7 +14,7 @@ public class NotificationEmailDto {
 
     private String subject;
 
-    private String mailContent;
+    private String emailBody;
 
     private String[] recipientMailAddress;
 

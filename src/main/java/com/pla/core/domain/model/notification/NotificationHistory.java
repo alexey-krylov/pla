@@ -44,7 +44,7 @@ public class NotificationHistory {
 
     private NotificationStatusEnum notificationStatus;
 
-    private String emailAddress;
+    private String[] recipientEmailAddress;
 
     public NotificationHistory(String notificationHistoryId,NotificationBuilder notificationBuilder) {
         this.notificationHistoryId = notificationHistoryId;
@@ -56,7 +56,7 @@ public class NotificationHistory {
         this.reminderType = notificationBuilder.getReminderType();
         this.reminderTemplate = notificationBuilder.getReminderTemplate();
         this.generatedOn = notificationBuilder.getGeneratedOn();
-        this.emailAddress = notificationBuilder.getEmailAddress();
+        this.recipientEmailAddress = notificationBuilder.getRecipientMailAddress();
         this.notificationStatus = NotificationStatusEnum.ACTION_TAKEN;
     }
 
