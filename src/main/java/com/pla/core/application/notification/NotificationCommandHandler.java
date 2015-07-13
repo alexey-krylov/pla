@@ -2,11 +2,9 @@ package com.pla.core.application.notification;
 
 import com.google.common.io.Files;
 import com.pla.core.application.service.notification.NotificationTemplateService;
-import com.pla.core.domain.model.notification.Notification;
-import com.pla.core.domain.model.notification.NotificationBuilder;
-import com.pla.core.domain.model.notification.NotificationId;
-import com.pla.core.domain.model.notification.NotificationTemplate;
+import com.pla.core.domain.model.notification.*;
 import com.pla.core.repository.NotificationTemplateRepository;
+import com.pla.sharedkernel.application.CreateNotificationHistoryCommand;
 import com.pla.sharedkernel.application.CreateProposalNotificationCommand;
 import com.pla.sharedkernel.application.CreateQuotationNotificationCommand;
 import com.pla.sharedkernel.domain.model.ProcessType;
@@ -22,6 +20,7 @@ import org.nthdimenzion.common.service.JpaRepositoryFactory;
 import org.nthdimenzion.object.utils.IIdGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.stereotype.Component;
 import org.springframework.ui.velocity.VelocityEngineUtils;
 
@@ -42,6 +41,9 @@ public class NotificationCommandHandler {
     private JpaRepositoryFactory jpaRepositoryFactory;
     private VelocityEngine velocityEngine;
     private NotificationTemplateService notificationTemplateService;
+
+    @Autowired
+    private MongoTemplate mongoTemplate;
 
     @Autowired
     public NotificationCommandHandler(NotificationTemplateRepository notificationTemplateRepository, JpaRepositoryFactory jpaRepositoryFactory,IIdGenerator idGenerator,VelocityEngine velocityEngine, NotificationTemplateService notificationTemplateService){
@@ -72,6 +74,31 @@ public class NotificationCommandHandler {
         notificationRepository.save(notification);
     }
 
+    @CommandHandler
+    public void createNotificationHistory(CreateNotificationHistoryCommand createNotificationHistoryCommand) throws Exception {
+        NotificationBuilder notificationBuilder = NotificationHistory.builder();
+        notificationBuilder.withLineOfBusiness(createNotificationHistoryCommand.getLineOfBusiness())
+                .withProcessType(createNotificationHistoryCommand.getProcessType())
+                .withRequestNumber(createNotificationHistoryCommand.getRequestNumber())
+                .withWaitingFor(createNotificationHistoryCommand.getWaitingFor())
+                .withReminderType(createNotificationHistoryCommand.getReminderType())
+                .withRecipientMailAddress(createNotificationHistoryCommand.getRecipientMailAddress())
+                .withReminderTemplate(createNotificationHistoryCommand.getTemplate())
+                .withRoleType(createNotificationHistoryCommand.getRoleType());
+        NotificationHistory notificationHistory = notificationBuilder.createNotificationHistory();
+        mongoTemplate.save(notificationHistory);
+        deleteNotification(createNotificationHistoryCommand.getNotificationId());
+
+    }
+
+
+    public void deleteNotification(String notificationId){
+        JpaRepository<Notification, NotificationId> notificationRepository = jpaRepositoryFactory.getCrudRepository(Notification.class);
+        Notification notification = notificationRepository.findOne(new NotificationId(notificationId));
+        notificationRepository.delete(notification);
+    }
+
+
     private Notification createNotification(LineOfBusinessEnum lineOfBusiness, ProcessType process,WaitingForEnum waitingFor, ReminderTypeEnum reminderType,
                                             String requestNumber,String roleType,Map<String,Object> notificationDetail) throws Exception {
         checkArgument(notificationDetail !=null,"Notification details cannot be empty");
@@ -86,7 +113,7 @@ public class NotificationCommandHandler {
                 .withReminderType(reminderType)
                 .withEmailAddress("")
                 .withReminderTemplate(mergeTemplate(notificationTemplate.getReminderFile(),
-                        notificationDetail, requestNumber,lineOfBusiness).toString().getBytes())
+                        notificationDetail, requestNumber, lineOfBusiness).toString().getBytes())
                 .withRoleType(roleType);
         NotificationId notificationId = new NotificationId(idGenerator.nextId());
         return notificationBuilder.createNotification(notificationId);

@@ -33,6 +33,9 @@ public class NotificationBuilder {
 
     private String emailAddress;
 
+    private String[] recipientMailAddress;
+
+
     @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentLocalDate")
     private LocalDate generatedOn;
 
@@ -87,6 +90,12 @@ public class NotificationBuilder {
     public NotificationBuilder withEmailAddress(String emailAddress){
         checkArgument(emailAddress!=null,"Email Address cannot be empty");
         this.emailAddress = emailAddress;
+        return this;
+    }
+
+    public NotificationBuilder withRecipientMailAddress(String[] recipientMailAddress){
+        checkArgument(recipientMailAddress!=null,"Email Address cannot be empty");
+        this.recipientMailAddress = recipientMailAddress;
         return this;
     }
 

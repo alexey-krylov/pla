@@ -1,14 +1,22 @@
 package com.pla.individuallife.quotation.saga;
 
+import com.google.common.collect.Lists;
+import com.pla.grouphealth.quotation.domain.event.GHQuotationReminderEvent;
 import com.pla.individuallife.quotation.domain.event.*;
 import com.pla.individuallife.quotation.domain.model.ILQuotation;
+import com.pla.individuallife.quotation.domain.model.ILQuotationStatus;
 import com.pla.publishedlanguage.contract.IProcessInfoAdapter;
+import com.pla.sharedkernel.application.CreateQuotationNotificationCommand;
 import com.pla.sharedkernel.domain.model.ProcessType;
+import com.pla.sharedkernel.domain.model.ReminderTypeEnum;
+import com.pla.sharedkernel.domain.model.WaitingForEnum;
 import com.pla.sharedkernel.exception.ProcessInfoException;
 import com.pla.sharedkernel.identifier.LineOfBusinessEnum;
+import com.pla.sharedkernel.util.RolesUtil;
 import org.axonframework.commandhandling.GenericCommandMessage;
 import org.axonframework.commandhandling.gateway.CommandGateway;
 import org.axonframework.eventhandling.scheduling.EventScheduler;
+import org.axonframework.eventhandling.scheduling.ScheduleToken;
 import org.axonframework.repository.Repository;
 import org.axonframework.saga.annotation.AbstractAnnotatedSaga;
 import org.axonframework.saga.annotation.SagaEventHandler;
@@ -22,6 +30,7 @@ import org.springframework.stereotype.Component;
 
 import java.io.Serializable;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -43,6 +52,9 @@ public class ILQuotationARSaga extends AbstractAnnotatedSaga implements Serializ
     @Autowired
     private transient CommandGateway commandGateway;
 
+    private int noOfReminderSent;
+
+    private List<ScheduleToken> scheduledTokens = Lists.newArrayList();
     //TODO discuss what happens if a quotation is just created and nothing happens after that
     //TODO Basically can it move from DRAFT to PURGE OR CLOSE OR ????
     @StartSaga
@@ -85,4 +97,28 @@ public class ILQuotationARSaga extends AbstractAnnotatedSaga implements Serializ
         payLoad.put("version", version);
         commandGateway.send(new GenericCommandMessage("QUOTATION_VERSION_CMD", payLoad, null));
     }
+
+    @SagaEventHandler(associationProperty = "quotationId")
+    public void handle(ILQuotationReminderEvent event) throws ProcessInfoException {
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Handling IL Quotation Reminder Event .....", event);
+        }
+        ILQuotation ilQuotation = ilQuotationRepository.load(event.getQuotationId());
+        if (ILQuotationStatus.GENERATED.equals(ilQuotation.getIlQuotationStatus())) {
+            this.noOfReminderSent = noOfReminderSent + 1;
+            System.out.println("************ Send Reminder ****************");
+            commandGateway.send(new CreateQuotationNotificationCommand(event.getQuotationId(), RolesUtil.INDIVIDUAL_LIFE_QUOTATION_PROCESSOR_ROLE, LineOfBusinessEnum.INDIVIDUAL_LIFE, ProcessType.QUOTATION,
+                    WaitingForEnum.QUOTATION_RESPONSE, noOfReminderSent == 1 ? ReminderTypeEnum.REMINDER_1 : ReminderTypeEnum.REMINDER_2));
+            if (this.noOfReminderSent == 1) {
+                int firstReminderDay = processInfoAdapter.getDaysForFirstReminder(LineOfBusinessEnum.INDIVIDUAL_LIFE, ProcessType.QUOTATION);
+                int secondReminderDay = processInfoAdapter.getDaysForSecondReminder(LineOfBusinessEnum.INDIVIDUAL_LIFE, ProcessType.QUOTATION);
+                LocalDate quotationSharedDate = ilQuotation.getGeneratedOn();
+                LocalDate secondReminderDate = quotationSharedDate.plusDays(firstReminderDay + secondReminderDay);
+                DateTime secondReminderDateTime = secondReminderDate.toDateTimeAtStartOfDay();
+                ScheduleToken secondReminderScheduleToken = eventScheduler.schedule(secondReminderDateTime, new GHQuotationReminderEvent(event.getQuotationId()));
+                scheduledTokens.add(secondReminderScheduleToken);
+            }
+        }
+    }
+
 }

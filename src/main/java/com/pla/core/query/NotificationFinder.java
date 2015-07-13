@@ -63,7 +63,7 @@ public class NotificationFinder {
     public static final String findAllNotificationRole = " SELECT role_type roleType,line_of_business lineOfBusiness,process processType FROM notification_role";
 
     public static final String findAllNotification = "SELECT n.notification_id notificationId,n.generated_on generatedOn,n.line_of_business lineOfBusiness, " +
-            " n.process_type processType,n.reminder_template template,n.reminder_type reminderType,n.request_number requestNumber, " +
+            " n.process_type processType,n.reminder_type reminderType,n.request_number requestNumber, " +
             " n.waiting_for waitingFor FROM notification n INNER JOIN notification_role nr " +
             " ON n.role_type=nr.role_type WHERE n.role_type in (:authorities) ";
 
@@ -111,7 +111,21 @@ public class NotificationFinder {
                 return grantedAuthority.getAuthority();
             }
         }).collect(Collectors.toList());
-        return namedParameterJdbcTemplate.query(findAllNotification, new MapSqlParameterSource("authorities", grantedAuthorities),new ColumnMapRowMapper());
+        List<Map<String,Object>> notificationList =  namedParameterJdbcTemplate.query(findAllNotification, new MapSqlParameterSource("authorities", grantedAuthorities),new ColumnMapRowMapper());
+       if (isNotEmpty(notificationList)) {
+           return notificationList.parallelStream().map(new Function<Map<String, Object>, Map<String, Object>>() {
+               @Override
+               public Map<String, Object> apply(Map<String, Object> notificationMap) {
+                   notificationMap.put("lineOfBusinessDescription", LineOfBusinessEnum.valueOf(notificationMap.get("lineOfBusiness").toString()).toString());
+                   notificationMap.put("processTypeDescription", ProcessType.valueOf(notificationMap.get("processType").toString()).toString());
+                   notificationMap.put("waitingForDescription", WaitingForEnum.valueOf(notificationMap.get("waitingFor").toString()).toString());
+                   notificationMap.put("reminderTypeDescription", ReminderTypeEnum.valueOf(notificationMap.get("reminderType").toString()).toString());
+
+                   return notificationMap;
+               }
+           }).collect(Collectors.toList());
+       }
+        return Collections.EMPTY_LIST;
     }
 
     public Map<String,Object> findILQuotationProposerDetail(String quotationId){
@@ -148,9 +162,10 @@ public class NotificationFinder {
                     Map<String,Object> emailContent = Maps.newLinkedHashMap();
                     emailContent.put("subject","Quotation First Reminder");
                     emailContent.put("mailSentDate", notificationMap.get("generatedOn"));
-                    emailContent.put("emailAddress",notificationMap.get("emailId"));
+                    emailContent.put("emailAddress",new String[]{notificationMap.get("emailId").toString()});
                     String emailBody = new String((byte[])notificationMap.get("reminderTemplate"),  Charset.forName("UTF-8"));
-                    emailContent.put("emailBody",emailBody);
+                    emailContent.put("emailBody", emailBody);
+                    emailContent.put("notificationId",notificationId);
                     return emailContent;
                 }
             }).collect(Collectors.toList());

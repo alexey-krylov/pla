@@ -3,6 +3,7 @@ package com.pla.core.application.service.notification;
 import com.google.common.collect.Maps;
 import com.pla.core.domain.model.notification.*;
 import com.pla.core.repository.NotificationTemplateRepository;
+import com.pla.sharedkernel.application.CreateNotificationHistoryCommand;
 import com.pla.sharedkernel.domain.model.ProcessType;
 import com.pla.sharedkernel.domain.model.ReminderTypeEnum;
 import com.pla.sharedkernel.domain.model.WaitingForEnum;
@@ -15,7 +16,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import java.util.*;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
@@ -144,5 +148,13 @@ public class NotificationService {
         notificationTemplateRepository.delete(notificationTemplate);
         return AppConstants.SUCCESS;
     }
+
+    public CreateNotificationHistoryCommand generateHistoryDetail(String notificationId,String[] recipientMailAddress){
+        NotificationId id =  new NotificationId(notificationId);
+        Notification notification = entityManager.find(Notification.class, id);
+        return new CreateNotificationHistoryCommand(notification.getRequestNumber(),notification.getRoleType(),notification.getLineOfBusiness(),
+                notification.getProcessType(),notification.getWaitingFor(),notification.getReminderType(),recipientMailAddress,notification.getReminderTemplate(),notificationId);
+    }
+
 
 }

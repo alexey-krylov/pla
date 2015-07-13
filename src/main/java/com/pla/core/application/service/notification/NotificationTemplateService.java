@@ -84,7 +84,6 @@ public class NotificationTemplateService {
         return notificationQuotationMap;
     }
 
-
     public Map<String,Object> getProposalNotificationTemplateData(LineOfBusinessEnum lineOfBusiness, String proposalId){
         Criteria proposalCriteria = Criteria.where("_id").is(proposalId);
         Query query = new Query(proposalCriteria);
@@ -92,4 +91,15 @@ public class NotificationTemplateService {
         List<Map> quotationNotificationDetailMap =  mongoTemplate.find(query, Map.class, proposalEntitiesMap.get(lineOfBusiness));
         return quotationNotificationDetailMap.get(0);
     }
+
+    public String getRequestNumberBy(LineOfBusinessEnum lineOfBusinessEnum,ProcessType processType,String id) throws ProcessInfoException {
+        switch (processType){
+            case QUOTATION:
+                return getQuotationNotificationTemplateData(lineOfBusinessEnum,id).get("requestNumber").toString();
+            case PROPOSAL:
+                return getProposalNotificationTemplateData(lineOfBusinessEnum,id).get("requestNumber").toString();
+        }
+        return "";
+    }
+
 }

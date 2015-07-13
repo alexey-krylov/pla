@@ -17,7 +17,7 @@ import java.io.Serializable;
  */
 @Entity
 @Table(name = "notification")
-@Getter(AccessLevel.PACKAGE)
+@Getter
 @NoArgsConstructor(access = AccessLevel.PACKAGE)
 @EqualsAndHashCode(of = {"notificationId"})
 @ToString
@@ -75,6 +75,7 @@ public class Notification implements ICrudEntity,Serializable {
         this.notificationStatus = NotificationStatusEnum.ACTION_TAKEN;
         return this;
     }
+
 
 
 }

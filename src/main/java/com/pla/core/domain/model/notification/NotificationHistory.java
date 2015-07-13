@@ -18,7 +18,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @Getter
 @Setter(AccessLevel.PACKAGE)
 @NoArgsConstructor(access = AccessLevel.PACKAGE)
-@EqualsAndHashCode(of = "notificationTemplateId")
+@EqualsAndHashCode(of = "notificationHistoryId")
 @ToString(of = {"lineOfBusiness","processType","waitingFor","reminderType"})
 public class NotificationHistory {
 
@@ -63,5 +63,7 @@ public class NotificationHistory {
     public static NotificationBuilder builder(){
         return new NotificationBuilder();
     }
+
+
 
 }
