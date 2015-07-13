@@ -65,6 +65,9 @@
                 <li data-step="8">
                     <span class="badge badge-info">H</span><span class="chevron"></span>
                 </li>
+                <li data-step="9">
+                    <span class="badge badge-info">I</span><span class="chevron"></span>
+                </li>
             </ul>
             <div class="actions">
                     <span style="font-weight: bolder;margin-right: 15px;color: #999">
@@ -98,6 +101,11 @@
                 <div class="step-pane" data-step="8">
                     <ng-include src="resources.additionalDetail | getTrustedUrl"></ng-include>
                 </div>
+
+               <!-- <div class="step-pane" data-step="9">
+                    <ng-include src="resources.premiumDetail | getTrustedUrl"></ng-include>
+                </div>-->
+
             </div>
         </div>
     </form>
@@ -170,11 +178,11 @@
                     <div class="col-md-12">
                         <div class="form-group required">
                             <label class="control-label">Policy Number</label>
-                            <input type="text" class="form-control input-sm" name="policyNumber" ng-model="policy.policyNumber"/>
+                            <input type="text" class="form-control input-sm" name="policyNumber" ng-model="policy.policyOrProposalNumber"/>
                         </div>
                         <div class="form-group required">
                             <label class="control-label">Sum Assured</label>
-                            <input type="text" class="form-control input-sm" name="sumAssured" ng-model="policy.sumAssured"/>
+                            <input type="text" class="form-control input-sm" name="sumAssured" ng-model="policy.amount"/>
                         </div>
                     </div>
                 </div>
@@ -198,21 +206,35 @@
                         <div class="col-md-6">
                             <div class="form-group required">
                                 <label class="control-label">Name of Assurer/Insurer</label>
-                                <input type="text" class="form-control input-sm" name="assuredName" ng-model="insurer1.assuredName"/>
+                                <input type="text" class="form-control input-sm" name="assuredName" ng-model="insurer1.name"/>
                             </div>
                             <div class="form-group required">
                                 <label class="control-label">Policy Number</label>
-                                <input type="text" class="form-control input-sm" name="policyNumber" ng-model="insurer1.policyNumber"/>
+                                <input type="text" class="form-control input-sm" name="policyNumber" ng-model="insurer1.policyOrProposalNumber"/>
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group required">
                                 <label class="control-label">Amount of Insurance</label>
-                                <input type="text" class="form-control input-sm" name="insuranceAmount" ng-model="insurer1.insuranceAmount"/>
+                                <input type="text" class="form-control input-sm" name="insuranceAmount" ng-model="insurer1.amount"/>
                             </div>
+
                             <div class="form-group required">
                                 <label class="control-label">Policy Inception Date</label>
-                                <input type="text" class="form-control input-sm" name="inceptionPolicyDate" ng-model="insurer1.inceptionPolicyDate"/>
+                                <!--<input type="text" class="form-control input-sm" name="inceptionPolicyDate" ng-model="insurer1.date"/>-->
+                                <div class='input-group date'>
+                                    <input type="text" class="form-control input-sm"
+                                           datepicker-popup="" view-enabled=""
+                                           ng-required="true"
+                                           is-open="launchinceptionDate"
+                                           max-date="todayDate"
+                                           ng-model="insurer1.date" name="dob" ng-disabled="mode=='new'||mode=='view'" ng-blur="showDob(proposedAssured.dateOfBirth)"/>
+										<span class="input-group-btn">
+										<button type="button" class="btn btn-default btn-sm"
+                                                ng-disabled="mode=='new'||mode=='view'" ng-click="launchassuredByOthersDate($event)">
+                                            <i class="glyphicon glyphicon-calendar"></i></button>
+									  </span>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -236,21 +258,35 @@
                         <div class="col-md-6">
                             <div class="form-group required">
                                 <label class="control-label">Name of Assurer/Insurer</label>
-                                <input type="text" class="form-control input-sm" name="assuredName" ng-model="insurer2.assuredName"/>
+                                <input type="text" class="form-control input-sm" name="assuredName" ng-model="insurer2.name"/>
                             </div>
                             <div class="form-group required">
                                 <label class="control-label">Policy Number</label>
-                                <input type="text" class="form-control input-sm" name="policyNumber" ng-model="insurer2.policyNumber"/>
+                                <input type="text" class="form-control input-sm" name="policyNumber" ng-model="insurer2.policyOrProposalNumber"/>
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group required">
                                 <label class="control-label">Amount of Insurance</label>
-                                <input type="text" class="form-control input-sm" name="insuranceAmount" ng-model="insurer2.insuranceAmount"/>
+                                <input type="text" class="form-control input-sm" name="insuranceAmount" ng-model="insurer2.amount"/>
                             </div>
                             <div class="form-group required">
                                 <label class="control-label">Date of Proposal</label>
-                                <input type="text" class="form-control input-sm" name="proposalDate" ng-model="insurer2.proposalDate"/>
+                               <!-- <input type="text" class="form-control input-sm" name="proposalDate" ng-model="insurer2.date"/>-->
+
+                                <div class='input-group date'>
+                                    <input type="text" class="form-control input-sm"
+                                           datepicker-popup="" view-enabled=""
+                                           ng-required="true"
+                                           is-open="pendingDate"
+                                           max-date="todayDate"
+                                           ng-model="insurer2.date" name="proposalDate" ng-disabled="mode=='new'||mode=='view'"/>
+										<span class="input-group-btn">
+										<button type="button" class="btn btn-default btn-sm"
+                                                ng-disabled="mode=='new'||mode=='view'" ng-click="pendingInsuranceByOthersTplDate($event)">
+                                            <i class="glyphicon glyphicon-calendar"></i></button>
+									  </span>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -274,11 +310,11 @@
                         <div class="col-md-12">
                             <div class="form-group required">
                                 <label class="control-label">Name of Assurer/Insurer</label>
-                                <input type="text" class="form-control input-sm" name="name" ng-model="insurer3.assuredName"/>
+                                <input type="text" class="form-control input-sm" name="name" ng-model="insurer3.name"/>
                             </div>
                             <div class="form-group required">
                                 <label class="control-label">Proposal Number</label>
-                                <input type="text" class="form-control input-sm" name="proposalNumber" ng-model="insurer3.proposalNumber"/>
+                                <input type="text" class="form-control input-sm" name="proposalNumber" ng-model="insurer3.policyOrProposalNumber"/>
                             </div>
                         </div>
                     </div>

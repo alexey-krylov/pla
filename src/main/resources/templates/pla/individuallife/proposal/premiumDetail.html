@@ -1,0 +1,216 @@
+<ng-form name="step9">
+    <accordion close-others="true">
+        <accordion-group is-open="accordionStatus.proposerDetails.proposedAssured" ng-form="proposerForm">
+            <accordion-heading>
+                Proposer<i class="pull-right glyphicon"
+                           ng-class="{'glyphicon-chevron-down': accordionStatus.proposerDetails.proposedAssured, 'glyphicon-chevron-right': !accordionStatus.proposerDetails.proposedAssured}"></i>
+            </accordion-heading>
+            <div class="col-md-6">
+                <div class="form-group required">
+                    <label class="control-label">Employee No</label>
+                    <input type="text" class="form-control input-sm" name="surname" ng-disabled="mode=='new'||mode=='view'" ng-maxlength="20"
+                           ng-model="proposer.surname" ng-required="true"/>
+
+                    <div class="error" ng-messages="proposerForm.surname.$error" ng-if="proposerForm.surname.$dirty">
+                        <small class="error" ng-message="required">Please enter Surname.</small>
+                        <small ng-message="maxlength">Only 20 characters are allowed.</small>
+
+                    </div>
+                </div>
+
+                <div class="form-group required">
+                    <label class="control-label">Company Name and Postal Address</label>
+                    <input type="text" class="form-control input-sm" name="surname" ng-disabled="mode=='new'||mode=='view'"  ng-maxlength="20" ng-model="proposer.surname" ng-required="true"/>
+
+                    <div class="error" ng-messages="proposerForm.surname.$error" ng-if="proposerForm.surname.$dirty">
+                        <small class="error" ng-message="required">Please enter Surname.</small>
+                        <small ng-message="maxlength">Only 20 characters are allowed.</small>
+                        <small ng-message="pattern">Only alphabets are allowed.</small>
+                    </div>
+                </div>
+                <div class="form-group required">
+                    <label class="control-label">Per</label>
+                    <input type="text" class="form-control input-sm" name="nrc" ng-disabled="mode=='new'||mode=='view'" ng-model="proposer.nrc" ng-maxlength="11" ng-required="true"/>
+
+                    <div class="error" ng-messages="proposerForm.nrc.$error" ng-if="proposerForm.nrc.$dirty">
+                        <small class="error" ng-message="required">Please enter NRC.</small>
+                        <small ng-message="maxlength">Only 11 characters are allowed.</small>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group required">
+                    <label class="control-label">Man No</label>
+                    <input type="text" class="form-control input-sm" ng-disabled="mode=='new' || mode=='view'" name="firstName"
+                           ng-maxlength="20" ng-model="proposer.firstName" ng-required="true"/>
+
+                    <div class="error" ng-messages="proposerForm.firstName.$error" ng-if="proposerForm.firstName.$dirty">
+                        <small class="error" ng-message="required">
+                            Please enter FirstName
+                        </small>
+                        <small ng-message="maxlength">Only 20 characters are allowed.</small>
+                    </div>
+
+                </div>
+                <div class="form-group">
+                    <label class="control-label">Basic Salary</label>
+                    <input type="text" class="form-control input-sm" ng-disabled="mode=='new'||mode=='view'" name="otherName" ng-maxlength="20" ng-pattern="/[a-zA-Z]/" ng-model="proposer.otherName"/>
+
+                    <div class="error" ng-messages="proposerForm.otherName.$error" ng-if="proposerForm.otherName.$dirty">
+                        <small ng-message="maxlength">Only 20 characters are allowed.</small>
+                        <small ng-message="pattern">Only alphabets are allowed.</small>
+                    </div>
+
+                </div>
+            </div>
+        </accordion-group>
+
+        <!-- Testing1 -->
+
+
+        <accordion-group is-open="accordionStatus.proposerDetails.spouseDetails" ng-form="proposerSpouseForm">
+            <accordion-heading>
+                Bank Details <i class="pull-right glyphicon"
+                                ng-class="{'glyphicon-chevron-down': accordionStatus.proposerDetails.spouseDetails, 'glyphicon-chevron-right': !accordionStatus.proposerDetails.spouseDetails}"></i>
+            </accordion-heading>
+            <div class="col-md-6">
+                <div class="form-group required">
+                    <label class="control-label">Bank Branch Sort Code</label>
+                    <input type="text" class="form-control input-sm" ng-disabled="mode=='new'||mode=='view'" name="spouseSurname"  ng-maxlength="20"
+                           ng-model="proposerSpouse.surname" ng-required="true"/>
+
+                    <div class="error" ng-messages="proposerSpouseForm.spouseSurname.$error" ng-if="proposerSpouseForm.spouseSurname.$dirty">
+                        <small class="error" ng-message="required">Please enter Spouse's Surname Name</small>
+                        <small ng-message="maxlength">Only 20 characters are allowed.</small>
+
+                    </div>
+                </div>
+                <div class="form-group required">
+                    <label class="control-label">Bank Branch Name</label>
+                    <input type="text" class="form-control input-sm" ng-disabled="mode=='new'||mode=='view'" name="branchname"
+                           ng-minlength="10" ng-maxLength="10" ng-model="proposerSpouse.mobileNumber"/>
+
+                    <div class="error" ng-messages="proposerSpouseForm.spouseMobileNumber.$error" ng-if="proposerSpouseForm.spouseMobileNumber.$dirty">
+                        <small class="error" ng-message="required">Please enter Spouse's Mobile Number</small>
+                        <small ng-message="maxlength">Only 10 number are allowed.</small>
+                        <small ng-message="minlength">Minimum 10 number are allowed.</small>
+                        <small ng-message="pattern">Only numeric are allowed.</small>
+                    </div>
+                </div>
+
+                <div class="form-group required">
+                    <label class="control-label">Bank Account Number</label>
+                    <input type="text" class="form-control input-sm" ng-disabled="mode=='new'||mode=='view'" name="branchname"
+                           ng-minlength="10" ng-maxLength="10" ng-model="proposerSpouse.mobileNumber"/>
+
+                    <div class="error" ng-messages="proposerSpouseForm.spouseMobileNumber.$error" ng-if="proposerSpouseForm.spouseMobileNumber.$dirty">
+                        <small class="error" ng-message="required">Please enter Spouse's Mobile Number</small>
+                        <small ng-message="maxlength">Only 10 number are allowed.</small>
+                        <small ng-message="minlength">Minimum 10 number are allowed.</small>
+                        <small ng-message="pattern">Only numeric are allowed.</small>
+                    </div>
+                </div>
+
+            </div>
+            <div class="col-md-6">
+                <div class="form-group required">
+                    <label class="control-label">Bank Name</label>
+                    <input type="text" class="form-control input-sm" ng-disabled="mode=='new'||mode=='view'" name="bankName" ng-maxlength="20" ng-pattern="/[a-zA-Z]/" ng-model="proposerSpouse.firstName"/>
+
+                    <div class="error" ng-messages="proposerSpouseForm.spouseFirstName.$error" ng-if="proposerSpouseForm.spouseFirstName.$dirty">
+                        <small class="error" ng-message="required">Please enter Spouse's First Name</small>
+                        <small ng-message="pattern">Only alphabets are allowed.</small>
+                        <small ng-message="maxlength">Only 20 characters are allowed.</small>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label">Bank Account Type</label>
+                    <input type="email" class="form-control input-sm" ng-disabled="mode=='new'||mode=='view'" name="spouseEmailId" ng-model="proposerSpouse.emailAddress"/>
+                    <div class="error" ng-messages="proposerSpouseForm.spouseEmailId.$error"  ng-if="proposerSpouseForm.spouseEmailId.$dirty">
+                        <small class="error" ng-message="email">Please enter  Valid email address. </small>
+                    </div>
+
+                </div>
+            </div>
+        </accordion-group>
+
+
+        <accordion-group is-open="accordionStatus.proposerDetails.employment" ng-form="proposerEmploymentForm">
+            <accordion-heading>
+                Premium Details <i class="pull-right glyphicon"
+                                   ng-class="{'glyphicon-chevron-down': accordionStatus.proposerDetails.employment, 'glyphicon-chevron-right': !accordionStatus.proposerDetails.employment}"></i>
+            </accordion-heading>
+            <div class="col-md-6">
+
+                <div class="form-group required">
+                    <label class="control-label">Plan Annual Premium</label>
+                    <input type="text" class="form-control input-sm" ng-disabled="mode=='new'||mode=='view'" name="addressLine1" ng-maxlength="100" ng-model="proposerEmployment.address1" ng-required="true"/>
+
+                    <div class="error" ng-messages="proposerEmploymentForm.addressLine1.$error" ng-if="proposerEmploymentForm.addressLine1.$dirty">
+                        <small class="error" ng-message="required">Please enter Address Line 1</small>
+                        <small ng-message="maxlength">Only 100 characters are allowed.</small>
+                    </div>
+                </div>
+
+                <div class="form-group required">
+                    <label class="control-label"> <Optional Coverage2 Name> <br/>Annual Premium </label>
+                    <input type="text" class="form-control input-sm" ng-disabled="mode=='new'||mode=='view'" name="addressLine1" ng-maxlength="100" ng-model="proposerEmployment.address1" ng-required="true"/>
+
+                    <div class="error" ng-messages="proposerEmploymentForm.addressLine1.$error" ng-if="proposerEmploymentForm.addressLine1.$dirty">
+                        <small class="error" ng-message="required">Please enter Address Line 1</small>
+                        <small ng-message="maxlength">Only 100 characters are allowed.</small>
+                    </div>
+                </div>
+
+
+                <div class="form-group required">
+                    <label class="control-label">Total Annual Premium Payable</label>
+                    <input type="text" class="form-control input-sm" ng-disabled="mode=='new'||mode=='view'" name="addressLine1" ng-maxlength="100" ng-model="proposerEmployment.address1" ng-required="true"/>
+
+                    <div class="error" ng-messages="proposerEmploymentForm.addressLine1.$error" ng-if="proposerEmploymentForm.addressLine1.$dirty">
+                        <small class="error" ng-message="required">Please enter Address Line 1</small>
+                        <small ng-message="maxlength">Only 100 characters are allowed.</small>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group required">
+                    <label class="control-label"><Optional Coverage1 Name><br/>Annual Premium</label>
+                    <input type="text" class="form-control input-sm" ng-disabled="mode=='new'||mode=='view'" name="employer" ng-maxlength="30" ng-model="proposerEmployment.employer"/>
+
+                    <div class="error" ng-messages="proposerEmploymentForm.employer.$error">
+                        <small class="error" ng-message="required">Please enter Employer</small>
+                        <small ng-message="maxlength">Only 30 characters are allowed.</small>
+                    </div>
+                </div>
+
+                <div class="form-group required">
+                    <label class="control-label"> <Optional Coverage3 Name> <br/>Annual Premium</label>
+                    <input type="text" class="form-control input-sm" ng-disabled="mode=='new'||mode=='view'" name="addressLine1" ng-maxlength="100" ng-model="proposerEmployment.address1" ng-required="true"/>
+
+                    <div class="error" ng-messages="proposerEmploymentForm.addressLine1.$error" ng-if="proposerEmploymentForm.addressLine1.$dirty">
+                        <small class="error" ng-message="required">Please enter Address Line 1</small>
+                        <small ng-message="maxlength">Only 100 characters are allowed.</small>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label">Frequency Premium Payable</label>
+                    <input type="text" class="form-control input-sm" ng-disabled="mode=='new'||mode=='view'" name="addressLine2" ng-maxlength="100" ng-model="proposerEmployment.address2"/>
+
+                    <div class="error" ng-messages="proposerEmploymentForm.addressLine2.$error" ng-if="proposerEmploymentForm.addressLine2.$dirty">
+                        <small ng-message="maxlength">Only 100 characters are allowed.</small>
+                    </div>
+                </div>
+            </div>
+        </accordion-group>
+    </accordion>
+
+    <div class="row">
+        <div class="col-sm-6">
+            <button type="button" class="btn btn-default btn-sm">Cancel</button>
+        </div>
+        <div class="col-sm-6">
+            <button type="button" class="btn btn-default btn-sm" style="float: right" ng-disabled="step9.$invalid ||mode=='new'||mode=='view'" ng-click="">Save</button>
+        </div>
+    </div>
+</ng-form>

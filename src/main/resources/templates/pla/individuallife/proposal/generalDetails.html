@@ -22,11 +22,25 @@
                                 <th>Sum Assured</th>
                             </tr>
                             </thead>
+
+                            <tbody>
+                                <tr ng-repeat="row in policyDetails">
+                                    <td>
+                                        <input type="text" ng-disabled="mode=='new'||mode=='view'" contenteditable="updateFlag" ng-model="row.policyOrProposalNumber" value="{{row.policyOrProposalNumber}}" ng-blur="test(row)" />
+                                        <!-- <div contenteditable="true" ng-model="row.update" ng-blur="test(row)" ng-change="test(row)" >{{row.commission}}</div>-->
+                                    </td>
+                                    <td>
+                                        <input type="text" ng-disabled="mode=='new'||mode=='view'" contenteditable="updateFlag" ng-model="row.amount" value="{{row.amount}}"/>
+                                        <!-- <div contenteditable="true" ng-model="row.update" ng-blur="test(row)" ng-change="test(row)" >{{row.commission}}</div>-->
+                                    </td>
+                                </tr>
+                            </tbody>
                         </table>
                     </div>
                 </accordion-group>
             </div>
             <div class="col-md-2">
+                {{assuredByPlal}}
                 <select class="form-control input-sm" ng-model="assuredByPlal" ng-change="openAccordion(assuredByPlal,'tab1')">
                     <option value="">--Select One--</option>
                     <option value="YES">Yes</option>
@@ -60,6 +74,26 @@
                                 <th>Policy Inception Date</th>
                             </tr>
                             </thead>
+
+                            <tbody>
+                            <tr ng-repeat="row in insurerDetails1">
+                                <td>{{row.name}}</td>
+                                <!--<td contenteditable="true" ng-model ="row.commission" >{{row.commission}}</td>-->
+                                <td>
+                                    <input type="text" ng-disabled="mode=='new'||mode=='view'" contenteditable="updateFlag" ng-model="row.policyOrProposalNumber" value="{{row.commission}}" ng-blur="test(row)" />
+                                    <!-- <div contenteditable="true" ng-model="row.update" ng-blur="test(row)" ng-change="test(row)" >{{row.commission}}</div>-->
+                                </td>
+                                <td>
+                                    <input type="text" ng-disabled="mode=='new'||mode=='view'" contenteditable="updateFlag" ng-model="row.amount" value="{{row.commission}}" ng-blur="test(row)" />
+                                    <!-- <div contenteditable="true" ng-model="row.update" ng-blur="test(row)" ng-change="test(row)" >{{row.commission}}</div>-->
+                                </td>
+                                <td>
+                                    <input type="text" ng-disabled="mode=='new'||mode=='view'" contenteditable="updateFlag" ng-model="row.date" value="{{row.commission}}" ng-blur="test(row)" />
+                                    <!-- <div contenteditable="true" ng-model="row.update" ng-blur="test(row)" ng-change="test(row)" >{{row.commission}}</div>-->
+                                </td>
+                            </tr>
+                            </tbody>
+
                         </table>
                     </div>
                 </accordion-group>
@@ -96,6 +130,25 @@
                                 <th>Date of Proposal</th>
                             </tr>
                             </thead>
+                            <tbody>
+                                <tr ng-repeat="row in insurerDetails2">
+                                    <td>{{row.name}}</td>
+                                    <!--<td contenteditable="true" ng-model ="row.commission" >{{row.commission}}</td>-->
+                                    <td>
+                                        <input type="text" ng-disabled="mode=='new'||mode=='view'" contenteditable="updateFlag" ng-model="row.policyOrProposalNumber" value="{{row.policyOrProposalNumber}}"  />
+                                        <!-- <div contenteditable="true" ng-model="row.update" ng-blur="test(row)" ng-change="test(row)" >{{row.commission}}</div>-->
+                                    </td>
+                                    <td>
+                                        <input type="text" ng-disabled="mode=='new'||mode=='view'" contenteditable="updateFlag" ng-model="row.amount" value="{{row.amount}}" />
+                                        <!-- <div contenteditable="true" ng-model="row.update" ng-blur="test(row)" ng-change="test(row)" >{{row.commission}}</div>-->
+                                    </td>
+                                    <td>
+                                        <input type="text" ng-disabled="mode=='new'||mode=='view'" contenteditable="updateFlag" ng-model="row.date" value="{{row.date}}"  />
+                                        <!-- <div contenteditable="true" ng-model="row.update" ng-blur="test(row)" ng-change="test(row)" >{{row.commission}}</div>-->
+                                    </td>
+                                </tr>
+                            </tbody>
+
                         </table>
                     </div>
                 </accordion-group>
@@ -130,6 +183,15 @@
                                 <th>Proposal Number</th>
                             </tr>
                             </thead>
+                            <tbody>
+                                <tr ng-repeat="row in insurerDetails3">
+                                    <td>{{row.name}}</td>
+                                    <td>
+                                        <input type="text" ng-disabled="mode=='new'||mode=='view'" contenteditable="updateFlag" ng-model="row.policyOrProposalNumber" value="{{row.policyOrProposalNumber}}"/>
+                                        <!-- <div contenteditable="true" ng-model="row.update" ng-blur="test(row)" ng-change="test(row)" >{{row.commission}}</div>-->
+                                    </td>
+                                </tr>
+                            </tbody>
                         </table>
                     </div>
                 </accordion-group>
@@ -149,7 +211,7 @@
             <strong>Have you ever been or have you any intention of being engaged or employed at a mine of any sort?</strong>
         </div>
         <div class="col-md-2">
-            <select class="form-control input-sm" ng-model="generalQuestion[0].answer" ng-change="generalQuestion[0].questionId='1'">
+            <select class="form-control input-sm" ng-model="generalQuestion[0].answer" ng-change="generalQuestion[0].questionId='5'">
                 <option value="">--Select One--</option>
                 <option ng-value="true" value="true">Yes</option>
                 <option ng-value="false" value="false">No</option>
@@ -163,7 +225,7 @@
             <strong>Have you ever been or have you any intention of being engaged or employed In aviation other than as a fare paying passenger on a regular airline?</strong>
         </div>
         <div class="col-md-2">
-            <select class="form-control input-sm" ng-model="generalQuestion[1].answer" ng-change="generalQuestion[1].questionId='2'">
+            <select class="form-control input-sm" ng-model="generalQuestion[1].answer" ng-change="generalQuestion[1].questionId='6'">
                 <option value="">--Select One--</option>
                 <option ng-value="true" value="true">Yes</option>
                 <option ng-value="false" value="false">No</option>
@@ -175,7 +237,7 @@
             <button type="button" class="btn btn-default btn-sm">Cancel</button>
         </div>
         <div class="col-sm-6">
-            <button type="button" class="btn btn-default btn-sm" style="float: right" ng-click="saveGeneraLDetails()">Save</button>
+            <button type="button" class="btn btn-default btn-sm" style="float: right" ng-click="saveGeneralDetails()">Save</button>
         </div>
     </div>
 </ng-form>
