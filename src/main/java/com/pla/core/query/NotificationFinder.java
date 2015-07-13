@@ -185,6 +185,11 @@ public class NotificationFinder {
                 @Override
                 public Map<String, Object> apply(NotificationHistory notificationHistory) {
                     Map<String, Object> notificationHistoryMap = objectMapper.convertValue(notificationHistory, Map.class);
+                    notificationHistoryMap.put("lineOfBusinessDescription", LineOfBusinessEnum.valueOf(notificationHistoryMap.get("lineOfBusiness").toString()).toString());
+                    notificationHistoryMap.put("processTypeDescription", ProcessType.valueOf(notificationHistoryMap.get("processType").toString()).toString());
+                    notificationHistoryMap.put("waitingForDescription", WaitingForEnum.valueOf(notificationHistoryMap.get("waitingFor").toString()).toString());
+                    notificationHistoryMap.put("reminderTypeDescription", ReminderTypeEnum.valueOf(notificationHistoryMap.get("reminderType").toString()).toString());
+                    notificationHistoryMap.put("sentOn", notificationHistoryMap.get("generatedOn"));
                     return notificationHistoryMap;
                 }
             }).collect(Collectors.toList());

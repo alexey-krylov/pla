@@ -55,7 +55,7 @@ public class NotificationHistory {
         this.waitingFor = notificationBuilder.getWaitingFor();
         this.reminderType = notificationBuilder.getReminderType();
         this.reminderTemplate = notificationBuilder.getReminderTemplate();
-        this.generatedOn = notificationBuilder.getGeneratedOn();
+        this.generatedOn = LocalDate.now();
         this.recipientEmailAddress = notificationBuilder.getRecipientMailAddress();
         this.notificationStatus = NotificationStatusEnum.ACTION_TAKEN;
     }

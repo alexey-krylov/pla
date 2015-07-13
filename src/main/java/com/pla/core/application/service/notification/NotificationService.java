@@ -149,11 +149,11 @@ public class NotificationService {
         return AppConstants.SUCCESS;
     }
 
-    public CreateNotificationHistoryCommand generateHistoryDetail(String notificationId,String[] recipientMailAddress){
+    public CreateNotificationHistoryCommand generateHistoryDetail(String notificationId,String[] recipientMailAddress,String emailBody){
         NotificationId id =  new NotificationId(notificationId);
         Notification notification = entityManager.find(Notification.class, id);
         return new CreateNotificationHistoryCommand(notification.getRequestNumber(),notification.getRoleType(),notification.getLineOfBusiness(),
-                notification.getProcessType(),notification.getWaitingFor(),notification.getReminderType(),recipientMailAddress,notification.getReminderTemplate(),notificationId);
+                notification.getProcessType(),notification.getWaitingFor(),notification.getReminderType(),recipientMailAddress,emailBody.getBytes(),notificationId);
     }
 
 

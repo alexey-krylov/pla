@@ -269,7 +269,7 @@ public class ReminderSetupController {
         }
         try {
             mailService.sendMailWithAttachment(notificationEmailDto.getSubject(),notificationEmailDto.getEmailBody(),Lists.newArrayList(),notificationEmailDto.getRecipientMailAddress());
-            CreateNotificationHistoryCommand createNotificationHistoryCommand = notificationService.generateHistoryDetail(notificationEmailDto.getNotificationId(),notificationEmailDto.getRecipientMailAddress());
+            CreateNotificationHistoryCommand createNotificationHistoryCommand = notificationService.generateHistoryDetail(notificationEmailDto.getNotificationId(),notificationEmailDto.getRecipientMailAddress(),notificationEmailDto.getEmailBody());
             commandGateway.send(createNotificationHistoryCommand);
         } catch (Exception e) {
             new ResponseEntity(Result.failure(e.getMessage()),HttpStatus.OK);
