@@ -1,39 +1,38 @@
 package com.pla.grouplife.proposal.presentation.dto;
 
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.pla.sharedkernel.identifier.QuotationId;
-import lombok.AllArgsConstructor;
-import org.joda.time.LocalDate;
-import org.nthdimenzion.presentation.LocalJodaDateDeserializer;
-import org.nthdimenzion.presentation.LocalJodaDateSerializer;
-import org.springframework.format.annotation.DateTimeFormat;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import org.joda.time.DateTime;
 
 /**
  * Created by Samir on 6/24/2015.
  */
-@AllArgsConstructor
+@Getter
+@Setter
+@NoArgsConstructor
 public class GLProposalDto {
-    private QuotationId quotationId;
+    private String proposalId;
 
-    private Integer versionNumber;
+    private DateTime submittedOn;
 
-    @JsonSerialize(using = LocalJodaDateSerializer.class)
-    @JsonDeserialize(using = LocalJodaDateDeserializer.class)
-    @DateTimeFormat(pattern="dd/MM/yyyy")
-    private LocalDate quotationGeneratedOn;
-
-    private String agentCode;
+    private String agentId;
 
     private String agentName;
 
-    private QuotationId parentQuotationId;
+    private String proposalStatus;
 
-    private String quotationStatus;
+    private String proposalNumber;
 
-    private String quotationNumber;
+    private String proposerName;
 
-    private String proposeName;
-
-    private Integer ageing;
+    public GLProposalDto(String proposalId, DateTime submittedOn, String agentId, String agentName, String proposalStatus, String proposalNumber, String proposerName) {
+        this.proposalId = proposalId;
+        this.submittedOn = submittedOn;
+        this.agentId = agentId;
+        this.agentName = agentName;
+        this.proposalStatus = proposalStatus;
+        this.proposalNumber = proposalNumber;
+        this.proposerName = proposerName;
+    }
 }

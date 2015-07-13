@@ -45,13 +45,14 @@ public class GroupLifeProposalFactory {
         Integer versionNumber = (Integer) quotationMap.get("versionNumber");
         Map proposalMap = glProposalFinder.findProposalByQuotationNumber(quotationNumber);
         ProposalNumber proposalNumber = proposalMap != null ? (ProposalNumber) proposalMap.get("proposalNumber") : new ProposalNumber(glProposalNumberGenerator.getProposalNumber(GroupLifeProposal.class, LocalDate.now()));
-        Quotation quotation = new Quotation(quotationNumber, versionNumber,new QuotationId(quotationId));
+        Quotation quotation = new Quotation(quotationNumber, versionNumber, new QuotationId(quotationId));
         AgentId agentId = (AgentId) quotationMap.get("agentId");
-        Set<Insured> insureds = new HashSet<Insured>((List)quotationMap.get("insureds")) ;
+        Set<Insured> insureds = new HashSet<Insured>((List) quotationMap.get("insureds"));
         PremiumDetail premiumDetail = (PremiumDetail) quotationMap.get("premiumDetail");
         Proposer proposer = (Proposer) quotationMap.get("proposer");
         GroupLifeProposal groupLifeProposal = new GroupLifeProposal(proposalId, quotation, proposalNumber);
-        groupLifeProposal = groupLifeProposal.updateWithAgentId(agentId).updateWithProposer(proposer).updateWithInsureds(insureds).updateWithPremiumDetail(premiumDetail);
+        groupLifeProposal = groupLifeProposal.updateWithAgentId(agentId).updateWithProposer(proposer)
+                .updateWithInsureds(insureds).updateWithPremiumDetail(premiumDetail);
         return groupLifeProposal;
     }
 }

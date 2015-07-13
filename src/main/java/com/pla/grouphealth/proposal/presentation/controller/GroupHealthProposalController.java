@@ -64,7 +64,7 @@ public class GroupHealthProposalController {
 
     @RequestMapping(value = "/opengrouphealthproposal/{quotationId}", method = RequestMethod.GET)
     @ApiOperation(httpMethod = "GET", value = "To create proposal from quotation")
-    public ResponseEntity createQuotationPage(@PathVariable("quotationId") String quotationId) {
+    public ResponseEntity createProposal(@PathVariable("quotationId") String quotationId) {
         if (ghProposalService.hasProposalForQuotation(quotationId)) {
             return new ResponseEntity(Result.failure("Proposal already exists for the selected quotation"), HttpStatus.INTERNAL_SERVER_ERROR);
         }
@@ -174,7 +174,6 @@ public class GroupHealthProposalController {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("pla/grouphealth/proposal/viewProposal");
         modelAndView.addObject("searchCriteria", new SearchGHProposalDto());
-
         return modelAndView;
     }
 
@@ -394,7 +393,7 @@ public class GroupHealthProposalController {
     public ResponseEntity uploadMandatoryDocument(GHProposalDocumentCommand ghProposalDocumentCommand, HttpServletRequest request) {
         ghProposalDocumentCommand.setUserDetails(getLoggedInUserDetail(request));
         try {
-          commandGateway.sendAndWait(ghProposalDocumentCommand);
+            commandGateway.sendAndWait(ghProposalDocumentCommand);
         } catch (Exception e) {
             e.printStackTrace();
             return new ResponseEntity(Result.failure(e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);

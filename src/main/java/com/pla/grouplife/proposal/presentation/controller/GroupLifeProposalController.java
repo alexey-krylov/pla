@@ -1,14 +1,20 @@
 package com.pla.grouplife.proposal.presentation.controller;
 
 import com.google.common.collect.Lists;
+import com.pla.grouphealth.proposal.presentation.dto.SearchGHProposalDto;
 import com.pla.grouplife.proposal.application.command.*;
 import com.pla.grouplife.proposal.application.service.GLProposalService;
+import com.pla.grouplife.proposal.presentation.dto.GLProposalDto;
+import com.pla.grouplife.proposal.presentation.dto.SearchGLProposalDto;
+import com.pla.grouplife.proposal.query.GLProposalFinder;
 import com.pla.grouplife.sharedresource.dto.AgentDetailDto;
 import com.pla.grouplife.sharedresource.dto.InsuredDto;
 import com.pla.grouplife.sharedresource.dto.PremiumDetailDto;
 import com.pla.grouplife.sharedresource.dto.ProposerDto;
 import com.pla.publishedlanguage.contract.IClientProvider;
+import com.pla.publishedlanguage.dto.ClientDetailDto;
 import com.pla.sharedkernel.identifier.ProposalId;
+import com.wordnik.swagger.annotations.ApiOperation;
 import net.sf.jasperreports.engine.JRException;
 import org.apache.commons.io.IOUtils;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
@@ -16,7 +22,9 @@ import org.apache.poi.poifs.filesystem.POIFSFileSystem;
 import org.axonframework.commandhandling.gateway.CommandGateway;
 import org.nthdimenzion.presentation.Result;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -44,21 +52,34 @@ public class GroupLifeProposalController {
 
     private IClientProvider clientProvider;
 
+    private GLProposalFinder glProposalFinder;
+
+
     @Autowired
-    public GroupLifeProposalController(CommandGateway commandGateway, GLProposalService glProposalService, IClientProvider clientProvider) {
+    public GroupLifeProposalController(CommandGateway commandGateway, GLProposalService glProposalService, IClientProvider clientProvider, GLProposalFinder glProposalFinder) {
         this.commandGateway = commandGateway;
         this.glProposalService = glProposalService;
         this.clientProvider = clientProvider;
-    }
-    @RequestMapping(value = "/searchgrouplifeproposal",method = RequestMethod.GET)
-    public String searchGroupLifeProposal() {
-        return "pla/proposal/groupLife/searchQuotationforGLProposal";
+        this.glProposalFinder = glProposalFinder;
     }
 
-    @RequestMapping(value = "/searchquotation/{quotationNumber}", method = RequestMethod.GET)
-    public ModelAndView searchQuotation(String quotationNumber) {
+    @RequestMapping(value = "/opengrouplifeproposal/{quotationId}", method = RequestMethod.GET)
+    public ResponseEntity createProposal(@PathVariable("quotationId") String quotationId, HttpServletRequest request) {
+        if (glProposalService.hasProposalForQuotation(quotationId)) {
+            return new ResponseEntity(Result.failure("Proposal Already Exists..Do you want to override the same?"), HttpStatus.INTERNAL_SERVER_ERROR);
+        } else {
+            UserDetails userDetails = getLoggedInUserDetail(request);
+            GLQuotationToProposalCommand glQuotationToProposalCommand = new GLQuotationToProposalCommand(quotationId, userDetails);
+            commandGateway.sendAndWait(glQuotationToProposalCommand);
+        }
+        return new ResponseEntity(Result.success("Proposal successfully created"), HttpStatus.OK);
+    }
+
+
+    @RequestMapping(value = "/searchquotation", method = RequestMethod.GET)
+    public ModelAndView searchQuotation(@RequestParam("quotationNumber") String quotationNumber) {
         ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("pla/grouplife/quotation/viewQuotation");
+        modelAndView.setViewName("pla/grouplife/proposal/searchQuotation");
         try {
             modelAndView.addObject("searchResult", glProposalService.searchGeneratedQuotation(quotationNumber));
         } catch (Exception e) {
@@ -68,21 +89,30 @@ public class GroupLifeProposalController {
         return modelAndView;
     }
 
-    @RequestMapping(value = "/opengrouplifeproposal", method = RequestMethod.POST)
-    @ResponseBody
-    public Result createProposal(@RequestBody GLQuotationToProposalCommand gQuotationToProposalCommand, BindingResult bindingResult,  HttpServletRequest request) {
-        if (glProposalService.hasProposalForQuotation(gQuotationToProposalCommand.getQuotationId())) {
-            return Result.failure("Proposal Already Exists..Do you want to override the same?");
-        }
-        else {
-            UserDetails userDetails = getLoggedInUserDetail(request);
-            gQuotationToProposalCommand.setUserDetails(userDetails);
-            commandGateway.sendAndWait(gQuotationToProposalCommand);
-        }
-        return Result.success("Proposal successfully created");
+    @RequestMapping(value = "/editProposal", method = RequestMethod.GET)
+    @ApiOperation(httpMethod = "GET", value = "To open edit proposal page")
+    public ModelAndView gotoCreateProposal() {
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("pla/grouplife/proposal/createProposal");
+        return modelAndView;
     }
 
-/*
+    @RequestMapping(value = "/forcecreateproposal", method = RequestMethod.GET)
+    @ApiOperation(httpMethod = "GET", value = "To create proposal forcefully if proposal already exists for the same quotation number")
+    public ResponseEntity gotoCreateProposal(@RequestParam("quotationId") String quotationId, HttpServletRequest request) {
+        String proposalId = commandGateway.sendAndWait(new GLQuotationToProposalCommand(quotationId, getLoggedInUserDetail(request)));
+        return new ResponseEntity(Result.success("", proposalId), HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/opensearchquotation", method = RequestMethod.GET)
+    @ApiOperation(httpMethod = "GET", value = "To open search quotation page")
+    public ModelAndView openSearchQuotation() {
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("pla/grouplife/proposal/searchQuotation");
+        return modelAndView;
+    }
+
+
     @RequestMapping(value = "/getproposerdetailfromclient/{proposerCode}/{proposalId}", method = RequestMethod.GET)
     @ResponseBody
     public ProposerDto getProposerDetailFromClientRepository(@PathVariable("proposerCode") String proposerCode, @PathVariable("proposalId") String proposalId) {
@@ -102,7 +132,7 @@ public class GroupLifeProposalController {
             proposerDto.setProposerCode(proposerCode);
         }
         return proposerDto;
-    }*/
+    }
 
     @RequestMapping(value = "/getagentdetailfromproposal/{proposalId}", method = RequestMethod.GET)
     @ResponseBody
@@ -110,7 +140,46 @@ public class GroupLifeProposalController {
         return glProposalService.getAgentDetail(new ProposalId(proposalId));
     }
 
-    @RequestMapping(value = "/updatewithagentid", method = RequestMethod.POST)
+    @RequestMapping(value = "/listgrouplifeproposal", method = RequestMethod.GET)
+    @ApiOperation(httpMethod = "GET", value = "To open search proposal page")
+    public ModelAndView listProposal() {
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("pla/grouplife/proposal/viewProposal");
+        modelAndView.addObject("searchCriteria", new SearchGLProposalDto());
+        return modelAndView;
+    }
+
+    @RequestMapping(value = "/searchproposal", method = RequestMethod.POST)
+    @ApiOperation(httpMethod = "POST", value = "To search proposal")
+    public ModelAndView searchProposal(SearchGLProposalDto searchGLProposalDto) {
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("pla/grouphealth/proposal/viewProposal");
+        try {
+            modelAndView.addObject("searchResult", glProposalService.searchProposal(searchGLProposalDto, new String[]{"DRAFT", "PENDING_ACCEPTANCE", "RETURNED"}));
+        } catch (Exception e) {
+            modelAndView.addObject("searchResult", Lists.newArrayList());
+        }
+        modelAndView.addObject("searchCriteria", searchGLProposalDto);
+        return modelAndView;
+    }
+
+    @RequestMapping(value = "/getsubmittedproposals", method = RequestMethod.POST)
+    @ApiOperation(httpMethod = "POST", value = "To search submitted proposal for approver approval")
+    public List<GLProposalDto> findSubmittedProposal(SearchGLProposalDto searchGLProposalDto) {
+        List<GLProposalDto> submittedProposals = glProposalService.searchProposal(searchGLProposalDto, new String[]{"PENDING_ACCEPTANCE"});
+        return submittedProposals;
+    }
+
+    @RequestMapping(value = "/opensearchproposal", method = RequestMethod.GET)
+    @ApiOperation(httpMethod = "GET", value = "To open search proposal page")
+    public ModelAndView openSearchProposal() {
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("pla/grouplife/proposal/viewProposal");
+        modelAndView.addObject("searchCriteria", new SearchGHProposalDto());
+        return modelAndView;
+    }
+
+    @RequestMapping(value = "/updatewithagentdetail", method = RequestMethod.POST)
     @ResponseBody
     public Result updateQuotationWithAgentId(@RequestBody UpdateGLProposalWithAgentCommand updateGLProposalWithAgentCommand, BindingResult bindingResult, HttpServletRequest request) {
         if (bindingResult.hasErrors()) {
@@ -118,17 +187,13 @@ public class GroupLifeProposalController {
         }
         try {
             updateGLProposalWithAgentCommand.setUserDetails(getLoggedInUserDetail(request));
-            String quotationId = commandGateway.sendAndWait(updateGLProposalWithAgentCommand);
-            return Result.success("Agent detail updated successfully", quotationId);
+            String proposalId = commandGateway.sendAndWait(updateGLProposalWithAgentCommand);
+            return Result.success("Agent detail updated successfully", proposalId);
         } catch (Exception e) {
             return Result.failure(e.getMessage());
         }
     }
-    @RequestMapping(value = "/getproposerdetailfromproposal/{proposalId}")
-    @ResponseBody
-    public ProposerDto getProposerDetail(@PathVariable("proposalId") String proposalId) {
-        return glProposalService.getProposerDetail(new ProposalId(proposalId));
-    }
+
     @RequestMapping(value = "/updatewithproposerdetail", method = RequestMethod.POST)
     @ResponseBody
     public Result updateProposalWithProposerDetail(@RequestBody UpdateGLProposalWithProposerCommand updateGLProposalWithProposerCommand, BindingResult bindingResult, HttpServletRequest request) {
@@ -137,39 +202,22 @@ public class GroupLifeProposalController {
         }
         try {
             updateGLProposalWithProposerCommand.setUserDetails(getLoggedInUserDetail(request));
-            String quotationId = commandGateway.sendAndWait(updateGLProposalWithProposerCommand);
-            return Result.success("Proposer detail updated successfully", quotationId);
+            String proposalId = commandGateway.sendAndWait(updateGLProposalWithProposerCommand);
+            return Result.success("Proposer detail updated successfully", proposalId);
         } catch (Exception e) {
             return Result.failure();
         }
     }
 
-    @RequestMapping(value = "/uploadinsureddetail", method = RequestMethod.POST)
-    @ResponseBody
-    public Result uploadInsuredDetail(@RequestBody UploadInsuredDetailDto uploadInsuredDetailDto, HttpServletRequest request) throws IOException {
-            MultipartFile file = uploadInsuredDetailDto.getFile();
-        if (!("application/ms-excel".equals(file.getContentType()) || "application/msexcel".equals(file.getContentType()) || "application/vnd.ms-excel".equals(file.getContentType()))) {
-            return Result.failure("Uploaded file is not valid excel");
-        }
-        POIFSFileSystem fs = new POIFSFileSystem(file.getInputStream());
-        HSSFWorkbook insuredTemplateWorkbook = new HSSFWorkbook(fs);
-        try {
-            boolean isValidInsuredTemplate = glProposalService.isValidInsuredTemplate(uploadInsuredDetailDto.getProposalId(), insuredTemplateWorkbook, uploadInsuredDetailDto.isSamePlanForAllCategory(), uploadInsuredDetailDto.isSamePlanForAllRelation());
-            if (!isValidInsuredTemplate) {
-                File insuredTemplateWithError = new File(uploadInsuredDetailDto.getProposalId());
-                FileOutputStream fileOutputStream = new FileOutputStream(insuredTemplateWithError);
-                insuredTemplateWorkbook.write(fileOutputStream);
-                fileOutputStream.flush();
-                fileOutputStream.close();
-                return Result.failure("Uploaded Insured template is not valid.Please download to check the errors");
-            }
-            List<InsuredDto> insuredDtos = glProposalService.transformToInsuredDto(insuredTemplateWorkbook, uploadInsuredDetailDto.getProposalId(), uploadInsuredDetailDto.isSamePlanForAllCategory(), uploadInsuredDetailDto.isSamePlanForAllRelation());
-            String quotationId = commandGateway.sendAndWait(new UpdateGLProposalWithInsuredCommand(uploadInsuredDetailDto.getProposalId(), insuredDtos, getLoggedInUserDetail(request)));
-            return Result.success("Insured detail uploaded successfully", quotationId);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return Result.failure(e.getMessage());
-        }
+    @RequestMapping(value = "/downloadplandetail/{proposalId}", method = RequestMethod.GET)
+    public void downloadPlanDetail(@PathVariable("proposalId") String proposalId, HttpServletResponse response) throws IOException, JRException {
+        response.reset();
+        response.setContentType("application/pdf");
+        response.setHeader("content-disposition", "attachment; filename=" + "planReadyReckoner.pdf" + "");
+        OutputStream outputStream = response.getOutputStream();
+        outputStream.write(glProposalService.getPlanReadyReckoner(proposalId));
+        outputStream.flush();
+        outputStream.close();
     }
 
 
@@ -199,20 +247,38 @@ public class GroupLifeProposalController {
         errorTemplateFile.delete();
     }
 
-    @RequestMapping(value = "/downloadplandetail/{proposalId}", method = RequestMethod.GET)
-    public void downloadPlanDetail(@PathVariable("proposalId") String proposalId, HttpServletResponse response) throws IOException, JRException {
-        response.reset();
-        response.setContentType("application/pdf");
-        response.setHeader("content-disposition", "attachment; filename=" + "planReadyReckoner.pdf" + "");
-        OutputStream outputStream = response.getOutputStream();
-        outputStream.write(glProposalService.getPlanReadyReckoner(proposalId));
-        outputStream.flush();
-        outputStream.close();
+
+    @RequestMapping(value = "/uploadinsureddetail", method = RequestMethod.POST)
+    @ResponseBody
+    public Result uploadInsuredDetail(@RequestBody UploadInsuredDetailDto uploadInsuredDetailDto, HttpServletRequest request) throws IOException {
+        MultipartFile file = uploadInsuredDetailDto.getFile();
+        if (!("application/ms-excel".equals(file.getContentType()) || "application/msexcel".equals(file.getContentType()) || "application/vnd.ms-excel".equals(file.getContentType()))) {
+            return Result.failure("Uploaded file is not valid excel");
+        }
+        POIFSFileSystem fs = new POIFSFileSystem(file.getInputStream());
+        HSSFWorkbook insuredTemplateWorkbook = new HSSFWorkbook(fs);
+        try {
+            boolean isValidInsuredTemplate = glProposalService.isValidInsuredTemplate(uploadInsuredDetailDto.getProposalId(), insuredTemplateWorkbook, uploadInsuredDetailDto.isSamePlanForAllCategory(), uploadInsuredDetailDto.isSamePlanForAllRelation());
+            if (!isValidInsuredTemplate) {
+                File insuredTemplateWithError = new File(uploadInsuredDetailDto.getProposalId());
+                FileOutputStream fileOutputStream = new FileOutputStream(insuredTemplateWithError);
+                insuredTemplateWorkbook.write(fileOutputStream);
+                fileOutputStream.flush();
+                fileOutputStream.close();
+                return Result.failure("Uploaded Insured template is not valid.Please download to check the errors");
+            }
+            List<InsuredDto> insuredDtos = glProposalService.transformToInsuredDto(insuredTemplateWorkbook, uploadInsuredDetailDto.getProposalId(), uploadInsuredDetailDto.isSamePlanForAllCategory(), uploadInsuredDetailDto.isSamePlanForAllRelation());
+            String quotationId = commandGateway.sendAndWait(new UpdateGLProposalWithInsuredCommand(uploadInsuredDetailDto.getProposalId(), insuredDtos, getLoggedInUserDetail(request)));
+            return Result.success("Insured detail uploaded successfully", quotationId);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return Result.failure(e.getMessage());
+        }
     }
 
-    @RequestMapping(value = "/getpremiumdetail/{proposalid}", method = RequestMethod.GET)
+    @RequestMapping(value = "/getpremiumdetail/{proposalId}", method = RequestMethod.GET)
     @ResponseBody
-    public PremiumDetailDto getPremiumDetail(@PathVariable("proposalid") String proposalId) {
+    public PremiumDetailDto getPremiumDetail(@PathVariable("proposalId") String proposalId) {
         return glProposalService.getPremiumDetail(new ProposalId(proposalId));
     }
 
@@ -240,40 +306,11 @@ public class GroupLifeProposalController {
             return Result.success(e.getMessage());
         }
     }
-/*
-    @RequestMapping(value = "/listgrouplifeproposal", method = RequestMethod.GET)
-    public ModelAndView listQuotation() {
-        ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("pla/grouplife/proposal/viewProposal");
-        modelAndView.addObject("searchCriteria", new SearchGLProposalDto());
-        return modelAndView;
-    }
 
-    @RequestMapping(value = "/searchproposal", method = RequestMethod.POST)
-    public ModelAndView searchQuotation(SearchGLProposalDto searchGLProposalDto) {
-        ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("pla/grouplife/proposal/viewProposal");
-        try {
-            modelAndView.addObject("searchResult", glProposalService.searchProposal(searchGLProposalDto));
-        } catch (Exception e) {
-            modelAndView.addObject("searchResult", Lists.newArrayList());
-        }
-        modelAndView.addObject("searchCriteria", searchGLProposalDto);
-        return modelAndView;
-    }
-
-
-
-    @RequestMapping(value = "/generate", method = RequestMethod.POST)
+    @RequestMapping(value = "/getproposerdetail/{proposalId}")
     @ResponseBody
-    public Result generateQuotation(@RequestBody GenerateGLQuotationCommand generateGLQuotationCommand) {
-        try {
-            commandGateway.sendAndWait(generateGLQuotationCommand);
-            return Result.success("Quotation generated successfully");
-        } catch (Exception e) {
-            return Result.failure(e.getMessage());
-        }
-    }*/
-
+    public ProposerDto getProposerDetail(@PathVariable("proposalId") String proposalId) {
+        return glProposalService.getProposerDetail(new ProposalId(proposalId));
+    }
 
 }

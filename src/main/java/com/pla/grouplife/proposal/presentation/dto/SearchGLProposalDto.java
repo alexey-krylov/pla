@@ -10,6 +10,8 @@ import lombok.Setter;
 @Setter
 public class SearchGLProposalDto {
 
+    private String proposalId;
+
     private String proposalNumber;
 
     private String proposerName;

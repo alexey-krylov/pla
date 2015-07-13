@@ -6,7 +6,6 @@ import com.pla.grouplife.sharedresource.model.vo.PremiumDetail;
 import com.pla.grouplife.sharedresource.model.vo.Proposer;
 import com.pla.grouplife.sharedresource.util.GroupLifeProposalFactory;
 import com.pla.sharedkernel.identifier.ProposalId;
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
 
 import java.util.Set;
@@ -14,7 +13,6 @@ import java.util.Set;
 /**
  * Created by User on 7/1/2015.
  */
-@EqualsAndHashCode(of = "userName")
 @Getter
 public class GLProposalProcessor {
 
@@ -23,8 +21,9 @@ public class GLProposalProcessor {
     public GLProposalProcessor(String userName) {
         this.userName = userName;
     }
-    public GroupLifeProposal createProposal(String quotationId, ProposalId proposalId,GroupLifeProposalFactory groupLifeProposalFactory) {
-        return  groupLifeProposalFactory.createProposal(quotationId,proposalId);
+
+    public GroupLifeProposal createProposal(String quotationId, ProposalId proposalId, GroupLifeProposalFactory groupLifeProposalFactory) {
+        return groupLifeProposalFactory.createProposal(quotationId, proposalId);
     }
 
     public GroupLifeProposal updateWithAgentId(GroupLifeProposal groupLifeProposal, AgentId agentId) {
@@ -35,8 +34,7 @@ public class GLProposalProcessor {
         return groupLifeProposal.updateWithProposer(proposer);
     }
 
-    public GroupLifeProposal updateWithInsured(GroupLifeProposal groupLifeProposal, Set
-            <Insured> insureds) {
+    public GroupLifeProposal updateWithInsured(GroupLifeProposal groupLifeProposal, Set<Insured> insureds) {
         return groupLifeProposal.updateWithInsureds(insureds);
     }
 

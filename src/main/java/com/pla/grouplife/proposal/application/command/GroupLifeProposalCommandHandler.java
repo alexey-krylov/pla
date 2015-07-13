@@ -5,6 +5,7 @@ import com.pla.grouplife.proposal.domain.model.GroupLifeProposal;
 import com.pla.grouplife.proposal.domain.service.GroupLifeProposalRoleAdapter;
 import com.pla.grouplife.proposal.domain.service.GroupLifeProposalService;
 import com.pla.grouplife.proposal.query.GLProposalFinder;
+import com.pla.grouplife.proposal.repository.GlProposalRepository;
 import com.pla.grouplife.sharedresource.dto.InsuredDto;
 import com.pla.grouplife.sharedresource.dto.PremiumDetailDto;
 import com.pla.grouplife.sharedresource.model.vo.Insured;
@@ -30,19 +31,27 @@ import java.util.Set;
 @Component
 public class GroupLifeProposalCommandHandler {
 
-    GLFinder glFinder;
-    GLProposalFinder glProposalFinder;
-    GroupLifeProposalRoleAdapter groupLifeProposalRoleAdapter;
+    private GLFinder glFinder;
+
+    private GLProposalFinder glProposalFinder;
+
+    private GroupLifeProposalRoleAdapter groupLifeProposalRoleAdapter;
+
     private GroupLifeProposalService groupLifeProposalService;
+
     private Repository<GroupLifeProposal> groupLifeProposalRepository;
+
     private GLInsuredFactory glInsuredFactory;
+
     private GroupLifeProposalFactory groupLifeProposalFactory;
+
+    @Autowired
+    private GlProposalRepository glProposalRepository;
 
 
     @Autowired
     GroupLifeProposalCommandHandler(GroupLifeProposalService groupLifeProposalService, GLFinder glFinder,
-                                    Repository<GroupLifeProposal> groupLifeProposalRepository, GLInsuredFactory glInsuredFactory, GLProposalFinder glProposalFinder, GroupLifeProposalRoleAdapter groupLifeProposalRoleAdapte, GroupLifeProposalFactory groupLifeProposalFactory
-    ) {
+                                    Repository<GroupLifeProposal> groupLifeProposalRepository, GLInsuredFactory glInsuredFactory, GLProposalFinder glProposalFinder, GroupLifeProposalRoleAdapter groupLifeProposalRoleAdapte, GroupLifeProposalFactory groupLifeProposalFactory) {
         this.groupLifeProposalService = groupLifeProposalService;
         this.groupLifeProposalRepository = groupLifeProposalRepository;
         this.glInsuredFactory = glInsuredFactory;
@@ -64,7 +73,7 @@ public class GroupLifeProposalCommandHandler {
             groupLifeProposal = groupLifeProposalRepository.load(proposalId);
         }
         GLProposalProcessor glProposalProcessor = groupLifeProposalRoleAdapter.userToProposalProcessor(glQuotationToProposalCommand.getUserDetails());
-        groupLifeProposal = glProposalProcessor.createProposal(glQuotationToProposalCommand.getQuotationId(), proposalId,groupLifeProposalFactory);
+        groupLifeProposal = glProposalProcessor.createProposal(glQuotationToProposalCommand.getQuotationId(), proposalId, groupLifeProposalFactory);
         if (proposalMap == null) {
             groupLifeProposalRepository.add(groupLifeProposal);
         }
@@ -106,6 +115,14 @@ public class GroupLifeProposalCommandHandler {
         groupLifeProposalRepository.add(groupLifeProposal);
         return groupLifeProposal.getIdentifier().getProposalId();
     }
+
+    @CommandHandler
+    public GroupLifeProposal recalculatePremium(GLRecalculatedInsuredPremiumCommand glRecalculatedInsuredPremiumCommand) {
+        GroupLifeProposal groupHealthProposal = glProposalRepository.findOne(new ProposalId(glRecalculatedInsuredPremiumCommand.getProposalId()));
+        groupHealthProposal = populateAnnualBasicPremiumOfInsured(groupHealthProposal, glRecalculatedInsuredPremiumCommand.getUserDetails(), glRecalculatedInsuredPremiumCommand.getPremiumDetailDto());
+        return groupHealthProposal;
+    }
+
     private GroupLifeProposal populateAnnualBasicPremiumOfInsured(GroupLifeProposal groupLifeQuotation, UserDetails userDetails, PremiumDetailDto premiumDetailDto) {
         if (premiumDetailDto.getPolicyTermValue() != 365) {
             Set<Insured> insureds = groupLifeQuotation.getInsureds();
