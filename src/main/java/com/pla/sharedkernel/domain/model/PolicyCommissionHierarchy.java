@@ -1,6 +1,5 @@
 package com.pla.sharedkernel.domain.model;
 
-import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -8,7 +7,7 @@ import lombok.NoArgsConstructor;
  * Created by Samir on 7/9/2015.
  */
 @Getter
-@NoArgsConstructor(access = AccessLevel.PUBLIC)
+@NoArgsConstructor
 public class PolicyCommissionHierarchy {
 
     private Agent agent;
