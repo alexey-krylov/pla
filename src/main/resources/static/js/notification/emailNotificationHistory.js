@@ -11,7 +11,7 @@ function bodyOnLoad() {
     };
 
     tinymce.init({
-        selector: "textarea#emailBody",
+        selector: "textarea#mailContent",
         width: "100%",
         height: 260,
         menubar: false,
