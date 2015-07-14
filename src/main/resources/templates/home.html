@@ -67,8 +67,8 @@
                     Notification Portlet
                 </div>
                 <div class="chart-stage ng-cloak">
-                    <div style="min-height: 175px">
-                        <table class="table table-striped table-bordered" id="notificationPortlet-table" cellspacing="0" width="100%">
+                    <div style="min-height: 175px;max-height:175px;overflow:auto;">
+                        <table class="table table-striped table-bordered" id="notificationPortlet-table" cellspacing="0" width="98%">
                             <thead>
                             <tr>
                                 <th>Quotation/proposal/policy</th>
@@ -100,8 +100,8 @@
                     Notification History
                 </div>
                 <div class="chart-stage ng-cloak">
-                    <div style="min-height: 175px">
-                        <table class="table table-striped table-bordered" id="notificationHistory-table" cellspacing="0" width="100%">
+                    <div style="min-height: 175px;max-height:175px;overflow:auto;">
+                        <table class="table table-striped table-bordered" id="notificationHistory-table" cellspacing="0" width="98%">
                             <thead>
                             <tr>
                                 <th>Quotation/proposal/policy</th>
@@ -183,13 +183,13 @@
                 $scope.openPrintWindow = function(notificationId){
                     window.location.href='/pla/core/notification/printnotification/'+notificationId;
                 }
-                $scope.openEmailReadOnlyWindow = function (notificationId) {
-                    console.log('invoke email...');
-                    window.open('/pla/core/notification/openreadonlyemailnotification/'+notificationId,"_blank","toolbar=no,resizable=no," +
+                $scope.openEmailReadOnlyWindow = function (notificationHistoryId) {
+                    console.log('invoke email...'+notificationHistoryId);
+                    window.open('/pla/core/notification/openemailnotificationhistory/'+notificationHistoryId,"_blank","toolbar=no,resizable=no," +
                     "scrollable=no,menubar=no,personalbar=no,dependent=yes,dialog=yes,split=no,titlebar=no,resizable=no,location=no,left=100px");
                 };
-                $scope.openPrintReadOnlyWindow = function(notificationId){
-                    window.location.href='/pla/core/notification/printnotification/'+notificationId;
+                $scope.openPrintReadOnlyWindow = function(notificationHistoryId){
+                    window.location.href='/pla/core/notification/printnotification/'+notificationHistoryId;
                 }
 
              }]);

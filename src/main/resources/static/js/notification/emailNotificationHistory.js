@@ -16,6 +16,10 @@ function bodyOnLoad() {
         height: 260,
         menubar: false,
         statusbar: false,
+        setup: function(ed) {
+            if($('#'+ed.id).attr('readonly'))
+                ed.settings.readonly = true;
+        },
         plugins: [
             "advlist lists charmap print preview hr anchor pagebreak",
             "searchreplace visualblocks visualchars nonbreaking",
@@ -33,7 +37,10 @@ function sendEmail() {
     var toAddress = $('#to').val();
     var subject = $('#subject').val();
     var emailBody = $('#emailBody').val();
-    var notificationId = $('#notificationId').val();
+    var x = document.getElementById("emailBody").readOnly;
+    document.getElementById("emailBody").innerHTML = x;
+
+    var notificationHistoryId = $('#notificationHistoryId').val();
     if (toAddress == undefined || toAddress == '' || toAddress.length == 0) {
         alert('Please enter email address.');
         return;
@@ -46,7 +53,7 @@ function sendEmail() {
             return;
         }
     }
-    var emailUrl = '/pla/core/notification/emailnotification';
+    var emailUrl = '/pla/core/notification/emailnotificationHistory';
 
 
     $.ajax({
@@ -54,7 +61,7 @@ function sendEmail() {
         type: 'POST',
         data: JSON.stringify({
             recipientMailAddress: toAddress.split(';'), subject: subject, emailBody: emailBody,
-            notificationId: notificationId
+            notificationHistoryId: notificationHistoryId
         }),
         contentType: 'application/json; charset=utf-8',
         success: function (msg) {
@@ -63,7 +70,6 @@ function sendEmail() {
                 $('#successMessage').text(msg.message).show();
                 $('#alert-modal-success').on('hidden.bs.modal', function () {
                     window.close();
-
                 });
             }else{
                 $('#alert-modal-success').modal('show');

@@ -13,21 +13,21 @@
     <!--*/-->
 </head>
 <script src="http://timschlechter.github.io/bootstrap-tagsinput/examples/lib/jquery/dist/jquery.min.js"></script>
-<script src="/pla/js/notification/emailNotification.js"></script>
+<script src="/pla/js/notification/emailNotificationHistory.js"></script>
 <script src="//tinymce.cachefly.net/4.1/tinymce.min.js"></script>
 <script src="http://timschlechter.github.io/bootstrap-tagsinput/examples/lib/bootstrap-tagsinput/bootstrap-tagsinput.js"></script>
 <body onload="javascript:bodyOnLoad();">
 
 
 
-<div class="container">
+<div class="container" style="margin-top:-25px;">
     <div class="row">
         <div class="col-md-12">
             <div class="panel panel-primary">
                 <div class="panel-heading">
                     <span th:text="#{emailNotification}">Email Notification</span>
                 </div>
-                <!--<p th:text="${mailContent}"></p>-->
+               <!-- <p th:text="${mailContent.emailAddress[0]}"></p>-->
                 <div class="panel-body">
                     <div class="row">
                         <div class="col-md-3">
@@ -45,7 +45,7 @@
                                     <td>
                                         <input type="text" name="emailAddress"
                                                id="to" class="form-control input-md" th:readonly="true"
-                                               th:value="${mailContent[0].emailAddress}"/>
+                                               th:value="${mailContent.emailAddress[0]}"/>
 
                                     </td>
                                 </tr>
@@ -60,29 +60,29 @@
                                 <tr>
                                     <td>Subject:</td>
                                     <td><strong>
-                                        <input type="hidden" id="notificationId" th:value="${mailContent[0].notificationId}"/>
+                                        <input type="hidden" id="notificationHistoryId" th:value="${mailContent.notificationHistoryId}"/>
 
 
                                         <input type="text" class="form-control input-md" name="subject"
                                                id="subject"
-                                               th:value="${mailContent[0].subject}" th:readonly="true"/></strong></td>
+                                               th:value="${mailContent.subject}" th:readonly="true"/></strong></td>
                                 </tr>
                                 </tbody>
                             </table>
                         </div>
                     </div>
                     <div class="row" style="margin-top: 3px">
-                        <div class="col-md-12">
-                            <textarea id="emailBody" style="width:100%;height:180px;" th:utext="${mailContent[0].emailBody}"
-                                      name="emailBody" th:readonly="true">
+                        <div class="col-md-12" style="width:100%;min-height:180px;max-height:180px;overflow-y:scroll;">
+                            <textarea id="emailBody"  th:utext="${mailContent.emailBody}"
+                                      name="emailBody" readonly="readonly">
                             </textarea>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-md-12">
-                            <a th:href="@{/notification/printnotification/{notificationId}(notificationId=${mailContent[0].notificationId})}">
+                            <a th:href="@{/notification/printnotification/{notificationHistoryId}(notificationHistoryId=${mailContent.notificationHistoryId})}">
                                 <span class="glyphicon glyphicon-file" style="font-size: 18px"></span>
-                                <label th:utext="${mailContent[0].subject}+'.PDF'"></label>
+                                <label th:utext="${mailContent.subject}+'.PDF'"></label>
                             </a>
                         </div>
                     </div>
@@ -127,8 +127,9 @@
                 <h4 class="modal-title">Information</h4>
             </div>
             <div class="modal-body">
-                <div class="alert alert-success" hidden="true"></div>
-                <div>Email sent successfully</div>
+                <div class="alert alert-success" id="successMessage" hidden="true"></div>
+                <div class="alert alert-error" id="errorMessage" hidden="true"></div>
+
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
@@ -137,7 +138,7 @@
     </div>
 </div>
 
-<div class="modal fade" id="alert-modal-error" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+<div class="modal fade" id="alert-modal-danger" tabindex="-1" role="dialog" aria-labelledby="alert-modal-danger"
      aria-hidden="true">
     <div class="modal-dialog modal-sm">
         <div class="modal-content">
@@ -151,7 +152,7 @@
                 <div>Mail not sent successfully.</div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-default" id="changeToOk" data-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-default"  data-dismiss="modal">Cancel</button>
             </div>
         </div>
     </div>
