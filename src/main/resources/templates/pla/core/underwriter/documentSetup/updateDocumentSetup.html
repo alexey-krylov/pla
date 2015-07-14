@@ -20,6 +20,24 @@
     });
 
 </script>
+<script th:inline="javascript">
+    /*<![CDATA[*/
+    var isNumeric = function (event){
+
+        var charCode = (event.which) ? event.which : event.keyCode;
+        // alert(charCode);
+        if (charCode > 31 && charCode !=8 && charCode !=0 ) {
+            event.preventDefault();
+
+        }
+        if(charCode ==8){
+            event.preventDefault();
+        }
+
+    };
+    /*]]>*/
+</script>
+
 
 
 <div class="container ng-cloak" ng-Controller="UpdateDocumentSetupController">
