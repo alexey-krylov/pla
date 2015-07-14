@@ -104,7 +104,7 @@ public class ILProposalFinder {
     /**
      * Find all the Plans by Agent Id and for a line of business.
      */
-    private static final String SEARCH_PLAN_BY_AGENT_IDS = "SELECT DISTINCT C.plan_id, A.`agent_id`, C.plan_name FROM AGENT A JOIN agent_authorized_plan b " +
+    private static final String SEARCH_PLAN_BY_AGENT_IDS = "SELECT DISTINCT C.* FROM AGENT A JOIN agent_authorized_plan b " +
             "ON A.`agent_id`=B.`agent_id` JOIN plan_coverage_benefit_assoc C " +
             "ON B.`plan_id`=C.`plan_id` where A.agent_id IN (:agentIds) and c.line_of_business=:lineOfBusiness group by A.agent_id";
 
