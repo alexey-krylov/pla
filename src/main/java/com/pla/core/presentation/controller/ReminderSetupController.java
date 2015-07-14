@@ -78,7 +78,7 @@ public class ReminderSetupController {
     public Callable<ModelAndView> displayAllRoles() {
         return () -> {
             ModelAndView modelAndView = new ModelAndView();
-            modelAndView.setViewName("/pla/core/notification/rolelist");
+            modelAndView.setViewName("pla/core/notification/rolelist");
             modelAndView.addObject("roleList", notificationFinder.findAllNotificationRole());
             return modelAndView;
         };
@@ -90,7 +90,7 @@ public class ReminderSetupController {
         return () -> {
             ModelAndView modelAndView = new ModelAndView();
             modelAndView.addObject("NotificationTemplateDto", new NotificationTemplateDto());
-            modelAndView.setViewName("/pla/core/notification/templatelist");
+            modelAndView.setViewName("pla/core/notification/templatelist");
             modelAndView.addObject("templateList", notificationFinder.findAllTemplates());
             return modelAndView;
         };
@@ -267,8 +267,8 @@ public class ReminderSetupController {
             return new ResponseEntity(Result.failure("Email cannot be sent due to wrong data"), HttpStatus.INTERNAL_SERVER_ERROR);
         }
         try {
-            mailService.sendMailWithAttachment(notificationEmailDto.getSubject(),notificationEmailDto.getEmailBody(),Lists.newArrayList(),notificationEmailDto.getRecipientMailAddress());
             CreateNotificationHistoryCommand createNotificationHistoryCommand = notificationService.generateHistoryDetail(notificationEmailDto.getNotificationId(),notificationEmailDto.getRecipientMailAddress(),notificationEmailDto.getEmailBody());
+            mailService.sendMailWithAttachment(notificationEmailDto.getSubject(),notificationEmailDto.getEmailBody(),Lists.newArrayList(),notificationEmailDto.getRecipientMailAddress());
             commandGateway.send(createNotificationHistoryCommand);
         } catch (Exception e) {
             new ResponseEntity(Result.failure(e.getMessage()),HttpStatus.OK);
@@ -298,6 +298,34 @@ public class ReminderSetupController {
             return notificationHistory.parallelStream().map(new RequestNumberTransformer()).collect(Collectors.toList());
         }
         return Collections.EMPTY_LIST;
+    }
+
+
+    @RequestMapping(value = "/openemailnotificationhistory/{notificationHistoryId}", method = RequestMethod.GET)
+    public ModelAndView openNotificationHistoryEmailPage(@PathVariable("notificationHistoryId") String notificationHistoryId) {
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("/pla/core/notification/emailNotification");
+        modelAndView.addObject("mailContent", notificationFinder.notificationHistoryEmailContent(notificationHistoryId));
+        return modelAndView;
+    }
+
+    @RequestMapping(value = "/emailnotificationHistory", method = RequestMethod.POST)
+    @ResponseBody
+    public ResponseEntity sendNotificationHistoryEmail(@RequestBody NotificationEmailDto notificationEmailDto,BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            return new ResponseEntity(Result.failure("Email cannot be sent due to wrong data"), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        try {
+            CreateNotificationHistoryCommand createNotificationHistoryCommand = notificationTemplateService.generateHistoryDetail(notificationEmailDto.getNotificationId(), notificationEmailDto.getRecipientMailAddress(), notificationEmailDto.getEmailBody());
+            if (createNotificationHistoryCommand==null){
+                return new ResponseEntity(Result.failure("Email cannot be sent due to wrong data"), HttpStatus.OK);
+            }
+            mailService.sendMailWithAttachment(notificationEmailDto.getSubject(), notificationEmailDto.getEmailBody(), Lists.newArrayList(), notificationEmailDto.getRecipientMailAddress());
+            commandGateway.send(createNotificationHistoryCommand);
+        } catch (Exception e) {
+            new ResponseEntity(Result.failure(e.getMessage()), HttpStatus.OK);
+        }
+        return new ResponseEntity(Result.success("Email sent successfully"), HttpStatus.OK);
     }
 
     private class RequestNumberTransformer implements Function<Map<String, Object>,Map<String, Object> > {

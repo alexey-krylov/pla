@@ -17,6 +17,8 @@ import com.pla.sharedkernel.domain.model.WaitingForEnum;
 import com.pla.sharedkernel.identifier.LineOfBusinessEnum;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.jdbc.core.ColumnMapRowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
@@ -25,7 +27,6 @@ import org.springframework.stereotype.Component;
 
 import javax.sql.DataSource;
 import java.io.IOException;
-import java.nio.charset.Charset;
 import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -146,6 +147,23 @@ public class NotificationFinder {
         return Collections.EMPTY_LIST;
     }
 
+    public Map<String, Object> notificationHistoryEmailContent(String notificationHistoryId) {
+        Criteria notificationCriteria = Criteria.where("_id").is(notificationHistoryId);
+        Query query = new Query(notificationCriteria);
+        NotificationHistory notificationHistories = mongoTemplate.findOne(query, NotificationHistory.class);
+        if (notificationHistories !=null){
+            Map<String, Object> notificationTemplateMap = objectMapper.convertValue(notificationHistories, Map.class);
+            Map<String, Object> emailContent = Maps.newLinkedHashMap();
+            emailContent.put("subject", "Quotation Reminder");
+            emailContent.put("mailSentDate", notificationTemplateMap.get("generatedOn"));
+            emailContent.put("emailAddress", notificationTemplateMap.get("recipientEmailAddress"));
+            emailContent.put("emailBody",new String((byte[]) notificationTemplateMap.get("reminderTemplate")));
+            emailContent.put("notificationHistoryId", notificationHistories.getNotificationHistoryId());
+            return emailContent;
+        }
+        return Collections.EMPTY_MAP;
+    }
+
     private class NotificationTemplateTransformer implements Function<NotificationTemplate, Map<String,Object>> {
         @Override
         public Map<String, Object> apply(NotificationTemplate notificationTemplate) {
@@ -167,9 +185,8 @@ public class NotificationFinder {
                     Map<String, Object> emailContent = Maps.newLinkedHashMap();
                     emailContent.put("subject", "Quotation First Reminder");
                     emailContent.put("mailSentDate", notificationMap.get("generatedOn"));
-                    emailContent.put("emailAddress", new String[]{notificationMap.get("emailId").toString()});
-                    String emailBody = new String((byte[]) notificationMap.get("reminderTemplate"), Charset.forName("UTF-8"));
-                    emailContent.put("emailBody", emailBody);
+                    emailContent.put("emailAddress", notificationMap.get("emailId").toString());
+                    emailContent.put("emailBody",new String((byte[]) notificationMap.get("reminderTemplate")));
                     emailContent.put("notificationId", notificationId);
                     return emailContent;
                 }
@@ -181,7 +198,7 @@ public class NotificationFinder {
     public List<Map<String,Object>> getNotificationHistoryDetail(){
         List<NotificationHistory> notificationHistories = mongoTemplate.findAll(NotificationHistory.class);
         if (isNotEmpty(notificationHistories)){
-           return notificationHistories.parallelStream().map(new Function<NotificationHistory, Map<String,Object>>() {
+            return notificationHistories.parallelStream().map(new Function<NotificationHistory, Map<String,Object>>() {
                 @Override
                 public Map<String, Object> apply(NotificationHistory notificationHistory) {
                     Map<String, Object> notificationHistoryMap = objectMapper.convertValue(notificationHistory, Map.class);
@@ -194,6 +211,6 @@ public class NotificationFinder {
                 }
             }).collect(Collectors.toList());
         }
-       return Collections.EMPTY_LIST;
+        return Collections.EMPTY_LIST;
     }
 }

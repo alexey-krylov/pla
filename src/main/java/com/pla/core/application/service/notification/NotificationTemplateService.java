@@ -2,8 +2,10 @@ package com.pla.core.application.service.notification;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;
+import com.pla.core.domain.model.notification.NotificationHistory;
 import com.pla.core.query.NotificationFinder;
 import com.pla.publishedlanguage.contract.IProcessInfoAdapter;
+import com.pla.sharedkernel.application.CreateNotificationHistoryCommand;
 import com.pla.sharedkernel.domain.model.ProcessType;
 import com.pla.sharedkernel.exception.ProcessInfoException;
 import com.pla.sharedkernel.identifier.LineOfBusinessEnum;
@@ -102,5 +104,14 @@ public class NotificationTemplateService {
         return "";
     }
 
-
+    public CreateNotificationHistoryCommand generateHistoryDetail(String notificationId,String[] recipientMailAddress,String emailBody){
+        Criteria notificationCriteria = Criteria.where("_id").is(notificationId);
+        Query query = new Query(notificationCriteria);
+        NotificationHistory notificationHistory =  mongoTemplate.findOne(query, NotificationHistory.class);
+        if (notificationHistory!=null) {
+            return new CreateNotificationHistoryCommand(notificationHistory.getRequestNumber(), notificationHistory.getRoleType(), notificationHistory.getLineOfBusiness(),
+                    notificationHistory.getProcessType(), notificationHistory.getWaitingFor(), notificationHistory.getReminderType(), recipientMailAddress, emailBody.getBytes(), notificationId);
+        }
+        return null;
+    }
 }
