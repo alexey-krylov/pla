@@ -25,7 +25,10 @@ import com.pla.sharedkernel.domain.model.RoutingLevel;
 import com.pla.sharedkernel.identifier.CoverageId;
 import com.pla.sharedkernel.identifier.PlanId;
 import com.pla.sharedkernel.identifier.QuotationId;
+import com.pla.underwriter.domain.model.UnderWriterDocument;
 import com.pla.underwriter.domain.model.UnderWriterInfluencingFactor;
+import com.pla.underwriter.domain.model.UnderWriterRoutingLevel;
+import com.pla.underwriter.finder.UnderWriterFinder;
 import org.apache.commons.io.IOUtils;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
@@ -81,6 +84,9 @@ public class ILProposalFinder {
 
     @Autowired
     private IUnderWriterAdapter underWriterAdapter;
+
+    @Autowired
+    private UnderWriterFinder underWriterFinder;
 
     @Autowired
     private GridFsTemplate gridFsTemplate;
@@ -271,24 +277,42 @@ public class ILProposalFinder {
         ProposalPlanDetail planDetail = (ProposalPlanDetail) proposal.get("proposalPlanDetail");
         SearchDocumentDetailDto searchDocumentDetailDto = new SearchDocumentDetailDto(new PlanId(planDetail.getPlanId()));
         documentDetailDtos.add(searchDocumentDetailDto);
-        List<CoverageId> coverageIds = ((Set<RiderDetailDto>)planDetail.getRiderDetails()).stream().map(rider -> new CoverageId(rider.getCoverageId())).collect(Collectors.toList());
+        List<CoverageId> coverageIds = ((Set<RiderDetailDto>) planDetail.getRiderDetails()).stream().map(rider -> new CoverageId(rider.getCoverageId())).collect(Collectors.toList());
         documentDetailDtos.add(new SearchDocumentDetailDto(new PlanId(planDetail.getPlanId()), coverageIds));
 
         UnderWriterRoutingLevelDetailDto routingLevelDetailDto = new UnderWriterRoutingLevelDetailDto(new PlanId(planDetail.getPlanId()), LocalDate.now(), ProcessType.ENROLLMENT.name());
         routingLevelDetailDto.addCoverage(coverageIds.get(0));
-        List<UnderWriterRoutingLevelDetailDto.UnderWriterInfluencingFactorItem> underWriterInfluencingFactorItems = new ArrayList<UnderWriterRoutingLevelDetailDto.UnderWriterInfluencingFactorItem>();
         DateTime dob = new DateTime(((ProposedAssured) proposal.get("proposedAssured")).getDateOfBirth());
         Integer age = Years.yearsBetween(dob, DateTime.now()).getYears() + 1;
-        underWriterInfluencingFactorItems.add(new UnderWriterRoutingLevelDetailDto.UnderWriterInfluencingFactorItem(UnderWriterInfluencingFactor.AGE.name(), age.toString()));
-        underWriterInfluencingFactorItems.add(new UnderWriterRoutingLevelDetailDto.UnderWriterInfluencingFactorItem(UnderWriterInfluencingFactor.SUM_ASSURED.name(), (((ProposalPlanDetail) proposal.get("proposalPlanDetail")).getSumAssured().toString())));
-        routingLevelDetailDto.setUnderWriterInfluencingFactor(underWriterInfluencingFactorItems);
-        RoutingLevel rl = underWriterAdapter.getRoutingLevel(routingLevelDetailDto);
+        List<UnderWriterRoutingLevelDetailDto.UnderWriterInfluencingFactorItem> underWriterInfluencingFactorItems = new ArrayList<UnderWriterRoutingLevelDetailDto.UnderWriterInfluencingFactorItem>();
+        RoutingLevel routinglevel = null;
+        try {
+            UnderWriterRoutingLevel underWriterRoutingLevel = underWriterFinder.findUnderWriterRoutingLevel(routingLevelDetailDto);
+
+            //TODO : need to add other influencing items
+            for (UnderWriterInfluencingFactor underWriterInfluencingFactor : underWriterRoutingLevel.getUnderWriterInfluencingFactors()) {
+                if (underWriterInfluencingFactor.name().equalsIgnoreCase(String.valueOf(UnderWriterInfluencingFactor.AGE)))
+                    underWriterInfluencingFactorItems.add(new UnderWriterRoutingLevelDetailDto.UnderWriterInfluencingFactorItem(UnderWriterInfluencingFactor.AGE.name(), age.toString()));
+                if (underWriterInfluencingFactor.name().equalsIgnoreCase(String.valueOf(UnderWriterInfluencingFactor.SUM_ASSURED)))
+                    underWriterInfluencingFactorItems.add(new UnderWriterRoutingLevelDetailDto.UnderWriterInfluencingFactorItem(UnderWriterInfluencingFactor.SUM_ASSURED.name(), (((ProposalPlanDetail) proposal.get("proposalPlanDetail")).getSumAssured().toString())));
+            }
+            routingLevelDetailDto.setUnderWriterInfluencingFactor(underWriterInfluencingFactorItems);
+
+            routinglevel = underWriterAdapter.getRoutingLevel(routingLevelDetailDto);
+        } catch (IllegalArgumentException ex) {
+
+        }
         List<ClientDocumentDto> mandatoryDocuments = new ArrayList<ClientDocumentDto>();
-        if (rl != null) {
+        if (routinglevel != null) {
+            UnderWriterDocument underWriterDocument = underWriterFinder.getUnderWriterDocumentSetUp(routingLevelDetailDto.getPlanId(), routingLevelDetailDto.getCoverageId(), LocalDate.now(), ProcessType.ENROLLMENT.name());
             underWriterInfluencingFactorItems = new ArrayList<UnderWriterRoutingLevelDetailDto.UnderWriterInfluencingFactorItem>();
-            dob = new DateTime(((ProposedAssured) proposal.get("proposedAssured")).getDateOfBirth());
-            age = Years.yearsBetween(dob, DateTime.now()).getYears() + 1;
-            underWriterInfluencingFactorItems.add(new UnderWriterRoutingLevelDetailDto.UnderWriterInfluencingFactorItem(UnderWriterInfluencingFactor.AGE.name(), age.toString()));
+            //TODO : need to add other influencing items
+            for (UnderWriterInfluencingFactor underWriterInfluencingFactor : underWriterDocument.getUnderWriterInfluencingFactors()) {
+                if (underWriterInfluencingFactor.name().equalsIgnoreCase(String.valueOf(UnderWriterInfluencingFactor.AGE)))
+                    underWriterInfluencingFactorItems.add(new UnderWriterRoutingLevelDetailDto.UnderWriterInfluencingFactorItem(UnderWriterInfluencingFactor.AGE.name(), age.toString()));
+                if (underWriterInfluencingFactor.name().equalsIgnoreCase(String.valueOf(UnderWriterInfluencingFactor.SUM_ASSURED)))
+                    underWriterInfluencingFactorItems.add(new UnderWriterRoutingLevelDetailDto.UnderWriterInfluencingFactorItem(UnderWriterInfluencingFactor.SUM_ASSURED.name(), (((ProposalPlanDetail) proposal.get("proposalPlanDetail")).getSumAssured().toString())));
+            }
             routingLevelDetailDto.setUnderWriterInfluencingFactor(underWriterInfluencingFactorItems);
             mandatoryDocuments = underWriterAdapter.getDocumentsForUnderWriterApproval(routingLevelDetailDto);
         } else {

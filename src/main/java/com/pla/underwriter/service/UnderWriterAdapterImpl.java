@@ -53,7 +53,11 @@ public class UnderWriterAdapterImpl implements IUnderWriterAdapter {
         if (routingLevel != null) {
             return routingLevel;
         }
-        return findRoutingLevelByClientId(underWriterRoutingLevelDetailDto.getClientId());
+        if(underWriterRoutingLevelDetailDto.getClientId() != null) {
+            return findRoutingLevelByClientId(underWriterRoutingLevelDetailDto.getClientId());
+        } else {
+            return null;
+        }
     }
 
     @Override

@@ -131,7 +131,7 @@ public class UnderWriterFinder {
     public UnderWriterRoutingLevel findUnderWriterRoutingLevel(UnderWriterRoutingLevelDetailDto underWriterRoutingLevelDetailDto) {
         List<UnderWriterRoutingLevel> underWriterRoutingLevel = underWriterRoutingLevelRepository.findByPlanCodeAndCoverageIdAndValidTillAndProcessType(underWriterRoutingLevelDetailDto.getPlanId(), underWriterRoutingLevelDetailDto.getCoverageId(),
                 null, underWriterRoutingLevelDetailDto.getProcess());
-        checkArgument(isNotEmpty(underWriterRoutingLevel), "Under Writer Document can not be null");
+        checkArgument(isNotEmpty(underWriterRoutingLevel), "Under Writer Router Level can not be null");
         checkArgument(underWriterRoutingLevel.size() == 1);
         return underWriterRoutingLevel.get(0);
     }
