@@ -16,6 +16,8 @@ public class ProposalPlanDetail {
 
     private String planId;
 
+    private String planName;
+
     private Integer policyTerm;
 
     private Integer premiumPaymentTerm;
