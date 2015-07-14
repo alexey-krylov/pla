@@ -1,12 +1,14 @@
 package com.pla.grouplife.quotation.saga;
 
 import com.google.common.collect.Lists;
-import com.pla.grouplife.quotation.application.command.ClosureGLQuotationCommand;
+import com.pla.grouplife.quotation.application.command.GLQuotationClosureCommand;
+import com.pla.grouplife.quotation.application.command.GLQuotationConvertedCommand;
 import com.pla.grouplife.quotation.application.command.PurgeGLQuotationCommand;
 import com.pla.grouplife.quotation.domain.event.*;
 import com.pla.grouplife.quotation.domain.model.GroupLifeQuotation;
 import com.pla.grouplife.quotation.domain.model.QuotationStatus;
 import com.pla.grouplife.quotation.repository.GlQuotationRepository;
+import com.pla.grouplife.sharedresource.event.GLQuotationConvertedToProposalEvent;
 import com.pla.publishedlanguage.contract.IProcessInfoAdapter;
 import com.pla.publishedlanguage.contract.ISMEGateway;
 import com.pla.sharedkernel.application.CreateQuotationNotificationCommand;
@@ -32,6 +34,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 import static org.nthdimenzion.utils.UtilValidator.isNotEmpty;
 
@@ -115,8 +119,8 @@ public class GroupLifeQuotationSaga extends AbstractAnnotatedSaga {
         if (QuotationStatus.SHARED.equals(groupLifeQuotation.getQuotationStatus())) {
             this.noOfReminderSent = noOfReminderSent + 1;
             System.out.println("************ Send Reminder ****************");
-            commandGateway.send(new CreateQuotationNotificationCommand(event.getQuotationId(),RolesUtil.GROUP_LIFE_QUOTATION_PROCESSOR_ROLE,LineOfBusinessEnum.GROUP_LIFE,ProcessType.QUOTATION,
-                    WaitingForEnum.QUOTATION_RESPONSE, noOfReminderSent==1? ReminderTypeEnum.REMINDER_1:ReminderTypeEnum.REMINDER_2));
+            commandGateway.send(new CreateQuotationNotificationCommand(event.getQuotationId(), RolesUtil.GROUP_LIFE_QUOTATION_PROCESSOR_ROLE, LineOfBusinessEnum.GROUP_LIFE, ProcessType.QUOTATION,
+                    WaitingForEnum.QUOTATION_RESPONSE, noOfReminderSent == 1 ? ReminderTypeEnum.REMINDER_1 : ReminderTypeEnum.REMINDER_2));
             if (this.noOfReminderSent == 1) {
                 int firstReminderDay = processInfoAdapter.getDaysForFirstReminder(LineOfBusinessEnum.GROUP_LIFE, ProcessType.QUOTATION);
                 int secondReminderDay = processInfoAdapter.getDaysForSecondReminder(LineOfBusinessEnum.GROUP_LIFE, ProcessType.QUOTATION);
@@ -136,7 +140,7 @@ public class GroupLifeQuotationSaga extends AbstractAnnotatedSaga {
         }
         GroupLifeQuotation groupLifeQuotation = glQuotationRepository.findOne(event.getQuotationId());
         if (!QuotationStatus.CLOSED.equals(groupLifeQuotation.getQuotationStatus())) {
-            commandGateway.send(new ClosureGLQuotationCommand(event.getQuotationId()));
+            commandGateway.send(new GLQuotationClosureCommand(event.getQuotationId()));
         }
         if (groupLifeQuotation.getOpportunityId() != null) {
             smeGateway.updateOpportunityStatus(groupLifeQuotation.getOpportunityId().getOpportunityId(), AppConstants.OPPORTUNITY_LOST_STATUS);
@@ -145,7 +149,7 @@ public class GroupLifeQuotationSaga extends AbstractAnnotatedSaga {
 
     @SagaEventHandler(associationProperty = "quotationId")
     @EndSaga
-    public void handle(GLQuotationClosedEvent event) {
+    public void handle(GLQuotationConvertedEvent event) {
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("Handling GL Quotation Closure Event .....", event);
         }
@@ -161,5 +165,26 @@ public class GroupLifeQuotationSaga extends AbstractAnnotatedSaga {
         scheduledTokens.forEach(scheduledToken -> {
             eventScheduler.cancelSchedule(scheduledToken);
         });
+    }
+
+    @SagaEventHandler(associationProperty = "quotationId")
+    @EndSaga
+    public void handle(GLQuotationConvertedToProposalEvent event) {
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Handling GH Quotation Closure Event .....", event);
+        }
+        List<GroupLifeQuotation> groupLifeQuotations = glQuotationRepository.findQuotationByQuotationNumber(event.getQuotationNumber());
+        List<GroupLifeQuotation> quotationsExcludingCurrentOne = groupLifeQuotations.stream().filter(new Predicate<GroupLifeQuotation>() {
+            @Override
+            public boolean test(GroupLifeQuotation groupLifeQuotation) {
+                return !event.getQuotationId().equals(groupLifeQuotation.getIdentifier());
+            }
+        }).collect(Collectors.toList());
+
+        commandGateway.send(new GLQuotationConvertedCommand(event.getQuotationId()));
+        quotationsExcludingCurrentOne.forEach(groupHealthQuotation -> {
+            commandGateway.send(new GLQuotationClosureCommand(groupHealthQuotation.getQuotationId()));
+        });
+
     }
 }

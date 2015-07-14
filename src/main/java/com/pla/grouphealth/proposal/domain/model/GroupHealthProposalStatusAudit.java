@@ -32,6 +32,7 @@ public class GroupHealthProposalStatusAudit {
     private String comment;
 
     public GroupHealthProposalStatusAudit(ObjectId id, ProposalId proposalId, ProposalStatus proposalStatus, DateTime modifiedOn, String modifiedBy, String comment) {
+        this.id=id;
         this.proposalId = proposalId;
         this.proposalStatus = proposalStatus;
         this.modifiedOn = modifiedOn;

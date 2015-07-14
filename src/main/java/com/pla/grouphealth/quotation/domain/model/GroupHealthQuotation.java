@@ -1,6 +1,7 @@
 package com.pla.grouphealth.quotation.domain.model;
 
 import com.pla.core.domain.model.agent.AgentId;
+import com.pla.grouphealth.quotation.domain.event.GHQuotationClosureEvent;
 import com.pla.grouphealth.quotation.domain.event.GHQuotationConvertedEvent;
 import com.pla.grouphealth.quotation.domain.event.GHQuotationEndSagaEvent;
 import com.pla.grouphealth.quotation.domain.event.GHQuotationSharedEvent;
@@ -136,6 +137,7 @@ public class GroupHealthQuotation extends AbstractAggregateRoot<QuotationId> imp
     @Override
     public void declineQuotation() {
         this.quotationStatus = GHQuotationStatus.DECLINED;
+        registerEvent(new GHQuotationClosureEvent(quotationId));
     }
 
     @Override

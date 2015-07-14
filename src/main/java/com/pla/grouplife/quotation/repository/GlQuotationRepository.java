@@ -1,5 +1,6 @@
 package com.pla.grouplife.quotation.repository;
 
+import com.pla.grouphealth.quotation.domain.model.GroupHealthQuotation;
 import com.pla.grouplife.quotation.domain.model.GroupLifeQuotation;
 import com.pla.sharedkernel.identifier.QuotationId;
 import org.springframework.data.mongodb.repository.MongoRepository;
@@ -14,4 +15,7 @@ public interface GlQuotationRepository extends MongoRepository<GroupLifeQuotatio
 
     @Query(value = "{'quotationNumber' : ?0,'quotationStatus' : ?2, 'quotationId' : {'$ne' : ?1}}")
     List<GroupLifeQuotation> findQuotationByQuotNumberAndStatusByExcludingGivenQuotId(String quotationNumber, QuotationId quotationId, String quotationStatus);
+
+    @Query(value = "{'quotationNumber' : ?0}")
+    List<GroupLifeQuotation> findQuotationByQuotationNumber(String quotationNumber);
 }

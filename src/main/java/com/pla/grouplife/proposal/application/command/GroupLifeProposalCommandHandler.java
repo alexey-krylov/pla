@@ -1,6 +1,9 @@
 package com.pla.grouplife.proposal.application.command;
 
+import com.google.common.collect.Sets;
+import com.pla.grouplife.proposal.domain.model.GLProposalApprover;
 import com.pla.grouplife.proposal.domain.model.GLProposalProcessor;
+import com.pla.grouplife.proposal.domain.model.GLProposerDocument;
 import com.pla.grouplife.proposal.domain.model.GroupLifeProposal;
 import com.pla.grouplife.proposal.domain.service.GroupLifeProposalRoleAdapter;
 import com.pla.grouplife.proposal.domain.service.GroupLifeProposalService;
@@ -16,14 +19,22 @@ import com.pla.sharedkernel.identifier.ProposalId;
 import org.axonframework.commandhandling.annotation.CommandHandler;
 import org.axonframework.repository.Repository;
 import org.bson.types.ObjectId;
+import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.data.mongodb.gridfs.GridFsTemplate;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.function.Predicate;
+
+import static org.nthdimenzion.utils.UtilValidator.isEmpty;
 
 /**
  * Created by User on 6/25/2015.
@@ -47,6 +58,9 @@ public class GroupLifeProposalCommandHandler {
 
     @Autowired
     private GlProposalRepository glProposalRepository;
+
+    @Autowired
+    private GridFsTemplate gridFsTemplate;
 
 
     @Autowired
@@ -121,6 +135,44 @@ public class GroupLifeProposalCommandHandler {
         GroupLifeProposal groupHealthProposal = glProposalRepository.findOne(new ProposalId(glRecalculatedInsuredPremiumCommand.getProposalId()));
         groupHealthProposal = populateAnnualBasicPremiumOfInsured(groupHealthProposal, glRecalculatedInsuredPremiumCommand.getUserDetails(), glRecalculatedInsuredPremiumCommand.getPremiumDetailDto());
         return groupHealthProposal;
+    }
+
+    @CommandHandler
+    public String submitProposal(SubmitGLProposalCommand submitGLProposalCommand) {
+        GroupLifeProposal groupLifeProposal = groupLifeProposalRepository.load(new ProposalId(submitGLProposalCommand.getProposalId()));
+        groupLifeProposal = groupLifeProposal.submitForApproval(DateTime.now(), submitGLProposalCommand.getUserDetails().getUsername(), submitGLProposalCommand.getComment());
+        return groupLifeProposal.getIdentifier().getProposalId();
+    }
+
+    @CommandHandler
+    public String proposalApproval(GLProposalApprovalCommand glProposalApprovalCommand) {
+        GroupLifeProposal groupLifeProposal = groupLifeProposalRepository.load(new ProposalId(glProposalApprovalCommand.getProposalId()));
+        GLProposalApprover glProposalApprover = groupLifeProposalRoleAdapter.userToProposalApprover(glProposalApprovalCommand.getUserDetails());
+        groupLifeProposal = glProposalApprover.submitApproval(DateTime.now(), glProposalApprovalCommand.getComment(), groupLifeProposal, glProposalApprovalCommand.getStatus());
+        return groupLifeProposal.getIdentifier().getProposalId();
+    }
+
+
+    @CommandHandler
+    public void uploadMandatoryDocument(GLProposalDocumentCommand glProposalDocumentCommand) throws IOException {
+        GroupLifeProposal groupLifeProposal = groupLifeProposalRepository.load(new ProposalId(glProposalDocumentCommand.getProposalId()));
+        Set<GLProposerDocument> documents = groupLifeProposal.getProposerDocuments();
+        if (isEmpty(documents)) {
+            documents = Sets.newHashSet();
+        }
+        String gridFsDocId = gridFsTemplate.store(glProposalDocumentCommand.getFile().getInputStream(), glProposalDocumentCommand.getFile().getContentType(), glProposalDocumentCommand.getFilename()).getId().toString();
+        GLProposerDocument currentDocument = new GLProposerDocument(glProposalDocumentCommand.getDocumentId(), glProposalDocumentCommand.getFilename(), gridFsDocId, glProposalDocumentCommand.getFile().getContentType());
+        if (!documents.add(currentDocument)) {
+            GLProposerDocument existingDocument = documents.stream().filter(new Predicate<GLProposerDocument>() {
+                @Override
+                public boolean test(GLProposerDocument ghProposerDocument) {
+                    return currentDocument.equals(ghProposerDocument);
+                }
+            }).findAny().get();
+            gridFsTemplate.delete(new Query(Criteria.where("_id").is(existingDocument.getGridFsDocId())));
+            existingDocument = existingDocument.updateWithNameAndContent(glProposalDocumentCommand.getFilename(), gridFsDocId, glProposalDocumentCommand.getFile().getContentType());
+        }
+        groupLifeProposal = groupLifeProposal.updateWithDocuments(documents);
     }
 
     private GroupLifeProposal populateAnnualBasicPremiumOfInsured(GroupLifeProposal groupLifeQuotation, UserDetails userDetails, PremiumDetailDto premiumDetailDto) {

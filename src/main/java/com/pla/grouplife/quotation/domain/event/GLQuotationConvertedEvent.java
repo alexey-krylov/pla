@@ -12,11 +12,11 @@ import org.nthdimenzion.axonframework.event.ISagaEvent;
 @EqualsAndHashCode
 @Getter
 @ToString
-public class GLQuotationClosedEvent implements ISagaEvent{
+public class GLQuotationConvertedEvent implements ISagaEvent{
 
     private QuotationId quotationId;
 
-    public GLQuotationClosedEvent(QuotationId quotationId) {
+    public GLQuotationConvertedEvent(QuotationId quotationId) {
         this.quotationId = quotationId;
     }
 }

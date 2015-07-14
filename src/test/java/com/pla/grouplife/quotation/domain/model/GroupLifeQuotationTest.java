@@ -1,7 +1,7 @@
 package com.pla.grouplife.quotation.domain.model;
 
 import com.pla.core.domain.model.agent.AgentId;
-import com.pla.grouplife.quotation.domain.event.GLQuotationClosedEvent;
+import com.pla.grouplife.quotation.domain.event.GLQuotationConvertedEvent;
 import com.pla.grouplife.quotation.domain.exception.QuotationException;
 import com.pla.grouplife.sharedresource.model.vo.Proposer;
 import com.pla.grouplife.sharedresource.model.vo.ProposerBuilder;
@@ -112,8 +112,8 @@ public class GroupLifeQuotationTest {
     @Test
     public void whenGlQuotationIsCloseItShouldRegisterQuotationClosedEvent() {
         this.groupLifeQuotation.closeQuotation();
-        GLQuotationClosedEvent GLQuotationClosedEvent = (GLQuotationClosedEvent) this.groupLifeQuotation.getUncommittedEvents().peek().getPayload();
-        assertThat(new GLQuotationClosedEvent(this.groupLifeQuotation.getQuotationId()), is(GLQuotationClosedEvent));
+        GLQuotationConvertedEvent GLQuotationConvertedEvent = (GLQuotationConvertedEvent) this.groupLifeQuotation.getUncommittedEvents().peek().getPayload();
+        assertThat(new GLQuotationConvertedEvent(this.groupLifeQuotation.getQuotationId()), is(GLQuotationConvertedEvent));
     }
 
     @Test

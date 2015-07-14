@@ -1,7 +1,8 @@
 package com.pla.grouplife.quotation.domain.model;
 
 import com.pla.core.domain.model.agent.AgentId;
-import com.pla.grouplife.quotation.domain.event.GLQuotationClosedEvent;
+import com.pla.grouplife.quotation.domain.event.GLQuotationClosureEvent;
+import com.pla.grouplife.quotation.domain.event.GLQuotationConvertedEvent;
 import com.pla.grouplife.quotation.domain.event.GLQuotationEndSagaEvent;
 import com.pla.grouplife.quotation.domain.event.GLQuotationSharedEvent;
 import com.pla.grouplife.sharedresource.model.vo.*;
@@ -138,7 +139,7 @@ public class GroupLifeQuotation extends AbstractAggregateRoot<QuotationId> imple
     @Override
     public void closeQuotation() {
         this.quotationStatus = QuotationStatus.CLOSED;
-        registerEvent(new GLQuotationClosedEvent(quotationId));
+        registerEvent(new GLQuotationConvertedEvent(quotationId));
     }
 
     @Override
@@ -149,6 +150,7 @@ public class GroupLifeQuotation extends AbstractAggregateRoot<QuotationId> imple
     @Override
     public void declineQuotation() {
         this.quotationStatus = QuotationStatus.DECLINED;
+        registerEvent(new GLQuotationClosureEvent(quotationId));
     }
 
     @Override

@@ -383,7 +383,7 @@ public class GroupHealthProposalController {
     @RequestMapping(value = "/getproposalnumber/{proposalId}", method = RequestMethod.GET)
     @ApiOperation(httpMethod = "GET", value = "Get Proposal number for a given proposal ID")
     @ResponseBody
-    public Result getQuotationNumber(@PathVariable("proposalId") String proposalId) {
+    public Result getProposalNumber(@PathVariable("proposalId") String proposalId) {
         Map proposalMap = ghProposalFinder.findProposalById(proposalId);
         return Result.success("Proposal number ", proposalMap.get("proposalNumber") != null ? ((ProposalNumber) proposalMap.get("proposalNumber")).getProposalNumber() : "");
     }

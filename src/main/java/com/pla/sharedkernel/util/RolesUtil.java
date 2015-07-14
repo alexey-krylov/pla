@@ -26,6 +26,7 @@ public class RolesUtil {
     private static final String ADMIN_ROLE = "ROLE_ADMIN";
     private static final String GROUP_HEALTH_PROPOSAL_PROCESSOR_ROLE = "ROLE_GROUP_HEALTH_PROPOSAL_PROCESSOR";
     private static final String GROUP_HEALTH_PROPOSAL_APPROVER_ROLE = "ROLE_GROUP_HEALTH_PROPOSAL_APPROVER";
+    private static final String GROUP_LIFE_PROPOSAL_APPROVER_ROLE = "ROLE_GROUP_LIFE_PROPOSAL_APPROVER";
 
     private RolesUtil() {
     }
@@ -67,6 +68,11 @@ public class RolesUtil {
 
     public static boolean hasGroupHealthProposalApproverRole(Collection<? extends GrantedAuthority> authorities) {
         long count = hasRole(GROUP_HEALTH_PROPOSAL_APPROVER_ROLE, authorities);
+        return count == 1;
+    }
+
+    public static boolean hasGroupLifeProposalApproverRole(Collection<? extends GrantedAuthority> authorities) {
+        long count = hasRole(GROUP_LIFE_PROPOSAL_APPROVER_ROLE, authorities);
         return count == 1;
     }
 

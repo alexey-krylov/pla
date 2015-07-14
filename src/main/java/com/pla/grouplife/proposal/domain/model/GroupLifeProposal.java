@@ -1,6 +1,9 @@
 package com.pla.grouplife.proposal.domain.model;
 
 import com.pla.core.domain.model.agent.AgentId;
+import com.pla.grouplife.proposal.domain.event.GLProposalStatusAuditEvent;
+import com.pla.grouplife.sharedresource.event.GLQuotationConvertedToProposalEvent;
+import com.pla.grouplife.sharedresource.model.vo.GLProposalStatus;
 import com.pla.grouplife.sharedresource.model.vo.Insured;
 import com.pla.grouplife.sharedresource.model.vo.PremiumDetail;
 import com.pla.grouplife.sharedresource.model.vo.Proposer;
@@ -17,7 +20,6 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.math.BigDecimal;
-import java.util.List;
 import java.util.Set;
 
 import static com.google.common.base.Preconditions.checkArgument;
@@ -50,7 +52,9 @@ public class GroupLifeProposal extends AbstractAggregateRoot<ProposalId> {
 
     private GLProposalStatus proposalStatus;
 
-    private List<ProposerDocument> proposerDocuments;
+    private Set<GLProposerDocument> proposerDocuments;
+
+    private String productType;
 
     @Override
     public ProposalId getIdentifier() {
@@ -64,6 +68,8 @@ public class GroupLifeProposal extends AbstractAggregateRoot<ProposalId> {
         this.proposalId = proposalId;
         this.quotation = quotation;
         this.proposalNumber = proposalNumber;
+        this.proposalStatus = GLProposalStatus.DRAFT;
+        this.productType = "INSURANCE";
     }
 
     public GroupLifeProposal updateWithAgentId(AgentId agentId) {
@@ -88,34 +94,41 @@ public class GroupLifeProposal extends AbstractAggregateRoot<ProposalId> {
 
     //TODO Document followup should be scheduled after submitting the proposal or even before also?
     // TODO WIll additional documents also be followed up
-    public GroupLifeProposal updateWithDocuments(List<ProposerDocument> proposerDocuments) {
+    public GroupLifeProposal updateWithDocuments(Set<GLProposerDocument> proposerDocuments) {
         this.proposerDocuments = proposerDocuments;
         // raise event to store document in client BC
         return this;
     }
 
-    public GroupLifeProposal submitForApproval(DateTime submittedOn) {
+    public GroupLifeProposal submitForApproval(DateTime submittedOn, String submittedBy, String comment) {
         this.submittedOn = submittedOn;
-        this.proposalStatus = GLProposalStatus.SUBMITTED;
-        //raise Event
+        this.proposalStatus = GLProposalStatus.PENDING_ACCEPTANCE;
+        registerEvent(new GLQuotationConvertedToProposalEvent(this.quotation.getQuotationNumber(), this.quotation.getQuotationId()));
+        registerEvent(new GLProposalStatusAuditEvent(this.getProposalId(), GLProposalStatus.PENDING_ACCEPTANCE, submittedBy, comment, submittedOn));
         return this;
     }
 
-    private GroupLifeProposal approvedByAprover(String approvedBy) {
-        this.proposalStatus = GLProposalStatus.APPROVED;
-        //raise event
+    public GroupLifeProposal markApproverApproval(String approvedBy, DateTime approvedOn, String comment, GLProposalStatus status) {
+        this.proposalStatus = status;
+        registerEvent(new GLProposalStatusAuditEvent(this.getProposalId(), status, approvedBy, comment, approvedOn));
+        if (GLProposalStatus.APPROVED.equals(status)) {
+            markASFirstPremiumPending(approvedBy, approvedOn, comment);
+            markASINForce(approvedBy, approvedOn, comment);
+        }
         return this;
     }
 
-    private GroupLifeProposal markASFirstPremiumPending() {
+
+    public GroupLifeProposal markASFirstPremiumPending(String approvedBy, DateTime approvedOn, String comment) {
         this.proposalStatus = GLProposalStatus.PENDING_FIRST_PREMIUM;
-        //raise event
+        registerEvent(new GLProposalStatusAuditEvent(this.getProposalId(), GLProposalStatus.PENDING_FIRST_PREMIUM, approvedBy, comment, approvedOn));
         return this;
     }
 
-    private GroupLifeProposal returnedByApprover(String returnedBy) {
-        this.proposalStatus = GLProposalStatus.RETURNED;
-        // raise event
+    public GroupLifeProposal markASINForce(String approvedBy, DateTime approvedOn, String comment) {
+        this.proposalStatus = GLProposalStatus.IN_FORCE;
+        registerEvent(new GLProposalStatusAuditEvent(this.getProposalId(), GLProposalStatus.IN_FORCE, approvedBy, comment, approvedOn));
+        //registerEvent(new GHProposalToPolicyEvent(this.proposalId));
         return this;
     }
 

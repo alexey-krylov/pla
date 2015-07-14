@@ -46,7 +46,7 @@ public class GroupLifeProposalService {
     }
 
     public GroupLifeProposal updateWithAgent(GroupLifeProposal groupLifeProposal, String agentId, UserDetails userDetails) {
-        if (!agentIsActive.isSatisfiedBy(groupLifeProposal.getAgentId())) {
+        if (!agentIsActive.isSatisfiedBy(new AgentId(agentId))){
             raiseAgentIsInactiveException();
         }
         GLProposalProcessor glProposalProcessor = groupLifeProposalRoleAdapter.userToProposalProcessor(userDetails);

@@ -4,16 +4,20 @@ import com.google.common.collect.Lists;
 import com.pla.grouphealth.proposal.presentation.dto.SearchGHProposalDto;
 import com.pla.grouplife.proposal.application.command.*;
 import com.pla.grouplife.proposal.application.service.GLProposalService;
+import com.pla.grouplife.proposal.presentation.dto.GLProposalApproverCommentDto;
 import com.pla.grouplife.proposal.presentation.dto.GLProposalDto;
+import com.pla.grouplife.proposal.presentation.dto.GLProposalMandatoryDocumentDto;
 import com.pla.grouplife.proposal.presentation.dto.SearchGLProposalDto;
 import com.pla.grouplife.proposal.query.GLProposalFinder;
 import com.pla.grouplife.sharedresource.dto.AgentDetailDto;
 import com.pla.grouplife.sharedresource.dto.InsuredDto;
 import com.pla.grouplife.sharedresource.dto.PremiumDetailDto;
 import com.pla.grouplife.sharedresource.dto.ProposerDto;
+import com.pla.grouplife.sharedresource.model.vo.GLProposalStatus;
 import com.pla.publishedlanguage.contract.IClientProvider;
 import com.pla.publishedlanguage.dto.ClientDetailDto;
 import com.pla.sharedkernel.identifier.ProposalId;
+import com.pla.sharedkernel.identifier.ProposalNumber;
 import com.wordnik.swagger.annotations.ApiOperation;
 import net.sf.jasperreports.engine.JRException;
 import org.apache.commons.io.IOUtils;
@@ -36,6 +40,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
 import java.util.List;
+import java.util.Map;
 
 import static org.nthdimenzion.presentation.AppUtils.getLoggedInUserDetail;
 
@@ -313,4 +318,84 @@ public class GroupLifeProposalController {
         return glProposalService.getProposerDetail(new ProposalId(proposalId));
     }
 
+    @RequestMapping(value = "/submit", method = RequestMethod.POST)
+    @ResponseBody
+    @ApiOperation(httpMethod = "POST", value = "To submit proposal for approval")
+    public ResponseEntity submitProposal(@RequestBody SubmitGLProposalCommand submitGLProposalCommand, HttpServletRequest request) {
+        try {
+            submitGLProposalCommand.setUserDetails(getLoggedInUserDetail(request));
+            commandGateway.sendAndWait(submitGLProposalCommand);
+            return new ResponseEntity(Result.success("Proposal submitted successfully"), HttpStatus.OK);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResponseEntity(Result.failure(e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @RequestMapping(value = "/approve", method = RequestMethod.POST)
+    @ResponseBody
+    @ApiOperation(httpMethod = "POST", value = "To approve proposal")
+    public ResponseEntity approveProposal(@RequestBody GLProposalApprovalCommand glProposalApprovalCommand, HttpServletRequest request) {
+        try {
+            glProposalApprovalCommand.setUserDetails(getLoggedInUserDetail(request));
+            glProposalApprovalCommand.setStatus(GLProposalStatus.APPROVED);
+            commandGateway.sendAndWait(glProposalApprovalCommand);
+            return new ResponseEntity(Result.success("Proposal approved successfully"), HttpStatus.OK);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResponseEntity(Result.failure(e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @RequestMapping(value = "/return", method = RequestMethod.POST)
+    @ResponseBody
+    @ApiOperation(httpMethod = "POST", value = "To return/reject proposal")
+    public ResponseEntity returnProposal(@RequestBody GLProposalApprovalCommand glProposalApprovalCommand, HttpServletRequest request) {
+        try {
+            glProposalApprovalCommand.setUserDetails(getLoggedInUserDetail(request));
+            glProposalApprovalCommand.setStatus(GLProposalStatus.RETURNED);
+            commandGateway.sendAndWait(glProposalApprovalCommand);
+            return new ResponseEntity(Result.success("Proposal returned successfully"), HttpStatus.OK);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResponseEntity(Result.failure(e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+
+    @RequestMapping(value = "/getapprovercomments", method = RequestMethod.GET)
+    @ResponseBody
+    @ApiOperation(httpMethod = "GET", value = "To list approval comments")
+    public List<GLProposalApproverCommentDto> findApproverComments() {
+        return glProposalService.findApproverComments();
+    }
+
+    @RequestMapping(value = "/getmandatorydocuments/{proposalId}", method = RequestMethod.GET)
+    @ResponseBody
+    @ApiOperation(httpMethod = "GET", value = "To list mandatory documents which is being configured in Mandatory Document SetUp")
+    public List<GLProposalMandatoryDocumentDto> findMandatoryDocuments(@PathVariable("proposalId") String proposalId) {
+        List<GLProposalMandatoryDocumentDto> glProposalMandatoryDocumentDtos = glProposalService.findMandatoryDocuments(proposalId);
+        return glProposalMandatoryDocumentDtos;
+    }
+
+    @RequestMapping(value = "/getproposalnumber/{proposalId}", method = RequestMethod.GET)
+    @ApiOperation(httpMethod = "GET", value = "Get Proposal number for a given proposal ID")
+    @ResponseBody
+    public Result getProposalNumber(@PathVariable("proposalId") String proposalId) {
+        Map proposalMap = glProposalFinder.getProposalById(new ProposalId(proposalId));
+        return Result.success("Proposal number ", proposalMap.get("proposalNumber") != null ? ((ProposalNumber) proposalMap.get("proposalNumber")).getProposalNumber() : "");
+    }
+
+    @RequestMapping(value = "/uploadmandatorydocument", method = RequestMethod.POST)
+    @ResponseBody
+    public ResponseEntity uploadMandatoryDocument(GLProposalDocumentCommand glProposalDocumentCommand, HttpServletRequest request) {
+        glProposalDocumentCommand.setUserDetails(getLoggedInUserDetail(request));
+        try {
+            commandGateway.sendAndWait(glProposalDocumentCommand);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResponseEntity(Result.failure(e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        return new ResponseEntity(Result.success("Documents uploaded successfully"), HttpStatus.OK);
+    }
 }

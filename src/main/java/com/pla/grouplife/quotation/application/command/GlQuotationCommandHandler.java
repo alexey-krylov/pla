@@ -132,9 +132,15 @@ public class GlQuotationCommandHandler {
     }
 
     @CommandHandler
-    public void closureGLQuotation(ClosureGLQuotationCommand closureGLQuotationCommand) {
+    public void closureGLQuotation(GLQuotationClosureCommand closureGLQuotationCommand) {
         GroupLifeQuotation groupLifeQuotation = glQuotationMongoRepository.load(closureGLQuotationCommand.getQuotationId());
         groupLifeQuotation.declineQuotation();
+    }
+
+    @CommandHandler
+    public void convertedGLQuotation(GLQuotationConvertedCommand ghQuotationConvertedCommand) {
+        GroupLifeQuotation groupLifeQuotation = glQuotationMongoRepository.load(ghQuotationConvertedCommand.getQuotationId());
+        groupLifeQuotation.closeQuotation();
     }
 
     @CommandHandler

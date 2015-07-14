@@ -6,12 +6,12 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 /**
- * Created by Samir on 5/31/2015.
+ * Created by Samir on 7/14/2015.
  */
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class ClosureGLQuotationCommand {
+public class GLQuotationConvertedCommand {
 
     private QuotationId quotationId;
 }

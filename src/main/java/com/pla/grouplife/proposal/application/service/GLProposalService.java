@@ -2,13 +2,19 @@ package com.pla.grouplife.proposal.application.service;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
+import com.mongodb.gridfs.GridFSDBFile;
 import com.pla.core.domain.model.agent.AgentId;
 import com.pla.grouphealth.sharedresource.model.vo.GHProposer;
 import com.pla.grouplife.proposal.application.command.GLRecalculatedInsuredPremiumCommand;
+import com.pla.grouplife.proposal.domain.model.GLProposerDocument;
 import com.pla.grouplife.proposal.domain.model.GroupLifeProposal;
+import com.pla.grouplife.proposal.domain.model.GroupLifeProposalStatusAudit;
+import com.pla.grouplife.proposal.presentation.dto.GLProposalApproverCommentDto;
 import com.pla.grouplife.proposal.presentation.dto.GLProposalDto;
+import com.pla.grouplife.proposal.presentation.dto.GLProposalMandatoryDocumentDto;
 import com.pla.grouplife.proposal.presentation.dto.SearchGLProposalDto;
 import com.pla.grouplife.proposal.query.GLProposalFinder;
+import com.pla.grouplife.proposal.repository.GLProposalStatusAuditRepository;
 import com.pla.grouplife.proposal.repository.GlProposalRepository;
 import com.pla.grouplife.quotation.presentation.dto.PlanDetailDto;
 import com.pla.grouplife.quotation.query.GLQuotationFinder;
@@ -18,26 +24,34 @@ import com.pla.grouplife.sharedresource.query.GLFinder;
 import com.pla.grouplife.sharedresource.service.GLInsuredExcelGenerator;
 import com.pla.grouplife.sharedresource.service.GLInsuredExcelParser;
 import com.pla.publishedlanguage.contract.IPlanAdapter;
+import com.pla.publishedlanguage.dto.ClientDocumentDto;
+import com.pla.publishedlanguage.dto.SearchDocumentDetailDto;
+import com.pla.publishedlanguage.underwriter.contract.IUnderWriterAdapter;
+import com.pla.sharedkernel.domain.model.ProcessType;
 import com.pla.sharedkernel.identifier.PlanId;
 import com.pla.sharedkernel.identifier.ProposalId;
 import com.pla.sharedkernel.identifier.ProposalNumber;
 import com.pla.sharedkernel.identifier.QuotationId;
 import com.pla.sharedkernel.util.PDFGeneratorUtils;
 import net.sf.jasperreports.engine.JRException;
+import org.apache.commons.beanutils.BeanUtils;
+import org.apache.commons.io.IOUtils;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.axonframework.commandhandling.gateway.CommandGateway;
 import org.bson.types.ObjectId;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.data.mongodb.gridfs.GridFsTemplate;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.lang.reflect.InvocationTargetException;
+import java.util.*;
 import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 import static org.nthdimenzion.presentation.AppUtils.getIntervalInDays;
@@ -66,6 +80,15 @@ public class GLProposalService {
 
     @Autowired
     private CommandGateway commandGateway;
+
+    @Autowired
+    private GLProposalStatusAuditRepository glProposalStatusAuditRepository;
+
+    @Autowired
+    private IUnderWriterAdapter underWriterAdapter;
+
+    @Autowired
+    private GridFsTemplate gridFsTemplate;
 
     @Autowired
     public GLProposalService(GLFinder glFinder, GLProposalFinder glProposalFinder, IPlanAdapter planAdapter,
@@ -308,6 +331,74 @@ public class GLProposalService {
         agentDetailDto.setAgentMobileNumber(agentDetail.get("mobileNumber") != null ? (String) agentDetail.get("mobileNumber") : "");
         agentDetailDto.setAgentSalutation(agentDetail.get("title") != null ? (String) agentDetail.get("title") : "");
         return agentDetailDto;
+    }
+
+    public List<GLProposalApproverCommentDto> findApproverComments() {
+        List<GroupLifeProposalStatusAudit> audits = glProposalStatusAuditRepository.findAll();
+        List<GLProposalApproverCommentDto> proposalApproverCommentsDtos = Lists.newArrayList();
+        if (isNotEmpty(audits)) {
+            proposalApproverCommentsDtos = audits.stream().map(new Function<GroupLifeProposalStatusAudit, GLProposalApproverCommentDto>() {
+                @Override
+                public GLProposalApproverCommentDto apply(GroupLifeProposalStatusAudit groupLifeProposalStatusAudit) {
+                    GLProposalApproverCommentDto proposalApproverCommentsDto = new GLProposalApproverCommentDto();
+                    try {
+                        BeanUtils.copyProperties(proposalApproverCommentsDto, groupLifeProposalStatusAudit);
+                    } catch (IllegalAccessException e) {
+                        e.printStackTrace();
+                    } catch (InvocationTargetException e) {
+                        e.printStackTrace();
+                    }
+                    return proposalApproverCommentsDto;
+                }
+            }).collect(Collectors.toList());
+        }
+        return proposalApproverCommentsDtos;
+    }
+
+    public List<GLProposalMandatoryDocumentDto> findMandatoryDocuments(String proposalId) {
+        Map proposal = glProposalFinder.getProposalById(new ProposalId(proposalId));
+        List<Insured> insureds = (List<Insured>) proposal.get("insureds");
+        List<GLProposerDocument> uploadedDocuments = proposal.get("proposerDocuments") != null ? (List<GLProposerDocument>) proposal.get("proposerDocuments") : Lists.newArrayList();
+        List<SearchDocumentDetailDto> documentDetailDtos = Lists.newArrayList();
+        insureds.forEach(ghInsured -> {
+            PlanPremiumDetail planPremiumDetail = ghInsured.getPlanPremiumDetail();
+            SearchDocumentDetailDto searchDocumentDetailDto = new SearchDocumentDetailDto(planPremiumDetail.getPlanId());
+            documentDetailDtos.add(searchDocumentDetailDto);
+            if (isNotEmpty(ghInsured.getInsuredDependents())) {
+                ghInsured.getInsuredDependents().forEach(insuredDependent -> {
+                    PlanPremiumDetail dependentPlanPremiumDetail = insuredDependent.getPlanPremiumDetail();
+                    documentDetailDtos.add(new SearchDocumentDetailDto(dependentPlanPremiumDetail.getPlanId()));
+                });
+            }
+        });
+        Set<ClientDocumentDto> mandatoryDocuments = underWriterAdapter.getMandatoryDocumentsForApproverApproval(documentDetailDtos, ProcessType.ENROLLMENT);
+        List<GLProposalMandatoryDocumentDto> mandatoryDocumentDtos = Lists.newArrayList();
+        if (isNotEmpty(mandatoryDocuments)) {
+            mandatoryDocumentDtos = mandatoryDocuments.stream().map(new Function<ClientDocumentDto, GLProposalMandatoryDocumentDto>() {
+                @Override
+                public GLProposalMandatoryDocumentDto apply(ClientDocumentDto clientDocumentDto) {
+                    GLProposalMandatoryDocumentDto mandatoryDocumentDto = new GLProposalMandatoryDocumentDto(clientDocumentDto.getDocumentCode(), clientDocumentDto.getDocumentName());
+                    Optional<GLProposerDocument> proposerDocumentOptional = uploadedDocuments.stream().filter(new Predicate<GLProposerDocument>() {
+                        @Override
+                        public boolean test(GLProposerDocument glProposerDocument) {
+                            return clientDocumentDto.getDocumentCode().equals(glProposerDocument.getDocumentId());
+                        }
+                    }).findAny();
+                    if (proposerDocumentOptional.isPresent()) {
+                        try {
+                            if (isNotEmpty(proposerDocumentOptional.get().getGridFsDocId())) {
+                                GridFSDBFile gridFSDBFile = gridFsTemplate.findOne(new Query(Criteria.where("_id").is(proposerDocumentOptional.get().getGridFsDocId())));
+                                mandatoryDocumentDto.updateWithContent(IOUtils.toByteArray(gridFSDBFile.getInputStream()));
+                            }
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                    return mandatoryDocumentDto;
+                }
+            }).collect(Collectors.toList());
+        }
+        return mandatoryDocumentDtos;
     }
 
 
