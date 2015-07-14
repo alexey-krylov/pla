@@ -114,4 +114,14 @@ public class NotificationTemplateService {
         }
         return null;
     }
+
+    public byte[] printNotificationHistory(String notificationId){
+        Criteria notificationCriteria = Criteria.where("_id").is(notificationId);
+        Query query = new Query(notificationCriteria);
+        NotificationHistory notificationHistory =  mongoTemplate.findOne(query, NotificationHistory.class);
+        if (notificationHistory!=null) {
+            return notificationHistory.getReminderTemplate();
+        }
+        return null;
+    }
 }
