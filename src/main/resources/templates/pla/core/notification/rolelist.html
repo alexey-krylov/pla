@@ -11,11 +11,26 @@
 <script>
     var interval = setInterval(function(){
         if(require.defined("basic")){
+                $(document).ready(function(){
+                    $('#roleMapping-table').dataTable(
+                            {
+                                "aoColumnDefs": [
+                                    { "bSearchable": false, "bSortable":false, "aTargets": [ 3 ] }
+                                ] }
+                    );
+                });
+
+            clearInterval(interval);
+        }
+    }, 1000);
+    /*var interval = setInterval(function(){
+        if(require.defined("basic")){
             requirejs(['/pla/js/notification/viewNotificationRole.js'],function(){
             });
             clearInterval(interval);
         }
-    }, 600);
+    }, 600);*/
+
 </script>
 
 <style>
@@ -203,7 +218,7 @@
                             $scope.clear();
                             $('#dangerMsg').hide();
                             $("#successMsg").text(data.message).show();
-                            window.setTimeout('location.reload()', 4000);
+                            window.setTimeout('location.reload()', 3000);
                         }else{
                             $("#successMsg").hide();
                             $('#dangerMsg').text(data.message).show();
