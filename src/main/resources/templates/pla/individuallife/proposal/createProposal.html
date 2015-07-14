@@ -21,7 +21,7 @@
             ilproposal_common: '/pla/js/proposal/individuallife/proposal.js?t=11221',
             ilproposal: '/pla/js/proposal/individuallife/createProposal.js?t=12121'
         },
-        "shim": {"ilproposal": ["angular", "ilproposal_common"]}
+        "shim": {"ilproposal": ["angular", "ilproposal_common", "angucomplete"]}
     });
 
     require(['ng-tags-input', 'checklistmodel', 'angular-ui-router'], function (a, b) {
@@ -102,10 +102,10 @@
                     <ng-include src="resources.additionalDetail | getTrustedUrl"></ng-include>
                 </div>
 
-               <!-- <div class="step-pane" data-step="9">
+               <!--<div class="step-pane" data-step="9">
                     <ng-include src="resources.premiumDetail | getTrustedUrl"></ng-include>
-                </div>-->
-
+                </div>
+-->
             </div>
         </div>
     </form>
@@ -374,10 +374,10 @@
                                            ng-required="true"
                                            is-open="launchdob4"
                                            max-date="todayDate"
-                                           ng-model="beneficiary.dateOfBirth" name="dob" ng-disabled="mode=='new'||mode=='edit'||mode=='view'" ng-blur="showBeneficiaryDob(beneficiary.dateOfBirth)"/>
+                                           ng-model="beneficiary.dateOfBirth" name="dob" ng-disabled="mode=='new'||mode=='view'" ng-blur="showBeneficiaryDob(beneficiary.dateOfBirth)"/>
                                     <span class="input-group-btn">
                                     <button type="button" class="btn btn-default btn-sm"
-                                            ng-disabled="mode=='new'||mode=='edit'||mode=='view'" ng-click="launchBeneficiaryDob($event)">
+                                            ng-disabled="mode=='new'||mode=='view'" ng-click="launchBeneficiaryDob($event)">
                                         <i class="glyphicon glyphicon-calendar"></i></button>
                                   </span>
                                 </div>

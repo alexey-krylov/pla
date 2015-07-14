@@ -25,6 +25,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.websocket.server.PathParam;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -41,17 +42,14 @@ import static org.nthdimenzion.presentation.AppUtils.getLoggedInUserDetail;
 @RequestMapping(value = "/individuallife/proposal")
 public class ILProposalController {
 
+    private final ILProposalCommandGateway proposalCommandGateway;
+    private final PlanFinder planFinder;
     @Autowired
     private MasterFinder masterFinder;
     @Autowired
     private AgentFinder agentFinder;
     @Autowired
     private ILProposalFinder proposalFinder;
-
-    private final ILProposalCommandGateway proposalCommandGateway;
-
-    private final PlanFinder planFinder;
-
     @Autowired
     private ILQuotationFinder ilQuotationFinder;
 
@@ -417,9 +415,9 @@ public class ILProposalController {
         return agentDetail;
     }
 
-    @RequestMapping(value = "/searchplan", method = RequestMethod.GET)
+    @RequestMapping(value = "/searchplan/{proposalId}", method = RequestMethod.GET)
     @ResponseBody
-    public List<Map<String, Object>> searchPlan(@RequestParam("proposalId") String proposalId) {
+    public List<Map<String, Object>> searchPlan(@PathVariable("proposalId") String proposalId, @RequestParam("q") String q) {
         List<Map<String, Object>> planList = proposalFinder.getPlans(proposalId);
         return planList;
     }
