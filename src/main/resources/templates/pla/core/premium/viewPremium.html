@@ -8,10 +8,15 @@
 <body>
 <div th:include="fragments/common :: bodyHeader" th:remove="tag"/>
 <script>
-    requirejs(['basic'],function(){
-        requirejs(['/pla/js/premium/viewPremium.js'],function(){
-        });
-    })
+    var interval = setInterval(function(){
+        if(require.defined("basic")){
+            requirejs(['/pla/js/premium/viewPremium.js'],function(){
+            });
+
+            clearInterval(interval);
+        }
+    }, 600);
+
 </script>
 
 <div class="container">
