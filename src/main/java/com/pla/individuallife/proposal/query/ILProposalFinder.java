@@ -285,6 +285,11 @@ public class ILProposalFinder {
         RoutingLevel rl = underWriterAdapter.getRoutingLevel(routingLevelDetailDto);
         List<ClientDocumentDto> mandatoryDocuments = new ArrayList<ClientDocumentDto>();
         if (rl != null) {
+            underWriterInfluencingFactorItems = new ArrayList<UnderWriterRoutingLevelDetailDto.UnderWriterInfluencingFactorItem>();
+            dob = new DateTime(((ProposedAssured) proposal.get("proposedAssured")).getDateOfBirth());
+            age = Years.yearsBetween(dob, DateTime.now()).getYears() + 1;
+            underWriterInfluencingFactorItems.add(new UnderWriterRoutingLevelDetailDto.UnderWriterInfluencingFactorItem(UnderWriterInfluencingFactor.AGE.name(), age.toString()));
+            routingLevelDetailDto.setUnderWriterInfluencingFactor(underWriterInfluencingFactorItems);
             mandatoryDocuments = underWriterAdapter.getDocumentsForUnderWriterApproval(routingLevelDetailDto);
         } else {
             mandatoryDocuments.addAll(underWriterAdapter.getMandatoryDocumentsForApproverApproval(documentDetailDtos, ProcessType.ENROLLMENT));

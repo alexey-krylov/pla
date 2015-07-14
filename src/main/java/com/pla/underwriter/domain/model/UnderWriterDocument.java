@@ -91,7 +91,7 @@ public class UnderWriterDocument {
     }
 
     public boolean hasAllInfluencingFactor(List<String> underWriterInfluencingFactor) {
-        return underWriterInfluencingFactor.containsAll(this.underWriterInfluencingFactors);
+        return underWriterInfluencingFactor.containsAll(this.underWriterInfluencingFactors.parallelStream().map(each -> each.name()).collect(Collectors.toList()));
     }
 
     public static class TransformUnderWriterRoutingLevel implements Function<Map<Object, Map<String, Object>>, UnderWriterDocumentItem> {

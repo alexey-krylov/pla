@@ -65,10 +65,12 @@ public class UnderWriterAdapterImpl implements IUnderWriterAdapter {
                 return new ClientDocumentDto(documentCode,false);
             }
         }).collect(Collectors.toList());
-        List<String> documentDefinedForClient = findDefinedUnderWriterDocumentByClientId(underWriterRoutingLevelDetailDto.getClientId());
-        for (ClientDocumentDto clientDocumentDto : clientDocument){
-            if (documentDefinedForClient.contains(clientDocumentDto.getDocumentCode())){
-                clientDocumentDto.setHasSubmitted(true);
+        if(underWriterRoutingLevelDetailDto.getClientId() != null) {
+            List<String> documentDefinedForClient = findDefinedUnderWriterDocumentByClientId(underWriterRoutingLevelDetailDto.getClientId());
+            for (ClientDocumentDto clientDocumentDto : clientDocument) {
+                if (documentDefinedForClient.contains(clientDocumentDto.getDocumentCode())) {
+                    clientDocumentDto.setHasSubmitted(true);
+                }
             }
         }
         return clientDocument;
