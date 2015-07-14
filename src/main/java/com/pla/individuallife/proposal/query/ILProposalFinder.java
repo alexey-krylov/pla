@@ -374,7 +374,9 @@ public class ILProposalFinder {
         if (proposal.get("proposer") != null) {
             dto.setProposer(ProposerBuilder.getProposerBuilder((Proposer) proposal.get("proposer")).createProposerDto());
         }
-        dto.setProposalPlanDetail((ProposalPlanDetail) proposal.get("proposalPlanDetail"));
+        ProposalPlanDetail pd = (ProposalPlanDetail) proposal.get("proposalPlanDetail");
+        pd.setPlanName(planFinder.getPlanName(new PlanId(pd.getPlanId())));
+        dto.setProposalPlanDetail(pd);
         dto.setBeneficiaries((List<Beneficiary>) proposal.get("beneficiaries"));
         dto.setTotalBeneficiaryShare(new BigDecimal(proposal.get("totalBeneficiaryShare").toString()) );
         dto.setGeneralDetails((GeneralDetails) proposal.get("generateDetails"));
