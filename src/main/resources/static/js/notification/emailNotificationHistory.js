@@ -11,7 +11,8 @@ function bodyOnLoad() {
     };
 
     tinymce.init({
-        selector: "textarea#mailContent",
+        selector: "textarea#emailBody",
+
         width: "100%",
         height: 260,
         menubar: false,
@@ -61,7 +62,7 @@ function sendEmail() {
         type: 'POST',
         data: JSON.stringify({
             recipientMailAddress: toAddress.split(';'), subject: subject, emailBody: emailBody,
-            notificationHistoryId: notificationHistoryId
+            notificationId: notificationHistoryId
         }),
         contentType: 'application/json; charset=utf-8',
         success: function (msg) {
@@ -70,6 +71,7 @@ function sendEmail() {
                 $('#successMessage').text(msg.message).show();
                 $('#alert-modal-success').on('hidden.bs.modal', function () {
                     window.close();
+
                 });
             }else{
                 $('#alert-modal-success').modal('show');

@@ -11,7 +11,7 @@ function bodyOnLoad() {
     };
 
     tinymce.init({
-        selector: "textarea#mailContent",
+        selector: "textarea#emailBody",
         width: "100%",
         height: 260,
         menubar: false,
@@ -73,7 +73,7 @@ function sendEmail() {
                 });
             }
         }
-    });
+            });
 }
 
 //});

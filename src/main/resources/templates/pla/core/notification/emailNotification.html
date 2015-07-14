@@ -16,7 +16,7 @@
 <script src="/pla/js/notification/emailNotification.js"></script>
 <script src="//tinymce.cachefly.net/4.1/tinymce.min.js"></script>
 <script src="http://timschlechter.github.io/bootstrap-tagsinput/examples/lib/bootstrap-tagsinput/bootstrap-tagsinput.js"></script>
-<body onload="javascript:bodyOnLoad();">
+<body onload="javascript:bodyOnLoad();" onunload="opener.location=('/pla/home')">
 
 
 
@@ -72,20 +72,20 @@
                         </div>
                     </div>
                     <div class="row" style="margin-top: 3px">
-                        <div class="col-md-12"  >
-                            <textarea id="emailBody"  style="width:100%;height:180px;" th:utext="${mailContent[0].emailBody}"
+                        <div class="col-md-12"  style="width:100%;min-height:180px;max-height:180px;overflow-y:scroll;">
+                            <textarea id="emailBody"  th:utext="${mailContent[0].emailBody}"
                                       name="emailBody">
                             </textarea>
                         </div>
                     </div>
-                    <div class="row">
+                   <!-- <div class="row">
                         <div class="col-md-12">
                             <a th:href="@{/notification/printnotification/{notificationId}(notificationId=${mailContent[0].notificationId})}">
                                 <span class="glyphicon glyphicon-file" style="font-size: 18px"></span>
                                 <label th:utext="${mailContent[0].subject}+'.PDF'"></label>
                             </a>
                         </div>
-                    </div>
+                    </div>-->
                 </div>
             </div>
         </div>
