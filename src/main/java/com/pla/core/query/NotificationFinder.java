@@ -75,7 +75,7 @@ public class NotificationFinder {
 
 
     public static final String findILQuotationProposerDetailQuery = "SELECT p.plan_name planName,il.proposer_email_address emailAddress,il.proposer_first_name firstName, il.proposer_surname surName, " +
-            " il.proposer_title salutation,il.quotation_number quotationNumber,il.shared_on sharedOn FROM individual_life_quotation il INNER JOIN plan_coverage_benefit_assoc p " +
+            " il.proposer_title salutation,il.quotation_number requestNumber,il.shared_on sharedOn FROM individual_life_quotation il INNER JOIN plan_coverage_benefit_assoc p " +
             " ON il.plan_id = p.plan_id WHERE il.quotation_id=:quotationId";
 
     public static final String findEmailNotificationContentQuery = "SELECT email_address emailId,generated_on generatedOn,line_of_business lineOfBusiness,process_type processType, " +

@@ -87,16 +87,8 @@ public class NotificationCommandHandler {
                 .withRoleType(createNotificationHistoryCommand.getRoleType());
         NotificationHistory notificationHistory = notificationBuilder.createNotificationHistory();
         mongoTemplate.save(notificationHistory);
-        deleteNotification(createNotificationHistoryCommand.getNotificationId());
-
     }
 
-
-    public void deleteNotification(String notificationId){
-        JpaRepository<Notification, NotificationId> notificationRepository = jpaRepositoryFactory.getCrudRepository(Notification.class);
-        Notification notification = notificationRepository.findOne(new NotificationId(notificationId));
-        notificationRepository.delete(notification);
-    }
 
 
     private Notification createNotification(LineOfBusinessEnum lineOfBusiness, ProcessType process,WaitingForEnum waitingFor, ReminderTypeEnum reminderType,
@@ -111,7 +103,7 @@ public class NotificationCommandHandler {
                 .withRequestNumber(requestNumber)
                 .withWaitingFor(waitingFor)
                 .withReminderType(reminderType)
-                .withEmailAddress("")
+                .withEmailAddress(notificationDetail.get("emailAddress")!=null?notificationDetail.get("emailAddress").toString():"")
                 .withReminderTemplate(mergeTemplate(notificationTemplate.getReminderFile(),
                         notificationDetail, requestNumber, lineOfBusiness).toString().getBytes())
                 .withRoleType(roleType);

@@ -2,6 +2,11 @@ package com.pla.core.presentation.controller;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import com.lowagie.text.Document;
+import com.lowagie.text.DocumentException;
+import com.lowagie.text.PageSize;
+import com.lowagie.text.Paragraph;
+import com.lowagie.text.pdf.PdfWriter;
 import com.pla.core.application.service.notification.NotificationService;
 import com.pla.core.application.service.notification.NotificationTemplateService;
 import com.pla.core.domain.exception.NotificationException;
@@ -38,6 +43,7 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.Collection;
@@ -64,6 +70,7 @@ public class ReminderSetupController {
     private NotificationTemplateService notificationTemplateService;
     private CommandGateway commandGateway;
     private MailService mailService;
+
 
     @Autowired
     public ReminderSetupController(NotificationFinder notificationFinder, NotificationService notificationService,CommandGateway commandGateway, MailService mailService,NotificationTemplateService notificationTemplateService) {
@@ -255,7 +262,7 @@ public class ReminderSetupController {
     @RequestMapping(value = "/openemailnotification/{notificationId}", method = RequestMethod.GET)
     public ModelAndView openEmailPage(@PathVariable("notificationId") NotificationId notificationId) {
         ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("/pla/core/notification/emailNotification");
+        modelAndView.setViewName("pla/core/notification/emailNotification");
         modelAndView.addObject("mailContent", notificationFinder.emailContent(notificationId));
         return modelAndView;
     }
@@ -270,8 +277,9 @@ public class ReminderSetupController {
             CreateNotificationHistoryCommand createNotificationHistoryCommand = notificationService.generateHistoryDetail(notificationEmailDto.getNotificationId(),notificationEmailDto.getRecipientMailAddress(),notificationEmailDto.getEmailBody());
             mailService.sendMailWithAttachment(notificationEmailDto.getSubject(),notificationEmailDto.getEmailBody(),Lists.newArrayList(),notificationEmailDto.getRecipientMailAddress());
             commandGateway.send(createNotificationHistoryCommand);
+            notificationService.deleteNotification(createNotificationHistoryCommand.getNotificationId());
         } catch (Exception e) {
-            new ResponseEntity(Result.failure(e.getMessage()),HttpStatus.OK);
+            return new ResponseEntity(Result.failure(e.getMessage()),HttpStatus.OK);
         }
         return new ResponseEntity(Result.success("Email sent successfully"), HttpStatus.OK);
     }
@@ -304,7 +312,7 @@ public class ReminderSetupController {
     @RequestMapping(value = "/openemailnotificationhistory/{notificationHistoryId}", method = RequestMethod.GET)
     public ModelAndView openNotificationHistoryEmailPage(@PathVariable("notificationHistoryId") String notificationHistoryId) {
         ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("/pla/core/notification/emailNotification");
+        modelAndView.setViewName("pla/core/notification/emailReadonlyNotification");
         modelAndView.addObject("mailContent", notificationFinder.notificationHistoryEmailContent(notificationHistoryId));
         return modelAndView;
     }
@@ -318,14 +326,63 @@ public class ReminderSetupController {
         try {
             CreateNotificationHistoryCommand createNotificationHistoryCommand = notificationTemplateService.generateHistoryDetail(notificationEmailDto.getNotificationId(), notificationEmailDto.getRecipientMailAddress(), notificationEmailDto.getEmailBody());
             if (createNotificationHistoryCommand==null){
-                return new ResponseEntity(Result.failure("Email cannot be sent due to wrong data"), HttpStatus.OK);
+                return new ResponseEntity(Result.failure("Email cannot be sent due to wrong data"), HttpStatus.INTERNAL_SERVER_ERROR);
             }
             mailService.sendMailWithAttachment(notificationEmailDto.getSubject(), notificationEmailDto.getEmailBody(), Lists.newArrayList(), notificationEmailDto.getRecipientMailAddress());
             commandGateway.send(createNotificationHistoryCommand);
         } catch (Exception e) {
-            new ResponseEntity(Result.failure(e.getMessage()), HttpStatus.OK);
+            return new ResponseEntity(Result.failure(e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
         }
         return new ResponseEntity(Result.success("Email sent successfully"), HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/printnotification/{notificationId}", method = RequestMethod.GET)
+    @ResponseBody
+    public ResponseEntity printNotification(@PathVariable("notificationId") String notificationId, HttpServletResponse response) throws IOException {
+        response.reset();
+        response.setContentType("application/pdf");
+        response.setHeader("content-disposition", "attachment; filename=" + "Quotation.pdf" + "");
+        OutputStream outputStream = null;
+        try {
+            outputStream = response.getOutputStream();
+            CreateNotificationHistoryCommand createNotificationHistoryCommand = notificationService.printNotificationHistoryDetail(notificationId);
+            printNotification(new String(createNotificationHistoryCommand.getTemplate()),outputStream);
+            outputStream.flush();
+            outputStream.close();
+            commandGateway.send(createNotificationHistoryCommand);
+            notificationService.deleteNotification(createNotificationHistoryCommand.getNotificationId());
+        } catch (Exception e) {
+            if (outputStream!=null){
+                outputStream.close();
+            }
+            return new ResponseEntity(Result.failure(e.getMessage()),HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        return new ResponseEntity(Result.success("PDF got generated successfully"), HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/printnotificationhistory/{notificationId}", method = RequestMethod.GET)
+    @ResponseBody
+    public ResponseEntity printNotificationHistory(@PathVariable("notificationId") String notificationId, HttpServletResponse response) throws IOException {
+        response.reset();
+        response.setContentType("application/pdf");
+        response.setHeader("content-disposition", "attachment; filename=" + "Quotation.pdf" + "");
+        OutputStream outputStream = null;
+        try {
+            outputStream = response.getOutputStream();
+            byte[] template = notificationTemplateService.printNotificationHistory(notificationId);
+            if (template==null){
+                return new ResponseEntity(Result.failure("Error in Print due to some bad data"), HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+            printNotification(new String(template),outputStream);
+            outputStream.flush();
+            outputStream.close();
+        } catch (Exception e) {
+            if (outputStream!=null){
+                outputStream.close();
+            }
+            return new ResponseEntity(Result.failure(e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        return new ResponseEntity(Result.success("PDF got generated successfully"), HttpStatus.OK);
     }
 
     private class RequestNumberTransformer implements Function<Map<String, Object>,Map<String, Object> > {
@@ -342,4 +399,14 @@ public class ReminderSetupController {
             return notificationMap;
         }
     }
+
+    private void printNotification(String content,OutputStream outputStream) throws FileNotFoundException, DocumentException {
+        Document document = new Document(PageSize.A4, 36, 72, 50, 50);
+        PdfWriter.getInstance(document, outputStream);
+        document.open();
+        document.add(new Paragraph(content));
+        System.out.println("PDF got generated");
+        document.close();
+    }
+
 }
