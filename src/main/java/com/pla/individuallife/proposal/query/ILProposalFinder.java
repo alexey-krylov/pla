@@ -309,13 +309,13 @@ public class ILProposalFinder {
             }
             routingLevelDetailDto.setUnderWriterInfluencingFactor(underWriterInfluencingFactorItems);
             mandatoryDocuments = underWriterAdapter.getDocumentsForUnderWriterApproval(routingLevelDetailDto);
-        } else {
-            List<SearchDocumentDetailDto> documentDetailDtos = Lists.newArrayList();
-            SearchDocumentDetailDto searchDocumentDetailDto = new SearchDocumentDetailDto(new PlanId(planDetail.getPlanId()));
-            documentDetailDtos.add(searchDocumentDetailDto);
-            documentDetailDtos.add(new SearchDocumentDetailDto(new PlanId(planDetail.getPlanId()), coverageIds));
-            mandatoryDocuments.addAll(underWriterAdapter.getMandatoryDocumentsForApproverApproval(documentDetailDtos, ProcessType.ENROLLMENT));
         }
+        List<SearchDocumentDetailDto> documentDetailDtos = Lists.newArrayList();
+        SearchDocumentDetailDto searchDocumentDetailDto = new SearchDocumentDetailDto(new PlanId(planDetail.getPlanId()));
+        documentDetailDtos.add(searchDocumentDetailDto);
+        documentDetailDtos.add(new SearchDocumentDetailDto(new PlanId(planDetail.getPlanId()), coverageIds));
+        mandatoryDocuments.addAll(underWriterAdapter.getMandatoryDocumentsForApproverApproval(documentDetailDtos, ProcessType.ENROLLMENT));
+
         List<ILProposalMandatoryDocumentDto> mandatoryDocumentDtos = Lists.newArrayList();
         if (isNotEmpty(mandatoryDocuments)) {
             mandatoryDocumentDtos = mandatoryDocuments.stream().map(new Function<ClientDocumentDto, ILProposalMandatoryDocumentDto>() {
@@ -374,14 +374,11 @@ public class ILProposalFinder {
         if (proposal.get("proposer") != null) {
             dto.setProposer(ProposerBuilder.getProposerBuilder((Proposer) proposal.get("proposer")).createProposerDto());
         }
-        ProposalPlanDetail pd = null;
-        if (proposal.get("proposalPlanDetail") != null) {
-            pd = (ProposalPlanDetail) proposal.get("proposalPlanDetail");
-            pd.setPlanName(planFinder.getPlanName(new PlanId(pd.getPlanId())));
-            dto.setProposalPlanDetail(pd);
-
+        dto.setProposalPlanDetail((ProposalPlanDetail) proposal.get("proposalPlanDetail"));
+        if (dto.getProposalPlanDetail() != null) {
+            dto.getProposalPlanDetail().setPlanName(planFinder.getPlanName(new PlanId(dto.getProposalPlanDetail().getPlanId())));
         }
-                dto.setBeneficiaries((List<Beneficiary>) proposal.get("beneficiaries"));
+        dto.setBeneficiaries((List<Beneficiary>) proposal.get("beneficiaries"));
         dto.setTotalBeneficiaryShare(new BigDecimal(proposal.get("totalBeneficiaryShare").toString()) );
         dto.setGeneralDetails((GeneralDetails) proposal.get("generateDetails"));
         dto.setCompulsoryHealthStatement((List<Question>) proposal.get("compulsoryHealthStatement"));
