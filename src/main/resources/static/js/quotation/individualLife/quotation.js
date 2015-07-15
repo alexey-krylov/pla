@@ -523,8 +523,8 @@ var viewILQuotationModule = (function () {
     };
 
     services.viewQuotation = function () {
-        var propsalId = this.selectedItem;
-        window.location.href = "/pla/individuallife/quotation/view?proposalId=" + propsalId + "&mode=view";
+        var quotationId = this.selectedItem;
+                window.location.href = "/pla/individuallife/quotation/view?quotationId=" + quotationId + "&mode=view";
     };
 
     return services;
