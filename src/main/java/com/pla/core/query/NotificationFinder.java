@@ -134,9 +134,9 @@ public class NotificationFinder {
         return Collections.EMPTY_LIST;
     }
 
-    public Map<String,Object> findILQuotationProposerDetail(String quotationId){
+    public HashMap<String,String> findILQuotationProposerDetail(String quotationId){
         List<Map<String,Object>> quotationProposerDetail = namedParameterJdbcTemplate.query(findILQuotationProposerDetailQuery, new MapSqlParameterSource("quotationId", quotationId), new ColumnMapRowMapper());
-        return isNotEmpty(quotationProposerDetail)?quotationProposerDetail.get(0): Collections.EMPTY_MAP;
+        return isNotEmpty(quotationProposerDetail)?new ILQuotationTransformer().apply(quotationProposerDetail.get(0)): new HashMap<String,String>();
     }
 
     public List<Map<String,Object>> getNotificationTemplateById(NotificationTemplateId notificationTemplateId){
@@ -183,10 +183,11 @@ public class NotificationFinder {
                 @Override
                 public Map<String, Object> apply(Map<String, Object> notificationMap) {
                     Map<String, Object> emailContent = Maps.newLinkedHashMap();
-                    emailContent.put("subject", "Quotation First Reminder");
+                    emailContent.put("subject", "Quotation Reminder");
                     emailContent.put("mailSentDate", notificationMap.get("generatedOn"));
                     emailContent.put("emailAddress", notificationMap.get("emailId").toString());
-                    emailContent.put("emailBody",new String((byte[]) notificationMap.get("reminderTemplate")));
+                    String content = new String((byte[]) notificationMap.get("reminderTemplate"));
+                    emailContent.put("emailBody",content);
                     emailContent.put("notificationId", notificationId);
                     return emailContent;
                 }
@@ -212,5 +213,23 @@ public class NotificationFinder {
             }).collect(Collectors.toList());
         }
         return Collections.EMPTY_LIST;
+    }
+
+    private class ILQuotationTransformer implements Function<Map<String, Object>, HashMap<String,String>> {
+        @Override
+        public HashMap<String, String> apply(Map<String, Object> ilQuotationMap) {
+            HashMap<String,String> ilQuotationProposerMap = new HashMap<String, String>();
+            ilQuotationProposerMap.put("planName", ilQuotationMap.get("planName")!=null?ilQuotationMap.get("planName").toString():"");
+            ilQuotationProposerMap.put("emailAddress", ilQuotationMap.get("emailAddress")!=null?ilQuotationMap.get("emailAddress").toString():"");
+            ilQuotationProposerMap.put("firstName", ilQuotationMap.get("firstName")!=null?ilQuotationMap.get("firstName").toString():"");
+            ilQuotationProposerMap.put("surName",  ilQuotationMap.get("surName")!=null?ilQuotationMap.get("surName").toString():"");
+            ilQuotationProposerMap.put("salutation", ilQuotationMap.get("salutation")!=null?ilQuotationMap.get("salutation").toString():"");
+            ilQuotationProposerMap.put("requestNumber", ilQuotationMap.get("requestNumber")!=null?ilQuotationMap.get("requestNumber").toString():"");
+//            ilQuotationProposerMap.put("sharedOn",  ilQuotationMap.get("sharedOn")!=null? ilQuotationMap.get("sharedOn").toString():"");
+            ilQuotationProposerMap.put("surName", ilQuotationMap.get("surName")!=null?ilQuotationMap.get("surName").toString():"");
+            ilQuotationProposerMap.put("salutation",ilQuotationMap.get("salutation")!=null? ilQuotationMap.get("salutation").toString():"");
+            ilQuotationProposerMap.put("requestNumber", ilQuotationMap.get("requestNumber")!=null?ilQuotationMap.get("requestNumber").toString():"");
+            return ilQuotationProposerMap;
+        }
     }
 }

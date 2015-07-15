@@ -1,7 +1,6 @@
 package com.pla.core.application.service.notification;
 
 import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.Maps;
 import com.pla.core.domain.model.notification.NotificationHistory;
 import com.pla.core.query.NotificationFinder;
 import com.pla.publishedlanguage.contract.IProcessInfoAdapter;
@@ -15,6 +14,7 @@ import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
@@ -44,12 +44,12 @@ public class NotificationTemplateService {
             LineOfBusinessEnum.INDIVIDUAL_LIFE,"individual_life_quotation");
 
 
-    public Map<String,Object> getQuotationNotificationTemplateData(LineOfBusinessEnum lineOfBusiness, String quotationId) throws ProcessInfoException {
+    public HashMap<String,String> getQuotationNotificationTemplateData(LineOfBusinessEnum lineOfBusiness, String quotationId) throws ProcessInfoException {
         int closureTimePeriod = iProcessInfoAdapter.getClosureTimePeriod(lineOfBusiness, ProcessType.QUOTATION);
-        Map<String,Object> notificationQuotationMap = null;
+        HashMap<String,String> notificationQuotationMap = null;
         if (LineOfBusinessEnum.INDIVIDUAL_LIFE.equals(lineOfBusiness)){
             notificationQuotationMap = notificationFinder.findILQuotationProposerDetail(quotationId);
-            notificationQuotationMap.put("closureDays",closureTimePeriod);
+            notificationQuotationMap.put("closureDays",String.valueOf(closureTimePeriod));
             return notificationQuotationMap;
         }
         Criteria quotationCriteria = Criteria.where("_id").is(quotationId);
@@ -58,27 +58,27 @@ public class NotificationTemplateService {
                 include("proposer.contactDetail.addressLine1").include("proposer.contactDetail.addressLine2").include("proposer.contactDetail.province").include("proposer.contactDetail.town")
                 .include("proposer.contactDetail.emailAddress").exclude("_id");
         List<Map> quotationNotificationDetail =  mongoTemplate.find(query, Map.class, quotationEntitiesMap.get(lineOfBusiness));
-        notificationQuotationMap = transformQuotationNotificationData(quotationNotificationDetail);
-        notificationQuotationMap.put("closureDays",closureTimePeriod);
+        HashMap<String,String> emailContentMap = transformQuotationNotificationData(quotationNotificationDetail);
+        emailContentMap.put("closureDays",String.valueOf(closureTimePeriod));
         checkArgument(isNotEmpty(quotationNotificationDetail), "Notification detail not found for the quotation");
-        return notificationQuotationMap;
+        return emailContentMap;
     }
 
-    private Map<String,Object> transformQuotationNotificationData(List<Map> notificationData){
-        Map<String,Object> notificationQuotationMap = Maps.newLinkedHashMap();
-        notificationData.parallelStream().map(new Function<Map, Map<String, Object>>() {
+    private HashMap<String,String> transformQuotationNotificationData(List<Map> notificationData){
+        HashMap<String,String> notificationQuotationMap = new HashMap<String,String>();
+        notificationData.parallelStream().map(new Function<Map, Map<String, String>>() {
             @Override
-            public Map<String, Object> apply(Map map) {
+            public Map<String, String> apply(Map map) {
                 Map<String, Object> proposerMap = (Map) map.get("proposer");
                 if (isNotEmpty(proposerMap)) {
-                    notificationQuotationMap.put("proposerName", proposerMap.get("proposerName"));
+                    notificationQuotationMap.put("proposerName", proposerMap.get("proposerName").toString());
                     Map<String, Object> contactDetailMap = (Map) proposerMap.get("contactDetail");
-                    notificationQuotationMap.put("addressLine1", contactDetailMap.get("addressLine1"));
-                    notificationQuotationMap.put("addressLine2", contactDetailMap.get("addressLine2"));
-                    notificationQuotationMap.put("province", contactDetailMap.get("province"));
-                    notificationQuotationMap.put("town", contactDetailMap.get("town"));
-                    notificationQuotationMap.put("emailAddress", contactDetailMap.get("emailAddress"));
-                    notificationQuotationMap.put("requestNumber", map.get("quotationNumber"));
+                    notificationQuotationMap.put("addressLine1", contactDetailMap.get("addressLine1").toString());
+                    notificationQuotationMap.put("addressLine2", contactDetailMap.get("addressLine2").toString());
+                    notificationQuotationMap.put("province", contactDetailMap.get("province").toString());
+                    notificationQuotationMap.put("town", contactDetailMap.get("town").toString());
+                    notificationQuotationMap.put("emailAddress", contactDetailMap.get("emailAddress").toString());
+                    notificationQuotationMap.put("requestNumber", map.get("quotationNumber").toString());
                 }
                 return notificationQuotationMap;
             }
