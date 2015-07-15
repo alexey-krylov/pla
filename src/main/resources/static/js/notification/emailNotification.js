@@ -10,7 +10,7 @@ function bodyOnLoad() {
         }
     };
 
-    /*tinymce.init({
+    tinymce.init({
         selector: "textarea#emailBody",
         width: "100%",
         height: 260,
@@ -22,7 +22,7 @@ function bodyOnLoad() {
             "save table contextmenu directionality template paste textcolor"
         ],
         toolbar: " undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | print preview   | forecolor backcolor "
-    });*/
+    });
 };
 
 function IsValidEmail(email) {
