@@ -2,7 +2,6 @@ package com.pla.grouplife.policy.domain.service;
 
 import com.google.common.collect.Maps;
 import com.pla.core.domain.model.agent.AgentId;
-import com.pla.grouphealth.sharedresource.model.vo.GHInsured;
 import com.pla.grouplife.policy.domain.model.GroupLifePolicy;
 import com.pla.grouplife.sharedresource.model.vo.Insured;
 import com.pla.grouplife.sharedresource.model.vo.InsuredDependent;
@@ -67,7 +66,7 @@ public class GLPolicyFactory {
 
 
     private Set<Insured> populateFamilyId(Set<Insured> insureds) {
-        Map<String, Object> entitySequenceMap = sequenceGenerator.getEntitySequenceMap(GHInsured.class);
+        Map<String, Object> entitySequenceMap = sequenceGenerator.getEntitySequenceMap(Insured.class);
         final Integer[] sequenceNumber = {((Integer) entitySequenceMap.get("sequenceNumber")) + 1};
         insureds.forEach(insured -> {
             if (insured.getNoOfAssured() == null) {
