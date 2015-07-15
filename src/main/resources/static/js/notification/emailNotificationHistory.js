@@ -37,11 +37,9 @@ function IsValidEmail(email) {
 function sendEmail() {
     var toAddress = $('#to').val();
     var subject = $('#subject').val();
-    var emailBody = $('#emailBody').val();
-    var x = document.getElementById("emailBody").readOnly;
-    document.getElementById("emailBody").innerHTML = x;
-
-    var notificationHistoryId = $('#notificationHistoryId').val();
+  //  var emailBody = $('#emailBody').val();
+    var emailBody = tinyMCE.get('emailBody').getContent();
+   var notificationHistoryId = $('#notificationHistoryId').val();
     if (toAddress == undefined || toAddress == '' || toAddress.length == 0) {
         alert('Please enter email address.');
         return;

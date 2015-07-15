@@ -124,53 +124,38 @@
                 <div class="alert alert-success" hidden="true" id="successMsg"></div>
                 <div class="alert alert-danger" hidden="true" id="dangerMsg"></div>
                 <form name="roleForm" novalidate="true" class="css-form">
-                    <ng-alert></ng-alert>
+
                     <div class="panel panel-default">
                         <div class="panel-body">
                             <div class="control-group required col-md-6">
                                 <label class="control-label">Role</label>
                                 <select class="form-control input-sm" id="role"
-                                        ng-model="mapping.roleType" name="roleType" ng-required="true">
+                                        ng-model="mapping.roleType" name="roleType" >
                                     <option value="QUOTATION_PREPROCESSOR">Quotation Preprocessor</option>
                                     <option value="PROPOSAL_PREPROCESSOR">Proposal Preprocessor</option>
                                     <option value="CLAIM_PREPROCESSOR">Claim Preprocessor</option>
                                 </select>
 
-                                <div class="error"
-                                     ng-show="roleForm.roleType.$submitted &amp;&amp; roleForm.roleType.$invalid">
-                                    <small class="error" ng-show="roleForm.roleType.$error.required">
-                                        Please select Role.
-                                    </small>
-                                </div>
+
                             </div>
                             <div class="control-group required col-md-6">
                                 <label class="control-label">Line of Business</label>
                                 <select class="form-control input-sm" id="lineOfBusiness"
                                         ng-model="mapping.lineOfBusiness" name="lineOfBusiness"
-                                        ng-required="true">
+                                        >
                                     <option value="INDIVIDUAL_LIFE">Individual Life</option>
                                     <option value="GROUP_HEALTH">Group Health</option>
                                     <option value="GROUP_LIFE">Group Life</option>
                                 </select>
 
-                                <div class="error"
-                                     ng-show="roleForm.lineOfBusiness.$submitted &amp;&amp; roleForm.lineOfBusiness.$invalid">
-                                    <small class="error" ng-show="roleForm.lineOfBusinessId.$error.required">
-                                        Please indicate the Line Of Business.
-                                    </small>
-                                </div>
+
                             </div>
-                            <div class="control-group required col-md-4">
+                            <div class="control-group required col-md-6">
                                 <label class="control-label">Process Type</label>
-                                   <select class="form-control input-sm"  ng-model="mapping.processType" ng-options="processTypes.processType as processTypes.description for processTypes in processTypeList | orderBy:'description' " ng-disabled="!mapping.lineOfBusiness">
+                                   <select class="form-control input-sm"   ng-model="mapping.processType" ng-options="processTypes.processType as processTypes.description for processTypes in processTypeList | orderBy:'description' " ng-disabled="!mapping.lineOfBusiness">
                                     <option value="">---Select Process Type---</option>
                                 </select>
-                                <div class="error"
-                                     ng-show="roleForm.processType.$submitted &amp;&amp; roleForm.processType.$invalid">
-                                    <small class="error" ng-show="roleForm.processType.$error.required">
-                                        Please indicate the Process Type.
-                                    </small>
-                                </div>
+
                             </div>
                         </div>
                     </div>

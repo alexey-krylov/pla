@@ -32,7 +32,9 @@ function IsValidEmail(email) {
 function sendEmail() {
     var toAddress = $('#to').val();
     var subject = $('#subject').val();
-    var emailBody = $('#emailBody').val();
+   // var emailBody = $('#emailBody').val();
+
+    var emailBody = tinyMCE.get('emailBody').getContent();
     var notificationId = $('#notificationId').val();
     if (toAddress == undefined || toAddress == '' || toAddress.length == 0) {
         alert('Please enter email address.');
@@ -49,7 +51,7 @@ function sendEmail() {
     var emailUrl = '/pla/core/notification/emailnotification';
 
 
-    $.ajax({
+   $.ajax({
         url: emailUrl,
         type: 'POST',
         data: JSON.stringify({
