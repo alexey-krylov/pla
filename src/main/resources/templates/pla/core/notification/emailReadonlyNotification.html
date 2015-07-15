@@ -45,7 +45,7 @@
                                     <td>To:</td>
                                     <td>
                                         <input type="text" name="emailAddress"
-                                               id="to" class="form-control input-md" th:readonly="true"
+                                               id="to" class="form-control input-md"
                                                th:value="${mailContent.emailAddress[0]}"/>
 
                                     </td>
@@ -73,7 +73,7 @@
                         </div>
                     </div>
                     <div class="row" style="margin-top: 3px">
-                        <div class="col-md-12" style="width:100%;min-height:180px;max-height:180px;overflow-y:scroll;">
+                        <div class="col-md-12" >
                             <textarea id="emailBody"  th:utext="${mailContent.emailBody}"
                                       name="emailBody" readonly="readonly">
                             </textarea>
