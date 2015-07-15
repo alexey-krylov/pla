@@ -44,6 +44,7 @@ public class GHQuotationDetailDto {
 
     private List<CoverDetail> coverDetails;
     private List<Annexure> annexure;
+    private boolean showLoading;
 
 
     @Getter

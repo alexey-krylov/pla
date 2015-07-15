@@ -2,14 +2,17 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Quotation" pageWidth="842" pageHeight="1500" orientation="Landscape" whenNoDataType="AllSectionsNoDetail" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="957e75dd-e876-4376-9d34-ee0e5f53cdeb">
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
 	<property name="ireport.zoom" value="1.0"/>
-	<property name="ireport.x" value="97"/>
-	<property name="ireport.y" value="484"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="454"/>
 	<subDataset name="dataset1" uuid="cb7c3b79-1e7b-49c3-9bac-8ee5b60d6edc"/>
 	<queryString>
 		<![CDATA[]]>
 	</queryString>
 	<field name="agentName" class="java.lang.String">
 		<fieldDescription><![CDATA[agentName]]></fieldDescription>
+	</field>
+	<field name="showLoading" class="java.lang.Boolean">
+		<fieldDescription><![CDATA[showLoading]]></fieldDescription>
 	</field>
 	<field name="agentSalutation" class="java.lang.String">
 		<fieldDescription><![CDATA[agentSalutation]]></fieldDescription>
@@ -342,7 +345,9 @@
 						<text><![CDATA[Premium Details:]]></text>
 					</staticText>
 					<staticText>
-						<reportElement x="381" y="53" width="189" height="22" uuid="139c374a-b01d-49ea-95da-8d30ef42ca19"/>
+						<reportElement x="381" y="53" width="189" height="22" uuid="139c374a-b01d-49ea-95da-8d30ef42ca19">
+							<printWhenExpression><![CDATA[$F{showLoading}]]></printWhenExpression>
+						</reportElement>
 						<textElement textAlignment="Right" verticalAlignment="Middle">
 							<font size="12" isBold="true"/>
 							<paragraph lineSpacing="Single" lineSpacingSize="1.0"/>
@@ -357,14 +362,18 @@
 						<text><![CDATA[Net Premium :]]></text>
 					</staticText>
 					<staticText>
-						<reportElement x="31" y="74" width="182" height="21" uuid="6ba3e743-3fec-459c-8944-85490abf6845"/>
+						<reportElement x="31" y="74" width="182" height="21" uuid="6ba3e743-3fec-459c-8944-85490abf6845">
+							<printWhenExpression><![CDATA[$F{showLoading}]]></printWhenExpression>
+						</reportElement>
 						<textElement textAlignment="Right" verticalAlignment="Middle">
 							<font size="12" isBold="true"/>
 						</textElement>
 						<text><![CDATA[Waiver of Excess Loadings :]]></text>
 					</staticText>
 					<staticText>
-						<reportElement x="381" y="80" width="189" height="18" uuid="a125feeb-520c-4597-b633-6370894afb21"/>
+						<reportElement x="381" y="80" width="189" height="18" uuid="a125feeb-520c-4597-b633-6370894afb21">
+							<printWhenExpression><![CDATA[$F{showLoading}]]></printWhenExpression>
+						</reportElement>
 						<textElement textAlignment="Right" verticalAlignment="Middle">
 							<font size="12" isBold="true"/>
 						</textElement>
@@ -400,19 +409,25 @@
 						<textFieldExpression><![CDATA[$F{longTermDiscount}]]></textFieldExpression>
 					</textField>
 					<textField isStretchWithOverflow="true">
-						<reportElement x="581" y="81" width="51" height="17" uuid="a481f5df-2207-4868-9e9c-bb8f6ed66c31"/>
+						<reportElement x="581" y="81" width="51" height="17" uuid="a481f5df-2207-4868-9e9c-bb8f6ed66c31">
+							<printWhenExpression><![CDATA[$F{showLoading}]]></printWhenExpression>
+						</reportElement>
 						<textElement textAlignment="Left" verticalAlignment="Middle"/>
 						<textFieldExpression><![CDATA[$F{profitAndSolvencyLoading}]]></textFieldExpression>
 					</textField>
 					<textField isStretchWithOverflow="true">
-						<reportElement x="571" y="51" width="100" height="20" uuid="3e9a580a-3d7f-4c28-aed5-74cdc6da912f"/>
+						<reportElement x="571" y="51" width="100" height="20" uuid="3e9a580a-3d7f-4c28-aed5-74cdc6da912f">
+							<printWhenExpression><![CDATA[$F{showLoading}]]></printWhenExpression>
+						</reportElement>
 						<textElement verticalAlignment="Bottom">
 							<font isBold="false"/>
 						</textElement>
 						<textFieldExpression><![CDATA[$F{addOnBenefits}]]></textFieldExpression>
 					</textField>
 					<textField isStretchWithOverflow="true">
-						<reportElement x="222" y="75" width="88" height="22" uuid="63983f1c-55d3-40b5-81fa-68203e120ef7"/>
+						<reportElement x="222" y="75" width="88" height="22" uuid="63983f1c-55d3-40b5-81fa-68203e120ef7">
+							<printWhenExpression><![CDATA[$F{showLoading}]]></printWhenExpression>
+						</reportElement>
 						<textElement verticalAlignment="Middle"/>
 						<textFieldExpression><![CDATA[$F{waiverOfExcessLoadings}]]></textFieldExpression>
 					</textField>

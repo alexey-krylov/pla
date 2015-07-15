@@ -42,6 +42,7 @@ public class GLQuotationDetailDto {
     private String addOnBenefitsPercentage;
     private String waiverOfExcessLoadings;
     private String waiverOfExcessLoadingsPercentage;
+    private boolean showLoading;
 
 
     private List<CoverDetail> coverDetails;

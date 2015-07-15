@@ -111,6 +111,7 @@ public class GHQuotationService {
     //TODO Need to change the JASPER Field Key as per the object property and then use BeanUtils to copy object properties
     private GHQuotationDetailDto getGlQuotationDetailForPDF(String quotationId, boolean withOutSplit) {
         GHQuotationDetailDto ghQuotationDetailDto = new GHQuotationDetailDto();
+        ghQuotationDetailDto.setShowLoading(!withOutSplit);
         GroupHealthQuotation quotation = ghQuotationRepository.findOne(new QuotationId(quotationId));
         AgentDetailDto agentDetailDto = getAgentDetail(new QuotationId(quotationId));
         ghQuotationDetailDto.setAgentBranch(isEmpty(agentDetailDto.getBranchName()) ? "" : agentDetailDto.getBranchName());

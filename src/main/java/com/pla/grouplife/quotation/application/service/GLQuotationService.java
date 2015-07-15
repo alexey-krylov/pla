@@ -113,6 +113,7 @@ public class GLQuotationService {
     //TODO Need to change the JASPER Field Key as per the object property and then use BeanUtils to copy object properties
     private GLQuotationDetailDto getGlQuotationDetailForPDF(String quotationId, boolean withOutSplit) {
         GLQuotationDetailDto glQuotationDetailDto = new GLQuotationDetailDto();
+        glQuotationDetailDto.setShowLoading(!withOutSplit);
         GroupLifeQuotation quotation = glQuotationRepository.findOne(new QuotationId(quotationId));
         AgentDetailDto agentDetailDto = getAgentDetail(new QuotationId(quotationId));
         glQuotationDetailDto.setAgentBranch(isNotEmpty(agentDetailDto.getBranchName()) ? agentDetailDto.getBranchName() : "");
