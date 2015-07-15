@@ -54,7 +54,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="row" ng-if="(hideAlert || alreadyExists)"><!--ng-if="alreadyExists"-->
+                    <div class="row" ng-show="(hideAlert &amp;&amp; alreadyExists)"><!--ng-if="alreadyExists"-->
                         <div class="col-md-7">
                             <div class="alert alert-danger">
                                 <strong>{{serverErrorMsg}}</strong>.
