@@ -1,5 +1,6 @@
 package com.pla.grouplife.sharedresource.model.vo;
 
+import com.pla.sharedkernel.domain.model.FamilyId;
 import com.pla.sharedkernel.domain.model.Gender;
 import com.pla.sharedkernel.domain.model.Relationship;
 import com.pla.sharedkernel.identifier.PlanId;
@@ -54,6 +55,8 @@ public class InsuredDependent {
 
     private Integer noOfAssured;
 
+    private FamilyId familyId;
+
     InsuredDependent(InsuredDependentBuilder insuredDependentBuilder) {
         checkArgument(insuredDependentBuilder != null);
         this.companyName = insuredDependentBuilder.getCompanyName();
@@ -78,6 +81,11 @@ public class InsuredDependent {
 
     public InsuredDependent updatePlanPremiumAmount(BigDecimal insuredPlanProratePremium) {
         this.planPremiumDetail = this.planPremiumDetail.updatePremiumAmount(insuredPlanProratePremium);
+        return this;
+    }
+
+    public InsuredDependent updateWithFamilyId(FamilyId familyId) {
+        this.familyId = familyId;
         return this;
     }
 }

@@ -131,4 +131,11 @@ public class GLFinder {
         Map quotationMap = mongoTemplate.findOne(query, Map.class, "group_life_quotation");
         return quotationMap;
     }
+
+    public Map findProposalById(String proposalId) {
+        BasicDBObject query = new BasicDBObject();
+        query.put("_id", proposalId);
+        Map proposal = mongoTemplate.findOne(new BasicQuery(query), Map.class, "group_life_proposal");
+        return proposal;
+    }
 }

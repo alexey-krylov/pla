@@ -1,5 +1,6 @@
 package com.pla.grouplife.sharedresource.model.vo;
 
+import com.pla.sharedkernel.domain.model.FamilyId;
 import com.pla.sharedkernel.domain.model.Gender;
 import com.pla.sharedkernel.identifier.PlanId;
 import lombok.AccessLevel;
@@ -56,6 +57,8 @@ public class Insured {
 
     private Set<CoveragePremiumDetail> coveragePremiumDetails;
 
+    private FamilyId familyId;
+
     Insured(InsuredBuilder insuredBuilder) {
         checkArgument(insuredBuilder != null);
         this.planPremiumDetail = insuredBuilder.getPlanPremiumDetail();
@@ -110,5 +113,10 @@ public class Insured {
             }
         }
         return basicAnnualPremiumOfDependent;
+    }
+
+    public Insured updateWithFamilyId(FamilyId familyId) {
+        this.familyId = familyId;
+        return this;
     }
 }

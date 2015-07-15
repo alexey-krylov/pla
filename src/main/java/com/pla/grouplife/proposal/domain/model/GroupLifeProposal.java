@@ -2,6 +2,7 @@ package com.pla.grouplife.proposal.domain.model;
 
 import com.pla.core.domain.model.agent.AgentId;
 import com.pla.grouplife.proposal.domain.event.GLProposalStatusAuditEvent;
+import com.pla.grouplife.sharedresource.event.GLProposalToPolicyEvent;
 import com.pla.grouplife.sharedresource.event.GLQuotationConvertedToProposalEvent;
 import com.pla.grouplife.sharedresource.model.vo.GLProposalStatus;
 import com.pla.grouplife.sharedresource.model.vo.Insured;
@@ -128,7 +129,7 @@ public class GroupLifeProposal extends AbstractAggregateRoot<ProposalId> {
     public GroupLifeProposal markASINForce(String approvedBy, DateTime approvedOn, String comment) {
         this.proposalStatus = GLProposalStatus.IN_FORCE;
         registerEvent(new GLProposalStatusAuditEvent(this.getProposalId(), GLProposalStatus.IN_FORCE, approvedBy, comment, approvedOn));
-        //registerEvent(new GHProposalToPolicyEvent(this.proposalId));
+        registerEvent(new GLProposalToPolicyEvent(this.proposalId));
         return this;
     }
 

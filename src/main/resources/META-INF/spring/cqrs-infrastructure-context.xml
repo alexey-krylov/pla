@@ -102,5 +102,8 @@
     <extension:mongo-repository id="ghPolicyMongoRepository"
                                 aggregate-type="com.pla.grouphealth.policy.domain.model.GroupHealthPolicy"
                                 mongo-template="mongoTemplate"/>
+    <extension:mongo-repository id="glPolicyMongoRepository"
+                                aggregate-type="com.pla.grouplife.policy.domain.model.GroupLifePolicy"
+                                mongo-template="mongoTemplate"/>
 
 </beans>
