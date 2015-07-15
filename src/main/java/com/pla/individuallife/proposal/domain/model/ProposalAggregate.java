@@ -10,6 +10,7 @@ import com.pla.individuallife.quotation.presentation.dto.PlanDetailDto;
 import com.pla.individuallife.quotation.presentation.dto.ProposerDto;
 import com.pla.individuallife.quotation.query.ILQuotationDto;
 import com.pla.sharedkernel.identifier.ProposalId;
+import lombok.Getter;
 import org.apache.commons.beanutils.BeanUtils;
 import org.axonframework.eventsourcing.annotation.AbstractAnnotatedAggregateRoot;
 import org.axonframework.eventsourcing.annotation.AggregateIdentifier;
@@ -30,6 +31,7 @@ import static com.pla.sharedkernel.util.RolesUtil.hasIndividualLifeProposalProce
  * Created by pradyumna on 22-05-2015.
  */
 @Document(collection = "individual_life_proposal")
+@Getter
 public class ProposalAggregate extends AbstractAnnotatedAggregateRoot<ProposalId> {
 
     private final BigDecimal PERCENTAGE = new BigDecimal(100.00);
@@ -49,6 +51,7 @@ public class ProposalAggregate extends AbstractAnnotatedAggregateRoot<ProposalId
     private AgentCommissionShareModel agentCommissionShareModel;
     private AdditionalDetails additionaldetails;
     private PremiumPaymentDetails premiumPaymentDetails;
+    private Set<ILProposerDocument> proposerDocuments;
 
     private ILProposalStatus proposalStatus;
 
@@ -214,5 +217,13 @@ public class ProposalAggregate extends AbstractAnnotatedAggregateRoot<ProposalId
     public void updateWithPremiumPaymentDetail(ProposalAggregate aggregate, PremiumPaymentDetails premiumPaymentDetails, UserDetails userDetails) {
         checkAuthorization(userDetails);
         this.premiumPaymentDetails = premiumPaymentDetails;
+    }
+
+    // TODO WIll additional documents also be followed up
+    public ProposalAggregate updateWithDocuments(Set<ILProposerDocument> proposerDocuments, UserDetails userDetails) {
+        checkAuthorization(userDetails);
+        this.proposerDocuments = proposerDocuments;
+        // raise event to store document in client BC
+        return this;
     }
 }

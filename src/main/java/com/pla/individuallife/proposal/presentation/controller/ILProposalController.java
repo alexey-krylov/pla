@@ -25,7 +25,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.websocket.server.PathParam;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -263,6 +262,19 @@ public class ILProposalController {
         map.put("message", "Proposal updated with Premium Payment Details successfully");
         map.put("proposalId", proposalId);
         return new ResponseEntity(map, HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/uploadmandatorydocument", method = RequestMethod.POST)
+    @ResponseBody
+    public ResponseEntity uploadMandatoryDocument(ILProposalDocumentCommand cmd, HttpServletRequest request) {
+        cmd.setUserDetails(getLoggedInUserDetail(request));
+        try {
+            proposalCommandGateway.uploadMandatoryDocument(cmd);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResponseEntity(Result.failure(e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        return new ResponseEntity(Result.success("Documents uploaded successfully"), HttpStatus.OK);
     }
 
     @RequestMapping(value = "/searchQuotation", method = RequestMethod.POST)

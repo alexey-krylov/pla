@@ -1,5 +1,6 @@
 package com.pla.individuallife.proposal.application.command;
 
+import com.google.common.collect.Sets;
 import com.pla.core.query.AgentFinder;
 import com.pla.core.query.PlanFinder;
 import com.pla.individuallife.proposal.domain.model.*;
@@ -15,10 +16,18 @@ import org.axonframework.repository.Repository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.data.mongodb.gridfs.GridFsTemplate;
 import org.springframework.stereotype.Component;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.function.Predicate;
+
+import static org.nthdimenzion.utils.UtilValidator.isEmpty;
 
 /**
  * Created by Prasant on 26-May-15.
@@ -40,6 +49,9 @@ public class ILProposalCommandHandler {
 
     @Autowired
     private PlanFinder planFinder;
+
+    @Autowired
+    private GridFsTemplate gridFsTemplate;
 
     @CommandHandler
     public void createProposal(ILCreateProposalCommand cmd) {
@@ -158,5 +170,27 @@ public class ILProposalCommandHandler {
         } catch (AggregateNotFoundException e) {
             e.printStackTrace();
         }
+    }
+
+    @CommandHandler
+    public void uploadMandatoryDocument(ILProposalDocumentCommand cmd) throws IOException {
+        ProposalAggregate aggregate = ilProposalMongoRepository.load(new ProposalId(cmd.getProposalId()));
+        Set<ILProposerDocument> documents = aggregate.getProposerDocuments();
+        if (isEmpty(documents)) {
+            documents = Sets.newHashSet();
+        }
+        String gridFsDocId = gridFsTemplate.store(cmd.getFile().getInputStream(), cmd.getFile().getContentType(), cmd.getFilename()).getId().toString();
+        ILProposerDocument currentDocument = new ILProposerDocument(cmd.getDocumentId(), cmd.getFilename(), gridFsDocId, cmd.getFile().getContentType());
+        if (!documents.add(currentDocument)) {
+            ILProposerDocument existingDocument = documents.stream().filter(new Predicate<ILProposerDocument>() {
+                @Override
+                public boolean test(ILProposerDocument ilProposerDocument) {
+                    return currentDocument.equals(ilProposerDocument);
+                }
+            }).findAny().get();
+            gridFsTemplate.delete(new Query(Criteria.where("_id").is(existingDocument.getGridFsDocId())));
+            existingDocument = existingDocument.updateWithNameAndContent(cmd.getFilename(), gridFsDocId, cmd.getFile().getContentType());
+        }
+        aggregate = aggregate.updateWithDocuments(documents, cmd.getUserDetails());
     }
 }
