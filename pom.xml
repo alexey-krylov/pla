@@ -414,7 +414,7 @@
             <version>1.2.0</version>
             <scope>test</scope>
         </dependency>
-        <dependency>
+      <!--  <dependency>
             <groupId>fr.opensagres.xdocreport</groupId>
             <artifactId>org.apache.poi.xwpf.converter.xhtml</artifactId>
             <version>1.0.0</version>
@@ -423,7 +423,7 @@
             <groupId>org.docx4j</groupId>
             <artifactId>docx4j</artifactId>
             <version>3.0.0</version>
-        </dependency>
+        </dependency>-->
         <dependency>
             <groupId>org.seleniumhq.selenium.client-drivers</groupId>
             <artifactId>selenium-java-client-driver</artifactId>

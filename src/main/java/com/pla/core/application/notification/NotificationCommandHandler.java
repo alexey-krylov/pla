@@ -11,17 +11,7 @@ import com.pla.sharedkernel.domain.model.ProcessType;
 import com.pla.sharedkernel.domain.model.ReminderTypeEnum;
 import com.pla.sharedkernel.domain.model.WaitingForEnum;
 import com.pla.sharedkernel.identifier.LineOfBusinessEnum;
-import org.apache.commons.io.FileUtils;
-import org.apache.poi.xwpf.converter.core.FileURIResolver;
-import org.apache.poi.xwpf.converter.xhtml.XHTMLConverter;
-import org.apache.poi.xwpf.converter.xhtml.XHTMLOptions;
-import org.apache.poi.xwpf.usermodel.XWPFDocument;
 import org.axonframework.commandhandling.annotation.CommandHandler;
-import org.docx4j.model.datastorage.migration.VariablePrepare;
-import org.docx4j.openpackaging.packages.WordprocessingMLPackage;
-import org.docx4j.openpackaging.parts.WordprocessingML.MainDocumentPart;
-import org.joda.time.LocalDate;
-import org.nthdimenzion.common.AppConstants;
 import org.nthdimenzion.common.service.JpaRepositoryFactory;
 import org.nthdimenzion.object.utils.IIdGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,7 +19,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.stereotype.Component;
 
-import java.io.*;
+import java.io.File;
+import java.io.IOException;
 import java.util.HashMap;
 
 import static com.google.common.base.Preconditions.checkArgument;
@@ -113,23 +104,23 @@ public class NotificationCommandHandler {
     public byte[] convert(byte[] templateFile,HashMap<String,String> notificationMap,LineOfBusinessEnum lineOfBusiness,String requestNumber) throws Exception {
         File tempFile  = new File("./src/main/resources/emailtemplate/notification_"+requestNumber+".docx");
         Files.write(templateFile, tempFile);
-        WordprocessingMLPackage wordMLPackage = WordprocessingMLPackage.load(tempFile);
+       /* WordprocessingMLPackage wordMLPackage = WordprocessingMLPackage.load(tempFile);
         VariablePrepare.prepare(wordMLPackage);
         MainDocumentPart documentPart = wordMLPackage.getMainDocumentPart();
         notificationMap.put("systemDate", LocalDate.now().toString(AppConstants.DD_MM_YYY_FORMAT));
         notificationMap.put("lineOfBusiness",lineOfBusiness.toString());
         documentPart.variableReplace(notificationMap);
         wordMLPackage.save(tempFile);
-        String htmlContent = convertDocxToHtml(tempFile);
-        return htmlContent.getBytes();
+        String htmlContent = convertDocxToHtml(tempFile);*/
+        return "".getBytes();
     }
 
     public String convertDocxToHtml(File tempFile) throws IOException {
-        XWPFDocument document = new XWPFDocument(FileUtils.openInputStream(tempFile));
+      /*  XWPFDocument document = new XWPFDocument(FileUtils.openInputStream(tempFile));
         XHTMLOptions options = XHTMLOptions.create().URIResolver(new FileURIResolver(new File("word/media")));
         OutputStream outputStream = new ByteArrayOutputStream();
         XHTMLConverter.getInstance().convert(document, outputStream, options);
-        FileUtils.forceDelete(tempFile);
-        return outputStream.toString();
+        FileUtils.forceDelete(tempFile);*/
+        return "";
     }
 }
