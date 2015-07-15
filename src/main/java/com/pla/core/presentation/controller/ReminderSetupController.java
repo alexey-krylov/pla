@@ -5,7 +5,7 @@ import com.google.common.collect.Maps;
 import com.lowagie.text.Document;
 import com.lowagie.text.DocumentException;
 import com.lowagie.text.PageSize;
-import com.lowagie.text.Paragraph;
+import com.lowagie.text.html.simpleparser.HTMLWorker;
 import com.lowagie.text.pdf.PdfWriter;
 import com.pla.core.application.service.notification.NotificationService;
 import com.pla.core.application.service.notification.NotificationTemplateService;
@@ -43,9 +43,10 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.io.StringReader;
+import java.nio.charset.StandardCharsets;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
@@ -155,7 +156,6 @@ public class ReminderSetupController {
         };
     }
 
-
     @RequestMapping(value = "/uploadnotification", method = RequestMethod.POST)
     public Callable<ResponseEntity> uploadNotification(@Valid @ModelAttribute NotificationTemplateDto notificationTemplateDto,BindingResult bindingResult) throws IOException {
         return ()-> {
@@ -163,7 +163,7 @@ public class ReminderSetupController {
                 return new ResponseEntity(Result.failure("Error in uploading the notification template"), HttpStatus.INTERNAL_SERVER_ERROR);
             }
             MultipartFile template = notificationTemplateDto.getFile();
-            if (!("text/plain".equals(notificationTemplateDto.getFile().getContentType()))) {
+            if (!("application/vnd.openxmlformats-officedocument.wordprocessingml.document".equals(notificationTemplateDto.getFile().getContentType()))) {
                 return new ResponseEntity(Result.failure("Please upload a valid file"), HttpStatus.INTERNAL_SERVER_ERROR);
             }
             try {
@@ -183,11 +183,11 @@ public class ReminderSetupController {
     @ResponseBody
     public void getReminderFile(@PathVariable("notificationTemplateId") NotificationTemplateId notificationTemplateId, HttpServletRequest request, HttpServletResponse response) throws IOException {
         response.reset();
-        response.setContentType("text/plain");
+        response.setContentType("application/msword");
         OutputStream outputStream = response.getOutputStream();
         NotificationTemplate  notificationTemplate = notificationService.getReminderFile(notificationTemplateId);
         String fileName =  notificationTemplate.getFileName();
-        response.setHeader("content-disposition", "attachment; filename=" + fileName + ".txt");
+        response.setHeader("content-disposition", "attachment; filename=" + fileName + ".docx");
         IOUtils.write(notificationTemplate.getReminderFile(), outputStream);
         outputStream.flush();
         outputStream.close();
@@ -346,7 +346,7 @@ public class ReminderSetupController {
         try {
             outputStream = response.getOutputStream();
             CreateNotificationHistoryCommand createNotificationHistoryCommand = notificationService.printNotificationHistoryDetail(notificationId);
-            printNotification(new String(createNotificationHistoryCommand.getTemplate()),outputStream);
+            printNotification(new String(createNotificationHistoryCommand.getTemplate()), outputStream);
             outputStream.flush();
             outputStream.close();
             commandGateway.send(createNotificationHistoryCommand);
@@ -373,7 +373,7 @@ public class ReminderSetupController {
             if (template==null){
                 return new ResponseEntity(Result.failure("Error in Print due to some bad data"), HttpStatus.INTERNAL_SERVER_ERROR);
             }
-            printNotification(new String(template),outputStream);
+            printNotification(new String(template, StandardCharsets.UTF_8),outputStream);
             outputStream.flush();
             outputStream.close();
         } catch (Exception e) {
@@ -400,12 +400,12 @@ public class ReminderSetupController {
         }
     }
 
-    private void printNotification(String content,OutputStream outputStream) throws FileNotFoundException, DocumentException {
+    private void printNotification(String content,OutputStream outputStream) throws IOException, DocumentException {
         Document document = new Document(PageSize.A4, 36, 72, 50, 50);
         PdfWriter.getInstance(document, outputStream);
         document.open();
-        document.add(new Paragraph(content));
-        System.out.println("PDF got generated");
+        HTMLWorker htmlWorker = new HTMLWorker(document);
+        htmlWorker.parse(new StringReader(content));
         document.close();
     }
 

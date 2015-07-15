@@ -202,30 +202,20 @@
                                     <label class="control-label">Line of Business</label>
                                     <select class="form-control input-sm" id="lineOfBusiness"
                                             ng-model="template.lineOfBusiness" name="lineOfBusiness"
-                                            ng-required="true">
+                                            >
                                         <option value="INDIVIDUAL_LIFE">Individual Life</option>
                                         <option value="GROUP_HEALTH">Group Health</option>
                                         <option value="GROUP_LIFE">Group Life</option>
                                     </select>
 
-                                    <div class="error"
-                                         ng-show="templateForm.lineOfBusiness.$submitted &amp;&amp; templateForm.lineOfBusiness.$invalid">
-                                        <small class="error" ng-show="templateForm.lineOfBusiness.$error.required">
-                                            Please indicate the Line Of Business.
-                                        </small>
-                                    </div>
+
                                 </div>
-                                <div class="control-group required col-md-4">
+                                <div class="control-group required col-md-6">
                                     <label class="control-label">Process Type</label>
                                     <select class="form-control input-sm" id="processType" name="processType" ng-model="template.processType" ng-options="processTypes.processType as processTypes.description for processTypes in processTypeList | orderBy:'description' " ng-disabled="!template.lineOfBusiness">
                                         <option value="">---Select Process Type---</option>
                                     </select>
-                                     <div class="error"
-                                         ng-show="templateForm.processType.$submitted &amp;&amp; templateForm.processType.$invalid">
-                                        <small class="error" ng-show="templateForm.processType.$error.required">
-                                            Please indicate the Process Type.
-                                        </small>
-                                    </div>
+
                                 </div>
                                 <div class="control-group required col-md-6">
                                     <label class="control-label">Waiting For</label>
@@ -235,12 +225,7 @@
                                     </select>
 
 
-                                    <div class="error"
-                                         ng-show="templateForm.waitingFor.$submitted &amp;&amp; templateForm.waitingFor.$invalid">
-                                        <small class="error" ng-show="templateForm.waitingFor.$error.required">
-                                            Please select Role.
-                                        </small>
-                                    </div>
+
                                 </div>
                                 <div class="control-group required col-md-6">
                                     <label class="control-label">Notification Type</label>
@@ -249,12 +234,7 @@
                                     </select>
 
 
-                                    <div class="error"
-                                         ng-show="templateForm.reminderType.$submitted &amp;&amp; templateForm.reminderType.$invalid">
-                                        <small class="error" ng-show="templateForm.reminderType.$error.required">
-                                            Please select Role.
-                                        </small>
-                                    </div>
+
                                 </div>
 
                                 <div class="row">

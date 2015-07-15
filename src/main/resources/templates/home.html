@@ -24,7 +24,7 @@
 
 </head>
 
-<body >
+<body style="font-size: 9px;">
 <div th:include="fragments/common :: bodyHeader" th:remove="tag"/>
 <script>
     var interval = setInterval(function(){
@@ -34,11 +34,11 @@
                 $('#notificationPortlet-table').dataTable(
                         {
                             "aoColumnDefs": [
-                                { "sWidth": "20%","bSearchable": true, "bSortable":true, "aTargets": [ 0 ] },
-                                { "sWidth": "20%","bSearchable": true, "bSortable":true, "aTargets": [ 1 ] },
+                                { "sWidth": "27%","bSearchable": true, "bSortable":true, "aTargets": [ 0 ] },
+                                { "sWidth": "10%","bSearchable": true, "bSortable":true, "aTargets": [ 1 ] },
                                 { "sWidth": "20%","bSearchable": true, "bSortable":true, "aTargets": [ 2 ] },
-                                { "sWidth": "10%","bSearchable": true, "bSortable":true, "aTargets": [ 3 ] },
-                                { "sWidth": "30%","bSearchable": false, "bSortable":false, "aTargets": [ 4 ] }
+                                { "sWidth": "18%","bSearchable": true, "bSortable":true, "aTargets": [ 3 ] },
+                                { "sWidth": "25%","bSearchable": false, "bSortable":false, "aTargets": [ 4 ] }
 
                             ] }
                 );
@@ -47,10 +47,10 @@
             $('#notificationHistory-table').dataTable(
                     {
                         "aoColumnDefs": [
-                            { "sWidth": "20%","bSearchable": true, "bSortable":true, "aTargets": [ 0 ] },
-                            { "sWidth": "20%","bSearchable": true, "bSortable":true, "aTargets": [ 1 ] },
+                            { "sWidth": "27%","bSearchable": true, "bSortable":true, "aTargets": [ 0 ] },
+                            { "sWidth": "10%","bSearchable": true, "bSortable":true, "aTargets": [ 1 ] },
                             { "sWidth": "20%","bSearchable": true, "bSortable":true, "aTargets": [ 2 ] },
-                            { "sWidth": "10%","bSearchable": true, "bSortable":true, "aTargets": [ 3 ] },
+                            { "sWidth": "13%","bSearchable": true, "bSortable":true, "aTargets": [ 3 ] },
                             { "sWidth": "30%","bSearchable": false, "bSortable":false, "aTargets": [ 4 ] }
 
                         ] }
@@ -73,7 +73,7 @@
                             <tr>
                                 <th>Quotation/Proposal/Policy</th>
                                 <th>Process</th>
-                                <th>Document Name</th>
+                                <th>Notification Type</th>
                                 <th>Generated On</th>
                                 <th>Action</th>
                             </tr>
@@ -106,7 +106,7 @@
                             <tr>
                                 <th>Quotation/Proposal/Policy</th>
                                 <th>Process</th>
-                                <th>Document Name</th>
+                                <th>Notification Type</th>
                                 <th>Sent On</th>
                                 <th>Action</th>
                             </tr>
