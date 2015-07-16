@@ -45,6 +45,7 @@
                 <li data-step="4"><span class="badge">4</span>Premium Details<span class="chevron"></span></li>
                 <li data-step="5"><span class="badge">5</span>Documents<span class="chevron"></span></li>
             </ul>
+
             <div class="actions">
                 <span style="font-weight: bolder;margin-right: 15px;color: #999">Proposal ID: <span
                         style="font-size: 13px;color: #3a87ad;">{{proposalNumber}}<span
@@ -271,7 +272,7 @@
                     </div>
                 </div>
                 <div class="step-pane" data-step="4">
-                    <div class="col-lg-9">
+                    <div class="col-lg-9" disable-all-fields="isViewMode">
                         <div class="bs-callout  bs-callout-info">
                             <ng-form name="premiumForm" novalidate="true">
                             <div class="row">
@@ -350,7 +351,7 @@
                             </ng-form>
                         </div>
                     </div>
-                    <div class="col-lg-3" ng-hide="isPolicyTermNot365 || inappropriatePolicyTerm">
+                    <div class="col-lg-3" ng-hide="isPolicyTermNot365 || inappropriatePolicyTerm" disable-all-fields="isViewMode">
                         <div class="form-group">
                             <label>Annual Payment</label>
                             <input type="radio" class="" ng-model="proposalDetails.premium.optedPremiumFrequency"
@@ -404,7 +405,7 @@
                     </div>
                 </div>
                 <div class="step-pane active" data-step="5">
-                    <ng-form name="step5">
+                    <ng-form name="step5" disable-all-fields="isViewMode">
                         <accordion close-others="true">
                             <accordion-group  is-open="accordionStatusDocuments.documents">
                                 <accordion-heading>
@@ -414,14 +415,14 @@
                                 </accordion-heading>
                         <div class="bs-callout  bs-callout-info" style="overflow:auto;height:240px;"  disable-all-fields="isViewMode">
 
-                            <div class="form-group "  ng-repeat="document in documentList">
+                            <div class="form-group "  ng-repeat="document in documentList" >
                                 <label class="col-sm-3 control-label">{{document.documentName}}</label>
                                      <div class="input-group">
-                                         <a href="/pla/grouphealth/proposal/downloadmandatorydocument/{{document.gridFsDocId}}" style="display:inline;float:right;"  hg-show="!document.submitted">{{document.fileName}}</a>
+                                         <a  href="/pla/grouphealth/proposal/downloadmandatorydocument/{{document.gridFsDocId}}" style="display:inline;float:right;"  hg-show="!document.submitted">{{document.fileName}}</a>
 
                                          <button class="btn btn-default"
                                                  style="display:inline;float:right;margin-right:5px;" ng-file-select=""
-                                                 ng-model="document.documentAttached">Browse
+                                                 ng-model="document.documentAttached" ng-disabled="isViewMode">Browse
                                          </button>
                                         <label class="form-control input-sm" style="border:1px solid #ccc;width:380px;" >{{document.documentAttached[0].name}} </label>
 
@@ -429,7 +430,7 @@
 
                             </div>
                             <div class="btn btn-default" style="display:inline;float:right;clear:both"
-                                 ng-click="uploadDocumentFiles()">Upload All
+                                 ng-click="uploadDocumentFiles()" ng-hide="isViewMode">Upload All
                             </div>
                         </div>
                             </accordion-group>
@@ -440,15 +441,15 @@
                                 <div class="bs-callout  bs-callout-info" style="overflow:auto;height:250px;"
                                      disable-all-fields="isViewMode">
 
-                                    <div class="row">
+                                    <div class="row" >
                                         <button class="btn btn-default"
                                                 style="display:inline;float:left;margin-right:5px;"
-                                                ng-click="addAdditionalDocument()">New Document
+                                                ng-click="addAdditionalDocument()" ng-disabled="isViewMode">New Document
                                         </button>
                                     </div>
                                     <br/><br/>
 
-                                    <div class="row">
+                                    <div class="row" >
                                         <div ng-repeat="additionalDocument in additionalDocumentList">
                                 <div class="col-lg-6">
                                     <div class="form-group required">
@@ -458,7 +459,7 @@
                                                ng-model="additionalDocument.documentName"/>
                                     </div>
                                 </div>
-                                            <div class="col-lg-6">
+                                            <div class="col-lg-6" ng-hide="isViewMode">
                                     <div class="form-group required">
                                         <label class="control-label">Browse File</label>
                                         <button class="btn btn-default"
@@ -472,34 +473,29 @@
                             </div>
                                     <button class="btn btn-default"
                                             style="display:inline;float:right;margin-right:5px;margin-top:20px;"
-                                            ng-click="uploadAdditionalDocument()">Upload
+                                            ng-click="uploadAdditionalDocument()" ng-hide="isViewMode">Upload
                                     </button>
-                                    <button class="btn btn-default"
-                                            style="display:inline;float:right;margin-right:5px;margin-top:20px;"
-                                            ng-click="submitAdditionalDocument()">Submit
-                                    </button>
+
                                 </div>
                             </accordion-group>
                         </accordion>
                     </ng-form>
                     <div class="row">
                         <div class="col-sm-6">
+
                             <button type="button" class="btn btn-default btn-sm" ng-click="back()">Cancel</button>
                         </div>
-                        <!--<div class="col-sm-6">
-                            <button type="button" class="btn btn-default btn-sm" style="float: right" ng-click="saveBasicDetails()"
-                                    ng-disabled="isSaveDisabled(step5)" ng-if="!isViewMode">Save</button>
-                            <button type="button" class="btn btn-default btn-sm" style="float: right"  ng-if="isViewMode" ng-click="back()">Back</button>
-                        </div>-->
+                        <div class="col-sm-6">
+                            <button type="button" class="btn btn-default btn-sm" style="float: right" ng-click="submitAdditionalDocument()" ng-disabled="isViewMode">Submit</button>
+                        </div>
                     </div>
                 </div>
-
-
-
             </div>
         </div>
     </form>
-
+    <form method="POST" action="searchproposal" id="searchForm">
+        <input type="hidden" id="searchFormProposal" name="proposalId"/>
+    </form>
 
     <style>
 

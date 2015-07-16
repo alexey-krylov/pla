@@ -1,37 +1,50 @@
 var viewProposalModule = (function () {
     var services = {};
     services.selectedItem = "";
+    services.status = '';
     services.getTheItemSelected = function (ele) {
         this.selectedItem = $(ele).val();
+        this.status = $(ele).parent().find('.proposalStatus').val();
+        console.log("***********************");
+        console.log(this.status);
         $(".btn-disabled").attr("disabled", false);
+        if (this.status == 'RETURN' || this.status == 'DRAFT'){
+            $('#modifyProposal').attr('disabled', false);
+
+        }else{
+            $('#modifyProposal').attr('disabled', true);
+
+        }
     };
 
     services.reload = function () {
         window.location.reload();
     };
 
-    services.createQuotation = function () {
+   /* services.createQuotation = function () {
         window.location.href = "creategrouplifequotation"
-    };
+    };*/
 
-    services.modifyQuotation = function () {
-        var quotationId = this.selectedItem;
-        $.ajax({
-            url: '/pla/proposal/grouplife/getversionnumber/' + quotationId,
+    services.modifyProposal = function () {
+        var proposalId = this.selectedItem;
+        window.location.href = "/pla/grouphealth/proposal/editProposal?proposalId=" + proposalId  + "&mode=edit";
+       /* $.ajax({
+            url: '/pla/grouphealth/proposal/editProposal?proposalId=' + proposalId,
             type: 'GET',
             contentType: 'application/json; charset=utf-8',
             success: function (msg) {
                 if (msg.status == '200') {
-                    window.location.href = "/pla/proposal/grouplife/creategrouplifeproposal?quotationId=" + quotationId + "&version=" + msg.data + "&mode=edit";
+                 //   window.location.href = "/pla/proposal/grouphealth/editproposal?proposalId=" + proposalId + "&version=" + msg.data + "&mode=edit";
                 } else if (msg.status == '500') {
                 }
             }
-        });
+        });*/
     };
 
-    services.viewQuotation = function () {
-        var quotationId = this.selectedItem;
-        $.ajax({
+    services.viewProposal = function () {
+        var proposalId = this.selectedItem;
+        window.location.href = "/pla/grouphealth/proposal/editProposal?proposalId=" + proposalId  + "&mode=view";
+      /*  $.ajax({
             url: '/pla/quotation/grouplife/getversionnumber/' + quotationId,
             type: 'GET',
             contentType: 'application/json; charset=utf-8',
@@ -41,7 +54,7 @@ var viewProposalModule = (function () {
                 } else if (msg.status == '500') {
                 }
             }
-        });
+        });*/
     };
 
     return services;

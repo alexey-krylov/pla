@@ -271,13 +271,15 @@ angular.module('createProposal', ['common', 'ngRoute', 'mgcrea.ngStrap.select', 
                 });
 
             };
-            $scope.downloadDocumentContent = function(gridfsdocid){
-                window.location.href = '/pla/grouphealth/proposal/downloadmandatorydocument/'+gridfsdocid;
 
-            }
             $scope.submitAdditionalDocument = function(){
                $http.post('/pla/grouphealth/proposal/submit', angular.extend({},
                     {"proposalId": $scope.proposalId})).success(function (data) {
+                   if (data.status == "200") {
+                       saveStep();
+                       $('#searchFormProposal').val($scope.proposalId);
+                       $('#searchForm').submit();
+                   }
 
                 });
 
@@ -391,7 +393,7 @@ angular.module('createProposal', ['common', 'ngRoute', 'mgcrea.ngStrap.select', 
             };
 
             $scope.back = function () {
-                $window.location.href = 'listgrouplifeproposal';
+                $window.location.href = 'listgrouphealthproposal';
             }
 
         }])
