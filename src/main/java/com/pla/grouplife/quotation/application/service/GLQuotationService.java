@@ -128,7 +128,7 @@ public class GLQuotationService {
         Map<String, Object> provinceGeoMap = glQuotationFinder.findGeoDetail(proposerContactDetail.getProvince());
         Map<String, Object> townGeoMap = glQuotationFinder.findGeoDetail(proposerContactDetail.getTown());
         glQuotationDetailDto.setProposerAddress(proposerContactDetail.getAddress((String) townGeoMap.get("geoName"), (String) provinceGeoMap.get("geoName")));
-        glQuotationDetailDto.setQuotationNumber(quotation.getQuotationNumber());
+        glQuotationDetailDto.setQuotationNumber(quotation.getQuotationNumber() + "/" + quotation.getVersionNumber());
 
         PremiumDetail premiumDetail = quotation.getPremiumDetail();
         glQuotationDetailDto.setCoveragePeriod(premiumDetail.getPolicyTermValue() != null ? premiumDetail.getPolicyTermValue().toString() + "  days" : "");

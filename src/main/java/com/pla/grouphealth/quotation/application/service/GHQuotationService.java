@@ -131,7 +131,7 @@ public class GHQuotationService {
             ghQuotationDetailDto.setProposerAddress("");
             ghQuotationDetailDto.setProposerPhoneNumber("");
         }
-        ghQuotationDetailDto.setQuotationNumber(quotation.getQuotationNumber());
+        ghQuotationDetailDto.setQuotationNumber(quotation.getQuotationNumber() + "/" + quotation.getVersionNumber());
 
         GHPremiumDetail premiumDetail = quotation.getPremiumDetail();
         ghQuotationDetailDto.setCoveragePeriod(premiumDetail.getPolicyTermValue() != null ? premiumDetail.getPolicyTermValue().toString() + "  days" : "");
