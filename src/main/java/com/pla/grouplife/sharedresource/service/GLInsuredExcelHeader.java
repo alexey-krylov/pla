@@ -322,7 +322,7 @@ public enum GLInsuredExcelHeader {
     GENDER("Gender") {
         @Override
         public String getAllowedValue(InsuredDto insuredDto) {
-            return insuredDto.getGender()!=null?insuredDto.getGender().name():"";
+            return insuredDto.getGender() != null ? insuredDto.getGender().name() : "";
         }
 
         @Override
@@ -330,7 +330,7 @@ public enum GLInsuredExcelHeader {
             int cellNumber = headers.indexOf(this.getDescription());
             Cell cell = row.getCell(cellNumber);
             String cellValue = getCellValue(cell);
-            insuredDto.setGender(isNotEmpty(cellValue)?Gender.valueOf(cellValue):null);
+            insuredDto.setGender(isNotEmpty(cellValue) ? Gender.valueOf(cellValue) : null);
             return insuredDto;
         }
 
@@ -339,13 +339,13 @@ public enum GLInsuredExcelHeader {
             int cellNumber = headers.indexOf(this.getDescription());
             Cell cell = row.getCell(cellNumber);
             String cellValue = getCellValue(cell);
-            insuredDependentDto.setGender(isNotEmpty(cellValue)?Gender.valueOf(cellValue):null);
+            insuredDependentDto.setGender(isNotEmpty(cellValue) ? Gender.valueOf(cellValue) : null);
             return insuredDependentDto;
         }
 
         @Override
         public String getAllowedValue(InsuredDto.InsuredDependentDto insuredDependentDto) {
-            return insuredDependentDto.getGender()!=null?insuredDependentDto.getGender().name():"";
+            return insuredDependentDto.getGender() != null ? insuredDependentDto.getGender().name() : "";
         }
 
         @Override
@@ -510,6 +510,9 @@ public enum GLInsuredExcelHeader {
 
         @Override
         public String validateAndIfNotBuildErrorMessage(IPlanAdapter planAdapter, Row row, String value, List<String> excelHeaders) {
+            if (isNotEmpty(value) && Double.valueOf(value) < 0) {
+                return "No of assured cannot be negative.";
+            }
             return "";
         }
     }, PLAN("Plan") {
@@ -728,16 +731,19 @@ public enum GLInsuredExcelHeader {
             if (!isValidSumAssured) {
                 errorMessage = errorMessage + "Sum assured is not valid for selected plan.";
             }
+            if (isNotEmpty(value) && Double.valueOf(value) < 0) {
+                errorMessage = errorMessage + "Plan Sum assured cannot be negative.";
+            }
             return errorMessage;
         }
     },
     PLAN_PREMIUM("Plan Premium") {
         @Override
         public String getAllowedValue(InsuredDto insuredDto) {
-            String premium=insuredDto.getPlanPremiumDetail().getPremiumAmount() != null ? insuredDto.getPlanPremiumDetail().getPremiumAmount().toString() : "";
-            if(insuredDto.getPlanPremiumDetail().getPremiumAmount() != null && insuredDto.getNoOfAssured()!=null){
+            String premium = insuredDto.getPlanPremiumDetail().getPremiumAmount() != null ? insuredDto.getPlanPremiumDetail().getPremiumAmount().toString() : "";
+            if (insuredDto.getPlanPremiumDetail().getPremiumAmount() != null && insuredDto.getNoOfAssured() != null) {
                 BigDecimal premiumAmount = insuredDto.getPlanPremiumDetail().getPremiumAmount().divide(new BigDecimal(insuredDto.getNoOfAssured()));
-                premium=premiumAmount.toPlainString();
+                premium = premiumAmount.toPlainString();
             }
             return premium;
         }
@@ -750,7 +756,7 @@ public enum GLInsuredExcelHeader {
             BigDecimal planPremium = null;
             Cell noOfAssuredCell = row.getCell(headers.indexOf(NO_OF_ASSURED.getDescription()));
             String noOfAssuredCellValue = getCellValue(noOfAssuredCell);
-            if(isNotEmpty(noOfAssuredCellValue) && isNotEmpty(cellValue)){
+            if (isNotEmpty(noOfAssuredCellValue) && isNotEmpty(cellValue)) {
                 planPremium = BigDecimal.valueOf(Double.valueOf(noOfAssuredCellValue)).multiply(BigDecimal.valueOf(Double.valueOf(cellValue)));
             }
             InsuredDto.PlanPremiumDetailDto planPremiumDetailDto = insuredDto.getPlanPremiumDetail() != null ? insuredDto.getPlanPremiumDetail() : new InsuredDto.PlanPremiumDetailDto();
@@ -767,7 +773,7 @@ public enum GLInsuredExcelHeader {
             Cell noOfAssuredCell = row.getCell(headers.indexOf(NO_OF_ASSURED.getDescription()));
             String noOfAssuredCellValue = getCellValue(noOfAssuredCell);
             BigDecimal planPremium = null;
-            if(isNotEmpty(noOfAssuredCellValue) && isNotEmpty(cellValue)){
+            if (isNotEmpty(noOfAssuredCellValue) && isNotEmpty(cellValue)) {
                 planPremium = BigDecimal.valueOf(Double.valueOf(noOfAssuredCellValue)).multiply(BigDecimal.valueOf(Double.valueOf(cellValue)));
             }
             InsuredDto.PlanPremiumDetailDto planPremiumDetailDto = insuredDependentDto.getPlanPremiumDetail() != null ? insuredDependentDto.getPlanPremiumDetail() : new InsuredDto.PlanPremiumDetailDto();
@@ -778,10 +784,10 @@ public enum GLInsuredExcelHeader {
 
         @Override
         public String getAllowedValue(InsuredDto.InsuredDependentDto insuredDependentDto) {
-            String premium=insuredDependentDto.getPlanPremiumDetail().getPremiumAmount() != null ? insuredDependentDto.getPlanPremiumDetail().getPremiumAmount().toString() : "";
-            if(insuredDependentDto.getPlanPremiumDetail().getPremiumAmount() != null && insuredDependentDto.getNoOfAssured()!=null){
+            String premium = insuredDependentDto.getPlanPremiumDetail().getPremiumAmount() != null ? insuredDependentDto.getPlanPremiumDetail().getPremiumAmount().toString() : "";
+            if (insuredDependentDto.getPlanPremiumDetail().getPremiumAmount() != null && insuredDependentDto.getNoOfAssured() != null) {
                 BigDecimal premiumAmount = insuredDependentDto.getPlanPremiumDetail().getPremiumAmount().divide(new BigDecimal(insuredDependentDto.getNoOfAssured()));
-                premium=premiumAmount.toPlainString();
+                premium = premiumAmount.toPlainString();
             }
             return premium;
         }
@@ -793,6 +799,9 @@ public enum GLInsuredExcelHeader {
             String noOfSumAssured = getCellValue(noOfSumAssuredCell);
             if (isNotEmpty(noOfSumAssured) && isEmpty(value)) {
                 errorMessage = errorMessage + "Plan premium cannot be empty.";
+            }
+            if (isNotEmpty(value) && Double.valueOf(value) < 0) {
+                errorMessage = errorMessage + "Plan premium cannot be negative.";
             }
             return errorMessage;
         }

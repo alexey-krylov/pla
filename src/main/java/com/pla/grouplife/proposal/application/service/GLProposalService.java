@@ -388,6 +388,9 @@ public class GLProposalService {
                         try {
                             if (isNotEmpty(proposerDocumentOptional.get().getGridFsDocId())) {
                                 GridFSDBFile gridFSDBFile = gridFsTemplate.findOne(new Query(Criteria.where("_id").is(proposerDocumentOptional.get().getGridFsDocId())));
+                                mandatoryDocumentDto.setFileName(gridFSDBFile.getFilename());
+                                mandatoryDocumentDto.setContentType(gridFSDBFile.getContentType());
+                                mandatoryDocumentDto.setGridFsDocId(gridFSDBFile.getId().toString());
                                 mandatoryDocumentDto.updateWithContent(IOUtils.toByteArray(gridFSDBFile.getInputStream()));
                             }
                         } catch (IOException e) {

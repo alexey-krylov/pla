@@ -23,6 +23,12 @@ public class GLProposalMandatoryDocumentDto {
 
     private boolean submitted;
 
+    private String fileName;
+
+    private String contentType;
+
+    private String gridFsDocId;
+
     public GLProposalMandatoryDocumentDto(String documentId, String documentName) {
         this.documentId = documentId;
         this.documentName = documentName;

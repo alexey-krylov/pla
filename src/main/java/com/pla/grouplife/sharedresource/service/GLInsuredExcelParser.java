@@ -322,6 +322,9 @@ public class GLInsuredExcelParser {
             if (isEmpty(coverageSA)) {
                 errorMessages.add("Sum Assured is empty for" + optionalCoverageCode + ".");
             }
+            if (isNotEmpty(coverageSA) && Double.valueOf(coverageSA) < 0) {
+                errorMessages.add("Sum Assured cannot be negative for optional coverage :" + optionalCoverageCode + ".");
+            }
             String optionalCoveragePremiumCellValue = getCellValue(optionalCoverageCellHolder.getOptionalCoveragePremiumCell());
             if (isNotEmpty(noOfAssuredCellValue) && isEmpty(optionalCoveragePremiumCellValue)) {
                 errorMessages.add("Premium cannot be empty for" + optionalCoverageCode + ".");

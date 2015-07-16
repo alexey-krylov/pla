@@ -341,6 +341,9 @@ public class GHInsuredExcelParser {
             if (isEmpty(coverageSA)) {
                 errorMessages.add("Sum Assured is empty for" + optionalCoverageCode + ".");
             }
+            if (isNotEmpty(coverageSA) && Double.valueOf(coverageSA) < 0) {
+                errorMessages.add("Sum Assured cannot be negative for optional coverage :" + optionalCoverageCode + ".");
+            }
             String optionalCoveragePremiumCellValue = getCellValue(optionalCoverageCellHolder.getOptionalCoveragePremiumCell());
             if (isNotEmpty(noOfAssuredCellValue) && isEmpty(optionalCoveragePremiumCellValue)) {
                 errorMessages.add("Premium cannot be empty for" + optionalCoverageCode + ".");
@@ -363,6 +366,9 @@ public class GHInsuredExcelParser {
                         String benefitLimit = getCellValue(optionalCoverageBenefitCellHolder.getBenefitLimitCell());
                         if (isEmpty(benefitLimit)) {
                             errorMessages.add("Benefit Limit is empty for benefit" + benefitCode + ".");
+                        }
+                        if (isNotEmpty(benefitLimit) && Double.valueOf(benefitLimit) < 0) {
+                            errorMessages.add("Benefit limit cannot be negative for benefit code :" + benefitCode + ".");
                         }
                         try {
                             BigDecimal benefitLimitBigDecimal = BigDecimal.valueOf(Double.valueOf(benefitLimit).intValue());

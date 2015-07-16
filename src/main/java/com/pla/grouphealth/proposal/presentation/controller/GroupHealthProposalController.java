@@ -1,6 +1,7 @@
 package com.pla.grouphealth.proposal.presentation.controller;
 
 import com.google.common.collect.Lists;
+import com.mongodb.gridfs.GridFSDBFile;
 import com.pla.grouphealth.proposal.application.command.*;
 import com.pla.grouphealth.proposal.application.service.GHProposalService;
 import com.pla.grouphealth.proposal.presentation.dto.GHProposalDto;
@@ -22,6 +23,9 @@ import org.apache.poi.util.IOUtils;
 import org.axonframework.commandhandling.gateway.CommandGateway;
 import org.nthdimenzion.presentation.Result;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.data.mongodb.gridfs.GridFsTemplate;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -52,6 +56,9 @@ public class GroupHealthProposalController {
     private IClientProvider clientProvider;
 
     private GHProposalFinder ghProposalFinder;
+
+    @Autowired
+    private GridFsTemplate gridFsTemplate;
 
     @Autowired
     public GroupHealthProposalController(CommandGateway commandGateway, GHProposalService ghProposalService, IClientProvider clientProvider,
@@ -248,6 +255,18 @@ public class GroupHealthProposalController {
         outputStream.flush();
         outputStream.close();
         errorTemplateFile.delete();
+    }
+
+    @RequestMapping(value = "/downloadmandatorydocument/{gridfsdocid}", method = RequestMethod.GET)
+    public void downloadMandatoryDocument(@PathVariable("gridfsdocid") String gridfsDocId, HttpServletResponse response) throws IOException {
+        GridFSDBFile gridFSDBFile = gridFsTemplate.findOne(new Query(Criteria.where("_id").is(gridfsDocId)));
+        response.reset();
+        response.setContentType(gridFSDBFile.getContentType());
+        response.setHeader("content-disposition", "attachment; filename=" + gridFSDBFile.getFilename() + "");
+        OutputStream outputStream = response.getOutputStream();
+        org.apache.commons.io.IOUtils.copy(gridFSDBFile.getInputStream(), outputStream);
+        outputStream.flush();
+        outputStream.close();
     }
 
     @RequestMapping(value = "/uploadinsureddetail", method = RequestMethod.POST)

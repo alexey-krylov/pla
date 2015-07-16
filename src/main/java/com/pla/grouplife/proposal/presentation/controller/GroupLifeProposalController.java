@@ -1,6 +1,7 @@
 package com.pla.grouplife.proposal.presentation.controller;
 
 import com.google.common.collect.Lists;
+import com.mongodb.gridfs.GridFSDBFile;
 import com.pla.grouphealth.proposal.presentation.dto.SearchGHProposalDto;
 import com.pla.grouplife.proposal.application.command.*;
 import com.pla.grouplife.proposal.application.service.GLProposalService;
@@ -26,6 +27,9 @@ import org.apache.poi.poifs.filesystem.POIFSFileSystem;
 import org.axonframework.commandhandling.gateway.CommandGateway;
 import org.nthdimenzion.presentation.Result;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.data.mongodb.gridfs.GridFsTemplate;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -59,6 +63,8 @@ public class GroupLifeProposalController {
 
     private GLProposalFinder glProposalFinder;
 
+    @Autowired
+    private GridFsTemplate gridFsTemplate;
 
     @Autowired
     public GroupLifeProposalController(CommandGateway commandGateway, GLProposalService glProposalService, IClientProvider clientProvider, GLProposalFinder glProposalFinder) {
@@ -234,6 +240,18 @@ public class GroupLifeProposalController {
         OutputStream outputStream = response.getOutputStream();
         HSSFWorkbook planDetailExcel = glProposalService.getInsuredTemplateExcel(proposalId);
         planDetailExcel.write(outputStream);
+        outputStream.flush();
+        outputStream.close();
+    }
+
+    @RequestMapping(value = "/downloadmandatorydocument/{gridfsdocid}", method = RequestMethod.GET)
+    public void downloadMandatoryDocument(@PathVariable("gridfsdocid") String gridfsDocId, HttpServletResponse response) throws IOException {
+        GridFSDBFile gridFSDBFile = gridFsTemplate.findOne(new Query(Criteria.where("_id").is(gridfsDocId)));
+        response.reset();
+        response.setContentType(gridFSDBFile.getContentType());
+        response.setHeader("content-disposition", "attachment; filename=" + gridFSDBFile.getFilename() + "");
+        OutputStream outputStream = response.getOutputStream();
+        IOUtils.copy(gridFSDBFile.getInputStream(), outputStream);
         outputStream.flush();
         outputStream.close();
     }

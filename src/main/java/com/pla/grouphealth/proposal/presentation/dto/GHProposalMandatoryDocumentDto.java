@@ -23,6 +23,12 @@ public class GHProposalMandatoryDocumentDto {
 
     private boolean submitted;
 
+    private String fileName;
+
+    private String contentType;
+
+    private String gridFsDocId;
+
     public GHProposalMandatoryDocumentDto(String documentId, String documentName) {
         this.documentId = documentId;
         this.documentName = documentName;

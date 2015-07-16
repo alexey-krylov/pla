@@ -486,6 +486,9 @@ public enum GHInsuredExcelHeader {
 
         @Override
         public String validateAndIfNotBuildErrorMessage(IPlanAdapter planAdapter, Row row, String value, List<String> excelHeaders) {
+            if (isNotEmpty(value) && Double.valueOf(value) < 0) {
+                return "No of assured cannot be negative.";
+            }
             return "";
         }
     }, PLAN("Plan") {
@@ -702,9 +705,12 @@ public enum GHInsuredExcelHeader {
                 errorMessage = errorMessage + "Plan code does not exist.";
                 return errorMessage;
             }
-            boolean isValidSumAssured = isNotEmpty(value) ? planAdapter.isValidPlanSumAssured(planCode, BigDecimal.valueOf(Double.valueOf(value).intValue())) : false;
+            boolean isValidSumAssured = isNotEmpty(value) ? planAdapter.isValidPlanSumAssured(planCode, BigDecimal.valueOf(Double.valueOf(value).intValue())) : true;
             if (!isValidSumAssured) {
                 errorMessage = errorMessage + "Annual Limit is not valid for selected plan.";
+            }
+            if (isNotEmpty(value) && Double.valueOf(value) < 0) {
+                errorMessage = errorMessage + "Annual limit cannot be negative.";
             }
             return errorMessage;
         }
@@ -771,6 +777,9 @@ public enum GHInsuredExcelHeader {
             String noOfSumAssured = getCellValue(noOfSumAssuredCell);
             if (isNotEmpty(noOfSumAssured) && isEmpty(value)) {
                 errorMessage = errorMessage + "Plan premium cannot be empty.";
+            }
+            if (isNotEmpty(value) && Double.valueOf(value) < 0) {
+                errorMessage = errorMessage + "Plan premium cannot be negative.";
             }
             return errorMessage;
         }
