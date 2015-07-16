@@ -445,90 +445,37 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
             $scope.questionList = [];
             $scope.habits = {};
             $scope.generalQuestion = [];
-
+            //$scope.assuredByPlalList="No";
             //$scope.assuredByPLAL={};
-
             $scope.saveGeneralDetails = function () {
                 console.log('Inside saveGeneraLDetails Method..');
-                console.log($scope.generalAnswer);
-                var assuredByPlalA;
-                var assuredByOthers;
-                var pendingInsuranceByOthers;
-                var assuranceDeclined;
-
-                //alert("Checking.."+$scope.assuredByPlal);
-                console.log('********************assuredByPlal');
-                console.log('SCOPETest' + $scope.assuredByPlalModel);
-
-                if ($scope.assuredByPlal == "YES") {
-                    assuredByPlalA = "true";
-                    console.log($scope.assuredByPlal);
-                    console.log('***assuredByPlal' + JSON.stringify(assuredByPlalA));
-                }
-                else {
-                    console.log($scope.assuredByPlal);
-                    assuredByPlalA = "false";
-                    console.log('assuredByPlal' + JSON.stringify(assuredByPlalA));
-                }
-
-                if ($scope.assuredByOthers == "YES") {
-                    console.log($scope.assuredByOthers);
-                    assuredByOthers = "true";
-                    console.log('assuredByOthers' + JSON.stringify(assuredByOthers));
-                }
-                else {
-                    console.log($scope.assuredByOthers);
-                    assuredByOthers = "false";
-                    console.log('assuredByOthers' + JSON.stringify(assuredByOthers));
-                }
-
-                if ($scope.pendingInsuranceByOthers == "YES") {
-                    console.log($scope.pendingInsuranceByOthers);
-                    pendingInsuranceByOthers = "true";
-                    console.log('pendingInsuranceByOthers' + JSON.stringify(pendingInsuranceByOthers));
-                }
-                else {
-                    console.log($scope.pendingInsuranceByOthers);
-                    pendingInsuranceByOthers = "false";
-                    console.log('pendingInsuranceByOthers' + JSON.stringify(pendingInsuranceByOthers));
-                }
-
-                if ($scope.assuranceDeclined == "YES") {
-                    console.log($scope.assuranceDeclined);
-                    assuranceDeclined = "true";
-                    console.log('pendingInsuranceByOthers' + JSON.stringify(assuranceDeclined));
-                }
-                else {
-                    console.log($scope.assuranceDeclined);
-                    assuranceDeclined = "false";
-                    console.log('pendingInsuranceByOthers' + JSON.stringify(assuranceDeclined));
-                }
+                console.log('Checking GeneralStatus:--> '+$scope.generalAnswer);
                 var assuredByPLAL =
                 {
                     "answerResponse": $scope.policyDetails,
                     "questionId": "1",
                     //"answer": $scope.generalAnswer
-                    "answer": assuredByPlalA
+                    "answer": $scope.generalAnswerList[0]
                 }
                 var assuredByOthers =
                 {
                     "answerResponse": $scope.insurerDetails1,
                     "questionId": "2",
-                    "answer": assuredByOthers
+                    "answer": $scope.generalAnswerList[1]
                 }
 
                 var pendingInsuranceByOthers =
                 {
                     "answerResponse": $scope.insurerDetails2,
                     "questionId": "3",
-                    "answer": pendingInsuranceByOthers
+                    "answer": $scope.generalAnswerList[2]
                 }
 
                 var assuranceDeclined =
                 {
                     "answerResponse": $scope.insurerDetails3,
                     "questionId": "4",
-                    "answer": assuranceDeclined
+                    "answer": $scope.generalAnswerList[3]
                 }
                 var generalQuestion = $scope.generalQuestion;
                 var req =
@@ -542,11 +489,6 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
                 }
 
                 console.log('generalQuestion is: ' + JSON.stringify(generalQuestion));
-                //$scope.assuredByPLAL=angular.extend($scope.assuredByPLAL,request);
-                /* console.log('To Test1'+JSON.stringify(assuredByPLAL));
-                 console.log('To Test2'+JSON.stringify(assuredByOthers));
-                 console.log('To Test3'+JSON.stringify(pendingInsuranceByOthers));
-                 console.log('To Test4'+JSON.stringify(assuranceDeclined));*/
                 console.log('Final General is' + JSON.stringify(req));
                  $http.post('/pla/individuallife/proposal/updategeneraldetails',req).success(function (response, status, headers, config) {
                  $scope.occupations = response;
@@ -1236,13 +1178,19 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
                 });
 
             };
+            $scope.generalAnswer;
+            $scope.generalAnswerList=[];
+
             $scope.openAccordion = function (status, tab) {
                 console.log(status);
                 if (status === 'YES') {
+                    $scope.generalAnswer = true;
+                    $scope.generalAnswerList.push($scope.generalAnswer);
                     console.log('Checking Status is ' + $scope.generalAnswer);
                     $scope.accordionStatus.generalDetails[tab] = true;
                 } else {
                     $scope.generalAnswer = false;
+                    $scope.generalAnswerList.push($scope.generalAnswer);
                     console.log('Checking Status is ' + $scope.generalAnswer);
                     $scope.accordionStatus.generalDetails[tab] = false;
                 }
@@ -1303,6 +1251,7 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
         familyHabitAndBuild: "/pla/individuallife/proposal/getPage/familyHabitAndBuild",
         additionalDetail: "/pla/individuallife/proposal/getPage/additionalDetail",
         premiumDetail:"/pla/individuallife/proposal/getPage/premiumDetail"
+       /*mandatoryDocumentDetails:"/pla/individuallife/proposal/getPage/mandatoryDocumentDetails"*/
     })
 
 

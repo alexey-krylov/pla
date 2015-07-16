@@ -8,14 +8,14 @@
                         <i class="pull-right glyphicon"
                            ng-class="{'glyphicon-chevron-down': accordionStatus.generalDetails.tab1, 'glyphicon-chevron-right': !accordionStatus.generalDetails.tab1}"></i>
                     </accordion-heading>
-                    <div class="col-md-1" ng-show="assuredByPlal == 'YES'">
+                    <div class="col-md-1" ng-show="assuredByPlalList == 'YES'">
                         <!-- <button class="btn btn-default btn-sm" ng-click="openModalWindow('assuredByPlalTpl.html')"><strong>Add</strong></button>-->
                         <button type="button" class="btn btn-default btn-xs pull-right"
                                 data-toggle="modal" data-target="#policyModal" style="margin-bottom: 10px"><strong>Add</strong>
                         </button>
                     </div>
                     <div class="col-md-11">
-                        <table class="table table-bordered" style="margin-top: 10px;margin-bottom: 0px" ng-show="assuredByPlal == 'YES'">
+                        <table class="table table-bordered" style="margin-top: 10px;margin-bottom: 0px" ng-show="assuredByPlalList == 'YES'">
                             <thead>
                             <tr>
                                 <th>Policy Number</th>
@@ -40,8 +40,8 @@
                 </accordion-group>
             </div>
             <div class="col-md-2">
-                {{assuredByPlal}}
-                <select class="form-control input-sm" ng-model="assuredByPlal" ng-change="openAccordion(assuredByPlal,'tab1')">
+                {{generalAnswerList}} {{assuredByPlalList}}
+                <select class="form-control input-sm" ng-model="assuredByPlalList" ng-change="openAccordion(assuredByPlalList,'tab1')">
                     <option value="">--Select One--</option>
                     <option value="YES">Yes</option>
                     <option value="NO">No</option>
