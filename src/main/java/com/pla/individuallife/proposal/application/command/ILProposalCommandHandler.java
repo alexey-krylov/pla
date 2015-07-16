@@ -13,6 +13,7 @@ import com.pla.sharedkernel.identifier.ProposalId;
 import org.axonframework.commandhandling.annotation.CommandHandler;
 import org.axonframework.repository.AggregateNotFoundException;
 import org.axonframework.repository.Repository;
+import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -191,6 +192,12 @@ public class ILProposalCommandHandler {
             gridFsTemplate.delete(new Query(Criteria.where("_id").is(existingDocument.getGridFsDocId())));
             existingDocument = existingDocument.updateWithNameAndContent(cmd.getFilename(), gridFsDocId, cmd.getFile().getContentType());
         }
-        aggregate = aggregate.updateWithDocuments(documents, cmd.getUserDetails());
+        aggregate.updateWithDocuments(documents, cmd.getUserDetails());
+    }
+
+    @CommandHandler
+    public void submitProposal(SubmitILProposalCommand cmd) {
+        ProposalAggregate aggregate = ilProposalMongoRepository.load(new ProposalId(cmd.getProposalId()));
+        aggregate.submitForApproval(DateTime.now(), cmd.getUserDetails(), cmd.getComment());
     }
 }

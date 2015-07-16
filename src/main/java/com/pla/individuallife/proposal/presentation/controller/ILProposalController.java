@@ -274,7 +274,21 @@ public class ILProposalController {
             e.printStackTrace();
             return new ResponseEntity(Result.failure(e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
         }
-        return new ResponseEntity(Result.success("Documents uploaded successfully"), HttpStatus.OK);
+        return new ResponseEntity(Result.success("Document uploaded successfully"), HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/submit", method = RequestMethod.POST)
+    @ResponseBody
+    @ApiOperation(httpMethod = "POST", value = "To submit proposal for approval")
+    public ResponseEntity submitProposal(@RequestBody SubmitILProposalCommand cmd, HttpServletRequest request) {
+        try {
+            cmd.setUserDetails(getLoggedInUserDetail(request));
+            proposalCommandGateway.sendAndWait(cmd);
+            return new ResponseEntity(Result.success("Proposal submitted successfully"), HttpStatus.OK);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResponseEntity(Result.failure(e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     @RequestMapping(value = "/searchQuotation", method = RequestMethod.POST)

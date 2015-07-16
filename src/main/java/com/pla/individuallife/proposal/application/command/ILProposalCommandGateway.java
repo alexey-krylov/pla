@@ -37,4 +37,7 @@ public interface ILProposalCommandGateway {
 
     void uploadMandatoryDocument(ILProposalDocumentCommand cmd)
             throws TimeoutException, InterruptedException;
+
+    void sendAndWait(SubmitILProposalCommand cmd)
+            throws TimeoutException, InterruptedException;
 }

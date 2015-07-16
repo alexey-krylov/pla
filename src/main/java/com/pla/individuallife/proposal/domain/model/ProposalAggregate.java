@@ -14,6 +14,7 @@ import lombok.Getter;
 import org.apache.commons.beanutils.BeanUtils;
 import org.axonframework.eventsourcing.annotation.AbstractAnnotatedAggregateRoot;
 import org.axonframework.eventsourcing.annotation.AggregateIdentifier;
+import org.joda.time.DateTime;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.security.access.AuthorizationServiceException;
@@ -54,6 +55,7 @@ public class ProposalAggregate extends AbstractAnnotatedAggregateRoot<ProposalId
     private Set<ILProposerDocument> proposerDocuments;
 
     private ILProposalStatus proposalStatus;
+    private DateTime submittedOn;
 
     ProposalAggregate() {
         beneficiaries = new ArrayList<Beneficiary>();
@@ -220,10 +222,16 @@ public class ProposalAggregate extends AbstractAnnotatedAggregateRoot<ProposalId
     }
 
     // TODO WIll additional documents also be followed up
-    public ProposalAggregate updateWithDocuments(Set<ILProposerDocument> proposerDocuments, UserDetails userDetails) {
+    public void updateWithDocuments(Set<ILProposerDocument> proposerDocuments, UserDetails userDetails) {
         checkAuthorization(userDetails);
         this.proposerDocuments = proposerDocuments;
         // raise event to store document in client BC
-        return this;
+    }
+
+    public void submitForApproval(DateTime submittedOn, UserDetails userDetails, String comment) {
+        checkAuthorization(userDetails);
+        this.submittedOn = submittedOn;
+        this.proposalStatus = ILProposalStatus.PENDING_ACCEPTANCE;
+        //TODO : if this proposal is being converted from quotation, have to change the state of quotation as CONVERTED
     }
 }

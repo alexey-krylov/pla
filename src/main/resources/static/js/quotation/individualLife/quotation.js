@@ -524,7 +524,7 @@ var viewILQuotationModule = (function () {
 
     services.viewQuotation = function () {
         var quotationId = this.selectedItem;
-                window.location.href = "/pla/individuallife/quotation/view?quotationId=" + quotationId + "&mode=view";
+        window.location.href = "/pla/individuallife/quotation/view?quotationId=" + quotationId + "&mode=view";
     };
 
     return services;

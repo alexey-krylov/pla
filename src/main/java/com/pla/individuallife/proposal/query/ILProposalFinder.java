@@ -130,7 +130,7 @@ public class ILProposalFinder {
     }
 
     public List<ILSearchProposalDto> searchProposal(ILSearchProposalDto ilSearchProposalDto) {
-        Criteria criteria = Criteria.where("proposalStatus").in(new String[]{"DRAFT", "SUBMITTED"});
+        Criteria criteria = Criteria.where("proposalStatus").in(new String[]{"DRAFT", "SUBMITTED", "PENDING_ACCEPTANCE"});
         String proposalNumber = ilSearchProposalDto.getProposalNumber();
         String proposalId = ilSearchProposalDto.getProposalId();
         String agentCode = ilSearchProposalDto.getAgentCode();
@@ -288,8 +288,10 @@ public class ILProposalFinder {
             for (UnderWriterInfluencingFactor underWriterInfluencingFactor : underWriterRoutingLevel.getUnderWriterInfluencingFactors()) {
                 if (underWriterInfluencingFactor.name().equalsIgnoreCase(String.valueOf(UnderWriterInfluencingFactor.AGE)))
                     underWriterInfluencingFactorItems.add(new UnderWriterRoutingLevelDetailDto.UnderWriterInfluencingFactorItem(UnderWriterInfluencingFactor.AGE.name(), age.toString()));
-                if (underWriterInfluencingFactor.name().equalsIgnoreCase(String.valueOf(UnderWriterInfluencingFactor.SUM_ASSURED)))
+                if (underWriterInfluencingFactor.name().equalsIgnoreCase(String.valueOf(UnderWriterInfluencingFactor.SUM_ASSURED))) {
+                    //TODO : Need to add previous sum assured values from the previous policies
                     underWriterInfluencingFactorItems.add(new UnderWriterRoutingLevelDetailDto.UnderWriterInfluencingFactorItem(UnderWriterInfluencingFactor.SUM_ASSURED.name(), (((ProposalPlanDetail) proposal.get("proposalPlanDetail")).getSumAssured().toString())));
+                }
             }
             routingLevelDetailDto.setUnderWriterInfluencingFactor(underWriterInfluencingFactorItems);
             routinglevel = underWriterAdapter.getRoutingLevel(routingLevelDetailDto);
@@ -304,17 +306,21 @@ public class ILProposalFinder {
             for (UnderWriterInfluencingFactor underWriterInfluencingFactor : underWriterDocument.getUnderWriterInfluencingFactors()) {
                 if (underWriterInfluencingFactor.name().equalsIgnoreCase(String.valueOf(UnderWriterInfluencingFactor.AGE)))
                     underWriterInfluencingFactorItems.add(new UnderWriterRoutingLevelDetailDto.UnderWriterInfluencingFactorItem(UnderWriterInfluencingFactor.AGE.name(), age.toString()));
-                if (underWriterInfluencingFactor.name().equalsIgnoreCase(String.valueOf(UnderWriterInfluencingFactor.SUM_ASSURED)))
+                if (underWriterInfluencingFactor.name().equalsIgnoreCase(String.valueOf(UnderWriterInfluencingFactor.SUM_ASSURED))) {
+                    //TODO : Need to add previous sum assured values from the previous policies
                     underWriterInfluencingFactorItems.add(new UnderWriterRoutingLevelDetailDto.UnderWriterInfluencingFactorItem(UnderWriterInfluencingFactor.SUM_ASSURED.name(), (((ProposalPlanDetail) proposal.get("proposalPlanDetail")).getSumAssured().toString())));
+                }
             }
             routingLevelDetailDto.setUnderWriterInfluencingFactor(underWriterInfluencingFactorItems);
             mandatoryDocuments = underWriterAdapter.getDocumentsForUnderWriterApproval(routingLevelDetailDto);
+        } else {
+            List<SearchDocumentDetailDto> documentDetailDtos = Lists.newArrayList();
+            SearchDocumentDetailDto searchDocumentDetailDto = new SearchDocumentDetailDto(new PlanId(planDetail.getPlanId()));
+            documentDetailDtos.add(searchDocumentDetailDto);
+            documentDetailDtos.add(new SearchDocumentDetailDto(new PlanId(planDetail.getPlanId()), coverageIds));
+            mandatoryDocuments.addAll(underWriterAdapter.getMandatoryDocumentsForApproverApproval(documentDetailDtos, ProcessType.ENROLLMENT));
         }
-        List<SearchDocumentDetailDto> documentDetailDtos = Lists.newArrayList();
-        SearchDocumentDetailDto searchDocumentDetailDto = new SearchDocumentDetailDto(new PlanId(planDetail.getPlanId()));
-        documentDetailDtos.add(searchDocumentDetailDto);
-        documentDetailDtos.add(new SearchDocumentDetailDto(new PlanId(planDetail.getPlanId()), coverageIds));
-        mandatoryDocuments.addAll(underWriterAdapter.getMandatoryDocumentsForApproverApproval(documentDetailDtos, ProcessType.ENROLLMENT));
+
 
         List<ILProposalMandatoryDocumentDto> mandatoryDocumentDtos = Lists.newArrayList();
         if (isNotEmpty(mandatoryDocuments)) {
@@ -351,13 +357,13 @@ public class ILProposalFinder {
         @Override
         public ILSearchProposalDto apply(Map map) {
             String proposalId = map.get("_id").toString();
-            String generatedOn = map.get("generatedOn") != null ? (String) map.get("generatedOn") : "";
+            String submittedOn = map.get("submittedOn") != null ? map.get("submittedOn").toString() : "";
             String proposalStatus = map.get("proposalStatus") != null ? (String) map.get("proposalStatus") : "";
             String proposalNumber = map.get("proposalNumber") != null ? (String) map.get("proposalNumber") : "";
             Proposer proposerMap = map.get("proposer") != null ? (Proposer) map.get("proposer") : null;
             String proposerName = proposerMap != null ? proposerMap.getFirstName() + " " + proposerMap.getSurname() : "";
             String agentNames = ((AgentCommissionShareModel) map.get("agentCommissionShareModel")).getCommissionShare().stream().map(x -> getAgentFullNameById(x.getAgentId().toString())).collect(Collectors.joining(" , "));
-            ILSearchProposalDto ilSearchProposalDto = new ILSearchProposalDto(proposalNumber, proposerName, "NRCNumber", agentNames, "Agent Code", proposalId, generatedOn, proposalStatus);
+            ILSearchProposalDto ilSearchProposalDto = new ILSearchProposalDto(proposalNumber, proposerName, "NRCNumber", agentNames, "Agent Code", proposalId, submittedOn, proposalStatus);
             return ilSearchProposalDto;
         }
     }
@@ -398,6 +404,7 @@ public class ILProposalFinder {
         dto.setProposalId(proposalId);
         dto.setProposalStatus(proposal.get("proposalStatus").toString());
         dto.setProposalNumber(proposal.get("proposalNumber").toString());
+        dto.setSubmittedOn(proposal.get("submittedOn") != null ?  proposal.get("submittedOn").toString() : "");
         return dto;
     }
 

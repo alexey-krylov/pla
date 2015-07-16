@@ -5,7 +5,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.joda.time.DateTime;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -22,7 +21,7 @@ public class ILProposalDto {
 
     private  String proposalId;
 
-    private DateTime proposalSubmittedOn;
+    private String submittedOn;
 
     private ProposedAssuredDto proposedAssured;
 
