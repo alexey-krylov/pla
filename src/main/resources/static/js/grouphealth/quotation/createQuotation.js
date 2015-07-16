@@ -5,7 +5,7 @@ angular.module('createQuotation', ['common', 'ngRoute', 'mgcrea.ngStrap.select',
         function ($scope, $http, $timeout, $location, $route, $upload, provinces, getProvinceAndCityDetail, globalConstants, agentDetails, stepsSaved, proposerDetails, quotationNumber, getQueryParameter,
                   $window, checkIfInsuredUploaded, premiumData) {
             var mode = getQueryParameter("mode");
-            $scope.mode=mode;
+            $scope.mode = mode;
             $scope.qId = null;
             if (mode == 'view') {
                 $scope.isViewMode = true;
@@ -45,18 +45,20 @@ angular.module('createQuotation', ['common', 'ngRoute', 'mgcrea.ngStrap.select',
                 /*initialize with default values*/
                 plan: {
                     samePlanForAllRelation: false,
-                    samePlanForAllCategory: false
+                    samePlanForAllCategory: false,
+                    considerMoratoriumPeriod: false
                 },
 
 
                 premium: $scope.premiumData
             };
 
-            if($scope.premiumData)
+            if ($scope.premiumData)
                 $scope.selectedInstallment = $scope.premiumData.premiumInstallment;
 
             $scope.quotationDetails.basic = agentDetails;
             $scope.quotationDetails.proposer = proposerDetails;
+            $scope.quotationDetails.plan.considerMoratoriumPeriod = proposerDetails.considerMoratoriumPeriod;
             // console.log(getQueryParameter('quotationId'));
             // console.log($scope.quotationId);
 
@@ -110,7 +112,7 @@ angular.module('createQuotation', ['common', 'ngRoute', 'mgcrea.ngStrap.select',
             };
 
             $scope.populateProposerDetailFromClientRepository = function () {
-                $http.get("/pla/quotation/grouphealth/getproposerdetailfromclient/" + $scope.quotationDetails.proposer.proposerCode+"/"+$scope.quotationId)
+                $http.get("/pla/quotation/grouphealth/getproposerdetailfromclient/" + $scope.quotationDetails.proposer.proposerCode + "/" + $scope.quotationId)
                     .success(function (data) {
                         $scope.quotationDetails.proposer = data;
                     });
@@ -139,7 +141,7 @@ angular.module('createQuotation', ['common', 'ngRoute', 'mgcrea.ngStrap.select',
             };
 
             $scope.isSaveDisabled = function (formName) {
-                return formName.$invalid || ($scope.stepsSaved[$scope.selectedItem] && !mode=='new')
+                return formName.$invalid || ($scope.stepsSaved[$scope.selectedItem] && !mode == 'new')
             };
 
             $scope.searchAgent = function () {
@@ -241,16 +243,16 @@ angular.module('createQuotation', ['common', 'ngRoute', 'mgcrea.ngStrap.select',
                     .success(function (data) {
                         if (data.status == "200") {
                             $scope.quotationId = data.id;
-                            $scope.proposerCodeDisabled=true;
+                            $scope.proposerCodeDisabled = true;
                             saveStep();
                         }
                     });
             };
 
-            $scope.updatePremiumDetail = function(quotationId) {
-                $http.get("/pla/quotation/grouphealth/getpremiumdetail/" +quotationId)
+            $scope.updatePremiumDetail = function (quotationId) {
+                $http.get("/pla/quotation/grouphealth/getpremiumdetail/" + quotationId)
                     .success(function (data) {
-                        console.log('received data'+JSON.stringify(data));
+                        console.log('received data' + JSON.stringify(data));
                         $scope.quotationDetails.premium = data;
                         $scope.premiumData = data;
                         $scope.quotationDetails.premium.policyTermValue = data.policyTermValue;
@@ -288,7 +290,7 @@ angular.module('createQuotation', ['common', 'ngRoute', 'mgcrea.ngStrap.select',
                 }
             };
 
-            $scope.installments =_.sortBy($scope.premiumData.installments,'installmentNo');
+            $scope.installments = _.sortBy($scope.premiumData.installments, 'installmentNo');
 
             $scope.recalculatePremium = function () {
                 $scope.premiumInstallment = false;
@@ -307,19 +309,19 @@ angular.module('createQuotation', ['common', 'ngRoute', 'mgcrea.ngStrap.select',
                     }
                     if (data.data.installments) {
                         $scope.selectedInstallment = null;
-                        $scope.installments =_.sortBy(data.data.installments,'installmentNo');
+                        $scope.installments = _.sortBy(data.data.installments, 'installmentNo');
                     }
                 });
 
             }
 
             $scope.savePremiumDetails = function () {
-                var premiumDetailDto=$scope.quotationDetails.premium;
-                var request= angular.extend({premiumDetailDto: $scope.quotationDetails.premium},
+                var premiumDetailDto = $scope.quotationDetails.premium;
+                var request = angular.extend({premiumDetailDto: $scope.quotationDetails.premium},
                     {"quotationId": $scope.quotationId});
-                request.premiumDetailDto["premiumInstallment"]=$scope.selectedInstallment;
+                request.premiumDetailDto["premiumInstallment"] = $scope.selectedInstallment;
                 console.log(JSON.stringify(request));
-                $http.post('/pla/quotation/grouphealth/savepremiumdetail',request).success(function (data) {
+                $http.post('/pla/quotation/grouphealth/savepremiumdetail', request).success(function (data) {
                     $http.post("/pla/quotation/grouphealth/generate", angular.extend({},
                         {"quotationId": $scope.quotationId}))
                         .success(function (data) {
@@ -333,8 +335,8 @@ angular.module('createQuotation', ['common', 'ngRoute', 'mgcrea.ngStrap.select',
 
             }
 
-            $scope.setSelectedInstallment = function (selectedInstallment){
-                $scope.selectedInstallment=selectedInstallment;
+            $scope.setSelectedInstallment = function (selectedInstallment) {
+                $scope.selectedInstallment = selectedInstallment;
                 console.log('setSelectedInstallment ***');
             }
 

@@ -60,6 +60,11 @@ public class GroupHealthQuotation extends AbstractAggregateRoot<QuotationId> imp
 
     private LocalDate sharedOn;
 
+    private boolean moratoriumPeriodApplicable;
+
+    private OpportunityId opportunityId;
+
+
     private GroupHealthQuotation(String quotationCreator, String quotationNumber, QuotationId quotationId, AgentId agentId, GHProposer proposer, GHQuotationStatus quotationStatus, int versionNumber) {
         checkArgument(isNotEmpty(quotationCreator));
         checkArgument(isNotEmpty(quotationNumber));
@@ -98,6 +103,12 @@ public class GroupHealthQuotation extends AbstractAggregateRoot<QuotationId> imp
         return this;
     }
 
+    public GroupHealthQuotation updateWithMoratoriumPeriod(boolean moratoriumPeriodApplicable) {
+        checkInvariant();
+        this.moratoriumPeriodApplicable = moratoriumPeriodApplicable;
+        return this;
+    }
+
     public GroupHealthQuotation updateWithAgent(AgentId agentId) {
         checkInvariant();
         this.agentId = agentId;
@@ -116,7 +127,6 @@ public class GroupHealthQuotation extends AbstractAggregateRoot<QuotationId> imp
         return this;
     }
 
-    private OpportunityId opportunityId;
 
     @Override
     public QuotationId getIdentifier() {

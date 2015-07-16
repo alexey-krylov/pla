@@ -103,6 +103,7 @@ public class GHQuotationCommandHandler {
         groupHealthQuotation = groupHealthQuotationService.updateInsured(groupHealthQuotation, insureds, updateGLQuotationWithInsuredCommand.getUserDetails());
         GHPremiumDetailDto premiumDetailDto = new GHPremiumDetailDto(BigDecimal.valueOf(20), 365, BigDecimal.valueOf(15), processInfoAdapter.getServiceTaxAmount());
         groupHealthQuotation = groupHealthQuotationService.updateWithPremiumDetail(groupHealthQuotation, premiumDetailDto, updateGLQuotationWithInsuredCommand.getUserDetails());
+        groupHealthQuotation = groupHealthQuotation.updateWithMoratoriumPeriod(updateGLQuotationWithInsuredCommand.isConsiderMoratoriumPeriod());
         if (isVersioningRequire) {
             ghQuotationMongoRepository.add(groupHealthQuotation);
         }

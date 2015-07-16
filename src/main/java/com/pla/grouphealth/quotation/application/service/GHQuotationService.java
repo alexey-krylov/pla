@@ -418,12 +418,14 @@ public class GHQuotationService {
 
     public ProposerDto getProposerDetail(QuotationId quotationId) {
         Map quotation = ghQuotationFinder.getQuotationById(quotationId.getQuotationId());
+        boolean moratoriumPeriodApplicable = quotation.get("moratoriumPeriodApplicable") != null ? (boolean) quotation.get("moratoriumPeriodApplicable") : false;
         GHProposer proposer = (GHProposer) quotation.get("proposer");
         ProposerDto proposerDto = new ProposerDto(proposer);
         if (quotation.get("opportunityId") != null) {
             OpportunityId opportunityId = (OpportunityId) quotation.get("opportunityId");
             proposerDto.setOpportunityId(opportunityId.getOpportunityId());
         }
+        proposerDto.setConsiderMoratoriumPeriod(moratoriumPeriodApplicable);
         return proposerDto;
     }
 

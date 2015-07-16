@@ -319,7 +319,7 @@ public enum GHInsuredExcelHeader {
 
         @Override
         public String getAllowedValue(GHInsuredDto.GHInsuredDependentDto insuredDependentDto) {
-            return insuredDependentDto.getGender().name();
+            return insuredDependentDto.getGender()!=null?insuredDependentDto.getGender().name():"";
         }
 
         @Override

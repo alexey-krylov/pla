@@ -20,4 +20,6 @@ public class UploadInsuredDetailDto {
     private String quotationId;
 
     private String proposalId;
+
+    private boolean considerMoratoriumPeriod;
 }

@@ -378,7 +378,7 @@
 						<text><![CDATA[HIV Discount:]]></text>
 					</staticText>
 					<staticText>
-						<reportElement x="84" y="119" width="127" height="19" uuid="09c82c9b-9709-43c8-b964-221fcfe55b11"/>
+						<reportElement x="29" y="119" width="182" height="19" uuid="09c82c9b-9709-43c8-b964-221fcfe55b11"/>
 						<textElement textAlignment="Right" verticalAlignment="Middle">
 							<font size="12" isBold="true"/>
 						</textElement>

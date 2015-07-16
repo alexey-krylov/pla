@@ -40,6 +40,8 @@ public class ProposerDto {
 
     private String opportunityId;
 
+    private boolean considerMoratoriumPeriod;
+
     public ProposerDto(GHProposer proposer) {
         GHProposerContactDetail proposerContactDetail = proposer.getContactDetail();
         GHProposerContactDetail.ContactPersonDetail contactPersonDetail = proposerContactDetail != null ? proposerContactDetail.getContactPersonDetail() : null;
