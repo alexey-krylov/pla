@@ -292,7 +292,10 @@ public class ILProposalFinder {
         return null;
     }
 
-    private RoutingLevel findRoutingLevel(UnderWriterRoutingLevelDetailDto routingLevelDetailDto, Map proposal, Integer age) {
+    public RoutingLevel findRoutingLevel(UnderWriterRoutingLevelDetailDto routingLevelDetailDto, String proposalId, Integer age) {
+        BasicDBObject query = new BasicDBObject();
+        query.put("_id", proposalId);
+        Map proposal = mongoTemplate.findOne(new BasicQuery(query), Map.class, "individual_life_proposal");
         RoutingLevel oldRoutinglevel = null;
         RoutingLevel currentRoutinglevel = null;
         ProposalPlanDetail planDetail = (ProposalPlanDetail) proposal.get("proposalPlanDetail");
@@ -368,11 +371,9 @@ public class ILProposalFinder {
         List<ILProposerDocument> uploadedDocuments = proposal.get("proposalDocuments") != null ? (List<ILProposerDocument>) proposal.get("proposalDocuments") : Lists.newArrayList();
         ProposalPlanDetail planDetail = (ProposalPlanDetail) proposal.get("proposalPlanDetail");
         UnderWriterRoutingLevelDetailDto routingLevelDetailDto = new UnderWriterRoutingLevelDetailDto(new PlanId(planDetail.getPlanId()), LocalDate.now(), ProcessType.ENROLLMENT.name());
-        List<CoverageId> coverageIds = ((Set<RiderDetailDto>) planDetail.getRiderDetails()).stream().map(rider -> new CoverageId(rider.getCoverageId())).collect(Collectors.toList());
-
         DateTime dob = new DateTime(((ProposedAssured) proposal.get("proposedAssured")).getDateOfBirth());
         Integer age = Years.yearsBetween(dob, DateTime.now()).getYears() + 1;
-        RoutingLevel routinglevel = findRoutingLevel(routingLevelDetailDto, proposal, age);
+        RoutingLevel routinglevel = findRoutingLevel(routingLevelDetailDto, proposalId, age);
 
         List<ClientDocumentDto> mandatoryDocuments = new ArrayList<ClientDocumentDto>();
         if (routinglevel != null) {
@@ -381,6 +382,7 @@ public class ILProposalFinder {
             List<SearchDocumentDetailDto> documentDetailDtos = Lists.newArrayList();
             SearchDocumentDetailDto searchDocumentDetailDto = new SearchDocumentDetailDto(new PlanId(planDetail.getPlanId()));
             documentDetailDtos.add(searchDocumentDetailDto);
+            List<CoverageId> coverageIds = ((Set<RiderDetailDto>) planDetail.getRiderDetails()).stream().map(rider -> new CoverageId(rider.getCoverageId())).collect(Collectors.toList());
             documentDetailDtos.add(new SearchDocumentDetailDto(new PlanId(planDetail.getPlanId()), coverageIds));
             mandatoryDocuments.addAll(underWriterAdapter.getMandatoryDocumentsForApproverApproval(documentDetailDtos, ProcessType.ENROLLMENT));
         }

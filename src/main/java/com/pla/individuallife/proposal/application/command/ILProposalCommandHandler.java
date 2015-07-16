@@ -6,6 +6,7 @@ import com.pla.core.query.PlanFinder;
 import com.pla.individuallife.proposal.domain.model.*;
 import com.pla.individuallife.proposal.domain.service.ProposalNumberGenerator;
 import com.pla.individuallife.proposal.presentation.dto.QuestionDto;
+import com.pla.individuallife.proposal.query.ILProposalFinder;
 import com.pla.individuallife.quotation.query.ILQuotationDto;
 import com.pla.individuallife.quotation.query.ILQuotationFinder;
 import com.pla.sharedkernel.identifier.PlanId;
@@ -50,6 +51,9 @@ public class ILProposalCommandHandler {
 
     @Autowired
     private PlanFinder planFinder;
+
+    @Autowired
+    private ILProposalFinder proposalFinder;
 
     @Autowired
     private GridFsTemplate gridFsTemplate;
@@ -198,6 +202,6 @@ public class ILProposalCommandHandler {
     @CommandHandler
     public void submitProposal(SubmitILProposalCommand cmd) {
         ProposalAggregate aggregate = ilProposalMongoRepository.load(new ProposalId(cmd.getProposalId()));
-        aggregate.submitForApproval(DateTime.now(), cmd.getUserDetails(), cmd.getComment());
+        aggregate.submitProposal(DateTime.now(), cmd.getUserDetails(), cmd.getComment(), proposalFinder);
     }
 }

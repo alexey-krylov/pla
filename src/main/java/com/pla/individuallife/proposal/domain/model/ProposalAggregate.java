@@ -6,15 +6,21 @@ import com.pla.core.query.PlanFinder;
 import com.pla.individuallife.identifier.QuestionId;
 import com.pla.individuallife.proposal.presentation.dto.AgentDetailDto;
 import com.pla.individuallife.proposal.presentation.dto.QuestionDto;
+import com.pla.individuallife.proposal.query.ILProposalFinder;
 import com.pla.individuallife.quotation.presentation.dto.PlanDetailDto;
 import com.pla.individuallife.quotation.presentation.dto.ProposerDto;
 import com.pla.individuallife.quotation.query.ILQuotationDto;
+import com.pla.publishedlanguage.dto.UnderWriterRoutingLevelDetailDto;
+import com.pla.sharedkernel.domain.model.ProcessType;
+import com.pla.sharedkernel.domain.model.RoutingLevel;
+import com.pla.sharedkernel.identifier.PlanId;
 import com.pla.sharedkernel.identifier.ProposalId;
 import lombok.Getter;
 import org.apache.commons.beanutils.BeanUtils;
 import org.axonframework.eventsourcing.annotation.AbstractAnnotatedAggregateRoot;
 import org.axonframework.eventsourcing.annotation.AggregateIdentifier;
 import org.joda.time.DateTime;
+import org.joda.time.LocalDate;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.security.access.AuthorizationServiceException;
@@ -56,6 +62,7 @@ public class ProposalAggregate extends AbstractAnnotatedAggregateRoot<ProposalId
 
     private ILProposalStatus proposalStatus;
     private DateTime submittedOn;
+    private RoutingLevel routinglevel;
 
     ProposalAggregate() {
         beneficiaries = new ArrayList<Beneficiary>();
@@ -228,10 +235,14 @@ public class ProposalAggregate extends AbstractAnnotatedAggregateRoot<ProposalId
         // raise event to store document in client BC
     }
 
-    public void submitForApproval(DateTime submittedOn, UserDetails userDetails, String comment) {
+    public void submitProposal(DateTime submittedOn, UserDetails userDetails, String comment, ILProposalFinder proposalFinder ) {
         checkAuthorization(userDetails);
         this.submittedOn = submittedOn;
         this.proposalStatus = ILProposalStatus.PENDING_ACCEPTANCE;
+        UnderWriterRoutingLevelDetailDto routingLevelDetailDto = new UnderWriterRoutingLevelDetailDto(new PlanId(proposalPlanDetail.getPlanId()), LocalDate.now(), ProcessType.ENROLLMENT.name());
+
+        RoutingLevel routinglevel = proposalFinder.findRoutingLevel(routingLevelDetailDto, proposalId.toString(), (Integer)proposedAssured.getAgeNextBirthday());
+        this.routinglevel = routinglevel;
         //TODO : if this proposal is being converted from quotation, have to change the state of quotation as CONVERTED
     }
 }
