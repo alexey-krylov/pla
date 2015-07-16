@@ -407,10 +407,36 @@
                             </div>
                         </div>
 
+                        <div class="panel panel-default" id="panel14" ng-class="forms.form14.$valid ? '' : 'errorClass'">
+                            <div class="panel-heading">
+                                <h4 class="panel-title">
+                                    <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapseFourteen">
+                                       Moratorium Period
+                                    </a><i class="indicator glyphicon glyphicon-chevron-down  pull-right"></i>
+                                </h4>
+                            </div>
+                            <div id="collapseFourteen" class="panel-collapse collapse">
+                                <div class="panel-body">
+                                    <form  novalidate="true" role="form" name="forms.form14">
+                                        <div class="row">
+                                            <div class="form-group col-md-4 required" >
+                                                <label class="control-label"   data-placement="top"  >
+                                                    Moratorium Period (Days)
+                                                </label>
+                                                <p class="input-group">
+                                                    <input type="number" class="form-control input-sm" min="1" ng-pattern="/^([0-9]{1,2})?$/" ng-model="items.moratoriumPeriod" value="{{items.moratoriumPeriod}}" ng-required="true" />
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+
                         <div class="row">
                             <div class="col-lg-12" style="text-align: center;margin-top:10px;">
 
-                                <button type="button" class="btn btn-default" style="float:right;" ng-disabled="(!forms.form1.$valid || !forms.form2.$valid || !forms.form3.$valid || !forms.form4.$valid || !forms.form5.$valid || !forms.form6.$valid || !forms.form7.$valid || !forms.form8.$valid || !forms.form9.$valid || !forms.form10.$valid || !forms.form11.$valid || !forms.form12.$valid || !forms.form13.$valid)" data-placement="top-right" data-container="notification" data-duration="10" bs-alert="alert"   ng-click="submitGroupHealth()">Save</button>
+                                <button type="button" class="btn btn-default" style="float:right;" ng-disabled="(!forms.form1.$valid || !forms.form2.$valid || !forms.form3.$valid || !forms.form4.$valid || !forms.form5.$valid || !forms.form6.$valid || !forms.form7.$valid || !forms.form8.$valid || !forms.form9.$valid || !forms.form10.$valid || !forms.form11.$valid || !forms.form12.$valid || !forms.form13.$valid || !forms.form14.$valid)" data-placement="top-right" data-container="notification" data-duration="10" bs-alert="alert"   ng-click="submitGroupHealth()">Save</button>
                                 <a class="btn btn-default" ng-click="reloadPage()" style="float:left;">Cancel</a>
 
                             </div>
@@ -1121,7 +1147,7 @@
                         <div class="row">
                             <div class="col-lg-12" style="text-align: center;margin-top:10px;">
 
-                                <button type="button" class="btn btn-default" style="float:right;" ng-disabled="(!forms.form1.$valid || !forms.form2.$valid || !forms.form3.$valid || !forms.form4.$valid || !forms.form5.$valid || !forms.form6.$valid || !forms.form7.$valid || !forms.form8.$valid || !forms.form9.$valid || !forms.form10.$valid || !forms.form11.$valid || !forms.form12.$valid )" data-placement="top-right" data-container="notification2" data-duration="5" bs-alert="alert"   ng-click="submitIndividualLife()">Save</button>
+                                <button type="button" class="btn btn-default" style="float:right;" ng-disabled="(!forms.form1.$valid || !forms.form2.$valid || !forms.form3.$valid || !forms.form4.$valid || !forms.form5.$valid || !forms.form6.$valid || !forms.form7.$valid || !forms.form8.$valid || !forms.form9.$valid || !forms.form10.$valid || !forms.form11.$valid || !forms.form12.$valid || !forms.form13.$valid)" data-placement="top-right" data-container="notification2" data-duration="5" bs-alert="alert"   ng-click="submitIndividualLife()">Save</button>
                                 <a class="btn btn-default" ng-click="reloadPage()" style="float:left;">Cancel</a>
 
                             </div>

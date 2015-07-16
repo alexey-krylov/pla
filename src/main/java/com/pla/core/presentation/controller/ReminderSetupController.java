@@ -124,7 +124,7 @@ public class ReminderSetupController {
             } catch (NotificationException e) {
                 return new ResponseEntity(Result.failure(e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
             } catch (DataIntegrityViolationException e) {
-                return new ResponseEntity(Result.failure("Notification Role mapping has already configured"), HttpStatus.INTERNAL_SERVER_ERROR);
+                return new ResponseEntity(Result.failure("Notification Role mapping is already configured"), HttpStatus.INTERNAL_SERVER_ERROR);
             } catch (RuntimeException e) {
                 return new ResponseEntity(Result.failure(e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
             }

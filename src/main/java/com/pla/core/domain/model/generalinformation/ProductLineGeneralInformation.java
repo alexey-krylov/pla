@@ -70,6 +70,8 @@ public class ProductLineGeneralInformation {
 
     private AgentLoadingFactor ageLoadingFactor;
 
+    private int moratoriumPeriod;
+
 
     private ProductLineGeneralInformation(String productLineInformationId, LineOfBusinessEnum productLineId) {
         this.productLineInformationId = productLineInformationId;
@@ -150,6 +152,14 @@ public class ProductLineGeneralInformation {
 
     public ProductLineGeneralInformation withAgeLoadingFactor(int age, BigDecimal loadingFactor){
         this.ageLoadingFactor = new AgentLoadingFactor(age,loadingFactor);
+        return this;
+    }
+
+    public ProductLineGeneralInformation withMoratoriumPeriod(int moratoriumPeriod){
+        if (!LineOfBusinessEnum.GROUP_HEALTH.equals(this.productLine)){
+            return this;
+        }
+        this.moratoriumPeriod = moratoriumPeriod;
         return this;
     }
 

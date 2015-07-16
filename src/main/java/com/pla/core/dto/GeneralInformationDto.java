@@ -29,6 +29,7 @@ public class GeneralInformationDto {
     private List<ProductLineProcessItemDto> maturityProcessItems;
     private List<PremiumFrequencyFollowUpDto> premiumFollowUpFrequency;
     private Map<String,Object> ageLoadingFactor;
+    private int moratoriumPeriod;
     private String organizationInformationId;
     private List<DiscountFactorInformationDto> discountFactorItems;
     private List<ModalFactorInformationDto> modelFactorItems;

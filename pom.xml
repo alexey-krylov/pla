@@ -414,16 +414,29 @@
             <version>1.2.0</version>
             <scope>test</scope>
         </dependency>
-      <!--  <dependency>
+
+      <!--   doc file conversion dependency starts -->
+
+        <dependency>
             <groupId>fr.opensagres.xdocreport</groupId>
             <artifactId>org.apache.poi.xwpf.converter.xhtml</artifactId>
             <version>1.0.0</version>
         </dependency>
         <dependency>
             <groupId>org.docx4j</groupId>
-            <artifactId>docx4j</artifactId>
+            <artifactId>docx4j-ImportXHTML</artifactId>
             <version>3.0.0</version>
-        </dependency>-->
+            <scope>provided</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>log4j</groupId>
+                    <artifactId>log4j</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+
+        <!-- doc file conversion dependency End -->
+
         <dependency>
             <groupId>org.seleniumhq.selenium.client-drivers</groupId>
             <artifactId>selenium-java-client-driver</artifactId>

@@ -1,19 +1,36 @@
 package com.pla.core.application.service.notification;
 
 import com.google.common.collect.ImmutableMap;
-import com.pla.core.domain.model.notification.NotificationHistory;
+import com.google.common.io.Files;
+import com.pla.core.domain.model.notification.*;
 import com.pla.core.query.NotificationFinder;
 import com.pla.publishedlanguage.contract.IProcessInfoAdapter;
 import com.pla.sharedkernel.application.CreateNotificationHistoryCommand;
 import com.pla.sharedkernel.domain.model.ProcessType;
+import com.pla.sharedkernel.domain.model.ReminderTypeEnum;
+import com.pla.sharedkernel.domain.model.WaitingForEnum;
 import com.pla.sharedkernel.exception.ProcessInfoException;
 import com.pla.sharedkernel.identifier.LineOfBusinessEnum;
+import org.apache.commons.io.FileUtils;
+import org.apache.poi.xwpf.converter.core.FileURIResolver;
+import org.apache.poi.xwpf.converter.xhtml.XHTMLConverter;
+import org.apache.poi.xwpf.converter.xhtml.XHTMLOptions;
+import org.apache.poi.xwpf.usermodel.XWPFDocument;
+import org.docx4j.model.datastorage.migration.VariablePrepare;
+import org.docx4j.openpackaging.packages.WordprocessingMLPackage;
+import org.docx4j.openpackaging.parts.WordprocessingML.MainDocumentPart;
+import org.joda.time.LocalDate;
+import org.nthdimenzion.common.AppConstants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
 
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -123,5 +140,44 @@ public class NotificationTemplateService {
             return notificationHistory.getReminderTemplate();
         }
         return null;
+    }
+
+    public NotificationBuilder createNotification(LineOfBusinessEnum lineOfBusiness, ProcessType process, WaitingForEnum waitingFor, ReminderTypeEnum reminderType,
+                                                  String requestNumber, String roleType, byte[] templateFile, HashMap<String, String> notificationDetail) throws Exception {
+        checkArgument(notificationDetail !=null,"Notification details cannot be empty");
+        checkArgument(templateFile != null, "Notification Template is not uploaded");
+        NotificationBuilder notificationBuilder = Notification.builder();
+        notificationBuilder.withLineOfBusiness(lineOfBusiness)
+                .withProcessType(process)
+                .withRequestNumber(requestNumber)
+                .withWaitingFor(waitingFor)
+                .withReminderType(reminderType)
+                .withEmailAddress(notificationDetail.get("emailAddress") != null ? notificationDetail.get("emailAddress").toString() : "")
+                .withReminderTemplate(convert(templateFile, notificationDetail, lineOfBusiness,requestNumber))
+                .withRoleType(roleType);
+        return notificationBuilder;
+    }
+
+    public byte[] convert(byte[] templateFile,HashMap<String,String> notificationMap,LineOfBusinessEnum lineOfBusiness,String requestNumber) throws Exception {
+        File tempFile  = new File("./src/main/resources/emailtemplate/notification_"+requestNumber+".docx");
+        Files.write(templateFile, tempFile);
+        WordprocessingMLPackage wordMLPackage = WordprocessingMLPackage.load(tempFile);
+        VariablePrepare.prepare(wordMLPackage);
+        MainDocumentPart documentPart = wordMLPackage.getMainDocumentPart();
+        notificationMap.put("systemDate", LocalDate.now().toString(AppConstants.DD_MM_YYY_FORMAT));
+        notificationMap.put("lineOfBusiness",lineOfBusiness.toString());
+        documentPart.variableReplace(notificationMap);
+        wordMLPackage.save(tempFile);
+        String htmlContent = convertDocxToHtml(tempFile);
+        return htmlContent.getBytes();
+    }
+
+    public String convertDocxToHtml(File tempFile) throws IOException {
+        XWPFDocument document = new XWPFDocument(FileUtils.openInputStream(tempFile));
+        XHTMLOptions options = XHTMLOptions.create().URIResolver(new FileURIResolver(new File("word/media")));
+        OutputStream outputStream = new ByteArrayOutputStream();
+        XHTMLConverter.getInstance().convert(document, outputStream, options);
+        FileUtils.forceDelete(tempFile);
+        return outputStream.toString();
     }
 }

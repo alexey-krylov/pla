@@ -73,7 +73,7 @@ public class GeneralInformationService {
         List<Map<ModalFactorItem, BigDecimal>> modalFactorItems =  transformModalFactorItem(generalInformationDto.getModelFactorItems());
         List<Map<DiscountFactorItem, BigDecimal>> discountFactorItems =  transformDiscountFactorItem(generalInformationDto.getDiscountFactorItems());
         ProductLineGeneralInformation productLineGeneralInformation = admin.createProductLineGeneralInformation(lineOfBusinessId, quotationProcessItem,enrollmentProcessItem,reinstatementProcessItem,endorsementProcessItem,claimProcessItem,policyFeeProcess,minimumLimitProcess,surrenderProcessItem,maturityProcessItem,
-                premiumFollowUpFrequencyItems,modalFactorItems,discountFactorItems,generalInformationDto.getAgeLoadingFactor());
+                premiumFollowUpFrequencyItems,modalFactorItems,discountFactorItems,generalInformationDto.getAgeLoadingFactor(),generalInformationDto.getMoratoriumPeriod() );
         mongoTemplate.save(productLineGeneralInformation);
         return AppConstants.SUCCESS;
     }
@@ -167,7 +167,7 @@ public class GeneralInformationService {
         Map<PremiumFrequency, List<Map<ProductLineProcessType,Integer>>>  premiumFrequencyFollowUp =  transformPremiumFrequencyFollowUp(generalInformationDto.getPremiumFollowUpFrequency());
         List<Map<ModalFactorItem, BigDecimal>> modalFactorItems  = transformModalFactorItem(generalInformationDto.getModelFactorItems());
         List<Map<DiscountFactorItem, BigDecimal>> discountFactorItems = transformDiscountFactorItem(generalInformationDto.getDiscountFactorItems());
-        productLineGeneralInformation = admin.updateProductLineInformation(productLineGeneralInformation,  quotationProcessItem,enrollmentProcessItem,reinstatementProcessItem,endorsementProcessItem,claimProcessItem,policyFeeProcess,minimumLimitProcess,surrenderProcessItem,maturityProcessItem,premiumFrequencyFollowUp,modalFactorItems,discountFactorItems,generalInformationDto.getAgeLoadingFactor());
+        productLineGeneralInformation = admin.updateProductLineInformation(productLineGeneralInformation,  quotationProcessItem,enrollmentProcessItem,reinstatementProcessItem,endorsementProcessItem,claimProcessItem,policyFeeProcess,minimumLimitProcess,surrenderProcessItem,maturityProcessItem,premiumFrequencyFollowUp,modalFactorItems,discountFactorItems,generalInformationDto.getAgeLoadingFactor(), generalInformationDto.getMoratoriumPeriod());
         update = updateProductLineInformation(update, productLineGeneralInformation);
         mongoTemplate.updateFirst(findGeneralInformation, update, ProductLineGeneralInformation.class);
         return AppConstants.SUCCESS;
@@ -187,6 +187,7 @@ public class GeneralInformationService {
         update.set("modalFactorProcessInformation", updatedProductLineInformation.getModalFactorProcessInformation());
         update.set("discountFactorProcessInformation", updatedProductLineInformation.getDiscountFactorProcessInformation());
         update.set("ageLoadingFactor", updatedProductLineInformation.getAgeLoadingFactor());
+        update.set("moratoriumPeriod", updatedProductLineInformation.getMoratoriumPeriod());
         return update;
     }
 
@@ -324,7 +325,7 @@ public class GeneralInformationService {
             Map  modalFactorMap = (Map) productLineInformationMap.get("modalFactorProcessInformation");
             productLineInformationByBusinessId.put("modelFactorItems",modalFactorMap.get("modelFactorItems"));
             productLineInformationByBusinessId.put("ageLoadingFactor",productLineInformationMap.get("ageLoadingFactor"));
-
+            productLineInformationByBusinessId.put("moratoriumPeriod",productLineInformationMap.get("moratoriumPeriod"));
             productLineInformationList.add(productLineInformationByBusinessId);
         }
         return transformProductLineInformation(productLineInformationList);
@@ -415,6 +416,7 @@ public class GeneralInformationService {
         productLineInformationMap.put("modelFactorItems",GeneralInformationProcessItem.MODAL_FACTOR.getOrganizationLevelProcessInformationItem(lineOfBusinessId));
         productLineInformationMap.put("discountFactorItems",GeneralInformationProcessItem.DISCOUNT_FACTOR.getOrganizationLevelProcessInformationItem(lineOfBusinessId));
         productLineInformationMap.put("ageLoadingFactor", ImmutableMap.of("age",0,"loadingFactor",0));
+        productLineInformationMap.put("moratoriumPeriod", 0);
         return productLineInformationMap;
     }
 

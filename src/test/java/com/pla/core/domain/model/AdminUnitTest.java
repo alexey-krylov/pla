@@ -324,7 +324,7 @@ public class AdminUnitTest {
         List<Map<PolicyProcessMinimumLimitType,Integer>> policyProcessMinimumLimitItems = Lists.newArrayList();
         List<Map<PolicyFeeProcessType,Integer>> policyFeeProcessItems = Lists.newArrayList();
 
-        ProductLineGeneralInformation createdProductLineGeneralInformation = admin.createProductLineGeneralInformation(LineOfBusinessEnum.GROUP_HEALTH, listOfProcessItems, listOfProcessItems, listOfProcessItems, listOfProcessItems, listOfProcessItems, policyFeeProcessItems, policyProcessMinimumLimitItems, listOfProcessItems, listOfProcessItems, premiumFollowUpFrequencyItems, listOfModalFactorItem, listOfDiscountFactorItem, ageLoadingFactorMap);
+        ProductLineGeneralInformation createdProductLineGeneralInformation = admin.createProductLineGeneralInformation(LineOfBusinessEnum.GROUP_HEALTH, listOfProcessItems, listOfProcessItems, listOfProcessItems, listOfProcessItems, listOfProcessItems, policyFeeProcessItems, policyProcessMinimumLimitItems, listOfProcessItems, listOfProcessItems, premiumFollowUpFrequencyItems, listOfModalFactorItem, listOfDiscountFactorItem, ageLoadingFactorMap, 10);
         assertNotNull(createdProductLineGeneralInformation);
         assertNotNull(createdProductLineGeneralInformation.getQuotationProcessInformation());
         assertNotNull(createdProductLineGeneralInformation.getEnrollmentProcessInformation());
@@ -351,7 +351,7 @@ public class AdminUnitTest {
         List<Map<PolicyProcessMinimumLimitType,Integer>> policyProcessMinimumLimitItems = Lists.newArrayList();
         productLineProcessItemMap.put(ProductLineProcessType.EARLY_DEATH_CRITERIA, 10);
         listOfProcessItems.add(productLineProcessItemMap);
-        ProductLineGeneralInformation createdProductLineGeneralInformation = admin.createProductLineGeneralInformation(LineOfBusinessEnum.GROUP_HEALTH, listOfProcessItems, listOfProcessItems, listOfProcessItems, listOfProcessItems, listOfProcessItems, null, policyProcessMinimumLimitItems, listOfProcessItems, listOfProcessItems, premiumFollowUpFrequencyItems, listOfModalFactorItem, listOfDiscountFactorItem, ageLoadingFactorMap);
+        ProductLineGeneralInformation createdProductLineGeneralInformation = admin.createProductLineGeneralInformation(LineOfBusinessEnum.GROUP_HEALTH, listOfProcessItems, listOfProcessItems, listOfProcessItems, listOfProcessItems, listOfProcessItems, null, policyProcessMinimumLimitItems, listOfProcessItems, listOfProcessItems, premiumFollowUpFrequencyItems, listOfModalFactorItem, listOfDiscountFactorItem, ageLoadingFactorMap, 10);
         assertNull(createdProductLineGeneralInformation);
     }
 
@@ -373,7 +373,7 @@ public class AdminUnitTest {
     public void givenLineOfBusinessIdAndGeneralInformation_whenLineOfBusinessIdIsIndividualInsurance_thenItThrowAnException(){
         List<Map<PolicyFeeProcessType,Integer>> policyFeeProcessItems = Lists.newArrayList();
         List<Map<PolicyProcessMinimumLimitType,Integer>> policyProcessMinimumLimitItems = Lists.newArrayList();
-        ProductLineGeneralInformation createdProductLineGeneralInformation = admin.createProductLineGeneralInformation(LineOfBusinessEnum.INDIVIDUAL_LIFE, listOfProcessItems, listOfProcessItems, listOfProcessItems, listOfProcessItems, listOfProcessItems, policyFeeProcessItems, policyProcessMinimumLimitItems, listOfProcessItems, listOfProcessItems, premiumFollowUpFrequencyItems, listOfModalFactorItem, listOfDiscountFactorItem, ageLoadingFactorMap);
+        ProductLineGeneralInformation createdProductLineGeneralInformation = admin.createProductLineGeneralInformation(LineOfBusinessEnum.INDIVIDUAL_LIFE, listOfProcessItems, listOfProcessItems, listOfProcessItems, listOfProcessItems, listOfProcessItems, policyFeeProcessItems, policyProcessMinimumLimitItems, listOfProcessItems, listOfProcessItems, premiumFollowUpFrequencyItems, listOfModalFactorItem, listOfDiscountFactorItem, ageLoadingFactorMap, 10);
         assertNotNull(createdProductLineGeneralInformation);
     }
 
@@ -432,8 +432,8 @@ public class AdminUnitTest {
         Map<PolicyFeeProcessType,Integer> feeProcessMap = Maps.newLinkedHashMap();
         feeProcessMap.put(PolicyFeeProcessType.MONTHLY,12);
         policyFeeProcessItems.add(feeProcessMap);
-        ProductLineGeneralInformation createdProductLineGeneralInformation = admin.createProductLineGeneralInformation(LineOfBusinessEnum.GROUP_HEALTH, listOfProcessItems, listOfProcessItems, listOfProcessItems, listOfProcessItems, listOfProcessItems, policyFeeProcessItems, policyProcessMinimumLimitItems, listOfProcessItems, listOfProcessItems, premiumFollowUpFrequencyItems, listOfModalFactorItem, listOfDiscountFactorItem, ageLoadingFactorMap);
-        ProductLineGeneralInformation updatedProductLineInformation = admin.updateProductLineInformation(createdProductLineGeneralInformation, listOfProcessItems, listOfProcessItems, listOfProcessItems, listOfProcessItems, listOfProcessItems, policyFeeProcessItems, policyProcessMinimumLimitItems, listOfProcessItems, listOfProcessItems,premiumFollowUpFrequencyItems,listOfModalFactorItem,listOfDiscountFactorItem, ageLoadingFactorMap);
+        ProductLineGeneralInformation createdProductLineGeneralInformation = admin.createProductLineGeneralInformation(LineOfBusinessEnum.GROUP_HEALTH, listOfProcessItems, listOfProcessItems, listOfProcessItems, listOfProcessItems, listOfProcessItems, policyFeeProcessItems, policyProcessMinimumLimitItems, listOfProcessItems, listOfProcessItems, premiumFollowUpFrequencyItems, listOfModalFactorItem, listOfDiscountFactorItem, ageLoadingFactorMap, 10);
+        ProductLineGeneralInformation updatedProductLineInformation = admin.updateProductLineInformation(createdProductLineGeneralInformation, listOfProcessItems, listOfProcessItems, listOfProcessItems, listOfProcessItems, listOfProcessItems, policyFeeProcessItems, policyProcessMinimumLimitItems, listOfProcessItems, listOfProcessItems,premiumFollowUpFrequencyItems,listOfModalFactorItem,listOfDiscountFactorItem, ageLoadingFactorMap, 10);
         assertNotNull(updatedProductLineInformation);
         assertNotNull(updatedProductLineInformation.getPolicyFeeProcessInformation());
     }
