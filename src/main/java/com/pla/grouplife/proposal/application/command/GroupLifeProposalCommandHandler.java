@@ -87,7 +87,8 @@ public class GroupLifeProposalCommandHandler {
             groupLifeProposal = groupLifeProposalRepository.load(proposalId);
         }
         GLProposalProcessor glProposalProcessor = groupLifeProposalRoleAdapter.userToProposalProcessor(glQuotationToProposalCommand.getUserDetails());
-        groupLifeProposal = glProposalProcessor.createProposal(glQuotationToProposalCommand.getQuotationId(), proposalId, groupLifeProposalFactory);
+        GroupLifeProposal newGroupLifeProposal = glProposalProcessor.createProposal(glQuotationToProposalCommand.getQuotationId(), proposalId, groupLifeProposalFactory);
+        groupLifeProposal = groupLifeProposal != null ? newGroupLifeProposal.copyTo(groupLifeProposal) : newGroupLifeProposal;
         if (proposalMap == null) {
             groupLifeProposalRepository.add(groupLifeProposal);
         }

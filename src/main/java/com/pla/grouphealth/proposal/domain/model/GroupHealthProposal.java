@@ -13,6 +13,7 @@ import com.pla.sharedkernel.identifier.OpportunityId;
 import com.pla.sharedkernel.identifier.ProposalId;
 import com.pla.sharedkernel.identifier.ProposalNumber;
 import lombok.AccessLevel;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.axonframework.domain.AbstractAggregateRoot;
@@ -32,6 +33,7 @@ import static com.google.common.base.Preconditions.checkArgument;
 @Document(collection = "group_health_proposal")
 @Getter
 @NoArgsConstructor(access = AccessLevel.PACKAGE)
+@EqualsAndHashCode(of = "proposalId")
 public class GroupHealthProposal extends AbstractAggregateRoot<ProposalId> {
 
     @Id
@@ -74,6 +76,22 @@ public class GroupHealthProposal extends AbstractAggregateRoot<ProposalId> {
         this.proposalNumber = proposalNumber;
         this.proposalStatus = ProposalStatus.DRAFT;
         this.productType = "INSURANCE";
+    }
+
+    public GroupHealthProposal copyTo(GroupHealthProposal groupHealthProposal) {
+        groupHealthProposal.proposalId = this.proposalId;
+        groupHealthProposal.quotation = this.quotation;
+        groupHealthProposal.proposalNumber = this.proposalNumber;
+        groupHealthProposal.submittedOn = this.submittedOn;
+        groupHealthProposal.agentId = this.agentId;
+        groupHealthProposal.proposer = this.proposer;
+        groupHealthProposal.insureds = this.insureds;
+        groupHealthProposal.premiumDetail = this.premiumDetail;
+        groupHealthProposal.proposalStatus = this.proposalStatus;
+        groupHealthProposal.proposerDocuments = this.proposerDocuments;
+        groupHealthProposal.opportunityId = this.opportunityId;
+        groupHealthProposal.productType = this.productType;
+        return groupHealthProposal;
     }
 
     public GroupHealthProposal updateWithAgentId(AgentId agentId) {

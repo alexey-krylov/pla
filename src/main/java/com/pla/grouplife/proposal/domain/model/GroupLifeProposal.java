@@ -73,6 +73,22 @@ public class GroupLifeProposal extends AbstractAggregateRoot<ProposalId> {
         this.productType = "INSURANCE";
     }
 
+    public GroupLifeProposal copyTo(GroupLifeProposal groupLifeProposal) {
+        groupLifeProposal.proposalId = this.proposalId;
+        groupLifeProposal.quotation = this.quotation;
+        groupLifeProposal.proposalNumber = this.proposalNumber;
+        groupLifeProposal.submittedOn = this.submittedOn;
+        groupLifeProposal.agentId = this.agentId;
+        groupLifeProposal.proposer = this.proposer;
+        groupLifeProposal.insureds = this.insureds;
+        groupLifeProposal.premiumDetail = this.premiumDetail;
+        groupLifeProposal.proposalStatus = this.proposalStatus;
+        groupLifeProposal.proposerDocuments = this.proposerDocuments;
+        groupLifeProposal.productType = this.productType;
+        return groupLifeProposal;
+    }
+
+
     public GroupLifeProposal updateWithAgentId(AgentId agentId) {
         this.agentId = agentId;
         return this;

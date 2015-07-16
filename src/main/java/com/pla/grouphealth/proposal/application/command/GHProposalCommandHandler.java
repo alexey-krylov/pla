@@ -90,7 +90,8 @@ public class GHProposalCommandHandler {
             proposalId = new ProposalId(proposalMap.get("_id").toString());
             groupHealthProposal = ghProposalMongoRepository.load(proposalId);
         }
-        groupHealthProposal = groupHealthProposalFactory.createProposal(new QuotationId(ghQuotationToProposalCommand.getQuotationId()), proposalId);
+        GroupHealthProposal newGroupHealthProposal = groupHealthProposalFactory.createProposal(new QuotationId(ghQuotationToProposalCommand.getQuotationId()), proposalId);
+        groupHealthProposal = groupHealthProposal != null ? newGroupHealthProposal.copyTo(groupHealthProposal) : newGroupHealthProposal;
         if (proposalMap == null) {
             ghProposalMongoRepository.add(groupHealthProposal);
         }
@@ -154,13 +155,13 @@ public class GHProposalCommandHandler {
 
     @CommandHandler
     public void uploadMandatoryDocument(GHProposalDocumentCommand ghProposalDocumentCommand) throws IOException {
-        String fileName = ghProposalDocumentCommand.getFile()!=null?ghProposalDocumentCommand.getFile().getOriginalFilename():"";
+        String fileName = ghProposalDocumentCommand.getFile() != null ? ghProposalDocumentCommand.getFile().getOriginalFilename() : "";
         GroupHealthProposal groupHealthProposal = ghProposalMongoRepository.load(new ProposalId(ghProposalDocumentCommand.getProposalId()));
         Set<GHProposerDocument> documents = groupHealthProposal.getProposerDocuments();
         if (isEmpty(documents)) {
             documents = Sets.newHashSet();
         }
-        String gridFsDocId = gridFsTemplate.store(ghProposalDocumentCommand.getFile().getInputStream(),fileName,ghProposalDocumentCommand.getFile().getContentType()).getId().toString();
+        String gridFsDocId = gridFsTemplate.store(ghProposalDocumentCommand.getFile().getInputStream(), fileName, ghProposalDocumentCommand.getFile().getContentType()).getId().toString();
         GHProposerDocument currentDocument = new GHProposerDocument(ghProposalDocumentCommand.getDocumentId(), fileName, gridFsDocId, ghProposalDocumentCommand.getFile().getContentType());
         if (!documents.add(currentDocument)) {
             GHProposerDocument existingDocument = documents.stream().filter(new Predicate<GHProposerDocument>() {
