@@ -362,15 +362,6 @@
 						<text><![CDATA[Net Premium :]]></text>
 					</staticText>
 					<staticText>
-						<reportElement x="31" y="74" width="182" height="21" uuid="6ba3e743-3fec-459c-8944-85490abf6845">
-							<printWhenExpression><![CDATA[$F{showLoading}]]></printWhenExpression>
-						</reportElement>
-						<textElement textAlignment="Right" verticalAlignment="Middle">
-							<font size="12" isBold="true"/>
-						</textElement>
-						<text><![CDATA[Waiver of Excess Loadings :]]></text>
-					</staticText>
-					<staticText>
 						<reportElement x="381" y="80" width="189" height="18" uuid="a125feeb-520c-4597-b633-6370894afb21">
 							<printWhenExpression><![CDATA[$F{showLoading}]]></printWhenExpression>
 						</reportElement>
@@ -394,7 +385,7 @@
 						<text><![CDATA[Long Term Discount :]]></text>
 					</staticText>
 					<textField isStretchWithOverflow="true">
-						<reportElement x="221" y="51" width="84" height="20" uuid="89fb0baf-1f19-435b-8a08-422ad8f89845"/>
+						<reportElement x="223" y="51" width="84" height="20" uuid="89fb0baf-1f19-435b-8a08-422ad8f89845"/>
 						<textElement textAlignment="Left" verticalAlignment="Middle"/>
 						<textFieldExpression><![CDATA[$F{netPremium}]]></textFieldExpression>
 					</textField>
@@ -424,22 +415,15 @@
 						</textElement>
 						<textFieldExpression><![CDATA[$F{addOnBenefits}]]></textFieldExpression>
 					</textField>
-					<textField isStretchWithOverflow="true">
-						<reportElement x="222" y="75" width="88" height="22" uuid="63983f1c-55d3-40b5-81fa-68203e120ef7">
-							<printWhenExpression><![CDATA[$F{showLoading}]]></printWhenExpression>
-						</reportElement>
-						<textElement verticalAlignment="Middle"/>
-						<textFieldExpression><![CDATA[$F{waiverOfExcessLoadings}]]></textFieldExpression>
-					</textField>
 					<staticText>
-						<reportElement x="381" y="99" width="189" height="20" uuid="495b3456-1b7c-48a6-979d-e113df53062c"/>
+						<reportElement x="27" y="76" width="189" height="20" uuid="495b3456-1b7c-48a6-979d-e113df53062c"/>
 						<textElement textAlignment="Right">
 							<font size="12" isBold="true"/>
 						</textElement>
 						<text><![CDATA[       Valued Client Discount:]]></text>
 					</staticText>
 					<textField>
-						<reportElement x="581" y="99" width="123" height="17" uuid="8752e5f1-046d-44db-9070-43fa61f2321b"/>
+						<reportElement x="223" y="76" width="123" height="17" uuid="8752e5f1-046d-44db-9070-43fa61f2321b"/>
 						<textElement verticalAlignment="Middle"/>
 						<textFieldExpression><![CDATA[$F{valuedClientDiscount}]]></textFieldExpression>
 					</textField>

@@ -79,9 +79,9 @@ public class AgentProfileDto {
     }
 
     public void setNrcNumberInString(String nrcNumberInString) {
-        if(isEmpty(nrcNumberInString)){
-            this.nrcNumber=null;
-            this.nrcNumberInString="";
+        if (isEmpty(nrcNumberInString)) {
+            this.nrcNumber = null;
+            this.nrcNumberInString = "";
             return;
         }
         nrcNumberInString = nrcNumberInString.replaceAll("/", "").trim();
@@ -90,8 +90,11 @@ public class AgentProfileDto {
     }
 
     public String getNrcNumberInString() {
-        if(getNrcNumber()==null){
+        if (getNrcNumber() == null) {
             return "";
+        }
+        if (getNrcNumber() == 0) {
+            return "000000/00/0";
         }
         String nrc = String.valueOf(getNrcNumber());
         String part1 = nrc.substring(0, 6);
