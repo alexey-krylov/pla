@@ -241,4 +241,22 @@ public class ProcessInfoAdapterImplUnitTest {
         assertThat(daysForSecondReminder,is(11));
         assertThat(daysForFirstReminder,is(12));
     }
+
+    @Test
+    public void givenLineOfBusiness_whenTheLobIsGROUP_HEALTH_thenItShouldReturnTheMoratoriumPeriodConfiguredForGH() throws ProcessInfoException {
+        ProductLineGeneralInformation productLineGeneralInformation = ProductLineGeneralInformation.createProductLineGeneralInformation(LineOfBusinessEnum.GROUP_HEALTH);
+        productLineGeneralInformation = productLineGeneralInformation.withMoratoriumPeriod(15);
+        when(generalInformationService.findProductLineInformationByLineOfBusinessId(LineOfBusinessEnum.GROUP_HEALTH)).thenReturn(productLineGeneralInformation);
+        int moratoriumPeriod =  processInfoAdapter.getMoratoriumPeriod(LineOfBusinessEnum.GROUP_HEALTH);
+        assertThat(moratoriumPeriod,is(15));
+    }
+
+    @Test
+    public void givenLineOfBusiness_whenTheLobIsOtherThanGROUP_HEALTH_thenItShouldReturnTheMoratoriumPeriodAsZero() throws ProcessInfoException {
+        ProductLineGeneralInformation productLineGeneralInformation = ProductLineGeneralInformation.createProductLineGeneralInformation(LineOfBusinessEnum.INDIVIDUAL_LIFE);
+        productLineGeneralInformation = productLineGeneralInformation.withMoratoriumPeriod(15);
+        when(generalInformationService.findProductLineInformationByLineOfBusinessId(LineOfBusinessEnum.INDIVIDUAL_LIFE)).thenReturn(productLineGeneralInformation);
+        int moratoriumPeriod =  processInfoAdapter.getMoratoriumPeriod(LineOfBusinessEnum.INDIVIDUAL_LIFE);
+        assertThat(moratoriumPeriod,is(0));
+    }
 }

@@ -27,4 +27,6 @@ public interface IProcessInfoAdapter {
     public int getDaysForSecondPremiumReminder(LineOfBusinessEnum lineOfBusinessEnum, PremiumFrequency premiumFrequency) throws ProcessInfoException;
 
     public BigDecimal getServiceTaxAmount();
+
+    public int getMoratoriumPeriod(LineOfBusinessEnum lineOfBusiness);
 }

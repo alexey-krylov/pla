@@ -221,4 +221,8 @@ public class ProductLineGeneralInformation {
             }
         }).findAny().get();
     }
+
+    public int getMoratoriumPeriod(){
+        return LineOfBusinessEnum.GROUP_HEALTH.equals(this.productLine)?this.moratoriumPeriod:0;
+    }
 }

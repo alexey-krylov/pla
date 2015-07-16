@@ -26,7 +26,7 @@ public class ProcessInfoAdapterImpl implements IProcessInfoAdapter {
     }
 
     @Override
-     public int getPurgeTimePeriod(LineOfBusinessEnum lineOfBusinessEnum, ProcessType processType) throws ProcessInfoException {
+    public int getPurgeTimePeriod(LineOfBusinessEnum lineOfBusinessEnum, ProcessType processType) throws ProcessInfoException {
         ProductLineGeneralInformation productLineGeneralInformation =  generalInformationService.findProductLineInformationByLineOfBusinessId(lineOfBusinessEnum);
         return productLineGeneralInformation.getProductLineProcessItemValue(processType, ProductLineProcessType.PURGE_TIME_PERIOD);
     }
@@ -50,7 +50,7 @@ public class ProcessInfoAdapterImpl implements IProcessInfoAdapter {
     }
 
     @Override
-     public int getPolicyLapseTimePeriod(LineOfBusinessEnum lineOfBusinessEnum, PremiumFrequency premiumFrequency) throws ProcessInfoException {
+    public int getPolicyLapseTimePeriod(LineOfBusinessEnum lineOfBusinessEnum, PremiumFrequency premiumFrequency) throws ProcessInfoException {
         ProductLineGeneralInformation productLineGeneralInformation = generalInformationService.findProductLineInformationByLineOfBusinessId(lineOfBusinessEnum);
         return productLineGeneralInformation.getPremiumFollowUpFrequencyLineItem(premiumFrequency, ProductLineProcessType.LAPSE);
     }
@@ -68,8 +68,16 @@ public class ProcessInfoAdapterImpl implements IProcessInfoAdapter {
     }
 
     @Override
-     public BigDecimal getServiceTaxAmount() {
+    public BigDecimal getServiceTaxAmount() {
         return generalInformationService.getTheServiceTaxAmount();
+    }
+
+    @Override
+    public int getMoratoriumPeriod(LineOfBusinessEnum lineOfBusiness) {
+        if (!LineOfBusinessEnum.GROUP_HEALTH.equals(lineOfBusiness))
+            return 0;
+        ProductLineGeneralInformation productLineGeneralInformation = generalInformationService.findProductLineInformationByLineOfBusinessId(lineOfBusiness);
+        return productLineGeneralInformation.getMoratoriumPeriod();
     }
 
 }
