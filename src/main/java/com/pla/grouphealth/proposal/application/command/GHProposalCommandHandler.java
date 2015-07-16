@@ -154,13 +154,14 @@ public class GHProposalCommandHandler {
 
     @CommandHandler
     public void uploadMandatoryDocument(GHProposalDocumentCommand ghProposalDocumentCommand) throws IOException {
+        String fileName = ghProposalDocumentCommand.getFile()!=null?ghProposalDocumentCommand.getFile().getOriginalFilename():"";
         GroupHealthProposal groupHealthProposal = ghProposalMongoRepository.load(new ProposalId(ghProposalDocumentCommand.getProposalId()));
         Set<GHProposerDocument> documents = groupHealthProposal.getProposerDocuments();
         if (isEmpty(documents)) {
             documents = Sets.newHashSet();
         }
-        String gridFsDocId = gridFsTemplate.store(ghProposalDocumentCommand.getFile().getInputStream(), ghProposalDocumentCommand.getFile().getContentType(), ghProposalDocumentCommand.getFilename()).getId().toString();
-        GHProposerDocument currentDocument = new GHProposerDocument(ghProposalDocumentCommand.getDocumentId(), ghProposalDocumentCommand.getFilename(), gridFsDocId, ghProposalDocumentCommand.getFile().getContentType());
+        String gridFsDocId = gridFsTemplate.store(ghProposalDocumentCommand.getFile().getInputStream(),fileName,ghProposalDocumentCommand.getFile().getContentType()).getId().toString();
+        GHProposerDocument currentDocument = new GHProposerDocument(ghProposalDocumentCommand.getDocumentId(), fileName, gridFsDocId, ghProposalDocumentCommand.getFile().getContentType());
         if (!documents.add(currentDocument)) {
             GHProposerDocument existingDocument = documents.stream().filter(new Predicate<GHProposerDocument>() {
                 @Override
@@ -169,7 +170,7 @@ public class GHProposalCommandHandler {
                 }
             }).findAny().get();
             gridFsTemplate.delete(new Query(Criteria.where("_id").is(existingDocument.getGridFsDocId())));
-            existingDocument = existingDocument.updateWithNameAndContent(ghProposalDocumentCommand.getFilename(), gridFsDocId, ghProposalDocumentCommand.getFile().getContentType());
+            existingDocument = existingDocument.updateWithNameAndContent(fileName, gridFsDocId, ghProposalDocumentCommand.getFile().getContentType());
         }
         groupHealthProposal = groupHealthProposal.updateWithDocuments(documents);
     }
