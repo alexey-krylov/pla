@@ -45,7 +45,7 @@
                                 <input type="text" class="form-control input-sm" ng-model="familyHistory.father.healthState"/>
                             </td>
                             <td>
-                                <input type="text" class="form-control input-sm" ng-disabled="familyHistory.father.isAlive" ng-model="familyHistory.father.deathAge"/>
+                                <input type="number" class="form-control input-sm" ng-disabled="familyHistory.father.isAlive" ng-model="familyHistory.father.deathAge"/>
                             </td>
                             <td>
                                 <input type="text" class="form-control input-sm" ng-disabled="familyHistory.father.isAlive" ng-model="familyHistory.father.deathCause"/>
@@ -65,7 +65,7 @@
                                 <input type="text" class="form-control input-sm" ng-model="familyHistory.mother.healthState"/>
                             </td>
                             <td>
-                                <input type="text" class="form-control input-sm" ng-disabled="familyHistory.mother.isAlive" ng-model="familyHistory.mother.deathAge"/>
+                                <input type="number" class="form-control input-sm" ng-disabled="familyHistory.mother.isAlive" ng-model="familyHistory.mother.deathAge"/>
                             </td>
                             <td>
                                 <input type="text" class="form-control input-sm" ng-disabled="familyHistory.mother.isAlive" ng-model="familyHistory.mother.deathCause"/>
@@ -103,18 +103,18 @@
                         <tbody>
                         <tr>
                             <td>Brothers</td>
-                            <td><input type="text" class="form-control input-sm" ng-model="familyHistory.brother.alive"/></td>
-                            <td><input type="text" class="form-control input-sm" ng-model="familyHistory.brother.death"/></td>
+                            <td><input type="number" class="form-control input-sm" ng-model="familyHistory.brother.alive"/></td>
+                            <td><input type="number" class="form-control input-sm" ng-model="familyHistory.brother.death"/></td>
                             <td><input type="text" class="form-control input-sm" ng-model="familyHistory.brother.healthState"/></td>
-                            <td><input type="text" class="form-control input-sm" ng-model="familyHistory.brother.deathAge"/></td>
+                            <td><input type="number" class="form-control input-sm" ng-model="familyHistory.brother.deathAge"/></td>
                             <td><input type="text" class="form-control input-sm" ng-model="familyHistory.brother.deathCause"/></td>
                         </tr>
                         <tr>
                             <td>Sisters</td>
-                            <td><input type="text" class="form-control input-sm" ng-model="familyHistory.sister.alive"/></td>
-                            <td><input type="text" class="form-control input-sm" ng-model="familyHistory.sister.death"/></td>
+                            <td><input type="number" class="form-control input-sm" ng-model="familyHistory.sister.alive"/></td>
+                            <td><input type="number" class="form-control input-sm" ng-model="familyHistory.sister.death"/></td>
                             <td><input type="text" class="form-control input-sm" ng-model="familyHistory.sister.healthState"/></td>
-                            <td><input type="text" class="form-control input-sm" ng-model="familyHistory.sister.deathAge"/></td>
+                            <td><input type="number" class="form-control input-sm" ng-model="familyHistory.sister.deathAge"/></td>
                             <td><input type="text" class="form-control input-sm" ng-model="familyHistory.sister.deathCause"/></td>
                         </tr>
                         </tbody>
@@ -126,7 +126,7 @@
                     If not already stated, is any close blood relative suffering from (or has any one had) diabetes, heart disease, high blood pressure, mental illness etc.
                 </div>
                 <div class="col-md-2">
-                    <select class="form-control input-sm" ng-model="familyHistory.closeRelative.answer" ng-change="familyHistory.closeRelative.questionId=16">
+                    <select class="form-control input-sm" ng-model="familyHistory.closeRelative.answer" ng-change="familyHistory.closeRelative.questionId='16'">
                         <option value="">--Select One--</option>
                         <option value="true">Yes</option>
                         <option value="false">No</option>
@@ -162,13 +162,13 @@
                         <tbody>
                         <tr>
                             <td>
-                                <input type="text" class="form-control input-sm" ng-model="habits.wine"/>
+                                <input type="number" class="form-control input-sm" ng-model="habits.wine"/>
                             </td>
                             <td>
-                                <input type="text" class="form-control input-sm" ng-model="habits.beer"/>
+                                <input type="number" class="form-control input-sm" ng-model="habits.beer"/>
                             </td>
                             <td>
-                                <input type="text" class="form-control input-sm" ng-model="habits.spirit"/>
+                                <input type="number" class="form-control input-sm" ng-model="habits.spirit"/>
                             </td>
                         </tr>
                         </tbody>
@@ -180,7 +180,7 @@
                     How much, and what do you smoke per day?
                 </div>
                 <div class="col-md-2">
-                    <input type="text" class="form-control input-sm" ng-model="habits.smokePerDay"/>
+                    <input type="number" class="form-control input-sm" ng-model="habits.smokePerDay"/>
                 </div>
             </div>
             <div class="row" style="margin: 0">
@@ -298,9 +298,9 @@
                         </thead>
                         <tbody>
                         <tr>
-                            <td><input type="text" class="form-control input-sm" ng-model="build.height"/></td>
+                            <td><input type="number" class="form-control input-sm" ng-model="build.height"/></td>
                             <td><input type="text" class="form-control input-sm" ng-model="build.heightType"/></td>
-                            <td><input type="text" class="form-control input-sm" ng-model="build.weight"/></td>
+                            <td><input type="number" class="form-control input-sm" ng-model="build.weight"/></td>
                         </tr>
                         </tbody>
                     </table>
@@ -348,7 +348,7 @@
         <div class="col-md-2 col-md-offset-6">
             <div class="form-group">
                 <label class="control-label">If <strong>Yes</strong> how many months?</label>
-                <input type="text" class="form-control input-sm" ng-model="familyPersonalDetail.pregnancyMonth"/>
+                <input type="number" class="form-control input-sm" ng-model="familyPersonalDetail.pregnancyMonth"/>
             </div>
         </div>
     </div>
