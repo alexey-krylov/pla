@@ -28,6 +28,7 @@ import com.pla.sharedkernel.identifier.QuotationId;
 import com.pla.underwriter.domain.model.UnderWriterDocument;
 import com.pla.underwriter.domain.model.UnderWriterInfluencingFactor;
 import com.pla.underwriter.domain.model.UnderWriterRoutingLevel;
+import com.pla.underwriter.exception.UnderWriterException;
 import com.pla.underwriter.finder.UnderWriterFinder;
 import org.apache.commons.io.IOUtils;
 import org.joda.time.DateTime;
@@ -268,20 +269,9 @@ public class ILProposalFinder {
         return premiumDetailDto;
     }
 
-    public List<ILProposalMandatoryDocumentDto> findMandatoryDocuments(String proposalId) {
-        BasicDBObject query = new BasicDBObject();
-        query.put("_id", proposalId);
-        Map proposal = mongoTemplate.findOne(new BasicQuery(query), Map.class, "individual_life_proposal");
-        List<ILProposerDocument> uploadedDocuments = proposal.get("proposalDocuments") != null ? (List<ILProposerDocument>) proposal.get("proposalDocuments") : Lists.newArrayList();
-        ProposalPlanDetail planDetail = (ProposalPlanDetail) proposal.get("proposalPlanDetail");
-        List<CoverageId> coverageIds = ((Set<RiderDetailDto>) planDetail.getRiderDetails()).stream().map(rider -> new CoverageId(rider.getCoverageId())).collect(Collectors.toList());
+    private RoutingLevel findRoute(UnderWriterRoutingLevelDetailDto routingLevelDetailDto, Map proposal, Integer age) {
 
-        UnderWriterRoutingLevelDetailDto routingLevelDetailDto = new UnderWriterRoutingLevelDetailDto(new PlanId(planDetail.getPlanId()), LocalDate.now(), ProcessType.ENROLLMENT.name());
-        coverageIds.stream().forEach(coverageId -> routingLevelDetailDto.addCoverage(coverageId));
-        DateTime dob = new DateTime(((ProposedAssured) proposal.get("proposedAssured")).getDateOfBirth());
-        Integer age = Years.yearsBetween(dob, DateTime.now()).getYears() + 1;
         List<UnderWriterRoutingLevelDetailDto.UnderWriterInfluencingFactorItem> underWriterInfluencingFactorItems = new ArrayList<UnderWriterRoutingLevelDetailDto.UnderWriterInfluencingFactorItem>();
-        RoutingLevel routinglevel = null;
         try {
             UnderWriterRoutingLevel underWriterRoutingLevel = underWriterFinder.findUnderWriterRoutingLevel(routingLevelDetailDto);
             //TODO : need to add other influencing items
@@ -294,14 +284,37 @@ public class ILProposalFinder {
                 }
             }
             routingLevelDetailDto.setUnderWriterInfluencingFactor(underWriterInfluencingFactorItems);
-            routinglevel = underWriterAdapter.getRoutingLevel(routingLevelDetailDto);
-        } catch (IllegalArgumentException ex) {
+            return underWriterAdapter.getRoutingLevel(routingLevelDetailDto);
 
+        } catch (IllegalArgumentException ex) {
+            ex.printStackTrace();
         }
+        return null;
+    }
+
+    private RoutingLevel findRoutingLevel(UnderWriterRoutingLevelDetailDto routingLevelDetailDto, Map proposal, Integer age) {
+        RoutingLevel oldRoutinglevel = null;
+        RoutingLevel currentRoutinglevel = null;
+        ProposalPlanDetail planDetail = (ProposalPlanDetail) proposal.get("proposalPlanDetail");
+
+        currentRoutinglevel = findRoute(routingLevelDetailDto, proposal, age);
+        for (RiderDetailDto rider : planDetail.getRiderDetails()) {
+            routingLevelDetailDto.addCoverage(new CoverageId(rider.getCoverageId()));
+            oldRoutinglevel =currentRoutinglevel;
+            currentRoutinglevel = findRoute(routingLevelDetailDto, proposal, age);
+            if( oldRoutinglevel!= null && currentRoutinglevel!= null && oldRoutinglevel.ordinal() < currentRoutinglevel.ordinal()) currentRoutinglevel = oldRoutinglevel;
+        }
+        return  currentRoutinglevel;
+
+    }
+
+    private List<ClientDocumentDto> findDocuments(UnderWriterRoutingLevelDetailDto routingLevelDetailDto, Map proposal, Integer age) {
+
         List<ClientDocumentDto> mandatoryDocuments = new ArrayList<ClientDocumentDto>();
-        if (routinglevel != null) {
-            UnderWriterDocument underWriterDocument = underWriterFinder.getUnderWriterDocumentSetUp(routingLevelDetailDto.getPlanId(), routingLevelDetailDto.getCoverageId(), LocalDate.now(), ProcessType.ENROLLMENT.name());
-            underWriterInfluencingFactorItems = new ArrayList<UnderWriterRoutingLevelDetailDto.UnderWriterInfluencingFactorItem>();
+
+        List<UnderWriterRoutingLevelDetailDto.UnderWriterInfluencingFactorItem> underWriterInfluencingFactorItems = new ArrayList<UnderWriterRoutingLevelDetailDto.UnderWriterInfluencingFactorItem>();
+        try {
+            UnderWriterDocument underWriterDocument = underWriterFinder.getUnderWriterDocumentSetUp(routingLevelDetailDto.getPlanId(), null, LocalDate.now(), ProcessType.ENROLLMENT.name());
             //TODO : need to add other influencing items
             for (UnderWriterInfluencingFactor underWriterInfluencingFactor : underWriterDocument.getUnderWriterInfluencingFactors()) {
                 if (underWriterInfluencingFactor.name().equalsIgnoreCase(String.valueOf(UnderWriterInfluencingFactor.AGE)))
@@ -312,7 +325,58 @@ public class ILProposalFinder {
                 }
             }
             routingLevelDetailDto.setUnderWriterInfluencingFactor(underWriterInfluencingFactorItems);
-            mandatoryDocuments = underWriterAdapter.getDocumentsForUnderWriterApproval(routingLevelDetailDto);
+            mandatoryDocuments.addAll(underWriterAdapter.getDocumentsForUnderWriterApproval(routingLevelDetailDto));
+
+        } catch (UnderWriterException ex) {
+            ex.printStackTrace();
+
+        } catch (IllegalArgumentException ex) {
+        ex.printStackTrace();
+        }
+
+        ProposalPlanDetail planDetail = (ProposalPlanDetail) proposal.get("proposalPlanDetail");
+        for (RiderDetailDto rider : planDetail.getRiderDetails()) {
+            routingLevelDetailDto.addCoverage(new CoverageId(rider.getCoverageId()));
+            try{
+            UnderWriterDocument underWriterDocument = underWriterFinder.getUnderWriterDocumentSetUp(routingLevelDetailDto.getPlanId(), routingLevelDetailDto.getCoverageId(), LocalDate.now(), ProcessType.ENROLLMENT.name());
+            //TODO : need to add other influencing items
+            for (UnderWriterInfluencingFactor underWriterInfluencingFactor : underWriterDocument.getUnderWriterInfluencingFactors()) {
+                if (underWriterInfluencingFactor.name().equalsIgnoreCase(String.valueOf(UnderWriterInfluencingFactor.AGE)))
+                    underWriterInfluencingFactorItems.add(new UnderWriterRoutingLevelDetailDto.UnderWriterInfluencingFactorItem(UnderWriterInfluencingFactor.AGE.name(), age.toString()));
+                if (underWriterInfluencingFactor.name().equalsIgnoreCase(String.valueOf(UnderWriterInfluencingFactor.SUM_ASSURED))) {
+                    //TODO : Need to add previous sum assured values from the previous policies
+                    underWriterInfluencingFactorItems.add(new UnderWriterRoutingLevelDetailDto.UnderWriterInfluencingFactorItem(UnderWriterInfluencingFactor.SUM_ASSURED.name(), (((ProposalPlanDetail) proposal.get("proposalPlanDetail")).getSumAssured().toString())));
+                }
+            }
+            routingLevelDetailDto.setUnderWriterInfluencingFactor(underWriterInfluencingFactorItems);
+            mandatoryDocuments.addAll(underWriterAdapter.getDocumentsForUnderWriterApproval(routingLevelDetailDto));
+            } catch (UnderWriterException ex) {
+                ex.printStackTrace();
+
+            } catch (IllegalArgumentException ex) {
+                ex.printStackTrace();
+            }
+        }
+
+        return mandatoryDocuments;
+    }
+
+    public List<ILProposalMandatoryDocumentDto> findMandatoryDocuments(String proposalId) {
+        BasicDBObject query = new BasicDBObject();
+        query.put("_id", proposalId);
+        Map proposal = mongoTemplate.findOne(new BasicQuery(query), Map.class, "individual_life_proposal");
+        List<ILProposerDocument> uploadedDocuments = proposal.get("proposalDocuments") != null ? (List<ILProposerDocument>) proposal.get("proposalDocuments") : Lists.newArrayList();
+        ProposalPlanDetail planDetail = (ProposalPlanDetail) proposal.get("proposalPlanDetail");
+        UnderWriterRoutingLevelDetailDto routingLevelDetailDto = new UnderWriterRoutingLevelDetailDto(new PlanId(planDetail.getPlanId()), LocalDate.now(), ProcessType.ENROLLMENT.name());
+        List<CoverageId> coverageIds = ((Set<RiderDetailDto>) planDetail.getRiderDetails()).stream().map(rider -> new CoverageId(rider.getCoverageId())).collect(Collectors.toList());
+
+        DateTime dob = new DateTime(((ProposedAssured) proposal.get("proposedAssured")).getDateOfBirth());
+        Integer age = Years.yearsBetween(dob, DateTime.now()).getYears() + 1;
+        RoutingLevel routinglevel = findRoutingLevel(routingLevelDetailDto, proposal, age);
+
+        List<ClientDocumentDto> mandatoryDocuments = new ArrayList<ClientDocumentDto>();
+        if (routinglevel != null) {
+            mandatoryDocuments = findDocuments(routingLevelDetailDto, proposal, age);
         } else {
             List<SearchDocumentDetailDto> documentDetailDtos = Lists.newArrayList();
             SearchDocumentDetailDto searchDocumentDetailDto = new SearchDocumentDetailDto(new PlanId(planDetail.getPlanId()));
