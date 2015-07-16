@@ -397,7 +397,7 @@
                         </div>
                         <div class="col-sm-6">
                             <button type="button" class="btn btn-default btn-sm" style="float: right"
-                                    ng-if="!isViewMode" ng-click="savePremiumDetails()">Submit
+                                    ng-if="!isViewMode" ng-click="savePremiumDetails()" ng-disabled="(!disableSaveButton)">Save
                             </button>
                             <button type="button" class="btn btn-default btn-sm" style="float: right"  ng-if="isViewMode" ng-click="back()">Back</button>
                         </div>
@@ -417,11 +417,14 @@
                             <div class="form-group "  ng-repeat="document in documentList">
                                 <label class="col-sm-3 control-label">{{document.documentName}}</label>
                                      <div class="input-group">
+                                         <a href="/pla/grouphealth/proposal/downloadmandatorydocument/{{document.gridFsDocId}}" style="display:inline;float:right;"  hg-show="!document.submitted">{{document.fileName}}</a>
+
                                          <button class="btn btn-default"
                                                  style="display:inline;float:right;margin-right:5px;" ng-file-select=""
                                                  ng-model="document.documentAttached">Browse
                                          </button>
-                                        <label class="form-control input-sm" style="border:1px solid #ccc;width:380px;"  >{{document.documentAttached[0].name}} </label>
+                                        <label class="form-control input-sm" style="border:1px solid #ccc;width:380px;" >{{document.documentAttached[0].name}} </label>
+
                                      </div>
 
                             </div>
@@ -470,6 +473,10 @@
                                     <button class="btn btn-default"
                                             style="display:inline;float:right;margin-right:5px;margin-top:20px;"
                                             ng-click="uploadAdditionalDocument()">Upload
+                                    </button>
+                                    <button class="btn btn-default"
+                                            style="display:inline;float:right;margin-right:5px;margin-top:20px;"
+                                            ng-click="submitAdditionalDocument()">Submit
                                     </button>
                                 </div>
                             </accordion-group>

@@ -12,7 +12,7 @@ var viewProposalModule = (function () {
     };
 
     services.createProposal = function () {
-        alert(this.selectedItem);
+       // alert(this.selectedItem);
         if (this.selectedItem) {
             $.ajax({
                 url: "opengrouphealthproposal/" + this.selectedItem

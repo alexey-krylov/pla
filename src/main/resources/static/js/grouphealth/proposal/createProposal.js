@@ -118,6 +118,8 @@ angular.module('createProposal', ['common', 'ngRoute', 'mgcrea.ngStrap.select', 
              }
              }
              });*/
+
+
             $scope.proposalDetails = {
                 /*initialize with default values*/
                 plan: {
@@ -269,6 +271,29 @@ angular.module('createProposal', ['common', 'ngRoute', 'mgcrea.ngStrap.select', 
                 });
 
             };
+            $scope.downloadDocumentContent = function(gridfsdocid){
+                window.location.href = '/pla/grouphealth/proposal/downloadmandatorydocument/'+gridfsdocid;
+
+            }
+            $scope.submitAdditionalDocument = function(){
+               $http.post('/pla/grouphealth/proposal/submit', angular.extend({},
+                    {"proposalId": $scope.proposalId})).success(function (data) {
+
+                });
+
+            }
+            $scope.disableSaveButton=false;
+            $scope.$watch( 'proposalDetails.premium.optedPremiumFrequency',function(newValue, oldValue){
+                if(newValue){
+                    $scope.disableSaveButton=true;
+                }else{
+                    $scope.disableSaveButton=false;
+                    $scope.stepsSaved["4"]=false;
+                }
+
+            });
+
+
 
             $scope.savePremiumDetails = function () {
                 console.log("$scope.selectedInstallment " + JSON.stringify($scope.selectedInstallment));
@@ -282,7 +307,12 @@ angular.module('createProposal', ['common', 'ngRoute', 'mgcrea.ngStrap.select', 
                      {"proposalId": $scope.proposalId}))
                      .success(function (data) {
                      });*/
-                    saveStep();
+                   // console.log(data);
+                  //  console.log("*******************"+$scope.selectedItem);
+                    if(data.status== '200'){
+                        saveStep();
+                    }
+
                 });
 
             };
@@ -314,6 +344,7 @@ angular.module('createProposal', ['common', 'ngRoute', 'mgcrea.ngStrap.select', 
              });*/
 
             $scope.saveBasicDetails = function () {
+
                 $http.post("/pla/grouphealth/proposal/updatewithagentdetail", angular.extend($scope.proposalDetails.basic, {
                     proposerName: $scope.proposalDetails.proposer.proposerName,
                     proposalId: $scope.proposalId
