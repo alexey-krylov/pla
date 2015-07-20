@@ -256,7 +256,7 @@
                                     <label class="control-label">Age Next Birthday</label>
                                     <input type="text" class="form-control input-sm" name="age"
                                            ng-model="proposedAssuredAge" readonly="readonly"
-                                           validate-dob=""/>
+                                           validate-proposed-dob=""/>
 
                                     <div class="error" ng-messages="step2.age.$error" ng-if="step2.$dirty">
                                         <small ng-message="invalidProposedMinAge">Minimum Entry Age For Proposed Assured
@@ -298,6 +298,7 @@
                                         onclick="window.location='/pla/individuallife/quotation/searchForm'">Cancel
                                 </button>
                             </div>
+                            {{step2.$error}}
                             <div class="col-sm-6">
                                 <input type="submit" class="btn btn-default btn-sm" style="float: right;clear:both"
                                        ng-click="saveStep2(step2)"
@@ -336,14 +337,13 @@
                                 </div>
                                 <div class="form-group required">
                                     <label class="control-label">Date of Birth</label>
-
                                     <div class='input-group date' ng-if="!proposerSameAsProposedAssured">
                                         <input type="text" class="form-control input-sm"
                                                datepicker-popup=""
                                                ng-disabled="proposerSameAsProposedAssured"
                                                ng-required="true"
                                                is-open="launchdob2" view-enabled=""
-                                               validate-dob=""
+                                               validate-proposer-dob=""
                                                max-date="todayDate"
                                                ng-model="proposer.dateOfBirth" name="dob2"/>
                                         <span class="input-group-btn">
@@ -357,7 +357,7 @@
                                            ng-if="proposerSameAsProposedAssured"
                                            ng-disabled="proposerSameAsProposedAssured"
                                            view-enabled=""
-                                           ng-model="proposer.dateOfBirth"/>
+                                           value="{{formatDate(proposer.dateOfBirth)}}"/>
 
                                     <div class="error" ng-messages="step3.dob2.$error" ng-if="step3.dob2.$dirty">
                                         <small ng-message="required">Please enter Date of Birth.</small>

@@ -170,7 +170,7 @@
             }
         })
 
-        .directive('validateDob', function () {
+        .directive('validateProposedDob', function () {
             return {
                 // restrict to an attribute type.
                 restrict: 'A',
@@ -198,6 +198,27 @@
                         }
                     });
 
+                }
+            }
+        })
+        .directive('validateProposerDob', function () {
+            return {
+                // restrict to an attribute type.
+                restrict: 'A',
+                // element must have ng-model attribute.
+                require: 'ngModel',
+                link: function (scope, ele, attrs, ctrl) {
+                    ctrl.$parsers.unshift(function (value) {
+                        var planDetail = scope.$eval('plan.planDetail');
+                        if (value && planDetail) {
+                            var dateOfBirth = scope.$eval('proposedAssured.dateOfBirth');
+                            var age = calculateAge(dateOfBirth);
+                            var valid = planDetail.minEntryAge <= age && age <= planDetail.maxEntryAge;
+                            //ctrl.$setValidity('invalidMinAge', planDetail.minEntryAge <= age);
+                        }
+                        return valid ? value : undefined;
+                    });
+
                     scope.$watch('proposer.dateOfBirth', function (newval) {
                         if (!newval) return;
                         var age = calculateAge(newval);
@@ -208,8 +229,8 @@
             }
         })
         .controller('QuotationController', ['$scope', '$http', '$route', '$location', '$bsmodal', '$window',
-            'globalConstants', 'getQueryParameter', '$timeout',
-            function ($scope, $http, $route, $location, $bsmodal, $window, globalConstants, getQueryParameter, $timeout) {
+            'globalConstants', 'getQueryParameter', '$timeout', '$filter',
+            function ($scope, $http, $route, $location, $bsmodal, $window, globalConstants, getQueryParameter, $timeout, $filter) {
 
 
                 var absUrl = $location.absUrl();
@@ -369,6 +390,10 @@
                         }
                     }
                 });
+
+                $scope.formatDate = function (date) {
+                    return $filter('date')(date, "dd/MM/yyyy");
+                }
 
                 $scope.saveStep1 = function () {
                     if ($scope.quotationId) {
