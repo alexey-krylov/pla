@@ -12,7 +12,7 @@
     requirejs.config({
         paths: {
             angucomplete: 'http://ghiden.github.io/angucomplete-alt/js/libs/angucomplete-alt',
-            ilquotation: '/pla/js/quotation/individualLife/quotation.js?t=1221'
+            ilquotation: '/pla/js/quotation/individualLife/quotation.js?t=121'
         },
         "shim": {"ilquotation": ["angular", 'angucomplete']}
     });
@@ -259,10 +259,12 @@
                                            validate-dob=""/>
 
                                     <div class="error" ng-messages="step2.age.$error" ng-if="step2.$dirty">
-                                        <small ng-message="invalidMinAge">Minimum Entry Age For Proposed Assured is
+                                        <small ng-message="invalidProposedMinAge">Minimum Entry Age For Proposed Assured
+                                            is
                                             {{plan.planDetail.minEntryAge}} years.
                                         </small>
-                                        <small ng-message="invalidMaxAge">Maximum Entry Age For Proposed Assured is
+                                        <small ng-message="invalidProposedMaxAge">Maximum Entry Age For Proposed Assured
+                                            is
                                             {{plan.planDetail.maxEntryAge}} Years.
                                         </small>
                                     </div>
@@ -355,7 +357,7 @@
                                            ng-if="proposerSameAsProposedAssured"
                                            ng-disabled="proposerSameAsProposedAssured"
                                            view-enabled=""
-                                           ng-model="proposer.dateOfBirth|date:'dd/MM/yyyy'"/>
+                                           ng-model="proposer.dateOfBirth"/>
 
                                     <div class="error" ng-messages="step3.dob2.$error" ng-if="step3.dob2.$dirty">
                                         <small ng-message="required">Please enter Date of Birth.</small>
@@ -452,7 +454,8 @@
                             <div class="col-sm-6">
                                 <div class="form-group required">
                                     <label>Plan</label>
-                                    <div data-angucomplete-alt="" id="plan" placeholder="Search Plan" pause="500"
+
+                                    <div data-angucomplete-alt="" placeholder="Search Plan" pause="500"
                                          selected-object="selectedPlan" disable-input="uneditable"
                                          remote-url="/pla/core/agent/searchplan"
                                          remote-url-request-formatter="remoteUrlRequestFn" field-required="true"
@@ -666,16 +669,12 @@
         </div>
         <div ng-switch-when="RANGE">
             <input type="number" view-enabled="" class="form-control input-sm" min="{{plan.sumAssured.minSumInsured}}"
-                   name="sumAssured"
+                   name="sumAssured" validate-sumassured=""
                    max="{{plan.sumAssured.maxSumInsured}}" ng-model="planDetailDto.sumAssured" ng-required="true"/>
             <div class="error" ng-messages="step4.sumAssured.$error">
                 <small ng-message="min">Sum Assured cannot be less then {{plan.sumAssured.minSumInsured}}.</small>
                 <small ng-message="max">Sum Assured cannot be more than {{plan.sumAssured.maxSumInsured}}.</small>
                 <small ng-message="invalidMultiple">Invalid Multiples.</small>
-            </div>
-            <div class="error" ng-messages="step4.invalidMultiple.$error" ng-if="step4.$dirty">
-                <small ng-message="invalidMultiple">Invalid Multiplier
-                </small>
             </div>
         </div>
         <div ng-switch-when="INCOME_MULTIPLIER">

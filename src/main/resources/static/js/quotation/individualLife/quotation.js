@@ -19,25 +19,12 @@
         }])
         .directive('sumassured', function ($compile) {
             return {
-                restrict: 'E',
                 templateUrl: 'plan-sumassured.tpl',
                 // element must have ng-model attribute.
                 require: 'ngModel',
                 link: function (scope, elem, attrs, ctrl) {
                     if (!ctrl)return;
-                    scope.$watch('planDetailDto.sumAssured', function (newval, oldval) {
-                        if (newval == oldval)return;
-                        if (newval) {
-                            var plan = scope.$eval('plan');
-                            if (plan && plan.sumAssured.sumAssuredType == 'RANGE') {
-                                var multiplesOf = plan.sumAssured.multiplesOf;
-                                var modulus = parseInt(newval) % parseInt(multiplesOf);
-                                var valid = modulus == 0;
-                                ctrl.$setValidity('invalidMultiple', valid);
-                            }
-                        }
-                        return valid ? newval : undefined;
-                    });
+
                 }
             };
         })
@@ -125,13 +112,7 @@
                 restrict: 'E',
                 templateUrl: 'plan-premiumterm.tpl',
                 link: function (scope) {
-                    scope.$on('planDetailDto.policyTerm', function (newval) {
-                        if (scope.plan.premiumTermType === 'REGULAR') {
-                            console.log(' changing premium payment term ' + newval);
-                            scope.planDetailDto.premiumPaymentTerm = newval;
-                        }
 
-                    });
                 },
                 controller: ['$scope', function ($scope) {
                     $scope.premiumTerms = function () {
@@ -153,8 +134,40 @@
                             return item[prop] <= val;
                         }
                     }
+
+                    $scope.$watch('planDetailDto.policyTerm', function (newval) {
+
+                        if ($scope.plan && $scope.plan.premiumTermType === 'REGULAR') {
+                            $scope.planDetailDto.premiumPaymentTerm = newval;
+                        }
+
+                    });
                 }]
             };
+        })
+        .directive('validateSumassured', function () {
+            return {
+                // restrict to an attribute type.
+                restrict: 'A',
+                // element must have ng-model attribute.
+                require: 'ngModel',
+                link: function (scope, ele, attrs, ctrl) {
+                    scope.$watch('planDetailDto.sumAssured', function (newval, oldval) {
+                        if (newval == oldval)return;
+                        if (newval) {
+                            console.log('validating...***');
+                            var plan = scope.$eval('plan');
+                            if (plan && plan.sumAssured.sumAssuredType == 'RANGE') {
+                                var multiplesOf = plan.sumAssured.multiplesOf;
+                                var modulus = parseInt(newval) % parseInt(multiplesOf);
+                                var valid = modulus == 0;
+                                ctrl.$setValidity('invalidMultiple', valid);
+                            }
+                        }
+                        return valid ? newval : undefined;
+                    });
+                }
+            }
         })
 
         .directive('validateDob', function () {
@@ -179,8 +192,8 @@
                         var planDetail = scope.$eval('plan.planDetail');
                         if (planDetail) {
                             var age = calculateAge(newval);
-                            ctrl.$setValidity('invalidMinAge', age >= planDetail.minEntryAge);
-                            ctrl.$setValidity('invalidMaxAge', age <= planDetail.maxEntryAge);
+                            ctrl.$setValidity('invalidProposedMinAge', age >= planDetail.minEntryAge);
+                            ctrl.$setValidity('invalidProposedMaxAge', age <= planDetail.maxEntryAge);
 
                         }
                     });
