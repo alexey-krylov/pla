@@ -101,6 +101,16 @@ public class GroupHealthProposalController {
         return modelAndView;
     }
 
+    @RequestMapping(value = "/editProposalReturnStatus", method = RequestMethod.GET)
+    @ApiOperation(httpMethod = "GET", value = "To open edit proposal page")
+    public ModelAndView gotoCreateProposalReturnStatus() {
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("pla/grouphealth/proposal/createProposalReturnStatus");
+        return modelAndView;
+    }
+
+
+
     @RequestMapping(value = "/forcecreateproposal", method = RequestMethod.GET)
     @ApiOperation(httpMethod = "GET", value = "To create proposal forcefully if proposal already exists for the same quotation number")
     public ResponseEntity gotoCreateProposal(@RequestParam("quotationId") String quotationId) {
