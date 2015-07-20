@@ -452,7 +452,7 @@ public class ILProposalFinder {
         }
         dto.setBeneficiaries((List<Beneficiary>) proposal.get("beneficiaries"));
         dto.setTotalBeneficiaryShare(new BigDecimal(proposal.get("totalBeneficiaryShare").toString()) );
-        dto.setGeneralDetails((GeneralDetails) proposal.get("generateDetails"));
+        dto.setGeneralDetails((GeneralDetails) proposal.get("generalDetails"));
         dto.setCompulsoryHealthStatement((List<Question>) proposal.get("compulsoryHealthStatement"));
         dto.setFamilyPersonalDetail((FamilyPersonalDetail) proposal.get("familyPersonalDetail"));
         dto.setAdditionaldetails((AdditionalDetails) proposal.get("additionaldetails"));
