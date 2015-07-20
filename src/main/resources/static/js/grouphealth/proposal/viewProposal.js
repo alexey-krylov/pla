@@ -62,6 +62,12 @@ var viewProposalModule = (function () {
             }
         });*/
     };
+    services.viewApprovalProposal = function () {
+        var proposalId = this.selectedItem;
+
+        window.location.href = "/pla/grouphealth/proposal/viewApprovalProposal?proposalId=" + proposalId  + "&method=approval";
+
+    };
 
     return services;
 })();

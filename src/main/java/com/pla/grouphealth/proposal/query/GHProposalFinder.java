@@ -78,9 +78,9 @@ public class GHProposalFinder {
 
     public List<Map> searchProposal(String proposalNumber, String proposerName, String agentName, String agentCode, String proposalId, String[] statuses) {
         Criteria criteria = Criteria.where("proposalStatus").in(statuses);
-        if (isEmpty(proposalNumber) && isEmpty(proposalId) && isEmpty(agentCode) && isEmpty(proposerName) && isEmpty(agentName)) {
+       /* if (isEmpty(proposalNumber) && isEmpty(proposalId) && isEmpty(agentCode) && isEmpty(proposerName) && isEmpty(agentName)) {
             return Lists.newArrayList();
-        }
+        }*/
         if (isNotEmpty(proposalId)) {
             criteria = criteria.and("_id").is(new ProposalId(proposalId));
         }

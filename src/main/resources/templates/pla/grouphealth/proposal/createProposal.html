@@ -25,6 +25,7 @@
     /*]]>*/
 </script>
 <script>
+
     requirejs(['main','angular-file-upload'],function(){
         require(['/pla/js/grouphealth/proposal/createProposal.js?t=9'], function () {
             angular.element(document).ready(function() {
@@ -36,7 +37,7 @@
 </script>
 <script type="text/ng-template" id="createProposalTpl.html">
     <nth-alert></nth-alert>
-    <form name="quotationForm" novalidate="true"  class="css-form" method="post" enctype="multipart/form-data">
+    <form name="quotationForm" novalidate="true"  class="css-form ng-cloak" method="post" enctype="multipart/form-data">
         <div class="wizard fueluxWizard" style="overflow: visible" selected-item="selectedItem">
             <ul class="steps" style="margin-left: 0">
                 <li data-step="1"><span class="badge badge-info">1</span>Basic Details<span class="chevron"></span></li>
@@ -56,10 +57,10 @@
                         class="glyphicon glyphicon-arrow-right"></span></button>
                 <!-- -->
             </div>
-            <div class="step-content">
+            <div class="step-content ng-cloak">
                 <div class="step-pane active" data-step="1">
                     <ng-form name="step1">
-                        <div class="bs-callout  bs-callout-info" style="margin-bottom: 7px">
+                        <div class="bs-callout  bs-callout-info" style="margin-bottom: 7px" >
                             <div class="alert alert-info" ng-show="agentNotFound">
                                 <strong>Agent Not Found.Please try again</strong>
                             </div>

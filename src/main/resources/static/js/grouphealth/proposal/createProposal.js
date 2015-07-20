@@ -24,6 +24,17 @@ angular.module('createProposal', ['common', 'ngRoute', 'mgcrea.ngStrap.select', 
                     });
 
             }
+            var method = getQueryParameter("method");
+            if (method == 'approval') {
+                $scope.isViewMode = true;
+
+                $http.get("/pla/grouphealth/proposal/getapprovercomments").success(function (data, status) {
+                   // console.log(data);
+                    $scope.approvalCommentList=data;
+                });
+
+            }
+
             /*This scope holds the list of installments from which user can select one */
             $scope.numberOfInstallmentsDropDown = [];
 
@@ -154,11 +165,12 @@ angular.module('createProposal', ['common', 'ngRoute', 'mgcrea.ngStrap.select', 
 
             $scope.changeAgent = false;
             console.log($scope.proposalDetails.basic['active']);
-            if (!$scope.proposalDetails.basic['active'] && $scope.isReturnStatus==false ) {
+            if (!$scope.proposalDetails.basic['active']) {
                 $('#agentModal').modal('show');
                 $scope.changeAgent = true;
                 $scope.stepsSaved["1"] = !$scope.changeAgent;
-            }else if(!$scope.proposalDetails.basic['active'] && $scope.isReturnStatus==true ){
+            }
+            if(!$scope.proposalDetails.basic['active'] && $scope.isReturnStatus==true && method == 'approval' ){
                 $('#agentModal').modal('show');
                 $scope.changeAgent = true;
                 $scope.stepsSaved["2"] = !$scope.changeAgent;
@@ -314,10 +326,32 @@ angular.module('createProposal', ['common', 'ngRoute', 'mgcrea.ngStrap.select', 
                         $scope.stepsSaved["5"]=false;
                     }
 
+
+                }
+                if (method == 'approval') {
+                    $scope.stepsSaved["5"]=true;
                 }
 
             });
 
+            $scope.approveProposal = function(){
+                var request = angular.extend({comment: $scope.comment},
+                    {"proposalId": $scope.proposalId});
+
+                $http.post('/pla/grouphealth/proposal/approve', request).success(function (data) {
+
+
+                });
+            }
+            $scope.comment='';
+            $scope.returnProposal = function(){
+                var request = angular.extend({comment: $scope.comment},{"proposalId": $scope.proposalId});
+
+                $http.post('/pla/grouphealth/proposal/return', request).success(function (data) {
+
+
+                });
+            }
 
 
             $scope.savePremiumDetails = function () {
