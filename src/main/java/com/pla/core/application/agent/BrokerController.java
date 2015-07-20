@@ -26,7 +26,7 @@ public class BrokerController {
             @Override
             public Object call() throws Exception {
                 ModelAndView modelAndView = new ModelAndView();
-                modelAndView.setViewName("/pla/core/agent/broker");
+                modelAndView.setViewName("pla/core/agent/broker");
                 return modelAndView;
             }
         };
@@ -39,7 +39,7 @@ public class BrokerController {
             public Object call() throws Exception {
                 ModelAndView modelAndView = new ModelAndView();
                 List<Map<String, Object>> nonTerminatedBrokers = agentFinder.getAllNonTerminatedAgent();
-                modelAndView.setViewName("/pla/core/agent/broker-list");
+                modelAndView.setViewName("pla/core/agent/broker-list");
                 modelAndView.addObject("brokers", nonTerminatedBrokers);
                 return modelAndView;
             }
@@ -52,7 +52,7 @@ public class BrokerController {
             @Override
             public Object call() throws Exception {
                 ModelAndView modelAndView = new ModelAndView();
-                modelAndView.setViewName("/pla/core/agent/broker");
+                modelAndView.setViewName("pla/core/agent/broker");
                 return modelAndView;
             }
         };
@@ -64,7 +64,7 @@ public class BrokerController {
             @Override
             public Object call() throws Exception {
                 ModelAndView modelAndView = new ModelAndView();
-                modelAndView.setViewName("/pla/core/agent/broker");
+                modelAndView.setViewName("pla/core/agent/broker");
                 return modelAndView;
             }
         };
