@@ -62,8 +62,8 @@
 
 
                 <div class="step-pane" data-step="1">
-
-                    <table class="table table-striped table-bordered"  style="margin-top:5px;">
+                    <div style="height:300px;overflow-y:scroll;border:1px solid grey;margin-top:10px;margin-bottom: 10px;">
+                    <table class="table table-striped table-bordered"  style="margin-top:5px; ">
                         <thead>
                         <tr  >
                             <th >UserName</th>
@@ -71,9 +71,9 @@
                             <th>Comments</th>
                         </tr>
                         </thead>
-                        <tbody>
+                        <tbody >
 
-                        <tr ng-repeat="approvalComment in approvalCommentList">
+                        <tr ng-repeat="approvalComment in approvalCommentList" >
                             <td >{{approvalComment.modifiedBy}} </td>
                             <td >{{approvalComment.id.time | date:'dd/MM/yyyy h:mm a'}} </td>
                             <td style="width:75%;">{{approvalComment.comment}} </td>
@@ -82,6 +82,7 @@
                         </tr>
                         </tbody>
                     </table>
+                    </div>
                     <form class="form-horizontal"  id="createGHApprovalProposal" name="createGHApprovalProposal" novalidate="true">
                     <div class="row">
                         <div class="col-lg-6">

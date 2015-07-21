@@ -339,7 +339,11 @@ angular.module('createProposal', ['common', 'ngRoute', 'mgcrea.ngStrap.select', 
                     {"proposalId": $scope.proposalId});
 
                 $http.post('/pla/grouphealth/proposal/approve', request).success(function (data) {
+                    if(data.status==200){
 
+                        $window.location.href="/pla/grouphealth/proposal/openapprovalproposal";
+
+                    }
 
                 });
             }
@@ -348,7 +352,12 @@ angular.module('createProposal', ['common', 'ngRoute', 'mgcrea.ngStrap.select', 
                 var request = angular.extend({comment: $scope.comment},{"proposalId": $scope.proposalId});
 
                 $http.post('/pla/grouphealth/proposal/return', request).success(function (data) {
+                    if(data.status==200){
 
+
+                        $window.location.href="/pla/grouphealth/proposal/openapprovalproposal";
+
+                    }
 
                 });
             }

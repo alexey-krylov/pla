@@ -17,7 +17,7 @@ var viewAgentModule = (function(){
         $("#agent-view").prop("disabled","");
 
         this.channelType = $(ele).parent().find('input[type=hidden]').val();
-        alert(this.channelType);
+       // alert(this.channelType);
     };
     agentServices.createAgent = function(){
         window.location.href = "opencreatepage";
