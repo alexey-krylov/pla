@@ -136,7 +136,7 @@ public class ILQuotationARSaga extends AbstractAnnotatedSaga implements Serializ
     @EndSaga
     public void handle(ILQuotationConvertedToProposalEvent event) {
         if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("Handling IL Quotation Closure Event .Premium....", event);
+            LOGGER.debug("Handling IL Quotation Closure Event ....", event);
         }
 
         List<ILSearchQuotationResultDto> quotations = quotationFinder.searchQuotation(event.getQuotationNumber(), "", "", "", "");

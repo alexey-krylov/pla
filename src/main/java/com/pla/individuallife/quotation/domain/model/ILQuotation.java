@@ -161,6 +161,10 @@ public class ILQuotation extends AbstractAggregateRoot<QuotationId> implements I
         this.ilQuotationStatus = ILQuotationStatus.DECLINED;
     }
 
+    public void convertQuotation() {
+        this.ilQuotationStatus = ILQuotationStatus.CONVERTED;
+    }
+
     @Override
     public void generateQuotation(LocalDate generatedOn) {
         Preconditions.checkArgument(ILQuotationStatus.DRAFT == this.ilQuotationStatus, " Quotation in Draft state can only be generated.");

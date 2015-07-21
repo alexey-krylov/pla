@@ -144,6 +144,6 @@ public class ILQuotationCommandHandler {
     @CommandHandler
     public void convertedILQuotation(ILQuotationConvertedCommand cmd) {
         ILQuotation quotation = ilQuotationRepository.load(cmd.getQuotationId());
-        quotation.closeQuotation();
+        quotation.convertQuotation();
     }
 }
