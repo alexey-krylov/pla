@@ -29,6 +29,7 @@ public class GHPolicyController {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("pla/grouphealth/policy/searchPolicy");
         modelAndView.addObject("searchResult", ghPolicyService.findAllPolicy());
+        modelAndView.addObject("searchCriteria", new SearchGHPolicyDto());
         return modelAndView;
     }
 
@@ -48,10 +49,20 @@ public class GHPolicyController {
         return policyDetailDto;
     }
 
-    @RequestMapping(value = "/search/", method = RequestMethod.POST)
+   /* @RequestMapping(value = "/search/", method = RequestMethod.POST)
     @ResponseBody
     public List<PolicyDetailDto> searchPolicy(SearchGHPolicyDto searchGHPolicyDto) {
         List<PolicyDetailDto> policyDetailDtos = ghPolicyService.searchPolicy(searchGHPolicyDto);
         return policyDetailDtos;
+    }*/
+    @RequestMapping(value = "/search", method = RequestMethod.POST)
+    @ResponseBody
+    public ModelAndView searchPolicy(SearchGHPolicyDto searchGHPolicyDto) {
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("pla/grouphealth/policy/searchPolicy");
+        List<PolicyDetailDto> policyDetailDtos = ghPolicyService.searchPolicy(searchGHPolicyDto);
+        modelAndView.addObject("searchResult",policyDetailDtos);
+        modelAndView.addObject("searchCriteria", searchGHPolicyDto);
+        return modelAndView;
     }
 }
