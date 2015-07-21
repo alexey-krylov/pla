@@ -117,6 +117,8 @@ angular.module('createAgent',['common','ngRoute','mgcrea.ngStrap.select','mgcrea
                         $scope.teamDetailsForm.$submitted=true;
 
                     }
+                }else{
+                    $scope.agentDetails.channelType ={channelName:"Personal Selling",channelCode:"PERSONAL_SELLING"};;
                 }
 
             });
@@ -175,8 +177,7 @@ angular.module('createAgent',['common','ngRoute','mgcrea.ngStrap.select','mgcrea
                 }
                 return true;
             };
-            $scope.channelTypes = [{channelName:"Personal Selling",channelCode:"PERSONAL_SELLING"},
-                {channelName: "Direct", channelCode: "DIRECT"}];
+            $scope.channelTypes = {channelName:"Personal Selling",channelCode:"PERSONAL_SELLING"};
             $scope.authorisedToSell = authorisedToSell;
             $scope.teamDetails= teamDetails;
             $scope.provinces=provinces;

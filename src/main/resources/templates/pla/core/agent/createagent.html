@@ -110,11 +110,15 @@
                                 <input type="text" class="form-control input-sm" name="agentId" ng-required="true" ng-maxlength="7" ng-disabled="true"
                                        placeholder="Enter agent ID" ng-model="agentDetails.agentId"  ng-pattern="numberPattern"/>
                             </div>
-                            <div class="form-group required" disable-all-fields="disableChannelType()">
+                            <div class="form-group required" ng-if="agentDetails.channelType.channelName=='Direct'" >
                                 <label  class="control-label">Channel Type</label>
-                                <select name="channelType" class="form-control input-sm" ng-required="true" ng-model="agentDetails.channelType"
-                                        ng-options="channelType as channelType.channelName for channelType in channelTypes track by channelType.channelCode">
-                                </select>
+                                <input type="hidden" ng-model="agentDetails.channelType.channelCode" />
+                                <input name="channelType" class="form-control input-sm" ng-disabled="true" ng-required="true" ng-model="agentDetails.channelType.channelName"/>
+                            </div>
+                            <div class="form-group required" ng-disabled="true" ng-if="agentDetails.channelType.channelName!='Direct'">
+                                <label  class="control-label">Channel Type</label>
+                                <input type="hidden" ng-model="agentDetails.channelType.channelCode" />
+                                <input name="channelType" class="form-control input-sm" ng-disabled="true" ng-required="true" ng-model="agentDetails.channelType.channelName"/>
                             </div>
                             <div class="form-group required">
                                 <label class="control-label">Authorized to Sell</label>
