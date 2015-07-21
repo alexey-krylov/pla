@@ -3,6 +3,7 @@ package com.pla.individuallife.quotation.application.service;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.pla.core.domain.model.CoverageName;
+import com.pla.core.domain.model.agent.AgentId;
 import com.pla.core.domain.model.plan.premium.Premium;
 import com.pla.core.query.PlanFinder;
 import com.pla.core.query.PremiumFinder;
@@ -164,11 +165,11 @@ public class ILQuotationAppService {
         ILQuotationDetailDto ilQuotationDetailDto = new ILQuotationDetailDto();
         ILQuotationDto quotationMap = ilQuotationFinder.getQuotationById(quotationId);
 
-       /* AgentDetailDto agentDetailDto = getAgentDetail(new AgentId(quotationMap.getAgentId()));
+        AgentDetailDto agentDetailDto = getAgentDetail(new AgentId(quotationMap.getAgentId()));
         ilQuotationDetailDto.setAgentBranch(agentDetailDto.getBranchName());
         ilQuotationDetailDto.setAgentCode(agentDetailDto.getAgentId());
         ilQuotationDetailDto.setAgentName(agentDetailDto.getAgentSalutation() + "  " + agentDetailDto.getAgentName());
-        ilQuotationDetailDto.setAgentMobileNumber(agentDetailDto.getAgentMobileNumber());*/
+        ilQuotationDetailDto.setAgentMobileNumber(agentDetailDto.getAgentMobileNumber());
 
         ProposerDto proposerDto = quotationMap.getProposer();
         ilQuotationDetailDto.setProposerName(proposerDto.getFirstName());
@@ -232,5 +233,17 @@ public class ILQuotationAppService {
         dto.setQuotationId(quotationId);
         dto.setQuotationNumber(ilQuotationDto.getQuotationNumber());
         return dto;
+    }
+
+    public AgentDetailDto getAgentDetail(AgentId  agentId) {
+        Map<String, Object> agentDetail = ilQuotationFinder.getAgentById(agentId.toString());
+        AgentDetailDto agentDetailDto = new AgentDetailDto();
+        agentDetailDto.setAgentId(agentId.toString());
+        agentDetailDto.setBranchName((String) agentDetail.get("branchName"));
+        agentDetailDto.setTeamName((String) agentDetail.get("teamName"));
+        agentDetailDto.setAgentName(agentDetail.get("firstName") + " " +(agentDetail.get("lastName") == null ? "" : (String) agentDetail.get("lastName")));
+        agentDetailDto.setAgentMobileNumber(agentDetail.get("mobileNumber") != null ? (String) agentDetail.get("mobileNumber") : "");
+        agentDetailDto.setAgentSalutation(agentDetail.get("title") != null ? (String) agentDetail.get("title") : "");
+        return agentDetailDto;
     }
 }
