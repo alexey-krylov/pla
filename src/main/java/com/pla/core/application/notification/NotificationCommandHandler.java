@@ -46,8 +46,8 @@ public class NotificationCommandHandler {
         JpaRepository<Notification, NotificationId> notificationRepository = jpaRepositoryFactory.getCrudRepository(Notification.class);
         HashMap<String,String> quotationNotificationDetailMap =   notificationTemplateService.getQuotationNotificationTemplateData(createQuotationNotificationCommand.getLineOfBusiness(), createQuotationNotificationCommand.getQuotationId().getQuotationId());
         NotificationTemplate notificationTemplate = notificationTemplateRepository.findNotification(createQuotationNotificationCommand.getLineOfBusiness(), createQuotationNotificationCommand.getProcessType(), createQuotationNotificationCommand.getWaitingFor(), createQuotationNotificationCommand.getReminderType());
-        checkArgument(notificationTemplate!=null,"Notification Template is not uploaded");
-        NotificationBuilder notificationBuilder =  notificationTemplateService.createNotification(createQuotationNotificationCommand.getLineOfBusiness(), createQuotationNotificationCommand.getProcessType(), createQuotationNotificationCommand.getWaitingFor(),
+        checkArgument(notificationTemplate != null, "Notification Template is not uploaded");
+        NotificationBuilder notificationBuilder =  notificationTemplateService.generateNotification(createQuotationNotificationCommand.getLineOfBusiness(), createQuotationNotificationCommand.getProcessType(), createQuotationNotificationCommand.getWaitingFor(),
                 createQuotationNotificationCommand.getReminderType(), createQuotationNotificationCommand.getQuotationId().getQuotationId(), createQuotationNotificationCommand.getRoleType(), notificationTemplate.getReminderFile(), quotationNotificationDetailMap);
         NotificationId notificationId = new NotificationId(idGenerator.nextId());
         Notification notification  = notificationBuilder.createNotification(notificationId);
@@ -61,7 +61,7 @@ public class NotificationCommandHandler {
         NotificationTemplate notificationTemplate = notificationTemplateRepository.findNotification(createProposalNotificationCommand.getLineOfBusiness(), createProposalNotificationCommand.getProcessType(), createProposalNotificationCommand.getWaitingFor(), createProposalNotificationCommand.getReminderType());
         checkArgument(notificationTemplate!=null,"Notification Template is not uploaded");
         HashMap<String,String>  proposalNotificationDetailMap = notificationTemplateService.getQuotationNotificationTemplateData(createProposalNotificationCommand.getLineOfBusiness(), createProposalNotificationCommand.getProposalId().getProposalId());
-        NotificationBuilder notificationBuilder = notificationTemplateService.createNotification(createProposalNotificationCommand.getLineOfBusiness(), createProposalNotificationCommand.getProcessType(), createProposalNotificationCommand.getWaitingFor(),
+        NotificationBuilder notificationBuilder = notificationTemplateService.generateNotification(createProposalNotificationCommand.getLineOfBusiness(), createProposalNotificationCommand.getProcessType(), createProposalNotificationCommand.getWaitingFor(),
                 createProposalNotificationCommand.getReminderType(), createProposalNotificationCommand.getProposalId().getProposalId(), createProposalNotificationCommand.getRoleType(), notificationTemplate.getReminderFile(), proposalNotificationDetailMap);
         NotificationId notificationId = new NotificationId(idGenerator.nextId());
         Notification notification  = notificationBuilder.createNotification(notificationId);
@@ -69,7 +69,7 @@ public class NotificationCommandHandler {
     }
 
     @CommandHandler
-     public void createNotificationHistory(CreateNotificationHistoryCommand createNotificationHistoryCommand) throws Exception {
+    public void createNotificationHistory(CreateNotificationHistoryCommand createNotificationHistoryCommand) throws Exception {
         NotificationBuilder notificationBuilder = NotificationHistory.builder();
         notificationBuilder.withLineOfBusiness(createNotificationHistoryCommand.getLineOfBusiness())
                 .withProcessType(createNotificationHistoryCommand.getProcessType())

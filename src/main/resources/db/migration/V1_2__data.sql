@@ -2,7 +2,7 @@ USE PLA;
 INSERT INTO geo(GEO_ID,PARENT_GEO_ID,GEO_TYPE,GEO_DESCRIPTION)
 VALUES("PR-LUS",null,"PROVINCE","Lusaka"),("PR-COP",null,"PROVINCE","Copperbelt"),("PR-LUA",null,"PROVINCE","Luapula"),
 ("PR-SOU",null,"PROVINCE","Southern"),("PR-NOR",null,"PROVINCE","Northern"),("PR-CEN",null,"PROVINCE","Central"),
-("PR-EAS",null,"PROVINCE","Eastern"),("PR-WES",null,"PROVINCE","Western"),("PR-NORW",null,"PROVINCE","North Western"),
+("PR-EAS",null,"PROVINCE","Eastern"),("PR-WES",null,"PROVINCE","Western"),("PR-NORW",null,"PROVINCE","North Western"),("PR-MUCHI",null,"PROVINCE","Muchinga"),
 ("CI-LUS","PR-LUS","CITY","Lusaka"),("CI-CHI","PR-LUS","CITY","Chilanga"),("CI-KAF","PR-LUS","CITY","Kafue"),("CI-NAM","PR-LUS","CITY","Namalundu"),("CI-CHIS","PR-LUS","CITY","Chisamba"),("CI-CHO","PR-LUS","CITY","Chongwe"),("CI-NAMP","PR-LUS","CITY","Nampundwe"),
 ("CI-MUM","PR-LUS","CITY","Mumbwa"),("CI-LUA","PR-LUS","CITY","Luangwa"),("CI-SIA","PR-LUS","CITY","Siavonga"),("CI-CHIR","PR-LUS","CITY","Chirundu"),
 ("CI-KIT","PR-COP","CITY","Kitwe"),("CI-CHIN","PR-COP","CITY","Chingola"),("CI-CHIL","PR-COP","CITY","Chililabombwe"),("CI-MUF","PR-COP","CITY","Mufulira"),("CI-LUAN","PR-COP","CITY","Luanshya"),("CI-NDO","PR-COP","CITY","Ndola"),("CI-ITI","PR-COP","CITY","Itimpi"),
@@ -18,7 +18,10 @@ VALUES("PR-LUS",null,"PROVINCE","Lusaka"),("PR-COP",null,"PROVINCE","Copperbelt"
 ("CI-SIND","PR-EAS","CITY","Sinda"),("CI-LUN","PR-EAS","CITY","Lundazi"),("CI-CHAM","PR-EAS","CITY","Chama"),("CI-PET","PR-EAS","CITY","Petauke"),("CI-NYI","PR-EAS","CITY","Nyimba"),
 ("CI-MONG","PR-WES","CITY","Mongu"),("CI-SEN","PR-WES","CITY","Senanga"),("CI-KALA","PR-WES","CITY","Kalabo"),("CI-LUK","PR-WES","CITY","Lukulu"),("CI-KAO","PR-WES","CITY","Kaoma"),
 ("CI-MUFU","PR-NORW","CITY","Mufumbwe"),("CI-SOL","PR-NORW","CITY","Solwezi"),("CI-KASE","PR-NORW","CITY","Kasempa"),("CI-MWI","PR-NORW","CITY","Mwinilunga"),("CI-ZAM","PR-NORW","CITY","Zambezi"),("CI-KABO","PR-NORW","CITY","Kabompo"),
-("CI-LUM","PR-NORW","CITY","Lumwana"),("CI-CAI","PR-LUS","CITY","Cairo Road");
+("CI-LUM","PR-NORW","CITY","Lumwana"),("CI-CAI","PR-LUS","CITY","Cairo Road"),("CI-MPIK","PR-MUCHI","CITY","Mpika"),("CI-CHINSA","PR-MUCHI","CITY","Chinsali"),
+("CI-NAKO","PR-MUCHI","CITY","Nakonde"),("CI-ISOK","PR-MUCHI","CITY","Isoka"),
+("CI-MAF","PR-MUCHI","CITY","Mafinga"),("CI-SHI","PR-MUCHI","CITY","Shiwangandu"),
+("CI-CHAMA","PR-MUCHI","CITY","Chama");
 
 INSERT INTO bank_name(BANK_CODE,BANK_NAME)
 VALUES("ABB","AB BANK ZAMBIA LTD."),

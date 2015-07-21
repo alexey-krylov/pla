@@ -188,11 +188,11 @@ public class ProductLineGeneralInformation {
 
     public int getProductLineProcessItemValue(ProcessType processType, ProductLineProcessType productLineProcessType) throws ProcessInfoException {
         ImmutableMap<ProcessType, Object> processTypeMap = ImmutableMap.of(QUOTATION, this.quotationProcessInformation,PROPOSAL, this.enrollmentProcessInformation);
-        switch (processType.name()){
-            case "QUOTATION":
+        switch (processType){
+            case QUOTATION:
                 QuotationProcessInformation quotationProcessInformation = (QuotationProcessInformation) processTypeMap.get(processType);
                 return quotationProcessInformation.getTheProductLineProcessTypeValue(productLineProcessType);
-            case "PROPOSAL":
+            case PROPOSAL:
                 EnrollmentProcessInformation enrollmentProcessInformation = (EnrollmentProcessInformation) processTypeMap.get(processType);
                 return enrollmentProcessInformation.getTheProductLineProcessTypeValue(productLineProcessType);
             default:

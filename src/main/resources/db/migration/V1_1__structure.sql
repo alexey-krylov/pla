@@ -974,7 +974,8 @@ CREATE  VIEW `plan_coverage_benefit_assoc_view` AS
       coverage_id                      coverageId,
       benefit_id                       benefitId,
       optional                         optional,
-      funeral_cover                    funeralCover
+      funeral_cover                    funeralCover,
+      plan_status                      planStatus
     FROM plan_coverage_benefit_assoc ORDER BY plan_name,launch_date );
 
 CREATE OR REPLACE VIEW `plan_coverage` AS

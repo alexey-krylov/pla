@@ -10,7 +10,7 @@ public class NotificationException extends RuntimeException{
     }
 
     public static void raiseDuplicateEntryException(){
-        throw  new NotificationException("Notification Template has already uploaded");
+        throw  new NotificationException("Notification Template is already uploaded");
     }
 
     public static void raiseErrorInReload(){
