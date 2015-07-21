@@ -14,7 +14,6 @@ function preConfigurations(){
         $('#benefitName').focus()
     });
 
-
     $('#benefit-table').dataTable(
         {
             "aoColumnDefs": [
@@ -46,6 +45,8 @@ var modalOptions = {
 var openBenefitCreateModal = function(){
     $('#benefitName').val(null);
     $('#benefitCode').val(null);
+    $('#benefitCode').hide();
+    $('#benefitLabel').hide();
     $('#createUpdate').text('Create');
     $('#alert').hide();
     $('#alert-danger').hide();

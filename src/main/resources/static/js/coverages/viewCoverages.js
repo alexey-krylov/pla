@@ -67,11 +67,13 @@ var modalOptions = {
 
 var openCoverageCreateModal = function(){
     $('#coverageName').val(coverageName).attr("disabled",false);
-    $('#coverageCode').val(coverageCode).attr("disabled",false);
+   // $('#coverageCode').val(coverageCode).attr("disabled",false);
     $('#description').val(description).attr("disabled",false);
     $('#checkBenefits').removeAttr("disabled");
     $('#coverageName').val(null);
     $('#coverageCode').val(null);
+    $('#coverageCode').hide();
+    $('#coverageLabel').hide();
     $('#description').val(null);
     $('#createUpdate').text('Create');
     $('#alert').hide();
