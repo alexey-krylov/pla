@@ -174,28 +174,30 @@ public class ProposerBuilder {
                 .withGender(proposer.getGender())
                 .withMobileNumber(proposer.getMobileNumber())
                 .withMaritalStatus(proposer.getMaritalStatus())
-                .withNrc(proposer.getNrc())
-                .withEmploymentDetail(new EmploymentDetailBuilder()
-                        .withEmploymentDate(proposer.getEmploymentDetail().getEmploymentDate())
-                        .withEmploymentTypeId(proposer.getEmploymentDetail().getEmploymentTypeId())
-                        .withEmployer(proposer.getEmploymentDetail().getEmployer())
-                        .withWorkPhone(proposer.getEmploymentDetail().getWorkPhone())
-                        .withAddress(new AddressBuilder()
-                                .withAddress1(proposer.getEmploymentDetail().getAddress().getAddress1())
-                                .withAddress2(proposer.getEmploymentDetail().getAddress().getAddress2())
-                                .withProvince(proposer.getEmploymentDetail().getAddress().getProvince())
-                                .withPostalCode(proposer.getEmploymentDetail().getAddress().getPostalCode())
-                                .withTown(proposer.getEmploymentDetail().getAddress().getTown()).createAddress())
-                        .withOccupationClass(proposer.getEmploymentDetail().getOccupationClass()).createEmploymentDetail())
-                .withResidentialAddress(new ResidentialAddress(new AddressBuilder()
-                        .withAddress1(proposer.getResidentialAddress().getAddress().getAddress1())
-                        .withAddress2(proposer.getResidentialAddress().getAddress().getAddress2())
-                        .withProvince(proposer.getResidentialAddress().getAddress().getProvince())
-                        .withPostalCode(proposer.getResidentialAddress().getAddress().getPostalCode())
-                        .withTown(proposer.getResidentialAddress().getAddress().getTown()).createAddress(),
-                        proposer.getResidentialAddress().getHomePhone(),
-                        proposer.getResidentialAddress().getEmailAddress()));
-        if(proposer.getMaritalStatus().equals(MaritalStatus.MARRIED)) {
+                .withNrc(proposer.getNrc());
+         if(proposer.getEmploymentDetail() != null && proposer.getResidentialAddress() != null) {
+             builder.withEmploymentDetail(new EmploymentDetailBuilder()
+                     .withEmploymentDate(proposer.getEmploymentDetail().getEmploymentDate())
+                     .withEmploymentTypeId(proposer.getEmploymentDetail().getEmploymentTypeId())
+                     .withEmployer(proposer.getEmploymentDetail().getEmployer())
+                     .withWorkPhone(proposer.getEmploymentDetail().getWorkPhone())
+                     .withAddress(new AddressBuilder()
+                             .withAddress1(proposer.getEmploymentDetail().getAddress().getAddress1())
+                             .withAddress2(proposer.getEmploymentDetail().getAddress().getAddress2())
+                             .withProvince(proposer.getEmploymentDetail().getAddress().getProvince())
+                             .withPostalCode(proposer.getEmploymentDetail().getAddress().getPostalCode())
+                             .withTown(proposer.getEmploymentDetail().getAddress().getTown()).createAddress())
+                     .withOccupationClass(proposer.getEmploymentDetail().getOccupationClass()).createEmploymentDetail())
+                     .withResidentialAddress(new ResidentialAddress(new AddressBuilder()
+                             .withAddress1(proposer.getResidentialAddress().getAddress().getAddress1())
+                             .withAddress2(proposer.getResidentialAddress().getAddress().getAddress2())
+                             .withProvince(proposer.getResidentialAddress().getAddress().getProvince())
+                             .withPostalCode(proposer.getResidentialAddress().getAddress().getPostalCode())
+                             .withTown(proposer.getResidentialAddress().getAddress().getTown()).createAddress(),
+                             proposer.getResidentialAddress().getHomePhone(),
+                             proposer.getResidentialAddress().getEmailAddress()));
+         }
+        if(proposer.getMaritalStatus() != null && proposer.getMaritalStatus().equals(MaritalStatus.MARRIED)) {
             builder.withSpouseEmailAddress(proposer.getSpouseEmailAddress())
                     .withSpouseFirstName(proposer.getSpouseFirstName())
                     .withSpouseMobileNumber(proposer.getSpouseMobileNumber())

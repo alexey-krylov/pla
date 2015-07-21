@@ -13,10 +13,10 @@ import com.pla.individuallife.quotation.query.ILQuotationDto;
 import com.pla.individuallife.sharedresource.event.ILQuotationConvertedToProposalEvent;
 import com.pla.publishedlanguage.dto.UnderWriterRoutingLevelDetailDto;
 import com.pla.sharedkernel.domain.model.ProcessType;
-import com.pla.sharedkernel.domain.model.Quotation;
 import com.pla.sharedkernel.domain.model.RoutingLevel;
 import com.pla.sharedkernel.identifier.PlanId;
 import com.pla.sharedkernel.identifier.ProposalId;
+import com.pla.sharedkernel.identifier.QuotationId;
 import lombok.Getter;
 import org.apache.commons.beanutils.BeanUtils;
 import org.axonframework.eventsourcing.annotation.AbstractAnnotatedAggregateRoot;
@@ -106,7 +106,7 @@ public class ProposalAggregate extends AbstractAnnotatedAggregateRoot<ProposalId
         assignPlan(quotationDto.getPlanDetailDto(), planFinder);
 
         this.proposalStatus = ILProposalStatus.DRAFT;
-        this.quotation = new Quotation(quotationDto.getQuotationNumber(), quotationDto.getVersionNumber(),quotationDto.getQuotationId());
+        this.quotation = new Quotation(quotationDto.getQuotationNumber(), quotationDto.getVersionNumber(),quotationDto.getQuotationId().toString());
 
     }
 
@@ -249,7 +249,7 @@ public class ProposalAggregate extends AbstractAnnotatedAggregateRoot<ProposalId
         RoutingLevel routinglevel = proposalFinder.findRoutingLevel(routingLevelDetailDto, proposalId.toString(), (Integer) proposedAssured.getAgeNextBirthday());
         this.routinglevel = routinglevel;
         if (this.quotation != null)
-            registerEvent(new ILQuotationConvertedToProposalEvent(this.quotation.getQuotationNumber(), this.quotation.getQuotationId()));
+            registerEvent(new ILQuotationConvertedToProposalEvent(this.quotation.getQuotationNumber(), new QuotationId(this.quotation.getQuotationId())));
         //TODO : if this proposal is being converted from quotation, have to change the state of quotation as CONVERTED
     }
 }
