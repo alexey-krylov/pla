@@ -269,12 +269,16 @@ public class ILProposalController {
     public ResponseEntity uploadMandatoryDocument(ILProposalDocumentCommand cmd, HttpServletRequest request) {
         cmd.setUserDetails(getLoggedInUserDetail(request));
         try {
+            String proposalId = cmd.getProposalId();
             proposalCommandGateway.uploadMandatoryDocument(cmd);
+            Map map = new HashMap<>();
+            map.put("message", "Document uploaded successfully");
+            map.put("proposalId", proposalId);
+            return new ResponseEntity(map, HttpStatus.OK);
         } catch (Exception e) {
             e.printStackTrace();
             return new ResponseEntity(Result.failure(e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
         }
-        return new ResponseEntity(Result.success("Document uploaded successfully"), HttpStatus.OK);
     }
 
     @RequestMapping(value = "/submit", method = RequestMethod.POST)
@@ -282,9 +286,13 @@ public class ILProposalController {
     @ApiOperation(httpMethod = "POST", value = "To submit proposal for approval")
     public ResponseEntity submitProposal(@RequestBody SubmitILProposalCommand cmd, HttpServletRequest request) {
         try {
+            String proposalId = cmd.getProposalId();
             cmd.setUserDetails(getLoggedInUserDetail(request));
             proposalCommandGateway.sendAndWait(cmd);
-            return new ResponseEntity(Result.success("Proposal submitted successfully"), HttpStatus.OK);
+            Map map = new HashMap<>();
+            map.put("message", "Proposal submitted successfully");
+            map.put("proposalId", proposalId);
+            return new ResponseEntity(map, HttpStatus.OK);
         } catch (Exception e) {
             e.printStackTrace();
             return new ResponseEntity(Result.failure(e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
