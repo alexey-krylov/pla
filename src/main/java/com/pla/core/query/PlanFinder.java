@@ -87,7 +87,7 @@ public class PlanFinder {
     }
 
     public List<Map> findAllPlan() {
-        Criteria planCriteria = Criteria.where("status").is(PlanStatus.LAUNCHED);
+        Criteria planCriteria = Criteria.where("status").ne(PlanStatus.WITHDRAWN);
         Query query = new Query(planCriteria);
         List<Plan> allPlans = mongoTemplate.find(query, Plan.class);
         allPlans.sort(Comparator.comparing(e -> e.getPlanDetail().getPlanName()));
@@ -201,7 +201,7 @@ public class PlanFinder {
     }
 
     public List<Map<String, Object>> getAllPlans() {
-        final String FIND_ALL_PLAN_QUERY = "SELECT DISTINCT planId,planName,planCode FROM plan_coverage_benefit_assoc_view WHERE planStatus='LAUNCHED'";
+        final String FIND_ALL_PLAN_QUERY = "SELECT DISTINCT planId,planName,planCode FROM plan_coverage_benefit_assoc_view WHERE planStatus !='WITHDRAWN'";
         return namedParameterJdbcTemplate.query(FIND_ALL_PLAN_QUERY, new ColumnMapRowMapper());
     }
 
