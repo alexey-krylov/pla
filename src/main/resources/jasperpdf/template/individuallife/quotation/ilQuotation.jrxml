@@ -2,8 +2,8 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Quotation" pageWidth="842" pageHeight="1500" orientation="Landscape" whenNoDataType="AllSectionsNoDetail" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="957e75dd-e876-4376-9d34-ee0e5f53cdeb">
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
 	<property name="ireport.zoom" value="1.0"/>
-	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="243"/>
+	<property name="ireport.x" value="12"/>
+	<property name="ireport.y" value="0"/>
 	<style name="table">
 		<box>
 			<pen lineWidth="1.0" lineColor="#000000"/>
@@ -147,18 +147,6 @@
 					<textElement verticalAlignment="Middle"/>
 					<textFieldExpression><![CDATA[$F{agentMobileNumber}]]></textFieldExpression>
 				</textField>
-				<textField isStretchWithOverflow="true">
-					<reportElement x="595" y="54" width="144" height="15" uuid="c0ac43ee-f6a4-47f3-9e99-b14baefecac1"/>
-					<textElement verticalAlignment="Middle"/>
-					<textFieldExpression><![CDATA[$F{agentBranch}]]></textFieldExpression>
-				</textField>
-				<staticText>
-					<reportElement x="481" y="50" width="100" height="20" uuid="ac1b81a8-9484-4246-b06f-dc2cf3c4c4f3"/>
-					<textElement verticalAlignment="Middle">
-						<font fontName="Arial" size="12" isBold="true"/>
-					</textElement>
-					<text><![CDATA[Servicing Office :]]></text>
-				</staticText>
 				<textField isStretchWithOverflow="true">
 					<reportElement x="142" y="54" width="100" height="15" uuid="ba824947-a77a-416a-80cc-8c1257048ce0"/>
 					<textElement textAlignment="Left" verticalAlignment="Middle"/>

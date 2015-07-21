@@ -547,7 +547,6 @@ var viewILQuotationModule = (function () {
     };
 
     services.printQuotation = function () {
-        alert('print quotation...' + this.selectedItem);
         window.location.href = '/pla/individuallife/quotation/printquotation/' + this.selectedItem;
     }
 
