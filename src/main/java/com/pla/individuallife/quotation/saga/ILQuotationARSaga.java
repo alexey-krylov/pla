@@ -2,9 +2,14 @@ package com.pla.individuallife.quotation.saga;
 
 import com.google.common.collect.Lists;
 import com.pla.grouphealth.quotation.domain.event.GHQuotationReminderEvent;
+import com.pla.individuallife.quotation.application.command.ILQuotationClosureCommand;
+import com.pla.individuallife.quotation.application.command.ILQuotationConvertedCommand;
 import com.pla.individuallife.quotation.domain.event.*;
 import com.pla.individuallife.quotation.domain.model.ILQuotation;
 import com.pla.individuallife.quotation.domain.model.ILQuotationStatus;
+import com.pla.individuallife.quotation.query.ILQuotationFinder;
+import com.pla.individuallife.quotation.query.ILSearchQuotationResultDto;
+import com.pla.individuallife.sharedresource.event.ILQuotationConvertedToProposalEvent;
 import com.pla.publishedlanguage.contract.IProcessInfoAdapter;
 import com.pla.sharedkernel.application.CreateQuotationNotificationCommand;
 import com.pla.sharedkernel.domain.model.ProcessType;
@@ -12,6 +17,7 @@ import com.pla.sharedkernel.domain.model.ReminderTypeEnum;
 import com.pla.sharedkernel.domain.model.WaitingForEnum;
 import com.pla.sharedkernel.exception.ProcessInfoException;
 import com.pla.sharedkernel.identifier.LineOfBusinessEnum;
+import com.pla.sharedkernel.identifier.QuotationId;
 import com.pla.sharedkernel.util.RolesUtil;
 import org.axonframework.commandhandling.GenericCommandMessage;
 import org.axonframework.commandhandling.gateway.CommandGateway;
@@ -19,6 +25,7 @@ import org.axonframework.eventhandling.scheduling.EventScheduler;
 import org.axonframework.eventhandling.scheduling.ScheduleToken;
 import org.axonframework.repository.Repository;
 import org.axonframework.saga.annotation.AbstractAnnotatedSaga;
+import org.axonframework.saga.annotation.EndSaga;
 import org.axonframework.saga.annotation.SagaEventHandler;
 import org.axonframework.saga.annotation.StartSaga;
 import org.joda.time.DateTime;
@@ -32,6 +39,7 @@ import java.io.Serializable;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * Created by pradyumna on 16-06-2015.
@@ -49,6 +57,9 @@ public class ILQuotationARSaga extends AbstractAnnotatedSaga implements Serializ
     private transient EventScheduler eventScheduler;
     @Autowired
     private transient Repository<ILQuotation> ilQuotationRepository;
+
+    @Autowired
+    private transient ILQuotationFinder quotationFinder;
     @Autowired
     private transient CommandGateway commandGateway;
 
@@ -119,6 +130,23 @@ public class ILQuotationARSaga extends AbstractAnnotatedSaga implements Serializ
                 scheduledTokens.add(secondReminderScheduleToken);
             }
         }
+    }
+
+    @SagaEventHandler(associationProperty = "quotationId")
+    @EndSaga
+    public void handle(ILQuotationConvertedToProposalEvent event) {
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Handling IL Quotation Closure Event .Premium....", event);
+        }
+
+        List<ILSearchQuotationResultDto> quotations = quotationFinder.searchQuotation(event.getQuotationNumber(), "", "", "", "");
+        List<ILSearchQuotationResultDto> quotationsExcludingCurrentOne = quotations.stream().filter( t -> !t.getQuotationId().equals(event.getQuotationId())).collect(Collectors.toList());
+
+        commandGateway.send(new ILQuotationConvertedCommand(event.getQuotationId()));
+        quotationsExcludingCurrentOne.forEach(quotation -> {
+            commandGateway.send(new ILQuotationClosureCommand(new QuotationId(quotation.getQuotationId())));
+        });
+
     }
 
 }
