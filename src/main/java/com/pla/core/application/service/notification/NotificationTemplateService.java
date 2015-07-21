@@ -81,34 +81,15 @@ public class NotificationTemplateService {
         return emailContentMap;
     }
 
-    private HashMap<String,String> transformQuotationNotificationData(List<Map> notificationData){
-        HashMap<String,String> notificationQuotationMap = new HashMap<String,String>();
-        notificationData.parallelStream().map(new Function<Map, Map<String, String>>() {
-            @Override
-            public Map<String, String> apply(Map map) {
-                Map<String, Object> proposerMap = (Map) map.get("proposer");
-                if (isNotEmpty(proposerMap)) {
-                    notificationQuotationMap.put("proposerName", proposerMap.get("proposerName").toString());
-                    Map<String, Object> contactDetailMap = (Map) proposerMap.get("contactDetail");
-                    notificationQuotationMap.put("addressLine1", contactDetailMap.get("addressLine1").toString());
-                    notificationQuotationMap.put("addressLine2", contactDetailMap.get("addressLine2").toString());
-                    notificationQuotationMap.put("province", contactDetailMap.get("province").toString());
-                    notificationQuotationMap.put("town", contactDetailMap.get("town").toString());
-                    notificationQuotationMap.put("emailAddress", contactDetailMap.get("emailAddress").toString());
-                    notificationQuotationMap.put("requestNumber", map.get("quotationNumber").toString());
-                }
-                return notificationQuotationMap;
-            }
-        }).collect(Collectors.toList());
-        return notificationQuotationMap;
-    }
-
-    public Map<String,Object> getProposalNotificationTemplateData(LineOfBusinessEnum lineOfBusiness, String proposalId){
+    public HashMap<String,String> getProposalNotificationTemplateData(LineOfBusinessEnum lineOfBusiness, String proposalId){
         Criteria proposalCriteria = Criteria.where("_id").is(proposalId);
         Query query = new Query(proposalCriteria);
-        query.fields().include("proposer").include("proposalNumber").exclude("_id");
-        List<Map> quotationNotificationDetailMap =  mongoTemplate.find(query, Map.class, proposalEntitiesMap.get(lineOfBusiness));
-        return quotationNotificationDetailMap.get(0);
+        query.fields().include("proposer.proposerName").include("proposalNumber.proposalNumber").include("sharedOn").include("insureds.planPremiumDetail.planId").
+                include("proposer.contactDetail.addressLine1").include("proposer.contactDetail.addressLine2").include("proposer.contactDetail.province").include("proposer.contactDetail.town")
+                .include("proposer.contactDetail.emailAddress").exclude("_id");
+        List<Map> proposalNotificationDetailMap =  mongoTemplate.find(query, Map.class, proposalEntitiesMap.get(lineOfBusiness));
+        HashMap<String,String>  proposalNotificationMap = transformQuotationNotificationData(proposalNotificationDetailMap);
+        return proposalNotificationMap;
     }
 
     public String getRequestNumberBy(LineOfBusinessEnum lineOfBusinessEnum,ProcessType processType,String id) throws ProcessInfoException {
@@ -119,6 +100,28 @@ public class NotificationTemplateService {
                 return getProposalNotificationTemplateData(lineOfBusinessEnum,id).get("requestNumber").toString();
         }
         return "";
+    }
+
+    private HashMap<String,String> transformQuotationNotificationData(List<Map> notificationData){
+        HashMap<String,String> notificationQuotationMap = new HashMap<String,String>();
+        notificationData.parallelStream().map(new Function<Map, Map<String, String>>() {
+            @Override
+            public Map<String, String> apply(Map map) {
+                Map<String, Object> proposerMap = (Map) map.get("proposer");
+                if (isNotEmpty(proposerMap)) {
+                    notificationQuotationMap.put("proposerName", proposerMap.get("proposerName")!=null?proposerMap.get("proposerName").toString():"");
+                    Map<String, Object> contactDetailMap = (Map) proposerMap.get("contactDetail");
+                    notificationQuotationMap.put("addressLine1",contactDetailMap.get("addressLine1")!=null?contactDetailMap.get("addressLine1").toString():"");
+                    notificationQuotationMap.put("addressLine2", contactDetailMap.get("addressLine2")!=null?contactDetailMap.get("addressLine2").toString():"");
+                    notificationQuotationMap.put("province", contactDetailMap.get("province")!=null?contactDetailMap.get("province").toString():"");
+                    notificationQuotationMap.put("town", contactDetailMap.get("town")!=null?contactDetailMap.get("town").toString():"");
+                    notificationQuotationMap.put("emailAddress", contactDetailMap.get("emailAddress")!=null?contactDetailMap.get("emailAddress").toString():"");
+                    notificationQuotationMap.put("requestNumber", map.get("quotationNumber")!=null?map.get("quotationNumber").toString():"");
+                }
+                return notificationQuotationMap;
+            }
+        }).collect(Collectors.toList());
+        return notificationQuotationMap;
     }
 
     public CreateNotificationHistoryCommand generateHistoryDetail(String notificationId,String[] recipientMailAddress,String emailBody){
@@ -142,8 +145,8 @@ public class NotificationTemplateService {
         return null;
     }
 
-    public NotificationBuilder createNotification(LineOfBusinessEnum lineOfBusiness, ProcessType process, WaitingForEnum waitingFor, ReminderTypeEnum reminderType,
-                                                  String requestNumber, String roleType, byte[] templateFile, HashMap<String, String> notificationDetail) throws Exception {
+    public NotificationBuilder generateNotification(LineOfBusinessEnum lineOfBusiness, ProcessType process, WaitingForEnum waitingFor, ReminderTypeEnum reminderType,
+                                                    String requestNumber, String roleType, byte[] templateFile, HashMap<String, String> notificationDetail) throws Exception {
         checkArgument(notificationDetail !=null,"Notification details cannot be empty");
         checkArgument(templateFile != null, "Notification Template is not uploaded");
         NotificationBuilder notificationBuilder = Notification.builder();

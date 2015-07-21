@@ -21,6 +21,7 @@ import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.poifs.filesystem.POIFSFileSystem;
 import org.apache.poi.util.IOUtils;
 import org.axonframework.commandhandling.gateway.CommandGateway;
+import org.joda.time.DateTime;
 import org.nthdimenzion.presentation.Result;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.query.Criteria;
@@ -101,6 +102,48 @@ public class GroupHealthProposalController {
         return modelAndView;
     }
 
+
+    @RequestMapping(value = "/viewApprovalProposal", method = RequestMethod.GET)
+    @ApiOperation(httpMethod = "GET", value = "To open Approval proposal page in view Mode")
+    public ModelAndView gotoApprovalProposal() {
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("pla/grouphealth/proposal/createApprovalProposal");
+        return modelAndView;
+    }
+
+
+    @RequestMapping(value = "/editProposalReturnStatus", method = RequestMethod.GET)
+    @ApiOperation(httpMethod = "GET", value = "To open edit proposal page")
+    public ModelAndView gotoCreateProposalReturnStatus() {
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("pla/grouphealth/proposal/createProposalReturnStatus");
+        return modelAndView;
+    }
+
+    @RequestMapping(value = "/openapprovalproposal", method = RequestMethod.GET)
+    @ApiOperation(httpMethod = "GET", value = "To open Approval proposal page")
+    public ModelAndView gotoApprovalProposalPage() {
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("pla/grouphealth/proposal/viewApprovalProposal");
+        List<GHProposalDto> submittedProposals = ghProposalService.searchProposal(new SearchGHProposalDto(), new String[]{"PENDING_ACCEPTANCE"});
+        modelAndView.addObject("searchResult",submittedProposals);
+        modelAndView.addObject("searchCriteria", new SearchGHProposalDto());
+        return modelAndView;
+    }
+
+    @RequestMapping(value = "/getsubmittedproposals", method = RequestMethod.POST)
+    @ApiOperation(httpMethod = "POST", value = "To search submitted proposal for approver approval")
+    public ModelAndView findSubmittedProposal(SearchGHProposalDto searchGHProposalDto) {
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("pla/grouphealth/proposal/viewApprovalProposal");
+     List<GHProposalDto> submittedProposals = ghProposalService.searchProposal(searchGHProposalDto, new String[]{"PENDING_ACCEPTANCE"});
+
+        modelAndView.addObject("searchResult",submittedProposals);
+        modelAndView.addObject("searchCriteria", new SearchGHProposalDto());
+        return modelAndView;
+    }
+
+
     @RequestMapping(value = "/forcecreateproposal", method = RequestMethod.GET)
     @ApiOperation(httpMethod = "GET", value = "To create proposal forcefully if proposal already exists for the same quotation number")
     public ResponseEntity gotoCreateProposal(@RequestParam("quotationId") String quotationId) {
@@ -166,13 +209,6 @@ public class GroupHealthProposalController {
         }
         modelAndView.addObject("searchCriteria", searchGHProposalDto);
         return modelAndView;
-    }
-
-    @RequestMapping(value = "/getsubmittedproposals", method = RequestMethod.POST)
-    @ApiOperation(httpMethod = "POST", value = "To search submitted proposal for approver approval")
-    public List<GHProposalDto> findSubmittedProposal(SearchGHProposalDto searchGHProposalDto) {
-        List<GHProposalDto> submittedProposals = ghProposalService.searchProposal(searchGHProposalDto, new String[]{"PENDING_ACCEPTANCE"});
-        return submittedProposals;
     }
 
     @RequestMapping(value = "/opensearchproposal", method = RequestMethod.GET)

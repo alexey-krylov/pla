@@ -140,4 +140,10 @@ public class ILQuotationCommandHandler {
         ILQuotation quotation = ilQuotationRepository.load(new QuotationId(cmd.getQuotationId()));
         quotation.generateQuotation(LocalDate.now());
     }
+
+    @CommandHandler
+    public void convertedILQuotation(ILQuotationConvertedCommand cmd) {
+        ILQuotation quotation = ilQuotationRepository.load(cmd.getQuotationId());
+        quotation.closeQuotation();
+    }
 }

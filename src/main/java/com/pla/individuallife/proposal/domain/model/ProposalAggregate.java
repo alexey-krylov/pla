@@ -10,8 +10,10 @@ import com.pla.individuallife.proposal.query.ILProposalFinder;
 import com.pla.individuallife.quotation.presentation.dto.PlanDetailDto;
 import com.pla.individuallife.quotation.presentation.dto.ProposerDto;
 import com.pla.individuallife.quotation.query.ILQuotationDto;
+import com.pla.individuallife.sharedresource.event.ILQuotationConvertedToProposalEvent;
 import com.pla.publishedlanguage.dto.UnderWriterRoutingLevelDetailDto;
 import com.pla.sharedkernel.domain.model.ProcessType;
+import com.pla.sharedkernel.domain.model.Quotation;
 import com.pla.sharedkernel.domain.model.RoutingLevel;
 import com.pla.sharedkernel.identifier.PlanId;
 import com.pla.sharedkernel.identifier.ProposalId;
@@ -49,6 +51,7 @@ public class ProposalAggregate extends AbstractAnnotatedAggregateRoot<ProposalId
     @Id
     @AggregateIdentifier
     private ProposalId proposalId;
+    private Quotation quotation;
     private ProposalPlanDetail proposalPlanDetail;
     private List<Beneficiary> beneficiaries;
     private BigDecimal totalBeneficiaryShare = BigDecimal.ZERO;
@@ -63,6 +66,7 @@ public class ProposalAggregate extends AbstractAnnotatedAggregateRoot<ProposalId
     private ILProposalStatus proposalStatus;
     private DateTime submittedOn;
     private RoutingLevel routinglevel;
+
 
     ProposalAggregate() {
         beneficiaries = new ArrayList<Beneficiary>();
@@ -102,6 +106,7 @@ public class ProposalAggregate extends AbstractAnnotatedAggregateRoot<ProposalId
         assignPlan(quotationDto.getPlanDetailDto(), planFinder);
 
         this.proposalStatus = ILProposalStatus.DRAFT;
+        this.quotation = new Quotation(quotationDto.getQuotationNumber(), quotationDto.getVersionNumber(),quotationDto.getQuotationId());
 
     }
 
@@ -235,14 +240,16 @@ public class ProposalAggregate extends AbstractAnnotatedAggregateRoot<ProposalId
         // raise event to store document in client BC
     }
 
-    public void submitProposal(DateTime submittedOn, UserDetails userDetails, String comment, ILProposalFinder proposalFinder ) {
+    public void submitProposal(DateTime submittedOn, UserDetails userDetails, String comment, ILProposalFinder proposalFinder) {
         checkAuthorization(userDetails);
         this.submittedOn = submittedOn;
         this.proposalStatus = ILProposalStatus.PENDING_ACCEPTANCE;
         UnderWriterRoutingLevelDetailDto routingLevelDetailDto = new UnderWriterRoutingLevelDetailDto(new PlanId(proposalPlanDetail.getPlanId()), LocalDate.now(), ProcessType.ENROLLMENT.name());
 
-        RoutingLevel routinglevel = proposalFinder.findRoutingLevel(routingLevelDetailDto, proposalId.toString(), (Integer)proposedAssured.getAgeNextBirthday());
+        RoutingLevel routinglevel = proposalFinder.findRoutingLevel(routingLevelDetailDto, proposalId.toString(), (Integer) proposedAssured.getAgeNextBirthday());
         this.routinglevel = routinglevel;
+        if (this.quotation != null)
+            registerEvent(new ILQuotationConvertedToProposalEvent(this.quotation.getQuotationNumber(), this.quotation.getQuotationId()));
         //TODO : if this proposal is being converted from quotation, have to change the state of quotation as CONVERTED
     }
 }

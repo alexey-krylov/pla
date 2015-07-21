@@ -13,6 +13,28 @@ angular.module('createProposal', ['common', 'ngRoute', 'mgcrea.ngStrap.select', 
             } else if (mode == 'edit') {
                 $scope.isEditMode = true;
             }
+            $scope.isReturnStatus = false;
+            var status = getQueryParameter("status");
+            if (status == 'return') {
+                $scope.isReturnStatus = true;
+
+                $http.get("/pla/grouphealth/proposal/getapprovercomments").success(function (data, status) {
+                    console.log(data);
+                    $scope.approvalCommentList=data;
+                    });
+
+            }
+            var method = getQueryParameter("method");
+            if (method == 'approval') {
+                $scope.isViewMode = true;
+
+                $http.get("/pla/grouphealth/proposal/getapprovercomments").success(function (data, status) {
+                   // console.log(data);
+                    $scope.approvalCommentList=data;
+                });
+
+            }
+
             /*This scope holds the list of installments from which user can select one */
             $scope.numberOfInstallmentsDropDown = [];
 
@@ -40,6 +62,9 @@ angular.module('createProposal', ['common', 'ngRoute', 'mgcrea.ngStrap.select', 
 
             $scope.documentList = documentList;
 
+            if (status == 'return') {
+                $scope.stepsSaved["1"] =true;
+            }
             $scope.uploadDocumentFiles = function () {
                 // console.log($scope.documentList.length);
                 for (var i = 0; i < $scope.documentList.length; i++) {
@@ -144,6 +169,11 @@ angular.module('createProposal', ['common', 'ngRoute', 'mgcrea.ngStrap.select', 
                 $('#agentModal').modal('show');
                 $scope.changeAgent = true;
                 $scope.stepsSaved["1"] = !$scope.changeAgent;
+            }
+            if(!$scope.proposalDetails.basic['active'] && $scope.isReturnStatus==true && method == 'approval' ){
+                $('#agentModal').modal('show');
+                $scope.changeAgent = true;
+                $scope.stepsSaved["2"] = !$scope.changeAgent;
             }
             console.log(' $scope.changeAgent ' + $scope.changeAgent);
 
@@ -290,11 +320,38 @@ angular.module('createProposal', ['common', 'ngRoute', 'mgcrea.ngStrap.select', 
                     $scope.disableSaveButton=true;
                 }else{
                     $scope.disableSaveButton=false;
-                    $scope.stepsSaved["4"]=false;
+                    if($scope.isReturnStatus == false){
+                        $scope.stepsSaved["4"]=false;
+                    }else{
+                        $scope.stepsSaved["5"]=false;
+                    }
+
+
+                }
+                if (method == 'approval') {
+                    $scope.stepsSaved["5"]=true;
                 }
 
             });
 
+            $scope.approveProposal = function(){
+                var request = angular.extend({comment: $scope.comment},
+                    {"proposalId": $scope.proposalId});
+
+                $http.post('/pla/grouphealth/proposal/approve', request).success(function (data) {
+
+
+                });
+            }
+            $scope.comment='';
+            $scope.returnProposal = function(){
+                var request = angular.extend({comment: $scope.comment},{"proposalId": $scope.proposalId});
+
+                $http.post('/pla/grouphealth/proposal/return', request).success(function (data) {
+
+
+                });
+            }
 
 
             $scope.savePremiumDetails = function () {
@@ -428,14 +485,23 @@ angular.module('createProposal', ['common', 'ngRoute', 'mgcrea.ngStrap.select', 
                         }).error(function (response, status, headers, config) {
                             deferred.reject();
                         });
-                        stepsSaved["1"] = true;
-                        stepsSaved["3"] = true;
+                        var status =getQueryParameter('status');
+                        console.log("**************RETURN STATUS********************");
+                       console.log(status);
+                        if(status == 'return'){
+                            stepsSaved["2"] = true;
+                            stepsSaved["4"] = true;
+                        }else{
+                            stepsSaved["1"] = true;
+                            stepsSaved["3"] = true;
+                        }
+
                         return deferred.promise;
                     } else {
                         return {};
                     }
                 }],
-                proposerDetails: ['$q', '$http', function ($q, $http) {
+                proposerDetails: ['$q', '$http', 'getQueryParameter', function ($q, $http,getQueryParameter) {
                     if (queryParam && !_.isEmpty(queryParam)) {
                         var deferred = $q.defer();
                         $http.get('/pla/grouphealth/proposal/getproposerdetail/' + queryParam).success(function (response, status, headers, config) {
@@ -443,7 +509,13 @@ angular.module('createProposal', ['common', 'ngRoute', 'mgcrea.ngStrap.select', 
                         }).error(function (response, status, headers, config) {
                             deferred.reject();
                         });
-                        stepsSaved["2"] = true;
+                        var status =getQueryParameter('status');
+                        if(status == 'return'){
+                            stepsSaved["3"] = true;
+                        }else{
+                            stepsSaved["2"] = true;
+                        }
+
                         return deferred.promise;
                     } else {
                         return {};
@@ -464,11 +536,17 @@ angular.module('createProposal', ['common', 'ngRoute', 'mgcrea.ngStrap.select', 
                         return 1;
                     }
                 }],
-                premiumData: ['$q', '$http', function ($q, $http) {
+                premiumData: ['$q', '$http','getQueryParameter', function ($q, $http,getQueryParameter) {
                     if (queryParam && !_.isEmpty(queryParam)) {
                         var deferred = $q.defer();
                         $http.get('/pla/grouphealth/proposal/getpremiumdetail/' + queryParam).success(function (response, status, headers, config) {
-                            stepsSaved["4"] = true;
+                            var status =getQueryParameter('status');
+                            if(status == 'return'){
+                                stepsSaved["5"] = true;
+                            }else{
+                                stepsSaved["4"] = true;
+                            }
+
                             deferred.resolve(response)
                         }).error(function (response, status, headers, config) {
                             deferred.reject();

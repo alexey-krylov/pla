@@ -5,8 +5,8 @@ var viewProposalModule = (function () {
     services.getTheItemSelected = function (ele) {
         this.selectedItem = $(ele).val();
         this.status = $(ele).parent().find('.proposalStatus').val();
-        console.log("***********************");
-        console.log(this.status);
+       // console.log("***********************");
+       // console.log(this.status);
         $(".btn-disabled").attr("disabled", false);
         if (this.status == 'RETURN' || this.status == 'DRAFT'){
             $('#modifyProposal').attr('disabled', false);
@@ -27,7 +27,13 @@ var viewProposalModule = (function () {
 
     services.modifyProposal = function () {
         var proposalId = this.selectedItem;
-        window.location.href = "/pla/grouphealth/proposal/editProposal?proposalId=" + proposalId  + "&mode=edit";
+        console.log(this.status);
+        if(this.status == 'RETURN'){
+            window.location.href = "/pla/grouphealth/proposal/editProposalReturnStatus?proposalId=" + proposalId  + "&mode=edit" + "&status=return";
+        }else{
+            window.location.href = "/pla/grouphealth/proposal/editProposal?proposalId=" + proposalId  + "&mode=edit";
+        }
+
        /* $.ajax({
             url: '/pla/grouphealth/proposal/editProposal?proposalId=' + proposalId,
             type: 'GET',
@@ -55,6 +61,12 @@ var viewProposalModule = (function () {
                 }
             }
         });*/
+    };
+    services.viewApprovalProposal = function () {
+        var proposalId = this.selectedItem;
+
+        window.location.href = "/pla/grouphealth/proposal/viewApprovalProposal?proposalId=" + proposalId  + "&method=approval";
+
     };
 
     return services;

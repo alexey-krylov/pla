@@ -16,6 +16,7 @@ import com.pla.core.domain.model.plan.Plan;
 import com.pla.core.domain.model.plan.PlanCoverage;
 import com.pla.core.dto.CoverageDto;
 import com.pla.sharedkernel.domain.model.CoverageType;
+import com.pla.sharedkernel.domain.model.PlanStatus;
 import com.pla.sharedkernel.identifier.CoverageId;
 import com.pla.sharedkernel.identifier.PlanId;
 import org.nthdimenzion.utils.UtilValidator;
@@ -86,7 +87,9 @@ public class PlanFinder {
     }
 
     public List<Map> findAllPlan() {
-        List<Plan> allPlans = mongoTemplate.findAll(Plan.class, "PLAN");
+        Criteria planCriteria = Criteria.where("status").ne(PlanStatus.WITHDRAWN);
+        Query query = new Query(planCriteria);
+        List<Plan> allPlans = mongoTemplate.find(query, Plan.class);
         allPlans.sort(Comparator.comparing(e -> e.getPlanDetail().getPlanName()));
         List<Map> planList = new ArrayList<Map>();
         for (Plan p : allPlans) {
@@ -198,7 +201,7 @@ public class PlanFinder {
     }
 
     public List<Map<String, Object>> getAllPlans() {
-        final String FIND_ALL_PLAN_QUERY = "SELECT DISTINCT planId,planName,planCode FROM plan_coverage_benefit_assoc_view";
+        final String FIND_ALL_PLAN_QUERY = "SELECT DISTINCT planId,planName,planCode FROM plan_coverage_benefit_assoc_view WHERE planStatus !='WITHDRAWN'";
         return namedParameterJdbcTemplate.query(FIND_ALL_PLAN_QUERY, new ColumnMapRowMapper());
     }
 
