@@ -321,6 +321,20 @@ public class ILProposalController {
         return modelAndView;
     }
 
+    @RequestMapping(value = "/getsubmittedproposalsforapprover", method = RequestMethod.POST)
+    @ApiOperation(httpMethod = "POST", value = "To search submitted proposal for approver approval")
+    public ModelAndView findSubmittedProposal(ILSearchProposalDto ilSearchProposalDto) {
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("pla/individuallife/proposal/index");
+        try {
+            modelAndView.addObject("searchResult", proposalFinder.searchProposal(ilSearchProposalDto));
+        } catch (Exception e) {
+            modelAndView.addObject("searchResult", Lists.newArrayList());
+        }
+        modelAndView.addObject("searchCriteria", ilSearchProposalDto);
+        return modelAndView;
+    }
+
 
     /**
      * For routing of proposal list page to the index.html page under core/plan.
