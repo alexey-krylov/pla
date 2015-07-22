@@ -11,10 +11,10 @@ import lombok.NoArgsConstructor;
 public class QuestionAnswerDto {
 
    private String questionId;
-    private Boolean response;
+    private Boolean answer;
 
-    public QuestionAnswerDto(String questionId, Boolean response) {
+    public QuestionAnswerDto(String questionId, Boolean answer) {
         this.questionId = questionId;
-        this.response = response;
+        this.answer = answer;
     }
 }
