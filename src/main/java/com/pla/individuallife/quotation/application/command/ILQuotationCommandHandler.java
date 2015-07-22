@@ -1,6 +1,7 @@
 package com.pla.individuallife.quotation.application.command;
 
 import com.pla.core.domain.model.agent.AgentId;
+import com.pla.individuallife.quotation.application.service.ILQuotationAppService;
 import com.pla.individuallife.quotation.domain.model.*;
 import com.pla.individuallife.quotation.domain.service.ILQuotationRoleAdapter;
 import com.pla.individuallife.quotation.domain.service.ILQuotationService;
@@ -8,6 +9,8 @@ import com.pla.individuallife.quotation.presentation.dto.PlanDetailDto;
 import com.pla.individuallife.quotation.presentation.dto.ProposedAssuredDto;
 import com.pla.individuallife.quotation.presentation.dto.ProposerDto;
 import com.pla.individuallife.quotation.presentation.dto.RiderDetailDto;
+import com.pla.individuallife.quotation.query.PremiumDetailDto;
+import com.pla.individuallife.quotation.query.RiderPremiumDto;
 import com.pla.sharedkernel.identifier.PlanId;
 import com.pla.sharedkernel.identifier.QuotationId;
 import org.axonframework.commandhandling.GenericCommandMessage;
@@ -37,6 +40,8 @@ public class ILQuotationCommandHandler {
     private ILQuotationService quotationService;
     @Autowired
     private Repository<ILQuotation> ilQuotationRepository;
+    @Autowired
+    private ILQuotationAppService ilQuotationService;
 
     @CommandHandler
     public QuotationId createQuotation(ILCreateQuotationCommand cmd) {
@@ -138,6 +143,24 @@ public class ILQuotationCommandHandler {
     @CommandHandler
     public void generateQuotation(ILGenerateQuotationCommand cmd) {
         ILQuotation quotation = ilQuotationRepository.load(new QuotationId(cmd.getQuotationId()));
+        PremiumDetailDto premiumDetailDto = ilQuotationService.getPremiumDetail(new QuotationId(cmd.getQuotationId()));
+        PlanDetail planDetail = quotation.getPlanDetail();
+        Set<RiderDetail> riders = quotation.getRiderDetails();
+        planDetail.setAnnualPremium(premiumDetailDto.getPlanAnnualPremium());
+        planDetail.setSemiannualPremium(premiumDetailDto.getSemiannualPremium());
+        planDetail.setQuarterlyPremium(premiumDetailDto.getQuarterlyPremium());
+        planDetail.setMonthlyPremium(premiumDetailDto.getMonthlyPremium());
+        planDetail.setTotalPremium(premiumDetailDto.getTotalPremium());
+        if (premiumDetailDto.getRiderPremiumDtos() != null) {
+            for (RiderPremiumDto each : premiumDetailDto.getRiderPremiumDtos()) {
+                riders.stream().forEach(t -> {
+                    t.getCoverageId().equals(each.getCoverageId());
+                    t.setAnnualPremium(each.getAnnualPremium());
+                });
+            }
+        }
+        ILQuotationProcessor quotationProcessor = ILQuotationRoleAdapter.userToQuotationProcessor(cmd.getUserDetails());
+        quotation.updateWithPlanAndRider(quotationProcessor, planDetail, riders);
         quotation.generateQuotation(LocalDate.now());
     }
 

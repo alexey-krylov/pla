@@ -836,6 +836,13 @@ DROP TABLE IF EXISTS `individual_life_quotation`;
   PRIMARY KEY (`quotation_id`)
 );
 
+ALTER TABLE `individual_life_quotation`
+ADD COLUMN `annual_premium` decimal(19,2) DEFAULT NULL,
+ADD COLUMN ``monthly_premium` decimal(19,2) DEFAULT NULL,
+ADD COLUMN `quarterly_premium` decimal(19,2) DEFAULT NULL,
+ADD COLUMN `semiannual_premium` decimal(19,2) DEFAULT NULL,
+ADD COLUMN `total_premium` decimal(19,2) DEFAULT NULL;
+
 DROP TABLE IF EXISTS `individual_quotation_rider`;
 CREATE TABLE `individual_quotation_rider` (
   `quotation_id` varchar(255) NOT NULL,
@@ -846,6 +853,9 @@ CREATE TABLE `individual_quotation_rider` (
   KEY `FK_5r93vhcdtxcuv950j05mos777` (`quotation_id`),
   CONSTRAINT `FK_5r93vhcdtxcuv950j05mos777` FOREIGN KEY (`quotation_id`) REFERENCES `individual_life_quotation` (`quotation_id`)
 ) ;
+
+ALTER TABLE `individual_quotation_rider`
+ADD COLUMN `annual_premium` decimal(19,2) DEFAULT NULL;
 
 DROP TABLE IF EXISTS `assured`;
   CREATE TABLE `assured` (

@@ -230,8 +230,12 @@ public class ILQuotationController {
 
     @RequestMapping(value = "/generatequotation", method = RequestMethod.POST)
     @ResponseBody
-    public Result reCalculatePremium(@RequestBody ILGenerateQuotationCommand generateQuotationCommand) {
+    public Result generateQuotation(@RequestBody ILGenerateQuotationCommand generateQuotationCommand, BindingResult bindingResult,  HttpServletRequest request) {
+        if (bindingResult.hasErrors()) {
+            return Result.failure("Generate Quotation data is not valid", bindingResult.getAllErrors());
+        }
         try{
+            generateQuotationCommand.setUserDetails(getLoggedInUserDetail(request));
             String quotationId =commandGateway.sendAndWait(generateQuotationCommand)   ;
             return Result.success("Quotation Generated Successfully",quotationId);
         }catch (Exception e){

@@ -16,10 +16,10 @@ public class EmploymentDetail {
     @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
     private DateTime employmentDate;
     private String employmentTypeId;
-    private long workPhone;
+    private String workPhone;
     private Address address;
 
-    EmploymentDetail(String occupationId, String occupationClass, String employer, DateTime employmentDate, String employmentTypeId, long workPhone, Address address) {
+    EmploymentDetail(String occupationId, String occupationClass, String employer, DateTime employmentDate, String employmentTypeId, String workPhone, Address address) {
         this.occupationId = occupationId;
         this.occupationClass = occupationClass;
         this.employer = employer;
