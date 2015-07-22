@@ -26,10 +26,16 @@ public class RiderDetail {
 
     private Integer waiverOfPremium;
 
+    private BigDecimal annualPremium;
+
     public RiderDetail(String coverageId, BigDecimal sumAssured, Integer coverTerm, Integer waiverOfPremium) {
         this.coverageId = coverageId;
         this.sumAssured = sumAssured;
         this.coverTerm = coverTerm;
         this.waiverOfPremium = waiverOfPremium;
+    }
+
+    public void setAnnualPremium(BigDecimal annualPremium) {
+        this.annualPremium = annualPremium;
     }
 }

@@ -1,6 +1,5 @@
 package com.pla.individuallife.proposal.domain.model;
 
-import lombok.AccessLevel;
 import lombok.Getter;
 
 /**
@@ -10,10 +9,10 @@ import lombok.Getter;
 public class ResidentialAddress {
 
     private Address address;
-    private long homePhone;
+    private Long homePhone;
     private String emailAddress;
 
-    public ResidentialAddress(Address address, long homePhone,String emailAddress) {
+    public ResidentialAddress(Address address, Long homePhone,String emailAddress) {
         this.address = address;
         this.homePhone = homePhone;
         this.emailAddress=emailAddress;

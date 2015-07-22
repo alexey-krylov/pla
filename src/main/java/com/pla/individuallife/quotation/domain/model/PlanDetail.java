@@ -12,7 +12,6 @@ import java.math.BigDecimal;
 @Embeddable
 @Getter
 public class PlanDetail {
-
     private PlanId planId;
 
     private Integer policyTerm;
@@ -20,6 +19,16 @@ public class PlanDetail {
     private Integer premiumPaymentTerm;
 
     private BigDecimal sumAssured;
+
+    private BigDecimal annualPremium;
+
+    private BigDecimal semiannualPremium;
+
+    private BigDecimal quarterlyPremium;
+
+    private BigDecimal monthlyPremium;
+
+    private BigDecimal totalPremium;
 
     PlanDetail() {
     }
@@ -29,5 +38,25 @@ public class PlanDetail {
         this.policyTerm = policyTerm;
         this.premiumPaymentTerm = premiumPaymentTerm;
         this.sumAssured = sumAssured;
+    }
+
+    public void setAnnualPremium(BigDecimal annualPremium) {
+        this.annualPremium = annualPremium;
+    }
+
+    public void setSemiannualPremium(BigDecimal semiannualPremium) {
+        this.semiannualPremium = semiannualPremium;
+    }
+
+    public void setQuarterlyPremium(BigDecimal quarterlyPremium) {
+        this.quarterlyPremium = quarterlyPremium;
+    }
+
+    public void setMonthlyPremium(BigDecimal monthlyPremium) {
+        this.monthlyPremium = monthlyPremium;
+    }
+
+    public void setTotalPremium(BigDecimal totalPremium) {
+        this.totalPremium = totalPremium;
     }
 }
