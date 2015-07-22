@@ -4,7 +4,6 @@ import com.pla.core.domain.model.agent.AgentId;
 import com.pla.grouphealth.sharedresource.model.vo.GHInsured;
 import com.pla.grouphealth.sharedresource.model.vo.GHPremiumDetail;
 import com.pla.grouphealth.sharedresource.model.vo.GHProposer;
-import com.pla.sharedkernel.domain.model.PolicyCommissionHierarchy;
 import com.pla.sharedkernel.domain.model.PolicyNumber;
 import com.pla.sharedkernel.domain.model.Proposal;
 import com.pla.sharedkernel.identifier.PolicyId;
@@ -51,8 +50,6 @@ public class GroupHealthPolicy extends AbstractAggregateRoot<PolicyId> {
 
     private PolicyStatus status;
 
-    private PolicyCommissionHierarchy commissionHierarchy;
-
     public GroupHealthPolicy(PolicyId policyId, PolicyNumber policyNumber, Proposal proposal, DateTime inceptionOn, DateTime expiredOn) {
         checkArgument(policyId != null, "Policy ID cannot be empty");
         checkArgument(policyNumber != null, "Policy number cannot be empty");
@@ -84,12 +81,6 @@ public class GroupHealthPolicy extends AbstractAggregateRoot<PolicyId> {
 
     public GroupHealthPolicy addPremium(GHPremiumDetail premiumDetail) {
         this.premiumDetail = premiumDetail;
-        return this;
-    }
-
-    public GroupHealthPolicy addCommissionHierarchy(PolicyCommissionHierarchy policyCommissionHierarchy) {
-        checkArgument(policyCommissionHierarchy != null, "Commission hierarchy should be provided");
-        this.commissionHierarchy = policyCommissionHierarchy;
         return this;
     }
 

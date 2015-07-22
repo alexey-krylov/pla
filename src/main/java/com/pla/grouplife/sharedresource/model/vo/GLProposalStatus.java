@@ -5,5 +5,15 @@ package com.pla.grouplife.sharedresource.model.vo;
  */
 public enum GLProposalStatus {
 
-    DRAFT, PENDING_ACCEPTANCE,APPROVED,RETURNED,PENDING_FIRST_PREMIUM,IN_FORCE
+    DRAFT("Draft"), PENDING_ACCEPTANCE("Pending Acceptance"), APPROVED("Approved"), RETURNED("Returned"), PENDING_FIRST_PREMIUM("Pending First Premium"), IN_FORCE("In Force");
+
+    private String description;
+
+    GLProposalStatus(String description) {
+        this.description = description;
+    }
+
+    public String getDescription() {
+        return description;
+    }
 }

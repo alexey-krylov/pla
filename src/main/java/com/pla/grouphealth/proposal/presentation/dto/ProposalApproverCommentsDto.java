@@ -26,4 +26,6 @@ public class ProposalApproverCommentsDto {
 
     private String comment;
 
+    private String status;
+
 }

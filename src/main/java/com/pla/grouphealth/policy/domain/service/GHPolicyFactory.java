@@ -8,8 +8,10 @@ import com.pla.grouphealth.sharedresource.model.vo.GHInsuredDependent;
 import com.pla.grouphealth.sharedresource.model.vo.GHPremiumDetail;
 import com.pla.grouphealth.sharedresource.model.vo.GHProposer;
 import com.pla.grouphealth.sharedresource.query.GHFinder;
-import com.pla.publishedlanguage.contract.ICommissionHierarchyProvider;
-import com.pla.sharedkernel.domain.model.*;
+import com.pla.sharedkernel.domain.model.FamilyId;
+import com.pla.sharedkernel.domain.model.PolicyNumber;
+import com.pla.sharedkernel.domain.model.Proposal;
+import com.pla.sharedkernel.domain.model.Relationship;
 import com.pla.sharedkernel.identifier.PolicyId;
 import com.pla.sharedkernel.identifier.ProposalId;
 import com.pla.sharedkernel.identifier.ProposalNumber;
@@ -35,14 +37,11 @@ public class GHPolicyFactory {
 
     private GHPolicyNumberGenerator ghPolicyNumberGenerator;
 
-    private ICommissionHierarchyProvider commissionHierarchyProvider;
-
     @Autowired
-    public GHPolicyFactory(GHFinder ghFinder, SequenceGenerator sequenceGenerator, GHPolicyNumberGenerator ghPolicyNumberGenerator, ICommissionHierarchyProvider commissionHierarchyProvider) {
+    public GHPolicyFactory(GHFinder ghFinder, SequenceGenerator sequenceGenerator, GHPolicyNumberGenerator ghPolicyNumberGenerator) {
         this.ghFinder = ghFinder;
         this.sequenceGenerator = sequenceGenerator;
         this.ghPolicyNumberGenerator = ghPolicyNumberGenerator;
-        this.commissionHierarchyProvider = commissionHierarchyProvider;
     }
 
     public GroupHealthPolicy createPolicy(ProposalId proposalId) {
@@ -61,8 +60,7 @@ public class GHPolicyFactory {
         GroupHealthPolicy groupHealthPolicy = new GroupHealthPolicy(policyId, policyNumber, proposal, policyInceptionDate, policyExpireDate);
         insureds = populateFamilyId(insureds);
         groupHealthPolicy = groupHealthPolicy.addAgentId(agentId).addProposer(proposer).addInsured(insureds)
-                .addPremium(premiumDetail)
-                .addCommissionHierarchy(commissionHierarchyProvider.getCommissionHierarchy(agentId, DateTime.now()));
+                .addPremium(premiumDetail);
         return groupHealthPolicy;
     }
 

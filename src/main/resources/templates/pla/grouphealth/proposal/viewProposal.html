@@ -143,10 +143,9 @@
                                 <td th:if="${proposal.submittedOn!=null}"><span
                                         th:text="${#dates.format(proposal.submittedOn,'dd/MM/yyyy')}"></span>
                                 </td>
-
-
+                                <td th:if="${proposal.submittedOn==null}"></td>
                                 <td th:text="${proposal.agentName}"></td>
-                                <td th:text="${proposal.proposalStatus}"></td>
+                                <td th:text="${proposal.status}"></td>
                                 <td th:text="${proposal.proposerName}"></td>
 
 

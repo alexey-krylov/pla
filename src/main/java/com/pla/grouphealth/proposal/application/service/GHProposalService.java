@@ -140,7 +140,7 @@ public class GHProposalService {
                 String proposalId = map.get("_id").toString();
                 AgentDetailDto agentDetailDto = getAgentDetail(new ProposalId(proposalId));
                 DateTime submittedOn = map.get("submittedOn") != null ? new DateTime((Date) map.get("submittedOn")) : null;
-                String proposalStatus = map.get("proposalStatus") != null ? (String) map.get("proposalStatus") : "";
+                String proposalStatus = map.get("proposalStatus") != null ? ProposalStatus.valueOf((String) map.get("proposalStatus")).getDescription() : "";
                 String proposalNumber = map.get("proposalNumber") != null ? ((ProposalNumber) map.get("proposalNumber")).getProposalNumber() : "";
                 GHProposer proposerMap = map.get("proposer") != null ? (GHProposer) map.get("proposer") : null;
                 String proposerName = proposerMap != null ? proposerMap.getProposerName() : "";
@@ -350,6 +350,7 @@ public class GHProposalService {
                     ProposalApproverCommentsDto proposalApproverCommentsDto = new ProposalApproverCommentsDto();
                     try {
                         BeanUtils.copyProperties(proposalApproverCommentsDto, groupHealthProposalStatusAudit);
+                        proposalApproverCommentsDto.setStatus(proposalApproverCommentsDto.getProposalStatus().getDescription());
                     } catch (IllegalAccessException e) {
                         e.printStackTrace();
                     } catch (InvocationTargetException e) {
