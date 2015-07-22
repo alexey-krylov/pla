@@ -10,7 +10,7 @@ public class EmploymentDetailBuilder {
     @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
     private DateTime employmentDate;
     private String employmentTypeId;
-    private long workPhone;
+    private String workPhone;
     private Address address;
 
     public EmploymentDetailBuilder withOccupationId(String occupationId) {
@@ -38,7 +38,7 @@ public class EmploymentDetailBuilder {
         return this;
     }
 
-    public EmploymentDetailBuilder withWorkPhone(long workPhone) {
+    public EmploymentDetailBuilder withWorkPhone(String workPhone) {
         this.workPhone = workPhone;
         return this;
     }

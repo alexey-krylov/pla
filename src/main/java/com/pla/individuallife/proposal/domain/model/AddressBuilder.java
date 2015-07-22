@@ -3,7 +3,7 @@ package com.pla.individuallife.proposal.domain.model;
 public class AddressBuilder {
     private String address1;
     private String address2;
-    private int postalCode;
+    private String postalCode;
     private String province;
     private String town;
 
@@ -17,7 +17,7 @@ public class AddressBuilder {
         return this;
     }
 
-    public AddressBuilder withPostalCode(int postalCode) {
+    public AddressBuilder withPostalCode(String postalCode) {
         this.postalCode = postalCode;
         return this;
     }

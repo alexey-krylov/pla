@@ -1,7 +1,5 @@
 package com.pla.individuallife.proposal.presentation.dto;
 
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -27,8 +25,8 @@ public class EmploymentDto {
     private String employmentType;
     private String address1;
     private String address2;
-    private int postalCode;
+    private String postalCode;
     private String province;
     private String town;
-    private long workPhone;
+    private String workPhone;
 }
