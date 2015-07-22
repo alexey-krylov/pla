@@ -83,6 +83,7 @@ public class GHPremiumDetail {
 
     public GHPremiumDetail nullifyFrequencyPremium() {
         this.frequencyPremiums = null;
+        this.optedFrequencyPremium=null;
         return this;
     }
 

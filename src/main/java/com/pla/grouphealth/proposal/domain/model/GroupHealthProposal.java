@@ -127,7 +127,7 @@ public class GroupHealthProposal extends AbstractAggregateRoot<ProposalId> {
         this.submittedOn = submittedOn;
         this.proposalStatus = ProposalStatus.PENDING_ACCEPTANCE;
         registerEvent(new GHQuotationConvertedToProposalEvent(this.quotation.getQuotationNumber(), this.quotation.getQuotationId()));
-        registerEvent(new GHProposalStatusAuditEvent(this.getProposalId(), ProposalStatus.PENDING_ACCEPTANCE, submittedBy, comment, submittedOn));
+//        registerEvent(new GHProposalStatusAuditEvent(this.getProposalId(), ProposalStatus.PENDING_ACCEPTANCE, submittedBy, comment, submittedOn));
         return this;
     }
 
