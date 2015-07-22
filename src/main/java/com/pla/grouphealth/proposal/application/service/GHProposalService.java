@@ -340,8 +340,8 @@ public class GHProposalService {
         return agentDetailDto;
     }
 
-    public List<ProposalApproverCommentsDto> findApproverComments() {
-        List<GroupHealthProposalStatusAudit> audits = ghProposalStatusAuditRepository.findAll();
+    public List<ProposalApproverCommentsDto> findApproverComments(String proposalId) {
+        List<GroupHealthProposalStatusAudit> audits = ghProposalStatusAuditRepository.findByProposalId(new ProposalId(proposalId));
         List<ProposalApproverCommentsDto> proposalApproverCommentsDtos = Lists.newArrayList();
         if (isNotEmpty(audits)) {
             proposalApproverCommentsDtos = audits.stream().map(new Function<GroupHealthProposalStatusAudit, ProposalApproverCommentsDto>() {

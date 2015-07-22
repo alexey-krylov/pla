@@ -334,6 +334,7 @@ public class GroupHealthProposalController {
         }
     }
 
+
     @RequestMapping(value = "/getpremiumdetail/{proposalId}", method = RequestMethod.GET)
     @ResponseBody
     @ApiOperation(httpMethod = "GET", value = "To get premium detail")
