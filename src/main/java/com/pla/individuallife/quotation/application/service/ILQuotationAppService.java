@@ -168,18 +168,19 @@ public class ILQuotationAppService {
         AgentDetailDto agentDetailDto = getAgentDetail(new AgentId(quotationMap.getAgentId()));
         ilQuotationDetailDto.setAgentBranch(agentDetailDto.getBranchName());
         ilQuotationDetailDto.setAgentCode(agentDetailDto.getAgentId());
-        ilQuotationDetailDto.setAgentName(agentDetailDto.getAgentSalutation() + "  " + agentDetailDto.getAgentName());
+        ilQuotationDetailDto.setAgentName(agentDetailDto.getAgentName());
         ilQuotationDetailDto.setAgentMobileNumber(agentDetailDto.getAgentMobileNumber());
 
         ProposerDto proposerDto = quotationMap.getProposer();
-        ilQuotationDetailDto.setProposerName(proposerDto.getFirstName());
-        ilQuotationDetailDto.setProposerEmailAddress(proposerDto.getEmailAddress());
+        ilQuotationDetailDto.setProposerName(proposerDto.getTitle() + " " + proposerDto.getFirstName() + " " + proposerDto.getSurname());
+        String emailAddress = proposerDto.getEmailAddress() != null ? proposerDto.getEmailAddress() : "-";
+        ilQuotationDetailDto.setProposerEmailAddress(emailAddress);
         ilQuotationDetailDto.setProposerMobileNumber(proposerDto.getMobileNumber());
 
         ilQuotationDetailDto.setQuotationNumber(quotationMap.getQuotationNumber());
 
         ProposedAssuredDto proposedAssuredDto = quotationMap.getProposedAssured();
-        ilQuotationDetailDto.setProposedAssuredName(proposedAssuredDto.getFirstName());
+        ilQuotationDetailDto.setProposedAssuredName(proposedAssuredDto.getTitle() + " " + proposedAssuredDto.getFirstName() + " " + proposedAssuredDto.getSurname());
         ilQuotationDetailDto.setProposedAssuredDob(AppUtils.toString(proposedAssuredDto.getDateOfBirth()));
         ilQuotationDetailDto.setProposedAssuredMobileNumber(proposedAssuredDto.getMobileNumber());
 
@@ -241,9 +242,10 @@ public class ILQuotationAppService {
         agentDetailDto.setAgentId(agentId.toString());
         agentDetailDto.setBranchName((String) agentDetail.get("branchName"));
         agentDetailDto.setTeamName((String) agentDetail.get("teamName"));
-        agentDetailDto.setAgentName(agentDetail.get("firstName") + " " +(agentDetail.get("lastName") == null ? "" : (String) agentDetail.get("lastName")));
+        agentDetailDto.setAgentName((String)agentDetail.get("firstName"));
+       // agentDetailDto.setAgentName(agentDetail.get("firstName") + " " +(agentDetail.get("lastName") == null ? "" : (String) agentDetail.get("lastName")));
         agentDetailDto.setAgentMobileNumber(agentDetail.get("mobileNumber") != null ? (String) agentDetail.get("mobileNumber") : "");
-        agentDetailDto.setAgentSalutation(agentDetail.get("title") != null ? (String) agentDetail.get("title") : "");
+        //agentDetailDto.setAgentSalutation(agentDetail.get("title") != null ? (String) agentDetail.get("title") : "");
         return agentDetailDto;
     }
 }
