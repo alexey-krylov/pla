@@ -9,10 +9,10 @@ import lombok.Getter;
 public class ResidentialAddress {
 
     private Address address;
-    private Long homePhone;
+    private String homePhone;
     private String emailAddress;
 
-    public ResidentialAddress(Address address, Long homePhone,String emailAddress) {
+    public ResidentialAddress(Address address, String homePhone,String emailAddress) {
         this.address = address;
         this.homePhone = homePhone;
         this.emailAddress=emailAddress;

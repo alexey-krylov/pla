@@ -10,10 +10,10 @@ import lombok.Getter;
 public class Address {
     private String address1;
     private String address2;
-    private Integer postalCode;
+    private String postalCode;
     private String province;
     private String town;
-    Address(String address1, String address2, int postalCode, String province, String town) {
+    Address(String address1, String address2, String postalCode, String province, String town) {
         this.address1 = address1;
         this.address2 = address2;
         this.postalCode = postalCode;
