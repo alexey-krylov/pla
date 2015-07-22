@@ -303,14 +303,14 @@
 						<textFieldExpression><![CDATA[$F{quotationNumber}]]></textFieldExpression>
 					</textField>
 					<staticText>
-						<reportElement x="8" y="54" width="160" height="16" uuid="2a8afc7d-5790-4f15-88e2-ac3b67686ebf"/>
+						<reportElement x="8" y="54" width="179" height="16" uuid="2a8afc7d-5790-4f15-88e2-ac3b67686ebf"/>
 						<textElement textAlignment="Left">
 							<font size="12" isBold="true"/>
 						</textElement>
 						<text><![CDATA[Proposed Cover Period :]]></text>
 					</staticText>
 					<textField isStretchWithOverflow="true">
-						<reportElement x="185" y="54" width="80" height="16" uuid="ab56d408-c6f6-42e9-8178-d73749575090"/>
+						<reportElement x="199" y="54" width="80" height="16" uuid="ab56d408-c6f6-42e9-8178-d73749575090"/>
 						<textElement verticalAlignment="Top"/>
 						<textFieldExpression><![CDATA[$F{proposedCoverPeriod}]]></textFieldExpression>
 					</textField>
