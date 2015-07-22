@@ -15,7 +15,7 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/datatables/1.10.5/js/jquery.dataTables.min.js"></script>
     <script src="http://cdn.datatables.net/plug-ins/f2c75b7247b/integration/bootstrap/3/dataTables.bootstrap.js"></script>
-    <script src="../../../../../static/js/grouphealth/policy/viewPolicy.js"></script>
+    <script src="../../../../../static/js/grouphealth/policy/searchPolicy.js"></script>
     <!--*/-->
 </head>
 <body>
@@ -23,7 +23,7 @@
 <script>
     var interval = setInterval(function () {
         if (require.defined("basic")) {
-            requirejs(['/pla/js/grouphealth/policy/viewPolicy.js'], function () {
+            requirejs(['/pla/js/grouphealth/policy/searchPolicy.js'], function () {
                 $(document).ready(function () {
                     $("input[type='text']").keyup(function () {
                         var isDisabled = true;
@@ -123,8 +123,8 @@
                                 </td>
                                 <td th:text="${policy.policyNumber}">5100000010315</td>
                                 <td th:text="${policy.policyHolderName}"></td>
-                                <td th:text="${policy.inceptionDate}"></td>
-                                <td th:text="${policy.expiryDate}"></td>
+                                <td th:text="${#dates.format(policy.inceptionDate,'dd/MM/yyyy')}"></td>
+                                <td th:text="${#dates.format(policy.expiryDate,'dd/MM/yyyy')}"></td>
                             </tr>
                             <!--/*-->
                             <tr>

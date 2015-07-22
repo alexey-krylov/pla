@@ -413,11 +413,11 @@ public class GroupHealthProposalController {
         }
     }
 
-    @RequestMapping(value = "/getapprovercomments", method = RequestMethod.GET)
+    @RequestMapping(value = "/getapprovercomments/{proposalId}", method = RequestMethod.GET)
     @ResponseBody
     @ApiOperation(httpMethod = "GET", value = "To list approval comments")
-    public List<ProposalApproverCommentsDto> findApproverComments() {
-        return ghProposalService.findApproverComments();
+    public List<ProposalApproverCommentsDto> findApproverComments(@PathVariable("proposalId") String proposalId) {
+        return ghProposalService.findApproverComments(proposalId);
     }
 
     @RequestMapping(value = "/getmandatorydocuments/{proposalId}", method = RequestMethod.GET)
