@@ -72,6 +72,7 @@
                     <span class="badge badge-info">J</span><span class="chevron"></span>
                 </li>
             </ul>
+
             <div class="actions">
                     <span style="font-weight: bolder;margin-right: 15px;color: #999">
                     Proposal Number :<span style="font-size: 13px;color: #3a87ad;">{{proposalNumberDetails.proposalNumber}}</span>
@@ -109,9 +110,9 @@
                     <ng-include src="resources.premiumDetail | getTrustedUrl"></ng-include>
                 </div>
 
-                <!--<div class="step-pane" data-step="10">
+                <div class="step-pane" data-step="10">
                     <ng-include src="resources.mandatoryDocumentDetails | getTrustedUrl"></ng-include>
-                </div>-->
+                </div>
 
             </div>
         </div>
@@ -157,11 +158,11 @@
                         <div class="col-md-6">
                             <div class="form-group required">
                                 <label class="control-label">First Name</label>
-                                <input type="text" class="form-control input-sm" name="surname" readonly="true" ng-model="agent.firstName"></input>
+                                <input type="text" class="form-control input-sm" name="surname" readonly="true" ng-model="agent.firstName" />
                             </div>
                             <div class="form-group">
                                 <label class="control-label">Last Name</label>
-                                <input type="text" class="form-control input-sm" name="surname" readonly="true" ng-model="agent.lastName"></input>
+                                <input type="text" class="form-control input-sm" name="surname" readonly="true" ng-model="agent.lastName" />
                             </div>
                         </div>
                     </div>

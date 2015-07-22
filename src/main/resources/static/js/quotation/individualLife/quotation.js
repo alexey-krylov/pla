@@ -362,11 +362,9 @@
                         $http.get('/pla/core/plan/getPlanById/' + newval.description.plan_id)
                             .success(function (response) {
                                 $scope.plan = response;
-
                             });
 
                     }
-
                 });
 
                 $scope.$watch('plan.planId', function (newval) {

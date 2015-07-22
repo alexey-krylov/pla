@@ -1,6 +1,5 @@
 <ng-form name="step2">
     <accordion close-others="true">
-
         <accordion-group is-open="accordionStatus.proposerDetails.proposedAssured" ng-form="proposerForm">
             <accordion-heading>
                 Proposer<i class="pull-right glyphicon"
@@ -53,7 +52,7 @@
                 </div>
                 <div class="form-group required">
                     <label class="control-label">Marital Status</label>
-                    <select class="form-control input-sm" ng-disabled="mode=='new'||mode=='view'" ng-model="proposer.maritalStatus" name="maritalStatus" ng-change="selectSpouse()" ng-required="true">
+                    <select class="form-control input-sm" ng-disabled="mode=='new'||mode=='view'" ng-model="proposer.maritalStatus" name="maritalStatus" ng-init="selectSpouse(proposer.maritalStatus)" ng-change="selectSpouse(proposer.maritalStatus)" ng-required="true">
                         <option value="MARRIED">Married</option>
                         <option value="UNMARRIED">UnMarried</option>
                     </select>
@@ -96,7 +95,7 @@
                                ng-required="true"
                                is-open="launchdob2"
                                max-date="todayDate" ng-disabled="mode=='new'||mode=='view'"
-                               ng-model="proposer.dateOfBirth" name="dob" ng-blur="showProposerDob(proposer.dateOfBirth)"/>
+                               ng-model="proposer.dateOfBirth" name="dob" ng-init="showProposerDob(proposer.dateOfBirth)" ng-blur="showProposerDob(proposer.dateOfBirth)"/>
                                     <span class="input-group-btn">
                                     <button ng-disabled="mode=='new'||mode=='view'" type="button" class="btn btn-default btn-sm"
                                             ng-click="launchProposerDate($event)">
@@ -129,7 +128,7 @@
         </accordion-group>
 
 
-        <accordion-group is-open="accordionStatus.proposerDetails.spouseDetails" ng-form="proposerSpouseForm">
+        <accordion-group is-open="accordionStatus.proposerDetails.spouseDetails" ng-form="proposerSpouseForm" ng-if="spouseChoice">
             <accordion-heading>
                 Spouse Details <i class="pull-right glyphicon"
                                   ng-class="{'glyphicon-chevron-down': accordionStatus.proposerDetails.spouseDetails, 'glyphicon-chevron-right': !accordionStatus.proposerDetails.spouseDetails}"></i>
@@ -331,12 +330,21 @@
                         <small class="error" ng-message="required">Please enter Town</small>
                     </div>
                 </div>
-                <div class="form-group">
+                <!--<div class="form-group">
                     <label class="control-label">email Address</label>
                     <input type="email" class="form-control input-sm" ng-disabled="mode=='new'||mode=='view'" name="residentEmail" ng-model="proposerResidential.emailAddress"/>
 
                     <div class="error" ng-messages="proposerResidentForm.residentEmail.$error" ng-if="proposerResidentForm.residentEmail.$dirty">
-                        <small class="error" ng-message="required">Please enter Town</small>
+                        <small class="error" ng-message="required">Please enter Email</small>
+                    </div>
+                </div>-->
+
+                <div class="form-group">
+                    <label class="control-label">Email Address</label>
+                    <input type="email" class="form-control input-sm" name="residentEmail" ng-disabled="mode=='new'||mode=='view'" ng-model="proposerResidential.emailAddress"/>
+
+                    <div class="error" ng-messages="proposerResidentForm.residentEmail.$error"  ng-if="proposerResidentForm.residentEmail.$dirty">
+                        <small class="error" ng-message="email">Please enter  Valid email address. </small>
                     </div>
                 </div>
             </div>

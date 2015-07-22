@@ -67,28 +67,28 @@ import static org.nthdimenzion.utils.UtilValidator.isNotEmpty;
 @Finder
 public class ILProposalFinder {
 
+    public static final String FIND_ACTIVE_AGENT_BY_FIRST_NAME_QUERY = "SELECT * FROM agent WHERE first_name =:firstName";
+    public static final String FIND_AGENT_BY_ID_QUERY = "SELECT agent_id as agentId, first_name as firstName, last_name as lastName FROM agent WHERE agent_id=:agentId AND agent_status = 'ACTIVE'";
+    /**
+     * Find all the Plans by Agent Id and for a line of business.
+     */
+    private static final String SEARCH_PLAN_BY_AGENT_IDS = "SELECT DISTINCT C.* FROM AGENT A JOIN agent_authorized_plan b " +
+            "ON A.`agent_id`=B.`agent_id` JOIN plan_coverage_benefit_assoc C " +
+            "ON B.`plan_id`=C.`plan_id` where A.agent_id IN (:agentIds) and c.line_of_business=:lineOfBusiness group by A.agent_id";
     private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
-
     private MongoTemplate mongoTemplate;
-
     @Autowired
     private IPremiumCalculator premiumCalculator;
-
     @Autowired
     private PremiumFinder premiumFinder;
-
     @Autowired
     private PlanFinder planFinder;
-
     @Autowired
     private CoverageFinder coverageFinder;
-
     @Autowired
     private IUnderWriterAdapter underWriterAdapter;
-
     @Autowired
     private UnderWriterFinder underWriterFinder;
-
     @Autowired
     private GridFsTemplate gridFsTemplate;
 
@@ -97,17 +97,6 @@ public class ILProposalFinder {
         this.namedParameterJdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
         this.mongoTemplate = mongoTemplate;
     }
-
-    public static final String FIND_ACTIVE_AGENT_BY_FIRST_NAME_QUERY = "SELECT * FROM agent WHERE first_name =:firstName";
-
-    public static final String FIND_AGENT_BY_ID_QUERY = "SELECT agent_id as agentId, first_name as firstName, last_name as lastName FROM agent WHERE agent_id=:agentId AND agent_status = 'ACTIVE'";
-
-    /**
-     * Find all the Plans by Agent Id and for a line of business.
-     */
-    private static final String SEARCH_PLAN_BY_AGENT_IDS = "SELECT DISTINCT C.* FROM AGENT A JOIN agent_authorized_plan b " +
-            "ON A.`agent_id`=B.`agent_id` JOIN plan_coverage_benefit_assoc C " +
-            "ON B.`plan_id`=C.`plan_id` where A.agent_id IN (:agentIds) and c.line_of_business=:lineOfBusiness group by A.agent_id";
 
     public Map<String, Object> getAgentById(String agentId) {
         Preconditions.checkArgument(UtilValidator.isNotEmpty(agentId));
@@ -418,23 +407,6 @@ public class ILProposalFinder {
 
     }
 
-    private class TransformToILSearchProposalDto implements Function<Map, ILSearchProposalDto> {
-
-        @Override
-        public ILSearchProposalDto apply(Map map) {
-            String proposalId = map.get("_id").toString();
-            String submittedOn = map.get("submittedOn") != null ? map.get("submittedOn").toString() : "";
-            String proposalStatus = map.get("proposalStatus") != null ? (String) map.get("proposalStatus") : "";
-            String proposalNumber = map.get("proposalNumber") != null ? (String) map.get("proposalNumber") : "";
-            Proposer proposerMap = map.get("proposer") != null ? (Proposer) map.get("proposer") : null;
-            String proposerName = proposerMap != null ? proposerMap.getFirstName() + " " + proposerMap.getSurname() : "";
-            String agentNames = ((AgentCommissionShareModel) map.get("agentCommissionShareModel")).getCommissionShare().stream().map(x -> getAgentFullNameById(x.getAgentId().toString())).collect(Collectors.joining(" , "));
-            ILSearchProposalDto ilSearchProposalDto = new ILSearchProposalDto(proposalNumber, proposerName, "NRCNumber", agentNames, "Agent Code", proposalId, submittedOn, proposalStatus);
-            return ilSearchProposalDto;
-        }
-    }
-
-
     public ILProposalDto getProposalById(String proposalId) {
         ILProposalDto dto = new ILProposalDto();
         BasicDBObject query = new BasicDBObject();
@@ -458,8 +430,8 @@ public class ILProposalFinder {
         dto.setAdditionaldetails((AdditionalDetails) proposal.get("additionaldetails"));
         dto.setPremiumPaymentDetails((PremiumPaymentDetails) proposal.get("premiumPaymentDetails"));
         // TODO : commenting for time being untill premium tab details completed
-        /* if(dto.getProposalPlanDetail() != null)
-        dto.setPremiumDetailDto(getPremiumDetail(proposalId)); */
+        if(dto.getProposalPlanDetail() != null)
+        dto.setPremiumDetailDto(getPremiumDetail(proposalId));
         // TODO : need to set document details once it is ready
 
         AgentCommissionShareModel model = (AgentCommissionShareModel) proposal.get("agentCommissionShareModel");
@@ -491,5 +463,21 @@ public class ILProposalFinder {
         List<Map<String, Object>>  result =  namedParameterJdbcTemplate.query(SEARCH_PLAN_BY_AGENT_IDS, new MapSqlParameterSource().addValue("agentIds", agentIds).addValue("lineOfBusiness", "Individual Life"), new ColumnMapRowMapper());
         return result;
 
+    }
+
+    private class TransformToILSearchProposalDto implements Function<Map, ILSearchProposalDto> {
+
+        @Override
+        public ILSearchProposalDto apply(Map map) {
+            String proposalId = map.get("_id").toString();
+            String submittedOn = map.get("submittedOn") != null ? map.get("submittedOn").toString() : "";
+            String proposalStatus = map.get("proposalStatus") != null ? (String) map.get("proposalStatus") : "";
+            String proposalNumber = map.get("proposalNumber") != null ? (String) map.get("proposalNumber") : "";
+            Proposer proposerMap = map.get("proposer") != null ? (Proposer) map.get("proposer") : null;
+            String proposerName = proposerMap != null ? proposerMap.getFirstName() + " " + proposerMap.getSurname() : "";
+            String agentNames = ((AgentCommissionShareModel) map.get("agentCommissionShareModel")).getCommissionShare().stream().map(x -> getAgentFullNameById(x.getAgentId().toString())).collect(Collectors.joining(" , "));
+            ILSearchProposalDto ilSearchProposalDto = new ILSearchProposalDto(proposalNumber, proposerName, "NRCNumber", agentNames, "Agent Code", proposalId, submittedOn, proposalStatus);
+            return ilSearchProposalDto;
+        }
     }
 }

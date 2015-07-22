@@ -9,7 +9,7 @@
             </accordion-heading>
             <div class="col-md-12">
                <!--<button type="button" class="btn btn-default btn-xs pull-right" ng-click="openAgentModal()" style="margin-bottom: 5px"><strong>Add Agent</strong></button>-->
-                <p style="color:red" ng-show="statusCount">
+                {{statusCount}}<p style="color:red" ng-show="agentMessage">
                     Sum of commission % is not 100..Please update commission % to ensure it should be 100
                 </p>
                 <button ng-disabled="mode=='new'||mode=='view'" type="button" class="btn btn-default btn-xs pull-right"
@@ -29,9 +29,13 @@
                         <td>{{row.agentId}}</td>
                         <td>{{row.firstName+ ' ' + (row.lastName !=null ?(row.lastName + ' ') : '')}}</td>
                         <!--<td contenteditable="true" ng-model ="row.commission" >{{row.commission}}</td>-->
-                        <td>
+                       <!-- <td>
                             <input type="text" ng-disabled="mode=='new'||mode=='view'" contenteditable="updateFlag" ng-model="row.commission" value="{{row.commission}}" ng-blur="test(row)" />
-                          <!-- <div contenteditable="true" ng-model="row.update" ng-blur="test(row)" ng-change="test(row)" >{{row.commission}}</div>-->
+                          &lt;!&ndash; <div contenteditable="true" ng-model="row.update" ng-blur="test(row)" ng-change="test(row)" >{{row.commission}}</div>&ndash;&gt;
+                        </td>-->
+
+                        <td>
+                            <input type="number" ng-disabled="mode=='new'||mode=='view'" contenteditable="updateFlag" ng-init="commisionSumTest()" ng-model="row.commission"  ng-blur="commisionSumTest()" value="{{row.commission}}" />
                         </td>
 
                     </tr>
@@ -92,7 +96,7 @@
                 </div>
                 <div class="form-group required">
                     <label class="control-label">Marital Status</label>
-                    <select class="form-control input-sm" ng-disabled="mode=='new'||mode=='view'" ng-model="proposedAssured.maritalStatus" name="maritalStatus" ng-required="true" ng-change="selectSpouse()">
+                    <select class="form-control input-sm" ng-disabled="mode=='new'||mode=='view'" ng-model="proposedAssured.maritalStatus" name="maritalStatus" ng-required="true" ng-init="selectSpouse(proposedAssured.maritalStatus)" ng-change="selectSpouse(proposedAssured.maritalStatus)">
                         <option value="MARRIED">Married</option>
                         <option value="UNMARRIED">UnMarried</option>
                     </select>
@@ -133,7 +137,7 @@
                            ng-required="true"
                            is-open="launchdob"
                            max-date="todayDate"
-                           ng-model="proposedAssured.dateOfBirth" name="dob" ng-disabled="mode=='new'||mode=='view'" ng-blur="showDob(proposedAssured.dateOfBirth)"/>
+                           ng-model="proposedAssured.dateOfBirth" name="dob" ng-disabled="mode=='new'||mode=='view'" ng-init="showDob(proposedAssured.dateOfBirth)" ng-blur="showDob(proposedAssured.dateOfBirth)"/>
                                     <span class="input-group-btn">
                                     <button type="button" class="btn btn-default btn-sm"
                                             ng-disabled="mode=='new'||mode=='view'" ng-click="launchProposedAssuredeDob($event)">
@@ -170,7 +174,7 @@
             </div>
         </accordion-group>
 
-        <accordion-group is-open="accordionStatus.proposedAssuredDetails.spouseDetails" ng-form="spouseDetails" ng-hide="choose">
+        <accordion-group is-open="accordionStatus.proposedAssuredDetails.spouseDetails" ng-form="spouseDetails" ng-if="spouseChoice">
             <accordion-heading>
                 Spouse Details <i class="pull-right glyphicon"
                                   ng-class="{'glyphicon-chevron-down': accordionStatus.proposedAssuredDetails.spouseDetails, 'glyphicon-chevron-right': !accordionStatus.proposedAssuredDetails.spouseDetails}"></i>
@@ -280,7 +284,7 @@
                 <div class="form-group required">
                     <label class="control-label">Town</label>
                     <select class="form-control input-sm" name="town" ng-disabled="mode=='new'||mode=='view'" ng-required="true" ng-model="employment.town"
-                            ng-options="city.geoId as city.geoName for city in proposedAssuredEmploymentCities"/>
+                            ng-options="city.geoId as city.geoName for city in proposedAssuredEmploymentCities"></select>
 
                     <div class="error" ng-messages="employmentDetails.town.$error" ng-if="employmentDetails.town.$dirty">
                         <small class="error" ng-message="required">Please enter Town</small>
@@ -316,7 +320,7 @@
                 </div>
                 <div class="form-group required">
                     <label class="control-label">Province</label>
-                                        <select class="form-control input-sm" name="province" ng-disabled="mode=='new'||mode=='view'" ng-options="province.provinceId as province.provinceName for province in provinces"
+                    <select class="form-control input-sm" name="province" ng-disabled="mode=='new'||mode=='view'" ng-options="province.provinceId as province.provinceName for province in provinces"
                             ng-model="employment.province" ng-required="true">
                     </select>
 
@@ -401,10 +405,11 @@
                 </div>
                 <div class="form-group">
                     <label class="control-label">Home Phone</label>
-                    <input type="text" class="form-control input-sm" name="residentPhone" ng-disabled="mode=='new'||mode=='view'" ng-maxlength="10" ng-pattern="/^\d+$/" ng-model="residentialAddress.homePhone"/>
+                    <input type="text" class="form-control input-sm" name="residentPhone" ng-disabled="mode=='new'||mode=='view'" ng-minlength="10" ng-maxlength="10" ng-pattern="/^\d+$/" ng-model="residentialAddress.homePhone"/>
 
                     <div class="error" ng-messages="residentDetails.residentPhone.$error" ng-if="residentDetails.residentPhone.$dirty">
                         <small ng-message="maxlength">Only 10 characters are allowed.</small>
+                        <small ng-message="minlength">Minimum 10 Numbers are allowed.</small>
                         <small ng-message="pattern">Only Numeric are allowed.</small>
                     </div>
 
@@ -429,6 +434,7 @@
         <div class="col-sm-6">
             <button type="button" class="btn btn-default btn-sm">Cancel</button>
         </div>
+        {{statusCount}}
         <div class="col-sm-6">
             <button type="button" class="btn btn-default btn-sm" style="float: right" ng-disabled="(step1.$invalid || statusCount)"   ng-hide=" mode=='new'||mode=='view'" ng-click="saveProposedAssuredDetails()">Save</button>
         </div>

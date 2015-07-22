@@ -4,7 +4,7 @@
             <strong>Have you ever received counseling or treatment, or had a blood test in connection with HIV infection, excluding blood test taken for the purpose of donating blood for blood transfusion ?</strong>
         </div>
         <div class="col-md-2">
-            <select class="form-control input-sm" ng-model="compulsoryHealthDetails[0].answer" ng-change="compulsoryHealthDetails[0].questionId=11">
+            <select class="form-control input-sm"  ng-disabled="mode=='new'||mode=='view'" ng-model="compulsoryHealthDetails[0].answer" ng-change="compulsoryHealthDetails[0].questionId=11">
                 <option value="">--Select One--</option>
                 <option value="true" ng-value="true">Yes</option>
                 <option value="false" ng-value="false">No</option>
@@ -17,7 +17,7 @@
             <strong>Do you have, or have you ever had any of the following:- Disease or disorder of the Kidneys, Bladder, or Reproductive Organs e.g. Protein in Urine, Kidney Stones, prostatitis, Cystitis, Urethritis, Sexual transmitted Disease, HIV infection?</strong>
         </div>
         <div class="col-md-2">
-            <select class="form-control input-sm" ng-model="compulsoryHealthDetails[1].answer" ng-change="compulsoryHealthDetails[1].questionId=12">
+            <select class="form-control input-sm"  ng-disabled="mode=='new'||mode=='view'" ng-model="compulsoryHealthDetails[1].answer" ng-change="compulsoryHealthDetails[1].questionId=12">
                 <option value="">--Select One--</option>
                 <option value="true" ng-value="true">Yes</option>
                 <option value="false" ng-value="false">No</option>
@@ -42,7 +42,7 @@
                 </accordion-group>
             </div>
             <div class="col-md-2">
-                <select class="form-control input-sm" ng-model="compulsoryHealthDetails[2].answer" ng-change="compulsoryHealthDetails[2].questionId=13">
+                <select class="form-control input-sm"  ng-disabled="mode=='new'||mode=='view'" ng-model="compulsoryHealthDetails[2].answer" ng-change="compulsoryHealthDetails[2].questionId=13">
                     <option value="">--Select One--</option>
                     <option value="true" ng-value="true">Yes</option>
                     <option value="false" ng-value="false">No</option>
@@ -59,12 +59,12 @@
                            ng-class="{'glyphicon-chevron-down': accordionStatus.healthDetailsPart1.tab2, 'glyphicon-chevron-right': !accordionStatus.healthDetailsPart1.tab2}"></i>
                     </accordion-heading>
                     <div class="col-md-12">
-                        <textarea class="form-control" ng-model="compulsoryHealthDetails[3].answerResponse" placeholder="Please give full details  e.g. name and address of attending doctor, treatment and results etc"></textarea>
+                        <textarea class="form-control"  ng-disabled="mode=='new'||mode=='view'" ng-model="compulsoryHealthDetails[3].answerResponse" placeholder="Please give full details  e.g. name and address of attending doctor, treatment and results etc"></textarea>
                     </div>
                 </accordion-group>
             </div>
             <div class="col-md-2">
-                <select class="form-control input-sm" ng-model="compulsoryHealthDetails[3].answer" ng-change="compulsoryHealthDetails[3].questionId=14">
+                <select class="form-control input-sm"  ng-disabled="mode=='new'||mode=='view'" ng-model="compulsoryHealthDetails[3].answer" ng-change="compulsoryHealthDetails[3].questionId=14">
                     <option value="">--Select One--</option>
                     <option value="true" ng-value="true">Yes</option>
                     <option value="false" ng-value="false">No</option>
@@ -81,12 +81,12 @@
                            ng-class="{'glyphicon-chevron-down': accordionStatus.healthDetailsPart1.tab3, 'glyphicon-chevron-right': !accordionStatus.healthDetailsPart1.tab3}"></i>
                     </accordion-heading>
                     <div class="col-md-12">
-                        <textarea class="form-control" ng-model="compulsoryHealthDetails[4].answerResponse" placeholder="Please give full details  e.g. name and address of attending doctor, treatment and results etc"></textarea>
+                        <textarea class="form-control"  ng-disabled="mode=='new'||mode=='view'" ng-model="compulsoryHealthDetails[4].answerResponse" placeholder="Please give full details  e.g. name and address of attending doctor, treatment and results etc"></textarea>
                     </div>
                 </accordion-group>
             </div>
             <div class="col-md-2">
-                <select class="form-control input-sm" ng-model="compulsoryHealthDetails[4].answer" ng-change="compulsoryHealthDetails[4].questionId=15">
+                <select class="form-control input-sm"  ng-disabled="mode=='new'||mode=='view'" ng-model="compulsoryHealthDetails[4].answer" ng-change="compulsoryHealthDetails[4].questionId=15">
                     <option value="">--Select One--</option>
                     <option value="true" ng-value="true">Yes</option>
                     <option value="false" ng-value="false">No</option>
@@ -103,12 +103,12 @@
                            ng-class="{'glyphicon-chevron-down': accordionStatus.healthDetailsPart1.tab4, 'glyphicon-chevron-right': !accordionStatus.healthDetailsPart1.tab4}"></i>
                     </accordion-heading>
                     <div class="col-md-12">
-                        <textarea class="form-control" ng-model="compulsoryHealthDetails[5].answerResponse" placeholder="Please give full details  e.g. name and address of attending doctor, treatment and results etc"></textarea>
+                        <textarea class="form-control"  ng-disabled="mode=='new'||mode=='view'" ng-model="compulsoryHealthDetails[5].answerResponse" placeholder="Please give full details  e.g. name and address of attending doctor, treatment and results etc"></textarea>
                     </div>
                 </accordion-group>
             </div>
             <div class="col-md-2">
-                <select class="form-control input-sm" ng-model="compulsoryHealthDetails[5].answer" ng-change="compulsoryHealthDetails[5].questionId=16">
+                <select class="form-control input-sm"  ng-disabled="mode=='new'||mode=='view'" ng-model="compulsoryHealthDetails[5].answer" ng-change="compulsoryHealthDetails[5].questionId=16">
                     <option value="">--Select One--</option>
                     <option value="true" ng-value="true">Yes</option>
                     <option value="false" ng-value="false">No</option>
@@ -125,12 +125,12 @@
                            ng-class="{'glyphicon-chevron-down': accordionStatus.healthDetailsPart1.tab5, 'glyphicon-chevron-right': !accordionStatus.healthDetailsPart1.tab5}"></i>
                     </accordion-heading>
                     <div class="col-md-12">
-                        <textarea class="form-control" ng-model="compulsoryHealthDetails[6].answerResponse" placeholder="Please give full details  e.g. name and address of attending doctor, treatment and results etc"></textarea>
+                        <textarea class="form-control"  ng-disabled="mode=='new'||mode=='view'" ng-model="compulsoryHealthDetails[6].answerResponse" placeholder="Please give full details  e.g. name and address of attending doctor, treatment and results etc"></textarea>
                     </div>
                 </accordion-group>
             </div>
             <div class="col-md-2">
-                <select class="form-control input-sm" ng-model="compulsoryHealthDetails[6].answer" ng-change="compulsoryHealthDetails[6].questionId=17">
+                <select class="form-control input-sm"  ng-disabled="mode=='new'||mode=='view'" ng-model="compulsoryHealthDetails[6].answer" ng-change="compulsoryHealthDetails[6].questionId=17">
                     <option value="">--Select One--</option>
                     <option value="true" ng-value="true">Yes</option>
                     <option value="false" ng-value="false">No</option>
@@ -144,7 +144,7 @@
             <button type="button" class="btn btn-default btn-sm">Cancel</button>
         </div>
         <div class="col-sm-6">
-            <button type="button" class="btn btn-default btn-sm" ng-click="saveCompulsoryQuestionDetails()" style="float: right">Save</button>
+            <button type="button" class="btn btn-default btn-sm"  ng-disabled="mode=='new'||mode=='view'" ng-click="saveCompulsoryQuestionDetails()" style="float: right">Save</button>
         </div>
     </div>
 </ng-form>

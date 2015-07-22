@@ -11,7 +11,7 @@
                     <div class="col-md-1" ng-show="assuredByPlalList == 'YES'">
                         <!-- <button class="btn btn-default btn-sm" ng-click="openModalWindow('assuredByPlalTpl.html')"><strong>Add</strong></button>-->
                         <button type="button" class="btn btn-default btn-xs pull-right"
-                                data-toggle="modal" data-target="#policyModal" style="margin-bottom: 10px"><strong>Add</strong>
+                                ng-disabled="mode=='new'||mode=='view'" data-toggle="modal" data-target="#policyModal" style="margin-bottom: 10px"><strong>Add</strong>
                         </button>
                     </div>
                     <div class="col-md-11">
@@ -41,7 +41,7 @@
             </div>
             <div class="col-md-2">
                 {{generalAnswerList}} {{assuredByPlalList}}
-                <select class="form-control input-sm" ng-model="assuredByPlalList" ng-change="openAccordion(assuredByPlalList,'tab1')">
+                <select class="form-control input-sm"  ng-disabled="mode=='new'||mode=='view'" ng-model="assuredByPlalList" ng-change="openAccordion(assuredByPlalList,'tab1')">
                     <option value="">--Select One--</option>
                     <option value="YES">Yes</option>
                     <option value="NO">No</option>
@@ -99,7 +99,7 @@
                 </accordion-group>
             </div>
             <div class="col-md-2">
-                <select class="form-control input-sm" ng-model="assuredByOthers" ng-change="openAccordion(assuredByOthers,'tab2')">
+                <select class="form-control input-sm"  ng-disabled="mode=='new'||mode=='view'" ng-model="assuredByOthers" ng-change="openAccordion(assuredByOthers,'tab2')">
                     <option value="">--Select One--</option>
                     <option value="YES">Yes</option>
                     <option value="NO">No</option>
@@ -154,7 +154,7 @@
                 </accordion-group>
             </div>
             <div class="col-md-2">
-                <select class="form-control input-sm" ng-model="pendingInsuranceByOthers" ng-change="openAccordion(pendingInsuranceByOthers,'tab3')">
+                <select class="form-control input-sm"  ng-disabled="mode=='new'||mode=='view'" ng-model="pendingInsuranceByOthers" ng-change="openAccordion(pendingInsuranceByOthers,'tab3')">
                     <option value="">--Select One--</option>
                     <option value="YES">Yes</option>
                     <option value="NO">No</option>
@@ -197,7 +197,7 @@
                 </accordion-group>
             </div>
             <div class="col-md-2">
-                <select class="form-control input-sm" ng-model="assuranceDeclined" ng-change="openAccordion(assuranceDeclined,'tab4')">
+                <select class="form-control input-sm"  ng-disabled="mode=='new'||mode=='view'" ng-model="assuranceDeclined" ng-change="openAccordion(assuranceDeclined,'tab4')">
                     <option value="">--Select One--</option>
                     <option value="YES">Yes</option>
                     <option value="NO">No</option>
@@ -211,7 +211,7 @@
             <strong>Have you ever been or have you any intention of being engaged or employed at a mine of any sort?</strong>
         </div>
         <div class="col-md-2">
-            <select class="form-control input-sm" ng-model="generalQuestion[0].answer" ng-change="generalQuestion[0].questionId='5'">
+            <select class="form-control input-sm"  ng-disabled="mode=='new'||mode=='view'" ng-model="generalQuestion[0].answer" ng-change="generalQuestion[0].questionId='5'">
                 <option value="">--Select One--</option>
                 <option ng-value="true" value="true">Yes</option>
                 <option ng-value="false" value="false">No</option>
@@ -225,7 +225,7 @@
             <strong>Have you ever been or have you any intention of being engaged or employed In aviation other than as a fare paying passenger on a regular airline?</strong>
         </div>
         <div class="col-md-2">
-            <select class="form-control input-sm" ng-model="generalQuestion[1].answer" ng-change="generalQuestion[1].questionId='6'">
+            <select class="form-control input-sm"  ng-disabled="mode=='new'||mode=='view'" ng-model="generalQuestion[1].answer" ng-change="generalQuestion[1].questionId='6'">
                 <option value="">--Select One--</option>
                 <option ng-value="true" value="true">Yes</option>
                 <option ng-value="false" value="false">No</option>
@@ -237,7 +237,7 @@
             <button type="button" class="btn btn-default btn-sm">Cancel</button>
         </div>
         <div class="col-sm-6">
-            <button type="button" class="btn btn-default btn-sm" style="float: right" ng-click="saveGeneralDetails()">Save</button>
+            <button type="button" class="btn btn-default btn-sm" style="float: right" ng-disabled="mode=='new'||mode=='view'"  ng-click="saveGeneralDetails()">Save</button>
         </div>
     </div>
 </ng-form>

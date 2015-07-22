@@ -11,6 +11,6 @@ public class BankDetails {
     private String bankName;
     private String bankBranchName;
     private String bankAccountNumber;
-    private String BankAccountType;
+    private String bankAccountType;
 
 }
