@@ -38,7 +38,7 @@ public class ProposedAssuredBuilderUnitTest {
                 .withSpouseLastName("PvtLtd")
                 .withSpouseEmailAddress("abc@nthDimenzion")
                 .withEmploymentDetail(new EmploymentDetailBuilder().createEmploymentDetail())
-                .withResidentialAddress(new ResidentialAddress(new AddressBuilder().createAddress(), 897784243,"xyz@gmail.com"))
+                .withResidentialAddress(new ResidentialAddress(new AddressBuilder().createAddress(), "897784243","xyz@gmail.com"))
                 .withIsProposer(true)
                 .withNrc("123456/78/9");
         proposedAssured = proposedAssuredBuilder1.createProposedAssured();
