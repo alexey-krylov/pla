@@ -208,7 +208,7 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
                         $scope.proposedAssured.nextDob = moment().diff(new moment(new Date($scope.proposedAssured.dateOfBirth)), 'years') + 1;
                     }
                     if ($scope.proposer.dateOfBirth) {
-                        $scope.proposer.nextDob = moment().diff(new moment(new Date($scope.proposedAssured.dateOfBirth)), 'years') + 1;
+                        $scope.proposer.nextDob = moment().diff(new moment(new Date($scope.proposer.dateOfBirth)), 'years') + 1;
                     }
                     //$scope.agentDetails=[];
                     $scope.spouse = $scope.rcvProposal.proposedAssured.spouse;
@@ -1227,6 +1227,15 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
                     $scope.agentAlert = true;
                 }*/
             };
+
+            $scope.$watch('proposer.dateOfBirth',function(newvalue,oldvalue){
+                if(newvalue){
+                    //alert(newvalue);
+                    $scope.proposer.nextDob = moment().diff(new moment(new Date(newvalue)), 'years') + 1;
+                    //alert($scope.proposer.nextDob);
+                }
+
+            });
 
             $scope.saveProposerDetails = function () {
                 console.log('Save method of Proposer1');

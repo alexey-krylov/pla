@@ -45,10 +45,10 @@
                                 <input type="text" class="form-control input-sm" ng-model="familyHistory.father.healthState"/>
                             </td>
                             <td>
-                                <input type="number" class="form-control input-sm" ng-disabled="familyHistory.father.isAlive" ng-model="familyHistory.father.deathAge"/>
+                                <input type="number" class="form-control input-sm" ng-if="!familyHistory.father.isAlive" ng-model="familyHistory.father.deathAge"/>
                             </td>
                             <td>
-                                <input type="text" class="form-control input-sm" ng-disabled="familyHistory.father.isAlive" ng-model="familyHistory.father.deathCause"/>
+                                <input type="text" class="form-control input-sm" ng-if="!familyHistory.father.isAlive"  ng-model="familyHistory.father.deathCause"/>
                             </td>
                         </tr>
                         <tr>
@@ -65,10 +65,10 @@
                                 <input type="text" class="form-control input-sm" ng-model="familyHistory.mother.healthState"/>
                             </td>
                             <td>
-                                <input type="number" class="form-control input-sm" ng-disabled="familyHistory.mother.isAlive" ng-model="familyHistory.mother.deathAge"/>
+                                <input type="number" class="form-control input-sm" ng-if="!familyHistory.mother.isAlive"  ng-model="familyHistory.mother.deathAge"/>
                             </td>
                             <td>
-                                <input type="text" class="form-control input-sm" ng-disabled="familyHistory.mother.isAlive" ng-model="familyHistory.mother.deathCause"/>
+                                <input type="text" class="form-control input-sm" ng-if="!familyHistory.mother.isAlive"  ng-model="familyHistory.mother.deathCause"/>
                             </td>
                         </tr>
                         </tbody>

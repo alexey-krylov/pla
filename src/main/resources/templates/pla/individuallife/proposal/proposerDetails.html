@@ -95,7 +95,7 @@
                                ng-required="true"
                                is-open="launchdob2"
                                max-date="todayDate" ng-disabled="mode=='new'||mode=='view'"
-                               ng-model="proposer.dateOfBirth" name="dob" ng-init="showProposerDob(proposer.dateOfBirth)" ng-blur="showProposerDob(proposer.dateOfBirth)"/>
+                               ng-model="proposer.dateOfBirth" name="dob"/>
                                     <span class="input-group-btn">
                                     <button ng-disabled="mode=='new'||mode=='view'" type="button" class="btn btn-default btn-sm"
                                             ng-click="launchProposerDate($event)">
