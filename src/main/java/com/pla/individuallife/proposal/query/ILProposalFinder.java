@@ -522,7 +522,7 @@ public class ILProposalFinder {
         public ILSearchProposalDto apply(Map map) {
             String proposalId = map.get("_id").toString();
             String submittedOn = map.get("submittedOn") != null ? map.get("submittedOn").toString() : "";
-            String proposalStatus = map.get("proposalStatus") != null ? (String) map.get("proposalStatus") : "";
+            String proposalStatus = map.get("proposalStatus") != null ? ((ILProposalStatus) map.get("proposalStatus")).getDescription() : "";
             String proposalNumber = map.get("proposalNumber") != null ? (String) map.get("proposalNumber") : "";
             Proposer proposerMap = map.get("proposer") != null ? (Proposer) map.get("proposer") : null;
             String proposerName = proposerMap != null ? proposerMap.getFirstName() + " " + proposerMap.getSurname() : "";
