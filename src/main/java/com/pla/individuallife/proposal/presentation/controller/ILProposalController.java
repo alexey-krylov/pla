@@ -5,6 +5,7 @@ import com.pla.core.query.AgentFinder;
 import com.pla.core.query.MasterFinder;
 import com.pla.core.query.PlanFinder;
 import com.pla.individuallife.proposal.application.command.*;
+import com.pla.individuallife.proposal.domain.model.ILProposalStatus;
 import com.pla.individuallife.proposal.presentation.dto.*;
 import com.pla.individuallife.proposal.query.ILProposalFinder;
 import com.pla.individuallife.quotation.application.service.ILQuotationAppService;
@@ -312,10 +313,100 @@ public class ILProposalController {
         try {
             String proposalId = cmd.getProposalId();
             cmd.setUserDetails(getLoggedInUserDetail(request));
-            proposalCommandGateway.sendAndWait(cmd);
+            proposalCommandGateway.submitProposal(cmd);
             Map map = new HashMap<>();
             map.put("message", "Proposal submitted successfully");
             map.put("proposalId", proposalId);
+            return new ResponseEntity(map, HttpStatus.OK);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResponseEntity(Result.failure(e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @RequestMapping(value = "/approve", method = RequestMethod.POST)
+    @ResponseBody
+    @ApiOperation(httpMethod = "POST", value = "To approve proposal")
+    public ResponseEntity approveProposal(@RequestBody ILProposalApprovalCommand cmd, HttpServletRequest request) {
+        try {
+            cmd.setUserDetails(getLoggedInUserDetail(request));
+            cmd.setStatus(ILProposalStatus.APPROVED);
+            proposalCommandGateway.approveProposal(cmd);
+            Map map = new HashMap<>();
+            map.put("message", "Proposal approved successfully");
+            map.put("proposalId", cmd.getProposalId());
+            return new ResponseEntity(map, HttpStatus.OK);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResponseEntity(Result.failure(e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @RequestMapping(value = "/return", method = RequestMethod.POST)
+    @ResponseBody
+    @ApiOperation(httpMethod = "POST", value = "To return proposal")
+    public ResponseEntity returnProposal(@RequestBody ILProposalApprovalCommand cmd, HttpServletRequest request) {
+        try {
+            cmd.setUserDetails(getLoggedInUserDetail(request));
+            cmd.setStatus(ILProposalStatus.RETURNED);
+            proposalCommandGateway.returnProposal(cmd);
+            Map map = new HashMap<>();
+            map.put("message", "Proposal returned successfully");
+            map.put("proposalId", cmd.getProposalId());
+            return new ResponseEntity(map, HttpStatus.OK);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResponseEntity(Result.failure(e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @RequestMapping(value = "/hold", method = RequestMethod.POST)
+    @ResponseBody
+    @ApiOperation(httpMethod = "POST", value = "To hold proposal")
+    public ResponseEntity holdProposal(@RequestBody ILProposalApprovalCommand cmd, HttpServletRequest request) {
+        try {
+            cmd.setUserDetails(getLoggedInUserDetail(request));
+            cmd.setStatus(ILProposalStatus.PENDING_DECISION);
+            proposalCommandGateway.holdProposal(cmd);
+            Map map = new HashMap<>();
+            map.put("message", "Proposal held successfully");
+            map.put("proposalId", cmd.getProposalId());
+            return new ResponseEntity(map, HttpStatus.OK);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResponseEntity(Result.failure(e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @RequestMapping(value = "/reject", method = RequestMethod.POST)
+     @ResponseBody
+     @ApiOperation(httpMethod = "POST", value = "To reject proposal")
+     public ResponseEntity rejectProposal(@RequestBody ILProposalApprovalCommand cmd, HttpServletRequest request) {
+        try {
+            cmd.setUserDetails(getLoggedInUserDetail(request));
+            cmd.setStatus(ILProposalStatus.DECLINED);
+            proposalCommandGateway.rejectProposal(cmd);
+            Map map = new HashMap<>();
+            map.put("message", "Proposal rejected successfully");
+            map.put("proposalId", cmd.getProposalId());
+            return new ResponseEntity(map, HttpStatus.OK);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResponseEntity(Result.failure(e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @RequestMapping(value = "/routetonextlevel", method = RequestMethod.POST)
+    @ResponseBody
+    @ApiOperation(httpMethod = "POST", value = "To route to next level of a proposal")
+    public ResponseEntity routeToNextLevel(@RequestBody ILProposalUnderwriterNextLevelCommand cmd, HttpServletRequest request) {
+        try {
+            cmd.setUserDetails(getLoggedInUserDetail(request));
+            cmd.setStatus(ILProposalStatus.PENDING_ACCEPTANCE);
+            proposalCommandGateway.routeToNextLevel(cmd);
+            Map map = new HashMap<>();
+            map.put("message", "Proposal rejected successfully");
+            map.put("proposalId", cmd.getProposalId());
             return new ResponseEntity(map, HttpStatus.OK);
         } catch (Exception e) {
             e.printStackTrace();

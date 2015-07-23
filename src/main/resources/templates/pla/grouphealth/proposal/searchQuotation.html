@@ -24,7 +24,7 @@
                 $(document).ready(function(){
                     $("input[type='text']").keyup(function() {
                         var isDisabled =  true;
-                        $('#searchQuotationforGLProposal *').filter(':text').each(function(key,value){
+                        $('#searchQuotationforGHProposal *').filter(':text').each(function(key,value){
                             if($(value).val().trim().length !=0){
                                 isDisabled = false;
                             }
@@ -49,7 +49,7 @@
         <li>Group Health</li>
     </ol>
     </p>
-    <form method="post" action="searchquotation" name="searchQuotationforGLProposal" id="searchQuotationforGLProposal">
+    <form method="post" action="searchquotation" name="searchQuotationforGHProposal" id="searchQuotationforGHProposal">
         <div class="row well well-sm" style="margin: 0;">
             <div class="col-md-2">
                 <h4 th:text="#{searchQuotation}" class="pull-left">Search Quotation</h4>

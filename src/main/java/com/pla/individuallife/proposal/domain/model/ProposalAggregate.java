@@ -34,6 +34,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
+import static com.pla.sharedkernel.util.RolesUtil.hasIndividualLifeProposalApproverRole;
 import static com.pla.sharedkernel.util.RolesUtil.hasIndividualLifeProposalProcessorRole;
 
 /**
@@ -261,6 +262,41 @@ public class ProposalAggregate extends AbstractAnnotatedAggregateRoot<ProposalId
         this.routinglevel = routinglevel;
         if (this.quotation != null)
             registerEvent(new ILQuotationConvertedToProposalEvent(this.quotation.getQuotationNumber(), new QuotationId(this.quotation.getQuotationId())));
-        //TODO : if this proposal is being converted from quotation, have to change the state of quotation as CONVERTED
+    }
+
+    public void submitApproval(DateTime now, UserDetails userDetails, String comment, ILProposalStatus status) {
+        boolean hasProposalApprovalRole = hasIndividualLifeProposalApproverRole(userDetails.getAuthorities());
+        if (!hasProposalApprovalRole) {
+            throw new AuthorizationServiceException("User does not have Individual Life Proposal Approval (INDIVIDUAL_LIFE_PROPOSAL_APPROVER) authority");
+        }
+        Preconditions.checkArgument(hasProposalApprovalRole);
+        this.proposalStatus = status;
+        if (ILProposalStatus.APPROVED.equals(status)) {
+            DateTime approvedOn = DateTime.now();
+            markASFirstPremiumPending(userDetails.getUsername(), DateTime.now(), comment);
+            markASINForce(userDetails.getUsername(), approvedOn, comment);
+        }
+    }
+
+    public void routeToNextLevel(UserDetails userDetails, String comment, ILProposalStatus status) {
+        boolean hasProposalApprovalRole = hasIndividualLifeProposalApproverRole(userDetails.getAuthorities());
+        if (!hasProposalApprovalRole) {
+            throw new AuthorizationServiceException("User does not have Individual Life Proposal Approval (INDIVIDUAL_LIFE_PROPOSAL_APPROVER) authority");
+        }
+        Preconditions.checkArgument(hasProposalApprovalRole);
+        RoutingLevel nextRoutingLevel = getRoutinglevel().getNext();
+        Preconditions.checkNotNull(nextRoutingLevel);
+        this.routinglevel = nextRoutingLevel;
+        this.proposalStatus = status;
+    }
+
+    public void markASFirstPremiumPending(String approvedBy, DateTime approvedOn, String comment) {
+        this.proposalStatus = ILProposalStatus.PENDING_FIRST_PREMIUM;
+    }
+
+    public void markASINForce(String approvedBy, DateTime approvedOn, String comment) {
+        this.proposalStatus = ILProposalStatus.IN_FORCE;
+        //TODO : need to register to ILProposalToPolicyEvent so that proposal becomes the policy
+        //registerEvent(new ILProposalToPolicyEvent(this.proposalId));
     }
 }
