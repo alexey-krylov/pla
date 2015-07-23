@@ -24,7 +24,7 @@ import com.pla.sharedkernel.domain.model.ProcessType;
 import com.pla.sharedkernel.domain.model.RoutingLevel;
 import com.pla.sharedkernel.identifier.CoverageId;
 import com.pla.sharedkernel.identifier.PlanId;
-import com.pla.sharedkernel.identifier.QuotationId;
+import com.pla.sharedkernel.identifier.ProposalId;
 import com.pla.underwriter.domain.model.UnderWriterDocument;
 import com.pla.underwriter.domain.model.UnderWriterInfluencingFactor;
 import com.pla.underwriter.domain.model.UnderWriterRoutingLevel;
@@ -119,8 +119,59 @@ public class ILProposalFinder {
         return resultSet;
     }
 
-    public List<ILSearchProposalDto> searchProposal(ILSearchProposalDto ilSearchProposalDto) {
-        Criteria criteria = Criteria.where("proposalStatus").in(new String[]{"DRAFT", "SUBMITTED", "PENDING_ACCEPTANCE"});
+    public List<ILSearchProposalDto> searchProposalToApprove(ILSearchProposalForApprovalDto dto, String[] statuses) {
+        Criteria criteria = Criteria.where("proposalStatus").in(statuses);
+        String proposalNumber = dto.getProposalNumber();
+        String proposalId = dto.getProposalId();
+        String agentCode = dto.getAgentCode();
+        String proposerName = dto.getProposerName();
+        String agentName = dto.getAgentName();
+        String proposerNrcNumber =  dto.getProposerNrcNumber();
+        if (isEmpty(proposalNumber) && isEmpty(proposalId) && isEmpty(agentCode) && isEmpty(proposerName) && isEmpty(agentName) && isEmpty(proposerNrcNumber)) {
+          return Lists.newArrayList();
+        }
+        if (isNotEmpty(proposalId)) {
+            criteria = criteria.and("_id").is(new ProposalId(proposalId));
+        }
+        if (isNotEmpty(proposalNumber)) {
+            criteria = criteria.and("proposalNumber").is(proposalNumber);
+        }
+        if (isNotEmpty(agentCode)) {
+            criteria = criteria != null ? criteria.and("agentCommissionShareModel.commissionShare").elemMatch(Criteria.where("agentId.agentId").is(agentCode)) : Criteria.where("agentCommissionShareModel.commissionShare").elemMatch(Criteria.where("agentId.agentId").is(agentCode));
+        }
+        if (isNotEmpty(proposerName)) {
+            String proposerPattern = "^"+proposerName;
+            criteria = criteria != null ? criteria.and("proposer.firstName").regex(Pattern.compile(proposerPattern, Pattern.CASE_INSENSITIVE)) : Criteria.where("proposer.firstName").regex(Pattern.compile(proposerPattern,Pattern.CASE_INSENSITIVE));
+        }
+        if (isNotEmpty(proposerNrcNumber)) {
+            String proposerNrcPattern = "^"+proposerNrcNumber;
+            criteria = criteria != null ? criteria.and("proposer.nrc").regex(Pattern.compile(proposerNrcPattern, Pattern.CASE_INSENSITIVE)) : Criteria.where("proposer.nrc").regex(Pattern.compile(proposerNrcPattern,Pattern.CASE_INSENSITIVE));
+        }
+        Set<String> agentIds = null;
+        if (isNotEmpty(agentName)) {
+            List<Map<String, Object>> agentList = namedParameterJdbcTemplate.queryForList(FIND_ACTIVE_AGENT_BY_FIRST_NAME_QUERY, new MapSqlParameterSource().addValue("firstName", agentName));
+            agentIds = agentList.stream().map(new Function<Map<String, Object>, String>() {
+                @Override
+                public String apply(Map<String, Object> stringObjectMap) {
+                    return (String) stringObjectMap.get("agentId");
+                }
+            }).collect(Collectors.toSet());
+        }
+        if (isNotEmpty(agentIds)) {
+            criteria = criteria.and("agentId.agentId").in(agentIds);
+        }
+        criteria = criteria.and("routinglevel").is(dto.getRoutingLevel());
+        Query query = new Query(criteria);
+        query.with(new Sort(Sort.Direction.ASC,"proposalNumber"));
+        query.with(new Sort(Sort.Direction.DESC,"versionNumber"));
+        List<Map> allProposals = mongoTemplate.find(query, Map.class, "individual_life_proposal");
+        List<ILSearchProposalDto> ilProposalDtoList = allProposals.stream().map(new TransformToILSearchProposalDto()).collect(Collectors.toList());
+        return ilProposalDtoList;
+    }
+
+
+    public List<ILSearchProposalDto> searchProposal(ILSearchProposalDto ilSearchProposalDto, String[] statuses) {
+        Criteria criteria = Criteria.where("proposalStatus").in(statuses);
         String proposalNumber = ilSearchProposalDto.getProposalNumber();
         String proposalId = ilSearchProposalDto.getProposalId();
         String agentCode = ilSearchProposalDto.getAgentCode();
@@ -131,7 +182,7 @@ public class ILProposalFinder {
             return Lists.newArrayList();
         }
         if (isNotEmpty(proposalId)) {
-            criteria = criteria.and("_id").is(new QuotationId(proposalId));
+            criteria = criteria.and("_id").is(new ProposalId(proposalId));
         }
         if (isNotEmpty(proposalNumber)) {
             criteria = criteria.and("proposalNumber").is(proposalNumber);

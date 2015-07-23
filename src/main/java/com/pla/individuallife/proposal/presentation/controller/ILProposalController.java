@@ -337,7 +337,7 @@ public class ILProposalController {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("pla/individuallife/proposal/index");
         try {
-            modelAndView.addObject("searchResult", proposalFinder.searchProposal(ilSearchProposalDto));
+            modelAndView.addObject("searchResult", proposalFinder.searchProposal(ilSearchProposalDto, new String[]{"DRAFT", "SUBMITTED", "PENDING_ACCEPTANCE"}));
         } catch (Exception e) {
             modelAndView.addObject("searchResult", Lists.newArrayList());
         }
@@ -347,15 +347,15 @@ public class ILProposalController {
 
     @RequestMapping(value = "/getsubmittedproposalsforapprover", method = RequestMethod.POST)
     @ApiOperation(httpMethod = "POST", value = "To search submitted proposal for approver approval")
-    public ModelAndView findSubmittedProposal(ILSearchProposalDto ilSearchProposalDto) {
+    public ModelAndView findSubmittedProposal(ILSearchProposalForApprovalDto dto) {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("pla/individuallife/proposal/index");
         try {
-            modelAndView.addObject("searchResult", proposalFinder.searchProposal(ilSearchProposalDto));
+            modelAndView.addObject("searchResult", proposalFinder.searchProposalToApprove(dto, new String[]{"PENDING_ACCEPTANCE"}));
         } catch (Exception e) {
             modelAndView.addObject("searchResult", Lists.newArrayList());
         }
-        modelAndView.addObject("searchCriteria", ilSearchProposalDto);
+        modelAndView.addObject("searchCriteria", dto);
         return modelAndView;
     }
 
