@@ -40,4 +40,7 @@ public interface ILProposalCommandGateway {
 
     void sendAndWait(SubmitILProposalCommand cmd)
             throws TimeoutException, InterruptedException;
+
+    void updateProposedAssuredAndAgents(ILUpdateProposalWithProposedAssuredCommand cmd)
+            throws TimeoutException, InterruptedException;
 }

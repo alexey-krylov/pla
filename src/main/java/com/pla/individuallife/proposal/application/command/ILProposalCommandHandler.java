@@ -79,6 +79,18 @@ public class ILProposalCommandHandler {
     }
 
     @CommandHandler
+    public void updateProposalProposedAssured(ILUpdateProposalWithProposedAssuredCommand cmd) {
+
+        ProposedAssured proposedAssured = ProposedAssuredBuilder.getProposedAssuredBuilder(cmd.getProposedAssured()).createProposedAssured();
+        if (logger.isDebugEnabled()) {
+            logger.debug(" ProposedAssured :: " + proposedAssured);
+        }
+        ProposalAggregate aggregate = ilProposalMongoRepository.load(new ProposalId(cmd.getProposalId()));
+        aggregate.updateWithProposedAssuredAndAgenDetails(cmd.getUserDetails(), cmd.getProposalId(), proposedAssured, cmd.getAgentCommissionDetails());
+        ilProposalMongoRepository.add(aggregate);
+    }
+
+    @CommandHandler
     public void updateProposalProposer(ILProposalUpdateWithProposerCommand cmd) {
         Proposer proposer = ProposerBuilder.getProposerBuilder(cmd.getProposer()).createProposer();
         if (logger.isDebugEnabled()) {

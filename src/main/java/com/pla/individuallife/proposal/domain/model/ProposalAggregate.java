@@ -206,6 +206,17 @@ public class ProposalAggregate extends AbstractAnnotatedAggregateRoot<ProposalId
         totalBeneficiaryShare = newTotal;
     }
 
+    public void updateWithProposedAssuredAndAgenDetails(UserDetails userDetails, String proposalId, ProposedAssured proposedAssured, Set<AgentDetailDto> agentCommissionDetails) {
+        checkAuthorization(userDetails);
+        if(proposedAssured.getIsProposer()) {
+            assignProposer(proposedAssured);
+        }
+        assignProposedAssured(proposedAssured);
+        AgentCommissionShareModel agentCommissionShareModel = new AgentCommissionShareModel();
+        agentCommissionDetails.forEach(agentCommission -> agentCommissionShareModel.addAgentCommission(new AgentId(agentCommission.getAgentId()), agentCommission.getCommission()));
+        assignAgents(agentCommissionShareModel);
+    }
+
     public void updateGeneralDetails(GeneralDetails generaldetails, UserDetails userDetails) {
         checkAuthorization(userDetails);
         this.generalDetails = generaldetails;
@@ -217,11 +228,11 @@ public class ProposalAggregate extends AbstractAnnotatedAggregateRoot<ProposalId
         compulsoryHealthStatement.stream().forEach(ch -> this.compulsoryHealthStatement.add(new Question(new QuestionId(ch.getQuestionId()), ch.isAnswer(), ch.getAnswerResponse())));
     }
 
+
     public void updateFamilyPersonalDetail(FamilyPersonalDetail personalDetail, UserDetails userDetails){
         checkAuthorization(userDetails);
         this.familyPersonalDetail=personalDetail;
     }
-
 
     public void updateAdditionalDetails(UserDetails userDetails, String medicalAttendantDetails, String medicalAttendantDuration, String dateAndReason, ReplacementQuestion replacementDetails) {
         checkAuthorization(userDetails);

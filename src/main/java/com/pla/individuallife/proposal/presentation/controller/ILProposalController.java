@@ -89,6 +89,30 @@ public class ILProposalController {
     }
 
     @ResponseBody
+    @RequestMapping(value = "/updateproposedassuredandagent")
+    public ResponseEntity<Map> updateProposedAssuredAndAgents(@RequestBody ILUpdateProposalWithProposedAssuredCommand cmd, BindingResult bindingResult, HttpServletRequest request) {
+        String proposalId = cmd.getProposalId();;
+
+        if (bindingResult.hasErrors()) {
+            return new ResponseEntity(bindingResult.getAllErrors(), HttpStatus.PRECONDITION_FAILED);
+        }
+        try {
+            UserDetails userDetails = getLoggedInUserDetail(request);
+            cmd.setUserDetails(userDetails);
+            proposalCommandGateway.updateProposedAssuredAndAgents(cmd);
+        } catch (TimeoutException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        Map map = new HashMap<>();
+        map.put("message", "Proposal updated with ProposedAssured and Agent Details successfully");
+        map.put("proposalId", proposalId);
+        return new ResponseEntity(map, HttpStatus.OK);
+    }
+
+    @ResponseBody
     @RequestMapping(value = "/updateproposer")
     public ResponseEntity<Map> updateWithProposerDetails(@RequestBody ILProposalUpdateWithProposerCommand cmd, BindingResult bindingResult, HttpServletRequest request) {
         String proposalId = cmd.getProposalId();
