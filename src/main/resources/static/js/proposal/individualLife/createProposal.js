@@ -69,7 +69,7 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
             }
 
             if ($scope.proposalId) {
-
+                alert("Testing...");
                 $http.get("/pla/individuallife/proposal/getproposal/" + $scope.proposalId + "?mode=view").success(function (response, status, headers, config) {
                     var result = response;
                     console.log('Result:' + JSON.stringify(result));
@@ -84,14 +84,24 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
 
                     $scope.proposal.proposalId = $scope.rcvProposal.proposalId;
                     $scope.proposedAssured = $scope.rcvProposal.proposedAssured || {};
-                    $scope.proposer = $scope.rcvProposal.proposer || {};
-                    $scope.proposerEmployment = $scope.proposer.employment;
-                    $scope.proposerResidential = $scope.proposer.residentialAddress;
-                    $scope.proposerSpouse = $scope.proposer.spouse;
+                    if($scope.rcvProposal.proposer != null)
+                    {
+                        $scope.proposer = $scope.rcvProposal.proposer || {};
+
+                        $scope.proposerEmployment = $scope.proposer.employment;
+                        $scope.proposerResidential = $scope.proposer.residentialAddress;
+                        $scope.proposerSpouse = $scope.proposer.spouse;
+
+                        if ($scope.proposer.dateOfBirth) {
+                            $scope.proposer.nextDob = moment().diff(new moment(new Date($scope.proposer.dateOfBirth)), 'years') + 1;
+                        }
+                    }
+
                     if($scope.rcvProposal.proposalPlanDetail !=null)
                     {
                         $scope.proposalPlanDetail = $scope.rcvProposal.proposalPlanDetail;
                     }
+
                     console.log('Response..'+JSON.stringify(response.proposalPlanDetail));
                     //$scope.selectedPlan.title=response.proposalPlanDetail.planName;
                     var selectedPlan = {};
@@ -207,9 +217,9 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
                     if ($scope.proposedAssured.dateOfBirth) {
                         $scope.proposedAssured.nextDob = moment().diff(new moment(new Date($scope.proposedAssured.dateOfBirth)), 'years') + 1;
                     }
-                    if ($scope.proposer.dateOfBirth) {
+                    /*if ($scope.proposer.dateOfBirth) {
                         $scope.proposer.nextDob = moment().diff(new moment(new Date($scope.proposer.dateOfBirth)), 'years') + 1;
-                    }
+                    }*/
                     //$scope.agentDetails=[];
                     $scope.spouse = $scope.rcvProposal.proposedAssured.spouse;
                     //alert($scope.rcvProposal.proposedAssured.employment);
@@ -719,10 +729,11 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
                         $scope.proposerEmploymentCities = provinceDetails.cities;
                 }
                 if (newVal[3]) {
-                    //console.log('residential ' + newVal[3]);
+                    console.log('residential ' + newVal[3]);
                     var provinceDetails = _.findWhere($scope.provinces, {provinceId: newVal[3]});
                     if (provinceDetails)
                         $scope.proposerResidentialCities = provinceDetails.cities;
+
                 }
 
                 if (newVal[4]) {
@@ -732,11 +743,11 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
                     }
                 }
 
-              /*  if (newVal[5]) {
+              if (newVal[5]) {
                     console.log('Town: ' + newVal[5]);
                 }
 
-                if (newVal[6]) {
+               /* if (newVal[6]) {
                     var proposeremployeeTypes = _.findWhere($scope.employmentTypes, {code: newVal[6]});
                     if (proposeremployeeTypes) {
                         $scope.proposerEmployment.employmentType = proposeremployeeTypes.employment_id;
@@ -1341,22 +1352,23 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
                 }
             });
 
-            /*$scope.$watch('proposerEmployment.employmentType',function(newvalue,oldvalue){
-                if(newvalue){
-                    alert(newvalue);
-                    //$scope.proposer.nextDob = moment().diff(new moment(new Date(newvalue)), 'years') + 1;
-                    //alert($scope.proposer.nextDob);
 
-                    if(newvalue == 1)
-                    {
-                        $scope.proposerEmployment.employmentType="Permanent";
-                    }
-                    else
-                    {
-                        $scope.proposerEmployment.employmentType="Temporary";
-                    }
-                }
-            });*/
+            /*$scope.$watch('proposerEmployment.employmentType',function(newvalue,oldvalue){
+             if(newvalue){
+             alert(newvalue);
+             //$scope.proposer.nextDob = moment().diff(new moment(new Date(newvalue)), 'years') + 1;
+             //alert($scope.proposer.nextDob);
+
+             if(newvalue == 1)
+             {
+             $scope.proposerEmployment.employmentType="Permanent";
+             }
+             else
+             {
+             $scope.proposerEmployment.employmentType="Temporary";
+             }
+             }
+             });*/
 
             $scope.saveProposerDetails = function () {
                 console.log('Save method of Proposer1');
