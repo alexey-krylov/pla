@@ -222,4 +222,12 @@ public class ILProposalCommandHandler {
         ProposalAggregate aggregate = ilProposalMongoRepository.load(new ProposalId(cmd.getProposalId()));
         aggregate.submitApproval(DateTime.now(), cmd.getUserDetails(), cmd.getComment(), cmd.getStatus());
     }
+
+    @CommandHandler
+    public void routeToNextLevel(ILProposalUnderwriterNextLevelCommand cmd) {
+        ProposalAggregate aggregate = ilProposalMongoRepository.load(new ProposalId(cmd.getProposalId()));
+        aggregate.routeToNextLevel(cmd.getUserDetails(), cmd.getComment(), cmd.getStatus());
+    }
+
+
 }

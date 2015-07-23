@@ -16,6 +16,11 @@ public enum  RoutingLevel {
         this.description = description;
     }
 
+    public RoutingLevel getNext() {
+        return this.ordinal() < RoutingLevel.values().length - 1
+                ? RoutingLevel.values()[this.ordinal() + 1]
+                : null;
+    }
 
 }
 

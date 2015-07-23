@@ -278,6 +278,18 @@ public class ProposalAggregate extends AbstractAnnotatedAggregateRoot<ProposalId
         }
     }
 
+    public void routeToNextLevel(UserDetails userDetails, String comment, ILProposalStatus status) {
+        boolean hasProposalApprovalRole = hasIndividualLifeProposalApproverRole(userDetails.getAuthorities());
+        if (!hasProposalApprovalRole) {
+            throw new AuthorizationServiceException("User does not have Individual Life Proposal Approval (INDIVIDUAL_LIFE_PROPOSAL_APPROVER) authority");
+        }
+        Preconditions.checkArgument(hasProposalApprovalRole);
+        RoutingLevel nextRoutingLevel = getRoutinglevel().getNext();
+        Preconditions.checkNotNull(nextRoutingLevel);
+        this.routinglevel = nextRoutingLevel;
+        this.proposalStatus = status;
+    }
+
     public void markASFirstPremiumPending(String approvedBy, DateTime approvedOn, String comment) {
         this.proposalStatus = ILProposalStatus.PENDING_FIRST_PREMIUM;
     }

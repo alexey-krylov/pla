@@ -49,4 +49,13 @@ public interface ILProposalCommandGateway {
 
     void returnProposal(ILProposalApprovalCommand cmd)
             throws TimeoutException, InterruptedException;
+
+    void holdProposal(ILProposalApprovalCommand cmd)
+            throws TimeoutException, InterruptedException;
+
+    void rejectProposal(ILProposalApprovalCommand cmd)
+            throws TimeoutException, InterruptedException;
+
+    void routeToNextLevel(ILProposalUnderwriterNextLevelCommand cmd)
+            throws TimeoutException, InterruptedException;
 }
