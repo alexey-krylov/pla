@@ -1,80 +1,128 @@
-angular.module('createProposal',['common','ngRoute','mgcrea.ngStrap.select','mgcrea.ngStrap.alert','mgcrea.ngStrap.popover','directives','angularFileUpload','mgcrea.ngStrap.dropdown','ngSanitize','commonServices'])
-    .controller('proposalCtrl',['$scope','$http','$timeout','$upload','provinces','getProvinceAndCityDetail','globalConstants','agentDetails','stepsSaved','proposerDetails','quotationNumber','getQueryParameter','$window',
-        function($scope,$http,$timeout,$upload,provinces,getProvinceAndCityDetail,globalConstants,agentDetails,stepsSaved,proposerDetails,quotationNumber,getQueryParameter,$window){
+angular.module('createProposal', ['common', 'ngRoute', 'mgcrea.ngStrap.select', 'mgcrea.ngStrap.alert', 'mgcrea.ngStrap.popover', 'directives',
+    'angularFileUpload', 'mgcrea.ngStrap.dropdown', 'ngSanitize', 'commonServices'])
+
+    .controller('proposalCtrl', ['$scope', '$http', '$timeout', '$upload', 'provinces', 'getProvinceAndCityDetail', 'globalConstants',
+        'agentDetails', 'stepsSaved', 'proposerDetails', 'proposalNumber', 'getQueryParameter', '$window', 'premiumData', 'documentList',
+        function ($scope, $http, $timeout, $upload, provinces, getProvinceAndCityDetail, globalConstants, agentDetails, stepsSaved, proposerDetails, proposalNumber,
+                  getQueryParameter, $window, premiumData, documentList) {
+
             var mode = getQueryParameter("mode");
-            if(mode=='view'){
+            if (mode == 'view') {
                 $scope.isViewMode = true;
                 $scope.isEditMode = true;
-            }else if(mode=='edit'){
+            } else if (mode == 'edit') {
                 $scope.isEditMode = true;
             }
+            $scope.isReturnStatus = false;
+
             /*This scope holds the list of installments from which user can select one */
             $scope.numberOfInstallmentsDropDown = [];
 
             /*regex for number pattern for more details see commonModule.js*/
-            $scope.numberPattern =globalConstants.numberPattern;
+            $scope.numberPattern = globalConstants.numberPattern;
 
-            $scope.fileSaved=null;
-            $scope.disableUploadButton=false;
+            $scope.fileSaved = null;
+            $scope.disableUploadButton = false;
 
             /*This scope value is binded to fueluxWizard directive and hence it changes as and when next button is clicked*/
             $scope.selectedItem = 1;
 
             /*Holds the indicator for steps in which save button is clicked*/
-            $scope.setpsSaved =stepsSaved;
+            $scope.stepsSaved = stepsSaved;
 
             /*Inter id used for programmatic purpose*/
-            $scope.quotationId = getQueryParameter('quotationId') || null;
+            $scope.proposalId = getQueryParameter('proposalId') || null;
 
             $scope.versionNumber = getQueryParameter('version') || null;
 
             /*actual quotation number to be used in the view*/
-            $scope.quotationNumber = quotationNumber;
+            $scope.proposalNumber = proposalNumber;
 
             $scope.provinces = provinces;
 
-            $scope.documentList=[
-                {
-                    "documentName" : "Document-ONE"
-                },
-                {
-                    "documentName" : "Document-TWO"
-                },
-                {
-                    "documentName" : "Document-THREE"
-                },
-                {
-                    "documentName" : "Document-FOUR"
-                },
-                {
-                    "documentName" : "Document-FIVE"
-                }
+            $scope.documentList = documentList;
+            var status = getQueryParameter("status");
+            if (status == 'return') {
+                $scope.isReturnStatus = true;
 
-            ];
-            $scope.uploadDocumentFiles = function(){
-               // console.log($scope.documentList.length);
-                for(var i=0; i<$scope.documentList.length; i++){
-                    var files = $scope.documentList[i].documentAttached;
-                   // console.log(files);
+                $http.get("/pla/grouplife/proposal/getapprovercomments/"+ $scope.proposalId).success(function (data, status) {
+                    console.log(data);
+                    $scope.approvalCommentList=data;
+                });
+
+            }
+            var method = getQueryParameter("method");
+            if (method == 'approval') {
+                $scope.isViewMode = true;
+
+                $http.get("/pla/grouplife/proposal/getapprovercomments/" + $scope.proposalId).success(function (data, status) {
+                    // console.log(data);
+                    $scope.approvalCommentList=data;
+                });
+
+            }
+
+
+            if (status == 'return') {
+                $scope.stepsSaved["1"] =true;
+            }
+            $scope.uploadDocumentFiles = function () {
+                // console.log($scope.documentList.length);
+                for (var i = 0; i < $scope.documentList.length; i++) {
+                    var document = $scope.documentList[i];
+                    var files = document.documentAttached;
+                    // console.log(files);
                     if (files) {
-
                         $upload.upload({
-                            url: '/pla/core/proposal/uploadProposalDocument',
+                            url: '/pla/grouplife/proposal/uploadmandatorydocument',
                             file: files,
+                            fields: {documentId: document.documentId, proposalId: $scope.proposalId},
                             method: 'POST'
                         }).progress(function (evt) {
 
                         }).success(function (data, status, headers, config) {
                             //console.log('file ' + config.file.name + 'uploaded. Response: ' +
-                           // JSON.stringify(data));
+                            // JSON.stringify(data));
                         });
                     }
 
                 }
 
             };
-            if($scope.documentList) {
-                if($scope.documentList.documentAttached) {
+
+            $scope.additionalDocumentList = [{}, {}];
+
+            $scope.addAdditionalDocument = function () {
+                $scope.additionalDocumentList.unshift({});
+            };
+
+            $scope.removeAdditionalDocument = function (index) {
+                $scope.additionalDocumentList.splice(index, 1);
+            };
+
+            $scope.uploadAdditionalDocument = function () {
+                for (var i = 0; i < $scope.additionalDocumentList.length; i++) {
+                    var document = $scope.additionalDocumentList[i];
+                    var files = document.documentAttached;
+                    if (files) {
+                        $upload.upload({
+                            url: '/pla/grouplife/proposal/uploadmandatorydocument',
+                            file: files,
+                            fields: {documentId: document.documentName, proposalId: $scope.proposalId},
+                            method: 'POST'
+                        }).progress(function (evt) {
+
+                        }).success(function (data, status, headers, config) {
+                            //console.log('file ' + config.file.name + 'uploaded. Response: ' +
+                            // JSON.stringify(data));
+                        });
+                    }
+
+                }
+            };
+
+            if ($scope.documentList) {
+                if ($scope.documentList.documentAttached) {
                     if ($scope.documentList.documentAttached.length == $scope.documentList.documentName.length) {
                         $scope.disableUploadButton = true;
                         console.log($scope.documentList.documentAttached.length);
@@ -84,97 +132,119 @@ angular.module('createProposal',['common','ngRoute','mgcrea.ngStrap.select','mgc
                     }
                 }
             }
-           /* $scope.$watch('documentList.documentAttached',function(newVal,oldVal){
-                if(newVal && newVal.length){
-                    $scope.selectedFiles.push(newVal);
-                    console.log($scope.selectedFiles.length);
-                    console.log($scope.documentList.length);
-                    if($scope.selectedFiles.length == $scope.documentList.length){
-                        $scope.disableUploadButton=true;
-                    }else{
-                        $scope.disableUploadButton=false;
-                    }
-                }
-            });*/
+            /* $scope.$watch('documentList.documentAttached',function(newVal,oldVal){
+             if(newVal && newVal.length){
+             $scope.selectedFiles.push(newVal);
+             console.log($scope.selectedFiles.length);
+             console.log($scope.documentList.length);
+             if($scope.selectedFiles.length == $scope.documentList.length){
+             $scope.disableUploadButton=true;
+             }else{
+             $scope.disableUploadButton=false;
+             }
+             }
+             });*/
+
+
             $scope.proposalDetails = {
                 /*initialize with default values*/
-                plan:{
-                    samePlanForAllRelation:false,
-                    samePlanForAllCategory:false
+                plan: {
+                    samePlanForAllRelation: false,
+                    samePlanForAllCategory: false
                 },
-                premium:{
-                    addOnBenefit:20,
-                    profitAndSolvencyLoading:0,
-                    discounts:0
+                premium: {
+                    addOnBenefit: 20,
+                    profitAndSolvencyLoading: 0,
+                    discounts: 0
                 }
             };
+
+
             $scope.proposalDetails.basic = agentDetails;
+
+            $scope.proposalDetails.premium = premiumData || {};
+
+            $scope.changeAgent = false;
+            console.log($scope.proposalDetails.basic['active']);
+            if (!$scope.proposalDetails.basic['active']) {
+                $('#agentModal').modal('show');
+                $scope.changeAgent = true;
+                $scope.stepsSaved["1"] = !$scope.changeAgent;
+            }
+            if(!$scope.proposalDetails.basic['active'] && $scope.isReturnStatus==true && method == 'approval' ){
+                $('#agentModal').modal('show');
+                $scope.changeAgent = true;
+                $scope.stepsSaved["2"] = !$scope.changeAgent;
+            }
+            console.log(' $scope.changeAgent ' + $scope.changeAgent);
+
+
             $scope.proposalDetails.proposer = proposerDetails;
             /*used for bs-dropdown*/
             $scope.dropdown = [
                 {
                     "text": "<a><img src=\"/pla/images/xls-icon.png\">Ready Reckoner</a>",
-                    "href": "/pla/proposal/grouplife/downloadplandetail"
+                    "href": "/pla/grouplife/proposal/downloadplandetail/" + $scope.proposalId
                 },
                 {
                     "text": "<a><img src=\"/pla/images/xls-icon.png\">Template</a>",
-                    "href": "/pla/proposal/grouplife/downloadinsuredtemplate"
+                    "href": "/pla/grouplife/proposal/downloadinsuredtemplate/" + $scope.proposalId
                 }
             ];
 
-            $scope.$watch('proposalDetails.proposer.province',function(newVal,oldVal){
-                if(newVal){
+            $scope.$watch('proposalDetails.proposer.province', function (newVal, oldVal) {
+                if (newVal) {
                     $scope.getProvinceDetails(newVal);
                 }
             });
 
-            $scope.getProvinceDetails=function(provinceCode){
-                var provinceDetails = getProvinceAndCityDetail(provinces,provinceCode);
-                if(provinceDetails){
+            $scope.getProvinceDetails = function (provinceCode) {
+                var provinceDetails = getProvinceAndCityDetail(provinces, provinceCode);
+                if (provinceDetails) {
                     $scope.cities = provinceDetails.cities;
                 }
             };
             $scope.accordionStatus = {
-                contact:false,
-                proposer:true
+                contact: false,
+                proposer: true
             };
             $scope.accordionStatusDocuments = {
-                documents:true,
-                additionalDocuments:false
+                documents: true,
+                additionalDocuments: false
             };
-            $scope.$watch('fileSaved', function (n,o) {
-                if(n&& n.length){
-                    $scope.fileName=n[0].name
+            $scope.$watch('fileSaved', function (n, o) {
+                if (n && n.length) {
+                    $scope.fileName = n[0].name
                 }
             });
-            $scope.openNewTab=function(event){
+            $scope.openNewTab = function (event) {
                 /*keyCode 9 is tab key*/
-                if(event && event.keyCode ==9){
-                    $scope.accordionStatus.contact =true;
-                    $scope.accordionStatus.proposer =false;
+                if (event && event.keyCode == 9) {
+                    $scope.accordionStatus.contact = true;
+                    $scope.accordionStatus.proposer = false;
                 }
             };
 
             /*clear all fields in the agent details except agentId*/
-            $scope.clearAgentDetails =  function(){
-                angular.extend($scope.proposalDetails.basic,{agentName:null,branchName:null,teamName:null});
+            $scope.clearAgentDetails = function () {
+                angular.extend($scope.proposalDetails.basic, {agentName: null, branchName: null, teamName: null});
             };
 
-            $scope.isSaveDisabled = function(formName){
-                //return formName.$invalid || ($scope.setpsSaved[$scope.selectedItem] && !$scope.isEditMode)
+            $scope.isSaveDisabled = function (formName) {
+                //return formName.$invalid || ($scope.stepsSaved[$scope.selectedItem] && !$scope.isEditMode)
             };
 
-            $scope.searchAgent = function(){
-                $http.get("/pla/quotation/grouplife/getagentdetail/"+$scope.proposalDetails.basic.agentId)
-                    .success(function(data,status){
-                        if(data.status=="200"){
+            $scope.searchAgent = function () {
+                $http.get("/pla/quotation/grouplife/getagentdetail/" + $scope.proposalDetails.basic.agentId)
+                    .success(function (data, status) {
+                        if (data.status == "200") {
                             $scope.agentNotFound = false;
-                            $scope.proposalDetails.basic=data.data;
-                        }else{
+                            $scope.proposalDetails.basic = data.data;
+                        } else {
                             $scope.agentNotFound = true;
                         }
                     })
-                    .error(function(data,status){
+                    .error(function (data, status) {
 
                     });
             };
@@ -183,100 +253,238 @@ angular.module('createProposal',['common','ngRoute','mgcrea.ngStrap.select','mgc
                 return Math.round(x) === x;
             }
 
-
-            function generateListOfInstallments(numberOfInstallments){
-                $scope.numberOfInstallmentsDropDown=[];
-                for(var installment=1;installment<=numberOfInstallments;installment++){
+            function generateListOfInstallments(numberOfInstallments) {
+                $scope.numberOfInstallmentsDropDown = [];
+                for (var installment = 1; installment <= numberOfInstallments; installment++) {
                     $scope.numberOfInstallmentsDropDown.push(installment);
                 }
             }
 
-            $scope.$watch('quotationDetails.premium.policyTermValue',function(newVal,oldVal){
+            $scope.$watch('proposalDetails.premium.policyTermValue', function (newVal, oldVal) {
                 /*TODO check for the minimum amd maximum value for the policy term value*/
-                if(newVal && newVal!=365 && newVal>=30 && newVal<=999){
+                if (newVal && newVal != 365 && newVal >= 30 && newVal <= 9999) {
                     /*used to toggle controls between dropdown and text*/
                     $scope.isPolicyTermNot365 = true;
                     /*used to show the error message when inappropriate value is entered*/
                     $scope.inappropriatePolicyTerm = false;
-                    var numberOfInstallments = newVal/30;
-                    if(isInteger(numberOfInstallments)){
-                        generateListOfInstallments(numberOfInstallments-1)
-                    }else{
-                        generateListOfInstallments(Math.floor(numberOfInstallments));
-                    }
-                }else{
-                    if(newVal<30 || newVal>999){
+                } else {
+                    console.log(' 2 ' + newVal);
+                    if (newVal < 30 || newVal > 9999) {
                         $scope.inappropriatePolicyTerm = true;
-                    }else{
+                    } else {
+                        $scope.inappropriatePolicyTerm = false;
                         $scope.isPolicyTermNot365 = false;
                     }
                 }
             });
 
-            var setQuotationNumberAndVersionNumber = function(quotationId){
-                $http.get("/pla/proposal/grouplife/getquotationnumber/"+quotationId)
-                    .success(function(data,status){
-                        $scope.quotationNumber=data.id;
-                    });
-                $http.get("/pla/proposal/grouplife/getversionnumber/"+quotationId)
-                    .success(function(data,status){
-                        $scope.versionNumber=data.id;
-                    });
+            $scope.selectedInstallment = premiumData.premiumInstallment;
+            $scope.installments = $scope.proposalDetails.premium.installments;
+            $scope.recalculatePremium = function () {
+                $scope.premiumInstallment = {};
+                $scope.proposalDetails.premium.premiumInstallment = $scope.selectedInstallment || null;
+                $http.post('/pla/grouplife/proposal/recalculatePremium', angular.extend({},
+                    {premiumDetailDto: $scope.proposalDetails.premium},
+                    {"proposalId": $scope.proposalId})).success(function (data) {
+                    // console.log(data.data);
+                    var enableSaveButton = $scope.proposalDetails.premium.optedPremiumFrequency!=null|| $scope.selectedInstallment!=null;
+                    console.log("enableSaveButton--"+enableSaveButton);
+                        $scope.disableSaveButton=false;
+                    $scope.stepsSaved["4"]=$scope.disableSaveButton;
+                    $scope.proposalDetails.premium = data.data;
+                    $scope.proposalDetails.premium.totalPremium = data.data.totalPremium;
+                    if (data.data.annualPremium) {
+                        $scope.proposalDetails.premium.annualPremium = data.data.annualPremium;
+                        $scope.proposalDetails.premium.semiannualPremium = data.data.semiannualPremium;
+                        $scope.proposalDetails.premium.quarterlyPremium = data.data.quarterlyPremium;
+                        $scope.proposalDetails.premium.monthlyPremium = data.data.monthlyPremium;
+                    }
+                    if (data.data.installments) {
+                        $scope.selectedInstallment = null;
+                        $scope.installments = _.sortBy(data.data.installments, 'installmentNo');
+                    }
+                });
+
             };
 
-            $scope.saveBasicDetails = function(){
-               // console.log($scope.proposalDetails.basic);
-                $http.post("/pla/proposal/grouplife/createproposal",angular.extend($scope.proposalDetails.basic,{proposerName:$scope.proposalDetails.proposer.proposerName}))
-                    .success(function(agentDetails){
-                        if(agentDetails.status=="200"){
-                            $scope.quotationId = agentDetails.id;
-                            setQuotationNumberAndVersionNumber(agentDetails.id);
+            $scope.submitAdditionalDocument = function(){
+               $http.post('/pla/grouplife/proposal/submit', angular.extend({},
+                    {"proposalId": $scope.proposalId})).success(function (data) {
+                   if (data.status == "200") {
+                       saveStep();
+                       $('#searchFormProposal').val($scope.proposalId);
+                       $('#searchForm').submit();
+                   }
+
+                });
+
+            }
+            $scope.disableSaveButton=false;
+            $scope.$watch( 'proposalDetails.premium.optedPremiumFrequency',function(newValue, oldValue){
+                console.log("$scope.proposalDetails.premium.optedPremiumFrequency::"+$scope.proposalDetails.premium.optedPremiumFrequency);
+                console.log("$scope.selectedInstallment::"+$scope.selectedInstallment);
+                var enableSaveButton = $scope.proposalDetails.premium.optedPremiumFrequency!=null|| $scope.selectedInstallment!=null;
+                console.log("enableSaveButton--"+enableSaveButton)
+                if(newValue){
+                    $scope.disableSaveButton=enableSaveButton;
+
+                }else{
+                    $scope.disableSaveButton=enableSaveButton;
+                    if($scope.isReturnStatus == false){
+                        $scope.stepsSaved["4"]=enableSaveButton;
+                    }else{
+                        $scope.stepsSaved["5"]=enableSaveButton;
+                    }
+
+
+                }
+                if (method == 'approval') {
+                    $scope.stepsSaved["5"]=true;
+                }
+
+            });
+
+            $scope.approveProposal = function(){
+                var request = angular.extend({comment: $scope.comment},
+                    {"proposalId": $scope.proposalId});
+
+                $http.post('/pla/grouplife/proposal/approve', request).success(function (data) {
+                    if(data.status==200){
+
+                        $window.location.href="/pla/grouplife/proposal/openapprovalproposal";
+
+                    }
+
+                });
+            }
+            $scope.comment='';
+            $scope.returnProposal = function(){
+                var request = angular.extend({comment: $scope.comment},{"proposalId": $scope.proposalId});
+
+                $http.post('/pla/grouplife/proposal/return', request).success(function (data) {
+                    if(data.status==200){
+
+
+                        $window.location.href="/pla/grouplife/proposal/openapprovalproposal";
+
+                    }
+
+                });
+            }
+            $scope.savePremiumDetails = function () {
+                console.log("$scope.selectedInstallment " + JSON.stringify($scope.selectedInstallment));
+                var premiumDetailDto = $scope.proposalDetails.premium;
+                var request = angular.extend({premiumDetailDto: $scope.proposalDetails.premium},
+                    {"proposalId": $scope.proposalId});
+                request.premiumDetailDto["premiumInstallment"] = $scope.selectedInstallment;
+                console.log(JSON.stringify(request.premiumDetailDto));
+                $http.post('/pla/grouplife/proposal/savepremiumdetail', request).success(function (data) {
+                    /*$http.post("/pla/grouphealth/proposal/submit", angular.extend({},
+                     {"proposalId": $scope.proposalId}))
+                     .success(function (data) {
+                     });*/
+                   // console.log(data);
+                  //  console.log("*******************"+$scope.selectedItem);
+                    if(data.status== '200'){
+                        $scope.stepsSaved["4"]=true;
+                        saveStep();
+                    }
+
+                });
+
+            };
+
+            $scope.setSelectedInstallment = function (selectedInstallment) {
+                $scope.selectedInstallment = selectedInstallment;
+                $scope.proposalDetails.premium.optedPremiumFrequency=null;
+                var enableSaveButton = $scope.proposalDetails.premium.optedPremiumFrequency!=null|| $scope.selectedInstallment!=null;
+                console.log("enableSaveButton--"+enableSaveButton);
+                    $scope.disableSaveButton=enableSaveButton;
+               // $scope.stepsSaved["4"]=enableSaveButton;
+
+
+
+            };
+
+            var setproposalNumberAndVersionNumber = function (proposalId) {
+                $http.get("/pla/grouplife/proposal/getproposalNumber/" + proposalId)
+                    .success(function (data, status) {
+                        $scope.proposalNumber = data.id;
+                    });
+                $http.get("/pla/grouplife/proposal/getversionnumber/" + proposalId)
+                    .success(function (data, status) {
+                        $scope.versionNumber = data.id;
+                    });
+            };
+            /*
+             $scope.$on('actionclicked.fu.wizard', function (newval, oldval) {
+
+             if (data.step == 1) {
+             $http.post("/pla/grouphealth/proposal/", angular.extend($scope.proposalDetails.basic,
+             {proposerName: $scope.proposalDetails.proposer.proposerName}))
+             .success(function (agentDetails) {
+             });
+             }
+             });*/
+
+            $scope.saveBasicDetails = function () {
+
+                $http.post("/pla/grouplife/proposal/updatewithagentdetail", angular.extend($scope.proposalDetails.basic, {
+                    proposerName: $scope.proposalDetails.proposer.proposerName,
+                    proposalId: $scope.proposalId
+                }))
+                    .success(function (agentDetails) {
+                        if (agentDetails.status == "200") {
+                            $scope.proposalId = agentDetails.id;
+                            setproposalNumberAndVersionNumber(agentDetails.id);
                             saveStep();
                         }
                     });
             };
 
-            var saveStep = function(){
-                $scope.setpsSaved[$scope.selectedItem]=true;
+            var saveStep = function () {
+                $scope.stepsSaved[$scope.selectedItem] = true;
             };
 
-            $scope.saveProposerDetails =  function(){
-                $http.post("/pla/proposal/grouplife/updatewithproposerdetail",angular.extend({},
-                    {proposerDto : $scope.proposalDetails.proposer},
-                    {"quotationId":$scope.quotationId}))
-                    .success(function(data){
-                        if(data.status=="200"){
+            $scope.saveProposerDetails = function () {
+                $http.post("/pla/grouplife/proposal/updatewithproposerdetail", angular.extend({},
+                    {proposerDto: $scope.proposalDetails.proposer},
+                    {"proposalId": $scope.proposalId}))
+                    .success(function (data) {
+                        if (data.status == "200") {
                             saveStep();
                         }
                     });
             };
+
             $scope.savePlanDetails = function () {
                 $upload.upload({
-                    url: '/pla/proposal/grouplife/uploadinsureddetail',
+                    url: '/pla/grouplife/proposal/uploadinsureddetail',
                     headers: {'Authorization': 'xxx'},
-                    fields:$scope.proposalDetails.plan,
+                    fields: $scope.proposalDetails.plan,
                     file: $scope.fileSaved
                 }).success(function (data, status, headers, config) {
-                    if(data.status="200"){
+                    if (data.status = "200") {
                         saveStep();
-                        $http.get("/pla/proposal/getpremiumdetail/"+ $scope.quotationId)
-                            .success(function(){
+                        $http.get("/pla/grouplife/proposal/getpremiumdetail/" + $scope.proposalId)
+                            .success(function () {
 
                             })
                     }
                 });
             };
 
-            $scope.back = function(){
-                $window.location.href= 'listgrouplifeproposal';
+            $scope.back = function () {
+                $window.location.href = 'listgrouplifeproposal';
             }
+
         }])
-    .config(['$dropdownProvider',function($dropdownProvider){
+    .config(['$dropdownProvider', function ($dropdownProvider) {
         angular.extend($dropdownProvider.defaults, {
             html: true
         });
     }])
-    .config(["$routeProvider",function($routeProvider){
+    .config(["$routeProvider", function ($routeProvider) {
         var stepsSaved = {};
         var queryParam = null;
         $routeProvider.when('/', {
@@ -284,7 +492,7 @@ angular.module('createProposal',['common','ngRoute','mgcrea.ngStrap.select','mgc
             controller: 'proposalCtrl',
             resolve: {
 
-                provinces:['$q', '$http', function ($q, $http) {
+                provinces: ['$q', '$http', function ($q, $http) {
                     var deferred = $q.defer();
                     $http.get('/pla/core/master/getgeodetail').success(function (response, status, headers, config) {
                         deferred.resolve(response)
@@ -293,56 +501,102 @@ angular.module('createProposal',['common','ngRoute','mgcrea.ngStrap.select','mgc
                     });
                     return deferred.promise;
                 }],
-                agentDetails:['$q','$http','getQueryParameter',function($q,$http,getQueryParameter){
-                    queryParam = getQueryParameter('quotationId');
-                    if(queryParam && !_.isEmpty(queryParam) ){
+                agentDetails: ['$q', '$http', 'getQueryParameter', function ($q, $http, getQueryParameter) {
+                    queryParam = getQueryParameter('proposalId');
+                    if (queryParam && !_.isEmpty(queryParam)) {
                         var deferred = $q.defer();
-                        $http.get('/pla/proposal/grouplife/getagentdetailfromquotation/'+queryParam).success(function (response, status, headers, config) {
+                        $http.get('/pla/grouplife/proposal/getagentdetailfromproposal/' + queryParam).success(function (response, status, headers, config) {
                             deferred.resolve(response)
                         }).error(function (response, status, headers, config) {
                             deferred.reject();
                         });
-                        stepsSaved["1"]=true;
+                        var status =getQueryParameter('status');
+                       // console.log("**************RETURN STATUS********************");
+                       console.log(status);
+                        if(status == 'return'){
+                            stepsSaved["2"] = true;
+                            stepsSaved["4"] = true;
+                        }else{
+                            stepsSaved["1"] = true;
+                            stepsSaved["3"] = true;
+                        }
+
                         return deferred.promise;
-                    }else{
+                    } else {
                         return {};
                     }
                 }],
-                proposerDetails:['$q','$http',function($q,$http){
-                    if(queryParam && !_.isEmpty(queryParam) ){
+                proposerDetails: ['$q', '$http', 'getQueryParameter', function ($q, $http,getQueryParameter) {
+                    if (queryParam && !_.isEmpty(queryParam)) {
                         var deferred = $q.defer();
-                        $http.get('/pla/proposal/grouplife/getproposerdetail/'+queryParam).success(function (response, status, headers, config) {
+                        $http.get('/pla/grouplife/proposal/getproposerdetail/' + queryParam).success(function (response, status, headers, config) {
                             deferred.resolve(response)
                         }).error(function (response, status, headers, config) {
                             deferred.reject();
                         });
-                        stepsSaved["2"]=true;
+                        var status =getQueryParameter('status');
+                        if(status == 'return'){
+                            stepsSaved["3"] = true;
+                        }else{
+                            stepsSaved["2"] = true;
+                        }
+
                         return deferred.promise;
-                    }else{
+                    } else {
                         return {};
                     }
                 }],
-                quotationNumber:['$q','$http',function($q,$http){
-                    if(queryParam && !_.isEmpty(queryParam) ){
+                proposalNumber: ['$q', '$http', function ($q, $http) {
+                    if (queryParam && !_.isEmpty(queryParam)) {
                         var deferred = $q.defer();
-                        $http.get("/pla/proposal/grouplife/getquotationnumber/"+queryParam)
-                            .success(function(response){
+                        $http.get("/pla/grouplife/proposal/getproposalnumber/" + queryParam)
+                            .success(function (response) {
                                 deferred.resolve(response.id)
                             })
-                            .error(function(){
+                            .error(function () {
                                 deferred.reject();
                             });
                         return deferred.promise;
-                    }else{
-                        return null;
+                    } else {
+                        return 1;
                     }
                 }],
-                stepsSaved:function(){
+                premiumData: ['$q', '$http','getQueryParameter', function ($q, $http,getQueryParameter) {
+                    if (queryParam && !_.isEmpty(queryParam)) {
+                        var deferred = $q.defer();
+                        $http.get('/pla/grouplife/proposal/getpremiumdetail/' + queryParam).success(function (response, status, headers, config) {
+                            var status =getQueryParameter('status');
+                            if(status == 'return'){
+                                stepsSaved["5"] = true;
+                            }else{
+                                stepsSaved["4"] = true;
+                            }
+
+                            deferred.resolve(response)
+                        }).error(function (response, status, headers, config) {
+                            deferred.reject();
+                        });
+                        return deferred.promise;
+                    } else {
+                        return false;
+                    }
+                }],
+                documentList: ['$q', '$http', function ($q, $http) {
+                    if (queryParam && !_.isEmpty(queryParam)) {
+                        var deferred = $q.defer();
+                        $http.get('/pla/grouplife/proposal/getmandatorydocuments/' + queryParam).success(function (response, status, headers, config) {
+                            deferred.resolve(response)
+                        }).error(function (response, status, headers, config) {
+                            deferred.reject();
+                        });
+                        return deferred.promise;
+                    } else {
+                        return false;
+                    }
+                }],
+                stepsSaved: function () {
                     return stepsSaved;
                 }
             }
         })
     }]);
-
-
-

@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/xhtml"
       lang="en">
 <head th:include="fragments/common :: headTag">
-    <title>Group Health</title>
+    <title>Group Life</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <!--/*-->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
@@ -57,7 +57,7 @@
         <li>Group Life</li>
     </ol>
     </p>
-    <form method="post" action="searchproposal" novalidate="true" name="searchproposalforGLProposal"
+    <form method="post" action="getsubmittedproposals" novalidate="true" name="searchproposalforGLProposal"
           id="searchproposalforGLProposal">
         <div class="row well well-sm" style="margin: 0;">
             <div class="col-md-2">
@@ -108,14 +108,13 @@
                             <span th:text="#{listOfproposal}">List of proposal</span>
                         </div>
                         <div class="col-md-2 col-md-offset-2">
-                            <a type="button" class="btn btn-default btn-sm btn-disabled" id="modifyProposal" disabled="disabled"
-                               onclick="viewProposalModule.modifyProposal()">Modify</a>
                             <a type="button" class="btn btn-default btn-sm btn-disabled"  disabled="disabled"
-                               onclick="viewProposalModule.viewProposal()">View</a>
+                               onclick="viewProposalModule.viewApprovalProposal()">Approve/Return</a>
                         </div>
                     </div>
                 </div>
                 <div class="panel-body">
+
                     <table class="table table-striped table-bordered" id="proposalGL-table" cellspacing="0" width="100%">
                         <thead>
                         <tr>
@@ -130,7 +129,8 @@
                         <tbody>
                         <form id="viewAgentsForm">
                             <!--/*/ <th:block th:each="proposal : ${searchResult}"> /*/-->
-                            <tr>
+
+                            <tr th:each="proposal : ${searchResult}">
                                 <td>
                                     <input type="radio" name="proposalNumber" th:value="${proposal.proposalId}"
                                            value="5100000010315"/>
@@ -144,6 +144,7 @@
                                         th:text="${#dates.format(proposal.submittedOn,'dd/MM/yyyy')}"></span>
                                 </td>
                                 <td th:if="${proposal.submittedOn==null}"></td>
+
                                 <td th:text="${proposal.agentName}"></td>
                                 <td th:text="${proposal.proposalStatus}"></td>
                                 <td th:text="${proposal.proposerName}"></td>
