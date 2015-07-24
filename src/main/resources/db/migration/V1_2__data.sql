@@ -530,14 +530,14 @@ VALUES ("KON","Konkola Copper Mine","Private Clinic",null,"CI-CHIL","PR-COP",nul
 ("LUSC","Lusaka Chemist","Private Pharmacist",null,"CI-LUS","PR-LUS",null,null,null),
 ("NOR","Northmead Chemist","Private Pharmacist",null,"CI-LUS","PR-LUS",null,null,null);
 
-insert  into `entity_sequence`(`sequence_id`,`sequence_name`,`sequence_number`,`sequence_prefix`) values (1,'com.pla.core.domain.model.agent.Agent',0,'1000');
+insert  into `entity_sequence`(`sequence_id`,`sequence_name`,`sequence_number`,`sequence_prefix`) values (1,'com.pla.core.domain.model.agent.Agent',1000,' ');
 insert  into `entity_sequence`(`sequence_id`,`sequence_name`,`sequence_number`,`sequence_prefix`) values (2,'com.pla.grouplife.quotation.domain.model.GroupLifeQuotation',1000000,' ');
 INSERT INTO `entity_sequence`(`sequence_id`,`sequence_name`,`sequence_number`,`sequence_prefix`) values ('3','com.pla.core.domain.model.plan.Plan',1000,' ');
 insert  into `entity_sequence`(`sequence_id`,`sequence_name`,`sequence_number`,`sequence_prefix`) values (4,'com.pla.grouphealth.quotation.domain.model.GroupHealthQuotation',2000000,' ');
 insert  into `entity_sequence`(`sequence_id`,`sequence_name`,`sequence_number`,`sequence_prefix`) values (5,'com.pla.individuallife.quotation.domain.model.ILQuotation',3000000,' ');
 insert  into `entity_sequence`(`sequence_id`,`sequence_name`,`sequence_number`,`sequence_prefix`) values (6,'com.pla.individuallife.proposal.domain.model.ProposalAggregate',0,' ');
-insert  into `entity_sequence`(`sequence_id`,`sequence_name`,`sequence_number`,`sequence_prefix`) values (7,'com.pla.core.domain.model.Benefit',0,'1000');
-insert  into `entity_sequence`(`sequence_id`,`sequence_name`,`sequence_number`,`sequence_prefix`) values (8,'com.pla.core.domain.model.Coverage',0,'1000');
+insert  into `entity_sequence`(`sequence_id`,`sequence_name`,`sequence_number`,`sequence_prefix`) values (7,'com.pla.core.domain.model.Benefit',1000,' ');
+insert  into `entity_sequence`(`sequence_id`,`sequence_name`,`sequence_number`,`sequence_prefix`) values (8,'com.pla.core.domain.model.Coverage',1000,' ');
 insert  into `entity_sequence`(`sequence_id`,`sequence_name`,`sequence_number`,`sequence_prefix`) values (9,'com.pla.grouplife.proposal.domain.model.GroupLifeProposal',4000000,' ');
 insert  into `entity_sequence`(`sequence_id`,`sequence_name`,`sequence_number`,`sequence_prefix`) values (10,'com.pla.grouphealth.proposal.domain.model.GroupHealthProposal',5000000,' ');
 insert  into `entity_sequence`(`sequence_id`,`sequence_name`,`sequence_number`,`sequence_prefix`) values (11,'com.pla.grouphealth.policy.domain.model.GroupHealthPolicy',10000000,' ');
