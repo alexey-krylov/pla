@@ -8,6 +8,7 @@ package com.pla.core.query;
 
 import com.google.common.base.Preconditions;
 import org.nthdimenzion.ddd.domain.annotations.Finder;
+import org.nthdimenzion.presentation.AppUtils;
 import org.nthdimenzion.utils.UtilValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.ColumnMapRowMapper;
@@ -19,6 +20,9 @@ import javax.sql.DataSource;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.function.ToIntFunction;
+
+import static org.nthdimenzion.utils.UtilValidator.isEmpty;
 
 /**
  * @author: Samir
@@ -37,7 +41,7 @@ public class BenefitFinder {
 
     public static final String FIND_BENEFIT_FOR_A_GIVEN_BENEFIT_NAME_Query = "select * from benefit where benefit_name=:benefitName";
 
-    public static final String ACTIVE_BENEFIT_COUNT_BY_BENEFIT_NAME_Query = "select count(benefit_id) from benefit where benefit_name=:benefitName and status='ACTIVE' " +
+    public static final String ACTIVE_BENEFIT_COUNT_BY_BENEFIT_NAME_Query = "select  benefit_name benefitName from benefit where status='ACTIVE' " +
             " and benefit_id !=:benefitId";
 
     public static final String ACTIVE_BENEFIT_COUNT_BY_BENEFIT_CODE_Query = "select count(benefit_id) from benefit where benefit_code=:benefitCode and status='ACTIVE' " +
@@ -60,8 +64,20 @@ public class BenefitFinder {
 
     public int getBenefitCountByBenefitName(String benefitName,String benefitId) {
         Preconditions.checkNotNull(benefitName);
-        Number noOfBenefit = namedParameterJdbcTemplate.queryForObject(ACTIVE_BENEFIT_COUNT_BY_BENEFIT_NAME_Query, new MapSqlParameterSource("benefitId",benefitId).addValue("benefitName", benefitName), Number.class);
-        return noOfBenefit.intValue();
+        String benefitNameWithoutSpecialCharacters = AppUtils.replaceSpecialCharactersIn(benefitName);
+        List<Map<String,Object>> benefitNameList = namedParameterJdbcTemplate.query(ACTIVE_BENEFIT_COUNT_BY_BENEFIT_NAME_Query, new MapSqlParameterSource("benefitId", benefitId), new ColumnMapRowMapper());
+        if (isEmpty(benefitNameList)){
+            return 0;
+        }
+        return benefitNameList.parallelStream().mapToInt(new ToIntFunction<Map<String, Object>>() {
+            @Override
+            public int applyAsInt(Map<String, Object> benefitNameMap) {
+                if (benefitNameWithoutSpecialCharacters.equalsIgnoreCase(AppUtils.replaceSpecialCharactersIn(benefitNameMap.get("benefitName") != null ? benefitNameMap.get("benefitName").toString():""))) {
+                    return 1;
+                }
+                return 0;
+            }
+        }).sum();
     }
 
     public int getBenefitCountByBenefitCode(String benefitCode,String benefitId) {

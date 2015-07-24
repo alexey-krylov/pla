@@ -1,5 +1,7 @@
 package org.nthdimenzion.presentation;
 
+import com.google.common.collect.Lists;
+import org.apache.commons.lang.StringUtils;
 import org.joda.money.CurrencyUnit;
 import org.joda.money.Money;
 import org.joda.time.DateTime;
@@ -13,6 +15,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.servlet.http.HttpServletRequest;
 import java.math.BigDecimal;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Locale;
 
 import static org.nthdimenzion.common.AppConstants.DEFAULT_CURRENCY;
@@ -64,6 +68,15 @@ public class AppUtils {
     public static UserDetails getLoggedInUserDetail(HttpServletRequest request) {
         UserDetails userDetails = (UserDetails) request.getSession().getAttribute(AppConstants.LOGGED_IN_USER);
         return userDetails;
+    }
+
+    public static String replaceSpecialCharactersIn(String textToBeReplaced){
+        String[] searchStringArray = ":;\"'?/.,{[}]\\-=()_ ".split("(?!^)");
+        List<String> listOfEmptyString = Lists.newArrayList();
+        Lists.newArrayList(searchStringArray).forEach(replacementCharacters->
+                listOfEmptyString.add(""));
+        String[] replacementList = Arrays.copyOf(listOfEmptyString.toArray(), listOfEmptyString.toArray().length, String[].class);
+        return StringUtils.replaceEachRepeatedly(textToBeReplaced, searchStringArray, replacementList);
     }
 
     public static Integer getAgeOnNextBirthDate(LocalDate dateOfBirth) {

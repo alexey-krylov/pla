@@ -174,14 +174,14 @@ public enum UnderWriterInfluencingFactor {
                     errorMessageBuilder.append(" Age To should be greater than Age From \n");
                     return false;
                 }
-                boolean isValid = !(isNotEmpty(planCode) && isNotEmpty(coverageId))?(iPlanAdapter.isValidPlanAge(planCode,ageFromCellValue) && iPlanAdapter.isValidPlanAge(planCode,ageToValue)):
+                boolean isValid = !(isNotEmpty(planCode) && isNotEmpty(coverageId))?(iPlanAdapter.isValidAgeRange(planCode, ageFromCellValue) && iPlanAdapter.isValidAgeRange(planCode, ageToValue)):
                         (iPlanAdapter.isValidCoverageAge(planCode, coverageId, ageFromCellValue) && iPlanAdapter.isValidCoverageAge(planCode, coverageId, ageToValue));
                 if (!isValid)
                     errorMessageBuilder.append(errorMessage);
                 return isValid;
             }
             else {
-                boolean isValid = !(isNotEmpty(planCode) && isNotEmpty(coverageId))?(iPlanAdapter.isValidPlanAge(planCode,Integer.valueOf(fromValue)) && iPlanAdapter.isValidPlanAge(planCode,Integer.valueOf(toValue))):
+                boolean isValid = !(isNotEmpty(planCode) && isNotEmpty(coverageId))?(iPlanAdapter.isValidAgeRange(planCode, Integer.valueOf(fromValue)) && iPlanAdapter.isValidAgeRange(planCode, Integer.valueOf(toValue))):
                         (iPlanAdapter.isValidCoverageAge(planCode, coverageId, Integer.valueOf(fromValue)) && iPlanAdapter.isValidCoverageAge(planCode, coverageId, Integer.valueOf(toValue)));
                 if (!isValid)
                     errorMessageBuilder.append(errorMessage);

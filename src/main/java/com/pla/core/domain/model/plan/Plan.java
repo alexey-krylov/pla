@@ -13,6 +13,7 @@ import com.pla.core.domain.exception.PlanValidationException;
 import com.pla.sharedkernel.domain.model.*;
 import com.pla.sharedkernel.identifier.BenefitId;
 import com.pla.sharedkernel.identifier.CoverageId;
+import com.pla.sharedkernel.identifier.LineOfBusinessEnum;
 import com.pla.sharedkernel.identifier.PlanId;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -279,7 +280,7 @@ public class Plan extends AbstractAnnotatedAggregateRoot<PlanId> {
     public List<Integer> getAllowedAges() {
         List<Integer> allowedAges = new ArrayList<>();
         int maxAge = this.getPlanDetail().maxEntryAge;
-        //int maxAge = getMaximumMaturityAge();
+//        int maxAge = getMaximumMaturityAge();
         int minAge = this.getPlanDetail().minEntryAge;
         while (minAge <= maxAge) {
             allowedAges.add(minAge);
@@ -288,10 +289,18 @@ public class Plan extends AbstractAnnotatedAggregateRoot<PlanId> {
         return allowedAges;
     }
 
-
     public List<Integer> getAllowedCoverageAges(CoverageId coverageId) {
         PlanCoverage planCoverage = findPlanCoverage(coverageId);
         return planCoverage.getAllowedAges();
+    }
+
+    public List<Integer> getAllowedCoverageAgeRange(CoverageId coverageId) {
+        PlanCoverage planCoverage = findPlanCoverage(coverageId);
+        if (LineOfBusinessEnum.INDIVIDUAL_LIFE.equals(this.planDetail.lineOfBusinessId)) {
+            int maxAge = getMaximumMaturityAge();
+            return planCoverage.getAllowedMaturityAgeRange(maxAge);
+        }
+        return planCoverage.getAllowedAgeRange();
     }
 
 
@@ -300,11 +309,30 @@ public class Plan extends AbstractAnnotatedAggregateRoot<PlanId> {
         return validAges.contains(age);
     }
 
+    /*
+    * While creating the underwriter document/routing level, system should accept the age till the max maturity age for Individual Life
+    * and  for Group Health and Group Life line of business ,
+    * the system accept the age till max entry age + 1 (i.e if max entry age is 50, then system should accept the age till 51)
+    * */
+    public boolean isValidAgeRange(Integer age) {
+        int maxAge = this.planDetail.getMaxEntryAge()+1;
+        if (LineOfBusinessEnum.INDIVIDUAL_LIFE.equals(this.planDetail.lineOfBusinessId)) {
+            maxAge = getMaximumMaturityAge();
+        }
+        return age >= this.planDetail.getMinEntryAge() && age <= maxAge;
+    }
+
 
     public boolean isValidCoverageAge(Integer age, CoverageId coverageId) {
         List<Integer> validAges = getAllowedCoverageAges(coverageId);
         return validAges.contains(age);
     }
+
+    public boolean isValidCoverageAgeRange(Integer age, CoverageId coverageId) {
+        List<Integer> validAges = getAllowedCoverageAgeRange(coverageId);
+        return validAges.contains(age);
+    }
+
 
     PlanCoverage findPlanCoverage(CoverageId coverageId) {
         List<PlanCoverage> planCoverages = this.coverages.stream().filter(new Predicate<PlanCoverage>() {

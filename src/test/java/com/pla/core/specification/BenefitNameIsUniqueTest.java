@@ -12,9 +12,10 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
+import org.nthdimenzion.presentation.AppUtils;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.hamcrest.core.Is.is;
+import static org.junit.Assert.*;
 import static org.mockito.Mockito.when;
 
 /**
@@ -45,4 +46,12 @@ public class BenefitNameIsUniqueTest {
         boolean alreadyExists = benefitNameIsUnique.isSatisfiedBy(benefitDto);
         assertFalse(alreadyExists);
     }
+
+    @Test
+    public void shouldReplaceTheSpecialCharactersFromTheString(){
+        String benefitName = "Death_ Benefit";
+        String replaceString = AppUtils.replaceSpecialCharactersIn(benefitName);
+        assertThat("DeathBenefit",is(replaceString));
+    }
+
 }

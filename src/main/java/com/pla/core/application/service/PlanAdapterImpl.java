@@ -178,7 +178,7 @@ public class PlanAdapterImpl implements IPlanAdapter {
             return false;
         }
         Plan plan = plans.get(0);
-        return plan.isValidCoverageAge(age, new CoverageId(coverageId));
+        return plan.isValidCoverageAgeRange(age, new CoverageId(coverageId));
     }
 
     @Override
@@ -222,6 +222,16 @@ public class PlanAdapterImpl implements IPlanAdapter {
     public boolean isPlanActive(String planCode) {
         int activePlanCount = planFinder.findActivePlanByPlanCode(planCode);
         return activePlanCount!=0;
+    }
+
+    @Override
+    public boolean isValidAgeRange(String planCode, int age) {
+        List<Plan> plans = planRepository.findPlanByCodeAndName(planCode);
+        if (isEmpty(plans)) {
+            return false;
+        }
+        Plan plan = plans.get(0);
+        return plan.isValidAgeRange(age);
     }
 
     private class PlanCoverageDetailTransformer implements Function<Plan, PlanCoverageDetailDto> {

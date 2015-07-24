@@ -160,6 +160,45 @@ public class PlanCoverage {
         return allowedAges;
     }
 
+    public List<Integer> getAllowedAgeRange() {
+        List<Integer> allowedAges = new ArrayList<>();
+        int maxAge = this.maxAge+1;
+        int minAge = this.minAge;
+        while (minAge <= maxAge) {
+            allowedAges.add(minAge);
+            minAge = minAge + 1;
+        }
+        return allowedAges;
+    }
+
+    public List<Integer> getAllowedMaturityAgeRange(int planMaturityAge) {
+        List<Integer> allowedAges = new ArrayList<>();
+        int maxAge = getMaximumMaturityAge(planMaturityAge);
+        int minAge = this.minAge;
+        while (minAge <= maxAge) {
+            allowedAges.add(minAge);
+            minAge = minAge + 1;
+        }
+        return allowedAges;
+    }
+
+    public int getMaximumMaturityAge(int planMaturityAge) {
+        int maximumMaturityAge = 0;
+        if (CoverageTermType.SPECIFIED_VALUES.equals(this.coverageTermType)) {
+            maximumMaturityAge = this.coverageTerm.getMaxMaturityAge() != null ? this.coverageTerm.getMaxMaturityAge() : 0;
+        } else if (CoverageTermType.AGE_DEPENDENT.equals(this.coverageTermType)) {
+            List<Integer> maturityAges = new ArrayList<Integer>();
+            maturityAges.addAll(this.coverageTerm.getMaturityAges());
+            Collections.sort(maturityAges);
+            maximumMaturityAge = maturityAges.get(maturityAges.size() - 1);
+        }
+        else if (CoverageTermType.POLICY_TERM.equals(this.coverageTermType)) {
+            maximumMaturityAge = planMaturityAge;
+        }
+        return maximumMaturityAge;
+    }
+
+
     private PlanCoverageBenefit findBenefit(BenefitId benefitId) {
         Optional<PlanCoverageBenefit> planCoverageBenefitOptional = this.planCoverageBenefits.stream().filter(new Predicate<PlanCoverageBenefit>() {
             @Override
