@@ -116,7 +116,7 @@ public class BranchController {
             }
         } catch (Exception e) {
             LOGGER.error("Error in assigning branch manager", e);
-            return Result.failure("Error in assigning branch manager");
+            return Result.failure(e.getMessage());
         }
         return Result.success("Branch manager updated successfully");
     }

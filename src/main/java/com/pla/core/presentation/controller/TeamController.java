@@ -58,7 +58,7 @@ public class TeamController {
     public ModelAndView viewTeams() {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("pla/core/team/viewTeam");
-        modelAndView.addObject("teamList", teamFinder.getAllActiveTeam());
+        modelAndView.addObject("teamList", teamFinder.getAllActiveTeamFulfillmentGreaterThanCurrentDate());
         return modelAndView;
     }
 
@@ -122,7 +122,7 @@ public class TeamController {
             commandGateway.sendAndWait(updateTeamCommand);
         } catch (Exception e) {
             LOGGER.error("Error in creating team", e);
-            return Result.failure("Error in updating team");
+            return Result.failure(e.getMessage());
         }
         return Result.success("Team updated successfully");
     }

@@ -36,6 +36,7 @@ public class TeamFinder {
             " INNER JOIN region r ON  tm.region_code=r.region_code \n" +
             " INNER JOIN branch b ON  tm.branch_code=b.branch_code WHERE tm.team_id=:teamId";
     public static final String FIND_ALL_ACTIVE_TEAM_QUERY = "select * from active_team_region_branch_view";
+    public static final String FIND_ALL_ACTIVE_TEAM_FULFILLMENT_GREATER_THAN_CURRENT_DATE_QUERY = "select * from active_team_team_fulfillment_greater_than_current_date";
     private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
     @Autowired
@@ -61,5 +62,9 @@ public class TeamFinder {
 
     public List<Map<String, Object>> getAllActiveTeam() {
         return namedParameterJdbcTemplate.query(FIND_ALL_ACTIVE_TEAM_QUERY, new ColumnMapRowMapper());
+    }
+
+    public List<Map<String, Object>> getAllActiveTeamFulfillmentGreaterThanCurrentDate() {
+        return namedParameterJdbcTemplate.query(FIND_ALL_ACTIVE_TEAM_FULFILLMENT_GREATER_THAN_CURRENT_DATE_QUERY, new ColumnMapRowMapper());
     }
 }

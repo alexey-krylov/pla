@@ -55,7 +55,7 @@ public class RegionController {
     public ModelAndView viewRegions() {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("pla/core/region/viewRegionalManager");
-        modelAndView.addObject("regionList", masterFinder.getAllRegion());
+        modelAndView.addObject("regionList", masterFinder.getAllRegionGreaterThanCurrentDate());
         return modelAndView;
     }
 
@@ -92,7 +92,7 @@ public class RegionController {
             regionService.associateRegionalManager(updateRegionalManagerCommand.getRegionCode(), updateRegionalManagerCommand.getEmployeeId(), updateRegionalManagerCommand.getFirstName(), updateRegionalManagerCommand.getLastName(), updateRegionalManagerCommand.getFromDate());
         } catch (Exception e) {
             LOGGER.error("Error in creating region", e);
-            return Result.failure("Error in creating region");
+            return Result.failure(e.getMessage());
         }
         return Result.success("Region manager updated successfully");
     }

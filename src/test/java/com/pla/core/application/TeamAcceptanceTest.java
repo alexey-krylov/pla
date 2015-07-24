@@ -91,7 +91,7 @@ public class TeamAcceptanceTest {
         updateTeamCommand.setEmployeeId("3456");
         updateTeamCommand.setFirstName("CI TL2");
         updateTeamCommand.setLastName("CI TL LN2");
-        updateTeamCommand.setFromDate(new LocalDate(2015,03,18));
+        updateTeamCommand.setFromDate(new LocalDate(2015, 03, 25));
         updateTeamCommand.setTeamId("1");
         updateTeamCommand.setUserDetails(userDetails);
         Boolean isSuccess = Boolean.FALSE;

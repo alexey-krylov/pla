@@ -585,15 +585,55 @@ CREATE VIEW `region_region_manger_fulfilment_view` AS
    FROM region R LEFT JOIN `region_manager_fulfillment` RF
        ON R.region_code = RF.region_code AND R.regional_manager = RF.employee_id AND RF.thru_date IS NULL);
 
+DROP VIEW IF EXISTS `region_region_manger_fulfilment_greater_than_current_date_view`;
+CREATE VIEW `region_region_manger_fulfilment_greater_than_current_date_view` AS
+  (SELECT
+     R.region_code  AS regionCode,
+     R.region_name  AS regionName,
+     RF.first_name  AS regionalManagerFirstName,
+     RF.last_name   AS regionalManagerLastName,
+     RF.from_date   AS regionalManagerFromDate,
+     RF.thru_date   AS regionalManagerThruDate,
+     RF.employee_id AS currentRegionalManager
+   FROM region R LEFT JOIN `region_manager_fulfillment` RF
+       ON R.region_code = RF.region_code
+          /* AND R.regional_manager = RF.employee_id */
+          AND ((RF.thru_date IS NULL) OR (RF.thru_date >= CURDATE())));
+
 DROP VIEW IF EXISTS `active_team_region_branch_view`;
 CREATE VIEW `active_team_region_branch_view` AS
 (SELECT tm.team_id AS teamId,tm.team_name AS teamName,tm.team_code AS teamCode,tm.current_team_leader AS currentTeamLeader,tf.first_Name AS firstName,
  tf.last_Name AS lastName,tf.from_date AS fromDate,tf.thru_date AS endDate ,b.branch_name AS branchName,r.region_name AS regionName,b.branch_code AS branchCode,r.region_code AS regionCode
  FROM team tm
    INNER JOIN team_team_leader_fulfillment tf
-     ON tm.current_team_leader = tf.employee_id AND tf.team_id = tm.team_id AND tf.thru_date IS NULL
+     ON tm.current_team_leader = tf.employee_id AND
+        tf.team_id = tm.team_id AND tf.thru_date IS NULL
  INNER JOIN region r ON  tm.region_code=r.region_code
  INNER JOIN branch b ON  tm.branch_code=b.branch_code  WHERE tm.active='1');
+
+DROP VIEW IF EXISTS `active_team_team_fulfillment_greater_than_current_date`;
+CREATE VIEW `active_team_team_fulfillment_greater_than_current_date` AS
+  (SELECT
+     tm.team_id             AS teamId,
+     tm.team_name           AS teamName,
+     tm.team_code           AS teamCode,
+     tm.current_team_leader AS currentTeamLeader,
+     tf.first_Name          AS firstName,
+     tf.last_Name           AS lastName,
+     tf.from_date           AS fromDate,
+     tf.thru_date           AS endDate,
+     b.branch_name          AS branchName,
+     r.region_name          AS regionName,
+     b.branch_code          AS branchCode,
+     r.region_code          AS regionCode
+   FROM team tm
+     INNER JOIN team_team_leader_fulfillment tf
+       ON tf.team_id = tm.team_id AND
+          /* tm.current_team_leader = tf.employee_id AND */
+          ((tf.thru_date IS NULL) OR (tf.thru_date >= CURDATE()))
+     INNER JOIN region r ON tm.region_code = r.region_code
+     INNER JOIN branch b ON tm.branch_code = b.branch_code
+   WHERE tm.active = '1');
 
 DROP VIEW IF EXISTS `commission_view`;
 CREATE VIEW `commission_view` AS

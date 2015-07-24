@@ -39,6 +39,8 @@ public class MasterFinder {
 
     public static final String FIND_ALL_REGION_QUERY = "select * from region_region_manger_fulfilment_view";
 
+    public static final String FIND_ALL_REGION_REGION_FULFILLMENT_GREATER_THAN_CURRENT_DATE_QUERY = "select * from region_region_manger_fulfilment_greater_than_current_date_view";
+
     public static final String FINA_ALL_BRANCH_QUERY = "SELECT B.branch_code AS branch_code,B.branch_name AS branchName FROM `region_branch` RB LEFT JOIN  `branch` B ON RB.branch_code =B.branch_code\n" +
             "  WHERE RB.region_code = :regionCode";
 
@@ -63,6 +65,10 @@ public class MasterFinder {
 
     public List<Map<String, Object>> getAllRegion() {
         return namedParameterJdbcTemplate.query(FIND_ALL_REGION_QUERY, new ColumnMapRowMapper());
+    }
+
+    public List<Map<String, Object>> getAllRegionGreaterThanCurrentDate() {
+        return namedParameterJdbcTemplate.query(FIND_ALL_REGION_REGION_FULFILLMENT_GREATER_THAN_CURRENT_DATE_QUERY, new ColumnMapRowMapper());
     }
 
     public List<Map<String, Object>> getBranchByRegion(String regionCode) {

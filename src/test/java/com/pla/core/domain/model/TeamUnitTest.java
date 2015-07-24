@@ -40,8 +40,8 @@ public class TeamUnitTest {
 
     @Test
     public void testCreateTeamAndTeamLead() {
-        admin.updateTeamLead(team, "aa", "employeedId2", "ss", new LocalDate(2015, 03, 17));
-        Team updatedTeam = admin.updateTeamLead(team, "employeedId3", "NTLF", "NTLL", LocalDate.now());
+        admin.updateTeamLead(team, "aa", "employeedId2", "ss", LocalDate.now().plusDays(1));
+        Team updatedTeam = admin.updateTeamLead(team, "employeedId3", "NTLF", "NTLL", LocalDate.now().plusDays(2));
         assertEquals("employeedId3", updatedTeam.getCurrentTeamLeader());
     }
 
@@ -69,7 +69,7 @@ public class TeamUnitTest {
     @Test
     public void testCreateTeamLeaderFulfillment() {
         TeamLeaderFulfillment teamLeaderFulfillment = new TeamLeaderFulfillment(new TeamLeader("12345678", "TEAMNAME", "TEAMCODE"), new LocalDate(2015, 03, 18).minusDays(1));
-        assertEquals(teamLeaderFulfillment, team.createTeamLeaderFulfillment("12345678", "TEAMNAME", "TEAMCODE", new LocalDate(2015, 03, 18).minusDays(1)));
+        assertEquals(teamLeaderFulfillment, Team.createTeamLeaderFulfillment("12345678", "TEAMNAME", "TEAMCODE", new LocalDate(2015, 03, 18).minusDays(1)));
     }
 
 

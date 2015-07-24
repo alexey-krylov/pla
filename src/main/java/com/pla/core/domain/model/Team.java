@@ -7,6 +7,7 @@
 package com.pla.core.domain.model;
 
 import com.google.common.collect.Sets;
+import com.pla.core.domain.exception.TeamDomainException;
 import lombok.*;
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
@@ -81,12 +82,21 @@ public class Team implements ICrudEntity {
     }
 
     public Team assignTeamLeader(String employeeId, String firstName, String lastName, LocalDate effectiveFrom) {
-        TeamLeaderFulfillment currentTeamFulfillment = getTeamLeaderFulfillmentForATeamLeader(this.currentTeamLeader);
-        checkArgument(currentTeamFulfillment != null);
-        this.teamLeaders = updateTeamLeaderFullfillment(this.teamLeaders, currentTeamFulfillment.getTeamLeader(), effectiveFrom.plusDays(-1));
+        TeamLeaderFulfillment currentTeamLeaderFulfillment = getTeamLeaderFulfillmentForATeamLeader(this.currentTeamLeader);
+        try {
+            checkArgument(isNewTeamLeaderFulfillmentValid(effectiveFrom, currentTeamLeaderFulfillment.getFromDate()));
+        } catch (IllegalArgumentException e) {
+            throw new TeamDomainException(firstName + " " + lastName + " from date should be greater than " + currentTeamLeaderFulfillment.getFromDate().getDayOfMonth() + "/" + currentTeamLeaderFulfillment.getFromDate().getMonthOfYear() + "/" + currentTeamLeaderFulfillment.getFromDate().getYear());
+        }
+        checkArgument(currentTeamLeaderFulfillment != null);
+        this.teamLeaders = updateTeamLeaderFullfillment(this.teamLeaders, currentTeamLeaderFulfillment.getTeamLeader(), effectiveFrom.plusDays(-1));
         this.teamLeaders.add(createTeamLeaderFulfillment(employeeId, firstName, lastName, effectiveFrom));
         this.currentTeamLeader = employeeId;
         return this;
+    }
+
+    public boolean isNewTeamLeaderFulfillmentValid(LocalDate newTeamLeaderFromDate, LocalDate currentTeamLeaderFromDate) {
+        return newTeamLeaderFromDate.isAfter(currentTeamLeaderFromDate);
     }
 
     public Set<TeamLeaderFulfillment> updateTeamLeaderFullfillment(Set<TeamLeaderFulfillment> teamLeaderFulfillments, TeamLeader teamLeaderToBeExpired, LocalDate expireDate) {

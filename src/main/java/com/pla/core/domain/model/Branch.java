@@ -2,6 +2,7 @@ package com.pla.core.domain.model;
 
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Sets;
+import com.pla.core.domain.exception.BranchDomainException;
 import lombok.*;
 import org.hibernate.annotations.Cascade;
 import org.joda.time.LocalDate;
@@ -9,6 +10,8 @@ import org.nthdimenzion.common.crud.ICrudEntity;
 
 import javax.persistence.*;
 import java.util.Set;
+
+import static com.google.common.base.Preconditions.checkArgument;
 
 /**
  * Created by User on 3/20/2015.
@@ -52,8 +55,14 @@ public class Branch implements ICrudEntity {
 
     public Branch assignBranchManager(String employeeId, String firstName, String lastName, LocalDate effectiveFrom) {
         if (currentBranchManager != null) {
+            BranchManagerFulfillment currentBranchManagerFulfillment = getBranchManagerFulfillmentForABranchManager(this.currentBranchManager);
             if (currentBranchManager.equals(employeeId)) {
                 return this;
+            }
+            try {
+                checkArgument(isNewFulfillmentValid(effectiveFrom, currentBranchManagerFulfillment.getFromDate()));
+            } catch (IllegalArgumentException e) {
+                throw new BranchDomainException(firstName + " " + lastName + " from date should be greater than " + currentBranchManagerFulfillment.getFromDate().getDayOfMonth() + "/" + currentBranchManagerFulfillment.getFromDate().getMonthOfYear() + "/" + currentBranchManagerFulfillment.getFromDate().getYear());
             }
             expireBranchManager(this.currentBranchManager, effectiveFrom.plusDays(-1));
 
@@ -66,21 +75,30 @@ public class Branch implements ICrudEntity {
 
     public Branch assignBranchBDE(String employeeId, String firstName, String lastName, LocalDate effectiveFrom) {
         if (currentBranchBdE != null) {
+            BranchBdeFulfillment currentBranchBdeFulfillment = getBranchBDEFulfillmentForABranchBDE(this.currentBranchBdE);
             if (currentBranchBdE.equals(employeeId)) {
                 return this;
+            }
+            try {
+                checkArgument(isNewFulfillmentValid(effectiveFrom, currentBranchBdeFulfillment.getFromDate()));
+            } catch (IllegalArgumentException e) {
+                throw new BranchDomainException(firstName + " " + lastName + " from date should be greater than " + currentBranchBdeFulfillment.getFromDate().getDayOfMonth() + "/" + currentBranchBdeFulfillment.getFromDate().getMonthOfYear() + "/" + currentBranchBdeFulfillment.getFromDate().getYear());
             }
             expireBranchBDE(this.currentBranchBdE, effectiveFrom.plusDays(-1));
 
         }
         BranchBde branchBde = new BranchBde(employeeId, firstName, lastName);
         BranchBdeFulfillment branchBdeFulfillment = new BranchBdeFulfillment(branchBde, effectiveFrom);
-        ;
         this.branchBDEFulfillments = addBranchBDEFulfillment(employeeId, branchBdeFulfillment);
         return this;
     }
 
+    public boolean isNewFulfillmentValid(LocalDate newFromDate, LocalDate currentFromDate) {
+        return newFromDate.isAfter(currentFromDate);
+    }
 
     public Branch expireBranchManager(String branchManagerId, LocalDate expireDate) {
+        this.currentBranchManager = null;
         BranchManagerFulfillment branchManagerFulfillment = getBranchManagerFulfillmentForABranchManager(branchManagerId);
         if (branchManagerFulfillment != null) {
             this.branchManagerFulfillments = expireBranchManagerFulfillment(this.branchManagerFulfillments, branchManagerFulfillment.getBranchManager(), expireDate);
@@ -98,6 +116,7 @@ public class Branch implements ICrudEntity {
     }
 
     public Branch expireBranchBDE(String branchBDEId, LocalDate expireDate) {
+        this.currentBranchBdE = null;
         BranchBdeFulfillment branchBDEFulfillment = getBranchBDEFulfillmentForABranchBDE(branchBDEId);
         if (branchBDEFulfillment != null) {
             this.branchBDEFulfillments = expireBranchBDEFulfillment(this.branchBDEFulfillments, branchBDEFulfillment.getBranchBde(), expireDate);

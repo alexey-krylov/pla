@@ -1,6 +1,7 @@
 package com.pla.core.domain.model;
 
 import com.google.common.collect.Sets;
+import com.pla.core.domain.exception.RegionDomainException;
 import lombok.*;
 import org.hibernate.annotations.Cascade;
 import org.joda.time.LocalDate;
@@ -54,10 +55,19 @@ public class Region implements ICrudEntity {
         RegionalManagerFulfillment regionalManagerFulfillment = new RegionalManagerFulfillment(regionalManager, effectiveFrom);
         RegionalManagerFulfillment currentRegionFulfillment = getRegionalManagerFulfillmentForARegionalManager(this.regionalManager);
         if (currentRegionFulfillment != null) {
+            try {
+                checkArgument(isNewRegionalManagerFulfillmentValid(effectiveFrom, currentRegionFulfillment.getFromDate()));
+            } catch (IllegalArgumentException e) {
+                throw new RegionDomainException(firstName + " " + lastName + " from date should be greater than " + currentRegionFulfillment.getFromDate().getDayOfMonth() + "/" + currentRegionFulfillment.getFromDate().getMonthOfYear() + "/" + currentRegionFulfillment.getFromDate().getYear());
+            }
             this.regionalManagerFulfillments = updateRegionalMangerFulfillment(this.regionalManagerFulfillments, currentRegionFulfillment.getRegionalManager(), effectiveFrom.plusDays(-1));
         }
         this.regionalManagerFulfillments = addRegionalMangerFulfillment(employeeId, regionalManagerFulfillment);
         return this;
+    }
+
+    public boolean isNewRegionalManagerFulfillmentValid(LocalDate newRegionalManagerFromDate, LocalDate currentRegionalManagerFromDate) {
+        return newRegionalManagerFromDate.isAfter(currentRegionalManagerFromDate);
     }
 
     public Set<RegionalManagerFulfillment> updateRegionalMangerFulfillment(Set<RegionalManagerFulfillment> regionalManagerFulfillments, RegionalManager regionalManagerToBeExpired,

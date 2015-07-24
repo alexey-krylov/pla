@@ -11,15 +11,15 @@ import static org.junit.Assert.assertEquals;
 public class BranchUnitTest {
     @Test
     public void givenBranchEmployeeIdItShouldAssignNewBranchManager() {
-        Branch branch = new Branch(new BranchCode("BRANCHCODE12"), new BranchName("LivingStone"), "employeeId445", null);
+        Branch branch = new Branch(new BranchCode("BRANCHCODE12"), new BranchName("LivingStone"), null, null);
         branch.assignBranchManager("213", "BRNCHMNGR FN", "BRNCHMNGR LN", LocalDate.now());
         assertEquals(branch.getBranchManagerFulfillments().size(), 1);
         assertEquals("213", branch.getCurrentBranchManager());
     }
 
     @Test
-    public void givenBranchEmployeeIdItShouldUpdateExistingBranchManagerAndExpireCurrentBranchManager() {
-        Branch branch = new Branch(new BranchCode("BRANCHCODE12"), new BranchName("LivingStone"), "employeeId445", null);
+    public void givenBranchEmployeeIdItShouldAddNewBranchManagerAndExpireCurrentBranchManager() {
+        Branch branch = new Branch(new BranchCode("BRANCHCODE12"), new BranchName("LivingStone"), null, null);
         branch.assignBranchManager("213", "BRNCHMNGR FN", "BRNCHMNGR LN", LocalDate.now());
         branch.assignBranchManager("445", "BRNCHMNGR FN2", "BRNCHMNGR LN2", LocalDate.now().plusDays(1));
         assertEquals(branch.getBranchManagerFulfillments().size(), 2);
