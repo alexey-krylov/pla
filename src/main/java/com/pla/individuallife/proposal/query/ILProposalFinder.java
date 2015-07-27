@@ -74,7 +74,7 @@ public class ILProposalFinder {
      */
     private static final String SEARCH_PLAN_BY_AGENT_IDS = "SELECT DISTINCT C.* FROM AGENT A JOIN agent_authorized_plan b " +
             "ON A.`agent_id`=B.`agent_id` JOIN plan_coverage_benefit_assoc C " +
-            "ON B.`plan_id`=C.`plan_id` where A.agent_id IN (:agentIds) and c.line_of_business=:lineOfBusiness group by A.agent_id";
+            "ON B.`plan_id`=C.`plan_id` where A.agent_id IN (:agentIds) and c.line_of_business=:lineOfBusiness group by C.plan_id";
     private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
     private MongoTemplate mongoTemplate;
     @Autowired
@@ -346,6 +346,7 @@ public class ILProposalFinder {
             oldRoutinglevel =currentRoutinglevel;
             currentRoutinglevel = findRoute(routingLevelDetailDto, proposal, age);
             if( oldRoutinglevel!= null && currentRoutinglevel!= null && oldRoutinglevel.ordinal() < currentRoutinglevel.ordinal()) currentRoutinglevel = oldRoutinglevel;
+            if(currentRoutinglevel == null && oldRoutinglevel != null) currentRoutinglevel = oldRoutinglevel;
         }
         return  currentRoutinglevel;
 
