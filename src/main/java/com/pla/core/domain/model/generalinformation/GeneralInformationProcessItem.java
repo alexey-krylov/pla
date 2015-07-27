@@ -1,3 +1,4 @@
+
 package com.pla.core.domain.model.generalinformation;
 
 import com.google.common.collect.Lists;
@@ -14,7 +15,7 @@ import java.util.Map;
  */
 public enum GeneralInformationProcessItem {
 
-    DEFAULT{
+    QUOTATION{
         @Override
         public List<Map<String, Object>> getOrganizationLevelProcessInformationItem(LineOfBusinessEnum lineOfBusinessId) {
             List<Map<String,Object>> productLineProcessList = Lists.newArrayList();
@@ -24,12 +25,51 @@ public enum GeneralInformationProcessItem {
                     Map<String,Object> quotationProcessItems = Maps.newLinkedHashMap();
                     quotationProcessItems.put("productLineProcessItem",productLineProcessType);
                     quotationProcessItems.put("value",0);
+                    quotationProcessItems.put("description",productLineProcessType.toString());
+                    quotationProcessItems.put("fullDescription",productLineProcessType.getFullDescriptionByProcess("Quotation",""));
                     productLineProcessList.add(quotationProcessItems);
                 }
             }
             return productLineProcessList;
         }
     },
+    ENROLLMENT{
+        @Override
+        public List<Map<String, Object>> getOrganizationLevelProcessInformationItem(LineOfBusinessEnum lineOfBusinessId) {
+            List<Map<String,Object>> productLineProcessList = Lists.newArrayList();
+            List<ProductLineProcessType> productLineProcessTypes = Arrays.asList(ProductLineProcessType.EARLY_DEATH_CRITERIA, ProductLineProcessType.LAPSE, ProductLineProcessType.TYPE, ProductLineProcessType.CHARGES, ProductLineProcessType.INTEREST);
+            for (ProductLineProcessType productLineProcessType : ProductLineProcessType.values()){
+                if (!productLineProcessTypes.contains(productLineProcessType)){
+                    Map<String,Object> quotationProcessItems = Maps.newLinkedHashMap();
+                    quotationProcessItems.put("productLineProcessItem",productLineProcessType);
+                    quotationProcessItems.put("value",0);
+                    quotationProcessItems.put("description",productLineProcessType.toString());
+                    quotationProcessItems.put("fullDescription",productLineProcessType.getFullDescriptionByProcess("New business/Enrollment ",""));
+                    productLineProcessList.add(quotationProcessItems);
+                }
+            }
+            return productLineProcessList;
+        }
+    },
+    ENDORSEMENT{
+        @Override
+        public List<Map<String, Object>> getOrganizationLevelProcessInformationItem(LineOfBusinessEnum lineOfBusinessId) {
+            List<Map<String,Object>> productLineProcessList = Lists.newArrayList();
+            List<ProductLineProcessType> productLineProcessTypes = Arrays.asList(ProductLineProcessType.EARLY_DEATH_CRITERIA, ProductLineProcessType.LAPSE, ProductLineProcessType.TYPE, ProductLineProcessType.CHARGES, ProductLineProcessType.INTEREST);
+            for (ProductLineProcessType productLineProcessType : ProductLineProcessType.values()){
+                if (!productLineProcessTypes.contains(productLineProcessType)){
+                    Map<String,Object> quotationProcessItems = Maps.newLinkedHashMap();
+                    quotationProcessItems.put("productLineProcessItem",productLineProcessType);
+                    quotationProcessItems.put("value",0);
+                    quotationProcessItems.put("description",productLineProcessType.toString());
+                    quotationProcessItems.put("fullDescription",productLineProcessType.getFullDescriptionByProcess("Endorsement ",""));
+                    productLineProcessList.add(quotationProcessItems);
+                }
+            }
+            return productLineProcessList;
+        }
+    },
+
     REINSTATEMENT{
         @Override
         public List<Map<String, Object>> getOrganizationLevelProcessInformationItem(LineOfBusinessEnum lineOfBusinessId) {
@@ -41,6 +81,8 @@ public enum GeneralInformationProcessItem {
                     Map<String,Object> quotationProcessItems = Maps.newLinkedHashMap();
                     quotationProcessItems.put("productLineProcessItem",productLineProcessType);
                     quotationProcessItems.put("value",0);
+                    quotationProcessItems.put("description",productLineProcessType.toString());
+                    quotationProcessItems.put("fullDescription",productLineProcessType.getFullDescriptionByProcess("Reinstatement",""));
                     productLineProcessList.add(quotationProcessItems);
                 }
             }
@@ -58,13 +100,32 @@ public enum GeneralInformationProcessItem {
                     Map<String,Object> quotationProcessItems = Maps.newLinkedHashMap();
                     quotationProcessItems.put("productLineProcessItem",productLineProcessType);
                     quotationProcessItems.put("value",0);
+                    quotationProcessItems.put("description",productLineProcessType.toString());
+                    quotationProcessItems.put("fullDescription",productLineProcessType.getFullDescriptionByProcess("Surrender",""));
                     productLineProcessList.add(quotationProcessItems);
                 }
             }
             return productLineProcessList;
         }
     },
-
+    MATURITY{
+        @Override
+        public List<Map<String, Object>> getOrganizationLevelProcessInformationItem(LineOfBusinessEnum lineOfBusinessId) {
+            List<Map<String,Object>> productLineProcessList = Lists.newArrayList();
+            List<ProductLineProcessType> productLineProcessTypes = Arrays.asList(ProductLineProcessType.EARLY_DEATH_CRITERIA, ProductLineProcessType.LAPSE, ProductLineProcessType.TYPE, ProductLineProcessType.CHARGES, ProductLineProcessType.INTEREST);
+            for (ProductLineProcessType productLineProcessType : ProductLineProcessType.values()){
+                if (!productLineProcessTypes.contains(productLineProcessType)){
+                    Map<String,Object> quotationProcessItems = Maps.newLinkedHashMap();
+                    quotationProcessItems.put("productLineProcessItem",productLineProcessType);
+                    quotationProcessItems.put("value",0);
+                    quotationProcessItems.put("description",productLineProcessType.toString());
+                    quotationProcessItems.put("fullDescription",productLineProcessType.getFullDescriptionByProcess("Maturity",""));
+                    productLineProcessList.add(quotationProcessItems);
+                }
+            }
+            return productLineProcessList;
+        }
+    },
     CLAIM{
         @Override
         public List<Map<String, Object>> getOrganizationLevelProcessInformationItem(LineOfBusinessEnum lineOfBusinessId) {
@@ -74,6 +135,8 @@ public enum GeneralInformationProcessItem {
                     Map<String, Object> quotationProcessItems = Maps.newLinkedHashMap();
                     quotationProcessItems.put("productLineProcessItem", productLineProcessType);
                     quotationProcessItems.put("value", 0);
+                    quotationProcessItems.put("description",productLineProcessType.toString());
+                    quotationProcessItems.put("fullDescription",productLineProcessType.getFullDescriptionByProcess("Claim",""));
                     productLineProcessList.add(quotationProcessItems);
                 }
             }
@@ -88,6 +151,8 @@ public enum GeneralInformationProcessItem {
                 Map<String,Object> quotationProcessItems = Maps.newLinkedHashMap();
                 quotationProcessItems.put("policyFeeProcessType", policyFeeProcessType);
                 quotationProcessItems.put("policyFee",0);
+                quotationProcessItems.put("description", policyFeeProcessType.toString());
+                quotationProcessItems.put("fullDescription",policyFeeProcessType.toString());
                 productLineProcessList.add(quotationProcessItems);
             }
             return productLineProcessList;
@@ -101,6 +166,8 @@ public enum GeneralInformationProcessItem {
                 Map<String,Object> quotationProcessItems = Maps.newLinkedHashMap();
                 quotationProcessItems.put("policyProcessMinimumLimitType", policyProcessMinimumLimitType);
                 quotationProcessItems.put("value",0);
+                quotationProcessItems.put("description", policyProcessMinimumLimitType.toString());
+                quotationProcessItems.put("fullDescription",policyProcessMinimumLimitType.toString());
                 productLineProcessList.add(quotationProcessItems);
             }
             return productLineProcessList;
@@ -115,6 +182,8 @@ public enum GeneralInformationProcessItem {
                     Map<String,Object> quotationProcessItems = Maps.newLinkedHashMap();
                     quotationProcessItems.put("productLineProcessItem",productLineProcessType);
                     quotationProcessItems.put("value",0);
+                    quotationProcessItems.put("description", productLineProcessType.toString());
+                    quotationProcessItems.put("fullDescription",productLineProcessType.getFullDescriptionByProcess("Premium Follow Up", ""));
                     productLineProcessList.add(quotationProcessItems);
                 }
             }
@@ -129,6 +198,8 @@ public enum GeneralInformationProcessItem {
                 Map<String,Object> quotationProcessItems = Maps.newLinkedHashMap();
                 quotationProcessItems.put("modalFactorItem", modalFactorItem);
                 quotationProcessItems.put("value",0);
+                quotationProcessItems.put("description", modalFactorItem.getDescription());
+                quotationProcessItems.put("fullDescription", modalFactorItem.getDescription());
                 organizationFactorList.add(quotationProcessItems);
             }
             return organizationFactorList;
@@ -142,6 +213,8 @@ public enum GeneralInformationProcessItem {
                 Map<String,Object> quotationProcessItems = Maps.newLinkedHashMap();
                 quotationProcessItems.put("discountFactorItem", discountFactorItem);
                 quotationProcessItems.put("value",0);
+                quotationProcessItems.put("description", discountFactorItem.getDescription());
+                quotationProcessItems.put("fullDescription",discountFactorItem.getDescription());
                 organizationFactorList.add(quotationProcessItems);
             }
             return organizationFactorList;
@@ -155,6 +228,8 @@ public enum GeneralInformationProcessItem {
                 Map<String,Object> quotationProcessItems = Maps.newLinkedHashMap();
                 quotationProcessItems.put("tax", tax);
                 quotationProcessItems.put("value",0);
+                quotationProcessItems.put("description", tax.getDescription());
+                quotationProcessItems.put("fullDescription", tax.getDescription());
                 organizationFactorList.add(quotationProcessItems);
             }
             return organizationFactorList;

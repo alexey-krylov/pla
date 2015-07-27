@@ -19,4 +19,8 @@ public enum PolicyFeeProcessType {
         this.description = description;
     }
 
+    @Override
+    public String toString() {
+        return   description ;
+    }
 }

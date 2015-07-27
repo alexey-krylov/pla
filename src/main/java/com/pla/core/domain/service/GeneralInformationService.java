@@ -26,9 +26,9 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 import static com.google.common.base.Preconditions.checkArgument;
 import static org.nthdimenzion.utils.UtilValidator.isEmpty;
@@ -220,14 +220,41 @@ public class GeneralInformationService {
         return organizationInformationProcess;
     }
 
-    public List<GeneralInformationProcessDto> getProductLineProcessItems(){
-        List<GeneralInformationProcessDto> productLineProcessList = Lists.newArrayList();
-        productLineProcessList = getPolicyFeeProcessType(productLineProcessList);
-        productLineProcessList = getProductLineProcessType(productLineProcessList);
-        productLineProcessList = getPolicyProcessMinimumLimitType(productLineProcessList);
-        return productLineProcessList;
+    public List<Map<String,Object>> getProductLineProcessItems(){
+        List<Map<String,Object>> processItemList = Lists.newArrayList();
+        processItemList.add(populateProcessItemDetail("QUOTATION","Quotation"));
+        processItemList.add(populateProcessItemDetail("ENROLLMENT","New business/Enrollment"));
+        processItemList.add(populateProcessItemDetail("REINSTATEMENT","Reinstatement"));
+        processItemList.add(populateProcessItemDetail("ENDORSEMENT","Endorsement"));
+        processItemList.add(populateProcessItemDetail("CLAIM","Claim"));
+        processItemList.add(populateProcessItemDetail("MATURITY","Maturity"));
+        processItemList.add(populateProcessItemDetail("SURRENDER","Surrender"));
+        Map<String,Object> processItemMap = Maps.newLinkedHashMap();
+        processItemMap.put("process", "POLICY_FEE");
+        processItemMap.put("processItem", getPolicyFeeProcessType());
+        processItemList.add(processItemMap);
+        processItemMap = Maps.newLinkedHashMap();
+        processItemMap.put("process", "POLICY_PROCESS_MINIMUM_LIMIT");
+        processItemMap.put("processItem", getPolicyProcessMinimumLimitType());
+        processItemList.add(processItemMap);
+        return processItemList;
     }
 
+    public Map<String,Object> populateProcessItemDetail(String processType,String description){
+        Map<String,Object> processItemMap = Maps.newLinkedHashMap();
+        processItemMap.put("process",processType);
+        processItemMap.put("processItem", processLineItemFullDescriptionBy(description));
+        return processItemMap;
+    }
+
+    public List<GeneralInformationProcessDto> processLineItemFullDescriptionBy(String process){
+        return Arrays.asList(ProductLineProcessType.values()).parallelStream().map(new Function<ProductLineProcessType, GeneralInformationProcessDto>() {
+            @Override
+            public GeneralInformationProcessDto apply(ProductLineProcessType productLineProcessType) {
+                return new GeneralInformationProcessDto(productLineProcessType.name(),productLineProcessType.getDescription(),productLineProcessType.getFullDescriptionByProcess(process,""));
+            }
+        }).collect(Collectors.toList());
+    }
     private List<GeneralInformationProcessDto> getModalFactorItems(){
         List<GeneralInformationProcessDto> organizationProcessList = Lists.newArrayList();
         for (ModalFactorItem modalFactorItem : ModalFactorItem.values()){
@@ -250,32 +277,24 @@ public class GeneralInformationService {
         return organizationProcessList;
     }
 
-    private  List<GeneralInformationProcessDto> getPolicyFeeProcessType(List<GeneralInformationProcessDto> productLineProcessList ){
+    private List<GeneralInformationProcessDto> getPolicyFeeProcessType(){
+        List<GeneralInformationProcessDto> productLineProcessList = Lists.newArrayList();
         for(PolicyFeeProcessType policyFeeProcessType : PolicyFeeProcessType.values()){
-            productLineProcessList.add(transformProductLineProcessItem(policyFeeProcessType.name(),policyFeeProcessType.getDescription(),policyFeeProcessType.getFullDescription()));
+            productLineProcessList.add(transformProductLineProcessItem(policyFeeProcessType.name(),policyFeeProcessType.getDescription(),policyFeeProcessType.getDescription()));
         }
         return productLineProcessList;
     }
 
-    private  List<GeneralInformationProcessDto> getProductLineProcessType(List<GeneralInformationProcessDto> productLineProcessList){
-        for(ProductLineProcessType productLineProcessType : ProductLineProcessType.values()){
-            productLineProcessList.add(transformProductLineProcessItem(productLineProcessType.name(),productLineProcessType.getDescription(),productLineProcessType.getFullDescription()));
-        }
-        return productLineProcessList;
-    }
-
-    private List<GeneralInformationProcessDto> getPolicyProcessMinimumLimitType(List<GeneralInformationProcessDto> productLineProcessList ){
+    private List<GeneralInformationProcessDto> getPolicyProcessMinimumLimitType(){
+        List<GeneralInformationProcessDto> productLineProcessList = Lists.newArrayList();
         for(PolicyProcessMinimumLimitType minimumLimitType :PolicyProcessMinimumLimitType.values()){
-            productLineProcessList.add(transformProductLineProcessItem(minimumLimitType.name(),minimumLimitType.getDescription(),minimumLimitType.getFullDescription()));
+            productLineProcessList.add(transformProductLineProcessItem(minimumLimitType.name(),minimumLimitType.getDescription(),minimumLimitType.getDescription()));
         }
         return productLineProcessList;
     }
 
     private GeneralInformationProcessDto transformProductLineProcessItem(String type,String description,String fullDescription){
-        GeneralInformationProcessDto generalInformationProcessDto = new GeneralInformationProcessDto();
-        generalInformationProcessDto.setType(type);
-        generalInformationProcessDto.setDescription(description);
-        generalInformationProcessDto.setFullDescription(fullDescription);
+        GeneralInformationProcessDto generalInformationProcessDto = new GeneralInformationProcessDto(type,description,fullDescription);
         return generalInformationProcessDto;
     }
 
@@ -297,33 +316,71 @@ public class GeneralInformationService {
             productLineInformationList.add(getIndividualInsuranceProductLineInformation());
             return productLineInformationList;
         }
-        for (Map productLineInformationMap: productLineInformation){
+        for (Map productLineInformationMap : productLineInformation){
             Map<String,Object> productLineInformationByBusinessId = Maps.newLinkedHashMap();
             productLineInformationByBusinessId.put("productLine",productLineInformationMap.get("productLine"));
             productLineInformationByBusinessId.put("productLineInformationId", productLineInformationMap.get("productLineInformationId"));
             Map quotationMap = (Map) productLineInformationMap.get("quotationProcessInformation");
-            productLineInformationByBusinessId.put("quotationProcessItems", quotationMap.get("quotationProcessItems"));
+            productLineInformationByBusinessId.put("quotationProcessItems", ((List) quotationMap.get("quotationProcessItems")).parallelStream().map(new ProcessTransformation("Quotation")).collect(Collectors.toList()));
             Map enrollmentMap = (Map) productLineInformationMap.get("enrollmentProcessInformation");
-            productLineInformationByBusinessId.put("enrollmentProcessItems",enrollmentMap.get("enrollmentProcessItems") );
+            productLineInformationByBusinessId.put("enrollmentProcessItems",((List)enrollmentMap.get("enrollmentProcessItems")).parallelStream().map(new ProcessTransformation("New business/Enrollment")).collect(Collectors.toList()));
             Map reinstatementMap = (Map) productLineInformationMap.get("reinstatementProcessInformation");
-            productLineInformationByBusinessId.put("reinstatementProcessItems",reinstatementMap.get("reinstatementProcessItems") );
+            productLineInformationByBusinessId.put("reinstatementProcessItems",((List)reinstatementMap.get("reinstatementProcessItems")).parallelStream().map(new ProcessTransformation("Reinstatement")).collect(Collectors.toList()));
             Map  endorsementMap = (Map) productLineInformationMap.get("endorsementProcessInformation");
-            productLineInformationByBusinessId.put("endorsementProcessItems",endorsementMap.get("endorsementProcessItems") );
+            productLineInformationByBusinessId.put("endorsementProcessItems",((List)endorsementMap.get("endorsementProcessItems")).parallelStream().map(new ProcessTransformation("Endorsement")).collect(Collectors.toList()));
             Map claimMap = (Map) productLineInformationMap.get("claimProcessInformation");
-            productLineInformationByBusinessId.put("claimProcessItems",claimMap.get("claimProcessItems"));
+            productLineInformationByBusinessId.put("claimProcessItems",((List)claimMap.get("claimProcessItems")).parallelStream().map(new ProcessTransformation("Claim")).collect(Collectors.toList()));
             Map policyFeeMap = (Map) productLineInformationMap.get("policyFeeProcessInformation");
-            productLineInformationByBusinessId.put("policyFeeProcessItems", policyFeeMap.get("policyFeeProcessItems"));
+            productLineInformationByBusinessId.put("policyFeeProcessItems",((List) policyFeeMap.get("policyFeeProcessItems")).parallelStream().map(new Function<Map, Map>() {
+                @Override
+                public Map apply(Map map) {
+                    PolicyFeeProcessType policyFeeProcessType = PolicyFeeProcessType.valueOf((String)map.get("policyFeeProcessType"));
+                    map.put("description",policyFeeProcessType.getDescription());
+                    map.put("fullDescription",policyFeeProcessType.getDescription());
+                    return map;
+                }
+            }).collect(Collectors.toList()));
             Map minimumLimitMap = (Map) productLineInformationMap.get("policyProcessMinimumLimit");
-            productLineInformationByBusinessId.put("policyProcessMinimumLimitItems",minimumLimitMap.get("policyProcessMinimumLimitItems"));
+            productLineInformationByBusinessId.put("policyProcessMinimumLimitItems",((List<Map>)minimumLimitMap.get("policyProcessMinimumLimitItems")).parallelStream().map(new Function<Map, Map>() {
+                @Override
+                public Map apply(Map map) {
+                    PolicyProcessMinimumLimitType policyProcessMinimumLimitType = PolicyProcessMinimumLimitType.valueOf((String)map.get("policyProcessMinimumLimitType"));
+                    map.put("description",policyProcessMinimumLimitType.getDescription());
+                    map.put("fullDescription",policyProcessMinimumLimitType.getDescription());
+                    return map;
+                }
+            }).collect(Collectors.toList()));
             Map surrenderMap  = (Map) productLineInformationMap.get("surrenderProcessInformation");
-            productLineInformationByBusinessId.put("surrenderProcessItems",surrenderMap.get("surrenderProcessItems"));
+            productLineInformationByBusinessId.put("surrenderProcessItems", ((List) surrenderMap.get("surrenderProcessItems")).parallelStream().map(new ProcessTransformation("Surrender")).collect(Collectors.toList()));
             Map  maturityMap = (Map) productLineInformationMap.get("maturityProcessInformation");
-            productLineInformationByBusinessId.put("maturityProcessItems",maturityMap.get("maturityProcessItems"));
-            productLineInformationByBusinessId.put("premiumFollowUpFrequency", productLineInformationMap.get("premiumFollowUpFrequency"));
+            productLineInformationByBusinessId.put("maturityProcessItems",((List)maturityMap.get("maturityProcessItems")).parallelStream().map(new ProcessTransformation("Maturity")).collect(Collectors.toList()));
+            productLineInformationByBusinessId.put("premiumFollowUpFrequency", ((List<Map>)productLineInformationMap.get("premiumFollowUpFrequency")).parallelStream().map(new Function<Map, Map>() {
+                @Override
+                public Map apply(Map map) {
+                    map.put("premiumFollowUpFrequencyItems",((List) map.get("premiumFollowUpFrequencyItems")).parallelStream().map(new ProcessTransformation("Premium Frequency Follow Up")).collect(Collectors.toList()));
+                    return map;
+                }
+            }).collect(Collectors.toList()));
             Map  discountFactorMap = (Map) productLineInformationMap.get("discountFactorProcessInformation");
-            productLineInformationByBusinessId.put("discountFactorItems",discountFactorMap.get("discountFactorItems"));
+            productLineInformationByBusinessId.put("discountFactorItems",((List)discountFactorMap.get("discountFactorItems")).parallelStream().map(new Function<Map, Map>() {
+                @Override
+                public Map apply(Map map) {
+                    DiscountFactorItem discountFactorItem = DiscountFactorItem.valueOf((String)map.get("discountFactorItem"));
+                    map.put("description",discountFactorItem.getDescription());
+                    map.put("fullDescription",discountFactorItem.getDescription());
+                    return map;
+                }
+            }).collect(Collectors.toList()));
             Map  modalFactorMap = (Map) productLineInformationMap.get("modalFactorProcessInformation");
-            productLineInformationByBusinessId.put("modelFactorItems",modalFactorMap.get("modelFactorItems"));
+            productLineInformationByBusinessId.put("modelFactorItems",((List)modalFactorMap.get("modelFactorItems")).parallelStream().map(new Function<Map, Map>() {
+                @Override
+                public Map apply(Map map) {
+                    ModalFactorItem modalFactorItem = ModalFactorItem.valueOf((String)map.get("modalFactorItem"));
+                    map.put("description",modalFactorItem.getDescription());
+                    map.put("fullDescription",modalFactorItem.getDescription());
+                    return map;
+                }
+            }).collect(Collectors.toList()));
             productLineInformationByBusinessId.put("ageLoadingFactor",productLineInformationMap.get("ageLoadingFactor"));
             productLineInformationByBusinessId.put("moratoriumPeriod",productLineInformationMap.get("moratoriumPeriod"));
             productLineInformationList.add(productLineInformationByBusinessId);
@@ -403,15 +460,15 @@ public class GeneralInformationService {
     }
 
     private Map getProductLineGeneralInformation(Map productLineInformationMap, LineOfBusinessEnum lineOfBusinessId) {
-        productLineInformationMap.put("quotationProcessItems", GeneralInformationProcessItem.DEFAULT.getOrganizationLevelProcessInformationItem(lineOfBusinessId));
-        productLineInformationMap.put("enrollmentProcessItems",  GeneralInformationProcessItem.DEFAULT.getOrganizationLevelProcessInformationItem(lineOfBusinessId));
+        productLineInformationMap.put("quotationProcessItems", GeneralInformationProcessItem.QUOTATION.getOrganizationLevelProcessInformationItem(lineOfBusinessId));
+        productLineInformationMap.put("enrollmentProcessItems",  GeneralInformationProcessItem.ENROLLMENT.getOrganizationLevelProcessInformationItem(lineOfBusinessId));
         productLineInformationMap.put("reinstatementProcessItems",  GeneralInformationProcessItem.REINSTATEMENT.getOrganizationLevelProcessInformationItem(lineOfBusinessId));
-        productLineInformationMap.put("endorsementProcessItems", GeneralInformationProcessItem.DEFAULT.getOrganizationLevelProcessInformationItem(lineOfBusinessId));
+        productLineInformationMap.put("endorsementProcessItems", GeneralInformationProcessItem.ENDORSEMENT.getOrganizationLevelProcessInformationItem(lineOfBusinessId));
         productLineInformationMap.put("claimProcessItems", GeneralInformationProcessItem.CLAIM.getOrganizationLevelProcessInformationItem(lineOfBusinessId));
         productLineInformationMap.put("policyFeeProcessItems",GeneralInformationProcessItem.POLICY_FEE.getOrganizationLevelProcessInformationItem(lineOfBusinessId));
         productLineInformationMap.put("policyProcessMinimumLimitItems", GeneralInformationProcessItem.MINIMUM_LIMIT.getOrganizationLevelProcessInformationItem(lineOfBusinessId));
         productLineInformationMap.put("surrenderProcessItems", GeneralInformationProcessItem.SURRENDER.getOrganizationLevelProcessInformationItem(lineOfBusinessId));
-        productLineInformationMap.put("maturityProcessItems", GeneralInformationProcessItem.DEFAULT.getOrganizationLevelProcessInformationItem(lineOfBusinessId));
+        productLineInformationMap.put("maturityProcessItems", GeneralInformationProcessItem.MATURITY.getOrganizationLevelProcessInformationItem(lineOfBusinessId));
         productLineInformationMap.put("premiumFollowUpFrequency", transformPremiumFollowUp(lineOfBusinessId));
         productLineInformationMap.put("modelFactorItems",GeneralInformationProcessItem.MODAL_FACTOR.getOrganizationLevelProcessInformationItem(lineOfBusinessId));
         productLineInformationMap.put("discountFactorItems",GeneralInformationProcessItem.DISCOUNT_FACTOR.getOrganizationLevelProcessInformationItem(lineOfBusinessId));
@@ -446,5 +503,19 @@ public class GeneralInformationService {
             return organizationGeneralInformation.getTheServiceTaxAmount();
         }
         return BigDecimal.ZERO;
+    }
+
+    private class ProcessTransformation implements Function<Map, Map> {
+        private String process;
+        public ProcessTransformation(String process) {
+            this.process = process;
+        }
+        @Override
+        public Map apply(Map map) {
+            String productLineProcessType = (String) map.get("productLineProcessItem");
+            map.put("description",ProductLineProcessType.valueOf(productLineProcessType).toString());
+            map.put("fullDescription",ProductLineProcessType.valueOf(productLineProcessType).getFullDescriptionByProcess(process, ""));
+            return map;
+        }
     }
 }

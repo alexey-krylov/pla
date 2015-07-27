@@ -15,4 +15,11 @@ public class GeneralInformationProcessDto {
     private String description;
 
     private String fullDescription;
+
+    public GeneralInformationProcessDto(String type, String description,String fullDescription) {
+        this.type  = type;
+        this.description = description;
+        this.fullDescription = fullDescription;
+
+    }
 }

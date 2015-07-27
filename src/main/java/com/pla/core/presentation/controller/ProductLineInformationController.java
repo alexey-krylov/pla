@@ -3,7 +3,6 @@ package com.pla.core.presentation.controller;
 import com.pla.core.domain.exception.GeneralInformationException;
 import com.pla.core.domain.service.GeneralInformationService;
 import com.pla.core.dto.GeneralInformationDto;
-import com.pla.core.dto.GeneralInformationProcessDto;
 import org.nthdimenzion.presentation.Result;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -45,7 +44,7 @@ public class ProductLineInformationController {
 
     @RequestMapping(value = "/getproductlineprocessitem", method = RequestMethod.GET)
     @ResponseBody
-    public  List<GeneralInformationProcessDto> getProductLineInformationItem(){
+    public List<Map<String, Object>> getProductLineInformationItem(){
         return generalInformationService.getProductLineProcessItems();
     }
 
