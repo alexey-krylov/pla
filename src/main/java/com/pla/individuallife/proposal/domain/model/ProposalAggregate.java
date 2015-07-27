@@ -278,13 +278,13 @@ public class ProposalAggregate extends AbstractAnnotatedAggregateRoot<ProposalId
         }
     }
 
-    public void routeToNextLevel(UserDetails userDetails, String comment, ILProposalStatus status) {
+    public void routeToNextLevel(UserDetails userDetails, String comment, ILProposalStatus status, RoutingLevel routingLevel) {
         boolean hasProposalApprovalRole = hasIndividualLifeProposalApproverRole(userDetails.getAuthorities());
         if (!hasProposalApprovalRole) {
             throw new AuthorizationServiceException("User does not have Individual Life Proposal Approval (INDIVIDUAL_LIFE_PROPOSAL_APPROVER) authority");
         }
         Preconditions.checkArgument(hasProposalApprovalRole);
-        RoutingLevel nextRoutingLevel = getRoutinglevel().getNext();
+        RoutingLevel nextRoutingLevel = routingLevel.getNext();
         Preconditions.checkNotNull(nextRoutingLevel);
         this.routinglevel = nextRoutingLevel;
         this.proposalStatus = status;

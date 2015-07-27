@@ -226,7 +226,7 @@ public class ILProposalCommandHandler {
     @CommandHandler
     public void routeToNextLevel(ILProposalUnderwriterNextLevelCommand cmd) {
         ProposalAggregate aggregate = ilProposalMongoRepository.load(new ProposalId(cmd.getProposalId()));
-        aggregate.routeToNextLevel(cmd.getUserDetails(), cmd.getComment(), cmd.getStatus());
+        aggregate.routeToNextLevel(cmd.getUserDetails(), cmd.getComment(), cmd.getStatus(), cmd.getRoutingLevel());
     }
 
 
