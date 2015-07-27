@@ -62,7 +62,7 @@ public class ProposalAggregate extends AbstractAnnotatedAggregateRoot<ProposalId
     private AgentCommissionShareModel agentCommissionShareModel;
     private AdditionalDetails additionaldetails;
     private PremiumPaymentDetails premiumPaymentDetails;
-    private Set<ILProposerDocument> proposerDocuments;
+    private Set<ILProposerDocument> proposalDocuments;
 
     private ILProposalStatus proposalStatus;
     private DateTime submittedOn;
@@ -246,9 +246,9 @@ public class ProposalAggregate extends AbstractAnnotatedAggregateRoot<ProposalId
     }
 
     // TODO WIll additional documents also be followed up
-    public void updateWithDocuments(Set<ILProposerDocument> proposerDocuments, UserDetails userDetails) {
+    public void updateWithDocuments(Set<ILProposerDocument> proposalDocuments, UserDetails userDetails) {
         checkAuthorization(userDetails);
-        this.proposerDocuments = proposerDocuments;
+        this.proposalDocuments = proposalDocuments;
         // raise event to store document in client BC
     }
 

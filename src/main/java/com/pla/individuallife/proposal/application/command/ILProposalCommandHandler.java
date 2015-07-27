@@ -192,7 +192,7 @@ public class ILProposalCommandHandler {
     @CommandHandler
     public void uploadMandatoryDocument(ILProposalDocumentCommand cmd) throws IOException {
         ProposalAggregate aggregate = ilProposalMongoRepository.load(new ProposalId(cmd.getProposalId()));
-        Set<ILProposerDocument> documents = aggregate.getProposerDocuments();
+        Set<ILProposerDocument> documents = aggregate.getProposalDocuments();
         if (isEmpty(documents)) {
             documents = Sets.newHashSet();
         }
