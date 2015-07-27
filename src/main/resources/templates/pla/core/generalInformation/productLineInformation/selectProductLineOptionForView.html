@@ -71,6 +71,13 @@
 
 <div class="container ng-cloak" ng-Controller="ViewGroupHealthLevelInformationController" ng-show="groupHealth">
     <div class="row">
+        <div class="col-lg-12" style="text-align: center;margin-top:10px;margin-bottom: 10px;">
+
+            <button type="button" class="btn btn-primary btn-xs" style="float:left;"  ng-click="reloadPage()">Back</button>
+
+        </div>
+    </div>
+    <div class="row">
         <div class="col-lg-12">
             <div class="panel panel-primary">
                 <div class="panel-heading">
@@ -94,7 +101,7 @@
                                 <div class="panel-body">
                                     <div class="row">
                                         <div class="form-group col-md-4" ng-repeat="quotationProcessItems in items.quotationProcessItems">
-                                            <label class="control-label"  data-placement="top"  ng-bind="getFieldName(quotationProcessItems.productLineProcessItem)"></label>
+                                            <label class="control-label"  data-placement="top" data-toggle="tooltip" tooltip="{{quotationProcessItems.fullDescription}}"   >{{quotationProcessItems.description}}</label>
                                             <p class="input-group" >
                                                 <input type="text" class="form-control input-sm"  value="{{quotationProcessItems.value}}" readonly="true"/>
                                             </p>
@@ -117,7 +124,7 @@
 
                                     <div class="row">
                                         <div class="form-group col-md-4" ng-repeat="enrollmentProcessItems in items.enrollmentProcessItems">
-                                            <label class="control-label"   data-placement="top"  ng-bind="getFieldName(enrollmentProcessItems.productLineProcessItem)"></label>
+                                            <label class="control-label"   data-placement="top" data-toggle="tooltip" tooltip="{{enrollmentProcessItems.fullDescription}}" >{{enrollmentProcessItems.description}}</label>
                                             <p class="input-group">
                                                 <input type="text" class="form-control input-sm"  value="{{enrollmentProcessItems.value}}" readonly="true"/>
                                             </p>
@@ -141,7 +148,7 @@
                                 <div class="panel-body">
                                     <div class="row">
                                         <div class="form-group col-md-4" ng-repeat="premiumFollowUpFrequencyItems in items.premiumFollowUpFrequency[0].premiumFollowUpFrequencyItems">
-                                            <label class="control-label"   data-placement="top"  ng-bind="getFieldName(premiumFollowUpFrequencyItems.productLineProcessItem)"></label>
+                                            <label class="control-label"  data-placement="top" data-toggle="tooltip" tooltip="{{premiumFollowUpFrequencyItems.fullDescription}}"  >{{premiumFollowUpFrequencyItems.description}}</label>
                                             <p class="input-group">
                                                 <input type="number" class="form-control input-sm" value="{{premiumFollowUpFrequencyItems.value}}" readonly="true"/>
                                             </p>
@@ -162,7 +169,7 @@
                                 <div class="panel-body">
                                     <div class="row">
                                         <div class="form-group col-md-4" ng-repeat="premiumFollowUpFrequencyItems in items.premiumFollowUpFrequency[1].premiumFollowUpFrequencyItems">
-                                            <label class="control-label"   data-placement="top"  ng-bind="getFieldName(premiumFollowUpFrequencyItems.productLineProcessItem)"></label>
+                                            <label class="control-label"   data-placement="top" data-toggle="tooltip" tooltip="{{premiumFollowUpFrequencyItems.fullDescription}}" >{{premiumFollowUpFrequencyItems.description}}</label>
                                             <p class="input-group">
                                                 <input type="number" class="form-control input-sm"  value="{{premiumFollowUpFrequencyItems.value}}" readonly="true"/>
                                             </p>
@@ -183,7 +190,7 @@
                                 <div class="panel-body">
                                     <div class="row">
                                         <div class="form-group col-md-4" ng-repeat="premiumFollowUpFrequencyItems in items.premiumFollowUpFrequency[2].premiumFollowUpFrequencyItems">
-                                            <label class="control-label"   data-placement="top"  ng-bind="getFieldName(premiumFollowUpFrequencyItems.productLineProcessItem)"></label>
+                                            <label class="control-label"   data-placement="top" data-toggle="tooltip" tooltip="{{premiumFollowUpFrequencyItems.fullDescription}}"  >{{premiumFollowUpFrequencyItems.description}}</label>
                                             <p class="input-group">
                                                 <input type="number" class="form-control input-sm"  value="{{premiumFollowUpFrequencyItems.value}}" readonly="true"/>
                                             </p>
@@ -205,7 +212,7 @@
                                 <div class="panel-body">
                                     <div class="row">
                                         <div class="form-group col-md-4" ng-repeat="premiumFollowUpFrequencyItems in items.premiumFollowUpFrequency[3].premiumFollowUpFrequencyItems">
-                                            <label class="control-label"   data-placement="top"  ng-bind="getFieldName(premiumFollowUpFrequencyItems.productLineProcessItem)"></label>
+                                            <label class="control-label"   data-placement="top" data-toggle="tooltip" tooltip="{{premiumFollowUpFrequencyItems.fullDescription}}"  >{{premiumFollowUpFrequencyItems.description}}</label>
                                             <p class="input-group">
                                                 <input type="number" class="form-control input-sm"  value="{{premiumFollowUpFrequencyItems.value}}" readonly="true"/>
                                             </p>
@@ -226,7 +233,7 @@
                                 <div class="panel-body">
                                     <div class="row">
                                         <div class="form-group col-md-4" ng-repeat="reinstatementProcessItems in items.reinstatementProcessItems">
-                                            <label class="control-label"   data-placement="top"  ng-bind="getFieldName(reinstatementProcessItems.productLineProcessItem)"></label>
+                                            <label class="control-label"   data-placement="top" data-toggle="tooltip" tooltip="{{reinstatementProcessItems.fullDescription}}" >{{reinstatementProcessItems.description}}</label>
                                             <p class="input-group">
                                                 <input type="text" class="form-control input-sm"  value="{{reinstatementProcessItems.value}}" readonly="true"/>
                                             </p>
@@ -250,7 +257,7 @@
                                 <div class="panel-body">
                                     <div class="row">
                                         <div class="form-group col-md-4"  ng-repeat="endorsementProcessItems in items.endorsementProcessItems">
-                                            <label class="control-label"   data-placement="top"  ng-bind="getFieldName(endorsementProcessItems.productLineProcessItem)"></label>
+                                            <label class="control-label"   data-placement="top" data-toggle="tooltip" tooltip="{{endorsementProcessItems.fullDescription}}"  >{{endorsementProcessItems.description}}</label>
                                             <p class="input-group">
                                                 <input type="text" class="form-control input-sm"  value="{{endorsementProcessItems.value}}" readonly="true" />
                                             </p>
@@ -273,7 +280,7 @@
                                 <div class="panel-body">
                                     <div class="row">
                                         <div class="form-group col-md-4" ng-repeat="claimProcessItems in items.claimProcessItems">
-                                            <label class="control-label"   data-placement="top"  ng-bind="getFieldName(claimProcessItems.productLineProcessItem)"></label>
+                                            <label class="control-label"  data-placement="top" data-toggle="tooltip" tooltip="{{claimProcessItems.fullDescription}}"   >{{claimProcessItems.description}}</label>
                                             <p class="input-group">
                                                 <input type="text" class="form-control input-sm" value="{{claimProcessItems.value}}" readonly="true" />
                                             </p>
@@ -295,7 +302,7 @@
                                 <div class="panel-body">
                                     <div class="row">
                                         <div class="form-group col-md-4" ng-repeat="policyProcessMinimumLimitItems in items.policyProcessMinimumLimitItems">
-                                            <label class="control-label"   data-placement="top"   ng-bind="getFieldName(policyProcessMinimumLimitItems.policyProcessMinimumLimitType)"></label>
+                                            <label class="control-label"  data-placement="top" data-toggle="tooltip" tooltip="{{policyProcessMinimumLimitItems.fullDescription}}">{{policyProcessMinimumLimitItems.description}}</label>
                                             <p class="input-group">
                                                 <input type="text" class="form-control input-sm"  value="{{policyProcessMinimumLimitItems.value}}" readonly="true" />
                                             </p>
@@ -316,7 +323,7 @@
                                 <div class="panel-body">
                                     <div class="row">
                                         <div class="form-group col-md-4" ng-repeat="modelFactorItems in items.modelFactorItems">
-                                            <label class="control-label"   data-placement="top"  ng-bind="getFieldName(modelFactorItems.modalFactorItem)"></label>
+                                            <label class="control-label"   data-placement="top" data-toggle="tooltip" tooltip="{{modelFactorItems.fullDescription}}" >{{modelFactorItems.description}}</label>
                                             <p class="input-group">
                                                 <input type="text" class="form-control input-sm"  value="{{modelFactorItems.value}}" readonly="true"/>
                                             </p>
@@ -337,7 +344,7 @@
                                 <div class="panel-body">
                                     <div class="row">
                                         <div class="form-group col-md-4" ng-repeat="discountFactorItems in items.discountFactorItems">
-                                            <label class="control-label"   data-placement="top"  ng-bind="getFieldName(discountFactorItems.discountFactorItem)"></label>
+                                            <label class="control-label"   data-placement="top" data-toggle="tooltip" tooltip="{{discountFactorItems.fullDescription}}"  >{{discountFactorItems.description}}</label>
                                             <p class="input-group">
                                                 <input type="text" class="form-control input-sm"  value="{{discountFactorItems.value}}" readonly="true"/>
                                             </p>
@@ -414,6 +421,14 @@
 
 <div class="container ng-cloak" ng-Controller="ViewGroupLifeLevelInformationController" ng-show="groupLife">
     <div class="row">
+        <div class="col-lg-12" style="text-align: center;margin-top:10px;margin-bottom: 10px;">
+
+            <button type="button" class="btn btn-primary btn-xs" style="float:left;"  ng-click="reloadPage()">Back</button>
+
+        </div>
+    </div>
+
+    <div class="row">
         <div class="col-lg-12">
             <div class="panel panel-primary">
                 <div class="panel-heading">
@@ -437,7 +452,7 @@
                                 <div class="panel-body">
                                     <div class="row">
                                         <div class="form-group col-md-4" ng-repeat="quotationProcessItems in items.quotationProcessItems">
-                                            <label class="control-label"  data-placement="top"  ng-bind="getFieldName(quotationProcessItems.productLineProcessItem)"></label>
+                                            <label class="control-label"  data-placement="top" data-toggle="tooltip" tooltip="{{quotationProcessItems.fullDescription}}"  >{{quotationProcessItems.description}}</label>
                                             <p class="input-group" >
                                                 <input type="text" class="form-control input-sm" value="{{quotationProcessItems.value}}" readonly="true"/>
                                             </p>
@@ -460,7 +475,7 @@
 
                                     <div class="row">
                                         <div class="form-group col-md-4" ng-repeat="enrollmentProcessItems in items.enrollmentProcessItems">
-                                            <label class="control-label"   data-placement="top"  ng-bind="getFieldName(enrollmentProcessItems.productLineProcessItem)"></label>
+                                            <label class="control-label"  data-placement="top" data-toggle="tooltip" tooltip="{{enrollmentProcessItems.fullDescription}}" >{{enrollmentProcessItems.description}}</label>
                                             <p class="input-group">
                                                 <input type="text" class="form-control input-sm"  value="{{enrollmentProcessItems.value}}" readonly="true"/>
                                             </p>
@@ -483,7 +498,7 @@
                                 <div class="panel-body">
                                     <div class="row">
                                         <div class="form-group col-md-4" ng-repeat="premiumFollowUpFrequencyItems in items.premiumFollowUpFrequency[0].premiumFollowUpFrequencyItems">
-                                            <label class="control-label"   data-placement="top"  ng-bind="getFieldName(premiumFollowUpFrequencyItems.productLineProcessItem)"></label>
+                                            <label class="control-label"   data-placement="top" data-toggle="tooltip" tooltip="{{premiumFollowUpFrequencyItems.fullDescription}}"  >{{premiumFollowUpFrequencyItems.description}}</label>
                                             <p class="input-group">
                                                 <input type="number" class="form-control input-sm" value="{{premiumFollowUpFrequencyItems.value}}" readonly="true"/>
                                             </p>
@@ -504,7 +519,7 @@
                                 <div class="panel-body">
                                     <div class="row">
                                         <div class="form-group col-md-4" ng-repeat="premiumFollowUpFrequencyItems in items.premiumFollowUpFrequency[1].premiumFollowUpFrequencyItems">
-                                            <label class="control-label"   data-placement="top"  ng-bind="getFieldName(premiumFollowUpFrequencyItems.productLineProcessItem)"></label>
+                                            <label class="control-label"   data-placement="top" data-toggle="tooltip" tooltip="{{premiumFollowUpFrequencyItems.fullDescription}}"  >{{premiumFollowUpFrequencyItems.description}}</label>
                                             <p class="input-group">
                                                 <input type="number" class="form-control input-sm"  value="{{premiumFollowUpFrequencyItems.value}}" readonly="true"/>
                                             </p>
@@ -525,7 +540,7 @@
                                 <div class="panel-body">
                                     <div class="row">
                                         <div class="form-group col-md-4" ng-repeat="premiumFollowUpFrequencyItems in items.premiumFollowUpFrequency[2].premiumFollowUpFrequencyItems">
-                                            <label class="control-label"   data-placement="top"  ng-bind="getFieldName(premiumFollowUpFrequencyItems.productLineProcessItem)"></label>
+                                            <label class="control-label"   data-placement="top" data-toggle="tooltip" tooltip="{{premiumFollowUpFrequencyItems.fullDescription}}"  >{{premiumFollowUpFrequencyItems.description}}</label>
                                             <p class="input-group">
                                                 <input type="number" class="form-control input-sm"  value="{{premiumFollowUpFrequencyItems.value}}" readonly="true"/>
                                             </p>
@@ -547,7 +562,7 @@
                                 <div class="panel-body">
                                     <div class="row">
                                         <div class="form-group col-md-4" ng-repeat="premiumFollowUpFrequencyItems in items.premiumFollowUpFrequency[3].premiumFollowUpFrequencyItems">
-                                            <label class="control-label"   data-placement="top"  ng-bind="getFieldName(premiumFollowUpFrequencyItems.productLineProcessItem)"></label>
+                                            <label class="control-label"   data-placement="top" data-toggle="tooltip" tooltip="{{premiumFollowUpFrequencyItems.fullDescription}}"  >{{premiumFollowUpFrequencyItems.description}}</label>
                                             <p class="input-group">
                                                 <input type="number" class="form-control input-sm"  value="{{premiumFollowUpFrequencyItems.value}}" readonly="true"/>
                                             </p>
@@ -568,7 +583,7 @@
                                 <div class="panel-body">
                                     <div class="row">
                                         <div class="form-group col-md-4" ng-repeat="reinstatementProcessItems in items.reinstatementProcessItems">
-                                            <label class="control-label"   data-placement="top"  ng-bind="getFieldName(reinstatementProcessItems.productLineProcessItem)"></label>
+                                            <label class="control-label"  data-placement="top" data-toggle="tooltip" tooltip="{{reinstatementProcessItems.fullDescription}}"  >{{reinstatementProcessItems.description}}</label>
                                             <p class="input-group">
                                                 <input type="text" class="form-control input-sm" value="{{reinstatementProcessItems.value}}" readonly="true"/>
                                             </p>
@@ -590,7 +605,7 @@
                                 <div class="panel-body">
                                     <div class="row">
                                         <div class="form-group col-md-4"  ng-repeat="endorsementProcessItems in items.endorsementProcessItems">
-                                            <label class="control-label"   data-placement="top"  ng-bind="getFieldName(endorsementProcessItems.productLineProcessItem)"></label>
+                                            <label class="control-label"   data-placement="top" data-toggle="tooltip" tooltip="{{endorsementProcessItems.fullDescription}}"  >{{endorsementProcessItems.description}}</label>
                                             <p class="input-group">
                                                 <input type="text" class="form-control input-sm"  value="{{endorsementProcessItems.value}}" readonly="true"/>
                                             </p>
@@ -613,7 +628,7 @@
                                 <div class="panel-body">
                                     <div class="row">
                                         <div class="form-group col-md-4" ng-repeat="claimProcessItems in items.claimProcessItems">
-                                            <label class="control-label"   data-placement="top"  ng-bind="getFieldName(claimProcessItems.productLineProcessItem)"></label>
+                                            <label class="control-label"   data-placement="top" data-toggle="tooltip" tooltip="{{claimProcessItems.fullDescription}}"  >{{claimProcessItems.description}}</label>
                                             <p class="input-group">
                                                 <input type="text" class="form-control input-sm"  value="{{claimProcessItems.value}}" readonly="true"/>
                                             </p>
@@ -635,7 +650,7 @@
                                 <div class="panel-body">
                                     <div class="row">
                                         <div class="form-group col-md-4" ng-repeat="policyProcessMinimumLimitItems in items.policyProcessMinimumLimitItems">
-                                            <label class="control-label"   data-placement="top"  ng-bind="getFieldName(policyProcessMinimumLimitItems.policyProcessMinimumLimitType)"></label>
+                                            <label class="control-label"   data-placement="top" data-toggle="tooltip" tooltip="{{policyProcessMinimumLimitItems.fullDescription}}"  >{{policyProcessMinimumLimitItems.description}}</label>
                                             <p class="input-group">
                                                 <input type="text" class="form-control input-sm"  value="{{policyProcessMinimumLimitItems.value}}" readonly="true"/>
                                             </p>
@@ -656,7 +671,7 @@
                                 <div class="panel-body">
                                     <div class="row">
                                         <div class="form-group col-md-4" ng-repeat="modelFactorItems in items.modelFactorItems">
-                                            <label class="control-label"   data-placement="top"  ng-bind="getFieldName(modelFactorItems.modalFactorItem)"></label>
+                                            <label class="control-label"   data-placement="top" data-toggle="tooltip" tooltip="{{modelFactorItems.fullDescription}}"   >{{modelFactorItems.description}}</label>
                                             <p class="input-group">
                                                 <input type="text" class="form-control input-sm"  value="{{modelFactorItems.value}}" readonly="true"/>
                                             </p>
@@ -677,7 +692,7 @@
                                 <div class="panel-body">
                                     <div class="row">
                                         <div class="form-group col-md-4" ng-repeat="discountFactorItems in items.discountFactorItems">
-                                            <label class="control-label"   data-placement="top"  ng-bind="getFieldName(discountFactorItems.discountFactorItem)"></label>
+                                            <label class="control-label"    data-placement="top" data-toggle="tooltip" tooltip="{{discountFactorItems.fullDescription}}"  >{{discountFactorItems.description}}</label>
                                             <p class="input-group">
                                                 <input type="text" class="form-control input-sm"  value="{{discountFactorItems.value}}" readonly="true" />
                                             </p>
@@ -689,15 +704,15 @@
 
                         <!---->
 
-                        <div class="panel panel-default" id="panel55">
+                        <div class="panel panel-default" id="panel33">
                             <div class="panel-heading">
                                 <h4 class="panel-title">
-                                    <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapseFiveFive">
+                                    <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion1" href="#collapseThreeThree">
                                         Age Loading Factor
                                     </a><i class="indicator glyphicon glyphicon-chevron-down  pull-right"></i>
                                 </h4>
                             </div>
-                            <div id="collapseFiveFive" class="panel-collapse collapse">
+                            <div id="collapseThreeThree" class="panel-collapse collapse">
                                 <div class="panel-body">
                                     <div class="row">
                                         <div class="form-group col-md-4" >
@@ -731,6 +746,14 @@
 
 <div class="container ng-cloak" ng-Controller="ViewIndividualLifeLevelInformationController" ng-show="individualLife">
     <div class="row">
+        <div class="col-lg-12" style="text-align: center;margin-top:10px;margin-bottom: 10px;">
+
+            <button type="button" class="btn btn-primary btn-xs" style="float:left;"  ng-click="reloadPage()">Back</button>
+
+        </div>
+    </div>
+
+    <div class="row">
         <div class="col-lg-12">
             <div class="panel panel-primary">
                 <div class="panel-heading">
@@ -754,7 +777,7 @@
                                 <div class="panel-body">
                                     <div class="row">
                                         <div class="form-group col-md-4" ng-repeat="quotationProcessItems in items.quotationProcessItems">
-                                            <label class="control-label"  data-placement="top"  ng-bind="getFieldName(quotationProcessItems.productLineProcessItem)"></label>
+                                            <label class="control-label"  data-placement="top" data-toggle="tooltip" tooltip="{{quotationProcessItems.fullDescription}}"  >{{quotationProcessItems.description}}</label>
                                             <p class="input-group" >
                                                 <input type="text" class="form-control input-sm"  value="{{quotationProcessItems.value}}" readonly="true"/>
                                             </p>
@@ -777,7 +800,7 @@
 
                                     <div class="row">
                                         <div class="form-group col-md-4" ng-repeat="enrollmentProcessItems in items.enrollmentProcessItems">
-                                            <label class="control-label"   data-placement="top"  ng-bind="getFieldName(enrollmentProcessItems.productLineProcessItem)"></label>
+                                            <label class="control-label"   data-placement="top" data-toggle="tooltip" tooltip="{{enrollmentProcessItems.fullDescription}}" >{{enrollmentProcessItems.description}}</label>
                                             <p class="input-group">
                                                 <input type="text" class="form-control input-sm"  value="{{enrollmentProcessItems.value}}" readonly="true"/>
                                             </p>
@@ -800,7 +823,7 @@
                                 <div class="panel-body">
                                     <div class="row">
                                         <div class="form-group col-md-4" ng-repeat="premiumFollowUpFrequencyItems in items.premiumFollowUpFrequency[0].premiumFollowUpFrequencyItems">
-                                            <label class="control-label"   data-placement="top"  ng-bind="getFieldName(premiumFollowUpFrequencyItems.productLineProcessItem)"></label>
+                                            <label class="control-label"   data-placement="top" data-toggle="tooltip" tooltip="{{premiumFollowUpFrequencyItems.fullDescription}}" >{{premiumFollowUpFrequencyItems.description}}</label>
                                             <p class="input-group">
                                                 <input type="number" class="form-control input-sm" value="{{premiumFollowUpFrequencyItems.value}}" readonly="true"/>
                                             </p>
@@ -821,7 +844,7 @@
                                 <div class="panel-body">
                                     <div class="row">
                                         <div class="form-group col-md-4" ng-repeat="premiumFollowUpFrequencyItems in items.premiumFollowUpFrequency[1].premiumFollowUpFrequencyItems">
-                                            <label class="control-label"   data-placement="top"  ng-bind="getFieldName(premiumFollowUpFrequencyItems.productLineProcessItem)"></label>
+                                            <label class="control-label"   data-placement="top" data-toggle="tooltip" tooltip="{{premiumFollowUpFrequencyItems.fullDescription}}"  >{{premiumFollowUpFrequencyItems.description}}</label>
                                             <p class="input-group">
                                                 <input type="number" class="form-control input-sm"  value="{{premiumFollowUpFrequencyItems.value}}" readonly="true"/>
                                             </p>
@@ -842,7 +865,7 @@
                                 <div class="panel-body">
                                     <div class="row">
                                         <div class="form-group col-md-4" ng-repeat="premiumFollowUpFrequencyItems in items.premiumFollowUpFrequency[2].premiumFollowUpFrequencyItems">
-                                            <label class="control-label"   data-placement="top"  ng-bind="getFieldName(premiumFollowUpFrequencyItems.productLineProcessItem)"></label>
+                                            <label class="control-label"   data-placement="top" data-toggle="tooltip" tooltip="{{premiumFollowUpFrequencyItems.fullDescription}}" >{{premiumFollowUpFrequencyItems.description}}</label>
                                             <p class="input-group">
                                                 <input type="number" class="form-control input-sm"  value="{{premiumFollowUpFrequencyItems.value}}" readonly="true"/>
                                             </p>
@@ -864,7 +887,7 @@
                                 <div class="panel-body">
                                     <div class="row">
                                         <div class="form-group col-md-4" ng-repeat="premiumFollowUpFrequencyItems in items.premiumFollowUpFrequency[3].premiumFollowUpFrequencyItems">
-                                            <label class="control-label"   data-placement="top"  ng-bind="getFieldName(premiumFollowUpFrequencyItems.productLineProcessItem)"></label>
+                                            <label class="control-label"    data-placement="top" data-toggle="tooltip" tooltip="{{premiumFollowUpFrequencyItems.fullDescription}}"  >{{premiumFollowUpFrequencyItems.description}}</label>
                                             <p class="input-group">
                                                 <input type="number" class="form-control input-sm"  value="{{premiumFollowUpFrequencyItems.value}}" readonly="true"/>
                                             </p>
@@ -886,7 +909,7 @@
                                 <div class="panel-body">
                                     <div class="row">
                                         <div class="form-group col-md-4" ng-repeat="reinstatementProcessItems in items.reinstatementProcessItems">
-                                            <label class="control-label"   data-placement="top"  ng-bind="getFieldName(reinstatementProcessItems.productLineProcessItem)"></label>
+                                            <label class="control-label"   data-placement="top" data-toggle="tooltip" tooltip="{{reinstatementProcessItems.fullDescription}}"  >{{reinstatementProcessItems.description}}</label>
                                             <p class="input-group">
                                                 <input type="text" class="form-control input-sm"  value="{{reinstatementProcessItems.value}}" readonly="true" />
                                             </p>
@@ -910,7 +933,7 @@
                                 <div class="panel-body">
                                     <div class="row">
                                         <div class="form-group col-md-4"  ng-repeat="endorsementProcessItems in items.endorsementProcessItems">
-                                            <label class="control-label"   data-placement="top"  ng-bind="getFieldName(endorsementProcessItems.productLineProcessItem)"></label>
+                                            <label class="control-label"   data-placement="top" data-toggle="tooltip" tooltip="{{endorsementProcessItems.fullDescription}}" >{{endorsementProcessItems.description}}</label>
                                             <p class="input-group">
                                                 <input type="text" class="form-control input-sm"   value="{{endorsementProcessItems.value}}" readonly="true"/>
                                             </p>
@@ -933,7 +956,7 @@
                                 <div class="panel-body">
                                     <div class="row">
                                         <div class="form-group col-md-4" ng-repeat="claimProcessItems in items.claimProcessItems">
-                                            <label class="control-label"   data-placement="top"  ng-bind="getFieldName(claimProcessItems.productLineProcessItem)"></label>
+                                            <label class="control-label"   data-placement="top" data-toggle="tooltip" tooltip="{{claimProcessItems.fullDescription}}"  >{{claimProcessItems.description}}</label>
                                             <p class="input-group">
                                                 <input type="text" class="form-control input-sm"  value="{{claimProcessItems.value}}" readonly="true"/>
                                             </p>
@@ -956,7 +979,7 @@
                                 <div class="panel-body">
                                     <div class="row">
                                         <div class="form-group col-md-4" ng-repeat="surrenderProcessItems in items.surrenderProcessItems">
-                                            <label class="control-label"   data-placement="top"  ng-bind="getFieldName(surrenderProcessItems.productLineProcessItem)"></label>
+                                            <label class="control-label"   data-placement="top" data-toggle="tooltip" tooltip="{{surrenderProcessItems.fullDescription}}"  >{{surrenderProcessItems.description}}</label>
                                             <p class="input-group">
                                                 <input type="text" class="form-control input-sm" value="{{surrenderProcessItems.value}}" readonly="true" />
                                             </p>
@@ -977,7 +1000,7 @@
                                 <div class="panel-body">
                                     <div class="row">
                                         <div class="form-group col-md-4" ng-repeat="maturityProcessItems in items.maturityProcessItems">
-                                            <label class="control-label"   data-placement="top"  ng-bind="getFieldName(maturityProcessItems.productLineProcessItem)"></label>
+                                            <label class="control-label"   data-placement="top" data-toggle="tooltip" tooltip="{{maturityProcessItems.fullDescription}}"  >{{maturityProcessItems.description}}</label>
                                             <p class="input-group">
                                                 <input type="text" class="form-control input-sm"  value="{{maturityProcessItems.value}}" readonly="true" />
                                             </p>
@@ -998,7 +1021,7 @@
                                 <div class="panel-body">
                                     <div class="row">
                                         <div class="form-group col-md-4" ng-repeat="policyFeeProcessItems in items.policyFeeProcessItems">
-                                            <label class="control-label"   data-placement="top"  ng-bind="getFieldName(policyFeeProcessItems.policyFeeProcessType)"></label>
+                                            <label class="control-label"   data-placement="top" data-toggle="tooltip" tooltip="{{policyFeeProcessItems.fullDescription}}" >{{policyFeeProcessItems.description}}</label>
                                             <p class="input-group">
                                                 <input type="text" class="form-control input-sm"   value="{{policyFeeProcessItems.policyFee}}" readonly="true"/>
                                             </p>
