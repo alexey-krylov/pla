@@ -139,7 +139,10 @@
                             <tr ng-repeat="beneficiary in beneficiariesList">
                                 <td>{{beneficiary.firstName +' '+ beneficiary.surname}}</td>
                                 <td>{{beneficiary.relationshipId}}</td>
-                                <td>{{beneficiary.share}}</td>
+                                <!--<td>{{beneficiary.share}}</td>-->
+                                <td>
+                                    <input type="number" ng-disabled="mode=='new'||mode=='view'" contenteditable="updateFlag" ng-init="shareSumTest()" ng-model="beneficiary.share"  ng-blur="shareSumTest()" value="{{beneficiary.share}}" />
+                                </td>
                             </tr>
                         </tbody>
                     </table>
@@ -152,7 +155,7 @@
             <button type="button" class="btn btn-default btn-sm">Cancel</button>
         </div>
         <div class="col-sm-6">
-            <button type="button" class="btn btn-default btn-sm" style="float: right"  ng-disabled="mode=='new'||mode=='view'" ng-click="savePlanDetail()">Save</button>
+            <button type="button" class="btn btn-default btn-sm" style="float: right" ng-disabled="commisionStatus" ng-hide="mode=='new'||mode=='view'" ng-click="savePlanDetail()">Save</button>
         </div>
     </div>
 

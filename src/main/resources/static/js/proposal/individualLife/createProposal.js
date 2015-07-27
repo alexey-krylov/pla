@@ -1071,7 +1071,8 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
 
             $scope.statusCount = true;
             $scope.agentMessage=false;
-            $scope.commisionSumTest = function () {
+
+                        $scope.commisionSumTest = function () {
                 var sum = 0;
                 for (i in $scope.agentDetails) {
 
@@ -1087,27 +1088,47 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
                     $scope.agentMessage=true;
                 }
             };
+            $scope.commisionStatus=true;
+            $scope.commisionMessage=false;
 
-           /* $scope.test = function (row) {
-                console.log('Testing...');
-                console.log('Pass..' + JSON.stringify(row));
-                for (i in $scope.agentDetails) {
-                    if ($scope.agentDetails[i].agentId == row.agentId) {
-                        $scope.agentDetails[i] = row;
-                    }
+            $scope.shareSumTest = function () {
+                var sum = 0;
+                for (i in $scope.beneficiariesList) {
+
+                    sum = parseFloat(sum) + parseFloat($scope.beneficiariesList[i].share);
                 }
-
-                var countCheck = $scope.countStatus();
-                console.log('Checking-->' + JSON.stringify(countCheck));
-                if (countCheck != 100) {
-                    console.log('Not 100');
-                    $scope.statusCount = true;
+                console.log('sum: ' + sum);
+                if (sum == 100.00) {
+                    //$scope.commisionStatus = false;
+                    //$scope.commisionMessage=false;
                 }
                 else {
-                    $scope.statusCount = false;
+                    //$scope.commisionStatus = true;
+                    //$scope.commisionMessage=true;
                 }
+            };
 
-            };*/
+
+            /* $scope.test = function (row) {
+                 console.log('Testing...');
+                 console.log('Pass..' + JSON.stringify(row));
+                 for (i in $scope.agentDetails) {
+                     if ($scope.agentDetails[i].agentId == row.agentId) {
+                         $scope.agentDetails[i] = row;
+                     }
+                 }
+
+                 var countCheck = $scope.countStatus();
+                 console.log('Checking-->' + JSON.stringify(countCheck));
+                 if (countCheck != 100) {
+                     console.log('Not 100');
+                     $scope.statusCount = true;
+                 }
+                 else {
+                     $scope.statusCount = false;
+                 }
+
+             };*/
 
             /*$scope.countStatus = function () {
                 var count = 0;
