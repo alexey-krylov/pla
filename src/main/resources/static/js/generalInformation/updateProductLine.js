@@ -60,7 +60,7 @@ App.controller('UpdateGroupHealthLevelInformationController',['$rootScope','$sco
 
     }
 
-    $http.get('/pla/core/productlineinformation/getproductlineprocessitem').success(function(data){
+   /* $http.get('/pla/core/productlineinformation/getproductlineprocessitem').success(function(data){
         $scope.processItems=data;
 
     });
@@ -72,7 +72,7 @@ App.controller('UpdateGroupHealthLevelInformationController',['$rootScope','$sco
              if($scope.fieldData)
                  return $scope.fieldData.description;
             }
-    }
+    }*/
 
     $scope.submitGroupHealth=function(){
         ///console.log($scope.items);
@@ -133,7 +133,7 @@ App.controller('UpdateGroupLifeLevelInformationController',['$rootScope','$scope
         }
 
     });
-    $http.get('/pla/core/productlineinformation/getproductlineprocessitem').success(function(data){
+   /* $http.get('/pla/core/productlineinformation/getproductlineprocessitem').success(function(data){
         $scope.processItems=data;
 
     });
@@ -146,7 +146,7 @@ App.controller('UpdateGroupLifeLevelInformationController',['$rootScope','$scope
             if($scope.fieldData)
                 return $scope.fieldData.description;
         }
-    }
+    }*/
 
     $scope.reloadPage = function(){
         $window.location.href="/pla/core/productlineinformation/openupdate";
@@ -211,7 +211,7 @@ App.controller('UpdateIndividualLifeLevelInformationController',['$rootScope','$
         }
 
     });
-    $http.get('/pla/core/productlineinformation/getproductlineprocessitem').success(function(data){
+    /*$http.get('/pla/core/productlineinformation/getproductlineprocessitem').success(function(data){
         $scope.processItems=data;
 
     });
@@ -224,7 +224,7 @@ App.controller('UpdateIndividualLifeLevelInformationController',['$rootScope','$
             if($scope.fieldData)
                 return $scope.fieldData.description;
         }
-    }
+    }*/
 
     $scope.reloadPage = function(){
         $window.location.href="/pla/core/productlineinformation/openupdate";
