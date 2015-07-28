@@ -17,41 +17,6 @@ App.controller('UpdateOrganizationalLevelController',['$scope','$http','$templat
         }
 
     });
-    $http.get('/pla/core/organizationinformation/getorganizationprocessitem').success(function(data){
-        $scope.processItems=data;
-
-    });
-
-    $scope.fieldData={};
-    $scope.getFieldNameModalFactor = function(fieldtype){
-
-        if(fieldtype) {
-            if ($scope.processItems) {
-                $scope.fieldData = _.findWhere($scope.processItems.modalFactorProcess, {type: fieldtype});
-                if ($scope.fieldData)
-                    return $scope.fieldData.description;
-            }
-        }
-    }
-    $scope.getFieldNameDiscountFactor = function(fieldtype){
-        if(fieldtype) {
-            if ($scope.processItems) {
-                $scope.fieldData = _.findWhere($scope.processItems.discountFactorProcess, {type: fieldtype});
-                if ($scope.fieldData)
-                    return $scope.fieldData.description;
-            }
-        }
-    }
-    $scope.getFieldName = function(fieldtype){
-        if(fieldtype) {
-            if ($scope.processItems) {
-                $scope.fieldData = _.findWhere($scope.processItems.serviceTax, {type: fieldtype});
-                if ($scope.fieldData)
-                    return $scope.fieldData.description;
-            }
-        }
-
-    }
     $scope.reloadPage = function(){
         $window.location.href="/pla/core/organizationinformation/openview";
 
@@ -85,41 +50,6 @@ App.controller('ViewOrganizationalLevelController',['$scope','$http','$templateC
        $scope.organizationInformation=data[0];
 
     });
-    $http.get('/pla/core/organizationinformation/getorganizationprocessitem').success(function(data){
-        $scope.processItems=data;
-
-
-    });
-
-    $scope.fieldData={};
-    $scope.getFieldNameModalFactor = function(fieldtype){
-
-        if(fieldtype) {
-            if ($scope.processItems) {
-                $scope.fieldData = _.findWhere($scope.processItems.modalFactorProcess, {type: fieldtype});
-                    if ($scope.fieldData)
-                     return $scope.fieldData.description;
-                  }
-        }
-    }
-    $scope.getFieldNameDiscountFactor = function(fieldtype){
-        if(fieldtype) {
-            if ($scope.processItems) {
-                $scope.fieldData = _.findWhere($scope.processItems.discountFactorProcess, {type: fieldtype});
-                if ($scope.fieldData)
-                    return $scope.fieldData.description;
-            }
-        }
-    }
-    $scope.getFieldName = function(fieldtype){
-        if(fieldtype) {
-            if ($scope.processItems) {
-                $scope.fieldData = _.findWhere($scope.processItems.serviceTax, {type: fieldtype});
-                if ($scope.fieldData)
-                    return $scope.fieldData.description;
-            }
-        }
-    }
 
 
 }]);
@@ -134,41 +64,6 @@ App.controller('CreateOrganizationalLevelController',['$scope','$http','$templat
             $scope.createOrganizationinfo=false;
         }
     });
-    $http.get('/pla/core/organizationinformation/getorganizationprocessitem').success(function(data){
-        $scope.processItems=data;
-
-    });
-
-    $scope.fieldData={};
-    $scope.getFieldNameModalFactor = function(fieldtype){
-
-        if(fieldtype) {
-            if ($scope.processItems) {
-                $scope.fieldData = _.findWhere($scope.processItems.modalFactorProcess, {type: fieldtype});
-                if ($scope.fieldData)
-                    return $scope.fieldData.description;
-            }
-        }
-    }
-    $scope.getFieldNameDiscountFactor = function(fieldtype){
-        if(fieldtype) {
-            if ($scope.processItems) {
-                $scope.fieldData = _.findWhere($scope.processItems.discountFactorProcess, {type: fieldtype});
-                if ($scope.fieldData)
-                    return $scope.fieldData.description;
-            }
-        }
-
-    }
-    $scope.getFieldName = function(fieldtype){
-        if(fieldtype) {
-            if ($scope.processItems) {
-                $scope.fieldData = _.findWhere($scope.processItems.serviceTax, {type: fieldtype});
-                if ($scope.fieldData)
-                    return $scope.fieldData.description;
-            }
-        }
-    }
 
     $scope.reloadPage = function(){
         $window.location.href="/pla/core/organizationinformation/openview";

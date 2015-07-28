@@ -35,7 +35,7 @@
                             <label class="control-label" style="padding-left:10px;">Modal Factors - to be applied in case Premiums are mentioned on a per year basis.</label>
                         </div>
                         <div class="form-group col-md-4 " ng-repeat="modelFactorItems in organizationInformation.modelFactorItems">
-                            <label class="control-label" ng-bind="getFieldNameModalFactor(modelFactorItems.modalFactorItem)"></label>
+                            <label class="control-label" data-placement="top" data-toggle="tooltip" tooltip="{{modelFactorItems.fullDescription}}"  >{{modelFactorItems.description}}</label>
                             <p class="input-group" >
                                 <input type="text" class="form-control input-sm" ng-model="modelFactorItems.value" value="{{modelFactorItems.value}}" readonly="true"/>
                             </p>
@@ -46,13 +46,13 @@
                             <label class="control-label"  style="padding-left:10px;">Discount Factors - to be applied in case Premiums are mentioned on a per month basis.</label>
                         </div>
                         <div class="form-group col-md-4" ng-repeat="discountFactorItems in organizationInformation.discountFactorItems">
-                            <label class="control-label" ng-bind="getFieldNameDiscountFactor(discountFactorItems.discountFactorItem)" ></label>
+                            <label class="control-label" data-placement="top" data-toggle="tooltip" tooltip="{{discountFactorItems.fullDescription}}"  >{{discountFactorItems.description}}</label>
                             <p class="input-group" >
                                 <input type="text" class="form-control input-sm" ng-model="discountFactorItems.value" value="{{discountFactorItems.value}}" readonly="true"/>
                             </p>
                         </div>
                         <div class="form-group col-md-4" >
-                            <label class="control-label" ng-bind="getFieldName(organizationInformation.serviceTax.tax)"></label>
+                            <label class="control-label" data-placement="top" data-toggle="tooltip" tooltip="{{organizationInformation.serviceTax.fullDescription}}" >{{organizationInformation.serviceTax.description}}</label>
                             <p class="input-group" >
                                 <input type="text" class="form-control input-sm" min="1"  ng-model="organizationInformation.serviceTax.value" value="{{organizationInformation.serviceTax.value}}" readonly="true"/>
                             </p>
