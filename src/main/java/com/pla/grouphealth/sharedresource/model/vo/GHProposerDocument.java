@@ -21,11 +21,14 @@ public class GHProposerDocument {
 
     private String gridFsDocId;
 
-    public GHProposerDocument(String documentId, String documentName, String gridFsDocId, String contentType) {
+    private boolean mandatory;
+
+    public GHProposerDocument(String documentId, String documentName, String gridFsDocId, String contentType, boolean mandatory) {
         this.documentId = documentId;
         this.documentName = documentName;
         this.gridFsDocId = gridFsDocId;
         this.contentType = contentType;
+        this.mandatory = mandatory;
     }
 
     public GHProposerDocument updateWithNameAndContent(String documentName, String gridFsDocId, String contentType) {

@@ -67,7 +67,7 @@ public class GLProposalFinder {
         return groupLifeProposal;
     }
 
-    public Map getProposalById(ProposalId proposalId) {
+    public Map findProposalById(ProposalId proposalId) {
         checkArgument(proposalId != null);
         BasicDBObject query = new BasicDBObject();
         query.put("_id", proposalId);

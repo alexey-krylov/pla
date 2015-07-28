@@ -1,5 +1,6 @@
 package com.pla.grouphealth.proposal.presentation.dto;
 
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -11,6 +12,7 @@ import org.springframework.web.multipart.MultipartFile;
 @Getter
 @Setter
 @NoArgsConstructor
+@EqualsAndHashCode(of = "gridFsDocId")
 public class GHProposalMandatoryDocumentDto {
 
     private String documentId;
@@ -34,9 +36,9 @@ public class GHProposalMandatoryDocumentDto {
         this.documentName = documentName;
     }
 
-    public GHProposalMandatoryDocumentDto updateWithContent(byte[] content){
-        this.content=content;
-        this.submitted=true;
+    public GHProposalMandatoryDocumentDto updateWithContent(byte[] content) {
+        this.content = content;
+        this.submitted = true;
         return this;
     }
 }

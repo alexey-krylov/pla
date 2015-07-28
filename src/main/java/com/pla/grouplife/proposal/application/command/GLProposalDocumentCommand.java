@@ -24,4 +24,6 @@ public class GLProposalDocumentCommand {
 
     private boolean additional;
 
+    private boolean mandatory;
+
 }

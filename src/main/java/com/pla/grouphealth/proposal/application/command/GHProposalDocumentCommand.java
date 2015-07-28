@@ -20,5 +20,7 @@ public class GHProposalDocumentCommand {
 
     private String filename;
 
+    private boolean mandatory;
+
     private MultipartFile file;
 }

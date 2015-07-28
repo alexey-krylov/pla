@@ -162,7 +162,7 @@ public class GroupLifeProposalCommandHandler {
             documents = Sets.newHashSet();
         }
         String gridFsDocId = gridFsTemplate.store(glProposalDocumentCommand.getFile().getInputStream(), glProposalDocumentCommand.getFile().getContentType(), glProposalDocumentCommand.getFilename()).getId().toString();
-        GLProposerDocument currentDocument = new GLProposerDocument(glProposalDocumentCommand.getDocumentId(), glProposalDocumentCommand.getFilename(), gridFsDocId, glProposalDocumentCommand.getFile().getContentType());
+        GLProposerDocument currentDocument = new GLProposerDocument(glProposalDocumentCommand.getDocumentId(), glProposalDocumentCommand.getFilename(), gridFsDocId, glProposalDocumentCommand.getFile().getContentType(), glProposalDocumentCommand.isMandatory());
         if (!documents.add(currentDocument)) {
             GLProposerDocument existingDocument = documents.stream().filter(new Predicate<GLProposerDocument>() {
                 @Override

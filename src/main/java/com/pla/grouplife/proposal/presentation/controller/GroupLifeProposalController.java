@@ -44,6 +44,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.*;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import static org.nthdimenzion.presentation.AppUtils.getLoggedInUserDetail;
 
@@ -434,11 +435,19 @@ public class GroupLifeProposalController {
         return glProposalMandatoryDocumentDtos;
     }
 
+    @RequestMapping(value = "/getadditionaldocuments/{proposalId}", method = RequestMethod.GET)
+    @ResponseBody
+    @ApiOperation(httpMethod = "GET", value = "To list additional documents which is being configured in Mandatory Document SetUp")
+    public Set<GLProposalMandatoryDocumentDto> findAdditionalDocuments(@PathVariable("proposalId") String proposalId) {
+        Set<GLProposalMandatoryDocumentDto> ghProposalMandatoryDocumentDtos = glProposalService.findAdditionalDocuments(proposalId);
+        return ghProposalMandatoryDocumentDtos;
+    }
+
     @RequestMapping(value = "/getproposalnumber/{proposalId}", method = RequestMethod.GET)
     @ApiOperation(httpMethod = "GET", value = "Get Proposal number for a given proposal ID")
     @ResponseBody
     public Result getProposalNumber(@PathVariable("proposalId") String proposalId) {
-        Map proposalMap = glProposalFinder.getProposalById(new ProposalId(proposalId));
+        Map proposalMap = glProposalFinder.findProposalById(new ProposalId(proposalId));
         return Result.success("Proposal number ", proposalMap.get("proposalNumber") != null ? ((ProposalNumber) proposalMap.get("proposalNumber")).getProposalNumber() : "");
     }
 

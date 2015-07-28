@@ -133,7 +133,7 @@ public class GLProposalService {
     }
 
     public AgentDetailDto getAgentDetail(ProposalId proposalId) {
-        Map proposal = glProposalFinder.getProposalById(proposalId);
+        Map proposal = glProposalFinder.findProposalById(proposalId);
         AgentId agentMap = (AgentId) proposal.get("agentId");
         String agentId = agentMap.getAgentId();
         Map<String, Object> agentDetail = glFinder.getAgentById(agentId);
@@ -149,7 +149,7 @@ public class GLProposalService {
     }
 
     public ProposerDto getProposerDetail(ProposalId proposalId) {
-        Map proposal = glProposalFinder.getProposalById(proposalId);
+        Map proposal = glProposalFinder.findProposalById(proposalId);
         Proposer proposer = (Proposer) proposal.get("proposer");
         ProposerDto proposerDto = new ProposerDto(proposer);
         return proposerDto;
@@ -212,7 +212,7 @@ public class GLProposalService {
     public HSSFWorkbook getInsuredTemplateExcel(String proposalId) throws IOException {
         AgentDetailDto agentDetailDto = getAgentDetail(new ProposalId(proposalId));
         List<PlanId> planIds = getAgentAuthorizedPlans(agentDetailDto.getAgentId());
-        Map quotation = glProposalFinder.getProposalById(new ProposalId(proposalId));
+        Map quotation = glProposalFinder.findProposalById(new ProposalId(proposalId));
         List<Insured> insureds = (List<Insured>) quotation.get("insureds");
         List<InsuredDto> insuredDtoList = isNotEmpty(insureds) ? insureds.stream().map(new Function<Insured, InsuredDto>() {
             @Override
@@ -355,7 +355,7 @@ public class GLProposalService {
     }
 
     public List<GLProposalMandatoryDocumentDto> findMandatoryDocuments(String proposalId) {
-        Map proposal = glProposalFinder.getProposalById(new ProposalId(proposalId));
+        Map proposal = glProposalFinder.findProposalById(new ProposalId(proposalId));
         List<Insured> insureds = (List<Insured>) proposal.get("insureds");
         List<GLProposerDocument> uploadedDocuments = proposal.get("proposerDocuments") != null ? (List<GLProposerDocument>) proposal.get("proposerDocuments") : Lists.newArrayList();
         List<SearchDocumentDetailDto> documentDetailDtos = Lists.newArrayList();
@@ -419,6 +419,31 @@ public class GLProposalService {
             GlQuotationDto glQuotationDto = new GlQuotationDto(new QuotationId(quotationId), (Integer) map.get("versionNumber"), generatedOn, agentDetailDto.getAgentId(), agentDetailDto.getAgentName(), new QuotationId(parentQuotationId), quotationStatus, quotationNumber, proposerName, getIntervalInDays(sharedOn), sharedOn);
             return glQuotationDto;
         }
+    }
+
+    public Set<GLProposalMandatoryDocumentDto> findAdditionalDocuments(String proposalId) {
+        Map proposal = glProposalFinder.findProposalById(new ProposalId(proposalId));
+        List<GLProposerDocument> uploadedDocuments = proposal.get("proposerDocuments") != null ? (List<GLProposerDocument>) proposal.get("proposerDocuments") : Lists.newArrayList();
+        Set<GLProposalMandatoryDocumentDto> mandatoryDocumentDtos = Sets.newHashSet();
+        if (isNotEmpty(uploadedDocuments)) {
+            mandatoryDocumentDtos = uploadedDocuments.stream().filter(uploadedDocument -> uploadedDocument.isMandatory()).map(new Function<GLProposerDocument, GLProposalMandatoryDocumentDto>() {
+                @Override
+                public GLProposalMandatoryDocumentDto apply(GLProposerDocument glProposerDocument) {
+                    GLProposalMandatoryDocumentDto mandatoryDocumentDto = new GLProposalMandatoryDocumentDto(glProposerDocument.getDocumentId(), glProposerDocument.getDocumentName());
+                    GridFSDBFile gridFSDBFile = gridFsTemplate.findOne(new Query(Criteria.where("_id").is(glProposerDocument.getGridFsDocId())));
+                    mandatoryDocumentDto.setFileName(gridFSDBFile.getFilename());
+                    mandatoryDocumentDto.setContentType(gridFSDBFile.getContentType());
+                    mandatoryDocumentDto.setGridFsDocId(gridFSDBFile.getId().toString());
+                    try {
+                        mandatoryDocumentDto.updateWithContent(IOUtils.toByteArray(gridFSDBFile.getInputStream()));
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    return mandatoryDocumentDto;
+                }
+            }).collect(Collectors.toSet());
+        }
+        return mandatoryDocumentDtos;
     }
 
 }

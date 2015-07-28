@@ -21,7 +21,6 @@ import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.poifs.filesystem.POIFSFileSystem;
 import org.apache.poi.util.IOUtils;
 import org.axonframework.commandhandling.gateway.CommandGateway;
-import org.joda.time.DateTime;
 import org.nthdimenzion.presentation.Result;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.query.Criteria;
@@ -40,6 +39,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.*;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import static org.nthdimenzion.presentation.AppUtils.getLoggedInUserDetail;
 
@@ -126,7 +126,7 @@ public class GroupHealthProposalController {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("pla/grouphealth/proposal/viewApprovalProposal");
         List<GHProposalDto> submittedProposals = ghProposalService.searchProposal(new SearchGHProposalDto(), new String[]{"PENDING_ACCEPTANCE"});
-        modelAndView.addObject("searchResult",submittedProposals);
+        modelAndView.addObject("searchResult", submittedProposals);
         modelAndView.addObject("searchCriteria", new SearchGHProposalDto());
         return modelAndView;
     }
@@ -136,9 +136,9 @@ public class GroupHealthProposalController {
     public ModelAndView findSubmittedProposal(SearchGHProposalDto searchGHProposalDto) {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("pla/grouphealth/proposal/viewApprovalProposal");
-     List<GHProposalDto> submittedProposals = ghProposalService.searchProposal(searchGHProposalDto, new String[]{"PENDING_ACCEPTANCE"});
+        List<GHProposalDto> submittedProposals = ghProposalService.searchProposal(searchGHProposalDto, new String[]{"PENDING_ACCEPTANCE"});
 
-        modelAndView.addObject("searchResult",submittedProposals);
+        modelAndView.addObject("searchResult", submittedProposals);
         modelAndView.addObject("searchCriteria", new SearchGHProposalDto());
         return modelAndView;
     }
@@ -424,8 +424,16 @@ public class GroupHealthProposalController {
     @RequestMapping(value = "/getmandatorydocuments/{proposalId}", method = RequestMethod.GET)
     @ResponseBody
     @ApiOperation(httpMethod = "GET", value = "To list mandatory documents which is being configured in Mandatory Document SetUp")
-    public List<GHProposalMandatoryDocumentDto> findMandatoryDocuments(@PathVariable("proposalId") String proposalId) {
-        List<GHProposalMandatoryDocumentDto> ghProposalMandatoryDocumentDtos = ghProposalService.findMandatoryDocuments(proposalId);
+    public Set<GHProposalMandatoryDocumentDto> findMandatoryDocuments(@PathVariable("proposalId") String proposalId) {
+        Set<GHProposalMandatoryDocumentDto> ghProposalMandatoryDocumentDtos = ghProposalService.findMandatoryDocuments(proposalId);
+        return ghProposalMandatoryDocumentDtos;
+    }
+
+    @RequestMapping(value = "/getadditionaldocuments/{proposalId}", method = RequestMethod.GET)
+    @ResponseBody
+    @ApiOperation(httpMethod = "GET", value = "To list additional documents which is being configured in Mandatory Document SetUp")
+    public Set<GHProposalMandatoryDocumentDto> findAdditionalDocuments(@PathVariable("proposalId") String proposalId) {
+        Set<GHProposalMandatoryDocumentDto> ghProposalMandatoryDocumentDtos = ghProposalService.findAdditionalDocuments(proposalId);
         return ghProposalMandatoryDocumentDtos;
     }
 

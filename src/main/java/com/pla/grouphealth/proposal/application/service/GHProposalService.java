@@ -363,7 +363,7 @@ public class GHProposalService {
         return proposalApproverCommentsDtos;
     }
 
-    public List<GHProposalMandatoryDocumentDto> findMandatoryDocuments(String proposalId) {
+    public Set<GHProposalMandatoryDocumentDto> findMandatoryDocuments(String proposalId) {
         Map proposal = ghProposalFinder.findProposalById(proposalId);
         List<GHInsured> insureds = (List<GHInsured>) proposal.get("insureds");
         List<GHProposerDocument> uploadedDocuments = proposal.get("proposerDocuments") != null ? (List<GHProposerDocument>) proposal.get("proposerDocuments") : Lists.newArrayList();
@@ -398,7 +398,7 @@ public class GHProposalService {
             }
         });
         Set<ClientDocumentDto> mandatoryDocuments = underWriterAdapter.getMandatoryDocumentsForApproverApproval(documentDetailDtos, ProcessType.ENROLLMENT);
-        List<GHProposalMandatoryDocumentDto> mandatoryDocumentDtos = Lists.newArrayList();
+        Set<GHProposalMandatoryDocumentDto> mandatoryDocumentDtos = Sets.newHashSet();
         if (isNotEmpty(mandatoryDocuments)) {
             mandatoryDocumentDtos = mandatoryDocuments.stream().map(new Function<ClientDocumentDto, GHProposalMandatoryDocumentDto>() {
                 @Override
@@ -425,10 +425,37 @@ public class GHProposalService {
                     }
                     return mandatoryDocumentDto;
                 }
-            }).collect(Collectors.toList());
+            }).collect(Collectors.toSet());
         }
         return mandatoryDocumentDtos;
     }
+
+
+    public Set<GHProposalMandatoryDocumentDto> findAdditionalDocuments(String proposalId) {
+        Map proposal = ghProposalFinder.findProposalById(proposalId);
+        List<GHProposerDocument> uploadedDocuments = proposal.get("proposerDocuments") != null ? (List<GHProposerDocument>) proposal.get("proposerDocuments") : Lists.newArrayList();
+        Set<GHProposalMandatoryDocumentDto> mandatoryDocumentDtos = Sets.newHashSet();
+        if (isNotEmpty(uploadedDocuments)) {
+            mandatoryDocumentDtos = uploadedDocuments.stream().filter(uploadedDocument -> uploadedDocument.isMandatory()).map(new Function<GHProposerDocument, GHProposalMandatoryDocumentDto>() {
+                @Override
+                public GHProposalMandatoryDocumentDto apply(GHProposerDocument ghProposerDocument) {
+                    GHProposalMandatoryDocumentDto mandatoryDocumentDto = new GHProposalMandatoryDocumentDto(ghProposerDocument.getDocumentId(), ghProposerDocument.getDocumentName());
+                    GridFSDBFile gridFSDBFile = gridFsTemplate.findOne(new Query(Criteria.where("_id").is(ghProposerDocument.getGridFsDocId())));
+                    mandatoryDocumentDto.setFileName(gridFSDBFile.getFilename());
+                    mandatoryDocumentDto.setContentType(gridFSDBFile.getContentType());
+                    mandatoryDocumentDto.setGridFsDocId(gridFSDBFile.getId().toString());
+                    try {
+                        mandatoryDocumentDto.updateWithContent(IOUtils.toByteArray(gridFSDBFile.getInputStream()));
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    return mandatoryDocumentDto;
+                }
+            }).collect(Collectors.toSet());
+        }
+        return mandatoryDocumentDtos;
+    }
+
 
     private class TransformToGLQuotationDto implements Function<Map, GlQuotationDto> {
 

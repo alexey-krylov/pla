@@ -162,7 +162,7 @@ public class GHProposalCommandHandler {
             documents = Sets.newHashSet();
         }
         String gridFsDocId = gridFsTemplate.store(ghProposalDocumentCommand.getFile().getInputStream(), fileName, ghProposalDocumentCommand.getFile().getContentType()).getId().toString();
-        GHProposerDocument currentDocument = new GHProposerDocument(ghProposalDocumentCommand.getDocumentId(), fileName, gridFsDocId, ghProposalDocumentCommand.getFile().getContentType());
+        GHProposerDocument currentDocument = new GHProposerDocument(ghProposalDocumentCommand.getDocumentId(), fileName, gridFsDocId, ghProposalDocumentCommand.getFile().getContentType(), ghProposalDocumentCommand.isMandatory());
         if (!documents.add(currentDocument)) {
             GHProposerDocument existingDocument = documents.stream().filter(new Predicate<GHProposerDocument>() {
                 @Override
@@ -185,6 +185,4 @@ public class GHProposalCommandHandler {
         groupHealthProposal = groupHealthProposalService.updateWithPremiumDetail(groupHealthProposal, premiumDetailDto, userDetails);
         return groupHealthProposal;
     }
-
-
 }
