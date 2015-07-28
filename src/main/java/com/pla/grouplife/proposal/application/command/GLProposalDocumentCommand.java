@@ -21,4 +21,7 @@ public class GLProposalDocumentCommand {
     private String filename;
 
     private MultipartFile file;
+
+    private boolean additional;
+
 }

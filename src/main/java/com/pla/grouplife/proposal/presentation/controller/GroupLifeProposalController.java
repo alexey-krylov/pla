@@ -77,12 +77,11 @@ public class GroupLifeProposalController {
     public ResponseEntity createProposal(@PathVariable("quotationId") String quotationId, HttpServletRequest request) {
         if (glProposalService.hasProposalForQuotation(quotationId)) {
             return new ResponseEntity(Result.failure("Proposal Already Exists..Do you want to override the same?"), HttpStatus.INTERNAL_SERVER_ERROR);
-        } else {
-            UserDetails userDetails = getLoggedInUserDetail(request);
-            GLQuotationToProposalCommand glQuotationToProposalCommand = new GLQuotationToProposalCommand(quotationId, userDetails);
-            commandGateway.sendAndWait(glQuotationToProposalCommand);
         }
-        return new ResponseEntity(Result.success("Proposal successfully created"), HttpStatus.OK);
+        UserDetails userDetails = getLoggedInUserDetail(request);
+        GLQuotationToProposalCommand glQuotationToProposalCommand = new GLQuotationToProposalCommand(quotationId, userDetails);
+        String proposalId = commandGateway.sendAndWait(glQuotationToProposalCommand);
+        return new ResponseEntity(Result.success("Proposal successfully created", proposalId), HttpStatus.OK);
     }
 
 
@@ -91,15 +90,13 @@ public class GroupLifeProposalController {
 
     public ModelAndView searchQuotation(@RequestParam("quotationNumber") String quotationNumber) {
         ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("pla/grouplife/proposal/searchQuotation");
+        modelAndView.setViewName("pla/groupLife/proposal/searchQuotation");
         try {
             modelAndView.addObject("searchResult", glProposalService.searchGeneratedQuotation(quotationNumber));
         } catch (Exception e) {
             modelAndView.addObject("searchResult", Lists.newArrayList());
         }
-        System.out.println("***************************************TRY METHOD*******************************");
         System.out.println(glProposalService.searchGeneratedQuotation(quotationNumber));
-        System.out.println("***************************************Catch METHOD*******************************");
         System.out.println(Lists.newArrayList());
 
 
@@ -111,7 +108,7 @@ public class GroupLifeProposalController {
     @ApiOperation(httpMethod = "GET", value = "To open edit proposal page")
     public ModelAndView gotoCreateProposal() {
         ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("pla/grouplife/proposal/createProposal");
+        modelAndView.setViewName("pla/groupLife/proposal/createProposal");
         return modelAndView;
     }
 
@@ -126,7 +123,7 @@ public class GroupLifeProposalController {
     @ApiOperation(httpMethod = "GET", value = "To open search quotation page")
     public ModelAndView openSearchQuotation() {
         ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("pla/grouplife/proposal/searchQuotation");
+        modelAndView.setViewName("pla/groupLife/proposal/searchQuotation");
         return modelAndView;
     }
 
@@ -162,7 +159,7 @@ public class GroupLifeProposalController {
     @ApiOperation(httpMethod = "GET", value = "To open search proposal page")
     public ModelAndView listProposal() {
         ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("pla/grouplife/proposal/viewProposal");
+        modelAndView.setViewName("pla/groupLife/proposal/viewProposal");
         modelAndView.addObject("searchCriteria", new SearchGLProposalDto());
         return modelAndView;
     }
@@ -171,7 +168,7 @@ public class GroupLifeProposalController {
     @ApiOperation(httpMethod = "POST", value = "To search proposal")
     public ModelAndView searchProposal(SearchGLProposalDto searchGLProposalDto) {
         ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("pla/grouphealth/proposal/viewProposal");
+        modelAndView.setViewName("pla/groupLife/proposal/viewProposal");
         try {
             modelAndView.addObject("searchResult", glProposalService.searchProposal(searchGLProposalDto, new String[]{"DRAFT", "PENDING_ACCEPTANCE", "RETURNED"}));
         } catch (Exception e) {
@@ -180,11 +177,12 @@ public class GroupLifeProposalController {
         modelAndView.addObject("searchCriteria", searchGLProposalDto);
         return modelAndView;
     }
+
     @RequestMapping(value = "/viewApprovalProposal", method = RequestMethod.GET)
     @ApiOperation(httpMethod = "GET", value = "To open Approval proposal page in view Mode")
     public ModelAndView gotoApprovalProposal() {
         ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("pla/grouplife/proposal/createApprovalProposal");
+        modelAndView.setViewName("pla/groupLife/proposal/createApprovalProposal");
         return modelAndView;
     }
 
@@ -193,7 +191,7 @@ public class GroupLifeProposalController {
     @ApiOperation(httpMethod = "GET", value = "To open edit proposal page")
     public ModelAndView gotoCreateProposalReturnStatus() {
         ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("pla/grouplife/proposal/createProposalReturnStatus");
+        modelAndView.setViewName("pla/groupLife/proposal/createProposalReturnStatus");
         return modelAndView;
     }
 
@@ -201,22 +199,21 @@ public class GroupLifeProposalController {
     @ApiOperation(httpMethod = "GET", value = "To open Approval proposal page")
     public ModelAndView gotoApprovalProposalPage() {
         ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("pla/grouplife/proposal/viewApprovalProposal");
+        modelAndView.setViewName("pla/groupLife/proposal/viewApprovalProposal");
         List<GLProposalDto> submittedProposals = glProposalService.searchProposal(new SearchGLProposalDto(), new String[]{"PENDING_ACCEPTANCE"});
-        modelAndView.addObject("searchResult",submittedProposals);
+        modelAndView.addObject("searchResult", submittedProposals);
         modelAndView.addObject("searchCriteria", new SearchGLProposalDto());
         return modelAndView;
     }
-
 
 
     @RequestMapping(value = "/getsubmittedproposals", method = RequestMethod.POST)
     @ApiOperation(httpMethod = "POST", value = "To search submitted proposal for approver approval")
     public ModelAndView findSubmittedProposal(SearchGLProposalDto searchGLProposalDto) {
         ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("pla/grouphealth/proposal/viewApprovalProposal");
+        modelAndView.setViewName("pla/groupLife/proposal/viewApprovalProposal");
         List<GLProposalDto> submittedProposals = glProposalService.searchProposal(searchGLProposalDto, new String[]{"PENDING_ACCEPTANCE"});
-        modelAndView.addObject("searchResult",submittedProposals);
+        modelAndView.addObject("searchResult", submittedProposals);
         modelAndView.addObject("searchCriteria", new SearchGLProposalDto());
         return modelAndView;
 
@@ -226,7 +223,7 @@ public class GroupLifeProposalController {
     @ApiOperation(httpMethod = "GET", value = "To open search proposal page")
     public ModelAndView openSearchProposal() {
         ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("pla/grouplife/proposal/viewProposal");
+        modelAndView.setViewName("pla/groupLife/proposal/viewProposal");
         modelAndView.addObject("searchCriteria", new SearchGLProposalDto());
         return modelAndView;
     }
@@ -422,11 +419,11 @@ public class GroupLifeProposalController {
     }
 
 
-    @RequestMapping(value = "/getapprovercomments", method = RequestMethod.GET)
+    @RequestMapping(value = "/getapprovercomments/{proposalId}", method = RequestMethod.GET)
     @ResponseBody
     @ApiOperation(httpMethod = "GET", value = "To list approval comments")
-    public List<GLProposalApproverCommentDto> findApproverComments() {
-        return glProposalService.findApproverComments();
+    public List<GLProposalApproverCommentDto> findApproverComments(@PathVariable("proposalId") String proposalId) {
+        return glProposalService.findApproverComments(proposalId);
     }
 
     @RequestMapping(value = "/getmandatorydocuments/{proposalId}", method = RequestMethod.GET)

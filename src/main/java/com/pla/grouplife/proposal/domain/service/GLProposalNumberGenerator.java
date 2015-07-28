@@ -29,7 +29,7 @@ public class GLProposalNumberGenerator {
         String currentDateInString = now.toString(DateTimeFormat.forPattern("dd/MM/yyyy"));
         String month = currentDateInString.substring(3, 5).trim();
         String year = currentDateInString.substring(8, 10).trim();
-        String quotationNumber = 6 + "-" + 4 + "-" + quotationSequence + "-" + month + year;
+        String quotationNumber = 6 + "-" + 1 + "-" + quotationSequence + "-" + month + year;
         return quotationNumber;
     }
 }

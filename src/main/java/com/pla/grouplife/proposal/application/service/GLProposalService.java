@@ -146,6 +146,7 @@ public class GLProposalService {
         agentDetailDto.setAgentName(agentDetail.get("firstName") + " " + (agentDetail.get("lastName") == null ? "" : (String) agentDetail.get("lastName")));
         agentDetailDto.setAgentMobileNumber(agentDetail.get("mobileNumber") != null ? (String) agentDetail.get("mobileNumber") : "");
         agentDetailDto.setAgentSalutation(agentDetail.get("title") != null ? (String) agentDetail.get("title") : "");
+        agentDetailDto.setActive("ACTIVE".equalsIgnoreCase((String) agentDetail.get("agentStatus")));
         return agentDetailDto;
     }
 
@@ -170,7 +171,7 @@ public class GLProposalService {
                 DateTime submittedOn = map.get("submittedOn") != null ? new DateTime((Date) map.get("submittedOn")) : null;
                 String proposalStatus = map.get("proposalStatus") != null ? (String) map.get("proposalStatus") : "";
                 String proposalNumber = map.get("proposalNumber") != null ? ((ProposalNumber) map.get("proposalNumber")).getProposalNumber() : "";
-                GHProposer proposerMap = map.get("proposer") != null ? (GHProposer) map.get("proposer") : null;
+                Proposer proposerMap = map.get("proposer") != null ? (Proposer) map.get("proposer") : null;
                 String proposerName = proposerMap != null ? proposerMap.getProposerName() : "";
                 GLProposalDto glProposalDto = new GLProposalDto(proposalId, submittedOn, agentDetailDto.getAgentId(), agentDetailDto.getAgentName(), proposalStatus, proposalNumber, proposerName);
                 return glProposalDto;
@@ -333,8 +334,8 @@ public class GLProposalService {
         return agentDetailDto;
     }
 
-    public List<GLProposalApproverCommentDto> findApproverComments() {
-        List<GroupLifeProposalStatusAudit> audits = glProposalStatusAuditRepository.findAll();
+    public List<GLProposalApproverCommentDto> findApproverComments(String proposalId) {
+        List<GroupLifeProposalStatusAudit> audits = glProposalStatusAuditRepository.findByProposalId(new ProposalId(proposalId));
         List<GLProposalApproverCommentDto> proposalApproverCommentsDtos = Lists.newArrayList();
         if (isNotEmpty(audits)) {
             proposalApproverCommentsDtos = audits.stream().map(new Function<GroupLifeProposalStatusAudit, GLProposalApproverCommentDto>() {
@@ -415,7 +416,7 @@ public class GLProposalService {
             String quotationStatus = map.get("quotationStatus") != null ? (String) map.get("quotationStatus") : "";
             String quotationNumber = map.get("quotationNumber") != null ? (String) map.get("quotationNumber") : "";
             ObjectId parentQuotationIdMap = map.get("parentQuotationId") != null ? (ObjectId) map.get("parentQuotationId") : null;
-            GHProposer proposerMap = map.get("proposer") != null ? (GHProposer) map.get("proposer") : null;
+            Proposer proposerMap = map.get("proposer") != null ? (Proposer) map.get("proposer") : null;
             String proposerName = proposerMap != null ? proposerMap.getProposerName() : "";
             String parentQuotationId = parentQuotationIdMap != null ? parentQuotationIdMap.toString() : "";
             GlQuotationDto glQuotationDto = new GlQuotationDto(new QuotationId(quotationId), (Integer) map.get("versionNumber"), generatedOn, agentDetailDto.getAgentId(), agentDetailDto.getAgentName(), new QuotationId(parentQuotationId), quotationStatus, quotationNumber, proposerName, getIntervalInDays(sharedOn), sharedOn);

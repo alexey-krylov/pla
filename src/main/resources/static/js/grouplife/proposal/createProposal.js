@@ -89,8 +89,9 @@ angular.module('createProposal', ['common', 'ngRoute', 'mgcrea.ngStrap.select', 
                 }
 
             };
-
-            $scope.additionalDocumentList = [{}, {}];
+    $scope.additional=false;
+           // $scope.additionalDocumentList = [{}, {}];
+            $scope.additionalDocumentList = [{}];
 
             $scope.addAdditionalDocument = function () {
                 $scope.additionalDocumentList.unshift({});
@@ -104,11 +105,12 @@ angular.module('createProposal', ['common', 'ngRoute', 'mgcrea.ngStrap.select', 
                 for (var i = 0; i < $scope.additionalDocumentList.length; i++) {
                     var document = $scope.additionalDocumentList[i];
                     var files = document.documentAttached;
+                    $scope.additional=true;
                     if (files) {
                         $upload.upload({
                             url: '/pla/grouplife/proposal/uploadmandatorydocument',
                             file: files,
-                            fields: {documentId: document.documentName, proposalId: $scope.proposalId},
+                            fields: {documentId: document.documentName, proposalId: $scope.proposalId,additional:$scope.additional},
                             method: 'POST'
                         }).progress(function (evt) {
 
@@ -323,7 +325,7 @@ angular.module('createProposal', ['common', 'ngRoute', 'mgcrea.ngStrap.select', 
             $scope.$watch( 'proposalDetails.premium.optedPremiumFrequency',function(newValue, oldValue){
                 console.log("$scope.proposalDetails.premium.optedPremiumFrequency::"+$scope.proposalDetails.premium.optedPremiumFrequency);
                 console.log("$scope.selectedInstallment::"+$scope.selectedInstallment);
-                var enableSaveButton = $scope.proposalDetails.premium.optedPremiumFrequency!=null|| $scope.selectedInstallment!=null;
+                var enableSaveButton = $scope.proposalDetails.premium.optedPremiumFrequency!=null || $scope.selectedInstallment!=null;
                 console.log("enableSaveButton--"+enableSaveButton)
                 if(newValue){
                     $scope.disableSaveButton=enableSaveButton;

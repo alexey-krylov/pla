@@ -121,7 +121,7 @@ public class GroupLifeProposal extends AbstractAggregateRoot<ProposalId> {
         this.submittedOn = submittedOn;
         this.proposalStatus = GLProposalStatus.PENDING_ACCEPTANCE;
         registerEvent(new GLQuotationConvertedToProposalEvent(this.quotation.getQuotationNumber(), this.quotation.getQuotationId()));
-        registerEvent(new GLProposalStatusAuditEvent(this.getProposalId(), GLProposalStatus.PENDING_ACCEPTANCE, submittedBy, comment, submittedOn));
+        //registerEvent(new GLProposalStatusAuditEvent(this.getProposalId(), GLProposalStatus.PENDING_ACCEPTANCE, submittedBy, comment, submittedOn));
         return this;
     }
 
