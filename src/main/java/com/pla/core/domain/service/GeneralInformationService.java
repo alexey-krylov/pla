@@ -211,94 +211,6 @@ public class GeneralInformationService {
         return discountFactorItems;
     }
 
-
-    public Map<String,List<GeneralInformationProcessDto>> getOrganizationProcessItems(){
-        Map<String,List<GeneralInformationProcessDto>> organizationInformationProcess = Maps.newLinkedHashMap();
-        organizationInformationProcess.put("modalFactorProcess",getModalFactorItems());
-        organizationInformationProcess.put("discountFactorProcess",getDiscountFactorItems());
-        organizationInformationProcess.put("serviceTax",getServiceTaxItem());
-        return organizationInformationProcess;
-    }
-
-    public List<Map<String,Object>> getProductLineProcessItems(){
-        List<Map<String,Object>> processItemList = Lists.newArrayList();
-        processItemList.add(populateProcessItemDetail("QUOTATION","Quotation"));
-        processItemList.add(populateProcessItemDetail("ENROLLMENT","New business/Enrollment"));
-        processItemList.add(populateProcessItemDetail("REINSTATEMENT","Reinstatement"));
-        processItemList.add(populateProcessItemDetail("ENDORSEMENT","Endorsement"));
-        processItemList.add(populateProcessItemDetail("CLAIM","Claim"));
-        processItemList.add(populateProcessItemDetail("MATURITY","Maturity"));
-        processItemList.add(populateProcessItemDetail("SURRENDER","Surrender"));
-        Map<String,Object> processItemMap = Maps.newLinkedHashMap();
-        processItemMap.put("process", "POLICY_FEE");
-        processItemMap.put("processItem", getPolicyFeeProcessType());
-        processItemList.add(processItemMap);
-        processItemMap = Maps.newLinkedHashMap();
-        processItemMap.put("process", "POLICY_PROCESS_MINIMUM_LIMIT");
-        processItemMap.put("processItem", getPolicyProcessMinimumLimitType());
-        processItemList.add(processItemMap);
-        return processItemList;
-    }
-
-    public Map<String,Object> populateProcessItemDetail(String processType,String description){
-        Map<String,Object> processItemMap = Maps.newLinkedHashMap();
-        processItemMap.put("process",processType);
-        processItemMap.put("processItem", processLineItemFullDescriptionBy(description));
-        return processItemMap;
-    }
-
-    public List<GeneralInformationProcessDto> processLineItemFullDescriptionBy(String process){
-        return Arrays.asList(ProductLineProcessType.values()).parallelStream().map(new Function<ProductLineProcessType, GeneralInformationProcessDto>() {
-            @Override
-            public GeneralInformationProcessDto apply(ProductLineProcessType productLineProcessType) {
-                return new GeneralInformationProcessDto(productLineProcessType.name(),productLineProcessType.getDescription(),productLineProcessType.getFullDescriptionByProcess(process,""));
-            }
-        }).collect(Collectors.toList());
-    }
-    private List<GeneralInformationProcessDto> getModalFactorItems(){
-        List<GeneralInformationProcessDto> organizationProcessList = Lists.newArrayList();
-        for (ModalFactorItem modalFactorItem : ModalFactorItem.values()){
-            organizationProcessList.add(transformProductLineProcessItem(modalFactorItem.name(),modalFactorItem.getDescription(),modalFactorItem.getFullDescription()));
-        }
-        return organizationProcessList;
-    }
-
-    private List<GeneralInformationProcessDto> getServiceTaxItem(){
-        List<GeneralInformationProcessDto> organizationProcessList = Lists.newArrayList();
-        organizationProcessList.add(transformProductLineProcessItem(Tax.SERVICE_TAX.name(), Tax.SERVICE_TAX.getDescription(), Tax.SERVICE_TAX.getFullDescription()));
-        return organizationProcessList;
-    }
-
-    private List<GeneralInformationProcessDto> getDiscountFactorItems(){
-        List<GeneralInformationProcessDto> organizationProcessList = Lists.newArrayList();
-        for (DiscountFactorItem discountFactorItem : DiscountFactorItem.values()){
-            organizationProcessList.add(transformProductLineProcessItem(discountFactorItem.name(),discountFactorItem.getDescription(),discountFactorItem.getFullDescription()));
-        }
-        return organizationProcessList;
-    }
-
-    private List<GeneralInformationProcessDto> getPolicyFeeProcessType(){
-        List<GeneralInformationProcessDto> productLineProcessList = Lists.newArrayList();
-        for(PolicyFeeProcessType policyFeeProcessType : PolicyFeeProcessType.values()){
-            productLineProcessList.add(transformProductLineProcessItem(policyFeeProcessType.name(),policyFeeProcessType.getDescription(),policyFeeProcessType.getDescription()));
-        }
-        return productLineProcessList;
-    }
-
-    private List<GeneralInformationProcessDto> getPolicyProcessMinimumLimitType(){
-        List<GeneralInformationProcessDto> productLineProcessList = Lists.newArrayList();
-        for(PolicyProcessMinimumLimitType minimumLimitType :PolicyProcessMinimumLimitType.values()){
-            productLineProcessList.add(transformProductLineProcessItem(minimumLimitType.name(),minimumLimitType.getDescription(),minimumLimitType.getDescription()));
-        }
-        return productLineProcessList;
-    }
-
-    private GeneralInformationProcessDto transformProductLineProcessItem(String type,String description,String fullDescription){
-        GeneralInformationProcessDto generalInformationProcessDto = new GeneralInformationProcessDto(type,description,fullDescription);
-        return generalInformationProcessDto;
-    }
-
-
     public List<Map> getAllOrganizationInformation(){
         List<Map> organizationInformation = findAllOrganizationInformation();
         if (isEmpty(organizationInformation)){
@@ -311,9 +223,9 @@ public class GeneralInformationService {
         List<Map> productLineInformation = findAllProductLineInformation();
         List<Map> productLineInformationList = Lists.newArrayList();
         if (isEmpty(productLineInformation)){
-            productLineInformationList.add(getGroupHealthProductLineInformation());
-            productLineInformationList.add(getGroupInsuranceProductLineInformation());
-            productLineInformationList.add(getIndividualInsuranceProductLineInformation());
+            productLineInformationList.add(getProductLineInformationByLineOfBusiness(LineOfBusinessEnum.GROUP_HEALTH));
+            productLineInformationList.add(getProductLineInformationByLineOfBusiness(LineOfBusinessEnum.GROUP_LIFE));
+            productLineInformationList.add(getProductLineInformationByLineOfBusiness(LineOfBusinessEnum.INDIVIDUAL_LIFE));
             return productLineInformationList;
         }
         for (Map productLineInformationMap : productLineInformation){
@@ -361,26 +273,10 @@ public class GeneralInformationService {
                     return map;
                 }
             }).collect(Collectors.toList()));
-            Map  discountFactorMap = (Map) productLineInformationMap.get("discountFactorProcessInformation");
-            productLineInformationByBusinessId.put("discountFactorItems",((List)discountFactorMap.get("discountFactorItems")).parallelStream().map(new Function<Map, Map>() {
-                @Override
-                public Map apply(Map map) {
-                    DiscountFactorItem discountFactorItem = DiscountFactorItem.valueOf((String)map.get("discountFactorItem"));
-                    map.put("description",discountFactorItem.getDescription());
-                    map.put("fullDescription",discountFactorItem.getDescription());
-                    return map;
-                }
-            }).collect(Collectors.toList()));
+            Map discountFactorMap = (Map) productLineInformationMap.get("discountFactorProcessInformation");
+            productLineInformationByBusinessId.put("discountFactorItems",((List)discountFactorMap.get("discountFactorItems")).parallelStream().map(new DiscountFactorTransformation()).collect(Collectors.toList()));
             Map  modalFactorMap = (Map) productLineInformationMap.get("modalFactorProcessInformation");
-            productLineInformationByBusinessId.put("modelFactorItems",((List)modalFactorMap.get("modelFactorItems")).parallelStream().map(new Function<Map, Map>() {
-                @Override
-                public Map apply(Map map) {
-                    ModalFactorItem modalFactorItem = ModalFactorItem.valueOf((String)map.get("modalFactorItem"));
-                    map.put("description",modalFactorItem.getDescription());
-                    map.put("fullDescription",modalFactorItem.getDescription());
-                    return map;
-                }
-            }).collect(Collectors.toList()));
+            productLineInformationByBusinessId.put("modelFactorItems",((List)modalFactorMap.get("modelFactorItems")).parallelStream().map(new ModalFactorTransformation()).collect(Collectors.toList()));
             productLineInformationByBusinessId.put("ageLoadingFactor",productLineInformationMap.get("ageLoadingFactor"));
             productLineInformationByBusinessId.put("moratoriumPeriod",productLineInformationMap.get("moratoriumPeriod"));
             productLineInformationList.add(productLineInformationByBusinessId);
@@ -388,19 +284,19 @@ public class GeneralInformationService {
         return transformProductLineInformation(productLineInformationList);
     }
 
-    private List<Map> transformProductLineInformation(List<Map> productLineInformation){
+    private List<Map> transformProductLineInformation(List<Map> productLineInformation) {
         List<String> strings = Lists.newArrayList();
         for (Map map : productLineInformation){
             strings.add((String) map.get("productLine"));
         }
         if (!strings.contains(LineOfBusinessEnum.GROUP_HEALTH.name())) {
-            productLineInformation.add(getGroupHealthProductLineInformation());
+            productLineInformation.add(getProductLineInformationByLineOfBusiness(LineOfBusinessEnum.GROUP_HEALTH));
         }
         if (!strings.contains(LineOfBusinessEnum.GROUP_LIFE.name())) {
-            productLineInformation.add(getGroupInsuranceProductLineInformation());
+            productLineInformation.add(getProductLineInformationByLineOfBusiness(LineOfBusinessEnum.GROUP_LIFE));
         }
         if (!strings.contains(LineOfBusinessEnum.INDIVIDUAL_LIFE.name())) {
-            productLineInformation.add(getIndividualInsuranceProductLineInformation());
+            productLineInformation.add(getProductLineInformationByLineOfBusiness(LineOfBusinessEnum.INDIVIDUAL_LIFE));
         }
         return productLineInformation;
     }
@@ -419,34 +315,25 @@ public class GeneralInformationService {
         List<Map> organizationInformationList = new ArrayList<Map>();
         List<OrganizationGeneralInformation> organizationGeneralInformations =  mongoTemplate.findAll(OrganizationGeneralInformation.class, "organization_information");
         for (OrganizationGeneralInformation organizationGeneralInformation : organizationGeneralInformations) {
-            Map plan = objectMapper.convertValue(organizationGeneralInformation, Map.class);
-            organizationInformationList.add(plan);
+            Map organizationInformation = objectMapper.convertValue(organizationGeneralInformation, Map.class);
+            organizationInformation.put("modelFactorItems", ((List<Map>) organizationInformation.get("modelFactorItems")).parallelStream().map(new ModalFactorTransformation()).collect(Collectors.toList()));
+            organizationInformation.put("discountFactorItems", ((List<Map>) organizationInformation.get("discountFactorItems")).parallelStream().map(new DiscountFactorTransformation()).collect(Collectors.toList()));
+            Map serviceTaxMap  =((Map) organizationInformation.get("serviceTax"));
+            serviceTaxMap.put("description","Service Tax");
+            serviceTaxMap.put("fullDescription","Service Tax");
+            organizationInformation.put("serviceTax",serviceTaxMap);
+            organizationInformationList.add(organizationInformation);
         }
         return organizationInformationList;
     }
 
-    public Map getGroupHealthProductLineInformation(){
+
+    public Map getProductLineInformationByLineOfBusiness(LineOfBusinessEnum lineOfBusinessEnum){
         Map productLineMap  = Maps.newLinkedHashMap();
-        productLineMap.put("productLine", LineOfBusinessEnum.GROUP_HEALTH);
+        productLineMap.put("productLine", lineOfBusinessEnum);
         productLineMap.put("productLineInformationId",null);
-        productLineMap = getProductLineGeneralInformation(productLineMap, LineOfBusinessEnum.GROUP_HEALTH);
+        productLineMap = getProductLineGeneralInformation(productLineMap,lineOfBusinessEnum);
         return productLineMap;
-    }
-
-    public Map getGroupInsuranceProductLineInformation(){
-        Map insuranceMap  = Maps.newLinkedHashMap();
-        insuranceMap.put("productLine", LineOfBusinessEnum.GROUP_LIFE);
-        insuranceMap.put("productLineInformationId",null);
-        insuranceMap = getProductLineGeneralInformation(insuranceMap, LineOfBusinessEnum.GROUP_LIFE);
-        return insuranceMap;
-    }
-
-    public Map getIndividualInsuranceProductLineInformation(){
-        Map individualInsurance  = Maps.newLinkedHashMap();
-        individualInsurance.put("productLine", LineOfBusinessEnum.INDIVIDUAL_LIFE);
-        individualInsurance.put("productLineInformationId",null);
-        individualInsurance = getProductLineGeneralInformation(individualInsurance, LineOfBusinessEnum.INDIVIDUAL_LIFE);
-        return individualInsurance;
     }
 
     private List populateOrganizationGeneralInformationData(){
@@ -472,7 +359,7 @@ public class GeneralInformationService {
         productLineInformationMap.put("premiumFollowUpFrequency", transformPremiumFollowUp(lineOfBusinessId));
         productLineInformationMap.put("modelFactorItems",GeneralInformationProcessItem.MODAL_FACTOR.getOrganizationLevelProcessInformationItem(lineOfBusinessId));
         productLineInformationMap.put("discountFactorItems",GeneralInformationProcessItem.DISCOUNT_FACTOR.getOrganizationLevelProcessInformationItem(lineOfBusinessId));
-        productLineInformationMap.put("ageLoadingFactor", ImmutableMap.of("age",0,"loadingFactor",0));
+        productLineInformationMap.put("ageLoadingFactor", ImmutableMap.of("age", 0, "loadingFactor", 0));
         productLineInformationMap.put("moratoriumPeriod", 0);
         return productLineInformationMap;
     }
@@ -515,6 +402,26 @@ public class GeneralInformationService {
             String productLineProcessType = (String) map.get("productLineProcessItem");
             map.put("description",ProductLineProcessType.valueOf(productLineProcessType).toString());
             map.put("fullDescription",ProductLineProcessType.valueOf(productLineProcessType).getFullDescriptionByProcess(process, ""));
+            return map;
+        }
+    }
+
+    private class ModalFactorTransformation implements Function<Map,Map> {
+        @Override
+        public Map apply(Map map) {
+            ModalFactorItem modalFactorItem = ModalFactorItem.valueOf((String)map.get("modalFactorItem"));
+            map.put("description",modalFactorItem.getDescription());
+            map.put("fullDescription",modalFactorItem.getDescription());
+            return map;
+        }
+    }
+
+    private class DiscountFactorTransformation implements Function<Map,Map> {
+        @Override
+        public Map apply(Map map) {
+            DiscountFactorItem discountFactorItem = DiscountFactorItem.valueOf((String)map.get("discountFactorItem"));
+            map.put("description",discountFactorItem.getDescription());
+            map.put("fullDescription",discountFactorItem.getDescription());
             return map;
         }
     }

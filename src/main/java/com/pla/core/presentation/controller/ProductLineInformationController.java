@@ -7,7 +7,6 @@ import org.nthdimenzion.presentation.Result;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
@@ -34,18 +33,10 @@ public class ProductLineInformationController {
     private static final Logger LOGGER = LoggerFactory.getLogger(ProductLineInformationController.class);
     private GeneralInformationService generalInformationService;
 
-    private MongoTemplate mongoTemplate;
 
     @Autowired
-    public ProductLineInformationController(GeneralInformationService generalInformationService, MongoTemplate springMongoTemplate) {
+    public ProductLineInformationController(GeneralInformationService generalInformationService) {
         this.generalInformationService = generalInformationService;
-        this.mongoTemplate = springMongoTemplate;
-    }
-
-    @RequestMapping(value = "/getproductlineprocessitem", method = RequestMethod.GET)
-    @ResponseBody
-    public List<Map<String, Object>> getProductLineInformationItem(){
-        return generalInformationService.getProductLineProcessItems();
     }
 
     @RequestMapping(value = "/openview", method = RequestMethod.GET)
