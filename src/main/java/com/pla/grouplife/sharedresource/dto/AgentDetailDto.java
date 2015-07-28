@@ -24,4 +24,6 @@ public class AgentDetailDto {
 
     private String agentMobileNumber;
 
+    private boolean active;
+
 }

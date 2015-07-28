@@ -4,7 +4,6 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import com.mongodb.gridfs.GridFSDBFile;
 import com.pla.core.domain.model.agent.AgentId;
-import com.pla.grouphealth.sharedresource.model.vo.GHProposer;
 import com.pla.grouplife.proposal.application.command.GLRecalculatedInsuredPremiumCommand;
 import com.pla.grouplife.proposal.domain.model.GLProposerDocument;
 import com.pla.grouplife.proposal.domain.model.GroupLifeProposal;
@@ -118,7 +117,6 @@ public class GLProposalService {
         return glQuotationDtoList;
     }
 
-
     public AgentDetailDto getAgentDetail(String quotationId) {
         Map quotation = glFinder.getQuotationById(quotationId);
         AgentId agentMap = (AgentId) quotation.get("agentId");
@@ -156,7 +154,6 @@ public class GLProposalService {
         ProposerDto proposerDto = new ProposerDto(proposer);
         return proposerDto;
     }
-
 
     public List<GLProposalDto> searchProposal(SearchGLProposalDto searchGLProposalDto, String[] statuses) {
         List<Map> allQuotations = glProposalFinder.searchProposal(searchGLProposalDto.getProposalNumber(), searchGLProposalDto.getProposerName(), searchGLProposalDto.getAgentName(), searchGLProposalDto.getAgentCode(), searchGLProposalDto.getProposalId(), statuses);
@@ -316,6 +313,7 @@ public class GLProposalService {
         }
         premiumDetailDto = premiumDetailDto.addFrequencyPremiumAmount(premiumDetail.getAnnualPremiumAmount(), premiumDetail.getSemiAnnualPremiumAmount(), premiumDetail.getQuarterlyPremiumAmount(), premiumDetail.getMonthlyPremiumAmount());
         premiumDetailDto = premiumDetailDto.addNetTotalPremiumAmount(premiumDetail.getNetTotalPremium());
+        premiumDetailDto = premiumDetailDto.updateWithOptedFrequency(premiumDetail.getOptedFrequencyPremium() != null ? premiumDetail.getOptedFrequencyPremium().getPremiumFrequency() : null);
         return premiumDetailDto;
     }
 
@@ -404,7 +402,6 @@ public class GLProposalService {
         }
         return mandatoryDocumentDtos;
     }
-
 
     private class TransformToGLQuotationDto implements Function<Map, GlQuotationDto> {
 

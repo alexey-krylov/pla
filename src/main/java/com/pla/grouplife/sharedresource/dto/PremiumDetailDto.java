@@ -2,6 +2,7 @@ package com.pla.grouplife.sharedresource.dto;
 
 import com.google.common.collect.Sets;
 import com.pla.grouplife.quotation.query.PremiumInstallmentDto;
+import com.pla.publishedlanguage.domain.model.PremiumFrequency;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -47,6 +48,8 @@ public class PremiumDetailDto {
 
     private BigDecimal longTermDiscount;
 
+    private PremiumFrequency optedPremiumFrequency;
+
 
     public PremiumDetailDto(BigDecimal addOnBenefit, BigDecimal profitAndSolvencyLoading, BigDecimal hivDiscount, BigDecimal valuedClientDiscount, BigDecimal longTermDiscount, Integer policyTermValue) {
         this.addOnBenefit = addOnBenefit;
@@ -75,7 +78,7 @@ public class PremiumDetailDto {
         if (isEmpty(this.installments)) {
             this.installments = Sets.newHashSet();
         }
-        com.pla.grouplife.quotation.query.PremiumInstallmentDto premiumInstallment = new PremiumInstallmentDto(noOfInstallment, installmentAmount);
+        PremiumInstallmentDto premiumInstallment = new PremiumInstallmentDto(noOfInstallment, installmentAmount);
         this.installments.add(premiumInstallment);
         return this;
     }
@@ -90,6 +93,11 @@ public class PremiumDetailDto {
 
     public PremiumDetailDto addNetTotalPremiumAmount(BigDecimal netTotalAmount) {
         this.totalPremium = netTotalAmount;
+        return this;
+    }
+
+    public PremiumDetailDto updateWithOptedFrequency(PremiumFrequency optedPremiumFrequency){
+        this.optedPremiumFrequency=optedPremiumFrequency;
         return this;
     }
 }

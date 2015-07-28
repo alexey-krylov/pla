@@ -34,7 +34,7 @@ public class PremiumDetail {
 
     private Set<PremiumInstallment> installments;
 
-    private Set<Policy> policies;
+    private Set<GLFrequencyPremium> frequencyPremiums;
 
     private BigDecimal netTotalPremium;
 
@@ -43,6 +43,8 @@ public class PremiumDetail {
     private BigDecimal valuedClientDiscount;
 
     private BigDecimal longTermDiscount;
+
+    private GLFrequencyPremium optedFrequencyPremium;
 
 
     public PremiumDetail(BigDecimal addOnBenefit, BigDecimal profitAndSolvency, BigDecimal hivDiscount, BigDecimal valuedClientDiscount, BigDecimal longTermDiscount, Integer policyTermValue) {
@@ -60,10 +62,10 @@ public class PremiumDetail {
         return this;
     }
 
-    public Policy getAnnualPolicy() {
-        Optional<Policy> policyOptional = this.policies.stream().filter(new Predicate<Policy>() {
+    public GLFrequencyPremium getAnnualPolicy() {
+        Optional<GLFrequencyPremium> policyOptional = this.frequencyPremiums.stream().filter(new Predicate<GLFrequencyPremium>() {
             @Override
-            public boolean test(Policy policy) {
+            public boolean test(GLFrequencyPremium policy) {
                 return false;
             }
         }).findAny();
@@ -77,7 +79,8 @@ public class PremiumDetail {
     }
 
     public PremiumDetail nullifyFrequencyPremium() {
-        this.policies = null;
+        this.frequencyPremiums = null;
+        this.optedFrequencyPremium = null;
         return this;
     }
 
@@ -88,8 +91,8 @@ public class PremiumDetail {
         return this;
     }
 
-    public PremiumDetail addPolicies(Set<Policy> policies) {
-        this.policies = policies;
+    public PremiumDetail addPolicies(Set<GLFrequencyPremium> policies) {
+        this.frequencyPremiums = policies;
         return this;
     }
 
@@ -103,34 +106,47 @@ public class PremiumDetail {
     }
 
     public BigDecimal getAnnualPremiumAmount() {
-        Policy policy = getPolicy(PremiumFrequency.ANNUALLY);
-        return policy != null ? policy.getPremium() : null;
+        GLFrequencyPremium frequencyPremium = getPolicy(PremiumFrequency.ANNUALLY);
+        return frequencyPremium != null ? frequencyPremium.getPremium() : null;
     }
 
     public BigDecimal getSemiAnnualPremiumAmount() {
-        Policy policy = getPolicy(PremiumFrequency.SEMI_ANNUALLY);
-        return policy != null ? policy.getPremium() : null;
+        GLFrequencyPremium frequencyPremium = getPolicy(PremiumFrequency.SEMI_ANNUALLY);
+        return frequencyPremium != null ? frequencyPremium.getPremium() : null;
     }
 
 
     public BigDecimal getQuarterlyPremiumAmount() {
-        Policy policy = getPolicy(PremiumFrequency.QUARTERLY);
-        return policy != null ? policy.getPremium() : null;
+        GLFrequencyPremium frequencyPremium = getPolicy(PremiumFrequency.QUARTERLY);
+        return frequencyPremium != null ? frequencyPremium.getPremium() : null;
     }
 
     public BigDecimal getMonthlyPremiumAmount() {
-        Policy policy = getPolicy(PremiumFrequency.MONTHLY);
-        return policy != null ? policy.getPremium() : null;
+        GLFrequencyPremium frequencyPremium = getPolicy(PremiumFrequency.MONTHLY);
+        return frequencyPremium != null ? frequencyPremium.getPremium() : null;
+    }
+
+    public PremiumDetail updateWithOptedFrequencyPremium(PremiumFrequency premiumFrequency) {
+
+        Optional<GLFrequencyPremium> policyOptional = this.frequencyPremiums.stream().filter(new Predicate<GLFrequencyPremium>() {
+            @Override
+            public boolean test(GLFrequencyPremium policy) {
+                return premiumFrequency.equals(policy.getPremiumFrequency());
+            }
+        }).findAny();
+        GLFrequencyPremium ghFrequencyPremium = policyOptional.isPresent() ? policyOptional.get() : null;
+        this.optedFrequencyPremium = ghFrequencyPremium;
+        return this;
     }
 
 
-    private Policy getPolicy(PremiumFrequency premiumFrequency) {
-        if (isEmpty(this.policies)) {
+    private GLFrequencyPremium getPolicy(PremiumFrequency premiumFrequency) {
+        if (isEmpty(this.frequencyPremiums)) {
             return null;
         }
-        Optional<Policy> policyOptional = this.policies.stream().filter(new Predicate<Policy>() {
+        Optional<GLFrequencyPremium> policyOptional = this.frequencyPremiums.stream().filter(new Predicate<GLFrequencyPremium>() {
             @Override
-            public boolean test(Policy policy) {
+            public boolean test(GLFrequencyPremium policy) {
                 return premiumFrequency.equals(policy.getPremiumFrequency());
             }
         }).findAny();

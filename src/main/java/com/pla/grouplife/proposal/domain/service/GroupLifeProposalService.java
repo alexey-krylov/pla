@@ -27,6 +27,7 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import static com.pla.grouplife.proposal.domain.exception.ProposalException.raiseAgentIsInactiveException;
+import static org.nthdimenzion.utils.UtilValidator.isNotEmpty;
 
 @DomainService
 public class GroupLifeProposalService {
@@ -81,10 +82,10 @@ public class GroupLifeProposalService {
         premiumDetail = premiumDetail.updateWithNetPremium(groupLifeProposal.getNetAnnualPremiumPaymentAmount(premiumDetail));
         if (premiumDetailDto.getPolicyTermValue() != null && premiumDetailDto.getPolicyTermValue() == 365) {
             List<ComputedPremiumDto> computedPremiumDtoList = premiumCalculator.calculateModalPremium(new BasicPremiumDto(PremiumFrequency.ANNUALLY, premiumDetail.getNetTotalPremium()));
-            Set<Policy> policies = computedPremiumDtoList.stream().map(new Function<ComputedPremiumDto, Policy>() {
+            Set<GLFrequencyPremium> policies = computedPremiumDtoList.stream().map(new Function<ComputedPremiumDto, GLFrequencyPremium>() {
                 @Override
-                public Policy apply(ComputedPremiumDto computedPremiumDto) {
-                    return new Policy(computedPremiumDto.getPremiumFrequency(), computedPremiumDto.getPremium().setScale(AppConstants.scale, AppConstants.roundingMode));
+                public GLFrequencyPremium apply(ComputedPremiumDto computedPremiumDto) {
+                    return new GLFrequencyPremium(computedPremiumDto.getPremiumFrequency(), computedPremiumDto.getPremium().setScale(AppConstants.scale, AppConstants.roundingMode));
                 }
             }).collect(Collectors.toSet());
             premiumDetail = premiumDetail.addPolicies(policies);
@@ -102,6 +103,9 @@ public class GroupLifeProposalService {
                 premiumDetail = premiumDetail.addChoosenPremiumInstallment(premiumDetailDto.getPremiumInstallment().getInstallmentNo(), premiumDetailDto.getPremiumInstallment().getInstallmentAmount());
             }
             premiumDetail = premiumDetail.nullifyFrequencyPremium();
+        }
+        if (premiumDetailDto.getOptedPremiumFrequency() != null && isNotEmpty(premiumDetail.getFrequencyPremiums())) {
+            premiumDetail = premiumDetail.updateWithOptedFrequencyPremium(premiumDetailDto.getOptedPremiumFrequency());
         }
         groupLifeProposal = glProposalProcessor.updateWithPremiumDetail(groupLifeProposal, premiumDetail);
         return groupLifeProposal;

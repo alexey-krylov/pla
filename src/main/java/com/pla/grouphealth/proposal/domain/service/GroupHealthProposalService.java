@@ -111,8 +111,9 @@ public class GroupHealthProposalService {
             }
             premiumDetail = premiumDetail.nullifyFrequencyPremium();
         }
-        if (premiumDetailDto.getOptedPremiumFrequency() != null && isNotEmpty(premiumDetail.getFrequencyPremiums()))
+        if (premiumDetailDto.getOptedPremiumFrequency() != null && isNotEmpty(premiumDetail.getFrequencyPremiums())) {
             premiumDetail = premiumDetail.updateWithOptedFrequencyPremium(premiumDetailDto.getOptedPremiumFrequency());
+        }
 
         groupHealthProposal = ghProposalProcessor.updateWithPremiumDetail(groupHealthProposal, premiumDetail);
         return groupHealthProposal;

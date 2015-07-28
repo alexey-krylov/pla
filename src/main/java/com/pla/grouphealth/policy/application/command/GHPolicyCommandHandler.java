@@ -11,18 +11,18 @@ import org.springframework.stereotype.Component;
  * Created by Samir on 7/9/2015.
  */
 @Component
-public class GHPolicyCommandHandler {
+    public class GHPolicyCommandHandler {
 
-    private GHPolicyFactory ghPolicyFactory;
+        private GHPolicyFactory ghPolicyFactory;
 
-    private Repository<GroupHealthPolicy> ghPolicyMongoRepository;
+        private Repository<GroupHealthPolicy> ghPolicyMongoRepository;
 
 
-    @Autowired
-    public GHPolicyCommandHandler(GHPolicyFactory ghPolicyFactory, Repository<GroupHealthPolicy> ghPolicyMongoRepository) {
-        this.ghPolicyFactory = ghPolicyFactory;
-        this.ghPolicyMongoRepository = ghPolicyMongoRepository;
-    }
+        @Autowired
+        public GHPolicyCommandHandler(GHPolicyFactory ghPolicyFactory, Repository<GroupHealthPolicy> ghPolicyMongoRepository) {
+            this.ghPolicyFactory = ghPolicyFactory;
+            this.ghPolicyMongoRepository = ghPolicyMongoRepository;
+        }
 
     @CommandHandler
     public void createPolicy(GHProposalToPolicyCommand proposalToPolicyCommand) {
