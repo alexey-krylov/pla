@@ -4,6 +4,7 @@ import com.pla.core.domain.model.agent.AgentId;
 import com.pla.grouphealth.sharedresource.model.vo.GHInsured;
 import com.pla.grouphealth.sharedresource.model.vo.GHPremiumDetail;
 import com.pla.grouphealth.sharedresource.model.vo.GHProposer;
+import com.pla.grouphealth.sharedresource.model.vo.GHProposerDocument;
 import com.pla.sharedkernel.domain.model.PolicyNumber;
 import com.pla.sharedkernel.domain.model.Proposal;
 import com.pla.sharedkernel.identifier.PolicyId;
@@ -50,6 +51,8 @@ public class GroupHealthPolicy extends AbstractAggregateRoot<PolicyId> {
 
     private PolicyStatus status;
 
+    private Set<GHProposerDocument> proposerDocuments;
+
     public GroupHealthPolicy(PolicyId policyId, PolicyNumber policyNumber, Proposal proposal, DateTime inceptionOn, DateTime expiredOn) {
         checkArgument(policyId != null, "Policy ID cannot be empty");
         checkArgument(policyNumber != null, "Policy number cannot be empty");
@@ -81,6 +84,11 @@ public class GroupHealthPolicy extends AbstractAggregateRoot<PolicyId> {
 
     public GroupHealthPolicy addPremium(GHPremiumDetail premiumDetail) {
         this.premiumDetail = premiumDetail;
+        return this;
+    }
+
+    public GroupHealthPolicy addDocuments(Set<GHProposerDocument> proposerDocuments) {
+        this.proposerDocuments = proposerDocuments;
         return this;
     }
 

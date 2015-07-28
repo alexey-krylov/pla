@@ -3,10 +3,7 @@ package com.pla.grouphealth.policy.domain.service;
 import com.google.common.collect.Maps;
 import com.pla.core.domain.model.agent.AgentId;
 import com.pla.grouphealth.policy.domain.model.GroupHealthPolicy;
-import com.pla.grouphealth.sharedresource.model.vo.GHInsured;
-import com.pla.grouphealth.sharedresource.model.vo.GHInsuredDependent;
-import com.pla.grouphealth.sharedresource.model.vo.GHPremiumDetail;
-import com.pla.grouphealth.sharedresource.model.vo.GHProposer;
+import com.pla.grouphealth.sharedresource.model.vo.*;
 import com.pla.grouphealth.sharedresource.query.GHFinder;
 import com.pla.sharedkernel.domain.model.FamilyId;
 import com.pla.sharedkernel.domain.model.PolicyNumber;
@@ -50,6 +47,7 @@ public class GHPolicyFactory {
         Set<GHInsured> insureds = new HashSet((List) proposalMap.get("insureds"));
         GHPremiumDetail premiumDetail = (GHPremiumDetail) proposalMap.get("premiumDetail");
         GHProposer proposer = (GHProposer) proposalMap.get("proposer");
+        Set<GHProposerDocument> proposerDocuments = proposalMap.get("proposerDocuments") != null ? new HashSet<>((List) proposalMap.get("proposerDocuments")) : null;
         ProposalNumber proposalNumber = (ProposalNumber) proposalMap.get("proposalNumber");
         String policyNumberInString = ghPolicyNumberGenerator.getPolicyNumber(GroupHealthPolicy.class, agentId);
         PolicyNumber policyNumber = new PolicyNumber(policyNumberInString);
@@ -60,7 +58,7 @@ public class GHPolicyFactory {
         GroupHealthPolicy groupHealthPolicy = new GroupHealthPolicy(policyId, policyNumber, proposal, policyInceptionDate, policyExpireDate);
         insureds = populateFamilyId(insureds);
         groupHealthPolicy = groupHealthPolicy.addAgentId(agentId).addProposer(proposer).addInsured(insureds)
-                .addPremium(premiumDetail);
+                .addPremium(premiumDetail).addDocuments(proposerDocuments);
         return groupHealthPolicy;
     }
 

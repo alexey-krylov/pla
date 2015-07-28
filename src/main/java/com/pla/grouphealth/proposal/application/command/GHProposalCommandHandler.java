@@ -2,7 +2,7 @@ package com.pla.grouphealth.proposal.application.command;
 
 import com.google.common.collect.Sets;
 import com.pla.grouphealth.proposal.domain.model.GHProposalApprover;
-import com.pla.grouphealth.proposal.domain.model.GHProposerDocument;
+import com.pla.grouphealth.sharedresource.model.vo.GHProposerDocument;
 import com.pla.grouphealth.proposal.domain.model.GroupHealthProposal;
 import com.pla.grouphealth.proposal.domain.service.GHProposalRoleAdapter;
 import com.pla.grouphealth.proposal.domain.service.GroupHealthProposalFactory;

@@ -1,4 +1,4 @@
-package com.pla.grouphealth.proposal.domain.model;
+package com.pla.grouphealth.sharedresource.model.vo;
 
 import lombok.AccessLevel;
 import lombok.EqualsAndHashCode;

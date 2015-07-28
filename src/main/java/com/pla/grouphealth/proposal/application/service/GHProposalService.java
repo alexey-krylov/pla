@@ -5,7 +5,7 @@ import com.google.common.collect.Sets;
 import com.mongodb.gridfs.GridFSDBFile;
 import com.pla.core.domain.model.agent.AgentId;
 import com.pla.grouphealth.proposal.application.command.GHProposalRecalculatedInsuredPremiumCommand;
-import com.pla.grouphealth.proposal.domain.model.GHProposerDocument;
+import com.pla.grouphealth.sharedresource.model.vo.GHProposerDocument;
 import com.pla.grouphealth.proposal.domain.model.GroupHealthProposal;
 import com.pla.grouphealth.proposal.domain.model.GroupHealthProposalStatusAudit;
 import com.pla.grouphealth.proposal.presentation.dto.GHProposalDto;
