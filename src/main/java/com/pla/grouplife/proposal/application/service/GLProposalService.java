@@ -426,7 +426,7 @@ public class GLProposalService {
         List<GLProposerDocument> uploadedDocuments = proposal.get("proposerDocuments") != null ? (List<GLProposerDocument>) proposal.get("proposerDocuments") : Lists.newArrayList();
         Set<GLProposalMandatoryDocumentDto> mandatoryDocumentDtos = Sets.newHashSet();
         if (isNotEmpty(uploadedDocuments)) {
-            mandatoryDocumentDtos = uploadedDocuments.stream().filter(uploadedDocument -> uploadedDocument.isMandatory()).map(new Function<GLProposerDocument, GLProposalMandatoryDocumentDto>() {
+            mandatoryDocumentDtos = uploadedDocuments.stream().filter(uploadedDocument -> !uploadedDocument.isMandatory()).map(new Function<GLProposerDocument, GLProposalMandatoryDocumentDto>() {
                 @Override
                 public GLProposalMandatoryDocumentDto apply(GLProposerDocument glProposerDocument) {
                     GLProposalMandatoryDocumentDto mandatoryDocumentDto = new GLProposalMandatoryDocumentDto(glProposerDocument.getDocumentId(), glProposerDocument.getDocumentName());

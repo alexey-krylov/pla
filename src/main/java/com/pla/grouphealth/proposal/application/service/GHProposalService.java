@@ -436,7 +436,7 @@ public class GHProposalService {
         List<GHProposerDocument> uploadedDocuments = proposal.get("proposerDocuments") != null ? (List<GHProposerDocument>) proposal.get("proposerDocuments") : Lists.newArrayList();
         Set<GHProposalMandatoryDocumentDto> mandatoryDocumentDtos = Sets.newHashSet();
         if (isNotEmpty(uploadedDocuments)) {
-            mandatoryDocumentDtos = uploadedDocuments.stream().filter(uploadedDocument -> uploadedDocument.isMandatory()).map(new Function<GHProposerDocument, GHProposalMandatoryDocumentDto>() {
+            mandatoryDocumentDtos = uploadedDocuments.stream().filter(uploadedDocument -> !uploadedDocument.isMandatory()).map(new Function<GHProposerDocument, GHProposalMandatoryDocumentDto>() {
                 @Override
                 public GHProposalMandatoryDocumentDto apply(GHProposerDocument ghProposerDocument) {
                     GHProposalMandatoryDocumentDto mandatoryDocumentDto = new GHProposalMandatoryDocumentDto(ghProposerDocument.getDocumentId(), ghProposerDocument.getDocumentName());

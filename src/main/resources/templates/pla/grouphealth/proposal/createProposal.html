@@ -263,6 +263,15 @@
                             </div>
                         </div>
                     </div>
+                    <br/>
+                    <div class="row " disable-all-fields="isViewMode">
+                        <div class="col-lg-3 col-lg-offset-3">
+                            <input type="checkbox" ng-model="proposalDetails.plan.considerMoratoriumPeriod"/><span
+                                class="checkbox-label"
+                                style="position: relative;top:-1px;font-weight: bold;color:#000000;margin-left:5px">Consider Moratorium Period</span>
+                        </div>
+                    </div>
+
                     <div class="row">
                         <div class="col-sm-6">
                             <button type="button" class="btn btn-default btn-sm" ng-click="back()">Cancel</button>
@@ -455,31 +464,36 @@
                                         <label class="control-label">Document Title</label>
                                         <input type="text" class="form-control input-sm" style="width:400px;"
                                                name="documentTitle"
-                                               ng-model="additionalDocument.documentName"/>
+                                               ng-model="additionalDocument.documentId"/>
                                     </div>
                                 </div>
                                             <div class="col-lg-5" ng-hide="isViewMode">
                                     <div class="form-group">
+
                                         <label class="control-label">Browse File</label>
                                         <button class="btn btn-default"
                                                 style="display:inline;float:right;margin-right:135px;margin-top:20px;"
-                                                ng-file-select="" ng-model="additionalDocument.documentAttached">Browse
+                                                ng-file-select="callAdditionalDoc(additionalDocument.documentAttached)" ng-model="additionalDocument.documentAttached" ng-disabled="!additionalDocument.documentId">Browse
                                         </button>
-                                        <label class="form-control input-sm" style="border:1px solid #ccc;width:320px;"  >{{additionalDocument.documentAttached[0].name}} </label>
+                                        <label class="form-control input-sm" style="border:1px solid #ccc;width:286px;"  >{{additionalDocument.documentAttached[0].name}} </label>
                                     </div>
 
                                             </div>
-                                            <div class="col-lg-2">
-                                            <button class="btn btn-default" style="margin-top:20px;" ng-click="removeAdditionalDocument($index)" ng-disabled="isViewMode">Remove</button>
-                                                </div>
+                                            <div class="col-lg-3">
+                                                <button class="btn btn-default" style="margin-top:20px;" ng-click="removeAdditionalDocument($index)" ng-disabled="isViewMode">Remove</button>
+                                                <a  href="/pla/grouphealth/proposal/downloadmandatorydocument/{{additionalDocument.gridFsDocId}}" style="display:inline;margin-top:25px;float:right;"  hg-show="!additionalDocument.submitted">{{additionalDocument.fileName}}</a>
+
+                                            </div>
 
                                         </div>
 
                             </div>
                                     <button class="btn btn-default"
                                             style="display:inline;float:right;margin-right:5px;margin-top:20px;"
-                                            ng-click="uploadAdditionalDocument()" ng-hide="isViewMode">Upload
+                                            ng-click="uploadAdditionalDocument()" ng-disabled="!checkDocumentAttached" ng-hide="isViewMode">Upload
                                     </button>
+
+
 
                                 </div>
                             </accordion-group>

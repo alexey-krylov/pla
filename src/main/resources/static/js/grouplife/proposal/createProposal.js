@@ -76,7 +76,7 @@ angular.module('createProposal', ['common', 'ngRoute', 'mgcrea.ngStrap.select', 
                         $upload.upload({
                             url: '/pla/grouplife/proposal/uploadmandatorydocument',
                             file: files,
-                            fields: {documentId: document.documentId, proposalId: $scope.proposalId},
+                            fields: {documentId: document.documentId, proposalId: $scope.proposalId,mandatory:true},
                             method: 'POST'
                         }).progress(function (evt) {
 
@@ -89,17 +89,45 @@ angular.module('createProposal', ['common', 'ngRoute', 'mgcrea.ngStrap.select', 
                 }
 
             };
-    $scope.additional=false;
-           // $scope.additionalDocumentList = [{}, {}];
             $scope.additionalDocumentList = [{}];
+            $http.get("/pla/grouplife/proposal/getadditionaldocuments/"+ $scope.proposalId).success(function (data, status) {
+                console.log(data);
+                $scope.additionalDocumentList=data;
+                $scope.checkDocumentAttached=$scope.additionalDocumentList!=null;
+
+            });
 
             $scope.addAdditionalDocument = function () {
                 $scope.additionalDocumentList.unshift({});
+                $scope.checkDocumentAttached=$scope.isUploadEnabledForAdditionalDocument();
+
             };
 
             $scope.removeAdditionalDocument = function (index) {
                 $scope.additionalDocumentList.splice(index, 1);
+                $scope.checkDocumentAttached=$scope.isUploadEnabledForAdditionalDocument();
             };
+            $scope.callAdditionalDoc = function(file){
+                if(file[0]){
+                    $scope.checkDocumentAttached=$scope.isUploadEnabledForAdditionalDocument();
+                }
+            }
+
+            $scope.isUploadEnabledForAdditionalDocument = function(){
+                var enableAdditionalUploadButton= ($scope.additionalDocumentList!=null);
+                for (var i = 0; i < $scope.additionalDocumentList.length; i++) {
+                    var document = $scope.additionalDocumentList[i];
+                    var files = document.documentAttached;
+                    alert(i+"--"+files)
+                    alert(i+"--"+document.content);
+                    if(!(files || document.content)){
+                        enableAdditionalUploadButton=false;
+                        break;
+                    }
+                }
+                return enableAdditionalUploadButton;
+            }
+
 
             $scope.uploadAdditionalDocument = function () {
                 for (var i = 0; i < $scope.additionalDocumentList.length; i++) {
@@ -110,7 +138,7 @@ angular.module('createProposal', ['common', 'ngRoute', 'mgcrea.ngStrap.select', 
                         $upload.upload({
                             url: '/pla/grouplife/proposal/uploadmandatorydocument',
                             file: files,
-                            fields: {documentId: document.documentName, proposalId: $scope.proposalId,additional:$scope.additional},
+                            fields: {documentId: document.documentName, proposalId: $scope.proposalId,mandatory:false},
                             method: 'POST'
                         }).progress(function (evt) {
 
@@ -219,6 +247,9 @@ angular.module('createProposal', ['common', 'ngRoute', 'mgcrea.ngStrap.select', 
                     $scope.fileName = n[0].name
                 }
             });
+
+
+
             $scope.openNewTab = function (event) {
                 /*keyCode 9 is tab key*/
                 if (event && event.keyCode == 9) {
@@ -461,7 +492,7 @@ angular.module('createProposal', ['common', 'ngRoute', 'mgcrea.ngStrap.select', 
 
             $scope.savePlanDetails = function () {
                 $upload.upload({
-                    url: '/pla/grouplife/proposal/uploadinsureddetail',
+                    url: '/pla/grouplife/proposal/uploadinsureddetail?proposalId=' + $scope.proposalId,
                     headers: {'Authorization': 'xxx'},
                     fields: $scope.proposalDetails.plan,
                     file: $scope.fileSaved

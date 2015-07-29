@@ -12,7 +12,6 @@ import org.springframework.web.multipart.MultipartFile;
 @Getter
 @Setter
 @NoArgsConstructor
-@EqualsAndHashCode(of = "gridFsDocId")
 public class GHProposalMandatoryDocumentDto {
 
     private String documentId;

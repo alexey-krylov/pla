@@ -417,7 +417,7 @@
                             <div class="form-group "  ng-repeat="document in documentList" >
                                 <label class="col-sm-3 control-label">{{document.documentName}}</label>
                                      <div class="input-group">
-                                         <a  href="/pla/grouphealth/proposal/downloadmandatorydocument/{{document.gridFsDocId}}" style="display:inline;float:right;"  hg-show="!document.submitted">{{document.fileName}}</a>
+                                         <a  href="/pla/grouplife/proposal/downloadmandatorydocument/{{document.gridFsDocId}}" style="display:inline;float:right;"  hg-show="!document.submitted">{{document.fileName}}</a>
 
                                          <button class="btn btn-default"
                                                  style="display:inline;float:right;margin-right:5px;" ng-file-select=""
@@ -461,25 +461,29 @@
                                             <div class="col-lg-5" ng-hide="isViewMode">
                                     <div class="form-group">
                                         <label class="control-label">Browse File</label>
-                                        <button class="btn btn-default"
+                                        <button  class="btn btn-default"
                                                 style="display:inline;float:right;margin-right:135px;margin-top:20px;"
-                                                ng-file-select="" ng-model="additionalDocument.documentAttached" >Browse
+                                                ng-file-select="callAdditionalDoc(additionalDocument.documentAttached)" ng-model="additionalDocument.documentAttached" ng-disabled="!additionalDocument.documentName " >Browse
                                         </button>
-                                        <label class="form-control input-sm" style="border:1px solid #ccc;width:320px;"  >{{additionalDocument.documentAttached[0].name}} </label>
+
+                                        <label class="form-control input-sm" style="border:1px solid #ccc;width:286px;"  >{{additionalDocument.documentAttached[0].name}} </label>
                                     </div>
 
                                             </div>
-                                            <div class="col-lg-2">
+                                            <div class="col-lg-3">
                                             <button class="btn btn-default" style="margin-top:20px;" ng-click="removeAdditionalDocument($index)" ng-disabled="isViewMode">Remove</button>
-                                                </div>
+                                                <a  href="/pla/grouplife/proposal/downloadmandatorydocument/{{additionalDocument.gridFsDocId}}" style="display:inline;margin-top:25px;float:right;"  hg-show="!additionalDocument.submitted">{{additionalDocument.fileName}}</a>
+
+                                            </div>
 
                                         </div>
+                                        <button class="btn btn-default"
+                                                style="display:inline;float:right;margin-right:5px;margin-top:20px;"
+                                                ng-click="uploadAdditionalDocument()" ng-hide="isViewMode" ng-disabled="!checkDocumentAttached">Upload
+                                        </button>
 
                             </div>
-                                    <button class="btn btn-default"
-                                            style="display:inline;float:right;margin-right:5px;margin-top:20px;"
-                                            ng-click="uploadAdditionalDocument()" ng-hide="isViewMode" ng-disabled="(!additionalDocumentList.length > 0)">Upload
-                                    </button>
+
 
                                 </div>
                             </accordion-group>

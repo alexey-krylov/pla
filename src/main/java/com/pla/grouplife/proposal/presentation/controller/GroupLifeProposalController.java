@@ -312,7 +312,7 @@ public class GroupLifeProposalController {
 
     @RequestMapping(value = "/uploadinsureddetail", method = RequestMethod.POST)
     @ResponseBody
-    public Result uploadInsuredDetail(@RequestBody UploadInsuredDetailDto uploadInsuredDetailDto, HttpServletRequest request) throws IOException {
+    public Result uploadInsuredDetail(UploadInsuredDetailDto uploadInsuredDetailDto, HttpServletRequest request) throws IOException {
         MultipartFile file = uploadInsuredDetailDto.getFile();
         if (!("application/ms-excel".equals(file.getContentType()) || "application/msexcel".equals(file.getContentType()) || "application/vnd.ms-excel".equals(file.getContentType()))) {
             return Result.failure("Uploaded file is not valid excel");

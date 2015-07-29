@@ -300,7 +300,7 @@ public class GroupHealthProposalController {
         response.setContentType(gridFSDBFile.getContentType());
         response.setHeader("content-disposition", "attachment; filename=" + gridFSDBFile.getFilename() + "");
         OutputStream outputStream = response.getOutputStream();
-        org.apache.commons.io.IOUtils.copy(gridFSDBFile.getInputStream(), outputStream);
+        IOUtils.copy(gridFSDBFile.getInputStream(), outputStream);
         outputStream.flush();
         outputStream.close();
     }
@@ -333,7 +333,6 @@ public class GroupHealthProposalController {
             return Result.failure(e.getMessage());
         }
     }
-
 
     @RequestMapping(value = "/getpremiumdetail/{proposalId}", method = RequestMethod.GET)
     @ResponseBody

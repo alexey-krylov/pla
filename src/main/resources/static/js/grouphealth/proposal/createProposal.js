@@ -76,7 +76,7 @@ angular.module('createProposal', ['common', 'ngRoute', 'mgcrea.ngStrap.select', 
                         $upload.upload({
                             url: '/pla/grouphealth/proposal/uploadmandatorydocument',
                             file: files,
-                            fields: {documentId: document.documentId, proposalId: $scope.proposalId},
+                            fields: {documentId: document.documentId, proposalId: $scope.proposalId,mandatory:true},
                             method: 'POST'
                         }).progress(function (evt) {
 
@@ -90,15 +90,45 @@ angular.module('createProposal', ['common', 'ngRoute', 'mgcrea.ngStrap.select', 
 
             };
 
-            $scope.additionalDocumentList = [{}, {}];
+            $scope.additionalDocumentList = [{}];
+            $http.get("/pla/grouphealth/proposal/getadditionaldocuments/"+ $scope.proposalId).success(function (data, status) {
+                console.log(data);
+                    $scope.additionalDocumentList=data;
+                    $scope.checkDocumentAttached=$scope.additionalDocumentList!=null;
+
+            });
 
             $scope.addAdditionalDocument = function () {
                 $scope.additionalDocumentList.unshift({});
+                $scope.checkDocumentAttached=$scope.isUploadEnabledForAdditionalDocument();
+
             };
 
             $scope.removeAdditionalDocument = function (index) {
                 $scope.additionalDocumentList.splice(index, 1);
+                $scope.checkDocumentAttached=$scope.isUploadEnabledForAdditionalDocument();
             };
+            $scope.callAdditionalDoc = function(file){
+                if(file[0]){
+                    $scope.checkDocumentAttached=$scope.isUploadEnabledForAdditionalDocument();
+                }
+            }
+
+            $scope.isUploadEnabledForAdditionalDocument = function(){
+                var enableAdditionalUploadButton= ($scope.additionalDocumentList!=null);
+                for (var i = 0; i < $scope.additionalDocumentList.length; i++) {
+                    var document = $scope.additionalDocumentList[i];
+                    var files = document.documentAttached;
+                    alert(i+"--"+files)
+                    alert(i+"--"+document.content);
+                    if(!(files || document.content)){
+                        enableAdditionalUploadButton=false;
+                        break;
+                    }
+                }
+                return enableAdditionalUploadButton;
+            }
+
 
             $scope.uploadAdditionalDocument = function () {
                 for (var i = 0; i < $scope.additionalDocumentList.length; i++) {
@@ -108,7 +138,7 @@ angular.module('createProposal', ['common', 'ngRoute', 'mgcrea.ngStrap.select', 
                         $upload.upload({
                             url: '/pla/grouphealth/proposal/uploadmandatorydocument',
                             file: files,
-                            fields: {documentId: document.documentName, proposalId: $scope.proposalId},
+                            fields: {documentId: document.documentId, proposalId: $scope.proposalId,mandatory:false},
                             method: 'POST'
                         }).progress(function (evt) {
 
@@ -120,7 +150,6 @@ angular.module('createProposal', ['common', 'ngRoute', 'mgcrea.ngStrap.select', 
 
                 }
             };
-
             if ($scope.documentList) {
                 if ($scope.documentList.documentAttached) {
                     if ($scope.documentList.documentAttached.length == $scope.documentList.documentName.length) {
@@ -150,7 +179,8 @@ angular.module('createProposal', ['common', 'ngRoute', 'mgcrea.ngStrap.select', 
                 /*initialize with default values*/
                 plan: {
                     samePlanForAllRelation: false,
-                    samePlanForAllCategory: false
+                    samePlanForAllCategory: false,
+                    considerMoratoriumPeriod: false
                 },
                 premium: {
                     addOnBenefit: 20,
@@ -180,6 +210,7 @@ angular.module('createProposal', ['common', 'ngRoute', 'mgcrea.ngStrap.select', 
 
 
             $scope.proposalDetails.proposer = proposerDetails;
+            $scope.proposalDetails.plan.considerMoratoriumPeriod = proposerDetails.considerMoratoriumPeriod;
             /*used for bs-dropdown*/
             $scope.dropdown = [
                 {
@@ -459,7 +490,7 @@ angular.module('createProposal', ['common', 'ngRoute', 'mgcrea.ngStrap.select', 
 
             $scope.savePlanDetails = function () {
                 $upload.upload({
-                    url: '/pla/grouphealth/proposal/uploadinsureddetail',
+                    url: '/pla/grouphealth/proposal/uploadinsureddetail?proposalId=' + $scope.proposalId,
                     headers: {'Authorization': 'xxx'},
                     fields: $scope.proposalDetails.plan,
                     file: $scope.fileSaved
