@@ -455,7 +455,7 @@
                                         <label class="control-label">Document Title</label>
                                         <input type="text" class="form-control input-sm" style="width:400px;"
                                                name="documentTitle"
-                                               ng-model="additionalDocument.documentName"/>
+                                               ng-model="additionalDocument.documentId"/>
                                     </div>
                                 </div>
                                             <div class="col-lg-5" ng-hide="isViewMode">
@@ -463,7 +463,7 @@
                                         <label class="control-label">Browse File</label>
                                         <button  class="btn btn-default"
                                                 style="display:inline;float:right;margin-right:135px;margin-top:20px;"
-                                                ng-file-select="callAdditionalDoc(additionalDocument.documentAttached)" ng-model="additionalDocument.documentAttached" ng-disabled="!additionalDocument.documentName " >Browse
+                                                ng-file-select="callAdditionalDoc(additionalDocument.documentAttached)" ng-model="additionalDocument.documentAttached" ng-disabled="!additionalDocument.documentId" >Browse
                                         </button>
 
                                         <label class="form-control input-sm" style="border:1px solid #ccc;width:286px;"  >{{additionalDocument.documentAttached[0].name}} </label>

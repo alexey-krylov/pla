@@ -118,8 +118,8 @@ angular.module('createProposal', ['common', 'ngRoute', 'mgcrea.ngStrap.select', 
                 for (var i = 0; i < $scope.additionalDocumentList.length; i++) {
                     var document = $scope.additionalDocumentList[i];
                     var files = document.documentAttached;
-                    alert(i+"--"+files)
-                    alert(i+"--"+document.content);
+                  //  alert(i+"--"+files)
+                   // alert(i+"--"+document.content);
                     if(!(files || document.content)){
                         enableAdditionalUploadButton=false;
                         break;
