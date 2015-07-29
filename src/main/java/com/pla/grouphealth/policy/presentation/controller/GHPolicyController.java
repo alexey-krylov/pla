@@ -12,6 +12,7 @@ import com.pla.grouphealth.sharedresource.dto.ProposerDto;
 import com.pla.sharedkernel.domain.model.PolicyNumber;
 import com.pla.sharedkernel.identifier.PolicyId;
 import com.wordnik.swagger.annotations.ApiOperation;
+import org.apache.commons.io.IOUtils;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.nthdimenzion.presentation.Result;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -136,7 +137,7 @@ public class GHPolicyController {
         response.setContentType(gridFSDBFile.getContentType());
         response.setHeader("content-disposition", "attachment; filename=" + gridFSDBFile.getFilename() + "");
         OutputStream outputStream = response.getOutputStream();
-        org.apache.commons.io.IOUtils.copy(gridFSDBFile.getInputStream(), outputStream);
+        IOUtils.copy(gridFSDBFile.getInputStream(), outputStream);
         outputStream.flush();
         outputStream.close();
     }

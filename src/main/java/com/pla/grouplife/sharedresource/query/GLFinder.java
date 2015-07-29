@@ -47,6 +47,7 @@ public class GLFinder {
 
     public static final String FIND_COVERAGE_BY_CODE_QUERY = "SELECT coverage_id AS coverageId, coverage_code AS coverageCode,coverage_name AS coverageName FROM coverage WHERE coverage_code=:coverageCode";
     public static final String FIND_ACTIVE_AGENT_BY_FIRST_NAME_QUERY = "SELECT * FROM agent_team_branch_view WHERE firstName =:firstName";
+    public static final String FIND_AGENT_PLANS_QUERY = "SELECT agent_id as agentId,plan_id as planId FROM `agent_authorized_plan` WHERE agent_id=:agentId";
 
     @Autowired
     public void setDataSource(DataSource dataSource, MongoTemplate mongoTemplate) {
@@ -138,4 +139,9 @@ public class GLFinder {
         Map proposal = mongoTemplate.findOne(new BasicQuery(query), Map.class, "group_life_proposal");
         return proposal;
     }
+
+    public List<Map<String, Object>> getAgentAuthorizedPlan(String agentId) {
+        return namedParameterJdbcTemplate.query(FIND_AGENT_PLANS_QUERY, new MapSqlParameterSource().addValue("agentId", agentId), new ColumnMapRowMapper());
+    }
+
 }
