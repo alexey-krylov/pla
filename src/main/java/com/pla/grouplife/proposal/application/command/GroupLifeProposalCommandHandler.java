@@ -157,12 +157,13 @@ public class GroupLifeProposalCommandHandler {
     @CommandHandler
     public void uploadMandatoryDocument(GLProposalDocumentCommand glProposalDocumentCommand) throws IOException {
         GroupLifeProposal groupLifeProposal = groupLifeProposalRepository.load(new ProposalId(glProposalDocumentCommand.getProposalId()));
+        String fileName = glProposalDocumentCommand.getFile() != null ? glProposalDocumentCommand.getFile().getOriginalFilename() : "";
         Set<GLProposerDocument> documents = groupLifeProposal.getProposerDocuments();
         if (isEmpty(documents)) {
             documents = Sets.newHashSet();
         }
-        String gridFsDocId = gridFsTemplate.store(glProposalDocumentCommand.getFile().getInputStream(), glProposalDocumentCommand.getFile().getContentType(), glProposalDocumentCommand.getFilename()).getId().toString();
-        GLProposerDocument currentDocument = new GLProposerDocument(glProposalDocumentCommand.getDocumentId(), glProposalDocumentCommand.getFilename(), gridFsDocId, glProposalDocumentCommand.getFile().getContentType(), glProposalDocumentCommand.isMandatory());
+        String gridFsDocId = gridFsTemplate.store(glProposalDocumentCommand.getFile().getInputStream(), fileName, glProposalDocumentCommand.getFile().getContentType()).getId().toString();
+        GLProposerDocument currentDocument = new GLProposerDocument(glProposalDocumentCommand.getDocumentId(), fileName, gridFsDocId, glProposalDocumentCommand.getFile().getContentType(), glProposalDocumentCommand.isMandatory());
         if (!documents.add(currentDocument)) {
             GLProposerDocument existingDocument = documents.stream().filter(new Predicate<GLProposerDocument>() {
                 @Override
