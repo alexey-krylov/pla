@@ -1,40 +1,16 @@
-angular.module('createPolicy', ['common', 'ngRoute', 'mgcrea.ngStrap.select', 'mgcrea.ngStrap.alert', 'mgcrea.ngStrap.popover', 'directives',
+angular.module('viewPolicy', ['common', 'ngRoute', 'mgcrea.ngStrap.select', 'mgcrea.ngStrap.alert', 'mgcrea.ngStrap.popover', 'directives',
     'angularFileUpload', 'mgcrea.ngStrap.dropdown', 'ngSanitize', 'commonServices'])
 
     .controller('policyCtrl', ['$scope', '$http', '$timeout', '$upload', 'provinces', 'getProvinceAndCityDetail', 'globalConstants',
-        'agentDetails', 'stepsSaved', 'policyDetails', 'proposalNumber', 'getQueryParameter', '$window', 'premiumData', 'documentList',
-        function ($scope, $http, $timeout, $upload, provinces, getProvinceAndCityDetail, globalConstants, agentDetails, stepsSaved, policyDetails, proposalNumber,
+        'agentDetails', 'stepsSaved', 'policyDetails', 'policyNumber', 'getQueryParameter', '$window', 'premiumData', 'documentList',
+        function ($scope, $http, $timeout, $upload, provinces, getProvinceAndCityDetail, globalConstants, agentDetails, stepsSaved, policyDetails, policyNumber,
                   getQueryParameter, $window, premiumData, documentList) {
 
             var mode = getQueryParameter("mode");
             if (mode == 'view') {
                 $scope.isViewMode = true;
-                $scope.isEditMode = true;
-            } else if (mode == 'edit') {
-                $scope.isEditMode = true;
-            }
-            $scope.isReturnStatus = false;
-            var status = getQueryParameter("status");
-            if (status == 'return') {
-                $scope.isReturnStatus = true;
-
-                $http.get("/pla/grouphealth/proposal/getapprovercomments").success(function (data, status) {
-                    console.log(data);
-                    $scope.approvalCommentList=data;
-                });
 
             }
-            var method = getQueryParameter("method");
-            if (method == 'approval') {
-                $scope.isViewMode = true;
-
-                $http.get("/pla/grouphealth/proposal/getapprovercomments").success(function (data, status) {
-                    // console.log(data);
-                    $scope.approvalCommentList=data;
-                });
-
-            }
-
             /*This scope holds the list of installments from which user can select one */
             $scope.numberOfInstallmentsDropDown = [];
 
@@ -51,43 +27,17 @@ angular.module('createPolicy', ['common', 'ngRoute', 'mgcrea.ngStrap.select', 'm
             $scope.stepsSaved = stepsSaved;
 
             /*Inter id used for programmatic purpose*/
-            $scope.proposalId = getQueryParameter('proposalId') || null;
+            $scope.policyId = getQueryParameter('policyId') || null;
 
             $scope.versionNumber = getQueryParameter('version') || null;
 
             /*actual quotation number to be used in the view*/
-            $scope.proposalNumber = proposalNumber;
+            console.log(policyNumber);
+            $scope.policyNumber = policyNumber;
 
             $scope.provinces = provinces;
 
             $scope.documentList = documentList;
-
-            if (status == 'return') {
-                $scope.stepsSaved["1"] =true;
-            }
-            $scope.uploadDocumentFiles = function () {
-                // console.log($scope.documentList.length);
-                for (var i = 0; i < $scope.documentList.length; i++) {
-                    var document = $scope.documentList[i];
-                    var files = document.documentAttached;
-                    // console.log(files);
-                    if (files) {
-                        $upload.upload({
-                            url: '/pla/grouphealth/proposal/uploadmandatorydocument',
-                            file: files,
-                            fields: {documentId: document.documentId, proposalId: $scope.proposalId},
-                            method: 'POST'
-                        }).progress(function (evt) {
-
-                        }).success(function (data, status, headers, config) {
-                            //console.log('file ' + config.file.name + 'uploaded. Response: ' +
-                            // JSON.stringify(data));
-                        });
-                    }
-
-                }
-
-            };
 
             $scope.additionalDocumentList = [{}, {}];
 
@@ -99,53 +49,25 @@ angular.module('createPolicy', ['common', 'ngRoute', 'mgcrea.ngStrap.select', 'm
                 $scope.additionalDocumentList.splice(index, 1);
             };
 
-            $scope.uploadAdditionalDocument = function () {
-                for (var i = 0; i < $scope.additionalDocumentList.length; i++) {
-                    var document = $scope.additionalDocumentList[i];
-                    var files = document.documentAttached;
-                    if (files) {
-                        $upload.upload({
-                            url: '/pla/grouphealth/proposal/uploadmandatorydocument',
-                            file: files,
-                            fields: {documentId: document.documentName, proposalId: $scope.proposalId},
-                            method: 'POST'
-                        }).progress(function (evt) {
-
-                        }).success(function (data, status, headers, config) {
-                            //console.log('file ' + config.file.name + 'uploaded. Response: ' +
-                            // JSON.stringify(data));
-                        });
-                    }
-
-                }
-            };
-
             if ($scope.documentList) {
                 if ($scope.documentList.documentAttached) {
                     if ($scope.documentList.documentAttached.length == $scope.documentList.documentName.length) {
                         $scope.disableUploadButton = true;
-                        console.log($scope.documentList.documentAttached.length);
-                        console.log($scope.documentList.documentName.length);
                     } else {
                         $scope.disableUploadButton = false;
                     }
                 }
             }
-            /* $scope.$watch('documentList.documentAttached',function(newVal,oldVal){
-             if(newVal && newVal.length){
-             $scope.selectedFiles.push(newVal);
-             console.log($scope.selectedFiles.length);
-             console.log($scope.documentList.length);
-             if($scope.selectedFiles.length == $scope.documentList.length){
-             $scope.disableUploadButton=true;
-             }else{
-             $scope.disableUploadButton=false;
-             }
-             }
-             });*/
+            $http.get("/pla/grouphealth/policy/getpolicydetail/" + $scope.policyId).success(function (data, status) {
+               //  console.log(data);
+                 $scope.policyDetails.basicDetails = data;
+                $scope.policyDetails.basicDetails.inceptionDate= moment(data.inceptionDate).format("DD/MM/YYYY");
+                $scope.policyDetails.basicDetails.expiryDate =moment(data.expiryDate).format("DD/MM/YYYY");
 
 
-            $scope.proposalDetails = {
+            });
+
+            $scope.policyDetails = {
                 /*initialize with default values*/
                 plan: {
                     samePlanForAllRelation: false,
@@ -159,39 +81,28 @@ angular.module('createPolicy', ['common', 'ngRoute', 'mgcrea.ngStrap.select', 'm
             };
 
 
-            $scope.proposalDetails.basic = agentDetails;
+            $scope.policyDetails.basic = agentDetails;
 
-            $scope.proposalDetails.premium = premiumData || {};
+            $scope.policyDetails.premium = premiumData || {};
 
             $scope.changeAgent = false;
-            console.log($scope.proposalDetails.basic['active']);
-            if (!$scope.proposalDetails.basic['active']) {
-                $('#agentModal').modal('show');
-                $scope.changeAgent = true;
-                $scope.stepsSaved["1"] = !$scope.changeAgent;
-            }
-            if(!$scope.proposalDetails.basic['active'] && $scope.isReturnStatus==true && method == 'approval' ){
+            console.log($scope.policyDetails.basic['active']);
+            if (!$scope.policyDetails.basic['active']) {
                 $('#agentModal').modal('show');
                 $scope.changeAgent = true;
                 $scope.stepsSaved["2"] = !$scope.changeAgent;
             }
-            console.log(' $scope.changeAgent ' + $scope.changeAgent);
 
-
-            $scope.proposalDetails.proposer = policyDetails;
+            $scope.policyDetails.proposer = policyDetails;
             /*used for bs-dropdown*/
             $scope.dropdown = [
                 {
-                    "text": "<a><img src=\"/pla/images/xls-icon.png\">Ready Reckoner</a>",
-                    "href": "/pla/grouphealth/proposal/downloadplandetail/" + $scope.proposalId
-                },
-                {
                     "text": "<a><img src=\"/pla/images/xls-icon.png\">Template</a>",
-                    "href": "/pla/grouphealth/proposal/downloadinsuredtemplate/" + $scope.proposalId
+                    "href": "/pla/grouphealth/policy/downloadinsuredtemplate/" + $scope.policyId
                 }
             ];
 
-            $scope.$watch('proposalDetails.proposer.province', function (newVal, oldVal) {
+            $scope.$watch('policyDetails.proposer.province', function (newVal, oldVal) {
                 if (newVal) {
                     $scope.getProvinceDetails(newVal);
                 }
@@ -226,27 +137,10 @@ angular.module('createPolicy', ['common', 'ngRoute', 'mgcrea.ngStrap.select', 'm
 
             /*clear all fields in the agent details except agentId*/
             $scope.clearAgentDetails = function () {
-                angular.extend($scope.proposalDetails.basic, {agentName: null, branchName: null, teamName: null});
+                angular.extend($scope.policyDetails.basic, {agentName: null, branchName: null, teamName: null});
             };
 
-            $scope.isSaveDisabled = function (formName) {
-                //return formName.$invalid || ($scope.stepsSaved[$scope.selectedItem] && !$scope.isEditMode)
-            };
 
-            $scope.searchAgent = function () {
-                $http.get("/pla/quotation/grouplife/getagentdetail/" + $scope.proposalDetails.basic.agentId)
-                    .success(function (data, status) {
-                        if (data.status == "200") {
-                            $scope.agentNotFound = false;
-                            $scope.proposalDetails.basic = data.data;
-                        } else {
-                            $scope.agentNotFound = true;
-                        }
-                    })
-                    .error(function (data, status) {
-
-                    });
-            };
 
             function isInteger(x) {
                 return Math.round(x) === x;
@@ -259,7 +153,7 @@ angular.module('createPolicy', ['common', 'ngRoute', 'mgcrea.ngStrap.select', 'm
                 }
             }
 
-            $scope.$watch('proposalDetails.premium.policyTermValue', function (newVal, oldVal) {
+            $scope.$watch('policyDetails.premium.policyTermValue', function (newVal, oldVal) {
                 /*TODO check for the minimum amd maximum value for the policy term value*/
                 if (newVal && newVal != 365 && newVal >= 30 && newVal <= 9999) {
                     /*used to toggle controls between dropdown and text*/
@@ -278,188 +172,22 @@ angular.module('createPolicy', ['common', 'ngRoute', 'mgcrea.ngStrap.select', 'm
             });
 
             $scope.selectedInstallment = premiumData.premiumInstallment;
-            $scope.installments = $scope.proposalDetails.premium.installments;
-            $scope.recalculatePremium = function () {
-                $scope.premiumInstallment = {};
-                $scope.proposalDetails.premium.premiumInstallment = $scope.selectedInstallment || null;
-                $http.post('/pla/grouphealth/proposal/recalculatePremium', angular.extend({},
-                    {premiumDetailDto: $scope.proposalDetails.premium},
-                    {"proposalId": $scope.proposalId})).success(function (data) {
-                    // console.log(data.data);
-                    $scope.proposalDetails.premium = data.data;
-                    $scope.proposalDetails.premium.totalPremium = data.data.totalPremium;
-                    if (data.data.annualPremium) {
-                        $scope.proposalDetails.premium.annualPremium = data.data.annualPremium;
-                        $scope.proposalDetails.premium.semiannualPremium = data.data.semiannualPremium;
-                        $scope.proposalDetails.premium.quarterlyPremium = data.data.quarterlyPremium;
-                        $scope.proposalDetails.premium.monthlyPremium = data.data.monthlyPremium;
-                    }
-                    if (data.data.installments) {
-                        $scope.selectedInstallment = null;
-                        $scope.installments = _.sortBy(data.data.installments, 'installmentNo');
-                    }
-                });
-
-            };
-
-            $scope.submitAdditionalDocument = function(){
-                $http.post('/pla/grouphealth/proposal/submit', angular.extend({},
-                    {"proposalId": $scope.proposalId})).success(function (data) {
-                    if (data.status == "200") {
-                        saveStep();
-                        $('#searchFormProposal').val($scope.proposalId);
-                        $('#searchForm').submit();
-                    }
-
-                });
-
-            }
+            $scope.installments = $scope.policyDetails.premium.installments;
             $scope.disableSaveButton=false;
-            $scope.$watch( 'proposalDetails.premium.optedPremiumFrequency',function(newValue, oldValue){
-                if(newValue){
-                    $scope.disableSaveButton=true;
-                }else{
-                    $scope.disableSaveButton=false;
-                    if($scope.isReturnStatus == false){
-                        $scope.stepsSaved["4"]=false;
-                    }else{
-                        $scope.stepsSaved["5"]=false;
-                    }
-
-
-                }
-                if (method == 'approval') {
-                    $scope.stepsSaved["5"]=true;
-                }
-
-            });
-
-            $scope.approveProposal = function(){
-                var request = angular.extend({comment: $scope.comment},
-                    {"proposalId": $scope.proposalId});
-
-                $http.post('/pla/grouphealth/proposal/approve', request).success(function (data) {
-                    if(data.status==200){
-
-                        $window.location.href="/pla/grouphealth/proposal/openapprovalproposal";
-
-                    }
-
-                });
-            }
-            $scope.comment='';
-            $scope.returnProposal = function(){
-                var request = angular.extend({comment: $scope.comment},{"proposalId": $scope.proposalId});
-
-                $http.post('/pla/grouphealth/proposal/return', request).success(function (data) {
-                    if(data.status==200){
-
-
-                        $window.location.href="/pla/grouphealth/proposal/openapprovalproposal";
-
-                    }
-
-                });
-            }
-
-
-            $scope.savePremiumDetails = function () {
-                console.log("$scope.selectedInstallment " + JSON.stringify($scope.selectedInstallment));
-                var premiumDetailDto = $scope.proposalDetails.premium;
-                var request = angular.extend({premiumDetailDto: $scope.proposalDetails.premium},
-                    {"proposalId": $scope.proposalId});
-                request.premiumDetailDto["premiumInstallment"] = $scope.selectedInstallment;
-                console.log(JSON.stringify(request.premiumDetailDto));
-                $http.post('/pla/grouphealth/proposal/savepremiumdetail', request).success(function (data) {
-                    /*$http.post("/pla/grouphealth/proposal/submit", angular.extend({},
-                     {"proposalId": $scope.proposalId}))
-                     .success(function (data) {
-                     });*/
-                    // console.log(data);
-                    //  console.log("*******************"+$scope.selectedItem);
-                    if(data.status== '200'){
-                        saveStep();
-                    }
-
-                });
-
-            };
 
             $scope.setSelectedInstallment = function (selectedInstallment) {
                 $scope.selectedInstallment = selectedInstallment;
                 console.log('setSelectedInstallment ***');
             };
 
-            var setproposalNumberAndVersionNumber = function (proposalId) {
-                $http.get("/pla/grouphealth/proposal/getproposalNumber/" + proposalId)
-                    .success(function (data, status) {
-                        $scope.proposalNumber = data.id;
-                    });
-                $http.get("/pla/grouphealth/proposal/getversionnumber/" + proposalId)
-                    .success(function (data, status) {
-                        $scope.versionNumber = data.id;
-                    });
-            };
-            /*
-             $scope.$on('actionclicked.fu.wizard', function (newval, oldval) {
-
-             if (data.step == 1) {
-             $http.post("/pla/grouphealth/proposal/", angular.extend($scope.proposalDetails.basic,
-             {proposerName: $scope.proposalDetails.proposer.proposerName}))
-             .success(function (agentDetails) {
-             });
-             }
-             });*/
-
-            $scope.saveBasicDetails = function () {
-
-                $http.post("/pla/grouphealth/proposal/updatewithagentdetail", angular.extend($scope.proposalDetails.basic, {
-                    proposerName: $scope.proposalDetails.proposer.proposerName,
-                    proposalId: $scope.proposalId
-                }))
-                    .success(function (agentDetails) {
-                        if (agentDetails.status == "200") {
-                            $scope.proposalId = agentDetails.id;
-                            setproposalNumberAndVersionNumber(agentDetails.id);
-                            saveStep();
-                        }
-                    });
-            };
 
             var saveStep = function () {
                 $scope.stepsSaved[$scope.selectedItem] = true;
             };
 
-            $scope.saveProposerDetails = function () {
-                $http.post("/pla/grouphealth/proposal/updatewithproposerdetail", angular.extend({},
-                    {proposerDto: $scope.proposalDetails.proposer},
-                    {"proposalId": $scope.proposalId}))
-                    .success(function (data) {
-                        if (data.status == "200") {
-                            saveStep();
-                        }
-                    });
-            };
-
-            $scope.savePlanDetails = function () {
-                $upload.upload({
-                    url: '/pla/grouphealth/proposal/uploadinsureddetail',
-                    headers: {'Authorization': 'xxx'},
-                    fields: $scope.proposalDetails.plan,
-                    file: $scope.fileSaved
-                }).success(function (data, status, headers, config) {
-                    if (data.status = "200") {
-                        saveStep();
-                        $http.get("/pla/grouphealth/proposal/getpremiumdetail/" + $scope.proposalId)
-                            .success(function () {
-
-                            })
-                    }
-                });
-            };
 
             $scope.back = function () {
-                $window.location.href = 'listgrouphealthproposal';
+                $window.location.href = 'openpolicysearchpage';
             }
 
         }])
@@ -472,7 +200,7 @@ angular.module('createPolicy', ['common', 'ngRoute', 'mgcrea.ngStrap.select', 'm
         var stepsSaved = {};
         var queryParam = null;
         $routeProvider.when('/', {
-            templateUrl: 'createPolicyTpl.html',
+            templateUrl: 'viewPolicyTpl.html',
             controller: 'policyCtrl',
             resolve: {
 
@@ -486,24 +214,17 @@ angular.module('createPolicy', ['common', 'ngRoute', 'mgcrea.ngStrap.select', 'm
                     return deferred.promise;
                 }],
                 agentDetails: ['$q', '$http', 'getQueryParameter', function ($q, $http, getQueryParameter) {
-                    queryParam = getQueryParameter('proposalId');
+                    queryParam = getQueryParameter('policyId');
                     if (queryParam && !_.isEmpty(queryParam)) {
                         var deferred = $q.defer();
-                        $http.get('/pla/grouphealth/proposal/getagentdetailfromproposal/' + queryParam).success(function (response, status, headers, config) {
+                        $http.get('/pla/grouphealth/policy/getagentdetailfrompolicy/' + queryParam).success(function (response, status, headers, config) {
                             deferred.resolve(response)
                         }).error(function (response, status, headers, config) {
                             deferred.reject();
                         });
-                        var status =getQueryParameter('status');
-                        console.log("**************RETURN STATUS********************");
-                        console.log(status);
-                        if(status == 'return'){
-                            stepsSaved["2"] = true;
-                            stepsSaved["4"] = true;
-                        }else{
-                            stepsSaved["1"] = true;
-                            stepsSaved["3"] = true;
-                        }
+                        stepsSaved["2"] = true;
+
+
 
                         return deferred.promise;
                     } else {
@@ -513,27 +234,23 @@ angular.module('createPolicy', ['common', 'ngRoute', 'mgcrea.ngStrap.select', 'm
                 policyDetails: ['$q', '$http', 'getQueryParameter', function ($q, $http,getQueryParameter) {
                     if (queryParam && !_.isEmpty(queryParam)) {
                         var deferred = $q.defer();
-                        $http.get('/pla/grouphealth/proposal/getproposerdetail/' + queryParam).success(function (response, status, headers, config) {
+                        $http.get('/pla/grouphealth/policy/getproposerdetail/' + queryParam).success(function (response, status, headers, config) {
                             deferred.resolve(response)
                         }).error(function (response, status, headers, config) {
                             deferred.reject();
                         });
-                        var status =getQueryParameter('status');
-                        if(status == 'return'){
-                            stepsSaved["3"] = true;
-                        }else{
-                            stepsSaved["2"] = true;
-                        }
-
+                        stepsSaved["1"] = true;
+                        stepsSaved["3"] = true;
+                        stepsSaved["4"] = true;
                         return deferred.promise;
                     } else {
                         return {};
                     }
                 }],
-                proposalNumber: ['$q', '$http', function ($q, $http) {
+                policyNumber: ['$q', '$http', function ($q, $http) {
                     if (queryParam && !_.isEmpty(queryParam)) {
                         var deferred = $q.defer();
-                        $http.get("/pla/grouphealth/proposal/getproposalnumber/" + queryParam)
+                        $http.get("/pla/grouphealth/policy/getpolicynumber/" + queryParam)
                             .success(function (response) {
                                 deferred.resolve(response.id)
                             })
@@ -548,18 +265,14 @@ angular.module('createPolicy', ['common', 'ngRoute', 'mgcrea.ngStrap.select', 'm
                 premiumData: ['$q', '$http','getQueryParameter', function ($q, $http,getQueryParameter) {
                     if (queryParam && !_.isEmpty(queryParam)) {
                         var deferred = $q.defer();
-                        $http.get('/pla/grouphealth/proposal/getpremiumdetail/' + queryParam).success(function (response, status, headers, config) {
-                            var status =getQueryParameter('status');
-                            if(status == 'return'){
-                                stepsSaved["5"] = true;
-                            }else{
-                                stepsSaved["4"] = true;
-                            }
+                        $http.get('/pla/grouphealth/policy/getpremiumdetail/' + queryParam).success(function (response, status, headers, config) {
+
 
                             deferred.resolve(response)
                         }).error(function (response, status, headers, config) {
                             deferred.reject();
                         });
+                        stepsSaved["5"] = true;
                         return deferred.promise;
                     } else {
                         return false;
@@ -568,11 +281,14 @@ angular.module('createPolicy', ['common', 'ngRoute', 'mgcrea.ngStrap.select', 'm
                 documentList: ['$q', '$http', function ($q, $http) {
                     if (queryParam && !_.isEmpty(queryParam)) {
                         var deferred = $q.defer();
-                        $http.get('/pla/grouphealth/proposal/getmandatorydocuments/' + queryParam).success(function (response, status, headers, config) {
+                        $http.get('/pla/grouphealth/policy/getmandatorydocuments/' + queryParam).success(function (response, status, headers, config) {
+
                             deferred.resolve(response)
                         }).error(function (response, status, headers, config) {
                             deferred.reject();
                         });
+                        stepsSaved["6"] = true;
+
                         return deferred.promise;
                     } else {
                         return false;

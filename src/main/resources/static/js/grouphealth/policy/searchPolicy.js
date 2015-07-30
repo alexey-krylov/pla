@@ -12,8 +12,16 @@ var viewPolicyModule = (function () {
     services.reload = function () {
         window.location.reload();
     };
+    services.printPolicy = function () {
+        var policyId = this.selectedItem;
+      //  window.location.href = "/pla/grouphealth/policy/viewpolicy?policyId=" + policyId  + "&mode=view";
 
+    };
+    services.emailPolicy = function () {
+        var policyId = this.selectedItem;
+      //  window.location.href = "/pla/grouphealth/policy/viewpolicy?policyId=" + policyId  + "&mode=view";
 
+    };
     services.viewPolicy = function () {
         var policyId = this.selectedItem;
         window.location.href = "/pla/grouphealth/policy/viewpolicy?policyId=" + policyId  + "&mode=view";

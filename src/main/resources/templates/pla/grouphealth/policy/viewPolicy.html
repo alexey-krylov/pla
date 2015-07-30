@@ -35,22 +35,23 @@
 
     });
 </script>
-<script type="text/ng-template" id="createPolicyTpl.html">
+<script type="text/ng-template" id="viewPolicyTpl.html">
     <nth-alert></nth-alert>
     <form name="policyForm" novalidate="true"  class="css-form ng-cloak" method="post" enctype="multipart/form-data">
         <div class="wizard fueluxWizard" style="overflow: visible" selected-item="selectedItem">
             <ul class="steps" style="margin-left: 0">
                 <li data-step="1"><span class="badge badge-info">1</span>Basic Details<span class="chevron"></span></li>
-                <li data-step="2"><span class="badge">2</span>Proposer Details<span class="chevron"></span></li>
-                <li data-step="3"><span class="badge">3</span>Plan Details<span class="chevron"></span></li>
-                <li data-step="4"><span class="badge">4</span>Premium Details<span class="chevron"></span></li>
-                <li data-step="5"><span class="badge">5</span>Documents<span class="chevron"></span></li>
+                <li data-step="2"><span class="badge">2</span>Agent Details<span class="chevron"></span></li>
+                <li data-step="3"><span class="badge">3</span>Proposer Details<span class="chevron"></span></li>
+                <li data-step="4"><span class="badge">4</span>Plan Details<span class="chevron"></span></li>
+                <li data-step="5"><span class="badge">5</span>Premium Details<span class="chevron"></span></li>
+                <li data-step="6"><span class="badge">6</span>Documents<span class="chevron"></span></li>
             </ul>
 
 
             <div class="actions">
-                <span style="font-weight: bolder;margin-right: 15px;color: #999">Proposal ID: <span
-                        style="font-size: 13px;color: #3a87ad;">{{proposalNumber}}<span
+                <span style="font-weight: bolder;margin-right: 15px;color: #999">Policy Number: <span
+                        style="font-size: 13px;color: #3a87ad;">{{policyNumber}}<span
                         ng-show="versionNumber &amp;&amp; versionNumber!=0">/{{versionNumber}}</span></span></span>
                 <button type="button" class="btn btn-default btn-prev" disabled="disabled"><span class="glyphicon glyphicon-arrow-left"></span>Prev</button>
                 <button type="button" class="btn btn-default btn-next" ng-disabled="!stepsSaved[selectedItem]">Next<span
@@ -60,6 +61,60 @@
             <div class="step-content ng-cloak">
                 <div class="step-pane active" data-step="1">
                     <ng-form name="step1">
+                        <div class="bs-callout  bs-callout-info" style="margin-bottom: 7px" >
+
+                            <div class="row">
+                                 <div class="col-lg-6">
+                                    <div class="form-group required">
+                                        <label class="control-label">PolicyHolder Name</label>
+                                        <input type="text" class="form-control input-sm" name="policyHolderName"
+                                               ng-if="policyDetails.basicDetails.policyHolderName" ng-model="policyDetails.basicDetails.policyHolderName"
+                                               ng-required="true" ng-disabled="true"/>
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-6">
+                                    <div class="form-group required">
+                                        <label class="control-label">Inception Date</label>
+                                       <input type="text" class="form-control input-sm" name="inceptionDate"
+                                                ng-model="policyDetails.basicDetails.inceptionDate"
+                                               ng-required="true" ng-disabled="true"/>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-6">
+                                    <div class="form-group required">
+                                        <label class="control-label">Expiry Date</label>
+                                        <input type="text" class="form-control input-sm" ng-readonly="true"
+                                               ng-required="true" name="expiryDate"
+                                               ng-model="policyDetails.basicDetails.expiryDate"/>
+                                    </div>
+
+                                </div>
+
+                            </div>
+                        </div>
+                    </ng-form>
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <button type="button" class="btn btn-default btn-sm" ng-click="back()">Cancel</button>
+                        </div>
+                        <div class="col-sm-6">
+                            <button type="button" class="btn btn-default btn-sm" style="float: right" ng-click="saveBasicDetails()" ng-disabled="isSaveDisabled(step1)" ng-if="!isViewMode">Save</button>
+                            <button type="button" class="btn btn-default btn-sm" style="float: right"  ng-if="isViewMode" ng-click="back()">Back</button>
+                        </div>
+                    </div>
+                </div>
+
+
+
+
+
+
+
+                <div class="step-pane" data-step="2">
+                    <ng-form name="step2">
                         <div class="bs-callout  bs-callout-info" style="margin-bottom: 7px" >
                             <div class="alert alert-info" ng-show="agentNotFound">
                                 <strong>Agent Not Found.Please try again</strong>
@@ -119,13 +174,13 @@
                             <button type="button" class="btn btn-default btn-sm" ng-click="back()">Cancel</button>
                         </div>
                         <div class="col-sm-6">
-                            <button type="button" class="btn btn-default btn-sm" style="float: right" ng-click="saveBasicDetails()" ng-disabled="isSaveDisabled(step1)" ng-if="!isViewMode">Save</button>
+                            <button type="button" class="btn btn-default btn-sm" style="float: right" ng-click="saveBasicDetails()" ng-disabled="isSaveDisabled(step2)" ng-if="!isViewMode">Save</button>
                             <button type="button" class="btn btn-default btn-sm" style="float: right"  ng-if="isViewMode" ng-click="back()">Back</button>
                         </div>
                     </div>
                 </div>
-                <div class="step-pane" data-step="2">
-                    <ng-form name="step2">
+                <div class="step-pane" data-step="3">
+                    <ng-form name="step3">
                         <accordion close-others="true">
                             <accordion-group  is-open="accordionStatus.proposer">
                                 <accordion-heading>
@@ -186,11 +241,11 @@
                                     <div class="form-group required">
                                         <label class="control-label">Mobile Number</label>
                                         <input type="text" class="form-control input-sm" maxlength="10" minlength="10" name="mobileNumber" ng-required="true" ng-pattern="numberPattern" ng-model="policyDetails.proposer.contactPersonMobileNumber"/>
-                                        <div ng-show="step2.mobileNumber.$invalid &amp;&amp; step2.mobileNumber.$dirty">
-                                            <small class="error" ng-show="!step2.mobileNumber.$error.pattern &amp;&amp; step2.mobileNumber.$error.minlength">
+                                        <div ng-show="step3.mobileNumber.$invalid &amp;&amp; step3.mobileNumber.$dirty">
+                                            <small class="error" ng-show="!step3.mobileNumber.$error.pattern &amp;&amp; step3.mobileNumber.$error.minlength">
                                                 Please enter a valid mobile number.
                                             </small>
-                                            <small class="error" ng-show="step2.mobileNumber.$error.pattern">
+                                            <small class="error" ng-show="step3.mobileNumber.$error.pattern">
                                                 Only numbers are allowed.
                                             </small>
                                         </div>
@@ -200,8 +255,8 @@
                                     <div class="form-group">
                                         <label class="control-label">Email</label>
                                         <input type="email" class="form-control input-sm"  name="email" ng-model="policyDetails.proposer.contactPersonEmail"/>
-                                        <div ng-show="step2.email.$invalid &amp;&amp; step2.email.$dirty">
-                                            <small class="error" ng-show="step2.email.$error.email">
+                                        <div ng-show="step3.email.$invalid &amp;&amp; step3.email.$dirty">
+                                            <small class="error" ng-show="step3.email.$error.email">
                                                 Please enter a valid emailId.
                                             </small>
                                         </div>
@@ -209,8 +264,8 @@
                                     <div class="form-group required">
                                         <label class="control-label">Work Phone</label>
                                         <input type="text" class="form-control input-sm" maxlength="13" minlength="13" name="workPhone" ng-required="true" ng-pattern="numberPattern" ng-model="policyDetails.proposer.contactPersonWorkPhoneNumber"/>
-                                        <div ng-show="step2.workPhone.$invalid &amp;&amp; step2.workPhone.$dirty">
-                                            <small class="error" ng-show="!step2.workPhone.$error.pattern &amp;&amp; step2.workPhone.$error.minlength">
+                                        <div ng-show="step3.workPhone.$invalid &amp;&amp; step3.workPhone.$dirty">
+                                            <small class="error" ng-show="!step3.workPhone.$error.pattern &amp;&amp; step3.workPhone.$error.minlength">
                                                 Please enter a valid mobile number.
                                             </small>
                                             <small class="error" ng-show="step2.workPhone.$error.pattern">
@@ -227,12 +282,12 @@
                             <button type="button" class="btn btn-default btn-sm" ng-click="back()">Cancel</button>
                         </div>
                         <div class="col-sm-6">
-                            <button type="button" class="btn btn-default btn-sm" style="float: right" ng-click="saveProposerDetails()" ng-disabled="isSaveDisabled(step2)" ng-if="!isViewMode">Save</button>
+                            <button type="button" class="btn btn-default btn-sm" style="float: right" ng-click="saveProposerDetails()" ng-disabled="isSaveDisabled(step3)" ng-if="!isViewMode">Save</button>
                             <button type="button" class="btn btn-default btn-sm" style="float: right"  ng-if="isViewMode" ng-click="back()">Back</button>
                         </div>
                     </div>
                 </div>
-                <div class="step-pane" data-step="3">
+                <div class="step-pane" data-step="4">
                     <div class="row " disable-all-fields="isViewMode">
                         <div class="col-lg-3 col-lg-offset-3">
                             <div class="checkbox">
@@ -251,7 +306,7 @@
                             </div>
                         </div>
                         <div class="col-lg-3">
-                            <button type="button" class="btn btn-default pull-right" data-animation="am-flip-x" bs-dropdown="dropdown" ng-disabled="isViewMode">Downloads
+                            <button type="button" class="btn btn-default pull-right" data-animation="am-flip-x" bs-dropdown="dropdown" >Downloads
                             </button>
                         </div>
                     </div>
@@ -273,7 +328,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="step-pane" data-step="4">
+                <div class="step-pane" data-step="5">
                     <div class="col-lg-9" disable-all-fields="isViewMode">
                         <div class="bs-callout  bs-callout-info">
                             <ng-form name="premiumForm" novalidate="true">
@@ -406,8 +461,8 @@
                         </div>
                     </div>
                 </div>
-                <div class="step-pane active" data-step="5">
-                    <ng-form name="step5" disable-all-fields="isViewMode">
+                <div class="step-pane" data-step="6">
+                    <ng-form name="step6" disable-all-fields="isViewMode">
                         <accordion close-others="true">
                             <accordion-group  is-open="accordionStatusDocuments.documents">
                                 <accordion-heading>
@@ -420,7 +475,7 @@
                                     <div class="form-group "  ng-repeat="document in documentList" >
                                         <label class="col-sm-3 control-label">{{document.documentName}}</label>
                                         <div class="input-group">
-                                            <a  href="/pla/grouphealth/proposal/downloadmandatorydocument/{{document.gridFsDocId}}" style="display:inline;float:right;"  hg-show="!document.submitted">{{document.fileName}}</a>
+                                            <a  href="/pla/grouphealth/policy/downloadmandatorydocument/{{document.gridFsDocId}}" style="display:inline;float:right;"  hg-show="!document.submitted">{{document.fileName}}</a>
 
                                             <button class="btn btn-default"
                                                     style="display:inline;float:right;margin-right:5px;" ng-file-select=""
@@ -458,7 +513,7 @@
                                                     <label class="control-label">Document Title</label>
                                                     <input type="text" class="form-control input-sm" style="width:400px;"
                                                            ng-required="true" name="documentTitle"
-                                                           ng-model="additionalDocument.documentName"/>
+                                                           ng-model="additionalDocument.documentId"/>
                                                 </div>
                                             </div>
                                             <div class="col-lg-6" ng-hide="isViewMode">
@@ -469,6 +524,12 @@
                                                             ng-file-select="" ng-model="additionalDocument.documentAttached">Browse
                                                     </button>
                                                     <label class="form-control input-sm" style="border:1px solid #ccc;width:380px;"  >{{additionalDocument.documentAttached[0].name}} </label>
+                                                    <div class="col-lg-3">
+                                                        <button class="btn btn-default" style="margin-top:20px;" ng-click="removeAdditionalDocument($index)" ng-disabled="isViewMode">Remove</button>
+                                                        <a  href="/pla/grouphealth/policy/downloadmandatorydocument/{{additionalDocument.gridFsDocId}}" style="display:inline;margin-top:25px;float:right;"  hg-show="!additionalDocument.submitted">{{additionalDocument.fileName}}</a>
+
+                                                    </div>
+
                                                 </div>
                                             </div>
                                         </div>
