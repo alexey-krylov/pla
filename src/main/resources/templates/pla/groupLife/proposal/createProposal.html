@@ -168,6 +168,12 @@
                                         <select class="form-control input-sm" ng-required="true" name="province" ng-model="proposalDetails.proposer.province" ng-options="province.provinceId  as province.provinceName for province in provinces">
                                         </select>
                                     </div>
+                                    <div class="form-group">
+                                        <label>Opportunity ID</label>
+                                        <input type="text" onkeypress="return isNumeric(event)"
+                                               class="form-control input-sm" maxlength="100" ng-disabled="true"
+                                               ng-model="proposalDetails.proposer.opportunityId" />
+                                    </div>
                                     <!--<div class="form-group">
                                         <label >Email</label>
                                         <input type="email" class="form-control input-sm" ng-required="true" ng-keydown="openNewTab($event)"/>
