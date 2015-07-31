@@ -6,27 +6,19 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.math.BigDecimal;
-import java.util.Set;
 
 /**
- * Created by pradyumna on 22-05-2015.
+ * Created by Admin on 7/30/2015.
  */
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
-public class ProposalPlanDetail {
-
-    private String planId;
-
-    private String planName;
-
-    private Integer policyTerm;
-
-    private Integer premiumPaymentTerm;
-
+public class ILRiderDetail {
+    private String coverageId;
     private BigDecimal sumAssured;
-
-    private Set<ILRiderDetail> riderDetails;
+    private Integer coverTerm;
+    private Integer waiverOfPremium;
+    private String coverageName;
 
 }

@@ -3,9 +3,7 @@ package com.pla.individuallife.quotation.domain.model;
 import com.google.common.base.Preconditions;
 import com.pla.core.domain.model.agent.AgentId;
 import com.pla.grouplife.quotation.domain.model.IQuotation;
-import com.pla.individuallife.quotation.domain.event.ILQuotationCreatedEvent;
-import com.pla.individuallife.quotation.domain.event.ILQuotationGeneratedEvent;
-import com.pla.individuallife.quotation.domain.event.ILQuotationVersionEvent;
+import com.pla.individuallife.quotation.domain.event.*;
 import com.pla.sharedkernel.identifier.OpportunityId;
 import com.pla.sharedkernel.identifier.PlanId;
 import com.pla.sharedkernel.identifier.QuotationId;
@@ -159,10 +157,16 @@ public class ILQuotation extends AbstractAggregateRoot<QuotationId> implements I
     @Override
     public void declineQuotation() {
         this.ilQuotationStatus = ILQuotationStatus.DECLINED;
+        registerEvent(new ILQuotationClosureEvent(quotationId));
     }
 
     public void convertQuotation() {
         this.ilQuotationStatus = ILQuotationStatus.CONVERTED;
+        registerEvent(new ILQuotationConvertedEvent(quotationId));
+    }
+
+    public void cancelSchedules() {
+        registerEvent(new ILQuotationEndSagaEvent(this.getQuotationId()));
     }
 
     @Override

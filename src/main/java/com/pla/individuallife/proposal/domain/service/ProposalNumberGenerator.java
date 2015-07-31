@@ -1,6 +1,6 @@
 package com.pla.individuallife.proposal.domain.service;
 
-import com.pla.individuallife.proposal.domain.model.ProposalAggregate;
+import com.pla.individuallife.proposal.domain.model.ILProposalAggregate;
 import com.pla.sharedkernel.util.SequenceGenerator;
 import org.apache.commons.lang.StringUtils;
 import org.joda.time.LocalDate;
@@ -25,7 +25,7 @@ public class ProposalNumberGenerator {
      * @return transactionType-division-runningSequence-SystemMonthSystemYear
      */
     public String getProposalNumber() {
-        String proposalNumber = sequenceGenerator.getSequence(ProposalAggregate.class);
+        String proposalNumber = sequenceGenerator.getSequence(ILProposalAggregate.class);
         proposalNumber = StringUtils.leftPad(proposalNumber, 7, "0");
         String currentDateInString = LocalDate.now().toString(DateTimeFormat.forPattern("dd/MM/yyyy"));
         String month = currentDateInString.substring(3, 5).trim();

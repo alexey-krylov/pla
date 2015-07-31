@@ -1,19 +1,17 @@
 package com.pla.individuallife.proposal.domain.model;
 
 import com.pla.individuallife.proposal.presentation.dto.QuestionAnswerDto;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 
 import java.util.List;
 
 /**
  * Created by Karunakar on 7/6/2015.
  */
+@AllArgsConstructor
+@NoArgsConstructor
 @Getter
 @Setter
-@NoArgsConstructor
 @ToString
 public class GeneralDetails {
 
@@ -22,4 +20,5 @@ public class GeneralDetails {
     private GeneralDetailQuestion pendingInsuranceByOthers;
     private GeneralDetailQuestion assuranceDeclined;
     private List<QuestionAnswerDto> questionAndAnswers;
+
 }

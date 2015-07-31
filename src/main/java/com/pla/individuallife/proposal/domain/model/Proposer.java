@@ -51,4 +51,13 @@ public class Proposer {
         this.otherName=otherName;
     }
 
+    public Proposer(String title, String firstName, String surname, DateTime dateOfBirth, Gender gender, String mobileNumber, String emailAddress) {
+        this.title = title;
+        this.firstName = firstName;
+        this.surname = surname;
+        this.dateOfBirth = dateOfBirth;
+        this.gender = gender;
+        this.mobileNumber = mobileNumber;
+        this.emailAddress = emailAddress;
+    }
 }

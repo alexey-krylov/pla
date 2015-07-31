@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.stereotype.Service;
 
 import javax.sql.DataSource;
@@ -35,9 +36,9 @@ public class ILQuotationFinder {
     public static final String FIND_AGENT_BY_ID_QUERY = "select * from agent_team_branch_view where agentId =:agentId";
     public static final String FIND_QUOTATION_BY_ID_FOR_PREMIUM_WITH_RIDER_QUERY =
             " SELECT  r.`coverage_id` AS COVERAGEID, r.`cover_term` AS COVERTERM, r.`sum_assured` AS RIDER_SA, " +
-            " r.`waiver_of_premium` AS RIDER_PREMIUM_WAIVER, c.`coverage_name` AS COVERAGENAME " +
+                    " r.`waiver_of_premium` AS RIDER_PREMIUM_WAIVER, c.`coverage_name` AS COVERAGENAME " +
                     " FROM individual_life_quotation_rider r  INNER JOIN coverage c " +
-            " ON r.`coverage_id` = c.`coverage_id` " +
+                    " ON r.`coverage_id` = c.`coverage_id` " +
                     " WHERE r.`quotation_id` =:quotationId";
     public static final String FIND_QUOTATION_BY_ID_FOR_PREMIUM_QUERY = "SELECT quotation_id AS QUOTATIONID, plan_id AS PLANID, date_of_birth AS ASSURED_DOB, " +
             " gender AS ASSURED_GENDER, policy_term AS POLICYTERM, occupation AS ASSURED_OCCUPATION, " +
@@ -60,6 +61,8 @@ public class ILQuotationFinder {
             "    ON IL.agent_id = A.agent_id ";
 
     private static final String IL_QUOTATION_TABLE = "individual_life_quotation";
+
+    public static final String findILQuotationByQuotationNumberQuery = "SELECT * FROM individual_life_quotation WHERE quotation_number=:quotationNumber AND quotation_id !=:quotationId AND il_quotation_status=:quotationStatus";
 
     private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
     @Autowired
@@ -159,60 +162,65 @@ public class ILQuotationFinder {
 
     public List<ILSearchQuotationResultDto> searchQuotation(
             String quotationNumber, String proposerName, String proposerNrcNumber, String agentCode, String quotationStatus) {
-         boolean isFirst = true;
+        boolean isFirst = true;
 
         if (isEmpty(quotationNumber) && isEmpty(proposerName) && isEmpty(proposerNrcNumber) && isEmpty(agentCode)) {
-             return Lists.newArrayList();
-         }
+            return Lists.newArrayList();
+        }
 
         StringBuilder query = new StringBuilder(QUOTATION_SEARCH_QUERY);
 
-         if (isNotEmpty(quotationNumber)) {
-             if (isFirst) {
-                 query.append(" where (quotation_number = '"+quotationNumber +"'" + "or quotation_id = '"+quotationNumber +"')");
-             } else {
-                 query.append(" and (quotation_number = '"+quotationNumber +"'" + "or quotation_id = '"+quotationNumber +"')");
-             }
-             isFirst = false;
-         }
+        if (isNotEmpty(quotationNumber)) {
+            if (isFirst) {
+                query.append(" where (quotation_number = '"+quotationNumber +"'" + "or quotation_id = '"+quotationNumber +"')");
+            } else {
+                query.append(" and (quotation_number = '"+quotationNumber +"'" + "or quotation_id = '"+quotationNumber +"')");
+            }
+            isFirst = false;
+        }
 
-         if (isNotEmpty(proposerName)) {
-             if (isFirst) {
-                 query.append(" where lower(proposer_first_name) like '" + proposerName.toLowerCase() + "%' OR proposer_surname like '" + proposerName.toLowerCase() + "%' ");
-             } else {
-                 query.append(" and lower(proposer_first_name) like '" + proposerName.toLowerCase() + "%' OR proposer_surname like '" + proposerName.toLowerCase() + "%' ");
-             }
-             isFirst = false;
-         }
+        if (isNotEmpty(proposerName)) {
+            if (isFirst) {
+                query.append(" where lower(proposer_first_name) like '" + proposerName.toLowerCase() + "%' OR proposer_surname like '" + proposerName.toLowerCase() + "%' ");
+            } else {
+                query.append(" and lower(proposer_first_name) like '" + proposerName.toLowerCase() + "%' OR proposer_surname like '" + proposerName.toLowerCase() + "%' ");
+            }
+            isFirst = false;
+        }
 
-         if (isNotEmpty(proposerNrcNumber)) {
-             if (isFirst) {
-                 query.append(" where proposer_nrc_number = '"+ proposerNrcNumber + "'");
-             } else {
-                 query.append(" and proposer_nrc_number = '"+ proposerNrcNumber + "'");
-             }
-             isFirst = false;
-         }
+        if (isNotEmpty(proposerNrcNumber)) {
+            if (isFirst) {
+                query.append(" where proposer_nrc_number = '"+ proposerNrcNumber + "'");
+            } else {
+                query.append(" and proposer_nrc_number = '"+ proposerNrcNumber + "'");
+            }
+            isFirst = false;
+        }
 
-         if (isNotEmpty(agentCode)) {
-             if (isFirst) {
-                 query.append(" where il.agent_id = '" + agentCode + "'");
-             } else {
-                 query.append(" and il.agent_id = '" + agentCode + "'");
-             }
-             isFirst = false;
-         }
+        if (isNotEmpty(agentCode)) {
+            if (isFirst) {
+                query.append(" where il.agent_id = '" + agentCode + "'");
+            } else {
+                query.append(" and il.agent_id = '" + agentCode + "'");
+            }
+            isFirst = false;
+        }
 
-         if (isNotEmpty(quotationStatus)) {
-             if (isFirst) {
-                 query.append(" where il_quotation_status = '" + quotationStatus + "'");
-             } else {
-                 query.append(" and il_quotation_status = '" + quotationStatus + "'");
-             }
-             isFirst = false;
-         }
+        if (isNotEmpty(quotationStatus)) {
+            if (isFirst) {
+                query.append(" where il_quotation_status = '" + quotationStatus + "'");
+            } else {
+                query.append(" and il_quotation_status = '" + quotationStatus + "'");
+            }
+            isFirst = false;
+        }
 
-         query.append(" order by version_number desc");
+        query.append(" order by version_number desc");
         return namedParameterJdbcTemplate.query(query.toString(), new BeanPropertyRowMapper(ILSearchQuotationResultDto.class));
-     }
+    }
+
+    public List<ILQuotation> findQuotationByQuotNumberAndStatusByExcludingGivenQuotId(String quotationNumber, QuotationId quotationId, String quotationStatus) {
+        SqlParameterSource sqlParameterSource =  new MapSqlParameterSource("quotationNumber",quotationNumber).addValue("quotationId",quotationId.getQuotationId()).addValue("quotationStatus",quotationStatus);
+        return namedParameterJdbcTemplate.query(findILQuotationByQuotationNumberQuery,sqlParameterSource,new BeanPropertyRowMapper<>(ILQuotation.class));
+    }
 }

@@ -1,20 +1,24 @@
 package com.pla.individuallife.proposal.application.command;
 
 import com.google.common.collect.Sets;
-import com.pla.core.query.AgentFinder;
+import com.pla.core.domain.model.agent.AgentId;
 import com.pla.core.query.PlanFinder;
+import com.pla.individuallife.identifier.QuestionId;
 import com.pla.individuallife.proposal.domain.model.*;
+import com.pla.individuallife.proposal.domain.service.ILProposalRoleAdapter;
 import com.pla.individuallife.proposal.domain.service.ProposalNumberGenerator;
+import com.pla.individuallife.proposal.presentation.dto.AgentDetailDto;
 import com.pla.individuallife.proposal.presentation.dto.QuestionDto;
 import com.pla.individuallife.proposal.query.ILProposalFinder;
-import com.pla.individuallife.quotation.query.ILQuotationDto;
-import com.pla.individuallife.quotation.query.ILQuotationFinder;
+import com.pla.individuallife.proposal.service.ILProposalFactory;
+import com.pla.publishedlanguage.dto.UnderWriterRoutingLevelDetailDto;
+import com.pla.sharedkernel.domain.model.ProcessType;
+import com.pla.sharedkernel.domain.model.RoutingLevel;
 import com.pla.sharedkernel.identifier.PlanId;
 import com.pla.sharedkernel.identifier.ProposalId;
 import org.axonframework.commandhandling.annotation.CommandHandler;
-import org.axonframework.repository.AggregateNotFoundException;
 import org.axonframework.repository.Repository;
-import org.joda.time.DateTime;
+import org.joda.time.LocalDate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,10 +28,13 @@ import org.springframework.data.mongodb.gridfs.GridFsTemplate;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.function.Function;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 import static org.nthdimenzion.utils.UtilValidator.isEmpty;
 
@@ -41,13 +48,7 @@ public class ILProposalCommandHandler {
     @Autowired
     private ProposalNumberGenerator proposalNumberGenerator;
     @Autowired
-    private Repository<ProposalAggregate> ilProposalMongoRepository;
-
-    @Autowired
-    private ILQuotationFinder quotationFinder;
-
-    @Autowired
-    private AgentFinder agentFinder;
+    private Repository<ILProposalAggregate> ilProposalMongoRepository;
 
     @Autowired
     private PlanFinder planFinder;
@@ -58,140 +59,124 @@ public class ILProposalCommandHandler {
     @Autowired
     private GridFsTemplate gridFsTemplate;
 
-    @CommandHandler
-    public void createProposal(ILCreateProposalCommand cmd) {
+    @Autowired
+    private ILProposalRoleAdapter ilProposalRoleAdapter;
 
-        ProposalAggregate aggregate;
+    @Autowired
+    private ILProposalFactory ilProposalFactory;
+
+    /*
+    *
+    * Generate a Proposal Number once the Proposed Assured details has been submitted
+    * */
+    @CommandHandler
+    public String createProposal(ILCreateProposalCommand cmd) {
+        ilProposalRoleAdapter.userToProposalProcessorRole(cmd.getUserDetails());
+        ILProposalAggregate proposalAggregate = ilProposalFactory.createProposal(cmd);
+        ilProposalMongoRepository.add(proposalAggregate);
+        return proposalAggregate.getIdentifier().getProposalId();
+    }
+
+    /*
+    *
+    * Update the IL Proposal  with Proposed Assured Details
+    * */
+    @CommandHandler
+    public String updateProposalProposedAssured(ILUpdateProposalWithProposedAssuredCommand cmd) {
+        ILProposalProcessor ilProposalProcessor  = ilProposalRoleAdapter.userToProposalProcessorRole(cmd.getUserDetails());
         ProposedAssured proposedAssured = ProposedAssuredBuilder.getProposedAssuredBuilder(cmd.getProposedAssured()).createProposedAssured();
         if (logger.isDebugEnabled()) {
             logger.debug(" ProposedAssured :: " + proposedAssured);
         }
-        String proposalNumber = proposalNumberGenerator.getProposalNumber();
-        if (cmd.getQuotationId() != null) {
-            ILQuotationDto dto = quotationFinder.getQuotationById(cmd.getQuotationId());
-            Map planDetail = planFinder.findPlanByPlanId(new PlanId(dto.getPlanId()));
-            dto.setPlanDetail(planDetail);
-            aggregate = new ProposalAggregate(cmd.getUserDetails(), cmd.getProposalId(), proposalNumber, proposedAssured, cmd.getAgentCommissionDetails(), dto, planFinder);
-        } else {
-            aggregate = new ProposalAggregate(cmd.getUserDetails(), cmd.getProposalId(), proposalNumber, proposedAssured, cmd.getAgentCommissionDetails());
-        }
+        ILProposalAggregate aggregate = ilProposalMongoRepository.load(new ProposalId(cmd.getProposalId()));
+        AgentCommissionShareModel agentCommissionShareModel  = withAgentCommissionShareModel(cmd.getAgentCommissionDetails());
+        aggregate = ilProposalProcessor.updateWithProposedAssuredAndAgentDetails(aggregate,proposedAssured, agentCommissionShareModel);
         ilProposalMongoRepository.add(aggregate);
+        return aggregate.getIdentifier().getProposalId();
     }
 
     @CommandHandler
-    public void updateProposalProposedAssured(ILUpdateProposalWithProposedAssuredCommand cmd) {
-
-        ProposedAssured proposedAssured = ProposedAssuredBuilder.getProposedAssuredBuilder(cmd.getProposedAssured()).createProposedAssured();
-        if (logger.isDebugEnabled()) {
-            logger.debug(" ProposedAssured :: " + proposedAssured);
-        }
-        ProposalAggregate aggregate = ilProposalMongoRepository.load(new ProposalId(cmd.getProposalId()));
-        aggregate.updateWithProposedAssuredAndAgenDetails(cmd.getUserDetails(), cmd.getProposalId(), proposedAssured, cmd.getAgentCommissionDetails());
-        ilProposalMongoRepository.add(aggregate);
-    }
-
-    @CommandHandler
-    public void updateProposalProposer(ILProposalUpdateWithProposerCommand cmd) {
+    public String updateProposalProposer(ILProposalUpdateWithProposerCommand cmd) {
+        ILProposalProcessor ilProposalProcessor  =  ilProposalRoleAdapter.userToProposalProcessorRole(cmd.getUserDetails());
         Proposer proposer = ProposerBuilder.getProposerBuilder(cmd.getProposer()).createProposer();
         if (logger.isDebugEnabled()) {
             logger.debug(" Proposer :: " + proposer);
         }
-        ProposalAggregate aggregate = ilProposalMongoRepository.load(new ProposalId(cmd.getProposalId()));
-        aggregate.updateWithProposer(aggregate, proposer, cmd.getUserDetails());
+        ILProposalAggregate aggregate = ilProposalMongoRepository.load(new ProposalId(cmd.getProposalId()));
+        aggregate = ilProposalProcessor.updateWithProposer(aggregate,proposer);
         ilProposalMongoRepository.add(aggregate);
+        return aggregate.getIdentifier().getProposalId();
     }
 
-
-
-
     @CommandHandler
-    public void updateGeneralDetails(ILProposalUpdateGeneralDetailsCommand cmd) {
-        ProposalAggregate aggregate = null;
+    public String updateGeneralDetails(ILProposalUpdateGeneralDetailsCommand cmd) {
+        ILProposalProcessor ilProposalProcessor  = ilProposalRoleAdapter.userToProposalProcessorRole(cmd.getUserDetails());
         ProposalId proposalId = new ProposalId(cmd.getProposalId());
-        GeneralDetails gd = new GeneralDetails();
-        gd.setAssuredByPLAL(cmd.getAssuredByPLAL());
-        gd.setPendingInsuranceByOthers(cmd.getPendingInsuranceByOthers());
-        gd.setAssuranceDeclined(cmd.getAssuranceDeclined());
-        gd.setAssuredByOthers(cmd.getAssuredByOthers());
-        gd.setQuestionAndAnswers(cmd.getGeneralQuestion());
-        try {
-            aggregate = ilProposalMongoRepository.load(proposalId);
-            aggregate.updateGeneralDetails(gd, cmd.getUserDetails());
-        } catch (AggregateNotFoundException e) {
-            e.printStackTrace();
-        }
+        GeneralDetails generalDetails = new GeneralDetails(cmd.getAssuredByPLAL(),cmd.getPendingInsuranceByOthers(),cmd.getAssuranceDeclined(),cmd.getAssuredByOthers(),cmd.getGeneralQuestion());
+        ILProposalAggregate aggregate = ilProposalMongoRepository.load(proposalId);
+        aggregate = ilProposalProcessor.updateGeneralDetails(aggregate,generalDetails);
+        return aggregate.getIdentifier().getProposalId();
     }
 
     @CommandHandler
-    public void updateAdditionalDetails(ILProposalUpdateAdditionalDetailsCommand cmd) {
-        ProposalAggregate proposalAggregate = null;
+    public String updateAdditionalDetails(ILProposalUpdateAdditionalDetailsCommand cmd) {
+        ILProposalProcessor ilProposalProcessor  =   ilProposalRoleAdapter.userToProposalProcessorRole(cmd.getUserDetails());
+        ILProposalAggregate proposalAggregate = null;
         ProposalId proposalId = new ProposalId(cmd.getProposalId());
-        try {
-            proposalAggregate = ilProposalMongoRepository.load(proposalId);
-            proposalAggregate.updateAdditionalDetails(cmd.getUserDetails(), cmd.getMedicalAttendantDetails(), cmd.getMedicalAttendantDuration(), cmd.getDateAndReason(), cmd.getReplacementDetails());
-        } catch (AggregateNotFoundException e) {
-            e.printStackTrace();
-        }
+        proposalAggregate = ilProposalMongoRepository.load(proposalId);
+        proposalAggregate =  ilProposalProcessor.updateAdditionalDetails(proposalAggregate,cmd.getMedicalAttendantDetails(), cmd.getMedicalAttendantDuration(), cmd.getDateAndReason(), cmd.getReplacementDetails());
+        return proposalAggregate.getIdentifier().getProposalId();
     }
 
     @CommandHandler
-    public void updateCompulsoryHealthStatement(ILProposalUpdateCompulsoryHealthStatementCommand cmd) {
-        ProposalAggregate proposalAggregate = null;
+    public String updateCompulsoryHealthStatement(ILProposalUpdateCompulsoryHealthStatementCommand cmd) {
+        ILProposalProcessor ilProposalProcessor  = ilProposalRoleAdapter.userToProposalProcessorRole(cmd.getUserDetails());
         ProposalId proposalId = new ProposalId(cmd.getProposalId());
         List<QuestionDto> questionDtoList=cmd.getCompulsoryHealthDetails();
-        try {
-            proposalAggregate = ilProposalMongoRepository.load(proposalId);
-            proposalAggregate.updateCompulsoryHealthStatement(questionDtoList, cmd.getUserDetails());
-        } catch (AggregateNotFoundException e) {
-            e.printStackTrace();
-        }
+        ILProposalAggregate proposalAggregate = ilProposalMongoRepository.load(proposalId);
+        List<Question> quotations  = withCompulsoryHealthStatement(questionDtoList);
+        proposalAggregate = ilProposalProcessor.updateCompulsoryHealthStatement(proposalAggregate,quotations);
+        return proposalAggregate.getIdentifier().getProposalId();
     }
 
     @CommandHandler
-    public void updateFamilyPersonalDetails(ILProposalUpdateFamilyPersonalDetailsCommand cmd) {
-        ProposalAggregate proposalAggregate = null;
+    public String updateFamilyPersonalDetails(ILProposalUpdateFamilyPersonalDetailsCommand cmd) {
+        ILProposalProcessor ilProposalProcessor  = ilProposalRoleAdapter.userToProposalProcessorRole(cmd.getUserDetails());
         ProposalId proposalId = new ProposalId(cmd.getProposalId());
         FamilyPersonalDetail familyPersonalDetail = cmd.getFamilyPersonalDetail();
-
-        try {
-            proposalAggregate = ilProposalMongoRepository.load(proposalId);
-            proposalAggregate.updateFamilyPersonalDetail(familyPersonalDetail, cmd.getUserDetails());
-        } catch (AggregateNotFoundException e) {
-            e.printStackTrace();
-        }
+        ILProposalAggregate proposalAggregate = ilProposalMongoRepository.load(proposalId);
+        proposalAggregate = ilProposalProcessor.updateFamilyPersonalDetail(proposalAggregate,familyPersonalDetail);
+        return proposalAggregate.getIdentifier().getProposalId();
     }
 
     @CommandHandler
-    public void updateWithPlanDetail(ILProposalUpdateWithPlanAndBeneficiariesCommand cmd) {
-        ProposalAggregate aggregate = null;
+    public String updateWithPlanDetail(ILProposalUpdateWithPlanAndBeneficiariesCommand cmd) {
+        ILProposalProcessor ilProposalProcessor   =  ilProposalRoleAdapter.userToProposalProcessorRole(cmd.getUserDetails());
         ProposalId proposalId = new ProposalId(cmd.getProposalId());
-
-        try {
-            aggregate = ilProposalMongoRepository.load(proposalId);
-            aggregate.updatePlan(aggregate, cmd.getProposalPlanDetail(), cmd.getBeneficiaries(), cmd.getUserDetails(), planFinder);
-            ilProposalMongoRepository.add(aggregate);
-        } catch (AggregateNotFoundException e) {
-            e.printStackTrace();
-        }
+        ILProposalAggregate aggregate = ilProposalMongoRepository.load(proposalId);
+        Map plan = planFinder.findPlanByPlanId(new PlanId(aggregate.getProposalPlanDetail().getPlanId()));
+        Map planDetail = (HashMap) plan.get("planDetail");
+        int minAge = (int) planDetail.get("minEntryAge");
+        int maxAge = (int) planDetail.get("maxEntryAge");
+        aggregate = ilProposalProcessor.updateWithPlanDetail(aggregate,cmd.getProposalPlanDetail(), cmd.getBeneficiaries(),minAge,maxAge);
+        ilProposalMongoRepository.add(aggregate);
+        return aggregate.getIdentifier().getProposalId();
     }
 
     @CommandHandler
-    public void updateWithPremiumPaymentDetail(ILProposalUpdatePremiumPaymentDetailsCommand cmd) {
-        ProposalAggregate aggregate = null;
+    public String updateWithPremiumPaymentDetail(ILProposalUpdatePremiumPaymentDetailsCommand cmd) {
+        ILProposalProcessor ilProposalProcessor  = ilProposalRoleAdapter.userToProposalProcessorRole(cmd.getUserDetails());
         ProposalId proposalId = new ProposalId(cmd.getProposalId());
-
-        try {
-            aggregate = ilProposalMongoRepository.load(proposalId);
-            aggregate.updateWithPremiumPaymentDetail(aggregate, cmd.getPremiumPaymentDetails(), cmd.getUserDetails());
-            ilProposalMongoRepository.add(aggregate);
-        } catch (AggregateNotFoundException e) {
-            e.printStackTrace();
-        }
+        ILProposalAggregate aggregate = ilProposalMongoRepository.load(proposalId);
+        aggregate = ilProposalProcessor.updateWithPremiumPaymentDetail(aggregate,cmd.getPremiumPaymentDetails());
+        ilProposalMongoRepository.add(aggregate);
+        return aggregate.getIdentifier().getProposalId();
     }
 
     @CommandHandler
-    public void uploadMandatoryDocument(ILProposalDocumentCommand cmd) throws IOException {
-        ProposalAggregate aggregate = ilProposalMongoRepository.load(new ProposalId(cmd.getProposalId()));
+    public String uploadMandatoryDocument(ILProposalDocumentCommand cmd) throws IOException {
+        ILProposalProcessor ilProposalProcessor  =  ilProposalRoleAdapter.userToProposalProcessorRole(cmd.getUserDetails());
+        ILProposalAggregate aggregate = ilProposalMongoRepository.load(new ProposalId(cmd.getProposalId()));
         Set<ILProposerDocument> documents = aggregate.getProposalDocuments();
         if (isEmpty(documents)) {
             documents = Sets.newHashSet();
@@ -208,25 +193,55 @@ public class ILProposalCommandHandler {
             gridFsTemplate.delete(new Query(Criteria.where("_id").is(existingDocument.getGridFsDocId())));
             existingDocument = existingDocument.updateWithNameAndContent(cmd.getFilename(), gridFsDocId, cmd.getFile().getContentType());
         }
-        aggregate.updateWithDocuments(documents, cmd.getUserDetails());
+        aggregate = ilProposalProcessor.updateWithDocuments(aggregate,documents);
+        return aggregate.getIdentifier().getProposalId();
     }
 
     @CommandHandler
-    public void submitProposal(SubmitILProposalCommand cmd) {
-        ProposalAggregate aggregate = ilProposalMongoRepository.load(new ProposalId(cmd.getProposalId()));
-        aggregate.submitProposal(DateTime.now(), cmd.getUserDetails(), cmd.getComment(), proposalFinder);
+    public String submitProposal(SubmitILProposalCommand cmd) {
+        ILProposalProcessor ilProposalProcessor = ilProposalRoleAdapter.userToProposalProcessorRole(cmd.getUserDetails());
+        ILProposalAggregate aggregate = ilProposalMongoRepository.load(new ProposalId(cmd.getProposalId()));
+        UnderWriterRoutingLevelDetailDto routingLevelDetailDto = new UnderWriterRoutingLevelDetailDto(new PlanId(aggregate.getProposalPlanDetail().getPlanId()), LocalDate.now(), ProcessType.ENROLLMENT.name());
+        RoutingLevel routinglevel = proposalFinder.findRoutingLevel(routingLevelDetailDto, aggregate.getProposalId().toString(), aggregate.getProposedAssured().getAgeNextBirthday());
+        aggregate = ilProposalProcessor.submitProposal(aggregate,cmd.getComment(), routinglevel);
+        return aggregate.getIdentifier().getProposalId();
     }
 
     @CommandHandler
-    public void proposalApproval(ILProposalApprovalCommand cmd) {
-        ProposalAggregate aggregate = ilProposalMongoRepository.load(new ProposalId(cmd.getProposalId()));
-        aggregate.submitApproval(DateTime.now(), cmd.getUserDetails(), cmd.getComment(), cmd.getStatus());
+    public String proposalApproval(ILProposalApprovalCommand cmd) {
+        ILProposalApprover ilProposalApprover = ilProposalRoleAdapter.userToProposalApproverRole(cmd.getUserDetails());
+        ILProposalAggregate aggregate = ilProposalMongoRepository.load(new ProposalId(cmd.getProposalId()));
+        aggregate = ilProposalApprover.submitApproval(aggregate,cmd.getComment(), cmd.getStatus(),cmd.getUserDetails().getUsername());
+        return aggregate.getIdentifier().getProposalId();
     }
 
     @CommandHandler
-    public void routeToNextLevel(ILProposalUnderwriterNextLevelCommand cmd) {
-        ProposalAggregate aggregate = ilProposalMongoRepository.load(new ProposalId(cmd.getProposalId()));
-        aggregate.routeToNextLevel(cmd.getUserDetails(), cmd.getComment(), cmd.getStatus(), cmd.getRoutingLevel());
+    public String routeToNextLevel(ILProposalUnderwriterNextLevelCommand cmd) {
+        ILProposalApprover ilProposalApprover =  ilProposalRoleAdapter.userToProposalApproverRole(cmd.getUserDetails());
+        ILProposalAggregate aggregate = ilProposalMongoRepository.load(new ProposalId(cmd.getProposalId()));
+        aggregate = ilProposalApprover.routeToNextLevel(aggregate,cmd.getComment(), cmd.getStatus());
+        return aggregate.getIdentifier().getProposalId();
+    }
+
+    @CommandHandler
+    public void closureILProposal(ILProposalClosureCommand cmd) {
+        ILProposalAggregate aggregate = ilProposalMongoRepository.load(cmd.getProposalId());
+        aggregate.closeProposal();
+    }
+
+    private List<Question> withCompulsoryHealthStatement(List<QuestionDto> compulsoryHealthStatement){
+        return compulsoryHealthStatement.parallelStream().map(new Function<QuestionDto, Question>() {
+            @Override
+            public Question apply(QuestionDto questionDto) {
+                return new Question(new QuestionId(questionDto.getQuestionId()), questionDto.isAnswer(), questionDto.getAnswerResponse());
+            }
+        }).collect(Collectors.toList());
+    }
+
+    private AgentCommissionShareModel withAgentCommissionShareModel(Set<AgentDetailDto> agentCommissionDetails){
+        AgentCommissionShareModel agentCommissionShareModel = new AgentCommissionShareModel();
+        agentCommissionDetails.forEach(agentCommission -> agentCommissionShareModel.addAgentCommission(new AgentId(agentCommission.getAgentId()), agentCommission.getCommission()));
+        return agentCommissionShareModel;
     }
 
 

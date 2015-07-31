@@ -169,4 +169,16 @@ public class ILQuotationCommandHandler {
         ILQuotation quotation = ilQuotationRepository.load(cmd.getQuotationId());
         quotation.convertQuotation();
     }
+
+    @CommandHandler
+    public void purgeILQuotation(ILQuotationPurgeCommand ILQuotationPurgeCommand) {
+        ILQuotation ilQuotation = ilQuotationRepository.load(ILQuotationPurgeCommand.getQuotationId());
+        ilQuotation.purgeQuotation();
+    }
+
+    @CommandHandler
+    public void closureILQuotation(ILQuotationClosureCommand ilClosureILQuotationCommand) {
+        ILQuotation ilQuotation = ilQuotationRepository.load(ilClosureILQuotationCommand.getQuotationId());
+        ilQuotation.declineQuotation();
+    }
 }

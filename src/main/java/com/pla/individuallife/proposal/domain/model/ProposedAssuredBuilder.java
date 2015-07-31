@@ -112,12 +112,10 @@ public class ProposedAssuredBuilder {
     }
 
     public ProposedAssured createProposedAssured() {
-
         return new ProposedAssured(title, firstName, surname, nrc, dateOfBirth, gender, mobileNumber, emailAddress, maritalStatus, spouseFirstName, spouseLastName, spouseEmailAddress, spouseMobileNumber, employmentDetail, residentialAddress, isProposer,otherName);
     }
 
     public ProposedAssuredDto createProposedAssuredDto() {
-
         return new ProposedAssuredDto(title, firstName, surname, nrc, dateOfBirth, gender, mobileNumber, emailAddress, maritalStatus, spouseFirstName, spouseLastName, spouseEmailAddress, spouseMobileNumber, employmentDetail, residentialAddress, isProposer,otherName);
     }
 
