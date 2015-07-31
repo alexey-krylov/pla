@@ -88,7 +88,7 @@
                          event-bus="eventBus"/>
 
     <extension:mongo-repository id="ilProposalMongoRepository"
-                                aggregate-type="com.pla.individuallife.proposal.domain.model.ProposalAggregate"
+                                aggregate-type="com.pla.individuallife.proposal.domain.model.ILProposalAggregate"
                                 mongo-template="mongoTemplate"/>
 
     <extension:mongo-repository id="groupLifeProposalRepository"
