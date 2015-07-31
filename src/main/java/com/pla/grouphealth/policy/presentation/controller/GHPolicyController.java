@@ -127,7 +127,7 @@ public class GHPolicyController {
     @ResponseBody
     public Result getPolicyNumber(@PathVariable("policyId") String policyId) {
         Map policyMap = ghPolicyFinder.findPolicyById(policyId);
-        return Result.success("Proposal number ", policyMap.get("policyNumber") != null ? ((PolicyNumber) policyMap.get("policyNumber")).getPolicyNumber() : "");
+        return Result.success("Policy number ", policyMap.get("policyNumber") != null ? ((PolicyNumber) policyMap.get("policyNumber")).getPolicyNumber() : "");
     }
 
     @RequestMapping(value = "/downloadmandatorydocument/{gridfsdocid}", method = RequestMethod.GET)
