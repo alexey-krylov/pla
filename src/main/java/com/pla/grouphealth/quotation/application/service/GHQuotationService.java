@@ -118,6 +118,7 @@ public class GHQuotationService {
         ghQuotationDetailDto.setAgentCode(agentDetailDto.getAgentId());
         ghQuotationDetailDto.setAgentName(agentDetailDto.getAgentSalutation() + "  " + agentDetailDto.getAgentName());
         ghQuotationDetailDto.setAgentMobileNumber(agentDetailDto.getAgentMobileNumber());
+        ghQuotationDetailDto.setQuotationDate(quotation.getGeneratedOn().toString(AppConstants.DD_MM_YYY_FORMAT));
 
         GHProposer proposer = quotation.getProposer();
         ghQuotationDetailDto.setProposerName(proposer.getProposerName());

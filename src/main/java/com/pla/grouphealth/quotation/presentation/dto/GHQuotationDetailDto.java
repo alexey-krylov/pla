@@ -20,6 +20,8 @@ public class GHQuotationDetailDto {
     private String agentCode;
     private String agentMobileNumber;
 
+    private String quotationDate;
+
     private String proposerName;
     private String proposerAddress;
 

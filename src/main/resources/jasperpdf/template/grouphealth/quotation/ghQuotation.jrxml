@@ -2,14 +2,17 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Quotation" pageWidth="1000" pageHeight="1500" orientation="Landscape" whenNoDataType="AllSectionsNoDetail" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="957e75dd-e876-4376-9d34-ee0e5f53cdeb">
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
 	<property name="ireport.zoom" value="1.0"/>
-	<property name="ireport.x" value="146"/>
-	<property name="ireport.y" value="348"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="82"/>
 	<subDataset name="dataset1" uuid="cb7c3b79-1e7b-49c3-9bac-8ee5b60d6edc"/>
 	<queryString>
 		<![CDATA[]]>
 	</queryString>
 	<field name="agentName" class="java.lang.String">
 		<fieldDescription><![CDATA[agentName]]></fieldDescription>
+	</field>
+	<field name="quotationDate" class="java.lang.String">
+		<fieldDescription><![CDATA[quotationDate]]></fieldDescription>
 	</field>
 	<field name="showLoading" class="java.lang.Boolean">
 		<fieldDescription><![CDATA[showLoading]]></fieldDescription>
@@ -108,11 +111,32 @@
 					<rightPen lineWidth="0.6" lineStyle="Double"/>
 				</box>
 				<staticText>
-					<reportElement x="298" y="11" width="366" height="30" uuid="e55211fe-d850-41ac-b5d4-02a060976fee"/>
+					<reportElement x="319" y="11" width="186" height="30" uuid="e55211fe-d850-41ac-b5d4-02a060976fee"/>
 					<textElement textAlignment="Center" verticalAlignment="Top">
 						<font fontName="Arial" size="14" isBold="true"/>
 					</textElement>
-					<text><![CDATA[Group Health Quotation]]></text>
+					<text><![CDATA[Group Health Quotation - ]]></text>
+				</staticText>
+				<textField>
+					<reportElement x="498" y="12" width="124" height="29" uuid="3ea7fd38-9694-486c-ae4f-f6349f15d8fe"/>
+					<textElement verticalAlignment="Top">
+						<font size="12" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{quotationNumber}   ]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="667" y="12" width="100" height="29" uuid="778b5ab9-f57e-4f75-9f11-47c729323f10"/>
+					<textElement>
+						<font size="12" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{quotationDate}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement x="622" y="12" width="45" height="29" uuid="b5dc7f01-f7c0-49ac-8d4b-04eb5561233c"/>
+					<textElement>
+						<font size="12" isBold="true"/>
+					</textElement>
+					<text><![CDATA[ Date : ]]></text>
 				</staticText>
 			</frame>
 		</band>
@@ -128,7 +152,7 @@
 					<rightPen lineWidth="0.6" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<staticText>
-					<reportElement x="127" y="18" width="80" height="24" uuid="942b9f26-51ec-4c2b-bc2d-5dfe337ec718"/>
+					<reportElement x="127" y="19" width="80" height="24" uuid="942b9f26-51ec-4c2b-bc2d-5dfe337ec718"/>
 					<box>
 						<topPen lineColor="#F22522"/>
 						<leftPen lineColor="#F22522"/>
@@ -177,7 +201,7 @@
 					<textFieldExpression><![CDATA[$F{agentCode}]]></textFieldExpression>
 				</textField>
 				<staticText>
-					<reportElement x="126" y="56" width="81" height="20" uuid="adf044ed-7118-4885-8628-16e1d83764ce"/>
+					<reportElement x="120" y="56" width="87" height="20" uuid="adf044ed-7118-4885-8628-16e1d83764ce"/>
 					<textElement verticalAlignment="Middle">
 						<font fontName="Arial" size="12" isBold="true"/>
 					</textElement>
@@ -205,14 +229,14 @@
 						<text><![CDATA[Name :]]></text>
 					</staticText>
 					<staticText>
-						<reportElement x="21" y="13" width="132" height="24" uuid="e95c1610-70b6-4204-be32-c867179840b7"/>
+						<reportElement mode="Opaque" x="0" y="0" width="704" height="20" forecolor="#FFFFFF" backcolor="#002060" uuid="e95c1610-70b6-4204-be32-c867179840b7"/>
 						<textElement>
 							<font size="14" isBold="true"/>
 						</textElement>
-						<text><![CDATA[Proposer Detail]]></text>
+						<text><![CDATA[   Proposer Detail]]></text>
 					</staticText>
 					<staticText>
-						<reportElement x="311" y="30" width="59" height="19" uuid="2bfc2cde-678f-4609-8f89-b86c401df6df"/>
+						<reportElement x="304" y="30" width="73" height="19" uuid="2bfc2cde-678f-4609-8f89-b86c401df6df"/>
 						<box>
 							<topPen lineColor="#F22522"/>
 							<leftPen lineColor="#F22522"/>
@@ -235,7 +259,7 @@
 						<textFieldExpression><![CDATA[$F{proposerAddress}]]></textFieldExpression>
 					</textField>
 					<staticText>
-						<reportElement x="106" y="62" width="110" height="15" uuid="8be7f033-0783-4099-a616-37c35562a8fe"/>
+						<reportElement x="98" y="62" width="123" height="15" uuid="8be7f033-0783-4099-a616-37c35562a8fe"/>
 						<box>
 							<topPen lineColor="#F22522"/>
 							<leftPen lineColor="#F22522"/>
@@ -262,11 +286,11 @@
 						<rightPen lineWidth="0.6" lineStyle="Solid" lineColor="#000000"/>
 					</box>
 					<staticText>
-						<reportElement x="17" y="1" width="121" height="21" uuid="c2652866-9fe2-490f-84c4-3caa84050503"/>
+						<reportElement mode="Opaque" x="0" y="1" width="704" height="24" forecolor="#FFFFFF" backcolor="#002060" uuid="c2652866-9fe2-490f-84c4-3caa84050503"/>
 						<textElement>
 							<font size="14" isBold="true"/>
 						</textElement>
-						<text><![CDATA[Quotation Details:]]></text>
+						<text><![CDATA[  Quotation Details:]]></text>
 					</staticText>
 					<staticText>
 						<reportElement x="85" y="35" width="123" height="19" uuid="bc10e285-9c9f-41f0-8cbe-c2ed5516cf80"/>
@@ -276,7 +300,7 @@
 						<text><![CDATA[Quotation Number :]]></text>
 					</staticText>
 					<textField isStretchWithOverflow="true">
-						<reportElement x="212" y="37" width="100" height="17" uuid="5f3ccd72-3e34-419f-b9c2-c67064e6cf69"/>
+						<reportElement mode="Opaque" x="212" y="37" width="100" height="17" backcolor="#808080" uuid="5f3ccd72-3e34-419f-b9c2-c67064e6cf69"/>
 						<textFieldExpression><![CDATA[$F{quotationNumber}]]></textFieldExpression>
 					</textField>
 					<staticText>
@@ -322,7 +346,7 @@
 					<subreportExpression><![CDATA["jasperpdf/jasper/grouphealth/quotation/coverdetailsubreport.jasper"]]></subreportExpression>
 				</subreport>
 				<frame>
-					<reportElement positionType="Float" x="135" y="414" width="722" height="139" uuid="1b0278c2-f175-414f-85b5-895178227955"/>
+					<reportElement positionType="Float" x="135" y="414" width="722" height="155" uuid="1b0278c2-f175-414f-85b5-895178227955"/>
 					<box>
 						<topPen lineWidth="0.6" lineColor="#000000"/>
 						<leftPen lineWidth="0.6" lineColor="#000000"/>
@@ -330,11 +354,11 @@
 						<rightPen lineWidth="0.6" lineColor="#000000"/>
 					</box>
 					<staticText>
-						<reportElement x="29" y="11" width="121" height="21" uuid="9fc95520-2ad3-4d6d-a408-8f575331f23c"/>
+						<reportElement mode="Opaque" x="0" y="0" width="722" height="25" forecolor="#FFFFFF" backcolor="#002060" uuid="9fc95520-2ad3-4d6d-a408-8f575331f23c"/>
 						<textElement>
 							<font size="14" isBold="true"/>
 						</textElement>
-						<text><![CDATA[Premium Details:]]></text>
+						<text><![CDATA[  Premium Details:]]></text>
 					</staticText>
 					<staticText>
 						<reportElement x="381" y="53" width="189" height="22" uuid="139c374a-b01d-49ea-95da-8d30ef42ca19">
@@ -378,13 +402,6 @@
 						</textElement>
 						<text><![CDATA[Service Tax/VAT:]]></text>
 					</staticText>
-					<staticText>
-						<reportElement x="111" y="119" width="100" height="19" uuid="09c82c9b-9709-43c8-b964-221fcfe55b11"/>
-						<textElement textAlignment="Right" verticalAlignment="Middle">
-							<font size="12" isBold="true"/>
-						</textElement>
-						<text><![CDATA[Total Premium :]]></text>
-					</staticText>
 					<textField isStretchWithOverflow="true">
 						<reportElement x="221" y="51" width="84" height="20" uuid="89fb0baf-1f19-435b-8a08-422ad8f89845"/>
 						<textElement textAlignment="Left" verticalAlignment="Middle"/>
@@ -394,11 +411,6 @@
 						<reportElement x="223" y="99" width="147" height="17" uuid="c0f7417e-2640-4e6b-a364-eff91e4b09df"/>
 						<textElement textAlignment="Left" verticalAlignment="Middle"/>
 						<textFieldExpression><![CDATA[$F{serviceTax}]]></textFieldExpression>
-					</textField>
-					<textField isStretchWithOverflow="true">
-						<reportElement x="223" y="119" width="92" height="19" uuid="f265b2c7-cccd-459f-84dc-01efcb498bfd"/>
-						<textElement textAlignment="Left" verticalAlignment="Middle"/>
-						<textFieldExpression><![CDATA[$F{totalPremium}]]></textFieldExpression>
 					</textField>
 					<textField isStretchWithOverflow="true">
 						<reportElement x="581" y="81" width="51" height="17" uuid="a481f5df-2207-4868-9e9c-bb8f6ed66c31">
@@ -423,6 +435,23 @@
 						<textElement verticalAlignment="Middle"/>
 						<textFieldExpression><![CDATA[$F{waiverOfExcessLoadings}]]></textFieldExpression>
 					</textField>
+					<frame>
+						<reportElement mode="Opaque" x="0" y="124" width="722" height="31" backcolor="#C4BD97" uuid="bba4e95b-2016-4cac-a25d-7d9176ec453a"/>
+						<staticText>
+							<reportElement x="113" y="0" width="100" height="20" uuid="b2daf5b4-4ba2-41df-b744-072bb9e1e741"/>
+							<textElement textAlignment="Right" verticalAlignment="Middle">
+								<font size="12" isBold="true"/>
+							</textElement>
+							<text><![CDATA[Total Premum :]]></text>
+						</staticText>
+						<textField>
+							<reportElement x="221" y="0" width="100" height="20" uuid="14061e33-0219-4b7a-9c53-5fa39020eefe"/>
+							<textElement verticalAlignment="Middle">
+								<font size="12" isBold="true"/>
+							</textElement>
+							<textFieldExpression><![CDATA[$F{totalPremium}]]></textFieldExpression>
+						</textField>
+					</frame>
 				</frame>
 				<subreport>
 					<reportElement positionType="Float" x="18" y="581" width="755" height="33" uuid="e2ddcdb0-a869-4c1d-a93a-16b20833ca13"/>

@@ -58,6 +58,10 @@
         </property>
     </bean>
 
+    <bean id="filterMultipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+        <property name="maxUploadSize" value="100000000"/>
+    </bean>
+
     <axon:saga-manager id="sagaManager" saga-repository="sagaRepository">
         <axon:async executor="taskExecutor" transaction-manager="transactionManager"/>
         <axon:types>

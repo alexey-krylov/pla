@@ -1,6 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Created with Jaspersoft Studio version 6.0.4.final using JasperReports Library version 6.0.4  -->
-<!-- 2015-07-02T14:37:25 -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="cover" pageWidth="900" pageHeight="500" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="7eac5401-a67e-44d2-9810-556f68c0a117">
 	<property name="ireport.zoom" value="1.0"/>
 	<property name="ireport.x" value="0"/>
@@ -26,7 +24,7 @@
 	<title>
 		<band height="39" splitType="Stretch">
 			<frame>
-				<reportElement mode="Opaque" x="0" y="0" width="612" height="37" backcolor="#CC6633" uuid="59281fe2-118a-4be6-920c-6bfc9763af82"/>
+				<reportElement mode="Opaque" x="0" y="0" width="612" height="37" backcolor="#002060" uuid="59281fe2-118a-4be6-920c-6bfc9763af82"/>
 				<box>
 					<topPen lineWidth="0.6"/>
 					<leftPen lineWidth="0.6"/>
@@ -34,7 +32,7 @@
 					<rightPen lineWidth="0.6"/>
 				</box>
 				<staticText>
-					<reportElement mode="Opaque" x="150" y="0" width="279" height="34" forecolor="#FFFFFF" backcolor="#CC6633" uuid="aa717d92-a23a-43bf-9f64-baeaacbb1ff9"/>
+					<reportElement mode="Opaque" x="181" y="3" width="279" height="34" forecolor="#FFFFFF" backcolor="#002060" uuid="aa717d92-a23a-43bf-9f64-baeaacbb1ff9"/>
 					<box>
 						<topPen lineWidth="0.0"/>
 						<leftPen lineWidth="0.0"/>
@@ -52,7 +50,7 @@
 	<columnHeader>
 		<band height="43" splitType="Stretch">
 			<frame>
-				<reportElement mode="Opaque" x="0" y="-1" width="120" height="44" forecolor="#FFFFFF" backcolor="#524A49" uuid="612f3d0d-b9ee-490e-a6d4-fa16b77af2d4"/>
+				<reportElement mode="Opaque" x="0" y="-1" width="120" height="44" forecolor="#FFFFFF" backcolor="#808080" uuid="612f3d0d-b9ee-490e-a6d4-fa16b77af2d4"/>
 				<box>
 					<topPen lineWidth="0.6" lineStyle="Solid" lineColor="#030000"/>
 					<leftPen lineWidth="0.6" lineStyle="Solid" lineColor="#030000"/>
@@ -60,7 +58,7 @@
 					<rightPen lineWidth="0.6" lineStyle="Solid" lineColor="#030000"/>
 				</box>
 				<staticText>
-					<reportElement mode="Opaque" x="6" y="14" width="110" height="18" forecolor="#FFFFFF" backcolor="#524A49" uuid="dce35c7b-e7ec-4cca-be84-836416b5a781"/>
+					<reportElement mode="Opaque" x="6" y="14" width="110" height="18" forecolor="#FFFFFF" backcolor="#808080" uuid="dce35c7b-e7ec-4cca-be84-836416b5a781"/>
 					<box>
 						<topPen lineWidth="0.0"/>
 						<leftPen lineWidth="0.0"/>
@@ -74,7 +72,7 @@
 				</staticText>
 			</frame>
 			<frame>
-				<reportElement mode="Opaque" x="120" y="-1" width="190" height="44" forecolor="#FFFFFF" backcolor="#524A49" uuid="f0cbd88a-a8b4-4eb3-b049-f8abc6d273c8"/>
+				<reportElement mode="Opaque" x="120" y="-1" width="190" height="44" forecolor="#FFFFFF" backcolor="#808080" uuid="f0cbd88a-a8b4-4eb3-b049-f8abc6d273c8"/>
 				<box>
 					<topPen lineWidth="0.6" lineColor="#030000"/>
 					<leftPen lineWidth="0.6" lineColor="#030000"/>
@@ -82,7 +80,7 @@
 					<rightPen lineWidth="0.6" lineColor="#030000"/>
 				</box>
 				<staticText>
-					<reportElement mode="Opaque" x="12" y="13" width="169" height="16" forecolor="#FFFFFF" backcolor="#524A49" uuid="49c09b52-2665-4e02-a163-03f1d5558ab2"/>
+					<reportElement mode="Opaque" x="12" y="13" width="169" height="16" forecolor="#FFFFFF" backcolor="#808080" uuid="49c09b52-2665-4e02-a163-03f1d5558ab2"/>
 					<box>
 						<topPen lineWidth="0.0"/>
 						<leftPen lineWidth="0.0"/>
@@ -96,7 +94,7 @@
 				</staticText>
 			</frame>
 			<frame>
-				<reportElement mode="Opaque" x="310" y="-1" width="180" height="44" forecolor="#FFFFFF" backcolor="#524A49" uuid="5768d99c-750e-46e1-b2b7-ef955c04180c"/>
+				<reportElement mode="Opaque" x="310" y="-1" width="180" height="44" forecolor="#FFFFFF" backcolor="#808080" uuid="5768d99c-750e-46e1-b2b7-ef955c04180c"/>
 				<box>
 					<topPen lineWidth="0.6" lineColor="#030000"/>
 					<leftPen lineWidth="0.6" lineColor="#030000"/>
@@ -104,7 +102,7 @@
 					<rightPen lineWidth="0.6" lineColor="#030000"/>
 				</box>
 				<staticText>
-					<reportElement mode="Opaque" x="12" y="14" width="158" height="18" forecolor="#FFFFFF" backcolor="#524A49" uuid="cd45f313-b9cf-44bb-a516-9880b506599d"/>
+					<reportElement mode="Opaque" x="12" y="14" width="158" height="18" forecolor="#FFFFFF" backcolor="#808080" uuid="cd45f313-b9cf-44bb-a516-9880b506599d"/>
 					<box>
 						<topPen lineWidth="0.0"/>
 						<leftPen lineWidth="0.0"/>
@@ -118,7 +116,7 @@
 				</staticText>
 			</frame>
 			<frame>
-				<reportElement mode="Opaque" x="490" y="-1" width="122" height="44" forecolor="#FFFFFF" backcolor="#524A49" uuid="86db7a2b-be96-4f7e-9055-30f3a2bfa6d3"/>
+				<reportElement mode="Opaque" x="490" y="-1" width="122" height="44" forecolor="#FFFFFF" backcolor="#808080" uuid="86db7a2b-be96-4f7e-9055-30f3a2bfa6d3"/>
 				<box>
 					<topPen lineWidth="0.6" lineColor="#030000"/>
 					<leftPen lineWidth="0.6" lineColor="#030000"/>
@@ -126,7 +124,7 @@
 					<rightPen lineWidth="0.6" lineColor="#030000"/>
 				</box>
 				<staticText>
-					<reportElement mode="Opaque" x="11" y="13" width="100" height="18" forecolor="#FFFFFF" backcolor="#524A49" uuid="6a48f756-7dae-4cda-b06f-de180b351de9"/>
+					<reportElement mode="Opaque" x="11" y="13" width="100" height="18" forecolor="#FFFFFF" backcolor="#808080" uuid="6a48f756-7dae-4cda-b06f-de180b351de9"/>
 					<box>
 						<topPen lineWidth="0.0"/>
 						<leftPen lineWidth="0.0"/>
