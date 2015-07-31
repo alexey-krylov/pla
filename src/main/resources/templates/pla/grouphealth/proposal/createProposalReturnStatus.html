@@ -496,37 +496,50 @@
                                     <div class="row" >
                                         <button class="btn btn-default"
                                                 style="display:inline;float:left;margin-right:5px;"
-                                                ng-click="addAdditionalDocument()" ng-disabled="isViewMode">New Document
+                                                ng-click="addAdditionalDocument()" ng-disabled="isViewMode">Add Document
                                         </button>
                                     </div>
                                     <br/><br/>
 
                                     <div class="row" >
                                         <div ng-repeat="additionalDocument in additionalDocumentList">
-                                            <div class="col-lg-6">
-                                                <div class="form-group required">
-                                                    <label class="control-label">Document Title</label>
-                                                    <input type="text" class="form-control input-sm" style="width:400px;"
-                                                           ng-required="true" name="documentTitle"
-                                                           ng-model="additionalDocument.documentName"/>
+                                            <div class="row">
+                                                <div class="col-lg-3">
+                                                    <div class="form-group">
+                                                        <label class="control-label">Document Title</label>
+                                                        <input type="text" class="form-control input-sm"
+                                                               name="documentTitle"
+                                                               ng-model="additionalDocument.documentId"/>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                            <div class="col-lg-6" ng-hide="isViewMode">
-                                                <div class="form-group required">
-                                                    <label class="control-label">Browse File</label>
-                                                    <button class="btn btn-default"
-                                                            style="display:inline;float:right;margin-right:5px;margin-top:20px;"
-                                                            ng-file-select="" ng-model="additionalDocument.documentAttached">Browse
-                                                    </button>
-                                                    <label class="form-control input-sm" style="border:1px solid #ccc;width:380px;"  >{{additionalDocument.documentAttached[0].name}} </label>
+                                                <div class="col-lg-4" ng-hide="isViewMode">
+                                                    <div class="form-group">
+
+                                                        <label class="control-label">Browse File</label>
+                                                        <button class="btn btn-default"
+                                                                style="display:inline;float:right;margin-top:20px;"
+                                                                ng-file-select="callAdditionalDoc(additionalDocument.documentAttached)" ng-model="additionalDocument.documentAttached" ng-disabled="!additionalDocument.documentId">Browse
+                                                        </button>
+                                                        <input class="form-control input-sm" style="width:320px;" value="{{additionalDocument.documentAttached[0].name}}" readonly="true" />
+                                                    </div>
+
                                                 </div>
+                                                <div class="col-lg-5">
+                                                    <button class="btn btn-default" style="margin-top:20px;" ng-click="removeAdditionalDocument($index)" ng-disabled="isViewMode">Remove</button>
+                                                    <a  href="/pla/grouphealth/proposal/downloadmandatorydocument/{{additionalDocument.gridFsDocId}}" style="display:inline;margin-top:25px;float:right;"  title="{{additionalDocument.fileName}}" hg-show="!additionalDocument.submitted">{{additionalDocument.fileName| limitTo: 70}}</a>
+
+                                                </div>
+
                                             </div>
                                         </div>
+
                                     </div>
                                     <button class="btn btn-default"
                                             style="display:inline;float:right;margin-right:5px;margin-top:20px;"
-                                            ng-click="uploadAdditionalDocument()" ng-hide="isViewMode">Upload
+                                            ng-click="uploadAdditionalDocument()" ng-disabled="!checkDocumentAttached" ng-hide="isViewMode">Upload
                                     </button>
+
+
 
                                 </div>
                             </accordion-group>

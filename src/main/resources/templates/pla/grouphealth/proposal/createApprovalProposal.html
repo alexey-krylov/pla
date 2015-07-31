@@ -518,22 +518,24 @@
                                     <div class="row" >
                                         <button class="btn btn-default"
                                                 style="display:inline;float:left;margin-right:5px;"
-                                                ng-click="addAdditionalDocument()" ng-disabled="isViewMode">New Document
+                                                ng-click="addAdditionalDocument()" ng-disabled="isViewMode">Add Document
                                         </button>
                                     </div>
                                     <br/><br/>
 
                                     <div class="row" >
                                         <div ng-repeat="additionalDocument in additionalDocumentList">
-                                            <div class="col-lg-6">
+                                            <div class="row">
+
+                                            <div class="col-lg-3">
                                                 <div class="form-group required">
                                                     <label class="control-label">Document Title</label>
-                                                    <input type="text" class="form-control input-sm" style="width:400px;"
+                                                    <input type="text" class="form-control input-sm"
                                                            ng-required="true" name="documentTitle"
-                                                           ng-model="additionalDocument.documentName"/>
+                                                           ng-model="additionalDocument.documentId" readonly="true"/>
                                                 </div>
                                             </div>
-                                            <div class="col-lg-6" ng-hide="isViewMode">
+                                            <div class="col-lg-4" ng-hide="isViewMode">
                                                 <div class="form-group required">
                                                     <label class="control-label">Browse File</label>
                                                     <button class="btn btn-default"
@@ -543,7 +545,11 @@
                                                     <label class="form-control input-sm" style="border:1px solid #ccc;width:380px;"  >{{additionalDocument.documentAttached[0].name}} </label>
                                                 </div>
                                             </div>
-                                        </div>
+                                                <div class="col-lg-8">
+                                                <a  href="/pla/grouphealth/proposal/downloadmandatorydocument/{{additionalDocument.gridFsDocId}}" style="display:inline;margin-top:25px;float:right;"   hg-show="!additionalDocument.submitted">{{additionalDocument.fileName}}</a>
+                                            </div>
+                                            </div>
+                                            </div>
                                     </div>
                                     <button class="btn btn-default"
                                             style="display:inline;float:right;margin-right:5px;margin-top:20px;"
