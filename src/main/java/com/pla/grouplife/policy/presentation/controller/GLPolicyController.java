@@ -52,8 +52,9 @@ public class GLPolicyController {
     @RequestMapping(value = "/openpolicysearchpage", method = RequestMethod.GET)
     public ModelAndView openPolicySearchPage() {
         ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("pla/grouphealth/policy/searchPolicy");
+        modelAndView.setViewName("pla/grouplife/policy/searchPolicy");
         modelAndView.addObject("searchResult", glPolicyService.findAllPolicy());
+        modelAndView.addObject("searchCriteria", new SearchGLPolicyDto());
         return modelAndView;
     }
 
@@ -61,7 +62,7 @@ public class GLPolicyController {
     @RequestMapping(value = "/viewpolicy", method = RequestMethod.GET)
     public ModelAndView openPolicySearchPage(@RequestParam("policyId") String policyId) {
         ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("pla/grouphealth/policy/viewPolicy");
+        modelAndView.setViewName("pla/grouplife/policy/viewPolicy");
         modelAndView.addObject("policyDetail", glPolicyService.getPolicyDetail(policyId));
         return modelAndView;
     }
