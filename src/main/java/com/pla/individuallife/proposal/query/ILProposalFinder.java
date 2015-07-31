@@ -74,7 +74,8 @@ public class ILProposalFinder {
      */
     private static final String SEARCH_PLAN_BY_AGENT_IDS = "SELECT DISTINCT C.* FROM AGENT A JOIN agent_authorized_plan b " +
             "ON A.`agent_id`=B.`agent_id` JOIN plan_coverage_benefit_assoc C " +
-            "ON B.`plan_id`=C.`plan_id` where A.agent_id IN (:agentIds) and c.line_of_business=:lineOfBusiness group by C.plan_id";
+            "ON B.`plan_id`=C.`plan_id` where A.agent_id IN (:agentIds) and c.line_of_business=:lineOfBusiness group by C.plan_id ";
+
     private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
     private MongoTemplate mongoTemplate;
     @Autowired
@@ -263,10 +264,10 @@ public class ILProposalFinder {
         BigDecimal quarterlyPremium = ComputedPremiumDto.getQuarterlyPremium(computedPremiums);
         BigDecimal monthlyPremium = ComputedPremiumDto.getMonthlyPremium(computedPremiums);
 
-        Set<RiderDetailDto> riderList = planDetail.getRiderDetails();
+        Set<ILRiderDetail> riderList = planDetail.getRiderDetails();
 
         if (riderList != null) {
-            for (RiderDetailDto rider : riderList) {
+            for (ILRiderDetail rider : riderList) {
                 if ((new BigDecimal(rider.getSumAssured().toString()).compareTo(new BigDecimal("0.0")) != 0) || (rider.getCoverTerm() != 0)) {
                     premiumCalculationDto = new PremiumCalculationDto(new PlanId(planDetail.getPlanId()), LocalDate.now(), PremiumFrequency.ANNUALLY, 365);
                     premiumCalculationDto = premiumCalculationDto.addCoverage(new CoverageId(rider.getCoverageId()));
@@ -339,9 +340,8 @@ public class ILProposalFinder {
         RoutingLevel oldRoutinglevel = null;
         RoutingLevel currentRoutinglevel = null;
         ProposalPlanDetail planDetail = (ProposalPlanDetail) proposal.get("proposalPlanDetail");
-
         currentRoutinglevel = findRoute(routingLevelDetailDto, proposal, age);
-        for (RiderDetailDto rider : planDetail.getRiderDetails()) {
+        for (ILRiderDetail rider : planDetail.getRiderDetails()) {
             routingLevelDetailDto.addCoverage(new CoverageId(rider.getCoverageId()));
             oldRoutinglevel =currentRoutinglevel;
             currentRoutinglevel = findRoute(routingLevelDetailDto, proposal, age);
@@ -379,7 +379,7 @@ public class ILProposalFinder {
         }
 
         ProposalPlanDetail planDetail = (ProposalPlanDetail) proposal.get("proposalPlanDetail");
-        for (RiderDetailDto rider : planDetail.getRiderDetails()) {
+        for (ILRiderDetail rider : planDetail.getRiderDetails()) {
             routingLevelDetailDto.addCoverage(new CoverageId(rider.getCoverageId()));
             try{
             UnderWriterDocument underWriterDocument = underWriterFinder.getUnderWriterDocumentSetUp(routingLevelDetailDto.getPlanId(), routingLevelDetailDto.getCoverageId(), LocalDate.now(), ProcessType.ENROLLMENT.name());
@@ -415,7 +415,6 @@ public class ILProposalFinder {
         DateTime dob = new DateTime(((ProposedAssured) proposal.get("proposedAssured")).getDateOfBirth());
         Integer age = Years.yearsBetween(dob, DateTime.now()).getYears() + 1;
         RoutingLevel routinglevel = findRoutingLevel(routingLevelDetailDto, proposalId, age);
-
         List<ClientDocumentDto> mandatoryDocuments = new ArrayList<ClientDocumentDto>();
         if (routinglevel != null) {
             mandatoryDocuments = findDocuments(routingLevelDetailDto, proposal, age);
@@ -423,7 +422,7 @@ public class ILProposalFinder {
             List<SearchDocumentDetailDto> documentDetailDtos = Lists.newArrayList();
             SearchDocumentDetailDto searchDocumentDetailDto = new SearchDocumentDetailDto(new PlanId(planDetail.getPlanId()));
             documentDetailDtos.add(searchDocumentDetailDto);
-            List<CoverageId> coverageIds = ((Set<RiderDetailDto>) planDetail.getRiderDetails()).stream().map(rider -> new CoverageId(rider.getCoverageId())).collect(Collectors.toList());
+            List<CoverageId> coverageIds = planDetail.getRiderDetails().stream().map(rider -> new CoverageId(rider.getCoverageId())).collect(Collectors.toList());
             documentDetailDtos.add(new SearchDocumentDetailDto(new PlanId(planDetail.getPlanId()), coverageIds));
             mandatoryDocuments.addAll(underWriterAdapter.getMandatoryDocumentsForApproverApproval(documentDetailDtos, ProcessType.ENROLLMENT));
         }
@@ -456,7 +455,6 @@ public class ILProposalFinder {
             }).collect(Collectors.toList());
         }
         return mandatoryDocumentDtos;
-
     }
 
     public ILProposalDto getProposalById(String proposalId) {
@@ -509,12 +507,18 @@ public class ILProposalFinder {
         BasicDBObject query = new BasicDBObject();
         query.put("_id", proposalId);
         Map proposal = mongoTemplate.findOne(new BasicQuery(query), Map.class, "individual_life_proposal");
-
         List <String> agentIds = new ArrayList<String>();
         ((AgentCommissionShareModel) proposal.get("agentCommissionShareModel")).getCommissionShare().stream().forEach(x -> agentIds.add(x.getAgentId().toString()));
         List<Map<String, Object>>  result =  namedParameterJdbcTemplate.query(SEARCH_PLAN_BY_AGENT_IDS, new MapSqlParameterSource().addValue("agentIds", agentIds).addValue("lineOfBusiness", "Individual Life"), new ColumnMapRowMapper());
         return result;
 
+    }
+
+    public Map findProposalByQuotationNumber(String quotationNumber) {
+        Criteria proposalCriteria = Criteria.where("quotationNumber").is(quotationNumber);
+        Query query = new Query(proposalCriteria);
+        Map proposalMap = mongoTemplate.findOne(query, Map.class, "individual_life_proposal");
+        return proposalMap;
     }
 
     private class TransformToILSearchProposalDto implements Function<Map, ILSearchProposalDto> {

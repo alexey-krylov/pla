@@ -1,5 +1,6 @@
 package com.pla.individuallife.proposal.domain.model;
 
+import com.pla.individuallife.proposal.presentation.dto.ProposedAssuredDto;
 import com.pla.individuallife.proposal.presentation.dto.ProposerDto;
 import com.pla.sharedkernel.domain.model.Gender;
 import com.pla.sharedkernel.domain.model.MaritalStatus;
@@ -116,7 +117,7 @@ public class ProposerBuilder {
         return new ProposerDto(title, firstName, surname, nrc, dateOfBirth, gender, mobileNumber, emailAddress, maritalStatus, spouseFirstName, spouseLastName, spouseEmailAddress, spouseMobileNumber, employmentDetail, residentialAddress,otherName);
     }
 
-    public static ProposerBuilder getProposerBuilder(ProposerDto dto) {
+    public static ProposerBuilder getProposerBuilder(ProposedAssuredDto dto) {
 
         ProposerBuilder builder = new ProposerBuilder();
         builder.withOtherName(dto.getOtherName())

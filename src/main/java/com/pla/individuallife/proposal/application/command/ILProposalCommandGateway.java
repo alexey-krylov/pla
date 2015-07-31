@@ -13,10 +13,10 @@ public interface ILProposalCommandGateway {
     ProposalId createProposal(ILCreateProposalCommand proposalCommand)
             throws TimeoutException, InterruptedException;
 
-    void updateCompulsoryHealthStatement(ILProposalUpdateCompulsoryHealthStatementCommand updateCompulsoryHealthStatementCommand)
+    String updateCompulsoryHealthStatement(ILProposalUpdateCompulsoryHealthStatementCommand updateCompulsoryHealthStatementCommand)
             throws  TimeoutException,InterruptedException;
 
-    void updateFamilyPersonal(ILProposalUpdateFamilyPersonalDetailsCommand questionCommand)
+    String updateFamilyPersonal(ILProposalUpdateFamilyPersonalDetailsCommand questionCommand)
             throws TimeoutException, InterruptedException;
 
 
@@ -26,36 +26,36 @@ public interface ILProposalCommandGateway {
     String updateWithProposer(ILProposalUpdateWithProposerCommand cmd)
             throws TimeoutException, InterruptedException;
 
-    void updateGeneralDetails(ILProposalUpdateGeneralDetailsCommand cmd)
+    String updateGeneralDetails(ILProposalUpdateGeneralDetailsCommand cmd)
             throws TimeoutException, InterruptedException;
 
-    void updateAdditionalDetails(ILProposalUpdateAdditionalDetailsCommand cmd)
+    String updateAdditionalDetails(ILProposalUpdateAdditionalDetailsCommand cmd)
             throws TimeoutException, InterruptedException;
 
-    void updatePremiumPaymentDetails(ILProposalUpdatePremiumPaymentDetailsCommand cmd)
+    String updatePremiumPaymentDetails(ILProposalUpdatePremiumPaymentDetailsCommand cmd)
             throws TimeoutException, InterruptedException;
 
-    void uploadMandatoryDocument(ILProposalDocumentCommand cmd)
+    String uploadMandatoryDocument(ILProposalDocumentCommand cmd)
             throws TimeoutException, InterruptedException;
 
-    void updateProposedAssuredAndAgents(ILUpdateProposalWithProposedAssuredCommand cmd)
+    String updateProposedAssuredAndAgents(ILUpdateProposalWithProposedAssuredCommand cmd)
             throws TimeoutException, InterruptedException;
 
-    void submitProposal(SubmitILProposalCommand cmd)
+    String submitProposal(SubmitILProposalCommand cmd)
             throws TimeoutException, InterruptedException;
 
-    void approveProposal(ILProposalApprovalCommand cmd)
+    String approveProposal(ILProposalApprovalCommand cmd)
             throws TimeoutException, InterruptedException;
 
-    void returnProposal(ILProposalApprovalCommand cmd)
+    String returnProposal(ILProposalApprovalCommand cmd)
             throws TimeoutException, InterruptedException;
 
-    void holdProposal(ILProposalApprovalCommand cmd)
+    String holdProposal(ILProposalApprovalCommand cmd)
             throws TimeoutException, InterruptedException;
 
-    void rejectProposal(ILProposalApprovalCommand cmd)
+    String rejectProposal(ILProposalApprovalCommand cmd)
             throws TimeoutException, InterruptedException;
 
-    void routeToNextLevel(ILProposalUnderwriterNextLevelCommand cmd)
+    String routeToNextLevel(ILProposalUnderwriterNextLevelCommand cmd)
             throws TimeoutException, InterruptedException;
 }

@@ -1,6 +1,6 @@
 package com.pla.individuallife.proposal.application.command;
 
-import com.pla.individuallife.proposal.presentation.dto.ProposerDto;
+import com.pla.individuallife.proposal.presentation.dto.ProposedAssuredDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -14,7 +14,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 @NoArgsConstructor
 public class ILProposalUpdateWithProposerCommand {
 
-    private ProposerDto proposer;
+    private ProposedAssuredDto proposer;
     private UserDetails userDetails;
     private String proposalId;
 }

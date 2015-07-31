@@ -2,6 +2,8 @@ package com.pla.individuallife.quotation.saga;
 
 import com.google.common.collect.Lists;
 import com.pla.grouphealth.quotation.domain.event.GHQuotationReminderEvent;
+import com.pla.grouphealth.quotation.domain.model.GHQuotationStatus;
+import com.pla.individuallife.quotation.application.command.ILQuotationPurgeCommand;
 import com.pla.individuallife.quotation.application.command.ILQuotationClosureCommand;
 import com.pla.individuallife.quotation.application.command.ILQuotationConvertedCommand;
 import com.pla.individuallife.quotation.domain.event.*;
@@ -11,6 +13,7 @@ import com.pla.individuallife.quotation.query.ILQuotationFinder;
 import com.pla.individuallife.quotation.query.ILSearchQuotationResultDto;
 import com.pla.individuallife.sharedresource.event.ILQuotationConvertedToProposalEvent;
 import com.pla.publishedlanguage.contract.IProcessInfoAdapter;
+import com.pla.publishedlanguage.contract.ISMEGateway;
 import com.pla.sharedkernel.application.CreateQuotationNotificationCommand;
 import com.pla.sharedkernel.domain.model.ProcessType;
 import com.pla.sharedkernel.domain.model.ReminderTypeEnum;
@@ -30,6 +33,7 @@ import org.axonframework.saga.annotation.SagaEventHandler;
 import org.axonframework.saga.annotation.StartSaga;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
+import org.nthdimenzion.common.AppConstants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,6 +44,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+
+import static org.nthdimenzion.utils.UtilValidator.isNotEmpty;
 
 /**
  * Created by pradyumna on 16-06-2015.
@@ -65,13 +71,16 @@ public class ILQuotationARSaga extends AbstractAnnotatedSaga implements Serializ
 
     private int noOfReminderSent;
 
+    @Autowired
+    private transient ISMEGateway smeGateway;
+
     private List<ScheduleToken> scheduledTokens = Lists.newArrayList();
     //TODO discuss what happens if a quotation is just created and nothing happens after that
     //TODO Basically can it move from DRAFT to PURGE OR CLOSE OR ????
     @StartSaga
     @SagaEventHandler(associationProperty = "quotationARId")
     public void handle(ILQuotationCreatedEvent event) {
-        LOGGER.debug("SAGA CREATED GL Quotation Generated Event .....", event);
+        LOGGER.debug("SAGA CREATED IL Quotation Generated Event .....", event);
 
     }
 
@@ -79,7 +88,7 @@ public class ILQuotationARSaga extends AbstractAnnotatedSaga implements Serializ
     @SagaEventHandler(associationProperty = "quotationId")
     public void handle(ILQuotationGeneratedEvent event) throws ProcessInfoException {
         if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("Handling GL Quotation Generated Event .....", event);
+            LOGGER.debug("Handling IL Quotation Generated Event .....", event);
         }
         int noOfDaysToPurge = processInfoAdapter.getPurgeTimePeriod(LineOfBusinessEnum.INDIVIDUAL_LIFE, ProcessType.QUOTATION);
         int noOfDaysToClosure = processInfoAdapter.getClosureTimePeriod(LineOfBusinessEnum.INDIVIDUAL_LIFE, ProcessType.QUOTATION);
@@ -94,9 +103,18 @@ public class ILQuotationARSaga extends AbstractAnnotatedSaga implements Serializ
         DateTime closureScheduleDateTime = closureDate.toDateTimeAtStartOfDay();
         DateTime firstReminderDateTime = firstReminderDate.toDateTimeAtStartOfDay();
 
-        eventScheduler.schedule(firstReminderDateTime, new ILQuotationReminderEvent(event.getQuotationId()));
-        eventScheduler.schedule(purgeScheduleDateTime, new ILQuotationPurgeEvent(event.getQuotationId()));
-        eventScheduler.schedule(closureScheduleDateTime, new ILQuotationClosureEvent(event.getQuotationId()));
+        ScheduleToken firstReminderScheduleToken =   eventScheduler.schedule(firstReminderDateTime, new ILQuotationReminderEvent(event.getQuotationId()));
+        ScheduleToken purgeScheduleToken =  eventScheduler.schedule(purgeScheduleDateTime, new ILQuotationPurgeEvent(event.getQuotationId()));
+        ScheduleToken closureScheduleToken = eventScheduler.schedule(closureScheduleDateTime, new ILQuotationClosureEvent(event.getQuotationId()));
+        scheduledTokens.add(firstReminderScheduleToken);
+        scheduledTokens.add(purgeScheduleToken);
+        scheduledTokens.add(closureScheduleToken);
+        List<ILQuotation> generatedVersionedQuotations = quotationFinder.findQuotationByQuotNumberAndStatusByExcludingGivenQuotId(quotation.getQuotationNumber(), quotation.getQuotationId(), GHQuotationStatus.GENERATED.name());
+        if (isNotEmpty(generatedVersionedQuotations)) {
+            generatedVersionedQuotations.forEach(generatedVersionedQuotation -> {
+                generatedVersionedQuotation.cancelSchedules();
+            });
+        }
     }
 
     @SagaEventHandler(associationProperty = "quotationARId")
@@ -133,20 +151,66 @@ public class ILQuotationARSaga extends AbstractAnnotatedSaga implements Serializ
     }
 
     @SagaEventHandler(associationProperty = "quotationId")
+    public void handle(ILQuotationClosureEvent event) {
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Handling IL Quotation Closure Event .....", event);
+        }
+        ILQuotation ilQuotation = ilQuotationRepository.load(event.getQuotationId());
+        if (!GHQuotationStatus.CONVERTED.equals(ilQuotation.getIlQuotationStatus())) {
+            commandGateway.send(new ILQuotationClosureCommand(event.getQuotationId()));
+        }
+        if (ilQuotation.getOpportunityId() != null) {
+            smeGateway.updateOpportunityStatus(ilQuotation.getOpportunityId().getOpportunityId(), AppConstants.OPPORTUNITY_LOST_STATUS);
+        }
+    }
+
+
+    @SagaEventHandler(associationProperty = "quotationId")
+    @EndSaga
+    public void handle(ILQuotationConvertedEvent event) {
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Handling IL Quotation Closure Event .....", event);
+        }
+        ILQuotation ilQuotation = ilQuotationRepository.load(event.getQuotationId());
+        if (ilQuotation.getOpportunityId() != null) {
+            smeGateway.updateOpportunityStatus(ilQuotation.getOpportunityId().getOpportunityId(), AppConstants.OPPORTUNITY_CLOSE_STATUS);
+        }
+    }
+
+    @SagaEventHandler(associationProperty = "quotationId")
+     @EndSaga
+     public void handle(ILQuotationPurgeEvent event) {
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Handling IL Quotation Purge Event .....", event);
+        }
+        ILQuotation ilQuotation = ilQuotationRepository.load(event.getQuotationId());
+        if (!GHQuotationStatus.CONVERTED.equals(ilQuotation.getIlQuotationStatus())) {
+            commandGateway.send(new ILQuotationPurgeCommand(event.getQuotationId()));
+        }
+    }
+
+    @SagaEventHandler(associationProperty = "quotationId")
     @EndSaga
     public void handle(ILQuotationConvertedToProposalEvent event) {
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("Handling IL Quotation Closure Event ....", event);
         }
-
+        /*
+        * refactor the search quotation
+        * */
         List<ILSearchQuotationResultDto> quotations = quotationFinder.searchQuotation(event.getQuotationNumber(), "", "", "", "");
         List<ILSearchQuotationResultDto> quotationsExcludingCurrentOne = quotations.stream().filter( t -> !t.getQuotationId().equals(event.getQuotationId())).collect(Collectors.toList());
-
         commandGateway.send(new ILQuotationConvertedCommand(event.getQuotationId()));
         quotationsExcludingCurrentOne.forEach(quotation -> {
             commandGateway.send(new ILQuotationClosureCommand(new QuotationId(quotation.getQuotationId())));
         });
-
     }
 
+    @SagaEventHandler(associationProperty = "quotationId")
+    @EndSaga
+    public void handle(ILQuotationEndSagaEvent event) {
+        scheduledTokens.forEach(scheduledToken -> {
+            eventScheduler.cancelSchedule(scheduledToken);
+        });
+    }
 }
