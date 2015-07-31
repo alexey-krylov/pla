@@ -26,6 +26,12 @@
             <mongo:converter>
                 <bean class="com.pla.individuallife.proposal.repository.ObjectIdToProposalIdConverter"/>
             </mongo:converter>
+            <mongo:converter>
+                <bean class="com.pla.sharedkernel.identifier.ObjectIdToPolicyIdConverter"/>
+            </mongo:converter>
+            <mongo:converter>
+                <bean class="com.pla.sharedkernel.identifier.PolicyIdToObjectIdConverter"/>
+            </mongo:converter>
         </mongo:custom-converters>
     </mongo:mapping-converter>
 
