@@ -175,13 +175,14 @@ public class ILProposalCommandHandler {
 
     @CommandHandler
     public String uploadMandatoryDocument(ILProposalDocumentCommand cmd) throws IOException {
+        String fileName = cmd.getFile() != null ? cmd.getFile().getOriginalFilename() : "";
         ILProposalProcessor ilProposalProcessor  =  ilProposalRoleAdapter.userToProposalProcessorRole(cmd.getUserDetails());
         ILProposalAggregate aggregate = ilProposalMongoRepository.load(new ProposalId(cmd.getProposalId()));
         Set<ILProposerDocument> documents = aggregate.getProposalDocuments();
         if (isEmpty(documents)) {
             documents = Sets.newHashSet();
         }
-        String gridFsDocId = gridFsTemplate.store(cmd.getFile().getInputStream(), cmd.getFile().getContentType(), cmd.getFilename()).getId().toString();
+        String gridFsDocId = gridFsTemplate.store(cmd.getFile().getInputStream(), cmd.getFile().getContentType(),fileName).getId().toString();
         ILProposerDocument currentDocument = new ILProposerDocument(cmd.getDocumentId(), cmd.getFilename(), gridFsDocId, cmd.getFile().getContentType());
         if (!documents.add(currentDocument)) {
             ILProposerDocument existingDocument = documents.stream().filter(new Predicate<ILProposerDocument>() {

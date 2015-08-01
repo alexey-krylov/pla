@@ -1,8 +1,6 @@
 package com.pla.individuallife.proposal.application.command;
 
 
-import com.pla.sharedkernel.identifier.ProposalId;
-
 import java.util.concurrent.TimeoutException;
 
 /**
@@ -10,7 +8,7 @@ import java.util.concurrent.TimeoutException;
  */
 public interface ILProposalCommandGateway {
 
-    ProposalId createProposal(ILCreateProposalCommand proposalCommand)
+    String createProposal(ILCreateProposalCommand proposalCommand)
             throws TimeoutException, InterruptedException;
 
     String updateCompulsoryHealthStatement(ILProposalUpdateCompulsoryHealthStatementCommand updateCompulsoryHealthStatementCommand)
@@ -20,7 +18,7 @@ public interface ILProposalCommandGateway {
             throws TimeoutException, InterruptedException;
 
 
-    String updateWithPlandetail(ILProposalUpdateWithPlanAndBeneficiariesCommand updateWithPlanAndBeneficiariesCommand)
+    String updateWithPlanDetail(ILProposalUpdateWithPlanAndBeneficiariesCommand updateWithPlanAndBeneficiariesCommand)
             throws TimeoutException, InterruptedException;
 
     String updateWithProposer(ILProposalUpdateWithProposerCommand cmd)

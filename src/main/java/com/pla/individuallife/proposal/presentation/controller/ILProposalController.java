@@ -76,7 +76,7 @@ public class ILProposalController {
             UserDetails userDetails = getLoggedInUserDetail(request);
             createProposalCommand.setUserDetails(userDetails);
             createProposalCommand.setProposalId(proposalId);
-            proposalCommandGateway.createProposal(createProposalCommand);
+            proposalId =   proposalCommandGateway.createProposal(createProposalCommand);
         } catch (TimeoutException e) {
             return new ResponseEntity(Result.failure(e.getMessage()), HttpStatus.PRECONDITION_FAILED);
         } catch (InterruptedException e) {
@@ -134,7 +134,7 @@ public class ILProposalController {
         try {
             UserDetails userDetails = getLoggedInUserDetail(request);
             cmd.setUserDetails(userDetails);
-            proposalId =   proposalCommandGateway.updateWithPlandetail(cmd);
+            proposalId =   proposalCommandGateway.updateWithPlanDetail(cmd);
         } catch (TimeoutException e) {
             return new ResponseEntity(Result.failure(e.getMessage()), HttpStatus.PRECONDITION_FAILED);
         } catch (InterruptedException e) {
@@ -188,7 +188,7 @@ public class ILProposalController {
         if (bindingResult.hasErrors()) {
             return new ResponseEntity(bindingResult.getAllErrors(), HttpStatus.PRECONDITION_FAILED);
         }
-        String proposalId =null;
+        String proposalId = null;
         try {
             UserDetails userDetails = getLoggedInUserDetail(request);
             cmd.setUserDetails(userDetails);
