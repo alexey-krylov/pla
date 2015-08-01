@@ -1,6 +1,7 @@
 package com.pla.individuallife.proposal.presentation.controller;
 
 import com.google.common.collect.Lists;
+import com.mongodb.gridfs.GridFSDBFile;
 import com.pla.core.query.MasterFinder;
 import com.pla.core.query.PlanFinder;
 import com.pla.individuallife.proposal.application.command.*;
@@ -11,11 +12,15 @@ import com.pla.individuallife.proposal.service.ILProposalService;
 import com.pla.individuallife.quotation.application.service.ILQuotationAppService;
 import com.pla.individuallife.quotation.presentation.dto.ILSearchQuotationDto;
 import com.wordnik.swagger.annotations.ApiOperation;
+import org.apache.poi.util.IOUtils;
 import org.axonframework.commandhandling.CommandBus;
 import org.axonframework.commandhandling.gateway.GatewayProxyFactory;
 import org.bson.types.ObjectId;
 import org.nthdimenzion.presentation.Result;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.data.mongodb.gridfs.GridFsTemplate;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -25,9 +30,13 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.TimeoutException;
 
 import static com.google.common.base.Preconditions.checkArgument;
@@ -53,6 +62,9 @@ public class ILProposalController {
 
     @Autowired
     private ILProposalService ilProposalService;
+
+    @Autowired
+    private GridFsTemplate gridFsTemplate;
 
     @Autowired
     public ILProposalController(CommandBus commandBus, PlanFinder planFinder) {
@@ -115,7 +127,7 @@ public class ILProposalController {
         try {
             UserDetails userDetails = getLoggedInUserDetail(request);
             cmd.setUserDetails(userDetails);
-              proposalId =  proposalCommandGateway.updateWithProposer(cmd);
+            proposalId =  proposalCommandGateway.updateWithProposer(cmd);
         } catch (TimeoutException e) {
             return new ResponseEntity(Result.failure(e.getMessage()), HttpStatus.PRECONDITION_FAILED);
         } catch (InterruptedException e) {
@@ -526,7 +538,25 @@ public class ILProposalController {
     @ResponseBody
     @ApiOperation(httpMethod = "GET", value = "To list mandatory documents which is being configured in Mandatory Document SetUp")
     public List<ILProposalMandatoryDocumentDto> findMandatoryDocuments(@PathVariable("proposalId") String proposalId) {
-        List<ILProposalMandatoryDocumentDto> ilProposalMandatoryDocumentDtos = proposalFinder.findMandatoryDocuments(proposalId);
-        return ilProposalMandatoryDocumentDtos;
+        return ilProposalService.findMandatoryDocuments(proposalId);
+    }
+
+    @RequestMapping(value = "/getadditionaldocuments/{proposalId}", method = RequestMethod.GET)
+    @ResponseBody
+    @ApiOperation(httpMethod = "GET", value = "To list additional documents which is being configured in Mandatory Document SetUp")
+    public Set<ILProposalMandatoryDocumentDto> findAdditionalDocuments(@PathVariable("proposalId") String proposalId) {
+        return ilProposalService.findAdditionalDocuments(proposalId);
+    }
+
+    @RequestMapping(value = "/downloadmandatorydocument/{gridfsdocid}", method = RequestMethod.GET)
+    public void downloadMandatoryDocument(@PathVariable("gridfsdocid") String gridfsDocId, HttpServletResponse response) throws IOException {
+        GridFSDBFile gridFSDBFile = gridFsTemplate.findOne(new Query(Criteria.where("_id").is(gridfsDocId)));
+        response.reset();
+        response.setContentType(gridFSDBFile.getContentType());
+        response.setHeader("content-disposition", "attachment; filename=" + gridFSDBFile.getFilename() + "");
+        OutputStream outputStream = response.getOutputStream();
+        IOUtils.copy(gridFSDBFile.getInputStream(), outputStream);
+        outputStream.flush();
+        outputStream.close();
     }
 }

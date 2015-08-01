@@ -11,6 +11,7 @@ import com.pla.individuallife.proposal.presentation.dto.AgentDetailDto;
 import com.pla.individuallife.proposal.presentation.dto.QuestionDto;
 import com.pla.individuallife.proposal.query.ILProposalFinder;
 import com.pla.individuallife.proposal.service.ILProposalFactory;
+import com.pla.individuallife.proposal.service.ILProposalService;
 import com.pla.publishedlanguage.dto.UnderWriterRoutingLevelDetailDto;
 import com.pla.sharedkernel.domain.model.ProcessType;
 import com.pla.sharedkernel.domain.model.RoutingLevel;
@@ -64,6 +65,9 @@ public class ILProposalCommandHandler {
 
     @Autowired
     private ILProposalFactory ilProposalFactory;
+
+    @Autowired
+    private ILProposalService ilProposalService;
 
     /*
     *
@@ -154,7 +158,7 @@ public class ILProposalCommandHandler {
         ILProposalProcessor ilProposalProcessor   =  ilProposalRoleAdapter.userToProposalProcessorRole(cmd.getUserDetails());
         ProposalId proposalId = new ProposalId(cmd.getProposalId());
         ILProposalAggregate aggregate = ilProposalMongoRepository.load(proposalId);
-        Map plan = planFinder.findPlanByPlanId(new PlanId(aggregate.getProposalPlanDetail().getPlanId()));
+        Map plan = planFinder.findPlanByPlanId(new PlanId(cmd.getProposalPlanDetail().getPlanId()));
         Map planDetail = (HashMap) plan.get("planDetail");
         int minAge = (int) planDetail.get("minEntryAge");
         int maxAge = (int) planDetail.get("maxEntryAge");
@@ -182,8 +186,8 @@ public class ILProposalCommandHandler {
         if (isEmpty(documents)) {
             documents = Sets.newHashSet();
         }
-        String gridFsDocId = gridFsTemplate.store(cmd.getFile().getInputStream(), cmd.getFile().getContentType(),fileName).getId().toString();
-        ILProposerDocument currentDocument = new ILProposerDocument(cmd.getDocumentId(), cmd.getFilename(), gridFsDocId, cmd.getFile().getContentType());
+        String gridFsDocId = gridFsTemplate.store(cmd.getFile().getInputStream(),fileName,cmd.getFile().getContentType()).getId().toString();
+        ILProposerDocument currentDocument = new ILProposerDocument(cmd.getDocumentId(), cmd.getFilename(), gridFsDocId, cmd.getFile().getContentType(),cmd.isMandatory());
         if (!documents.add(currentDocument)) {
             ILProposerDocument existingDocument = documents.stream().filter(new Predicate<ILProposerDocument>() {
                 @Override
@@ -203,7 +207,7 @@ public class ILProposalCommandHandler {
         ILProposalProcessor ilProposalProcessor = ilProposalRoleAdapter.userToProposalProcessorRole(cmd.getUserDetails());
         ILProposalAggregate aggregate = ilProposalMongoRepository.load(new ProposalId(cmd.getProposalId()));
         UnderWriterRoutingLevelDetailDto routingLevelDetailDto = new UnderWriterRoutingLevelDetailDto(new PlanId(aggregate.getProposalPlanDetail().getPlanId()), LocalDate.now(), ProcessType.ENROLLMENT.name());
-        RoutingLevel routinglevel = proposalFinder.findRoutingLevel(routingLevelDetailDto, aggregate.getProposalId().toString(), aggregate.getProposedAssured().getAgeNextBirthday());
+        RoutingLevel routinglevel = ilProposalService.findRoutingLevel(routingLevelDetailDto, aggregate.getProposalId().toString(), aggregate.getProposedAssured().getAgeNextBirthday());
         aggregate = ilProposalProcessor.submitProposal(aggregate,cmd.getComment(), routinglevel);
         return aggregate.getIdentifier().getProposalId();
     }

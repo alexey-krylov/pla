@@ -21,11 +21,14 @@ public class ILProposerDocument {
 
     private String gridFsDocId;
 
-    public ILProposerDocument(String documentId, String documentName, String gridFsDocId, String contentType) {
+    private boolean mandatory;
+
+    public ILProposerDocument(String documentId, String documentName, String gridFsDocId, String contentType,boolean mandatory) {
         this.documentId = documentId;
         this.documentName = documentName;
         this.gridFsDocId = gridFsDocId;
         this.contentType = contentType;
+        this.mandatory = mandatory;
     }
 
     public ILProposerDocument updateWithNameAndContent(String documentName, String gridFsDocId, String contentType) {

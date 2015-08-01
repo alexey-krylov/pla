@@ -3,7 +3,6 @@ package com.pla.individuallife.proposal.query;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
 import com.mongodb.BasicDBObject;
-import com.mongodb.gridfs.GridFSDBFile;
 import com.pla.core.domain.model.CoverageName;
 import com.pla.core.domain.model.plan.premium.Premium;
 import com.pla.core.query.CoverageFinder;
@@ -16,21 +15,9 @@ import com.pla.publishedlanguage.domain.model.ComputedPremiumDto;
 import com.pla.publishedlanguage.domain.model.PremiumCalculationDto;
 import com.pla.publishedlanguage.domain.model.PremiumFrequency;
 import com.pla.publishedlanguage.domain.model.PremiumInfluencingFactor;
-import com.pla.publishedlanguage.dto.ClientDocumentDto;
-import com.pla.publishedlanguage.dto.SearchDocumentDetailDto;
-import com.pla.publishedlanguage.dto.UnderWriterRoutingLevelDetailDto;
-import com.pla.publishedlanguage.underwriter.contract.IUnderWriterAdapter;
-import com.pla.sharedkernel.domain.model.ProcessType;
-import com.pla.sharedkernel.domain.model.RoutingLevel;
 import com.pla.sharedkernel.identifier.CoverageId;
 import com.pla.sharedkernel.identifier.PlanId;
 import com.pla.sharedkernel.identifier.ProposalId;
-import com.pla.underwriter.domain.model.UnderWriterDocument;
-import com.pla.underwriter.domain.model.UnderWriterInfluencingFactor;
-import com.pla.underwriter.domain.model.UnderWriterRoutingLevel;
-import com.pla.underwriter.exception.UnderWriterException;
-import com.pla.underwriter.finder.UnderWriterFinder;
-import org.apache.commons.io.IOUtils;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import org.joda.time.Years;
@@ -42,18 +29,15 @@ import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.BasicQuery;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
-import org.springframework.data.mongodb.gridfs.GridFsTemplate;
 import org.springframework.jdbc.core.ColumnMapRowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Service;
 
 import javax.sql.DataSource;
-import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.*;
 import java.util.function.Function;
-import java.util.function.Predicate;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
@@ -78,6 +62,7 @@ public class ILProposalFinder {
 
     private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
     private MongoTemplate mongoTemplate;
+
     @Autowired
     private IPremiumCalculator premiumCalculator;
     @Autowired
@@ -86,12 +71,7 @@ public class ILProposalFinder {
     private PlanFinder planFinder;
     @Autowired
     private CoverageFinder coverageFinder;
-    @Autowired
-    private IUnderWriterAdapter underWriterAdapter;
-    @Autowired
-    private UnderWriterFinder underWriterFinder;
-    @Autowired
-    private GridFsTemplate gridFsTemplate;
+
 
     @Autowired
     public void setDataSource(DataSource dataSource, MongoTemplate mongoTemplate) {
@@ -310,153 +290,6 @@ public class ILProposalFinder {
         return premiumDetailDto;
     }
 
-    private RoutingLevel findRoute(UnderWriterRoutingLevelDetailDto routingLevelDetailDto, Map proposal, Integer age) {
-
-        List<UnderWriterRoutingLevelDetailDto.UnderWriterInfluencingFactorItem> underWriterInfluencingFactorItems = new ArrayList<UnderWriterRoutingLevelDetailDto.UnderWriterInfluencingFactorItem>();
-        try {
-            UnderWriterRoutingLevel underWriterRoutingLevel = underWriterFinder.findUnderWriterRoutingLevel(routingLevelDetailDto);
-            //TODO : need to add other influencing items
-            for (UnderWriterInfluencingFactor underWriterInfluencingFactor : underWriterRoutingLevel.getUnderWriterInfluencingFactors()) {
-                if (underWriterInfluencingFactor.name().equalsIgnoreCase(String.valueOf(UnderWriterInfluencingFactor.AGE)))
-                    underWriterInfluencingFactorItems.add(new UnderWriterRoutingLevelDetailDto.UnderWriterInfluencingFactorItem(UnderWriterInfluencingFactor.AGE.name(), age.toString()));
-                if (underWriterInfluencingFactor.name().equalsIgnoreCase(String.valueOf(UnderWriterInfluencingFactor.SUM_ASSURED))) {
-                    //TODO : Need to add previous sum assured values from the previous policies
-                    underWriterInfluencingFactorItems.add(new UnderWriterRoutingLevelDetailDto.UnderWriterInfluencingFactorItem(UnderWriterInfluencingFactor.SUM_ASSURED.name(), (((ProposalPlanDetail) proposal.get("proposalPlanDetail")).getSumAssured().toString())));
-                }
-            }
-            routingLevelDetailDto.setUnderWriterInfluencingFactor(underWriterInfluencingFactorItems);
-            return underWriterAdapter.getRoutingLevel(routingLevelDetailDto);
-
-        } catch (IllegalArgumentException ex) {
-            ex.printStackTrace();
-        }
-        return null;
-    }
-
-    public RoutingLevel findRoutingLevel(UnderWriterRoutingLevelDetailDto routingLevelDetailDto, String proposalId, Integer age) {
-        BasicDBObject query = new BasicDBObject();
-        query.put("_id", proposalId);
-        Map proposal = mongoTemplate.findOne(new BasicQuery(query), Map.class, "individual_life_proposal");
-        RoutingLevel oldRoutinglevel = null;
-        RoutingLevel currentRoutinglevel = null;
-        ProposalPlanDetail planDetail = (ProposalPlanDetail) proposal.get("proposalPlanDetail");
-        currentRoutinglevel = findRoute(routingLevelDetailDto, proposal, age);
-        for (ILRiderDetail rider : planDetail.getRiderDetails()) {
-            routingLevelDetailDto.addCoverage(new CoverageId(rider.getCoverageId()));
-            oldRoutinglevel =currentRoutinglevel;
-            currentRoutinglevel = findRoute(routingLevelDetailDto, proposal, age);
-            if( oldRoutinglevel!= null && currentRoutinglevel!= null && oldRoutinglevel.ordinal() < currentRoutinglevel.ordinal()) currentRoutinglevel = oldRoutinglevel;
-            if(currentRoutinglevel == null && oldRoutinglevel != null) currentRoutinglevel = oldRoutinglevel;
-        }
-        return  currentRoutinglevel;
-
-    }
-
-    private List<ClientDocumentDto> findDocuments(UnderWriterRoutingLevelDetailDto routingLevelDetailDto, Map proposal, Integer age) {
-
-        List<ClientDocumentDto> mandatoryDocuments = new ArrayList<ClientDocumentDto>();
-
-        List<UnderWriterRoutingLevelDetailDto.UnderWriterInfluencingFactorItem> underWriterInfluencingFactorItems = new ArrayList<UnderWriterRoutingLevelDetailDto.UnderWriterInfluencingFactorItem>();
-        try {
-            UnderWriterDocument underWriterDocument = underWriterFinder.getUnderWriterDocumentSetUp(routingLevelDetailDto.getPlanId(), null, LocalDate.now(), ProcessType.ENROLLMENT.name());
-            //TODO : need to add other influencing items
-            for (UnderWriterInfluencingFactor underWriterInfluencingFactor : underWriterDocument.getUnderWriterInfluencingFactors()) {
-                if (underWriterInfluencingFactor.name().equalsIgnoreCase(String.valueOf(UnderWriterInfluencingFactor.AGE)))
-                    underWriterInfluencingFactorItems.add(new UnderWriterRoutingLevelDetailDto.UnderWriterInfluencingFactorItem(UnderWriterInfluencingFactor.AGE.name(), age.toString()));
-                if (underWriterInfluencingFactor.name().equalsIgnoreCase(String.valueOf(UnderWriterInfluencingFactor.SUM_ASSURED))) {
-                    //TODO : Need to add previous sum assured values from the previous policies
-                    underWriterInfluencingFactorItems.add(new UnderWriterRoutingLevelDetailDto.UnderWriterInfluencingFactorItem(UnderWriterInfluencingFactor.SUM_ASSURED.name(), (((ProposalPlanDetail) proposal.get("proposalPlanDetail")).getSumAssured().toString())));
-                }
-            }
-            routingLevelDetailDto.setUnderWriterInfluencingFactor(underWriterInfluencingFactorItems);
-            mandatoryDocuments.addAll(underWriterAdapter.getDocumentsForUnderWriterApproval(routingLevelDetailDto));
-
-        } catch (UnderWriterException ex) {
-            ex.printStackTrace();
-
-        } catch (IllegalArgumentException ex) {
-        ex.printStackTrace();
-        }
-
-        ProposalPlanDetail planDetail = (ProposalPlanDetail) proposal.get("proposalPlanDetail");
-        for (ILRiderDetail rider : planDetail.getRiderDetails()) {
-            routingLevelDetailDto.addCoverage(new CoverageId(rider.getCoverageId()));
-            try{
-            UnderWriterDocument underWriterDocument = underWriterFinder.getUnderWriterDocumentSetUp(routingLevelDetailDto.getPlanId(), routingLevelDetailDto.getCoverageId(), LocalDate.now(), ProcessType.ENROLLMENT.name());
-            //TODO : need to add other influencing items
-            for (UnderWriterInfluencingFactor underWriterInfluencingFactor : underWriterDocument.getUnderWriterInfluencingFactors()) {
-                if (underWriterInfluencingFactor.name().equalsIgnoreCase(String.valueOf(UnderWriterInfluencingFactor.AGE)))
-                    underWriterInfluencingFactorItems.add(new UnderWriterRoutingLevelDetailDto.UnderWriterInfluencingFactorItem(UnderWriterInfluencingFactor.AGE.name(), age.toString()));
-                if (underWriterInfluencingFactor.name().equalsIgnoreCase(String.valueOf(UnderWriterInfluencingFactor.SUM_ASSURED))) {
-                    //TODO : Need to add previous sum assured values from the previous policies
-                    underWriterInfluencingFactorItems.add(new UnderWriterRoutingLevelDetailDto.UnderWriterInfluencingFactorItem(UnderWriterInfluencingFactor.SUM_ASSURED.name(), (((ProposalPlanDetail) proposal.get("proposalPlanDetail")).getSumAssured().toString())));
-                }
-            }
-            routingLevelDetailDto.setUnderWriterInfluencingFactor(underWriterInfluencingFactorItems);
-            mandatoryDocuments.addAll(underWriterAdapter.getDocumentsForUnderWriterApproval(routingLevelDetailDto));
-            } catch (UnderWriterException ex) {
-                ex.printStackTrace();
-
-            } catch (IllegalArgumentException ex) {
-                ex.printStackTrace();
-            }
-        }
-
-        return mandatoryDocuments;
-    }
-
-    public List<ILProposalMandatoryDocumentDto> findMandatoryDocuments(String proposalId) {
-        BasicDBObject query = new BasicDBObject();
-        query.put("_id", proposalId);
-        Map proposal = mongoTemplate.findOne(new BasicQuery(query), Map.class, "individual_life_proposal");
-        List<ILProposerDocument> uploadedDocuments = proposal.get("proposalDocuments") != null ? (List<ILProposerDocument>) proposal.get("proposalDocuments") : Lists.newArrayList();
-        ProposalPlanDetail planDetail = (ProposalPlanDetail) proposal.get("proposalPlanDetail");
-        UnderWriterRoutingLevelDetailDto routingLevelDetailDto = new UnderWriterRoutingLevelDetailDto(new PlanId(planDetail.getPlanId()), LocalDate.now(), ProcessType.ENROLLMENT.name());
-        DateTime dob = new DateTime(((ProposedAssured) proposal.get("proposedAssured")).getDateOfBirth());
-        Integer age = Years.yearsBetween(dob, DateTime.now()).getYears() + 1;
-        RoutingLevel routinglevel = findRoutingLevel(routingLevelDetailDto, proposalId, age);
-        List<ClientDocumentDto> mandatoryDocuments = new ArrayList<ClientDocumentDto>();
-        if (routinglevel != null) {
-            mandatoryDocuments = findDocuments(routingLevelDetailDto, proposal, age);
-        } else {
-            List<SearchDocumentDetailDto> documentDetailDtos = Lists.newArrayList();
-            SearchDocumentDetailDto searchDocumentDetailDto = new SearchDocumentDetailDto(new PlanId(planDetail.getPlanId()));
-            documentDetailDtos.add(searchDocumentDetailDto);
-            List<CoverageId> coverageIds = planDetail.getRiderDetails().stream().map(rider -> new CoverageId(rider.getCoverageId())).collect(Collectors.toList());
-            documentDetailDtos.add(new SearchDocumentDetailDto(new PlanId(planDetail.getPlanId()), coverageIds));
-            mandatoryDocuments.addAll(underWriterAdapter.getMandatoryDocumentsForApproverApproval(documentDetailDtos, ProcessType.ENROLLMENT));
-        }
-
-
-        List<ILProposalMandatoryDocumentDto> mandatoryDocumentDtos = Lists.newArrayList();
-        if (isNotEmpty(mandatoryDocuments)) {
-            mandatoryDocumentDtos = mandatoryDocuments.stream().map(new Function<ClientDocumentDto, ILProposalMandatoryDocumentDto>() {
-                @Override
-                public ILProposalMandatoryDocumentDto apply(ClientDocumentDto clientDocumentDto) {
-                    ILProposalMandatoryDocumentDto mandatoryDocumentDto = new ILProposalMandatoryDocumentDto(clientDocumentDto.getDocumentCode(), clientDocumentDto.getDocumentName());
-                    Optional<ILProposerDocument> proposerDocumentOptional = uploadedDocuments.stream().filter(new Predicate<ILProposerDocument>() {
-                        @Override
-                        public boolean test(ILProposerDocument ilProposerDocument) {
-                            return clientDocumentDto.getDocumentCode().equals(ilProposerDocument.getDocumentId());
-                        }
-                    }).findAny();
-                    if (proposerDocumentOptional.isPresent()) {
-                        try {
-                            if (isNotEmpty(proposerDocumentOptional.get().getGridFsDocId())) {
-                                GridFSDBFile gridFSDBFile = gridFsTemplate.findOne(new Query(Criteria.where("_id").is(proposerDocumentOptional.get().getGridFsDocId())));
-                                mandatoryDocumentDto.updateWithContent(IOUtils.toByteArray(gridFSDBFile.getInputStream()));
-                            }
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                    return mandatoryDocumentDto;
-                }
-            }).collect(Collectors.toList());
-        }
-        return mandatoryDocumentDtos;
-    }
-
     public ILProposalDto getProposalById(String proposalId) {
         ILProposalDto dto = new ILProposalDto();
         BasicDBObject query = new BasicDBObject();
@@ -521,6 +354,14 @@ public class ILProposalFinder {
         return proposalMap;
     }
 
+    public Map getProposalByProposalId(String proposalId){
+        BasicDBObject query = new BasicDBObject();
+        query.put("_id", proposalId);
+        Map proposal = mongoTemplate.findOne(new BasicQuery(query), Map.class, "individual_life_proposal");
+        return proposal;
+    }
+
+
     private class TransformToILSearchProposalDto implements Function<Map, ILSearchProposalDto> {
 
         @Override
@@ -536,4 +377,6 @@ public class ILProposalFinder {
             return ilSearchProposalDto;
         }
     }
+
+
 }

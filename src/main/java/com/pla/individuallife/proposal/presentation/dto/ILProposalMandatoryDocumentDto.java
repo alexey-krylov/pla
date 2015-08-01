@@ -13,7 +13,6 @@ import org.springframework.web.multipart.MultipartFile;
 @NoArgsConstructor
 public class ILProposalMandatoryDocumentDto {
 
-
     private String documentId;
 
     private String documentName;
@@ -23,6 +22,13 @@ public class ILProposalMandatoryDocumentDto {
     private byte[] content;
 
     private boolean submitted;
+
+    private String fileName;
+
+    private String contentType;
+
+    private String gridFsDocId;
+
 
     public ILProposalMandatoryDocumentDto(String documentId, String documentName) {
         this.documentId = documentId;

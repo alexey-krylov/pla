@@ -1,7 +1,6 @@
 package com.pla.individuallife.quotation.query;
 
 import com.google.common.base.Preconditions;
-import com.google.common.collect.Lists;
 import com.pla.individuallife.quotation.domain.model.ILQuotation;
 import com.pla.individuallife.quotation.domain.model.RiderDetail;
 import com.pla.individuallife.quotation.presentation.dto.PlanDetailDto;
@@ -23,7 +22,6 @@ import java.lang.reflect.InvocationTargetException;
 import java.math.BigDecimal;
 import java.util.*;
 
-import static org.nthdimenzion.utils.UtilValidator.isEmpty;
 import static org.nthdimenzion.utils.UtilValidator.isNotEmpty;
 
 /**
@@ -46,21 +44,12 @@ public class ILQuotationFinder {
             " FROM individual_life_quotation " +
             " WHERE quotation_id =:quotationId";
 
-    public static final String QUOTATION_SEARCH_QUERY = "SELECT " +
-            "  CONCAT(COALESCE(A.FIRST_NAME,' '), ' ', COALESCE(A.last_name,'')) AS agentName," +
-            "  CONCAT(COALESCE(IL.first_name,' '), ' ', COALESCE(surname,'')) AS proposedName," +
-            "  CONCAT(proposer_first_name,' ',proposer_surname) AS proposerName," +
-            "  il_quotation_status AS quotationStatus," +
-            "  quotation_id AS quotation_id," +
-            "  quotation_number AS quotationNumber," +
-            "  generated_on AS generatedOn," +
-            "  version_number AS versionNumber " +
-            "FROM" +
-            "  individual_life_quotation IL " +
-            "  JOIN agent A " +
-            "    ON IL.agent_id = A.agent_id ";
-
-    private static final String IL_QUOTATION_TABLE = "individual_life_quotation";
+    public static final String QUOTATION_SEARCH_QUERY = "SELECT CONCAT(COALESCE(A.FIRST_NAME,' '), ' ', COALESCE(A.last_name,'')) AS agentName, CONCAT(COALESCE(IL.first_name,' '), ' ', \n" +
+            "COALESCE(surname,'')) AS proposedName,CONCAT(proposer_first_name,' ',proposer_surname) AS proposerName, " +
+            "il_quotation_status AS quotationStatus, quotation_id AS quotation_id, quotation_number AS quotationNumber,  " +
+            "generated_on AS generatedOn,version_number AS versionNumber FROM individual_life_quotation IL JOIN agent A  " +
+            "ON IL.agent_id = A.agent_id WHERE LOWER(IL.proposer_first_name) LIKE :proposerName OR IL.quotation_number= :quotationNumber " +
+            "OR IL.proposer_nrc_number= :nrcNumber OR il.agent_id = :agentCode OR IL.il_quotation_status=:quotationStatus order by version_number desc";
 
     public static final String findILQuotationByQuotationNumberQuery = "SELECT * FROM individual_life_quotation WHERE quotation_number=:quotationNumber AND quotation_id !=:quotationId AND il_quotation_status=:quotationStatus";
 
@@ -78,11 +67,11 @@ public class ILQuotationFinder {
         return namedParameterJdbcTemplate.queryForMap(FIND_AGENT_BY_ID_QUERY, new MapSqlParameterSource().addValue("agentId", agentId));
     }
 
-    public Map getQuotationforPremiumById(String quotationId) {
+    public Map getQuotationForPremiumById(String quotationId) {
         return namedParameterJdbcTemplate.queryForMap(FIND_QUOTATION_BY_ID_FOR_PREMIUM_QUERY, new MapSqlParameterSource().addValue("quotationId", quotationId));
     }
 
-    public List<Map<String, Object>> getQuotationforPremiumWithRiderById(String quotationId) {
+    public List<Map<String, Object>> getQuotationForPremiumWithRiderById(String quotationId) {
         return namedParameterJdbcTemplate.queryForList(FIND_QUOTATION_BY_ID_FOR_PREMIUM_WITH_RIDER_QUERY,
                 new MapSqlParameterSource().addValue("quotationId", quotationId));
     }
@@ -160,63 +149,10 @@ public class ILQuotationFinder {
         return resultSet;
     }
 
-    public List<ILSearchQuotationResultDto> searchQuotation(
-            String quotationNumber, String proposerName, String proposerNrcNumber, String agentCode, String quotationStatus) {
-        boolean isFirst = true;
-
-        if (isEmpty(quotationNumber) && isEmpty(proposerName) && isEmpty(proposerNrcNumber) && isEmpty(agentCode)) {
-            return Lists.newArrayList();
-        }
-
-        StringBuilder query = new StringBuilder(QUOTATION_SEARCH_QUERY);
-
-        if (isNotEmpty(quotationNumber)) {
-            if (isFirst) {
-                query.append(" where (quotation_number = '"+quotationNumber +"'" + "or quotation_id = '"+quotationNumber +"')");
-            } else {
-                query.append(" and (quotation_number = '"+quotationNumber +"'" + "or quotation_id = '"+quotationNumber +"')");
-            }
-            isFirst = false;
-        }
-
-        if (isNotEmpty(proposerName)) {
-            if (isFirst) {
-                query.append(" where lower(proposer_first_name) like '" + proposerName.toLowerCase() + "%' OR proposer_surname like '" + proposerName.toLowerCase() + "%' ");
-            } else {
-                query.append(" and lower(proposer_first_name) like '" + proposerName.toLowerCase() + "%' OR proposer_surname like '" + proposerName.toLowerCase() + "%' ");
-            }
-            isFirst = false;
-        }
-
-        if (isNotEmpty(proposerNrcNumber)) {
-            if (isFirst) {
-                query.append(" where proposer_nrc_number = '"+ proposerNrcNumber + "'");
-            } else {
-                query.append(" and proposer_nrc_number = '"+ proposerNrcNumber + "'");
-            }
-            isFirst = false;
-        }
-
-        if (isNotEmpty(agentCode)) {
-            if (isFirst) {
-                query.append(" where il.agent_id = '" + agentCode + "'");
-            } else {
-                query.append(" and il.agent_id = '" + agentCode + "'");
-            }
-            isFirst = false;
-        }
-
-        if (isNotEmpty(quotationStatus)) {
-            if (isFirst) {
-                query.append(" where il_quotation_status = '" + quotationStatus + "'");
-            } else {
-                query.append(" and il_quotation_status = '" + quotationStatus + "'");
-            }
-            isFirst = false;
-        }
-
-        query.append(" order by version_number desc");
-        return namedParameterJdbcTemplate.query(query.toString(), new BeanPropertyRowMapper(ILSearchQuotationResultDto.class));
+    public List<ILSearchQuotationResultDto> searchQuotation(String quotationNumber, String proposerName, String proposerNrcNumber, String agentCode, String quotationStatus) {
+        SqlParameterSource sqlParameterSource  = new MapSqlParameterSource("quotationNumber",quotationNumber).addValue("proposerName",proposerName)
+                .addValue("nrcNumber",proposerNrcNumber).addValue("quotationStatus",quotationStatus).addValue("agentCode",agentCode);
+        return namedParameterJdbcTemplate.query(QUOTATION_SEARCH_QUERY,sqlParameterSource, new BeanPropertyRowMapper(ILSearchQuotationResultDto.class));
     }
 
     public List<ILQuotation> findQuotationByQuotNumberAndStatusByExcludingGivenQuotId(String quotationNumber, QuotationId quotationId, String quotationStatus) {

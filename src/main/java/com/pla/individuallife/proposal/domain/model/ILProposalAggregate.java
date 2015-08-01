@@ -196,12 +196,12 @@ public class ILProposalAggregate extends AbstractAnnotatedAggregateRoot<Proposal
         return this;
     }
 
-    public ILProposalAggregate submitApproval(DateTime now,  String comment, ILProposalStatus status,String userName) {
+    public ILProposalAggregate submitApproval(DateTime approvedOn,  String comment, ILProposalStatus status,String approvedBy) {
         this.proposalStatus = status;
+        registerEvent(new ILProposalStatusAuditEvent(this.getProposalId(), ProposalStatus.PENDING_FIRST_PREMIUM, approvedBy, comment, approvedOn));
         if (ILProposalStatus.APPROVED.equals(status)) {
-            DateTime approvedOn = now;
-            markASFirstPremiumPending(userName, DateTime.now(), comment);
-            markASINForce(userName, approvedOn, comment);
+            markASFirstPremiumPending(approvedBy, approvedOn, comment);
+            markASINForce(approvedBy, approvedOn, comment);
         }
         return this;
     }

@@ -21,4 +21,6 @@ public class ILProposalDocumentCommand {
     private String filename;
 
     private MultipartFile file;
+
+    private boolean mandatory;
 }

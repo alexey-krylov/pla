@@ -66,7 +66,7 @@ public class ILQuotationAppService {
 
         Set<RiderPremiumDto> riderPremiumDtoSet = new HashSet<RiderPremiumDto>();
 
-        Map quotation = ilQuotationFinder.getQuotationforPremiumById(quotationId.getQuotationId());
+        Map quotation = ilQuotationFinder.getQuotationForPremiumById(quotationId.getQuotationId());
 
         PremiumCalculationDto premiumCalculationDto = new PremiumCalculationDto(new PlanId(quotation.get("PLANID").toString()), LocalDate.now(), PremiumFrequency.ANNUALLY, 365);
 
@@ -99,7 +99,7 @@ public class ILQuotationAppService {
         BigDecimal quarterlyPremium = ComputedPremiumDto.getQuarterlyPremium(computedPremiums);
         BigDecimal monthlyPremium = ComputedPremiumDto.getMonthlyPremium(computedPremiums);
 
-        List<Map<String, Object>> riderList = ilQuotationFinder.getQuotationforPremiumWithRiderById(quotationId.getQuotationId());
+        List<Map<String, Object>> riderList = ilQuotationFinder.getQuotationForPremiumWithRiderById(quotationId.getQuotationId());
         if(riderList != null) {
             for (Map  rider : riderList) {
                 if ( (new BigDecimal(rider.get("RIDER_SA").toString()).compareTo(new BigDecimal("0.0")) != 0) || (Integer.parseInt(rider.get("COVERTERM").toString()) != 0) ) {
