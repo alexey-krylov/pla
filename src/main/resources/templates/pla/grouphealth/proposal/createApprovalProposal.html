@@ -161,15 +161,15 @@
                                                ng-required="true" name="agentName"
                                                ng-model="proposalDetails.basic.agentName"/>
                                     </div>
-                                    <div class="form-group required">
+                                    <div class="form-group ">
                                         <label class="control-label">Branch Name</label>
-                                        <input type="text" class="form-control input-sm" ng-readonly="true" ng-required="true" name="branchName" ng-model="proposalDetails.basic.branchName"/>
+                                        <input type="text" class="form-control input-sm" ng-readonly="true"  name="branchName" ng-model="proposalDetails.basic.branchName"/>
                                     </div>
                                 </div>
                                 <div class="col-lg-6">
-                                    <div class="form-group required">
+                                    <div class="form-group ">
                                         <label class="control-label">Team Name</label>
-                                        <input type="text" class="form-control input-sm" ng-readonly="true" ng-required="true" name="teamName" ng-model="proposalDetails.basic.teamName"/>
+                                        <input type="text" class="form-control input-sm" ng-readonly="true"  name="teamName" ng-model="proposalDetails.basic.teamName"/>
                                     </div>
                                 </div>
                             </div>
@@ -414,7 +414,7 @@
                                                 <select class="form-control" ng-model="selectedInstallment"
                                                         name="installments" ng-required="true"
                                                         ng-change="setSelectedInstallment(selectedInstallment)"
-                                                        ng-options="installment as installment.installmentNo for installment in installments track by installment.installmentNo"></select>
+                                                        ng-options="installment as installment.installmentNo for installment in installments track by installment.installmentNo | orderBy: 'installment.installmentNo'"></select>
                                             </div>
                                         </div>
                                         <div class="col-lg-6">

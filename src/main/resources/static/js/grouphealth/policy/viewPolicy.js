@@ -39,7 +39,15 @@ angular.module('viewPolicy', ['common', 'ngRoute', 'mgcrea.ngStrap.select', 'mgc
 
             $scope.documentList = documentList;
 
-            $scope.additionalDocumentList = [{}, {}];
+
+            $scope.additionalDocumentList = [{}];
+            $http.get("/pla/grouphealth/proposal/getadditionaldocuments/"+ $scope.policyId).success(function (data, status) {
+                console.log(data);
+                $scope.additionalDocumentList=data;
+              //  $scope.checkDocumentAttached=$scope.additionalDocumentList!=null;
+
+            });
+
 
             $scope.addAdditionalDocument = function () {
                 $scope.additionalDocumentList.unshift({});
