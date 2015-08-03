@@ -1,6 +1,5 @@
 package com.pla.individuallife.proposal.domain.model;
 
-import com.pla.grouphealth.sharedresource.model.vo.ProposalStatus;
 import com.pla.sharedkernel.identifier.ProposalId;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -23,7 +22,7 @@ public class ILProposalStatusAudit {
 
     private ProposalId proposalId;
 
-    private ProposalStatus proposalStatus;
+    private ILProposalStatus proposalStatus;
 
     private DateTime modifiedOn;
 
@@ -31,7 +30,7 @@ public class ILProposalStatusAudit {
 
     private String comment;
 
-    public ILProposalStatusAudit(ObjectId id, ProposalId proposalId, ProposalStatus proposalStatus, DateTime modifiedOn, String modifiedBy, String comment) {
+    public ILProposalStatusAudit(ObjectId id, ProposalId proposalId, ILProposalStatus proposalStatus, DateTime modifiedOn, String modifiedBy, String comment) {
         this.id=id;
         this.proposalId = proposalId;
         this.proposalStatus = proposalStatus;
