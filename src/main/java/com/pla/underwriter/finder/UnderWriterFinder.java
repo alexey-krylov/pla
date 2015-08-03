@@ -205,7 +205,7 @@ public class UnderWriterFinder {
                 }
             }).collect(Collectors.toList());
         }
-        SqlParameterSource sqlParameterSource = new MapSqlParameterSource("processType", processType.name()).addValue("planId", planId).addValue("coverageIds", coverageIds);
+        SqlParameterSource sqlParameterSource = new MapSqlParameterSource("processType", processType.name()).addValue("planId", planId).addValue("coverageIds", coverageIdsInString);
         findMandatoryDocumentByProcessType = isEmpty(coverageIdsInString) ? findMandatoryDocumentByProcessType + " AND md.coverage_id is null " : findMandatoryDocumentByProcessType + " AND md.coverage_id in (:coverageIds)";
         return namedParameterJdbcTemplate.query(findMandatoryDocumentByProcessType, sqlParameterSource, new ColumnMapRowMapper());
     }
