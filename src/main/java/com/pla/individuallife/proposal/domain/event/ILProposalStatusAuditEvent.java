@@ -1,6 +1,6 @@
 package com.pla.individuallife.proposal.domain.event;
 
-import com.pla.grouphealth.sharedresource.model.vo.ProposalStatus;
+import com.pla.individuallife.proposal.domain.model.ILProposalStatus;
 import com.pla.sharedkernel.identifier.ProposalId;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -17,7 +17,7 @@ public class ILProposalStatusAuditEvent {
 
     private ProposalId proposalId;
 
-    private ProposalStatus status;
+    private ILProposalStatus status;
 
     private String actor;
 

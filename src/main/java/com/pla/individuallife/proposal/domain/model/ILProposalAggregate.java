@@ -1,7 +1,6 @@
 package com.pla.individuallife.proposal.domain.model;
 
 import com.google.common.base.Preconditions;
-import com.pla.grouphealth.sharedresource.model.vo.ProposalStatus;
 import com.pla.individuallife.proposal.domain.event.ILProposalStatusAuditEvent;
 import com.pla.individuallife.proposal.domain.event.ILProposalSubmitEvent;
 import com.pla.individuallife.sharedresource.event.ILProposalToPolicyEvent;
@@ -188,7 +187,7 @@ public class ILProposalAggregate extends AbstractAnnotatedAggregateRoot<Proposal
 
     public ILProposalAggregate submitProposal(DateTime submittedOn,String comment,RoutingLevel routinglevel) {
         this.submittedOn = submittedOn;
-        this.proposalStatus = routinglevel!=null?RoutingLevel.UNDERWRITING_LEVEL_ONE.equals(routinglevel)?ILProposalStatus.URL1_PENDING_ACCEPTANCE:ILProposalStatus.URL2_PENDING_ACCEPTANCE:
+        this.proposalStatus = routinglevel!=null?RoutingLevel.UNDERWRITING_LEVEL_ONE.equals(routinglevel)?ILProposalStatus.UNDERWRITING_LEVEL_ONE :ILProposalStatus.UNDERWRITING_LEVEL_TWO :
                 ILProposalStatus.PENDING_ACCEPTANCE;
         if (this.quotation != null)
             registerEvent(new ILQuotationConvertedToProposalEvent(this.quotation.getQuotationNumber(), new QuotationId(this.quotation.getQuotationId())));
@@ -198,7 +197,7 @@ public class ILProposalAggregate extends AbstractAnnotatedAggregateRoot<Proposal
 
     public ILProposalAggregate submitApproval(DateTime approvedOn,  String comment, ILProposalStatus status,String approvedBy) {
         this.proposalStatus = status;
-        registerEvent(new ILProposalStatusAuditEvent(this.getProposalId(), ProposalStatus.PENDING_FIRST_PREMIUM, approvedBy, comment, approvedOn));
+        registerEvent(new ILProposalStatusAuditEvent(this.getProposalId(), status, approvedBy, comment, approvedOn));
         if (ILProposalStatus.APPROVED.equals(status)) {
             markASFirstPremiumPending(approvedBy, approvedOn, comment);
             markASINForce(approvedBy, approvedOn, comment);
@@ -210,19 +209,19 @@ public class ILProposalAggregate extends AbstractAnnotatedAggregateRoot<Proposal
     * store the comment when routing to  next level
     * */
     public ILProposalAggregate routeToNextLevel(String comment, ILProposalStatus status) {
-        this.proposalStatus = ILProposalStatus.URL1_PENDING_ACCEPTANCE.equals(status)?ILProposalStatus.URL2_PENDING_ACCEPTANCE:status;
+        this.proposalStatus = ILProposalStatus.UNDERWRITING_LEVEL_ONE.equals(status)?ILProposalStatus.UNDERWRITING_LEVEL_TWO :status;
         return this;
     }
 
     public ILProposalAggregate markASFirstPremiumPending(String approvedBy, DateTime approvedOn, String comment) {
         this.proposalStatus = ILProposalStatus.PENDING_FIRST_PREMIUM;
-        registerEvent(new ILProposalStatusAuditEvent(this.getProposalId(), ProposalStatus.PENDING_FIRST_PREMIUM, approvedBy, comment, approvedOn));
+        registerEvent(new ILProposalStatusAuditEvent(this.getProposalId(), ILProposalStatus.PENDING_FIRST_PREMIUM, approvedBy, comment, approvedOn));
         return this;
     }
 
     public ILProposalAggregate markASINForce(String approvedBy, DateTime approvedOn, String comment) {
         this.proposalStatus = ILProposalStatus.IN_FORCE;
-        registerEvent(new ILProposalStatusAuditEvent(this.getProposalId(), ProposalStatus.IN_FORCE, approvedBy, comment, approvedOn));
+        registerEvent(new ILProposalStatusAuditEvent(this.getProposalId(), ILProposalStatus.IN_FORCE, approvedBy, comment, approvedOn));
         registerEvent(new ILProposalToPolicyEvent(this.proposalId));
         return this;
     }

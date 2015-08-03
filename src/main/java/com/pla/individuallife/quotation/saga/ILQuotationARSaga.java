@@ -195,9 +195,6 @@ public class ILQuotationARSaga extends AbstractAnnotatedSaga implements Serializ
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("Handling IL Quotation Closure Event ....", event);
         }
-        /*
-        * refactor the search quotation
-        * */
         List<ILSearchQuotationResultDto> quotations = quotationFinder.searchQuotation(event.getQuotationNumber(), "", "", "", "");
         List<ILSearchQuotationResultDto> quotationsExcludingCurrentOne = quotations.stream().filter( t -> !t.getQuotationId().equals(event.getQuotationId())).collect(Collectors.toList());
         commandGateway.send(new ILQuotationConvertedCommand(event.getQuotationId()));

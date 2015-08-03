@@ -5,10 +5,7 @@ package com.pla.individuallife.proposal.domain.model;
  */
 public enum ILProposalStatus {
     DRAFT("Draft"), PENDING_ACCEPTANCE("Pending Acceptance"), PENDING_DECISION("Pending Decision"), DECLINED ("Declined"), APPROVED("Approved"), RETURNED("Returned"), PENDING_FIRST_PREMIUM("Pending First Premium"), IN_FORCE("In Force"),
-    /*
-    * Under Writer Level One(URL1), Under Writer Level Two (URL2)
-    * */
-    URL1_PENDING_ACCEPTANCE("Pending Acceptance"), URL2_PENDING_ACCEPTANCE("Pending Acceptance");
+    UNDERWRITING_LEVEL_ONE("Pending Acceptance"), UNDERWRITING_LEVEL_TWO("Pending Acceptance");
 
     private String description;
 
