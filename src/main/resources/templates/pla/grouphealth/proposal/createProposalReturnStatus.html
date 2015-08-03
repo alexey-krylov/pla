@@ -10,7 +10,7 @@
     <script data-main="../../../../static/js/requireConfig" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.1.16/require.min.js"></script>
     <!--*/-->
 </head>
-<body class="fuelux ng-cloak">
+<body class="fuelux ng-cloak" style="overflow-x: hidden;">
 <div th:include="fragments/common :: bodyHeader" th:remove="tag"/>
 <script th:inline="javascript">
     /*<![CDATA[*/
@@ -526,7 +526,7 @@
                                                 </div>
                                                 <div class="col-lg-5">
                                                     <button class="btn btn-default" style="margin-top:20px;" ng-click="removeAdditionalDocument($index)" ng-disabled="isViewMode">Remove</button>
-                                                    <a  href="/pla/grouphealth/proposal/downloadmandatorydocument/{{additionalDocument.gridFsDocId}}" style="display:inline;margin-top:25px;float:right;"  title="{{additionalDocument.fileName}}" hg-show="!additionalDocument.submitted">{{additionalDocument.fileName| limitTo: 70}}</a>
+                                                    <a  href="/pla/grouphealth/proposal/downloadmandatorydocument/{{additionalDocument.gridFsDocId}}" style="display:inline;"  title="{{additionalDocument.fileName}}" hg-show="!additionalDocument.submitted">{{additionalDocument.fileName| limitTo: 70}}</a>
 
                                                 </div>
 

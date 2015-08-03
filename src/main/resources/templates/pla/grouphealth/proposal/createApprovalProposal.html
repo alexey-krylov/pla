@@ -10,7 +10,7 @@
     <script data-main="../../../../static/js/requireConfig" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.1.16/require.min.js"></script>
     <!--*/-->
 </head>
-<body class="fuelux ng-cloak">
+<body class="fuelux ng-cloak" style="overflow-x: hidden;">
 <div th:include="fragments/common :: bodyHeader" th:remove="tag"/>
 <script th:inline="javascript">
     /*<![CDATA[*/
@@ -83,6 +83,7 @@
                         </tbody>
                     </table>
                     </div>
+
                     <form class="form-horizontal"  id="createGHApprovalProposal" name="createGHApprovalProposal" novalidate="true">
                     <div class="row">
                         <div class="col-lg-6">
@@ -546,7 +547,7 @@
                                                 </div>
                                             </div>
                                                 <div class="col-lg-8">
-                                                <a  href="/pla/grouphealth/proposal/downloadmandatorydocument/{{additionalDocument.gridFsDocId}}" style="display:inline;margin-top:25px;float:right;"   hg-show="!additionalDocument.submitted">{{additionalDocument.fileName}}</a>
+                                                <a  href="/pla/grouphealth/proposal/downloadmandatorydocument/{{additionalDocument.gridFsDocId}}" style="display:inline;"   hg-show="!additionalDocument.submitted">{{additionalDocument.fileName}}</a>
                                             </div>
                                             </div>
                                             </div>
