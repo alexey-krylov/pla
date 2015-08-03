@@ -109,7 +109,7 @@ public class GLProposalService {
     }
 
     public List<GlQuotationDto> searchGeneratedQuotation(String quotationNumber) {
-        List<Map> allQuotations = glFinder.searchQuotation(quotationNumber, null, null, null, null, new String[]{"GENERATED", "SHARED"});
+        List<Map> allQuotations = glFinder.searchQuotation(quotationNumber, null, null, null, null, new String[]{"SHARED"});
         if (isEmpty(allQuotations)) {
             return Lists.newArrayList();
         }

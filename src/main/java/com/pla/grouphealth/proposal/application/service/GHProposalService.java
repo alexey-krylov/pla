@@ -105,7 +105,7 @@ public class GHProposalService {
     }
 
     public List<GlQuotationDto> searchGeneratedQuotation(String quotationNumber) {
-        List<Map> allQuotations = ghFinder.searchQuotation(quotationNumber, null, null, null, null, new String[]{"GENERATED", "SHARED"});
+        List<Map> allQuotations = ghFinder.searchQuotation(quotationNumber, null, null, null, null, new String[]{"SHARED"});
         if (isEmpty(allQuotations)) {
             return Lists.newArrayList();
         }
