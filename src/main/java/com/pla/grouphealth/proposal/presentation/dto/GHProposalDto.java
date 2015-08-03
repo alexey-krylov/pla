@@ -1,6 +1,7 @@
 package com.pla.grouphealth.proposal.presentation.dto;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.joda.time.DateTime;
 
@@ -9,6 +10,7 @@ import org.joda.time.DateTime;
  */
 @Getter
 @Setter
+@NoArgsConstructor
 public class GHProposalDto {
 
     private String proposalId;

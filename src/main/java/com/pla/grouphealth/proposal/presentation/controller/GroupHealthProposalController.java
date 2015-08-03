@@ -125,8 +125,8 @@ public class GroupHealthProposalController {
     public ModelAndView gotoApprovalProposalPage() {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("pla/grouphealth/proposal/viewApprovalProposal");
-        List<GHProposalDto> submittedProposals = ghProposalService.searchProposal(new SearchGHProposalDto(), new String[]{"PENDING_ACCEPTANCE"});
-        modelAndView.addObject("searchResult", submittedProposals);
+        //List<GHProposalDto> submittedProposals = ghProposalService.searchProposal(new SearchGHProposalDto(), new String[]{"PENDING_ACCEPTANCE"});
+        //modelAndView.addObject("searchResult", submittedProposals);
         modelAndView.addObject("searchCriteria", new SearchGHProposalDto());
         return modelAndView;
     }
@@ -139,7 +139,7 @@ public class GroupHealthProposalController {
         List<GHProposalDto> submittedProposals = ghProposalService.searchProposal(searchGHProposalDto, new String[]{"PENDING_ACCEPTANCE"});
 
         modelAndView.addObject("searchResult", submittedProposals);
-        modelAndView.addObject("searchCriteria", new SearchGHProposalDto());
+        modelAndView.addObject("searchCriteria", searchGHProposalDto);
         return modelAndView;
     }
 

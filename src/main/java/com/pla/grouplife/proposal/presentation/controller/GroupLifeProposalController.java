@@ -215,7 +215,7 @@ public class GroupLifeProposalController {
         modelAndView.setViewName("pla/groupLife/proposal/viewApprovalProposal");
         List<GLProposalDto> submittedProposals = glProposalService.searchProposal(searchGLProposalDto, new String[]{"PENDING_ACCEPTANCE"});
         modelAndView.addObject("searchResult", submittedProposals);
-        modelAndView.addObject("searchCriteria", new SearchGLProposalDto());
+        modelAndView.addObject("searchCriteria",searchGLProposalDto);
         return modelAndView;
 
     }

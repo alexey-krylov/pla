@@ -8,7 +8,7 @@ var viewProposalModule = (function () {
        // console.log("***********************");
        // console.log(this.status);
         $(".btn-disabled").attr("disabled", false);
-        if (this.status == 'Returned' || this.status == 'Draft'){
+        if (this.status == 'RETURNED' || this.status == 'DRAFT'){
             $('#modifyProposal').attr('disabled', false);
 
         }else{
@@ -28,7 +28,7 @@ var viewProposalModule = (function () {
     services.modifyProposal = function () {
         var proposalId = this.selectedItem;
         console.log(this.status);
-        if(this.status == 'Returned' || this.status == 'Approved'){
+        if(this.status == 'RETURNED' || this.status == 'APPROVED'){
             window.location.href = "/pla/grouplife/proposal/editProposalReturnStatus?proposalId=" + proposalId  + "&mode=edit" + "&status=return";
         }else{
             window.location.href = "/pla/grouplife/proposal/editProposal?proposalId=" + proposalId  + "&mode=edit";
