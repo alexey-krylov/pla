@@ -379,9 +379,9 @@ public class ILProposalController {
     @ApiOperation(httpMethod = "POST", value = "To search submitted proposal for approver approval")
     public ModelAndView findSubmittedProposal(ILSearchProposalForApprovalDto dto) {
         ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("pla/individuallife/proposal/index");
+        modelAndView.setViewName("pla/individuallife/proposal/viewApprovalProposal");
         try {
-            modelAndView.addObject("searchResult", proposalFinder.searchProposalToApprove(dto, new String[]{"PENDING_ACCEPTANCE"}));
+            modelAndView.addObject("searchResult", proposalFinder.searchProposalToApprove(dto, new String[]{"PENDING_ACCEPTANCE","UNDERWRITING_LEVEL_ONE","UNDERWRITING_LEVEL_TWO"}));
         } catch (Exception e) {
             modelAndView.addObject("searchResult", Lists.newArrayList());
         }
@@ -458,6 +458,16 @@ public class ILProposalController {
         modelAndView.setViewName("pla/individuallife/proposal/searchquotationforilproposal");
         return modelAndView;
     }
+
+    @RequestMapping(value = "/openapprovalproposal", method = RequestMethod.GET)
+    @ApiOperation(httpMethod = "GET", value = "To open Approval proposal page")
+    public ModelAndView gotoApprovalProposalPage() {
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("pla/individuallife/proposal/viewApprovalProposal");
+        modelAndView.addObject("searchCriteria", new ILSearchProposalDto());
+        return modelAndView;
+    }
+
 
     @RequestMapping(method = RequestMethod.GET, value = "/getAllOccupation")
     @ResponseBody
@@ -546,6 +556,13 @@ public class ILProposalController {
     @ApiOperation(httpMethod = "GET", value = "To list additional documents which is being configured in Mandatory Document SetUp")
     public Set<ILProposalMandatoryDocumentDto> findAdditionalDocuments(@PathVariable("proposalId") String proposalId) {
         return ilProposalService.findAdditionalDocuments(proposalId);
+    }
+
+    @RequestMapping(value = "/getapprovercomments/{proposalId}", method = RequestMethod.GET)
+    @ResponseBody
+    @ApiOperation(httpMethod = "GET", value = "To list approval comments")
+    public List<ProposalApproverCommentsDto> findApproverComments(@PathVariable("proposalId") String proposalId) {
+        return ilProposalService.findApproverComments(proposalId);
     }
 
     @RequestMapping(value = "/downloadmandatorydocument/{gridfsdocid}", method = RequestMethod.GET)

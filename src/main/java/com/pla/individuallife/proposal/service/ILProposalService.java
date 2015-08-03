@@ -2,12 +2,11 @@ package com.pla.individuallife.proposal.service;
 
 import com.google.common.collect.Lists;
 import com.mongodb.gridfs.GridFSDBFile;
-import com.pla.individuallife.proposal.domain.model.ILProposerDocument;
-import com.pla.individuallife.proposal.domain.model.ILRiderDetail;
-import com.pla.individuallife.proposal.domain.model.ProposalPlanDetail;
-import com.pla.individuallife.proposal.domain.model.ProposedAssured;
+import com.pla.individuallife.proposal.domain.model.*;
 import com.pla.individuallife.proposal.presentation.dto.ILProposalMandatoryDocumentDto;
+import com.pla.individuallife.proposal.presentation.dto.ProposalApproverCommentsDto;
 import com.pla.individuallife.proposal.query.ILProposalFinder;
+import com.pla.individuallife.proposal.repository.ILProposalStatusAuditRepository;
 import com.pla.individuallife.quotation.query.ILQuotationDto;
 import com.pla.individuallife.quotation.query.ILQuotationFinder;
 import com.pla.publishedlanguage.dto.ClientDocumentDto;
@@ -18,11 +17,13 @@ import com.pla.sharedkernel.domain.model.ProcessType;
 import com.pla.sharedkernel.domain.model.RoutingLevel;
 import com.pla.sharedkernel.identifier.CoverageId;
 import com.pla.sharedkernel.identifier.PlanId;
+import com.pla.sharedkernel.identifier.ProposalId;
 import com.pla.underwriter.domain.model.UnderWriterDocument;
 import com.pla.underwriter.domain.model.UnderWriterInfluencingFactor;
 import com.pla.underwriter.domain.model.UnderWriterRoutingLevel;
 import com.pla.underwriter.exception.UnderWriterException;
 import com.pla.underwriter.finder.UnderWriterFinder;
+import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.io.IOUtils;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
@@ -34,6 +35,7 @@ import org.springframework.data.mongodb.gridfs.GridFsTemplate;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 import java.util.*;
 import java.util.function.Function;
 import java.util.function.Predicate;
@@ -64,6 +66,9 @@ public class ILProposalService {
     @Autowired
     private UnderWriterFinder underWriterFinder;
 
+    @Autowired
+    private ILProposalStatusAuditRepository ilProposalStatusAuditRepository;
+
     public boolean hasProposalForQuotation(String quotationId){
         if (isEmpty(quotationId))
             return false;
@@ -76,7 +81,7 @@ public class ILProposalService {
 
     public Set<ILProposalMandatoryDocumentDto> findAdditionalDocuments(String proposalId) {
         Map proposal = proposalFinder.getProposalByProposalId(proposalId);
-        List<ILProposerDocument> uploadedDocuments = proposal.get("proposerDocuments") != null ? (List<ILProposerDocument>) proposal.get("proposerDocuments") : Lists.newArrayList();
+        List<ILProposerDocument> uploadedDocuments = proposal.get("proposalDocuments") != null ? (List<ILProposerDocument>) proposal.get("proposalDocuments") : Lists.newArrayList();
         if (isNotEmpty(uploadedDocuments)) {
             return uploadedDocuments.stream().filter(uploadedDocument -> !uploadedDocument.isMandatory()).map(new Function<ILProposerDocument, ILProposalMandatoryDocumentDto>() {
                 @Override
@@ -135,6 +140,9 @@ public class ILProposalService {
                         try {
                             if (isNotEmpty(proposerDocumentOptional.get().getGridFsDocId())) {
                                 GridFSDBFile gridFSDBFile = gridFsTemplate.findOne(new Query(Criteria.where("_id").is(proposerDocumentOptional.get().getGridFsDocId())));
+                                mandatoryDocumentDto.setFileName(gridFSDBFile.getFilename());
+                                mandatoryDocumentDto.setContentType(gridFSDBFile.getContentType());
+                                mandatoryDocumentDto.setGridFsDocId(gridFSDBFile.getId().toString());
                                 mandatoryDocumentDto.updateWithContent(IOUtils.toByteArray(gridFSDBFile.getInputStream()));
                             }
                         } catch (IOException e) {
@@ -236,6 +244,29 @@ public class ILProposalService {
         }
 
         return mandatoryDocuments;
+    }
+
+    public List<ProposalApproverCommentsDto> findApproverComments(String proposalId) {
+        List<ILProposalStatusAudit> audits = ilProposalStatusAuditRepository.findByProposalId(new ProposalId(proposalId));
+        List<ProposalApproverCommentsDto> proposalApproverCommentsDtos = Lists.newArrayList();
+        if (isNotEmpty(audits)) {
+            proposalApproverCommentsDtos = audits.stream().map(new Function<ILProposalStatusAudit, ProposalApproverCommentsDto>() {
+                @Override
+                public ProposalApproverCommentsDto apply(ILProposalStatusAudit ilProposalStatusAudit) {
+                    ProposalApproverCommentsDto proposalApproverCommentsDto = new ProposalApproverCommentsDto();
+                    try {
+                        BeanUtils.copyProperties(proposalApproverCommentsDto, ilProposalStatusAudit);
+                        proposalApproverCommentsDto.setStatus(proposalApproverCommentsDto.getProposalStatus().getDescription());
+                    } catch (IllegalAccessException e) {
+                        e.printStackTrace();
+                    } catch (InvocationTargetException e) {
+                        e.printStackTrace();
+                    }
+                    return proposalApproverCommentsDto;
+                }
+            }).collect(Collectors.toList());
+        }
+        return proposalApproverCommentsDtos;
     }
 
 }

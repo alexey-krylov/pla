@@ -292,9 +292,7 @@ public class ILProposalFinder {
 
     public ILProposalDto getProposalById(String proposalId) {
         ILProposalDto dto = new ILProposalDto();
-        BasicDBObject query = new BasicDBObject();
-        query.put("_id", proposalId);
-        Map proposal = mongoTemplate.findOne(new BasicQuery(query), Map.class, "individual_life_proposal");
+        Map proposal = getProposalByProposalId(proposalId);
         if (proposal.get("proposedAssured") != null) {
             dto.setProposedAssured(ProposedAssuredBuilder.getProposedAssuredBuilder((ProposedAssured) proposal.get("proposedAssured")).createProposedAssuredDto());
         }
@@ -337,14 +335,11 @@ public class ILProposalFinder {
     }
 
     public List<Map<String, Object>> getPlans(String proposalId) {
-        BasicDBObject query = new BasicDBObject();
-        query.put("_id", proposalId);
-        Map proposal = mongoTemplate.findOne(new BasicQuery(query), Map.class, "individual_life_proposal");
+        Map proposal = getProposalByProposalId(proposalId);
         List <String> agentIds = new ArrayList<String>();
         ((AgentCommissionShareModel) proposal.get("agentCommissionShareModel")).getCommissionShare().stream().forEach(x -> agentIds.add(x.getAgentId().toString()));
         List<Map<String, Object>>  result =  namedParameterJdbcTemplate.query(SEARCH_PLAN_BY_AGENT_IDS, new MapSqlParameterSource().addValue("agentIds", agentIds).addValue("lineOfBusiness", "Individual Life"), new ColumnMapRowMapper());
         return result;
-
     }
 
     public Map findProposalByQuotationNumber(String quotationNumber) {
