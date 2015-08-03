@@ -468,6 +468,14 @@ public class ILProposalController {
         return modelAndView;
     }
 
+    @RequestMapping(value = "/viewApprovalProposal", method = RequestMethod.GET)
+    @ApiOperation(httpMethod = "GET", value = "To open Approval proposal page in view Mode")
+    public ModelAndView gotoApprovalProposal() {
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("pla/individuallife/proposal/createApprovalProposal");
+        return modelAndView;
+    }
+
 
     @RequestMapping(method = RequestMethod.GET, value = "/getAllOccupation")
     @ResponseBody
@@ -477,6 +485,7 @@ public class ILProposalController {
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/getAllIndividualLifePlans")
+    @ResponseBody
     public List<Map<String, Object>> getAllIndividualLifePlans() {
         List<Map<String, Object>> planList = masterFinder.getAllPlanForIndividualLife();
         return planList;

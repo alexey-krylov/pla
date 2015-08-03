@@ -10,7 +10,7 @@
     <script data-main="../../../../static/js/requireConfig" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.1.16/require.min.js"></script>
     <!--*/-->
 </head>
-<body class="fuelux ng-cloak">
+<body class="fuelux ng-cloak" style="overflow-x: hidden;">
 <div th:include="fragments/common :: bodyHeader" th:remove="tag"/>
 <script th:inline="javascript">
     /*<![CDATA[*/
@@ -100,15 +100,15 @@
                                                ng-required="true" name="agentName"
                                                ng-model="proposalDetails.basic.agentName"/>
                                     </div>
-                                    <div class="form-group required">
+                                    <div class="form-group ">
                                         <label class="control-label">Branch Name</label>
-                                        <input type="text" class="form-control input-sm" ng-readonly="true" ng-required="true" name="branchName" ng-model="proposalDetails.basic.branchName"/>
+                                        <input type="text" class="form-control input-sm" ng-readonly="true"  name="branchName" ng-model="proposalDetails.basic.branchName"/>
                                     </div>
                                 </div>
                                 <div class="col-lg-6">
-                                    <div class="form-group required">
+                                    <div class="form-group ">
                                         <label class="control-label">Team Name</label>
-                                        <input type="text" class="form-control input-sm" ng-readonly="true" ng-required="true" name="teamName" ng-model="proposalDetails.basic.teamName"/>
+                                        <input type="text" class="form-control input-sm" ng-readonly="true"  name="teamName" ng-model="proposalDetails.basic.teamName"/>
                                     </div>
                                 </div>
                             </div>
@@ -344,7 +344,7 @@
                                             <select class="form-control" ng-model="selectedInstallment"
                                                     name="installments"
                                                     ng-change="setSelectedInstallment(selectedInstallment)"
-                                                    ng-options="installment as installment.installmentNo for installment in installments track by installment.installmentNo"></select>
+                                                    ng-options="installment as installment.installmentNo for installment in installments track by installment.installmentNo | orderBy: 'installment.installmentNo'"></select>
                                         </div>
                                     </div>
                                     <div class="col-lg-6">
@@ -456,39 +456,42 @@
 
                                     <div class="row" >
                                         <div ng-repeat="additionalDocument in additionalDocumentList">
-                                <div class="col-lg-4">
-                                    <div class="form-group">
-                                        <label class="control-label">Document Title</label>
-                                        <input type="text" class="form-control input-sm" style="width:400px;"
-                                               name="documentTitle"
-                                               ng-model="additionalDocument.documentId"/>
-                                    </div>
-                                </div>
-                                            <div class="col-lg-5" ng-hide="isViewMode">
-                                    <div class="form-group">
-                                        <label class="control-label">Browse File</label>
-                                        <button  class="btn btn-default"
-                                                style="display:inline;float:right;margin-right:135px;margin-top:20px;"
-                                                ng-file-select="callAdditionalDoc(additionalDocument.documentAttached)" ng-model="additionalDocument.documentAttached" ng-disabled="!additionalDocument.documentId" >Browse
-                                        </button>
+                                            <div class="row">
+                                                <div class="col-lg-3">
+                                                    <div class="form-group">
+                                                        <label class="control-label">Document Title</label>
+                                                        <input type="text" class="form-control input-sm"
+                                                               name="documentTitle"
+                                                               ng-model="additionalDocument.documentId"/>
+                                                    </div>
+                                                </div>
+                                                <div class="col-lg-4" ng-hide="isViewMode">
+                                                    <div class="form-group">
 
-                                        <label class="form-control input-sm" style="border:1px solid #ccc;width:286px;"  >{{additionalDocument.documentAttached[0].name}} </label>
-                                    </div>
+                                                        <label class="control-label">Browse File</label>
+                                                        <button class="btn btn-default"
+                                                                style="display:inline;float:right;margin-top:20px;"
+                                                                ng-file-select="callAdditionalDoc(additionalDocument.documentAttached)" ng-model="additionalDocument.documentAttached" ng-disabled="!additionalDocument.documentId">Browse
+                                                        </button>
+                                                        <input class="form-control input-sm" style="width:320px;" value="{{additionalDocument.documentAttached[0].name}}" readonly="true" />
+                                                    </div>
+
+                                                </div>
+                                                <div class="col-lg-5">
+                                                    <button class="btn btn-default" style="margin-top:20px;" ng-click="removeAdditionalDocument($index)" ng-disabled="isViewMode">Remove</button>
+                                                    <a  href="/pla/grouplife/proposal/downloadmandatorydocument/{{additionalDocument.gridFsDocId}}" style="display:inline;"  title="{{additionalDocument.fileName}}" hg-show="!additionalDocument.submitted">{{additionalDocument.fileName| limitTo: 70}}</a>
+
+                                                </div>
 
                                             </div>
-                                            <div class="col-lg-3">
-                                            <button class="btn btn-default" style="margin-top:20px;" ng-click="removeAdditionalDocument($index)" ng-disabled="isViewMode">Remove</button>
-                                                <a  href="/pla/grouplife/proposal/downloadmandatorydocument/{{additionalDocument.gridFsDocId}}" style="display:inline;margin-top:25px;float:right;"  hg-show="!additionalDocument.submitted">{{additionalDocument.fileName}}</a>
-
-                                            </div>
-
                                         </div>
-                                        <button class="btn btn-default"
-                                                style="display:inline;float:right;margin-right:5px;margin-top:20px;"
-                                                ng-click="uploadAdditionalDocument()" ng-hide="isViewMode" ng-disabled="!checkDocumentAttached">Upload
-                                        </button>
 
-                            </div>
+                                    </div>
+                                    <button class="btn btn-default"
+                                            style="display:inline;float:right;margin-right:5px;margin-top:20px;"
+                                            ng-click="uploadAdditionalDocument()" ng-disabled="!checkDocumentAttached" ng-hide="isViewMode">Upload
+                                    </button>
+
 
 
                                 </div>
@@ -545,7 +548,7 @@
 
 </div>
 
-<div class="modal fade" id="agentModal">
+<div class="modal fade" id="agentModal" ng-hide="isViewMode">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header bg-danger" style="display: block">
