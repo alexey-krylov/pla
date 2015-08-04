@@ -25,6 +25,14 @@
     /*]]>*/
 </script>
 <script>
+    var isEnterKey = function (event) {
+        var charCode = (event.which) ? event.which : event.keyCode;
+
+        if (charCode == 13) {
+            event.preventDefault();
+        }
+    }
+
     requirejs(['main','angular-file-upload'],function(){
         require(['/pla/js/grouphealth/proposal/createProposal.js?t=9'], function () {
             angular.element(document).ready(function() {
@@ -59,8 +67,6 @@
                 <!-- -->
             </div>
             <div class="step-content ng-cloak">
-
-
                 <div class="step-pane" data-step="1">
                     <div style="height:300px;overflow-y:scroll;border:1px solid grey;margin-top:10px;margin-bottom: 10px;">
                     <table class="table table-striped table-bordered"  style="margin-top:5px; ">
@@ -91,7 +97,7 @@
                                 <label class="control-label">Comments</label>
                                 <textarea rows="4" cols="50"
                                        ng-required="true" name="comments"
-                                       ng-model="comment"/>
+                                       ng-model="comment" onkeypress="return isEnterKey(event)"/>
                             </div>
 
                         </div>
@@ -130,7 +136,7 @@
                                         <div class="input-group">
                                             <input type="text" class="form-control input-sm" name="agentId"
                                                    ng-model="proposalDetails.basic.agentId" ng-required="true"
-                                                   ng-change="clearAgentDetails()"
+                                                   ng-change="clearAgentDetails()" onkeypress="return isEnterKey(event)"
                                                    ng-disabled="isEditMode ||!changeAgent"/>
                                             <div class="input-group-btn">
                                                 <button type="button" class="btn btn-default btn-sm"
@@ -146,7 +152,7 @@
                                     <div class="form-group required">
                                         <label class="control-label">Proposer Name</label>
                                         <input type="text" class="form-control input-sm" name="proposerName"
-                                               ng-model="proposalDetails.proposer.proposerName"
+                                               ng-model="proposalDetails.proposer.proposerName" onkeypress="return isEnterKey(event)"
                                                ng-required="true" ng-disabled="true"/>
                                     </div>
                                 </div>
@@ -196,11 +202,11 @@
                                     </div>
                                     <div class="form-group required">
                                         <label class="control-label">Address Line 1</label>
-                                        <input type="text" class="form-control input-sm" ng-required="true" name="addressLine1" ng-maxlength="100" ng-model="proposalDetails.proposer.addressLine1"/>
+                                        <input type="text" class="form-control input-sm" ng-required="true" name="addressLine1" onkeypress="return isEnterKey(event)" ng-maxlength="100" ng-model="proposalDetails.proposer.addressLine1"/>
                                     </div>
                                     <div class="form-group">
                                         <label >Postal Code</label>
-                                        <input type="text" class="form-control input-sm" name="postalCode" ng-model="proposalDetails.proposer.postalCode"/>
+                                        <input type="text" class="form-control input-sm" name="postalCode" onkeypress="return isEnterKey(event)" ng-model="proposalDetails.proposer.postalCode"/>
                                     </div>
                                     <div class="form-group required">
                                         <label class="control-label">Town</label>
@@ -215,11 +221,11 @@
                                 <div class="col-lg-6" disable-all-fields="isViewMode">
                                     <div class="form-group required">
                                         <label class="control-label">Proposer Code</label>
-                                        <input type="text" class="form-control input-sm" ng-required="true" name="proposerCode" ng-model="proposalDetails.proposer.proposerCode"/>
+                                        <input type="text" class="form-control input-sm" ng-required="true" name="proposerCode" onkeypress="return isEnterKey(event)" ng-model="proposalDetails.proposer.proposerCode"/>
                                     </div>
                                     <div class="form-group">
                                         <label >Address Line 2</label>
-                                        <input type="text" class="form-control input-sm" maxlength="100" ng-model="proposalDetails.proposer.addressLine2"/>
+                                        <input type="text" class="form-control input-sm" onkeypress="return isEnterKey(event)" maxlength="100" ng-model="proposalDetails.proposer.addressLine2"/>
                                     </div>
                                     <div class="form-group required">
                                         <label class="control-label">Province</label>
@@ -245,11 +251,11 @@
                                 <div class="col-lg-6" disable-all-fields="isViewMode">
                                     <div class="form-group required">
                                         <label class="control-label">Contact Person Details</label>
-                                        <input type="text" class="form-control input-sm" name="contactPersonDetails" maxlength="100" ng-required="true" ng-model="proposalDetails.proposer.contactPersonName"/>
+                                        <input type="text" class="form-control input-sm" name="contactPersonDetails" onkeypress="return isEnterKey(event)" maxlength="100" ng-required="true" ng-model="proposalDetails.proposer.contactPersonName"/>
                                     </div>
                                     <div class="form-group required">
                                         <label class="control-label">Mobile Number</label>
-                                        <input type="text" class="form-control input-sm" maxlength="10" minlength="10" name="mobileNumber" ng-required="true" ng-pattern="numberPattern" ng-model="proposalDetails.proposer.contactPersonMobileNumber"/>
+                                        <input type="text" class="form-control input-sm" maxlength="10" minlength="10" name="mobileNumber" ng-required="true" ng-pattern="numberPattern" onkeypress="return isEnterKey(event)" ng-model="proposalDetails.proposer.contactPersonMobileNumber"/>
                                         <div ng-show="step2.mobileNumber.$invalid &amp;&amp; step2.mobileNumber.$dirty">
                                             <small class="error" ng-show="!step2.mobileNumber.$error.pattern &amp;&amp; step2.mobileNumber.$error.minlength">
                                                 Please enter a valid mobile number.
@@ -263,7 +269,7 @@
                                 <div class="col-lg-6" disable-all-fields="isViewMode">
                                     <div class="form-group">
                                         <label class="control-label">Email</label>
-                                        <input type="email" class="form-control input-sm"  name="email" ng-model="proposalDetails.proposer.contactPersonEmail"/>
+                                        <input type="email" class="form-control input-sm"  name="email" onkeypress="return isEnterKey(event)" ng-model="proposalDetails.proposer.contactPersonEmail"/>
                                         <div ng-show="step2.email.$invalid &amp;&amp; step2.email.$dirty">
                                             <small class="error" ng-show="step2.email.$error.email">
                                                 Please enter a valid emailId.
@@ -272,7 +278,7 @@
                                     </div>
                                     <div class="form-group required">
                                         <label class="control-label">Work Phone</label>
-                                        <input type="text" class="form-control input-sm" maxlength="13" minlength="13" name="workPhone" ng-required="true" ng-pattern="numberPattern" ng-model="proposalDetails.proposer.contactPersonWorkPhoneNumber"/>
+                                        <input type="text" class="form-control input-sm" maxlength="13" minlength="13" name="workPhone" ng-required="true" onkeypress="return isEnterKey(event)" ng-pattern="numberPattern" ng-model="proposalDetails.proposer.contactPersonWorkPhoneNumber"/>
                                         <div ng-show="step2.workPhone.$invalid &amp;&amp; step2.workPhone.$dirty">
                                             <small class="error" ng-show="!step2.workPhone.$error.pattern &amp;&amp; step2.workPhone.$error.minlength">
                                                 Please enter a valid mobile number.
