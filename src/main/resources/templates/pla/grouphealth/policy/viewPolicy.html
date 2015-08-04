@@ -295,20 +295,28 @@
                 <div class="step-pane" data-step="4">
                     <div class="row " disable-all-fields="isViewMode">
                         <div class="col-lg-3 col-lg-offset-3">
-                            <div class="checkbox">
-                                <label class="checkbox-custom" data-initialize="checkbox">
-                                    <input class="sr-only" type="checkbox" ng-true-value="true" ng-false-value="false" name="planChoice" ng-model="policyDetails.plan.samePlanForAllRelation"/>
-                                    <span class="checkbox-label" style="position: relative;top:5px;font-weight: bold;color:#000000;margin-left:5px">Same Plan for all Relationships</span>
-                                </label>
-                            </div>
+                            <input type="checkbox" ng-model="policyDetails.plan.samePlanForAllRelation"/><span
+                                class="checkbox-label"
+                                style="position: relative;top:-1px;font-weight: bold;color:#000000;margin-left:5px">Same Plan for all Relationships</span>
+
+                            <!-- <div class="checkbox">
+                                 <label class="checkbox-custom" data-initialize="checkbox">
+                                     <input class="sr-only" type="checkbox" ng-true-value="true" ng-false-value="false" name="planChoice" ng-model="policyDetails.plan.samePlanForAllRelation"/>
+                                     <span class="checkbox-label" style="position: relative;top:5px;font-weight: bold;color:#000000;margin-left:5px">Same Plan for all Relationships</span>
+                                 </label>
+                             </div>-->
                         </div>
                         <div class="col-lg-3">
-                            <div class="checkbox" style="display: inline-block;">
-                                <label class="checkbox-custom" data-initialize="checkbox">
-                                    <input class="sr-only" type="checkbox" ng-true-value="true" ng-false-value="false" name="planChoice" ng-model="policyDetails.plan.samePlanForAllCategory"/>
-                                    <span class="checkbox-label" style="position: relative;top:5px;font-weight: bold;color:#000000;margin-left: 5px">Same Plan for all Categories</span>
-                                </label>
-                            </div>
+                            <input type="checkbox" ng-model="policyDetails.plan.samePlanForAllCategory"/><span
+                                class="checkbox-label"
+                                style="position: relative;top:-1px;font-weight: bold;color:#000000;margin-left:5px">Same Plan for all Categories</span>
+
+                            <!--    <div class="checkbox" style="display: inline-block;">
+                                    <label class="checkbox-custom" data-initialize="checkbox">
+                                        <input class="sr-only" type="checkbox" ng-true-value="true" ng-false-value="false" name="planChoice" ng-model="policyDetails.plan.samePlanForAllCategory"/>
+                                        <span class="checkbox-label" style="position: relative;top:5px;font-weight: bold;color:#000000;margin-left: 5px">Same Plan for all Categories</span>
+                                    </label>
+                                </div>-->
                         </div>
                         <div class="col-lg-3">
                             <button type="button" class="btn btn-default pull-right" data-animation="am-flip-x" bs-dropdown="dropdown" >Downloads
