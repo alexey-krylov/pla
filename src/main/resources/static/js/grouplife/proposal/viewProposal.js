@@ -39,7 +39,12 @@ var viewProposalModule = (function () {
 
     services.viewProposal = function () {
         var proposalId = this.selectedItem;
-        window.location.href = "/pla/grouplife/proposal/editProposal?proposalId=" + proposalId  + "&mode=view";
+        if(this.status == 'RETURNED' || this.status == 'APPROVED'){
+            window.location.href = "/pla/grouplife/proposal/editProposalReturnStatus?proposalId=" + proposalId  + "&mode=view" + "&status=return";
+        }else {
+
+            window.location.href = "/pla/grouplife/proposal/editProposal?proposalId=" + proposalId + "&mode=view";
+        }
 
     };
     services.viewApprovalProposal = function () {

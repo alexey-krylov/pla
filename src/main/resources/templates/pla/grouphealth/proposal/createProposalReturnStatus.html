@@ -315,7 +315,7 @@
                              </div>-->
                         </div>
                         <div class="col-lg-3">
-                            <button type="button" class="btn btn-default pull-right" data-animation="am-flip-x" bs-dropdown="dropdown">Downloads
+                            <button type="button" class="btn btn-default pull-right" data-animation="am-flip-x" bs-dropdown="dropdown" ng-disabled="isViewMode">Downloads
                             </button>
                         </div>
                     </div>
@@ -323,7 +323,7 @@
                         <div class="col-lg-6 col-lg-offset-3">
                             <div class="form-group">
                                 <input type="text" class="form-control input-sm" ng-model="fileName" style="width: 62%;display: inline-block" ng-readonly="true"/>
-                                <button type="file" class="btn btn-default btn-sm" ng-file-select="" ng-model="fileSaved">Browse</button>
+                                <button type="file" class="btn btn-default btn-sm" ng-file-select="" ng-model="fileSaved" ng-disabled="isViewMode">Browse</button>
                             </div>
                         </div>
                     </div>
