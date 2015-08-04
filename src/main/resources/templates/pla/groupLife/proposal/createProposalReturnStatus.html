@@ -89,9 +89,7 @@
                         <div class="col-sm-6">
                             <button type="button" class="btn btn-default btn-sm" ng-click="back()">Cancel</button>
                         </div>
-                        <div class="col-sm-6">
-                            <button type="button" class="btn btn-default btn-sm" style="float: right"  ng-if="isViewMode" ng-click="back()">Back</button>
-                        </div>
+
                     </div>
                 </div>
 
@@ -161,7 +159,6 @@
                         </div>
                         <div class="col-sm-6">
                             <button type="button" class="btn btn-default btn-sm" style="float: right" ng-click="saveBasicDetails()" ng-disabled="isSaveDisabled(step2)" ng-if="!isViewMode">Save</button>
-                            <button type="button" class="btn btn-default btn-sm" style="float: right"  ng-if="isViewMode" ng-click="back()">Back</button>
                         </div>
                     </div>
                 </div>
@@ -275,7 +272,6 @@
                         </div>
                         <div class="col-sm-6">
                             <button type="button" class="btn btn-default btn-sm" style="float: right" ng-click="saveProposerDetails()" ng-disabled="isSaveDisabled(step3)" ng-if="!isViewMode">Save</button>
-                            <button type="button" class="btn btn-default btn-sm" style="float: right"  ng-if="isViewMode" ng-click="back()">Back</button>
                         </div>
                     </div>
                 </div>
@@ -316,7 +312,6 @@
                         </div>
                         <div class="col-sm-6">
                             <button type="button" class="btn btn-default btn-sm" style="float: right" ng-disabled="!fileSaved" ng-if="!isViewMode" ng-click="savePlanDetails()">Upload &amp; Save</button>
-                            <button type="button" class="btn btn-default btn-sm" style="float: right"  ng-if="isViewMode" ng-click="back()">Back</button>
                         </div>
                     </div>
                 </div>
@@ -402,32 +397,29 @@
                     </div>
                     <div class="col-lg-3" ng-hide="isPolicyTermNot365 || inappropriatePolicyTerm" disable-all-fields="isViewMode">
                         <div class="form-group">
-                            <label>Annual Payment</label>
-                            <input type="radio" class="" ng-model="proposalDetails.premium.optedPremiumFrequency"
-                                   value="ANNUALLY"/>
+                            <label><input type="radio" class="" ng-model="proposalDetails.premium.optedPremiumFrequency"
+                                          value="ANNUALLY" style="margin-right:5px;"/>Annual Payment</label>
+
                             <input type="number" readonly="true" class="form-control input-sm"
                                    ng-model="proposalDetails.premium.annualPremium"/>
                         </div>
                         <div class="form-group">
-                            <label>Semi-Annual Payment</label>
-                            <label class="radio-inline">
-                                <input type="radio" ng-model="proposalDetails.premium.optedPremiumFrequency"
-                                       value="SEMI_ANNUALLY"/>
-                            </label>
+                            <label><input type="radio" ng-model="proposalDetails.premium.optedPremiumFrequency"
+                                          value="SEMI_ANNUALLY" style="margin-right:5px;"/>Semi-Annual Payment</label>
                             <input type="number" readonly="true" class="form-control input-sm"
                                    ng-model="proposalDetails.premium.semiannualPremium"/>
                         </div>
                         <div class="form-group">
-                            <label>Quarterly Payment</label>
-                            <input type="radio" ng-model="proposalDetails.premium.optedPremiumFrequency"
-                                   value="QUARTERLY"/>
+                            <label><input type="radio" ng-model="proposalDetails.premium.optedPremiumFrequency"
+                                          value="QUARTERLY" style="margin-right:5px;"/>Quarterly Payment</label>
+
                             <input type="number" readonly="true" class="form-control input-sm"
                                    ng-model="proposalDetails.premium.quarterlyPremium"/>
                         </div>
                         <div class="form-group">
-                            <label>Monthly Payment</label>
-                            <input type="radio" ng-model="proposalDetails.premium.optedPremiumFrequency"
-                                   value="MONTHLY"/>
+                            <label> <input type="radio" ng-model="proposalDetails.premium.optedPremiumFrequency"
+                                           value="MONTHLY" style="margin-right:5px;"/>Monthly Payment</label>
+
                             <input type="number" readonly="true" class="form-control input-sm"
                                    ng-model="proposalDetails.premium.monthlyPremium"/>
                         </div>
@@ -449,7 +441,6 @@
                             <button type="button" class="btn btn-default btn-sm" style="float: right"
                                     ng-if="!isViewMode" ng-click="savePremiumDetails()" ng-disabled="(!disableSaveButton)">Save
                             </button>
-                            <button type="button" class="btn btn-default btn-sm" style="float: right"  ng-if="isViewMode" ng-click="back()">Back</button>
                         </div>
                     </div>
                 </div>
@@ -541,6 +532,18 @@
                                 </div>
                             </accordion-group>
                         </accordion>
+                        <div class="row">
+
+                            <div class="form-group col-md-11 required">
+                                <label class="control-label">Comments</label>
+                                <textarea  class="form-control input-sm " rows="4" cols="50"
+                                           ng-required="true" name="comment" id="comment"
+                                           ng-model="comment"/>
+
+                            </div>
+
+
+                        </div>
                     </ng-form>
                     <div class="row">
                         <div class="col-sm-6">
@@ -548,7 +551,7 @@
                             <button type="button" class="btn btn-default btn-sm" ng-click="back()">Cancel</button>
                         </div>
                         <div class="col-sm-6">
-                            <button type="button" class="btn btn-default btn-sm" style="float: right" ng-click="submitAdditionalDocument()" ng-disabled="isViewMode">Submit</button>
+                            <button type="button" class="btn btn-default btn-sm" style="float: right" ng-click="submitAdditionalDocument()" ng-disabled="isViewMode || !comment">Submit</button>
                         </div>
                     </div>
                 </div>
@@ -560,6 +563,10 @@
     </form>
 
     <style>
+        textarea.ng-invalid.ng-dirty{
+            border-color: #fa787e;
+        }
+
 
         .fuelux .checkbox-custom:before {
             font-family: "Glyphicons Halflings" !important;

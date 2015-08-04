@@ -63,6 +63,7 @@ angular.module('createProposal', ['common', 'ngRoute', 'mgcrea.ngStrap.select', 
             }
 
 
+
             if (status == 'return') {
                 $scope.stepsSaved["1"] =true;
             }
@@ -513,6 +514,10 @@ angular.module('createProposal', ['common', 'ngRoute', 'mgcrea.ngStrap.select', 
             $scope.back = function () {
                 $window.location.href = 'listgrouphealthproposal';
             }
+            $scope.backToApproverPortlet = function () {
+                $window.location.href = 'viewApprovalProposal';
+            }
+
 
         }])
     .config(['$dropdownProvider', function ($dropdownProvider) {

@@ -515,6 +515,11 @@ angular.module('createProposal', ['common', 'ngRoute', 'mgcrea.ngStrap.select', 
                 $window.location.href = 'listgrouplifeproposal';
             }
 
+            $scope.backToApproverPortlet = function () {
+                $window.location.href = 'viewApprovalProposal';
+            }
+
+
         }])
     .config(['$dropdownProvider', function ($dropdownProvider) {
         angular.extend($dropdownProvider.defaults, {
