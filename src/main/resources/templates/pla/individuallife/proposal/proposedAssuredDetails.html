@@ -161,6 +161,7 @@
                         <small class="error" ng-message="required">Please enter Sex</small>
                     </div>
                 </div>
+
                 <div class="form-group">
                     <label class="control-label">Email Address</label>
                     <input type="email" class="form-control input-sm" name="email" ng-disabled="mode=='new'||mode=='view'" ng-model="proposedAssured.emailAddress"/>
@@ -171,6 +172,7 @@
                     </div>
 
                 </div>
+
             </div>
         </accordion-group>
 
@@ -302,6 +304,7 @@
                     </div>
                 </div>
                 <div class="form-group required">
+                    {{employment.employmentType}}
                     <label class="control-label">Employment Type</label>
                     <select class="form-control input-sm" name="employmentType" ng-required="true" ng-disabled="mode=='new'||mode=='view'" ng-model="employment.employmentType" ng-options="employmentType.employment_id as employmentType.description for employmentType in employmentTypes">
                             </select>

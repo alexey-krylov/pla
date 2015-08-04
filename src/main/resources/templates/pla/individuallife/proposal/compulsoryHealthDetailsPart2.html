@@ -9,7 +9,7 @@
                         <i class="pull-right glyphicon"
                            ng-class="{'glyphicon-chevron-down': accordionStatus.healthDetailsPart2.tab1, 'glyphicon-chevron-right': !accordionStatus.healthDetailsPart2.tab1}"></i>
                     </accordion-heading>
-                    <div class="col-md-12">
+                    <div class="col-md-12" ng-if="compulsoryHealthDetails[7].answer == 'true' ">
                         <textarea class="form-control" ng-model="compulsoryHealthDetails[7].answerResponse" placeholder="Please give full details  e.g. name and address of attending doctor, treatment and results etc"></textarea>
                     </div>
                 </accordion-group>
@@ -17,8 +17,8 @@
             <div class="col-md-2">
                 <select class="form-control input-sm" ng-model="compulsoryHealthDetails[7].answer" ng-change="compulsoryHealthDetails[7].questionId=21">
                     <option value="">--Select One--</option>
-                    <option value="true" ng-value="true">Yes</option>
-                    <option value="false" ng-value="true">No</option>
+                    <option value="true">Yes</option>
+                    <option value="false">No</option>
                 </select>
             </div>
         </div>
@@ -31,7 +31,7 @@
                         <i class="pull-right glyphicon"
                            ng-class="{'glyphicon-chevron-down': accordionStatus.healthDetailsPart2.tab2, 'glyphicon-chevron-right': !accordionStatus.healthDetailsPart2.tab2}"></i>
                     </accordion-heading>
-                    <div class="col-md-12">
+                    <div class="col-md-12" ng-if="compulsoryHealthDetails[8].answer == 'true' ">
                         <textarea class="form-control" ng-model="compulsoryHealthDetails[8].answerResponse" placeholder="Please give full details  e.g. name and address of attending doctor, treatment and results etc"></textarea>
                     </div>
                 </accordion-group>
@@ -53,7 +53,7 @@
                         <i class="pull-right glyphicon"
                            ng-class="{'glyphicon-chevron-down': accordionStatus.healthDetailsPart2.tab3, 'glyphicon-chevron-right': !accordionStatus.healthDetailsPart2.tab3}"></i>
                     </accordion-heading>
-                    <div class="col-md-12">
+                    <div class="col-md-12" ng-if="compulsoryHealthDetails[9].answer == 'true' ">
                         <textarea class="form-control" ng-model="compulsoryHealthDetails[9].answerResponse" placeholder="Please give full details  e.g. name and address of attending doctor, treatment and results etc"></textarea>
                     </div>
                 </accordion-group>
@@ -62,7 +62,7 @@
                 <select class="form-control input-sm" ng-model="compulsoryHealthDetails[9].answer" ng-change="compulsoryHealthDetails[9].questionId=23">
                     <option value="">--Select One--</option>
                     <option value="true" ng-value="true">Yes</option>
-                    <option value="true" ng-value="false">No</option>
+                    <option value="false" ng-value="false">No</option>
                 </select>
             </div>
         </div>
@@ -75,7 +75,7 @@
                         <i class="pull-right glyphicon"
                            ng-class="{'glyphicon-chevron-down': accordionStatus.healthDetailsPart2.tab4, 'glyphicon-chevron-right': !accordionStatus.healthDetailsPart2.tab4}"></i>
                     </accordion-heading>
-                    <div class="col-md-12">
+                    <div class="col-md-12" ng-if="compulsoryHealthDetails[10].answer == 'true' ">
                         <textarea class="form-control" ng-model="compulsoryHealthDetails[10].answerResponse" placeholder="Please give full details  e.g. name and address of attending doctor, treatment and results etc"></textarea>
                     </div>
                 </accordion-group>
@@ -97,7 +97,7 @@
                         <i class="pull-right glyphicon"
                            ng-class="{'glyphicon-chevron-down': accordionStatus.healthDetailsPart2.tab5, 'glyphicon-chevron-right': !accordionStatus.healthDetailsPart2.tab5}"></i>
                     </accordion-heading>
-                    <div class="col-md-12">
+                    <div class="col-md-12" ng-if="compulsoryHealthDetails[11].answer == 'true' ">
                         <textarea class="form-control" ng-model="compulsoryHealthDetails[11].answerResponse" placeholder="Please give full details  e.g. name and address of attending doctor, treatment and results etc"></textarea>
                     </div>
                 </accordion-group>
@@ -119,7 +119,7 @@
                         <i class="pull-right glyphicon"
                            ng-class="{'glyphicon-chevron-down': accordionStatus.healthDetailsPart2.tab6, 'glyphicon-chevron-right': !accordionStatus.healthDetailsPart2.tab6}"></i>
                     </accordion-heading>
-                    <div class="col-md-12">
+                    <div class="col-md-12" ng-if="compulsoryHealthDetails[12].answer == 'true' ">
                         <textarea class="form-control" ng-model="compulsoryHealthDetails[12].answerResponse" placeholder="Please give full details  e.g. name and address of attending doctor, treatment and results etc"></textarea>
                     </div>
                 </accordion-group>
@@ -141,7 +141,7 @@
                         <i class="pull-right glyphicon"
                            ng-class="{'glyphicon-chevron-down': accordionStatus.healthDetailsPart2.tab7, 'glyphicon-chevron-right': !accordionStatus.healthDetailsPart2.tab7}"></i>
                     </accordion-heading>
-                    <div class="col-md-12">
+                    <div class="col-md-12" ng-if="compulsoryHealthDetails[13].answer == 'true' ">
                         <textarea class="form-control"   ng-model="compulsoryHealthDetails[13].answerResponse"
                                   placeholder="Please give full details  e.g. name and address of attending doctor, treatment and results etc">
 
@@ -167,7 +167,7 @@
                         <i class="pull-right glyphicon"
                            ng-class="{'glyphicon-chevron-down': accordionStatus.healthDetailsPart2.tab8, 'glyphicon-chevron-right': !accordionStatus.healthDetailsPart2.tab8}"></i>
                     </accordion-heading>
-                    <div class="col-md-12">
+                    <div class="col-md-12" ng-if="compulsoryHealthDetails[14].answer == 'true' ">
                         <textarea class="form-control" ng-model="compulsoryHealthDetails[14].answerResponse" placeholder="Please give full details  e.g. name and address of attending doctor, treatment and results etc"></textarea>
                     </div>
                 </accordion-group>
