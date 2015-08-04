@@ -41,9 +41,11 @@
     <form>
         <div class="wizard fuelux-wizard" selected-item="selectedWizard">
             <ul class="steps" style="margin-left: 0">
+
                 <li data-step="1">
                     <span class="badge badge-info">A</span><span class="chevron"></span>
                 </li>
+
                 <li data-step="2">
                     <span class="badge badge-info">B</span><span class="chevron"></span>
                 </li>
@@ -71,6 +73,9 @@
                 <li data-step="10">
                     <span class="badge badge-info">J</span><span class="chevron"></span>
                 </li>
+                <li data-step="11">
+                    <span class="badge badge-info">K</span><span class="chevron"></span>
+                </li>
             </ul>
 
             <div class="actions">
@@ -81,36 +86,40 @@
                 <button type="button" class="btn btn-default btn-next">Next<span class="glyphicon glyphicon-arrow-right"></span></button>
             </div>
             <div class="step-content">
+
                 <div class="step-pane" data-step="1">
-                    <ng-include src="resources.proposedAssuredUrl | getTrustedUrl"></ng-include>
+                    <ng-include src="resources.approvalDetails | getTrustedUrl"></ng-include>
                 </div>
                 <div class="step-pane" data-step="2">
-                    <ng-include src="resources.proposerDetails | getTrustedUrl"></ng-include>
+                    <ng-include src="resources.proposedAssuredUrl | getTrustedUrl"></ng-include>
                 </div>
                 <div class="step-pane" data-step="3">
-                    <ng-include src="resources.planDetails | getTrustedUrl"></ng-include>
+                    <ng-include src="resources.proposerDetails | getTrustedUrl"></ng-include>
                 </div>
                 <div class="step-pane" data-step="4">
-                    <ng-include src="resources.generalDetails | getTrustedUrl"></ng-include>
+                    <ng-include src="resources.planDetails | getTrustedUrl"></ng-include>
                 </div>
                 <div class="step-pane" data-step="5">
-                    <ng-include src="resources.compulsoryHealthDetailsPart1 | getTrustedUrl"></ng-include>
+                    <ng-include src="resources.generalDetails | getTrustedUrl"></ng-include>
                 </div>
                 <div class="step-pane" data-step="6">
-                    <ng-include src="resources.compulsoryHealthDetailsPart2 | getTrustedUrl"></ng-include>
+                    <ng-include src="resources.compulsoryHealthDetailsPart1 | getTrustedUrl"></ng-include>
                 </div>
                 <div class="step-pane" data-step="7">
-                    <ng-include src="resources.familyHabitAndBuild | getTrustedUrl"></ng-include>
+                    <ng-include src="resources.compulsoryHealthDetailsPart2 | getTrustedUrl"></ng-include>
                 </div>
                 <div class="step-pane" data-step="8">
+                    <ng-include src="resources.familyHabitAndBuild | getTrustedUrl"></ng-include>
+                </div>
+                <div class="step-pane" data-step="9">
                     <ng-include src="resources.additionalDetail | getTrustedUrl"></ng-include>
                 </div>
 
-               <div class="step-pane" data-step="9">
+                <div class="step-pane" data-step="10">
                     <ng-include src="resources.premiumDetail | getTrustedUrl"></ng-include>
                 </div>
 
-                <div class="step-pane" data-step="10">
+                <div class="step-pane" data-step="11">
                     <ng-include src="resources.mandatoryDocumentDetails | getTrustedUrl"></ng-include>
                 </div>
 
@@ -137,7 +146,7 @@
                                            ng-model="agent.agentId" ng-required="true" ng-change="clearAgentDetails()"
                                            ng-blur="searchAgent()"
                                            ng-disabled="mode=='new'">
-                                           </input>
+                                    </input>
                                     <div class="input-group-btn">
                                         <button type="button" class="btn btn-default btn-sm" ng-click="searchAgent()"
                                                 ng-disabled="!agent.agentId || mode=='new'">
@@ -175,33 +184,33 @@
         </div>
     </div>
 
-<div class="modal fade" id="policyModal" tabindex="-1" role="dialog" aria-labelledby="policyModal">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3 class="modal-title">Policy Details</h3>
-            </div>
-            <div class="modal-body">
-                <div class="row">
-                    <div class="col-md-12">
-                        <div class="form-group required">
-                            <label class="control-label">Policy Number</label>
-                            <input type="text" class="form-control input-sm" name="policyNumber" ng-model="policy.policyOrProposalNumber"/>
-                        </div>
-                        <div class="form-group required">
-                            <label class="control-label">Sum Assured</label>
-                            <input type="text" class="form-control input-sm" name="sumAssured" ng-model="policy.amount"/>
+    <div class="modal fade" id="policyModal" tabindex="-1" role="dialog" aria-labelledby="policyModal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="modal-title">Policy Details</h3>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group required">
+                                <label class="control-label">Policy Number</label>
+                                <input type="text" class="form-control input-sm" name="policyNumber" ng-model="policy.policyOrProposalNumber"/>
+                            </div>
+                            <div class="form-group required">
+                                <label class="control-label">Sum Assured</label>
+                                <input type="text" class="form-control input-sm" name="sumAssured" ng-model="policy.amount"/>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-            <div class="modal-footer">
-                <button class="btn btn-default" ng-click="addPolicyDetails(policy)">Add</button>
-                <button class="btn btn-default" ng-click="cancel()">Cancel</button>
+                <div class="modal-footer">
+                    <button class="btn btn-default" ng-click="addPolicyDetails(policy)">Add</button>
+                    <button class="btn btn-default" ng-click="cancel()">Cancel</button>
+                </div>
             </div>
         </div>
     </div>
-</div>
 
     <div class="modal fade" id="assuredByOthersModal" tabindex="-1" role="dialog" aria-labelledby="assuredByOthersModal">
         <div class="modal-dialog">
@@ -280,7 +289,7 @@
                             </div>
                             <div class="form-group required">
                                 <label class="control-label">Date of Proposal</label>
-                               <!-- <input type="text" class="form-control input-sm" name="proposalDate" ng-model="insurer2.date"/>-->
+                                <!-- <input type="text" class="form-control input-sm" name="proposalDate" ng-model="insurer2.date"/>-->
 
                                 <div class='input-group date'>
                                     <input type="text" class="form-control input-sm"
@@ -370,11 +379,11 @@
                                 <label class="control-label">NRC</label>
                                 <input type="text" class="form-control input-sm" ng-disabled="mode=='new'||mode=='view'" ng-maxlength="11" ng-pattern="/^[0-9]{6}\/[0-9]{2}\/[0-9]{1}$/" name="beneficiaryNrc" ng-model="beneficiary.nrc"/>
 
-                              <div class="error" ng-messages="planBeneficiary.beneficiaryNrc.$error" ng-if="planBeneficiary.beneficiaryNrc.$dirty">
+                                <div class="error" ng-messages="planBeneficiary.beneficiaryNrc.$error" ng-if="planBeneficiary.beneficiaryNrc.$dirty">
                                     <small class="error" ng-message="required">Please enter NRC.</small>
                                     <small ng-message="maxlength">Only 11 characters are allowed.</small>
                                     <small ng-message="pattern"> Follow Pattern 999999/99/1</small>
-                              </div>
+                                </div>
 
                             </div>
 
@@ -403,7 +412,7 @@
                             </div>
                             <div class="form-group">
                                 <label class="control-label">Date Of Birth</label>
-                               <!-- <input type="text" class="form-control input-sm" name="dob" ng-model="beneficiary.dob"/>-->
+                                <!-- <input type="text" class="form-control input-sm" name="dob" ng-model="beneficiary.dob"/>-->
                                 <div class='input-group date'>
                                     <input type="text" class="form-control input-sm"
                                            datepicker-popup="" view-enabled=""

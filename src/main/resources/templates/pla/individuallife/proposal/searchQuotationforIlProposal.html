@@ -59,7 +59,7 @@
                 <div class="form-group">
                     <label th:text="#{quotationNumber}">Quotation Number</label>
                     <input type="text" class="form-control input-sm" name="quotationNumber" ng-model="quotationNumber" /><!--th:value="${searchCriteria.quotationNumber}"-->
-                    <input type="hidden" class="form-control input-sm" name="quotationStatus" ng-value="GENERATED" th:value="GENERATED" ng-model="quotationStatus" />
+                    <!--<input type="hidden" class="form-control input-sm" name="quotationStatus" ng-value="GENERATED" th:value="GENERATED" ng-model="quotationStatus" />-->
                 </div>
 
             </div>
@@ -89,7 +89,6 @@
                             <th style="width: 1%"></th>
                             <th th:text="#{quotationNumber}">Quotation Number</th>
                             <th th:text="#{quotationCreatedOn}">Quotation Date</th>
-
                             <th th:text="#{agentName}">Agent Name</th>
                             <th th:text="#{proposerName}">Proposer Name</th>
                             <th th:text="#{versionNumber}">Version Number</th>

@@ -193,7 +193,7 @@
                                     <i class="pull-right glyphicon"
                                        ng-class="{'glyphicon-chevron-down': accordionStatus.familyHabitAndBuild.tab2_1, 'glyphicon-chevron-right': !accordionStatus.familyHabitAndBuild.tab2_1}"></i>
                                 </accordion-heading>
-                                <div class="col-md-12">
+                                <div class="col-md-12" ng-if="questionList[0].answer == 'true'">
                                     <textarea class="form-control" ng-model="questionList[0].answerResponse"
                                               placeholder="Please give full details  e.g. name and address of attending doctor, diagnosis etc">
                                     </textarea>
@@ -218,7 +218,7 @@
                                     <i class="pull-right glyphicon"
                                        ng-class="{'glyphicon-chevron-down': accordionStatus.familyHabitAndBuild.tab2_2, 'glyphicon-chevron-right': !accordionStatus.familyHabitAndBuild.tab2_2}"></i>
                                 </accordion-heading>
-                                <div class="col-md-12">
+                                <div class="col-md-12" ng-if="questionList[1].answer == 'true'">
                                     <textarea class="form-control" ng-model="questionList[1].answerResponse"
                                               placeholder="Please give full details  "></textarea>
                                 </div>
@@ -241,7 +241,7 @@
                                     <i class="pull-right glyphicon"
                                        ng-class="{'glyphicon-chevron-down': accordionStatus.familyHabitAndBuild.tab2_3, 'glyphicon-chevron-right': !accordionStatus.familyHabitAndBuild.tab2_3}"></i>
                                 </accordion-heading>
-                                <div class="col-md-12">
+                                <div class="col-md-12" ng-if="questionList[2].answer == 'true'">
                                     <textarea class="form-control" ng-model="questionList[2].answerResponse" placeholder="Please give full details  "></textarea>
                                 </div>
                             </accordion-group>
@@ -263,7 +263,7 @@
                                     <i class="pull-right glyphicon"
                                        ng-class="{'glyphicon-chevron-down': accordionStatus.familyHabitAndBuild.tab2_4, 'glyphicon-chevron-right': !accordionStatus.familyHabitAndBuild.tab2_4}"></i>
                                 </accordion-heading>
-                                <div class="col-md-12">
+                                <div class="col-md-12" ng-if="questionList[3].answer == 'true'">
                                     <textarea class="form-control" placeholder="Please give full details " ng-model="questionList[3].answerResponse" ></textarea>
                                 </div>
                             </accordion-group>
@@ -316,7 +316,7 @@
                                 <i class="pull-right glyphicon"
                                    ng-class="{'glyphicon-chevron-down': accordionStatus.familyHabitAndBuild.tab3_1, 'glyphicon-chevron-right': !accordionStatus.familyHabitAndBuild.tab3_1}"></i>
                             </accordion-heading>
-                            <div class="col-md-12">
+                            <div class="col-md-12" ng-if="build.overWeightQuestion.answer == 'true'">
                                 <textarea class="form-control" ng-model="build.overWeightQuestion.answerResponse"
                                           placeholder="state whether increase or decrease, by how much, reason and for long present weight has remained constant."></textarea>
                             </div>
@@ -335,20 +335,20 @@
 
     <strong>For Female Applicants</strong>
     <div class="row bs-callout  bs-callout-info" style="margin: 5px;padding:10px">
-        <div class="col-md-2">
-            Are you now pregnant?
+        <div class="col-md-2 form-group required">
+            <label class="control-label"> Are you now pregnant?</label>
         </div>
         <div class="col-md-2">
-            <select class="form-control input-sm" ng-model="familyPersonalDetail.isPregnant">
+            <select class="form-control input-sm" ng-required="true" ng-model="familyPersonalDetail.isPregnant">
                 <option value="">--Select One--</option>
                 <option value="true" ng-value="true">Yes</option>
                 <option value="false" ng-value="false">No</option>
             </select>
         </div>
         <div class="col-md-2 col-md-offset-6">
-            <div class="form-group">
+            <div class="form-group required" ng-if="familyPersonalDetail.isPregnant == 'true' ">
                 <label class="control-label">If <strong>Yes</strong> how many months?</label>
-                <input type="number" class="form-control input-sm" ng-model="familyPersonalDetail.pregnancyMonth"/>
+                <input type="number" class="form-control input-sm" ng-required="true" ng-model="familyPersonalDetail.pregnancyMonth"/>
             </div>
         </div>
     </div>

@@ -6,7 +6,7 @@
                                 ng-class="{'glyphicon-chevron-down': accordionStatus.planDetails.plan, 'glyphicon-chevron-right': !accordionStatus.planDetails.plan}"></i>
             </accordion-heading>
             <div class="col-md-6">
-                <div class="form-group">
+                <div class="form-group required">
                     <label class="control-label">Plan</label>
                    <!--<input type="text" class="form-control input-sm" name="plan" ng-blur="searchRiders()" ng-model="proposalPlanDetail.planId"/>-->
 {{planSelected}}
@@ -27,7 +27,7 @@
                     </div>-->
                 </div>
                 <div class="form-group">
-                    <label class="control-label">Policy Term</label>
+                    <label class="control-label" ng-if="selectPlanResponse">Policy Term</label>
                     <!--<input type="number" class="form-control input-sm" name="policyTerm"  ng-disabled="mode=='new'||mode=='view'" ng-model="proposalPlanDetail.policyTerm"/>-->
 
                     <policyterm term-type="proposalPlanDetail.policyTerm"
@@ -88,7 +88,7 @@
                             </td>
 
                             <td>
-                            <input type="number"  ng-disabled="mode=='new'||mode=='view'" contenteditable="updateFlag"  ng-model="searchRider.waiverOfPremium" value="{{searchRider.waiverOfPremium}}"/>
+                            <input type="number"  ng-disabled="mode=='new'||mode=='view'" contenteditable="updateFlag"  ng-init="shareSumTest()" ng-model="searchRider.waiverOfPremium" value="{{searchRider.waiverOfPremium}}"/>
                             <!-- <div contenteditable="true" ng-model="row.update" ng-blur="test(row)" ng-change="test(row)" >{{row.commission}}</div>-->
                         </td>
                         </tr>
@@ -98,12 +98,12 @@
             </div>
             <div class="col-md-6">
                 <div class="form-group">
-                    <label class="control-label">Sum Assured</label>
+                    <label class="control-label" ng-if="selectPlanResponse">Sum Assured</label>
                    <!-- <input type="number" class="form-control input-sm" name="sumAssured"  ng-disabled="mode=='new'||mode=='view'" ng-model="proposalPlanDetail.sumAssured"/>-->
                     <sumassured ng-model="proposalPlanDetail.sumAssured"></sumassured>
                 </div>
                 <div class="form-group">
-                    <label class="control-label">Premium Payment Term</label>
+                    <label class="control-label" ng-if="selectPlanResponse">Premium Payment Term</label>
                     <!--<input type="number" class="form-control input-sm" name="plan"  ng-disabled="mode=='new'||mode=='view'" ng-model="proposalPlanDetail.premiumPaymentTerm"/>-->
                     <premiumterm plan="plan" proposedAssured="proposedAssured"></premiumterm>
                 </div>
@@ -155,6 +155,7 @@
             <button type="button" class="btn btn-default btn-sm">Cancel</button>
         </div>
         <div class="col-sm-6">
+            {{commisionStatus}}
             <button type="button" class="btn btn-default btn-sm" style="float: right" ng-disabled="commisionStatus" ng-hide="mode=='new'||mode=='view'" ng-click="savePlanDetail()">Save</button>
         </div>
     </div>
@@ -180,12 +181,12 @@
                         ng-required="true"></select>
             </div>
             <div ng-switch-when="RANGE">
+
                 <input type="number" view-enabled="" class="form-control input-sm"
                        min="{{coverage.sumAssured.minSumInsured}}"
                        name="sumAssured"
                        max="{{coverage.sumAssured.maxSumInsured}}" ng-model="searchRider.sumAssured" ng-required="true"/>
-
-                <div class="error" ng-messages="step4.sumAssured.$error">
+                <div class="error" ng-messages="step3.sumAssured.$error">
                     <small ng-message="min">Sum Assured cannot be less then {{coverage.sumAssured.minSumInsured}}.</small>
                     <small ng-message="max">Sum Assured cannot be more than {{coverage.sumAssured.maxSumInsured}}.</small>
                 </div>
@@ -194,7 +195,7 @@
                 <input type="number" view-enabled="" class="form-control input-sm" min="0"
                        max="{{coverage.sumAssured.maxLimit}}"
                        name="sumAssured"
-                       ng-model="rider.sumAssured" ng-required="true"/>
+                       ng-model="searchRider.sumAssured" ng-required="true"/>
 
                 <div class="error" ng-messages="step3.sumAssured.$error" ng-if="step3.$dirty">
                     <small ng-message="max">Sum Assured cannot be greater than {{coverage.sumAssured.incomeMultiplier}}.
@@ -217,6 +218,7 @@
 
     <script id="plan-coverage.tpl" type="text/ng-template">
         <div ng-switch="getCoverageTermType(searchRider)">
+            {{searchRider.coverTerm}}
             <div ng-switch-when="SPECIFIED_VALUES">
                 <select class="form-control input-sm" view-enabled="" ng-model="searchRider.coverTerm" name="policyTerm"
                         ng-options="value.text as value.text for value in policyTerms" ng-required="true"></select>
@@ -225,6 +227,12 @@
                 <select class="form-control input-sm" view-enabled="" ng-model="searchRider.coverTerm" name="policyTerm"
                         ng-options="value.text as value.text for value in policyTerms" ng-required="true"></select>
             </div>
+
+            <!--<div ng-switch-when="POLICY_TERM">
+                <select class="form-control input-sm" view-enabled="" ng-model="searchRider.coverTerm" name="policyTerm"
+                        ng-options="value.text as value.text for value in policyTerms" ng-required="true"></select>
+            </div>-->
+
         </div>
     </script>
 
