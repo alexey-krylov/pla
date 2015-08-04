@@ -23,6 +23,7 @@ import java.math.BigDecimal;
 import java.util.Set;
 
 import static com.google.common.base.Preconditions.checkArgument;
+import static org.nthdimenzion.utils.UtilValidator.isNotEmpty;
 
 /**
  * Created by Samir on 6/24/2015.
@@ -124,7 +125,9 @@ public class GroupHealthProposal extends AbstractAggregateRoot<ProposalId> {
         this.submittedOn = submittedOn;
         this.proposalStatus = ProposalStatus.PENDING_ACCEPTANCE;
         registerEvent(new GHQuotationConvertedToProposalEvent(this.quotation.getQuotationNumber(), this.quotation.getQuotationId()));
-//        registerEvent(new GHProposalStatusAuditEvent(this.getProposalId(), ProposalStatus.PENDING_ACCEPTANCE, submittedBy, comment, submittedOn));
+        if (isNotEmpty(comment)) {
+            registerEvent(new GHProposalStatusAuditEvent(this.getProposalId(), ProposalStatus.PENDING_ACCEPTANCE, submittedBy, comment, submittedOn));
+        }
         return this;
     }
 

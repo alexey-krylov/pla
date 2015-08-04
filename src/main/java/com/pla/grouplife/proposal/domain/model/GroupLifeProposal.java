@@ -24,6 +24,7 @@ import java.math.BigDecimal;
 import java.util.Set;
 
 import static com.google.common.base.Preconditions.checkArgument;
+import static org.nthdimenzion.utils.UtilValidator.isNotEmpty;
 
 /**
  * Created by Samir on 6/24/2015.
@@ -121,7 +122,9 @@ public class GroupLifeProposal extends AbstractAggregateRoot<ProposalId> {
         this.submittedOn = submittedOn;
         this.proposalStatus = GLProposalStatus.PENDING_ACCEPTANCE;
         registerEvent(new GLQuotationConvertedToProposalEvent(this.quotation.getQuotationNumber(), this.quotation.getQuotationId()));
-        //registerEvent(new GLProposalStatusAuditEvent(this.getProposalId(), GLProposalStatus.PENDING_ACCEPTANCE, submittedBy, comment, submittedOn));
+        if (isNotEmpty(comment)) {
+            registerEvent(new GLProposalStatusAuditEvent(this.getProposalId(), GLProposalStatus.PENDING_ACCEPTANCE, submittedBy, comment, submittedOn));
+        }
         return this;
     }
 
