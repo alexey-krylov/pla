@@ -5,5 +5,27 @@ package com.pla.publishedlanguage.domain.model;
  */
 public enum PremiumFrequency {
 
-    ANNUALLY, SEMI_ANNUALLY, QUARTERLY, MONTHLY
+    ANNUALLY {
+        @Override
+        public int getNoOfPremiumYearlyFactor() {
+            return 1;
+        }
+    }, SEMI_ANNUALLY {
+        @Override
+        public int getNoOfPremiumYearlyFactor() {
+            return 2;
+        }
+    }, QUARTERLY {
+        @Override
+        public int getNoOfPremiumYearlyFactor() {
+            return 3;
+        }
+    }, MONTHLY {
+        @Override
+        public int getNoOfPremiumYearlyFactor() {
+            return 0;
+        }
+    };
+
+    public abstract int getNoOfPremiumYearlyFactor();
 }

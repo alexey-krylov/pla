@@ -2,6 +2,7 @@ package com.pla.grouplife.sharedresource.model.vo;
 
 import com.pla.sharedkernel.domain.model.FamilyId;
 import com.pla.sharedkernel.domain.model.Gender;
+import com.pla.sharedkernel.domain.model.Relationship;
 import com.pla.sharedkernel.identifier.PlanId;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -59,6 +60,8 @@ public class Insured {
 
     private FamilyId familyId;
 
+    private Relationship relationship;
+
     Insured(InsuredBuilder insuredBuilder) {
         checkArgument(insuredBuilder != null);
         this.planPremiumDetail = insuredBuilder.getPlanPremiumDetail();
@@ -75,7 +78,7 @@ public class Insured {
         this.annualIncome = insuredBuilder.getAnnualIncome();
         this.occupationClass = insuredBuilder.getOccupation();
         this.coveragePremiumDetails = insuredBuilder.getCoveragePremiumDetails();
-        this.noOfAssured=insuredBuilder.getNoOfAssured();
+        this.noOfAssured = insuredBuilder.getNoOfAssured();
 
     }
 
