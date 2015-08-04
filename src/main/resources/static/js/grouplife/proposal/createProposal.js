@@ -356,6 +356,19 @@ angular.module('createProposal', ['common', 'ngRoute', 'mgcrea.ngStrap.select', 
                 });
 
             }
+            $scope.submitComments = function(comment){
+                $http.post('/pla/grouphealth/proposal/submit', angular.extend({},
+                    {"proposalId": $scope.proposalId,comment:comment})).success(function (data) {
+                    if (data.status == "200") {
+                        saveStep();
+                        $('#searchFormProposal').val($scope.proposalId);
+                        $('#searchForm').submit();
+                    }
+
+                });
+
+            }
+
             $scope.disableSaveButton=false;
             $scope.$watch( 'proposalDetails.premium.optedPremiumFrequency',function(newValue, oldValue){
                 console.log("$scope.proposalDetails.premium.optedPremiumFrequency::"+$scope.proposalDetails.premium.optedPremiumFrequency);
