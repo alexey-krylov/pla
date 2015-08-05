@@ -121,6 +121,11 @@
                                 aggregate-type="com.pla.grouplife.policy.domain.model.GroupLifePolicy"
                                 mongo-template="mongoTemplate"/>
 
+    <extension:mongo-repository id="ilPolicyMongoRepository"
+                                aggregate-type="com.pla.individuallife.policy.domain.model.IndividualLifePolicy"
+                                mongo-template="mongoTemplate"/>
+
+
     <bean id="gridFsTemplate" class="org.springframework.data.mongodb.gridfs.GridFsTemplate">
         <constructor-arg name="dbFactory" ref="mongoDbFactory"/>
         <constructor-arg name="converter" ref="mappingConverter"/>

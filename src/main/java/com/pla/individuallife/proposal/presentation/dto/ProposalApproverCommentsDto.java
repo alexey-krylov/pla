@@ -1,6 +1,6 @@
 package com.pla.individuallife.proposal.presentation.dto;
 
-import com.pla.grouphealth.sharedresource.model.vo.ProposalStatus;
+import com.pla.individuallife.proposal.domain.model.ILProposalStatus;
 import com.pla.sharedkernel.identifier.ProposalId;
 import lombok.Getter;
 import lombok.Setter;
@@ -19,7 +19,7 @@ public class ProposalApproverCommentsDto {
 
     private ProposalId proposalId;
 
-    private ProposalStatus proposalStatus;
+    private ILProposalStatus proposalStatus;
 
     private DateTime modifiedOn;
 

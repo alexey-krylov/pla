@@ -3,7 +3,7 @@
         <div class="row form-group">
             <div class="col-md-6">
                 <label class="control-label">Premium Payment Frequency</label>
-               <!-- <input type="text" class="form-control input-sm" ng-model="premiumPaymentDetails.premiumFrequency"/>-->
+                <!-- <input type="text" class="form-control input-sm" ng-model="premiumPaymentDetails.premiumFrequency"/>-->
                 <select class="form-control input-sm" name="gender" ng-disabled="mode=='new'||mode=='view'" ng-model="premiumPaymentDetails.premiumFrequency">
                     <option  value="ANNUALLY">Yearly</option>
                     <option  value="SEMI_ANNUALLY">Half Yearly</option>
@@ -16,8 +16,8 @@
                 <!--<input type="text" class="form-control input-sm" ng-model="premiumPaymentDetails.premiumPaymentMethod" />-->
                 <select class="form-control input-sm" name="gender" ng-disabled="mode=='new'||mode=='view'" ng-model="premiumPaymentDetails.premiumPaymentMethod">
                     <option value="CASH" >CASH</option>
-                    <option value="STOPORDER">Stop Order</option>
-                    <option value="DEBITORDER">Bank Debit Order</option>
+                    <option value="STOP_ORDER">Stop Order</option>
+                    <option value="DEBIT_ORDER">Bank Debit Order</option>
                     <option value="CHEQUE"> Cheque</option>
                 </select>
             </div>
@@ -29,22 +29,22 @@
         <accordion-group is-open=" " ng-form=" ">
             <accordion-heading>
                 Employer Details<i class="pull-right glyphicon"
-                           ng-class="{'glyphicon-chevron-down': accordionStatus.proposerDetails.proposedAssured, 'glyphicon-chevron-right': !accordionStatus.proposerDetails.proposedAssured}"></i>
+                                   ng-class="{'glyphicon-chevron-down': accordionStatus.proposerDetails.proposedAssured, 'glyphicon-chevron-right': !accordionStatus.proposerDetails.proposedAssured}"></i>
             </accordion-heading>
             <div class="col-md-6">
-                <div class="form-group required" ng-if="premiumPaymentDetails.premiumPaymentMethod == 'STOPORDER'">
+                <div class="form-group required" ng-if="premiumPaymentDetails.premiumPaymentMethod == 'STOP_ORDER'">
                     <label class="control-label">Employee No</label>
                     <input type="text" class="form-control input-sm" name="employeeNumber" ng-model="premiumEmployerDetails.employeeId" ng-disabled="mode=='new'||mode=='view'" ng-maxlength="20"
-                            ng-required="true"/>
+                           ng-required="true"/>
                 </div>
 
-                <div class="form-group required" ng-if="premiumPaymentDetails.premiumPaymentMethod == 'STOPORDER'">
+                <div class="form-group required" ng-if="premiumPaymentDetails.premiumPaymentMethod == 'STOP_ORDER'">
                     <label class="control-label">Company Name and Postal Address</label>
                     <input type="text" class="form-control input-sm" name="surname" ng-model="premiumEmployerDetails.companyNameAndPostalAddress" ng-disabled="mode=='new'||mode=='view'"  ng-maxlength="20" ng-required="true"/>
                 </div>
-                <div class="form-group required" ng-if="premiumPaymentDetails.premiumPaymentMethod == 'STOPORDER'">
+                <div class="form-group required" ng-if="premiumPaymentDetails.premiumPaymentMethod == 'STOP_ORDER'">
                     <label class="control-label">Per</label>
-                   <!-- <input type="text" class="form-control input-sm" name="nrc" ng-model="premiumEmployerDetails.salaryPer" ng-disabled="mode=='new'||mode=='view'"/>-->
+                    <!-- <input type="text" class="form-control input-sm" name="nrc" ng-model="premiumEmployerDetails.salaryPer" ng-disabled="mode=='new'||mode=='view'"/>-->
                     <select class="form-control input-sm" name="gender" ng-disabled="mode=='new'||mode=='view'" ng-model="premiumEmployerDetails.salaryPer">
                         <option value="ANNUALLY">ANNUALLY</option>
                         <option value="MONTHLY">MONTHLY</option>
@@ -54,12 +54,12 @@
                 </div>
             </div>
             <div class="col-md-6">
-                <div class="form-group required" ng-if="premiumPaymentDetails.premiumPaymentMethod == 'STOPORDER'">
+                <div class="form-group required" ng-if="premiumPaymentDetails.premiumPaymentMethod == 'STOP_ORDER'">
                     <label class="control-label">Man No</label>
                     <input type="text" class="form-control input-sm"  ng-model="premiumEmployerDetails.manNumber" ng-disabled="mode=='new' || mode=='view'" name="firstName"
                            ng-maxlength="20" ng-required="true"/>
                 </div>
-                <div class="form-group" ng-if="premiumPaymentDetails.premiumPaymentMethod == 'STOPORDER'">
+                <div class="form-group" ng-if="premiumPaymentDetails.premiumPaymentMethod == 'STOP_ORDER'">
                     <label class="control-label">Basic Salary</label>
                     <input type="text" class="form-control input-sm" ng-model="premiumEmployerDetails.basicSalary" ng-disabled="mode=='new'||mode=='view'" name="otherName" />
 
@@ -73,7 +73,7 @@
                                 ng-class="{'glyphicon-chevron-down': accordionStatus.proposerDetails.spouseDetails, 'glyphicon-chevron-right': !accordionStatus.proposerDetails.spouseDetails}"></i>
             </accordion-heading>
             <div class="col-md-6">
-                <div class="form-group required" ng-if="premiumPaymentDetails.premiumPaymentMethod == 'DEBITORDER'">
+                <div class="form-group required" ng-if="premiumPaymentDetails.premiumPaymentMethod == 'DEBIT_ORDER'">
                     <label class="control-label">Bank Branch Sort Code</label>
                     <input type="text" class="form-control input-sm" readonly="true" ng-model="bankDetails.bankBranchSortCode" ng-disabled="mode=='new'||mode=='view'" name="spouseSurname"  ng-maxlength="20"
                            ng-required="true"/>
@@ -83,9 +83,9 @@
                     </select>-->
 
                 </div>
-                <div class="form-group required" ng-if="premiumPaymentDetails.premiumPaymentMethod == 'DEBITORDER'">
+                <div class="form-group required" ng-if="premiumPaymentDetails.premiumPaymentMethod == 'DEBIT_ORDER'">
                     <label class="control-label">Bank Branch Name</label>
-                   <!-- <input type="text" class="form-control input-sm" ng-model="bankDetails.bankBranchName" ng-disabled="mode=='new'||mode=='view'" name="branchname"/>-->
+                    <!-- <input type="text" class="form-control input-sm" ng-model="bankDetails.bankBranchName" ng-disabled="mode=='new'||mode=='view'" name="branchname"/>-->
 
                     <select class="form-control input-sm" name="branchname" ng-disabled="mode=='new'||mode=='view'" ng-options="bankBranchDetail.branchName as bankBranchDetail.branchName for bankBranchDetail in bankBranchDetails"
                             ng-model="bankDetails.bankBranchName" ng-required="true">
@@ -96,16 +96,16 @@
                     </select>-->
                 </div>
 
-                <div class="form-group required" ng-if="premiumPaymentDetails.premiumPaymentMethod == 'DEBITORDER'">
+                <div class="form-group required" ng-if="premiumPaymentDetails.premiumPaymentMethod == 'DEBIT_ORDER'">
                     <label class="control-label">Bank Account Number</label>
                     <input type="text" class="form-control input-sm" ng-model="bankDetails.bankAccountNumber" ng-disabled="mode=='new'||mode=='view'" name="branchname"/>
 
                 </div>
             </div>
             <div class="col-md-6">
-                <div class="form-group required" ng-if="premiumPaymentDetails.premiumPaymentMethod == 'DEBITORDER'">
+                <div class="form-group required" ng-if="premiumPaymentDetails.premiumPaymentMethod == 'DEBIT_ORDER'">
                     <label class="control-label">Bank Name</label>
-                   <!-- <input type="text" class="form-control input-sm" ng-model="bankDetails.bankName" ng-disabled="mode=='new'||mode=='view'" name="bankName"/>-->
+                    <!-- <input type="text" class="form-control input-sm" ng-model="bankDetails.bankName" ng-disabled="mode=='new'||mode=='view'" name="bankName"/>-->
 
                     <select class="form-control input-sm" name="bankName" ng-disabled="mode=='new'||mode=='view'" ng-options="bankDetail.bankName as bankDetail.bankName for bankDetail in bankDetailsResponse"
                             ng-model="bankDetails.bankName" ng-required="true">{{bankDetail.bankName}}
@@ -116,7 +116,7 @@
                     </select>-->
                 </div>
 
-                <div class="form-group required" ng-if="premiumPaymentDetails.premiumPaymentMethod == 'DEBITORDER' ">
+                <div class="form-group required" ng-if="premiumPaymentDetails.premiumPaymentMethod == 'DEBIT_ORDER' ">
                     <label class="control-label">Bank Account Type</label>
                     <input type="text" class="form-control input-sm" ng-required="true" ng-model="bankDetails.bankAccountType" ng-disabled="mode=='new'||mode=='view'" name="accountType"/>
                 </div>
@@ -154,7 +154,7 @@
             <div class="col-md-6">
                 <div class="form-group">
                     <label class="control-label">Plan Annual Premium</label>
-                    <input type="text" class="form-control input-sm" ng-model="premiumResponse.planAnnualPremium" ng-disabled="mode=='new'||mode=='view'" name="addressLine1" ng-maxlength="100"/>
+                    <input type="text" class="form-control input-sm" ng-model="premiumResponse.planAnnualPremium" ng-disabled="mode=='new'||mode=='view'" name="premiumResponse.planAnnualPremium" ng-maxlength="100"/>
                 </div>
 
                 <!--<div class="form-group">
@@ -169,9 +169,14 @@
                 </div>
             </div>
             <div class="col-md-6">
-                <div class="form-group">
-                    <label class="control-label"> Optional Coverage Name Annual Premium</label>
-                    <input type="text" class="form-control input-sm" ng-disabled="mode=='new'||mode=='view'" name="employer" ng-maxlength="30"/>
+                <div class="form-group" ng-repeat="rider in premiumResponse.riderPremiumDtos">
+                    <div>
+                        <td>{{rider.coverageName.coverageName}} Annual Premium </td>
+                        <td>
+                            <input type="number" ng-model="rider.annualPremium"
+                                   class="form-control input-sm" view-enabled=""/>
+                        </td>
+                    </div>
                 </div>
 
                 <!--<div class="form-group">
@@ -180,7 +185,7 @@
                 </div>-->
                 <div class="form-group">
                     <label class="control-label">Frequency Premium Payable</label>
-                    <input type="text" class="form-control input-sm" ng-disabled="mode=='new'||mode=='view'" name="addressLine2" ng-maxlength="100"/>
+                    <input type="text" class="form-control input-sm" ng-model="premiumResponse.annualPremium1111" ng-disabled="mode=='new'||mode=='view'" name="addressLine2" ng-maxlength="100"/>
                 </div>
             </div>
         </accordion-group>

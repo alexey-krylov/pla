@@ -2,6 +2,7 @@ package com.pla.individuallife.quotation.domain.model;
 
 import com.pla.sharedkernel.identifier.PlanId;
 import lombok.Getter;
+import lombok.Setter;
 
 import javax.persistence.Embeddable;
 import java.math.BigDecimal;
@@ -11,7 +12,9 @@ import java.math.BigDecimal;
  */
 @Embeddable
 @Getter
+@Setter
 public class PlanDetail {
+
     private PlanId planId;
 
     private Integer policyTerm;
@@ -40,23 +43,4 @@ public class PlanDetail {
         this.sumAssured = sumAssured;
     }
 
-    public void setAnnualPremium(BigDecimal annualPremium) {
-        this.annualPremium = annualPremium;
-    }
-
-    public void setSemiannualPremium(BigDecimal semiannualPremium) {
-        this.semiannualPremium = semiannualPremium;
-    }
-
-    public void setQuarterlyPremium(BigDecimal quarterlyPremium) {
-        this.quarterlyPremium = quarterlyPremium;
-    }
-
-    public void setMonthlyPremium(BigDecimal monthlyPremium) {
-        this.monthlyPremium = monthlyPremium;
-    }
-
-    public void setTotalPremium(BigDecimal totalPremium) {
-        this.totalPremium = totalPremium;
-    }
 }

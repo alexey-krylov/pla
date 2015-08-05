@@ -8,9 +8,9 @@
             <div class="col-md-6">
                 <div class="form-group required">
                     <label class="control-label">Plan</label>
-                   <!--<input type="text" class="form-control input-sm" name="plan" ng-blur="searchRiders()" ng-model="proposalPlanDetail.planId"/>-->
-{{planSelected}}
-                 <div data-angucomplete-alt="" id="searchPlan" placeholder="Search Plans" pause="500"
+                    <!--<input type="text" class="form-control input-sm" name="plan" ng-blur="searchRiders()" ng-model="proposalPlanDetail.planId"/>-->
+                    {{planSelected}}
+                    <div data-angucomplete-alt="" id="searchPlan" placeholder="Search Plans" pause="500"
                          selected-object="planSelected" disable-input="uneditable"
                          remote-url="/pla/individuallife/proposal/searchplan/{{proposal.proposalId}}?q=" field-required="true"
                          remote-url-data-field="" title-field="plan_name"
@@ -41,9 +41,9 @@
                     <select class="form-control input-sm" name="ridersAppliedFor" ng-disabled="mode=='new' || mode=='view'" ng-options="searchRider.coverageName for searchRider in searchRiders"
                             ng-model="proposalPlanDetail1.riderDetails">
                     </select>
-                   <!-- <button type="button" class="btn btn-default bs-select"   required="true" name="ridersAppliedFor" id="ridersAppliedFor"  ng-disabled="mode=='new' || mode=='view'"  ng-model="createCoverage.benefitIds" max-length="0" data-all-none-buttons="true"  data-html="1" data-multiple="1" placeholder="Select Riders" ng-options="searchRider.coverageName for searchRider in searchRiders | orderBy:'coverageName'"  >
-                        Select Riders <span class="caret"></span>
-                    </button>-->
+                    <!-- <button type="button" class="btn btn-default bs-select"   required="true" name="ridersAppliedFor" id="ridersAppliedFor"  ng-disabled="mode=='new' || mode=='view'"  ng-model="createCoverage.benefitIds" max-length="0" data-all-none-buttons="true"  data-html="1" data-multiple="1" placeholder="Select Riders" ng-options="searchRider.coverageName for searchRider in searchRiders | orderBy:'coverageName'"  >
+                         Select Riders <span class="caret"></span>
+                     </button>-->
 
                 </div>
                 <table class="table table-bordered">
@@ -63,35 +63,35 @@
                         </th>
                     </tr>
                     </thead>
-                   <tbody>
-                        <tr ng-repeat="searchRider in proposalPlanDetail.riderDetails">
+                    <tbody>
+                    <tr ng-repeat="searchRider in proposalPlanDetail.riderDetails">
                         <!--<tr ng-repeat="rider in planDetailDto.riderDetails">-->
-                            <td>{{searchRider.coverageName}}</td>
-                            <!--<td>
-                                <input type="number" ng-disabled="mode=='new'||mode=='view'" contenteditable="updateFlag" ng-model="searchRider.sumAssured" value="{{searchRider.sumAssured}}" />
-                                &lt;!&ndash; <div contenteditable="true" ng-model="row.update" ng-blur="test(row)" ng-change="test(row)" >{{row.commission}}</div>&ndash;&gt;
-                            </td>-->
+                        <td>{{searchRider.coverageName}}</td>
+                        <!--<td>
+                            <input type="number" ng-disabled="mode=='new'||mode=='view'" contenteditable="updateFlag" ng-model="searchRider.sumAssured" value="{{searchRider.sumAssured}}" />
+                            &lt;!&ndash; <div contenteditable="true" ng-model="row.update" ng-blur="test(row)" ng-change="test(row)" >{{row.commission}}</div>&ndash;&gt;
+                        </td>-->
 
-                            <td>
-                                <coverage-sumassured></coverage-sumassured>
-                            </td>
+                        <td>
+                            <coverage-sumassured></coverage-sumassured>
+                        </td>
 
-                            <!--<td>{{searchRider.coverTerm}}</td>-->
-                            <!--<td>
-                                <input type="number" ng-disabled="mode=='new'||mode=='view'" contenteditable="updateFlag"  ng-model="searchRider.coverTerm" value="{{searchRider.coverTerm}}" />
-                                &lt;!&ndash; <div contenteditable="true" ng-model="row.update" ng-blur="test(row)" ng-change="test(row)" >{{row.commission}}</div>&ndash;&gt;
-                            </td>-->
-                            <!--<td>{{searchRider.waiverOfPremium}}</td>-->
+                        <!--<td>{{searchRider.coverTerm}}</td>-->
+                        <!--<td>
+                            <input type="number" ng-disabled="mode=='new'||mode=='view'" contenteditable="updateFlag"  ng-model="searchRider.coverTerm" value="{{searchRider.coverTerm}}" />
+                            &lt;!&ndash; <div contenteditable="true" ng-model="row.update" ng-blur="test(row)" ng-change="test(row)" >{{row.commission}}</div>&ndash;&gt;
+                        </td>-->
+                        <!--<td>{{searchRider.waiverOfPremium}}</td>-->
 
-                            <td>
-                                <coverage-term></coverage-term>
-                            </td>
+                        <td>
+                            <coverage-term></coverage-term>
+                        </td>
 
-                            <td>
+                        <td>
                             <input type="number"  ng-disabled="mode=='new'||mode=='view'" contenteditable="updateFlag"  ng-init="shareSumTest()" ng-model="searchRider.waiverOfPremium" value="{{searchRider.waiverOfPremium}}"/>
                             <!-- <div contenteditable="true" ng-model="row.update" ng-blur="test(row)" ng-change="test(row)" >{{row.commission}}</div>-->
                         </td>
-                        </tr>
+                    </tr>
                     </tbody>
 
                 </table>
@@ -99,7 +99,7 @@
             <div class="col-md-6">
                 <div class="form-group">
                     <label class="control-label" ng-if="selectPlanResponse">Sum Assured</label>
-                   <!-- <input type="number" class="form-control input-sm" name="sumAssured"  ng-disabled="mode=='new'||mode=='view'" ng-model="proposalPlanDetail.sumAssured"/>-->
+                    <!-- <input type="number" class="form-control input-sm" name="sumAssured"  ng-disabled="mode=='new'||mode=='view'" ng-model="proposalPlanDetail.sumAssured"/>-->
                     <sumassured ng-model="proposalPlanDetail.sumAssured"></sumassured>
                 </div>
                 <div class="form-group">
@@ -136,14 +136,14 @@
                         </tr>
                         </thead>
                         <tbody>
-                            <tr ng-repeat="beneficiary in beneficiariesList">
-                                <td>{{beneficiary.firstName +' '+ beneficiary.surname}}</td>
-                                <td>{{beneficiary.relationshipId}}</td>
-                                <!--<td>{{beneficiary.share}}</td>-->
-                                <td>
-                                    <input type="number" ng-disabled="mode=='new'||mode=='view'" contenteditable="updateFlag" ng-init="shareSumTest()" ng-model="beneficiary.share"  ng-blur="shareSumTest()" value="{{beneficiary.share}}" />
-                                </td>
-                            </tr>
+                        <tr ng-repeat="beneficiary in beneficiariesList">
+                            <td>{{beneficiary.firstName +' '+ beneficiary.surname}}</td>
+                            <td>{{beneficiary.relationshipId}}</td>
+                            <!--<td>{{beneficiary.share}}</td>-->
+                            <td>
+                                <input type="number" ng-disabled="mode=='new'||mode=='view'" contenteditable="updateFlag" ng-init="shareSumTest()" ng-model="beneficiary.share"  ng-blur="shareSumTest()" value="{{beneficiary.share}}" />
+                            </td>
+                        </tr>
                         </tbody>
                     </table>
                 </div>
@@ -248,7 +248,7 @@
                 <input type="number" view-enabled="" class="form-control input-sm" min="{{plan.sumAssured.minSumInsured}}"
                        name="sumAssured" validate-sumassured=""
                        max="{{plan.sumAssured.maxSumInsured}}" ng-model="proposalPlanDetail.sumAssured" ng-required="true"/>
-               <div class="error" ng-messages="step3.sumAssured.$error">
+                <div class="error" ng-messages="step3.sumAssured.$error">
                     <small ng-message="min">Sum Assured cannot be less then {{plan.sumAssured.minSumInsured}}.</small>
                     <small ng-message="max">Sum Assured cannot be more than {{plan.sumAssured.maxSumInsured}}.</small>
                     <small ng-message="invalidMultiple">Invalid Multiples.</small>
@@ -260,7 +260,7 @@
                        name="sumAssured"
                        ng-model="proposalPlanDetail.sumAssured" ng-required="true"/>
 
-               <div class="error" ng-messages="step3.sumAssured.$error" ng-if="step3.$dirty">
+                <div class="error" ng-messages="step3.sumAssured.$error" ng-if="step3.$dirty">
                     <small ng-message="max">Sum Assured cannot be greater than {{plan.sumAssured.incomeMultiplier}}.
                     </small>
                 </div>

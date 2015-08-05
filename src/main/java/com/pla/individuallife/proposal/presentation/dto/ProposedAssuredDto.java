@@ -1,7 +1,7 @@
 package com.pla.individuallife.proposal.presentation.dto;
 
-import com.pla.individuallife.proposal.domain.model.EmploymentDetail;
-import com.pla.individuallife.proposal.domain.model.ResidentialAddress;
+import com.pla.individuallife.sharedresource.model.vo.EmploymentDetail;
+import com.pla.individuallife.sharedresource.model.vo.ResidentialAddress;
 import com.pla.sharedkernel.domain.model.Gender;
 import com.pla.sharedkernel.domain.model.MaritalStatus;
 import lombok.Getter;

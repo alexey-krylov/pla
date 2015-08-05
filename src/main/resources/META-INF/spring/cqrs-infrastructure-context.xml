@@ -110,4 +110,9 @@
                                 aggregate-type="com.pla.grouplife.policy.domain.model.GroupLifePolicy"
                                 mongo-template="mongoTemplate"/>
 
+    <extension:mongo-repository id="ilPolicyMongoRepository"
+                                aggregate-type="com.pla.individuallife.policy.domain.model.IndividualLifePolicy"
+                                mongo-template="mongoTemplate"/>
+
+
 </beans>

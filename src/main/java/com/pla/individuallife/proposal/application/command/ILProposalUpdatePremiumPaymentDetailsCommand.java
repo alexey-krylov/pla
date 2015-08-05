@@ -1,6 +1,6 @@
 package com.pla.individuallife.proposal.application.command;
 
-import com.pla.individuallife.proposal.domain.model.PremiumPaymentDetails;
+import com.pla.individuallife.sharedresource.model.vo.PremiumPaymentDetails;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;

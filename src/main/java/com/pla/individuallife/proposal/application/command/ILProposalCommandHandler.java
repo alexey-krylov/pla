@@ -12,6 +12,8 @@ import com.pla.individuallife.proposal.presentation.dto.QuestionDto;
 import com.pla.individuallife.proposal.query.ILProposalFinder;
 import com.pla.individuallife.proposal.service.ILProposalFactory;
 import com.pla.individuallife.proposal.service.ILProposalService;
+import com.pla.individuallife.sharedresource.model.vo.ILProposerDocument;
+import com.pla.individuallife.sharedresource.model.vo.*;
 import com.pla.publishedlanguage.dto.UnderWriterRoutingLevelDetailDto;
 import com.pla.sharedkernel.domain.model.ProcessType;
 import com.pla.sharedkernel.domain.model.RoutingLevel;

@@ -1,5 +1,6 @@
 package com.pla.individuallife.proposal.presentation.controller;
 
+import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
 import com.mongodb.gridfs.GridFSDBFile;
 import com.pla.core.query.MasterFinder;
@@ -216,7 +217,7 @@ public class ILProposalController {
     @ResponseBody
     @RequestMapping(value = "/updatefamily", method = RequestMethod.POST)
     public ResponseEntity updateFamilyPersonalDetails(@RequestBody ILProposalUpdateFamilyPersonalDetailsCommand cmd, HttpServletRequest request,BindingResult bindingResult) {
-        if (bindingResult.hasErrors()) {
+            if (bindingResult.hasErrors()) {
             return new ResponseEntity(bindingResult.getAllErrors(), HttpStatus.PRECONDITION_FAILED);
         }
         String proposalId = null;
@@ -285,59 +286,14 @@ public class ILProposalController {
     public ResponseEntity approveProposal(@RequestBody ILProposalApprovalCommand cmd, HttpServletRequest request) {
         try {
             cmd.setUserDetails(getLoggedInUserDetail(request));
-            cmd.setStatus(ILProposalStatus.APPROVED);
             String proposalId = proposalCommandGateway.approveProposal(cmd);
-            return new ResponseEntity(Result.success("Proposal approved successfully",proposalId), HttpStatus.OK);
+            return new ResponseEntity(Result.success(messageMap.get(cmd.getStatus()),proposalId), HttpStatus.OK);
         } catch (Exception e) {
             e.printStackTrace();
             return new ResponseEntity(Result.failure(e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
-    @RequestMapping(value = "/return", method = RequestMethod.POST)
-    @ResponseBody
-    @ApiOperation(httpMethod = "POST", value = "To return proposal")
-    public ResponseEntity returnProposal(@RequestBody ILProposalApprovalCommand cmd, HttpServletRequest request) {
-        try {
-            cmd.setUserDetails(getLoggedInUserDetail(request));
-            cmd.setStatus(ILProposalStatus.RETURNED);
-            String proposalId =  proposalCommandGateway.returnProposal(cmd);
-            return new ResponseEntity(Result.success("Proposal returned successfully",proposalId), HttpStatus.OK);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return new ResponseEntity(Result.failure(e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-    }
-
-    @RequestMapping(value = "/hold", method = RequestMethod.POST)
-    @ResponseBody
-    @ApiOperation(httpMethod = "POST", value = "To hold proposal")
-    public ResponseEntity holdProposal(@RequestBody ILProposalApprovalCommand cmd, HttpServletRequest request) {
-        try {
-            cmd.setUserDetails(getLoggedInUserDetail(request));
-            cmd.setStatus(ILProposalStatus.PENDING_DECISION);
-            String proposalId = proposalCommandGateway.holdProposal(cmd);
-            return new ResponseEntity(Result.success("Proposal held successfully",proposalId), HttpStatus.OK);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return new ResponseEntity(Result.failure(e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-    }
-
-    @RequestMapping(value = "/reject", method = RequestMethod.POST)
-    @ResponseBody
-    @ApiOperation(httpMethod = "POST", value = "To reject proposal")
-    public ResponseEntity rejectProposal(@RequestBody ILProposalApprovalCommand cmd, HttpServletRequest request) {
-        try {
-            cmd.setUserDetails(getLoggedInUserDetail(request));
-            cmd.setStatus(ILProposalStatus.DECLINED);
-            String proposalId = proposalCommandGateway.rejectProposal(cmd);
-            return new ResponseEntity(Result.success("Proposal rejected successfully",proposalId), HttpStatus.OK);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return new ResponseEntity(Result.failure(e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-    }
 
     @RequestMapping(value = "/routetonextlevel", method = RequestMethod.POST)
     @ResponseBody
@@ -367,7 +323,7 @@ public class ILProposalController {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("pla/individuallife/proposal/index");
         try {
-            modelAndView.addObject("searchResult", proposalFinder.searchProposal(ilSearchProposalDto, new String[]{"DRAFT", "SUBMITTED", "PENDING_ACCEPTANCE"}));
+            modelAndView.addObject("searchResult", proposalFinder.searchProposal(ilSearchProposalDto, new String[]{"DRAFT", "RETURNED", "PENDING_ACCEPTANCE","UNDERWRITING_LEVEL_ONE","UNDERWRITING_LEVEL_TWO"}));
         } catch (Exception e) {
             modelAndView.addObject("searchResult", Lists.newArrayList());
         }
@@ -381,7 +337,7 @@ public class ILProposalController {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("pla/individuallife/proposal/viewApprovalProposal");
         try {
-            modelAndView.addObject("searchResult", proposalFinder.searchProposalToApprove(dto, new String[]{"PENDING_ACCEPTANCE","UNDERWRITING_LEVEL_ONE","UNDERWRITING_LEVEL_TWO"}));
+            modelAndView.addObject("searchResult", proposalFinder.searchProposalToApprove(dto, new String[]{"PENDING_ACCEPTANCE","UNDERWRITING_LEVEL_ONE","UNDERWRITING_LEVEL_TWO","PENDING_DECISION"}));
         } catch (Exception e) {
             modelAndView.addObject("searchResult", Lists.newArrayList());
         }
@@ -585,4 +541,5 @@ public class ILProposalController {
         outputStream.flush();
         outputStream.close();
     }
+    public static ImmutableMap<ILProposalStatus,String> messageMap  = ImmutableMap.of(ILProposalStatus.APPROVED,"Proposal approved successfully",ILProposalStatus.RETURNED,"Proposal returned successfully",ILProposalStatus.DECLINED,"Proposal rejected successfully",ILProposalStatus.PENDING_DECISION,"Proposal held successfully");
 }

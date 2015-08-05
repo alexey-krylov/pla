@@ -1,6 +1,8 @@
 package com.pla.individuallife.proposal.domain.model;
 
 import com.google.common.base.Preconditions;
+import com.pla.individuallife.sharedresource.model.vo.ProposedAssured;
+import com.pla.individuallife.sharedresource.model.vo.Proposer;
 import com.pla.sharedkernel.domain.model.MaritalStatus;
 import org.nthdimenzion.utils.UtilValidator;
 

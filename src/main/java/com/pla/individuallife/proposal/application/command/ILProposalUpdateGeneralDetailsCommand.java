@@ -1,7 +1,7 @@
 package com.pla.individuallife.proposal.application.command;
 
-import com.pla.individuallife.proposal.domain.model.GeneralDetailQuestion;
-import com.pla.individuallife.proposal.presentation.dto.QuestionAnswerDto;
+import com.pla.individuallife.sharedresource.model.vo.GeneralDetailQuestion;
+import com.pla.individuallife.sharedresource.dto.QuestionAnswerDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;

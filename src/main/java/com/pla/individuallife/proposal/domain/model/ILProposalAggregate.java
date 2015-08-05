@@ -5,6 +5,8 @@ import com.pla.individuallife.proposal.domain.event.ILProposalStatusAuditEvent;
 import com.pla.individuallife.proposal.domain.event.ILProposalSubmitEvent;
 import com.pla.individuallife.sharedresource.event.ILProposalToPolicyEvent;
 import com.pla.individuallife.sharedresource.event.ILQuotationConvertedToProposalEvent;
+import com.pla.individuallife.sharedresource.model.vo.ILProposerDocument;
+import com.pla.individuallife.sharedresource.model.vo.*;
 import com.pla.sharedkernel.domain.model.RoutingLevel;
 import com.pla.sharedkernel.identifier.ProposalId;
 import com.pla.sharedkernel.identifier.QuotationId;
@@ -45,7 +47,7 @@ public class ILProposalAggregate extends AbstractAnnotatedAggregateRoot<Proposal
     private GeneralDetails generalDetails;
     private FamilyPersonalDetail familyPersonalDetail;
     private AgentCommissionShareModel agentCommissionShareModel;
-    private AdditionalDetails additionaldetails;
+    private AdditionalDetails additionalDetails;
     private PremiumPaymentDetails premiumPaymentDetails;
     private Set<ILProposerDocument> proposalDocuments;
 
@@ -170,7 +172,7 @@ public class ILProposalAggregate extends AbstractAnnotatedAggregateRoot<Proposal
     }
 
     public ILProposalAggregate updateAdditionalDetails(String medicalAttendantDetails, String medicalAttendantDuration, String dateAndReason, ReplacementQuestion replacementDetails) {
-        this.additionaldetails = new AdditionalDetails(medicalAttendantDetails, medicalAttendantDuration, dateAndReason, new ReplacementQuestion(replacementDetails.getQuestionId(), replacementDetails.isAnswer(), replacementDetails.getAnswerResponse1(), replacementDetails.getAnswerResponse2()));
+        this.additionalDetails = new AdditionalDetails(medicalAttendantDetails, medicalAttendantDuration, dateAndReason, new ReplacementQuestion(replacementDetails.getQuestionId(), replacementDetails.isAnswer(), replacementDetails.getAnswerResponse1(), replacementDetails.getAnswerResponse2()));
         return this;
     }
 

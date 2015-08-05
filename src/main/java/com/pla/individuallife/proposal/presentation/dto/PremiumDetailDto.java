@@ -15,6 +15,7 @@ import java.util.Set;
 @Setter
 @NoArgsConstructor
 public class PremiumDetailDto {
+
     private String planName;
 
     private BigDecimal planAnnualPremium;

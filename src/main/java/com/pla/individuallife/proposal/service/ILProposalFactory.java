@@ -12,6 +12,7 @@ import com.pla.individuallife.quotation.presentation.dto.PlanDetailDto;
 import com.pla.individuallife.quotation.presentation.dto.RiderDetailDto;
 import com.pla.individuallife.quotation.query.ILQuotationDto;
 import com.pla.individuallife.quotation.query.ILQuotationFinder;
+import com.pla.individuallife.sharedresource.model.vo.*;
 import com.pla.sharedkernel.identifier.PlanId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -55,6 +56,9 @@ public class ILProposalFactory {
         ILProposalAggregate aggregate;
         String proposalNumber = proposalNumberGenerator.getProposalNumber();
         if (cmd.getQuotationId() != null) {
+            if (proposedAssured.getIsProposer()) {
+                proposer = ProposerBuilder.getProposerBuilder(cmd.getProposedAssured()).createProposer();
+            }
             ILQuotationDto dto = quotationFinder.getQuotationById(cmd.getQuotationId());
             Map plan = planFinder.findPlanByPlanId(new PlanId(dto.getPlanId()));
             Map planDetail = (HashMap) plan.get("planDetail");

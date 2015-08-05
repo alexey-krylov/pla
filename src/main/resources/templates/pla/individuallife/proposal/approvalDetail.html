@@ -18,21 +18,23 @@
                 </tbody>
             </table>
         </div>
-        <form class="form-horizontal"  id="createGLApprovalProposal" name="createGLApprovalProposal" novalidate="true">
+        <form class="form-horizontal"  id="createILApprovalProposal" name="createILApprovalProposal" novalidate="true">
             <div class="row">
                 <div class="col-lg-6">
                     <div class="form-group required">
                         <label class="control-label">Comments</label>
                         <textarea rows="4" cols="50"
                                   ng-required="true" name="comments"
-                                  ng-model="comment"/>
+                                  ng-model="comment" />
                     </div>
 
                 </div>
                 <div class="col-lg-6">
                     <div class="form-group required">
-                        <button type="button" class="btn btn-default btn-sm" style="float: right" ng-if="isViewMode" ng-click="approveProposal()">Approve</button>
-                        <button type="button" class="btn btn-default btn-sm" style="float: right;margin-right: 10px;" ng-click="returnProposal()" ng-disabled="!comment" ng-if="isViewMode">Return</button>
+                        <button type="button" class="btn btn-default btn-sm" style="float: right" ng-if="isViewMode" ng-click="approveProposal(comment)">Approve</button>
+                        <button type="button" class="btn btn-default btn-sm" style="float: right;margin-right: 10px;" ng-click="returnProposal(comment)" ng-disabled="!comment" ng-if="isViewMode">Return</button>
+                        <button type="button" class="btn btn-default btn-sm" style="float: right;margin-right: 10px;" ng-click="holdProposal(comment)" ng-disabled="!comment" ng-if="isViewMode">Hold</button>
+                        <button type="button" class="btn btn-default btn-sm" style="float: right;margin-right: 10px;" ng-click="rejectProposal(comment)" ng-disabled="!comment" ng-if="isViewMode">Reject</button>
                     </div>
                 </div>
             </div>

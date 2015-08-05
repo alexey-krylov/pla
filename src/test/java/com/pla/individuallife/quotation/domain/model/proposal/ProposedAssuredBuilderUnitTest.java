@@ -1,6 +1,6 @@
 package com.pla.individuallife.quotation.domain.model.proposal;
 
-import com.pla.individuallife.proposal.domain.model.*;
+import com.pla.individuallife.sharedresource.model.vo.*;
 import com.pla.sharedkernel.domain.model.Gender;
 import com.pla.sharedkernel.domain.model.MaritalStatus;
 import org.joda.time.DateTime;

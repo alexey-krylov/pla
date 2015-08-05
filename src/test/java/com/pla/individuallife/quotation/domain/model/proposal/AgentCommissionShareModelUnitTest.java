@@ -1,7 +1,7 @@
 package com.pla.individuallife.quotation.domain.model.proposal;
 
 import com.pla.core.domain.model.agent.AgentId;
-import com.pla.individuallife.proposal.domain.model.AgentCommissionShareModel;
+import com.pla.individuallife.sharedresource.model.vo.AgentCommissionShareModel;
 import org.junit.Before;
 import org.junit.Test;
 

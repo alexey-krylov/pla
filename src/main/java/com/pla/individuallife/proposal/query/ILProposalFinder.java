@@ -2,6 +2,7 @@ package com.pla.individuallife.proposal.query;
 
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import com.mongodb.BasicDBObject;
 import com.pla.core.domain.model.CoverageName;
 import com.pla.core.domain.model.plan.premium.Premium;
@@ -10,6 +11,7 @@ import com.pla.core.query.PlanFinder;
 import com.pla.core.query.PremiumFinder;
 import com.pla.individuallife.proposal.domain.model.*;
 import com.pla.individuallife.proposal.presentation.dto.*;
+import com.pla.individuallife.sharedresource.model.vo.*;
 import com.pla.publishedlanguage.contract.IPremiumCalculator;
 import com.pla.publishedlanguage.domain.model.ComputedPremiumDto;
 import com.pla.publishedlanguage.domain.model.PremiumCalculationDto;
@@ -60,6 +62,9 @@ public class ILProposalFinder {
             "ON A.`agent_id`=B.`agent_id` JOIN plan_coverage_benefit_assoc C " +
             "ON B.`plan_id`=C.`plan_id` where A.agent_id IN (:agentIds) and c.line_of_business=:lineOfBusiness group by C.plan_id ";
 
+    public static final String FIND_ACTIVE_AGENT_BY_ID_QUERY = "select * from agent_team_branch_view where agentId =:agentId AND agentStatus='ACTIVE'";
+
+
     private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
     private MongoTemplate mongoTemplate;
 
@@ -109,7 +114,7 @@ public class ILProposalFinder {
         String agentName = dto.getAgentName();
         String proposerNrcNumber =  dto.getProposerNrcNumber();
         if (isEmpty(proposalNumber) && isEmpty(proposalId) && isEmpty(agentCode) && isEmpty(proposerName) && isEmpty(agentName) && isEmpty(proposerNrcNumber)) {
-          return Lists.newArrayList();
+            return Lists.newArrayList();
         }
         if (isNotEmpty(proposalId)) {
             criteria = criteria.and("_id").is(new ProposalId(proposalId));
@@ -211,8 +216,9 @@ public class ILProposalFinder {
         Map proposal = mongoTemplate.findOne(new BasicQuery(query), Map.class, "individual_life_proposal");
 
         ProposalPlanDetail planDetail = (ProposalPlanDetail) proposal.get("proposalPlanDetail");
-
-
+        if (planDetail==null){
+            return new PremiumDetailDto();
+        }
         PremiumCalculationDto premiumCalculationDto = new PremiumCalculationDto(new PlanId(planDetail.getPlanId()), LocalDate.now(), PremiumFrequency.ANNUALLY, 365);
 
         DateTime dob = new DateTime(((ProposedAssured) proposal.get("proposedAssured")).getDateOfBirth());
@@ -308,11 +314,11 @@ public class ILProposalFinder {
         dto.setGeneralDetails((GeneralDetails) proposal.get("generalDetails"));
         dto.setCompulsoryHealthStatement((List<Question>) proposal.get("compulsoryHealthStatement"));
         dto.setFamilyPersonalDetail((FamilyPersonalDetail) proposal.get("familyPersonalDetail"));
-        dto.setAdditionaldetails((AdditionalDetails) proposal.get("additionaldetails"));
+        dto.setAdditionaldetails((AdditionalDetails) proposal.get("additionalDetails"));
         dto.setPremiumPaymentDetails((PremiumPaymentDetails) proposal.get("premiumPaymentDetails"));
         // TODO : commenting for time being untill premium tab details completed
         if(dto.getProposalPlanDetail() != null)
-        dto.setPremiumDetailDto(getPremiumDetail(proposalId));
+            dto.setPremiumDetailDto(getPremiumDetail(proposalId));
         // TODO : need to set document details once it is ready
 
         AgentCommissionShareModel model = (AgentCommissionShareModel) proposal.get("agentCommissionShareModel");
@@ -356,6 +362,11 @@ public class ILProposalFinder {
         return proposal;
     }
 
+    public Map<String, Object> getAgentByAgentId(String agentId) {
+        Preconditions.checkArgument(isNotEmpty(agentId));
+        List<Map<String, Object>> agentList = namedParameterJdbcTemplate.queryForList(FIND_ACTIVE_AGENT_BY_ID_QUERY, new MapSqlParameterSource().addValue("agentId", agentId));
+        return isNotEmpty(agentList) ? agentList.get(0) : Maps.newHashMap();
+    }
 
     private class TransformToILSearchProposalDto implements Function<Map, ILSearchProposalDto> {
 

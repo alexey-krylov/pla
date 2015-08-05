@@ -544,6 +544,7 @@ insert  into `entity_sequence`(`sequence_id`,`sequence_name`,`sequence_number`,`
 insert  into `entity_sequence`(`sequence_id`,`sequence_name`,`sequence_number`,`sequence_prefix`) values (12,'com.pla.grouplife.policy.domain.model.GroupLifePolicy',20000000,' ');
 insert  into `entity_sequence`(`sequence_id`,`sequence_name`,`sequence_number`,`sequence_prefix`) values (13,'com.pla.grouplife.sharedresource.model.vo.Insured',100000,' ');
 insert  into `entity_sequence`(`sequence_id`,`sequence_name`,`sequence_number`,`sequence_prefix`) values (14,'com.pla.grouphealth.sharedresource.model.vo.GHInsured',100000,' ');
+insert  into `entity_sequence`(`sequence_id`,`sequence_name`,`sequence_number`,`sequence_prefix`) values (15,'com.pla.individuallife.policy.domain.model.IndividualLifePolicy',10000000,' ');
 
 
 insert into `channel_type` (`CHANNEL_CODE`, `CHANNEL_DESCRIPTION`) values('BROKER','Broker');

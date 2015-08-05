@@ -269,6 +269,15 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
 
                      });
 
+                    $http.get("getpremiumdetail/"+$scope.proposal.proposalId).success(function (response, status, headers, config) {
+                        $scope.premiumResponse=response;
+                        if($scope.premiumResponse != null)
+                        {
+                            ////alert('Premium is Present');
+
+                        }
+                    }).error(function (response, status, headers, config) {
+                    });
                     if($scope.rcvProposal.proposer != null)
                     {
                         $scope.proposer = $scope.rcvProposal.proposer || {};
@@ -720,9 +729,9 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
             }
 
             $scope.comment='';
-            $scope.approveProposal = function(){
-                var request = angular.extend({comment: $scope.comment},
-                    {"proposalId": $scope.proposalId});
+            $scope.approveProposal = function(comment){
+                var request = angular.extend({comment: comment},
+                    {"proposalId": $scope.proposalId},{"status":"APPROVED"});
 
                 $http.post('/pla/individuallife/proposal/approve', request).success(function (data) {
                     if(data.status==200){
@@ -734,10 +743,10 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
                 });
             }
 
-            $scope.returnProposal = function(){
-                var request = angular.extend({comment: $scope.comment},{"proposalId": $scope.proposalId});
+            $scope.returnProposal = function(comment){
+                var request = angular.extend({comment: comment},{"proposalId": $scope.proposalId},{"status":"RETURNED"});
 
-                $http.post('/pla/individuallife/proposal/return', request).success(function (data) {
+                $http.post('/pla/individuallife/proposal/approve', request).success(function (data) {
                     if(data.status==200){
 
 
@@ -747,6 +756,36 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
 
                 });
             }
+
+            $scope.holdProposal = function(comment){
+               // alert(comment);
+                var request = angular.extend({"comment": comment},{"proposalId": $scope.proposalId},{"status":"PENDING_DECISION"});
+
+                $http.post('/pla/individuallife/proposal/approve', request).success(function (data) {
+                    if(data.status==200){
+
+
+                     //   $window.location.href="/pla/individuallife/proposal/openapprovalproposal";
+
+                    }
+
+                });
+            }
+
+            $scope.rejectProposal = function(comment){
+                var request = angular.extend({comment: comment},{"proposalId": $scope.proposalId},{"status":"DECLINED"});
+
+                $http.post('/pla/individuallife/proposal/approve', request).success(function (data) {
+                    if(data.status==200){
+
+
+                        $window.location.href="/pla/individuallife/proposal/openapprovalproposal";
+
+                    }
+
+                });
+            }
+
 
 
             $scope.addBeneficiary = function (beneficiary) {
@@ -849,7 +888,7 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
 
                    //alert("Before GetPremium...");
                    //Getting PremiumDetails Documents
-                   $http.get("getpremiumdetail/"+$scope.proposal.proposalId).success(function (response, status, headers, config) {
+                    $http.get("getpremiumdetail/"+$scope.proposal.proposalId).success(function (response, status, headers, config) {
                     $scope.premiumResponse=response;
                     if($scope.premiumResponse != null)
                     {

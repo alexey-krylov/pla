@@ -1,7 +1,7 @@
 package com.pla.individuallife.proposal.application.command;
 
-import com.pla.individuallife.proposal.domain.model.Beneficiary;
-import com.pla.individuallife.proposal.domain.model.ProposalPlanDetail;
+import com.pla.individuallife.sharedresource.model.vo.Beneficiary;
+import com.pla.individuallife.sharedresource.model.vo.ProposalPlanDetail;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;

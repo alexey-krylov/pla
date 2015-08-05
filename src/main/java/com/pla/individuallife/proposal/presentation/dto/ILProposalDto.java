@@ -1,6 +1,6 @@
 package com.pla.individuallife.proposal.presentation.dto;
 
-import com.pla.individuallife.proposal.domain.model.*;
+import com.pla.individuallife.sharedresource.model.vo.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -27,7 +27,7 @@ public class ILProposalDto {
 
     private ProposerDto proposer;
 
-    private Set<RiderDetail> riders;
+    private Set<RiderDetailDto> riders;
 
     private String proposalNumber;
 

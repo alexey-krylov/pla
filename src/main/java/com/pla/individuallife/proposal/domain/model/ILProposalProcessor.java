@@ -1,5 +1,7 @@
 package com.pla.individuallife.proposal.domain.model;
 
+import com.pla.individuallife.sharedresource.model.vo.ILProposerDocument;
+import com.pla.individuallife.sharedresource.model.vo.*;
 import com.pla.sharedkernel.domain.model.RoutingLevel;
 import org.joda.time.DateTime;
 
