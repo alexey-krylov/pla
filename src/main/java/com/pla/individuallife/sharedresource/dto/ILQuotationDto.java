@@ -1,8 +1,5 @@
-package com.pla.individuallife.quotation.query;
+package com.pla.individuallife.sharedresource.dto;
 
-import com.pla.individuallife.quotation.presentation.dto.PlanDetailDto;
-import com.pla.individuallife.quotation.presentation.dto.ProposedAssuredDto;
-import com.pla.individuallife.quotation.presentation.dto.ProposerDto;
 import com.pla.sharedkernel.identifier.QuotationId;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

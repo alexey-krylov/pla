@@ -9,6 +9,7 @@ import com.pla.core.query.PlanFinder;
 import com.pla.core.query.PremiumFinder;
 import com.pla.individuallife.quotation.presentation.dto.*;
 import com.pla.individuallife.quotation.query.*;
+import com.pla.individuallife.sharedresource.dto.*;
 import com.pla.publishedlanguage.contract.IPremiumCalculator;
 import com.pla.publishedlanguage.domain.model.ComputedPremiumDto;
 import com.pla.publishedlanguage.domain.model.PremiumCalculationDto;

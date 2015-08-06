@@ -7,7 +7,7 @@ import com.pla.individuallife.proposal.presentation.dto.ILProposalMandatoryDocum
 import com.pla.individuallife.proposal.presentation.dto.ProposalApproverCommentsDto;
 import com.pla.individuallife.proposal.query.ILProposalFinder;
 import com.pla.individuallife.proposal.repository.ILProposalStatusAuditRepository;
-import com.pla.individuallife.quotation.query.ILQuotationDto;
+import com.pla.individuallife.sharedresource.dto.ILQuotationDto;
 import com.pla.individuallife.quotation.query.ILQuotationFinder;
 import com.pla.individuallife.sharedresource.model.vo.ILProposerDocument;
 import com.pla.individuallife.sharedresource.model.vo.ILRiderDetail;

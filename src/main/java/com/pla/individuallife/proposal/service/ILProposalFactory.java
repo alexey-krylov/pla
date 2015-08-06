@@ -3,15 +3,14 @@ package com.pla.individuallife.proposal.service;
 import com.pla.core.domain.model.agent.AgentId;
 import com.pla.core.query.PlanFinder;
 import com.pla.individuallife.proposal.application.command.ILCreateProposalCommand;
-import com.pla.individuallife.proposal.domain.model.*;
+import com.pla.individuallife.proposal.domain.model.ILProposalAggregate;
 import com.pla.individuallife.proposal.domain.service.ProposalNumberGenerator;
 import com.pla.individuallife.proposal.presentation.dto.AgentDetailDto;
-import com.pla.individuallife.sharedresource.dto.ProposedAssuredDto;
-import com.pla.individuallife.sharedresource.dto.ProposerDto;
-import com.pla.individuallife.quotation.presentation.dto.PlanDetailDto;
-import com.pla.individuallife.quotation.presentation.dto.RiderDetailDto;
-import com.pla.individuallife.quotation.query.ILQuotationDto;
+import com.pla.individuallife.sharedresource.dto.PlanDetailDto;
+import com.pla.individuallife.sharedresource.dto.RiderDetailDto;
+import com.pla.individuallife.sharedresource.dto.ILQuotationDto;
 import com.pla.individuallife.quotation.query.ILQuotationFinder;
+import com.pla.individuallife.sharedresource.dto.ProposedAssuredDto;
 import com.pla.individuallife.sharedresource.model.vo.*;
 import com.pla.sharedkernel.identifier.PlanId;
 import org.slf4j.Logger;
@@ -45,20 +44,22 @@ public class ILProposalFactory {
 
     public ILProposalAggregate createProposal(ILCreateProposalCommand cmd){
         AgentCommissionShareModel agentCommissionShareModel = withAgentCommissionShareModel(cmd.getAgentCommissionDetails());
-        ProposedAssured proposedAssured =   withProposedAssure(cmd.getProposedAssured());
+        ProposedAssured proposedAssured =   null;
         Proposer proposer = null;
-        if (proposedAssured.getIsProposer()) {
-            proposer = ProposerBuilder.getProposerBuilder(cmd.getProposedAssured()).createProposer();
-        }
-        if (logger.isDebugEnabled()) {
-            logger.debug(" ProposedAssured :: " + proposedAssured);
-        }
         ILProposalAggregate aggregate;
         String proposalNumber = proposalNumberGenerator.getProposalNumber();
         if (cmd.getQuotationId() != null) {
             ILQuotationDto dto = quotationFinder.getQuotationById(cmd.getQuotationId());
+            ProposedAssuredDto proposedAssuredDto  = cmd.getProposedAssured();
+            ProposedAssuredDto proposedAssuredDtoQuotation  = dto.getProposedAssured();
+            proposedAssuredDtoQuotation.setEmployment(proposedAssuredDto.getEmployment());
+            proposedAssuredDtoQuotation.setResidentialAddress(proposedAssuredDto.getResidentialAddress());
+            proposedAssuredDtoQuotation.setMaritalStatus(proposedAssuredDto.getMaritalStatus());
+            proposedAssuredDtoQuotation.setOtherName(proposedAssuredDto.getOtherName());
+            proposedAssuredDtoQuotation.setSpouse(proposedAssuredDto.getSpouse());
+            proposedAssured =  withProposedAssure(proposedAssuredDtoQuotation);
             if (dto.isAssuredTheProposer()) {
-                proposer = ProposerBuilder.getProposerBuilder(cmd.getProposedAssured()).createProposer();
+                proposer = ProposerBuilder.getProposerBuilder(dto.getProposedAssured()).createProposer();
             }
             Map plan = planFinder.findPlanByPlanId(new PlanId(dto.getPlanId()));
             Map planDetail = (HashMap) plan.get("planDetail");
@@ -69,11 +70,15 @@ public class ILProposalFactory {
             aggregate = new ILProposalAggregate(cmd.getProposalId(), proposalNumber, proposedAssured, agentCommissionShareModel,proposer, dto.getQuotationNumber(),dto.getVersionNumber(),
                     dto.getQuotationId().getQuotationId(),proposalPlanDetail, minAge,maxAge);
         } else {
+            if (logger.isDebugEnabled()) {
+                logger.debug(" ProposedAssured :: " + proposedAssured);
+            }
+            agentCommissionShareModel = withAgentCommissionShareModel(cmd.getAgentCommissionDetails());
+            proposedAssured =  withProposedAssure(cmd.getProposedAssured());
             aggregate = new ILProposalAggregate(cmd.getProposalId(), proposalNumber, proposedAssured,agentCommissionShareModel);
         }
         return aggregate;
     }
-
 
     private AgentCommissionShareModel withAgentCommissionShareModel(Set<AgentDetailDto> agentCommissionDetails){
         AgentCommissionShareModel agentCommissionShareModel = new AgentCommissionShareModel();
@@ -81,11 +86,6 @@ public class ILProposalFactory {
         return agentCommissionShareModel;
     }
 
-    private Proposer withProposer(ProposerDto proposerDto){
-        Proposer proposer = new Proposer(proposerDto.getTitle(),proposerDto.getFirstName(),proposerDto.getSurname(),proposerDto.getDateOfBirth(),
-                proposerDto.getGender(),proposerDto.getMobileNumber() ,proposerDto.getEmailAddress());
-        return proposer;
-    }
 
     private ProposedAssured withProposedAssure(ProposedAssuredDto proposedAssure){
         return  ProposedAssuredBuilder.getProposedAssuredBuilder(proposedAssure).createProposedAssured();

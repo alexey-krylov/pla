@@ -1,4 +1,4 @@
-package com.pla.individuallife.quotation.presentation.dto;
+package com.pla.individuallife.sharedresource.dto;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;

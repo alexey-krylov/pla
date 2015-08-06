@@ -204,12 +204,12 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
                     //console.log('viewQuotationOutput' + JSON.stringify(viewQuotationOutput));
 
                     $scope.proposedAssured = $scope.rcvProposalDetailQid.proposedAssured || {};
-                    $scope.proposedAssured.nrc = $scope.rcvProposalDetailQid.proposedAssured.nrcNumber || {};
+                    $scope.proposedAssured.nrc = $scope.rcvProposalDetailQid.proposedAssured.nrc || {};
                     $scope.proposedAssured.isProposer = $scope.rcvProposalDetailQid.assuredTheProposer;
                     if($scope.rcvProposalDetailQid.proposer != null)
                     {
                         $scope.proposer = $scope.rcvProposalDetailQid.proposer || {};
-                        $scope.proposer.nrc = $scope.rcvProposalDetailQid.proposer.nrcNumber || {};
+                        $scope.proposer.nrc = $scope.rcvProposalDetailQid.proposer.nrc || {};
 
                         $scope.proposerEmployment = $scope.rcvProposalDetailQid.proposer.employment;
                         $scope.proposerResidential = $scope.rcvProposalDetailQid.proposer.residentialAddress;

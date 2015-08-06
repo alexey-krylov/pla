@@ -5,12 +5,12 @@ import com.pla.individuallife.quotation.application.service.ILQuotationAppServic
 import com.pla.individuallife.quotation.domain.model.*;
 import com.pla.individuallife.quotation.domain.service.ILQuotationRoleAdapter;
 import com.pla.individuallife.quotation.domain.service.ILQuotationService;
-import com.pla.individuallife.quotation.presentation.dto.PlanDetailDto;
-import com.pla.individuallife.quotation.presentation.dto.ProposedAssuredDto;
-import com.pla.individuallife.quotation.presentation.dto.ProposerDto;
-import com.pla.individuallife.quotation.presentation.dto.RiderDetailDto;
+import com.pla.individuallife.sharedresource.dto.PlanDetailDto;
+import com.pla.individuallife.sharedresource.dto.RiderDetailDto;
 import com.pla.individuallife.quotation.query.PremiumDetailDto;
 import com.pla.individuallife.quotation.query.RiderPremiumDto;
+import com.pla.individuallife.sharedresource.dto.ProposedAssuredDto;
+import com.pla.individuallife.sharedresource.dto.ProposerDto;
 import com.pla.sharedkernel.identifier.PlanId;
 import com.pla.sharedkernel.identifier.QuotationId;
 import org.axonframework.commandhandling.GenericCommandMessage;
@@ -50,7 +50,7 @@ public class ILQuotationCommandHandler {
         ProposedAssured proposedAssured = ProposedAssured.proposedAssuredBuilder()
                 .withFirstName(cmd.getFirstName())
                 .withSurname(cmd.getSurname())
-                .withNrcNumber(cmd.getNrcNumber())
+                .withNrcNumber(cmd.getNrc())
                 .withTitle(cmd.getTitle()).build();
         quotationService.createQuotation(quotationProcessor, quotationId, new AgentId(cmd.getAgentId()),
                 proposedAssured, new PlanId(cmd.getPlanId()));
@@ -62,7 +62,7 @@ public class ILQuotationCommandHandler {
         ILQuotation quotation = ilQuotationRepository.load(new QuotationId(cmd.getQuotationId()));
         ILQuotationProcessor quotationProcessor = ILQuotationRoleAdapter.userToQuotationProcessor(cmd.getUserDetails());
         ProposerDto dto = cmd.getProposerDto();
-        Proposer proposer = new Proposer(dto.getTitle(), dto.getFirstName(), dto.getSurname(), dto.getNrcNumber(),
+        Proposer proposer = new Proposer(dto.getTitle(), dto.getFirstName(), dto.getSurname(), dto.getNrc(),
                 dto.getDateOfBirth(), dto.getGender(), dto.getMobileNumber(), dto.getEmailAddress());
 
         if (quotation.requireVersioning()) {
@@ -85,7 +85,7 @@ public class ILQuotationCommandHandler {
                 .withGender(dto.getGender())
                 .withTitle(dto.getTitle())
                 .withFirstName(dto.getFirstName())
-                .withNrcNumber(dto.getNrcNumber())
+                .withNrcNumber(dto.getNrc())
                 .withEmailAddress(dto.getEmailAddress())
                 .withMobileNumber(dto.getMobileNumber())
                 .withDateOfBirth(dto.getDateOfBirth())

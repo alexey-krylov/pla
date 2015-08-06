@@ -2,11 +2,14 @@ package com.pla.individuallife.quotation.query;
 
 import com.google.common.base.Preconditions;
 import com.pla.individuallife.quotation.domain.model.ILQuotation;
+import com.pla.individuallife.quotation.domain.model.ProposedAssured;
+import com.pla.individuallife.quotation.domain.model.Proposer;
 import com.pla.individuallife.quotation.domain.model.RiderDetail;
-import com.pla.individuallife.quotation.presentation.dto.PlanDetailDto;
-import com.pla.individuallife.quotation.presentation.dto.ProposedAssuredDto;
-import com.pla.individuallife.quotation.presentation.dto.ProposerDto;
-import com.pla.individuallife.quotation.presentation.dto.RiderDetailDto;
+import com.pla.individuallife.sharedresource.dto.PlanDetailDto;
+import com.pla.individuallife.sharedresource.dto.RiderDetailDto;
+import com.pla.individuallife.sharedresource.dto.ILQuotationDto;
+import com.pla.individuallife.sharedresource.dto.ProposedAssuredDto;
+import com.pla.individuallife.sharedresource.dto.ProposerDto;
 import com.pla.sharedkernel.identifier.QuotationId;
 import org.apache.commons.beanutils.BeanUtils;
 import org.nthdimenzion.ddd.domain.annotations.Finder;
@@ -95,10 +98,16 @@ public class ILQuotationFinder {
         //TODO change the type in dto
 //        dto.setQuotationStatus(quotation.getIlQuotationStatus());
         try {
-            if (quotation.getProposer() != null)
+            if (quotation.getProposer() != null) {
                 BeanUtils.copyProperties(proposerDto, quotation.getProposer());
-            if (quotation.getProposedAssured() != null)
+                Proposer proposer = quotation.getProposer();
+                proposerDto.setNrc(proposer.getNrcNumber());
+            }
+            if (quotation.getProposedAssured() != null) {
                 BeanUtils.copyProperties(proposedAssuredDto, quotation.getProposedAssured());
+                ProposedAssured proposedAssured = quotation.getProposedAssured();
+                proposedAssuredDto.setNrc(proposedAssured.getNrcNumber());
+            }
             if (quotation.getPlanDetail() != null)
                 BeanUtils.copyProperties(planDetailDto, quotation.getPlanDetail());
         } catch (IllegalAccessException e) {

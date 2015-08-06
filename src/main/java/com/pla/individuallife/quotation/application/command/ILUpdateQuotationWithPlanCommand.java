@@ -1,6 +1,6 @@
 package com.pla.individuallife.quotation.application.command;
 
-import com.pla.individuallife.quotation.presentation.dto.PlanDetailDto;
+import com.pla.individuallife.sharedresource.dto.PlanDetailDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;

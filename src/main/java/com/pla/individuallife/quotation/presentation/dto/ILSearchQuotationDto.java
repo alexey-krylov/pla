@@ -1,5 +1,6 @@
 package com.pla.individuallife.quotation.presentation.dto;
 
+import com.pla.individuallife.sharedresource.dto.PlanDetailDto;
 import com.pla.individuallife.sharedresource.dto.ProposedAssuredDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

@@ -33,7 +33,7 @@ public class ILCreateQuotationCommand {
 
     @NotNull(message = "{Assured NRC  cannot be null}")
     @NotEmpty(message = "{Assured NRC  cannot be empty}")
-    private String nrcNumber;
+    private String nrc;
 
     @NotNull(message = "{Plan ID cannot be null}")
     private String planId;
