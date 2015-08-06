@@ -134,6 +134,8 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
                 $scope.getSumAssuredType = function (searchRider) {
                     if ($scope.plan) {
                         $scope.coverage = _.findWhere($scope.plan.coverages, {coverageId: searchRider.coverageId});
+                        //alert("COverage.."+JSON.stringify($scope.coverage));
+                        //console.log('Coverage..'+JSON.stringify($scope.coverage));
                         return $scope.coverage.coverageSumAssured.sumAssuredType;
 
                     }
@@ -163,7 +165,7 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
     }])
     .controller('createProposalCtrl', ['$scope', 'resources', 'getQueryParameter', '$bsmodal', '$http', '$window',
         'globalConstants', 'ProposalService','$upload',
-        function ($scope, resources, getQueryParameter, $bsmodal, $http, $window, globalConstants, ProposalService,$upload) {
+        function ($scope, resources, getQueryParameter, $bsmodal, $http, $window, globalConstants, ProposalService,$upload,$route) {
 
             //console.log('create proposal');
 
@@ -567,7 +569,7 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
                 viewILProposalModule.getTheItemSelected(ele);
             };
 
-            $scope.beneficiariesList =[];
+            /*$scope.beneficiariesList =[];*/
 
             $scope.titleList = globalConstants.title;
             $scope.genderList = globalConstants.gender;
@@ -785,39 +787,54 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
 
                 });
             }
-
-
-
+            $scope.beneficiariesList =[];
             $scope.addBeneficiary = function (beneficiary) {
-                //console.log('Inside addBeneficiary Method..');
-                ////console.log("Length is:"+$scope.beneficiariesList.length);
-
-                if ($scope.beneficiariesList.length == 0) {
+                alert('Inside addBeneficiary Method..');
+                alert("Length is:"+$scope.beneficiariesList.length);
+                //console.log("List..: "+JSON.stringify(beneficiariesList));
+               /*if ($scope.beneficiariesList.length == 0) {
                  //console.log('Object Is..' + beneficiary);
                  $scope.beneficiariesList.push(beneficiary);
                  //$scope.test(agent);
-                    $scope.clear();
-                 }
-
-                else {
-
-                    for (i in $scope.beneficiariesList) {
-                        if (($scope.beneficiariesList[i].firstName == beneficiary.firstName)||($scope.beneficiaries[i].nrc == beneficiary.nrc)) {
-                            //console.log('Failure..');
-                            //alert("Particular Beneficiary is Already Added..Please Choose different AgentId");
-
-                        }
-                        else {
-                            $scope.beneficiariesList.unshift(beneficiary);
-                        }
-                    }
-                    //$scope.test(agent);
-                    $scope.clear();
-
+                 //   $scope.clear();
+                 }*/
+                if ($scope.beneficiariesList.length == 0) {
+                    ////console.log('Length is Null..'+$scope.agentDetails.length);
+                    //$scope.beneficiariesList.unshift(beneficiary);
+                    $scope.beneficiariesList.push(beneficiary);
+                   //console.log("List..: "+JSON.stringify(beneficiariesList));
+                    alert("Object Is.." + JSON.stringify(beneficiary));
                 }
 
+                else {
+                    alert('Length is greater Then 0');
+                    var checkLoopNameStatus = "true";
+                    for (i in $scope.beneficiariesList) {
+                        if ($scope.beneficiariesList[i].nrc == beneficiary.nrc) {
+                            checkLoopNameStatus = "false";
+                            break;
+                        } else if( ($scope.beneficiariesList[i].firstName == beneficiary.firstName) &&
+                            ($scope.beneficiariesList[i].gender == beneficiary.gender) && ($scope.beneficiariesList[i].dateOfBirth == beneficiary.dateOfBirth) ) {
+                            checkLoopNameStatus = "false";
+                            break;
+                        }
+                    }
 
-                $('#beneficiaryModal').modal('hide');
+                    if(checkLoopNameStatus == "true") {
+                        $scope.beneficiariesList.unshift(beneficiary);
+                        alert("Object Is.." + JSON.stringify(beneficiary));
+                        //$scope.clear();
+                        // $('#beneficiaryModal').modal('hide');
+                    } else {
+                        alert("All Are Same...");
+                        //$scope.clear();
+                        // $('#beneficiaryModal').modal('hide');
+                    }
+                }
+                $scope.clear();
+                $('#beneficialModal').modal('hide');
+                //$scope.clear();
+
             };
 
             $scope.showDob = function (dob) {
@@ -1358,6 +1375,10 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
                 $scope.clear();
             };
 
+           /* $scope.addBeneficiaryList=function(beneficiary)
+            {
+                alert('Test');
+            }*/
 
             $scope.addAgent = function (agent) {
                 //console.log('Inside addagent Method..');
@@ -1846,6 +1867,104 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
                     ////alert(newvalue);
                     $scope.proposer.nextDob = moment().diff(new moment(new Date(newvalue)), 'years') + 1;
                     ////alert($scope.proposer.nextDob);
+                }
+            });
+
+            $scope.ageCalculateStatus=false;
+          $scope.$watch('proposer.nextDob',function(newvalue,oldvalue){
+              //$scope.ageCalculate=0;
+                if(newvalue){
+
+                    //alert(newvalue);
+
+                    if((parseInt(newvalue) <= 18 ) || (parseInt(newvalue) >=60)){
+                        $scope.ageCalculateStatus=true;
+                        alert("Same1....");
+                        //alert(parseInt(newvalue));
+                    }
+                    else {
+                        $scope.ageCalculateStatus=false;
+                        //alert("Not Same..");
+                        //alert(newvalue);
+                    }
+                }
+            });
+
+
+            $scope.$watch('proposedAssured.title', function (newVal, oldVal) {
+                if (newVal) {
+                   //alert(newVal);
+                    if(newVal == 'Mr.')
+                    {
+                        $scope.proposedAssured.gender='MALE';
+                    }
+                    else if((newVal == 'Miss') || (newVal == 'Mrs.') )
+                    {
+                        $scope.proposedAssured.gender ='FEMALE';
+                    }
+                    else
+                    {
+                        $scope.proposedAssured.gender ='';
+                    }
+                }
+            });
+
+
+            $scope.$watch('proposer.title', function (newVal, oldVal) {
+                if (newVal) {
+                    //alert(newVal);
+                    if(newVal == 'Mr.')
+                    {
+                        $scope.proposer.gender='MALE';
+                    }
+                    else if((newVal == 'Miss') || (newVal == 'Mrs.') )
+                    {
+                        $scope.proposer.gender ='FEMALE';
+                    }
+                    else
+                    {
+                        $scope.proposer.gender ='';
+                    }
+                }
+            });
+
+            /**
+             * Checking of  Occupation filed of  ProposedAssured Detail  to decide whether to display Employment Type Field
+             * Address1, Address2 ,Province ,Work Phone & Postal CodeFields
+             * */
+
+             $scope.employmentTypeStaus=true;
+            $scope.$watch('employment.occupation', function (newVal, oldVal) {
+                if (newVal) {
+                    //alert(newVal);
+                    if((newVal == 'Student') || (newVal == 'Housewives'))
+                    {
+                        $scope.employmentTypeStaus=false;
+                    }
+                    else
+                    {
+                        $scope.employmentTypeStaus=true;
+                    }
+                }
+            });
+
+            /**
+             * Checking of  Occupation filed of  Proposer Detail  to decide whether to display Employment Type Field
+             * Address1, Address2 ,Province ,Work Phone & Postal CodeFields
+             * */
+
+            $scope.proposerEmploymentTypeStaus=true;
+            $scope.$watch('proposerEmployment.occupation', function (newVal, oldVal) {
+                if (newVal) {
+                    //alert(newVal);
+                    if((newVal == 'Student') || (newVal == 'Housewives'))
+                    {
+                        $scope.proposerEmploymentTypeStaus=false;
+                    }
+                    else
+                    {
+                        $scope.proposerEmploymentTypeStaus=true;
+                    }
                 }
             });
 

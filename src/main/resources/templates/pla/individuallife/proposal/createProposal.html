@@ -335,8 +335,6 @@
         </div>
     </div>
 
-
-
     <div class="modal fade" id="beneficialModal" tabindex="-1" role="dialog" aria-labelledby="beneficialModal" ng-form="planBeneficiary">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -386,7 +384,7 @@
                                 <label class="control-label">Relationship To Life Assured</label>
                                 <!--<input type="text" class="form-control input-sm" name="relationship" ng-model="beneficiary.relationshipId"/>-->
 
-                                <select class="form-control input-sm" name="relationship" ng-required="true" ng-disabled="mode=='new'||mode=='view'" ng-model="beneficiary.relationshipId" ng-options="applicableRelationship for applicableRelationship in applicableRelationships">
+                                <select class="form-control input-sm" name="relationship" ng-disabled="mode=='new'||mode=='view'" ng-model="beneficiary.relationshipId" ng-options="applicableRelationship for applicableRelationship in applicableRelationships">
                                 </select>
                             </div>
                         </div>
@@ -433,7 +431,8 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button class="btn btn-default" data-dismiss="modal" ng-click="addBeneficiary(beneficiary)">Add</button>
+                    <button class="btn btn-default" data-dismiss="modal" ng-disabled="planBeneficiary.$invalid" ng-click="addBeneficiary(beneficiary)">Add</button>
+                    <!--<button class="btn btn-default" data-dismiss="modal" ng-click="addBeneficiary(beneficiary)">Add12</button>-->
                     <button class="btn btn-default" data-dismiss="modal">Cancel</button>
                 </div>
             </div>
@@ -441,6 +440,5 @@
     </div>
 </div>
 <footer class="footer" th:include="fragments/common :: footer"></footer>
-
 </body>
 </html>

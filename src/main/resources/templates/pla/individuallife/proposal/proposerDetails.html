@@ -37,7 +37,12 @@
                 </div>
                 <div class="form-group required">
                     <label class="control-label">Age Next Birthday</label>
-                    <input type="text" class="form-control input-sm" ng-disabled="mode=='new'||mode=='view'" name="ageNextBirthday" ng-model="proposer.nextDob"/>
+                    <input type="text" class="form-control input-sm" ng-disabled="mode=='new'||mode=='view'" ng-readonly="true" name="ageNextBirthday" ng-model="proposer.nextDob"/>
+
+                    <p style="color:red" ng-show="ageCalculateStatus">
+                        Age Next Birthday should be in between 18 years to 60 years.
+                    </p>
+
                 </div>
                 <div class="form-group required">
                     <label class="control-label">Mobile Number</label>
@@ -218,7 +223,7 @@
 
 
                 <div class="form-group required">
-                    <label class="control-label">Address Line 1</label>
+                    <label class="control-label" ng-if="proposerEmploymentTypeStaus">Address Line 1</label>
                     <input type="text" class="form-control input-sm" ng-disabled="mode=='new'||mode=='view'" name="addressLine1" ng-maxlength="100" ng-model="proposerEmployment.address1" ng-required="true"/>
 
                     <div class="error" ng-messages="proposerEmploymentForm.addressLine1.$error" ng-if="proposerEmploymentForm.addressLine1.$dirty">
@@ -226,7 +231,7 @@
                         <small ng-message="maxlength">Only 100 characters are allowed.</small>
                     </div>
                 </div>
-                <div class="form-group">
+                <div class="form-group" ng-if="proposerEmploymentTypeStaus">
                     <label class="control-label">Postal Code</label>
                     <input type="text" class="form-control input-sm" ng-disabled="mode=='new'||mode=='view'" name="postCode" ng-maxlength="7" ng-pattern="/^\d+$/" ng-model="proposerEmployment.postalCode"/>
 
@@ -235,7 +240,7 @@
                         <small ng-message="pattern">Only Numeric are allowed.</small>
                     </div>
                 </div>
-                <div class="form-group required">
+                <div class="form-group required" ng-if="proposerEmploymentTypeStaus">
                     <label class="control-label">Town</label>
                     <select class="form-control input-sm" name="town" ng-disabled="mode=='new'||mode=='view'" ng-required="true" ng-model="proposerEmployment.town"
                             ng-options="city.geoId as city.geoName for city in proposerEmploymentCities"/>
@@ -255,8 +260,7 @@
                         <small ng-message="maxlength">Only 30 characters are allowed.</small>
                     </div>
                 </div>
-                <div class="form-group required">
-                    {{proposerEmployment.employmentType}}
+                <div class="form-group required" ng-if="proposerEmploymentTypeStaus">
                     <label class="control-label">Employment Type</label>
                     <select class="form-control input-sm" name="employmentType"
                             ng-options="employmentType.employment_id as employmentType.description for employmentType in employmentTypes"
@@ -267,14 +271,14 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    <label class="control-label">Address Line 2</label>
+                    <label class="control-label" ng-if="proposerEmploymentTypeStaus">Address Line 2</label>
                     <input type="text" class="form-control input-sm" ng-disabled="mode=='new'||mode=='view'" name="addressLine2" ng-maxlength="100" ng-model="proposerEmployment.address2"/>
 
                     <div class="error" ng-messages="proposerEmploymentForm.addressLine2.$error" ng-if="proposerEmploymentForm.addressLine2.$dirty">
                         <small ng-message="maxlength">Only 100 characters are allowed.</small>
                     </div>
                 </div>
-                <div class="form-group required">
+                <div class="form-group required" ng-if="proposerEmploymentTypeStaus">
                     <label class="control-label">Province</label>
                     <select class="form-control input-sm" name="province" ng-disabled="mode=='new'||mode=='view'" ng-options="province.provinceId as province.provinceName for province in provinces"
                             ng-model="proposerEmployment.province" ng-required="true">
@@ -284,7 +288,7 @@
                         <small class="error" ng-message="required">Please enter Province</small>
                     </div>
                 </div>
-                <div class="form-group">
+                <div class="form-group" ng-if="proposerEmploymentTypeStaus">
                     <label class="control-label">Work phone</label>
                     <input type="text" class="form-control input-sm" name="workPhone" ng-disabled="mode=='new'||mode=='view'" ng-minlength="10" ng-maxlength="10" ng-pattern="/^\d+$/" ng-model="proposerEmployment.workPhone"/>
 
@@ -386,7 +390,7 @@
             <button type="button" class="btn btn-default btn-sm">Cancel</button>
         </div>
         <div class="col-sm-6">
-            <button type="button" class="btn btn-default btn-sm" style="float: right" ng-disabled="step2.$invalid ||mode=='new'||mode=='view'" ng-click="saveProposerDetails()">Save</button>
+            <button type="button" class="btn btn-default btn-sm" style="float: right" ng-disabled="step2.$invalid ||mode=='new'||mode=='view'|| ageCalculateStatus" ng-click="saveProposerDetails()">Save</button>
         </div>
     </div>
 </ng-form>

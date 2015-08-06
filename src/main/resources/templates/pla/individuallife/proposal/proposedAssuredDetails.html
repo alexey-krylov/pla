@@ -153,8 +153,8 @@
                 <div class="form-group required">
                     <label class="control-label">Sex</label>
                     <select class="form-control input-sm" name="gender" ng-disabled="mode=='new'||mode=='view'" ng-model="proposedAssured.gender" ng-required="true">
-                        <option value="MALE" ng-value="MALE">MALE</option>
-                        <option value="FEMALE" ng-value="FEMALE">FEMALE</option>
+                        <option value="MALE" >Male</option>
+                        <option value="FEMALE">Female</option>
                     </select>
 
                     <div class="error" ng-messages="proposedAssuredDetails.gender.$error" ng-if="proposedAssuredDetails.gender.$dirty">
@@ -265,7 +265,7 @@
                     </div>
                 </div>
 
-                <div class="form-group required">
+                <div class="form-group required" ng-if="employmentTypeStaus">
                     <label class="control-label">Address Line 1</label>
                     <input type="text" class="form-control input-sm" ng-disabled="mode=='new'||mode=='view'" name="addressLine1" ng-maxlength="100" ng-model="employment.address1" ng-required="true"/>
 
@@ -274,7 +274,7 @@
                         <small ng-message="maxlength">Only 100 characters are allowed.</small>
                     </div>
                 </div>
-                <div class="form-group">
+                <div class="form-group" ng-if="employmentTypeStaus">
                     <label class="control-label">Postal Code</label>
                     <input type="text" class="form-control input-sm" name="postalCode" ng-disabled="mode=='new'||mode=='view'" ng-maxlength="7" ng-pattern="/^\d+$/" ng-model="employment.postalCode"/>
 
@@ -303,8 +303,7 @@
                         <small ng-message="maxlength">Only 30 characters are allowed.</small>
                     </div>
                 </div>
-                <div class="form-group required">
-                    {{employment.employmentType}}
+                <div class="form-group required" ng-if="employmentTypeStaus">
                     <label class="control-label">Employment Type</label>
                     <select class="form-control input-sm" name="employmentType" ng-required="true" ng-disabled="mode=='new'||mode=='view'" ng-model="employment.employmentType" ng-options="employmentType.employment_id as employmentType.description for employmentType in employmentTypes">
                             </select>
@@ -313,7 +312,7 @@
                         <small class="error" ng-message="required">Please enter Employment Type</small>
                     </div>
                 </div>
-                <div class="form-group">
+                <div class="form-group" ng-if="employmentTypeStaus">
                     <label class="control-label">Address Line 2</label>
                     <input type="text" class="form-control input-sm" name="addressLine2" ng-disabled="mode=='new'||mode=='view'" ng-maxlength="100" ng-model="employment.address2"/>
 
@@ -321,7 +320,7 @@
                         <small ng-message="maxlength">Only 100 characters are allowed.</small>
                     </div>
                 </div>
-                <div class="form-group required">
+                <div class="form-group required" ng-if="employmentTypeStaus">
                     <label class="control-label">Province</label>
                     <select class="form-control input-sm" name="province" ng-disabled="mode=='new'||mode=='view'" ng-options="province.provinceId as province.provinceName for province in provinces"
                             ng-model="employment.province" ng-required="true">
@@ -331,7 +330,7 @@
                         <small class="error" ng-message="required">Please enter Province</small>
                     </div>
                 </div>
-                <div class="form-group">
+                <div class="form-group" ng-if="employmentTypeStaus">
                     <label class="control-label">Work phone</label>
                     <input type="text" class="form-control input-sm" name="workPhone" ng-disabled="mode=='new'||mode=='view'" ng-minlength="10" ng-maxlength="10" ng-pattern="/^\d+$/" ng-model="employment.workPhone"/>
 
