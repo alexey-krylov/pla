@@ -360,6 +360,9 @@ public class GHInsuredExcelParser {
                 if (optionalCoverageCellHolder.getBenefitCellHolders() != null) {
                     for (OptionalCoverageBenefitCellHolder optionalCoverageBenefitCellHolder : optionalCoverageCellHolder.getBenefitCellHolders()) {
                         String benefitCode = getCellValue(optionalCoverageBenefitCellHolder.getBenefitCell());
+                        if (benefitCode.indexOf(".") != -1) {
+                            benefitCode = benefitCode.substring(0, benefitCode.indexOf("."));
+                        }
                         if (!planAdapter.isValidPlanCoverageBenefit(finalPlanCode, optionalCoverageCode, benefitCode)) {
                             errorMessages.add(benefitCode + "  is not valid Benefit Code for coverage " + optionalCoverageCode + ".");
                         }
