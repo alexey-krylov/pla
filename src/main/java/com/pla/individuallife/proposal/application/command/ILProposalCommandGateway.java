@@ -45,7 +45,7 @@ public interface ILProposalCommandGateway {
     String approveProposal(ILProposalApprovalCommand cmd)
             throws TimeoutException, InterruptedException;
 
-    String returnProposal(ILProposalApprovalCommand cmd)
+   /* String returnProposal(ILProposalApprovalCommand cmd)
             throws TimeoutException, InterruptedException;
 
     String holdProposal(ILProposalApprovalCommand cmd)
@@ -53,7 +53,7 @@ public interface ILProposalCommandGateway {
 
     String rejectProposal(ILProposalApprovalCommand cmd)
             throws TimeoutException, InterruptedException;
-
+*/
     String routeToNextLevel(ILProposalUnderwriterNextLevelCommand cmd)
             throws TimeoutException, InterruptedException;
 }

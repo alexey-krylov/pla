@@ -17,8 +17,10 @@ import java.math.BigDecimal;
 public class RiderPremiumDto {
 
     private CoverageId coverageId;
-
     private CoverageName coverageName;
-
     private BigDecimal annualPremium;
+    private BigDecimal monthlyPremium;
+    private BigDecimal SemiAnnualPremium;
+    private BigDecimal QuarterlyPremium;
+
 }

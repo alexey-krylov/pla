@@ -1,7 +1,7 @@
 package com.pla.individuallife.sharedresource.model.vo;
 
-import com.pla.individuallife.proposal.presentation.dto.ProposedAssuredDto;
-import com.pla.individuallife.proposal.presentation.dto.ProposerDto;
+import com.pla.individuallife.sharedresource.dto.ProposedAssuredDto;
+import com.pla.individuallife.sharedresource.dto.ProposerDto;
 import com.pla.sharedkernel.domain.model.Gender;
 import com.pla.sharedkernel.domain.model.MaritalStatus;
 import org.hibernate.annotations.Type;

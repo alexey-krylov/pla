@@ -26,7 +26,7 @@
             requirejs(['/pla/js/individuallife/policy/searchPolicy.js'], function () {
                 $(document).ready(function () {
                     $("input[type='text']").keyup(function () {
-                        var isDisabled = true;
+                        var isDisabled = false;
                         $('#searchpolicyforGLPolicy *').filter(':text').each(function (key, value) {
                             if ($(value).val().trim().length != 0) {
                                 isDisabled = false;
@@ -54,7 +54,7 @@
     <p class="lead">
     <ol class="breadcrumb">
         <li>Policy</li>
-        <li>Group Health</li>
+        <li>Individual Life</li>
     </ol>
     </p>
     <form method="post" action="search" novalidate="true" name="searchpolicyforGHPolicy"
@@ -68,6 +68,13 @@
                     <label th:text="#{policyNumber}">Policy Number</label>
                     <input type="text" class="form-control input-sm" name="policyNumber"
                            th:value="${searchCriteria.policyNumber}"/>
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div class="form-group">
+                    <label th:text="#{proposalNumber}">Proposal Number</label>
+                    <input type="text" class="form-control input-sm" name="proposalNumber"
+                           th:value="${searchCriteria.proposalNumber}"/>
                 </div>
             </div>
             <div class="col-md-2">

@@ -278,6 +278,9 @@ public class ILProposalFinder {
                     rd.setCoverageName(new CoverageName(coverageFinder.getCoverageDetail(rider.getCoverageId()).get("coverageName").toString()));
                     computedPremiums = premiumCalculator.calculateBasicPremium(premiumCalculationDto);
                     rd.setAnnualPremium(ComputedPremiumDto.getAnnualPremium(computedPremiums));
+                    rd.setSemiAnnualPremium(ComputedPremiumDto.getSemiAnnualPremium(computedPremiums));
+                    rd.setQuarterlyPremium(ComputedPremiumDto.getQuarterlyPremium(computedPremiums));
+                    rd.setMonthlyPremium(ComputedPremiumDto.getMonthlyPremium(computedPremiums));
                     totalPremium = totalPremium.add(ComputedPremiumDto.getAnnualPremium(computedPremiums));
                     semiAnnualPremium = semiAnnualPremium.add(ComputedPremiumDto.getSemiAnnualPremium(computedPremiums));
                     quarterlyPremium = quarterlyPremium.add(ComputedPremiumDto.getQuarterlyPremium(computedPremiums));

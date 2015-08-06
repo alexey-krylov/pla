@@ -54,6 +54,7 @@ public class ILQuotationFinder {
     public static final String findILQuotationByQuotationNumberQuery = "SELECT * FROM individual_life_quotation WHERE quotation_number=:quotationNumber AND quotation_id !=:quotationId AND il_quotation_status=:quotationStatus";
 
     private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
+
     @Autowired
     private ILQuotationRepository ilQuotationRepository;
 

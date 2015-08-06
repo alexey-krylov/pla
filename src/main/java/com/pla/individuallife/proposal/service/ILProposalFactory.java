@@ -6,8 +6,8 @@ import com.pla.individuallife.proposal.application.command.ILCreateProposalComma
 import com.pla.individuallife.proposal.domain.model.*;
 import com.pla.individuallife.proposal.domain.service.ProposalNumberGenerator;
 import com.pla.individuallife.proposal.presentation.dto.AgentDetailDto;
-import com.pla.individuallife.proposal.presentation.dto.ProposedAssuredDto;
-import com.pla.individuallife.proposal.presentation.dto.ProposerDto;
+import com.pla.individuallife.sharedresource.dto.ProposedAssuredDto;
+import com.pla.individuallife.sharedresource.dto.ProposerDto;
 import com.pla.individuallife.quotation.presentation.dto.PlanDetailDto;
 import com.pla.individuallife.quotation.presentation.dto.RiderDetailDto;
 import com.pla.individuallife.quotation.query.ILQuotationDto;
@@ -56,10 +56,10 @@ public class ILProposalFactory {
         ILProposalAggregate aggregate;
         String proposalNumber = proposalNumberGenerator.getProposalNumber();
         if (cmd.getQuotationId() != null) {
-            if (proposedAssured.getIsProposer()) {
+            ILQuotationDto dto = quotationFinder.getQuotationById(cmd.getQuotationId());
+            if (dto.isAssuredTheProposer()) {
                 proposer = ProposerBuilder.getProposerBuilder(cmd.getProposedAssured()).createProposer();
             }
-            ILQuotationDto dto = quotationFinder.getQuotationById(cmd.getQuotationId());
             Map plan = planFinder.findPlanByPlanId(new PlanId(dto.getPlanId()));
             Map planDetail = (HashMap) plan.get("planDetail");
             int minAge = (int) planDetail.get("minEntryAge");

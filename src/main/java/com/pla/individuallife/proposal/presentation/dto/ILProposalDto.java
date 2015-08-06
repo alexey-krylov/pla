@@ -1,5 +1,7 @@
 package com.pla.individuallife.proposal.presentation.dto;
 
+import com.pla.individuallife.sharedresource.dto.ProposedAssuredDto;
+import com.pla.individuallife.sharedresource.dto.ProposerDto;
 import com.pla.individuallife.sharedresource.model.vo.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

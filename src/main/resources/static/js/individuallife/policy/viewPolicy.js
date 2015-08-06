@@ -44,7 +44,7 @@ angular.module('viewPolicy', ['common', 'ngRoute', 'mgcrea.ngStrap.select', 'mgc
             $http.get("/pla/grouphealth/proposal/getadditionaldocuments/"+ $scope.policyId).success(function (data, status) {
                 console.log(data);
                 $scope.additionalDocumentList=data;
-              //  $scope.checkDocumentAttached=$scope.additionalDocumentList!=null;
+                //  $scope.checkDocumentAttached=$scope.additionalDocumentList!=null;
 
             });
 
@@ -67,8 +67,8 @@ angular.module('viewPolicy', ['common', 'ngRoute', 'mgcrea.ngStrap.select', 'mgc
                 }
             }
             $http.get("/pla/grouphealth/policy/getpolicydetail/" + $scope.policyId).success(function (data, status) {
-               //  console.log(data);
-                 $scope.policyDetails.basicDetails = data;
+                //  console.log(data);
+                $scope.policyDetails.basicDetails = data;
                 $scope.policyDetails.basicDetails.inceptionDate= moment(data.inceptionDate).format("DD/MM/YYYY");
                 $scope.policyDetails.basicDetails.expiryDate =moment(data.expiryDate).format("DD/MM/YYYY");
 

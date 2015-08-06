@@ -1,5 +1,8 @@
-package com.pla.individuallife.proposal.presentation.dto;
+package com.pla.individuallife.sharedresource.dto;
 
+import com.pla.individuallife.proposal.presentation.dto.EmploymentDto;
+import com.pla.individuallife.proposal.presentation.dto.ResidentialAddressDto;
+import com.pla.individuallife.proposal.presentation.dto.SpouseDto;
 import com.pla.individuallife.sharedresource.model.vo.EmploymentDetail;
 import com.pla.individuallife.sharedresource.model.vo.ResidentialAddress;
 import com.pla.sharedkernel.domain.model.Gender;
