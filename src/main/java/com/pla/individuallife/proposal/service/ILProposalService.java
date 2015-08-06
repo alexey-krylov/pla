@@ -114,6 +114,9 @@ public class ILProposalService {
             return Collections.EMPTY_LIST;
         List<ILProposerDocument> uploadedDocuments = proposal.get("proposalDocuments") != null ? (List<ILProposerDocument>) proposal.get("proposalDocuments") : Lists.newArrayList();
         ProposalPlanDetail planDetail = (ProposalPlanDetail) proposal.get("proposalPlanDetail");
+        if (planDetail==null){
+            return Collections.EMPTY_LIST;
+        }
         UnderWriterRoutingLevelDetailDto routingLevelDetailDto = new UnderWriterRoutingLevelDetailDto(new PlanId(planDetail.getPlanId()), LocalDate.now(), ProcessType.ENROLLMENT.name());
         DateTime dob = new DateTime(((ProposedAssured) proposal.get("proposedAssured")).getDateOfBirth());
         Integer age = Years.yearsBetween(dob, DateTime.now()).getYears() + 1;
@@ -130,7 +133,7 @@ public class ILProposalService {
             mandatoryDocuments.addAll(underWriterAdapter.getMandatoryDocumentsForApproverApproval(documentDetailDtos, ProcessType.ENROLLMENT));
         }
         if (isNotEmpty(mandatoryDocuments)) {
-           return mandatoryDocuments.stream().map(new Function<ClientDocumentDto, ILProposalMandatoryDocumentDto>() {
+            return mandatoryDocuments.stream().map(new Function<ClientDocumentDto, ILProposalMandatoryDocumentDto>() {
                 @Override
                 public ILProposalMandatoryDocumentDto apply(ClientDocumentDto clientDocumentDto) {
                     ILProposalMandatoryDocumentDto mandatoryDocumentDto = new ILProposalMandatoryDocumentDto(clientDocumentDto.getDocumentCode(), clientDocumentDto.getDocumentName());

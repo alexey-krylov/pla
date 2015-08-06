@@ -5,7 +5,7 @@ import com.pla.core.query.PlanFinder;
 import com.pla.individuallife.proposal.application.command.ILCreateProposalCommand;
 import com.pla.individuallife.proposal.domain.model.ILProposalAggregate;
 import com.pla.individuallife.proposal.domain.service.ProposalNumberGenerator;
-import com.pla.individuallife.proposal.presentation.dto.AgentDetailDto;
+import com.pla.individuallife.sharedresource.dto.AgentDetailDto;
 import com.pla.individuallife.sharedresource.dto.PlanDetailDto;
 import com.pla.individuallife.sharedresource.dto.RiderDetailDto;
 import com.pla.individuallife.sharedresource.dto.ILQuotationDto;

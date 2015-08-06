@@ -7,7 +7,7 @@ import com.pla.individuallife.identifier.QuestionId;
 import com.pla.individuallife.proposal.domain.model.*;
 import com.pla.individuallife.proposal.domain.service.ILProposalRoleAdapter;
 import com.pla.individuallife.proposal.domain.service.ProposalNumberGenerator;
-import com.pla.individuallife.proposal.presentation.dto.AgentDetailDto;
+import com.pla.individuallife.sharedresource.dto.AgentDetailDto;
 import com.pla.individuallife.proposal.presentation.dto.QuestionDto;
 import com.pla.individuallife.proposal.query.ILProposalFinder;
 import com.pla.individuallife.proposal.service.ILProposalFactory;

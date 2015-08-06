@@ -1,4 +1,4 @@
-package com.pla.individuallife.proposal.presentation.dto;
+package com.pla.individuallife.sharedresource.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;

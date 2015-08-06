@@ -1,14 +1,20 @@
 package com.pla.individuallife.policy.presentation.controller;
 
+import com.pla.individuallife.policy.finder.ILPolicyFinder;
+import com.pla.individuallife.policy.presentation.dto.ILPolicyDto;
 import com.pla.individuallife.policy.presentation.dto.PolicyDetailDto;
 import com.pla.individuallife.policy.presentation.dto.SearchILPolicyDto;
 import com.pla.individuallife.policy.service.ILPolicyService;
+import com.pla.sharedkernel.identifier.PolicyId;
+import com.wordnik.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.List;
+
+import static com.google.common.base.Preconditions.checkArgument;
 
 /**
  * Created by Admin on 8/4/2015.
@@ -18,6 +24,11 @@ import java.util.List;
 public class ILPolicyController {
 
     private ILPolicyService ilPolicyService;
+
+    @Autowired
+    private ILPolicyFinder ilPolicyFinder;
+
+
     @Autowired
     public ILPolicyController(ILPolicyService ilPolicyService) {
         this.ilPolicyService = ilPolicyService;
@@ -64,23 +75,22 @@ public class ILPolicyController {
         return modelAndView;
     }
 
-    /*@RequestMapping(method = RequestMethod.GET, value = "/getproposal/{proposalId}")
-    @ApiOperation(httpMethod = "GET", value = "This call for edit proposal screen.")
+    @RequestMapping(value = "/getpolicydetail/{policyId}", method = RequestMethod.GET)
     @ResponseBody
-    public ILProposalDto getProposalById(@PathVariable("proposalId") String proposalId) {
-        ILProposalDto dto = proposalFinder.getProposalById(proposalId);
-        checkArgument(dto != null, "Proposal not found");
+    public PolicyDetailDto findPolicyDetail(@PathVariable("policyId") String policyId) {
+        PolicyDetailDto policyDetailDto = ilPolicyService.getPolicyDetail(policyId);
+        return policyDetailDto;
+    }
+
+    @RequestMapping(method = RequestMethod.GET, value = "/getpolicy/{policyId}")
+    @ApiOperation(httpMethod = "GET", value = "This call for edit Policy screen.")
+    @ResponseBody
+    public ILPolicyDto getPolicyById(@PathVariable("policyId") PolicyId policyId) {
+        ILPolicyDto dto = ilPolicyFinder.getPolicyById(policyId);
+        checkArgument(dto != null, "Policy not found");
         return dto;
     }
 
-    @RequestMapping(method = RequestMethod.GET, value = "/getproposalnumber/{proposalId}")
-    @ApiOperation(httpMethod = "GET", value = "This call to get proposal number")
-    @ResponseBody
-    public String getProposalNumberById(@PathVariable("proposalId") String proposalId) {
-        String proposalNumber = proposalFinder.getProposalNumberById(proposalId);
-        checkArgument(proposalNumber != null, "Proposal number not found");
-        return proposalNumber;
-    }*/
 
 
 }

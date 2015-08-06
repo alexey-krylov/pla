@@ -11,6 +11,7 @@ import com.pla.core.query.PlanFinder;
 import com.pla.core.query.PremiumFinder;
 import com.pla.individuallife.proposal.domain.model.*;
 import com.pla.individuallife.proposal.presentation.dto.*;
+import com.pla.individuallife.sharedresource.dto.AgentDetailDto;
 import com.pla.individuallife.sharedresource.model.vo.*;
 import com.pla.publishedlanguage.contract.IPremiumCalculator;
 import com.pla.publishedlanguage.domain.model.ComputedPremiumDto;
