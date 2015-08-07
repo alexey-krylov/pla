@@ -84,6 +84,7 @@ angular.module('createProposal', ['common', 'ngRoute', 'mgcrea.ngStrap.select', 
                         }).success(function (data, status, headers, config) {
                             //console.log('file ' + config.file.name + 'uploaded. Response: ' +
                             // JSON.stringify(data));
+
                         });
                     }
 
@@ -217,17 +218,27 @@ angular.module('createProposal', ['common', 'ngRoute', 'mgcrea.ngStrap.select', 
 
             $scope.proposalDetails.proposer = proposerDetails;
             $scope.proposalDetails.plan.considerMoratoriumPeriod = proposerDetails.considerMoratoriumPeriod;
-            /*used for bs-dropdown*/
-            $scope.dropdown = [
-                {
-                    "text": "<a><img src=\"/pla/images/xls-icon.png\">Ready Reckoner</a>",
-                    "href": "/pla/grouphealth/proposal/downloadplandetail/" + $scope.proposalId
-                },
-                {
-                    "text": "<a><img src=\"/pla/images/xls-icon.png\">Template</a>",
-                    "href": "/pla/grouphealth/proposal/downloadinsuredtemplate/" + $scope.proposalId
-                }
-            ];
+            if (mode == 'view') {
+                $scope.dropdown = [
+                    {
+                        "text": "<a><img src=\"/pla/images/xls-icon.png\">Template</a>",
+                        "href": "/pla/grouphealth/proposal/downloadinsuredtemplate/" + $scope.proposalId
+                    }
+                ];
+
+            }else {
+                /*used for bs-dropdown*/
+                $scope.dropdown = [
+                    {
+                        "text": "<a><img src=\"/pla/images/xls-icon.png\">Ready Reckoner</a>",
+                        "href": "/pla/grouphealth/proposal/downloadplandetail/" + $scope.proposalId
+                    },
+                    {
+                        "text": "<a><img src=\"/pla/images/xls-icon.png\">Template</a>",
+                        "href": "/pla/grouphealth/proposal/downloadinsuredtemplate/" + $scope.proposalId
+                    }
+                ];
+            }
 
             $scope.$watch('proposalDetails.proposer.province', function (newVal, oldVal) {
                 if (newVal) {

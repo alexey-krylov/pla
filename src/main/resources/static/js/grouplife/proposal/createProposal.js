@@ -214,17 +214,28 @@ angular.module('createProposal', ['common', 'ngRoute', 'mgcrea.ngStrap.select', 
 
 
             $scope.proposalDetails.proposer = proposerDetails;
-            /*used for bs-dropdown*/
-            $scope.dropdown = [
-                {
-                    "text": "<a><img src=\"/pla/images/xls-icon.png\">Ready Reckoner</a>",
-                    "href": "/pla/grouplife/proposal/downloadplandetail/" + $scope.proposalId
-                },
-                {
-                    "text": "<a><img src=\"/pla/images/xls-icon.png\">Template</a>",
-                    "href": "/pla/grouplife/proposal/downloadinsuredtemplate/" + $scope.proposalId
-                }
-            ];
+            if (mode == 'view') {
+                $scope.dropdown = [
+                    {
+                        "text": "<a><img src=\"/pla/images/xls-icon.png\">Template</a>",
+                        "href": "/pla/grouphealth/proposal/downloadinsuredtemplate/" + $scope.proposalId
+                    }
+                ];
+
+            }else {
+
+                /*used for bs-dropdown*/
+                $scope.dropdown = [
+                    {
+                        "text": "<a><img src=\"/pla/images/xls-icon.png\">Ready Reckoner</a>",
+                        "href": "/pla/grouplife/proposal/downloadplandetail/" + $scope.proposalId
+                    },
+                    {
+                        "text": "<a><img src=\"/pla/images/xls-icon.png\">Template</a>",
+                        "href": "/pla/grouplife/proposal/downloadinsuredtemplate/" + $scope.proposalId
+                    }
+                ];
+            }
 
             $scope.$watch('proposalDetails.proposer.province', function (newVal, oldVal) {
                 if (newVal) {
