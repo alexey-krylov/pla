@@ -39,14 +39,39 @@ var viewProposalModule = (function () {
 
     services.viewProposal = function () {
         var proposalId = this.selectedItem;
-        if(this.status == 'RETURNED' || this.status == 'APPROVED'){
-            window.location.href = "/pla/grouplife/proposal/editProposalReturnStatus?proposalId=" + proposalId  + "&mode=view" + "&status=return";
-        }else {
 
-            window.location.href = "/pla/grouplife/proposal/editProposal?proposalId=" + proposalId + "&mode=view";
+        if (this.status == 'RETURNED' || this.status == 'APPROVED') {
+            window.location.href = "/pla/grouplife/proposal/editProposalReturnStatus?proposalId=" + proposalId + "&mode=view" + "&status=return";
+        } else {
+
+            $.ajax({
+                url: '/pla/grouplife/proposal/getapprovercomments/' + proposalId,
+                type: 'GET',
+                success: function (data, textStatus, jqXHR) {
+                    for (var i = 0; i < data.length; i++) {
+                        var statusProposal = data[i].status;
+                        if (statusProposal === 'Returned') {
+                            services.statusValue = true;
+                            break;
+
+                        }
+                    }
+                    if (services.statusValue == false) {
+                        window.location.href = "/pla/grouplife/proposal/editProposal?proposalId=" + proposalId + "&mode=view";
+
+                    } else {
+                        window.location.href = "/pla/grouplife/proposal/editProposalReturnStatus?proposalId=" + proposalId + "&mode=view" + "&status=return";
+
+                    }
+
+                }
+            });
+
+
         }
 
     };
+
     services.viewApprovalProposal = function () {
         var proposalId = this.selectedItem;
 
