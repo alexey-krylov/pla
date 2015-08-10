@@ -59,13 +59,13 @@ public class ILProposalAggregate extends AbstractAnnotatedAggregateRoot<Proposal
         agentCommissionShareModel = new AgentCommissionShareModel();
     }
 
-    public ILProposalAggregate(String proposalId, String proposalNumber, ProposedAssured proposedAssured, AgentCommissionShareModel agentCommissionShareModel) {
+    public ILProposalAggregate(String proposalId, String proposalNumber, Proposer proposer, AgentCommissionShareModel agentCommissionShareModel) {
         this.proposalNumber = proposalNumber;
         this.proposalId = new ProposalId(proposalId);
-        if(proposedAssured.getIsProposer()) {
-            assignProposer(proposedAssured);
+        if(proposer.getIsProposedAssured()) {
+            assignProposedAssured(proposer);
         }
-        assignProposedAssured(proposedAssured);
+        assignProposer(proposer);
         this.agentCommissionShareModel = agentCommissionShareModel;
         this.proposalStatus = ILProposalStatus.DRAFT;
     }
@@ -75,12 +75,12 @@ public class ILProposalAggregate extends AbstractAnnotatedAggregateRoot<Proposal
     public ILProposalAggregate(String proposalId, String proposalNumber, ProposedAssured proposedAssured, AgentCommissionShareModel agentCommissionShareModel, Proposer proposer, String quotationNumber, int versionNumber, String quotationId, ProposalPlanDetail proposalPlanDetail, int minAge, int maxAge) {
         this.proposalNumber = proposalNumber;
         this.proposalId = new ProposalId(proposalId);
-        assignProposedAssured(proposedAssured);
+        assignProposer(proposer);
         assignAgents(agentCommissionShareModel);
-        if(proposedAssured.getIsProposer()) {
-            assignProposer(proposedAssured);
+        if(proposer.getIsProposedAssured()) {
+            assignProposedAssured(proposer);
         } else {
-            assignProposer(proposer);
+            assignProposedAssured(proposer);
         }
         specification.checkProposerAgainstPlan(minAge,maxAge,proposedAssured.getAgeNextBirthday());
         this.proposalPlanDetail = proposalPlanDetail;
@@ -88,8 +88,12 @@ public class ILProposalAggregate extends AbstractAnnotatedAggregateRoot<Proposal
         this.quotation = new Quotation(quotationNumber, versionNumber,quotationId.toString());
     }
 
-    public ILProposalAggregate updateWithProposer(Proposer proposer) {
+    public ILProposalAggregate updateWithProposer(Proposer proposer, AgentCommissionShareModel agentCommissionShareModel) {
+        if(proposer.getIsProposedAssured()) {
+            assignProposedAssured(proposer);
+        }
         assignProposer(proposer);
+        assignAgents(agentCommissionShareModel);
         return this;
     }
 
@@ -107,12 +111,12 @@ public class ILProposalAggregate extends AbstractAnnotatedAggregateRoot<Proposal
         beneficiaries.forEach(beneficiary -> this.addBeneficiary(beneficiary));
     }
 
-    private void assignProposer(ProposedAssured proposedAssured) {
-        specification.checkProposedAssured(proposedAssured);
+    private void assignProposedAssured(Proposer proposer) {
+        specification.checkProposer(proposer);
         try {
-            Proposer proposer = new Proposer();
-            BeanUtils.copyProperties(proposer, proposedAssured);
-            assignProposer(proposer);
+            ProposedAssured proposedAssured = new ProposedAssured();
+            BeanUtils.copyProperties(proposedAssured,proposer);
+            assignProposedAssured(proposedAssured);
         } catch (IllegalAccessException e) {
             e.printStackTrace();
         } catch (InvocationTargetException e) {
@@ -146,12 +150,8 @@ public class ILProposalAggregate extends AbstractAnnotatedAggregateRoot<Proposal
         totalBeneficiaryShare = newTotal;
     }
 
-    public ILProposalAggregate updateWithProposedAssuredAndAgentDetails(ProposedAssured proposedAssured, AgentCommissionShareModel agentCommissionShareModel) {
-        if(proposedAssured.getIsProposer()) {
-            assignProposer(proposedAssured);
-        }
+    public ILProposalAggregate updateWithProposedAssuredAndAgentDetails(ProposedAssured proposedAssured) {
         assignProposedAssured(proposedAssured);
-        assignAgents(agentCommissionShareModel);
         return this;
     }
 

@@ -37,9 +37,9 @@ public class ProposerDto {
     private ResidentialAddressDto residentialAddress;
     private EmploymentDto employment;
     private SpouseDto spouse;
-    private boolean isProposer;
+    private Boolean isProposedAssured;
 
-    public ProposerDto(String title, String firstName, String surname, String nrc, DateTime dateOfBirth, Gender gender, String mobileNumber, String emailAddress, MaritalStatus maritalStatus, String spouseFirstName, String spouseLastName, String spouseEmailAddress, String spouseMobileNumber, EmploymentDetail employmentDetail, ResidentialAddress residentialAddress, String otherName) {
+    public ProposerDto(String title, String firstName, String surname, String nrc, DateTime dateOfBirth, Gender gender, String mobileNumber, String emailAddress, MaritalStatus maritalStatus, String spouseFirstName, String spouseLastName, String spouseEmailAddress, String spouseMobileNumber, EmploymentDetail employmentDetail, ResidentialAddress residentialAddress,boolean isProposedAssured, String otherName) {
 
         this.title = title;
         this.firstName = firstName;
@@ -50,6 +50,7 @@ public class ProposerDto {
         this.mobileNumber = mobileNumber;
         this.emailAddress = emailAddress;
         this.maritalStatus = maritalStatus;
+        this.isProposedAssured = isProposedAssured;
         SpouseDto spouseDto = new SpouseDto();
         spouseDto.setEmailAddress(spouseEmailAddress);
         spouseDto.setMobileNumber(spouseMobileNumber);

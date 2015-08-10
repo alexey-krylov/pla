@@ -27,7 +27,6 @@ public class ProposedAssuredDto {
     private String surname;
     private String otherName;
     private String nrc;
-    private Boolean isProposer=Boolean.FALSE;
     @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
     private DateTime dateOfBirth;
     private Gender gender;
@@ -38,9 +37,10 @@ public class ProposedAssuredDto {
     private EmploymentDto employment;
     private SpouseDto spouse;
     private String occupation;
+    private String relationshipId;
 
 
-    public ProposedAssuredDto(String title, String firstName, String surname, String nrc, DateTime dateOfBirth, Gender gender, String mobileNumber, String emailAddress, MaritalStatus maritalStatus, String spouseFirstName, String spouseLastName, String spouseEmailAddress, String spouseMobilNumber, EmploymentDetail employmentDetail, ResidentialAddress residentialAddress, boolean isProposer, String otherName) {
+    public ProposedAssuredDto(String title, String firstName, String surname, String nrc, DateTime dateOfBirth, Gender gender, String mobileNumber, String emailAddress, MaritalStatus maritalStatus, String spouseFirstName, String spouseLastName, String spouseEmailAddress, String spouseMobilNumber, EmploymentDetail employmentDetail, ResidentialAddress residentialAddress, String otherName,String relationshipId) {
 
         this.title = title;
         this.firstName = firstName;
@@ -79,8 +79,7 @@ public class ProposedAssuredDto {
         rDto.setProvince(residentialAddress.getAddress().getProvince());
         rDto.setTown(residentialAddress.getAddress().getTown());
         this.residentialAddress = rDto;
-        this.isProposer = isProposer;
-
+        this.relationshipId = relationshipId;
 
     }
 

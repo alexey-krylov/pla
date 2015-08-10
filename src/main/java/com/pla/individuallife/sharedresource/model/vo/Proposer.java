@@ -31,8 +31,11 @@ public class Proposer {
     private EmploymentDetail employmentDetail;
     private ResidentialAddress residentialAddress;
     private String otherName;
+    private Boolean isProposedAssured;
 
-    public Proposer(String title, String firstName, String surname, String nrc, DateTime dateOfBirth, Gender gender, String mobileNumber, String emailAddress, MaritalStatus maritalStatus, String spouseFirstName, String spouseLastName, String spouseEmailAddress, String spouseMobileNumber, EmploymentDetail employmentDetail, ResidentialAddress residentialAddress, String otherName) {
+    Proposer(String title, String firstName, String surname, String nrc, DateTime dateOfBirth, Gender gender, String mobileNumber, String emailAddress,
+                    MaritalStatus maritalStatus, String spouseFirstName, String spouseLastName, String spouseEmailAddress, String spouseMobileNumber,
+                    EmploymentDetail employmentDetail, ResidentialAddress residentialAddress, boolean isProposedAssured,String otherName) {
         this.title = title;
         this.firstName = firstName;
         this.surname = surname;
@@ -48,10 +51,11 @@ public class Proposer {
         this.spouseMobileNumber = spouseMobileNumber;
         this.employmentDetail = employmentDetail;
         this.residentialAddress = residentialAddress;
+        this.isProposedAssured = isProposedAssured;
         this.otherName=otherName;
     }
 
-    public Proposer(String title, String firstName, String surname, DateTime dateOfBirth, Gender gender, String mobileNumber, String emailAddress) {
+    public Proposer(String title, String firstName, String surname, DateTime dateOfBirth, Gender gender, String mobileNumber, String emailAddress,boolean isProposedAssured) {
         this.title = title;
         this.firstName = firstName;
         this.surname = surname;
@@ -59,5 +63,6 @@ public class Proposer {
         this.gender = gender;
         this.mobileNumber = mobileNumber;
         this.emailAddress = emailAddress;
+        this.isProposedAssured = isProposedAssured;
     }
 }

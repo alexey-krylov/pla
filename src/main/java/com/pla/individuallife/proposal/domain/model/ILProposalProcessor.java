@@ -23,12 +23,12 @@ public class ILProposalProcessor {
         return aggregate.updatePlan(proposalPlanDetail, beneficiaries,minAge,maxAge);
     }
 
-    public ILProposalAggregate updateWithProposedAssuredAndAgentDetails(ILProposalAggregate proposalAggregate,ProposedAssured proposedAssured, AgentCommissionShareModel agentCommissionShareModel) {
-        return proposalAggregate.updateWithProposedAssuredAndAgentDetails(proposedAssured,agentCommissionShareModel);
+    public ILProposalAggregate updateWithProposedAssuredAndAgentDetails(ILProposalAggregate proposalAggregate,ProposedAssured proposedAssured) {
+        return proposalAggregate.updateWithProposedAssuredAndAgentDetails(proposedAssured);
     }
 
-    public ILProposalAggregate updateWithProposer(ILProposalAggregate aggregate, Proposer proposer) {
-        return aggregate.updateWithProposer(proposer);
+    public ILProposalAggregate updateWithProposer(ILProposalAggregate aggregate, Proposer proposer, AgentCommissionShareModel agentCommissionShareModel) {
+        return aggregate.updateWithProposer(proposer,agentCommissionShareModel);
     }
 
     public ILProposalAggregate updateGeneralDetails(ILProposalAggregate aggregate, GeneralDetails generalDetails) {

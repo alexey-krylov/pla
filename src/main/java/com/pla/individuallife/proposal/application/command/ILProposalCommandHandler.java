@@ -95,8 +95,7 @@ public class ILProposalCommandHandler {
             logger.debug(" ProposedAssured :: " + proposedAssured);
         }
         ILProposalAggregate aggregate = ilProposalMongoRepository.load(new ProposalId(cmd.getProposalId()));
-        AgentCommissionShareModel agentCommissionShareModel  = withAgentCommissionShareModel(cmd.getAgentCommissionDetails());
-        aggregate = ilProposalProcessor.updateWithProposedAssuredAndAgentDetails(aggregate,proposedAssured, agentCommissionShareModel);
+        aggregate = ilProposalProcessor.updateWithProposedAssuredAndAgentDetails(aggregate,proposedAssured);
         ilProposalMongoRepository.add(aggregate);
         return aggregate.getIdentifier().getProposalId();
     }
@@ -105,11 +104,12 @@ public class ILProposalCommandHandler {
     public String updateProposalProposer(ILProposalUpdateWithProposerCommand cmd) {
         ILProposalProcessor ilProposalProcessor  =  ilProposalRoleAdapter.userToProposalProcessorRole(cmd.getUserDetails());
         Proposer proposer = ProposerBuilder.getProposerBuilder(cmd.getProposer()).createProposer();
+        AgentCommissionShareModel agentCommissionShareModel  = withAgentCommissionShareModel(cmd.getAgentCommissionDetails());
         if (logger.isDebugEnabled()) {
             logger.debug(" Proposer :: " + proposer);
         }
         ILProposalAggregate aggregate = ilProposalMongoRepository.load(new ProposalId(cmd.getProposalId()));
-        aggregate = ilProposalProcessor.updateWithProposer(aggregate,proposer);
+        aggregate = ilProposalProcessor.updateWithProposer(aggregate,proposer,agentCommissionShareModel);
         ilProposalMongoRepository.add(aggregate);
         return aggregate.getIdentifier().getProposalId();
     }

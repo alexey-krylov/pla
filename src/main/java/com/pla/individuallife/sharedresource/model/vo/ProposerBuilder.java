@@ -1,6 +1,5 @@
 package com.pla.individuallife.sharedresource.model.vo;
 
-import com.pla.individuallife.sharedresource.dto.ProposedAssuredDto;
 import com.pla.individuallife.sharedresource.dto.ProposerDto;
 import com.pla.sharedkernel.domain.model.Gender;
 import com.pla.sharedkernel.domain.model.MaritalStatus;
@@ -27,6 +26,7 @@ public class ProposerBuilder {
     private EmploymentDetail employmentDetail;
     private ResidentialAddress residentialAddress;
     private String otherName;
+    private boolean isProposedAssured;
 
     public ProposerBuilder withOtherName(String otherName)
     {
@@ -54,6 +54,10 @@ public class ProposerBuilder {
         return this;
     }
 
+    public ProposerBuilder withIsProposedAssured(boolean isProposedAssured){
+        this.isProposedAssured  = isProposedAssured;
+        return this;
+    }
     public ProposerBuilder withDateOfBirth(DateTime dateOfBirth) {
         this.dateOfBirth = dateOfBirth;
         return this;
@@ -110,14 +114,14 @@ public class ProposerBuilder {
     }
 
     public Proposer createProposer() {
-        return new Proposer(title, firstName, surname, nrc, dateOfBirth, gender, mobileNumber, emailAddress, maritalStatus, spouseFirstName, spouseLastName, spouseEmailAddress, spouseMobileNumber, employmentDetail, residentialAddress,otherName);
+        return new Proposer(title, firstName, surname, nrc, dateOfBirth, gender, mobileNumber, emailAddress, maritalStatus, spouseFirstName, spouseLastName, spouseEmailAddress, spouseMobileNumber, employmentDetail, residentialAddress,isProposedAssured,otherName);
     }
 
     public ProposerDto createProposerDto() {
-        return new ProposerDto(title, firstName, surname, nrc, dateOfBirth, gender, mobileNumber, emailAddress, maritalStatus, spouseFirstName, spouseLastName, spouseEmailAddress, spouseMobileNumber, employmentDetail, residentialAddress,otherName);
+        return new ProposerDto(title, firstName, surname, nrc, dateOfBirth, gender, mobileNumber, emailAddress, maritalStatus, spouseFirstName, spouseLastName, spouseEmailAddress, spouseMobileNumber, employmentDetail, residentialAddress,isProposedAssured,otherName);
     }
 
-    public static ProposerBuilder getProposerBuilder(ProposedAssuredDto dto) {
+    public static ProposerBuilder getProposerBuilder(ProposerDto dto) {
 
         ProposerBuilder builder = new ProposerBuilder();
         builder.withOtherName(dto.getOtherName())
@@ -131,6 +135,7 @@ public class ProposerBuilder {
                 .withMobileNumber(dto.getMobileNumber())
                 .withMaritalStatus(dto.getMaritalStatus())
                 .withNrc(dto.getNrc())
+                .withIsProposedAssured(dto.getIsProposedAssured())
                 .withEmploymentDetail(new EmploymentDetailBuilder()
                         .withEmploymentDate(dto.getEmployment().getEmploymentDate())
                         .withEmploymentTypeId(dto.getEmployment().getEmploymentType())
@@ -175,7 +180,8 @@ public class ProposerBuilder {
                 .withGender(proposer.getGender())
                 .withMobileNumber(proposer.getMobileNumber())
                 .withMaritalStatus(proposer.getMaritalStatus())
-                .withNrc(proposer.getNrc());
+                .withNrc(proposer.getNrc())
+        .withIsProposedAssured(proposer.getIsProposedAssured());
          if(proposer.getEmploymentDetail() != null && proposer.getResidentialAddress() != null) {
              builder.withEmploymentDetail(new EmploymentDetailBuilder()
                      .withEmploymentDate(proposer.getEmploymentDetail().getEmploymentDate())

@@ -1,5 +1,6 @@
 package com.pla.individuallife.proposal.application.command;
 
+import com.pla.individuallife.sharedresource.dto.ProposerDto;
 import com.pla.individuallife.sharedresource.model.vo.ProposalPlanDetail;
 import com.pla.individuallife.sharedresource.dto.AgentDetailDto;
 import com.pla.individuallife.sharedresource.dto.ProposedAssuredDto;
@@ -18,7 +19,7 @@ import java.util.Set;
 @NoArgsConstructor
 public class ILCreateProposalCommand {
     private ProposedAssuredDto proposedAssured;
-    private ProposedAssuredDto proposer;
+    private ProposerDto proposer;
     private ProposalPlanDetail planDetail;
     private UserDetails userDetails;
     private Set<AgentDetailDto> agentCommissionDetails;

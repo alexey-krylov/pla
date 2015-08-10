@@ -75,17 +75,17 @@
 
             <div class="actions">
                     <span style="font-weight: bolder;margin-right: 15px;color: #999">
-                    Proposal Number :<span style="font-size: 13px;color: #3a87ad;">{{proposalNumberDetails.proposalNumber}}</span>
+                     Proposal Number :<span style="font-size: 13px;color: #3a87ad;">{{proposalNumberDetails.proposalNumber}}</span>
                      </span>
                 <button type="button" class="btn btn-default btn-prev" disabled="disabled"><span class="glyphicon glyphicon-arrow-left"></span>Prev</button>
                 <button type="button" class="btn btn-default btn-next">Next<span class="glyphicon glyphicon-arrow-right"></span></button>
             </div>
             <div class="step-content">
                 <div class="step-pane" data-step="1">
-                    <ng-include src="resources.proposedAssuredUrl | getTrustedUrl"></ng-include>
+                    <ng-include src="resources.proposerDetails | getTrustedUrl"></ng-include>
                 </div>
                 <div class="step-pane" data-step="2">
-                    <ng-include src="resources.proposerDetails | getTrustedUrl"></ng-include>
+                    <ng-include src="resources.proposedAssuredUrl | getTrustedUrl"></ng-include>
                 </div>
                 <div class="step-pane" data-step="3">
                     <ng-include src="resources.planDetails | getTrustedUrl"></ng-include>

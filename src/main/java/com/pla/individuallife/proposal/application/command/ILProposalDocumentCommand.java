@@ -23,4 +23,6 @@ public class ILProposalDocumentCommand {
     private MultipartFile file;
 
     private boolean mandatory;
+
+//    private Boolean isApproved;
 }

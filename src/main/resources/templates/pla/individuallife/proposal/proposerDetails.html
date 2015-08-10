@@ -1,9 +1,46 @@
 <ng-form name="step2">
     <accordion close-others="true">
-        <accordion-group is-open="accordionStatus.proposerDetails.proposedAssured" ng-form="proposerForm">
+        <accordion-group is-open="accordionStatus.proposerDetails.agents" ng-class="{'accordion-error':isAgentEmpty}">
+            <accordion-heading>
+                Agent
+                <i class="pull-right glyphicon"
+                   ng-class="{'glyphicon-chevron-down': accordionStatus.proposerDetails.agents, 'glyphicon-chevron-right': !accordionStatus.proposerDetails.agents}"></i>
+            </accordion-heading>
+            <div class="col-md-12">
+                <!--<button type="button" class="btn btn-default btn-xs pull-right" ng-click="openAgentModal()" style="margin-bottom: 5px"><strong>Add Agent</strong></button>-->
+                <p style="color:red" ng-show="agentMessage">
+                    Sum of commission % is not 100..Please update commission % to ensure it should be 100
+                </p>
+                <button ng-disabled="mode=='new'||mode=='view'" type="button" class="btn btn-default btn-xs pull-right"
+                        data-toggle="modal" data-target="#agentModal" style="margin-bottom: 5px"><strong>Add Agent</strong>
+                </button>
+
+                <table class="table table-bordered">
+                    <thead>
+                    <tr>
+                        <th>Agent Code</th>
+                        <th>Agent Name</th>
+                        <th>Commission %</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr ng-repeat="row in agentDetails">
+                        <td>{{row.agentId}}</td>
+                        <td>{{row.firstName+ ' ' + (row.lastName !=null ?(row.lastName + ' ') : '')}}</td>
+
+                        <td>
+                            <input type="number" ng-disabled="mode=='new'||mode=='view'" contenteditable="updateFlag" ng-init="commisionSumTest()" ng-model="row.commission"  ng-blur="commisionSumTest()" value="{{row.commission}}" />
+                        </td>
+
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </accordion-group>
+        <accordion-group is-open="accordionStatus.proposerDetails.proposer" ng-form="proposerForm">
             <accordion-heading>
                 Proposer<i class="pull-right glyphicon"
-                           ng-class="{'glyphicon-chevron-down': accordionStatus.proposerDetails.proposedAssured, 'glyphicon-chevron-right': !accordionStatus.proposerDetails.proposedAssured}"></i>
+                           ng-class="{'glyphicon-chevron-down': accordionStatus.proposerDetails.proposer, 'glyphicon-chevron-right': !accordionStatus.proposerDetails.proposer}"></i>
             </accordion-heading>
             <div class="col-md-6">
                 <div class="form-group required">
@@ -384,7 +421,19 @@
             </div>
         </accordion-group>
     </accordion>
+    <div class="form-group required">
+        <label class="control-label" style="margin-right: 25px">Is Proposer the Proposed Assured?</label>
+        <label class="radio-inline">
+            <input type="radio" name="proposedAssuredAsProposer" ng-value="true" value="true" ng-disabled="mode=='new'||mode=='view'" ng-required="true" ng-model="proposer.isProposedAssured"/> Yes
+        </label>
+        <label class="radio-inline">
+            <input type="radio" name="proposedAssuredAsProposer" ng-value="false" value="false" ng-required="true" ng-model="proposer.isProposedAssured"/> No
+        </label>
 
+        <div class="error" ng-messages="step1.proposedAssuredAsProposer.$error" ng-if="step1.proposedAssuredAsProposer.$pristine">
+            <small class="error" ng-message="required">Please select one.</small>
+        </div>
+    </div>
     <div class="row">
         <div class="col-sm-6">
             <button type="button" class="btn btn-default btn-sm">Cancel</button>
