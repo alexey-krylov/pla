@@ -2,6 +2,7 @@ package com.pla.individuallife.proposal.presentation.controller;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import com.mongodb.gridfs.GridFSDBFile;
 import com.pla.core.query.MasterFinder;
 import com.pla.core.query.PlanFinder;
@@ -12,6 +13,7 @@ import com.pla.individuallife.proposal.query.ILProposalFinder;
 import com.pla.individuallife.proposal.service.ILProposalService;
 import com.pla.individuallife.quotation.application.service.ILQuotationAppService;
 import com.pla.individuallife.quotation.presentation.dto.ILSearchQuotationDto;
+import com.pla.sharedkernel.domain.model.Relationship;
 import com.wordnik.swagger.annotations.ApiOperation;
 import org.apache.poi.util.IOUtils;
 import org.axonframework.commandhandling.CommandBus;
@@ -34,11 +36,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.TimeoutException;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 import static com.google.common.base.Preconditions.checkArgument;
 import static org.nthdimenzion.presentation.AppUtils.getLoggedInUserDetail;
@@ -217,7 +218,7 @@ public class ILProposalController {
     @ResponseBody
     @RequestMapping(value = "/updatefamily", method = RequestMethod.POST)
     public ResponseEntity updateFamilyPersonalDetails(@RequestBody ILProposalUpdateFamilyPersonalDetailsCommand cmd, HttpServletRequest request,BindingResult bindingResult) {
-            if (bindingResult.hasErrors()) {
+        if (bindingResult.hasErrors()) {
             return new ResponseEntity(bindingResult.getAllErrors(), HttpStatus.PRECONDITION_FAILED);
         }
         String proposalId = null;
@@ -529,6 +530,22 @@ public class ILProposalController {
     public List<ProposalApproverCommentsDto> findApproverComments(@PathVariable("proposalId") String proposalId) {
         return ilProposalService.findApproverComments(proposalId);
     }
+
+    @RequestMapping(value = "/getallrelations", method = RequestMethod.GET)
+    @ResponseBody
+    @ApiOperation(httpMethod = "GET", value = "To list all the relations")
+    public List<Map<String,Object>> getAllRelationShip() {
+        return Arrays.asList(Relationship.values()).parallelStream().map(new Function<Relationship, Map<String,Object>>() {
+            @Override
+            public  Map<String,Object> apply(Relationship relationship) {
+                Map<String,Object> relationMap = Maps.newLinkedHashMap();
+                relationMap.put("relationCode",relationship.name());
+                relationMap.put("description",relationship.description);
+                return relationMap;
+            }
+        }).collect(Collectors.toList());
+    }
+
 
     @RequestMapping(value = "/downloadmandatorydocument/{gridfsdocid}", method = RequestMethod.GET)
     public void downloadMandatoryDocument(@PathVariable("gridfsdocid") String gridfsDocId, HttpServletResponse response) throws IOException {
