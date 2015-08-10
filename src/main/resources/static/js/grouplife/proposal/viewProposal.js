@@ -2,6 +2,7 @@ var viewProposalModule = (function () {
     var services = {};
     services.selectedItem = "";
     services.status = '';
+    services.statusValue = false;
     services.getTheItemSelected = function (ele) {
         this.selectedItem = $(ele).val();
         this.status = $(ele).parent().find('.proposalStatus').val();
@@ -39,9 +40,11 @@ var viewProposalModule = (function () {
 
     services.viewProposal = function () {
         var proposalId = this.selectedItem;
-
+alert(this.status);
         if (this.status == 'RETURNED' || this.status == 'APPROVED') {
-            window.location.href = "/pla/grouplife/proposal/editProposalReturnStatus?proposalId=" + proposalId + "&mode=view" + "&status=return";
+            alert("hi");
+
+            // window.location.href = "/pla/grouplife/proposal/editProposalReturnStatus?proposalId=" + proposalId + "&mode=view" + "&status=return";
         } else {
 
             $.ajax({
@@ -50,7 +53,7 @@ var viewProposalModule = (function () {
                 success: function (data, textStatus, jqXHR) {
                     for (var i = 0; i < data.length; i++) {
                         var statusProposal = data[i].status;
-                        if (statusProposal === 'Returned') {
+                        if (statusProposal === 'RETURNED') {
                             services.statusValue = true;
                             break;
 
