@@ -63,6 +63,8 @@
                         <small class="error" ng-message="required">Please enter Marital Status</small>
                     </div>
                 </div>
+
+
             </div>
             <div class="col-md-6">
                 <div class="form-group required">
@@ -130,6 +132,18 @@
                     </div>
 
                 </div>
+
+                <div class="form-group" >
+                    <label class="control-label">Relationship with Proposer</label>
+                    <select class="form-control input-sm" name="relation" ng-disabled="mode=='new'||mode=='view'" ng-options="relation.relationCode as relation.description for relation in relationshipList"
+                            ng-model="proposedAssured.relationshipId" >
+                    </select>
+
+                    <div class="error" ng-messages="proposedAssuredDetails.relationshipId.$error" ng-if="proposedAssuredDetails.relationshipId.$dirty">
+                        <small class="error" ng-message="required">Please enter Relationship</small>
+                    </div>
+                </div>
+
 
             </div>
         </accordion-group>

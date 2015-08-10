@@ -242,7 +242,7 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
             if ($scope.proposalId) {
                 $http.get("/pla/individuallife/proposal/getproposal/" + $scope.proposalId + "?mode=view").success(function (response, status, headers, config) {
                     var result = response;
-                    console.log(JSON.stringify(response.proposer.proposedAssured ));
+
                     $scope.agentDetails=result.agentCommissionDetails;
                     $scope.rcvProposal = response;
                     ////console.log('Proposal Number....');
@@ -263,7 +263,18 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
                             //console.log('DocumentList Details..'+JSON.stringify(response));
                         });
 
-                    $http.get("getadditionaldocuments/"+ $scope.proposal.proposalId).success(function (data, status) {
+                    $http.get("getallrelations/").success(function (response, status, headers, config) {
+                    $scope.relationshipList=response;
+                    if($scope.relationshipList != null)
+                    {
+                        ////alert('Premium is Present');
+
+                    }
+                }).error(function (response, status, headers, config) {
+                });
+
+
+                $http.get("getadditionaldocuments/"+ $scope.proposal.proposalId).success(function (data, status) {
                         //console.log(data);
                         $scope.additionalDocumentList=data;
                         $scope.checkDocumentAttached=$scope.additionalDocumentList!=null;
@@ -2404,7 +2415,7 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
             $scope.agentDetails = [];
             $scope.accordionStatus = {
                 proposerDetails: {agents: true},
-                proposedAssuredDetails: {proposedAssured: false},
+                proposedAssuredDetails: {proposedAssured: true},
                 planDetails: {plan: true},
                 generalDetails: {tab1: false},
                 healthDetailsPart1: {tab1: false},

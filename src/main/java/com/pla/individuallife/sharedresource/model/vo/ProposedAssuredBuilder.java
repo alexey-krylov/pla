@@ -112,7 +112,7 @@ public class ProposedAssuredBuilder {
     }
 
     public ProposedAssured createProposedAssured() {
-        return new ProposedAssured(title, firstName, surname, nrc, dateOfBirth, gender, mobileNumber, emailAddress, maritalStatus, spouseFirstName, spouseLastName, spouseEmailAddress, spouseMobileNumber, employmentDetail, residentialAddress,otherName);
+        return new ProposedAssured(title, firstName, surname, nrc, dateOfBirth, gender, mobileNumber, emailAddress, maritalStatus, spouseFirstName, spouseLastName, spouseEmailAddress, spouseMobileNumber, employmentDetail, residentialAddress,otherName,relationShipId);
     }
 
     public ProposedAssuredDto createProposedAssuredDto() {
@@ -176,6 +176,7 @@ public class ProposedAssuredBuilder {
                 .withMobileNumber(pa.getMobileNumber())
                 .withMaritalStatus(pa.getMaritalStatus())
                 .withNrc(pa.getNrc())
+                .withRelationShipId(pa.getRelationshipId())
                 .withEmploymentDetail(new EmploymentDetailBuilder()
                         .withEmploymentDate(pa.getEmploymentDetail().getEmploymentDate())
                         .withEmploymentTypeId(pa.getEmploymentDetail().getEmploymentTypeId())
