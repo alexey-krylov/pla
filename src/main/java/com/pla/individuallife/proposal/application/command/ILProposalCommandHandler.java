@@ -4,15 +4,17 @@ import com.google.common.collect.Sets;
 import com.pla.core.domain.model.agent.AgentId;
 import com.pla.core.query.PlanFinder;
 import com.pla.individuallife.identifier.QuestionId;
-import com.pla.individuallife.proposal.domain.model.*;
+import com.pla.individuallife.proposal.domain.model.ILProposalAggregate;
+import com.pla.individuallife.proposal.domain.model.ILProposalApprover;
+import com.pla.individuallife.proposal.domain.model.ILProposalProcessor;
+import com.pla.individuallife.proposal.domain.model.ILProposalStatus;
 import com.pla.individuallife.proposal.domain.service.ILProposalRoleAdapter;
 import com.pla.individuallife.proposal.domain.service.ProposalNumberGenerator;
-import com.pla.individuallife.sharedresource.dto.AgentDetailDto;
 import com.pla.individuallife.proposal.presentation.dto.QuestionDto;
 import com.pla.individuallife.proposal.query.ILProposalFinder;
 import com.pla.individuallife.proposal.service.ILProposalFactory;
 import com.pla.individuallife.proposal.service.ILProposalService;
-import com.pla.individuallife.sharedresource.model.vo.ILProposerDocument;
+import com.pla.individuallife.sharedresource.dto.AgentDetailDto;
 import com.pla.individuallife.sharedresource.model.vo.*;
 import com.pla.publishedlanguage.dto.UnderWriterRoutingLevelDetailDto;
 import com.pla.sharedkernel.domain.model.ProcessType;
@@ -39,6 +41,7 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
+import static com.pla.individuallife.proposal.exception.ILProposalException.raiseMandatoryDocumentNotUploaded;
 import static org.nthdimenzion.utils.UtilValidator.isEmpty;
 
 /**
@@ -189,7 +192,7 @@ public class ILProposalCommandHandler {
             documents = Sets.newHashSet();
         }
         String gridFsDocId = gridFsTemplate.store(cmd.getFile().getInputStream(),fileName,cmd.getFile().getContentType()).getId().toString();
-        ILProposerDocument currentDocument = new ILProposerDocument(cmd.getDocumentId(), cmd.getFilename(), gridFsDocId, cmd.getFile().getContentType(),cmd.isMandatory());
+        ILProposerDocument currentDocument = new ILProposerDocument(cmd.getDocumentId(), cmd.getFilename(), gridFsDocId, cmd.getFile().getContentType(),cmd.isMandatory(),cmd.getIsApproved());
         if (!documents.add(currentDocument)) {
             ILProposerDocument existingDocument = documents.stream().filter(new Predicate<ILProposerDocument>() {
                 @Override
@@ -217,6 +220,9 @@ public class ILProposalCommandHandler {
     @CommandHandler
     public String proposalApproval(ILProposalApprovalCommand cmd) {
         ILProposalApprover ilProposalApprover = ilProposalRoleAdapter.userToProposalApproverRole(cmd.getUserDetails());
+        if (ILProposalStatus.APPROVED.equals(cmd.getStatus()) && !ilProposalService.doesAllDocumentWaivesByApprover(cmd.getProposalId())){
+            raiseMandatoryDocumentNotUploaded();
+        }
         ILProposalAggregate aggregate = ilProposalMongoRepository.load(new ProposalId(cmd.getProposalId()));
         aggregate = ilProposalApprover.submitApproval(aggregate,cmd.getComment(), cmd.getStatus(),cmd.getUserDetails().getUsername());
         return aggregate.getIdentifier().getProposalId();

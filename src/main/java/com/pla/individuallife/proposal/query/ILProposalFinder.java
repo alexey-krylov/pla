@@ -353,7 +353,7 @@ public class ILProposalFinder {
     }
 
     public Map findProposalByQuotationNumber(String quotationNumber) {
-        Criteria proposalCriteria = Criteria.where("quotationNumber").is(quotationNumber);
+        Criteria proposalCriteria = Criteria.where("quotation.quotationNumber").is(quotationNumber);
         Query query = new Query(proposalCriteria);
         Map proposalMap = mongoTemplate.findOne(query, Map.class, "individual_life_proposal");
         return proposalMap;

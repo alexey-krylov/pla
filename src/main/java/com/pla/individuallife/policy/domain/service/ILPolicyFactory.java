@@ -52,7 +52,7 @@ public class ILPolicyFactory {
         PolicyNumber policyNumber = generatePolicyNumber(agentCommissionShareModel.getCommissionShare());
         PolicyId policyId = new PolicyId(ObjectId.get().toString());
         DateTime policyInceptionDate = DateTime.now();
-        DateTime policyExpireDate = policyInceptionDate.plusDays(proposalPlanDetail.getPolicyTerm());
+        DateTime policyExpireDate = policyInceptionDate.plusYears(proposalPlanDetail.getPolicyTerm());
         Proposal proposal = new Proposal(proposalId, proposalNumber);
         IndividualLifePolicy  individualLifePolicy = IndividualLifePolicy.createPolicy(policyId,policyNumber,proposal,policyInceptionDate,policyExpireDate);
         individualLifePolicy.withProposedAssured(proposedAssured)
@@ -72,11 +72,13 @@ public class ILPolicyFactory {
     private PolicyNumber generatePolicyNumber(List<AgentCommissionShareModel.AgentCommissionShare> agentCommissionShares){
         AgentId agentId = null;
         if (isNotEmpty(agentCommissionShares)){
+
             AgentCommissionShareModel.AgentCommissionShare  agentCommissionShare =  agentCommissionShares.get(0);
             agentId =  agentCommissionShare.getAgentId();
         }
         String policyNumberInString = ilPolicyNumberGenerator.getPolicyNumber(IndividualLifePolicy.class, agentId);
         return new PolicyNumber(policyNumberInString);
     }
+
 
 }

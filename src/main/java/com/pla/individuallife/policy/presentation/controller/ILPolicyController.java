@@ -7,7 +7,10 @@ import com.pla.individuallife.policy.presentation.dto.SearchILPolicyDto;
 import com.pla.individuallife.policy.service.ILPolicyService;
 import com.pla.sharedkernel.identifier.PolicyId;
 import com.wordnik.swagger.annotations.ApiOperation;
+import org.nthdimenzion.presentation.Result;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
@@ -91,6 +94,13 @@ public class ILPolicyController {
         return dto;
     }
 
-
+    @RequestMapping(method = RequestMethod.GET, value = "/getproposalid/{policyId}")
+    @ApiOperation(httpMethod = "GET", value = "This call to get proposal id")
+    @ResponseBody
+    public ResponseEntity getProposalNumberById(@PathVariable("policyId") String policyId) {
+        String proposalId = ilPolicyFinder.getProposalIdByPolicyId(new PolicyId(policyId));
+        checkArgument(proposalId != null, "Proposal Id not found");
+        return new ResponseEntity(Result.success("The Proposal Id ",proposalId), HttpStatus.OK);
+    }
 
 }

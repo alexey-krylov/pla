@@ -5,7 +5,6 @@ import com.pla.individuallife.proposal.domain.event.ILProposalStatusAuditEvent;
 import com.pla.individuallife.proposal.domain.event.ILProposalSubmitEvent;
 import com.pla.individuallife.sharedresource.event.ILProposalToPolicyEvent;
 import com.pla.individuallife.sharedresource.event.ILQuotationConvertedToProposalEvent;
-import com.pla.individuallife.sharedresource.model.vo.ILProposerDocument;
 import com.pla.individuallife.sharedresource.model.vo.*;
 import com.pla.sharedkernel.domain.model.RoutingLevel;
 import com.pla.sharedkernel.identifier.ProposalId;
@@ -68,6 +67,7 @@ public class ILProposalAggregate extends AbstractAnnotatedAggregateRoot<Proposal
         assignProposer(proposer);
         this.agentCommissionShareModel = agentCommissionShareModel;
         this.proposalStatus = ILProposalStatus.DRAFT;
+        registerEvent(new ILProposalSubmitEvent(this.proposalId));
     }
 
 
@@ -80,12 +80,13 @@ public class ILProposalAggregate extends AbstractAnnotatedAggregateRoot<Proposal
         if(proposer.getIsProposedAssured()) {
             assignProposedAssured(proposer);
         } else {
-            assignProposedAssured(proposer);
+            assignProposedAssured(proposedAssured);
         }
         specification.checkProposerAgainstPlan(minAge,maxAge,proposedAssured.getAgeNextBirthday());
         this.proposalPlanDetail = proposalPlanDetail;
         this.proposalStatus = ILProposalStatus.DRAFT;
         this.quotation = new Quotation(quotationNumber, versionNumber,quotationId.toString());
+        registerEvent(new ILProposalSubmitEvent(this.proposalId));
     }
 
     public ILProposalAggregate updateWithProposer(Proposer proposer, AgentCommissionShareModel agentCommissionShareModel) {
@@ -193,7 +194,6 @@ public class ILProposalAggregate extends AbstractAnnotatedAggregateRoot<Proposal
                 ILProposalStatus.PENDING_ACCEPTANCE;
         if (this.quotation != null)
             registerEvent(new ILQuotationConvertedToProposalEvent(this.quotation.getQuotationNumber(), new QuotationId(this.quotation.getQuotationId())));
-        registerEvent(new ILProposalSubmitEvent(this.proposalId));
         return this;
     }
 

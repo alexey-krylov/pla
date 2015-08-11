@@ -23,11 +23,15 @@ public class ILProposalMandatoryDocumentDto {
 
     private boolean submitted;
 
+    private Boolean isApproved  = Boolean.FALSE;
+
     private String fileName;
 
     private String contentType;
 
     private String gridFsDocId;
+
+    private Boolean mandatory;
 
 
     public ILProposalMandatoryDocumentDto(String documentId, String documentName) {
@@ -35,9 +39,9 @@ public class ILProposalMandatoryDocumentDto {
         this.documentName = documentName;
     }
 
-    public ILProposalMandatoryDocumentDto updateWithContent(byte[] content){
-        this.content=content;
-        this.submitted=true;
+    public ILProposalMandatoryDocumentDto updateWithContent(byte[] content) {
+        this.content = content;
+        this.submitted = true;
         return this;
     }
 

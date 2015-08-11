@@ -1,6 +1,7 @@
 package com.pla.individuallife.sharedresource.model.vo;
 
 import com.pla.individuallife.sharedresource.dto.ProposedAssuredDto;
+import com.pla.individuallife.sharedresource.dto.ProposerDto;
 import com.pla.sharedkernel.domain.model.Gender;
 import com.pla.sharedkernel.domain.model.MaritalStatus;
 import org.joda.time.DateTime;
@@ -160,6 +161,49 @@ public class ProposedAssuredBuilder {
                     .withSpouseLastName(dto.getSpouse().getSurname());
         }
 
+        return builder;
+    }
+
+
+    public static ProposedAssuredBuilder getProposedAssuredBuilder(ProposerDto dto) {
+        ProposedAssuredBuilder builder = new ProposedAssuredBuilder();
+        builder.withOtherName(dto.getOtherName())
+                .withDateOfBirth(dto.getDateOfBirth())
+                .withEmailAddress(dto.getEmailAddress())
+                .withFirstName(dto.getFirstName())
+                .withSurname(dto.getSurname())
+                .withTitle(dto.getTitle())
+                .withDateOfBirth(dto.getDateOfBirth())
+                .withGender(dto.getGender())
+                .withMobileNumber(dto.getMobileNumber())
+                .withMaritalStatus(dto.getMaritalStatus())
+                .withNrc(dto.getNrc())
+                .withEmploymentDetail(new EmploymentDetailBuilder()
+                        .withEmploymentDate(dto.getEmployment().getEmploymentDate())
+                        .withEmploymentTypeId(dto.getEmployment().getEmploymentType())
+                        .withEmployer(dto.getEmployment().getEmployer())
+                        .withWorkPhone(dto.getEmployment().getWorkPhone())
+                        .withAddress(new AddressBuilder()
+                                .withAddress1(dto.getEmployment().getAddress1())
+                                .withAddress2(dto.getEmployment().getAddress2())
+                                .withProvince(dto.getEmployment().getProvince())
+                                .withTown(dto.getEmployment().getTown())
+                                .withPostalCode(dto.getEmployment().getPostalCode()).createAddress())
+                        .withOccupationClass(dto.getEmployment().getOccupation()).createEmploymentDetail())
+                .withResidentialAddress(new ResidentialAddress(new AddressBuilder()
+                        .withAddress1(dto.getResidentialAddress().getAddress1())
+                        .withAddress2(dto.getResidentialAddress().getAddress2())
+                        .withProvince(dto.getResidentialAddress().getProvince())
+                        .withPostalCode(dto.getResidentialAddress().getPostalCode())
+                        .withTown(dto.getResidentialAddress().getTown()).createAddress(),
+                        dto.getResidentialAddress().getHomePhone(),
+                        dto.getResidentialAddress().getEmailAddress()));
+        if(dto.getMaritalStatus().equals(MaritalStatus.MARRIED)) {
+            builder.withSpouseEmailAddress(dto.getSpouse().getEmailAddress())
+                    .withSpouseFirstName(dto.getSpouse().getFirstName())
+                    .withSpouseMobileNumber(dto.getSpouse().getMobileNumber())
+                    .withSpouseLastName(dto.getSpouse().getSurname());
+        }
         return builder;
     }
 

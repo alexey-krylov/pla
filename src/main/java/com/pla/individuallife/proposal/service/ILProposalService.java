@@ -137,6 +137,8 @@ public class ILProposalService {
                 @Override
                 public ILProposalMandatoryDocumentDto apply(ClientDocumentDto clientDocumentDto) {
                     ILProposalMandatoryDocumentDto mandatoryDocumentDto = new ILProposalMandatoryDocumentDto(clientDocumentDto.getDocumentCode(), clientDocumentDto.getDocumentName());
+                    mandatoryDocumentDto.setIsApproved(false);
+                    mandatoryDocumentDto.setMandatory(false);
                     Optional<ILProposerDocument> proposerDocumentOptional = uploadedDocuments.stream().filter(new Predicate<ILProposerDocument>() {
                         @Override
                         public boolean test(ILProposerDocument ilProposerDocument) {
@@ -151,6 +153,8 @@ public class ILProposalService {
                                 mandatoryDocumentDto.setContentType(gridFSDBFile.getContentType());
                                 mandatoryDocumentDto.setGridFsDocId(gridFSDBFile.getId().toString());
                                 mandatoryDocumentDto.updateWithContent(IOUtils.toByteArray(gridFSDBFile.getInputStream()));
+                                mandatoryDocumentDto.setIsApproved(proposerDocumentOptional.get().isApproved());
+                                mandatoryDocumentDto.setMandatory(proposerDocumentOptional.get().isMandatory());
                             }
                         } catch (IOException e) {
                             e.printStackTrace();
@@ -276,4 +280,16 @@ public class ILProposalService {
         return proposalApproverCommentsDtos;
     }
 
+    public boolean doesAllDocumentWaivesByApprover(String proposalId){
+        List<ILProposalMandatoryDocumentDto> ilProposalMandatoryDocumentDtos = findMandatoryDocuments(proposalId);
+        long count =  ilProposalMandatoryDocumentDtos.parallelStream().filter(new Predicate<ILProposalMandatoryDocumentDto>() {
+            @Override
+            public boolean test(ILProposalMandatoryDocumentDto ilProposalMandatoryDocumentDto) {
+                return ilProposalMandatoryDocumentDto.getIsApproved();
+            }
+        }).count();
+        if (count==ilProposalMandatoryDocumentDtos.size())
+            return true;
+        return false;
+    }
 }

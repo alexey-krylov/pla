@@ -27,21 +27,6 @@ public class ILPolicyService {
     private ILPolicyFinder ilPolicyFinder;
 
 
-    public List<PolicyDetailDto> findAllPolicy() {
-        List<Map> allPolicies = ilPolicyFinder.findAllPolicy();
-        if (isEmpty(allPolicies)) {
-            return Lists.newArrayList();
-        }
-        List<PolicyDetailDto> policies = allPolicies.stream().map(new Function<Map, PolicyDetailDto>() {
-            @Override
-            public PolicyDetailDto apply(Map map) {
-                PolicyDetailDto policyDetailDto = transformToDto(map);
-                return policyDetailDto;
-            }
-        }).collect(Collectors.toList());
-        return policies;
-    }
-
     private PolicyDetailDto transformToDto(Map policyMap) {
         DateTime inceptionDate = policyMap.get("inceptionOn") != null ? new DateTime(policyMap.get("inceptionOn")) : null;
         DateTime expiryDate = policyMap.get("expiredOn") != null ? new DateTime(policyMap.get("expiredOn")) : null;
@@ -78,4 +63,5 @@ public class ILPolicyService {
         }).collect(Collectors.toList());
         return transformedPolicies;
     }
+
 }

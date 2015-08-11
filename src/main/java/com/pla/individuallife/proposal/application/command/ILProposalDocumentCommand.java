@@ -24,5 +24,5 @@ public class ILProposalDocumentCommand {
 
     private boolean mandatory;
 
-//    private Boolean isApproved;
+    private Boolean isApproved;
 }

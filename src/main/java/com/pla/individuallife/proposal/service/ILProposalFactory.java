@@ -46,16 +46,16 @@ public class ILProposalFactory {
         String proposalNumber = proposalNumberGenerator.getProposalNumber();
         if (cmd.getQuotationId() != null) {
             ILQuotationDto dto = quotationFinder.getQuotationById(cmd.getQuotationId());
-            ProposedAssuredDto proposedAssuredDto  = cmd.getProposedAssured();
-            ProposedAssuredDto proposedAssuredDtoQuotation  = dto.getProposedAssured();
-            proposedAssuredDtoQuotation.setEmployment(proposedAssuredDto.getEmployment());
-            proposedAssuredDtoQuotation.setResidentialAddress(proposedAssuredDto.getResidentialAddress());
-            proposedAssuredDtoQuotation.setMaritalStatus(proposedAssuredDto.getMaritalStatus());
-            proposedAssuredDtoQuotation.setOtherName(proposedAssuredDto.getOtherName());
-            proposedAssuredDtoQuotation.setSpouse(proposedAssuredDto.getSpouse());
-            proposedAssured =  withProposedAssure(proposedAssuredDtoQuotation);
+            ProposerDto proposerDto  = cmd.getProposer();
+            ProposerDto quotationProposerDto  = dto.getProposer();
+            quotationProposerDto.setEmployment(proposerDto.getEmployment());
+            quotationProposerDto.setResidentialAddress(proposerDto.getResidentialAddress());
+            quotationProposerDto.setMaritalStatus(proposerDto.getMaritalStatus());
+            quotationProposerDto.setOtherName(proposerDto.getOtherName());
+            quotationProposerDto.setSpouse(proposerDto.getSpouse());
+            proposer = ProposerBuilder.getProposerBuilder(dto.getProposer()).createProposer();
             if (dto.isAssuredTheProposer()) {
-                proposer = ProposerBuilder.getProposerBuilder(dto.getProposer()).createProposer();
+                proposedAssured =  withProposedAssure(quotationProposerDto);
             }
             Map plan = planFinder.findPlanByPlanId(new PlanId(dto.getPlanId()));
             Map planDetail = (HashMap) plan.get("planDetail");
@@ -83,8 +83,8 @@ public class ILProposalFactory {
     }
 
 
-    private ProposedAssured withProposedAssure(ProposedAssuredDto proposedAssure){
-        return  ProposedAssuredBuilder.getProposedAssuredBuilder(proposedAssure).createProposedAssured();
+    private ProposedAssured withProposedAssure(ProposerDto proposerDto){
+        return  ProposedAssuredBuilder.getProposedAssuredBuilder(proposerDto).createProposedAssured();
     }
 
     private Proposer withProposer(ProposerDto proposedAssure){

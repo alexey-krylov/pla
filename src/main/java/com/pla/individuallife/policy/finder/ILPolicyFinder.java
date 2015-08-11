@@ -251,4 +251,16 @@ public class ILPolicyFinder {
         else
             return map.get("firstName").toString();
     }
+
+    public String getProposalIdByPolicyId(PolicyId policyId) {
+        Criteria policyCriteria = Criteria.where("_id").is(policyId);
+        Query query = new Query(policyCriteria);
+        query.fields().include("proposal.proposalId");
+        Map proposalMap = mongoTemplate.findOne(query, Map.class, IL_POLICY_COLLECTION_NAME);
+        if (isEmpty(proposalMap)){
+            return null;
+        }
+        Map proposal = (Map) proposalMap.get("proposal");
+        return proposal.get("proposalId").toString();
+    }
 }

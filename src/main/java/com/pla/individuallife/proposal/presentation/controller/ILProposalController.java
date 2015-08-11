@@ -8,6 +8,7 @@ import com.pla.core.query.MasterFinder;
 import com.pla.core.query.PlanFinder;
 import com.pla.individuallife.proposal.application.command.*;
 import com.pla.individuallife.proposal.domain.model.ILProposalStatus;
+import com.pla.individuallife.proposal.exception.ILProposalException;
 import com.pla.individuallife.proposal.presentation.dto.*;
 import com.pla.individuallife.proposal.query.ILProposalFinder;
 import com.pla.individuallife.proposal.service.ILProposalService;
@@ -289,7 +290,10 @@ public class ILProposalController {
             cmd.setUserDetails(getLoggedInUserDetail(request));
             String proposalId = proposalCommandGateway.approveProposal(cmd);
             return new ResponseEntity(Result.success(messageMap.get(cmd.getStatus()),proposalId), HttpStatus.OK);
-        } catch (Exception e) {
+        }catch (ILProposalException e){
+            return new ResponseEntity(Result.failure(e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        catch (Exception e) {
             e.printStackTrace();
             return new ResponseEntity(Result.failure(e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
         }
