@@ -221,8 +221,6 @@ public class ILPolicyFinder {
         dto.setFamilyPersonalDetail((FamilyPersonalDetail) policy.get("familyPersonalDetail"));
         dto.setAdditionaldetails((AdditionalDetails) policy.get("additionalDetails"));
         dto.setPremiumPaymentDetails((PremiumPaymentDetails) policy.get("premiumPaymentDetails"));
-        if(dto.getProposalPlanDetail() != null)
-            dto.setPremiumDetailDto(getPremiumDetail(policyId));
         AgentCommissionShareModel model = (AgentCommissionShareModel) policy.get("agentCommissionShareModel");
         Set<AgentDetailDto> agentCommissionDetails = new HashSet<AgentDetailDto>();
         model.getCommissionShare().forEach(commissionShare -> agentCommissionDetails.add(new AgentDetailDto(commissionShare.getAgentId().toString(), getAgentFullNameById(commissionShare.getAgentId().toString()), commissionShare.getAgentCommission())));

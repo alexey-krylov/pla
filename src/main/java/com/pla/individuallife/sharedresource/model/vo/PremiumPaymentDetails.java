@@ -11,6 +11,7 @@ import org.joda.time.DateTime;
 @Getter
 @ToString
 public class PremiumPaymentDetails {
+    private PremiumDetail premiumDetail;
     private PremiumFrequency premiumFrequency;
     private PremiumPaymentMethod premiumPaymentMethod;
     private EmployerDetails employerDetails;
