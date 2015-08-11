@@ -318,7 +318,7 @@
                 <div class="form-group required" ng-if="proposerEmploymentTypeStaus">
                     <label class="control-label">Province</label>
                     <select class="form-control input-sm" name="province" ng-disabled="mode=='new'||mode=='view'" ng-options="province.provinceId as province.provinceName for province in provinces"
-                            ng-model="proposerEmployment.province" ng-required="true">
+                            ng-model="proposerEmployment.province" ng-required="true" ng-init="getProposerEmpProvinceValue(proposerEmployment.province)" ng-change="getProposerEmpProvinceValue(proposerEmployment.province)">
                     </select>
 
                     <div class="error" ng-messages="proposerEmploymentForm.province.$error" ng-if="proposerEmploymentForm.province.$dirty">
@@ -402,7 +402,7 @@
                 <div class="form-group required">
                     <label class="control-label">Province</label>
                     <select class="form-control input-sm" name="province" ng-disabled="mode=='new'||mode=='view'" ng-options="province.provinceId as province.provinceName for province in provinces"
-                            ng-model="proposerResidential.province" ng-required="true">
+                            ng-init="getProposerResProvinceValue(proposerResidential.province)" ng-change="getProposerResProvinceValue(proposerResidential.province)" ng-model="proposerResidential.province" ng-required="true">
                     </select>
 
                     <div class="error" ng-messages="proposerResidentForm.province.$error" ng-if="proposerResidentForm.province.$dirty">
@@ -435,11 +435,12 @@
         </div>
     </div>
     <div class="row">
+        {{statusCount}}
         <div class="col-sm-6">
             <button type="button" class="btn btn-default btn-sm">Cancel</button>
         </div>
         <div class="col-sm-6">
-            <button type="button" class="btn btn-default btn-sm" style="float: right" ng-disabled="step2.$invalid ||mode=='new'||mode=='view'|| ageCalculateStatus" ng-click="saveProposerDetails()">Save</button>
+            <button type="button" class="btn btn-default btn-sm" style="float: right" ng-disabled="step2.$invalid || statusCount ||mode=='new'||mode=='view'|| ageCalculateStatus" ng-click="saveProposerDetails()">Save</button>
         </div>
     </div>
 </ng-form>

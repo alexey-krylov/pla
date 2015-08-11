@@ -45,7 +45,6 @@ angular.module('viewPolicy', ['common', 'ngRoute', 'mgcrea.ngStrap.select', 'mgc
                 console.log(data);
                 $scope.additionalDocumentList=data;
                 //  $scope.checkDocumentAttached=$scope.additionalDocumentList!=null;
-
             });
 
 

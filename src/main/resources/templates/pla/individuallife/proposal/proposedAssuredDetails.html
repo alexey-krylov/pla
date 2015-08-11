@@ -295,7 +295,7 @@
                 <div class="form-group required" ng-if="employmentTypeStaus">
                     <label class="control-label">Province</label>
                     <select class="form-control input-sm" name="province" ng-disabled="mode=='new'||mode=='view'" ng-options="province.provinceId as province.provinceName for province in provinces"
-                            ng-model="employment.province" ng-required="true">
+                           ng-init="getProposedAssuredEmpProvinceValue(employment.province)"  ng-change="getProposedAssuredEmpProvinceValue(employment.province)" ng-model="employment.province" ng-required="true">
                     </select>
 
                     <div class="error" ng-messages="employmentDetails.province.$error" ng-if="employmentDetails.province.$dirty">
@@ -371,7 +371,7 @@
                 <div class="form-group required">
                     <label class="control-label">Province</label>
                     <select class="form-control input-sm" name="residentProvince" ng-disabled="mode=='new'||mode=='view'" ng-options="province.provinceId as province.provinceName for province in provinces"
-                            ng-model="residentialAddress.province" ng-required="true"/>
+                            ng-init="getProposedAssuredResProvinceValue(residentialAddress.province)" ng-change="getProposedAssuredResProvinceValue(residentialAddress.province)" ng-model="residentialAddress.province" ng-required="true"/>
 
                     <div class="error" ng-messages="residentDetails.residentProvince.$error" ng-if="residentDetails.residentProvince.$dirty">
                         <small class="error" ng-message="required">Please enter Province</small>
