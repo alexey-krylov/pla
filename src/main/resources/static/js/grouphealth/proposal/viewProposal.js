@@ -31,10 +31,32 @@ var viewProposalModule = (function () {
     services.modifyProposal = function () {
         var proposalId = this.selectedItem;
         console.log(this.status);
-        if (this.status == 'Returned' || this.status == 'Draft') {
+        if (this.status == 'Returned') {
             window.location.href = "/pla/grouphealth/proposal/editProposalReturnStatus?proposalId=" + proposalId + "&mode=edit" + "&status=return";
         } else {
-            window.location.href = "/pla/grouphealth/proposal/editProposal?proposalId=" + proposalId + "&mode=edit";
+
+            $.ajax({
+                url: '/pla/grouphealth/proposal/getapprovercomments/' + proposalId,
+                type: 'GET',
+                success: function (data, textStatus, jqXHR) {
+                    for (var i = 0; i < data.length; i++) {
+                        var statusProposal = data[i].status;
+                        if (statusProposal === 'Returned') {
+                            services.statusValue = true;
+                            break;
+
+                        }
+                    }
+                    if (services.statusValue == false) {
+                        window.location.href = "/pla/grouphealth/proposal/editProposal?proposalId=" + proposalId + "&mode=edit";
+
+                    } else {
+                        window.location.href = "/pla/grouphealth/proposal/editProposalReturnStatus?proposalId=" + proposalId + "&mode=edit" + "&status=return";
+
+                    }
+
+                }
+            });
         }
 
 
@@ -43,7 +65,7 @@ var viewProposalModule = (function () {
     services.viewProposal = function () {
         var proposalId = this.selectedItem;
 
-        if (this.status == 'Returned' || this.status == 'Draft') {
+        if (this.status == 'Returned') {
             window.location.href = "/pla/grouphealth/proposal/editProposalReturnStatus?proposalId=" + proposalId + "&mode=view" + "&status=return";
         } else {
 

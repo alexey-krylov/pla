@@ -23,6 +23,9 @@ angular.module('brokerModule', ['common', 'ngRoute', 'mgcrea.ngStrap.select', 'm
 
           //  console.log(' Broker Controller invoked.. ');
             $scope.agentDetails = agentDetails;
+            $scope.cancel = function(){
+                $window.location.href = "/pla/core/agent/listagent"
+            };
 
             if (_.size(agentDetails) != 0) {
                 //console.log(agentDetails);
@@ -54,7 +57,18 @@ angular.module('brokerModule', ['common', 'ngRoute', 'mgcrea.ngStrap.select', 'm
             }
             $scope.selectedItem = 1;
             $scope.stepsSaved = {};
-            $scope.stepsSaved["1"] = false;
+            var mode = getQueryParameter("mode");
+            if (mode == 'view' || mode =='edit') {
+                $scope.stepsSaved["1"] = true;
+                var queryParam = {'agentId': getQueryParameter('agentId')};
+                $http.get('/pla/core/agent/agentdetail', {params: queryParam})
+                    .success(function (response, status, headers, config) {
+                        $scope.agentDetails = response;
+                    });
+
+
+                console.log($scope.agentDetails);
+            }
             $scope.contact = {};
             $scope.titleList = globalConstants.title;
             $scope.primaryCities = [];
@@ -136,6 +150,7 @@ angular.module('brokerModule', ['common', 'ngRoute', 'mgcrea.ngStrap.select', 'm
                         transformJson.createCompatibleJson(angular.copy($scope.agentDetails), $scope.physicalCities, $scope.primaryCities, $scope.trainingCompleteOn, true))
                         .success(function (response, status, headers, config) {
                             if (response.status == "200") {
+                                $scope.contactDetailsForm.$submitted=true;
                             }
                         })
                         .error(function (response, status, headers, config) {
@@ -145,6 +160,7 @@ angular.module('brokerModule', ['common', 'ngRoute', 'mgcrea.ngStrap.select', 'm
                         transformJson.createCompatibleJson(angular.copy($scope.agentDetails), $scope.physicalCities, $scope.primaryCities, $scope.trainingCompleteOn, false))
                         .success(function (response, status, headers, config) {
                             if (response.status == "200") {
+                                $scope.contactDetailsForm.$submitted=true;
                             }
                         })
                         .error(function (response, status, headers, config) {

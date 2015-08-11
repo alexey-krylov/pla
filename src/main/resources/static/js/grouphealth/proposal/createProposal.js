@@ -79,11 +79,11 @@ angular.module('createProposal', ['common', 'ngRoute', 'mgcrea.ngStrap.select', 
                             file: files,
                             fields: {documentId: document.documentId, proposalId: $scope.proposalId,mandatory:true},
                             method: 'POST'
-                        }).progress(function (evt) {
-
+                        }).progress(function(evt) {
+                            console.log('percent: ' + parseInt(100.0 * evt.loaded / evt.total));
                         }).success(function (data, status, headers, config) {
-                            //console.log('file ' + config.file.name + 'uploaded. Response: ' +
-                            // JSON.stringify(data));
+                            console.log('file ' + config.file.name );
+                             console.log(data);
 
                         });
                     }

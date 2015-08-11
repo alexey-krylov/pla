@@ -30,7 +30,7 @@ var viewAgentModule = (function(){
     agentServices.viewAgent =  function(){
         if (this.agentSelected) {
             if ('BROKER' === this.channelType) {
-                window.location.href = "/pla/core/broker/view?agentId=" + this.agentSelected;
+                window.location.href = "/pla/core/broker/view?agentId=" + this.agentSelected + "&mode=view";
             } else {
                 window.location.href = "/pla/core/agent/viewagentdetail?agentId=" + this.agentSelected;
 
@@ -41,7 +41,7 @@ var viewAgentModule = (function(){
     agentServices.updateAgent = function(){
         if(this.agentSelected){
             if ('BROKER' === this.channelType) {
-                window.location.href = "/pla/core/broker/edit?agentId=" + this.agentSelected;
+                window.location.href = "/pla/core/broker/edit?agentId=" + this.agentSelected + "&mode=edit";
             } else {
                 window.location.href = "/pla/core/agent/openeditpage?agentId=" + this.agentSelected;
             }
