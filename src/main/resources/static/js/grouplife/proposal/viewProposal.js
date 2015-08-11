@@ -40,11 +40,11 @@ var viewProposalModule = (function () {
 
     services.viewProposal = function () {
         var proposalId = this.selectedItem;
-alert(this.status);
-        if (this.status == 'RETURNED' || this.status == 'APPROVED') {
-            alert("hi");
 
-            // window.location.href = "/pla/grouplife/proposal/editProposalReturnStatus?proposalId=" + proposalId + "&mode=view" + "&status=return";
+        if (this.status == 'RETURNED' || this.status == 'APPROVED') {
+
+
+            window.location.href = "/pla/grouplife/proposal/editProposalReturnStatus?proposalId=" + proposalId + "&mode=view" + "&status=return";
         } else {
 
             $.ajax({

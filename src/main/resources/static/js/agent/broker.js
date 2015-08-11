@@ -14,14 +14,14 @@ angular.module('brokerModule', ['common', 'ngRoute', 'mgcrea.ngStrap.select', 'm
         }
     }])
     .controller('brokerController', ['$scope', '$http', 'authorisedToSell', 'provinces', '$timeout', '$alert', '$route', '$window', 'transformJson',
-        'getQueryParameter', 'agentDetails', 'globalConstants', 'nextAgentSequence', 'getProvinceAndCityDetail',
+        'getQueryParameter', 'agentDetails', 'globalConstants', 'nextAgentSequence', 'getProvinceAndCityDetail', '$alert',
 
 
         function ($scope, $http,
-                  authorisedToSell, provinces, $timeout, $alert, $route, $window, transformJson, getQueryParameter, agentDetails, globalConstants, nextAgentSequence, getProvinceAndCityDetail) {
+                  authorisedToSell, provinces, $timeout, $alert, $route, $window, transformJson, getQueryParameter, agentDetails, globalConstants, nextAgentSequence, getProvinceAndCityDetail, $alert) {
             $scope.numberPattern = globalConstants.numberPattern;
 
-            console.log(' Broker Controller invoked.. ');
+          //  console.log(' Broker Controller invoked.. ');
             $scope.agentDetails = agentDetails;
 
             if (_.size(agentDetails) != 0) {
@@ -37,13 +37,59 @@ angular.module('brokerModule', ['common', 'ngRoute', 'mgcrea.ngStrap.select', 'm
             } else {
                 $scope.agentDetails = {agentId: nextAgentSequence};
             }
+            $scope.lineOfBusinessList = [{
+                "lineOfBusinessId": "INDIVIDUAL_LIFE",
+                "value": "Individual Life"
+            }, {"lineOfBusinessId": "GROUP_HEALTH", "value": "Group Health"}, {
+                "lineOfBusinessId": "GROUP_LIFE",
+                "value": "Group Life"
+            },]
 
             if (!$scope.agentDetails.contactPersonDetails || $scope.agentDetails.contactPersonDetails.length == 0)
-                $scope.agentDetails.contactPersonDetails = [{}, {}, {}];
-
+            //$scope.agentDetails.contactPersonDetails = [{}, {}, {}];
+                $scope.agentDetails.contactPersonDetails = [{}];
+            else {
+                var len = $scope.agentDetails.contactPersonDetails.length;
+                $scope.agentDetails.contactPersonDetails = [{}];
+            }
+            $scope.selectedItem = 1;
+            $scope.stepsSaved = {};
+            $scope.stepsSaved["1"] = false;
+            $scope.contact = {};
             $scope.titleList = globalConstants.title;
             $scope.primaryCities = [];
             $scope.physicalCities = [];
+            $scope.count = 0;
+            $scope.errorMsg = false;
+
+            $scope.addingRowTest = function (contact) {
+
+                var addRowCheck = false;
+               // $scope.errorMsg = false;
+                $scope.contact = contact;
+
+
+                if ($scope.contact.lineOfBusinessId && $scope.contact.title && $scope.contact.fullName && $scope.contact.workPhone) {
+                    addRowCheck = true;
+                    $scope.stepsSaved["1"] = true;
+
+                }
+                else {
+                    addRowCheck = false;
+                    $scope.stepsSaved["1"] = false;
+
+                }
+
+                if (addRowCheck) {
+                    if ($scope.agentDetails.contactPersonDetails.length <= 2) {
+                        $scope.agentDetails.contactPersonDetails.push({});
+                        $scope.count++;
+                        $scope.stepsSaved["1"] = true;
+                    }
+
+                }
+
+            }
             $scope.$watch('agentDetails.physicalAddress.physicalGeoDetail.provinceCode', function (newVal, oldVal) {
                 if (newVal) {
                     var provinceDetails = $scope.getProvinceDetails(newVal);
@@ -97,12 +143,12 @@ angular.module('brokerModule', ['common', 'ngRoute', 'mgcrea.ngStrap.select', 'm
                 } else {
                     $http.post("/pla/core/agent/createbroker",
                         transformJson.createCompatibleJson(angular.copy($scope.agentDetails), $scope.physicalCities, $scope.primaryCities, $scope.trainingCompleteOn, false))
-                    .success(function (response, status, headers, config) {
-                        if (response.status == "200") {
-                        }
-                    })
-                    .error(function (response, status, headers, config) {
-                    });
+                        .success(function (response, status, headers, config) {
+                            if (response.status == "200") {
+                            }
+                        })
+                        .error(function (response, status, headers, config) {
+                        });
                 }
             };
 
@@ -207,16 +253,16 @@ angular.module('brokerModule', ['common', 'ngRoute', 'mgcrea.ngStrap.select', 'm
                 }],
                 agentDetails: ['$q', '$http', 'getQueryParameter', '$window', function ($q, $http, getQueryParameter, $window) {
                     var queryParam = {'agentId': getQueryParameter('agentId')};
-                    console.log('AGENT ID == ' + getQueryParameter('agentId'));
+                   // console.log('AGENT ID == ' + getQueryParameter('agentId'));
                     if (angular.isDefined(getQueryParameter('agentId')) && getQueryParameter('agentId') != null) {
                         var deferred = $q.defer();
                         $http.get('/pla/core/agent/agentdetail', {params: queryParam})
                             .success(function (response, status, headers, config) {
-                            deferred.resolve(response)
+                                deferred.resolve(response)
                             })
                             .error(function (response, status, headers, config) {
-                            deferred.reject();
-                        });
+                                deferred.reject();
+                            });
                         return deferred.promise;
                     } else {
                         return {};
