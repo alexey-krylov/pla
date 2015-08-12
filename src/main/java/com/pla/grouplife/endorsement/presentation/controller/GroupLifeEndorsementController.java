@@ -35,6 +35,7 @@ public class GroupLifeEndorsementController {
     public ModelAndView openPolicySearchPage() {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("pla/grouplife/endorsement/searchPolicy");
+        modelAndView.addObject("searchCriteria",new SearchGLPolicyDto());
         return modelAndView;
     }
 
