@@ -74,11 +74,14 @@ public class GLPolicyController {
         return policyDetailDto;
     }
 
-    @RequestMapping(value = "/search/", method = RequestMethod.POST)
-    @ResponseBody
-    public List<GLPolicyDetailDto> searchPolicy(SearchGLPolicyDto searchGLPolicyDto) {
+    @RequestMapping(value = "/search", method = RequestMethod.POST)
+    public ModelAndView searchPolicy(SearchGLPolicyDto searchGLPolicyDto) {
         List<GLPolicyDetailDto> policyDetailDtos = glPolicyService.searchPolicy(searchGLPolicyDto);
-        return policyDetailDtos;
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("pla/grouplife/policy/searchPolicy");
+        modelAndView.addObject("searchResult", policyDetailDtos);
+        modelAndView.addObject("searchCriteria", searchGLPolicyDto);
+        return modelAndView;
     }
 
     @RequestMapping(value = "/getagentdetailfrompolicy/{policyId}", method = RequestMethod.GET)

@@ -13,4 +13,7 @@ public class SearchGHPolicyDto {
     private String policyNumber;
 
     private String policyHolderName;
+
+    private String proposalNumber;
+
 }

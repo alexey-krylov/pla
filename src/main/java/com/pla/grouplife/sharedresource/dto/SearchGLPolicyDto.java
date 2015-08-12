@@ -13,4 +13,6 @@ public class SearchGLPolicyDto {
     private String policyNumber;
 
     private String policyHolderName;
+
+    private String proposalNumber;
 }

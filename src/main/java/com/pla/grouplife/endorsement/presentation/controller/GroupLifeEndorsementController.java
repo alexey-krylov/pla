@@ -41,9 +41,13 @@ public class GroupLifeEndorsementController {
 
     @RequestMapping(value = "/searchpolicy", method = RequestMethod.POST)
     @ResponseBody
-    public List<GLPolicyDetailDto> searchPolicy(SearchGLPolicyDto searchGLPolicyDto) {
+    public ModelAndView searchPolicy(SearchGLPolicyDto searchGLPolicyDto) {
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("pla/grouplife/endorsement/searchPolicy");
+        modelAndView.addObject("searchCriteria",new SearchGLPolicyDto());
         List<GLPolicyDetailDto> policyDetailDtos = glEndorsementService.searchPolicy(searchGLPolicyDto);
-        return policyDetailDtos;
+        modelAndView.addObject("searchResult", policyDetailDtos);
+        return modelAndView;
     }
 
     @RequestMapping(value = "/downloadtemplatebyendorsementtype/{endorsementType}/{endorsementId}", method = RequestMethod.GET)
