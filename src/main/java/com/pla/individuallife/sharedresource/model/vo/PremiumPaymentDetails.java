@@ -2,6 +2,7 @@ package com.pla.individuallife.sharedresource.model.vo;
 
 import com.pla.publishedlanguage.domain.model.PremiumFrequency;
 import lombok.Getter;
+import lombok.Setter;
 import lombok.ToString;
 import org.joda.time.DateTime;
 
@@ -9,6 +10,7 @@ import org.joda.time.DateTime;
  * Created by Karunakar on 7/2/2015.
  */
 @Getter
+@Setter
 @ToString
 public class PremiumPaymentDetails {
     private PremiumDetail premiumDetail;

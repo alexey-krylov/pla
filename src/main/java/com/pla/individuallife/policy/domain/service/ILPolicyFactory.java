@@ -14,8 +14,10 @@ import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import static org.nthdimenzion.utils.UtilValidator.isNotEmpty;
 
@@ -72,13 +74,24 @@ public class ILPolicyFactory {
     private PolicyNumber generatePolicyNumber(List<AgentCommissionShareModel.AgentCommissionShare> agentCommissionShares){
         AgentId agentId = null;
         if (isNotEmpty(agentCommissionShares)){
-
-            AgentCommissionShareModel.AgentCommissionShare  agentCommissionShare =  agentCommissionShares.get(0);
-            agentId =  agentCommissionShare.getAgentId();
+            agentId =  getDominantAgentId(agentCommissionShares);
         }
         String policyNumberInString = ilPolicyNumberGenerator.getPolicyNumber(IndividualLifePolicy.class, agentId);
         return new PolicyNumber(policyNumberInString);
     }
 
+
+    private AgentId getDominantAgentId(List<AgentCommissionShareModel.AgentCommissionShare> agentCommissionShares){
+        Optional<AgentCommissionShareModel.AgentCommissionShare> agentCommissionShareOptional =  agentCommissionShares.parallelStream().max(new Comparator<AgentCommissionShareModel.AgentCommissionShare>() {
+            @Override
+            public int compare(AgentCommissionShareModel.AgentCommissionShare agentLeft, AgentCommissionShareModel.AgentCommissionShare agentRight) {
+                return agentLeft.getAgentCommission().compareTo(agentRight.getAgentCommission());
+            }
+        });
+        if (agentCommissionShareOptional.isPresent()){
+            return agentCommissionShareOptional.get().getAgentId();
+        }
+        return null;
+    }
 
 }

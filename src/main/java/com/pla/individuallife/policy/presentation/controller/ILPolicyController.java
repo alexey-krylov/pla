@@ -1,20 +1,27 @@
 package com.pla.individuallife.policy.presentation.controller;
 
+import com.mongodb.gridfs.GridFSDBFile;
 import com.pla.individuallife.policy.finder.ILPolicyFinder;
 import com.pla.individuallife.policy.presentation.dto.ILPolicyDto;
 import com.pla.individuallife.policy.presentation.dto.PolicyDetailDto;
 import com.pla.individuallife.policy.presentation.dto.SearchILPolicyDto;
 import com.pla.individuallife.policy.service.ILPolicyService;
+import com.pla.individuallife.proposal.presentation.dto.ILProposalMandatoryDocumentDto;
 import com.pla.sharedkernel.identifier.PolicyId;
 import com.wordnik.swagger.annotations.ApiOperation;
-import org.nthdimenzion.presentation.Result;
+import net.sf.jasperreports.engine.JRException;
+import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.data.mongodb.gridfs.GridFsTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.util.List;
 
 import static com.google.common.base.Preconditions.checkArgument;
@@ -30,6 +37,9 @@ public class ILPolicyController {
 
     @Autowired
     private ILPolicyFinder ilPolicyFinder;
+
+    @Autowired
+    private GridFsTemplate gridFsTemplate;
 
 
     @Autowired
@@ -94,13 +104,35 @@ public class ILPolicyController {
         return dto;
     }
 
-    @RequestMapping(method = RequestMethod.GET, value = "/getproposalid/{policyId}")
-    @ApiOperation(httpMethod = "GET", value = "This call to get proposal id")
+
+    @RequestMapping(value = "/getmandatorydocuments/{policyId}", method = RequestMethod.GET)
     @ResponseBody
-    public ResponseEntity getProposalNumberById(@PathVariable("policyId") String policyId) {
-        String proposalId = ilPolicyFinder.getProposalIdByPolicyId(new PolicyId(policyId));
-        checkArgument(proposalId != null, "Proposal Id not found");
-        return new ResponseEntity(Result.success("The Proposal Id ",proposalId), HttpStatus.OK);
+    @ApiOperation(httpMethod = "GET", value = "To list mandatory documents which is being configured in Mandatory Document SetUp")
+    public List<ILProposalMandatoryDocumentDto> findMandatoryDocuments(@PathVariable("policyId") String policyId) {
+        List<ILProposalMandatoryDocumentDto> ilProposalMandatoryDocumentDtos = ilPolicyService.findMandatoryDocuments(policyId);
+        return ilProposalMandatoryDocumentDtos;
     }
 
+    @RequestMapping(value = "/downloadmandatorydocument/{gridfsdocid}", method = RequestMethod.GET)
+    public void downloadMandatoryDocument(@PathVariable("gridfsdocid") String gridfsDocId, HttpServletResponse response) throws IOException {
+        GridFSDBFile gridFSDBFile = gridFsTemplate.findOne(new Query(Criteria.where("_id").is(gridfsDocId)));
+        response.reset();
+        response.setContentType(gridFSDBFile.getContentType());
+        response.setHeader("content-disposition", "attachment; filename=" + gridFSDBFile.getFilename() + "");
+        OutputStream outputStream = response.getOutputStream();
+        IOUtils.copy(gridFSDBFile.getInputStream(), outputStream);
+        outputStream.flush();
+        outputStream.close();
+    }
+
+    @RequestMapping(value = "/printpolicy/{policyId}", method = RequestMethod.GET)
+    public void downloadPlanDetail(@PathVariable("policyId") String policyId, HttpServletResponse response) throws IOException, JRException {
+        response.reset();
+        response.setContentType("application/pdf");
+        response.setHeader("content-disposition", "attachment; filename=" + "planReadyReckoner.pdf" + "");
+        OutputStream outputStream = response.getOutputStream();
+        outputStream.write(ilPolicyService.getPolicyDocument(new PolicyId(policyId)));
+        outputStream.flush();
+        outputStream.close();
+    }
 }
