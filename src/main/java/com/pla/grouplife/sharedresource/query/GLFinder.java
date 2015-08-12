@@ -36,6 +36,8 @@ import static org.nthdimenzion.utils.UtilValidator.isNotEmpty;
 @Service
 public class GLFinder {
 
+    private static final String GL_POLICY_COLLECTION_NAME = "group_life_policy";
+
     private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
     private MongoTemplate mongoTemplate;
@@ -66,21 +68,26 @@ public class GLFinder {
 
     public List<Map> searchQuotation(String quotationNumber, String agentCode, String proposerName, String agentName, String quotationId, String[] statuses) {
         Criteria criteria = Criteria.where("quotationStatus").in(statuses);
+        boolean areFieldsOtherThanAgentNameNotEmpty = false;
         if (isEmpty(quotationNumber) && isEmpty(quotationId) && isEmpty(agentCode) && isEmpty(proposerName) && isEmpty(agentName)) {
             return Lists.newArrayList();
         }
         if (isNotEmpty(quotationId)) {
             criteria = criteria.and("_id").is(new QuotationId(quotationId));
+            areFieldsOtherThanAgentNameNotEmpty = true;
         }
         if (isNotEmpty(quotationNumber)) {
             criteria = criteria.and("quotationNumber").is(quotationNumber);
+            areFieldsOtherThanAgentNameNotEmpty = true;
         }
         if (isNotEmpty(agentCode)) {
             criteria = criteria != null ? criteria.and("agentId.agentId").is(agentCode) : Criteria.where("agentId.agentId").is(agentCode);
+            areFieldsOtherThanAgentNameNotEmpty = true;
         }
         if (isNotEmpty(proposerName)) {
             String proposerPattern = "^" + proposerName;
             criteria = criteria != null ? criteria.and("proposer.proposerName").regex(Pattern.compile(proposerPattern, Pattern.CASE_INSENSITIVE)) : Criteria.where("proposer.proposerName").regex(Pattern.compile(proposerPattern, Pattern.CASE_INSENSITIVE));
+            areFieldsOtherThanAgentNameNotEmpty = true;
         }
         Set<String> agentIds = null;
         if (isNotEmpty(agentName)) {
@@ -94,6 +101,9 @@ public class GLFinder {
         }
         if (isNotEmpty(agentIds)) {
             criteria = criteria.and("agentId.agentId").in(agentIds);
+        }
+        if (isEmpty(agentIds) && !areFieldsOtherThanAgentNameNotEmpty) {
+            return Lists.newArrayList();
         }
         Query query = new Query(criteria);
         query.with(new Sort(Sort.Direction.ASC, "quotationNumber"));
@@ -144,4 +154,21 @@ public class GLFinder {
         return namedParameterJdbcTemplate.query(FIND_AGENT_PLANS_QUERY, new MapSqlParameterSource().addValue("agentId", agentId), new ColumnMapRowMapper());
     }
 
+
+    public List<Map> searchPolicy(String policyNumber, String policyHolderName, String[] statuses) {
+        if (isEmpty(policyHolderName) && isEmpty(policyNumber)) {
+            return Lists.newArrayList();
+        }
+        Criteria criteria = Criteria.where("status").in(statuses);
+        if (isNotEmpty(policyHolderName)) {
+            String proposerPattern = "^" + policyHolderName;
+            criteria = criteria.and("proposer.proposerName").regex(Pattern.compile(proposerPattern, Pattern.CASE_INSENSITIVE));
+        }
+        if (isNotEmpty(policyNumber)) {
+            criteria = criteria.and("policyNumber.policyNumber").is(policyNumber);
+        }
+        Query query = new Query(criteria);
+        query.with(new Sort(Sort.Direction.ASC, "policyNumber.policyNumber"));
+        return mongoTemplate.find(query, Map.class, GL_POLICY_COLLECTION_NAME);
+    }
 }

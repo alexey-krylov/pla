@@ -78,19 +78,24 @@ public class GHFinder {
 
     public List<Map> searchQuotation(String quotationNumber, String agentCode, String proposerName, String agentName, String quotationId, String[] statuses) {
         Criteria criteria = Criteria.where("quotationStatus").in(statuses);
+        boolean areFieldsOtherThanAgentNameNotEmpty = false;
         if (isEmpty(quotationNumber) && isEmpty(quotationId) && isEmpty(agentCode) && isEmpty(proposerName) && isEmpty(agentName)) {
             return Lists.newArrayList();
         }
         if (isNotEmpty(quotationId)) {
+            areFieldsOtherThanAgentNameNotEmpty = true;
             criteria = criteria.and("_id").is(new QuotationId(quotationId));
         }
         if (isNotEmpty(quotationNumber)) {
+            areFieldsOtherThanAgentNameNotEmpty = true;
             criteria = criteria.and("quotationNumber").is(quotationNumber);
         }
         if (isNotEmpty(agentCode)) {
+            areFieldsOtherThanAgentNameNotEmpty = true;
             criteria = criteria != null ? criteria.and("agentId.agentId").is(agentCode) : Criteria.where("agentId.agentId").is(agentCode);
         }
         if (isNotEmpty(proposerName)) {
+            areFieldsOtherThanAgentNameNotEmpty = true;
             String proposerPattern = "^" + proposerName;
             criteria = criteria != null ? criteria.and("proposer.proposerName").regex(Pattern.compile(proposerPattern, Pattern.CASE_INSENSITIVE)) : Criteria.where("proposer.proposerName").regex(Pattern.compile(proposerPattern, Pattern.CASE_INSENSITIVE));
         }
@@ -106,6 +111,9 @@ public class GHFinder {
         }
         if (isNotEmpty(agentIds)) {
             criteria = criteria.and("agentId.agentId").in(agentIds);
+        }
+        if (isEmpty(agentIds) && !areFieldsOtherThanAgentNameNotEmpty) {
+            return Lists.newArrayList();
         }
         Query query = new Query(criteria);
         query.with(new Sort(Sort.Direction.ASC, "quotationNumber"));

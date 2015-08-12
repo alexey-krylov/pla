@@ -15,6 +15,7 @@ import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.nthdimenzion.common.AppConstants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.math.BigDecimal;
@@ -27,6 +28,7 @@ import java.util.stream.Collectors;
  * Created by Samir on 5/4/2015.
  */
 @Component(value = "glInsuredExcelGenerator")
+@Service
 @NoArgsConstructor
 public class GLInsuredExcelGenerator {
 

@@ -14,6 +14,8 @@ public class EndorsementType {
 
     private String description;
 
+    private String code;
+
     public EndorsementType() {
     }
 

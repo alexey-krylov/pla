@@ -1,4 +1,4 @@
-package com.pla.grouplife.policy.presentation.dto;
+package com.pla.grouplife.sharedresource.dto;
 
 import lombok.Getter;
 import lombok.Setter;
