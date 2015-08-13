@@ -15,4 +15,8 @@ public abstract class AbstractGLEndorsementExcelGenerator implements GLEndorseme
         return ExcelGeneratorUtil.generateExcelWithDvConstraintCell(headers, rowCellData, constraintCellData);
     }
 
+    protected HSSFWorkbook createExcel(List<String> headers, List<Map<Integer, String>> rowCellData) {
+        return ExcelGeneratorUtil.generateExcel(headers, rowCellData);
+    }
+
 }

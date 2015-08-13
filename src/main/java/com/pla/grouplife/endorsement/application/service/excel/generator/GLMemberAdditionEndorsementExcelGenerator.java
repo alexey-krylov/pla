@@ -17,7 +17,6 @@ import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.Map;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
 /**
@@ -36,12 +35,7 @@ public class GLMemberAdditionEndorsementExcelGenerator extends AbstractGLEndorse
     @Override
     public HSSFWorkbook generate(PolicyId policyId, EndorsementId endorsementId) {
         List<GLEndorsementExcelHeader> excelHeaderList = GLEndorsementType.ASSURED_MEMBER_ADDITION.getExcelHeaderByEndorsementType();
-        List<String> excelHeaderInString = excelHeaderList.stream().map(new Function<GLEndorsementExcelHeader, String>() {
-            @Override
-            public String apply(GLEndorsementExcelHeader glEndorsementExcelHeader) {
-                return glEndorsementExcelHeader.getDescription();
-            }
-        }).collect(Collectors.toList());
+        List<String> excelHeaderInString = excelHeaderList.stream().map(excelHeader -> excelHeader.getDescription()).collect(Collectors.toList());
         Map<Integer, List<String>> constraintCellDataMap = Maps.newHashMap();
         constraintCellDataMap.put(excelHeaderInString.indexOf("Gender"), Gender.getAllGender());
         constraintCellDataMap.put(excelHeaderInString.indexOf("Relationship"), Relationship.getAllRelation());
@@ -53,12 +47,7 @@ public class GLMemberAdditionEndorsementExcelGenerator extends AbstractGLEndorse
 
     private List<String> getAllOccupationClassification() {
         List<Map<String, Object>> occupationClassList = masterFinder.getAllOccupationClassification();
-        List<String> occupationClasses = occupationClassList.stream().map(new Function<Map<String, Object>, String>() {
-            @Override
-            public String apply(Map<String, Object> stringObjectMap) {
-                return (String) stringObjectMap.get("description");
-            }
-        }).collect(Collectors.toList());
+        List<String> occupationClasses = occupationClassList.stream().map(occupationMap -> (String) occupationMap.get("description")).collect(Collectors.toList());
         return occupationClasses;
     }
 
