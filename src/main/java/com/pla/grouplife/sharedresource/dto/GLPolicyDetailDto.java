@@ -4,6 +4,9 @@ import lombok.Getter;
 import lombok.Setter;
 import org.joda.time.DateTime;
 
+import java.util.List;
+import java.util.Map;
+
 /**
  * Created by Samir on 7/9/2015.
  */
@@ -22,4 +25,6 @@ public class GLPolicyDetailDto {
     private String policyNumber;
 
     private String status;
+
+    private List<Map<String, String>> endorsementTypes;
 }
