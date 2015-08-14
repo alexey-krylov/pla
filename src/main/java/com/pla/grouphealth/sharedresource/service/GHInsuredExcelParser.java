@@ -111,12 +111,14 @@ public class GHInsuredExcelParser {
                 coveragePremiumDetailDto.setPremium(coveragePremium);
                 int coverageSA = Double.valueOf(ExcelGeneratorUtil.getCellValue(optionalCoverageCellHolder.getOptionalCoverageSACell())).intValue();
                 coveragePremiumDetailDto.setSumAssured(BigDecimal.valueOf(coverageSA));
-                for (OptionalCoverageBenefitCellHolder optionalCoverageBenefitCellHolder : optionalCoverageCellHolder.getBenefitCellHolders()) {
-                    GHInsuredDto.GHCoveragePremiumDetailDto.GHCoverageBenefitDetailDto ghCoverageBenefitDetailDto = new GHInsuredDto.GHCoveragePremiumDetailDto.GHCoverageBenefitDetailDto();
-                    ghCoverageBenefitDetailDto.setBenefitCode(ExcelGeneratorUtil.getCellValue(optionalCoverageBenefitCellHolder.getBenefitCell()));
-                    int benefitLimit = Double.valueOf(ExcelGeneratorUtil.getCellValue(optionalCoverageBenefitCellHolder.getBenefitLimitCell())).intValue();
-                    ghCoverageBenefitDetailDto.setBenefitLimit(BigDecimal.valueOf(benefitLimit));
-                    coveragePremiumDetailDto = coveragePremiumDetailDto.addBenefit(ghCoverageBenefitDetailDto);
+                if (isNotEmpty(optionalCoverageCellHolder.getBenefitCellHolders())) {
+                    for (OptionalCoverageBenefitCellHolder optionalCoverageBenefitCellHolder : optionalCoverageCellHolder.getBenefitCellHolders()) {
+                        GHInsuredDto.GHCoveragePremiumDetailDto.GHCoverageBenefitDetailDto ghCoverageBenefitDetailDto = new GHInsuredDto.GHCoveragePremiumDetailDto.GHCoverageBenefitDetailDto();
+                        ghCoverageBenefitDetailDto.setBenefitCode(ExcelGeneratorUtil.getCellValue(optionalCoverageBenefitCellHolder.getBenefitCell()));
+                        int benefitLimit = Double.valueOf(ExcelGeneratorUtil.getCellValue(optionalCoverageBenefitCellHolder.getBenefitLimitCell())).intValue();
+                        ghCoverageBenefitDetailDto.setBenefitLimit(BigDecimal.valueOf(benefitLimit));
+                        coveragePremiumDetailDto = coveragePremiumDetailDto.addBenefit(ghCoverageBenefitDetailDto);
+                    }
                 }
                 return coveragePremiumDetailDto;
             }
