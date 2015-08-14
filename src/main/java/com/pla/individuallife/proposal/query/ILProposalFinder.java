@@ -9,7 +9,7 @@ import com.pla.core.domain.model.plan.premium.Premium;
 import com.pla.core.query.CoverageFinder;
 import com.pla.core.query.PlanFinder;
 import com.pla.core.query.PremiumFinder;
-import com.pla.individuallife.proposal.domain.model.*;
+import com.pla.individuallife.proposal.domain.model.ILProposalStatus;
 import com.pla.individuallife.proposal.presentation.dto.*;
 import com.pla.individuallife.sharedresource.dto.AgentDetailDto;
 import com.pla.individuallife.sharedresource.model.vo.*;
@@ -41,6 +41,7 @@ import javax.sql.DataSource;
 import java.math.BigDecimal;
 import java.util.*;
 import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
@@ -309,10 +310,31 @@ public class ILProposalFinder {
         if (proposal.get("proposer") != null) {
             dto.setProposer(ProposerBuilder.getProposerBuilder((Proposer) proposal.get("proposer")).createProposerDto());
         }
+
         dto.setProposalPlanDetail((ProposalPlanDetail) proposal.get("proposalPlanDetail"));
         if (dto.getProposalPlanDetail() != null) {
+            List<Map<String,Object>> coverageNameList = planFinder.findAllOptionalCoverage(dto.getProposalPlanDetail().getPlanId());
             dto.getProposalPlanDetail().setPlanName(planFinder.getPlanName(new PlanId(dto.getProposalPlanDetail().getPlanId())));
+            ProposalPlanDetail proposalPlanDetail = dto.getProposalPlanDetail();
+            proposalPlanDetail.setRiderDetails(proposalPlanDetail.getRiderDetails().parallelStream().map(new Function<ILRiderDetail, ILRiderDetail>() {
+                @Override
+                public ILRiderDetail apply(ILRiderDetail ilRiderDetail) {
+                    Optional<Map<String, Object>> coverageNameMap = coverageNameList.parallelStream().filter(new Predicate<Map<String, Object>>() {
+                        @Override
+                        public boolean test(Map<String, Object> coverageNameMap) {
+                            return ilRiderDetail.getCoverageId().equals(coverageNameMap.get("coverageId"));
+                        }
+                    }).findAny();
+                    if (coverageNameMap.isPresent()){
+                        String coverageName = (String) coverageNameMap.get().get("coverageName");
+                        ilRiderDetail.setCoverageName(coverageName);
+                    }
+                    return ilRiderDetail;
+                }
+            }).collect(Collectors.toSet()));
         }
+
+
         dto.setBeneficiaries((List<Beneficiary>) proposal.get("beneficiaries"));
         dto.setTotalBeneficiaryShare(new BigDecimal(proposal.get("totalBeneficiaryShare").toString()) );
         dto.setGeneralDetails((GeneralDetails) proposal.get("generalDetails"));

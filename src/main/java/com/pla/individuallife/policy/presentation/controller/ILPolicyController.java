@@ -129,7 +129,7 @@ public class ILPolicyController {
     public void downloadPlanDetail(@PathVariable("policyId") String policyId, HttpServletResponse response) throws IOException, JRException {
         response.reset();
         response.setContentType("application/pdf");
-        response.setHeader("content-disposition", "attachment; filename=" + "planReadyReckoner.pdf" + "");
+        response.setHeader("content-disposition", "attachment; filename=" + "policy.pdf" + "");
         OutputStream outputStream = response.getOutputStream();
         outputStream.write(ilPolicyService.getPolicyDocument(new PolicyId(policyId)));
         outputStream.flush();

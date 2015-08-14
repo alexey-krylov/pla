@@ -255,9 +255,9 @@ public class ILPolicyService {
 
     public List<Map<String,Object>> testData(){
         Map<String,Object> map = Maps.newLinkedHashMap();
-        map.put("proposerName","Ravi Kumar");
+        map.put("proposerName","Test One");
         map.put("policyStartDate","12/12/2018");
-        map.put("agentCode","Bond007");
+        map.put("agentCode","007");
         map.put("contactNumber","9999999999");
         map.put("psOffice","Sahakara Nagara");
         map.put("address","Bengaluru");
@@ -265,15 +265,39 @@ public class ILPolicyService {
         map.put("policyNumber","2-09-05-393484949");
         map.put("policyStartDate","8/11/2015");
         map.put("policyEndDate","8/11/2020");
-        map.put("planName","Premium Plan One");
-        map.put("planSumAssured","50000");
-        map.put("netPremium","1282.45");
-        map.put("underwriterLoading","242.45");
-        map.put("underWritingDiscount","23.244");
-        map.put("totalPremium","93834838.345");
         map.put("issueBranch","Bengaluru");
         map.put("issuanceDate","3/4/2016");
 
+        List<Map<String,Object>> coverDetails = Lists.newArrayList();
+        Map<String,Object> map1 = Maps.newLinkedHashMap();
+        map1.put("planCoverageName","Premium Plan One");
+        map1.put("planCoverageSumAssured","50000");
+        coverDetails.add(map1);
+
+        map1 = Maps.newLinkedHashMap();
+        map1.put("planCoverageName","Cover One");
+        map1.put("planCoverageSumAssured","5000");
+        coverDetails.add(map1);
+
+        map1 = Maps.newLinkedHashMap();
+        map1.put("planCoverageName","Cover Two");
+        map1.put("planCoverageSumAssured","5004");
+        coverDetails.add(map1);
+
+        map1 = Maps.newLinkedHashMap();
+        map1.put("planCoverageName","Cover Four");
+        map1.put("planCoverageSumAssured","5006");
+        coverDetails.add(map1);
+        map.put("coverDetails",coverDetails);
+
+        List<Map<String,Object>> premiumList = Lists.newArrayList();
+        Map<String,Object> premiumMap = Maps.newLinkedHashMap();
+        premiumMap.put("netPremium","1000000");
+        premiumMap.put("underWritingLoading","1100000");
+        premiumMap.put("underWritingDiscount","1110000");
+        premiumMap.put("totalPremium","100011111");
+        premiumList.add(premiumMap);
+        map.put("premiumDetails",premiumList);
         return Lists.newArrayList(map);
     }
 

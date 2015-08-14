@@ -29,6 +29,7 @@ import org.springframework.jdbc.core.ColumnMapRowMapper;
 import org.springframework.jdbc.core.namedparam.EmptySqlParameterSource;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.stereotype.Service;
 
 import javax.sql.DataSource;
@@ -71,6 +72,9 @@ public class PlanFinder {
 
     public static final String findActivePlanByPlanCode  = "SELECT COUNT(plan_id) FROM plan_coverage_benefit_assoc WHERE plan_code = :planCode AND plan_status = 'LAUNCHED'";
 
+    public static final String findOptionalCoverageByPlanId = "SELECT DISTINCT c.coverage_id coverageId,c.coverage_name coverageName FROM plan_coverage_benefit_assoc p INNER JOIN coverage c ON c.coverage_id = p.coverage_id\n" +
+            "WHERE p.plan_id=:planId AND p.optional='1'";
+
     @Autowired
     public void setDataSource(DataSource dataSource) {
         this.namedParameterJdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
@@ -79,6 +83,12 @@ public class PlanFinder {
     public List<Map<String, Object>> findAllPlanForThymeleaf() {
         List<Map<String, Object>> planList = namedParameterJdbcTemplate.queryForList("SELECT * FROM plan_coverage_benefit_assoc WHERE withdrawal_date >= NOW() OR withdrawal_date IS NULL GROUP BY plan_code ORDER BY plan_name,launch_date", EmptySqlParameterSource.INSTANCE);
         return planList;
+    }
+
+
+    public List<Map<String,Object>> findAllOptionalCoverage(String planId){
+        SqlParameterSource sqlParameterSource = new MapSqlParameterSource("planId",planId);
+        return namedParameterJdbcTemplate.query(findOptionalCoverageByPlanId,sqlParameterSource,new ColumnMapRowMapper());
     }
 
     public List<Plan> findPlanBy(List<PlanId> planIds) {
