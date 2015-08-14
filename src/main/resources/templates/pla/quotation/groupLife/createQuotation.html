@@ -96,17 +96,17 @@
                                 </div>
                             </div>
                             <div class="row">
-                                <div class="col-lg-6">
+                                <div class="col-lg-6" >
                                     <div class="form-group required">
                                         <label class="control-label">Agent Name</label>
                                         <input type="text" class="form-control input-sm" ng-readonly="true" ng-required="true" name="agentName" ng-model="quotationDetails.basic.agentName"/>
                                     </div>
-                                    <div class="form-group">
+                                    <div class="form-group" ng-hide="!quotationDetails.basic.branchName" >
                                         <label class="control-label">Branch Name</label>
                                         <input type="text" class="form-control input-sm" ng-readonly="true" name="branchName" ng-model="quotationDetails.basic.branchName"/>
                                     </div>
                                 </div>
-                                <div class="col-lg-6">
+                                <div class="col-lg-6" ng-hide="!quotationDetails.basic.teamName">
                                     <div class="form-group">
                                         <label class="control-label">Team Name</label>
                                         <input type="text" class="form-control input-sm" ng-readonly="true"
