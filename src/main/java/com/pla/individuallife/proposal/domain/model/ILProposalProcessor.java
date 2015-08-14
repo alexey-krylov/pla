@@ -55,8 +55,8 @@ public class ILProposalProcessor {
         return aggregate.updateWithDocuments(documents);
     }
 
-    public ILProposalAggregate submitProposal(ILProposalAggregate proposalAggregate, String comment, RoutingLevel routinglevel) {
-        return proposalAggregate.submitProposal(DateTime.now(),comment,routinglevel);
+    public ILProposalAggregate submitProposal(ILProposalAggregate proposalAggregate, String submittedBy,String comment, RoutingLevel routinglevel) {
+        return proposalAggregate.submitProposal(submittedBy,DateTime.now(),comment,routinglevel);
     }
 
 }

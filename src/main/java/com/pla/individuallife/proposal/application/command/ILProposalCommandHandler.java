@@ -213,7 +213,7 @@ public class ILProposalCommandHandler {
         ILProposalAggregate aggregate = ilProposalMongoRepository.load(new ProposalId(cmd.getProposalId()));
         UnderWriterRoutingLevelDetailDto routingLevelDetailDto = new UnderWriterRoutingLevelDetailDto(new PlanId(aggregate.getProposalPlanDetail().getPlanId()), LocalDate.now(), ProcessType.ENROLLMENT.name());
         RoutingLevel routinglevel = ilProposalService.findRoutingLevel(routingLevelDetailDto, aggregate.getProposalId().toString(), aggregate.getProposedAssured().getAgeNextBirthday());
-        aggregate = ilProposalProcessor.submitProposal(aggregate,cmd.getComment(), routinglevel);
+        aggregate = ilProposalProcessor.submitProposal(aggregate,cmd.getUserDetails().getUsername(),cmd.getComment(), routinglevel);
         return aggregate.getIdentifier().getProposalId();
     }
 

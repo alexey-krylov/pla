@@ -52,20 +52,18 @@ import static org.nthdimenzion.presentation.AppUtils.getLoggedInUserDetail;
 @RequestMapping(value = "/individuallife/proposal")
 public class ILProposalController {
 
+    public static ImmutableMap<ILProposalStatus,String> messageMap  = ImmutableMap.of(ILProposalStatus.APPROVED,"Proposal approved successfully",ILProposalStatus.RETURNED,"Proposal returned successfully",ILProposalStatus.DECLINED,"Proposal rejected successfully",ILProposalStatus.PENDING_DECISION,"Proposal held successfully",
+            ILProposalStatus.UNDERWRITING_LEVEL_TWO,"Successfully Routed to Senior UnderWriter");
     private final ILProposalCommandGateway proposalCommandGateway;
     private final PlanFinder planFinder;
     @Autowired
     private MasterFinder masterFinder;
-
     @Autowired
     private ILProposalFinder proposalFinder;
-
     @Autowired
     private ILQuotationAppService ilQuotationService;
-
     @Autowired
     private ILProposalService ilProposalService;
-
     @Autowired
     private GridFsTemplate gridFsTemplate;
 
@@ -157,7 +155,6 @@ public class ILProposalController {
         }
         return new ResponseEntity(Result.success("Proposal updated with Plan and Beneficiary Details successfully",proposalId), HttpStatus.OK);
     }
-
 
     @ResponseBody
     @RequestMapping(value = "/updatecompulsoryhealthstatement", method = RequestMethod.POST)
@@ -273,7 +270,7 @@ public class ILProposalController {
     @ApiOperation(httpMethod = "POST", value = "To submit proposal for approval")
     public ResponseEntity submitProposal(@RequestBody SubmitILProposalCommand cmd, HttpServletRequest request) {
         try {
-            cmd.setUserDetails(getLoggedInUserDetail(request));
+           cmd.setUserDetails(getLoggedInUserDetail(request));
             String proposalId  = proposalCommandGateway.submitProposal(cmd);
             return new ResponseEntity(Result.success("Proposal submitted successfully",proposalId), HttpStatus.OK);
         } catch (Exception e) {
@@ -298,7 +295,6 @@ public class ILProposalController {
             return new ResponseEntity(Result.failure(e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-
 
     @RequestMapping(value = "/routetonextlevel", method = RequestMethod.POST)
     @ResponseBody
@@ -350,7 +346,6 @@ public class ILProposalController {
         return modelAndView;
     }
 
-
     /**
      * For routing of proposal list page to the index.html page under core/plan.
      *
@@ -371,14 +366,12 @@ public class ILProposalController {
         return modelAndView;
     }
 
-
     @RequestMapping(method = RequestMethod.GET, value = "/view")
     public ModelAndView viewProposal() {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("pla/proposal/individuallife/createProposal");
         return modelAndView;
     }
-
 
     @RequestMapping(method = RequestMethod.GET, value = "/getproposal/{proposalId}")
     @ApiOperation(httpMethod = "GET", value = "This call for edit proposal screen.")
@@ -397,7 +390,6 @@ public class ILProposalController {
         checkArgument(proposalNumber != null, "Proposal number not found");
         return proposalNumber;
     }
-
 
     @RequestMapping(value = "/getPage/{pageName}", method = RequestMethod.GET)
     public ModelAndView proposal(@PathVariable("pageName") String pageName) {
@@ -437,7 +429,6 @@ public class ILProposalController {
         return modelAndView;
     }
 
-
     @RequestMapping(method = RequestMethod.GET, value = "/getAllOccupation")
     @ResponseBody
     public List<Map<String, Object>> getAllOccupationClassification() {
@@ -463,7 +454,6 @@ public class ILProposalController {
     public List<Map<String, Object>> getAllBankBranchNames(@PathVariable("bankCode") String bankCode) {
         return masterFinder.getAllBankBranch(bankCode);
     }
-
 
     @RequestMapping(method = RequestMethod.GET, value = "/getridersforplan/{planId}")
     @ApiOperation(httpMethod = "GET", value = "This call for edit quotation screen.")
@@ -550,7 +540,6 @@ public class ILProposalController {
         }).collect(Collectors.toList());
     }
 
-
     @RequestMapping(value = "/downloadmandatorydocument/{gridfsdocid}", method = RequestMethod.GET)
     public void downloadMandatoryDocument(@PathVariable("gridfsdocid") String gridfsDocId, HttpServletResponse response) throws IOException {
         GridFSDBFile gridFSDBFile = gridFsTemplate.findOne(new Query(Criteria.where("_id").is(gridfsDocId)));
@@ -562,5 +551,4 @@ public class ILProposalController {
         outputStream.flush();
         outputStream.close();
     }
-    public static ImmutableMap<ILProposalStatus,String> messageMap  = ImmutableMap.of(ILProposalStatus.APPROVED,"Proposal approved successfully",ILProposalStatus.RETURNED,"Proposal returned successfully",ILProposalStatus.DECLINED,"Proposal rejected successfully",ILProposalStatus.PENDING_DECISION,"Proposal held successfully");
 }

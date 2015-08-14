@@ -30,7 +30,7 @@
                     <label class="control-label" ng-if="selectPlanResponse">Policy Term</label>
                     <!--<input type="number" class="form-control input-sm" name="policyTerm"  ng-disabled="mode=='new'||mode=='view'" ng-model="proposalPlanDetail.policyTerm"/>-->
 
-                    <policyterm term-type="proposalPlanDetail.policyTerm"
+                    <policyterm term-type="plan.policyTermType"
                                 proposedAssured="proposedAssured"></policyterm>
 
                 </div>
@@ -53,10 +53,10 @@
                             Optional Cover Name
                         </th>
                         <th>
-                            Sum Assured
+                            Sum Assured *
                         </th>
                         <th>
-                            CoverTerm
+                            CoverTerm *
                         </th>
                         <th>
                             WaiverOfPremium
@@ -164,11 +164,11 @@
         <div ng-switch="plan.policyTermType">
             <div ng-switch-when="SPECIFIED_VALUES">
                 <select class="form-control input-sm" view-enabled="" ng-model="proposalPlanDetail.policyTerm" name="policyTerm"
-                        ng-options="value.text as value.text for value in policyTerms()" ng-required="true" ng-change="getPolicyTermVal(proposalPlanDetail.policyTerm)"></select>
+                        ng-options="value.text as value.text for value in policyTerms()" ng-required="true"></select>
             </div>
             <div ng-switch-when="MATURITY_AGE_DEPENDENT">
                 <select class="form-control input-sm" view-enabled="" ng-model="proposalPlanDetail.policyTerm" name="policyTerm"
-                        ng-options="value.text as value.text for value in policyTerms()" ng-required="true" ng-change="getPolicyTermVal(proposalPlanDetail.policyTerm)"></select>
+                         ng-options="value.text as value.text for value in policyTerms()" ng-required="true"></select>
             </div>
         </div>
     </script>
@@ -230,8 +230,7 @@
 
            <div ng-switch-when="POLICY_TERM" >
                <input type="number" view-enabled="" class="form-control input-sm" min="0"
-                      name="sumAssured"
-                      ng-model="searchRider.coverTerm" ng-required="true"/>
+                      name="sumAssured"   ng-model="searchRider.coverTerm" ng-required="true"/>
                 <!--<select class="form-control input-sm" view-enabled="" ng-model="searchRider.coverTerm" name="policyTerm"
                         ng-options="value.text as value.text for value in policyTerms" ng-required="true"></select>-->
             </div>
@@ -276,7 +275,7 @@
             <div ng-switch-when="SPECIFIED_VALUES">
                 <select view-enabled="" class="form-control input-sm" ng-model="proposalPlanDetail.premiumPaymentTerm"
                         name="premiumTerm"
-                        ng-options="value.text as value.text for value in premiumTerms()"
+                        ng-options="value.text as value.text for value in premiumTerms() | filter:lessThanEqualTo('text',proposalPlanDetail.policyTerm)"
                         ng-required="true"></select>
             </div>
             <div ng-switch-when="SPECIFIED_AGES">

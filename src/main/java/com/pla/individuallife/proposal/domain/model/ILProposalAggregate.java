@@ -82,7 +82,7 @@ public class ILProposalAggregate extends AbstractAnnotatedAggregateRoot<Proposal
         } else {
             assignProposedAssured(proposedAssured);
         }
-        specification.checkProposerAgainstPlan(minAge,maxAge,proposedAssured.getAgeNextBirthday());
+        specification.checkProposerAgainstPlan(minAge,maxAge,this.proposedAssured.getAgeNextBirthday());
         this.proposalPlanDetail = proposalPlanDetail;
         this.proposalStatus = ILProposalStatus.DRAFT;
         this.quotation = new Quotation(quotationNumber, versionNumber,quotationId.toString());
@@ -188,10 +188,11 @@ public class ILProposalAggregate extends AbstractAnnotatedAggregateRoot<Proposal
         return this;
     }
 
-    public ILProposalAggregate submitProposal(DateTime submittedOn,String comment,RoutingLevel routinglevel) {
+    public ILProposalAggregate submitProposal(String submittedBy,DateTime submittedOn,String comment,RoutingLevel routinglevel) {
         this.submittedOn = submittedOn;
         this.proposalStatus = routinglevel!=null?RoutingLevel.UNDERWRITING_LEVEL_ONE.equals(routinglevel)?ILProposalStatus.UNDERWRITING_LEVEL_ONE :ILProposalStatus.UNDERWRITING_LEVEL_TWO :
                 ILProposalStatus.PENDING_ACCEPTANCE;
+        registerEvent(new ILProposalStatusAuditEvent(this.getProposalId(), this.proposalStatus, submittedBy, comment, submittedOn));
         if (this.quotation != null)
             registerEvent(new ILQuotationConvertedToProposalEvent(this.quotation.getQuotationNumber(), new QuotationId(this.quotation.getQuotationId())));
         return this;
