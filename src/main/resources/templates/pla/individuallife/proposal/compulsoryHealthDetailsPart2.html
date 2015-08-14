@@ -1,0 +1,193 @@
+<ng-form name="step6">
+    <h5>Do you have, or have you ever had, any trouble with, or disorder or abnormality of :</h5>
+    <accordion close-others="true">
+        <div class="row" style="margin-bottom: 5px">
+            <div class="col-md-10">
+                <accordion-group is-open="accordionStatus.healthDetailsPart2.tab1">
+                    <accordion-heading>
+                        <strong style="font-size: 11px">Your nervous system (e.g. meningitis, epilepsy/fits, blackout, paralysis, profound weakness, depressive or anxiety states etc.)?</strong>
+                        <i class="pull-right glyphicon"
+                           ng-class="{'glyphicon-chevron-down': accordionStatus.healthDetailsPart2.tab1, 'glyphicon-chevron-right': !accordionStatus.healthDetailsPart2.tab1}"></i>
+                    </accordion-heading>
+                    <div class="col-md-12" ng-if="compulsoryHealthDetails[7].answer == 'true' ">
+                        <textarea class="form-control" ng-model="compulsoryHealthDetails[7].answerResponse" placeholder="Please give full details  e.g. name and address of attending doctor, treatment and results etc"></textarea>
+                    </div>
+                </accordion-group>
+            </div>
+            <div class="col-md-2">
+                <select class="form-control input-sm" ng-model="compulsoryHealthDetails[7].answer" ng-change="compulsoryHealthDetails[7].questionId=21">
+                    <option value="">--Select One--</option>
+                    <option value="true">Yes</option>
+                    <option value="false">No</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="row" style="margin-bottom: 5px">
+            <div class="col-md-10">
+                <accordion-group is-open="accordionStatus.healthDetailsPart2.tab2">
+                    <accordion-heading>
+                        <strong style="font-size: 11px">Your eyes, ears, nose or throat (e.g. ear discharge, recurrent sores, deafness, poor vision, thrush, recurrent tonsilitis.)etc?</strong>
+                        <i class="pull-right glyphicon"
+                           ng-class="{'glyphicon-chevron-down': accordionStatus.healthDetailsPart2.tab2, 'glyphicon-chevron-right': !accordionStatus.healthDetailsPart2.tab2}"></i>
+                    </accordion-heading>
+                    <div class="col-md-12" ng-if="compulsoryHealthDetails[8].answer == 'true' ">
+                        <textarea class="form-control" ng-model="compulsoryHealthDetails[8].answerResponse" placeholder="Please give full details  e.g. name and address of attending doctor, treatment and results etc"></textarea>
+                    </div>
+                </accordion-group>
+            </div>
+            <div class="col-md-2">
+                <select class="form-control input-sm" ng-model="compulsoryHealthDetails[8].answer" ng-change="compulsoryHealthDetails[8].questionId=22">
+                    <option value="">--Select One--</option>
+                    <option value="true" ng-value="true">Yes</option>
+                    <option value="false" ng-value="false">No</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="row" style="margin-bottom: 5px">
+            <div class="col-md-10">
+                <accordion-group is-open="accordionStatus.healthDetailsPart2.tab3">
+                    <accordion-heading>
+                        <strong style="font-size: 11px">Your kidneys, reproductive organs or bladder (e.g. albumin in urine, stones, any form of veneral disease, abnormal pregnancies etc.)?</strong>
+                        <i class="pull-right glyphicon"
+                           ng-class="{'glyphicon-chevron-down': accordionStatus.healthDetailsPart2.tab3, 'glyphicon-chevron-right': !accordionStatus.healthDetailsPart2.tab3}"></i>
+                    </accordion-heading>
+                    <div class="col-md-12" ng-if="compulsoryHealthDetails[9].answer == 'true' ">
+                        <textarea class="form-control" ng-model="compulsoryHealthDetails[9].answerResponse" placeholder="Please give full details  e.g. name and address of attending doctor, treatment and results etc"></textarea>
+                    </div>
+                </accordion-group>
+            </div>
+            <div class="col-md-2">
+                <select class="form-control input-sm" ng-model="compulsoryHealthDetails[9].answer" ng-change="compulsoryHealthDetails[9].questionId=23">
+                    <option value="">--Select One--</option>
+                    <option value="true" ng-value="true">Yes</option>
+                    <option value="false" ng-value="false">No</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="row" style="margin-bottom: 5px">
+            <div class="col-md-10">
+                <accordion-group is-open="accordionStatus.healthDetailsPart2.tab4">
+                    <accordion-heading>
+                        <strong style="font-size: 11px">Your skeleton, joints or muscles (e.g. rheumatism, arthritis, gout, slipped disc, back or neck trouble etc.)?</strong>
+                        <i class="pull-right glyphicon"
+                           ng-class="{'glyphicon-chevron-down': accordionStatus.healthDetailsPart2.tab4, 'glyphicon-chevron-right': !accordionStatus.healthDetailsPart2.tab4}"></i>
+                    </accordion-heading>
+                    <div class="col-md-12" ng-if="compulsoryHealthDetails[10].answer == 'true' ">
+                        <textarea class="form-control" ng-model="compulsoryHealthDetails[10].answerResponse" placeholder="Please give full details  e.g. name and address of attending doctor, treatment and results etc"></textarea>
+                    </div>
+                </accordion-group>
+            </div>
+            <div class="col-md-2">
+                <select class="form-control input-sm" ng-model="compulsoryHealthDetails[10].answer" ng-change="compulsoryHealthDetails[10].questionId=24">
+                    <option value="">--Select One--</option>
+                    <option value="true" ng-value="true">Yes</option>
+                    <option value="false" ng-value="false">No</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="row" style="margin-bottom: 5px">
+            <div class="col-md-10">
+                <accordion-group is-open="accordionStatus.healthDetailsPart2.tab5">
+                    <accordion-heading>
+                        <strong style="font-size: 11px">Cancer, growth or tumour of any kind?</strong>
+                        <i class="pull-right glyphicon"
+                           ng-class="{'glyphicon-chevron-down': accordionStatus.healthDetailsPart2.tab5, 'glyphicon-chevron-right': !accordionStatus.healthDetailsPart2.tab5}"></i>
+                    </accordion-heading>
+                    <div class="col-md-12" ng-if="compulsoryHealthDetails[11].answer == 'true' ">
+                        <textarea class="form-control" ng-model="compulsoryHealthDetails[11].answerResponse" placeholder="Please give full details  e.g. name and address of attending doctor, treatment and results etc"></textarea>
+                    </div>
+                </accordion-group>
+            </div>
+            <div class="col-md-2">
+                <select class="form-control input-sm" ng-model="compulsoryHealthDetails[11].answer" ng-change="compulsoryHealthDetails[11].questionId=25">
+                    <option value="">--Select One--</option>
+                    <option value="true" ng-value="true">Yes</option>
+                    <option value="false" ng-value="false">No</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="row" style="margin-bottom: 5px">
+            <div class="col-md-10">
+                <accordion-group is-open="accordionStatus.healthDetailsPart2.tab6">
+                    <accordion-heading>
+                        <strong style="font-size: 11px">Any tropical disease (e.g. bilharzia, malaria etc.)?</strong>
+                        <i class="pull-right glyphicon"
+                           ng-class="{'glyphicon-chevron-down': accordionStatus.healthDetailsPart2.tab6, 'glyphicon-chevron-right': !accordionStatus.healthDetailsPart2.tab6}"></i>
+                    </accordion-heading>
+                    <div class="col-md-12" ng-if="compulsoryHealthDetails[12].answer == 'true' ">
+                        <textarea class="form-control" ng-model="compulsoryHealthDetails[12].answerResponse" placeholder="Please give full details  e.g. name and address of attending doctor, treatment and results etc"></textarea>
+                    </div>
+                </accordion-group>
+            </div>
+            <div class="col-md-2">
+                <select class="form-control input-sm" ng-model="compulsoryHealthDetails[12].answer" ng-change="compulsoryHealthDetails[12].questionId=26">
+                    <option value="">--Select One--</option>
+                    <option value="true" ng-value="true">Yes</option>
+                    <option value="false" ng-value="false">No</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="row" style="margin-bottom: 5px">
+            <div class="col-md-10">
+                <accordion-group is-open="accordionStatus.healthDetailsPart2.tab7">
+                    <accordion-heading>
+                        <strong style="font-size: 11px">Any other serious or prolonged illness, injury or infection?</strong>
+                        <i class="pull-right glyphicon"
+                           ng-class="{'glyphicon-chevron-down': accordionStatus.healthDetailsPart2.tab7, 'glyphicon-chevron-right': !accordionStatus.healthDetailsPart2.tab7}"></i>
+                    </accordion-heading>
+                    <div class="col-md-12" ng-if="compulsoryHealthDetails[13].answer == 'true' ">
+                        <textarea class="form-control"   ng-model="compulsoryHealthDetails[13].answerResponse"
+                                  placeholder="Please give full details  e.g. name and address of attending doctor, treatment and results etc">
+
+                                  </textarea>
+                    </div>
+                </accordion-group>
+            </div>
+            <div class="col-md-2">
+                <select class="form-control input-sm" ng-model="compulsoryHealthDetails[13].answer"
+                        ng-change="compulsoryHealthDetails[13].questionId=27">
+                    <option value="">--Select One--</option>
+                    <option value="true" ng-value="true">Yes</option>
+                    <option value="false" ng-value="false">No</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="row" style="margin-bottom: 5px">
+            <div class="col-md-10">
+                <accordion-group is-open="accordionStatus.healthDetailsPart2.tab8">
+                    <accordion-heading>
+                        <strong style="font-size: 11px">Have you during the past five years, been a patient in a hospital, clinic or undergone medical investigation such as E.C.G. X-ray, or laboratory tests or had any blood transfusion?</strong>
+                        <i class="pull-right glyphicon"
+                           ng-class="{'glyphicon-chevron-down': accordionStatus.healthDetailsPart2.tab8, 'glyphicon-chevron-right': !accordionStatus.healthDetailsPart2.tab8}"></i>
+                    </accordion-heading>
+                    <div class="col-md-12" ng-if="compulsoryHealthDetails[14].answer == 'true' ">
+                        <textarea class="form-control" ng-model="compulsoryHealthDetails[14].answerResponse" placeholder="Please give full details  e.g. name and address of attending doctor, treatment and results etc"></textarea>
+                    </div>
+                </accordion-group>
+            </div>
+            <div class="col-md-2">
+                <select class="form-control input-sm" ng-model="compulsoryHealthDetails[14].answer" ng-change="compulsoryHealthDetails[14].questionId=28">
+                    <option value="">--Select One--</option>
+                    <option value="true" ng-value="true">Yes</option>
+                    <option value="false" ng-value="false">No</option>
+                </select>
+            </div>
+        </div>
+    </accordion>
+
+    <div class="row">
+        <div class="col-sm-6">
+            <button type="button" class="btn btn-default btn-sm">Cancel</button>
+        </div>
+        <div class="col-sm-6">
+            <button type="button" class="btn btn-default btn-sm" style="float: right" ng-click="saveCompulsoryQuestionDetails()">Save</button>
+        </div>
+    </div>
+</ng-form>

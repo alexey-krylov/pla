@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/xhtml"
+      lang="en">
+<head th:include="fragments/common :: headTag">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+</head>
+<body>
+
+<style>
+    .error {
+        font-size: 10px;
+        color: firebrick;
+    }
+</style>
+<div th:include="fragments/common :: bodyHeader" th:remove="tag"/>
+<link href="/pla/css/xeditable.css"/>
+
+<div class="splash" ng-cloak="">
+    <div class="color-line"></div>
+    <div class="splash-title">
+        <p>Please wait.. The Plan is loading.</p></div>
+</div>
+<script>
+    requirejs.config({
+        paths: {
+            'plansetup': '/pla/js/plan-app.js?t=10',
+            'xeditable': '/pla/js/xeditable.min.js?t=12190'
+        },
+        "shim": {"plansetup": ["xeditable", "angular"]}
+    });
+
+    require(['ng-tags-input', 'checklistmodel', 'angular-ui-router'], function (a, b) {
+    });
+    requirejs(['main'], function () {
+        require(['plansetup', 'jquery'], function (app, $) {
+            angular.bootstrap(document, ['planSetup']);
+        });
+    });
+</script>
+<div class="container-fluid fuelux">
+    <ng-view></ng-view>
+</div>
+<footer class="footer" th:include="fragments/common :: footer">
+</footer>
+</body>
+</html>

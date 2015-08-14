@@ -6,6 +6,10 @@
 
 package org.nthdimenzion.utils;
 
+import org.nthdimenzion.common.AppConstants;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Collection;
 import java.util.Map;
 import java.util.regex.Matcher;
@@ -36,6 +40,8 @@ public class UtilValidator {
     public static final Pattern CHARACTER_PATTERN = Pattern.compile("((?=.*\\d)(?=.*[\\p{Alpha}])(?=.*[\\p{Punct}]).{8,})");
 
     public static final Pattern ALPHANUMERIC_WHITE_SPACE_PATTERN = Pattern.compile("[\\p{Alnum}\\p{Alpha}\\p{Space}]+");
+
+    public static final Pattern NRC_NUMBER_PATTERN = Pattern.compile("[0-9]{6}[/][0-9]{2}[/][0-9]{1}");
 
     private UtilValidator() {
     }
@@ -119,7 +125,18 @@ public class UtilValidator {
         return m.matches();
     }
 
-    public static boolean isRESTConnectionAvailable() {
-        return false;
+    public static boolean isValidNrcNumber(String value) {
+        return validatePattern(value, NRC_NUMBER_PATTERN);
+    }
+
+    public static boolean isValidDate(String inDate) {
+        SimpleDateFormat dateFormat = new SimpleDateFormat(AppConstants.DD_MM_YYY_FORMAT);
+        dateFormat.setLenient(false);
+        try {
+            dateFormat.parse(inDate.trim());
+        } catch (ParseException pe) {
+            return false;
+        }
+        return true;
     }
 }

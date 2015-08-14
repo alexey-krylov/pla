@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/xhtml"
+      lang="en">
+<head th:include="fragments/common :: headTag">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+
+</head>
+<body>
+<div th:include="fragments/common :: bodyHeader" th:remove="tag"/>
+<script>
+    requirejs(['main'],function(){
+    require(['/pla/js/mandatoryDocuments/updateMandatoryDocument.js'],function(){
+    angular.bootstrap(document, ['updateMandatoryDocument']);
+    });
+    });
+</script>
+
+<div class="container ng-cloak" ng-Controller="UpdateMandatoryDocumentsController">
+    <div class="row">
+        <div class="col-lg-12" >
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <div class="row">
+                        <div class="col-lg-4"><span th:text="#{updateMandatoryDocuments}">Update Mandatory Documents
+                        </span></div>
+                    </div>
+                </div>
+                <div class="panel-body ng-cloak">
+                    <form  novalidate="true" class="css-form">
+                        <nth-alert></nth-alert>
+                        <div class="row">
+                            <div class="form-group col-md-6" >
+                                <label class="control-label">Plan Name</label>
+                                <div class="controls readonly">{{updateMandatoryDocument.planName}}</div>
+                            </div>
+                            <div class="form-group col-md-6" ng-show="showOptionalCoverage">
+                                <label class="control-label">OptionalCoverage</label>
+                                <div class="controls readonly">{{updateMandatoryDocument.coverageName}}</div>
+                            </div>
+                            <div class="form-group col-md-6" >
+                                <label class="control-label">Process</label>
+                                <div class="controls readonly">{{updateMandatoryDocument.process}}</div>
+                            </div>
+                            <div class="form-group col-md-6 required">
+                                <label class="control-label">Mandatory Documents</label>
+                               <div>
+                                    <button type="button" class="btn btn-default bs-select" ng-model="updateMandatoryDocument.document"  max-length="0" data-all-none-buttons="true" data-html="1" data-multiple="1" placeholder="----Select MandatoryDocuments----" ng-options="mandatoryDocument.documentCode as mandatoryDocument.documentName for mandatoryDocument in mandatoryDocList | orderBy:'documentName'" >
+                                        Action <span class="caret"></span>
+                                    </button>
+                                </div>
+                            </div>
+                             </div>
+                             <div class="row">
+                            <div class="form-group col-lg-12" style="margin: auto;margin-top:10px;" >
+                                <button type="submit" class="btn btn-default" style="float:right;" ng-disabled="(!updateMandatoryDocument.document || !boolVal)"  ng-click="updateMandatoryDoc()">Save</button>
+                                <a class="btn btn-default" style="float:left;" th:href="@{/core/mandatorydocument/view}">Cancel</a>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<style>
+    .form-control {
+    font-size: 12px;
+    padding:5px;
+    }
+    .select{
+        width: 400px;
+        height:310px;
+        overflow:auto;
+    }
+ </style>
+<footer class="footer" th:include="fragments/common :: footer">
+</footer>
+</body>
+</html>

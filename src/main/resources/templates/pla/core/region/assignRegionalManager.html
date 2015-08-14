@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/xhtml"
+      lang="en" >
+<head th:include="fragments/common :: headTag">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+
+</head>
+<body>
+<div th:include="fragments/common :: bodyHeader" th:remove="tag"/>
+<script>
+    require(['moment'], function(moment) {
+    });
+    requirejs(['main'],function(){
+    require(['/pla/js/region/assignRegionalManager.js'],function(){
+    angular.bootstrap(document, ['assignRegionalManager']);
+    });
+    });
+    requirejs(['basic'],function(){
+        requirejs(['/pla/js/region/viewRegionalManager.js'],function(){
+        });
+    })
+</script>
+
+<div class="container ng-cloak" ng-Controller="AssignRegionalManagerController">
+    <div class="row">
+        <div class="col-lg-8" style="left:230px;position:absolute;">
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <div class="row">
+                        <div class="col-lg-4"><span th:text="#{assignRegionalManager}">Assign Regional Manager
+                        </span></div>
+                    </div>
+                </div>
+                <div class="panel-body ng-cloak">
+                    <form novalidate="true" class="css-form">
+                        <nth-alert></nth-alert>
+                        <div class="row">
+                           <div class="form-group col-md-6" style="margin: auto;margin-top:10px;">
+                               <label class="control-label ">Region Name</label>
+                               <div class="controls readonly" ng-model="assignBranchManager.regionName">{{assignRegionalManager.regionName}}</div>
+                           </div>
+                           <div class="form-group col-md-6" style="margin: auto;margin-top:10px;">
+                               <label class="control-label">Current Regional Manager</label>
+                               <div class="controls readonly" ng-model="assignBranchManager.regionalManagerName">{{assignRegionalManager.regionalManagerFirstName}} {{assignRegionalManager.regionalManagerLastName}}</div>
+                            </div>
+
+                       </div>
+                        <div class="row">
+                            <div class="form-group col-md-6" style="margin: auto;margin-top:10px;">
+                                <label class="control-label">Current Regional Manager from</label>
+                                <div class="controls readonly" ng-model="assignBranchManager.regionalManagerFromDate">{{assignRegionalManager.regionalManagerFromDate | date:'dd/MM/yyyy'}}</div>
+                            </div>
+                        </div>
+                        <div class="row">
+                        <div class="form-group col-md-6 required" style="margin: auto;margin-top:10px;">
+                            <label class="control-label">Regional Manager</label>
+                             <select class="form-control input-sm"  ng-model="assignRegionalManager.employeeId" ng-options="regionalManager.employeeId as regionalManager.firstName + ' ' + regionalManager.lastName for regionalManager in regionalManagerList | orderBy:'firstName' ">
+                                <option value="">----Select RegionalManager----</option>
+                            </select>
+                        </div>
+                        <div class="form-group col-md-6 required" style="margin: auto;margin-top:10px;">
+                            <label class="control-label">Regional Manager From</label>
+                            <p class="input-group">
+                                <input type="text" class="form-control input-sm" ng-required="true" ng-click="open($event)"  min-date="selectedDate" datepicker-popup="dd/MM/yyyy" ng-model="assignRegionalManager.fromDate"  datepicker-options="datePickerSettings.dateOptions" is-open="datePickerSettings.isOpened"  close-text="Close" show-button-bar="false" onkeypress="return isNumeric(event)"/>
+                                <span class="input-group-btn">
+                                    <button type="button" class="btn btn-default btn-sm" ng-click="open($event)"><i class="glyphicon glyphicon-calendar"></i></button>
+                                </span>
+                            </p>
+                        </div>
+                        </div>
+                        <div class="row">
+                        <div class="col-lg-12" style="text-align: center;margin-top:10px;">
+                            <button type="button" class="btn btn-default" style="float:right;" ng-disabled="(!assignRegionalManager.employeeId || !assignRegionalManager.fromDate)"  ng-click="submitAssign()">Save</button>
+                            <a class="btn btn-default" style="float:left;" th:href="@{/core/region/view}" >Cancel</a>
+
+                        </div>
+                        </div>
+                    </form>
+                </div>
+              </div>
+        </div>
+    </div>
+</div>
+<style>
+    .form-control {
+    font-size: 12px;
+    padding:5px;
+    }
+
+</style>
+<footer class="footer" th:include="fragments/common :: footer">
+</footer>
+</body>
+</html>

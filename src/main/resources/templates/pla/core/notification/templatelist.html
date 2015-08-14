@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/xhtml"
+      lang="en">
+<head th:include="fragments/common :: headTag">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <title name="Notification Upload Template List"/>
+</head>
+<body ng-controller="ReminderTemplateCtrl">
+
+<style>
+    .error {
+        font-size: 10px;
+        color: firebrick;
+    }
+</style>
+<div th:include="fragments/common :: bodyHeader" th:remove="tag"></div>
+<script>
+       var interval = setInterval(function(){
+        if(require.defined("basic")){
+            requirejs(['/pla/js/notification/viewTemplate.js'],function(){
+            });
+            clearInterval(interval);
+        }
+    }, 1000);
+</script>
+
+
+
+<link href="/pla/css/xeditable.css"/>
+<div class="splash">
+    <div class="color-line"></div>
+    <div class="splash-title"></div>
+</div>
+<!-- ***************************  LIST OF ROLE MAPPING *************-->
+<div class="container-fluid ng-cloak">
+    <div class="col-lg-12">
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+
+                <div class="row">
+                    <div class="col-lg-6"><span th:text="#{notificationUploadTemplates}">List of Notification Upload Templates
+                        </span></div>
+                    <div class="col-lg-6"><a class="btn btn-default btn-sm" style="float: right"
+                                             href="#newTemplate" data-toggle="modal" data-target="#newTemplate">New Template</a>
+
+                    </div>
+                </div>
+            </div>
+            <div class="panel-body">
+                <table class="table table-striped table-bordered" id="uploadTemplateList-table" cellspacing="0" width="100%">
+                    <thead>
+                    <tr>
+                        <th>Line of Business</th>
+                        <th>Process Type</th>
+                        <th>Waiting For</th>
+                        <th>Reminder Type</th>
+                        <th>Template</th>
+                        <th>Action</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr ng-repeat="template in templateList">
+                        <td>{{template.lineOfBusinessDescription}}</td>
+                        <td>{{template.processTypeDescription}}</td>
+                        <td>{{template.waitingForDescription}}</td>
+                        <td>{{template.reminderTypeDescription}}</td>
+                        <td><button type="button" class="btn btn-success btn-xs"  ng-click="downloadTemplate(template.notificationTemplateId)">DownloadTemplate</button></td>
+                        <td>
+                            <button type="button" class="btn btn-default btn-xs" data-toggle="modal" data-target="#updateTemplate" ng-click="updateTemplate(template.notificationTemplateId)">Update</button>
+                            <button type="button" class="btn btn-danger btn-xs"  data-toggle="modal" data-target="#alert-modal" ng-click="inactivate(template.notificationTemplateId,'save')" >Inactivate</button></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+
+<!-- ***************************** ALERT BOX ********************************-->
+
+<div class="modal fade" id="alert-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">Alert</h4>
+            </div>
+            <div class="modal-body">
+                <div class="alert alert-success" hidden="true" id="successMessage"></div>
+                <div class="alert alert-danger" hidden="true" id="inactivate-alert-danger"></div>
+                <div id="confirmationMsg">Are you sure you want to delete the upload template?</div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" id="approveButton" ng-click="inactivate('','confirm')">Yes</button>
+                <button type="button" class="btn btn-danger" id="changeToOk" data-dismiss="modal">Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ******************************** UPDATE EXISTING TEMPLATE ****************************-->
+<div class="modal fade" id="updateTemplate" tabindex="-1" role="dialog" aria-labelledby="updateTemplate">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">Update Template</h4>
+            </div>
+            <div class="modal-body">
+                <div class="alert alert-success" hidden="true" id="updateSuccessMsg"></div>
+                <div class="alert alert-danger" hidden="true" id="updateDangerMsg"></div>
+                <form name="templateForm" action="uploadnotification"  id="updateTemplateForm" method="POST"
+                      enctype="multipart/form-data" ng-submit="submitFormToServer()">
+
+                    <div class="panel panel-default">
+                        <div class="panel-body">
+                            <div class="control-group required col-md-6">
+                                <label class="control-label">Line of Business</label>
+                                <p class="input-group" >
+                                    <input type="hidden" id="notificationTemplateId" value="{{updateTemplate.notificationTemplateId}}"/>
+                                    <input type="text" class="form-control input-sm"  value="{{updateTemplate.lineOfBusinessDescription}}" readonly="true"/>
+                                </p>
+
+                            </div>
+                            <div class="control-group required col-md-4">
+                                <label class="control-label">Process Type</label>
+                                <p class="input-group" >
+                                    <input type="text" class="form-control input-sm"  value="{{updateTemplate.processTypeDescription}}" readonly="true"/>
+                                </p>
+                           </div>
+                            <div class="control-group required col-md-6">
+                                <label class="control-label">Waiting For</label>
+                                <p class="input-group" >
+                                    <input type="text" class="form-control input-sm"  value="{{updateTemplate.waitingForDescription}}" readonly="true"/>
+                                </p>
+                            </div>
+                            <div class="control-group required col-md-6">
+                                <label class="control-label">Notification Type</label>
+                                <p class="input-group" >
+                                    <input type="text" class="form-control input-sm"  value="{{updateTemplate.reminderTypeDescription}}" readonly="true"/>
+                                </p>
+                            </div>
+
+                            <div class="row">
+                                <div class="form-group col-md-6 required">
+                                    <label class="control-label">Select Template</label>
+                                    <div>
+                                    <div class="input-group">
+                                <span class="input-group-btn">
+                                    <span class="btn btn-default btn-file" ng-file-select=""  ng-model="updateTemplate.file"  >
+                                        Browse...
+
+                                    </span>
+                                </span>
+                                        <input type="text" class="form-control" value="{{updateTemplate.file[0].name}}" />
+                                    </div>
+                                </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary"  ng-click="saveUpdatedTemplate(updateTemplate.file)" ng-disabled="(!updateTemplate.file)">
+                    Upload
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<!-- ******************************** CREATE NEW TEMPLATE ****************************-->
+    <div class="modal fade" id="newTemplate" tabindex="-1" role="dialog" aria-labelledby="newTemplate">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                            aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">New Template</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="alert alert-success" hidden="true" id="successMsg"></div>
+                    <div class="alert alert-danger" hidden="true" id="dangerMsg"></div>
+
+                    <form name="templateForm" action="uploadnotification"  id="templateForm" method="POST"
+                          enctype="multipart/form-data" ng-submit="submitFormToServer()">
+
+                        <div class="panel panel-default">
+                            <div class="panel-body">
+                                <div class="control-group required col-md-6">
+                                    <label class="control-label">Line of Business</label>
+                                    <select class="form-control input-sm" id="lineOfBusiness"
+                                            ng-model="template.lineOfBusiness" name="lineOfBusiness"
+                                            >
+                                        <option value="INDIVIDUAL_LIFE">Individual Life</option>
+                                        <option value="GROUP_HEALTH">Group Health</option>
+                                        <option value="GROUP_LIFE">Group Life</option>
+                                    </select>
+
+
+                                </div>
+                                <div class="control-group required col-md-6">
+                                    <label class="control-label">Process Type</label>
+                                    <select class="form-control input-sm" id="processType" name="processType" ng-model="template.processType" ng-options="processTypes.processType as processTypes.description for processTypes in processTypeList | orderBy:'description' " ng-disabled="!template.lineOfBusiness">
+                                        <option value="">---Select Process Type---</option>
+                                    </select>
+
+                                </div>
+                                <div class="control-group required col-md-6">
+                                    <label class="control-label">Waiting For</label>
+
+                                    <select class="form-control input-sm" id="waitingFor" name="waitingFor"  ng-model="template.waitingFor" ng-options="waitingFors.waitingFor as waitingFors.description for waitingFors in waitingForList | orderBy:'description' " ng-disabled="!template.lineOfBusiness || !template.processType ">
+                                        <option value="">---Select Waiting For---</option>
+                                    </select>
+
+
+
+                                </div>
+                                <div class="control-group required col-md-6">
+                                    <label class="control-label">Notification Type</label>
+                                    <select class="form-control input-sm" id="reminderType" name="reminderType" ng-model="template.reminderType" ng-options="notificationTypes.reminderType as notificationTypes.description for notificationTypes in notificationTypeList | orderBy:'description' " ng-disabled="!template.lineOfBusiness || !template.processType || !template.waitingFor">
+                                        <option value="">---Select Notification Type---</option>
+                                    </select>
+
+
+
+                                </div>
+
+                                <div class="row">
+                                    <div class="form-group col-md-6 required">
+                                        <label class="control-label">Select Template</label>
+                                       <div>
+                                            <div class="input-group">
+                                <span class="input-group-btn">
+                                    <span class="btn btn-default btn-file" ng-file-select=""  ng-model="template.file"  >
+                                        Browse...
+                                    </span>
+                                </span>
+                                 <input type="text" class="form-control" value="{{template.file[0].name}}" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                            </div>
+                        </div>
+
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                   <button type="button" class="btn btn-primary"  ng-click="save(template.file)" ng-disabled="(!template.lineOfBusiness || !template.processType || !template.waitingFor || !template.reminderType)">
+                        Upload
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+<footer class="footer" th:include="fragments/common :: footer"></footer>
+
+<script>
+    requirejs(['main','angular-file-upload'], function () {
+        require(['angular', 'jquery'], function (app, $) {
+            var module = angular.module('ReminderTemplateModule', ['angularFileUpload']);
+            module.controller('ReminderTemplateCtrl', ['$scope', '$http', '$window','$upload', function ($scope, $http, $window,$upload) {
+                console.log('Reminder Template Module Controller ');
+
+                $scope.template = {};
+                $http.get('/pla/core/notification/getnotificationtemplatelist').success(function(data){
+                    $scope.templateList=data;
+                });
+                $scope.$watch('template.lineOfBusiness',function(newValue, oldValue){
+                    if(newValue){
+                        $http.get('/pla/core/notification/getprocessbylob/'+newValue).success(function(data){
+                            $scope.processTypeList=data;
+                        });
+                    }
+                });
+                $scope.$watch('template.processType',function(newValue, oldValue){
+                    if(newValue){
+                        $http.get('/pla/core/notification/getwaitingfor/'+$scope.template.lineOfBusiness+'/'+newValue).success(function(data){
+                            $scope.waitingForList=data;
+                        });
+                    }
+                });
+                $scope.$watch('template.waitingFor',function(newValue, oldValue){
+                    if(newValue){
+                        $http.get('/pla/core/notification/getnotificationtype/'+$scope.template.lineOfBusiness+'/'+$scope.template.processType+'/'+newValue).success(function(data){
+                            $scope.notificationTypeList=data;
+                        });
+                    }
+                });
+
+
+                $scope.save = function (files) {
+                    console.log('invoke saved...');
+                    console.log(files);
+                    /*var requestUrl = '/pla/core/notification/uploadnotification';//new Url
+                    console.log($scope.template);
+                    $http.post(requestUrl, $scope.template).success();
+                    if ($scope.template.id) {
+                        requestUrl = '';//editUrl as it has an Id
+                    }
+                   $('#');
+                   $('#newRoleMapping').modal('hide');
+                   $scope.reload();*/
+                    if (files) {
+                        $upload.upload({
+                            url: '/pla/core/notification/uploadnotification',
+                            file: files,
+                            fields:{lineOfBusiness:$scope.template.lineOfBusiness,processType:$scope.template.processType,
+                                waitingFor:$scope.template.waitingFor,reminderType:$scope.template.reminderType}
+                        }).progress(function (evt) {
+
+                        }).success(function (data) {
+                           if(data.status=='200'){
+                               $scope.clear();
+                               $('#dangerMsg').hide();
+                               $("#successMsg").text(data.message).show();
+                               window.setTimeout('location.reload()', 4000);
+                           }else{
+                               $("#successMsg").hide();
+                               $('#dangerMsg').text(data.message).show();
+
+                           }
+                        }).error(function(data) {
+                            if(data.status=='500'){
+                                $("#successMsg").hide();
+                                $('#dangerMsg').text(data.message).show();
+                            }
+
+                        });
+                    }
+                   // $('#newTemplate').modal('hide');
+                  //  $scope.reload();
+                };
+
+                $scope.clear = function () {
+                    $scope.template = {lineOfBusiness: null, processType: null, id: null, roleType: null};
+                };
+
+                $scope.edit = function (template) {
+                    $scope.template = template.copy();
+                    $('#newTemplate').modal('show');
+                };
+
+                $scope.reload = function () {
+                    $window.location = '';
+                };
+
+
+                $scope.downloadTemplate = function(templateId){
+                    window.location.href = '/pla/core/notification/getremindertype/'+templateId;
+                 }
+                $scope.updateTemplate = function(templateId){
+                    $scope.updateTemplate =_.findWhere($scope.templateList,{notificationTemplateId:templateId});
+                    console.log($scope.updateTemplate);
+                }
+                $scope.saveUpdatedTemplate =function(files){
+
+                    if (files) {
+                        $upload.upload({
+                            url: '/pla/core/notification/uploadnotification',
+                            file: files,
+                            fields:{lineOfBusiness:$scope.updateTemplate.lineOfBusiness,processType:$scope.updateTemplate.processType,
+                                waitingFor:$scope.updateTemplate.waitingFor,reminderType:$scope.updateTemplate.reminderType,notificationTemplateId:$scope.updateTemplate.notificationTemplateId}
+                        }).progress(function (evt) {
+
+                        }).success(function (data) {
+                            if(data.status=='200'){
+                                $scope.clear();
+                                $('#dangerMsg').hide();
+                                $("#updateSuccessMsg").text(data.message).show();
+                                window.setTimeout('location.reload()', 4000);
+                            }else{
+                                $("#updateSuccessMsg").hide();
+                                $('#updateDangerMsg').text(data.message).show();
+
+                            }
+
+                        }).error(function(data) {
+                            if(data.status=='500'){
+                                $("#updateSuccessMsg").hide();
+                                $('#updateDangerMsg').text(data.message).show();
+                            }
+
+                        });
+                    }
+                   // $('#updateTemplate').modal('hide');
+                  //  window.setTimeout('location.reload()', 3000);
+
+                }
+
+                var uploadTemplateToInactivate = '';
+                $scope.inactivate=function(value,flag){
+                    // hideAlerts();
+                    $('#approveButton').show();
+                    if(flag=='save'){
+                        console.log(value);
+                        uploadTemplateToInactivate =  value;
+                    }else{
+                        $http.delete('/pla/core/notification/deletetemplate/'+uploadTemplateToInactivate).success(function(data){
+                             if(data.status=='200'){
+                                $('#alert-modal').show();
+                                $('#confirmationMsg').hide();
+                                $('#approveButton').hide();
+                                $('#changeToOk').text('Ok');
+                                $("#successMessage").text(data.message).show();
+                               window.setTimeout('location.reload()', 2000);
+                            }else{
+
+                                $('#approveButton').hide();
+                                $('#inactivate-alert-danger').text(data.message).show();
+                            }
+
+                        });
+
+                    }
+                };
+
+            }]);
+          /*  module.directive("fileread", [function () {
+                return {
+                    scope: {
+                        fileread: "="
+                    },
+                    link: function (scope, element, attributes) {
+                        element.bind("change", function (changeEvent) {
+                            var reader = new FileReader();
+                            reader.onload = function (loadEvent) {
+                                scope.$apply(function () {
+                                    scope.fileread = loadEvent.target.result;
+                                });
+                            }
+                            reader.readAsDataURL(changeEvent.target.files[0]);
+                        });
+                    }
+                }
+            }]);*/
+
+          /*  module.directive('myUpload', function () {
+                return {
+                    link: function postLink(scope, element, attrs) {
+                        element.find("input").bind("change", function (changeEvent) {
+                            var reader = new FileReader();
+                            reader.onload = function (loadEvent) {
+                                scope.$apply(function () {
+                                    scope[attrs.key] = loadEvent.target.result;
+                                });
+                            }
+                            if (typeof(changeEvent.target.files[0]) === 'object') {
+                                reader.readAsDataURL(changeEvent.target.files[0]);
+                            }
+                        });
+
+                    },
+                    controller: 'FileUploadCtrl',
+                    template: '<span class="btn btn-success fileinput-button">' +
+                    '<i class="glyphicon glyphicon-plus"></i>' +
+                    '<span>Replace Image</span>' +
+                    '<input type="file" accept="image/*" name="files[]" multiple=""/>' +
+                    '</span>',
+                    restrict: 'E'
+
+                };
+            });*/
+            angular.bootstrap(document, ['ReminderTemplateModule']);
+        });
+        $(document).on('change', '.btn-file :file', function () {
+            var input = $(this),
+                    numFiles = input.get(0).files ? input.get(0).files.length : 1,
+                    label = input.val().replace(/\\/g, '/').replace(/.*\//, '');
+            input.trigger('fileselect', [numFiles, label]);
+        });
+        $(document).ready(function () {
+            $('.btn-file :file').on('fileselect', function (event, numFiles, label) {
+                var input = $(this).parents('.input-group').find(':text'),
+                        log = numFiles > 1 ? numFiles + ' files selected' : label;
+                if (input.length) {
+                    input.val(log);
+                } else {
+                    if (log) alert(log);
+                }
+            });
+        });
+    });
+
+</script>
+</body>
+</html>

@@ -1,0 +1,1275 @@
+<html>
+<head><style type='text/css'>
+body, table {
+    font-family: Verdana, Arial, sans-serif;
+    font-size: 12;
+}
+
+table {
+    border-collapse: collapse;
+    border: 1px solid #ccc;
+}
+
+th, td {
+    padding-left: 0.3em;
+    padding-right: 0.3em;
+}
+
+a {
+    text-decoration: none;
+}
+
+.title {
+    font-style: italic;
+}
+
+.selected {
+    background-color: #ffffcc;
+}
+
+.status_done {
+    background-color: #eeffee;
+}
+
+.status_passed {
+    background-color: #ccffcc;
+}
+
+.status_failed {
+    background-color: #ffcccc;
+}
+
+.breakpoint {
+    background-color: #cccccc;
+    border: 1px solid black;
+}
+</style><title>Test suite results</title></head>
+<body>
+<h1>Test suite results </h1>
+
+<table>
+<tr>
+<td>result:</td>
+<td>passed</td>
+</tr>
+<tr>
+<td>totalTime:</td>
+<td>119</td>
+</tr>
+<tr>
+<td>numTestTotal:</td>
+<td>8</td>
+</tr>
+<tr>
+<td>numTestPasses:</td>
+<td>8</td>
+</tr>
+<tr>
+<td>numTestFailures:</td>
+<td>0</td>
+</tr>
+<tr>
+<td>numCommandPasses:</td>
+<td>14</td>
+</tr>
+<tr>
+<td>numCommandFailures:</td>
+<td>0</td>
+</tr>
+<tr>
+<td>numCommandErrors:</td>
+<td>0</td>
+</tr>
+<tr>
+<td>Selenium Version:</td>
+<td>2.44</td>
+</tr>
+<tr>
+<td>Selenium Revision:</td>
+<td>.0</td>
+</tr>
+<tr>
+<td>
+<table id="suiteTable" class="selenium" border="1" cellpadding="1" cellspacing="1"><tbody>
+<tr class="title status_passed"><td><b>Test Suite</b></td></tr>
+<tr class="  status_passed"><td><a href="#testresult0">CreateBenefit</a></td></tr>
+<tr class="  status_passed"><td><a href="#testresult1">CreateCoverage</a></td></tr>
+<tr class="  status_passed"><td><a href="#testresult2">CreateCoveragewithDuplicateName</a></td></tr>
+<tr class="  status_passed"><td><a href="#testresult3">CreateCoveragewithDuplicateCode</a></td></tr>
+<tr class="  status_passed"><td><a href="#testresult4">UpdateBenefitAssociatedtoCoverage</a></td></tr>
+<tr class="  status_passed"><td><a href="#testresult5">InactivateBenefitAssociatedtoCoverage</a></td></tr>
+<tr class="  status_passed"><td><a href="#testresult6">UpdateCoverage</a></td></tr>
+<tr class="  status_passed"><td><a href="#testresult7">UpdateCoveragewithDuplicateNameCode</a></td></tr>
+</tbody></table>
+
+
+</td>
+<td>&nbsp;</td>
+</tr>
+</table><table><tr>
+<td><a name="testresult0">CreateBenefit.html</a><br/><div>
+<table border="1" cellpadding="1" cellspacing="1">
+<thead>
+<tr class="title status_passed"><td rowspan="1" colspan="3">CreateBenefit</td></tr>
+</thead><tbody>
+<tr class="  status_done" style="cursor: pointer;">
+	<td>open</td>
+	<td>/myportal/control/main/</td>
+	<td></td>
+</tr>
+<tr class="  status_done" style="cursor: pointer;">
+	<td>type</td>
+	<td>//input[@name='USERNAME']</td>
+	<td>admin</td>
+</tr>
+<tr class="  status_done" style="cursor: pointer;">
+	<td>type</td>
+	<td>//input[@name='PASSWORD']</td>
+	<td>ofbiz</td>
+</tr>
+<tr class="  status_done" style="cursor: pointer;">
+	<td>clickAndWait</td>
+	<td>//input[@type='image']</td>
+	<td></td>
+</tr>
+<!--Click Insurance-->
+<tr class="  status_done" style="cursor: pointer;">
+	<td>clickAndWait</td>
+	<td>//li[5]/a/b</td>
+	<td></td>
+</tr>
+<!--Click Core-->
+<tr class="  status_done" style="cursor: pointer;">
+	<td>click</td>
+	<td>//div[@id='cssmenu']/ul/li[2]/a</td>
+	<td></td>
+</tr>
+<!--Click Benefits-->
+<tr class="  status_done" style="cursor: pointer;">
+	<td>clickAndWait</td>
+	<td>//div[@id='cssmenu']/ul/li[2]/ul/li[2]/a</td>
+	<td></td>
+</tr>
+<tr class="  status_done" style="cursor: pointer;">
+	<td>pause</td>
+	<td>2000</td>
+	<td></td>
+</tr>
+<!--Click Create Button-->
+<tr class="  status_done" style="cursor: pointer;">
+	<td>click</td>
+	<td>xpath=(//button[@type='button'])[7]</td>
+	<td></td>
+</tr>
+<tr class="  status_done" style="cursor: pointer;">
+	<td>pause</td>
+	<td>2000</td>
+	<td></td>
+</tr>
+<!--Generate a random benefit name-->
+<tr class="  status_done" style="cursor: pointer;">
+	<td>storeEval</td>
+	<td>javascript{Math.floor(Math.random()*111111)}</td>
+	<td>RandomNumber</td>
+</tr>
+<tr class="  status_done" style="cursor: pointer;">
+	<td>echo</td>
+	<td>${RandomNumber}</td>
+	<td>107872</td>
+</tr>
+<tr class="  status_done" style="cursor: pointer;">
+	<td>type</td>
+	<td>//form[@id='createBenefit']/div/div[3]/div/input</td>
+	<td>SeleniumBenefit${RandomNumber}</td>
+</tr>
+<tr class="  status_done" style="cursor: pointer;">
+	<td>store</td>
+	<td>SeleniumBenefit${RandomNumber}</td>
+	<td>BenefitName</td>
+</tr>
+<tr class="  status_done" style="cursor: pointer;">
+	<td>click</td>
+	<td>//form[@id='createBenefit']/div[2]/button</td>
+	<td></td>
+</tr>
+<tr class="  status_done" style="cursor: pointer;">
+	<td>pause</td>
+	<td>2000</td>
+	<td></td>
+</tr>
+<tr class="  status_passed" style="cursor: pointer;">
+	<td>assertText</td>
+	<td>//form[@id='createBenefit']/div/div</td>
+	<td>Benefit created successfully</td>
+</tr>
+<tr class="  status_done" style="cursor: pointer;">
+	<td>clickAndWait</td>
+	<td>//form[@id='createBenefit']/div[2]/button[2]</td>
+	<td></td>
+</tr>
+<tr class="  status_done" style="cursor: pointer;">
+	<td>pause</td>
+	<td>2000</td>
+	<td></td>
+</tr>
+<!--Create second benefit-->
+<!--Click Create Button-->
+<tr class="  status_done" style="cursor: pointer;">
+	<td>click</td>
+	<td>xpath=(//button[@type='button'])[7]</td>
+	<td></td>
+</tr>
+<tr class="  status_done" style="cursor: pointer;">
+	<td>pause</td>
+	<td>2000</td>
+	<td></td>
+</tr>
+<!--Generate a random benefit name-->
+<tr class="  status_done" style="cursor: pointer;">
+	<td>storeEval</td>
+	<td>javascript{Math.floor(Math.random()*11111)}</td>
+	<td>RandomNumber</td>
+</tr>
+<tr class="  status_done" style="cursor: pointer;">
+	<td>type</td>
+	<td>//form[@id='createBenefit']/div/div[3]/div/input</td>
+	<td>SeleniumBenefit${RandomNumber}</td>
+</tr>
+<tr class="  status_done" style="cursor: pointer;">
+	<td>store</td>
+	<td>SeleniumBenefit${RandomNumber}</td>
+	<td>BenefitName1</td>
+</tr>
+<tr class="  status_done" style="cursor: pointer;">
+	<td>click</td>
+	<td>//form[@id='createBenefit']/div[2]/button</td>
+	<td></td>
+</tr>
+<tr class="  status_done" style="cursor: pointer;">
+	<td>pause</td>
+	<td>3000</td>
+	<td></td>
+</tr>
+<tr class="  status_passed" style="cursor: pointer;">
+	<td>assertText</td>
+	<td>//form[@id='createBenefit']/div/div</td>
+	<td>Benefit created successfully</td>
+</tr>
+<tr class="  status_done" style="cursor: pointer;">
+	<td>clickAndWait</td>
+	<td>//form[@id='createBenefit']/div[2]/button[2]</td>
+	<td></td>
+</tr>
+</tbody></table>
+
+
+</div></td>
+<td>&nbsp;</td>
+</tr><tr>
+<td><a name="testresult1">CreateCoverage.html</a><br/><div>
+<table border="1" cellpadding="1" cellspacing="1">
+<thead>
+<tr class="title status_passed"><td rowspan="1" colspan="3">CreateCoverage</td></tr>
+</thead><tbody>
+<!--<tr>
+	<td>open</td>
+	<td>/myportal/control/main</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>//input[@name='USERNAME']</td>
+	<td>admin</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>//input[@name='PASSWORD']</td>
+	<td>ofbiz</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>//input[@type='image']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>css=button.close</td>
+	<td></td>
+</tr>
+<!--Click Insurance
+<tr>
+	<td>clickAndWait</td>
+	<td>//li[5]/a/b</td>
+	<td></td>
+</tr>-->
+<!--Click Core-Coverage-->
+<tr class="  status_done" style="cursor: pointer;">
+	<td>click</td>
+	<td>//div[@id='cssmenu']/ul/li[2]/a</td>
+	<td></td>
+</tr>
+<tr class="  status_done" style="cursor: pointer;">
+	<td>clickAndWait</td>
+	<td>//div[@id='cssmenu']/ul/li[2]/ul/li[3]/a</td>
+	<td></td>
+</tr>
+<tr class="  status_done" style="cursor: pointer;">
+	<td>pause</td>
+	<td>2000</td>
+	<td></td>
+</tr>
+<!--Click Create Button-->
+<tr class="  status_done" style="cursor: pointer;">
+	<td>click</td>
+	<td>xpath=(//button[@type='button'])[7]</td>
+	<td></td>
+</tr>
+<!--Create Coverage-->
+<tr class="  status_done" style="cursor: pointer;">
+	<td>storeEval</td>
+	<td>javascript{Math.floor(Math.random()*111111)}</td>
+	<td>RandomNumber</td>
+</tr>
+<tr class="  status_done" style="cursor: pointer;">
+	<td>echo</td>
+	<td>${RandomNumber}</td>
+	<td>68527</td>
+</tr>
+<tr class="  status_done" style="cursor: pointer;">
+	<td>type</td>
+	<td>//form[@id='createCoverage']/div/div[3]/div/input</td>
+	<td>SeleniumCoverage${RandomNumber}</td>
+</tr>
+<tr class="  status_done" style="cursor: pointer;">
+	<td>store</td>
+	<td>SeleniumCoverage${RandomNumber}</td>
+	<td>CoverageName</td>
+</tr>
+<tr class="  status_done" style="cursor: pointer;">
+	<td>storeEval</td>
+	<td>javascript{Math.floor(Math.random()*1112)}</td>
+	<td>RandomNumber</td>
+</tr>
+<tr class="  status_done" style="cursor: pointer;">
+	<td>echo</td>
+	<td>${RandomNumber}</td>
+	<td>916</td>
+</tr>
+<tr class="  status_done" style="cursor: pointer;">
+	<td>type</td>
+	<td>//form[@id='createCoverage']/div/div[4]/div/input</td>
+	<td>SeleniumCode${RandomNumber}</td>
+</tr>
+<tr class="  status_done" style="cursor: pointer;">
+	<td>store</td>
+	<td>SeleniumCode${RandomNumber}</td>
+	<td>CoverageCode</td>
+</tr>
+<tr class="  status_done" style="cursor: pointer;">
+	<td>type</td>
+	<td>//form[@id='createCoverage']/div/div[5]/div/input</td>
+	<td>Desc_${CoverageName}</td>
+</tr>
+<tr class="  status_done" style="cursor: pointer;">
+	<td>click</td>
+	<td>id=selectedBenefits</td>
+	<td></td>
+</tr>
+<tr class="  status_done" style="cursor: pointer;">
+	<td>pause</td>
+	<td>2000</td>
+	<td></td>
+</tr>
+<!--Select BenefitsMulti-select dropdown-->
+<tr class="  status_done" style="cursor: pointer;">
+	<td>click</td>
+	<td>//form[@id='createCoverage']/div/div[6]/div/button</td>
+	<td></td>
+</tr>
+<tr class="  status_done" style="cursor: pointer;">
+	<td>click</td>
+	<td>link=${BenefitName}</td>
+	<td></td>
+</tr>
+<tr class="  status_done" style="cursor: pointer;">
+	<td>click</td>
+	<td>link=${BenefitName1}</td>
+	<td></td>
+</tr>
+<tr class="  status_done" style="cursor: pointer;">
+	<td>click</td>
+	<td>id=createUpdate</td>
+	<td></td>
+</tr>
+<tr class="  status_done" style="cursor: pointer;">
+	<td>pause</td>
+	<td>2000</td>
+	<td></td>
+</tr>
+<tr class="  status_passed" style="cursor: pointer;">
+	<td>assertText</td>
+	<td>//form[@id='createCoverage']/div/div</td>
+	<td>Coverage created successfully</td>
+</tr>
+<tr class="  status_done" style="cursor: pointer;">
+	<td>clickAndWait</td>
+	<td>//form[@id='createCoverage']/div[2]/button[2]</td>
+	<td></td>
+</tr>
+<tr class="  status_done" style="cursor: pointer;">
+	<td>pause</td>
+	<td>2000</td>
+	<td></td>
+</tr>
+<!--Creating Second Coverage-->
+<!--Click Create Button-->
+<tr class="  status_done" style="cursor: pointer;">
+	<td>click</td>
+	<td>xpath=(//button[@type='button'])[7]</td>
+	<td></td>
+</tr>
+<tr class="  status_done" style="cursor: pointer;">
+	<td>storeEval</td>
+	<td>javascript{Math.floor(Math.random()*111111)}</td>
+	<td>RandomNumber</td>
+</tr>
+<tr class="  status_done" style="cursor: pointer;">
+	<td>echo</td>
+	<td>${RandomNumber}</td>
+	<td>54538</td>
+</tr>
+<tr class="  status_done" style="cursor: pointer;">
+	<td>type</td>
+	<td>//form[@id='createCoverage']/div/div[3]/div/input</td>
+	<td>SeleniumCoverage${RandomNumber}</td>
+</tr>
+<tr class="  status_done" style="cursor: pointer;">
+	<td>store</td>
+	<td>SeleniumCoverage${RandomNumber}</td>
+	<td>CoverageName1</td>
+</tr>
+<tr class="  status_done" style="cursor: pointer;">
+	<td>storeEval</td>
+	<td>javascript{Math.floor(Math.random()*1112)}</td>
+	<td>RandomNumber</td>
+</tr>
+<tr class="  status_done" style="cursor: pointer;">
+	<td>echo</td>
+	<td>${RandomNumber}</td>
+	<td>1044</td>
+</tr>
+<tr class="  status_done" style="cursor: pointer;">
+	<td>type</td>
+	<td>//form[@id='createCoverage']/div/div[4]/div/input</td>
+	<td>SeleniumCode${RandomNumber}</td>
+</tr>
+<tr class="  status_done" style="cursor: pointer;">
+	<td>store</td>
+	<td>SeleniumCode${RandomNumber}</td>
+	<td>CoverageCode1</td>
+</tr>
+<tr class="  status_done" style="cursor: pointer;">
+	<td>type</td>
+	<td>//form[@id='createCoverage']/div/div[5]/div/input</td>
+	<td>Desc_${CoverageName1}</td>
+</tr>
+<tr class="  status_done" style="cursor: pointer;">
+	<td>click</td>
+	<td>id=selectedBenefits</td>
+	<td></td>
+</tr>
+<tr class="  status_done" style="cursor: pointer;">
+	<td>pause</td>
+	<td>2000</td>
+	<td></td>
+</tr>
+<!--Select BenefitsMulti-select dropdown-->
+<tr class="  status_done" style="cursor: pointer;">
+	<td>click</td>
+	<td>//form[@id='createCoverage']/div/div[6]/div/button</td>
+	<td></td>
+</tr>
+<tr class="  status_done" style="cursor: pointer;">
+	<td>click</td>
+	<td>link=${BenefitName}</td>
+	<td></td>
+</tr>
+<tr class="  status_done" style="cursor: pointer;">
+	<td>click</td>
+	<td>link=${BenefitName1}</td>
+	<td></td>
+</tr>
+<tr class="  status_done" style="cursor: pointer;">
+	<td>click</td>
+	<td>id=createUpdate</td>
+	<td></td>
+</tr>
+<tr class="  status_done" style="cursor: pointer;">
+	<td>pause</td>
+	<td>2000</td>
+	<td></td>
+</tr>
+<tr class="  status_passed" style="cursor: pointer;">
+	<td>assertText</td>
+	<td>//form[@id='createCoverage']/div/div</td>
+	<td>Coverage created successfully</td>
+</tr>
+<tr class="  status_done" style="cursor: pointer;">
+	<td>clickAndWait</td>
+	<td>//form[@id='createCoverage']/div[2]/button[2]</td>
+	<td></td>
+</tr>
+</tbody></table>
+
+
+</div></td>
+<td>&nbsp;</td>
+</tr><tr>
+<td><a name="testresult2">CreateCoveragewithDuplicateName.html</a><br/><div>
+<table border="1" cellpadding="1" cellspacing="1">
+<thead>
+<tr class="title status_passed"><td rowspan="1" colspan="3">CreateCoveragewithDuplicateName</td></tr>
+</thead><tbody>
+<!--Click Core-Coverage-->
+<tr class="  status_done" style="cursor: pointer;">
+	<td>click</td>
+	<td>//div[@id='cssmenu']/ul/li[2]/a</td>
+	<td></td>
+</tr>
+<tr class="  status_done" style="cursor: pointer;">
+	<td>clickAndWait</td>
+	<td>//div[@id='cssmenu']/ul/li[2]/ul/li[3]/a</td>
+	<td></td>
+</tr>
+<tr class="  status_done" style="cursor: pointer;">
+	<td>pause</td>
+	<td>2000</td>
+	<td></td>
+</tr>
+<!--Click Create Button-->
+<tr class="  status_done" style="cursor: pointer;">
+	<td>click</td>
+	<td>xpath=(//button[@type='button'])[7]</td>
+	<td></td>
+</tr>
+<!--Create Coverage-->
+<tr class="  status_done" style="cursor: pointer;">
+	<td>type</td>
+	<td>//form[@id='createCoverage']/div/div[3]/div/input</td>
+	<td>${CoverageName}</td>
+</tr>
+<tr class="  status_done" style="cursor: pointer;">
+	<td>storeEval</td>
+	<td>javascript{Math.floor(Math.random()*11111)}</td>
+	<td>RandomNumber</td>
+</tr>
+<tr class="  status_done" style="cursor: pointer;">
+	<td>echo</td>
+	<td>${RandomNumber}</td>
+	<td>1835</td>
+</tr>
+<tr class="  status_done" style="cursor: pointer;">
+	<td>type</td>
+	<td>//form[@id='createCoverage']/div/div[4]/div/input</td>
+	<td>SeleniumCode${RandomNumber}</td>
+</tr>
+<tr class="  status_done" style="cursor: pointer;">
+	<td>type</td>
+	<td>//form[@id='createCoverage']/div/div[5]/div/input</td>
+	<td>Desc_${CoverageName}</td>
+</tr>
+<tr class="  status_done" style="cursor: pointer;">
+	<td>click</td>
+	<td>id=selectedBenefits</td>
+	<td></td>
+</tr>
+<tr class="  status_done" style="cursor: pointer;">
+	<td>pause</td>
+	<td>2000</td>
+	<td></td>
+</tr>
+<!--Select BenefitsMulti-select dropdown-->
+<tr class="  status_done" style="cursor: pointer;">
+	<td>click</td>
+	<td>//form[@id='createCoverage']/div/div[6]/div/button</td>
+	<td></td>
+</tr>
+<tr class="  status_done" style="cursor: pointer;">
+	<td>click</td>
+	<td>link=${BenefitName}</td>
+	<td></td>
+</tr>
+<tr class="  status_done" style="cursor: pointer;">
+	<td>click</td>
+	<td>link=${BenefitName1}</td>
+	<td></td>
+</tr>
+<tr class="  status_done" style="cursor: pointer;">
+	<td>click</td>
+	<td>id=createUpdate</td>
+	<td></td>
+</tr>
+<tr class="  status_done" style="cursor: pointer;">
+	<td>pause</td>
+	<td>2000</td>
+	<td></td>
+</tr>
+<tr class="  status_passed" style="cursor: pointer;">
+	<td>assertText</td>
+	<td>//form[@id='createCoverage']/div/div[2]</td>
+	<td>Coverage already described</td>
+</tr>
+<tr class="  status_done" style="cursor: pointer;">
+	<td>clickAndWait</td>
+	<td>//form[@id='createCoverage']/div[2]/button[2]</td>
+	<td></td>
+</tr>
+</tbody></table>
+
+
+</div></td>
+<td>&nbsp;</td>
+</tr><tr>
+<td><a name="testresult3">CreateCoveragewithDuplicateCode.html</a><br/><div>
+<table border="1" cellpadding="1" cellspacing="1">
+<thead>
+<tr class="title status_passed"><td rowspan="1" colspan="3">CreateCoveragewithDuplicateCode</td></tr>
+</thead><tbody>
+<!--Click Core-Coverage-->
+<tr class="  status_done" style="cursor: pointer;">
+	<td>click</td>
+	<td>//div[@id='cssmenu']/ul/li[2]/a</td>
+	<td></td>
+</tr>
+<tr class="  status_done" style="cursor: pointer;">
+	<td>clickAndWait</td>
+	<td>//div[@id='cssmenu']/ul/li[2]/ul/li[3]/a</td>
+	<td></td>
+</tr>
+<tr class="  status_done" style="cursor: pointer;">
+	<td>pause</td>
+	<td>2000</td>
+	<td></td>
+</tr>
+<!--Click Create Button-->
+<tr class="  status_done" style="cursor: pointer;">
+	<td>click</td>
+	<td>xpath=(//button[@type='button'])[7]</td>
+	<td></td>
+</tr>
+<!--Create Coverage-->
+<tr class="  status_done" style="cursor: pointer;">
+	<td>storeEval</td>
+	<td>javascript{Math.floor(Math.random()*111111)}</td>
+	<td>RandomNumber</td>
+</tr>
+<tr class="  status_done" style="cursor: pointer;">
+	<td>echo</td>
+	<td>${RandomNumber}</td>
+	<td>103357</td>
+</tr>
+<tr class="  status_done" style="cursor: pointer;">
+	<td>type</td>
+	<td>//form[@id='createCoverage']/div/div[3]/div/input</td>
+	<td>SeleniumCoverage${RandomNumber}</td>
+</tr>
+<tr class="  status_done" style="cursor: pointer;">
+	<td>type</td>
+	<td>//form[@id='createCoverage']/div/div[4]/div/input</td>
+	<td>${CoverageCode}</td>
+</tr>
+<tr class="  status_done" style="cursor: pointer;">
+	<td>type</td>
+	<td>//form[@id='createCoverage']/div/div[5]/div/input</td>
+	<td>Desc_${CoverageName1}</td>
+</tr>
+<tr class="  status_done" style="cursor: pointer;">
+	<td>click</td>
+	<td>id=selectedBenefits</td>
+	<td></td>
+</tr>
+<tr class="  status_done" style="cursor: pointer;">
+	<td>pause</td>
+	<td>2000</td>
+	<td></td>
+</tr>
+<!--Select BenefitsMulti-select dropdown-->
+<tr class="  status_done" style="cursor: pointer;">
+	<td>click</td>
+	<td>//form[@id='createCoverage']/div/div[6]/div/button</td>
+	<td></td>
+</tr>
+<tr class="  status_done" style="cursor: pointer;">
+	<td>click</td>
+	<td>link=${BenefitName}</td>
+	<td></td>
+</tr>
+<tr class="  status_done" style="cursor: pointer;">
+	<td>click</td>
+	<td>link=${BenefitName1}</td>
+	<td></td>
+</tr>
+<tr class="  status_done" style="cursor: pointer;">
+	<td>click</td>
+	<td>id=createUpdate</td>
+	<td></td>
+</tr>
+<tr class="  status_done" style="cursor: pointer;">
+	<td>pause</td>
+	<td>2000</td>
+	<td></td>
+</tr>
+<tr class="  status_passed" style="cursor: pointer;">
+	<td>assertText</td>
+	<td>//form[@id='createCoverage']/div/div[2]</td>
+	<td>Coverage already described</td>
+</tr>
+<tr class="  status_done" style="cursor: pointer;">
+	<td>clickAndWait</td>
+	<td>//form[@id='createCoverage']/div[2]/button[2]</td>
+	<td></td>
+</tr>
+</tbody></table>
+
+
+</div></td>
+<td>&nbsp;</td>
+</tr><tr>
+<td><a name="testresult4">UpdateBenefitAssociatedtoCoverage.html</a><br/><div>
+<table border="1" cellpadding="1" cellspacing="1">
+<thead>
+<tr class="title status_passed"><td rowspan="1" colspan="3">UpdateBenefitAssociatedtoCoverage</td></tr>
+</thead><tbody>
+<!--Click Core-->
+<tr class="  status_done" style="cursor: pointer;">
+	<td>click</td>
+	<td>//div[@id='cssmenu']/ul/li[2]/a</td>
+	<td></td>
+</tr>
+<!--Click Benefits-->
+<tr class="  status_done" style="cursor: pointer;">
+	<td>clickAndWait</td>
+	<td>//div[@id='cssmenu']/ul/li[2]/ul/li[2]/a</td>
+	<td></td>
+</tr>
+<tr class="  status_done" style="cursor: pointer;">
+	<td>pause</td>
+	<td>3000</td>
+	<td></td>
+</tr>
+<!--Type-in Search input field-->
+<tr class="  status_done" style="cursor: pointer;">
+	<td>sendKeys</td>
+	<td>//div[@id='benefit-table_filter']/label/input</td>
+	<td>${BenefitName}</td>
+</tr>
+<tr class="  status_passed" style="cursor: pointer;">
+	<td>verifyText</td>
+	<td>//table[@id='benefit-table']/tbody/tr/td</td>
+	<td>${BenefitName}</td>
+</tr>
+<!--Click Update button-->
+<tr class="  status_done" style="cursor: pointer;">
+	<td>click</td>
+	<td>xpath=(//button[@type='button'])[8]</td>
+	<td></td>
+</tr>
+<tr class="  status_done" style="cursor: pointer;">
+	<td>pause</td>
+	<td>2000</td>
+	<td></td>
+</tr>
+<tr class="  status_done" style="cursor: pointer;">
+	<td>type</td>
+	<td>//form[@id='createBenefit']/div/div[3]/div/input</td>
+	<td>${BenefitName}_123</td>
+</tr>
+<tr class="  status_done" style="cursor: pointer;">
+	<td>click</td>
+	<td>//form[@id='createBenefit']/div[2]/button</td>
+	<td></td>
+</tr>
+<tr class="  status_done" style="cursor: pointer;">
+	<td>pause</td>
+	<td>2000</td>
+	<td></td>
+</tr>
+<tr class="  status_passed" style="cursor: pointer;">
+	<td>assertText</td>
+	<td>//form[@id='createBenefit']/div/div[2]</td>
+	<td>Benefit is associated with active coverage</td>
+</tr>
+<tr class="  status_done" style="cursor: pointer;">
+	<td>clickAndWait</td>
+	<td>//form[@id='createBenefit']/div[2]/button[2]</td>
+	<td></td>
+</tr>
+</tbody></table>
+
+
+</div></td>
+<td>&nbsp;</td>
+</tr><tr>
+<td><a name="testresult5">InactivateBenefitAssociatedtoCoverage.html</a><br/><div>
+<table border="1" cellpadding="1" cellspacing="1">
+<thead>
+<tr class="title status_passed"><td rowspan="1" colspan="3">InactivateBenefitAssociatedtoCoverage</td></tr>
+</thead><tbody>
+<!--Click Core-->
+<tr class="  status_done" style="cursor: pointer;">
+	<td>click</td>
+	<td>//div[@id='cssmenu']/ul/li[2]/a</td>
+	<td></td>
+</tr>
+<!--Click Benefits-->
+<tr class="  status_done" style="cursor: pointer;">
+	<td>clickAndWait</td>
+	<td>//div[@id='cssmenu']/ul/li[2]/ul/li[2]/a</td>
+	<td></td>
+</tr>
+<tr class="  status_done" style="cursor: pointer;">
+	<td>pause</td>
+	<td>3000</td>
+	<td></td>
+</tr>
+<!--Type-in Search input field-->
+<tr class="  status_done" style="cursor: pointer;">
+	<td>sendKeys</td>
+	<td>//div[@id='benefit-table_filter']/label/input</td>
+	<td>${BenefitName}</td>
+</tr>
+<tr class="  status_passed" style="cursor: pointer;">
+	<td>verifyText</td>
+	<td>//table[@id='benefit-table']/tbody/tr/td</td>
+	<td>${BenefitName}</td>
+</tr>
+<!--Click Inactivate button-->
+<tr class="  status_done" style="cursor: pointer;">
+	<td>click</td>
+	<td>//table[@id='benefit-table']/tbody/tr/td[2]/button[2]</td>
+	<td></td>
+</tr>
+<!--Click on 'Yes' button-->
+<tr class="  status_done" style="cursor: pointer;">
+	<td>click</td>
+	<td>//div[@id='alert-modal']/div/div/div[3]/button</td>
+	<td></td>
+</tr>
+<tr class="  status_done" style="cursor: pointer;">
+	<td>pause</td>
+	<td>2000</td>
+	<td></td>
+</tr>
+<tr class="  status_passed" style="cursor: pointer;">
+	<td>assertText</td>
+	<td>//div[@id='alert-modal']/div/div/div[2]/div</td>
+	<td>Benefit is associated with active coverage</td>
+</tr>
+<tr class="  status_done" style="cursor: pointer;">
+	<td>click</td>
+	<td>//div[@id='alert-modal']/div/div/div[3]/button[2]</td>
+	<td></td>
+</tr>
+</tbody></table>
+
+
+</div></td>
+<td>&nbsp;</td>
+</tr><tr>
+<td><a name="testresult6">UpdateCoverage.html</a><br/><div>
+<table border="1" cellpadding="1" cellspacing="1">
+<thead>
+<tr class="title status_passed"><td rowspan="1" colspan="3">UpdateCoverage</td></tr>
+</thead><tbody>
+<!--Click Core-Coverage-->
+<tr class="  status_done" style="cursor: pointer;">
+	<td>click</td>
+	<td>//div[@id='cssmenu']/ul/li[2]/a</td>
+	<td></td>
+</tr>
+<tr class="  status_done" style="cursor: pointer;">
+	<td>clickAndWait</td>
+	<td>//div[@id='cssmenu']/ul/li[2]/ul/li[3]/a</td>
+	<td></td>
+</tr>
+<tr class="  status_done" style="cursor: pointer;">
+	<td>pause</td>
+	<td>2000</td>
+	<td></td>
+</tr>
+<!--Type-in Search input field-->
+<tr class="  status_done" style="cursor: pointer;">
+	<td>sendKeys</td>
+	<td>//div[@id='coverage-table_filter']/label/input</td>
+	<td>${CoverageName}</td>
+</tr>
+<tr class="  status_passed" style="cursor: pointer;">
+	<td>verifyText</td>
+	<td>//table[@id='coverage-table']/tbody/tr/td</td>
+	<td>${CoverageName}</td>
+</tr>
+<!--Click Update button-->
+<tr class="  status_done" style="cursor: pointer;">
+	<td>click</td>
+	<td>xpath=(//button[@type='button'])[8]</td>
+	<td></td>
+</tr>
+<tr class="  status_done" style="cursor: pointer;">
+	<td>pause</td>
+	<td>2000</td>
+	<td></td>
+</tr>
+<tr class="  status_done" style="cursor: pointer;">
+	<td>type</td>
+	<td>//form[@id='createCoverage']/div/div[3]/div/input</td>
+	<td>${CoverageName}_Modified</td>
+</tr>
+<tr class="  status_done" style="cursor: pointer;">
+	<td>type</td>
+	<td>//form[@id='createCoverage']/div/div[5]/div/input</td>
+	<td>${CoverageName}_Modified</td>
+</tr>
+<!--Select Benefits dropdown-->
+<tr class="  status_done" style="cursor: pointer;">
+	<td>click</td>
+	<td>//form[@id='createCoverage']/div/div[6]/div/button</td>
+	<td></td>
+</tr>
+<tr class="  status_done" style="cursor: pointer;">
+	<td>click</td>
+	<td>link=${BenefitName}</td>
+	<td></td>
+</tr>
+<tr class="  status_done" style="cursor: pointer;">
+	<td>click</td>
+	<td>//form[@id='createCoverage']/div[2]/button</td>
+	<td></td>
+</tr>
+<tr class="  status_done" style="cursor: pointer;">
+	<td>pause</td>
+	<td>3000</td>
+	<td></td>
+</tr>
+<tr class="  status_passed" style="cursor: pointer;">
+	<td>assertText</td>
+	<td>//form[@id='createCoverage']/div/div</td>
+	<td>coverage updated successfully</td>
+</tr>
+<tr class="  status_done" style="cursor: pointer;">
+	<td>clickAndWait</td>
+	<td>//form[@id='createCoverage']/div[2]/button[2]</td>
+	<td></td>
+</tr>
+</tbody></table>
+
+
+</div></td>
+<td>&nbsp;</td>
+</tr><tr>
+<td><a name="testresult7">UpdateCoveragewithDuplicateNameCode.html</a><br/><div>
+<table border="1" cellpadding="1" cellspacing="1">
+<thead>
+<tr class="title status_passed"><td rowspan="1" colspan="3">UpdateCoveragewithDuplicateNameCode</td></tr>
+</thead><tbody>
+<!--Click Core-Coverage-->
+<tr class="  status_done" style="cursor: pointer;">
+	<td>click</td>
+	<td>//div[@id='cssmenu']/ul/li[2]/a</td>
+	<td></td>
+</tr>
+<tr class="  status_done" style="cursor: pointer;">
+	<td>clickAndWait</td>
+	<td>//div[@id='cssmenu']/ul/li[2]/ul/li[3]/a</td>
+	<td></td>
+</tr>
+<tr class="  status_done" style="cursor: pointer;">
+	<td>pause</td>
+	<td>3000</td>
+	<td></td>
+</tr>
+<!--Type-in Search input field-->
+<tr class="  status_done" style="cursor: pointer;">
+	<td>sendKeys</td>
+	<td>//div[@id='coverage-table_filter']/label/input</td>
+	<td>${CoverageName}_Modified</td>
+</tr>
+<tr class="  status_passed" style="cursor: pointer;">
+	<td>verifyText</td>
+	<td>//table[@id='coverage-table']/tbody/tr/td</td>
+	<td>${CoverageName}_Modified</td>
+</tr>
+<!--Click Update button-->
+<tr class="  status_done" style="cursor: pointer;">
+	<td>click</td>
+	<td>xpath=(//button[@type='button'])[8]</td>
+	<td></td>
+</tr>
+<tr class="  status_done" style="cursor: pointer;">
+	<td>pause</td>
+	<td>2000</td>
+	<td></td>
+</tr>
+<tr class="  status_done" style="cursor: pointer;">
+	<td>type</td>
+	<td>//form[@id='createCoverage']/div/div[3]/div/input</td>
+	<td>${CoverageName1}</td>
+</tr>
+<tr class="  status_done" style="cursor: pointer;">
+	<td>click</td>
+	<td>id=selectedBenefits</td>
+	<td></td>
+</tr>
+<tr class="  status_done" style="cursor: pointer;">
+	<td>pause</td>
+	<td>2000</td>
+	<td></td>
+</tr>
+<!--Select BenefitsMulti-select dropdown-->
+<tr class="  status_done" style="cursor: pointer;">
+	<td>click</td>
+	<td>//form[@id='createCoverage']/div/div[6]/div/button</td>
+	<td></td>
+</tr>
+<tr class="  status_done" style="cursor: pointer;">
+	<td>click</td>
+	<td>link=${BenefitName}</td>
+	<td></td>
+</tr>
+<tr class="  status_done" style="cursor: pointer;">
+	<td>click</td>
+	<td>link=${BenefitName1}</td>
+	<td></td>
+</tr>
+<tr class="  status_done" style="cursor: pointer;">
+	<td>click</td>
+	<td>id=createUpdate</td>
+	<td></td>
+</tr>
+<tr class="  status_done" style="cursor: pointer;">
+	<td>pause</td>
+	<td>2000</td>
+	<td></td>
+</tr>
+<tr class="  status_passed" style="cursor: pointer;">
+	<td>assertText</td>
+	<td>//form[@id='createCoverage']/div/div[2]</td>
+	<td>Coverage already described</td>
+</tr>
+<tr class="  status_done" style="cursor: pointer;">
+	<td>clickAndWait</td>
+	<td>//form[@id='createCoverage']/div[2]/button[2]</td>
+	<td></td>
+</tr>
+</tbody></table>
+
+
+</div></td>
+<td>&nbsp;</td>
+</tr></table><pre>
+info: Starting test /selenium-server/tests/CreateBenefit.html
+info: Executing: |open | /myportal/control/main/ |  |
+info: Executing: |type | //input[@name=&apos;USERNAME&apos;] | admin |
+info: Executing: |type | //input[@name=&apos;PASSWORD&apos;] | ofbiz |
+info: Executing: |clickAndWait | //input[@type=&apos;image&apos;] |  |
+info: Executing: |clickAndWait | //li[5]/a/b |  |
+info: Executing: |click | //div[@id=&apos;cssmenu&apos;]/ul/li[2]/a |  |
+info: Selenium 1.0 (Core, RC, etc) is no longer under active development. Please update to WebDriver ASAP
+info: Executing: |clickAndWait | //div[@id=&apos;cssmenu&apos;]/ul/li[2]/ul/li[2]/a |  |
+info: Executing: |pause | 2000 |  |
+info: Executing: |click | xpath=(//button[@type=&apos;button&apos;])[7] |  |
+info: Executing: |pause | 2000 |  |
+info: Executing: |storeEval | javascript{Math.floor(Math.random()*111111)} | RandomNumber |
+info: Selenium 1.0 (Core, RC, etc) is no longer under active development. Please update to WebDriver ASAP
+info: script is: 107872
+info: Executing: |echo | ${RandomNumber} |  |
+info: Executing: |type | //form[@id=&apos;createBenefit&apos;]/div/div[3]/div/input | SeleniumBenefit${RandomNumber} |
+info: Executing: |store | SeleniumBenefit${RandomNumber} | BenefitName |
+info: Selenium 1.0 (Core, RC, etc) is no longer under active development. Please update to WebDriver ASAP
+info: Executing: |click | //form[@id=&apos;createBenefit&apos;]/div[2]/button |  |
+info: Executing: |pause | 2000 |  |
+info: Executing: |assertText | //form[@id=&apos;createBenefit&apos;]/div/div | Benefit created successfully |
+info: Executing: |clickAndWait | //form[@id=&apos;createBenefit&apos;]/div[2]/button[2] |  |
+info: Selenium 1.0 (Core, RC, etc) is no longer under active development. Please update to WebDriver ASAP
+info: Executing: |pause | 2000 |  |
+info: Executing: |click | xpath=(//button[@type=&apos;button&apos;])[7] |  |
+info: Executing: |pause | 2000 |  |
+info: Executing: |storeEval | javascript{Math.floor(Math.random()*11111)} | RandomNumber |
+info: script is: 11047
+info: Executing: |type | //form[@id=&apos;createBenefit&apos;]/div/div[3]/div/input | SeleniumBenefit${RandomNumber} |
+info: Executing: |store | SeleniumBenefit${RandomNumber} | BenefitName1 |
+info: Executing: |click | //form[@id=&apos;createBenefit&apos;]/div[2]/button |  |
+info: Selenium 1.0 (Core, RC, etc) is no longer under active development. Please update to WebDriver ASAP
+info: Executing: |pause | 3000 |  |
+info: Executing: |assertText | //form[@id=&apos;createBenefit&apos;]/div/div | Benefit created successfully |
+info: Selenium 1.0 (Core, RC, etc) is no longer under active development. Please update to WebDriver ASAP
+info: Executing: |clickAndWait | //form[@id=&apos;createBenefit&apos;]/div[2]/button[2] |  |
+info: Starting test /selenium-server/tests/CreateCoverage.html
+info: Executing: |click | //div[@id=&apos;cssmenu&apos;]/ul/li[2]/a |  |
+info: Executing: |clickAndWait | //div[@id=&apos;cssmenu&apos;]/ul/li[2]/ul/li[3]/a |  |
+info: Executing: |pause | 2000 |  |
+info: Executing: |click | xpath=(//button[@type=&apos;button&apos;])[7] |  |
+info: Executing: |storeEval | javascript{Math.floor(Math.random()*111111)} | RandomNumber |
+info: script is: 68527
+info: Executing: |echo | ${RandomNumber} |  |
+info: Executing: |type | //form[@id=&apos;createCoverage&apos;]/div/div[3]/div/input | SeleniumCoverage${RandomNumber} |
+info: Executing: |store | SeleniumCoverage${RandomNumber} | CoverageName |
+info: Executing: |storeEval | javascript{Math.floor(Math.random()*1112)} | RandomNumber |
+info: Selenium 1.0 (Core, RC, etc) is no longer under active development. Please update to WebDriver ASAP
+info: script is: 916
+info: Executing: |echo | ${RandomNumber} |  |
+info: Executing: |type | //form[@id=&apos;createCoverage&apos;]/div/div[4]/div/input | SeleniumCode${RandomNumber} |
+info: Executing: |store | SeleniumCode${RandomNumber} | CoverageCode |
+info: Selenium 1.0 (Core, RC, etc) is no longer under active development. Please update to WebDriver ASAP
+info: Executing: |type | //form[@id=&apos;createCoverage&apos;]/div/div[5]/div/input | Desc_${CoverageName} |
+info: Executing: |click | id=selectedBenefits |  |
+info: Executing: |pause | 2000 |  |
+info: Executing: |click | //form[@id=&apos;createCoverage&apos;]/div/div[6]/div/button |  |
+info: Executing: |click | link=${BenefitName} |  |
+info: Executing: |click | link=${BenefitName1} |  |
+info: Executing: |click | id=createUpdate |  |
+info: Executing: |pause | 2000 |  |
+info: Executing: |assertText | //form[@id=&apos;createCoverage&apos;]/div/div | Coverage created successfully |
+info: Executing: |clickAndWait | //form[@id=&apos;createCoverage&apos;]/div[2]/button[2] |  |
+info: Executing: |pause | 2000 |  |
+info: Executing: |click | xpath=(//button[@type=&apos;button&apos;])[7] |  |
+info: Selenium 1.0 (Core, RC, etc) is no longer under active development. Please update to WebDriver ASAP
+info: Executing: |storeEval | javascript{Math.floor(Math.random()*111111)} | RandomNumber |
+info: script is: 54538
+info: Executing: |echo | ${RandomNumber} |  |
+info: Executing: |type | //form[@id=&apos;createCoverage&apos;]/div/div[3]/div/input | SeleniumCoverage${RandomNumber} |
+info: Selenium 1.0 (Core, RC, etc) is no longer under active development. Please update to WebDriver ASAP
+info: Executing: |store | SeleniumCoverage${RandomNumber} | CoverageName1 |
+info: Executing: |storeEval | javascript{Math.floor(Math.random()*1112)} | RandomNumber |
+info: script is: 1044
+info: Executing: |echo | ${RandomNumber} |  |
+info: Selenium 1.0 (Core, RC, etc) is no longer under active development. Please update to WebDriver ASAP
+info: Executing: |type | //form[@id=&apos;createCoverage&apos;]/div/div[4]/div/input | SeleniumCode${RandomNumber} |
+info: Selenium 1.0 (Core, RC, etc) is no longer under active development. Please update to WebDriver ASAP
+info: Executing: |store | SeleniumCode${RandomNumber} | CoverageCode1 |
+info: Executing: |type | //form[@id=&apos;createCoverage&apos;]/div/div[5]/div/input | Desc_${CoverageName1} |
+info: Executing: |click | id=selectedBenefits |  |
+info: Executing: |pause | 2000 |  |
+info: Executing: |click | //form[@id=&apos;createCoverage&apos;]/div/div[6]/div/button |  |
+info: Executing: |click | link=${BenefitName} |  |
+info: Executing: |click | link=${BenefitName1} |  |
+info: Executing: |click | id=createUpdate |  |
+info: Executing: |pause | 2000 |  |
+info: Executing: |assertText | //form[@id=&apos;createCoverage&apos;]/div/div | Coverage created successfully |
+info: Selenium 1.0 (Core, RC, etc) is no longer under active development. Please update to WebDriver ASAP
+info: Executing: |clickAndWait | //form[@id=&apos;createCoverage&apos;]/div[2]/button[2] |  |
+info: Selenium 1.0 (Core, RC, etc) is no longer under active development. Please update to WebDriver ASAP
+info: Starting test /selenium-server/tests/CreateCoveragewithDuplicateName.html
+info: Executing: |click | //div[@id=&apos;cssmenu&apos;]/ul/li[2]/a |  |
+info: Selenium 1.0 (Core, RC, etc) is no longer under active development. Please update to WebDriver ASAP
+info: Executing: |clickAndWait | //div[@id=&apos;cssmenu&apos;]/ul/li[2]/ul/li[3]/a |  |
+info: Executing: |pause | 2000 |  |
+info: Executing: |click | xpath=(//button[@type=&apos;button&apos;])[7] |  |
+info: Executing: |type | //form[@id=&apos;createCoverage&apos;]/div/div[3]/div/input | ${CoverageName} |
+info: Executing: |storeEval | javascript{Math.floor(Math.random()*11111)} | RandomNumber |
+info: script is: 1835
+info: Executing: |echo | ${RandomNumber} |  |
+info: Executing: |type | //form[@id=&apos;createCoverage&apos;]/div/div[4]/div/input | SeleniumCode${RandomNumber} |
+info: Executing: |type | //form[@id=&apos;createCoverage&apos;]/div/div[5]/div/input | Desc_${CoverageName} |
+info: Selenium 1.0 (Core, RC, etc) is no longer under active development. Please update to WebDriver ASAP
+info: Executing: |click | id=selectedBenefits |  |
+info: Executing: |pause | 2000 |  |
+info: Executing: |click | //form[@id=&apos;createCoverage&apos;]/div/div[6]/div/button |  |
+info: Executing: |click | link=${BenefitName} |  |
+info: Selenium 1.0 (Core, RC, etc) is no longer under active development. Please update to WebDriver ASAP
+info: Executing: |click | link=${BenefitName1} |  |
+info: Executing: |click | id=createUpdate |  |
+info: Executing: |pause | 2000 |  |
+info: Executing: |assertText | //form[@id=&apos;createCoverage&apos;]/div/div[2] | Coverage already described |
+info: Executing: |clickAndWait | //form[@id=&apos;createCoverage&apos;]/div[2]/button[2] |  |
+info: Starting test /selenium-server/tests/CreateCoveragewithDuplicateCode.html
+info: Executing: |click | //div[@id=&apos;cssmenu&apos;]/ul/li[2]/a |  |
+info: Executing: |clickAndWait | //div[@id=&apos;cssmenu&apos;]/ul/li[2]/ul/li[3]/a |  |
+info: Executing: |pause | 2000 |  |
+info: Executing: |click | xpath=(//button[@type=&apos;button&apos;])[7] |  |
+info: Selenium 1.0 (Core, RC, etc) is no longer under active development. Please update to WebDriver ASAP
+info: Executing: |storeEval | javascript{Math.floor(Math.random()*111111)} | RandomNumber |
+info: script is: 103357
+info: Executing: |echo | ${RandomNumber} |  |
+info: Executing: |type | //form[@id=&apos;createCoverage&apos;]/div/div[3]/div/input | SeleniumCoverage${RandomNumber} |
+info: Executing: |type | //form[@id=&apos;createCoverage&apos;]/div/div[4]/div/input | ${CoverageCode} |
+info: Executing: |type | //form[@id=&apos;createCoverage&apos;]/div/div[5]/div/input | Desc_${CoverageName1} |
+info: Executing: |click | id=selectedBenefits |  |
+info: Executing: |pause | 2000 |  |
+info: Executing: |click | //form[@id=&apos;createCoverage&apos;]/div/div[6]/div/button |  |
+info: Selenium 1.0 (Core, RC, etc) is no longer under active development. Please update to WebDriver ASAP
+info: Executing: |click | link=${BenefitName} |  |
+info: Selenium 1.0 (Core, RC, etc) is no longer under active development. Please update to WebDriver ASAP
+info: Executing: |click | link=${BenefitName1} |  |
+info: Executing: |click | id=createUpdate |  |
+info: Executing: |pause | 2000 |  |
+info: Executing: |assertText | //form[@id=&apos;createCoverage&apos;]/div/div[2] | Coverage already described |
+info: Executing: |clickAndWait | //form[@id=&apos;createCoverage&apos;]/div[2]/button[2] |  |
+info: Selenium 1.0 (Core, RC, etc) is no longer under active development. Please update to WebDriver ASAP
+info: Starting test /selenium-server/tests/UpdateBenefitAssociatedtoCoverage.html
+info: Executing: |click | //div[@id=&apos;cssmenu&apos;]/ul/li[2]/a |  |
+info: Executing: |clickAndWait | //div[@id=&apos;cssmenu&apos;]/ul/li[2]/ul/li[2]/a |  |
+info: Executing: |pause | 3000 |  |
+info: Executing: |sendKeys | //div[@id=&apos;benefit-table_filter&apos;]/label/input | ${BenefitName} |
+info: Executing: |verifyText | //table[@id=&apos;benefit-table&apos;]/tbody/tr/td | ${BenefitName} |
+info: Executing: |click | xpath=(//button[@type=&apos;button&apos;])[8] |  |
+info: Executing: |pause | 2000 |  |
+info: Executing: |type | //form[@id=&apos;createBenefit&apos;]/div/div[3]/div/input | ${BenefitName}_123 |
+info: Executing: |click | //form[@id=&apos;createBenefit&apos;]/div[2]/button |  |
+info: Selenium 1.0 (Core, RC, etc) is no longer under active development. Please update to WebDriver ASAP
+info: Executing: |pause | 2000 |  |
+info: Selenium 1.0 (Core, RC, etc) is no longer under active development. Please update to WebDriver ASAP
+info: Executing: |assertText | //form[@id=&apos;createBenefit&apos;]/div/div[2] | Benefit is associated with active coverage |
+info: Executing: |clickAndWait | //form[@id=&apos;createBenefit&apos;]/div[2]/button[2] |  |
+info: Selenium 1.0 (Core, RC, etc) is no longer under active development. Please update to WebDriver ASAP
+info: Starting test /selenium-server/tests/InactivateBenefitAssociatedtoCoverage.html
+info: Executing: |click | //div[@id=&apos;cssmenu&apos;]/ul/li[2]/a |  |
+info: Executing: |clickAndWait | //div[@id=&apos;cssmenu&apos;]/ul/li[2]/ul/li[2]/a |  |
+info: Executing: |pause | 3000 |  |
+info: Executing: |sendKeys | //div[@id=&apos;benefit-table_filter&apos;]/label/input | ${BenefitName} |
+info: Executing: |verifyText | //table[@id=&apos;benefit-table&apos;]/tbody/tr/td | ${BenefitName} |
+info: Executing: |click | //table[@id=&apos;benefit-table&apos;]/tbody/tr/td[2]/button[2] |  |
+info: Executing: |click | //div[@id=&apos;alert-modal&apos;]/div/div/div[3]/button |  |
+info: Executing: |pause | 2000 |  |
+info: Executing: |assertText | //div[@id=&apos;alert-modal&apos;]/div/div/div[2]/div | Benefit is associated with active coverage |
+info: Executing: |click | //div[@id=&apos;alert-modal&apos;]/div/div/div[3]/button[2] |  |
+info: Starting test /selenium-server/tests/UpdateCoverage.html
+info: Executing: |click | //div[@id=&apos;cssmenu&apos;]/ul/li[2]/a |  |
+info: Executing: |clickAndWait | //div[@id=&apos;cssmenu&apos;]/ul/li[2]/ul/li[3]/a |  |
+info: Executing: |pause | 2000 |  |
+info: Executing: |sendKeys | //div[@id=&apos;coverage-table_filter&apos;]/label/input | ${CoverageName} |
+info: Executing: |verifyText | //table[@id=&apos;coverage-table&apos;]/tbody/tr/td | ${CoverageName} |
+info: Executing: |click | xpath=(//button[@type=&apos;button&apos;])[8] |  |
+info: Selenium 1.0 (Core, RC, etc) is no longer under active development. Please update to WebDriver ASAP
+info: Executing: |pause | 2000 |  |
+info: Executing: |type | //form[@id=&apos;createCoverage&apos;]/div/div[3]/div/input | ${CoverageName}_Modified |
+info: Executing: |type | //form[@id=&apos;createCoverage&apos;]/div/div[5]/div/input | ${CoverageName}_Modified |
+info: Selenium 1.0 (Core, RC, etc) is no longer under active development. Please update to WebDriver ASAP
+info: Executing: |click | //form[@id=&apos;createCoverage&apos;]/div/div[6]/div/button |  |
+info: Executing: |click | link=${BenefitName} |  |
+info: Executing: |click | //form[@id=&apos;createCoverage&apos;]/div[2]/button |  |
+info: Selenium 1.0 (Core, RC, etc) is no longer under active development. Please update to WebDriver ASAP
+info: Executing: |pause | 3000 |  |
+info: Executing: |assertText | //form[@id=&apos;createCoverage&apos;]/div/div | coverage updated successfully |
+info: Executing: |clickAndWait | //form[@id=&apos;createCoverage&apos;]/div[2]/button[2] |  |
+info: Starting test /selenium-server/tests/UpdateCoveragewithDuplicateNameCode.html
+info: Executing: |click | //div[@id=&apos;cssmenu&apos;]/ul/li[2]/a |  |
+info: Executing: |clickAndWait | //div[@id=&apos;cssmenu&apos;]/ul/li[2]/ul/li[3]/a |  |
+info: Executing: |pause | 3000 |  |
+info: Executing: |sendKeys | //div[@id=&apos;coverage-table_filter&apos;]/label/input | ${CoverageName}_Modified |
+info: Executing: |verifyText | //table[@id=&apos;coverage-table&apos;]/tbody/tr/td | ${CoverageName}_Modified |
+info: Executing: |click | xpath=(//button[@type=&apos;button&apos;])[8] |  |
+info: Executing: |pause | 2000 |  |
+info: Executing: |type | //form[@id=&apos;createCoverage&apos;]/div/div[3]/div/input | ${CoverageName1} |
+info: Selenium 1.0 (Core, RC, etc) is no longer under active development. Please update to WebDriver ASAP
+info: Executing: |click | id=selectedBenefits |  |
+info: Executing: |pause | 2000 |  |
+info: Selenium 1.0 (Core, RC, etc) is no longer under active development. Please update to WebDriver ASAP
+info: Executing: |click | //form[@id=&apos;createCoverage&apos;]/div/div[6]/div/button |  |
+info: Executing: |click | link=${BenefitName} |  |
+info: Executing: |click | link=${BenefitName1} |  |
+info: Executing: |click | id=createUpdate |  |
+info: Executing: |pause | 2000 |  |
+info: Selenium 1.0 (Core, RC, etc) is no longer under active development. Please update to WebDriver ASAP
+info: Executing: |assertText | //form[@id=&apos;createCoverage&apos;]/div/div[2] | Coverage already described |
+info: Executing: |clickAndWait | //form[@id=&apos;createCoverage&apos;]/div[2]/button[2] |  |
+</pre></body></html>

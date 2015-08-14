@@ -10,6 +10,8 @@ require(["bootstrap-datepicker"], function() {
     });
 });
 
-require(["datatables"], function() {
-    $('#example').dataTable();
-});
+/* var openAssignTeam = function(teamId){
+    var assignTeam ='';
+    assignTeam=teamId;
+    window.location.href="/pla/core/team/openAssignPage?teamId="+assignTeam;
+}*/

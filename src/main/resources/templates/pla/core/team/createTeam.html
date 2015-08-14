@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/xhtml"
+      lang="en">
+<head th:include="fragments/common :: headTag">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+
+</head>
+<body>
+<div th:include="fragments/common :: bodyHeader" th:remove="tag"/>
+<script>
+   require(['moment'], function(moment) {
+   // alert(moment().format('dddd, MMMM Do YYYY, h:mm:ss a'));
+    });
+    requirejs(['main'],function(){
+    require(['/pla/js/team/createTeam.js'],function(){
+    angular.bootstrap(document, ['createTeam']);
+    });
+    });
+   requirejs(['basic'],function(){
+       requirejs(['/pla/js/team/viewTeam.js'],function(){
+       });
+   })
+</script>
+
+<div class="container ng-cloak" ng-Controller="CreateTeamController">
+
+    <div class="row">
+        <div class="col-lg-8" style="left:230px;position:absolute;">
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <div class="row">
+                        <div class="col-lg-2"><span th:text="#{createTeam}">Create Team
+                        </span></div>
+                    </div>
+                </div>
+                <div class="panel-body ng-cloak">
+                    <form  name="myForm" novalidate="true" class="css-form">
+                        <nth-alert></nth-alert>
+                        <div class="row">
+                            <div class="form-group col-md-6 required" style="margin: auto;margin-top:10px;">
+                                <label class="control-label">Region Name</label>
+                                <select class="form-control input-sm"  ng-model="createTeam.regionCode"  ng-change="getAllBranch(createTeam.regionCode)">
+                                    <option value="">----Select Region----</option>
+                                    <option th:each="region : ${regions}" th:value="${region.regionCode}" th:text="${region.regionName}"></option>
+                                </select>
+                            </div>
+                            <div class="form-group col-md-6 required" style="margin: auto;margin-top:10px;">
+                                <label class="control-label">Branch Name</label>
+                                <select class="form-control input-sm" ng-model="createTeam.branchCode"  ng-options="branch.branch_code as branch.branchName for branch in branchList | orderBy:'branchName'" ng-disabled="!createTeam.regionCode" >
+                                   <option value="">----Select Branch----</option>
+
+                                </select>
+                            </div>
+                            <div class="form-group col-md-6 required" style="margin: auto;margin-top:10px;">
+                                <label class="control-label">Team Name</label>
+                                <input type="text" name="teamName"  maxlength="50" class="form-control input-sm"
+                                       id="teamName" ng-model="createTeam.teamName" />
+                                <span hidden="true"
+                                      style="color: darkred;font-size: 10px">Please check if it is empty </span>
+                            </div>
+                            <div class="form-group col-md-6 required" style="margin: auto;margin-top:10px;">
+                                <label class="control-label">Team Code</label>
+                                <input type="text" name="teamCode"  maxlength="50" class="form-control input-sm"
+                                       id="teamCode" ng-model="createTeam.teamCode" ng-pattern="/^([a-zA-Z]{3})+(\/[0-9]{2})+(\/[a-zA-Z]{1})$/"/>
+                                <span style="color: darkred;font-size: 10px" ng-show="!myForm.teamCode.$valid">Please enter valid format 3Alpha/2Numeric/1Alpha</span>
+                            </div>
+                            <div class="form-group col-md-6 required" style="margin: auto;margin-top:10px;">
+                                <label class="control-label">Team Leader</label>
+                                <select class="form-control input-sm" id="teamLeader" ng-model="createTeam.employeeId" ng-options="teamLeader.employeeId as teamLeader.firstName + ' ' + teamLeader.lastName for teamLeader in teamLeaders | orderBy:'firstName' ">
+                                    <option value="">----Select TeamLeader----</option>
+
+                                </select>
+
+                            </div>
+                            <div class="form-group col-md-6 required "  style="margin: auto;margin-top:10px;" >
+                                <label class="control-label">Team Leader From</label>
+                                <p class="input-group">
+                                    <input type="text" name="fromDate" class="form-control input-sm"  ng-click="open($event)"  min-date="selectedDate"   datepicker-popup="dd/MM/yyyy"  ng-model="createTeam.fromDate"  datepicker-options="datePickerSettings.dateOptions" is-open="datePickerSettings.isOpened"  close-text="Close" show-button-bar="false" onkeypress="return isNumeric(event)"/>
+                                        <span class="input-group-btn">
+                                            <button type="button" class="btn btn-default btn-sm" ng-click="open($event)"><i class="glyphicon glyphicon-calendar"></i></button>
+                                    </span>
+                                </p>
+
+                            </div>
+
+                        </div>
+                        <div class="row">
+                            <div class="form-group col-lg-12" >
+                                <button type="button" class="btn btn-default" style="float:right;"  ng-disabled="(!createTeam.regionCode || !createTeam.branchCode || !createTeam.teamName || !createTeam.teamCode || !createTeam.employeeId || !createTeam.fromDate || !myForm.teamCode.$valid)"  ng-click="submitTeam()">Save</button>
+                                <a class="btn btn-default"  style="float:left;" th:href="@{/core/team/view}" >Cancel</a>
+
+                            </div>
+                        </div>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<style>
+    .form-control {
+    font-size: 12px;
+    padding:5px;
+    }
+
+</style>
+<footer class="footer" th:include="fragments/common :: footer">
+</footer>
+</body>
+</html>

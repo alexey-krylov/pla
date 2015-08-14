@@ -7,10 +7,9 @@
 package org.nthdimenzion.security.service;
 
 
-import org.nthdimenzion.security.repository.UserLoginRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.nthdimenzion.common.AppConstants;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.SavedRequestAwareAuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
 import org.springframework.stereotype.Component;
@@ -27,14 +26,17 @@ import java.io.IOException;
 @Component
 public class AuthenticationSuccessHandler extends SavedRequestAwareAuthenticationSuccessHandler implements LogoutSuccessHandler {
 
+
+    @Override
     public void onLogoutSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
-        request.getSession().invalidate();
+        request.getSession().removeAttribute(AppConstants.LOGGED_IN_USER);
         super.handle(request, response, authentication);
     }
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication auth) throws IOException, ServletException {
-        final String username = request.getParameter("username");
+        UserDetails userDetails = (UserDetails) auth.getPrincipal();
+        request.getSession().setAttribute(AppConstants.LOGGED_IN_USER, userDetails);
         super.setDefaultTargetUrl("/home");
         super.onAuthenticationSuccess(request, response, auth);
     }

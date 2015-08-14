@@ -1,0 +1,264 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head profile="http://selenium-ide.openqa.org/profiles/test-case">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link rel="selenium.base" href="http://5.9.249.195:9090/" />
+<title>CreateCoverage</title>
+</head>
+<body>
+<table cellpadding="1" cellspacing="1" border="1">
+<thead>
+<tr><td rowspan="1" colspan="3">CreateCoverage</td></tr>
+</thead><tbody>
+<!--<tr>
+	<td>open</td>
+	<td>/myportal/control/main</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>//input[@name='USERNAME']</td>
+	<td>admin</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>//input[@name='PASSWORD']</td>
+	<td>ofbiz</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>//input[@type='image']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>css=button.close</td>
+	<td></td>
+</tr>
+<!--Click Insurance
+<tr>
+	<td>clickAndWait</td>
+	<td>//li[5]/a/b</td>
+	<td></td>
+</tr>-->
+<!--Click Core-Coverage-->
+<tr>
+	<td>click</td>
+	<td>//div[@id='cssmenu']/ul/li[2]/a</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>//div[@id='cssmenu']/ul/li[2]/ul/li[3]/a</td>
+	<td></td>
+</tr>
+<tr>
+	<td>pause</td>
+	<td>2000</td>
+	<td></td>
+</tr>
+<!--Click Create Button-->
+<tr>
+	<td>click</td>
+	<td>xpath=(//button[@type='button'])[7]</td>
+	<td></td>
+</tr>
+<!--Create Coverage-->
+<tr>
+	<td>storeEval</td>
+	<td>javascript{Math.floor(Math.random()*111111)}</td>
+	<td>RandomNumber</td>
+</tr>
+<tr>
+	<td>echo</td>
+	<td>${RandomNumber}</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>//form[@id='createCoverage']/div/div[3]/div/input</td>
+	<td>SeleniumCoverage${RandomNumber}</td>
+</tr>
+<tr>
+	<td>store</td>
+	<td>SeleniumCoverage${RandomNumber}</td>
+	<td>CoverageName</td>
+</tr>
+<tr>
+	<td>storeEval</td>
+	<td>javascript{Math.floor(Math.random()*1112)}</td>
+	<td>RandomNumber</td>
+</tr>
+<tr>
+	<td>echo</td>
+	<td>${RandomNumber}</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>//form[@id='createCoverage']/div/div[4]/div/input</td>
+	<td>SeleniumCode${RandomNumber}</td>
+</tr>
+<tr>
+	<td>store</td>
+	<td>SeleniumCode${RandomNumber}</td>
+	<td>CoverageCode</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>//form[@id='createCoverage']/div/div[5]/div/input</td>
+	<td>Desc_${CoverageName}</td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>id=selectedBenefits</td>
+	<td></td>
+</tr>
+<tr>
+	<td>pause</td>
+	<td>2000</td>
+	<td></td>
+</tr>
+<!--Select BenefitsMulti-select dropdown-->
+<tr>
+	<td>click</td>
+	<td>//form[@id='createCoverage']/div/div[6]/div/button</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>link=${BenefitName}</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>link=${BenefitName1}</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>id=createUpdate</td>
+	<td></td>
+</tr>
+<tr>
+	<td>pause</td>
+	<td>2000</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertText</td>
+	<td>//form[@id='createCoverage']/div/div</td>
+	<td>Coverage created successfully</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>//form[@id='createCoverage']/div[2]/button[2]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>pause</td>
+	<td>2000</td>
+	<td></td>
+</tr>
+<!--Creating Second Coverage-->
+<!--Click Create Button-->
+<tr>
+	<td>click</td>
+	<td>xpath=(//button[@type='button'])[7]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>storeEval</td>
+	<td>javascript{Math.floor(Math.random()*111111)}</td>
+	<td>RandomNumber</td>
+</tr>
+<tr>
+	<td>echo</td>
+	<td>${RandomNumber}</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>//form[@id='createCoverage']/div/div[3]/div/input</td>
+	<td>SeleniumCoverage${RandomNumber}</td>
+</tr>
+<tr>
+	<td>store</td>
+	<td>SeleniumCoverage${RandomNumber}</td>
+	<td>CoverageName1</td>
+</tr>
+<tr>
+	<td>storeEval</td>
+	<td>javascript{Math.floor(Math.random()*1112)}</td>
+	<td>RandomNumber</td>
+</tr>
+<tr>
+	<td>echo</td>
+	<td>${RandomNumber}</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>//form[@id='createCoverage']/div/div[4]/div/input</td>
+	<td>SeleniumCode${RandomNumber}</td>
+</tr>
+<tr>
+	<td>store</td>
+	<td>SeleniumCode${RandomNumber}</td>
+	<td>CoverageCode1</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>//form[@id='createCoverage']/div/div[5]/div/input</td>
+	<td>Desc_${CoverageName1}</td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>id=selectedBenefits</td>
+	<td></td>
+</tr>
+<tr>
+	<td>pause</td>
+	<td>2000</td>
+	<td></td>
+</tr>
+<!--Select BenefitsMulti-select dropdown-->
+<tr>
+	<td>click</td>
+	<td>//form[@id='createCoverage']/div/div[6]/div/button</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>link=${BenefitName}</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>link=${BenefitName1}</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>id=createUpdate</td>
+	<td></td>
+</tr>
+<tr>
+	<td>pause</td>
+	<td>2000</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertText</td>
+	<td>//form[@id='createCoverage']/div/div</td>
+	<td>Coverage created successfully</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>//form[@id='createCoverage']/div[2]/button[2]</td>
+	<td></td>
+</tr>
+</tbody></table>
+</body>
+</html>

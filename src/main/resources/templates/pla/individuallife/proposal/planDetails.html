@@ -1,0 +1,300 @@
+<ng-form name="step3">
+    <accordion>
+        <accordion-group is-open="accordionStatus.planDetails.plan">
+            <accordion-heading>
+                Plan Details <i class="pull-right glyphicon"
+                                ng-class="{'glyphicon-chevron-down': accordionStatus.planDetails.plan, 'glyphicon-chevron-right': !accordionStatus.planDetails.plan}"></i>
+            </accordion-heading>
+            <div class="col-md-6">
+                <div class="form-group required">
+                    <label class="control-label">Plan</label>
+                    <!--<input type="text" class="form-control input-sm" name="plan" ng-blur="searchRiders()" ng-model="proposalPlanDetail.planId"/>-->
+                    {{planSelected}}
+                    <div data-angucomplete-alt="" id="searchPlan" placeholder="Search Plans" pause="500"
+                         selected-object="planSelected" disable-input="uneditable"
+                         remote-url="/pla/individuallife/proposal/searchplan/{{proposal.proposalId}}?q=" field-required="true"
+                         remote-url-data-field="" title-field="plan_name"
+                         initial-value="selectedPlan.title"
+                         minlength="3" ng-blur="printValue()"
+                         input-class="form-control form-control-small"
+                         match-class="highlight">
+                    </div>
+
+                    <!--<div>
+                        <div>
+                            You selected <span class="bold-span">{{selectedPlan.originalObject.plan_id}}</span> which has a plan code of <span class="bold-span">{{selectedPlan.originalObject.plan_name}}</span>
+                        </div>
+                    </div>-->
+                </div>
+                <div class="form-group">
+                    <label class="control-label" ng-if="selectPlanResponse">Policy Term</label>
+                    <!--<input type="number" class="form-control input-sm" name="policyTerm"  ng-disabled="mode=='new'||mode=='view'" ng-model="proposalPlanDetail.policyTerm"/>-->
+
+                    <policyterm term-type="plan.policyTermType"
+                                proposedAssured="proposedAssured"></policyterm>
+
+                </div>
+                <div class="form-group">
+                    <label class="control-label">Riders Applied For</label>
+                    <!--<input type="text" class="form-control input-sm" name="ridersAppliedFor" ng-model="proposalPlanDetail.ridersapplied"/>-->
+
+                    <select class="form-control input-sm" name="ridersAppliedFor" ng-disabled="mode=='new' || mode=='view'" ng-options="searchRider.coverageName for searchRider in searchRiders"
+                            ng-model="proposalPlanDetail1.riderDetails">
+                    </select>
+                    <!-- <button type="button" class="btn btn-default bs-select"   required="true" name="ridersAppliedFor" id="ridersAppliedFor"  ng-disabled="mode=='new' || mode=='view'"  ng-model="createCoverage.benefitIds" max-length="0" data-all-none-buttons="true"  data-html="1" data-multiple="1" placeholder="Select Riders" ng-options="searchRider.coverageName for searchRider in searchRiders | orderBy:'coverageName'"  >
+                         Select Riders <span class="caret"></span>
+                     </button>-->
+
+                </div>
+                <table class="table table-bordered">
+                    <thead>
+                    <tr>
+                        <th>
+                            Optional Cover Name
+                        </th>
+                        <th>
+                            Sum Assured *
+                        </th>
+                        <th>
+                            CoverTerm *
+                        </th>
+                        <th>
+                            WaiverOfPremium
+                        </th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr ng-repeat="searchRider in proposalPlanDetail.riderDetails">
+                        <!--<tr ng-repeat="rider in planDetailDto.riderDetails">-->
+                        <td>{{searchRider.coverageName}}</td>
+                        <!--<td>
+                            <input type="number" ng-disabled="mode=='new'||mode=='view'" contenteditable="updateFlag" ng-model="searchRider.sumAssured" value="{{searchRider.sumAssured}}" />
+                            &lt;!&ndash; <div contenteditable="true" ng-model="row.update" ng-blur="test(row)" ng-change="test(row)" >{{row.commission}}</div>&ndash;&gt;
+                        </td>-->
+
+                        <td>
+                            <coverage-sumassured></coverage-sumassured>
+                        </td>
+
+                        <!--<td>{{searchRider.coverTerm}}</td>-->
+                        <!--<td>
+                            <input type="number" ng-disabled="mode=='new'||mode=='view'" contenteditable="updateFlag"  ng-model="searchRider.coverTerm" value="{{searchRider.coverTerm}}" />
+                            &lt;!&ndash; <div contenteditable="true" ng-model="row.update" ng-blur="test(row)" ng-change="test(row)" >{{row.commission}}</div>&ndash;&gt;
+                        </td>-->
+                        <!--<td>{{searchRider.waiverOfPremium}}</td>-->
+
+                        <td>
+                            <coverage-term></coverage-term>
+                        </td>
+
+                        <td>
+                            <input type="number"  ng-disabled="mode=='new'||mode=='view'" contenteditable="updateFlag"  ng-init="shareSumTest()" ng-model="searchRider.waiverOfPremium" value="{{searchRider.waiverOfPremium}}"/>
+                            <!-- <div contenteditable="true" ng-model="row.update" ng-blur="test(row)" ng-change="test(row)" >{{row.commission}}</div>-->
+                        </td>
+                    </tr>
+                    </tbody>
+
+                </table>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label class="control-label" ng-if="selectPlanResponse">Sum Assured</label>
+                    <!-- <input type="number" class="form-control input-sm" name="sumAssured"  ng-disabled="mode=='new'||mode=='view'" ng-model="proposalPlanDetail.sumAssured"/>-->
+                    <sumassured ng-model="proposalPlanDetail.sumAssured"></sumassured>
+                </div>
+                <div class="form-group">
+                    <label class="control-label" ng-if="selectPlanResponse">Premium Payment Term</label>
+                    <!--<input type="number" class="form-control input-sm" name="plan"  ng-disabled="mode=='new'||mode=='view'" ng-model="proposalPlanDetail.premiumPaymentTerm"/>-->
+                    <premiumterm plan="plan" proposedAssured="proposedAssured"></premiumterm>
+                </div>
+            </div>
+        </accordion-group>
+
+
+        <accordion-group is-open="accordionStatus.planDetails.beneficiary">
+            <accordion-heading>
+                Beneficiary Details <i class="pull-right glyphicon"
+                                       ng-class="{'glyphicon-chevron-down': accordionStatus.planDetails.beneficiary, 'glyphicon-chevron-right': !accordionStatus.planDetails.beneficiary}"></i>
+            </accordion-heading>
+            <div class="row" style="margin: 0px">
+                <div class="col-md-12">
+                    <button type="button" class="btn btn-default btn-xs pull-right"
+                            data-toggle="modal" data-target="#beneficialModal"
+                            style="margin-bottom: 5px"><strong>Add Beneficiary</strong></button>
+                    <table class="table table-bordered">
+                        <thead>
+                        <tr>
+                            <th>
+                                Beneficiary Name
+                            </th>
+                            <th>
+                                Relationship To Proposed Assured
+                            </th>
+                            <th>
+                                Share %
+                            </th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr ng-repeat="beneficiary in beneficiariesList">
+                            <td>{{beneficiary.firstName +' '+ beneficiary.surname}}</td>
+                            <td>{{beneficiary.relationshipId}}</td>
+                            <!--<td>{{beneficiary.share}}</td>-->
+                            <td>
+                                <input type="number" ng-disabled="mode=='new'||mode=='view'" contenteditable="updateFlag" ng-init="shareSumTest()" ng-model="beneficiary.share"  ng-blur="shareSumTest()" value="{{beneficiary.share}}" />
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </accordion-group>
+    </accordion>
+    <div class="row">
+        <div class="col-sm-6">
+            <button type="button" class="btn btn-default btn-sm">Cancel</button>
+        </div>
+        <div class="col-sm-6">
+            {{commisionStatus}}
+            <button type="button" class="btn btn-default btn-sm" style="float: right" ng-disabled="commisionStatus" ng-hide="mode=='new'||mode=='view'" ng-click="savePlanDetail()">Save</button>
+        </div>
+    </div>
+
+    <script id="plan-policyterm.tpl" type="text/ng-template">
+        <div ng-switch="plan.policyTermType">
+            <div ng-switch-when="SPECIFIED_VALUES">
+                <select class="form-control input-sm" view-enabled="" ng-model="proposalPlanDetail.policyTerm" name="policyTerm"
+                        ng-options="value.text as value.text for value in policyTerms()" ng-required="true"></select>
+            </div>
+            <div ng-switch-when="MATURITY_AGE_DEPENDENT">
+                <select class="form-control input-sm" view-enabled="" ng-model="proposalPlanDetail.policyTerm" name="policyTerm"
+                         ng-options="value.text as value.text for value in policyTerms()" ng-required="true"></select>
+            </div>
+        </div>
+    </script>
+
+    <script id="coverage-sumassured.tpl" type="text/ng-template">
+        <div ng-switch="getSumAssuredType(searchRider)">
+            <div ng-switch-when="SPECIFIED_VALUES">
+                <select view-enabled="" class="form-control input-sm" ng-model="searchRider.sumAssured" name="sumAssured"
+                        ng-options="value.text as value.text for value in coverage.coverageSumAssured.sumAssuredValue"
+                        ng-required="true"></select>
+            </div>
+
+            <div ng-switch-when="RANGE">
+                <input type="number" view-enabled="" class="form-control input-sm"
+                       min="{{coverage.sumAssured.minSumInsured}}"
+                       name="sumAssured"
+                       max="{{coverage.sumAssured.maxSumInsured}}" ng-model="searchRider.sumAssured" ng-required="true"/>
+                <div class="error" ng-messages="step3.sumAssured.$error">
+                    <small ng-message="min">Sum Assured cannot be less then {{coverage.sumAssured.minSumInsured}}.</small>
+                    <small ng-message="max">Sum Assured cannot be more than {{coverage.sumAssured.maxSumInsured}}.</small>
+                </div>
+            </div>
+            <div ng-switch-when="DERIVED">
+                <input type="number" view-enabled="" class="form-control input-sm" min="0"
+                       max="{{coverage.sumAssured.maxLimit}}"
+                       name="sumAssured"
+                       ng-model="searchRider.sumAssured" ng-required="true"/>
+
+                <div class="error" ng-messages="step3.sumAssured.$error" ng-if="step3.sumAssured.$dirty">
+                    <small ng-message="max">Sum Assured cannot be greater than {{coverage.sumAssured.incomeMultiplier}}.
+                    </small>
+                </div>
+            </div>
+            <div ng-switch-when="INCOME_MULTIPLIER">
+                <input type="number" view-enabled="" class="form-control input-sm" min="0"
+                       max="{{coverage.sumAssured.incomeMultiplier}}"
+                       name="sumAssured"
+                       ng-model="searchRider.sumAssured" ng-required="true"/>
+
+                <div class="error" ng-messages="step3.sumAssured.$error" ng-if="step3.sumAssured.$dirty">
+                    <small ng-message="max">Sum Assured cannot be greater than {{coverage.sumAssured.incomeMultiplier}}.
+                    </small>
+                </div>
+            </div>
+        </div>
+    </script>
+
+    <script id="plan-coverage.tpl" type="text/ng-template">
+        <div ng-switch="getCoverageTermType(searchRider)">
+            {{searchRider.coverTerm}}
+            <div ng-switch-when="SPECIFIED_VALUES">
+                <select class="form-control input-sm" view-enabled="" ng-model="searchRider.coverTerm" name="policyTerm"
+                        ng-options="value.text as value.text for value in policyTerms" ng-required="true"></select>
+            </div>
+            <div ng-switch-when="AGE_DEPENDENT">
+                <select class="form-control input-sm" view-enabled="" ng-model="searchRider.coverTerm" name="policyTerm"
+                        ng-options="value.text as value.text for value in policyTerms" ng-required="true"></select>
+            </div>
+
+           <div ng-switch-when="POLICY_TERM" >
+               <input type="number" view-enabled="" class="form-control input-sm" min="0"
+                      name="sumAssured"   ng-model="searchRider.coverTerm" ng-required="true"/>
+                <!--<select class="form-control input-sm" view-enabled="" ng-model="searchRider.coverTerm" name="policyTerm"
+                        ng-options="value.text as value.text for value in policyTerms" ng-required="true"></select>-->
+            </div>
+
+        </div>
+    </script>
+
+
+    <script id="plan-sumassured.tpl" type="text/ng-template">
+        <div ng-switch="plan.sumAssured.sumAssuredType">
+            <div ng-switch-when="SPECIFIED_VALUES">
+                <select class="form-control input-sm" ng-model="proposalPlanDetail.sumAssured" name="sumAssured"
+                        ng-options="value.text as value.text for value in plan.sumAssured.sumAssuredValue"
+                        ng-required="true"></select>
+            </div>
+            <div ng-switch-when="RANGE">
+                <input type="number" view-enabled="" class="form-control input-sm" min="{{plan.sumAssured.minSumInsured}}"
+                       name="sumAssured" validate-sumassured=""
+                       max="{{plan.sumAssured.maxSumInsured}}" ng-model="proposalPlanDetail.sumAssured" ng-required="true"/>
+                <div class="error" ng-messages="step3.sumAssured.$error" ng-if="step3.sumAssured.$dirty">
+                    <small ng-message="min">Sum Assured cannot be less then {{plan.sumAssured.minSumInsured}}.</small>
+                    <small ng-message="max">Sum Assured cannot be more than {{plan.sumAssured.maxSumInsured}}.</small>
+                    <small ng-message="invalidMultiple">Invalid Multiples.</small>
+                </div>
+            </div>
+            <div ng-switch-when="INCOME_MULTIPLIER">
+                <input type="number" view-enabled="" class="form-control input-sm" min="0"
+                       max="{{plan.sumAssured.incomeMultiplier}}"
+                       name="sumAssured"
+                       ng-model="proposalPlanDetail.sumAssured" ng-required="true"/>
+
+                <div class="error" ng-messages="step3.sumAssured.$error" ng-if="step3.sumAssured.$dirty">
+                    <small ng-message="max">Sum Assured cannot be greater than {{plan.sumAssured.incomeMultiplier}}.
+                    </small>
+                </div>
+            </div>
+        </div>
+    </script>
+
+    <script id="plan-premiumterm.tpl" type="text/ng-template">
+        <div ng-switch="plan.premiumTermType">
+            <div ng-switch-when="SPECIFIED_VALUES">
+                <select view-enabled="" class="form-control input-sm" ng-model="proposalPlanDetail.premiumPaymentTerm"
+                        name="premiumTerm"
+                        ng-options="value.text as value.text for value in premiumTerms() | filter:lessThanEqualTo('text',proposalPlanDetail.policyTerm)"
+                        ng-required="true"></select>
+            </div>
+            <div ng-switch-when="SPECIFIED_AGES">
+                <select view-enabled="" class="form-control input-sm" ng-model="proposalPlanDetail.premiumPaymentTerm"
+                        name="premiumTerm"
+                        ng-options="value.text as value.text for value in premiumTerms() | filter:lessThanEqualTo('text',proposalPlanDetail.policyTerm)"
+                        ng-required="true"></select>
+            </div>
+            <div ng-switch-when="REGULAR">
+                <input type="number" class="form-control input-sm" readonly="true" value=""
+                       ng-model="proposalPlanDetail.premiumPaymentTerm"
+                       name="premiumTerm"/>
+            </div>
+            <div ng-switch-when="SINGLE">
+                <input view-enabled="" type="number" class="form-control input-sm" ng-required="true"
+                       ng-model="proposalPlanDetail.premiumPaymentTerm"
+                       name="premiumTerm"/>
+            </div>
+        </div>
+    </script>
+</ng-form>
+

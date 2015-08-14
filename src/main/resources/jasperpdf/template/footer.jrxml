@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="footer" pageWidth="842" pageHeight="595" orientation="Landscape" whenNoDataType="AllSectionsNoDetail" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="61837e5c-2516-4bdc-bfa1-eca55665bc10">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<columnFooter>
+		<band height="34">
+			<frame>
+				<reportElement mode="Opaque" x="-21" y="0" width="808" height="34" forecolor="#FFFFFF" backcolor="#003399" uuid="96059769-100b-46e9-b930-4f0fc1367e5a"/>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Double"/>
+					<leftPen lineWidth="1.0" lineStyle="Double"/>
+					<bottomPen lineWidth="1.0" lineStyle="Double"/>
+					<rightPen lineWidth="1.0" lineStyle="Double"/>
+				</box>
+				<staticText>
+					<reportElement mode="Opaque" x="221" y="8" width="366" height="24" forecolor="#FFFFFF" backcolor="#003399" uuid="ba2f1eb9-cfca-4b1e-a830-f22a61a87045"/>
+					<textElement textAlignment="Center" verticalAlignment="Top">
+						<font fontName="Arial" size="14" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Professional Life Assurance Limited]]></text>
+				</staticText>
+			</frame>
+		</band>
+	</columnFooter>
+	<pageFooter>
+		<band height="90">
+			<frame>
+				<reportElement mode="Transparent" x="2" y="0" width="800" height="90" forecolor="#000000" uuid="8c334bc8-c8d7-49ba-ac25-fafaa1cbd1e4"/>
+				<staticText>
+					<reportElement x="24" y="10" width="234" height="54" forecolor="#0000CC" uuid="c4f0d631-7bc7-417a-817b-5e45605e4317"/>
+					<textElement>
+						<font fontName="Arial" size="8" isBold="true"/>
+					</textElement>
+					<text><![CDATA[  Head Office
+  Finsbury Park, Cairo Road,
+  North End ,P.O.Box 31357,Lusaka-Zambia
+  Tel : 021-1-222233,366704,Fax: 021-1-220128
+  email : ho@proflife.co.zm.Website : www.proflife.co.zm]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="350" y="12" width="127" height="52" forecolor="#0000CC" uuid="76a67ea6-5a45-4b0f-ad28-fdad1368b3ad"/>
+					<textElement>
+						<font fontName="Arial" size="8" isBold="true"/>
+					</textElement>
+					<text><![CDATA[  KITWE Branch
+  17,Kanyanta Road
+  P.O.Box 20564
+  Kitwe - Zambia
+  Tel : 021-2-224270,225611]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="564" y="12" width="212" height="52" forecolor="#3300CC" uuid="82d4caa4-425c-4cda-9036-ac7eba50f3f6"/>
+					<textElement>
+						<font fontName="Arial" size="8" isBold="true"/>
+					</textElement>
+					<text><![CDATA[  Ndola Branch
+  1stFloor, Finance House,President Avenue,
+  P.O.Box:71177,Ndola,Zambia
+  Tel - 021-2-612466
+  Fax-021-2-612466]]></text>
+				</staticText>
+			</frame>
+		</band>
+	</pageFooter>
+</jasperReport>

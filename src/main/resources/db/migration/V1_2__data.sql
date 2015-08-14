@@ -2,7 +2,7 @@ USE PLA;
 INSERT INTO geo(GEO_ID,PARENT_GEO_ID,GEO_TYPE,GEO_DESCRIPTION)
 VALUES("PR-LUS",null,"PROVINCE","Lusaka"),("PR-COP",null,"PROVINCE","Copperbelt"),("PR-LUA",null,"PROVINCE","Luapula"),
 ("PR-SOU",null,"PROVINCE","Southern"),("PR-NOR",null,"PROVINCE","Northern"),("PR-CEN",null,"PROVINCE","Central"),
-("PR-EAS",null,"PROVINCE","Eastern"),("PR-WES",null,"PROVINCE","Western"),("PR-NORW",null,"PROVINCE","North Western"),
+("PR-EAS",null,"PROVINCE","Eastern"),("PR-WES",null,"PROVINCE","Western"),("PR-NORW",null,"PROVINCE","North Western"),("PR-MUCHI",null,"PROVINCE","Muchinga"),
 ("CI-LUS","PR-LUS","CITY","Lusaka"),("CI-CHI","PR-LUS","CITY","Chilanga"),("CI-KAF","PR-LUS","CITY","Kafue"),("CI-NAM","PR-LUS","CITY","Namalundu"),("CI-CHIS","PR-LUS","CITY","Chisamba"),("CI-CHO","PR-LUS","CITY","Chongwe"),("CI-NAMP","PR-LUS","CITY","Nampundwe"),
 ("CI-MUM","PR-LUS","CITY","Mumbwa"),("CI-LUA","PR-LUS","CITY","Luangwa"),("CI-SIA","PR-LUS","CITY","Siavonga"),("CI-CHIR","PR-LUS","CITY","Chirundu"),
 ("CI-KIT","PR-COP","CITY","Kitwe"),("CI-CHIN","PR-COP","CITY","Chingola"),("CI-CHIL","PR-COP","CITY","Chililabombwe"),("CI-MUF","PR-COP","CITY","Mufulira"),("CI-LUAN","PR-COP","CITY","Luanshya"),("CI-NDO","PR-COP","CITY","Ndola"),("CI-ITI","PR-COP","CITY","Itimpi"),
@@ -18,9 +18,12 @@ VALUES("PR-LUS",null,"PROVINCE","Lusaka"),("PR-COP",null,"PROVINCE","Copperbelt"
 ("CI-SIND","PR-EAS","CITY","Sinda"),("CI-LUN","PR-EAS","CITY","Lundazi"),("CI-CHAM","PR-EAS","CITY","Chama"),("CI-PET","PR-EAS","CITY","Petauke"),("CI-NYI","PR-EAS","CITY","Nyimba"),
 ("CI-MONG","PR-WES","CITY","Mongu"),("CI-SEN","PR-WES","CITY","Senanga"),("CI-KALA","PR-WES","CITY","Kalabo"),("CI-LUK","PR-WES","CITY","Lukulu"),("CI-KAO","PR-WES","CITY","Kaoma"),
 ("CI-MUFU","PR-NORW","CITY","Mufumbwe"),("CI-SOL","PR-NORW","CITY","Solwezi"),("CI-KASE","PR-NORW","CITY","Kasempa"),("CI-MWI","PR-NORW","CITY","Mwinilunga"),("CI-ZAM","PR-NORW","CITY","Zambezi"),("CI-KABO","PR-NORW","CITY","Kabompo"),
-("CI-LUM","PR-NORW","CITY","Lumwana"),("CI-CAI","PR-LUS","CITY","Cairo Road");
+("CI-LUM","PR-NORW","CITY","Lumwana"),("CI-CAI","PR-LUS","CITY","Cairo Road"),("CI-MPIK","PR-MUCHI","CITY","Mpika"),("CI-CHINSA","PR-MUCHI","CITY","Chinsali"),
+("CI-NAKO","PR-MUCHI","CITY","Nakonde"),("CI-ISOK","PR-MUCHI","CITY","Isoka"),
+("CI-MAF","PR-MUCHI","CITY","Mafinga"),("CI-SHI","PR-MUCHI","CITY","Shiwangandu"),
+("CI-CHAMA","PR-MUCHI","CITY","Chama");
 
-INSERT INTO bank_name(BANK_CODE,BANK_NAME) 
+INSERT INTO bank_name(BANK_CODE,BANK_NAME)
 VALUES("ABB","AB BANK ZAMBIA LTD."),
 ("ACC","ACCESS BANK ZAMBIA LIMITED"),
 ("AFR","AFRICAN BANKING CORPORATION ZAMBIA"),
@@ -526,3 +529,185 @@ VALUES ("KON","Konkola Copper Mine","Private Clinic",null,"CI-CHIL","PR-COP",nul
 ("VIK","Vikay Pharmacy Ltd","Private Pharmacist",null,"CI-LUS","PR-LUS",null,null,null),
 ("LUSC","Lusaka Chemist","Private Pharmacist",null,"CI-LUS","PR-LUS",null,null,null),
 ("NOR","Northmead Chemist","Private Pharmacist",null,"CI-LUS","PR-LUS",null,null,null);
+
+insert  into `entity_sequence`(`sequence_id`,`sequence_name`,`sequence_number`,`sequence_prefix`) values (1,'com.pla.core.domain.model.agent.Agent',1000,' ');
+insert  into `entity_sequence`(`sequence_id`,`sequence_name`,`sequence_number`,`sequence_prefix`) values (2,'com.pla.grouplife.quotation.domain.model.GroupLifeQuotation',1000000,' ');
+INSERT INTO `entity_sequence`(`sequence_id`,`sequence_name`,`sequence_number`,`sequence_prefix`) values ('3','com.pla.core.domain.model.plan.Plan',1000,' ');
+insert  into `entity_sequence`(`sequence_id`,`sequence_name`,`sequence_number`,`sequence_prefix`) values (4,'com.pla.grouphealth.quotation.domain.model.GroupHealthQuotation',2000000,' ');
+insert  into `entity_sequence`(`sequence_id`,`sequence_name`,`sequence_number`,`sequence_prefix`) values (5,'com.pla.individuallife.quotation.domain.model.ILQuotation',3000000,' ');
+insert  into `entity_sequence`(`sequence_id`,`sequence_name`,`sequence_number`,`sequence_prefix`) values (6,'com.pla.individuallife.proposal.domain.model.ILProposalAggregate',0,' ');
+insert  into `entity_sequence`(`sequence_id`,`sequence_name`,`sequence_number`,`sequence_prefix`) values (7,'com.pla.core.domain.model.Benefit',1000,' ');
+insert  into `entity_sequence`(`sequence_id`,`sequence_name`,`sequence_number`,`sequence_prefix`) values (8,'com.pla.core.domain.model.Coverage',1000,' ');
+insert  into `entity_sequence`(`sequence_id`,`sequence_name`,`sequence_number`,`sequence_prefix`) values (9,'com.pla.grouplife.proposal.domain.model.GroupLifeProposal',4000000,' ');
+insert  into `entity_sequence`(`sequence_id`,`sequence_name`,`sequence_number`,`sequence_prefix`) values (10,'com.pla.grouphealth.proposal.domain.model.GroupHealthProposal',5000000,' ');
+insert  into `entity_sequence`(`sequence_id`,`sequence_name`,`sequence_number`,`sequence_prefix`) values (11,'com.pla.grouphealth.policy.domain.model.GroupHealthPolicy',10000000,' ');
+insert  into `entity_sequence`(`sequence_id`,`sequence_name`,`sequence_number`,`sequence_prefix`) values (12,'com.pla.grouplife.policy.domain.model.GroupLifePolicy',20000000,' ');
+insert  into `entity_sequence`(`sequence_id`,`sequence_name`,`sequence_number`,`sequence_prefix`) values (13,'com.pla.grouplife.sharedresource.model.vo.Insured',100000,' ');
+insert  into `entity_sequence`(`sequence_id`,`sequence_name`,`sequence_number`,`sequence_prefix`) values (14,'com.pla.grouphealth.sharedresource.model.vo.GHInsured',100000,' ');
+insert  into `entity_sequence`(`sequence_id`,`sequence_name`,`sequence_number`,`sequence_prefix`) values (15,'com.pla.individuallife.policy.domain.model.IndividualLifePolicy',10000000,' ');
+
+
+insert into `channel_type` (`CHANNEL_CODE`, `CHANNEL_DESCRIPTION`) values('BROKER','Broker');
+insert into `channel_type` (`CHANNEL_CODE`, `CHANNEL_DESCRIPTION`) values('DIRECT','Direct');
+insert into `channel_type` (`CHANNEL_CODE`, `CHANNEL_DESCRIPTION`) values('PERSONAL','Personel Selling');
+
+insert into `region` (`region_code`, `region_name`, `regional_manager`) values('NORTH','North',NULL);
+insert into `region` (`region_code`, `region_name`, `regional_manager`) values('SOUTH','South',NULL);
+
+
+insert into `branch` (`branch_code`, `current_branch_bde`, `current_branch_manager`, `branch_name`) values('N03',NULL,NULL,'Chingola');
+insert into `branch` (`branch_code`, `current_branch_bde`, `current_branch_manager`, `branch_name`) values('S02',NULL,NULL,'Chipata');
+insert into `branch` (`branch_code`, `current_branch_bde`, `current_branch_manager`, `branch_name`) values('S05',NULL,NULL,'Choma');
+insert into `branch` (`branch_code`, `current_branch_bde`, `current_branch_manager`, `branch_name`) values('S03',NULL,NULL,'Kabwe');
+insert into `branch` (`branch_code`, `current_branch_bde`, `current_branch_manager`, `branch_name`) values('N05',NULL,NULL,'Kasama');
+insert into `branch` (`branch_code`, `current_branch_bde`, `current_branch_manager`, `branch_name`) values('N01',NULL,NULL,'Kitwe');
+insert into `branch` (`branch_code`, `current_branch_bde`, `current_branch_manager`, `branch_name`) values('S04',NULL,NULL,'Livingstone');
+insert into `branch` (`branch_code`, `current_branch_bde`, `current_branch_manager`, `branch_name`) values('S01',NULL,NULL,'Lusaka');
+insert into `branch` (`branch_code`, `current_branch_bde`, `current_branch_manager`, `branch_name`) values('S06',NULL,NULL,'Mazabuka');
+insert into `branch` (`branch_code`, `current_branch_bde`, `current_branch_manager`, `branch_name`) values('N02',NULL,NULL,'Ndola');
+insert into `branch` (`branch_code`, `current_branch_bde`, `current_branch_manager`, `branch_name`) values('N04',NULL,NULL,'Solwezi');
+INSERT INTO `branch` (`branch_code`, `current_branch_bde`, `current_branch_manager`, `branch_name`) VALUES ('S07',NULL,NULL,'Mongu');
+INSERT INTO `branch` (`branch_code`, `current_branch_bde`, `current_branch_manager`, `branch_name`) VALUES ('N06',NULL,NULL,'Mansa');;
+
+insert into `region_branch` (`region_code`, `branch_code`) values('North','N03');
+insert into `region_branch` (`region_code`, `branch_code`) values('South','S02');
+insert into `region_branch` (`region_code`, `branch_code`) values('South','S05');
+insert into `region_branch` (`region_code`, `branch_code`) values('South','S03');
+insert into `region_branch` (`region_code`, `branch_code`) values('North','N05');
+insert into `region_branch` (`region_code`, `branch_code`) values('North','N01');
+insert into `region_branch` (`region_code`, `branch_code`) values('South','S04');
+insert into `region_branch` (`region_code`, `branch_code`) values('South','S01');
+insert into `region_branch` (`region_code`, `branch_code`) values('South','S06');
+insert into `region_branch` (`region_code`, `branch_code`) values('North','N02');
+insert into `region_branch` (`region_code`, `branch_code`) values('North','N04');
+
+insert into `region_branch` (`region_code`, `branch_code`) values ('South','S07');
+insert into `region_branch` (`region_code`, `branch_code`) values ('North','N06');
+
+
+/*Data for the table `occupation_class` */
+
+insert  into `occupation_class`(`code`,`description`)
+values ('A','Accountants'),('A','Actuaries'),('A','Advocates'),('A','Architects'),('A','Attorneys'),
+('A','Bankers, Bank Clerks'),('A','Broker (shares)'),
+('A','Business managers and Proprietors (admin only)'),
+('A','Business secretaries'),('A','Buyers (Other)'),
+('A','Chemist (Pharmaceutical and analytical)'),('A','Clergymen'),
+('A','Clerks (no manual work)'),('A','Company Directors (admin. or executive Duties only)'),
+('A','Company Directors (other Duties as well) RATAO'),('A','Computer Programmers & Analysts'),
+('A','Dentists'),('A','Draughtsmen'),('A','Engineers (Professionally qualified)'),
+('A','Factory Managers (admin only)'),('A','Geologists'),('A','Housewives'),
+('A','Journalists (other)'),('A','Lecturers'),('A','Librarians'),('A','Medical Practitioners'),
+('A','Opticians'),('A','Quantity surveyors'),('A','Radio announcers'),('A','Radiologists'),
+('A','Raliway Clerical'),('A','Surface Workers (Clerical only)'),('A','Surgeons'),
+('A','Teachers (Professionally qualified)'),('A','Travel Agents'),('A','Veterinary surgeons'),
+('B','Advertising agents'),('B','Auctioneers'),('B','Bakers'),('B','Barbers'),
+('B','Brewery Employees (administrative)'),('B','Building contractors (supervising only)'),
+('B','Butcher (supervising only)'),('B','Buyers (industrial)'),('B','Chefs'),('B','Chemist (Others)'),
+('B','Cinema projectionists'),('B','Clerks of works'),('B','Commercial Artists'),
+('B','Computer Operators & Technicians'),('B','Customs officers'),('B','Dental mechanics'),
+('B','Diamond cutters or polishers'),('B','Engineers (other) IC Reporters'),('B','Engravers'),
+('B','Estate agents'),('B','Florists'),('B','Foremen (supervisory only)'),('B','Foresters'),
+('B','General Dealers'),('B','Hairdressers'),('B','Horticulturists and nurserymen'),
+('B','Hoteliers (never serving in bar)'),('B','Inspectors (health, land meter, stock)'),
+('B','Instrument technicians'),('B','Interior Decorators'),('B','Journalists (reporters)'),
+('B','Laboratory Assistants'),('B','Land Surveyors'),('B','Lithographers'),('B','Master builders (supervising)'),
+('B','Medical Technologists'),('B','Nurses'),('B','Officers (Defence forces )'),('B','Officers (not naval)'),
+('B','Optical mechanics'),('B','Painters (houses & industrial other Shop assistants'),('B','Photographers (studio)'),
+('B','Physicists'),('B','Pilots (scheduled airlines)'),('B','Representatives (manufacturers, insurance Jewellers )'),
+('B','Salesmen (not travelling, not motor salesmen)'),('B','Sign writers'),('B','Station '),('B','Store men'),
+('B','Tailors'),('B','Telephonists'),('B','Undertakers'),('B','Watchmakers or repairers'),('C','Ambulance Drivers'),
+('C','Bus Conductors'),('C','Bus Drivers'),('C','Cabinet makers'),('C','Chauffeurs'),
+('C','Commercial Travellers (on liquor)'),('C','Compositors'),('C','Electrician (other)'),
+('C','Foreman (no shunting)'),('C','Gunsmith s'),('C','Hoteliers (other)'),('C','Joiners'),
+('C','Linotype operators'),('C','Mechanics (motor & tractor)'),('C','Metallurgists'),('C','Motor salesmen'),
+('C','Other aircrew (scheduled airlines)'),('C','Photographers (other except aerial)'),('C','Postmen'),
+('C','Printers (other)'),('C','Raliway Signalmen'),('C','Raliway Ticket examiners'),('C','Salesmen (other)'),
+('C','Tanners'),('C','Telephone Technicians'),('C','Television Technicians'),('C','than spray painters)'),
+('C','Tilers (other)'),('C','Upholsters'),('D','Barmen'),('D','Blacksmiths'),('D','Block men'),('D','Boiler Attendants'),
+('D','Boilermakers'),('D','Bricklayer'),('D','Butcher (Other)'),('D','Carpenters'),('D','Crane Drivers'),
+('D','Electricians (working at heights and or high voltages)'),('D','Explosive workers'),('D','Fitters and turners'),
+('D','Lorry Drivers'),('D','Other crew (not Naval)'),('D','Panel beaters'),('D','Pilots and Aircrew (Defence forces )'),
+('D','Plant operators'),('D','Plumbers'),('D','Police(ranks lower than section officers)'),('D','Printers (operators)'),
+('D','Raliway Stokers'),('D','Sheet Metal Workers'),('D','Smelters'),('D','Station '),('D','Stonemasons'),('D','Taxi '),
+('D','Tilers (roof)'),('D','Tool and Die Makers'),('D','Traffic Police'),('D','Train Drivers'),
+('D','Underground workers (light occupations- Mines)'),('D','Wagon & Carriage examiners'),('D','Workers on open '),
+('E','Blasters'),('E','Bulldozers Drivers'),('E','Divers (Qualified professionals)'),('E','Firemen (fire fighting)'),
+('E','Raliway Shunters'),('E','Spray painters'),('E','Trawlers (all crew members- Not Naval)'),
+('E','Underground workers (heavy occupations- Mines)'),('IC','Brewery Employees');
+
+
+/*Data for the table `document` */
+
+INSERT INTO `document` (`document_code`, `document_name`, `is_provided`)
+VALUES('ACTIVE_AT_WORK_DECLARATION_FORM','Active At Work Declaration Form','No'),
+('ADDRESS_PROOF','Address Proof','No'),
+('ANY_CLINICAL_ABSTRACTS_RECORDS_IF_AVAILABLE','Any clinical abstracts/records if available','No'),
+('BROUGHT_IN_DEAD_(BID)_CERTIFICATE','Brought in dead (BID) certificate','No'),
+('BURIAL_CERTIFICATE','Burial Certificate','No'),
+('CERTIFICATE_OF_REGISTRATION_OF_DEATH','Certificate of Registration of Death','No'),
+('CERTIFIED_COPY_OF_NATIONAL_REGISTRATION_CARD/ID','Certified copy of National Registration Card/ID','No'),
+('CONSENT_LETTER','Consent Letter','No'),
+('CORONERS_REPORT','Coroner\'s Report','No'),
+('DEATH_CERTIFICATE','Death Certificate','No'),
+('ELECTROCARDIOGRAM_EFFORT_(ECG)','Electrocardiogram,  Effort (ECG)','Yes'),
+('ELECTROCARDIOGRAM_RESTING_(ECG)','Electrocardiogram, Resting (ECG)','Yes'),
+('FULLY_FILLED_MATURITY_CLAIM_FORM','Fully filled Maturity Claim Form','No'),
+('FULLY_FILLED_SURRENDER_CLAIM_FORM','Fully filled Surrender Claim Form','No'),
+('FULLY_FILLED__CLAIM_FORM','Fully filled  Claim Form','No'),
+('FULL_BLOOD_COUNT','Full Blood Count','Yes'),
+('GLYCOSYLATED_HEMOGLOBIN_(HBA1C)','Glycosylated Hemoglobin (HBA1C)','Yes'),
+('HIV_TEST','HIV Test','Yes'),
+('ID_PROOF','ID Proof','No'),
+('LETTER_FROM_THE_VILLAGE_CHIEF','Letter from the Village Chief','No'),
+('LIVER_FUNCTION_TEST(WHICH_INCLUDES_GGT_AST_AND_ALT)','Liver Function Test(which includes GGT, AST and ALT)','Yes'),
+('MEDICAL_CERTIFICATE_OF_CAUSE_OF_DEATH','Medical Certificate of cause of death','No'),
+('MEDICAL_REPORT_SIGNED_BY_DOCTOR_FROM_REGISTERED_HOSPITALS_OR_CLINICS_UNDER_THE_MINISTRY_OF_HEALTH_ONLY','Medical Report signed by Doctor from registered hospitals or clinics under the Ministry of Health only','No'),
+('ORIGINAL_POLICY_DOCUMENT_&_SCHEDULE','Original Policy Document & Schedule','No'),
+('POLICE_REPORT_(FOR_ACCIDENT_CASES)','Police Report (for accident cases)','No'),
+('PROSTATE_SPECIFIC_ANTIGEN_(PSA)','Prostate Specific Antigen (PSA)','Yes'),
+('RANDOM_BLOOD_SERUM_CHOLESTEROL_(RBSC)','Random Blood Serum Cholesterol (RBSC)','Yes'),
+('RANDOM_GLUCOSE_TEST_(RBS)','Random Glucose Test (RBS)','Yes'),
+('SIGNED_AGREEMENT','Signed Agreement','No'),
+('SIGNED_PROPOSAL_FORM','Signed Proposal Form','No'),
+('UREA_AND_CREATININE_TEST','Urea and Creatinine Test','Yes');
+
+INSERT INTO `endorsement_type`(`description`,`category`) VALUES ('Correction of Life Assured Name','INDIVIDUAL');
+INSERT INTO `endorsement_type`(`description`,`category`) VALUES ('Correction of Policyholder Name','INDIVIDUAL');
+INSERT INTO `endorsement_type`(`description`,`category`) VALUES ('Correction Life Assured - Gender','INDIVIDUAL');
+INSERT INTO `endorsement_type`(`description`,`category`) VALUES ('Correction Policyholder - Gender','INDIVIDUAL');
+INSERT INTO `endorsement_type`(`description`,`category`) VALUES ('Change of Contact Details- Life Assured','INDIVIDUAL');
+INSERT INTO `endorsement_type`(`description`,`category`) VALUES ('Change of Contact Details-Policyholder','INDIVIDUAL');
+INSERT INTO `endorsement_type`(`description`,`category`) VALUES ('Change/Add Beneficiary','INDIVIDUAL');
+INSERT INTO `endorsement_type`(`description`,`category`) VALUES ('Change method of payment','INDIVIDUAL');
+INSERT INTO `endorsement_type`(`description`,`category`) VALUES ('Change Agent','INDIVIDUAL');
+INSERT INTO `endorsement_type`(`description`,`category`) VALUES ('Change Payer','INDIVIDUAL');
+INSERT INTO `endorsement_type`(`description`,`category`) VALUES ('Change Sum Assured ','INDIVIDUAL');
+INSERT INTO `endorsement_type`(`description`,`category`) VALUES ('Change Life Assured Date of Birth','INDIVIDUAL');
+INSERT INTO `endorsement_type`(`description`,`category`) VALUES ('Change Policyholder Date of Birth','INDIVIDUAL');
+INSERT INTO `endorsement_type`(`description`,`category`) VALUES ('Correction of NRC - Life Assured','INDIVIDUAL');
+INSERT INTO `endorsement_type`(`description`,`category`) VALUES ('Correction of NRC-Policyholder','INDIVIDUAL');
+INSERT INTO `endorsement_type`(`description`,`category`) VALUES ('Premium Adjustment','INDIVIDUAL');
+
+INSERT INTO `endorsement_type`(`description`,`category`) VALUES ('Correction of Name-Policyholder','GROUP');
+INSERT INTO `endorsement_type`(`description`,`category`) VALUES ('Correction Of Name - Life Assured','GROUP');
+INSERT INTO `endorsement_type`(`description`,`category`) VALUES ('Change of Address','GROUP');
+INSERT INTO `endorsement_type`(`description`,`category`) VALUES ('Change Sum Assured ','GROUP');
+INSERT INTO `endorsement_type`(`description`,`category`) VALUES ('Change Life Assured Date of Birth','GROUP');
+INSERT INTO `endorsement_type`(`description`,`category`) VALUES ('Correction Life Assured - NRC','GROUP');
+INSERT INTO `endorsement_type`(`description`,`category`) VALUES ('Correction Life Assured-MAN Number','GROUP');
+INSERT INTO `endorsement_type`(`description`,`category`) VALUES ('Correction Life Assured - Gender','GROUP');
+INSERT INTO `endorsement_type`(`description`,`category`) VALUES ('Member Addition','GROUP');
+INSERT INTO `endorsement_type`(`description`,`category`) VALUES ('Member Deletion','GROUP');
+INSERT INTO `endorsement_type`(`description`,`category`) VALUES ('Promotion','GROUP');
+INSERT INTO `endorsement_type`(`description`,`category`) VALUES ('Introduction of New category','GROUP');
+INSERT INTO `endorsement_type`(`description`,`category`) VALUES ('Premium Adjustment','GROUP');
+INSERT INTO `endorsement_type`(`description`,`category`) VALUES ('Change Agent','GROUP');
+INSERT INTO `endorsement_type`(`description`,`category`) VALUES ('Change Inception Date','GROUP');
+
+
+INSERT INTO `employment_type`(`code`,`description`) values('1','Permanent');
+INSERT INTO `employment_type`(`code`,`description`) values('2','Temporary');
+
+INSERT INTO `agent` (`agent_id`, `designation_code`, `designation_name`, `employee_id`, `first_name`, `last_name`, `nrc_number`, `title`, `training_complete_on`, `agent_status`, `channel_code`, `channel_name`, `address_line1`, `address_line2`, `email`, `city`, `postal_code`, `province`, `home_phone_number`, `mobile_number`, `work_phone_number`, `license_number`, `override_commission_applicable`, `physical_address_line1`, `physical_address_line2`, `physical_address_city`, `physical_address_postal_code`, `physical_address_province`, `team_id`) VALUES('000000','Direct','Direct',NULL,'DirectF','DirectL',NULL,NULL,NULL,'ACTIVE','DIRECT','Direct',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL);
+insert  into `industry`(`industry_id`,`industry_name`,`risk_class`,`industry_factor`) values ('1','Mining',3,1.3000),('2','Agriculture',2,1.2000),('3','Financial Services',1,0.9000),('4','Government and Parastatals',2,1.2000),('5','Retail/Wholesale Trade',1,0.9000),('6','Medical',2,1.2000),('7','Travel,Communication and Public Utilities',3,1.3000),('8','Construction and Manufacturing',3,1.3000),('9','Others',0,1.0000);

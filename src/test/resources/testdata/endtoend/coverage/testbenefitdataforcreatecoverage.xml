@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<dataset>
+    <entity_sequence sequence_id="8" sequence_name="com.pla.core.domain.model.Coverage" sequence_number="0" sequence_prefix="1000" />
+    <BENEFIT BENEFIT_ID= "1" STATUS="ACTIVE" BENEFIT_NAME="Accidental Death Benefit ONE"></BENEFIT>
+    <BENEFIT BENEFIT_ID= "2" STATUS="ACTIVE" BENEFIT_NAME="Accidental Death Benefit TWO"></BENEFIT>
+    <BENEFIT BENEFIT_ID= "3" STATUS="ACTIVE" BENEFIT_NAME="Accidental Death Benefit THREE"></BENEFIT>
+    <BENEFIT BENEFIT_ID= "4" STATUS="ACTIVE" BENEFIT_NAME="Accidental Death Benefit FOUR"></BENEFIT>
+
+</dataset>

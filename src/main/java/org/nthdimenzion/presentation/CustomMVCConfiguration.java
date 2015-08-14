@@ -16,19 +16,19 @@ import org.springframework.format.Formatter;
 import org.springframework.format.FormatterRegistry;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.servlet.LocaleResolver;
-import org.springframework.web.servlet.config.annotation.DefaultServletHandlerConfigurer;
-import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
-import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
+import org.springframework.web.servlet.config.annotation.*;
 import org.springframework.web.servlet.i18n.LocaleChangeInterceptor;
 import org.springframework.web.servlet.i18n.SessionLocaleResolver;
+import org.springframework.web.servlet.view.InternalResourceView;
+import org.springframework.web.servlet.view.UrlBasedViewResolver;
+import org.thymeleaf.templateresolver.ServletContextTemplateResolver;
 
 import java.text.ParseException;
 import java.util.Locale;
 
 import static org.nthdimenzion.common.AppConstants.MONEY_FORMATTER;
-import static org.nthdimenzion.presentation.AppUtils.PrependCurrencyUnit;
-import static org.nthdimenzion.presentation.AppUtils.StripCurrencyUnit;
+import static org.nthdimenzion.presentation.AppUtils.prependCurrencyUnit;
+import static org.nthdimenzion.presentation.AppUtils.stripCurrencyUnit;
 
 /**
  * @author: Samir
@@ -37,8 +37,23 @@ import static org.nthdimenzion.presentation.AppUtils.StripCurrencyUnit;
 @Configuration
 public class CustomMVCConfiguration extends WebMvcConfigurerAdapter {
 
+    private static final String[] SERVLET_RESOURCE_LOCATIONS = {"/"};
+    private static final String[] CLASSPATH_RESOURCE_LOCATIONS = {
+            "classpath:/META-INF/resources/", "classpath:/resources/",
+            "classpath:/static/", "classpath:/public/"};
+    private static final String[] RESOURCE_LOCATIONS;
+
     static {
         Locale.setDefault(Locale.UK);
+    }
+
+    static {
+        RESOURCE_LOCATIONS = new String[CLASSPATH_RESOURCE_LOCATIONS.length
+                + SERVLET_RESOURCE_LOCATIONS.length];
+        System.arraycopy(SERVLET_RESOURCE_LOCATIONS, 0, RESOURCE_LOCATIONS, 0,
+                SERVLET_RESOURCE_LOCATIONS.length);
+        System.arraycopy(CLASSPATH_RESOURCE_LOCATIONS, 0, RESOURCE_LOCATIONS,
+                SERVLET_RESOURCE_LOCATIONS.length, CLASSPATH_RESOURCE_LOCATIONS.length);
     }
 
     @Bean
@@ -77,8 +92,33 @@ public class CustomMVCConfiguration extends WebMvcConfigurerAdapter {
     @Override
     public void addViewControllers(ViewControllerRegistry registry) {
         registry.addViewController("/").setViewName("index");
-        registry.addViewController("/login").setViewName("login");
         registry.addViewController("/home").setViewName("home");
+        registry.addViewController("/sample/grid").setViewName("pla/sample/grid");
+
+    }
+
+    @Override
+    public void addResourceHandlers(ResourceHandlerRegistry registry) {
+        if (!registry.hasMappingForPattern("/webjars/**")) {
+            registry.addResourceHandler("/webjars/**")
+                    .addResourceLocations("classpath:/META-INF/resources/webjars/");
+        }
+
+        if (!registry.hasMappingForPattern("/**")) {
+            registry.addResourceHandler("/**")
+                    .addResourceLocations(RESOURCE_LOCATIONS);
+        }
+    }
+
+    @Bean
+    public ServletContextTemplateResolver templateResolver() {
+        ServletContextTemplateResolver resolver = new ServletContextTemplateResolver();
+        resolver.setPrefix("/WEB-INF/");
+        resolver.setSuffix(".html");
+        resolver.setTemplateMode("HTML5");
+        resolver.setOrder(2);
+        resolver.setCacheable(false);
+        return resolver;
     }
 
     @Override
@@ -86,23 +126,32 @@ public class CustomMVCConfiguration extends WebMvcConfigurerAdapter {
         registry.addInterceptor(localeChangeInterceptor());
     }
 
+
     @Override
     public void addFormatters(FormatterRegistry registry) {
         registry.addFormatter(new JodaMoneyFormatter());
         super.addFormatters(registry);
     }
 
+    @Override
+    public void configureViewResolvers(ViewResolverRegistry registry) {
+        UrlBasedViewResolver resolver = new UrlBasedViewResolver();
+        resolver.setPrefix("/WEB-INF/classes/templates/");
+        resolver.setSuffix(".html");
+        resolver.setViewClass(InternalResourceView.class);
+        registry.viewResolver(resolver);
+    }
 
     private class JodaMoneyFormatter implements Formatter<Money> {
 
         @Override
         public Money parse(String text, Locale locale) throws ParseException {
-            return MONEY_FORMATTER.parseMoney(PrependCurrencyUnit(text));
+            return MONEY_FORMATTER.parseMoney(prependCurrencyUnit(text));
         }
 
         @Override
         public String print(Money object, Locale locale) {
-            return StripCurrencyUnit(MONEY_FORMATTER.print(object));
+            return stripCurrencyUnit(MONEY_FORMATTER.print(object));
         }
     }
 }

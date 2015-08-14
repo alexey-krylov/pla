@@ -1,7 +1,7 @@
 package org.nthdimenzion.security.service;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Setter;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -17,11 +17,11 @@ import java.util.List;
 public class UserLoginDetailDto implements UserDetails {
 
 
-    private Collection<String> permissions;
+    private List<String> permissions;
 
-    private Collection<? extends GrantedAuthority> authorities;
+    private Collection<SimpleGrantedAuthority> authorities;
 
-    private String userName;
+    private String username;
 
     private String password;
 
@@ -30,11 +30,11 @@ public class UserLoginDetailDto implements UserDetails {
     }
 
     private UserLoginDetailDto(String userName, String password) {
-        this.userName = userName;
+        this.username = userName;
         this.password = password;
     }
 
-    public static UserLoginDetailDto createUserLoginDetailVo(String userName, String password) {
+    public static UserLoginDetailDto createUserLoginDetailDto(String userName, String password) {
         UserLoginDetailDto userLoginDetailDto = new UserLoginDetailDto(userName, password);
         return userLoginDetailDto;
     }
@@ -49,34 +49,47 @@ public class UserLoginDetailDto implements UserDetails {
         return this;
     }
 
-    public Collection<? extends GrantedAuthority> getAuthorities() {
+    @JsonIgnore
+    @Override
+    public Collection<SimpleGrantedAuthority> getAuthorities() {
         return authorities;
     }
 
-    public Collection<String> getPermissions() {
+
+    public List<String> getPermissions() {
         return permissions;
     }
 
+    @Override
     public String getPassword() {
         return password;
     }
 
+    @Override
     public String getUsername() {
-        return userName;
+        return username;
     }
 
+    @JsonIgnore
+    @Override
     public boolean isAccountNonExpired() {
         return true;
     }
 
+    @JsonIgnore
+    @Override
     public boolean isAccountNonLocked() {
         return true;
     }
 
+    @JsonIgnore
+    @Override
     public boolean isCredentialsNonExpired() {
         return true;
     }
 
+    @JsonIgnore
+    @Override
     public boolean isEnabled() {
         return true;
     }

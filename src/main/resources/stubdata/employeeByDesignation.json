@@ -1,0 +1,154 @@
+[
+  {
+    "firstName": "Bright",
+    "lastName": "Chishala",
+    "middleName": "",
+    "employeeId": "G053",
+    "nrcNumber": "270768/66/1",
+    "departmentName": "ELECTRICAL",
+    "designation":"BRANCH_BDE",
+    "email": null
+  },
+  {
+    "firstName": "Owen",
+    "lastName": "Chungu",
+    "middleName": "",
+    "employeeId": "G054",
+    "nrcNumber": "376865/61/1",
+    "departmentName": "ELECTRICAL",
+    "designation":"BRANCH_BDE",
+    "email": null
+  },
+  {
+    "firstName": "Felix K",
+    "lastName": "Chisupa",
+    "middleName": "",
+    "employeeId": "G055",
+    "nrcNumber": "160102/46/1",
+    "departmentName": "ELECTRICAL",
+    "designation":"BRANCH_BDE",
+    "email": null
+  },
+  {
+    "firstName": "Sahir",
+    "lastName": "Raza",
+    "middleName": "",
+    "employeeId": "G721",
+    "nrcNumber": null,
+    "departmentName": "HUMAN RESOURCES & ADMINISTRATION",
+    "designation":"BRANCH_BDE",
+    "email": "rashid_saba@nthdimenzion.com"
+  },
+  {
+    "firstName": "Joseph",
+    "lastName": "Musonda",
+    "middleName": "",
+    "employeeId": "G145",
+    "nrcNumber": "299505/66/1",
+    "departmentName": "PACKING PLANT",
+    "designation":"BRANCH_BDE",
+    "email": null
+  },
+  {
+    "firstName": "Gregory",
+    "lastName": "Namatama",
+    "middleName": "",
+    "employeeId": "G061",
+    "nrcNumber": "103683/37/1",
+    "departmentName": "QUALITY",
+    "designation":"BRANCH_BDE",
+    "email": null
+  }
+  ,
+  {
+    "firstName": "GM",
+    "lastName": "Prakash",
+    "middleName": "",
+    "employeeId": "M710",
+    "nrcNumber": "sdfdsfd",
+    "departmentName": "HUMAN RESOURCES & ADMINISTRATION",
+    "designation":"REGIONAL_MANAGER",
+    "email": null
+  },
+  {
+    "firstName":"Bright",
+    "lastName":"Chishala",
+    "middleName":"",
+    "employeeId":"G053",
+    "nrcNumber":"270768/66/1",
+    "departmentName":"ELECTRICAL",
+    "designation":"TEAM_LEADER",
+    "email":null
+  },
+  {
+    "firstName":"Owen",
+    "lastName":"Chungu",
+    "middleName":"",
+    "employeeId":"G054",
+    "nrcNumber":"376865/61/1",
+    "departmentName":"ELECTRICAL",
+    "designation":"TEAM_LEADER",
+    "email":null
+  },
+  {
+    "firstName": "Evans",
+    "lastName": "BWALYA",
+    "middleName": "",
+    "employeeId": "G085",
+    "nrcNumber": "945578/11/1",
+    "departmentName": "ELECTRICAL",
+    "designation":"BRANCH_MANAGER",
+    "email": null
+  },
+  {
+    "firstName": "Benson",
+    "lastName": "MULEYA",
+    "middleName": "",
+    "employeeId": "G687",
+    "nrcNumber": "103431/611",
+    "departmentName": "MECHANICAL",
+    "designation":"BRANCH_MANAGER",
+    "email": null
+  },
+  {
+    "firstName": "Dominic C.",
+    "lastName": "LENGWE",
+    "middleName": "",
+    "employeeId": "G035",
+    "nrcNumber": "190288/65/1",
+    "departmentName": "MOBILE",
+    "designation":"BRANCH_MANAGER",
+    "email": null
+  },
+  {
+    "firstName": "Benson",
+    "lastName": "MULEYA",
+    "middleName": "",
+    "employeeId": "G687",
+    "nrcNumber": "103431/611",
+    "departmentName": "MECHANICAL",
+    "designation": "REGIONAL_MANAGER",
+    "email": null
+  },
+  {
+    "firstName": "Dominic C.",
+    "lastName": "LENGWE",
+    "middleName": "",
+    "employeeId": "G035",
+    "nrcNumber": "190288/65/1",
+    "departmentName": "MOBILE",
+    "designation": "BRANCH_MANAGER",
+    "email": null
+  },
+  {
+    "firstName": "GM",
+    "lastName": "Prakash",
+    "middleName": "",
+    "employeeId": "M710",
+    "nrcNumber": "sdfdsfd",
+    "departmentName": "HUMAN RESOURCES & ADMINISTRATION",
+    "designation": "BRANCH_BDE",
+    "email": null
+  }
+]
+

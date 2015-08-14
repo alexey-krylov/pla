@@ -1,0 +1,785 @@
+<form novalidate="ng" name="planSetUpForm">
+    <style>
+        .row {
+            padding: 10px;
+        }
+
+        .tags-input .host {
+            height: 100%;
+            margin-top: 0;
+            position: relative;
+        }
+    </style>
+    <div class="wizard fuelux-wizard" id="planSetUpWizard" skip-validation="['step5']">
+        <div class="alert alert-danger" role="alert" ng-if="validationFailed">
+            <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+            <span class="sr-only">Error:</span>
+            {{serverErrMsg}}
+        </div>
+        <ul class="steps">
+            <li data-step="1" class="active">
+                <span class="badge">1</span>Plan Details<span class="chevron"></span></li>
+            <li data-step="2"><span class="badge">2</span>Sum Assured<span class="chevron"></span></li>
+            <li data-step="3"><span class="badge">3</span>Policy Term<span class="chevron"></span></li>
+            <li data-step="4" data-name="template"><span class="badge">4</span>Premium Term<span class="chevron"></span>
+            </li>
+            <li data-step="5" data-name="template"><span class="badge">5</span>Coverage<span class="chevron"></span>
+            </li>
+            <li data-step="6" data-name="template"><span class="badge">6</span>Benefits<span class="chevron"></span>
+            </li>
+        </ul>
+        <div class="actions">
+            <button type="button" class="btn btn-default btn-prev">
+                <span class="glyphicon glyphicon-arrow-left"></span>Prev
+            </button>
+            <button type="button" class="btn btn-default btn-next" data-last="Complete">Next<span
+                    class="glyphicon glyphicon-arrow-right"></span></button>
+        </div>
+        <div class="step-content">
+
+            <div class="step-pane" data-step="1" style="min-height: 250px">
+                <!--<div ng-include="'/pla/plan/plan-step-1.html' | getTrustedUrl"/>-->
+                <ng-form id="step1" name="step1" novalidate="true">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group required">
+                                <label class="control-label">Line of Business/Product Line</label>
+                                <select class="form-control input-sm" id="lineOfBusinessId"
+                                        ng-model="plan.planDetail.lineOfBusinessId" name="lineOfBusinessId" ng-required="true">
+                                    <option value="INDIVIDUAL_LIFE">Individual Life</option>
+                                    <option value="GROUP_HEALTH">Group Health</option>
+                                    <option value="GROUP_LIFE">Group Life</option>
+                                </select>
+
+                                <div class="error" ng-show="step1.lineOfBusinessId.$dirty &amp;&amp; step1.lineOfBusinessId.$invalid">
+                                    <small class="error" ng-show="step1.lineOfBusinessId.$error.required">
+                                        Please indicate the Product Line/Line Of Business.
+                                    </small>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group required">
+                                <label class="control-label">Plan Name</label>
+                                <input id="planName" name="planName" ng-model="plan.planDetail.planName" ng-required="true" type="text" class="form-control input-sm"/>
+
+                                <div class="error" ng-show="step1.planName.$dirty &amp;&amp; step1.planName.$invalid">
+                                    <small class="error" ng-show="step1.planName.$error.maxlength">
+                                        Exceeded max length.
+                                    </small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-3">
+                            <div class="form-group required">
+                                <label class="control-label">Client Type</label>
+                                <select id="clientType" class="form-control input-sm" ng-model="clientType" ng-required="true" name="clientType">
+                                    <option value="INDIVIDUAL">Individual</option>
+                                    <option value="GROUP">Group</option>
+                                </select>
+                                <div class="error" ng-show="step1.clientType.$dirty &amp;&amp; step1.clientType.$invalid">
+                                    <small class="error" ng-show="step1.clientType.$error.required">
+                                        Please indicate the Client type.
+                                    </small>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group required">
+                                <label class="control-label">Plan Type</label>
+                                <select id="productType" ng-model="plan.planDetail.planType" class="form-control input-sm" ng-required="true" name="productType">
+                                    <option value="INVESTMENT">Investment</option>
+                                    <option value="NON_INVESTMENT">Non-Investment</option>
+                                </select>
+
+                                <div class="error" ng-show="step1.productType.$dirty &amp;&amp; step1.productType.$invalid">
+                                    <small class="error" ng-show="step1.productType.$error.required">
+                                        Please indicate the Product type.
+                                    </small>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label class="control-label">Plan Code</label>
+                                <input id="productCode" name="productCode" ng-model="plan.planDetail.planCode" readonly="true" type="text" size="10" class="form-control input-sm"/>
+
+                                <p ng-if="plan.planId==null" class="help">This is system generated</p>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group  required">
+                                <label class="control-label">FreeLook Period(Days)</label>
+                                <input id="freeLookPeriod" name="freeLookPeriod" type="number"
+                                       class="form-control input-sm" ng-model="plan.planDetail.freeLookPeriod"
+                                       ng-required="true"/>
+
+                                <div ng-show="isValid(step1.freeLookPeriod)">
+                                    <small class="error" ng-show="step1.freeLookPeriod.$error.number">Please
+                                        enter Freelook Period.
+                                    </small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-3">
+                            <div class="form-group  required">
+                                <label class="control-label">Launch Date</label>
+                                <div class='input-group date'>
+                                    <input type="text" class="form-control input-sm"
+                                           datepicker-popup=""
+                                           ng-required="true"
+                                           min-date="minDate"
+                                           is-open="launchDateOpen"
+                                           ng-model="plan.planDetail.launchDate" name="launchDate" id='launchDate'/>
+                                    <span class="input-group-btn">
+                                    <button type="button" class="btn btn-default btn-sm" ng-click="openLaunchDate($event)">
+                                        <i class="glyphicon glyphicon-calendar"></i></button>
+                                  </span>
+                                </div>
+                                <div ng-show="step1.launchDate.$dirty &amp;&amp; step1.launchDate.$invalid">
+                                    <small class="error" ng-show="step1.launchDate.$error.required">
+                                        Launch Date is required.
+                                    </small>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label class="control-label">Withdrawal Date</label>
+                                <div class='input-group date'>
+                                    <input type="text" class="form-control input-sm"
+                                           is-open="withdrawalDateOpen"
+                                           min-date="launchDt"
+                                           datepicker-popup="" name="withdrawalDate"
+                                           ng-model="plan.planDetail.withdrawalDate" id='withdrawalDate'/>
+                                    <span class="input-group-btn">
+                                    <button type="button" class="btn btn-default btn-sm" ng-click="openWithdrawalDate($event)">
+                                        <i class="glyphicon glyphicon-calendar"></i></button>
+                                  </span>
+                                </div>
+                                <div ng-show="step1.withdrawalDate.$dirty &amp;&amp; step1.withdrawalDate.$invalid">
+                                    <small class="error" ng-show="step1.withdrawalDate.$error.max">Error
+                                    </small>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group required">
+                                <label class="control-label">Min Entry Age</label>
+                                <input type="number" ng-required="true"
+                                       class="form-control input-sm" name="minEntryAge" id='minEntryAge'
+                                       ng-model="plan.planDetail.minEntryAge"/>
+                                <div ng-show="step1.minEntryAge.$dirty &amp;&amp; step1.minEntryAge.$invalid">
+                                    <small class="error" ng-show="step1.minEntryAge.$error.number">Please
+                                        enter Numbers only.
+                                    </small>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group  required" ng-class="error('maxEntryAge')">
+                                <label class="control-label">Max Entry Age</label>
+                                <input type="number" class="form-control input-sm" ng-required="true"
+                                       ng-model="plan.planDetail.maxEntryAge"
+                                       id='maxEntryAge' min="{{plan.planDetail.minEntryAge}}" name="maxEntryAge"/>
+
+                                <div ng-show="step1.maxEntryAge.$dirty &amp;&amp; step1.maxEntryAge.$invalid">
+                                    <small class="error" ng-show="step1.maxEntryAge.$error.min">
+                                        Max Entry Age should be greater than or equal to Min Entry Age.
+                                    </small>
+                                    <small class="error" ng-show="step1.maxEntryAge.$error.number">Please
+                                        enter Numbers only.
+                                    </small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="control-label" for="surrenderAfter">
+                                    Number of years post which surrender option should be accepted</label>
+                                <div class="controls">
+                                    <input id="surrenderAfter" ng-pattern="onlyNumbers" name="surrenderAfter"
+                                           ng-model="plan.planDetail.surrenderAfter"
+                                           type="text" class="form-control input-sm" ng-disabled="isSurrenderDisabled()" placeholder="(in years)"/>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group required">
+                                <label class="control-label" style="display: block;">Is Tax Applicable?</label>
+                                <label class="radio-inline">
+                                    <input type="radio" name="taxable" id="taxable" ng-required="true" ng-value="true"
+                                           ng-model="plan.planDetail.taxApplicable"/>Yes
+                                </label>
+                                <label class="radio-inline">
+                                    <input type="radio" name="taxable" ng-required="true" ng-value="false"
+                                           ng-model="plan.planDetail.taxApplicable"/>No
+                                </label>
+                                <div class="error"
+                                     ng-show="step1.taxable.$dirty &amp;&amp; step1.taxable.$invalid">
+                                    <small class="error"
+                                           ng-show="step1.taxable.$error.required">
+                                        Please indicate whether taxes are applicable for the product.
+                                    </small>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-3">
+                            <div class="form-group required">
+                                <label class="control-label" style="display: block;">Is it a Funeral Cover?</label>
+                                <label class="radio-inline">
+                                    <input type="radio" name="funeralCover" ng-required="true" ng-value="true"
+                                           ng-model="plan.planDetail.funeralCover"/>Yes
+                                </label>
+                                <label class="radio-inline">
+                                    <input type="radio" name="funeralCover" ng-required="true" ng-value="false"
+                                           ng-model="plan.planDetail.funeralCover"/>No
+                                </label>
+
+                                <div class="error"
+                                     ng-show="step1.funeralCover.$dirty &amp;&amp; step1.funeralCover.$invalid">
+                                    <small class="error"
+                                           ng-show="step1.funeralCover.$error.required">
+                                        Please indicate whether it is a Funeral Plan.
+                                    </small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Select Multiple -->
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group required">
+                                <label class="control-label" style="display: block">Relationships Covered</label>
+                                <div class="error"
+                                     ng-show="step1.applicableRelationships.$dirty &amp;&amp; step1.applicableRelationships.$invalid">
+                                    <small class="error"
+                                           ng-show="step1.applicableRelationships.$error.required">
+                                        Relationships are mandatory.
+                                    </small>
+                                </div>
+                                <label class="checkbox-inline" ng-repeat="rel in relations">
+                                    <input type="checkbox"
+                                           ng-required="!(plan.planDetail.applicableRelationships &amp;&amp; plan.planDetail.applicableRelationships.length > 0)"
+                                           name="applicableRelationships"
+                                           checklist-model="plan.planDetail.applicableRelationships"
+                                           checklist-value="rel.val"/>{{rel.desc}}
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group required">
+                                <label class="control-label" style="display: block">Endorsements Available</label>
+                                <div class="error"
+                                     ng-show="step1.endorsementTypes.$dirty &amp;&amp; step1.endorsementTypes.$invalid">
+                                    <small class="error"
+                                           ng-show="step1.endorsementTypes.$error.required">
+                                        Endorsements are mandatory.
+                                    </small>
+                                </div>
+                                <label class="checkbox-inline" ng-if="clientType=='INDIVIDUAL'"
+                                       ng-repeat="endorsementType in ::groupEndorsementTypes">
+                                    <input type="checkbox" checklist-value="endorsementType"
+                                           name="endorsementTypes"
+                                           ng-required="!(plan.planDetail.endorsementTypes &amp;&amp; plan.planDetail.endorsementTypes.length > 0)"
+                                           checklist-model="plan.planDetail.endorsementTypes"/>{{endorsementType}}
+                                </label>
+                                <label class="checkbox-inline" ng-if="clientType=='GROUP'"
+                                       ng-repeat="endorsementType in ::individualEndorsementTypes">
+                                    <input type="checkbox" checklist-value="endorsementType" name="endorsementTypes"
+                                           ng-required="!(plan.planDetail.endorsementTypes &amp;&amp; plan.planDetail.endorsementTypes.length > 0)"
+                                           checklist-model="plan.planDetail.endorsementTypes"/>{{endorsementType}}
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label class="control-label" style="display: block"></label>
+                                <div style="min-height: 50px;"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Select Multiple -->
+                </ng-form>
+            </div>
+            <div class="step-pane" data-step="2" style="min-height: 250px">
+                <h4>Sum Assured</h4>
+                <ng-form id="step2" name="step2" novalidate="true">
+                    <div class="row">
+                        <div class="form-group required col-md-3">
+                            <label class="control-label">Defined Sum Assured Type</label>
+                            <select ng-model="plan.sumAssured.sumAssuredType" ng-required="true" class="form-control input-sm" ng-change="resetPlanSumAssured()"
+                                    ng-options="item.val as item.desc for item in sumAssuredTypes">
+                                <!--   <option value="INCOME_MULTIPLIER">Income Multiplier</option>
+                                   <option value="RANGE">Specified Range</option>
+                                   <option value="SPECIFIED_VALUES">Specified Values</option>-->
+                            </select>
+
+                        </div>
+                    </div>
+                    <br/>
+                    <div class="row animate-switch-container" ng-switch="" on="plan.sumAssured.sumAssuredType">
+                        <div class="col-md-12">
+                            <div class="panel panel-default animate-switch" ng-switch-when="SPECIFIED_VALUES">
+                                <div class="panel-heading">
+                                    <h3 class="panel-title">Sum Assured Values</h3>
+                                </div>
+                                <div class="panel-body">
+                                    <div class="control-group required col-md-12">
+                                        <label class="control-label">Sum Assured</label>
+
+                                        <div class="controls">
+                                            <tags-input class="ti-input-lg"
+                                                        ng-model="plan.sumAssured.sumAssuredValue"
+                                                        min-tags="1" name="sumAssuredValues"
+                                                        placeholder="Add a number"
+                                                        allow-leftover-text="false"
+                                                        allowed-tags-pattern="^[0-9]+$"></tags-input>
+                                            <div class="error" ng-show="step2.sumAssuredValues.$dirty &amp;&amp; step2.sumAssuredValues.$invalid">
+                                                <small class="error" ng-show="step2.sumAssuredValues.$error.minTags">
+                                                    Atleast one Sum Assured Value is needed.
+                                                </small>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="panel panel-default animate-switch" ng-switch-when="RANGE">
+                                <div class="panel-heading">
+                                    <h3 class="panel-title">Sum Assured Range</h3>
+                                </div>
+                                <div class="panel-body">
+                                    <div class="control-group required col-md-4">
+                                        <label class="control-label" for="groupTerm">Minimum Sum Assured</label>
+
+                                        <div class="controls">
+                                            <input type="number" name="minSumInsured" ng-pattern="onlyNumbers" class="form-control input-sm  col-sm-3"
+                                                   ng-model="plan.sumAssured.minSumInsured" ng-required="true"/>
+
+                                            <div class="error" ng-show="step2.minSumInsured.$dirty &amp;&amp; step2.minSumInsured.$invalid">
+                                                <small class="error" ng-show="step2.minSumInsured.$error.required">
+                                                    Minimum Sum Assured is required.
+                                                </small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="control-group required  col-md-4">
+                                        <label class="control-label" for="groupTerm">Maximum Sum Assured</label>
+
+                                        <div class="controls">
+                                            <input type="number" name="maxSumInsured" ng-pattern="onlyNumbers" class="form-control input-sm col-sm-3"
+                                                   ng-model="plan.sumAssured.maxSumInsured" ng-required="true" min="{{plan.sumAssured.minSumInsured}}"/>
+                                            <div class="error" ng-show="step2.maxSumInsured.$dirty &amp;&amp; step2.maxSumInsured.$invalid">
+                                                <small class="error" ng-show="step2.maxSumInsured.$error.required">
+                                                    Maximum Sum Assured is required.
+                                                </small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="control-group required col-md-4">
+                                        <label class="control-label" for="groupTerm">Multiples of</label>
+
+                                        <div class="controls">
+                                            <select ng-model="plan.sumAssured.multiplesOf"
+                                                    ng-required="true" name="multiplesOf"
+                                                    sumassured-check="ng"
+                                                    class="form-control input-sm col-sm-3">
+                                                <option value="1">1</option>
+                                                <option value="10">10</option>
+                                                <option value="100">100</option>
+                                                <option value="1000">1000</option>
+                                                <option value="10000">10000</option>
+                                                <option value="100000">100000</option>
+                                            </select>
+                                            <div class="error" ng-show="step2.multiplesOf.$dirty &amp;&amp; step2.multiplesOf.$invalid">
+                                                <small class="error" ng-show="step2.multiplesOf.$error.required">
+                                                    Multiples is required.
+                                                </small>
+                                                <small class="error" ng-show="step2.multiplesOf.$error.invalidMultiple">
+                                                    Invalid Multiples.
+                                                </small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="panel panel-default animate-switch" ng-switch-when="INCOME_MULTIPLIER">
+                                <div class="panel-body">
+                                    <div class="control-group required col-md-4">
+                                        <label class="control-label">Income Multiplier</label>
+                                        <div class="controls">
+                                            <input type="text" name="incomeMultiplier" ng-pattern="onlyNumbers" class="form-control input-sm  col-sm-3"
+                                                   ng-model="plan.sumAssured.incomeMultiplier" ng-required="true"/>
+
+                                            <div class="error" ng-show="step2.incomeMultiplier.$dirty &amp;&amp; step2.incomeMultiplier.$invalid">
+                                                <small class="error" ng-show="step2.incomeMultiplier.$error.required">
+                                                    Income Multiplier is mandatory.
+                                                </small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </ng-form>
+            </div>
+            <div class="step-pane" data-step="3" style="min-height: 250px">
+                <h4>Policy Term</h4>
+                <ng-form id="step3" name="step3" novalidate="true">
+                    <div class="row">
+                        <div class="control-group col-sm-3" ng-show="clientType=='GROUP'">
+                            <label class="control-label" for="groupTerm">Group Term</label>
+
+                            <div class="controls">
+                                <input type="text" readonly="true" class="form-control input-sm col-sm-3" id="groupTerm" ng-model="plan.policyTerm.groupTerm"
+                                       ng-show="clientType=='GROUP'"/>
+                            </div>
+                        </div>
+                        <div class="control-group required col-md-3" ng-show="clientType!='GROUP'">
+                            <label class="control-label" for="groupTerm">Defined Policy Term Type</label>
+
+                            <div class="controls">
+                                <select ng-model="plan.policyTermType" ng-required="true" class="form-control input-sm col-sm-3">
+                                    <option value="SPECIFIED_VALUES">Specified Values</option>
+                                    <option value="MATURITY_AGE_DEPENDENT">Dependent on Maturity Age</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <br/>
+
+                    <div class="row animate-switch-container"
+                         ng-switch="" on="plan.policyTermType" ng-if="clientType!='GROUP'">
+                        <div class="col-md-12">
+                            <div class="panel panel-default animate-switch" ng-switch-when="MATURITY_AGE_DEPENDENT">
+                                <div class="panel-heading">
+                                    <h3 class="panel-title">Policy Term Based on Age</h3></div>
+                                <div class="panel-body">
+                                    <div class="control-group col-sm-12">
+                                        <label class="control-label" for="groupTerm">Various Maturity Ages</label>
+                                        <div class="controls">
+                                            <tags-input class="ti-input-lg"
+                                                        ng-model="plan.policyTerm.maturityAges"
+                                                        name="maturityAges"
+                                                        placeholder="Add a number" allow-leftover-text="false"
+                                                        allowed-tags-pattern="^[0-9]+$"></tags-input>
+                                            <div class="error" ng-show="step3.maturityAges.$dirty &amp;&amp; step3.maturityAges.$invalid">
+                                                <small class="error" ng-show="step3.maturityAges.$error.minTags">
+                                                    Policy Terms are required.
+                                                </small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="panel panel-default animate-switch" ng-switch-when="SPECIFIED_VALUES">
+                                <div class="panel-heading">
+                                    <h3 class="panel-title">Policy Term Based on Term Values</h3>
+                                </div>
+                                <div class="panel-body">
+                                    <div class="control-group required col-sm-3">
+                                        <label class="control-label">Maximum Maturity Age</label>
+                                        <div class="controls">
+                                            <input type="number" ng-pattern="onlyNumbers" name="maxMaturityAge"
+                                                   class="form-control input-sm col-sm-3" style="margin-top: 8px"
+                                                   min="{{plan.planDetail.maxEntryAge+1}}"
+                                                   ng-required="true"
+                                                   ng-model="plan.policyTerm.maxMaturityAge"/>
+                                            <div class="error"
+                                                 ng-show="step3.maxMaturityAge.$dirty &amp;&amp; step3.maxMaturityAge.$invalid">
+                                                <small class="error" ng-show="step3.maxMaturityAge.$error.required">
+                                                    Maximum Maturity Age is required.
+                                                </small>
+                                                <small class="error" ng-show="step3.maxMaturityAge.$error.min">
+                                                    Cannot be less than Plan Max Entry Age
+                                                    {{plan.planDetail.maxEntryAge}}
+                                                </small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="control-group required col-sm-9">
+                                        <label class="control-label">Policy Term Values</label>
+                                        <div class="controls">
+                                            <tags-input class="ti-input-lg"
+                                                        name="policyValidTerms"
+                                                        ng-model="plan.policyTerm.validTerms"
+                                                        ng-disabled="isPolicyTermByValue()"
+                                                        min-tags="1" placeholder="Add a number" allow-leftover-text="false"
+                                                        allowed-tags-pattern="^[0-9]+$"></tags-input>
+                                            <div class="error" ng-show="step3.policyValidTerms.$dirty &amp;&amp; step3.policyValidTerms.$invalid">
+                                                <small class="error" ng-show="step3.policyValidTerms.$error.minTags">
+                                                    Policy Terms are required.
+                                                </small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </ng-form>
+            </div>
+            <div class="step-pane" data-step="4" style="min-height: 250px">
+                <h4>Premium Payment Term</h4>
+                <ng-form novalidate="true" id="step4" name="step4">
+                    <div class="row">
+                        <div class="control-group col-md-3">
+                            <label class="control-label" for="groupTerm">Premium Payment Term Type</label>
+
+                            <div class="controls">
+                                <select ng-model="plan.premiumTermType" class="form-control input-sm  col-sm-3" ng-disabled="premiumPaymentTermReadonly">
+                                    <option value="REGULAR">Regular</option>
+                                    <option value="SINGLE">Single</option>
+                                    <option value="SPECIFIED_VALUES">Specified Values</option>
+                                    <option value="SPECIFIED_AGES">Specified Ages</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <br/>
+
+                    <div class="row">
+                        <div class="col-md-12 animate-switch-container"
+                             ng-switch="" on="plan.premiumTermType">
+                            <div class="panel panel-default animate-switch" ng-switch-when="SPECIFIED_VALUES">
+                                <div class="panel-heading">
+                                    <h3 class="panel-title">Premium Payment Term Values</h3>
+                                </div>
+                                <div class="panel-body">
+                                    <!--<div class="control-group col-md-3">
+                                        <label class="control-label" for="groupTerm">Premium Payment Cutoff Age</label>
+                                        <div class="controls">
+                                            <input type="number" ng-pattern="onlyNumbers" class="form-control col-sm-3"
+                                                   ng-model="plan.premiumTerm.maxMaturityAge" name="cutoffage"/>
+                                        </div>
+                                    </div>-->
+                                    <div class="control-group required col-md-9">
+                                        <label class="control-label">Payment Terms</label>
+
+                                        <div class="controls">
+                                            <tags-input class="ti-input-lg" name="validTerms"
+                                                        ng-model="plan.premiumTerm.validTerms"
+                                                        min-tags="1" placeholder="Add a number"
+                                                        allow-leftover-text="false"
+                                                        allowed-tags-pattern="^[0-9]+$"></tags-input>
+                                            <div class="error" ng-show="step4.validTerms.$dirty &amp;&amp; step4.validTerms.$invalid">
+                                                <small class="error" ng-show="step4.validTerms.$error.minTags">
+                                                    Premium Terms are required.
+                                                </small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="panel panel-default animate-switch" ng-switch-when="SPECIFIED_AGES">
+                                <div class="panel-heading">
+                                    <h3 class="panel-title">Premium Payment Term Age</h3>
+                                </div>
+                                <div class="panel-body">
+                                    <div class="control-group required col-md-12">
+                                        <label class="control-label" for="groupTerm">Premium Ages</label>
+
+                                        <div class="controls">
+                                            <tags-input name="maturityAges"
+                                                        ng-model="plan.premiumTerm.maturityAges"
+                                                        min-tags="1" placeholder="Add a number"
+                                                        allow-leftover-text="false"
+                                                        allowed-tags-pattern="^[0-9]+$"></tags-input>
+                                            <div class="error" ng-show="step4.maturityAges.$dirty &amp;&amp; step4.maturityAges.$invalid">
+                                                <small class="error" ng-show="step4.maturityAges.$error.required">
+                                                    Premium Age is required.
+                                                </small>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </ng-form>
+            </div>
+            <div class="step-pane" data-step="5" style="min-height: 250px">
+                <h4>Coverage<span class="badge">{{plan.coverages.length}}</span></h4>
+
+                <div class="alert alert-danger" role="alert" ng-if="step5.hasError">
+                    <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+                    <span class="sr-only">Error:</span>{{stepErrorMsg}}
+                </div>
+                <div style="float:right;padding:0px 0px 2px 0px">
+                    <button name="showCoverageButton" class="btn btn-default"
+                            ng-click="showCoverageForm(null,false,$event)">Add Coverage
+                    </button>
+                </div>
+                <table class="table table-bordered table-hover table-stripped" style="background-color: #fff">
+                    <thead>
+                    <tr>
+                        <th> Coverage Name</th>
+                        <th> Accelerated / Additional Cover</th>
+                        <th> Base/Optional</th>
+                        <th> Deductible Type</th>
+                        <th> Sum Assured Type</th>
+                        <th> Action</th>
+                    </tr>
+                    </thead>
+                    <tr ng-repeat="coverage in plan.coverages">
+                        <td>{{resolveCoverage(coverage.coverageId).coverageName}}</td>
+                        <td>{{coverage.coverageCover}}</td>
+                        <td>{{coverage.coverageType}}</td>
+                        <td>{{coverage.deductibleType}}</td>
+                        <td>{{coverage.coverageSumAssured.sumAssuredType|resolveEnum}}</td>
+                        <td style="text-align:center">
+                            <button type="button" class="btn btn-default btn-xs"
+                                    ng-click="editPlanCoverage(coverage)">
+                                <span class="glyphicon glyphicon-edit" aria-hidden="true" tooltip="Edit Coverage"></span>
+                            </button>
+                            <button type="button" class="btn btn-danger btn-xs"
+                                    ng-click="removePlanCoverage($index)" tooltip="Remove Coverage">X
+                            </button>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <div class="step-pane" data-step="6" style="min-height: 250px">
+                <ng-form novalidate="true" id="step6" name="step6">
+                    <div class="alert alert-danger" role="alert" ng-if="step6.$dirty &amp;&amp; step6.$invalid">
+                    <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+                    <span class="sr-only">Error:</span>
+                        All the fields are mandatory.
+                </div>
+                <accordion>
+                    <accordion-group heading="Configure Benefits" is-open="true">
+                        <div ng-init="setBenefitForm(benefitForm);"></div>
+                        <table class="table table-bordered table-hover table-stripped" style="background-color: #fff">
+                            <thead>
+                            <tr>
+                                <th width="20%"><label class="control-label">Coverage</label></th>
+                                <th width="20%"><label class="control-label">Benefit</label></th>
+                                <th width="10%" class="required"><label class="control-label">Limit Defined </label>
+                                </th>
+                                <th width="20%" class="required"><label class="control-label">Limit Type </label></th>
+                                <th width="15%" class="required"><label class="control-label">Benefit Limit</label></th>
+                                <th width="15%" class="required"><label class="control-label">Maximum Limit</label></th>
+                            </tr>
+                            </thead>
+                            <tr ng-repeat="benefit in benefits">
+                                <td>{{benefit.coverageName}}</td>
+                                <td>{{benefit.benefitName}}</td>
+                                <td>
+                                    <select class="form-control input-sm" name="definedPer_{{$index}}"
+                                            ng-model="benefit.definedPer" ng-required="true">
+                                        <option value="INCIDENCE">Per Incidence</option>
+                                        <option value="DAY">Per Day</option>
+                                        <option value="YEAR">Per Year</option>
+                                    </select>
+
+                                    <div class="error"
+                                         ng-show="step6.definedPer_{{$index}}.$dirty &amp;&amp;  step6.$dirty">
+                                        <small class="error" ng-show="step6.definedPer_{{$index}}.$error.required">
+                                            Benefit Defined Per is required.
+                                        </small>
+                                    </div>
+                                </td>
+                                <td>
+                                    <select class="form-control input-sm" name="benefitType_{{$index}}"
+                                            ng-model="benefit.coverageBenefitType" ng-required="true">
+                                        <option value="AMOUNT">Amount</option>
+                                        <option value="PRODUCT_LIMIT">Percentage of Plan Limit</option>
+                                        <option value="COVERAGE_LIMIT">Percentage of Coverage Limit</option>
+                                    </select>
+
+                                    <div class="error"
+                                         ng-show="step6.benefitType_{{$index}}.$dirty &amp;&amp; step6.$dirty">
+                                        <small class="error" ng-show="step6.benefitType_{{$index}}.$error.required">
+                                            Benefit Limit Type is required.
+                                        </small>
+                                    </div>
+                                </td>
+                                <td>
+                                    <input type="number" class="form-control input-sm" max="benefit.maxLimit"
+                                           name="benefitLimit_{{$index}}"
+                                           ng-model="benefit.benefitLimit" ng-required="true"/>
+
+                                    <div class="error"
+                                         ng-show="step6.$invalid &amp;&amp; step6.benefitLimit_{{$index}}.$dirty">
+                                        <small class="error" ng-show="step6.benefitLimit_{{$index}}.$error.required">
+                                            Benefit Limit is required.
+                                        </small>
+                                    </div>
+                                </td>
+                                <td>
+                                    <input type="number" class="form-control input-sm" name="maxLimit_{{$index}}"
+                                           ng-model="benefit.maxLimit" ng-required="true"/>
+
+                                    <div class="error"
+                                         ng-show="step6.$invalid &amp;&amp; step6.maxLimit_{{$index}}.$dirty">
+                                        <small class="error" ng-show="step6.maxLimit_{{$index}}.$error.required">
+                                            Max Limit is required.
+                                        </small>
+                                    </div>
+                                </td>
+                            </tr>
+                        </table>
+
+                    </accordion-group>
+                </accordion>
+                </ng-form>
+            </div>
+        </div>
+    </div>
+</form>
+
+<script type="text/ng-template" id="coverageConfirmation.html">
+    <div class="modal-header bg-primary" style="display: block">
+        <h3 class="modal-title">Confirmation</h3>
+    </div>
+    <div class="modal-body">
+        <h4 class="text-danger">Are you sure?</h4>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-danger" ng-click="ok()">OK</button>
+        <button class="btn btn-warning" ng-click="cancel()">Cancel</button>
+    </div>
+</script>
+
+<script type="text/ng-template" id="coverageAlert.html">
+    <div class="modal-header bg-primary" style="display: block">
+        <h3 class="modal-title">Information</h3>
+    </div>
+    <div class="modal-body">
+        <h4 class="text-info">Please remove all the Benefits related to the Coverage from this Plan.</h4>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-default" ng-click="cancel()">OK</button>
+    </div>
+</script>
+
+<script type="text/ng-template" id="benefitConfirmation.html">
+    <div class="modal-header bg-primary" style="display: block">
+        <h3 class="modal-title">Confirmation</h3>
+    </div>
+    <div class="modal-body">
+        <h4 class="text-danger">Are you sure?</h4>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-danger" ng-click="ok()">OK</button>
+        <button class="btn btn-warning" ng-click="cancel()">Cancel</button>
+    </div>
+</script>
