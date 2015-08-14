@@ -188,7 +188,7 @@
                                     <div class="form-group required">
                                         <label class="control-label">Proposer Code</label>
                                         <input type="text" class="form-control input-sm" ng-required="true"
-                                               name="proposerCode" onkeypress="return isEnterKey(event)"
+                                               name="proposerCode" ng-disabled="true" onkeypress="return isEnterKey(event)"
                                                ng-model="proposalDetails.proposer.proposerCode"/>
                                     </div>
                                     <div class="form-group">
@@ -201,7 +201,7 @@
                                         <label class="control-label">Province</label>
                                         <select class="form-control input-sm" ng-required="true" name="province"
                                                 ng-model="proposalDetails.proposer.province"
-                                                ng-options="province.provinceId  as province.provinceName for province in provinces">
+                                                ng-options="province.provinceId  as province.provinceName for province in provinces" ng-change="getCurrentVal(proposalDetails.proposer.province)">
                                         </select>
                                     </div>
                                     <div class="form-group">

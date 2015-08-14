@@ -89,6 +89,15 @@ angular.module('createProposal', ['common', 'ngRoute', 'mgcrea.ngStrap.select', 
                 }
 
             };
+            $scope.isSaveDisabled = function (formName) {
+                return formName.$invalid ;
+            };
+            $scope.getCurrentVal=function(val){
+
+                $scope.proposalDetails.proposer.town='';
+
+            }
+
             $scope.additionalDocumentList = [{}];
             $http.get("/pla/grouplife/proposal/getadditionaldocuments/"+ $scope.proposalId).success(function (data, status) {
                 console.log(data);
@@ -278,9 +287,6 @@ angular.module('createProposal', ['common', 'ngRoute', 'mgcrea.ngStrap.select', 
                 angular.extend($scope.proposalDetails.basic, {agentName: null, branchName: null, teamName: null});
             };
 
-            $scope.isSaveDisabled = function (formName) {
-                //return formName.$invalid || ($scope.stepsSaved[$scope.selectedItem] && !$scope.isEditMode)
-            };
 
             $scope.searchAgent = function () {
                 $http.get("/pla/quotation/grouplife/getagentdetail/" + $scope.proposalDetails.basic.agentId)
