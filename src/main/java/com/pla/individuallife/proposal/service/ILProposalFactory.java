@@ -27,16 +27,13 @@ import java.util.stream.Collectors;
 public class ILProposalFactory {
 
 
+    private static final Logger logger = LoggerFactory.getLogger(ILProposalFactory.class);
     @Autowired
     private ILQuotationFinder quotationFinder;
-
     @Autowired
     private PlanFinder planFinder;
-
     @Autowired
     private ProposalNumberGenerator proposalNumberGenerator;
-
-    private static final Logger logger = LoggerFactory.getLogger(ILProposalFactory.class);
 
     public ILProposalAggregate createProposal(ILCreateProposalCommand cmd){
         AgentCommissionShareModel agentCommissionShareModel = withAgentCommissionShareModel(cmd.getAgentCommissionDetails());
@@ -53,7 +50,8 @@ public class ILProposalFactory {
             quotationProposerDto.setMaritalStatus(proposerDto.getMaritalStatus());
             quotationProposerDto.setOtherName(proposerDto.getOtherName());
             quotationProposerDto.setSpouse(proposerDto.getSpouse());
-            proposer = ProposerBuilder.getProposerBuilder(dto.getProposer()).createProposer();
+            quotationProposerDto.setIsProposedAssured(cmd.getProposer().getIsProposedAssured());
+            proposer = ProposerBuilder.getProposerBuilder(quotationProposerDto).createProposer();
             if (dto.isAssuredTheProposer()) {
                 proposedAssured =  withProposedAssure(quotationProposerDto);
             }

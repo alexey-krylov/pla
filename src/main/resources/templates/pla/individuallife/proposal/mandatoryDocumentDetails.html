@@ -80,13 +80,26 @@
         </div>
         </accordion-group>
     </accordion>
+
+        <div class="row" ng-if="returnStatusCheck">
+            {{returnComments}}
+            <div class="col-lg-6">
+                <div class="form-group required">
+                    <label class="control-label">Comments</label>
+                        <textarea class="form-control input-sm" rows="4" cols="50"
+                                  name="comments"
+                                  ng-blur="setComments(returnComments)" ng-model="returnComments" />
+                </div>
+            </div>
+        </div>
+
     <div class="row">
         <div class="col-sm-6">
-
             <button type="button" class="btn btn-default btn-sm" ng-click="back()">Cancel</button>
         </div>
         <div class="col-sm-6">
-            <button type="button" class="btn btn-default btn-sm" style="float: right" ng-click="submitAdditionalDocument()">Submit</button>
+            {{showSubmitStatus}}
+            <button type="button" class="btn btn-default btn-sm" style="float: right" ng-disabled="showSubmitStatus" ng-click="submitAdditionalDocument()">Submit</button>
         </div>
     </div>
 </ng-form>

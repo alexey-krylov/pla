@@ -126,7 +126,10 @@
                             <form id="viewAgentsForm">
                                 <tr th:each="proposal : ${searchResult}">
                                     <td><input type="radio" name="quotationNumber" th:value="${proposal.proposalId}"/>
+                                        <input type="hidden" class="proposalStatus"
+                                               th:value="${proposal.proposalStatus}"/>
                                     </td>
+
                                     <td th:text="${proposal.proposalNumber}">5100000010315</td>
                                     <td th:text="${proposal.createdOn}">05/03/2015</td>
                                     <td th:text="${proposal.agentName}">Agent Name</td>

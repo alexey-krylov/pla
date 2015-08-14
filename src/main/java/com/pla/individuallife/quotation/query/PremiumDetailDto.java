@@ -29,6 +29,6 @@ public class PremiumDetailDto {
 
     private BigDecimal totalPremium;
 
-    private Set<RiderPremiumDto> riderPremiumDtos;
+    private Set<RiderPremiumDto> riderPremium;
 
 }

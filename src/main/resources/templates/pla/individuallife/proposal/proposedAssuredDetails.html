@@ -1,4 +1,4 @@
-<ng-form name="step1">
+<ng-form name="step2">
     <div ng-init="setForm(step1);"></div>
     <accordion close-others="true">
         <accordion-group is-open="accordionStatus.proposedAssuredDetails.proposedAssured" ng-form="proposedAssuredDetails"
@@ -277,7 +277,7 @@
                 </div>
                 <div class="form-group required" ng-if="employmentTypeStaus">
                     <label class="control-label">Employment Type</label>
-                    <select class="form-control input-sm" name="employmentType" ng-required="true" ng-disabled="mode=='new'||mode=='view'" ng-model="employment.employmentType" ng-options="employmentType.employment_id as employmentType.description for employmentType in employmentTypes">
+                    <select class="form-control input-sm" name="employmentType" ng-required="true" ng-disabled="mode=='new'||mode=='view'" ng-init="getProposeAssuredEmpType(employment.employmentType)" ng-change="getProposeAssuredEmpType(employment.employmentType)" ng-model="employment.employmentType" ng-options="employmentType.employment_id as employmentType.description for employmentType in employmentTypes">
                             </select>
 
                     <div class="error" ng-messages="employmentDetails.employmentType.$error" ng-if="employmentDetails.employmentType.$dirty">

@@ -139,7 +139,7 @@ public class ILQuotationAppService {
                 }
             }
         }
-        premiumDetailDto.setRiderPremiumDtos(riderPremiumDtoSet);
+        premiumDetailDto.setRiderPremium(riderPremiumDtoSet);
         premiumDetailDto.setTotalPremium(totalPremium);
         premiumDetailDto.setPlanName(planFinder.getPlanName(new PlanId(quotation.get("PLANID").toString())));
         premiumDetailDto.setAnnualPremium(totalPremium);

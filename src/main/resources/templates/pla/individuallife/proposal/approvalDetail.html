@@ -18,8 +18,8 @@
                 </tbody>
             </table>
         </div>
-        <form class="form-horizontal"  id="createILApprovalProposal" name="createILApprovalProposal" novalidate="true">
-            <div class="row">
+        <form class="form-horizontal"  id="createILApprovalProposal" name="createILApprovalProposal" ng-if="methodCheckStatus" novalidate="true">
+            <div class="row" ng-if="!returnStatusCheck">
                 <div class="col-lg-6">
                     <div class="form-group required">
                         <label class="control-label">Comments</label>
@@ -31,16 +31,16 @@
                 </div>
                 <div class="col-lg-6">
                     <div class="form-group required">
-                        <button type="button" class="btn btn-default btn-sm" style="float: right" ng-if="isViewMode" ng-click="approveProposal(comment)">Approve</button>
+                        <button type="button" class="btn btn-default btn-sm" style="float: right" ng-if="isViewMode"  ng-click="approveProposal(comment)">Approve</button>
                         <button type="button" class="btn btn-default btn-sm" style="float: right;margin-right: 10px;" ng-click="returnProposal(comment)" ng-disabled="!comment" ng-if="isViewMode">Return</button>
-                        <button type="button" class="btn btn-default btn-sm" style="float: right;margin-right: 10px;" ng-click="holdProposal(comment)" ng-disabled="!comment" ng-if="isViewMode">Hold</button>
-                        <button type="button" class="btn btn-default btn-sm" style="float: right;margin-right: 10px;" ng-click="rejectProposal(comment)" ng-disabled="!comment" ng-if="isViewMode">Reject</button>
+                        <button type="button" class="btn btn-default btn-sm" style="float: right;margin-right: 10px;" ng-show="holdStatus" ng-click="holdProposal(comment)" ng-disabled="!comment" ng-if="isViewMode">Hold</button>
+                        <button type="button" class="btn btn-default btn-sm" style="float: right;margin-right: 10px;" ng-show="rejectStatus" ng-click="rejectProposal(comment)" ng-disabled="!comment" ng-if="isViewMode">Reject</button>
+                        <button type="button" class="btn btn-default btn-sm" style="float: right;margin-right: 10px;" ng-show="forwardStatus" ng-disabled="!comment" ng-if="isViewMode"  ng-click="routeToNextLevel(comment)">Forward</button>
                     </div>
                 </div>
             </div>
         </form>
-
-
+        
         <div class="row">
             <div class="col-sm-6">
                 <button type="button" class="btn btn-default btn-sm" ng-click="back()">Cancel</button>

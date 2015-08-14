@@ -376,9 +376,18 @@
 
                             </div>
 
-                            <div class="form-group">
+                            <div class="form-group required">
                                 <label class="control-label">Age</label>
-                                <input type="text" class="form-control input-sm" name="beneficiaryAge" ng-model="beneficiary.age" ng-readonly="true"/>
+                                <input type="text" class="form-control input-sm" name="beneficiaryAge" ng-model="beneficiary.age" min="1" max="16"
+                                       ng-required="true" ng-readonly="true"/>
+
+                                <div class="error" ng-messages="planBeneficiary.beneficiaryAge.$error" ng-if="planBeneficiary.beneficiaryAge.$dirty">
+                                    <small ng-message="required">Please enter title.</small>
+                                    <small ng-message="invalidProposedMinAge">Minimum Entry Age For Beneficiary is 1 year.
+                                    </small>
+                                    <small ng-message="invalidProposedMaxAge">Maximum Entry Age For Beneficiary is 16 Years.
+                                    </small>
+                                </div>
                             </div>
                             <div class="form-group">
                                 <label class="control-label">Relationship To Life Assured</label>
@@ -420,12 +429,18 @@
                                 <label class="control-label">Sex</label>
                                 <select type="text" class="form-control input-sm" name="sex" ng-model="beneficiary.gender" ng-options="gender.code as gender.description for gender in genderList"></select>
                             </div>
-                            <div class="form-group">
+                            <div class="form-group required">
                                 <label class="control-label">Share %</label>
                                 <!--<select type="text" class="form-control input-sm" name="share" ng-model="beneficiary.share">
                                     <option value="15">Select One</option>
                                 </select>-->
-                                <input type="number" class="form-control input-sm" name="share" ng-model="beneficiary.share"/>
+                                <input type="number" class="form-control input-sm" name="share" ng-required="true" ng-model="beneficiary.share"/>
+
+                                <div class="error" ng-messages="planBeneficiary.beneficiarySurname.$error" ng-if="planBeneficiary.beneficiarySurname.$dirty">
+                                    <!--<small class="error" ng-message="required">Please enter Surname.</small>-->
+                                    <small ng-message="required">Please enter share%.</small>
+                                </div>
+
                             </div>
                         </div>
                     </div>
