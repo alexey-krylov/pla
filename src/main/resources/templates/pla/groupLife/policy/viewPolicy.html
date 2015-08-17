@@ -18,7 +18,7 @@
 
         var charCode = (evt.which) ? evt.which : evt.keyCode;
 
-        if (charCode > 31 && charCode != 8 && charCode != 0 && (charCode < 48 || charCode > 57 ))
+        if (charCode > 31 && charCode != 8 && charCode != 0 && charCode!=46 &&(charCode < 48 || charCode > 57 ))
             return false;
         return true;
     }
@@ -357,35 +357,35 @@
                                         <div class="form-group required">
                                             <label class="control-label">Add-On Benefits</label>
                                             <input class="form-control input-sm" onkeypress="return isNumeric(event)"
-                                                   ng-required="true" name="addOnBenefits"
+                                                   ng-required="true" name="addOnBenefits" ng-pattern="/^(^[0-9]{1,2})+(\.[0-9]{1,2})?$/"
                                                    ng-model="policyDetails.premium.addOnBenefit"
                                                    ng-blur="recalculatePremium();" value="0"/>
                                         </div>
                                         <div class="form-group">
                                             <label class="control-label">Profit and Solvency Loading</label>
                                             <input class="form-control input-sm" onkeypress="return isNumeric(event)"
-                                                   name="profitAndSolvencyLoading"
+                                                   name="profitAndSolvencyLoading" ng-pattern="/^(^[0-9]{1,2})+(\.[0-9]{1,2})?$/"
                                                    ng-model="policyDetails.premium.profitAndSolvencyLoading"
                                                    ng-blur="recalculatePremium();" value="0"/>
                                         </div>
                                         <div class="form-group">
                                             <label class="control-label">HIV Discounts</label>
                                             <input class="form-control input-sm" onkeypress="return isNumeric(event)"
-                                                   name="hivDiscount"
+                                                   name="hivDiscount" ng-pattern="/^(^[0-9]{1,2})+(\.[0-9]{1,2})?$/"
                                                    ng-model="policyDetails.premium.hivDiscount"
                                                    ng-blur="recalculatePremium();" value="0"/>
                                         </div>
                                         <div class="form-group">
                                             <label class="control-label">Valued Client Discounts</label>
                                             <input class="form-control input-sm" onkeypress="return isNumeric(event)"
-                                                   name="valuedClientDiscount"
+                                                   name="valuedClientDiscount" ng-pattern="/^(^[0-9]{1,2})+(\.[0-9]{1,2})?$/"
                                                    ng-model="policyDetails.premium.valuedClientDiscount"
                                                    ng-blur="recalculatePremium();" value="0"/>
                                         </div>
                                         <div class="form-group">
                                             <label class="control-label">Long Term Discounts</label>
                                             <input class="form-control input-sm" onkeypress="return isNumeric(event)"
-                                                   name="longTermDiscount"
+                                                   name="longTermDiscount" ng-pattern="/^(^[0-9]{1,2})+(\.[0-9]{1,2})?$/"
                                                    ng-model="policyDetails.premium.longTermDiscount"
                                                    ng-blur="recalculatePremium();" value="0"/>
                                         </div>

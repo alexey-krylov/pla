@@ -18,7 +18,7 @@
 
         var charCode = (evt.which) ? evt.which : evt.keyCode;
 
-        if (charCode > 31 && charCode != 8 && charCode != 0 && (charCode < 48 || charCode > 57 ))
+        if (charCode > 31 && charCode != 8 && charCode != 0 && charCode != 46 && (charCode < 48 || charCode > 57 ))
             return false;
         return true;
     }
@@ -356,14 +356,14 @@
                                         <div class="form-group required">
                                             <label class="control-label">Add-On Benefits</label>
                                             <input class="form-control input-sm" onkeypress="return isNumeric(event)"
-                                                   ng-required="true" name="addOnBenefits"
+                                                   ng-required="true" name="addOnBenefits" ng-pattern="/^(^[0-9]{1,2})+(\.[0-9]{1,2})?$/"
                                                    ng-model="policyDetails.premium.addOnBenefit"
                                                    ng-blur="recalculatePremium();" value="0"/>
                                         </div>
                                         <div class="form-group">
                                             <label class="control-label">Profit and Solvency Loading</label>
                                             <input class="form-control input-sm" onkeypress="return isNumeric(event)"
-                                                   name="profitAndSolvencyLoading"
+                                                   name="profitAndSolvencyLoading" ng-pattern="/^(^[0-9]{1,2})+(\.[0-9]{1,2})?$/"
                                                    ng-model="policyDetails.premium.profitAndSolvencyLoading"
                                                    ng-blur="recalculatePremium();" value="0"/>
                                         </div>
@@ -371,14 +371,14 @@
                                             <label class="control-label">Waiver of Excess Loading</label>
                                             <input class="form-control input-sm" onkeypress="return isNumeric(event)"
                                                    ng-required="true" name="addOnBenefits"
-                                                   type="number" min="0" max="100"
+                                                    min="0" max="99" ng-pattern="/^(^[0-9]{1,2})+(\.[0-9]{1,2})?$/"
                                                    ng-model="policyDetails.premium.waiverOfExcessLoading"
                                                    ng-blur="recalculatePremium();" value="0"/>
                                         </div>
                                         <div class="form-group">
                                             <label class="control-label">Discounts</label>
                                             <input class="form-control input-sm" onkeypress="return isNumeric(event)"
-                                                   name="discounts"
+                                                   name="discounts" ng-pattern="/^(^[0-9]{1,2})+(\.[0-9]{1,2})?$/"
                                                    ng-model="policyDetails.premium.discounts"
                                                    ng-blur="recalculatePremium();" value="0"/>
                                         </div>
