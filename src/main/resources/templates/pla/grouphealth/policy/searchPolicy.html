@@ -27,7 +27,7 @@
                 $(document).ready(function () {
                     $("input[type='text']").keyup(function () {
                         var isDisabled = true;
-                        $('#searchpolicyforGLPolicy *').filter(':text').each(function (key, value) {
+                        $('#searchpolicyforGHPolicy *').filter(':text').each(function (key, value) {
                             if ($(value).val().trim().length != 0) {
                                 isDisabled = false;
                             }
