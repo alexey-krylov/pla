@@ -1,9 +1,10 @@
 package com.pla.grouphealth.quotation.domain.service;
 
 import com.pla.core.domain.model.agent.AgentId;
-import com.pla.grouphealth.quotation.domain.model.*;
-import com.pla.grouphealth.sharedresource.dto.GHPremiumDetailDto;
+import com.pla.grouphealth.quotation.domain.model.GHQuotationProcessor;
+import com.pla.grouphealth.quotation.domain.model.GroupHealthQuotation;
 import com.pla.grouphealth.quotation.query.GHQuotationFinder;
+import com.pla.grouphealth.sharedresource.dto.GHPremiumDetailDto;
 import com.pla.grouphealth.sharedresource.dto.ProposerDto;
 import com.pla.grouphealth.sharedresource.model.vo.*;
 import com.pla.grouphealth.sharedresource.service.AgentIsActive;
@@ -11,6 +12,7 @@ import com.pla.publishedlanguage.contract.IPremiumCalculator;
 import com.pla.publishedlanguage.domain.model.BasicPremiumDto;
 import com.pla.publishedlanguage.domain.model.ComputedPremiumDto;
 import com.pla.publishedlanguage.domain.model.PremiumFrequency;
+import com.pla.sharedkernel.identifier.LineOfBusinessEnum;
 import com.pla.sharedkernel.identifier.OpportunityId;
 import com.pla.sharedkernel.identifier.QuotationId;
 import org.bson.types.ObjectId;
@@ -127,7 +129,7 @@ public class GroupHealthQuotationService {
                 premiumDetailDto.getDiscounts(), premiumDetailDto.getWaiverOfExcessLoading(), premiumDetailDto.getVat(), premiumDetailDto.getPolicyTermValue());
         premiumDetail = premiumDetail.updateWithNetPremium(groupHealthQuotation.getNetAnnualPremiumPaymentAmount(premiumDetail));
         if (premiumDetailDto.getPolicyTermValue() != null && premiumDetailDto.getPolicyTermValue() == 365) {
-            List<ComputedPremiumDto> computedPremiumDtoList = premiumCalculator.calculateModalPremium(new BasicPremiumDto(PremiumFrequency.ANNUALLY, premiumDetail.getNetTotalPremium()));
+            List<ComputedPremiumDto> computedPremiumDtoList = premiumCalculator.calculateModalPremium(new BasicPremiumDto(PremiumFrequency.ANNUALLY, premiumDetail.getNetTotalPremium(), LineOfBusinessEnum.GROUP_HEALTH));
             Set<GHFrequencyPremium> policies = computedPremiumDtoList.stream().map(new Function<ComputedPremiumDto, GHFrequencyPremium>() {
                 @Override
                 public GHFrequencyPremium apply(ComputedPremiumDto computedPremiumDto) {

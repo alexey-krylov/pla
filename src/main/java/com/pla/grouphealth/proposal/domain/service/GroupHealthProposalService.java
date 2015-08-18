@@ -11,6 +11,7 @@ import com.pla.publishedlanguage.contract.IPremiumCalculator;
 import com.pla.publishedlanguage.domain.model.BasicPremiumDto;
 import com.pla.publishedlanguage.domain.model.ComputedPremiumDto;
 import com.pla.publishedlanguage.domain.model.PremiumFrequency;
+import com.pla.sharedkernel.identifier.LineOfBusinessEnum;
 import com.pla.sharedkernel.identifier.OpportunityId;
 import org.nthdimenzion.common.AppConstants;
 import org.nthdimenzion.ddd.domain.annotations.DomainService;
@@ -88,7 +89,7 @@ public class GroupHealthProposalService {
                 premiumDetailDto.getDiscounts(), premiumDetailDto.getWaiverOfExcessLoading(), premiumDetailDto.getVat(), premiumDetailDto.getPolicyTermValue());
         premiumDetail = premiumDetail.updateWithNetPremium(groupHealthProposal.getNetAnnualPremiumPaymentAmount(premiumDetail));
         if (premiumDetailDto.getPolicyTermValue() != null && premiumDetailDto.getPolicyTermValue() == 365) {
-            List<ComputedPremiumDto> computedPremiumDtoList = premiumCalculator.calculateModalPremium(new BasicPremiumDto(PremiumFrequency.ANNUALLY, premiumDetail.getNetTotalPremium()));
+            List<ComputedPremiumDto> computedPremiumDtoList = premiumCalculator.calculateModalPremium(new BasicPremiumDto(PremiumFrequency.ANNUALLY, premiumDetail.getNetTotalPremium(), LineOfBusinessEnum.GROUP_HEALTH));
             Set<GHFrequencyPremium> policies = computedPremiumDtoList.stream().map(new Function<ComputedPremiumDto, GHFrequencyPremium>() {
                 @Override
                 public GHFrequencyPremium apply(ComputedPremiumDto computedPremiumDto) {

@@ -46,4 +46,3 @@
         <appender-ref ref="ERRORFILE"/>
     </root>
 </configuration>
-

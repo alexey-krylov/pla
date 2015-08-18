@@ -1,5 +1,6 @@
 package com.pla.publishedlanguage.domain.model;
 
+import com.pla.sharedkernel.identifier.LineOfBusinessEnum;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
@@ -17,4 +18,6 @@ public class BasicPremiumDto {
     private PremiumFrequency premiumFrequency;
 
     private BigDecimal basicPremium;
+
+    private LineOfBusinessEnum lineOfBusinessEnum;
 }

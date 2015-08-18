@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="cover" pageWidth="900" pageHeight="500" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="7eac5401-a67e-44d2-9810-556f68c0a117">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<style name="table">
+		<box>
+			<pen lineWidth="1.0" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_TH" mode="Opaque" backcolor="#BFE1FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_CH" mode="Opaque" backcolor="#E6F3FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+		<conditionalStyle>
+			<conditionExpression><![CDATA[new Boolean($V{REPORT_COUNT}.intValue()%2==0)]]></conditionExpression>
+			<style backcolor="#F8FCFF"/>
+		</conditionalStyle>
+	</style>
+	<subDataset name="CoverDetailsDS" uuid="656ac15f-d3e1-439d-9d38-3c8d654e1e77">
+		<field name="planCoverageName" class="java.lang.String">
+			<fieldDescription><![CDATA[planCoverageName]]></fieldDescription>
+		</field>
+		<field name="planCoverageSumAssured" class="java.lang.String">
+			<fieldDescription><![CDATA[planCoverageSumAssured]]></fieldDescription>
+		</field>
+		<field name="category" class="java.lang.String">
+			<fieldDescription><![CDATA[category]]></fieldDescription>
+		</field>
+		<field name="relationship" class="java.lang.String">
+			<fieldDescription><![CDATA[relationship]]></fieldDescription>
+		</field>
+	</subDataset>
+	<queryString>
+		<![CDATA[]]>
+	</queryString>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<detail>
+		<band height="50">
+			<componentElement>
+				<reportElement key="table" style="table" x="124" y="0" width="360" height="50" uuid="a8cbf463-690a-453b-b4c5-c6dfae3fb4e1"/>
+				<jr:table xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd">
+					<datasetRun subDataset="CoverDetailsDS" uuid="094614b4-a1b9-4fe7-9444-f423c105550e"/>
+					<jr:column width="130" uuid="bf9a7475-9104-4545-adfd-681832f20393">
+						<jr:tableHeader style="table_TH" height="30" rowSpan="1">
+							<staticText>
+								<reportElement x="10" y="0" width="107" height="30" uuid="41d91e73-bb51-45b7-981f-e2d414b108a4"/>
+								<text><![CDATA[Plan/Coverage Name]]></text>
+							</staticText>
+						</jr:tableHeader>
+						<jr:detailCell style="table_TD" height="20" rowSpan="1">
+							<textField>
+								<reportElement x="0" y="0" width="130" height="20" uuid="f121e45f-8695-4623-a68b-fe8ea2377bbf"/>
+								<textFieldExpression><![CDATA[$F{planCoverageName}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="117" uuid="7a04b9fc-2ba7-4d61-9f04-dab15a3f1375">
+						<jr:tableHeader style="table_TH" height="30" rowSpan="1">
+							<staticText>
+								<reportElement x="0" y="0" width="117" height="30" uuid="7366755f-6afc-44d7-bf49-bdc5451cb4a4"/>
+								<text><![CDATA[Sum Assured]]></text>
+							</staticText>
+						</jr:tableHeader>
+						<jr:detailCell style="table_TD" height="20" rowSpan="1">
+							<textField>
+								<reportElement x="0" y="0" width="117" height="20" uuid="5bc1f4af-d090-43c3-aa87-a568386bd74c"/>
+								<textFieldExpression><![CDATA[$F{planCoverageName}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="90" uuid="b80fd4a3-5fe0-4363-a267-85e248950dea">
+						<jr:tableHeader style="table_TH" height="30" rowSpan="1">
+							<staticText>
+								<reportElement x="0" y="0" width="90" height="30" uuid="93071ef4-09a6-47ae-baf0-60bd64ef734e"/>
+								<text><![CDATA[Category]]></text>
+							</staticText>
+						</jr:tableHeader>
+						<jr:detailCell style="table_TD" height="20" rowSpan="1">
+							<textField>
+								<reportElement x="0" y="0" width="90" height="20" uuid="1375146c-c606-4e82-8af2-fc8059c74fef"/>
+								<textFieldExpression><![CDATA[$F{category}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="90" uuid="539786b2-df63-4d46-a7a6-99148cb71022">
+						<jr:tableHeader style="table_TH" height="30" rowSpan="1">
+							<staticText>
+								<reportElement x="0" y="0" width="90" height="30" uuid="3ec8c165-df09-4af5-b86f-8885832dbf64"/>
+								<text><![CDATA[Relationship]]></text>
+							</staticText>
+						</jr:tableHeader>
+						<jr:detailCell style="table_TD" height="20" rowSpan="1">
+							<textField>
+								<reportElement x="0" y="0" width="90" height="20" uuid="8bb74dac-5972-4d41-9e40-0fe5ec3f2ac6"/>
+								<textFieldExpression><![CDATA[$F{relationship}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+				</jr:table>
+			</componentElement>
+		</band>
+	</detail>
+</jasperReport>

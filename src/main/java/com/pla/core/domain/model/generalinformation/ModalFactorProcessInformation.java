@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
 /**
  * Created by Admin on 4/27/2015.
  */
-@Getter(AccessLevel.PACKAGE)
+@Getter
 @Setter(AccessLevel.PACKAGE)
 @EqualsAndHashCode
 public class ModalFactorProcessInformation {

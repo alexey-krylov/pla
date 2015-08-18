@@ -316,7 +316,7 @@ public class GroupHealthProposalController {
         POIFSFileSystem fs = new POIFSFileSystem(file.getInputStream());
         HSSFWorkbook insuredTemplateWorkbook = new HSSFWorkbook(fs);
         try {
-            boolean isValidInsuredTemplate = ghProposalService.isValidInsuredTemplate(uploadInsuredDetailDto.getQuotationId(), insuredTemplateWorkbook, uploadInsuredDetailDto.isSamePlanForAllCategory(), uploadInsuredDetailDto.isSamePlanForAllRelation());
+            boolean isValidInsuredTemplate = ghProposalService.isValidInsuredTemplate(uploadInsuredDetailDto.getProposalId(), insuredTemplateWorkbook, uploadInsuredDetailDto.isSamePlanForAllCategory(), uploadInsuredDetailDto.isSamePlanForAllRelation());
             if (!isValidInsuredTemplate) {
                 File insuredTemplateWithError = new File(uploadInsuredDetailDto.getProposalId());
                 FileOutputStream fileOutputStream = new FileOutputStream(insuredTemplateWithError);
