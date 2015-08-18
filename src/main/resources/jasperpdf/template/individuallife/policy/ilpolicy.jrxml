@@ -1,0 +1,273 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="policyInLandscape" pageWidth="1000" pageHeight="1500" orientation="Landscape" columnWidth="960" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="03a1851c-2668-4a30-807a-ddd2aa7044e4">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<subDataset name="dataset1" uuid="cb7c3b79-1e7b-49c3-9bac-8ee5b60d6edc"/>
+	<queryString>
+		<![CDATA[]]>
+	</queryString>
+	<field name="proposerName" class="java.lang.String">
+		<fieldDescription><![CDATA[proposerName]]></fieldDescription>
+	</field>
+	<field name="policyStartDate" class="java.lang.String">
+		<fieldDescription><![CDATA[policyStartDate]]></fieldDescription>
+	</field>
+	<field name="telephoneNumber" class="java.lang.String">
+		<fieldDescription><![CDATA[telephoneNumber]]></fieldDescription>
+	</field>
+	<field name="agentCode" class="java.lang.String">
+		<fieldDescription><![CDATA[agentCode]]></fieldDescription>
+	</field>
+	<field name="contactNumber" class="java.lang.String">
+		<fieldDescription><![CDATA[contactNumber]]></fieldDescription>
+	</field>
+	<field name="psOffice" class="java.lang.String">
+		<fieldDescription><![CDATA[psOffice]]></fieldDescription>
+	</field>
+	<field name="address" class="java.lang.String">
+		<fieldDescription><![CDATA[address]]></fieldDescription>
+	</field>
+	<field name="policyNumber" class="java.lang.String">
+		<fieldDescription><![CDATA[policyNumber]]></fieldDescription>
+	</field>
+	<field name="policyEndDate" class="java.lang.String">
+		<fieldDescription><![CDATA[policyEndDate]]></fieldDescription>
+	</field>
+	<field name="planName" class="java.lang.String">
+		<fieldDescription><![CDATA[planName]]></fieldDescription>
+	</field>
+	<field name="planSumAssured" class="java.lang.String">
+		<fieldDescription><![CDATA[planSumAssured]]></fieldDescription>
+	</field>
+	<field name="premiumDetails" class="java.util.List">
+		<fieldDescription><![CDATA[premiumDetails]]></fieldDescription>
+	</field>
+	<field name="issueBranch" class="java.lang.String">
+		<fieldDescription><![CDATA[issueBranch]]></fieldDescription>
+	</field>
+	<field name="issuanceDate" class="java.lang.String">
+		<fieldDescription><![CDATA[issuanceDate]]></fieldDescription>
+	</field>
+	<field name="coverDetails" class="java.util.List">
+		<fieldDescription><![CDATA[coverDetails]]></fieldDescription>
+	</field>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<pageHeader>
+		<band height="119" splitType="Stretch">
+			<subreport>
+				<reportElement x="65" y="0" width="568" height="119" uuid="fa6a7357-91e7-4f4b-8661-21c0b790e5ef"/>
+				<subreportExpression><![CDATA["jasperpdf/jasper/header.jasper"]]></subreportExpression>
+			</subreport>
+		</band>
+	</pageHeader>
+	<detail>
+		<band height="900" splitType="Stretch">
+			<rectangle radius="0">
+				<reportElement positionType="Float" stretchType="RelativeToBandHeight" x="1" y="0" width="959" height="900" isRemoveLineWhenBlank="true" forecolor="#000000" backcolor="#FFFFFF" uuid="ddc055b7-d0a1-406f-a37b-dd08172caf30"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="378" y="2" width="100" height="20" uuid="c42ceb79-1d87-4c08-9e1b-743cadba649f"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Trebuchet MS" size="16" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Policy]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="118" y="22" width="68" height="20" uuid="a3324e02-d103-44f3-b767-96d7bb8f18ae"/>
+				<textElement verticalAlignment="Middle"/>
+				<text><![CDATA[Agent Name :]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="118" y="42" width="68" height="20" uuid="f4834cad-94b4-4c70-bdc6-82caf045b327"/>
+				<textElement verticalAlignment="Middle"/>
+				<text><![CDATA[Agent Code ;]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="533" y="22" width="100" height="20" uuid="c9a5ad23-5750-451b-bc0a-f551df3d3718"/>
+				<textElement verticalAlignment="Middle"/>
+				<text><![CDATA[Contact Number :]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="533" y="42" width="132" height="20" uuid="f6a1f3e5-7959-40c8-b131-02add356a187"/>
+				<textElement verticalAlignment="Middle"/>
+				<text><![CDATA[Policy Servicing Office :]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="186" y="22" width="100" height="20" uuid="22554e76-bc46-42f1-95f9-a17975fc8751"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{proposerName}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="186" y="42" width="100" height="20" uuid="1929dae2-e3ac-4dbf-8707-84fc392e7e47"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{agentCode}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="633" y="22" width="100" height="20" uuid="8474eaa9-ea9e-41bf-9eb2-316f4ba78b51"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{contactNumber}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="655" y="42" width="100" height="20" uuid="39252de2-3330-4455-9ab1-32da98481e27"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{psOffice}]]></textFieldExpression>
+			</textField>
+			<rectangle>
+				<reportElement x="116" y="98" width="751" height="80" uuid="28dea15b-5fcb-4ce9-b002-785f9164a010"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="116" y="178" width="751" height="60" uuid="1ef83064-159a-4f3c-8245-149fba3df972"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="118" y="98" width="100" height="20" uuid="ca40fc19-430d-4aac-a60b-d19325d88183"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Trebuchet MS" size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Policy Holder :]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="118" y="118" width="55" height="20" uuid="0182c783-fe91-4df9-8c20-46513b6c6fe6"/>
+				<textElement verticalAlignment="Middle"/>
+				<text><![CDATA[Name :]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="116" y="138" width="70" height="20" uuid="51cb987f-3ecd-460d-9976-bd32154bc0a7"/>
+				<textElement verticalAlignment="Middle"/>
+				<text><![CDATA[Address :]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="116" y="158" width="119" height="20" uuid="1962ddfa-3200-4bbd-b3ec-30787da5ecef"/>
+				<textElement verticalAlignment="Middle"/>
+				<text><![CDATA[Telephone Number(s) :]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="186" y="118" width="100" height="20" uuid="f1392ed7-c983-41fd-9c56-7028d361b730"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{proposerName}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="186" y="138" width="100" height="20" uuid="da6e5a55-630c-4b0c-b208-498d98847f95"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{address}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="229" y="158" width="122" height="20" uuid="69d61a41-c064-4fb5-b6d4-a06f2a45ca06"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{telephoneNumber}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="116" y="178" width="100" height="20" uuid="d3e17c57-cc3f-4d0f-b64c-67b926807ba9"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Trebuchet MS" size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Policy Details :]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="118" y="198" width="100" height="20" uuid="a8d97a7b-da51-4b6e-adf9-f8a915bf2ed5"/>
+				<textElement verticalAlignment="Middle"/>
+				<text><![CDATA[Policy Number :]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="117" y="218" width="100" height="20" uuid="79442ee6-7133-4e58-8b06-fe27c260875c"/>
+				<textElement verticalAlignment="Middle"/>
+				<text><![CDATA[Policy Period :]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="216" y="198" width="100" height="20" uuid="3a323d8f-def1-47d4-95d6-14f0069759c2"/>
+				<textFieldExpression><![CDATA[$F{policyNumber}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="251" y="218" width="100" height="20" uuid="08b3914e-8105-410b-aed3-4a444aec2895"/>
+				<textFieldExpression><![CDATA[$F{policyStartDate}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="216" y="218" width="40" height="20" uuid="2444e730-f329-4d5f-93fb-20b86fc9d042"/>
+				<text><![CDATA[From :]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="351" y="218" width="25" height="20" uuid="691e8873-6bd9-47be-878e-d40ffab50357"/>
+				<text><![CDATA[To :]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="376" y="218" width="100" height="20" uuid="a1e58145-a774-4064-b5f1-24f71a4d2c6f"/>
+				<textFieldExpression><![CDATA[$F{policyEndDate}]]></textFieldExpression>
+			</textField>
+			<subreport>
+				<reportElement positionType="Float" x="149" y="252" width="672" height="40" uuid="320efc4f-e6f9-48b6-b0ce-3580ac1ff9e7"/>
+				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{coverDetails})]]></dataSourceExpression>
+				<subreportExpression><![CDATA["jasperpdf/jasper/individuallife/policy/coverdetailsubreport.jasper"]]></subreportExpression>
+			</subreport>
+			<staticText>
+				<reportElement x="118" y="499" width="142" height="20" uuid="6543c127-6910-495b-8777-6fa3eafd7610"/>
+				<text><![CDATA[Special Condtions (If Any) :]]></text>
+			</staticText>
+			<subreport>
+				<reportElement x="118" y="578" width="672" height="27" uuid="dcd84270-fad9-430a-94f4-0fefb2f40fbe"/>
+				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{premiumDetails})]]></dataSourceExpression>
+				<subreportExpression><![CDATA["jasperpdf/jasper/individuallife/policy/premiumDetails.jasper"]]></subreportExpression>
+			</subreport>
+			<rectangle>
+				<reportElement x="253" y="499" width="631" height="49" uuid="4a02be24-0959-42a7-9b87-9ef8fc6edb57"/>
+			</rectangle>
+		</band>
+	</detail>
+	<pageFooter>
+		<band height="99" splitType="Stretch">
+			<frame>
+				<reportElement mode="Opaque" x="2" y="0" width="958" height="34" forecolor="#FFFFFF" backcolor="#003399" uuid="637e6dff-f1d1-4607-8eaf-5ae8dc827bf8"/>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Double"/>
+					<leftPen lineWidth="1.0" lineStyle="Double"/>
+					<bottomPen lineWidth="1.0" lineStyle="Double"/>
+					<rightPen lineWidth="1.0" lineStyle="Double"/>
+				</box>
+				<staticText>
+					<reportElement mode="Opaque" x="265" y="0" width="366" height="34" forecolor="#FFFFFF" backcolor="#003399" uuid="a52e332d-c040-415d-a379-d4470c569c7d"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Arial" size="14" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Professional Life Assurance Limited]]></text>
+				</staticText>
+			</frame>
+			<frame>
+				<reportElement mode="Transparent" x="2" y="34" width="958" height="64" forecolor="#000000" uuid="d5cbf125-30ef-479a-8a2a-4f1c56956b0d"/>
+				<staticText>
+					<reportElement x="24" y="10" width="234" height="54" forecolor="#0000CC" uuid="d47b89e3-3f66-4413-b84e-9d6365673e9a"/>
+					<textElement>
+						<font fontName="Arial" size="8" isBold="true"/>
+					</textElement>
+					<text><![CDATA[  Head Office
+  Finsbury Park, Cairo Road,
+  North End ,P.O.Box 31357,Lusaka-Zambia
+  Tel : 021-1-222233,366704,Fax: 021-1-220128
+  email : ho@proflife.co.zm.Website : www.proflife.co.zm]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="380" y="12" width="127" height="52" forecolor="#0000CC" uuid="7655170f-4879-4465-a4b7-deb6c48b03a6"/>
+					<textElement>
+						<font fontName="Arial" size="8" isBold="true"/>
+					</textElement>
+					<text><![CDATA[  KITWE Branch
+  17,Kanyanta Road
+  P.O.Box 20564
+  Kitwe - Zambia
+  Tel : 021-2-224270,225611]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="620" y="12" width="212" height="52" forecolor="#3300CC" uuid="d29f730e-4e4d-4e16-86ae-40116d67747d"/>
+					<textElement>
+						<font fontName="Arial" size="8" isBold="true"/>
+					</textElement>
+					<text><![CDATA[  Ndola Branch
+  1stFloor, Finance House,President Avenue,
+  P.O.Box:71177,Ndola,Zambia
+  Tel - 021-2-612466
+  Fax-021-2-612466]]></text>
+				</staticText>
+			</frame>
+		</band>
+	</pageFooter>
+</jasperReport>

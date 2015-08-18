@@ -249,7 +249,7 @@ public class ILPolicyService {
     }
 
     public byte[] getPolicyDocument(PolicyId policyId) throws IOException, JRException {
-        byte[] pdfData = PDFGeneratorUtils.createPDFReportByList(testData(), "jasperpdf/template/grouphealth/quotation/policyInLandscape.jrxml");
+        byte[] pdfData = PDFGeneratorUtils.createPDFReportByList(testData(), "jasperpdf/template/individuallife/policy/ilpolicy.jrxml");
         return pdfData;
     }
 
