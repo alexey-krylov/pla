@@ -130,7 +130,7 @@
                         <form id="viewAgentsForm">
                             <!--/*/ <th:block th:each="proposal : ${searchResult}"> /*/-->
 
-                            <tr th:each="proposal : ${searchResult}">
+                            <tr ><!--th:each="proposal : ${searchResult}"-->
                                 <td>
                                     <input type="radio" name="proposalNumber" th:value="${proposal.proposalId}"
                                            value="5100000010315"/>
