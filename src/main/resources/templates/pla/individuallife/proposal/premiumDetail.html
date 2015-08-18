@@ -181,7 +181,7 @@
                         <td>{{rider.coverageName.coverageName}} Annual Premium </td>
                         <td>
                             <input type="number" ng-model="rider.annualPremium"
-                                   class="form-control input-sm" view-enabled=""/>
+                                   ng-disabled="mode=='new'||mode=='view'" class="form-control input-sm" view-enabled=""/>
                         </td>
                     </div>
                 </div>
@@ -202,7 +202,7 @@
             <button type="button" class="btn btn-default btn-sm">Cancel</button>
         </div>
         <div class="col-sm-6">
-            <button type="button" class="btn btn-default btn-sm" style="float: right" ng-click="savePremiumDetail()">Save</button>
+            <button type="button" class="btn btn-default btn-sm" style="float: right" ng-disabled="mode=='new'||mode=='view'" ng-click="savePremiumDetail()">Save</button>
         </div>
     </div>
 </ng-form>

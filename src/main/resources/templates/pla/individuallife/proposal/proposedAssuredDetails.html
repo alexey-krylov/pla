@@ -10,7 +10,7 @@
             <div class="col-md-6">
                 <div class="form-group required">
                     <label class="control-label">Title</label>
-                    <select class="form-control input-sm" name="title" ng-disabled="mode=='new'||mode=='view'" ng-required="true" ng-model="proposedAssured.title" ng-options="title as title for title in titles">
+                    <select class="form-control input-sm" name="title" ng-disabled="mode=='new'||mode=='view'" ng-required="true" ng-change="getProposedAssuredGender(proposedAssured.title)" ng-model="proposedAssured.title" ng-options="title as title for title in titles">
                     </select>
 
                     <div class="error" ng-messages="proposedAssuredDetails.title.$error" ng-if="proposedAssuredDetails.title.$dirty">

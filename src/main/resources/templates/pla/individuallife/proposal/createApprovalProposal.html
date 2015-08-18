@@ -90,12 +90,19 @@
                 <div class="step-pane" data-step="1">
                     <ng-include src="resources.approvalDetails | getTrustedUrl"></ng-include>
                 </div>
+
                 <div class="step-pane" data-step="2">
-                    <ng-include src="resources.proposedAssuredUrl | getTrustedUrl"></ng-include>
-                </div>
-                <div class="step-pane" data-step="3">
                     <ng-include src="resources.proposerDetails | getTrustedUrl"></ng-include>
                 </div>
+                 <div class="step-pane" data-step="3">
+                    <ng-include src="resources.proposedAssuredUrl | getTrustedUrl"></ng-include>
+                </div>
+               <!-- <div class="step-pane" data-step="2">
+                    <ng-include src="resources.proposedAssuredUrl | getTrustedUrl"></ng-include>
+                </div>-->
+                <!--<div class="step-pane" data-step="3">
+                    <ng-include src="resources.proposerDetails | getTrustedUrl"></ng-include>
+                </div>-->
                 <div class="step-pane" data-step="4">
                     <ng-include src="resources.planDetails | getTrustedUrl"></ng-include>
                 </div>

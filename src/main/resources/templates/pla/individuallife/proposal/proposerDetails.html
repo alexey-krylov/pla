@@ -45,7 +45,7 @@
             <div class="col-md-6">
                 <div class="form-group required">
                     <label class="control-label">Title</label>
-                    <select class="form-control input-sm" name="title" ng-required="true" ng-disabled="mode=='new'||mode=='view'" ng-model="proposer.title" ng-options="title as title for title in titles">
+                    <select class="form-control input-sm" name="title" ng-required="true" ng-disabled="mode=='new'||mode=='view'" ng-model="proposer.title" ng-options="title as title for title in titles" ng-change="getProposerGender(proposer.title)">
                     </select>
 
                     <div class="error" ng-messages="proposerForm.title.$error" ng-if="proposerForm.title.$dirty">
@@ -148,6 +148,7 @@
                 <div class="form-group required">
                     <label class="control-label">Sex</label>
                     <select class="form-control input-sm" ng-disabled="mode=='new'||mode=='view'" name="gender" ng-model="proposer.gender" ng-required="true">
+                        <option value="">Select Gender</option>
                         <option value="MALE">Male</option>
                         <option value="FEMALE">Female</option>
                     </select>

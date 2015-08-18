@@ -208,25 +208,6 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
 
             //console.log('modeType' + $scope.mode);
             $scope.quotationStatus = "GENERATED";
-
-           /* $scope.$watch('proposer.gender',function(newVal,oldVal)
-             {
-             //alert('Return:-'+newVal);
-                 if(oldVal)
-                 {
-                     $scope.proposer.gender=oldVal;
-                 }
-             });
-
-            $scope.$watch('proposedAssured.gender',function(newVal,oldVal)
-            {
-                //alert('Return:-'+newVal);
-                if(oldVal)
-                {
-                    $scope.proposedAssured.gender=oldVal;
-                }
-            });*/
-
             if ($scope.quotationId) {
                 //console.log('Navigate to quotation Window...');
                 //alert("Quotation Id");
@@ -250,18 +231,18 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
                         $scope.proposer.isProposedAssured= response.assuredTheProposer
                         $scope.proposer.nrc = $scope.rcvProposalDetailQid.proposer.nrc || {};
 
-                       /*if($scope.rcvProposalDetailQid.proposer.employment != null)
-                        {
-                            $scope.proposerEmployment = $scope.rcvProposalDetailQid.proposer.employment;
-                        }
-                        else
-                        {
-                            $scope.proposerEmployment =" ";
-                        }
+                        /*if($scope.rcvProposalDetailQid.proposer.employment != null)
+                         {
+                         $scope.proposerEmployment = $scope.rcvProposalDetailQid.proposer.employment;
+                         }
+                         else
+                         {
+                         $scope.proposerEmployment =" ";
+                         }
 
-                        //$scope.proposerEmployment = $scope.rcvProposalDetailQid.proposer.employment;
-                        $scope.proposerResidential = $scope.rcvProposalDetailQid.proposer.residentialAddress;
-                        $scope.proposerSpouse = $scope.rcvProposalDetailQid.proposer.spouse;*/
+                         //$scope.proposerEmployment = $scope.rcvProposalDetailQid.proposer.employment;
+                         $scope.proposerResidential = $scope.rcvProposalDetailQid.proposer.residentialAddress;
+                         $scope.proposerSpouse = $scope.rcvProposalDetailQid.proposer.spouse;*/
 
                         if ($scope.proposer.dateOfBirth) {
                             $scope.proposer.nextDob = moment().diff(new moment(new Date($scope.proposer.dateOfBirth)), 'years') + 1;
@@ -287,11 +268,16 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
                 });
             }
 
+
             if ($scope.proposalId) {
                 $http.get("/pla/individuallife/proposal/getproposal/" + $scope.proposalId + "?mode=view").success(function (response, status, headers, config) {
                     var result = response;
+                    console.log("called********************");
+                    console.log(response.proposer);
+                    console.log('After Proposer.. ****');
+                    //console.log(response);
                     //alert(response.proposer.gender);
-                    $scope.proposer.gender=response.proposer.gender;
+                    //$scope.proposer.gender=response.proposer.gender;
                     console.log('proposalStatus***: '+ response.proposalStatus);
                     if(response.proposalStatus !=null)
                     {
@@ -340,12 +326,13 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
                     }
 
                     console.log("Response***");
-                    console.log(JSON.stringify(response));
+                    //console.log(JSON.stringify(response));
+
                     $scope.agentDetails=result.agentCommissionDetails;
                     $scope.rcvProposal = response;
 
-                   /* if($scope.rcvProposal.premiumPaymentDetails.premiumDetail != null){
-                       $scope.premiumResponse=$scope.rcvProposal.premiumPaymentDetails.premiumDetail;
+                    /* if($scope.rcvProposal.premiumPaymentDetails.premiumDetail != null){
+                     $scope.premiumResponse=$scope.rcvProposal.premiumPaymentDetails.premiumDetail;
                      }*/
 
                     ////console.log('Proposal Number....');
@@ -366,19 +353,19 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
                             //console.log('DocumentList Details..'+JSON.stringify(response));
                         });
                     $http.get("getallrelations/").success(function (response, status, headers, config) {
-                    $scope.relationshipList=response;
-                }).error(function (response, status, headers, config) {
-                });
+                        $scope.relationshipList=response;
+                    }).error(function (response, status, headers, config) {
+                    });
 
 
-                $http.get("getadditionaldocuments/"+ $scope.proposal.proposalId).success(function (data, status) {
+                    $http.get("getadditionaldocuments/"+ $scope.proposal.proposalId).success(function (data, status) {
                         //console.log(data);
                         $scope.additionalDocumentList=data;
                         $scope.checkDocumentAttached=$scope.additionalDocumentList!=null;
 
                     });
 
-                   $http.get("getpremiumdetail/"+$scope.proposal.proposalId).success(function (response, status, headers, config) {
+                    $http.get("getpremiumdetail/"+$scope.proposal.proposalId).success(function (response, status, headers, config) {
                         $scope.premiumResponse=response;
                         if($scope.premiumResponse != null)
                         {
@@ -389,16 +376,26 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
                     });
                     if($scope.rcvProposal.proposer != null)
                     {
-                        $scope.proposer = $scope.rcvProposal.proposer || {};
-                        $scope.proposer.gender=$scope.rcvProposal.proposer.gender;
+                        //console.log('Proposer: '+JSON.stringify($scope.rcvProposal.proposer || {}));
+                        $scope.proposer = $scope.rcvProposal.proposer;
+                        console.log($scope.rcvProposal);
+                        if($scope.rcvProposal.proposer.gender){
+                            var gender=$scope.rcvProposal.proposer.gender;
+                            $scope.proposer.gender=gender;
+
+                        }
+
                         $scope.proposerEmployment = $scope.proposer.employment;
+
                         $scope.proposerResidential = $scope.proposer.residentialAddress;
                         $scope.proposerSpouse = $scope.proposer.spouse;
 
                         if ($scope.proposer.dateOfBirth) {
                             $scope.proposer.nextDob = moment().diff(new moment(new Date($scope.proposer.dateOfBirth)), 'years') + 1;
                         }
+                        // $scope.proposer.gender=$scope.rcvProposal.proposer.gender;
                     }
+
                     if($scope.rcvProposal.proposalPlanDetail !=null)
                     {
                         $scope.proposalPlanDetail = $scope.rcvProposal.proposalPlanDetail;
@@ -564,28 +561,26 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
                 alert(policyTerm);
                 for(i in $scope.plan.coverages )
                 {
-                      if ($scope.plan.coverages[i].coverageTermType == 'POLICY_TERM')
-                      {
-                          alert($scope.plan.coverages[i].coverageTermType);
-                          $scope.riderDetails[i].coverTerm=policyTerm;
-                      }
+                    if ($scope.plan.coverages[i].coverageTermType == 'POLICY_TERM')
+                    {
+                        alert($scope.plan.coverages[i].coverageTermType);
+                        $scope.riderDetails[i].coverTerm=policyTerm;
+                    }
                 }
                 /*if($scope.plan.coverage.coverageTermType=='POLICY_TERM'){
-                    $scope.searchRider.coverTerm=policyTerm;
+                 $scope.searchRider.coverTerm=policyTerm;
 
-                }*/
+                 }*/
 
 
             }
-
-
-
 
 
             $http.get('/pla/individuallife/proposal/getAllOccupation').success(function (response, status, headers, config) {
                 $scope.occupations = response;
             }).error(function (response, status, headers, config) {
             });
+
 
             $http.get('/pla/individuallife/proposal/getAllEmploymentType').success(function (response, status, headers, config) {
                 $scope.employmentTypes = response;
@@ -779,7 +774,7 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
                 return enableAdditionalUploadButton;
             }
 
-           $scope.returnComment='';
+            $scope.returnComment='';
             $scope.showSubmitStatus=false;
 
             $scope.setComments=function(comments)
@@ -799,10 +794,10 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
                 //$scope.comments=comments;
                 //alert('Comments: '+ JSON.stringify($scope.returnComment));
 
-                 $http.post('submit', angular.extend({},
+                $http.post('submit', angular.extend({},
                     {"proposalId": $scope.proposal.proposalId,
-                    "comment":$scope.returnComment})).success(function (data) {
-                   /*if (data.status == "200") {
+                        "comment":$scope.returnComment})).success(function (data) {
+                    /*if (data.status == "200") {
                      saveStep();
                      $('#searchFormProposal').val($scope.proposalId);
                      $('#searchForm').submit();
@@ -928,8 +923,8 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
 
                 $http.post('/pla/individuallife/proposal/approve', request).success(function (data) {
                     if(data.status==200){
-                           $window.location.href="/pla/individuallife/proposal/openapprovalproposal";
-                    //
+                        $window.location.href="/pla/individuallife/proposal/openapprovalproposal";
+                        //
                     }
 
                 });
@@ -941,7 +936,7 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
 
                 $http.post('/pla/individuallife/proposal/approve', request).success(function (data) {
                     if(data.status==200){
-                           $window.location.href="/pla/individuallife/proposal/openapprovalproposal";
+                        $window.location.href="/pla/individuallife/proposal/openapprovalproposal";
                     }
 
                 });
@@ -995,7 +990,7 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
 
                     if(checkLoopNameStatus == "true") {
                         $scope.beneficiariesList.unshift(beneficiary);
-                        alert("Object Is.." + JSON.stringify(beneficiary));
+                        //alert("Object Is.." + JSON.stringify(beneficiary));
                         //$scope.clear();
                         // $('#beneficiaryModal').modal('hide');
                     } else {
@@ -1029,11 +1024,32 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
                 {
                     $scope.beneficiary.age = moment().diff(new moment(new Date(dob)), 'years');
                 }
-
+                $scope.addBeneficiaryStatusCheck=false;
                 //$scope.beneficiary.age = moment().diff(new moment(new Date(dob)), 'years');
 
+                if(($scope.beneficiary.age <1) && ($scope.beneficiary.age >16))
+                {
+                    alert('Less then  Condition..');
+                    $scope.addBeneficiaryStatusCheck=true;
+                }
+                else
+                {
+                    $scope.addBeneficiaryStatusCheck=false;
+                }
             };
+            /*$scope.addBeneficiaryStatusCheck=false;
 
+             $scope.$watch('beneficiary.age',function(newVal,oldVal)
+             {
+             if(newVal)
+             {
+             if( (newVal >=1) &&(newVal<=16))
+             {
+
+             }
+             }
+             });
+             */
             $scope.showProposerDob = function (dob) {
                 //console.log('Dob Calculation..');
                 //console.log('DOB' + JSON.stringify(dob));
@@ -1340,6 +1356,24 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
             }
 
             $scope.applicableRelationships=[];
+
+            $scope.getMax = function () {
+                console.log('getMax');
+                return 999999.99;
+            }
+            $scope.getBuildHeightMax=function()
+            {
+                console.log('getBuildHeightMax');
+                return 999.99;
+            }
+            $scope.getBeneficiaryMinAge = function () {
+                console.log('getBeneficiaryMinAge');
+                return 1;
+            }
+            $scope.getBeneficiaryMaxAge = function () {
+                console.log('getBeneficiaryMaxAge');
+                return 16;
+            }
             $scope.planSelected = function (newValue) {
                 //console.log('Watching is:'+JSON.stringify(newValue));
                 if (newValue && newValue.description && newValue.description.plan_id) {
@@ -1385,11 +1419,11 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
 
                 }
             });
-           /* $scope.setpolicytermTypeValue=function(termType)
-            {
-                alert("Test Change..*");
-                $scope.termTypeCover=termType;
-            }*/
+            /* $scope.setpolicytermTypeValue=function(termType)
+             {
+             alert("Test Change..*");
+             $scope.termTypeCover=termType;
+             }*/
 
 
             $scope.getpolicytermTypeValue=function()
@@ -1431,7 +1465,7 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
                 //alert(empType);
                 var employeeTypes = _.findWhere($scope.employmentTypes, {code:empType});
                 if (employeeTypes)
-                $scope.employment.employmentType = employeeTypes.employment_id;
+                    $scope.employment.employmentType = employeeTypes.employment_id;
             }
 
             $scope.getProposerEmpType = function(empType){
@@ -1441,55 +1475,55 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
                     $scope.proposerEmployment.employmentType = employeeTypes.employment_id;
             }
 
-           /* $scope.$watchGroup(['employment.province', 'residentialAddress.province', 'proposerEmployment.province', 'proposerResidential.province', 'employment.employmentType', 'employment.province','proposerEmployment.employmentType'], function (newVal, oldVal) {
-               // if (!newVal) return;
-                console.log(newVal[2]);
-                if (newVal[0]) {
-                    var provinceDetails = _.findWhere($scope.provinces, {provinceId: newVal[0]});
-                    if (provinceDetails)
-                        $scope.proposedAssuredEmploymentCities = provinceDetails.cities;
-                }
-                if (newVal[1]) {
-                    var provinceDetails = _.findWhere($scope.provinces, {provinceId: newVal[1]});
-                    if (provinceDetails)
-                        $scope.proposedAssuredResidentialCities = provinceDetails.cities;
-                }
-                if (newVal[2]) {
-                    alert(proposerEmployment.province);
-                    console.log('employment ' + newVal[2]);
-                    var provinceDetails = _.findWhere($scope.provinces, {provinceId: newVal[2]});
-                    if (provinceDetails)
-                        $scope.proposerEmploymentCities = provinceDetails.cities;
-                }
-                if (newVal[3]) {
-                    //console.log('residential ' + newVal[3]);
-                    var provinceDetails = _.findWhere($scope.provinces, {provinceId: newVal[3]});
-                    if (provinceDetails)
-                        $scope.proposerResidentialCities = provinceDetails.cities;
+            /* $scope.$watchGroup(['employment.province', 'residentialAddress.province', 'proposerEmployment.province', 'proposerResidential.province', 'employment.employmentType', 'employment.province','proposerEmployment.employmentType'], function (newVal, oldVal) {
+             // if (!newVal) return;
+             console.log(newVal[2]);
+             if (newVal[0]) {
+             var provinceDetails = _.findWhere($scope.provinces, {provinceId: newVal[0]});
+             if (provinceDetails)
+             $scope.proposedAssuredEmploymentCities = provinceDetails.cities;
+             }
+             if (newVal[1]) {
+             var provinceDetails = _.findWhere($scope.provinces, {provinceId: newVal[1]});
+             if (provinceDetails)
+             $scope.proposedAssuredResidentialCities = provinceDetails.cities;
+             }
+             if (newVal[2]) {
+             alert(proposerEmployment.province);
+             console.log('employment ' + newVal[2]);
+             var provinceDetails = _.findWhere($scope.provinces, {provinceId: newVal[2]});
+             if (provinceDetails)
+             $scope.proposerEmploymentCities = provinceDetails.cities;
+             }
+             if (newVal[3]) {
+             //console.log('residential ' + newVal[3]);
+             var provinceDetails = _.findWhere($scope.provinces, {provinceId: newVal[3]});
+             if (provinceDetails)
+             $scope.proposerResidentialCities = provinceDetails.cities;
 
-                }
+             }
 
-                if (newVal[4]) {
-                    var employeeTypes = _.findWhere($scope.employmentTypes, {code: newVal[4]});
-                    if (employeeTypes) {
-                        //console.log(employeeTypes.employment_id);
-                        $scope.employment.employmentType = employeeTypes.employment_id;
-                    }
-                }
+             if (newVal[4]) {
+             var employeeTypes = _.findWhere($scope.employmentTypes, {code: newVal[4]});
+             if (employeeTypes) {
+             //console.log(employeeTypes.employment_id);
+             $scope.employment.employmentType = employeeTypes.employment_id;
+             }
+             }
 
-                if (newVal[5]) {
-                    //console.log('Town: ' + newVal[5]);
-                }
+             if (newVal[5]) {
+             //console.log('Town: ' + newVal[5]);
+             }
 
-                if (newVal[6]) {
-                    var proposeremployeeTypes = _.findWhere($scope.employmentTypes, {code: newVal[6]});
-                    if (proposeremployeeTypes) {
-                        //alert("proposeremployeeTypes"+proposeremployeeTypes.employment_id);
-                        $scope.proposerEmployment.employmentType = proposeremployeeTypes.employment_id;
-                    }
-                }
-            });
-           */
+             if (newVal[6]) {
+             var proposeremployeeTypes = _.findWhere($scope.employmentTypes, {code: newVal[6]});
+             if (proposeremployeeTypes) {
+             //alert("proposeremployeeTypes"+proposeremployeeTypes.employment_id);
+             $scope.proposerEmployment.employmentType = proposeremployeeTypes.employment_id;
+             }
+             }
+             });
+             */
             $scope.selectSpouse = function (maritalStatusCheck) {
                 //console.log("MaritialStatus:" + maritalStatusCheck);
                 //var choice = $scope.proposedAssured.maritalStatus;
@@ -1523,28 +1557,63 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
                 //console.log('Inside Add PolicyDetails..');
                 //console.log(JSON.stringify(policy));
                 //$scope.policyDetails.unshift(policy)
+                //$scope.policyDetails.push(policy);
 
                 if ($scope.policyDetails.length == 0) {
                     //console.log('Lenght is Null..');
-                    $scope.policyDetails.unshift(policy);
+                    $scope.policyDetails.push(policy);
                 }
-                else {
-
+                else
+                {
+                    var checkLoopNameStatus = "true";
                     for (i in $scope.policyDetails) {
-
                         if ($scope.policyDetails[i].policyOrProposalNumber == policy.policyOrProposalNumber) {
                             //console.log('Failure..');
-                            //alert("Particular PolicyNumber is Already Added..Please Choose different PolicyNumber");
+                            checkLoopNameStatus=false;
+                            break;
                         }
-                        else {
-                            $scope.policyDetails.unshift(policy);
-                        }
+
                     }
 
+                    if(checkLoopNameStatus == "true")
+                    {
+                        $scope.policyDetails.unshift(policy);
+                    }
+                    else
+                    {
+                        alert("Please Select Different Proposal Number");
+                    }
                 }
+
+                /*if ($scope.policyDetails.length == 0) {
+                 //console.log('Lenght is Null..');
+                 $scope.policyDetails.unshift(policy);
+                 }
+                 else {
+
+                 for (i in $scope.policyDetails) {
+                 if ($scope.policyDetails[i].policyOrProposalNumber == policy.policyOrProposalNumber) {
+                 //console.log('Failure..');
+                 alert("Particular PolicyNumber is Already Added..Please Choose different PolicyNumber");
+                 }
+                 else {
+                 $scope.policyDetails.unshift(policy);
+                 }
+                 }
+
+                 }*/
                 $('#policyModal').modal('hide');
                 $scope.clear();
             };
+
+            $scope.cancelModal=function()
+            {
+                $('#policyModal').modal('hide');
+                $('#assuredByOthersModal').modal('hide');
+                $('#pendingInsuranceByOthersTpl').modal('hide');
+                $('#assuranceDeclinedTpl').modal('hide');
+                $scope.clear();
+            }
 
             $scope.addAssuredByOthers = function (insurer1) {
                 //console.log('Inside Add addAssuredByOthers..');
@@ -1555,16 +1624,33 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
                     $scope.insurerDetails1.unshift(insurer1);
                 }
                 else {
-
+                    var checkLoopNameStatus = "true";
                     for (i in $scope.insurerDetails1) {
                         if ($scope.insurerDetails1[i].policyOrProposalNumber == insurer1.policyOrProposalNumber) {
                             //console.log('Failure..');
                             //alert("Particular PolicyNumber is Already Added..Please Choose different PolicyNumber");
-                        }
-                        else {
-                            $scope.insurerDetails1.unshift(insurer1);
+                            checkLoopNameStatus = "false";
+                            break;
                         }
                     }
+
+                    if(checkLoopNameStatus == "true")
+                    {
+                        $scope.insurerDetails1.unshift(insurer1);
+                    }
+                    else
+                    {
+                        alert("Please Select Different Proposal Number");
+                    }
+                    /* for (i in $scope.insurerDetails1) {
+                     if ($scope.insurerDetails1[i].policyOrProposalNumber == insurer1.policyOrProposalNumber) {
+                     //console.log('Failure..');
+                     //alert("Particular PolicyNumber is Already Added..Please Choose different PolicyNumber");
+                     }
+                     else {
+                     $scope.insurerDetails1.unshift(insurer1);
+                     }
+                     }*/
 
                 }
                 $('#assuredByOthersModal').modal('hide');
@@ -1576,24 +1662,51 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
                 //console.log('Inside Add addPendingInsuranceByOthersTpl..');
                 //console.log(JSON.stringify(insurer2));
                 //$scope.policyDetails.unshift(policy)
+                //$scope.insurerDetails2.push(insurer2);
 
                 if ($scope.insurerDetails2.length == 0) {
                     //console.log('Lenght is Null..');
                     $scope.insurerDetails2.unshift(insurer2);
                 }
-                else {
+                else
+                {
+                    var checkLoopNameStatus = "true";
 
                     for (i in $scope.insurerDetails2) {
                         if ($scope.insurerDetails2[i].policyOrProposalNumber == insurer2.policyOrProposalNumber) {
                             //console.log('Failure..');
                             //alert("Particular PolicyNumber is Already Added..Please Choose different PolicyNumber");
-                        }
-                        else {
-                            $scope.insurerDetails2.unshift(insurer2);
+                            checkLoopNameStatus = "false";
+                            break;
                         }
                     }
 
+                    if(checkLoopNameStatus == "true")
+                    {
+                        $scope.insurerDetails2.unshift(insurer2);
+                    }
+                    else
+                    {
+                        alert("Please Select Different Proposal Number");
+                    }
                 }
+                /* if ($scope.insurerDetails2.length == 0) {
+                 //console.log('Lenght is Null..');
+                 $scope.insurerDetails2.unshift(insurer2);
+                 }
+                 else {
+
+                 for (i in $scope.insurerDetails2) {
+                 if ($scope.insurerDetails2[i].policyOrProposalNumber == insurer2.policyOrProposalNumber) {
+                 //console.log('Failure..');
+                 //alert("Particular PolicyNumber is Already Added..Please Choose different PolicyNumber");
+                 }
+                 else {
+                 $scope.insurerDetails2.unshift(insurer2);
+                 }
+                 }
+
+                 }*/
                 $('#pendingInsuranceByOthersTpl').modal('hide');
                 $scope.clear();
             };
@@ -1604,20 +1717,31 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
 
                 if ($scope.insurerDetails3.length == 0) {
                     //console.log('Lenght is Null..');
-                    $scope.insurerDetails3.unshift(insurer3);
+                    //$scope.insurerDetails3.unshift(insurer3);
+                    $scope.insurerDetails3.push(insurer3);
                 }
                 else {
-
+                    var checkLoopNameStatus = "true";
                     for (i in $scope.insurerDetails3) {
                         if ($scope.insurerDetails3[i].policyOrProposalNumber == insurer3.policyOrProposalNumber) {
                             //console.log('Failure..');
                             //alert("Particular ProposalNumber is Already Added..Please Choose different PolicyNumber");
+                            checkLoopNameStatus = "false";
+                            break;
                         }
-                        else {
-                            $scope.insurerDetails3.unshift(insurer3);
-                        }
+                        /* else {
+                         $scope.insurerDetails3.unshift(insurer3);
+                         }*/
                     }
 
+                    if(checkLoopNameStatus == "true")
+                    {
+                        $scope.insurerDetails3.unshift(insurer3);
+                    }
+                    else
+                    {
+                        alert("Please Select Different Proposal Number");
+                    }
                 }
                 $('#assuranceDeclinedTpl').modal('hide');
                 $scope.clear();
@@ -2172,24 +2296,6 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
                 }
             });
 
-
-            $scope.$watch('proposedAssured.title', function (newVal, oldVal) {
-                if (newVal) {
-                    //alert(newVal);
-                    if(newVal == 'Mr.')
-                    {
-                        $scope.proposedAssured.gender='MALE';
-                    }
-                    else if((newVal == 'Miss') || (newVal == 'Mrs.') )
-                    {
-                        $scope.proposedAssured.gender ='FEMALE';
-                    }
-                    else
-                    {
-                        $scope.proposedAssured.gender ='';
-                    }
-                }
-            });
             $scope.beneficiary={};
             $scope.$watch('beneficiary.title', function (newVal, oldVal) {
                 if (newVal) {
@@ -2210,7 +2316,26 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
             });
 
 
-            $scope.$watch('proposer.title', function (newVal, oldVal) {
+            $scope.getProposedAssuredGender=function(newVal)
+            {
+                if (newVal) {
+                    //alert(newVal);
+                    if(newVal == 'Mr.')
+                    {
+                        $scope.proposedAssuredDetails.gender='MALE';
+                    }
+                    else if((newVal == 'Miss') || (newVal == 'Mrs.') )
+                    {
+                        $scope.proposedAssuredDetails.gender ='FEMALE';
+                    }
+                    else
+                    {
+                        $scope.proposedAssuredDetails.gender ='';
+                    }
+                }
+            }
+            $scope.getProposerGender=function(newVal)
+            {
                 if (newVal) {
                     //alert(newVal);
                     if(newVal == 'Mr.')
@@ -2226,7 +2351,24 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
                         $scope.proposer.gender ='';
                     }
                 }
-            });
+            }
+      /*      $scope.$watch('proposer.title', function (newVal, oldVal) {
+                if (newVal) {
+                    //alert(newVal);
+                    if(newVal == 'Mr.')
+                    {
+                        $scope.proposer.gender='MALE';
+                    }
+                    else if((newVal == 'Miss') || (newVal == 'Mrs.') )
+                    {
+                        $scope.proposer.gender ='FEMALE';
+                    }
+                    else
+                    {
+                        $scope.proposer.gender ='';
+                    }
+                }
+            });*/
 
             /**
              * Checking of  Occupation filed of  ProposedAssured Detail  to decide whether to display Employment Type Field
@@ -2318,11 +2460,11 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
 
                 if ($scope.quotationIdDetails.quotationId != null && $scope.quotationIdDetails.quotationId != " ") {
                     //alert("Quotation Save...");
-                   /* var request2 = {
-                        "proposedAssured": $scope.proposedAssured,
-                        "agentCommissionDetails": $scope.agentDetails,
-                        "quotationId": $scope.quotationIdDetails.quotationId
-                    }*/
+                    /* var request2 = {
+                     "proposedAssured": $scope.proposedAssured,
+                     "agentCommissionDetails": $scope.agentDetails,
+                     "quotationId": $scope.quotationIdDetails.quotationId
+                     }*/
                     alert('employment'+JSON.stringify($scope.proposerResidential));
 
                     var request2 = {
@@ -2350,7 +2492,7 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
                     $http.post('create', request2).success(function (response, status, headers, config) {
                         //$scope.proposal = response;
                         $scope.proposal.ProposalId=response.id;
-                            //alert("ProposalId Check"+JSON.stringify(response));
+                        //alert("ProposalId Check"+JSON.stringify(response));
                         //alert('Proposal..'+JSON.stringify($scope.proposal.ProposalId));
                         //    console.log('Retrieving Proposal Number@###..');
                         $http.get("/pla/individuallife/proposal/getproposal/" +response.id + "?mode=view").success(function (response, status, headers, config) {
@@ -2857,7 +2999,7 @@ var viewILQuotationModule = (function ($http) {
         //alert("View Approval..");
         var proposalId = this.selectedItem;
         ////alert("proposalId"+proposalId);
-            window.location.href = "/pla/individuallife/proposal/viewApprovalProposal?proposalId=" + proposalId  + "&method=approval" + "&mode=view" ;
+        window.location.href = "/pla/individuallife/proposal/viewApprovalProposal?proposalId=" + proposalId  + "&method=approval" + "&mode=view" ;
 
     };
 

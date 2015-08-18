@@ -14,14 +14,14 @@
                         <a  href="downloadmandatorydocument/{{document.gridFsDocId}}" style="display:inline;float:right;margin-top:10px;"  hg-show="!document.submitted">{{document.fileName}}</a>
                         <button class="btn btn-default"
                                 style="display:inline;float:right;margin-right:5px;" ng-file-select=""
-                                ng-model="document.documentAttached">Browse
+                                ng-disabled="mode=='new'||mode=='view'" ng-model="document.documentAttached">Browse
                         </button>
                         <label class="form-control input-sm" style="border:1px solid #ccc;width:380px;" >{{document.documentAttached[0].name}} </label>
                     </div>
 
                 </div>
                 <div class="btn btn-default" style="display:inline;float:right;clear:both"
-                     ng-click="uploadDocumentFiles()">Upload All
+                     ng-disabled="mode=='new'||mode=='view'" ng-click="uploadDocumentFiles()">Upload All
                 </div>
             </div>
         </accordion-group>
@@ -35,7 +35,7 @@
             <div class="row" >
                 <button class="btn btn-default"
                         style="display:inline;float:left;margin-right:5px;"
-                        ng-click="addAdditionalDocument()">Add Document
+                        ng-disabled="mode=='new'||mode=='view'" ng-click="addAdditionalDocument()">Add Document
                 </button>
             </div>
             <br/><br/>
@@ -46,7 +46,7 @@
                         <div class="form-group">
                             <label class="control-label">Document Title</label>
                             <input type="text" class="form-control input-sm" style="width:400px;"
-                                   name="documentTitle" ng-model="additionalDocument.documentId" />
+                                   ng-disabled="mode=='new'||mode=='view'" name="documentTitle" ng-model="additionalDocument.documentId" />
                         </div>
                     </div>
                     <div class="col-md-1">
@@ -65,7 +65,7 @@
                         </div>
                     </div>
                     <div class="col-md-2">
-                        <button class="btn btn-default" style="margin-top:20px;" ng-click="removeAdditionalDocument($index)" >Remove</button>
+                        <button class="btn btn-default" style="margin-top:20px;" ng-disabled="mode=='new'||mode=='view'" ng-click="removeAdditionalDocument($index)" >Remove</button>
                         <!--<a  href="downloadmandatorydocument/{{additionalDocument.gridFsDocId}}" style="display:inline;margin-top:25px;float:right;">{{additionalDocument.fileName}}</a>-->
                     </div>
 
@@ -88,7 +88,7 @@
                     <label class="control-label">Comments</label>
                         <textarea class="form-control input-sm" rows="4" cols="50"
                                   name="comments"
-                                  ng-blur="setComments(returnComments)" ng-model="returnComments" />
+                                  ng-disabled="mode=='new'||mode=='view'" ng-blur="setComments(returnComments)" ng-model="returnComments" />
                 </div>
             </div>
         </div>
@@ -99,7 +99,7 @@
         </div>
         <div class="col-sm-6">
             {{showSubmitStatus}}
-            <button type="button" class="btn btn-default btn-sm" style="float: right" ng-disabled="showSubmitStatus" ng-click="submitAdditionalDocument()">Submit</button>
+            <button type="button" class="btn btn-default btn-sm" style="float: right" ng-hide="mode=='new'||mode=='view'" ng-disabled="showSubmitStatus" ng-click="submitAdditionalDocument()">Submit</button>
         </div>
     </div>
 </ng-form>

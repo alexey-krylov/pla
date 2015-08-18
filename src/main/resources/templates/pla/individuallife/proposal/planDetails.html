@@ -9,7 +9,6 @@
                 <div class="form-group required">
                     <label class="control-label">Plan</label>
                     <!--<input type="text" class="form-control input-sm" name="plan" ng-blur="searchRiders()" ng-model="proposalPlanDetail.planId"/>-->
-                    {{planSelected}}
                     <div data-angucomplete-alt="" id="searchPlan" placeholder="Search Plans" pause="500"
                          selected-object="planSelected" disable-input="uneditable"
                          remote-url="/pla/individuallife/proposal/searchplan/{{proposal.proposalId}}?q=" field-required="true"
@@ -35,17 +34,17 @@
 
                 </div>
                 <div class="form-group">
-                    <label class="control-label">Riders Applied For</label>
-                    <!--<input type="text" class="form-control input-sm" name="ridersAppliedFor" ng-model="proposalPlanDetail.ridersapplied"/>-->
+                <label class="control-label">Riders Applied For</label>
+                <!--<input type="text" class="form-control input-sm" name="ridersAppliedFor" ng-model="proposalPlanDetail.ridersapplied"/>-->
 
-                    <select class="form-control input-sm" name="ridersAppliedFor" ng-disabled="mode=='new' || mode=='view'" ng-options="searchRider.coverageName for searchRider in searchRiders"
-                            ng-model="proposalPlanDetail1.riderDetails">
-                    </select>
-                    <!-- <button type="button" class="btn btn-default bs-select"   required="true" name="ridersAppliedFor" id="ridersAppliedFor"  ng-disabled="mode=='new' || mode=='view'"  ng-model="createCoverage.benefitIds" max-length="0" data-all-none-buttons="true"  data-html="1" data-multiple="1" placeholder="Select Riders" ng-options="searchRider.coverageName for searchRider in searchRiders | orderBy:'coverageName'"  >
-                         Select Riders <span class="caret"></span>
-                     </button>-->
+               <!-- <select class="form-control input-sm" name="ridersAppliedFor" ng-disabled="mode=='new' || mode=='view'" ng-options="searchRider.coverageName for searchRider in searchRiders"
+                        ng-model="proposalPlanDetail1.riderDetails">
+                </select>-->
+                <!-- <button type="button" class="btn btn-default bs-select"   required="true" name="ridersAppliedFor" id="ridersAppliedFor"  ng-disabled="mode=='new' || mode=='view'"  ng-model="createCoverage.benefitIds" max-length="0" data-all-none-buttons="true"  data-html="1" data-multiple="1" placeholder="Select Riders" ng-options="searchRider.coverageName for searchRider in searchRiders | orderBy:'coverageName'"  >
+                     Select Riders <span class="caret"></span>
+                 </button>-->
 
-                </div>
+            </div>
                 <table class="table table-bordered">
                     <thead>
                     <tr>
@@ -155,7 +154,7 @@
             <button type="button" class="btn btn-default btn-sm">Cancel</button>
         </div>
         <div class="col-sm-6">
-            {{commisionStatus}}
+            <!--{{commisionStatus}}-->
             <button type="button" class="btn btn-default btn-sm" style="float: right" ng-disabled="commisionStatus" ng-hide="mode=='new'||mode=='view'" ng-click="savePlanDetail()">Save</button>
         </div>
     </div>
@@ -218,7 +217,7 @@
 
     <script id="plan-coverage.tpl" type="text/ng-template">
         <div ng-switch="getCoverageTermType(searchRider)">
-            {{searchRider.coverTerm}}
+           <!-- {{searchRider.coverTerm}}-->
             <div ng-switch-when="SPECIFIED_VALUES">
                 <select class="form-control input-sm" view-enabled="" ng-model="searchRider.coverTerm" name="policyTerm"
                         ng-options="value.text as value.text for value in policyTerms" ng-required="true"></select>
