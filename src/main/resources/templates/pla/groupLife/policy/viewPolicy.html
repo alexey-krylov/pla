@@ -170,13 +170,13 @@
                                                ng-required="true" name="agentName"
                                                ng-model="policyDetails.basic.agentName"/>
                                     </div>
-                                    <div class="form-group ">
+                                    <div class="form-group " ng-hide="!policyDetails.basic.branchName">
                                         <label class="control-label">Branch Name</label>
                                         <input type="text" class="form-control input-sm" ng-readonly="true"  name="branchName" ng-model="policyDetails.basic.branchName"/>
                                     </div>
                                 </div>
                                 <div class="col-lg-6">
-                                    <div class="form-group ">
+                                    <div class="form-group " ng-hide="!policyDetails.basic.teamName">
                                         <label class="control-label">Team Name</label>
                                         <input type="text" class="form-control input-sm" ng-readonly="true"  name="teamName" ng-model="policyDetails.basic.teamName"/>
                                     </div>
