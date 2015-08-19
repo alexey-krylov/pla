@@ -227,7 +227,7 @@ angular.module('createProposal', ['common', 'ngRoute', 'mgcrea.ngStrap.select', 
                 $scope.dropdown = [
                     {
                         "text": "<a><img src=\"/pla/images/xls-icon.png\">Template</a>",
-                        "href": "/pla/grouphealth/proposal/downloadinsuredtemplate/" + $scope.proposalId
+                        "href": "/pla/grouplife/proposal/downloadinsuredtemplate/" + $scope.proposalId
                     }
                 ];
 
@@ -376,7 +376,7 @@ angular.module('createProposal', ['common', 'ngRoute', 'mgcrea.ngStrap.select', 
 
             }
             $scope.submitComments = function(comment){
-                $http.post('/pla/grouphealth/proposal/submit', angular.extend({},
+                $http.post('/pla/grouplife/proposal/submit', angular.extend({},
                     {"proposalId": $scope.proposalId,comment:comment})).success(function (data) {
                     if (data.status == "200") {
                         saveStep();
