@@ -268,6 +268,37 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
                 });
             }
 
+            $scope.getCoverageTermType = function (searchRider) {
+
+                alert(JSON.stringify(searchRider));
+                if ($scope.plan) {
+                    //alert('Inside Plan..');
+                    var coverage = _.findWhere($scope.plan.coverages, {coverageId: searchRider.coverageId});
+                    // //console.log("Coverage Details..."+JSON.stringify(coverage));
+                    //var ageNextBirthday = calculateAge($scope.proposedAssured.dateOfBirth);
+                    var ageNextBirthday = moment().diff(new moment(new Date($scope.proposedAssured.dateOfBirth)), 'years') + 1;
+                    if (coverage.coverageTermType === 'SPECIFIED_VALUES') {
+                        var maxMaturityAge = coverage.coverageTerm.maxMaturityAge || 1000;
+                        $scope.policyTerms = _.filter(coverage.coverageTerm.validTerms, function (term) {
+                            return ageNextBirthday + term.text <= maxMaturityAge;
+                        });
+                    } else if (coverage.coverageTermType === 'AGE_DEPENDENT') {
+                        $scope.policyTerms = _.filter(coverage.coverageTerm.maturityAges, function (term) {
+                            return term.text > ageNextBirthday;
+                        });
+                    }
+
+                    /* else if (coverage.coverageTermType === 'POLICY_TERM') {
+                     $scope.policyTerms = _.filter(coverage.coverageTerm.maturityAges, function (term) {
+                     return term.text > ageNextBirthday;
+                     });
+                     }
+                     */
+                    return coverage.coverageTermType;
+                } else {
+                    return ""
+                }
+            }
 
             if ($scope.proposalId) {
                 $http.get("/pla/individuallife/proposal/getproposal/" + $scope.proposalId + "?mode=view").success(function (response, status, headers, config) {
@@ -275,7 +306,7 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
                     console.log("called********************");
                     console.log(response.proposer);
                     console.log('After Proposer.. ****');
-                    //console.log(response);
+                    console.log(response);
                     //alert(response.proposer.gender);
                     //$scope.proposer.gender=response.proposer.gender;
                     console.log('proposalStatus***: '+ response.proposalStatus);
@@ -347,6 +378,7 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
                     $http.get("getmandatorydocuments/" + $scope.proposal.proposalId)
                         .success(function (response) {
                             $scope.documentList = response;
+                            console.log('DcoumentList:'+JSON.stringify(response));
                             // //alert("documentResponse: "+JSON.stringify(response))
                             //console.log('documentResponse:'+JSON.stringify(response));
                             //console.log("documentList: "+JSON.stringify($scope.documentList))
@@ -362,6 +394,7 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
                         //console.log(data);
                         $scope.additionalDocumentList=data;
                         $scope.checkDocumentAttached=$scope.additionalDocumentList!=null;
+
 
                     });
 
@@ -642,7 +675,7 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
             };
 
             $scope.selectedPlan = {};
-            $scope.selectedWizard = 1;
+            $scope.selectedWizard = 7;
 
             $scope.premiumEmployerDetails=
             {
@@ -1361,11 +1394,17 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
                 console.log('getMax');
                 return 999999.99;
             }
-            $scope.getBuildHeightMax=function()
+
+            $scope.getPregnencymonth=function()
+            {
+                console.log('getPregnencymonth');
+                return 10;
+            }
+            /*$scope.getBuildHeightMax=function()
             {
                 console.log('getBuildHeightMax');
                 return 999.99;
-            }
+            }*/
             $scope.getBeneficiaryMinAge = function () {
                 console.log('getBeneficiaryMinAge');
                 return 1;

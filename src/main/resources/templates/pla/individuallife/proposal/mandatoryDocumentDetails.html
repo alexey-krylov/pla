@@ -56,11 +56,14 @@
                             <label class="control-label">Browse File</label>
                             <button class="btn btn-default"
                                     style="display:inline;float:right;margin-right:10px;margin-top:18px;" ng-file-select="callAdditionalDoc(additionalDocument.documentAttached)"
-                                    ng-model="additionalDocument.documentAttached">Browse
+                                    ng-disabled="mode=='new'||mode=='view'" ng-model="additionalDocument.documentAttached">Browse
                             </button>
-                            <label class="form-control input-sm" style="border:1px solid #ccc;width:320px;">
+                            <input class="form-control input-sm" style="width:320px;"
+                                   value="{{additionalDocument.documentAttached[0].name}}"
+                                   readonly="true"/>
+                            <!--<label class="form-control input-sm" style="border:1px solid #ccc;width:320px;">
                                 {{additionalDocument.documentAttached[0].name}}
-                            </label>
+                            </label>-->
                             <a  href="downloadmandatorydocument/{{additionalDocument.gridFsDocId}}" style="display:inline;margin-top:0px;float:left;">{{additionalDocument.fileName}}</a>
                         </div>
                     </div>
@@ -74,7 +77,7 @@
             </div>
 
             <button class="btn btn-default"
-                    style="display:inline;float:right;margin-right:5px;margin-top:20px;" ng-disabled="!checkDocumentAttached" ng-click="uploadAdditionalDocument()">Upload
+                    style="display:inline;float:right;margin-right:5px;margin-top:20px;" ng-hide="mode=='new'||mode=='view'" ng-disabled="!checkDocumentAttached" ng-click="uploadAdditionalDocument()">Upload
             </button>
 
         </div>
