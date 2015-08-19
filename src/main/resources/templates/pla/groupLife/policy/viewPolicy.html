@@ -218,6 +218,14 @@
                                         <select class="form-control input-sm" ng-required="true" name="town" ng-model="policyDetails.proposer.town" ng-options="city.geoId as city.geoName for city in cities">
                                         </select>
                                     </div>
+                                    <div class="form-group">
+                                        <label class="control-label">Industry</label>
+                                        <select class="form-control input-sm" name="industryId"
+                                                ng-model="policyDetails.proposer.industryId"
+                                                ng-options="industry.industryId  as industry.industryName for industry in industries">
+                                        </select>
+                                    </div>
+
                                     <!-- <div class="form-group required">
                                          <label class="control-label">Work Phone</label>
                                          <input type="text" class="form-control input-sm" ng-required="true" maxlength="13" ng-pattern="numberPattern" ng-model="policyDetails.proposer.contactPersonWorkPhoneNumber"/>
@@ -237,6 +245,13 @@
                                         <select class="form-control input-sm" ng-required="true" name="province" ng-model="policyDetails.proposer.province" ng-options="province.provinceId  as province.provinceName for province in provinces">
                                         </select>
                                     </div>
+                                    <div class="form-group">
+                                        <label>Opportunity ID</label>
+                                        <input type="text" onkeypress="return isNumeric(event)"
+                                               class="form-control input-sm" maxlength="100" ng-disabled="true"
+                                               ng-model="policyDetails.proposer.opportunityId"/>
+                                    </div>
+
                                     <!--<div class="form-group">
                                         <label >Email</label>
                                         <input type="email" class="form-control input-sm" ng-required="true" ng-keydown="openNewTab($event)"/>

@@ -1,9 +1,9 @@
 angular.module('viewPolicy', ['common', 'ngRoute', 'mgcrea.ngStrap.select', 'mgcrea.ngStrap.alert', 'mgcrea.ngStrap.popover', 'directives',
     'angularFileUpload', 'mgcrea.ngStrap.dropdown', 'ngSanitize', 'commonServices'])
 
-    .controller('policyCtrl', ['$scope', '$http', '$timeout', '$upload', 'provinces', 'getProvinceAndCityDetail', 'globalConstants',
+    .controller('policyCtrl', ['$scope', '$http', '$timeout', '$upload', 'provinces', 'industries', 'getProvinceAndCityDetail', 'globalConstants',
         'agentDetails', 'stepsSaved', 'policyDetails', 'policyNumber', 'getQueryParameter', '$window', 'premiumData', 'documentList',
-        function ($scope, $http, $timeout, $upload, provinces, getProvinceAndCityDetail, globalConstants, agentDetails, stepsSaved, policyDetails, policyNumber,
+        function ($scope, $http, $timeout, $upload, provinces, industries, getProvinceAndCityDetail, globalConstants, agentDetails, stepsSaved, policyDetails, policyNumber,
                   getQueryParameter, $window, premiumData, documentList) {
 
             var mode = getQueryParameter("mode");
@@ -39,12 +39,12 @@ angular.module('viewPolicy', ['common', 'ngRoute', 'mgcrea.ngStrap.select', 'mgc
 
             $scope.documentList = documentList;
 
-
+            $scope.industries = industries;
             $scope.additionalDocumentList = [{}];
-            $http.get("/pla/grouplife/proposal/getadditionaldocuments/"+ $scope.policyId).success(function (data, status) {
+            $http.get("/pla/grouplife/proposal/getadditionaldocuments/" + $scope.policyId).success(function (data, status) {
                 console.log(data);
-                $scope.additionalDocumentList=data;
-             //   $scope.checkDocumentAttached=$scope.additionalDocumentList!=null;
+                $scope.additionalDocumentList = data;
+                //   $scope.checkDocumentAttached=$scope.additionalDocumentList!=null;
 
             });
 
@@ -67,10 +67,10 @@ angular.module('viewPolicy', ['common', 'ngRoute', 'mgcrea.ngStrap.select', 'mgc
                 }
             }
             $http.get("/pla/grouplife/policy/getpolicydetail/" + $scope.policyId).success(function (data, status) {
-               //  console.log(data);
-                 $scope.policyDetails.basicDetails = data;
-                $scope.policyDetails.basicDetails.inceptionDate= moment(data.inceptionDate).format("DD/MM/YYYY");
-                $scope.policyDetails.basicDetails.expiryDate =moment(data.expiryDate).format("DD/MM/YYYY");
+                //  console.log(data);
+                $scope.policyDetails.basicDetails = data;
+                $scope.policyDetails.basicDetails.inceptionDate = moment(data.inceptionDate).format("DD/MM/YYYY");
+                $scope.policyDetails.basicDetails.expiryDate = moment(data.expiryDate).format("DD/MM/YYYY");
 
 
             });
@@ -149,7 +149,6 @@ angular.module('viewPolicy', ['common', 'ngRoute', 'mgcrea.ngStrap.select', 'mgc
             };
 
 
-
             function isInteger(x) {
                 return Math.round(x) === x;
             }
@@ -181,7 +180,7 @@ angular.module('viewPolicy', ['common', 'ngRoute', 'mgcrea.ngStrap.select', 'mgc
 
             $scope.selectedInstallment = premiumData.premiumInstallment;
             $scope.installments = $scope.policyDetails.premium.installments;
-            $scope.disableSaveButton=false;
+            $scope.disableSaveButton = false;
 
             $scope.setSelectedInstallment = function (selectedInstallment) {
                 $scope.selectedInstallment = selectedInstallment;
@@ -221,6 +220,15 @@ angular.module('viewPolicy', ['common', 'ngRoute', 'mgcrea.ngStrap.select', 'mgc
                     });
                     return deferred.promise;
                 }],
+                industries: ['$q', '$http', function ($q, $http) {
+                    var deferred = $q.defer();
+                    $http.get('/pla/core/master/getindustry').success(function (response, status, headers, config) {
+                        deferred.resolve(response)
+                    }).error(function (response, status, headers, config) {
+                        deferred.reject();
+                    });
+                    return deferred.promise;
+                }],
                 agentDetails: ['$q', '$http', 'getQueryParameter', function ($q, $http, getQueryParameter) {
                     queryParam = getQueryParameter('policyId');
                     if (queryParam && !_.isEmpty(queryParam)) {
@@ -233,13 +241,12 @@ angular.module('viewPolicy', ['common', 'ngRoute', 'mgcrea.ngStrap.select', 'mgc
                         stepsSaved["2"] = true;
 
 
-
                         return deferred.promise;
                     } else {
                         return {};
                     }
                 }],
-                policyDetails: ['$q', '$http', 'getQueryParameter', function ($q, $http,getQueryParameter) {
+                policyDetails: ['$q', '$http', 'getQueryParameter', function ($q, $http, getQueryParameter) {
                     if (queryParam && !_.isEmpty(queryParam)) {
                         var deferred = $q.defer();
                         $http.get('/pla/grouplife/policy/getproposerdetail/' + queryParam).success(function (response, status, headers, config) {
@@ -270,7 +277,7 @@ angular.module('viewPolicy', ['common', 'ngRoute', 'mgcrea.ngStrap.select', 'mgc
                         return 1;
                     }
                 }],
-                premiumData: ['$q', '$http','getQueryParameter', function ($q, $http,getQueryParameter) {
+                premiumData: ['$q', '$http', 'getQueryParameter', function ($q, $http, getQueryParameter) {
                     if (queryParam && !_.isEmpty(queryParam)) {
                         var deferred = $q.defer();
                         $http.get('/pla/grouplife/policy/getpremiumdetail/' + queryParam).success(function (response, status, headers, config) {

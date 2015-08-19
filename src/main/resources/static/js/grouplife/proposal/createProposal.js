@@ -1,9 +1,9 @@
 angular.module('createProposal', ['common', 'ngRoute', 'mgcrea.ngStrap.select', 'mgcrea.ngStrap.alert', 'mgcrea.ngStrap.popover', 'directives',
     'angularFileUpload', 'mgcrea.ngStrap.dropdown', 'ngSanitize', 'commonServices'])
 
-    .controller('proposalCtrl', ['$scope', '$http', '$timeout', '$upload', 'provinces', 'getProvinceAndCityDetail', 'globalConstants',
+    .controller('proposalCtrl', ['$scope', '$http', '$timeout', '$upload', 'provinces','industries', 'getProvinceAndCityDetail', 'globalConstants',
         'agentDetails', 'stepsSaved', 'proposerDetails', 'proposalNumber', 'getQueryParameter', '$window', 'premiumData', 'documentList',
-        function ($scope, $http, $timeout, $upload, provinces, getProvinceAndCityDetail, globalConstants, agentDetails, stepsSaved, proposerDetails, proposalNumber,
+        function ($scope, $http, $timeout, $upload, provinces,industries, getProvinceAndCityDetail, globalConstants, agentDetails, stepsSaved, proposerDetails, proposalNumber,
                   getQueryParameter, $window, premiumData, documentList) {
 
             var mode = getQueryParameter("mode");
@@ -17,6 +17,7 @@ angular.module('createProposal', ['common', 'ngRoute', 'mgcrea.ngStrap.select', 
 
             /*This scope holds the list of installments from which user can select one */
             $scope.numberOfInstallmentsDropDown = [];
+            $scope.industries = industries;
 
             /*regex for number pattern for more details see commonModule.js*/
             $scope.numberPattern = globalConstants.numberPattern;
@@ -575,6 +576,16 @@ angular.module('createProposal', ['common', 'ngRoute', 'mgcrea.ngStrap.select', 
                     });
                     return deferred.promise;
                 }],
+                industries: ['$q', '$http', function ($q, $http) {
+                    var deferred = $q.defer();
+                    $http.get('/pla/core/master/getindustry').success(function (response, status, headers, config) {
+                        deferred.resolve(response)
+                    }).error(function (response, status, headers, config) {
+                        deferred.reject();
+                    });
+                    return deferred.promise;
+                }],
+
                 agentDetails: ['$q', '$http', 'getQueryParameter', function ($q, $http, getQueryParameter) {
                     queryParam = getQueryParameter('proposalId');
                     if (queryParam && !_.isEmpty(queryParam)) {
