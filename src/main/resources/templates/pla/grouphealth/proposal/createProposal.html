@@ -7,7 +7,8 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css">
     <link href="https://www.fuelcdn.com/fuelux/3.6.3/css/fuelux.min.css" rel="stylesheet">
     <link href="../../../../static/css/common.css" rel="stylesheet">
-    <script data-main="../../../../static/js/requireConfig" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.1.16/require.min.js"></script>
+    <script data-main="../../../../static/js/requireConfig"
+            src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.1.16/require.min.js"></script>
     <!--*/-->
 </head>
 <body class="fuelux ng-cloak" style="overflow-x: hidden;">
@@ -37,9 +38,9 @@
         }
     }
 
-    requirejs(['main','angular-file-upload'],function(){
+    requirejs(['main', 'angular-file-upload'], function () {
         require(['/pla/js/grouphealth/proposal/createProposal.js?t=7'], function () {
-            angular.element(document).ready(function() {
+            angular.element(document).ready(function () {
                 angular.bootstrap(document, ['createProposal']);
             });
         });
@@ -48,7 +49,7 @@
 </script>
 <script type="text/ng-template" id="createProposalTpl.html">
     <nth-alert></nth-alert>
-    <form name="quotationForm" novalidate="true"  class="css-form ng-cloak" method="post" enctype="multipart/form-data">
+    <form name="quotationForm" novalidate="true" class="css-form ng-cloak" method="post" enctype="multipart/form-data">
         <div class="wizard fueluxWizard" style="overflow: visible" selected-item="selectedItem">
             <ul class="steps" style="margin-left: 0">
                 <li data-step="1"><span class="badge badge-info">1</span>Basic Details<span class="chevron"></span></li>
@@ -63,7 +64,9 @@
                 <span style="font-weight: bolder;margin-right: 15px;color: #999">Proposal ID: <span
                         style="font-size: 13px;color: #3a87ad;">{{proposalNumber}}<span
                         ng-show="versionNumber &amp;&amp; versionNumber!=0">/{{versionNumber}}</span></span></span>
-                <button type="button" class="btn btn-default btn-prev" disabled="disabled"><span class="glyphicon glyphicon-arrow-left"></span>Prev</button>
+                <button type="button" class="btn btn-default btn-prev" disabled="disabled"><span
+                        class="glyphicon glyphicon-arrow-left"></span>Prev
+                </button>
                 <button type="button" class="btn btn-default btn-next" ng-disabled="!stepsSaved[selectedItem]">Next<span
                         class="glyphicon glyphicon-arrow-right"></span></button>
                 <!-- -->
@@ -71,7 +74,7 @@
             <div class="step-content ng-cloak">
                 <div class="step-pane active" data-step="1">
                     <ng-form name="step1">
-                        <div class="bs-callout  bs-callout-info" style="margin-bottom: 7px" >
+                        <div class="bs-callout  bs-callout-info" style="margin-bottom: 7px">
                             <div class="alert alert-info" ng-show="agentNotFound">
                                 <strong>Agent Not Found.Please try again</strong>
                             </div>
@@ -79,11 +82,13 @@
                                 <div class="col-lg-6">
                                     <div class="form-group required">
                                         <label class="control-label">Agent ID</label>
+
                                         <div class="input-group">
                                             <input type="text" class="form-control input-sm" name="agentId"
                                                    ng-model="proposalDetails.basic.agentId" ng-required="true"
                                                    ng-change="clearAgentDetails()" onkeypress="return isEnterKey(event)"
                                                    ng-disabled="isEditMode ||!changeAgent"/>
+
                                             <div class="input-group-btn">
                                                 <button type="button" class="btn btn-default btn-sm"
                                                         ng-click="searchAgent()"
@@ -98,7 +103,8 @@
                                     <div class="form-group required">
                                         <label class="control-label">Proposer Name</label>
                                         <input type="text" class="form-control input-sm" name="proposerName"
-                                               ng-model="proposalDetails.proposer.proposerName" onkeypress="return isEnterKey(event)"
+                                               ng-model="proposalDetails.proposer.proposerName"
+                                               onkeypress="return isEnterKey(event)"
                                                ng-required="true" ng-disabled="true"/>
                                     </div>
                                 </div>
@@ -111,15 +117,17 @@
                                                ng-required="true" name="agentName"
                                                ng-model="proposalDetails.basic.agentName"/>
                                     </div>
-                                    <div class="form-group "  ng-hide="!proposalDetails.basic.branchName">
+                                    <div class="form-group " ng-hide="!proposalDetails.basic.branchName">
                                         <label class="control-label">Branch Name</label>
-                                        <input type="text" class="form-control input-sm" ng-readonly="true" name="branchName" ng-model="proposalDetails.basic.branchName"/>
+                                        <input type="text" class="form-control input-sm" ng-readonly="true"
+                                               name="branchName" ng-model="proposalDetails.basic.branchName"/>
                                     </div>
                                 </div>
                                 <div class="col-lg-6">
                                     <div class="form-group " ng-hide="!proposalDetails.basic.teamName">
                                         <label class="control-label">Team Name</label>
-                                        <input type="text" class="form-control input-sm" ng-readonly="true"  name="teamName" ng-model="proposalDetails.basic.teamName"/>
+                                        <input type="text" class="form-control input-sm" ng-readonly="true"
+                                               name="teamName" ng-model="proposalDetails.basic.teamName"/>
                                     </div>
                                 </div>
                             </div>
@@ -130,33 +138,46 @@
                             <button type="button" class="btn btn-default btn-sm" ng-click="back()">Cancel</button>
                         </div>
                         <div class="col-sm-6">
-                            <button type="button" class="btn btn-default btn-sm" style="float: right" ng-click="saveBasicDetails()" ng-disabled="isSaveDisabled(step1)" ng-if="!isViewMode">Save</button>
+                            <button type="button" class="btn btn-default btn-sm" style="float: right"
+                                    ng-click="saveBasicDetails()" ng-disabled="isSaveDisabled(step1)"
+                                    ng-if="!isViewMode">Save
+                            </button>
                         </div>
                     </div>
                 </div>
                 <div class="step-pane" data-step="2">
                     <ng-form name="step2">
                         <accordion close-others="true">
-                            <accordion-group  is-open="accordionStatus.proposer">
+                            <accordion-group is-open="accordionStatus.proposer">
                                 <accordion-heading>
-                                    Proposer Details <i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': accordionStatus.proposer, 'glyphicon-chevron-right': !accordionStatus.proposer}"></i>
+                                    Proposer Details <i class="pull-right glyphicon"
+                                                        ng-class="{'glyphicon-chevron-down': accordionStatus.proposer, 'glyphicon-chevron-right': !accordionStatus.proposer}"></i>
                                 </accordion-heading>
                                 <div class="col-lg-6" disable-all-fields="isViewMode">
                                     <div class="form-group required">
                                         <label class="control-label">Proposer Name</label>
-                                        <input type="text" class="form-control input-sm" name="proposerName" ng-disabled="true" ng-required="true" ng-model="proposalDetails.proposer.proposerName"/>
+                                        <input type="text" class="form-control input-sm" name="proposerName"
+                                               ng-disabled="true" ng-required="true"
+                                               ng-model="proposalDetails.proposer.proposerName"/>
                                     </div>
                                     <div class="form-group required">
                                         <label class="control-label">Address Line 1</label>
-                                        <input type="text" class="form-control input-sm" ng-required="true" onkeypress="return isEnterKey(event)" name="addressLine1" ng-maxlength="100" ng-model="proposalDetails.proposer.addressLine1"/>
+                                        <input type="text" class="form-control input-sm" ng-required="true"
+                                               onkeypress="return isEnterKey(event)" name="addressLine1"
+                                               ng-maxlength="100" ng-model="proposalDetails.proposer.addressLine1"/>
                                     </div>
                                     <div class="form-group">
-                                        <label >Postal Code</label>
-                                        <input type="text" class="form-control input-sm" name="postalCode" onkeypress="return isEnterKey(event)" ng-model="proposalDetails.proposer.postalCode"/>
+                                        <label>Postal Code</label>
+                                        <input type="text" class="form-control input-sm" name="postalCode"
+                                               onkeypress="return isEnterKey(event)"
+                                               ng-model="proposalDetails.proposer.postalCode"/>
                                     </div>
                                     <div class="form-group required">
                                         <label class="control-label">Town</label>
-                                        <select class="form-control input-sm"  name="town" ng-model="proposalDetails.proposer.town" ng-options="city.geoId as city.geoName for city in cities" ng-required="true" >
+                                        <select class="form-control input-sm" name="town"
+                                                ng-model="proposalDetails.proposer.town"
+                                                ng-options="city.geoId as city.geoName for city in cities"
+                                                ng-required="true">
                                             <option value="">-- Select Town --</option>
                                         </select>
 
@@ -169,22 +190,30 @@
                                 <div class="col-lg-6" disable-all-fields="isViewMode">
                                     <div class="form-group required">
                                         <label class="control-label">Proposer Code</label>
-                                        <input type="text" class="form-control input-sm" ng-required="true" ng-disabled="true" name="proposerCode" onkeypress="return isEnterKey(event)" ng-model="proposalDetails.proposer.proposerCode"/>
+                                        <input type="text" class="form-control input-sm" ng-required="true"
+                                               ng-disabled="true" name="proposerCode"
+                                               onkeypress="return isEnterKey(event)"
+                                               ng-model="proposalDetails.proposer.proposerCode"/>
                                     </div>
                                     <div class="form-group">
-                                        <label >Address Line 2</label>
-                                        <input type="text" class="form-control input-sm" maxlength="100" onkeypress="return isEnterKey(event)" ng-model="proposalDetails.proposer.addressLine2"/>
+                                        <label>Address Line 2</label>
+                                        <input type="text" class="form-control input-sm" maxlength="100"
+                                               onkeypress="return isEnterKey(event)"
+                                               ng-model="proposalDetails.proposer.addressLine2"/>
                                     </div>
                                     <div class="form-group required">
                                         <label class="control-label">Province</label>
-                                        <select class="form-control input-sm" ng-required="true" name="province" ng-model="proposalDetails.proposer.province" ng-options="province.provinceId  as province.provinceName for province in provinces" ng-change="getCurrentVal(proposalDetails.proposer.province)">
+                                        <select class="form-control input-sm" ng-required="true" name="province"
+                                                ng-model="proposalDetails.proposer.province"
+                                                ng-options="province.provinceId  as province.provinceName for province in provinces"
+                                                ng-change="getCurrentVal(proposalDetails.proposer.province)">
                                         </select>
                                     </div>
                                     <div class="form-group">
                                         <label>Opportunity ID</label>
                                         <input type="text" onkeypress="return isNumeric(event)"
                                                class="form-control input-sm" maxlength="100" ng-disabled="true"
-                                               ng-model="proposalDetails.proposer.opportunityId" />
+                                               ng-model="proposalDetails.proposer.opportunityId"/>
                                     </div>
                                     <!--<div class="form-group">
                                         <label >Email</label>
@@ -192,20 +221,28 @@
                                     </div>-->
                                 </div>
                             </accordion-group>
-                            <accordion-group  is-open="accordionStatus.contact">
+                            <accordion-group is-open="accordionStatus.contact">
                                 <accordion-heading>
-                                    Contact Details <i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': accordionStatus.contact, 'glyphicon-chevron-right': !accordionStatus.contact}"></i>
+                                    Contact Details <i class="pull-right glyphicon"
+                                                       ng-class="{'glyphicon-chevron-down': accordionStatus.contact, 'glyphicon-chevron-right': !accordionStatus.contact}"></i>
                                 </accordion-heading>
                                 <div class="col-lg-6" disable-all-fields="isViewMode">
                                     <div class="form-group required">
                                         <label class="control-label">Contact Person Details</label>
-                                        <input type="text" class="form-control input-sm" name="contactPersonDetails" onkeypress="return isEnterKey(event)" maxlength="100" ng-required="true" ng-model="proposalDetails.proposer.contactPersonName"/>
+                                        <input type="text" class="form-control input-sm" name="contactPersonDetails"
+                                               onkeypress="return isEnterKey(event)" maxlength="100" ng-required="true"
+                                               ng-model="proposalDetails.proposer.contactPersonName"/>
                                     </div>
                                     <div class="form-group required">
                                         <label class="control-label">Mobile Number</label>
-                                        <input type="text" class="form-control input-sm" maxlength="10" minlength="10" name="mobileNumber" ng-required="true" ng-pattern="numberPattern" onkeypress="return isEnterKey(event)" ng-model="proposalDetails.proposer.contactPersonMobileNumber"/>
+                                        <input type="text" class="form-control input-sm" maxlength="10" minlength="10"
+                                               name="mobileNumber" ng-required="true" ng-pattern="numberPattern"
+                                               onkeypress="return isEnterKey(event)"
+                                               ng-model="proposalDetails.proposer.contactPersonMobileNumber"/>
+
                                         <div ng-show="step2.mobileNumber.$invalid &amp;&amp; step2.mobileNumber.$dirty">
-                                            <small class="error" ng-show="!step2.mobileNumber.$error.pattern &amp;&amp; step2.mobileNumber.$error.minlength">
+                                            <small class="error"
+                                                   ng-show="!step2.mobileNumber.$error.pattern &amp;&amp; step2.mobileNumber.$error.minlength">
                                                 Please enter a valid mobile number.
                                             </small>
                                             <small class="error" ng-show="step2.mobileNumber.$error.pattern">
@@ -217,7 +254,10 @@
                                 <div class="col-lg-6" disable-all-fields="isViewMode">
                                     <div class="form-group">
                                         <label class="control-label">Email</label>
-                                        <input type="email" class="form-control input-sm"  name="email" onkeypress="return isEnterKey(event)" ng-model="proposalDetails.proposer.contactPersonEmail"/>
+                                        <input type="email" class="form-control input-sm" name="email"
+                                               onkeypress="return isEnterKey(event)"
+                                               ng-model="proposalDetails.proposer.contactPersonEmail"/>
+
                                         <div ng-show="step2.email.$invalid &amp;&amp; step2.email.$dirty">
                                             <small class="error" ng-show="step2.email.$error.email">
                                                 Please enter a valid emailId.
@@ -226,9 +266,14 @@
                                     </div>
                                     <div class="form-group required">
                                         <label class="control-label">Work Phone</label>
-                                        <input type="text" class="form-control input-sm" maxlength="13" minlength="13" name="workPhone" onkeypress="return isEnterKey(event)" ng-required="true" ng-pattern="numberPattern" ng-model="proposalDetails.proposer.contactPersonWorkPhoneNumber"/>
+                                        <input type="text" class="form-control input-sm" maxlength="13" minlength="13"
+                                               name="workPhone" onkeypress="return isEnterKey(event)" ng-required="true"
+                                               ng-pattern="numberPattern"
+                                               ng-model="proposalDetails.proposer.contactPersonWorkPhoneNumber"/>
+
                                         <div ng-show="step2.workPhone.$invalid &amp;&amp; step2.workPhone.$dirty">
-                                            <small class="error" ng-show="!step2.workPhone.$error.pattern &amp;&amp; step2.workPhone.$error.minlength">
+                                            <small class="error"
+                                                   ng-show="!step2.workPhone.$error.pattern &amp;&amp; step2.workPhone.$error.minlength">
                                                 Please enter a valid work phone.
                                             </small>
                                             <small class="error" ng-show="step2.workPhone.$error.pattern">
@@ -245,7 +290,10 @@
                             <button type="button" class="btn btn-default btn-sm" ng-click="back()">Cancel</button>
                         </div>
                         <div class="col-sm-6">
-                            <button type="button" class="btn btn-default btn-sm" style="float: right" ng-click="saveProposerDetails()" ng-disabled="(step2.$invalid)" ng-if="!isViewMode">Save</button>
+                            <button type="button" class="btn btn-default btn-sm" style="float: right"
+                                    ng-click="saveProposerDetails()" ng-disabled="(step2.$invalid)" ng-if="!isViewMode">
+                                Save
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -276,19 +324,24 @@
                              </div>-->
                         </div>
                         <div class="col-lg-3">
-                            <button type="button" class="btn btn-default pull-right" data-animation="am-flip-x" bs-dropdown="dropdown" >Downloads
+                            <button type="button" class="btn btn-default pull-right" data-animation="am-flip-x"
+                                    bs-dropdown="dropdown">Downloads
                             </button>
                         </div>
                     </div>
                     <div class="row" style="margin-top: 5px">
                         <div class="col-lg-6 col-lg-offset-3">
                             <div class="form-group">
-                                <input type="text" class="form-control input-sm" ng-model="fileName" style="width: 62%;display: inline-block" ng-readonly="true"/>
-                                <button type="file" class="btn btn-default btn-sm" ng-file-select="" ng-model="fileSaved" ng-disabled="isViewMode">Browse</button>
+                                <input type="text" class="form-control input-sm" ng-model="fileName"
+                                       style="width: 62%;display: inline-block" ng-readonly="true"/>
+                                <button type="file" class="btn btn-default btn-sm" ng-file-select=""
+                                        ng-model="fileSaved" ng-disabled="isViewMode">Browse
+                                </button>
                             </div>
                         </div>
                     </div>
                     <br/>
+
                     <div class="row " disable-all-fields="isViewMode">
                         <div class="col-lg-3 col-lg-offset-3">
                             <input type="checkbox" ng-model="proposalDetails.plan.considerMoratoriumPeriod"/><span
@@ -302,7 +355,10 @@
                             <button type="button" class="btn btn-default btn-sm" ng-click="back()">Cancel</button>
                         </div>
                         <div class="col-sm-6">
-                            <button type="button" class="btn btn-default btn-sm" style="float: right" ng-disabled="!fileSaved" ng-if="!isViewMode" ng-click="savePlanDetails()">Upload &amp; Save</button>
+                            <button type="button" class="btn btn-default btn-sm" style="float: right"
+                                    ng-disabled="!fileSaved" ng-if="!isViewMode" ng-click="savePlanDetails()">Upload
+                                &amp; Save
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -310,83 +366,87 @@
                     <div class="col-lg-9" disable-all-fields="isViewMode">
                         <div class="bs-callout  bs-callout-info">
                             <ng-form name="premiumForm" novalidate="true">
-                            <div class="row">
-                                <div class="col-lg-6">
-                                    <div class="form-group required">
-                                        <label class="control-label">Add-On Benefits</label>
-                                        <input class="form-control input-sm" onkeypress="return isNumeric(event)"
-                                               ng-required="true" name="addOnBenefits" ng-pattern="/^(^[0-9]{1,2})+(\.[0-9]{1,2})?$/"
-                                               ng-model="proposalDetails.premium.addOnBenefit"
-                                               ng-blur="recalculatePremium();" value="0"/>
-                                    </div>
-                                    <div class="form-group">
-                                        <label class="control-label">Profit and Solvency Loading</label>
-                                        <input class="form-control input-sm" onkeypress="return isNumeric(event)"
-                                               name="profitAndSolvencyLoading" ng-pattern="/^(^[0-9]{1,2})+(\.[0-9]{1,2})?$/"
-                                               ng-model="proposalDetails.premium.profitAndSolvencyLoading"
-                                               ng-blur="recalculatePremium();" value="0"/>
-                                    </div>
-                                    <div class="form-group required">
-                                        <label class="control-label">Waiver of Excess Loading</label>
-                                        <input class="form-control input-sm" onkeypress="return isNumeric(event)"
-                                               ng-required="true" name="addOnBenefits"
-                                                min="0" max="99" ng-pattern="/^(^[0-9]{1,2})+(\.[0-9]{1,2})?$/"
-                                               ng-model="proposalDetails.premium.waiverOfExcessLoading"
-                                               ng-blur="recalculatePremium();" value="0"/>
-                                    </div>
-                                    <div class="form-group">
-                                        <label class="control-label">Discounts</label>
-                                        <input class="form-control input-sm" onkeypress="return isNumeric(event)"
-                                               name="discounts" ng-pattern="/^(^[0-9]{1,2})+(\.[0-9]{1,2})?$/"
-                                               ng-model="proposalDetails.premium.discounts"
-                                               ng-blur="recalculatePremium();" value="0"/>
-                                    </div>
-                                    <div class="form-group">
-                                        <label class="control-label">Service Tax / VAT</label>
-                                        <input class="form-control input-sm" onkeypress="return isNumeric(event)"
-                                               ng-required="true"
-
-                                               name="addOnBenefits" ng-model="proposalDetails.premium.vat"
-                                               ng-blur="recalculatePremium();" value="0"/>
-                                    </div>
-
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-lg-6">
-                                    <div class="form-group">
-                                        <label>Policy Term Value (Days)</label>
-                                        <input class="form-control input-sm" onkeypress="return isNumeric(event)"
-                                                ng-model="proposalDetails.premium.policyTermValue"
-                                               ng-blur="recalculatePremium();" ng-pattern="/^[0-9]{1,3}$/"/>
-                                        <small class="error" ng-show="inappropriatePolicyTerm">
-                                            Please enter a number between 30 and 999.
-                                        </small>
-                                    </div>
-                                </div>
-                                <div class="col-lg-6" ng-if="!(!isPolicyTermNot365 || inappropriatePolicyTerm)">
+                                <div class="row">
                                     <div class="col-lg-6">
                                         <div class="form-group required">
-                                            <label class="control-label">Number Of Installments</label>
-                                            <select class="form-control" ng-model="selectedInstallment"
-                                                    name="installments"
-                                                    ng-change="setSelectedInstallment(selectedInstallment)"
-                                                    ng-options="installment as installment.installmentNo for installment in installments track by installment.installmentNo | orderBy: 'installment.installmentNo'"></select>
+                                            <label class="control-label">Add-On Benefits</label>
+                                            <input class="form-control input-sm" onkeypress="return isNumeric(event)"
+                                                   ng-required="true" name="addOnBenefits"
+                                                   ng-pattern="/^(^[0-9]{1,2})+(\.[0-9]{1,2})?$/"
+                                                   ng-model="proposalDetails.premium.addOnBenefit"
+                                                   ng-blur="recalculatePremium();" value="0"/>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label">Profit and Solvency Loading</label>
+                                            <input class="form-control input-sm" onkeypress="return isNumeric(event)"
+                                                   name="profitAndSolvencyLoading"
+                                                   ng-pattern="/^(^[0-9]{1,2})+(\.[0-9]{1,2})?$/"
+                                                   ng-model="proposalDetails.premium.profitAndSolvencyLoading"
+                                                   ng-blur="recalculatePremium();" value="0"/>
+                                        </div>
+                                        <div class="form-group required">
+                                            <label class="control-label">Waiver of Excess Loading</label>
+                                            <input class="form-control input-sm" onkeypress="return isNumeric(event)"
+                                                   ng-required="true" name="addOnBenefits"
+                                                   min="0" max="99" ng-pattern="/^(^[0-9]{1,2})+(\.[0-9]{1,2})?$/"
+                                                   ng-model="proposalDetails.premium.waiverOfExcessLoading"
+                                                   ng-blur="recalculatePremium();" value="0"/>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label">Discounts</label>
+                                            <input class="form-control input-sm" onkeypress="return isNumeric(event)"
+                                                   name="discounts" ng-pattern="/^(^[0-9]{1,2})+(\.[0-9]{1,2})?$/"
+                                                   ng-model="proposalDetails.premium.discounts"
+                                                   ng-blur="recalculatePremium();" value="0"/>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label">Service Tax / VAT</label>
+                                            <input class="form-control input-sm" onkeypress="return isNumeric(event)"
+                                                   ng-required="true"
+
+                                                   name="addOnBenefits" ng-model="proposalDetails.premium.vat"
+                                                   ng-blur="recalculatePremium();" value="0"/>
+                                        </div>
+
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-lg-6">
+                                        <div class="form-group">
+                                            <label>Policy Term Value (Days)</label>
+                                            <input class="form-control input-sm" onkeypress="return isNumeric(event)"
+                                                   ng-model="proposalDetails.premium.policyTermValue"
+                                                   ng-blur="recalculatePremium();" ng-pattern="/^[0-9]{1,3}$/"/>
+                                            <small class="error" ng-show="inappropriatePolicyTerm">
+                                                Please enter a number between 30 and 999.
+                                            </small>
                                         </div>
                                     </div>
-                                    <div class="col-lg-6">
-                                        <div class="form-group" ng-if="selectedInstallment!=null">
-                                            <label>Installment Amount</label>
-                                            <input type="number" class="form-control input-sm" readonly="true"
-                                                   ng-model="selectedInstallment.installmentAmount"/>
+                                    <div class="col-lg-6" ng-if="!(!isPolicyTermNot365 || inappropriatePolicyTerm)">
+                                        <div class="col-lg-6">
+                                            <div class="form-group required">
+                                                <label class="control-label">Number Of Installments</label>
+                                                <select class="form-control" ng-model="selectedInstallment"
+                                                        name="installments"
+                                                        ng-change="setSelectedInstallment(selectedInstallment)"
+                                                        ng-options="installment as installment.installmentNo for installment in installments track by installment.installmentNo"></select>
+
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-6">
+                                            <div class="form-group" ng-if="selectedInstallment!=null">
+                                                <label>Installment Amount</label>
+                                                <input type="number" class="form-control input-sm" readonly="true"
+                                                       ng-model="selectedInstallment.installmentAmount"/>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
                             </ng-form>
                         </div>
                     </div>
-                    <div class="col-lg-3" ng-hide="isPolicyTermNot365 || inappropriatePolicyTerm" disable-all-fields="isViewMode">
+                    <div class="col-lg-3" ng-hide="isPolicyTermNot365 || inappropriatePolicyTerm"
+                         disable-all-fields="isViewMode">
                         <div class="form-group">
                             <label><input type="radio" class="" ng-model="proposalDetails.premium.optedPremiumFrequency"
                                           value="ANNUALLY" style="margin-right:5px;"/>Annual Payment</label>
@@ -418,7 +478,7 @@
                     <div class="row" style="margin-top: 5px">
                         <div class="col-lg-3 col-lg-offset-9" style="padding-right: 27px;padding-left: 6px">
                             <div class="form-group">
-                                <label >Total Premium payable</label>
+                                <label>Total Premium payable</label>
                                 <input type="number" readonly="true" class="form-control input-sm"
                                        ng-model="proposalDetails.premium.totalPremium"/>
                             </div>
@@ -430,7 +490,8 @@
                         </div>
                         <div class="col-sm-6">
                             <button type="button" class="btn btn-default btn-sm" style="float: right"
-                                    ng-if="!isViewMode" ng-click="savePremiumDetails()" ng-disabled="(!disableSaveButton)">Save
+                                    ng-if="!isViewMode" ng-click="savePremiumDetails()"
+                                    ng-disabled="(!disableSaveButton)">Save
                             </button>
                         </div>
                     </div>
@@ -438,41 +499,49 @@
                 <div class="step-pane acti" data-step="5">
                     <ng-form name="step5" disable-all-fields="isViewMode">
                         <accordion close-others="true">
-                            <accordion-group  is-open="accordionStatusDocuments.documents">
+                            <accordion-group is-open="accordionStatusDocuments.documents">
                                 <accordion-heading>
                                     Mandatory Documents <i class="pull-right glyphicon"
                                                            ng-class="{'glyphicon-chevron-down': accordionStatusDocuments.documents,
                                                             'glyphicon-chevron-right': !accordionStatusDocuments.documents}"></i>
                                 </accordion-heading>
-                        <div class="bs-callout  bs-callout-info" style="overflow:auto;height:240px;"  disable-all-fields="isViewMode">
+                                <div class="bs-callout  bs-callout-info" style="overflow:auto;height:240px;"
+                                     disable-all-fields="isViewMode">
 
-                            <div class="form-group "  ng-repeat="document in documentList" >
-                                <label class="col-sm-3 control-label">{{document.documentName}}</label>
-                                     <div class="input-group">
-                                         <a  href="/pla/grouphealth/proposal/downloadmandatorydocument/{{document.gridFsDocId}}" style="display:inline;float:right;"  hg-show="!document.submitted">{{document.fileName}}</a>
+                                    <div class="form-group " ng-repeat="document in documentList">
+                                        <label class="col-sm-3 control-label">{{document.documentName}}</label>
 
-                                         <button class="btn btn-default"
-                                                 style="display:inline;float:right;margin-right:5px;" ng-file-select=""
-                                                 ng-model="document.documentAttached" ng-disabled="isViewMode">Browse
-                                         </button>
-                                        <label class="form-control input-sm" style="border:1px solid #ccc;width:380px;" >{{document.documentAttached[0].name}} </label>
+                                        <div class="input-group">
+                                            <a href="/pla/grouphealth/proposal/downloadmandatorydocument/{{document.gridFsDocId}}"
+                                               style="display:inline;float:right;" hg-show="!document.submitted">{{document.fileName | limitTo: 70}}</a>
 
-                                     </div>
+                                            <button class="btn btn-default"
+                                                    style="display:inline;float:right;margin-right:5px;"
+                                                    ng-file-select=""
+                                                    ng-model="document.documentAttached" ng-disabled="isViewMode">Browse
+                                            </button>
+                                            <input class="form-control input-sm" style="width:380px;"
+                                                   value="{{document.documentAttached[0].name}}"
+                                                   readonly="true"/>
 
-                            </div>
-                            <div class="btn btn-default" style="display:inline;float:right;clear:both"
-                                 ng-click="uploadDocumentFiles()" ng-hide="isViewMode">Upload All
-                            </div>
-                        </div>
+
+                                        </div>
+
+                                    </div>
+                                    <div class="btn btn-default" style="display:inline;float:right;clear:both"
+                                         ng-click="uploadDocumentFiles()" ng-hide="isViewMode">Upload All
+                                    </div>
+                                </div>
                             </accordion-group>
-                            <accordion-group  is-open="accordionStatusDocuments.additionalDocuments">
+                            <accordion-group is-open="accordionStatusDocuments.additionalDocuments">
                                 <accordion-heading>
-                                    Additional Documents <i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': accordionStatusDocuments.additionalDocuments, 'glyphicon-chevron-right': !accordionStatusDocuments.additionalDocuments}"></i>
+                                    Additional Documents <i class="pull-right glyphicon"
+                                                            ng-class="{'glyphicon-chevron-down': accordionStatusDocuments.additionalDocuments, 'glyphicon-chevron-right': !accordionStatusDocuments.additionalDocuments}"></i>
                                 </accordion-heading>
                                 <div class="bs-callout  bs-callout-info" style="overflow:auto;height:250px;"
                                      disable-all-fields="isViewMode">
 
-                                    <div class="row" >
+                                    <div class="row">
                                         <button class="btn btn-default"
                                                 style="display:inline;float:left;margin-right:5px;"
                                                 ng-click="addAdditionalDocument()" ng-disabled="isViewMode">Add Document
@@ -480,44 +549,55 @@
                                     </div>
                                     <br/><br/>
 
-                                    <div class="row" >
+                                    <div class="row">
                                         <div ng-repeat="additionalDocument in additionalDocumentList">
                                             <div class="row">
-                                <div class="col-lg-3">
-                                    <div class="form-group">
-                                        <label class="control-label">Document Title</label>
-                                        <input type="text" class="form-control input-sm"
-                                               name="documentTitle" onkeypress="return isEnterKey(event)"
-                                               ng-model="additionalDocument.documentId"/>
-                                    </div>
-                                </div>
-                                            <div class="col-lg-4" ng-hide="isViewMode">
-                                    <div class="form-group">
+                                                <div class="col-lg-3">
+                                                    <div class="form-group">
+                                                        <label class="control-label">Document Title</label>
+                                                        <input type="text" class="form-control input-sm"
+                                                               name="documentTitle"
+                                                               onkeypress="return isEnterKey(event)"
+                                                               ng-model="additionalDocument.documentId"/>
+                                                    </div>
+                                                </div>
+                                                <div class="col-lg-4" ng-hide="isViewMode">
+                                                    <div class="form-group">
 
-                                        <label class="control-label">Browse File</label>
-                                        <button class="btn btn-default"
-                                                style="display:inline;float:right;margin-top:20px;"
-                                                ng-file-select="callAdditionalDoc(additionalDocument.documentAttached)" ng-model="additionalDocument.documentAttached" ng-disabled="!additionalDocument.documentId">Browse
-                                        </button>
-                                        <input class="form-control input-sm" style="width:320px;" value="{{additionalDocument.documentAttached[0].name}}" readonly="true" />
-                                    </div>
+                                                        <label class="control-label">Browse File</label>
+                                                        <button class="btn btn-default"
+                                                                style="display:inline;float:right;margin-top:20px;"
+                                                                ng-file-select="callAdditionalDoc(additionalDocument.documentAttached)"
+                                                                ng-model="additionalDocument.documentAttached"
+                                                                ng-disabled="!additionalDocument.documentId">Browse
+                                                        </button>
+                                                        <input class="form-control input-sm" style="width:320px;"
+                                                               value="{{additionalDocument.documentAttached[0].name}}"
+                                                               readonly="true"/>
+                                                    </div>
+
+                                                </div>
+                                                <div class="col-lg-5">
+                                                    <button class="btn btn-default" style="margin-top:20px;"
+                                                            ng-click="removeAdditionalDocument($index)"
+                                                            ng-disabled="isViewMode">Remove
+                                                    </button>
+                                                    <a href="/pla/grouphealth/proposal/downloadmandatorydocument/{{additionalDocument.gridFsDocId}}"
+                                                       style="display:inline;" title="{{additionalDocument.fileName}}"
+                                                       hg-show="!additionalDocument.submitted">{{additionalDocument.fileName|
+                                                        limitTo: 70}}</a>
+
+                                                </div>
 
                                             </div>
-                                            <div class="col-lg-5">
-                                                <button class="btn btn-default" style="margin-top:20px;" ng-click="removeAdditionalDocument($index)" ng-disabled="isViewMode">Remove</button>
-                                                <a  href="/pla/grouphealth/proposal/downloadmandatorydocument/{{additionalDocument.gridFsDocId}}" style="display:inline;"  title="{{additionalDocument.fileName}}" hg-show="!additionalDocument.submitted">{{additionalDocument.fileName| limitTo: 70}}</a>
-
-                                            </div>
-
                                         </div>
-                                            </div>
 
-                            </div>
+                                    </div>
                                     <button class="btn btn-default"
                                             style="display:inline;float:right;margin-right:5px;margin-top:20px;"
-                                            ng-click="uploadAdditionalDocument()" ng-disabled="!checkDocumentAttached" ng-hide="isViewMode">Upload
+                                            ng-click="uploadAdditionalDocument()" ng-disabled="!checkDocumentAttached"
+                                            ng-hide="isViewMode">Upload
                                     </button>
-
 
 
                                 </div>
@@ -530,7 +610,9 @@
                             <button type="button" class="btn btn-default btn-sm" ng-click="back()">Cancel</button>
                         </div>
                         <div class="col-sm-6">
-                            <button type="button" class="btn btn-default btn-sm" style="float: right" ng-click="submitAdditionalDocument()" ng-disabled="isViewMode">Submit</button>
+                            <button type="button" class="btn btn-default btn-sm" style="float: right"
+                                    ng-click="submitAdditionalDocument()" ng-disabled="isViewMode">Submit
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -565,6 +647,7 @@
             top: 3px;
             width: 18px;
         }
+
         .btn {
             font-size: 12px;
         }

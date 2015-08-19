@@ -331,7 +331,8 @@ angular.module('createProposal', ['common', 'ngRoute', 'mgcrea.ngStrap.select', 
             });
 
             $scope.selectedInstallment = premiumData.premiumInstallment;
-            $scope.installments = $scope.proposalDetails.premium.installments;
+            $scope.installment = $scope.proposalDetails.premium.installments;
+            $scope.installments = _.sortBy($scope.installment, 'installmentNo');
             $scope.recalculatePremium = function () {
                 $scope.premiumInstallment = {};
                 $scope.proposalDetails.premium.premiumInstallment = $scope.selectedInstallment || null;
@@ -543,7 +544,8 @@ angular.module('createProposal', ['common', 'ngRoute', 'mgcrea.ngStrap.select', 
                 $window.location.href = 'listgrouphealthproposal';
             }
             $scope.backToApproverPortlet = function () {
-                $window.location.href = 'viewApprovalProposal';
+
+                $window.location.href = 'openapprovalproposal';
             }
 
 
