@@ -436,12 +436,11 @@
         </div>
     </div>
     <div class="row">
-        <!--{{statusCount}}-->
         <div class="col-sm-6">
             <button type="button" class="btn btn-default btn-sm">Cancel</button>
         </div>
         <div class="col-sm-6">
-            <button type="button" class="btn btn-default btn-sm" style="float: right" ng-disabled="step2.$invalid || statusCount ||mode=='new'||mode=='view'|| ageCalculateStatus" ng-click="saveProposerDetails()">Save</button>
+            <button type="button" class="btn btn-default btn-sm" style="float: right" ng-disabled="step1.$invalid || statusCount ||mode=='new'||mode=='view'|| ageCalculateStatus" ng-click="saveProposerDetails()">Save</button>
         </div>
     </div>
 </ng-form>

@@ -521,8 +521,8 @@
         <div class="form-group required col-md-2">
             <select class="form-control input-sm" name="isPregnant" ng-required="true" ng-disabled="mode=='new'||mode=='view'" ng-model="familyPersonalDetail.isPregnant">
                 <option value="">--Select One--</option>
-                <option value="true" ng-value="true">Yes</option>
-                <option value="false" ng-value="false">No</option>
+                <option value="true">Yes</option>
+                <option value="false">No</option>
             </select>
 
             <div class="error" ng-messages="step7.isPregnant.$error" ng-if="step7.isPregnant.$dirty">

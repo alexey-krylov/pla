@@ -1,48 +1,6 @@
-<ng-form name="step1">
+<ng-form name="step2">
     <div ng-init="setForm(step1);"></div>
     <accordion close-others="true">
-        <accordion-group is-open="accordionStatus.proposedAssuredDetails.agents" ng-class="{'accordion-error':isAgentEmpty}">
-            <accordion-heading>
-                Agent
-                <i class="pull-right glyphicon"
-                   ng-class="{'glyphicon-chevron-down': accordionStatus.proposedAssuredDetails.agents, 'glyphicon-chevron-right': !accordionStatus.proposedAssuredDetails.agents}"></i>
-            </accordion-heading>
-            <div class="col-md-12">
-               <!--<button type="button" class="btn btn-default btn-xs pull-right" ng-click="openAgentModal()" style="margin-bottom: 5px"><strong>Add Agent</strong></button>-->
-                <p style="color:red" ng-show="agentMessage">
-                    Sum of commission % is not 100..Please update commission % to ensure it should be 100
-                </p>
-                <button ng-disabled="mode=='new'||mode=='view'" type="button" class="btn btn-default btn-xs pull-right"
-                        data-toggle="modal" data-target="#agentModal" style="margin-bottom: 5px"><strong>Add Agent</strong>
-                </button>
-
-                <table class="table table-bordered">
-                    <thead>
-                    <tr>
-                        <th>Agent Code</th>
-                        <th>Agent Name</th>
-                        <th>Commission %</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr ng-repeat="row in agentDetails">
-                        <td>{{row.agentId}}</td>
-                        <td>{{row.firstName+ ' ' + (row.lastName !=null ?(row.lastName + ' ') : '')}}</td>
-                        <!--<td contenteditable="true" ng-model ="row.commission" >{{row.commission}}</td>-->
-                       <!-- <td>
-                            <input type="text" ng-disabled="mode=='new'||mode=='view'" contenteditable="updateFlag" ng-model="row.commission" value="{{row.commission}}" ng-blur="test(row)" />
-                          &lt;!&ndash; <div contenteditable="true" ng-model="row.update" ng-blur="test(row)" ng-change="test(row)" >{{row.commission}}</div>&ndash;&gt;
-                        </td>-->
-
-                        <td>
-                            <input type="number" ng-disabled="mode=='new'||mode=='view'" contenteditable="updateFlag" ng-init="commisionSumTest()" ng-model="row.commission"  ng-blur="commisionSumTest()" value="{{row.commission}}" />
-                        </td>
-
-                    </tr>
-                    </tbody>
-                </table>
-            </div>
-        </accordion-group>
         <accordion-group is-open="accordionStatus.proposedAssuredDetails.proposedAssured" ng-form="proposedAssuredDetails"
                          ng-class="{'accordion-error':hasAccordionError(proposedAssuredDetails)}">
             <accordion-heading>
@@ -52,7 +10,7 @@
             <div class="col-md-6">
                 <div class="form-group required">
                     <label class="control-label">Title</label>
-                    <select class="form-control input-sm" name="title" ng-disabled="mode=='new'||mode=='view'" ng-required="true" ng-model="proposedAssured.title" ng-options="title as title for title in titles">
+                    <select class="form-control input-sm" name="title" ng-disabled="mode=='new'||mode=='view'" ng-required="true" ng-change="getProposedAssuredGender(proposedAssured.title)" ng-model="proposedAssured.title" ng-options="title as title for title in titles">
                     </select>
 
                     <div class="error" ng-messages="proposedAssuredDetails.title.$error" ng-if="proposedAssuredDetails.title.$dirty">
@@ -70,15 +28,15 @@
                     </div>
                 </div>
                 <div class="form-group required">
-                <label class="control-label">NRC</label>
-                <input type="text" class="form-control input-sm" name="nrc" ng-disabled="mode=='new'||mode=='view'" ng-model="proposedAssured.nrc" ng-required="true" ng-maxlength="11" ng-pattern="/^[0-9]{6}\/[0-9]{2}\/[0-9]{1}$/"/>
+                    <label class="control-label">NRC</label>
+                    <input type="text" class="form-control input-sm" name="nrc" ng-disabled="mode=='new'||mode=='view'" ng-model="proposedAssured.nrc" ng-required="true" ng-maxlength="11" ng-pattern="/^[0-9]{6}\/[0-9]{2}\/[0-9]{1}$/"/>
 
-                <div class="error" ng-messages="proposedAssuredDetails.nrc.$error" ng-if="proposedAssuredDetails.nrc.$dirty">
-                    <small class="error" ng-message="required">Please enter NRC.</small>
-                    <small ng-message="maxlength">Only 11 characters are allowed.</small>
-                    <small ng-message="pattern"> Follw Pattern 999999/99/1</small>
+                    <div class="error" ng-messages="proposedAssuredDetails.nrc.$error" ng-if="proposedAssuredDetails.nrc.$dirty">
+                        <small class="error" ng-message="required">Please enter NRC.</small>
+                        <small ng-message="maxlength">Only 11 characters are allowed.</small>
+                        <small ng-message="pattern"> Follw Pattern 999999/99/1</small>
+                    </div>
                 </div>
-            </div>
                 <div class="form-group required">
                     <label class="control-label">Age Next Birthday</label>
                     <input type="text" class="form-control input-sm" ng-disabled="mode=='new'||mode=='view'" ng-readonly="true" name="ageNextBirthday" ng-model="proposedAssured.nextDob"/>
@@ -105,6 +63,8 @@
                         <small class="error" ng-message="required">Please enter Marital Status</small>
                     </div>
                 </div>
+
+
             </div>
             <div class="col-md-6">
                 <div class="form-group required">
@@ -130,25 +90,25 @@
                 </div>
 
                 <div class="form-group required">
-                <label class="control-label">Date Of Birth</label>
-                <div class='input-group date'>
-                    <input type="text" class="form-control input-sm"
-                           datepicker-popup="" view-enabled=""
-                           ng-required="true"
-                           is-open="launchdob"
-                           max-date="todayDate"
-                           ng-model="proposedAssured.dateOfBirth" name="dob" ng-disabled="mode=='new'||mode=='view'" ng-init="showDob(proposedAssured.dateOfBirth)" ng-blur="showDob(proposedAssured.dateOfBirth)"/>
+                    <label class="control-label">Date Of Birth</label>
+                    <div class='input-group date'>
+                        <input type="text" class="form-control input-sm"
+                               datepicker-popup="" view-enabled=""
+                               ng-required="true"
+                               is-open="launchdob"
+                               max-date="todayDate"
+                               ng-model="proposedAssured.dateOfBirth" name="dob" ng-disabled="mode=='new'||mode=='view'" ng-init="showDob(proposedAssured.dateOfBirth)" ng-blur="showDob(proposedAssured.dateOfBirth)"/>
                                     <span class="input-group-btn">
                                     <button type="button" class="btn btn-default btn-sm"
                                             ng-disabled="mode=='new'||mode=='view'" ng-click="launchProposedAssuredeDob($event)">
                                         <i class="glyphicon glyphicon-calendar"></i></button>
                                   </span>
+                    </div>
+                    <div class="error" ng-messages="proposedAssuredDetails.dob.$error" ng-if="proposedAssuredDetails.dob.$dirty">
+                        <small ng-message="required">Please enter Employment Date.</small>
+                        <small ng-message="date">Invalid Date.</small>
+                    </div>
                 </div>
-                <div class="error" ng-messages="proposedAssuredDetails.dob.$error" ng-if="proposedAssuredDetails.dob.$dirty">
-                    <small ng-message="required">Please enter Employment Date.</small>
-                    <small ng-message="date">Invalid Date.</small>
-                </div>
-            </div>
 
                 <div class="form-group required">
                     <label class="control-label">Sex</label>
@@ -172,6 +132,18 @@
                     </div>
 
                 </div>
+
+                <div class="form-group" >
+                    <label class="control-label">Relationship with Proposer</label>
+                    <select class="form-control input-sm" name="relation" ng-disabled="mode=='new'||mode=='view'" ng-options="relation.relationCode as relation.description for relation in relationshipList"
+                            ng-model="proposedAssured.relationshipId" >
+                    </select>
+
+                    <div class="error" ng-messages="proposedAssuredDetails.relationshipId.$error" ng-if="proposedAssuredDetails.relationshipId.$dirty">
+                        <small class="error" ng-message="required">Please enter Relationship</small>
+                    </div>
+                </div>
+
 
             </div>
         </accordion-group>
@@ -279,9 +251,9 @@
                     <input type="text" class="form-control input-sm" name="postalCode" ng-disabled="mode=='new'||mode=='view'" ng-maxlength="7" ng-pattern="/^\d+$/" ng-model="employment.postalCode"/>
 
                     <div class="error" ng-messages="employmentDetails.postalCode.$error" ng-if="employmentDetails.postalCode.$dirty">
-                    <small ng-message="maxlength">Only 7 characters are allowed.</small>
-                    <small ng-message="pattern">Only Numeric are allowed.</small>
-                </div>
+                        <small ng-message="maxlength">Only 7 characters are allowed.</small>
+                        <small ng-message="pattern">Only Numeric are allowed.</small>
+                    </div>
                 </div>
                 <div class="form-group required">
                     <label class="control-label">Town</label>
@@ -305,8 +277,8 @@
                 </div>
                 <div class="form-group required" ng-if="employmentTypeStaus">
                     <label class="control-label">Employment Type</label>
-                    <select class="form-control input-sm" name="employmentType" ng-required="true" ng-disabled="mode=='new'||mode=='view'" ng-model="employment.employmentType" ng-options="employmentType.employment_id as employmentType.description for employmentType in employmentTypes">
-                            </select>
+                    <select class="form-control input-sm" name="employmentType" ng-required="true" ng-disabled="mode=='new'||mode=='view'" ng-init="getProposeAssuredEmpType(employment.employmentType)" ng-change="getProposeAssuredEmpType(employment.employmentType)" ng-model="employment.employmentType" ng-options="employmentType.employment_id as employmentType.description for employmentType in employmentTypes">
+                    </select>
 
                     <div class="error" ng-messages="employmentDetails.employmentType.$error" ng-if="employmentDetails.employmentType.$dirty">
                         <small class="error" ng-message="required">Please enter Employment Type</small>
@@ -323,7 +295,7 @@
                 <div class="form-group required" ng-if="employmentTypeStaus">
                     <label class="control-label">Province</label>
                     <select class="form-control input-sm" name="province" ng-disabled="mode=='new'||mode=='view'" ng-options="province.provinceId as province.provinceName for province in provinces"
-                            ng-model="employment.province" ng-required="true">
+                            ng-init="getProposedAssuredEmpProvinceValue(employment.province)"  ng-change="getProposedAssuredEmpProvinceValue(employment.province)" ng-model="employment.province" ng-required="true">
                     </select>
 
                     <div class="error" ng-messages="employmentDetails.province.$error" ng-if="employmentDetails.province.$dirty">
@@ -392,14 +364,14 @@
                     <label class="control-label">Address Line 2</label>
                     <input type="text" class="form-control input-sm" name="residentAddress2" ng-disabled="mode=='new'||mode=='view'" ng-maxlenght="100" ng-model="residentialAddress.address2"/>
 
-                     <div class="error" ng-messages="residentDetails.residentAddress2.$error" ng-if="residentDetails.residentAddress2.$dirty">
-                         <small ng-message="maxlength">Only 100 characters are allowed.</small>
+                    <div class="error" ng-messages="residentDetails.residentAddress2.$error" ng-if="residentDetails.residentAddress2.$dirty">
+                        <small ng-message="maxlength">Only 100 characters are allowed.</small>
                     </div>
                 </div>
                 <div class="form-group required">
                     <label class="control-label">Province</label>
                     <select class="form-control input-sm" name="residentProvince" ng-disabled="mode=='new'||mode=='view'" ng-options="province.provinceId as province.provinceName for province in provinces"
-                            ng-model="residentialAddress.province" ng-required="true"/>
+                            ng-init="getProposedAssuredResProvinceValue(residentialAddress.province)" ng-change="getProposedAssuredResProvinceValue(residentialAddress.province)" ng-model="residentialAddress.province" ng-required="true"/>
 
                     <div class="error" ng-messages="residentDetails.residentProvince.$error" ng-if="residentDetails.residentProvince.$dirty">
                         <small class="error" ng-message="required">Please enter Province</small>
@@ -419,19 +391,6 @@
             </div>
         </accordion-group>
     </accordion>
-    <div class="form-group required">
-        <label class="control-label" style="margin-right: 25px">Is Proposed Assured the Proposer?</label>
-        <label class="radio-inline">
-            <input type="radio" name="proposedAssuredAsProposer" ng-value="true" value="true" ng-disabled="mode=='new'||mode=='view'" ng-required="true" ng-model="proposedAssured.isProposer"/> Yes
-        </label>
-        <label class="radio-inline">
-            <input type="radio" name="proposedAssuredAsProposer" ng-value="false" value="false" ng-disabled="mode=='new'||mode=='view'" ng-required="true" ng-model="proposedAssured.isProposer"/> No
-        </label>
-
-        <div class="error" ng-messages="step1.proposedAssuredAsProposer.$error" ng-if="step1.proposedAssuredAsProposer.$pristine">
-            <small class="error" ng-message="required">Please select one.</small>
-        </div>
-    </div>
     <div class="row">
         <div class="col-sm-6">
             <button type="button" class="btn btn-default btn-sm">Cancel</button>
