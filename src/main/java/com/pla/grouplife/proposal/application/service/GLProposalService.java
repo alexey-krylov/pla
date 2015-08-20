@@ -181,7 +181,7 @@ public class GLProposalService {
         AgentDetailDto agentDetailDto = getAgentDetail(new ProposalId(proposalId));
         List<PlanId> planIds = getAgentAuthorizedPlans(agentDetailDto.getAgentId());
         List<PlanDetailDto> planDetailDtoList = PlanDetailDto.transformToPlanDetail(planAdapter.getPlanAndCoverageDetail(planIds));
-        byte[] pdfData = PDFGeneratorUtils.createPDFReportByList(planDetailDtoList, "jasperpdf/template/grouplife/quotation/planReadyReckoner.jrxml");
+        byte[] pdfData = PDFGeneratorUtils.createPDFReportByList(planDetailDtoList, "jasperpdf/template/grouplife/planReadyReckoner.jrxml");
         return pdfData;
     }
 
