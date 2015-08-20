@@ -134,5 +134,6 @@ public class ILPolicyController {
         outputStream.write(ilPolicyService.getPolicyDocument(new PolicyId(policyId)));
         outputStream.flush();
         outputStream.close();
+
     }
 }

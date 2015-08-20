@@ -300,9 +300,22 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
                 }
             }
 
+            /*$scope.$watch('replacement.answer',function(newVal,oldVal){
+
+                if(newVal)
+                {
+                    //alert('true');
+                    $scope.replacement.answer = 'true';
+                }
+                else{
+                    $scope.replacement.answer = 'false';
+                }
+            });*/
+
             if ($scope.proposalId) {
                 $http.get("/pla/individuallife/proposal/getproposal/" + $scope.proposalId + "?mode=view").success(function (response, status, headers, config) {
                     var result = response;
+                    console.log('++++'+JSON.stringify(response));
                     console.log("called********************");
                     console.log(response.proposer);
                     console.log('After Proposer.. ****');
@@ -552,7 +565,10 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
 
                         if($scope.rcvProposal.premiumPaymentDetails.bankDetails !=null)
                         {
+                            //alert('Bank Details..');
                             $scope.bankDetails= $scope.rcvProposal.premiumPaymentDetails.bankDetails;
+                            //$scope.bankDetails.bankAccountNumber=$scope.rcvProposal.premiumPaymentDetails.bankDetails.bankAccountNumber;
+                            $scope.bankDetails.bankBranchName=$scope.rcvProposal.premiumPaymentDetails.bankDetails.bankBranchName;
                         }
                     }
 
@@ -633,6 +649,27 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
             });
 
             $scope.bankCodeDetails=[];
+
+            /*$scope.getAllBankBranchName=function(newvalue)
+            {
+                if(newvalue){
+                    //console.log(newvalue);
+                    var bankCode = _.findWhere($scope.bankDetailsResponse, {bankName: newvalue});
+                    // //alert("Bank Details.."+JSON.stringify(bankCode));
+                    if (bankCode){
+                        $http.get('/pla/individuallife/proposal/getAllBankBranchNames/'+bankCode.bankCode).success(function (response, status, headers, config) {
+                            $scope.bankBranchDetails= response;
+                            //console.log("Bank Details :"+JSON.stringify(response));
+                        }).error(function (response, status, headers, config) {
+                        });
+
+                        // http://localhost:6443/pla/individuallife/proposal/getAllBankBranchNames/BAN
+                    }
+                    //$scope.bankDetails.bankBranchSortCode = bankCode.BANK_CODE;
+
+                }
+            }*/
+
             $scope.$watch('bankDetails.bankName',function(newvalue,oldvalue){
                 if(newvalue){
                     //console.log(newvalue);
@@ -651,11 +688,33 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
 
                 }
             });
+
             $scope.bankCodeDetails=[];
+
+            /*$scope.getBankSortCode=function(newvalue)
+            {
+                if(newvalue){
+                    //alert("//alert in bankCode"+newvalue);
+                    //alert('branchName'+newvalue);
+                    //$scope.bankDetails.bankBranchName=newvalue;
+                    var bankBranchNames = _.findWhere($scope.bankBranchDetails, {branchName: newvalue});
+                    //$scope.bankDetails.bankBranchSortCode=bankBranchNames.sortCode;
+                    //$scope.bankBranchDetails=bankBranchNames;
+                    ////alert("bankBranchName"+JSON.stringify($scope.bankBranchNames));
+                    //console.log("Branch Details.."+JSON.stringify($scope.bankBranchNames))
+                    if(bankBranchNames)
+                    {
+                        $scope.bankDetails.bankBranchSortCode=bankBranchNames.sortCode;
+                    }
+                }
+            }*/
+
 
             $scope.$watch('bankDetails.bankBranchName',function(newvalue,oldvalue){
                 if(newvalue){
                     //alert("//alert in bankCode"+newvalue);
+                    alert('branchName'+newvalue);
+                    $scope.bankDetails.bankBranchName=newvalue;
                     var bankBranchNames = _.findWhere($scope.bankBranchDetails, {branchName: newvalue});
                     //$scope.bankDetails.bankBranchSortCode=bankBranchNames.sortCode;
                     //$scope.bankBranchDetails=bankBranchNames;
@@ -668,14 +727,13 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
                 }
             });
 
-
             $scope.titles = globalConstants.title;
             $scope.part = {
                 isPart: true
             };
 
             $scope.selectedPlan = {};
-            $scope.selectedWizard = 7;
+            $scope.selectedWizard = 1;
 
             $scope.premiumEmployerDetails=
             {
@@ -868,11 +926,15 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
             };
 
             $scope.uploadAdditionalDocument = function () {
+                //alert('Upload');
                 for (var i = 0; i < $scope.additionalDocumentList.length; i++) {
                     var document = $scope.additionalDocumentList[i];
                     var files = document.documentAttached;
+                    //alert($scope.proposal.proposalId);
+
                     $scope.additional=true;
                     if (files) {
+                        console.dir(files);
                         $upload.upload({
                             url: '/pla/individuallife/proposal/uploadmandatorydocument',
                             file: files,
@@ -885,7 +947,6 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
                             // JSON.stringify(data));
                         });
                     }
-
                 }
             };
 
@@ -1060,29 +1121,18 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
                 $scope.addBeneficiaryStatusCheck=false;
                 //$scope.beneficiary.age = moment().diff(new moment(new Date(dob)), 'years');
 
-                if(($scope.beneficiary.age <1) && ($scope.beneficiary.age >16))
-                {
-                    alert('Less then  Condition..');
-                    $scope.addBeneficiaryStatusCheck=true;
-                }
-                else
+                if(($scope.beneficiary.age >= 1) && ($scope.beneficiary.age <= 16))
                 {
                     $scope.addBeneficiaryStatusCheck=false;
                 }
+                else
+                {
+                    $scope.addBeneficiaryStatusCheck=true;
+                }
             };
-            /*$scope.addBeneficiaryStatusCheck=false;
 
-             $scope.$watch('beneficiary.age',function(newVal,oldVal)
-             {
-             if(newVal)
-             {
-             if( (newVal >=1) &&(newVal<=16))
-             {
+            $scope.addBeneficiaryStatusCheck=true;
 
-             }
-             }
-             });
-             */
             $scope.showProposerDob = function (dob) {
                 //console.log('Dob Calculation..');
                 //console.log('DOB' + JSON.stringify(dob));
@@ -1395,11 +1445,11 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
                 return 999999.99;
             }
 
-            $scope.getPregnencymonth=function()
+            /*$scope.getPregnencymonth=function()
             {
                 console.log('getPregnencymonth');
                 return 10;
-            }
+            }*/
             /*$scope.getBuildHeightMax=function()
             {
                 console.log('getBuildHeightMax');
@@ -1800,8 +1850,27 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
                     //$scope.test(agent);
                 }
                 else {
+                    var checkLoopNameStatus = "true";
 
                     for (i in $scope.agentDetails) {
+                        if ($scope.agentDetails[i].agentId == agent.agentId) {
+                            //console.log('Failure..');
+                            //alert("Particular AgentId is Already Added..Please Choose different AgentId");
+                            checkLoopNameStatus = "false";
+                            break;
+                        }
+                    }
+
+                    if(checkLoopNameStatus == "true")
+                    {
+                        $scope.agentDetails.unshift(agent);
+                    }
+                    else
+                    {
+                        alert("Please Select Different AgentId");
+                    }
+
+                    /*for (i in $scope.agentDetails) {
                         if ($scope.agentDetails[i].agentId == agent.agentId) {
                             //console.log('Failure..');
                             //alert("Particular AgentId is Already Added..Please Choose different AgentId");
@@ -1811,7 +1880,7 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
                         }
                     }
                     //$scope.test(agent);
-
+*/
                 }
                 $('#agentModal').modal('hide');
                 $scope.clear();
@@ -2898,12 +2967,12 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
                     $scope.generalAnswer = true;
                     $scope.generalAnswerList.push($scope.generalAnswer);
                     //console.log('Checking Status is ' + $scope.generalAnswer);
-                    $scope.accordionStatus.generalDetails[tab] = true;
+                    //$scope.accordionStatus.generalDetails[tab] = true;
                 } else {
                     $scope.generalAnswer = false;
                     $scope.generalAnswerList.push($scope.generalAnswer);
                     //console.log('Checking Status is ' + $scope.generalAnswer);
-                    $scope.accordionStatus.generalDetails[tab] = false;
+                    //$scope.accordionStatus.generalDetails[tab] = false;
                 }
             };
 
@@ -2963,7 +3032,17 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
         additionalDetail: "/pla/individuallife/proposal/getPage/additionalDetail",
         premiumDetail:"/pla/individuallife/proposal/getPage/premiumDetail",
         mandatoryDocumentDetails:"/pla/individuallife/proposal/getPage/mandatoryDocumentDetails",
-        approvalDetails:"/pla/individuallife/proposal/getPage/approvalDetail"
+        approvalDetails:"/pla/individuallife/proposal/getPage/approvalDetail",
+        proposerDetailsForApproval:"/pla/individuallife/proposal/getPage/proposerDetailsForApproval",
+        proposedAssuredUrlForApproval:"/pla/individuallife/proposal/getPage/proposedAssuredDetailsForApproval",
+        planDetailsForApproval:"/pla/individuallife/proposal/getPage/planDetailsForApproval",
+        generalDetailsForApproval:"/pla/individuallife/proposal/getPage/generalDetailsForApproval",
+        compulsoryHealthDetailsPart1ForApproval:"/pla/individuallife/proposal/getPage/compulsoryHealthDetailsPart1ForApproval",
+        compulsoryHealthDetailsPart2ForApproval:"/pla/individuallife/proposal/getPage/compulsoryHealthDetailsPart2ForApproval",
+        familyHabitAndBuildForApproval:"/pla/individuallife/proposal/getPage/familyHabitAndBuildForApproval",
+        additionalDetailForApproval:"/pla/individuallife/proposal/getPage/additionalDetailForApproval",
+        premiumDetailForApproval:"/pla/individuallife/proposal/getPage/premiumDetailForApproval",
+        mandatoryDocumentDetailsForApproval:"/pla/individuallife/proposal/getPage/mandatoryDocumentDetailsForApproval"
     })
     .filter('getTrustedUrl', ['$sce', function ($sce) {
         return function (url) {

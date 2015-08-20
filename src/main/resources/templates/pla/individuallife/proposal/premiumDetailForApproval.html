@@ -1,4 +1,4 @@
-<ng-form name="step9">
+<ng-form name="step10">
     <div class="row bs-callout  bs-callout-info" style="margin: 5px;padding:10px">
         <div class="row form-group">
             <div class="form-group required col-md-6">
@@ -136,6 +136,7 @@
                 </div>
 
               <div class="form-group required" ng-if="bankDetails.bankName == 'INVESTRUST BANK PLC'">
+                  {{bankDetails.bankAccountNumber}}
                     <label class="control-label">Bank Account Number</label>
                     <input type="text" class="form-control input-sm" ng-model="bankDetails.bankAccountNumber" ng-maxlength="17" ng-disabled="mode=='new'||mode=='view'" name="bankAccountNumber"/>
 
@@ -161,7 +162,7 @@
                     <label class="control-label">Bank Name</label>
                     <!-- <input type="text" class="form-control input-sm" ng-model="bankDetails.bankName" ng-disabled="mode=='new'||mode=='view'" name="bankName"/>-->
                     <select class="form-control input-sm" name="bankName" ng-disabled="mode=='new'||mode=='view'" ng-options="bankDetail.bankName as bankDetail.bankName for bankDetail in bankDetailsResponse"
-                            ng-model="bankDetails.bankName"  ng-required="true">{{bankDetail.bankName}}
+                            ng-model="bankDetails.bankName" ng-required="true">{{bankDetail.bankName}}
                     </select>
 
                     <div class="error" ng-messages="premiumBankDetail.bankName.$error" ng-if="premiumBankDetail.bankName.$dirty">
