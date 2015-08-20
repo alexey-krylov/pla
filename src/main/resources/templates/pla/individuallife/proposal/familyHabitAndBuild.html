@@ -322,8 +322,8 @@
                             <select class="form-control input-sm" ng-disabled="mode=='new'||mode=='view'" ng-model="questionList[0].answer"
                                     name="familyQuestion1" ng-required="true" ng-change="questionList[0].questionId='17'">
                                 <option value="">--Select One--</option>
-                                <option ng-value="true" value="true">Yes</option>
-                                <option ng-value="false" value="false">No</option>
+                                <option   value="true">Yes</option>
+                                <option   value="false">No</option>
                             </select>
 
                             <div class="error" ng-messages="step7.familyQuestion1.$error" ng-if="step7.familyQuestion1.$dirty">

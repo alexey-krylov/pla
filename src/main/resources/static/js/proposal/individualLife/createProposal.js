@@ -262,6 +262,7 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
                         selectedPlan.title = response.planDetail.planDetail.planName;
                         selectedPlan.description = response.planDetail;
                         $scope.selectedPlan = selectedPlan;
+                        $scope.proposalPlanDetail.planId=response.proposalPlanDetail.planId;
                     }
                     $scope.agentDetails.push($scope.agent);
                 }).error(function (response, status, headers, config) {
@@ -537,7 +538,22 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
                             $scope.insurerDetails3=$scope.rcvProposal.generalDetails.assuranceDeclined.answerResponse;
                         }
 
-                        $scope.generalQuestion=$scope.rcvProposal.generalDetails.questionAndAnswers;
+                        if($scope.rcvProposal.generalDetails.questionAndAnswers)
+                        {
+                            for(i in $scope.rcvProposal.generalDetails.questionAndAnswers)
+                            {
+                                if($scope.rcvProposal.generalDetails.questionAndAnswers[i].answer)
+                                {
+                                    $scope.rcvProposal.generalDetails.questionAndAnswers[i].answer="true";
+                                }
+                                else
+                                {
+                                    $scope.rcvProposal.generalDetails.questionAndAnswers[i].answer="false";
+                                }
+                            }
+                            $scope.generalQuestion=$scope.rcvProposal.generalDetails.questionAndAnswers;
+                        }
+                        //$scope.generalQuestion=$scope.rcvProposal.generalDetails.questionAndAnswers;
                     }
 
                     if($scope.rcvProposal.additionaldetails != null)
@@ -549,6 +565,15 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
                         if($scope.rcvProposal.additionaldetails.replacementDetails !=null)
                         {
                             $scope.replacement=$scope.rcvProposal.additionaldetails.replacementDetails;
+
+                            if($scope.rcvProposal.additionaldetails.replacementDetails.answer)
+                            {
+                                $scope.replacement.answer="true";
+                            }
+                            else
+                            {
+                                $scope.replacement.answer="false";
+                            }
                         }
                     }
 
@@ -589,16 +614,65 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
                     }
                     if($scope.rcvProposal.familyPersonalDetail != null)
                     {
+                        if($scope.rcvProposal.familyPersonalDetail)
+                        {
+                            $scope.rcvProposal.familyPersonalDetail.isPregnant="true";
+                        }
+                        else
+                        {
+                            $scope.rcvProposal.familyPersonalDetail.isPregnant="false";
+                        }
                         $scope.familyPersonalDetail = $scope.rcvProposal.familyPersonalDetail;
                         //console.log('FamilyHistory..' + $scope.rcvProposal.familyPersonalDetail.familyHistory.father);
                         $scope.familyHistory = $scope.rcvProposal.familyPersonalDetail.familyHistory;
                         $scope.habit = $scope.rcvProposal.familyPersonalDetail.habit;
                         $scope.habits = $scope.rcvProposal.familyPersonalDetail.habit;
-                        $scope.questionList = $scope.rcvProposal.familyPersonalDetail.habit.questions;
-                        $scope.build = $scope.rcvProposal.familyPersonalDetail.build;
+
+                        if($scope.rcvProposal.familyPersonalDetail.habit.questions)
+                        {
+                            for(i in $scope.rcvProposal.familyPersonalDetail.habit.questions)
+                            {
+                                if($scope.rcvProposal.familyPersonalDetail.habit.questions[i].answer)
+                                {
+                                    $scope.rcvProposal.familyPersonalDetail.habit.questions[i].answer="true";
+                                }
+                                else
+                                {
+                                    $scope.rcvProposal.familyPersonalDetail.habit.questions[i].answer="false";
+                                }
+                            }
+                            $scope.questionList = $scope.rcvProposal.familyPersonalDetail.habit.questions;
+                        }
+                        //$scope.questionList = $scope.rcvProposal.familyPersonalDetail.habit.questions;
+                        if($scope.rcvProposal.familyPersonalDetail.build)
+                        {
+                            if($scope.rcvProposal.familyPersonalDetail.build.overWeightQuestion.answer)
+                            {
+                                $scope.rcvProposal.familyPersonalDetail.build.overWeightQuestion.answer="true";
+                            }
+                            else
+                            {
+                                $scope.rcvProposal.familyPersonalDetail.build.overWeightQuestion.answer="false";
+                            }
+
+                            $scope.build = $scope.rcvProposal.familyPersonalDetail.build;
+                        }
+                        //$scope.build = $scope.rcvProposal.familyPersonalDetail.build;
                     }
                     if($scope.rcvProposal.compulsoryHealthStatement !=null)
                     {
+                        for(i in $scope.rcvProposal.compulsoryHealthStatement)
+                        {
+                            if($scope.rcvProposal.compulsoryHealthStatement[i].answer)
+                            {
+                                $scope.rcvProposal.compulsoryHealthStatement[i].answer="true";
+                            }
+                            else
+                            {
+                                $scope.rcvProposal.compulsoryHealthStatement[i].answer="false";
+                            }
+                        }
+
                         $scope.compulsoryHealthDetails = $scope.rcvProposal.compulsoryHealthStatement;
                     }
 
