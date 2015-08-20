@@ -233,8 +233,8 @@
         <div class="form-group required col-md-2">
             <select class="form-control input-sm"  name="generalQuestion" ng-disabled="mode=='new'||mode=='view'" ng-required="true" ng-model="generalQuestion[0].answer" ng-change="generalQuestion[0].questionId='5'">
                 <option value="">--Select One--</option>
-                <option ng-value="true" value="true">Yes</option>
-                <option ng-value="false" value="false">No</option>
+                <option  value="true">Yes</option>
+                <option  value="false">No</option>
             </select>
 
             <div class="error" ng-messages="step4.generalQuestion.$error" ng-if="step4.generalQuestion.$dirty">
