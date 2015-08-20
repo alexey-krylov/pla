@@ -20,9 +20,11 @@ import java.util.Optional;
 import static com.pla.sharedkernel.util.ExcelGeneratorUtil.getCellValue;
 import static org.nthdimenzion.utils.UtilValidator.*;
 
+
 /**
  * Created by Samir on 8/19/2015.
  */
+
 @Getter
 public class GLEndorsementExcelValidator {
 

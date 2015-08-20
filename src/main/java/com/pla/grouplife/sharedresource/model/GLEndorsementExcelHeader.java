@@ -10,6 +10,7 @@ import java.util.List;
  */
 public enum GLEndorsementExcelHeader {
 
+
     PROPOSER_NAME("Proposer Name") {
         @Override
         public String getErrorMessageIfNotValid(GLEndorsementExcelValidator glEndorsementExcelValidator, Row row, String value, List<String> excelHeaders) {

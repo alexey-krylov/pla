@@ -22,6 +22,7 @@ import java.util.stream.Collectors;
 /**
  * Created by Samir on 8/10/2015.
  */
+
 @Component
 public class GLMemberPromotionEndorsementExcelGenerator extends AbstractGLEndorsementExcelGenerator {
 

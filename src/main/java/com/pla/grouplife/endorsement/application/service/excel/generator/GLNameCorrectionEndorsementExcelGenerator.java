@@ -15,6 +15,7 @@ import java.util.stream.Collectors;
 /**
  * Created by Samir on 8/10/2015.
  */
+
 @Component
 public class GLNameCorrectionEndorsementExcelGenerator extends AbstractGLEndorsementExcelGenerator{
     @Override
