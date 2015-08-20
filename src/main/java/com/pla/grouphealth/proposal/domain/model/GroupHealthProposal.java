@@ -134,7 +134,7 @@ public class GroupHealthProposal extends AbstractAggregateRoot<ProposalId> {
     public GroupHealthProposal markApproverApproval(String approvedBy, DateTime approvedOn, String comment, ProposalStatus status) {
         this.proposalStatus = status;
         registerEvent(new GHProposalStatusAuditEvent(this.getProposalId(), status, approvedBy, comment, approvedOn));
-        if (ProposalStatus.APPROVED.equals(status)) {
+        if (ProposalStatus.APPROVED.equals(this.proposalStatus)) {
             markASFirstPremiumPending(approvedBy, approvedOn, comment);
             markASINForce(approvedBy, approvedOn, comment);
         }

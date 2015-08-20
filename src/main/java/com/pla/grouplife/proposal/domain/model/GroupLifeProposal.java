@@ -131,7 +131,7 @@ public class GroupLifeProposal extends AbstractAggregateRoot<ProposalId> {
     public GroupLifeProposal markApproverApproval(String approvedBy, DateTime approvedOn, String comment, GLProposalStatus status) {
         this.proposalStatus = status;
         registerEvent(new GLProposalStatusAuditEvent(this.getProposalId(), status, approvedBy, comment, approvedOn));
-        if (GLProposalStatus.APPROVED.equals(status)) {
+        if (GLProposalStatus.APPROVED.equals(this.proposalStatus)) {
             markASFirstPremiumPending(approvedBy, approvedOn, comment);
             markASINForce(approvedBy, approvedOn, comment);
         }
