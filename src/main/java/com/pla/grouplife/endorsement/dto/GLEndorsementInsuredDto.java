@@ -1,4 +1,4 @@
-package com.pla.grouplife.endorsement.presentation.dto;
+package com.pla.grouplife.endorsement.dto;
 
 /**
  * Created by Samir on 8/10/2015.
