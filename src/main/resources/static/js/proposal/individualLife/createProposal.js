@@ -3229,7 +3229,7 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
     }]);
 
 
-var viewILQuotationModule = (function ($http) {
+var viewILQuotationModule = (function () {
     var services = {};
     services.selectedItem = "";
     services.status = '';
