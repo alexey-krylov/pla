@@ -566,7 +566,7 @@ angular.module('createProposal', ['common', 'ngRoute', 'mgcrea.ngStrap.select', 
                     fields: $scope.proposalDetails.plan,
                     file: $scope.fileSaved
                 }).success(function (data, status, headers, config) {
-                    if (data.status = "200") {
+                    if (data.status == "200") {
                         $scope.proposalId = data.id;
                         $timeout($scope.updatePremiumDetail($scope.proposalId), 500);
 

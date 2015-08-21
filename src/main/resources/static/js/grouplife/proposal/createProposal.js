@@ -248,33 +248,34 @@ angular.module('createProposal', ['common', 'ngRoute', 'mgcrea.ngStrap.select', 
             }*/
             $scope.$watchCollection('[proposalId,showDownload]', function (n) {
                 if (n[0]) {
-                    $scope.qId = n[0];
-                    //  console.log(n[0]);
-                    // console.log(n[1]);
+                    $scope.pId = n[0];
+                      console.log(n[0]);
+                    console.log(n[1]);
+               //     alert($scope.showDownload);
                     if (n[1]) {
                         $scope.dropdown = [
                             {
                                 "text": "<a><img src=\"/pla/images/xls-icon.png\">Ready Reckoner</a>",
-                                "href": "/pla/grouplife/proposal/downloadplandetail/" + $scope.proposalId
+                                "href": "/pla/grouplife/proposal/downloadplandetail/" + $scope.pId
                             },
                             {
                                 "text": "<a><img src=\"/pla/images/xls-icon.png\">Template</a>",
-                                "href": "/pla/grouplife/proposal/downloadinsuredtemplate/" + $scope.proposalId
+                                "href": "/pla/grouplife/proposal/downloadinsuredtemplate/" + $scope.pId
                             }
                         ];
                     } else {
                         $scope.dropdown = [
                             {
                                 "text": "<a><img src=\"/pla/images/xls-icon.png\">Ready Reckoner</a>",
-                                "href": "/pla/grouplife/proposal/downloadplandetail/" + $scope.proposalId
+                                "href": "/pla/grouplife/proposal/downloadplandetail/" + $scope.pId
                             },
                             {
                                 "text": "<a><img src=\"/pla/images/xls-icon.png\">Template</a>",
-                                "href": "/pla/grouplife/proposal/downloadinsuredtemplate/" + $scope.proposalId
+                                "href": "/pla/grouplife/proposal/downloadinsuredtemplate/" + $scope.pId
                             },
                             {
                                 "text": "<a><img src=\"/pla/images/xls-icon.png\">Error File</a>",
-                                "href": "/pla/grouplife/proposal/downloaderrorinsuredtemplate/" + $scope.proposalId
+                                "href": "/pla/grouplife/proposal/downloaderrorinsuredtemplate/" + $scope.pId
                             }
                         ];
                     }
@@ -352,6 +353,8 @@ angular.module('createProposal', ['common', 'ngRoute', 'mgcrea.ngStrap.select', 
 
             $scope.$watch('proposalDetails.premium.policyTermValue', function (newVal, oldVal) {
                 /*TODO check for the minimum amd maximum value for the policy term value*/
+                console.log(' 1 ' + newVal);
+
                 if (newVal && newVal != 365 && newVal >= 30 && newVal <= 9999) {
                     /*used to toggle controls between dropdown and text*/
                     $scope.isPolicyTermNot365 = true;
@@ -569,7 +572,9 @@ angular.module('createProposal', ['common', 'ngRoute', 'mgcrea.ngStrap.select', 
                     fields: $scope.proposalDetails.plan,
                     file: $scope.fileSaved
                 }).success(function (data, status, headers, config) {
-                    if (data.status = "200") {
+                  //  console.log(data.status);
+                    if (data.status == "200") {
+                       // alert("200 successfull");
                        /* $http.get("/pla/grouplife/proposal/getpremiumdetail/" + $scope.proposalId)
                             .success(function () {
 
@@ -585,7 +590,7 @@ angular.module('createProposal', ['common', 'ngRoute', 'mgcrea.ngStrap.select', 
                 });
             };
             $scope.updatePremiumDetail = function (proposalId) {
-                $http.get("/pla/grouphealth/proposal/getpremiumdetail/" + proposalId)
+                $http.get("/pla/grouplife/proposal/getpremiumdetail/" + proposalId)
                     .success(function (data) {
                         console.log('received data' + JSON.stringify(data));
                         $scope.proposalDetails.premium = data;
