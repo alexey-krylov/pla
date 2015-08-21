@@ -2,8 +2,8 @@ angular.module('createEndorsement', ['common', 'ngRoute', 'mgcrea.ngStrap.select
     'angularFileUpload', 'mgcrea.ngStrap.dropdown', 'ngSanitize', 'commonServices'])
 
     .controller('EndorsementCtrl', ['$scope', '$http', '$timeout', '$upload', 'provinces', 'getProvinceAndCityDetail', 'globalConstants',
-        'agentDetails', 'stepsSaved', 'policyDetails', 'policyNumber', 'getQueryParameter', '$window', 'premiumData', 'documentList',
-        function ($scope, $http, $timeout, $upload, provinces, getProvinceAndCityDetail, globalConstants, agentDetails, stepsSaved, policyDetails, policyNumber,
+        'agentDetails', 'stepsSaved', 'policyDetails', 'endorsementNumber', 'getQueryParameter', '$window', 'premiumData', 'documentList',
+        function ($scope, $http, $timeout, $upload, provinces, getProvinceAndCityDetail, globalConstants, agentDetails, stepsSaved, policyDetails, endorsementNumber,
                   getQueryParameter, $window, premiumData, documentList) {
 
             var mode = getQueryParameter("mode");
@@ -46,13 +46,13 @@ angular.module('createEndorsement', ['common', 'ngRoute', 'mgcrea.ngStrap.select
             $scope.stepsSaved = stepsSaved;
 
             /*Inter id used for programmatic purpose*/
-            $scope.policyId = getQueryParameter('policyId') || null;
+            $scope.endorsementId = getQueryParameter('endorsementId') || null;
 
             $scope.versionNumber = getQueryParameter('version') || null;
 
             /*actual quotation number to be used in the view*/
             console.log(policyNumber);
-            $scope.policyNumber = policyNumber;
+            $scope.endorsementNumber = endorsementNumber;
 
             $scope.provinces = provinces;
 
@@ -68,7 +68,7 @@ angular.module('createEndorsement', ['common', 'ngRoute', 'mgcrea.ngStrap.select
                         $upload.upload({
                             url: '/pla/grouplife/endorsement/uploadmandatorydocument',
                             file: files,
-                            fields: {documentId: document.documentId, policyId: $scope.policyId,mandatory:true},
+                            fields: {documentId: document.documentId, endorsementId: $scope.endorsementId,mandatory:true},
                             method: 'POST'
                         }).progress(function(evt) {
                             console.log('percent: ' + parseInt(100.0 * evt.loaded / evt.total));
@@ -90,7 +90,7 @@ angular.module('createEndorsement', ['common', 'ngRoute', 'mgcrea.ngStrap.select
                         $upload.upload({
                             url: '/pla/grouplife/endorsement/uploadmandatorydocument',
                             file: files,
-                            fields: {documentId: document.documentId, policyId: $scope.policyId,mandatory:false},
+                            fields: {documentId: document.documentId, endorsementId: $scope.endorsementId,mandatory:false},
                             method: 'POST'
                         }).progress(function (evt) {
 
@@ -106,7 +106,7 @@ angular.module('createEndorsement', ['common', 'ngRoute', 'mgcrea.ngStrap.select
 
 
             $scope.additionalDocumentList = [{}];
-            $http.get("/pla/grouplife/endorsement/getadditionaldocuments/"+ $scope.policyId).success(function (data, status) {
+            $http.get("/pla/grouplife/endorsement/getadditionaldocuments/"+ $scope.endorsementId).success(function (data, status) {
                 console.log(data);
                 $scope.additionalDocumentList=data;
                 $scope.checkDocumentAttached=$scope.additionalDocumentList!=null;
@@ -146,10 +146,10 @@ angular.module('createEndorsement', ['common', 'ngRoute', 'mgcrea.ngStrap.select
 
             $scope.submitAdditionalDocument = function(){
                 $http.post('/pla/grouplife/endorsement/submit', angular.extend({},
-                    {"policyId": $scope.policyId})).success(function (data) {
+                    {"endorsementId": $scope.endorsementId})).success(function (data) {
                     if (data.status == "200") {
                         saveStep();
-                        $('#searchFormEndorsement').val($scope.policyId);
+                        $('#searchFormEndorsement').val($scope.endorsementId);
                         $('#searchForm').submit();
                     }
 
@@ -159,7 +159,7 @@ angular.module('createEndorsement', ['common', 'ngRoute', 'mgcrea.ngStrap.select
             $scope.saveProposerDetails = function () {
                 $http.post("/pla/grouplife/endorsement/updatewithproposerdetail", angular.extend({},
                     {proposerDto: $scope.policyDetails.proposer},
-                    {"policyId": $scope.policyId}))
+                    {"endorsementId": $scope.endorsementId}))
                     .success(function (data) {
                         if (data.status == "200") {
                             saveStep();
@@ -169,7 +169,7 @@ angular.module('createEndorsement', ['common', 'ngRoute', 'mgcrea.ngStrap.select
 
             $scope.savePlanDetails = function () {
                 $upload.upload({
-                    url: '/pla/grouplife/endorsement/uploadinsureddetail?policyId=' + $scope.policyId,
+                    url: '/pla/grouplife/endorsement/uploadinsureddetail?endorsementId=' + $scope.endorsementId,
                     headers: {'Authorization': 'xxx'},
                     fields: $scope.policyDetails.plan,
                     file: $scope.fileSaved
@@ -233,7 +233,7 @@ angular.module('createEndorsement', ['common', 'ngRoute', 'mgcrea.ngStrap.select
                     }
                 }
             }
-            $http.get("/pla/grouplife/policy/getpolicydetail/" + $scope.policyId).success(function (data, status) {
+            $http.get("/pla/grouplife/policy/getpolicydetail/" + $scope.endorsementId).success(function (data, status) {
                 //  console.log(data);
                 $scope.policyDetails.basicDetails = data;
                 $scope.policyDetails.basicDetails.inceptionDate = moment(data.inceptionDate).format("DD/MM/YYYY");
@@ -273,7 +273,7 @@ angular.module('createEndorsement', ['common', 'ngRoute', 'mgcrea.ngStrap.select
             $scope.dropdown = [
                 {
                     "text": "<a><img src=\"/pla/images/xls-icon.png\">Template</a>",
-                    "href": "/pla/grouplife/endorsement/downloadtemplatebyendorsementtype/" +  $scope.endorsementType + "/" + $scope.policyId
+                    "href": "/pla/grouplife/endorsement/downloadtemplatebyendorsementtype/" +  $scope.endorsementType + "/" + $scope.endorsementId
                 }
             ];
 
@@ -388,7 +388,7 @@ angular.module('createEndorsement', ['common', 'ngRoute', 'mgcrea.ngStrap.select
                     return deferred.promise;
                 }],
                 agentDetails: ['$q', '$http', 'getQueryParameter', function ($q, $http, getQueryParameter) {
-                    queryParam = getQueryParameter('policyId');
+                    queryParam = getQueryParameter('endorsementId');
                     if (queryParam && !_.isEmpty(queryParam)) {
                         var deferred = $q.defer();
                         $http.get('/pla/grouplife/policy/getagentdetailfrompolicy/' + queryParam).success(function (response, status, headers, config) {
@@ -420,7 +420,7 @@ angular.module('createEndorsement', ['common', 'ngRoute', 'mgcrea.ngStrap.select
                         return {};
                     }
                 }],
-                policyNumber: ['$q', '$http', function ($q, $http) {
+                endorsementNumber: ['$q', '$http', function ($q, $http) {
                     if (queryParam && !_.isEmpty(queryParam)) {
                         var deferred = $q.defer();
                         $http.get("/pla/grouplife/policy/getpolicynumber/" + queryParam)
