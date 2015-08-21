@@ -59,6 +59,7 @@ public class ILProposalAggregate extends AbstractAnnotatedAggregateRoot<Proposal
     }
 
     public ILProposalAggregate(String proposalId, String proposalNumber, Proposer proposer, AgentCommissionShareModel agentCommissionShareModel) {
+        this.submittedOn = DateTime.now();
         this.proposalNumber = proposalNumber;
         this.proposalId = new ProposalId(proposalId);
         if(proposer.getIsProposedAssured()) {
@@ -73,6 +74,7 @@ public class ILProposalAggregate extends AbstractAnnotatedAggregateRoot<Proposal
 
 
     public ILProposalAggregate(String proposalId, String proposalNumber, ProposedAssured proposedAssured, AgentCommissionShareModel agentCommissionShareModel, Proposer proposer, String quotationNumber, int versionNumber, String quotationId, ProposalPlanDetail proposalPlanDetail, int minAge, int maxAge) {
+        this.submittedOn = DateTime.now();
         this.proposalNumber = proposalNumber;
         this.proposalId = new ProposalId(proposalId);
         assignProposer(proposer);
@@ -189,7 +191,6 @@ public class ILProposalAggregate extends AbstractAnnotatedAggregateRoot<Proposal
     }
 
     public ILProposalAggregate submitProposal(String submittedBy,DateTime submittedOn,String comment,RoutingLevel routinglevel) {
-        this.submittedOn = submittedOn;
         this.proposalStatus = routinglevel!=null?RoutingLevel.UNDERWRITING_LEVEL_ONE.equals(routinglevel)?ILProposalStatus.UNDERWRITING_LEVEL_ONE :ILProposalStatus.UNDERWRITING_LEVEL_TWO :
                 ILProposalStatus.PENDING_ACCEPTANCE;
         registerEvent(new ILProposalStatusAuditEvent(this.getProposalId(), this.proposalStatus, submittedBy, comment, submittedOn));

@@ -146,19 +146,17 @@ public class ILProposalService {
                         }
                     }).findAny();
                     if (proposerDocumentOptional.isPresent()) {
-                        try {
                             if (isNotEmpty(proposerDocumentOptional.get().getGridFsDocId())) {
                                 GridFSDBFile gridFSDBFile = gridFsTemplate.findOne(new Query(Criteria.where("_id").is(proposerDocumentOptional.get().getGridFsDocId())));
-                                mandatoryDocumentDto.setFileName(gridFSDBFile.getFilename());
-                                mandatoryDocumentDto.setContentType(gridFSDBFile.getContentType());
-                                mandatoryDocumentDto.setGridFsDocId(gridFSDBFile.getId().toString());
-                                mandatoryDocumentDto.updateWithContent(IOUtils.toByteArray(gridFSDBFile.getInputStream()));
-                                mandatoryDocumentDto.setIsApproved(proposerDocumentOptional.get().isApproved());
-                                mandatoryDocumentDto.setMandatory(proposerDocumentOptional.get().isMandatory());
+                                if (gridFSDBFile != null) {
+                                    mandatoryDocumentDto.setFileName(gridFSDBFile.getFilename());
+                                    mandatoryDocumentDto.setContentType(gridFSDBFile.getContentType());
+                                    mandatoryDocumentDto.setGridFsDocId(gridFSDBFile.getId().toString());
+                                    mandatoryDocumentDto.setSubmitted(true);
+                                    mandatoryDocumentDto.setIsApproved(proposerDocumentOptional.get().isApproved());
+                                    mandatoryDocumentDto.setMandatory(proposerDocumentOptional.get().isMandatory());
+                                }
                             }
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
                     }
                     return mandatoryDocumentDto;
                 }

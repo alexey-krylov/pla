@@ -64,6 +64,16 @@
                     </div>
                 </div>
 
+                <div class="form-group">
+                    <label class="control-label">Client Id</label>
+                    <input type="clientId" class="form-control input-sm" name="email" ng-disabled="mode=='new'||mode=='view'" ng-model="proposedAssured.clientId"/>
+
+                    <div class="error" ng-messages="proposedAssuredDetails.clientId.$error"  ng-if="proposedAssuredDetails.clientId.$dirty">
+                        <small class="error" ng-message="required">Please enter  Client Id. </small>
+                    </div>
+
+                </div>
+
 
             </div>
             <div class="col-md-6">
@@ -393,7 +403,7 @@
     </accordion>
     <div class="row">
         <div class="col-sm-6">
-            <button type="button" class="btn btn-default btn-sm">Cancel</button>
+            <button type="button" class="btn btn-default btn-sm" ng-click="cancelAll()">Cancel</button>
         </div>
         <div class="col-sm-6">
             <button type="button" class="btn btn-default btn-sm" style="float: right" ng-disabled="(step2.$invalid || statusCount)"   ng-hide=" mode=='new'||mode=='view'" ng-click="saveProposedAssuredDetails()">Save</button>

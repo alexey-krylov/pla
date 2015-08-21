@@ -19,6 +19,7 @@ import org.axonframework.eventhandling.annotation.EventHandler;
 import org.axonframework.eventhandling.scheduling.EventScheduler;
 import org.axonframework.eventhandling.scheduling.ScheduleToken;
 import org.axonframework.repository.Repository;
+import org.axonframework.saga.annotation.AbstractAnnotatedSaga;
 import org.axonframework.saga.annotation.SagaEventHandler;
 import org.axonframework.saga.annotation.StartSaga;
 import org.bson.types.ObjectId;
@@ -28,13 +29,14 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
  * Created by Admin on 7/29/2015.
  */
 @Component
-public class IndividualLifeProposalSaga {
+public class IndividualLifeProposalSaga  extends AbstractAnnotatedSaga implements Serializable {
 
     private transient static final Logger LOGGER = LoggerFactory.getLogger(IndividualLifeProposalSaga.class);
 
@@ -71,9 +73,9 @@ public class IndividualLifeProposalSaga {
         DateTime firstReminderDateTime = proposalSubmitDate.plusDays(firstReminderDay);
         DateTime purgeScheduleDateTime = proposalSubmitDate.plusDays(noOfDaysToPurge);
         DateTime closureScheduleDateTime = proposalSubmitDate.plusDays(noOfDaysToClosure);
-        ScheduleToken firstReminderScheduleToken = eventScheduler.schedule(firstReminderDateTime, new ILProposalReminderEvent(event.getProposalId()));
-        ScheduleToken purgeScheduleToken = eventScheduler.schedule(purgeScheduleDateTime, new ILProposalPurgeEvent(event.getProposalId()));
-        ScheduleToken closureScheduleToken = eventScheduler.schedule(closureScheduleDateTime, new ILProposalClosureEvent(event.getProposalId()));
+        ScheduleToken firstReminderScheduleToken = eventScheduler.schedule(DateTime.now(), new ILProposalReminderEvent(event.getProposalId()));
+        ScheduleToken purgeScheduleToken = eventScheduler.schedule(DateTime.now(), new ILProposalPurgeEvent(event.getProposalId()));
+        ScheduleToken closureScheduleToken = eventScheduler.schedule(DateTime.now(), new ILProposalClosureEvent(event.getProposalId()));
         scheduledTokens.add(firstReminderScheduleToken);
         scheduledTokens.add(purgeScheduleToken);
         scheduledTokens.add(closureScheduleToken);
@@ -85,7 +87,7 @@ public class IndividualLifeProposalSaga {
             LOGGER.debug("Handling IL Proposal Reminder Event .....", event);
         }
         ILProposalAggregate proposalAggregate = ilProposalMongoRepository.load(event.getProposalId());
-        if (ILProposalStatus.PENDING_ACCEPTANCE.equals(proposalAggregate.getProposalStatus())) {
+        if (ILProposalStatus.DRAFT.equals(proposalAggregate.getProposalStatus())) {
             this.noOfReminderSent = noOfReminderSent + 1;
             System.out.println("************ Send Reminder ****************");
             commandGateway.send(new CreateProposalNotificationCommand(event.getProposalId(), RolesUtil.INDIVIDUAL_LIFE__PROPOSAL_PROCESSOR_ROLE, LineOfBusinessEnum.INDIVIDUAL_LIFE, ProcessType.PROPOSAL,
@@ -95,7 +97,7 @@ public class IndividualLifeProposalSaga {
                 int secondReminderDay = processInfoAdapter.getDaysForSecondReminder(LineOfBusinessEnum.INDIVIDUAL_LIFE, ProcessType.PROPOSAL);
                 DateTime quotationSharedDate = proposalAggregate.getSubmittedOn();
                 DateTime secondReminderDateTime = quotationSharedDate.plusDays(firstReminderDay + secondReminderDay);
-                ScheduleToken secondReminderScheduleToken = eventScheduler.schedule(secondReminderDateTime, new ILProposalReminderEvent(event.getProposalId()));
+                ScheduleToken secondReminderScheduleToken = eventScheduler.schedule(DateTime.now().plusDays(1), new ILProposalReminderEvent(event.getProposalId()));
                 scheduledTokens.add(secondReminderScheduleToken);
             }
         }
