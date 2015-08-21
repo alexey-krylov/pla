@@ -203,6 +203,8 @@ angular.module('createProposal', ['common', 'ngRoute', 'mgcrea.ngStrap.select', 
             $scope.proposalDetails.basic = agentDetails;
 
             $scope.proposalDetails.premium = premiumData || {};
+            $scope.showDownload = true;
+
 
             $scope.changeAgent = false;
             console.log($scope.proposalDetails.basic['active']);
@@ -232,10 +234,8 @@ angular.module('createProposal', ['common', 'ngRoute', 'mgcrea.ngStrap.select', 
                     }
                 ];
 
-            }else {
-
-                /*used for bs-dropdown*/
-                $scope.dropdown = [
+            }/*else {
+             $scope.dropdown = [
                     {
                         "text": "<a><img src=\"/pla/images/xls-icon.png\">Ready Reckoner</a>",
                         "href": "/pla/grouplife/proposal/downloadplandetail/" + $scope.proposalId
@@ -245,7 +245,42 @@ angular.module('createProposal', ['common', 'ngRoute', 'mgcrea.ngStrap.select', 
                         "href": "/pla/grouplife/proposal/downloadinsuredtemplate/" + $scope.proposalId
                     }
                 ];
-            }
+            }*/
+            $scope.$watchCollection('[proposalId,showDownload]', function (n) {
+                if (n[0]) {
+                    $scope.qId = n[0];
+                    //  console.log(n[0]);
+                    // console.log(n[1]);
+                    if (n[1]) {
+                        $scope.dropdown = [
+                            {
+                                "text": "<a><img src=\"/pla/images/xls-icon.png\">Ready Reckoner</a>",
+                                "href": "/pla/grouplife/proposal/downloadplandetail/" + $scope.proposalId
+                            },
+                            {
+                                "text": "<a><img src=\"/pla/images/xls-icon.png\">Template</a>",
+                                "href": "/pla/grouplife/proposal/downloadinsuredtemplate/" + $scope.proposalId
+                            }
+                        ];
+                    } else {
+                        $scope.dropdown = [
+                            {
+                                "text": "<a><img src=\"/pla/images/xls-icon.png\">Ready Reckoner</a>",
+                                "href": "/pla/grouplife/proposal/downloadplandetail/" + $scope.proposalId
+                            },
+                            {
+                                "text": "<a><img src=\"/pla/images/xls-icon.png\">Template</a>",
+                                "href": "/pla/grouplife/proposal/downloadinsuredtemplate/" + $scope.proposalId
+                            },
+                            {
+                                "text": "<a><img src=\"/pla/images/xls-icon.png\">Error File</a>",
+                                "href": "/pla/grouplife/proposal/downloaderrorinsuredtemplate/" + $scope.proposalId
+                            }
+                        ];
+                    }
+                }
+            });
+
 
             $scope.$watch('proposalDetails.proposer.province', function (newVal, oldVal) {
                 if (newVal) {
@@ -535,14 +570,33 @@ angular.module('createProposal', ['common', 'ngRoute', 'mgcrea.ngStrap.select', 
                     file: $scope.fileSaved
                 }).success(function (data, status, headers, config) {
                     if (data.status = "200") {
-                        saveStep();
-                        $http.get("/pla/grouplife/proposal/getpremiumdetail/" + $scope.proposalId)
+                       /* $http.get("/pla/grouplife/proposal/getpremiumdetail/" + $scope.proposalId)
                             .success(function () {
 
-                            })
+                            })*/
+                        $scope.proposalId = data.id;
+                        $timeout($scope.updatePremiumDetail($scope.proposalId), 500);
+
+                        saveStep();
+                        $scope.showDownload = true;
+                    }else{
+                        $scope.showDownload = false;
                     }
                 });
             };
+            $scope.updatePremiumDetail = function (proposalId) {
+                $http.get("/pla/grouphealth/proposal/getpremiumdetail/" + proposalId)
+                    .success(function (data) {
+                        console.log('received data' + JSON.stringify(data));
+                        $scope.proposalDetails.premium = data;
+                        $scope.premiumData = data;
+                        $scope.proposalDetails.premium.policyTermValue = data.policyTermValue;
+                        $scope.proposalDetails.premium.profitAndSolvencyLoading = $scope.proposalDetails.premium.profitAndSolvencyLoading || 0;
+                        $scope.proposalDetails.premium.discounts = $scope.proposalDetails.premium.discounts || 0;
+
+
+                    });
+            }
 
             $scope.back = function () {
                 $window.location.href = 'listgrouplifeproposal';
