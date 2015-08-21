@@ -67,7 +67,7 @@
                     <div class="col-md-1" ng-show="assuredByOthers == 'YES'">
                         <!--<button class="btn btn-default btn-sm" ng-click="openModalWindow('assuredByOthersTpl.html')"><strong>Add</strong></button>-->
                         <button type="button" class="btn btn-default btn-xs pull-right"
-                        data-toggle="modal" data-target="#assuredByOthersModal" style="margin-bottom: 10px"><strong>Add</strong>
+                                ng-disabled="mode=='new'||mode=='view'" data-toggle="modal" data-target="#assuredByOthersModal" style="margin-bottom: 10px"><strong>Add</strong>
                         </button>
                     </div>
                     <div class="col-md-11">
@@ -90,25 +90,25 @@
                                     <!-- <div contenteditable="true" ng-model="row.update" ng-blur="test(row)" ng-change="test(row)" >{{row.commission}}</div>-->
                                 </td>
                                 <td>
-                                    <input type="text" ng-disabled="mode=='new'||mode=='view'" contenteditable="updateFlag" ng-model="row.amount" value="{{row.commission}}"  />
+                                    <input type="number" ng-disabled="mode=='new'||mode=='view'" contenteditable="updateFlag" ng-model="row.amount" value="{{row.commission}}"  />
                                     <!-- <div contenteditable="true" ng-model="row.update" ng-blur="test(row)" ng-change="test(row)" >{{row.commission}}</div>-->
                                 </td>
                                 <td>
-                                    <input type="text" ng-disabled="mode=='new'||mode=='view'" contenteditable="updateFlag" ng-model="row.date" value="{{row.commission}}" />
+                                    <!--<input type="text" ng-disabled="mode=='new'||mode=='view'" contenteditable="updateFlag" ng-model="row.date"/>-->
 
-                                   <!-- <div class='input-group date'>
+                                   <div class='input-group date'>
                                         <input type="text" class="form-control input-sm"
                                                datepicker-popup="" view-enabled=""
                                                ng-required="true"
                                                is-open="inceptionDateA"
                                                max-date="todayDate"
-                                               ng-model="row.date" name="inceptionDate" ng-disabled="mode=='new'||mode=='view'" ng-init="showDob(proposedAssured.dateOfBirth)" ng-blur="showDob(proposedAssured.dateOfBirth)"/>
+                                               ng-model="row.date" name="inceptionDate" ng-disabled="mode=='new'||mode=='view'"/>
                                     <span class="input-group-btn">
                                     <button type="button" class="btn btn-default btn-sm"
                                             ng-disabled="mode=='new'||mode=='view'" ng-click="launchinceptionDateADob($event)">
                                         <i class="glyphicon glyphicon-calendar"></i></button>
                                     </span>
-                                    </div>-->
+                                    </div>
 
                                     <!-- <div contenteditable="true" ng-model="row.update" ng-blur="test(row)" ng-change="test(row)" >{{row.commission}}</div>-->
                                 </td>
@@ -142,7 +142,7 @@
                     <div class="col-md-1" ng-show="pendingInsuranceByOthers == 'YES'">
                         <!--<button class="btn btn-default btn-sm" ng-click="openModalWindow('pendingInsuranceByOthersTpl.html')"><strong>Add</strong></button>-->
                         <button type="button" class="btn btn-default btn-xs pull-right"
-                                data-toggle="modal" data-target="#pendingInsuranceByOthersTpl" style="margin-bottom: 10px"><strong>Add</strong>
+                                ng-disabled="mode=='new'||mode=='view'" data-toggle="modal" data-target="#pendingInsuranceByOthersTpl" style="margin-bottom: 10px"><strong>Add</strong>
                         </button>
                     </div>
                     <div class="col-md-11">
@@ -165,11 +165,26 @@
                                         <!-- <div contenteditable="true" ng-model="row.update" ng-blur="test(row)" ng-change="test(row)" >{{row.commission}}</div>-->
                                     </td>
                                     <td>
-                                        <input type="text" ng-disabled="mode=='new'||mode=='view'" contenteditable="updateFlag" ng-model="row.amount" value="{{row.amount}}" />
+                                        <input type="number" ng-disabled="mode=='new'||mode=='view'" contenteditable="updateFlag" ng-model="row.amount" value="{{row.amount}}" />
                                         <!-- <div contenteditable="true" ng-model="row.update" ng-blur="test(row)" ng-change="test(row)" >{{row.commission}}</div>-->
                                     </td>
                                     <td>
-                                        <input type="text" ng-disabled="mode=='new'||mode=='view'" contenteditable="updateFlag" ng-model="row.date" value="{{row.date}}"  />
+                                        <!--<input type="text" ng-disabled="mode=='new'||mode=='view'" contenteditable="updateFlag" ng-model="row.date" value="{{row.date}}"  />-->
+
+                                        <div class='input-group date'>
+                                            <input type="text" class="form-control input-sm"
+                                                   datepicker-popup="" view-enabled=""
+                                                   ng-required="true"
+                                                   is-open="dateProposalA"
+                                                   max-date="todayDate"
+                                                   ng-model="row.date" name="inceptionDate" ng-disabled="mode=='new'||mode=='view'"/>
+                                    <span class="input-group-btn">
+                                    <button type="button" class="btn btn-default btn-sm"
+                                            ng-disabled="mode=='new'||mode=='view'" ng-click="launchProposalDateADob($event)">
+                                        <i class="glyphicon glyphicon-calendar"></i></button>
+                                    </span>
+                                        </div>
+
                                         <!-- <div contenteditable="true" ng-model="row.update" ng-blur="test(row)" ng-change="test(row)" >{{row.commission}}</div>-->
                                     </td>
                                 </tr>
@@ -202,7 +217,7 @@
                     <div class="col-md-1" ng-show="assuranceDeclined == 'YES'">
                         <!--<button class="btn btn-default btn-sm" ng-click="openModalWindow('assuranceDeclinedTpl.html')"><strong>Add</strong></button>-->
                         <button type="button" class="btn btn-default btn-xs pull-right"
-                                data-toggle="modal" data-target="#assuranceDeclinedTpl" style="margin-bottom: 10px"><strong>Add</strong>
+                                ng-disabled="mode=='new'||mode=='view'" data-toggle="modal" data-target="#assuranceDeclinedTpl" style="margin-bottom: 10px"><strong>Add</strong>
                         </button>
                     </div>
                     <div class="col-md-11">

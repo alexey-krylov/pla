@@ -1492,11 +1492,19 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
                 $scope.launchdob1 = true;
             };
 
-            /*$scope.launchinceptionDateADob = function ($event) {
+
+            $scope.launchinceptionDateADob = function ($event) {
                 $event.preventDefault();
                 $event.stopPropagation();
                 $scope.inceptionDateA = true;
-            };*/
+            };
+
+            $scope.launchProposalDateADob = function ($event) {
+                $event.preventDefault();
+                $event.stopPropagation();
+                $scope.dateProposalA = true;
+            };
+
 
             $scope.launchProposedAssuredeDob = function ($event) {
                 $event.preventDefault();
@@ -3130,20 +3138,20 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
                     $scope.accordionStatus.familyHabitAndBuild[tab] = false;
                 }
             };
-            $scope.accordionStatus.additionalDetail=false;
-            $scope.openAccordionAdditionalQuestion=function(status,tab)
+
+            /*$scope.openAccordionAdditionalQuestion=function(status,tab)
             {
                 $scope.replacement.questionId='22';
                 //alert('****'+ status);
                 if(status == 'true')
                 {
-                    $scope.accordionStatus.additionalDetail1[tab] = true;
+                    $scope.accordionStatus.additionalDetail[tab] = true;
                 }
                 else
                 {
-                    $scope.accordionStatus.additionalDetail1[tab] = false;
+                    $scope.accordionStatus.additionalDetail[tab] = false;
                 }
-            };
+            };*/
 
             $scope.openModalWindow = function (templateName) {
                 var modalInstance = $bsmodal.open({
