@@ -97,7 +97,7 @@ public class AppUtils {
     }
 
     public static void main(String[] args) {
-        System.out.println(getAgeOnNextBirthDate(new LocalDate(1985, 5, 25)));
+        System.out.println(getAgeOnNextBirthDate(new LocalDate(1985, 11, 05)));
     }
 }
 
