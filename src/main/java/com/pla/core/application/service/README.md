@@ -1,0 +1,1 @@
+All application service should be under this package.

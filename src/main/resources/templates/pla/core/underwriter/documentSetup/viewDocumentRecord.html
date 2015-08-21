@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/xhtml"
+      lang="en">
+<head th:include="fragments/common :: headTag">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+
+</head>
+<body>
+<div th:include="fragments/common :: bodyHeader" th:remove="tag"/>
+<script>
+    require(['moment'], function(moment) {
+        // alert(moment().format('dddd, MMMM Do YYYY, h:mm:ss a'));
+    });
+    requirejs(['main'],function(){
+        require(['/pla/js/underwriter/updateDocumentSetup.js'],function(){
+            angular.bootstrap(document, ['updateDocumentSetup']);
+        });
+    });
+</script>
+
+<div class="container ng-cloak" ng-Controller="ViewDocumentSetupController">
+
+    <div class="row">
+        <div  >
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <div class="row">
+                        <div class="col-lg-2"><span th:text="#{viewDocumentsetup}">View Document Setup
+                        </span></div>
+                    </div>
+                </div>
+                <div class="panel-body ng-cloak">
+                    <form  name="myForm" novalidate="true" class="css-form">
+                          <div class="row">
+                            <div class="form-group col-md-4 required">
+                                <label class="control-label">Defined For</label>
+
+                                <div class="radio">
+                                    <label style="margin-right:30px">
+                                        <input type="radio" disabled='disabled' name="definedFor" value="plan" ng-model="viewDocumentLevel.definedFor" ng-change="getDefinedOption()"/>Plan
+                                    </label>
+                                    <label>
+                                        <input type="radio" disabled='disabled' name="definedFor" value="optionalCoverage" ng-model="viewDocumentLevel.definedFor" ng-change="getDefinedOption()"/>Optional
+                                        Coverage
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="form-group col-md-4 required">
+                                <label class="control-label">Plan Name</label>
+                                <p class="input-group" >
+                                    <input type="text" class="form-control input-sm"  value="{{viewDocumentLevel.planName}}" readonly="true"/>
+                                </p>
+                            </div>
+                            <div class="form-group col-md-4 required" ng-show="viewDocumentLevel.definedFor=='optionalCoverage'">
+                                <label class="control-label">Optional Coverage</label>
+                                <p class="input-group" >
+                                    <input type="text" class="form-control input-sm"  value="{{viewDocumentLevel.coverageName}}" readonly="true"/>
+                                </p>
+                            </div>
+
+                        </div>
+                        <div class="row">
+                            <div class="form-group col-md-4 required">
+                                <label class="control-label">Process</label>
+                                <p class="input-group" >
+                                    <input type="text" class="form-control input-sm"  value="{{viewDocumentLevel.processType}}" readonly="true"/>
+                                </p>
+                            </div>
+                            <div class="form-group col-md-4 required">
+                                <label class="control-label">From Date</label>
+                                <p class="input-group">
+                                    <input type="text" class="form-control input-sm" ng-required="false" datepicker-popup="dd/MM/yyyy"
+                                           ng-model="viewDocumentLevel.effectiveFrom" datepicker-options="datePickerSettings.dateOptions" is-open="datePickerSettings.isOpened"
+                                           name="effectiveFrom" readonly="true"/>
+                                </p>
+                            </div>
+                            <div class="form-group col-md-4 required" >
+                                <label class="control-label">Influencing Factors</label>
+                                <p class="input-group" >
+                                    <div ng-repeat="multiselect in viewDocumentLevel.underWriterInfluencingFactors" style="float:left;display:block;" readonly="true">{{multiselect.description}}{{$last ? '' : ', '}}</div>
+                                </p>
+                            </div>
+                        </div>
+
+                        <table class="table table-striped table-bordered" ng-show="headerDataList.length > 0" >
+                            <thead>
+                            <tr  >
+                                <th ng-repeat="headerData in headerDataList">{{headerData.name}}</th>
+                                <th >Documents</th>
+
+                            </tr>
+                            </thead>
+                            <tbody >
+
+                            <tr ng-repeat="col in dataList" >
+
+                                <td  ng-repeat="(k,v) in col.underWriterDocumentLineItem">
+                                    <span >{{v.influencingItem}}</span>
+                                </td>
+                                <td style="text-align:left;" class="pop" >
+                                    <a data-placement="top" href="#" class="btn btn-primary btn-sm ng-scope " id="new-quote-popover" data-trigger="hover"  popover="">Mandatory Documents
+                                        <div class="popover-head hide" >Documents</div>
+                                        <div class="popover-content hide"  ng-repeat="document in col.underWriterDocuments">
+                                        </div>
+                                    </a>
+                                </td>
+
+                            </tr>
+                            </tbody>
+                        </table>
+
+                        <div class="row">
+                            <div class="form-group col-lg-12" >
+                                <a class="btn btn-default"  style="float:left;" th:href="@{/underwriter/viewdocumentsetup}" >Cancel</a>
+
+                            </div>
+                        </div>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<style>
+    .form-control {
+        font-size: 12px;
+        padding:5px;
+    }
+    .select{
+        width: 400px;
+        height:310px;
+        overflow:auto;
+    }
+
+    .popover-content {
+        font-size: 11px;
+        padding-left:3px;
+    }
+
+</style>
+<footer class="footer" th:include="fragments/common :: footer">
+</footer>
+</body>
+</html>

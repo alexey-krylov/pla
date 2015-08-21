@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/xhtml"
+      lang="en" ng-app="AngularApp">
+<head th:include="fragments/common :: headTag">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+</head>
+<body>
+<div th:include="fragments/common :: bodyHeader" th:remove="tag"/>
+
+<div class="container" ng-Controller="CreateOverrideCommissionController">
+    <div class="row">
+        <div class="col-lg-12" >
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <div class="row">
+                        <div class="col-lg-3"><span th:text="#{createOverRideCommission}">Create Over-ride Commission
+                        </span></div>
+                    </div>
+                </div>
+                <div class="panel-body" style="padding-top:5px">
+                    <form >
+
+                        <div class="row">
+                            <div class="form-group col-md-6">
+                                <label class="control-label">Product</label>
+
+
+                                <select class="form-control input-sm" id="productName" ng-model="createOverRideCommission.productName">
+                                    <option value="">Select Product</option>
+                                    <option value="Product A">Product A</option>
+                                    <option value="Product B">Product B</option>
+                                    <option value="Product C">Product C</option>
+                                    <option value="Product D">Product D</option>
+                                </select>
+
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label class="control-label">Over-ride Commissions Available For</label>
+
+                                <select class="form-control input-sm" id="commissionsAvailableFor" ng-model="createOverRideCommission.overRideCommissionsAvailableFor">
+                                    <option value="">Select Over-ride Commission Available For</option>
+                                    <option value="Team Leader">Team Leader</option>
+                                    <option value="Sales Supervisor BDE">Sales Supervisor BDE</option>
+                                    <option value="Branch Manager">Branch Manager</option>
+                                    <option value="Regional Manager">Regional Manager</option>
+                                    <option value="National Sales Manager">National Sales Manager</option>
+                                    <option value="General Manager">General Manager</option>
+                                    <option value="Managing Director">Managing Director</option>
+                                 </select>
+
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label class="control-label">From Date</label>
+                                <p class="input-group">
+                                    <input type="text" class="form-control input-sm" ng-click="open($event)" datepicker-popup="dd/MM/yyyy" ng-model="createOverRideCommission.fromDate"  datepicker-options="fromDatePickerSettings.dateOptions" is-open="fromDatePickerSettings.isOpened"  close-text="Close" />
+                                        <span class="input-group-btn">
+                                            <button type="button" class="btn btn-default btn-sm" ng-click="open($event)"><i class="glyphicon glyphicon-calendar"></i></button>
+                                        </span>
+                                </p>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label class="control-label">To Date</label>
+                                <p class="input-group">
+                                    <input type="text" class="form-control input-sm" ng-click="openToDate($event)" datepicker-popup="dd/MM/yyyy" ng-model="createOverRideCommission.toDate"  datepicker-options="toDatePickerSettings.dateOptions" is-open="toDatePickerSettings.isOpened"  close-text="Close" />
+                                        <span class="input-group-btn">
+                                            <button type="button" class="btn btn-default btn-sm" ng-click="openToDate($event)"><i class="glyphicon glyphicon-calendar"></i></button>
+                                        </span>
+                                </p>
+                            </div>
+                            <div class="form-group col-md-11">
+                                <label class="control-label">Over-ride Commission Calculated</label>
+                                <div class="radio" style="margin:0px">
+                                    <label style="margin-right:30px"><input type="radio"  name="overRideCommissionCalculated" value="Premium - Policy Fee" ng-model="createOverRideCommission.overRideCommissionCalculated"/>Premium - Policy Fee</label>
+                                    <label style="margin-right:30px"><input type="radio" name="overRideCommissionCalculated" value="Premium - Policy Fee - Investment Premium" ng-model="createOverRideCommission.overRideCommissionCalculated"/>Premium - Policy Fee - Investment Premium</label>
+                                    <label style="margin-right:30px"><input type="radio"  name="overRideCommissionCalculated" value="Agents Commission" ng-model="createOverRideCommission.overRideCommissionCalculated"/>Agent's Commission</label>
+                                    <label style="margin-right:30px"><input type="radio" name="overRideCommissionCalculated" value="Broker Commission" ng-model="createOverRideCommission.overRideCommissionCalculated"/>Broker Commission</label>
+                                    <label><input type="radio" name="overRideCommissionCalculated" value="Staff Commission" ng-model="createOverRideCommission.overRideCommissionCalculated"/>Staff Commission</label>
+
+
+                                </div>
+                            </div>
+                        </div>
+                        <form id="commissionDeclaration">
+                            <h4>Add Over-ride Commissions</h4>
+                            <div class="row">
+                                <div class="form-group col-md-3">
+                                    <label class="control-label">Policy year Expressed As</label>
+                                    <select class="form-control input-sm" id="policyYearExpressed" ng-model="addOverRideCommission.policyYearExpressed"
+                                            ng-change="getPolicyYearExpressed(addOverRideCommission.policyYearExpressed)">
+                                        <option value="">Please Select</option>
+                                        <option value="Single">Single</option>
+                                        <option value="Range">Range</option>
+                                    </select>
+
+                                </div>
+                                <div class="form-group col-md-2">
+                                    <label class="control-label">Policy Year1</label>
+                                    <input type="text" name="policyYear1"  class="form-control input-sm" ng-disabled="(!addOverRideCommission.policyYearExpressed)" id="policyYear1" ng-model="addOverRideCommission.fromYear"/>
+                                </div>
+                                <div class="form-group col-md-2" ng-show="showToYear">
+                                    <label class="control-label">Policy Year2</label>
+                                    <input type="text" name="policyYear2" class="form-control input-sm" id="policyYear2" ng-disabled="(!addOverRideCommission.policyYearExpressed)" ng-model="addOverRideCommission.toYear"/>
+                                </div>
+                                <div class="form-group col-md-3" >
+                                    <label class="control-label">Over-ride Commissions In %age</label>
+                                    <input type="text" name="commissions"  class="form-control input-sm" id="commissions" ng-disabled="(!addOverRideCommission.policyYearExpressed)" ng-model="addOverRideCommission.policyOverRideCommissions"/>
+                                </div>
+                                <div class="form-group col-md-2">
+
+                                    <button type="BUTTON" class="btn btn-default btn-sm " value="Save" ng-click="addOverRideCommissionDetails()" ng-disabled="( !createOverRideCommission.fromDate|| !createOverRideCommission.toDate || !addOverRideCommission.policyYearExpressed || !addOverRideCommission.fromYear || !addOverRideCommission.policyOverRideCommissions )" style="margin-top:23px;">Add</button>
+                                </div>
+                            </div>
+
+                        </form>
+                        <table class="table table-striped table-bordered" ng-show="showtable">
+                            <thead>
+                            <tr>
+                                <th>Policy Year1</th>
+                                <th>Policy Year2</th>
+                                <th>Over-ride Commissions In %age</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+
+                            <tr ng-repeat="overRidecommission in overRideCommissions" >
+                                <td>{{ overRidecommission.fromYear}}</td>
+                                <td>{{ overRidecommission.toYear}}</td>
+                                <td>{{ overRidecommission.policyOverRideCommissions }}</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                        <div class="row">
+                        <div class="col-lg-12" style="text-align: center;margin-top:3px;">
+                            <button type="button" class="btn btn-default" style="float:right;" ng-disabled="(!createOverRideCommission.productName || !createOverRideCommission.overRideCommissionsAvailableFor || !createOverRideCommission.overRideCommissionCalculated || !overRideCommissions[0].policyOverRideCommissions)" ng-click="saveOverRideCommission()">Save</button>
+                            <a class="btn btn-default" style="float:left;" th:href="@{/core/overRideCommission/view}">Cancel</a>
+                        </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<style>
+      .form-control {
+        font-size: 12px;
+        padding:5px;
+        }
+    .panel-body {
+    padding-bottom:5px
+    }
+    .form-group{
+    margin-bottom:5px;
+    }
+    td{
+    padding:2px!important;
+    }
+    th{
+    padding:4px!important;
+    }
+    .table{
+    margin-bottom:3px;
+    }
+</style>
+<footer class="footer" th:include="fragments/common :: footer">
+</footer>
+</body>
+</html>

@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head th:include="fragments/common :: headTag">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <title></title>
+</head>
+<body>
+<div th:include="fragments/common :: bodyHeader" th:remove="tag"/>
+<script>
+    var isEnterKey = function (event){
+        var charCode = (event.which) ? event.which : event.keyCode;
+
+        if (charCode ==13) {
+            event.preventDefault();
+        }
+    }
+
+    requirejs.config({
+        paths: {
+            angucomplete: 'http://ghiden.github.io/angucomplete-alt/js/libs/angucomplete-alt',
+           /* ilproposal_common: '/pla/js/proposal/individuallife/proposal.js?t=11221',*/
+            ilPolicy: '/pla/js/individuallife/policy/searchPolicy'
+        },
+        "shim": {"ilPolicy": ["angular", "angucomplete"]}
+    });
+
+    require(['ng-tags-input', 'checklistmodel', 'angular-ui-router'], function (a, b) {
+    });
+
+    requirejs(['main','angular-file-upload'], function () {
+        require(['ilPolicy', 'jquery'], function (app, $) {
+            angular.bootstrap(document, ['searchPolicy']);
+        });
+
+    });
+
+</script>
+<div class="container fuelux" ng-controller="viewPolicyCtrl">
+    <nth-alert></nth-alert>
+    <form>
+        <div class="wizard fuelux-wizard" selected-item="selectedWizard">
+            <ul class="steps" style="margin-left: 0">
+                <li data-step="1">
+                    <span class="badge badge-info">A</span><span class="chevron"></span>
+                </li>
+                <li data-step="2">
+                    <span class="badge badge-info">B</span><span class="chevron"></span>
+                </li>
+                <li data-step="3">
+                    <span class="badge badge-info">C</span><span class="chevron"></span>
+                </li>
+                <li data-step="4">
+                    <span class="badge badge-info">D</span><span class="chevron"></span>
+                </li>
+                <li data-step="5">
+                    <span class="badge badge-info">E</span><span class="chevron"></span>
+                </li>
+                <li data-step="6">
+                    <span class="badge badge-info">F</span><span class="chevron"></span>
+                </li>
+                <li data-step="7">
+                    <span class="badge badge-info">G</span><span class="chevron"></span>
+                </li>
+                <li data-step="8">
+                    <span class="badge badge-info">H</span><span class="chevron"></span>
+                </li>
+                <li data-step="9">
+                    <span class="badge badge-info">I</span><span class="chevron"></span>
+                </li>
+                <li data-step="10">
+                    <span class="badge badge-info">J</span><span class="chevron"></span>
+                </li>
+            </ul>
+
+            <div class="actions">
+                    <span style="font-weight: bolder;margin-right: 15px;color: #999">
+                    Policy Number :<span style="font-size: 13px;color: #3a87ad;">{{policyNumberDetails.policyNumber}}</span>
+                     </span>
+                <button type="button" class="btn btn-default btn-prev" disabled="disabled"><span class="glyphicon glyphicon-arrow-left"></span>Prev</button>
+                <button type="button" class="btn btn-default btn-next">Next<span class="glyphicon glyphicon-arrow-right"></span></button>
+            </div>
+
+            <div class="step-content">
+                <div class="step-pane" data-step="1">
+                    <ng-include src="resources.proposedAssuredUrl | getTrustedUrl"></ng-include>
+                </div>
+                <div class="step-pane" data-step="2">
+                    <ng-include src="resources.proposerDetails | getTrustedUrl"></ng-include>
+                </div>
+                <div class="step-pane" data-step="3">
+                    <ng-include src="resources.planDetails | getTrustedUrl"></ng-include>
+                </div>
+                <div class="step-pane" data-step="4">
+                    <ng-include src="resources.generalDetails | getTrustedUrl"></ng-include>
+                </div>
+                <div class="step-pane" data-step="5">
+                    <ng-include src="resources.compulsoryHealthDetailsPart1 | getTrustedUrl"></ng-include>
+                </div>
+                <div class="step-pane" data-step="6">
+                    <ng-include src="resources.compulsoryHealthDetailsPart2 | getTrustedUrl"></ng-include>
+                </div>
+                <div class="step-pane" data-step="7">
+                    <ng-include src="resources.familyHabitAndBuild | getTrustedUrl"></ng-include>
+                </div>
+                <div class="step-pane" data-step="8">
+                    <ng-include src="resources.additionalDetail | getTrustedUrl"></ng-include>
+                </div>
+
+               <div class="step-pane" data-step="9">
+                    <ng-include src="resources.premiumDetail | getTrustedUrl"></ng-include>
+                </div>
+
+                <div class="step-pane" data-step="10">
+                    <ng-include src="resources.mandatoryDocumentDetails | getTrustedUrl"></ng-include>
+                </div>
+
+            </div>
+        </div>
+    </form>
+    <div class="modal fade" id="agentModal" tabindex="-1" role="dialog" aria-labelledby="agentModal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="modal-title">Agent Details</h3>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <!--<div class="form-group required">
+                                <label class="control-label">Agent Code</label>
+                                <input type="text" class="form-control input-sm" name="surname" ng-model="agent.agentId"/>
+                            </div>-->
+                            <div class="form-group required">
+                                <label class="control-label">Agent Code</label>
+                                <div class="input-group">
+                                    <input type="text" onkeypress="return isEnterKey(event)" class="form-control input-sm" name="agentId"
+                                           ng-model="agent.agentId" ng-required="true" ng-change="clearAgentDetails()"
+                                           ng-blur="searchAgent()"
+                                           ng-disabled="mode=='new'">
+                                           </input>
+                                    <div class="input-group-btn">
+                                        <button type="button" class="btn btn-default btn-sm" ng-click="searchAgent()"
+                                                ng-disabled="!agent.agentId || mode=='new'">
+                                            <span class="glyphicon glyphicon-search"></span>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group required" ng-show="check">
+                                <span style="color:red">Invalid Agent Code</span>
+                            </div>
+
+                            <div class="form-group required">
+                                <label class="control-label">Commission %</label>
+                                <input type="number" max="allowedPercentage" min="0" class="form-control input-sm" name="commission" ng-model="agent.commission"/>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group required">
+                                <label class="control-label">First Name</label>
+                                <input type="text" class="form-control input-sm" name="surname" readonly="true" ng-model="agent.firstName" />
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label">Last Name</label>
+                                <input type="text" class="form-control input-sm" name="surname" readonly="true" ng-model="agent.lastName" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-default" data-dismiss="modal" ng-disabled="checking" ng-click="addAgent(agent)">Add</button>
+                    <button class="btn btn-default" data-dismiss="modal" ng-click="cancel()">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+<div class="modal fade" id="policyModal" tabindex="-1" role="dialog" aria-labelledby="policyModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Policy Details</h3>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group required">
+                            <label class="control-label">Policy Number</label>
+                            <input type="text" class="form-control input-sm" name="policyNumber" ng-model="policy.policyOrProposalNumber"/>
+                        </div>
+                        <div class="form-group required">
+                            <label class="control-label">Sum Assured</label>
+                            <input type="text" class="form-control input-sm" name="sumAssured" ng-model="policy.amount"/>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-default" ng-click="addPolicyDetails(policy)">Add</button>
+                <button class="btn btn-default" ng-click="cancel()">Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+    <div class="modal fade" id="assuredByOthersModal" tabindex="-1" role="dialog" aria-labelledby="assuredByOthersModal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="modal-title">Assurer/Insurer Details</h3>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group required">
+                                <label class="control-label">Name of Assurer/Insurer</label>
+                                <input type="text" class="form-control input-sm" name="assuredName" ng-model="insurer1.name"/>
+                            </div>
+                            <div class="form-group required">
+                                <label class="control-label">Policy Number</label>
+                                <input type="text" class="form-control input-sm" name="policyNumber" ng-model="insurer1.policyOrProposalNumber"/>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group required">
+                                <label class="control-label">Amount of Insurance</label>
+                                <input type="text" class="form-control input-sm" name="insuranceAmount" ng-model="insurer1.amount"/>
+                            </div>
+
+                            <div class="form-group required">
+                                <label class="control-label">Policy Inception Date</label>
+                                <!--<input type="text" class="form-control input-sm" name="inceptionPolicyDate" ng-model="insurer1.date"/>-->
+                                <div class='input-group date'>
+                                    <input type="text" class="form-control input-sm"
+                                           datepicker-popup="" view-enabled=""
+                                           ng-required="true"
+                                           is-open="launchinceptionDate"
+                                           max-date="todayDate"
+                                           ng-model="insurer1.date" name="dob" ng-disabled="mode=='new'||mode=='view'" ng-blur="showDob(proposedAssured.dateOfBirth)"/>
+										<span class="input-group-btn">
+										<button type="button" class="btn btn-default btn-sm"
+                                                ng-disabled="mode=='new'||mode=='view'" ng-click="launchassuredByOthersDate($event)">
+                                            <i class="glyphicon glyphicon-calendar"></i></button>
+									  </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-default" ng-click="addAssuredByOthers(insurer1)">Add</button>
+                    <button class="btn btn-default" ng-click="cancel()">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="pendingInsuranceByOthersTpl" tabindex="-1" role="dialog" aria-labelledby="pendingInsuranceByOthersTpl">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="modal-title">Assurer/Insurer Details</h3>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group required">
+                                <label class="control-label">Name of Assurer/Insurer</label>
+                                <input type="text" class="form-control input-sm" name="assuredName" ng-model="insurer2.name"/>
+                            </div>
+                            <div class="form-group required">
+                                <label class="control-label">Policy Number</label>
+                                <input type="text" class="form-control input-sm" name="policyNumber" ng-model="insurer2.policyOrProposalNumber"/>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group required">
+                                <label class="control-label">Amount of Insurance</label>
+                                <input type="text" class="form-control input-sm" name="insuranceAmount" ng-model="insurer2.amount"/>
+                            </div>
+                            <div class="form-group required">
+                                <label class="control-label">Date of Proposal</label>
+                               <!-- <input type="text" class="form-control input-sm" name="proposalDate" ng-model="insurer2.date"/>-->
+
+                                <div class='input-group date'>
+                                    <input type="text" class="form-control input-sm"
+                                           datepicker-popup="" view-enabled=""
+                                           ng-required="true"
+                                           is-open="pendingDate"
+                                           max-date="todayDate"
+                                           ng-model="insurer2.date" name="proposalDate" ng-disabled="mode=='new'||mode=='view'"/>
+										<span class="input-group-btn">
+										<button type="button" class="btn btn-default btn-sm"
+                                                ng-disabled="mode=='new'||mode=='view'" ng-click="pendingInsuranceByOthersTplDate($event)">
+                                            <i class="glyphicon glyphicon-calendar"></i></button>
+									  </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-default" ng-click="addPendingInsuranceByOthersTpl(insurer2)">Add This</button>
+                    <button class="btn btn-default" ng-click="cancel()">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="assuranceDeclinedTpl" tabindex="-1" role="dialog" aria-labelledby="assuranceDeclinedTpl">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="modal-title">Assurer/Insurer Details</h3>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group required">
+                                <label class="control-label">Name of Assurer/Insurer</label>
+                                <input type="text" class="form-control input-sm" name="name" ng-model="insurer3.name"/>
+                            </div>
+                            <div class="form-group required">
+                                <label class="control-label">Proposal Number</label>
+                                <input type="text" class="form-control input-sm" name="proposalNumber" ng-model="insurer3.policyOrProposalNumber"/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-default" ng-click="addaAssuranceDeclinedTpl(insurer3)">Add This TPL</button>
+                    <button class="btn btn-default" ng-click="cancel()">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="beneficialModal" tabindex="-1" role="dialog" aria-labelledby="beneficialModal" ng-form="planBeneficiary">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="modal-title">Beneficiary Details</h3>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="control-label">Title</label>
+                                <select class="form-control input-sm" name="beneficiaryTitle" ng-model="beneficiary.title" ng-options="title for title in titleList">
+                                </select>
+
+                                <div class="error" ng-messages="planBeneficiary.beneficiaryTitle.$error" ng-if="planBeneficiary.beneficiaryTitle.$dirty">
+                                    <small ng-message="required">Please enter title.</small>
+                                </div>
+                            </div>
+                            <div class="form-group required">
+                                <label class="control-label">First Name</label>
+                                <input type="text" class="form-control input-sm" ng-required="true" ng-pattern="/[a-zA-Z]/" ng-maxlength="20" name="beneficiaryFirstName" ng-model="beneficiary.firstName"/>
+
+                                <div class="error" ng-messages="planBeneficiary.beneficiaryFirstName.$error" ng-if="planBeneficiary.beneficiaryFirstName.$dirty">
+                                    <small class="error" ng-message="required">Please enter First Name.</small>
+                                    <small ng-message="maxlength">Only 20 characters are allowed.</small>
+                                    <small ng-message="pattern">Only alphabets are allowed.</small>
+                                </div>
+
+                            </div>
+                            <div class="form-group required">
+                                <label class="control-label">NRC</label>
+                                <input type="text" class="form-control input-sm" ng-disabled="mode=='new'||mode=='view'" ng-maxlength="11" ng-pattern="/^[0-9]{6}\/[0-9]{2}\/[0-9]{1}$/" name="beneficiaryNrc" ng-model="beneficiary.nrc"/>
+
+                              <div class="error" ng-messages="planBeneficiary.beneficiaryNrc.$error" ng-if="planBeneficiary.beneficiaryNrc.$dirty">
+                                    <small class="error" ng-message="required">Please enter NRC.</small>
+                                    <small ng-message="maxlength">Only 11 characters are allowed.</small>
+                                    <small ng-message="pattern"> Follow Pattern 999999/99/1</small>
+                              </div>
+
+                            </div>
+
+                            <div class="form-group">
+                                <label class="control-label">Age</label>
+                                <input type="text" class="form-control input-sm" name="beneficiaryAge" ng-model="beneficiary.age" ng-readonly="true"/>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label">Relationship To Life Assured</label>
+                                <!--<input type="text" class="form-control input-sm" name="relationship" ng-model="beneficiary.relationshipId"/>-->
+
+                                <select class="form-control input-sm" name="relationship" ng-disabled="mode=='new'||mode=='view'" ng-model="beneficiary.relationshipId" ng-options="applicableRelationship for applicableRelationship in applicableRelationships">
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="control-label">Surname</label>
+                                <input type="text" class="form-control input-sm" name="beneficiarySurname" ng-pattern="/[a-zA-Z]/" ng-maxlength="20" ng-model="beneficiary.surname"/>
+
+                                <div class="error" ng-messages="planBeneficiary.beneficiarySurname.$error" ng-if="planBeneficiary.beneficiarySurname.$dirty">
+                                    <!--<small class="error" ng-message="required">Please enter Surname.</small>-->
+                                    <small ng-message="maxlength">Only 20 characters are allowed.</small>
+                                    <small ng-message="pattern">Only alphabets are allowed.</small>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label">Date Of Birth</label>
+                               <!-- <input type="text" class="form-control input-sm" name="dob" ng-model="beneficiary.dob"/>-->
+                                <div class='input-group date'>
+                                    <input type="text" class="form-control input-sm"
+                                           datepicker-popup="" view-enabled=""
+                                           ng-required="true"
+                                           is-open="launchdob4"
+                                           max-date="todayDate"
+                                           ng-model="beneficiary.dateOfBirth" name="dob" ng-disabled="mode=='new'||mode=='view'" ng-blur="showBeneficiaryDob(beneficiary.dateOfBirth)"/>
+                                    <span class="input-group-btn">
+                                    <button type="button" class="btn btn-default btn-sm"
+                                            ng-disabled="mode=='new'||mode=='view'" ng-click="launchBeneficiaryDob($event)">
+                                        <i class="glyphicon glyphicon-calendar"></i></button>
+                                  </span>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label">Sex</label>
+                                <select type="text" class="form-control input-sm" name="sex" ng-model="beneficiary.gender" ng-options="gender.code as gender.description for gender in genderList"></select>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label">Share %</label>
+                                <!--<select type="text" class="form-control input-sm" name="share" ng-model="beneficiary.share">
+                                    <option value="15">Select One</option>
+                                </select>-->
+                                <input type="number" class="form-control input-sm" name="share" ng-model="beneficiary.share"/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-default" data-dismiss="modal" ng-disabled="planBeneficiary.$invalid" ng-click="addBeneficiary(beneficiary)">Add</button>
+                    <!--<button class="btn btn-default" data-dismiss="modal" ng-click="addBeneficiary(beneficiary)">Add12</button>-->
+                    <button class="btn btn-default" data-dismiss="modal">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<footer class="footer" th:include="fragments/common :: footer"></footer>
+</body>
+</html>

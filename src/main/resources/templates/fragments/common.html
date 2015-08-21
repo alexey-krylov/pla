@@ -1,67 +1,308 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
-      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/xhtml">
 <head th:fragment="headTag">
 
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <META HTTP-EQUIV="Pragma" CONTENT="no-cache"/>
+    <META HTTP-EQUIV="Expires" CONTENT="10"/>
     <title></title>
-
-    <link href="http://cdn.jsdelivr.net/bootstrap/3.3.2/css/bootstrap.min.css"
-          th:href="@{/webjars/bootstrap/3.3.2/css/bootstrap.min.css}" rel="stylesheet" />
+    <link href="http://cdn.jsdelivr.net/bootstrap/3.3.4/css/bootstrap.min.css"
+          th:href="@{/webjars/bootstrap/3.3.4/css/bootstrap.min.css}" rel="stylesheet"/>
     <link href="http://cdn.datatables.net/1.10.4/css/jquery.dataTables.css"
-          rel="stylesheet" />
+          th:href="@{/webjars/datatables/1.10.5/css/jquery.dataTables.min.css}" rel="stylesheet"/>
     <link href="http://cdn.jsdelivr.net/css/sticky-footer-navbar.css"
-          th:href="@{/css/sticky-footer-navbar.css}" rel="stylesheet" />
+          th:href="@{/css/sticky-footer-navbar.css}" rel="stylesheet"/>
+    <link href="http://cdn.jsdelivr.net/webjars/ng-tags-input/2.1.1/ng-tags-input.css"
+          th:href="@{/css/ng-tags-input.bootstrap.min.css}" rel="stylesheet"/>
+    <!--sub-menus in the navbar css-->
+    <!--sub-menus in the navbar css-->
+    <link href="/static/css/common.css"
+          th:href="@{/css/common.css}" rel="stylesheet"/>
+    <link href="/static/css/cssmenu.css"
+          th:href="@{/css/cssmenu.css}" rel="stylesheet"/>
     <link href="http://cdn.jsdelivr.net/bootstrap-datepicker/1.3.1/css/datepicker3.css"
-          th:href="@{/webjars/bootstrap-datepicker/1.3.1/css/datepicker3.css}" rel="stylesheet" />
+          th:href="@{/webjars/bootstrap-datepicker/1.3.1/css/datepicker3.css}" rel="stylesheet"/>
+    <link href="http://cdn.jsdelivr.net/webjars/org.webjars/fuelux/3.3.1/css/fuelux.css"
+          th:href="@{/webjars/fuelux/3.3.1/css/fuelux.css}" rel="stylesheet"/>
+    <script th:src="@{/js/webjars.js}"></script>
+    <script th:src="@{/webjars/requirejs/2.1.15/require.min.js}"></script>
+    <script>
+        define('basic', ['datatables', 'angular', 'bootstrap'], function (datatables) {
+            $("#cssmenu ul li>a").click(function (event) {
+                event.preventDefault();
+                var windowHref = window.location.href;
+                var clickedHref = $(this).prop('href');
+                if (windowHref === clickedHref) {
+                    window.location.reload();
+                } else {
+                    window.location.href = clickedHref;
+                }
+            })
+        });
+        require(['basic']);
+        requirejs.config({
+            waitSeconds: 0,
+            paths: {
+                'main': '/pla/js/main',
+                'fuelux': '/pla/webjars/fuelux/3.3.1/js/fuelux.min',
+                'directives': '/pla/js/common/directives',
+                'services': '/pla/js/common/services',
+                'checklistmodel': '/pla/js/common/checklist-model',
+                'commonModule': '/pla/js/common/commonModule',
+                'bt_datatable': '/pla/js/common/bootstrap-datatables'
+            },
+            "shim": {
+                "checklistmodel": ["angular"],
+                "directives": {deps: ['angular', 'fuelux', "datatables"]},
+                "fuelux": {deps: ['jquery', 'bootstrap']},
+                "services": {deps: ['angular']}
+            },
+            "packages": []
+        });
 
-    <script data-main="/pla/js/core.js" src="/webjarsjs" th:src="@{/webjarsjs}"></script>
-    <script th:src="@{/webjars/requirejs/2.1.15/require.min.js}" href="http://cdn.jsdelivr.net/requirejs/2.1.15/require.min.js"></script>
+        require(['jquery'], function ($) {
+            //add some elements with animate effect
+            $(".box").hover(
+                    function () {
+                        $(this).find('span.badge').addClass("animated fadeInLeft");
+                        $(this).find('.ico').addClass("animated fadeIn");
+                    },
+                    function () {
+                        $(this).find('span.badge').removeClass("animated fadeInLeft");
+                        $(this).find('.ico').removeClass("animated fadeIn");
+                    }
+            );
+            (function () {
+
+                var $menu = $('.navigation nav'),
+                        optionsList = '<option value="" selected="selected">Go to..</option>';
+                $menu.find('li').each(function () {
+                    var $this = $(this),
+                            $anchor = $this.children('a'),
+                            depth = $this.parents('ul').length - 1,
+                            indent = '';
+
+                    if (depth) {
+                        while (depth > 0) {
+                            indent += ' - ';
+                            depth--;
+                        }
+
+                    }
+                    $(".nav li").parent().addClass("bold");
+
+                    optionsList += '<option value="' + $anchor.attr('href') + '">' + indent + ' ' + $anchor.text() + '</option>';
+                }).end()
+                        .after('<select class="selectmenu">' + optionsList + '</select>');
+
+                $('select.selectmenu').on('change', function () {
+                    window.location = $(this).val();
+                });
+
+            })();
+            //Navi hover
+            $('ul.nav li.dropdown').hover(function () {
+                $(this).find('.dropdown-menu').stop(true, true).delay(200).fadeIn();
+            }, function () {
+                $(this).find('.dropdown-menu').stop(true, true).delay(200).fadeOut();
+            });
+        });
+    </script>
 </head>
 <body>
-
 <div th:fragment="bodyHeader">
-<!-- Fixed navbar -->
-<nav class="navbar navbar-default navbar-fixed-top">
-    <div class="container">
-        <div class="navbar-header">
-            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-                <span class="sr-only">Toggle navigation</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>
-            <a class="navbar-brand" href="#">Project name</a>
-        </div>
-        <div id="navbar" class="collapse navbar-collapse">
-            <ul class="nav navbar-nav">
-                <li class="active"><a href="#">Home</a></li>
-                <li><a th:href="@{/sample}">Sample Form</a></li>
-                <li><a th:href="@{/grid/persons}">Sample Table</a></li>
-                <li><a href="#" th:href="@{/logout}">Log off</a></li>
+    <style>
+        .dropdown-menu > li > a:hover {
+            background-color: #C7C7C7 !important;
+        }
+    </style>
+    <!-- Fixed navbar -->
+    <header>
+        <div class="container">
+            <div class="navbar navbar-static-top">
+                <div class="navigation">
+                    <nav>
+                        <ul class="nav topnav bold">
+                            <li class="dropdown active">
+                                <a th:href="@{/home}">
+                                    <span class="glyphicon glyphicon-home"
+                                          aria-hidden="true">&nbsp;</span><span>Home</span>
+                                </a>
+                            </li>
+                            <li class="dropdown">
+                                <a href="javascript:void(0)">
+                                    <span class="glyphicon glyphicon-wrench"></span>&nbsp;Core<i
+                                        class="icon-angle-down"></i>
+                                </a>
+                                <ul style="display: none;" class="dropdown-menu sub-menu-level1 bold">
+                                    <li><a th:href="@{/core/agent/listagent}">Agents</a></li>
+                                    <li><a th:href="@{/core/benefit/listbenefit}">Benefits</a></li>
+                                    <li><a th:href="@{/core/coverages/view}">Coverages</a></li>
+                                    <li><a th:href="@{/core/team/view}">Team</a></li>
+                                    <li><a th:href="@{/core/plan}" onclick="window.location='/pla/core/plan'">Plan</a>
+                                    </li>
+                                    <li><a th:href="@{/core/branch/view}">Branch Manager</a></li>
+                                    <li><a th:href="@{/core/region/view}">Regional Manager</a></li>
+                                    <li><a th:href="@{/core/premium/listpremium}">Premium</a></li>
 
-                <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Dropdown <span class="caret"></span></a>
-                    <ul class="dropdown-menu" role="menu">
-                        <li><a href="#">Action</a></li>
-                        <li><a href="#">Another action</a></li>
-                        <li><a href="#">Something else here</a></li>
-                        <li class="divider"></li>
-                        <li class="dropdown-header">Nav header</li>
-                        <li><a href="#">Separated link</a></li>
-                        <li><a href="#">One more separated link</a></li>
-                    </ul>
-                </li>
-            </ul>
-        </div><!--/.nav-collapse -->
-    </div>
-</nav>
+                                    <li class="dropdown"><a href="#">Underwriting<i style="margin-top:12px;"
+                                                                                    class="glyphicon glyphicon-chevron-right "></i></a>
+                                        <ul style="display: none;" class="dropdown-menu sub-menu-level1 bold">
+                                            <li><a th:href="@{/underwriter/viewdocumentsetup}">Document Setup</a></li>
+                                            <li><a th:href="@{/underwriter/viewroutinglevel}">Routing Level Setup</a>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li class="dropdown">
+                                <a href="javascript:void(0)">
+                                    <span class="glyphicon glyphicon-cog"></span>&nbsp;Global Configuration<i
+                                        class="icon-angle-down"></i></a>
+                                <ul style="display: none;" class="dropdown-menu sub-menu-level1 bold">
+                                    <li><a th:href="@{/core/commission/list/NORMAL}">Commission</a></li>
+                                    <li><a th:href="@{/core/commission/list/OVERRIDE}">Over-ride Commission</a></li>
+                                    <li><a th:href="@{/core/mandatorydocument/view}">Mandatory Documents </a></li>
+                                    <li class="dropdown"><a href="#">General Information
+                                        <small style="margin-top:5px"><i style="margin-top:12px;"
+                                                                         class="glyphicon glyphicon-chevron-right"></i>
+                                        </small>
+                                    </a>
+                                        <ul style="display: none;" class="dropdown-menu sub-menu-level1 bold">
+                                            <li class='dropdown'><a href="#">Product Line Information</a>
+                                                <ul style="display: none;" class="dropdown-menu sub-menu-level2 bold">
+                                                    <li><a th:href="@{/core/productlineinformation/openview}">View</a>
+                                                    </li>
+                                                    <li>
+                                                        <a th:href="@{/core/productlineinformation/openupdate}">Update</a>
+                                                    </li>
+                                                </ul>
+                                            </li>
+                                            <li class='dropdown'><a href="#">Organizational Level Information</a>
+                                                <ul style="display: none;" class="dropdown-menu sub-menu-level2 bold">
+                                                    <li><a th:href="@{/core/organizationinformation/openview}">View
+                                                        Organizational Level Information</a></li>
+                                                    <li><a th:href="@{/core/organizationinformation/openupdate}"> Set
+                                                        Organizational Level Information</a></li>
+                                                </ul>
+                                            </li>
+                                        </ul>
+                                    <li class="dropdown">
+                                        <a href="javascript:void(0)">
+                                            <span class="glyphicon glyphicon-list-alt"></span>&nbsp;Notification
+                                            <small style="margin-top:5px">
+                                                <i style="margin-top:12px;"
+                                                   class="glyphicon glyphicon-chevron-right"></i>
+                                            </small>
+                                        </a>
+                                        <ul style="display: none;" class="dropdown-menu sub-menu-level1 bold">
+                                            <li><a th:href="@{/core/notification/rolelist}">Role Mapping</a>
+                                            </li>
+                                            <li><a th:href="@{/core/notification/templatelist}">Upload Template</a>
+                                            </li>
+                                        </ul>
+                                    </li>
+                            </li>
+                        </ul>
+                        </li>
+                            <li class="dropdown">
+                                <a href="javascript:void(0)">
+                                    <span class="glyphicon glyphicon-list-alt"></span>&nbsp;Quotation<i
+                                        class="icon-angle-down"></i></a>
+                                <ul style="display: none;" class="dropdown-menu sub-menu-level1 bold">
+                                    <li><a th:href="@{/quotation/grouphealth/listgrouphealthquotation}">Group Health</a>
+                                    </li>
+                                    <li><a th:href="@{/quotation/grouplife/listgrouplifequotation}">Group Life </a></li>
+                                    <li><a th:href="@{/individuallife/quotation}"
+                                           onclick="window.location='/pla/individuallife/quotation'">Individual
+                                        Life </a></li>
+                                </ul>
+                            </li>
+
+                        <li class="dropdown">
+                                <a href="javascript:void(0)"><span class="glyphicon glyphicon-list-alt"></span>&nbsp;Proposal<i
+                                        class="icon-angle-down"></i></a>
+                                <ul style="display: none;" class="dropdown-menu sub-menu-level1 bold">
+                                    <li class="dropdown"><a href="#">GroupHealth<i style="margin-top:12px;" class="glyphicon glyphicon-chevron-right "></i></a>
+                                        <ul style="display: none;" class="dropdown-menu sub-menu-level1 bold">
+                                            <li><a th:href="@{/grouphealth/proposal/opensearchquotation}">Create
+                                                Proposal</a></li>
+                                            <li><a th:href="@{/grouphealth/proposal/opensearchproposal}">Search
+                                                Proposal</a></li>
+                                            <li><a th:href="@{/grouphealth/proposal/openapprovalproposal}">Approval
+                                                Proposal</a></li>
+                                        </ul>
+                                    </li>
+                                    <li class="dropdown"><a href="#">GroupLife<i style="margin-top:12px;" class="glyphicon glyphicon-chevron-right "></i></a>
+                                        <ul style="display: none;" class="dropdown-menu sub-menu-level1 bold">
+                                            <li><a th:href="@{/grouplife/proposal/opensearchquotation}">Create
+                                                Proposal</a></li>
+                                            <li><a th:href="@{/grouplife/proposal/opensearchproposal}">Search
+                                                Proposal</a></li>
+                                            <li><a th:href="@{/grouplife/proposal/openapprovalproposal}">Approval
+                                                Proposal</a></li>
+                                        </ul>
+                                    </li>
+                                    <!--<li><a th:href="@{/individuallife/proposal}">Individual Life </a></li>-->
+
+                                    <li class="dropdown"><a href="#">Individual Life<i style="margin-top:12px;" class="glyphicon glyphicon-chevron-right "></i></a>
+                                        <ul style="display: none;" class="dropdown-menu sub-menu-level1 bold">
+                                            <li><a th:href="@{/individuallife/proposal/search}">Create Proposal</a></li>
+                                            <li><a th:href="@{/individuallife/proposal}">Search Proposal</a></li>
+                                            <li><a th:href="@{/individuallife/proposal/openapprovalproposal}">Approval Proposal</a></li>
+                                        </ul>
+                                    </li>
+
+                                </ul>
+                            </li>
+
+                        <li class="dropdown">
+                            <a href="javascript:void(0)"><span class="glyphicon glyphicon-list-alt"></span>&nbsp;Policy<i
+                                    class="icon-angle-down"></i></a>
+                            <ul style="display: none;" class="dropdown-menu sub-menu-level1 bold">
+                                <li class="dropdown"><a href="#">GroupHealth<i style="margin-top:12px;" class="glyphicon glyphicon-chevron-right "></i></a>
+                                    <ul style="display: none;" class="dropdown-menu sub-menu-level1 bold">
+                                        <li><a th:href="@{/grouphealth/policy/openpolicysearchpage}">Search Policy</a></li>
+
+                                    </ul>
+                                </li>
+                                <li class="dropdown"><a href="#">GroupLife<i style="margin-top:12px;" class="glyphicon glyphicon-chevron-right "></i></a>
+                                    <ul style="display: none;" class="dropdown-menu sub-menu-level1 bold">
+                                        <li><a th:href="@{/grouplife/policy/openpolicysearchpage}">Search Policy</a></li>
+
+                                    </ul>
+                                </li>
+                                <li class="dropdown"><a href="#">Individual Life<i style="margin-top:12px;" class="glyphicon glyphicon-chevron-right "></i></a>
+                                    <ul style="display: none;" class="dropdown-menu sub-menu-level1 bold">
+                                        <li><a th:href="@{/individuallife/policy/openpolicysearchpage}">Search Policy</a></li>
+
+                                    </ul>
+                                </li>
+                           </ul>
+                        </li>
+                        <li class='last' style="float:right">
+                                <a href="#" class="menu-button" th:href="@{/logout}"><span
+                                        class="glyphicon glyphicon-log-out" aria-hidden="true"></span>&nbsp;Log off</a>
+                            </li>
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </header>
 </div>
-<footer class="footer"  th:fragment="footer">
+<footer class="footer" th:fragment="footer">
     <div class="container">
-        <p class="text-muted">Place sticky footer content here.</p>
+        <p class="text-muted"></p>
     </div>
 </footer>
+<script th:inline="javascript">
+    /*<![CDATA[*/
+    /*global jQuery:false */
+    $(document).ready(function ($) {
+        "use strict";
+    });
+    /*]]>*/
+</script>
 </body>
-
 </html>

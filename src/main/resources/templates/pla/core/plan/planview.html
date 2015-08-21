@@ -1,0 +1,284 @@
+<section>
+    <div class="row">
+        <div class="md-col-6">
+            <div class="panel panel-default br-t bw5 br-grey">
+                <div class="panel-body">
+                    <h3>View Plan
+                        <small>{{plan.planDetail.planName}}</small>
+                        &nbsp;&nbsp;&nbsp;<span class="label label-success align-right">{{plan.status}}</span></h3>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <dl class="dl-horizontal">
+                                <dt>Line of Business</dt>
+                                <dd>{{plan.planDetail.lineOfBusinessId}}</dd>
+                                <dt>Client Type</dt>
+                                <dd>{{plan.planDetail.clientType}}</dd>
+                                <dt>Plan Type</dt>
+                                <dd>{{plan.planDetail.planType}}</dd>
+                            </dl>
+                        </div>
+                        <div class="col-md-4">
+                            <dl class="dl-horizontal">
+                                <dt>Plan Name</dt>
+                                <dd>{{plan.planDetail.planName}}</dd>
+                                <dt>Plan Code</dt>
+                                <dd>{{plan.planDetail.planCode}}</dd>
+                                <dt>FreeLook Period (Days)</dt>
+                                <dd>{{plan.planDetail.freeLookPeriod}}</dd>
+                                <dt>Funeral Cover</dt>
+                                <dd>
+                                    <span ng-if="plan.planDetail.funeralCover">Yes</span>
+                                    <span ng-if="!plan.planDetail.funeralCover">No</span>
+                                </dd>
+                            </dl>
+                        </div>
+                        <div class="col-md-4">
+                            <dl class="dl-horizontal">
+                                <dt>Launch Date</dt>
+                                <dd>{{plan.planDetail.launchDate|date:'dd/MM/yyyy'}}</dd>
+                                <dt>Withdrawal Date</dt>
+                                <dd>
+                                    <a href="#" editable-bsdate="plan.planDetail.withdrawalDate"
+                                       e-datepicker-popup="dd/MM/yyyy">
+                                        {{ (plan.planDetail.withdrawalDate | date:"dd/MM/yyyy") || 'empty' }}
+                                    </a>
+                                </dd>
+                                <dt>Surrender After</dt>
+                                <dd>{{plan.planDetail.surrenderAfter}}</dd>
+                                <dt>Tax Applicable</dt>
+                                <dd>
+                                    <span ng-if="plan.planDetail.taxApplicable">Yes</span>
+                                    <span ng-if="!plan.planDetail.taxApplicable">No</span>
+                                </dd>
+                            </dl>
+                        </div>
+                    </div>
+                    <div class="row" style="padding-left:15px">
+                        <h4>Age Qualification</h4>
+                        <div class="col-md-4">
+                            <dl class="dl-horizontal">
+                                <dt>Minimum Entry Age</dt>
+                                <dd>{{plan.planDetail.minEntryAge}}</dd>
+                            </dl>
+                        </div>
+                        <div class="col-md-4">
+                            <dl class="dl-horizontal">
+                                <dt>Maximum Entry Age</dt>
+                                <dd>{{plan.planDetail.maxEntryAge}}</dd>
+                            </dl>
+                        </div>
+                    </div>
+
+
+                    <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+                        <div class="panel panel-default">
+                            <div class="panel-heading" role="tab" id="headingOne">
+                                <h4 class="panel-title">
+                                    <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                                        Other Details
+                                    </a>
+                                </h4>
+                            </div>
+                            <div id="collapseOne" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
+                                <div class="panel-body">
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <h4>Endorsement Types</h4>
+                                            <span ng-repeat="endorsement in plan.planDetail.endorsementTypes">
+                                                {{endorsement}}&nbsp;<b ng-if="!$last">,</b>&nbsp;</span>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <h4>Relationships Covered</h4>
+                                            <span ng-repeat="relation in plan.planDetail.applicableRelationships">
+                                                {{resolveRelationship(relation)}}&nbsp;<b ng-if="!$last">,</b>&nbsp;
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <h4>Sum Assured</h4>
+                                            <div ng-if="plan.sumAssured.sumAssuredType=='SPECIFIED_VALUES'">
+                                                <span ng-repeat="sumAssured in plan.sumAssured.sumAssuredValue">
+                                                    {{sumAssured.text}}&nbsp;<b ng-if="!$last">,</b>&nbsp;
+                                                </span>
+                                            </div>
+                                            <div ng-if="plan.sumAssured.sumAssuredType=='INCOME_MULTIPLIER'">
+                                                <dl class="dl-horizontal">
+                                                    <dt>Income Multiplier</dt>
+                                                    <dd>{{plan.sumAssured.incomeMultiplier}}</dd>
+                                                </dl>
+                                            </div>
+                                            <div ng-if="plan.sumAssured.sumAssuredType=='RANGE'">
+                                                <div class="col-md-4">
+                                                    <dl class="dl-horizontal">
+                                                        <dt>Minimum Amount</dt>
+                                                        <dd>{{plan.sumAssured.minSumInsured}}</dd>
+                                                    </dl>
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <dl class="dl-horizontal">
+                                                        <dt>Maximum Amount</dt>
+                                                        <dd>{{plan.sumAssured.maxSumInsured}}</dd>
+                                                    </dl>
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <dl class="dl-horizontal">
+                                                        <dt>Multiples Of</dt>
+                                                        <dd>{{plan.sumAssured.multiplesOf}}</dd>
+                                                    </dl>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <h4>Policy Terms</h4>
+                                            <div ng-if="plan.policyTermType=='SPECIFIED_VALUES'">
+                                                <span ng-repeat="term in plan.policyTerm.validTerms">{{term.text}} &nbsp;<b ng-if="!$last">,</b>&nbsp;
+                                                </span>
+                                                <h6 ng-if="plan.planDetail.clientType=='INDIVIDUAL'">Age at Maturity
+                                                    should not be more than {{plan.policyTerm.maxMaturityAge}} year</h6>
+                                                <h6 ng-if="plan.planDetail.clientType=='GROUP'">Policy Term for 365 days
+                                                    only.</h6>
+                                            </div>
+                                            <div ng-if="plan.policyTermType=='MATURITY_AGE_DEPENDENT'">
+                                                <span ng-repeat="term in plan.policyTerm.validTerms">{{term.text}}&nbsp;<b ng-if="!$last">,</b>&nbsp;
+                                                </span>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <h4>Premium Term</h4>
+                                            <div ng-if="plan.premiumTermType=='REGULAR'">
+                                                <div ng-if="plan.policyTermType=='SPECIFIED_VALUES'">
+                                                    <span ng-repeat="term in plan.policyTerm.validTerms">{{term.text}}&nbsp;<b ng-if="!$last">,</b>&nbsp;
+                                                    </span>
+                                                    <h6 ng-if="plan.planDetail.clientType=='INDIVIDUAL'">Age at Maturity
+                                                        should not be more than {{plan.policyTerm.maxMaturityAge}}
+                                                        year</h6>
+                                                    <h6 ng-if="plan.planDetail.clientType=='GROUP'">Premium Term for 365
+                                                        days only.</h6>
+                                                </div>
+                                                <div ng-if="plan.policyTermType=='MATURITY_AGE_DEPENDENT'">
+                                                    <span ng-repeat="term in plan.policyTerm.validTerms">{{term.text}}&nbsp;<b ng-if="!$last">,</b>&nbsp;
+                                                    </span>
+                                                </div>
+                                            </div>
+                                            <div ng-if="plan.premiumTermType=='SPECIFIED_VALUES'">
+                                                <span ng-repeat="term in plan.premiumTerm.validTerms">{{term.text}} &nbsp;<b ng-if="!$last">,</b>&nbsp;
+                                                </span>
+                                            </div>
+                                            <div ng-if="plan.premiumTermType=='SPECIFIED_AGES'">
+                                                <span ng-repeat="term in plan.premiumTerm.maturityAges">{{term.text}}&nbsp;<b ng-if="!$last">,</b>&nbsp;
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel panel-default">
+                            <div class="panel-heading" role="tab" id="headingTwo">
+                                <h4 class="panel-title">
+                                    <a class="collapsed" data-toggle="collapse" data-parent="#accordion"
+                                       href="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo">
+                                        Coverages and Benefits
+                                    </a>
+                                </h4>
+                            </div>
+                            <div id="collapseTwo" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingTwo">
+                                <div class="panel-body">
+                                    <div ng-repeat="planCoverage in plan.coverages">
+                                        <h5>{{getCoverageName(planCoverage.coverageId)}}</h5>
+                                        <div class="row">
+                                            <div class="col-md-4">
+                                                <dl class="dl-horizontal">
+                                                    <dt>Coverage Cover</dt>
+                                                    <dd>{{planCoverage.coverageCover}}</dd>
+                                                    <dt>Coverage Type</dt>
+                                                    <dd>{{planCoverage.coverageType}}</dd>
+                                                </dl>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <dl class="dl-horizontal">
+                                                    <dt>Deductible Type</dt>
+                                                    <dd>{{planCoverage.deductibleType}}</dd>
+                                                    <dt>Tax Applicable</dt>
+                                                    <dd>
+                                                        <span ng-if="planCoverage.taxApplicable">Yes</span>
+                                                        <span ng-if="!planCoverage.taxApplicable">No</span>
+                                                    </dd>
+                                                </dl>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <dl class="dl-horizontal">
+                                                    <dt>Minimum Entry Age</dt>
+                                                    <dd>{{planCoverage.minAge}}</dd>
+                                                    <dt>Maximum Entry Age</dt>
+                                                    <dd>{{planCoverage.maxAge}}</dd>
+                                                </dl>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <h5>Sum Assured</h5>
+                                            <div class="col-md-12" ng-if="planCoverage.coverageSumAssured.sumAssuredType=='SPECIFIED_VALUES'">
+                                                    <span ng-repeat="sumAssured in planCoverage.coverageSumAssured.sumAssuredValue">
+                                                        {{sumAssured.text}}&nbsp;<b ng-if="!$last">,</b>&nbsp;
+                                                    </span>
+                                            </div>
+                                            <div ng-if="planCoverage.coverageSumAssured.sumAssuredType=='RANGE'">
+                                                <div class="col-md-4">
+                                                    <dl class="dl-horizontal">
+                                                        <dt>Minimum Amount</dt>
+                                                        <dd>{{planCoverage.coverageSumAssured.minSumInsured}}</dd>
+                                                    </dl>
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <dl class="dl-horizontal">
+                                                        <dt>Maximum Amount</dt>
+                                                        <dd>{{planCoverage.coverageSumAssured.maxSumInsured}}</dd>
+                                                    </dl>
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <dl class="dl-horizontal">
+                                                        <dt>Multiples Of</dt>
+                                                        <dd>{{planCoverage.coverageSumAssured.multiplesOf}}</dd>
+                                                    </dl>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <h6 class="text-muted">Benefits</h6>
+
+                                        <div class="row" ng-repeat="benefit in planCoverage.planCoverageBenefits">
+                                            <div class="col-md-4">
+
+                                                <dl class="dl-horizontal">
+                                                    <dt>Benefit Name</dt>
+                                                    <dd>{{getBenefitName(planCoverage.coverageId,benefit.benefitId)}}</dd>
+                                                    <dt>Limit Defined</dt>
+                                                    <dd>{{benefit.definedPer}}</dd>
+                                                    <dt>Limit Type</dt>
+                                                    <dd>{{benefit.coverageBenefitType}}</dd>
+                                                </dl>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <dl class="dl-horizontal">
+                                                    <dt>Benefit Limit</dt>
+                                                    <dd>{{benefit.benefitLimit}}</dd>
+                                                    <dt>Maximum Limit</dt>
+                                                    <dd>{{benefit.maxLimit}}</dd>
+                                                </dl>
+                                            </div>
+                                        </div>
+                                        <p class="bg-primary" ng-if="!$last">
+                                        <hr/>
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

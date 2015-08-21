@@ -6,68 +6,34 @@
 
 package org.nthdimenzion.security.service;
 
-import org.nthdimenzion.security.domain.SystemUser;
-import org.nthdimenzion.security.repository.UserLoginRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.dao.SystemWideSaltSource;
-import org.springframework.security.authentication.encoding.ShaPasswordEncoder;
+import com.google.common.base.Preconditions;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
+import org.springframework.web.client.RestTemplate;
 
 /**
  * @author: Samir
  * @since 1.0 23/01/2015
  */
 @Service
-public class UserService implements UserDetailsService, IAuthentication {
+public class UserService implements UserDetailsService {
 
-    private UserDetailsService userDetailsService;
-
-    private ShaPasswordEncoder passwordEncoder;
-
-    private SystemWideSaltSource saltSource;
-
-    @PersistenceContext
-    private EntityManager entityManager;
-
-    private UserLoginRepository userLoginRepository;
-
-    UserService() {
-    }
-
-    @Autowired
-    public UserService(UserDetailsService userValidationService, ShaPasswordEncoder passwordEncoder, SystemWideSaltSource saltSource,UserLoginRepository userLoginRepository) {
-        this.userDetailsService = userValidationService;
-        this.passwordEncoder = passwordEncoder;
-        this.saltSource = saltSource;
-        this.userLoginRepository = userLoginRepository;
-    }
+    @Value("${spring.smeServer.${spring.profiles.active}.url}")
+    private String serverUrl;
 
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        UserDetails userDetails = userDetailsService.loadUserByUsername(username);
-        SystemUser systemUser = new SystemUser(userDetails);
-        return systemUser;
-    }
-
-
-    @Override
-    public void failedLoginAttempt(String username) {
-    }
-
-    @Override
-    public void successFullLogin(String username) {
-    }
-
-    @Override
-    public String encryptPassword(String password) {
-        return passwordEncoder.encodePassword(password, saltSource.getSystemWideSalt());
+        Preconditions.checkNotNull(serverUrl);
+        RestTemplate restTemplate = new RestTemplate();
+        String userDetailUrl = serverUrl + "/getuserdetail?username=" + username;
+        UserLoginDetailDto userLoginDetailDto = restTemplate.getForObject(userDetailUrl, UserLoginDetailDto.class);
+        Preconditions.checkNotNull(userLoginDetailDto);
+        userLoginDetailDto = userLoginDetailDto.populateAuthorities(userLoginDetailDto.getPermissions());
+        return userLoginDetailDto;
     }
 
 }

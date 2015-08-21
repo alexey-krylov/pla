@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/xhtml"
+      lang="en" ng-app="AngularApp">
+<head th:include="fragments/common :: headTag">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+
+</head>
+<body>
+<div th:include="fragments/common :: bodyHeader" th:remove="tag"/>
+
+<div class="container" ng-Controller="UpdateHealthCareProviderController">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <div class="row">
+                        <div class="col-lg-2"><span th:text="#{updateHcpCore}">Update HCP Core
+                        </span></div>
+                    </div>
+                </div>
+                <div class="panel-body">
+                    <form novalidate="true" class="css-form">
+
+                        <div class="row">
+                            <div class="form-group col-md-4">
+                                <label class="control-label">Activated On</label>
+                                <div class="controls readonly">02/09/2013</div>
+                            </div>
+                            <div class="form-group col-md-4">
+                                <label class="control-label">Status</label>
+                                <div class="controls readonly">Active</div>
+                            </div>
+                            <div class="form-group col-md-4">
+                                <label class="control-label">HCP Code</label>
+                                <div class="controls readonly">HCP-123</div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="form-group col-md-4">
+                                <label class="control-label">HCP Name</label>
+                                <div class="controls readonly">CMC</div>
+                            </div>
+                            <div class="form-group col-md-4 required">
+                                <label class="control-label">Address Line 1</label>
+                                <input type="text" required="true" maxlength="50"
+                                       class="form-control" ng-model="updateHealthCareProvider.addressLine1"/>
+                            </div>
+                            <div class="form-group col-md-4">
+                                <label class="control-label">Address Line 2</label>
+                                <input type="text" required="true" maxlength="50"
+                                       class="form-control" ng-model="updateHealthCareProvider.addressLine2"/>
+                            </div>
+                            <div class="form-group col-md-4 required">
+                                <label class="control-label">Postal Code</label>
+                                <input type="text" required="true" maxlength="50"
+                                       class="form-control" ng-model="updateHealthCareProvider.postalCode"/>
+                            </div>
+                            <div class="form-group col-md-4 required">
+                                <label class="control-label">Province</label>
+                                <select class="form-control input-sm" ng-model="updateHealthCareProvider.province">
+                                    <option value="">Select Province</option>
+                                    <option value="Central">Central</option>
+                                    <option value="Copperbelt">Copperbelt</option>
+                                    <option value="Eastern">Eastern</option>
+                                    <option value="Luapula">Luapula</option>
+                                    <option value="Lusaka">Lusaka</option>
+                                    <option value="Muchinga">Muchinga</option>
+                                    <option value="Northern">Northern</option>
+                                    <option value="North-Western">North-Western</option>
+                                    <option value="Southern">Southern</option>
+                                    <option value="Western">Western</option>
+                                </select>
+                            </div>
+                            <div class="form-group col-md-4 required">
+                                <label class="control-label">Town</label>
+                                <input type="text" required="true" maxlength="50" class="form-control"
+                                       ng-model="updateHealthCareProvider.town"/>
+                            </div>
+                        </div>
+                        <div class="row">
+
+                            <div class="form-group col-md-4 required">
+                                <label class="control-label">Work Phone</label>
+                                <input type="text" required="true" maxlength="50"
+                                       class="form-control" ng-model="updateHealthCareProvider.workPhone"/>
+                            </div>
+                            <div class="form-group col-md-4 required">
+                                <label class="control-label">Email ID</label>
+                                <input type="text" required="true" maxlength="50"
+                                       class="form-control" ng-model="updateHealthCareProvider.emailId"/>
+                            </div>
+
+                        </div>
+                        <div class="row">
+                            <h4 style="margin-left:10px;">Contact Person Details</h4>
+
+                            <div class="form-group col-md-4 required">
+                                <label class="control-label">Person Name</label>
+                                <input type="text"  required="true" maxlength="50"
+                                       class="form-control" ng-model="updateHealthCareProvider.contactPersonName"/>
+                            </div>
+                            <div class="form-group col-md-4 required">
+                                <label class="control-label">Mobile Number</label>
+                                <input type="text" required="true" maxlength="50"
+                                       class="form-control" ng-model="updateHealthCareProvider.mobileNumber"/>
+                            </div>
+                            <div class="form-group col-md-4 required ">
+                                <label class="control-label">Work Phone</label>
+                                <input type="text" required="true" maxlength="50"
+                                       class="form-control" ng-model="updateHealthCareProvider.ContactPersonWorkPhone"/>
+                            </div>
+                            <div class="form-group col-md-4">
+                                <label class="control-label">Email Address</label>
+                                <input type="text" required="true" maxlength="50"
+                                       class="form-control" ng-model="updateHealthCareProvider.ContactPersonEmailId"/>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <button type="submit" class="btn btn-default" style="float:right;" ng-disabled="(!updateHealthCareProvider.addressLine1 || !updateHealthCareProvider.province || !updateHealthCareProvider.postalCode || !updateHealthCareProvider.town || !updateHealthCareProvider.workPhone || !updateHealthCareProvider.emailId || !updateHealthCareProvider.contactPersonName || !updateHealthCareProvider.mobileNumber || !updateHealthCareProvider.ContactPersonWorkPhone)">Save</button>
+                                <a class="btn btn-default" style="float:left;" th:href="@{/core/healthCareProvider/viewCore}">Cancel</a>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<style>
+    .form-control {
+    font-size: 12px;
+    padding:5px;
+    }
+    .form-group {
+    margin-bottom: 7px;
+    }
+
+</style>
+<footer class="footer" th:include="fragments/common :: footer">
+</footer>
+</body>
+</html>

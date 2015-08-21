@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/xhtml"
+      lang="en">
+<head th:include="fragments/common :: headTag">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+</head>
+<body>
+<div th:include="fragments/common :: bodyHeader" th:remove="tag"/>
+<script>
+    requirejs(['main','angular-file-upload'],function(){
+        require(['/pla/js/commissions/createCommissions.js'],function(){
+            angular.element(document).ready(function() {
+                angular.bootstrap(document, ['createCommission']);
+            });
+        });
+    });
+</script>
+<div class="container ng-cloak">
+
+<ng-view></ng-view>
+</div>
+<footer class="footer" th:include="fragments/common :: footer">
+</footer>
+</body>
+</html>

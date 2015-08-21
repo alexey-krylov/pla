@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/xhtml"
+      lang="en">
+<head th:include="fragments/common :: headTag">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+
+</head>
+<body>
+<div th:include="fragments/common :: bodyHeader" th:remove="tag"/>
+<script>
+    require(['moment'], function(moment) {
+    });
+    requirejs(['main'],function(){
+        require(['/pla/js/underwriter/createDocumentSetup.js'],function(){
+            angular.bootstrap(document, ['createDocumentSetup']);
+        });
+    });
+
+
+</script>
+<script th:inline="javascript">
+    /*<![CDATA[*/
+    var createDocumentLevel = {};
+    var coverageId = /*[[${CreateUnderWriterDocumentCommand.coverageId}]]*/null;
+    if (coverageId) {
+        createDocumentLevel.definedFor = 'optionalCoverage';
+        createDocumentLevel.coverageId = coverageId;
+    } else {
+        createDocumentLevel.definedFor = 'plan';
+    }
+    var isNumeric = function (event){
+
+        var charCode = (event.which) ? event.which : event.keyCode;
+        // alert(charCode);
+        if (charCode > 31 && charCode !=8 && charCode !=0 ) {
+            event.preventDefault();
+
+        }
+        if(charCode ==8){
+            event.preventDefault();
+        }
+
+    };
+    /*]]>*/
+</script>
+<div class="container ng-cloak" ng-Controller="CreateDocumentSetupController">
+
+    <div class="row">
+        <div  >
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <div class="row">
+                        <div class="col-lg-2"><span th:text="#{createDocumentsetup}">Create Document Setup
+                        </span></div>
+                    </div>
+                </div>
+                <div class="panel-body ng-cloak">
+                    <form  name="myForm" novalidate="true" class="css-form">
+                       <nth-alert></nth-alert>
+                        <div class="row">
+                            <div class="form-group col-md-6 required">
+                                <label class="control-label">Defined For</label>
+
+                                <div class="radio">
+                                    <label style="margin-right:30px">
+                                        <input type="radio" name="definedFor" value="plan" ng-model="createDocumentLevel.definedFor" ng-change="getDefinedOption()"/>Plan
+                                    </label>
+                                    <label>
+                                        <input type="radio" name="definedFor" value="optionalCoverage" ng-model="createDocumentLevel.definedFor" ng-change="getDefinedOption()"/>Optional
+                                        Coverage
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="form-group col-md-6 required">
+                                <label class="control-label">Plan Name</label>
+                                <select class="form-control input-sm" ng-model="createDocumentLevel.planCode"
+                                        ng-options="plan.planCode as plan.planName for plan in newPlanList | orderBy:'planName'">
+                                    <option value="">----Select Plan----</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row">
+
+                            <div ng-switch="" on="createDocumentLevel.definedFor" class="animate-switch-container">
+                                <div class="form-group col-md-6 required animate-switch" ng-switch-when="optionalCoverage">
+                                    <label class="control-label">Optional Coverage</label>
+                                    <select class="form-control input-sm" id="optionalCoverage" ng-required="true" ng-model="createDocumentLevel.coverageId" ng-disabled="!createDocumentLevel.planCode"
+                                            ng-options="optionalCoverage.coverageId as optionalCoverage.coverageName for optionalCoverage in optionalCoverageList | orderBy:'coverageName'">
+                                        <option value="">----Select Optional Coverage ----</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group col-md-6 required">
+                                <label class="control-label">Process</label>
+                                <select class="form-control input-sm" ng-model="createDocumentLevel.processType"
+                                        ng-options="process.processType as process.description for process in processList | orderBy:'processType'">
+                                    <option value="">----Select Process----</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row">
+
+                            <div class="form-group col-md-6 required">
+                                <label class="control-label">From Date</label>
+
+                                <p class="input-group">
+                                    <input type="text" class="form-control input-sm" onkeypress="return isNumeric(event)" ng-click="open($event)" min-date="selectedDate" ng-required="true" datepicker-popup="dd/MM/yyyy"
+                                           ng-model="createDocumentLevel.effectiveFrom" datepicker-options="datePickerSettings.dateOptions" is-open="datePickerSettings.isOpened"
+                                           name="effectiveFrom"
+                                           close-text="Close" show-button-bar="false"/>
+                                        <span class="input-group-btn">
+                                            <button type="button" class="btn btn-default btn-sm" ng-click="open($event)"><i class="glyphicon glyphicon-calendar"></i></button>
+                                        </span>
+                                </p>
+                            </div>
+                            <div class="form-group col-md-6 required" ng-show="createDocumentLevel.processType">
+                                <label class="control-label">Influencing Factors</label>
+                                <div>
+                                    <button type="button" class="btn btn-default bs-select" ng-model="createDocumentLevel.underWriterInfluencingFactors" max-length="0" data-all-none-buttons="true" data-html="1" data-multiple="1" placeholder="----Select Influencing Factor----" ng-options="influencingFactor.influencingFactor as influencingFactor.description for influencingFactor in mulSelect | orderBy:'description'"   >
+                                        Action <span class="caret"></span>
+                                    </button>
+                                </div>
+
+                            </div>
+
+                        </div>
+                        <ng-form name="addDocumentForm" ng-show="createDocumentLevel.underWriterInfluencingFactors.length > 0" >
+                        <div  class="bs-callout  bs-callout-info" style="padding:5px;">
+                        <div class="row" >
+                            <div class="form-group col-md-2 required" ng-repeat="headerData in headerDataList">
+                                <label class="control-label"  >{{headerData.name}}</label>
+                                <p class="input-group" >
+                                    <input type="number" class="form-control input-sm" min="1" ng-model="headerData.value" value="{{headerData.value}}" ng-required="true"/>
+                                </p>
+
+                            </div>
+                            <div class="form-group col-md-2 required">
+                                 <label class="control-label">Underwriting Documents</label>
+                                    <button type="button" class="btn btn-default bs-select" ng-model="mandatoryDocument.documents" max-length="0" data-all-none-buttons="true" data-html="1" data-multiple="1" placeholder="----Select----" ng-options="mandatoryDocument.documentCode as mandatoryDocument.documentName for mandatoryDocument in documentList | orderBy:'documentName'"   ng-change="makeChanged(mandatoryDocument.documents)" >
+                                    Action <span class="caret"></span>
+                                    </button>
+                                <button type="button" class="btn btn-primary btn-sm"  ng-disabled="(addDocumentForm.$invalid || (!mandatoryDocument.documents.length > 0))" ng-click="addDocumentDetails(addDocumentForm)">Add</button>
+
+                            </div>
+                        </div>
+
+                        </div>
+                            </ng-form>
+                        <table class="table table-striped table-bordered"  ng-show="headerDataList.length > 0" style="margin-top:5px;">
+                            <thead>
+                            <tr  >
+                                <th ng-repeat="headerData in headerDataList">{{headerData.name}}</th>
+                                <th >Documents</th>
+                                <th>Action</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+
+                            <tr ng-repeat="col in dataList">
+
+                              <td ng-repeat="(k,v) in col.underWriterDocumentLineItem">
+                                  <span >{{v.influencingItem}}</span>
+                              </td>
+
+                             <td style="text-align:left" class="pop" >
+                                  <a data-placement="top" href="#" class="btn btn-primary btn-sm ng-scope " id="new-quote-popover" data-trigger="hover"  popover="">Mandatory Documents
+                                     <div class="popover-head hide" >Documents</div>
+                                     <div class="popover-content hide"  ng-repeat="document in col.underWriterDocuments">
+                                     </div>
+                                 </a>
+                                </td>
+                                <td>
+                                     <button class="btn btn-default btn-sm" ng-click="deleteCurrentRow($index)">Delete</button>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+
+                        <div class="row">
+                            <div class="form-group col-lg-12" >
+                                <button type="button" class="btn btn-default" style="float:right;"   ng-disabled="(!showOptionalCoverageValue || !createDocumentLevel.effectiveFrom || !createDocumentLevel.processType || !createDocumentLevel.planCode  || (!dataList.length > 0))"   ng-click="submitDocumentSetUp()">Save</button>
+                                <a class="btn btn-default"  style="float:left;" th:href="@{/underwriter/viewdocumentsetup}" >Cancel</a>
+
+                            </div>
+                        </div>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<style>
+    .form-control {
+        font-size: 12px;
+        padding:5px;
+    }
+    .select{
+        width: 400px;
+        height:310px;
+        overflow:auto;
+    }
+
+     .popover-content {
+         font-size: 11px;
+         padding-left:3px;
+     }
+
+</style>
+<footer class="footer" th:include="fragments/common :: footer">
+</footer>
+</body>
+</html>

@@ -1,0 +1,77 @@
+<ng-form name="step8">
+    <strong>Medical Attendant</strong>
+    <div class="row bs-callout  bs-callout-info" style="margin: 5px;padding:10px">
+        <div class="row form-group">
+            <div class="col-md-10">
+                State name and address of your usual medical attendant(s)/Clinic Hospital
+            </div>
+            <div class="col-md-2">
+                <input type="text" class="form-control input-sm" ng-model="medicalAttendant.medicalAttendantDetails"/>
+            </div>
+        </div>
+        <div class="row form-group">
+            <div class="col-md-10">
+                For how long has he/she been your medical attendant?
+            </div>
+            <div class="col-md-2">
+                <input type="text" class="form-control input-sm" ng-model="medicalAttendant.medicalAttendantDuration"/>
+            </div>
+        </div>
+        <div class="row form-group">
+            <div class="col-md-10">
+                Date and reason for most recent consultation. (i.e. during the last 5 years)
+            </div>
+            <div class="col-md-2">
+                <input type="text" class="form-control input-sm" ng-model="medicalAttendant.dateAndReason"/>
+            </div>
+        </div>
+    </div>
+    <div></div>
+    <strong>Replacement</strong>
+    <accordion close-others="true">
+        <div class="row" style="margin-bottom: 5px">
+            <div class="col-md-10">
+                <accordion-group is-open="accordionStatus.additionalDetail.tab1">
+                    <accordion-heading>
+                        <strong style="font-size: 11px">Is this proposal to replace the whole or part of any other proposal to this or any other office, or to replace all or any part of your existing insurance with any life office (where replacement is to occur immediately or to replace an insurance discontinued within the past six months or to be discontinued within the next six months)?</strong>
+                        <i class="pull-right glyphicon"
+                           ng-class="{'glyphicon-chevron-down': accordionStatus.additionalDetail.tab1, 'glyphicon-chevron-right': !accordionStatus.additionalDetail.tab1}"></i>
+                    </accordion-heading>
+                    <div class="col-md-12">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="control-label">Name Of Office</label>
+                                    <input type="text" class="form-control input-sm" ng-model="replacement.answerResponse1"/>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="control-label">Policy Number</label>
+                                    <input type="text" class="form-control input-sm" ng-model="replacement.answerResponse2"/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </accordion-group>
+            </div>
+            <div class="col-md-2">
+                <select class="form-control input-sm" ng-model="replacement.answer" ng-change="replacement.questionId='22' ">
+                    <option value="">--Select One--</option>
+                    <option ng-value="true" value="true">Yes</option>
+                    <option ng-value="false" value="false">No</option>
+                </select>
+            </div>
+        </div>
+    </accordion>
+        <div></div>
+        <div class="row">
+            <div class="col-sm-6">
+                <button type="button" class="btn btn-default btn-sm">Cancel</button>
+            </div>
+            <div class="col-sm-6">
+                <button type="button" class="btn btn-default btn-sm" style="float: right"
+                        ng-click="saveAdditionalDetail()">Save</button>
+            </div>
+    </div>
+</ng-form>

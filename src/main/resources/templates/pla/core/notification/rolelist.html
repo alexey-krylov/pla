@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/xhtml"
+      lang="en">
+<head th:include="fragments/common :: headTag">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <title name="Notification Role List"/>
+
+</head>
+<body ng-controller="RoleMappingCtrl">
+
+<script>
+    var interval = setInterval(function(){
+        if(require.defined("basic")){
+                $(document).ready(function(){
+                    $('#roleMapping-table').dataTable(
+                            {
+                                "aoColumnDefs": [
+                                    { "bSearchable": false, "bSortable":false, "aTargets": [ 3 ] }
+                                ] }
+                    );
+                });
+
+            clearInterval(interval);
+        }
+    }, 1000);
+    /*var interval = setInterval(function(){
+        if(require.defined("basic")){
+            requirejs(['/pla/js/notification/viewNotificationRole.js'],function(){
+            });
+            clearInterval(interval);
+        }
+    }, 600);*/
+
+</script>
+
+<style>
+    .error {
+        font-size: 10px;
+        color: firebrick;
+    }
+</style>
+<div th:include="fragments/common :: bodyHeader" th:remove="tag"></div>
+<link href="/pla/css/xeditable.css"/>
+<div class="splash">
+    <div class="color-line"></div>
+    <div class="splash-title"></div>
+</div>
+<!-- ***************************  LIST OF ROLE MAPPING *************-->
+<div class="container-fluid ng-cloak ">
+    <div class="col-lg-12">
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+
+                <div class="row">
+                    <div class="col-lg-6"><span th:text="#{notificationRoleList}">List of Notification Roles
+                        </span></div>
+                    <div class="col-lg-6"><a class="btn btn-default btn-sm" style="float: right"
+                                             href="#newRoleMapping" data-toggle="modal" ng-click="newRoleMapping()">New Role Mapping</a>
+                    </div>
+                </div>
+            </div>
+            <div class="panel-body">
+                <table class="table table-striped table-bordered" id="roleMapping-table" cellspacing="0" width="100%">
+                    <thead>
+                    <tr>
+                        <th>Role</th>
+                        <th>Line of Business</th>
+                        <th>Process Type</th>
+                        <th>Action</th>
+
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr ng-repeat="roleMap in roleList">
+                        <td >{{roleMap.roleTypeDescription}}</td>
+                        <td>{{roleMap.lineOfBusinessDescription}}</td>
+                        <td >{{roleMap.processTypeDescription}}</td>
+                        <td><button type="button" class="btn btn-danger btn-xs" data-toggle="modal" data-target="#alert-modal"  ng-click="inactivate(roleMap,'save')" >Inactivate</button>
+                        </td>
+
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+<!-- ***************************** ALERT BOX ********************************-->
+<div class="modal fade" id="alert-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">Alert</h4>
+            </div>
+            <div class="modal-body">
+                <div class="alert alert-success" hidden="true" id="successMessage"></div>
+                <div class="alert alert-danger" hidden="true" id="inactivate-alert-danger"></div>
+                <div id="confirmationMsg">Are you sure you want to delete the Role mapping?</div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" id="approveButton" ng-click="inactivate('','confirm')">Yes</button>
+                <button type="button" class="btn btn-danger" id="changeToOk" data-dismiss="modal">Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- ************************ NEW ROLE MAPPING *************************************-->
+
+<div class="modal fade" id="newRoleMapping" tabindex="-1" role="dialog" aria-labelledby="newRoleMapping">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">New Role Mapping</h4>
+            </div>
+            <div class="modal-body">
+                <div class="alert alert-success" hidden="true" id="successMsg"></div>
+                <div class="alert alert-danger" hidden="true" id="dangerMsg"></div>
+                <form name="roleForm" novalidate="true" class="css-form">
+
+                    <div class="panel panel-default">
+                        <div class="panel-body">
+                            <div class="control-group required col-md-6">
+                                <label class="control-label">Role</label>
+                                <select class="form-control input-sm" id="role"
+                                        ng-model="mapping.roleType" name="roleType" >
+                                    <option value="QUOTATION_PREPROCESSOR">Quotation Preprocessor</option>
+                                    <option value="PROPOSAL_PREPROCESSOR">Proposal Preprocessor</option>
+                                    <option value="CLAIM_PREPROCESSOR">Claim Preprocessor</option>
+                                </select>
+
+
+                            </div>
+                            <div class="control-group required col-md-6">
+                                <label class="control-label">Line of Business</label>
+                                <select class="form-control input-sm" id="lineOfBusiness"
+                                        ng-model="mapping.lineOfBusiness" name="lineOfBusiness"
+                                        >
+                                    <option value="INDIVIDUAL_LIFE">Individual Life</option>
+                                    <option value="GROUP_HEALTH">Group Health</option>
+                                    <option value="GROUP_LIFE">Group Life</option>
+                                </select>
+
+
+                            </div>
+                            <div class="control-group required col-md-6">
+                                <label class="control-label">Process Type</label>
+                                   <select class="form-control input-sm"   ng-model="mapping.processType" ng-options="processTypes.processType as processTypes.description for processTypes in processTypeList | orderBy:'description' " ng-disabled="!mapping.lineOfBusiness">
+                                    <option value="">---Select Process Type---</option>
+                                </select>
+
+                            </div>
+                        </div>
+                    </div>
+
+                </form>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" ng-click="save()" ng-disabled="roleForm.$invalid">Save
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+<footer class="footer" th:include="fragments/common :: footer"></footer>
+
+<script>
+
+    requirejs(['main'], function () {
+        require(['angular', 'jquery'], function (app, $) {
+            var module = angular.module('RoleMappingModule', []);
+            module.controller('RoleMappingCtrl', ['$scope', '$http', '$window', function ($scope, $http, $window) {
+
+                console.log('Role Mapping Controller ');
+                $scope.original = {lineOfBusiness: null, processType: null, roleType: null};
+                $scope.mapping = {};
+                $http.get('/pla/core/notification/getnotificationrolelist').success(function(data){
+                    $scope.roleList=data;
+                });
+                $scope.$watch('mapping.lineOfBusiness',function(newValue, oldValue){
+                    if(newValue){
+                        $http.get('/pla/core/notification/getprocessbylob/'+newValue).success(function(data){
+                            $scope.processTypeList=data;
+                        });
+                    }
+                });
+
+                $scope.save = function () {
+                    console.log('invoke saved...');
+                  //  var requestUrl = '/pla/core/notification/createnotificationrolemapping';//new Url
+                   // $http.post(requestUrl, $scope.mapping).success();
+                    $http.post('/pla/core/notification/createnotificationrolemapping',$scope.mapping).success(function(data){
+                        if(data.status=='200'){
+                            $scope.clear();
+                            $('#dangerMsg').hide();
+                            $("#successMsg").text(data.message).show();
+                            window.setTimeout('location.reload()', 3000);
+                        }else{
+                            $("#successMsg").hide();
+                            $('#dangerMsg').text(data.message).show();
+
+                        }
+                    }).error(function(data) {
+                        if(data.status=='500'){
+                            $("#successMsg").hide();
+                            $('#dangerMsg').text(data.message).show();
+                        }
+
+                    });
+
+
+                    // $scope.reload();
+                };
+
+                $scope.clear = function () {
+                    $scope.mapping = angular.copy($scope.original);
+                };
+
+                $scope.reload = function () {
+                    $window.location = '';
+                };
+              /*  $scope.inactivate = function(role){
+                    $http.post('/pla/core/notification/deletenotificationrolemapping',role).success(function(data){
+                    });
+                 //   $scope.reload();
+
+                }*/
+                var roleMappingToInactivate = '';
+                $scope.inactivate=function(value,flag){
+                    // hideAlerts();
+                    $('#approveButton').show();
+                    if(flag=='save'){
+                        console.log(value);
+                        roleMappingToInactivate =  value;
+                    }else{
+                        $http.post('/pla/core/notification/deletenotificationrolemapping',roleMappingToInactivate).success(function(data){
+                            if(data.status=='200'){
+
+                                $('#alert-modal').show();
+                                $('#confirmationMsg').hide();
+                                $('#approveButton').hide();
+                                $('#changeToOk').text('Ok');
+                                $("#successMessage").text(data.message).show();
+                                window.setTimeout('location.reload()', 3000);
+
+                            }else{
+
+                                $('#approveButton').hide();
+                                $('#inactivate-alert-danger').text(data.message).show();
+                            }
+
+                        });
+
+                    }
+                };
+
+
+
+            }]);
+            angular.bootstrap(document, ['RoleMappingModule']);
+        });
+    });
+
+
+</script>
+</body>
+</html>

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<dataset>
+    <!-- Mandatory document associated with Plan P001 for Claim process type-->
+    <mandatory_document coverage_id="C001" plan_id="P001" PROCESS="CLAIM" />
+    <mandatory_document  plan_id="P001" PROCESS="CLAIM" />
+
+    <!-- Mandatory document associated with Plan P001 for Enrollment process type-->
+    <mandatory_document coverage_id="C001" plan_id="P001" PROCESS="Enrollment" />
+    <mandatory_document plan_id="P001" PROCESS="Enrollment" />
+
+    <!-- mandatory document with no coverage -->
+    <mandatory_document plan_id="P002" PROCESS="CLAIM" />
+
+</dataset>

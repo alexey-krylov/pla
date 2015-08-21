@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:mongo="http://www.springframework.org/schema/data/mongo"
+       xmlns="http://www.springframework.org/schema/beans"
+       xsi:schemaLocation="http://www.springframework.org/schema/data/mongo http://www.springframework.org/schema/data/mongo/spring-mongo.xsd
+
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.1.xsd">
+
+    <bean id="userCredentials" class="org.springframework.data.authentication.UserCredentials">
+        <constructor-arg name="username" value="pla"/>
+        <constructor-arg name="password" value="pla"/>
+    </bean>
+
+    <bean name="fongo" class="com.foursquare.fongo.Fongo">
+        <constructor-arg value="InMemoryMongo"/>
+    </bean>
+
+    <bean id="mongo" factory-bean="fongo" factory-method="getMongo"/>
+
+    <mongo:db-factory id="mongoDbFactory" mongo-ref="mongo" dbname="pla"/>
+
+    <bean id="mongoTemplate" class="org.springframework.data.mongodb.core.MongoTemplate">
+        <constructor-arg ref="mongoDbFactory"/>
+    </bean>
+
+    <bean id="mongoSagaTemplate" class="org.axonframework.saga.repository.mongo.DefaultMongoTemplate">
+        <constructor-arg ref="mongo" name="mongo"/>
+    </bean>
+
+    <bean id="springMongoTemplate" class="org.springframework.data.mongodb.core.MongoTemplate">
+        <constructor-arg name="mongoDbFactory" ref="mongoDbFactory"/>
+    </bean>
+
+
+</beans>

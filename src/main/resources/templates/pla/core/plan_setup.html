@@ -1,0 +1,879 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title></title>
+    <link href="bootstrap.min.css" rel="stylesheet"/>
+    <link href="fuelux.min.css" rel="stylesheet"/>
+    <link href="bootstrap-multiselect.css"
+          rel="stylesheet"/>
+    <link href="bootstrap-datepicker.min.css"
+          rel="stylesheet"/>
+    <link rel="stylesheet" href="jquery-ui.css">
+    <link rel="stylesheet" href="http://cdn.jsdelivr.net/webjars/ng-tags-input/2.1.1/ng-tags-input.min.css"/>
+    <style>
+        [ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
+            display: none !important;
+        }
+
+        .ui-widget {
+            font-family: 'Arial, Verdana, Helvetica, sans-serif';
+            font-size: 12px;
+        }
+    </style>
+    <script src="require.js"></script>
+    <script src="angular.js"></script>
+    <script>
+        requirejs.config({
+            paths: {
+                'jquery': 'jquery',
+                'bootstrap': 'bootstrap.min',
+                'fuelux': 'fuelux.min',
+                'ngTagsInput': 'http://cdn.jsdelivr.net/webjars/ng-tags-input/2.1.1/ng-tags-input'
+            },
+            // Bootstrap is a "browser globals" script :-(
+            shim: {'bootstrap': {deps: ['jquery', 'jquery-ui']}}
+
+        });
+        // Require all.js or include individual files as needed
+        require(['jquery', 'bootstrap', 'fuelux', 'jquery-ui', 'app'], function ($) {
+            $('#launchDate').datepicker({
+                format: "dd/mm/yyyy",
+                orientation: "top auto",
+                clearBtn: true,
+                autoclose: true
+            });
+            $('#withdrawalDate').datepicker({
+                format: "dd/mm/yyyy",
+                orientation: "top auto",
+                clearBtn: true,
+                autoclose: true
+            });
+
+            $('#planSetUpWizard').wizard();
+            $('#accordion').accordion({
+                heightStyle: "content"
+            });
+        });
+
+    </script>
+    <style>
+
+
+        .step-content {
+        }
+
+        input.ng-invalid.ng-dirty {
+            background-color: #FA787E;
+        }
+
+        input.ng-valid.ng-dirty {
+            background-color: #78FA89;
+        }
+
+        .required .control-label:after {
+            content: " *";
+            color: red;
+        }
+        .error {
+            font-size: 10px;
+            color: firebrick;
+        }
+
+
+    </style>
+</head>
+<body class="fuelux" ng-controller="planSetUpCtrl" ng-cloak class="ng-cloak">
+
+<div class="container">
+    <div class="wizard" id="planSetUpWizard">
+        <ul class="steps">
+            <li data-step="1" data-name="campaign" class="active">
+                <span class="badge">1</span>Plan Details<span class="chevron"></span></li>
+            <li data-step="2"><span class="badge">2</span>Sum Assured<span class="chevron"></span></li>
+            <li data-step="3"><span class="badge">3</span>Policy Term<span class="chevron"></span></li>
+            <li data-step="4" data-name="template"><span class="badge">4</span>Premium Term<span class="chevron"></span>
+            </li>
+            <li data-step="5" data-name="template"><span class="badge">5</span>Coverage<span class="chevron"></span>
+            </li>
+            <li data-step="6" data-name="template"><span class="badge">6</span>Benefits<span class="chevron"></span>
+            </li>
+        </ul>
+        <div class="actions">
+            <button type="button" class="btn btn-default btn-prev">
+                <span class="glyphicon glyphicon-arrow-left"></span>Prev
+            </button>
+            <button type="button" class="btn btn-default btn-next" data-last="Complete">Next<span
+                    class="glyphicon glyphicon-arrow-right"></span></button>
+        </div>
+
+            <div class="step-content">
+                <div class="step-pane active sample-pane alert" data-step="6">
+                    <h4>Plan Details</h4>
+                    <!-- Select Basic -->
+                    <form id="planSetUpForm" name="planSetUpForm" novalidate method="post" class="form-horizontal">
+                    <div class="control-group required col-sm-6">
+                        <label class="control-label" for="lineOfBusinessId">Line of
+                            Business/Product Line</label>
+
+                        <div class="controls">
+                            <select class="form-control col-sm-6" id="lineOfBusinessId" ng-model="lineOfBusinessId">
+                                <option>Individual</option>
+                                <option>Group Health</option>
+                                <option>Group Insurance</option>
+                            </select>
+
+                            <div class="error"
+                                 ng-show="planSetUpForm.lineOfBusinessId.$dirty && planSetUpForm.lineOfBusinessId.$invalid">
+                                <small class="error"
+                                       ng-show="planSetUpForm.lineOfBusinessId.$error.required">
+                                    Please indicate the Product Line/Line Of Business.
+                                </small>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Text input-->
+                    <div class="control-group required col-sm-6">
+                        <label class="control-label" for="productName">Product Name</label>
+
+                        <div class="controls">
+                            <input id="productName" name="productName" ng-model="productName" ng-required="true"
+                                   ng-maxlength=10
+                                   type="text" class="form-control" required="true">
+
+                            <div class="error"
+                                 ng-show="planSetUpForm.productName.$dirty && planSetUpForm.productName.$invalid">
+                                <small class="error"
+                                       ng-show="planSetUpForm.productName.$error.maxlength">
+                                    Exceeded max length.
+                                </small>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Select Basic -->
+                    <div class="col-md-6">
+                        <div class="col-md-5" style="padding: 0px">
+                            <div class="control-group required">
+                                <label class="control-label" for="clientType">Client Type</label>
+
+                                <div class="controls">
+                                    <select id="clientType" class="form-control col-md-5" ng-model="clientType">
+                                        <option value="INDIVIDUAL">Individual</option>
+                                        <option value="GROUP">Group</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-2"></div>
+                        <div class="col-md-5" style="padding: 0px">
+                            <div class="control-group required">
+                                <label class="control-label" for="productType">Product Type</label>
+
+                                <div class="controls">
+                                    <select id="productType" ng-model="productType" class="form-control col-md-5"
+                                            ng-requied="true" aria-required="true">
+                                        <option value="INVESTMENT">Investment</option>
+                                        <option value="NON-INVESTMENT">Non-Investment</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Text input-->
+                    <div class="col-sm-6">
+                        <div class="control-group required col-sm-5" style="padding: 0px">
+                            <label class="control-label" for="productCode">Product Code</label>
+
+                            <div class="controls">
+                                <input id="productCode" name="productCode" type="text" size="10" class=" form-control"
+                                       ng-required="true">
+                            </div>
+                        </div>
+                        <div class="col-md-2"></div>
+                        <div class="control-group  required col-sm-5" style="padding: 0px">
+                            <label class="control-label" for="freeLookPeriod">FreeLook Period</label>
+
+                            <div class="controls">
+                                <input id="freeLookPeriod" name="freeLookPeriod" type="number" required="true"
+                                       class="form-control" ng-model="freeLookPeriod" ng-pattern="onlyNumbers"
+                                       ng-required="true">
+
+                                <p class="help-block">(in days)</p>
+
+                                <div ng-show="planSetUpForm.freeLookPeriod.$dirty && planSetUpForm.freeLookPeriod.$invalid">
+                                    <small class="error" ng-show="planSetUpForm.freeLookPeriod.$error.required">Please
+                                        enter Free Look Period.
+                                    </small>
+                                    <small class="error" ng-show="planSetUpForm.freeLookPeriod.$error.pattern">Please
+                                        enter Numbers only.
+                                    </small>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <!-- Text input-->
+                    <div class="col-md-6">
+                        <div class="control-group col-md-5 required" style="padding: 0px">
+                            <label class="control-label" for="launchDate">Launch Date</label>
+
+                            <div class="controls">
+                                <div class='input-group date'>
+                                    <input type="date" class="form-control" name="launchDate" id='launchDate'/>
+                                    <span class="input-group-addon glyphicon glyphicon-calendar"
+                                          id="basic-addon2"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-2"></div>
+                        <div class="control-group col-md-5" style="padding-left: 0px">
+                            <label class="control-label" for="withdrawalDate">Withdrawal Date</label>
+
+                            <div class="controls" style="padding-left: 0px">
+                                <div class='input-group date'>
+                                    <input type="date" class="form-control" name="withdrawalDate" id='withdrawalDate'/>
+                                    <span class="input-group-addon glyphicon glyphicon-calendar"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="control-group required col-md-6">
+                        <div class="col-md-5" style="padding: 0px">
+                            <label class="control-label" for="minEntryAge">Min Entry Age</label>
+
+                            <div class="controls">
+                                <div class='input-group date'>
+                                    <input type="number" ng-required="true" ng-pattern="onlyNumbers"
+                                           class="form-control" name="minEntryAge" id='minEntryAge'
+                                           ng-model="minEntryAge"/>
+
+                                    <div ng-show="planSetUpForm.minEntryAge.$dirty && planSetUpForm.minEntryAge.$invalid">
+                                        <small class="error" ng-show="planSetUpForm.minEntryAge.$error.required">Please
+                                            enter Minimum Entry Age.
+                                        </small>
+                                        <small class="error" ng-show="planSetUpForm.minEntryAge.$error.pattern">Please
+                                            enter Numbers only.
+                                        </small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-2"></div>
+                        <div class="control-group  col-md-5" ng-class="error('maxEntryAge')" style="padding-left: 0px">
+                            <label class="control-label" for="maxEntryAge">Max Entry Age</label>
+
+                            <div class="controls" style="padding-left: 0px">
+                                <div class='input-group date'>
+                                    <input type="number" class="form-control" ng-required="true" name="maxEntryAge"
+                                           id='maxEntryAge' ng-pattern="onlyNumbers"/>
+
+                                    <div ng-show="planSetUpForm.maxEntryAge.$dirty && planSetUpForm.maxEntryAge.$invalid">
+                                        <small class="error" ng-show="planSetUpForm.maxEntryAge.$error.required">Please
+                                            enter Max Entry Age.
+                                        </small>
+                                        <small class="error" ng-show="planSetUpForm.maxEntryAge.$error.pattern">Please
+                                            enter Numbers only.
+                                        </small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Text input-->
+                    <div class="control-group col-sm-6" ng-class="isSurrenderReq()">
+                        <label class="control-label" for="surrenderAfter">
+                            Number of years post which surrender option should be accepted </label>
+
+                        <div class="controls">
+                            <input id="surrenderAfter" ng-pattern="onlyNumbers" name="surrenderAfter"
+                                   ng-required="!isSurrenderDisabled()"
+                                   ng-model="surrenderAfter"
+                                   type="number" class="form-control" ng-disabled="isSurrenderDisabled()">
+
+                            <p class="help-block">(in years)</p>
+                        </div>
+                    </div>
+
+                    <div class="control-group required col-sm-6">
+                        <label class="control-label" for="taxable">Is Tax Applicable?</label>
+
+                        <div class="controls">
+                            <input id="taxable" name="taxable" ng-model="taxable" ng-required="true" ng-maxlength=10
+                                   type="text" class="form-control" required="true">
+
+                            <div class="error"
+                                 ng-show="planSetUpForm.taxable.$dirty && planSetUpForm.taxable.$invalid">
+                                <small class="error"
+                                       ng-show="planSetUpForm.taxable.$error.required">
+                                    Please indicate whether taxes are applicable for the product.
+                                </small>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Select Multiple -->
+                    <div class="control-group  col-sm-12">
+                        <label class="control-label">Relationships Covered</label>
+
+                        <div class="controls">
+                            <label class="checkbox-inline" ng-repeat="rel in relations">
+                                <input type="checkbox" value="{{rel.value}}"/>{{rel.desc}}
+                            </label>
+                        </div>
+                    </div>
+                    <!-- Select Multiple -->
+                    <div class="control-group  col-sm-12">
+                        <label class="control-label">Endorsements Available</label>
+
+                        <div class="controls">
+                            <label class="checkbox-inline"
+                                   ng-repeat="endorsementType in endorsementTypes|filter:clientType">
+                                <input type="checkbox" value="{{endorsementType.value}}"/>{{endorsementType.desc}}
+                            </label>
+                        </div>
+                    </div>
+                    </form>
+                </div>
+                <div class="step-pane sample-pane alert" data-step="2">
+                    <h4>Sum Assured</h4>
+
+                    <div class="row">
+                        <div class="control-group col-md-3">
+                            <label class="control-label" for="groupTerm">Defined Sum Assured Type</label>
+
+                            <div class="controls">
+                                <select ng-model="sumAssuredType" class="form-control  col-sm-3">
+                                    <option value="VALUES">Specified Values</option>
+                                    <option value="RANGE">Specified Range</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <br/>
+
+                    <div class="row">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <h3 class="panel-title">Sum Assured Values</h3>
+                            </div>
+                            <div class="panel-body">
+                                <div class="control-group required col-md-4">
+                                    <label class="control-label">Sum Assured</label>
+                                    <div class="controls">
+                                        <tags-input class="form-control col-sm-12" ng-model="sumAssuredValues"
+                                                    min-tags="0" min-length="1"
+                                                    max-length="3" placeholder="Add a number"
+                                                    allow-leftover-text="false"
+                                                    allowed-tags-pattern="^[0-9]+$"
+                                                    ng-disabled="isSumAssuredTypeRange()"></tags-input>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <h3 class="panel-title">Sum Assured Range</h3>
+                            </div>
+                            <div class="panel-body">
+                                <div class="control-group required col-md-4">
+                                    <label class="control-label" for="groupTerm">Minimum Sum Assured</label>
+
+                                    <div class="controls">
+                                        <input type="text" ng-pattern="onlyNumbers" class="form-control col-sm-3"
+                                               ng-model="minSumAssured"
+                                               ng-disabled="!isSumAssuredTypeRange()"/>
+                                    </div>
+                                </div>
+                                <div class="control-group required  col-md-4">
+                                    <label class="control-label" for="groupTerm">Maximum Sum Assured</label>
+
+                                    <div class="controls">
+                                        <input type="text" ng-pattern="onlyNumbers" class="form-control col-sm-3"
+                                               ng-model="maxSumAssured"
+                                               ng-disabled="!isSumAssuredTypeRange()"/>
+                                    </div>
+                                </div>
+                                <div class="control-group required col-md-4">
+                                    <label class="control-label" for="groupTerm">Multiples of</label>
+
+                                    <div class="controls">
+                                        <input type="text" class="form-control col-sm-3"
+                                               ng-model="multipleOf"
+                                               ng-disabled="!isSumAssuredTypeRange()"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                </div>
+                <div class="step-pane sample-pane alert" data-step="3">
+                    <h4>Policy Term</h4>
+
+                    <div class="row">
+                        <div class="control-group col-sm-3">
+                            <label class="control-label" for="groupTerm">Group Term</label>
+
+                            <div class="controls">
+                                <input type="number" class="form-control col-sm-3" id="groupTerm" ng-model="groupTerm"
+                                       ng-disabled="{{clientType=='GROUP'}}"/>
+                            </div>
+                        </div>
+                    </div>
+                    <br/>
+
+                    <div class="panel panel-default">
+                        <div class="panel-heading">Policy Term Based on Age</div>
+                        <div class="panel-body">
+                            <div class="control-group col-sm-12">
+                                <label class="control-label" for="groupTerm">Various Maturity Ages</label>
+
+                                <div class="controls">
+                                    <tags-input class=" col-sm-3" ng-model="maturityAges" min-tags="0" min-length="1"
+                                                max-length="3" placeholder="Add a number" allow-leftover-text="false"
+                                                allowed-tags-pattern="^[0-9]+$"></tags-input>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="panel panel-default">
+                        <div class="panel-heading">Policy Term Based on Term Values</div>
+                        <div class="panel-body">
+                            <div class="control-group col-sm-3">
+                                <label class="control-label">Maximum Maturity Age</label>
+
+                                <div class="controls">
+                                    <input type="number" class="form-control col-sm-3" ng-model="maximumMaturityAge"/>
+                                </div>
+                            </div>
+                            <div class="control-group col-sm-9">
+                                <label class="control-label">Policy Term Values</label>
+
+                                <div class="controls">
+                                    <tags-input class=" col-sm-3"
+                                                ng-model="policyTermValues"
+                                                ng-disabled="!isPaymentTermByValue()"
+                                                min-tags="0" min-length="1"
+                                                max-length="3" placeholder="Add a number" allow-leftover-text="false"
+                                                allowed-tags-pattern="^[0-9]+$"></tags-input>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="step-pane sample-pane" data-step="4">
+                    <h4>Premium Payment Term</h4>
+
+                    <div class="row">
+                        <div class="control-group col-md-3">
+                            <label class="control-label" for="groupTerm">Premium Payment Term Type</label>
+
+                            <div class="controls">
+                                <select ng-model="premiumPaymentTermType" class="form-control  col-sm-3">
+                                    <option value="VALUES">Specified Values</option>
+                                    <option value="RANGE">Specified Range</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <br/>
+
+                    <div class="row">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <h3 class="panel-title">Premium Payment Term Values</h3>
+                            </div>
+                            <div class="panel-body">
+                                <div class="control-group required col-md-12">
+                                    <label class="control-label">Payment Terms</label>
+
+                                    <div class="controls">
+                                        <tags-input class=" col-sm-3"
+                                                    ng-model="paymentTerms"
+                                                    ng-disabled="!isPaymentTermByValue()"
+                                                    min-tags="0" min-length="1"
+                                                    max-length="3" placeholder="Add a number"
+                                                    allow-leftover-text="false"
+                                                    allowed-tags-pattern="^[0-9]+$"></tags-input>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <h3 class="panel-title">Premium Payment Term Age</h3>
+                            </div>
+                            <div class="panel-body">
+                                <div class="control-group required col-md-4">
+                                    <label class="control-label" for="groupTerm">Premium Payment Cutoff Age</label>
+
+                                    <div class="controls">
+                                        <input type="text" ng-pattern="onlyNumbers" class="form-control col-sm-3"
+                                               ng-model="cutOffAge"
+                                               ng-disabled="isPaymentTermByValue()"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="step-pane sample-pane" data-step="5">
+                    <h4>Coverage<span class="badge">{{selectedCoverages.length}}</span></h4>
+
+                    <form name="coverageForm">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">Attach a new Coverage</div>
+                            <div class="panel-body" data-spy="scroll" data-target="#navbar-example">
+                            <div class="row">
+                                <div class="control-group required col-md-2">
+                                    <label class="control-label">Coverage</label>
+                                    <div class="controls">
+                                        <select ng-model="newCoverage.coverage"
+                                                ng-options="item as item.coverageName for item in coverages track by item.coverageId"
+                                                class="form-control  col-sm-3">
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="required col-md-3">
+                                    <label class="control-label">Cover Type</label>
+
+                                    <div class="radio">
+                                        <label>
+                                            <input type="radio" name="coverType" ng-model="newCoverage.coverType"
+                                                   value="ACCELERATED"> Accelerated
+                                        </label>
+                                        <label>
+                                            <input type="radio" name="coverType" ng-model="newCoverage.coverType"
+                                                   value="ADDITIONAL"> Additional
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="control-group required col-md-4">
+                                    <label class="control-label">Deductible Type</label>
+                                    <div class="controls">
+                                        <label class="radio-inline">
+                                            <input type="radio" name="deductibleType"
+                                                   ng-model="newCoverage.deductibleType" value="AMOUNT">Amount
+                                        </label>
+                                        <label class="radio-inline">
+                                            <input type="radio" name="deductibleType"
+                                                   ng-model="newCoverage.deductibleType" value="PERCENTAGE">% of Claimed
+                                            Amount
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <div class="control-group required col-md-2">
+                                    <label class="control-label">Minimum Entry Age</label>
+
+                                    <div class="controls">
+                                        <input type="number" ng-model="newCoverage.minAge" class="form-control"
+                                               ng-pattern="onlyNumbers" ng-required="true"/>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="control-group required col-md-2">
+                                    <label class="control-label">Coverage Type</label>
+                                    <div class="controls">
+                                        <label class="radio-inline">
+                                            <input type="radio" name="coverageType" ng-model="newCoverage.coverageType"
+                                                   value="BASE"> Base
+                                        </label>
+                                        <label class="radio-inline">
+                                            <input type="radio" name="coverageType" ng-model="newCoverage.coverageType"
+                                                   value="OPTIONAL"> Optional
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="control-group required col-md-3">
+                                    <label class="control-label">Tax Applicable</label>
+
+                                    <div class="controls">
+                                        <label class="radio-inline">
+                                            <input type="radio" value="yes"/>Yes
+                                        </label>
+                                        <label class="radio-inline">
+                                            <input type="radio" value="no"/>No
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="control-group col-md-2">
+                                    <label class="control-label">Deductible</label>
+                                    <div class="controls">
+                                        <input type="text" ng-pattern="onlyNumbers" ng-model="newCoverage.deductible"
+                                               class="form-control"/>
+                                    </div>
+                                </div>
+                                <div class="control-group col-md-2">
+                                    <label class="control-label">Waiting Period</label>
+                                    <div class="controls">
+                                        <input type="text" ng-pattern="onlyNumbers" ng-model="newCoverage.waitingPeriod"
+                                               class="form-control input-sm"/>
+                                        <p class="help">(in years)</p>
+                                    </div>
+                                </div>
+                                <div class="control-group required col-md-2">
+                                    <label class="control-label">Maximum Entry Age</label>
+
+                                    <div class="controls">
+                                        <input type="number" ng-model="newCoverage.maxAge" class="form-control"
+                                               ng-pattern="onlyNumbers" ng-required="true"/>
+                                    </div>
+                                </div>
+                            </div>
+                                <div id="accordion">
+                                    <h5>Coverage Sum Assured</h5>
+
+                                    <div>
+                                        <div class="row">
+                                            <div class="control-group required col-md-3">
+                                                <label class="control-label">Sum Assured Type</label>
+                                                <select ng-model="newCoverage.coverageSumAssuredType"
+                                                        class="form-control  col-sm-3">
+                                                    <option value="VALUE">Specified Values</option>
+                                                    <option value="RANGE">Specified Range</option>
+                                                    <option value="PERCENTAGE">% of the Product Sum Assured</option>
+                                                </select>
+                                            </div>
+                                            <div class="control-group required col-md-6">
+                                                <label class="control-label">Sum Assured Value</label>
+
+                                                <div class="controls">
+                                                    <tags-input class=""
+                                                                ng-model="newCoverage.sumAssuredValue"
+                                                                ng-disabled="true"
+                                                                min-tags="0" min-length="1"
+                                                                ng-required="!isCoverageSumAssuredDisabled('VALUE')"
+                                                                max-length="3" placeholder="Add a number"
+                                                                allow-leftover-text="false"
+                                                                allowed-tags-pattern="^[0-9]+$"></tags-input>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="control-group required col-md-3">
+                                                <label class="control-label">Minimum Sum Assured</label>
+
+                                                <div class="controls">
+                                                    <input type="number" ng-model="newCoverage.minSumAssured"
+                                                           class="form-control"
+                                                           ng-disabled="isCoverageSumAssuredDisabled('RANGE')"
+                                                           ng-pattern="onlyNumbers"
+                                                           ng-required="!isCoverageSumAssuredDisabled('RANGE')"/>
+                                                </div>
+                                            </div>
+                                            <div class="control-group required col-md-3">
+                                                <label class="control-label">Maximum Sum Assured</label>
+
+                                                <div class="controls">
+                                                    {{newCoverage.coverageSumAssuredType}}
+                                                    <input type="number" ng-model="newCoverage.maxSumAssured"
+                                                           class="form-control"
+                                                           ng-disabled="isCoverageSumAssuredDisabled('RANGE')"
+                                                           ng-pattern="onlyNumbers"
+                                                           ng-required="!isCoverageSumAssuredDisabled('RANGE')"/>
+                                                </div>
+                                            </div>
+                                            <div class="control-group col-md-3">
+                                                <label class="control-label">Multiples Of</label>
+
+                                                <div class="controls">
+                                                    <select ng-model="newCoverage.multipleOf"
+                                                            ng-disabled="isCoverageSumAssuredDisabled('RANGE')"
+                                                            class="form-control">
+                                                        <option value="1000">1000</option>
+                                                        <option value="10000">10000</option>
+                                                        <option value="100000">100000</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="control-group required col-md-3">
+                                                <label class="control-label">% of Plan Sum Assured</label>
+
+                                                <div class="controls">
+                                                    <input type="number" ng-model="newCoverage.percentageOfSumAssured"
+                                                           class="form-control"
+                                                           ng-disabled="isCoverageSumAssuredDisabled('PERCENTAGE')"
+                                                           ng-pattern="onlyNumbers"
+                                                           ng-required="!isCoverageSumAssuredDisabled('PERCENTAGE')"/>
+                                                </div>
+                                            </div>
+                                            <div class="control-group required col-md-3">
+                                                <label class="control-label">Max Limit</label>
+
+                                                <div class="controls">
+                                                    <input type="number" ng-model="newCoverage.maxLimit"
+                                                           class="form-control"
+                                                           ng-disabled="isCoverageSumAssuredDisabled('PERCENTAGE')"
+                                                           ng-pattern="onlyNumbers"
+                                                           ng-required="!isCoverageSumAssuredDisabled('PERCENTAGE')"/>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <h5>Coverage Term</h5>
+
+                                    <div>
+                                        <div class="control-group required col-md-4">
+                                            <label class="control-label">Coverage Term Type</label>
+
+                                            <div class="controls">
+                                                <select ng-model="newCoverage.coverageTermType"
+                                                        class="form-control">
+                                                    <option value="VALUE">Specified Values</option>
+                                                    <option value="AGE">Maturity Age Dependent</option>
+                                                    <option value="POLICY_TERM">Policy Term</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="control-group required col-md-2">
+                                            <label class="control-label">Maturity Age</label>
+
+                                            <div class="controls">
+                                                <input type="number" ng-model="newCoverage.maxMaturityAge"
+                                                       class="form-control"
+                                                       ng-disabled="isCoverageTermDisabled('AGE')"
+                                                       ng-required="!isCoverageTermDisabled('AGE')"
+                                                       ng-pattern="onlyNumbers" ng-required="true"/>
+                                            </div>
+                                        </div>
+                                        <div class="control-group required col-md-9">
+                                            <label class="control-label">Coverage Term Values</label>
+
+                                            <div class="controls">
+                                                <tags-input class=""
+                                                            ng-model="newCoverage.coverageTermValues"
+                                                            ng-disabled="isCoverageTermDisabled('VALUE')"
+                                                            ng-required="!isCoverageTermDisabled('VALUE')"
+                                                            min-tags="0" min-length="1"
+                                                            ng-required="!isCoverageSumAssuredDisabled('VALUE')"
+                                                            max-length="3" placeholder="Add a number"
+                                                            allow-leftover-text="false"
+                                                            allowed-tags-pattern="^[0-9]+$"></tags-input>
+                                            </div>
+                                        </div>
+                                        <div class="control-group required col-md-3">
+                                            <label class="control-label">Maximum Maturity Age</label>
+
+                                            <div class="controls">
+                                                <input type="number" ng-model="newCoverage.maxMaturityAge"
+                                                       class="form-control"
+                                                       ng-disabled="isCoverageTermDisabled('VALUE')"
+                                                       ng-required="!isCoverageTermDisabled('VALUE')"
+                                                       ng-pattern="onlyNumbers" ng-required="true"/>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <h3>Coverage Maturity</h3>
+
+                                    <div>
+                                        <div class="control-group required col-md-6">
+                                            <label class="control-label">Partial Maturity Year</label>
+
+                                            <div class="controls">
+                                                <input type="number" ng-model="newCoverage.maxMaturityAge"
+                                                       class="form-control"
+                                                       ng-pattern="onlyNumbers" ng-required="true"/>
+                                            </div>
+                                        </div>
+                                        <div class="control-group required col-md-6">
+                                            <label class="control-label">Guaranteed Survival Benefit</label>
+
+                                            <div class="controls">
+                                                <input type="number" ng-model="newCoverage.guaranteedSurvivalBenefit"
+                                                       class="form-control"
+                                                       ng-pattern="onlyNumbers" ng-required="true"/>
+
+                                                <p class="help">Guaranteed periodic survival benefit Amount (Percentage
+                                                    Of
+                                                    Sum
+                                                    Insured)</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            <p class="pager" style="line-height: 70px;">
+                                <button type="button btn-primary" class="btn btn-default"
+                                        ng-disabled="!coverageForm.$valid" ng-click="addCoverage()">Add
+                                </button>
+                            </p>
+                        </div>
+                    </div>
+                    </form>
+                </div>
+                <div class="step-pane sample-pane" data-step="1">
+                    <h4>Benefit Configuration</h4>
+
+                    <form name="benefitForm">
+                        <div class="row">
+                            <div class="control-group required col-md-6">
+                                <label class="control-label">Coverage</label>
+
+                                <div class="controls">
+                                    <select ng-model="newCoverage.coverage"
+                                            ng-options="item as item.coverageName for item in selectedCoverages track by item.coverageId"
+                                            class="form-control">
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="control-group required col-md-6">
+                                <label class="control-label">Benefits</label>
+
+                                <div class="controls">
+                                    <select class="form-control">
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="control-group required col-md-6">
+                                <label class="control-label">Limit Defined</label>
+
+                                <div class="controls">
+                                    <select class="form-control">
+                                        <option>Per Incidence</option>
+                                        <option>Per Day</option>
+                                        <option>Per Year</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="control-group required col-md-6">
+                                <label class="control-label">Limit Type</label>
+
+                                <div class="controls">
+                                    <select class="form-control">
+                                        <option>Amount</option>
+                                        <option>Percentage of Plan Limit</option>
+                                        <option>Percentage of Coverage Limit</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="control-group required col-md-6">
+                                <label class="control-label">Maximum Limit</label>
+
+                                <div class="controls">
+                                    <input type="text" class="form-control"/>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+    </div>
+</div>
+</body>
+</html>

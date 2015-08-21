@@ -6,14 +6,15 @@
 
 package org.nthdimenzion.application;
 
-import org.flywaydb.core.Flyway;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.orm.jpa.EntityScan;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.ImportResource;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
 
 import javax.sql.DataSource;
 
@@ -23,22 +24,19 @@ import javax.sql.DataSource;
  */
 @SpringBootApplication
 @ComponentScan(basePackages = {"com.pla", "org.nthdimenzion"})
-@EntityScan(basePackages = {"com.pla", "org.nthdimenzion"})
-@ImportResource(value = "classpath:axonContext.xml")
+@EntityScan(basePackages = {"com.pla",
+        "org.axonframework.saga", "org.axonframework.eventstore.jpa"})
+@ImportResource(value = {"classpath*:META-INF/spring/cqrs-infrastructure-context.xml"})
+@EnableMongoRepositories(basePackages = {"com.pla"})
+@EnableJpaRepositories(basePackages = {"com.pla.individuallife.quotation.query"})
 public class Application {
 
     @Autowired
+    @Qualifier("primaryDataSource")
     private DataSource dataSource;
 
     public static void main(String[] args) {
         SpringApplication.run(Application.class, args);
     }
 
-    @Bean(initMethod = "migrate",name = "flyway")
-    public Flyway flyway(){
-        Flyway flyway = new Flyway();
-        flyway.setInitOnMigrate(true);
-        flyway.setDataSource(dataSource);
-        return flyway;
-    }
 }

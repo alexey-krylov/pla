@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/xhtml"
+      lang="en">
+<head th:include="fragments/common :: headTag">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+
+</head>
+<body>
+<div th:include="fragments/common :: bodyHeader" th:remove="tag"/>
+<script>
+
+
+    requirejs(['main'],function(){
+        require(['/pla/js/generalInformation/updateOrganizationalLevelInformation.js'],function(){
+            angular.bootstrap(document, ['updateOrganizationalLevelInfo']);
+        });
+    });
+
+</script>
+
+<div class="container ng-cloak" ng-Controller="ViewOrganizationalLevelController">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <div class="row">
+                        <div class="col-lg-6"><span th:text="#{viewOrganizationalLevelInformation}">View Organizational Level Information
+                        </span></div>
+
+                    </div>
+                </div>
+                <div class="panel-body ng-cloak">
+                    <div class="row">
+                        <div class="" style="margin: auto;margin-top:10px;">
+                            <label class="control-label" style="padding-left:10px;">Modal Factors - to be applied in case Premiums are mentioned on a per year basis.</label>
+                        </div>
+                        <div class="form-group col-md-4 " ng-repeat="modelFactorItems in organizationInformation.modelFactorItems">
+                            <label class="control-label" data-placement="top" data-toggle="tooltip" tooltip="{{modelFactorItems.fullDescription}}"  >{{modelFactorItems.description}}</label>
+                            <p class="input-group" >
+                                <input type="text" class="form-control input-sm" ng-model="modelFactorItems.value" value="{{modelFactorItems.value}}" readonly="true"/>
+                            </p>
+                        </div>
+                    </div>
+                    <div class="row" >
+                        <div class="" style="margin: auto;margin-top:10px;">
+                            <label class="control-label"  style="padding-left:10px;">Discount Factors - to be applied in case Premiums are mentioned on a per month basis.</label>
+                        </div>
+                        <div class="form-group col-md-4" ng-repeat="discountFactorItems in organizationInformation.discountFactorItems">
+                            <label class="control-label" data-placement="top" data-toggle="tooltip" tooltip="{{discountFactorItems.fullDescription}}"  >{{discountFactorItems.description}}</label>
+                            <p class="input-group" >
+                                <input type="text" class="form-control input-sm" ng-model="discountFactorItems.value" value="{{discountFactorItems.value}}" readonly="true"/>
+                            </p>
+                        </div>
+                        <div class="form-group col-md-4" >
+                            <label class="control-label" data-placement="top" data-toggle="tooltip" tooltip="{{organizationInformation.serviceTax.fullDescription}}" >{{organizationInformation.serviceTax.description}}</label>
+                            <p class="input-group" >
+                                <input type="text" class="form-control input-sm" min="1"  ng-model="organizationInformation.serviceTax.value" value="{{organizationInformation.serviceTax.value}}" readonly="true"/>
+                            </p>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="panel-footer">
+                    <ul class="pagination" id="logs-pagination-default"></ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<footer class="footer" th:include="fragments/common :: footer">
+</footer>
+</body>
+</html>

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="header" pageWidth="842" pageHeight="595" orientation="Landscape" whenNoDataType="AllSectionsNoDetail" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="a7d9cad1-e229-479d-ae81-b5803ae76230">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<pageHeader>
+		<band height="101">
+			<image>
+				<reportElement x="309" y="12" width="333" height="82" uuid="d92a575b-0386-46ae-857a-56c0b8ea4043"/>
+				<imageExpression><![CDATA["static/images/Plal_Logo.jpg"]]></imageExpression>
+			</image>
+		</band>
+	</pageHeader>
+</jasperReport>

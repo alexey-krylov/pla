@@ -1,0 +1,84 @@
+<html xmlns:v="urn:schemas-microsoft-com:vml"
+      xmlns:o="urn:schemas-microsoft-com:office:office"
+      xmlns:w="urn:schemas-microsoft-com:office:word"
+      xmlns:m="http://schemas.microsoft.com/office/2004/12/omml"
+      xmlns="http://www.w3.org/TR/REC-html40">
+<body>
+<div>
+    <h3 style='margin-right:-.25in;tab-stops:.5in'>
+        <span style='mso-no-proof:yes'>${emailContent.mailSentDate}</span></span>
+    </h3>
+
+    <p class=MsoNormal style='margin-left:.25in'><span style='font-size:11.0pt;
+font-family:"Tahoma","sans-serif"'>The Account Executive<o:p></o:p></span></p>
+
+    <p class=MsoNormal style='margin-left:.25in'><span style='font-size:11.0pt;
+font-family:"Tahoma","sans-serif"'>Marsh Zambia ltd<o:p></o:p></span></p>
+
+    <h3 style='tab-stops:.5in;margin-left:.25in'><u><span lang=EN-GB style='font-size:11.0pt;
+font-family:"Tahoma","sans-serif"'>LUSAKA<o:p></o:p></span></u></h3>
+
+    <p class=MsoNormal style='margin-top:0in;margin-right:-.25in;margin-bottom:
+0in;margin-left:.25in;margin-bottom:.0001pt;text-align:justify'><b
+            style='mso-bidi-font-weight:normal'><u><span lang=EN-GB style='font-size:11.0pt;
+font-family:"Tahoma","sans-serif";mso-ansi-language:EN-GB'>Attention: ${emailContent.contactPersonName}
+        <o:p></o:p></span></u></b></p>
+
+    <p class=MsoNormal style='margin-top:0in;margin-right:-.25in;margin-bottom:
+0in;margin-left:.25in;margin-bottom:.0001pt;text-align:justify'><span
+            lang=EN-GB style='font-size:11.0pt;font-family:"Tahoma","sans-serif";
+mso-ansi-language:EN-GB'><o:p>&nbsp;</o:p></span></p>
+
+    <p class=MsoNormal style='margin-top:0in;margin-right:-.25in;margin-bottom:
+0in;margin-left:.25in;margin-bottom:.0001pt;text-align:justify'>Dear Sir/Madam,
+        <o:p></o:p>
+    </p>
+    <h3><span lang=EN-GB
+              style='margin-top:0in;margin-right:-.25in;margin-bottom:0in;margin-left:.25in;margin-bottom:.0001pt;text-align:justify;font-size:11.0pt;font-family:"Tahoma","sans-serif"'>QUOTATION
+FOR GROUP Health ASSURANCE - ${emailContent.proposerName}</span>
+    </h3>
+
+    <div style='mso-element:para-border-div;border:none;border-top:solid windowtext 1.0pt;
+mso-border-top-alt:solid windowtext .5pt;padding:1.0pt 0in 0in 0in;margin-left:
+.25in;margin-right:4.25in'>
+
+        <p class=MsoNormal style='text-align:justify;tab-stops:-.5in 0in;border:none;
+mso-border-top-alt:solid windowtext .5pt;padding:0in;mso-padding-alt:1.0pt 0in 0in 0in'><span
+                lang=EN-GB style='font-size:11.0pt;font-family:"Tahoma","sans-serif";
+mso-ansi-language:EN-GB'><o:p>&nbsp;</o:p></span></p>
+
+    </div>
+
+    <p class=MsoNormal style='margin-top:0in;margin-right:-.25in;margin-bottom:
+0in;margin-left:.25in;margin-bottom:.0001pt;text-align:justify;tab-stops:-.5in'><span
+            lang=EN-GB style='font-size:11.0pt;font-family:"Tahoma","sans-serif";
+mso-ansi-language:EN-GB'>We have pleasure in submitting our quotation terms for
+Group Health Assurance.<br/><span style='mso-spacerun:yes'> </span>PFA the quotation detail.</span></p>
+
+    <p class=MsoNormal style='margin-top:0in;margin-right:-.25in;margin-bottom:
+0in;margin-left:.25in;margin-bottom:.0001pt;text-align:justify;tab-stops:-.5in'><span
+            lang=EN-GB style='font-size:11.0pt;font-family:"Tahoma","sans-serif";
+mso-ansi-language:EN-GB'>We now look forward to hearing from you and will get
+in touch with you soon to make arrangements to conclude this business.<o:p></o:p></span></p>
+
+    <p class=MsoNormal style='margin-top:0in;margin-right:-.25in;margin-bottom:
+0in;margin-left:.25in;margin-bottom:.0001pt;text-align:justify;tab-stops:-.5in'><span
+            lang=EN-GB style='font-size:11.0pt;font-family:"Tahoma","sans-serif";
+mso-ansi-language:EN-GB'><o:p>&nbsp;</o:p></span></p>
+
+    <h1 style='margin-top:0in;margin-right:-.25in;margin-bottom:0in;margin-left:
+.25in;margin-bottom:.0001pt'><span lang=EN-GB style='font-size:11.0pt;
+font-family:"Tahoma","sans-serif";font-weight:normal'>Yours Faithfully,<o:p></o:p></span></h1>
+    <p class=MsoNormal style='margin-right:-.25in;text-align:justify;tab-stops:
+-.5in'><b style='mso-bidi-font-weight:normal'>
+        <span lang=EN-GB
+              style='margin-top:0in;margin-right:-.25in;margin-bottom:0in;margin-left: .25in;margin-bottom:.0001pt'>Fridah Mandanji</span></b><span
+            lang=EN-GB style='font-size:11.0pt;font-family:"Tahoma","sans-serif";
+mso-ansi-language:EN-GB'><o:p></o:p></span></p>
+
+    <h1 style='margin-right:-.25in'><u><span
+            style='font-size:11.0pt;font-family:"Tahoma","sans-serif";margin-top:0in;margin-right:-.25in;margin-bottom:0in;margin-left: .25in;margin-bottom:.0001pt'>MANAGER - GROUP Health<o:p></o:p></span></u>
+    </h1>
+</div>
+</body>
+</html>

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+  ~ Copyright (c) 3/11/15 1:50 PM .NthDimenzion,Inc - All Rights Reserved
+  ~ Unauthorized copying of this file, via any medium is strictly prohibited
+  ~ Proprietary and confidential
+  -->
+
+<dataset>
+    <BENEFIT BENEFIT_ID="1" STATUS="ACTIVE" BENEFIT_NAME="Death Benefit" BENEFIT_CODE="10001" ></BENEFIT>
+    <BENEFIT BENEFIT_ID="2" STATUS="ACTIVE" BENEFIT_NAME="Accident Benefit" BENEFIT_CODE="10002" ></BENEFIT>
+</dataset>

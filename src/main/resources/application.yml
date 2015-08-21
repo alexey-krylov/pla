@@ -9,25 +9,49 @@ server:
   context-path: /pla
 
 spring:
+
+  jackson:
+    dateFormat: dd/MM/yyyy
+    serialization:
+      WRITE_DATES_AS_TIMESTAMPS: false
+
   thymeleaf:
       check-template-location: true
       cache: false
+      mode: XHTML
 
   jpa:
-    generate-ddl: true
-    hibernate:
-      ddl-auto: update
-    database: MYSQL
-    show-sql: true
+      hibernate:
+        ddl-auto: update
+      database: MYSQL
+      show-sql: true
+
+  profiles:
+        active: ${spring.profiles.active}
+
+  smeServer :
+        logoutUrl: https://5.9.249.195:7443/myportal/control/logout
+        dev :
+          url : http://localhost:6443/pla/stub
+        prod :
+          url: http://5.9.249.195:9090/partymgr/control
 
   datasource:
-    url: jdbc:mysql://localhost:3306/pla?useUnicode=true&characterEncoding=utf8&characterSetResults=utf8&rewriteBatchedStatements=true
-    driverClassName: com.mysql.jdbc.Driver
-    username: root
-    password: welcome
+      primary:
+        name: primaryDataSource
+        url: jdbc:mysql://localhost:3306/pla?useUnicode=true&characterEncoding=utf8&characterSetResults=utf8&rewriteBatchedStatements=true&autoReconnect=true&autoReconnectForPools=true
+        driverClassName: com.mysql.jdbc.Driver
+        username: root
+        password: welcome
+        maxIdleTime: 0
 
-
+      jobs:
+        name: jobsDataSource
+        url: jdbc:mysql://localhost:3306/plajobs?useUnicode=true&characterEncoding=utf8&characterSetResults=utf8&rewriteBatchedStatements=true&autoReconnect=true&autoReconnectForPools=true
+        driverClassName: com.mysql.jdbc.Driver
+        username: root
+        password: welcome
+        maxIdleTime: 0
 flyway:
-  check-location: false
-  enabled: false
-
+  check-location: true
+  enabled: true

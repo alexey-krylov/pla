@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/xhtml"
+      lang="en" >
+<head th:include="fragments/common :: headTag">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+
+</head>
+<body>
+<div th:include="fragments/common :: bodyHeader" th:remove="tag"/>
+<script>
+    require(['moment'], function(moment) {
+    });
+    requirejs(['main'],function(){
+    require(['/pla/js/branch/assignBranchManager.js'],function(){
+    angular.bootstrap(document, ['assignBranchManager']);
+    });
+    });
+    requirejs(['basic'],function(){
+        requirejs(['/pla/js/branch/viewBranchManager.js'],function(){
+        });
+    })
+</script>
+<div class="container ng-cloak" ng-Controller="AssignBranchManagerController">
+    <div class="row">
+        <div class="col-lg-8" style="left:230px;position:absolute;">
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <div class="row">
+                        <div class="col-lg-4"><span th:text="#{assignBranchManager}">Assign Branch Manager
+                        </span></div>
+                    </div>
+                </div>
+                <div class="panel-body ng-cloak">
+                    <form novalidate="true" class="css-form">
+                        <nth-alert></nth-alert>
+                        <div class="row">
+                        <div class="form-group col-md-6" style="margin: auto;margin-top:10px;">
+                            <label class="control-label">Region Name</label>
+                            <div class="controls readonly" ng-model="assignBranchManager.regionName">{{assignBranchManager.regionName}}</div>
+                        </div>
+                        <div class="form-group col-md-6" style="margin: auto;margin-top:10px;">
+                            <label class="control-label">Branch Name</label>
+                            <div class="controls readonly" ng-model="assignBranchManager.branchName">{{assignBranchManager.branchName}}</div>
+                        </div>
+                        </div>
+                        <div class="row">
+                            <div class="form-group col-md-6" style="margin: auto;margin-top:10px;">
+                                <label class="control-label">Current Branch Manager</label>
+                                <div class="controls readonly" ng-model="assignBranchManager.currentBranchManagerFirstName">{{assignBranchManager.currentBranchManagerFirstName}} {{assignBranchManager.currentBranchManagerLastName}}</div>
+                            </div>
+                            <div class="form-group col-md-6" style="margin: auto;margin-top:10px;">
+                                <label class="control-label">Current Branch Manager From</label>
+                                <div class="controls readonly" ng-model="assignBranchManager.currentBranchManagerFromDate">{{assignBranchManager.currentBranchManagerFromDate | date:'dd/MM/yyyy'}}</div>
+                            </div>
+                            </div>
+                        <div class="row">
+                            <div class="form-group col-md-6" style="margin: auto;margin-top:10px;">
+                                <label class="control-label">Current Branch BDE</label>
+                                <div class="controls readonly" ng-model="assignBranchManager.currentBranchBDEFirstName">{{assignBranchManager.currentBranchBDFirstName}} {{assignBranchManager.currentBranchBDELastName}}</div>
+                            </div>
+                            <div class="form-group col-md-6" style="margin: auto;margin-top:10px;">
+                                <label class="control-label">Current Branch BDE From</label>
+                                <div class="controls readonly" ng-model="assignBranchManager.currentBranchBDEFromDate">{{assignBranchManager.currentBranchBDEFromDate | date:'dd/MM/yyyy'}}</div>
+                            </div>
+
+                        </div>
+                        <div class="row">
+                        <div class="form-group col-md-6" style="margin: auto;margin-top:10px;">
+                            <label class="control-label">Branch Manager</label>
+                            <select class="form-control input-sm"  ng-model="assignBranchManager.employeeId" ng-options="branchManager.employeeId as branchManager.firstName + ' ' + branchManager.lastName for branchManager in branchManagers | orderBy:'firstName' " ng-disabled="(!disableCurrentBranchManager)">
+                                <option value="">----Select BranchManager----</option>
+                             </select>
+                        </div>
+                        <div class="form-group col-md-6 " style="margin: auto;margin-top:10px;">
+                            <label class="control-label">Branch Manager From</label>
+                            <p class="input-group">
+                                <input type="text" class="form-control input-sm" ng-required="true" ng-click="open($event)" min-date="selectedDate"  datepicker-popup="dd/MM/yyyy" ng-model="assignBranchManager.branchManagerFromDate"  datepicker-options="datePickerSettings.dateOptions" is-open="datePickerSettings.isOpened"  close-text="Close" show-button-bar="false" ng-disabled="(!disableCurrentBranchManager)" onkeypress="return isNumeric(event)"/>
+                                   <span class="input-group-btn">
+                                      <button type="button" class="btn btn-default btn-sm" ng-click="open($event)"><i class="glyphicon glyphicon-calendar"></i></button>
+                                   </span>
+                            </p>
+                        </div>
+                            </div>
+                        <div class="row">
+                            <div class="form-group col-md-6" style="margin: auto;margin-top:10px;" >
+                                <label class="control-label">Branch BDE</label>
+                                <select class="form-control input-sm"  ng-model="assignBranchManager.branchBDEEmployeeId" ng-options="branchBDE.employeeId as branchBDE.firstName + ' ' + branchBDE.lastName for branchBDE in branchBDEList | orderBy:'firstName' " ng-disabled="(!disableCurrentBranchBDE)">
+                                     <option value="">----Select BranchBDE----</option>
+                                </select>
+                            </div>
+                            <div class="form-group col-md-6 " style="margin: auto;margin-top:10px;" >
+                                <label class="control-label">Branch BDE From</label>
+                                <p class="input-group">
+                                    <input type="text" class="form-control input-sm" ng-required="true" ng-click="openBDE($event)" min-date="selectedDate"  datepicker-popup="dd/MM/yyyy" ng-model="assignBranchManager.branchBDEFromDate"  datepicker-options="datePickerSettingsBDE.dateOptions" is-open="datePickerSettingsBDE.isOpened"  close-text="Close" show-button-bar="false" ng-disabled="(!disableCurrentBranchBDE)" onkeypress="return isNumeric(event)"/>
+                                   <span class="input-group-btn">
+                                      <button type="button" class="btn btn-default btn-sm" ng-click="openBDE($event)"><i class="glyphicon glyphicon-calendar"></i></button>
+                                   </span>
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                        <div class="col-lg-12" style="text-align: center;margin-top:10px;">
+
+                            <button type="button" class="btn btn-default" style="float:right;" ng-disabled="(!bmBool)"  ng-click="submitAssign()">Save</button>
+                            <a class="btn btn-default" th:href="@{/core/branch/view}" style="float:left;">Cancel</a>
+
+                        </div>
+                        </div>
+                    </form>
+                </div>
+             </div>
+        </div>
+    </div>
+</div>
+<style>
+    .form-control {
+    font-size: 12px;
+    padding:5px;
+    }
+
+</style>
+<footer class="footer" th:include="fragments/common :: footer">
+</footer>
+</body>
+</html>

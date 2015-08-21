@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence xmlns="http://java.sun.com/xml/ns/persistence" version="1.0">
+    <persistence-unit name="testnthdimenzion" transaction-type="RESOURCE_LOCAL">
+        <provider>org.hibernate.ejb.HibernatePersistence</provider>
+        <class>org.axonframework.eventstore.jpa.DomainEventEntry</class>
+        <class>org.axonframework.eventstore.jpa.SnapshotEventEntry</class>
+        <class>com.pla.core.domain.model.Benefit</class>
+        <class>com.pla.core.domain.model.Coverage</class>
+        <class>com.pla.core.domain.model.Team</class>
+        <class>com.pla.core.domain.model.Branch</class>
+        <class>com.pla.core.domain.model.Region</class>
+        <class>com.pla.core.domain.model.agent.Agent</class>
+        <class>com.pla.core.domain.model.MandatoryDocument</class>
+        <class>com.pla.core.domain.model.plan.commission.Commission</class>
+        <class>com.pla.individuallife.quotation.domain.model.ILQuotation</class>
+        <properties>
+            <property name="hibernate.hbm2ddl.auto" value="update"/>
+            <property name="hibernate.ejb.naming_strategy"
+                      value="org.springframework.boot.orm.jpa.hibernate.SpringNamingStrategy"/>
+            <property name="jadira.usertype.autoRegisterUserTypes" value="true"></property>
+            <property name="jadira.usertype.databaseZone" value="jvm"></property>
+            <property name="jadira.usertype.javaZone" value="Asia/Kolkata"></property>
+            <property name="hibernate.dialect" value="org.hibernate.dialect.MySQL5Dialect"/>
+            <property name="javax.persistence.sql-load-script-source" value="classpath:scripts/pla.sql"/>
+            <property name="hibernate.jdbc.batch_size" value="10"/>
+            <property name="hibernate.order_inserts" value="true"/>
+            <property name="hibernate.order_updates" value="true"/>
+        </properties>
+    </persistence-unit>
+</persistence>

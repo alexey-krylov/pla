@@ -1,0 +1,1197 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/xhtml"
+      lang="en">
+<head th:include="fragments/common :: headTag">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+
+</head>
+<body>
+<div th:include="fragments/common :: bodyHeader" th:remove="tag"/>
+
+<script>
+  var interval = setInterval(function(){
+        if(require.defined("basic")){
+            $(document).ready(function(){
+                $('#accordion .accordion-toggle').click(function (e){
+                    var chevState = $(e.target).siblings("i.indicator").toggleClass('glyphicon-chevron-down glyphicon-chevron-up');
+                    $("i.indicator").not(chevState).removeClass("glyphicon-chevron-down").addClass("glyphicon-chevron-up");
+                });
+                $('#accordion1 .accordion-toggle').click(function (e){
+                    var chevState = $(e.target).siblings("i.indicator").toggleClass('glyphicon-chevron-down glyphicon-chevron-up');
+                    $("i.indicator").not(chevState).removeClass("glyphicon-chevron-down").addClass("glyphicon-chevron-up");
+                });
+                $('#accordion2 .accordion-toggle').click(function (e){
+                    var chevState = $(e.target).siblings("i.indicator").toggleClass('glyphicon-chevron-down glyphicon-chevron-up');
+                    $("i.indicator").not(chevState).removeClass("glyphicon-chevron-down").addClass("glyphicon-chevron-up");
+                });
+
+            });
+
+            clearInterval(interval);
+        }
+    }, 300);
+
+    requirejs(['main'],function(){
+        require(['/pla/js/generalInformation/updateProductLine.js'],function(){
+            angular.bootstrap(document, ['updateProductLine']);
+        });
+    });
+
+
+</script>
+<div class="container ng-cloak" ng-Controller="SelectUpdateController" ng-show="selectUpdate">
+
+
+    <div class="row">
+        <div class="col-lg-12" >
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <div class="row">
+                        <div class="col-lg-3"><span th:text="#{selectProductLineInformation}">Select Product Line Information
+                        </span></div>
+                    </div>
+                </div>
+                <div class="panel-body ng-cloak">
+                    <form  novalidate="true" class="css-form">
+                        <div class="row">
+                            <div class="form-group col-md-6 required" >
+                                <label class="control-label">Select Product Line information</label>
+
+                                <select class="form-control input-sm" ng-model="selectedOption.productLine"   >
+                                    <option value="">----Select one----</option>
+                                    <option value="groupHealth" >Group Health Level Information</option>
+                                    <option value="groupLife">Group Life Level Information</option>
+                                    <option value="individualLife">Individual Life Level Information</option>
+                                </select>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container ng-cloak" ng-Controller="UpdateGroupHealthLevelInformationController" ng-show="groupHealth">
+    <div class="row">
+        <div class="col-lg-12" style="text-align: center;margin-top:10px;margin-bottom: 10px;">
+
+            <button type="button" class="btn btn-primary btn-xs" style="float:left;"  ng-click="reloadPage()">Back</button>
+
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <div class="row" ng-show="updatePanelLabel">
+                        <div class="col-lg-6"><span th:text="#{updateGroupHealthLevelInformation}">Update Group Health Level Information
+                        </span></div>
+                    </div>
+                    <div class="row" ng-show="createPanelLabel">
+                        <div class="col-lg-6"><span th:text="#{createGroupHealthLevelInformation}">Create Group Health Level Information
+                        </span></div>
+                    </div>
+                </div>
+
+                <div class="panel-body ng-cloak">
+                    <notification></notification>
+                    <div class="panel-group ng-cloak" id="accordion" >
+                        <div class="panel panel-default" id="panel1" ng-class="forms.form1.$valid ? '' : 'errorClass'">
+                            <div class="panel-heading">
+                                <h4 class="panel-title">
+                                    <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapseOne">
+                                        Quotation
+                                    </a><i class="indicator glyphicon glyphicon-chevron-down  pull-right"></i>
+
+                                </h4>
+                            </div>
+                            <div id="collapseOne" class="panel-collapse collapse in">
+
+                                <div class="panel-body">
+                                    <form  novalidate="true" role="form" name="forms.form1">
+                                        <div class="row">
+                                            <div class="form-group col-md-4 required" ng-repeat="quotationProcessItems in items.quotationProcessItems">
+                                                <label class="control-label"   data-placement="top" data-toggle="tooltip" tooltip="{{quotationProcessItems.fullDescription}}" >{{quotationProcessItems.description}}</label>
+                                                <p class="input-group" >
+                                                    <input type="number" class="form-control input-sm" min="1" ng-pattern="/^([0-9]{1,2})?$/"  ng-model="quotationProcessItems.value" value="{{quotationProcessItems.value}}" ng-required="true"/>
+                                                </p>
+
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel panel-default" id="panel2" ng-class="forms.form2.$valid ? '' : 'errorClass'">
+                            <div class="panel-heading">
+                                <h4 class="panel-title">
+                                    <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo">
+                                        New Business/Enrollment
+                                    </a><i class="indicator glyphicon glyphicon-chevron-down  pull-right"></i>
+                                </h4>
+                            </div>
+                            <div id="collapseTwo" class="panel-collapse collapse">
+                                <div class="panel-body">
+                                    <form  novalidate="true" role="form" name="forms.form2">
+                                    <div class="row">
+                                        <div class="form-group col-md-4 required" ng-repeat="enrollmentProcessItems in items.enrollmentProcessItems">
+                                            <label class="control-label"  data-placement="top" data-toggle="tooltip" tooltip="{{enrollmentProcessItems.fullDescription}}">{{enrollmentProcessItems.description}}</label>
+                                            <p class="input-group">
+                                                <input type="number" class="form-control input-sm" min="1" ng-pattern="/^([0-9]{1,2})?$/"  ng-model="enrollmentProcessItems.value" value="{{enrollmentProcessItems.value}}" ng-required="true"/>
+                                            </p>
+                                        </div>
+
+                                    </div>
+                                </form>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="panel panel-default" id="panel3" ng-class="forms.form3.$valid ? '' : 'errorClass'">
+                            <div class="panel-heading">
+                                <h4 class="panel-title">
+                                    <a  class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapseThree">
+                                        Premium Follow Up- Annual Frequency
+                                    </a><i class="indicator glyphicon glyphicon-chevron-down  pull-right"></i>
+                                </h4>
+                            </div>
+                            <div id="collapseThree" class="panel-collapse collapse">
+                                <div class="panel-body">
+                                    <form  novalidate="true" role="form" name="forms.form3">
+                                       <div class="row">
+                                            <div class="form-group col-md-4 required" ng-repeat="premiumFollowUpFrequencyItems in items.premiumFollowUpFrequency[0].premiumFollowUpFrequencyItems">
+                                                <label class="control-label"   data-placement="top" data-toggle="tooltip" tooltip="{{premiumFollowUpFrequencyItems.fullDescription}}"  >{{premiumFollowUpFrequencyItems.description}}</label>
+                                                <p class="input-group">
+                                                    <input type="number" class="form-control input-sm" min="1" ng-pattern="/^([0-9]{1,2})?$/"  ng-model="premiumFollowUpFrequencyItems.value" value="{{premiumFollowUpFrequencyItems.value}}" ng-required="true"/>
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel panel-default" id="panel4" ng-class="forms.form4.$valid ? '' : 'errorClass'">
+                            <div class="panel-heading">
+                                <h4 class="panel-title">
+                                    <a  class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapseFour">
+                                        Premium Follow Up- Semi-Annual Frequency
+                                    </a><i class="indicator glyphicon glyphicon-chevron-down  pull-right"></i>
+                                </h4>
+                            </div>
+                            <div id="collapseFour" class="panel-collapse collapse">
+                                <div class="panel-body">
+                                    <form  novalidate="true" role="form" name="forms.form4">
+                                         <div class="row">
+                                             <div class="form-group col-md-4 required" ng-repeat="premiumFollowUpFrequencyItems in items.premiumFollowUpFrequency[1].premiumFollowUpFrequencyItems">
+                                                 <label class="control-label"   data-placement="top" data-toggle="tooltip" tooltip="{{premiumFollowUpFrequencyItems.fullDescription}}" >{{premiumFollowUpFrequencyItems.description}}</label>
+                                                 <p class="input-group">
+                                                     <input type="number" class="form-control input-sm" min="1" ng-pattern="/^([0-9]{1,2})?$/"  ng-model="premiumFollowUpFrequencyItems.value" value="{{premiumFollowUpFrequencyItems.value}}" ng-required="true"/>
+                                                 </p>
+                                             </div>
+                                         </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel panel-default" id="panel5" ng-class="forms.form5.$valid ? '' : 'errorClass'">
+                            <div class="panel-heading">
+                                <h4 class="panel-title">
+                                    <a  class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapseFive">
+                                        Premium Follow Up- Quarterly Frequency
+                                    </a><i class="indicator glyphicon glyphicon-chevron-down  pull-right"></i>
+                                </h4>
+                            </div>
+                            <div id="collapseFive" class="panel-collapse collapse">
+                                <div class="panel-body">
+                                    <form  novalidate="true" role="form" name="forms.form5">
+                                         <div class="row">
+                                             <div class="form-group col-md-4 required" ng-repeat="premiumFollowUpFrequencyItems in items.premiumFollowUpFrequency[2].premiumFollowUpFrequencyItems">
+                                                 <label class="control-label"   data-placement="top" data-toggle="tooltip" tooltip="{{premiumFollowUpFrequencyItems.fullDescription}}"  >{{premiumFollowUpFrequencyItems.description}}</label>
+                                                 <p class="input-group">
+                                                     <input type="number" class="form-control input-sm" min="1" ng-pattern="/^([0-9]{1,2})?$/"  ng-model="premiumFollowUpFrequencyItems.value" value="{{premiumFollowUpFrequencyItems.value}}" ng-required="true"/>
+                                                 </p>
+                                             </div>
+                                         </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="panel panel-default" id="panel6" ng-class="forms.form6.$valid ? '' : 'errorClass'">
+                            <div class="panel-heading">
+                                <h4 class="panel-title">
+                                    <a  class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapseSix">
+                                        Premium Follow Up- Monthly Frequency
+                                    </a><i class="indicator glyphicon glyphicon-chevron-down  pull-right"></i>
+                                </h4>
+                            </div>
+                            <div id="collapseSix" class="panel-collapse collapse">
+                                <div class="panel-body">
+                                    <form  novalidate="true" role="form" name="forms.form6">
+                                        <div class="row">
+                                             <div class="form-group col-md-4 required" ng-repeat="premiumFollowUpFrequencyItems in items.premiumFollowUpFrequency[3].premiumFollowUpFrequencyItems">
+                                                 <label class="control-label"   data-placement="top" data-toggle="tooltip" tooltip="{{premiumFollowUpFrequencyItems.fullDescription}}"  >{{premiumFollowUpFrequencyItems.description}}</label>
+                                                 <p class="input-group">
+                                                     <input type="number" class="form-control input-sm" min="1" ng-pattern="/^([0-9]{1,2})?$/"  ng-model="premiumFollowUpFrequencyItems.value" value="{{premiumFollowUpFrequencyItems.value}}" ng-required="true"/>
+                                                 </p>
+                                             </div>
+                                         </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel panel-default" id="panel7" ng-class="forms.form7.$valid ? '' : 'errorClass'">
+                            <div class="panel-heading">
+                                <h4 class="panel-title">
+                                    <a  class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapseSeven">
+                                        Reinstatement Request
+                                    </a><i class="indicator glyphicon glyphicon-chevron-down  pull-right"></i>
+                                </h4>
+                            </div>
+                            <div id="collapseSeven" class="panel-collapse collapse">
+                                <div class="panel-body">
+                                    <form  novalidate="true" role="form" name="forms.form7">
+                                    <div class="row">
+                                        <div class="form-group col-md-4 required" ng-repeat="reinstatementProcessItems in items.reinstatementProcessItems">
+                                            <label class="control-label"   data-placement="top" data-toggle="tooltip" tooltip="{{reinstatementProcessItems.fullDescription}}"  >{{reinstatementProcessItems.description}}</label>
+                                            <p class="input-group">
+                                                <input type="number" class="form-control input-sm" min="1" ng-pattern="/^([0-9]{1,2})?$/"  ng-model="reinstatementProcessItems.value" value="{{reinstatementProcessItems.value}}" ng-required="true"/>
+                                            </p>
+                                        </div>
+                                    </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel panel-default" id="panel8" ng-class="forms.form8.$valid ? '' : 'errorClass'">
+                            <div class="panel-heading">
+                                <h4 class="panel-title">
+                                    <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapseEight">
+                                        Endorsement Request
+                                    </a><i class="indicator glyphicon glyphicon-chevron-down  pull-right"></i>
+                                </h4>
+                            </div>
+                            <div id="collapseEight" class="panel-collapse collapse">
+                                <div class="panel-body">
+                                    <form  novalidate="true" role="form" name="forms.form8">
+                                    <div class="row">
+                                        <div class="form-group col-md-4 required"  ng-repeat="endorsementProcessItems in items.endorsementProcessItems">
+                                            <label class="control-label"   data-placement="top" data-toggle="tooltip" tooltip="{{endorsementProcessItems.fullDescription}}"  >{{endorsementProcessItems.description}}</label>
+                                            <p class="input-group">
+                                                <input type="number" class="form-control input-sm" min="1" ng-pattern="/^([0-9]{1,2})?$/"  ng-model="endorsementProcessItems.value" value="{{endorsementProcessItems.value}}" ng-required="true"/>
+                                            </p>
+                                        </div>
+
+                                    </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel panel-default" id="panel9" ng-class="forms.form9.$valid ? '' : 'errorClass'">
+                            <div class="panel-heading">
+                                <h4 class="panel-title">
+                                    <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapseNine">
+                                        Claim Request
+                                    </a><i class="indicator glyphicon glyphicon-chevron-down  pull-right"></i>
+                                </h4>
+                            </div>
+                            <div id="collapseNine" class="panel-collapse collapse">
+                                <div class="panel-body">
+                                    <form  novalidate="true" role="form" name="forms.form9">
+                                    <div class="row">
+                                        <div class="form-group col-md-4 required" ng-repeat="claimProcessItems in items.claimProcessItems">
+                                            <label class="control-label"   data-placement="top" data-toggle="tooltip" tooltip="{{claimProcessItems.fullDescription}}"  >{{claimProcessItems.description}}</label>
+                                            <p class="input-group">
+                                                <input type="number" class="form-control input-sm" min="1" ng-pattern="/^([0-9]{1,2})?$/"  ng-model="claimProcessItems.value" value="{{claimProcessItems.value}}" ng-required="true"/>
+                                            </p>
+                                        </div>
+                                    </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel panel-default" id="panel10" ng-class="forms.form10.$valid ? '' : 'errorClass'">
+                            <div class="panel-heading">
+                                <h4 class="panel-title">
+                                    <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapseTen">
+                                        Minimum Limit for Group Policy
+                                    </a><i class="indicator glyphicon glyphicon-chevron-down  pull-right"></i>
+                                </h4>
+                            </div>
+                            <div id="collapseTen" class="panel-collapse collapse">
+                                <div class="panel-body">
+                                    <form  novalidate="true" role="form" name="forms.form10">
+                                    <div class="row">
+                                        <div class="form-group col-md-4 required" ng-repeat="policyProcessMinimumLimitItems in items.policyProcessMinimumLimitItems">
+                                            <label class="control-label"   data-placement="top" data-toggle="tooltip" tooltip="{{policyProcessMinimumLimitItems.fullDescription}}"  >{{policyProcessMinimumLimitItems.description}}</label>
+                                            <p class="input-group">
+                                                <input type="number" class="form-control input-sm" min="1" ng-pattern="/^([0-9]{1,5})?$/"  ng-model="policyProcessMinimumLimitItems.value" value="{{policyProcessMinimumLimitItems.value}}" ng-required="true" />
+                                            </p>
+                                        </div>
+                                    </div>
+                                   </form>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel panel-default" id="panel11" ng-class="forms.form11.$valid ? '' : 'errorClass'">
+                            <div class="panel-heading">
+                                <h4 class="panel-title">
+                                    <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapseEleven">
+                                        Modal Factors
+                                    </a><i class="indicator glyphicon glyphicon-chevron-down  pull-right"></i>
+                                </h4>
+                            </div>
+                            <div id="collapseEleven" class="panel-collapse collapse">
+                                <div class="panel-body">
+                                    <form  novalidate="true" role="form" name="forms.form11">
+                                    <div class="row">
+                                        <div class="form-group col-md-4 required" ng-repeat="modelFactorItems in items.modelFactorItems">
+                                            <label class="control-label"   data-placement="top" data-toggle="tooltip" tooltip="{{modelFactorItems.fullDescription}}"  >{{modelFactorItems.description}}</label>
+                                            <p class="input-group">
+                                                <input type="number" class="form-control input-sm" min="0.0001" ng-pattern="/^(^[0-9]{1,2})+(\.[0-9]{1,4})?$/" ng-model="modelFactorItems.value" value="{{modelFactorItems.value}}" ng-required="true"/>
+                                            </p>
+                                        </div>
+                                    </div>
+                                 </form>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel panel-default" id="panel12" ng-class="forms.form12.$valid ? '' : 'errorClass'">
+                            <div class="panel-heading">
+                                <h4 class="panel-title">
+                                    <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapseTwelve">
+                                        Discount Factors
+                                    </a><i class="indicator glyphicon glyphicon-chevron-down  pull-right"></i>
+                                </h4>
+                            </div>
+                            <div id="collapseTwelve" class="panel-collapse collapse">
+                                <div class="panel-body">
+                                    <form  novalidate="true" role="form" name="forms.form12">
+
+                                    <div class="row">
+                                        <div class="form-group col-md-4 required" ng-repeat="discountFactorItems in items.discountFactorItems">
+                                            <label class="control-label"   data-placement="top" data-toggle="tooltip" tooltip="{{discountFactorItems.fullDescription}}"  >{{discountFactorItems.description}}</label>
+                                            <p class="input-group">
+                                                <input type="number" class="form-control input-sm" min="0.0001" ng-pattern="/^(^[0-9]{1,2})+(\.[0-9]{1,4})?$/" ng-model="discountFactorItems.value" value="{{discountFactorItems.value}}" ng-required="true" />
+                                            </p>
+                                        </div>
+                                    </div>
+                                  </form>
+                                </div>
+                            </div>
+                        </div>
+        <!--              -->
+                        <div class="panel panel-default" id="panel13" ng-class="forms.form13.$valid ? '' : 'errorClass'">
+                            <div class="panel-heading">
+                                <h4 class="panel-title">
+                                    <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapseThirteen">
+                                        Age Loading Factor
+                                    </a><i class="indicator glyphicon glyphicon-chevron-down  pull-right"></i>
+                                </h4>
+                            </div>
+                            <div id="collapseThirteen" class="panel-collapse collapse">
+                                <div class="panel-body">
+                                    <form  novalidate="true" role="form" name="forms.form13">
+                                        <div class="row">
+                                            <div class="form-group col-md-4 required" >
+                                                <label class="control-label"   data-placement="top"  >
+                                                    Age
+                                                </label>
+                                                <p class="input-group">
+                                                    <input type="number" class="form-control input-sm" min="1" ng-pattern="/^([0-9]{1,2})?$/" ng-model="items.ageLoadingFactor.age" value="{{items.ageLoadingFactor.age}}" ng-required="true" />
+                                                </p>
+                                            </div>
+                                            <div class="form-group col-md-4 required" >
+                                                <label class="control-label"   data-placement="top"  >
+                                                    Loading Factor
+                                                </label>
+                                                <p class="input-group">
+                                                    <input type="number" class="form-control input-sm" min="0.0001" ng-pattern="/^(^[0-9]{1,2})+(\.[0-9]{1,4})?$/" ng-model="items.ageLoadingFactor.loadingFactor" value="{{items.ageLoadingFactor.loadingFactor}}" ng-required="true" />
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="panel panel-default" id="panel14" ng-class="forms.form14.$valid ? '' : 'errorClass'">
+                            <div class="panel-heading">
+                                <h4 class="panel-title">
+                                    <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapseFourteen">
+                                        Moratorium Period for Pre-existing Illness
+                                    </a><i class="indicator glyphicon glyphicon-chevron-down  pull-right"></i>
+                                </h4>
+                            </div>
+                            <div id="collapseFourteen" class="panel-collapse collapse">
+                                <div class="panel-body">
+                                    <form  novalidate="true" role="form" name="forms.form14">
+                                        <div class="row">
+                                            <div class="form-group col-md-4 required" >
+                                                <label class="control-label"   data-placement="top"  >
+                                                    Moratorium Period (Days)
+                                                </label>
+                                                <p class="input-group">
+                                                    <input type="number" class="form-control input-sm" min="0" ng-pattern="/^([0-9]{1,2})?$/" ng-model="items.moratoriumPeriod" value="{{items.moratoriumPeriod}}" ng-required="true" />
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-lg-12" style="text-align: center;margin-top:10px;">
+
+                                <button type="button" class="btn btn-default" style="float:right;" ng-disabled="(!forms.form1.$valid || !forms.form2.$valid || !forms.form3.$valid || !forms.form4.$valid || !forms.form5.$valid || !forms.form6.$valid || !forms.form7.$valid || !forms.form8.$valid || !forms.form9.$valid || !forms.form10.$valid || !forms.form11.$valid || !forms.form12.$valid || !forms.form13.$valid || !forms.form14.$valid)" data-placement="top-right" data-container="notification" data-duration="10" bs-alert="alert"   ng-click="submitGroupHealth()">Save</button>
+                                <a class="btn btn-default" ng-click="reloadPage()" style="float:left;">Cancel</a>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<div class="container ng-cloak" ng-Controller="UpdateGroupLifeLevelInformationController" ng-show="groupLife">
+    <div class="row">
+        <div class="col-lg-12" style="text-align: center;margin-top:10px;margin-bottom: 10px;">
+
+            <button type="button" class="btn btn-primary btn-xs" style="float:left;"  ng-click="reloadPage()">Back</button>
+
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <div class="row" ng-show="updatePanelLabel">
+                        <div class="col-lg-6"><span th:text="#{updateGroupLifeLevelInformation}">Update Group Life Level Information
+                        </span></div>
+                    </div>
+                    <div class="row" ng-show="createPanelLabel">
+                        <div class="col-lg-6"><span th:text="#{createGroupLifeLevelInformation}">Create Group Life Level Information
+                        </span></div>
+                    </div>
+                </div>
+                <div class="panel-body ng-cloak">
+                    <notification1></notification1>
+                    <div class="panel-group ng-cloak" id="accordion1">
+                        <div class="panel panel-default" id="panel100" ng-class="forms.form1.$valid ? '' : 'errorClass'">
+                            <div class="panel-heading">
+                                <h4 class="panel-title">
+                                    <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion1" href="#collapseOneZeroZero">
+                                        Quotation
+                                    </a><i class="indicator glyphicon glyphicon-chevron-down  pull-right"></i>
+
+                                </h4>
+                            </div>
+                            <div id="collapseOneZeroZero" class="panel-collapse collapse in">
+                                <div class="panel-body">
+                                    <form  novalidate="true" role="form" name="forms.form1">
+                                        <div class="row">
+                                            <div class="form-group col-md-4 required" ng-repeat="quotationProcessItems in items.quotationProcessItems">
+                                                <label class="control-label"  data-placement="top" data-toggle="tooltip" tooltip="{{quotationProcessItems.fullDescription}}"   >{{quotationProcessItems.description}}</label>
+                                                <p class="input-group" >
+                                                    <input type="number" class="form-control input-sm" min="1" ng-pattern="/^([0-9]{1,2})?$/"  ng-model="quotationProcessItems.value" value="{{quotationProcessItems.value}}" ng-required="true"/>
+                                                </p>
+
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel panel-default" id="panel101"  ng-class="forms.form2.$valid ? '' : 'errorClass'" >
+                            <div class="panel-heading">
+                                <h4 class="panel-title">
+                                    <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion1" href="#collapseOneZeroOne">
+                                        New Business/Enrollment
+                                    </a><i class="indicator glyphicon glyphicon-chevron-down  pull-right"></i>
+                                </h4>
+                            </div>
+                            <div id="collapseOneZeroOne" class="panel-collapse collapse">
+                                <div class="panel-body">
+                                    <form  novalidate="true" role="form" name="forms.form2">
+                                    <div class="row">
+                                        <div class="form-group col-md-4 required" ng-repeat="enrollmentProcessItems in items.enrollmentProcessItems">
+                                            <label class="control-label"   data-placement="top" data-toggle="tooltip" tooltip="{{enrollmentProcessItems.fullDescription}}"   >{{enrollmentProcessItems.description}}</label>
+                                            <p class="input-group">
+                                                <input type="number" class="form-control input-sm" min="1" ng-pattern="/^([0-9]{1,2})?$/"  ng-model="enrollmentProcessItems.value" value="{{enrollmentProcessItems.value}}" ng-required="true"/>
+                                            </p>
+                                        </div>
+                                    </div>
+                                </form>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="panel panel-default" id="panel102" ng-class="forms.form3.$valid ? '' : 'errorClass'">
+                            <div class="panel-heading">
+                                <h4 class="panel-title">
+                                    <a  class="accordion-toggle" data-toggle="collapse" data-parent="#accordion1" href="#collapseOneZeroTwo">
+                                        Premium Follow Up- Annual Frequency
+                                    </a><i class="indicator glyphicon glyphicon-chevron-down  pull-right"></i>
+                                </h4>
+                            </div>
+                            <div id="collapseOneZeroTwo" class="panel-collapse collapse">
+                                <div class="panel-body">
+                                    <form  novalidate="true" role="form" name="forms.form3">
+                                     <div class="row">
+                                             <div class="form-group col-md-4 required" ng-repeat="premiumFollowUpFrequencyItems in items.premiumFollowUpFrequency[0].premiumFollowUpFrequencyItems">
+                                                 <label class="control-label"   data-placement="top" data-toggle="tooltip" tooltip="{{premiumFollowUpFrequencyItems.fullDescription}}" >{{premiumFollowUpFrequencyItems.description}}</label>
+                                                 <p class="input-group">
+                                                     <input type="number" class="form-control input-sm" min="1" ng-pattern="/^([0-9]{1,2})?$/"  ng-model="premiumFollowUpFrequencyItems.value" value="{{premiumFollowUpFrequencyItems.value}}" ng-required="true"/>
+                                                 </p>
+                                             </div>
+                                         </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel panel-default" id="panel103" ng-class="forms.form4.$valid ? '' : 'errorClass'">
+                            <div class="panel-heading">
+                                <h4 class="panel-title">
+                                    <a  class="accordion-toggle" data-toggle="collapse" data-parent="#accordion1" href="#collapseOneZeroThree">
+                                        Premium Follow Up- Semi-Annual Frequency
+                                    </a><i class="indicator glyphicon glyphicon-chevron-down  pull-right"></i>
+                                </h4>
+                            </div>
+                            <div id="collapseOneZeroThree" class="panel-collapse collapse">
+                                <div class="panel-body">
+                                    <form  novalidate="true" role="form" name="forms.form4">
+                                        <div class="row">
+                                             <div class="form-group col-md-4 required" ng-repeat="premiumFollowUpFrequencyItems in items.premiumFollowUpFrequency[1].premiumFollowUpFrequencyItems">
+                                                 <label class="control-label"   data-placement="top" data-toggle="tooltip" tooltip="{{premiumFollowUpFrequencyItems.fullDescription}}"  >{{premiumFollowUpFrequencyItems.description}}</label>
+                                                 <p class="input-group">
+                                                     <input type="number" class="form-control input-sm" min="1" ng-pattern="/^([0-9]{1,2})?$/"  ng-model="premiumFollowUpFrequencyItems.value" value="{{premiumFollowUpFrequencyItems.value}}" ng-required="true"/>
+                                                 </p>
+                                             </div>
+                                         </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel panel-default" id="panel104" ng-class="forms.form5.$valid ? '' : 'errorClass'">
+                            <div class="panel-heading">
+                                <h4 class="panel-title">
+                                    <a  class="accordion-toggle" data-toggle="collapse" data-parent="#accordion1" href="#collapseOneZeroFour">
+                                        Premium Follow Up- Quarterly Frequency
+                                    </a><i class="indicator glyphicon glyphicon-chevron-down  pull-right"></i>
+                                </h4>
+                            </div>
+                            <div id="collapseOneZeroFour" class="panel-collapse collapse">
+                                <div class="panel-body">
+                                    <form  novalidate="true" role="form" name="forms.form5">
+                                         <div class="row">
+                                             <div class="form-group col-md-4 required" ng-repeat="premiumFollowUpFrequencyItems in items.premiumFollowUpFrequency[2].premiumFollowUpFrequencyItems">
+                                                 <label class="control-label"   data-placement="top" data-toggle="tooltip" tooltip="{{premiumFollowUpFrequencyItems.fullDescription}}"  >{{premiumFollowUpFrequencyItems.description}}</label>
+                                                 <p class="input-group">
+                                                     <input type="number" class="form-control input-sm" min="1" ng-pattern="/^([0-9]{1,2})?$/"  ng-model="premiumFollowUpFrequencyItems.value" value="{{premiumFollowUpFrequencyItems.value}}" ng-required="true"/>
+                                                 </p>
+                                             </div>
+                                         </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="panel panel-default" id="panel105" ng-class="forms.form6.$valid ? '' : 'errorClass'">
+                            <div class="panel-heading">
+                                <h4 class="panel-title">
+                                    <a  class="accordion-toggle" data-toggle="collapse" data-parent="#accordion1" href="#collapseOneZeroFive">
+                                        Premium Follow Up- Monthly Frequency
+                                    </a><i class="indicator glyphicon glyphicon-chevron-down  pull-right"></i>
+                                </h4>
+                            </div>
+                            <div id="collapseOneZeroFive" class="panel-collapse collapse">
+                                <div class="panel-body">
+                                    <form  novalidate="true" role="form" name="forms.form6">
+                                        <div class="row">
+                                             <div class="form-group col-md-4 required" ng-repeat="premiumFollowUpFrequencyItems in items.premiumFollowUpFrequency[3].premiumFollowUpFrequencyItems">
+                                                 <label class="control-label"   data-placement="top" data-toggle="tooltip" tooltip="{{premiumFollowUpFrequencyItems.fullDescription}}"  >{{premiumFollowUpFrequencyItems.description}}</label>
+                                                 <p class="input-group">
+                                                     <input type="number" class="form-control input-sm" min="1" ng-pattern="/^([0-9]{1,2})?$/"  ng-model="premiumFollowUpFrequencyItems.value" value="{{premiumFollowUpFrequencyItems.value}}" ng-required="true"/>
+                                                 </p>
+                                             </div>
+                                         </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel panel-default" id="panel106" ng-class="forms.form7.$valid ? '' : 'errorClass'">
+                            <div class="panel-heading">
+                                <h4 class="panel-title">
+                                    <a  class="accordion-toggle" data-toggle="collapse" data-parent="#accordion1" href="#collapseOneZeroSix">
+                                        Reinstatement Request
+                                    </a><i class="indicator glyphicon glyphicon-chevron-down  pull-right"></i>
+                                </h4>
+                            </div>
+                            <div id="collapseOneZeroSix" class="panel-collapse collapse">
+                                <div class="panel-body">
+                                    <form  novalidate="true" role="form" name="forms.form7">
+                                       <div class="row">
+                                        <div class="form-group col-md-4 required" ng-repeat="reinstatementProcessItems in items.reinstatementProcessItems">
+                                            <label class="control-label"   data-placement="top" data-toggle="tooltip" tooltip="{{reinstatementProcessItems.fullDescription}}">{{reinstatementProcessItems.description}}</label>
+                                            <p class="input-group">
+                                                <input type="number" class="form-control input-sm" min="1" ng-pattern="/^([0-9]{1,2})?$/"  ng-model="reinstatementProcessItems.value" value="{{reinstatementProcessItems.value}}"  ng-required="true"/>
+                                            </p>
+                                        </div>
+                                    </div>
+                                </form>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel panel-default" id="panel107" ng-class="forms.form8.$valid ? '' : 'errorClass'">
+                            <div class="panel-heading">
+                                <h4 class="panel-title">
+                                    <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion1" href="#collapseOneZeroSeven">
+                                        Endorsement Request
+                                    </a><i class="indicator glyphicon glyphicon-chevron-down  pull-right"></i>
+                                </h4>
+                            </div>
+                            <div id="collapseOneZeroSeven" class="panel-collapse collapse">
+                                <div class="panel-body">
+                                    <form  novalidate="true" role="form" name="forms.form8">
+                                    <div class="row">
+                                        <div class="form-group col-md-4 required"  ng-repeat="endorsementProcessItems in items.endorsementProcessItems">
+                                            <label class="control-label"   data-placement="top" data-toggle="tooltip" tooltip="{{endorsementProcessItems.fullDescription}}"  >{{endorsementProcessItems.description}}</label>
+                                            <p class="input-group">
+                                                <input type="number" class="form-control input-sm" min="1" ng-pattern="/^([0-9]{1,2})?$/"  ng-model="endorsementProcessItems.value" value="{{endorsementProcessItems.value}}" ng-required="true"/>
+                                            </p>
+                                        </div>
+
+                                    </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel panel-default" id="panel108" ng-class="forms.form9.$valid ? '' : 'errorClass'">
+                            <div class="panel-heading">
+                                <h4 class="panel-title">
+                                    <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion1" href="#collapseOneZeroEight">
+                                        Claim Request
+                                    </a><i class="indicator glyphicon glyphicon-chevron-down  pull-right"></i>
+                                </h4>
+                            </div>
+                            <div id="collapseOneZeroEight" class="panel-collapse collapse">
+                                <div class="panel-body">
+                                    <form  novalidate="true" role="form" name="forms.form9">
+                                    <div class="row">
+                                        <div class="form-group col-md-4 required" ng-repeat="claimProcessItems in items.claimProcessItems">
+                                            <label class="control-label"   data-placement="top" data-toggle="tooltip" tooltip="{{claimProcessItems.fullDescription}}"  >{{claimProcessItems.description}}</label>
+                                            <p class="input-group">
+                                                <input type="number" class="form-control input-sm" min="1" ng-pattern="/^([0-9]{1,2})?$/"  ng-model="claimProcessItems.value" value="{{claimProcessItems.value}}"  ng-required="true"/>
+                                            </p>
+                                        </div>
+                                    </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="panel panel-default" id="panel109" ng-class="forms.form10.$valid ? '' : 'errorClass'">
+                            <div class="panel-heading">
+                                <h4 class="panel-title">
+                                    <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion1" href="#collapseOneZeroNine">
+                                        Minimum Limit for Group Policy
+                                    </a><i class="indicator glyphicon glyphicon-chevron-down  pull-right"></i>
+                                </h4>
+                            </div>
+                            <div id="collapseOneZeroNine" class="panel-collapse collapse">
+                                <div class="panel-body">
+                                    <form  novalidate="true" role="form" name="forms.form10">
+                                    <div class="row">
+                                        <div class="form-group col-md-4 required" ng-repeat="policyProcessMinimumLimitItems in items.policyProcessMinimumLimitItems">
+                                            <label class="control-label"   data-placement="top" data-toggle="tooltip" tooltip="{{policyProcessMinimumLimitItems.fullDescription}}"  >{{policyProcessMinimumLimitItems.description}}</label>
+                                            <p class="input-group">
+                                                <input type="number" class="form-control input-sm" min="1" ng-pattern="/^([0-9]{1,5})?$/"  ng-model="policyProcessMinimumLimitItems.value" value="{{policyProcessMinimumLimitItems.value}}"  ng-required="true"/>
+                                            </p>
+                                        </div>
+                                    </div>
+                                        </form>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class="panel panel-default" id="panel110" ng-class="forms.form11.$valid ? '' : 'errorClass'">
+                            <div class="panel-heading">
+                                <h4 class="panel-title">
+                                    <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapseOneOneZero">
+                                        Modal Factors
+                                    </a><i class="indicator glyphicon glyphicon-chevron-down  pull-right"></i>
+                                </h4>
+                            </div>
+                            <div id="collapseOneOneZero" class="panel-collapse collapse">
+                                <div class="panel-body">
+                                    <form  novalidate="true" role="form" name="forms.form11">
+                                        <div class="row">
+                                            <div class="form-group col-md-4 required" ng-repeat="modelFactorItems in items.modelFactorItems">
+                                                <label class="control-label"   data-placement="top" data-toggle="tooltip" tooltip="{{modelFactorItems.fullDescription}}" >{{modelFactorItems.description}}</label>
+                                                <p class="input-group">
+                                                    <input type="number" class="form-control input-sm" min="0.0001" ng-pattern="/^(^[0-9]{1,2})+(\.[0-9]{1,4})?$/" ng-model="modelFactorItems.value" value="{{modelFactorItems.value}}" ng-required="true"/>
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel panel-default" id="panel111" ng-class="forms.form12.$valid ? '' : 'errorClass'">
+                            <div class="panel-heading">
+                                <h4 class="panel-title">
+                                    <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion1" href="#collapseOneOneOne">
+                                       Discount Factors
+                                    </a><i class="indicator glyphicon glyphicon-chevron-down  pull-right"></i>
+                                </h4>
+                            </div>
+                            <div id="collapseOneOneOne" class="panel-collapse collapse">
+                                <div class="panel-body">
+                                    <form  novalidate="true" role="form" name="forms.form12">
+                                    <div class="row">
+                                        <div class="form-group col-md-4 required" ng-repeat="discountFactorItems in items.discountFactorItems">
+                                            <label class="control-label"   data-placement="top" data-toggle="tooltip" tooltip="{{discountFactorItems.fullDescription}}"  >{{discountFactorItems.description}}</label>
+                                            <p class="input-group">
+                                                <input type="number" class="form-control input-sm" min="0.0001" ng-pattern="/^(^[0-9]{1,2})+(\.[0-9]{1,4})?$/" ng-model="discountFactorItems.value" value="{{discountFactorItems.value}}" ng-required="true"/>
+                                            </p>
+                                        </div>
+                                    </div>
+                                  </form>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!--  Added the Age Loading Factor -->
+                        <div class="panel panel-default" id="panel113" ng-class="forms.form13.$valid ? '' : 'errorClass'">
+                            <div class="panel-heading">
+                                <h4 class="panel-title">
+                                    <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapseOneOneThree">
+                                        Age Loading Factor
+                                    </a><i class="indicator glyphicon glyphicon-chevron-down  pull-right"></i>
+                                </h4>
+                            </div>
+                            <div id="collapseOneOneThree" class="panel-collapse collapse">
+                                <div class="panel-body">
+                                    <form  novalidate="true" role="form" name="forms.form13">
+                                        <div class="row">
+                                            <div class="form-group col-md-4 required" >
+                                                <label class="control-label"   data-placement="top"  >
+                                                    Age
+                                                </label>
+                                                <p class="input-group">
+                                                    <input type="number" class="form-control input-sm" min="1" ng-pattern="/^([0-9]{1,2})?$/" ng-model="items.ageLoadingFactor.age" value="{{items.ageLoadingFactor.age}}" ng-required="true" />
+                                                </p>
+                                            </div>
+                                            <div class="form-group col-md-4 required" >
+                                                <label class="control-label"   data-placement="top"  >
+                                                    Loading Factor
+                                                </label>
+                                                <p class="input-group">
+                                                    <input type="number" class="form-control input-sm" min="0.0001" ng-pattern="/^(^[0-9]{1,2})+(\.[0-9]{1,4})?$/" ng-model="items.ageLoadingFactor.loadingFactor" value="{{items.ageLoadingFactor.loadingFactor}}" ng-required="true" />
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-lg-12" style="text-align: center;margin-top:10px;">
+
+                                <button type="button" class="btn btn-default" style="float:right;" ng-disabled="(!forms.form1.$valid || !forms.form2.$valid || !forms.form3.$valid || !forms.form4.$valid || !forms.form5.$valid || !forms.form6.$valid || !forms.form7.$valid || !forms.form8.$valid || !forms.form9.$valid || !forms.form10.$valid || !forms.form11.$valid || !forms.form12.$valid || !forms.form13.$valid)" data-placement="top-right" data-container="notification1" data-duration="10" bs-alert="alert"   ng-click="submitGroupLife()">Save</button>
+                                <a class="btn btn-default" ng-click="reloadPage()" style="float:left;">Cancel</a>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<div class="container ng-cloak" ng-Controller="UpdateIndividualLifeLevelInformationController" ng-show="individualLife">
+    <div class="row">
+        <div class="col-lg-12" style="text-align: center;margin-top:10px;margin-bottom: 10px;">
+
+            <button type="button" class="btn btn-primary btn-xs" style="float:left;"  ng-click="reloadPage()">Back</button>
+
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <div class="row" ng-show="updatePanelLabel">
+                        <div class="col-lg-6"><span th:text="#{updateIndividualLifeLevelInformation}">Update Individual Life Level Information
+                        </span></div>
+                    </div>
+                    <div class="row" ng-show="createPanelLabel">
+                        <div class="col-lg-6"><span th:text="#{createIndividualLifeLevelInformation}">Create Individual Life Level Information
+                        </span></div>
+                    </div>
+                </div>
+                <div class="panel-body ng-cloak">
+                    <notification2></notification2>
+                    <div class="panel-group ng-cloak" id="accordion2">
+                        <div class="panel panel-default" id="panel21" ng-class="forms.form1.$valid ? '' : 'errorClass'">
+                            <div class="panel-heading">
+                                <h4 class="panel-title">
+                                    <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion1" href="#collapseTwoOne">
+                                        Quotation
+                                    </a><i class="indicator glyphicon glyphicon-chevron-down  pull-right"></i>
+
+                                </h4>
+                            </div>
+                            <div id="collapseTwoOne" class="panel-collapse collapse in">
+                                <div class="panel-body">
+                                    <form  novalidate="true" role="form" name="forms.form1">
+                                        <div class="row">
+                                            <div class="form-group col-md-4 required" ng-repeat="quotationProcessItems in items.quotationProcessItems">
+                                                <label class="control-label"  data-placement="top" data-toggle="tooltip" tooltip="{{quotationProcessItems.fullDescription}}">{{quotationProcessItems.description}}</label>
+                                                <p class="input-group" >
+                                                    <input type="number" class="form-control input-sm" min="1" ng-pattern="/^([0-9]{1,2})?$/"  ng-model="quotationProcessItems.value" value="{{quotationProcessItems.value}}" ng-required="true"/>
+                                                </p>
+
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel panel-default" id="panel22"  ng-class="forms.form2.$valid ? '' : 'errorClass'" >
+                            <div class="panel-heading">
+                                <h4 class="panel-title">
+                                    <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseTwoTwo">
+                                        New Business/Enrollment
+                                    </a><i class="indicator glyphicon glyphicon-chevron-down  pull-right"></i>
+                                </h4>
+                            </div>
+                            <div id="collapseTwoTwo" class="panel-collapse collapse">
+                                <div class="panel-body">
+                                    <form  novalidate="true" role="form" name="forms.form2">
+                                        <div class="row">
+                                            <div class="form-group col-md-4 required" ng-repeat="enrollmentProcessItems in items.enrollmentProcessItems">
+                                                <label class="control-label"   data-placement="top" data-toggle="tooltip" tooltip="{{enrollmentProcessItems.fullDescription}}" >{{enrollmentProcessItems.description}}</label>
+                                                <p class="input-group">
+                                                    <input type="number" class="form-control input-sm" min="1" ng-pattern="/^([0-9]{1,2})?$/"  ng-model="enrollmentProcessItems.value" value="{{enrollmentProcessItems.value}}" ng-required="true"/>
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="panel panel-default" id="panel23" ng-class="forms.form3.$valid ? '' : 'errorClass'">
+                            <div class="panel-heading">
+                                <h4 class="panel-title">
+                                    <a  class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseTwoThree">
+                                        Premium Follow Up- Annual Frequency
+                                    </a><i class="indicator glyphicon glyphicon-chevron-down  pull-right"></i>
+                                </h4>
+                            </div>
+                            <div id="collapseTwoThree" class="panel-collapse collapse">
+                                <div class="panel-body">
+                                    <form  novalidate="true" role="form" name="forms.form3">
+                                        <div class="row">
+                                             <div class="form-group col-md-4 required" ng-repeat="premiumFollowUpFrequencyItems in items.premiumFollowUpFrequency[0].premiumFollowUpFrequencyItems">
+                                                 <label class="control-label"   data-placement="top" data-toggle="tooltip" tooltip="{{premiumFollowUpFrequencyItems.fullDescription}}"  >{{premiumFollowUpFrequencyItems.description}}</label>
+                                                 <p class="input-group">
+                                                     <input type="number" class="form-control input-sm" min="1" ng-pattern="/^([0-9]{1,2})?$/"  ng-model="premiumFollowUpFrequencyItems.value" value="{{premiumFollowUpFrequencyItems.value}}" ng-required="true"/>
+                                                 </p>
+                                             </div>
+                                         </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel panel-default" id="panel24" ng-class="forms.form4.$valid ? '' : 'errorClass'">
+                            <div class="panel-heading">
+                                <h4 class="panel-title">
+                                    <a  class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseTwoFour">
+                                        Premium Follow Up- Semi-Annual Frequency
+                                    </a><i class="indicator glyphicon glyphicon-chevron-down  pull-right"></i>
+                                </h4>
+                            </div>
+                            <div id="collapseTwoFour" class="panel-collapse collapse">
+                                <div class="panel-body">
+                                    <form  novalidate="true" role="form" name="forms.form4">
+                                         <div class="row">
+                                             <div class="form-group col-md-4 required" ng-repeat="premiumFollowUpFrequencyItems in items.premiumFollowUpFrequency[1].premiumFollowUpFrequencyItems">
+                                                 <label class="control-label"   data-placement="top" data-toggle="tooltip" tooltip="{{premiumFollowUpFrequencyItems.fullDescription}}" >{{premiumFollowUpFrequencyItems.description}}</label>
+                                                 <p class="input-group">
+                                                     <input type="number" class="form-control input-sm" min="1" ng-pattern="/^([0-9]{1,2})?$/"  ng-model="premiumFollowUpFrequencyItems.value" value="{{premiumFollowUpFrequencyItems.value}}" ng-required="true"/>
+                                                 </p>
+                                             </div>
+                                         </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel panel-default" id="panel25" ng-class="forms.form5.$valid ? '' : 'errorClass'">
+                            <div class="panel-heading">
+                                <h4 class="panel-title">
+                                    <a  class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseTwoFive">
+                                        Premium Follow Up- Quarterly Frequency
+                                    </a><i class="indicator glyphicon glyphicon-chevron-down  pull-right"></i>
+                                </h4>
+                            </div>
+                            <div id="collapseTwoFive" class="panel-collapse collapse">
+                                <div class="panel-body">
+                                    <form  novalidate="true" role="form" name="forms.form5">
+                                       <div class="row">
+                                             <div class="form-group col-md-4 required" ng-repeat="premiumFollowUpFrequencyItems in items.premiumFollowUpFrequency[2].premiumFollowUpFrequencyItems">
+                                                 <label class="control-label"   data-placement="top" data-toggle="tooltip" tooltip="{{premiumFollowUpFrequencyItems.fullDescription}}"  >{{premiumFollowUpFrequencyItems.description}}</label>
+                                                 <p class="input-group">
+                                                     <input type="number" class="form-control input-sm" min="1" ng-pattern="/^([0-9]{1,2})?$/"  ng-model="premiumFollowUpFrequencyItems.value" value="{{premiumFollowUpFrequencyItems.value}}" ng-required="true"/>
+                                                 </p>
+                                             </div>
+                                         </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="panel panel-default" id="panel26" ng-class="forms.form6.$valid ? '' : 'errorClass'">
+                            <div class="panel-heading">
+                                <h4 class="panel-title">
+                                    <a  class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseTwoSix">
+                                        Premium Follow Up- Monthly Frequency
+                                    </a><i class="indicator glyphicon glyphicon-chevron-down  pull-right"></i>
+                                </h4>
+                            </div>
+                            <div id="collapseTwoSix" class="panel-collapse collapse">
+                                <div class="panel-body">
+                                    <form  novalidate="true" role="form" name="forms.form6">
+                                        <div class="row">
+                                             <div class="form-group col-md-4 required" ng-repeat="premiumFollowUpFrequencyItems in items.premiumFollowUpFrequency[3].premiumFollowUpFrequencyItems">
+                                                 <label class="control-label"   data-placement="top" data-toggle="tooltip" tooltip="{{premiumFollowUpFrequencyItems.fullDescription}}"  >{{premiumFollowUpFrequencyItems.description}}</label>
+                                                 <p class="input-group">
+                                                     <input type="number" class="form-control input-sm" min="1" ng-pattern="/^([0-9]{1,2})?$/"  ng-model="premiumFollowUpFrequencyItems.value" value="{{premiumFollowUpFrequencyItems.value}}" ng-required="true"/>
+                                                 </p>
+                                             </div>
+                                         </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel panel-default" id="panel27" ng-class="forms.form7.$valid ? '' : 'errorClass'">
+                            <div class="panel-heading">
+                                <h4 class="panel-title">
+                                    <a  class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseTwoSeven">
+                                        Reinstatement Request
+                                    </a><i class="indicator glyphicon glyphicon-chevron-down  pull-right"></i>
+                                </h4>
+                            </div>
+                            <div id="collapseTwoSeven" class="panel-collapse collapse">
+                                <div class="panel-body">
+                                    <form  novalidate="true" role="form" name="forms.form7">
+                                        <div class="row">
+                                            <div class="form-group col-md-4 required" ng-repeat="reinstatementProcessItems in items.reinstatementProcessItems">
+                                                <label class="control-label"   data-placement="top" data-toggle="tooltip" tooltip="{{reinstatementProcessItems.fullDescription}}"  >{{reinstatementProcessItems.description}}</label>
+                                                <p class="input-group">
+                                                    <input type="number" class="form-control input-sm" min="1" ng-pattern="/^([0-9]{1,2})?$/"  ng-model="reinstatementProcessItems.value" value="{{reinstatementProcessItems.value}}"  ng-required="true"/>
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel panel-default" id="panel28" ng-class="forms.form8.$valid ? '' : 'errorClass'">
+                            <div class="panel-heading">
+                                <h4 class="panel-title">
+                                    <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseTwoEight">
+                                        Endorsement Request
+                                    </a><i class="indicator glyphicon glyphicon-chevron-down  pull-right"></i>
+                                </h4>
+                            </div>
+                            <div id="collapseTwoEight" class="panel-collapse collapse">
+                                <div class="panel-body">
+                                    <form  novalidate="true" role="form" name="forms.form8">
+                                        <div class="row">
+                                            <div class="form-group col-md-4 required"  ng-repeat="endorsementProcessItems in items.endorsementProcessItems">
+                                                <label class="control-label"   data-placement="top" data-toggle="tooltip" tooltip="{{endorsementProcessItems.fullDescription}}" >{{endorsementProcessItems.description}}</label>
+                                                <p class="input-group">
+                                                    <input type="number" class="form-control input-sm" min="1" ng-pattern="/^([0-9]{1,2})?$/"  ng-model="endorsementProcessItems.value" value="{{endorsementProcessItems.value}}" ng-required="true"/>
+                                                </p>
+                                            </div>
+
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel panel-default" id="panel29" ng-class="forms.form9.$valid ? '' : 'errorClass'">
+                            <div class="panel-heading">
+                                <h4 class="panel-title">
+                                    <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseTwoNine">
+                                        Claim Request
+                                    </a><i class="indicator glyphicon glyphicon-chevron-down  pull-right"></i>
+                                </h4>
+                            </div>
+                            <div id="collapseTwoNine" class="panel-collapse collapse">
+                                <div class="panel-body">
+                                    <form  novalidate="true" role="form" name="forms.form9">
+                                        <div class="row">
+                                            <div class="form-group col-md-4 required" ng-repeat="claimProcessItems in items.claimProcessItems">
+                                                <label class="control-label"   data-placement="top" data-toggle="tooltip" tooltip="{{claimProcessItems.fullDescription}}"   >{{claimProcessItems.description}}</label>
+                                                <p class="input-group">
+                                                    <input type="number" class="form-control input-sm" min="1" ng-pattern="/^([0-9]{1,2})?$/"  ng-model="claimProcessItems.value" value="{{claimProcessItems.value}}"  ng-required="true"/>
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="panel panel-default" id="panel30" ng-class="forms.form10.$valid ? '' : 'errorClass'">
+                            <div class="panel-heading">
+                                <h4 class="panel-title">
+                                    <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseThreeZero">
+                                        Surrender Request
+                                    </a><i class="indicator glyphicon glyphicon-chevron-down  pull-right"></i>
+                                </h4>
+                            </div>
+                            <div id="collapseThreeZero" class="panel-collapse collapse">
+                                <div class="panel-body">
+                                    <form  novalidate="true" role="form" name="forms.form10">
+                                        <div class="row">
+                                            <div class="form-group col-md-4 required" ng-repeat="surrenderProcessItems in items.surrenderProcessItems">
+                                                <label class="control-label"   data-placement="top" data-toggle="tooltip" tooltip="{{surrenderProcessItems.fullDescription}}"   >{{surrenderProcessItems.description}}</label>
+                                                <p class="input-group">
+                                                    <input type="number" class="form-control input-sm" min="1" ng-pattern="/^([0-9]{1,2})?$/"  ng-model="surrenderProcessItems.value" value="{{surrenderProcessItems.value}}" ng-required="true"/>
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel panel-default" id="panel31" ng-class="forms.form11.$valid ? '' : 'errorClass'">
+                            <div class="panel-heading">
+                                <h4 class="panel-title">
+                                    <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseThreeOne">
+                                        Maturity Process
+                                    </a><i class="indicator glyphicon glyphicon-chevron-down  pull-right"></i>
+                                </h4>
+                            </div>
+                            <div id="collapseThreeOne" class="panel-collapse collapse">
+                                <div class="panel-body">
+                                    <form  novalidate="true" role="form" name="forms.form11">
+                                        <div class="row">
+                                            <div class="form-group col-md-4 required" ng-repeat="maturityProcessItems in items.maturityProcessItems">
+                                                <label class="control-label"   data-placement="top" data-toggle="tooltip" tooltip="{{maturityProcessItems.fullDescription}}" >{{maturityProcessItems.description}}</label>
+                                                <p class="input-group">
+                                                    <input type="number" class="form-control input-sm" min="1" ng-pattern="/^([0-9]{1,2})?$/"  ng-model="maturityProcessItems.value" value="{{maturityProcessItems.value}}" ng-required="true"/>
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel panel-default" id="panel32" ng-class="forms.form12.$valid ? '' : 'errorClass'">
+                            <div class="panel-heading">
+                                <h4 class="panel-title">
+                                    <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseThreeTwo">
+                                        Policy Fee
+                                    </a><i class="indicator glyphicon glyphicon-chevron-down  pull-right"></i>
+                                </h4>
+                            </div>
+                            <div id="collapseThreeTwo" class="panel-collapse collapse">
+                                <div class="panel-body">
+                                    <form  novalidate="true" role="form" name="forms.form12">
+                                        <div class="row">
+                                            <div class="form-group col-md-4 required" ng-repeat="policyFeeProcessItems in items.policyFeeProcessItems">
+                                                <label class="control-label"   data-placement="top" data-toggle="tooltip" tooltip="{{policyFeeProcessItems.fullDescription}}"   >{{policyFeeProcessItems.description}}</label>
+                                                <p class="input-group">
+                                                    <input type="number" class="form-control input-sm" min="1" ng-pattern="/^([0-9]{1,3})?$/"  ng-model="policyFeeProcessItems.policyFee" value="{{policyFeeProcessItems.policyFee}}" ng-required="true"/>
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+
+
+                       <!-- <div class="panel panel-default" id="panel133" ng-class="forms.form13.$valid ? '' : 'errorClass'">
+                            <div class="panel-heading">
+                                <h4 class="panel-title">
+                                    <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapseThreeThree">
+                                        Age Loading Factor
+                                    </a><i class="indicator glyphicon glyphicon-chevron-down  pull-right"></i>
+                                </h4>
+                            </div>
+                            <div id="collapseThreeThree" class="panel-collapse collapse">
+                                <div class="panel-body">
+                                    <form  novalidate="true" role="form" name="forms.form13">
+                                        <div class="row">
+                                            <div class="form-group col-md-4 required" >
+                                                <label class="control-label"   data-placement="top"  >
+                                                    Age
+                                                </label>
+                                                <p class="input-group">
+                                                    <input type="number" class="form-control input-sm" min="1" ng-pattern="/^([0-9]{1,2})?$/" ng-model="items.ageLoadingFactor.age" value="{{items.ageLoadingFactor.age}}" ng-required="true" />
+                                                </p>
+                                            </div>
+                                            <div class="form-group col-md-4 required" >
+                                                <label class="control-label"   data-placement="top"  >
+                                                    Loading Factor
+                                                </label>
+                                                <p class="input-group">
+                                                    <input type="number" class="form-control input-sm" min="0.0001" ng-pattern="/^(^[0-9]{1,2})+(\.[0-9]{1,4})?$/" ng-model="items.ageLoadingFactor.loadingFactor" value="{{items.ageLoadingFactor.loadingFactor}}" ng-required="true" />
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>-->
+
+
+                        <div class="row">
+                            <div class="col-lg-12" style="text-align: center;margin-top:10px;">
+
+                                <button type="button" class="btn btn-default" style="float:right;" ng-disabled="(!forms.form1.$valid || !forms.form2.$valid || !forms.form3.$valid || !forms.form4.$valid || !forms.form5.$valid || !forms.form6.$valid || !forms.form7.$valid || !forms.form8.$valid || !forms.form9.$valid || !forms.form10.$valid || !forms.form11.$valid || !forms.form12.$valid)" data-placement="top-right" data-container="notification2" data-duration="5" bs-alert="alert"   ng-click="submitIndividualLife()">Save</button>
+                                <a class="btn btn-default" ng-click="reloadPage()" style="float:left;">Cancel</a>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<footer class="footer" th:include="fragments/common :: footer">
+</footer>
+<style>
+    .errorClass{
+        border:1px solid red;
+    }
+</style>
+
+</body>
+</html>

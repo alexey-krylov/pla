@@ -1,0 +1,1090 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/xhtml"
+      lang="en">
+<head th:include="fragments/common :: headTag">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+
+</head>
+<body>
+<div th:include="fragments/common :: bodyHeader" th:remove="tag"/>
+
+<script>
+    var interval = setInterval(function(){
+        if(require.defined("basic")){
+            $(document).ready(function(){
+                $('#accordion .accordion-toggle').click(function (e){
+                    var chevState = $(e.target).siblings("i.indicator").toggleClass('glyphicon-chevron-down glyphicon-chevron-up');
+                    $("i.indicator").not(chevState).removeClass("glyphicon-chevron-down").addClass("glyphicon-chevron-up");
+                });
+                $('#accordion1 .accordion-toggle').click(function (e){
+                    var chevState = $(e.target).siblings("i.indicator").toggleClass('glyphicon-chevron-down glyphicon-chevron-up');
+                    $("i.indicator").not(chevState).removeClass("glyphicon-chevron-down").addClass("glyphicon-chevron-up");
+                });
+                $('#accordion2 .accordion-toggle').click(function (e){
+                    var chevState = $(e.target).siblings("i.indicator").toggleClass('glyphicon-chevron-down glyphicon-chevron-up');
+                    $("i.indicator").not(chevState).removeClass("glyphicon-chevron-down").addClass("glyphicon-chevron-up");
+                });
+
+            });
+
+            clearInterval(interval);
+        }
+    }, 300);
+
+    requirejs(['main'],function(){
+        require(['/pla/js/generalInformation/viewProductLine.js'],function(){
+            angular.bootstrap(document, ['viewProductLine']);
+        });
+    });
+
+
+</script>
+<div class="container ng-cloak" ng-Controller="SelectViewController" ng-show="selectUpdate" >
+    <div class="row">
+        <div class="col-lg-12" >
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <div class="row">
+                        <div class="col-lg-3"><span th:text="#{selectProductLineInformation}">Select Product Line Information
+                        </span></div>
+                    </div>
+                </div>
+                <div class="panel-body ng-cloak">
+                    <div class="row">
+                        <div class="form-group col-md-6 required" >
+                            <label class="control-label">Select Product Line information</label>
+
+                            <select class="form-control input-sm" ng-model="selectedOption.productLine"   >
+                                <option value="">----Select one----</option>
+                                <option value="groupHealth" >Group Health Level Information</option>
+                                <option value="groupLife">Group Life Level Information</option>
+                                <option value="individualLife">Individual Life Level Information</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="container ng-cloak" ng-Controller="ViewGroupHealthLevelInformationController" ng-show="groupHealth">
+    <div class="row">
+        <div class="col-lg-12" style="text-align: center;margin-top:10px;margin-bottom: 10px;">
+
+            <button type="button" class="btn btn-primary btn-xs" style="float:left;"  ng-click="reloadPage()">Back</button>
+
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <div class="row">
+                        <div class="col-lg-6"><span th:text="#{groupHealthLevelInformation}">Group Health Level Information
+                        </span></div>
+                    </div>
+                </div>
+                <div class="panel-body ng-cloak">
+                    <div class="panel-group ng-cloak" id="accordion">
+                        <div class="panel panel-default" id="panel1" >
+                            <div class="panel-heading">
+                                <h4 class="panel-title">
+                                    <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapseOne">
+                                        Quotation
+                                    </a><i class="indicator glyphicon glyphicon-chevron-down  pull-right"></i>
+
+                                </h4>
+                            </div>
+                            <div id="collapseOne" class="panel-collapse collapse in">
+                                <div class="panel-body">
+                                    <div class="row">
+                                        <div class="form-group col-md-4" ng-repeat="quotationProcessItems in items.quotationProcessItems">
+                                            <label class="control-label"  data-placement="top" data-toggle="tooltip" tooltip="{{quotationProcessItems.fullDescription}}"   >{{quotationProcessItems.description}}</label>
+                                            <p class="input-group" >
+                                                <input type="text" class="form-control input-sm"  value="{{quotationProcessItems.value}}" readonly="true"/>
+                                            </p>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel panel-default" id="panel2" >
+                            <div class="panel-heading">
+                                <h4 class="panel-title">
+                                    <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo">
+                                        New Business/Enrollment
+                                    </a><i class="indicator glyphicon glyphicon-chevron-down  pull-right"></i>
+                                </h4>
+                            </div>
+                            <div id="collapseTwo" class="panel-collapse collapse">
+                                <div class="panel-body">
+
+                                    <div class="row">
+                                        <div class="form-group col-md-4" ng-repeat="enrollmentProcessItems in items.enrollmentProcessItems">
+                                            <label class="control-label"   data-placement="top" data-toggle="tooltip" tooltip="{{enrollmentProcessItems.fullDescription}}" >{{enrollmentProcessItems.description}}</label>
+                                            <p class="input-group">
+                                                <input type="text" class="form-control input-sm"  value="{{enrollmentProcessItems.value}}" readonly="true"/>
+                                            </p>
+                                        </div>
+
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="panel panel-default" id="panel3">
+                            <div class="panel-heading">
+                                <h4 class="panel-title">
+                                    <a  class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapseThree">
+                                        Premium Follow Up- Annual Frequency
+                                    </a><i class="indicator glyphicon glyphicon-chevron-down  pull-right"></i>
+                                </h4>
+                            </div>
+                            <div id="collapseThree" class="panel-collapse collapse">
+                                <div class="panel-body">
+                                    <div class="row">
+                                        <div class="form-group col-md-4" ng-repeat="premiumFollowUpFrequencyItems in items.premiumFollowUpFrequency[0].premiumFollowUpFrequencyItems">
+                                            <label class="control-label"  data-placement="top" data-toggle="tooltip" tooltip="{{premiumFollowUpFrequencyItems.fullDescription}}"  >{{premiumFollowUpFrequencyItems.description}}</label>
+                                            <p class="input-group">
+                                                <input type="number" class="form-control input-sm" value="{{premiumFollowUpFrequencyItems.value}}" readonly="true"/>
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel panel-default" id="panel4">
+                            <div class="panel-heading">
+                                <h4 class="panel-title">
+                                    <a  class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapseFour">
+                                        Premium Follow Up- Semi-Annual Frequency
+                                    </a><i class="indicator glyphicon glyphicon-chevron-down  pull-right"></i>
+                                </h4>
+                            </div>
+                            <div id="collapseFour" class="panel-collapse collapse">
+                                <div class="panel-body">
+                                    <div class="row">
+                                        <div class="form-group col-md-4" ng-repeat="premiumFollowUpFrequencyItems in items.premiumFollowUpFrequency[1].premiumFollowUpFrequencyItems">
+                                            <label class="control-label"   data-placement="top" data-toggle="tooltip" tooltip="{{premiumFollowUpFrequencyItems.fullDescription}}" >{{premiumFollowUpFrequencyItems.description}}</label>
+                                            <p class="input-group">
+                                                <input type="number" class="form-control input-sm"  value="{{premiumFollowUpFrequencyItems.value}}" readonly="true"/>
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel panel-default" id="panel5" >
+                            <div class="panel-heading">
+                                <h4 class="panel-title">
+                                    <a  class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapseFive">
+                                        Premium Follow Up- Quarterly Frequency
+                                    </a><i class="indicator glyphicon glyphicon-chevron-down  pull-right"></i>
+                                </h4>
+                            </div>
+                            <div id="collapseFive" class="panel-collapse collapse">
+                                <div class="panel-body">
+                                    <div class="row">
+                                        <div class="form-group col-md-4" ng-repeat="premiumFollowUpFrequencyItems in items.premiumFollowUpFrequency[2].premiumFollowUpFrequencyItems">
+                                            <label class="control-label"   data-placement="top" data-toggle="tooltip" tooltip="{{premiumFollowUpFrequencyItems.fullDescription}}"  >{{premiumFollowUpFrequencyItems.description}}</label>
+                                            <p class="input-group">
+                                                <input type="number" class="form-control input-sm"  value="{{premiumFollowUpFrequencyItems.value}}" readonly="true"/>
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="panel panel-default" id="panel6" >
+                            <div class="panel-heading">
+                                <h4 class="panel-title">
+                                    <a  class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapseSix">
+                                        Premium Follow Up- Monthly Frequency
+                                    </a><i class="indicator glyphicon glyphicon-chevron-down  pull-right"></i>
+                                </h4>
+                            </div>
+                            <div id="collapseSix" class="panel-collapse collapse">
+                                <div class="panel-body">
+                                    <div class="row">
+                                        <div class="form-group col-md-4" ng-repeat="premiumFollowUpFrequencyItems in items.premiumFollowUpFrequency[3].premiumFollowUpFrequencyItems">
+                                            <label class="control-label"   data-placement="top" data-toggle="tooltip" tooltip="{{premiumFollowUpFrequencyItems.fullDescription}}"  >{{premiumFollowUpFrequencyItems.description}}</label>
+                                            <p class="input-group">
+                                                <input type="number" class="form-control input-sm"  value="{{premiumFollowUpFrequencyItems.value}}" readonly="true"/>
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel panel-default" id="panel7">
+                            <div class="panel-heading">
+                                <h4 class="panel-title">
+                                    <a  class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapseSeven">
+                                        Reinstatement Request
+                                    </a><i class="indicator glyphicon glyphicon-chevron-down  pull-right"></i>
+                                </h4>
+                            </div>
+                            <div id="collapseSeven" class="panel-collapse collapse">
+                                <div class="panel-body">
+                                    <div class="row">
+                                        <div class="form-group col-md-4" ng-repeat="reinstatementProcessItems in items.reinstatementProcessItems">
+                                            <label class="control-label"   data-placement="top" data-toggle="tooltip" tooltip="{{reinstatementProcessItems.fullDescription}}" >{{reinstatementProcessItems.description}}</label>
+                                            <p class="input-group">
+                                                <input type="text" class="form-control input-sm"  value="{{reinstatementProcessItems.value}}" readonly="true"/>
+                                            </p>
+                                        </div>
+
+                                    </div>
+
+
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel panel-default" id="panel8">
+                            <div class="panel-heading">
+                                <h4 class="panel-title">
+                                    <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapseEight">
+                                        Endorsement Request
+                                    </a><i class="indicator glyphicon glyphicon-chevron-down  pull-right"></i>
+                                </h4>
+                            </div>
+                            <div id="collapseEight" class="panel-collapse collapse">
+                                <div class="panel-body">
+                                    <div class="row">
+                                        <div class="form-group col-md-4"  ng-repeat="endorsementProcessItems in items.endorsementProcessItems">
+                                            <label class="control-label"   data-placement="top" data-toggle="tooltip" tooltip="{{endorsementProcessItems.fullDescription}}"  >{{endorsementProcessItems.description}}</label>
+                                            <p class="input-group">
+                                                <input type="text" class="form-control input-sm"  value="{{endorsementProcessItems.value}}" readonly="true" />
+                                            </p>
+                                        </div>
+
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel panel-default" id="panel9">
+                            <div class="panel-heading">
+                                <h4 class="panel-title">
+                                    <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapseNine">
+                                        Claim Request
+                                    </a><i class="indicator glyphicon glyphicon-chevron-down  pull-right"></i>
+                                </h4>
+                            </div>
+                            <div id="collapseNine" class="panel-collapse collapse">
+                                <div class="panel-body">
+                                    <div class="row">
+                                        <div class="form-group col-md-4" ng-repeat="claimProcessItems in items.claimProcessItems">
+                                            <label class="control-label"  data-placement="top" data-toggle="tooltip" tooltip="{{claimProcessItems.fullDescription}}"   >{{claimProcessItems.description}}</label>
+                                            <p class="input-group">
+                                                <input type="text" class="form-control input-sm" value="{{claimProcessItems.value}}" readonly="true" />
+                                            </p>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel panel-default" id="panel10">
+                            <div class="panel-heading">
+                                <h4 class="panel-title">
+                                    <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapseTen">
+                                        Minimum Limit for Group Policy
+                                    </a><i class="indicator glyphicon glyphicon-chevron-down  pull-right"></i>
+                                </h4>
+                            </div>
+                            <div id="collapseTen" class="panel-collapse collapse">
+                                <div class="panel-body">
+                                    <div class="row">
+                                        <div class="form-group col-md-4" ng-repeat="policyProcessMinimumLimitItems in items.policyProcessMinimumLimitItems">
+                                            <label class="control-label"  data-placement="top" data-toggle="tooltip" tooltip="{{policyProcessMinimumLimitItems.fullDescription}}">{{policyProcessMinimumLimitItems.description}}</label>
+                                            <p class="input-group">
+                                                <input type="text" class="form-control input-sm"  value="{{policyProcessMinimumLimitItems.value}}" readonly="true" />
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel panel-default" id="panel11">
+                            <div class="panel-heading">
+                                <h4 class="panel-title">
+                                    <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapseEleven">
+                                        Modal Factors
+                                    </a><i class="indicator glyphicon glyphicon-chevron-down  pull-right"></i>
+                                </h4>
+                            </div>
+                            <div id="collapseEleven" class="panel-collapse collapse">
+                                <div class="panel-body">
+                                    <div class="row">
+                                        <div class="form-group col-md-4" ng-repeat="modelFactorItems in items.modelFactorItems">
+                                            <label class="control-label"   data-placement="top" data-toggle="tooltip" tooltip="{{modelFactorItems.fullDescription}}" >{{modelFactorItems.description}}</label>
+                                            <p class="input-group">
+                                                <input type="text" class="form-control input-sm"  value="{{modelFactorItems.value}}" readonly="true"/>
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel panel-default" id="panel12">
+                            <div class="panel-heading">
+                                <h4 class="panel-title">
+                                    <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapseTwelve">
+                                        Discount Factors
+                                    </a><i class="indicator glyphicon glyphicon-chevron-down  pull-right"></i>
+                                </h4>
+                            </div>
+                            <div id="collapseTwelve" class="panel-collapse collapse">
+                                <div class="panel-body">
+                                    <div class="row">
+                                        <div class="form-group col-md-4" ng-repeat="discountFactorItems in items.discountFactorItems">
+                                            <label class="control-label"   data-placement="top" data-toggle="tooltip" tooltip="{{discountFactorItems.fullDescription}}"  >{{discountFactorItems.description}}</label>
+                                            <p class="input-group">
+                                                <input type="text" class="form-control input-sm"  value="{{discountFactorItems.value}}" readonly="true"/>
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!---->
+
+                        <div class="panel panel-default" id="panel13">
+                            <div class="panel-heading">
+                                <h4 class="panel-title">
+                                    <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapseThirteen">
+                                        Age Loading Factor
+                                    </a><i class="indicator glyphicon glyphicon-chevron-down  pull-right"></i>
+                                </h4>
+                            </div>
+                            <div id="collapseThirteen" class="panel-collapse collapse">
+                                <div class="panel-body">
+                                    <div class="row">
+                                        <div class="form-group col-md-4" >
+                                            <label class="control-label"   data-placement="top"  >
+                                                Age
+                                            </label>
+                                            <p class="input-group">
+                                                <input type="text" class="form-control input-sm"  value="{{items.ageLoadingFactor.age}}" readonly="true"/>
+                                            </p>
+                                        </div>
+                                        <div class="form-group col-md-4">
+                                            <label class="control-label"   data-placement="top"  >
+                                                Loading Factor
+                                            </label>
+                                            <p class="input-group">
+                                                <input type="text" class="form-control input-sm"  value="{{items.ageLoadingFactor.loadingFactor}}" readonly="true"/>
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="panel panel-default" id="panel14">
+                            <div class="panel-heading">
+                                <h4 class="panel-title">
+                                    <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapseFourteen">
+                                        Moratorium Period for Pre-existing Illness
+                                    </a><i class="indicator glyphicon glyphicon-chevron-down  pull-right"></i>
+                                </h4>
+                            </div>
+                            <div id="collapseFourteen" class="panel-collapse collapse">
+                                <div class="panel-body">
+                                    <div class="row">
+                                        <div class="form-group col-md-4" >
+                                            <label class="control-label"   data-placement="top"  >
+                                                Moratorium Period (Days)
+                                            </label>
+                                            <p class="input-group">
+                                                <input type="text" class="form-control input-sm"  value="{{items.moratoriumPeriod}}" readonly="true"/>
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="container ng-cloak" ng-Controller="ViewGroupLifeLevelInformationController" ng-show="groupLife">
+    <div class="row">
+        <div class="col-lg-12" style="text-align: center;margin-top:10px;margin-bottom: 10px;">
+
+            <button type="button" class="btn btn-primary btn-xs" style="float:left;"  ng-click="reloadPage()">Back</button>
+
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <div class="row">
+                        <div class="col-lg-6"><span th:text="#{groupLifeLevelInformation}">Group Life Level Information
+                        </span></div>
+                    </div>
+                </div>
+                <div class="panel-body ng-cloak">
+                    <div class="panel-group ng-cloak" id="accordion1">
+                        <div class="panel panel-default" id="panel21" >
+                            <div class="panel-heading">
+                                <h4 class="panel-title">
+                                    <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion1" href="#collapseTwoOne">
+                                        Quotation
+                                    </a><i class="indicator glyphicon glyphicon-chevron-down  pull-right"></i>
+
+                                </h4>
+                            </div>
+                            <div id="collapseTwoOne" class="panel-collapse collapse in">
+                                <div class="panel-body">
+                                    <div class="row">
+                                        <div class="form-group col-md-4" ng-repeat="quotationProcessItems in items.quotationProcessItems">
+                                            <label class="control-label"  data-placement="top" data-toggle="tooltip" tooltip="{{quotationProcessItems.fullDescription}}"  >{{quotationProcessItems.description}}</label>
+                                            <p class="input-group" >
+                                                <input type="text" class="form-control input-sm" value="{{quotationProcessItems.value}}" readonly="true"/>
+                                            </p>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel panel-default" id="panel22" >
+                            <div class="panel-heading">
+                                <h4 class="panel-title">
+                                    <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion1" href="#collapseTwoTwo">
+                                        New Business/Enrollment
+                                    </a><i class="indicator glyphicon glyphicon-chevron-down  pull-right"></i>
+                                </h4>
+                            </div>
+                            <div id="collapseTwoTwo" class="panel-collapse collapse">
+                                <div class="panel-body">
+
+                                    <div class="row">
+                                        <div class="form-group col-md-4" ng-repeat="enrollmentProcessItems in items.enrollmentProcessItems">
+                                            <label class="control-label"  data-placement="top" data-toggle="tooltip" tooltip="{{enrollmentProcessItems.fullDescription}}" >{{enrollmentProcessItems.description}}</label>
+                                            <p class="input-group">
+                                                <input type="text" class="form-control input-sm"  value="{{enrollmentProcessItems.value}}" readonly="true"/>
+                                            </p>
+                                        </div>
+
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel panel-default" id="panel23" >
+                            <div class="panel-heading">
+                                <h4 class="panel-title">
+                                    <a  class="accordion-toggle" data-toggle="collapse" data-parent="#accordion1" href="#collapseTwoThree">
+                                        Premium Follow Up- Annual Frequency
+                                    </a><i class="indicator glyphicon glyphicon-chevron-down  pull-right"></i>
+                                </h4>
+                            </div>
+                            <div id="collapseTwoThree" class="panel-collapse collapse">
+                                <div class="panel-body">
+                                    <div class="row">
+                                        <div class="form-group col-md-4" ng-repeat="premiumFollowUpFrequencyItems in items.premiumFollowUpFrequency[0].premiumFollowUpFrequencyItems">
+                                            <label class="control-label"   data-placement="top" data-toggle="tooltip" tooltip="{{premiumFollowUpFrequencyItems.fullDescription}}"  >{{premiumFollowUpFrequencyItems.description}}</label>
+                                            <p class="input-group">
+                                                <input type="number" class="form-control input-sm" value="{{premiumFollowUpFrequencyItems.value}}" readonly="true"/>
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel panel-default" id="panel24">
+                            <div class="panel-heading">
+                                <h4 class="panel-title">
+                                    <a  class="accordion-toggle" data-toggle="collapse" data-parent="#accordion1" href="#collapseTwoFour">
+                                        Premium Follow Up- Semi-Annual Frequency
+                                    </a><i class="indicator glyphicon glyphicon-chevron-down  pull-right"></i>
+                                </h4>
+                            </div>
+                            <div id="collapseTwoFour" class="panel-collapse collapse">
+                                <div class="panel-body">
+                                    <div class="row">
+                                        <div class="form-group col-md-4" ng-repeat="premiumFollowUpFrequencyItems in items.premiumFollowUpFrequency[1].premiumFollowUpFrequencyItems">
+                                            <label class="control-label"   data-placement="top" data-toggle="tooltip" tooltip="{{premiumFollowUpFrequencyItems.fullDescription}}"  >{{premiumFollowUpFrequencyItems.description}}</label>
+                                            <p class="input-group">
+                                                <input type="number" class="form-control input-sm"  value="{{premiumFollowUpFrequencyItems.value}}" readonly="true"/>
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel panel-default" id="panel25" >
+                            <div class="panel-heading">
+                                <h4 class="panel-title">
+                                    <a  class="accordion-toggle" data-toggle="collapse" data-parent="#accordion1" href="#collapseTwoFive">
+                                        Premium Follow Up- Quarterly Frequency
+                                    </a><i class="indicator glyphicon glyphicon-chevron-down  pull-right"></i>
+                                </h4>
+                            </div>
+                            <div id="collapseTwoFive" class="panel-collapse collapse">
+                                <div class="panel-body">
+                                    <div class="row">
+                                        <div class="form-group col-md-4" ng-repeat="premiumFollowUpFrequencyItems in items.premiumFollowUpFrequency[2].premiumFollowUpFrequencyItems">
+                                            <label class="control-label"   data-placement="top" data-toggle="tooltip" tooltip="{{premiumFollowUpFrequencyItems.fullDescription}}"  >{{premiumFollowUpFrequencyItems.description}}</label>
+                                            <p class="input-group">
+                                                <input type="number" class="form-control input-sm"  value="{{premiumFollowUpFrequencyItems.value}}" readonly="true"/>
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="panel panel-default" id="panel26" >
+                            <div class="panel-heading">
+                                <h4 class="panel-title">
+                                    <a  class="accordion-toggle" data-toggle="collapse" data-parent="#accordion1" href="#collapseTwoSix">
+                                        Premium Follow Up- Monthly Frequency
+                                    </a><i class="indicator glyphicon glyphicon-chevron-down  pull-right"></i>
+                                </h4>
+                            </div>
+                            <div id="collapseTwoSix" class="panel-collapse collapse">
+                                <div class="panel-body">
+                                    <div class="row">
+                                        <div class="form-group col-md-4" ng-repeat="premiumFollowUpFrequencyItems in items.premiumFollowUpFrequency[3].premiumFollowUpFrequencyItems">
+                                            <label class="control-label"   data-placement="top" data-toggle="tooltip" tooltip="{{premiumFollowUpFrequencyItems.fullDescription}}"  >{{premiumFollowUpFrequencyItems.description}}</label>
+                                            <p class="input-group">
+                                                <input type="number" class="form-control input-sm"  value="{{premiumFollowUpFrequencyItems.value}}" readonly="true"/>
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel panel-default" id="panel27">
+                            <div class="panel-heading">
+                                <h4 class="panel-title">
+                                    <a  class="accordion-toggle" data-toggle="collapse" data-parent="#accordion1" href="#collapseTwoSeven">
+                                        Reinstatement Request
+                                    </a><i class="indicator glyphicon glyphicon-chevron-down  pull-right"></i>
+                                </h4>
+                            </div>
+                            <div id="collapseTwoSeven" class="panel-collapse collapse">
+                                <div class="panel-body">
+                                    <div class="row">
+                                        <div class="form-group col-md-4" ng-repeat="reinstatementProcessItems in items.reinstatementProcessItems">
+                                            <label class="control-label"  data-placement="top" data-toggle="tooltip" tooltip="{{reinstatementProcessItems.fullDescription}}"  >{{reinstatementProcessItems.description}}</label>
+                                            <p class="input-group">
+                                                <input type="text" class="form-control input-sm" value="{{reinstatementProcessItems.value}}" readonly="true"/>
+                                            </p>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel panel-default" id="panel28">
+                            <div class="panel-heading">
+                                <h4 class="panel-title">
+                                    <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion1" href="#collapseTwoEight">
+                                        Endorsement Request
+                                    </a><i class="indicator glyphicon glyphicon-chevron-down  pull-right"></i>
+                                </h4>
+                            </div>
+                            <div id="collapseTwoEight" class="panel-collapse collapse">
+                                <div class="panel-body">
+                                    <div class="row">
+                                        <div class="form-group col-md-4"  ng-repeat="endorsementProcessItems in items.endorsementProcessItems">
+                                            <label class="control-label"   data-placement="top" data-toggle="tooltip" tooltip="{{endorsementProcessItems.fullDescription}}"  >{{endorsementProcessItems.description}}</label>
+                                            <p class="input-group">
+                                                <input type="text" class="form-control input-sm"  value="{{endorsementProcessItems.value}}" readonly="true"/>
+                                            </p>
+                                        </div>
+
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel panel-default" id="panel29">
+                            <div class="panel-heading">
+                                <h4 class="panel-title">
+                                    <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion1" href="#collapseTwoNine">
+                                        Claim Request
+                                    </a><i class="indicator glyphicon glyphicon-chevron-down  pull-right"></i>
+                                </h4>
+                            </div>
+                            <div id="collapseTwoNine" class="panel-collapse collapse">
+                                <div class="panel-body">
+                                    <div class="row">
+                                        <div class="form-group col-md-4" ng-repeat="claimProcessItems in items.claimProcessItems">
+                                            <label class="control-label"   data-placement="top" data-toggle="tooltip" tooltip="{{claimProcessItems.fullDescription}}"  >{{claimProcessItems.description}}</label>
+                                            <p class="input-group">
+                                                <input type="text" class="form-control input-sm"  value="{{claimProcessItems.value}}" readonly="true"/>
+                                            </p>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel panel-default" id="panel30">
+                            <div class="panel-heading">
+                                <h4 class="panel-title">
+                                    <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion1" href="#collapseThreeZero">
+                                        Minimum Limit for Group Policy
+                                    </a><i class="indicator glyphicon glyphicon-chevron-down  pull-right"></i>
+                                </h4>
+                            </div>
+                            <div id="collapseThreeZero" class="panel-collapse collapse">
+                                <div class="panel-body">
+                                    <div class="row">
+                                        <div class="form-group col-md-4" ng-repeat="policyProcessMinimumLimitItems in items.policyProcessMinimumLimitItems">
+                                            <label class="control-label"   data-placement="top" data-toggle="tooltip" tooltip="{{policyProcessMinimumLimitItems.fullDescription}}"  >{{policyProcessMinimumLimitItems.description}}</label>
+                                            <p class="input-group">
+                                                <input type="text" class="form-control input-sm"  value="{{policyProcessMinimumLimitItems.value}}" readonly="true"/>
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel panel-default" id="panel31">
+                            <div class="panel-heading">
+                                <h4 class="panel-title">
+                                    <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion1" href="#collapseThreeOne">
+                                        Modal Factors
+                                    </a><i class="indicator glyphicon glyphicon-chevron-down  pull-right"></i>
+                                </h4>
+                            </div>
+                            <div id="collapseThreeOne" class="panel-collapse collapse">
+                                <div class="panel-body">
+                                    <div class="row">
+                                        <div class="form-group col-md-4" ng-repeat="modelFactorItems in items.modelFactorItems">
+                                            <label class="control-label"   data-placement="top" data-toggle="tooltip" tooltip="{{modelFactorItems.fullDescription}}"   >{{modelFactorItems.description}}</label>
+                                            <p class="input-group">
+                                                <input type="text" class="form-control input-sm"  value="{{modelFactorItems.value}}" readonly="true"/>
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel panel-default" id="panel32">
+                            <div class="panel-heading">
+                                <h4 class="panel-title">
+                                    <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion1" href="#collapseThreeTwo">
+                                        Discount Factors
+                                    </a><i class="indicator glyphicon glyphicon-chevron-down  pull-right"></i>
+                                </h4>
+                            </div>
+                            <div id="collapseThreeTwo" class="panel-collapse collapse">
+                                <div class="panel-body">
+                                    <div class="row">
+                                        <div class="form-group col-md-4" ng-repeat="discountFactorItems in items.discountFactorItems">
+                                            <label class="control-label"    data-placement="top" data-toggle="tooltip" tooltip="{{discountFactorItems.fullDescription}}"  >{{discountFactorItems.description}}</label>
+                                            <p class="input-group">
+                                                <input type="text" class="form-control input-sm"  value="{{discountFactorItems.value}}" readonly="true" />
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!---->
+
+                        <div class="panel panel-default" id="panel33">
+                            <div class="panel-heading">
+                                <h4 class="panel-title">
+                                    <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion1" href="#collapseThreeThree">
+                                        Age Loading Factor
+                                    </a><i class="indicator glyphicon glyphicon-chevron-down  pull-right"></i>
+                                </h4>
+                            </div>
+                            <div id="collapseThreeThree" class="panel-collapse collapse">
+                                <div class="panel-body">
+                                    <div class="row">
+                                        <div class="form-group col-md-4" >
+                                            <label class="control-label"   data-placement="top"  >
+                                                Age
+                                            </label>
+                                            <p class="input-group">
+                                                <input type="text" class="form-control input-sm"  value="{{items.ageLoadingFactor.age}}" readonly="true"/>
+                                            </p>
+                                        </div>
+                                        <div class="form-group col-md-4">
+                                            <label class="control-label"   data-placement="top"  >
+                                                Loading Factor
+                                            </label>
+                                            <p class="input-group">
+                                                <input type="text" class="form-control input-sm"  value="{{items.ageLoadingFactor.loadingFactor}}" readonly="true"/>
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container ng-cloak" ng-Controller="ViewIndividualLifeLevelInformationController" ng-show="individualLife">
+    <div class="row">
+        <div class="col-lg-12" style="text-align: center;margin-top:10px;margin-bottom: 10px;">
+
+            <button type="button" class="btn btn-primary btn-xs" style="float:left;"  ng-click="reloadPage()">Back</button>
+
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <div class="row">
+                        <div class="col-lg-6"><span th:text="#{individualLifeLevelInformation}">Individual Life Level Information
+                        </span></div>
+                    </div>
+                </div>
+                <div class="panel-body ng-cloak">
+                    <div class="panel-group ng-cloak" id="accordion2">
+                        <div class="panel panel-default" id="panel41" >
+                            <div class="panel-heading">
+                                <h4 class="panel-title">
+                                    <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseFourOne">
+                                        Quotation
+                                    </a><i class="indicator glyphicon glyphicon-chevron-down  pull-right"></i>
+
+                                </h4>
+                            </div>
+                            <div id="collapseFourOne" class="panel-collapse collapse in">
+                                <div class="panel-body">
+                                    <div class="row">
+                                        <div class="form-group col-md-4" ng-repeat="quotationProcessItems in items.quotationProcessItems">
+                                            <label class="control-label"  data-placement="top" data-toggle="tooltip" tooltip="{{quotationProcessItems.fullDescription}}"  >{{quotationProcessItems.description}}</label>
+                                            <p class="input-group" >
+                                                <input type="text" class="form-control input-sm"  value="{{quotationProcessItems.value}}" readonly="true"/>
+                                            </p>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel panel-default" id="panel42" >
+                            <div class="panel-heading">
+                                <h4 class="panel-title">
+                                    <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseFourTwo">
+                                        New Business/Enrollment
+                                    </a><i class="indicator glyphicon glyphicon-chevron-down  pull-right"></i>
+                                </h4>
+                            </div>
+                            <div id="collapseFourTwo" class="panel-collapse collapse">
+                                <div class="panel-body">
+
+                                    <div class="row">
+                                        <div class="form-group col-md-4" ng-repeat="enrollmentProcessItems in items.enrollmentProcessItems">
+                                            <label class="control-label"   data-placement="top" data-toggle="tooltip" tooltip="{{enrollmentProcessItems.fullDescription}}" >{{enrollmentProcessItems.description}}</label>
+                                            <p class="input-group">
+                                                <input type="text" class="form-control input-sm"  value="{{enrollmentProcessItems.value}}" readonly="true"/>
+                                            </p>
+                                        </div>
+
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel panel-default" id="panel43" >
+                            <div class="panel-heading">
+                                <h4 class="panel-title">
+                                    <a  class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseFourThree">
+                                        Premium Follow Up- Annual Frequency
+                                    </a><i class="indicator glyphicon glyphicon-chevron-down  pull-right"></i>
+                                </h4>
+                            </div>
+                            <div id="collapseFourThree" class="panel-collapse collapse">
+                                <div class="panel-body">
+                                    <div class="row">
+                                        <div class="form-group col-md-4" ng-repeat="premiumFollowUpFrequencyItems in items.premiumFollowUpFrequency[0].premiumFollowUpFrequencyItems">
+                                            <label class="control-label"   data-placement="top" data-toggle="tooltip" tooltip="{{premiumFollowUpFrequencyItems.fullDescription}}" >{{premiumFollowUpFrequencyItems.description}}</label>
+                                            <p class="input-group">
+                                                <input type="number" class="form-control input-sm" value="{{premiumFollowUpFrequencyItems.value}}" readonly="true"/>
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel panel-default" id="panel44">
+                            <div class="panel-heading">
+                                <h4 class="panel-title">
+                                    <a  class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseFourFour">
+                                        Premium Follow Up- Semi-Annual Frequency
+                                    </a><i class="indicator glyphicon glyphicon-chevron-down  pull-right"></i>
+                                </h4>
+                            </div>
+                            <div id="collapseFourFour" class="panel-collapse collapse">
+                                <div class="panel-body">
+                                    <div class="row">
+                                        <div class="form-group col-md-4" ng-repeat="premiumFollowUpFrequencyItems in items.premiumFollowUpFrequency[1].premiumFollowUpFrequencyItems">
+                                            <label class="control-label"   data-placement="top" data-toggle="tooltip" tooltip="{{premiumFollowUpFrequencyItems.fullDescription}}"  >{{premiumFollowUpFrequencyItems.description}}</label>
+                                            <p class="input-group">
+                                                <input type="number" class="form-control input-sm"  value="{{premiumFollowUpFrequencyItems.value}}" readonly="true"/>
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel panel-default" id="panel45" >
+                            <div class="panel-heading">
+                                <h4 class="panel-title">
+                                    <a  class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseFourFive">
+                                        Premium Follow Up- Quarterly Frequency
+                                    </a><i class="indicator glyphicon glyphicon-chevron-down  pull-right"></i>
+                                </h4>
+                            </div>
+                            <div id="collapseFourFive" class="panel-collapse collapse">
+                                <div class="panel-body">
+                                    <div class="row">
+                                        <div class="form-group col-md-4" ng-repeat="premiumFollowUpFrequencyItems in items.premiumFollowUpFrequency[2].premiumFollowUpFrequencyItems">
+                                            <label class="control-label"   data-placement="top" data-toggle="tooltip" tooltip="{{premiumFollowUpFrequencyItems.fullDescription}}" >{{premiumFollowUpFrequencyItems.description}}</label>
+                                            <p class="input-group">
+                                                <input type="number" class="form-control input-sm"  value="{{premiumFollowUpFrequencyItems.value}}" readonly="true"/>
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="panel panel-default" id="panel46" >
+                            <div class="panel-heading">
+                                <h4 class="panel-title">
+                                    <a  class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseFourSix">
+                                        Premium Follow Up- Monthly Frequency
+                                    </a><i class="indicator glyphicon glyphicon-chevron-down  pull-right"></i>
+                                </h4>
+                            </div>
+                            <div id="collapseFourSix" class="panel-collapse collapse">
+                                <div class="panel-body">
+                                    <div class="row">
+                                        <div class="form-group col-md-4" ng-repeat="premiumFollowUpFrequencyItems in items.premiumFollowUpFrequency[3].premiumFollowUpFrequencyItems">
+                                            <label class="control-label"    data-placement="top" data-toggle="tooltip" tooltip="{{premiumFollowUpFrequencyItems.fullDescription}}"  >{{premiumFollowUpFrequencyItems.description}}</label>
+                                            <p class="input-group">
+                                                <input type="number" class="form-control input-sm"  value="{{premiumFollowUpFrequencyItems.value}}" readonly="true"/>
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="panel panel-default" id="panel47">
+                            <div class="panel-heading">
+                                <h4 class="panel-title">
+                                    <a  class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseFourSeven">
+                                        Reinstatement Request
+                                    </a><i class="indicator glyphicon glyphicon-chevron-down  pull-right"></i>
+                                </h4>
+                            </div>
+                            <div id="collapseFourSeven" class="panel-collapse collapse">
+                                <div class="panel-body">
+                                    <div class="row">
+                                        <div class="form-group col-md-4" ng-repeat="reinstatementProcessItems in items.reinstatementProcessItems">
+                                            <label class="control-label"   data-placement="top" data-toggle="tooltip" tooltip="{{reinstatementProcessItems.fullDescription}}"  >{{reinstatementProcessItems.description}}</label>
+                                            <p class="input-group">
+                                                <input type="text" class="form-control input-sm"  value="{{reinstatementProcessItems.value}}" readonly="true" />
+                                            </p>
+                                        </div>
+
+                                    </div>
+
+
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel panel-default" id="panel48">
+                            <div class="panel-heading">
+                                <h4 class="panel-title">
+                                    <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseFourEight">
+                                        Endorsement Request
+                                    </a><i class="indicator glyphicon glyphicon-chevron-down  pull-right"></i>
+                                </h4>
+                            </div>
+                            <div id="collapseFourEight" class="panel-collapse collapse">
+                                <div class="panel-body">
+                                    <div class="row">
+                                        <div class="form-group col-md-4"  ng-repeat="endorsementProcessItems in items.endorsementProcessItems">
+                                            <label class="control-label"   data-placement="top" data-toggle="tooltip" tooltip="{{endorsementProcessItems.fullDescription}}" >{{endorsementProcessItems.description}}</label>
+                                            <p class="input-group">
+                                                <input type="text" class="form-control input-sm"   value="{{endorsementProcessItems.value}}" readonly="true"/>
+                                            </p>
+                                        </div>
+
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel panel-default" id="panel49">
+                            <div class="panel-heading">
+                                <h4 class="panel-title">
+                                    <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseFourNine">
+                                        Claim Request
+                                    </a><i class="indicator glyphicon glyphicon-chevron-down  pull-right"></i>
+                                </h4>
+                            </div>
+                            <div id="collapseFourNine" class="panel-collapse collapse">
+                                <div class="panel-body">
+                                    <div class="row">
+                                        <div class="form-group col-md-4" ng-repeat="claimProcessItems in items.claimProcessItems">
+                                            <label class="control-label"   data-placement="top" data-toggle="tooltip" tooltip="{{claimProcessItems.fullDescription}}"  >{{claimProcessItems.description}}</label>
+                                            <p class="input-group">
+                                                <input type="text" class="form-control input-sm"  value="{{claimProcessItems.value}}" readonly="true"/>
+                                            </p>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="panel panel-default" id="panel50">
+                            <div class="panel-heading">
+                                <h4 class="panel-title">
+                                    <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseFiveZero">
+                                        Surrender Request
+                                    </a><i class="indicator glyphicon glyphicon-chevron-down  pull-right"></i>
+                                </h4>
+                            </div>
+                            <div id="collapseFiveZero" class="panel-collapse collapse">
+                                <div class="panel-body">
+                                    <div class="row">
+                                        <div class="form-group col-md-4" ng-repeat="surrenderProcessItems in items.surrenderProcessItems">
+                                            <label class="control-label"   data-placement="top" data-toggle="tooltip" tooltip="{{surrenderProcessItems.fullDescription}}"  >{{surrenderProcessItems.description}}</label>
+                                            <p class="input-group">
+                                                <input type="text" class="form-control input-sm" value="{{surrenderProcessItems.value}}" readonly="true" />
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel panel-default" id="panel51">
+                            <div class="panel-heading">
+                                <h4 class="panel-title">
+                                    <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseFiveOne">
+                                        Maturity Process
+                                    </a><i class="indicator glyphicon glyphicon-chevron-down  pull-right"></i>
+                                </h4>
+                            </div>
+                            <div id="collapseFiveOne" class="panel-collapse collapse">
+                                <div class="panel-body">
+                                    <div class="row">
+                                        <div class="form-group col-md-4" ng-repeat="maturityProcessItems in items.maturityProcessItems">
+                                            <label class="control-label"   data-placement="top" data-toggle="tooltip" tooltip="{{maturityProcessItems.fullDescription}}"  >{{maturityProcessItems.description}}</label>
+                                            <p class="input-group">
+                                                <input type="text" class="form-control input-sm"  value="{{maturityProcessItems.value}}" readonly="true" />
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel panel-default" id="panel52">
+                            <div class="panel-heading">
+                                <h4 class="panel-title">
+                                    <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseFiveTwo">
+                                        Policy Fee
+                                    </a><i class="indicator glyphicon glyphicon-chevron-down  pull-right"></i>
+                                </h4>
+                            </div>
+                            <div id="collapseFiveTwo" class="panel-collapse collapse">
+                                <div class="panel-body">
+                                    <div class="row">
+                                        <div class="form-group col-md-4" ng-repeat="policyFeeProcessItems in items.policyFeeProcessItems">
+                                            <label class="control-label"   data-placement="top" data-toggle="tooltip" tooltip="{{policyFeeProcessItems.fullDescription}}" >{{policyFeeProcessItems.description}}</label>
+                                            <p class="input-group">
+                                                <input type="text" class="form-control input-sm"   value="{{policyFeeProcessItems.policyFee}}" readonly="true"/>
+                                            </p>
+                                        </div>
+
+                                    </div>
+
+                                </div>
+                            </div>
+                            <!--<div class="row">
+                                <div class="col-lg-12" style="text-align: center;margin-top:10px;">
+                                    <a class="btn btn-default" ng-click="reloadPage()" style="float:left;">Back</a>
+
+                                </div>
+                            </div>-->
+                        </div>
+
+                        <!---->
+
+                      <!--  <div class="panel panel-default" id="panel56">
+                            <div class="panel-heading">
+                                <h4 class="panel-title">
+                                    <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapseFiveSix">
+                                        Age Loading Factor
+                                    </a><i class="indicator glyphicon glyphicon-chevron-down  pull-right"></i>
+                                </h4>
+                            </div>
+                            <div id="collapseFiveSix" class="panel-collapse collapse">
+                                <div class="panel-body">
+                                    <div class="row">
+                                        <div class="form-group col-md-4" >
+                                            <label class="control-label"   data-placement="top"  >
+                                                Age
+                                            </label>
+                                            <p class="input-group">
+                                                <input type="text" class="form-control input-sm"  value="{{items.ageLoadingFactor.age}}" readonly="true"/>
+                                            </p>
+                                        </div>
+                                        <div class="form-group col-md-4">
+                                            <label class="control-label"   data-placement="top"  >
+                                                Loading Factor
+                                            </label>
+                                            <p class="input-group">
+                                                <input type="text" class="form-control input-sm"  value="{{items.ageLoadingFactor.loadingFactor}}" readonly="true"/>
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>-->
+
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<footer class="footer" th:include="fragments/common :: footer">
+</footer>
+
+</body>
+</html>
