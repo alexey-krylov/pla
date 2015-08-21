@@ -1,4 +1,4 @@
-angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute', 'commonServices', 'ngMessages', 'angucomplete-alt','mgcrea.ngStrap.select','angularFileUpload'])
+angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute', 'commonServices', 'ngMessages', 'angucomplete-alt','mgcrea.ngStrap.select','angularFileUpload','mgcrea.ngStrap.alert','mgcrea.ngStrap.popover','directives'])
     .directive('policyterm', function () {
         return {
             restrict: 'E',
@@ -262,7 +262,7 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
                         selectedPlan.title = response.planDetail.planDetail.planName;
                         selectedPlan.description = response.planDetail;
                         $scope.selectedPlan = selectedPlan;
-                        $scope.proposalPlanDetail.planId=response.proposalPlanDetail.planId;
+                        //$scope.proposalPlanDetail.planId=response.proposalPlanDetail.planId;
                     }
                     $scope.agentDetails.push($scope.agent);
                 }).error(function (response, status, headers, config) {
@@ -402,7 +402,7 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
                         $scope.relationshipList=response;
                     }).error(function (response, status, headers, config) {
                     });
-
+                    alert($scope.proposal.proposalId);
 
                     $http.get("getadditionaldocuments/"+ $scope.proposal.proposalId).success(function (data, status) {
                         //console.log(data);
@@ -593,7 +593,7 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
                             //alert('Bank Details..');
                             $scope.bankDetails= $scope.rcvProposal.premiumPaymentDetails.bankDetails;
                             //$scope.bankDetails.bankAccountNumber=$scope.rcvProposal.premiumPaymentDetails.bankDetails.bankAccountNumber;
-                            $scope.bankDetails.bankBranchName=$scope.rcvProposal.premiumPaymentDetails.bankDetails.bankBranchName;
+                            //$scope.bankDetails.bankBranchName=$scope.rcvProposal.premiumPaymentDetails.bankDetails.bankBranchName;
                         }
                     }
 
@@ -614,7 +614,7 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
                     }
                     if($scope.rcvProposal.familyPersonalDetail != null)
                     {
-                        if($scope.rcvProposal.familyPersonalDetail)
+                        if($scope.rcvProposal.familyPersonalDetail.isPregnant)
                         {
                             $scope.rcvProposal.familyPersonalDetail.isPregnant="true";
                         }
@@ -677,6 +677,8 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
                     }
 
                 }).error(function (response, status, headers, config) {
+                    //$scope.message = response.message;
+                    alert(response.message);
                 });
             }
 
@@ -788,7 +790,7 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
                 if(newvalue){
                     //alert("//alert in bankCode"+newvalue);
                     alert('branchName'+newvalue);
-                    $scope.bankDetails.bankBranchName=newvalue;
+                    //$scope.bankDetails.bankBranchName=newvalue;
                     var bankBranchNames = _.findWhere($scope.bankBranchDetails, {branchName: newvalue});
                     //$scope.bankDetails.bankBranchSortCode=bankBranchNames.sortCode;
                     //$scope.bankBranchDetails=bankBranchNames;
@@ -1071,7 +1073,9 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
 
                     }
 
-                });
+                }).error(function (response, status, headers, config) {
+                   //alert(response.message);
+                });;
             }
 
             $scope.returnProposal = function(comment){
@@ -2641,7 +2645,7 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
                 ////console.log('Update Result ' + JSON.stringify(request3));
 
                 if ($scope.quotationIdDetails.quotationId != null && $scope.quotationIdDetails.quotationId != " ") {
-                    //alert("Quotation Save...");
+                    alert("Quotation Save...");
                     /* var request2 = {
                      "proposedAssured": $scope.proposedAssured,
                      "agentCommissionDetails": $scope.agentDetails,
@@ -2657,6 +2661,7 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
                         "employment": $scope.proposerEmployment,
                         "residentialAddress": $scope.proposerResidential
                     }
+                    alert('quotationId:'+$scope.quotationIdDetails.quotationId);
 
                     request2 = angular.extend($scope.proposer, request2);
                     request2=
@@ -2749,6 +2754,11 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
 
 
                         }).error(function (response, status, headers, config) {
+
+                            $scope.message = response.message;
+                            //$scope.showErrorAlert = true;
+                            //$scope.saveDisabled = false;
+
                         });
 
                         //Testing

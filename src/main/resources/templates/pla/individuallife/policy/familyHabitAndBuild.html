@@ -15,16 +15,16 @@
                                 Family Member
                             </th>
                             <th>
-                                Status
+                                Status *
                             </th>
                             <th>
-                                State of health, give particulars
+                                State of health, give particulars *
                             </th>
                             <th>
-                                Age of death
+                                Age of death *
                             </th>
                             <th>
-                                Cause of Death
+                                Cause of Death *
                             </th>
                         </tr>
                         </thead>
@@ -34,41 +34,71 @@
                             <td>
                                 <label class="radio-inline">
                                     <input type="radio" name="fatherStatus" ng-model="familyHistory.father.isAlive"
-                                           value="true" ng-value="true"/> Alive
+                                           ng-disabled="mode=='new'||mode=='view'" value="true" ng-value="true"/> Alive
                                 </label>
                                 <label class="radio-inline">
                                     <input type="radio" name="fatherStatus" ng-model="familyHistory.father.isAlive" ng-value="false"
-                                           value="false"/> Dead
+                                           ng-disabled="mode=='new'||mode=='view'" value="false"/> Dead
                                 </label>
                             </td>
                             <td>
-                                <input type="text" class="form-control input-sm" ng-model="familyHistory.father.healthState"/>
+                                <input type="text" class="form-control input-sm" ng-disabled="mode=='new'||mode=='view'" ng-pattern="/[a-zA-Z]/" ng-if="familyHistory.father.isAlive" name="fatherhealthState" ng-maxlength="50" ng-model="familyHistory.father.healthState"/>
+                                <div class="error" ng-messages="step7.fatherhealthState.$error" ng-if="step7.fatherhealthState.$dirty">
+                                    <small ng-message="maxlength">Only 50 characters are allowed.</small>
+                                    <small ng-message="pattern">Only alphabets are allowed.</small>
+                                </div>
                             </td>
                             <td>
-                                <input type="number" class="form-control input-sm" ng-if="!familyHistory.father.isAlive" ng-model="familyHistory.father.deathAge"/>
+                                <input type="number" class="form-control input-sm" name="fatherDeathAge" ng-disabled="mode=='new'||mode=='view'" ng-pattern="/^\d+$/" ng-if="!familyHistory.father.isAlive" ng-maxlength="2" ng-model="familyHistory.father.deathAge"/>
+
+                                <div class="error" ng-messages="step7.fatherDeathAge.$error" ng-if="step7.fatherDeathAge.$dirty">
+                                    <small ng-message="maxlength">Only 2 Numbers are allowed.</small>
+                                    <small ng-message="pattern">Only Numeric are allowed.</small>
+                                </div>
+
                             </td>
                             <td>
-                                <input type="text" class="form-control input-sm" ng-if="!familyHistory.father.isAlive"  ng-model="familyHistory.father.deathCause"/>
+                                <input type="text" class="form-control input-sm" ng-disabled="mode=='new'||mode=='view'" name="fatherDeathCause" ng-pattern="/[a-zA-Z]/" ng-if="!familyHistory.father.isAlive"  ng-maxlength="20" ng-model="familyHistory.father.deathCause"/>
+
+                                <div class="error" ng-messages="step7.fatherDeathCause.$error" ng-if="step7.fatherDeathCause.$dirty">
+                                    <small ng-message="maxlength">Only 20 characters are allowed.</small>
+                                    <small ng-message="pattern">Only alphabets are allowed.</small>
+                                </div>
+
                             </td>
                         </tr>
                         <tr>
                             <td>Mother</td>
                             <td>
                                 <label class="radio-inline">
-                                    <input type="radio" name="motherStatus" ng-model="familyHistory.mother.isAlive"  ng-value="true" value="true" /> Alive
+                                    <input type="radio" name="motherStatus" ng-disabled="mode=='new'||mode=='view'" ng-model="familyHistory.mother.isAlive"  ng-value="true" value="true" /> Alive
                                 </label>
                                 <label class="radio-inline">
-                                    <input type="radio" name="motherStatus"  ng-model="familyHistory.mother.isAlive"  ng-value="false" value="false" /> Dead
+                                    <input type="radio" name="motherStatus"  ng-disabled="mode=='new'||mode=='view'" ng-model="familyHistory.mother.isAlive"  ng-value="false" value="false" /> Dead
                                 </label>
                             </td>
                             <td>
-                                <input type="text" class="form-control input-sm" ng-model="familyHistory.mother.healthState"/>
+                                <input type="text" class="form-control input-sm" ng-disabled="mode=='new'||mode=='view'" name="motherHealthState" ng-if="familyHistory.mother.isAlive"  ng-pattern="/[a-zA-Z]/" ng-maxlength="50" ng-model="familyHistory.mother.healthState"/>
+
+                                <div class="error" ng-messages="step7.motherHealthState.$error" ng-if="step7.motherHealthState.$dirty">
+                                    <small ng-message="maxlength">Only 50 characters are allowed.</small>
+                                    <small ng-message="pattern">Only alphabets are allowed.</small>
+                                </div>
                             </td>
                             <td>
-                                <input type="number" class="form-control input-sm" ng-if="!familyHistory.mother.isAlive"  ng-model="familyHistory.mother.deathAge"/>
+                                <input type="number" class="form-control input-sm" ng-disabled="mode=='new'||mode=='view'" ng-if="!familyHistory.mother.isAlive"   ng-pattern="/^\d+$/" name="motherDeathAge" ng-maxlength="2" ng-model="familyHistory.mother.deathAge"/>
+
+                                <div class="error" ng-messages="step7.motherDeathAge.$error" ng-if="step7.motherDeathAge.$dirty">
+                                    <small ng-message="maxlength">Only 2 Numbers are allowed.</small>
+                                    <small ng-message="pattern">Only Numerics are allowed.</small>
+                                </div>
                             </td>
                             <td>
-                                <input type="text" class="form-control input-sm" ng-if="!familyHistory.mother.isAlive"  ng-model="familyHistory.mother.deathCause"/>
+                                <input type="text" class="form-control input-sm" ng-disabled="mode=='new'||mode=='view'" ng-if="!familyHistory.mother.isAlive"  name="motherDeathCause" ng-pattern="/[a-zA-Z]/" ng-maxlength="20" ng-model="familyHistory.mother.deathCause"/>
+                                <div class="error" ng-messages="step7.motherDeathCause.$error" ng-if="step7.motherDeathCause.$dirty">
+                                    <small ng-message="maxlength">Only 20 characters are allowed.</small>
+                                    <small ng-message="pattern">Only alphabets are allowed.</small>
+                                </div>
                             </td>
                         </tr>
                         </tbody>
@@ -84,38 +114,102 @@
                                 Family Member
                             </th>
                             <th>
-                                Number Of Siblings Alive
+                                Number Of Siblings Alive *
                             </th>
                             <th>
-                                Number Of Siblings Dead
+                                Number Of Siblings Dead *
                             </th>
                             <th>
-                                State of health,give particulars
+                                State of health,give particulars *
                             </th>
                             <th>
-                                Age at death
+                                Age at death *
                             </th>
                             <th>
-                                Cause Of Death
+                                Cause Of Death *
                             </th>
                         </tr>
                         </thead>
                         <tbody>
                         <tr>
                             <td>Brothers</td>
-                            <td><input type="number" class="form-control input-sm" ng-model="familyHistory.brother.alive"/></td>
-                            <td><input type="number" class="form-control input-sm" ng-model="familyHistory.brother.death"/></td>
-                            <td><input type="text" class="form-control input-sm" ng-model="familyHistory.brother.healthState"/></td>
-                            <td><input type="number" class="form-control input-sm" ng-model="familyHistory.brother.deathAge"/></td>
-                            <td><input type="text" class="form-control input-sm" ng-model="familyHistory.brother.deathCause"/></td>
+                            <td><input type="number" class="form-control input-sm" name="NoBrotherAlive" ng-disabled="mode=='new'||mode=='view'" ng-pattern="/^\d+$/" ng-maxlength="2" ng-model="familyHistory.brother.alive"/>
+
+                                <div class="error" ng-messages="step7.NoBrotherAlive.$error" ng-if="step7.NoBrotherAlive.$dirty">
+                                    <small ng-message="maxlength">Only 2 Numbers are allowed.</small>
+                                    <small ng-message="pattern">Only Numerics are allowed.</small>
+                                </div>
+
+                            </td>
+                            <td><input type="number" class="form-control input-sm" name="NoBrotherDeath" ng-disabled="mode=='new'||mode=='view'" ng-pattern="/^\d+$/" ng-maxlength="2" ng-model="familyHistory.brother.death"/>
+
+                                <div class="error" ng-messages="step7.NoBrotherDeath.$error" ng-if="step7.NoBrotherDeath.$dirty">
+                                    <small ng-message="maxlength">Only 2 Numbers are allowed.</small>
+                                    <small ng-message="pattern">Only Numerics are allowed.</small>
+                                </div>
+
+                            </td>
+                            <td><input type="text" class="form-control input-sm" ng-pattern="/[a-zA-Z]/" ng-disabled="mode=='new'||mode=='view'" ng-if="familyHistory.brother.alive > 0 " ng-maxlength="50" name="brotherHealthState" ng-model="familyHistory.brother.healthState"/>
+
+                                <div class="error" ng-messages="step7.brotherHealthState.$error" ng-if="step7.brotherHealthState.$dirty">
+                                    <small ng-message="maxlength">Only 50 Characters are allowed.</small>
+                                    <small ng-message="pattern">Only alphabets are allowed.</small>
+                                </div>
+
+                            </td>
+                            <td><input type="number" class="form-control input-sm" ng-disabled="mode=='new'||mode=='view'" ng-pattern="/^\d+$/" ng-maxlength="2" ng-if="familyHistory.brother.death > 0 " name="brotherDeathAge" ng-model="familyHistory.brother.deathAge"/>
+                                <div class="error" ng-messages="step7.brotherDeathAge.$error" ng-if="step7.brotherDeathAge.$dirty">
+                                    <small ng-message="maxlength">Only 2 Numbers are allowed.</small>
+                                    <small ng-message="pattern">Only Numerics are allowed.</small>
+                                </div>
+                            </td>
+                            <td><input type="text" class="form-control input-sm" name="brotherDeathCause" ng-disabled="mode=='new'||mode=='view'" ng-pattern="/[a-zA-Z]/" ng-if="familyHistory.brother.death > 0 " ng-maxlength="20" ng-model="familyHistory.brother.deathCause"/>
+                                <div class="error" ng-messages="step7.brotherDeathCause.$error" ng-if="step7.brotherDeathCause.$dirty">
+                                    <small ng-message="maxlength">Only 20 Characters are allowed.</small>
+                                    <small ng-message="pattern">Only alphabets are allowed.</small>
+                                </div>
+                            </td>
                         </tr>
                         <tr>
                             <td>Sisters</td>
-                            <td><input type="number" class="form-control input-sm" ng-model="familyHistory.sister.alive"/></td>
-                            <td><input type="number" class="form-control input-sm" ng-model="familyHistory.sister.death"/></td>
-                            <td><input type="text" class="form-control input-sm" ng-model="familyHistory.sister.healthState"/></td>
-                            <td><input type="number" class="form-control input-sm" ng-model="familyHistory.sister.deathAge"/></td>
-                            <td><input type="text" class="form-control input-sm" ng-model="familyHistory.sister.deathCause"/></td>
+                            <td><input type="number" class="form-control input-sm" name="NoSisterAlive" ng-disabled="mode=='new'||mode=='view'" ng-pattern="/^\d+$/" ng-maxlength="2" ng-model="familyHistory.sister.alive"/>
+
+                                <div class="error" ng-messages="step7.NoSisterAlive.$error" ng-if="step7.NoSisterAlive.$dirty">
+                                    <small ng-message="maxlength">Only 2 Numbers are allowed.</small>
+                                    <small ng-message="pattern">Only Numerics are allowed.</small>
+                                </div>
+                            </td>
+                            <td><input type="number" class="form-control input-sm" name="NoSisterDeath" ng-disabled="mode=='new'||mode=='view'" ng-pattern="/^\d+$/" ng-maxlength="2" ng-model="familyHistory.sister.death"/>
+
+                                <div class="error" ng-messages="step7.NoSisterDeath.$error" ng-if="step7.NoSisterDeath.$dirty">
+                                    <small ng-message="maxlength">Only 2 Numbers are allowed.</small>
+                                    <small ng-message="pattern">Only Numerics are allowed.</small>
+                                </div>
+
+
+                            </td>
+                            <td><input type="text" class="form-control input-sm" ng-pattern="/[a-zA-Z]/" ng-disabled="mode=='new'||mode=='view'" ng-if="familyHistory.sister.alive > 0 " ng-maxlength="50" name="sisterHealthState" ng-model="familyHistory.sister.healthState"/>
+
+                                <div class="error" ng-messages="step7.sisterHealthState.$error" ng-if="step7.sisterHealthState.$dirty">
+                                    <small ng-message="maxlength">Only 50 Characters are allowed.</small>
+                                    <small ng-message="pattern">Only alphabets are allowed.</small>
+                                </div>
+                            </td>
+                            <td><input type="number" class="form-control input-sm" ng-pattern="/^\d+$/" ng-disabled="mode=='new'||mode=='view'" ng-maxlength="2" ng-if="familyHistory.sister.death > 0 " name="sisterDeathAge" ng-model="familyHistory.sister.deathAge"/>
+
+                                <div class="error" ng-messages="step7.sisterDeathAge.$error" ng-if="step7.sisterDeathAge.$dirty">
+                                    <small ng-message="maxlength">Only 2 Numbers are allowed.</small>
+                                    <small ng-message="pattern">Only Numerics are allowed.</small>
+                                </div>
+                            </td>
+                            <td><input type="text" class="form-control input-sm" name="sisterDeathCause" ng-disabled="mode=='new'||mode=='view'" ng-pattern="/[a-zA-Z]/" ng-if="familyHistory.sister.death > 0 " ng-maxlength="20" ng-model="familyHistory.sister.deathCause"/>
+
+                                <div class="error" ng-messages="step7.sisterDeathCause.$error" ng-if="step7.sisterDeathCause.$dirty">
+                                    <small ng-message="maxlength">Only 20 Characters are allowed.</small>
+                                    <small ng-message="pattern">Only alphabets are allowed.</small>
+                                </div>
+
+                            </td>
                         </tr>
                         </tbody>
                     </table>
@@ -126,7 +220,7 @@
                     If not already stated, is any close blood relative suffering from (or has any one had) diabetes, heart disease, high blood pressure, mental illness etc.
                 </div>
                 <div class="col-md-2">
-                    <select class="form-control input-sm" ng-model="familyHistory.closeRelative.answer" ng-change="familyHistory.closeRelative.questionId='16'">
+                    <select class="form-control input-sm" ng-model="familyHistory.closeRelative.answer" ng-disabled="mode=='new'||mode=='view'" ng-change="familyHistory.closeRelative.questionId='16'">
                         <option value="">--Select One--</option>
                         <option value="true">Yes</option>
                         <option value="false">No</option>
@@ -135,7 +229,7 @@
             </div>
             <div class="row">
                 <div class="col-md-10">
-                    <textarea class="form-control" placeholder="Please give full details" ng-model="familyHistory.closeRelative.answerResponse"></textarea>
+                    <textarea class="form-control" ng-if="familyHistory.closeRelative.answer == 'true' " ng-disabled="mode=='new'||mode=='view'" placeholder="Please give full details" ng-model="familyHistory.closeRelative.answerResponse"></textarea>
                 </div>
             </div>
         </accordion-group>
@@ -162,13 +256,26 @@
                         <tbody>
                         <tr>
                             <td>
-                                <input type="number" class="form-control input-sm" ng-model="habits.wine"/>
+                                <input type="text" class="form-control input-sm" name="wine" ng-maxlength="15" ng-disabled="mode=='new'||mode=='view'" ng-model="habits.wine"/>
+
+                                <div class="error" ng-messages="step7.wine.$error" ng-if="step7.wine.$dirty">
+                                    <small ng-message="maxlength">Upto 15 characters are allowed.</small>
+                                </div>
+
                             </td>
                             <td>
-                                <input type="number" class="form-control input-sm" ng-model="habits.beer"/>
+                                <input type="text" class="form-control input-sm" name="beer" ng-maxlength="15" ng-disabled="mode=='new'||mode=='view'" ng-model="habits.beer"/>
+                                <div class="error" ng-messages="step7.beer.$error" ng-if="step7.beer.$dirty">
+                                    <small ng-message="maxlength">Upto 15 characters are allowed.</small>
+                                </div>
                             </td>
                             <td>
-                                <input type="number" class="form-control input-sm" ng-model="habits.spirit"/>
+                                <input type="text" class="form-control input-sm" name="spirits" ng-maxlength="15" ng-disabled="mode=='new'||mode=='view'" ng-model="habits.spirit"/>
+
+                                <div class="error" ng-messages="step7.spirits.$error" ng-if="step7.spirits.$dirty">
+                                    <small ng-message="maxlength">Upto 15 characters are allowed.</small>
+                                </div>
+
                             </td>
                         </tr>
                         </tbody>
@@ -179,108 +286,152 @@
                 <div class="col-md-10">
                     How much, and what do you smoke per day?
                 </div>
-                <div class="col-md-2">
-                    <input type="number" class="form-control input-sm" ng-model="habits.smokePerDay"/>
+                <div class="form-group required col-md-2">
+                    <input type="text" class="form-control input-sm" name="smokeDetail" ng-maxlength="15" ng-model="habits.smokePerDay"/>
+
+                    <div class="error" ng-messages="step7.smokeDetail.$error" ng-if="step7.smokeDetail.$dirty">
+                        <small ng-message="maxlength">Only 15 characters are allowed.</small>
+                    </div>
+
                 </div>
             </div>
             <div class="row" style="margin: 0">
                 <accordion close-others="true">
                     <div class="row" style="margin-top: 5px">
-                        <div class="col-md-10">
+                        <div class="form-group required col-md-10">
                             <accordion-group is-open="accordionStatus.familyHabitAndBuild.tab2_1">
                                 <accordion-heading>
-                                    <strong style="font-size: 11px">Have you ever received personal medical advise to reduce or discontinue your liquor tobacco consumption?</strong>
+                                    <strong class="control-label" style="font-size: 11px">Have you ever received personal medical advise to reduce or discontinue your liquor tobacco consumption?</strong>
                                     <i class="pull-right glyphicon"
                                        ng-class="{'glyphicon-chevron-down': accordionStatus.familyHabitAndBuild.tab2_1, 'glyphicon-chevron-right': !accordionStatus.familyHabitAndBuild.tab2_1}"></i>
                                 </accordion-heading>
                                 <div class="col-md-12" ng-if="questionList[0].answer == 'true'">
-                                    <textarea class="form-control" ng-model="questionList[0].answerResponse"
-                                              placeholder="Please give full details  e.g. name and address of attending doctor, diagnosis etc">
+                                    <textarea class="form-control" ng-required="true" ng-disabled="mode=='new'||mode=='view'" ng-model="questionList[0].answerResponse"
+                                              name="familyResponse1" ng-maxlength="100" placeholder="Please give full details  e.g. name and address of attending doctor, diagnosis etc">
                                     </textarea>
+
+                                    <div class="error" ng-messages="step7.familyResponse1.$error" ng-if="step7.familyResponse1.$dirty">
+                                        <small class="error" ng-message="required">Please answer</small>
+                                        <small ng-message="maxlength">Only 100 characters are allowed.</small>
+                                    </div>
+
                                 </div>
                             </accordion-group>
                         </div>
-                        <div class="col-md-2">
-                            <select class="form-control input-sm" ng-model="questionList[0].answer"
-                                    ng-change="questionList[0].questionId='17'">
+                        <div class="form-group required col-md-2">
+                            <select class="form-control input-sm" ng-disabled="mode=='new'||mode=='view'" ng-model="questionList[0].answer"
+                                    name="familyQuestion1" ng-required="true" ng-change="questionList[0].questionId='17'">
                                 <option value="">--Select One--</option>
-                                <option ng-value="true" value="true">Yes</option>
-                                <option ng-value="false" value="false">No</option>
+                                <option   value="true">Yes</option>
+                                <option   value="false">No</option>
                             </select>
+
+                            <div class="error" ng-messages="step7.familyQuestion1.$error" ng-if="step7.familyQuestion1.$dirty">
+                                <small class="error" ng-message="required">Please answer familyQuestion1</small>
+                            </div>
                         </div>
                     </div>
 
                     <div class="row" style="margin-top: 5px">
-                        <div class="col-md-10">
+                        <div class="form-group required col-md-10">
                             <accordion-group is-open="accordionStatus.familyHabitAndBuild.tab2_2">
                                 <accordion-heading>
-                                    <strong style="font-size: 11px">Have you ever, in the past, used quantities of liquor or tobacco greater than the amounts indicated above?</strong>
+                                    <strong class="control-label" style="font-size: 11px">Have you ever, in the past, used quantities of liquor or tobacco greater than the amounts indicated above?</strong>
                                     <i class="pull-right glyphicon"
                                        ng-class="{'glyphicon-chevron-down': accordionStatus.familyHabitAndBuild.tab2_2, 'glyphicon-chevron-right': !accordionStatus.familyHabitAndBuild.tab2_2}"></i>
                                 </accordion-heading>
-                                <div class="col-md-12" ng-if="questionList[1].answer == 'true'">
+                                <div class="form-group required col-md-12" ng-disabled="mode=='new'||mode=='view'" ng-if="questionList[1].answer == 'true'">
                                     <textarea class="form-control" ng-model="questionList[1].answerResponse"
-                                              placeholder="Please give full details  "></textarea>
+                                              name="familyResponse2" ng-maxlength="100" ng-required="true" placeholder="Please give full details  "></textarea>
+
+                                    <div class="error" ng-messages="step7.familyResponse2.$error" ng-if="step7.familyResponse2.$dirty">
+                                        <small class="error" ng-message="required">Please answer</small>
+                                        <small ng-message="maxlength">Only 100 characters are allowed.</small>
+                                    </div>
+
                                 </div>
                             </accordion-group>
                         </div>
-                        <div class="col-md-2">
-                            <select class="form-control input-sm" ng-model="questionList[1].answer" ng-change="questionList[1].questionId='18'">
+                        <div class="form-group required col-md-2">
+                            <select class="form-control input-sm" ng-disabled="mode=='new'||mode=='view'" name="familyQuestion2" ng-required="true" ng-model="questionList[1].answer" ng-change="questionList[1].questionId='18'">
                                 <option value="">--Select One--</option>
                                 <option value="true">Yes</option>
                                 <option value="false">No</option>
                             </select>
+
+                            <div class="error" ng-messages="step7.familyQuestion2.$error" ng-if="step7.familyQuestion2.$dirty">
+                                <small class="error" ng-message="required">Please answer familyQuestion2</small>
+                            </div>
                         </div>
                     </div>
 
                     <div class="row" style="margin-top: 5px">
-                        <div class="col-md-10">
+                        <div class="form-group required col-md-10">
                             <accordion-group is-open="accordionStatus.familyHabitAndBuild.tab2_3">
                                 <accordion-heading>
-                                    <strong style="font-size: 11px">Have you ever taken drugs, medicine or tranquilisers prescribed by a medical practitioner for more than two weeks.</strong>
+                                    <strong class="control-label" style="font-size: 11px">Have you ever taken drugs, medicine or tranquilisers prescribed by a medical practitioner for more than two weeks.</strong>
                                     <i class="pull-right glyphicon"
                                        ng-class="{'glyphicon-chevron-down': accordionStatus.familyHabitAndBuild.tab2_3, 'glyphicon-chevron-right': !accordionStatus.familyHabitAndBuild.tab2_3}"></i>
                                 </accordion-heading>
-                                <div class="col-md-12" ng-if="questionList[2].answer == 'true'">
-                                    <textarea class="form-control" ng-model="questionList[2].answerResponse" placeholder="Please give full details  "></textarea>
+                                <div class="form-group required col-md-12" ng-if="questionList[2].answer == 'true'">
+                                    <textarea class="form-control" name="familyResponse3" ng-required="true" ng-model="questionList[2].answerResponse" ng-maxlength="15" ng-disabled="mode=='new'||mode=='view'" placeholder="Please give full details  "></textarea>
+
+                                    <div class="error" ng-messages="step7.familyResponse3.$error" ng-if="step7.familyResponse3.$dirty">
+                                        <small class="error" ng-message="required">Please answer</small>
+                                        <small ng-message="maxlength">Only 15 characters are allowed.</small>
+                                    </div>
                                 </div>
                             </accordion-group>
                         </div>
-                        <div class="col-md-2">
-                            <select class="form-control input-sm" ng-model="questionList[2].answer" ng-change="questionList[2].questionId='19'">
+                        <div class="form-group required col-md-2">
+                            <select class="form-control input-sm" ng-required="true" ng-disabled="mode=='new'||mode=='view'" name="familyQuestion3" ng-model="questionList[2].answer" ng-change="questionList[2].questionId='19'">
                                 <option value="">--Select One--</option>
                                 <option value="true">Yes</option>
                                 <option value="false">No</option>
                             </select>
+                            <div class="error" ng-messages="step7.familyQuestion3.$error" ng-if="step7.familyQuestion3.$dirty">
+                                <small class="error" ng-message="required">Please answer familyQuestion3</small>
+                            </div>
                         </div>
                     </div>
 
                     <div class="row" style="margin-top: 5px">
-                        <div class="col-md-10">
+                        <div class="form-group required col-md-10">
                             <accordion-group is-open="accordionStatus.familyHabitAndBuild.tab2_4">
                                 <accordion-heading>
-                                    <strong style="font-size: 11px">Have you ever taken drugs for non medicinal purpose?</strong>
+                                    <strong class="control-label" style="font-size: 11px">Have you ever taken drugs for non medicinal purpose?</strong>
                                     <i class="pull-right glyphicon"
                                        ng-class="{'glyphicon-chevron-down': accordionStatus.familyHabitAndBuild.tab2_4, 'glyphicon-chevron-right': !accordionStatus.familyHabitAndBuild.tab2_4}"></i>
                                 </accordion-heading>
                                 <div class="col-md-12" ng-if="questionList[3].answer == 'true'">
-                                    <textarea class="form-control" placeholder="Please give full details " ng-model="questionList[3].answerResponse" ></textarea>
+                                    <textarea class="form-control" name="familyResponse4" ng-required="true" ng-disabled="mode=='new'||mode=='view'" ng-maxlength="15" placeholder="Please give full details " ng-model="questionList[3].answerResponse" ></textarea>
+
+                                    <div class="error" ng-messages="step7.familyResponse4.$error" ng-if="step7.familyResponse4.$dirty">
+                                        <small class="error" ng-message="required">Please answer</small>
+                                        <small ng-message="maxlength">Only 15 characters are allowed.</small>
+                                    </div>
+
                                 </div>
                             </accordion-group>
                         </div>
-                        <div class="col-md-2">
-                            <select class="form-control input-sm" ng-model="questionList[3].answer" ng-change="questionList[3].questionId='20'">
+                        <div class="form-group required col-md-2">
+                            <select class="form-control input-sm" name="familyQuestion4" ng-required="true" ng-disabled="mode=='new'||mode=='view'" ng-model="questionList[3].answer" ng-change="questionList[3].questionId='20'">
                                 <option value="">--Select One--</option>
                                 <option value="true">Yes</option>
                                 <option value="false">No</option>
                             </select>
+
+                            <div class="error" ng-messages="step7.familyQuestion4.$error" ng-if="step7.familyQuestion4.$dirty">
+                                <small class="error" ng-message="required">Please answer familyQuestion4</small>
+                            </div>
+
                         </div>
                     </div>
                 </accordion>
             </div>
         </accordion-group>
 
-        <accordion-group is-open="accordionStatus.familyHabitAndBuild.tab3">
+        <accordion-group ng-form="familyBuild" is-open="accordionStatus.familyHabitAndBuild.tab3">
             <accordion-heading>
                 Build
                 <i class="pull-right glyphicon"
@@ -298,9 +449,28 @@
                         </thead>
                         <tbody>
                         <tr>
-                            <td><input type="number" class="form-control input-sm" ng-model="build.height"/></td>
-                            <td><input type="text" class="form-control input-sm" ng-model="build.heightType"/></td>
-                            <td><input type="number" class="form-control input-sm" ng-model="build.weight"/></td>
+                            <td><input class="form-control input-sm" type="number"  ng-disabled="mode=='new'||mode=='view'" ng-pattern="/^(^[0-9]{1,3})+(\.[0-9]{1,2})?$/" name="buildheight" ng-model="build.height"/>
+
+                                <div class="error" ng-messages="familyBuild.buildheight.$error" ng-if="familyBuild.buildheight.$dirty">
+                                    <small ng-message="pattern">Upto 3 + 2  are allowed.</small>
+                                </div>
+
+                            </td>
+
+                            <td><!--<input type="text" class="form-control input-sm" ng-disabled="mode=='new'||mode=='view'" ng-model="build.heightType"/>-->
+                                <select class="form-control input-sm" name="gender" ng-disabled="mode=='new'||mode=='view'" ng-model="build.heightType">
+                                    <option value="Feet" >Feet</option>
+                                    <option value="Inches">Inches</option>
+                                    <option value="Meters">Meters</option>
+                                    <option value="cm">CM</option>
+                                </select>
+                            </td>
+                            <td><input class="form-control input-sm" type="number" name="buildweight" ng-pattern="/^(^[0-9]{1,3})+(\.[0-9]{1,2})?$/" ng-disabled="mode=='new'||mode=='view'" ng-model="build.weight"/>
+                                <div class="error" ng-messages="familyBuild.buildweight.$error" ng-if="familyBuild.buildweight.$dirty">
+                                    <small ng-message="pattern">xxx.xx format allowed.</small>
+                                </div>
+                            </td>
+
                         </tr>
                         </tbody>
                     </table>
@@ -309,49 +479,70 @@
 
             <accordion close-others="true">
                 <div class="row" style="margin-top: 5px">
-                    <div class="col-md-10">
+                    <div class="form-group required col-md-10">
                         <accordion-group is-open="accordionStatus.familyHabitAndBuild.tab3_1">
                             <accordion-heading>
-                                <strong style="font-size: 11px">Has your weight altered by more than 5Kgs during the past year?</strong>
+                                <strong class="control-label" style="font-size: 11px">Has your weight altered by more than 5Kgs during the past year?</strong>
                                 <i class="pull-right glyphicon"
                                    ng-class="{'glyphicon-chevron-down': accordionStatus.familyHabitAndBuild.tab3_1, 'glyphicon-chevron-right': !accordionStatus.familyHabitAndBuild.tab3_1}"></i>
                             </accordion-heading>
-                            <div class="col-md-12" ng-if="build.overWeightQuestion.answer == 'true'">
-                                <textarea class="form-control" ng-model="build.overWeightQuestion.answerResponse"
-                                          placeholder="state whether increase or decrease, by how much, reason and for long present weight has remained constant."></textarea>
+                            <div class="form-group required col-md-12" ng-if="build.overWeightQuestion.answer == 'true'">
+                                <textarea class="form-control" ng-required="true" ng-disabled="mode=='new'||mode=='view'" ng-model="build.overWeightQuestion.answerResponse"
+                                          name="familyResponse5" ng-maxlength="50" placeholder="state whether increase or decrease, by how much, reason and for long present weight has remained constant."></textarea>
+
+                                <div class="error" ng-messages="familyBuild.familyResponse5.$error" ng-if="familyBuild.familyResponse5.$dirty">
+                                    <small class="error" ng-message="required">Please answer</small>
+                                    <small ng-message="maxlength">Only 50 characters are allowed.</small>
+                                </div>
+
                             </div>
                         </accordion-group>
                     </div>
-                    <div class="col-md-2">
-                        <select class="form-control input-sm" ng-model="build.overWeightQuestion.answer" ng-change="build.overWeightQuestion.questionId='21'">
+                    <div class="form-group required col-md-2">
+                        <select class="form-control input-sm" ng-model="build.overWeightQuestion.answer" name="familyQuestion5" ng-required="true" ng-disabled="mode=='new'||mode=='view'" ng-change="build.overWeightQuestion.questionId='21'">
                             <option value="">--Select One--</option>
                             <option value="true">Yes</option>
                             <option value="false">No</option>
                         </select>
+                        <div class="error" ng-messages="step7.familyQuestion5.$error" ng-if="step7.familyQuestion5.$dirty">
+                            <small class="error" ng-message="required">Please answer familyQuestion5</small>
+                        </div>
+
                     </div>
                 </div>
             </accordion>
         </accordion-group>
 
-    <strong>For Female Applicants</strong>
-    <div class="row bs-callout  bs-callout-info" style="margin: 5px;padding:10px">
-        <div class="col-md-2 form-group required">
-            <label class="control-label"> Are you now pregnant?</label>
-        </div>
-        <div class="col-md-2">
-            <select class="form-control input-sm" ng-required="true" ng-model="familyPersonalDetail.isPregnant">
-                <option value="">--Select One--</option>
-                <option value="true" ng-value="true">Yes</option>
-                <option value="false" ng-value="false">No</option>
-            </select>
-        </div>
-        <div class="col-md-2 col-md-offset-6">
-            <div class="form-group required" ng-if="familyPersonalDetail.isPregnant == 'true' ">
-                <label class="control-label">If <strong>Yes</strong> how many months?</label>
-                <input type="number" class="form-control input-sm" ng-required="true" ng-model="familyPersonalDetail.pregnancyMonth"/>
+        <strong>For Female Applicants</strong>
+        <div class="row bs-callout  bs-callout-info" style="margin: 5px;padding:10px">
+            <div class="col-md-2 form-group required">
+                <label class="control-label"> Are you now pregnant?</label>
+            </div>
+            <div class="form-group required col-md-2">
+                <select class="form-control input-sm" name="isPregnant" ng-required="true" ng-disabled="mode=='new'||mode=='view'" ng-model="familyPersonalDetail.isPregnant">
+                    <option value="">--Select One--</option>
+                    <option value="true">Yes</option>
+                    <option value="false">No</option>
+                </select>
+
+                <div class="error" ng-messages="step7.isPregnant.$error" ng-if="step7.isPregnant.$dirty">
+                    <small class="error" ng-message="required">Please provide Details</small>
+                </div>
+            </div>
+            <div class="col-md-2 col-md-offset-6">
+                <div class="form-group required" ng-if="familyPersonalDetail.isPregnant == 'true' ">
+                    <label class="control-label">If <strong>Yes</strong> how many months?</label>
+                    <input type="number" class="form-control input-sm" ng-disabled="mode=='new'||mode=='view'" ng-maxlength="2" name="pregnencyMonth" ng-required="true" ng-model="familyPersonalDetail.pregnancyMonth"/>
+
+                    <div class="error" ng-messages="step7.pregnencyMonth.$error" ng-if="step7.pregnencyMonth.$dirty">
+                        <small class="error" ng-message="required">Please answer pregnencyMonth</small>
+                        <small class="error" ng-message="maxlength">Allow upto two digit</small>
+                        <!--<small class="error" ng-message="max">Allowed Upto 10 months</small>-->
+                    </div>
+
+                </div>
             </div>
         </div>
-    </div>
     </accordion>
     <div class="row">
         <div class="col-sm-6">
@@ -359,7 +550,7 @@
         </div>
         <div class="col-sm-6">
             <button type="button" class="btn btn-default btn-sm" style="float: right"
-                    ng-click="saveFamilyHistory()">Save</button>
+                    ng-disabled="step7.$invalid" ng-hide="mode=='new'||mode=='view'" ng-click="saveFamilyHistory()">Save</button>
         </div>
     </div>
 </ng-form>

@@ -12,14 +12,54 @@ angular.module('brokerModule', ['common', 'ngRoute', 'mgcrea.ngStrap.select', 'm
                 $("#BrokerSubmitBtn").css('visibility', 'hidden');
             }
         }
-    }])
-    .controller('brokerController', ['$scope', '$http', 'authorisedToSell', 'provinces', '$timeout', '$alert', '$route', '$window', 'transformJson',
+    }]).directive('popover', function($compile){
+        return {
+            restrict : 'A',
+            link : function(scope, elem){
+                var content = $(".popover-content").html();
+                scope.fieldData=[];
+                for (var i = 0; i < scope.agentDetails.authorizePlansToSell.length; i++) {
+                    scope.fieldData.push(_.findWhere(scope.authorisedToSell,{planId: scope.agentDetails.authorizePlansToSell[i]}));
+                }
+
+                var compileContent = scope.fieldData;
+                console.log(compileContent);
+                var content="<ul>";
+                for (var i=0; i<compileContent.length; i++ ){
+
+                    content=content + "<li>" + compileContent[i].planName +"</li>";
+                }
+                content=content +"</ul>";
+                var title = $(".popover-head").html();
+                var options = {
+                    content: content,
+                    html: true,
+                    title: title
+                };
+
+                $(elem).popover(options);
+            }
+        }
+    })
+
+.controller('brokerController', ['$scope', '$http', 'authorisedToSell', 'provinces', '$timeout', '$alert', '$route', '$window', 'transformJson',
         'getQueryParameter', 'agentDetails', 'globalConstants', 'nextAgentSequence', 'getProvinceAndCityDetail', '$alert',
 
 
         function ($scope, $http,
                   authorisedToSell, provinces, $timeout, $alert, $route, $window, transformJson, getQueryParameter, agentDetails, globalConstants, nextAgentSequence, getProvinceAndCityDetail, $alert) {
             $scope.numberPattern = globalConstants.numberPattern;
+
+            var mode = getQueryParameter("mode");
+           // console.log(mode);
+           // alert(mode);
+            if(mode=='view'){
+                $scope.isViewMode = true;
+
+            }else{
+                $scope.isViewMode = false;
+            }
+
 
           //  console.log(' Broker Controller invoked.. ');
             $scope.agentDetails = agentDetails;

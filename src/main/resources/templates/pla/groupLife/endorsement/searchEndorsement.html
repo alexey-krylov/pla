@@ -38,7 +38,7 @@
                     $('#searchEndorsement-table').dataTable({
                         "fnDrawCallback": function () {
                             $("input[type=radio]").on("click", function () {
-                                viewEndorsementModule.getTheItemSelected(this);
+                                searchEndorsementModule.getTheItemSelected(this);
                                 //console.log($(".proposalStatus").val());
 
                             });
@@ -49,6 +49,14 @@
             clearInterval(interval);
         }
     }, 300);
+    requirejs(['main', 'angular-file-upload'], function () {
+        require(['/pla/js/grouplife/endorsement/createEndorsement.js?t=9'], function () {
+            angular.element(document).ready(function () {
+                angular.bootstrap(document, ['createEndorsement']);
+            });
+        });
+
+    });
 </script>
 <div class="container container-fluid" style="padding-top: 10px">
     <p class="lead">
@@ -61,20 +69,20 @@
           id="searchEndorsementforGLPolicy">
         <div class="row well well-sm" style="margin: 0;">
             <div class="col-md-2">
-                <h5 th:text="#{searchpolicy}" class="pull-left">Search Endorsement</h5>
+                <h5 th:text="#{searchendorsement}" class="pull-left">Search Endorsement</h5>
             </div>
             <div class="col-md-2">
                 <div class="form-group">
                     <label th:text="#{endorsementType}">Endorsement Type</label>
                     <input type="text" class="form-control input-sm" name="endorsementType"
-                           /><!--th:value="${searchCriteria.endorsementType}" -->
+                            /><!--th:value="${searchCriteria.endorsementType}" -->
                 </div>
             </div>
             <div class="col-md-3">
                 <div class="form-group">
                     <label th:text="#{endorsementRequestNumber}">Endorsement request Number</label>
                     <input type="text" class="form-control input-sm" name="endorsementRequestNumber"
-                           /><!--th:value="${searchCriteria.endorsementRequestNumber}"-->
+                            /><!--th:value="${searchCriteria.endorsementRequestNumber}"-->
                 </div>
             </div>
 
@@ -109,12 +117,10 @@
                         <div class="col-md-8">
                             <span th:text="#{listOfEndorsement}">List of Endorsement</span>
                         </div>
-                        <a type="button" class="btn btn-default btn-sm btn-disable" disabled="disabled"
-                           onclick="viewEndorsementModule.modifyEndorsement()">Modify</a>
-
-                        <a type="button" class="btn btn-default btn-sm btn-disable" disabled="disabled"
-                           onclick="viewEndorsementModule.generateEndorsement()">Generate</a>
-
+                        <a type="button" class="btn btn-default btn-sm btn-disabled" id="modifyEndorsement" disabled="disabled"
+                           onclick="searchEndorsementModule.modifyEndorsement()">Modify</a>
+                        <a type="button" class="btn btn-default btn-sm btn-disabled"  disabled="disabled"
+                           onclick="searchEndorsementModule.viewEndorsement()">View</a>
                     </div>
                 </div>
                 <div class="panel-body">
@@ -128,6 +134,7 @@
                             <th th:text="#{policyNumber}">Policy Number</th>
                             <th th:text="#{policyHolderName}">Policy HolderName</th>
                             <th th:text="#{status}">Status</th>
+                            <th th:text="#{ageing}">Ageing</th>
                             <th th:text="#{endorsementEffectiveDate}">Endorsement Effective Date</th>
                         </tr>
                         </thead>
@@ -136,22 +143,22 @@
                             <!--/*/ <th:block th:each="endorsement : ${searchResult}"> /*/-->
                             <tr>
                                 <td>
-                                    <input type="radio" name="policyNumber" th:value="${endorsement.policyId}"
+                                    <input type="radio" name="endorsementId" th:value="${endorsement.endorsementId}"
                                            value="5100000010315"/>
+                                    <input type="hidden" class="endorsementStatus"
+                                           th:value="${endorsement.endorsementStatus}"/>
 
-                                    <input type="hidden" name="policyId"
-                                           th:value="${endorsement.policyId}"/>
+                                    <input type="hidden" name="endorsementId"
+                                           th:value="${endorsement.endorsementId}"/>
                                 </td>
+                                <td th:text="${endorsement.endorsementRequestNumber}">5100000010315</td>
+                                <td th:text="${endorsement.endorsementType}">5100000010315</td>
                                 <td th:text="${endorsement.policyNumber}">5100000010315</td>
                                 <td th:text="${endorsement.policyHolderName}"></td>
-                                <td th:text="${#dates.format(endorsement.inceptionDate,'dd/MM/yyyy')}"></td>
-                                <td th:text="${#dates.format(endorsement.expiryDate,'dd/MM/yyyy')}"></td>
-                                <td>
+                                <td th:text="${endorsement.endorsementStatus}"></td>
+                                <td th:text="${endorsement.aging}"></td>
+                                <td th:text="${#dates.format(endorsement.effectiveDate,'dd/MM/yyyy')}"></td>
 
-                                    <select  onchange="GetSelectedTextValue()" name="variety"   class="btn btn-default btn-sm btn-disabled variety" disabled="disabled" >
-                                        <option th:each="endorsementType :${endorsement.endorsementTypes}" th:value="${{endorsementType.code}}" th:text="${endorsementType.description}"></option>
-                                    </select>
-                                </td>
                             </tr>
                             <!--/*-->
                             <tr>

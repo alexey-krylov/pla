@@ -2,134 +2,201 @@
     <h5>Do you have, or have you ever had, any trouble with, or disorder or abnormality of :</h5>
     <accordion close-others="true">
         <div class="row" style="margin-bottom: 5px">
-            <div class="col-md-10">
+            <div class="form-group required col-md-10">
                 <accordion-group is-open="accordionStatus.healthDetailsPart2.tab1">
                     <accordion-heading>
-                        <strong style="font-size: 11px">Your nervous system (e.g. meningitis, epilepsy/fits, blackout, paralysis, profound weakness, depressive or anxiety states etc.)?</strong>
+                        <strong class="control-label" style="font-size: 11px">Your nervous system (e.g. meningitis, epilepsy/fits, blackout, paralysis, profound weakness, depressive or anxiety states etc.)?</strong>
                         <i class="pull-right glyphicon"
                            ng-class="{'glyphicon-chevron-down': accordionStatus.healthDetailsPart2.tab1, 'glyphicon-chevron-right': !accordionStatus.healthDetailsPart2.tab1}"></i>
                     </accordion-heading>
                     <div class="col-md-12" ng-if="compulsoryHealthDetails[7].answer == 'true' ">
-                        <textarea class="form-control" ng-model="compulsoryHealthDetails[7].answerResponse" placeholder="Please give full details  e.g. name and address of attending doctor, treatment and results etc"></textarea>
+                        <textarea class="form-control" name="response6" ng-disabled="mode=='new'||mode=='view'" ng-model="compulsoryHealthDetails[7].answerResponse" ng-required="true" ng-maxlength="50" placeholder="Please give full details  e.g. name and address of attending doctor, treatment and results etc"></textarea>
+
+                        <div class="error" ng-messages="step6.response6.$error" ng-if="step6.response6.$dirty">
+                            <small class="error" ng-message="required">Please answer</small>
+                            <small ng-message="maxlength">Only 50 characters are allowed.</small>
+                        </div>
+
                     </div>
                 </accordion-group>
             </div>
-            <div class="col-md-2">
-                <select class="form-control input-sm" ng-model="compulsoryHealthDetails[7].answer" ng-change="compulsoryHealthDetails[7].questionId=21">
+            <div class="form-group required col-md-2">
+                <select class="form-control input-sm" ng-required="true" name="compulsoryHealthDetailsQuestion8" ng-disabled="mode=='new'||mode=='view'" ng-model="compulsoryHealthDetails[7].answer" ng-change="compulsoryHealthDetails[7].questionId=21">
                     <option value="">--Select One--</option>
                     <option value="true">Yes</option>
                     <option value="false">No</option>
                 </select>
+
+                <div class="error" ng-messages="step6.compulsoryHealthDetailsQuestion8.$error" ng-if="step6.compulsoryHealthDetailsQuestion8.$dirty">
+                    <small class="error" ng-message="required">Please answer compulsoryHealthDetailsQuestion8</small>
+                </div>
+
             </div>
         </div>
 
         <div class="row" style="margin-bottom: 5px">
-            <div class="col-md-10">
+            <div class="form-group required col-md-10">
                 <accordion-group is-open="accordionStatus.healthDetailsPart2.tab2">
                     <accordion-heading>
-                        <strong style="font-size: 11px">Your eyes, ears, nose or throat (e.g. ear discharge, recurrent sores, deafness, poor vision, thrush, recurrent tonsilitis.)etc?</strong>
+                        <strong class="control-label" style="font-size: 11px">Your eyes, ears, nose or throat (e.g. ear discharge, recurrent sores, deafness, poor vision, thrush, recurrent tonsilitis.)etc?</strong>
                         <i class="pull-right glyphicon"
                            ng-class="{'glyphicon-chevron-down': accordionStatus.healthDetailsPart2.tab2, 'glyphicon-chevron-right': !accordionStatus.healthDetailsPart2.tab2}"></i>
                     </accordion-heading>
                     <div class="col-md-12" ng-if="compulsoryHealthDetails[8].answer == 'true' ">
-                        <textarea class="form-control" ng-model="compulsoryHealthDetails[8].answerResponse" placeholder="Please give full details  e.g. name and address of attending doctor, treatment and results etc"></textarea>
+                        <textarea class="form-control" name="response7" ng-disabled="mode=='new'||mode=='view'" ng-model="compulsoryHealthDetails[8].answerResponse" ng-maxlength="50" placeholder="Please give full details  e.g. name and address of attending doctor, treatment and results etc"></textarea>
+
+                        <div class="error" ng-messages="step6.response7.$error" ng-if="step6.response7.$dirty">
+                            <small class="error" ng-message="required">Please answer</small>
+                            <small ng-message="maxlength">Only 50 characters are allowed.</small>
+                        </div>
+
                     </div>
                 </accordion-group>
             </div>
-            <div class="col-md-2">
-                <select class="form-control input-sm" ng-model="compulsoryHealthDetails[8].answer" ng-change="compulsoryHealthDetails[8].questionId=22">
+            <div class="form-group required col-md-2">
+                <select class="form-control input-sm" ng-required="true" name="compulsoryHealthDetailsQuestion9" ng-disabled="mode=='new'||mode=='view'" ng-model="compulsoryHealthDetails[8].answer" ng-change="compulsoryHealthDetails[8].questionId=22">
                     <option value="">--Select One--</option>
                     <option value="true" ng-value="true">Yes</option>
                     <option value="false" ng-value="false">No</option>
                 </select>
+
+                <div class="error" ng-messages="step6.compulsoryHealthDetailsQuestion9.$error" ng-if="step6.compulsoryHealthDetailsQuestion9.$dirty">
+                    <small class="error" ng-message="required">Please answer compulsoryHealthDetailsQuestion9</small>
+                </div>
+
             </div>
         </div>
 
         <div class="row" style="margin-bottom: 5px">
-            <div class="col-md-10">
+            <div class="form-group required col-md-10">
                 <accordion-group is-open="accordionStatus.healthDetailsPart2.tab3">
                     <accordion-heading>
-                        <strong style="font-size: 11px">Your kidneys, reproductive organs or bladder (e.g. albumin in urine, stones, any form of veneral disease, abnormal pregnancies etc.)?</strong>
+                        <strong class="control-label" style="font-size: 11px">Your kidneys, reproductive organs or bladder (e.g. albumin in urine, stones, any form of veneral disease, abnormal pregnancies etc.)?</strong>
                         <i class="pull-right glyphicon"
                            ng-class="{'glyphicon-chevron-down': accordionStatus.healthDetailsPart2.tab3, 'glyphicon-chevron-right': !accordionStatus.healthDetailsPart2.tab3}"></i>
                     </accordion-heading>
-                    <div class="col-md-12" ng-if="compulsoryHealthDetails[9].answer == 'true' ">
-                        <textarea class="form-control" ng-model="compulsoryHealthDetails[9].answerResponse" placeholder="Please give full details  e.g. name and address of attending doctor, treatment and results etc"></textarea>
+
+                    <div class="form-group required col-md-12" ng-if="compulsoryHealthDetails[9].answer == 'true' ">
+                        <textarea class="form-control" name="response8" ng-disabled="mode=='new'||mode=='view'" ng-required="true" ng-model="compulsoryHealthDetails[9].answerResponse" ng-maxlength="50" placeholder="Please give full details  e.g. name and address of attending doctor, treatment and results etc"></textarea>
+
+                        <div class="error" ng-messages="step6.response8.$error" ng-if="step6.response8.$dirty">
+                            <small class="error" ng-message="required">Please answer</small>
+                            <small ng-message="maxlength">Only 50 characters are allowed.</small>
+                        </div>
+
                     </div>
                 </accordion-group>
             </div>
-            <div class="col-md-2">
-                <select class="form-control input-sm" ng-model="compulsoryHealthDetails[9].answer" ng-change="compulsoryHealthDetails[9].questionId=23">
+            <div class="form-group required col-md-2">
+                <select class="form-control input-sm" name="compulsoryHealthDetailsQuestion10" ng-disabled="mode=='new'||mode=='view'" ng-required="true" ng-model="compulsoryHealthDetails[9].answer" ng-change="compulsoryHealthDetails[9].questionId=23">
                     <option value="">--Select One--</option>
                     <option value="true" ng-value="true">Yes</option>
                     <option value="false" ng-value="false">No</option>
                 </select>
+
+                <div class="error" ng-messages="step6.compulsoryHealthDetailsQuestion10.$error" ng-if="step6.compulsoryHealthDetailsQuestion10.$dirty">
+                    <small class="error" ng-message="required">Please answer compulsoryHealthDetailsQuestion10</small>
+                </div>
+
             </div>
         </div>
 
         <div class="row" style="margin-bottom: 5px">
-            <div class="col-md-10">
+            <div class="form-group required col-md-10">
                 <accordion-group is-open="accordionStatus.healthDetailsPart2.tab4">
                     <accordion-heading>
-                        <strong style="font-size: 11px">Your skeleton, joints or muscles (e.g. rheumatism, arthritis, gout, slipped disc, back or neck trouble etc.)?</strong>
+                        <strong class="control-label" style="font-size: 11px">Your skeleton, joints or muscles (e.g. rheumatism, arthritis, gout, slipped disc, back or neck trouble etc.)?</strong>
                         <i class="pull-right glyphicon"
                            ng-class="{'glyphicon-chevron-down': accordionStatus.healthDetailsPart2.tab4, 'glyphicon-chevron-right': !accordionStatus.healthDetailsPart2.tab4}"></i>
                     </accordion-heading>
-                    <div class="col-md-12" ng-if="compulsoryHealthDetails[10].answer == 'true' ">
-                        <textarea class="form-control" ng-model="compulsoryHealthDetails[10].answerResponse" placeholder="Please give full details  e.g. name and address of attending doctor, treatment and results etc"></textarea>
+                    <div class="form-group required col-md-12" ng-if="compulsoryHealthDetails[10].answer == 'true' ">
+                        <textarea class="form-control" name="response9" ng-disabled="mode=='new'||mode=='view'" ng-required="true" ng-model="compulsoryHealthDetails[10].answerResponse" ng-maxlength="50" placeholder="Please give full details  e.g. name and address of attending doctor, treatment and results etc"></textarea>
+
+                        <div class="error" ng-messages="step6.response9.$error" ng-if="step6.response9.$dirty">
+                            <small class="error" ng-message="required">Please answer</small>
+                            <small ng-message="maxlength">Only 50 characters are allowed.</small>
+                        </div>
+
                     </div>
                 </accordion-group>
             </div>
-            <div class="col-md-2">
-                <select class="form-control input-sm" ng-model="compulsoryHealthDetails[10].answer" ng-change="compulsoryHealthDetails[10].questionId=24">
+            <div class="form-group required col-md-2">
+                <select class="form-control input-sm" name="compulsoryHealthDetailsQuestion11" ng-disabled="mode=='new'||mode=='view'" ng-required="true" ng-model="compulsoryHealthDetails[10].answer" ng-change="compulsoryHealthDetails[10].questionId=24">
                     <option value="">--Select One--</option>
                     <option value="true" ng-value="true">Yes</option>
                     <option value="false" ng-value="false">No</option>
                 </select>
+
+                <div class="error" ng-messages="step6.compulsoryHealthDetailsQuestion11.$error" ng-if="step6.compulsoryHealthDetailsQuestion11.$dirty">
+                    <small class="error" ng-message="required">Please answer compulsoryHealthDetailsQuestion11</small>
+                </div>
+
             </div>
         </div>
 
         <div class="row" style="margin-bottom: 5px">
-            <div class="col-md-10">
+            <div class="form-group required col-md-10">
                 <accordion-group is-open="accordionStatus.healthDetailsPart2.tab5">
                     <accordion-heading>
-                        <strong style="font-size: 11px">Cancer, growth or tumour of any kind?</strong>
+                        <strong class="control-label" style="font-size: 11px">Cancer, growth or tumour of any kind?</strong>
                         <i class="pull-right glyphicon"
                            ng-class="{'glyphicon-chevron-down': accordionStatus.healthDetailsPart2.tab5, 'glyphicon-chevron-right': !accordionStatus.healthDetailsPart2.tab5}"></i>
                     </accordion-heading>
-                    <div class="col-md-12" ng-if="compulsoryHealthDetails[11].answer == 'true' ">
-                        <textarea class="form-control" ng-model="compulsoryHealthDetails[11].answerResponse" placeholder="Please give full details  e.g. name and address of attending doctor, treatment and results etc"></textarea>
+                    <div class="form-group required col-md-12" ng-if="compulsoryHealthDetails[11].answer == 'true' ">
+                        <textarea class="form-control" name="response10" ng-disabled="mode=='new'||mode=='view'" ng-required="true" ng-model="compulsoryHealthDetails[11].answerResponse" ng-maxlength="50" placeholder="Please give full details  e.g. name and address of attending doctor, treatment and results etc"></textarea>
+
+                        <div class="error" ng-messages="step6.response10.$error" ng-if="step6.response10.$dirty">
+                            <small class="error" ng-message="required">Please answer</small>
+                            <small ng-message="maxlength">Only 50 characters are allowed.</small>
+                        </div>
+
                     </div>
                 </accordion-group>
             </div>
-            <div class="col-md-2">
-                <select class="form-control input-sm" ng-model="compulsoryHealthDetails[11].answer" ng-change="compulsoryHealthDetails[11].questionId=25">
+            <div class="form-group required col-md-2">
+                <select class="form-control input-sm" name="compulsoryHealthDetailsQuestion12" ng-disabled="mode=='new'||mode=='view'" ng-required="true" ng-model="compulsoryHealthDetails[11].answer" ng-change="compulsoryHealthDetails[11].questionId=25">
                     <option value="">--Select One--</option>
                     <option value="true" ng-value="true">Yes</option>
                     <option value="false" ng-value="false">No</option>
                 </select>
+
+                <div class="error" ng-messages="step6.compulsoryHealthDetailsQuestion12.$error" ng-if="step6.compulsoryHealthDetailsQuestion12.$dirty">
+                    <small class="error" ng-message="required">Please answer compulsoryHealthDetailsQuestion12</small>
+                </div>
+
             </div>
         </div>
 
         <div class="row" style="margin-bottom: 5px">
-            <div class="col-md-10">
+            <div class="form-group required col-md-10">
                 <accordion-group is-open="accordionStatus.healthDetailsPart2.tab6">
                     <accordion-heading>
-                        <strong style="font-size: 11px">Any tropical disease (e.g. bilharzia, malaria etc.)?</strong>
+                        <strong class="control-label" style="font-size: 11px">Any tropical disease (e.g. bilharzia, malaria etc.)?</strong>
                         <i class="pull-right glyphicon"
                            ng-class="{'glyphicon-chevron-down': accordionStatus.healthDetailsPart2.tab6, 'glyphicon-chevron-right': !accordionStatus.healthDetailsPart2.tab6}"></i>
                     </accordion-heading>
-                    <div class="col-md-12" ng-if="compulsoryHealthDetails[12].answer == 'true' ">
-                        <textarea class="form-control" ng-model="compulsoryHealthDetails[12].answerResponse" placeholder="Please give full details  e.g. name and address of attending doctor, treatment and results etc"></textarea>
+                    <div class="form-group required col-md-12" ng-if="compulsoryHealthDetails[12].answer == 'true' ">
+                        <textarea class="form-control" ng-required="true" name="response11" ng-disabled="mode=='new'||mode=='view'" ng-model="compulsoryHealthDetails[12].answerResponse" ng-maxlength="50" placeholder="Please give full details  e.g. name and address of attending doctor, treatment and results etc"></textarea>
+
+                        <div class="error" ng-messages="step6.response11.$error" ng-if="step6.response11.$dirty">
+                            <small class="error" ng-message="required">Please answer</small>
+                            <small ng-message="maxlength">Only 50 characters are allowed.</small>
+                        </div>
+
                     </div>
                 </accordion-group>
             </div>
-            <div class="col-md-2">
-                <select class="form-control input-sm" ng-model="compulsoryHealthDetails[12].answer" ng-change="compulsoryHealthDetails[12].questionId=26">
+            <div class="form-group required col-md-2">
+                <select class="form-control input-sm" ng-required="true" name="compulsoryHealthDetailsQuestion13" ng-disabled="mode=='new'||mode=='view'" ng-model="compulsoryHealthDetails[12].answer" ng-change="compulsoryHealthDetails[12].questionId=26">
                     <option value="">--Select One--</option>
                     <option value="true" ng-value="true">Yes</option>
                     <option value="false" ng-value="false">No</option>
                 </select>
+
+                <div class="error" ng-messages="step6.compulsoryHealthDetailsQuestion13.$error" ng-if="step6.compulsoryHealthDetailsQuestion13.$dirty">
+                    <small class="error" ng-message="required">Please answer compulsoryHealthDetailsQuestion13</small>
+                </div>
+
             </div>
         </div>
 
@@ -137,47 +204,68 @@
             <div class="col-md-10">
                 <accordion-group is-open="accordionStatus.healthDetailsPart2.tab7">
                     <accordion-heading>
-                        <strong style="font-size: 11px">Any other serious or prolonged illness, injury or infection?</strong>
+                        <strong class="control-label" style="font-size: 11px">Any other serious or prolonged illness, injury or infection?</strong>
                         <i class="pull-right glyphicon"
                            ng-class="{'glyphicon-chevron-down': accordionStatus.healthDetailsPart2.tab7, 'glyphicon-chevron-right': !accordionStatus.healthDetailsPart2.tab7}"></i>
                     </accordion-heading>
-                    <div class="col-md-12" ng-if="compulsoryHealthDetails[13].answer == 'true' ">
-                        <textarea class="form-control"   ng-model="compulsoryHealthDetails[13].answerResponse"
-                                  placeholder="Please give full details  e.g. name and address of attending doctor, treatment and results etc">
+                    <div class="form-group required col-md-12" ng-if="compulsoryHealthDetails[13].answer == 'true' ">
+                        <textarea class="form-control"   name="response12" ng-required="true" ng-model="compulsoryHealthDetails[13].answerResponse"
+                                  ng-disabled="mode=='new'||mode=='view'" ng-maxlength="50" placeholder="Please give full details  e.g. name and address of attending doctor, treatment and results etc">
+                        </textarea>
 
-                                  </textarea>
+                        <div class="error" ng-messages="step6.response12.$error" ng-if="step6.response12.$dirty">
+                            <small class="error" ng-message="required">Please answer</small>
+                            <small ng-message="maxlength">Only 50 characters are allowed.</small>
+                        </div>
+
                     </div>
                 </accordion-group>
             </div>
-            <div class="col-md-2">
-                <select class="form-control input-sm" ng-model="compulsoryHealthDetails[13].answer"
+            <div class="form-group required col-md-2">
+                <select class="form-control input-sm" ng-required="true" ng-disabled="mode=='new'||mode=='view'" ng-model="compulsoryHealthDetails[13].answer"
                         ng-change="compulsoryHealthDetails[13].questionId=27">
                     <option value="">--Select One--</option>
                     <option value="true" ng-value="true">Yes</option>
                     <option value="false" ng-value="false">No</option>
                 </select>
+
+                <div class="error" ng-messages="step6.compulsoryHealthDetailsQuestion14.$error" ng-if="step6.compulsoryHealthDetailsQuestion13.$dirty">
+                    <small class="error" ng-message="required">Please answer compulsoryHealthDetailsQuestion14</small>
+                </div>
+
             </div>
         </div>
 
         <div class="row" style="margin-bottom: 5px">
-            <div class="col-md-10">
+            <div class="form-group required col-md-10">
                 <accordion-group is-open="accordionStatus.healthDetailsPart2.tab8">
                     <accordion-heading>
-                        <strong style="font-size: 11px">Have you during the past five years, been a patient in a hospital, clinic or undergone medical investigation such as E.C.G. X-ray, or laboratory tests or had any blood transfusion?</strong>
+                        <strong class="control-label" style="font-size: 11px">Have you during the past five years, been a patient in a hospital, clinic or undergone medical investigation such as E.C.G. X-ray, or laboratory tests or had any blood transfusion?</strong>
                         <i class="pull-right glyphicon"
                            ng-class="{'glyphicon-chevron-down': accordionStatus.healthDetailsPart2.tab8, 'glyphicon-chevron-right': !accordionStatus.healthDetailsPart2.tab8}"></i>
                     </accordion-heading>
                     <div class="col-md-12" ng-if="compulsoryHealthDetails[14].answer == 'true' ">
-                        <textarea class="form-control" ng-model="compulsoryHealthDetails[14].answerResponse" placeholder="Please give full details  e.g. name and address of attending doctor, treatment and results etc"></textarea>
+                        <textarea class="form-control" name="response13" ng-required="true" ng-disabled="mode=='new'||mode=='view'" ng-model="compulsoryHealthDetails[14].answerResponse" ng-maxlength="50" placeholder="Please give full details  e.g. name and address of attending doctor, treatment and results etc"></textarea>
+
+                        <div class="error" ng-messages="step6.response13.$error" ng-if="step6.response13.$dirty">
+                            <small class="error" ng-message="required">Please answer</small>
+                            <small ng-message="maxlength">Only 50 characters are allowed.</small>
+                        </div>
+
                     </div>
                 </accordion-group>
             </div>
-            <div class="col-md-2">
-                <select class="form-control input-sm" ng-model="compulsoryHealthDetails[14].answer" ng-change="compulsoryHealthDetails[14].questionId=28">
+            <div class="form-group required col-md-2">
+                <select class="form-control input-sm" name="compulsoryHealthDetailsQuestion15" ng-disabled="mode=='new'||mode=='view'" ng-required="true" ng-model="compulsoryHealthDetails[14].answer" ng-change="compulsoryHealthDetails[14].questionId=28">
                     <option value="">--Select One--</option>
                     <option value="true" ng-value="true">Yes</option>
                     <option value="false" ng-value="false">No</option>
                 </select>
+
+                <div class="error" ng-messages="step6.compulsoryHealthDetailsQuestion15.$error" ng-if="step6.compulsoryHealthDetailsQuestion15.$dirty">
+                    <small class="error" ng-message="required">Please answer compulsoryHealthDetailsQuestion14</small>
+                </div>
+
             </div>
         </div>
     </accordion>
@@ -187,7 +275,7 @@
             <button type="button" class="btn btn-default btn-sm">Cancel</button>
         </div>
         <div class="col-sm-6">
-            <button type="button" class="btn btn-default btn-sm" style="float: right" ng-click="saveCompulsoryQuestionDetails()">Save</button>
+            <button type="button" class="btn btn-default btn-sm" style="float: right" ng-disabled="step6.$invalid" ng-hide="mode=='new'||mode=='view'" ng-click="saveCompulsoryQuestionDetails()">Save</button>
         </div>
     </div>
 </ng-form>

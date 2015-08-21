@@ -33,7 +33,7 @@
             <button type="button" class="btn btn-default btn-prev"><span
                     class="glyphicon glyphicon-arrow-left"></span>Prev
             </button>
-            <button type="button" class="btn btn-default btn-next" ng-disabled="!stepsSaved[selectedItem]" >Next<span
+            <button type="button" class="btn btn-default btn-next" ng-disabled="!stepsSaved[selectedItem]">Next<span
                     class="glyphicon glyphicon-arrow-right"></span></button>
         </div>
         <div class="step-content">
@@ -89,7 +89,7 @@
                                         </span>
                                 </p>
                             </div>
-                            <div class="form-group required col-md-6">
+                            <div class="form-group required col-md-6" ng-hide="isViewMode">
                                 <label class="control-label">Authorized to Sell</label>
                                 <button style="display: block;" type="button" class="btn btn-default btn-sm bs-select"
                                         data-all-none-buttons="true" view-enabled=""
@@ -99,6 +99,18 @@
                                         placeholder="Select one or more plans">
                                     Action <span class="caret"></span>
                                 </button>
+                            </div>
+                            <div class="form-group  col-md-6" ng-hide="!isViewMode">
+                                <label class="control-label"></label>
+
+                                <div>
+                                    <a data-placement="right" href="#" class="btn btn-primary btn-sm ng-scope "
+                                       id="new-quote-popover" data-trigger="hover" popover="">Authorized to Sell
+                                        <div class="popover-head hide">Plans</div>
+                                        <div class="popover-content hide" ng-repeat="authorisedToS in agentDetails.authorizePlansToSell">
+                                        </div>
+                                    </a>
+                                </div>
                             </div>
                         </div>
 
@@ -145,10 +157,10 @@
                             <table class="table table-bordered">
                                 <thead>
                                 <tr class="form-group required">
-                                    <th class="control-label" >Line of Business</th>
+                                    <th class="control-label">Line of Business</th>
                                     <th class="control-label">Salutation</th>
-                                    <th class="control-label" >Full Name</th>
-                                    <th  >email ID</th>
+                                    <th class="control-label">Full Name</th>
+                                    <th>email ID</th>
                                     <th class="control-label">Work Phone</th>
                                     <th>Fax</th>
                                 </tr>
@@ -157,28 +169,33 @@
                                 <tr ng-repeat="contact in agentDetails.contactPersonDetails">
                                     <td width="13%">
                                         <select class="form-control input-sm" view-enabled=""
-                                                ng-model="contact.lineOfBusinessId"  ng-options="lineOfBusiness.lineOfBusinessId as lineOfBusiness.value for lineOfBusiness in lineOfBusinessList" ng-blur="addingRowTest(contact)">
-                                            <option value="" >Select</option>
-                                            </select>
+                                                ng-model="contact.lineOfBusinessId"
+                                                ng-options="lineOfBusiness.lineOfBusinessId as lineOfBusiness.value for lineOfBusiness in lineOfBusinessList"
+                                                ng-blur="addingRowTest(contact)">
+                                            <option value="">Select</option>
+                                        </select>
                                         <span style="color:red;" ng-show="errorMsg">Select different option.</span>
                                     </td>
                                     <td width="10%">
                                         <select class="form-control input-sm" name="title"
                                                 ng-model="contact.title" view-enabled="" ng-required="true"
-                                                ng-blur="addingRowTest(contact)" ng-options="title as title for title in titleList">
+                                                ng-blur="addingRowTest(contact)"
+                                                ng-options="title as title for title in titleList">
                                         </select>
                                     </td>
                                     <td width="27%">
-                                        <input type="text" class="form-control input-sm" name="fullName"  ng-model="contact.fullName" ng-required="true"
-                                               ng-blur="addingRowTest(contact)" view-enabled="" />
+                                        <input type="text" class="form-control input-sm" name="fullName"
+                                               ng-model="contact.fullName" ng-required="true"
+                                               ng-blur="addingRowTest(contact)" view-enabled=""/>
                                     </td>
                                     <td>
                                         <input type="text" class="form-control input-sm" ng-model="contact.emailId"
-                                               view-enabled="" />
+                                               view-enabled=""/>
                                     </td>
                                     <td width="15%">
                                         <input type="text" ng-minlength="15" ng-maxlength="15" ng-required="true"
-                                               ng-blur="addingRowTest(contact)" class="form-control input-sm" ng-model="contact.workPhone"
+                                               ng-blur="addingRowTest(contact)" class="form-control input-sm"
+                                               ng-model="contact.workPhone"
                                                view-enabled=""/>
                                     </td>
                                     <td width="15%">
@@ -202,6 +219,7 @@
                     <!--Contact Details  start-->
                     <div class="row">
                         <h4 style="margin-left: 10px">Postal Address</h4>
+
                         <div class="col-md-6">
                             <div class="form-group required">
                                 <label class="control-label">Address Line 1</label>
@@ -242,6 +260,7 @@
                     </div>
                     <div class="row">
                         <h4 style="margin-left: 10px">Physical Address</h4>
+
                         <div class="col-md-6">
                             <div class="form-group required">
                                 <label class="control-label">Address Line 1</label>
@@ -282,12 +301,14 @@
                             <div class="form-group" style="margin-top: 22px">
                                 <button type="submit" class="btn btn-default btn-sm" id="BrokerSubmitBtn"
                                         style="width: 25%;margin-left: 260px" ng-if="!isEditMode" view-enabled=""
-                                        ng-click="submit()" ng-disabled="(!contactDetailsForm.$valid || !step1.$valid)" >Submit
+                                        ng-click="submit()" ng-disabled="(!contactDetailsForm.$valid || !step1.$valid)">
+                                    Submit
                                 </button>
                                 <button type="submit" class="btn btn-default btn-sm"
                                         style="width: 25%;margin-left: 260px" ng-if="isEditMode" id="BrokerUpdateBtn"
                                         view-enabled=""
-                                        ng-click="submit()" ng-disabled="(!contactDetailsForm.$valid || !step1.$valid)">Update
+                                        ng-click="submit()" ng-disabled="(!contactDetailsForm.$valid || !step1.$valid)">
+                                    Update
                                 </button>
                                 <button type="button" class="btn btn-default btn-sm" style="width:25%;"
                                         ng-click="cancel()">{{contactDetailsForm.$submitted==true?'Back':'Cancel'}}
@@ -301,6 +322,11 @@
         </div>
     </div>
     <style>
+        .popover-content {
+            font-size: 11px;
+            padding-left: 3px;
+        }
+
         .form-group {
             margin-bottom: 5px !important;
         }
