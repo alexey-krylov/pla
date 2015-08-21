@@ -38,9 +38,10 @@ public class ProposedAssuredDto {
     private SpouseDto spouse;
     private String occupation;
     private String relationshipId;
+    private String clientId;
 
 
-    public ProposedAssuredDto(String title, String firstName, String surname, String nrc, DateTime dateOfBirth, Gender gender, String mobileNumber, String emailAddress, MaritalStatus maritalStatus, String spouseFirstName, String spouseLastName, String spouseEmailAddress, String spouseMobilNumber, EmploymentDetail employmentDetail, ResidentialAddress residentialAddress, String otherName,String relationshipId) {
+    public ProposedAssuredDto(String title, String firstName, String surname, String nrc, DateTime dateOfBirth, Gender gender, String mobileNumber, String emailAddress, MaritalStatus maritalStatus, String spouseFirstName, String spouseLastName, String spouseEmailAddress, String spouseMobilNumber, EmploymentDetail employmentDetail, ResidentialAddress residentialAddress, String otherName,String relationshipId,String clientId) {
 
         this.title = title;
         this.firstName = firstName;
@@ -80,6 +81,7 @@ public class ProposedAssuredDto {
         rDto.setTown(residentialAddress.getAddress().getTown());
         this.residentialAddress = rDto;
         this.relationshipId = relationshipId;
+        this.clientId = clientId;
 
     }
 

@@ -32,10 +32,11 @@ public class Proposer {
     private ResidentialAddress residentialAddress;
     private String otherName;
     private Boolean isProposedAssured;
+    private String clientId;
 
     Proposer(String title, String firstName, String surname, String nrc, DateTime dateOfBirth, Gender gender, String mobileNumber, String emailAddress,
                     MaritalStatus maritalStatus, String spouseFirstName, String spouseLastName, String spouseEmailAddress, String spouseMobileNumber,
-                    EmploymentDetail employmentDetail, ResidentialAddress residentialAddress, boolean isProposedAssured,String otherName) {
+                    EmploymentDetail employmentDetail, ResidentialAddress residentialAddress, boolean isProposedAssured,String otherName,String clientId) {
         this.title = title;
         this.firstName = firstName;
         this.surname = surname;
@@ -53,6 +54,7 @@ public class Proposer {
         this.residentialAddress = residentialAddress;
         this.isProposedAssured = isProposedAssured;
         this.otherName=otherName;
+        this.clientId = clientId;
     }
 
     public Proposer(String title, String firstName, String surname, DateTime dateOfBirth, Gender gender, String mobileNumber, String emailAddress,boolean isProposedAssured) {

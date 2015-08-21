@@ -24,6 +24,7 @@ public class ProposedAssuredBuilder {
     private EmploymentDetail employmentDetail;
     private String otherName;
     private String relationShipId;
+    private String clientId;
 
     public ProposedAssuredBuilder withOtherName(String otherName)
     {
@@ -112,12 +113,17 @@ public class ProposedAssuredBuilder {
         return this;
     }
 
+    public ProposedAssuredBuilder withClientId(String clientId){
+        this.clientId = clientId;
+        return this;
+    }
+
     public ProposedAssured createProposedAssured() {
-        return new ProposedAssured(title, firstName, surname, nrc, dateOfBirth, gender, mobileNumber, emailAddress, maritalStatus, spouseFirstName, spouseLastName, spouseEmailAddress, spouseMobileNumber, employmentDetail, residentialAddress,otherName,relationShipId);
+        return new ProposedAssured(title, firstName, surname, nrc, dateOfBirth, gender, mobileNumber, emailAddress, maritalStatus, spouseFirstName, spouseLastName, spouseEmailAddress, spouseMobileNumber, employmentDetail, residentialAddress,otherName,relationShipId,clientId);
     }
 
     public ProposedAssuredDto createProposedAssuredDto() {
-        return new ProposedAssuredDto(title, firstName, surname, nrc, dateOfBirth, gender, mobileNumber, emailAddress, maritalStatus, spouseFirstName, spouseLastName, spouseEmailAddress, spouseMobileNumber, employmentDetail, residentialAddress,otherName,relationShipId);
+        return new ProposedAssuredDto(title, firstName, surname, nrc, dateOfBirth, gender, mobileNumber, emailAddress, maritalStatus, spouseFirstName, spouseLastName, spouseEmailAddress, spouseMobileNumber, employmentDetail, residentialAddress,otherName,relationShipId,clientId);
     }
 
     public static ProposedAssuredBuilder getProposedAssuredBuilder(ProposedAssuredDto dto) {
@@ -134,6 +140,7 @@ public class ProposedAssuredBuilder {
                 .withMaritalStatus(dto.getMaritalStatus())
                 .withNrc(dto.getNrc())
                 .withRelationShipId(dto.getRelationshipId())
+                .withClientId(dto.getClientId())
                 .withEmploymentDetail(new EmploymentDetailBuilder()
                         .withEmploymentDate(dto.getEmployment().getEmploymentDate())
                         .withEmploymentTypeId(dto.getEmployment().getEmploymentType())
@@ -178,6 +185,7 @@ public class ProposedAssuredBuilder {
                 .withMobileNumber(dto.getMobileNumber())
                 .withMaritalStatus(dto.getMaritalStatus())
                 .withNrc(dto.getNrc())
+                .withClientId(dto.getClientId())
                 .withEmploymentDetail(new EmploymentDetailBuilder()
                         .withEmploymentDate(dto.getEmployment().getEmploymentDate())
                         .withEmploymentTypeId(dto.getEmployment().getEmploymentType())
@@ -221,6 +229,7 @@ public class ProposedAssuredBuilder {
                 .withMaritalStatus(pa.getMaritalStatus())
                 .withNrc(pa.getNrc())
                 .withRelationShipId(pa.getRelationshipId())
+                .withClientId(pa.getClientId())
                 .withEmploymentDetail(new EmploymentDetailBuilder()
                         .withEmploymentDate(pa.getEmploymentDetail().getEmploymentDate())
                         .withEmploymentTypeId(pa.getEmploymentDetail().getEmploymentTypeId())

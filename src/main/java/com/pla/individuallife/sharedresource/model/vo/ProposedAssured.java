@@ -33,10 +33,11 @@ public class ProposedAssured {
     private ResidentialAddress residentialAddress;
     private String otherName;
     private String relationshipId;
+    private String clientId;
 
    public ProposedAssured(String title, String firstName, String surname, String nrc, DateTime dateOfBirth, Gender gender, String mobileNumber, String emailAddress,
                     MaritalStatus maritalStatus, String spouseFirstName, String spouseLastName, String spouseEmailAddress, String spouseMobileNumber,
-                    EmploymentDetail employmentDetail, ResidentialAddress residentialAddress,String otherName,String relationshipId) {
+                    EmploymentDetail employmentDetail, ResidentialAddress residentialAddress,String otherName,String relationshipId,String clientId) {
         this.title = title;
         this.firstName = firstName;
         this.surname = surname;
@@ -54,6 +55,7 @@ public class ProposedAssured {
         this.residentialAddress = residentialAddress;
         this.otherName=otherName;
        this.relationshipId = relationshipId;
+       this.clientId = clientId;
     }
 
     public ProposedAssured(){

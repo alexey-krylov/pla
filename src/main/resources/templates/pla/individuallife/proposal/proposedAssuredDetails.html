@@ -64,6 +64,16 @@
                     </div>
                 </div>
 
+                <div class="form-group">
+                    <label class="control-label">Client Id</label>
+                    <input type="clientId" class="form-control input-sm" name="email" ng-disabled="mode=='new'||mode=='view'" ng-model="proposedAssured.clientId"/>
+
+                    <div class="error" ng-messages="proposedAssuredDetails.clientId.$error"  ng-if="proposedAssuredDetails.clientId.$dirty">
+                        <small class="error" ng-message="required">Please enter  Client Id. </small>
+                    </div>
+
+                </div>
+
 
             </div>
             <div class="col-md-6">

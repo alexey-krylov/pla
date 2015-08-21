@@ -16,9 +16,9 @@ import java.util.List;
 @NoArgsConstructor
 @ToString
 public class HabitDetails {
-    private int wine;
-    private int beer;
-    private int spirit;
+    private String wine;
+    private String beer;
+    private String spirit;
     private int smokePerDay;
     private List<Question> questions;
 }

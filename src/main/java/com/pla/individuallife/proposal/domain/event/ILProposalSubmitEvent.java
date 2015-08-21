@@ -5,13 +5,15 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.io.Serializable;
+
 /**
  * Created by Admin on 7/29/2015.
  */
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
-public class ILProposalSubmitEvent {
+public class ILProposalSubmitEvent implements Serializable {
 
     private ProposalId proposalId;
 
