@@ -155,15 +155,12 @@ public class GroupHealthProposal extends AbstractAggregateRoot<ProposalId> {
     }
 
     public BigDecimal getNetAnnualPremiumPaymentAmount(GHPremiumDetail premiumDetail) {
-        BigDecimal totalInsuredPremiumAmount = this.getTotalBasicPremiumForInsured();
-        BigDecimal addOnBenefitAmount = premiumDetail.getAddOnBenefit() == null ? BigDecimal.ZERO : totalInsuredPremiumAmount.multiply((premiumDetail.getAddOnBenefit().divide(new BigDecimal(100))));
-        totalInsuredPremiumAmount = totalInsuredPremiumAmount.add(addOnBenefitAmount);
-        BigDecimal profitAndSolvencyAmount = premiumDetail.getProfitAndSolvency() == null ? BigDecimal.ZERO : totalInsuredPremiumAmount.multiply((premiumDetail.getProfitAndSolvency().divide(new BigDecimal(100))));
-        totalInsuredPremiumAmount = totalInsuredPremiumAmount.add(profitAndSolvencyAmount);
-        BigDecimal waiverOfExcessLoading = premiumDetail.getWaiverOfExcessLoading() == null ? BigDecimal.ZERO : totalInsuredPremiumAmount.multiply((premiumDetail.getWaiverOfExcessLoading().divide(new BigDecimal(100))));
-        totalInsuredPremiumAmount = totalInsuredPremiumAmount.add(waiverOfExcessLoading);
-        BigDecimal discountAmount = premiumDetail.getDiscount() == null ? BigDecimal.ZERO : totalInsuredPremiumAmount.multiply((premiumDetail.getDiscount().divide(new BigDecimal(100))));
-        totalInsuredPremiumAmount = totalInsuredPremiumAmount.subtract(discountAmount);
+        BigDecimal totalBasicAmount = this.getTotalBasicPremiumForInsured();
+        BigDecimal addOnBenefitAmount = premiumDetail.getAddOnBenefit() == null ? BigDecimal.ZERO : totalBasicAmount.multiply((premiumDetail.getAddOnBenefit().divide(new BigDecimal(100))));
+        BigDecimal profitAndSolvencyAmount = premiumDetail.getProfitAndSolvency() == null ? BigDecimal.ZERO : totalBasicAmount.multiply((premiumDetail.getProfitAndSolvency().divide(new BigDecimal(100))));
+        BigDecimal waiverOfExcessLoading = premiumDetail.getWaiverOfExcessLoading() == null ? BigDecimal.ZERO : totalBasicAmount.multiply((premiumDetail.getWaiverOfExcessLoading().divide(new BigDecimal(100))));
+        BigDecimal discountAmount = premiumDetail.getDiscount() == null ? BigDecimal.ZERO : totalBasicAmount.multiply((premiumDetail.getDiscount().divide(new BigDecimal(100))));
+        BigDecimal totalInsuredPremiumAmount = totalBasicAmount.add(addOnBenefitAmount.add(profitAndSolvencyAmount).add(waiverOfExcessLoading)).subtract(discountAmount);
         BigDecimal vat = premiumDetail.getVat() == null ? BigDecimal.ZERO : totalInsuredPremiumAmount.multiply((premiumDetail.getVat().divide(new BigDecimal(100))));
         totalInsuredPremiumAmount = totalInsuredPremiumAmount.add(vat);
         totalInsuredPremiumAmount = totalInsuredPremiumAmount.setScale(2, BigDecimal.ROUND_CEILING);
