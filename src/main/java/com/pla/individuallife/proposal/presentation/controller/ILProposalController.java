@@ -328,7 +328,7 @@ public class ILProposalController {
             modelAndView.addObject("searchResult", Lists.newArrayList());
         }
         modelAndView.addObject("searchCriteria", ilSearchProposalDto);
-        modelAndView.setViewName("pla/individuallife/proposal/index");
+        modelAndView.setViewName("/pla/individuallife/proposal/index");
         return modelAndView;
     }
 
@@ -355,7 +355,7 @@ public class ILProposalController {
     public ModelAndView proposalListPage() {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.addObject("searchCriteria", new ILSearchProposalDto());
-        modelAndView.setViewName("pla/individualLife/proposal/index");
+        modelAndView.setViewName("/pla/individuallife/proposal/index");
         return modelAndView;
     }
 
