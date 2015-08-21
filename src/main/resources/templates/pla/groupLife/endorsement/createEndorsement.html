@@ -58,8 +58,16 @@
     });
 </script>
 <script type="text/ng-template" id="createEndorsementTpl.html">
+    <p class="container lead">
+    <ol class="container breadcrumb">
+        <li>Endorsement</li>
+        <li>Group Life</li>
+    </ol>
+    </p>
+
+
     <nth-alert></nth-alert>
-    <form name="policyForm" novalidate="true" class="css-form ng-cloak" method="post" enctype="multipart/form-data">
+    <form name="policyForm" novalidate="true" class="container css-form ng-cloak" method="post" enctype="multipart/form-data">
         <div class="wizard fueluxWizard" style="overflow: visible" selected-item="selectedItem">
             <ul class="steps" style="margin-left: 0">
                 <li data-step="1"><span class="badge badge-info">1</span>Basic Details<span class="chevron"></span></li>
