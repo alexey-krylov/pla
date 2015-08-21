@@ -322,7 +322,7 @@ public class ILProposalController {
     @RequestMapping(method = RequestMethod.POST)
     public ModelAndView searchProposal(ILSearchProposalDto ilSearchProposalDto) {
         ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("pla/individuallife/proposal/index");
+        modelAndView.setViewName("/pla/individuallife/proposal/index");
         try {
             modelAndView.addObject("searchResult", proposalFinder.searchProposal(ilSearchProposalDto, new String[]{"DRAFT", "RETURNED", "PENDING_ACCEPTANCE","UNDERWRITING_LEVEL_ONE","UNDERWRITING_LEVEL_TWO"}));
         } catch (Exception e) {
@@ -355,7 +355,7 @@ public class ILProposalController {
     public ModelAndView proposalListPage() {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.addObject("searchCriteria", new ILSearchProposalDto());
-        modelAndView.setViewName("pla/individualLife/proposal/index");
+        modelAndView.setViewName("/pla/individualLife/proposal/index");
         return modelAndView;
     }
 
