@@ -3,6 +3,7 @@ var App = angular.module('createRoutingLevel', ['ngRoute', 'ui.bootstrap', 'ngSa
 App.controller('CreateRoutingLevelController', ['$scope', '$http', function ($scope, $http) {
 
    console.log(JSON.stringify(createRoutingLevel));
+    $scope.createRoutingLevel = createRoutingLevel;
     $scope.uploaded = false;
     $scope.showOptionalCoverageValue=true;
     $scope.verified = false;
@@ -21,7 +22,7 @@ App.controller('CreateRoutingLevelController', ['$scope', '$http', function ($sc
             startingDay: 1
         }
     };
-    $scope.createRoutingLevel = createRoutingLevel;
+
     $scope.open = function ($event) {
         $event.preventDefault();
         $event.stopPropagation();
@@ -33,9 +34,19 @@ App.controller('CreateRoutingLevelController', ['$scope', '$http', function ($sc
             $scope.createRoutingLevel.planCode="";
             $scope.createRoutingLevel.coverageId="";
             $scope.showOptionalCoverageValue = false;
+            $scope.createRoutingLevel.effectiveFrom="";
         }else if (newValue == 'plan'){
-            $scope.createRoutingLevel.planCode="";
-            $scope.showOptionalCoverageValue = true;
+            if($scope.createRoutingLevel.planCode){
+               // $scope.createRoutingLevel.planCode="";
+                $scope.showOptionalCoverageValue = true;
+                $scope.createRoutingLevel.effectiveFrom="";
+
+            }else{
+                $scope.createRoutingLevel.planCode="";
+                $scope.showOptionalCoverageValue = true;
+                $scope.createRoutingLevel.effectiveFrom="";
+
+            }
 
         }
 
@@ -55,6 +66,7 @@ App.controller('CreateRoutingLevelController', ['$scope', '$http', function ($sc
     });
 
     $scope.$watch('createRoutingLevel.planCode', function (newValue, oldValue) {
+        console.log("*****************************-->"+createRoutingLevel.planCode);
         if (newValue) {
             var planCode = $scope.createRoutingLevel.planCode;
             $scope.routingForm.planCode = planCode;
