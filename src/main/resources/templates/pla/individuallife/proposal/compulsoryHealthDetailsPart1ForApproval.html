@@ -205,7 +205,7 @@
 
     <div class="row">
         <div class="col-sm-6">
-            <button type="button" class="btn btn-default btn-sm">Cancel</button>
+            <button type="button" class="btn btn-default btn-sm" ng-click="cancelAll()">Cancel</button>
         </div>
         <div class="col-sm-6">
             <button type="button" class="btn btn-default btn-sm"   ng-disabled="step5.$invalid" ng-hide="mode=='new'||mode=='view'" ng-click="saveCompulsoryQuestionDetails()" style="float: right">Save</button>

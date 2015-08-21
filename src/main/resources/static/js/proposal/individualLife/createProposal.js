@@ -5,6 +5,7 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
             templateUrl: 'plan-policyterm.tpl',
             controller: ['$scope', function ($scope) {
                 $scope.policyTerms = function () {
+                    //alert('PlanDetailsINsideDirective'+JSON.stringify($scope.plan));
                     if ($scope.plan.policyTermType === 'SPECIFIED_VALUES') {
                         var maxMaturityAge = $scope.plan.policyTerm.maxMaturityAge || 1000;
                         //var ageNextBirthday = calculateAge($scope.proposedAssured.dateOfBirth);
@@ -313,6 +314,11 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
                 }
             });*/
 
+            $scope.cancelAll=function()
+            {
+                window.location.href="/pla/individuallife/proposal/search"
+            }
+
             if ($scope.proposalId) {
                 $http.get("/pla/individuallife/proposal/getproposal/" + $scope.proposalId + "?mode=view").success(function (response, status, headers, config) {
                     var result = response;
@@ -402,7 +408,7 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
                         $scope.relationshipList=response;
                     }).error(function (response, status, headers, config) {
                     });
-                    alert($scope.proposal.proposalId);
+                    //alert($scope.proposal.proposalId);
 
                     $http.get("getadditionaldocuments/"+ $scope.proposal.proposalId).success(function (data, status) {
                         //console.log(data);
@@ -683,7 +689,7 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
             }
 
             $scope.getPolicyTermVal=function(policyTerm){
-                alert(policyTerm);
+                //alert(policyTerm);
                 for(i in $scope.plan.coverages )
                 {
                     if ($scope.plan.coverages[i].coverageTermType == 'POLICY_TERM')
@@ -789,7 +795,7 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
             $scope.$watch('bankDetails.bankBranchName',function(newvalue,oldvalue){
                 if(newvalue){
                     //alert("//alert in bankCode"+newvalue);
-                    alert('branchName'+newvalue);
+                    //alert('branchName'+newvalue);
                     //$scope.bankDetails.bankBranchName=newvalue;
                     var bankBranchNames = _.findWhere($scope.bankBranchDetails, {branchName: newvalue});
                     //$scope.bankDetails.bankBranchSortCode=bankBranchNames.sortCode;
@@ -1129,8 +1135,8 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
             }
             $scope.beneficiariesList =[];
             $scope.addBeneficiary = function (beneficiary) {
-                alert('Inside addBeneficiary Method..');
-                alert("Length is:"+$scope.beneficiariesList.length);
+                //alert('Inside addBeneficiary Method..');
+                //alert("Length is:"+$scope.beneficiariesList.length);
                 //console.log("List..: "+JSON.stringify(beneficiariesList));
                 /*if ($scope.beneficiariesList.length == 0) {
                  //console.log('Object Is..' + beneficiary);
@@ -1143,11 +1149,11 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
                     //$scope.beneficiariesList.unshift(beneficiary);
                     $scope.beneficiariesList.push(beneficiary);
                     //console.log("List..: "+JSON.stringify(beneficiariesList));
-                    alert("Object Is.." + JSON.stringify(beneficiary));
+                    //alert("Object Is.." + JSON.stringify(beneficiary));
                 }
 
                 else {
-                    alert('Length is greater Then 0');
+                    //alert('Length is greater Then 0');
                     var checkLoopNameStatus = "true";
                     for (i in $scope.beneficiariesList) {
                         if ($scope.beneficiariesList[i].nrc == beneficiary.nrc) {
@@ -1485,6 +1491,12 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
                 $event.stopPropagation();
                 $scope.launchdob1 = true;
             };
+
+            /*$scope.launchinceptionDateADob = function ($event) {
+                $event.preventDefault();
+                $event.stopPropagation();
+                $scope.inceptionDateA = true;
+            };*/
 
             $scope.launchProposedAssuredeDob = function ($event) {
                 $event.preventDefault();
@@ -2471,7 +2483,7 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
 
                     if((parseInt(newvalue) <= 18 ) || (parseInt(newvalue) >=60)){
                         $scope.ageCalculateStatus=true;
-                        alert("Same1....");
+                        //alert("Same1....");
                         //alert(parseInt(newvalue));
                     }
                     else {
@@ -2645,13 +2657,13 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
                 ////console.log('Update Result ' + JSON.stringify(request3));
 
                 if ($scope.quotationIdDetails.quotationId != null && $scope.quotationIdDetails.quotationId != " ") {
-                    alert("Quotation Save...");
+                    //alert("Quotation Save...");
                     /* var request2 = {
                      "proposedAssured": $scope.proposedAssured,
                      "agentCommissionDetails": $scope.agentDetails,
                      "quotationId": $scope.quotationIdDetails.quotationId
                      }*/
-                    alert('employment'+JSON.stringify($scope.proposerResidential));
+                    //alert('employment'+JSON.stringify($scope.proposerResidential));
 
                     var request2 = {
                         //"proposer": $scope.proposer,
@@ -2661,7 +2673,7 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
                         "employment": $scope.proposerEmployment,
                         "residentialAddress": $scope.proposerResidential
                     }
-                    alert('quotationId:'+$scope.quotationIdDetails.quotationId);
+                    //alert('quotationId:'+$scope.quotationIdDetails.quotationId);
 
                     request2 = angular.extend($scope.proposer, request2);
                     request2=
@@ -3051,12 +3063,85 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
                     $scope.generalAnswer = true;
                     $scope.generalAnswerList.push($scope.generalAnswer);
                     //console.log('Checking Status is ' + $scope.generalAnswer);
-                    //$scope.accordionStatus.generalDetails[tab] = true;
+                    $scope.accordionStatus.generalDetails[tab] = true;
                 } else {
                     $scope.generalAnswer = false;
                     $scope.generalAnswerList.push($scope.generalAnswer);
                     //console.log('Checking Status is ' + $scope.generalAnswer);
-                    //$scope.accordionStatus.generalDetails[tab] = false;
+                    $scope.accordionStatus.generalDetails[tab] = false;
+                }
+            };
+
+            $scope.openAccordionCompulsoryQuestion1=function(status,tab,arrySeq,qId)
+            {
+                //answer,'tab1',2,13
+                //alert('****'+ status);
+                $scope.compulsoryHealthDetails[arrySeq].questionId=qId;
+                if(status == 'true')
+                {
+                    $scope.accordionStatus.healthDetailsPart1[tab] = true;
+                }
+                else
+                {
+                    $scope.accordionStatus.healthDetailsPart1[tab] = false;
+                }
+            };
+
+            $scope.openAccordionCompulsoryQuestion2=function(status,tab,arrySeq,qId)
+            {
+                //answer,'tab1',2,13
+                //alert('****'+ status);
+                $scope.compulsoryHealthDetails[arrySeq].questionId=qId;
+                if(status == 'true')
+                {
+                    $scope.accordionStatus.healthDetailsPart2[tab] = true;
+                }
+                else
+                {
+                    $scope.accordionStatus.healthDetailsPart2[tab] = false;
+                }
+            };
+
+            $scope.openAccordionFamilyQuestion=function(status,tab,arrySeq,qId)
+            {
+                //answer,'tab1',2,13
+                //alert('****'+ status);
+                $scope.questionList[arrySeq].questionId=qId;
+                if(status == 'true')
+                {
+                    $scope.accordionStatus.familyHabitAndBuild[tab] = true;
+                }
+                else
+                {
+                    $scope.accordionStatus.familyHabitAndBuild[tab] = false;
+                }
+            };
+
+            $scope.openAccordionoverWeightQuestion=function(status,tab)
+            {
+                $scope.build.overWeightQuestion.questionId='21';
+                //alert('****'+ status);
+                if(status == 'true')
+                {
+                    $scope.accordionStatus.familyHabitAndBuild[tab] = true;
+                }
+                else
+                {
+                    $scope.accordionStatus.familyHabitAndBuild[tab] = false;
+                }
+            };
+            $scope.accordionStatus.additionalDetail=false;
+            $scope.openAccordionAdditionalQuestion=function(status,tab)
+            {
+                $scope.replacement.questionId='22';
+                //alert('****'+ status);
+                if(status == 'true')
+                {
+                    $scope.accordionStatus.additionalDetail1[tab] = true;
+                }
+                else
+                {
+                    $scope.accordionStatus.additionalDetail1[tab] = false;
                 }
             };
 

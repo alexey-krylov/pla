@@ -438,7 +438,7 @@
     <div class="row">
         <!--{{statusCount}}-->
         <div class="col-sm-6">
-            <button type="button" class="btn btn-default btn-sm">Cancel</button>
+            <button type="button" class="btn btn-default btn-sm" ng-click="cancelAll()">Cancel</button>
         </div>
         <div class="col-sm-6">
             <button type="button" class="btn btn-default btn-sm" style="float: right" ng-disabled="step2.$invalid || statusCount ||mode=='new'||mode=='view'|| ageCalculateStatus" ng-click="saveProposerDetails()">Save</button>

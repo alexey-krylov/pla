@@ -319,8 +319,11 @@
                             </accordion-group>
                         </div>
                         <div class="form-group required col-md-2">
-                            <select class="form-control input-sm" ng-disabled="mode=='new'||mode=='view'" ng-model="questionList[0].answer"
+                           <!-- <select class="form-control input-sm" ng-disabled="mode=='new'||mode=='view'" ng-model="questionList[0].answer"
                                     name="familyQuestion1" ng-required="true" ng-change="questionList[0].questionId='17'">
+-->
+                              <select class="form-control input-sm"  ng-required="true" name="familyQuestion1" ng-disabled="mode=='new'||mode=='view'"
+                                        ng-model="questionList[0].answer" ng-change="openAccordionFamilyQuestion(questionList[0].answer,'tab2_1',0,'17')">
                                 <option value="">--Select One--</option>
                                 <option   value="true">Yes</option>
                                 <option   value="false">No</option>
@@ -353,7 +356,11 @@
                             </accordion-group>
                         </div>
                         <div class="form-group required col-md-2">
-                            <select class="form-control input-sm" ng-disabled="mode=='new'||mode=='view'" name="familyQuestion2" ng-required="true" ng-model="questionList[1].answer" ng-change="questionList[1].questionId='18'">
+                            <!--<select class="form-control input-sm" ng-disabled="mode=='new'||mode=='view'" name="familyQuestion2"
+                            ng-required="true" ng-model="questionList[1].answer" ng-change="questionList[1].questionId='18'">-->
+
+                            <select class="form-control input-sm"  ng-required="true" name="familyQuestion2" ng-disabled="mode=='new'||mode=='view'"
+                                    ng-model="questionList[1].answer" ng-change="openAccordionFamilyQuestion(questionList[1].answer,'tab2_2',1,'18')">
                                 <option value="">--Select One--</option>
                                 <option value="true">Yes</option>
                                 <option value="false">No</option>
@@ -384,7 +391,11 @@
                             </accordion-group>
                         </div>
                         <div class="form-group required col-md-2">
-                            <select class="form-control input-sm" ng-required="true" ng-disabled="mode=='new'||mode=='view'" name="familyQuestion3" ng-model="questionList[2].answer" ng-change="questionList[2].questionId='19'">
+                            <!--<select class="form-control input-sm" ng-required="true" ng-disabled="mode=='new'||mode=='view'"
+                            name="familyQuestion3" ng-model="questionList[2].answer" ng-change="questionList[2].questionId='19'">-->
+
+                            <select class="form-control input-sm"  ng-required="true" name="familyQuestion3" ng-disabled="mode=='new'||mode=='view'"
+                                    ng-model="questionList[2].answer" ng-change="openAccordionFamilyQuestion(questionList[2].answer,'tab2_3',2,'19')">
                                 <option value="">--Select One--</option>
                                 <option value="true">Yes</option>
                                 <option value="false">No</option>
@@ -415,7 +426,10 @@
                             </accordion-group>
                         </div>
                         <div class="form-group required col-md-2">
-                            <select class="form-control input-sm" name="familyQuestion4" ng-required="true" ng-disabled="mode=='new'||mode=='view'" ng-model="questionList[3].answer" ng-change="questionList[3].questionId='20'">
+                           <!-- <select class="form-control input-sm" name="familyQuestion4" ng-required="true" ng-disabled="mode=='new'||mode=='view'"
+                           ng-model="questionList[3].answer" ng-change="questionList[3].questionId='20'">-->
+                            <select class="form-control input-sm"  ng-required="true" name="familyQuestion4" ng-disabled="mode=='new'||mode=='view'"
+                                    ng-model="questionList[3].answer" ng-change="openAccordionFamilyQuestion(questionList[3].answer,'tab2_4',3,'20')">
                                 <option value="">--Select One--</option>
                                 <option value="true">Yes</option>
                                 <option value="false">No</option>
@@ -499,7 +513,11 @@
                         </accordion-group>
                     </div>
                     <div class="form-group required col-md-2">
-                        <select class="form-control input-sm" ng-model="build.overWeightQuestion.answer" name="familyQuestion5" ng-required="true" ng-disabled="mode=='new'||mode=='view'" ng-change="build.overWeightQuestion.questionId='21'">
+                       <!-- <select class="form-control input-sm" ng-model="build.overWeightQuestion.answer" name="familyQuestion5" ng-required="true"
+                        ng-disabled="mode=='new'||mode=='view'" ng-change="build.overWeightQuestion.questionId='21'">-->
+
+                        <select class="form-control input-sm"  ng-required="true" name="familyQuestion5" ng-disabled="mode=='new'||mode=='view'"
+                                ng-model="build.overWeightQuestion.answer" ng-change="openAccordionoverWeightQuestion(build.overWeightQuestion.answer,'tab3_1')">
                             <option value="">--Select One--</option>
                             <option value="true">Yes</option>
                             <option value="false">No</option>
@@ -546,7 +564,7 @@
     </accordion>
     <div class="row">
         <div class="col-sm-6">
-            <button type="button" class="btn btn-default btn-sm">Cancel</button>
+            <button type="button" class="btn btn-default btn-sm" ng-click="cancelAll()">Cancel</button>
         </div>
         <div class="col-sm-6">
             <button type="button" class="btn btn-default btn-sm" style="float: right"
