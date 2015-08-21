@@ -209,10 +209,11 @@ public class GroupLifeQuotation extends AbstractAggregateRoot<QuotationId> imple
         BigDecimal profitAndSolvencyAmount = premiumDetail.getProfitAndSolvency() == null ? BigDecimal.ZERO : totalBasicPremium.multiply((premiumDetail.getProfitAndSolvency().divide(new BigDecimal(100))));
         BigDecimal industryLoadingFactor = BigDecimal.ZERO;
         if (this.industry != null) {
-            industryLoadingFactor = totalBasicPremium.multiply(this.industry.getLoadingFactor());
+            industryLoadingFactor = this.industry.getLoadingFactor();
         }
-        BigDecimal totalLoadingAmount = (addOnBenefitAmount.add(profitAndSolvencyAmount).add(industryLoadingFactor)).subtract((hivDiscountAmount.add(valuedClientDiscountAmount).add(longTermDiscountAmount)));
+        BigDecimal totalLoadingAmount = (addOnBenefitAmount.add(profitAndSolvencyAmount)).subtract((hivDiscountAmount.add(valuedClientDiscountAmount).add(longTermDiscountAmount)));
         BigDecimal totalInsuredPremiumAmount = totalBasicPremium.add(totalLoadingAmount);
+        totalInsuredPremiumAmount = totalInsuredPremiumAmount.multiply(industryLoadingFactor);
         totalInsuredPremiumAmount = totalInsuredPremiumAmount.setScale(2, BigDecimal.ROUND_CEILING);
         return totalInsuredPremiumAmount;
     }

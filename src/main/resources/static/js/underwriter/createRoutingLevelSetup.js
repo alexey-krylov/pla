@@ -72,12 +72,14 @@ App.controller('CreateRoutingLevelController', ['$scope', '$http', function ($sc
             $scope.routingForm.planCode = planCode;
            var planDetails= _.findWhere($scope.planList, {planCode: planCode});
           //  console.log(planDetails);
-             $scope.createRoutingLevel.planName = planDetails.planName;
+            if(planDetails) {
+                $scope.createRoutingLevel.planName = planDetails.planName;
 
-            $http.get('/pla/underwriter/getoptionalcoverage/' + planDetails.planId).success(function (data) { /*/pla/underwriter/getoptionalcoverage/*/
-                $scope.optionalCoverageList = data[0].coverageDtoList;
-                //console.log($scope.optionalCoverageList);
-            });
+                $http.get('/pla/underwriter/getoptionalcoverage/' + planDetails.planId).success(function (data) { /*/pla/underwriter/getoptionalcoverage/*/
+                    $scope.optionalCoverageList = data[0].coverageDtoList;
+                    //console.log($scope.optionalCoverageList);
+                });
+            }
         }
     });
 
