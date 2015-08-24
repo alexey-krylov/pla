@@ -16,5 +16,11 @@ public class BankDetails {
 
     private String bankAccountNumber;
 
-
+    public  BankDetails(String bankName, String bankBranchName, String bankAccountType, String bankAccountNumber)
+    {
+       this.bankName=bankName;
+        this.bankBranchName=bankBranchName;
+        this.bankAccountType=bankAccountType;
+        this.bankAccountNumber=bankAccountNumber;
+    }
 }

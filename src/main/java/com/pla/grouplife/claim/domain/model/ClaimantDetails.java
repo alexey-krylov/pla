@@ -10,23 +10,24 @@ import org.joda.time.DateTime;
  */
 
 @Getter
+
 public class ClaimantDetails {
 
     private ClaimType claimType;
 
     private Policy policy;
 
-    private String assuredIdField;
-
-    private String assuredIdNumber;
-
-    private String assuredFirstName;
-
-    private String assuredSurName;
-
-    private DateTime assuredDob;
+    private AssuredDetail assuredDetail;
 
     private DateTime claimIntimationDate;
+
+    public ClaimantDetails(ClaimType claimType, Policy policy, AssuredDetail assuredDetail, DateTime claimIntimationDate) {
+        this.claimIntimationDate = claimIntimationDate;
+        this.claimType = claimType;
+        this.policy = policy;
+        this.assuredDetail = assuredDetail;
+        
+    }
 
 
 }

@@ -22,9 +22,25 @@ public class PolicyHolderDetail {
 
     private String town;
 
-    private String emailID;
+    private String emailId;
 
     private String mobileNumber;
 
     private String workPhone;
+
+   public PolicyHolderDetail(String proposerName, String addressLine1, String addressLine2, String postalCode, String province,
+                             String town, String emailId, String mobileNumber, String workPhone){
+
+       this.proposerName=proposerName;
+       this.addressLine1=addressLine1;
+       this.addressLine2=addressLine2;
+       this.postalCode=postalCode;
+       this.province=province;
+       this.town=town;
+       this.emailId=emailId;
+       this.mobileNumber=mobileNumber;
+       this.workPhone=workPhone;
+
+
+   }
 }
