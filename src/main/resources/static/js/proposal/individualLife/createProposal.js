@@ -382,9 +382,9 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
                     $scope.agentDetails=result.agentCommissionDetails;
                     $scope.rcvProposal = response;
 
-                    /* if($scope.rcvProposal.premiumPaymentDetails.premiumDetail != null){
-                     $scope.premiumResponse=$scope.rcvProposal.premiumPaymentDetails.premiumDetail;
-                     }*/
+                     if($scope.rcvProposal.premiumDetailDto!= null){
+                     $scope.premiumResponse=$scope.rcvProposal.premiumDetailDto;
+                     }
 
                     ////console.log('Proposal Number....');
                     $scope.proposalNumberDetails.proposalNumber = $scope.rcvProposal.proposalNumber;
@@ -420,6 +420,7 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
 
                     $http.get("getpremiumdetail/"+$scope.proposal.proposalId).success(function (response, status, headers, config) {
                         $scope.premiumResponse=response;
+                        console.log('PremiumResponseRes'+JSON.stringify(response));
                         if($scope.premiumResponse != null)
                         {
                             ////alert('Premium is Present');
@@ -911,6 +912,38 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
 
              });*/
 
+            $scope.$watch('premiumPaymentDetails.premiumFrequency',function(newVal,oldVal){
+                console.log(newVal);
+                console.log('***** premiumPaymentDetails.premiumFrequency'+ newVal);
+                console.log('PremiumResponse...'+ JSON.stringify($scope.premiumResponse));
+
+                if(newVal == 'QUARTERLY')
+                {
+                    $scope.premiumResponse.annualPremium1111=$scope.premiumResponse.quarterlyPremium;
+                }
+                else if(newVal == 'ANNUALLY')
+                {
+                    $scope.premiumResponse.annualPremium1111=$scope.premiumResponse.annualPremium;
+                }
+                else if(newVal == 'SEMI_ANNUALLY')
+                {
+                    $scope.premiumResponse.annualPremium1111=$scope.premiumResponse.semiannualPremium;
+                }
+
+                else if(newVal == 'MONTHLY')
+                {
+                    $scope.premiumResponse.annualPremium1111=$scope.premiumResponse.monthlyPremium;
+                }
+
+
+                /*if(newVal)
+                {
+                    //alert(newVal);
+                    $scope.premiumResponse.annualPremium1111=newVal;
+                    //alert($scope.premiumResponse.annualPremium1111);
+                }*/
+            });
+
 
             $scope.addAdditionalDocument = function () {
                 $scope.additionalDocumentList.unshift({});
@@ -980,7 +1013,53 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
 
             }
 
+            $scope.updateFiles=function()
+            {
+                //alert('Length'+$scope.waiverByApproved.length);
+                var requestObj={
+                    "waiverByApproved":$scope.waiverByApproved,
+                    "proposalId": $scope.proposal.proposalId
+                }
+                console.log('FinalUpdateObj: '+JSON.stringify(requestObj));
 
+                if($scope.waiverByApproved.length > 0)
+                {
+                    // call The URL to send the requestObject
+                }
+                else
+                {
+                    alert("Please Select the CheckBoxes...");
+                }
+            }
+
+            $scope.waiverByApproved=[];
+
+            $scope.getMandatoryDocumentDetials=function($event,document)
+            {
+                var checkbox = $event.target;
+                console.log('CheckBox Check..'+ checkbox.checked);
+                console.log("FUNCTION CALLED");
+                console.log(document);
+
+                if(checkbox.checked)
+                {
+                    $scope.waiverByApproved.push({documentId:document.documentId,documentName:document.documentName,mandatory:true,isApproved:true});
+                }
+                else
+                {
+                    //alert(index);
+
+                    for(i in $scope.waiverByApproved)
+                    {
+                        if($scope.waiverByApproved[i].documentName == document.documentName)
+                        {
+                            $scope.waiverByApproved.splice(i, 1);
+                        }
+                    }
+                }
+
+                console.log(JSON.stringify($scope.waiverByApproved));
+            }
             $scope.uploadDocumentFiles = function () {
                 // //console.log($scope.documentList.length);
                 for (var i = 0; i < $scope.documentList.length; i++) {
@@ -1269,7 +1348,8 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
 
                     //alert("Before GetPremium...");
                     //Getting PremiumDetails Documents
-                    $http.get("getpremiumdetail/"+$scope.proposal.proposalId).success(function (response, status, headers, config) {
+
+                   $http.get("getpremiumdetail/"+$scope.proposal.proposalId).success(function (response, status, headers, config) {
                         $scope.premiumResponse=response;
                         if($scope.premiumResponse != null)
                         {
@@ -1278,6 +1358,14 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
                         }
                     }).error(function (response, status, headers, config) {
                     });
+
+                  /*  $http.get("/pla/individuallife/proposal/getproposal/" + $scope.proposal.proposalId).success(function (response, status, headers, config) {
+                        var result = response;
+                        //console.log('Result:' + JSON.stringify(result));
+                        //window.location.href = "/pla/individuallife/proposal/edit?proposalId=" + response.proposalId + "&mode=edit";
+                        $scope.rcvProposal = response;
+                    });*/
+
 
 
                     // for generating document Details
