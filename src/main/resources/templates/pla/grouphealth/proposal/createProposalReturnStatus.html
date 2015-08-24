@@ -554,8 +554,9 @@
                                                     ng-file-select=""
                                                     ng-model="document.documentAttached" ng-disabled="isViewMode">Browse
                                             </button>
-                                            <label class="form-control input-sm"
-                                                   style="border:1px solid #ccc;width:380px;">{{document.documentAttached[0].name}} </label>
+                                            <input class="form-control input-sm" style="width:300px;"
+                                                   value="{{document.documentAttached[0].name}}"
+                                                   readonly="true"/>
 
                                         </div>
 
