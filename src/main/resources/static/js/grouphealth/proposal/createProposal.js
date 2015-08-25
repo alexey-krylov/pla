@@ -125,6 +125,7 @@ angular.module('createProposal', ['common', 'ngRoute', 'mgcrea.ngStrap.select', 
 
             $scope.isUploadEnabledForAdditionalDocument = function(){
                 var enableAdditionalUploadButton= ($scope.additionalDocumentList!=null);
+                console.log("enable value"+ enableAdditionalUploadButton);
                 for (var i = 0; i < $scope.additionalDocumentList.length; i++) {
                     var document = $scope.additionalDocumentList[i];
                     var files = document.documentAttached;
@@ -451,7 +452,7 @@ angular.module('createProposal', ['common', 'ngRoute', 'mgcrea.ngStrap.select', 
                     {"proposalId": $scope.proposalId});
 
                 $http.post('/pla/grouphealth/proposal/approve', request).success(function (data) {
-                    if(data.status==200){
+                    if(data.status=="200"){
 
                         $window.location.href="/pla/grouphealth/proposal/openapprovalproposal";
 
@@ -464,7 +465,7 @@ angular.module('createProposal', ['common', 'ngRoute', 'mgcrea.ngStrap.select', 
                 var request = angular.extend({comment: $scope.comment},{"proposalId": $scope.proposalId});
 
                 $http.post('/pla/grouphealth/proposal/return', request).success(function (data) {
-                    if(data.status==200){
+                    if(data.status=="200"){
 
 
                         $window.location.href="/pla/grouphealth/proposal/openapprovalproposal";
@@ -487,7 +488,7 @@ angular.module('createProposal', ['common', 'ngRoute', 'mgcrea.ngStrap.select', 
                      });*/
                    // console.log(data);
                   //  console.log("*******************"+$scope.selectedItem);
-                    if(data.status== '200'){
+                    if(data.status== "200"){
                         $scope.stepsSaved["4"]=true;
                         saveStep();
                     }
