@@ -231,7 +231,7 @@
                                     </div>
                                     <div class="form-group required">
                                         <label class="control-label">Province</label>
-                                        <select class="form-control input-sm" ng-required="true" name="province" ng-model="proposalDetails.proposer.province" ng-options="province.provinceId  as province.provinceName for province in provinces">
+                                        <select class="form-control input-sm" ng-required="true" name="province" ng-change="getCurrentVal(proposalDetails.proposer.province)" ng-model="proposalDetails.proposer.province" ng-options="province.provinceId  as province.provinceName for province in provinces">
                                         </select>
                                     </div>
                                     <div class="form-group">
@@ -299,7 +299,7 @@
                             <button type="button" class="btn btn-default btn-sm" ng-click="back()">Cancel</button>
                         </div>
                         <div class="col-sm-6">
-                            <button type="button" class="btn btn-default btn-sm" style="float: right" ng-click="saveProposerDetails()" ng-disabled="isSaveDisabled(step3)" ng-if="!isViewMode">Save</button>
+                            <button type="button" class="btn btn-default btn-sm" style="float: right" ng-click="saveProposerDetails()" ng-disabled="(step3.$invalid)" ng-if="!isViewMode">Save</button>
                         </div>
                     </div>
                 </div>
