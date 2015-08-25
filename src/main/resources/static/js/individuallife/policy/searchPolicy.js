@@ -1956,7 +1956,7 @@ angular.module('searchPolicy', ['common', 'ngRoute', 'commonServices', 'ngMessag
 
                     if((parseInt(newvalue) <= 18 ) || (parseInt(newvalue) >=60)){
                         $scope.ageCalculateStatus=true;
-                        alert("Same1....");
+                        //alert("Same1....");
                         //alert(parseInt(newvalue));
                     }
                     else {
@@ -2229,7 +2229,7 @@ var viewPolicyModule = (function () {
     };
     services.printPolicy = function () {
         var policyId = this.selectedItem;
-        alert('Print.');
+        //alert('Print.');
         //window.location.href = "/pla/individuallife/policy/viewpolicy?PrintId=" + policyId  + "&mode=view";
         window.location.href = "/pla/individuallife/policy/printpolicy/ " + policyId;
     };
