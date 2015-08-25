@@ -191,7 +191,7 @@ angular.module('searchPolicy', ['common', 'ngRoute', 'commonServices', 'ngMessag
 
 
             if($scope.policyId) {
-                alert('PolicyId');
+                //alert('PolicyId');
                 //alert($scope.statusPrint);
                 //alert("Policy Id :+" + $scope.policyId);
                 //$scope.selectPlanResponse=true;
@@ -200,9 +200,12 @@ angular.module('searchPolicy', ['common', 'ngRoute', 'commonServices', 'ngMessag
                         .success(function (response, status, headers, config)
                         {
                             var result = response;
-                            console.log("Response of Policy: "+JSON.stringify(result));
+                            //console.log("Response of Policy: "+JSON.stringify(result));
                             $scope.rcvProposal = response;
+
+                            //console.log('additionalDetails..' +JSON.stringify($scope.rcvProposal.additionalDetails));
                             $scope.policyNumberDetails.policyNumber=response.policyNumber.policyNumber;
+
                             if($scope.rcvProposal.proposedAssured != null)
                             {
                                 $scope.proposedAssured = $scope.rcvProposal.proposedAssured || {};
@@ -340,30 +343,97 @@ angular.module('searchPolicy', ['common', 'ngRoute', 'commonServices', 'ngMessag
 
                             if($scope.rcvProposal.additionaldetails != null)
                             {
+                                console.log('additionalDetails..' +JSON.stringify($scope.rcvProposal.additionaldetails));
                                 $scope.medicalAttendant.medicalAttendantDetails=$scope.rcvProposal.additionaldetails.medicalAttendantDetails;
                                 $scope.medicalAttendant.medicalAttendantDuration=$scope.rcvProposal.additionaldetails.medicalAttendantDuration;
                                 $scope.medicalAttendant.dateAndReason=$scope.rcvProposal.additionaldetails.dateAndReason;
 
+                                /*if($scope.rcvProposal.additionaldetails.replacementDetails !=null)
+                                {
+                                    $scope.replacement=$scope.rcvProposal.additionaldetails.replacementDetails;
+                                }*/
+
                                 if($scope.rcvProposal.additionaldetails.replacementDetails !=null)
                                 {
                                     $scope.replacement=$scope.rcvProposal.additionaldetails.replacementDetails;
+
+                                    if($scope.rcvProposal.additionaldetails.replacementDetails.answer)
+                                    {
+                                        $scope.replacement.answer="true";
+                                    }
+                                    else
+                                    {
+                                        $scope.replacement.answer="false";
+                                    }
                                 }
                             }
 
                             if($scope.rcvProposal.compulsoryHealthStatement !=null)
                             {
+                                for(i in $scope.rcvProposal.compulsoryHealthStatement)
+                                {
+                                    if($scope.rcvProposal.compulsoryHealthStatement[i].answer)
+                                    {
+                                        $scope.rcvProposal.compulsoryHealthStatement[i].answer="true";
+                                    }
+                                    else
+                                    {
+                                        $scope.rcvProposal.compulsoryHealthStatement[i].answer="false";
+                                    }
+                                }
+
                                 $scope.compulsoryHealthDetails = $scope.rcvProposal.compulsoryHealthStatement;
                             }
 
                             if($scope.rcvProposal.familyPersonalDetail != null)
                             {
+                                if($scope.rcvProposal.familyPersonalDetail.isPregnant)
+                                {
+                                    $scope.rcvProposal.familyPersonalDetail.isPregnant="true";
+                                }
+                                else
+                                {
+                                    $scope.rcvProposal.familyPersonalDetail.isPregnant="false";
+                                }
+
                                 $scope.familyPersonalDetail = $scope.rcvProposal.familyPersonalDetail;
                                 //console.log('FamilyHistory..' + $scope.rcvProposal.familyPersonalDetail.familyHistory.father);
                                 $scope.familyHistory = $scope.rcvProposal.familyPersonalDetail.familyHistory;
                                 $scope.habit = $scope.rcvProposal.familyPersonalDetail.habit;
                                 $scope.habits = $scope.rcvProposal.familyPersonalDetail.habit;
-                                $scope.questionList = $scope.rcvProposal.familyPersonalDetail.habit.questions;
-                                $scope.build = $scope.rcvProposal.familyPersonalDetail.build;
+
+                                if($scope.rcvProposal.familyPersonalDetail.habit.questions)
+                                {
+                                    for(i in $scope.rcvProposal.familyPersonalDetail.habit.questions)
+                                    {
+                                        if($scope.rcvProposal.familyPersonalDetail.habit.questions[i].answer)
+                                        {
+                                            $scope.rcvProposal.familyPersonalDetail.habit.questions[i].answer="true";
+                                        }
+                                        else
+                                        {
+                                            $scope.rcvProposal.familyPersonalDetail.habit.questions[i].answer="false";
+                                        }
+                                    }
+                                    $scope.questionList = $scope.rcvProposal.familyPersonalDetail.habit.questions;
+                                }
+
+                                //$scope.questionList = $scope.rcvProposal.familyPersonalDetail.habit.questions;
+                                if($scope.rcvProposal.familyPersonalDetail.build)
+                                {
+                                    if($scope.rcvProposal.familyPersonalDetail.build.overWeightQuestion.answer)
+                                    {
+                                        $scope.rcvProposal.familyPersonalDetail.build.overWeightQuestion.answer="true";
+                                    }
+                                    else
+                                    {
+                                        $scope.rcvProposal.familyPersonalDetail.build.overWeightQuestion.answer="false";
+                                    }
+
+                                    $scope.build = $scope.rcvProposal.familyPersonalDetail.build;
+                                }
+
+                                //$scope.build = $scope.rcvProposal.familyPersonalDetail.build;
                             }
 
                             if($scope.rcvProposal.premiumPaymentDetails != null)
@@ -2153,7 +2223,7 @@ var viewPolicyModule = (function () {
     };
     services.viewPolicy = function () {
         var policyId = this.selectedItem;
-        alert("view Policy.." +JSON.stringify(policyId));
+        //alert("view Policy.." +JSON.stringify(policyId));
         window.location.href = "/pla/individuallife/policy/viewpolicy?policyId=" + policyId  + "&mode=view";
 
     };
