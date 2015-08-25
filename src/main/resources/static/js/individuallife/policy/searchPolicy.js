@@ -339,7 +339,22 @@ angular.module('searchPolicy', ['common', 'ngRoute', 'commonServices', 'ngMessag
                                     $scope.insurerDetails3=$scope.rcvProposal.generalDetails.assuranceDeclined.answerResponse;
                                 }
 
-                                $scope.generalQuestion=$scope.rcvProposal.generalDetails.questionAndAnswers;
+                                if($scope.rcvProposal.generalDetails.questionAndAnswers)
+                                {
+                                    for(i in $scope.rcvProposal.generalDetails.questionAndAnswers)
+                                    {
+                                        if($scope.rcvProposal.generalDetails.questionAndAnswers[i].answer)
+                                        {
+                                            $scope.rcvProposal.generalDetails.questionAndAnswers[i].answer="true";
+                                        }
+                                        else
+                                        {
+                                            $scope.rcvProposal.generalDetails.questionAndAnswers[i].answer="false";
+                                        }
+                                    }
+                                    $scope.generalQuestion=$scope.rcvProposal.generalDetails.questionAndAnswers;
+                                }
+                                //$scope.generalQuestion=$scope.rcvProposal.generalDetails.questionAndAnswers;
                             }
 
                             if($scope.rcvProposal.additionaldetails != null)

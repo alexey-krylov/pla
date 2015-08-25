@@ -415,8 +415,6 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
                         //console.log(data);
                         $scope.additionalDocumentList=data;
                         $scope.checkDocumentAttached=$scope.additionalDocumentList!=null;
-
-
                     });
 
                    /* $http.get("getpremiumdetail/"+$scope.proposal.proposalId).success(function (response, status, headers, config) {
