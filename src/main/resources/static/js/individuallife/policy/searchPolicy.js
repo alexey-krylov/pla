@@ -182,7 +182,7 @@ angular.module('searchPolicy', ['common', 'ngRoute', 'commonServices', 'ngMessag
             var selectedPlan = {};
             $scope.proposalPlanDetail={};
             $scope.beneficiariesList =[];
-            $scope.documentList=[];
+            //$scope.documentList=[];
             //$scope.selectPlanResponse=true;
             $scope.policyNumberDetails={
                 "policyNumber":null
@@ -202,6 +202,7 @@ angular.module('searchPolicy', ['common', 'ngRoute', 'commonServices', 'ngMessag
                             var result = response;
                             //console.log("Response of Policy: "+JSON.stringify(result));
                             $scope.rcvProposal = response;
+                            console.log(response);
 
                             //console.log('additionalDetails..' +JSON.stringify($scope.rcvProposal.additionalDetails));
                             $scope.policyNumberDetails.policyNumber=response.policyNumber.policyNumber;
@@ -465,6 +466,7 @@ angular.module('searchPolicy', ['common', 'ngRoute', 'commonServices', 'ngMessag
                             {
                                 $scope.documentList=$scope.rcvProposal.proposerDocuments;
                                 //alert('DocumentList:'+JSON.stringify($scope.documentList));
+                                console.log('*******'+JSON.stringify($scope.documentList));
                             }
 
                             /* $http.get("getmandatorydocuments/" + $scope.rcvProposal.proposal.proposalId)

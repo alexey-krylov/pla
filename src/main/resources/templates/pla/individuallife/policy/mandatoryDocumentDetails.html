@@ -16,14 +16,14 @@
                         <a  href="downloadmandatorydocument/{{document.gridFsDocId}}" style="display:inline;float:right;margin-top:10px;">{{document.fileName}}</a>
                         <button class="btn btn-default"
                                 style="display:inline;float:right;margin-right:5px;" ng-file-select=""
-                                ng-model="document.documentAttached">Browse
+                                ng-disabled="mode=='new'||mode=='view'" ng-model="document.documentAttached">Browse
                         </button>
                         <label class="form-control input-sm" style="border:1px solid #ccc;width:380px;" >{{document.documentAttached[0].name}} </label>
                     </div>
 
                 </div>
                 <div class="btn btn-default" style="display:inline;float:right;clear:both"
-                     ng-click="uploadDocumentFiles()">Upload All
+                     ng-disabled="mode=='new'||mode=='view'" ng-click="uploadDocumentFiles()">Upload All
                 </div>
             </div>
         </accordion-group>
@@ -37,7 +37,7 @@
             <div class="row" >
                 <button class="btn btn-default"
                         style="display:inline;float:left;margin-right:5px;"
-                        ng-click="addAdditionalDocument()">Add Document
+                        ng-disabled="mode=='new'||mode=='view'" ng-click="addAdditionalDocument()">Add Document
                 </button>
             </div>
             <br/><br/>
@@ -48,7 +48,7 @@
                         <div class="form-group">
                             <label class="control-label">Document Title</label>
                             <input type="text" class="form-control input-sm" style="width:400px;"
-                                   name="documentTitle" ng-model="additionalDocument.documentId" />
+                                   ng-disabled="mode=='new'||mode=='view'" name="documentTitle" ng-model="additionalDocument.documentId" />
                         </div>
                     </div>
                     <div class="col-md-1">
@@ -58,7 +58,7 @@
                             <label class="control-label">Browse File</label>
                             <button class="btn btn-default"
                                     style="display:inline;float:right;margin-right:10px;margin-top:18px;" ng-file-select="callAdditionalDoc(additionalDocument.documentAttached)"
-                                    ng-model="additionalDocument.documentAttached">Browse
+                                    ng-disabled="mode=='new'||mode=='view'" ng-model="additionalDocument.documentAttached">Browse
                             </button>
                             <label class="form-control input-sm" style="border:1px solid #ccc;width:320px;">
                                 {{additionalDocument.documentAttached[0].name}}
@@ -67,7 +67,7 @@
                         </div>
                     </div>
                     <div class="col-md-2">
-                        <button class="btn btn-default" style="margin-top:20px;" ng-click="removeAdditionalDocument($index)" >Remove</button>
+                        <button class="btn btn-default" style="margin-top:20px;" ng-disabled="mode=='new'||mode=='view'" ng-click="removeAdditionalDocument($index)" >Remove</button>
                         <!--<a  href="downloadmandatorydocument/{{additionalDocument.gridFsDocId}}" style="display:inline;margin-top:25px;float:right;">{{additionalDocument.fileName}}</a>-->
                     </div>
 
@@ -76,7 +76,7 @@
             </div>
 
             <button class="btn btn-default"
-                    style="display:inline;float:right;margin-right:5px;margin-top:20px;" ng-disabled="!checkDocumentAttached" ng-click="uploadAdditionalDocument()">Upload
+                    style="display:inline;float:right;margin-right:5px;margin-top:20px;" ng-disabled="!checkDocumentAttached || mode=='new'||mode=='view'" ng-click="uploadAdditionalDocument()">Upload
             </button>
 
         </div>
