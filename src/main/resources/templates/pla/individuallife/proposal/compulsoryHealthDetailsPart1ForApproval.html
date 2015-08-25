@@ -57,7 +57,8 @@
                 </accordion-group>
             </div>
             <div class="form-group required col-md-2">
-                <select class="form-control input-sm"  ng-required="true" name="compulsoryHealthDetailsQuestion3" ng-disabled="mode=='new'||mode=='view'" ng-model="compulsoryHealthDetails[2].answer" ng-change="compulsoryHealthDetails[2].questionId=13">
+                <!-- <select class="form-control input-sm"  ng-required="true" name="compulsoryHealthDetailsQuestion3" ng-disabled="mode=='new'||mode=='view'" ng-model="compulsoryHealthDetails[2].answer" ng-change="openAccordionCompulsoryQuestion('tab1')compulsoryHealthDetails[2].questionId=13">-->
+                <select class="form-control input-sm"  ng-required="true" name="compulsoryHealthDetailsQuestion3" ng-disabled="mode=='new'||mode=='view'" ng-model="compulsoryHealthDetails[2].answer" ng-change="openAccordionCompulsoryQuestion1(compulsoryHealthDetails[2].answer,'tab1',2,13)">
                     <option value="">--Select One--</option>
                     <option value="true">Yes</option>
                     <option value="false">No</option>
@@ -90,7 +91,8 @@
                 </accordion-group>
             </div>
             <div class="form-group required col-md-2">
-                <select class="form-control input-sm"  ng-required="true" name="compulsoryHealthDetailsQuestion4" ng-disabled="mode=='new'||mode=='view'" ng-model="compulsoryHealthDetails[3].answer" ng-change="compulsoryHealthDetails[3].questionId=14">
+                <!--<select class="form-control input-sm"  ng-required="true" name="compulsoryHealthDetailsQuestion4" ng-disabled="mode=='new'||mode=='view'" ng-model="compulsoryHealthDetails[3].answer" ng-change="compulsoryHealthDetails[3].questionId=14">-->
+                <select class="form-control input-sm"  ng-required="true" name="compulsoryHealthDetailsQuestion4" ng-disabled="mode=='new'||mode=='view'" ng-model="compulsoryHealthDetails[3].answer" ng-change="openAccordionCompulsoryQuestion1(compulsoryHealthDetails[3].answer,'tab2',3,14)">
                     <option value="">--Select One--</option>
                     <option value="true" ng-value="true">Yes</option>
                     <option value="false" ng-value="false">No</option>
@@ -123,7 +125,8 @@
                 </accordion-group>
             </div>
             <div class="form-group required col-md-2">
-                <select class="form-control input-sm"  name="compulsoryHealthDetailsQuestion5" ng-required="true" ng-disabled="mode=='new'||mode=='view'" ng-model="compulsoryHealthDetails[4].answer" ng-change="compulsoryHealthDetails[4].questionId=15">
+                <!--<select class="form-control input-sm"  name="compulsoryHealthDetailsQuestion5" ng-required="true" ng-disabled="mode=='new'||mode=='view'" ng-model="compulsoryHealthDetails[4].answer" ng-change="compulsoryHealthDetails[4].questionId=15">-->
+                <select class="form-control input-sm"  ng-required="true" name="compulsoryHealthDetailsQuestion5" ng-disabled="mode=='new'||mode=='view'" ng-model="compulsoryHealthDetails[4].answer" ng-change="openAccordionCompulsoryQuestion1(compulsoryHealthDetails[4].answer,'tab3',4,15)">
                     <option value="">--Select One--</option>
                     <option value="true" ng-value="true">Yes</option>
                     <option value="false" ng-value="false">No</option>
@@ -156,7 +159,8 @@
                 </accordion-group>
             </div>
             <div class="form-group required col-md-2">
-                <select class="form-control input-sm"  name="compulsoryHealthDetailsQuestion6" ng-required="true" ng-disabled="mode=='new'||mode=='view'" ng-model="compulsoryHealthDetails[5].answer" ng-change="compulsoryHealthDetails[5].questionId=16">
+                <!--<select class="form-control input-sm"  name="compulsoryHealthDetailsQuestion6" ng-required="true" ng-disabled="mode=='new'||mode=='view'" ng-model="compulsoryHealthDetails[5].answer" ng-change="compulsoryHealthDetails[5].questionId=16">-->
+                <select class="form-control input-sm"  ng-required="true" name="compulsoryHealthDetailsQuestion6" ng-disabled="mode=='new'||mode=='view'" ng-model="compulsoryHealthDetails[5].answer" ng-change="openAccordionCompulsoryQuestion1(compulsoryHealthDetails[5].answer,'tab4',5,16)">
                     <option value="">--Select One--</option>
                     <option value="true" ng-value="true">Yes</option>
                     <option value="false" ng-value="false">No</option>
@@ -189,7 +193,8 @@
                 </accordion-group>
             </div>
             <div class="form-group required col-md-2">
-                <select class="form-control input-sm"  ng-required="true" name="compulsoryHealthDetailsQuestion7" ng-disabled="mode=='new'||mode=='view'" ng-model="compulsoryHealthDetails[6].answer" ng-change="compulsoryHealthDetails[6].questionId=17">
+                <!--<select class="form-control input-sm"  ng-required="true" name="compulsoryHealthDetailsQuestion7" ng-disabled="mode=='new'||mode=='view'" ng-model="compulsoryHealthDetails[6].answer" ng-change="compulsoryHealthDetails[6].questionId=17">-->
+                <select class="form-control input-sm"  ng-required="true" name="compulsoryHealthDetailsQuestion7" ng-disabled="mode=='new'||mode=='view'" ng-model="compulsoryHealthDetails[6].answer" ng-change="openAccordionCompulsoryQuestion1(compulsoryHealthDetails[6].answer,'tab5',6,17)">
                     <option value="">--Select One--</option>
                     <option value="true" ng-value="true">Yes</option>
                     <option value="false" ng-value="false">No</option>

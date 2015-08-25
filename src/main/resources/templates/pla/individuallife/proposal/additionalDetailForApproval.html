@@ -46,7 +46,8 @@
     <accordion close-others="true">
         <div class="row" style="margin-bottom: 5px">
             <div class="form-group required col-md-10">
-                <accordion-group is-open="accordionStatus.additionalDetail.tab1">
+                <!--<accordion-group is-open="accordionStatus.additionalDetail.tab1">-->
+                <accordion-group is-open="replacement.answer == 'true'">
                     <accordion-heading>
                         <strong  class="control-label" style="font-size: 11px">Is this proposal to replace the whole or part of any other proposal to this or any other office, or to replace all or any part of your existing insurance with any life office (where replacement is to occur immediately or to replace an insurance discontinued within the past six months or to be discontinued within the next six months)?</strong>
                         <i class="pull-right glyphicon"
@@ -84,8 +85,8 @@
                 </accordion-group>
             </div>
             <div class="form-group required col-md-2">
-                {{replacement.answer}}
                 <select class="form-control input-sm" ng-required="true" name="additionadetailQuestion1" ng-model="replacement.answer" ng-disabled="mode=='new'||mode=='view'" ng-change="replacement.questionId='22' ">
+                    <!--<select class="form-control input-sm"  ng-required="true" name="additionadetailQuestion1" ng-disabled="mode=='new'||mode=='view'" ng-model="replacement.answer" ng-change="openAccordionAdditionalQuestion(replacement.answer,'tab1')">-->
                     <option value="">--Select One--</option>
                     <option  value="true">Yes</option>
                     <option  value="false">No</option>
@@ -100,7 +101,7 @@
     <div></div>
     <div class="row">
         <div class="col-sm-6">
-            <button type="button" class="btn btn-default btn-sm">Cancel</button>
+            <button type="button" class="btn btn-default btn-sm" ng-click="cancelAll()">Cancel</button>
         </div>
         <div class="col-sm-6">
             <button type="button" class="btn btn-default btn-sm" style="float: right"

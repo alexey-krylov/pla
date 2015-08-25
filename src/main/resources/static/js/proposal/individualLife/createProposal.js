@@ -321,15 +321,16 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
 
             if ($scope.proposalId) {
                 $http.get("/pla/individuallife/proposal/getproposal/" + $scope.proposalId + "?mode=view").success(function (response, status, headers, config) {
+                    //alert(status);
                     var result = response;
-                    console.log('++++'+JSON.stringify(response));
-                    console.log("called********************");
-                    console.log(response.proposer);
-                    console.log('After Proposer.. ****');
-                    console.log(response);
+                    //console.log('++++'+JSON.stringify(response));
+                    //console.log("called********************");
+                    //console.log(response.proposer);
+                    //console.log('After Proposer.. ****');
+                    //console.log(response);
                     //alert(response.proposer.gender);
                     //$scope.proposer.gender=response.proposer.gender;
-                    console.log('proposalStatus***: '+ response.proposalStatus);
+                    //console.log('proposalStatus***: '+ response.proposalStatus);
                     if(response.proposalStatus !=null)
                     {
                         if(response.proposalStatus == 'UNDERWRITING_LEVEL_ONE')
@@ -376,7 +377,7 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
                         $scope.holdStatus=false;
                     }
 
-                    console.log("Response***");
+                    //console.log("Response***");
                     //console.log(JSON.stringify(response));
 
                     $scope.agentDetails=result.agentCommissionDetails;
@@ -398,7 +399,7 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
                     $http.get("getmandatorydocuments/" + $scope.proposal.proposalId)
                         .success(function (response) {
                             $scope.documentList = response;
-                            console.log('DcoumentList:'+JSON.stringify(response));
+                            //console.log('DcoumentList:'+JSON.stringify(response));
                             // //alert("documentResponse: "+JSON.stringify(response))
                             //console.log('documentResponse:'+JSON.stringify(response));
                             //console.log("documentList: "+JSON.stringify($scope.documentList))
@@ -418,7 +419,7 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
 
                     });
 
-                    $http.get("getpremiumdetail/"+$scope.proposal.proposalId).success(function (response, status, headers, config) {
+                   /* $http.get("getpremiumdetail/"+$scope.proposal.proposalId).success(function (response, status, headers, config) {
                         $scope.premiumResponse=response;
                         console.log('PremiumResponseRes'+JSON.stringify(response));
                         if($scope.premiumResponse != null)
@@ -428,6 +429,7 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
                         }
                     }).error(function (response, status, headers, config) {
                     });
+*/
                     if($scope.rcvProposal.proposer != null)
                     {
                         //console.log('Proposer: '+JSON.stringify($scope.rcvProposal.proposer || {}));
@@ -465,7 +467,7 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
                         $http.get('/pla/core/plan/getPlanById/' + response.proposalPlanDetail.planId)
                             .success(function (plandata) {
                                 $scope.plan = plandata;
-                                console.log("Plan Details.."+JSON.stringify($scope.plan));
+                                //console.log("Plan Details.."+JSON.stringify($scope.plan));
                                 $scope.applicableRelationships=plandata.planDetail.applicableRelationships;
                             });
 
@@ -880,7 +882,7 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
             $scope.savePremiumDetail=function()
             {
                 $scope.premiumResponse.planId=$scope.proposalPlanDetail.planId;
-                console.log("PremiumResponse.."+JSON.stringify($scope.premiumResponse));
+                //console.log("PremiumResponse.."+JSON.stringify($scope.premiumResponse));
 
 
                 var premiumRequest=
@@ -913,9 +915,9 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
              });*/
 
             $scope.$watch('premiumPaymentDetails.premiumFrequency',function(newVal,oldVal){
-                console.log(newVal);
-                console.log('***** premiumPaymentDetails.premiumFrequency'+ newVal);
-                console.log('PremiumResponse...'+ JSON.stringify($scope.premiumResponse));
+                //console.log(newVal);
+                //console.log('***** premiumPaymentDetails.premiumFrequency'+ newVal);
+                //console.log('PremiumResponse...'+ JSON.stringify($scope.premiumResponse));
 
                 if(newVal == 'QUARTERLY')
                 {
@@ -1037,9 +1039,9 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
             $scope.getMandatoryDocumentDetials=function($event,document)
             {
                 var checkbox = $event.target;
-                console.log('CheckBox Check..'+ checkbox.checked);
-                console.log("FUNCTION CALLED");
-                console.log(document);
+                //console.log('CheckBox Check..'+ checkbox.checked);
+                //console.log("FUNCTION CALLED");
+                //console.log(document);
 
                 if(checkbox.checked)
                 {
@@ -1058,7 +1060,7 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
                     }
                 }
 
-                console.log(JSON.stringify($scope.waiverByApproved));
+                //console.log(JSON.stringify($scope.waiverByApproved));
             }
             $scope.uploadDocumentFiles = function () {
                 // //console.log($scope.documentList.length);
@@ -1316,9 +1318,9 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
 
             $scope.savePlanDetail = function () {
                 //console.log('Save Plan');
-                console.log("Minimum Age:" + $scope.plan.planDetail.minEntryAge);
-                console.log("Maximum Age:" + $scope.plan.planDetail.maxEntryAge);
-                console.log("Next DOb:" + $scope.proposedAssured.nextDob);
+                //console.log("Minimum Age:" + $scope.plan.planDetail.minEntryAge);
+                //console.log("Maximum Age:" + $scope.plan.planDetail.maxEntryAge);
+                //console.log("Next DOb:" + $scope.proposedAssured.nextDob);
 
                 if(($scope.proposedAssured.nextDob < $scope.plan.planDetail.minEntryAge) || ($scope.proposedAssured.nextDob > $scope.plan.planDetail.maxEntryAge))
                 {
@@ -1349,7 +1351,7 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
                     //alert("Before GetPremium...");
                     //Getting PremiumDetails Documents
 
-                   $http.get("getpremiumdetail/"+$scope.proposal.proposalId).success(function (response, status, headers, config) {
+                  /* $http.get("getpremiumdetail/"+$scope.proposal.proposalId).success(function (response, status, headers, config) {
                         $scope.premiumResponse=response;
                         if($scope.premiumResponse != null)
                         {
@@ -1357,14 +1359,90 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
 
                         }
                     }).error(function (response, status, headers, config) {
-                    });
-
-                  /*  $http.get("/pla/individuallife/proposal/getproposal/" + $scope.proposal.proposalId).success(function (response, status, headers, config) {
+                    });*/
+                    $http.get("/pla/individuallife/proposal/getproposal/" + $scope.proposal.proposalId).success(function (planResponse, status, headers, config) {
                         var result = response;
                         //console.log('Result:' + JSON.stringify(result));
                         //window.location.href = "/pla/individuallife/proposal/edit?proposalId=" + response.proposalId + "&mode=edit";
-                        $scope.rcvProposal = response;
-                    });*/
+                        $scope.rcvProposal = planResponse;
+                        //console.log(planResponse);
+
+                        if($scope.rcvProposal.proposer != null)
+                        {
+                            //console.log('Proposer: '+JSON.stringify($scope.rcvProposal.proposer || {}));
+                            $scope.proposer = $scope.rcvProposal.proposer;
+                            //console.log($scope.rcvProposal);
+                            if($scope.rcvProposal.proposer.gender){
+                                var gender=$scope.rcvProposal.proposer.gender;
+                                $scope.proposer.gender=gender;
+
+                            }
+
+                            $scope.proposerEmployment = $scope.proposer.employment;
+
+                            $scope.proposerResidential = $scope.proposer.residentialAddress;
+                            $scope.proposerSpouse = $scope.proposer.spouse;
+
+                            if ($scope.proposer.dateOfBirth) {
+                                $scope.proposer.nextDob = moment().diff(new moment(new Date($scope.proposer.dateOfBirth)), 'years') + 1;
+                            }
+                            // $scope.proposer.gender=$scope.rcvProposal.proposer.gender;
+                        }
+
+                        if($scope.rcvProposal.proposedAssured !=null) {
+                            $scope.proposedAssured = $scope.rcvProposal.proposedAssured || {};
+                            if ($scope.proposedAssured.dateOfBirth) {
+                                $scope.proposedAssured.nextDob = moment().diff(new moment(new Date($scope.proposedAssured.dateOfBirth)), 'years') + 1;
+                            }
+                            /*if ($scope.proposer.dateOfBirth) {
+                             $scope.proposer.nextDob = moment().diff(new moment(new Date($scope.proposer.dateOfBirth)), 'years') + 1;
+                             }*/
+                            //$scope.agentDetails=[];
+                            $scope.spouse = $scope.rcvProposal.proposedAssured.spouse;
+                            ////alert($scope.rcvProposal.proposedAssured.employment);
+                            $scope.employment = $scope.rcvProposal.proposedAssured.employment;
+                            $scope.residentialAddress = $scope.rcvProposal.proposedAssured.residentialAddress;
+                            $scope.agentDetails = $scope.rcvProposal.agentCommissionDetails;
+                        }
+
+                        if($scope.rcvProposal.proposalPlanDetail !=null)
+                        {
+                            $scope.proposalPlanDetail = $scope.rcvProposal.proposalPlanDetail;
+                        }
+
+                        var selectedPlan = {};
+
+                        if(planResponse.proposalPlanDetail !=null)
+                        {
+                            $scope.selectPlanResponse=true;
+                            $http.get('/pla/core/plan/getPlanById/' + planResponse.proposalPlanDetail.planId)
+                                .success(function (plandata) {
+                                    $scope.plan = plandata;
+                                    //console.log("Plan Details.."+JSON.stringify($scope.plan));
+                                    $scope.applicableRelationships=plandata.planDetail.applicableRelationships;
+                                });
+
+                            selectedPlan.title = planResponse.proposalPlanDetail.planName;
+                            selectedPlan.description = planResponse.planDetail;
+                            $scope.selectedPlan = selectedPlan;
+                            $scope.proposalPlanDetail.planId=planResponse.proposalPlanDetail.planId;
+                        }
+
+                        if($scope.proposalPlanDetail != null && $scope.proposalPlanDetail.riderDetails != null)
+                        {
+                            $scope.searchRiders = $scope.rcvProposal.proposalPlanDetail.riderDetails;
+
+                            //$scope.proposalPlanDetail.riderDetails=$scope.rcvProposal.proposalPlanDetail.riderDetails;
+                        }
+                        if($scope.rcvProposal.beneficiaries != null)
+                        {
+                            $scope.beneficiariesList = $scope.rcvProposal.beneficiaries;
+                        }
+                        if($scope.rcvProposal.premiumDetailDto!= null){
+                            $scope.premiumResponse=$scope.rcvProposal.premiumDetailDto;
+                        }
+
+                    });
 
 
 
@@ -1627,7 +1705,7 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
             $scope.applicableRelationships=[];
 
             $scope.getMax = function () {
-                console.log('getMax');
+                //console.log('getMax');
                 return 999999.99;
             }
 
@@ -1642,11 +1720,11 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
                 return 999.99;
             }*/
             $scope.getBeneficiaryMinAge = function () {
-                console.log('getBeneficiaryMinAge');
+                //console.log('getBeneficiaryMinAge');
                 return 1;
             }
             $scope.getBeneficiaryMaxAge = function () {
-                console.log('getBeneficiaryMaxAge');
+                //console.log('getBeneficiaryMaxAge');
                 return 16;
             }
             $scope.planSelected = function (newValue) {
@@ -1665,7 +1743,7 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
                         .success(function (response) {
                             $scope.plan = response;
                             $scope.applicableRelationships=response.planDetail.applicableRelationships;
-                            console.log('PLanDetails..'+JSON.stringify(response));
+                            //console.log('PLanDetails..'+JSON.stringify(response));
                             //alert("applicableRelationships"+JSON.stringify($scope.applicableRelationships));
                         });
 
@@ -2779,8 +2857,8 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
                         "quotationId": $scope.quotationIdDetails.quotationId
                     }
 
-                    console.log('**** Saving QuotationId..');
-                    console.log(JSON.stringify(request2));
+                    //console.log('**** Saving QuotationId..');
+                    //console.log(JSON.stringify(request2));
 
                     // QuotationID saving
 

@@ -83,7 +83,7 @@
                 </div>
                 <div class="form-group required">
                     <label class="control-label">Mobile Number</label>
-                    <input type="text" class="form-control input-sm" ng-minlength="10" ng-disabled="mode=='new'||mode=='view'" ng-maxLength="10" name="mobileNumber" ng-pattern="/^\d+$/" ng-model="proposer.mobileNumber"/>
+                    <input type="text" class="form-control input-sm" ng-required="true" ng-minlength="10" ng-disabled="mode=='new'||mode=='view'" ng-maxLength="10" name="mobileNumber" ng-pattern="/^\d+$/" ng-model="proposer.mobileNumber"/>
 
                     <div class="error" ng-messages="proposerForm.mobileNumber.$error" ng-if="proposerForm.mobileNumber.$dirty">
                         <small class="error" ng-message="required">Please enter Mobile Number</small>
