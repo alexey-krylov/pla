@@ -179,17 +179,17 @@
         </div>
         <div class="col-sm-6">
             <!--{{commisionStatus}}-->
-            <button type="button" class="btn btn-default btn-sm" style="float: right" ng-disabled="commisionStatus" ng-hide="mode=='new'||mode=='view'" ng-click="savePlanDetail()">Save</button>
+            <button type="button" class="btn btn-default btn-sm" style="float: right" ng-disabled="step3.$invalid || commisionStatus" ng-hide="mode=='new'||mode=='view'" ng-click="savePlanDetail()">Save</button>
         </div>
     </div>
 
     <script id="plan-policyterm.tpl" type="text/ng-template">
         <div ng-switch="plan.policyTermType">
-            <div ng-switch-when="SPECIFIED_VALUES">
+            <div class="form-group required" ng-switch-when="SPECIFIED_VALUES">
                 <select class="form-control input-sm" view-enabled="" ng-model="proposalPlanDetail.policyTerm" name="policyTerm"
                         ng-disabled="mode=='new'||mode=='view'" ng-options="value.text as value.text for value in policyTerms()" ng-required="true"></select>
             </div>
-            <div ng-switch-when="MATURITY_AGE_DEPENDENT">
+            <div class="form-group required" ng-switch-when="MATURITY_AGE_DEPENDENT">
                 <select class="form-control input-sm" view-enabled="" ng-model="proposalPlanDetail.policyTerm" name="policyTerm"
                         ng-disabled="mode=='new'||mode=='view'" ng-options="value.text as value.text for value in policyTerms()" ng-required="true"></select>
             </div>
