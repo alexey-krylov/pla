@@ -92,7 +92,7 @@ public class GHPolicyService {
     }
 
     public List<PolicyDetailDto> searchPolicy(SearchGHPolicyDto searchGHPolicyDto) {
-        List<Map> searchedPolices = ghPolicyFinder.searchPolicy(searchGHPolicyDto.getPolicyNumber(), searchGHPolicyDto.getPolicyHolderName());
+        List<Map> searchedPolices = ghPolicyFinder.searchPolicy(searchGHPolicyDto.getPolicyNumber(), searchGHPolicyDto.getPolicyHolderName(),searchGHPolicyDto.getProposalNumber());
         if (isEmpty(searchedPolices)) {
             return Lists.newArrayList();
         }

@@ -156,7 +156,7 @@ public class GLFinder {
 
 
     public List<Map> searchPolicy(String policyNumber, String policyHolderName,String clientId, String[] statuses,String proposalNumber) {
-        if (isEmpty(policyHolderName) && isEmpty(policyNumber)) {
+        if (isEmpty(policyHolderName) && isEmpty(policyNumber) && isEmpty(clientId) && isEmpty(proposalNumber)) {
             return Lists.newArrayList();
         }
         Criteria criteria = Criteria.where("status").in(statuses);

@@ -34,8 +34,8 @@ public class GHPolicyFinder {
         return mongoTemplate.findOne(new Query(Criteria.where("_id").is(policyId)), Map.class, GH_POLICY_COLLECTION_NAME);
     }
 
-    public List<Map> searchPolicy(String policyNumber, String policyHolderName) {
-        if (isEmpty(policyHolderName) && isEmpty(policyNumber)) {
+    public List<Map> searchPolicy(String policyNumber, String policyHolderName,String proposalNumber) {
+        if (isEmpty(policyHolderName) && isEmpty(policyNumber) && isEmpty(proposalNumber)) {
             return Lists.newArrayList();
         }
         Criteria criteria = Criteria.where("status").is("IN_FORCE");
@@ -45,6 +45,10 @@ public class GHPolicyFinder {
         }
         if (isNotEmpty(policyNumber)) {
             criteria = criteria.and("policyNumber.policyNumber").is(policyNumber);
+        }
+        if(isNotEmpty(proposalNumber)){
+            criteria = criteria.and("proposal.proposalNumber.proposalNumber").is(proposalNumber);
+
         }
         Query query = new Query(criteria);
         query.with(new Sort(Sort.Direction.ASC, "policyNumber.policyNumber"));
