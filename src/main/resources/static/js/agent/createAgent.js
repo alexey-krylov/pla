@@ -155,6 +155,7 @@ angular.module('createAgent',['common','ngRoute','mgcrea.ngStrap.select','mgcrea
                     $scope.agentDetails.contactDetail.geoDetail.provinceName = provinceDetails.provinceName;
                 }
             });
+
             $scope.getProvinceDetails=function(provinceCode){
                 return getProvinceAndCityDetail(provinces,provinceCode);
             };
@@ -179,6 +180,9 @@ angular.module('createAgent',['common','ngRoute','mgcrea.ngStrap.select','mgcrea
             };
             $scope.channelTypes = {channelName:"Personal Selling",channelCode:"PERSONAL_SELLING"};
             $scope.authorisedToSell = authorisedToSell;
+           // console.log(authorisedToSell);
+            //console.log(agentDetails.authorisedToSell);
+
             $scope.teamDetails= teamDetails;
             $scope.provinces=provinces;
             $scope.today = new Date();
@@ -248,6 +252,17 @@ angular.module('createAgent',['common','ngRoute','mgcrea.ngStrap.select','mgcrea
 
 
             };
+            $scope.getCurrentVal=function(val){
+
+                $scope.agentDetails.contactDetail.geoDetail.cityCode='';
+
+            }
+            $scope.getCurrentValTown=function(val){
+
+                $scope.agentDetails.physicalAddress.physicalGeoDetail.cityCode='';
+
+            }
+
             $scope.cancel = function(){
                 $window.location.href = "listagent"
             };

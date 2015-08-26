@@ -51,9 +51,8 @@ angular.module('createEndorsement', ['common', 'ngRoute', 'mgcrea.ngStrap.select
             $scope.versionNumber = getQueryParameter('version') || null;
 
             /*actual quotation number to be used in the view*/
-            console.log(policyNumber);
             $scope.endorsementNumber = endorsementNumber;
-
+            // console.log(endorsementNumber);
             $scope.provinces = provinces;
 
             $scope.documentList = documentList;

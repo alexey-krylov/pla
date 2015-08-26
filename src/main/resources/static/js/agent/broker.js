@@ -12,24 +12,27 @@ angular.module('brokerModule', ['common', 'ngRoute', 'mgcrea.ngStrap.select', 'm
                 $("#BrokerSubmitBtn").css('visibility', 'hidden');
             }
         }
-    }]).directive('popover', function($compile){
+    }]).directive('popover', function ($compile) {
         return {
-            restrict : 'A',
-            link : function(scope, elem){
+            restrict: 'A',
+            link: function (scope, elem) {
                 var content = $(".popover-content").html();
-                scope.fieldData=[];
-                for (var i = 0; i < scope.agentDetails.authorizePlansToSell.length; i++) {
-                    scope.fieldData.push(_.findWhere(scope.authorisedToSell,{planId: scope.agentDetails.authorizePlansToSell[i]}));
+                scope.fieldData = [];
+                if (scope.agentDetails) {
+                    if (scope.agentDetails.authorizePlansToSell) {
+                        for (var i = 0; i < scope.agentDetails.authorizePlansToSell.length; i++) {
+                            scope.fieldData.push(_.findWhere(scope.authorisedToSell, {planId: scope.agentDetails.authorizePlansToSell[i]}));
+                        }
+                    }
                 }
-
                 var compileContent = scope.fieldData;
                 console.log(compileContent);
-                var content="<ul>";
-                for (var i=0; i<compileContent.length; i++ ){
+                var content = "<ul>";
+                for (var i = 0; i < compileContent.length; i++) {
 
-                    content=content + "<li>" + compileContent[i].planName +"</li>";
+                    content = content + "<li>" + compileContent[i].planName + "</li>";
                 }
-                content=content +"</ul>";
+                content = content + "</ul>";
                 var title = $(".popover-head").html();
                 var options = {
                     content: content,
@@ -42,7 +45,7 @@ angular.module('brokerModule', ['common', 'ngRoute', 'mgcrea.ngStrap.select', 'm
         }
     })
 
-.controller('brokerController', ['$scope', '$http', 'authorisedToSell', 'provinces', '$timeout', '$alert', '$route', '$window', 'transformJson',
+    .controller('brokerController', ['$scope', '$http', 'authorisedToSell', 'provinces', '$timeout', '$alert', '$route', '$window', 'transformJson',
         'getQueryParameter', 'agentDetails', 'globalConstants', 'nextAgentSequence', 'getProvinceAndCityDetail', '$alert',
 
 
@@ -51,19 +54,19 @@ angular.module('brokerModule', ['common', 'ngRoute', 'mgcrea.ngStrap.select', 'm
             $scope.numberPattern = globalConstants.numberPattern;
 
             var mode = getQueryParameter("mode");
-           // console.log(mode);
-           // alert(mode);
-            if(mode=='view'){
+            // console.log(mode);
+            // alert(mode);
+            if (mode == 'view') {
                 $scope.isViewMode = true;
 
-            }else{
+            } else {
                 $scope.isViewMode = false;
             }
 
 
-          //  console.log(' Broker Controller invoked.. ');
+            //  console.log(' Broker Controller invoked.. ');
             $scope.agentDetails = agentDetails;
-            $scope.cancel = function(){
+            $scope.cancel = function () {
                 $window.location.href = "/pla/core/agent/listagent"
             };
 
@@ -98,7 +101,7 @@ angular.module('brokerModule', ['common', 'ngRoute', 'mgcrea.ngStrap.select', 'm
             $scope.selectedItem = 1;
             $scope.stepsSaved = {};
             var mode = getQueryParameter("mode");
-            if (mode == 'view' || mode =='edit') {
+            if (mode == 'view' || mode == 'edit') {
                 $scope.stepsSaved["1"] = true;
                 var queryParam = {'agentId': getQueryParameter('agentId')};
                 $http.get('/pla/core/agent/agentdetail', {params: queryParam})
@@ -119,7 +122,7 @@ angular.module('brokerModule', ['common', 'ngRoute', 'mgcrea.ngStrap.select', 'm
             $scope.addingRowTest = function (contact) {
 
                 var addRowCheck = false;
-               // $scope.errorMsg = false;
+                // $scope.errorMsg = false;
                 $scope.contact = contact;
 
 
@@ -152,6 +155,15 @@ angular.module('brokerModule', ['common', 'ngRoute', 'mgcrea.ngStrap.select', 'm
 
                 }
             });
+            $scope.getCurrentVal=function(val){
+
+                $scope.agentDetails.contactDetail.geoDetail.cityCode='';
+
+            }
+            $scope.getCurrentValTown=function(val){
+                $scope.agentDetails.physicalAddress.physicalGeoDetail.cityCode='';
+
+            }
 
 
             $scope.$watch('agentDetails.contactDetail.geoDetail.provinceCode', function (newVal, oldVal) {
@@ -190,7 +202,7 @@ angular.module('brokerModule', ['common', 'ngRoute', 'mgcrea.ngStrap.select', 'm
                         transformJson.createCompatibleJson(angular.copy($scope.agentDetails), $scope.physicalCities, $scope.primaryCities, $scope.trainingCompleteOn, true))
                         .success(function (response, status, headers, config) {
                             if (response.status == "200") {
-                                $scope.contactDetailsForm.$submitted=true;
+                                $scope.contactDetailsForm.$submitted = true;
                             }
                         })
                         .error(function (response, status, headers, config) {
@@ -200,7 +212,7 @@ angular.module('brokerModule', ['common', 'ngRoute', 'mgcrea.ngStrap.select', 'm
                         transformJson.createCompatibleJson(angular.copy($scope.agentDetails), $scope.physicalCities, $scope.primaryCities, $scope.trainingCompleteOn, false))
                         .success(function (response, status, headers, config) {
                             if (response.status == "200") {
-                                $scope.contactDetailsForm.$submitted=true;
+                                $scope.contactDetailsForm.$submitted = true;
                             }
                         })
                         .error(function (response, status, headers, config) {
@@ -309,7 +321,7 @@ angular.module('brokerModule', ['common', 'ngRoute', 'mgcrea.ngStrap.select', 'm
                 }],
                 agentDetails: ['$q', '$http', 'getQueryParameter', '$window', function ($q, $http, getQueryParameter, $window) {
                     var queryParam = {'agentId': getQueryParameter('agentId')};
-                   // console.log('AGENT ID == ' + getQueryParameter('agentId'));
+                    // console.log('AGENT ID == ' + getQueryParameter('agentId'));
                     if (angular.isDefined(getQueryParameter('agentId')) && getQueryParameter('agentId') != null) {
                         var deferred = $q.defer();
                         $http.get('/pla/core/agent/agentdetail', {params: queryParam})
