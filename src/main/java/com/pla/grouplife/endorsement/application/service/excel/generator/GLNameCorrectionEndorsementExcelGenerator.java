@@ -20,7 +20,7 @@ import java.util.stream.Collectors;
 public class GLNameCorrectionEndorsementExcelGenerator extends AbstractGLEndorsementExcelGenerator{
     @Override
     public HSSFWorkbook generate(PolicyId policyId,EndorsementId endorsementId) {
-        List<GLEndorsementExcelHeader> excelHeaderList = GLEndorsementType.CHANGE_ASSURED_NAME.getExcelHeaderByEndorsementType();
+        List<GLEndorsementExcelHeader> excelHeaderList = GLEndorsementType.CHANGE_ASSURED_NAME.getAllowedExcelHeaders();
         List<String> excelHeaderInString = excelHeaderList.stream().map(new Function<GLEndorsementExcelHeader, String>() {
             @Override
             public String apply(GLEndorsementExcelHeader glEndorsementExcelHeader) {

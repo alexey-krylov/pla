@@ -1,4 +1,4 @@
-package com.pla.grouplife.quotation.application.service.exception;
+package com.pla.grouplife.sharedresource.exception;
 
 /**
  * Created by Samir on 5/18/2015.

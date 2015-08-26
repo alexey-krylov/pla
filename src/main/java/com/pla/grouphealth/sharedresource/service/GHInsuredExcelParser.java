@@ -181,6 +181,9 @@ public class GHInsuredExcelParser {
         Iterator<Row> rowIterator = hssfSheet.rowIterator();
         Row headerRow = rowIterator.next();
         List<Row> dataRows = Lists.newArrayList(rowIterator);
+        if(isEmpty(dataRows)){
+            raiseAssuredDataNotSharedException();
+        }
         final List<String> headers = getHeaders(headerRow);
         boolean isValidHeader = isValidHeader(headers, agentPlans);
         if (!isValidHeader) {

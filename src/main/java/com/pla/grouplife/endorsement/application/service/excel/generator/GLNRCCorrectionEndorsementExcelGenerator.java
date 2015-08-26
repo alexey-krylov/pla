@@ -21,7 +21,7 @@ public class GLNRCCorrectionEndorsementExcelGenerator extends AbstractGLEndorsem
 
     @Override
     public HSSFWorkbook generate(PolicyId policyId, EndorsementId endorsementId) {
-        List<GLEndorsementExcelHeader> excelHeaderList = GLEndorsementType.CHANGE_NRC.getExcelHeaderByEndorsementType();
+        List<GLEndorsementExcelHeader> excelHeaderList = GLEndorsementType.CHANGE_NRC.getAllowedExcelHeaders();
         List<String> excelHeaderInString = excelHeaderList.stream().map(new Function<GLEndorsementExcelHeader, String>() {
             @Override
             public String apply(GLEndorsementExcelHeader glEndorsementExcelHeader) {

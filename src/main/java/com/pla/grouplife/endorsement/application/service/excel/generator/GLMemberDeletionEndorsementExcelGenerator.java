@@ -32,7 +32,7 @@ public class GLMemberDeletionEndorsementExcelGenerator extends AbstractGLEndorse
 
     @Override
     public HSSFWorkbook generate(PolicyId policyId,EndorsementId endorsementId) {
-        List<GLEndorsementExcelHeader> excelHeaderList = GLEndorsementType.ASSURED_MEMBER_DELETION.getExcelHeaderByEndorsementType();
+        List<GLEndorsementExcelHeader> excelHeaderList = GLEndorsementType.ASSURED_MEMBER_DELETION.getAllowedExcelHeaders();
         List<String> excelHeaderInString = excelHeaderList.stream().map(excelHeader -> excelHeader.getDescription()).collect(Collectors.toList());
         Map<Integer, List<String>> constraintCellDataMap = Maps.newHashMap();
         constraintCellDataMap.put(excelHeaderInString.indexOf("Gender"), Gender.getAllGender());

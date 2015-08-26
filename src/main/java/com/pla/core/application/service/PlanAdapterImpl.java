@@ -18,6 +18,7 @@ import com.pla.sharedkernel.identifier.BenefitId;
 import com.pla.sharedkernel.identifier.CoverageId;
 import com.pla.sharedkernel.identifier.LineOfBusinessEnum;
 import com.pla.sharedkernel.identifier.PlanId;
+import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -194,7 +195,11 @@ public class PlanAdapterImpl implements IPlanAdapter {
     @Override
     public boolean isValidPlanCode(String planCode) {
         List<Plan> plans = planRepository.findPlanByCodeAndName(planCode);
-        return isNotEmpty(plans);
+        if (isEmpty(plans)) {
+            return false;
+        }
+        List<Plan> activePlans = plans.stream().filter(plan -> (plan.getPlanDetail().getWithdrawalDate() == null || DateTime.now().isBefore(plan.getPlanDetail().getWithdrawalDate()))).collect(Collectors.toList());
+        return isNotEmpty(activePlans);
     }
 
     @Override
@@ -213,15 +218,15 @@ public class PlanAdapterImpl implements IPlanAdapter {
         return isNotEmpty(plans) ? plans.get(0).getIdentifier() : null;
     }
 
-   /*
-   *
-   * returns true if any plan is active and
-    *  false if plan is not active
-   * */
+    /*
+    *
+    * returns true if any plan is active and
+     *  false if plan is not active
+    * */
     @Override
     public boolean isPlanActive(String planCode) {
         int activePlanCount = planFinder.findActivePlanByPlanCode(planCode);
-        return activePlanCount!=0;
+        return activePlanCount != 0;
     }
 
     @Override

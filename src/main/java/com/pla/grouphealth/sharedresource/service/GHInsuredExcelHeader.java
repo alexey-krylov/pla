@@ -197,6 +197,11 @@ public enum GHInsuredExcelHeader {
 
         @Override
         public String validateAndIfNotBuildErrorMessage(IPlanAdapter planAdapter, Row row, String value, List<String> excelHeaders) {
+            Cell noOfAssuredCell = row.getCell(excelHeaders.indexOf(NO_OF_ASSURED.getDescription()));
+            String noOfAssuredCellValue = getCellValue(noOfAssuredCell);
+            if (isEmpty(noOfAssuredCellValue) && isEmpty(value)) {
+                return "Assured data not shared.";
+            }
             return "";
         }
     }, LAST_NAME("Last Name") {
@@ -267,6 +272,11 @@ public enum GHInsuredExcelHeader {
                 return "";
             }
             String errorMessage = "";
+            Cell noOfAssuredCell = row.getCell(excelHeaders.indexOf(NO_OF_ASSURED.getDescription()));
+            String noOfAssuredCellValue = getCellValue(noOfAssuredCell);
+            if (isEmpty(noOfAssuredCellValue) && isEmpty(value)) {
+                return "Assured data not shared.";
+            }
             if (!isValidDate(value)) {
                 errorMessage = errorMessage + "Date of birth should be in format(dd/MM/yyyy).";
                 return errorMessage;
@@ -319,7 +329,7 @@ public enum GHInsuredExcelHeader {
 
         @Override
         public String getAllowedValue(GHInsuredDto.GHInsuredDependentDto insuredDependentDto) {
-            return insuredDependentDto.getGender()!=null?insuredDependentDto.getGender().name():"";
+            return insuredDependentDto.getGender() != null ? insuredDependentDto.getGender().name() : "";
         }
 
         @Override
@@ -377,7 +387,7 @@ public enum GHInsuredExcelHeader {
             if (isEmpty(relationship)) {
                 errorMessage = errorMessage + "Relationship cannot be empty.";
             }
-            if (isEmpty(noOfSumAssured) && isEmpty(value)) {
+            if (isNotEmpty(noOfSumAssured) && isEmpty(value)) {
                 errorMessage = errorMessage + "Occupation cannot be empty.";
             }
             return errorMessage;
@@ -486,8 +496,8 @@ public enum GHInsuredExcelHeader {
 
         @Override
         public String validateAndIfNotBuildErrorMessage(IPlanAdapter planAdapter, Row row, String value, List<String> excelHeaders) {
-            if (isNotEmpty(value) && Double.valueOf(value) < 0) {
-                return "No of assured cannot be negative.";
+            if (isNotEmpty(value) && Double.valueOf(value) <= 0) {
+                return "No of assured cannot be negative/zero.";
             }
             return "";
         }
@@ -778,8 +788,8 @@ public enum GHInsuredExcelHeader {
             if (isNotEmpty(noOfSumAssured) && isEmpty(value)) {
                 errorMessage = errorMessage + "Plan premium cannot be empty.";
             }
-            if (isNotEmpty(value) && Double.valueOf(value) < 0) {
-                errorMessage = errorMessage + "Plan premium cannot be negative.";
+            if (isNotEmpty(value) && Double.valueOf(value) <= 0) {
+                errorMessage = errorMessage + "Plan premium cannot be negative/zero.";
             }
             return errorMessage;
         }

@@ -29,6 +29,10 @@ public class GLInsuredTemplateExcelParseException extends RuntimeException {
         throw new  GLInsuredTemplateExcelParseException("For all relationship plan code should be same");
     }
 
+    public static void raiseAssuredDataNotSharedException() {
+        throw new  GLInsuredTemplateExcelParseException("Assured data not shared.");
+    }
+
     public static void raiseNotValidValueException(String message) {
         throw new  GLInsuredTemplateExcelParseException(message);
     }

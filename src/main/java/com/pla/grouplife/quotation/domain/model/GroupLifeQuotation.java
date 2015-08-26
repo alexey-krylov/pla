@@ -20,7 +20,6 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.math.BigDecimal;
 import java.util.Set;
-import java.util.function.ToIntFunction;
 
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.pla.grouplife.quotation.domain.exception.QuotationException.raiseQuotationNotModifiableException;
@@ -230,12 +229,7 @@ public class GroupLifeQuotation extends AbstractAggregateRoot<QuotationId> imple
 
     public Integer getTotalNoOfLifeCovered() {
         Integer totalNoOfLifeCovered = insureds.size();
-        Integer dependentSize = insureds.stream().mapToInt(new ToIntFunction<Insured>() {
-            @Override
-            public int applyAsInt(Insured value) {
-                return isNotEmpty(value.getInsuredDependents()) ? value.getInsuredDependents().size() : 0;
-            }
-        }).sum();
+        Integer dependentSize = insureds.stream().mapToInt(insured -> isNotEmpty(insured.getInsuredDependents()) ? insured.getInsuredDependents().size() : 0).sum();
         totalNoOfLifeCovered = totalNoOfLifeCovered + dependentSize;
         return totalNoOfLifeCovered;
     }

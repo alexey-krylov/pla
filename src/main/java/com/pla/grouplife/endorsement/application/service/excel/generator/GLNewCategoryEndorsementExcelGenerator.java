@@ -31,7 +31,7 @@ public class GLNewCategoryEndorsementExcelGenerator extends AbstractGLEndorsemen
 
     @Override
     public HSSFWorkbook generate(PolicyId policyId,EndorsementId endorsementId) {
-        List<GLEndorsementExcelHeader> excelHeaderList = GLEndorsementType.NEW_CATEGORY_RELATION.getExcelHeaderByEndorsementType();
+        List<GLEndorsementExcelHeader> excelHeaderList = GLEndorsementType.NEW_CATEGORY_RELATION.getAllowedExcelHeaders();
         List<String> excelHeaderInString = excelHeaderList.stream().map(new Function<GLEndorsementExcelHeader, String>() {
             @Override
             public String apply(GLEndorsementExcelHeader glEndorsementExcelHeader) {

@@ -31,7 +31,7 @@ public class GLMemberPromotionEndorsementExcelGenerator extends AbstractGLEndors
 
     @Override
     public HSSFWorkbook generate(PolicyId policyId,EndorsementId endorsementId) {
-        List<GLEndorsementExcelHeader> excelHeaderList = GLEndorsementType.MEMBER_PROMOTION.getExcelHeaderByEndorsementType();
+        List<GLEndorsementExcelHeader> excelHeaderList = GLEndorsementType.MEMBER_PROMOTION.getAllowedExcelHeaders();
         List<String> excelHeaderInString = excelHeaderList.stream().map(new Function<GLEndorsementExcelHeader, String>() {
             @Override
             public String apply(GLEndorsementExcelHeader glEndorsementExcelHeader) {

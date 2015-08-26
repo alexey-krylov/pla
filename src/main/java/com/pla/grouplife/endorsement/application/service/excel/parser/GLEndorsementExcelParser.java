@@ -1,5 +1,6 @@
 package com.pla.grouplife.endorsement.application.service.excel.parser;
 
+import com.pla.grouplife.endorsement.dto.GLEndorsementInsuredDto;
 import com.pla.sharedkernel.identifier.PolicyId;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 
@@ -9,5 +10,7 @@ import org.apache.poi.hssf.usermodel.HSSFWorkbook;
  */
 public interface GLEndorsementExcelParser {
 
-    boolean isValidExcel(HSSFWorkbook excelFile, PolicyId policyId);
+    boolean isValidExcel(HSSFWorkbook workbook, PolicyId policyId);
+
+    GLEndorsementInsuredDto transformExcelToGLEndorsementDto(HSSFWorkbook workbook, PolicyId policyId);
 }

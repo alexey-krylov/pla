@@ -27,7 +27,7 @@ import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-import static com.pla.grouplife.quotation.application.service.exception.GLInsuredTemplateExcelParseException.*;
+import static com.pla.grouplife.sharedresource.exception.GLInsuredTemplateExcelParseException.*;
 import static com.pla.sharedkernel.util.ExcelGeneratorUtil.getCellValue;
 import static org.nthdimenzion.utils.UtilValidator.isEmpty;
 import static org.nthdimenzion.utils.UtilValidator.isNotEmpty;

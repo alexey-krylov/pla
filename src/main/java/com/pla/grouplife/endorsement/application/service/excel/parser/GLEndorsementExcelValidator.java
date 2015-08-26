@@ -1,7 +1,6 @@
 package com.pla.grouplife.endorsement.application.service.excel.parser;
 
 import com.google.common.collect.Lists;
-import com.pla.grouplife.policy.query.GLPolicyFinder;
 import com.pla.grouplife.sharedresource.model.GLEndorsementExcelHeader;
 import com.pla.grouplife.sharedresource.model.vo.Insured;
 import com.pla.publishedlanguage.contract.IPlanAdapter;
@@ -30,15 +29,12 @@ public class GLEndorsementExcelValidator {
 
     private PolicyId policyId;
 
-    private GLPolicyFinder glPolicyFinder;
-
     private List<Insured> policyAssureds;
 
     private IPlanAdapter planAdapter;
 
-    public GLEndorsementExcelValidator(PolicyId policyId, GLPolicyFinder glPolicyFinder, List<Insured> policyAssureds, IPlanAdapter planAdapter) {
+    public GLEndorsementExcelValidator(PolicyId policyId, List<Insured> policyAssureds, IPlanAdapter planAdapter) {
         this.policyId = policyId;
-        this.glPolicyFinder = glPolicyFinder;
         this.policyAssureds = policyAssureds;
         this.planAdapter = planAdapter;
     }

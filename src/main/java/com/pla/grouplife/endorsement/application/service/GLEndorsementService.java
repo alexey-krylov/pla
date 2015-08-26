@@ -1,6 +1,7 @@
 package com.pla.grouplife.endorsement.application.service;
 
 import com.pla.grouplife.endorsement.application.service.excel.generator.GLEndorsementExcelGenerator;
+import com.pla.grouplife.endorsement.application.service.excel.parser.GLEndorsementExcelParser;
 import com.pla.grouplife.endorsement.query.GLEndorsementFinder;
 import com.pla.grouplife.sharedresource.dto.GLPolicyDetailDto;
 import com.pla.grouplife.sharedresource.dto.SearchGLPolicyDto;
@@ -34,8 +35,12 @@ public class GLEndorsementService {
 
     private final Map<GLEndorsementType, GLEndorsementExcelGenerator> excelGenerators;
 
-    public GLEndorsementService(Map<GLEndorsementType, GLEndorsementExcelGenerator> excelGenerators) {
+    private final Map<GLEndorsementType, GLEndorsementExcelParser> excelParsers;
+
+
+    public GLEndorsementService(Map<GLEndorsementType, GLEndorsementExcelGenerator> excelGenerators, Map<GLEndorsementType, GLEndorsementExcelParser> excelParsers) {
         this.excelGenerators = excelGenerators;
+        this.excelParsers = excelParsers;
     }
 
     public List<GLPolicyDetailDto> searchPolicy(SearchGLPolicyDto searchGLPolicyDto) {
@@ -69,7 +74,7 @@ public class GLEndorsementService {
     public HSSFWorkbook generateEndorsementExcel(GLEndorsementType endorsementType, EndorsementId endorsementId) {
         GLEndorsementExcelGenerator glEndorsementExcelGenerator = excelGenerators.get(endorsementType);
         Map glEndorsementMap = glEndorsementFinder.findEndorsementById(endorsementId.getEndorsementId());
-        Policy policy = glEndorsementMap!= null ? (Policy) glEndorsementMap.get("policy") : null;
+        Policy policy = glEndorsementMap != null ? (Policy) glEndorsementMap.get("policy") : null;
         PolicyId policyId = policy != null ? policy.getPolicyId() : null;
         return glEndorsementExcelGenerator.generate(policyId, endorsementId);
     }

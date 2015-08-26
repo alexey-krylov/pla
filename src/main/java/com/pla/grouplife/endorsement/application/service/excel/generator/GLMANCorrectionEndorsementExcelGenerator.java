@@ -20,7 +20,7 @@ public class GLMANCorrectionEndorsementExcelGenerator extends AbstractGLEndorsem
 
     @Override
     public HSSFWorkbook generate(PolicyId policyId,EndorsementId endorsementId) {
-        List<GLEndorsementExcelHeader> excelHeaderList = GLEndorsementType.CHANGE_MAN_NUMBER.getExcelHeaderByEndorsementType();
+        List<GLEndorsementExcelHeader> excelHeaderList = GLEndorsementType.CHANGE_MAN_NUMBER.getAllowedExcelHeaders();
         List<String> excelHeaderInString = excelHeaderList.stream().map(excelHeader -> excelHeader.getDescription()).collect(Collectors.toList());
         HSSFWorkbook workbook = createExcel(excelHeaderInString, Lists.newArrayList());
         return workbook;

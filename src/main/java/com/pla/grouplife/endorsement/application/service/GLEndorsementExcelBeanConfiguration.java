@@ -2,6 +2,7 @@ package com.pla.grouplife.endorsement.application.service;
 
 import com.google.common.collect.Maps;
 import com.pla.grouplife.endorsement.application.service.excel.generator.*;
+import com.pla.grouplife.endorsement.application.service.excel.parser.*;
 import com.pla.grouplife.sharedresource.model.GLEndorsementType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -42,6 +43,32 @@ public class GLEndorsementExcelBeanConfiguration {
     @Autowired
     private GLDOBCorrectionEndorsementExcelGenerator gldobCorrectionEndorsementExcelGenerator;
 
+    @Autowired
+    private GLDOBCorrectionEndorsementExcelParser gldobCorrectionEndorsementExcelParser;
+
+    @Autowired
+    private GLGenderCorrectionEndorsementExcelParser glGenderCorrectionEndorsementExcelParser;
+
+    @Autowired
+    private GLMANCorrectionEndorsementExcelParser glmanCorrectionEndorsementExcelParser;
+
+    @Autowired
+    private GLMemberAdditionExcelParser glMemberAdditionExcelParser;
+
+    @Autowired
+    private GLMemberDeletionExcelParser glMemberDeletionExcelParser;
+
+    @Autowired
+    private GLMemberPromotionExcelParser glMemberPromotionExcelParser;
+
+    @Autowired
+    private GLNameCorrectionEndorsementExcelParser glNameCorrectionEndorsementExcelParser;
+
+    @Autowired
+    private GLNewCategoryEndorsementExcelParser glNewCategoryEndorsementExcelParser;
+
+    @Autowired
+    private GLNRCCorrectionEndorsementExcelParser glnrcCorrectionEndorsementExcelParser;
 
     @Bean(name = "glEndorsementService")
     public GLEndorsementService glEndorsementService() {
@@ -55,7 +82,19 @@ public class GLEndorsementExcelBeanConfiguration {
         excelGenerators.put(GLEndorsementType.CHANGE_MAN_NUMBER, glmanCorrectionEndorsementExcelGenerator);
         excelGenerators.put(GLEndorsementType.CHANGE_GENDER, glGenderCorrectionEndorsementExcelGenerator);
         excelGenerators.put(GLEndorsementType.CHANGE_DOB, gldobCorrectionEndorsementExcelGenerator);
-        GLEndorsementService glEndorsementService = new GLEndorsementService(excelGenerators);
+
+        Map<GLEndorsementType, GLEndorsementExcelParser> excelParsers = Maps.newHashMap();
+        excelParsers.put(GLEndorsementType.ASSURED_MEMBER_ADDITION, glMemberAdditionExcelParser);
+        excelParsers.put(GLEndorsementType.ASSURED_MEMBER_DELETION, glMemberDeletionExcelParser);
+        excelParsers.put(GLEndorsementType.MEMBER_PROMOTION, glMemberPromotionExcelParser);
+        excelParsers.put(GLEndorsementType.NEW_CATEGORY_RELATION, glNewCategoryEndorsementExcelParser);
+        excelParsers.put(GLEndorsementType.CHANGE_NRC, glnrcCorrectionEndorsementExcelParser);
+        excelParsers.put(GLEndorsementType.CHANGE_MAN_NUMBER, glmanCorrectionEndorsementExcelParser);
+        excelParsers.put(GLEndorsementType.CHANGE_GENDER, glGenderCorrectionEndorsementExcelParser);
+        excelParsers.put(GLEndorsementType.CHANGE_DOB, gldobCorrectionEndorsementExcelParser);
+        excelParsers.put(GLEndorsementType.CHANGE_ASSURED_NAME, glNameCorrectionEndorsementExcelParser);
+
+        GLEndorsementService glEndorsementService = new GLEndorsementService(excelGenerators, excelParsers);
         return glEndorsementService;
     }
 
