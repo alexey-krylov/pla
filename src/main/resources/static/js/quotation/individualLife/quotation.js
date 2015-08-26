@@ -55,8 +55,9 @@
                                 return ageNextBirthday + term.text <= maxMaturityAge;
                             });
                         } else if ($scope.plan.policyTermType === 'MATURITY_AGE_DEPENDENT') {
+                            var ageNextBirthday = calculateAge($scope.proposedAssured.dateOfBirth);
                             return _.filter($scope.plan.policyTerm.maturityAges, function (term) {
-                                return term > ageNextBirthday;
+                                return term.text > ageNextBirthday;
                             });
                         }
                         return [];
