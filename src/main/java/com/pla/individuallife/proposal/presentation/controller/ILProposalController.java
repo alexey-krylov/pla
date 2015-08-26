@@ -76,13 +76,13 @@ public class ILProposalController {
 
     @ResponseBody
     @RequestMapping(value = "/create" , method = RequestMethod.POST)
-    public ResponseEntity<Map> createProposal(@RequestBody ILCreateProposalCommand createProposalCommand, BindingResult bindingResult, HttpServletRequest request) {
+    public ResponseEntity<Result> createProposal(@RequestBody ILCreateProposalCommand createProposalCommand, BindingResult bindingResult, HttpServletRequest request) {
         String proposalId = null;
         if (bindingResult.hasErrors()) {
             return new ResponseEntity(bindingResult.getAllErrors(), HttpStatus.PRECONDITION_FAILED);
         }
         if (ilProposalService.hasProposalForQuotation(createProposalCommand.getQuotationId())) {
-            return new ResponseEntity(Result.failure("Proposal already exists for the selected quotation"), HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity(Result.failure("Proposal already exists for the selected quotation"), HttpStatus.OK);
         }
         try {
             proposalId = new ObjectId().toString();
