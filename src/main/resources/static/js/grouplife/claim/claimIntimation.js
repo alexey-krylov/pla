@@ -20,6 +20,13 @@ App.controller('ClaimIntimationController', ['$scope', '$http', '$timeout',   '$
    $scope.agency={};
    $scope.selectedItem = 1;
    $scope.saveAccidentObject={};
+
+ $http.get("/pla/grouplife/claim/getclaimtype")
+             .success(function (data) {
+                $scope.claimTypes = data
+                    });
+
+
     $scope.items=[
          {
            "assuredNumber":"code1",

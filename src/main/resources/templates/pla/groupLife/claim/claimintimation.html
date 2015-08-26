@@ -89,30 +89,23 @@
                                         <div class="col-md-4">
                                             <div class="form-group required">
                                                 <label class="control-label">Claim Type</label>
-                                                <select id="claim_Type" class="form-control input-md"
-                                                        ng-options=""
-                                                        ng-required="true"
-                                                        ng-model="schedule.claimType"
-                                                        name="claimType">
-                                                    <option value="Claim Type1">Claim Type1</option>
-                                                    <option value="Claim Type2">Claim Type2</option>
-                                                    <option value="Claim Type3">Claim Type3</option>
-                                                </select>
-                                                <div class="error"
-                                                     ng-show="step1.claimType.$dirty &amp;&amp; step1.claimType.$invalid">
-                                                    <small class="error" ng-show="step1.claimType.$error.required">
-                                                        Please indicate the type of claim.
-                                                    </small>
-                                                </div>
-                                            </div>
-                                        </div>
+                                            <select id="claimtype" class="form-control input-sm"
+                                            ng-options="claimType.code as claimType.description for claimType in claimTypes"
+                                         ng-model="claimType.code" name="claimType.code"></select>
+
+                                             </div></div>
+
+
+
+
 
                                         <div class="col-md-4">
                                             <div class="form-group required">
                                                 <label class="control-label">Claim intimation Date</label>
                                                 <div class='input-group date'>
                                                     <input type="text" class="form-control input-sm"
-                                                           datepicker-popup="" view-enabled=""
+                                                           datepicker-popup=""
+                                                           view-enabled=""
                                                            ng-required="true"
                                                            is-open="claimIntimationDate"
                                                            max-date="todayDate"
@@ -404,7 +397,7 @@
                                                 <div class="error"
                                                      ng-show="step1.province.$dirty &amp;&amp; step1.province.$invalid">
                                                     <small class="error" ng-show="step1.province.$error.required">
-                                                        Please select the postalCode.
+                                                        Please select the Province.
                                                     </small>
                                                 </div>
                                             </div>
@@ -721,9 +714,7 @@
                                                        class="form-control input-md"
                                                        name="firstName"
                                                        ng-disabled="true"
-
                                                        ng-model="schedule.firstName" />
-
                                                 <div class="error"
                                                      ng-show="step2.firstName.$dirty &amp;&amp; step2.firstName.$invalid">
                                                     <small class="error"
@@ -733,15 +724,12 @@
                                                 </div>
                                             </div>
                                         </div>
-
                                         <div class="col-md-4">
                                             <div class="form-group ">
                                                 <label class="control-label">SurName</label>
-
                                                 <input id="surname" type="text"
                                                        name="surname"
                                                        ng-disabled="true"
-
                                                        ng-model="schedule.surName"
                                                        class="form-control input-md"/>
                                                 <div class="error"
@@ -754,9 +742,7 @@
                                             </div>
                                         </div>
                                     </div>
-
                                     <div class="row">
-
                                         <div class="col-md-4">
                                             <div class="form-group ">
                                                 <label class="control-label">Date OF Birth</label>
@@ -775,13 +761,9 @@
                                                 <div class="error" ng-messages="step2.dob.$error" ng-if="step2.dob.$dirty">
                                                     <small ng-message="required">Please enter theAssured DOB</small>
                                                     <small ng-message="date">Invalid Date.</small>
-
                                                 </div>
                                             </div>
                                         </div>
-
-
-
                                         <div class="col-md-4">
                                             <div class="form-group ">
                                                 <label class="control-label">Age Next Birthday</label>

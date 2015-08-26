@@ -73,6 +73,13 @@
             </div>
             <div class="col-md-2">
                 <div class="form-group">
+                    <label th:text="#{policyNumber}">PolicyHolder ClientID</label>
+                    <input type="text" class="form-control input-sm" name="policyNumber"
+                           th:value="${searchCriteria.clientId}"/>
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div class="form-group">
                     <label th:text="#{proposalNumber}">Proposal Number</label>
                     <input type="text" class="form-control input-sm" name="proposalNumber"
                            th:value="${searchCriteria.proposalNumber}"/>

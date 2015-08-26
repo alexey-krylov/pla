@@ -39,7 +39,7 @@ public class GLEndorsementService {
     }
 
     public List<GLPolicyDetailDto> searchPolicy(SearchGLPolicyDto searchGLPolicyDto) {
-        List<Map> searchedPolices = glFinder.searchPolicy(searchGLPolicyDto.getPolicyNumber(), searchGLPolicyDto.getPolicyHolderName(), new String[]{"IN_FORCE"});
+        List<Map> searchedPolices = glFinder.searchPolicy(searchGLPolicyDto.getPolicyNumber(), searchGLPolicyDto.getPolicyHolderName(),searchGLPolicyDto.getClientId(), new String[]{"IN_FORCE"},searchGLPolicyDto.getProposalNumber());
         List<GLPolicyDetailDto> transformedPolicies = searchedPolices.stream().map(new Function<Map, GLPolicyDetailDto>() {
             @Override
             public GLPolicyDetailDto apply(Map map) {

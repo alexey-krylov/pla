@@ -28,7 +28,7 @@ public class GLClaimService {
     private GLFinder glFinder;
 
     public List<GLPolicyDetailDto> searchPolicy(SearchGLPolicyDto searchGLPolicyDto) {
-        List<Map> searchedPolices = glFinder.searchPolicy(searchGLPolicyDto.getPolicyNumber(), searchGLPolicyDto.getPolicyHolderName(), new String[]{"IN_FORCE"});
+        List<Map> searchedPolices = glFinder.searchPolicy(searchGLPolicyDto.getPolicyNumber(),searchGLPolicyDto.getPolicyHolderName(),searchGLPolicyDto.getClientId(), new String[]{"IN_FORCE"},searchGLPolicyDto.getProposalNumber());
         if (isEmpty(searchedPolices)) {
             return Lists.newArrayList();
         }

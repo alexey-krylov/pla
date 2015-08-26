@@ -32,8 +32,8 @@ public class GLPolicyFinder {
         return mongoTemplate.findOne(new Query(Criteria.where("_id").is(policyId)), Map.class, GL_POLICY_COLLECTION_NAME);
     }
 
-    public List<Map> searchPolicy(String policyNumber, String policyHolderName) {
-        return glFinder.searchPolicy(policyNumber, policyHolderName, new String[]{"IN_FORCE"});
+    public List<Map> searchPolicy(String policyNumber, String policyHolderName,String clientId,String proposalNumber) {
+        return glFinder.searchPolicy(policyNumber, policyHolderName,clientId, new String[]{"IN_FORCE"},proposalNumber);
     }
 
 

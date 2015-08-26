@@ -92,7 +92,7 @@ public class GLPolicyService {
     }
 
     public List<GLPolicyDetailDto> searchPolicy(SearchGLPolicyDto searchGLPolicyDto) {
-        List<Map> searchedPolices = glPolicyFinder.searchPolicy(searchGLPolicyDto.getPolicyNumber(), searchGLPolicyDto.getPolicyHolderName());
+        List<Map> searchedPolices = glPolicyFinder.searchPolicy(searchGLPolicyDto.getPolicyNumber(),searchGLPolicyDto.getClientId(), searchGLPolicyDto.getPolicyHolderName(),searchGLPolicyDto.getProposalNumber());
         if (isEmpty(searchedPolices)) {
             return Lists.newArrayList();
         }

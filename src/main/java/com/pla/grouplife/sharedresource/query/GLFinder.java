@@ -155,7 +155,7 @@ public class GLFinder {
     }
 
 
-    public List<Map> searchPolicy(String policyNumber, String policyHolderName, String[] statuses) {
+    public List<Map> searchPolicy(String policyNumber, String policyHolderName,String clientId, String[] statuses,String proposalNumber) {
         if (isEmpty(policyHolderName) && isEmpty(policyNumber)) {
             return Lists.newArrayList();
         }
@@ -166,6 +166,10 @@ public class GLFinder {
         }
         if (isNotEmpty(policyNumber)) {
             criteria = criteria.and("policyNumber.policyNumber").is(policyNumber);
+        }
+        if(isNotEmpty(proposalNumber)){
+            criteria = criteria.and("proposal.proposalNumber.proposalNumber").is(proposalNumber);
+
         }
         Query query = new Query(criteria);
         query.with(new Sort(Sort.Direction.ASC, "policyNumber.policyNumber"));
