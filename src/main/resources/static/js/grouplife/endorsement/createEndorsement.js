@@ -422,7 +422,7 @@ angular.module('createEndorsement', ['common', 'ngRoute', 'mgcrea.ngStrap.select
                 endorsementNumber: ['$q', '$http', function ($q, $http) {
                     if (queryParam && !_.isEmpty(queryParam)) {
                         var deferred = $q.defer();
-                        $http.get("/pla/grouplife/policy/getpolicynumber/" + queryParam)
+                        $http.get("/pla/grouplife/endorsement/getendorsementnumber/" + queryParam)
                             .success(function (response) {
                                 deferred.resolve(response.id)
                             })
