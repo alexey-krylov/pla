@@ -24,6 +24,6 @@ public class SearchGLEndorsementDto {
 
     private String endorsementId;
 
-    private List<Map<String,Object>> endorsementTypes;
+    private List<Map<String,String>> endorsementTypes;
 
 }

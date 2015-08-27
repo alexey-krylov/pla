@@ -58,7 +58,7 @@ public class GLEndorsementService {
             @Override
             public GLPolicyDetailDto apply(Map map) {
                 GLPolicyDetailDto policyDetailDto = transformToDto(map);
-                policyDetailDto.setEndorsementTypes(GLEndorsementType.getAllEndorsementType());
+                policyDetailDto.setEndorsementTypes(GLEndorsementType.getAllEndorsementTypeExceludingFCL());
                 return policyDetailDto;
             }
         }).collect(Collectors.toList());

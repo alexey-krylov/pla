@@ -9,6 +9,7 @@ import com.pla.grouplife.sharedresource.dto.SearchGLPolicyDto;
 import com.pla.grouplife.sharedresource.model.GLEndorsementType;
 import com.pla.sharedkernel.domain.model.EndorsementNumber;
 import com.pla.sharedkernel.identifier.EndorsementId;
+import com.wordnik.swagger.annotations.ApiOperation;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.axonframework.commandhandling.gateway.CommandGateway;
 import org.nthdimenzion.presentation.Result;
@@ -86,25 +87,61 @@ public class GroupLifeEndorsementController {
         return new ResponseEntity(Result.success("Endorsement successfully created", endorsementId), HttpStatus.OK);
     }
 
-    @RequestMapping(value = "/getEndorsementNumber/{endorsementId}", method = RequestMethod.GET)
+
+    @RequestMapping(value = "/editEndorsement", method = RequestMethod.GET)
+    @ApiOperation(httpMethod = "GET", value = "To open edit proposal page")
+    private ModelAndView openCreateEndorsement() {
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("pla/grouplife/endorsement/createEndorsement");
+        return modelAndView;
+    }
+
+    @RequestMapping(value = "/getendorsementnumber/{endorsementId}", method = RequestMethod.GET)
     public Result getEndorsementNumber(@PathVariable("endorsementId") String endorsementId) {
         Map endorsmentMap = glEndorsementFinder.findEndorsementById(endorsementId);
-        return Result.success("Proposal number ", endorsmentMap.get("endorsementNumber") != null ? ((EndorsementNumber) endorsmentMap.get("endorsementNumber")).getEndorsementNumber() : "");
+        return Result.success("Endorsement number ", endorsmentMap.get("endorsementNumber") != null ? ((EndorsementNumber) endorsmentMap.get("endorsementNumber")).getEndorsementNumber() : "");
     }
 
     @RequestMapping(value = "/opensearchendorsement", method = RequestMethod.GET)
     public ModelAndView openSearchEndorsementPage() {
         ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("pla/grouplife/endorsement/viewEndorsement");
-        modelAndView.addObject("searchCriteria", new SearchGLEndorsementDto());
+        modelAndView.setViewName("pla/grouplife/endorsement/searchEndorsement");
+        SearchGLEndorsementDto searchGLEndorsementDto = new SearchGLEndorsementDto();
+        searchGLEndorsementDto.setEndorsementTypes(GLEndorsementType.getAllEndorsementType());
+        modelAndView.addObject("searchCriteria", searchGLEndorsementDto);
         return modelAndView;
     }
+    @RequestMapping(value = "/openapprovalendorsement", method = RequestMethod.GET)
+    public ModelAndView gotoApprovalEndorsementPage() {
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("pla/grouplife/endorsement/viewApprovalEndorsement");
+        SearchGLEndorsementDto searchGLEndorsementDto = new SearchGLEndorsementDto();
+        searchGLEndorsementDto.setEndorsementTypes(GLEndorsementType.getAllEndorsementType());
+
+        modelAndView.addObject("searchCriteria", searchGLEndorsementDto);
+
+        return modelAndView;
+    }
+
+    @RequestMapping(value = "/searchEndorsementApprovalpolicy", method = RequestMethod.POST)
+    public ModelAndView searchEndorsementPolicy(SearchGLEndorsementDto searchGLEndorsementDto) {
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("pla/grouplife/endorsement/viewApprovalEndorsement");
+        modelAndView.addObject("searchCriteria", searchGLEndorsementDto);
+        searchGLEndorsementDto.setEndorsementTypes(GLEndorsementType.getAllEndorsementType());
+        modelAndView.addObject("searchResult", glEndorsementService.searchEndorsement(searchGLEndorsementDto, new String[]{"APPROVER_PENDING_ACCEPTANCE", "UNDERWRITER_LEVEL1_PENDING_ACCEPTANCE", "UNDERWRITER_LEVEL2_PENDING_ACCEPTANCE"}));
+        return modelAndView;
+    }
+
+
 
     @RequestMapping(value = "/search", method = RequestMethod.POST)
     public ModelAndView searchEndorsement(SearchGLEndorsementDto searchGLEndorsementDto) {
         ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("pla/grouplife/endorsement/viewEndorsement");
+        modelAndView.setViewName("pla/grouplife/endorsement/searchEndorsement");
         modelAndView.addObject("searchCriteria", searchGLEndorsementDto);
+        searchGLEndorsementDto.setEndorsementTypes(GLEndorsementType.getAllEndorsementType());
+
         modelAndView.addObject("searchResult", glEndorsementService.searchEndorsement(searchGLEndorsementDto, new String[]{"DRAFT", "APPROVER_PENDING_ACCEPTANCE", "UNDERWRITER_LEVEL1_PENDING_ACCEPTANCE", "UNDERWRITER_LEVEL2_PENDING_ACCEPTANCE"}));
         return modelAndView;
     }

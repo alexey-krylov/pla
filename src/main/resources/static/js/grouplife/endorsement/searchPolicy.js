@@ -37,18 +37,35 @@ var viewEndorsementModule = (function () {
      //  window.location.href = "/pla/grouplife/policy/viewpolicy?policyId=" + policyId  + "&mode=view";
 
      };*/
+    services.createEndorsement = function () {
+        // alert(this.selectedItem);
+        var policyId = this.selectedItem;
+        if (this.selectedItem) {
+            $.ajax({
+                url: "opencreateendorsementpage/?policyId=" + policyId + "&endorsementType=" + selectValue
+            }).done(function (data) {
+                console.log(JSON.stringify(data));
+                window.location.href = "editEndorsement?endorsementId=" + data.id;
+            });//.error(function () {
+              //  $('#proposalConfirm').modal('show');
+
+            //});
+        }
+
+    };
+
     services.modifyEndorsement =function(){
         var policyId = this.selectedItem;
-        window.location.href = "/pla/grouplife/endorsement/opencreateendorsementpage?endorsementId=" + endorsementId + "&endorsementType=" + selectValue + "&mode=update";
+        window.location.href = "/pla/grouplife/endorsement/editEndorsement?endorsementId=" + endorsementId + "&endorsementType=" + selectValue + "&mode=update";
 
 
     };
-    services.createEndorsement = function () {
+ /*   services.createEndorsement = function () {
         var policyId = this.selectedItem;
         // alert(selectValue);
         window.location.href = "/pla/grouplife/endorsement/opencreateendorsementpage?policyId=" + policyId + "&endorsementType=" + selectValue;
         //  window.location.href = "/pla/grouplife/endorsement/opencreateendorsementpage";
-    };
+    };*/
 
 
     return services;

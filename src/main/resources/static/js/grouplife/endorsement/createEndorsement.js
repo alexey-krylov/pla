@@ -47,6 +47,7 @@ angular.module('createEndorsement', ['common', 'ngRoute', 'mgcrea.ngStrap.select
 
             /*Inter id used for programmatic purpose*/
             $scope.endorsementId = getQueryParameter('endorsementId') || null;
+            alert($scope.endorsementId);
 
             $scope.versionNumber = getQueryParameter('version') || null;
 

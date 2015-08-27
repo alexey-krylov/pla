@@ -98,7 +98,7 @@ public enum GLEndorsementType {
         return description;
     }
 
-    public static List<Map<String, String>> getAllEndorsementType() {
+    public static List<Map<String, String>> getAllEndorsementTypeExceludingFCL() {
         List<Map<String, String>> endorsementTypes = Lists.newArrayList();
         GLEndorsementType[] glEndorsementTypes = GLEndorsementType.values();
         for (int count = 0; count < glEndorsementTypes.length; count++) {
@@ -109,6 +109,19 @@ public enum GLEndorsementType {
                 map.put("description", glEndorsementType.getDescription());
                 endorsementTypes.add(map);
             }
+        }
+        return endorsementTypes;
+    }
+
+    public static List<Map<String, String>> getAllEndorsementType() {
+        List<Map<String, String>> endorsementTypes = Lists.newArrayList();
+        GLEndorsementType[] glEndorsementTypes = GLEndorsementType.values();
+        for (int count = 0; count < glEndorsementTypes.length; count++) {
+            GLEndorsementType glEndorsementType = glEndorsementTypes[count];
+            Map<String, String> map = new HashMap<>();
+            map.put("code", glEndorsementType.name());
+            map.put("description", glEndorsementType.getDescription());
+            endorsementTypes.add(map);
         }
         return endorsementTypes;
     }

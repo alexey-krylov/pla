@@ -65,7 +65,7 @@
         <li>Group Life</li>
     </ol>
     </p>
-    <form method="post" action="searchpolicy" novalidate="true" name="searchEndorsementforGLPolicy"
+    <form method="post" action="searchEndorsementApprovalpolicy" novalidate="true" name="searchEndorsementforGLPolicy"
           id="searchEndorsementforGLPolicy">
         <div class="row well well-sm" style="margin: 0;">
             <div class="col-md-2">
@@ -74,8 +74,9 @@
             <div class="col-md-2">
                 <div class="form-group">
                     <label th:text="#{endorsementType}">Endorsement Type</label>
-                    <input type="text" class="form-control input-sm" name="endorsementType"
-                            /><!--th:value="${searchCriteria.endorsementType}" -->
+                    <select  class="btn btn-default btn-sm"  style=" text-align: left;width:170px;">
+                        <option th:each="endorsementType :${searchCriteria.endorsementTypes}" th:value="${{endorsementType.code}}" th:text="${endorsementType.description}"></option>
+                    </select>
                 </div>
             </div>
             <div class="col-md-3">

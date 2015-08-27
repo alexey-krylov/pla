@@ -39,7 +39,7 @@ public class GroupLifeEndorsementService {
         String endorsementNumber = glEndorsementNumberGenerator.getEndorsementNumber(GroupLifeEndorsement.class, LocalDate.now());
         Map<String, Object> policyMap = glFinder.findPolicyById(policyId);
         String policyNumber = ((PolicyNumber) policyMap.get("policyNumber")).getPolicyNumber();
-        String policyHolderName = ((Proposer) policyMap.get("proposerName")).getProposerName();
+        String policyHolderName =  policyMap.get("proposer")!=null?((Proposer) policyMap.get("proposer")).getProposerName():null;
         return glEndorsementProcessor.createEndorsement(endorsementId, endorsementNumber, policyId, policyNumber, policyHolderName, glEndorsementType);
     }
 }

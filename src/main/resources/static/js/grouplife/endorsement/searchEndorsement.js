@@ -24,7 +24,7 @@ var searchEndorsementModule = (function () {
     };
     services.modifyEndorsement =function(){
         var endorsementId = this.selectedItem;
-        window.location.href = "/pla/grouplife/endorsement/opencreateendorsementpage?endorsementId=" + endorsementId + "&endorsementType=" + selectValue + "&mode=update";
+        window.location.href = "/pla/grouplife/endorsement/editEndorsement?endorsementId=" + endorsementId + "&endorsementType=" + selectValue + "&mode=update";
         if (this.status == 'Returned') {
             window.location.href = "/pla/grouplife/endorsement/editEndorsementReturnStatus?endorsementId=" + endorsementId + "&mode=edit" + "&status=return";
         } else {
@@ -42,7 +42,7 @@ var searchEndorsementModule = (function () {
                         }
                     }
                     if (services.statusValue == false) {
-                        window.location.href = "/pla/grouplife/endorsement/opencreateendorsementpage?endorsementId=" + endorsementId + "&mode=edit";
+                        window.location.href = "/pla/grouplife/endorsement/editEndorsement?endorsementId=" + endorsementId + "&mode=edit";
 
                     } else {
                         window.location.href = "/pla/grouplife/endorsement/editEndorsementReturnStatus?endorsementId=" + endorsementId + "&mode=edit" + "&status=return";
@@ -74,7 +74,7 @@ var searchEndorsementModule = (function () {
                         }
                     }
                     if (services.statusValue == false) {
-                        window.location.href = "/pla/grouplife/endorsement/opencreateendorsementpage?endorsementId=" + endorsementId + "&mode=view";
+                        window.location.href = "/pla/grouplife/endorsement/editEndorsement?endorsementId=" + endorsementId + "&mode=view";
 
                     } else {
                         window.location.href = "/pla/grouplife/endorsement/editEndorsementReturnStatus?endorsementId=" + endorsementId + "&mode=view" + "&status=return";
