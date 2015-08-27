@@ -156,11 +156,9 @@ public class GHQuotationCommandHandler {
     }
 
     private GroupHealthQuotation populateAnnualBasicPremiumOfInsured(GroupHealthQuotation groupHealthQuotation, UserDetails userDetails, GHPremiumDetailDto premiumDetailDto) {
-        if (premiumDetailDto.getPolicyTermValue() != 365) {
-            Set<GHInsured> insureds = groupHealthQuotation.getInsureds();
-            insureds = ghInsuredFactory.recalculateProratePremiumForInsureds(premiumDetailDto, insureds);
-            groupHealthQuotation = groupHealthQuotationService.updateInsured(groupHealthQuotation, insureds, userDetails);
-        }
+        Set<GHInsured> insureds = groupHealthQuotation.getInsureds();
+        insureds = ghInsuredFactory.recalculateProratePremiumForInsureds(premiumDetailDto, insureds);
+        groupHealthQuotation = groupHealthQuotationService.updateInsured(groupHealthQuotation, insureds, userDetails);
         groupHealthQuotation = groupHealthQuotationService.updateWithPremiumDetail(groupHealthQuotation, premiumDetailDto, userDetails);
         return groupHealthQuotation;
     }

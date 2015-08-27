@@ -95,7 +95,11 @@ public class GHInsuredFactory {
         for (GHInsured insured : insureds) {
             GHPlanPremiumDetail planPremiumDetail = insured.getPlanPremiumDetail();
             String occupationClass = ghFinder.getOccupationClass(insured.getOccupationClass());
-            BigDecimal insuredPlanProratePremium = insured.getNoOfAssured() != null ? insured.getPlanPremiumDetail().getPremiumAmount() : computeBasicProratePremium(planPremiumDetail.getPlanId().getPlanId(), planPremiumDetail.getSumAssured().toPlainString(), getAgeOnNextBirthDate(insured.getDateOfBirth()).toString(), occupationClass, insured.getGender().name(), premiumDetailDto.getPolicyTermValue(), null);
+            BigDecimal insuredPlanProratePremium = insured.getNoOfAssured() != null ? insured.getPlanPremiumDetail().getPremiumAmount() :
+                    premiumDetailDto.getPolicyTermValue() != 365 ?
+                    computeBasicProratePremium(planPremiumDetail.getPlanId().getPlanId(), planPremiumDetail.getSumAssured().toPlainString(),
+                            getAgeOnNextBirthDate(insured.getDateOfBirth()).toString(), occupationClass, insured.getGender().name(), premiumDetailDto.getPolicyTermValue(), null) : computePlanBasicAnnualPremium(planPremiumDetail.getPlanId().getPlanId(), planPremiumDetail.getSumAssured().toPlainString(),
+                    getAgeOnNextBirthDate(insured.getDateOfBirth()).toString(), occupationClass, insured.getGender().name(), premiumDetailDto.getPolicyTermValue(), null);
             if (insured.getNoOfAssured() == null && insured.getDateOfBirth() != null) {
                 insuredPlanProratePremium = computePremiumByApplyingAgeLoadingFactor(getAgeOnNextBirthDate(insured.getDateOfBirth()), insuredPlanProratePremium);
             }
@@ -103,7 +107,10 @@ public class GHInsuredFactory {
             if (isNotEmpty(insured.getPlanPremiumDetail().getCoveragePremiumDetails())) {
                 List<GHCoveragePremiumDetail> coveragePremiumDetails = insured.getPlanPremiumDetail().getCoveragePremiumDetails();
                 for (GHCoveragePremiumDetail coveragePremiumDetail : coveragePremiumDetails) {
-                    BigDecimal insuredCoveragePremiumDetail = insured.getNoOfAssured() != null ? coveragePremiumDetail.getPremium() : computeBasicProratePremium(planPremiumDetail.getPlanId().getPlanId(), coveragePremiumDetail.getSumAssured().toPlainString(), getAgeOnNextBirthDate(insured.getDateOfBirth()).toString(), occupationClass, insured.getGender().name(), premiumDetailDto.getPolicyTermValue(), coveragePremiumDetail.getCoverageId().getCoverageId());
+                    BigDecimal insuredCoveragePremiumDetail = insured.getNoOfAssured() != null ? coveragePremiumDetail.getPremium() : premiumDetailDto.getPolicyTermValue() != 365 ? computeBasicProratePremium(planPremiumDetail.getPlanId().getPlanId(),
+                            coveragePremiumDetail.getSumAssured().toPlainString(), getAgeOnNextBirthDate(insured.getDateOfBirth()).toString(),
+                            occupationClass, insured.getGender().name(), premiumDetailDto.getPolicyTermValue(), coveragePremiumDetail.getCoverageId().getCoverageId()) : computePlanBasicAnnualPremium(planPremiumDetail.getPlanId().getPlanId(), planPremiumDetail.getSumAssured().toPlainString(),
+                            getAgeOnNextBirthDate(insured.getDateOfBirth()).toString(), occupationClass, insured.getGender().name(), premiumDetailDto.getPolicyTermValue(), null);
                     if (insured.getNoOfAssured() == null && insured.getDateOfBirth() != null) {
                         insuredCoveragePremiumDetail = computePremiumByApplyingAgeLoadingFactor(getAgeOnNextBirthDate(insured.getDateOfBirth()), insuredCoveragePremiumDetail);
                     }
@@ -113,7 +120,12 @@ public class GHInsuredFactory {
             for (GHInsuredDependent insuredDependent : insured.getInsuredDependents()) {
                 GHPlanPremiumDetail insuredDependentPlanPremiumDetail = insuredDependent.getPlanPremiumDetail();
                 String dependentOccupationClass = ghFinder.getOccupationClass(insuredDependent.getOccupationClass());
-                BigDecimal insuredDependentPlanProratePremium = insuredDependent.getNoOfAssured() != null ? insuredDependent.getPlanPremiumDetail().getPremiumAmount() : computeBasicProratePremium(insuredDependentPlanPremiumDetail.getPlanId().getPlanId(), insuredDependentPlanPremiumDetail.getSumAssured().toPlainString(), getAgeOnNextBirthDate(insuredDependent.getDateOfBirth()).toString(), dependentOccupationClass, insuredDependent.getGender().name(), premiumDetailDto.getPolicyTermValue(), null);
+                BigDecimal insuredDependentPlanProratePremium = insuredDependent.getNoOfAssured() != null ? insuredDependent.getPlanPremiumDetail().getPremiumAmount() :  premiumDetailDto.getPolicyTermValue() != 365 ?
+                        computeBasicProratePremium(insuredDependentPlanPremiumDetail.getPlanId().getPlanId(), insuredDependentPlanPremiumDetail.getSumAssured().toPlainString(),
+                                getAgeOnNextBirthDate(insuredDependent.getDateOfBirth()).toString(), dependentOccupationClass, insuredDependent.getGender().name(),
+                                premiumDetailDto.getPolicyTermValue(), null):computePlanBasicAnnualPremium(insuredDependentPlanPremiumDetail.getPlanId().getPlanId(), insuredDependentPlanPremiumDetail.getSumAssured().toPlainString(),
+                        getAgeOnNextBirthDate(insuredDependent.getDateOfBirth()).toString(), dependentOccupationClass, insuredDependent.getGender().name(),
+                        premiumDetailDto.getPolicyTermValue(), null);
                 if (insuredDependent.getNoOfAssured() == null && insuredDependent.getDateOfBirth() != null) {
                     insuredDependentPlanProratePremium = computePremiumByApplyingAgeLoadingFactor(getAgeOnNextBirthDate(insuredDependent.getDateOfBirth()), insuredDependentPlanProratePremium);
                 }
@@ -121,7 +133,9 @@ public class GHInsuredFactory {
                 List<GHCoveragePremiumDetail> insuredDependentCoveragePremiumDetails = insuredDependent.getPlanPremiumDetail().getCoveragePremiumDetails();
                 if (isNotEmpty(insuredDependentCoveragePremiumDetails)) {
                     for (GHCoveragePremiumDetail insuredDependentCoveragePremiumDetail : insuredDependentCoveragePremiumDetails) {
-                        BigDecimal insuredCoveragePremiumDetail = insuredDependent.getNoOfAssured() != null ? insuredDependentCoveragePremiumDetail.getPremium() : computeBasicProratePremium(insuredDependentPlanPremiumDetail.getPlanId().getPlanId(), insuredDependentCoveragePremiumDetail.getSumAssured().toPlainString(), getAgeOnNextBirthDate(insuredDependent.getDateOfBirth()).toString(), dependentOccupationClass, insuredDependent.getGender().name(), premiumDetailDto.getPolicyTermValue(), insuredDependentCoveragePremiumDetail.getCoverageId().getCoverageId());
+                        BigDecimal insuredCoveragePremiumDetail = insuredDependent.getNoOfAssured() != null ? insuredDependentCoveragePremiumDetail.getPremium() :
+                                premiumDetailDto.getPolicyTermValue() != 365 ?computeBasicProratePremium(insuredDependentPlanPremiumDetail.getPlanId().getPlanId(), insuredDependentCoveragePremiumDetail.getSumAssured().toPlainString(), getAgeOnNextBirthDate(insuredDependent.getDateOfBirth()).toString(), dependentOccupationClass, insuredDependent.getGender().name(), premiumDetailDto.getPolicyTermValue(), insuredDependentCoveragePremiumDetail.getCoverageId().getCoverageId()):
+                                        computePlanBasicAnnualPremium(insuredDependentPlanPremiumDetail.getPlanId().getPlanId(), insuredDependentCoveragePremiumDetail.getSumAssured().toPlainString(), getAgeOnNextBirthDate(insuredDependent.getDateOfBirth()).toString(), dependentOccupationClass, insuredDependent.getGender().name(), premiumDetailDto.getPolicyTermValue(), insuredDependentCoveragePremiumDetail.getCoverageId().getCoverageId());
                         if (insuredDependent.getNoOfAssured() == null && insuredDependent.getDateOfBirth() != null) {
                             insuredCoveragePremiumDetail = computePremiumByApplyingAgeLoadingFactor(getAgeOnNextBirthDate(insuredDependent.getDateOfBirth()), insuredCoveragePremiumDetail);
                         }
@@ -159,6 +173,36 @@ public class GHInsuredFactory {
         }
         BigDecimal installmentPremium = premiumCalculator.computeProratePremium(premiumCalculationDto);
         return installmentPremium;
+    }
+
+
+    private BigDecimal computePlanBasicAnnualPremium(String planId, String sumAssured, String age, String occupationClass, String gender, int noOfDays, String coverageId) {
+        List<PremiumInfluencingFactor> setUpPremiumInfluencingFactors = getPremiumInfluencingFactors(planId, coverageId, LocalDate.now());
+        PremiumCalculationDto premiumCalculationDto = new PremiumCalculationDto(new PlanId(planId), LocalDate.now(), PremiumFrequency.ANNUALLY, noOfDays);
+        if (findPremiumInfluencingFactor(PremiumInfluencingFactor.SUM_ASSURED, setUpPremiumInfluencingFactors) != null) {
+            premiumCalculationDto.addInfluencingFactorItemValue(PremiumInfluencingFactor.SUM_ASSURED, sumAssured);
+        }
+        if (findPremiumInfluencingFactor(PremiumInfluencingFactor.AGE, setUpPremiumInfluencingFactors) != null) {
+            premiumCalculationDto.addInfluencingFactorItemValue(PremiumInfluencingFactor.AGE, age);
+        }
+        if (isNotEmpty(occupationClass) && findPremiumInfluencingFactor(PremiumInfluencingFactor.OCCUPATION_CLASS, setUpPremiumInfluencingFactors) != null) {
+            premiumCalculationDto.addInfluencingFactorItemValue(PremiumInfluencingFactor.OCCUPATION_CLASS, occupationClass);
+        }
+        if (findPremiumInfluencingFactor(PremiumInfluencingFactor.GENDER, setUpPremiumInfluencingFactors) != null) {
+            premiumCalculationDto.addInfluencingFactorItemValue(PremiumInfluencingFactor.GENDER, gender);
+        }
+        if (findPremiumInfluencingFactor(PremiumInfluencingFactor.POLICY_TERM, setUpPremiumInfluencingFactors) != null) {
+            premiumCalculationDto.addInfluencingFactorItemValue(PremiumInfluencingFactor.POLICY_TERM, String.valueOf(1));
+        }
+        if (findPremiumInfluencingFactor(PremiumInfluencingFactor.PREMIUM_PAYMENT_TERM, setUpPremiumInfluencingFactors) != null) {
+            premiumCalculationDto.addInfluencingFactorItemValue(PremiumInfluencingFactor.PREMIUM_PAYMENT_TERM, String.valueOf(1));
+        }
+        if (isNotEmpty(coverageId)) {
+            premiumCalculationDto = premiumCalculationDto.addCoverage(new CoverageId(coverageId));
+        }
+        List<ComputedPremiumDto> computedPremiums = premiumCalculator.calculateBasicPremium(premiumCalculationDto);
+        BigDecimal annualBasicPremium = ComputedPremiumDto.getAnnualPremium(computedPremiums);
+        return annualBasicPremium;
     }
 
     private Set<GHInsuredDependent> getInsuredDependent(Set<GHInsuredDto.GHInsuredDependentDto> insuredDependentDtos) {
@@ -208,34 +252,6 @@ public class GHInsuredFactory {
         return basicPremium;
     }
 
-    private BigDecimal computePlanBasicAnnualPremium(String planId, String sumAssured, String age, String occupationClass, String gender, int noOfDays, String coverageId) {
-        List<PremiumInfluencingFactor> setUpPremiumInfluencingFactors = getPremiumInfluencingFactors(planId, coverageId, LocalDate.now());
-        PremiumCalculationDto premiumCalculationDto = new PremiumCalculationDto(new PlanId(planId), LocalDate.now(), PremiumFrequency.ANNUALLY, noOfDays);
-        if (findPremiumInfluencingFactor(PremiumInfluencingFactor.SUM_ASSURED, setUpPremiumInfluencingFactors) != null) {
-            premiumCalculationDto.addInfluencingFactorItemValue(PremiumInfluencingFactor.SUM_ASSURED, sumAssured);
-        }
-        if (findPremiumInfluencingFactor(PremiumInfluencingFactor.AGE, setUpPremiumInfluencingFactors) != null) {
-            premiumCalculationDto.addInfluencingFactorItemValue(PremiumInfluencingFactor.AGE, age);
-        }
-        if (isNotEmpty(occupationClass) && findPremiumInfluencingFactor(PremiumInfluencingFactor.OCCUPATION_CLASS, setUpPremiumInfluencingFactors) != null) {
-            premiumCalculationDto.addInfluencingFactorItemValue(PremiumInfluencingFactor.OCCUPATION_CLASS, occupationClass);
-        }
-        if (findPremiumInfluencingFactor(PremiumInfluencingFactor.GENDER, setUpPremiumInfluencingFactors) != null) {
-            premiumCalculationDto.addInfluencingFactorItemValue(PremiumInfluencingFactor.GENDER, gender);
-        }
-        if (findPremiumInfluencingFactor(PremiumInfluencingFactor.POLICY_TERM, setUpPremiumInfluencingFactors) != null) {
-            premiumCalculationDto.addInfluencingFactorItemValue(PremiumInfluencingFactor.POLICY_TERM, String.valueOf(1));
-        }
-        if (findPremiumInfluencingFactor(PremiumInfluencingFactor.PREMIUM_PAYMENT_TERM, setUpPremiumInfluencingFactors) != null) {
-            premiumCalculationDto.addInfluencingFactorItemValue(PremiumInfluencingFactor.PREMIUM_PAYMENT_TERM, String.valueOf(1));
-        }
-        if (isNotEmpty(coverageId)) {
-            premiumCalculationDto = premiumCalculationDto.addCoverage(new CoverageId(coverageId));
-        }
-        List<ComputedPremiumDto> computedPremiums = premiumCalculator.calculateBasicPremium(premiumCalculationDto);
-        BigDecimal annualBasicPremium = ComputedPremiumDto.getAnnualPremium(computedPremiums);
-        return annualBasicPremium;
-    }
 
     private PremiumInfluencingFactor findPremiumInfluencingFactor(PremiumInfluencingFactor premiumInfluencingFactor, List<PremiumInfluencingFactor> premiumInfluencingFactors) {
         Optional<PremiumInfluencingFactor> premiumInfluencingFactorOptional = premiumInfluencingFactors.stream().filter(new Predicate<PremiumInfluencingFactor>() {
