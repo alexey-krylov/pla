@@ -3,7 +3,7 @@ package com.pla.grouplife.proposal.application.command;
 import com.google.common.collect.Sets;
 import com.pla.grouplife.proposal.domain.model.GLProposalApprover;
 import com.pla.grouplife.proposal.domain.model.GLProposalProcessor;
-import com.pla.grouplife.proposal.domain.model.GLProposerDocument;
+import com.pla.grouplife.sharedresource.model.vo.GLProposerDocument;
 import com.pla.grouplife.proposal.domain.model.GroupLifeProposal;
 import com.pla.grouplife.proposal.domain.service.GroupLifeProposalRoleAdapter;
 import com.pla.grouplife.proposal.domain.service.GroupLifeProposalService;

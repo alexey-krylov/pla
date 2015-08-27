@@ -1,4 +1,4 @@
-package com.pla.grouplife.proposal.domain.model;
+package com.pla.grouplife.sharedresource.model.vo;
 
 import lombok.Getter;
 

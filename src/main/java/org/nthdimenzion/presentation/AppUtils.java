@@ -70,10 +70,10 @@ public class AppUtils {
         return userDetails;
     }
 
-    public static String replaceSpecialCharactersIn(String textToBeReplaced){
+    public static String replaceSpecialCharactersIn(String textToBeReplaced) {
         String[] searchStringArray = ":;\"'?/.,{[}]\\-=()_ ".split("(?!^)");
         List<String> listOfEmptyString = Lists.newArrayList();
-        Lists.newArrayList(searchStringArray).forEach(replacementCharacters->
+        Lists.newArrayList(searchStringArray).forEach(replacementCharacters ->
                 listOfEmptyString.add(""));
         String[] replacementList = Arrays.copyOf(listOfEmptyString.toArray(), listOfEmptyString.toArray().length, String[].class);
         return StringUtils.replaceEachRepeatedly(textToBeReplaced, searchStringArray, replacementList);
@@ -93,6 +93,14 @@ public class AppUtils {
             return null;
         }
         Days interval = Days.daysBetween(date, LocalDate.now());
+        return interval.getDays();
+    }
+
+    public static Integer getIntervalInDays(DateTime date) {
+        if (date == null) {
+            return null;
+        }
+        Days interval = Days.daysBetween(date, DateTime.now());
         return interval.getDays();
     }
 

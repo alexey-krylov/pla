@@ -1,6 +1,5 @@
 package com.pla.grouplife.endorsement.domain.model;
 
-import com.pla.grouplife.sharedresource.model.GLEndorsementType;
 import lombok.Getter;
 import org.nthdimenzion.ddd.domain.annotations.ValueObject;
 
@@ -12,8 +11,6 @@ import java.util.List;
 @Getter
 @ValueObject
 public class GLEndorsement {
-
-    private GLEndorsementType endorsementType;
 
     private GLMemberEndorsement memberEndorsement;
 
@@ -32,10 +29,6 @@ public class GLEndorsement {
     private List<GLAssuredNRCEndorsement> nrcEndorsements;
 
     private List<GLAssuredMANNumberEndorsement> manNumberEndorsements;
-
-    public GLEndorsement(GLEndorsementType endorsementType) {
-        this.endorsementType = endorsementType;
-    }
 
     public GLEndorsement addMemberEndorsement(GLMemberEndorsement memberEndorsement) {
         this.memberEndorsement = memberEndorsement;

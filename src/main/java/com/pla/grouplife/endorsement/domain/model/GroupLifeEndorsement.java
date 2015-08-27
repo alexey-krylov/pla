@@ -1,5 +1,7 @@
 package com.pla.grouplife.endorsement.domain.model;
 
+import com.pla.grouplife.sharedresource.model.GLEndorsementType;
+import com.pla.grouplife.sharedresource.model.vo.GLProposerDocument;
 import com.pla.sharedkernel.domain.model.EndorsementNumber;
 import com.pla.sharedkernel.domain.model.EndorsementStatus;
 import com.pla.sharedkernel.domain.model.Policy;
@@ -12,6 +14,8 @@ import org.axonframework.eventsourcing.annotation.AggregateIdentifier;
 import org.joda.time.DateTime;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
+
+import java.util.Set;
 
 import static com.google.common.base.Preconditions.checkArgument;
 
@@ -29,6 +33,8 @@ public class GroupLifeEndorsement extends AbstractAggregateRoot<EndorsementId> {
 
     private EndorsementNumber endorsementNumber;
 
+    private GLEndorsementType endorsementType;
+
     private EndorsementStatus status;
 
     private GLEndorsement endorsement;
@@ -37,20 +43,26 @@ public class GroupLifeEndorsement extends AbstractAggregateRoot<EndorsementId> {
 
     private DateTime effectiveDate;
 
-    public GroupLifeEndorsement(EndorsementId endorsementId, EndorsementNumber endorsementNumber, GLEndorsement endorsement, Policy policy, DateTime effectiveDate) {
+    private Set<GLProposerDocument> proposerDocuments;
+
+    public GroupLifeEndorsement(EndorsementId endorsementId, EndorsementNumber endorsementNumber, Policy policy, GLEndorsementType endorsementType) {
         checkArgument(endorsementId != null, "Endorsement ID cannot be empty");
         checkArgument(endorsementNumber != null, "Endorsement Number cannot be empty");
         checkArgument(policy != null, "Policy cannot be empty");
         this.endorsementId = endorsementId;
         this.endorsementNumber = endorsementNumber;
         this.status = EndorsementStatus.DRAFT;
-        this.endorsement = endorsement;
         this.policy = policy;
-        this.effectiveDate = effectiveDate;
+        this.endorsementType = endorsementType;
     }
 
     public GroupLifeEndorsement updateWithEndorsementDetail(GLEndorsement endorsement) {
         this.endorsement = endorsement;
+        return this;
+    }
+
+    public GroupLifeEndorsement updateWithDocuments(Set<GLProposerDocument> proposerDocuments) {
+        this.proposerDocuments = proposerDocuments;
         return this;
     }
 

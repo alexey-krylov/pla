@@ -103,10 +103,12 @@ public enum GLEndorsementType {
         GLEndorsementType[] glEndorsementTypes = GLEndorsementType.values();
         for (int count = 0; count < glEndorsementTypes.length; count++) {
             GLEndorsementType glEndorsementType = glEndorsementTypes[count];
-            Map<String, String> map = new HashMap<>();
-            map.put("code", glEndorsementType.name());
-            map.put("description", glEndorsementType.getDescription());
-            endorsementTypes.add(map);
+            if (!GLEndorsementType.FREE_COVER_LIMIT.equals(glEndorsementType)) {
+                Map<String, String> map = new HashMap<>();
+                map.put("code", glEndorsementType.name());
+                map.put("description", glEndorsementType.getDescription());
+                endorsementTypes.add(map);
+            }
         }
         return endorsementTypes;
     }

@@ -175,4 +175,8 @@ public class GLFinder {
         query.with(new Sort(Sort.Direction.ASC, "policyNumber.policyNumber"));
         return mongoTemplate.find(query, Map.class, GL_POLICY_COLLECTION_NAME);
     }
+
+    public Map findPolicyById(String policyId) {
+        return mongoTemplate.findOne(new Query(Criteria.where("_id").is(policyId)), Map.class, GL_POLICY_COLLECTION_NAME);
+    }
 }

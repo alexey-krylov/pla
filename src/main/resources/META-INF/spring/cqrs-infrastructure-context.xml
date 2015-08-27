@@ -115,4 +115,7 @@
                                 mongo-template="mongoTemplate"/>
 
 
+    <extension:mongo-repository id="glEndorsementMongoRepository"
+                                aggregate-type="com.pla.grouplife.endorsement.domain.model.GroupLifeEndorsement"
+                                mongo-template="mongoTemplate"/>
 </beans>

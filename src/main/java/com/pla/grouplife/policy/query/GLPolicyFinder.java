@@ -29,11 +29,11 @@ public class GLPolicyFinder {
     }
 
     public Map findPolicyById(String policyId) {
-        return mongoTemplate.findOne(new Query(Criteria.where("_id").is(policyId)), Map.class, GL_POLICY_COLLECTION_NAME);
+        return glFinder.findPolicyById(policyId);
     }
 
-    public List<Map> searchPolicy(String policyNumber, String policyHolderName,String clientId,String proposalNumber) {
-        return glFinder.searchPolicy(policyNumber, policyHolderName,clientId, new String[]{"IN_FORCE"},proposalNumber);
+    public List<Map> searchPolicy(String policyNumber, String policyHolderName, String clientId, String proposalNumber) {
+        return glFinder.searchPolicy(policyNumber, policyHolderName, clientId, new String[]{"IN_FORCE"}, proposalNumber);
     }
 
 

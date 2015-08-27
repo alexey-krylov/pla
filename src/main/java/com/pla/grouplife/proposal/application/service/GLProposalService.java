@@ -5,7 +5,7 @@ import com.google.common.collect.Sets;
 import com.mongodb.gridfs.GridFSDBFile;
 import com.pla.core.domain.model.agent.AgentId;
 import com.pla.grouplife.proposal.application.command.GLRecalculatedInsuredPremiumCommand;
-import com.pla.grouplife.proposal.domain.model.GLProposerDocument;
+import com.pla.grouplife.sharedresource.model.vo.GLProposerDocument;
 import com.pla.grouplife.proposal.domain.model.GroupLifeProposal;
 import com.pla.grouplife.proposal.domain.model.GroupLifeProposalStatusAudit;
 import com.pla.grouplife.proposal.presentation.dto.GLProposalApproverCommentDto;

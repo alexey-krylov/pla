@@ -9,7 +9,7 @@ import com.pla.grouplife.sharedresource.dto.GLPolicyDetailDto;
 import com.pla.grouplife.sharedresource.dto.SearchGLPolicyDto;
 import com.pla.grouplife.policy.query.GLPolicyFinder;
 import com.pla.grouplife.policy.repository.GLPolicyRepository;
-import com.pla.grouplife.proposal.domain.model.GLProposerDocument;
+import com.pla.grouplife.sharedresource.model.vo.GLProposerDocument;
 import com.pla.grouplife.proposal.presentation.dto.GLProposalMandatoryDocumentDto;
 import com.pla.grouplife.sharedresource.dto.AgentDetailDto;
 import com.pla.grouplife.sharedresource.dto.InsuredDto;

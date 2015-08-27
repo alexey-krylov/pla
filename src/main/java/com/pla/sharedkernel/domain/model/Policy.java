@@ -15,8 +15,11 @@ public class Policy {
 
     private PolicyNumber policyNumber;
 
-    public Policy(PolicyId policyId, PolicyNumber policyNumber) {
+    private String policyHolderName;
+
+    public Policy(PolicyId policyId, PolicyNumber policyNumber, String policyHolderName) {
         this.policyId = policyId;
         this.policyNumber = policyNumber;
+        this.policyHolderName = policyHolderName;
     }
 }

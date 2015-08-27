@@ -23,10 +23,12 @@ public class RolesUtil {
     public static final String INDIVIDUAL_LIFE_QUOTATION_PROCESSOR_ROLE = "ROLE_INDIVIDUAL_LIFE_QUOTATION_PROCESSOR";
     public static final String INDIVIDUAL_LIFE__PROPOSAL_PROCESSOR_ROLE = "ROLE_INDIVIDUAL_LIFE_PROPOSAL_PROCESSOR";
     public static final String GROUP_LIFE_PROPOSAL_PROCESSOR_ROLE = "ROLE_GROUP_LIFE_PROPOSAL_PROCESSOR";
+    public static final String GROUP_LIFE_ENDORSEMENT_PROCESSOR_ROLE = "ROLE_GROUP_LIFE_ENDORSEMENT_PROCESSOR";
     private static final String ADMIN_ROLE = "ROLE_ADMIN";
     private static final String GROUP_HEALTH_PROPOSAL_PROCESSOR_ROLE = "ROLE_GROUP_HEALTH_PROPOSAL_PROCESSOR";
     private static final String GROUP_HEALTH_PROPOSAL_APPROVER_ROLE = "ROLE_GROUP_HEALTH_PROPOSAL_APPROVER";
     private static final String GROUP_LIFE_PROPOSAL_APPROVER_ROLE = "ROLE_GROUP_LIFE_PROPOSAL_APPROVER";
+    private static final String GROUP_LIFE_ENDORSEMENT_APPROVER_ROLE = "ROLE_GROUP_LIFE_ENDORSEMENT_APPROVER";
     private static final String INDIVIDUAL_LIFE_PROPOSAL_APPROVER_ROLE = "ROLE_INDIVIDUAL_LIFE_PROPOSAL_APPROVER";
 
     private RolesUtil() {
@@ -62,6 +64,11 @@ public class RolesUtil {
         return count == 1;
     }
 
+    public static boolean hasGroupLifeEndorsementProcessorRole(Collection<? extends GrantedAuthority> authorities) {
+        long count = hasRole(GROUP_LIFE_ENDORSEMENT_PROCESSOR_ROLE, authorities);
+        return count == 1;
+    }
+
     public static boolean hasGroupHealthProposalProcessorRole(Collection<? extends GrantedAuthority> authorities) {
         long count = hasRole(GROUP_HEALTH_PROPOSAL_PROCESSOR_ROLE, authorities);
         return count == 1;
@@ -74,6 +81,11 @@ public class RolesUtil {
 
     public static boolean hasGroupLifeProposalApproverRole(Collection<? extends GrantedAuthority> authorities) {
         long count = hasRole(GROUP_LIFE_PROPOSAL_APPROVER_ROLE, authorities);
+        return count == 1;
+    }
+
+    public static boolean hasGroupLifeEndorsementApproverRole(Collection<? extends GrantedAuthority> authorities) {
+        long count = hasRole(GROUP_LIFE_ENDORSEMENT_APPROVER_ROLE, authorities);
         return count == 1;
     }
 
