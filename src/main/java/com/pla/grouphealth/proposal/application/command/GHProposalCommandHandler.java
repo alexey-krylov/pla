@@ -177,11 +177,9 @@ public class GHProposalCommandHandler {
     }
 
     private GroupHealthProposal populateAnnualBasicPremiumOfInsured(GroupHealthProposal groupHealthProposal, UserDetails userDetails, GHPremiumDetailDto premiumDetailDto) {
-        if (premiumDetailDto.getPolicyTermValue() != 365) {
-            Set<GHInsured> insureds = groupHealthProposal.getInsureds();
-            insureds = ghInsuredFactory.recalculateProratePremiumForInsureds(premiumDetailDto, insureds);
-            groupHealthProposal = groupHealthProposalService.updateInsured(groupHealthProposal, insureds, userDetails);
-        }
+        Set<GHInsured> insureds = groupHealthProposal.getInsureds();
+        insureds = ghInsuredFactory.recalculateProratePremiumForInsureds(premiumDetailDto, insureds);
+        groupHealthProposal = groupHealthProposalService.updateInsured(groupHealthProposal, insureds, userDetails);
         groupHealthProposal = groupHealthProposalService.updateWithPremiumDetail(groupHealthProposal, premiumDetailDto, userDetails);
         return groupHealthProposal;
     }
