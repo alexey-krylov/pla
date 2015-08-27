@@ -39,7 +39,7 @@ var viewEndorsementModule = (function () {
      };*/
     services.modifyEndorsement =function(){
         var policyId = this.selectedItem;
-        window.location.href = "/pla/grouplife/endorsement/opencreateendorsementpage?policyId=" + policyId + "&endorsementType=" + selectValue + "&mode=update";
+        window.location.href = "/pla/grouplife/endorsement/opencreateendorsementpage?endorsementId=" + endorsementId + "&endorsementType=" + selectValue + "&mode=update";
 
 
     };
