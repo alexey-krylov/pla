@@ -5,7 +5,7 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
             templateUrl: 'plan-policyterm.tpl',
             controller: ['$scope', function ($scope) {
                 $scope.policyTerms = function () {
-                    //alert('PlanDetailsINsideDirective'+JSON.stringify($scope.plan));
+                    //console.log('PlanDetailsINsideDirective'+JSON.stringify($scope.plan));
                     if ($scope.plan.policyTermType === 'SPECIFIED_VALUES') {
                         var maxMaturityAge = $scope.plan.policyTerm.maxMaturityAge || 1000;
                         //var ageNextBirthday = calculateAge($scope.proposedAssured.dateOfBirth);
@@ -14,8 +14,10 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
                             return ageNextBirthday + term.text <= maxMaturityAge;
                         });
                     } else if ($scope.plan.policyTermType === 'MATURITY_AGE_DEPENDENT') {
+                        var ageNextBirthday = moment().diff(new moment(new Date($scope.proposedAssured.dateOfBirth)), 'years') + 1;
                         return _.filter($scope.plan.policyTerm.maturityAges, function (term) {
-                            return term > ageNextBirthday;
+                            //console.log('Term'+ JSON.stringify(term));
+                            return term.text > ageNextBirthday;
                         });
                     }
                     return [];
@@ -135,7 +137,7 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
                     if ($scope.plan) {
                         $scope.coverage = _.findWhere($scope.plan.coverages, {coverageId: searchRider.coverageId});
                         //alert("COverage.."+JSON.stringify($scope.coverage));
-                        //console.log('Coverage..'+JSON.stringify($scope.coverage));
+                        console.log('Coverage..'+JSON.stringify($scope.coverage));
                         return $scope.coverage.coverageSumAssured.sumAssuredType;
 
                     }
@@ -685,7 +687,7 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
 
                 }).error(function (response, status, headers, config) {
                     //$scope.message = response.message;
-                    alert(response.message);
+                    //alert(response.message);
                 });
             }
 
@@ -1341,6 +1343,7 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
                 //console.log('Final to Plan DB..' + JSON.stringify(request));
 
                 $http.post('updateplan', request).success(function (response, status, headers, config) {
+                    //alert('status'+status);
                     $scope.proposal = response;
                     $scope.proposal.proposalId=response.id;
                     //console.log("Response of PLan is:"+JSON.stringify(response));
@@ -2798,6 +2801,10 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
              }
              });*/
 
+            $scope.toggleAnimation = function () {
+                $scope.animationsEnabled = !$scope.animationsEnabled;
+            };
+
             $scope.saveProposerDetails = function () {
 
                 //ProposalService.saveProposedAssured($scope.proposedAssured, $scope.proposedAssuredSpouse, $scope.paemployment, $scope.paresidential, proposedAssuredAsProposer, null);
@@ -2859,94 +2866,105 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
                     //console.log(JSON.stringify(request2));
 
                     // QuotationID saving
-
+                    //alert('quid..')
                     $http.post('create', request2).success(function (response, status, headers, config) {
-                        //$scope.proposal = response;
-                        $scope.proposal.ProposalId=response.id;
-                        //alert("ProposalId Check"+JSON.stringify(response));
-                        //alert('Proposal..'+JSON.stringify($scope.proposal.ProposalId));
-                        //    console.log('Retrieving Proposal Number@###..');
-                        $http.get("/pla/individuallife/proposal/getproposal/" +response.id + "?mode=view").success(function (response, status, headers, config) {
-                            window.location.href = "/pla/individuallife/proposal/edit?proposalId=" + $scope.proposal.ProposalId + "&mode=edit";
-                            var result = response;
-                            $scope.rcvProposal = response;
-                            $scope.agentDetails=result.agentCommissionDetails;
-                            $scope.proposalNumberDetails.proposalNumber = $scope.rcvProposal.proposalNumber;
-                            $scope.proposal.proposalId = $scope.rcvProposal.proposalId;
-                            //$scope.proposedAssured = $scope.rcvProposal.proposedAssured || {};
-                            if($scope.rcvProposal.proposedAssured !=null)
-                            {
-                                ////alert("Yes");
-                                $scope.proposedAssured = $scope.rcvProposal.proposedAssured || {};
+                        //alert('status'+response.status);
+                        if(response.status == '500')
+                        {
+                            //alert('Return');
+                            return;
+                        }
+                        else
+                        {
+                            $http.get("/pla/individuallife/proposal/getproposal/" +response.id + "?mode=view").success(function (response, status, headers, config) {
+                                window.location.href = "/pla/individuallife/proposal/edit?proposalId=" + $scope.proposal.ProposalId + "&mode=edit";
+                                var result = response;
+                                $scope.proposal.ProposalId=response.id;
+                                $scope.rcvProposal = response;
+                                $scope.agentDetails=result.agentCommissionDetails;
+                                $scope.proposalNumberDetails.proposalNumber = $scope.rcvProposal.proposalNumber;
+                                $scope.proposal.proposalId = $scope.rcvProposal.proposalId;
+                                //$scope.proposedAssured = $scope.rcvProposal.proposedAssured || {};
+                                if($scope.rcvProposal.proposedAssured !=null)
+                                {
+                                    ////alert("Yes");
+                                    $scope.proposedAssured = $scope.rcvProposal.proposedAssured || {};
+                                    $scope.spouse = $scope.rcvProposal.proposedAssured.spouse;
+                                    $scope.employment = $scope.rcvProposal.proposedAssured.employment;
+                                    $scope.residentialAddress = $scope.rcvProposal.proposedAssured.residentialAddress;
+                                }
+                                else
+                                {
+                                    ////alert("No");
+                                    $scope.proposedAssured={};
+                                    $scope.employment={};
+                                    $scope.residentialAddress={};
+                                    $scope.spouse={};
+                                }
+
+
+                                if($scope.rcvProposal.proposer !=null)
+                                {
+                                    ////alert("Yes");
+                                    $scope.proposer = $scope.rcvProposal.proposer || {};
+                                    $scope.proposerEmployment = $scope.proposer.employment;
+                                    $scope.proposerResidential = $scope.proposer.residentialAddress;
+                                    $scope.proposerSpouse = $scope.proposer.spouse;
+                                }
+                                else
+                                {
+                                    ////alert("No");
+                                    $scope.proposer={};
+                                    $scope.proposerEmployment={};
+                                    $scope.proposerResidential={};
+                                    $scope.proposerSpouse={};
+                                }
+
+                                /* $scope.proposer = $scope.rcvProposal.proposer || {};
+                                 $scope.proposerEmployment = $scope.proposer.employment;
+                                 $scope.proposerResidential = $scope.proposer.residentialAddress;
+                                 $scope.proposerSpouse = $scope.proposer.spouse;*/
+
+                                $scope.proposalPlanDetail = $scope.rcvProposal.proposalPlanDetail;
+                                $scope.searchRiders = $scope.rcvProposal.proposalPlanDetail.riderDetails;
+                                $scope.beneficiaries = $scope.rcvProposal.beneficiaries;
+                                if ($scope.proposedAssured.dateOfBirth) {
+                                    $scope.proposedAssured.nextDob = moment().diff(new moment(new Date($scope.proposedAssured.dateOfBirth)), 'years') + 1;
+                                }
+                                if ($scope.proposer.dateOfBirth) {
+                                    $scope.proposer.nextDob = moment().diff(new moment(new Date($scope.proposedAssured.dateOfBirth)), 'years') + 1;
+                                }
                                 $scope.spouse = $scope.rcvProposal.proposedAssured.spouse;
                                 $scope.employment = $scope.rcvProposal.proposedAssured.employment;
                                 $scope.residentialAddress = $scope.rcvProposal.proposedAssured.residentialAddress;
-                            }
-                            else
-                            {
-                                ////alert("No");
-                                $scope.proposedAssured={};
-                                $scope.employment={};
-                                $scope.residentialAddress={};
-                                $scope.spouse={};
-                            }
+                                //$scope.agentDetails = $scope.rcvProposal.agentCommissionDetails;
+                                //$scope.familyPersonalDetail = $scope.rcvProposal.familyPersonalDetail;
+                                ////console.log('FamilyHistory..' + $scope.rcvProposal.familyPersonalDetail.familyHistory.father);
+                                //$scope.familyHistory = $scope.rcvProposal.familyPersonalDetail.familyHistory;
+                                //$scope.habit = $scope.rcvProposal.familyPersonalDetail.habit;
+                                //$scope.habits = $scope.rcvProposal.familyPersonalDetail.habit;
+                                //$scope.questionList = $scope.rcvProposal.familyPersonalDetail.habit.questions;
+                                //$scope.build = $scope.rcvProposal.familyPersonalDetail.build;
+                                //$scope.compulsoryHealthDetails = $scope.rcvProposal.compulsoryHealthStatement;
 
 
-                            if($scope.rcvProposal.proposer !=null)
-                            {
-                                ////alert("Yes");
-                                $scope.proposer = $scope.rcvProposal.proposer || {};
-                                $scope.proposerEmployment = $scope.proposer.employment;
-                                $scope.proposerResidential = $scope.proposer.residentialAddress;
-                                $scope.proposerSpouse = $scope.proposer.spouse;
-                            }
-                            else
-                            {
-                                ////alert("No");
-                                $scope.proposer={};
-                                $scope.proposerEmployment={};
-                                $scope.proposerResidential={};
-                                $scope.proposerSpouse={};
-                            }
+                            }).error(function (response, status, headers, config) {
 
-                            /* $scope.proposer = $scope.rcvProposal.proposer || {};
-                             $scope.proposerEmployment = $scope.proposer.employment;
-                             $scope.proposerResidential = $scope.proposer.residentialAddress;
-                             $scope.proposerSpouse = $scope.proposer.spouse;*/
+                                $scope.message = response.message;
+                                //$scope.showErrorAlert = true;
+                                //$scope.saveDisabled = false;
 
-                            $scope.proposalPlanDetail = $scope.rcvProposal.proposalPlanDetail;
-                            $scope.searchRiders = $scope.rcvProposal.proposalPlanDetail.riderDetails;
-                            $scope.beneficiaries = $scope.rcvProposal.beneficiaries;
-                            if ($scope.proposedAssured.dateOfBirth) {
-                                $scope.proposedAssured.nextDob = moment().diff(new moment(new Date($scope.proposedAssured.dateOfBirth)), 'years') + 1;
-                            }
-                            if ($scope.proposer.dateOfBirth) {
-                                $scope.proposer.nextDob = moment().diff(new moment(new Date($scope.proposedAssured.dateOfBirth)), 'years') + 1;
-                            }
-                            $scope.spouse = $scope.rcvProposal.proposedAssured.spouse;
-                            $scope.employment = $scope.rcvProposal.proposedAssured.employment;
-                            $scope.residentialAddress = $scope.rcvProposal.proposedAssured.residentialAddress;
-                            //$scope.agentDetails = $scope.rcvProposal.agentCommissionDetails;
-                            //$scope.familyPersonalDetail = $scope.rcvProposal.familyPersonalDetail;
-                            ////console.log('FamilyHistory..' + $scope.rcvProposal.familyPersonalDetail.familyHistory.father);
-                            //$scope.familyHistory = $scope.rcvProposal.familyPersonalDetail.familyHistory;
-                            //$scope.habit = $scope.rcvProposal.familyPersonalDetail.habit;
-                            //$scope.habits = $scope.rcvProposal.familyPersonalDetail.habit;
-                            //$scope.questionList = $scope.rcvProposal.familyPersonalDetail.habit.questions;
-                            //$scope.build = $scope.rcvProposal.familyPersonalDetail.build;
-                            //$scope.compulsoryHealthDetails = $scope.rcvProposal.compulsoryHealthStatement;
+                            });
+                        }
+                        //$scope.proposal = response;
 
-
-                        }).error(function (response, status, headers, config) {
-
-                            $scope.message = response.message;
-                            //$scope.showErrorAlert = true;
-                            //$scope.saveDisabled = false;
-
-                        });
+                        //alert("ProposalId Check"+JSON.stringify(response));
+                        //alert('Proposal..'+JSON.stringify($scope.proposal.ProposalId));
+                        //    console.log('Retrieving Proposal Number@###..');
 
                         //Testing
                     }).error(function (response, status, headers, config) {
+                        alert(status);
                     });
 
                 }
@@ -2972,7 +2990,11 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
                     else
                     {
                         // For New Proposal Save...
+                        console.log('New Fresh Proposer Saving..');
+
                         $http.post('create', request1).success(function (response, status, headers, config) {
+                            console.log('Fresh Proposer Created..');
+                            console.log(response);
                             $scope.proposal.ProposalId=response.id;
                             // //alert("ProposalId Check"+JSON.stringify($scope.proposal.ProposalId));
                             window.location.href = "/pla/individuallife/proposal/edit?proposalId=" + $scope.proposal.ProposalId + "&mode=edit";

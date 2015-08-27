@@ -102,6 +102,7 @@
                     $scope.getSumAssuredType = function (riderDetail) {
                         if ($scope.plan) {
                             $scope.coverage = _.findWhere($scope.plan.coverages, {coverageId: riderDetail.coverageId});
+                           // console.log('Coverage..'+JSON.stringify($scope.coverage));
                             return $scope.coverage.coverageSumAssured.sumAssuredType;
                         }
                     }
@@ -401,7 +402,7 @@
                     $http.post('createquotation',
                         angular.extend($scope.proposedAssured, {
                             agentId: $scope.quotation.agentId,
-                            planId: $scope.plan.planId,
+                            planId: $scope.plan.planId
                         }))
                         .success(function (data) {
                             if (data.id)
@@ -428,7 +429,8 @@
                 };
 
                 $scope.$watch('proposerSameAsProposedAssured', function (newval, oldval) {
-                    if (newval == oldval)return;
+                    if (newval == oldval)
+                        return;
 
                     if (!newval) {
                         $scope.proposer = angular.copy($scope.originalProposer);
