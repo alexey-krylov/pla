@@ -178,11 +178,9 @@ public class GroupLifeProposalCommandHandler {
     }
 
     private GroupLifeProposal populateAnnualBasicPremiumOfInsured(GroupLifeProposal groupLifeQuotation, UserDetails userDetails, PremiumDetailDto premiumDetailDto) {
-        if (premiumDetailDto.getPolicyTermValue() != 365) {
-            Set<Insured> insureds = groupLifeQuotation.getInsureds();
-            insureds = glInsuredFactory.recalculateProratePremiumForInsureds(premiumDetailDto, insureds);
-            groupLifeQuotation = groupLifeProposalService.updateInsured(groupLifeQuotation, insureds, userDetails);
-        }
+        Set<Insured> insureds = groupLifeQuotation.getInsureds();
+        insureds = glInsuredFactory.recalculateProratePremiumForInsureds(premiumDetailDto, insureds);
+        groupLifeQuotation = groupLifeProposalService.updateInsured(groupLifeQuotation, insureds, userDetails);
         groupLifeQuotation = groupLifeProposalService.updateWithPremiumDetail(groupLifeQuotation, premiumDetailDto, userDetails);
         return groupLifeQuotation;
     }

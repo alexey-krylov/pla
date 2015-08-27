@@ -107,11 +107,9 @@ public class GlQuotationCommandHandler {
 
 
     private GroupLifeQuotation populateAnnualBasicPremiumOfInsured(GroupLifeQuotation groupLifeQuotation, UserDetails userDetails, PremiumDetailDto premiumDetailDto) {
-        if (premiumDetailDto.getPolicyTermValue() != 365) {
-            Set<Insured> insureds = groupLifeQuotation.getInsureds();
-            insureds = glInsuredFactory.recalculateProratePremiumForInsureds(premiumDetailDto, insureds);
-            groupLifeQuotation = groupLifeQuotationService.updateInsured(groupLifeQuotation, insureds, userDetails);
-        }
+        Set<Insured> insureds = groupLifeQuotation.getInsureds();
+        insureds = glInsuredFactory.recalculateProratePremiumForInsureds(premiumDetailDto, insureds);
+        groupLifeQuotation = groupLifeQuotationService.updateInsured(groupLifeQuotation, insureds, userDetails);
         groupLifeQuotation = groupLifeQuotationService.updateWithPremiumDetail(groupLifeQuotation, premiumDetailDto, userDetails);
         return groupLifeQuotation;
     }
