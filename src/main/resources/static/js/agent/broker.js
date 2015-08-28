@@ -25,8 +25,9 @@ angular.module('brokerModule', ['common', 'ngRoute', 'mgcrea.ngStrap.select', 'm
                         }
                     }
                 }
-                var compileContent = scope.fieldData;
-                console.log(compileContent);
+                //var compileContent = scope.fieldData;
+               // console.log(compileContent);
+                var compileContent = _.sortBy(scope.fieldData, 'planName');
                 var content = "<ul>";
                 for (var i = 0; i < compileContent.length; i++) {
 
