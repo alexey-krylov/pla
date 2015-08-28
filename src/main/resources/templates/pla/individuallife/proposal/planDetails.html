@@ -205,24 +205,23 @@
             </div>
 
             <div ng-switch-when="RANGE">
-                {{coverage.sumAssured.minSumInsured}}
                 <input type="number" view-enabled="" class="form-control input-sm"
-                       ng-disabled="mode=='new'||mode=='view'" min="{{coverage.sumAssured.minSumInsured}}"
-                       name="sumAssured"
-                       max="{{coverage.sumAssured.maxSumInsured}}" ng-model="searchRider.sumAssured" ng-required="true"/>
-                <div class="error" ng-messages="step3.sumAssured.$error">
-                    <small ng-message="min">Sum Assured cannot be less then {{coverage.sumAssured.minSumInsured}}.</small>
-                    <small ng-message="max">Sum Assured cannot be more than {{coverage.sumAssured.maxSumInsured}}.</small>
+                       ng-disabled="mode=='new'||mode=='view'" min="{{coverage.coverageSumAssured.minSumInsured}}"
+                       name="sumAssuredPlanA"
+                       max="{{coverage.coverageSumAssured.maxSumInsured}}" ng-model="searchRider.coverageSumAssured" ng-required="true"/>
+                <div class="error" ng-messages="step3.sumAssuredPlanA.$error">
+                    <small ng-message="min">Sum Assured cannot be less then {{coverage.coverageSumAssured.minSumInsured}}.</small>
+                    <small ng-message="max">Sum Assured cannot be more than {{coverage.coverageSumAssured.maxSumInsured}}.</small>
                 </div>
             </div>
             <div ng-switch-when="DERIVED">
-                {{coverage.sumAssured.incomeMultiplier}}
+                {{coverage.coverageSumAssured.incomeMultiplier}}
                 <input type="number" view-enabled="" class="form-control input-sm" min="0"
                        ng-disabled="mode=='new'||mode=='view'" max="{{coverage.sumAssured.maxLimit}}"
-                       name="sumAssured"
+                       name="sumAssuredPlanRider"
                        ng-model="searchRider.sumAssured" ng-required="true"/>
 
-                <div class="error" ng-messages="step3.sumAssured.$error" ng-if="step3.sumAssured.$dirty">
+                <div class="error" ng-messages="step3.sumAssuredPlanRider.$error" ng-if="step3.sumAssuredPlanRider.$dirty">
                     <small ng-message="max">Sum Assured cannot be greater than {{coverage.sumAssured.incomeMultiplier}}.
                     </small>
                 </div>
@@ -278,7 +277,7 @@
                 <div class="error" ng-messages="step3.plansumAssured.$error" ng-if="step3.plansumAssured.$dirty">
                     <small ng-message="min">Sum Assured cannot be less then {{plan.sumAssured.minSumInsured}}.</small>
                     <small ng-message="max">Sum Assured cannot be more than {{plan.sumAssured.maxSumInsured}}.</small>
-                    <small ng-message="invalidMultiple">Invalid Multiples.</small>
+                    <small ng-message="invalidMultiple">Please enter multiples of {{plan.sumAssured.multiplesOf}}</small>
                 </div>
             </div>
             <div ng-switch-when="INCOME_MULTIPLIER">
