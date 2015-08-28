@@ -56,7 +56,7 @@
     }
 </style>
 <div th:include="fragments/common :: bodyHeader" th:remove="tag"/>
-<div class="container-fluid">
+<div class="container container-fluid">
     <ng-view>
         <form method="post" action="/pla/individuallife/quotation" novalidate="true" name="quotationForm"
               id="quotationForm">
@@ -130,6 +130,7 @@
                                width="100%">
                             <thead>
                             <tr>
+
                                 <th style="width: 1%"></th>
                                 <th th:text="#{quotationNumber}">Quotation Number</th>
                                 <th th:text="#{quotationCreatedOn}">Quotation Date</th>
