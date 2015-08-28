@@ -29,6 +29,42 @@ function IsValidEmail(email) {
     var regex = /^([a-zA-Z0-9_.+-])+\@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/;
     return regex.test(email);
 }
+function printNotification () {
+
+    var emailBody = tinyMCE.get('emailBody').getContent();
+    var notificationId = $('#notificationId').val();
+    //alert(notificationId);
+
+    var printUrl = '/pla/core/notification/printnotification';
+
+
+    $.ajax({
+        url: printUrl,
+        type: 'POST',
+        data: JSON.stringify({
+            emailBody: emailBody,
+            notificationId: notificationId
+        }),
+        contentType: 'application/json; charset=utf-8',
+        success: function (msg) {
+            if (msg.status == '200') {
+                $('#alert-modal-success').modal('show');
+                $('#successMessage').text(msg.message).show();
+                $('#alert-modal-success').on('hidden.bs.modal', function () {
+                    window.close();
+
+                });
+            }else{
+                $('#alert-modal-success').modal('show');
+                $('#errorMessage').text(msg.message).show();
+                $('#alert-modal-success').on('hidden.bs.modal', function () {
+                    window.close();
+                });
+            }
+        }
+    });
+}
+
 function sendEmail() {
     var toAddress = $('#to').val();
     var subject = $('#subject').val();
@@ -77,5 +113,6 @@ function sendEmail() {
         }
             });
 }
+
 
 //});

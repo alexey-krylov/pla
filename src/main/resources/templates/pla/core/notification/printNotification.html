@@ -25,67 +25,33 @@
         <div class="col-md-12">
             <div class="panel panel-primary">
                 <div class="panel-heading">
-                    <span th:text="#{emailNotification}">Email Notification</span>
+                    <span th:text="#{printNotification}">Print Notification</span>
                 </div>
-                <!--<p th:text="${mailContent}"></p>-->
-               <div class="panel-body">
+                <div class="panel-body">
                     <div class="row">
                         <div class="col-md-3">
                             <button type="button" class="btn btn-success btn-xs"
-                                    onclick="javascript:sendEmail()">Send Email
+                                    onclick="javascript:printNotification()">Print
                             </button>
-                        </div>
-                    </div>
-                    <div class="row" style="margin-top: 10px">
-                        <div class="col-md-12">
-                            <table class="table table-bordered" style="margin-bottom: 0px">
-                                <tbody>
-                                <tr>
-                                    <td>To:</td>
-                                    <td>
-                                        <input type="text" name="emailAddress"
-                                               id="to" class="form-control input-md" ng-required="true"
-                                               th:value="${mailContent[0].emailAddress}"/>
-
-                                    </td>
-                                </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                    <div class="row" style="margin-top: 3px">
-                        <div class="col-md-12">
-                            <table class="table table-bordered" style="margin-bottom: 0px">
-                                <tbody>
-                                <tr>
-                                    <td>Subject:</td>
-                                    <td><strong>
-                                        <input type="hidden" id="notificationId" th:value="${mailContent[0].notificationId}"/>
-
-
-                                        <input type="text" class="form-control input-md" name="subject"
-                                               id="subject"
-                                               th:value="${mailContent[0].subject}"/></strong></td>
-                                </tr>
-                                </tbody>
-                            </table>
                         </div>
                     </div>
                     <div class="row" style="margin-top: 3px">
                         <div class="col-md-12"  >
-                            <textarea id="emailBody"  th:utext="${mailContent[0].emailBody}" th:value="${mailContent[0].emailBody}"
+                            <input type="hidden" id="notificationId" th:value="${printContent[0].notificationId}"/>
+
+                            <textarea id="emailBody"  th:utext="${printContent[0].emailBody}" th:value="${printContent[0].emailBody}"
                                       name="emailBody">
                             </textarea>
                         </div>
                     </div>
-                   <!-- <div class="row">
-                        <div class="col-md-12">
-                            <a th:href="@{/notification/printnotification/{notificationId}(notificationId=${mailContent[0].notificationId})}">
-                                <span class="glyphicon glyphicon-file" style="font-size: 18px"></span>
-                                <label th:utext="${mailContent[0].subject}+'.PDF'"></label>
-                            </a>
-                        </div>
-                    </div>-->
+                    <!-- <div class="row">
+                         <div class="col-md-12">
+                             <a th:href="@{/notification/printnotification/{notificationId}(notificationId=${mailContent[0].notificationId})}">
+                                 <span class="glyphicon glyphicon-file" style="font-size: 18px"></span>
+                                 <label th:utext="${mailContent[0].subject}+'.PDF'"></label>
+                             </a>
+                         </div>
+                     </div>-->
                 </div>
             </div>
         </div>
