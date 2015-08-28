@@ -4,9 +4,11 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.mongodb.gridfs.GridFSDBFile;
 import com.pla.individuallife.policy.finder.ILPolicyFinder;
+import com.pla.individuallife.policy.presentation.dto.ILPolicyDto;
 import com.pla.individuallife.policy.presentation.dto.PolicyDetailDto;
 import com.pla.individuallife.policy.presentation.dto.SearchILPolicyDto;
 import com.pla.individuallife.proposal.presentation.dto.ILProposalMandatoryDocumentDto;
+import com.pla.individuallife.sharedresource.dto.AgentDetailDto;
 import com.pla.individuallife.sharedresource.model.vo.*;
 import com.pla.publishedlanguage.dto.ClientDocumentDto;
 import com.pla.publishedlanguage.dto.SearchDocumentDetailDto;
@@ -249,56 +251,61 @@ public class ILPolicyService {
     }
 
     public byte[] getPolicyDocument(PolicyId policyId) throws IOException, JRException {
-        byte[] pdfData = PDFGeneratorUtils.createPDFReportByList(testData(), "jasperpdf/template/individuallife/policy/ilpolicy.jrxml");
+        ILPolicyDto dto = ilPolicyFinder.getPolicyById(policyId);
+        byte[] pdfData = PDFGeneratorUtils.createPDFReportByList(ilPolicyDetailTransformMap(dto), "jasperpdf/template/individuallife/policy/ilpolicy.jrxml");
         return pdfData;
     }
 
-    public List<Map<String,Object>> testData(){
-        Map<String,Object> map = Maps.newLinkedHashMap();
-        map.put("proposerName","Test One");
-        map.put("policyStartDate","12/12/2018");
-        map.put("agentCode","007");
-        map.put("contactNumber","9999999999");
-        map.put("psOffice","Sahakara Nagara");
-        map.put("address","Bengaluru");
-        map.put("telephoneNumber","080-38293-44958");
-        map.put("policyNumber","2-09-05-393484949");
-        map.put("policyStartDate","8/11/2015");
-        map.put("policyEndDate","8/11/2020");
-        map.put("issueBranch","Bengaluru");
-        map.put("issuanceDate","3/4/2016");
+    public List<Map<String,Object>> ilPolicyDetailTransformMap(ILPolicyDto ilPolicyDto){
+        Map<String,Object> ilPolicyDetailMap = Maps.newLinkedHashMap();
+        ilPolicyDetailMap.put("proposerName", ilPolicyDto.getProposer().getClientId() + " " + ilPolicyDto.getProposer().getFirstName() + " " + ilPolicyDto.getProposer().getSurname());
+        ilPolicyDetailMap.put("policyStartDate", ilPolicyDto.getInceptionOn());
+        ilPolicyDetailMap.put("agentCode", getDominantAgentId(ilPolicyDto.getAgentCommissionDetails()));
+        ilPolicyDetailMap.put("contactNumber", ilPolicyDto.getProposer().getMobileNumber());
+        ilPolicyDetailMap.put("psOffice", ilPolicyDto.getProposer().getResidentialAddress().getTown());
+        ilPolicyDetailMap.put("address", ilPolicyDto.getProposer().getResidentialAddress().getAddress1());
+        ilPolicyDetailMap.put("telephoneNumber", ilPolicyDto.getProposer().getResidentialAddress().getHomePhone());
+        ilPolicyDetailMap.put("policyNumber", ilPolicyDto.getPolicyNumber().getPolicyNumber());
+        ilPolicyDetailMap.put("policyEndDate", ilPolicyDto.getExpiryDate());
+        ilPolicyDetailMap.put("issueBranch", ilPolicyDto.getProposer().getResidentialAddress().getTown());
+        ilPolicyDetailMap.put("issuanceDate", ilPolicyDto.getInceptionOn());
 
-        List<Map<String,Object>> coverDetails = Lists.newArrayList();
-        Map<String,Object> map1 = Maps.newLinkedHashMap();
-        map1.put("planCoverageName","Premium Plan One");
-        map1.put("planCoverageSumAssured","50000");
-        coverDetails.add(map1);
-
-        map1 = Maps.newLinkedHashMap();
-        map1.put("planCoverageName","Cover One");
-        map1.put("planCoverageSumAssured","5000");
-        coverDetails.add(map1);
-
-        map1 = Maps.newLinkedHashMap();
-        map1.put("planCoverageName","Cover Two");
-        map1.put("planCoverageSumAssured","5004");
-        coverDetails.add(map1);
-
-        map1 = Maps.newLinkedHashMap();
-        map1.put("planCoverageName","Cover Four");
-        map1.put("planCoverageSumAssured","5006");
-        coverDetails.add(map1);
-        map.put("coverDetails",coverDetails);
+        List<Map<String,Object>> coverDetails =  ilPolicyDto.getProposalPlanDetail().getRiderDetails().parallelStream().map(new Function<ILRiderDetail, Map<String,Object>>() {
+            @Override
+            public Map<String, Object> apply(ILRiderDetail ilRiderDetail) {
+                Map<String,Object> coverageSumAssured = Maps.newLinkedHashMap();
+                coverageSumAssured.put("planCoverageName", ilRiderDetail.getCoverageName());
+                coverageSumAssured.put("planCoverageSumAssured", ilRiderDetail.getSumAssured().toString());
+                return coverageSumAssured;
+            }
+        }).collect(Collectors.toList());
+        Map<String,Object> coverageSumAssured = Maps.newLinkedHashMap();
+        coverageSumAssured.put("planCoverageName", ilPolicyDto.getProposalPlanDetail().getPlanName());
+        coverageSumAssured.put("planCoverageSumAssured", ilPolicyDto.getProposalPlanDetail().getSumAssured().toString());
+        ilPolicyDetailMap.put("coverDetails", coverDetails);
 
         List<Map<String,Object>> premiumList = Lists.newArrayList();
         Map<String,Object> premiumMap = Maps.newLinkedHashMap();
-        premiumMap.put("netPremium","1000000");
-        premiumMap.put("underWritingLoading","1100000");
-        premiumMap.put("underWritingDiscount","1110000");
-        premiumMap.put("totalPremium","100011111");
+        premiumMap.put("netPremium", ilPolicyDto.getPremiumPaymentDetails().getPremiumDetail().getTotalPremium().toString());
+        premiumMap.put("underWritingLoading", ilPolicyDto.getPremiumPaymentDetails().getPremiumDetail().getTotalPremium().toString());
+        premiumMap.put("underWritingDiscount", ilPolicyDto.getPremiumPaymentDetails().getPremiumDetail().getTotalPremium().toString());
+        premiumMap.put("totalPremium", ilPolicyDto.getPremiumPaymentDetails().getPremiumDetail().getTotalPremium().toString());
         premiumList.add(premiumMap);
-        map.put("premiumDetails",premiumList);
-        return Lists.newArrayList(map);
+        ilPolicyDetailMap.put("premiumDetails", premiumList);
+        return Lists.newArrayList(ilPolicyDetailMap);
+    }
+
+    private String getDominantAgentId(Set<AgentDetailDto> agentCommissionShares){
+       Optional<AgentDetailDto> agentCommissionShareOptional = agentCommissionShares.parallelStream().max(new Comparator<AgentDetailDto>() {
+            @Override
+            public int compare(AgentDetailDto agentLeft, AgentDetailDto agentRight) {
+                  return agentLeft.getCommission().compareTo(agentRight.getCommission());
+            }
+        });
+        if (agentCommissionShareOptional.isPresent()){
+            return agentCommissionShareOptional.get().getAgentId();
+        }
+        return null;
     }
 
 }

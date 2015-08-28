@@ -115,7 +115,8 @@ public class ILPolicyFinder {
         dto.setPolicyStatus(policy.get("policyStatus").toString());
         dto.setProposal((Proposal)policy.get("proposal"));
         dto.setPolicyNumber((PolicyNumber) policy.get("policyNumber"));
-        dto.setSubmittedOn(policy.get("submittedOn") != null ? policy.get("submittedOn").toString() : "");
+        dto.setInceptionOn(policy.get("inceptionOn") != null ? policy.get("inceptionOn").toString() : "");
+        dto.setInceptionOn(policy.get("expiredOn") != null ? policy.get("expiredOn").toString() : "");
         dto.setProposerDocuments(policy.get("proposalDocuments") != null ? (List) policy.get("proposalDocuments") : Collections.EMPTY_LIST);
         return dto;
     }

@@ -18,12 +18,16 @@ public class GLProposerDocument {
 
     private boolean mandatory;
 
+    private boolean requireForSubmission;
+
+
     public GLProposerDocument(String documentId, String documentName, String gridFsDocId, String contentType, boolean mandatory) {
         this.documentId = documentId;
         this.documentName = documentName;
         this.gridFsDocId = gridFsDocId;
         this.contentType = contentType;
         this.mandatory = mandatory;
+        this.requireForSubmission = true;
     }
 
     public GLProposerDocument updateWithNameAndContent(String documentName, String gridFsDocId, String contentType) {

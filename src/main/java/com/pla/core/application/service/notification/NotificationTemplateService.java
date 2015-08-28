@@ -4,6 +4,9 @@ import com.google.common.collect.ImmutableMap;
 import com.google.common.io.Files;
 import com.pla.core.domain.model.notification.*;
 import com.pla.core.query.NotificationFinder;
+import com.pla.sharedkernel.service.GHMandatoryDocumentChecker;
+import com.pla.sharedkernel.service.GLMandatoryDocumentChecker;
+import com.pla.sharedkernel.service.ILMandatoryDocumentChecker;
 import com.pla.publishedlanguage.contract.IProcessInfoAdapter;
 import com.pla.sharedkernel.application.CreateNotificationHistoryCommand;
 import com.pla.sharedkernel.domain.model.ProcessType;
@@ -55,7 +58,17 @@ public class NotificationTemplateService {
     @Autowired
     private IProcessInfoAdapter iProcessInfoAdapter;
 
-    public static ImmutableMap<LineOfBusinessEnum,String> proposalEntitiesMap = ImmutableMap.of(LineOfBusinessEnum.GROUP_LIFE,"group_life_proposal",LineOfBusinessEnum.GROUP_HEALTH,"group_health_proposal");
+    @Autowired
+    private GLMandatoryDocumentChecker glMandatoryDocumentChecker;
+
+    @Autowired
+    private ILMandatoryDocumentChecker ilMandatoryDocumentChecker;
+
+    @Autowired
+    private GHMandatoryDocumentChecker ghMandatoryDocumentChecker;
+
+
+    public static ImmutableMap<LineOfBusinessEnum,String> proposalEntitiesMap = ImmutableMap.of(LineOfBusinessEnum.GROUP_LIFE,"group_life_proposal",LineOfBusinessEnum.GROUP_HEALTH,"group_health_proposal",LineOfBusinessEnum.INDIVIDUAL_LIFE,"individual_life_proposal");
 
     public static ImmutableMap<LineOfBusinessEnum,String> quotationEntitiesMap = ImmutableMap.of(LineOfBusinessEnum.GROUP_LIFE,"group_life_quotation",LineOfBusinessEnum.GROUP_HEALTH,"group_health_quotation",
             LineOfBusinessEnum.INDIVIDUAL_LIFE,"individual_life_quotation");
@@ -81,14 +94,17 @@ public class NotificationTemplateService {
         return emailContentMap;
     }
 
-    public HashMap<String,String> getProposalNotificationTemplateData(LineOfBusinessEnum lineOfBusiness, String proposalId){
+    public HashMap<String,String> getProposalNotificationTemplateData(LineOfBusinessEnum lineOfBusiness, String proposalId, WaitingForEnum waitingFor){
         Criteria proposalCriteria = Criteria.where("_id").is(proposalId);
         Query query = new Query(proposalCriteria);
-        query.fields().include("proposer.proposerName").include("proposalNumber.proposalNumber").include("sharedOn").include("insureds.planPremiumDetail.planId").
-                include("proposer.contactDetail.addressLine1").include("proposer.contactDetail.addressLine2").include("proposer.contactDetail.province").include("proposer.contactDetail.town")
-                .include("proposer.contactDetail.emailAddress").exclude("_id");
-        List<Map> proposalNotificationDetailMap =  mongoTemplate.find(query, Map.class, proposalEntitiesMap.get(lineOfBusiness));
-        HashMap<String,String>  proposalNotificationMap = transformQuotationNotificationData(proposalNotificationDetailMap);
+        query.fields().include("proposer.firstName").include("proposer.surname").include("proposer.title").include("proposalNumber").include("proposer.residentialAddress.address.address1")
+                .include("proposer.residentialAddress.address.address2").include("proposer.residentialAddress.address.province").include("proposer.residentialAddress.address.town")
+                .include("submittedOn").exclude("_id");
+        List<Map> proposalNotificationDetailMap = mongoTemplate.find(query, Map.class, proposalEntitiesMap.get(lineOfBusiness));
+        HashMap<String,String>  proposalNotificationMap = transformProposalNotificationData(proposalNotificationDetailMap);
+        String waitingForEnum = waitingFor!=null?waitingFor.name():"";
+        StringBuilder documentNameBuilder = getDocumentsRequiredSubmission(waitingForEnum,lineOfBusiness,proposalId);
+        proposalNotificationMap.put("documentName",documentNameBuilder.toString());
         return proposalNotificationMap;
     }
 
@@ -97,7 +113,7 @@ public class NotificationTemplateService {
             case QUOTATION:
                 return getQuotationNotificationTemplateData(lineOfBusinessEnum,id).get("requestNumber").toString();
             case PROPOSAL:
-                return getProposalNotificationTemplateData(lineOfBusinessEnum,id).get("requestNumber").toString();
+                return getProposalNotificationTemplateData(lineOfBusinessEnum,id, null).get("requestNumber").toString();
         }
         return "";
     }
@@ -109,14 +125,39 @@ public class NotificationTemplateService {
             public Map<String, String> apply(Map map) {
                 Map<String, Object> proposerMap = (Map) map.get("proposer");
                 if (isNotEmpty(proposerMap)) {
-                    notificationQuotationMap.put("proposerName", proposerMap.get("proposerName")!=null?proposerMap.get("proposerName").toString():"");
+                    notificationQuotationMap.put("proposerName", proposerMap.get("proposerName").toString());
                     Map<String, Object> contactDetailMap = (Map) proposerMap.get("contactDetail");
-                    notificationQuotationMap.put("addressLine1",contactDetailMap.get("addressLine1")!=null?contactDetailMap.get("addressLine1").toString():"");
-                    notificationQuotationMap.put("addressLine2", contactDetailMap.get("addressLine2")!=null?contactDetailMap.get("addressLine2").toString():"");
-                    notificationQuotationMap.put("province", contactDetailMap.get("province")!=null?contactDetailMap.get("province").toString():"");
-                    notificationQuotationMap.put("town", contactDetailMap.get("town")!=null?contactDetailMap.get("town").toString():"");
-                    notificationQuotationMap.put("emailAddress", contactDetailMap.get("emailAddress")!=null?contactDetailMap.get("emailAddress").toString():"");
-                    notificationQuotationMap.put("requestNumber", map.get("quotationNumber")!=null?map.get("quotationNumber").toString():"");
+                    notificationQuotationMap.put("addressLine1", contactDetailMap.get("addressLine1").toString());
+                    notificationQuotationMap.put("addressLine2", contactDetailMap.get("addressLine2").toString());
+                    notificationQuotationMap.put("province", contactDetailMap.get("province").toString());
+                    notificationQuotationMap.put("town", contactDetailMap.get("town").toString());
+                    notificationQuotationMap.put("emailAddress", contactDetailMap.get("emailAddress").toString());
+                    notificationQuotationMap.put("requestNumber", map.get("quotationNumber").toString());
+                }
+                return notificationQuotationMap;
+            }
+        }).collect(Collectors.toList());
+        return notificationQuotationMap;
+    }
+
+    private HashMap<String,String> transformProposalNotificationData(List<Map> notificationData){
+        HashMap<String,String> notificationQuotationMap = new HashMap<String,String>();
+        notificationData.parallelStream().map(new Function<Map, Map<String, String>>() {
+            @Override
+            public Map<String, String> apply(Map map) {
+                Map<String, Object> proposerMap = (Map) map.get("proposer");
+                if (isNotEmpty(proposerMap)) {
+                    notificationQuotationMap.put("firstName", proposerMap.get("firstName")!=null?proposerMap.get("firstName").toString():"");
+                    notificationQuotationMap.put("surname", proposerMap.get("surname")!=null?proposerMap.get("surname").toString():"");
+                    notificationQuotationMap.put("title", proposerMap.get("title")!=null?proposerMap.get("title").toString():"");
+                    Map<String, Object> contactDetailMap = (Map) proposerMap.get("residentialAddress");
+                    Map<String, Object> addressMap = (Map) contactDetailMap.get("address");
+                    notificationQuotationMap.put("addressLine1",addressMap.get("address1")!=null?addressMap.get("address1").toString():"");
+                    notificationQuotationMap.put("addressLine2", addressMap.get("address2")!=null?addressMap.get("address2").toString():"");
+                    notificationQuotationMap.put("province", addressMap.get("province")!=null?addressMap.get("province").toString():"");
+                    notificationQuotationMap.put("town", addressMap.get("town")!=null?addressMap.get("town").toString():"");
+                    notificationQuotationMap.put("emailAddress", proposerMap.get("emailAddress")!=null?proposerMap.get("emailAddress").toString():"");
+                    notificationQuotationMap.put("requestNumber", map.get("proposalNumber")!=null?map.get("proposalNumber").toString():"");
                 }
                 return notificationQuotationMap;
             }
@@ -156,7 +197,7 @@ public class NotificationTemplateService {
                 .withWaitingFor(waitingFor)
                 .withReminderType(reminderType)
                 .withEmailAddress(notificationDetail.get("emailAddress") != null ? notificationDetail.get("emailAddress").toString() : "")
-                .withReminderTemplate(convert(templateFile, notificationDetail, lineOfBusiness,requestNumber))
+                .withReminderTemplate(convert(templateFile, notificationDetail, lineOfBusiness, requestNumber))
                 .withRoleType(roleType);
         return notificationBuilder;
     }
@@ -182,5 +223,26 @@ public class NotificationTemplateService {
         XHTMLConverter.getInstance().convert(document, outputStream, options);
         FileUtils.forceDelete(tempFile);
         return outputStream.toString();
+    }
+
+    private StringBuilder getDocumentsRequiredSubmission(String waitingFor,LineOfBusinessEnum lineOfBusiness,String proposalId){
+        StringBuilder documentNameBuilder = new StringBuilder();
+        if (WaitingForEnum.MANDATORY_DOCUMENTS.name().equals(waitingFor)){
+            List<String> documentsRequiredForSubmission=null;
+            switch (lineOfBusiness){
+                case INDIVIDUAL_LIFE:
+                    documentsRequiredForSubmission  = ilMandatoryDocumentChecker.findDocumentRequiredForSubmission(proposalId);
+                    break;
+                case GROUP_LIFE:
+                    documentsRequiredForSubmission = glMandatoryDocumentChecker.findDocumentRequiredForSubmission(proposalId);
+                    break;
+                case GROUP_HEALTH:
+                    documentsRequiredForSubmission = ghMandatoryDocumentChecker.findDocumentRequiredForSubmission(proposalId);
+            }
+            for (String documentName : documentsRequiredForSubmission ){
+                documentNameBuilder.append(documentName+"\n\t");
+            }
+        }
+        return documentNameBuilder;
     }
 }

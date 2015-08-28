@@ -218,6 +218,14 @@ public class ILQuotation extends AbstractAggregateRoot<QuotationId> implements I
         this.versionNumber = versionNumber;
     }
 
+    public void shareQuotation(LocalDate sharedOn) {
+        if (ILQuotationStatus.GENERATED.equals(this.ilQuotationStatus)) {
+            this.ilQuotationStatus = ILQuotationStatus.SHARED;
+            this.sharedOn = sharedOn;
+            registerEvent(new ILQuotationSharedEvent(quotationId));
+        }
+    }
+
     @Override
     public QuotationId getIdentifier() {
         return this.getQuotationId();

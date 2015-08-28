@@ -5,7 +5,6 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.mongodb.gridfs.GridFSDBFile;
 import com.pla.core.query.MasterFinder;
-import com.pla.core.query.PlanFinder;
 import com.pla.individuallife.proposal.application.command.*;
 import com.pla.individuallife.proposal.domain.model.ILProposalStatus;
 import com.pla.individuallife.proposal.exception.ILProposalException;
@@ -17,8 +16,7 @@ import com.pla.individuallife.quotation.presentation.dto.ILSearchQuotationDto;
 import com.pla.sharedkernel.domain.model.Relationship;
 import com.wordnik.swagger.annotations.ApiOperation;
 import org.apache.poi.util.IOUtils;
-import org.axonframework.commandhandling.CommandBus;
-import org.axonframework.commandhandling.gateway.GatewayProxyFactory;
+import org.axonframework.commandhandling.gateway.CommandGateway;
 import org.bson.types.ObjectId;
 import org.nthdimenzion.presentation.Result;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,7 +36,6 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.*;
-import java.util.concurrent.TimeoutException;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -54,8 +51,7 @@ public class ILProposalController {
 
     public static ImmutableMap<ILProposalStatus,String> messageMap  = ImmutableMap.of(ILProposalStatus.APPROVED,"Proposal approved successfully",ILProposalStatus.RETURNED,"Proposal returned successfully",ILProposalStatus.DECLINED,"Proposal rejected successfully",ILProposalStatus.PENDING_DECISION,"Proposal held successfully",
             ILProposalStatus.UNDERWRITING_LEVEL_TWO,"Successfully Routed to Senior UnderWriter");
-    private final ILProposalCommandGateway proposalCommandGateway;
-    private final PlanFinder planFinder;
+
     @Autowired
     private MasterFinder masterFinder;
     @Autowired
@@ -68,11 +64,9 @@ public class ILProposalController {
     private GridFsTemplate gridFsTemplate;
 
     @Autowired
-    public ILProposalController(CommandBus commandBus, PlanFinder planFinder) {
-        this.planFinder = planFinder;
-        GatewayProxyFactory factory = new GatewayProxyFactory(commandBus);
-        proposalCommandGateway = factory.createGateway(ILProposalCommandGateway.class);
-    }
+    private CommandGateway commandGateway;
+
+
 
     @ResponseBody
     @RequestMapping(value = "/create" , method = RequestMethod.POST)
@@ -89,10 +83,8 @@ public class ILProposalController {
             UserDetails userDetails = getLoggedInUserDetail(request);
             createProposalCommand.setUserDetails(userDetails);
             createProposalCommand.setProposalId(proposalId);
-            proposalId =   proposalCommandGateway.createProposal(createProposalCommand);
-        } catch (TimeoutException e) {
-            return new ResponseEntity(Result.failure(e.getMessage()), HttpStatus.PRECONDITION_FAILED);
-        } catch (InterruptedException e) {
+            proposalId =  commandGateway.sendAndWait(createProposalCommand);
+        }catch (Exception e){
             return new ResponseEntity(Result.failure(e.getMessage()), HttpStatus.PRECONDITION_FAILED);
         }
         return new ResponseEntity(Result.success("Proposal got created successfully",proposalId), HttpStatus.OK);
@@ -109,10 +101,8 @@ public class ILProposalController {
         try {
             UserDetails userDetails = getLoggedInUserDetail(request);
             cmd.setUserDetails(userDetails);
-            proposalId =  proposalCommandGateway.updateProposedAssuredAndAgents(cmd);
-        } catch (TimeoutException e) {
-            return new ResponseEntity(Result.failure(e.getMessage()), HttpStatus.PRECONDITION_FAILED);
-        } catch (InterruptedException e) {
+            proposalId = commandGateway.sendAndWait(cmd);
+        }catch (Exception e){
             return new ResponseEntity(Result.failure(e.getMessage()), HttpStatus.PRECONDITION_FAILED);
         }
         return new ResponseEntity(Result.success("Proposal updated with ProposedAssured and Agent Details successfully",proposalId), HttpStatus.OK);
@@ -128,10 +118,8 @@ public class ILProposalController {
         try {
             UserDetails userDetails = getLoggedInUserDetail(request);
             cmd.setUserDetails(userDetails);
-            proposalId =  proposalCommandGateway.updateWithProposer(cmd);
-        } catch (TimeoutException e) {
-            return new ResponseEntity(Result.failure(e.getMessage()), HttpStatus.PRECONDITION_FAILED);
-        } catch (InterruptedException e) {
+            proposalId =  commandGateway.sendAndWait(cmd);
+        } catch (Exception e) {
             return new ResponseEntity(Result.failure(e.getMessage()), HttpStatus.PRECONDITION_FAILED);
         }
         return new ResponseEntity(Result.success("Proposal updated with Proposer Details successfully",proposalId), HttpStatus.OK);
@@ -147,10 +135,8 @@ public class ILProposalController {
         try {
             UserDetails userDetails = getLoggedInUserDetail(request);
             cmd.setUserDetails(userDetails);
-            proposalId =   proposalCommandGateway.updateWithPlanDetail(cmd);
-        } catch (TimeoutException e) {
-            return new ResponseEntity(Result.failure(e.getMessage()), HttpStatus.PRECONDITION_FAILED);
-        } catch (InterruptedException e) {
+            proposalId =  commandGateway.sendAndWait(cmd);
+        } catch (Exception e) {
             return new ResponseEntity(Result.failure(e.getMessage()), HttpStatus.PRECONDITION_FAILED);
         }
         return new ResponseEntity(Result.success("Proposal updated with Plan and Beneficiary Details successfully",proposalId), HttpStatus.OK);
@@ -165,10 +151,8 @@ public class ILProposalController {
         try {
             UserDetails userDetails = getLoggedInUserDetail(request);
             cmd.setUserDetails(userDetails);
-            proposalCommandGateway.updateCompulsoryHealthStatement(cmd);
-        } catch (TimeoutException e) {
-            return new ResponseEntity(Result.failure(e.getMessage()), HttpStatus.PRECONDITION_FAILED);
-        } catch (InterruptedException e) {
+            commandGateway.sendAndWait(cmd);
+        } catch (Exception e) {
             return new ResponseEntity(Result.failure(e.getMessage()), HttpStatus.PRECONDITION_FAILED);
         }
         List<QuestionDto> list = cmd.getCompulsoryHealthDetails();
@@ -185,10 +169,8 @@ public class ILProposalController {
         try {
             UserDetails userDetails = getLoggedInUserDetail(request);
             cmd.setUserDetails(userDetails);
-            proposalId  = proposalCommandGateway.updateGeneralDetails(cmd);
-        } catch (TimeoutException e) {
-            return new ResponseEntity(Result.failure(e.getMessage()), HttpStatus.PRECONDITION_FAILED);
-        } catch (InterruptedException e) {
+            proposalId  = commandGateway.sendAndWait(cmd);
+        } catch (Exception e) {
             return new ResponseEntity(Result.failure(e.getMessage()), HttpStatus.PRECONDITION_FAILED);
         }
         return new ResponseEntity(Result.success("Proposal updated with General Details successfully",proposalId), HttpStatus.OK);
@@ -204,10 +186,8 @@ public class ILProposalController {
         try {
             UserDetails userDetails = getLoggedInUserDetail(request);
             cmd.setUserDetails(userDetails);
-            proposalId = proposalCommandGateway.updateAdditionalDetails(cmd);
-        } catch (TimeoutException e) {
-            return new ResponseEntity(Result.failure(e.getMessage()), HttpStatus.PRECONDITION_FAILED);
-        } catch (InterruptedException e) {
+            proposalId = commandGateway.sendAndWait(cmd);
+        } catch (Exception e) {
             return new ResponseEntity(Result.failure(e.getMessage()), HttpStatus.PRECONDITION_FAILED);
         }
         return new ResponseEntity(Result.success("Proposal updated with Additional Details successfully",proposalId), HttpStatus.OK);
@@ -223,10 +203,8 @@ public class ILProposalController {
         try {
             UserDetails userDetails = getLoggedInUserDetail(request);
             cmd.setUserDetails(userDetails);
-            proposalId = proposalCommandGateway.updateFamilyPersonal(cmd);
-        } catch (TimeoutException e) {
-            return new ResponseEntity(Result.failure(e.getMessage()), HttpStatus.PRECONDITION_FAILED);
-        } catch (InterruptedException e) {
+            proposalId = commandGateway.sendAndWait(cmd);
+        } catch (Exception e) {
             return new ResponseEntity(Result.failure(e.getMessage()), HttpStatus.PRECONDITION_FAILED);
         }
         return new ResponseEntity(Result.success("Proposal updated with Family and Personal Details successfully",proposalId), HttpStatus.OK);
@@ -243,10 +221,8 @@ public class ILProposalController {
         try {
             UserDetails userDetails = getLoggedInUserDetail(request);
             cmd.setUserDetails(userDetails);
-            proposalId =  proposalCommandGateway.updatePremiumPaymentDetails(cmd);
-        } catch (TimeoutException e) {
-            return new ResponseEntity(Result.failure(e.getMessage()), HttpStatus.PRECONDITION_FAILED);
-        } catch (InterruptedException e) {
+            proposalId = commandGateway.sendAndWait(cmd);
+        } catch (Exception e) {
             return new ResponseEntity(Result.failure(e.getMessage()), HttpStatus.PRECONDITION_FAILED);
         }
         return new ResponseEntity(Result.success("Proposal updated with Premium Payment Details successfully",proposalId), HttpStatus.OK);
@@ -257,7 +233,7 @@ public class ILProposalController {
     public ResponseEntity uploadMandatoryDocument(ILProposalDocumentCommand cmd, HttpServletRequest request) {
         cmd.setUserDetails(getLoggedInUserDetail(request));
         try {
-            String proposalId = proposalCommandGateway.uploadMandatoryDocument(cmd);
+            String proposalId = commandGateway.sendAndWait(cmd);
             return new ResponseEntity(Result.success("Document uploaded successfully",proposalId), HttpStatus.OK);
         } catch (Exception e) {
             e.printStackTrace();
@@ -270,8 +246,8 @@ public class ILProposalController {
     @ApiOperation(httpMethod = "POST", value = "To submit proposal for approval")
     public ResponseEntity submitProposal(@RequestBody SubmitILProposalCommand cmd, HttpServletRequest request) {
         try {
-           cmd.setUserDetails(getLoggedInUserDetail(request));
-            String proposalId  = proposalCommandGateway.submitProposal(cmd);
+            cmd.setUserDetails(getLoggedInUserDetail(request));
+            String proposalId  = commandGateway.sendAndWait(cmd);
             return new ResponseEntity(Result.success("Proposal submitted successfully",proposalId), HttpStatus.OK);
         } catch (Exception e) {
             e.printStackTrace();
@@ -285,7 +261,7 @@ public class ILProposalController {
     public ResponseEntity approveProposal(@RequestBody ILProposalApprovalCommand cmd, HttpServletRequest request) {
         try {
             cmd.setUserDetails(getLoggedInUserDetail(request));
-            String proposalId = proposalCommandGateway.approveProposal(cmd);
+            String proposalId = commandGateway.sendAndWait(cmd);
             return new ResponseEntity(Result.success(messageMap.get(cmd.getStatus()),proposalId), HttpStatus.OK);
         }catch (ILProposalException e){
             return new ResponseEntity(Result.failure(e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
@@ -302,7 +278,7 @@ public class ILProposalController {
     public ResponseEntity routeToNextLevel(@RequestBody ILProposalUnderwriterNextLevelCommand cmd, HttpServletRequest request) {
         try {
             cmd.setUserDetails(getLoggedInUserDetail(request));
-            String proposalId =  proposalCommandGateway.routeToNextLevel(cmd);
+            String proposalId =  commandGateway.sendAndWait(cmd);
             return new ResponseEntity(Result.success("Proposal rejected successfully",proposalId), HttpStatus.OK);
         } catch (Exception e) {
             e.printStackTrace();
@@ -376,10 +352,11 @@ public class ILProposalController {
     @RequestMapping(method = RequestMethod.GET, value = "/getproposal/{proposalId}")
     @ApiOperation(httpMethod = "GET", value = "This call for edit proposal screen.")
     @ResponseBody
-    public ILProposalDto getProposalById(@PathVariable("proposalId") String proposalId) {
-        ILProposalDto dto = proposalFinder.getProposalById(proposalId);
+    public  ILProposalDto  getProposalById(@PathVariable("proposalId") String proposalId) {
+        ILProposalDto dto = null;
+        dto = proposalFinder.getProposalById(proposalId);
         checkArgument(dto != null, "Proposal not found");
-        return dto;
+        return  dto ;
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/getproposalnumber/{proposalId}")
@@ -508,7 +485,7 @@ public class ILProposalController {
     @ResponseBody
     @ApiOperation(httpMethod = "GET", value = "To list mandatory documents which is being configured in Mandatory Document SetUp")
     public List<ILProposalMandatoryDocumentDto> findMandatoryDocuments(@PathVariable("proposalId") String proposalId) {
-        return ilProposalService.findMandatoryDocuments(proposalId);
+        return ilProposalService.findAllMandatoryDocument(proposalId);
     }
 
     @RequestMapping(value = "/getadditionaldocuments/{proposalId}", method = RequestMethod.GET)

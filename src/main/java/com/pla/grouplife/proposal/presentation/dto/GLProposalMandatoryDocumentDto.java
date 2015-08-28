@@ -29,6 +29,8 @@ public class GLProposalMandatoryDocumentDto {
 
     private String gridFsDocId;
 
+    private boolean isRequireForSubmission;
+
     public GLProposalMandatoryDocumentDto(String documentId, String documentName) {
         this.documentId = documentId;
         this.documentName = documentName;

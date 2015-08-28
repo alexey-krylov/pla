@@ -54,6 +54,8 @@ public class ILProposalDto {
 
     private String proposalStatus;
 
+    private Set<ILProposerDocument> proposalDocuments;
+
     private PremiumDetailDto premiumDetailDto;
 
 }

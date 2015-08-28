@@ -6,6 +6,7 @@ import com.pla.individuallife.proposal.domain.model.ILProposalAggregate;
 import com.pla.individuallife.proposal.domain.model.ILProposalStatus;
 import com.pla.individuallife.proposal.domain.model.ILProposalStatusAudit;
 import com.pla.individuallife.proposal.repository.ILProposalStatusAuditRepository;
+import com.pla.sharedkernel.service.ILMandatoryDocumentChecker;
 import com.pla.publishedlanguage.contract.IProcessInfoAdapter;
 import com.pla.sharedkernel.application.CreateProposalNotificationCommand;
 import com.pla.sharedkernel.domain.model.ProcessType;
@@ -57,6 +58,9 @@ public class IndividualLifeProposalSaga  extends AbstractAnnotatedSaga implement
     @Autowired
     private ILProposalStatusAuditRepository ilProposalStatusAuditRepository;
 
+    @Autowired
+    private ILMandatoryDocumentChecker mandatoryDocumentChecker;
+
     private List<ScheduleToken> scheduledTokens = Lists.newArrayList();
 
     @StartSaga
@@ -65,20 +69,22 @@ public class IndividualLifeProposalSaga  extends AbstractAnnotatedSaga implement
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("Handling IL Proposal Submitted Event .....", event);
         }
-        int noOfDaysToPurge = processInfoAdapter.getPurgeTimePeriod(LineOfBusinessEnum.INDIVIDUAL_LIFE, ProcessType.PROPOSAL);
-        int noOfDaysToClosure = processInfoAdapter.getClosureTimePeriod(LineOfBusinessEnum.INDIVIDUAL_LIFE, ProcessType.PROPOSAL);
-        int firstReminderDay = processInfoAdapter.getDaysForFirstReminder(LineOfBusinessEnum.INDIVIDUAL_LIFE, ProcessType.PROPOSAL);
-        ILProposalAggregate proposalAggregate = ilProposalMongoRepository.load(event.getProposalId());
-        DateTime proposalSubmitDate = proposalAggregate.getSubmittedOn();
-        DateTime firstReminderDateTime = proposalSubmitDate.plusDays(firstReminderDay);
-        DateTime purgeScheduleDateTime = proposalSubmitDate.plusDays(noOfDaysToPurge);
-        DateTime closureScheduleDateTime = proposalSubmitDate.plusDays(noOfDaysToClosure);
-        ScheduleToken firstReminderScheduleToken = eventScheduler.schedule(DateTime.now(), new ILProposalReminderEvent(event.getProposalId()));
-        ScheduleToken purgeScheduleToken = eventScheduler.schedule(DateTime.now(), new ILProposalPurgeEvent(event.getProposalId()));
-        ScheduleToken closureScheduleToken = eventScheduler.schedule(DateTime.now(), new ILProposalClosureEvent(event.getProposalId()));
-        scheduledTokens.add(firstReminderScheduleToken);
-        scheduledTokens.add(purgeScheduleToken);
-        scheduledTokens.add(closureScheduleToken);
+        if (mandatoryDocumentChecker.isRequiredForSubmission(event.getProposalId().getProposalId())) {
+            int noOfDaysToPurge = processInfoAdapter.getPurgeTimePeriod(LineOfBusinessEnum.INDIVIDUAL_LIFE, ProcessType.PROPOSAL);
+            int noOfDaysToClosure = processInfoAdapter.getClosureTimePeriod(LineOfBusinessEnum.INDIVIDUAL_LIFE, ProcessType.PROPOSAL);
+            int firstReminderDay = processInfoAdapter.getDaysForFirstReminder(LineOfBusinessEnum.INDIVIDUAL_LIFE, ProcessType.PROPOSAL);
+            ILProposalAggregate proposalAggregate = ilProposalMongoRepository.load(event.getProposalId());
+            DateTime proposalSubmitDate = proposalAggregate.getSubmittedOn();
+            DateTime firstReminderDateTime = proposalSubmitDate.plusDays(firstReminderDay);
+            DateTime purgeScheduleDateTime = proposalSubmitDate.plusDays(noOfDaysToPurge);
+            DateTime closureScheduleDateTime = proposalSubmitDate.plusDays(noOfDaysToClosure);
+            ScheduleToken firstReminderScheduleToken = eventScheduler.schedule(firstReminderDateTime, new ILProposalReminderEvent(event.getProposalId()));
+            ScheduleToken purgeScheduleToken = eventScheduler.schedule(purgeScheduleDateTime, new ILProposalPurgeEvent(event.getProposalId()));
+            ScheduleToken closureScheduleToken = eventScheduler.schedule(closureScheduleDateTime, new ILProposalClosureEvent(event.getProposalId()));
+            scheduledTokens.add(firstReminderScheduleToken);
+            scheduledTokens.add(purgeScheduleToken);
+            scheduledTokens.add(closureScheduleToken);
+        }
     }
 
     @SagaEventHandler(associationProperty = "proposalId")
@@ -87,7 +93,7 @@ public class IndividualLifeProposalSaga  extends AbstractAnnotatedSaga implement
             LOGGER.debug("Handling IL Proposal Reminder Event .....", event);
         }
         ILProposalAggregate proposalAggregate = ilProposalMongoRepository.load(event.getProposalId());
-        if (ILProposalStatus.DRAFT.equals(proposalAggregate.getProposalStatus())) {
+        if (ILProposalStatus.PENDING_ACCEPTANCE.equals(proposalAggregate.getProposalStatus()) && mandatoryDocumentChecker.isRequiredForSubmission(event.getProposalId().getProposalId())) {
             this.noOfReminderSent = noOfReminderSent + 1;
             System.out.println("************ Send Reminder ****************");
             commandGateway.send(new CreateProposalNotificationCommand(event.getProposalId(), RolesUtil.INDIVIDUAL_LIFE__PROPOSAL_PROCESSOR_ROLE, LineOfBusinessEnum.INDIVIDUAL_LIFE, ProcessType.PROPOSAL,
@@ -97,7 +103,7 @@ public class IndividualLifeProposalSaga  extends AbstractAnnotatedSaga implement
                 int secondReminderDay = processInfoAdapter.getDaysForSecondReminder(LineOfBusinessEnum.INDIVIDUAL_LIFE, ProcessType.PROPOSAL);
                 DateTime quotationSharedDate = proposalAggregate.getSubmittedOn();
                 DateTime secondReminderDateTime = quotationSharedDate.plusDays(firstReminderDay + secondReminderDay);
-                ScheduleToken secondReminderScheduleToken = eventScheduler.schedule(DateTime.now().plusDays(1), new ILProposalReminderEvent(event.getProposalId()));
+                ScheduleToken secondReminderScheduleToken = eventScheduler.schedule(secondReminderDateTime, new ILProposalReminderEvent(event.getProposalId()));
                 scheduledTokens.add(secondReminderScheduleToken);
             }
         }
@@ -109,8 +115,10 @@ public class IndividualLifeProposalSaga  extends AbstractAnnotatedSaga implement
             LOGGER.debug("Handling IL Proposal Closure Event .....", event);
         }
         ILProposalAggregate proposalAggregate = ilProposalMongoRepository.load(event.getProposalId());
+        commandGateway.send(new CreateProposalNotificationCommand(event.getProposalId(), RolesUtil.INDIVIDUAL_LIFE__PROPOSAL_PROCESSOR_ROLE, LineOfBusinessEnum.INDIVIDUAL_LIFE, ProcessType.PROPOSAL,
+                WaitingForEnum.MANDATORY_DOCUMENTS,ReminderTypeEnum.CANCELLATION ));
         if (ILProposalStatus.PENDING_ACCEPTANCE.equals(proposalAggregate.getProposalStatus())) {
-           commandGateway.send(new ILProposalClosureCommand(event.getProposalId()));
+            commandGateway.send(new ILProposalClosureCommand(event.getProposalId()));
         }
     }
 
@@ -120,5 +128,6 @@ public class IndividualLifeProposalSaga  extends AbstractAnnotatedSaga implement
         ILProposalStatusAudit groupHealthProposalStatusAudit = new ILProposalStatusAudit(ObjectId.get(), ilProposalStatusAuditEvent.getProposalId(), ilProposalStatusAuditEvent.getStatus(), ilProposalStatusAuditEvent.getPerformedOn(), ilProposalStatusAuditEvent.getActor(), ilProposalStatusAuditEvent.getComments());
         ilProposalStatusAuditRepository.save(groupHealthProposalStatusAudit);
     }
+
 
 }

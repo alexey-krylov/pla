@@ -55,12 +55,12 @@ public class NotificationCommandHandler {
     }
 
     @CommandHandler
-    public void createProposalNotification(CreateProposalNotificationCommand createProposalNotificationCommand) throws Exception {
+     public void createProposalNotification(CreateProposalNotificationCommand createProposalNotificationCommand) throws Exception {
         checkArgument(createProposalNotificationCommand!=null,"Create Proposal command cannot be empty");
         JpaRepository<Notification, NotificationId> notificationRepository = jpaRepositoryFactory.getCrudRepository(Notification.class);
         NotificationTemplate notificationTemplate = notificationTemplateRepository.findNotification(createProposalNotificationCommand.getLineOfBusiness(), createProposalNotificationCommand.getProcessType(), createProposalNotificationCommand.getWaitingFor(), createProposalNotificationCommand.getReminderType());
         checkArgument(notificationTemplate!=null,"Notification Template is not uploaded");
-        HashMap<String,String>  proposalNotificationDetailMap = notificationTemplateService.getQuotationNotificationTemplateData(createProposalNotificationCommand.getLineOfBusiness(), createProposalNotificationCommand.getProposalId().getProposalId());
+        HashMap<String,String>  proposalNotificationDetailMap = notificationTemplateService.getProposalNotificationTemplateData(createProposalNotificationCommand.getLineOfBusiness(), createProposalNotificationCommand.getProposalId().getProposalId(),createProposalNotificationCommand.getWaitingFor());
         NotificationBuilder notificationBuilder = notificationTemplateService.generateNotification(createProposalNotificationCommand.getLineOfBusiness(), createProposalNotificationCommand.getProcessType(), createProposalNotificationCommand.getWaitingFor(),
                 createProposalNotificationCommand.getReminderType(), createProposalNotificationCommand.getProposalId().getProposalId(), createProposalNotificationCommand.getRoleType(), notificationTemplate.getReminderFile(), proposalNotificationDetailMap);
         NotificationId notificationId = new NotificationId(idGenerator.nextId());

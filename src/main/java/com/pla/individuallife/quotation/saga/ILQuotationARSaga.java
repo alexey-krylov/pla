@@ -86,7 +86,7 @@ public class ILQuotationARSaga extends AbstractAnnotatedSaga implements Serializ
 
     @StartSaga
     @SagaEventHandler(associationProperty = "quotationId")
-    public void handle(ILQuotationGeneratedEvent event) throws ProcessInfoException {
+    public void handle(ILQuotationSharedEvent event) throws ProcessInfoException {
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("Handling IL Quotation Generated Event .....", event);
         }
@@ -133,7 +133,7 @@ public class ILQuotationARSaga extends AbstractAnnotatedSaga implements Serializ
             LOGGER.debug("Handling IL Quotation Reminder Event .....", event);
         }
         ILQuotation ilQuotation = ilQuotationRepository.load(event.getQuotationId());
-        if (ILQuotationStatus.GENERATED.equals(ilQuotation.getIlQuotationStatus())) {
+        if (ILQuotationStatus.SHARED.equals(ilQuotation.getIlQuotationStatus())) {
             this.noOfReminderSent = noOfReminderSent + 1;
             System.out.println("************ Send Reminder ****************");
             commandGateway.send(new CreateQuotationNotificationCommand(event.getQuotationId(), RolesUtil.INDIVIDUAL_LIFE_QUOTATION_PROCESSOR_ROLE, LineOfBusinessEnum.INDIVIDUAL_LIFE, ProcessType.QUOTATION,

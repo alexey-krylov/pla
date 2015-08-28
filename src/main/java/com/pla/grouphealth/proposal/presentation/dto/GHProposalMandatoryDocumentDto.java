@@ -1,6 +1,5 @@
 package com.pla.grouphealth.proposal.presentation.dto;
 
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -30,14 +29,17 @@ public class GHProposalMandatoryDocumentDto {
 
     private String gridFsDocId;
 
+    private boolean requireForSubmission;
+
     public GHProposalMandatoryDocumentDto(String documentId, String documentName) {
         this.documentId = documentId;
         this.documentName = documentName;
     }
 
-    public GHProposalMandatoryDocumentDto updateWithContent(byte[] content) {
+    public GHProposalMandatoryDocumentDto   updateWithContent(byte[] content) {
         this.content = content;
         this.submitted = true;
         return this;
     }
+
 }

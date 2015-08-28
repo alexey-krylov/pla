@@ -1,17 +1,18 @@
-package com.pla.grouplife.proposal.application.command;
+package com.pla.grouplife.proposal.domain.event;
 
 import com.pla.sharedkernel.identifier.ProposalId;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.io.Serializable;
+
 /**
- * Created by Samir on 5/31/2015.
+ * Created by Admin on 8/23/2015.
  */
-@Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class ClosureGLProposalCommand {
-
+@Getter
+public class GLProposalPurgeEvent implements Serializable {
     private ProposalId proposalId;
 }

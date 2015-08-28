@@ -25,6 +25,8 @@ public class ILProposerDocument {
 
     private boolean isApproved;
 
+    private boolean requireForSubmission;
+
     public ILProposerDocument(String documentId, String documentName, String gridFsDocId, String contentType,boolean mandatory,boolean isApproved) {
         this.documentId = documentId;
         this.documentName = documentName;
@@ -32,6 +34,7 @@ public class ILProposerDocument {
         this.contentType = contentType;
         this.mandatory = mandatory;
         this.isApproved = isApproved;
+        this.requireForSubmission=true;
     }
 
     public ILProposerDocument updateWithNameAndContent(String documentName, String gridFsDocId, String contentType) {

@@ -33,6 +33,8 @@ public class ILProposalMandatoryDocumentDto {
 
     private Boolean mandatory;
 
+    private  boolean requireForSubmission;
+
 
     public ILProposalMandatoryDocumentDto(String documentId, String documentName) {
         this.documentId = documentId;

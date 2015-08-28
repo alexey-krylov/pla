@@ -139,7 +139,7 @@ public class GHProposalService {
             public GHProposalDto apply(Map map) {
                 String proposalId = map.get("_id").toString();
                 AgentDetailDto agentDetailDto = getAgentDetail(new ProposalId(proposalId));
-                DateTime submittedOn = map.get("submittedOn") != null ? new DateTime((Date) map.get("submittedOn")) : null;
+                DateTime submittedOn = map.get("submittedOn") != null ? new DateTime(map.get("submittedOn")) : null;
                 String proposalStatus = map.get("proposalStatus") != null ? ProposalStatus.valueOf((String) map.get("proposalStatus")).getDescription() : "";
                 String proposalNumber = map.get("proposalNumber") != null ? ((ProposalNumber) map.get("proposalNumber")).getProposalNumber() : "";
                 GHProposer proposerMap = map.get("proposer") != null ? (GHProposer) map.get("proposer") : null;
@@ -364,9 +364,20 @@ public class GHProposalService {
     }
 
     public Set<GHProposalMandatoryDocumentDto> findMandatoryDocuments(String proposalId) {
+        List<GHProposerDocument> uploadedDocuments = getUploadedMandatoryDocument(proposalId);
+        Set<ClientDocumentDto> mandatoryDocuments = getMandatoryDocumentRequiredForSubmission(proposalId);
+        return getAllMandatoryDocument(uploadedDocuments,mandatoryDocuments);
+    }
+
+    public List<GHProposerDocument> getUploadedMandatoryDocument(String proposalId){
+        Map proposal = ghProposalFinder.findProposalById(proposalId);
+        List<GHProposerDocument> uploadedDocuments = proposal.get("proposerDocuments") != null ? (List<GHProposerDocument>) proposal.get("proposerDocuments") : Lists.newArrayList();
+        return uploadedDocuments;
+    }
+
+    public Set<ClientDocumentDto> getMandatoryDocumentRequiredForSubmission(String proposalId){
         Map proposal = ghProposalFinder.findProposalById(proposalId);
         List<GHInsured> insureds = (List<GHInsured>) proposal.get("insureds");
-        List<GHProposerDocument> uploadedDocuments = proposal.get("proposerDocuments") != null ? (List<GHProposerDocument>) proposal.get("proposerDocuments") : Lists.newArrayList();
         List<SearchDocumentDetailDto> documentDetailDtos = Lists.newArrayList();
         insureds.forEach(ghInsured -> {
             GHPlanPremiumDetail planPremiumDetail = ghInsured.getPlanPremiumDetail();
@@ -397,14 +408,17 @@ public class GHProposalService {
                 });
             }
         });
-        Set<ClientDocumentDto> mandatoryDocuments = underWriterAdapter.getMandatoryDocumentsForApproverApproval(documentDetailDtos, ProcessType.ENROLLMENT);
+        return underWriterAdapter.getMandatoryDocumentsForApproverApproval(documentDetailDtos, ProcessType.ENROLLMENT);
+    }
+
+    private Set<GHProposalMandatoryDocumentDto> getAllMandatoryDocument(List<GHProposerDocument> uploadedDocument,Set<ClientDocumentDto> mandatoryDocuments){
         Set<GHProposalMandatoryDocumentDto> mandatoryDocumentDtos = Sets.newHashSet();
         if (isNotEmpty(mandatoryDocuments)) {
             mandatoryDocumentDtos = mandatoryDocuments.stream().map(new Function<ClientDocumentDto, GHProposalMandatoryDocumentDto>() {
                 @Override
                 public GHProposalMandatoryDocumentDto apply(ClientDocumentDto clientDocumentDto) {
                     GHProposalMandatoryDocumentDto mandatoryDocumentDto = new GHProposalMandatoryDocumentDto(clientDocumentDto.getDocumentCode(), clientDocumentDto.getDocumentName());
-                    Optional<GHProposerDocument> proposerDocumentOptional = uploadedDocuments.stream().filter(new Predicate<GHProposerDocument>() {
+                    Optional<GHProposerDocument> proposerDocumentOptional = uploadedDocument.stream().filter(new Predicate<GHProposerDocument>() {
                         @Override
                         public boolean test(GHProposerDocument ghProposerDocument) {
                             return clientDocumentDto.getDocumentCode().equals(ghProposerDocument.getDocumentId());
@@ -463,8 +477,8 @@ public class GHProposalService {
         public GlQuotationDto apply(Map map) {
             String quotationId = map.get("_id").toString();
             AgentDetailDto agentDetailDto = getAgentDetail(new QuotationId(quotationId));
-            LocalDate generatedOn = map.get("generatedOn") != null ? new LocalDate((Date) map.get("generatedOn")) : null;
-            LocalDate sharedOn = map.get("sharedOn") != null ? new LocalDate((Date) map.get("sharedOn")) : null;
+            LocalDate generatedOn = map.get("generatedOn") != null ? new LocalDate(map.get("generatedOn")) : null;
+            LocalDate sharedOn = map.get("sharedOn") != null ? new LocalDate(map.get("sharedOn")) : null;
             String quotationStatus = map.get("quotationStatus") != null ? (String) map.get("quotationStatus") : "";
             String quotationNumber = map.get("quotationNumber") != null ? (String) map.get("quotationNumber") : "";
             ObjectId parentQuotationIdMap = map.get("parentQuotationId") != null ? (ObjectId) map.get("parentQuotationId") : null;

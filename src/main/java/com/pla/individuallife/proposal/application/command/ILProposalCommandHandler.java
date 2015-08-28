@@ -167,7 +167,7 @@ public class ILProposalCommandHandler {
         Map planDetail = (HashMap) plan.get("planDetail");
         int minAge = (int) planDetail.get("minEntryAge");
         int maxAge = (int) planDetail.get("maxEntryAge");
-        aggregate = ilProposalProcessor.updateWithPlanDetail(aggregate,cmd.getProposalPlanDetail(), cmd.getBeneficiaries(),minAge,maxAge);
+        aggregate = ilProposalProcessor.updateWithPlanDetail(aggregate, cmd.getProposalPlanDetail(), cmd.getBeneficiaries(), minAge, maxAge);
         ilProposalMongoRepository.add(aggregate);
         return aggregate.getIdentifier().getProposalId();
     }
@@ -220,10 +220,10 @@ public class ILProposalCommandHandler {
     @CommandHandler
     public String proposalApproval(ILProposalApprovalCommand cmd) {
         ILProposalApprover ilProposalApprover = ilProposalRoleAdapter.userToProposalApproverRole(cmd.getUserDetails());
+        ILProposalAggregate aggregate = ilProposalMongoRepository.load(new ProposalId(cmd.getProposalId()));
         if (ILProposalStatus.APPROVED.equals(cmd.getStatus()) && !ilProposalService.doesAllDocumentWaivesByApprover(cmd.getProposalId())){
             raiseMandatoryDocumentNotUploaded();
         }
-        ILProposalAggregate aggregate = ilProposalMongoRepository.load(new ProposalId(cmd.getProposalId()));
         aggregate = ilProposalApprover.submitApproval(aggregate,cmd.getComment(), cmd.getStatus(),cmd.getUserDetails().getUsername());
         return aggregate.getIdentifier().getProposalId();
     }
@@ -256,6 +256,7 @@ public class ILProposalCommandHandler {
         agentCommissionDetails.forEach(agentCommission -> agentCommissionShareModel.addAgentCommission(new AgentId(agentCommission.getAgentId()), agentCommission.getCommission()));
         return agentCommissionShareModel;
     }
+
 
 
 }

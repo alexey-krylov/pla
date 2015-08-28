@@ -65,7 +65,8 @@
     <axon:saga-manager id="sagaManager" saga-repository="sagaRepository">
         <axon:async executor="taskExecutor" transaction-manager="transactionManager"/>
         <axon:types>
-            com.pla.individuallife.quotation.saga.ILQuotationARSaga,com.pla.core.saga.PlanSaga,com.pla.grouplife.quotation.saga.GroupLifeQuotationSaga,com.pla.grouphealth.quotation.saga.GroupHealthQuotationSaga
+            com.pla.individuallife.quotation.saga.ILQuotationARSaga,com.pla.core.saga.PlanSaga,com.pla.grouplife.quotation.saga.GroupLifeQuotationSaga,com.pla.grouphealth.quotation.saga.GroupHealthQuotationSaga,com.pla.individuallife.proposal.domain.event.IndividualLifeProposalSaga,
+            com.pla.grouplife.proposal.domain.event.GroupLifeProposalEventSaga,com.pla.grouphealth.proposal.domain.event.GroupHealthProposalEventSaga
         </axon:types>
     </axon:saga-manager>
 

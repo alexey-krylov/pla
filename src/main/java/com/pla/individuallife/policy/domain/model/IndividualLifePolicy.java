@@ -39,7 +39,7 @@ public class IndividualLifePolicy extends AbstractAggregateRoot<PolicyId> {
     private GeneralDetails generalDetails;
     private FamilyPersonalDetail familyPersonalDetail;
     private AgentCommissionShareModel agentCommissionShareModel;
-    private AdditionalDetails additionaldetails;
+    private AdditionalDetails additionalDetails;
     private PremiumPaymentDetails premiumPaymentDetails;
     private List<ILProposerDocument> proposalDocuments;
     private PolicyStatus policyStatus;
@@ -106,7 +106,7 @@ public class IndividualLifePolicy extends AbstractAggregateRoot<PolicyId> {
     }
 
     public IndividualLifePolicy withAdditionalDetails(AdditionalDetails additionaldetails){
-        this.additionaldetails = additionaldetails;
+        this.additionalDetails = additionaldetails;
         return this;
     }
 

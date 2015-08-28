@@ -1,6 +1,8 @@
 package com.pla.individuallife.quotation.application.command;
 
 import com.pla.core.domain.model.agent.AgentId;
+import com.pla.grouplife.quotation.application.command.ShareGLQuotationCommand;
+import com.pla.grouplife.quotation.domain.model.GroupLifeQuotation;
 import com.pla.individuallife.quotation.application.service.ILQuotationAppService;
 import com.pla.individuallife.quotation.domain.model.*;
 import com.pla.individuallife.quotation.domain.service.ILQuotationRoleAdapter;
@@ -182,4 +184,10 @@ public class ILQuotationCommandHandler {
         ILQuotation ilQuotation = ilQuotationRepository.load(ilClosureILQuotationCommand.getQuotationId());
         ilQuotation.declineQuotation();
     }
+    @CommandHandler
+    public void shareGLQuotation(ShareILQuotationCommand shareILQuotationCommand) {
+        ILQuotation ilQuotation = ilQuotationRepository.load(shareILQuotationCommand.getQuotationId());
+        ilQuotation.shareQuotation(LocalDate.now());
+    }
+
 }

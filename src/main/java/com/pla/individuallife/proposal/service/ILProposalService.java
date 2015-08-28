@@ -2,13 +2,13 @@ package com.pla.individuallife.proposal.service;
 
 import com.google.common.collect.Lists;
 import com.mongodb.gridfs.GridFSDBFile;
-import com.pla.individuallife.proposal.domain.model.*;
+import com.pla.individuallife.proposal.domain.model.ILProposalStatusAudit;
 import com.pla.individuallife.proposal.presentation.dto.ILProposalMandatoryDocumentDto;
 import com.pla.individuallife.proposal.presentation.dto.ProposalApproverCommentsDto;
 import com.pla.individuallife.proposal.query.ILProposalFinder;
 import com.pla.individuallife.proposal.repository.ILProposalStatusAuditRepository;
-import com.pla.individuallife.sharedresource.dto.ILQuotationDto;
 import com.pla.individuallife.quotation.query.ILQuotationFinder;
+import com.pla.individuallife.sharedresource.dto.ILQuotationDto;
 import com.pla.individuallife.sharedresource.model.vo.ILProposerDocument;
 import com.pla.individuallife.sharedresource.model.vo.ILRiderDetail;
 import com.pla.individuallife.sharedresource.model.vo.ProposalPlanDetail;
@@ -108,11 +108,22 @@ public class ILProposalService {
     }
 
 
-    public List<ILProposalMandatoryDocumentDto> findMandatoryDocuments(String proposalId) {
+    public List<ILProposalMandatoryDocumentDto> findAllMandatoryDocument(String proposalId) {
+        List<ILProposerDocument> uploadedDocuments = getAllUploadedDocument(proposalId);
+        List<ClientDocumentDto> mandatoryDocuments = getDocumentRequiredForSubmission(proposalId);
+        return getAllMandatoryDocumentByPlan(uploadedDocuments, mandatoryDocuments);
+    }
+
+    public List<ILProposerDocument> getAllUploadedDocument(String proposalId){
         Map proposal = proposalFinder.getProposalByProposalId(proposalId);
         if (isEmpty(proposal))
             return Collections.EMPTY_LIST;
         List<ILProposerDocument> uploadedDocuments = proposal.get("proposalDocuments") != null ? (List<ILProposerDocument>) proposal.get("proposalDocuments") : Lists.newArrayList();
+        return uploadedDocuments;
+    }
+
+    public List<ClientDocumentDto> getDocumentRequiredForSubmission(String proposalId){
+        Map proposal = proposalFinder.getProposalByProposalId(proposalId);
         ProposalPlanDetail planDetail = (ProposalPlanDetail) proposal.get("proposalPlanDetail");
         if (planDetail==null){
             return Collections.EMPTY_LIST;
@@ -132,37 +143,7 @@ public class ILProposalService {
             documentDetailDtos.add(new SearchDocumentDetailDto(new PlanId(planDetail.getPlanId()), coverageIds));
             mandatoryDocuments.addAll(underWriterAdapter.getMandatoryDocumentsForApproverApproval(documentDetailDtos, ProcessType.ENROLLMENT));
         }
-        if (isNotEmpty(mandatoryDocuments)) {
-            return mandatoryDocuments.stream().map(new Function<ClientDocumentDto, ILProposalMandatoryDocumentDto>() {
-                @Override
-                public ILProposalMandatoryDocumentDto apply(ClientDocumentDto clientDocumentDto) {
-                    ILProposalMandatoryDocumentDto mandatoryDocumentDto = new ILProposalMandatoryDocumentDto(clientDocumentDto.getDocumentCode(), clientDocumentDto.getDocumentName());
-                    mandatoryDocumentDto.setIsApproved(false);
-                    mandatoryDocumentDto.setMandatory(false);
-                    Optional<ILProposerDocument> proposerDocumentOptional = uploadedDocuments.stream().filter(new Predicate<ILProposerDocument>() {
-                        @Override
-                        public boolean test(ILProposerDocument ilProposerDocument) {
-                            return clientDocumentDto.getDocumentCode().equals(ilProposerDocument.getDocumentId());
-                        }
-                    }).findAny();
-                    if (proposerDocumentOptional.isPresent()) {
-                            if (isNotEmpty(proposerDocumentOptional.get().getGridFsDocId())) {
-                                GridFSDBFile gridFSDBFile = gridFsTemplate.findOne(new Query(Criteria.where("_id").is(proposerDocumentOptional.get().getGridFsDocId())));
-                                if (gridFSDBFile != null) {
-                                    mandatoryDocumentDto.setFileName(gridFSDBFile.getFilename());
-                                    mandatoryDocumentDto.setContentType(gridFSDBFile.getContentType());
-                                    mandatoryDocumentDto.setGridFsDocId(gridFSDBFile.getId().toString());
-                                    mandatoryDocumentDto.setSubmitted(true);
-                                    mandatoryDocumentDto.setIsApproved(proposerDocumentOptional.get().isApproved());
-                                    mandatoryDocumentDto.setMandatory(proposerDocumentOptional.get().isMandatory());
-                                }
-                            }
-                    }
-                    return mandatoryDocumentDto;
-                }
-            }).collect(Collectors.toList());
-        }
-        return Collections.EMPTY_LIST;
+        return mandatoryDocuments;
     }
 
     public RoutingLevel findRoutingLevel(UnderWriterRoutingLevelDetailDto routingLevelDetailDto, String proposalId, Integer age) {
@@ -279,7 +260,7 @@ public class ILProposalService {
     }
 
     public boolean doesAllDocumentWaivesByApprover(String proposalId){
-        List<ILProposalMandatoryDocumentDto> ilProposalMandatoryDocumentDtos = findMandatoryDocuments(proposalId);
+        List<ILProposalMandatoryDocumentDto> ilProposalMandatoryDocumentDtos = findAllMandatoryDocument(proposalId);
         long count =  ilProposalMandatoryDocumentDtos.parallelStream().filter(new Predicate<ILProposalMandatoryDocumentDto>() {
             @Override
             public boolean test(ILProposalMandatoryDocumentDto ilProposalMandatoryDocumentDto) {
@@ -290,4 +271,39 @@ public class ILProposalService {
             return true;
         return false;
     }
+
+    private List<ILProposalMandatoryDocumentDto> getAllMandatoryDocumentByPlan(List<ILProposerDocument> uploadedDocuments,List<ClientDocumentDto> mandatoryDocuments){
+        if (isNotEmpty(mandatoryDocuments)) {
+            return mandatoryDocuments.stream().map(new Function<ClientDocumentDto, ILProposalMandatoryDocumentDto>() {
+                @Override
+                public ILProposalMandatoryDocumentDto apply(ClientDocumentDto clientDocumentDto) {
+                    ILProposalMandatoryDocumentDto mandatoryDocumentDto = new ILProposalMandatoryDocumentDto(clientDocumentDto.getDocumentCode(), clientDocumentDto.getDocumentName());
+                    Optional<ILProposerDocument> proposerDocumentOptional = uploadedDocuments.stream().filter(new Predicate<ILProposerDocument>() {
+                        @Override
+                        public boolean test(ILProposerDocument ilProposerDocument) {
+                            return clientDocumentDto.getDocumentCode().equals(ilProposerDocument.getDocumentId());
+                        }
+                    }).findAny();
+                    if (proposerDocumentOptional.isPresent()) {
+                        mandatoryDocumentDto.setRequireForSubmission(proposerDocumentOptional.get().isRequireForSubmission());
+                        mandatoryDocumentDto.setIsApproved(proposerDocumentOptional.get().isApproved());
+                        mandatoryDocumentDto.setMandatory(proposerDocumentOptional.get().isMandatory());
+                        if (isNotEmpty(proposerDocumentOptional.get().getGridFsDocId())) {
+                            GridFSDBFile gridFSDBFile = gridFsTemplate.findOne(new Query(Criteria.where("_id").is(proposerDocumentOptional.get().getGridFsDocId())));
+                            if (gridFSDBFile != null) {
+                                mandatoryDocumentDto.setFileName(gridFSDBFile.getFilename());
+                                mandatoryDocumentDto.setContentType(gridFSDBFile.getContentType());
+                                mandatoryDocumentDto.setGridFsDocId(gridFSDBFile.getId().toString());
+                                mandatoryDocumentDto.setSubmitted(true);
+                            }
+                        }
+                    }
+                    return mandatoryDocumentDto;
+                }
+            }).collect(Collectors.toList());
+        }
+        return Collections.EMPTY_LIST;
+    }
+
+
 }

@@ -6,10 +6,10 @@ import com.pla.individuallife.quotation.application.command.*;
 import com.pla.individuallife.quotation.application.service.ILQuotationAppService;
 import com.pla.individuallife.quotation.presentation.dto.ILQuotationMailDto;
 import com.pla.individuallife.quotation.presentation.dto.ILSearchQuotationDto;
-import com.pla.individuallife.sharedresource.dto.RiderDetailDto;
-import com.pla.individuallife.sharedresource.dto.ILQuotationDto;
 import com.pla.individuallife.quotation.query.ILQuotationFinder;
 import com.pla.individuallife.quotation.query.PremiumDetailDto;
+import com.pla.individuallife.sharedresource.dto.ILQuotationDto;
+import com.pla.individuallife.sharedresource.dto.RiderDetailDto;
 import com.pla.sharedkernel.identifier.PlanId;
 import com.pla.sharedkernel.identifier.QuotationId;
 import com.pla.sharedkernel.service.EmailAttachment;
@@ -253,6 +253,7 @@ public class ILQuotationController {
         outputStream.write(ilQuotationService.getQuotationPDF(quotationId));
         outputStream.flush();
         outputStream.close();
+        commandGateway.sendAndWait(new ShareILQuotationCommand(new QuotationId(quotationId)));
     }
 
     @RequestMapping(value = "/emailQuotation/{quotationId}", method = RequestMethod.GET)
@@ -286,6 +287,7 @@ public class ILQuotationController {
             fileOutputStream.close();
             EmailAttachment emailAttachment = new EmailAttachment(fileName, "application/pdf", file);
             mailService.sendMailWithAttachment(mailDto.getSubject(), mailDto.getMailContent(), Arrays.asList(emailAttachment), mailDto.getRecipientMailAddress());
+            commandGateway.sendAndWait(new ShareILQuotationCommand(new QuotationId(mailDto.getQuotationId())));
             file.delete();
             return Result.success("Email sent successfully");
 
