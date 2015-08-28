@@ -47,12 +47,12 @@ public class ILQuotationFinder {
             " FROM individual_life_quotation " +
             " WHERE quotation_id =:quotationId";
 
-    public static final String QUOTATION_SEARCH_QUERY = "SELECT CONCAT(COALESCE(A.FIRST_NAME,' '), ' ', COALESCE(A.last_name,'')) AS agentName, CONCAT(COALESCE(IL.first_name,' '), ' ', \n" +
-            "COALESCE(surname,'')) AS proposedName,CONCAT(proposer_first_name,' ',proposer_surname) AS proposerName, " +
-            "il_quotation_status AS quotationStatus, quotation_id AS quotation_id, quotation_number AS quotationNumber,  " +
-            "generated_on AS generatedOn,version_number AS versionNumber FROM individual_life_quotation IL JOIN agent A  " +
-            "ON IL.agent_id = A.agent_id WHERE LOWER(IL.proposer_first_name) LIKE :proposerName OR IL.quotation_number= :quotationNumber " +
-            "OR IL.proposer_nrc_number= :nrcNumber OR il.agent_id = :agentCode OR IL.il_quotation_status=:quotationStatus order by version_number desc";
+    public static final String QUOTATION_SEARCH_QUERY = "SELECT DISTINCT CONCAT(COALESCE(A.FIRST_NAME,' '), ' ', COALESCE(A.last_name,'')) AS agentName, CONCAT(COALESCE(IL.first_name,' '), ' ',   " +
+            "   COALESCE(surname,'')) AS proposedName,CONCAT(proposer_first_name,' ',proposer_surname) AS proposerName,   " +
+            "   il_quotation_status AS quotationStatus, quotation_id AS quotation_id, quotation_number AS quotationNumber,    " +
+            "   generated_on AS generatedOn,version_number AS versionNumber,COALESCE(p.plan_name,'') planName FROM individual_life_quotation IL LEFT JOIN agent A   ON IL.agent_id = A.agent_id   " +
+            "   LEFT JOIN plan_coverage_benefit_assoc p ON p.plan_id = IL.plan_id WHERE LOWER(IL.proposer_first_name) LIKE :proposerName OR IL.quotation_number= :quotationNumber " +
+            " OR IL.proposer_nrc_number= :nrcNumber OR il.agent_id = :agentCode OR IL.il_quotation_status=:quotationStatus order by version_number desc";
 
     public static final String findILQuotationByQuotationNumberQuery = "SELECT * FROM individual_life_quotation WHERE quotation_number=:quotationNumber AND quotation_id !=:quotationId AND il_quotation_status=:quotationStatus";
 

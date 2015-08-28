@@ -13,6 +13,7 @@ import java.sql.Date;
 public class ILSearchQuotationResultDto {
 
     private String agentName;
+    private String planName;
     private String proposerName;
     private String proposedName;
     private String quotationId;

@@ -133,6 +133,7 @@
 
                                 <th style="width: 1%"></th>
                                 <th th:text="#{quotationNumber}">Quotation Number</th>
+                                <th th:text="#{planName}">Plan Name</th>
                                 <th th:text="#{quotationCreatedOn}">Quotation Date</th>
                                 <th th:text="#{agentName}">Agent Name</th>
                                 <th th:text="#{proposedName}">Proposed Name</th>
@@ -150,6 +151,7 @@
                                         <input type="radio" name="quotationNumber" th:value="${quotation.quotationId}"/>
                                     </td>
                                     <td th:text="${quotation.quotationNumber}">5100000010315</td>
+                                    <td th:text="${quotation.planName}">ABC</td>
                                     <td th:text="${quotation.generatedOn}?${#dates.format(quotation.generatedOn,'dd/MM/yyyy')}"></td>
                                     <td th:text="${quotation.agentName}">Agent Name</td>
                                     <td th:text="${quotation.proposedName}"></td>

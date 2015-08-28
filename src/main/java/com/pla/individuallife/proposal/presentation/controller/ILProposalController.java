@@ -85,7 +85,7 @@ public class ILProposalController {
             createProposalCommand.setProposalId(proposalId);
             proposalId =  commandGateway.sendAndWait(createProposalCommand);
         }catch (Exception e){
-            return new ResponseEntity(Result.failure(e.getMessage()), HttpStatus.PRECONDITION_FAILED);
+            return new ResponseEntity(Result.failure(e.getMessage()), HttpStatus.OK);
         }
         return new ResponseEntity(Result.success("Proposal got created successfully",proposalId), HttpStatus.OK);
     }
@@ -120,7 +120,7 @@ public class ILProposalController {
             cmd.setUserDetails(userDetails);
             proposalId =  commandGateway.sendAndWait(cmd);
         } catch (Exception e) {
-            return new ResponseEntity(Result.failure(e.getMessage()), HttpStatus.PRECONDITION_FAILED);
+            return new ResponseEntity(Result.failure(e.getMessage()), HttpStatus.OK);
         }
         return new ResponseEntity(Result.success("Proposal updated with Proposer Details successfully",proposalId), HttpStatus.OK);
     }
@@ -251,7 +251,7 @@ public class ILProposalController {
             return new ResponseEntity(Result.success("Proposal submitted successfully",proposalId), HttpStatus.OK);
         } catch (Exception e) {
             e.printStackTrace();
-            return new ResponseEntity(Result.failure(e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity(Result.failure(e.getMessage()), HttpStatus.OK);
         }
     }
 
@@ -353,10 +353,9 @@ public class ILProposalController {
     @ApiOperation(httpMethod = "GET", value = "This call for edit proposal screen.")
     @ResponseBody
     public  ILProposalDto  getProposalById(@PathVariable("proposalId") String proposalId) {
-        ILProposalDto dto = null;
-        dto = proposalFinder.getProposalById(proposalId);
+        ILProposalDto dto = proposalFinder.getProposalById(proposalId);
         checkArgument(dto != null, "Proposal not found");
-        return  dto ;
+        return dto;
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/getproposalnumber/{proposalId}")

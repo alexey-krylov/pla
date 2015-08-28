@@ -394,7 +394,7 @@ public class GroupHealthProposalController {
             return new ResponseEntity(Result.success("Proposal approved successfully"), HttpStatus.OK);
         } catch (Exception e) {
             e.printStackTrace();
-            return new ResponseEntity(Result.failure(e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity(Result.failure(e.getMessage()), HttpStatus.OK);
         }
     }
 
@@ -409,7 +409,7 @@ public class GroupHealthProposalController {
             return new ResponseEntity(Result.success("Proposal returned successfully"), HttpStatus.OK);
         } catch (Exception e) {
             e.printStackTrace();
-            return new ResponseEntity(Result.failure(e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity(Result.failure(e.getMessage()), HttpStatus.OK);
         }
     }
 
@@ -459,7 +459,7 @@ public class GroupHealthProposalController {
             commandGateway.sendAndWait(ghProposalDocumentCommand);
         } catch (Exception e) {
             e.printStackTrace();
-            return new ResponseEntity(Result.failure(e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity(Result.failure(e.getMessage()), HttpStatus.OK);
         }
         return new ResponseEntity(Result.success("Documents uploaded successfully"), HttpStatus.OK);
     }
