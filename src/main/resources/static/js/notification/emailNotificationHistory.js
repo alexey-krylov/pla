@@ -34,6 +34,23 @@ function IsValidEmail(email) {
     var regex = /^([a-zA-Z0-9_.+-])+\@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/;
     return regex.test(email);
 }
+
+function printNotification() {
+    var emailBody = tinyMCE.get('emailBody').getContent();
+    var notificationId = $('#notificationHistoryId').val();
+    //  alert(notificationId);
+    createNotificationHistory.notificationHistoryId=notificationId;
+    createNotificationHistory.emailBody=emailBody;
+    console.log(JSON.stringify(createNotificationHistory));
+
+    var status= $('#notificationForm').attr('action', '/pla/core/notification/printnotificationhistory');
+    console.log(status);
+    //window.close();
+
+    return true;
+
+}
+
 function sendEmail() {
     var toAddress = $('#to').val();
     var subject = $('#subject').val();

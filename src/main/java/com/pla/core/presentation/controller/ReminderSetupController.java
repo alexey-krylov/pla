@@ -19,6 +19,7 @@ import com.pla.core.dto.NotificationTemplateDto;
 import com.pla.core.query.NotificationFinder;
 import com.pla.sharedkernel.application.CreateNotificationHistoryCommand;
 import com.pla.sharedkernel.application.CreateProposalNotificationCommand;
+import com.pla.sharedkernel.application.CreateQuotationNotificationCommand;
 import com.pla.sharedkernel.domain.model.ProcessType;
 import com.pla.sharedkernel.domain.model.WaitingForEnum;
 import com.pla.sharedkernel.exception.ProcessInfoException;
@@ -74,7 +75,7 @@ public class ReminderSetupController {
 
 
     @Autowired
-    public ReminderSetupController(NotificationFinder notificationFinder, NotificationService notificationService,CommandGateway commandGateway, MailService mailService,NotificationTemplateService notificationTemplateService) {
+    public ReminderSetupController(NotificationFinder notificationFinder, NotificationService notificationService, CommandGateway commandGateway, MailService mailService, NotificationTemplateService notificationTemplateService) {
         this.notificationFinder = notificationFinder;
         this.notificationService = notificationService;
         this.commandGateway = commandGateway;
@@ -112,21 +113,29 @@ public class ReminderSetupController {
         return modelAndView;
     }
 
+    @RequestMapping(value = "/openprintnotificationhistory/{notificationHistoryId}", method = RequestMethod.GET)
+    public ModelAndView openPrintHistoryPage(@PathVariable("notificationHistoryId") String notificationHistoryId) {
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("pla/core/notification/printNotificationHistory");
+        modelAndView.addObject("mailContent", notificationFinder.notificationHistoryEmailContent(notificationHistoryId));
+        return modelAndView;
+    }
+
 
     @RequestMapping(value = "/createnotificationrolemapping", method = RequestMethod.POST)
     @ResponseBody
     public Callable<ResponseEntity> createNotificationRoleMapping(@RequestBody Map<String, String> notificationRoleMapping) {
-        return ()->{
+        return () -> {
             try {
                 LineOfBusinessEnum lineOfBusinessEnum = LineOfBusinessEnum.valueOf(notificationRoleMapping.get("lineOfBusiness"));
                 ProcessType processType = ProcessType.valueOf(notificationRoleMapping.get("processType"));
                 String uiRole = notificationRoleMapping.get("roleType");
                 boolean isValidProcess = lineOfBusinessEnum.isValidProcess(processType);
                 if (!isValidProcess) {
-                    raiseProcessIsNotValid(processType.toString(),lineOfBusinessEnum.toString());
+                    raiseProcessIsNotValid(processType.toString(), lineOfBusinessEnum.toString());
                 }
                 String systemRole = NotificationRoleResolver.notificationRoleResolver(lineOfBusinessEnum, uiRole);
-                if (isEmpty(systemRole)){
+                if (isEmpty(systemRole)) {
                     return new ResponseEntity(Result.failure("No mapping available for the given combination"), HttpStatus.INTERNAL_SERVER_ERROR);
                 }
                 notificationService.createNotificationRoleMapping(systemRole, lineOfBusinessEnum, processType);
@@ -141,17 +150,17 @@ public class ReminderSetupController {
         };
     }
 
-    @RequestMapping(value = "/deletenotificationrolemapping",method = RequestMethod.POST)
+    @RequestMapping(value = "/deletenotificationrolemapping", method = RequestMethod.POST)
     @ResponseBody
-    public Callable<ResponseEntity> deleteNotificationRoleMapping(@RequestBody Map<String, String> notificationRoleMapping){
-        return ()->{
+    public Callable<ResponseEntity> deleteNotificationRoleMapping(@RequestBody Map<String, String> notificationRoleMapping) {
+        return () -> {
             try {
                 LineOfBusinessEnum lineOfBusinessEnum = LineOfBusinessEnum.valueOf(notificationRoleMapping.get("lineOfBusiness"));
                 ProcessType processType = ProcessType.valueOf(notificationRoleMapping.get("processType"));
                 String systemRole = notificationRoleMapping.get("roleType");
                 boolean isValidProcess = lineOfBusinessEnum.isValidProcess(processType);
                 if (!isValidProcess) {
-                    raiseProcessIsNotValid(processType.toString(),lineOfBusinessEnum.toString());
+                    raiseProcessIsNotValid(processType.toString(), lineOfBusinessEnum.toString());
                 }
                 notificationService.deleteNotificationRoleMapping(systemRole, lineOfBusinessEnum, processType);
             } catch (NotificationException e) {
@@ -166,8 +175,8 @@ public class ReminderSetupController {
     }
 
     @RequestMapping(value = "/uploadnotification", method = RequestMethod.POST)
-    public Callable<ResponseEntity> uploadNotification(@Valid @ModelAttribute NotificationTemplateDto notificationTemplateDto,BindingResult bindingResult) throws IOException {
-        return ()-> {
+    public Callable<ResponseEntity> uploadNotification(@Valid @ModelAttribute NotificationTemplateDto notificationTemplateDto, BindingResult bindingResult) throws IOException {
+        return () -> {
             if (bindingResult.hasErrors()) {
                 return new ResponseEntity(Result.failure("Error in uploading the notification template"), HttpStatus.INTERNAL_SERVER_ERROR);
             }
@@ -176,7 +185,7 @@ public class ReminderSetupController {
                 return new ResponseEntity(Result.failure("Please upload a valid file"), HttpStatus.INTERNAL_SERVER_ERROR);
             }
             try {
-                boolean isCreated = notificationService.uploadNotificationTemplate(notificationTemplateDto.getNotificationTemplateId(),notificationTemplateDto.getLineOfBusiness(), notificationTemplateDto.getProcessType(),
+                boolean isCreated = notificationService.uploadNotificationTemplate(notificationTemplateDto.getNotificationTemplateId(), notificationTemplateDto.getLineOfBusiness(), notificationTemplateDto.getProcessType(),
                         notificationTemplateDto.getWaitingFor(), notificationTemplateDto.getReminderType(), template.getBytes());
                 if (!isCreated) {
                     return new ResponseEntity(Result.failure("Error in uploading the notification template"), HttpStatus.INTERNAL_SERVER_ERROR);
@@ -188,14 +197,14 @@ public class ReminderSetupController {
         };
     }
 
-    @RequestMapping(value = "/getremindertype/{notificationTemplateId}", method = RequestMethod.GET,consumes = MediaType.ALL_VALUE)
+    @RequestMapping(value = "/getremindertype/{notificationTemplateId}", method = RequestMethod.GET, consumes = MediaType.ALL_VALUE)
     @ResponseBody
     public void getReminderFile(@PathVariable("notificationTemplateId") NotificationTemplateId notificationTemplateId, HttpServletRequest request, HttpServletResponse response) throws IOException {
         response.reset();
         response.setContentType("application/msword");
         OutputStream outputStream = response.getOutputStream();
-        NotificationTemplate  notificationTemplate = notificationService.getReminderFile(notificationTemplateId);
-        String fileName =  notificationTemplate.getFileName();
+        NotificationTemplate notificationTemplate = notificationService.getReminderFile(notificationTemplateId);
+        String fileName = notificationTemplate.getFileName();
         response.setHeader("content-disposition", "attachment; filename=" + fileName + ".docx");
         IOUtils.write(notificationTemplate.getReminderFile(), outputStream);
         outputStream.flush();
@@ -203,69 +212,69 @@ public class ReminderSetupController {
         response.flushBuffer();
     }
 
-    @RequestMapping(value = "/getnotificationtemplate/{notificationTemplateId}",method = RequestMethod.GET)
+    @RequestMapping(value = "/getnotificationtemplate/{notificationTemplateId}", method = RequestMethod.GET)
     @ResponseBody
-    public List<Map<String,Object>> getNotificationTemplateById(@PathVariable("notificationTemplateId") NotificationTemplateId notificationTemplateId){
+    public List<Map<String, Object>> getNotificationTemplateById(@PathVariable("notificationTemplateId") NotificationTemplateId notificationTemplateId) {
         return notificationFinder.getNotificationTemplateById(notificationTemplateId);
     }
 
-    @RequestMapping(value = "/deletetemplate/{notificationTemplateId}",method = RequestMethod.DELETE)
+    @RequestMapping(value = "/deletetemplate/{notificationTemplateId}", method = RequestMethod.DELETE)
     @ResponseBody
-    public Callable<ResponseEntity> deleteNotificationTemplate(@PathVariable("notificationTemplateId") NotificationTemplateId notificationTemplateId){
-        return()->{
-            boolean isDeleted =  notificationService.deleteNotificationTemplate(notificationTemplateId);
-            if (!isDeleted){
-                return new ResponseEntity(Result.failure("Unable to delete the Notification Template"),HttpStatus.INTERNAL_SERVER_ERROR);
+    public Callable<ResponseEntity> deleteNotificationTemplate(@PathVariable("notificationTemplateId") NotificationTemplateId notificationTemplateId) {
+        return () -> {
+            boolean isDeleted = notificationService.deleteNotificationTemplate(notificationTemplateId);
+            if (!isDeleted) {
+                return new ResponseEntity(Result.failure("Unable to delete the Notification Template"), HttpStatus.INTERNAL_SERVER_ERROR);
             }
-            return new ResponseEntity(Result.success("Notification Template deleted successfully"),HttpStatus.OK);
+            return new ResponseEntity(Result.success("Notification Template deleted successfully"), HttpStatus.OK);
         };
     }
 
-    @RequestMapping(value = "/getnotification",method = RequestMethod.GET)
+    @RequestMapping(value = "/getnotification", method = RequestMethod.GET)
     @ResponseBody
-    public List<Map<String, Object>> getNotification(){
+    public List<Map<String, Object>> getNotification() {
         Collection<? extends GrantedAuthority> authorities = SecurityContextHolder.getContext().getAuthentication().getAuthorities();
-        List<Map<String,Object>> notificationList =  notificationFinder.getNotificationByRole(authorities);
+        List<Map<String, Object>> notificationList = notificationFinder.getNotificationByRole(authorities);
         return notificationList.parallelStream().map(new RequestNumberTransformer()).collect(Collectors.toList());
     }
 
 
-    @RequestMapping(value = "/getprocessbylob/{lineOfBusiness}",method = RequestMethod.GET)
+    @RequestMapping(value = "/getprocessbylob/{lineOfBusiness}", method = RequestMethod.GET)
     @ResponseBody
-    public List<Map<String,Object>> getProcessByLineOfBusiness(@PathVariable("lineOfBusiness") LineOfBusinessEnum lineOfBusiness){
-        List<Map<String,Object>> processList = Lists.newArrayList();
-        lineOfBusiness.getProcessTypeList().forEach(process->{
-            Map<String,Object> processMap = Maps.newLinkedHashMap();
-            processMap.put("processType",process.name());
-            processMap.put("description",process.toString());
+    public List<Map<String, Object>> getProcessByLineOfBusiness(@PathVariable("lineOfBusiness") LineOfBusinessEnum lineOfBusiness) {
+        List<Map<String, Object>> processList = Lists.newArrayList();
+        lineOfBusiness.getProcessTypeList().forEach(process -> {
+            Map<String, Object> processMap = Maps.newLinkedHashMap();
+            processMap.put("processType", process.name());
+            processMap.put("description", process.toString());
             processList.add(processMap);
         });
         return processList;
     }
 
-    @RequestMapping(value = "/getwaitingfor/{lineOfBusiness}/{process}",method = RequestMethod.GET)
+    @RequestMapping(value = "/getwaitingfor/{lineOfBusiness}/{process}", method = RequestMethod.GET)
     @ResponseBody
-    public List<Map<String,Object>> getWaitingForByProcess(@PathVariable("lineOfBusiness") LineOfBusinessEnum lineOfBusiness,@PathVariable("process") ProcessType process) {
+    public List<Map<String, Object>> getWaitingForByProcess(@PathVariable("lineOfBusiness") LineOfBusinessEnum lineOfBusiness, @PathVariable("process") ProcessType process) {
         return notificationService.getWaitingForBy(lineOfBusiness, process);
     }
 
 
-    @RequestMapping(value = "/getnotificationtype/{lineOfBusiness}/{process}/{waitingFor}",method = RequestMethod.GET)
+    @RequestMapping(value = "/getnotificationtype/{lineOfBusiness}/{process}/{waitingFor}", method = RequestMethod.GET)
     @ResponseBody
-    public List<Map<String,Object>> getNotificationType(@PathVariable("lineOfBusiness") LineOfBusinessEnum lineOfBusiness,@PathVariable("process") ProcessType process,@PathVariable("waitingFor") WaitingForEnum waitingFor) {
+    public List<Map<String, Object>> getNotificationType(@PathVariable("lineOfBusiness") LineOfBusinessEnum lineOfBusiness, @PathVariable("process") ProcessType process, @PathVariable("waitingFor") WaitingForEnum waitingFor) {
         return notificationService.getNotificationTypeBy(lineOfBusiness, process, waitingFor);
     }
 
     @RequestMapping(value = "/getnotificationrolelist", method = RequestMethod.GET)
     @ResponseBody
-    public List<Map<String, Object>> getNotificationRoleList(){
-        return  notificationFinder.findAllNotificationRole();
+    public List<Map<String, Object>> getNotificationRoleList() {
+        return notificationFinder.findAllNotificationRole();
     }
 
     @RequestMapping(value = "/getnotificationtemplatelist", method = RequestMethod.GET)
     @ResponseBody
-    public List<Map<String, Object>> getNotificationTemplateList(){
-        return  notificationFinder.findAllTemplates();
+    public List<Map<String, Object>> getNotificationTemplateList() {
+        return notificationFinder.findAllTemplates();
     }
 
     //   ===================== Notification Template Services Starts  ==========================
@@ -280,52 +289,51 @@ public class ReminderSetupController {
 
     @RequestMapping(value = "/emailnotification", method = RequestMethod.POST)
     @ResponseBody
-    public ResponseEntity sendEmail(@RequestBody NotificationEmailDto notificationEmailDto,BindingResult bindingResult){
+    public ResponseEntity sendEmail(@RequestBody NotificationEmailDto notificationEmailDto, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             return new ResponseEntity(Result.failure("Email cannot be sent due to wrong data"), HttpStatus.INTERNAL_SERVER_ERROR);
         }
         try {
-            CreateNotificationHistoryCommand createNotificationHistoryCommand = notificationService.generateHistoryDetail(notificationEmailDto.getNotificationId(),notificationEmailDto.getRecipientMailAddress(),notificationEmailDto.getEmailBody());
-            mailService.sendMailWithAttachment(notificationEmailDto.getSubject(),notificationEmailDto.getEmailBody(),Lists.newArrayList(),notificationEmailDto.getRecipientMailAddress());
+            CreateNotificationHistoryCommand createNotificationHistoryCommand = notificationService.generateHistoryDetail(notificationEmailDto.getNotificationId(), notificationEmailDto.getRecipientMailAddress(), notificationEmailDto.getEmailBody());
+            mailService.sendMailWithAttachment(notificationEmailDto.getSubject(), notificationEmailDto.getEmailBody(), Lists.newArrayList(), notificationEmailDto.getRecipientMailAddress());
             commandGateway.send(createNotificationHistoryCommand);
             notificationService.deleteNotification(createNotificationHistoryCommand.getNotificationId());
         } catch (Exception e) {
-            return new ResponseEntity(Result.failure(e.getMessage()),HttpStatus.OK);
+            return new ResponseEntity(Result.failure(e.getMessage()), HttpStatus.OK);
         }
         return new ResponseEntity(Result.success("Email sent successfully"), HttpStatus.OK);
     }
 
-
     @RequestMapping(value = "/printnotification", method = RequestMethod.POST)
     @ResponseBody
-    public ResponseEntity printNotification(@RequestBody NotificationEmailDto notificationEmailDto,BindingResult bindingResult, HttpServletResponse response) throws IOException {
+    public ResponseEntity printNotification(@Valid @ModelAttribute NotificationEmailDto notificationEmailDto, BindingResult bindingResult, HttpServletResponse response) throws IOException {
         if (bindingResult.hasErrors()) {
-            return new ResponseEntity(Result.failure("Error in generating the PDF file", bindingResult.getAllErrors()),HttpStatus.OK);
+            return new ResponseEntity(Result.failure("Error in generating the PDF file", bindingResult.getAllErrors()), HttpStatus.OK);
         }
         response.reset();
         response.setContentType("application/pdf");
         response.setHeader("content-disposition", "attachment; filename=" + "Quotation.pdf" + "");
         OutputStream outputStream = null;
         try {
-            CreateNotificationHistoryCommand createNotificationHistoryCommand = notificationService.generateHistoryDetail(notificationEmailDto.getNotificationId(),new String[]{""},notificationEmailDto.getEmailBody());
+            CreateNotificationHistoryCommand createNotificationHistoryCommand = notificationService.generateHistoryDetail(notificationEmailDto.getNotificationId(), new String[]{""}, notificationEmailDto.getEmailBody());
             commandGateway.send(createNotificationHistoryCommand);
             outputStream = response.getOutputStream();
             printNotification(notificationEmailDto.getEmailBody(), outputStream);
             outputStream.flush();
-            notificationService.deleteNotification(createNotificationHistoryCommand.getNotificationId());
+           notificationService.deleteNotification(createNotificationHistoryCommand.getNotificationId());
         } catch (Exception e) {
-            if (outputStream!=null){
+            if (outputStream != null) {
                 outputStream.close();
             }
-            return new ResponseEntity(Result.failure(e.getMessage()),HttpStatus.OK);
+            return new ResponseEntity(Result.failure(e.getMessage()), HttpStatus.OK);
         }
         outputStream.close();
         return new ResponseEntity(Result.success("PDF got generated successfully"), HttpStatus.OK);
     }
 
     @RequestMapping(value = "/createnotification", method = RequestMethod.POST)
-     @ResponseBody
-     public Result createQuotationNotification(@RequestBody CreateProposalNotificationCommand createQuotationNotificationCommand, BindingResult bindingResult, HttpServletRequest request) {
+    @ResponseBody
+    public Result createQuotationNotification(@RequestBody CreateQuotationNotificationCommand createQuotationNotificationCommand, BindingResult bindingResult, HttpServletRequest request) {
         if (bindingResult.hasErrors()) {
             return Result.failure("Error in creating Notification", bindingResult.getAllErrors());
         }
@@ -341,11 +349,11 @@ public class ReminderSetupController {
 
     //============= Notification History Services Starts  ==============
 
-    @RequestMapping(value = "/getnotificationhistory",method = RequestMethod.GET)
+    @RequestMapping(value = "/getnotificationhistory", method = RequestMethod.GET)
     @ResponseBody
-    public List<Map<String,Object>> getNotificationHistory(){
-        List<Map<String,Object>> notificationHistory = notificationFinder.getNotificationHistoryDetail();
-        if (isNotEmpty(notificationHistory)){
+    public List<Map<String, Object>> getNotificationHistory() {
+        List<Map<String, Object>> notificationHistory = notificationFinder.getNotificationHistoryDetail();
+        if (isNotEmpty(notificationHistory)) {
             return notificationHistory.parallelStream().map(new RequestNumberTransformer()).collect(Collectors.toList());
         }
         return Collections.EMPTY_LIST;
@@ -362,13 +370,13 @@ public class ReminderSetupController {
 
     @RequestMapping(value = "/emailnotificationHistory", method = RequestMethod.POST)
     @ResponseBody
-    public ResponseEntity sendNotificationHistoryEmail(@RequestBody NotificationEmailDto notificationEmailDto,BindingResult bindingResult) {
+    public ResponseEntity sendNotificationHistoryEmail(@RequestBody NotificationEmailDto notificationEmailDto, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             return new ResponseEntity(Result.failure("Email cannot be sent due to wrong data"), HttpStatus.INTERNAL_SERVER_ERROR);
         }
         try {
             CreateNotificationHistoryCommand createNotificationHistoryCommand = notificationTemplateService.generateHistoryDetail(notificationEmailDto.getNotificationId(), notificationEmailDto.getRecipientMailAddress(), notificationEmailDto.getEmailBody());
-            if (createNotificationHistoryCommand==null){
+            if (createNotificationHistoryCommand == null) {
                 return new ResponseEntity(Result.failure("Email cannot be sent due to wrong data"), HttpStatus.INTERNAL_SERVER_ERROR);
             }
             mailService.sendMailWithAttachment(notificationEmailDto.getSubject(), notificationEmailDto.getEmailBody(), Lists.newArrayList(), notificationEmailDto.getRecipientMailAddress());
@@ -389,14 +397,14 @@ public class ReminderSetupController {
         try {
             outputStream = response.getOutputStream();
             byte[] template = notificationTemplateService.printNotificationHistory(notificationId);
-            if (template==null){
+            if (template == null) {
                 return new ResponseEntity(Result.failure("Error in Print due to some bad data"), HttpStatus.OK);
             }
-            printNotification(new String(template, StandardCharsets.UTF_8),outputStream);
+            printNotification(new String(template, StandardCharsets.UTF_8), outputStream);
             outputStream.flush();
             outputStream.close();
         } catch (Exception e) {
-            if (outputStream!=null){
+            if (outputStream != null) {
                 outputStream.close();
             }
             return new ResponseEntity(Result.failure(e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
@@ -406,7 +414,7 @@ public class ReminderSetupController {
 
 //   ===================== Notification History Services Ends  ==========================
 
-    private class RequestNumberTransformer implements Function<Map<String, Object>,Map<String, Object> > {
+    private class RequestNumberTransformer implements Function<Map<String, Object>, Map<String, Object>> {
         @Override
         public Map<String, Object> apply(Map<String, Object> notificationMap) {
             ProcessType processType = ProcessType.valueOf(notificationMap.get("processType").toString());
@@ -421,7 +429,7 @@ public class ReminderSetupController {
         }
     }
 
-    private void printNotification(String content,OutputStream outputStream) throws IOException, DocumentException {
+    private void printNotification(String content, OutputStream outputStream) throws IOException, DocumentException {
         Document document = new Document(PageSize.A4, 36, 72, 50, 50);
         PdfWriter.getInstance(document, outputStream);
         document.open();

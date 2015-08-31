@@ -196,7 +196,10 @@
                     "scrollable=no,menubar=no,personalbar=no,dependent=yes,dialog=yes,split=no,titlebar=no,resizable=no,location=no,left=100px");
                 };
                 $scope.openPrintReadOnlyWindow = function(notificationHistoryId){
-                    window.location.href='/pla/core/notification/printnotificationhistory/'+notificationHistoryId;
+                   // window.location.href='/pla/core/notification/printnotificationhistory/'+notificationHistoryId;
+                    window.open('/pla/core/notification/openprintnotificationhistory/'+notificationHistoryId,"_blank","toolbar=no,resizable=no," +
+                    "scrollable=no,menubar=no,personalbar=no,dependent=yes,dialog=yes,split=no,titlebar=no,resizable=no,location=no,left=100px");
+
                 }
 
              }]);

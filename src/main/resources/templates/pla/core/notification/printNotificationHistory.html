@@ -20,9 +20,9 @@
 
 <script th:inline="javascript">
     /*<![CDATA[*/
-    var createNotification = {};
-    createNotification.notificationId = null;
-    createNotification.emailBody = null;
+    var createNotificationHistory = {};
+    createNotificationHistory.notificationId = null;
+    createNotificationHistory.emailBody = null;
     /*]]>*/
 </script>
 
@@ -34,7 +34,7 @@
                 <div class="panel-heading">
                     <span th:text="#{printNotification}">Print Notification</span>
                 </div>
-                <form class="css-form" method="post" enctype="multipart/form-data" action="printnotification"
+                <form class="css-form" method="post" enctype="multipart/form-data" action="printnotificationhistory"
                       name="notificationForm" id="notificationForm" ng-submit="submitFormToServer()">
 
                     <div class="panel-body">
@@ -46,8 +46,8 @@
                         </div>
                         <div class="row" style="margin-top: 3px">
                             <div class="col-md-12">
-                                <input type="hidden" id="notificationId" name="notificationId"
-                                       th:value="${printContent[0].notificationId}"/>
+                                <input type="hidden" id="notificationHistoryId" name="notificationHistoryId"
+                                       th:value="${printContent[0].notificationHistoryId}"/>
 
                                 <textarea id="emailBody" th:utext="${printContent[0].emailBody}"
                                           th:value="${printContent[0].emailBody}"
@@ -55,14 +55,6 @@
                                 </textarea>
                             </div>
                         </div>
-                        <!-- <div class="row">
-                             <div class="col-md-12">
-                                 <a th:href="@{/notification/printnotification/{notificationId}(notificationId=${mailContent[0].notificationId})}">
-                                     <span class="glyphicon glyphicon-file" style="font-size: 18px"></span>
-                                     <label th:utext="${mailContent[0].subject}+'.PDF'"></label>
-                                 </a>
-                             </div>
-                         </div>-->
                     </div>
                 </form>
             </div>
@@ -94,47 +86,6 @@
         width: 95%;
     }
 </style>
-
-<!--<div class="modal fade" id="alert-modal-success" tabindex="-1" role="dialog" aria-labelledby="alert-modal-success"
-     aria-hidden="true">
-    <div class="modal-dialog modal-sm">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
-                        aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title">Information</h4>
-            </div>
-            <div class="modal-body">
-                <div class="alert alert-success" id="successMessage" hidden="true"></div>
-                <div class="alert alert-error" id="errorMessage" hidden="true"></div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal" >Close</button>
-            </div>
-        </div>
-    </div>
-</div>
-
-<div class="modal fade" id="alert-modal-error" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
-     aria-hidden="true">
-    <div class="modal-dialog modal-sm">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
-                        aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title">Information</h4>
-            </div>
-            <div class="modal-body">
-                <div class="alert alert-success" hidden="true"></div>
-                <div>Mail not sent successfully.</div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" id="changeToOk" data-dismiss="modal">Cancel</button>
-            </div>
-        </div>
-    </div>
-</div>-->>
-
 <footer class="footer" th:include="fragments/common :: footer">
 </footer>
 </body>
