@@ -183,7 +183,8 @@ public class NotificationFinder {
                 @Override
                 public Map<String, Object> apply(Map<String, Object> notificationMap) {
                     Map<String, Object> emailContent = Maps.newLinkedHashMap();
-                    emailContent.put("subject", "Quotation Reminder");
+                    String subject  = ProcessType.valueOf(notificationMap.get("processType").toString())+" "+WaitingForEnum.valueOf(notificationMap.get("waitingFor").toString())+" "+ReminderTypeEnum.valueOf(notificationMap.get("reminderType").toString());
+                    emailContent.put("subject",subject);
                     emailContent.put("mailSentDate", notificationMap.get("generatedOn"));
                     emailContent.put("emailAddress", notificationMap.get("emailId").toString());
                     String content = new String((byte[]) notificationMap.get("reminderTemplate"));

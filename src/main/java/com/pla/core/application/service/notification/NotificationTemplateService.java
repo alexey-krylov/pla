@@ -4,6 +4,7 @@ import com.google.common.collect.ImmutableMap;
 import com.google.common.io.Files;
 import com.pla.core.domain.model.notification.*;
 import com.pla.core.query.NotificationFinder;
+import com.pla.core.repository.NotificationHistoryRepository;
 import com.pla.sharedkernel.service.GHMandatoryDocumentChecker;
 import com.pla.sharedkernel.service.GLMandatoryDocumentChecker;
 import com.pla.sharedkernel.service.ILMandatoryDocumentChecker;
@@ -57,6 +58,10 @@ public class NotificationTemplateService {
 
     @Autowired
     private IProcessInfoAdapter iProcessInfoAdapter;
+
+
+    @Autowired
+    private NotificationHistoryRepository notificationHistoryRepository;
 
     @Autowired
     private GLMandatoryDocumentChecker glMandatoryDocumentChecker;
@@ -166,9 +171,7 @@ public class NotificationTemplateService {
     }
 
     public CreateNotificationHistoryCommand generateHistoryDetail(String notificationId,String[] recipientMailAddress,String emailBody){
-        Criteria notificationCriteria = Criteria.where("_id").is(notificationId);
-        Query query = new Query(notificationCriteria);
-        NotificationHistory notificationHistory =  mongoTemplate.findOne(query, NotificationHistory.class);
+        NotificationHistory notificationHistory =  notificationHistoryRepository.findOne(notificationId);
         if (notificationHistory!=null) {
             return new CreateNotificationHistoryCommand(notificationHistory.getRequestNumber(), notificationHistory.getRoleType(), notificationHistory.getLineOfBusiness(),
                     notificationHistory.getProcessType(), notificationHistory.getWaitingFor(), notificationHistory.getReminderType(), recipientMailAddress, emailBody.getBytes(), notificationId);
@@ -177,9 +180,7 @@ public class NotificationTemplateService {
     }
 
     public byte[] printNotificationHistory(String notificationId){
-        Criteria notificationCriteria = Criteria.where("_id").is(notificationId);
-        Query query = new Query(notificationCriteria);
-        NotificationHistory notificationHistory =  mongoTemplate.findOne(query, NotificationHistory.class);
+        NotificationHistory notificationHistory =  notificationHistoryRepository.findOne(notificationId);
         if (notificationHistory!=null) {
             return notificationHistory.getReminderTemplate();
         }

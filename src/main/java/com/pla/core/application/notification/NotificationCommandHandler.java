@@ -2,6 +2,7 @@ package com.pla.core.application.notification;
 
 import com.pla.core.application.service.notification.NotificationTemplateService;
 import com.pla.core.domain.model.notification.*;
+import com.pla.core.repository.NotificationHistoryRepository;
 import com.pla.core.repository.NotificationTemplateRepository;
 import com.pla.sharedkernel.application.CreateNotificationHistoryCommand;
 import com.pla.sharedkernel.application.CreateProposalNotificationCommand;
@@ -25,6 +26,8 @@ import static com.google.common.base.Preconditions.checkArgument;
 public class NotificationCommandHandler {
 
     private NotificationTemplateRepository notificationTemplateRepository;
+    @Autowired
+    private NotificationHistoryRepository notificationHistoryRepository;
     private IIdGenerator idGenerator;
     private JpaRepositoryFactory jpaRepositoryFactory;
     private NotificationTemplateService notificationTemplateService;
@@ -80,6 +83,6 @@ public class NotificationCommandHandler {
                 .withReminderTemplate(createNotificationHistoryCommand.getTemplate())
                 .withRoleType(createNotificationHistoryCommand.getRoleType());
         NotificationHistory notificationHistory = notificationBuilder.createNotificationHistory();
-        mongoTemplate.save(notificationHistory);
+        notificationHistoryRepository.save(notificationHistory);
     }
 }

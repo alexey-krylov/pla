@@ -18,7 +18,7 @@ import com.pla.core.dto.NotificationEmailDto;
 import com.pla.core.dto.NotificationTemplateDto;
 import com.pla.core.query.NotificationFinder;
 import com.pla.sharedkernel.application.CreateNotificationHistoryCommand;
-import com.pla.sharedkernel.application.CreateQuotationNotificationCommand;
+import com.pla.sharedkernel.application.CreateProposalNotificationCommand;
 import com.pla.sharedkernel.domain.model.ProcessType;
 import com.pla.sharedkernel.domain.model.WaitingForEnum;
 import com.pla.sharedkernel.exception.ProcessInfoException;
@@ -103,6 +103,15 @@ public class ReminderSetupController {
             return modelAndView;
         };
     }
+
+    @RequestMapping(value = "/openprintnotification/{notificationId}", method = RequestMethod.GET)
+    public ModelAndView openPrintPage(@PathVariable("notificationId") NotificationId notificationId) {
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("pla/core/notification/printNotification");
+        modelAndView.addObject("printContent", notificationFinder.emailContent(notificationId));
+        return modelAndView;
+    }
+
 
     @RequestMapping(value = "/createnotificationrolemapping", method = RequestMethod.POST)
     @ResponseBody
@@ -259,6 +268,8 @@ public class ReminderSetupController {
         return  notificationFinder.findAllTemplates();
     }
 
+    //   ===================== Notification Template Services Starts  ==========================
+
     @RequestMapping(value = "/openemailnotification/{notificationId}", method = RequestMethod.GET)
     public ModelAndView openEmailPage(@PathVariable("notificationId") NotificationId notificationId) {
         ModelAndView modelAndView = new ModelAndView();
@@ -284,9 +295,37 @@ public class ReminderSetupController {
         return new ResponseEntity(Result.success("Email sent successfully"), HttpStatus.OK);
     }
 
-    @RequestMapping(value = "/createnotification", method = RequestMethod.POST)
+
+    @RequestMapping(value = "/printnotification", method = RequestMethod.POST)
     @ResponseBody
-    public Result createQuotationNotification(@RequestBody CreateQuotationNotificationCommand createQuotationNotificationCommand, BindingResult bindingResult, HttpServletRequest request) {
+    public ResponseEntity printNotification(@RequestBody NotificationEmailDto notificationEmailDto,BindingResult bindingResult, HttpServletResponse response) throws IOException {
+        if (bindingResult.hasErrors()) {
+            return new ResponseEntity(Result.failure("Error in generating the PDF file", bindingResult.getAllErrors()),HttpStatus.OK);
+        }
+        response.reset();
+        response.setContentType("application/pdf");
+        response.setHeader("content-disposition", "attachment; filename=" + "Quotation.pdf" + "");
+        OutputStream outputStream = null;
+        try {
+            CreateNotificationHistoryCommand createNotificationHistoryCommand = notificationService.generateHistoryDetail(notificationEmailDto.getNotificationId(),new String[]{""},notificationEmailDto.getEmailBody());
+            commandGateway.send(createNotificationHistoryCommand);
+            outputStream = response.getOutputStream();
+            printNotification(notificationEmailDto.getEmailBody(), outputStream);
+            outputStream.flush();
+            notificationService.deleteNotification(createNotificationHistoryCommand.getNotificationId());
+        } catch (Exception e) {
+            if (outputStream!=null){
+                outputStream.close();
+            }
+            return new ResponseEntity(Result.failure(e.getMessage()),HttpStatus.OK);
+        }
+        outputStream.close();
+        return new ResponseEntity(Result.success("PDF got generated successfully"), HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/createnotification", method = RequestMethod.POST)
+     @ResponseBody
+     public Result createQuotationNotification(@RequestBody CreateProposalNotificationCommand createQuotationNotificationCommand, BindingResult bindingResult, HttpServletRequest request) {
         if (bindingResult.hasErrors()) {
             return Result.failure("Error in creating Notification", bindingResult.getAllErrors());
         }
@@ -297,6 +336,10 @@ public class ReminderSetupController {
         }
         return Result.success("Notification created successfully");
     }
+
+    //   ===================== Notification Template Services Ends  ==========================
+
+    //============= Notification History Services Starts  ==============
 
     @RequestMapping(value = "/getnotificationhistory",method = RequestMethod.GET)
     @ResponseBody
@@ -336,30 +379,6 @@ public class ReminderSetupController {
         return new ResponseEntity(Result.success("Email sent successfully"), HttpStatus.OK);
     }
 
-    @RequestMapping(value = "/printnotification/{notificationId}", method = RequestMethod.GET)
-    @ResponseBody
-    public ResponseEntity printNotification(@PathVariable("notificationId") String notificationId, HttpServletResponse response) throws IOException {
-        response.reset();
-        response.setContentType("application/pdf");
-        response.setHeader("content-disposition", "attachment; filename=" + "Quotation.pdf" + "");
-        OutputStream outputStream = null;
-        try {
-            outputStream = response.getOutputStream();
-            CreateNotificationHistoryCommand createNotificationHistoryCommand = notificationService.printNotificationHistoryDetail(notificationId);
-            printNotification(new String(createNotificationHistoryCommand.getTemplate()), outputStream);
-            outputStream.flush();
-            outputStream.close();
-            commandGateway.send(createNotificationHistoryCommand);
-            notificationService.deleteNotification(createNotificationHistoryCommand.getNotificationId());
-        } catch (Exception e) {
-            if (outputStream!=null){
-                outputStream.close();
-            }
-            return new ResponseEntity(Result.failure(e.getMessage()),HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-        return new ResponseEntity(Result.success("PDF got generated successfully"), HttpStatus.OK);
-    }
-
     @RequestMapping(value = "/printnotificationhistory/{notificationId}", method = RequestMethod.GET)
     @ResponseBody
     public ResponseEntity printNotificationHistory(@PathVariable("notificationId") String notificationId, HttpServletResponse response) throws IOException {
@@ -371,7 +390,7 @@ public class ReminderSetupController {
             outputStream = response.getOutputStream();
             byte[] template = notificationTemplateService.printNotificationHistory(notificationId);
             if (template==null){
-                return new ResponseEntity(Result.failure("Error in Print due to some bad data"), HttpStatus.INTERNAL_SERVER_ERROR);
+                return new ResponseEntity(Result.failure("Error in Print due to some bad data"), HttpStatus.OK);
             }
             printNotification(new String(template, StandardCharsets.UTF_8),outputStream);
             outputStream.flush();
@@ -384,6 +403,8 @@ public class ReminderSetupController {
         }
         return new ResponseEntity(Result.success("PDF got generated successfully"), HttpStatus.OK);
     }
+
+//   ===================== Notification History Services Ends  ==========================
 
     private class RequestNumberTransformer implements Function<Map<String, Object>,Map<String, Object> > {
         @Override
