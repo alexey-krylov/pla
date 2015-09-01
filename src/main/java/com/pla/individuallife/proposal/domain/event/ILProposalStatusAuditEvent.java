@@ -7,15 +7,13 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.joda.time.DateTime;
 
-import java.io.Serializable;
-
 /**
  * Created by Admin on 7/29/2015.
  */
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class ILProposalStatusAuditEvent implements Serializable {
+public class ILProposalStatusAuditEvent  {
 
     private ProposalId proposalId;
 

@@ -166,14 +166,26 @@ public class ILProposalService {
         List<UnderWriterRoutingLevelDetailDto.UnderWriterInfluencingFactorItem> underWriterInfluencingFactorItems = new ArrayList<UnderWriterRoutingLevelDetailDto.UnderWriterInfluencingFactorItem>();
         try {
             UnderWriterRoutingLevel underWriterRoutingLevel = underWriterFinder.findUnderWriterRoutingLevel(routingLevelDetailDto);
-            //TODO : need to add other influencing items
             for (UnderWriterInfluencingFactor underWriterInfluencingFactor : underWriterRoutingLevel.getUnderWriterInfluencingFactors()) {
-                if (underWriterInfluencingFactor.name().equalsIgnoreCase(String.valueOf(UnderWriterInfluencingFactor.AGE)))
+                if (UnderWriterInfluencingFactor.AGE.equals(underWriterInfluencingFactor)) {
                     underWriterInfluencingFactorItems.add(new UnderWriterRoutingLevelDetailDto.UnderWriterInfluencingFactorItem(UnderWriterInfluencingFactor.AGE.name(), age.toString()));
-                if (underWriterInfluencingFactor.name().equalsIgnoreCase(String.valueOf(UnderWriterInfluencingFactor.SUM_ASSURED))) {
+                }
+                else if (UnderWriterInfluencingFactor.SUM_ASSURED.equals(underWriterInfluencingFactor)) {
                     //TODO : Need to add previous sum assured values from the previous policies
                     underWriterInfluencingFactorItems.add(new UnderWriterRoutingLevelDetailDto.UnderWriterInfluencingFactorItem(UnderWriterInfluencingFactor.SUM_ASSURED.name(), (((ProposalPlanDetail) proposal.get("proposalPlanDetail")).getSumAssured().toString())));
                 }
+              /*  else if (UnderWriterInfluencingFactor.BMI.equals(underWriterInfluencingFactor)){
+                    underWriterInfluencingFactorItems.add(new UnderWriterRoutingLevelDetailDto.UnderWriterInfluencingFactorItem(UnderWriterInfluencingFactor.BMI.name(), null));
+                }
+                else if (UnderWriterInfluencingFactor.HEIGHT.equals(underWriterInfluencingFactor)){
+                    underWriterInfluencingFactorItems.add(new UnderWriterRoutingLevelDetailDto.UnderWriterInfluencingFactorItem(UnderWriterInfluencingFactor.HEIGHT.name(), null));
+                }
+                else  if (UnderWriterInfluencingFactor.WEIGHT.equals(underWriterInfluencingFactor)){
+                    underWriterInfluencingFactorItems.add(new UnderWriterRoutingLevelDetailDto.UnderWriterInfluencingFactorItem(UnderWriterInfluencingFactor.WEIGHT.name(), null));
+                }
+                else  if (UnderWriterInfluencingFactor.CLAIM_AMOUNT.equals(underWriterInfluencingFactor)){
+                    underWriterInfluencingFactorItems.add(new UnderWriterRoutingLevelDetailDto.UnderWriterInfluencingFactorItem(UnderWriterInfluencingFactor.BMI.name(), null));
+                }*/
             }
             routingLevelDetailDto.setUnderWriterInfluencingFactor(underWriterInfluencingFactorItems);
             return underWriterAdapter.getRoutingLevel(routingLevelDetailDto);
@@ -288,13 +300,13 @@ public class ILProposalService {
                         mandatoryDocumentDto.setRequireForSubmission(proposerDocumentOptional.get().isRequireForSubmission());
                         mandatoryDocumentDto.setIsApproved(proposerDocumentOptional.get().isApproved());
                         mandatoryDocumentDto.setMandatory(proposerDocumentOptional.get().isMandatory());
+                        mandatoryDocumentDto.setSubmitted(proposerDocumentOptional.get().isApproved());
                         if (isNotEmpty(proposerDocumentOptional.get().getGridFsDocId())) {
                             GridFSDBFile gridFSDBFile = gridFsTemplate.findOne(new Query(Criteria.where("_id").is(proposerDocumentOptional.get().getGridFsDocId())));
                             if (gridFSDBFile != null) {
                                 mandatoryDocumentDto.setFileName(gridFSDBFile.getFilename());
                                 mandatoryDocumentDto.setContentType(gridFSDBFile.getContentType());
                                 mandatoryDocumentDto.setGridFsDocId(gridFSDBFile.getId().toString());
-                                mandatoryDocumentDto.setSubmitted(true);
                             }
                         }
                     }

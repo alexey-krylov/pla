@@ -71,8 +71,16 @@ public class NotificationCommandHandler {
         notificationRepository.save(notification);
     }
 
+
     @CommandHandler
     public void createNotificationHistory(CreateNotificationHistoryCommand createNotificationHistoryCommand) throws Exception {
+        NotificationHistory notificationHistory  = notificationHistoryRepository.findOne(createNotificationHistoryCommand.getNotificationId());
+       if (notificationHistory!=null){
+           notificationHistory.updateWithTemplate(createNotificationHistoryCommand.getTemplate())
+                   .updateWithRecipientEmailAddress(createNotificationHistoryCommand.getRecipientMailAddress());
+           notificationHistoryRepository.save(notificationHistory);
+           return;
+       }
         NotificationBuilder notificationBuilder = NotificationHistory.builder();
         notificationBuilder.withLineOfBusiness(createNotificationHistoryCommand.getLineOfBusiness())
                 .withProcessType(createNotificationHistoryCommand.getProcessType())
@@ -82,7 +90,7 @@ public class NotificationCommandHandler {
                 .withRecipientMailAddress(createNotificationHistoryCommand.getRecipientMailAddress())
                 .withReminderTemplate(createNotificationHistoryCommand.getTemplate())
                 .withRoleType(createNotificationHistoryCommand.getRoleType());
-        NotificationHistory notificationHistory = notificationBuilder.createNotificationHistory();
+        notificationHistory = notificationBuilder.createNotificationHistory();
         notificationHistoryRepository.save(notificationHistory);
     }
 }

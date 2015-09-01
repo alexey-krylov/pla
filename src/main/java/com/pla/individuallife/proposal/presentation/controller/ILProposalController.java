@@ -264,11 +264,10 @@ public class ILProposalController {
             String proposalId = commandGateway.sendAndWait(cmd);
             return new ResponseEntity(Result.success(messageMap.get(cmd.getStatus()),proposalId), HttpStatus.OK);
         }catch (ILProposalException e){
-            return new ResponseEntity(Result.failure(e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity(Result.failure(e.getMessage()), HttpStatus.OK);
         }
         catch (Exception e) {
-            e.printStackTrace();
-            return new ResponseEntity(Result.failure(e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity(Result.failure(e.getMessage()), HttpStatus.OK);
         }
     }
 
@@ -280,6 +279,20 @@ public class ILProposalController {
             cmd.setUserDetails(getLoggedInUserDetail(request));
             String proposalId =  commandGateway.sendAndWait(cmd);
             return new ResponseEntity(Result.success("Proposal rejected successfully",proposalId), HttpStatus.OK);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResponseEntity(Result.failure(e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @RequestMapping(value = "/waivedocument", method = RequestMethod.POST)
+    @ResponseBody
+    @ApiOperation(httpMethod = "POST", value = "To waive mandatory document by Approver")
+    public ResponseEntity waiveDocument(@RequestBody WaiveMandatoryDocumentCommand cmd, HttpServletRequest request) {
+        try {
+            cmd.setUserDetails(getLoggedInUserDetail(request));
+            String proposalId =  commandGateway.sendAndWait(cmd);
+            return new ResponseEntity(Result.success("Mandatory Document waives successfully",proposalId), HttpStatus.OK);
         } catch (Exception e) {
             e.printStackTrace();
             return new ResponseEntity(Result.failure(e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);

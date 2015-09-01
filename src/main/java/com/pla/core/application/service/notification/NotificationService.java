@@ -160,12 +160,6 @@ public class NotificationService {
                 notification.getProcessType(),notification.getWaitingFor(),notification.getReminderType(),recipientMailAddress,emailBody.getBytes(),notificationId);
     }
 
-    public CreateNotificationHistoryCommand printNotificationHistoryDetail(String notificationId){
-        NotificationId id =  new NotificationId(notificationId);
-        Notification notification = entityManager.find(Notification.class, id);
-        return new CreateNotificationHistoryCommand(notification.getRequestNumber(),notification.getRoleType(),notification.getLineOfBusiness(),
-                notification.getProcessType(),notification.getWaitingFor(),notification.getReminderType(),new String[]{notification.getEmailAddress()},notification.getReminderTemplate(),notificationId);
-    }
 
     @Transactional
     public void deleteNotification(String notificationId){

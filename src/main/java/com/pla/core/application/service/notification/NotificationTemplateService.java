@@ -179,13 +179,6 @@ public class NotificationTemplateService {
         return null;
     }
 
-    public byte[] printNotificationHistory(String notificationId){
-        NotificationHistory notificationHistory =  notificationHistoryRepository.findOne(notificationId);
-        if (notificationHistory!=null) {
-            return notificationHistory.getReminderTemplate();
-        }
-        return null;
-    }
 
     public NotificationBuilder generateNotification(LineOfBusinessEnum lineOfBusiness, ProcessType process, WaitingForEnum waitingFor, ReminderTypeEnum reminderType,
                                                     String requestNumber, String roleType, byte[] templateFile, HashMap<String, String> notificationDetail) throws Exception {

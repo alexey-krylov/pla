@@ -60,6 +60,16 @@ public class NotificationHistory {
         this.notificationStatus = NotificationStatusEnum.ACTION_TAKEN;
     }
 
+    public NotificationHistory updateWithTemplate(byte[] reminderTemplate){
+        this.reminderTemplate = reminderTemplate;
+        return this;
+    }
+
+    public NotificationHistory updateWithRecipientEmailAddress(String[] recipientEmailAddress){
+        this.recipientEmailAddress = recipientEmailAddress;
+        return this;
+    }
+
     public static NotificationBuilder builder(){
         return new NotificationBuilder();
     }

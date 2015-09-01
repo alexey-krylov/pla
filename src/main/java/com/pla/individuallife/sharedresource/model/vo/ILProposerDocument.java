@@ -37,6 +37,13 @@ public class ILProposerDocument {
         this.requireForSubmission=true;
     }
 
+    public ILProposerDocument(String documentId,boolean mandatory,boolean isApproved){
+        this.documentId = documentId;
+        this.mandatory = mandatory;
+        this.isApproved = isApproved;
+        this.requireForSubmission=true;
+    }
+
     public ILProposerDocument updateWithNameAndContent(String documentName, String gridFsDocId, String contentType) {
         this.documentName = documentName;
         this.gridFsDocId = gridFsDocId;

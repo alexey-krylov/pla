@@ -10,6 +10,7 @@ import com.pla.individuallife.proposal.domain.model.ILProposalProcessor;
 import com.pla.individuallife.proposal.domain.model.ILProposalStatus;
 import com.pla.individuallife.proposal.domain.service.ILProposalRoleAdapter;
 import com.pla.individuallife.proposal.domain.service.ProposalNumberGenerator;
+import com.pla.individuallife.proposal.presentation.dto.ILProposalMandatoryDocumentDto;
 import com.pla.individuallife.proposal.presentation.dto.QuestionDto;
 import com.pla.individuallife.proposal.query.ILProposalFinder;
 import com.pla.individuallife.proposal.service.ILProposalFactory;
@@ -233,6 +234,22 @@ public class ILProposalCommandHandler {
         ILProposalApprover ilProposalApprover =  ilProposalRoleAdapter.userToProposalApproverRole(cmd.getUserDetails());
         ILProposalAggregate aggregate = ilProposalMongoRepository.load(new ProposalId(cmd.getProposalId()));
         aggregate = ilProposalApprover.routeToNextLevel(aggregate,cmd.getComment(), cmd.getStatus());
+        return aggregate.getIdentifier().getProposalId();
+    }
+
+    @CommandHandler
+    public String waiveDocumentCommandHandler(WaiveMandatoryDocumentCommand cmd) {
+        ILProposalApprover ilProposalApprover =  ilProposalRoleAdapter.userToProposalApproverRole(cmd.getUserDetails());
+        ILProposalAggregate aggregate = ilProposalMongoRepository.load(new ProposalId(cmd.getProposalId()));
+        Set<ILProposerDocument> documents = aggregate.getProposalDocuments();
+        if (isEmpty(documents)) {
+            documents = Sets.newHashSet();
+        }
+        for (ILProposalMandatoryDocumentDto proposalDocument : cmd.getWaivedDocuments()){
+            ILProposerDocument ilProposerDocument = new ILProposerDocument(proposalDocument.getDocumentId(),proposalDocument.getMandatory(),proposalDocument.getIsApproved());
+            documents.add(ilProposerDocument);
+        }
+        aggregate = ilProposalApprover.updateWithDocuments(aggregate,documents);
         return aggregate.getIdentifier().getProposalId();
     }
 
