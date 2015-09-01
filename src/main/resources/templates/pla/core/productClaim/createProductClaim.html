@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/xhtml"
+      lang="en">
+<head th:include="fragments/common :: headTag">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+
+</head>
+<body>
+<div th:include="fragments/common :: bodyHeader" th:remove="tag"/>
+<script>
+    requirejs(['main'], function () {
+        require(['/pla/js/productclaim/createproductclaim.js?t=11221'], function () {
+            angular.bootstrap(document, ['createProductClaim']);
+        });
+    });
+</script>
+
+<div class="container ng-cloak" ng-Controller="CreateProductClaimCtrl">
+    <div class="row">
+        <div class="col-lg-10" style="right:100px;position:absolute;">
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <div class="row">
+                        <div class="col-lg-4"><span th:text="#{createProductClaim}">Create Product Claim
+                        </span></div>
+                    </div>
+                </div>
+                <div class="panel-body ng-cloak">
+                    <form novalidate="true" class="css-form">
+                        <nth-alert></nth-alert>
+                        <div class="row">
+                            <div class="form-group col-md-6" style="margin: auto;margin-top:10px;" >
+                                <label class="control-label">LoB/Product Line</label>
+                                <select class="form-control input-sm" ng-model="lobTest" ng-change="getPlan()">
+                                    <option value="">--Select One--</option>
+                                    <option value="ProductLine1">Product Line1</option>
+                                    <option value="ProductLine2">Product Line2</option>
+                                    <option value="ProductLine3">Product Line3</option>
+                                    <option value="ProductLine4">Product Line4</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group col-md-6 " style="margin: auto;margin-top:10px;" ng-model="planTest">
+                                <label class="control-label">Plan</label>
+                                <select class="form-control input-sm" ng-model="planTest" ng-chang="getCoverageClaimType()">
+                                    <option value="">--Select One--</option>
+                                    <option value="Plan1">Plan1</option>
+                                    <option value="Plan2">Plan2</option>
+                                    <option value="Plan3">Plan3</option>
+                                    <option value="Plan4">Plan4</option>
+                                </select>
+
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="form-group col-md-8 " style="margin: auto;margin-top:10px;">
+                                <label class="control-label">Coverage-Claim Type Mapping</label>
+                                <table class="table table-bordered" style="margin-top: 10px;margin-bottom: 0px">
+                                    <thead>
+                                    <tr>
+                                        <th>Coverage</th>
+                                        <th>Claim Type</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                 <!--   <tr ng-repeat="row in insurerDetails3">
+                                        <td>{{row.name}}</td>
+                                        <td>
+                                            <input type="text" ng-disabled="mode=='new'||mode=='view'" contenteditable="updateFlag" ng-model="row.policyOrProposalNumber" value="{{row.policyOrProposalNumber}}"/>
+                                            &lt;!&ndash; <div contenteditable="true" ng-model="row.update" ng-blur="test(row)" ng-change="test(row)" >{{row.commission}}</div>&ndash;&gt;
+                                        </td>
+                                    </tr>-->
+                                 {{benefitIds}}
+                                    <tr>
+                                        <td>{{CoverageSample}}</td>
+                                        <td>
+                                            <!--<div ng-dropdown-multiselect="" options="example1data" selected-model="example1model"></div>-->
+
+                                            <button type="button" class="btn btn-default bs-select" name="checkBenefits" id="checkBenefits"  ng-model="benefitIds" max-length="0"
+                                                    data-all-none-buttons="true"  data-html="1" data-multiple="1" placeholder="Select Claim Type" ng-options="benefit.id as benefit.label for benefit in example1data" />
+                                                <!--Action <span class="caret"></span>-->
+                                        </td>
+                                    </tr>
+                                 <tr>
+                                     <td>{{CoverageSample}}</td>
+                                     <td>
+                                         <!--<div ng-dropdown-multiselect="" options="example1data" selected-model="example1model"></div>-->
+
+                                         <button type="button" class="btn btn-default bs-select" name="checkBenefits" id="checkBenefits"  ng-model="benefitIds" max-length="0"
+                                                 data-all-none-buttons="true"  data-html="1" data-multiple="1" placeholder="Select Claim Type" ng-options="benefit.id as benefit.label for benefit in example1data" />
+                                         <!--Action <span class="caret"></span>-->
+                                     </td>
+                                 </tr>
+                                 <tr>
+                                     <td>{{CoverageSample}}</td>
+                                     <td>
+                                         <!--<div ng-dropdown-multiselect="" options="example1data" selected-model="example1model"></div>-->
+
+                                         <button type="button" class="btn btn-default bs-select" name="checkBenefits" id="checkBenefits"  ng-model="benefitIds" max-length="0"
+                                                 data-all-none-buttons="true"  data-html="1" data-multiple="1" placeholder="Select Claim Type" ng-options="benefit.id as benefit.label for benefit in example1data" />
+                                         <!--Action <span class="caret"></span>-->
+                                     </td>
+                                 </tr>
+                                    </tbody>
+                                </table>
+
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-lg-12" style="text-align: center;margin-top:10px;">
+
+                                <button type="button" class="btn btn-default" style="float:right;"
+                                        ng-disabled="(!bmBool)" ng-click="submitAssign()">Save
+                                </button>
+                                <a class="btn btn-default" th:href="@{/core/branch/view}" style="float:left;">Cancel</a>
+
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<style>
+    .form-control {
+        font-size: 12px;
+        padding: 5px;
+    }
+
+</style>
+<footer class="footer" th:include="fragments/common :: footer">
+</footer>
+</body>
+</html>
