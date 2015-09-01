@@ -10,15 +10,13 @@ import com.pla.core.domain.model.notification.NotificationHistory;
 import com.pla.core.domain.model.notification.NotificationId;
 import com.pla.core.domain.model.notification.NotificationTemplate;
 import com.pla.core.domain.model.notification.NotificationTemplateId;
+import com.pla.core.repository.NotificationHistoryRepository;
 import com.pla.core.repository.NotificationTemplateRepository;
 import com.pla.sharedkernel.domain.model.ProcessType;
 import com.pla.sharedkernel.domain.model.ReminderTypeEnum;
 import com.pla.sharedkernel.domain.model.WaitingForEnum;
 import com.pla.sharedkernel.identifier.LineOfBusinessEnum;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.mongodb.core.MongoTemplate;
-import org.springframework.data.mongodb.core.query.Criteria;
-import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.jdbc.core.ColumnMapRowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
@@ -44,8 +42,10 @@ public class NotificationFinder {
     private NotificationTemplateRepository notificationTemplateRepository;
     private ObjectMapper objectMapper;
 
+
+
     @Autowired
-    private MongoTemplate mongoTemplate;
+    private NotificationHistoryRepository notificationHistoryRepository;
 
     @Autowired
     public void setDataSource(DataSource dataSource) {
@@ -148,13 +148,12 @@ public class NotificationFinder {
     }
 
     public Map<String, Object> notificationHistoryEmailContent(String notificationHistoryId) {
-        Criteria notificationCriteria = Criteria.where("_id").is(notificationHistoryId);
-        Query query = new Query(notificationCriteria);
-        NotificationHistory notificationHistories = mongoTemplate.findOne(query, NotificationHistory.class);
+        NotificationHistory notificationHistories = notificationHistoryRepository.findOne(notificationHistoryId);
         if (notificationHistories !=null){
             Map<String, Object> notificationTemplateMap = objectMapper.convertValue(notificationHistories, Map.class);
             Map<String, Object> emailContent = Maps.newLinkedHashMap();
-            emailContent.put("subject", "Quotation Reminder");
+            String subject  = ProcessType.valueOf(notificationTemplateMap.get("processType").toString())+" "+WaitingForEnum.valueOf(notificationTemplateMap.get("waitingFor").toString())+" "+ReminderTypeEnum.valueOf(notificationTemplateMap.get("reminderType").toString());
+            emailContent.put("subject", subject);
             emailContent.put("mailSentDate", notificationTemplateMap.get("generatedOn"));
             emailContent.put("emailAddress", notificationTemplateMap.get("recipientEmailAddress"));
             emailContent.put("emailBody",new String((byte[]) notificationTemplateMap.get("reminderTemplate")));
@@ -198,7 +197,7 @@ public class NotificationFinder {
     }
 
     public List<Map<String,Object>> getNotificationHistoryDetail(){
-        List<NotificationHistory> notificationHistories = mongoTemplate.findAll(NotificationHistory.class);
+        List<NotificationHistory> notificationHistories = notificationHistoryRepository.findAll();
         if (isNotEmpty(notificationHistories)){
             return notificationHistories.parallelStream().map(new Function<NotificationHistory, Map<String,Object>>() {
                 @Override

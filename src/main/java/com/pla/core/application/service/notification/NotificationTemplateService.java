@@ -114,11 +114,18 @@ public class NotificationTemplateService {
     }
 
     public String getRequestNumberBy(LineOfBusinessEnum lineOfBusinessEnum,ProcessType processType,String id) throws ProcessInfoException {
+        HashMap<String,String>  notificationDetailMap  = null;
         switch (processType){
             case QUOTATION:
-                return getQuotationNotificationTemplateData(lineOfBusinessEnum,id).get("requestNumber").toString();
+                notificationDetailMap  = getQuotationNotificationTemplateData(lineOfBusinessEnum,id);
+                if (notificationDetailMap!=null){
+                    return notificationDetailMap.get("requestNumber").toString();
+                }
             case PROPOSAL:
-                return getProposalNotificationTemplateData(lineOfBusinessEnum,id, null).get("requestNumber").toString();
+                notificationDetailMap  = getProposalNotificationTemplateData(lineOfBusinessEnum, id, null);
+                if (notificationDetailMap!=null) {
+                    return notificationDetailMap.get("requestNumber").toString();
+                }
         }
         return "";
     }
