@@ -34,7 +34,6 @@ function IsValidEmail(email) {
     var regex = /^([a-zA-Z0-9_.+-])+\@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/;
     return regex.test(email);
 }
-
 function printNotification() {
     var emailBody = tinyMCE.get('emailBody').getContent();
     var notificationId = $('#notificationId').val();
