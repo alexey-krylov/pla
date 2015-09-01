@@ -12,7 +12,6 @@ import org.nthdimenzion.common.service.JpaRepositoryFactory;
 import org.nthdimenzion.object.utils.IIdGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.stereotype.Component;
 
 import java.util.HashMap;
@@ -31,9 +30,6 @@ public class NotificationCommandHandler {
     private IIdGenerator idGenerator;
     private JpaRepositoryFactory jpaRepositoryFactory;
     private NotificationTemplateService notificationTemplateService;
-
-    @Autowired
-    private MongoTemplate mongoTemplate;
 
     @Autowired
     public NotificationCommandHandler(NotificationTemplateRepository notificationTemplateRepository, JpaRepositoryFactory jpaRepositoryFactory,IIdGenerator idGenerator, NotificationTemplateService notificationTemplateService){
