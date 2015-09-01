@@ -16,16 +16,24 @@ public class ProductClaimSetUpController {
     @RequestMapping(value = "/opencreateproductclaim",method = RequestMethod.GET)
     public ModelAndView openCreatePage(){
         ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("pla/core/productclaim/createProductClaim");
+        modelAndView.setViewName("pla/core/productClaim/createProductClaim");
         return modelAndView;
     }
 
     @RequestMapping(value = "/openviewproductclaim",method = RequestMethod.GET)
     public ModelAndView openViewPage(){
         ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("pla/core/productclaim/viewProductClaim");
+        modelAndView.setViewName("pla/core/productClaim/viewProductClaim");
         return modelAndView;
     }
+
+   /* @RequestMapping(value = "/openviewproductclaim",method = RequestMethod.GET)
+    public ModelAndView openViewPage(){
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("pla/core/productClaim/viewProductClaim");
+        return modelAndView;
+    }*/
+
 
 
 }
