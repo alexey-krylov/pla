@@ -5,7 +5,7 @@
     var app = angular.module('createProductClaim', ['ngRoute','ui.bootstrap','ngSanitize','mgcrea.ngStrap.select','mgcrea.ngStrap','mgcrea.ngStrap.alert']);
 
     app.controller('CreateProductClaimCtrl', ['$scope', '$http', '$location', function ($scope, $http, $location) {
-        alert('Hi..');
+        //alert('Hi..');
 
         $scope.CoverageSample= "coverages..";
 
