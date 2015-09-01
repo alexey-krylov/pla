@@ -13,7 +13,7 @@
     <!--*/-->
 </head>
 <script src="http://timschlechter.github.io/bootstrap-tagsinput/examples/lib/jquery/dist/jquery.min.js"></script>
-<script src="/pla/js/notification/emailNotification.js"></script>
+<script src="/pla/js/notification/emailNotificationHistory.js"></script>
 <script src="//tinymce.cachefly.net/4.1/tinymce.min.js"></script>
 <script src="http://timschlechter.github.io/bootstrap-tagsinput/examples/lib/bootstrap-tagsinput/bootstrap-tagsinput.js"></script>
 <body onload="javascript:bodyOnLoad();" onunload="opener.location=('/pla/home')">
@@ -46,11 +46,11 @@
                         </div>
                         <div class="row" style="margin-top: 3px">
                             <div class="col-md-12">
-                                <input type="hidden" id="notificationHistoryId" name="notificationHistoryId"
-                                       th:value="${printContent[0].notificationHistoryId}"/>
+                                <input type="hidden" id="notificationId" name="notificationId"
+                                       th:value="${printContent.notificationHistoryId}"/>
 
-                                <textarea id="emailBody" th:utext="${printContent[0].emailBody}"
-                                          th:value="${printContent[0].emailBody}"
+                                <textarea id="emailBody" th:utext="${printContent.emailBody}"
+                                          th:value="${printContent.emailBody}"
                                           name="emailBody">
                                 </textarea>
                             </div>

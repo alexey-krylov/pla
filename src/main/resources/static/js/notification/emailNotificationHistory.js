@@ -37,18 +37,17 @@ function IsValidEmail(email) {
 
 function printNotification() {
     var emailBody = tinyMCE.get('emailBody').getContent();
-    var notificationId = $('#notificationHistoryId').val();
-    //  alert(notificationId);
-    createNotificationHistory.notificationHistoryId=notificationId;
+    var notificationId = $('#notificationId').val();
+   //  alert(notificationId);
+    createNotificationHistory.notificationId=notificationId;
     createNotificationHistory.emailBody=emailBody;
     console.log(JSON.stringify(createNotificationHistory));
 
-    var status= $('#notificationForm').attr('action', '/pla/core/notification/printnotificationhistory');
-    console.log(status);
+    $('#notificationForm').attr('action', '/pla/core/notification/printnotificationhistory');
+    //console.log(status);
     //window.close();
 
     return true;
-
 }
 
 function sendEmail() {
