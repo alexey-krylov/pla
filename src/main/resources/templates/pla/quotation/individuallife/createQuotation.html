@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/xhtml"
       lang="en">
 <head th:include="fragments/common :: headTag">
@@ -271,7 +271,7 @@
                                 </div>
                                 <div class="form-group required">
                                     <label class="control-label">Mobile Number</label>
-                                    <input type="text" ng-maxlength="10" ng-minlength="10" ng-pattern="onlyNumbers" view-enabled=""
+                                    <input type="text" ng-maxlength="10" ng-minlength="10" maxlength="10" ng-pattern="onlyNumbers" view-enabled=""
                                            class="form-control input-sm" name="mobile" ng-required="true"
                                            ng-model="proposedAssured.mobileNumber"/>
 
@@ -423,7 +423,7 @@
                                 <div class="form-group required">
                                     <label class="control-label">Mobile Number</label>
                                     <input type="text" ng-pattern="onlyNumbers" ng-maxlength="10"
-                                           ng-minlength="10" ng-disabled="proposerSameAsProposedAssured"
+                                           ng-minlength="10" maxlength="10" ng-disabled="proposerSameAsProposedAssured"
                                            view-enabled=""
                                            class="form-control input-sm" ng-required="true"
                                            ng-model="proposer.mobileNumber"

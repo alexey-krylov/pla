@@ -3430,12 +3430,19 @@ var viewILQuotationModule = (function () {
         this.status = $(ele).parent().find('input[type=hidden]').val();
         //alert(JSON.stringify(this.status));
         $(".btn-disabled").attr("disabled", false);
-        if (this.status == 'GENERATED') {
+      /*  if (this.status == 'GENERATED') {
             $('#emailaddress').attr('disabled', false);
             $('#print').attr('disabled', false);
         } else {
             $('#emailaddress').attr('disabled', true);
             $('#print').attr('disabled', true);
+        }*/
+        if(this.status == 'Draft' || this.status == 'Returned') {
+            $('#modify').attr('disabled', false);
+        }
+        else
+        {
+            $('#modify').attr('disabled', true);
         }
     };
 

@@ -383,7 +383,7 @@
                     if (newval) {
                         if (newval[0]) {
                             $scope.proposedAssuredAge = calculateAge(newval[0]);
-                            $scope.proposer.dateOfBirth = newval[0];
+                            //$scope.proposer.dateOfBirth = newval[0];
                         }
                         if (newval[1]) {
                             $scope.proposerAge = calculateAge(newval[1]);
