@@ -16,6 +16,7 @@ import com.pla.sharedkernel.domain.model.ProcessType;
 import com.pla.sharedkernel.domain.model.ReminderTypeEnum;
 import com.pla.sharedkernel.domain.model.WaitingForEnum;
 import com.pla.sharedkernel.identifier.LineOfBusinessEnum;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.ColumnMapRowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
@@ -155,12 +156,18 @@ public class NotificationFinder {
             String subject  = ProcessType.valueOf(notificationTemplateMap.get("processType").toString())+" "+WaitingForEnum.valueOf(notificationTemplateMap.get("waitingFor").toString())+" "+ReminderTypeEnum.valueOf(notificationTemplateMap.get("reminderType").toString());
             emailContent.put("subject", subject);
             emailContent.put("mailSentDate", notificationTemplateMap.get("generatedOn"));
-            emailContent.put("emailAddress", notificationTemplateMap.get("recipientEmailAddress"));
+            emailContent.put("emailAddress",transformRecipientMailAddress(notificationTemplateMap.get("recipientEmailAddress")!=null?(String[])notificationTemplateMap.get("recipientEmailAddress"):new String[]{""}));
             emailContent.put("emailBody",new String((byte[]) notificationTemplateMap.get("reminderTemplate")));
             emailContent.put("notificationHistoryId", notificationHistories.getNotificationHistoryId());
             return emailContent;
         }
         return Collections.EMPTY_MAP;
+    }
+
+    private String transformRecipientMailAddress(String[] recipientMailAddress){
+        if (recipientMailAddress!=null)
+            return StringUtils.join(recipientMailAddress, ";");
+        return "";
     }
 
     private class NotificationTemplateTransformer implements Function<NotificationTemplate, Map<String,Object>> {
@@ -185,7 +192,7 @@ public class NotificationFinder {
                     String subject  = ProcessType.valueOf(notificationMap.get("processType").toString())+" "+WaitingForEnum.valueOf(notificationMap.get("waitingFor").toString())+" "+ReminderTypeEnum.valueOf(notificationMap.get("reminderType").toString());
                     emailContent.put("subject",subject);
                     emailContent.put("mailSentDate", notificationMap.get("generatedOn"));
-                    emailContent.put("emailAddress", notificationMap.get("emailId").toString());
+                    emailContent.put("emailAddress", transformRecipientMailAddress(notificationMap.get("emailId") != null ? (String[]) notificationMap.get("emailId") : new String[]{""}));
                     String content = new String((byte[]) notificationMap.get("reminderTemplate"));
                     emailContent.put("emailBody",content);
                     emailContent.put("notificationId", notificationId);
