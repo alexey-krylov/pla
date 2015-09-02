@@ -11,6 +11,7 @@ import com.pla.individuallife.proposal.domain.model.ILProposalStatus;
 import com.pla.individuallife.proposal.domain.service.ILProposalRoleAdapter;
 import com.pla.individuallife.proposal.domain.service.ProposalNumberGenerator;
 import com.pla.individuallife.proposal.presentation.dto.ILProposalMandatoryDocumentDto;
+import com.pla.individuallife.proposal.presentation.dto.PremiumDetailDto;
 import com.pla.individuallife.proposal.presentation.dto.QuestionDto;
 import com.pla.individuallife.proposal.query.ILProposalFinder;
 import com.pla.individuallife.proposal.service.ILProposalFactory;
@@ -22,6 +23,7 @@ import com.pla.sharedkernel.domain.model.ProcessType;
 import com.pla.sharedkernel.domain.model.RoutingLevel;
 import com.pla.sharedkernel.identifier.PlanId;
 import com.pla.sharedkernel.identifier.ProposalId;
+import org.apache.commons.beanutils.BeanUtils;
 import org.axonframework.commandhandling.annotation.CommandHandler;
 import org.axonframework.repository.Repository;
 import org.joda.time.LocalDate;
@@ -34,6 +36,7 @@ import org.springframework.data.mongodb.gridfs.GridFsTemplate;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -160,7 +163,7 @@ public class ILProposalCommandHandler {
     }
 
     @CommandHandler
-    public String updateWithPlanDetail(ILProposalUpdateWithPlanAndBeneficiariesCommand cmd) {
+    public String updateWithPlanDetail(ILProposalUpdateWithPlanAndBeneficiariesCommand cmd) throws InvocationTargetException, IllegalAccessException {
         ILProposalProcessor ilProposalProcessor   =  ilProposalRoleAdapter.userToProposalProcessorRole(cmd.getUserDetails());
         ProposalId proposalId = new ProposalId(cmd.getProposalId());
         ILProposalAggregate aggregate = ilProposalMongoRepository.load(proposalId);
@@ -169,6 +172,12 @@ public class ILProposalCommandHandler {
         int minAge = (int) planDetail.get("minEntryAge");
         int maxAge = (int) planDetail.get("maxEntryAge");
         aggregate = ilProposalProcessor.updateWithPlanDetail(aggregate, cmd.getProposalPlanDetail(), cmd.getBeneficiaries(), minAge, maxAge);
+        PremiumDetailDto premiumDetailDto =  proposalFinder.getPremiumDetail(proposalId.getProposalId());
+        PremiumDetail premiumDetail = new PremiumDetail();
+        BeanUtils.copyProperties(premiumDetail, premiumDetailDto);
+        PremiumPaymentDetails premiumPaymentDetails = new PremiumPaymentDetails();
+        premiumPaymentDetails.setPremiumDetail(premiumDetail);
+        aggregate =  ilProposalProcessor.updateWithPremiumPaymentDetail(aggregate,premiumPaymentDetails);
         ilProposalMongoRepository.add(aggregate);
         return aggregate.getIdentifier().getProposalId();
     }
@@ -178,7 +187,9 @@ public class ILProposalCommandHandler {
         ILProposalProcessor ilProposalProcessor  = ilProposalRoleAdapter.userToProposalProcessorRole(cmd.getUserDetails());
         ProposalId proposalId = new ProposalId(cmd.getProposalId());
         ILProposalAggregate aggregate = ilProposalMongoRepository.load(proposalId);
-        aggregate = ilProposalProcessor.updateWithPremiumPaymentDetail(aggregate,cmd.getPremiumPaymentDetails());
+        PremiumPaymentDetails premiumPaymentDetails = cmd.getPremiumPaymentDetails();
+        premiumPaymentDetails.setPremiumDetail(aggregate.getPremiumPaymentDetails().getPremiumDetail());
+        aggregate = ilProposalProcessor.updateWithPremiumPaymentDetail(aggregate,premiumPaymentDetails);
         ilProposalMongoRepository.add(aggregate);
         return aggregate.getIdentifier().getProposalId();
     }
@@ -219,7 +230,7 @@ public class ILProposalCommandHandler {
     }
 
     @CommandHandler
-    public String proposalApproval(ILProposalApprovalCommand cmd) {
+     public String proposalApproval(ILProposalApprovalCommand cmd) {
         ILProposalApprover ilProposalApprover = ilProposalRoleAdapter.userToProposalApproverRole(cmd.getUserDetails());
         ILProposalAggregate aggregate = ilProposalMongoRepository.load(new ProposalId(cmd.getProposalId()));
         if (ILProposalStatus.APPROVED.equals(cmd.getStatus()) && !ilProposalService.doesAllDocumentWaivesByApprover(cmd.getProposalId())){

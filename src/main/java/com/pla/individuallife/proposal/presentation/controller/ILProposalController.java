@@ -481,18 +481,6 @@ public class ILProposalController {
         return planList;
     }
 
-    @RequestMapping(value = "/getpremiumdetail/{proposalId}", method = RequestMethod.GET)
-    @ResponseBody
-    public ResponseEntity getPremiumDetail(@PathVariable("proposalId") String proposalId) {
-        PremiumDetailDto dto = null;
-        try {
-            dto = proposalFinder.getPremiumDetail(proposalId);
-        } catch (IllegalArgumentException iag) {
-            return new ResponseEntity(Result.failure(iag.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-        return new ResponseEntity(dto, HttpStatus.OK);
-    }
-
     @RequestMapping(value = "/getmandatorydocuments/{proposalId}", method = RequestMethod.GET)
     @ResponseBody
     @ApiOperation(httpMethod = "GET", value = "To list mandatory documents which is being configured in Mandatory Document SetUp")

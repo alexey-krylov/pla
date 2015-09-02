@@ -119,12 +119,12 @@ public class NotificationTemplateService {
             case QUOTATION:
                 notificationDetailMap  = getQuotationNotificationTemplateData(lineOfBusinessEnum,id);
                 if (notificationDetailMap!=null){
-                    return notificationDetailMap.get("requestNumber").toString();
+                    return notificationDetailMap.get("requestNumber")!=null?notificationDetailMap.get("requestNumber").toString():"";
                 }
             case PROPOSAL:
                 notificationDetailMap  = getProposalNotificationTemplateData(lineOfBusinessEnum, id, null);
                 if (notificationDetailMap!=null) {
-                    return notificationDetailMap.get("requestNumber").toString();
+                    return notificationDetailMap.get("requestNumber")!=null?notificationDetailMap.get("requestNumber").toString():"";
                 }
         }
         return "";

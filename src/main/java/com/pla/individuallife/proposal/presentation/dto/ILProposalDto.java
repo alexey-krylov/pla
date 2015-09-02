@@ -56,8 +56,6 @@ public class ILProposalDto {
 
     private Set<ILProposerDocument> proposalDocuments;
 
-    private PremiumDetailDto premiumDetailDto;
-
 }
 
 

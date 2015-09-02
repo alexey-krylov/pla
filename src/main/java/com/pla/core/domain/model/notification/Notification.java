@@ -53,6 +53,8 @@ public class Notification implements ICrudEntity,Serializable {
 
     private String emailAddress;
 
+
+
     public Notification(NotificationId notificationId,NotificationBuilder notificationBuilder) {
         this.notificationId = notificationId;
         this.requestNumber = notificationBuilder.getRequestNumber();

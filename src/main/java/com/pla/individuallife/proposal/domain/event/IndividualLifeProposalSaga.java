@@ -4,9 +4,6 @@ import com.google.common.collect.Lists;
 import com.pla.individuallife.proposal.application.command.ILProposalClosureCommand;
 import com.pla.individuallife.proposal.domain.model.ILProposalAggregate;
 import com.pla.individuallife.proposal.domain.model.ILProposalStatus;
-import com.pla.individuallife.proposal.domain.model.ILProposalStatusAudit;
-import com.pla.individuallife.proposal.repository.ILProposalStatusAuditRepository;
-import com.pla.sharedkernel.service.ILMandatoryDocumentChecker;
 import com.pla.publishedlanguage.contract.IProcessInfoAdapter;
 import com.pla.sharedkernel.application.CreateProposalNotificationCommand;
 import com.pla.sharedkernel.domain.model.ProcessType;
@@ -14,16 +11,15 @@ import com.pla.sharedkernel.domain.model.ReminderTypeEnum;
 import com.pla.sharedkernel.domain.model.WaitingForEnum;
 import com.pla.sharedkernel.exception.ProcessInfoException;
 import com.pla.sharedkernel.identifier.LineOfBusinessEnum;
+import com.pla.sharedkernel.service.ILMandatoryDocumentChecker;
 import com.pla.sharedkernel.util.RolesUtil;
 import org.axonframework.commandhandling.gateway.CommandGateway;
-import org.axonframework.eventhandling.annotation.EventHandler;
 import org.axonframework.eventhandling.scheduling.EventScheduler;
 import org.axonframework.eventhandling.scheduling.ScheduleToken;
 import org.axonframework.repository.Repository;
 import org.axonframework.saga.annotation.AbstractAnnotatedSaga;
 import org.axonframework.saga.annotation.SagaEventHandler;
 import org.axonframework.saga.annotation.StartSaga;
-import org.bson.types.ObjectId;
 import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -54,9 +50,6 @@ public class IndividualLifeProposalSaga  extends AbstractAnnotatedSaga implement
 
     @Autowired
     private Repository<ILProposalAggregate> ilProposalMongoRepository;
-
-    @Autowired
-    private ILProposalStatusAuditRepository ilProposalStatusAuditRepository;
 
     @Autowired
     private ILMandatoryDocumentChecker mandatoryDocumentChecker;
@@ -121,13 +114,5 @@ public class IndividualLifeProposalSaga  extends AbstractAnnotatedSaga implement
             commandGateway.send(new ILProposalClosureCommand(event.getProposalId()));
         }
     }
-
-
-    @EventHandler
-    public void handle(ILProposalStatusAuditEvent ilProposalStatusAuditEvent) {
-        ILProposalStatusAudit groupHealthProposalStatusAudit = new ILProposalStatusAudit(ObjectId.get(), ilProposalStatusAuditEvent.getProposalId(), ilProposalStatusAuditEvent.getStatus(), ilProposalStatusAuditEvent.getPerformedOn(), ilProposalStatusAuditEvent.getActor(), ilProposalStatusAuditEvent.getComments());
-        ilProposalStatusAuditRepository.save(groupHealthProposalStatusAudit);
-    }
-
 
 }

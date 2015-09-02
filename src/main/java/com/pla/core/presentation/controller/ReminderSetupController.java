@@ -18,7 +18,7 @@ import com.pla.core.dto.NotificationEmailDto;
 import com.pla.core.dto.NotificationTemplateDto;
 import com.pla.core.query.NotificationFinder;
 import com.pla.sharedkernel.application.CreateNotificationHistoryCommand;
-import com.pla.sharedkernel.application.CreateQuotationNotificationCommand;
+import com.pla.sharedkernel.application.CreateProposalNotificationCommand;
 import com.pla.sharedkernel.domain.model.ProcessType;
 import com.pla.sharedkernel.domain.model.WaitingForEnum;
 import com.pla.sharedkernel.exception.ProcessInfoException;
@@ -332,7 +332,7 @@ public class ReminderSetupController {
 
     @RequestMapping(value = "/createnotification", method = RequestMethod.POST)
     @ResponseBody
-    public Result createQuotationNotification(@RequestBody CreateQuotationNotificationCommand createQuotationNotificationCommand, BindingResult bindingResult, HttpServletRequest request) {
+    public Result createQuotationNotification(@RequestBody CreateProposalNotificationCommand createQuotationNotificationCommand, BindingResult bindingResult, HttpServletRequest request) {
         if (bindingResult.hasErrors()) {
             return Result.failure("Error in creating Notification", bindingResult.getAllErrors());
         }
@@ -387,7 +387,6 @@ public class ReminderSetupController {
     }
 
     @RequestMapping(value = "/printnotificationhistory", method = RequestMethod.POST)
-    @ResponseBody
     public ResponseEntity printNotificationHistory(@Valid @ModelAttribute NotificationEmailDto notificationEmailDto, HttpServletResponse response) throws IOException {
         response.reset();
         response.setContentType("application/pdf");

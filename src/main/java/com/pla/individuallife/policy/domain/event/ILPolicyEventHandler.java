@@ -21,6 +21,7 @@ public class ILPolicyEventHandler  {
     private transient CommandGateway commandGateway;
 
 
+
     @EventHandler
     public void handle(ILProposalToPolicyEvent event) {
         if (LOGGER.isDebugEnabled()) {

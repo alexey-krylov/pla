@@ -78,7 +78,7 @@ public class ILQuotationController {
     @RequestMapping(method = RequestMethod.POST)
     public ModelAndView searchQuotation(ILSearchQuotationDto ilSearchDto) {
         ModelAndView modelAndView = new ModelAndView();
-        modelAndView.addObject("searchResult", ilQuotationService.searchQuotation(ilSearchDto));
+            modelAndView.addObject("searchResult", ilQuotationService.searchQuotation(ilSearchDto));
         modelAndView.addObject("searchCriteria", ilSearchDto);
         modelAndView.setViewName("pla/quotation/individuallife/index");
         return modelAndView;

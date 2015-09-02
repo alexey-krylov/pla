@@ -95,15 +95,15 @@ public class ILQuotationARSaga extends AbstractAnnotatedSaga implements Serializ
         int firstReminderDay = processInfoAdapter.getDaysForFirstReminder(LineOfBusinessEnum.INDIVIDUAL_LIFE, ProcessType.QUOTATION);
 
         ILQuotation quotation = ilQuotationRepository.load(event.getQuotationId());
-        LocalDate quotationGeneratedDate = quotation.getGeneratedOn();
-        LocalDate firstReminderDate = quotationGeneratedDate.plusDays(firstReminderDay);
-        LocalDate purgeDate = quotationGeneratedDate.plusDays(noOfDaysToPurge);
-        LocalDate closureDate = quotationGeneratedDate.plusDays(noOfDaysToClosure);
+        LocalDate quotationSharedOnDate = quotation.getSharedOn();
+        LocalDate firstReminderDate = quotationSharedOnDate.plusDays(firstReminderDay);
+        LocalDate purgeDate = quotationSharedOnDate.plusDays(noOfDaysToPurge);
+        LocalDate closureDate = quotationSharedOnDate.plusDays(noOfDaysToClosure);
         DateTime purgeScheduleDateTime = purgeDate.toDateTimeAtStartOfDay();
         DateTime closureScheduleDateTime = closureDate.toDateTimeAtStartOfDay();
         DateTime firstReminderDateTime = firstReminderDate.toDateTimeAtStartOfDay();
 
-        ScheduleToken firstReminderScheduleToken =   eventScheduler.schedule(firstReminderDateTime, new ILQuotationReminderEvent(event.getQuotationId()));
+        ScheduleToken firstReminderScheduleToken = eventScheduler.schedule(firstReminderDateTime, new ILQuotationReminderEvent(event.getQuotationId()));
         ScheduleToken purgeScheduleToken =  eventScheduler.schedule(purgeScheduleDateTime, new ILQuotationPurgeEvent(event.getQuotationId()));
         ScheduleToken closureScheduleToken = eventScheduler.schedule(closureScheduleDateTime, new ILQuotationClosureEvent(event.getQuotationId()));
         scheduledTokens.add(firstReminderScheduleToken);

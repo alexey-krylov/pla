@@ -2,8 +2,6 @@ package com.pla.grouplife.proposal.domain.event;
 
 import com.google.common.collect.Lists;
 import com.pla.grouplife.proposal.domain.model.GroupLifeProposal;
-import com.pla.grouplife.proposal.domain.model.GroupLifeProposalStatusAudit;
-import com.pla.grouplife.proposal.repository.GLProposalStatusAuditRepository;
 import com.pla.grouplife.sharedresource.model.vo.GLProposalStatus;
 import com.pla.publishedlanguage.contract.IProcessInfoAdapter;
 import com.pla.sharedkernel.application.CreateProposalNotificationCommand;
@@ -15,14 +13,12 @@ import com.pla.sharedkernel.identifier.LineOfBusinessEnum;
 import com.pla.sharedkernel.service.GLMandatoryDocumentChecker;
 import com.pla.sharedkernel.util.RolesUtil;
 import org.axonframework.commandhandling.gateway.CommandGateway;
-import org.axonframework.eventhandling.annotation.EventHandler;
 import org.axonframework.eventhandling.scheduling.EventScheduler;
 import org.axonframework.eventhandling.scheduling.ScheduleToken;
 import org.axonframework.repository.Repository;
 import org.axonframework.saga.annotation.AbstractAnnotatedSaga;
 import org.axonframework.saga.annotation.SagaEventHandler;
 import org.axonframework.saga.annotation.StartSaga;
-import org.bson.types.ObjectId;
 import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -36,9 +32,9 @@ import java.util.List;
  * Created by Samir on 7/14/2015.
  */
 @Component
-public class GroupLifeProposalEventSaga extends AbstractAnnotatedSaga implements Serializable {
+public class GroupLifeProposalSaga extends AbstractAnnotatedSaga implements Serializable {
 
-    private transient static final Logger LOGGER = LoggerFactory.getLogger(GroupLifeProposalEventSaga.class);
+    private transient static final Logger LOGGER = LoggerFactory.getLogger(GroupLifeProposalSaga.class);
 
     @Autowired
     private transient EventScheduler eventScheduler;
@@ -56,9 +52,6 @@ public class GroupLifeProposalEventSaga extends AbstractAnnotatedSaga implements
 
     @Autowired
     private GLMandatoryDocumentChecker glMandatoryDocumentChecker;
-
-    @Autowired
-    private GLProposalStatusAuditRepository glProposalStatusAuditRepository;
 
     private List<ScheduleToken> scheduledTokens = Lists.newArrayList();
 
@@ -119,11 +112,7 @@ public class GroupLifeProposalEventSaga extends AbstractAnnotatedSaga implements
         }
     }
 
-    @EventHandler
-    public void handle(GLProposalStatusAuditEvent glProposalStatusAuditEvent) {
-        GroupLifeProposalStatusAudit groupLifeProposalStatusAudit = new GroupLifeProposalStatusAudit(ObjectId.get(), glProposalStatusAuditEvent.getProposalId(), glProposalStatusAuditEvent.getStatus(), glProposalStatusAuditEvent.getPerformedOn(), glProposalStatusAuditEvent.getActor(), glProposalStatusAuditEvent.getComments());
-        glProposalStatusAuditRepository.save(groupLifeProposalStatusAudit);
-    }
+
 
 
 }

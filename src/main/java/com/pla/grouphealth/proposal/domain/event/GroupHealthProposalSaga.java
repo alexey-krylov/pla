@@ -2,10 +2,7 @@ package com.pla.grouphealth.proposal.domain.event;
 
 import com.google.common.collect.Lists;
 import com.pla.grouphealth.proposal.application.command.GHProposalClosureCommand;
-import com.pla.sharedkernel.service.GHMandatoryDocumentChecker;
 import com.pla.grouphealth.proposal.domain.model.GroupHealthProposal;
-import com.pla.grouphealth.proposal.domain.model.GroupHealthProposalStatusAudit;
-import com.pla.grouphealth.proposal.repository.GHProposalStatusAuditRepository;
 import com.pla.grouphealth.sharedresource.model.vo.ProposalStatus;
 import com.pla.individuallife.proposal.domain.event.ILProposalReminderEvent;
 import com.pla.publishedlanguage.contract.IProcessInfoAdapter;
@@ -15,16 +12,15 @@ import com.pla.sharedkernel.domain.model.ReminderTypeEnum;
 import com.pla.sharedkernel.domain.model.WaitingForEnum;
 import com.pla.sharedkernel.exception.ProcessInfoException;
 import com.pla.sharedkernel.identifier.LineOfBusinessEnum;
+import com.pla.sharedkernel.service.GHMandatoryDocumentChecker;
 import com.pla.sharedkernel.util.RolesUtil;
 import org.axonframework.commandhandling.gateway.CommandGateway;
-import org.axonframework.eventhandling.annotation.EventHandler;
 import org.axonframework.eventhandling.scheduling.EventScheduler;
 import org.axonframework.eventhandling.scheduling.ScheduleToken;
 import org.axonframework.repository.Repository;
 import org.axonframework.saga.annotation.AbstractAnnotatedSaga;
 import org.axonframework.saga.annotation.SagaEventHandler;
 import org.axonframework.saga.annotation.StartSaga;
-import org.bson.types.ObjectId;
 import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -38,12 +34,10 @@ import java.util.List;
  * Created by Samir on 7/6/2015.
  */
 @Component
-public class GroupHealthProposalEventSaga extends AbstractAnnotatedSaga implements Serializable {
+public class GroupHealthProposalSaga extends AbstractAnnotatedSaga implements Serializable {
 
-    private transient static final Logger LOGGER = LoggerFactory.getLogger(GroupHealthProposalEventSaga.class);
+    private transient static final Logger LOGGER = LoggerFactory.getLogger(GroupHealthProposalSaga.class);
 
-    @Autowired
-    private GHProposalStatusAuditRepository ghProposalStatusAuditRepository;
 
     @Autowired
     private transient EventScheduler eventScheduler;
@@ -122,12 +116,4 @@ public class GroupHealthProposalEventSaga extends AbstractAnnotatedSaga implemen
             commandGateway.send(new GHProposalClosureCommand(event.getProposalId()));
         }
     }
-
-
-    @EventHandler
-    public void handle(GHProposalStatusAuditEvent ghProposalStatusAuditEvent) {
-        GroupHealthProposalStatusAudit groupHealthProposalStatusAudit = new GroupHealthProposalStatusAudit(ObjectId.get(), ghProposalStatusAuditEvent.getProposalId(), ghProposalStatusAuditEvent.getStatus(), ghProposalStatusAuditEvent.getPerformedOn(), ghProposalStatusAuditEvent.getActor(), ghProposalStatusAuditEvent.getComments());
-        ghProposalStatusAuditRepository.save(groupHealthProposalStatusAudit);
-    }
-
 }

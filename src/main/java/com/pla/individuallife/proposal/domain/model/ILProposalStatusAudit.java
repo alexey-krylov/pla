@@ -9,13 +9,15 @@ import org.joda.time.DateTime;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.io.Serializable;
+
 /**
  * Created by Admin on 8/3/2015.
  */
 @Document(collection = "individual_life_proposal_status")
 @Getter
 @NoArgsConstructor(access = AccessLevel.PACKAGE)
-public class ILProposalStatusAudit {
+public class ILProposalStatusAudit implements Serializable{
 
     @Id
     private ObjectId id;

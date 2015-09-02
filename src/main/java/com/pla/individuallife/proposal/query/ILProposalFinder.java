@@ -291,7 +291,7 @@ public class ILProposalFinder {
                 }
             }
         }
-        premiumDetailDto.setRiderPremiumDtos(riderPremiumDtoSet);
+        premiumDetailDto.setRiderPremiums(riderPremiumDtoSet);
         premiumDetailDto.setTotalPremium(totalPremium);
         premiumDetailDto.setPlanName(planFinder.getPlanName(new PlanId(planDetail.getPlanId())));
         premiumDetailDto.setAnnualPremium(totalPremium);
@@ -342,11 +342,7 @@ public class ILProposalFinder {
         dto.setFamilyPersonalDetail((FamilyPersonalDetail) proposal.get("familyPersonalDetail"));
         dto.setAdditionaldetails((AdditionalDetails) proposal.get("additionalDetails"));
         dto.setPremiumPaymentDetails((PremiumPaymentDetails) proposal.get("premiumPaymentDetails"));
-        // TODO : commenting for time being untill premium tab details completed
-        if(dto.getProposalPlanDetail() != null)
-            dto.setPremiumDetailDto(getPremiumDetail(proposalId));
         // TODO : need to set document details once it is ready
-
         AgentCommissionShareModel model = (AgentCommissionShareModel) proposal.get("agentCommissionShareModel");
 
         Set<AgentDetailDto> agentCommissionDetails = new HashSet<AgentDetailDto>();
