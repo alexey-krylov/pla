@@ -35,7 +35,7 @@ function IsValidEmail(email) {
     return regex.test(email);
 }
 function printNotification() {
-    var emailBody = tinyMCE.get('emailBody').getContent();
+   var emailBody = tinyMCE.get('emailBody').getContent();
     var notificationId = $('#notificationId').val();
    //  alert(notificationId);
     createNotificationHistory.notificationId=notificationId;
@@ -43,13 +43,14 @@ function printNotification() {
     console.log(JSON.stringify(createNotificationHistory));
 
     $('#notificationForm').attr('action', '/pla/core/notification/printnotificationhistory');
-    //console.log(status);
+
     //window.close();
 
     return true;
 }
 
 function sendEmail() {
+    $('#loading').show();
     var toAddress = $('#to').val();
     var subject = $('#subject').val();
   //  var emailBody = $('#emailBody').val();
@@ -59,7 +60,11 @@ function sendEmail() {
         alert('Please enter email address.');
         return;
     }
+   // console.log(toAddress);
+
     var recipientMailAddress = toAddress.split(';');
+  //  console.log(recipientMailAddress);
+
     var i = 0;
     for (; i < recipientMailAddress.length; i++) {
         if (!IsValidEmail(recipientMailAddress[i])) {
@@ -80,6 +85,7 @@ function sendEmail() {
         contentType: 'application/json; charset=utf-8',
         success: function (msg) {
             if (msg.status == '200') {
+                $('#loading').hide();
                 $('#alert-modal-success').modal('show');
                 $('#successMessage').text(msg.message).show();
                 $('#alert-modal-success').on('hidden.bs.modal', function () {
@@ -87,6 +93,7 @@ function sendEmail() {
 
                 });
             }else{
+                $('#loading').hide();
                 $('#alert-modal-success').modal('show');
                 $('#errorMessage').text(msg.message).show();
                 $('#alert-modal-success').on('hidden.bs.modal', function () {

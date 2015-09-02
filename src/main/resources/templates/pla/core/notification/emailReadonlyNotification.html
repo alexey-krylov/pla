@@ -16,19 +16,46 @@
 <script src="/pla/js/notification/emailNotificationHistory.js"></script>
 <script src="//tinymce.cachefly.net/4.1/tinymce.min.js"></script>
 <script src="http://timschlechter.github.io/bootstrap-tagsinput/examples/lib/bootstrap-tagsinput/bootstrap-tagsinput.js"></script>
+<script language="javascript" type="text/javascript">
+    $(window).load(function () {
+        $('#loading').hide();
+    });
+</script>
+<style>
+    #loading {
+        position: fixed;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        z-index: 1100;
+        background-color: white;
+        opacity: .6;
+
+    }
+
+    #loading-image {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        margin-left: -32px; /* -1 * image width / 2 */
+        margin-top: -32px; /* -1 * image height / 2 */
+        display: block;
+    }
+
+</style>
+
 <body onload="javascript:bodyOnLoad();" onunload="opener.location=('/pla/home')">
-
-
-
-
 <div class="container" style="margin-top:-25px;">
+    <div id="loading"><img id="loading-image" src="/pla/images/ajax-loader.gif"/></div>
+
     <div class="row">
         <div class="col-md-12">
             <div class="panel panel-primary">
                 <div class="panel-heading">
                     <span th:text="#{emailNotification}">Email Notification</span>
                 </div>
-               <!-- <p th:text="${mailContent.emailAddress[0]}"></p>-->
+                <!-- <p th:text="${mailContent.emailAddress[0]}"></p>-->
                 <div class="panel-body">
                     <div class="row">
                         <div class="col-md-3">
@@ -44,9 +71,15 @@
                                 <tr>
                                     <td>To:</td>
                                     <td>
-                                        <input type="text" name="emailAddress"
+                                        <!--<p th:text="${mailContent.emailAddress}"></p>
+                                        <div th:each="emailAddress, stat : ${mailContent.emailAddress}">
+
+                                            <input type="text" name="emailAddress" id="to" class="form-control input-md"
+                                                   th:value="${emailAddress[__${stat.index}__]}"/>
+                                        </div>-->
+                                        <input type="text" name="to"
                                                id="to" class="form-control input-md"
-                                               th:value="${mailContent.emailAddress[0]}"/>
+                                               th:value="${mailContent.emailAddress}"/>
 
                                     </td>
                                 </tr>
@@ -61,7 +94,8 @@
                                 <tr>
                                     <td>Subject:</td>
                                     <td><strong>
-                                        <input type="hidden" id="notificationHistoryId" th:value="${mailContent.notificationHistoryId}"/>
+                                        <input type="hidden" id="notificationHistoryId" name="notificationHistoryId"
+                                               th:value="${mailContent.notificationHistoryId}"/>
 
 
                                         <input type="text" class="form-control input-md" name="subject"
@@ -73,8 +107,8 @@
                         </div>
                     </div>
                     <div class="row" style="margin-top: 3px">
-                        <div class="col-md-12" >
-                            <textarea id="emailBody"  th:utext="${mailContent.emailBody}"
+                        <div class="col-md-12">
+                            <textarea id="emailBody" th:utext="${mailContent.emailBody}"
                                       name="emailBody" readonly="readonly">
                             </textarea>
                         </div>
@@ -146,7 +180,7 @@
                 <div>Mail not sent successfully.</div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-default"  data-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
             </div>
         </div>
     </div>

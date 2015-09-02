@@ -57,10 +57,12 @@
             );
             clearInterval(interval);
         }
-    }, 2000);
+    }, 4000);
 </script>
 <div class="container-fluid" style="padding:10px">
+
     <div class="row " ng-controller="NotificationPortletCtrl">
+
         <div class="col-sm-5 col-md-6">
             <div class="chart-wrapper">
                 <div class="chart-title">
@@ -163,20 +165,17 @@
 
     requirejs(['main'], function () {
         require(['angular', 'jquery'], function (app, $) {
-            var module = angular.module('NotificationPortlet', []);
+            var module = angular.module('NotificationPortlet', ['common','commonServices','ngRoute','ui.bootstrap','ngSanitize','mgcrea.ngStrap']);
+
             module.controller('NotificationPortletCtrl', ['$scope', '$http', '$window', function ($scope, $http, $window) {
 
                 console.log('Notification Portlet Controller ');
-
-
                 $http.get('/pla/core/notification/getnotification').success(function(data){
                     $scope.notificationList=data;
                 });
                 $http.get('/pla/core/notification/getnotificationhistory').success(function(data){
                     $scope.notificationHistoryList=data;
                 });
-
-
                 $scope.openEmailWindow = function (notificationId) {
                    // console.log('invoke email...');
                     window.open('/pla/core/notification/openemailnotification/'+notificationId,"_blank","toolbar=no,resizable=no," +
@@ -186,10 +185,7 @@
                   //  window.location.href = '/pla/core/notification/printnotification/' + notificationId;
                     window.open('/pla/core/notification/openprintnotification/'+notificationId,"_blank","toolbar=no,resizable=no," +
                     "scrollable=no,menubar=no,personalbar=no,dependent=yes,dialog=yes,split=no,titlebar=no,resizable=no,location=no,left=100px");
-
                 }
-
-
                 $scope.openEmailReadOnlyWindow = function (notificationHistoryId) {
                     console.log('invoke email...'+notificationHistoryId);
                     window.open('/pla/core/notification/openemailnotificationhistory/'+notificationHistoryId,"_blank","toolbar=no,resizable=no," +
@@ -199,9 +195,7 @@
                    // window.location.href='/pla/core/notification/printnotificationhistory/'+notificationHistoryId;
                     window.open('/pla/core/notification/openprintnotificationhistory/'+notificationHistoryId,"_blank","toolbar=no,resizable=no," +
                     "scrollable=no,menubar=no,personalbar=no,dependent=yes,dialog=yes,split=no,titlebar=no,resizable=no,location=no,left=100px");
-
                 }
-
              }]);
             angular.bootstrap(document, ['NotificationPortlet']);
         });
