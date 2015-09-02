@@ -385,8 +385,8 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
                     $scope.agentDetails=result.agentCommissionDetails;
                     $scope.rcvProposal = response;
 
-                     if($scope.rcvProposal.premiumDetailDto!= null){
-                     $scope.premiumResponse=$scope.rcvProposal.premiumDetailDto;
+                     if($scope.rcvProposal.premiumPaymentDetails != null){
+                     $scope.premiumResponse=$scope.rcvProposal.premiumPaymentDetails.premiumDetail;
                      }
 
                     ////console.log('Proposal Number....');
@@ -1035,7 +1035,6 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
             }
 
             $scope.waiverByApproved=[];
-
             $scope.getMandatoryDocumentDetials=function($event,document)
             {
                 var checkbox = $event.target;
@@ -1050,17 +1049,34 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
                 else
                 {
                     //alert(index);
-
                     for(i in $scope.waiverByApproved)
                     {
                         if($scope.waiverByApproved[i].documentName == document.documentName)
                         {
                             $scope.waiverByApproved.splice(i, 1);
+                            //$scope.waiverByApproved[i].mandatory=false;
+                            //$scope.waiverByApproved[i].isApproved=false;
                         }
                     }
                 }
+                //console.log('waiverByApproved'+JSON.stringify($scope.waiverByApproved));
+            }
 
-                //console.log(JSON.stringify($scope.waiverByApproved));
+            $scope.updateMandatoryDocumentForApproval=function(){
+                //alert($scope.proposal.proposalId);
+
+                var requestForApproval=
+                {
+                    "waivedDocuments":$scope.waiverByApproved,
+                    "proposalId":$scope.proposal.proposalId
+                }
+                //console.log('requestForApprovalTest'+JSON.stringify(requestForApproval));
+
+                $http.post('waivedocument', requestForApproval).success(function (response, status, headers, config) {
+                    //$scope.proposal.proposalId=response.id;
+                }).error(function (response, status, headers, config) {
+                });
+
             }
             $scope.uploadDocumentFiles = function () {
                 // //console.log($scope.documentList.length);
@@ -1352,7 +1368,8 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
                     //alert("Before GetPremium...");
                     //Getting PremiumDetails Documents
 
-                  /* $http.get("getpremiumdetail/"+$scope.proposal.proposalId).success(function (response, status, headers, config) {
+               /*    $http.get("getpremiumdetail/"+$scope.proposal.proposalId).success(function (response, status, headers, config) {
+                       console.log(response);
                         $scope.premiumResponse=response;
                         if($scope.premiumResponse != null)
                         {
@@ -1361,9 +1378,10 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
                         }
                     }).error(function (response, status, headers, config) {
                     });*/
+
                     $http.get("/pla/individuallife/proposal/getproposal/" + $scope.proposal.proposalId).success(function (planResponse, status, headers, config) {
-                        var result = response;
-                        //console.log('Result:' + JSON.stringify(result));
+                        var result = planResponse;
+                        //console.log('planResponse:' + JSON.stringify(planResponse));
                         //window.location.href = "/pla/individuallife/proposal/edit?proposalId=" + response.proposalId + "&mode=edit";
                         $scope.rcvProposal = planResponse;
                         //console.log(planResponse);
@@ -3461,6 +3479,7 @@ var viewILQuotationModule = (function () {
 
     services.modifyProposal = function () {
         var proposalId = this.selectedItem;
+
         if(this.status == 'Returned')
         {
 

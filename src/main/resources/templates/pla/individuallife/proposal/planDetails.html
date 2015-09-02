@@ -208,7 +208,7 @@
                 <input type="number" view-enabled="" class="form-control input-sm"
                        ng-disabled="mode=='new'||mode=='view'" min="{{coverage.coverageSumAssured.minSumInsured}}"
                        name="sumAssuredPlanA"
-                       max="{{coverage.coverageSumAssured.maxSumInsured}}" ng-model="searchRider.coverageSumAssured" ng-required="true"/>
+                       max="{{coverage.coverageSumAssured.maxSumInsured}}" ng-model="searchRider.sumAssured" ng-required="true"/>
                 <div class="error" ng-messages="step3.sumAssuredPlanA.$error">
                     <small ng-message="min">Sum Assured cannot be less then {{coverage.coverageSumAssured.minSumInsured}}.</small>
                     <small ng-message="max">Sum Assured cannot be more than {{coverage.coverageSumAssured.maxSumInsured}}.</small>

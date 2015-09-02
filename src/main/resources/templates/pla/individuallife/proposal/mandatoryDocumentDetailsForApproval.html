@@ -15,14 +15,12 @@
                         <label class="form-control input-sm" style="border:1px solid #ccc;width:380px;" >{{document.documentAttached[0].name}} </label>
                         <!--<a  href="downloadmandatorydocument/{{document.gridFsDocId}}" style="display:inline;float:right;margin-top:10px;"  hg-show="!document.submitted">{{document.fileName}}</a>-->
                         <a href="downloadmandatorydocument/{{document.gridFsDocId}}" style="display:inline;margin-left:10px;margin-top:10px;"  hg-show="!document.submitted">{{document.fileName}}</a>
-                        <!--<button class="btn btn-default"
+
+                        <button class="btn btn-default"
                                 style="display:inline;float:right;margin-right:5px;" ng-file-select=""
-                                ng-disabled="mode=='new'||mode=='view'" ng-model="document.documentAttached">Browse
-                        </button>-->
-                        <!--<label class="form-control input-sm" style="border:1px solid #ccc;width:380px;" >{{document.documentAttached[0].name}} </label>-->
-
-                        <input type="checkbox" data-toggle="tooltip" ng-model="boolval" title="Would you like to waive of the {{document.documentName}}" ng-click="getMandatoryDocumentDetials($event,document)" ng-if="!document.submitted"/>
-
+                                ng-hide="mode=='new'||mode=='view'" ng-model="document.documentAttached">Browse
+                        </button>
+                        <input type="checkbox" data-toggle="tooltip" ng-hide="mode == 'edit'" ng-model="document.isApproved" title="Would you like to waive of the {{document.documentName}}" ng-click="getMandatoryDocumentDetials($event,document)" ng-if="!document.submitted || !document.fileName"/>
                     </div>
                 </div>
 
@@ -30,7 +28,10 @@
                      ng-disabled="mode=='new'||mode=='view'" ng-click="uploadDocumentFiles()">Upload All
                 </div>-->
 
-                <div class="btn btn-default" style="display:inline;float:right;clear:both" ng-click="updateFiles()">Update
+                <div class="btn btn-default" ng-hide="mode == 'edit'" style="display:inline;float:right;clear:both" ng-click="updateMandatoryDocumentForApproval()">Update
+                </div>
+                <div class="btn btn-default" style="display:inline;float:right;clear:both"
+                     ng-show="mode == 'edit'" ng-disabled="mode=='new'||mode=='view'" ng-click="uploadDocumentFiles()">Upload All
                 </div>
             </div>
         </accordion-group>
@@ -94,7 +95,6 @@
     </accordion>
 
         <div class="row" ng-if="returnStatusCheck">
-            {{returnComments}}
             <div class="col-lg-6">
                 <div class="form-group required">
                     <label class="control-label">Comments</label>

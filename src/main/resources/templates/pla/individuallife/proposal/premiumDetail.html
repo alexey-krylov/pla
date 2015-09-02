@@ -118,7 +118,6 @@
 
                 </div>
                 <div class="form-group required" ng-if="premiumPaymentDetails.premiumPaymentMethod == 'DEBIT_ORDER'">
-                    {{bankDetails.bankBranchName}}
                     <label class="control-label">Bank Branch Name</label>
                     <!-- <input type="text" class="form-control input-sm" ng-model="bankDetails.bankBranchName" ng-disabled="mode=='new'||mode=='view'" name="branchname"/>-->
 
@@ -243,7 +242,7 @@
                 </div>
             </div>
             <div class="col-md-6">
-                <div class="form-group" ng-repeat="rider in premiumResponse.riderPremiumDtos">
+                <div class="form-group" ng-repeat="rider in premiumResponse.riderPremiums">
                     <div>
                         <td>{{rider.coverageName.coverageName}} Annual Premium </td>
                         <td>
