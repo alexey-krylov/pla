@@ -17,6 +17,7 @@
  DROP VIEW IF EXISTS `active_team_team_fulfillment_greater_than_current_date`;
  DROP VIEW IF EXISTS `region_region_manger_fulfilment_greater_than_current_date_view`;
  DROP VIEW IF EXISTS `agent_team_branch_view`;
+DROP VIEW IF EXISTS `product_claim_map_view`;
  DROP TABLE IF EXISTS `agent`;
   CREATE TABLE `agent`(
     `agent_id` varchar(255) NOT NULL,
@@ -623,8 +624,7 @@ CREATE TABLE `coverage_claim_mapper` (
 DROP TABLE IF EXISTS `coverage_claim_type`;
 CREATE TABLE `coverage_claim_type` (
   `coverage_claim_id` bigint(20) NOT NULL,
-  `claim_type` varchar(255) DEFAULT NULL,
-  KEY `FK_4gi81y4rlx14mu4n4rmia786s` (`coverage_claim_id`)
+  `claim_type` varchar(255) DEFAULT NULL
 );
 
 DROP VIEW IF EXISTS `product_claim_map_view`;
