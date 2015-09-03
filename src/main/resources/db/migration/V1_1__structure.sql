@@ -838,7 +838,7 @@ DROP TABLE IF EXISTS `individual_life_quotation`;
 
 ALTER TABLE `individual_life_quotation`
 ADD COLUMN `annual_premium` decimal(19,2) DEFAULT NULL,
-ADD COLUMN ``monthly_premium` decimal(19,2) DEFAULT NULL,
+ADD COLUMN ` decimal(19,2) DEFAULT NULL,
 ADD COLUMN `quarterly_premium` decimal(19,2) DEFAULT NULL,
 ADD COLUMN `semiannual_premium` decimal(19,2) DEFAULT NULL,
 ADD COLUMN `total_premium` decimal(19,2) DEFAULT NULL;
@@ -1028,6 +1028,54 @@ CREATE TABLE `industry` (
   `industry_factor` decimal(10,4) DEFAULT NULL,
   PRIMARY KEY (`industry_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+DROP TABLE IF EXISTS `product_claim_mapper`;
+CREATE TABLE `product_claim_mapper` (
+  `product_claim_id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `line_of_business` varchar(255) DEFAULT NULL,
+  `plan_code` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`product_claim_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+
+
+DROP TABLE IF EXISTS `coverage_claim_mapper`;
+CREATE TABLE `coverage_claim_mapper` (
+  `coverage_claim_id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `coverage_id` varchar(255) DEFAULT NULL,
+  `product_claim_id` bigint(20) DEFAULT NULL,
+  PRIMARY KEY (`coverage_claim_id`),
+  KEY `FK_4np78uanriy9fd5brg0n5j0pu` (`product_claim_id`),
+  CONSTRAINT `FK_4np78uanriy9fd5brg0n5j0pu` FOREIGN KEY (`product_claim_id`) REFERENCES `product_claim_mapper` (`product_claim_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+
+
+
+DROP TABLE IF EXISTS `coverage_claim_type`;
+CREATE TABLE `coverage_claim_type` (
+  `coverage_claim_id` bigint(20) NOT NULL,
+  `claim_type` varchar(255) DEFAULT NULL,
+  KEY `FK_4gi81y4rlx14mu4n4rmia786s` (`coverage_claim_id`),
+  CONSTRAINT `FK_4gi81y4rlx14mu4n4rmia786s` FOREIGN KEY (`coverage_claim_id`) REFERENCES `coverage_claim_mapper` (`coverage_claim_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+DROP VIEW IF EXISTS `product_claim_map_view`;
+CREATE VIEW `product_claim_map_view` AS
+  ( SELECT DISTINCT
+      pm.product_claim_id  		    productClaimId,
+      pm.line_of_business 		    lineOfBusiness,
+      pm.plan_code 			          planCode,
+      p.plan_name 			          planName,
+      c.coverage_id 		          coverageId,
+      c.coverage_name 		        coverageName,
+      cc.claim_type 		          claimType
+FROM product_claim_mapper pm
+INNER JOIN plan_coverage_benefit_assoc p ON pm.plan_code  = p.plan_code
+INNER JOIN coverage_claim_mapper cm ON pm.product_claim_id = cm.product_claim_id
+INNER JOIN  coverage_claim_type cc ON cc.coverage_claim_id = cm.coverage_claim_id
+INNER JOIN coverage c ON cm.coverage_id = c.coverage_id );
+
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;

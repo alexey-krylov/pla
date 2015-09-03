@@ -156,7 +156,7 @@ public class NotificationFinder {
             String subject  = ProcessType.valueOf(notificationTemplateMap.get("processType").toString())+" "+WaitingForEnum.valueOf(notificationTemplateMap.get("waitingFor").toString())+" "+ReminderTypeEnum.valueOf(notificationTemplateMap.get("reminderType").toString());
             emailContent.put("subject", subject);
             emailContent.put("mailSentDate", notificationTemplateMap.get("generatedOn"));
-            emailContent.put("emailAddress",transformRecipientMailAddress(notificationTemplateMap.get("recipientEmailAddress")!=null?(String[])notificationTemplateMap.get("recipientEmailAddress"):new String[]{""}));
+            emailContent.put("emailAddress",transformRecipientMailAddress(notificationTemplateMap.get("recipientEmailAddress")!=null?(List)notificationTemplateMap.get("recipientEmailAddress"):Lists.newArrayList()));
             emailContent.put("emailBody",new String((byte[]) notificationTemplateMap.get("reminderTemplate")));
             emailContent.put("notificationHistoryId", notificationHistories.getNotificationHistoryId());
             return emailContent;
@@ -164,7 +164,7 @@ public class NotificationFinder {
         return Collections.EMPTY_MAP;
     }
 
-    private String transformRecipientMailAddress(String[] recipientMailAddress){
+    private String transformRecipientMailAddress(List<String> recipientMailAddress){
         if (recipientMailAddress!=null)
             return StringUtils.join(recipientMailAddress, ";");
         return "";
@@ -192,7 +192,7 @@ public class NotificationFinder {
                     String subject  = ProcessType.valueOf(notificationMap.get("processType").toString())+" "+WaitingForEnum.valueOf(notificationMap.get("waitingFor").toString())+" "+ReminderTypeEnum.valueOf(notificationMap.get("reminderType").toString());
                     emailContent.put("subject",subject);
                     emailContent.put("mailSentDate", notificationMap.get("generatedOn"));
-                    emailContent.put("emailAddress", transformRecipientMailAddress(notificationMap.get("emailId") != null ? (String[]) notificationMap.get("emailId") : new String[]{""}));
+                    emailContent.put("emailAddress", notificationMap.get("emailId"));
                     String content = new String((byte[]) notificationMap.get("reminderTemplate"));
                     emailContent.put("emailBody",content);
                     emailContent.put("notificationId", notificationId);
@@ -234,7 +234,6 @@ public class NotificationFinder {
             ilQuotationProposerMap.put("requestNumber", ilQuotationMap.get("requestNumber")!=null?ilQuotationMap.get("requestNumber").toString():"");
 //            ilQuotationProposerMap.put("sharedOn",  ilQuotationMap.get("sharedOn")!=null? ilQuotationMap.get("sharedOn").toString():"");
             ilQuotationProposerMap.put("surName", ilQuotationMap.get("surName")!=null?ilQuotationMap.get("surName").toString():"");
-            ilQuotationProposerMap.put("salutation",ilQuotationMap.get("salutation")!=null? ilQuotationMap.get("salutation").toString():"");
             ilQuotationProposerMap.put("requestNumber", ilQuotationMap.get("requestNumber")!=null?ilQuotationMap.get("requestNumber").toString():"");
             return ilQuotationProposerMap;
         }

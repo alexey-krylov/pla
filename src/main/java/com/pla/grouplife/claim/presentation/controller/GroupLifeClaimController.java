@@ -1,20 +1,16 @@
 package com.pla.grouplife.claim.presentation.controller;
 
-import com.pla.grouphealth.policy.application.service.GHPolicyService;
-import com.pla.grouphealth.policy.presentation.dto.PolicyDetailDto;
-import com.pla.grouphealth.policy.presentation.dto.SearchGHPolicyDto;
 import com.pla.grouplife.claim.application.command.GLClaimIntimationCommand;
 import com.pla.grouplife.claim.application.service.GLClaimService;
-import com.pla.grouplife.policy.application.service.GLPolicyService;
-import com.pla.grouplife.sharedresource.dto.GLPolicyDetailDto;
 import com.pla.grouplife.sharedresource.dto.SearchGLPolicyDto;
-import com.pla.sharedkernel.domain.model.ClaimType;
-import org.nthdimenzion.presentation.Result;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.List;
@@ -68,7 +64,7 @@ public class GroupLifeClaimController {
     @RequestMapping(value = "/getclaimtype",method = RequestMethod.GET)
     @ResponseBody
     public List<Map<String, String>> getClaimType(){
-        return ClaimType.getAllClaimTypes();
+        return null;
     }
 
 
