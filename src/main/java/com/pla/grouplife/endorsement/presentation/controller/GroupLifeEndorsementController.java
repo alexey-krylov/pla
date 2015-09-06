@@ -1,16 +1,25 @@
 package com.pla.grouplife.endorsement.presentation.controller;
 
+import com.google.common.collect.Lists;
 import com.pla.grouplife.endorsement.application.command.GLCreateEndorsementCommand;
+import com.pla.grouplife.endorsement.application.command.SubmitGLEndorsementCommand;
 import com.pla.grouplife.endorsement.application.service.GLEndorsementService;
 import com.pla.grouplife.endorsement.presentation.dto.SearchGLEndorsementDto;
+import com.pla.grouplife.endorsement.presentation.dto.UploadInsuredDetailDto;
 import com.pla.grouplife.endorsement.query.GLEndorsementFinder;
-import com.pla.grouplife.sharedresource.dto.GLPolicyDetailDto;
-import com.pla.grouplife.sharedresource.dto.SearchGLPolicyDto;
+import com.pla.grouplife.policy.application.service.GLPolicyService;
+import com.pla.grouplife.proposal.application.command.GLProposalDocumentCommand;
+import com.pla.grouplife.proposal.application.command.UpdateGLProposalWithProposerCommand;
+import com.pla.grouplife.proposal.presentation.dto.GLProposalApproverCommentDto;
+import com.pla.grouplife.proposal.presentation.dto.GLProposalMandatoryDocumentDto;
+import com.pla.grouplife.sharedresource.dto.*;
 import com.pla.grouplife.sharedresource.model.GLEndorsementType;
 import com.pla.sharedkernel.domain.model.EndorsementNumber;
 import com.pla.sharedkernel.identifier.EndorsementId;
+import com.pla.sharedkernel.identifier.PolicyId;
 import com.wordnik.swagger.annotations.ApiOperation;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.poifs.filesystem.POIFSFileSystem;
 import org.axonframework.commandhandling.gateway.CommandGateway;
 import org.nthdimenzion.presentation.Result;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +27,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
@@ -46,6 +57,8 @@ public class GroupLifeEndorsementController {
     @Autowired
     private GLEndorsementFinder glEndorsementFinder;
 
+    @Autowired
+    private GLPolicyService glPolicyService;
 
     @RequestMapping(value = "/openpolicysearchpage", method = RequestMethod.GET)
     public ModelAndView openPolicySearchPage() {
@@ -111,15 +124,14 @@ public class GroupLifeEndorsementController {
         modelAndView.addObject("searchCriteria", searchGLEndorsementDto);
         return modelAndView;
     }
+
     @RequestMapping(value = "/openapprovalendorsement", method = RequestMethod.GET)
     public ModelAndView gotoApprovalEndorsementPage() {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("pla/grouplife/endorsement/viewApprovalEndorsement");
         SearchGLEndorsementDto searchGLEndorsementDto = new SearchGLEndorsementDto();
         searchGLEndorsementDto.setEndorsementTypes(GLEndorsementType.getAllEndorsementType());
-
         modelAndView.addObject("searchCriteria", searchGLEndorsementDto);
-
         return modelAndView;
     }
 
@@ -134,15 +146,118 @@ public class GroupLifeEndorsementController {
     }
 
 
-
     @RequestMapping(value = "/search", method = RequestMethod.POST)
     public ModelAndView searchEndorsement(SearchGLEndorsementDto searchGLEndorsementDto) {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("pla/grouplife/endorsement/searchEndorsement");
         modelAndView.addObject("searchCriteria", searchGLEndorsementDto);
         searchGLEndorsementDto.setEndorsementTypes(GLEndorsementType.getAllEndorsementType());
-
         modelAndView.addObject("searchResult", glEndorsementService.searchEndorsement(searchGLEndorsementDto, new String[]{"DRAFT", "APPROVER_PENDING_ACCEPTANCE", "UNDERWRITER_LEVEL1_PENDING_ACCEPTANCE", "UNDERWRITER_LEVEL2_PENDING_ACCEPTANCE"}));
         return modelAndView;
     }
+
+
+    @RequestMapping(value = "/getagentdetailfrompolicy/{endorsementId}", method = RequestMethod.GET)
+    @ResponseBody
+    @ApiOperation(httpMethod = "GET", value = "Fetch agent detail for a given Policy ID")
+    public AgentDetailDto getAgentDetailFromQuotation(@PathVariable("endorsementId") String endorsementId) {
+        PolicyId policyId = glEndorsementService.getPolicyIdFromEndorsment(endorsementId);
+        return glPolicyService.getAgentDetail(policyId);
+    }
+
+    @RequestMapping(value = "/getproposerdetail/{endorsementId}")
+    @ResponseBody
+    @ApiOperation(httpMethod = "GET", value = "To get proposer detail from proposer")
+    public ProposerDto getProposerDetail(@PathVariable("endorsementId") String endorsementId) {
+        PolicyId policyId = glEndorsementService.getPolicyIdFromEndorsment(endorsementId);
+        return glPolicyService.getProposerDetail(policyId);
+    }
+
+
+    @RequestMapping(value = "/getmandatorydocuments/{endorsementId}", method = RequestMethod.GET)
+    @ResponseBody
+    @ApiOperation(httpMethod = "GET", value = "To list mandatory documents which is being configured in Mandatory Document SetUp")
+    public List<GLProposalMandatoryDocumentDto> findMandatoryDocuments(@PathVariable("endorsementId") String endorsementId) {
+        PolicyId policyId = glEndorsementService.getPolicyIdFromEndorsment(endorsementId);
+        List<GLProposalMandatoryDocumentDto> ghProposalMandatoryDocumentDtos = glPolicyService.findMandatoryDocuments(policyId.getPolicyId());
+        return ghProposalMandatoryDocumentDtos;
+    }
+
+    @RequestMapping(value = "/getpremiumdetail/{endorsementId}", method = RequestMethod.GET)
+    @ResponseBody
+    @ApiOperation(httpMethod = "GET", value = "To get premium detail")
+    public PremiumDetailDto getPremiumDetail(@PathVariable("endorsementId") String endorsementId) {
+        PolicyId policyId = glEndorsementService.getPolicyIdFromEndorsment(endorsementId);
+        return glPolicyService.getPremiumDetail(policyId);
+    }
+
+
+    //TODO implement
+    @RequestMapping(value = "/uploadmandatorydocument", method = RequestMethod.POST)
+    @ResponseBody
+    public ResponseEntity uploadMandatoryDocument(GLProposalDocumentCommand glProposalDocumentCommand, HttpServletRequest request) {
+        glProposalDocumentCommand.setUserDetails(getLoggedInUserDetail(request));
+        try {
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResponseEntity(Result.failure(e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        return new ResponseEntity(Result.success("Documents uploaded successfully"), HttpStatus.OK);
+    }
+
+    //TODO implement
+    @RequestMapping(value = "/uploadinsureddetail", method = RequestMethod.POST)
+    @ResponseBody
+    public Result uploadInsuredDetail(UploadInsuredDetailDto uploadInsuredDetailDto, HttpServletRequest request) throws IOException {
+        MultipartFile file = uploadInsuredDetailDto.getFile();
+        if (!("application/x-ms-excel".equals(file.getContentType()) || "application/ms-excel".equals(file.getContentType()) || "application/msexcel".equals(file.getContentType()) || "application/vnd.ms-excel".equals(file.getContentType()))) {
+            return Result.failure("Uploaded file is not valid excel");
+        }
+        POIFSFileSystem fs = new POIFSFileSystem(file.getInputStream());
+        HSSFWorkbook insuredTemplateWorkbook = new HSSFWorkbook(fs);
+        try {
+
+            return Result.success("Insured detail uploaded successfully");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return Result.failure(e.getMessage());
+        }
+    }
+
+    //TODO implement
+    @RequestMapping(value = "/updatewithproposerdetail", method = RequestMethod.POST)
+    @ResponseBody
+    public Result updateProposalWithProposerDetail(@RequestBody UpdateGLProposalWithProposerCommand updateGLProposalWithProposerCommand, BindingResult bindingResult, HttpServletRequest request) {
+        if (bindingResult.hasErrors()) {
+            return Result.failure("Update proposal proposer data is not valid", bindingResult.getAllErrors());
+        }
+        try {
+            return Result.success("Proposer detail updated successfully");
+        } catch (Exception e) {
+            return Result.failure();
+        }
+    }
+
+    //TODO implement
+    @RequestMapping(value = "/getapprovercomments/{endorsementId}", method = RequestMethod.GET)
+    @ResponseBody
+    @ApiOperation(httpMethod = "GET", value = "To list approval comments")
+    public List<GLProposalApproverCommentDto> findApproverComments(@PathVariable("endorsementId") String endorsementId) {
+        return Lists.newArrayList();
+    }
+
+    //TODO implement
+    @RequestMapping(value = "/submit", method = RequestMethod.POST)
+    @ResponseBody
+    @ApiOperation(httpMethod = "POST", value = "To submit endorsement for approval")
+    public ResponseEntity submitProposal(@RequestBody SubmitGLEndorsementCommand submitGLEndorsementCommand, HttpServletRequest request) {
+        try {
+            submitGLEndorsementCommand.setUserDetails(getLoggedInUserDetail(request));
+            return new ResponseEntity(Result.success("Endorsement submitted successfully"), HttpStatus.OK);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResponseEntity(Result.failure(e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
 }

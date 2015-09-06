@@ -11,6 +11,7 @@ import com.pla.grouplife.sharedresource.dto.SearchGLPolicyDto;
 import com.pla.grouplife.sharedresource.model.GLEndorsementType;
 import com.pla.grouplife.sharedresource.model.vo.Proposer;
 import com.pla.grouplife.sharedresource.query.GLFinder;
+import com.pla.publishedlanguage.underwriter.contract.IUnderWriterAdapter;
 import com.pla.sharedkernel.domain.model.EndorsementNumber;
 import com.pla.sharedkernel.domain.model.EndorsementStatus;
 import com.pla.sharedkernel.domain.model.Policy;
@@ -20,6 +21,7 @@ import com.pla.sharedkernel.identifier.PolicyId;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.mongodb.gridfs.GridFsTemplate;
 
 import java.util.Date;
 import java.util.List;
@@ -41,6 +43,13 @@ public class GLEndorsementService {
 
     @Autowired
     private GLEndorsementFinder glEndorsementFinder;
+
+    @Autowired
+    private IUnderWriterAdapter underWriterAdapter;
+
+    @Autowired
+    private GridFsTemplate gridFsTemplate;
+
 
     private final Map<GLEndorsementType, GLEndorsementExcelGenerator> excelGenerators;
 
@@ -117,4 +126,12 @@ public class GLEndorsementService {
         }).collect(Collectors.toList());
         return endorsementDtos;
     }
+
+    public PolicyId getPolicyIdFromEndorsment(String endorsementId) {
+        Map endorsementMap = glEndorsementFinder.findEndorsementById(endorsementId);
+        Policy policy = endorsementMap != null ? (Policy) endorsementMap.get("policy") : null;
+        PolicyId policyId = policy != null ? policy.getPolicyId() : null;
+        return policyId;
+    }
+
 }

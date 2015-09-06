@@ -2,13 +2,9 @@ package com.pla.grouplife.policy.presentation.controller;
 
 import com.mongodb.gridfs.GridFSDBFile;
 import com.pla.grouplife.policy.application.service.GLPolicyService;
-import com.pla.grouplife.sharedresource.dto.GLPolicyDetailDto;
-import com.pla.grouplife.sharedresource.dto.SearchGLPolicyDto;
 import com.pla.grouplife.policy.query.GLPolicyFinder;
 import com.pla.grouplife.proposal.presentation.dto.GLProposalMandatoryDocumentDto;
-import com.pla.grouplife.sharedresource.dto.AgentDetailDto;
-import com.pla.grouplife.sharedresource.dto.PremiumDetailDto;
-import com.pla.grouplife.sharedresource.dto.ProposerDto;
+import com.pla.grouplife.sharedresource.dto.*;
 import com.pla.sharedkernel.domain.model.PolicyNumber;
 import com.pla.sharedkernel.identifier.PolicyId;
 import com.wordnik.swagger.annotations.ApiOperation;
