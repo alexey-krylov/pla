@@ -3455,13 +3455,14 @@ var viewILQuotationModule = (function () {
             $('#emailaddress').attr('disabled', true);
             $('#print').attr('disabled', true);
         }*/
-        /*if(this.status == 'Draft' || this.status == 'Returned') {
+
+        if(this.status == 'Draft' || this.status == 'Returned') {
             $('#modify').attr('disabled', false);
         }
         else
         {
             $('#modify').attr('disabled', true);
-        }*/
+        }
     };
 
     services.reload = function () {

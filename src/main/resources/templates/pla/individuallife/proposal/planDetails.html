@@ -164,7 +164,7 @@
                             <td>{{beneficiary.relationshipId}}</td>
                             <!--<td>{{beneficiary.share}}</td>-->
                             <td>
-                                <input type="number" ng-disabled="mode=='new'||mode=='view'" contenteditable="updateFlag" ng-init="shareSumTest()" ng-model="beneficiary.share"  ng-blur="shareSumTest()" value="{{beneficiary.share}}" />
+                                <input type="number" ng-disabled="mode=='new'||mode=='view'" contenteditable="updateFlag" ng-change="shareSumTest()" ng-init="shareSumTest()" ng-model="beneficiary.share"  ng-blur="shareSumTest()" value="{{beneficiary.share}}" />
                             </td>
                         </tr>
                         </tbody>
