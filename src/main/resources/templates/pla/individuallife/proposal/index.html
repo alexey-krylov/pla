@@ -27,7 +27,7 @@
 <script>
     var interval = setInterval(function () {
         if (require.defined("basic")) {
-            requirejs(['/pla/js/proposal/individuallife/createProposal.js?t=12121'], function () {
+            requirejs(['/pla/js/proposal/individualLife/createProposal.js?t=12121'], function () {
                 $(document).ready(function () {
                     $('#il-proposal-table').dataTable({
                         "fnDrawCallback": function () {
@@ -129,7 +129,6 @@
                                         <input type="hidden" class="proposalStatus"
                                                th:value="${proposal.proposalStatus}"/>
                                     </td>
-
                                     <td th:text="${proposal.proposalNumber}">5100000010315</td>
                                     <td th:text="${proposal.createdOn}">05/03/2015</td>
                                     <td th:text="${proposal.agentName}">Agent Name</td>
