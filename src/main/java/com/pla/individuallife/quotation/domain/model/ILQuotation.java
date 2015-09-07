@@ -174,7 +174,7 @@ public class ILQuotation extends AbstractAggregateRoot<QuotationId> implements I
         Preconditions.checkArgument(ILQuotationStatus.DRAFT == this.ilQuotationStatus, " Quotation in Draft state can only be generated.");
         this.ilQuotationStatus = ILQuotationStatus.GENERATED;
         this.generatedOn = generatedOn;
-        registerEvent(new ILQuotationGeneratedEvent(this.quotationARId, this.quotationId));
+//        registerEvent(new ILQuotationGeneratedEvent(this.quotationARId, this.quotationId));
     }
 
     @Override
