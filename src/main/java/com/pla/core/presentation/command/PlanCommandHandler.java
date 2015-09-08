@@ -117,7 +117,7 @@ public class PlanCommandHandler {
                  iter.hasNext(); ) {
                 PlanCoverageBenefitDetail rec = iter.next();
                 pcBuilder.withBenefitLimit(each.getCoverageId(), rec.getCoverageName(), rec.getBenefitName(), rec.getBenefitId().toString(),
-                        rec.getDefinedPer(), rec.getCoverageBenefitType(), rec.getBenefitLimit(), rec.getMaxLimit());
+                        rec.getDefinedPer(), rec.getCoverageBenefitType(), rec.getBenefitLimit(), rec.getMaxLimit(),rec.getWaitingPeriod());
             }
             PlanCoverage planCoverage = pcBuilder.build();
             coverageSet.add(planCoverage);

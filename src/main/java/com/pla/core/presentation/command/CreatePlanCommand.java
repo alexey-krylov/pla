@@ -154,5 +154,6 @@ class PlanCoverageBenefitDetail {
     private BigDecimal maxLimit;
     private String coverageName;
     private String benefitName;
+    private Long waitingPeriod;
 
 }
