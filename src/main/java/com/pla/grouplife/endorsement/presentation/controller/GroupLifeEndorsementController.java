@@ -174,6 +174,13 @@ public class GroupLifeEndorsementController {
         return glPolicyService.getProposerDetail(policyId);
     }
 
+    @RequestMapping(value = "/getpolicydetail/{endorsementId}")
+    @ResponseBody
+    @ApiOperation(httpMethod = "GET", value = "To get Policy detail from proposer")
+    public Map<String, Object> getPolicyDetail(@PathVariable("endorsementId") String endorsementId) {
+        return glEndorsementService.getPolicyDetail(endorsementId);
+    }
+
 
     @RequestMapping(value = "/getmandatorydocuments/{endorsementId}", method = RequestMethod.GET)
     @ResponseBody

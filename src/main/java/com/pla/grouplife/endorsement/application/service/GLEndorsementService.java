@@ -75,8 +75,8 @@ public class GLEndorsementService {
     }
 
     private GLPolicyDetailDto transformToDto(Map policyMap) {
-        DateTime inceptionDate = policyMap.get("inceptionOn") != null ? new DateTime((Date) policyMap.get("inceptionOn")) : null;
-        DateTime expiryDate = policyMap.get("expiredOn") != null ? new DateTime((Date) policyMap.get("expiredOn")) : null;
+        DateTime inceptionDate = policyMap.get("inceptionOn") != null ? new DateTime(policyMap.get("inceptionOn")) : null;
+        DateTime expiryDate = policyMap.get("expiredOn") != null ? new DateTime(policyMap.get("expiredOn")) : null;
         Proposer glProposer = policyMap.get("proposer") != null ? (Proposer) policyMap.get("proposer") : null;
         PolicyNumber policyNumber = policyMap.get("policyNumber") != null ? (PolicyNumber) policyMap.get("policyNumber") : null;
         GLPolicyDetailDto policyDetailDto = new GLPolicyDetailDto();
@@ -106,7 +106,7 @@ public class GLEndorsementService {
         List<GLEndorsementDto> endorsementDtos = endorsements.stream().map(new Function<Map, GLEndorsementDto>() {
             @Override
             public GLEndorsementDto apply(Map map) {
-                DateTime effectiveDate = map.get("effectiveDate") != null ? new DateTime((Date) map.get("effectiveDate")) : null;
+                DateTime effectiveDate = map.get("effectiveDate") != null ? new DateTime(map.get("effectiveDate")) : null;
                 String endorsementId = map.get("_id").toString();
                 String endorsementNumber = map.get("endorsementNumber") != null ? ((EndorsementNumber) map.get("endorsementNumber")).getEndorsementNumber() : "";
                 Policy policy = map.get("policy") != null ? (Policy) map.get("policy") : null;
@@ -132,6 +132,10 @@ public class GLEndorsementService {
         Policy policy = endorsementMap != null ? (Policy) endorsementMap.get("policy") : null;
         PolicyId policyId = policy != null ? policy.getPolicyId() : null;
         return policyId;
+    }
+
+    public Map<String, Object> getPolicyDetail(String endorsementId){
+      return glEndorsementFinder.getPolicyDetail(endorsementId);
     }
 
 }
