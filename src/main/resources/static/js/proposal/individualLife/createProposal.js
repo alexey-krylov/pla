@@ -385,9 +385,9 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
                     $scope.agentDetails=result.agentCommissionDetails;
                     $scope.rcvProposal = response;
 
-                     if($scope.rcvProposal.premiumPaymentDetails != null){
+                   /*  if($scope.rcvProposal.premiumPaymentDetails != null){
                      $scope.premiumResponse=$scope.rcvProposal.premiumPaymentDetails.premiumDetail;
-                     }
+                     }*/
 
                     ////console.log('Proposal Number....');
                     $scope.proposalNumberDetails.proposalNumber = $scope.rcvProposal.proposalNumber;
@@ -419,7 +419,7 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
                         $scope.checkDocumentAttached=$scope.additionalDocumentList!=null;
                     });
 
-                   /* $http.get("getpremiumdetail/"+$scope.proposal.proposalId).success(function (response, status, headers, config) {
+                    $http.get("getpremiumdetail/"+$scope.proposal.proposalId).success(function (response, status, headers, config) {
                         $scope.premiumResponse=response;
                         console.log('PremiumResponseRes'+JSON.stringify(response));
                         if($scope.premiumResponse != null)
@@ -429,7 +429,7 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
                         }
                     }).error(function (response, status, headers, config) {
                     });
-*/
+
                     if($scope.rcvProposal.proposer != null)
                     {
                         //console.log('Proposer: '+JSON.stringify($scope.rcvProposal.proposer || {}));
@@ -591,6 +591,7 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
                         $scope.premiumPaymentDetails.premiumFrequency=$scope.rcvProposal.premiumPaymentDetails.premiumFrequency;
                         $scope.premiumPaymentDetails.premiumPaymentMethod=$scope.rcvProposal.premiumPaymentDetails.premiumPaymentMethod;
                         $scope.premiumPaymentDetails.proposalSignDate=$scope.rcvProposal.premiumPaymentDetails.proposalSignDate;
+                        $scope.premiumPaymentDetails.premiumFrequencyPayable=$scope.rcvProposal.premiumPaymentDetails.premiumFrequencyPayable;
 
                         if($scope.rcvProposal.premiumPaymentDetails.employerDetails !=null)
                         {
@@ -913,39 +914,69 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
              $scope.checkDocumentAttached=$scope.additionalDocumentList!=null;
 
              });*/
-
-            $scope.$watch('premiumPaymentDetails.premiumFrequency',function(newVal,oldVal){
-                //console.log(newVal);
-                //console.log('***** premiumPaymentDetails.premiumFrequency'+ newVal);
-                //console.log('PremiumResponse...'+ JSON.stringify($scope.premiumResponse));
-
+            $scope.getpremiumFrequency=function(newVal)
+            {
                 if(newVal == 'QUARTERLY')
                 {
-                    $scope.premiumResponse.annualPremium1111=$scope.premiumResponse.quarterlyPremium;
+
+                    //$scope.premiumResponse.annualPremiumFreq=$scope.premiumResponse.quarterlyPremium;
+                    $scope.premiumPaymentDetails.premiumFrequencyPayable=$scope.premiumResponse.quarterlyPremium;
                 }
                 else if(newVal == 'ANNUALLY')
                 {
-                    $scope.premiumResponse.annualPremium1111=$scope.premiumResponse.annualPremium;
+                    $scope.premiumPaymentDetails.premiumFrequencyPayable=$scope.premiumResponse.annualPremium;
+                    //$scope.premiumResponse.annualPremiumFreq=$scope.premiumResponse.annualPremium;
                 }
                 else if(newVal == 'SEMI_ANNUALLY')
                 {
-                    $scope.premiumResponse.annualPremium1111=$scope.premiumResponse.semiannualPremium;
+                    $scope.premiumPaymentDetails.premiumFrequencyPayable=$scope.premiumResponse.semiannualPremium;
+                    //$scope.premiumResponse.annualPremiumFreq=$scope.premiumResponse.semiannualPremium;
                 }
 
                 else if(newVal == 'MONTHLY')
                 {
-                    $scope.premiumResponse.annualPremium1111=$scope.premiumResponse.monthlyPremium;
+                    $scope.premiumPaymentDetails.premiumFrequencyPayable=$scope.premiumResponse.monthlyPremium;
+                    //$scope.premiumResponse.annualPremiumFreq=$scope.premiumResponse.monthlyPremium;
+                }
+
+            }
+
+            /*$scope.$watch('premiumPaymentDetails.premiumFrequency',function(newVal,oldVal){
+                //console.log(newVal);
+                //console.log('***** premiumPaymentDetails.premiumFrequency'+ newVal);
+                //console.log('PremiumResponse...'+ JSON.stringify($scope.premiumResponse));
+                if(newVal == 'QUARTERLY')
+                {
+
+                    //$scope.premiumResponse.annualPremiumFreq=$scope.premiumResponse.quarterlyPremium;
+                    $scope.premiumPaymentDetails.premiumFrequencyPayable=$scope.premiumResponse.quarterlyPremium;
+                }
+                else if(newVal == 'ANNUALLY')
+                {
+                    $scope.premiumPaymentDetails.premiumFrequencyPayable=$scope.premiumResponse.annualPremium;
+                    //$scope.premiumResponse.annualPremiumFreq=$scope.premiumResponse.annualPremium;
+                }
+                else if(newVal == 'SEMI_ANNUALLY')
+                {
+                    $scope.premiumPaymentDetails.premiumFrequencyPayable=$scope.premiumResponse.semiannualPremium;
+                    //$scope.premiumResponse.annualPremiumFreq=$scope.premiumResponse.semiannualPremium;
+                }
+
+                else if(newVal == 'MONTHLY')
+                {
+                    $scope.premiumPaymentDetails.premiumFrequencyPayable=$scope.premiumResponse.monthlyPremium;
+                    //$scope.premiumResponse.annualPremiumFreq=$scope.premiumResponse.monthlyPremium;
                 }
 
 
-                /*if(newVal)
+                *//*if(newVal)
                 {
                     //alert(newVal);
                     $scope.premiumResponse.annualPremium1111=newVal;
                     //alert($scope.premiumResponse.annualPremium1111);
-                }*/
+                }*//*
             });
-
+*/
 
             $scope.addAdditionalDocument = function () {
                 $scope.additionalDocumentList.unshift({});
@@ -1278,6 +1309,9 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
                 $('#beneficialModal').modal('hide');
                 //$scope.clear();
 
+                console.log("BeneficiaryList:"+JSON.stringify($scope.beneficiariesList));
+
+
             };
 
             $scope.showDob = function (dob) {
@@ -1368,9 +1402,21 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
                     //alert("Before GetPremium...");
                     //Getting PremiumDetails Documents
 
-               /*    $http.get("getpremiumdetail/"+$scope.proposal.proposalId).success(function (response, status, headers, config) {
+                    $http.get("getpremiumdetail/"+$scope.proposal.proposalId).success(function (response, status, headers, config) {
+                        $scope.premiumResponse=response;
+                        console.log('PremiumResponseRes'+JSON.stringify(response));
+                        if($scope.premiumResponse != null)
+                        {
+                            ////alert('Premium is Present');
+
+                        }
+                    }).error(function (response, status, headers, config) {
+                    });
+
+                  /* $http.get("getpremiumdetail/"+$scope.proposal.proposalId).success(function (response, status, headers, config) {
                        console.log(response);
                         $scope.premiumResponse=response;
+                       console.log('PremiumResponse..'+JSON.stringify($scope.premiumResponse));
                         if($scope.premiumResponse != null)
                         {
                             ////alert('Premium is Present');
@@ -1381,7 +1427,7 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
 
                     $http.get("/pla/individuallife/proposal/getproposal/" + $scope.proposal.proposalId).success(function (planResponse, status, headers, config) {
                         var result = planResponse;
-                        //console.log('planResponse:' + JSON.stringify(planResponse));
+                        console.log('planResponse:' + JSON.stringify(planResponse));
                         //window.location.href = "/pla/individuallife/proposal/edit?proposalId=" + response.proposalId + "&mode=edit";
                         $scope.rcvProposal = planResponse;
                         //console.log(planResponse);
@@ -1457,9 +1503,9 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
                         {
                             $scope.beneficiariesList = $scope.rcvProposal.beneficiaries;
                         }
-                        if($scope.rcvProposal.premiumDetailDto!= null){
+                       /* if($scope.rcvProposal.premiumDetailDto!= null){
                             $scope.premiumResponse=$scope.rcvProposal.premiumDetailDto;
-                        }
+                        }*/
 
                     });
 
@@ -1797,6 +1843,12 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
              $scope.termTypeCover=termType;
              }*/
 
+            $scope.getTrusteeProvinceValue = function(province){
+                //alert(province);
+                var provinceDetails = _.findWhere($scope.provinces, {provinceId:province});
+                if (provinceDetails)
+                    $scope.trusteeCities = provinceDetails.cities;
+            }
 
             $scope.getpolicytermTypeValue=function()
             {
@@ -1805,6 +1857,7 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
                 //$scope.termTypeCover=termType;
                 return $scope.termTypeCover;
             }
+
             $scope.getProposerEmpProvinceValue = function(province){
                 //alert(province);
                 var provinceDetails = _.findWhere($scope.provinces, {provinceId:province});
