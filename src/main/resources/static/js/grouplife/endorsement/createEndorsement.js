@@ -233,14 +233,14 @@ angular.module('createEndorsement', ['common', 'ngRoute', 'mgcrea.ngStrap.select
                     }
                 }
             }
-           /* $http.get("/pla/grouplife/endorsement/getpolicydetail/" + $scope.endorsementId).success(function (data, status) {
+            $http.get("/pla/grouplife/endorsement/getpolicydetail/" + $scope.endorsementId).success(function (data, status) {
                 //  console.log(data);
                 $scope.policyDetails.basicDetails = data;
                 $scope.policyDetails.basicDetails.inceptionDate = moment(data.inceptionDate).format("DD/MM/YYYY");
                 $scope.policyDetails.basicDetails.expiryDate = moment(data.expiryDate).format("DD/MM/YYYY");
 
 
-            });*/
+            });
 
             $scope.policyDetails = {
                 /*initialize with default values*/

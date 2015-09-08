@@ -42,7 +42,7 @@ var viewEndorsementModule = (function () {
         var policyId = this.selectedItem;
         if (this.selectedItem) {
             $.ajax({
-                url: "opencreateendorsementpage/?policyId=" + policyId + "&endorsementType=" + selectValue
+                url: "opencreateendorsementpage?policyId=" + policyId + "&endorsementType=" + selectValue
             }).done(function (data) {
                 console.log(JSON.stringify(data));
                 window.location.href = "editEndorsement?endorsementId=" + data.id;
