@@ -85,13 +85,12 @@
     </accordion>
 
         <div class="row" ng-if="returnStatusCheck">
-            {{returnComments}}
             <div class="col-lg-6">
                 <div class="form-group required">
                     <label class="control-label">Comments</label>
                         <textarea class="form-control input-sm" rows="4" cols="50"
                                   name="comments"
-                                  ng-disabled="mode=='new'||mode=='view'" ng-blur="setComments(returnComments)" ng-model="returnComments" />
+                                  ng-disabled="mode=='new'||mode=='view'" ng-change="setComments(returnComments)" ng-blur="setComments(returnComments)" ng-model="returnComments" />
                 </div>
             </div>
         </div>

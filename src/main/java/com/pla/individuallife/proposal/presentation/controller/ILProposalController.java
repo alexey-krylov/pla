@@ -300,7 +300,7 @@ public class ILProposalController {
     }
 
     @RequestMapping(value = "/searchQuotation", method = RequestMethod.POST)
-    public ModelAndView searchQuotation(ILSearchQuotationDto searchIlDto) {
+       public ModelAndView searchQuotation(ILSearchQuotationDto searchIlDto) {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.addObject("searchResult", ilQuotationService.searchQuotation(searchIlDto));
         modelAndView.addObject("searchCriteria", searchIlDto);
@@ -431,6 +431,19 @@ public class ILProposalController {
         List<Map<String, Object>> planList = masterFinder.getAllPlanForIndividualLife();
         return planList;
     }
+
+    @RequestMapping(value = "/getpremiumdetail/{proposalId}", method = RequestMethod.GET)
+    @ResponseBody
+    public ResponseEntity getPremiumDetail(@PathVariable("proposalId") String proposalId) {
+        PremiumDetailDto dto = null;
+        try {
+            dto = proposalFinder.getPremiumDetail(proposalId);
+        } catch (IllegalArgumentException iag) {
+            return new ResponseEntity(Result.failure(iag.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        return new ResponseEntity(dto, HttpStatus.OK);
+    }
+
 
     @RequestMapping(method = RequestMethod.GET, value = "/getAllBankNames")
     @ResponseBody

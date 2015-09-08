@@ -4,7 +4,7 @@
             <div class="form-group required col-md-6">
                 <label class="control-label">Premium Payment Frequency</label>
                 <!-- <input type="text" class="form-control input-sm" ng-model="premiumPaymentDetails.premiumFrequency"/>-->
-                <select class="form-control input-sm"  name="premiumFrequency" ng-disabled="mode=='new'||mode=='view'" ng-model="premiumPaymentDetails.premiumFrequency">
+                <select class="form-control input-sm"  name="premiumFrequency" ng-disabled="mode=='new'||mode=='view'" ng-change="getpremiumFrequency(premiumPaymentDetails.premiumFrequency)" ng-model="premiumPaymentDetails.premiumFrequency">
                     <option  value="ANNUALLY">Yearly</option>
                     <option  value="SEMI_ANNUALLY">Half Yearly</option>
                     <option  value="QUARTERLY">Quarterly</option>
@@ -258,7 +258,7 @@
                 </div>-->
                 <div class="form-group">
                     <label class="control-label">Frequency Premium Payable</label>
-                    <input type="text" class="form-control input-sm" ng-readonly="true" ng-model="premiumResponse.annualPremium1111" ng-disabled="mode=='new'||mode=='view'" name="addressLine2" ng-maxlength="100"/>
+                    <input type="text" class="form-control input-sm" ng-readonly="true" ng-model="premiumPaymentDetails.premiumFrequencyPayable"  ng-disabled="mode=='new'||mode=='view'" name="addressLine2" ng-maxlength="100"/>
                 </div>
             </div>
         </accordion-group>

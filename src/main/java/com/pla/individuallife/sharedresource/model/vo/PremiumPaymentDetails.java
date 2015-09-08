@@ -6,6 +6,8 @@ import lombok.Setter;
 import lombok.ToString;
 import org.joda.time.DateTime;
 
+import java.math.BigDecimal;
+
 /**
  * Created by Karunakar on 7/2/2015.
  */
@@ -15,6 +17,7 @@ import org.joda.time.DateTime;
 public class PremiumPaymentDetails {
     private PremiumDetail premiumDetail;
     private PremiumFrequency premiumFrequency;
+    private BigDecimal premiumFrequencyPayable;
     private PremiumPaymentMethod premiumPaymentMethod;
     private EmployerDetails employerDetails;
     private BankDetails bankDetails;
