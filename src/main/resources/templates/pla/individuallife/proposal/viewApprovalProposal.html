@@ -2,8 +2,6 @@
 <html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/xhtml" lang="en">
 <head th:include="fragments/common :: headTag">
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-    <script src="/pla/js/proposal/individuallife/createProposal.js"></script>
-
     <script>
         requirejs.config({
             paths: {
@@ -27,7 +25,7 @@
 <script>
     var interval = setInterval(function () {
         if (require.defined("basic")) {
-            requirejs(['/pla/js/proposal/individuallife/createProposal.js?t=12121'], function () {
+            requirejs(['/pla/js/proposal/individualLife/createProposal.js?t=12121'], function () {
                 $(document).ready(function () {
                     $('#il-proposal-table').dataTable({
                         "fnDrawCallback": function () {
