@@ -47,7 +47,7 @@ public class ILQuotationTest {
         proposedAssuredBuilder.withTitle("Mr").withFirstName("Jones").withSurname("Dean").withNrcNumber("123456");
         proposedAssured = proposedAssuredBuilder.build();
         String quotationARId = "1000";
-        quotation = quotation.createWithBasicDetail(quotationProcessor, quotationARId,
+        quotation = ILQuotation.createWithBasicDetail(quotationProcessor, quotationARId,
                 "5-2-300001-0415", quotationId, agentId, proposedAssured, planId);
         assertNotNull(quotation);
     }
@@ -112,6 +112,7 @@ public class ILQuotationTest {
     @Test
     public void isShouldReturnTrueWhenQuotationStatusIsGenerated() {
         this.quotation.generateQuotation(LocalDate.now());
+        this.quotation.shareQuotation(LocalDate.now());
         boolean requireVersioning = this.quotation.requireVersioning();
         assertTrue(requireVersioning);
     }
