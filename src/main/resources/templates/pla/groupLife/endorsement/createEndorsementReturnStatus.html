@@ -46,6 +46,13 @@
     /*]]>*/
 </script>
 <script>
+    var isEnterKey = function (event) {
+        var charCode = (event.which) ? event.which : event.keyCode;
+
+        if (charCode == 13) {
+            event.preventDefault();
+        }
+    }
 
 
     requirejs(['main', 'angular-file-upload'], function () {
@@ -69,21 +76,20 @@
     <form name="policyForm" novalidate="true" class="container css-form ng-cloak" method="post" enctype="multipart/form-data">
         <div class="wizard fueluxWizard" style="overflow: visible" selected-item="selectedItem">
             <ul class="steps" style="margin-left: 0">
-                <li data-step="1"><span class="badge badge-info">1</span>Approval Comments<span class="chevron"></span>
+                <li data-step="1"><span class="badge badge-info">1</span>Comments<span class="chevron"></span>
                 </li>
-                <li data-step="2"><span class="badge badge-info">2</span>Basic Details<span class="chevron"></span></li>
-                <li data-step="3"><span class="badge">3</span>Agent Details<span class="chevron"></span></li>
-                <li data-step="4"><span class="badge">4</span>Proposer Details<span class="chevron"></span></li>
-                <li data-step="5"><span class="badge">5</span>Plan Details<span class="chevron"></span></li>
-                <li data-step="6"><span class="badge">6</span>Premium Details<span class="chevron"></span></li>
+                <li data-step="2"><span class="badge badge-info">2</span>Basic<span class="chevron"></span></li>
+                <li data-step="3"><span class="badge">3</span>Agent<span class="chevron"></span></li>
+                <li data-step="4"><span class="badge">4</span>Proposer<span class="chevron"></span></li>
+                <li data-step="5"><span class="badge">5</span>Plan<span class="chevron"></span></li>
+                <li data-step="6"><span class="badge">6</span>Premium<span class="chevron"></span></li>
                 <li data-step="7"><span class="badge">7</span>Documents<span class="chevron"></span></li>
             </ul>
 
 
             <div class="actions">
-                <span style="font-weight: bolder;margin-right: 15px;color: #999">Endorsement Request Number: <span
-                        style="font-size: 13px;color: #3a87ad;">{{policyNumber}}<span
-                        ng-show="versionNumber &amp;&amp; versionNumber!=0">/{{versionNumber}}</span></span></span><!--{{endorsementNumber}}-->
+                <span style="font-weight: bold;color: #999">Endorsement Request Number: <span
+                        style="font-size: 13px;color: #3a87ad;">{{endorsementNumber}}</span></span><!--{{endorsementNumber}}-->
                 <button type="button" class="btn btn-default btn-prev" disabled="disabled"><span
                         class="glyphicon glyphicon-arrow-left"></span>Prev
                 </button>
@@ -686,6 +692,19 @@
                                 </div>
                             </accordion-group>
                         </accordion>
+                        <div class="row" ng-hide="isViewMode">
+
+                            <div class="form-group col-md-11 required">
+                                <label class="control-label">Comments</label>
+                                <textarea  class="form-control input-sm " rows="4" cols="50"
+                                           ng-required="true" name="comment" id="comment" onkeypress="return isEnterKey(event)"
+                                           ng-model="comment"/>
+
+                            </div>
+
+
+                        </div>
+
                     </ng-form>
                     <div class="row">
                         <div class="col-sm-6">
@@ -694,7 +713,7 @@
                         </div>
                         <div class="col-sm-6">
                             <button type="button" class="btn btn-default btn-sm" style="float: right"
-                                    ng-click="submitAdditionalDocument()" ng-disabled="isViewMode">Submit
+                                    ng-click="submitComments(comment)" ng-disabled="isViewMode || !comment">Submit
                             </button>
                         </div>
                     </div>

@@ -6,11 +6,7 @@ angular.module('createEndorsement', ['common', 'ngRoute', 'mgcrea.ngStrap.select
         function ($scope, $http, $timeout, $upload, provinces, getProvinceAndCityDetail, globalConstants, agentDetails, stepsSaved, policyDetails, endorsementNumber,
                   getQueryParameter, $window, premiumData, documentList) {
 
-            var mode = getQueryParameter("mode");
-            if (mode == 'view') {
-                $scope.isViewMode = true;
 
-            }
             $scope.isEnablePolicyHolderMode = false;
             $scope.isEnableContactMode = false;
             $scope.isEnablePlanMode = false;
@@ -18,18 +14,51 @@ angular.module('createEndorsement', ['common', 'ngRoute', 'mgcrea.ngStrap.select
             $scope.disableProposerSaveButton = true;
             $scope.endorsementType=getQueryParameter("endorsementType");
             var enableTab = getQueryParameter("endorsementType");
-            if (enableTab == 'CHANGE_POLICY_HOLDER_NAME') {
+            console.log(enableTab);
+            if (enableTab == 'CHANGE_POLICY_HOLDER_NAME' || enableTab == 'Correction of Name - Policy Holder' ) {
                 $scope.isEnablePolicyHolderMode = true;
                 $scope.isEnable = true;
                 $scope.disableProposerSaveButton = true;
-            } else if (enableTab == 'CHANGE_POLICY_HOLDER_CONTACT_DETAIL') {
+            } else if (enableTab == 'CHANGE_POLICY_HOLDER_CONTACT_DETAIL' || enableTab == 'Change of Contact Details') {
                 $scope.isEnableContactMode = true;
                 $scope.isEnable = true;
                 $scope.disableProposerSaveButton = true;
-            } else {
+            } else{
                 $scope.isEnablePlanMode = true;
                 $scope.isEnable = false;
             }
+            var mode = getQueryParameter("mode");
+            if (mode == 'view') {
+                $scope.isViewMode = true;
+                $scope.isEnableContactMode = false;
+                $scope.isEnablePlanMode = false;
+                $scope.isEnable = false;
+                $scope.isEnablePolicyHolderMode = false;
+
+
+
+            }
+            var status = getQueryParameter("status");
+            if (status == 'return') {
+                $scope.isReturnStatus = true;
+
+                $http.get("/pla/grouplife/endorsement/getapprovercomments/"+ $scope.endorsementId).success(function (data, status) {
+                    console.log(data);
+                    $scope.approvalCommentList=data;
+                });
+
+            }
+            var method = getQueryParameter("method");
+            if (method == 'approval') {
+                $scope.isViewMode = true;
+
+                $http.get("/pla/grouplife/endorsement/getapprovercomments/" + $scope.endorsementId).success(function (data, status) {
+                    // console.log(data);
+                    $scope.approvalCommentList=data;
+                });
+
+            }
+
             /*This scope holds the list of installments from which user can select one */
             $scope.numberOfInstallmentsDropDown = [];
 
@@ -183,6 +212,45 @@ angular.module('createEndorsement', ['common', 'ngRoute', 'mgcrea.ngStrap.select
                     }
                 });
             };
+            $scope.approveEndorsement = function(){
+                var request = angular.extend({comment: $scope.comment},
+                    {"proposalId": $scope.proposalId});
+
+                $http.post('/pla/grouplife/endorsement/approve', request).success(function (data) {
+                    if(data.status==200){
+
+                        $window.location.href="/pla/grouplife/endorsement/openapprovalendorsement";
+
+                    }
+
+                });
+            }
+            $scope.comment='';
+            $scope.returnEndorsement = function(){
+                var request = angular.extend({comment: $scope.comment},{"proposalId": $scope.proposalId});
+
+                $http.post('/pla/grouplife/endorsement/return', request).success(function (data) {
+                    if(data.status==200){
+
+
+                        $window.location.href="/pla/grouplife/endorsement/openapprovalendorsement";
+
+                    }
+
+                });
+            }
+            $scope.submitComments = function(comment){
+                $http.post('/pla/grouplife/Endorsement/submit', angular.extend({},
+                    {"endorsementId": $scope.endorsementId,comment:comment})).success(function (data) {
+                    if (data.status == "200") {
+                        saveStep();
+                        $('#searchFormEndorsement').val($scope.endorsementId);
+                        $('#searchForm').submit();
+                    }
+
+                });
+
+            }
 
 
             $scope.$watch('policyDetails.proposer.proposerName', function (newVal, oldVal) {
@@ -344,6 +412,10 @@ angular.module('createEndorsement', ['common', 'ngRoute', 'mgcrea.ngStrap.select
                     }
                 }
             });
+            $scope.backToApproverPortlet = function () {
+                $window.location.href = 'viewApprovalEndorsement';
+            }
+
 
             $scope.selectedInstallment = premiumData.premiumInstallment;
             $scope.installments = $scope.policyDetails.premium.installments;

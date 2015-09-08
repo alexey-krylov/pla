@@ -67,7 +67,8 @@
 
 
     <nth-alert></nth-alert>
-    <form name="policyForm" novalidate="true" class="container css-form ng-cloak" method="post" enctype="multipart/form-data">
+    <form name="policyForm" novalidate="true" class="container css-form ng-cloak" method="post"
+          enctype="multipart/form-data">
         <div class="wizard fueluxWizard" style="overflow: visible" selected-item="selectedItem">
             <ul class="steps" style="margin-left: 0">
                 <li data-step="1"><span class="badge badge-info">1</span>Basic<span class="chevron"></span></li>
@@ -80,7 +81,7 @@
 
 
             <div class="actions">
-                <span style="font-weight: bolder;margin-right: 15px;color: #999">Endorsement Request Number: <span
+                <span style="font-weight: bolder;margin-right: 15px;color: #999">Endorsement Number: <span
                         style="font-size: 13px;color: #3a87ad;">{{endorsementNumber}}</span></span><!--{{endorsementNumber}}-->
                 <button type="button" class="btn btn-default btn-prev" disabled="disabled"><span
                         class="glyphicon glyphicon-arrow-left"></span>Prev
@@ -100,8 +101,9 @@
                                     <div class="form-group required">
                                         <label class="control-label">PolicyHolder Name</label>
                                         <input type="text" class="form-control input-sm" name="policyHolderName"
-                                               ng-if="policyDetails.basicDetails.policyHolderName"
-                                               ng-model="policyDetails.basicDetails.policyHolderName" ng-disabled="true"/>
+                                               ng-if="policyDetails.basicDetails.policyHolderName" ng-required="true"
+                                               ng-model="policyDetails.basicDetails.policyHolderName"
+                                               ng-disabled="true"/>
                                     </div>
                                 </div>
 
@@ -109,8 +111,8 @@
                                     <div class="form-group required">
                                         <label class="control-label">Inception Date</label>
                                         <input type="text" class="form-control input-sm" name="inceptionDate"
-                                               ng-model="policyDetails.basicDetails.inceptionDate"
-                                                ng-disabled="true"/>
+                                               ng-model="policyDetails.basicDetails.inceptionDate" ng-required="true"
+                                               ng-disabled="true"/>
                                     </div>
                                 </div>
                             </div>
@@ -119,7 +121,7 @@
                                     <div class="form-group required">
                                         <label class="control-label">Expiry Date</label>
                                         <input type="text" class="form-control input-sm" ng-readonly="true"
-                                                name="expiryDate"
+                                               name="expiryDate" ng-required="true"
                                                ng-model="policyDetails.basicDetails.expiryDate"/>
                                     </div>
 
@@ -128,8 +130,8 @@
                                     <div class="form-group required">
                                         <label class="control-label">Issuance Date</label>
                                         <input type="text" class="form-control input-sm" name="inceptionDate"
-                                               ng-model="policyDetails.basicDetails.inceptionDate"
-                                                ng-disabled="true"/>
+                                               ng-model="policyDetails.basicDetails.inceptionDate" ng-required="true"
+                                               ng-disabled="true"/>
                                     </div>
                                 </div>
 
@@ -230,7 +232,7 @@
                                         <label class="control-label">Address Line 1</label>
                                         <input type="text" class="form-control input-sm"
                                                ng-disabled="!isEnableContactMode" ng-required="true"
-                                               onkeypress="return isNumeric(event)" name="addressLine1"
+                                                name="addressLine1"
                                                ng-maxlength="100" ng-model="policyDetails.proposer.addressLine1"/>
                                     </div>
                                     <div class="form-group">
@@ -263,7 +265,7 @@
                                     <div class="form-group">
                                         <label>Address Line 2</label>
                                         <input type="text" class="form-control input-sm" maxlength="100"
-                                               ng-disabled="!isEnableContactMode" onkeypress="return isNumeric(event)"
+                                               ng-disabled="!isEnableContactMode"
                                                ng-model="policyDetails.proposer.addressLine2"/>
                                     </div>
                                     <div class="form-group required">
@@ -431,7 +433,7 @@
                                                    name="profitAndSolvencyLoading"
                                                    ng-pattern="/^(^[0-9]{1,2})+(\.[0-9]{1,2})?$/"
                                                    ng-model="policyDetails.premium.profitAndSolvencyLoading"
-                                                   ng-blur="recalculatePremium();"  ng-disabled="true" value="0"/>
+                                                   ng-blur="recalculatePremium();" ng-disabled="true" value="0"/>
                                         </div>
                                         <div class="form-group">
                                             <label class="control-label">HIV Discounts</label>
@@ -505,13 +507,15 @@
                         </div>
                         <div class="form-group">
                             <label><input type="radio" ng-model="policyDetails.premium.optedPremiumFrequency"
-                                          value="SEMI_ANNUALLY" style="margin-right:5px;" ng-disabled="true"/>Semi-Annual Payment</label>
+                                          value="SEMI_ANNUALLY" style="margin-right:5px;" ng-disabled="true"/>Semi-Annual
+                                Payment</label>
                             <input type="number" readonly="true" class="form-control input-sm"
                                    ng-model="policyDetails.premium.semiannualPremium" ng-disabled="true"/>
                         </div>
                         <div class="form-group">
                             <label><input type="radio" ng-model="policyDetails.premium.optedPremiumFrequency"
-                                          value="QUARTERLY" style="margin-right:5px;" ng-disabled="true"/>Quarterly Payment</label>
+                                          value="QUARTERLY" style="margin-right:5px;" ng-disabled="true"/>Quarterly
+                                Payment</label>
 
                             <input type="number" readonly="true" class="form-control input-sm"
                                    ng-model="policyDetails.premium.quarterlyPremium" ng-disabled="true"/>
@@ -547,7 +551,7 @@
                     </div>
                 </div>
                 <div class="step-pane" data-step="6">
-                    <ng-form name="step6" >
+                    <ng-form name="step6">
                         <accordion close-others="true">
                             <accordion-group is-open="accordionStatusDocuments.documents">
                                 <accordion-heading>
@@ -556,29 +560,32 @@
                                                             'glyphicon-chevron-right': !accordionStatusDocuments.documents}"></i>
                                 </accordion-heading>
                                 <div class="bs-callout  bs-callout-info" style="overflow:auto;height:240px;"
-                                     >
+                                        >
 
                                     <div class="form-group " ng-repeat="document in documentList">
                                         <label class="col-sm-3 control-label">{{document.documentName}}</label>
 
                                         <div class="input-group">
                                             <a href="/pla/grouplife/endorsement/downloadmandatorydocument/{{document.gridFsDocId}}"
-                                               style="display:inline;float:right;" hg-show="!document.submitted">{{document.fileName | limitTo: 70}}</a>
+                                               style="display:inline;float:right;" hg-show="!document.submitted">{{document.fileName
+                                                | limitTo: 70}}</a>
 
                                             <button class="btn btn-default"
                                                     style="display:inline;float:right;margin-right:5px;"
                                                     ng-file-select=""
-                                                    ng-model="document.documentAttached" ng-disabled="isViewMode" >Browse
+                                                    ng-model="document.documentAttached" ng-disabled="isViewMode">Browse
                                             </button>
                                             <input class="form-control input-sm" style="width:380px;"
                                                    value="{{document.documentAttached[0].name}}"
                                                    readonly="true"/>
 
-                                       </div>
+                                        </div>
 
                                     </div>
                                     <div class="btn btn-default" style="display:inline;float:right;clear:both"
-                                         ng-click="uploadDocumentFiles()" ng-hide="(documentList.length &lt;  1 || isViewMode)">Upload All{{documentList.length}}
+                                         ng-click="uploadDocumentFiles()"
+                                         ng-hide="(documentList.length &lt;  1 || isViewMode)">Upload
+                                        All{{documentList.length}}
                                     </div>
                                 </div>
                             </accordion-group>
@@ -588,7 +595,7 @@
                                                             ng-class="{'glyphicon-chevron-down': accordionStatusDocuments.additionalDocuments, 'glyphicon-chevron-right': !accordionStatusDocuments.additionalDocuments}"></i>
                                 </accordion-heading>
                                 <div class="bs-callout  bs-callout-info" style="overflow:auto;height:250px;"
-                                     >
+                                        >
 
                                     <div class="row">
                                         <button class="btn btn-default"
@@ -610,7 +617,7 @@
                                                                ng-model="additionalDocument.documentId"/>
                                                     </div>
                                                 </div>
-                                                <div class="col-lg-4" ng-hide="isViewMode" >
+                                                <div class="col-lg-4" ng-hide="isViewMode">
                                                     <div class="form-group">
 
                                                         <label class="control-label">Browse File</label>
@@ -668,8 +675,8 @@
             </div>
         </div>
     </form>
-    <form method="POST" action="opensearchendorsement" id="searchForm">
-        <input type="hidden" id="searchFormEndorsement" name="policyId"/>
+    <form method="GET" action="opensearchendorsement" id="searchForm">
+        <input type="hidden" id="searchFormEndorsement" name="endorsementId"/>
     </form>
 
     <style>

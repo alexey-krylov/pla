@@ -82,8 +82,8 @@
             <div class="col-md-3">
                 <div class="form-group">
                     <label th:text="#{endorsementRequestNumber}">Endorsement request Number</label>
-                    <input type="text" class="form-control input-sm" name="endorsementRequestNumber"
-                            /><!--th:value="${searchCriteria.endorsementRequestNumber}"-->
+                    <input type="text" class="form-control input-sm" name="endorsementNumber"
+                           th:value="${searchCriteria.endorsementNumber}"    /><!--th:value="${searchCriteria.endorsementRequestNumber}"-->
                 </div>
             </div>
 
@@ -146,18 +146,20 @@
                                     <input type="radio" name="endorsementId" th:value="${endorsement.endorsementId}"
                                            value="5100000010315"/>
                                     <input type="hidden" class="endorsementStatus"
-                                           th:value="${endorsement.endorsementStatus}"/>
+                                           th:value="${endorsement.status}"/>
+                                    <input type="hidden" class="endorsementType"
+                                           th:value="${endorsement.endorsementType}"/>
 
                                     <input type="hidden" name="endorsementId"
                                            th:value="${endorsement.endorsementId}"/>
                                 </td>
-                                <td th:text="${endorsement.endorsementRequestNumber}">5100000010315</td>
+                                <td th:text="${endorsement.endorsementNumber}">5100000010315</td>
                                 <td th:text="${endorsement.endorsementType}">5100000010315</td>
                                 <td th:text="${endorsement.policyNumber}">5100000010315</td>
                                 <td th:text="${endorsement.policyHolderName}"></td>
-                                <td th:text="${endorsement.endorsementStatus}"></td>
+                                <td th:text="${endorsement.status}"></td>
                                 <td th:text="${endorsement.aging}"></td>
-                                <td th:text="${#dates.format(endorsement.effectiveDate,'dd/MM/yyyy')}"></td>
+                                <td th:text="${endorsement.effectiveDate}"></td>
 
                             </tr>
                             <!--/*-->
