@@ -38,14 +38,14 @@ var viewEndorsementModule = (function () {
 
      };*/
     services.createEndorsement = function () {
-        // alert(this.selectedItem);
         var policyId = this.selectedItem;
         if (this.selectedItem) {
             $.ajax({
                 url: "opencreateendorsementpage?policyId=" + policyId + "&endorsementType=" + selectValue
             }).done(function (data) {
                 console.log(JSON.stringify(data));
-                window.location.href = "editEndorsement?endorsementId=" + data.id;
+
+                window.location.href = "editEndorsement?endorsementId=" + data.id +"&endorsementType=" + selectValue;
             });//.error(function () {
               //  $('#proposalConfirm').modal('show');
 
