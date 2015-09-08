@@ -11,7 +11,6 @@ import com.pla.individuallife.proposal.domain.model.ILProposalStatus;
 import com.pla.individuallife.proposal.domain.service.ILProposalRoleAdapter;
 import com.pla.individuallife.proposal.domain.service.ProposalNumberGenerator;
 import com.pla.individuallife.proposal.presentation.dto.ILProposalMandatoryDocumentDto;
-import com.pla.individuallife.proposal.presentation.dto.PremiumDetailDto;
 import com.pla.individuallife.proposal.presentation.dto.QuestionDto;
 import com.pla.individuallife.proposal.query.ILProposalFinder;
 import com.pla.individuallife.proposal.service.ILProposalFactory;
@@ -23,7 +22,6 @@ import com.pla.sharedkernel.domain.model.ProcessType;
 import com.pla.sharedkernel.domain.model.RoutingLevel;
 import com.pla.sharedkernel.identifier.PlanId;
 import com.pla.sharedkernel.identifier.ProposalId;
-import org.apache.commons.beanutils.BeanUtils;
 import org.axonframework.commandhandling.annotation.CommandHandler;
 import org.axonframework.repository.Repository;
 import org.joda.time.LocalDate;
@@ -172,12 +170,6 @@ public class ILProposalCommandHandler {
         int minAge = (int) planDetail.get("minEntryAge");
         int maxAge = (int) planDetail.get("maxEntryAge");
         aggregate = ilProposalProcessor.updateWithPlanDetail(aggregate, cmd.getProposalPlanDetail(), cmd.getBeneficiaries(), minAge, maxAge);
-        PremiumDetailDto premiumDetailDto =  proposalFinder.getPremiumDetail(proposalId.getProposalId());
-        PremiumDetail premiumDetail = new PremiumDetail();
-        BeanUtils.copyProperties(premiumDetail, premiumDetailDto);
-        PremiumPaymentDetails premiumPaymentDetails = new PremiumPaymentDetails();
-        premiumPaymentDetails.setPremiumDetail(premiumDetail);
-        aggregate =  ilProposalProcessor.updateWithPremiumPaymentDetail(aggregate,premiumPaymentDetails);
         ilProposalMongoRepository.add(aggregate);
         return aggregate.getIdentifier().getProposalId();
     }
@@ -188,7 +180,6 @@ public class ILProposalCommandHandler {
         ProposalId proposalId = new ProposalId(cmd.getProposalId());
         ILProposalAggregate aggregate = ilProposalMongoRepository.load(proposalId);
         PremiumPaymentDetails premiumPaymentDetails = cmd.getPremiumPaymentDetails();
-        premiumPaymentDetails.setPremiumDetail(aggregate.getPremiumPaymentDetails().getPremiumDetail());
         aggregate = ilProposalProcessor.updateWithPremiumPaymentDetail(aggregate,premiumPaymentDetails);
         ilProposalMongoRepository.add(aggregate);
         return aggregate.getIdentifier().getProposalId();
