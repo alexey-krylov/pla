@@ -233,14 +233,14 @@ angular.module('createEndorsement', ['common', 'ngRoute', 'mgcrea.ngStrap.select
                     }
                 }
             }
-            $http.get("/pla/grouplife/policy/getpolicydetail/" + $scope.endorsementId).success(function (data, status) {
+           /* $http.get("/pla/grouplife/endorsement/getpolicydetail/" + $scope.endorsementId).success(function (data, status) {
                 //  console.log(data);
                 $scope.policyDetails.basicDetails = data;
                 $scope.policyDetails.basicDetails.inceptionDate = moment(data.inceptionDate).format("DD/MM/YYYY");
                 $scope.policyDetails.basicDetails.expiryDate = moment(data.expiryDate).format("DD/MM/YYYY");
 
 
-            });
+            });*/
 
             $scope.policyDetails = {
                 /*initialize with default values*/
@@ -391,7 +391,7 @@ angular.module('createEndorsement', ['common', 'ngRoute', 'mgcrea.ngStrap.select
                     queryParam = getQueryParameter('endorsementId');
                     if (queryParam && !_.isEmpty(queryParam)) {
                         var deferred = $q.defer();
-                        $http.get('/pla/grouplife/policy/getagentdetailfrompolicy/' + queryParam).success(function (response, status, headers, config) {
+                        $http.get('/pla/grouplife/endorsement/getagentdetailfrompolicy/' + queryParam).success(function (response, status, headers, config) {
                             deferred.resolve(response)
                         }).error(function (response, status, headers, config) {
                             deferred.reject();
@@ -407,7 +407,7 @@ angular.module('createEndorsement', ['common', 'ngRoute', 'mgcrea.ngStrap.select
                 policyDetails: ['$q', '$http', 'getQueryParameter', function ($q, $http, getQueryParameter) {
                     if (queryParam && !_.isEmpty(queryParam)) {
                         var deferred = $q.defer();
-                        $http.get('/pla/grouplife/policy/getproposerdetail/' + queryParam).success(function (response, status, headers, config) {
+                        $http.get('/pla/grouplife/endorsement/getproposerdetail/' + queryParam).success(function (response, status, headers, config) {
                             deferred.resolve(response)
                         }).error(function (response, status, headers, config) {
                             deferred.reject();
@@ -438,7 +438,7 @@ angular.module('createEndorsement', ['common', 'ngRoute', 'mgcrea.ngStrap.select
                 premiumData: ['$q', '$http', 'getQueryParameter', function ($q, $http, getQueryParameter) {
                     if (queryParam && !_.isEmpty(queryParam)) {
                         var deferred = $q.defer();
-                        $http.get('/pla/grouplife/policy/getpremiumdetail/' + queryParam).success(function (response, status, headers, config) {
+                        $http.get('/pla/grouplife/endorsement/getpremiumdetail/' + queryParam).success(function (response, status, headers, config) {
 
 
                             deferred.resolve(response)
@@ -454,7 +454,7 @@ angular.module('createEndorsement', ['common', 'ngRoute', 'mgcrea.ngStrap.select
                 documentList: ['$q', '$http', function ($q, $http) {
                     if (queryParam && !_.isEmpty(queryParam)) {
                         var deferred = $q.defer();
-                        $http.get('/pla/grouplife/policy/getmandatorydocuments/' + queryParam).success(function (response, status, headers, config) {
+                        $http.get('/pla/grouplife/endorsement/getmandatorydocuments/' + queryParam).success(function (response, status, headers, config) {
 
                             deferred.resolve(response)
                         }).error(function (response, status, headers, config) {
