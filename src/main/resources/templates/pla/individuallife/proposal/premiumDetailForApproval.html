@@ -4,7 +4,7 @@
             <div class="form-group required col-md-6">
                 <label class="control-label">Premium Payment Frequency</label>
                 <!-- <input type="text" class="form-control input-sm" ng-model="premiumPaymentDetails.premiumFrequency"/>-->
-                <select class="form-control input-sm"  name="premiumFrequency" ng-disabled="mode=='new'||mode=='view'" ng-model="premiumPaymentDetails.premiumFrequency">
+                <select class="form-control input-sm"  name="premiumFrequency" ng-disabled="mode=='new'||mode=='view'" ng-change="getpremiumFrequency(premiumPaymentDetails.premiumFrequency)" ng-model="premiumPaymentDetails.premiumFrequency">
                     <option  value="ANNUALLY">Yearly</option>
                     <option  value="SEMI_ANNUALLY">Half Yearly</option>
                     <option  value="QUARTERLY">Quarterly</option>
@@ -118,7 +118,6 @@
 
                 </div>
                 <div class="form-group required" ng-if="premiumPaymentDetails.premiumPaymentMethod == 'DEBIT_ORDER'">
-                    {{bankDetails.bankBranchName}}
                     <label class="control-label">Bank Branch Name</label>
                     <!-- <input type="text" class="form-control input-sm" ng-model="bankDetails.bankBranchName" ng-disabled="mode=='new'||mode=='view'" name="branchname"/>-->
 
@@ -243,7 +242,7 @@
                 </div>
             </div>
             <div class="col-md-6">
-                <div class="form-group" ng-repeat="rider in premiumResponse.riderPremiumDtos">
+                <div class="form-group" ng-repeat="rider in premiumResponse.riderPremiums">
                     <div>
                         <td>{{rider.coverageName.coverageName}} Annual Premium </td>
                         <td>
@@ -258,9 +257,8 @@
                     <input type="text" class="form-control input-sm" ng-disabled="mode=='new'||mode=='view'" name="addressLine1" ng-maxlength="100"/>
                 </div>-->
                 <div class="form-group">
-                    {{premiumResponse.annualPremium1111}}
                     <label class="control-label">Frequency Premium Payable</label>
-                    <input type="text" class="form-control input-sm" ng-readonly="true" ng-model="premiumResponse.annualPremium1111" ng-disabled="mode=='new'||mode=='view'" name="addressLine2" ng-maxlength="100"/>
+                    <input type="text" class="form-control input-sm" ng-readonly="true" ng-model="premiumPaymentDetails.premiumFrequencyPayable"  ng-disabled="mode=='new'||mode=='view'" name="addressLine2" ng-maxlength="100"/>
                 </div>
             </div>
         </accordion-group>
@@ -270,7 +268,7 @@
             <button type="button" class="btn btn-default btn-sm">Cancel</button>
         </div>
         <div class="col-sm-6">
-            <button type="button" class="btn btn-default btn-sm" style="float: right" ng-disabled="(step9.$invalid)" ng-hide="mode=='new'||mode=='view'" ng-click="savePremiumDetail()">Save</button>
+            <button type="button" class="btn btn-default btn-sm" style="float: right" ng-disabled="(step10.$invalid)" ng-hide="mode=='new'||mode=='view'" ng-click="savePremiumDetail()">Save</button>
         </div>
     </div>
 </ng-form>
