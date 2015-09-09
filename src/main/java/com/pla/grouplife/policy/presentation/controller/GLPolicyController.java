@@ -108,7 +108,7 @@ public class GLPolicyController {
     public void downloadInsuredTemplate(@PathVariable("policyId") String policyId, HttpServletResponse response) throws IOException {
         response.reset();
         response.setContentType("application/msexcel");
-        response.setHeader("content-disposition", "attachment; filename=" + "GHInsuredTemplate.xls" + "");
+        response.setHeader("content-disposition", "attachment; filename=" + "Group_Life_InsuredTemplate.xls" + "");
         OutputStream outputStream = response.getOutputStream();
         HSSFWorkbook planDetailExcel = glPolicyService.getInsuredTemplateExcel(policyId);
         planDetailExcel.write(outputStream);
