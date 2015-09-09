@@ -2035,6 +2035,26 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
                  }
 
                  }*/
+
+                if($scope.policyDetails.length >0)
+                {
+                    if($scope.insurerDetails1.length>0)
+                    {
+                        if($scope.insurerDetails2.length>0)
+                        {
+                            if($scope.insurerDetails3.length>0)
+                            {
+                                $scope.generalDetailsSaveStatus='false';
+                            }
+                        }
+                    }
+                    //$scope.generalDetailsSaveStatus='false';
+                }
+                else
+                {
+                    $scope.generalDetailsSaveStatus='true';
+                }
+
                 $('#policyModal').modal('hide');
                 $scope.clear();
             };
@@ -2049,9 +2069,6 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
             }
 
             $scope.addAssuredByOthers = function (insurer1) {
-                //console.log('Inside Add addAssuredByOthers..');
-                //console.log(JSON.stringify(insurer1));
-
                 if ($scope.insurerDetails1.length == 0) {
                     //console.log('Lenght is Null..');
                     $scope.insurerDetails1.unshift(insurer1);
@@ -2067,25 +2084,38 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
                         }
                     }
 
-                    if(checkLoopNameStatus == "true")
-                    {
-                        $scope.insurerDetails1.unshift(insurer1);
-                    }
-                    else
-                    {
-                        alert("Please Select Different Proposal Number");
-                    }
-                    /* for (i in $scope.insurerDetails1) {
-                     if ($scope.insurerDetails1[i].policyOrProposalNumber == insurer1.policyOrProposalNumber) {
-                     //console.log('Failure..');
-                     //alert("Particular PolicyNumber is Already Added..Please Choose different PolicyNumber");
-                     }
-                     else {
-                     $scope.insurerDetails1.unshift(insurer1);
-                     }
-                     }*/
-
+                        if(checkLoopNameStatus == "true")
+                        {
+                            $scope.insurerDetails1.unshift(insurer1);
+                        }
+                        else
+                        {
+                            alert("Please Select Different Proposal Number");
+                        }
                 }
+
+                if($scope.insurerDetails1.length >0)
+                {
+                    //alert("Length.."+$scope.insurerDetails1.length);
+                    if($scope.insurerDetails2.length >0)
+                    {
+                        if($scope.insurerDetails3.length >0)
+                        {
+                            if($scope.policyDetails.length>0)
+                            {
+                                $scope.generalDetailsSaveStatus='false';
+                            }
+                        }
+
+                    }
+                    //$scope.generalDetailsSaveStatus='false';
+                    //alert($scope.generalDetailsSaveStatus)
+                }
+                else
+                {
+                    $scope.generalDetailsSaveStatus='true';
+                }
+
                 $('#assuredByOthersModal').modal('hide');
                 $scope.clear();
             };
@@ -2140,6 +2170,25 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
                  }
 
                  }*/
+
+                if($scope.insurerDetails2.length >0)
+                {
+                    if($scope.insurerDetails1.length >0)
+                    {
+                        if($scope.insurerDetails3.length >0)
+                        {
+                            if($scope.policyDetails.length>0)
+                            {
+                                $scope.generalDetailsSaveStatus='false';
+                            }
+                        }
+                    }
+                    //$scope.generalDetailsSaveStatus='false';
+                }
+                else
+                {
+                    $scope.generalDetailsSaveStatus='true';
+                }
                 $('#pendingInsuranceByOthersTpl').modal('hide');
                 $scope.clear();
             };
@@ -2175,6 +2224,24 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
                     {
                         alert("Please Select Different Proposal Number");
                     }
+                }
+
+                if($scope.insurerDetails3.length > 0)
+                {
+                    if($scope.insurerDetails2.length > 0)
+                    {
+                        if($scope.insurerDetails1.length > 0)
+                        {
+                            if($scope.policyDetails.length>0)
+                            {
+                                $scope.generalDetailsSaveStatus='false';
+                            }
+                        }
+                    }
+                    //$scope.generalDetailsSaveStatus='false';
+                }
+                else{
+                    $scope.generalDetailsSaveStatus='true';
                 }
                 $('#assuranceDeclinedTpl').modal('hide');
                 $scope.clear();
@@ -3339,21 +3406,47 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
             };
             $scope.generalAnswer;
             $scope.generalAnswerList=[];
-
+            $scope.generalDetailsSaveStatus='false'; //meant for  saveButton Enable or Disable
             $scope.openAccordion = function (status, tab) {
+                //alert(tab);
                 //console.log(status);
                 if (status === 'YES') {
                     $scope.generalAnswer = true;
                     $scope.generalAnswerList.push($scope.generalAnswer);
                     //console.log('Checking Status is ' + $scope.generalAnswer);
                     $scope.accordionStatus.generalDetails[tab] = true;
+                    $scope.generalDetailsSaveStatus='true';
                 } else {
+                    $scope.generalDetailsSaveStatus='false';
                     $scope.generalAnswer = false;
                     $scope.generalAnswerList.push($scope.generalAnswer);
                     //console.log('Checking Status is ' + $scope.generalAnswer);
                     $scope.accordionStatus.generalDetails[tab] = false;
+                    $scope.clearPopoUp(tab); //removing all the modal to  space
                 }
             };
+
+            $scope.clearPopoUp=function(tab)
+            {
+                if(tab == 'tab1')
+                {
+                    $scope.policyDetails=[];
+                }
+                else if(tab == 'tab2')
+                {
+                    $scope.insurerDetails1=[];
+                }
+                else if(tab == 'tab3')
+                {
+                    $scope.insurerDetails2=[];
+                }
+
+                else if(tab == 'tab4')
+                {
+                    $scope.insurerDetails3=[];
+                }
+
+            }
 
             $scope.openAccordionCompulsoryQuestion1=function(status,tab,arrySeq,qId)
             {

@@ -19,7 +19,6 @@
                             <thead>
                             <tr>
                                 <th>Policy Number</th>
-                                <!--<th>Sum Assured</th>-->
                                 <th>Amount of Insurance</th>
                             </tr>
                             </thead>
@@ -296,7 +295,7 @@
             <button type="button" class="btn btn-default btn-sm" ng-click="cancelAll()">Cancel</button>
         </div>
         <div class="col-sm-6">
-            <button type="button" class="btn btn-default btn-sm" style="float: right" ng-disabled="step4.$invalid" ng-hide="mode=='new'||mode=='view'"  ng-click="saveGeneralDetails()">Save</button>
+            <button type="button" class="btn btn-default btn-sm" style="float: right" ng-disabled="step4.$invalid || generalDetailsSaveStatus == 'true' " ng-hide="mode=='new'||mode=='view'"  ng-click="saveGeneralDetails()">Save</button>
         </div>
     </div>
 </ng-form>

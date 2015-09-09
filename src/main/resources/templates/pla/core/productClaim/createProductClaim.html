@@ -21,30 +21,37 @@
             <div class="panel panel-primary">
                 <div class="panel-heading">
                     <div class="row">
-                        <div class="col-lg-4"><span th:text="#{createProductClaim}">Create Product Claim
-                            <!--<div class="col-lg-4"><span th:text="#{updateProductClaim}">Update Product Claim-->
+                        <div class="col-lg-4" ng-hide="mode == 'update' "><span th:text="#{createProductClaim}">Create Product Claim
+                        </span></div>
+                        <!-- <div class="col-lg-4" ng-show="mode= 'update' "><span th:text="#{updateProductClaim}">Update Product Claim-->
+                        <div class="col-lg-4" ng-show="mode == 'update'"><span th:text="#{updateProductClaim}">Update Product Claim
                         </span></div>
                     </div>
                 </div>
                 <div class="panel-body ng-cloak">
-                    <form novalidate="true" class="css-form">
+                    <form novalidate="true" class="css-form" name="productClaimForm">
                         <nth-alert></nth-alert>
                         <div class="row">
                             <div class="form-group control-group required col-md-6" style="margin: auto;margin-top:10px;" >
                                 <label class="control-label">Line of Business</label>
-                                <select class="form-control input-sm" ng-model="mapping.lineOfBusiness" name="lineOfBusiness" id="lineOfBusiness" ng-change="getPlan()">
+                                <select class="form-control input-sm" ng-model="mapping.lineOfBusiness" name="lineOfBusiness" id="lineOfBusiness" ng-required="true" ng-change="getPlan()">
                                     <option value="">--Select One--</option>
-                                    <option value="GROUP_LIFE">GROUP LIFE</option>
+                                    <option value="GROUP_LIFE">Group Life</option>
                                     <option value="INDIVIDUAL_LIFE">Individual Life</option>
                                     <!--<option value="GROUP_HEALTH">Group Health</option>-->
                                 </select>
                             </div>
 
-                            <div class="form-group control-group required col-md-6 " style="margin: auto;margin-top:10px;">
+                            <div ng-hide="mode=='update' || mode== 'view' " class="form-group control-group required col-md-6 " style="margin: auto;margin-top:10px;">
                                 <label class="control-label">Plan</label>
                                 <select class="form-control input-sm" ng-model="mapping.planCode" ng-options="plan.planId as plan.planName for plan in businessPlans" ng-change="getCoverageClaimType()">
                                     <option value="">--Select One--</option>
                                 </select>
+                            </div>
+
+                            <div ng-show="mode=='update' || mod== 'view'" class="form-group control-group required col-md-6 " style="margin: auto;margin-top:10px;">
+                                <label class="control-label">Plan</label>
+                                <input type="text" class="form-control input-sm" name="planCode" ng-disabled="mode=='update'||mode=='view'" ng-model="mapping.planName" ng-required="true"/>
                             </div>
                         </div>
 
@@ -66,7 +73,6 @@
                                             &lt;!&ndash; <div contenteditable="true" ng-model="row.update" ng-blur="test(row)" ng-change="test(row)" >{{row.commission}}</div>&ndash;&gt;
                                         </td>
                                     </tr>-->
-                                 {{coverageClaim.claimTypes}}
                                     <tr ng-repeat="coverageClaim in coverageClaimType">
                                         <!--<td>{{CoverageSample}}</td>-->
                                         <td>{{coverageClaim.coverageName}}</td>
@@ -108,8 +114,13 @@
                             <div class="col-lg-12" style="text-align: center;margin-top:10px;">
 
                                 <button type="button" class="btn btn-default" style="float:right;"
-                                        ng-click="submitProductClaim()">Save
+                                        ng-hide="mode == 'update' " ng-click="submitProductClaim()">Save
                                 </button>
+
+                                <button type="button" class="btn btn-default" style="float:right;"
+                                        ng-show="mode== 'update' " ng-click="updateProductClaim()">Update
+                                </button>
+
                                 <a class="btn btn-default" th:href="@{/core/branch/view}" style="float:left;">Cancel</a>
 
                             </div>
