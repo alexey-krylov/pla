@@ -39,7 +39,7 @@
                         "fnDrawCallback": function () {
                             $("input[type=radio]").on("click", function () {
                                 viewEndorsementModule.getTheItemSelected(this);
-                               // console.log($(".endorsementId").val());
+                                // console.log($(".endorsementId").val());
 
                             });
                         }
@@ -125,8 +125,8 @@
                                 <td>
                                     <input type="radio" name="policyNumber" th:value="${endorsement.policyId}"
                                            value="5100000010315"/>
-                                 <!--   <input type="hidden" name="endorsementId"
-                                           th:value="${endorsement.endorsementId}"/>-->
+                                    <!--   <input type="hidden" name="endorsementId"
+                                              th:value="${endorsement.endorsementId}"/>-->
 
                                     <input type="hidden" name="policyId"
                                            th:value="${endorsement.policyId}"/>
@@ -137,9 +137,10 @@
                                 <td th:text="${#dates.format(endorsement.expiryDate,'dd/MM/yyyy')}"></td>
                                 <td>
 
-                                <select  onchange="GetSelectedTextValue()" name="variety"   class="btn btn-default btn-sm btn-disabled variety" disabled="disabled" style=" text-align: left;">
-                                     <option th:each="endorsementType :${endorsement.endorsementTypes}" th:value="${{endorsementType.code}}" th:text="${endorsementType.description}"></option>
-                                </select>
+                                    <select  onchange="GetSelectedTextValue()" name="variety"   class="btn btn-default btn-sm btn-disabled variety" disabled="disabled" style=" text-align: left;">
+                                        <option value="">------------Select------------</option>
+                                        <option th:each="endorsementType :${endorsement.endorsementTypes}" th:value="${{endorsementType.code}}" th:text="${endorsementType.description}"></option>
+                                    </select>
                                 </td>
                             </tr>
                             <!--/*-->

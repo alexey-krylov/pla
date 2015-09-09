@@ -78,7 +78,8 @@
                    <!-- <input type="text" class="form-control input-sm" name="endorsementType"
                             />th:value="${searchCriteria.endorsementType}" -->
                     <select  class="btn btn-default btn-sm"  style=" text-align: left;width:170px;">
-                        <option th:each="endorsementType :${searchCriteria.endorsementTypes}" th:value="${{endorsementType.code}}" th:text="${endorsementType.description}"></option>
+                        <option value="">------------Select------------</option>
+                        <option th:each="endorsementType :${searchCriteria.endorsementTypes}" th:value="${{endorsementType.code}}" th:text="${endorsementType.description}" ></option>
                     </select>
 
                 </div>
