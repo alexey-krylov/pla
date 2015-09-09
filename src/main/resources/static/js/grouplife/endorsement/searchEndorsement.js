@@ -28,7 +28,7 @@ var searchEndorsementModule = (function () {
         var endorsementId = this.selectedItem;
         var endorsementType=this.endorsementType;
         //window.location.href = "/pla/grouplife/endorsement/editEndorsement?endorsementId=" + endorsementId + "&endorsementType=" + selectValue + "&mode=update";
-        if (this.status == 'Returned' || this.status == 'Draft') {
+        if (this.status == 'Returned') {
             window.location.href = "/pla/grouplife/endorsement/editEndorsementReturnStatus?endorsementId=" + endorsementId + "&endorsementType=" + endorsementType+ "&mode=edit" + "&status=return";
         } else {
 
@@ -62,7 +62,7 @@ var searchEndorsementModule = (function () {
         var endorsementId = this.selectedItem;
         var endorsementType=this.endorsementType;
 
-        if (this.status == 'Returned' || this.status == 'Draft' ) {
+        if (this.status == 'Returned') {
             window.location.href = "/pla/grouplife/endorsement/editEndorsementReturnStatus?endorsementId=" + endorsementId + "&endorsementType=" + endorsementType + "&mode=view" + "&status=return";
         } else {
 
