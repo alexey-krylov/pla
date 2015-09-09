@@ -108,6 +108,29 @@ public class GroupLifeEndorsementController {
         modelAndView.setViewName("pla/groupLife/endorsement/createEndorsement");
         return modelAndView;
     }
+    @RequestMapping(value = "/editEndorsementReturnStatus", method = RequestMethod.GET)
+    @ApiOperation(httpMethod = "GET", value = "To open edit endorsement page")
+    public ModelAndView gotoCreateEndorsementReturnStatus() {
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("pla/groupLife/endorsement/createEndorsementReturnStatus");
+        return modelAndView;
+    }
+
+    @RequestMapping(value = "/viewApprovalEndorsement", method = RequestMethod.GET)
+    @ApiOperation(httpMethod = "GET", value = "To open Approval endorsement page in view Mode")
+    public ModelAndView gotoApprovalEndorsement() {
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("pla/groupLife/endorsement/createApprovalEndorsement");
+        return modelAndView;
+    }
+
+    @RequestMapping(value = "/approveEndorsement", method = RequestMethod.GET)
+    @ApiOperation(httpMethod = "GET", value = "To open Approval Endorsement page")
+    private ModelAndView openApprovalEndorsement() {
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("pla/groupLife/endorsement/createApprovalEndorsement");
+        return modelAndView;
+    }
 
     @RequestMapping(value = "/getendorsementnumber/{endorsementId}", method = RequestMethod.GET)
     @ResponseBody
@@ -143,11 +166,12 @@ public class GroupLifeEndorsementController {
         modelAndView.addObject("searchCriteria", searchGLEndorsementDto);
         searchGLEndorsementDto.setEndorsementTypes(GLEndorsementType.getAllEndorsementType());
         modelAndView.addObject("searchResult", glEndorsementService.searchEndorsement(searchGLEndorsementDto, new String[]{"APPROVER_PENDING_ACCEPTANCE", "UNDERWRITER_LEVEL1_PENDING_ACCEPTANCE", "UNDERWRITER_LEVEL2_PENDING_ACCEPTANCE"}));
-        return modelAndView;
+            return modelAndView;
     }
 
 
-    @RequestMapping(value = "/search", method = RequestMethod.POST)
+    @RequestMapping(value = "/searchendorsement", method = RequestMethod.POST)
+    @ApiOperation(httpMethod = "POST", value = "To search endorsement")
     public ModelAndView searchEndorsement(SearchGLEndorsementDto searchGLEndorsementDto) {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("pla/groupLife/endorsement/searchEndorsement");

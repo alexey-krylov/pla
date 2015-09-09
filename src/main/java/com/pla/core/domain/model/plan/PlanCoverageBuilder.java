@@ -175,9 +175,9 @@ public class PlanCoverageBuilder {
             String benefitId, CoverageBenefitDefinition definedPer,
                                                 CoverageBenefitType coverageBenefitType,
                                                 BigDecimal benefitLimit,
-                                                BigDecimal maxLimit) {
+                                                BigDecimal maxLimit,Long waitingPeriod) {
         this.planCoverageBenefits.add(new PlanCoverageBenefit(coverageId, coverageName, benefitName, benefitId, definedPer, coverageBenefitType,
-                benefitLimit, maxLimit));
+                benefitLimit, maxLimit,waitingPeriod));
         return this;
     }
 

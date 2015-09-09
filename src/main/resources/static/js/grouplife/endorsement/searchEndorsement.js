@@ -8,6 +8,8 @@ var searchEndorsementModule = (function () {
 
         this.selectedItem = $(ele).val();
         this.status = $(ele).parent().find('.endorsementStatus').val();
+        this.endorsementType = $(ele).parent().find('.endorsementType').val();
+
         // console.log("***********************");
         // console.log(this.status);
         $(".btn-disabled").attr("disabled", false);
@@ -24,9 +26,10 @@ var searchEndorsementModule = (function () {
     };
     services.modifyEndorsement =function(){
         var endorsementId = this.selectedItem;
-        window.location.href = "/pla/grouplife/endorsement/editEndorsement?endorsementId=" + endorsementId + "&endorsementType=" + selectValue + "&mode=update";
-        if (this.status == 'Returned') {
-            window.location.href = "/pla/grouplife/endorsement/editEndorsementReturnStatus?endorsementId=" + endorsementId + "&mode=edit" + "&status=return";
+        var endorsementType=this.endorsementType;
+        //window.location.href = "/pla/grouplife/endorsement/editEndorsement?endorsementId=" + endorsementId + "&endorsementType=" + selectValue + "&mode=update";
+        if (this.status == 'Returned' || this.status == 'Draft') {
+            window.location.href = "/pla/grouplife/endorsement/editEndorsementReturnStatus?endorsementId=" + endorsementId + "&endorsementType=" + endorsementType+ "&mode=edit" + "&status=return";
         } else {
 
             $.ajax({
@@ -42,10 +45,10 @@ var searchEndorsementModule = (function () {
                         }
                     }
                     if (services.statusValue == false) {
-                        window.location.href = "/pla/grouplife/endorsement/editEndorsement?endorsementId=" + endorsementId + "&mode=edit";
+                        window.location.href = "/pla/grouplife/endorsement/editEndorsement?endorsementId=" + endorsementId + "&endorsementType=" + endorsementType + "&mode=edit";
 
                     } else {
-                        window.location.href = "/pla/grouplife/endorsement/editEndorsementReturnStatus?endorsementId=" + endorsementId + "&mode=edit" + "&status=return";
+                        window.location.href = "/pla/grouplife/endorsement/editEndorsementReturnStatus?endorsementId=" + endorsementId + "&endorsementType=" + endorsementType+ "&mode=edit" + "&status=return";
 
                     }
 
@@ -57,8 +60,10 @@ var searchEndorsementModule = (function () {
     };
     services.viewEndorsement = function () {
         var endorsementId = this.selectedItem;
-        if (this.status == 'Returned') {
-            window.location.href = "/pla/grouplife/endorsement/editEndorsementReturnStatus?endorsementId=" + endorsementId + "&mode=view" + "&status=return";
+        var endorsementType=this.endorsementType;
+
+        if (this.status == 'Returned' || this.status == 'Draft' ) {
+            window.location.href = "/pla/grouplife/endorsement/editEndorsementReturnStatus?endorsementId=" + endorsementId + "&endorsementType=" + endorsementType + "&mode=view" + "&status=return";
         } else {
 
             $.ajax({
@@ -74,10 +79,10 @@ var searchEndorsementModule = (function () {
                         }
                     }
                     if (services.statusValue == false) {
-                        window.location.href = "/pla/grouplife/endorsement/editEndorsement?endorsementId=" + endorsementId + "&mode=view";
+                        window.location.href = "/pla/grouplife/endorsement/editEndorsement?endorsementId=" + endorsementId + "&endorsementType=" + endorsementType + "&mode=view";
 
                     } else {
-                        window.location.href = "/pla/grouplife/endorsement/editEndorsementReturnStatus?endorsementId=" + endorsementId + "&mode=view" + "&status=return";
+                        window.location.href = "/pla/grouplife/endorsement/editEndorsementReturnStatus?endorsementId=" + endorsementId  + "&endorsementType=" + endorsementType+ "&mode=view" + "&status=return";
 
                     }
 
@@ -89,8 +94,9 @@ var searchEndorsementModule = (function () {
     };
     services.viewApprovalEndorsement = function () {
         var endorsementId = this.selectedItem;
+        var endorsementType=this.endorsementType;
 
-        window.location.href = "/pla/grouplife/endorsement/viewApprovalEndorsement?endorsementId=" + endorsementId + "&method=approval";
+        window.location.href = "/pla/grouplife/endorsement/viewApprovalEndorsement?endorsementId=" + endorsementId + "&endorsementType=" + endorsementType + "&method=approval";
 
     };
 

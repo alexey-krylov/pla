@@ -29,6 +29,8 @@ public class PlanCoverageBenefit {
     private String coverageName;
     private String benefitName;
 
+    private  Long waitingPeriod;
+
     PlanCoverageBenefit() {
     }
 
@@ -36,7 +38,7 @@ public class PlanCoverageBenefit {
                         String benefitName,
                         String benefitId, CoverageBenefitDefinition definedPer,
                         CoverageBenefitType coverageBenefitType,
-                        BigDecimal benefitLimit, BigDecimal maxLimit) {
+                        BigDecimal benefitLimit, BigDecimal maxLimit,Long waitingPeriod) {
 
         Preconditions.checkArgument(benefitId != null, "Expected benefitId!=null, but %s!=null", benefitId);
         Preconditions.checkArgument(definedPer != null, "Expected definedPer!=null, but %s!=null.", definedPer);
@@ -50,6 +52,7 @@ public class PlanCoverageBenefit {
         this.coverageBenefitType = coverageBenefitType;
         this.benefitLimit = benefitLimit;
         this.maxLimit = maxLimit;
+        this.waitingPeriod=waitingPeriod;
     }
 
 
