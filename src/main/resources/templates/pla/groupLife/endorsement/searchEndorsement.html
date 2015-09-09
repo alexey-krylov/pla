@@ -25,7 +25,7 @@
         if (require.defined("basic")) {
             requirejs(['/pla/js/grouplife/endorsement/searchEndorsement.js'], function () {
                 $(document).ready(function () {
-                    $("input[type='text']").keyup(function () {
+                   /* $("input[type='text']").keyup(function () {
                         var isDisabled = true;
                         $('#searchEndorsementforGLPolicy *').filter(':text').each(function (key, value) {
                             if ($(value).val().trim().length != 0) {
@@ -33,7 +33,7 @@
                             }
                         });
                         $("#search").prop("disabled", isDisabled);
-                    });
+                    });*/
 
                     $('#searchEndorsement-table').dataTable({
                         "fnDrawCallback": function () {
@@ -77,9 +77,10 @@
                     <label th:text="#{endorsementType}">Endorsement Type</label>
                    <!-- <input type="text" class="form-control input-sm" name="endorsementType"
                             />th:value="${searchCriteria.endorsementType}" -->
-                    <select  class="btn btn-default btn-sm"  style=" text-align: left;width:170px;background-color:#fff;">
+                    <select  class="btn btn-default btn-sm" th:field="*{searchCriteria.endorsementType}" style=" text-align: left;width:170px;background-color:#fff;">
                         <option value="">------------Select------------</option>
-                        <option th:each="endorsementType :${searchCriteria.endorsementTypes}" th:value="${{endorsementType.code}}" th:text="${endorsementType.description}" ></option>
+                        <option th:each="endorsementType :${searchCriteria.endorsementTypes}"
+                                 name="code" th:value="${{endorsementType.code}}" th:text="${endorsementType.description}" ></option>
                     </select>
 
                 </div>
