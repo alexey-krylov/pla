@@ -179,7 +179,7 @@ public class ILQuotation extends AbstractAggregateRoot<QuotationId> implements I
 
     @Override
     public boolean requireVersioning() {
-        return ILQuotationStatus.SHARED.equals(this.ilQuotationStatus);
+        return (ILQuotationStatus.GENERATED.equals(this.ilQuotationStatus) || ILQuotationStatus.SHARED.equals(this.ilQuotationStatus));
     }
 
     public ILQuotation cloneQuotation(ILQuotationProcessor quotationCreator, QuotationId quotationId, int versionNumber) {
