@@ -101,7 +101,7 @@
                             <tr>
                                <td><input type="radio" name="proposalNumber" th:value="${quotation.quotationId}" value="5100000010315"/></td>
                                 <td th:text="${quotation.quotationNumber}">5100000010315</td>
-                                <td th:text="${quotation.generatedOn}">05/03/2015</td>
+                                <td th:text="${quotation.generatedOn}?${#dates.format(quotation.generatedOn,'dd/MM/yyyy')}">05/03/2015</td>
                                <!--&lt;!&ndash; <td th:text="${quotation.ageing}"></td>&ndash;&gt;-->
                                 <td th:text="${quotation.agentName}">Agent Name</td>
                                 <td th:text="${quotation.proposerName}"></td>

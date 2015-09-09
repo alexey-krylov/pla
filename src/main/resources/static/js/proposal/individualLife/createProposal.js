@@ -1814,7 +1814,19 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
 
 
                     $scope.proposalPlanDetail.planId=newValue.description.plan_id;
-                    $http.get("getridersforplan/" + newValue.description.plan_id+'/'+ $scope.proposedAssured.nextDob).success(function (response, status, headers, config) {
+
+                   /*$http.get("getridersforplan/" + newValue.description.plan_id).success(function (response, status, headers, config) {
+                        $scope.searchRiders = response;
+                        $scope.proposalPlanDetail.riderDetails = response;
+                        //console.log('Riders Details From Db is:' +JSON.stringify(response));
+                        //console.log($scope.searchRiders);
+
+                    }).error(function (response, status, headers, config) {
+                        var check = status;
+                        //console.log('Checking Status:'+JSON.stringify(check));
+                    });*/
+
+                   $http.get("getridersforplan/" + newValue.description.plan_id +"/" + $scope.proposedAssured.nextDob).success(function (response, status, headers, config) {
                         $scope.searchRiders = response;
                         $scope.proposalPlanDetail.riderDetails = response;
                         //console.log('Riders Details From Db is:' +JSON.stringify(response));
@@ -1826,8 +1838,8 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
                     });
                 }
             };
-            $scope.termTypeCover={};
 
+            $scope.termTypeCover={};
             $scope.$watch('proposalPlanDetail.policyTerm',function(newValue,oldValue){
                 if(newValue)
                 {
@@ -1837,11 +1849,7 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
 
                 }
             });
-            /* $scope.setpolicytermTypeValue=function(termType)
-             {
-             alert("Test Change..*");
-             $scope.termTypeCover=termType;
-             }*/
+
 
             $scope.getTrusteeProvinceValue = function(province){
                 //alert(province);
@@ -2317,7 +2325,8 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
 
 
             $scope.clear = function () {
-                $scope.agent = {};
+                //$scope.agent = {};
+                $scope.abc={};
                 $scope.policy = {};
                 $scope.insurer1 = {};
                 $scope.insurer2 = {};
@@ -2338,17 +2347,17 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
                 $scope.check = false;
                 $scope.checking = true;
                 //console.log('Testing In SearchCode..');
-                $scope.agentId = $scope.agent.agentId;
+                $scope.agentId = $scope.abc.agentId;
                 //console.log('Value is: ' + $scope.agentId);
                 $http.get("getagentdetail/" + $scope.agentId).success(function (response, status, headers, config) {
-                    $scope.agent = response;
+                    $scope.abc = response;
                     $scope.checking = false;
                 }).error(function (response, status, headers, config) {
                     var check = status;
                     if (check == 500) {
                         $scope.check = true;
-                        $scope.agent.firstName = null;
-                        $scope.agent.lastName = null;
+                        $scope.abc.firstName = null;
+                        $scope.abc.lastName = null;
                     }
                 });
 
@@ -2940,11 +2949,14 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
                     //alert('quid..')
                     $http.post('create', request2).success(function (response, status, headers, config) {
                         //alert('status'+response.status);
+                        //console.log("QuotationDetails..."+JSON.stringify(response));
+
                         if(response.status == '500')
                         {
                             //alert('Return');
                             return;
                         }
+
                         else
                         {
                             $http.get("/pla/individuallife/proposal/getproposal/" +response.id + "?mode=view").success(function (response, status, headers, config) {
